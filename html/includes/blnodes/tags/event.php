@@ -9,6 +9,12 @@
  */
 class xarTpl__XarEventNode extends xarTpl__TplTagNode
 {
+    function constructor(&$parser, $tagName, $parentTagName='', $attributes=array())
+    {
+        parent::constructor($parser, $tagName, $parentTagName, $attributes);
+        $this->isAssignable = false;
+    }
+
     function render()
     {
         extract($this->attributes);
@@ -19,11 +25,6 @@ class xarTpl__XarEventNode extends xarTpl__TplTagNode
         }
         
         return "xarEvt_trigger('$name')";
-    }
-    
-    function isAssignable()
-    {
-        return false;
     }
 }
 ?>

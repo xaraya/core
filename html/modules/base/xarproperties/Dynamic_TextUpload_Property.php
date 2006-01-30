@@ -23,20 +23,20 @@ include_once "modules/dynamicdata/class/properties.php";
  */
 class Dynamic_TextUpload_Property extends Dynamic_Property
 {
-    var $rows = 8;
-    var $cols = 50;
+    public $rows = 8;
+    public $cols = 50;
 
-    var $size = 40;
-    var $maxsize = 1000000;
-    var $methods = array('trusted'  => false,
+    public $size = 40;
+    public $maxsize = 1000000;
+    public $methods = array('trusted'  => false,
                          'external' => false,
                          'upload'   => false,
                          'stored'   => false);
-    var $basedir = null;
-    var $importdir = null;
+    public $basedir = null;
+    public $importdir = null;
 
     // this is used by Dynamic_Property_Master::addProperty() to set the $object->upload flag
-    var $upload = true;
+    public $upload = true;
 
     function Dynamic_TextUpload_Property($args)
     {
@@ -118,14 +118,11 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
                                           'override' => $override,
                                           'format' => 'textupload',
                                           'maxsize' => $this->maxsize));
+            // TODO: This raises exception now, we dont want it allways
+            // TODO: insert try/catch clause here once we know what uploads raises for exceptions
+            // TODO:
             if (!isset($return) || !is_array($return) || count($return) < 2) {
                 $this->value = null;
-            // CHECKME: copied from autolinks :)
-                // 'text' rendering will return an array
-                $errorstack = xarErrorGet();
-                $errorstack = array_shift($errorstack);
-                $this->invalid = $errorstack['short'];
-                xarErrorHandled();
                 return false;
             }
             if (empty($return[0])) {
@@ -163,7 +160,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
             // this doesn't work on some configurations
             //$this->value = join('', @file($_FILES[$upname]['tmp_name']));
             $tmpdir = xarCoreGetVarDirPath();
-            $tmpdir .= '/cache/templates';
+            $tmpdir .= XARCORE_TPL_CACHEDIR;
             $tmpfile = tempnam($tmpdir, 'dd');
         // no verification of file types here
             if (move_uploaded_file($_FILES[$upname]['tmp_name'], $tmpfile) && file_exists($tmpfile)) {
@@ -305,7 +302,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
      function getBasePropertyInfo()
      {
         $args['rows'] = 20;
-     
+
          $baseInfo = array(
                               'id'         => 38,
                               'name'       => 'textupload',
@@ -314,7 +311,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
                               'validation' => '',
                             'source'     => '',
                             'dependancies' => '',
-                            'requiresmodule' => '',
+                            'requiresmodule' => 'base',
                             'aliases' => '',
                             'args' => serialize( $args ),
                             'args'         => '',

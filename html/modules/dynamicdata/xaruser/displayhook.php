@@ -23,20 +23,12 @@ function dynamicdata_user_displayhook($args)
 {
     extract($args);
 
-    if (!isset($extrainfo)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'extrainfo', 'user', 'displayhook', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
-    }
+    if (!isset($extrainfo)) throw new EmptyParameterException('extrainfo');
 
     if (!isset($objectid) || !is_numeric($objectid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'object ID', 'user', 'displayhook', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('object ID', 'user', 'displayhook', 'dynamicdata');
+        throw new BadParameterException($vars,$msg);
     }
 
     // When called via hooks, the module name may be empty, so we get it from
@@ -49,11 +41,9 @@ function dynamicdata_user_displayhook($args)
 
     $modid = xarModGetIDFromName($modname);
     if (empty($modid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name ' . $modname, 'user', 'displayhook', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('module name ' . $modname, 'user', 'displayhook', 'dynamicdata');
+        throw new BadParameterException($vars,$msg);
     }
 
     if (is_array($extrainfo) && isset($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype'])) {

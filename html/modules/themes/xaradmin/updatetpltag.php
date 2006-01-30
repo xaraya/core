@@ -45,18 +45,12 @@ function themes_admin_updatetpltag()
     // action insert = add
     if ($action == 'update') {
         if(!xarTplUnregisterTag($tagname)) {
-            $msg = xarML('Could not unregister (#(1)).', $tagname);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                            new SystemException($msg));
-        return;
-            }
+            throw new TagRegistrationException($tagname,'Could not unregister tag (#(1)).');
+        }
     }
     
     if(!xarTplRegisterTag($module, $tagname, $aAttributes, $handler)) {
-        $msg = xarML('Could not register (#(1)).', $tagname);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                        new SystemException($msg));
-        return;
+        throw new TagRegistrationException($tagname);
     }
 
     xarResponseRedirect(xarModUrl('themes', 'admin', 'listtpltags'));

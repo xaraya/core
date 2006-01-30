@@ -34,7 +34,10 @@ function privileges_admin_viewprivileges()
     $renderer = new xarTreeRenderer();
 
     $data['authid'] = xarSecGenAuthKey();
-    $data['trees'] = $renderer->drawtrees($data['show']);
+    //$data['trees'] = $renderer->drawtrees($data['show']);
+    $data['trees'] = $renderer->maketrees($data['show']);
+    //set_exception_handler(array('ExceptionHandlers','bone'));
+       //    debug($data['newtrees']);
     $data['refreshlabel'] = xarML('Refresh');
     return $data;
 }

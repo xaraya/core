@@ -30,11 +30,7 @@ function modules_adminapi_getalldependents ($args)
         return;
 
     // Argument check
-    if (!isset($mainId)) {
-        $msg = xarML('Missing module regid (#(1)).', $mainId);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    if (!isset($mainId)) throw new EmptyParameterException('regid');
 
     // See if we have lost any modules since last generation
     if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {
@@ -97,8 +93,7 @@ function modules_adminapi_getalldependents ($args)
             $output = xarModAPIFunc('modules', 'admin', 'getalldependents', array('regid' => $modinfo['regid'])); 
             if (!$output) {
                 $msg = xarML('Unable to get dependencies for module with ID (#(1)).', $modinfo['regid']);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
-                return;
+                throw new Exception($msg);
             }
     
             //This is giving : recursing detected.... ohh well

@@ -116,12 +116,13 @@ class DTDIdentifiers
  * @package blocklayout
  * @access private
  */
-class xarTpl__CompilerError extends SystemException
+class xarTpl__CompilerError extends Exception
 {
     function raiseError($msg)
     {
         // FIXME: is this usefull at all, if the compiler doesn't work, how are we going to show the exception ?
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,'COMPILER_ERROR',$msg);
+        //throw a generic exception for now
+        throw new BLException('TBD',$msg);
     }
 }
 
@@ -136,7 +137,7 @@ class xarTpl__CompilerError extends SystemException
  * @todo ML for the error message?
  * @todo Does the exception need to be a system exception?
  */
-class xarTpl__ParserError extends SystemException
+class xarTpl__ParserError extends Exception
 {
     function raiseError($type, $msg, $posInfo)
     {
@@ -144,8 +145,8 @@ class xarTpl__ParserError extends SystemException
         $out .= $msg."\n\n";
         $out .= "Line contents before the parsing error occurred:\n";
         $out .= $posInfo->lineText . " <== Error position\n";
-
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,$type,$out);
+        // throw a generic exception for now, this probably should not do this, but i dunno yet
+        throw new BLException('TBD',$out);
     }
 }
 
@@ -159,8 +160,9 @@ class xarTpl__ParserError extends SystemException
  */
 class xarTpl__Compiler extends xarTpl__CompilerError
 {
-    var $parser;
-    var $codeGenerator;
+    private static $instance = null;
+    public $parser;
+    public $codeGenerator;
 
     function xarTpl__Compiler()
     {
@@ -168,14 +170,12 @@ class xarTpl__Compiler extends xarTpl__CompilerError
         $this->codeGenerator = new xarTpl__CodeGenerator();
     }
 
-    function &instance() 
+    static function &instance() 
     {
-        static $instance = NULL;
-        if(!isset($instance)) {
-            $instance = new xarTpl__Compiler();
+        if(self::$instance == null) {
+            self::$instance = new xarTpl__Compiler();
         }
-        return $instance;
-        
+        return self::$instance;
     }
     
     function compileFile($fileName)
@@ -219,10 +219,10 @@ class xarTpl__Compiler extends xarTpl__CompilerError
  */
 class xarTpl__PositionInfo extends xarTpl__ParserError
 {
-    var $fileName = '';
-    var $line = 1;
-    var $column = 1;
-    var $lineText = '';
+    public $fileName = '';
+    public $line = 1;
+    public $column = 1;
+    public $lineText = '';
     
     function setFileName($fileName)
     {
@@ -240,9 +240,8 @@ class xarTpl__PositionInfo extends xarTpl__ParserError
  */
 class xarTpl__CodeGenerator extends xarTpl__PositionInfo
 {
-    var $isPHPBlock = false;
-    var $pendingExceptionsControl = false;
-    var $code;
+    public $isPHPBlock = false;
+    public $code;
 
     function isPHPBlock()
     {
@@ -258,16 +257,6 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
             $code = ($isPHPBlock)? '<?php ' : '?>';
         }
         return $code;
-    }
-
-    function isPendingExceptionsControl()
-    {
-        return $this->pendingExceptionsControl;
-    }
-
-    function setPendingExceptionsControl($pendingExceptionsControl)
-    {
-        $this->pendingExceptionsControl = $pendingExceptionsControl;
     }
 
     function generate(&$documentTree)
@@ -327,15 +316,8 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
                 $code .= $childCode;
 
                 // This is in the outer level of the current node, see what kind of node we're dealing with
-                // here and whether it needs exceptions control
                 if ($child->isAssignable() && !($node->needParameter()) || $node->needAssignment()) {
                     $code .= "; ";
-                    if ($child->needExceptionsControl() || $this->isPendingExceptionsControl()) {
-                        $code .= "if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return false; ";
-                        $this->setPendingExceptionsControl(false);
-                    }
-                } elseif ($child->needExceptionsControl()) {
-                        $this->setPendingExceptionsControl(true);
                 }
             }
 
@@ -349,20 +331,13 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
             if (!isset($endCode)) return; // throw back
 
             $code .= $endCode;
-
-            // Other part: exception handling
-            if (!$node->isAssignable() && ($node->needExceptionsControl())) {
-                $code .= $this->setPHPBlock(true);
-                $code .= "if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return false; ";
-                $this->setPendingExceptionsControl(false);
-            }
         } else {
             // If there are no children or no text, we can render it as is.
             // Recursion end condition as well.
             $code = $node->render();
             if(!isset($code)) ;//xarLogVariable('offending node:', $node);
-            // Either code must have a value, or an exception must be pending.
-            assert('isset($code) || xarCurrentErrorType() != XAR_NO_EXCEPTION; /* The rendering code for a node is not working properly */');
+            // Either code must have a value
+            assert('isset($code); /* The rendering code for a node is not working properly */');
             if (!isset($code))  return; // throw back
         }
         return $code;
@@ -381,9 +356,9 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
  */
 class xarTpl__Parser extends xarTpl__PositionInfo
 {
-    var $tagNamesStack;
-    var $tagIds;
-    var $tagRootSeen;
+    public $tagNamesStack;
+    public $tagIds;
+    public $tagRootSeen;
 
     function parse(&$templateSource)
     {
@@ -1246,7 +1221,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
  */
 class xarTpl__TemplateVariables
 {
-    var $tplVars = array();
+    public $tplVars = array();
 
     function xarTpl__TemplateVariables()
     {
@@ -1377,7 +1352,7 @@ class xarTpl__ExpressionTransformer
         return $phpExpression;
     }
     
-    function rlensort($a, $b) 
+    static function rlensort($a, $b) 
     {
         if(strlen($a) == strlen($b)) {
             return 0;
@@ -1404,18 +1379,17 @@ class xarTpl__ExpressionTransformer
  * abstract and should be overridden by each specific node class
  *
  * @package blocklayout
- * hasChildren -> false
- * hasText -> false
- * isAssignable -> true
- * isPHPCode -> false
- * needAssignment -> false
- * needParameter -> false
- * needExceptionsControl -> false
  */
 class xarTpl__Node extends xarTpl__PositionInfo
 {
-    var $tagName;   // This is an internal name of the node, not the actual tag name
-    
+    public $tagName;   // This is an internal name of the node, not the actual tag name
+    protected $isPHPCode = false;
+    protected $hasChildren = false;
+    protected $hasText = false;
+    protected $isAssignable = true;
+    protected $needAssignment = false;
+    protected $needParameter = false;
+
     // What we're doing here is create an alias for the constructor, so
     // it derives properly. That way we decouple the class name from the 
     // constructor. Oh, the beauty of PHP :-(
@@ -1427,9 +1401,9 @@ class xarTpl__Node extends xarTpl__PositionInfo
         $this->constructor($parser, $nodeName);
     }
     
-    function constructor(&$parser, $nodeName)
+    function constructor(&$parser, $tagName, $parentTagName='', $attributes=array())
     {
-        $this->tagName  = $nodeName;
+        $this->tagName  = $tagName;
         $this->fileName = $parser->fileName;
         $this->line     = $parser->line;
         $this->column   = $parser->column;
@@ -1453,37 +1427,32 @@ class xarTpl__Node extends xarTpl__PositionInfo
 
     function hasChildren()
     {
-        return false;
+        return $this->hasChildren;
     }
 
     function hasText()
     {
-        return false;
+        return $this->hasText;
     }
 
     function isAssignable()
     {
-        return true;
+        return $this->isAssignable;
     }
 
     function isPHPCode()
     {
-        return false;
+        return $this->isPHPCode;
     }
 
     function needAssignment()
     {
-        return false;
+        return $this->needAssignment;
     }
 
     function needParameter()
     {
-        return false;
-    }
-
-    function needExceptionsControl()
-    {
-        return false;
+        return $this->needParameter;
     }
 }
 
@@ -1498,34 +1467,29 @@ class xarTpl__Node extends xarTpl__PositionInfo
  * isPHPCode -> true
  * needAssignment -> false
  * needParameter -> false
- * needExceptionsControl -> false
  * @package blocklayout
  */
 class xarTpl__TplTagNode extends xarTpl__Node
 {
-    var $attributes;
-    var $parentTagName;
-    var $children;
+    public $attributes;
+    public $parentTagName;
+    public $children;
     
     // Do the same here as we do in tplnode class
     function xarTpl__TplTagNode(&$parser, $tagName, $parentTagName, $attributes) 
     {
         // If constructor method is defined in subclass that one is called!!
+        $this->isPHPCode = true;
         $this->constructor($parser, $tagName, $parentTagName, $attributes);
     }
     
     
-    function constructor(&$parser, $tagName, $parentTagName, $attributes)
+    function constructor(&$parser, $tagName, $parentTagName='', $attributes=array())
     {
         // TplNode has no parent, nor attributes, separation is here.
         parent::constructor($parser, $tagName);
         $this->parentTagName = $parentTagName;
         $this->attributes = $attributes;  
-    }
-    
-    function isPHPCode()
-    {
-        return true;
     }
 }
 
@@ -1540,14 +1504,13 @@ class xarTpl__TplTagNode extends xarTpl__Node
  * isPHPCode -> true
  * needAssignment -> false
  * needParameter -> false
- * needExceptionsControl -> false
  * @package blocklayout
  */
 class xarTpl__EntityNode extends xarTpl__Node
 {
-    var $entityType;
-    var $parameters;
-    var $hasExtras = false;
+    public $entityType;
+    public $parameters;
+    public $hasExtras = false;
     
     function xarTpl__EntityNode(&$parser, $tagName, $entityType, $parameters) 
     {
@@ -1555,20 +1518,17 @@ class xarTpl__EntityNode extends xarTpl__Node
         // Bug 3603 workaround
         // TODO: centralize this further into xarModUrl
         $this->hasExtras = $parser->peek(5) == '&amp;';
+        $this->isPHPCode = true;
         // If constructor method is defined in subclass that one is called!!
         $this->constructor($parser, $tagName, $entityType, $parameters);
     }
     
-    function constructor(&$parser, $tagName, $entityType, $parameters)
+    function constructor(&$parser, $tagName, $parentTagName='', $parameters=array())
     {
+        // TODO: refactor the interface here, PHP5 insists on have the naming of parameters the same
         parent::constructor($parser, $tagName);
-        $this->entityType = $entityType;
+        $this->entityType = $parentTagName;
         $this->parameters = $parameters;
-    }
-    
-    function isPHPCode()
-    {
-        return true;
     }
 }
 
@@ -1583,22 +1543,18 @@ class xarTpl__EntityNode extends xarTpl__Node
  * isPHPCode -> true
  * needAssignment -> false
  * needParameter -> false
- * needExceptionsControl -> false
  * @package blocklayout
  */
 class xarTpl__InstructionNode extends xarTpl__Node
 {
-    var $instruction;
+    public $instruction;
     
     function xarTpl__InstructionNode(&$parser, $tagName, $instruction)
     {
         parent::constructor($parser,$tagName);
         $this->instruction = $instruction;
-    }
-    
-    function isPHPCode()
-    {
-        return true;
+        $this->isPHPCode = true;
+
     }
 }
 
@@ -1613,12 +1569,20 @@ class xarTpl__InstructionNode extends xarTpl__Node
  * isPHPCode -> false
  * needAssignment -> false
  * needParameter -> false
- * needExceptionsControl -> false
  */
 class xarTpl__DocumentNode extends xarTpl__Node
 {
-    var $children;
-    var $variables;
+    public $children;
+    public $variables;
+
+    function constructor(&$parser, $nodeName) 
+    {
+        parent::constructor($parser, $nodeName);
+        $this->hasChildren = true;
+        $this->hasText = true;
+        $this->isAssignable = false;
+    }
+
 
     function renderBeginTag()
     {
@@ -1628,21 +1592,6 @@ class xarTpl__DocumentNode extends xarTpl__Node
     function renderEndTag()
     {
         return '';
-    }
-
-    function hasChildren()
-    {
-        return true;
-    }
-
-    function hasText()
-    {
-        return true;
-    }
-
-    function isAssignable()
-    {
-        return false;
     }
 }
 
@@ -1654,27 +1603,22 @@ class xarTpl__DocumentNode extends xarTpl__Node
  * isPHPCode -> false
  * needAssignment -> false
  * needParameter -> false
- * needExceptionsControl -> false
  * @package blocklayout
  */
 class xarTpl__TextNode extends xarTpl__Node
 {
-    var $content;
+    public $content;
 
     function xarTpl__TextNode(&$parser, $tagName, $content)
     {
         parent::constructor($parser, $tagName);
         $this->content = $content;
+        $this->isAssignable = false;
     }
     
     function render()
     {
         return $this->content;
-    }
-
-    function isAssignable()
-    {
-        return false;
     }
 }
 

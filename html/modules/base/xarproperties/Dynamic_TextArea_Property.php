@@ -14,9 +14,9 @@
 */
 class Dynamic_TextArea_Property extends Dynamic_Property
 {
-    var $rows = 8;
-    var $cols = 35;
- 
+    public $rows = 8;
+    public $cols = 35;
+
     function Dynamic_TextArea_Property($args)
     {
          $this->Dynamic_Property($args);
@@ -65,7 +65,7 @@ class Dynamic_TextArea_Property extends Dynamic_Property
     {
          extract($args);
          $data=array();
-         
+
          if (isset($value)) {
             //return xarVarPrepHTMLDisplay($value);
             $data['value'] = xarVarPrepHTMLDisplay($value);
@@ -109,13 +109,13 @@ class Dynamic_TextArea_Property extends Dynamic_Property
                             'validation' => '',
                             'source'     => '',
                             'dependancies' => '',
-                            'requiresmodule' => '',
+                            'requiresmodule' => 'base',
                             'args' => serialize( $args ),
-                            
+
                             // ...
                            );
-     
-        $args['rows'] = 20;     
+
+        $args['rows'] = 20;
         $aliases[] = array(
                               'id'         => 5,
                               'name'       => 'textarea_large',
@@ -124,7 +124,7 @@ class Dynamic_TextArea_Property extends Dynamic_Property
                               'validation' => '',
                             'source'     => '',
                             'dependancies' => '',
-                            'requiresmodule' => '',
+                            'requiresmodule' => 'base',
                             'args' => serialize( $args ),
                             // ...
                            );
@@ -138,7 +138,7 @@ class Dynamic_TextArea_Property extends Dynamic_Property
                             'validation' => '',
                             'source'     => '',
                             'dependancies' => '',
-                            'requiresmodule' => '',
+                            'requiresmodule' => 'base',
                             'aliases' => $aliases,
                             'args' => serialize( $args ),
                             // ...

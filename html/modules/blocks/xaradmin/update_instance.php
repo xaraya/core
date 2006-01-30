@@ -45,9 +45,7 @@ function blocks_admin_update_instance()
     if ($blockinfo['name'] != $name) {
         $checkname = xarModAPIFunc('blocks', 'user', 'get', array('name' => $name));
         if (!empty($checkname)) {
-            $msg = xarML('Block name "#(1)" already exists', $name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-            return;
+            throw new DuplicateException(array('block',$name));
         }
     }
     $blockinfo['name'] = $name;
@@ -106,18 +104,6 @@ function blocks_admin_update_instance()
                 $blockinfo = $updatefunc($blockinfo);
             }
         }
-    }
-
-    // If the update function failed to return the blockinfo array, then
-    // throw the error back (if there is an error).
-    if (!is_array($blockinfo)) {
-        if (!xarCurrentErrorType()) {
-            // Raise an error here, since no error has been raised in 
-            // the block update function.
-            $msg = xarML('Unknown error in block update function "#(1)"', $updatefunc);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        }
-        return; 
     }
 
     // Pass to API - do generic updates.

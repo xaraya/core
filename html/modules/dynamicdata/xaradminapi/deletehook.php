@@ -24,20 +24,20 @@ function dynamicdata_adminapi_deletehook($args)
     extract($args);
 
     if (!isset($objectid) || !is_numeric($objectid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'object id', 'admin', 'createhook', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('object id', 'admin', 'createhook', 'dynamicdata');
+        throw new BadParameterException($vars,$msg);
         // we *must* return $extrainfo for now, or the next hook will fail
-        //return false;
-        return $extrainfo;
+        // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
+        //return $extrainfo;
     }
     if (!isset($extrainfo) || !is_array($extrainfo)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'extrainfo', 'admin', 'createhook', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('extrainfo', 'admin', 'createhook', 'dynamicdata');
+        throw new BadParameterException($vars,$msg);
         // we *must* return $extrainfo for now, or the next hook will fail
-        //return false;
-        return $extrainfo;
+        // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
+        //return $extrainfo;
     }
 
     // When called via hooks, the module name may be empty, so we get it from
@@ -50,12 +50,12 @@ function dynamicdata_adminapi_deletehook($args)
 
     $modid = xarModGetIDFromName($modname);
     if (empty($modid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'admin', 'createhook', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('module name', 'admin', 'createhook', 'dynamicdata');
+        throw new BadParameterException($vars,$msg);
         // we *must* return $extrainfo for now, or the next hook will fail
-        //return false;
-        return $extrainfo;
+        // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
+        //return $extrainfo;
     }
 
     if (!empty($extrainfo['itemtype'])) {
@@ -70,12 +70,12 @@ function dynamicdata_adminapi_deletehook($args)
         $itemid = $objectid;
     }
     if (empty($itemid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'admin', 'deletehook', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('module name', 'admin', 'deletehook', 'dynamicdata');
+        throw new BadParameterException($vars,$msg);
         // we *must* return $extrainfo for now, or the next hook will fail
-        //return false;
-        return $extrainfo;
+        // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
+        //return $extrainfo;
     }
 
     if (!xarModAPIFunc('dynamicdata', 'admin', 'delete',

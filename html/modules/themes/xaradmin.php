@@ -11,6 +11,16 @@
  * @author Marty Vance
 */
 
-// nothing here yet - thought of using it for preloading css classlib, but havent done it somehow
+// Tags
+class TagRegistrationException extends RegistrationExceptions
+{ 
+    protected $message = 'The tag "#(1)" is not properly registered';
+}
+
+// Themes
+class ThemeNotFoundException extends NotFoundExceptions
+{ 
+    protected $message = 'A theme is missing, the theme name could not be determined in the current context';
+}
 
 ?>

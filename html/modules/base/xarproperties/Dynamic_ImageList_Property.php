@@ -21,9 +21,9 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_ImageList_Property extends Dynamic_Select_Property
 {
-    var $basedir = '';
-    var $baseurl = null;
-    var $filetype = '(gif|jpg|jpeg|png|bmp)';
+    public $basedir = '';
+    public $baseurl = null;
+    public $filetype = '(gif|jpg|jpeg|png|bmp)';
 
     function Dynamic_ImageList_Property($args)
     {
@@ -181,7 +181,7 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
                               'validation' => '',
                               'source'         => '',
                               'dependancies'   => '',
-                              'requiresmodule' => '',
+                              'requiresmodule' => 'base',
                               'aliases'        => '',
                               'args'           => serialize($args),
                             // ...

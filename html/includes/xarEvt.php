@@ -51,6 +51,15 @@
  */
 
 /**
+ * Exceptions raised by this subsystem
+ *
+ */
+class EventRegistrationException extends RegistrationExceptions
+{ 
+    protected $message = 'The event "#(1)" is not properly registered';
+}
+
+/**
  * Intializes Event Messaging System
  *
  * @author Marco Canini <marco@xaraya.com>
@@ -156,10 +165,8 @@ function xarEvt__notify($modName, $eventName, $value, $modDir = NULL)
 {
     if (!xarEvt__checkEvent($eventName)) return; // throw back
 
-    if (empty($modName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
+    if (empty($modName)) throw new EmptyParameterException('modName');
+
     if (empty($modDir)) {
         $modDir = $modName;
     }
@@ -184,7 +191,11 @@ function xarEvt__notify($modName, $eventName, $value, $modDir = NULL)
 
     //If not loaded, try to
     if (!isset($loaded[$xarapifile])) {
-        $loaded[$xarapifile] = xarInclude($xarapifile, XAR_INCLUDE_MAY_NOT_EXIST + XAR_INCLUDE_ONCE);
+        try {
+            $loaded[$xarapifile] = xarInclude($xarapifile, XAR_INCLUDE_ONCE);
+        } catch(FileNotFoundException $e) {
+            $loaded[$xarapifile] = false;
+        }
     }
     
     //Nothing to do if the API file isnt there
@@ -197,17 +208,19 @@ function xarEvt__notify($modName, $eventName, $value, $modDir = NULL)
     if (isset($funcToRun) || isset($funcToRunGeneral)) {
         //LAZY LOAD!
         // We may need the tables
-        xarInclude($xartabfile, XAR_INCLUDE_MAY_NOT_EXIST + XAR_INCLUDE_ONCE);
-        $xartabfunc = $modName.'_xartables';
-        if (function_exists($xartabfunc)) xarDB_importTables($xartabfunc());
+        try {
+            xarInclude($xartabfile, XAR_INCLUDE_ONCE);
+            $xartabfunc = $modName.'_xartables';
+            if (function_exists($xartabfunc)) xarDB_importTables($xartabfunc());
+        } catch(FileNotFoundException $e) {
+            // no worries
+        }
     }
     
      if (isset($funcToRun)) {
         $funcToRun($value);
-        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
      } elseif (isset($funcToRunGeneral)) {
         $funcToRunGeneral($eventName, $value);
-        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
      }
 
     // Nothing to be done, be silent about it
@@ -226,10 +239,7 @@ function xarEvt__notify($modName, $eventName, $value, $modDir = NULL)
  */
 function xarEvt_registerEvent($eventName)
 {
-    if (empty($eventName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'eventName');
-        return;
-    }
+    if (empty($eventName)) throw new EmptyParameterException('eventName');
     
     $GLOBALS['xarEvt_knownEvents'][$eventName] = true;
     return true;
@@ -248,8 +258,7 @@ function xarEvt_registerEvent($eventName)
 function xarEvt__checkEvent($eventName)
 {
     if (!isset($GLOBALS['xarEvt_knownEvents'][$eventName])) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EVENT_NOT_REGISTERED', $eventName);
-        return;
+        throw new EventRegistrationException($eventName);
     }
     return true;
 }
@@ -272,14 +281,13 @@ function xarEvt__GetHandlersList()
         $dbconn =& xarDBGetConn();
         $sitetabpre = xarDBGetSiteTablePrefix();
         $configtable = $sitetabpre.'_config_vars';
-        $query = "SELECT xar_value
-                    FROM $configtable
-                   WHERE xar_name = 'Site.Evt.Handlers'";
-        $result =& $dbconn->Execute($query);
+        $query = "SELECT xar_value FROM $configtable WHERE xar_name = ?";
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery(array('Site.Evt.Handlers'), ResultSet::FETCHMODE_ASSOC);
         if (!$result) return;
         $handlers = array();
-        if (!$result->EOF) {
-            list($value) = $result->fields;
+        if ($result->next()) {
+            $value = $result->get('xar_value');
             if (!empty($value)) {
                 $handlers = unserialize($value);
             }

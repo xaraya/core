@@ -147,6 +147,9 @@ class xarCache_Database_Storage extends xarCache_Storage
 
         $dbconn =& xarDBGetConn();
 
+        // TODO: is a transaction warranted here?
+        // Since we catch the exception if someone beat us to it, a transaction could
+        // cause a deadlock here? 
         if ($key == $this->lastkey && !empty($this->lastid)) {
             $query = "UPDATE $table
                          SET xar_time = ?,
@@ -155,18 +158,18 @@ class xarCache_Database_Storage extends xarCache_Storage
                              xar_data = ?
                        WHERE xar_id = ?";
             $bindvars = array($time, $size, $check, $value, (int) $this->lastid);
-            $result =& $dbconn->Execute($query, $bindvars);
-            if (!$result) return;
+            $dbconn->Execute($query, $bindvars);
         } else {
-            $nextid = $dbconn->GenId($table);
-            $query = "INSERT INTO $table (xar_id, xar_type, xar_key, xar_code, xar_time, xar_size, xar_check, xar_data)
+            try {
+                $nextid = $dbconn->GenId($table);
+                $query = "INSERT INTO $table (xar_id, xar_type, xar_key, xar_code, xar_time, xar_size, xar_check, xar_data)
                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            $bindvars = array((int) $nextid, $this->type, $key, $this->code, $time, $size, $check, $value);
-            $result =& $dbconn->Execute($query, $bindvars);
-            if (!$result) {
+                $bindvars = array((int) $nextid, $this->type, $key, $this->code, $time, $size, $check, $value);
+                $dbconn->Execute($query, $bindvars);
+            } catch (SQLException $e) {
                 // someone else beat us to it - ignore error
-                xarErrorHandled();
             }
+
         }
         $this->lastkey = null;
     }
@@ -182,14 +185,12 @@ class xarCache_Database_Storage extends xarCache_Storage
             $query = "DELETE FROM $table
                             WHERE xar_id = ?";
             $bindvars = array((int) $this->lastid);
-            $result =& $dbconn->Execute($query, $bindvars);
-            if (!$result) return;
+            $dbconn->Execute($query, $bindvars);
         } else {
             $query = "DELETE FROM $table
                             WHERE xar_type = ? AND xar_key = ? AND xar_code = ?";
             $bindvars = array($this->type, $key, $this->code);
-            $result =& $dbconn->Execute($query, $bindvars);
-            if (!$result) return;
+            $dbconn->Execute($query, $bindvars);
         }
         $this->lastkey = null;
     }
@@ -206,10 +207,9 @@ class xarCache_Database_Storage extends xarCache_Storage
                             WHERE xar_type = ?";
             $bindvars = array($this->type);
         } else {
-            $key = $dbconn->qstr('%' . $key . '%');
-            $query = "DELETE FROM $table
-                            WHERE xar_type = ? AND xar_key LIKE $key";
-            $bindvars = array($this->type);
+            $key = '%'.$key.'%';
+            $query = "DELETE FROM $table  WHERE xar_type = ? AND xar_key LIKE ?";
+            $bindvars = array($this->type,$key);
         }
         $result =& $dbconn->Execute($query, $bindvars);
         if (!$result) return;

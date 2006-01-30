@@ -59,18 +59,11 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
                 // see if we got something interesting in return
                 if (isset($value)) {
                     $this->fields[$function]->setValue($value);
-                } elseif (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                    // ignore any exceptions on retrieval for now
-                    xarErrorFree();
-                }
+                } 
             } else {
             // TODO: don't we want auto-loading for xarModFunc too ???
                 // try to load the module GUI
                 if (!xarModLoad($fmod,$ftype)) {
-                    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                        // ignore any exceptions on retrieval for now
-                        xarErrorFree();
-                    }
                     continue;
                 }
                 // try to invoke the function with some common parameters
@@ -84,10 +77,7 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
                 // see if we got something interesting in return
                 if (isset($value)) {
                     $this->fields[$function]->setValue($value);
-                } elseif (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                    // ignore any exceptions on retrieval for now
-                    xarErrorFree();
-                }
+                } 
             }
         }
         return $itemid;

@@ -35,19 +35,13 @@ function blocks_adminapi_load($args)
     if (isset($blockType)) {$type = $blockType;}
     if (isset($blockFunc)) {$func = $blockFunc;}
 
-    if (empty($module)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'module');
-        return;
-    }
+    if (empty($module)) throw new EmptyParameterException('module');
 
     // Legacy - some modules still passing in a 'blockName'.
     if (!empty($blockName)) {$type = $blockName;}
 
     // These really are block types, as defined in the block_types.xar_type column.
-    if (empty($type)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'type');
-        return;
-    }
+    if (empty($type)) throw new EmptyParameterException('type');
 
     if (
         (isset($loaded[$module . ':' . $type]) && empty($func))
@@ -75,10 +69,7 @@ function blocks_adminapi_load($args)
         $filePath = $blockDir . '/' . xarVarPrepForOS($blockFile);
 
         if (!file_exists($filePath)) {
-            // TODO: should the block base be optional now?
-            // i.e. do we really need to raise an error?
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', $filePath);
-            return;
+            throw new FileNotFoundException($filePath);
         }
         include($filePath);
         $loaded[$module . ':' . $type] = 1;

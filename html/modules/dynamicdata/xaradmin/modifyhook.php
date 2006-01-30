@@ -23,21 +23,9 @@ function dynamicdata_admin_modifyhook($args)
 {
     extract($args);
 
-    if (!isset($extrainfo)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'extrainfo', 'admin', 'modifyhook', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
-    }
-
-    if (!isset($objectid) || !is_numeric($objectid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'object ID', 'admin', 'modifyhook', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
-    }
+    if (!isset($extrainfo)) throw new EmptyParameterException('extrainfo');
+    if (!isset($objectid)) throw new EmptyParameterException('objectid');
+    if (!is_numeric($objectid)) throw new VariableValidationException(array('objectid',$objectid,'numeric'));
 
     // When called via hooks, the module name may be empty, so we get it from
     // the current module
@@ -49,11 +37,9 @@ function dynamicdata_admin_modifyhook($args)
 
     $modid = xarModGetIDFromName($modname);
     if (empty($modid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'admin', 'modifyhook', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('module name', 'admin', 'modifyhook', 'dynamicdata');
+        throw new BadParameterException($vars,$msg);
     }
 
     if (!empty($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype'])) {

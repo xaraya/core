@@ -16,23 +16,13 @@
  */
 function roles_userapi_getdefaultgroup()
 {
-	$authmodule = xarModGetVar('roles','defaultauthmodule');
-    //if (!empty($authmodule)) {
-    if (xarModIsAvailable('registration')) {
-        $registrationgroup= xarModGetVar('registration', 'defaultgroup');
-    }
-    if (isset($registrationgroup)) {
-      /** TODO: jojodee - We really want 'registration' module here not authmodule
-	    * Maybe need to review how the vars are being used now that the modules are
-        * separated out for roles, registration and authentication. For now HARDWIRED to Registration module
-        */
-      //$defaultgroup = xarModGetVar(xarModGetNameFromID($authmodule), 'defaultgroup');
-        $defaultgroup = $registrationgroup;
-    
+    $authmodule = xarModGetVar('roles','defaultauthmodule');
+    if (!empty($authmodule)) {
+        $defaultgroup = xarModGetVar(xarModGetNameFromID($authmodule), 'defaultgroup');
     } else {
-	// TODO: improve on this hardwiring
-		$defaultgroup = 'Users';
-	}
+    // TODO: improve on this hardwiring
+        $defaultgroup = 'Users';
+    }
     return $defaultgroup;
 }
 

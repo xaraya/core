@@ -25,40 +25,25 @@ function modules_adminapi_activate ($args)
     extract($args);
 
     // Argument check
-    if (!isset($regid)) {
-        $msg = xarML('Empty regid (#(1)).', $regid);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    }
+    if (!isset($regid)) throw new EmptyParameterException('regid');
+
     $modInfo = xarModGetInfo($regid);
-    if (!isset($modInfo) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return NULL;
-    }
 
     // Module activate function
-    if (!xarModAPIFunc('modules',
-                           'admin',
-                           'executeinitfunction',
+    if (!xarModAPIFunc('modules','admin', 'executeinitfunction',
                            array('regid'    => $regid,
                                  'function' => 'activate'))) {
         $msg = xarML('Unable to execute "activate" function in the xarinit.php file of module (#(1))', $modInfo['displayname']);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
+        throw new Exception($msg);
     }
 
     // Update state of module
-    $res = xarModAPIFunc('modules',
-                        'admin',
-                        'setstate',
+    $res = xarModAPIFunc('modules','admin','setstate',
                         array('regid' => $regid,
                               'state' => XARMOD_STATE_ACTIVE));
 
-    if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return NULL;
-    }
-
     if (function_exists('xarOutputFlushCached') && function_exists('xarModGetName') && xarModGetName() != 'installer') {
-        xarOutputFlushCached('adminpanels');
+        xarOutputFlushCached('modules');
         xarOutputFlushCached('base-block');
     }
 

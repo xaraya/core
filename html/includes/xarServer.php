@@ -62,7 +62,7 @@ function xarServer__shutdown_handler()
  *
  * Returns the value of $name server variable.
  * Accepted values for $name are exactly the ones described by the
- * {@link http://www.php.net/manual/en/reserved.variables.html#reserved.variables.server PHP manual}.
+ * {@link http://www.php.net/manual/en/reserved.variables.html PHP manual}.
  * If the server variable doesn't exist void is returned.
  *
  * @author Marco Canini <marco@xaraya.com>
@@ -102,21 +102,19 @@ function xarServerGetBaseURI()
   // Allows overriding the Base URI from config.php
   // it can be used to configure Xaraya for mod_rewrite by
   // setting BaseURI = '' in config.php
-  $BaseURI =  xarCore_getSystemVar('BaseURI',true);
-  if( isSet( $BaseURI) )
-  {
-    // If BaseURI set, just use it
-    return  $BaseURI;
+  try {
+      $BaseURI =  xarCore_getSystemVar('BaseURI');
+      return $BaseURI;
+  } catch(VariableNotFoundException $e) {
+      // We need to build it
   }
-  // Otherwise build it dynamically
 
+  // Get the name of this URI
+  $path = xarServerGetVar('REQUEST_URI');
 
-    // Get the name of this URI
-    $path = xarServerGetVar('REQUEST_URI');
-
-    //if ((empty($path)) ||
-    //    (substr($path, -1, 1) == '/')) {
-    //what's wrong with a path (cfr. Indexes index.php, mod_rewrite etc.) ?
+  //if ((empty($path)) ||
+  //    (substr($path, -1, 1) == '/')) {
+  //what's wrong with a path (cfr. Indexes index.php, mod_rewrite etc.) ?
     if (empty($path)) {
         // REQUEST_URI was empty or pointed to a path
         // adapted patch from Chris van de Steeg for IIS
@@ -128,20 +126,20 @@ function xarServerGetBaseURI()
             $path = xarServerGetVar('PATH_INFO');
         }
     }
-
+    
     $path = preg_replace('/[#\?].*/', '', $path);
-
+    
     $path = preg_replace('/\.php\/.*$/', '', $path);
     if (substr($path, -1, 1) == '/') {
         $path .= 'dummy';
     }
     $path = dirname($path);
-
+    
     //FIXME: This is VERY slow!!
     if (preg_match('!^[/\\\]*$!', $path)) {
         $path = '';
     }
-
+    
     return $path;
 }
 
@@ -481,21 +479,6 @@ function xarRequestGetInfo()
                 }
                 $loopHole = NULL;
             }
-            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                // If exceptionId is MODULE_FUNCTION_NOT_EXIST there's no problem,
-                // this exception means that the module does not support short urls
-                // for this $modType.
-                // If exceptionId is MODULE_FILE_NOT_EXIST there's no problem too,
-                // this exception means that the module does not have the $modType API.
-
-                // IMPORTANT: As this is exactly the same construct as in xarModUrl and that was
-                // causing a lot of exceptions to be hidden, i commented this one out as well
-                // but i haven't been able to trace exception hiding back to this line. If it behaves
-                // wrong, and is still needed uncomment it (MrB)
-                //xarErrorFree();
-
-                // <mikespub> see above :)
-            }
         }
     }
 
@@ -574,11 +557,6 @@ function xarRequest__resolveModuleAlias($aliasModName)
  */
 function xarResponseRedirect($redirectURL)
 {
-
-    // First checks if there's a pending exception, if so does not redirect browser
-    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return false;
-
-
     if (headers_sent() == true) return false;
 
     // MrB: We only do this for pn Legacy, consider removing it

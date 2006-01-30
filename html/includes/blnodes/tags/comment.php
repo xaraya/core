@@ -9,7 +9,7 @@
  */
 class xarTpl__XarCommentNode extends xarTpl__TplTagNode
 {
-    function constructor(&$parser,$tagName, $parentTagName, $attributes)
+    function constructor(&$parser,$tagName, $parentTagName='', $attributes=array())
     {
         parent::constructor($parser, $tagName, $parentTagName, $attributes);
         // Completely skip the contents of the tag
@@ -21,6 +21,10 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
             //$end = $parser->peek(strlen($endMarker));
             //xarLogMessage("BL: next should read '$endMarker' : '$end'");
         }
+        $this->isPHPCode = false;
+        $this->hasChildren = true;
+        $this->hasText = true;
+        $this->isAssignable = false;
     }
 
     function renderBeginTag()
@@ -45,26 +49,6 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
         // This is just here to prevent the abstract method to kick in
         // FIXME: see above
         return '';
-    }
-
-    function hasChildren()
-    {
-        return true;
-    }
-
-    function hasText()
-    {
-        return true;
-    }
-
-    function isPHPCode()
-    {
-        return false;
-    }
-
-    function isAssignable()
-    {
-        return false;
     }
 }
 ?>

@@ -9,18 +9,27 @@
  */
 class xarTpl__XarSetNode extends xarTpl__TplTagNode
 {
-    var $_name;             // What are we setting?
-    var $_nonmarkup = true; // Do we accept non markup?
+    private $_name;             // What are we setting?
+    private $_nonmarkup = true; // Do we accept non markup?
     
-    var $_showTemplates;    // The ShowTemplates setting we may need to save
+    private $_showTemplates;    // The ShowTemplates setting we may need to save
     
+    function constructor(&$parser, $tagName, $parentTagName='', $parameters=array())
+    {
+        parent::constructor($parser, $tagName, $parentTagName, $parameters);
+        $this->hasChildren = true;
+        $this->hasText = true;
+        $this->isAssignable = false;
+        $this->needAssignment = true;
+    }
+
     function render()
-   {
+    {
         return '';
-   }
+    }
     
     function renderBeginTag()
-   {
+    {
         $code ='';
         $nonmarkup = 'yes'; // Default is to just use what is produced. 
         extract($this->attributes);
@@ -44,10 +53,10 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
         }
         $code.= XAR_TOKEN_VAR_START . $this->_name;
         return $code;
-   }
+    }
     
     function renderEndTag()
-   {
+    {
         $code ='';
         
         if(!$this->_nonmarkup) {
@@ -60,26 +69,6 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
          */
         // FIXME: add some checking whether $name already is a template variable
         return $code .' $_bl_data[\''.$this->_name.'\'] =& '. XAR_TOKEN_VAR_START . $this->_name.';';
-   }
-    
-    function isAssignable()
-   {
-        return false;
-   }
-    
-    function hasChildren()
-   {
-        return true;
-   }
-    
-    function needAssignment()
-   {
-        return true;
-   }
-    
-    function hasText()
-   {
-        return true;
    }
 }
 ?>

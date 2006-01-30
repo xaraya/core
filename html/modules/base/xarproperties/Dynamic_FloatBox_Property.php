@@ -21,8 +21,8 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
 {
-    var $size = 10;
-    var $maxlength = 30;
+    public $size = 10;
+    public $maxlength = 30;
 
     function validateValue($value = null)
     {
@@ -78,7 +78,7 @@ class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
             //}
         }
         $data['value']= xarVarPrepForDisplay($value);
-        
+
         $template="";
         return xarTplProperty('base', 'floatbox', 'showoutput', $data);
 
@@ -102,7 +102,7 @@ class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
                           'validation' => '',
                           'source'         => '',
                           'dependancies'   => '',
-                          'requiresmodule' => '',
+                          'requiresmodule' => 'base',
                           'aliases'        => '',
                           'args'           => serialize($args),
                           // ...

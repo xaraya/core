@@ -32,13 +32,8 @@
  */
 function dynamicdata_userapi_dropdownlist($args)
 {
-    if (empty($args['field'])) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                     'field', 'user', 'dropdownlist', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    if (empty($args['field'])) throw new EmptyParameterException('field');
+
 
     // put the field in the required fieldlist
     $args['fieldlist'] = array($args['field']);
@@ -51,11 +46,9 @@ function dynamicdata_userapi_dropdownlist($args)
 
     $field = $args['field'];
     if (!isset($object->properties[$field])) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                     'property', 'user', 'dropdownlist', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('property', 'user', 'dropdownlist', 'DynamicData');
+        throw new BadParameterException($vars,$msg);
     }
 
     // Fill in the dropdown list

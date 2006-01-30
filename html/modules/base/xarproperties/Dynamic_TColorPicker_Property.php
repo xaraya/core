@@ -14,9 +14,9 @@
 */
 class Dynamic_TColorPicker_Property extends Dynamic_Property
 {
-    var $size = 10;
-    var $maxlength = 7;
-    var $min = 7;
+    public $size = 10;
+    public $maxlength = 7;
+    public $min = 7;
 
     function validateValue($value = NULL)
     {
@@ -124,7 +124,7 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
                               'validation' => '',
                             'source'     => '',
                             'dependancies' => '',
-                            'requiresmodule' => '',
+                            'requiresmodule' => 'base',
                             'aliases'        => '',
                             'args'           => serialize($args)
                             // ...

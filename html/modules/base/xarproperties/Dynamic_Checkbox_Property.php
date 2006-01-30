@@ -116,7 +116,7 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
                               'validation' => '',
                               'source'         => '',
                               'dependancies'   => '',
-                              'requiresmodule' => '',
+                              'requiresmodule' => 'base',
                               'aliases'        => '',
                               'args'           => serialize($args),
                             // ...

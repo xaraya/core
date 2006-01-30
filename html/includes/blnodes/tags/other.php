@@ -12,9 +12,9 @@
  */
 class xarTpl__XarOtherNode extends xarTpl__TplTagNode
 {
-    var $tagobject;
+    public $tagobject;
     
-    function constructor(&$parser, $tagName, $parentTagName, $attributes)
+    function constructor(&$parser, $tagName, $parentTagName='', $attributes=array())
     {
         xarLogMessage("Constructing custom tag: $tagName");
         parent::constructor($parser, $tagName, $parentTagName, $attributes);
@@ -69,11 +69,6 @@ class xarTpl__XarOtherNode extends xarTpl__TplTagNode
     function needParameter()
     {
         return $this->tagobject->needParameter();
-    }
-    
-    function needExceptionsControl()
-    {
-        return $this->tagobject->needExceptionsControl();
     }
 }
 ?>

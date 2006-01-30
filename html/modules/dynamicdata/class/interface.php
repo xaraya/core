@@ -19,14 +19,14 @@
  */
 class Dynamic_Object_Interface
 {
-    var $args = array();
-    var $object = null;
-    var $list = null;
+    public $args = array();
+    public $object = null;
+    public $list = null;
 
     // module where the main templates for the GUI reside (defaults to the object module)
-    var $urlmodule = null;
+    public $urlmodule = null;
     // main function handling all object method calls (to be handled by the core someday ?)
-    var $func = 'main';
+    public $func = 'main';
 
     function Dynamic_Object_Interface($args = array())
     {
@@ -183,10 +183,7 @@ class Dynamic_Object_Interface
 
         $itemid = $this->object->getItem();
         if (empty($itemid) || $itemid != $this->object->itemid) {
-            $msg = xarML('Invalid itemid');
-            xarErrorSet(XAR_USER_EXCEPTION, 'NOT_FOUND',
-                        new DefaultUserException($msg));
-            return;
+            throw new BadParameterException(null,'The itemid updating the object was found to be invalid');
         }
 
         if (!empty($args['preview']) || !empty($args['confirm'])) {
@@ -265,10 +262,7 @@ class Dynamic_Object_Interface
 
         $itemid = $this->object->getItem();
         if (empty($itemid) || $itemid != $this->object->itemid) {
-            $msg = xarML('Invalid itemid');
-            xarErrorSet(XAR_USER_EXCEPTION, 'NOT_FOUND',
-                        new DefaultUserException($msg));
-            return;
+            throw new BadParameterException(null,'The itemid when deleting the object was found to be invalid');
         }
 
         if (!empty($args['confirm'])) {
@@ -318,10 +312,7 @@ class Dynamic_Object_Interface
 
         $itemid = $this->object->getItem();
         if (empty($itemid) || $itemid != $this->object->itemid) {
-            $msg = xarML('Invalid itemid');
-            xarErrorSet(XAR_USER_EXCEPTION, 'NOT_FOUND',
-                        new DefaultUserException($msg));
-            return;
+            throw new BadParameterException(null,'The itemid when displaying the object was found to be invalid');
         }
 
         // call item display hooks for this item

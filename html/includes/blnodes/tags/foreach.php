@@ -10,13 +10,21 @@
  */
 class xarTpl__XarForEachNode extends xarTpl__TplTagNode
 {
-    var $attr_value = null; // properties to hold the values of any values which might have the same name in
-    var $attr_key = null;   // the scope of the foreach loop.
-    var $keysavename = null;
-    var $valsavename = null;
+    public $attr_value = null; // properties to hold the values of any values which might have the same name in
+    public $attr_key = null;   // the scope of the foreach loop.
+    public $keysavename = null;
+    public $valsavename = null;
     
+    function constructor(&$parser, $tagName, $parentTagName='', $parameters=array())
+    {
+        parent::constructor($parser, $tagName, $parentTagName, $parameters);
+        $this->hasChildren = true;
+        $this->hasText = true;
+        $this->isAssignable = false;
+    }
+
     function renderBeginTag()
-   {
+    {
         extract($this->attributes);
         
         if (!isset($in)) {
@@ -66,21 +74,5 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
             return "} if (isset($this->keysavename)) $this->attr_key = $this->keysavename; ";
         
    }
-    
-    function hasChildren()
-   {
-        return true;
-   }
-    
-    function hasText()
-   {
-        return true;
-   }
-    
-    function isAssignable()
-   {
-        return false;
-   }
-    
 }
 ?>

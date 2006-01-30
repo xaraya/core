@@ -24,18 +24,12 @@ function themes_adminapi_initialise($args)
     extract($args);
 
     // Argument check
-    if (!isset($regid)) {
-       $msg = xarML('Missing theme regid (#(1)).', $regid);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));return;
-    }
+    if (!isset($regid)) throw new EmptyParameterException('regid');
 
     // Get theme information
     $themeInfo = xarThemeGetInfo($regid);
     if (!isset($themeInfo)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'THEME_NOT_EXIST',
-                       new SystemException(__FILE__."(".__LINE__."): Theme (regid: $regid) does not exist."));
-                       return;
+        throw new ThemeNotFoundException($regid,'Theme (regid: #(1) does not exist.');
     }
 
     // Get theme database info
@@ -59,9 +53,7 @@ function themes_adminapi_initialise($args)
             $value['prime'] = 1;
             if(!isset($value['name']) || !isset($value['value'])){
                 $msg = xarML('Malformed Theme Variable (#(1)).', $var);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                               new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-                return;
+                throw new Exception($msg);
             }
             $set = xarThemeSetVar($themeInfo['name'], $value['name'], $value['prime'], $value['value'], $value['description']);
             if(!$set) return;
@@ -73,7 +65,7 @@ function themes_adminapi_initialise($args)
                         'setstate',
                         array('regid' => $regid,
                               'state' => XARTHEME_STATE_INACTIVE));
-    //die(var_dump($set));
+    // debug($set);
     if (!isset($set)) {
         xarSessionSetVar('errormsg', xarML('Theme state change failed'));
         return false;

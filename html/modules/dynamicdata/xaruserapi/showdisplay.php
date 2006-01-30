@@ -48,11 +48,9 @@ function dynamicdata_userapi_showdisplay($args)
         $modid = xarModGetIDFromName($modname);
     }
     if (empty($modid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'user', 'showdisplay', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('module name', 'user', 'showdisplay', 'dynamicdata');
+        throw new BadParameterException($vars,$msg);
     }
 
     if (empty($itemtype) || !is_numeric($itemtype)) {

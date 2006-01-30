@@ -31,7 +31,7 @@ function roles_userapi_countallactive($args)
         $filter = time() - (xarConfigGetVar('Site.Session.Duration') * 60);
     }
 
-// Security Check
+    // Security Check
     if(!xarSecurityCheck('ReadRole')) return;
 
     // Get database setup
@@ -44,10 +44,13 @@ function roles_userapi_countallactive($args)
     $bindvars = array();
     $query = "SELECT COUNT(*)
               FROM $rolestable a, $sessioninfoTable b
-              WHERE a.xar_uid = b.xar_uid AND b.xar_lastused > ? AND a.xar_uid > 1";
+              WHERE a.xar_uid = b.xar_uid AND b.xar_lastused > ? AND a.xar_uid > ?";
     $bindvars[] = $filter;
+    $bindvars[] = 1;
 
+    // FIXME: this adds a part to the query which does NOT have bindvars but direct values
     if (isset($selection)) $query .= $selection;
+    // TODO: this would be the place to add the bindvars applicable for $selection
 
     // if we aren't including anonymous in the query,
     // then find the anonymous user's uid and add
@@ -63,7 +66,8 @@ function roles_userapi_countallactive($args)
         $bindvars[] = (int) $thisrole['uid'];
     }
 
-    $query .= " AND xar_type = 0";
+    $query .= " AND xar_type = ?";
+    $bindvars[] = 0;
 
 // cfr. xarcachemanager - this approach might change later
     $expire = xarModGetVar('roles','cache.userapi.countallactive');

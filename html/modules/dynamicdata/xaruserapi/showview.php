@@ -59,11 +59,9 @@ function dynamicdata_userapi_showview($args)
             $modname = $modinfo['name'];
     }
     if (empty($modid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'user', 'showview', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('module name', 'user', 'showview', 'dynamicdata');
+        throw new BadParameterException($vars,$msg);
     }
 
     if (empty($itemtype) || !is_numeric($itemtype)) {

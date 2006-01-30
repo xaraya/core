@@ -523,6 +523,8 @@ function xarQueryMask($mask, $showException=1, $component='', $instance='', $mod
  */
 function xarSecurityCheck($mask, $showException=1, $component='', $instance='', $module='', $role='',$pnrealm=0,$pnlevel=0)
 {
+    // Obviously, do NOT uncomment the next line :-)
+    //return true;
     $installing = xarCore_GetCached('installer','installing');
 
     if(isset($installing) && ($installing == true)) {
@@ -582,29 +584,6 @@ function xarRemoveMasks($module)
 {
     $privileges = new xarPrivileges();
     return $privileges->removeMasks($module);
-}
-
-/**
-
- * see if a user is authorised to carry out a particular task
- *
- * @access public
- * @param  integer realm the realm to authorize
- * @param  string component the component to authorize
- * @param  string instance the instance to authorize
- * @param  integer level the level of access required
- * @param  integer userId  user id to check for authorisation
- * @return bool
- * @raise DATABASE_ERROR
- */
-function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId = NULL)
-{
-    return pnSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId);
-    $msg = xarML('Security Realm #(1) - Component #(2) - Instance #(3) - Level #(4) : This call needs to be converted to the Xaraya security system',
-                 $testRealm, $testComponent, $testInstance, $testLevel);
-    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DEPRECATED_API',
-                    new SystemException($msg));
-    return true;
 }
 
 /**
@@ -688,9 +667,7 @@ function xarSecConfirmAuthKey($modName = NULL, $authIdVarName = 'authid')
         return true;
     }
     // Not found, assume invalid
-        xarErrorSet(XAR_USER_EXCEPTION, 'FORBIDDEN_OPERATION',
-                       new DefaultUserException());
-        return;
+    throw new ForbiddenOperationException();
 }
 
 ?>

@@ -12,8 +12,8 @@
 include_once "modules/dynamicdata/class/properties.php";
 class Dynamic_Array_Property extends Dynamic_Property
 {
-    var $fields = array();
-    var $size = 40;
+    public $fields = array();
+    public $size = 40;
 
     function Dynamic_Array_Property($args)
     {
@@ -146,7 +146,7 @@ class Dynamic_Array_Property extends Dynamic_Property
                            'validation' => '',
                            'source'     => '',
                            'dependancies' => '',
-                           'requiresmodule' => '',
+                           'requiresmodule' => 'base',
                            'aliases' => '',
                            'args'         => '',
                            // ...

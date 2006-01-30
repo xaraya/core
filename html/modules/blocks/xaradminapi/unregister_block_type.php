@@ -31,39 +31,41 @@ function blocks_adminapi_unregister_block_type($args)
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
-    $block_types_table = $xartable['block_types'];
+    $block_types_table     = $xartable['block_types'];
     $block_instances_table = $xartable['block_instances'];
-
+    $modules_table         = $xartable['modules'];
     // First we need to retrieve the block ids and remove 
     // the corresponding id's from the xar_block_instances
     // and xar_block_group_instances tables
     $query = "SELECT    inst.xar_id as id
-              FROM      $block_instances_table as inst,
-                        $block_types_table as btypes
-              WHERE     btypes.xar_id = inst.xar_type_id
-              AND       btypes.xar_module = ?
-              AND       btypes.xar_type = ?";
-
+              FROM      $block_instances_table inst, $block_types_table btypes, $modules_table mods
+              WHERE     mods.xar_id = btypes.xar_modid AND
+                        btypes.xar_id = inst.xar_type_id AND
+                        mods.xar_name = ? AND
+                        btypes.xar_type = ?";
     $result =& $dbconn->Execute($query,array($modName,$blockType));
-    if (!$result) return;
 
-    while (!$result->EOF) {
-        list($bid) = $result->fields;
+    try {
+        $dbconn->begin();
+        $modInfo = xarMod_GetBaseInfo($modName); 
+        $modId = $modInfo['systemid'];
 
-        // Pass ids to API
-        xarModAPIFunc('blocks',
-                      'admin',
-                      'delete_instance', array('bid' => $bid));
+        while (!$result->EOF) {
+            list($bid) = $result->fields;
+            // Pass ids to API
+            xarModAPIFunc('blocks','admin','delete_instance', array('bid' => $bid));
+            $result->MoveNext();
+        }
+        // Delete the block type itself
+        $query = "DELETE FROM $block_types_table WHERE xar_modid = ? AND xar_type = ?";
+        $dbconn->Execute($query,array($modId,$blockType));
 
-        $result->MoveNext();
+        $dbconn->commit();
+    } catch(Exception $e) { // catch any exception for now
+        $dbconn->rollback();
+        throw $e;
     }
-
     $result->Close();
-
-    // Delete the block type
-    $query = "DELETE FROM $block_types_table WHERE xar_module = ? AND xar_type = ?";
-    $result =& $dbconn->Execute($query,array($modName,$blockType));
-    if (!$result) return;
 
     return true;
 }

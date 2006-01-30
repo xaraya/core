@@ -27,26 +27,15 @@ function roles_adminapi_stateupdate($args)
     extract($args);
     // Argument check - make sure that all required arguments are present,
     // if not then set an appropriate error message and return
-    if ((!isset($uid)) ||
-        (!isset($state))) {
-        $msg = xarML('Invalid Parameter Count');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    if (!isset($uid))   throw new EmptyParameterException('uid');
+    if (!isset($state)) throw new EmptyParameterException('state');
 
     $item = xarModAPIFunc('roles',
                           'user',
                           'get',
                           array('uid' => $uid));
 
-    if ($item == false) {
-        $msg = xarML('No such user');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'ID_NOT_EXIST',
-                     new SystemException($msg));
-        return false;
-    }
+    if ($item == false) throw new IDNotFoundException($uid);
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();

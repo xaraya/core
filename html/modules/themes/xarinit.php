@@ -90,37 +90,14 @@ function themes_init()
      *   xar_state int(11) NOT NULL default '1'
      * ) TYPE=MyISAM;
      */
-    $fields = array('xar_regid' => array('type' => 'integer', 'null' => false, 'unsigned' => true, 'primary_key' => false),
-        'xar_state' => array('type' => 'integer', 'null' => false, 'default' => '0')
+    $fields = array(
+                    'xar_regid' => array('type' => 'integer', 'null' => false, 'unsigned' => true, 'primary_key' => false),
+                    'xar_state' => array('type' => 'integer', 'null' => false, 'default' => '0')
         );
 
     $query = xarDBCreateTable($tables['theme_states'], $fields);
     $res = &$dbconn->Execute($query);
     if (!$res) return; 
-    // prefix_theme_vars
-    /**
-     * CREATE TABLE xar_theme_vars (
-     *   xar_id int(11) NOT NULL auto_increment,
-     *   xar_themeName varchar(64) NOT NULL default '',
-     *   xar_name varchar(64) NOT NULL default '',
-     *   xar_prime int(1) NOT NULL default 1,
-     *   xar_description varchar(255) NOT NULL default '',
-     *   xar_value longtext,
-     *   PRIMARY KEY  (xar_id)
-     * ) TYPE=MyISAM;
-     */
-    $fields = array('xar_id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
-        'xar_themeName' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_prime' => array('type' => 'integer', 'null' => false, 'default' => 1),
-        'xar_description' => array('type' => 'varchar', 'size' => 255, 'null' => false),
-        'xar_value' => array('type' => 'text', 'size' => 'longtext')
-        );
-
-    $query = xarDBCreateTable($tables['theme_vars'], $fields);
-
-    $res = &$dbconn->Execute($query);
-    if (!$res) return;
 
     xarModSetVar('themes', 'default', 'Xaraya_Classic');
     xarModSetVar('themes', 'selsort', 'nameasc'); 
@@ -147,9 +124,6 @@ function themes_init()
     xarModSetVar('themes', 'ShowTemplates', 0);
 
     // Register theme tags.
-    // Additional styles, see bug 3868 note below.
-//     xarTplRegisterTag('themes', 'themes-additional-styles', array(), 'themes_userapi_handleadditionalstyles');
-// deprecated by andyv in corecss - delete comments
 
     // register complete set of css tags is now encapsulated in the module's api function
     if(!xarModAPIFunc('themes', 'css', 'registercsstags', array())) {
@@ -195,14 +169,6 @@ function themes_upgrade($oldversion)
             // Register additional styles tag.
             // This is for bug 3868 only - available to those that want to use it, but
             // not a permanent replacement for the additional styles global or corecss.
-            // TODO: we should not have to 'unregister' a tag just in case.
-//             xarTplUnregisterTag('themes-additional-styles');
-//             xarTplRegisterTag(
-//                 'themes', 'themes-additional-styles',
-//                 array(), 'themes_userapi_handleadditionalstyles'
-//             );
-
-// deprecated by andyv in corecss - delete comments
 
             // register complete set of css tags is now encapsulated in the module's api function
             if(!xarModAPIFunc('themes', 'css', 'registercsstags', array())) {

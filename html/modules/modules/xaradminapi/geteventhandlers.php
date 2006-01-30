@@ -35,8 +35,12 @@ function modules_adminapi_geteventhandlers()
         // use the directory here, not the name
         $xarapifile = "modules/{$modDir}/xareventapi.php";
         // try to include the event API for this module
-        $loaded = xarInclude($xarapifile, XAR_INCLUDE_MAY_NOT_EXIST + XAR_INCLUDE_ONCE);
-        if (!$loaded) continue;
+        try {
+            $loaded = xarInclude($xarapifile, XAR_INCLUDE_ONCE);
+            if (!$loaded) continue; // still needed if the file is there, but no exception raised yet
+        } catch(FileNotFoundException $e) {
+            continue;
+        }
         // function names are all lower-case here
         $modName = strtolower($modName);
         $todo[$modName] = $modDir;

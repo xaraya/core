@@ -42,10 +42,9 @@ function dynamicdata_adminapi_createproperty($args)
         $invalid[] = 'type';
     }
     if (count($invalid) > 0) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    join(', ',$invalid), 'admin', 'createproperty', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array(join(', ',$invalid), 'admin', 'createproperty', 'DynamicData');
+        throw new BadParameterException($vars,$msg);
     }
 
     // Security check - important to do this as early on as possible to

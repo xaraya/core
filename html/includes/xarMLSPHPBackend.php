@@ -19,7 +19,7 @@
  */
 
 include_once dirname(__FILE__).'/xarMLS.php';
-class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
+class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
     function xarMLS__PHPTranslationsBackend($locales)
     {
@@ -95,7 +95,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
     {
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
 //            $msg = xarML("Context type: #(1) and file name: #(2)", $ctxType, $ctxName);
-//            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($msg));
+//            throw new ContextNotFoundException?
 //            return;
             return true;
         }

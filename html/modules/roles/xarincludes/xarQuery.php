@@ -23,33 +23,33 @@
 class xarQuery
 {
 
-    var $version = "1.3";
-    var $id;
-    var $type;
-    var $tables;
-    var $fields;
-    var $conditions;
-    var $conjunctions;
-    var $bindings;
-    var $sorts;
-    var $result;
-    var $rows = 0;
-    var $rowstodo = 0;
-    var $startat = 1;
-    var $output;
-    var $row;
-    var $dbconn;
-    var $statement;
-    var $israwstatement = 0;
-    var $bindvars;
-    var $bindstring;
-    var $limits = 1;
+    public $version = "1.3";
+    public $id;
+    public $type;
+    public $tables;
+    public $fields;
+    public $conditions;
+    public $conjunctions;
+    public $bindings;
+    public $sorts;
+    public $result;
+    public $rows = 0;
+    public $rowstodo = 0;
+    public $startat = 1;
+    public $output;
+    public $row;
+    public $dbconn;
+    public $statement;
+    public $israwstatement = 0;
+    public $bindvars;
+    public $bindstring;
+    public $limits = 1;
 
 // Flags
-// Set to true to use binding variables supported by some dbs
-    var $usebinding = true;
+// Set to true to use binding variables 
+    public $usebinding = true;
 // Two unrelated conditions will be inserted into the query as AND or OR
-    var $implicitconjunction = "AND";
+    public $implicitconjunction = "AND";
 
 //---------------------------------------------------------
 // Constructor
@@ -58,9 +58,7 @@ class xarQuery
     {
         if (in_array($type,array("SELECT","INSERT","UPDATE","DELETE"))) $this->type = $type;
         else {
-            $msg = xarML('The operation #(1) is not supported', $type);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
-            return;
+            throw new ForbiddenOperationException($type,'This operation is not supported yet. "#(1)"');
         }
 
         $this->key = mktime();
@@ -87,54 +85,61 @@ class xarQuery
         //FIXME: PHP5 hack
         $this->open();
         $this->setstatement($statement);
+        // NON SELECT
         if ($this->type != 'SELECT') {
             if ($this->usebinding) {
                 $result = $this->dbconn->Execute($this->statement,$this->bindvars);
                 $this->bindvars = array();
-            }
-            else {
+            } else {
                 $result = $this->dbconn->Execute($this->statement);
             }
             if(!$result) return;
-            $this->rows = $result->_numOfRows;
+            $this->rows = $result; 
             return true;
         }
+
+        // SELECT statement
         if($this->rowstodo != 0 && $this->limits == 1 && $this->israwstatement) {
             $begin = $this->startat-1;
             $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin);
             $this->statement .= " LIMIT " . $begin . "," . $this->rowstodo;
-        }
-        else {
+        } else {
             if ($this->usebinding) {
                 $result = $this->dbconn->Execute($this->statement,$this->bindvars);
                 $this->bindvars = array();
-            }
-            else {
+            } else {
                 $result = $this->dbconn->Execute($this->statement);
             }
-            $this->rows = $result->_numOfRows;
+            if (!$result) return;
+            $this->rows = $result->getRecordCount();
         }
         if (!$result) return;
         $this->result =& $result;
 
-        if (($result->fields) === false) $numfields = 0;
-        else $numfields = $result->_numOfFields;
+        if (($result->fields) === false) 
+            $numfields = 0;
+        else 
+            $numfields = count($result->fields); // Better than the private var, fields should still be proteced
+
         $this->output = array();
         if ($display == 1) {
             if ($statement == '') {
                 if ($this->fields == array() && $numfields > 0) {
-                    for ($i=0;$i<$numfields;$i++) {
-                        $o =& $result->FetchField($i);
-                        if (!isset($o) || !isset($o->name)) {
-                            $msg = xarML('SELECT with total of columns different from the number retrieved.');
-                            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
-                            return;
-                        }
-                        $this->fields[$o->name]['name'] = strtolower($o->name);
+                    $result->setFetchMode(ResultSet::FETCHMODE_ASSOC);
+                    $result->next(); $result->previous(); 
+                    for ($i=0;$i< $numfields;$i++) {
+                        // Fetchfield was the only one used throughout the whole codebase, simulate it here instead of in creole
+                        //$o = $result->FetchField($i);
+                        // FIXME: get rid of it more globally since this never was portable anyway and it kills performance
+                        $tmp = array_slice($result->fields,$i,1);
+                        $finally_we_got_the_name_of_the_field  = key($tmp);
+                        $this->fields[$finally_we_got_the_name_of_the_field]['name'] = strtolower($finally_we_got_the_name_of_the_field);
                     }
+                    $result->setFetchMode(ResultSet::FETCHMODE_NUM);
+                    $result->next(); $result->previous();
                 }
                 while (!$result->EOF) {
-                    $i=0;
+                    $i=0; $line=array();
                     foreach ($this->fields as $key => $value ) {
                         if(!empty($value['alias']))
                             $line[$value['alias']] = $result->fields[$i];
@@ -147,11 +152,10 @@ class xarQuery
                     $this->output[] = $line;
                     $result->MoveNext();
                 }
-            }
-            else {
+            } else {
                 while (!$result->EOF) {
                     $line = array();
-                    for ($i=0;$i<$numfields;$i++) {
+                    for ($i=0;$i< $numfields;$i++) {
                         $line[] = $result->fields[$i];
                     }
                     $this->output[] = $line;
@@ -205,9 +209,7 @@ class xarQuery
             $table = func_get_arg(0);
             if (!is_array($table)) {
                 if (!is_string($table)) {
-                    $msg = xarML('The table #(1) you are trying to add needs to be a string or an array.', $table);
-                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
-                    return;
+                    throw new VariableValidationException(array('table',$table,'must be string or array'));
                 }
                 else {
                     $newtable = explode(' ',$table);
@@ -223,11 +225,8 @@ class xarQuery
                 $argsarray = $table;
             }
         }
-        else {
-            $msg = xarML('This function can only take 1 or 2 parameters');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemMessage($msg));
-            return;
-        }
+        else throw new BadParameterException(null,'This function can only take 1 or 2 parameters');
+
         $notdone = true;
         $limit = count($this->tables);
         for ($i=0;$i<$limit;$i++) {
@@ -252,11 +251,8 @@ class xarQuery
         elseif ($numargs == 1) {
             $field = func_get_arg(0);
             if (!is_array($field)) {
-                if (!is_string($field)) {
-                    $msg = xarML('The field #(1) you are trying to add needs to be a string or an array.', $field);
-                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage($msg));
-                    return;
-                }
+                if (!is_string($field)) 
+                    throw new BadParameterException($field,'The field #(1) you are trying to add needs to be a string or an array.');
                 else {
                     if ($this->type == 'SELECT') {
                         if (preg_match("/(.*) as (.*)/i", $field, $match)) {
@@ -275,11 +271,8 @@ class xarQuery
                 $argsarray = $field;
             }
         }
-        else {
-            $msg = xarML('This function can only take 1 or 2 parameters');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemMessage($msg));
-            return;
-        }
+        else throw new BadParameterException(null,'This function can only take 1 or 2 parameters');
+
         $this->fields[$argsarray['name']] = $argsarray;
     }
 
@@ -287,6 +280,7 @@ class xarQuery
     {
         $this->_addfields($tables);
     }
+
     function addtables($tables)
     {
         $this->_addtables($tables);
@@ -760,8 +754,7 @@ class xarQuery
             break;
         case "UPDATE" :
             if($this->fields == array('*')) {
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR_QUERY', new SystemMessage(xarML('Your query has no fields.')));
-                return;
+                throw new BadParameterException(null,'Your query has no fields.');
             }
             foreach ($this->fields as $field) {
                 if (is_array($field)) {
@@ -791,6 +784,7 @@ class xarQuery
         }
         return $this->bindstring;
     }
+
     function assembledconditions()
     {
         $c = "";
@@ -1003,6 +997,7 @@ class xarQuery
         $limit = count($pieces);
         for ($i=1;$i<$limit;$i++){
             if (gettype($this->bindvars[$i-1]) == 'string') {
+                // FIXME: qstr should not be used
                 $sqlfield = $this->dbconn->qstr($this->bindvars[$i-1]);
             }
             else {
@@ -1011,14 +1006,6 @@ class xarQuery
             $bound .= $sqlfield . $pieces[$i];
         }
         $this->statement = $bound;
-    }
-    function nextid($table="", $id="")
-    {
-        return $this->dbconn->PO_Insert_ID();
-    }
-    function lastid($table="", $id="")
-    {
-        return $this->dbconn->GetOne("SELECT MAX($id) FROM $table");
     }
 }
 ?>

@@ -25,12 +25,7 @@ function installer_init()
     * register(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
-    if (!xarInstallAPIFunc('initialise',
-                           array('directory' => 'base',
-                                 'initfunc'  => 'init'))) {
-        return NULL;
-    }
-
+    xarInstallAPIFunc('initialise', array('directory' => 'base','initfunc'  => 'init'));
     // Initialisation successful
     return true;
 }

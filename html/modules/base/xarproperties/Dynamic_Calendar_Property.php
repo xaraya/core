@@ -118,9 +118,9 @@ class Dynamic_Calendar_Property extends Dynamic_Property
     function showOutput($args = array())
     {
         extract($args);
-        
+
         $data=array();
-        
+
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -163,7 +163,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
                               'validation' => '',
                               'source'         => '',
                               'dependancies'   => '',
-                              'requiresmodule' => '',
+                              'requiresmodule' => 'base',
                               'aliases'        => '',
                               'args'           => serialize($args),
                             // ...

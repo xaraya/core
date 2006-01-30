@@ -22,25 +22,20 @@ function modules_admin_updatehooks()
     if(!xarSecurityCheck('AdminModules')) {return;}
 
     if (!xarSecConfirmAuthKey()) {return;}
+    // Curhook contains module name
     if (!xarVarFetch('curhook', 'str:1:', $curhook)) {return;}
 
     $regId = xarModGetIDFromName($curhook);
     if (!isset($curhook) || !isset($regId)) {
         $msg = xarML('Invalid hook');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                        new SystemException($msg));
-        return;
+        throw new Exception($msg);
     }
 
     // Only update if the module is active.
     $modinfo = xarModGetInfo($regId);
     if (!empty($modinfo) && xarModIsAvailable($modinfo['name'])) {
         // Pass to API
-        $updated = xarModAPIFunc(
-            'modules', 'admin', 'updatehooks',
-            array('regid' => $regId)
-        );
-        if (!isset($updated)) {return;}
+        if(!xarModAPIFunc('modules', 'admin', 'updatehooks', array('regid' => $regId))) return;
     }
 
     if (!xarVarFetch('return_url', 'isset', $return_url, '', XARVAR_NOT_REQUIRED)) {return;}

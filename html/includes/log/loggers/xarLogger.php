@@ -34,7 +34,7 @@ class xarLogger
     *
     * The level of the messages which will be logged.
     */
-    var $_logLevel;
+    private $_logLevel;
 
     /**
     * Identity of the logger.
@@ -43,16 +43,16 @@ class xarLogger
     * in highly frequented sites, the time of the logged message isnt as good to diferenciate
     * different pageviews
     */
-    var $_ident;
+    private $_ident;
 
     /**
     * String containing the format to use when generating timestamps.
     * @var string
     */
-    var $_timeFormat = '%b %d %H:%M:%S';
+    private $_timeFormat = '%b %d %H:%M:%S';
 
     // Elapsed time.
-    var $_elapsed = 0;
+    private $_elapsed = 0;
 
     /**
      * Sets up the configuration specific parameters for each driver

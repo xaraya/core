@@ -20,10 +20,5 @@ class xarTpl__XarConfigEntityNode extends xarTpl__EntityNode
         $name = $this->parameters[0];
         return "xarConfigGetVar('".$name."')";
     }
-    
-    function needExceptionsControl()
-    {
-        return true;
-    }
 }
 ?>

@@ -31,10 +31,9 @@ function modules_admin_install()
     if (!xarVarFetch('id', 'int:1:', $id)) return;
 
     //First check the modules dependencies
+    // TODO: investigate try/catch clause here, it's not trivial
     if (!xarModAPIFunc('modules','admin','verifydependency',array('regid'=>$id))) {
         //Oops, we got problems...
-        //Handle the exception with a nice GUI:
-        xarErrorHandled();
 
         //Checking if the user has already passed thru the GUI:
         xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
@@ -52,10 +51,12 @@ function modules_admin_install()
         //3rd has only 'regid' key with the ID of the module
 
         // get any dependency info on this module for a better message if something is missing
-        $thisinfo = xarModGetInfo($id);
-        if (!isset($thisinfo)) xarErrorHandled();
-        if (isset($thisinfo['dependencyinfo'])) $data['dependencyinfo'] = $thisinfo['dependencyinfo'];
-        else $data['dependencyinfo'] = array();
+        try {
+            $thisinfo = xarModGetInfo($id);
+            $data['dependencyinfo'] = $thisinfo['dependencyinfo'];
+        } catch (NotFoundExceptions $e) {
+            $data['dependencyinfo'] = array();
+        }
 
         $data['authid']       = xarSecGenAuthKey();
         $data['dependencies'] = xarModAPIFunc('modules','admin','getalldependencies',array('regid'=>$id));
@@ -78,22 +79,11 @@ function modules_admin_install()
         }
     }
 
-    // Send the full error stack to the install template for rendering.
-    // (The hope is that all errors can be rendered like this eventually)
-    if (xarCurrentErrorType()) {
-        // Get the error stack
-        $errorstack = xarErrorget();
-        // Free up the error stack since we are handling it locally.
-        xarErrorFree();
-        // Return the stack for rendering.
-        return array('errorstack' => $errorstack);
-    }
-
     // set the target location (anchor) to go to within the page
     $target = $minfo['name'];
     
     if (function_exists('xarOutputFlushCached')) {
-        xarOutputFlushCached('adminpanels');
+        xarOutputFlushCached('modules');
         xarOutputFlushCached('base-block');
     }
 

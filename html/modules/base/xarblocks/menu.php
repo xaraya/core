@@ -109,7 +109,6 @@ function base_menublock_display($blockinfo)
     list($thismodname, $thismodtype, $thisfuncname) = xarRequestGetInfo();
 
     // Sort Order, Status, Common Labels and Links Display preparation
-    //$menustyle = xarModGetVar('adminpanels','menustyle');
     $logoutlabel = xarVarPrepForDisplay(xarML('logout'));
     $logouturl = xarModURL('roles' ,'user', 'logout', array());
     $loggedin = xarUserIsLoggedIn();

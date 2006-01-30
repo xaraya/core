@@ -49,11 +49,9 @@ function dynamicdata_userapi_getfield($args)
         $invalid[] = 'field name';
     }
     if (count($invalid) > 0) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    join(', ',$invalid), 'user', 'get', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array(join(', ',$invalid), 'user', 'get', 'DynamicData');
+        throw new BadParameterException($vars,$msg);
     }
 
     $object = & Dynamic_Object_Master::getObject(array('moduleid'  => $modid,

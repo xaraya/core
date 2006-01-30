@@ -50,9 +50,7 @@ function blocks_adminapi_update_instance($args)
         (!isset($title)) ||
         (!isset($refresh) || !is_numeric($refresh)) ||
         (!isset($state)  || !is_numeric($state))) {
-        $msg = xarML('Invalid parameter');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return false;
+        throw new BadParameterException(null,'Invalid number of parameters or wrong values in blocks_adminapi_update_instance');
     }
 
     // Legacy support of group_id
@@ -75,38 +73,32 @@ function blocks_adminapi_update_instance($args)
     $block_instances_table = $xartable['block_instances'];
     $block_group_instances_table = $xartable['block_group_instances'];
 
-    $query = 'UPDATE ' . $block_instances_table . '
-              SET xar_content = ?,
-                  xar_template = ?,
-                  xar_name = ?,
-                  xar_title = ?,
-                  xar_refresh = ?,
-                  xar_state = ?
-              WHERE xar_id = ?';
-
-    $bind = array(
-        $content, $template, $name, $title,
-        $refresh, $state, $bid
-    );
-
-    $result =& $dbconn->Execute($query, $bind);
-    if (!$result) {return;}
-
-    // Update the group instances.
-    if (isset($groups) && is_array($groups)) {
-        // Pass the group updated to the API if required.
-        // TODO: error handling.
-        $result = xarModAPIfunc(
-            'blocks', 'admin', 'update_instance_groups',
-            array('bid' => $bid, 'groups' => $groups)
-        );
+    try {
+        $dbconn->begin();
+        $query = 'UPDATE ' . $block_instances_table . '
+                  SET xar_content=?, xar_template=?, xar_name=?, xar_title=?, xar_refresh=?, xar_state=?
+                  WHERE xar_id = ?';
+        $stmt = $dbconn->prepareStatement($query);
+        $bind = array($content, $template, $name, $title,$refresh, $state, $bid);
+        $stmt->executeUpdate($bind);
+        
+        // Update the group instances.
+        if (isset($groups) && is_array($groups)) {
+            // Pass the group updated to the API if required.
+            // TODO: error handling.
+            $result = xarModAPIfunc('blocks', 'admin', 'update_instance_groups',array('bid' => $bid, 'groups' => $groups));
+        }
+    
+        $args['module'] = 'blocks';
+        $args['itemtype'] = 3; // block instance
+        $args['itemid'] = $bid;
+        xarModCallHooks('item', 'update', $bid, $args);
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
     }
-    
-    $args['module'] = 'blocks';
-    $args['itemtype'] = 3; // block instance
-    $args['itemid'] = $bid;
-    xarModCallHooks('item', 'update', $bid, $args);
-    
+
     return true;
 }
 

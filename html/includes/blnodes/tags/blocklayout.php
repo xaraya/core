@@ -11,22 +11,14 @@
  */
 class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
 {
-    function constructor(&$parser,$tagName, $parentTagName, $attributes)
+    function constructor(&$parser,$tagName, $parentTagName='', $attributes=array())
     {
         parent::constructor($parser, $tagName, $parentTagName, $attributes);
         $parser->tagRootSeen = true; // Ladies and gentlemen, we got him!
+        $this->hasChildren = true;
+        $this->hasText = true;
+        $this->isAssignable = false;
     }
-    
-    function hasChildren()
-    {
-        return true;
-    }
-    
-    function hasText()
-    {
-        return true;
-    }
-    
     
     function renderBeginTag()
     {
@@ -55,11 +47,6 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
     function renderEndTag()
     {
         return ' ';
-    }
-    
-    function isAssignable()
-    {
-        return false;
     }
 }
 ?>

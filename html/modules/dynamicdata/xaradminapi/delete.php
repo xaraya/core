@@ -33,10 +33,9 @@ function dynamicdata_adminapi_delete($args)
         $invalid[] = 'module id';
     }
     if (count($invalid) > 0) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    join(', ',$invalid), 'admin', 'delete', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array(join(', ',$invalid), 'admin', 'delete', 'DynamicData');
+        throw new BadParameterException($vars,$msg);
     }
 
     if (!isset($itemtype) || !is_numeric($itemtype)) {

@@ -13,7 +13,7 @@ include_once dirname(__FILE__)."/exception.class.php";
 
 class SystemMessage extends xarException
 {
-    var $link;
+    public $link;
 
     function SystemMessage($msg = '', $link = NULL)
     {

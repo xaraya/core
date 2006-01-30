@@ -10,6 +10,14 @@
  */
 class xarTpl__XarLoopNode extends xarTpl__TplTagNode
 {
+    function constructor(&$parser, $tagName, $parentTagName='', $parameters=array())
+    {
+        parent::constructor($parser, $tagName, $parentTagName, $parameters);
+        $this->hasChildren = true;
+        $this->hasText = true;
+        $this->isAssignable = false;
+    }
+
     function loopCounter($operator = NULL)
     {
         static $loopCounter = 0;
@@ -64,9 +72,9 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
             $previousLoop ='$loop_'.($loopCounter-1);
             $output .= $previousLoop.'_save=serialize('.$previousLoop.');';
         }
-        $output .= $loopName.'->index=-1; '.$loopName.'->number='.$loopCounter.';
+        $output .= $loopName.'= (object) null;'.$loopName.'->index=-1; '.$loopName.'->number='.$loopCounter.';
         foreach ('.$name.' as '.$loopName.'->key => '.$loopName.'->item ) {
-            unset($loop); '.$loopName.'->index++;
+            $loop=(object) null; '.$loopName.'->index++;
             $loop->index = '.$loopName.'->index;
             $loop->key   = '.$loopName.'->key; 
             $loop->item  =& '.$loopName.'->item; 
@@ -84,21 +92,6 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
             $output .= '$loop = unserialize($loop_'.$previousLoop.'_save);';
         } 
         return $output;
-    }
-    
-    function hasChildren()
-    {
-        return true;
-    }
-    
-    function hasText()
-    {
-        return true;
-    }
-    
-    function isAssignable()
-    {
-        return false;
     }
 }
 ?>

@@ -65,15 +65,5 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
         }
         return $prefix . $value . $postfix;
     }
-    
-    function needExceptionsControl()
-    {
-        if (!isset($this->attributes['scope'])) {
-            return false;
-        }
-        return ($this->attributes['scope'] == 'module' ||
-                $this->attributes['scope'] == 'config' ||
-                $this->attributes['scope'] == 'user');
-    }
 }
 ?>

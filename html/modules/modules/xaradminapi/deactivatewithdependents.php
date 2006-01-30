@@ -29,11 +29,7 @@ function modules_adminapi_deactivatewithdependents ($args)
         return;
 
     // Argument check
-    if (!isset($mainId)) {
-        $msg = xarML('Missing module regid (#(1)).', $mainId);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    if (!isset($mainId)) throw new EmptyParameterException('regid');
 
     // See if we have lost any modules since last generation
     if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {
@@ -47,18 +43,15 @@ function modules_adminapi_deactivatewithdependents ($args)
 
     // Get module information
     $modInfo = xarModGetInfo($mainId);
-    if (!isset($modInfo)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', new SystemException(__FILE__."(".__LINE__."): Module (regid: $regid) does not exist."));
-        return;
-    }
+    if (!isset($modInfo)) throw new ModuleNotFoundException($regid,'Module (regid: #(1)) does not exist.');
+
 
     if ($modInfo['state'] != XARMOD_STATE_ACTIVE &&
         $modInfo['state'] != XARMOD_STATE_UPGRADED) {
         //We shouldnt be here
         //Throw Exception
         $msg = xarML('Module to be deactivated (#(1)) is not active nor upgraded', $modInfo['displayname']);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
-        return;
+        throw new Exception($msg);
     }
 
     $dependents = xarModAPIFunc('modules','admin','getalldependents',array('regid'=>$mainId));
@@ -66,8 +59,7 @@ function modules_adminapi_deactivatewithdependents ($args)
     foreach ($dependents['active'] as $active_dependent) {
         if (!xarModAPIFunc('modules', 'admin', 'deactivate', array('regid' => $active_dependent['regid']))) {
             $msg = xarML('Unable to deactivate module "#(1)".', $active_dependent['displayname']);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
-            return;
+            throw new Exception($msg);
         }
     }
     

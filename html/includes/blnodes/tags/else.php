@@ -10,6 +10,12 @@
  */
 class xarTpl__XarElseNode extends xarTpl__TplTagNode
 {
+    function constructor(&$parser, $tagName, $parentTagName='', $parameters=array())
+    {
+        parent::constructor($parser, $tagName, $parentTagName, $parameters);
+        $this->isAssignable = false;
+    }
+
     function render()
     {
         switch ($this->parentTagName) {
@@ -23,15 +29,5 @@ class xarTpl__XarElseNode extends xarTpl__TplTagNode
         }
                 return $output;
     }
-        
-        function isAssignable()
-   {
-            return false;
-   }
-        
-        function needParameter()
-   {
-            return false;
-   }
 }
 ?>

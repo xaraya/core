@@ -21,13 +21,9 @@ function roles_adminapi_renamegroup($args)
 {
     extract($args);
 
-    if((!isset($pid)) || (!isset($gname))) {
-        $msg = xarML('groups_adminapi_renamegroup');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
-    }
+    if (!isset($pid))  throw new EmptyParameterException('pid');
+    if (!isset($gname)) throw new EmptyParameterException('gname');
+
 
 // Security Check
     if(!xarSecurityCheck('EditRole')) return;

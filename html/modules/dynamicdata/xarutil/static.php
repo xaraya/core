@@ -60,7 +60,7 @@ function dynamicdata_util_static($args)
     $data['itemtype'] = $itemtype;
     $data['authid'] = xarSecGenAuthKey();
 
-    if (xarModGetVar('adminpanels','dashboard')) {
+    if (xarModGetVar('modules','usedashboard')) {
         xarTplSetPageTemplateName('admin');
     }else {
         xarTplSetPageTemplateName('default');

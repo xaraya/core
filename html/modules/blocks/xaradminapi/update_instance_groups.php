@@ -95,7 +95,7 @@ function blocks_adminapi_update_instance_groups($args)
         if (!isset($newgroups[$gid]) && isset($current[$gid])) {
             $query = "DELETE FROM $block_group_instances_table WHERE xar_id = ?";
             $bindvars = array((int) $current[$gid]['id']);
-            $result =& $dbconn->Execute($query,$bindvars);
+            $result = $dbconn->Execute($query,$bindvars);
             if(!$result) return;
             //echo " delete:$gid ";
         }
@@ -105,9 +105,9 @@ function blocks_adminapi_update_instance_groups($args)
             $nextId = $dbconn->GenId($block_group_instances_table);
             $query = "INSERT INTO $block_group_instances_table
                         (xar_id, xar_group_id, xar_instance_id, xar_position, xar_template)
-                      VALUES (?,?,?,?,?)";
-            $bindvars = array($nextId, $gid, $bid, 0, $newgroups[$gid]['template']);
-            $result =& $dbconn->Execute($query,$bindvars);
+                      VALUES (?,?,?,0,?)";
+            $bindvars = array($nextId, $gid, $bid, $newgroups[$gid]['template']);
+            $result = $dbconn->Execute($query,$bindvars);
             if(!$result) return;
             //echo " create:$gid with " . $newgroups[$gid]['template'];
         }
@@ -119,17 +119,11 @@ function blocks_adminapi_update_instance_groups($args)
                             SET xar_template = ?
                             WHERE xar_id = ?";
             $bindvars = array($newgroups[$gid]['template'],$current[$gid]['id']);
-            $result =& $dbconn->Execute($query,$bindvars);
+            $result = $dbconn->Execute($query,$bindvars);
             if(!$result) return;
             //echo " update:$gid with " . $newgroups[$gid]['template'];
         }
     }
-
-    // TODO: use ADODB array query function?
-    // TODO: error handling?
-//    foreach ($query_arr as $query) {
-//        $result =& $dbconn->Execute($query);
-//    }
 
     // Resequence the position values, since we may have changed the existing values.
     // Span the resequence across all groups, since any number of groups could have

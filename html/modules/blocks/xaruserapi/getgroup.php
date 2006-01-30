@@ -24,9 +24,7 @@ function blocks_userapi_getgroup($args)
     
     if (empty($gid) && empty($name)) {
         // No identifier provided.
-        $msg = xarML('Invalid parameter: missing gid and name');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
+        throw new EmptyParameterException('name or gid');
     }
 
     // The getall function does the main work.

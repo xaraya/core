@@ -227,5 +227,24 @@ p.complete, p.active, p.greyed {
     font-size: .75em;
 }
 
-.warning {color:orange}
-.failure {color:failure}
+h3 { text-align: left; }
+ul { text-align: left; font-size: small;}
+ul li.success { list-style: none;}
+ul li.failure { list-style: none;}
+ul li.warning { list-style: none;}
+
+.failure:before {
+    content: "\2717";
+    color: red;
+    font-size: larger;
+}
+.success:before {
+    content: "\2713";
+    color: green;
+    font-size: larger;
+}
+.warning:before {
+    content: "\2621";
+    color: orange;
+    font-size: larger;
+}

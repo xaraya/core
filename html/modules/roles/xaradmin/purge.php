@@ -96,8 +96,7 @@ function roles_admin_purge($args)
 // check each role's user name
             if (empty($role['uname'])) {
                 $msg = xarML('Execution halted: the role with uid #(1) has an empty name. This needs to be corrected manually in the database.', $role['uid']);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM',
-                new SystemException($msg));
+                throw new Exception($msg);
             }
             if (xarSecurityCheck('ReadRole', 0, 'All', $role['uname'] . ":All:" . $role['uid'])) {
                 $skip = 0;
@@ -243,7 +242,7 @@ function roles_admin_purge($args)
                     ' ORDER BY xar_name';
 
         $result = $dbconn->Execute($query);
-        $data['totalselect'] = $result->_numOfRows;
+        $data['totalselect'] = $result->getRecordCount();
         if (!$result) {return;}
         if ($purgestartnum != 0) {
             $result = $dbconn->SelectLimit($query, $numitems, $purgestartnum-1);
@@ -263,8 +262,7 @@ function roles_admin_purge($args)
 // check each role's name and user name
             if (empty($name) || empty($uname)) {
                 $msg = xarML('Execution halted: the role with uid #(1) has an empty name or user name. This needs to be corrected manually in the database.', $uid);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM',
-                new SystemException($msg));
+                throw new Exception($msg);
             }
             switch ($state):
                 case ROLES_STATE_DELETED :

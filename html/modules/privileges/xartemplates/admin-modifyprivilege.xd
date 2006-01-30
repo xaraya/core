@@ -278,7 +278,7 @@
         </xar:ml>
       </legend>
       <div>
-        #$tree#
+        <xar:template file="tree" />
       </div>
      
       <div class="xar-form-input-wrapper">

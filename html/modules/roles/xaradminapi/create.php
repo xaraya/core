@@ -13,7 +13,7 @@
  * create a user
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param $args['uname'] username of the user
- * @param $args['realname'] real name of the user
+ * @param $args['name'] real name of the user
  * @param $args['email'] email address of the user
  * @param $args['pass'] password of the user
  * @param $args['date'] registration date
@@ -31,29 +31,11 @@ function roles_adminapi_create($args)
     // Get arguments
     extract($args);
 
-    $invalid = array();
-    if (!isset($uname)) {
-        $invalid[] = 'uname';
-    } 
-    if (!isset($email)) {
-        $invalid[] = 'email';
-    } 
-    if (!isset($realname)) {
-        $invalid[] = 'realname';
-    } 
-    if (!isset($state)) {
-        $invalid[] = 'state';
-    } 
-    if (!isset($pass)) {
-        $invalid[] = 'pass';
-    } 
-    if (count($invalid) > 0) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)', 
-            join(', ', $invalid), 
-            'admin', 'create', 'roles');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    } 
+    if (!isset($uname)) throw new EmptyParameterException('uname');
+    if (!isset($email)) throw new EmptyParameterException('email');
+    if (!isset($name)) throw new EmptyParameterException('name');
+    if (!isset($state)) throw new EmptyParameterException('state');
+    if (!isset($pass)) throw new EmptyParameterException('pass');
 
     // Get datbase setup
     $dbconn =& xarDBGetConn();
@@ -62,12 +44,10 @@ function roles_adminapi_create($args)
     $rolestable = $xartable['roles'];
 
     // Check if that username exists
-    $query = "SELECT xar_uid FROM $rolestable
-            WHERE xar_uname= ? AND xar_type = 0";
-    $result =& $dbconn->Execute($query,array($uname));
-    if (!$result) return;
+    $query = "SELECT xar_uid FROM $rolestable WHERE xar_uname= ? AND xar_type = ?";
+    $result =& $dbconn->Execute($query,array($uname,0));
 
-    if ($result->RecordCount() > 0) {
+    if ($result->getRecordCount() > 0) {
         return 0;  // username is already there
     }
 
@@ -80,7 +60,8 @@ function roles_adminapi_create($args)
 
 // TODO: check this
     if (empty($authmodule)) {
-        $authmodule = 'authsystem';
+        $modInfo = xarMod_GetBaseInfo('authsystem');
+        $modId = $modInfo['systemid'];
     }
 
     // Add item, with encrypted passwd
@@ -100,13 +81,13 @@ function roles_adminapi_create($args)
     $query = "INSERT INTO $rolestable (
               xar_uid, xar_uname, xar_name, xar_type,
               xar_pass, xar_email, xar_date_reg, xar_valcode,
-              xar_state, xar_auth_module
+              xar_state, xar_auth_modid
               )
             VALUES (?,?,?,?,?,?,?,?,?,?)";
-    $bindvars = array($nextId, $uname, $realname, 0,
+    $bindvars = array($nextId, $uname, $name, 0,
                       $cryptpass,$email,$date_reg,$valcode,
-                      $state,$authmodule);
-    $result =& $dbconn->Execute($query,$bindvars);
+                      $state,$modId);
+    $result = $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
     // Get the ID of the user that we created.

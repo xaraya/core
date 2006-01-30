@@ -10,6 +10,16 @@
  */
 
 /**
+ * Exceptions for this subsystem
+ *
+ */
+
+class VariableValidationException extends ValidationExceptions
+{ 
+    protected $message = 'The variable "#(1)" [Value: "#(2)"] did not comply with the required validation: "#(3)"';
+}
+
+/**
  * Variables package defines
  */
 define('XARVAR_ALLOW_NO_ATTRIBS', 1);
@@ -52,16 +62,8 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
      * Initialise the variable cache
      */
     $GLOBALS['xarVar_cacheCollection'] = array();
-
     $GLOBALS['xarVar_allowableHTML'] = xarConfigGetVar('Site.Core.AllowableHTML');
-    if (!isset($GLOBALS['xarVar_allowableHTML']) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return; // throw back exception
-    }
-
     $GLOBALS['xarVar_fixHTMLEntities'] = xarConfigGetVar('Site.Core.FixHTMLEntities');
-    if (!isset($GLOBALS['xarVar_fixHTMLEntities']) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        return; // throw back exception
-    }
 
     // Subsystem initialized, register a handler to run when the request is over
     //register_shutdown_function ('xarVar__shutdown_handler');
@@ -120,17 +122,14 @@ function xarVarBatchFetch()
 
     foreach ($batch as $line) {
         $result_array[$line[2]] = array();
-        $result = xarVarFetch($line[0], $line[1], $result_array[$line[2]]['value'], isset($line[3])?$line[3]:NULL, isset($line[4])?$line[4]:XARVAR_GET_OR_POST);
-
-        if (!$result) {
+        try {
+            $result = xarVarFetch($line[0], $line[1], $result_array[$line[2]]['value'], isset($line[3])?$line[3]:NULL, isset($line[4])?$line[4]:XARVAR_GET_OR_POST);
+            $result_array[$line[2]]['error'] = '';
+        } catch (ValidationExceptions $e) { // Only catch validation exceptions, the rest should be thrown
             //Records the error presented in the given input variable
-            $result_array[$line[2]]['error'] = xarCurrentError();
-            //Handle the Exception
-            xarErrorHandled();
+            $result_array[$line[2]]['error'] = $e->getMessage();
             //Mark that we've got an error
             $no_errors = false;
-        } else {
-            $result_array[$line[2]]['error'] = '';
         }
     }
 
@@ -138,7 +137,7 @@ function xarVarBatchFetch()
     //errors present in the Fetched variables.
     $result_array['no_errors'] = $no_errors;
 
-    return $result_array;
+    return $result_array; // TODO: Is it the responsability of the callee to further handle this? If they dont => security risk.
 }
 
 /**
@@ -156,7 +155,7 @@ function xarVarBatchFetch()
  * The $defaultValue provides a default value that is returned when the variable is not present or doesn't validate
  * correctly.
  *
- * The $flag parameter is a bitmask between the following constants: 
+ * The $flag parameter is a bitmask between the following constants:
  * XARVAR_GET_OR_POST  - fetch from GET or POST variables
  * XARVAR_GET_ONLY     - fetch from GET variables only
  * XARVAR_POST_ONLY    - fetch from POST variables only
@@ -212,7 +211,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     //This allows us to have a extract($args) before the xarVarFetch and still run
     //the variables thru the tests here.
 
-// FIXME: this flag doesn't seem to work !?
+    // FIXME: this flag doesn't seem to work !?
     //The FLAG here, stops xarVarFetch from reusing the variable if already present
     if (!isset($value) || ($flags & XARVAR_DONT_REUSE)) {
         $value = xarRequestGetVar($name, $allowOnlyMethod);
@@ -225,8 +224,6 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     }
 
     $result = xarVarValidate($validation, $value, $supress, $name);
-
-    if (xarCurrentErrorType()) {return;} //Throw back
 
     if (!$result) {
     // CHECKME:  even for the XARVAR_DONT_SET flag !?
@@ -321,12 +318,7 @@ function xarVarValidate($validation, &$subject, $supress = false, $name='')
     $valParams = explode(':', $validation);
     $valType = strtolower(array_shift($valParams));
 
-    if (empty($valType)) {
-        // Raise an exception
-        $msg = xarML('No validation type present.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    }
+    if (empty($valType)) throw new EmptyParameterException('valType');
 
     // {ML_include 'includes/validations/array.php'}
     // {ML_include 'includes/validations/bool.php'}
@@ -485,35 +477,25 @@ function xarVar__getAllowedTags($level)
  * @return mixed The value of the variable or void if variable doesn't exist
  * @raise DATABASE_ERROR, BAD_PARAM
  */
- //FIXME: Theme vars seems to be useless, get rid of it.
-function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL, $type = 'modvar')
+function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = NULL, $type = 'modvar')
 {
-    if (empty($name)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
-        return;
-    }
-
-    // FIXME: <mrb> Has this a specific historic reason to do it like this?
-    $missing = '*!*MiSSiNG*!*';
+    if (empty($name)) throw new EmptyParameterException('name');
 
     if (empty($prep)) {
         $prep = XARVAR_PREP_FOR_NOTHING;
     }
 
     // Lets first check to see if any of our type vars are alread set in the cache.
-    //If you change this, change it down there in the results for modvar and themevar
     $cacheName = $name;
     switch(strtolower($type)) {
-    case 'moduservar':
-        $cacheCollection = 'ModUser.Variables.' . $modName;
-        $cacheName = $uid . $name;
-        break;
-    case 'themevar':
-        $cacheCollection = 'Theme.Variables.' . $modName;  // This is kinda confusing
+    case 'moditemvar':
+        $cacheCollection = 'ModItem.Variables.' . $modName;
+        $cacheName = $itemid . $name;
         break;
     case 'configvar':
         $cacheCollection = 'Config.Variables';
         break;
+    case 'modvar':
     default:
         $cacheCollection = 'Mod.Variables.' . $modName;
         break;
@@ -521,7 +503,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
 
     if (xarVarIsCached($cacheCollection, $cacheName)) {
         $value = xarVarGetCached($cacheCollection, $cacheName);
-        if ($value === $missing) {
+        if (!isset($value)) {
             return;
         } else {
             if ($prep == XARVAR_PREP_FOR_DISPLAY){
@@ -538,11 +520,8 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
 
 
     // We didn't find it in the single var cache, let's check the cached collection by whole/name
+    // TODO: caching for the other types
     switch(strtolower($type)) {
-    case 'themevar':
-        if (xarVarIsCached('Theme.GetVarsByTheme', $modName)) return;
-        if (xarVarIsCached('Theme.GetVarsByName', $cacheName)) return;
-        break;
     case 'modvar':
         if (xarVarIsCached('Mod.GetVarsByModule', $modName)) return;
         if (xarVarIsCached('Mod.GetVarsByName', $cacheName)) return;
@@ -553,20 +532,11 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
 
 
     // Still no luck, let's do the hard work then
-    switch(strtolower($type)) {
-    case 'themevar':
-        $baseinfotype = 'theme';
-        break;
-    default:
-        $baseinfotype = 'module';
-        break;
+    $baseinfotype = 'module';
 
-    }
     if($type != 'configvar') {
         $modBaseInfo = xarMod_getBaseInfo($modName, $baseinfotype);
-        if (!isset($modBaseInfo)) {
-            return; // throw back
-        }
+        if (!isset($modBaseInfo)) return; // throw back
     }
 
 
@@ -587,90 +557,44 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         $query = "SELECT xar_name, xar_value FROM $module_varstable WHERE xar_modid = ?";
         $bindvars = array((int)$modBaseInfo['systemid']);
         break;
-    case 'moduservar':
+     case 'moditemvar':
         // Takes the right table basing on module mode
         if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-            $module_uservarstable = $tables['system/module_uservars'];
+            $module_itemvarstable = $tables['system/module_itemvars'];
         } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-            $module_uservarstable = $tables['site/module_uservars'];
+            $module_itemvarstable = $tables['site/module_itemvars'];
         }
         unset($modvarid);
         $modvarid = xarModGetVarId($modName, $name);
         if (!$modvarid) return;
 
-        $query = "SELECT xar_value FROM $module_uservarstable
-                  WHERE xar_mvid = ? AND xar_uid = ?";
-        $bindvars = array((int)$modvarid, (int)$uid);
-        break;
-    case 'themevar':
-        // Takes the right table basing on theme mode
-        if ($modBaseInfo['mode'] == XARTHEME_MODE_SHARED) {
-            $theme_varsTable = $tables['theme_vars'];
-        } elseif ($modBaseInfo['mode'] == XARTHEME_MODE_PER_SITE) {
-            $theme_varsTable = $tables['site/theme_vars'];
-        }
-
-        //This was broken!!
-        //Guess nobody is using these
-        //Later on it was list($value) = $this->fields... But there are 3 fields here!!!
-//        $query = "SELECT xar_value, xar_prime, xar_description
-        $query = "SELECT xar_name, xar_value
-                  FROM $theme_varsTable
-                  WHERE xar_themename = ?";
-        $bindvars = array($modName);
+        $query = "SELECT xar_value FROM $module_itemvarstable WHERE xar_mvid = ? AND xar_itemid = ?";
+        $bindvars = array((int)$modvarid, (int)$itemid);
         break;
     case 'configvar':
-
         $config_varsTable = $tables['config_vars'];
 
         $query = "SELECT xar_value FROM $config_varsTable WHERE xar_name=?";
         $bindvars = array($name);
         break;
-
     }
 
-    // TODO : Explain the cache logic behind this, why exclude moduservars?
-    // TODO : why have cache period 1 week ?
-    if (xarCore_getSystemVar('DB.UseADODBCache')){
-        switch(strtolower($type)) {
-        case 'modvar':
-        case 'themevar':
-        case 'configvar':
-            $result =& $dbconn->CacheExecute(3600*24*7,$query,$bindvars);
-            if (!$result) return;
-            break;
-        case 'moduservar':
-            $result =& $dbconn->Execute($query,$bindvars);
-            if (!$result) return;
-            break;
-        }
-    } else {
-        $result =& $dbconn->Execute($query,$bindvars);
-        if (!$result) return;
-    }
+    // TODO : Here used to be a resultset cache option, reconsider it
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
 
-    if (strtolower($type) == 'moduservar') {
-        // If there is no such thing, return the global setting.
-        if ($result->EOF) {
-            $result->Close();
-            // return global setting
-            return xarModGetVar($modName, $name);
-        }
-    }
+    if ($result->getRecordCount() == 0) {
+        $result->close(); unset($result);
 
-    if ($result->EOF) {
-        $result->Close();
-        xarVarSetCached($cacheCollection, $cacheName, $missing);
+        // If there is no such thing, return the global setting for moditemvars
+        if (strtolower($type) == 'moditemvar') return xarModGetVar($modName, $name);
         return;
     }
 
     switch(strtolower($type)) {
-        case 'themevar':
         case 'modvar':
-            while (!$result->EOF) {
-                list($name, $value) = $result->fields;
-                xarVarSetCached($cacheCollection, $name, $value);
-                $result->MoveNext();
+            while ($result->next()) {
+                xarVarSetCached($cacheCollection, $result->getString(1), $result->get(2));
             }
             //Special value to tell this select has already been run, any
             //variable not found now on is missing
@@ -679,7 +603,6 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
             if (xarVarIsCached($cacheCollection, $cacheName)) {
                 $value = xarVarGetCached($cacheCollection, $cacheName);
             } else {
-                xarVarSetCached($cacheCollection, $cacheName, $missing);
                 return;
             }
         break;
@@ -688,7 +611,8 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
             // We finally found it, update the appropriate cache
             //Couldnt we serialize and unserialize all variables?
             //would that be too time expensive?
-            list($value) = $result->fields;
+            $result->next();
+            list($value) = $result->getRow();
             if($type == 'configvar') {
                 $value = unserialize($value);
             }
@@ -721,23 +645,16 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
  * @raise DATABASE_ERROR, BAD_PARAM
  * @todo  We could delete the user vars for the module with the new value to save space?
  */
-function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $description = NULL, $uid = NULL, $type = 'modvar')
+function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $description = NULL, $itemid = NULL, $type = 'modvar')
 {
     assert('!is_null($value); /* Not allowed to set a variable to NULL value */');
-    if (empty($name)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
-        return;
-    }
+    if (empty($name)) throw new EmptyParameterException('name');
 
     switch(strtolower($type)) {
         case 'modvar':
-        case 'moduservar':
+        case 'moditemvar':
             default:
             $modBaseInfo = xarMod_getBaseInfo($modName);
-            if (!isset($modBaseInfo)) return; // throw back
-            break;
-        case 'themevar':
-            $modBaseInfo = xarMod_getBaseInfo($modName, $baseinfotype = 'theme');
             if (!isset($modBaseInfo)) return; // throw back
             break;
         case 'configvar':
@@ -775,12 +692,12 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             }
 
             break;
-        case 'moduservar':
+        case 'moditemvar':
             // Takes the right table basing on module mode
             if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-                $module_uservarstable = $tables['system/module_uservars'];
+                $module_itemvarstable = $tables['system/module_itemvars'];
             } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-                $module_uservarstable = $tables['site/module_uservars'];
+                $module_itemvarstable = $tables['site/module_itemvars'];
             }
 
             // Get the default setting to compare the value against.
@@ -793,40 +710,20 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
 
             // First delete it.
             // FIXME: do we really want that ?
-            xarModDelUserVar($modName,$name,$uid);
+            xarModDelUserVar($modName,$name,$itemid);
 
             // Only store setting if different from global setting
             if ($value != $modsetting) {
-                $query = "INSERT INTO $module_uservarstable
-                            (xar_mvid, xar_uid, xar_value)
+                $query = "INSERT INTO $module_itemvarstable
+                            (xar_mvid, xar_itemid, xar_value)
                         VALUES (?,?,?)";
-                $bindvars = array($modvarid, $uid, (string)$value);
+                $bindvars = array($modvarid, $itemid, (string)$value);
             }
-            break;
-        case 'themevar':
-            // Takes the right table basing on theme mode
-            if ($modBaseInfo['mode'] == XARTHEME_MODE_SHARED) {
-                $theme_varsTable = $tables['theme_vars'];
-            } elseif ($modBaseInfo['mode'] == XARTHEME_MODE_PER_SITE) {
-                $theme_varsTable = $tables['site/theme_vars'];
-            }
-
-            // FIXME: do we really want that ?
-            xarThemeDelVar($modName, $name);
-
-            $seqId = $dbconn->GenId($theme_varsTable);
-            $query = "INSERT INTO $theme_varsTable
-                         (xar_id, xar_themename,
-                          xar_name, xar_prime,
-                          xar_value, xar_description)
-                      VALUES (?,?,?,?,?,?)";
-            $bindvars = array($seqId, $modName, $name, $prime, (string)$value, $description);
-
             break;
         case 'configvar':
 
             // FIXME: do we really want that ?
-            xarVar__DelVarByAlias($modname = NULL, $name, $uid = NULL, $type = 'configvar');
+            xarVar__DelVarByAlias($modname = NULL, $name, $itemid = NULL, $type = 'configvar');
 
             $config_varsTable = $tables['config_vars'];
 
@@ -844,14 +741,16 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             break;
     }
 
-    // TODO : Explain the cache logic behind this, why exclude moduservars? (see above)
-    if (xarCore_getSystemVar('DB.UseADODBCache') && strtolower($type) != 'moduservar'){
-        $result = $dbconn->CacheFlush();
-    }
-
     if (!empty($query)){
-        $result =& $dbconn->Execute($query,$bindvars);
-        if (!$result) return;
+        try {
+            $dbconn->begin();
+            $stmt = $dbconn->prepareStatement($query);
+            $stmt->executeUpdate($bindvars);
+            $dbconn->commit();
+        } catch (SQLException $e) {
+            $dbconn->rollback();
+            throw $e;
+        }
     }
 
     switch(strtolower($type)) {
@@ -859,12 +758,9 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             default:
             xarVarSetCached('Mod.Variables.' . $modName, $name, $value);
             break;
-        case 'moduservar':
-            $cachename = $uid . $name;
-            xarVarSetCached('ModUser.Variables.' . $modName, $cachename, $value);
-            break;
-        case 'themevar':
-            xarVarSetCached('Theme.Variables.' . $modName, $name, $value);
+        case 'moditemvar':
+            $cachename = $itemid . $name;
+            xarVarSetCached('ModItem.Variables.' . $modName, $cachename, $value);
             break;
         case 'configvar':
                 xarVarSetCached('Config.Variables', $name, $value);
@@ -884,22 +780,15 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
  * @raise DATABASE_ERROR, BAD_PARAM
  * @todo Add caching for user variables?
  */
-function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'modvar')
+function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = 'modvar')
 {
-    if (empty($name)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'name');
-        return;
-    }
+    if (empty($name)) throw new EmptyParameterException('name');
 
     switch(strtolower($type)) {
         case 'modvar':
-        case 'moduservar':
+        case 'moditemvar':
             default:
             $modBaseInfo = xarMod_getBaseInfo($modName);
-            if (!isset($modBaseInfo)) return; // throw back
-            break;
-        case 'themevar':
-            $modBaseInfo = xarMod_getBaseInfo($modName, $baseinfotype = 'theme');
             if (!isset($modBaseInfo)) return; // throw back
             break;
         case 'configvar':
@@ -909,24 +798,22 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
-    switch(strtolower($type)) {
+    try {
+        switch(strtolower($type)) {
         case 'modvar':
-            default:
+        default:
             // Delete all the user variables first
             $modvarid = xarModGetVarId($modName, $name);
             if($modvarid) {
                 // Takes the right table basing on module mode
                 if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-                    $module_uservarstable = $tables['system/module_uservars'];
+                    $module_itemvarstable = $tables['system/module_itemvars'];
                 } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-                    $module_uservarstable = $tables['site/module_uservars'];
+                    $module_itemvarstable = $tables['site/module_itemvars'];
                 }
 
-                // MrB: we could use xarModDelUserVar in a loop here, but this is
-                //      much faster.
-                $query = "DELETE FROM $module_uservarstable WHERE xar_mvid = ?";
-                $result =& $dbconn->Execute($query,array((int)$modvarid));
-                if(!$result) return;
+                $query = "DELETE FROM $module_itemvarstable WHERE xar_mvid = ?";
+                $dbconn->execute($query,array((int)$modvarid));
             }
             // Takes the right table basing on module mode
             if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
@@ -936,55 +823,47 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
             }
             // Now delete the module var itself
             $query = "DELETE FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
-            $bindvars = array((int)$modBaseInfo['systemid'], $name);
+            $dbconn->execute($query,array((int)$modBaseInfo['systemid'], $name));
             break;
-        case 'moduservar':
+        case 'moditemvar':
             // Takes the right table basing on module mode
             if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-                $module_uservarstable = $tables['system/module_uservars'];
+                $module_itemvarstable = $tables['system/module_itemvars'];
             } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-                $module_uservarstable = $tables['site/module_uservars'];
+                $module_itemvarstable = $tables['site/module_itemvars'];
             }
 
             // We need the variable id
             $modvarid = xarModGetVarId($modName, $name);
             if(!$modvarid) return;
 
-            $query = "DELETE FROM $module_uservarstable WHERE xar_mvid = ? AND xar_uid = ?";
-            $bindvars = array((int)$modvarid, (int)$uid);
-            break;
-        case 'themevar':
-            // Takes the right table basing on theme mode
-            if ($modBaseInfo['mode'] == XARTHEME_MODE_SHARED) {
-                $theme_varsTable = $tables['system/theme_vars'];
-            } elseif ($modBaseInfo['mode'] == XARTHEME_MODE_PER_SITE) {
-                $theme_varsTable = $tables['site/theme_vars'];
-            }
-
-            $query = "DELETE FROM $theme_varsTable WHERE xar_themename = ?  AND xar_name = ?";
-            $bindvars = array($modName,$name);
+            $query = "DELETE FROM $module_itemvarstable WHERE xar_mvid = ? AND xar_itemid = ?";
+            $bindvars = array((int)$modvarid, (int)$itemid);
+            $dbconn->execute($query,$bindvars);
             break;
         case 'configvar':
             $config_varsTable = $tables['config_vars'];
             $query = "DELETE FROM $config_varsTable WHERE xar_name = ?";
             $bindvars = array($name);
+            $dbconn->execute($query,$bindvars);
             break;
+        }
+        // All done, commit
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
     }
 
-    $result =& $dbconn->Execute($query, $bindvars);
-    if (!$result) return;
 
     switch(strtolower($type)) {
         case 'modvar':
             default:
                 xarVarDelCached('Mod.Variables.' . $modName, $name);
             break;
-        case 'moduservar':
-                $cachename = $uid . $name;
-                xarVarDelCached('ModUser.Variables.' . $modName, $cachename);
-            break;
-        case 'themevar':
-                xarVarDelCached('Theme.Variables.' . $modName, $name);
+        case 'moditemvar':
+                $cachename = $itemid . $name;
+                xarVarDelCached('ModItem.Variables.' . $modName, $cachename);
             break;
         case 'configvar':
                 xarVarDelCached('Config.Variables.', $name);
@@ -1003,17 +882,12 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
  * @param targetContext The name of the module
  * @return string the string in the new context
  * @raise EMPTY_PARAM
+ * @todo  Would it be useful to be able to transform arrays of strings at once?
  */
 function xarVarTransform ($string, $sourceContext, $targetContext)
 {
-
-    //Would it be useful to be able to transform arrays of strings at once?
-
-    if (empty($sourceContext) || empty($targetContext)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'sourceContext or targetContext');
-        return;
-    }
-
+    if (empty($sourceContext)) throw new EmptyParameterException('sourceContext');
+    if (empty($targetContext)) throw new EmptyParameterException('targetContext');
     $transform_type = $sourceContext.'_to_'.$targetContext;
     $function_name = xarVarLoad ('transforms', $transform_type);
 
@@ -1047,9 +921,9 @@ function xarVarLoad ($includes_type, $filename)
 
     if (!function_exists($function_name)) {
         // Raise an exception
-        $msg = xarML('The #(1) type \'#(2)\' could not be found.', $includes_type, $filename);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
+        $msg = 'The #(1) type \'#(2)\' could not be found.';
+        $params = arrary($includes_type, $filename);
+        throw new BadParameterException($params,$msg);
     }
 
     return $function_name;
@@ -1063,15 +937,11 @@ function xarVarLoad ($includes_type, $filename)
  * @param targetContext The name of the context to escape for
  * @return string the string escape for the context
  * @raise EMPTY_PARAM
+ * @todo Would it be useful to be able to transform arrays of strings at once?
  */
 function xarVarEscape ($string, $targetContext, $extras = array())
 {
-
-    //Would it be useful to be able to transform arrays of strings at once?
-    if (empty($targetContext)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'targetContext');
-        return;
-    }
+    if (empty($targetContext)) throw new EmptyParameterException('targetContext');
 
     $function_name = xarVarLoad ('escapes', $targetContext);
     if (!$function_name) {return;}

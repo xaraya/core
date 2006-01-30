@@ -28,29 +28,18 @@ function roles_adminapi_update($args)
 
     // Argument check - make sure that all required arguments are present,
     // if not then set an appropriate error message and return
-    if ((!isset($uid)) ||
-        (!isset($name)) ||
-        (!isset($uname)) ||
-        (!isset($email)) ||
-        (!isset($state))) {
-        $msg = xarML('Invalid Parameter Count');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    if (!isset($uid))   throw new EmptyParameterException('uid');
+    if (!isset($name))  throw new EmptyParameterException('name');
+    if (!isset($uname)) throw new EmptyParameterException('uname');
+    if (!isset($email)) throw new EmptyParameterException('email');
+    if (!isset($state)) throw new EmptyParameterException('state');
 
     $item = xarModAPIFunc('roles',
             'user',
             'get',
             array('uid' => $uid));
 
-    if ($item == false) {
-        $msg = xarML('No such user');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'ID_NOT_EXIST',
-                     new SystemException($msg));
-        return false;
-    }
+    if ($item == false) throw new IDNotFoundException($uid);
 
     if (empty($valcode)) {
         $valcode = '';
@@ -58,11 +47,6 @@ function roles_adminapi_update($args)
     if (empty($home)) {
         $home = '';
     }
-
-//    if (!xarSecAuthAction(0, 'roles::Item', "$item[uname]::$uid", ACCESS_EDIT)) {
-//        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-//        return;
-//    }
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
@@ -83,7 +67,7 @@ function roles_adminapi_update($args)
                 WHERE xar_uid = ?";
         $bindvars = array($name,$uname,$email,$valcode,$state,$uid);
     }
-	xarModSetUserVar('roles','userhome',$home,$uid);
+    xarModSetUserVar('roles','userhome',$home,$uid);
     $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 

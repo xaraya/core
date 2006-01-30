@@ -24,9 +24,6 @@ function themes_admin_modifyconfig()
     // everything else happens in Template for now
     // prepare labels and values for display by the template
     $data['title'] = xarVarPrepForDisplay(xarML('Configure Themes'));
-    $data['configoverview'] = xarVarPrepForDisplay(xarML('Configure Overview'));
-    $data['showhelplabel'] = xarVarPrepForDisplay(xarML('Show module "Help" in the menu:'));
-    $data['showhelp'] = xarModGetVar('adminpanels', 'showhelp') ? 'checked' : '' ;
     $data['submitbutton'] = xarVarPrepForDisplay(xarML('Submit')); 
     // everything else happens in Template for now
     return $data;

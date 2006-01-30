@@ -19,13 +19,8 @@ function roles_userapi_getUsers($args)
 {
     extract($args);
 
-    if(!isset($uid)) {
-        $msg = xarML('Wrong arguments to roles_userapi_getusers.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
-    }
+    if(!isset($uid)) throw new EmptyParameterException('uid');
+
 
 // Security Check
     if(!xarSecurityCheck('ReadRole')) return;

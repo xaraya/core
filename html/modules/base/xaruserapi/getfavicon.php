@@ -20,11 +20,9 @@
 function base_userapi_getfavicon($args)
 {
     extract($args);
-    if (!isset($url)) {
-        $msg = xarML('Invalid Parameter Count');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    }
+    if (!isset($url)) throw new BadParameterException($url);
+
+    // TODO: guess ;-)
     $empty_ico_data = base64_decode(
     'AAABAAEAEBAAAAEACABoBQAAFgAAACgAAAAQAAAAIAAAAAEACAAAAAAAQAEAAAAAAAAAAAAAAAAA' .
     'AAAAAAAAAAAA////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' .
