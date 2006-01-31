@@ -591,7 +591,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 switch(strtoupper($buildup)) {
                                     case XAR_TOKEN_HTMLCOMMENT_DELIM:
                                         $identifier = XAR_TOKEN_HTMLCOMMENT_DELIM;
-                                        break 2; // we found the delimiter, carry on
+                                        // Found in total: <!--
+                                        break 2; 
                                     case XAR_TOKEN_DOCTYPE_START:
                                         // doctype before root tag isnt ours to process, we skip that completely
                                         if(!$this->tagRootSeen) {
@@ -650,8 +651,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 $invalid = strpos($tagrest,$matchToken);
                                 switch($identifier) {
                                     case XAR_TOKEN_HTMLCOMMENT_DELIM:
-                                        // <!-- HTML comment, copy to output
-                                        $token .= $identifier . $tagrest . $matchToken . $nextChar;
+                                        // <!-- HTML comment, ignore what was in between
+                                        $token .= '';//$identifier . $tagrest . $matchToken . $nextChar;
                                         break;
                                     default:
                                         // <!WHATEVER Something else ( <!DOCTYPE for example ) as long as it ends properly, we're happy
