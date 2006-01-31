@@ -120,7 +120,7 @@ class xarTpl__CompilerError extends Exception
 {
     function raiseError($msg)
     {
-        // FIXME: is this usefull at all, if the compiler doesn't work, how are we going to show the exception ?
+        // FIXME: is this useful at all, if the compiler doesn't work, how are we going to show the exception ?
         //throw a generic exception for now
         throw new BLException('TBD',$msg);
     }
@@ -300,7 +300,6 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
                 if ($node->needAssignment() || $node->needParameter()) {
                     if (!$child->isAssignable() && $child->tagName != 'TextNode') {
                         $this->raiseError(XAR_BL_INVALID_TAG,"The '".$node->tagName."' tag cannot have children of type '".$child->tagName."'.", $child);
-                        return;
                     }
 
                     if ($node->needAssignment()) {
@@ -312,7 +311,7 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
 
                 // Recursively do the children
                 $childCode = $this->generateNode($child);
-                if (!isset($childCode)) return; // throw back
+                assert('isset($childCode); /* The rendering code for a node is not working properly */');
                 $code .= $childCode;
 
                 // This is in the outer level of the current node, see what kind of node we're dealing with
@@ -328,7 +327,7 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
                 $code .= $this->setPHPBlock(true);
             }
             $endCode = $node->renderEndTag();
-            if (!isset($endCode)) return; // throw back
+            assert('isset($endCode); /* The end rendering code for a node is not working properly */');
 
             $code .= $endCode;
         } else {
@@ -338,7 +337,6 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
             if(!isset($code)) ;//xarLogVariable('offending node:', $node);
             // Either code must have a value
             assert('isset($code); /* The rendering code for a node is not working properly */');
-            if (!isset($code))  return; // throw back
         }
         return $code;
     }
@@ -362,7 +360,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
     function parse(&$templateSource)
     {
-        // <make sure we only have to deal with \n as CR tokens, replace \r\n and \r
+        // <make sure we only have to deal with \n as LF tokens, replace \r\n and \r
         // Macintosh: \r, Unix: \n, Windows: \r\n
         $this->templateSource = str_replace(array('\r\n','\r'),'\n',$templateSource);
 
@@ -413,13 +411,11 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                 } else {
                     // Template error, found a > before the end
                     $this->raiseError(XAR_BL_INVALID_TAG,"The XML header ended prematurely, check the syntax", $this);
-                    return;
                 }    
                         
                 // We do the exception check after parsing it, so we get usefull info in the error
                 if($this->tagRootSeen) {
                     $this->raiseError(XAR_BL_INVALID_SYNTAX,'XML headers must occur before the root tag',$this);
-                    return;
                 }
                 
                 // Copy the header to the output
@@ -433,11 +429,11 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             case 'php':
                 // Do a specific error for php processing instruction
                 $this->raiseError(XAR_BL_INVALID_TAG,"PHP code detected outside allowed syntax ", $this);
-                return;
+                break;
             default:
                 // Anything else leads to an error, that includes the short form of the php tag (empty target)
                 $this->raiseError(XAR_BL_INVALID_TAG,"Unknown processing instruction '<?$target' found",$this);
-                return;
+                break;
         }
         return $result;
     }
@@ -446,7 +442,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
     {
         if (!$node->hasChildren()) {
             $this->raiseError(XAR_BL_INVALID_TAG,"The '".$node->tagName."' tag cannot have children.", $node);
-            return false;
         }
         return true;
     }
@@ -455,7 +450,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
     {
         if(!$node->hasText()) {
             $this->raiseError(XAR_BL_INVALID_TAG,"The '".$node->tagName."' tag cannot have text.", $node);
-            return false;
         }
         return true;
     }
@@ -475,6 +469,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
      * top level parse function for a node
      *
      * @todo why only allow PI targets of size 3?
+     * @todo obviously replace this parser with a php xml parser
      */
     function parseNode(&$parent)
     {
@@ -525,11 +520,9 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 if (isset($attributes['id'])) {
                                     if (isset($this->tagIds[$attributes['id']])) {
                                         $this->raiseError(XAR_BL_INVALID_TAG,"Not unique id in '".$tagName."' tag.", $this);
-                                        return;
                                     }
                                     if ($attributes['id'] == '') {
                                         $this->raiseError(XAR_BL_INVALID_TAG,"Empty id in '".$tagName."' tag.", $this);
-                                        return;
                                     }
                                     $this->tagIds[$attributes['id']] = true;
                                 }
@@ -539,12 +532,10 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                     // root tag found in module template
                                     $this->raiseError(XAR_BL_INVALID_SYNTAX,
                                               'Root tag found in module template or before <?xar type="page" ?> instruction',$this);
-                                    return;
                                 }
 
                                 if($tplType == 'page' && $tagName != XAR_ROOTTAG_NAME && !$this->tagRootSeen) {
                                     $this->raiseError(XAR_BL_INVALID_SYNTAX,"Found a  xar:$tagName tag before the xar:blocklayout tag, this is invalid",$this);
-                                    return;
                                 }
 
                                 // Create the node we parsed.
@@ -586,7 +577,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 $stackTagName = array_pop($this->tagNamesStack);
                                 if ($tagName != $stackTagName) {
                                     $this->raiseError(XAR_BL_INVALID_TAG,"Found closed '$tagName' tag where closed '$stackTagName' was expected.", $this);
-                                    return;
                                 }
                                 return $children;
                             }
@@ -673,14 +663,12 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                     $this->raiseError(XAR_BL_INVALID_TAG,
                                               "A non-markup tag (probably a comment) contains its identifier (".
                                               $matchToken.") in its contents. This is invalid XML syntax",$this);
-                                    return;
                                 }
                             } else {
                                 xarLogMessage("[$token][$buildup][$identifier][$tagrest][$matchToken][$nextChar]");
                                 $this->raiseError(XAR_BL_INVALID_TAG,
                                           "A non-markup tag (probably a comment) wasn't properly matched ('".
                                           $identifier."' vs. '". $matchToken ."') This is invalid XML syntax",$this);
-                                return;
                             }
                             break 2;
                     } // end case
@@ -693,7 +681,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // There is a < in there
                         $this->windTo(XAR_TOKEN_TAG_END);
                         $this->raiseError(XAR_BL_INVALID_TAG,__LINE__ .": Found open tag before close tag.", $this);
-                        return;
                     }
                     $token.=$nextToken;
                     break;
@@ -727,7 +714,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                     if(!isset($between) or strpos($between,XAR_TOKEN_TAG_START)) {
                         // set an exception and return
                         $this->raiseError(XAR_BL_INVALID_SYNTAX,"Entity isn't closed properly.", $this);
-                        return; // throw back
                     }
                     // Otherwise just pass the entity to the outputtext and clear the token to start over 
                     $text.=XAR_TOKEN_ENTITY_START.$this->windTo(XAR_TOKEN_ENTITY_END).$this->getNextToken();$token=''; 
@@ -775,7 +761,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // TODO: parse the PHP so the semi-colon can be tested in context.
                         if (strpos($instruction, ';')) {
                             $this->raiseError(XAR_BL_INVALID_TAG, "Possible injected PHP detected in: $instruction", $this);
-                            return;
                         }
                     
                         // Instruction is now set to $varname or xarFunction(.....)
@@ -803,7 +788,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $stackTagName = array_pop($this->tagNamesStack);
         if(!empty($stackTagName)) {
             $this->raiseError(XAR_BL_INVALID_SYNTAX,"Reached end of file while tag '$stackTagName' was open",$this);
-            return;
         }
         return $children;
     }
@@ -823,7 +807,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         }
         if ($exitToken != XAR_TOKEN_PI_DELIM) {
             $this->raiseError(XAR_BL_INVALID_TAG,"Invalid '$exitToken' character in header tag.", $this);
-            return;
         }
         // Must parse the entire tag, we want to find > character
         while (true) {
@@ -832,7 +815,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
             if ($token == XAR_TOKEN_TAG_START) {
                 $this->raiseError(XAR_BL_INVALID_TAG,"Unclosed tag.", $this);
-                return;
             }
             if ($token == XAR_TOKEN_TAG_END) {
                 break;
@@ -851,7 +833,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
             
             if ($token == XAR_TOKEN_TAG_START) {
                 $this->raiseError(XAR_BL_INVALID_TAG,"Unclosed tag.", $this);
-                return;
             }
             if ($token == XAR_TOKEN_SPACE || $token == XAR_TOKEN_TAG_END || $token == XAR_TOKEN_ENDTAG_START) {
                 break;
@@ -860,7 +841,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         }
         if ($tagName == '') {
             $this->raiseError(XAR_BL_INVALID_TAG,"Unnamed tag.", $this);
-            return;
         }
         
         // Parse the attributes
@@ -887,7 +867,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 
                 if ($token == XAR_TOKEN_TAG_START) {
                     $this->raiseError(XAR_BL_INVALID_TAG,"Unclosed tag.", $this);
-                    return;
                 }
                 if ($token == XAR_TOKEN_TAG_END) {
                     break;
@@ -909,16 +888,13 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                 case XAR_TOKEN_QUOTE:
                 case XAR_TOKEN_APOS:
                     $this->raiseError(XAR_BL_INVALID_TAG,"Invalid '$token' character in attribute name.", $this);
-                    return;
                 case  XAR_TOKEN_TAG_START:
                     $this->raiseError(XAR_BL_INVALID_TAG,"Unclosed tag.", $this);
-                    return;
                 case XAR_TOKEN_TAG_END:
                 case XAR_TOKEN_ENDTAG_START:
                 case XAR_TOKEN_PI_DELIM:
                     if (trim($name) != '') {
                         $this->raiseError(XAR_BL_INVALID_TAG,"Invalid '$name' attribute.", $this);
-                        return;
                     }
                     return $token;
                 case XAR_TOKEN_EQUAL_SIGN:
@@ -930,7 +906,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $name = trim($name);
         if ($name == '') {
             $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,"Unnamed attribute.", $this);
-            return;
         }
         
         // Then the value part
@@ -941,7 +916,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         
             if($token == XAR_TOKEN_TAG_END) {
                 $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,"Unclosed '$name' attribute.", $this);
-                return;
             } elseif ($token == $quote) {
                 break;
             }
@@ -971,7 +945,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         
             if($token == XAR_TOKEN_TAG_START) {
                 $this->raiseError(XAR_BL_INVALID_TAG,"Unclosed tag.", $this);
-                return;
             } elseif ($token == XAR_TOKEN_TAG_END) {
                 break;
             }
@@ -980,7 +953,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $tagName = rtrim($tagName);
         if ($tagName == '') {
             $this->raiseError(XAR_BL_INVALID_TAG,"Unnamed tag.", $this);
-            return;
         }
         return $tagName;
     }
@@ -1000,7 +972,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         }
         if ($entityType == '') {
             $this->raiseError(XAR_BL_INVALID_ENTITY,"Untyped entity.", $this);
-            return;
         }
         $parameters = array();
         if ($token == XAR_TOKEN_ENTITY_SEP) {
@@ -1012,7 +983,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                 if($token == XAR_TOKEN_ENTITY_END) {
                     if ($parameter == '') {
                         $this->raiseError(XAR_BL_INVALID_ENTITY,"Empty parameter.", $this);
-                        return;
                     }
                     $parameters[] = $parameter;
                     break;
@@ -1074,7 +1044,6 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $peek = $this->peekTo($needle);
         if(!isset($peek)) {
             $this->raiseError(XAR_BL_INVALID_FILE,"Unexpected end of the file.", $this);
-            return;
         }
            
         // We found sumtin, advance the pointer, cos we can
@@ -1133,7 +1102,6 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         // If the root tag comes along, check if we already have it
         if($tagName == XAR_ROOTTAG_NAME && $parser->tagRootSeen) {
             $parser->raiseError(XAR_BL_INVALID_SYNTAX,"The root tag can only occur once.", $parser);
-            return;
         }
 
         // Otherwise we instantiate the right class
@@ -1149,7 +1117,6 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
             $node = new xarTpl__XarOtherNode($parser, $tagName, $parentTagName, $attributes);
             if(!isset($node->tagobject)) {
                 $parser->raiseError(XAR_BL_INVALID_TAG,"Cannot instantiate nonexistent tag '$tagName'",$parser);
-                return;
             }
         }
         return $node;
@@ -1168,7 +1135,6 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         if(!xarTpl__NodesFactory::class_exists($entityClass)) { 
             if(!file_exists($entityFile)) {
                 $parser->raiseError(XAR_BL_INVALID_ENTITY,"Cannot instantiate nonexistent entity '$entityType'",$parser);
-                return;
             }
             include_once($entityFile);
         }
@@ -1187,7 +1153,6 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         if(!xarTpl__NodesFactory::class_exists($instructionClass)) {
             if(!file_exists($instructionFile)) {
                 $parser->raiseError(XAR_BL_INVALID_INSTRUCTION,"Cannot instantiate nonexistent instruction '$instruction'",$parser);
-                return;   
             }
             include_once($instructionFile);
         }
