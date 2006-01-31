@@ -33,8 +33,6 @@ upgrading from 1.0 to 2.x and not versions before 1.0
   a design error. xar:comment now produces a comment in the output while things
   between <!-- and --> get ignored by the BL parser. If you're previous xar:comment
   content was sensitive you might wanna reverse it in your templates too.
-  The xar:comment tag does *not* validate the content inside it which is still wrong, but
-  that is for another day.
 
 REFACTORING LIST:
 List of things which need to be refactored before starting the actual

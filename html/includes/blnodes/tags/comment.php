@@ -12,24 +12,17 @@
  */
 class xarTpl__XarCommentNode extends xarTpl__TplTagNode
 {
-    var $content ='';
+    private $iecondition = '';
+
     function constructor(&$parser,$tagName, $parentTagName='', $attributes=array())
     {
         parent::constructor($parser, $tagName, $parentTagName, $attributes);
-        // Completely skip the contents of the tag
-        $endMarker = XAR_TOKEN_TAG_START . XAR_TOKEN_ENDTAG_START. XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM .'comment'. XAR_TOKEN_TAG_END;
-        $res = $parser->windTo($endMarker);
-        if(isset($res)) {
-            if(strpos($res,'--')) {
-                $this->raiseError(XAR_BL_INVALID_SYNTAX,'The character sequence "--" inside a comment would produce invalid XML. Replace those characters with something else',$parser);
-            }
-            // Found the endmarker, save it in the content var, so we can produce it
-            $this->content = $res;
-            // We found it, eat that leave next lines to be able to check easily
-            //$end = $parser->peek(strlen($endMarker));
-            //xarLogMessage("BL: next should read '$endMarker' : '$end'");
-        }
-        $this->isPHPCode = false;
+        // We parse the content inside, what to do when it generates '--' in the output, that would make the output
+        // invalid. 
+        // Do we care? we're dealing with templates here, what content will be generated is of another parsers concern.
+        // We do care, because the effects can be so confusing. Option?
+        
+        $this->isPHPCode = true;
         $this->hasChildren = true;
         $this->hasText = true;
         $this->isAssignable = false;
@@ -37,20 +30,35 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
 
     function renderBeginTag()
     {
-        // Clear the children array, since we already scanned and saved them in content
-        $this->children = array();
-        return '<!--'.$this->content;
+        // Ok, strike my heart, we'll support ie conditional comments.
+        // i.e. <!--[if lt IE 7]<something>blah</something><![endif]-->
+        $iecondition='';
+        extract($this->attributes);
+
+        // Resolve it.
+        $this->iecondition = xarTpl__ExpressionTransformer::transformPHPExpression($iecondition);
+        
+        if($this->iecondition!='') {
+            $code = "'<!--[if '.".$this->iecondition.".']>'";
+        } else {
+            $code = "'<!--'";
+        }
+        return "echo $code;";
     }
 
     function renderEndTag()
     {
-        return '-->';
+        if($this->iecondition!='') {
+            $code = "'<![endif]-->'";
+        } else {
+            $code = "'-->'";
+        }
+        return "echo $code;";
     }
 
     function render()
     {
         // This is just here to prevent the abstract method to kick in
-        // FIXME: see above
         return '';
     }
 }

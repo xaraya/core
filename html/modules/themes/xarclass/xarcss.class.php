@@ -145,15 +145,8 @@ class xarCSS
                 $tagqueue->register($this->tagdata);
                 return true;
         }
-        // TODO: remove these hardcoded comments when BL + QA can handle them in templates
+
         $data['comments']                   = $this->comments;
-        $data['opencomment']                = "<!-- ";
-        $data['closecomment']               = " -->\n";
-        $data['openconditionalcomment']     = "<!--[if ";
-        $data['closeconditionalcomment']    = "<![endif]-->\n";
-        $data['openbracket']                = "<";
-        $data['closebracket']               = ">";
-        $data['closeconditionalbracket']    = "]>";
         return $data;
     }
 
