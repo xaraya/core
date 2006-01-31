@@ -99,15 +99,8 @@
             </dd>
         </xar:if>
     </dl>
-    <xar:comment>
-        ------------------- Begin Site Display Options --------------------- 
+    <xar:comment>- - - - - - - - -  Begin Site Display Options - - - - - - 
     </xar:comment>
-    <xar:ml>
-        <xar:mlstring>#(1) version #(2) (#(3))</xar:mlstring>
-        <xar:mlvar>#$XARCORE_VERSION_ID#</xar:mlvar>
-        <xar:mlvar>#$XARCORE_VERSION_NUM#</xar:mlvar>
-        <xar:mlvar>#$XARCORE_VERSION_SUB#</xar:mlvar>
-    </xar:ml>
     <xar:if condition="$tab eq 'display'">
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                <fieldset>
@@ -278,7 +271,7 @@
             </fieldset>
         </form>
         <xar:comment>
-            ----------------- Begin Security Options ------------------- 
+            - - - - - - Begin Security Options - - - - - - 
         </xar:comment>
         <xar:elseif condition="$tab eq 'security'" />
         <xar:set name="authmodules">
@@ -447,7 +440,7 @@
             </fieldset>
         </form>
         <xar:comment>
-            ----------------- Begin Locale Options ------------------- 
+            - - - - - - Begin Locale Options - - - - - - 
         </xar:comment>
         <xar:elseif condition="$tab eq 'locales'" />
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
@@ -461,7 +454,7 @@
             </fieldset>
         </form>
         <xar:comment>
-            ----------------- Begin Other Options ------------------- 
+            - - - - - - Begin Other Options - - - - - - 
         </xar:comment>
         <xar:elseif condition="$tab eq 'other'" />
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">

@@ -40,7 +40,7 @@
         </xar:if>
     </dl>
     <xar:comment>
-        ------------------- Begin General Options --------------------- 
+        - - - - - - -  Begin General Options - - - - - - - - - - - 
     </xar:comment>
     <xar:if condition="$tab eq 'general'">
         <form action="#xarModUrl('blocks', 'admin', 'modifyconfig')#" method="post" enctype="application/x-www-form-urlencoded">

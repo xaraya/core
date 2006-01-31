@@ -652,7 +652,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 switch($identifier) {
                                     case XAR_TOKEN_HTMLCOMMENT_DELIM:
                                         // <!-- HTML comment, ignore what was in between
-                                        $token .= '';//$identifier . $tagrest . $matchToken . $nextChar;
+                                        $token = '';//$identifier . $tagrest . $matchToken . $nextChar;
                                         break;
                                     default:
                                         // <!WHATEVER Something else ( <!DOCTYPE for example ) as long as it ends properly, we're happy

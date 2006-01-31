@@ -112,7 +112,7 @@
         </dl>
     </div>
     <xar:comment>
-        ------------------- Begin General Options --------------------- 
+        - - - - - - - - - - - - - - - - - - - Begin General Options - - - - - - - - - - - - - - - - - - - - - 
     </xar:comment>
     <xar:if condition="$tab eq 'general'">
         <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
@@ -197,7 +197,7 @@
             </fieldset>
         </form>
         <xar:comment>
-            ----------------- Begin User Variable Options ------------------- 
+            - - - - - - - - - - - - - - - - - Begin User Variable Options - - - - - - - - - - - - - - - - - - - 
         </xar:comment>
         <xar:elseif condition="$tab eq 'duvs'" />
             <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
@@ -347,7 +347,7 @@
                 </fieldset>
             </form>
         <xar:comment>
-            ----------------- Begin User Hooks Options ------------------- 
+            - - - - - - - - - - - - - - - - - Begin User Hooks Options - - - - - - - - - - - - - - - - - - - 
         </xar:comment>
         <xar:elseif condition="$tab eq 'hooks'" />
         <xar:if condition="!empty($hooks)">
@@ -376,7 +376,7 @@
             </p>
         </xar:if>
         <xar:comment>
-            ----------------- Begin Group Hooks Options ------------------- 
+            - - - - - - - - - - - - - - - - - Begin Group Hooks Options - - - - - - - - - - - - - - - - - - - 
         </xar:comment>
         <xar:elseif condition="$tab eq 'grouphooks'" />
         <xar:if condition="!empty($hooks)">
@@ -405,7 +405,7 @@
             </p>
         </xar:if>
         <xar:comment>
-            ----------------- Begin Member List Options ------------------- 
+            - - - - - - - - - - - - - - - - - Begin Member List Options - - - - - - - - - - - - - - - - - - - 
         </xar:comment>
         <xar:elseif condition="$tab eq 'memberlist'" />
         <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">

@@ -20,6 +20,9 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
         $endMarker = XAR_TOKEN_TAG_START . XAR_TOKEN_ENDTAG_START. XAR_NAMESPACE_PREFIX . XAR_TOKEN_NS_DELIM .'comment'. XAR_TOKEN_TAG_END;
         $res = $parser->windTo($endMarker);
         if(isset($res)) {
+            if(strpos($res,'--')) {
+                $this->raiseError(XAR_BL_INVALID_SYNTAX,'The character sequence "--" inside a comment would produce invalid XML. Replace those characters with something else',$parser);
+            }
             // Found the endmarker, save it in the content var, so we can produce it
             $this->content = $res;
             // We found it, eat that leave next lines to be able to check easily
