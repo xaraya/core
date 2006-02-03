@@ -129,7 +129,7 @@
             <fieldset>
                 <legend>
                     <xar:mlstring>
-                        Designated Site Administrator 
+                        Default Group and Site Administrator 
                     </xar:mlstring>
                 </legend>
                 <div class="xar-form-input-wrapper">
@@ -146,6 +146,26 @@
                                 </option>
                                 <xar:else />
                                 <option name="#$loop:item['id']#" id="#$loop:item['id']#" value="#$loop:item['id']#">
+                                    #$loop:item['name']# 
+                                </option>
+                            </xar:if>
+                        </xar:loop>
+                    </select>
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="defaultgroup" title="#xarML('New Users automatically get assigned to this Group')#" class="xar-form-label">
+                        <xar:mlstring>
+                            Default Group For New Users: 
+                        </xar:mlstring>
+                    </label>
+                    <select name="defaultgroup" id="defaultgroup">
+                        <xar:loop name="$groups">
+                            <xar:if condition="$loop:item['name'] eq $defaultgroup">
+                                <option name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['name']#" selected="selected">
+                                    #$loop:item['name']# 
+                                </option>
+                                <xar:else />
+                                <option name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['name']#">
                                     #$loop:item['name']# 
                                 </option>
                             </xar:if>
