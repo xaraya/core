@@ -106,6 +106,7 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'userName');
         return;
     }
+
     if (empty($password)) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'password');
         return;
@@ -122,12 +123,10 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
         // Bug #918 - If the module has been deactivated, then continue
         // checking with the next available authentication module
         if (!xarModIsAvailable($authModName)) continue;
-
         // Every authentication module must at least implement the
         // authentication interface so there's at least the authenticate_user
         // user api function
         if (!xarModAPILoad($authModName, 'user')) continue;
-
         $userId = xarModAPIFunc($authModName, 'user', 'authenticate_user', $args);
         if (!isset($userId)) {
             return; // throw back
