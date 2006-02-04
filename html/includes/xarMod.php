@@ -943,9 +943,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
     }
 
     // Build function name and call function
-    $funcName = strtolower($funcName);
-    $modName = strtolower($modName); // Bug 2870
-    $modAPIFunc = "{$modName}_{$modType}api_{$funcName}";
+    $modAPIFunc = strtolower("{$modName}_{$modType}api_{$funcName}");
     $found = true;
     $isLoaded = true;
     if (!function_exists($modAPIFunc)) {
@@ -1027,7 +1025,6 @@ function xarMod__URLencode($data, $type = 'getname')
     // separators.
     // The aim is to encode as little as possible, so that URLs
     // remain as human-readable as we can allow.
-    $type = strtolower($type);
 
     // We will encode everything first, then restore a select few
     // characters.
@@ -1796,16 +1793,10 @@ function xarMod_getBaseInfo($modName, $type = 'module')
         return;
     }
 
-    $type = strtolower($type);
-
     if ($type != 'module' && $type != 'theme') {
         $msg = xarML('Wrong type, it must be \'module\' or \'theme\': #(1).', $type);
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM',  new SystemException($msg));
         return;
-    }
-
-    if ($type != 'theme') {
-        $modName = strtolower($modName); // bug 2870
     }
 
     // Fixme: this is a presentation issue.
@@ -1910,7 +1901,7 @@ function xarMod_getVarsByModule($modName, $type = 'module')
         return;
     }
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'module':
             default:
             $modBaseInfo = xarMod_getBaseInfo($modName);
@@ -1929,7 +1920,7 @@ function xarMod_getVarsByModule($modName, $type = 'module')
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'module':
             default:
             // Takes the right table basing on module mode
@@ -2004,7 +1995,7 @@ function xarMod_getVarsByName($varName, $type = 'module')
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
-    switch(strtolower($type)) {
+    switch($type) {
     case 'module':
     default:
 
@@ -2041,7 +2032,7 @@ function xarMod_getVarsByName($varName, $type = 'module')
     }
 
     $result->Close();
-    switch(strtolower($type)) {
+    switch($type) {
         case 'module':
             default:
             xarCore_SetCached('Mod.GetVarsByName', $varName, true);
@@ -2133,7 +2124,7 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'module':
             default:
             if ($modMode == XARMOD_MODE_SHARED) {

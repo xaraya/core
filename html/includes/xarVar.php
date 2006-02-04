@@ -503,7 +503,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
     // Lets first check to see if any of our type vars are alread set in the cache.
     //If you change this, change it down there in the results for modvar and themevar
     $cacheName = $name;
-    switch(strtolower($type)) {
+    switch($type) {
     case 'moduservar':
         $cacheCollection = 'ModUser.Variables.' . $modName;
         $cacheName = $uid . $name;
@@ -538,7 +538,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
 
 
     // We didn't find it in the single var cache, let's check the cached collection by whole/name
-    switch(strtolower($type)) {
+    switch($type) {
     case 'themevar':
         if (xarVarIsCached('Theme.GetVarsByTheme', $modName)) return;
         if (xarVarIsCached('Theme.GetVarsByName', $cacheName)) return;
@@ -553,7 +553,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
 
 
     // Still no luck, let's do the hard work then
-    switch(strtolower($type)) {
+    switch($type) {
     case 'themevar':
         $baseinfotype = 'theme';
         break;
@@ -574,7 +574,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
     $tables =& xarDBGetTables();
     $bindvars = array();
 
-    switch(strtolower($type)) {
+    switch($type) {
     case 'modvar':
     default:
         // Takes the right table basing on module mode
@@ -632,7 +632,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
     // TODO : Explain the cache logic behind this, why exclude moduservars?
     // TODO : why have cache period 1 week ?
     if (xarCore_getSystemVar('DB.UseADODBCache')){
-        switch(strtolower($type)) {
+        switch($type) {
         case 'modvar':
         case 'themevar':
         case 'configvar':
@@ -649,7 +649,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         if (!$result) return;
     }
 
-    if (strtolower($type) == 'moduservar') {
+    if ($type == 'moduservar') {
         // If there is no such thing, return the global setting.
         if ($result->EOF) {
             $result->Close();
@@ -664,7 +664,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
         return;
     }
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'themevar':
         case 'modvar':
             while (!$result->EOF) {
@@ -729,7 +729,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
         return;
     }
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'modvar':
         case 'moduservar':
             default:
@@ -747,7 +747,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'modvar':
             default:
             // Takes the right table basing on module mode
@@ -845,7 +845,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
     }
 
     // TODO : Explain the cache logic behind this, why exclude moduservars? (see above)
-    if (xarCore_getSystemVar('DB.UseADODBCache') && strtolower($type) != 'moduservar'){
+    if (xarCore_getSystemVar('DB.UseADODBCache') && ($type != 'moduservar')){
         $result = $dbconn->CacheFlush();
     }
 
@@ -854,7 +854,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
         if (!$result) return;
     }
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'modvar':
             default:
             xarVarSetCached('Mod.Variables.' . $modName, $name, $value);
@@ -891,7 +891,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
         return;
     }
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'modvar':
         case 'moduservar':
             default:
@@ -909,7 +909,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'modvar':
             default:
             // Delete all the user variables first
@@ -974,7 +974,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
     $result =& $dbconn->Execute($query, $bindvars);
     if (!$result) return;
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'modvar':
             default:
                 xarVarDelCached('Mod.Variables.' . $modName, $name);

@@ -470,7 +470,7 @@ function xarCoreActivateDebugger($flags)
  */
 function xarCoreIsDebuggerActive()
 {
-    if(array_key_exists('xarDebug',$GLOBALS)) {
+    if(isset($GLOBALS['xarDebug'])) {
         return $GLOBALS['xarDebug'] & XARDBG_ACTIVE;
     } else return false;
 
