@@ -13,14 +13,40 @@
         <xar:mlstring>What is it?</xar:mlstring>
     </h3>
     <p>
-        <xar:mlstring>The Authsystem is the default module that handles user authentication on your site. </xar:mlstring>
+        <xar:mlstring>The Authsystem is the default Authentication module and part of the Xaraya Core package.
+        It handles user authentication on your site by checking for a valid user log in. </xar:mlstring>
     </p>
     <h3>
         <xar:mlstring>How to use it?</xar:mlstring>
     </h3>
     <p>
-        <xar:mlstring>To be added</xar:mlstring>
+        <xar:mlstring>The Authsystem module is installed as part of the Core installation package and comes ready
+        activated for your use. Once Xaraya is installed you should go to <strong>Admin Panel - Authentication - Modify Config</strong> to confirm setup of the Authentication options.</xar:mlstring>
     </p>
+
+    <br />
+    <ul>
+        <li><xar:mlstring><strong>Short URLs :</strong> There is short URL support that you can configure in the Admin Modify Config menu option</xar:mlstring></li>
+        <li><xar:mlstring><strong>Login Security Options :</strong> can also be configured and currently include login attempts and lockout time.</xar:mlstring></li>
+    </ul>
+    <br />
+    <p><xar:mlstring><strong>NOTE:</strong> If you also require the ability to have users register and log in on your
+     site, you should install the Registration module. The Registration module manages user registration and options 
+     for that process (which was previously handled by Roles module in earlier Xaraya versions). It is available in the Xaraya Base distribution and Module code repository</xar:mlstring>
+    </p>
+      <p>
+        <xar:mlstring>The Roles module will use the default Login page and block of the Default Authentication module wish is by default, Authsystem.</xar:mlstring>
+    </p>
+    <br />
+    <h3> <xar:mlstring>Other Authentication Methods</xar:mlstring></h3>
+    <p><xar:mlstring>Xaraya also has the ability to add other types of Authentication modules such as AuthLDAP, AuthURL, AuthEmail and so on, that are available in our 3rd party module code repository in addition to 3rd party providers' sites. Please see the documentation
+    for the relevant authentication module. </xar:mlstring>
+    </p>
+     <p>
+        <xar:mlstring>In the case of authentication modules other than the default, you should set your Default Authentication module for Roles in the Roles module Modify Config.</xar:mlstring>
+    </p>
+    <br />
+
     <h3>
         <xar:mlstring>Included Blocks</xar:mlstring>
     </h3>
@@ -29,12 +55,14 @@
             <xar:mlstring>Login Block allows users to login</xar:mlstring>
         </li>
     </ul>
+    <br />
     <h3>
         <xar:mlstring>Included Hooks</xar:mlstring>
     </h3>
     <p>
         <xar:mlstring>None</xar:mlstring>
     </p>
+    <br />
     <h3>
         <xar:mlstring>Included Dynamic Data Properties</xar:mlstring>
     </h3>
@@ -51,12 +79,9 @@
       </li>
       <li><xar:mlstring>Related tutorials and documentation on Authsystem module at</xar:mlstring> <a href="http://www.xaraya.com/index.php/keywords/authsystem/" title="#xarML('Related documentation on Authsystem')#"><xar:mlstring>Xaraya Documentation.</xar:mlstring></a>
       </li>
-      <li><xar:mlstring>Extended information for Developers at</xar:mlstring> <a href="http://www.xaraya.com/documentation/rfcs/rfc0030.html" title="#xarML('RFC 30')#"><xar:mlstring>Xaraya RFC-30</xar:mlstring></a>
-      </li>
-
-  </ul>
+   </ul>
   <p class="xar-sub">
-    <strong>&nbsp;<xar:mlstring>Authentication Module - Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.0.0&nbsp; 2006-01-04
+    <strong>&nbsp;<xar:mlstring>Authentication Module - Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.0.0&nbsp; 2006-02-04
   </p>
 </div>
 
