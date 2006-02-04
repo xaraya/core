@@ -452,7 +452,7 @@ function xarModGetIDFromName($modName, $type = 'module')
         return;
     }
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'module':
             default:
             $modBaseInfo = xarMod_getBaseInfo($modName);
@@ -478,14 +478,10 @@ function xarModGetIDFromName($modName, $type = 'module')
  */
 function xarModGetInfo($modRegId, $type = 'module')
 {
-    xarLogMessage("xarModGetInfo ". $modRegId ." / " . $type);
-
     if (empty($modRegId) || $modRegId == 0) {
         $msg = xarML('Empty RegId (#(1)) or RegId is equal to 0.', $modRegId);
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));return;
     }
-
-    $type = strtolower($type);
 
     switch($type) {
         case 'module':
@@ -500,6 +496,7 @@ function xarModGetInfo($modRegId, $type = 'module')
             }
             break;
     }
+    xarLogMessage("xarModGetInfo ". $modRegId ." / " . $type);
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
@@ -779,7 +776,7 @@ function xarModDBInfoLoad($modName, $modDir = NULL, $type = 'module')
     }
     // Get the directory if we don't already have it
     if (empty($modDir)) {
-        switch(strtolower($type)) {
+        switch($type) {
             case 'module':
                 default:
                 $modBaseInfo = xarMod_getBaseInfo($modName);
@@ -793,7 +790,7 @@ function xarModDBInfoLoad($modName, $modDir = NULL, $type = 'module')
     } else {
         $modDir = xarVarPrepForOS($modDir);
     }
-    switch(strtolower($type)) {
+    switch($type) {
         case 'module':
             default:
             xarMod__loadDbInfo($modBaseInfo['name'], $modDir);
@@ -837,7 +834,6 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
     $modBaseInfo = xarMod_getBaseInfo($modName);
 
     // Build function name and call function
-    $funcName = strtolower($funcName);
     $modFunc = "{$modName}_{$modType}_{$funcName}";
     $found = true;
     $isLoaded = true;
@@ -943,7 +939,8 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
     }
 
     // Build function name and call function
-    $modAPIFunc = strtolower("{$modName}_{$modType}api_{$funcName}");
+    $modAPIFunc = $modName.'_'.$modType.'api_'.$funcName;
+
     $found = true;
     $isLoaded = true;
     if (!function_exists($modAPIFunc)) {
@@ -955,7 +952,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
             $modBaseInfo = xarMod_getBaseInfo($modName);
             if (!isset($modBaseInfo)) {return;} // throw back
 
-            $funcFile = 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.'api/'.$funcName.'.php';
+            $funcFile = 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.'api/'.strtolower($funcName).'.php';
             if (!file_exists($funcFile)) {
                 $found = false;
             } else {
@@ -1658,8 +1655,6 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
  */
 function xarMod_getFileInfo($modOsDir, $type = 'module')
 {
-    xarLogMessage("xarMod_getFileInfo ". $modOsDir ." / " . $type);
-
     if (empty($modOsDir)) {
         $msg = xarML('Directory information #(1) is empty.', '$modOsDir');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', new SystemException($msg));
@@ -1669,9 +1664,10 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
     if (empty($GLOBALS['xarMod_noCacheState']) && xarCore_IsCached('Mod.getFileInfos', $modOsDir)) {
         return xarCore_GetCached('Mod.getFileInfos', $modOsDir);
     }
+    xarLogMessage("xarMod_getFileInfo ". $modOsDir ." / " . $type);
 
     // TODO redo legacy support via type.
-    switch(strtolower($type)) {
+    switch($type) {
         case 'module':
             default:
             // Spliffster, additional mod info from modules/$modDir/xarversion.php
@@ -1785,8 +1781,6 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
  */
 function xarMod_getBaseInfo($modName, $type = 'module')
 {
-    xarLogMessage("xarMod_getBaseInfo ". $modName ." / ". $type);
-
     if (empty($modName)) {
         $msg = xarML('Module or Theme Name #(1) is empty.', '$modName');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM',  new SystemException($msg));
@@ -1823,6 +1817,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     if (empty($GLOBALS[$checkNoState]) && xarCore_IsCached($cacheCollection, $modName)) {
        return xarCore_GetCached($cacheCollection, $modName);
     }
+    xarLogMessage("xarMod_getBaseInfo ". $modName ." / ". $type);
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
