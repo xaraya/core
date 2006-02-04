@@ -301,7 +301,7 @@ function base_init()
     $seqId = $dbconn->GenId($modulesTable);
     $query = "INSERT INTO $modulesTable
               (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
-     ) VALUES (?, 'authsystem', 42, 'authsystem', '0.91.0', 1, 'Core Utility', 'Global', 0, 0)";
+     ) VALUES (?, 'authsystem', 42, 'authsystem', '1.0.0', 1, 'Authentication', 'Global', 1, 0)";
 
     $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;

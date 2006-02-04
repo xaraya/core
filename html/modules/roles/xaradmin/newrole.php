@@ -111,5 +111,5 @@ function roles_admin_newrole()
     $data['groups'] = $groups;
     $data['return_url'] = $return_url;
     return $data;
-}
+} 
 ?>

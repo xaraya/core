@@ -31,7 +31,7 @@ function confirmLink(theLink, xarConfirmMsg)
 
 function formCheck(formobj, fieldRequired, fieldDescription){
     // dialog message
-    var alertMsg = "#xarML('Please complete the following fields:')#\n";
+    var alertMsg = "Please complete the following fields:\n";
     
     var l_Msg = alertMsg.length;
     

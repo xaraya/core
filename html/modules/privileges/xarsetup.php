@@ -1,6 +1,7 @@
 <?php
 /**
  * Default setup for roles and privileges
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -196,6 +197,12 @@ function initializeSetup()
     xarRegisterMask('AdminBase','All','base','All','All','ACCESS_ADMIN');
 
     xarRegisterMask('AdminInstaller','All','installer','All','All','ACCESS_ADMIN');
+
+    xarRegisterMask('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW');
+    xarRegisterMask('ViewAuthsystemBlocks','All','authsystem','Block','All','ACCESS_OVERVIEW');
+    xarRegisterMask('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
+    xarRegisterMask('EditAuthsystem','All','authsystem','All','All','ACCESS_EDIT');
+    xarRegisterMask('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
 
     xarRegisterMask('ViewPanel','All','adminpanels','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditPanel','All','adminpanels','All','All','ACCESS_EDIT');

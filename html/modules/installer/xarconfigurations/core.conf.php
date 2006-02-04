@@ -1,6 +1,7 @@
 <?php
 /**
  * Core configuration
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -71,7 +72,8 @@ function installer_core_configuration_load($args)
 function installer_core_casualaccess()
 {
     xarRegisterPrivilege('CasualAccess','All','themes','Block','All','ACCESS_OVERVIEW','Minimal access to a site');
-    xarRegisterPrivilege('ViewLogin','All','roles','Block','login:Login:All','ACCESS_OVERVIEW','View the Login block');
+    //xarRegisterPrivilege('ViewLogin','All','roles','Block','login:Login:All','ACCESS_OVERVIEW','View the Login block');
+    xarRegisterPrivilege('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW','View the Login block');
     xarRegisterPrivilege('ViewBlocks','All','base','Block','All','ACCESS_OVERVIEW','View blocks of the Base module');
     xarRegisterPrivilege('ViewLoginItems','All','dynamicdata','Item','All','ACCESS_OVERVIEW','View some Dynamic Data items');
     xarMakePrivilegeRoot('CasualAccess');

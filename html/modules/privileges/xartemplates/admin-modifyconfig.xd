@@ -253,13 +253,17 @@
             <fieldset>
                 <legend>
                     <xar:mlstring>
-                        Create a Last Resort Admin
+                        Manage Last Resort Admin
                     </xar:mlstring>
                 </legend>
-                <div>
-                    <xar:mlstring>Enter a  name and password to create an administrator that <b>always</b> has rights to the entire system.</xar:mlstring>
+                <div class="xar-form-input-wrapper-before">
+                    <p><xar:mlstring>The Last Resort Administrator will <strong>always</strong> have rights to the entire system.</xar:mlstring></p>
+                    <xar:if condition="!empty($lastresortname)">
+                        <p><xar:mlstring>Enter a name and password to replace the existing Last Resort administrator.</xar:mlstring></p>
+                    <xar:else />
+                         <p><xar:mlstring>Enter a  name and password to create a Last Resort administrator.</xar:mlstring></p>
+                    </xar:if>
                 </div>
-                <br />
                 <div class="xar-form-input-wrapper">
                     <label for="name" title="#xarML('Name of the administator of last  resort')#" class="xar-form-label">
                         <xar:mlstring>Admin name:</xar:mlstring>
@@ -267,11 +271,21 @@
                     <input type="text" name="name" id="name" value="" />
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="password" title="#xarML('Password of the administator of last  resort')#" class="xar-form-label">
+                    <label for="password" title="#xarML('Password of the administrator of last resort')#" class="xar-form-label">
                         <xar:mlstring>Password:</xar:mlstring>
                     </label>
-                    <input type="text" name="password" id="password" value="" />
+                    <input type="password" name="password" id="password" value="" maxlength="40" class="xar-form-textmedium" />
                 </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="password2" title="#xarML('Confirm password for administrator of last resort')#" class="xar-form-label">
+                        <xar:mlstring>Confirm Password:</xar:mlstring>
+                    </label>
+                    <input type="password" name="password2" id="password2" value="" maxlength="40" class="xar-form-textmedium" />
+                </div>
+                <xar:if condition="xarSessionGetVar('statusmsg') ne ''">
+                    <p class="xar-form-input-wrapper-after xar-error">#xarSessionGetVar('statusmsg')#</p>
+                </xar:if>
+               <xar:set name="dummy">xarSessionSetVar('statusmsg','')</xar:set>
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">

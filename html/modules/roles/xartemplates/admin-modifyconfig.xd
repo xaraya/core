@@ -129,7 +129,7 @@
             <fieldset>
                 <legend>
                     <xar:mlstring>
-                        Designated Site Administrator 
+                        Default Group and Site Administrator 
                     </xar:mlstring>
                 </legend>
                 <div class="xar-form-input-wrapper">
@@ -152,6 +152,26 @@
                         </xar:loop>
                     </select>
                 </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="defaultgroup" title="#xarML('New Users automatically get assigned to this Group')#" class="xar-form-label">
+                        <xar:mlstring>
+                            Default Group For New Users: 
+                        </xar:mlstring>
+                    </label>
+                    <select name="defaultgroup" id="defaultgroup">
+                        <xar:loop name="$groups">
+                            <xar:if condition="$loop:item['name'] eq $defaultgroup">
+                                <option name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['name']#" selected="selected">
+                                    #$loop:item['name']# 
+                                </option>
+                                <xar:else />
+                                <option name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['name']#">
+                                    #$loop:item['name']# 
+                                </option>
+                            </xar:if>
+                        </xar:loop>
+                    </select>
+                </div>
             </fieldset>
             <fieldset>
                 <legend>
@@ -160,13 +180,13 @@
                     </xar:mlstring>
                 </legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="defaultauthmodule" title="#xarML('Select the module that manages registration and authentication of users')#" class="xar-form-label">
+                    <label for="defaultauthmodule" title="#xarML('Select the module that manages authentication of users')#" class="xar-form-label">
                         <xar:mlstring>
-                            Registration/Authentication: 
+                            Authentication:
                         </xar:mlstring>
                     </label>
                     <xar:set name="defaultauthmodule">xarModGetVar('roles','defaultauthmodule')</xar:set>
-                    <xar:data-input type="module" name="defaultauthmodule" class="authentication" value="$defaultauthmodule" />
+                    <xar:data-input type="module" name="defaultauthmodule" class="authentication" value="" />
                 </div>
             </fieldset>
             <fieldset>

@@ -464,13 +464,20 @@ function installer_admin_bootstrap()
     if (!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
 
 	//TODO: improve this once we know where authentication modules are headed
-	$regid=xarModGetIDFromName('authentication');
+   /*	
+   $regid=xarModGetIDFromName('registration');
 	if (empty($regid)) {
 		die(xarML('I cannot load the authentication module. Please make it available and reinstall'));
 	}
+	*/
+    $regid=xarModGetIDFromName('authsystem');
+	if (empty($regid)) {
+		die(xarML('I cannot load the Authsystem module. Please make it available and reinstall'));
+    }
+
 
     // Set the state and activate the following modules
-    $modlist=array('roles','privileges','blocks','themes');
+    $modlist=array('roles','privileges','blocks','authsystem','themes');
     foreach ($modlist as $mod) {
         // Set state to inactive
         $regid=xarModGetIDFromName($mod);
@@ -730,12 +737,12 @@ function installer_admin_create_administrator()
 
     // Initialise authentication
     // TODO: this is happening late here because we need to create a block
-	$regid = xarModGetIDFromName('authentication');
-	if (isset($regid)) {
-		if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
+//	$regid = xarModGetIDFromName('authsystem');
+//	if (isset($regid)) {
+//		if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
 		// Activate the module
-		if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
-	}
+//		if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
+//	}
 
     xarResponseRedirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
 }
@@ -1042,6 +1049,7 @@ function installer_admin_cleanup()
 // log in admin user
     $uname = xarModGetVar('roles','lastuser');
     $pass = xarModGetVar('roles','adminpass');
+
     if (!xarUserLogIn($uname, $pass, 0)) {
         $msg = xarML('Cannot log in the default administrator. Check your setup.');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
@@ -1076,9 +1084,9 @@ function installer_admin_cleanup()
 
     list ($rightBlockGroup) = $result->fields;
 
-/*
+   //Get the info and add the Login block which is now in authsystem module
 	$loginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
-                                    array('module' => 'roles',
+                                    array('module' => 'authsystem',
                                           'type'   => 'login'));
 
     if (empty($loginBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
@@ -1099,7 +1107,7 @@ function installer_admin_cleanup()
             return;
         }
     }
-*/
+
     $query = "SELECT    xar_id as id
               FROM      $blockGroupsTable
               WHERE     xar_name = 'header'";

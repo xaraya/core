@@ -9,6 +9,8 @@
  * @link http://www.xaraya.com
  * 
  * @author John Cox
+ * @TODO jojodee - rethink dependencies between roles, authentication(authsystem) and 
+ *                 registration in relation to validation
 */
 
 /**

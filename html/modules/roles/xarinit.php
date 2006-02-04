@@ -200,12 +200,13 @@ function roles_activate()
 # Create some modvars
 #
     //TODO: improve on this hardwiring
-    xarModSetVar('roles', 'defaultauthmodule', '');
+     xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem')); //Setting a default
     if (xarModGetVar('roles','itemsperpage')) return true;
     xarModSetVar('roles', 'rolesdisplay', 'tabbed');
     xarModSetVar('roles', 'locale', '');
     xarModSetVar('roles', 'userhome', 0);
     xarModSetVar('roles', 'primaryparent', 0);
+    xarModSetVar('roles', 'defaultgroup', 'Users');
     $lockdata = array('roles' => array( array('uid' => 4,
                                               'name' => 'Administrators',
                                               'notify' => TRUE)),
@@ -265,22 +266,24 @@ function roles_upgrade($oldVersion)
     switch ($oldVersion) {
         case '1.01':
             break;
-        case '1.1.0':
+      case '1.1.0':
 
         	// is there an authentication module?
-			$regid = xarModGetIDFromName('authentication');
+			$regid = xarModGetIDFromName('authsystem');
 
 			if (isset($regid)) {
+
+				// upgrade and activate the authsystem module - should be done before roles upgrade
+				//if (!xarModAPIFunc('modules', 'admin', 'upgrade', array('regid' => $regid))) return;
+					// Activate the module
+				//if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
+
 				// remove the login block type and block from roles
 				$result = xarModAPIfunc('blocks', 'admin', 'delete_type', array('module' => 'roles', 'type' => 'login'));
 
-				// install the authentication module
-				if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
-					// Activate the module
-				if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
-
 				// create the new authentication modvars
-				xarModSetVar('authentication', 'allowregistration', xarModGetVar('roles', 'allowregistration'));
+				/*
+                xarModSetVar('authentication', 'allowregistration', xarModGetVar('roles', 'allowregistration'));
 				xarModSetVar('authentication', 'requirevalidation', xarModGetVar('roles', 'requirevalidation'));
 				xarModSetVar('authentication', 'itemsperpage', xarModGetVar('roles', 'rolesperpage'));
 				xarModSetVar('authentication', 'uniqueemail', xarModGetVar('roles', 'uniqueemail'));
@@ -296,7 +299,7 @@ function roles_upgrade($oldVersion)
 				xarModSetVar('authentication', 'disallowednames', xarModGetVar('roles', 'disallowednames'));
 				xarModSetVar('authentication', 'disallowedemails', xarModGetVar('roles', 'disallowedemails'));
 				xarModSetVar('authentication', 'disallowedips', xarModGetVar('roles', 'disallowedips'));
-
+               */
 				// delete the old roles modvars
 				xarModDelVar('roles', 'allowregistration');
 				xarModDelVar('roles', 'requirevalidation');
@@ -307,7 +310,6 @@ function roles_upgrade($oldVersion)
 				xarModDelVar('roles', 'askdeactivationemail');
 				xarModDelVar('roles', 'askpendingemail');
 				xarModDelVar('roles', 'askpasswordemail');
-				xarModDelVar('roles', 'defaultgroup');
 				xarModDelVar('roles', 'lockouttime');
 				xarModDelVar('roles', 'lockouttries');
 				xarModDelVar('roles', 'minage');
@@ -316,14 +318,15 @@ function roles_upgrade($oldVersion)
 				xarModDelVar('roles', 'disallowedips');
 
 				// create one new roles modvar
-				xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authentication'));
-			} else {
+				xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
+ 			} else {
 //				$msg = xarML('I could not load the authentication module. Please make it available and try again');
 //				xarErrorSet(XAR_USER_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new DefaultUserException($msg));
 //				return;
-				die(xarML('I could not load the authentication module. Please make it available and try again'));
+				die(xarML('I could not detect and load an authentication module (default is Authsystem). Please make an authentication module available and try again'));
 		    }
             break;
+
     }
     // Update successful
     return true;
