@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: OCI8PreparedStatement.php,v 1.23 2005/10/06 20:42:52 sethr Exp $
+ *  $Id: OCI8PreparedStatement.php,v 1.26 2006/01/30 21:32:05 sethr Exp $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -27,7 +27,7 @@ require_once 'creole/common/PreparedStatementCommon.php';
  * 
  * @author    David Giffin <david@giffin.org>
  * @author    Hans Lellelid <hans@xmpl.org>
- * @version   $Revision: 1.23 $
+ * @version   $Revision: 1.26 $
  * @package   creole.drivers.oracle
  */
 class OCI8PreparedStatement extends PreparedStatementCommon implements PreparedStatement {
@@ -66,13 +66,13 @@ class OCI8PreparedStatement extends PreparedStatementCommon implements PreparedS
     }
     
     /**
-     * ' -> ''
+     * Nothing to do - since oci_bind is used to insert data, no escaping is needed
      * @param string $str
      * @return string
      */
     protected function escape($str)
     {
-        return str_replace("'","''", $str);
+        return $str;
     }
 
     /**
@@ -141,8 +141,9 @@ class OCI8PreparedStatement extends PreparedStatementCommon implements PreparedS
 
         if($this->resultSet) $this->resultSet->close();
         $this->resultSet = null; // reset
-        
+
         $stmt = oci_parse($this->conn->getResource(), $this->sqlToOracleBindVars($this->sql));
+
         if (!$stmt) {
             throw new SQLException("Unable to prepare update", $this->conn->nativeError(), $this->sqlToOracleBindVars($this->sql));
         }
@@ -199,7 +200,7 @@ class OCI8PreparedStatement extends PreparedStatementCommon implements PreparedS
             $idxName = ":var" . $idx;
             if (!oci_bind_by_name($stmt, $idxName, $this->boundInVars[$idx], -1)) {
                 throw new SQLException("Erorr binding value to placeholder " . $idx);
-            }            
+            } 
         } // foreach
 
         foreach ($this->lobs as $idx => $val) {
@@ -321,9 +322,9 @@ class OCI8PreparedStatement extends PreparedStatementCommon implements PreparedS
             // it's ok to have a fatal error here, IMO, if object doesn't have
             // __toString() and is being passed to this method.
             if ( is_object ( $value ) ) {
-                $this->boundInVars[$paramIndex] = $this->escape($value->__toString());
+                $this->boundInVars[$paramIndex] = $value->__toString();
             } else {
-                $this->boundInVars[$paramIndex] = $this->escape((string)$value);
+                $this->boundInVars[$paramIndex] = (string)$value;
             }
         }
     }
@@ -344,7 +345,7 @@ class OCI8PreparedStatement extends PreparedStatementCommon implements PreparedS
         } else {
             if (is_numeric($value)) $value = date('Y-m-d H:i:s', $value);
             elseif (is_object($value)) $value = date('Y-m-d H:i:s', $value->getTime());
-            $this->boundInVars[$paramIndex] = $this->escape($value);
+            $this->boundInVars[$paramIndex] = $value;
         }
     }
 
@@ -363,7 +364,7 @@ class OCI8PreparedStatement extends PreparedStatementCommon implements PreparedS
         } else {
             if (is_numeric($value)) $value = date("Y-m-d", $value);
             elseif (is_object($value)) $value = date("Y-m-d", $value->getTime());
-            $this->boundInVars[$paramIndex] = $this->escape($value);
+            $this->boundInVars[$paramIndex] = $value;
         }
     }
 
@@ -408,6 +409,16 @@ class OCI8PreparedStatement extends PreparedStatementCommon implements PreparedS
             }
         }
    }
+
+   /**
+     * @param int $paramIndex
+     * @return void
+     */
+    function setNull($paramIndex)
+    {
+        $this->boundInVars[$paramIndex] = '';
+    }
+
 
 }
 ?>

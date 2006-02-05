@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: MSSQLTableInfo.php,v 1.13 2005/11/01 01:52:40 hlellelid Exp $
+ *  $Id: MSSQLTableInfo.php,v 1.14 2006/01/17 19:44:39 hlellelid Exp $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -26,7 +26,7 @@ require_once 'creole/metadata/TableInfo.php';
  * MSSQL implementation of TableInfo.
  * 
  * @author    Hans Lellelid <hans@xmpl.org>
- * @version   $Revision: 1.13 $
+ * @version   $Revision: 1.14 $
  * @package   creole.drivers.mssql.metadata
  */
 class MSSQLTableInfo extends TableInfo {    
@@ -40,11 +40,11 @@ class MSSQLTableInfo extends TableInfo {
         include_once 'creole/metadata/ColumnInfo.php';
         include_once 'creole/drivers/mssql/MSSQLTypes.php';
         
-        if (!@mssql_select_db($this->dbname, $this->dblink)) {
+        if (!@mssql_select_db($this->dbname, $this->conn->getResource())) {
             throw new SQLException('No database selected');
         }
          
-        $res = mssql_query("sp_columns ".$this->name, $this->dblink);
+        $res = mssql_query("sp_columns ".$this->name, $this->conn->getResource());
         if (!$res) {
             throw new SQLException('Could not get column names', mssql_get_last_message());
         }
@@ -76,11 +76,11 @@ class MSSQLTableInfo extends TableInfo {
         if (!$this->colsLoaded) $this->initColumns();
         include_once 'creole/metadata/IndexInfo.php';
         
-        if (!@mssql_select_db($this->dbname, $this->dblink)) {
+        if (!@mssql_select_db($this->dbname, $this->conn->getResource())) {
             throw new SQLException('No database selected');
         } 
         
-        $res = mssql_query("sp_indexes_rowset ".$this->name, $this->dblink);
+        $res = mssql_query("sp_indexes_rowset ".$this->name, $this->conn->getResource());
         
         while ($row = mssql_fetch_array($res)) {
             $name = $row['INDEX_NAME'];            
@@ -104,7 +104,7 @@ class MSSQLTableInfo extends TableInfo {
         if (!$this->colsLoaded) $this->initColumns();
         include_once 'creole/metadata/ForeignKeyInfo.php';
         
-        if (!@mssql_select_db($this->dbname, $this->dblink)) {
+        if (!@mssql_select_db($this->dbname, $this->conn->getResource())) {
             throw new SQLException('No database selected');
         } 
         
@@ -114,7 +114,7 @@ class MSSQLTableInfo extends TableInfo {
                                       CONSTRAINT_TYPE = 'Foreign Key' INNER JOIN
                                       INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS rc1 ON rc1.CONSTRAINT_NAME = tc1.CONSTRAINT_NAME INNER JOIN
                                       INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE ccu2 ON ccu2.CONSTRAINT_NAME = rc1.UNIQUE_CONSTRAINT_NAME
-                            WHERE     (ccu1.table_name = '".$this->name."')", $this->dblink);
+                            WHERE     (ccu1.table_name = '".$this->name."')", $this->conn->getResource());
         
         while($row = mssql_fetch_array($res)) {
             $name = $row['COLUMN_NAME'];
@@ -155,7 +155,7 @@ class MSSQLTableInfo extends TableInfo {
         if (!$this->colsLoaded) $this->initColumns();
         include_once 'creole/metadata/PrimaryKeyInfo.php';
         
-        if (!@mssql_select_db($this->dbname, $this->dblink)) {
+        if (!@mssql_select_db($this->dbname, $this->conn->getResource())) {
             throw new SQLException('No database selected');
         } 
         
@@ -164,7 +164,7 @@ class MSSQLTableInfo extends TableInfo {
                                 INNER JOIN INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE ON 
                       INFORMATION_SCHEMA.TABLE_CONSTRAINTS.CONSTRAINT_NAME = INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE.constraint_name
                         WHERE     (INFORMATION_SCHEMA.TABLE_CONSTRAINTS.CONSTRAINT_TYPE = 'PRIMARY KEY') AND 
-                      (INFORMATION_SCHEMA.TABLE_CONSTRAINTS.TABLE_NAME = '".$this->name."')", $this->dblink);
+                      (INFORMATION_SCHEMA.TABLE_CONSTRAINTS.TABLE_NAME = '".$this->name."')", $this->conn->getResource());
         
         // Loop through the returned results, grouping the same key_name together.
         // name of the primary key will be the first column name in the key.

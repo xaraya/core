@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: SQLiteConnection.php,v 1.14 2005/10/18 11:26:28 hlellelid Exp $
+ *  $Id: SQLiteConnection.php,v 1.15 2006/01/17 19:44:41 hlellelid Exp $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -28,7 +28,7 @@ require_once 'creole/common/ConnectionCommon.php';
  * @author    Hans Lellelid <hans@xmpl.org>
  * @author    Stig Bakken <ssb@fast.no> 
  * @author    Lukas Smith
- * @version   $Revision: 1.14 $
+ * @version   $Revision: 1.15 $
  * @package   creole.drivers.sqlite
  */ 
 class SQLiteConnection extends ConnectionCommon implements Connection {   
@@ -63,7 +63,7 @@ class SQLiteConnection extends ConnectionCommon implements Connection {
         if (PHP_VERSION == '5.0.4' || PHP_VERSION == '5.0.5') {
             $nochange = TRUE;
         } else {
-            $nochange = (($flags & Creole::NO_ASSOC_LOWER) === Creole::NO_ASSOC_LOWER);
+            $nochange = !(($flags & Creole::COMPAT_ASSOC_LOWER) === Creole::COMPAT_ASSOC_LOWER);
         }
         
         if ($nochange) {     

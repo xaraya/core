@@ -1,6 +1,6 @@
 <?php
 /*
- *  $Id: PgSQLDatabaseInfo.php,v 1.10 2005/11/08 04:24:50 hlellelid Exp $
+ *  $Id: PgSQLDatabaseInfo.php,v 1.11 2006/01/17 19:44:40 hlellelid Exp $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,7 +25,7 @@ require_once 'creole/metadata/DatabaseInfo.php';
  * MySQL implementation of DatabaseInfo.
  *
  * @author    Hans Lellelid <hans@xmpl.org>
- * @version   $Revision: 1.10 $
+ * @version   $Revision: 1.11 $
  * @package   creole.drivers.pgsql.metadata
  */
 class PgSQLDatabaseInfo extends DatabaseInfo {
@@ -39,7 +39,7 @@ class PgSQLDatabaseInfo extends DatabaseInfo {
         include_once 'creole/drivers/pgsql/metadata/PgSQLTableInfo.php';
         
         // Get Database Version
-        $result = pg_exec ($this->dblink, "SELECT version() as ver");
+        $result = pg_exec ($this->conn->getResource(), "SELECT version() as ver");
         
         if (!$result)
         {
@@ -54,7 +54,7 @@ class PgSQLDatabaseInfo extends DatabaseInfo {
         pg_free_result ($result);
         $result = null;
 
-        $result = pg_exec($this->dblink, "SELECT oid, relname FROM pg_class
+        $result = pg_exec($this->conn->getResource(), "SELECT oid, relname FROM pg_class
 										WHERE relkind = 'r' AND relnamespace = (SELECT oid
 										FROM pg_namespace
 										WHERE
@@ -71,6 +71,8 @@ class PgSQLDatabaseInfo extends DatabaseInfo {
         while ($row = pg_fetch_assoc($result)) {
             $this->tables[strtoupper($row['relname'])] = new PgSQLTableInfo($this, $row['relname'], $version, $row['oid']);
         }
+		
+		$this->tablesLoaded = true;
     }
 
     /**
@@ -84,7 +86,7 @@ class PgSQLDatabaseInfo extends DatabaseInfo {
      
 	 	$this->sequences = array();
 		   
-        $result = pg_exec($this->dblink, "SELECT oid, relname FROM pg_class
+        $result = pg_exec($this->conn->getResource(), "SELECT oid, relname FROM pg_class
 										WHERE relkind = 'S' AND relnamespace = (SELECT oid
 										FROM pg_namespace
 										WHERE
