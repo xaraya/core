@@ -96,7 +96,7 @@ define('XAR_INCLUDE_ONCE'         , 1);
  * Miscelaneous
  */
 define('XARCORE_CONFIG_FILE'  , 'config.system.php');
-define('XARCORE_CACHEDIR'     , '/cache');
+define('XARCORE_CACHEDR'     , '/cache');
 define('XARCORE_DB_CACHEDIR'  , '/cache/database');
 define('XARCORE_RSS_CACHEDIR' , '/cache/rss');
 define('XARCORE_TPL_CACHEDIR' , '/cache/templates');
@@ -483,7 +483,7 @@ function xarCoreActivateDebugger($flags)
  */
 function xarCoreIsDebuggerActive()
 {
-    if(array_key_exists('xarDebug',$GLOBALS)) {
+    if(isset($GLOBALS['xarDebug'])) { 
         return $GLOBALS['xarDebug'] & XARDBG_ACTIVE;
     } else return false;
 
