@@ -14,6 +14,12 @@
  */
 
 /**
+ * DONT EVEN THINK ABOUT UNCOMMENTING THIS
+ *
+ */
+  //define('XAR_BL_USE_XSLT',true);
+
+/**
  * Defines for token handling
  *
  */
@@ -51,7 +57,7 @@ define('XAR_TOKEN_SPACE'             , ' '    );
 define('XAR_NAMESPACE_PREFIX'        , 'xar'  );          // Our own default namespace prefix
 define('XAR_FUNCTION_PREFIX'         , 'xar'  );          // Function prefix (used in check for allowed functions)
 define('XAR_ROOTTAG_NAME'            , 'blocklayout');    // Default name of the root tag
-define('XAR_NODES_LOCATION'          , 'includes/blnodes/'); // Where do we keep our nodes classes
+define('XAR_NODES_LOCATION'          , 'includes/blocklayout/nodes/'); // Where do we keep our nodes classes
 
 
 /**
@@ -196,16 +202,45 @@ class xarTpl__Compiler extends xarTpl__CompilerError
         }
         
         fclose($fp);
+        
+        // XSLT-SECTION
+        if(defined('XAR_BL_USE_XSLT')) {
+            // If the filename contains 'modules' add a dummy tag
+            xarLogMessage("Compiling : $fileName");
+            $location = dirname($fileName);
+            $pathelements = explode('/',$location);
+            $lastdir = array_pop($pathelements);
+            if($lastdir != 'pages') {
+                //if(!(basename($fileName) == 'default.xt' || basename($fileName) =='admin.xt')) {
+                xarLogMessage('NOT a page template, adding dummy root tag');
+                $templateSource ="
+<!DOCTYPE dummy SYSTEM \"http://xartest.hsdev.com:81/includes/transforms/xar_entities.dtd\">
+<xar:dummy xmlns:xar=\"http://xaraya.com/2004/blocklayout\">\n".$templateSource .'</xar:dummy>';
+            }
+        }
 
         $this->parser->setFileName($fileName);
-        return $this->compile($templateSource);
+        $res = $this->compile($templateSource);
+        return $res;
     }
 
     function compile(&$templateSource)
     {
+        // EXPERIMENTAL, USE AT OWN RISK, I DONT EVEN WANNA KNOW
+        if(defined('XAR_BL_USE_XSLT')) {
+            include_once('includes/xarBLXSLTProcessor.php');
+            $xslFile = 'includes/transforms/xar2php.xsl';
+            $xslProc = new BlockLayoutXSLTProcessor($templateSource,$xslFile);
+            $xslProc->xmlFile = $this->parser->getFileName();
+            // This generates php code, the documentree is not visible here anymore
+            $outDoc = $xslProc->transform();
+            return $outDoc;
+        }
+
         $documentTree = $this->parser->parse($templateSource);
         if (!isset($documentTree)) return; // throw back
-        return $this->codeGenerator->generate($documentTree);
+        $res = $this->codeGenerator->generate($documentTree);
+        return $res;
     }
 }
 
@@ -227,6 +262,10 @@ class xarTpl__PositionInfo extends xarTpl__ParserError
     function setFileName($fileName)
     {
         $this->fileName = $fileName;
+    }
+    function getFileName()
+    {
+        return $this->fileName;
     }
 }
 
