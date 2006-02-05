@@ -30,7 +30,7 @@ define('XARLOG_LEVEL_DEBUG',     128);
 // This is a special define that includes all the levels defined above
 define('XARLOG_LEVEL_ALL',       255);
 
-function xarLog_init($args, &$whatElseIsGoingLoaded) 
+function xarLog_init(&$args, &$whatElseIsGoingLoaded) 
 {
 
     $GLOBALS['xarLog_loggers'] = array();

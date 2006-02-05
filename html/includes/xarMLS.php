@@ -37,7 +37,7 @@ require_once dirname(__FILE__)."/transforms/xarCharset.php";
  * @access protected
  * @return bool true
  */
-function xarMLS_init($args, $whatElseIsGoingLoaded)
+function xarMLS_init(&$args, $whatElseIsGoingLoaded)
 {
     switch ($args['MLSMode']) {
     case XARMLS_SINGLE_LANGUAGE_MODE:

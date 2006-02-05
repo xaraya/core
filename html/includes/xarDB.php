@@ -33,7 +33,7 @@
  * @return bool true on success, false on failure
  * @todo <marco> move template tag table definition somewhere else?
  */
-function xarDB_init($args, $whatElseIsGoingLoaded)
+function xarDB_init(&$args, $whatElseIsGoingLoaded)
 {
     $GLOBALS['xarDB_systemArgs'] = $args;
 

@@ -35,7 +35,7 @@ class xarDataDict
      * @return  none
      * @throws  none
     */
-    function xarDataDict($dbconn) 
+    function xarDataDict(&$dbconn) 
     {
         // Check if we passed in a database connection.
         if (empty($dbconn)) {

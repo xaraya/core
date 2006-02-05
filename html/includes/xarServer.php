@@ -26,7 +26,7 @@
  * @return bool true
  */
 
-function xarSerReqRes_init($args, $whatElseIsGoingLoaded)
+function xarSerReqRes_init(&$args, $whatElseIsGoingLoaded)
 {
     $GLOBALS['xarServer_generateXMLURLs']       = $args['generateXMLURLs'];
     $GLOBALS['xarRequest_allowShortURLs']       = $args['enableShortURLsSupport'];

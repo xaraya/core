@@ -19,7 +19,7 @@
  * @param integer whatElseIsGoingLoaded
  * @return bool
 */
-function xarConfig_init($args, $whatElseIsGoingLoaded)
+function xarConfig_init(&$args, $whatElseIsGoingLoaded)
 {
     // Configuration Unit Tables
     $sitePrefix = xarDBGetSiteTablePrefix();

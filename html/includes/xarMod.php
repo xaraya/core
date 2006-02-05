@@ -91,7 +91,7 @@ define('XARTHEME_MODE_PER_SITE', 2);
  * @param args['generateXMLURLs'] bool
  * @return bool true
  */
-function xarMod_init($args, $whatElseIsGoingLoaded)
+function xarMod_init(&$args, $whatElseIsGoingLoaded)
 {
     // generateShortURLs
     $GLOBALS['xarMod_generateShortURLs'] = $args['enableShortURLsSupport'];

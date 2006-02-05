@@ -58,7 +58,7 @@
  * @param $args['loadLevel']
  * @return bool true
  */
-function xarEvt_init($args, $whatElseIsGoingLoaded)
+function xarEvt_init(&$args, $whatElseIsGoingLoaded)
 {
     // Subsystem initialized, register a handler to run when the request is over
     //register_shutdown_function ('xarEvt__shutdown_handler');

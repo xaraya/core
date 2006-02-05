@@ -61,7 +61,7 @@ global $CoreStack, $ErrorStack;
  * @return bool true
  * @todo   can we move the stacks above into the init?
  */
-function xarError_init($systemArgs, $whatToLoad)
+function xarError_init(&$systemArgs, $whatToLoad)
 {
     global $CoreStack,$ErrorStack;
 
