@@ -16,8 +16,8 @@
 include 'includes/xarCore.php';
 xarCoreInit(XARCORE_SYSTEM_ALL);
 
-        if (!xarVarFetch('step', 'int:0:', $step, 0)) return;
-        if (!xarVarFetch('startnum', 'int:0:', $startnum, 0)) return;
+if(!xarVarFetch('step',     'isset', $step,      NULL, XARVAR_NOT_REQUIRED)) {return;}
+if(!xarVarFetch('startnum', 'isset', $startnum,  NULL, XARVAR_NOT_REQUIRED)) {return;}
 
 // pre-fill the module name (if any) for hooks
 xarRequestGetInfo();
@@ -33,12 +33,12 @@ if (!isset($step)) {
 <?php
 $prefix = xarDBGetSystemTablePrefix();
 if (isset($step)) {
-    if ($step == 1 && $startnum == 0) {
+    if ($step == 1 && !isset($startnum)) {
         if (!xarVarFetch('oldprefix', 'str:1:', $oldprefix, '')) return;
         if (!xarVarFetch('reset', 'int:0:1', $reset, 0)) return;
         if (!xarVarFetch('resetcat', 'int:0:1', $resetcat, 0)) return;
         if (!xarVarFetch('imgurl', 'str:1:', $imgurl, '')) return;
-    } elseif ($step > 1 || $startnum > 0) {
+    } elseif ($step > 1 || isset($startnum)) {
         $oldprefix = xarModGetVar('installer','oldprefix');
         $reset = xarModGetVar('installer','reset');
         $resetcat = xarModGetVar('installer','resetcat');
