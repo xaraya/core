@@ -2,6 +2,8 @@
 /**
  * BlockLayout Template Engine Compiler
  *
+ * The compiler is responsible for compiling xar + xml -> php + xml
+ *
  * @package blocklayout
  * @copyright (C) 2003,2004 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -228,7 +230,7 @@ class xarTpl__Compiler extends xarTpl__CompilerError
     {
         // EXPERIMENTAL, USE AT OWN RISK, I DONT EVEN WANNA KNOW
         if(defined('XAR_BL_USE_XSLT')) {
-            include_once('includes/xarBLXSLTProcessor.php');
+            include_once('includes/blocklayout/xsltransformer.php');
             $xslFile = 'includes/transforms/xar2php.xsl';
             $xslProc = new BlockLayoutXSLTProcessor($templateSource,$xslFile);
             $xslProc->xmlFile = $this->parser->getFileName();
