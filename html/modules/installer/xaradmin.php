@@ -427,7 +427,8 @@ function installer_admin_phase5()
     // If we are here, the base system has completed
     // We can now pass control to xaraya.
     include_once 'includes/xarConfig.php';
-    xarConfig_init(array(),XARCORE_SYSTEM_ADODB);
+    $params=array();
+    xarConfig_init($params,XARCORE_SYSTEM_ADODB);
     xarConfigSetVar('Site.MLS.DefaultLocale', $install_language);
 
     // Set the allowed locales to our "C" locale and the one used during installation
