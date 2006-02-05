@@ -339,9 +339,9 @@ class xarMasks
  * @param   access level description
  * @return  access level
  * @throws  none
- * @todo    none
+ * @todo    does this need to be in a db table? will it ever get other rows than the initialized ones?
 */
-
+    
     function xarSecLevel($levelname)
     {
         if (xarVarIsCached('Security.xarSecLevel', $levelname)) {
