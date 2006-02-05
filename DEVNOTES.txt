@@ -1,40 +1,39 @@
 A log of important changes made to the 2.x branch which we need to
 revisit later on before trusting the branch to be released or used.
 
-DB-CHANGES:
-
-- module_uservars is now module_itemvars where item is an item in a
+!!!DB-CHANGES:
+* module_uservars is now module_itemvars where item is an item in a
   module, not only roles. The columns are adapted accordingly.
-- hooks table now registers the mod id in the columns smodid and
+* hooks table now registers the mod id in the columns smodid and
   tmodid instead of the name of the module.
-- adminpanels as module is completely gone, which also means its table
+* adminpanels as module is completely gone, which also means its table
   was deleted. The complete functionality of adminpanels is now in the
   modules module.
-- template_tags column xar_module replaced by a column xar_modid
-- security_instances column xar_module replaced by column xar_modid
-- security_masks column xar_module replaced by column xar_modid
-- xar_roles column xar_auth_module replaced by column
+* template_tags column xar_module replaced by a column xar_modid
+* security_instances column xar_module replaced by column xar_modid
+* security_masks column xar_module replaced by column xar_modid
+* xar_roles column xar_auth_module replaced by column
   xar_auth_modid. The interface WAS NOT ADAPTED but nothing uses the
   auth_module directly and the columns is probably going to move away
   to somewhere else anyway. 
-- xar_block_types column xar_module replaced by column xar_modid. This
+* xar_block_types column xar_module replaced by column xar_modid. This
   was far out the most intrusive one since that table is used in the
   privilege instance queries. I adapted as best as I could, no doubt
   they wont work anymore in some cases. We'll see.
 
-OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
-- when encountered, upgrade code to upgrade modules from older
-versions than in 1.0 is removed, assuming we will only support
-upgrading from 1.0 to 2.x and not versions before 1.0
-- the whole exception subsystem was rewritten from scratch and the
+!!!OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
+* when encountered, upgrade code to upgrade modules from older
+  versions than in 1.0 is removed, assuming we will only support 
+  upgrading from 1.0 to 2.x and not versions before 1.0 
+* the whole exception subsystem was rewritten from scratch and the
   whole of core was adapted to use it. (see new RFC-0054)
-- adodb has been replaced with the creole database abstraction layer.
-- the meaning of xar:comment and <!-- has been reversed as observed as
+* adodb has been replaced with the creole database abstraction layer.
+* the meaning of xar:comment and <!-- has been reversed as observed as
   a design error. xar:comment now produces a comment in the output while things
   between <!-- and --> get ignored by the BL parser. If you're previous xar:comment
   content was sensitive you might wanna reverse it in your templates too.
 
-REFACTORING LIST:
+!!!REFACTORING LIST:
 List of things which need to be refactored before starting the actual
 design work can begin.
 
@@ -46,39 +45,49 @@ design work can begin.
   die()'s and modelling the classes where php4 could not) 
 * I really would like to do something with views wrt multisites et. al.
 * I really would like to do something with triggers, dunno for what
-* I really would like to do something with stored procedures, dunno for what
+* I really would like to do something with stored procedures, dunno
+  for what
+* the need for a Request mapper is evident. Apart from the gained
+  dimension for navigation design this also centralizes the short url
+  functionality instead of distributing it all over. 
+* the blocklayout tag could use attributes related to emitting a <?xml
+  header or not (or use <?xar for this? since it is an instruction to
+  process )
+* 
+
+!!!KNOWN ISSUES
 * blocks do not end up in group anymore, need to investigate
 * simplify installer/xaradmin.php before rewriting it
-* running installer twice with 2 different prefixes drop *all* tables 
-  regardless of earlier installations
+* running installer twice with 2 different prefixes drops *all* tables 
+  regardless of earlier installations (same problem in 1.0 too?)
 * we keep a 'state' of some sort for different items:
   1. modules
   2. themes
   3. roles
   4. blocks
   5. dd_properties
-  Would it make sense to centralise state management of a generic 'item' level?
-*
+  Would it make sense to centralise state management of a generic
+  'item' level? Also the use of a workflow component in core comes to mind.
 
-VIEWS support for backends:
+!!!VIEWS support for backends:
 - mysql   : yes, since 5.0
 - sqlite  : yes, since forever
 - postgres: yes, since 7.3 (at least)
 - mssql   : yes, no idea version wise
 
-TRANSACTION support for backends:
+!!!TRANSACTION support for backends:
 - mysql   : yes, innodb engine 
 - sqlite  : yes
 - postgres: yes
 - mssql   : yes
 
-FOREIGN KEY support for backends:
+!!!FOREIGN KEY support for backends:
 - mysql   : yes, innodb engine only
 - sqlite  : no
 - postgres: yes
 - mssql   : yes
 
-MIN. REQUIRED VERSIONS DETERMINED SO FAR
+!!!MIN. REQUIRED VERSIONS DETERMINED SO FAR
 * PHP      5.0.5
 * Mysql    5.0.18
 * Postgres 8.0.6
@@ -86,3 +95,10 @@ MIN. REQUIRED VERSIONS DETERMINED SO FAR
 * MsSql server 2003?
 
 
+
+
+<!-- 
+% Local Variables:
+% mode: stx
+% End:
+-->
