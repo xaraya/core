@@ -172,10 +172,10 @@
     }
   
     // check if there's a dynamic object defined for users
-    $myobject =& xarModAPIFunc('dynamicdata',
-                               'user',
-                               'getobject',
-                               array('moduleid' => xarModGetIDFromName('roles'), // it's this module
+    $myobject = xarModAPIFunc('dynamicdata',
+                              'user',
+                              'getobject',
+                              array('moduleid' => xarModGetIDFromName('roles'), // it's this module
                                      'itemtype' => 0));                          // with no item type
 
     if (empty($myobject) || empty($myobject->objectid)) {
@@ -189,10 +189,10 @@
             die('Error creating the dynamic user properties');
         }
  
-        $myobject =& xarModAPIFunc('dynamicdata',
-                                   'user',
-                                   'getobject',
-                                   array('objectid' => $objectid));
+        $myobject = xarModAPIFunc('dynamicdata',
+                                  'user',
+                                  'getobject',
+                                  array('objectid' => $objectid));
     }
     
     // Disable dynamicdata hooks for roles (to avoid create + update)
