@@ -65,9 +65,6 @@ class Creole {
     private static $driverMap = array(  'mysql' => 'creole.drivers.mysql.MySQLConnection',
                                         'mysqli' => 'creole.drivers.mysqli.MySQLiConnection',
                                         'pgsql' => 'creole.drivers.pgsql.PgSQLConnection',
-                                        // XARAYA MODIFICATION
-                                        'postgres' => 'creole.drivers.pgsql.PgSQLConnection',
-                                        // END XARAYA MODIFICATION
                                         'sqlite' => 'creole.drivers.sqlite.SQLiteConnection',
                                         'oracle' => 'creole.drivers.oracle.OCI8Connection',
                                         'mssql' => 'creole.drivers.mssql.MSSQLConnection',
