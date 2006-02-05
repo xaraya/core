@@ -21,7 +21,8 @@ function roles_admin_modifynotice()
     switch (strtolower($phase)) {
         case 'modify':
         default: 
-            $data['ips'] = unserialize(xarModGetVar('roles', 'disallowedips'));
+            $ips = xarModGetVar('roles','disallowedips');
+            $data['ips'] = empty($ips) ? '' : unserialize($ips);
             $data['authid'] = xarSecGenAuthKey();
             $data['updatelabel'] = xarML('Update Notification Configuration');
 

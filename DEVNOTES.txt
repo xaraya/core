@@ -53,11 +53,6 @@ design work can begin.
 * the blocklayout tag could use attributes related to emitting a <?xml
   header or not (or use <?xar for this? since it is an instruction to
   process )
-* 
-
-!!!KNOWN ISSUES
-* blocks do not end up in group anymore, need to investigate
-* simplify installer/xaradmin.php before rewriting it
 * we keep a 'state' of some sort for different items:
   1. modules
   2. themes
@@ -66,6 +61,15 @@ design work can begin.
   5. dd_properties
   Would it make sense to centralise state management of a generic
   'item' level? Also the use of a workflow component in core comes to mind.
+* simplify installer/xaradmin.php before rewriting it
+* privileges creates objects now where some number like '1098' enters
+  the xar_modid field (which was previously xar_module). This will
+  cause confusion. (unfinished?, experiment?, ask marc)
+
+!!!KNOWN ISSUES
+* blocks do not end up in groups anymore during installation, need to
+  investigate why that is. Most likely a missed spot when doing the
+  schema migration. 
 
 !!!VIEWS support for backends:
 - mysql   : yes, since 5.0
@@ -83,7 +87,7 @@ design work can begin.
 - mysql   : yes, innodb engine only
 - sqlite  : no
 - postgres: yes
-- mssql   : yes
+- mssql   : yes, no idea version wise
 
 !!!MIN. REQUIRED VERSIONS DETERMINED SO FAR
 * PHP      5.0.5
@@ -91,8 +95,6 @@ design work can begin.
 * Postgres 8.0.6
 * Sqlite   N/A (embedded in PHP, i think it's 2.8.x for non PDO and 3.x for PDO)
 * MsSql server 2003?
-
-
 
 
 <!-- 
