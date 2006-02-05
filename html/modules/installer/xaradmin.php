@@ -374,11 +374,15 @@ function installer_admin_phase5()
             $dbconn->begin();
             foreach($dbinfo->getTables() as $tbl) {
                 $table = $tbl->getName();
-                $sql = xarDBDropTable($table,$dbType);
-                $dbconn->Execute($sql);
+                // Same prefix? drop it
+                if(strpos($table,'_') and substr($table,0,strpos($table,'_') == $dbPrefix)) {
+                    $sql = xarDBDropTable($table,$dbType);
+                    $dbconn->Execute($sql);
+                }
             }
             $dbconn->commit();
         } catch (SQLException $e) {
+            // FUTURE: this will also get raised for views which may be in the database.
             $dbconn->rollback();
             throw $e;
         }

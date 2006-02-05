@@ -58,8 +58,6 @@ design work can begin.
 !!!KNOWN ISSUES
 * blocks do not end up in group anymore, need to investigate
 * simplify installer/xaradmin.php before rewriting it
-* running installer twice with 2 different prefixes drops *all* tables 
-  regardless of earlier installations (same problem in 1.0 too?)
 * we keep a 'state' of some sort for different items:
   1. modules
   2. themes
