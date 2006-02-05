@@ -92,6 +92,20 @@ function authsystem_upgrade($oldVersion)
     /* Upgrade dependent on old version number */
     switch ($oldVersion) {
         case '0.91.0':
+           /* Define privielges */
+           xarRegisterPrivilege('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
+
+          /* Define Module vars */
+          xarModSetVar('authsystem', 'lockouttime', 15);
+  	      xarModSetVar('authsystem', 'lockouttries', 3);
+	      xarModSetVar('authsystem', 'uselockout', false);
+          /* Define Masks */
+          xarRegisterMask('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW');
+          xarRegisterMask('ViewAuthsystemBlocks','All','authsystem','Block','All','ACCESS_OVERVIEW');
+          xarRegisterMask('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
+          xarRegisterMask('EditAuthsystem','All','authsystem','All','All','ACCESS_EDIT');
+          xarRegisterMask('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
+  
             //Set the default authmodule if not already set
    	        $isdefaultauth = xarModGetVar('roles','defaultauthmodule');
    	        if (!isset($isdefaultauth)) {
