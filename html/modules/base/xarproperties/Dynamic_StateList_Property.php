@@ -49,7 +49,7 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
     function showInput($args = array())
     {
         if (empty($args['template'])) {
-			$args['template'] = 'statelist';
+            $args['template'] = 'statelist';
         }
          return parent::showInput($args);
     }
@@ -57,7 +57,7 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
     function showOutput($args = array())
     {
         if (empty($args['template'])) {
-			$args['template'] = 'statelist';
+            $args['template'] = 'statelist';
         }
          return parent::showOutput($args);
     }

@@ -48,8 +48,6 @@ class xarCache_Database_Storage extends xarCache_Storage
         $bindvars = array($this->type, $key, $this->code);
         $result =& $dbconn->Execute($query, $bindvars);
 
-        if (!$result) return;
-
         $this->lastkey = $key;
 
         if ($result->EOF) {
@@ -101,8 +99,6 @@ class xarCache_Database_Storage extends xarCache_Storage
                   WHERE xar_type = ? AND xar_key = ? AND xar_code = ?";
         $bindvars = array($this->type, $key, $this->code);
         $result =& $dbconn->Execute($query, $bindvars);
-
-        if (!$result) return;
 
         $this->lastkey = $key;
 
@@ -207,12 +203,11 @@ class xarCache_Database_Storage extends xarCache_Storage
                             WHERE xar_type = ?";
             $bindvars = array($this->type);
         } else {
-            $key = '%'.$key.'%'
+            $key = '%'.$key.'%';
             $query = "DELETE FROM $table  WHERE xar_type = ? AND xar_key LIKE ?";
             $bindvars = array($this->type,$key);
         }
-        $result =& $dbconn->Execute($query, $bindvars);
-        if (!$result) return;
+        $dbconn->Execute($query, $bindvars);
 
         // check the cache size and clear the lockfile set by sizeLimitReached()
         $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
@@ -255,8 +250,7 @@ class xarCache_Database_Storage extends xarCache_Storage
         $query = "DELETE FROM $table
                         WHERE xar_type = ? AND xar_time < ?";
         $bindvars = array($this->type, $time);
-        $result =& $dbconn->Execute($query, $bindvars);
-        if (!$result) return;
+        $dbconn->Execute($query, $bindvars);
 
         // check the cache size and clear the lockfile set by sizeLimitReached()
         $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
@@ -279,7 +273,6 @@ class xarCache_Database_Storage extends xarCache_Storage
                        WHERE xar_type = ?";
             $bindvars = array($this->type);
             $result =& $dbconn->Execute($query, $bindvars);
-            if (!$result) return;
 
             list($size,$count) = $result->fields;
             $result->Close();
@@ -291,7 +284,6 @@ class xarCache_Database_Storage extends xarCache_Storage
                        WHERE xar_type = ?";
             $bindvars = array($this->type);
             $result =& $dbconn->Execute($query, $bindvars);
-            if (!$result) return;
 
             list($size) = $result->fields;
             $result->Close();
@@ -340,8 +332,6 @@ class xarCache_Database_Storage extends xarCache_Storage
                   WHERE xar_type = ?";
         $bindvars = array($this->type);
         $result =& $dbconn->Execute($query, $bindvars);
-
-        if (!$result) return;
 
         $list = array();
         while (!$result->EOF) {

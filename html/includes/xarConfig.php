@@ -132,7 +132,6 @@ function xarConfig_loadVars()
                 FROM $tables[config_vars]";
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery(array(),ResultSet::FETCHMODE_ASSOC);
-    if (!$result) return;
 
     while ($result->next()) {
         $newval = unserialize($result->getString('xar_value'));

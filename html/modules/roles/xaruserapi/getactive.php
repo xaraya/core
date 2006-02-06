@@ -44,7 +44,6 @@ function roles_userapi_getactive($args)
               WHERE xar_lastused > ? AND xar_uid = ?";
     $bindvars = array((int)$filter,(int)$uid);
     $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
 
     // Put users into result array
     for (; !$result->EOF; $result->MoveNext()) {

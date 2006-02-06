@@ -197,10 +197,13 @@ function roles_admin_purge($args)
         }
 
 // --- display users that can be purged
-        $selection = " WHERE xar_email != ''";
+        $bindvars = array();
+        $selection = " WHERE xar_email != ?";
+        $bindvars[] = '';
         //Create the selection
         if ($data['purgestate'] != -1) {
-            $selection .= " AND xar_state = " . $data['purgestate'];
+            $selection .= " AND xar_state = ? ";
+            $bindvars[] = $data['purgestate'];
             switch ($data['purgestate']):
                 case ROLES_STATE_DELETED :
                     $data['purgestatetext'] = 'deleted';
@@ -223,11 +226,15 @@ function roles_admin_purge($args)
             $data['purgestatetext'] = '';
         }
         if (!empty($data['purgesearch'])) {
-            $selection .= " AND (";
-            $selection .= "(xar_name LIKE '%" . $data['purgesearch'] . "%')";
-            $selection .= " OR (xar_uname LIKE '%" . $data['purgesearch'] . "%')";
-            $selection .= " OR (xar_email LIKE '%" . $data['purgesearch'] . "%')";
-            $selection .= ")";
+            $selection .= " AND (
+                                  (xar_name LIKE ?) OR
+                                  (xar_uname LIKE ?) OR
+                                  (xar_email LIKE ?)
+                                )";
+            $bv = '%'.$data['purgesearch'].'%';
+            $bindvars[] = $bv;
+            $bindvars[] = $bv;
+            $bindvars[] = $bv;
         }
         // Select-clause.
         $query = '
@@ -241,12 +248,11 @@ function roles_admin_purge($args)
                     $selection .
                     ' ORDER BY xar_name';
 
-        $result = $dbconn->Execute($query);
+        $result = $dbconn->Execute($query,$bindvars);
         $data['totalselect'] = $result->getRecordCount();
-        if (!$result) {return;}
+
         if ($purgestartnum != 0) {
-            $result = $dbconn->SelectLimit($query, $numitems, $purgestartnum-1);
-            if (!$result) {return;}
+            $result = $dbconn->SelectLimit($query, $numitems, $purgestartnum-1,$bindvars);
         }
 
         if ($data['totalselect'] == 0) {

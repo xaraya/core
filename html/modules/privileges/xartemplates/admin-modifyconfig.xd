@@ -67,6 +67,19 @@
                     </dd>    
                 </xar:if>
             </xar:if>
+            <xar:if condition="$tab eq 'masks'">
+                <dd class="active">
+                    <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=masks">
+                        <xar:mlstring>Masks</xar:mlstring>
+                    </a>
+                </dd>    
+            <xar:else />
+                <dd>
+                    <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=masks">    
+                        <xar:mlstring>Masks</xar:mlstring>
+                    </a>
+                </dd>    
+            </xar:if>
             <xar:if condition="$tab eq 'testing'">
                 <dd class="active">
                     <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=testing">
@@ -83,7 +96,7 @@
         </dl>
     </div>
     <xar:comment>
-        ------------------- Begin General Options --------------------- 
+        - - - - - - Begin General Options - - - - - -
     </xar:comment>
     <xar:if condition="$tab eq 'general'">
         <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded" >
@@ -93,6 +106,18 @@
                         Sitewide Settings 
                     </xar:mlstring>
                 </legend>
+                <div class="xar-form-input-wrapper">
+                    <label for="lastresort" title="#xarML('Show exceptions messages or redirect to a login screen')#" class="xar-form-label">
+                        <xar:mlstring>Exception Redirect:</xar:mlstring>
+                    </label>
+                    <xar:if condition="xarModGetVar('privileges', 'exceptionredirect')">
+                        <input type="checkbox" name="exceptionredirect" id="exceptionredirect" value="1" checked="checked" />
+                    <xar:else />
+                        <input type="checkbox" name="exceptionredirect" id="exceptionredirect" value="1" />
+                    </xar:if>
+                    <xar:mlstring>This redirects to the login screen when a user doesn't have the proper privileges.</xar:mlstring>
+                </div>
+                <xar:comment>
                 <div class="xar-form-input-wrapper">
                     <label for="inheritdeny" title="#xarML('Enable or disable inheritance of deny privileges')#" class="xar-form-label">
                         <xar:mlstring>Inherit Deny Privileges:</xar:mlstring>
@@ -104,6 +129,7 @@
                     </xar:if>
                     <xar:mlstring>Warning: This setting affects the way privileges work on your site. If changed you should retest all the privileges on your site.</xar:mlstring>
                 </div>
+                </xar:comment>
                 <legend>
                     <xar:mlstring>
                         Last Resort
@@ -238,13 +264,17 @@
             <fieldset>
                 <legend>
                     <xar:mlstring>
-                        Create a Last Resort Admin
+                        Manage Last Resort Admin
                     </xar:mlstring>
                 </legend>
-                <div>
-                    <xar:mlstring>Enter a  name and password to create an administrator that <b>always</b> has rights to the entire system.</xar:mlstring>
+                <div class="xar-form-input-wrapper-before">
+                    <p><xar:mlstring>The Last Resort Administrator will <strong>always</strong> have rights to the entire system.</xar:mlstring></p>
+                    <xar:if condition="!empty($lastresortname)">
+                        <p><xar:mlstring>Enter a name and password to replace the existing Last Resort administrator.</xar:mlstring></p>
+                    <xar:else />
+                         <p><xar:mlstring>Enter a  name and password to create a Last Resort administrator.</xar:mlstring></p>
+                    </xar:if>
                 </div>
-                <br />
                 <div class="xar-form-input-wrapper">
                     <label for="name" title="#xarML('Name of the administator of last  resort')#" class="xar-form-label">
                         <xar:mlstring>Admin name:</xar:mlstring>
@@ -252,11 +282,21 @@
                     <input type="text" name="name" id="name" value="" />
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="password" title="#xarML('Password of the administator of last  resort')#" class="xar-form-label">
+                    <label for="password" title="#xarML('Password of the administrator of last resort')#" class="xar-form-label">
                         <xar:mlstring>Password:</xar:mlstring>
                     </label>
-                    <input type="text" name="password" id="password" value="" />
+                    <input type="password" name="password" id="password" value="" maxlength="40" class="xar-form-textmedium" />
                 </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="password2" title="#xarML('Confirm password for administrator of last resort')#" class="xar-form-label">
+                        <xar:mlstring>Confirm Password:</xar:mlstring>
+                    </label>
+                    <input type="password" name="password2" id="password2" value="" maxlength="40" class="xar-form-textmedium" />
+                </div>
+                <xar:if condition="xarSessionGetVar('statusmsg') ne ''">
+                    <p class="xar-form-input-wrapper-after xar-error">#xarSessionGetVar('statusmsg')#</p>
+                </xar:if>
+               <xar:set name="dummy">xarSessionSetVar('statusmsg','')</xar:set>
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
@@ -269,7 +309,28 @@
         </form>
     </xar:if>
     <xar:comment>
-        ------------------- Begin Testing --------------------- 
+        - - - - - Begin Masks - - - - - 
+    </xar:comment>
+    <xar:if condition="$tab eq 'masks'">
+        <fieldset>
+            <legend>
+                <xar:mlstring>
+                    Registered Masks
+                </xar:mlstring>
+            </legend>
+            <xar:data-list module="1098" itemtype="3" tplmodule="privileges" />
+        </fieldset>
+        <fieldset>
+            <div class="xar-form-input-wrapper-after">
+                <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                <input type="hidden" name="phase" id="phase" value="update" />
+                <input type="hidden" name="tab" id="tab" value="#$tab#" />
+                <input type="submit" value="#xarML('Update Privileges Configuration')#" />
+            </div>
+        </fieldset>
+    </xar:if>
+    <xar:comment>
+        - - - - - - Begin Testing - - - - - 
     </xar:comment>
     <xar:if condition="$tab eq 'testing'">
         <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded" >

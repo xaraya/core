@@ -243,7 +243,6 @@ function xarModDelAllVars($modName)
     $sql="SELECT $module_varstable.xar_id FROM $module_varstable WHERE $module_varstable.xar_modid = ?";
     $stmt = $dbconn->prepareStatement($sql);
     $result = $stmt->executeQuery(array($modBaseInfo['systemid']), ResultSet::FETCHMODE_NUM);
-    if(!$result) return;
 
     // Seems that at least mysql and pgsql support the scalar IN operator
     $idlist = array();
@@ -416,7 +415,7 @@ function xarModGetVarId($modName, $name)
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery(array((int)$modBaseInfo['systemid'],$name),ResultSet::FETCHMODE_NUM);
     // If there is no such thing, the callee is responsible, return null
-    if(!$result || !$result->next()) return;
+    if(!$result->next()) return;
 
     // Return the ID
     $modvarid = $result->getInt(1);
@@ -441,7 +440,7 @@ function xarModGetIDFromName($modName, $type = 'module')
 {
     if (empty($modName)) throw new EmptyParameterException('modName');
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'module':
             default:
             $modBaseInfo = xarMod_getBaseInfo($modName);
@@ -469,8 +468,6 @@ function xarModGetIDFromName($modName, $type = 'module')
 function xarModGetInfo($modRegId, $type = 'module')
 {
     if (empty($modRegId)) throw new EmptyParameterException('modRegid');
-
-    $type = strtolower($type);
 
     switch($type) {
         case 'module':
@@ -516,7 +513,6 @@ function xarModGetInfo($modRegId, $type = 'module')
     }
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery(array($modRegId),ResultSet::FETCHMODE_NUM);
-    if (!$result) return;
 
     if (!$result->next()) {
         $result->close();
@@ -613,9 +609,10 @@ function xarModGetInfo($modRegId, $type = 'module')
     return $modInfo;
 }
 
-function xarModGetNameFromID($regid) {
-	$modinfo = xarModGetInfo($regid);
-	return $modinfo['name'];
+function xarModGetNameFromID($regid) 
+{
+    $modinfo = xarModGetInfo($regid);
+    return $modinfo['name'];
 }
 
 
@@ -744,7 +741,7 @@ function xarModDBInfoLoad($modName, $modDir = NULL, $type = 'module')
 
     // Get the directory if we don't already have it
     if (empty($modDir)) {
-        switch(strtolower($type)) {
+        switch($type) {
             case 'module':
                 default:
                 $modBaseInfo = xarMod_getBaseInfo($modName);
@@ -758,7 +755,7 @@ function xarModDBInfoLoad($modName, $modDir = NULL, $type = 'module')
     } else {
         $modDir = xarVarPrepForOS($modDir);
     }
-    switch(strtolower($type)) {
+    switch($type) {
         case 'module':
             default:
             xarMod__loadDbInfo($modBaseInfo['name'], $modDir);
@@ -797,7 +794,6 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
     $modBaseInfo = xarMod_getBaseInfo($modName);
 
     // Build function name and call function
-    $funcName = strtolower($funcName);
     $modFunc = "{$modName}_{$modType}_{$funcName}";
     $found = true;
     $isLoaded = true;
@@ -809,7 +805,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
         if (!function_exists($modFunc)) {
             if (!isset($modBaseInfo)) return; // throw back
 
-            $funcFile = 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.'/'.$funcName.'.php';
+            $funcFile = 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.'/'.strtolower($funcName).'.php';
             if (!file_exists($funcFile)) {
                 $found = false;
             } else {
@@ -894,8 +890,6 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
 
 
     // Build function name and call function
-    $funcName = strtolower($funcName);
-    $modName = strtolower($modName); // Bug 2870
     $modAPIFunc = "{$modName}_{$modType}api_{$funcName}";
     $found = true;
     $isLoaded = true;
@@ -908,7 +902,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
             $modBaseInfo = xarMod_getBaseInfo($modName);
             if (!isset($modBaseInfo)) {return;} // throw back
 
-            $funcFile = 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.'api/'.$funcName.'.php';
+            $funcFile = 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.'api/'.strtolower($funcName).'.php';
             if (!file_exists($funcFile)) {
                 $found = false;
             } else {
@@ -980,7 +974,6 @@ function xarMod__URLencode($data, $type = 'getname')
     // separators.
     // The aim is to encode as little as possible, so that URLs
     // remain as human-readable as we can allow.
-    $type = strtolower($type);
 
     // We will encode everything first, then restore a select few
     // characters.
@@ -1461,11 +1454,11 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
     // Get applicable hooks
     // New query:
     $query ="SELECT DISTINCT hooks.xar_tarea, tmods.xar_name, 
-	                         hooks.xar_ttype, hooks.xar_tfunc, hooks.xar_order
+                             hooks.xar_ttype, hooks.xar_tfunc, hooks.xar_order
              FROM $hookstable hooks, $modulestable tmods, $modulestable smods
              WHERE hooks.xar_tmodid = tmods.xar_id AND
                    hooks.xar_smodid = smods.xar_id AND
-	               smods.xar_name = ?";
+                   smods.xar_name = ?";
     $bindvars = array($callerModName);
 
     if (empty($callerItemType)) {
@@ -1487,7 +1480,6 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
     $bindvars[] = $hookAction;
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_NUM);
-    if (!$result) return;
 
     $resarray = array();
     while($result->next()) {
@@ -1547,7 +1539,6 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
         $bindvars = array($callerModName);
 
         $result =& $dbconn->Execute($query,$bindvars);
-        if (!$result) return;
 
         $modHookedCache[$callerModName] = array();
         while(!$result->EOF) {
@@ -1619,7 +1610,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
 
 
     // TODO redo legacy support via type.
-    switch(strtolower($type)) {
+    switch($type) {
         case 'module':
             default:
             // Spliffster, additional mod info from modules/$modDir/xarversion.php
@@ -1711,19 +1702,9 @@ function xarMod_getBaseInfo($modName, $type = 'module')
 {
     if (empty($modName)) throw new EmptyParameterException('modName');
 
-    $type = strtolower($type);
-
     if ($type != 'module' && $type != 'theme') {
         throw new BadParameterException($type,'The value of the "type" parameter must be "module" or "theme", it was "#(1)"');
     }
-
-    if ($type != 'theme') {
-        $modName = strtolower($modName); // bug 2870
-    }
-
-    // Fixme: this is a presentation issue.
-    $upperFirstLetter = $type;
-    $upperFirstLetter[0] = strtoupper($type[0]);
 
     // FIXME: <MrB> I've seen cases where the cache info is not in sync
     // with reality. I've take a couple ones out, but I haven't tested all
@@ -1779,7 +1760,6 @@ function xarMod_getBaseInfo($modName, $type = 'module')
 
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
-    if (!$result) return;
 
     if (!$result->next()) {
         $result->Close();
@@ -1846,7 +1826,6 @@ function xarMod_getVarsByModule($modName)
     $query = "SELECT xar_name, xar_value FROM $module_varstable WHERE xar_modid = ?";
     $stmt =& $dbconn->prepareStatement($query);
     $result =& $stmt->executeQuery(array($modBaseInfo['systemid']),ResultSet::FETCHMODE_ASSOC);
-    if (!$result) return;
 
     while ($result->next()) {
         xarCore_SetCached('Mod.Variables.' . $modName, $result->getString('xar_name'), $result->get('xar_value'));
@@ -1877,7 +1856,7 @@ function xarMod_getVarsByName($varName, $type = 'module')
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
-    switch(strtolower($type)) {
+    switch($type) {
     case 'module':
     default:
 
@@ -1904,7 +1883,6 @@ function xarMod_getVarsByName($varName, $type = 'module')
 
     $stmt =& $dbconn->prepareStatement($query);
     $result =& $stmt->executeQuery(array($varName),ResultSet::FETCHMODE_NUM);
-    if (!$result) return;
 
     // Add module variables to cache
     while ($result->next()) {
@@ -1912,7 +1890,7 @@ function xarMod_getVarsByName($varName, $type = 'module')
     }
 
     $result->Close();
-    switch(strtolower($type)) {
+    switch($type) {
         case 'module':
             default:
             xarCore_SetCached('Mod.GetVarsByName', $varName, true);
@@ -1990,7 +1968,7 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
     $tables =& xarDBGetTables();
     $modulesTable = $tables['modules'];
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'module':
             default:
             if ($modMode == XARMOD_MODE_SHARED) {
@@ -2018,7 +1996,6 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
     }
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery(array($modRegId),ResultSet::FETCHMODE_NUM);
-    if (!$result) return;
 
     // the module is not in the table
     // set state to XARMOD_STATE_UNINITIALISED

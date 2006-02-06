@@ -39,8 +39,7 @@ function roles_adminapi_delete($args)
 
     // Delete the item
     $query = "DELETE FROM $rolestable WHERE xar_uid = ?";
-    $result =& $dbconn->Execute($query,array($uid));
-    if (!$result) return;
+    $dbconn->Execute($query,array($uid));
 
     // Let any hooks know that we have deleted this user.
     $item['module'] = 'roles';

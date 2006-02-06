@@ -77,8 +77,7 @@ function modules_adminapi_upgrade($args)
     $bindvars = array($modFileInfo['version'], $modFileInfo['admin_capable'],
                       $modFileInfo['user_capable'],$modFileInfo['class'],
                       $modFileInfo['category'], $regid);
-    $result = $dbconn->Execute($sql,$bindvars);
-    if (!$result) return;
+    $dbconn->Execute($sql,$bindvars);
 
     // Message to display in the module list view (only for core modules atm)
     if(!xarSessionGetVar('statusmsg')){

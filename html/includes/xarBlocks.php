@@ -194,7 +194,6 @@ function xarBlock_renderGroup($groupname, $template = NULL)
               ORDER BY  group_inst.xar_position ASC";
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery(array($groupname,0), ResultSet::FETCHMODE_ASSOC);
-    if (!$result) {return;}
 
     $output = '';
     while($result->next()) {

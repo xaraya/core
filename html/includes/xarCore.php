@@ -104,7 +104,7 @@ define('XARCORE_TPL_CACHEDIR' , '/cache/templates');
 /**
  * Load the Xaraya pre core early (in case we're not coming in via index.php)
  */
-include_once('includes/xarPreCore.php');
+include_once(dirname(__FILE__).'/xarPreCore.php');
 
 /**
  * Initializes the core engine
@@ -384,7 +384,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     if ($whatToLoad & XARCORE_SYSTEM_USER) {
         include 'includes/xarUser.php';
         include 'includes/xarSecurity.php';
-
+        xarSecurity_init();
         // Start User System
         $systemArgs = array('authenticationModules' => xarConfigGetVar('Site.User.AuthenticationModules'));
         xarUser_init($systemArgs, $whatToLoad);
@@ -483,7 +483,7 @@ function xarCoreActivateDebugger($flags)
  */
 function xarCoreIsDebuggerActive()
 {
-    if(array_key_exists('xarDebug',$GLOBALS)) {
+    if(isset($GLOBALS['xarDebug'])) { 
         return $GLOBALS['xarDebug'] & XARDBG_ACTIVE;
     } else return false;
 

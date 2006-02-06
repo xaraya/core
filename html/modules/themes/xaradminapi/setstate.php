@@ -53,7 +53,6 @@ function themes_adminapi_setstate($args)
 /*                 VALUES (?,?)"; */
 /*  */
 /*             $result = $dbconn->Execute($sql,array($regid,$state); */
-/*             if (!$result) return; */
 /*  */
 /*             return true; */
 /*             break; */
@@ -85,14 +84,13 @@ function themes_adminapi_setstate($args)
                 $theme_statesTable = $xartable['system/theme_states'];
                 $query = "SELECT * FROM $theme_statesTable WHERE xar_regid = ?";
                 $result =& $dbconn->Execute($query,array($regid));
-                if (!$result) return;
+
                 if ($result->EOF) {
                     $query = "INSERT INTO $theme_statesTable
                        (xar_regid, xar_state)
                         VALUES (?,?)";
                     $bindvars = array($regid,$state);
-                    $newresult =& $dbconn->Execute($query,$bindvars);
-                    if (!$newresult) return;
+                    $dbconn->Execute($query,$bindvars);
                 }
                 return true;
             }
@@ -134,8 +132,8 @@ function themes_adminapi_setstate($args)
 
     $sql = "UPDATE $theme_statesTable SET xar_state = ? WHERE xar_regid =?";
     $bindvars = array($state,$regid);
-    $result = $dbconn->Execute($sql, $bindvars);
-    if (!$result) return;
+    $dbconn->Execute($sql, $bindvars);
+
     return true;
 }
 

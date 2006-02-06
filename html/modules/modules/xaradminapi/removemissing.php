@@ -40,7 +40,7 @@ function modules_adminapi_removemissing($args)
         $query = "DELETE FROM $tables[modules] WHERE xar_id = ?";
         $dbconn->Execute($query,array($modId));
         // This next entry probably already gone, but lets be sure
-        $query = "DELETE FROM $tables[system/module_states] WHERE xar_modid = ?";
+        $query = "DELETE FROM ".$tables['system/module_states']." WHERE xar_modid = ?";
         $dbconn->Execute($query,array($modId));
         $dbconn->commit();
     } catch (SQLException $e) {

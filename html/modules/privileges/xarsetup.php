@@ -152,6 +152,12 @@ function initializeSetup()
 
     xarRegisterMask('AdminInstaller','All','installer','All','All','ACCESS_ADMIN');
 
+    xarRegisterMask('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW');
+    xarRegisterMask('ViewAuthsystemBlocks','All','authsystem','Block','All','ACCESS_OVERVIEW');
+    xarRegisterMask('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
+    xarRegisterMask('EditAuthsystem','All','authsystem','All','All','ACCESS_EDIT');
+    xarRegisterMask('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
+
     xarRegisterMask('ViewPanel','All','modules','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditPanel','All','modules','All','All','ACCESS_EDIT');
     xarRegisterMask('AddPanel','All','modules','Item','All','ACCESS_ADD');

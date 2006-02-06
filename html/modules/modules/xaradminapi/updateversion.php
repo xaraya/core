@@ -43,7 +43,6 @@ function modules_adminapi_updateversion($args)
     $bindvars = array($fileModule['version'],$fileModule['regid']);
 
     $result =& $dbconn->Execute($sql,$bindvars);
-    if (!$result) return;
 
     return true;
 }

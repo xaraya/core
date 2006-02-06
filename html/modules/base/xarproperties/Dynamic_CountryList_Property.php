@@ -52,7 +52,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
     function showInput($args = array())
     {
         if (empty($args['template'])) {
-			$args['template'] = 'countrylist';
+            $args['template'] = 'countrylist';
         }
          return parent::showInput($args);
     }
@@ -60,7 +60,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
     function showOutput($args = array())
     {
         if (empty($args['template'])) {
-			$args['template'] = 'countrylist';
+            $args['template'] = 'countrylist';
         }
          return parent::showOutput($args);
     }

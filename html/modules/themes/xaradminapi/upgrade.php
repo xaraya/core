@@ -52,8 +52,7 @@ function themes_adminapi_upgrade($args)
                       $themeFileInfo['class'],
                       $regid);
             
-    $result = $dbconn->Execute($sql,$bindvars);
-    if (!$result) return;
+    $dbconn->Execute($sql,$bindvars);
 
     // Message
     xarSessionSetVar('statusmsg', xarML('Theme has been upgraded, now inactive'));

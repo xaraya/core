@@ -375,7 +375,7 @@ class Dynamic_Object_Master
      * @returns array
      * @return array of object definitions
      */
-
+    static function &getObjects()
         static function &getObjects($args=array())
     {
         extract($args);
@@ -398,8 +398,6 @@ class Dynamic_Object_Master
                   FROM $dynamicobjects ";
         if (isset($modid)) $query .= "WHERE xar_object_moduleid = " . $modid;
         $result =& $dbconn->Execute($query);
-
-        if (!$result) return $nullreturn;
 
         $objects = array();
         while (!$result->EOF) {
@@ -484,7 +482,7 @@ class Dynamic_Object_Master
             $bindvars[] = (int) $args['itemtype'];
         }
         $result =& $dbconn->Execute($query,$bindvars);
-        if (!$result || $result->EOF) return;
+        if ($result->EOF) return;
 
         $info = array();
         list($info['objectid'],
@@ -1310,7 +1308,7 @@ class Dynamic_Object extends Dynamic_Object_Master
                    WHERE xar_object_moduleid = ?";
 
         $result =& $dbconn->Execute($query,array((int)$args['moduleid']));
-        if (!$result || $result->EOF) return;
+        if ($result->EOF) return;
 
         $nexttype = $result->fields[0];
 

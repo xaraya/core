@@ -1,18 +1,27 @@
 <ul style="list-style: none;">
     <xar:foreach in="$hookmodules" value="$hookmod">
     <xar:if condition="empty($return_url)">
-        <li class="xar-alt xar-norm-outline" style="background-image: none; padding:3pt; font-size: 1.2em; margin-bottom: 5pt;"><a href="#$hookmod['modlink']#">#$hookmod['modname']#</a>: #$hookmod['modtitle']#</li>
+        <h3><a href="#$hookmod['modlink']#">#$hookmod['modname']#</a>: #$hookmod['modtitle']#</h3>
+            <a href="#$hookmod['modlink']#">#$hookmod['modname']#</a>: #$hookmod['modtitle']#
+        </p>
+
     </xar:if>
     <xar:if condition="$hookmod['modname'] eq $curhook">
         <xar:mlstring>Use this functionality in the following modules:</xar:mlstring> [<a href="#$DetailsURL#">#$DetailsLabel#</a>]<br />
+            <xar:mlstring>Use this functionality in the following modules:</xar:mlstring> 
+            [ <a href="javascript:void(0);" title="#xarML('Click to toggle details display.')#" onclick="return toggleDisplay('hookdetails');"><xar:mlstring>Details</xar:mlstring></a> ]
+            <xar:mlstring>Details</xar:mlstring></a> ]
         <xar:if condition="count($hooktypes) gt 0">
-            <br />
-            <xar:mlstring>This module offers the following hooks:</xar:mlstring><br />
+                <p>
+                    <xar:mlstring>This module offers the following hooks:</xar:mlstring>
+                </p>
             <ul>
                 <xar:foreach in="$hooktypes" value="$hooktype">
                     <li>#$hooktype#</li>
                 </xar:foreach>
             </ul>
+            <xar:else />
+                <p>
         </xar:if>
 
         <form action="&xar-modurl-modules-admin-updatehooks;" method="post">

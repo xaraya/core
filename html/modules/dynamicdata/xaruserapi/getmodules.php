@@ -32,10 +32,8 @@ function dynamicdata_userapi_getmodules($args)
               ORDER BY xar_prop_moduleid ASC, xar_prop_itemtype ASC";
 
     $result =& $dbconn->Execute($query);
-    if (!$result) return;
 
     $modules = array();
-
     while (!$result->EOF) {
         list($modid, $itemtype, $count) = $result->fields;
         if(xarSecurityCheck('ViewDynamicDataItems',0,'Item',"$modid:$itemtype:All")) {

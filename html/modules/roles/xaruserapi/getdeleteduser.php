@@ -77,7 +77,7 @@ function roles_userapi_getdeleteduser($args)
     }
 
     $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
+
 
     // Check for no rows found, and if so return
     if ($result->EOF) {

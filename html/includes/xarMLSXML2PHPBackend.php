@@ -16,6 +16,7 @@
  *
  * @package multilanguage
  */
+include_once dirname(__FILE__). '/xarMLS.php';
 class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
     public $gen;

@@ -95,7 +95,6 @@ function blocks_adminapi_update_instance_groups($args)
             $query = "DELETE FROM $block_group_instances_table WHERE xar_id = ?";
             $bindvars = array((int) $current[$gid]['id']);
             $result = $dbconn->Execute($query,$bindvars);
-            if(!$result) return;
             //echo " delete:$gid ";
         }
 
@@ -104,10 +103,9 @@ function blocks_adminapi_update_instance_groups($args)
             $nextId = $dbconn->GenId($block_group_instances_table);
             $query = "INSERT INTO $block_group_instances_table
                         (xar_id, xar_group_id, xar_instance_id, xar_position, xar_template)
-                      VALUES (?,?,?,0,?)";
-            $bindvars = array($nextId, $gid, $bid, $newgroups[$gid]['template']);
-            $result = $dbconn->Execute($query,$bindvars);
-            if(!$result) return;
+                      VALUES (?,?,?,?,?)";
+            $bindvars = array($nextId, $gid, $bid, 0,$newgroups[$gid]['template']);
+            $dbconn->Execute($query,$bindvars);
             //echo " create:$gid with " . $newgroups[$gid]['template'];
         }
 
@@ -115,11 +113,10 @@ function blocks_adminapi_update_instance_groups($args)
         if (isset($newgroups[$gid]) && isset($current[$gid])
             && $newgroups[$gid]['template'] != $current[$gid]['template']) {
             $query = "UPDATE $block_group_instances_table
-                            SET xar_template = ?
-                            WHERE xar_id = ?";
+                      SET xar_template = ?
+                      WHERE xar_id = ?";
             $bindvars = array($newgroups[$gid]['template'],$current[$gid]['id']);
-            $result = $dbconn->Execute($query,$bindvars);
-            if(!$result) return;
+            $dbconn->Execute($query,$bindvars);
             //echo " update:$gid with " . $newgroups[$gid]['template'];
         }
     }

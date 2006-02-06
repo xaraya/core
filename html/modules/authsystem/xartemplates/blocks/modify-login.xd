@@ -1,0 +1,19 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<div class="xar-form-input-wrapper-after">
+    <xar:if condition="$showlogout eq 1">
+        <input type="checkbox" name="showlogout" id="showlogout#$blockid#" value="1" checked="checked" />
+    <xar:else />
+        <input type="checkbox" name="showlogout" id="showlogout#$blockid#" value="1" />
+    </xar:if>
+    <label for="showlogout#$blockid#" title="#xarML('When a user has logged in, you can display a search form and logout link for the user by checking this box.')#">
+        <xar:mlstring>Show Logout Box When Logged In</xar:mlstring>
+    </label>
+</div>
+<xar:if condition="$showlogout eq 1">
+    <div class="xar-form-input-wrapper">
+        <label for="logouttitle#$blockid#" title="#xarML('When the logout block is shown, you can change the display title with this value.')#" class="xar-form-label">
+            <xar:mlstring>Logout Title:</xar:mlstring>
+        </label>
+        <input type="text" name="logouttitle" id="logouttitle#$blockid#" value="#$logouttitle#" maxlength="25" class="xar-form-textlong" />
+    </div>
+</xar:if>

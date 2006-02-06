@@ -68,25 +68,26 @@
 *  o Implement multipart/appledouble
 *  o UTF8: ???
 
-		> 4. We have also found a solution for decoding the UTF-8 
-		> headers. Therefore I made the following function:
-		> 
-		> function decode_utf8($txt) {
-		> $trans=array("�&#8216;"=>"õ","ű"=>"û","Ő"=>"�&#8226;","Ű"
-		=>"�&#8250;");
-		> $txt=strtr($txt,$trans);
-		> return(utf8_decode($txt));
-		> }
-		> 
-		> And I have inserted the following line to the class:
-		> 
-		> if (strtolower($charset)=="utf-8") $text=decode_utf8($text);
-		> 
-		> ... before the following one in the "_decodeHeader" function:
-		> 
-		> $input = str_replace($encoded, $text, $input);
-		> 
-		> This way from now on it can easily decode the UTF-8 headers too.
+        > 4. We have also found a solution for decoding the UTF-8 
+        > headers. Therefore I made the following function:
+        > 
+        > function decode_utf8($txt) 
+        > {
+        > $trans=array("�#8216;"=>"õ","ű"=>"û","Ő"=>"�#8226;","Ű"
+        =>"�#8250;");
+        > $txt=strtr($txt,$trans);
+        > return(utf8_decode($txt));
+        > }
+        > 
+        > And I have inserted the following line to the class:
+        > 
+        > if (strtolower($charset)=="utf-8") $text=decode_utf8($text);
+        > 
+        > ... before the following one in the "_decodeHeader" function:
+        > 
+        > $input = str_replace($encoded, $text, $input);
+        > 
+        > This way from now on it can easily decode the UTF-8 headers too.
 
 *
 * @author  Richard Heyes <richard@phpguru.org>
@@ -181,7 +182,7 @@ class Mail_mimeDecode extends PEAR
         $isStatic = !(isset($this));// XARAYA inherits so remove this condition: && get_class($this) == __CLASS__);
 
         // Have we been called statically?
-	// If so, create an object and pass details to that.
+    // If so, create an object and pass details to that.
         if ($isStatic AND isset($params['input'])) {
 
             $obj = new Mail_mimeDecode($params['input']);
@@ -194,11 +195,11 @@ class Mail_mimeDecode extends PEAR
         // Called via an object
         } else {
             $this->_include_bodies = isset($params['include_bodies']) ?
-	                             $params['include_bodies'] : false;
+                                 $params['include_bodies'] : false;
             $this->_decode_bodies  = isset($params['decode_bodies']) ?
-	                             $params['decode_bodies']  : false;
+                                 $params['decode_bodies']  : false;
             $this->_decode_headers = isset($params['decode_headers']) ?
-	                             $params['decode_headers'] : false;
+                                 $params['decode_headers'] : false;
 
             $structure = $this->_decode($this->_header, $this->_body);
             if ($structure === false) {
@@ -313,8 +314,8 @@ class Mail_mimeDecode extends PEAR
                 case 'message/rfc822':
                     $obj = &new Mail_mimeDecode($body);
                     $return->parts[] = $obj->decode(array('include_bodies' => $this->_include_bodies,
-					                                      'decode_bodies'  => $this->_decode_bodies,
-														  'decode_headers' => $this->_decode_headers));
+                                                          'decode_bodies'  => $this->_decode_bodies,
+                                                          'decode_headers' => $this->_decode_headers));
                     unset($obj);
                     break;
 
@@ -595,7 +596,7 @@ class Mail_mimeDecode extends PEAR
         $input = preg_replace("/=\r?\n/", '', $input);
 
         // Replace encoded characters
-		$input = preg_replace('/=([a-f0-9]{2})/ie', "chr(hexdec('\\1'))", $input);
+        $input = preg_replace('/=([a-f0-9]{2})/ie', "chr(hexdec('\\1'))", $input);
 
         return $input;
     }

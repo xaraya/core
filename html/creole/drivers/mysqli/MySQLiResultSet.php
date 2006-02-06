@@ -1,6 +1,6 @@
 <?php
 /*
- * $Id: MySQLiResultSet.php,v 1.4 2005/09/16 13:09:50 hlellelid Exp $
+ * $Id: MySQLiResultSet.php,v 1.5 2006/01/17 19:44:39 hlellelid Exp $
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -30,7 +30,7 @@ require_once 'creole/common/ResultSetCommon.php';
  * exception was thrown, and that OFFSET/LIMIT will never be emulated for MySQL.
  *
  * @author    Sebastian Bergmann <sb@sebastian-bergmann.de>
- * @version   $Revision: 1.4 $
+ * @version   $Revision: 1.5 $
  * @package   creole.drivers.mysqli
  */
 class MySQLiResultSet extends ResultSetCommon implements ResultSet {
@@ -70,7 +70,7 @@ class MySQLiResultSet extends ResultSetCommon implements ResultSet {
             }
         }
 
-        if (!$this->ignoreAssocCase) {
+        if ($this->fetchmode === ResultSet::FETCHMODE_ASSOC && $this->lowerAssocCase) {
             $this->fields = array_change_key_case($this->fields, CASE_LOWER);
         }
 

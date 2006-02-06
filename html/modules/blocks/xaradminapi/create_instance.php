@@ -84,9 +84,8 @@ function blocks_adminapi_create_instance($args)
     if (isset($groups) && is_array($groups)) {
         // Pass the group updated to the API if required.
         // TODO: error handling.
-        $result = xarModAPIfunc(
-            'blocks', 'admin', 'update_instance_groups',
-            array('bid' => $bid, 'groups' => $groups)
+        $result = xarModAPIfunc('blocks', 'admin', 'update_instance_groups',
+                                array('bid' => $bid, 'groups' => $groups)
         );
     }
 

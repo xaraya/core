@@ -25,6 +25,19 @@ function privileges_admin_modifyconfig()
             $data['inheritdeny'] = xarModGetVar('privileges', 'inheritdeny');
             $data['authid'] = xarSecGenAuthKey();
             switch ($data['tab']) {
+                case 'lastresort':
+                    //Check for existence of a last resort admin for feedback to user
+                    $lastresort  = xarModGetVar('privileges', 'lastresort');
+                    if (($lastresort) && strlen(trim($lastresort))>1) { 
+                      //could just be true, we want to know if the name is set
+                      $islastresort=unserialize($lastresort);
+                      if (isset($islastresort['name'])){
+                         $data['lastresortname']=$islastresort['name'];
+                      } else{
+                          $data['lastresortname']='';
+                      }
+                    }
+                    break;
                 case 'realms':
                 $data['showrealms'] = xarModGetVar('privileges', 'showrealms');
                 $realmvalue = xarModGetVar('privileges', 'realmvalue');
@@ -66,10 +79,19 @@ function privileges_admin_modifyconfig()
                 case 'lastresort':
                     if (!xarVarFetch('name', 'str', $name, '', XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('password', 'str', $password, '', XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('password2', 'str', $password2, '', XARVAR_NOT_REQUIRED)) return;
+                    
+                    // rudimentary check for valid password for now - fix so nicer presentation to user
+                    if (strcmp($password, $password2) != 0) {
+                        $msg = xarML('Last Resort Admin Creation failed! <br />The two password entries are not the same, please try again.');
+                        xarSessionSetVar('statusmsg', $msg);
+                       xarResponseRedirect(xarModURL('privileges', 'admin', 'modifyconfig',array('tab' => $data['tab'])));
+                    }
                     $secret = array(
                                 'name' => MD5($name),
                                 'password' => MD5($password)
                                 );
+                    xarSessionSetVar('statusmsg', xarML('Last Resort Administrator successfully created!'));
                     xarModSetVar('privileges','lastresort',serialize($secret));
                     break;
                 case 'testing':

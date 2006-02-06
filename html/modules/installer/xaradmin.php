@@ -144,7 +144,7 @@ function installer_admin_phase3()
     $xmlLanguageDir           = $systemVarDir . '/locales/' . $install_language . '/xml';
 
     if (function_exists('version_compare')) {
-        if (version_compare(PHP_VERSION,'4.1.2','>=')) $metRequiredPHPVersion = true;
+        if (version_compare(PHP_VERSION,'5.0','>=')) $metRequiredPHPVersion = true;
     }
 
     $systemConfigIsWritable     = is_writable($systemConfigFile);
@@ -166,7 +166,7 @@ function installer_admin_phase3()
     $data['xmlextension']             = extension_loaded('xml');
     $data['mysqlextension']           = extension_loaded('mysql');
     $data['pgsqlextension']           = extension_loaded ('pgsql');
-    $data['xsltextension']            = extension_loaded ('xslt');
+    $data['xsltextension']            = extension_loaded ('xsl');
     $data['ldapextension']            = extension_loaded ('ldap');
     $data['gdextension']              = extension_loaded ('gd');
 
@@ -374,11 +374,15 @@ function installer_admin_phase5()
             $dbconn->begin();
             foreach($dbinfo->getTables() as $tbl) {
                 $table = $tbl->getName();
-                $sql = xarDBDropTable($table,$dbType);
-                $dbconn->Execute($sql);
+                // Same prefix? drop it
+                if(strpos($table,'_') and substr($table,0,strpos($table,'_') == $dbPrefix)) {
+                    $sql = xarDBDropTable($table,$dbType);
+                    $dbconn->Execute($sql);
+                }
             }
             $dbconn->commit();
         } catch (SQLException $e) {
+            // FUTURE: this will also get raised for views which may be in the database.
             $dbconn->rollback();
             throw $e;
         }
@@ -448,12 +452,7 @@ function installer_admin_bootstrap()
     include 'modules/privileges/xarsetup.php';
     initializeSetup();
 
-	//TODO: improve this once we know where authentication modules are headed
-	$regid=xarModGetIDFromName('authentication');
-	if (empty($regid)) {
-		throw new Exception("I cannot load the authentication module. Please make it available and reinstall");
 	}
-
     // Set the state and activate the following modules
     $modlist=array('roles','privileges','blocks','themes','modules');
     foreach ($modlist as $mod) {
@@ -508,8 +507,12 @@ function installer_admin_bootstrap()
     // Set module state to active
     if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_ACTIVE))) return;
 
+# --------------------------------------------------------
 # Create wrapper DD objects for the native itemtypes of the roles module
 #
+# Create wrapper DD objects for the native itemtypes of the privileges module
+#
+	if (!xarModAPIFunc('privileges','admin','createobjects')) return;
 	if (!xarModAPIFunc('roles','admin','createobjects')) return;
 # --------------------------------------------------------
 #
@@ -692,12 +695,12 @@ function installer_admin_create_administrator()
 
     // Initialise authentication
     // TODO: this is happening late here because we need to create a block
-	$regid = xarModGetIDFromName('authentication');
-	if (isset($regid)) {
-		if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
-		// Activate the module
-		if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
-	}
+    $regid = xarModGetIDFromName('authsystem');
+    if (isset($regid)) {
+        if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
+        // Activate the module
+        if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
+    }
 
     xarResponseRedirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
 }
@@ -956,7 +959,6 @@ function installer_admin_confirm_configuration()
                   WHERE     xar_name = ?";
 
         $result =& $dbconn->Execute($query,array('left'));
-        if (!$result) return;
 
         // Freak if we don't get one and only one result
         if ($result->getRecordCount() != 1) {
@@ -1017,31 +1019,30 @@ function installer_admin_cleanup()
 
     $blockGroupsTable = $tables['block_groups'];
 
+    // Prepare getting one blockgroup
     $query = "SELECT    xar_id as id
               FROM      $blockGroupsTable
               WHERE     xar_name = ?";
     $stmt = $dbconn->prepareStatement($query);
     
 
-    // Check for db errors
+    // Execute for the right blockgroup
     $result = $stmt->executeQuery(array('right'));
-    if (!$result) return;
 
     // Freak if we don't get one and only one result
     if ($result->getRecordCount() != 1) {
         $msg = xarML("Group 'right' not found.");
         throw new Exception($msg);
     }
-
     list ($rightBlockGroup) = $result->fields;
 
-/*
+
 	$loginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
-                                    array('module' => 'roles',
+                                    array('module' => 'authsystem',
                                           'type'   => 'login'));
 
-
     $loginBlockTypeId = $loginBlockType['tid'];
+    assert('is_numeric($loginBlockTypeId)');
 
     if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'login'))) {
         if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
@@ -1049,16 +1050,17 @@ function installer_admin_cleanup()
                                  'name'     => 'login',
                                  'type'     => $loginBlockTypeId,
                                  'groups'    => array(array('gid'      => $rightBlockGroup,
-                                                           'template' => '')),
+                                                            'template' => '')),
                                  'template' => '',
                                  'state'    => 2))) {
-            return;
         }
+    } else {
+        throw new Exception('Login block created too early?');
     }
 */
-    // Check for db errors
+    // Same query, but for header group.
     $result = $stmt->executeQuery(array('header'));
-    if (!$result) return;
+
     xarLogMessage("Selected the header block group", XARLOG_LEVEL_ERROR);
     // Freak if we don't get one and only one result
     if ($result->getRecordCount() != 1) {

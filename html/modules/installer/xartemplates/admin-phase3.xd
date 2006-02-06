@@ -41,7 +41,7 @@
                     <li class="success">
                         <xar:ml>
                             <xar:mlstring>
-                                PHP Version is greater than or equal to 4.1.2. Your PHP Version is #(1)
+                                PHP Version is greater than or equal to 5.0. Your PHP Version is #(1)
                             </xar:mlstring>
                             <xar:mlvar>
                                 #$phpVersion#
@@ -52,7 +52,7 @@
                     <li class="failure">
                         <xar:ml>
                             <xar:mlstring>
-                                PHP Version is less than 4.1.2. Your PHP Version is #(1) please upgrade PHP.
+                                PHP Version is less than 5.0. Your PHP Version is #(1) please upgrade PHP.
                             </xar:mlstring>
                             <xar:mlvar>
                                 #$phpVersion#
@@ -320,7 +320,7 @@
                 </xar:if>
                 <xar:if condition="$xsltextension">
                     <li class="success">
-                        <xar:mlstring>The XSLT Extension is loaded.</xar:mlstring>
+                        <xar:mlstring>The XSL Extension is loaded.</xar:mlstring>
                     </li>
                 <xar:else />
                     <li class="warning">

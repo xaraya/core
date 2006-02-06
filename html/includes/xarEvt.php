@@ -284,7 +284,7 @@ function xarEvt__GetHandlersList()
         $query = "SELECT xar_value FROM $configtable WHERE xar_name = ?";
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array('Site.Evt.Handlers'), ResultSet::FETCHMODE_ASSOC);
-        if (!$result) return;
+
         $handlers = array();
         if ($result->next()) {
             $value = $result->get('xar_value');

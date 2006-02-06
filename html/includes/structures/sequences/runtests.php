@@ -8,7 +8,8 @@ include 'includes/xarCore.php';
 // TODO: don't load the whole core
 xarCoreInit(XARCORE_SYSTEM_ALL);
 
-function m($msg,$level=0) { 
+function m($msg,$level=0) 
+{ 
     $prefix = str_repeat('  ',$level);
     echo "$prefix - $msg\n"; 
 }

@@ -90,15 +90,12 @@ function modules_adminapi_regenerate()
             );
             $result =& $dbconn->Execute($sql, $params);
 
-            if (!$result) return;
-
-            $set = xarModAPIFunc(
-                'modules', 'admin', 'setstate',
-                array(
-                    'regid' => $modinfo['regid'],
-                    'state' => XARMOD_STATE_UNINITIALISED
-                )
-            );
+            $set = xarModAPIFunc('modules', 'admin', 'setstate',
+                                 array(
+                                       'regid' => $modinfo['regid'],
+                                       'state' => XARMOD_STATE_UNINITIALISED
+                                       )
+                                 );
             if (!isset($set)) {return;}
 
         } else {
@@ -175,8 +172,7 @@ function modules_adminapi_regenerate()
                         
                         // Update the module version number
                         $sql = "UPDATE $modules_table SET xar_version = ? WHERE xar_regid = ?";
-                        $result = $dbconn->Execute($sql, array($modinfo['version'], $modinfo['regid']));
-                        if (!$result) {return;}
+                        $dbconn->Execute($sql, array($modinfo['version'], $modinfo['regid']));
                     } else {
                         // Else set the module state to upgraded
                         $set = xarModAPIFunc(

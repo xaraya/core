@@ -103,8 +103,7 @@ function dynamicdata_adminapi_updateprop($args)
 
     $sql .= " WHERE xar_prop_id = ?";
     $bindvars[] = $prop_id;
-    $result =& $dbconn->Execute($sql,$bindvars);
-    if (!$result) return;
+    $dbconn->Execute($sql,$bindvars);
 
     return true;
 }

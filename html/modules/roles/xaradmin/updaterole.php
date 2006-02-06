@@ -70,11 +70,11 @@ function roles_admin_updaterole()
     }
 
     // assemble the args into an array for the API function
-	$duvs = array();
-	if (isset($phome) && xarModGetVar('roles','userhome'))
-		$duvs['userhome'] = $phome;
-	if (isset($pprimaryparent) && xarModGetVar('roles','primaryparent'))
-		$duvs['primaryparent'] = $pprimaryparent;
+    $duvs = array();
+    if (isset($phome) && xarModGetVar('roles','userhome'))
+        $duvs['userhome'] = $phome;
+    if (isset($pprimaryparent) && xarModGetVar('roles','primaryparent'))
+        $duvs['primaryparent'] = $pprimaryparent;
     $pargs = array('uid' => $uid,
         'name' => $pname,
         'itemtype' => $itemtype,

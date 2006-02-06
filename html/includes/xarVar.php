@@ -487,7 +487,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
 
     // Lets first check to see if any of our type vars are alread set in the cache.
     $cacheName = $name;
-    switch(strtolower($type)) {
+    switch($type) {
     case 'moditemvar':
         $cacheCollection = 'ModItem.Variables.' . $modName;
         $cacheName = $itemid . $name;
@@ -521,7 +521,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
 
     // We didn't find it in the single var cache, let's check the cached collection by whole/name
     // TODO: caching for the other types
-    switch(strtolower($type)) {
+    switch($type) {
     case 'modvar':
         if (xarVarIsCached('Mod.GetVarsByModule', $modName)) return;
         if (xarVarIsCached('Mod.GetVarsByName', $cacheName)) return;
@@ -544,7 +544,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
     $tables =& xarDBGetTables();
     $bindvars = array();
 
-    switch(strtolower($type)) {
+    switch($type) {
     case 'modvar':
     default:
         // Takes the right table basing on module mode
@@ -587,11 +587,11 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
         $result->close(); unset($result);
 
         // If there is no such thing, return the global setting for moditemvars
-        if (strtolower($type) == 'moditemvar') return xarModGetVar($modName, $name);
+        if ($type == 'moditemvar') return xarModGetVar($modName, $name);
         return;
     }
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'modvar':
             while ($result->next()) {
                 xarVarSetCached($cacheCollection, $result->getString(1), $result->get(2));
@@ -611,7 +611,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
             // We finally found it, update the appropriate cache
             //Couldnt we serialize and unserialize all variables?
             //would that be too time expensive?
-        	$result->next();
+            $result->next();
             list($value) = $result->getRow();
             if($type == 'configvar') {
                 $value = unserialize($value);
@@ -650,7 +650,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
     assert('!is_null($value); /* Not allowed to set a variable to NULL value */');
     if (empty($name)) throw new EmptyParameterException('name');
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'modvar':
         case 'moditemvar':
             default:
@@ -664,7 +664,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'modvar':
             default:
             // Takes the right table basing on module mode
@@ -753,7 +753,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
         }
     }
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'modvar':
             default:
             xarVarSetCached('Mod.Variables.' . $modName, $name, $value);
@@ -784,7 +784,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = '
 {
     if (empty($name)) throw new EmptyParameterException('name');
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'modvar':
         case 'moditemvar':
             default:
@@ -799,7 +799,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = '
     $tables =& xarDBGetTables();
 
     try {
-        switch(strtolower($type)) {
+        switch($type) {
         case 'modvar':
         default:
             // Delete all the user variables first
@@ -856,7 +856,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = '
     }
 
 
-    switch(strtolower($type)) {
+    switch($type) {
         case 'modvar':
             default:
                 xarVarDelCached('Mod.Variables.' . $modName, $name);

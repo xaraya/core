@@ -1,0 +1,8 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<div class="xar-align-center">
+<p><xar:ml>
+    <xar:mlstring>Welcome, #(1)</xar:mlstring>
+    <xar:mlvar>#$name#</xar:mlvar>
+</xar:ml></p>
+<p><a href="&xar-modurl-authsystem-user-logout;"><xar:mlstring>Logout</xar:mlstring></a></p>
+</div>

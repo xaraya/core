@@ -76,8 +76,8 @@
                 <span class="xar-sub">
                     <xar:mlstring>(for Table Sharing)</xar:mlstring>
                 </span>
-            </p>
         </div>
+        <br class="clear"/>
         <p>
             <label class="block" for="install_create_database">
                 <input type="checkbox" name="install_create_database" id="install_create_database" value="1" />

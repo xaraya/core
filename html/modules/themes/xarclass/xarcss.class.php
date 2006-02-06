@@ -145,15 +145,8 @@ class xarCSS
                 $tagqueue->register($this->tagdata);
                 return true;
         }
-        // TODO: remove these hardcoded comments when BL + QA can handle them in templates
+
         $data['comments']                   = $this->comments;
-        $data['opencomment']                = "<!-- ";
-        $data['closecomment']               = " -->\n";
-        $data['openconditionalcomment']     = "<!--[if ";
-        $data['closeconditionalcomment']    = "<![endif]-->\n";
-        $data['openbracket']                = "<";
-        $data['closebracket']               = ">";
-        $data['closeconditionalbracket']    = "]>";
         return $data;
     }
 
@@ -214,6 +207,7 @@ class xarCSS
             }
 
         } else {
+            // no scope, somebody overrode defaults and hasn't assign anything sensible? naughty - lets complain
             $msg = xarML("#(1) (no valid scope attribute could be deduced from this xar:style tag)",$this->scope);
             throw new Exception($msg);
         }

@@ -96,8 +96,6 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         $result =& $dbconn->Execute($query,array((int)$itemid),ResultSet::FETCHMODE_NUM);
 
-        if (!$result) return;
-
         if ($result->EOF) {
             return;
         }
@@ -174,7 +172,6 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         }
         $query .= " )";
         $result = & $dbconn->Execute($query,$bindvars);
-        if (!$result) return;
 
         // get the last inserted id
         if ($checkid) {
@@ -225,9 +222,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         }
         $query .= " WHERE $itemidfield=?";
         $bindvars[] = (int)$itemid;
-
-        $result =& $dbconn->Execute($query,$bindvars);
-        if (!$result) return;
+        $dbconn->Execute($query,$bindvars);
 
         return $itemid;
     }
@@ -246,9 +241,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         $dbconn =& xarDBGetConn();
 
         $query = "DELETE FROM $table WHERE $itemidfield = ?";
-
-        $result =& $dbconn->Execute($query,array((int)$itemid));
-        if (!$result) return;
+        $dbconn->Execute($query,array((int)$itemid));
 
         return $itemid;
     }
@@ -417,7 +410,6 @@ if (empty($itemidfield)) {
                 $result =& $dbconn->Execute($query,$bindvars);
             }
         }
-        if (!$result) return;
 
         if (count($itemids) == 0 && !$isgrouped) {
             $saveids = 1;
@@ -509,7 +501,7 @@ if (empty($itemidfield)) {
         } else {
             $result =& $dbconn->Execute($query,$bindvars);
         }
-        if (!$result || $result->EOF) return;
+        if ($result->EOF) return;
 
         $numitems = $result->fields[0];
 
@@ -614,7 +606,6 @@ if (empty($itemidfield)) {
             } else {
                 $result =& $dbconn->Execute($query,$bindvars,ResultSet::FETCHMODE_NUM);
             }
-            if (!$result) return;
             $temp['result'] =& $result;
         }
 

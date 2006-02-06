@@ -93,7 +93,6 @@ class xarQuery
             } else {
                 $result = $this->dbconn->Execute($this->statement);
             }
-            if(!$result) return;
             $this->rows = $result; 
             return true;
         }
@@ -110,10 +109,8 @@ class xarQuery
             } else {
                 $result = $this->dbconn->Execute($this->statement);
             }
-            if (!$result) return;
             $this->rows = $result->getRecordCount();
         }
-        if (!$result) return;
         $this->result =& $result;
 
         if (($result->fields) === false) 

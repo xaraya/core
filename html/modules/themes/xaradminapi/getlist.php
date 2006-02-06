@@ -127,7 +127,6 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
         $whereClause = join(' AND ', $whereClauses);
         $query .= " WHERE $whereClause ORDER BY $orderByClause";
         $result = $dbconn->SelectLimit($query, $numItems, $startNum - 1,$bindvars);
-        if (!$result) return;
 
         while(!$result->EOF) {
             list($themeInfo['regid'],

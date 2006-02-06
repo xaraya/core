@@ -27,8 +27,8 @@ define('XARMLS_DNTYPE_CORE', 1);
 define('XARMLS_DNTYPE_THEME', 2);
 define('XARMLS_DNTYPE_MODULE', 3);
 
-require_once "includes/xarLocale.php";
-require_once "includes/transforms/xarCharset.php";
+require_once dirname(__FILE__)."/xarLocale.php";
+require_once dirname(__FILE__)."/transforms/xarCharset.php";
 
 /**
  * Initializes the Multi Language System
@@ -849,13 +849,13 @@ function xarMLS__mkdirr($path)
     $next_path = substr($path, 0, strrpos($path, '/'));
     if (xarMLS__mkdirr($next_path)) {
         if (!file_exists($path)) {
-            $result = @mkdir($path, 0700);
-            if (!$result) {
+            $madeDir = @mkdir($path, 0700);
+            if (!$madeDir) {
                 $msg = xarML("The directories under #(1) must be writeable by PHP.", $next_path);
                 xarLogMessage($msg);
                 // throw new PermissionException?
             }
-            return $result;
+            return $madeDir;
         }
     }
     return false;

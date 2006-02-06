@@ -100,10 +100,8 @@ function dynamicdata_utilapi_getstatic($args)
     $query .= " ORDER BY xar_tableid ASC";
 
     $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
 
     $static = array();
-
     // add the list of table + field
     $order = 1;
     while (!$result->EOF) {

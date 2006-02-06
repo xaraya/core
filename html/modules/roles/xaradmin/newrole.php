@@ -17,7 +17,7 @@
  */
 function roles_admin_newrole()
 {
-	$defaultRole = xarModAPIFunc('roles', 'user', 'get', array('name'  => xarModAPIFunc('roles','user','getdefaultgroup'), 'type'   => 1));
+    $defaultRole = xarModAPIFunc('roles', 'user', 'get', array('name'  => xarModAPIFunc('roles','user','getdefaultgroup'), 'type'   => 1));
     if (!xarVarFetch('return_url',  'isset',  $return_url, NULL, XARVAR_DONT_SET)) {return;}
     $defaultuid = $defaultRole['uid'];
     if (!xarVarFetch('return_url',  'isset', $return_url, NULL, XARVAR_DONT_SET)) {return;}

@@ -65,7 +65,7 @@
     <fieldset class="qslip" style="margin-left: 5pt;">
         <legend><xar:mlstring>Legend</xar:mlstring></legend>
         <ul class="qslip" >
-            <li style="background-image: url(#xarTplGetImage('active.gif')#);"/>Queue is active and in good condition</li>
+            <li style="background-image: url(#xarTplGetImage('active.gif')#);">Queue is active and in good condition</li>
             <li style="background-image: url(#xarTplGetImage('inactive.gif')#);">Queue is inactive</li>
             <li style="background-image: url(#xarTplGetImage('problematic.gif')#);">Queue is inactive due to a problem</li>
             <xar:foreach in="$qtypes" key="$type" value="$description">

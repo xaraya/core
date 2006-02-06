@@ -99,7 +99,7 @@ function themes_adminapi_regenerate()
                               $themeInfo['version'],$themeInfo['xar_version'],
                               $themeInfo['bl_version'],$themeInfo['class']);
             $result = $dbconn->Execute($sql,$bindvars);
-            if (!$result) return;
+
 
             $set = xarModAPIFunc('themes',
                                 'admin',

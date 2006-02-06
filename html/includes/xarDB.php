@@ -40,6 +40,9 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     $GLOBALS['xarDB_systemArgs'] = $args;
     
     include_once 'creole/xarCreole.php';
+    // Register postgres driver, since Creole uses a slightly different alias
+    // We do this here so we can remove customisation from creole lib.
+    xarDB::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
     
     // Start the default connection
     $GLOBALS['xarDB_connections'] = array();

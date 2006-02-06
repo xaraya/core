@@ -36,7 +36,8 @@ class SequenceAdapter implements iAdapter, iSequenceAdapter
     // iSequenceAdapter implementation
 
     // I want to have this protected but php wont let me
-    public function __get($property) {
+    public function __get($property) 
+    {
         switch($property) {
         case 'size':
             return $this->implementor->size;

@@ -114,7 +114,6 @@ function themes_adminapi_getthemelist($args)
         $query .= " ORDER BY $orderByClause";
         
         $result = $dbconn->SelectLimit($query, $numItems, $startNum - 1,$bindvars);
-        if (!$result) return;
 
         while(!$result->EOF) {
             list($themeInfo['regid'],

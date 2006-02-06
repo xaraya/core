@@ -43,7 +43,7 @@ function themes_adminapi_remove($args)
     $mvid = xarModGetVarId('themes','default');
     $sql = "SELECT COUNT(*) FROM $tables[module_itemvars] WHERE xar_mvid=? AND xar_value = ?";
     $result =& $dbconn->Execute($sql, array($mvid,$defaultTheme));
-    if(!$result) return;
+
     // count should be zero
     $count = $result->fields[0];
     if($count != 0 ) {
@@ -55,39 +55,30 @@ function themes_adminapi_remove($args)
     // Get theme database info
     xarThemeDBInfoLoad($themeInfo['name'], $themeInfo['directory']);
 
-    // Delete any theme variables that the theme cleanup function might
-    // have missed
-    $sql = "DELETE FROM $tables[theme_vars] WHERE xar_themeName = ?";
-    $result = $dbconn->Execute($sql,array($themeInfo['name']));
-    if (!$result) return;
+    // make atomic
+    try {
+        $dbconn->begin();
 
-    // Delete the theme from the themes table
-    $sql = "DELETE FROM $tables[themes] WHERE xar_regid = ?";
-    $result = $dbconn->Execute($sql,array($regid));
-    if (!$result) return;
+        // Delete any theme variables that the theme cleanup function might
+        // have missed
+        $sql = "DELETE FROM $tables[theme_vars] WHERE xar_themeName = ?";
+        $dbconn->Execute($sql,array($themeInfo['name']));
 
-    // Delete the theme state from the theme states table
+        // Delete the theme from the themes table
+        $sql = "DELETE FROM $tables[themes] WHERE xar_regid = ?";
+        $dbconn->Execute($sql,array($regid));
 
-    //Get current theme mode to update the proper table
-    $themeMode  = $themeInfo['mode'];
-
-    /*
-    if ($themeMode == XARTHEME_MODE_SHARED) {
-        $theme_statesTable = $tables['system/theme_states'];
-    } elseif ($themeMode == XARTHEME_MODE_PER_SITE) {
+        // Delete the theme state from the theme states table
+        //Get current theme mode to update the proper table
+        $themeMode  = $themeInfo['mode'];
         $theme_statesTable = $tables['site/theme_states'];
+        $sql = "DELETE FROM $theme_statesTable  WHERE xar_regid = ?";
+        $dbconn->Execute($sql,array($regid));
+        $dbconn->commit();
+    } catch(SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
     }
-
-    // TODO: what happens if a theme state is still there in one of the subsites ?
-    //    $theme_statesTable = $tables['site/theme_states'];
-    */
-
-    $theme_statesTable = $tables['site/theme_states'];
-    $sql = "DELETE FROM $theme_statesTable  WHERE xar_regid = ?";
-
-    $result = $dbconn->Execute($sql,array($regid));
-    if (!$result) return;
-
     return true;
 }
 

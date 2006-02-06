@@ -17,7 +17,7 @@
  */
 // User (kinda)
 class NotLoggedInException extends xarExceptions
-{
+{ 
     protected $message = 'An operation was encountered that requires the user to be logged in. If you are currently logged in please report this as a bug.';
 }
 
@@ -151,7 +151,8 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
                 $userId = XARUSER_LAST_RESORT;
                 $rememberMe = 0;
             }
-        } else {
+         }
+        if ($userId !=XARUSER_LAST_RESORT) {
             return false;
         }
     }
@@ -565,7 +566,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
         xarUser__setUsersTableUserVar($name, $value, $userId);
 
     } elseif (!xarUser__isVarDefined($name)) {
-		if (xarModGetVar('roles',$name)) {
+        if (xarModGetVar('roles',$name)) {
             xarCore_SetCached('User.Variables.'.$userId, $name, false);
             throw new xarException($name,'User variable #(1) was not correctly registered');
         } else {

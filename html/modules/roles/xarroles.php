@@ -10,7 +10,7 @@
  * @subpackage Roles module
  */
 
-include_once 'modules/roles/xarincludes/xarQuery.php';
+include_once dirname(__FILE__).'/xarincludes/xarQuery.php';
 
 define('ROLES_STATE_DELETED',0);
 define('ROLES_STATE_INACTIVE',1);
@@ -206,10 +206,10 @@ class xarRoles
         $duvarray = array('userhome','primaryparent','passwordupdate','timezone');
         $duvs = array();
         foreach ($duvarray as $key) {
-			if (xarModGetVar('roles',$key)) {
-				$duvs[$key] = xarModGetUserVar('roles',$key,$row['xar_uid']);
-				$duvs[$key] = ($duvs[$key] == 1) ? '' : $duv;
-			}
+            if (xarModGetVar('roles',$key)) {
+                $duvs[$key] = xarModGetUserVar('roles',$key,$row['xar_uid']);
+                $duvs[$key] = ($duvs[$key] == 1) ? '' : $duv;
+            }
         }
         $pargs = array(
             'uid' =>         $row['xar_uid'],
@@ -223,7 +223,7 @@ class xarRoles
             'val_code' =>    $row['xar_valcode'],
             'state' =>       $row['xar_state'],
             'auth_module' => $row['xar_auth_modid'],
-            'duvs'		  => $duvs	);
+            'duvs'          => $duvs    );
         // create and return the role object
         return new xarRole($pargs);
     }
@@ -248,7 +248,7 @@ class xarRoles
         $query = "SELECT * FROM $this->rolestable WHERE xar_name = ?";
         // Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query,array($parentname));
-        if (!$result) return;
+
         // create the parent object
         list($uid, $name, $type, $parentid, $uname, $email, $pass,
             $date_reg, $val_code, $state, $auth_module) = $result->fields;
@@ -269,7 +269,7 @@ class xarRoles
                   WHERE xar_name = ?";
         // Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query,array($childname));
-        if (!$result) return;
+
         // create the child object
         list($uid, $name, $type, $parentid, $uname, $email, $pass,
             $date_reg, $val_code, $state, $auth_module) = $result->fields;
@@ -310,13 +310,13 @@ class xarRoles
                   WHERE xar_name = ?";
         // Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query,array($rootname));
-        if (!$result) return;
+
         // create the entry
         list($uid) = $result->fields;
         $query = "INSERT INTO $this->rolememberstable
                 VALUES (?,?)";
         // Execute the query, bail if an exception was thrown
-        if (!$this->dbconn->Execute($query, array($uid,0))) return;
+        $this->dbconn->Execute($query, array($uid,0));
         // done
         return true;
     }
@@ -410,7 +410,7 @@ class xarRoles
                   VALUES (?,?,?,?,?)";
         $bindvars = array($this->dbconn->genID($this->rolestable),
                           $name, ROLES_GROUPTYPE, $uname, $createdate);
-        if (!$this->dbconn->Execute($query,$bindvars)) return;
+        $this->dbconn->Execute($query,$bindvars);
         // done
         return true;
     }
@@ -617,13 +617,13 @@ class xarRole
             // get the current count
             $query = "SELECT xar_users FROM $this->rolestable WHERE xar_uid = ?";
             $result = $this->dbconn->Execute($query,array($this->getID()));
-            if (!$result) return;
+
             // add 1 and update.
             list($users) = $result->fields;
             $users = $users + 1;
             $query = "UPDATE " . $this->rolestable . " SET xar_users = ? WHERE xar_uid = ?";
             $bindvars = array($users,$this->getID());
-            if (!$this->dbconn->Execute($query,$bindvars)) return;
+            $this->dbconn->Execute($query,$bindvars);
         }
         // empty the privset cache
         // $privileges = new xarPrivileges();
@@ -649,20 +649,20 @@ class xarRole
         // delete the relevant entry from the rolemembers table
         $query = "DELETE FROM $this->rolememberstable WHERE xar_uid= ? AND xar_parentid= ?";
         $bindvars = array($member->getID(), $this->getID());
-        if (!$this->dbconn->Execute($query,$bindvars)) return;
+        $this->dbconn->Execute($query,$bindvars);
         // for children that are users
         // subtract 1 from the users field of the parent group. This is for display purposes.
         if ($member->isUser()) {
             // get the current count.
             $query = "SELECT xar_users FROM $this->rolestable WHERE xar_uid = ?";
             $result = $this->dbconn->Execute($query,array($this->getID()));
-            if (!$result) return;
+
             // subtract 1 and update.
             list($users) = $result->fields;
             $users = $users - 1;
             $query = "UPDATE " . $this->rolestable . " SET xar_users = ? WHERE xar_uid = ?";
             $bindvars = array($users, $this->getID());
-            if (!$this->dbconn->Execute($query,$bindvars)) return;
+            $this->dbconn->Execute($query,$bindvars);
         }
         // empty the privset cache
         // $privileges = new xarPrivileges();
@@ -707,7 +707,7 @@ class xarRole
         $query = "SELECT xar_parentid FROM $this->rolememberstable WHERE xar_uid= ?";
         // Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query,array($this->getID()));
-        if (!$result) return;
+
         // get the Roles class so we can use its methods
         $parts = new xarRoles();
         // go through the list, retrieving the roles and detaching each one
@@ -798,7 +798,7 @@ class xarRole
                       ORDER BY xar_name";
 
             $result = $this->dbconn->Execute($query);
-            if (!$result) return;
+
             $privileges = array();
             $ind = 0;
             while (!$result->EOF) {
@@ -830,7 +830,6 @@ class xarRole
                   WHERE   p.xar_pid = acl.xar_permid AND acl.xar_partid = ?";
         // Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query,array($this->uid));
-        if (!$result) return;
 
         include_once 'modules/privileges/xarprivileges.php';
         $privileges = array();
@@ -904,7 +903,7 @@ class xarRole
         // create an entry in the privmembers table
         $query = "INSERT INTO $this->acltable VALUES (?,?)";
         $bindvars = array($this->getID(),$perm->getID());
-        if (!$this->dbconn->Execute($query,$bindvars)) return;
+        $this->dbconn->Execute($query,$bindvars);
         // empty the privset cache
         // $privileges = new xarPrivileges();
         // $privileges->forgetprivsets();
@@ -927,7 +926,7 @@ class xarRole
         $query = "DELETE FROM $this->acltable
                   WHERE xar_partid= ? AND xar_permid= ?";
         $bindvars = array($this->uid, $perm->getID());
-        if (!$this->dbconn->Execute($query,$bindvars)) return;
+        $this->dbconn->Execute($query,$bindvars);
         // empty the privset cache
         // $privileges = new xarPrivileges();
         // $privileges->forgetprivsets();
@@ -992,7 +991,7 @@ class xarRole
         } else {
             $result = $this->dbconn->Execute($query,$bindvars);
         }
-        if (!$result) return;
+
         // CHECKME: I suppose this is what you meant here ?
         $parentid = $this->uid;
         // arrange the data in an array of role objects
@@ -1011,15 +1010,15 @@ class xarRole
                 'val_code' => $val_code,
                 'state' => $state,
                 'auth_module' => $auth_module);
-			$duvarray = array('userhome','primaryparent','passwordupdate','timezone');
-			$vars = array();
-			foreach ($duvarray as $key) {
-				if (xarModGetVar('roles',$key)) {
-					$vars[$key] = xarModGetUserVar('roles',$key,$pargs['uid']);
-					$vars[$key] = ($vars[$key] == 1) ? '' : $vars[$key];
-				}
-			}
-			$pargs = array_merge($pargs,$vars);
+            $duvarray = array('userhome','primaryparent','passwordupdate','timezone');
+            $vars = array();
+            foreach ($duvarray as $key) {
+                if (xarModGetVar('roles',$key)) {
+                    $vars[$key] = xarModGetUserVar('roles',$key,$pargs['uid']);
+                    $vars[$key] = ($vars[$key] == 1) ? '' : $vars[$key];
+                }
+            }
+            $pargs = array_merge($pargs,$vars);
             $users[] = new xarRole($pargs);
             $result->MoveNext();
         }
@@ -1102,7 +1101,7 @@ class xarRole
                     WHERE r.xar_uid = rm.xar_parentid
                     AND rm.xar_uid = ?";
         $result = $this->dbconn->Execute($query,array($this->uid));
-        if (!$result) return;
+
         // collect the table values and use them to create new role objects
         while (!$result->EOF) {
             list($uid, $name, $type, $parentid, $uname, $email, $pass,
@@ -1118,15 +1117,15 @@ class xarRole
                 'val_code' => $val_code,
                 'state' => $state,
                 'auth_module' => $auth_module);
-			$duvarray = array('userhome','primaryparent','passwordupdate','timezone');
-			$vars = array();
-			foreach ($duvarray as $key) {
-				if (xarModGetVar('roles',$key)) {
-					$vars[$key] = xarModGetUserVar('roles',$key,$pargs['uid']);
-					$vars[$key] = ($vars[$key] == 1) ? '' : $vars[$key];
-				}
-			}
-			$pargs = array_merge($pargs,$vars);
+            $duvarray = array('userhome','primaryparent','passwordupdate','timezone');
+            $vars = array();
+            foreach ($duvarray as $key) {
+                if (xarModGetVar('roles',$key)) {
+                    $vars[$key] = xarModGetUserVar('roles',$key,$pargs['uid']);
+                    $vars[$key] = ($vars[$key] == 1) ? '' : $vars[$key];
+                }
+            }
+            $pargs = array_merge($pargs,$vars);
             $parents[] = new xarRole($pargs);
             $result->MoveNext();
         }
@@ -1338,7 +1337,7 @@ class xarRole
         /*  // start by getting an array of all the privileges
             $query = "SELECT * FROM $this->privilegestable";
             $result = $this->dbconn->Execute($query);
-            if (!$result) return;
+
 
             $privileges = array();
             while(!$result->EOF) {

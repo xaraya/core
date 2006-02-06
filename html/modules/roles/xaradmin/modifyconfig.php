@@ -42,8 +42,6 @@ function roles_admin_modifyconfig()
             $query = "SELECT xar_partid FROM $acltable
                     WHERE xar_permid   = ?";
             $result =& $dbconn->Execute($query, array((int) $adminpriv));
-            if (!$result) return;
-
 
             // so now we have the list of all roles with *assigned* admin privileges
             // now we have to find which ones ar candidates for admin:

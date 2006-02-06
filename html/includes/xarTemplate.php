@@ -1052,7 +1052,7 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
  */
 function xarTpl__getCompilerInstance()
 {
-    include_once 'includes/xarBLCompiler.php';
+    include_once 'includes/blocklayout/compiler.php';
     return xarTpl__Compiler::instance();
 }
 
@@ -1162,20 +1162,24 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     // Load translations for the template
     $tplpath = explode("/", $newFileName);
     $tplPathCount = count($tplpath);
-    switch ($tplpath[0]) {
+    if($tplPathCount > 1) {
+        switch ($tplpath[0]) {
         case 'modules': $dnType = XARMLS_DNTYPE_MODULE; break;
         case 'themes':  $dnType = XARMLS_DNTYPE_THEME; break;
-    }
-    $dnName = $tplpath[1];
-    $stack = array();
-    if ($tplpath[2] == 'xartemplates') $tplpath[2] = 'templates';
-    for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
-    $ctxType = $tplpath[0].':'.implode("/", $stack);
-    $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
-    /* Temporary partial fix for Bug 5156. This is a temporary workaround and
-       while here, themes cannot be translated. This should be fixed as soon as possible */
-    if(isset($dnType)) {
-        if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
+        }
+    
+        $dnName = $tplpath[1];
+    
+        $stack = array();
+        if ($tplpath[2] == 'xartemplates') $tplpath[2] = 'templates';
+        for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
+        $ctxType = $tplpath[0].':'.implode("/", $stack);
+        $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
+        /* Temporary partial fix for Bug 5156. This is a temporary workaround and
+         while here, themes cannot be translated. This should be fixed as soon as possible */
+        if(isset($dnType)) {
+            if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
+        }
     }
 
     $needCompilation = true;
@@ -1913,7 +1917,6 @@ function xarTplGetTagObjectFromName($tag_name)
               WHERE tags.xar_modid = mods.xar_id AND tags.xar_name=?";
 
     $result = $dbconn->SelectLimit($query, 1,-1,array($tag_name),ResultSet::FETCHMODE_NUM);
-    if (!$result) return;
 
     if ($result->EOF) {
         $result->Close();

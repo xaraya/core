@@ -2,15 +2,15 @@
   /**
  * Privileges tree renderer
    * @package Xaraya eXtensible Management System
-   * @copyright (C) 2005 The Digital Development Foundation
+ * @copyright (C) 2005 The Digital Development Foundation
    * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
    * @link http://www.xaraya.com
    *
-   * @subpackage Privileges module
-   */
+ * @subpackage Privileges module
+ */
 
-  /* Purpose of file:  Privileges tree renderer
-   *
+/* Purpose of file:  Privileges tree renderer
+ *
    * @author Marc Lutolf <marcinmilan@xaraya.com>
    */
 

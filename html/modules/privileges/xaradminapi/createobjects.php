@@ -210,7 +210,7 @@ function privileges_adminapi_createobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 2,
                                     'default'  => '',
-                                    'source'   =>  $prefix . '_security_masks.xar_module',
+                                    'source'   =>  $prefix . '_security_masks.xar_modid',
                                     'status'   => 1,
                                     'order'    => 4,
                                     ))) return;

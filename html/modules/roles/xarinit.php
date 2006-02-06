@@ -159,7 +159,7 @@ function roles_activate()
     // Create some modvars
     //
     //TODO: improve on this hardwiring
-    xarModSetVar('roles', 'defaultauthmodule', '');
+     xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem')); //Setting a default
     if (xarModGetVar('roles','itemsperpage')) return true;
     xarModSetVar('roles', 'rolesdisplay', 'tabbed');
     xarModSetVar('roles', 'locale', '');
@@ -195,8 +195,10 @@ function roles_activate()
     // Register hooks here, init is too soon
     xarModRegisterHook('item', 'search', 'GUI','roles', 'user', 'search');
     xarModRegisterHook('item', 'usermenu', 'GUI','roles', 'user', 'usermenu');
-    xarModAPIFunc('modules', 'admin', 'enablehooks', array('callerModName' => 'roles', 'hookModName' => 'roles'));
 
+    xarModAPIFunc('modules', 'admin', 'enablehooks', array('callerModName' => 'roles', 'hookModName' => 'roles'));
+    // This won't work because the dynamicdata hooks aren't registered yet when this is
+    // called at installation --> put in xarinit.php of dynamicdata instead
     //xarModAPIFunc('modules','admin','enablehooks',array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
     return true;
 }
@@ -216,61 +218,61 @@ function roles_upgrade($oldVersion)
         case '1.01':
             break;
         case '1.1.1':
-        	// is there an authentication module?
-			$regid = xarModGetIDFromName('authentication');
+            // is there an authentication module?
+            $regid = xarModGetIDFromName('authentication');
             
-			if (isset($regid)) {
-				// remove the login block type and block from roles
-				$result = xarModAPIfunc('blocks', 'admin', 'delete_type', array('module' => 'roles', 'type' => 'login'));
+            if (isset($regid)) {
+                // remove the login block type and block from roles
+                $result = xarModAPIfunc('blocks', 'admin', 'delete_type', array('module' => 'roles', 'type' => 'login'));
 
-				// install the authentication module
-				if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
-					// Activate the module
-				if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
+                // install the authentication module
+                if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
+                    // Activate the module
+                if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
 
-				// create the new authentication modvars
+                // create the new authentication modvars
                 // TODO: dont do this here, but i dont know how to do it otherwise, since apparently the
                 //       roles values are needed
-				xarModSetVar('authentication', 'allowregistration', xarModGetVar('roles', 'allowregistration'));
-				xarModSetVar('authentication', 'requirevalidation', xarModGetVar('roles', 'requirevalidation'));
-				xarModSetVar('authentication', 'itemsperpage', xarModGetVar('roles', 'rolesperpage'));
-				xarModSetVar('authentication', 'uniqueemail', xarModGetVar('roles', 'uniqueemail'));
-				xarModSetVar('authentication', 'askwelcomeemail', xarModGetVar('roles', 'askwelcomeemail'));
-				xarModSetVar('authentication', 'askvalidationemail', xarModGetVar('roles', 'askvalidationemail'));
-				xarModSetVar('authentication', 'askdeactivationemail', xarModGetVar('roles', 'askdeactivationemail'));
-				xarModSetVar('authentication', 'askpendingemail', xarModGetVar('roles', 'askpendingemail'));
-				xarModSetVar('authentication', 'askpasswordemail', xarModGetVar('roles', 'askpasswordemail'));
-				xarModSetVar('authentication', 'defaultgroup', xarModGetVar('roles', 'defaultgroup'));
-				xarModSetVar('authentication', 'lockouttime', 15);
-				xarModSetVar('authentication', 'lockouttries', 3);
-				xarModSetVar('authentication', 'minage', xarModGetVar('roles', 'minage'));
-				xarModSetVar('authentication', 'disallowednames', xarModGetVar('roles', 'disallowednames'));
-				xarModSetVar('authentication', 'disallowedemails', xarModGetVar('roles', 'disallowedemails'));
-				xarModSetVar('authentication', 'disallowedips', xarModGetVar('roles', 'disallowedips'));
+                xarModSetVar('authentication', 'allowregistration', xarModGetVar('roles', 'allowregistration'));
+                xarModSetVar('authentication', 'requirevalidation', xarModGetVar('roles', 'requirevalidation'));
+                xarModSetVar('authentication', 'itemsperpage', xarModGetVar('roles', 'rolesperpage'));
+                xarModSetVar('authentication', 'uniqueemail', xarModGetVar('roles', 'uniqueemail'));
+                xarModSetVar('authentication', 'askwelcomeemail', xarModGetVar('roles', 'askwelcomeemail'));
+                xarModSetVar('authentication', 'askvalidationemail', xarModGetVar('roles', 'askvalidationemail'));
+                xarModSetVar('authentication', 'askdeactivationemail', xarModGetVar('roles', 'askdeactivationemail'));
+                xarModSetVar('authentication', 'askpendingemail', xarModGetVar('roles', 'askpendingemail'));
+                xarModSetVar('authentication', 'askpasswordemail', xarModGetVar('roles', 'askpasswordemail'));
+                xarModSetVar('authentication', 'defaultgroup', xarModGetVar('roles', 'defaultgroup'));
+                xarModSetVar('authentication', 'lockouttime', 15);
+                xarModSetVar('authentication', 'lockouttries', 3);
+                xarModSetVar('authentication', 'minage', xarModGetVar('roles', 'minage'));
+                xarModSetVar('authentication', 'disallowednames', xarModGetVar('roles', 'disallowednames'));
+                xarModSetVar('authentication', 'disallowedemails', xarModGetVar('roles', 'disallowedemails'));
+                xarModSetVar('authentication', 'disallowedips', xarModGetVar('roles', 'disallowedips'));
 
-				// delete the old roles modvars
-				xarModDelVar('roles', 'allowregistration');
-				xarModDelVar('roles', 'requirevalidation');
-				xarModDelVar('roles', 'rolesperpage');
-				xarModDelVar('roles', 'uniqueemail');
-				xarModDelVar('roles', 'askwelcomeemail');
-				xarModDelVar('roles', 'askvalidationemail');
-				xarModDelVar('roles', 'askdeactivationemail');
-				xarModDelVar('roles', 'askpendingemail');
-				xarModDelVar('roles', 'askpasswordemail');
-				xarModDelVar('roles', 'defaultgroup');
-				xarModDelVar('roles', 'lockouttime');
-				xarModDelVar('roles', 'lockouttries');
-				xarModDelVar('roles', 'minage');
-				xarModDelVar('roles', 'disallowednames');
-				xarModDelVar('roles', 'disallowedemails');
-				xarModDelVar('roles', 'disallowedips');
+                // delete the old roles modvars
+                xarModDelVar('roles', 'allowregistration');
+                xarModDelVar('roles', 'requirevalidation');
+                xarModDelVar('roles', 'rolesperpage');
+                xarModDelVar('roles', 'uniqueemail');
+                xarModDelVar('roles', 'askwelcomeemail');
+                xarModDelVar('roles', 'askvalidationemail');
+                xarModDelVar('roles', 'askdeactivationemail');
+                xarModDelVar('roles', 'askpendingemail');
+                xarModDelVar('roles', 'askpasswordemail');
+                xarModDelVar('roles', 'defaultgroup');
+                xarModDelVar('roles', 'lockouttime');
+                xarModDelVar('roles', 'lockouttries');
+                xarModDelVar('roles', 'minage');
+                xarModDelVar('roles', 'disallowednames');
+                xarModDelVar('roles', 'disallowedemails');
+                xarModDelVar('roles', 'disallowedips');
 
-				// create one new roles modvar
-				xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authentication'));
-			} else {
-				throw Exception('I could not load the authentication module. Please make it available and try again');
-		    }
+                // create one new roles modvar
+                xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authentication'));
+            } else {
+                throw Exception('I could not load the authentication module. Please make it available and try again');
+            }
             break;
         case '1.1.1':
         	$roles_objects = array('role','user','group');

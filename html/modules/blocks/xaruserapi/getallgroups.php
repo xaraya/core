@@ -53,7 +53,6 @@ function blocks_userapi_getallgroups($args)
     $query = 'SELECT xar_id as gid, xar_name as name, xar_template as template'
         . ' FROM ' . $block_groups_table . $where_clause . $orderby;
     $result = $dbconn->Execute($query, $bind,ResultSet::FETCHMODE_ASSOC);
-    if (!$result) {return;}
 
     $block_groups = array();
     while(!$result->EOF) {

@@ -221,7 +221,7 @@ class ColumnInfo {
     {
         switch($propname) {
             case 'max_length':
-                return $this->length;
+                return $this->size;
                 break;
             default:
                 throw new Exception("Unknown  property accessed for columninfo");

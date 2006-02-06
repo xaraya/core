@@ -237,7 +237,9 @@ function base_init()
         $modulesTable = $systemPrefix .'_modules';
         $systemModuleStatesTable = $systemPrefix .'_module_states';
 
-        $newModSql   = "INSERT INTO $modulesTable (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable)
+        $newModSql   = "INSERT INTO $modulesTable 
+                        (xar_id, xar_name, xar_regid, xar_directory, 
+                         xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable)
                         VALUES (?,?,?,?,?,?,?,?,?,?)";
         $newStmt     = $dbconn->prepareStatement($newModSql);
 
@@ -245,18 +247,23 @@ function base_init()
                         VALUES (?, ?, ?)";
         $stateStmt   = $dbconn->prepareStatement($stateModSql);
 
-        $modData   = array(
-                           array('authsystem', 42 , 'authsystem', '0.91.0', 1, 'Core Utility', 'Global', 0, 0),
-                           array('base'      , 68 , 'base'      , '0.1.0' , 1, 'Core Admin'  , 'Global', 1, 1),
-                           array('installer' , 200, 'installer' , '1.0.0' , 1, 'Core Utility', 'Global', 0, 0),
-                           array('blocks'    , 13 , 'blocks'    , '1.0.0' , 1, 'Core Utility', 'Global', 1, 0),
-                           array('themes'    , 70 , 'themes'    , '1.3.0' , 1, 'Core Utility', 'Global', 1, 0)
-                           );
-        for($module=0; $module < count($modData); $module++) {
+        $modules = array('authsystem','base','installer','blocks','themes');
+        foreach($modules as $index => $modName) {
             // Insert module
             $id = $dbconn->GenId($modulesTable);
-            array_unshift($modData[$module],$id);
-            $result = $newStmt->executeUpdate($modData[$module]);
+            $modversion=array();$bindvars = array();
+            include_once "modules/$modName/xarversion.php";
+            $bindvars = array($id,                     // system id, generated
+                              $modName,         
+                              $modversion['id'],       // regid, from xarversion
+                              $modName,
+                              $modversion['version'],
+                              1,
+                              $modversion['class'],
+                              $modversion['category'],
+                              isset($modversion['admin'])?$modversion['admin']:0,
+                              isset($modversion['user'])?$modversion['user']:0);
+            $result = $newStmt->executeUpdate($bindvars);
             $newModId = $dbconn->PO_Insert_ID($tables['modules'], 'xar_id');
 
             // Set the state

@@ -16,17 +16,15 @@
         </xar:if>
 
         <form action="&xar-modurl-modules-admin-updatehooks;" method="post">
-            <div>
+            <xar:mlstring>Extend the functionality of your modules via one of the following available hooks.</xar:mlstring>
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
                 <input type="hidden" name="curhook" id="curhook" value="#$curhook#" />
-                <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
-                <xar:foreach in="$hookedmodules" value="$hookedmod">
+            <xar:mlstring>Select the hook module providing the extra functionality and then check the boxes of the modules you would
+            like to enable that functionality in (e.g. select "comments" and then check "articles" to enable comments in the articles module).</xar:mlstring>
                     <xar:if condition="!empty($hookedmod['header'])">
-                        <h3>#$hookedmod['header']#</h3>
                     </xar:if>
 
                     <!-- Store the checked attribute for reuse -->
-                    <xar:set name="NOTischecked">false</xar:set>
                     <xar:set name="ALLischecked">false</xar:set>
                     <xar:set name="SOMEischecked">false</xar:set>
                     <xar:if condition="empty($hookedmod['checked']) or count($hookedmod['checked']) eq 0">
@@ -52,6 +50,7 @@
                                 <input onclick="setDisplayOff('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="NOT_hooked_#$hookedmod['name']#_0" value="0" checked="checked" style="vertical-align: middle;" disabled="disabled" />
                             <xar:else/>
                                 <input onclick="setDisplayOff('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="NOT_hooked_#$hookedmod['name']#_0" value="0" checked="checked" style="vertical-align: middle;" />
+
                             </xar:if>
                         <xar:else/>
                             <xar:if condition="$hookedmoddisabled">
@@ -68,7 +67,7 @@
                             </xar:ml>
                         </label>
                         <br />
-                        
+
                         <!-- The ALL radio -->
                         <xar:if condition="$ALLischecked">
                             <xar:if condition="$hookedmoddisabled">

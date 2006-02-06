@@ -51,8 +51,7 @@ function roles_adminapi_stateupdate($args)
     $query .= " WHERE xar_uid = ?";
     $bindvars[] = $uid;
 
-    $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
+    $dbconn->Execute($query,$bindvars);
 
     return true;
 }

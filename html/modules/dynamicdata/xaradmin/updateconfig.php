@@ -59,16 +59,14 @@ function dynamicdata_admin_updateconfig( $args )
             $query = "DELETE FROM $dynamicproptypes
                             WHERE xar_prop_id = ?";
             $bindvars = array($id);
-            $result =& $dbconn->Execute($query,$bindvars);
-            if (!$result) return;
+            $dbconn->Execute($query,$bindvars);
         } elseif ($label[$id] != $proptype['label'] || $validation[$id] != $proptype['validation']) {
             $query = "UPDATE $dynamicproptypes
                          SET xar_prop_label = ?,
                              xar_prop_validation = ?
                        WHERE xar_prop_id = ?";
             $bindvars = array($label[$id],$validation[$id],$id);
-            $result =& $dbconn->Execute($query,$bindvars);
-            if (!$result) return;
+            $dbconn->Execute($query,$bindvars);
         }
     }
 
