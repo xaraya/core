@@ -396,10 +396,7 @@ function dynamicdata_init()
         
         // when a module item is created (uses 'dd_*')
         xarModRegisterHook('item', 'create', 'API','dynamicdata', 'admin', 'createhook');
-        
-    // when a module item is being displayed
-    if (!xarModRegisterHook('item', 'display', 'GUI',
-                           'dynamicdata', 'user', 'displayhook')) {
+
         // when a module item is being modified (uses 'dd_*')
         xarModRegisterHook('item', 'modify', 'GUI','dynamicdata', 'admin', 'modifyhook');
         

@@ -96,6 +96,8 @@ function themes_init()
         );
 
     $query = xarDBCreateTable($tables['theme_states'], $fields);
+    $result =& $dbconn->Execute($query);
+    if(!$result) return;
 
     xarModSetVar('themes', 'default', 'Xaraya_Classic');
     xarModSetVar('themes', 'selsort', 'nameasc');
