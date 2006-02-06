@@ -1,13 +1,11 @@
 <?php
 /**
- * File: $Id$
- *
  * Quick & dirty import of PN .71x data into Xaraya test sites
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2002 by the Xaraya Development Team.
+ * @package tools
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage import
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -248,5 +246,5 @@ flush();
 
 // done
 exit;
- 
+
 ?>
