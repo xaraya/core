@@ -10,7 +10,7 @@
  * @subpackage Roles module
  */
 
-/* 
+/*
  * Handle Group list property
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -132,27 +132,7 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
         } else {
             $data['id'] = $id;
         }
-        /* $out = '<select' .
-               ' name="' . $name . '"' .
-               ' id="'. $id . '"' .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '') .
-               '>';
-        foreach ($options as $option) {
-            $out .= '<option';
-            if (empty($option['id']) || $option['id'] != $option['name']) {
-                $out .= ' value="'.$option['id'].'"';
-            }
-            if ($option['id'] == $value) {
-                $out .= ' selected="selected">'.$option['name'].'</option>';
-            } else {
-                $out .= '>'.$option['name'].'</option>';
-            }
-        }
-        */
-        /*$out .= '</select>' .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-        return $out;
-        */
+
         $data['groups']  = $groups;
         $data['value']   = $value;
         $data['options'] = $options;
@@ -198,7 +178,7 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
             return xarVarPrepForDisplay($groupname);
         }
         */
-        
+
         return xarTplProperty('roles', 'grouplist', 'showoutput', $data);
     }
 
