@@ -602,7 +602,7 @@ function installer_admin_create_administrator()
     $modifiedrole = $role->update();
     if (!$modifiedrole) {return;}
 
-    // Register Block types
+    // Register Block types 
     $blocks = array('finclude','html','menu','php','text','content');
 
     foreach ($blocks as $block) {
