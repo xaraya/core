@@ -452,7 +452,6 @@ function installer_admin_bootstrap()
     include 'modules/privileges/xarsetup.php';
     initializeSetup();
 
-	}
     // Set the state and activate the following modules
     $modlist=array('roles','privileges','blocks','themes','modules');
     foreach ($modlist as $mod) {
@@ -509,11 +508,11 @@ function installer_admin_bootstrap()
 
 # --------------------------------------------------------
 # Create wrapper DD objects for the native itemtypes of the roles module
+	if (!xarModAPIFunc('roles','admin','createobjects')) return;
 #
 # Create wrapper DD objects for the native itemtypes of the privileges module
-#
 	if (!xarModAPIFunc('privileges','admin','createobjects')) return;
-	if (!xarModAPIFunc('roles','admin','createobjects')) return;
+#
 # --------------------------------------------------------
 #
     xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
@@ -603,7 +602,7 @@ function installer_admin_create_administrator()
     $modifiedrole = $role->update();
     if (!$modifiedrole) {return;}
 
-    // Register Block types 
+    // Register Block types
     $blocks = array('finclude','html','menu','php','text','content');
 
     foreach ($blocks as $block) {
@@ -1024,7 +1023,6 @@ function installer_admin_cleanup()
               FROM      $blockGroupsTable
               WHERE     xar_name = ?";
     $stmt = $dbconn->prepareStatement($query);
-    
 
     // Execute for the right blockgroup
     $result = $stmt->executeQuery(array('right'));
@@ -1057,7 +1055,7 @@ function installer_admin_cleanup()
     } else {
         throw new Exception('Login block created too early?');
     }
-*/
+
     // Same query, but for header group.
     $result = $stmt->executeQuery(array('header'));
 

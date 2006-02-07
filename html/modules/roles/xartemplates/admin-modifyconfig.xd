@@ -197,7 +197,7 @@
             </fieldset>
         </form>
         <xar:comment>
-            ----------------- Begin User Variable Options ------------------- 
+        - - - - - - - - - - - - - - - - - - - Begin User Variable Options - - - - - - - - - - - - - - - - - - - - - 
         </xar:comment>
         <xar:elseif condition="$tab eq 'duvs'" />
             <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
