@@ -340,7 +340,7 @@ class xarMasks
  * @throws  none
  * @todo    does this need to be in a db table? will it ever get other rows than the initialized ones?
 */
-    
+
     function xarSecLevel($levelname)
     {
         if (xarVarIsCached('Security.xarSecLevel', $levelname)) {
@@ -673,7 +673,6 @@ class xarMasks
                     }
                 } else {
                     return false;
-                }
                 }
             }
         }

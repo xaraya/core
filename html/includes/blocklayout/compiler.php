@@ -1599,6 +1599,7 @@ class xarTpl__DocumentNode extends xarTpl__Node
     function renderEndTag()
     {
         return '';
+    }
 }
 
 /**

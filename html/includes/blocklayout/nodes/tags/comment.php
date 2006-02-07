@@ -26,10 +26,6 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
         $this->hasChildren = true;
         $this->hasText = true;
         $this->isAssignable = false;
-        $this->isPHPCode = false;
-        $this->hasChildren = true;
-        $this->hasText = true;
-        $this->isAssignable = false;
     }
 
     function renderBeginTag()
@@ -48,15 +44,22 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
             $code = "'<!--'";
         }
         return "echo $code;";
+    }
+
     function renderEndTag()
+    {
         if($this->iecondition!='') {
             $code = "'<![endif]-->'";
         } else {
             $code = "'-->'";
         }
         return "echo $code;";
+    }
+
     function render()
+    {
         // This is just here to prevent the abstract method to kick in
         return '';
+    }
 }
 ?>
