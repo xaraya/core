@@ -152,7 +152,7 @@
                             </option>
                             <xar:else />
                             <option value="#$tblInfo:getName()#">
-                                #$tblInfo:getName()# #$nogwat#
+                                #$tblInfo:getName()# 
                             </option>
                         </xar:if>
                     </xar:foreach>
