@@ -62,4 +62,3 @@ class ODBCStatement extends StatementCommon implements Statement
     }
 
 }
-?>

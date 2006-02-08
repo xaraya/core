@@ -207,4 +207,3 @@ class ODBCResultSet extends ODBCResultSetCommon implements ResultSet
     }
 
 }
-?>

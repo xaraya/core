@@ -258,4 +258,3 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
     }
     
 }
-?>

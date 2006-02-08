@@ -115,14 +115,17 @@ function &xarDBNewConn($args = NULL)
     $dbPass  = $args['password'];
     $persistent = !empty($args['persistent']) ? true : false;
 
-    $dsn = array('phptype' => $dbType,
-                 'hostspec' => $dbHost,
-                 'username' => $dbUname,
-                 'password' => $dbPass,
-                 'database' => $dbName);
-    
+    $dsn = array('phptype'   => $dbType,
+                 'hostspec'  => $dbHost,
+                 'username'  => $dbUname,
+                 'password'  => $dbPass,
+                 'database'  => $dbName);
+    // Set flags
+    $flags = 0;
+    if($persistent) $flags |= xarDB::PERSISTENT;
+
     $conn = null;
-    $conn = xarDB::getConnection($dsn,ResultSet::FETCHMODE_NUM);
+    $conn = xarDB::getConnection($dsn,$flags);
     // Store the connection for global access.
     $GLOBALS['xarDB_connections'][] =& $conn;
 

@@ -208,4 +208,3 @@ abstract class DatabaseInfo {
     }
 }
 
-?>

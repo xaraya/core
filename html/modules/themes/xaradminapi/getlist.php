@@ -82,7 +82,6 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
     $themestable = $tables['themes'];
-    $theme_statesTables = array($tables['system/theme_states'], $tables['site/theme_states']);
 
     // Construct an array with where conditions and their bind variables
     $whereClauses = array(); $bindvars = array();
@@ -96,11 +95,11 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
     }
     if (isset($filter['State'])) {
         if ($filter['State'] != XARTHEME_STATE_ANY) {
-            $whereClauses[] = 'states.xar_state = ?';
+            $whereClauses[] = 'themes.xar_state = ?';
             $bindvars[] = $filter['State'];
         }
     } else {
-        $whereClauses[] = 'states.xar_state = ?';
+        $whereClauses[] = 'themes.xar_state = ?';
         $bindvars[] = XARTHEME_STATE_ACTIVE;
     }
 
@@ -108,65 +107,52 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
     $mode = XARTHEME_MODE_SHARED;
     $themeList = array();
 
-    // Here we do 2 SELECTs: one for SHARED moded themes and
-    // one for PER_SITE moded themes
-    // Maybe this could be done with a single query?
-    for ($i = 0; $i < 2; $i++ ) {
-        $theme_statesTable = $theme_statesTables[$i];
+    $query = "SELECT themes.xar_regid,
+                     themes.xar_name,
+                     themes.xar_directory,
+                     themes.xar_state
+              FROM $tables[themes] AS themes ";
+    array_unshift($whereClauses, 'themes.xar_mode = ?');
+    array_unshift($bindvars,$mode);
 
-        $query = "SELECT themes.xar_regid,
-                         themes.xar_name,
-                         themes.xar_directory,
-                         states.xar_state
-                  FROM $tables[themes] AS themes
-                  LEFT JOIN $theme_statesTable AS states 
-                  ON themes.xar_regid = states.xar_regid";
-        array_unshift($whereClauses, 'themes.xar_mode = ?');
-        array_unshift($bindvars,$mode);
+    $whereClause = join(' AND ', $whereClauses);
+    $query .= " WHERE $whereClause ORDER BY $orderByClause";
+    $result = $dbconn->SelectLimit($query, $numItems, $startNum - 1,$bindvars);
 
-        $whereClause = join(' AND ', $whereClauses);
-        $query .= " WHERE $whereClause ORDER BY $orderByClause";
-        $result = $dbconn->SelectLimit($query, $numItems, $startNum - 1,$bindvars);
+    while(!$result->EOF) {
+        list($themeInfo['regid'],
+             $themeInfo['name'],
+             $themeInfo['directory'],
+             $themeState) = $result->fields;
 
-        while(!$result->EOF) {
-            list($themeInfo['regid'],
-                 $themeInfo['name'],
-                 $themeInfo['directory'],
-                 $themeState) = $result->fields;
-
-            if (xarVarIsCached('Theme.Infos', $themeInfo['regid'])) {
-                // Get infos from cache
-                $themeList[] = xarVarGetCached('Theme.Infos', $themeInfo['regid']);
+        if (xarVarIsCached('Theme.Infos', $themeInfo['regid'])) {
+            // Get infos from cache
+            $themeList[] = xarVarGetCached('Theme.Infos', $themeInfo['regid']);
+        } else {
+            $themeInfo['mode'] = (int) $mode;
+            $themeInfo['displayname'] = xarThemeGetDisplayableName($themeInfo['name']);
+            // Shortcut for os prepared directory
+            $themeInfo['osdirectory'] = xarVarPrepForOS($themeInfo['directory']);
+            
+            $themeInfo['state'] = (int) $themeState;
+            
+            xarVarSetCached('Theme.BaseInfos', $themeInfo['name'], $themeInfo);
+            
+            $themeFileInfo = xarTheme_getFileInfo($themeInfo['osdirectory']);
+            if (!isset($themeFileInfo)) {
+                // There was an entry in the database which was not in the file system,
+                // remove the entry from the database
+                xarModAPIFunc('themes','admin','remove',array('regid' => $themeInfo['regid']));
             } else {
-                $themeInfo['mode'] = (int) $mode;
-                $themeInfo['displayname'] = xarThemeGetDisplayableName($themeInfo['name']);
-                // Shortcut for os prepared directory
-                $themeInfo['osdirectory'] = xarVarPrepForOS($themeInfo['directory']);
-
-                $themeInfo['state'] = (int) $themeState;
-
-                xarVarSetCached('Theme.BaseInfos', $themeInfo['name'], $themeInfo);
-
-                $themeFileInfo = xarTheme_getFileInfo($themeInfo['osdirectory']);
-                if (!isset($themeFileInfo)) {
-                    // There was an entry in the database which was not in the file system,
-                    // remove the entry from the database
-                    xarModAPIFunc('themes','admin','remove',array('regid' => $themeInfo['regid']));
-                } else {
-                    $themeInfo = array_merge($themeInfo, $themeFileInfo);
-                    xarVarSetCached('Theme.Infos', $themeInfo['regid'], $themeInfo);
-                    $themeList[] = $themeInfo;
-                }
+                $themeInfo = array_merge($themeInfo, $themeFileInfo);
+                xarVarSetCached('Theme.Infos', $themeInfo['regid'], $themeInfo);
+                $themeList[] = $themeInfo;
             }
-            $themeInfo = array();
-            $result->MoveNext();
         }
-        $result->Close();
-
-        $mode = XARTHEME_MODE_PER_SITE;
-        array_shift($bindvars);
-        array_shift($whereClauses);break; // <-- Why is this? TEMP solution?
+        $themeInfo = array();
+        $result->MoveNext();
     }
+    $result->Close();
     return $themeList;
 }
 

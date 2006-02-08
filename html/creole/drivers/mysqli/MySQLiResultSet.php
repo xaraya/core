@@ -171,4 +171,3 @@ class MySQLiResultSet extends ResultSetCommon implements ResultSet {
         }
     }
 }
-?>

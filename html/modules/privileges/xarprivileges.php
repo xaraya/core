@@ -38,7 +38,6 @@ class xarMasks
     public $privmemberstable;
     public $maskstable;
     public $modulestable;
-    public $modulestatestable;
     public $realmstable;
     public $acltable;
     public $allmasks;
@@ -70,7 +69,6 @@ class xarMasks
         $this->privmemberstable = $xartable['privmembers'];
         $this->maskstable = $xartable['security_masks'];
         $this->modulestable = $xartable['modules'];
-        $this->modulestatestable = $xartable['module_states'];
         $this->realmstable = $xartable['security_realms'];
         $this->acltable = $xartable['security_acl'];
         $this->instancestable = $xartable['security_instances'];
@@ -1163,19 +1161,17 @@ class xarPrivileges extends xarMasks
  * @return  array of module ids and names
  * @throws  none
  * @todo    this isn't really the right place for this function
-*/
+ */
+    
     function getmodules()
     {
-    if ((!isset($allmodules)) || count($allmodules)==0) {
-            $query = "SELECT modules.xar_id,
-                        modules.xar_name
-                        FROM $this->modulestable modules LEFT JOIN $this->modulestatestable states
-                        ON modules.xar_id = states.xar_modid
-                        WHERE states.xar_state = ?
-                        ORDER BY modules.xar_name";
-
+        if ((!isset($allmodules)) || count($allmodules)==0) {
+            $query = "SELECT modules.xar_id, modules.xar_name
+                      FROM $this->modulestable modules 
+                      WHERE modules.xar_state = ?
+                      ORDER BY modules.xar_name";
             $result = $this->dbconn->Execute($query,array(3));
-
+            
             // add some extra lines we want
             $modules = array();
             //          $modules[] = array('id' => -2,
@@ -1185,7 +1181,7 @@ class xarPrivileges extends xarMasks
                                'display' => 'All');
             //          $modules[] = array('id' => 0,
             //                             'name' => 'None');
-
+            
             // add the modules from the database
             // TODO: maybe remove the key, don't really need it
             while(!$result->EOF) {
@@ -1198,8 +1194,7 @@ class xarPrivileges extends xarMasks
             }
             $allmodules = $modules;
             return $modules;
-        }
-        else {
+        } else {
             return $allmodules;
         }
     }

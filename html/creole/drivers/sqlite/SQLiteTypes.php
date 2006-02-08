@@ -106,4 +106,3 @@ class SQLiteTypes extends CreoleTypes {
     }
                                 
 }
-?>

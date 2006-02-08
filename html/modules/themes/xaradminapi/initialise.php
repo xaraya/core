@@ -33,18 +33,12 @@ function themes_adminapi_initialise($args)
     // Get theme database info
     xarThemeDBInfoLoad($themeInfo['name'], $themeInfo['directory']);
 
-    // Include theme initialisation file
-    //FIXME: added theme File not exist exception
-
-    // Theme activate function
-
-    // pnAPI compatibility
     // jojodee, fix hard coded themes dir
     $xarinitfilename = xarConfigGetVar('Site.BL.ThemesDirectory').'/'. $themeInfo['directory'] .'/xartheme.php';
     if (!file_exists($xarinitfilename)) {
-        $xarinitfilename = xarConfigGetVar('Site.BL.ThemesDirectory').'/'. $themeInfo['directory'] .'/theme.php';
+        throw new FileNotFounException($xarinitfilename);
     }
-    @include $xarinitfilename;
+    include $xarinitfilename;
 
     if (!empty($themevars)) {
         foreach($themevars as $var => $value){
@@ -53,18 +47,16 @@ function themes_adminapi_initialise($args)
                 $msg = xarML('Malformed Theme Variable (#(1)).', $var);
                 throw new Exception($msg);
             }
-            $set = xarThemeSetVar($themeInfo['name'], $value['name'], $value['prime'], $value['value'], $value['description']);
-            if(!$set) return;
+            xarThemeSetVar($themeInfo['name'], $value['name'], $value['prime'], $value['value'], $value['description']);
         }
     }
     // Update state of theme
-    $set = xarModAPIFunc('themes',
-                        'admin',
-                        'setstate',
+    $set = xarModAPIFunc('themes', 'admin', 'setstate',
                         array('regid' => $regid,
                               'state' => XARTHEME_STATE_INACTIVE));
     // debug($set);
     if (!isset($set)) {
+        throw new Exception('Could not set state of theme');
         xarSessionSetVar('errormsg', xarML('Theme state change failed'));
         return false;
     }

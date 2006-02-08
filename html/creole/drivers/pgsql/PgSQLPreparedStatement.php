@@ -261,4 +261,3 @@ class PgSQLPreparedStatement extends PreparedStatementCommon implements Prepared
         }
     }
 }
-?>

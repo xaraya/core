@@ -17,6 +17,7 @@
  * @returns mixed
  * @return array of field definitions, or null on failure
  * @raise BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
+ * @todo split off the common parts which are also in getstatic.php
  */
 function dynamicdata_utilapi_getmeta($args)
 {
@@ -66,8 +67,9 @@ function dynamicdata_utilapi_getmeta($args)
         $columns = array();
         foreach ($fields as $field) {
             $fieldname = $field->getName();
-            $datatype = $field->getType();
+            $datatype = $field->getNativeType();
             $size = $field->getSize();
+            $default = $field->getDefaultValue();
 
             // assign some default label for now, by removing the first part (xar_)
             $name = preg_replace('/^.+?_/','',$fieldname);
@@ -158,7 +160,7 @@ function dynamicdata_utilapi_getmeta($args)
                                    'label' => $label,
                                    'type' => $proptype,
                                    'id' => $id,
-                                   'default' => '', // unknown here
+                                   'default' => $default, 
                                    'source' => $curtable . '.' . $fieldname,
                                    'status' => $status,
                                    'order' => $id,

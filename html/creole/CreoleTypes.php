@@ -181,4 +181,3 @@ abstract class CreoleTypes {
             return $type;
         }
 }
-?>

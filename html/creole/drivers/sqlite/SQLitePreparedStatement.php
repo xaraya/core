@@ -59,4 +59,3 @@ class SQLitePreparedStatement extends PreparedStatementCommon implements Prepare
     }
     
 }
-?>

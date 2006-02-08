@@ -377,4 +377,4 @@ interface ResultSet extends IteratorAggregate {
     public function getTimestamp($column, $format = 'Y-m-d H:i:s');
     
 }
-?>
+

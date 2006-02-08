@@ -100,4 +100,3 @@ class MySQLTypes extends CreoleTypes {
     }
 
 }
-?>

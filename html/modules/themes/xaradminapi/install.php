@@ -22,14 +22,6 @@ function themes_adminapi_install($args)
     //    static $installed_ids = array();
     $mainId = $args['regid'];
 
-
-    // FIXME: check if this is necessary, it shouldn't, we should have checked it earlier
-    //     if(in_array($mainId, $installed_ids)) {
-    //         xarLogMessage("Already installed $mainId in this request, skipping");
-    //         return true;
-    //     }
-    //     $installed_ids[] = $mainId;
-
     // Security Check
     // need to specify the module because this function is called by the installer module
     if (!xarSecurityCheck('AdminTheme', 1, 'All', 'All', 'themes')) return;
@@ -66,7 +58,6 @@ function themes_adminapi_install($args)
 
     //Checks if the theme is already initialised
     if (!$initialised) {
-        // Finally, now that dependencies are dealt with, initialize the module
         if (!xarModAPIFunc('themes', 'admin', 'initialise', array('regid' => $mainId))) {
             $msg = xarML('Unable to initialize theme "#(1)".', $modInfo['displayname']);
             throw new Exception($msg);

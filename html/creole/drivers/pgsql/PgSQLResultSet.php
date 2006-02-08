@@ -201,4 +201,3 @@ class PgSQLResultSet extends ResultSetCommon implements ResultSet {
 	}
 			
 }
-?>
