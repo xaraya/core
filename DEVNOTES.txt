@@ -22,6 +22,8 @@ revisit later on before trusting the branch to be released or used.
   they wont work anymore in some cases. We'll see.
 * table theme_states has been dropped, where the xar_state column is
   now in the themes table itself.
+* table module_states has been dropped, where the xar_state column is
+  now in the modules table itself.
 
 
 !!!OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
