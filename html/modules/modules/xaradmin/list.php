@@ -96,6 +96,8 @@ function modules_admin_list()
 
     // now we can prepare data for template
     // we will use standard xarMod api calls as much as possible
+    //We want class as Authentication for auth mods so need to allow for this. Use hardcode list or core mods for now.
+    $coreMods = array('base','roles','privileges','blocks','themes','authsystem','mail','dynamicdata','installer','modules');
     foreach($modlist as $mod){
 
         // we're going to use the module regid in many places
@@ -104,11 +106,14 @@ function modules_admin_list()
         // if this module has been classified as 'Core'
         // we will disable certain actions
         $modinfo = xarModGetInfo($thismodid);
+        $coremod = in_array(strtolower($modinfo['name']),$coreMods);
+        /* coreMods are hardcoded so we can gain independance from class for now for core mods
         if(substr($modinfo['class'], 0, 4)  == 'Core'){
             $coremod = true;
         }else{
             $coremod = false;
         }
+        */
 
         // lets omit core modules if a user chosen to hide them from the list
         if($coremod && $data['hidecore']) continue;
