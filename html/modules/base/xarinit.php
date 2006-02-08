@@ -224,7 +224,7 @@ function base_init()
          * Install modules table and insert the modules module
          **************************************************************/
         xarInstallAPIFunc('initialise', array('directory' => 'modules', 'initfunc'  => 'init'));
-
+        
         /****************************************************************
          * Install roles module and set up default roles
          ****************************************************************/

@@ -131,11 +131,7 @@ function xarMod_init($args, $whatElseIsGoingLoaded)
                     'site/module_vars' => $sitePrefix . '_module_vars',
                     'system/module_itemvars' => $systemPrefix . '_module_itemvars',
                     'site/module_itemvars' => $sitePrefix . '_module_itemvars',
-                    'themes' => $systemPrefix . '_themes',
-                    'system/theme_states' => $systemPrefix . '_theme_states',
-                    'system/theme_vars' => $systemPrefix . '_theme_vars',
-                    'site/theme_states' => $sitePrefix . '_theme_states',
-                    'site/theme_vars' => $sitePrefix . '_theme_vars');
+                    'themes' => $systemPrefix . '_themes');
 
     // JC -- Question are these depreciated?
     // Old tables
@@ -507,7 +503,8 @@ function xarModGetInfo($modRegId, $type = 'module')
                              xar_name,
                              xar_directory,
                              xar_mode,
-                             xar_version
+                             xar_version,
+                             xar_state
                        FROM  $the_table WHERE xar_regid = ?";
             break;
     }
@@ -535,7 +532,8 @@ function xarModGetInfo($modRegId, $type = 'module')
                  $modInfo['name'],
                  $modInfo['directory'],
                  $mode,
-                 $modInfo['version']) = $result->getRow();
+                 $modInfo['version'],
+                 $modInfo['state']) = $result->getRow();
             break;
     }
     $result->Close();
@@ -559,10 +557,9 @@ function xarModGetInfo($modRegId, $type = 'module')
             $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
             break;
         case 'theme':
-            $modState = xarMod_getState($modInfo['regid'], $modInfo['mode'], $type = 'theme');
-            if (!isset($modState)) $modState = XARTHEME_STATE_MISSING_FROM_UNINITIALISED; //return; // throw back
-            $modInfo['state'] = $modState;
-
+            if (!isset($modInfo['state'])) {
+                $modInfo['state']= XARTHEME_STATE_MISSING_FROM_UNINITIALISED; 
+            }
             $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory'], $type = 'theme');
             break;
     }
@@ -1724,7 +1721,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     }
 
     if (empty($GLOBALS[$checkNoState]) && xarCore_IsCached($cacheCollection, $modName)) {
-       return xarCore_GetCached($cacheCollection, $modName);
+        return xarCore_GetCached($cacheCollection, $modName);
     }
     // Log it when it doesnt come from the cache
     xarLogMessage("xarMod_getBaseInfo ". $modName ." / ". $type);
@@ -1739,7 +1736,11 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     //FIXME:
     //This is a hack while we have 2 different tables for modules states
     //It will look in the most probable one first (SHARED)
-    $modules_statesTable = $tables['system/'.$type.'_states'];
+    if($type == 'module') {
+        $modules_statesTable = $tables['system/'.$type.'_states'];
+    } else {
+        $modules_statesTable = $tables['themes'];
+    }
     
     if($type == 'module') {
         $query = "SELECT mods.xar_regid, mods.xar_directory, mods.xar_mode,
@@ -1750,10 +1751,8 @@ function xarMod_getBaseInfo($modName, $type = 'module')
                   WHERE mods.xar_name = ? OR mods.xar_directory = ?";
     } else {
         $query = "SELECT mods.xar_regid, mods.xar_directory, mods.xar_mode,
-                         mods.xar_id, modstates.xar_state, mods.xar_name
+                         mods.xar_id, mods.xar_state, mods.xar_name
                   FROM   $modulestable mods 
-                  LEFT JOIN $modules_statesTable modstates
-                         ON modstates.xar_regid = mods.xar_regid
                   WHERE  mods.xar_name = ? OR mods.xar_directory = ?";
     }
     $bindvars = array($modName, $modName);
@@ -1983,13 +1982,8 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
                              mods.xar_regid = ?";
             break;
         case 'theme':
-            if ($modMode == XARTHEME_MODE_SHARED) {
-                $theme_statesTable = $tables['system/theme_states'];
-            } else {
-                $theme_statesTable = $tables['site/theme_states'];
-            }
-
-            $query = "SELECT xar_state FROM $theme_statesTable
+            $themesTable = $tables['themes'];
+            $query = "SELECT xar_state FROM $themeTable
                       WHERE xar_regid = ?";
 
             break;
