@@ -443,6 +443,7 @@ function xarSession__phpWrite($sessionId, $vars)
         // This is apparently because this is in a session write handler.
         // Additional notes:
         // * apache 2 on debian linux segfaults
+        // UPDATE: Could this be because the xar_vars column is a BLOB (i.e. binary) ?
         $query = "UPDATE $sessioninfoTable SET xar_vars = ". $dbconn->qstr($vars) . ", xar_lastused = " . $dbconn->qstr(time()). "WHERE xar_sessid = ".$dbconn->qstr($sessionId);
         $dbconn->executeUpdate($query);
         $dbconn->commit();
