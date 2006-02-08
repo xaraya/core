@@ -244,4 +244,3 @@ class ODBCPreparedStatement extends PreparedStatementCommon implements PreparedS
     }
 
 }
-?>

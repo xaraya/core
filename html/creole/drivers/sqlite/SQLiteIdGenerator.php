@@ -58,4 +58,3 @@ class SQLiteIdGenerator implements IdGenerator {
     
 }
 
-?>

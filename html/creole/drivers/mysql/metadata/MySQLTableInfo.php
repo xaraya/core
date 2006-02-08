@@ -247,4 +247,3 @@ class MySQLTableInfo extends TableInfo {
   }
 
 }
-?>

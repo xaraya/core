@@ -150,4 +150,3 @@ class MySQLResultSet extends ResultSetCommon implements ResultSet {
     }
 
 }
-?>

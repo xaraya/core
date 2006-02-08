@@ -132,4 +132,3 @@ interface CallableStatement extends PreparedStatement {
     public function getTimestamp($column, $format = 'Y-m-d H:i:s');
 
 }
-?>

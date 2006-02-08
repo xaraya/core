@@ -71,6 +71,7 @@ class SQLiteTableInfo extends TableInfo {
             } else {
                 $type = $fulltype;
             }
+            
             $not_null = $row['notnull'];
             $is_nullable = !$not_null;
             
@@ -140,4 +141,3 @@ class SQLiteTableInfo extends TableInfo {
     }
     
 }
-?>

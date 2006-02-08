@@ -64,4 +64,3 @@ class ODBCDatabaseInfo extends DatabaseInfo {
     }
 
 }
-?>

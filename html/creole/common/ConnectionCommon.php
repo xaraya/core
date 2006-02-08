@@ -395,4 +395,3 @@ abstract class ConnectionCommon {
         return !empty($this->dblink);
     }
 }
-?>

@@ -494,4 +494,3 @@ abstract class ResultSetCommon {
     }
     // END XARAYA MODIFICATION
 }
-?>

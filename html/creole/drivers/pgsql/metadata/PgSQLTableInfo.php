@@ -414,4 +414,3 @@ class PgSQLTableInfo extends TableInfo {
     
 
 }
-?>

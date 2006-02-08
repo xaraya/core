@@ -251,4 +251,3 @@ interface PreparedStatement {
     public function setTimestamp($paramIndex, $value);
             
 }
-?>

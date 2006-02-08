@@ -63,4 +63,3 @@ class MSSQLIdGenerator implements IdGenerator {
     
 }
 
-?>

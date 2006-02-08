@@ -92,4 +92,3 @@ class MSSQLTypes extends CreoleTypes {
     }
     
 }
-?>

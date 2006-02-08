@@ -40,4 +40,3 @@ class MySQLiPreparedStatement extends PreparedStatementCommon implements Prepare
         return mysqli_real_escape_string($this->getConnection()->getResource(), $str);
     }
 }
-?>

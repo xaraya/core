@@ -286,4 +286,3 @@ class MySQLiConnection extends ConnectionCommon implements Connection {
         return (int) @mysqli_affected_rows($this->dblink);
     }
 }
-?>

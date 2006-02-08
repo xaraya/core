@@ -129,4 +129,3 @@ class OCI8ResultSet extends ResultSetCommon implements ResultSet
         @oci_free_statement( $this->result );
     }
 }
-?>

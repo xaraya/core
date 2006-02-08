@@ -186,4 +186,3 @@ abstract class ODBCResultSetCommon extends ResultSetCommon
     }
 
 }
-?>

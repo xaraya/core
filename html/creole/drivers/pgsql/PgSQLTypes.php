@@ -99,4 +99,3 @@ class PgSQLTypes extends CreoleTypes {
     }
     
 }
-?>

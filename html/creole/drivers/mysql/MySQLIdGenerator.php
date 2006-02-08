@@ -73,4 +73,3 @@ class MySQLIdGenerator implements IdGenerator {
     
 }
 
-?>

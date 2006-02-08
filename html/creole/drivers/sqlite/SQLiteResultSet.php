@@ -120,4 +120,3 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet {
         // END XARAYA MODIFICATION
     }
 }
-?>

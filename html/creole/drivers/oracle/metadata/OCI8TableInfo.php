@@ -270,4 +270,3 @@ class OCI8TableInfo extends TableInfo {
     }
     
 }
-?>

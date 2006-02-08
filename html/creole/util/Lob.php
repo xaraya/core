@@ -241,4 +241,3 @@ abstract class Lob {
         return (boolean) $this->modified;
     }
 }
-?>
