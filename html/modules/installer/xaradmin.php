@@ -375,7 +375,7 @@ function installer_admin_phase5()
             foreach($dbinfo->getTables() as $tbl) {
                 $table = $tbl->getName();
                 // Same prefix? drop it
-                if(strpos($table,'_') and substr($table,0,strpos($table,'_') == $dbPrefix)) {
+                if(strpos($table,'_') && (substr($table,0,strpos($table,'_')) == $dbPrefix)) {
                     $sql = xarDBDropTable($table,$dbType);
                     $dbconn->Execute($sql);
                 }
