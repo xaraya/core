@@ -66,11 +66,17 @@ CREATE UNIQUE INDEX i_xar_block_types2 ON xar_block_types (xar_modid,xar_type);
 
 /* Themes table gained a xar_state column */
 ALTER TABLE xar_themes ADD COLUMN xar_state INT(11) NOT NULL DEFAULT '0';
-UPDATE xar_themes INNER JOIN xar_theme_states on xar_themes.xar_regid = xar_theme_states.xar_regid
+UPDATE xar_themes INNER JOIN xar_theme_states ON xar_themes.xar_regid = xar_theme_states.xar_regid
 SET    xar_themes.xar_state = xar_theme_states.xar_state;
+
+/* Modules table gained a xar_state column */
+ALTER TABLE xar_modules ADD COLUMN xar_state INT(11) NOT NULL DEFAULT '0';
+UPDATE xar_modules INNER JOIN xar_module_states ON xar_modules.xar_regid = xar_module_states.xar_regid
+SET    xar_modules.xar_state = xar_module_states.xar_state;
 
 /* Easy ones, tables not needed anymore */
 DROP TABLE xar_admin_menu;
 DROP TABLE xar_theme_vars;
 DROP TABLE xar_tables;
 DROP TABLE xar_theme_states;
+DROP TABLE xar_module_states;

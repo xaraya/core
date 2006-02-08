@@ -205,6 +205,7 @@ function xarTheme_getVarsByName($name)
  * @param themeRegId the theme's registered id
  * @param themeThemee the theme's site mode
  * @return to xarMod__getState for processing
+ * @todo we dont need this
  */
 function xarTheme_getState($themeRegId, $themeMode)
 {

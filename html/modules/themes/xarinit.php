@@ -57,6 +57,7 @@ function themes_init()
      *   xar_xaraya_version varchar(10) NOT NULL default '',
      *   xar_bl_version varchar(10) NOT NULL default '',
      *   xar_class int(10) unsigned NOT NULL default '0',
+     *   xar_state int(11) not null defaul '1'
      *   PRIMARY KEY  (xar_id)
      * ) 
      */
@@ -77,7 +78,7 @@ function themes_init()
         'xar_xaraya_version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
         'xar_bl_version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
         'xar_class' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
-        'xar_state' => array('type' => 'integer', 'null' => false, 'default' => '0')
+        'xar_state' => array('type' => 'integer', 'null' => false, 'default' => '1')
         );
 
     $query = xarDBCreateTable($tables['themes'], $fields);

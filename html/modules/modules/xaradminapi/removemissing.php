@@ -25,7 +25,7 @@ function modules_adminapi_removemissing($args)
 
     // TODO (random) This whole exercise is on hold because w have no way of knowing which
     // tables actually belong to the module being removed, and so the cleanup is incomplete
-    // For now just remove the entry in the modules and modules states tables
+    // For now just remove the entry in the modules table
     
     //    if (!xarVarFetch('remove', 'str', $remove, NULL, XARVAR_NOT_REQUIRED)) return;
     // Get module information
@@ -39,9 +39,6 @@ function modules_adminapi_removemissing($args)
     try {
         $dbconn->begin();
         $query = "DELETE FROM $tables[modules] WHERE xar_id = ?";
-        $dbconn->Execute($query,array($modId));
-        // This next entry probably already gone, but lets be sure
-        $query = "DELETE FROM ".$tables['system/module_states']." WHERE xar_modid = ?";
         $dbconn->Execute($query,array($modId));
         $dbconn->commit();
     } catch (SQLException $e) {

@@ -21,14 +21,16 @@
 function modules_adminapi_activate ($args)
 {
     //Shoudlnt we check first if the module is alredy INITIALISED????
-
     extract($args);
 
     // Argument check
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
     $modInfo = xarModGetInfo($regid);
-
+    
+    if($modInfo['state'] == XARMOD_STATE_UNINITIALISED) {
+        throw new Exception("Calling activate function while module is uninitialised");
+    }
     // Module activate function
     if (!xarModAPIFunc('modules','admin', 'executeinitfunction',
                            array('regid'    => $regid,
