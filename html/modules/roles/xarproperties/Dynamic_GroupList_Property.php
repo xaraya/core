@@ -114,8 +114,33 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
 //    function showInput($name = '', $value = null, $options = array(), $id = '', $tabindex = '')
     function showInput($args = array())
     {
-        $args['template'] = "grouplist";
-        return parent::showInput($args);
+        extract($args);
+        $data = array();
+        $select_options = array();
+
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (!isset($options) || count($options) == 0) {
+            $options = $this->getOptions();
+        }
+        if (empty($name)) {
+            $data['name'] = 'dd_' . $this->id;
+        } else {
+            $data['name']= $name;
+        }
+        if (empty($id)) {
+            $data['id'] = $data['name'];
+        } else {
+            $data['id'] = $id;
+        }
+
+        $data['value']   = $value;
+        $data['options'] = $options;
+        $data['tabindex']= !empty($tabindex) ? $tabindex : 0;
+        $data['invalid'] = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
+
+        return xarTplProperty('roles', 'grouplist', 'showinput', $data);
     }
 
     function showOutput($args = array())
