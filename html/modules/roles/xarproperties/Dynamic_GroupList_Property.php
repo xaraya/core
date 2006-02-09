@@ -10,7 +10,7 @@
  * @subpackage Roles module
  */
 
-/* 
+/*
  * Handle Group list property
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -111,13 +111,6 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
         return false;
     }
 
-//    function showInput($name = '', $value = null, $options = array(), $id = '', $tabindex = '')
-    function showInput($args = array())
-    {
-        $args['template'] = "grouplist";
-        return parent::showInput($args);
-    }
-
     function showOutput($args = array())
     {
         extract($args);
@@ -154,7 +147,7 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
             return xarVarPrepForDisplay($groupname);
         }
         */
-        
+
         return xarTplProperty('roles', 'grouplist', 'showoutput', $data);
     }
 
