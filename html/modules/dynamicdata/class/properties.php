@@ -168,7 +168,7 @@ class Dynamic_Property_Master
             // Filepath is complete rel path to the php file, and decoupled from the class name
             // We should load the MLS translations for the right context here, in case the property
             // PHP file contains xarML() statements
-            // See bug 5097 
+            // See bug 5097
             if(preg_match('/modules\/(.*)\/xarproperties/',$propertyInfo['filepath'],$matches) == 1) {
                 // The preg determines the module name (in a sloppy way, FIX this)
                 xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE,$matches[1],'modules:properties',$propertyClass);
@@ -714,6 +714,29 @@ class Dynamic_Property
 
         // tell the calling function that everything is OK
         return true;
+    }
+
+    /**
+     * Return the module this property belongs to
+     *
+     * @returns string module name
+     */
+    function getModule()
+    {
+        $info = $this->getBasePropertyInfo();
+        $modulename = $info['requiresmodule'];
+	    if (empty($modulename))  throw new EmptyParameterException('module name');
+        return $modulename;
+    }
+    /**
+     * Return the name this property uses in its templates
+     *
+     * @returns string template name
+     */
+    function getTemplate()
+    {
+        $info = $this->getBasePropertyInfo();
+        return $info['name'];
     }
 }
 ?>
