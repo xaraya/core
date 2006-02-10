@@ -45,6 +45,8 @@ class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
     function showInput($args = array())
     {
         extract($args);
+        $args['module'] = 'base';
+        $args['template'] = 'dropdown';
         if (isset($modid)) $this->referencemoduleid = $modid;
         return parent::showInput($args);
     }
@@ -102,7 +104,7 @@ class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
                               'validation'     => '',
                               'source'         => '',
                               'dependancies'   => '',
-                              'requiresmodule' => '',
+                              'requiresmodule' => 'dynamicdata',
                               'aliases'        => '',
                               'args'           => serialize($args),
                             // ...
