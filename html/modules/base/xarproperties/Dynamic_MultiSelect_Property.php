@@ -87,7 +87,7 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
         $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
         $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
 
-        $template="";
+		$template = '';
         return xarTplProperty('base', 'multiselect', 'showinput', $data);
     }
 
@@ -115,7 +115,7 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
         $data['value']= $value;
         $data['options']= $options;
 
-        $template="";
+		$template = '';
         return xarTplProperty('base', 'multiselect', 'showoutput', $data);
     }
 

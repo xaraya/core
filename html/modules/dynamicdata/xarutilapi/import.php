@@ -116,7 +116,7 @@ function dynamicdata_utilapi_import($args)
                     $object['itemtype'] = -1;
                 }
 
-                
+
                 $objectid = xarModAPIFunc('dynamicdata','admin','createobject',
                                           $object);
                 if (!isset($objectid)) {
@@ -318,7 +318,6 @@ function dynamicdata_utilapi_import($args)
     if (!empty($file)) {
         fclose($fp);
     }
-
     // adjust maxid (for objects stored in the dynamic_data table)
     if (count($objectcache) > 0 && count($objectmaxid) > 0) {
         foreach (array_keys($objectcache) as $objectid) {
@@ -328,6 +327,7 @@ function dynamicdata_utilapi_import($args)
                 if (empty($itemid)) return;
             }
         }
+		unset($objectcache);
     }
 
     return isset($objectid) ? $objectid : null;
