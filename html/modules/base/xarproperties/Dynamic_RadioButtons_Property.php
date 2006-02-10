@@ -21,37 +21,6 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
 {
-    function showInput($args = array())
-    {
-        extract($args);
-        $data = array();
-
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (!isset($options) || count($options) == 0) {
-            $options = $this->getOptions();
-        }
-        if (empty($name)) {
-            $name = 'dd_'.$this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-
-        $data['value']   = $value;
-        $data['name']    = $name;
-        $data['id']      = $id;
-        $data['options'] = $options;
-
-
-        $data['tabindex'] =!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
-        $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
-
-        $template="";
-        return xarTplProperty('base', 'radio', 'showinput', $data);
-
-    }
 
     // default methods from Dynamic_Select_Property
 

@@ -47,15 +47,6 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
         return true;
     }
 
-//    function showInput($name = '', $value = null, $options = array(), $id = '', $tabindex = '')
-    function showInput($args = array())
-    {
-        if (empty($args['template'])) {
-            $args['template'] = 'statelist';
-        }
-         return parent::showInput($args);
-    }
-
     function showOutput($args = array())
     {
         if (empty($args['template'])) {

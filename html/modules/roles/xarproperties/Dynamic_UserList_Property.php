@@ -10,7 +10,7 @@
  * @subpackage Roles module
  */
 
-/* 
+/*
  * Dynamic userlist property
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -55,6 +55,36 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         if (!empty($this->validation)) {
             $this->parseValidation($this->validation);
         }
+        if (count($this->options) == 0) {
+	        $select_options = array();
+            if ($this->userstate <> -1) {
+                $select_options['state'] = $this->userstate;
+            }
+            if (!empty($this->orderlist)) {
+                $select_options['order'] = implode(',', $this->orderlist);
+            }
+            if (!empty($this->grouplist)) {
+                $select_options['group'] = implode(',', $this->grouplist);
+            }
+            $users = xarModAPIFunc('roles', 'user', 'getall', $select_options);
+
+            // Loop for each user retrived and populate the options array.
+            if (empty($this->showlist)) {
+                // Simple case (default) -
+                foreach ($users as $user) {
+                    $this->options[] = array('id' => $user['uid'], 'name' => $user['name']);
+                }
+            } else {
+                // Complex case: allow specific fields to be selected.
+                foreach ($users as $user) {
+                    $namevalue = array();
+                    foreach ($this->showlist as $showfield) {
+                        $namevalue[] = $user[$showfield];
+                    }
+                    $this->options[] = array('id' => $user['uid'], 'name' => implode($this->showglue, $namevalue));
+                }
+            }
+        }
     }
 
     // TODO: validate the selected user against the specified group(s).
@@ -81,75 +111,6 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         $this->invalid = xarML('selection');
         $this->value = null;
         return false;
-    }
-
-    function showInput($args = array())
-    {
-        $select_options = array();
-
-        extract($args);
-
-        $data= array();
-        //$users=array(0;
-        
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (!isset($options) || count($options) == 0) {
-            $options = $this->options;
-        }
-        if (count($options) == 0) {
-            if ($this->userstate <> -1) {
-                $select_options['state'] = $this->userstate;
-            }
-            if (!empty($this->orderlist)) {
-                $select_options['order'] = implode(',', $this->orderlist);
-            }
-            if (!empty($this->grouplist)) {
-                $select_options['group'] = implode(',', $this->grouplist);
-            }
-
-            $users = xarModAPIFunc('roles', 'user', 'getall', $select_options);
-
-            // Loop for each user retrived and populate the options array.
-            if (empty($this->showlist)) {
-                // Simple case (default) - 
-                foreach ($users as $user) {
-                    $options[] = array('id' => $user['uid'], 'name' => $user['name']);
-                }
-            } else {
-                // Complex case: allow specific fields to be selected.
-                foreach ($users as $user) {
-                    $namevalue = array();
-                    foreach ($this->showlist as $showfield) {
-                        $namevalue[] = $user[$showfield];
-                    }
-                    $options[] = array('id' => $user['uid'], 'name' => implode($this->showglue, $namevalue));
-                }
-            }
-        }
-
-        if (empty($name)) {
-            $data['name'] = 'dd_' . $this->id;
-        } else {
-            $data['name'] = $name;
-        }
-
-        if (empty($id)) {
-            // TODO: strip out characters that are not allowed in a name.
-            $data['id'] = xarVarPrepForDisplay($data['name']);
-        } else {
-            $data['id']= $id;
-        }
-       //$data['select_options']=$select_options;
-        $data['value']=$value;
-        $data['options']=$options;
-        $data['users']=$users;
-        $data['tabindex']=!empty($tabindex) ? $tabindex : 0;
-        $data['onchange'] = isset($onchange) ? $onchange : null; // let tpl decide what to do
-        $data['invalid']=!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
-
-        return xarTplProperty('roles', 'userlist', 'showinput', $data);
     }
 
     // TODO: format the output according to the 'showlist'.

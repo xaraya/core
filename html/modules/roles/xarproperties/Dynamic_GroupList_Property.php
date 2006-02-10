@@ -135,18 +135,6 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
         $data['value']=$value;
         $data['group']=$group;
         $data['groupname']=xarVarPrepForDisplay($groupname);
-        /*if ($value > 1) {
-
-// TODO: have some meaningful user GUI in roles to show group info ?
-//       + adapt the URL below to point there :-)
-
-            return '<a href="'.xarModURL('roles','user','display',
-                                         array('uid' => $value))
-                    . '">'.xarVarPrepForDisplay($groupname).'</a>';
-        } else {
-            return xarVarPrepForDisplay($groupname);
-        }
-        */
 
         return xarTplProperty('roles', 'grouplist', 'showoutput', $data);
     }

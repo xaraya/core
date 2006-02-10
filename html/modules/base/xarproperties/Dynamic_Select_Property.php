@@ -95,8 +95,6 @@ class Dynamic_Select_Property extends Dynamic_Property
         $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
         $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
 
-    // FIXME: this won't work when called by a property from a different module
-        // allow template override by child classes (or in BL tags/API calls)
         if (empty($module)) {
             $module = $this->getModule();
         }
