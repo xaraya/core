@@ -20,6 +20,11 @@ revisit later on before trusting the branch to be released or used.
   was far out the most intrusive one since that table is used in the
   privilege instance queries. I adapted as best as I could, no doubt
   they wont work anymore in some cases. We'll see.
+* table theme_states has been dropped, where the xar_state column is
+  now in the themes table itself.
+* table module_states has been dropped, where the xar_state column is
+  now in the modules table itself.
+
 
 !!!OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
 * when encountered, upgrade code to upgrade modules from older
@@ -31,7 +36,9 @@ revisit later on before trusting the branch to be released or used.
 * the meaning of xar:comment and <!-- has been reversed as observed as
   a design error. xar:comment now produces a comment in the output while things
   between <!-- and --> get ignored by the BL parser. If you're previous xar:comment
-  content was sensitive you might wanna reverse it in your templates too.
+  content was sensitive you might wanna reverse it in your templates
+  too.
+* where applicable all pn compatibility has been removed.
 
 !!!REFACTORING LIST:
 List of things which need to be refactored before starting the actual

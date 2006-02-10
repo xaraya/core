@@ -375,7 +375,7 @@ function installer_admin_phase5()
             foreach($dbinfo->getTables() as $tbl) {
                 $table = $tbl->getName();
                 // Same prefix? drop it
-                if(strpos($table,'_') and substr($table,0,strpos($table,'_') == $dbPrefix)) {
+                if(strpos($table,'_') && (substr($table,0,strpos($table,'_')) == $dbPrefix)) {
                     $sql = xarDBDropTable($table,$dbType);
                     $dbconn->Execute($sql);
                 }
@@ -434,7 +434,7 @@ function installer_admin_bootstrap()
     xarVarSetCached('installer','installing', true);
 
     // load modules into *_modules table
-    if (!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
+    if (!xarModAPIFunc('modules', 'admin', 'regenerate')) throw new Exception("regenerating module list failed");//return;
 
     // create the default roles and privileges setup
     include 'modules/privileges/xarsetup.php';
@@ -445,18 +445,19 @@ function installer_admin_bootstrap()
     foreach ($modlist as $mod) {
         // Set state to inactive
         $regid=xarModGetIDFromName($mod);
-        if (isset($regid)) {
-            if (!xarModAPIFunc('modules','admin','setstate',
-                                array('regid'=> $regid, 'state'=> XARMOD_STATE_INACTIVE))) return;
-
-            // Activate the module
-            if (!xarModAPIFunc('modules','admin','activate', array('regid'=> $regid))) return;
-        }
+        if (!xarModAPIFunc('modules','admin','setstate',
+                           array('regid'=> $regid, 'state'=> XARMOD_STATE_INACTIVE))) 
+            throw new Exception("setting state of $regid failed");//return;
+        
+        // Activate the module
+        if (!xarModAPIFunc('modules','admin','activate', 
+                           array('regid'=> $regid))) 
+            throw new Exception("activation of $regid failed");//return;
     }
 
     // load themes into *_themes table
     if (!xarModAPIFunc('themes', 'admin', 'regenerate')) {
-        return NULL;
+        throw new Exception("themes regeneration failed");
     }
 
     // Set the state and activate the following themes
@@ -466,12 +467,12 @@ function installer_admin_bootstrap()
         $regid=xarThemeGetIDFromName($theme);
         if (isset($regid)) {
             if (!xarModAPIFunc('themes','admin','setstate', array('regid'=> $regid,'state'=> XARTHEME_STATE_INACTIVE))){
-                return;
+                throw new Exception("Setting state of theme with regid: $regid failed");
             }
             // Activate the theme
             if (!xarModAPIFunc('themes','admin','activate', array('regid'=> $regid)))
             {
-                return;
+                throw new Exception("Activation of theme with regid: $regid failed");
             }
         }
     }
@@ -481,24 +482,27 @@ function installer_admin_bootstrap()
     foreach ($modlist as $mod) {
         // Initialise the module
         $regid = xarModGetIDFromName($mod);
-        if (isset($regid)) {
-            if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
-            // Activate the module
-            if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
-        }
+        if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) 
+            throw new Exception("Initalising module with regid : $regid failed");
+        // Activate the module
+        if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) 
+            throw new Exception("Activating module with regid: $regid failed");
     }
 
     //initialise and activate base module by setting the states
     $baseId = xarModGetIDFromName('base');
-    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_INACTIVE))) return;
+    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_INACTIVE))) 
+        throw new Exception("Setting state for module with regid: $baseId failed");
     // Set module state to active
-    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_ACTIVE))) return;
+    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_ACTIVE))) 
+        throw new Exception("Activating base $baseId module failed");
 
-# --------------------------------------------------------
-#
-# Create wrapper DD objects for the native itemtypes of the privileges module
-#
-	if (!xarModAPIFunc('privileges','admin','createobjects')) return;
+    // --------------------------------------------------------
+    //
+    // Create wrapper DD objects for the native itemtypes of the privileges module
+    //
+	if (!xarModAPIFunc('privileges','admin','createobjects')) 
+        throw new Exception("Creating objects for privileges module failed");
 
     xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
 }
@@ -806,11 +810,11 @@ function installer_admin_confirm_configuration()
     foreach ($modules as $module) {
         if (in_array($module['name'],array_keys($fileModules))) {
             if ($module['regid'] == $fileModules[$module['name']]['regid']) {
-                if (xarMod_getState($module['regid']) == XARMOD_STATE_ACTIVE ||
-                xarMod_getState($module['regid']) == XARMOD_STATE_INACTIVE) {
+                $modInfo = xarModGetInfo($module['regid']);
+                if ($modInfo['state'] == XARMOD_STATE_ACTIVE ||
+                    $modInfo['state'] == XARMOD_STATE_INACTIVE) {
                     $installedmodules[] = ucfirst($module['name']);
-                }
-                else {
+                } else {
                     $availablemodules[] = $module;
                 }
                 unset($fileModules[$module['name']]);
@@ -821,14 +825,15 @@ function installer_admin_confirm_configuration()
 
     $options2 = $options3 = array();
     foreach ($availablemodules as $availablemodule) {
-//        if(xarMod_getState($availablemodule['regid']) != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-//            echo var_dump($availablemodule);exit;
-            $options2[] = array(
-                       'item' => $availablemodule['regid'],
-                       'option' => 'true',
-                       'comment' => xarML('Install the #(1) module.',ucfirst($availablemodule['name']))
-                       );
-//        }
+        // $modInfo = xarModGetInfo($availableModule['regid']);
+        // if($modInfo['state'] != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
+        //            echo var_dump($availablemodule);exit;
+        $options2[] = array(
+                            'item' => $availablemodule['regid'],
+                            'option' => 'true',
+                            'comment' => xarML('Install the #(1) module.',ucfirst($availablemodule['name']))
+                            );
+        //        }
     }
     if (!$confirmed) {
 

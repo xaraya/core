@@ -216,4 +216,3 @@ class ODBCCachedResultSet extends ODBCResultSetCommon implements ResultSet
     }
 
 }
-?>

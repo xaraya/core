@@ -63,4 +63,3 @@ class OCI8IdGenerator implements IdGenerator {
     
 }
 
-?>

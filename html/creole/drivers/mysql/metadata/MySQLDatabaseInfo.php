@@ -64,4 +64,3 @@ class MySQLDatabaseInfo extends DatabaseInfo {
         // throw new SQLException("MySQL does not support sequences natively.");
     }
 }
-?>

@@ -151,4 +151,3 @@ class MySQLiTableInfo extends TableInfo {
         $this->fksLoaded = true;
     }
 }
-?>

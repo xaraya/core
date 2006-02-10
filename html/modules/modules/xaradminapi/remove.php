@@ -52,11 +52,6 @@ function modules_adminapi_remove($args)
             // Remove the module itself
             $query = "DELETE FROM $tables[modules] WHERE xar_regid = ?";
             $dbconn->Execute($query,array($modinfo['regid']));
-            // Remove it from the states tables
-            $query = "DELETE FROM ".$tables['system/module_states']." WHERE xar_modid = ?";
-            $dbconn->Execute($query,array($modinfo['systemid']));
-            //NOTE: no use doing site/module_states now since the tables are the same
-            //see bug 1507 and xarDB.php for the details
         } else {
             // Module deletion function
             xarModAPIFunc('modules', 'admin', 'executeinitfunction', 

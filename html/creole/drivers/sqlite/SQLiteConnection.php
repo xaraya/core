@@ -246,4 +246,3 @@ class SQLiteConnection extends ConnectionCommon implements Connection {
     }
     
 }
-?>

@@ -29,7 +29,6 @@ function modules_init()
     $systemPrefix = xarDBGetSystemTablePrefix();
 
     $tables['modules'] = $systemPrefix . '_modules';
-    $tables['module_states'] = $sitePrefix . '_module_states';
     $tables['module_vars'] = $sitePrefix . '_module_vars';
     $tables['module_itemvars'] = $sitePrefix . '_module_itemvars';
     $tables['hooks'] = $sitePrefix . '_hooks';
@@ -41,7 +40,6 @@ function modules_init()
          * Here we create all the tables for the module system
          *
          * prefix_modules       - basic module info
-         * prefix_module_states - table to hold states for unshared modules
          * prefix_module_vars   - module variables table
          * prefix_hooks         - table for hooks
          */
@@ -58,6 +56,7 @@ function modules_init()
          *   xar_category varchar(64) NOT NULL default '',
          *   xar_admin_capable tinyint(1) NOT NULL default '0',
          *   xar_user_capable tinyint(1) NOT NULL default '0',
+         *   xar_state tinyint(1) NOT NULL default '0'
          *   PRIMARY KEY  (xar_id)
          * )
          */
@@ -71,7 +70,8 @@ function modules_init()
                         'xar_class' => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'xar_category' => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'xar_admin_capable' => array('type' => 'integer', 'size' => 'tiny', 'null' => false, 'default' => '0'),
-                        'xar_user_capable' => array('type' => 'integer', 'size' => 'tiny', 'null' => false, 'default' => '0')
+                        'xar_user_capable' => array('type' => 'integer', 'size' => 'tiny', 'null' => false, 'default' => '0'),
+                        'xar_state' => array('type' => 'integer', 'null' => false, 'default' => '1')
                         );
 
         // Create the modules table
@@ -86,44 +86,14 @@ function modules_init()
         $seqId = $dbconn->GenId($tables['modules']);
         $query = "INSERT INTO " . $tables['modules'] . "
               (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode,
-               xar_class, xar_category, xar_admin_capable, xar_user_capable )
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $bindvars = array($seqId,'modules',1,'modules',(string) $modVersion,1,'Core Admin','Global',1,0);
+               xar_class, xar_category, xar_admin_capable, xar_user_capable, xar_state )
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $bindvars = array($seqId,'modules',1,'modules',(string) $modVersion,1,'Core Admin','Global',1,0,3);
         $dbconn->Execute($query,$bindvars);
 
         // Save the actual insert id
         $savedmodid = $dbconn->PO_Insert_ID($tables['modules'], 'xar_id');
 
-        /**
-         * CREATE TABLE xar_module_states (
-         *   xar_id    int(11) unsigned NOT NULL auto_increment,
-         *   xar_regid int(11) unsigned NOT NULL default '0',
-         *   xar_state tinyint(1) NOT NULL default '0',
-         *   PRIMARY KEY  (xar_id),
-         *   UNIQUE (xar_modid)
-         * )
-         */
-        $fields = array(
-                        'xar_id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'unsigned' => true, 'primary_key' => true),
-                        'xar_modid' => array('type' => 'integer', 'null' => false, 'unsigned' => true),
-                        'xar_state' => array('type' => 'integer', 'null' => false, 'default' => '0')
-                        );
-
-        // Create the module_states table
-        $query = xarDBCreateTable($tables['module_states'], $fields);
-        $dbconn->Execute($query);
-
-        $index = array('name' => 'i_' . $sitePrefix . '_module_states_modid', 'unique' => true, 'fields' => array('xar_modid'));
-        $query = xarDBCreateIndex($tables['module_states'], $index);
-        $dbconn->Execute($query);
-
-        $seqId = $dbconn->GenId($tables['module_states']);
-
-        // manually set Modules Module to active
-        $query = "INSERT INTO $tables[module_states]
-                  (xar_id, xar_modid, xar_state  ) VALUES (?, ?, ?)";
-        $bindvars = array($seqId,$savedmodid,3);
-        $dbconn->Execute($query,$bindvars);
 
         /**
          * CREATE TABLE xar_module_vars (
@@ -310,16 +280,11 @@ function modules_upgrade($oldVersion)
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
-    $sitePrefix = xarDBGetSiteTablePrefix();
-    $systemPrefix = xarDBGetSystemTablePrefix();
-
-    $tables['module_states'] = $sitePrefix . '_module_states';
-
     switch($oldVersion) {
     case '2.3.0':
         // 1.0 version, add upgrade code to 2.x here
         // - hooks: removed columns smodule, tmodule in xar_hooks, made them smodid and tmodid
-        // - module_states: replaced regid with modid
+        // - module states: table removed 
     case '2.4.0':
         //current version
     }

@@ -32,4 +32,3 @@ require_once 'creole/common/StatementCommon.php';
 class SQLiteStatement extends StatementCommon implements Statement {   
     
 }
-?>

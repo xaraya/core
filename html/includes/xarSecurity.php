@@ -54,7 +54,6 @@ function xarSecurity_init()
                     'security_instances' => $prefix . '_security_instances',
                     'security_levels' => $prefix . '_security_levels',
                     'modules' => $prefix . '_modules',
-                    'module_states' => $prefix . '_module_states',
                     'security_privsets' => $prefix . '_security_privsets'
                     );
     xarDB_importTables($tables);

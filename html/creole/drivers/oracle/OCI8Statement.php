@@ -32,4 +32,3 @@ require_once 'creole/common/StatementCommon.php';
 class OCI8Statement extends StatementCommon implements Statement {
     
 }
-?>

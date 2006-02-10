@@ -651,14 +651,14 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
     if (empty($name)) throw new EmptyParameterException('name');
 
     switch($type) {
-        case 'modvar':
-        case 'moditemvar':
-            default:
-            $modBaseInfo = xarMod_getBaseInfo($modName);
-            if (!isset($modBaseInfo)) return; // throw back
-            break;
-        case 'configvar':
-            break;
+    case 'modvar':
+    case 'moditemvar':
+    default:
+        $modBaseInfo = xarMod_getBaseInfo($modName);
+        if(!isset($modBaseInfo)) throw new ModuleNotFoundException($modName);
+        break;
+    case 'configvar':
+        break;
     }
 
     $dbconn =& xarDBGetConn();
@@ -706,7 +706,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             // We need the variable id
             unset($modvarid);
             $modvarid = xarModGetVarId($modName, $name);
-            if(!$modvarid) return;
+            if(!$modvarid) throw new VariableNotFoundException($name);
 
             // First delete it.
             // FIXME: do we really want that ?

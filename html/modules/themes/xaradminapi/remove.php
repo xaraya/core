@@ -53,34 +53,12 @@ function themes_adminapi_remove($args)
         throw new ForbiddenOperationException($count,$msg);
     }        
     
-    
     // Get theme database info
     xarThemeDBInfoLoad($themeInfo['name'], $themeInfo['directory']);
 
-    // make atomic
-    try {
-        $dbconn->begin();
-
-        // Delete any theme variables that the theme cleanup function might
-        // have missed
-        $sql = "DELETE FROM $tables[theme_vars] WHERE xar_themeName = ?";
-        $dbconn->Execute($sql,array($themeInfo['name']));
-
-        // Delete the theme from the themes table
-        $sql = "DELETE FROM $tables[themes] WHERE xar_regid = ?";
-        $dbconn->Execute($sql,array($regid));
-
-        // Delete the theme state from the theme states table
-        //Get current theme mode to update the proper table
-        $themeMode  = $themeInfo['mode'];
-        $theme_statesTable = $tables['site/theme_states'];
-        $sql = "DELETE FROM $theme_statesTable  WHERE xar_regid = ?";
-        $dbconn->Execute($sql,array($regid));
-        $dbconn->commit();
-    } catch(SQLException $e) {
-        $dbconn->rollback();
-        throw $e;
-    }
+    // Delete the theme from the themes table
+    $sql = "DELETE FROM $tables[themes] WHERE xar_regid = ?";
+    $dbconn->Execute($sql,array($regid));
     return true;
 }
 

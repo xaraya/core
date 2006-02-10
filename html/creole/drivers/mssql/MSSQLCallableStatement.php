@@ -476,4 +476,3 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
     }    
 
 }
-?>

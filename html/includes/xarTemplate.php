@@ -1213,6 +1213,11 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
                               . "\n */\n?>\n";
                 fwrite($fd, $commentBlock);
             }
+            // Replace useless php context switches.
+            // This sometimes seems to improve rendering end speed, dunno, bytecacher dependent?
+            /* $templateCode = preg_replace(array('/\?>[\s\n]+<\?php/','/<\?php[\s\n]+\?>/'),
+                                         array(' ',' '),$templateCode);
+            */
             fwrite($fd, $templateCode);
             fclose($fd);
             // Add an entry into CACHEKEYS

@@ -303,4 +303,3 @@ abstract class TableInfo {
         return $this->database;
     }
 }
-?>

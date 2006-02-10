@@ -25,7 +25,8 @@ function xarThemeGetVar($themeName, $name, $prep = NULL)
     if (empty($themeName)) throw new EmptyParameterException('themename');
 
     $itemid = xarThemeGetIDFromName($themeName,'systemid');
-    return xarVar__GetVarByAlias('themes', $name, $itemid, $prep, $type = 'moditemvar');
+    $modVarName = $themeName . '_' . $name;
+    return xarVar__GetVarByAlias('themes', $modVarName, $itemid, $prep, $type = 'moditemvar');
 }
 
 /**
@@ -43,7 +44,13 @@ function xarThemeSetVar($themeName, $name, $prime = NULL, $value, $description='
     if (empty($themeName)) throw new EmptyParameterException('themename');
 
     $itemid = xarThemeGetIDFromName($themeName,'systemid');
-    return xarVar__SetVarByAlias('themes', $name, $value, $prime, $description, $itemid, $type = 'moditemvar');
+    $modVarName = $themeName . '_' . $name;
+    // Make sure we set it as modvar first
+    // TODO: this sucks
+    if(!xarModGetVar('themes',$modVarName)) {
+        xarModSetVar('themes',$modVarName,$value);
+    }
+    return xarVar__SetVarByAlias('themes', $modVarName, $value, $prime, $description, $itemid, $type = 'moditemvar');
 }
 
 
@@ -61,7 +68,8 @@ function xarThemeDelVar($themeName, $name)
     if (empty($themeName)) throw new EmptyParameterException('themename');
 
     $itemid = xarThemeGetIDFromName($themeName,'systemid');
-    return xarVar__DelVarByAlias('themes', $name, $itemid, $type = 'moditemvar');
+    $modVarName = $themeName . '_' . $name;
+    return xarVar__DelVarByAlias('themes', $modVarName, $itemid, $type = 'moditemvar');
 }
 
 /**
@@ -197,6 +205,7 @@ function xarTheme_getVarsByName($name)
  * @param themeRegId the theme's registered id
  * @param themeThemee the theme's site mode
  * @return to xarMod__getState for processing
+ * @todo we dont need this
  */
 function xarTheme_getState($themeRegId, $themeMode)
 {

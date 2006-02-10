@@ -289,4 +289,3 @@ abstract class StatementCommon {
         return $this->conn;
     }
 }
-?>
