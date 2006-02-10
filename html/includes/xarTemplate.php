@@ -15,17 +15,17 @@
  *
  */
 class DuplicateTagException extends DuplicationExceptions
-{ 
+{
     protected $message = 'The tag definition for the tag: "#(1)" already exists.';
 }
 
 class BLValidationException extends ValidationExceptions
-{ 
+{
     protected $message = 'A blocklayout tag or attribute construct was invalid, see the tag documentation for the correct syntax';
 }
 
-class BLException extends xarExceptions 
-{ 
+class BLException extends xarExceptions
+{
     protected $message = 'Unknown blocklayout exception (TODO)';
 }
 
@@ -224,6 +224,7 @@ function xarTpl__SetThemeNameAndDir($name)
 function xarTplGetThemeDir($theme=null)
 {
     if (isset($theme) && is_dir("themes/" . $theme)) return "themes/" . $theme;
+    die(var_dump($GLOBALS));
     return $GLOBALS['xarTpl_themeDir'];
 }
 
@@ -1071,7 +1072,7 @@ function xarTpl__getCompilerInstance()
 function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedFileName = null, $tplType = 'module')
 {
     assert('is_array($tplData); /* Template data should always be passed in an array */');
-    
+
     //POINT of ENTRY for cleaning variables
     // We need to be able to figure what is the template output type: RSS, XHTML, XML or whatever
     $tplData['_bl_data'] = $tplData;
@@ -1082,9 +1083,9 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
     // out of any server. At least we're not using eval anymore :-)
     // NOTES:
     // 1. If safe mode is ON this will most likely NOT work without specific configuration, do we want to go that far?
-    // 2. An alternative is write a stream wrapper class around $templateCode and use include/require on the streadm 
+    // 2. An alternative is write a stream wrapper class around $templateCode and use include/require on the streadm
     //    (This should theoretically work, but it crashes me all over the place and introduces a whole new class)
-    // 3. If all else fails we can still fall back to the eval. 
+    // 3. If all else fails we can still fall back to the eval.
     // yeah, getting rid of eval isnt your daily walk in the park
     $tmpPending = false; $useEval = false;
     // Start output buffering
@@ -1096,8 +1097,8 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
         $tmpPending = true; // We got to remove this one again too
         fwrite($fd,$templateCode);
         fclose($fd);
-    } 
-    
+    }
+
     if(!isset($cachedFileName)) {
         eval('?> '.$templateCode);
     } else {
@@ -1114,7 +1115,7 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
             if($tmpPending) unlink($cachedFileName);
             throw $e;
         }
-        if($tmpPending) unlink($cachedFileName); 
+        if($tmpPending) unlink($cachedFileName);
     }
 
     if($sourceFileName != '') {
@@ -1167,9 +1168,9 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
         case 'modules': $dnType = XARMLS_DNTYPE_MODULE; break;
         case 'themes':  $dnType = XARMLS_DNTYPE_THEME; break;
         }
-    
+
         $dnName = $tplpath[1];
-    
+
         $stack = array();
         if ($tplpath[2] == 'xartemplates') $tplpath[2] = 'templates';
         for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
@@ -1193,7 +1194,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
         }
     }
 
-    if (!file_exists($sourceFileName) && $needCompilation == true) 
+    if (!file_exists($sourceFileName) && $needCompilation == true)
         throw new FileNotFoundException($sourceFileName);
 
     xarLogMessage("Using template : $sourceFileName");
@@ -1787,18 +1788,18 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
     try {
         $dbconn->begin();
         $tag_id = $dbconn->GenId($tag_table);
-        
+
         $modInfo = xarMod_GetBaseInfo($tag->getModule());
         $modId = $modInfo['systemid'];
         $query = "INSERT INTO $tag_table
                   (xar_id, xar_name, xar_modid, xar_handler, xar_data)
                   VALUES(?,?,?,?,?)";
         $bindvars = array($tag_id,
-                          $tag->getName(), 
+                          $tag->getName(),
                           $modId,
                           $tag->getHandler(),
                           serialize($tag));
-        
+
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
         $dbconn->commit();
@@ -1917,7 +1918,7 @@ function xarTplGetTagObjectFromName($tag_name)
     $systemPrefix = xarDBGetSystemTablePrefix();
     $tag_table = $systemPrefix . '_template_tags';
     $mod_table = $systemPrefix . '_modules';
-    $query = "SELECT tags.xar_data, mods.xar_name 
+    $query = "SELECT tags.xar_data, mods.xar_name
               FROM $tag_table tags, $mod_table mods
               WHERE tags.xar_modid = mods.xar_id AND tags.xar_name=?";
 
