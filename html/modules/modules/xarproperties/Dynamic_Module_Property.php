@@ -37,8 +37,12 @@ class Dynamic_Module_Property extends Dynamic_Select_Property
         }
     }
 
-    // default methods from Dynamic_Select_Property
-
+    function showInput($args = array())
+    {
+        $args['module'] = 'base';
+        $args['template'] = 'dropdown';
+        return parent::showInput($args);
+    }
 
     /**
      * Get the base information for this property.
