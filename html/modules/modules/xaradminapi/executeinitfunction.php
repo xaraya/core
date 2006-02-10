@@ -31,7 +31,7 @@ function modules_adminapi_executeinitfunction ($args)
     if (!isset($modInfo['osdirectory']) ||
         empty($modInfo['osdirectory']) ||
         !is_dir('modules/'. $modInfo['osdirectory'])) {
-        
+
         $msg = 'Module (regid: #(1) - directory: #(2) does not exist.';
         $vars = array($args['regid'], $modInfo['osdirectory']);
         throw new ModuleNotFoundException($vars,$msg);
@@ -52,7 +52,7 @@ function modules_adminapi_executeinitfunction ($args)
     // If there is no xarinit file, there is apparently nothing to init.
     // TODO: we migh consider making it required.
     if (empty($xarinitfile)) return true;
-   
+
 
     // if (!empty($xarinitfile)) {
     ob_start();

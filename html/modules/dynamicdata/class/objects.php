@@ -649,6 +649,7 @@ class Dynamic_Object_Master
                                                           'itemtype' => $args['itemtype'],
                                                           'classname' => $args['classname']));
         $objectid = $object->createItem($args);
+        unset($object);
         return $objectid;
     }
 
@@ -674,6 +675,7 @@ class Dynamic_Object_Master
         $itemid = $object->getItem(array('itemid' => $args['objectid']));
         if (empty($itemid)) return;
         $itemid = $object->updateItem($args);
+        unset($object);
         return $itemid;
     }
 
@@ -715,9 +717,12 @@ class Dynamic_Object_Master
             $propid = $mylist->properties[$name]->id;
             $propid = Dynamic_Property_Master::deleteProperty(array('itemid' => $propid));
         }
+        unset($mylist);
 
         // delete the Dynamic Objects item corresponding to this object
-        return $object->deleteItem();
+        $result = $object->deleteItem();
+        unset($object);
+        return $result;
     }
 
     /**
@@ -2229,13 +2234,6 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         }
 */
         return $itemid;
-    }
-}
-
-class Extended_Object extends Dynamic_Object
-{
-    function Extended_Object($args)
-    {
     }
 }
 

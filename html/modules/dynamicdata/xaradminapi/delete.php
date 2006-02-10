@@ -1,6 +1,6 @@
 <?php
 /**
- * Delete an item 
+ * Delete an item
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -53,6 +53,7 @@ function dynamicdata_adminapi_delete($args)
 
     $myobject->getItem();
     $itemid = $myobject->deleteItem();
+    unset($myobject);
     return $itemid;
 }
 ?>

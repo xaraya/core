@@ -17,17 +17,17 @@
  *
  */
 class ModuleBaseInfoNotFoundException extends NotFoundExceptions
-{ 
+{
     protected $message = 'The base info for module "#(1)" could not be found';
 }
 
 class ModuleNotFoundException extends NotFoundExceptions
-{ 
+{
     protected $message = 'A module is missing, the module name could not be determined in the current context';
 }
 
 class ModuleNotActiveException extends xarExceptions
-{ 
+{
     protected $message = 'The module "#(1)" was called, but it is not active.';
 }
 
@@ -609,7 +609,7 @@ function xarModGetInfo($modRegId, $type = 'module')
     return $modInfo;
 }
 
-function xarModGetNameFromID($regid) 
+function xarModGetNameFromID($regid)
 {
     $modinfo = xarModGetInfo($regid);
     return $modinfo['name'];
@@ -1453,7 +1453,7 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
 
     // Get applicable hooks
     // New query:
-    $query ="SELECT DISTINCT hooks.xar_tarea, tmods.xar_name, 
+    $query ="SELECT DISTINCT hooks.xar_tarea, tmods.xar_name,
                              hooks.xar_ttype, hooks.xar_tfunc, hooks.xar_order
              FROM $hookstable hooks, $modulestable tmods, $modulestable smods
              WHERE hooks.xar_tmodid = tmods.xar_id AND
@@ -1532,9 +1532,9 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
 
         // Get applicable hooks
         // New query:
-        $query = "SELECT DISTINCT tmods.xar_name, hooks.xar_stype 
+        $query = "SELECT DISTINCT tmods.xar_name, hooks.xar_stype
                   FROM  $hookstable hooks, $modulestable tmods
-                  WHERE hooks.xar_tmodid = tmods.xar_id AND 
+                  WHERE hooks.xar_tmodid = tmods.xar_id AND
                         tmods.xar_name = ?";
         $bindvars = array($callerModName);
 
@@ -1740,7 +1740,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     //This is a hack while we have 2 different tables for modules states
     //It will look in the most probable one first (SHARED)
     $modules_statesTable = $tables['system/'.$type.'_states'];
-    
+
     if($type == 'module') {
         $query = "SELECT mods.xar_regid, mods.xar_directory, mods.xar_mode,
                          mods.xar_id, modstates.xar_state, mods.xar_name
@@ -1751,7 +1751,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     } else {
         $query = "SELECT mods.xar_regid, mods.xar_directory, mods.xar_mode,
                          mods.xar_id, modstates.xar_state, mods.xar_name
-                  FROM   $modulestable mods 
+                  FROM   $modulestable mods
                   LEFT JOIN $modules_statesTable modstates
                          ON modstates.xar_regid = mods.xar_regid
                   WHERE  mods.xar_name = ? OR mods.xar_directory = ?";
@@ -1977,9 +1977,9 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
                 $module_statesTable = $tables['site/module_states'];
             }
 
-            $query = "SELECT xar_state 
+            $query = "SELECT xar_state
                       FROM   $module_statesTable states, $modulesTable mods
-                      WHERE  states.xar_modid = mods.xar_id AND 
+                      WHERE  states.xar_modid = mods.xar_id AND
                              mods.xar_regid = ?";
             break;
         case 'theme':
@@ -2040,7 +2040,7 @@ function xarModRegisterHook($hookObject,
         // New query: the same but insert the modid's instead of the modnames into tmodule
         $tmodInfo = xarMod_getBaseInfo($hookModName);
         $tmodId = $tmodInfo['systemid'];
-        $query = "INSERT INTO $hookstable 
+        $query = "INSERT INTO $hookstable
                   (xar_id, xar_object, xar_action, xar_tarea, xar_tmodid, xar_ttype, xar_tfunc)
                   VALUES (?,?,?,?,?,?,?)";
         $seqId = $dbconn->GenId($hookstable);
