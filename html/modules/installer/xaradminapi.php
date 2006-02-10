@@ -1,7 +1,6 @@
 <?php
 /**
  * Modify the system configuration File
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -105,7 +104,6 @@ function installer_adminapi_initialise($args)
 function installer_adminapi_createdb($args)
 {
     extract($args);
-
     // Load in Table Maintainance API
     include_once 'includes/xarTableDDL.php';
 

@@ -25,14 +25,16 @@ function roles_userapi_get($args)
 {
     // Get arguments from argument array
     extract($args);
-    // Argument checks
     if (empty($uid) && empty($name) && empty($uname) && empty($email)) {
         throw new EmptyParameterException('uid or name or uname or email');
     } elseif (!empty($uid) && !is_numeric($uid)) {
         throw new VariableValidationException(array('uid',$uid,'numeric'));
     }
+    if ((empty($itemid) && !empty($uid))) {
+        $itemid = $uid;
+    }
 
-    if (empty($type)) $type = 0;
+    if (empty($type)) $type = ROLES_USERTYPE;
 
     $xartable =& xarDBGetTables();
     $rolestable = $xartable['roles'];

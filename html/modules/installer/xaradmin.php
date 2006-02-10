@@ -436,6 +436,20 @@ function installer_admin_bootstrap()
     // load modules into *_modules table
     if (!xarModAPIFunc('modules', 'admin', 'regenerate')) throw new Exception("regenerating module list failed");//return;
 
+     // Initialise and activate dynamic data
+    $modlist = array('dynamicdata');
+    foreach ($modlist as $mod) {
+        // Initialise the module
+        $regid = xarModGetIDFromName($mod);
+        if (isset($regid)) {
+            if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid)))
+                 throw new Exception("Initalising module with regid : $regid failed");
+            // Activate the module
+            if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid)))
+                throw new Exception("Activating module with regid: $regid failed");
+        }
+    }
+
     // create the default roles and privileges setup
     include 'modules/privileges/xarsetup.php';
     initializeSetup();
@@ -477,17 +491,15 @@ function installer_admin_bootstrap()
         }
     }
 
-    // Initialise and activate mail, dynamic data
-    $modlist = array('mail', 'dynamicdata');
-    foreach ($modlist as $mod) {
-        // Initialise the module
-        $regid = xarModGetIDFromName($mod);
+    // Initialise and activate mail
+    $regid = xarModGetIDFromName('mail');
+    if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) 
+         throw new Exception("Initalising m with regid : $regid failed");
         if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) 
             throw new Exception("Initalising module with regid : $regid failed");
         // Activate the module
         if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) 
             throw new Exception("Activating module with regid: $regid failed");
-    }
 
     //initialise and activate base module by setting the states
     $baseId = xarModGetIDFromName('base');
@@ -575,7 +587,7 @@ function installer_admin_create_administrator()
     // assemble the args into an array for the role constructor
     $pargs = array('uid'   => $role->getID(),
                    'name'  => $name,
-                   'type'  => 0,
+                   'type'  => ROLES_USERTYPE,
                    'uname' => $userName,
                    'email' => $email,
                    'pass'  => $pass,

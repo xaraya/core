@@ -1,7 +1,6 @@
 <?php
 /**
  * Get all data fields for an item
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2002-2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -99,24 +98,36 @@ function &dynamicdata_userapi_getitem($args)
         $table = '';
     }
 
-    $object = & Dynamic_Object_Master::getObject(array('moduleid'  => $modid,
-                                       'itemtype'  => $itemtype,
-                                       'itemid'    => $itemid,
-                                       'fieldlist' => $fieldlist,
-                                       'join'      => $join,
-                                       'table'     => $table,
-                                       'status'    => $status));
-    if (!isset($object) || empty($object->objectid)) return $nullreturn;
-    if (!empty($itemid)) {
-        $object->getItem();
-    }
-    if (!empty($preview)) {
-        $object->checkInput();
-    }
+    $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
+    $objectarray = $itemsarray = array();
+	foreach ($tree as $branch) {
+		$object = & Dynamic_Object_Master::getObject(array('moduleid'  => $modid,
+										   'itemtype'  => $branch['itemtype'],
+										   'itemid'    => $itemid,
+										   'fieldlist' => $fieldlist,
+										   'join'      => $join,
+										   'table'     => $table,
+										   'status'    => $status));
+		if (!isset($object) || empty($object->objectid)) return $nullreturn;
+		if (!empty($itemid)) {
+			$result = $object->getItem();
+		}
+		if (!empty($preview)) {
+			$object->checkInput();
+		}
 
-    if (!empty($getobject)) {
-        return $object;
-    }
+		if (!empty($getobject)) {
+			$objectarray[] = $object;
+		} else {
+			if (isset($result)) {
+				if ($itemsarray == array()) {
+					$itemsarray = $object->getFieldValues();}
+				else {
+					$itemsarray = array_merge($itemsarray, $object->getFieldValues());
+				}
+			}
+		}
+	}
     $objectData = $object->getFieldValues();
     return $objectData;
 }

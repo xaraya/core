@@ -1,7 +1,6 @@
 <?php
 /**
  * Call an installer function
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
