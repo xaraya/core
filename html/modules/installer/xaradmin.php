@@ -464,13 +464,7 @@ function installer_admin_bootstrap()
     // load modules into *_modules table
     if (!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
 
-	//TODO: improve this once we know where authentication modules are headed
-   /*	
-   $regid=xarModGetIDFromName('registration');
-	if (empty($regid)) {
-		die(xarML('I cannot load the authentication module. Please make it available and reinstall'));
-	}
-	*/
+
     $regid=xarModGetIDFromName('authsystem');
 	if (empty($regid)) {
 		die(xarML('I cannot load the Authsystem module. Please make it available and reinstall'));
@@ -513,8 +507,8 @@ function installer_admin_bootstrap()
         }
     }
 
-    // Initialise and activate adminpanels, mail, dynamic data
-    $modlist = array('adminpanels','mail', 'dynamicdata');
+    // Initialise and activate mail, dynamic data
+    $modlist = array('mail', 'dynamicdata');
     foreach ($modlist as $mod) {
         // Initialise the module
         $regid = xarModGetIDFromName($mod);
@@ -897,6 +891,7 @@ function installer_admin_confirm_configuration()
         $func = "installer_" . basename(strval($configuration),'.conf.php') . "_privilegeoptions";
         $data['options1'] = $func();
         $data['options2'] = $options2;
+        $data['options3'] = $options3;
         $data['installed'] = implode(', ',$installedmodules);
         $data['missing'] = implode(', ',$awolmodules);
         $data['configuration'] = $configuration;
@@ -1149,8 +1144,6 @@ function installer_admin_cleanup()
             return;
         }
     }
-
-    xarModAPIFunc('adminpanels', 'admin', 'updatemenudb',array('force' => true));
 
     $data['language']    = $install_language;
     $data['phase'] = 6;
