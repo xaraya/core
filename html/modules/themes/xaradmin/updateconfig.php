@@ -46,7 +46,7 @@ function themes_admin_updateconfig()
     xarModSetVar('themes', 'ShowTemplates', $showtemplates);
     xarModSetVar('themes', 'AtomTag', $atomtag);
     xarModSetVar('themes', 'var_dump', $var_dump);
-    xarModSetVar('themes', 'dashboard', ($dashboard) ? 1 : 0);
+    xarModSetVar('themes', 'usedashboard', ($dashboard) ? 1 : 0);
     xarConfigSetVar('Site.BL.CacheTemplates',$cachetemplates);
 
     // make sure we dont miss empty variables (which were not passed thru)

@@ -146,7 +146,7 @@ function themes_init()
     xarModSetVar('themes', 'ShowPHPCommentBlockInTemplates', 0);
     xarModSetVar('themes', 'ShowTemplates', 0);
     //Moved here in 1.1.x series
-    xarModSetVar('themes', 'dashboard', 0);
+    xarModSetVar('themes', 'usedashboard', 0);
 
     // Register theme tags.
     // Additional styles, see bug 3868 note below.
@@ -220,7 +220,7 @@ function themes_upgrade($oldversion)
       case '1.7.0':
         /* TODO: update when we up the version number */
         /* These done in the upgrade.php file
-           xarModSetVar('themes', 'dashboard', 0);
+           xarModSetVar('themes', 'usedashboard', 0);
         */
 
       case '1.8.0' :

@@ -1636,7 +1636,7 @@ if (empty($step)) {
     xarModSetVar('modules','overview',$oldvalue);
     // Move of Adminpanels dashboard modvar to Themes module
     $oldvalue=xarModGetVar('adminpanels','dashboard');
-    xarModSetVar('themes','dashboard',$oldvalue);
+    xarModSetVar('themes','usedashboard',$oldvalue);
 
     // Propsinplace scenario, flush the property cache, so on upgrade all proptypes
     // are properly set in the database.
