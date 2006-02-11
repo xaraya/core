@@ -74,7 +74,7 @@
                 </xar:if>
                 <label for="dashboard" title="#xarML('Use the Admin Dashboard to manage all your Admin settings from a single page.')#">
                     <xar:mlstring>
-                        Enable the Admin Dashboard - overrides other admin templates.
+                        Enable the Admin Dashboard (this overrides other admin templates).
                     </xar:mlstring>
                 </label>
             </div>

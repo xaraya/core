@@ -122,7 +122,7 @@ function xarMain()
         }
 
         // Set page template
-        if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default' && xarModGetVar('themes', 'dashboard')) {
+        if ($modType == 'admin' && xarTplGetPageTemplateName() == 'default' && xarModGetVar('themes', 'usedashboard')) {
             $dashtemplate=xarModGetVar('themes','dashtemplate');
             //if dashboard is enabled, use the dashboard template else fallback on the normal template override system for admin templates
               if (!xarTplSetPageTemplateName($dashtemplate.'-'.$modName)) {
