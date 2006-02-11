@@ -1649,6 +1649,14 @@ if (empty($step)) {
     // Move of Adminpanels dashboard modvar to Themes module
     $oldvalue=xarModGetVar('adminpanels','dashboard');
     xarModSetVar('themes','usedashboard',$oldvalue);
+    //dashtemplate will always override admin.xt
+    if (isset($oldvalue) && $oldvalue==1) {
+        //will use admin.xt if present
+        xarModSetVar('themes','dashtemplate','admin');
+    }else{
+        //setit to the new dashboard template
+        xarModSetVar('themes','dashtemplate','dashboard');
+    }
     //We need to upgrade the blocks, and as the block is the same we could just change the type id of any login.
     $blocktypeTable = $systemPrefix .'_block_types';
     $blockinstanceTable = $systemPrefix .'_block_instances';

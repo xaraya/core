@@ -147,6 +147,7 @@ function themes_init()
     xarModSetVar('themes', 'ShowTemplates', 0);
     //Moved here in 1.1.x series
     xarModSetVar('themes', 'usedashboard', 0);
+    xarModSetVar('themes', 'dashtemplate', 'dashboard');    
 
     // Register theme tags.
     // Additional styles, see bug 3868 note below.

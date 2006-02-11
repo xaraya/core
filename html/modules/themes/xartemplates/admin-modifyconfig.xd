@@ -67,7 +67,7 @@
                 </xar:mlstring>
             </legend>
             <div class="xar-form-input-wrapper-after">
-                <xar:if condition="$dashboard eq 1">
+                <xar:if condition="$dashboard">
                     <input type="checkbox" name="dashboard" id="dashboard" value="1" checked="checked" />
                     <xar:else />
                     <input type="checkbox" name="dashboard" id="dashboard" value="1" />
@@ -77,6 +77,14 @@
                         Enable the Admin Dashboard - overrides other admin templates.
                     </xar:mlstring>
                 </label>
+            </div>
+            <div class="xar-form-input-wrapper">
+                <label for="dashtemplate" title="#xarML('Template name for the dashboard - no trailing suffix, defaults to \'dashboard\'')#" class="xar-form-label">
+                    <xar:mlstring>
+                        Dashboard Template name
+                    </xar:mlstring>
+                </label>
+                <input type="text" name="dashtemplate" id="dashtemplate" value="#$dashtemplate#" size="30" maxlength="100" />
             </div>
         </fieldset>
         <fieldset>
