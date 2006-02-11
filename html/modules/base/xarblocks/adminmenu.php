@@ -58,7 +58,7 @@ function base_adminmenublock_info()
 function base_adminmenublock_display($blockinfo)
 {
     // Security Check
-    if (!xarSecurityCheck('ViewBaseBlocks',0,'Block',"adminmenu:$blockinfo[title]:$blockinfo[bid]")) {return;}
+    if (!xarSecurityCheck('AdminBaseBlock',0,'Block',"adminmenu:$blockinfo[title]:$blockinfo[bid]")) {return;}
 
     // Get variables from content block
     if (!is_array($blockinfo['content'])) {

@@ -25,7 +25,7 @@ function installer_community_moduleoptions()
         array('name' => "example",              'regid' => 36),
         array('name' => "hitcount",             'regid' => 177),
         array('name' => "ratings",              'regid' => 41),
-        array('name' => "registration",         'regid' => 30205),        
+        //array('name' => "registration",         'regid' => 30205),  omit until a mask problem is isolated and fixed
         array('name' => "search",               'regid' => 32),
         array('name' => "sniffer",              'regid' => 755),
         array('name' => "stats",                'regid' => 34),
@@ -106,7 +106,7 @@ function installer_community_casualaccess()
 function installer_community_readnoncore()
 {
     xarRegisterPrivilege('ReadNonCore','All','empty','All','All','ACCESS_NONE','Read access only to none-core modules');
-    xarRegisterPrivilege('ViewRegistrationLogin','All','registration','Block','rlogin:Login:All','ACCESS_OVERVIEW','View the User Access block');
+    //xarRegisterPrivilege('ViewRegistrationLogin','All','registration','Block','rlogin:Login:All','ACCESS_OVERVIEW','View the User Access block');
     xarRegisterPrivilege('DenyPrivileges','All','privileges','All','All','ACCESS_NONE','Deny access to the Privileges module');
     //xarRegisterPrivilege('DenyAdminPanels','All','adminpanels','All','All','ACCESS_NONE','Deny access to the AdminPanels module');
     xarRegisterPrivilege('DenyBlocks','All','blocks','All','All','ACCESS_NONE','Deny access to the Blocks module');
@@ -127,7 +127,7 @@ function installer_community_readnoncore()
     xarMakePrivilegeMember('DenyMail','ReadNonCore');
     xarMakePrivilegeMember('DenyModules','ReadNonCore');
     xarMakePrivilegeMember('DenyThemes','ReadNonCore');
-    xarMakePrivilegeMember('ViewRegistrationLogin','ReadNonCore');
+    //xarMakePrivilegeMember('ViewRegistrationLogin','ReadNonCore');
 }
 
 function installer_community_readaccess()

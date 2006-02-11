@@ -283,26 +283,6 @@ function roles_upgrade($oldVersion)
 
 				// remove the login block type and block from roles
 				$result = xarModAPIfunc('blocks', 'admin', 'delete_type', array('module' => 'roles', 'type' => 'login'));
-
-				// create the new authentication modvars
-				/*
-                xarModSetVar('authentication', 'allowregistration', xarModGetVar('roles', 'allowregistration'));
-				xarModSetVar('authentication', 'requirevalidation', xarModGetVar('roles', 'requirevalidation'));
-				xarModSetVar('authentication', 'itemsperpage', xarModGetVar('roles', 'rolesperpage'));
-				xarModSetVar('authentication', 'uniqueemail', xarModGetVar('roles', 'uniqueemail'));
-				xarModSetVar('authentication', 'askwelcomeemail', xarModGetVar('roles', 'askwelcomeemail'));
-				xarModSetVar('authentication', 'askvalidationemail', xarModGetVar('roles', 'askvalidationemail'));
-				xarModSetVar('authentication', 'askdeactivationemail', xarModGetVar('roles', 'askdeactivationemail'));
-				xarModSetVar('authentication', 'askpendingemail', xarModGetVar('roles', 'askpendingemail'));
-				xarModSetVar('authentication', 'askpasswordemail', xarModGetVar('roles', 'askpasswordemail'));
-				xarModSetVar('authentication', 'defaultgroup', xarModGetVar('roles', 'defaultgroup'));
-				xarModSetVar('authentication', 'lockouttime', 15);
-				xarModSetVar('authentication', 'lockouttries', 3);
-				xarModSetVar('authentication', 'minage', xarModGetVar('roles', 'minage'));
-				xarModSetVar('authentication', 'disallowednames', xarModGetVar('roles', 'disallowednames'));
-				xarModSetVar('authentication', 'disallowedemails', xarModGetVar('roles', 'disallowedemails'));
-				xarModSetVar('authentication', 'disallowedips', xarModGetVar('roles', 'disallowedips'));
-               */
 				// delete the old roles modvars
 				xarModDelVar('roles', 'allowregistration');
 				xarModDelVar('roles', 'requirevalidation');

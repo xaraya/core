@@ -676,9 +676,9 @@ function installer_admin_create_administrator()
     }
 
     list ($leftBlockGroup) = $result->fields;
-    /* We don't need this for adminpanels now - done in Base module
+    /* We don't need this for adminpanels now - done in Base module */
         $adminBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
-                                    array('module'  => 'adminpanels',
+                                    array('module'  => 'base',
                                           'type'    => 'adminmenu'));
 
     if (empty($adminBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
@@ -699,7 +699,7 @@ function installer_admin_create_administrator()
             return;
         }
     }
-    */
+
     
     $now = time();
 
