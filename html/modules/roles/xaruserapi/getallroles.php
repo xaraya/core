@@ -69,7 +69,7 @@ function roles_userapi_getallroles($args)
     $q->addfield('r.xar_date_reg AS date_reg');
     $q->addfield('r.xar_state AS state');
     $q->addfield('r.xar_valcode AS valcode');
-    $q->addfield('r.xar_auth_module AS auth_module');
+    $q->addfield('r.xar_auth_modid AS auth_modid');
 
     // Inclusions
 	$includedgroups = array();

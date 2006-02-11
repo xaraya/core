@@ -186,7 +186,7 @@ function roles_adminapi_createobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 2,
 //                                    'default'  => '',
-                                    'source'   =>  $prefix . '_roles.xar_auth_module',
+                                    'source'   =>  $prefix . '_roles.xar_auth_modid',
                                     'status'   => 1,
                                     'order'    => 10,
                                     ))) return;
@@ -307,7 +307,7 @@ function roles_adminapi_createobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 2,
 //                                    'default'  => '',
-                                    'source'   =>  $prefix . '_roles.xar_auth_module',
+                                    'source'   =>  $prefix . '_roles.xar_auth_modid',
                                     'status'   => 1,
                                     'order'    => 9,
                                     ))) return;
