@@ -1631,6 +1631,13 @@ if (empty($step)) {
     }
     // More or less generic stuff
     echo "<h5>Generic upgrade activities</h5>";
+    // Move of Adminpanels module overviews modvar to Modules module
+    $oldvalue=xarModGetVar('adminpanels','overview');
+    xarModSetVar('modules','overview',$oldvalue);
+    // Move of Adminpanels dashboard modvar to Themes module
+    $oldvalue=xarModGetVar('adminpanels','dashboard');
+    xarModSetVar('themes','dashboard',$oldvalue);
+
     // Propsinplace scenario, flush the property cache, so on upgrade all proptypes
     // are properly set in the database.
     echo "Flushing the property cache";

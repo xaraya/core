@@ -219,7 +219,7 @@ function themes_upgrade($oldversion)
             }
       case '1.7.0':
         /* TODO: update when we up the version number */
-        /*
+        /* These done in the upgrade.php file
            xarModSetVar('themes', 'dashboard', 0);
         */
 
@@ -228,7 +228,7 @@ function themes_upgrade($oldversion)
     }
     // Update successful
     return true;
-} 
+}
 
 /**
  * Delete the themes theme

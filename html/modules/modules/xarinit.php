@@ -381,7 +381,8 @@ function modules_upgrade($oldVersion)
         $result = &$dbconn->Execute($query);
         if (!$result) return;
     case '2.3.0':
-        /* TODO: adjust for changes once we are ready and up the module version
+        /* TODO: adjust for changes once we are ready and up the module version */
+        /* The following done in upgrade.php file as we want to set to existing 'old' value
           xarModSetVar('modules', 'disableoverview',0);
         */
     case '2.4.0':
