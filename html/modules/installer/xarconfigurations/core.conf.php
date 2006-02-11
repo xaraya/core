@@ -103,7 +103,7 @@ function installer_core_readnoncore()
     xarMakePrivilegeRoot('DenyThemes');
     xarMakePrivilegeMember('ReadAccess','ReadNonCore');
     xarMakePrivilegeMember('DenyPrivileges','ReadNonCore');
-    xarMakePrivilegeMember('DenyAdminPanels','ReadNonCore');
+    //xarMakePrivilegeMember('DenyAdminPanels','ReadNonCore');
     xarMakePrivilegeMember('DenyBlocks','ReadNonCore');
     xarMakePrivilegeMember('DenyMail','ReadNonCore');
     xarMakePrivilegeMember('DenyModules','ReadNonCore');

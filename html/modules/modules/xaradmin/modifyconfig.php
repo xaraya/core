@@ -23,7 +23,7 @@
 function modules_admin_modifyconfig()
 {
     // Security Check
-    if(!xarSecurityCheck('AdminPanel')) return;
+    if(!xarSecurityCheck('AdminModules')) return;
 
     // Generate a one-time authorisation code for this operation
     $data['authid'] = xarSecGenAuthKey();

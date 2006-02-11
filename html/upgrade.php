@@ -1718,7 +1718,7 @@ if (empty($step)) {
         echo "<br /><span style=\"color:red;\">WARNING!</span> There was a problem in updating Waiting Content and Adminpanels menu block to Base blocks. Please check!<br /><br />";
     }else {
         echo "</div>";
-        echo "<br />Done! Waiting content and Adminpanels block updated!<br /><br />";
+        echo "<br />Done! Waiting content and Admin Menu block updated in Base module!<br /><br />";
     }
 
 

@@ -86,7 +86,7 @@ function initializeSetup()
     xarDefineInstance('blocks','Blocks',$instances);
 
     //--------------------------------- Adminpanels Module
-
+    /*
     $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable WHERE xar_module = 'adminpanels'";
     $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'adminpanels'";
     $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'adminpanels'";
@@ -100,7 +100,7 @@ function initializeSetup()
                              'query' => $query3,
                              'limit' => 20));
     xarDefineInstance('adminpanels','Block',$instances);
-
+    */
    //--------------------------------- Roles Module
     $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable WHERE xar_module = 'roles'";
     $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'roles'";
@@ -204,11 +204,11 @@ function initializeSetup()
     xarRegisterMask('EditAuthsystem','All','authsystem','All','All','ACCESS_EDIT');
     xarRegisterMask('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
 
-    xarRegisterMask('ViewPanel','All','adminpanels','All','All','ACCESS_OVERVIEW');
-    xarRegisterMask('EditPanel','All','adminpanels','All','All','ACCESS_EDIT');
-    xarRegisterMask('AddPanel','All','adminpanels','Item','All','ACCESS_ADD');
-    xarRegisterMask('DeletePanel','All','adminpanels','All','All','ACCESS_DELETE');
-    xarRegisterMask('AdminPanel','All','adminpanels','All','All','ACCESS_ADMIN');
+    //xarRegisterMask('ViewPanel','All','adminpanels','All','All','ACCESS_OVERVIEW');
+    //xarRegisterMask('EditPanel','All','adminpanels','All','All','ACCESS_EDIT');
+    //xarRegisterMask('AddPanel','All','adminpanels','Item','All','ACCESS_ADD');
+    //xarRegisterMask('DeletePanel','All','adminpanels','All','All','ACCESS_DELETE');
+    //xarRegisterMask('AdminPanel','All','adminpanels','All','All','ACCESS_ADMIN');
 
     xarRegisterMask('ViewLogin','All','roles','Block','login:Login:All','ACCESS_OVERVIEW');
     xarRegisterMask('ViewRolesBlocks','All','roles','Block','All','ACCESS_OVERVIEW');

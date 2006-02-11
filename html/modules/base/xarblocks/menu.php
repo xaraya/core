@@ -349,7 +349,7 @@ function base_menublock_display($blockinfo)
     // we dont want to show logout link if the user is anonymous or admin
     // admins have their own logout method, which is more robust
     // Security Check
-    if (xarSecurityCheck('AdminPanel',0,'adminmenu',"$blockinfo[title]:All:All") or
+    if (xarSecurityCheck('AdminBaseBlock',0,'adminmenu',"$blockinfo[title]:All:All") or
         !xarUserIsLoggedIn() or
         empty($vars['showlogout'])) {
         $showlogout = false;

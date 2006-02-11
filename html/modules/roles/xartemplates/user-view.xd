@@ -99,7 +99,7 @@
         </xar:if>
         <table width="100%" border="0" cellspacing="0" cellpadding="2">
             <tr>
-            <xar:if condition="$phase eq 'active' and xarSecurityCheck('AdminPanel',0)">
+            <xar:if condition="$phase eq 'active' and xarSecurityCheck('AdminRole',0)">
                 <th class="xar-thirdwidth">
                     <a href="&xar-modurl-roles-user-view;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=name">
                         <xar:mlstring>Display Name</xar:mlstring>
