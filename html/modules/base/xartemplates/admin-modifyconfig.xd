@@ -131,11 +131,7 @@
                         Website Display Configuration 
                     </xar:mlstring>
                 </legend>
-                <p>
-                    <xar:mlstring>
-                        Please note that the default theme variable has moved to the themes module. 
-                    </xar:mlstring>
-                </p>
+
                 <div class="xar-form-input-wrapper">
                     <label for="defaultmodule" title="#xarML('The default module to be loaded on your base url.')#" class="xar-form-label">
                         <xar:mlstring>
