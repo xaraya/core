@@ -1589,6 +1589,7 @@ if (empty($step)) {
 
     echo "<h5>Updating Roles and Authsystem for changes in User Login and Authentication</h5>";
     echo "<div>";
+    //TODO: tidy up - look at this and other changes once we finish the refactoring for this and adminpanels
     //Check for allow registration in existing Roles module
     $allowregistration =xarModGetVar('roles','allowregistration');
     if (isset($allowregistration) && ($allowregistration==1)) {
@@ -1628,12 +1629,6 @@ if (empty($step)) {
             $bindvars=array($blockid);
             $result =& $dbconn->Execute($query,$bindvars);
 
-          //now update the instance table
-           $query = "UPDATE $blockinstanceTable
-                      SET xar_module = 'authsystem'
-                      WHERE xar_type_id=$blockid";
-            $bindvars=array($blockid);
-            $result =& $dbconn->Execute($query,$bindvars);
         }
 
       if (count($blockproblem) >0) {
@@ -1686,12 +1681,6 @@ if (empty($step)) {
                $bindvars=array($blockid);
                $result =& $dbconn->Execute($query,$bindvars);
 
-               //now update the instance table
-               $query = "UPDATE $blockinstanceTable
-                      SET xar_module = 'base'
-                      WHERE xar_type_id=$blockid";
-                $bindvars=array($blockid);
-                $result =& $dbconn->Execute($query,$bindvars);
 
                if (($newblock='waitingcontent') && isset($blockid)) {
                //We need to disable existing hooks and enable new ones - but which :)
