@@ -55,8 +55,6 @@ function roles_adminapi_update($args)
     $role->update();
 	xarModSetUserVar('roles','userhome',$home,$uid);
 
-    xarModSetUserVar('roles','userhome',$home,$uid);
-    $dbconn->Execute($query,$bindvars);
     $item['module'] = 'roles';
     $item['itemtype'] = $itemtype;
     $item['itemid'] = $uid;

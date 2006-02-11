@@ -37,7 +37,7 @@ function roles_admin_updaterole()
         $puname = $oldrole->getUser();
         $pemail = "";
         $ppass1 = "";
-        $pstate = 3;
+        $pstate = ROLES_STATE_ACTIVE;
     }
     else {
         if (!xarVarFetch('puname', 'str:1:35:', $puname)) return;
@@ -84,7 +84,7 @@ function roles_admin_updaterole()
         'email' => $pemail,
         'pass' => $ppass1,
         'state' => $pstate,
-	'duvs' => $duvs,
+		'duvs' => $duvs,
         'basetype' => $basetype,
         );
 

@@ -34,8 +34,6 @@ function roles_userapi_get($args)
         $itemid = $uid;
     }
 
-    if (empty($type)) $type = ROLES_USERTYPE;
-
     $xartable =& xarDBGetTables();
     $rolestable = $xartable['roles'];
 
@@ -70,7 +68,9 @@ function roles_userapi_get($args)
     elseif (!empty($state) && $state != ROLES_STATE_ALL) {
         $q->eq('xar_state',(int)$state);
     }
-    $q->eq('xar_type',$type);
+    if (!empty($type)) {
+	    $q->eq('xar_type',$type);
+	}
     if (!$q->run()) return;
 
     // Check for no rows found, and if so return
