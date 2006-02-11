@@ -26,8 +26,8 @@
                     <xar:else />
                     <input type="checkbox" name="disableoverview" id="disableoverview" value="1" />
                 </xar:if>
-                <label for="dashboard" title="#xarML('Disable the default display of a modules overview page.')#">
-                    <xar:mlstring>Disable the default display of a modules overview page.</xar:mlstring>
+                <label for="disableoverview" title="#xarML('Disable the display by default of all module overview pages.')#">
+                    <xar:mlstring>Disable the display by default of all module overview pages.</xar:mlstring>
                 </label>
             </div>
         </fieldset>
