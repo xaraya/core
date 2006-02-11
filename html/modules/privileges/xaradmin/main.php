@@ -19,7 +19,7 @@ function privileges_admin_main()
 // Security Check
     if(!xarSecurityCheck('ViewPrivileges')) return;
 
-    if (xarModGetVar('adminpanels', 'overview') == 0){
+    if (xarModGetVar('modules', 'overview') == 0){
         return array();
     } else {
         xarResponseRedirect(xarModURL('privileges', 'admin', 'viewprivileges'));

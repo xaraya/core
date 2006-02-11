@@ -142,8 +142,7 @@
                         <option value="#">Choose a page to preview..</option>
                         <!-- Next line cant be handled by entities yet -->
                         <option value="#xarModURL()#?theme=#$themedir#"><xar:mlstring>Default Front Page</xar:mlstring></option>
-                        <option value="&xar-modurl-adminpanels-admin-main;&amp;theme=#$themedir#"><xar:mlstring>Adminpanels (admin)</xar:mlstring></option>
-                        <option value="&xar-modurl-base-admin-main;&amp;theme=#$themedir#"><xar:mlstring>Base (admin)</xar:mlstring></option>
+                         <option value="&xar-modurl-base-admin-main;&amp;theme=#$themedir#"><xar:mlstring>Base (admin)</xar:mlstring></option>
                         <option value="&xar-modurl-base-user-main;&amp;theme=#$themedir#"><xar:mlstring>Base (user)</xar:mlstring></option>
                         <option value="&xar-modurl-blocks-admin-main;&amp;theme=#$themedir#"><xar:mlstring>Blocks (admin)</xar:mlstring></option>
                         <option value="&xar-modurl-module-admin-main;&amp;theme=#$themedir#"><xar:mlstring>Modules (admin)</xar:mlstring></option>

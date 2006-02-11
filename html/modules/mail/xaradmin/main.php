@@ -24,7 +24,7 @@ function mail_admin_main()
     // Security Check
     if (!xarSecurityCheck('EditMail')) return;
 
-    if (xarModGetVar('adminpanels', 'overview') == 0) {
+    if (xarModGetVar('modules', 'overview') == 0) {
         // Return the output
         return array();
     } else {

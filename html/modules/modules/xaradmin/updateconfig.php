@@ -29,7 +29,8 @@ function modules_admin_updateconfig()
     if(!xarVarFetch('disableoverview','isset', $disableoverview, 0, XARVAR_DONT_SET)) return;
 
     xarModSetVar('modules', 'disableoverview', ($disableoverview) ? 1 : 0);
-
+    //least distruption for now - remove later
+    xarModSetVar('adminpanels', 'disableoverview', ($disableoverview) ? 1 : 0);
      // lets update status and display updated configuration
     xarResponseRedirect(xarModURL('modules', 'admin', 'modifyconfig'));
 

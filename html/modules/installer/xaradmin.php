@@ -630,7 +630,7 @@ function installer_admin_create_administrator()
 
     // Register Block types
     $blocks = array('adminmenu','waitingcontent','finclude','html','menu','php','text','content');
-   
+
     foreach ($blocks as $block) {
         if (!xarModAPIFunc('blocks', 'admin', 'register_block_type', array('modName'  => 'base', 'blockType'=> $block))) return;
     }
@@ -676,8 +676,8 @@ function installer_admin_create_administrator()
     }
 
     list ($leftBlockGroup) = $result->fields;
-
-    $adminBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
+    /* We don't need this for adminpanels now - done in Base module
+        $adminBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
                                     array('module'  => 'adminpanels',
                                           'type'    => 'adminmenu'));
 
@@ -699,7 +699,8 @@ function installer_admin_create_administrator()
             return;
         }
     }
-
+    */
+    
     $now = time();
 
     $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot .';

@@ -93,7 +93,7 @@ function modules_admin_install()
     $target = $minfo['name'];
     
     if (function_exists('xarOutputFlushCached')) {
-        xarOutputFlushCached('adminpanels');
+        xarOutputFlushCached('base');
         xarOutputFlushCached('base-block');
     }
 

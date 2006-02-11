@@ -16,7 +16,7 @@ function roles_admin_main()
 {
     // Security Check
     if (!xarSecurityCheck('EditRole')) return;
-    if (xarModGetVar('adminpanels', 'overview') == 0) {
+    if (xarModGetVar('modules', 'overview') == 0) {
         return array();
     } else {
         xarResponseRedirect(xarModURL('roles', 'admin', 'showusers'));

@@ -26,7 +26,7 @@ function themes_admin_modifyconfig()
     $data['title'] = xarVarPrepForDisplay(xarML('Configure Themes'));
     $data['configoverview'] = xarVarPrepForDisplay(xarML('Configure Overview'));
     $data['showhelplabel'] = xarVarPrepForDisplay(xarML('Show module "Help" in the menu:'));
-    $data['showhelp'] = xarModGetVar('adminpanels', 'showhelp') ? 'checked' : '' ;
+    $data['showhelp'] = xarModGetVar('modules', 'showhelp') ? 'checked' : '' ;
     $data['submitbutton'] = xarVarPrepForDisplay(xarML('Submit')); 
     // Dashboard
     $data['dashboard']= xarModGetVar('themes', 'usedashboard');

@@ -49,7 +49,7 @@
         </li>
         <li><strong><xar:mlstring>Waiting content</xar:mlstring></strong>:
          <xar:mlstring>The block will display content waiting on approval for any modules that supply a hook for waiting content (eg Articles Module). To use it, create a Content Waiting block
-        and then hook the Module supplying the hook to Adminpanels. For example, to display waiting content in Articles module, go to </xar:mlstring><a href="&xar-modurl-modules-admin-hooks;&amp;hook=articles"><xar:mlstring>Modules-Configure-Hooks and Click on Articles</xar:mlstring></a>.
+        and then hook the Module supplying the hook to Base. For example, to display waiting content in Articles module, go to </xar:mlstring><a href="&xar-modurl-modules-admin-hooks;&amp;hook=articles"><xar:mlstring>Modules-Configure-Hooks and Click on Articles</xar:mlstring></a>.
         <xar:mlstring> Then make your way to Base radiobutton and check it to display any articles waiting approval in your Content Waiting block.</xar:mlstring>
         </li>
         <li><xar:mlstring><strong>finclude</strong>: Include a file as block content.</xar:mlstring></li>

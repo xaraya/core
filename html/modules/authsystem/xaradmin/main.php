@@ -19,7 +19,7 @@ function authsystem_admin_main()
 {
     // Security Check
     if (!xarSecurityCheck('AdminAuthsystem')) return;
-    if (xarModGetVar('adminpanels', 'overview') == 0) {
+    if (xarModGetVar('modules', 'overview') == 0) {
        $data=array();
        return $data;
     } else {
