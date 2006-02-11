@@ -224,7 +224,6 @@ function xarTpl__SetThemeNameAndDir($name)
 function xarTplGetThemeDir($theme=null)
 {
     if (isset($theme) && is_dir("themes/" . $theme)) return "themes/" . $theme;
-    die(var_dump($GLOBALS));
     return $GLOBALS['xarTpl_themeDir'];
 }
 
