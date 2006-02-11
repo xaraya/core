@@ -297,6 +297,9 @@ function modules_activate()
     xarModSetVar('modules', 'selfilter', $selfilter);
     xarModSetVar('modules', 'selsort', $selsort);
 
+    // New in 1.1.x series
+    xarModSetVar('modules', 'disableoverview',0);
+
     return true;
 }
 
@@ -378,6 +381,10 @@ function modules_upgrade($oldVersion)
         $result = &$dbconn->Execute($query);
         if (!$result) return;
     case '2.3.0':
+        /* TODO: adjust for changes once we are ready and up the module version
+          xarModSetVar('modules', 'disableoverview',0);
+        */
+    case '2.4.0':
         // current version
     }
     return true;
