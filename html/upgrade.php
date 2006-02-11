@@ -1654,9 +1654,14 @@ if (empty($step)) {
         //will use admin.xt if present
         xarModSetVar('themes','dashtemplate','admin');
     }else{
-        //setit to the new dashboard template
+        //set it to the new dashboard template
         xarModSetVar('themes','dashtemplate','dashboard');
     }
+    //Let's remove the now unused admin menu table
+    $adminmenuTable = $systemPrefix .'_admin_menu';
+    $query = xarDBDropTable($adminmenuTable);
+    $result = &$dbconn->Execute($query);
+
     //We need to upgrade the blocks, and as the block is the same we could just change the type id of any login.
     $blocktypeTable = $systemPrefix .'_block_types';
     $blockinstanceTable = $systemPrefix .'_block_instances';
@@ -1731,7 +1736,8 @@ if (empty($step)) {
 <div class="xar-mod-body"><h2><?php echo $complete; ?></h2><br />
 Thank you, the upgrades are complete. It is recommended you go to the
 <a href="<?php echo xarModUrl('modules','admin','list'); ?>">admin section of the modules module</a>
-to upgrade the modules which have a new version.
+to upgrade the modules which have a new version.<br /><br />
+The Adminpanels module has been deprecated. Please also check your themes for use of any Adminpanels references.<br />
 </div>
 </div>
 </div>
