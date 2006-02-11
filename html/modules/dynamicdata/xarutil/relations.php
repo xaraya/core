@@ -138,11 +138,13 @@ $withtable = $withobjectid;
         $data['relations'] = array();
     }
 
-    if (xarModGetVar('adminpanels','dashboard')) {
-        xarTplSetPageTemplateName('admin');
+    if (xarModGetVar('themes','usedashboard')) {
+        $admin_tpl = xarModGetVar('themes','dashtemplate');
     }else {
-        xarTplSetPageTemplateName('default');
+       $admin_tpl='default';
     }
+    xarTplSetPageTemplateName($admin_tpl);
+
 
     return $data;
 }
