@@ -28,6 +28,8 @@ function themes_admin_modifyconfig()
     $data['showhelplabel'] = xarVarPrepForDisplay(xarML('Show module "Help" in the menu:'));
     $data['showhelp'] = xarModGetVar('adminpanels', 'showhelp') ? 'checked' : '' ;
     $data['submitbutton'] = xarVarPrepForDisplay(xarML('Submit')); 
+    // Dashboard
+    $data['dashboard']= xarModGetVar('themes', 'dashboard');
     // everything else happens in Template for now
     return $data;
 } 

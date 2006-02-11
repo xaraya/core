@@ -25,7 +25,7 @@
             <div class="xar-form-input-wrapper">
                 <label for="sitename" class="xar-form-label">
                     <xar:mlstring>
-                        Site Name 
+                        Site Name
                     </xar:mlstring>
                 </label>
                 <input type="text" name="sitename" id="sitename" value="#xarModGetVar('themes', 'SiteName', 1)#" size="30" maxlength="100" />
@@ -33,7 +33,7 @@
             <div class="xar-form-input-wrapper">
                 <label for="slogan" class="xar-form-label">
                     <xar:mlstring>
-                        Site Slogan 
+                        Site Slogan
                     </xar:mlstring>
                 </label>
                 <input type="text" name="slogan" id="slogan" value="#xarModGetVar('themes', 'SiteSlogan', 1)#" size="30" maxlength="100" />
@@ -41,28 +41,48 @@
             <div class="xar-form-input-wrapper">
                 <label for="copyright" class="xar-form-label">
                     <xar:mlstring>
-                        Copyright 
+                        Copyright
                     </xar:mlstring>
                 </label>
                 <input type="text" name="copyright" id="copyright" value="#xarModGetVar('themes', 'SiteCopyRight', 1)#" size="30" maxlength="100" />
             </div>
-            #xarVarDelCached('Mod.Variables.themes','SiteCopyRight')# 
+            #xarVarDelCached('Mod.Variables.themes','SiteCopyRight')#
             <div class="xar-form-input-wrapper">
                 <label for="footer" class="xar-form-label">
                     <xar:mlstring>
-                        Footer Note 
+                        Footer Note
                     </xar:mlstring>
                 </label>
                 <div class="xar-form-container-after">
                     <textarea name="footer" id="footer" cols="60" rows="5" class="xar-form-textareamedium">#xarModGetVar('themes', 'SiteFooter', 1)#</textarea>
                 </div>
             </div>
-            #xarVarDelCached('Mod.Variables.themes','SiteFooter')# 
+            #xarVarDelCached('Mod.Variables.themes','SiteFooter')#
+
+        </fieldset>
+      <fieldset>
+            <legend>
+                <xar:mlstring>
+                    Admin Dashboard 
+                </xar:mlstring>
+            </legend>
+            <div class="xar-form-input-wrapper-after">
+                <xar:if condition="$dashboard eq 1">
+                    <input type="checkbox" name="dashboard" id="dashboard" value="1" checked="checked" />
+                    <xar:else />
+                    <input type="checkbox" name="dashboard" id="dashboard" value="1" />
+                </xar:if>
+                <label for="dashboard" title="#xarML('Use the Admin Dashboard to manage all your Admin settings from a single page.')#">
+                    <xar:mlstring>
+                        Enable the Admin Dashboard - overrides other admin templates.
+                    </xar:mlstring>
+                </label>
+            </div>
         </fieldset>
         <fieldset>
             <legend>
                 <xar:mlstring>
-                    Page Title Options 
+                    Page Title Options
                 </xar:mlstring>
             </legend>
             <div class="xar-form-input-wrapper">

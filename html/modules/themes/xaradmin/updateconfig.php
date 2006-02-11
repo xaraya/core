@@ -33,6 +33,8 @@ function themes_admin_updateconfig()
     if (!xarVarFetch('footer', 'str:1:', $footer, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('copyright', 'str:1:', $copyright, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('AtomTag', 'str:1:', $atomtag, '', XARVAR_NOT_REQUIRED)) return;
+    // enable or disable overviews
+    if(!xarVarFetch('dashboard', 'isset', $dashboard, 0, XARVAR_DONT_SET)) {return;}
 
     xarModSetVar('themes', 'SiteName', $sitename);
     xarModSetVar('themes', 'SiteTitleSeparator', $separator);
@@ -44,6 +46,7 @@ function themes_admin_updateconfig()
     xarModSetVar('themes', 'ShowTemplates', $showtemplates);
     xarModSetVar('themes', 'AtomTag', $atomtag);
     xarModSetVar('themes', 'var_dump', $var_dump);
+    xarModSetVar('themes', 'dashboard', ($dashboard) ? 1 : 0);
     xarConfigSetVar('Site.BL.CacheTemplates',$cachetemplates);
 
     // make sure we dont miss empty variables (which were not passed thru)
