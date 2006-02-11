@@ -85,6 +85,8 @@
                     </xar:mlstring>
                 </label>
                 <input type="text" name="dashtemplate" id="dashtemplate" value="#$dashtemplate#" size="30" maxlength="100" />
+                    <xar:mlstring>(without the .xt extension)
+                    </xar:mlstring>
             </div>
         </fieldset>
         <fieldset>

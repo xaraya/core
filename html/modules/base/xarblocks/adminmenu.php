@@ -1,14 +1,13 @@
 <?php
 /**
- * Admin panels block management
+ * Base block management
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage adminpanels module
- * @author Andy Varganov <andyv@xaraya.com>
+ * @subpackage Base module
  */
 
 /**
@@ -17,7 +16,7 @@
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  */
-function adminpanels_adminmenublock_init()
+function base_adminmenublock_init()
 {
     // Nothing to configure...
     // TODO: ...yet
@@ -34,12 +33,12 @@ function adminpanels_adminmenublock_init()
  * @throws  no exceptions
  * @todo    nothing
 */
-function adminpanels_adminmenublock_info()
+function base_adminmenublock_info()
 {
     // Values
     return array(
         'text_type' => 'adminmenu',
-        'module' => 'adminpanels',
+        'module' => 'base',
         'text_type_long' => 'Admin Menu',
         'allow_multiple' => false,
         'form_content' => false,
@@ -56,10 +55,10 @@ function adminpanels_adminmenublock_info()
  * @return  data array on success or void on failure
  * @todo    implement centre menu position
 */
-function adminpanels_adminmenublock_display($blockinfo)
+function base_adminmenublock_display($blockinfo)
 {
     // Security Check
-    if (!xarSecurityCheck('AdminPanel',0,'Block',"adminmenu:$blockinfo[title]:$blockinfo[bid]")) {return;}
+    if (!xarSecurityCheck('ViewBaseBlocks',0,'Block',"adminmenu:$blockinfo[title]:$blockinfo[bid]")) {return;}
 
     // Get variables from content block
     if (!is_array($blockinfo['content'])) {
@@ -68,22 +67,10 @@ function adminpanels_adminmenublock_display($blockinfo)
         $vars = $blockinfo['content'];
     }
     
-    // due to shortcomings of modules module, we need this workaround
-    // if our module deactivated intentionally or by accident
-    // we just switch to the block mode that is not dependent on the module's api
-    // the only such mode at the moment is sort by name
-    // TODO: eradicate dependency on module api for other sort orders too
-    if (!xarModIsAvailable('adminpanels')) {
-        xarModSetVar('adminpanels', 'menustyle', 'byname');
-    }
-    
     // are there any admin modules, then get the whole list sorted by names
     // checking this as early as possible
     $mods = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('AdminCapable' => 1)));
   
-    // there aren't any admin modules, dont display adminmenu
-    // <mrb> How would this happen? adminpanels is here :-)
-    if (empty($mods)) return;
 
     // which module is loaded atm?
     // we need it's name, type and function - dealing only with admin type mods, aren't we?
@@ -96,8 +83,9 @@ function adminpanels_adminmenublock_display($blockinfo)
     // SETTING 2: Menustyle 
     if(!isset($vars['menustyle'])) {
         // If it is not set, revert to the default setting
-        $vars['menustyle'] = xarModGetVar('adminpanels', 'menustyle');
+        $vars['menustyle'] = xarModGetVar('modules', 'menustyle');
     }
+    
     
     // Get current URL for later comparisons because we need to compare
     // xhtml compliant url, we fetch the default 'XML'-formatted URL.

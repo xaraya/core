@@ -7,8 +7,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage adminpanels module
- * @author Andy Varganov <andyv@xaraya.com>
+ * @subpackage base module
  */
 /**
  * call the waiting content hook
@@ -20,12 +19,12 @@
  * @throws  NO_PERMISSION exception
  * @todo    nothing
 */
-function adminpanels_adminapi_waitingcontent()
+function base_adminapi_waitingcontent()
 {
 
     // Hooks (we specify that we want the ones for adminpanels here)
     $output = array();
-    $output = xarModCallHooks('item', 'waitingcontent', '', array('module' => 'adminpanels'));
+    $output = xarModCallHooks('item', 'waitingcontent', '', array('module' => 'base'));
 
     if (empty($output)) {
         $message = xarML('Waiting Content has not been configured');

@@ -7,8 +7,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage adminpanels module
- * @author John Cox <niceguyeddie@xaraya.com>
+ * @subpackage base module
  */
 
 /**
@@ -21,7 +20,7 @@
  * @throws  no exceptions
  * @todo    nothing
 */
-function adminpanels_waitingcontentblock_init()
+function base_waitingcontentblock_init()
 {
     // Nothing to configure.
     return array('nocache'     => 0,
@@ -40,12 +39,12 @@ function adminpanels_waitingcontentblock_init()
  * @throws  no exceptions
  * @todo    nothing
 */
-function adminpanels_waitingcontentblock_info()
+function base_waitingcontentblock_info()
 {
     return array(
         'text_type' => 'Waiting Content',
         'text_type_long' => 'Displays Waiting Content for All Modules',
-        'module' => 'adminpanels',
+        'module' => 'base',
         'allow_multiple' => false,
         'form_content' => false,
         'form_refresh' => false,
@@ -54,7 +53,7 @@ function adminpanels_waitingcontentblock_info()
 }
 
 /**
- * display adminmenu block
+ * display waitingcontent block
  *
  * @author  John Cox <admin@dinerminor.com>
  * @access  public
@@ -62,13 +61,13 @@ function adminpanels_waitingcontentblock_info()
  * @return  data array on success or void on failure
  * @throws  no exceptions
 */
-function adminpanels_waitingcontentblock_display($blockinfo)
+function base_waitingcontentblock_display($blockinfo)
 {
     // Security Check
-    if(!xarSecurityCheck('AdminPanel',0,'Block',"waitingcontent:$blockinfo[title]:$blockinfo[bid]")) {return;}
+    if(!xarSecurityCheck('ViewBaseBlocks',0,'Block',"waitingcontent:$blockinfo[title]:$blockinfo[bid]")) {return;}
 
     // Get publication types
-    $data = xarModAPIFunc('adminpanels', 'admin', 'waitingcontent');
+    $data = xarModAPIFunc('base', 'admin', 'waitingcontent');
 
     $blockinfo['content'] = array(
         'output'   => $data['output'],

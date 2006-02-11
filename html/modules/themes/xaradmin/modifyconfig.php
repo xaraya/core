@@ -30,7 +30,7 @@ function themes_admin_modifyconfig()
     $data['submitbutton'] = xarVarPrepForDisplay(xarML('Submit')); 
     // Dashboard
     $data['dashboard']= xarModGetVar('themes', 'usedashboard');
-    $data['dashtemplate']= xarModGetVar('themes', 'dashtemplate');
+    $data['dashtemplate']= trim(xarModGetVar('themes', 'dashtemplate'));
     if (!isset($data['dashtemplate']) || trim ($data['dashtemplate']=='')) {
         $data['dashtemplate']='dashboard';
     }

@@ -7,7 +7,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage adminpanels module
+ * @subpackage base module
  * @author Marcel van der Boom <marcel@xaraya.com>
  */
 
@@ -16,7 +16,7 @@
  * Modify the instance configuration
  * @param $blockinfo array containing title,content
  */
-function adminpanels_adminmenublock_modify($blockinfo)
+function base_adminmenublock_modify($blockinfo)
 {
     // Get current content
     if (!is_array($blockinfo['content'])) {
@@ -28,7 +28,7 @@ function adminpanels_adminmenublock_modify($blockinfo)
     // Defaults
     if(empty($vars['showlogout'])) $vars['showlogout'] = 0;
     if(empty($vars['showmarker'])) $vars['showmarker'] = 0;
-    if(empty($vars['menustyle']))  $vars['menustyle'] = xarModGetVar('adminpanels','menustyle');
+    if(empty($vars['menustyle']))  $vars['menustyle'] = 'byname'; //xarModGetVar('base','menustyle');
     
     // Set the config values
     $args['showlogout'] = $vars['showlogout'];
@@ -46,10 +46,10 @@ function adminpanels_adminmenublock_modify($blockinfo)
  * Update the instance configuration
  * @param $blockinfo array containing title,content
  */
-function adminpanels_adminmenublock_update($blockinfo)
+function base_adminmenublock_update($blockinfo)
 {
     if (!xarVarFetch('showlogout', 'int:0:1', $vars['showlogout'], 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('menustyle' , 'str::'  , $vars['menustyle'] , xarModGetVar('adminpanels','menustyle'), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('menustyle' , 'str::'  , $vars['menustyle'] , 'byname', XARVAR_NOT_REQUIRED)) return;
     
     $blockinfo['content'] = $vars;
     
