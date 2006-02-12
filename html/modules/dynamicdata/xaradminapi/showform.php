@@ -1,7 +1,5 @@
 <?php
 /**
- * Show an input form in a template
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}

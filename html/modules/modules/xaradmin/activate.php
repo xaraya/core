@@ -1,6 +1,5 @@
 <?php
 /**
- * Activate a module
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
