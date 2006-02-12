@@ -109,6 +109,7 @@ function roles_admin_newrole()
     $item = $data;
     $item['module'] = 'roles';
     $data['hooks'] = xarModCallHooks('item', 'new', '', $item);
+    var_dump($item);
 
 	$data['authid'] = xarSecGenAuthKey();
     $data['addlabel'] = xarML('Add');
