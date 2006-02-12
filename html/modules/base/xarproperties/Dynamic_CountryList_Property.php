@@ -23,6 +23,11 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_CountryList_Property extends Dynamic_Select_Property
 {
+    public $id = 42;
+    public $name = 'countrylisting';
+    public $label = 'Country Dropdown';
+    public $format = '42';
+
     function Dynamic_CountryList_Property($args)
     {
         parent::Dynamic_Select_Property($args);
@@ -64,31 +69,6 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         }
          return parent::showOutput($args);
     }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 42,
-                              'name'       => 'countrylisting',
-                              'label'      => 'Country Dropdown',
-                              'format'     => '42',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'base',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
 
    /**
     * Country list according to ISO 3166

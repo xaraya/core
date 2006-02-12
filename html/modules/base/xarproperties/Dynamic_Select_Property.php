@@ -14,6 +14,12 @@
 */
 class Dynamic_Select_Property extends Dynamic_Property
 {
+    public $id = 6;
+    public $name = 'dropdown';
+    public $label = 'Dropdown List';
+    public $format = '6';
+    public $requiresmodule = 'base';
+
     public $options;
     public $func;
     public $itemfunc;
@@ -286,31 +292,6 @@ class Dynamic_Select_Property extends Dynamic_Property
         }
         if ($check) return false;
         return $this->value;
-    }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-    function getBasePropertyInfo()
-    {
-        $args = array();
-        $baseInfo = array(
-                          'id'         => 6,
-                          'name'       => 'dropdown',
-                          'label'      => 'Dropdown List',
-                          'format'     => '6',
-                          'validation' => '',
-                          'source'     => '',
-                          'dependancies' => '',
-                          'requiresmodule' => 'base',
-                          'aliases'        => '',
-                          'args'           => serialize($args)
-                          // ...
-                         );
-        return $baseInfo;
     }
 
     /**

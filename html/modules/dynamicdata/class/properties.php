@@ -307,15 +307,20 @@ class Dynamic_Property_Master
  */
 class Dynamic_Property
 {
-    public $id = null;
-    public $name = null;
-    public $label = null;
+    public $id = 0;
+    public $name = 'propertyName';
+    public $label = 'Property Label';
     public $type = 1;
     public $default = '';
     public $source = 'dynamic_data';
     public $status = 1;
     public $order = 0;
-    public $validation = null;
+    public $format = '0';
+    public $validation = '';
+    public $dependancies = '';    // semi-colon seperated list of files that must be present for this property to be available (optional)
+    public $requiresmodule = ''; // this module must be available before this property is enabled (optional)
+    public $aliases = '';        // If the same property class is reused directly with just different base info, supply the alternate base properties here (optional)
+    public $args;
 
     public $datastore = '';   // name of the data store where this property comes from
 
@@ -334,6 +339,8 @@ class Dynamic_Property
      */
     function Dynamic_Property($args)
     {
+	    $this->args = serialize(array());
+
         if (!empty($args) && is_array($args) && count($args) > 0) {
             foreach ($args as $key => $val) {
                 $this->$key = $val;
@@ -607,16 +614,16 @@ class Dynamic_Property
     function getBasePropertyInfo()
     {
         $baseInfo = array(
-                          'id'         => 0,
-                          'name'       => 'propertyName',
-                          'label'      => 'Property Label',
-                          'format'     => '0',
-                          'validation' => '',
-                          'source'     => '',
-                          'dependancies' => '',    // semi-colon seperated list of files that must be present for this property to be available (optional)
-                          'requiresmodule' => '', // this module must be available before this property is enabled (optional)
-                          'aliases' => '',        // If the same property class is reused directly with just different base info, supply the alternate base properties here (optional)
-                          'args' => serialize( array() ),
+                          'id'         => $this->id,
+                          'name'       => $this->name,
+                          'label'      => $this->label,
+                          'format'     => $this->format,
+                          'validation' => $this->validation,
+                          'source'     => $this->source,
+                          'dependancies' => $this->dependancies,
+                          'requiresmodule' => $this->requiresmodule,
+                          'aliases' => $this->aliases,
+                          'args' => $this->args
                           // ...
                          );
         return $baseInfo;
