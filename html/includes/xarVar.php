@@ -15,7 +15,7 @@
  */
 
 class VariableValidationException extends ValidationExceptions
-{ 
+{
     protected $message = 'The variable "#(1)" [Value: "#(2)"] did not comply with the required validation: "#(3)"';
 }
 

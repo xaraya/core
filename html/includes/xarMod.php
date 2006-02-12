@@ -17,7 +17,7 @@
  *
  */
 class ModuleBaseInfoNotFoundException extends NotFoundExceptions
-{ 
+{
     protected $message = 'The base info for module "#(1)" could not be found';
 }
 
@@ -555,7 +555,7 @@ function xarModGetInfo($modRegId, $type = 'module')
             break;
         case 'theme':
             if (!isset($modInfo['state'])) {
-                $modInfo['state']= XARTHEME_STATE_MISSING_FROM_UNINITIALISED; 
+                $modInfo['state']= XARTHEME_STATE_MISSING_FROM_UNINITIALISED;
             }
             $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory'], $type = 'theme');
             break;
