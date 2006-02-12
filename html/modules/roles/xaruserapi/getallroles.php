@@ -26,7 +26,7 @@ function roles_userapi_getallroles($args)
 
     // Optional arguments.
     if (!isset($startnum)) $startnum = 1;
-    if (!isset($numitems)) $numitems = xarModGetVar('roles', 'rolesperpage');
+    if (!isset($numitems)) $numitems = xarModGetVar('roles', 'itemsperpage');
 
     $q = new xarQuery();
     $xartable =& xarDBGetTables();

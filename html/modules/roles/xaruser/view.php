@@ -51,7 +51,7 @@ function roles_user_view($args)
     if (!isset($order)) $data['order'] = 'xar_name';
     if (!isset($search)) $data['search'] = '';
     if (!isset($startnum)) $data['startnum'] = 1;
-    if (!isset($numitems)) $numitems = xarModGetVar('roles', 'rolesperpage');
+    if (!isset($numitems)) $numitems = xarModGetVar('roles', 'itemsperpage');
 
     $numitems = xarModGetVar('roles', 'itemsperpage');
     $pagerfilter['order'] = $data['order'];
