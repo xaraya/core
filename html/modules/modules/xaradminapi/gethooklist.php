@@ -34,7 +34,7 @@ function modules_adminapi_gethooklist($args)
         $smodInfo = xarMod_GetBaseInfo($modName);
         $smodId = $smodInfo['systemid'];
     }
-    
+
     $dbconn  =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
@@ -49,7 +49,7 @@ function modules_adminapi_gethooklist($args)
 
     if ($smodId != 0) {
         // Only get the hooks for $modName
-        $query .= " AND ( hooks.xar_smodid = ? OR  hooks.xar_smodid = ? ) ";
+        $query .= " AND ( h.xar_smodid = ? OR  h.xar_smodid = ? ) ";
         //   ORDER BY tmods.xar_name,smods.xar_name DESC";
         $bindvars[] = 0;  $bindvars[] = $smodId;
     } else {
@@ -66,15 +66,15 @@ function modules_adminapi_gethooklist($args)
         // Avoid single-space item types e.g. for mssql
         if (!empty($itemType)) $itemType = trim($itemType);
 
-        if (!isset($hooklist[$tmodName])) 
+        if (!isset($hooklist[$tmodName]))
             $hooklist[$tmodName] = array();
-        if (!isset($hooklist[$tmodName]["$object:$action:$area"])) 
+        if (!isset($hooklist[$tmodName]["$object:$action:$area"]))
             $hooklist[$tmodName]["$object:$action:$area"] = array();
         // if the smodName has a value the hook is active
         if (!empty($smodId)) {
-            if (!isset($hooklist[$tmodName]["$object:$action:$area"][$smodId])) 
+            if (!isset($hooklist[$tmodName]["$object:$action:$area"][$smodId]))
                 $hooklist[$tmodName]["$object:$action:$area"][$smodId] = array();
-            if (empty($itemType)) 
+            if (empty($itemType))
                 $itemType = 0;
             $hooklist[$tmodName]["$object:$action:$area"][$smodId][$itemType] = 1;
         }
