@@ -146,7 +146,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      */
     //include 'includes/xarPHPCompat.php';
     //xarPHPCompat::loadAll('includes/phpcompat');
-    
+
     /*
      * Start Exception Handling System
      *
@@ -483,7 +483,7 @@ function xarCoreActivateDebugger($flags)
  */
 function xarCoreIsDebuggerActive()
 {
-    if(isset($GLOBALS['xarDebug'])) { 
+    if(isset($GLOBALS['xarDebug'])) {
         return $GLOBALS['xarDebug'] & XARDBG_ACTIVE;
     } else return false;
 
@@ -544,7 +544,7 @@ function xarCore_getSystemVar($name)
  *
  * @access public
  * @param  string $fileName name of the file to load
- * @param  bool   $flags  can this file only be loaded once, or multiple times? XAR_INCLUDE_ONCE 
+ * @param  bool   $flags  can this file only be loaded once, or multiple times? XAR_INCLUDE_ONCE
  * @return bool   true if file was loaded successfully
  * @todo  remove the may not exist flag, raise FileNotFound
  */
