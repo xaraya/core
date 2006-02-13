@@ -59,9 +59,6 @@
                         #$displayname# 
                     </xar:mlvar>
                 </xar:ml>
-                <xar:comment>
-                    Not really useful to toggle details anymore [<a href="$DetailsURL">$DetailsLabel</a>] 
-                </xar:comment>
             </p>
             <xar:foreach in="$hooklist" value="$hookmod">
                 <fieldset>
