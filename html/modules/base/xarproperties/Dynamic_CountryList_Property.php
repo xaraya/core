@@ -69,7 +69,6 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         }
          return parent::showOutput($args);
     }
-
    /**
     * Country list according to ISO 3166
     *

@@ -144,6 +144,7 @@ function roles_init()
         throw $e;
     }
 
+
     //Database Initialisation successful
     return true;
 }
@@ -272,6 +273,17 @@ function roles_upgrade($oldVersion)
             } else {
                 throw Exception('I could not load the authentication module. Please make it available and try again');
             }
+            break;
+        case '1.1.1':
+        	$roles_objects = array('role','user','group');
+			$existing_objects  = xarModApiFunc('dynamicdata','user','getobjects');
+			foreach($existing_objects as $objectid => $objectinfo) {
+				if(in_array($objectinfo['name'], $roles_objects)) {
+					// KILL
+					if(!xarModApiFunc('dynamicdata','admin','deleteobject', array('objectid' => $objectid))) return;
+				}
+			}
+		    if (!xarModAPIFunc('roles','admin','createobjects')) return;
             break;
     }
     // Update successful

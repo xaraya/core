@@ -1,7 +1,6 @@
 <?php
 /**
  * Privileges administration API
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -339,7 +338,7 @@ class xarMasks
  * @throws  none
  * @todo    does this need to be in a db table? will it ever get other rows than the initialized ones?
 */
-    
+
     function xarSecLevel($levelname)
     {
         if (xarVarIsCached('Security.xarSecLevel', $levelname)) {
