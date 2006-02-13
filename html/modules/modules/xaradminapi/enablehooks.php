@@ -32,7 +32,7 @@ function modules_adminapi_enablehooks($args)
     // Argument check
     if (empty($callerModName)) throw new EmptyParameterException('callerModName');
     if (empty($hookModName))   throw new EmptyParameterException('hookModName');
- 
+
     if (empty($callerItemType)) {
         $callerItemType = '';
     }
@@ -52,7 +52,7 @@ function modules_adminapi_enablehooks($args)
         $sql = "DELETE FROM $xartable[hooks] WHERE xar_smodid = ? AND xar_stype = ? AND xar_tmodid = ?";
         $bindvars = array($smodId,$callerItemType,$tmodId);
         $dbconn->Execute($sql,$bindvars);
-       
+
         $sql = "SELECT DISTINCT xar_id, xar_smodid, xar_stype, xar_object,
                                 xar_action, xar_tarea, xar_tmodid, xar_ttype,
                                 xar_tfunc
@@ -60,17 +60,17 @@ function modules_adminapi_enablehooks($args)
                 WHERE xar_smodid = ? AND xar_tmodid = ?";
         $stmt1 = $dbconn->prepareStatement($sql);
         $result = $stmt1->executeQuery(array(0,$tmodId));
-        
+
         // Prepare the statement outside the loop
-        $sql = "INSERT INTO $xartable[hooks] 
+        $sql = "INSERT INTO $xartable[hooks]
                 (xar_id,xar_object,xar_action,xar_smodid,xar_stype,xar_tarea,xar_tmodid,xar_ttype,xar_tfunc)
                 VALUES (?,?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
         while($result->next()) {
-            list($hookid,$smodId,$hookstype,$hookobject,$hookaction,
+            list($hookid,$hooksmodId,$hookstype,$hookobject,$hookaction,
                  $hooktarea,$tmodId,$hookttype,$hooktfunc) = $result->fields;
-            
+
             $bindvars = array($dbconn->GenId($xartable['hooks']),
                               $hookobject, $hookaction, $smodId,
                               $callerItemType, $hooktarea, $tmodId,
