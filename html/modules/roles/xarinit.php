@@ -24,11 +24,11 @@ function roles_init()
     // Get database setup
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
-    
+
     $sitePrefix = xarDBGetSiteTablePrefix();
     $tables['roles'] = $sitePrefix . '_roles';
     $tables['rolemembers'] = $sitePrefix . '_rolemembers';
-    
+
     // We want this to succeed completely or not at all
     try {
         /**
@@ -47,7 +47,7 @@ function roles_init()
          *    PRIMARY KEY  (xar_uid)
          * )
          */
-        
+
         $fields = array(
                         'xar_uid' => array('type' => 'integer','null' => false,'default' => '0','increment' => true, 'primary_key' => true),
                         'xar_name' => array('type' => 'varchar','size' => 255,'null' => false,'default' => ''),
@@ -62,7 +62,7 @@ function roles_init()
                         'xar_auth_modid' => array('type' => 'integer', 'unsigneded' => true,'null' => false, 'default' => '0'));
         $query = xarDBCreateTable($tables['roles'],$fields);
         $dbconn->Execute($query);
-        
+
         // role type is used in all group look-ups (e.g. security checks)
         $index = array('name' => 'i_' . $sitePrefix . '_roles_type',
                        'fields' => array('xar_type')
@@ -77,7 +77,7 @@ function roles_init()
                        );
         $query = xarDBCreateIndex($tables['roles'], $index);
         $dbconn->Execute($query);
-        
+
         // allow identical "real names" here
         $index = array('name' => 'i_' . $sitePrefix . '_roles_name',
                        'fields' => array('xar_name'),
@@ -85,7 +85,7 @@ function roles_init()
                        );
         $query = xarDBCreateIndex($tables['roles'], $index);
         $dbconn->Execute($query);
-        
+
         // allow identical e-mail here (???) + is empty for groups !
         $index = array('name' => 'i_' . $sitePrefix . '_roles_email',
                        'fields' => array('xar_email'),
@@ -101,15 +101,15 @@ function roles_init()
                        );
         $query = xarDBCreateIndex($tables['roles'], $index);
         $dbconn->Execute($query);
-        
-        
+
+
         /**
          * CREATE TABLE xar_rolemembers (
          *    xar_uid int(11) NOT NULL default '0',
          *    xar_parentid int(11) NOT NULL default '0'
          * )
          */
-        
+
         $query = xarDBCreateTable($tables['rolemembers'],
                                   array('xar_uid' => array('type' => 'integer',
                                                            'null' => false,
@@ -118,7 +118,7 @@ function roles_init()
                                                                 'null' => false,
                                                                 'default' => '0')));
         $dbconn->Execute($query);
-        
+
         $index = array('name' => 'i_' . $sitePrefix . '_rolememb_id',
                        'fields' => array('xar_uid','xar_parentid'),
                        'unique' => true);
@@ -172,7 +172,7 @@ function roles_activate()
                       'locked' => 0,
                       'notifymsg' => '');
     xarModSetVar('roles', 'lockdata', serialize($lockdata));
-    
+
     xarModSetVar('roles', 'itemsperpage', 20);
     // save the uids of the default roles for later
     $role = xarFindRole('Everybody');
@@ -183,7 +183,7 @@ function roles_activate()
     xarSession_setUserInfo($role->getID(), 0);
     $role = xarFindRole('Admin');
     xarModSetVar('roles', 'admin', $role->getID());
-    
+
     // --------------------------------------------------------
     //
     // Register block types
@@ -191,15 +191,14 @@ function roles_activate()
     xarModAPIFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'online'));
     xarModAPIFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'user'));
     xarModAPIFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'language'));
-    
+
     // Register hooks here, init is too soon
     xarModRegisterHook('item', 'search', 'GUI','roles', 'user', 'search');
     xarModRegisterHook('item', 'usermenu', 'GUI','roles', 'user', 'usermenu');
 
     xarModAPIFunc('modules', 'admin', 'enablehooks', array('callerModName' => 'roles', 'hookModName' => 'roles'));
-    // This won't work because the dynamicdata hooks aren't registered yet when this is
-    // called at installation --> put in xarinit.php of dynamicdata instead
-    //xarModAPIFunc('modules','admin','enablehooks',array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
+    xarModAPIFunc('modules','admin','enablehooks',array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
+
     return true;
 }
 
@@ -220,7 +219,7 @@ function roles_upgrade($oldVersion)
         case '1.1.1':
             // is there an authentication module?
             $regid = xarModGetIDFromName('authentication');
-            
+
             if (isset($regid)) {
                 // remove the login block type and block from roles
                 $result = xarModAPIfunc('blocks', 'admin', 'delete_type', array('module' => 'roles', 'type' => 'login'));
@@ -309,13 +308,13 @@ function roles_delete()
     // Get database information
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
-    
+
     try {
         $dbconn->begin();
         // drop roles table
         $query = xarDBDropTable($tables['roles']);
         $dbconn->Execute($query);
-        
+
         // drop role_members table
         $query = xarDBDropTable($tables['rolemembers']);
         $dbconn->Execute($query);
@@ -326,7 +325,7 @@ function roles_delete()
         xarModDelAllVars('roles');
         xarRemoveMasks('roles');
         xarRemoveInstances('roles');
-        
+
         $dbconn->commit();
     } catch (Exception $e) {
         $dbconn->rollback();
