@@ -20,6 +20,10 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 
 class Dynamic_GroupList_Property extends Dynamic_Select_Property
 {
+    public $id = 45;
+    public $name = 'grouplist';
+    public $label = 'Group List';
+    public $format = '45';
 
     public $ancestorlist = array();
     public $parentlist = array();
@@ -138,33 +142,6 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
 
         return xarTplProperty('roles', 'grouplist', 'showoutput', $data);
     }
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         =>45,
-                              'name'       => 'grouplist',
-                              'label'      => 'Group List',
-                              'format'     => '45',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'roles',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
 
 ?>

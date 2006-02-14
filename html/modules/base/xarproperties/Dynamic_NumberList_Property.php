@@ -20,6 +20,11 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_NumberList_Property extends Dynamic_Select_Property
 {
+    public $id = 16;
+    public $name = 'integerlist';
+    public $label = 'Number List';
+    public $format = '16';
+
     public $min = null;
     public $max = null;
 
@@ -87,37 +92,6 @@ class Dynamic_NumberList_Property extends Dynamic_Select_Property
             return false;
         }
     }
-
-    // default showInput() from Dynamic_Select_Property
-
-    // default showOutput() from Dynamic_Select_Property
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 16,
-                              'name'       => 'integerlist',
-                              'label'      => 'Number List',
-                              'format'     => '16',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => 'base',
-                            'aliases'        => '',
-                            'args'           => serialize($args)
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
 
 ?>

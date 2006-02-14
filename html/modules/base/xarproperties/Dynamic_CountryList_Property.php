@@ -27,11 +27,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
     public $name = 'countrylisting';
     public $label = 'Country Dropdown';
     public $format = '42';
-
-    function Dynamic_CountryList_Property($args)
-    {
-        parent::Dynamic_Select_Property($args);
-    }
+    public $template = 'countrylist';
 
     function validateValue($value = null)
     {
@@ -51,23 +47,6 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         }
 
         return true;
-    }
-
-//    function showInput($name = '', $value = null, $options = array(), $id = '', $tabindex = '')
-    function showInput($args = array())
-    {
-        if (empty($args['template'])) {
-            $args['template'] = 'countrylist';
-        }
-         return parent::showInput($args);
-    }
-
-    function showOutput($args = array())
-    {
-        if (empty($args['template'])) {
-            $args['template'] = 'countrylist';
-        }
-         return parent::showOutput($args);
     }
    /**
     * Country list according to ISO 3166

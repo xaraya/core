@@ -25,6 +25,11 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_DateFormat_Property extends Dynamic_Select_Property
 {
+    public $id = 33;
+    public $name = 'datformat';
+    public $label = 'Date Format';
+    public $format = '33';
+
     function Dynamic_DateFormat_Property($args)
     {
         $this->Dynamic_Select_Property($args);
@@ -38,33 +43,5 @@ class Dynamic_DateFormat_Property extends Dynamic_Select_Property
                              );
         }
     }
-
-    // default methods from Dynamic_Select_Property
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 33,
-                              'name'       => 'dateformat',
-                              'label'      => 'Date Format',
-                              'format'     => '33',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'base',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
 ?>

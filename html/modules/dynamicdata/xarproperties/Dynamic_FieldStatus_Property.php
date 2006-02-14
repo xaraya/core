@@ -20,6 +20,11 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
 {
+    public $id = 25;
+    public $name = 'fieldstatus';
+    public $label = 'Field Status';
+    public $format = '25';
+
     function Dynamic_FieldStatus_Property($args)
     {
         $this->Dynamic_Select_Property($args);
@@ -32,33 +37,6 @@ class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
                              );
         }
     }
-
-    // default methods from Dynamic_Select_Property
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 25,
-                              'name'       => 'fieldstatus',
-                              'label'      => 'Field Status',
-                              'format'     => '25',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'dynamicdata',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
 }
 
 ?>

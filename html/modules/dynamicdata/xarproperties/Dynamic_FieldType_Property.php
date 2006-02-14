@@ -23,6 +23,11 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_FieldType_Property extends Dynamic_Select_Property
 {
+    public $id = 22;
+    public $name = 'fieldtype';
+    public $label = 'Field Type';
+    public $format = '22';
+
     function Dynamic_FieldType_Property($args)
     {
         if( !isset($args['skipInit']) || ($args['skipInit'] != true) )
@@ -39,33 +44,6 @@ class Dynamic_FieldType_Property extends Dynamic_Select_Property
             }
         }
     }
-
-    // default methods from Dynamic_Select_Property
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 22,
-                              'name'       => 'fieldtype',
-                              'label'      => 'Field Type',
-                              'format'     => '22',
-                            'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'dynamicdata',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
 }
 
 ?>

@@ -22,6 +22,11 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_Combo_Property extends Dynamic_Select_Property
 {
+    public $id = 506;
+    public $name = 'combo';
+    public $label = 'Combo Dropdown Textbox';
+    public $format = '506';
+    public $template = 'combobox';
 
     function checkInput($name = '', $value = null)
     {
@@ -94,8 +99,13 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
         $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
         $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
 
-        $template="";
-        return xarTplProperty('base', 'combobox', 'showinput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -118,37 +128,14 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
             $data['option']['name'] = xarVarPrepForDisplay($this->value);
         }
 
-        $template="";
-        return xarTplProperty('base', 'combobox', 'showoutput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+        return xarTplProperty($module, $template, 'showoutput', $data);
     }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 506,
-                              'name'       => 'combo',
-                              'label'      => 'Combo Dropdown Textbox',
-                              'format'     => '506',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'base',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
-
-
 }
 
 

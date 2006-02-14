@@ -17,7 +17,8 @@ class Dynamic_Select_Property extends Dynamic_Property
     public $name = 'dropdown';
     public $label = 'Dropdown List';
     public $format = '6';
-    public $requiresmodule = 'base';
+    public $template = 'dropdown';
+    public $tplmodule = 'base';
 
     public $options;
     public $func;
@@ -130,10 +131,13 @@ class Dynamic_Select_Property extends Dynamic_Property
 
     // FIXME: this won't work when called by a property from a different module
         // allow template override by child classes (or in BL tags/API calls)
-        if (empty($template)) {
-            $template = 'dropdown';
+        if (empty($module)) {
+            $module = $this->getModule();
         }
-        return xarTplProperty('base', $template, 'showoutput', $data);
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+        return xarTplProperty($module, $template, 'showoutput', $data);
     }
 
     function parseValidation($validation = '')

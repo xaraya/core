@@ -20,6 +20,11 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 
 class Dynamic_UserList_Property extends Dynamic_Select_Property
 {
+    public $id = 37;
+    public $name = 'userlist';
+    public $label = 'User List';
+    public $format = '37';
+
     public $grouplist = array();
     public $userstate = -1;
     public $showlist = array();
@@ -173,30 +178,6 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
                 }
             }
         }
-    }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-    function getBasePropertyInfo()
-    {
-        $baseInfo = array(
-                          'id'         => 37,
-                          'name'       => 'userlist',
-                          'label'      => 'User List',
-                          'format'     => '37',
-                          'validation' => '',
-                          'source'     => '',
-                          'dependancies' => '',
-                          'requiresmodule' => 'roles',
-                          'aliases' => '',
-                          'args'         => '',
-                          // ...
-                         );
-        return $baseInfo;
     }
 
     /**

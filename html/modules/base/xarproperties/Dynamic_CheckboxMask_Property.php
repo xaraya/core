@@ -22,31 +22,11 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
 {
-    /**
-    * Get the base information for this property.
-    *
-    * @returns array
-    * @return base information for this property
-    **/
-    function getBasePropertyInfo()
-    {
-        $args = array();
-        $baseInfo = array(
-                        'id'         => 1114,
-                        'name'       => 'checkboxmask',
-                        'label'      => 'Checkbox Mask',
-                        'format'     => '1114',
-                        'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'base',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                        // ...
-                       );
-        return $baseInfo;
-    }
-
+    public $id = 1114;
+    public $name = 'checkboxmask';
+    public $label = 'Checkbox Mask';
+    public $format = '1114';
+    public $template = 'checkboxmask';
 
     function validateValue($value = null)
     {
@@ -107,9 +87,13 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
         $data['tabindex'] =!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
         $data['invalid']  =!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
 
-
-        $template="";
-        return xarTplProperty('base', 'checkboxmask', 'showinput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+        return xarTplProperty($module, $template, 'showinput', $data);
         //return $out;
     }
 
@@ -144,8 +128,13 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
         $data['options'] = $options;
         $data['numOptionsSelected'] = $numOptionsSelected;
 
-        $template="";
-        return xarTplProperty('base', 'checkboxmask', 'showoutput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+        return xarTplProperty($module, $template, 'showoutput', $data);
     }
 
 }

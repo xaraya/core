@@ -31,6 +31,11 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 
 class Dynamic_Object_Property extends Dynamic_Select_Property
 {
+    public $id = 24;
+    public $name = 'object';
+    public $label = 'Object';
+    public $format = '24';
+
     function Dynamic_Object_Property($args)
     {
         $this->Dynamic_Select_Property($args);
@@ -71,35 +76,6 @@ class Dynamic_Object_Property extends Dynamic_Select_Property
             }
 //        }
     }
-
-    // default methods from Dynamic_Select_Property
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 24,
-                              'name'       => 'object',
-                              'label'      => 'Object',
-                              'format'     => '24',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => 'dynamicdata',
-                            'aliases'        => '',
-                            'args'           => serialize($args)
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
 
 ?>

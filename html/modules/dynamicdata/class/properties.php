@@ -317,6 +317,8 @@ class Dynamic_Property
     public $status = 1;
     public $order = 0;
     public $format = '0';
+    public $template = '';
+    public $tplmodule = 'dynamic_data';
     public $validation = '';
     public $dependancies = '';    // semi-colon seperated list of files that must be present for this property to be available (optional)
     public $requiresmodule = ''; // this module must be available before this property is enabled (optional)
@@ -622,6 +624,8 @@ class Dynamic_Property
                           'name'       => $this->name,
                           'label'      => $this->label,
                           'format'     => $this->format,
+                          'template'   => $this->template,
+                          'tplmodule'  => $this->tplmodule,
                           'validation' => $this->validation,
                           'source'     => $this->source,
                           'dependancies' => $this->dependancies,
@@ -735,8 +739,7 @@ class Dynamic_Property
     function getModule()
     {
         $info = $this->getBasePropertyInfo();
-        $modulename = $info['requiresmodule'];
-	    if (empty($modulename))  throw new EmptyParameterException('module name');
+        $modulename = $info['tplmodule'];
         return $modulename;
     }
     /**
@@ -747,7 +750,9 @@ class Dynamic_Property
     function getTemplate()
     {
         $info = $this->getBasePropertyInfo();
-        return $info['name'];
+//        die(var_dump($info));
+        $template = empty($this->template) ? $info['name'] : $info['template'];
+        return $template;
     }
 }
 ?>

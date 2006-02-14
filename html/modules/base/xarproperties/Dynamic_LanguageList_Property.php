@@ -20,6 +20,11 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_LanguageList_Property extends Dynamic_Select_Property
 {
+    public $id = 36;
+    public $name = 'language';
+    public $label = 'Language List';
+    public $format = '36';
+
     function Dynamic_LanguageList_Property($args)
     {
         $this->Dynamic_Select_Property($args);
@@ -39,35 +44,6 @@ class Dynamic_LanguageList_Property extends Dynamic_Select_Property
             }
         }
     }
-
-    // default methods from Dynamic_Select_Property
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 36,
-                              'name'       => 'language',
-                              'label'      => 'Language List',
-                              'format'     => '36',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => 'base',
-                            'aliases'        => '',
-                            'args'           => serialize($args)
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
 
 ?>
