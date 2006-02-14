@@ -327,7 +327,6 @@ class xarRoles
         // TODO: validate the email address
         if (empty($name) && empty($uname) || empty($email)) {
             $msg = 'You must enter a user name and a valid email address.';
-            xarSessionSetVar('errormsg', _MODARGSERROR);
             throw new EmptyParameterException(null,$msg);
         }
         // Confirm that this group or user does not already exist
@@ -335,10 +334,9 @@ class xarRoles
         $q->eq('xar_uname',$uname);
 
         if (!$q->run()) return;
-        if ($q->getrows() > 0) {
-            xarSessionSetVar('errormsg', _GROUPALREADYEXISTS);
+        if ($q->getrows() > 0)
             throw new DuplicateException(array('user',$uname));
-        }
+
         // create an ID for the user
         $nextId = $this->dbconn->genID($this->rolestable);
 
@@ -500,15 +498,13 @@ class xarRole
      */
     function add()
     {
-        if (empty($this->name)) {
-            xarSessionSetVar('errormsg', _MODARGSERROR);
+        if (empty($this->name))
             throw new EmptyParameterException('You must enter a name.');
-        }
+
         // TODO: validate the email address
-        if ((empty($this->type)) && (empty($this->uname) || empty($this->email))) {
-            xarSessionSetVar('errormsg', _MODARGSERROR);
+        if ((empty($this->type)) && (empty($this->uname) || empty($this->email)))
             throw new EmptyParameterException('You must enter a user name and a valid email address.');
-        }
+
         // Confirm that this group or user does not already exist
         $q = new xarQuery('SELECT',$this->rolestable);
         if ($this->type == 1) {
@@ -519,10 +515,8 @@ class xarRole
 
         if (!$q->run()) return;
 
-        if ($q->getrows() > 0) {
-            xarSessionSetVar('errormsg', _GROUPALREADYEXISTS);
+        if ($q->getrows() > 0)
             throw new DuplicateException(array('role',($this->type==1)?$this->name:$this->uname));
-        }
 
         $nextId = $this->dbconn->genID($this->rolestable);
 
