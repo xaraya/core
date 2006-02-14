@@ -29,6 +29,11 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
 {
+    public $id = 507;
+    public $name = 'objectref';
+    public $label = 'Select value from other object';
+    public $format = '507';
+
     // We explicitly use names here instead of id's, so we are independent of
     // how dd assigns them at a given time. Otherwise the validation is not
     // exportable to other sites.
@@ -203,30 +208,5 @@ class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
         $this->validation = $this->refobject.$sep.$this->display_prop.$sep.$this->store_prop;
         return true;
     }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'             => 507,
-                              'name'           => 'objectref',
-                              'label'          => 'Select value from other object',
-                              'format'         => '507',
-                              'validation'     => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'dynamicdata',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
 }
 ?>

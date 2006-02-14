@@ -15,18 +15,18 @@
 include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 
 /**
- * handle the userlist property
+ * handle the statelist property
  *
  * @package dynamicdata
  *
  */
 class Dynamic_StateList_Property extends Dynamic_Select_Property
 {
-
-    function Dynamic_StateList_Property($args)
-    {
-        $this->Dynamic_Select_Property($args);
-    }
+    public $id = 43;
+    public $name = 'statelisting';
+    public $label = 'State Dropdown';
+    public $format = '43';
+    public $template = 'statelist';
 
     function validateValue($value = null)
     {
@@ -46,39 +46,6 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
         }
         return true;
     }
-
-    function showOutput($args = array())
-    {
-        if (empty($args['template'])) {
-            $args['template'] = 'statelist';
-        }
-         return parent::showOutput($args);
-    }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 43,
-                              'name'       => 'statelisting',
-                              'label'      => 'State Dropdown',
-                              'format'     => '43',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => 'base',
-                            'aliases'        => '',
-                            'args'           => serialize($args)
-                            // ...
-                           );
-        return $baseInfo;
-     }
 
    function getOptions()
    {

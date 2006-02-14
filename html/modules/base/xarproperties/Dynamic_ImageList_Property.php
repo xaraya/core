@@ -21,6 +21,12 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_ImageList_Property extends Dynamic_Select_Property
 {
+    public $id = 35;
+    public $name = 'imagelist';
+    public $label = 'Image List';
+    public $format = '35';
+    public $template = 'imagelist';
+
     public $basedir = '';
     public $baseurl = null;
     public $filetype = '(gif|jpg|jpeg|png|bmp)';
@@ -107,9 +113,13 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
         $data['tabindex']= !empty($tabindex) ? $tabindex : 0;
         $data['invalid'] = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid)  : '';
 
-        $template="";
-        return xarTplProperty('base', 'imagelist', 'showinput', $data);
-
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -142,9 +152,13 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
         $data['filetype']=$filetype;
         $data['srcpath']=$srcpath;
 
-        $template="";
-        return xarTplProperty('base', 'imagelist', 'showoutput', $data);
-
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+        return xarTplProperty($module, $template, 'showoutput', $data);
     }
 
     function parseValidation($validation = '')
@@ -163,31 +177,6 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
             $this->basedir = $validation;
         }
     }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 35,
-                              'name'       => 'imagelist',
-                              'label'      => 'Image List',
-                              'format'     => '35',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'base',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
 
     function showValidation($args = array())
     {

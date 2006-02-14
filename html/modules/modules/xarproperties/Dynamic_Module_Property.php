@@ -24,6 +24,11 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_Module_Property extends Dynamic_Select_Property
 {
+    public $id = 19;
+    public $name = 'module';
+    public $label = 'Module';
+    public $format = '19';
+
     function Dynamic_Module_Property($args)
     {
         $this->Dynamic_Select_Property($args);
@@ -36,39 +41,6 @@ class Dynamic_Module_Property extends Dynamic_Select_Property
             }
         }
     }
-
-    function showInput($args = array())
-    {
-        $args['module'] = 'base';
-        $args['template'] = 'dropdown';
-        return parent::showInput($args);
-    }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 19,
-                              'name'       => 'module',
-                              'label'      => 'Module',
-                              'format'     => '19',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => 'modules',
-                            'aliases'        => '',
-                            'args'           => serialize($args)
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
 
 ?>

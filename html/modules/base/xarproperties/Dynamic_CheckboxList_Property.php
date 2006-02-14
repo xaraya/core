@@ -22,31 +22,11 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
 {
-    /**
-    * Get the base information for this property.
-    *
-    * @returns array
-    * @return base information for this property
-    **/
-    function getBasePropertyInfo()
-    {
-        $args = array();
-        $baseInfo = array(
-                        'id'         => 1115,
-                        'name'       => 'checkboxlist',
-                        'label'      => 'Checkbox List',
-                        'format'     => '1115',
-                        'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'base',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                        // ...
-                       );
-        return $baseInfo;
-    }
-
+    public $id = 1115;
+    public $name = 'checkboxlist';
+    public $label = 'Checkbox List';
+    public $format = '1115';
+    public $template = 'checkboxlist';
 
     function checkInput($name='', $value = null)
     {
@@ -121,9 +101,13 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
         $data['tabindex'] =!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
         $data['invalid']  =!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
 
-
-        $template="";
-        return xarTplProperty('base', 'checkboxlist', 'showinput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -144,8 +128,13 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
 
         $data['value'] = xarVarPrepForDisplay($value);
 
-        $template="";
-        return xarTplProperty('base', 'checkboxlist', 'showoutput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+        return xarTplProperty($module, $template, 'showoutput', $data);
     }
 
 }
