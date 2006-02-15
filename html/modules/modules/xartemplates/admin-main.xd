@@ -32,6 +32,10 @@
             configuring hooks from one module to another. For example, setting a hook to display comments 
             (the Comments module) in articles (Articles module).</xar:mlstring>
         </li>
+        <li>
+            <xar:mlstring><strong>Modify Config</strong>: Change configuration options related to the Modules module, or modules in general.</xar:mlstring>
+        </li>
+
     </ul>
 
 <h4><xar:mlstring>View All</xar:mlstring></h4>
@@ -137,6 +141,6 @@
       </li>
   </ul>
   <p class="xar-sub">
-    <strong>&nbsp;<xar:mlstring>Modules Module - Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 2.3.0&nbsp; 2005-11-02
+    <strong>&nbsp;<xar:mlstring>Modules Module Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 2.3.1&nbsp; 2006-02-08
   </p>
 </div>

@@ -464,13 +464,7 @@ function installer_admin_bootstrap()
     // load modules into *_modules table
     if (!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
 
-	//TODO: improve this once we know where authentication modules are headed
-   /*	
-   $regid=xarModGetIDFromName('registration');
-	if (empty($regid)) {
-		die(xarML('I cannot load the authentication module. Please make it available and reinstall'));
-	}
-	*/
+
     $regid=xarModGetIDFromName('authsystem');
 	if (empty($regid)) {
 		die(xarML('I cannot load the Authsystem module. Please make it available and reinstall'));
@@ -513,8 +507,8 @@ function installer_admin_bootstrap()
         }
     }
 
-    // Initialise and activate adminpanels, mail, dynamic data
-    $modlist = array('adminpanels','mail', 'dynamicdata');
+    // Initialise and activate mail, dynamic data
+    $modlist = array('mail', 'dynamicdata');
     foreach ($modlist as $mod) {
         // Initialise the module
         $regid = xarModGetIDFromName($mod);
@@ -635,7 +629,7 @@ function installer_admin_create_administrator()
     if (!$modifiedrole) {return;}
 
     // Register Block types
-    $blocks = array('finclude','html','menu','php','text','content');
+    $blocks = array('adminmenu','waitingcontent','finclude','html','menu','php','text','content');
 
     foreach ($blocks as $block) {
         if (!xarModAPIFunc('blocks', 'admin', 'register_block_type', array('modName'  => 'base', 'blockType'=> $block))) return;
@@ -682,9 +676,9 @@ function installer_admin_create_administrator()
     }
 
     list ($leftBlockGroup) = $result->fields;
-
-    $adminBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
-                                    array('module'  => 'adminpanels',
+    /* We don't need this for adminpanels now - done in Base module */
+        $adminBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
+                                    array('module'  => 'base',
                                           'type'    => 'adminmenu'));
 
     if (empty($adminBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
@@ -706,6 +700,7 @@ function installer_admin_create_administrator()
         }
     }
 
+    
     $now = time();
 
     $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot .';
@@ -897,6 +892,7 @@ function installer_admin_confirm_configuration()
         $func = "installer_" . basename(strval($configuration),'.conf.php') . "_privilegeoptions";
         $data['options1'] = $func();
         $data['options2'] = $options2;
+        $data['options3'] = $options3;
         $data['installed'] = implode(', ',$installedmodules);
         $data['missing'] = implode(', ',$awolmodules);
         $data['configuration'] = $configuration;
@@ -1093,10 +1089,18 @@ function installer_admin_cleanup()
     if (empty($loginBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return;
     }
+   //Check for any sign of the Registration module (may have been installed in the configurations)
+	$regloginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
+                                    array('module' => 'registration',
+                                          'type'   => 'rlogin'));
 
+    if (empty($regloginBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+        //return; no don't return, it may not have been loaded
+    }
     $loginBlockTypeId = $loginBlockType['tid'];
-
-    if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'login'))) {
+    //We only want to create the login block if one doesn't already exist - with registration module or authsystem
+    //Registration module might be selected in the config options
+    if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'login')) && !isset($regloginBlockType['tid'])) {
         if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
                            array('title'    => 'Login',
                                  'name'     => 'login',
@@ -1149,8 +1153,6 @@ function installer_admin_cleanup()
             return;
         }
     }
-
-    xarModAPIFunc('adminpanels', 'admin', 'updatemenudb',array('force' => true));
 
     $data['language']    = $install_language;
     $data['phase'] = 6;

@@ -25,8 +25,8 @@
        <li><xar:mlstring><strong>Template tags</strong>: Allows you view, edit or delete template tags 
        on the system, as well as add new tags</xar:mlstring></li>
        <li><xar:mlstring><strong>Modify Configuration </strong>: Allows you to set various site wide 
-       configuration options. This is an important option and you should review these options carefully.<br /><br />
-      There are two important settings in the Modify Configuration - <strong>Cache Templates</strong>, and <strong>Show Template File Names</strong>. Be sure to understand what these options do.</xar:mlstring></li>
+       configuration options. This is an important option and you should review these options carefully. Pay particular attention to the debug options including
+      <strong>Cache Templates</strong>, and <strong>Show Template File Names</strong>. Be sure to understand what these options do.</xar:mlstring></li>
     </ol>
 
     <h4><xar:mlstring>View Themes</xar:mlstring></h4>
@@ -74,7 +74,7 @@
     </p>
     <ol>
        <li><xar:mlstring><strong>Site Display Options</strong><br />
-        These are variables that can be inserted into your templates for display on your site. 
+        These are variables that can be inserted into your templates for display on your site.
         They are all used in the Default theme at installation time. To display these variables on your site, 
         insert them in your templates with the <code>&lt;xar:var /&gt;</code> blocklayout tag.</xar:mlstring>
 
@@ -91,6 +91,15 @@
            note with <br /><code>&lt;xar:var scope="module" module="themes" name="SiteFooter" /&gt;</code></xar:mlstring></li>
         </ul>
       </li>
+       <li><strong><xar:mlstring>Admin Dashboard</xar:mlstring></strong>
+           <ul>
+           <li><xar:mlstring><em>Enable the Admin Dashboard</em>: The Admin Dashboard is a special theme that uses the <code>dashboard.xt</code>
+            template (by default) if it exists in your <code>themes/yourtheme/pages</code> directory. If you check this option 
+            the Admin Dashboard provides admin options in a special Admin page view instead of through the Admin Menu.</xar:mlstring></li>
+           <li><xar:mlstring><em>Dashboard Template Name</em>: This is the name of the Admin Dashboard template located in your <code>themes/yourtheme/pages</code> directory.
+           By default it is called <code>dashboard.xt</code> but you can change it with this option. Do not include the .xt extension when using this option.</xar:mlstring></li>
+           </ul>
+       </li>
        <li><strong><xar:mlstring>Page Title Options</xar:mlstring></strong>
            <ul>
            <li><xar:mlstring><em>Page Title Separator</em>: This will be the separation character(s) in
@@ -101,7 +110,7 @@
        </li>
        <li><strong><xar:mlstring>Template Debugging Options</xar:mlstring></strong>
        <ul>
-           <li><xar:mlstring><em>Show php comment block header in compiled templates</em></xar:mlstring></li>
+           <li><xar:mlstring><strong>Show php comment block header in compiled templates</strong>: This feature enables you to inspect a compiled template and know which template it refers to.</xar:mlstring></li>
 
            <li><xar:mlstring><strong>Show template filenames in HTML comments</strong>: When you view the source 
            of a page, checking this option will display the start and end point of each template used in the page. 
@@ -160,7 +169,7 @@
       </li>
   </ul>
   <p class="xar-sub">
-    <strong>&nbsp;<xar:mlstring>Themes Module - Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.7.0&nbsp; 2005-11-02
+    <strong>&nbsp;<xar:mlstring>Themes Module Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.7.1&nbsp; 2006-02-10
   </p>
 </div>
 

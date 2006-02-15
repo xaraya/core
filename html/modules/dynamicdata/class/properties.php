@@ -725,5 +725,33 @@ class Dynamic_Property
         // tell the calling function that everything is OK
         return true;
     }
+    
+    /**
+     * Return the module this property belongs to
+     *
+     * @returns string module name
+     */
+    function getModule()
+    {
+        $info = $this->getBasePropertyInfo();
+        $modulename = $info['requiresmodule'];
+
+	    if (empty($modulename)) {
+            //Do some funky error handling thing here
+            return;
+        }
+
+        return $modulename;
+    }
+   /**
+    * Return the name this property uses in its templates
+    *
+    * @returns string template name
+    */
+    function getTemplate()
+    {
+        $info = $this->getBasePropertyInfo();
+        return $info['name'];
+    }
 }
 ?>

@@ -63,7 +63,7 @@ function modules_adminapi_deactivate ($args)
     }
 
     if (function_exists('xarOutputFlushCached')) {
-        xarOutputFlushCached('adminpanels');
+        xarOutputFlushCached('base');
         xarOutputFlushCached('base-block');
     }
 

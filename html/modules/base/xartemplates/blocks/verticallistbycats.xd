@@ -85,7 +85,7 @@
             </h4>
             <ul class="xar-menu-item">
                 <li class="xar-menu-item">
-                    <a title="#xarML('Logout as administrator')#" href="&xar-modurl-adminpanels-admin-confirmlogout;">
+                    <a title="#xarML('Logout as administrator')#" href="&xar-modurl-base-admin-confirmlogout;">
                         <xar:mlstring>Admin logout</xar:mlstring>
                     </a> 
                 </li>
