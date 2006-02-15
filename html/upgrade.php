@@ -1631,6 +1631,22 @@ if (empty($step)) {
 
         }
 
+    //Authsystem ... we need to put this here as the authsystem upgrade is not happening (fully ...)
+    //Here until we isolate prob
+    xarRegisterMask('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW');
+    xarRegisterMask('ViewAuthsystemBlocks','All','authsystem','Block','All','ACCESS_OVERVIEW');
+    xarRegisterMask('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
+    xarRegisterMask('EditAuthsystem','All','authsystem','All','All','ACCESS_EDIT');
+    xarRegisterMask('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
+    // Define and setup privs
+    xarRegisterPrivilege('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
+
+    // Define Module vars
+ 	xarModSetVar('authsystem', 'lockouttime', 15);
+	xarModSetVar('authsystem', 'lockouttries', 3);
+	xarModSetVar('authsystem', 'uselockout', false);
+	xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
+	//End of this authsystem info that should be adde din the module upgrade function
       if (count($blockproblem) >0) {
       echo "</div>";
         echo "<br /><span style=\"color:red;\">WARNING!</span> There was a problem in updating Waiting Content and Adminpanels menu block to Base blocks. Please check!<br /><br />";
@@ -1640,7 +1656,7 @@ if (empty($step)) {
         echo "<br />Done! Roles, authentication and registration checked!<br /><br />";
     }
 
-    echo "<h5>Updating Adminpanels module - moving out to other modules</h5>";
+    echo "<h5>Removing Adminpanels module - moving functions to other  modules</h5>";
     echo "<div>";
     //TODO: Tidy this up - does the job for now
     // Move of Adminpanels module overviews modvar to Modules module
@@ -1657,6 +1673,7 @@ if (empty($step)) {
         //set it to the new dashboard template
         xarModSetVar('themes','dashtemplate','dashboard');
     }
+
     //Let's remove the now unused admin menu table
     $adminmenuTable = $systemPrefix .'_admin_menu';
     $query = xarDBDropTable($adminmenuTable);
@@ -1711,8 +1728,13 @@ if (empty($step)) {
             }
 
         }
+      }
+     // Delete any module variables
+      xarModDelAllVars('adminpanels');
+      // Remove Masks and Instances
+      xarRemoveMasks('adminpanels');
+      xarRemoveInstances('adminpanels');
 
-    }
     if (count($blockproblem) >0) {
       echo "</div>";
         echo "<br /><span style=\"color:red;\">WARNING!</span> There was a problem in updating Waiting Content and Adminpanels menu block to Base blocks. Please check!<br /><br />";
@@ -1734,10 +1756,13 @@ if (empty($step)) {
 
 ?>
 <div class="xar-mod-body"><h2><?php echo $complete; ?></h2><br />
-Thank you, the upgrades are complete. It is recommended you go to the
-<a href="<?php echo xarModUrl('modules','admin','list'); ?>">admin section of the modules module</a>
-to upgrade the modules which have a new version.<br /><br />
-The Adminpanels module has been deprecated. Please also check your themes for use of any Adminpanels references.<br />
+Thank you, the database upgrades are complete.<br />Please note this upgrade process does not upgrade your themes.
+<ul>
+<li>The Adminpanels module has been deprecated and no longer available. Please check your themes for use of any Adminpanel module references and change your adminpanel block references to an adminmenu block in the Base module.</li>
+<li>The core login block and function in Roles module has been moved to the Authsystem Module at <a href="<?php echo xarModUrl('authsystem','user','showloginform'); ?>">index.php?module=authsystem&amp;function=showloginform</a></li>
+</ul>
+<p>It is recommended you go to the <a href="<?php echo xarModUrl('modules','admin','list'); ?>">admin section of the modules module</a>
+to upgrade the modules which have a new version.</p><br /><br />
 </div>
 </div>
 </div>
