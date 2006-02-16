@@ -522,7 +522,7 @@ class xarRole
             throw new EmptyParameterException('name');
 
         // TODO: validate the email address
-        if (($this->basetype == ROLES_USERTYPE) && (empty($this->uname) || empty($this->email))) {
+        if (($this->basetype == ROLES_USERTYPE) && (empty($this->uname) || empty($this->email)))
             throw new EmptyParameterException('user name and valid email address.');
 
         // Confirm that this group or user does not already exist

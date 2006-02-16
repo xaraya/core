@@ -879,6 +879,7 @@ class Dynamic_Object extends Dynamic_Object_Master
             // only worry about finding something in primary datastore (if any)
             if (empty($itemid) && !empty($primarystore) && $primarystore == $name) return;
         }
+
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
         if (!empty($args['preview'])) {
             $this->checkInput();

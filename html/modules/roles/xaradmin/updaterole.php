@@ -33,13 +33,13 @@ function roles_admin_updaterole()
     $oldtype = $oldrole->getType();
 
     // groups dont have pw etc., and can only be active
-    if ($basetype == ROLES_GROUPTYPE) {
+    // TODO: what about the role itemtype?
+    if ($basetype != ROLES_USERTYPE) {
         $puname = $oldrole->getUser();
         $pemail = "";
         $ppass1 = "";
         $pstate = ROLES_STATE_ACTIVE;
-    }
-    else {
+    } else {
         if (!xarVarFetch('puname', 'str:1:35:', $puname)) return;
         if (!xarVarFetch('pemail', 'str:1:', $pemail)) return;
         if (!xarVarFetch('ppass1', 'str:1:', $ppass1,'')) return;

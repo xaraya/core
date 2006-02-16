@@ -10,10 +10,7 @@ function &dynamicdata_userapi_getancestors($args)
 
     if (!(isset($moduleid) && isset($itemtype)) && !isset($objectid)) {
         $msg = xarML('Wrong arguments to dynamicdata_userapi_getancestors.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
+		throw new BadParameterException(array(),$msg);
     }
 
     $top = isset($top) ? $top : true;
@@ -31,10 +28,7 @@ function &dynamicdata_userapi_getancestors($args)
 		$result = $q->row();
 		if ($result == array()) {
 			$msg = xarML('Bad objectid for dynamicdata_userapi_getancestors.');
-			xarErrorSet(XAR_SYSTEM_EXCEPTION,
-						'BAD_PARAM',
-						 new SystemException($msg));
-			return false;
+			throw new BadParameterException(array(),$msg);
 		}
 		$moduleid = $result['moduleid'];
 		$itemtype = $result['itemtype'];
