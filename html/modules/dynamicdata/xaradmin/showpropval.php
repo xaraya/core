@@ -12,6 +12,7 @@
  */
 /**
  * Show validation of some property
+ * @return array
  */
 function dynamicdata_admin_showpropval($args)
 {

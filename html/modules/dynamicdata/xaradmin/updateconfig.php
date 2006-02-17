@@ -14,10 +14,12 @@
  * Update configuration parameters of the module
  * This is a standard function to update the configuration parameters of the
  * module given the information passed back by the modification form
+ *
+ * @return bool and redirect to modifyconfig
  */
-function dynamicdata_admin_updateconfig( $args )
+function dynamicdata_admin_updateconfig($args)
 {
-    extract( $args );
+    extract($args);
 
     if (!xarVarFetch('flushPropertyCache', 'isset', $flushPropertyCache,  NULL, XARVAR_DONT_SET)) {return;}
 
@@ -25,12 +27,12 @@ function dynamicdata_admin_updateconfig( $args )
     if (!xarSecurityCheck('AdminDynamicData')) return;
 
     if (!xarSecConfirmAuthKey()) return;
-    
+
     if ( isset($flushPropertyCache) && ($flushPropertyCache == true) )
     {
         $args['flush'] = 'true';
         $success = xarModAPIFunc('dynamicdata','admin','importpropertytypes', $args);
-        
+
         if( $success )
         {
             xarResponseRedirect(xarModURL('dynamicdata','admin','modifyconfig'));
