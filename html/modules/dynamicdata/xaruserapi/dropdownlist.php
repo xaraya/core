@@ -28,7 +28,7 @@
  * @param $args['table'] database table to turn into an object
  * @returns array
  * @return array of (itemid => fieldvalue), or false on failure
- * @raise BAD_PARAM, NO_PERMISSION
+ * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_userapi_dropdownlist($args)
 {

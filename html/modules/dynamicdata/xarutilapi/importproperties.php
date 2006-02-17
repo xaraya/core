@@ -20,7 +20,7 @@
  * @param $args['objectid'] object id to assign these properties to
  * @returns bool
  * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION
+ * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_utilapi_importproperties($args)
 {

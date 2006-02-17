@@ -27,7 +27,7 @@
  * @param $args['validation'] validation of the property to create
  * @returns int
  * @return property ID on success, null on failure
- * @raise BAD_PARAM, NO_PERMISSION
+ * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_createproperty($args)
 {

@@ -27,7 +27,7 @@
  * @param $args['preview'] flag indicating if you're previewing an item
  * @returns array
  * @return array of (name => value), or false on failure
- * @raise BAD_PARAM, NO_PERMISSION
+ * @throws BAD_PARAM, NO_PERMISSION
  */
 function &dynamicdata_userapi_getitem($args)
 {

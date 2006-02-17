@@ -21,7 +21,7 @@
  * @param $args['debug'] don't actually update anything :-)
  * @returns mixed
  * @return true or debug string on success, null on failure
- * @raise BAD_PARAM, NO_PERMISSION
+ * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_utilapi_updatehooks($args)
 {

@@ -22,7 +22,7 @@
  * @param $args['name'] name of the field to get
  * @returns mixed
  * @return value of the field, or false on failure
- * @raise BAD_PARAM, NO_PERMISSION
+ * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_userapi_getfield($args)
 {

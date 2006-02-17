@@ -32,7 +32,7 @@
  * @param $args['getobject'] flag indicating if you want to get the whole object back
  * @returns array
  * @return array of (itemid => array of (name => value)), or false on failure
- * @raise BAD_PARAM, NO_PERMISSION
+ * @throws BAD_PARAM, NO_PERMISSION
  */
 function &dynamicdata_userapi_getitems($args)
 {

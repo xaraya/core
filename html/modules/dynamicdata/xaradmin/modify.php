@@ -11,10 +11,17 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * modify an item
+ * Modify an item
+ *
  * This is a standard function that is called whenever an administrator
  * wishes to modify a current module item
- * @param 'exid' the id of the item to be modified
+ *
+ * @param int objectid the id of the item to be modified
+ * @param int modid the id of the module where the item comes from
+ * @param int itemtype the id of the itemtype of the item
+ * @param join
+ * @param table
+ * @return
  */
 function dynamicdata_admin_modify($args)
 {
@@ -62,9 +69,9 @@ function dynamicdata_admin_modify($args)
     $item['itemtype'] = $myobject->itemtype;
     $item['itemid'] = $myobject->itemid;
     $hooks = array();
-    $hooks = xarModCallHooks('item', 'modify', $myobject->itemid, $item, $modinfo['name']); 
+    $hooks = xarModCallHooks('item', 'modify', $myobject->itemid, $item, $modinfo['name']);
     $data['hooks'] = $hooks;
-    
+
     $template = $myobject->name;
     return xarTplModule('dynamicdata','admin','modify',$data,$template);
 }

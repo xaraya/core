@@ -22,7 +22,7 @@
  * @param $args['itemtype'] item type of the item field to get
  * @returns mixed
  * @return value of the field, or false on failure
- * @raise BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
+ * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
  */
 function dynamicdata_utilapi_getrelations($args)
 {

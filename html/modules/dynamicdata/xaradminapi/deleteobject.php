@@ -17,7 +17,7 @@
  * @param $args['objectid'] object id of the object to delete
  * @returns int
  * @return object ID on success, null on failure
- * @raise BAD_PARAM, NO_PERMISSION
+ * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_deleteobject($args)
 {

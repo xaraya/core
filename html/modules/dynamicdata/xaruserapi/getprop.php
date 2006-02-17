@@ -24,7 +24,7 @@
  * @param $args['static'] include the static properties (= module tables) too (default no)
  * @returns mixed
  * @return value of the field, or false on failure
- * @raise BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
+ * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
  */
 function dynamicdata_userapi_getprop($args)
 {
