@@ -16,16 +16,21 @@
 function roles_admin_deleterole()
 {
     // get parameters
-    if (!xarVarFetch('uid', 'int:1:', $uid)) return;
+    if (!xarVarFetch('uid', 'int:1:', $uid, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemid', 'int', $itemid, NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('confirmation', 'str:1:', $confirmation, '', XARVAR_NOT_REQUIRED)) return;
+//    if (!xarVarFetch('itemtype', 'int', $itemtype, NULL, XARVAR_DONT_SET)) return;
+//   	if (!xarVarFetch('itemtype', 'int', $data['itemtype'], ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
+
+    $uid = isset($itemid) ? $itemid : $uid;
 
     // Call the Roles class
     $roles = new xarRoles();
     // get the role to be deleted
     $role = $roles->getRole($uid);
-    $type = $role->isUser() ? 0 : 1;
+	$itemtype = $role->getType();
 
-    // get the array of parents of this role
+	// get the array of parents of this role
     // need to display this in the template
     $parents = array();
     foreach ($role->getParents() as $parent) {
@@ -55,8 +60,14 @@ function roles_admin_deleterole()
         throw new ForbiddenOperationException($role->getName(),$msg);
     }
 
+	$types = xarModAPIFunc('roles','user','getitemtypes');
+	$data['itemtypename'] = $types[$itemtype]['label'];
+
     if (empty($confirmation)) {
         // Load Template
+		$data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
+		$types = xarModAPIFunc('roles','user','getitemtypes');
+		$data['itemtypename'] = $types[$itemtype]['label'];
         $data['authid'] = xarSecGenAuthKey();
         $data['uid'] = $uid;
         $data['ptype'] = $role->getType();
@@ -75,11 +86,11 @@ function roles_admin_deleterole()
         if (empty($check)) {
             // Try to remove the role and bail if an error was thrown
             if (!$role->remove()) return;
-            
+
             // call item delete hooks (for DD etc.)
             // TODO: move to remove() function
             $pargs['module'] = 'roles';
-            $pargs['itemtype'] = $type; // we might have something separate for groups later on
+            $pargs['itemtype'] = $itemtype;
             $pargs['itemid'] = $uid;
             xarModCallHooks('item', 'delete', $uid, $pargs);
         } else {

@@ -1,7 +1,5 @@
 <?php
 /**
- * Installs a module
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -81,7 +79,7 @@ function modules_admin_install()
 
     // set the target location (anchor) to go to within the page
     $target = $minfo['name'];
-    
+
     if (function_exists('xarOutputFlushCached')) {
         xarOutputFlushCached('modules');
         xarOutputFlushCached('base-block');

@@ -197,7 +197,7 @@ class xarTreeRenderer
 
 //-------------------- Assemble the data for a single row
         $html = "";
-        for ($i=1,$max = count($this->treeitems); $i <= $max; $i++) {
+		for ($i=1,$max = count($this->treeitems); $i <= $max; $i++) {
             $func = $this->treeitems[$i];
             $html .= $this->{$func}();
         }

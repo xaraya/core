@@ -25,6 +25,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
      */
     function getFieldName(&$property)
     {
+        if (!is_object($property)) die($property);
         // support [database.]table.field syntax
         if (preg_match('/^(.+)\.(\w+)$/', $property->source, $matches)) {
             $table = $matches[1];
@@ -263,6 +264,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             $itemids = $this->_itemids;
         } else {
             $itemids = array();
+            return true;
         }
         // TODO: is this is the proper solution in different scenarios?
         // necessary for extended objects where the base itemtype has a flat table datasource

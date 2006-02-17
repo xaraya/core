@@ -1,14 +1,13 @@
 <?php
 /**
  * Get output buffer
- *
- * @package Xaraya eXtensible Management System
+  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
+  * @link http://www.xaraya.com
  *
  * @subpackage Base module
- */
+  */
 /**
  * Get output buffer(s) (e.g. before trying to send back some file or image)
  *
