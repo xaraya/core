@@ -25,6 +25,7 @@ function roles_admin_updaterole()
     if (!xarVarFetch('phome', 'str', $phome, '', XARVAR_NOT_REQUIRED)) return;
 	$basetype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
     if (!xarVarFetch('pprimaryparent', 'int', $pprimaryparent, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('returnurl', 'str', $returnurl, '', XARVAR_NOT_REQUIRED)) return;
 
     //Save the old state and type
     $roles = new xarRoles();
@@ -139,7 +140,11 @@ function roles_admin_updaterole()
     }
 
     // redirect to the next page
-    xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole', array('uid' => $uid)));
+    if (empty($returnurl)) {
+	    xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole', array('uid' => $uid)));
+    } else {
+	    xarResponseRedirect($returnurl);
+    }
 }
 
 ?>

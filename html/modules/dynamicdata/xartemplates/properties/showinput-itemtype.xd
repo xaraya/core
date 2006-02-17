@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <select name="#$name#" id="#$id#" tabindex="#$tabindex#" >
     <option value=""> </option>
     <xar:foreach in="$options" value="$option" >

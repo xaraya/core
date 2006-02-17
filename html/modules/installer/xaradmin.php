@@ -460,12 +460,12 @@ function installer_admin_bootstrap()
         // Set state to inactive
         $regid=xarModGetIDFromName($mod);
         if (!xarModAPIFunc('modules','admin','setstate',
-                           array('regid'=> $regid, 'state'=> XARMOD_STATE_INACTIVE)))
+                           array('regid'=> $regid, 'state'=> XARMOD_STATE_INACTIVE))) 
             throw new Exception("setting state of $regid failed");//return;
-
+        
         // Activate the module
-        if (!xarModAPIFunc('modules','admin','activate',
-                           array('regid'=> $regid)))
+        if (!xarModAPIFunc('modules','admin','activate', 
+                           array('regid'=> $regid))) 
             throw new Exception("activation of $regid failed");//return;
     }
 
@@ -495,27 +495,27 @@ function installer_admin_bootstrap()
     $regid = xarModGetIDFromName('mail');
     if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid)))
          throw new Exception("Initalising m with regid : $regid failed");
-        if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid)))
+        if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) 
             throw new Exception("Initalising module with regid : $regid failed");
         // Activate the module
-        if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid)))
+        if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) 
             throw new Exception("Activating module with regid: $regid failed");
 
     //initialise and activate base module by setting the states
     $baseId = xarModGetIDFromName('base');
-    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_INACTIVE)))
+    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_INACTIVE))) 
         throw new Exception("Setting state for module with regid: $baseId failed");
     // Set module state to active
-    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_ACTIVE)))
+    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_ACTIVE))) 
         throw new Exception("Activating base $baseId module failed");
 
-# --------------------------------------------------------
+    // --------------------------------------------------------
 # Create wrapper DD objects for the native itemtypes of the roles module
 	if (!xarModAPIFunc('roles','admin','createobjects'))
         throw new Exception("Creating objects for roles module failed");
 # --------------------------------------------------------
 # Create wrapper DD objects for the native itemtypes of the privileges module
-	if (!xarModAPIFunc('privileges','admin','createobjects'))
+	if (!xarModAPIFunc('privileges','admin','createobjects')) 
         throw new Exception("Creating objects for privileges module failed");
 
     xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
