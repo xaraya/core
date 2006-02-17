@@ -5,12 +5,11 @@
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:if condition="$ptype eq 0">
-            <xar:mlstring>Manage The User:</xar:mlstring>
-        <xar:else/>
-            <xar:mlstring>Manage The Group:</xar:mlstring>
-        </xar:if>
-        #xarVarPrepForDisplay($name)#
+        <xar:ml>
+            <xar:mlstring>Manage #(1) '#(2)':</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+            <xar:mlvar>#$name#</xar:mlvar>
+        </xar:ml>
     </h2>
 
     <xar:if condition="count($parents) gt 0">

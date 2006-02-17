@@ -535,8 +535,10 @@ class xarRole
 
         if (!$q->run()) return;
 
-        if ($q->getrows() > 0)
+        if ($q->getrows() > 0) {
+        die(var_dump($q->output()));
             throw new DuplicateException(array('role',($this->type==1)?$this->name:$this->uname));
+            }
 
         $nextId = $this->dbconn->genID($this->rolestable);
 
