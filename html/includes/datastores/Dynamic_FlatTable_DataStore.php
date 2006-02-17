@@ -13,7 +13,7 @@
 include_once "includes/datastores/Dynamic_SQL_DataStore.php";
 
 /**
- * Class for flat table 
+ * Class for flat table
  *
  * @package dynamicdata
  */
@@ -134,7 +134,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         // TODO: this won't work for objects with several static tables !
         if (empty($itemid)) {
-            // get the next id (or dummy) 
+            // get the next id (or dummy)
             $itemid = $dbconn->GenId($table);
             $checkid = true;
         } else {
@@ -264,6 +264,9 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         } else {
             $itemids = array();
         }
+        // TODO: is this is the proper solution in different scenarios?
+        // necessary for extended objects where the base itemtype has a flat table datasource
+        if ($itemids == array()) return true;
         // check if it's set here - could be 0 (= empty) too
         if (isset($args['cache'])) {
             $this->cache = $args['cache'];
@@ -469,7 +472,7 @@ if (empty($itemidfield)) {
         $dbconn =& xarDBGetConn();
 
         if($dbconn->databaseType == 'sqlite') {
-            $query = "SELECT COUNT(*) 
+            $query = "SELECT COUNT(*)
                       FROM (SELECT DISTINCT $itemidfield FROM $table "; // WATCH OUT, STILL UNBALANCED
         } else {
             $query = "SELECT COUNT(DISTINCT $itemidfield)
