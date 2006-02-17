@@ -1,7 +1,6 @@
 <?php
 /**
  *  View recent extension releases
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -77,6 +76,7 @@ function base_admin_release($args)
     } else {
         throw new DataNotFoundException(null,'There is a problem with a feed.');
     }
+    asort($feedcontent);
     $data['feedcontent'] = $feedcontent; 
     return $data;
 }
