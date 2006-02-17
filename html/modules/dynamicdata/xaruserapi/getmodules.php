@@ -14,7 +14,6 @@
  * get the list of modules + itemtypes for which dynamic properties are defined
  *
  * @author the DynamicData module development team
- * @returns array
  * @return array of modid + itemtype + number of properties
  * @throws DATABASE_ERROR, NO_PERMISSION
  */

@@ -9,8 +9,8 @@
  *
  * @subpackage Dynamicdata module
  */
-/*
- * Dynamic Data User Interface
+/**
+ * Dynamic Data User function
  * @author mikespub <mikespub@xaraya.com>
  */
 

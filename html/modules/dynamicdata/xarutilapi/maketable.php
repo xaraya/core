@@ -27,6 +27,8 @@
  * 5. import all items from the XML file (Admin - DynamicData - Utilities - Import - change dir)
  * 6. (for extension objects) skip the extra itemid property in display / input templates
  * 7. in case of problems, report to http://bugs.xaraya.com/
+ *
+ * @return bool true on succes
  */
 function dynamicdata_utilapi_maketable($args)
 {
