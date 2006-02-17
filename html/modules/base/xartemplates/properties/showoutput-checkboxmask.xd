@@ -1,4 +1,4 @@
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:if condition="$numOptionsSelected eq 0">
     <em>None Specified</em>
     <xar:else />
@@ -7,7 +7,7 @@
         <strong>#$option['id']#</strong>- #$option['name']#
         <br />
         <xar:else />
-        <xar:comment>#$option['id']# - #$option['name']#
-        <br /></xar:comment></xar:if>
+        <!-- #$option['id']# - #$option['name']#
+        <br /> --> </xar:if>
     </xar:foreach>
 </xar:if>

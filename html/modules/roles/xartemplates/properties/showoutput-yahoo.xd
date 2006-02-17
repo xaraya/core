@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:set name="yahoo"><xar:mlstring>Yahoo Messenger</xar:mlstring></xar:set>
 <xar:if condition="!empty($link)">
     <a href="#$link#">

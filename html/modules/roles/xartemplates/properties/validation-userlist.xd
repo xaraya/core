@@ -1,10 +1,10 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <table class="xar-norm">
   <tr>
     <td>
       <xar:mlstring>Groups</xar:mlstring>
     </td>
-    <td> <xar:comment> TODO: replace with dropdown / multi-select list of groups + adapt code ? </xar:comment>
+    <td> <!-- TODO: replace with dropdown / multi-select list of groups + adapt code ? -->
       <input type="text" name="#$name#[grouplist]" id="#$id#_grouplist" value="#$grouplist#" size="#$size#" tabindex="#$tabindex#" />
     </td>
   </tr>
@@ -12,7 +12,7 @@
     <td>
       <xar:mlstring>State</xar:mlstring>
     </td>
-    <td> <xar:comment> TODO: replace with dropdown / multi-select list of states + adapt code ? </xar:comment>
+    <td> <!-- TODO: replace with dropdown / multi-select list of states + adapt code ? -->
       <input type="text" name="#$name#[userstate]" id="#$id#_userstate" value="#$userstate#" size="5" tabindex="#$tabindex#" />
     </td>
   </tr>
@@ -20,7 +20,7 @@
     <td>
       <xar:mlstring>Fields</xar:mlstring>
     </td>
-    <td> <xar:comment> TODO: replace with dropdown / multi-select list of fields + adapt code ? </xar:comment>
+    <td> <!-- TODO: replace with dropdown / multi-select list of fields + adapt code ? -->
       <input type="text" name="#$name#[showlist]" id="#$id#_showlist" value="#$showlist#" size="#$size#" tabindex="#$tabindex#" />
     </td>
   </tr>
@@ -28,7 +28,7 @@
     <td>
       <xar:mlstring>Order</xar:mlstring>
     </td>
-    <td> <xar:comment> TODO: replace with dropdown / multi-select list of fields + adapt code ? </xar:comment>
+    <td> <!-- TODO: replace with dropdown / multi-select list of fields + adapt code ? -->
       <input type="text" name="#$name#[orderlist]" id="#$id#_orderlist" value="#$orderlist#" size="#$size#" tabindex="#$tabindex#" />
     </td>
   </tr>
