@@ -1,7 +1,6 @@
 <?php
 /**
  * Get all dynamic data fields for a list of items
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -125,29 +124,32 @@ function &dynamicdata_userapi_getitems($args)
         $catid = '';
     }
 
-    $object = & Dynamic_Object_Master::getObjectList(array('moduleid'  => $modid,
-                                           'itemtype'  => $itemtype,
-                                           'itemids' => $itemids,
-                                           'sort' => $sort,
-                                           'numitems' => $numitems,
-                                           'startnum' => $startnum,
-                                           'where' => $where,
-                                           'fieldlist' => $fieldlist,
-                                           'join' => $join,
-                                           'table' => $table,
-                                           'catid' => $catid,
-                                           'groupby' => $groupby,
-                                           'status' => $status));
-    if (!isset($object)) return $nullreturn;
-    // $items[$itemid]['fields'][$name]['value'] --> $items[$itemid][$name] now
-
-    if (!empty($getobject)) {
-        $object->getItems();
-        return $object;
-    } else {
-        $result = $object->getItems();
-        return $result;
+    $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
+    $objectarray = $itemsarray = array();
+    foreach ($tree as $branch) {
+		$object = & Dynamic_Object_Master::getObjectList(array('moduleid'  => $modid,
+											   'itemtype'  => $branch['itemtype'],
+											   'itemids' => $itemids,
+											   'sort' => $sort,
+											   'numitems' => $numitems,
+											   'startnum' => $startnum,
+											   'where' => $where,
+											   'fieldlist' => $fieldlist,
+											   'join' => $join,
+											   'table' => $table,
+											   'catid' => $catid,
+											   'groupby' => $groupby,
+											   'status' => $status));
+		if (!isset($object)) return $nullreturn;
+		// $items[$itemid]['fields'][$name]['value'] --> $items[$itemid][$name] now
+		if (!empty($getobject)) {
+			$object->getItems();
+			$objectarray[] = $object;
+		} else {
+			$objectarray = $object->getItems();
+        }
     }
+	return $objectarray;
 }
 
 ?>

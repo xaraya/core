@@ -23,7 +23,7 @@ function roles_admin_showusers()
         $defaultgroup = xarModAPIFunc('roles','user','getdefaultgroup');
         $defaultgroupuid = xarModAPIFunc('roles','user','get',
                                                  array('uname'  => $defaultgroup,
-                                                       'type'   => 1));
+                                                       'type'   => ROLES_GROUPTYPE));
     }
     xarVarSetCached('roles', 'defaultgroupuid', $defaultgroupuid);
 
@@ -78,6 +78,12 @@ function roles_admin_showusers()
         $q = new xarQuery();
         $q = $q->sessiongetvar('rolesquery');
     if (empty($q) || isset($reload)) {
+		$types = xarModAPIFunc('roles','user','getitemtypes');
+		$basetypes = array();
+		foreach ($types as $key => $value) {
+			$basetype = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $key, 'moduleid' => 27));
+			if ($basetype['itemtype'] == ROLES_USERTYPE) $basetypes[] = $key;
+		}
         $xartable =& xarDBGetTables();
         $q = new xarQuery('SELECT');
         $q->addtable($xartable['roles'],'r');
@@ -90,14 +96,19 @@ function roles_admin_showusers()
             'r.xar_date_reg AS date_reg'));
 
         //Create the selection
+		$c = array();
         if (!empty($data['search'])) {
-            $c[1] = $q->like('xar_name','%' . $data['search'] . '%');
-            $c[2] = $q->like('xar_uname','%' . $data['search'] . '%');
-            $c[3] = $q->like('xar_email','%' . $data['search'] . '%');
+            $c[] = $q->like('xar_name','%' . $data['search'] . '%');
+            $c[] = $q->like('xar_uname','%' . $data['search'] . '%');
+            $c[] = $q->like('xar_email','%' . $data['search'] . '%');
             $q->qor($c);
         }
 
-        $q->eq('xar_type',0);
+		$c = array();
+		foreach ($basetypes as $type) {
+			$c[] = $q->eq('r.xar_type',$type);
+		}
+		$q->qor($c);
 
         // Add state
         if ($data['state'] == ROLES_STATE_CURRENT) $q->ne('xar_state',ROLES_STATE_DELETED);

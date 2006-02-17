@@ -1,7 +1,6 @@
 <?php
 /**
  * Find all the module's dependencies 
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -143,7 +142,7 @@ function modules_adminapi_getalldependencies($args)
             break;
         }
     }
-    
+
     return $dependency_array;
 }
 

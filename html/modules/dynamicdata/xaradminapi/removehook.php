@@ -1,7 +1,6 @@
 <?php
 /**
  * Delete all dynamicdata fields for a module
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -64,6 +63,7 @@ function dynamicdata_adminapi_removehook($args)
     $result =& $dbconn->Execute($sql,array($modid));
     // TODO: do we want to catch the exception here? or in the callee?
 
+        //return $extrainfo;
     $ids = array();
     while (!$result->EOF) {
         list($id) = $result->fields;
