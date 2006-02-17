@@ -23,15 +23,15 @@ $systemConfiguration['DB.Encoded'] = '0';
 // do NOT use it on your own servers unless your sysadmin + dba teams agree !
 $systemConfiguration['DB.Persistent'] = false;
 
-/* For Logging: 
- * Logging will be done automatically if you create a webserver writable 
- * file in var/logs/log.txt 
- * For more advanced logging options use the logconfig module 
+/* For Logging:
+ * Logging will be done automatically if you create a webserver writable
+ * file in var/logs/log.txt
+ * For more advanced logging options use the logconfig module
  */
 
 /*
  * if you set this to true the core will be able to
- * trap every message that comes  from PHP and if
+ * trap every message that comes from PHP and if
  * possible to show a gracefully error page.
  * This is an advanced option, leave it to false if unsure.
  * TODO: review this in code, it is known to hide some errors
@@ -47,7 +47,7 @@ $systemConfiguration['Exception.EnablePHPErrorHandler'] = true;
  * If set it is passed directly into the error_reporting() function of PHP
  * Normally you want this to be set to E_ALL during development and something a bit lower
  * for a production system.
- * NOTE: Also set this option if you suffer from the changes wrt references 
+ * NOTE: Also set this option if you suffer from the changes wrt references
  *       in php4.4 and php5.x versions or the bug in the zend optimizer
  */
  $systemConfiguration['Exception.ErrorLevel'] = E_ALL;
@@ -58,12 +58,11 @@ $systemConfiguration['Exception.EnablePHPErrorHandler'] = true;
  * true (on).
  *
  * Rule of thumb: If your db server is slower than your webserver and/or
- *                your db does no query caching (mysql 3.x for exampl)
+ *                your db does no query caching (mysql 3.x for example)
  *                this might speed things up a little
  * TODO: Move this out of here
-*/
+ */
 $systemConfiguration['DB.UseADODBCache'] = false;
-
 
 /*
  * This value is used to change the default behavior of the
