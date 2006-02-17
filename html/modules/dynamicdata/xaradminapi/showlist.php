@@ -21,15 +21,7 @@ function dynamicdata_adminapi_showlist($args)
 {
     extract($args);
 
-    // optional layout for the template
-    if (empty($layout)) {
-        $layout = 'default';
-    }
-    // or optional template, if you want e.g. to handle individual fields
-    // differently for a specific module / item type
-    if (empty($template)) {
-        $template = '';
-    }
+    $current = xarModAPIFunc('dynamicdata','user','setcontext',$args);
 
     // we got everything via template parameters
     if (isset($items) && is_array($items)) {
@@ -147,7 +139,6 @@ function dynamicdata_adminapi_showlist($args)
 
     $object->getItems();
 
-    return $object->showList(array('layout'   => $layout,
-                                   'template' => $template));
+    return $object->showList();
 }
 ?>

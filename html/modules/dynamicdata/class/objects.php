@@ -1756,15 +1756,6 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (!empty($args['extend'])) {
             $this->extend();
         }
-        if (empty($args['layout'])) {
-            $args['layout'] = $this->layout;
-        }
-        if (empty($args['template'])) {
-            $args['template'] = $this->template;
-        }
-        if (empty($args['tplmodule'])) {
-            $args['tplmodule'] = $this->tplmodule;
-        }
         if (empty($args['viewfunc'])) {
             $args['viewfunc'] = $this->viewfunc;
         }
@@ -1852,6 +1843,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                 $args['urlmodule'] = $modname;
             }
         }
+
         foreach (array_keys($this->items) as $itemid) {
     // TODO: improve this + SECURITY !!!
             $options = array();
@@ -1869,23 +1861,20 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                                        'olink'  => xarModURL($args['urlmodule'],$linktype,$linkfunc,
                                                    array('itemtype'     => $itemtype,
                                                          'table'        => $table,
-                                                         $args['param'] => $itemid,
-                                                         'template'     => $args['template'])),
+                                                         $args['param'] => $itemid)),
                                        'ojoin'  => '');
                 }
                 $options[] = array('otitle' => xarML('Edit'),
                                    'olink'  => xarModURL($args['urlmodule'],'admin','modify',
                                                array('itemtype'     => $itemtype,
                                                      'table'        => $table,
-                                                     $args['param'] => $itemid,
-                                                     'template'     => $args['template'])),
+                                                     $args['param'] => $itemid)),
                                    'ojoin'  => '|');
                 $options[] = array('otitle' => xarML('Delete'),
                                    'olink'  => xarModURL($args['urlmodule'],'admin','delete',
                                                array('itemtype'     => $itemtype,
                                                      'table'        => $table,
-                                                     $args['param'] => $itemid,
-                                                     'template'     => $args['template'])),
+                                                     $args['param'] => $itemid)),
                                    'ojoin'  => '|');
             } elseif(xarSecurityCheck('EditDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
                 if ($dummy_mode && $this->items[$itemid]['moduleid'] != 182) {
@@ -1897,16 +1886,14 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                                        'olink'  => xarModURL($args['urlmodule'],$linktype,$linkfunc,
                                                    array('itemtype'     => $itemtype,
                                                          'table'        => $table,
-                                                         $args['param'] => $itemid,
-                                                         'template'     => $args['template'])),
+                                                         $args['param'] => $itemid)),
                                        'ojoin'  => '');
                 }
                 $options[] = array('otitle' => xarML('Edit'),
                                    'olink'  => xarModURL($args['urlmodule'],'admin','modify',
                                                array('itemtype'     => $itemtype,
                                                      'table'        => $table,
-                                                     $args['param'] => $itemid,
-                                                     'template'     => $args['template'])),
+                                                     $args['param'] => $itemid)),
                                    'ojoin'  => '|');
             } elseif(xarSecurityCheck('ReadDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
                 if ($dummy_mode && $this->items[$itemid]['moduleid'] != 182) {
@@ -1918,8 +1905,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                                        'olink'  => xarModURL($args['urlmodule'],$linktype,$linkfunc,
                                                    array('itemtype'     => $itemtype,
                                                          'table'        => $table,
-                                                         $args['param'] => $itemid,
-                                                         'template'     => $args['template'])),
+                                                         $args['param'] => $itemid)),
                                        'ojoin'  => '');
                 }
             }
@@ -1964,7 +1950,9 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         // with custom tags.
         $args['objectid'] = $this->objectid;
 
-        return xarTplObject($args['tplmodule'],$args['template'],'showlist',$args);
+	    $current = xarModAPIFunc('dynamicdata','user','setcontext',$args);
+
+        return xarTplObject($current['tplmodule'],$current['template'],'showlist',$args);
     }
 
     function showView($args = array())

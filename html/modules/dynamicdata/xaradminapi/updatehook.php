@@ -90,7 +90,6 @@ function dynamicdata_adminapi_updatehook($args)
         //return $extrainfo;
     }
 
-//    if ($modid == 147) die(var_dump($extrainfo));
     $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
     foreach ($tree as $branch) {
     	if ($branch['objectid'] == 0) continue;
