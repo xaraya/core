@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
 <span class="xar-error"><xar:mlstring>Warning: the template showinput-[property type].xd or showinput-[template].xd is missing for this property !</xar:mlstring></span>
 <br/>

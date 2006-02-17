@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:if condition="!empty($value)">
     <xar:comment>we're using a hidden field to keep track of any previously uploaded file here</xar:comment>
     <span id="#$id#_text"><xar:ml><xar:mlstring>Uploaded file: #(1)</xar:mlstring><xar:mlvar>#$value#</xar:mlvar></xar:ml> <input type="button" onClick="document.getElementById('#$id#_hidden').value='';document.getElementById('#$id#_text').innerHTML='';" value="#xarML('Clear')#" />
