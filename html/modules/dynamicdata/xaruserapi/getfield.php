@@ -12,16 +12,15 @@
  */
 /**
  * get a specific item field
-// TODO: update this with all the new stuff
+ * @TODO: update this with all the new stuff
  *
  * @author the DynamicData module development team
- * @param $args['module'] module name of the item field to get, or
- * @param $args['modid'] module id of the item field to get
- * @param $args['itemtype'] item type of the item field to get
- * @param $args['itemid'] item id of the item field to get
- * @param $args['name'] name of the field to get
- * @returns mixed
- * @return value of the field, or false on failure
+ * @param string $args['module'] module name of the item field to get, or
+ * @param int $args['modid'] module id of the item field to get
+ * @param int $args['itemtype'] item type of the item field to get
+ * @param int $args['itemid'] item id of the item field to get
+ * @param string $args['name'] name of the field to get
+ * @return mixed value of the field, or false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_userapi_getfield($args)

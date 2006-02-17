@@ -15,17 +15,16 @@
  * (identified by module + item type + item id or table + item id)
  *
  * @author the DynamicData module development team
- * @param $args['module'] module name of the item fields to get or
- * @param $args['modid'] module id of the item fields to get +
- * @param $args['itemtype'] item type of the item fields to get, or
+ * @param string $args['module'] module name of the item fields to get or
+ * @param int $args['modid'] module id of the item fields to get +
+ * @param int $args['itemtype'] item type of the item fields to get, or
  * @param $args['table'] database table to turn into an object
- * @param $args['itemid'] item id of the item fields to get
- * @param $args['fieldlist'] array of field labels to retrieve (default is all)
+ * @param int $args['itemid'] item id of the item fields to get
+ * @param array $args['fieldlist'] array of field labels to retrieve (default is all)
  * @param $args['status'] limit to property fields of a certain status (e.g. active)
  * @param $args['join'] join a module table to the dynamic object (if it extends the table)
- * @param $args['getobject'] flag indicating if you want to get the whole object back
- * @param $args['preview'] flag indicating if you're previewing an item
- * @returns array
+ * @param bool $args['getobject'] flag indicating if you want to get the whole object back
+ * @param bool $args['preview'] flag indicating if you're previewing an item
  * @return array of (name => value), or false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */

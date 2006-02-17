@@ -11,12 +11,11 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
-// TODO: move this to some common place in Xaraya (base module ?)
  * return the properties and items
  *
- * @param $args array containing the items or fields to show
- * @returns array
+ * @param array $args array containing the items or fields to show
  * @return array containing a reference to the properties and a reference to the items
+ * @TODO: move this to some common place in Xaraya (base module ?)
  */
 function dynamicdata_userapi_getitemsforview($args)
 {
