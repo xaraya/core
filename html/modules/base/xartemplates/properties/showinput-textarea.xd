@@ -32,7 +32,7 @@
     I'm hesitant to pass along ie-only workarounds at this moment, so be aware of this! (andyv)
 </xar:comment>
 
-<xar:set name="textareasource">'
+<xar:set name="textareasource">"
 <!--
 textarea#'.$id.' {
     max-width: 99%;
@@ -40,7 +40,7 @@ textarea#'.$id.' {
     height: '. ($rows * 1.6) .'em;
 }
 -->
-'</xar:set>
+"</xar:set>
 <xar:style method="embed" source="'.$textareasource.'" media="all" />
 <div class="xar-form-container-after">
     <textarea name="#$name#" rows="#$rows#" cols="#$cols#" id="#$id#" tabindex="#$tabindex#" class="#$class#">#$value#</textarea>

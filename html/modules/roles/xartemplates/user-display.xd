@@ -16,7 +16,7 @@
             <xar:mlvar>#$itemtypename#</xar:mlvar>
         </xar:ml>
     <xar:else/>                
-        <xar:if condition="strtolower($uname) ne 'anonymous' and strtolower($uname) ne 'myself'">
+        <xar:if condition="($basetype eq ROLES_USERTYPE) and (strtolower($uname) ne 'anonymous') and (strtolower($uname) ne 'myself')">
             <xar:if condition="xarModGetVar('roles', 'usersendemails')">
                 <p>
                     <strong>

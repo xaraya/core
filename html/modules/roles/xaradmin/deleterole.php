@@ -19,8 +19,6 @@ function roles_admin_deleterole()
     if (!xarVarFetch('uid', 'int:1:', $uid, 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('itemid', 'int', $itemid, NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('confirmation', 'str:1:', $confirmation, '', XARVAR_NOT_REQUIRED)) return;
-//    if (!xarVarFetch('itemtype', 'int', $itemtype, NULL, XARVAR_DONT_SET)) return;
-//   	if (!xarVarFetch('itemtype', 'int', $data['itemtype'], ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
 
     $uid = isset($itemid) ? $itemid : $uid;
 
