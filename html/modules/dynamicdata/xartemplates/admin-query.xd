@@ -12,7 +12,7 @@
         </xar:ml>
     </h2>
     <form method="post" action="&xar-modurl-dynamicdata-admin-query;">
-        <table border="0" cellpadding="5">
+        <table border="0" cellpadding="5" class="xar-align-left xar-fullwidth">
             <tr>
                 <td>
                     <label for="itemid">
@@ -142,6 +142,7 @@
                 </td>
             </tr>
         </table>
+<!-- 
         <table border="0" cellpadding="5">
             <xar:if condition="!empty($properties)">
                 <tr>
@@ -262,6 +263,105 @@
                 </td>
             </tr>
         </table>
+ -->
+        <xar:comment>
+            vertical layout of basically the same table as above (as requested by johnny, implemented by andyv)
+            NOTE: if someone ever need the horisontal layout, then please implement a GUI switch
+        </xar:comment>
+        <table summary="Query Options" class="xar-align-left xar-fullwidth">
+            <tr>
+                <th><xar:mlstring>Properties:</xar:mlstring></th>
+                <th><xar:mlstring>Conditions:</xar:mlstring></th>
+                <th><xar:mlstring>Operation:</xar:mlstring></th>
+                <th><xar:mlstring>Sort Order:</xar:mlstring></th>
+            </tr>
+            <xar:if condition="!empty($properties)">
+                <xar:foreach in="$properties" key="$name">
+                    <tr>
+                        <td>
+                            <xar:if condition="$name eq '_extra_'">
+                                <select name="field[$name]">
+                                    <option value="">
+                                        <xar:mlstring>Select:</xar:mlstring>
+                                    </option>
+                                    <xar:foreach in="$properties" key="$name2">
+                                        <xar:if condition="!empty($field[$name]) and $field[$name] eq $name2">
+                                            <option value="#$name2#" selected="selected">
+                                                <xar:data-label property="$properties[$name2]" />
+                                            </option>
+                                            <xar:else />
+                                            <option value="#$name2#">
+                                                <xar:data-label property="$properties[$name2]" />
+                                            </option>
+                                        </xar:if>
+                                    </xar:foreach>
+                                </select>
+                                <xar:elseif condition="!empty($field[$name])" />
+                                <input type="checkbox" name="field[#$name#]" id="field_#$name#" value="1" checked="checked" />
+                                <label for="field_#$name#">
+                                    <xar:data-label property="$properties[$name]" />
+                                </label>
+                                <xar:else />
+                                <input type="checkbox" name="field[#$name#]" id="field_#$name#" value="1" />
+                                <label for="field_#$name#">
+                                    <xar:data-label property="$properties[$name]" />
+                                </label>
+                            </xar:if>                            
+                        </td>
+                        <td>
+                            <xar:if condition="!empty($groupby)">
+                                <select name="operation[#$name#]" id="operation_#$name#">
+                                    <option value=""></option>
+                                    <xar:foreach in="$operationoptions" value="$option">
+                                        <xar:if condition="!empty($operation[$name]) and $operation[$name] eq $option['id']">
+                                            <option value="#$option['id']#" selected="selected">#$option['name']#</option>
+                                            <xar:else />
+                                            <option value="#$option['id']#">#$option['name']#</option>
+                                        </xar:if>
+                                    </xar:foreach>
+                                </select>
+                                <label for="operation_#$name#" />                            
+                            </xar:if>
+                            <select name="where[#$name#]" id="where_#$name#">
+                                <option value=""></option>
+                                <xar:foreach in="$whereoptions" value="$option">
+                                    <xar:if condition="!empty($where[$name]) and $where[$name] eq $option['id']">
+                                        <option value="#$option['id']#" selected="selected">#$option['name']#</option>
+                                        <xar:else />
+                                        <option value="#$option['id']#">#$option['name']#</option>
+                                    </xar:if>
+                                </xar:foreach>
+                            </select>
+                            <label for="where_#$name#" />                            
+                        </td>
+                        <td>
+                            <xar:if condition="isset($value[$name])">
+                                <input name="value[#$name#]" id="value_#$name#" value="#$value[$name]#" type="text" size="13" />
+                                <xar:else />
+                                <input name="value[#$name#]" id="value_#$name#" value="" type="text" size="13" />
+                            </xar:if>                        
+                        </td>
+                        <td>
+                            <select name="sort[#$name#]" id="sort_#$name#">
+                                <option value=""></option>
+                                <xar:foreach in="$sortoptions" value="$option">
+                                    <xar:if condition="!empty($sort[$name]) and $sort[$name] eq $option['id']">
+                                        <option value="#$option['id']#" selected="selected">#$option['name']#</option>
+                                        <xar:else />
+                                        <option value="#$option['id']#">#$option['name']#</option>
+                                    </xar:if>
+                                </xar:foreach>
+                            </select>                        
+                        </td>
+                    </tr>
+                </xar:foreach>
+            </xar:if>
+            <tr>
+                <th class="xar-align-left">Submit</th>
+                <td colspan=3><input type="submit" value="#$submit#" /></td>
+            </tr>
+        </table>
+        
     </form>
     <xar:if condition="!empty($viewlink)">
         <p>
