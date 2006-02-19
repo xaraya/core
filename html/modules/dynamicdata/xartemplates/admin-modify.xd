@@ -36,10 +36,12 @@
         </div>
     </xar:if>
 
-    <fieldset>
-      <legend><xar:mlstring>Preview</xar:mlstring></legend>
-      <xar:data-display object="$object" />
-    </fieldset>
+    <xar:if condition="isset($preview)">
+        <fieldset>
+            <legend><xar:mlstring>Preview</xar:mlstring></legend>
+            <xar:data-display object="$object" />
+        </fieldset>
+    </xar:if>
 
     <xar:set name="isupload">#$object:upload#</xar:set>
     <xar:if condition="!empty($isupload)">

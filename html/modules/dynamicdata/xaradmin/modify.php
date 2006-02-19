@@ -28,7 +28,8 @@ function dynamicdata_admin_modify($args)
 
     if(!xarVarFetch('itemid',   'isset', $itemid)) {return;}
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
-    
+    if(!xarVarFetch('preview',    'isset', $preview,     NULL, XARVAR_DONT_SET)) {return;}
+
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
     if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
@@ -53,6 +54,7 @@ function dynamicdata_admin_modify($args)
     $data['objectid'] = $myobject->objectid;
     $data['itemid'] = $itemid;
     $data['authid'] = xarSecGenAuthKey();
+    $data['preview'] = $preview;
 
     $modinfo = xarModGetInfo($myobject->moduleid);
     $item = array();
