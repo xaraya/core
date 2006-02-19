@@ -264,9 +264,6 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         } else {
             $itemids = array();
         }
-        // TODO: is this is the proper solution in different scenarios?
-        // necessary for extended objects where the base itemtype has a flat table datasource
-        if ($itemids == array()) return true;
         // check if it's set here - could be 0 (= empty) too
         if (isset($args['cache'])) {
             $this->cache = $args['cache'];
