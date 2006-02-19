@@ -8,7 +8,7 @@ $ADODB_INCLUDED_CSV = 1;
 
 /* 
 
-  V4.60 24 Jan 2005  (c) 2000-2005 John Lim (jlim@natsoft.com.my). All rights reserved.
+  V4.71 24 Jan 2006  (c) 2000-2006 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. See License.txt. 
@@ -99,7 +99,7 @@ $ADODB_INCLUDED_CSV = 1;
 			$err = $url.' file/URL not found';
 			return $false;
 		}
-		flock($fp, LOCK_SH);
+		@flock($fp, LOCK_SH);
 		$arr = array();
 		$ttl = 0;
 		
@@ -280,7 +280,7 @@ $ADODB_INCLUDED_CSV = 1;
 			$mtime = substr(str_replace(' ','_',microtime()),2); 
 			// getmypid() actually returns 0 on Win98 - never mind!
 			$tmpname = $filename.uniqid($mtime).getmypid();
-			if (!($fd = fopen($tmpname,'a'))) return false;
+			if (!($fd = @fopen($tmpname,'a'))) return false;
 			$ok = ftruncate($fd,0);			
 			if (!fwrite($fd,$contents)) $ok = false;
 			fclose($fd);
@@ -296,7 +296,7 @@ $ADODB_INCLUDED_CSV = 1;
 			}
 			return $ok;
 		}
-		if (!($fd = fopen($filename, 'a'))) return false;
+		if (!($fd = @fopen($filename, 'a'))) return false;
 		if (flock($fd, LOCK_EX) && ftruncate($fd, 0)) {
 			$ok = fwrite( $fd, $contents );
 			fclose($fd);

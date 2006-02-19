@@ -1,7 +1,7 @@
 <?php
 
 /**
-  V4.60 24 Jan 2005  (c) 2000-2005 John Lim (jlim@natsoft.com.my). All rights reserved.
+  V4.71 24 Jan 2006  (c) 2000-2006 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -61,6 +61,7 @@ function Lens_ParseArgs($args,$endstmtchar=',',$tokenchars='_.-')
 	$tokens[$stmtno] = array();
 	$max = strlen($args);
 	$quoted = false;
+	$tokarr = array();
 	
 	while ($pos < $max) {
 		$ch = substr($args,$pos,1);
@@ -171,6 +172,7 @@ class ADODB_DataDict {
 	var $dropCol = ' DROP COLUMN';
 	var $renameColumn = 'ALTER TABLE %s RENAME COLUMN %s TO %s';	// table, old-column, new-column, column-definitions (not used by default)
 	var $nameRegex = '\w';
+	var $nameRegexBrackets = 'a-zA-Z0-9_\(\)';
 	var $schema = false;
 	var $serverInfo = array();
 	var $autoIncrement = false;
@@ -218,7 +220,7 @@ class ADODB_DataDict {
 		return ADORecordSet::MetaType($t,$len,$fieldobj);
 	}
 	
-	function NameQuote($name = NULL)
+	function NameQuote($name = NULL,$allowBrackets=false)
 	{
 		if (!is_string($name)) {
 			return FALSE;
@@ -238,7 +240,9 @@ class ADODB_DataDict {
 		}
 		
 		// if name contains special characters, quote it
-		if ( !preg_match('/^[' . $this->nameRegex . ']+$/', $name) ) {
+		$regex = ($allowBrackets) ? $this->nameRegexBrackets : $this->nameRegex;
+		
+		if ( !preg_match('/^[' . $regex . ']+$/', $name) ) {
 			return $quote . $name . $quote;
 		}
 		
@@ -319,7 +323,8 @@ class ADODB_DataDict {
 		}
 		
 		foreach($flds as $key => $fld) {
-			$flds[$key] = $this->NameQuote($fld);
+			# some indexes can use partial fields, eg. index first 32 chars of "name" with NAME(32)
+			$flds[$key] = $this->NameQuote($fld,$allowBrackets=true);
 		}
 		
 		return $this->_IndexSQL($this->NameQuote($idxname), $this->TableName($tabname), $flds, $this->_Options($idxoptions));
@@ -565,7 +570,7 @@ class ADODB_DataDict {
 				} else {
 					$fdefault = $this->connection->sysDate;
 				}
-			} else if (strlen($fdefault) && !$fnoquote)
+			} else if ($fdefault !== false && !$fnoquote)
 				if ($ty == 'C' or $ty == 'X' or 
 					( substr($fdefault,0,1) != "'" && !is_numeric($fdefault)))
 					if (strlen($fdefault) != 1 && substr($fdefault,0,1) == ' ' && substr($fdefault,strlen($fdefault)-1) == ' ') 
@@ -733,6 +738,11 @@ class ADODB_DataDict {
 			$holdflds = array();
 			foreach($flds as $k=>$v) {
 				if ( isset($cols[$k]) && is_object($cols[$k]) ) {
+					// If already not allowing nulls, then don't change
+					$obj = $cols[$k];
+					if (isset($obj->not_null) && $obj->not_null)
+						$v = str_replace('NOT NULL','',$v);
+
 					$c = $cols[$k];
 					$ml = $c->max_length;
 					$mt = $this->MetaType($c->type,$ml);
