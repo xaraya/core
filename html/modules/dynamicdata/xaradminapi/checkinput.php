@@ -18,7 +18,7 @@
  * @param $extrainfo optional extra information (from hooks)
  * @returns array
  * @return array of invalid fields
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
 function dynamicdata_adminapi_checkinput($args)
 {

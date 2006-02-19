@@ -21,7 +21,7 @@
  * @param $args['fields'] array containing the field definitions and values
  * @returns mixed
  * @return item id on success, null on failure
- * @raise BAD_PARAM, NO_PERMISSION
+ * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_update($args)
 {

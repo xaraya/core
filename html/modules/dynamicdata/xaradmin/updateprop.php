@@ -12,6 +12,12 @@
  */
 /**
  * Update the dynamic properties for a module + itemtype
+ *
+ * @param int objectid
+ * @param int modid
+ * @param int itemtype
+ * @throws BAD_PARAM
+ * @return bool true on success and redirect to modifyprop
  */
 function dynamicdata_admin_updateprop()
 {
@@ -28,11 +34,7 @@ function dynamicdata_admin_updateprop()
     if(!xarVarFetch('dd_status',     'isset', $dd_status,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_validation', 'isset', $dd_validation,  NULL, XARVAR_DONT_SET)) {return;}
 
-
-    // Confirm authorisation code.  This checks that the form had a valid
-    // authorisation code attached to it.  If it did not then the function will
-    // proceed no further as it is possible that this is an attempt at sending
-    // in false data to the system
+    // Confirm authorisation code.
     if (!xarSecConfirmAuthKey()) return;
 
     if (empty($itemtype)) {

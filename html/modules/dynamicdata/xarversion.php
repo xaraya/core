@@ -17,23 +17,21 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
-$modversion['name'] = 'Dynamic Data';
-$modversion['id'] = '182';
-$modversion['displayname'] = xarML('Dynamic Data');
-$modversion['version'] = '1.2.1';
-$modversion['description'] = 'Dynamic Data Module';
+$modversion['name']         = 'Dynamic Data';
+$modversion['id']           = '182';
+$modversion['displayname']  = xarML('Dynamic Data');
+$modversion['version']      = '1.2.1';
+$modversion['description']  = 'Dynamic Data Module';
 $modversion['displaydescription'] = xarML('Dynamic Data Module');
-$modversion['credits'] = 'xardocs/credits.txt';
-$modversion['help'] = 'xardocs/help.txt';
-$modversion['changelog'] = 'xardocs/changelog.txt';
-$modversion['license'] = 'xardocs/license.txt';
-$modversion['official'] = 1;
-$modversion['author'] = 'mikespub';
-$modversion['contact'] = 'http://www.xaraya.com/';
-$modversion['admin'] = 1;
-$modversion['user'] = 1;
-$modversion['securityschema'] = array('DynamicData::Item' => 'ModuleID:ItemType:ItemID',
-                                      'DynamicData::Field' => 'FieldName:FieldType:FieldID');
-$modversion['class'] = 'Core Complete';
-$modversion['category'] = 'Content';
+$modversion['credits']      = 'xardocs/credits.txt';
+$modversion['help']         = 'xardocs/help.txt';
+$modversion['changelog']    = 'xardocs/changelog.txt';
+$modversion['license']      = 'xardocs/license.txt';
+$modversion['official']     = 1;
+$modversion['author']       = 'mikespub';
+$modversion['contact']      = 'http://www.xaraya.com/';
+$modversion['admin']        = 1;
+$modversion['user']         = 1;
+$modversion['class']        = 'Core Complete';
+$modversion['category']     = 'Content';
 ?>

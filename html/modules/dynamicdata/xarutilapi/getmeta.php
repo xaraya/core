@@ -1,6 +1,6 @@
 <?php
 /**
- * (try to) get the "meta" properties of tables 
+ * (try to) get the "meta" properties of tables
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
@@ -17,7 +17,7 @@
  * @param $args['table']  optional table you're looking for
  * @returns mixed
  * @return array of field definitions, or null on failure
- * @raise BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
+ * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
  */
 function dynamicdata_utilapi_getmeta($args)
 {

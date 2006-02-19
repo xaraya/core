@@ -13,8 +13,8 @@
 /**
  * utility function to pass item field definitions to whoever
  *
- * @param $args['itemtype'] item type
- * @returns array
+ * @param int $args['itemtype'] item type
+ * @param int modid ID of the module
  * @return array containing the item field definitions
  */
 function dynamicdata_userapi_getitemfields($args)

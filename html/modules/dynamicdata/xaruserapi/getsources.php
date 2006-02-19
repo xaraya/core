@@ -1,6 +1,6 @@
 <?php
 /**
- * Get possible data sources 
+ * Get possible data sources
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
@@ -19,7 +19,7 @@
  * @param $args['itemtype'] item type of the item field to get (// TODO: for a module ?)
  * @returns mixed
  * @return list of possible data sources, or false on failure
- * @raise BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
+ * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
  */
 function dynamicdata_userapi_getsources($args)
 {

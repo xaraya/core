@@ -14,9 +14,8 @@
  * get the list of modules + itemtypes for which dynamic properties are defined
  *
  * @author the DynamicData module development team
- * @returns array
  * @return array of modid + itemtype + number of properties
- * @raise DATABASE_ERROR, NO_PERMISSION
+ * @throws DATABASE_ERROR, NO_PERMISSION
  */
 function dynamicdata_userapi_getmodules($args)
 {

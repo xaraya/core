@@ -13,6 +13,7 @@
 /**
  * This is a standard function to modify the configuration parameters of the
  * module
+ * @return array
  */
 function dynamicdata_admin_modifyconfig()
 {
@@ -22,9 +23,7 @@ function dynamicdata_admin_modifyconfig()
     // support easy navigation
     $data = xarModAPIFunc('dynamicdata','admin','menu');
 
-    // Security check - important to do this as early as possible to avoid
-    // potential security holes or just too much wasted processing
-// Security Check
+    // Security check
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
     // Generate a one-time authorisation code for this operation

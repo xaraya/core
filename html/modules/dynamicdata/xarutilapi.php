@@ -9,7 +9,10 @@
  *
  * @subpackage Dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
-*/
+ */
+/**
+ * Dynamic Data utilities
+ */
 require_once 'modules/dynamicdata/class/objects.php';
 
 ?>

@@ -24,7 +24,7 @@
  * @param $args['maxid'] for purely dynamic objects, the current max. itemid (for import only)
  * @returns int
  * @return object ID on success, null on failure
- * @raise BAD_PARAM, NO_PERMISSION
+ * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_createobject($args)
 {

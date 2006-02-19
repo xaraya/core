@@ -14,14 +14,13 @@
  * Update hooks when migrating module items
  *
  * @author the DynamicData module development team
- * @param $args['from'] the module id and itemtype for the original items
- * @param $args['to'] the module id and itemtype for the new items
+ * @param array $args['from'] the module id and itemtype for the original items
+ * @param array $args['to'] the module id and itemtype for the new items
  * @param $args['hookmap'] the hook mapping
- * @param $args['itemids'] the list of old => new itemids
+ * @param array $args['itemids'] the list of old => new itemids
  * @param $args['debug'] don't actually update anything :-)
- * @returns mixed
- * @return true or debug string on success, null on failure
- * @raise BAD_PARAM, NO_PERMISSION
+ * @return mixed true or debug string on success, null on failure
+ * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_utilapi_updatehooks($args)
 {

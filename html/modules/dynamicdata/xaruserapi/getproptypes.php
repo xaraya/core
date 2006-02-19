@@ -1,6 +1,6 @@
 <?php
 /**
- * Get the list of defined property types 
+ * Get the list of defined property types
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
@@ -16,7 +16,7 @@
  * @author the DynamicData module development team
  * @returns array
  * @return array of property types
- * @raise DATABASE_ERROR, NO_PERMISSION
+ * @throws DATABASE_ERROR, NO_PERMISSION
  */
 function dynamicdata_userapi_getproptypes($args)
 {

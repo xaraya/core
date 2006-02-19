@@ -17,7 +17,7 @@
  * @param $args['extrainfo'] extra information
  * @returns bool
  * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
 function dynamicdata_adminapi_removehook($args)
 {
@@ -69,7 +69,7 @@ function dynamicdata_adminapi_removehook($args)
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
-        // MrB: why does the next hook need to run when we have a system exception 
+        // MrB: why does the next hook need to run when we have a system exception
         // pending?
         return $extrainfo;
     }
@@ -100,7 +100,7 @@ function dynamicdata_adminapi_removehook($args)
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
-        // MrB: why does the next hook need to run when we have a system exception 
+        // MrB: why does the next hook need to run when we have a system exception
         // pending?
         //return false;
         return $extrainfo;
@@ -117,7 +117,7 @@ function dynamicdata_adminapi_removehook($args)
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DATABASE_ERROR',
                        new SystemException($msg));
         // we *must* return $extrainfo for now, or the next hook will fail
-        // MrB: why does the next hook need to run when we have a system exception 
+        // MrB: why does the next hook need to run when we have a system exception
         // pending?
         //return false;
         return $extrainfo;

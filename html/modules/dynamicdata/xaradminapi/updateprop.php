@@ -26,7 +26,7 @@
  * @param $args['validation'] validation of the field to update (optional)
  * @returns bool
  * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION
+ * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_updateprop($args)
 {
@@ -59,7 +59,7 @@ function dynamicdata_adminapi_updateprop($args)
     }
 
     // Get database setup - note that xarDBGetTables()
-    // returns an array but we handle it differently.   
+    // returns an array but we handle it differently.
     // For xarDBGetTables() we want to keep the entire
     // tables array together for easy reference later on
     $dbconn =& xarDBGetConn();

@@ -17,7 +17,7 @@
  * @param $args['extrainfo'] extra information
  * @returns bool
  * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
 function dynamicdata_admin_newhook($args)
 {

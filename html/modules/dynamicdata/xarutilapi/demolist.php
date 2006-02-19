@@ -1,6 +1,6 @@
 <?php
 /**
- * Sample function returning an array of options 
+ * Sample function returning an array of options
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -15,7 +15,7 @@
  * @author the DynamicData module development team
  * @returns array
  * @return array of values, or array of id => value combinations
- * @raise BAD_PARAM, NO_PERMISSION
+ * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_utilapi_demolist($args)
 {

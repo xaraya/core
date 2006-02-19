@@ -16,7 +16,7 @@
  * @author the DynamicData module development team
  * @returns array
  * @return array of object definitions
- * @raise DATABASE_ERROR, NO_PERMISSION
+ * @throws DATABASE_ERROR, NO_PERMISSION
  */
 function dynamicdata_userapi_getobjects($args = array())
 {

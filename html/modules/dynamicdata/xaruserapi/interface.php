@@ -14,12 +14,11 @@
  * get a dynamic object interface
  *
  * @author the DynamicData module development team
- * @param $args['objectid'] id of the object you're looking for, or
- * @param $args['moduleid'] module id of the item field to get
- * @param $args['itemtype'] item type of the item field to get
- * @param $args['classname'] optional classname (e.g. <module>_Dynamic_Object[_Interface])
- * @returns object
- * @return a particular Dynamic Object Interface
+ * @param id $args['objectid'] id of the object you're looking for, or
+ * @param id $args['moduleid'] module id of the item field to get
+ * @param int $args['itemtype'] item type of the item field to get
+ * @param string $args['classname'] optional classname (e.g. <module>_Dynamic_Object[_Interface])
+ * @return object a particular Dynamic Object Interface
  */
 function &dynamicdata_userapi_interface($args)
 {

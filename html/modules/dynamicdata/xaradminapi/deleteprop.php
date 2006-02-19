@@ -26,7 +26,7 @@
  * @param $args['validation'] validation of the field to delete
  * @returns bool
  * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION
+ * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_deleteprop($args)
 {
