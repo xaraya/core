@@ -13,7 +13,7 @@ Changes made to ADOdb library ONLY in this Xaraya 1.1.x series
             files and xartests directory added, and this xarchanges.txt file.
             1.0.x series changes have been left for reference.
 
-
+File removal: server.php [Bug 5233] Xaraya Directory Traversal Vulnerability
 
 
 =============================================================
