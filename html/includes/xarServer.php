@@ -431,9 +431,17 @@ function xarRequestGetInfo()
     xarVarFetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $modType, 'user');
     xarVarFetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $funcName, 'main');
 
-    if ($GLOBALS['xarRequest_allowShortURLs'] && empty($modName) && ($path = xarServerGetVar('PATH_INFO')) != ''
+    //CGI-PHP support patch (inc subdirectory install)
+    $path = xarServerGetVar('PATH_INFO');
+    if ($path == '') $path = substr(xarServerGetVar('REDIRECT_URL'),strlen(xarCore_getSystemVar('BaseURI',true)));
+    if ($GLOBALS['xarRequest_allowShortURLs'] && empty($modName) && $path != ''
+    //end CGI-PHP support patch
         // IIS fix
         && $path != xarServerGetVar('SCRIPT_NAME')) {
+    /*if ($GLOBALS['xarRequest_allowShortURLs'] && empty($modName) && ($path = xarServerGetVar('PATH_INFO')) != ''
+        // IIS fix
+        && $path != xarServerGetVar('SCRIPT_NAME')) {
+    */
         /*
         Note: we need to match anything that might be used as module params here too ! (without compromising security)
         preg_match_all('|/([a-z0-9_ .+-]+)|i', $path, $matches);
