@@ -40,8 +40,7 @@ function dynamicdata_userapi_handleDisplayTag($args)
     }
 
     // since no object available we must have a moduleid
-    $out = "if (!isset(\$moduleid)) \$moduleid = 182;";
-    $out .= "echo xarModAPIFunc(xarModGetNameFromID(\$moduleid),
+    $out = "echo xarModAPIFunc('dynamicdata',
                    'user',
                    'showdisplay',\n";
     if (isset($args['definition'])) {

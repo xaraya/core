@@ -19,6 +19,7 @@ function roles_admin_deleterole()
     if (!xarVarFetch('uid', 'int:1:', $uid, 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('itemid', 'int', $itemid, NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('confirmation', 'str:1:', $confirmation, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('returnurl', 'str', $returnurl, '', XARVAR_NOT_REQUIRED)) return;
 
     $uid = isset($itemid) ? $itemid : $uid;
 
@@ -71,6 +72,7 @@ function roles_admin_deleterole()
         $data['ptype'] = $role->getType();
         $data['deletelabel'] = xarML('Delete');
         $data['name'] = $name;
+        $data['returnurl'] = $returnurl;
         return $data;
     } else {
         // Check for authorization code
@@ -95,7 +97,11 @@ function roles_admin_deleterole()
             throw new ForbiddenOperation($role->getName(),'The user "#(1)" has an active session and can not be removed at this time.');
         }
         // redirect to the next page
-        xarResponseRedirect(xarModURL('roles', 'admin', 'showusers'));
+		if (empty($returnurl)) {
+			xarResponseRedirect(xarModURL('roles', 'admin', 'showusers'));
+		} else {
+			xarResponseRedirect($returnurl);
+		}
     }
 }
 ?>

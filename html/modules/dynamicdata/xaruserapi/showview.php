@@ -36,7 +36,7 @@ function dynamicdata_userapi_showview($args)
     } else {
         $count=true;
     }
-    
+
     // we got everything via template parameters
     if (isset($items) && is_array($items)) {
         return xarTplModule('dynamicdata','user','showview',
@@ -146,7 +146,8 @@ function dynamicdata_userapi_showview($args)
                                            'table' => $table,
                                            'catid' => $catid,
                                            'groupby' => $groupby,
-                                           'status' => $status));
+                                           'status' => $status,
+                                           'extend' => !empty($extend)));
     if (!isset($object)) return;
 
     // Count before numitems!
@@ -184,7 +185,8 @@ function dynamicdata_userapi_showview($args)
                                    'param'     => $param,
                                    'pagerurl'  => $pagerurl,
                                    'linkfield' => $linkfield,
-                                   'count'     => $numthings));
+                                   'count'     => $numthings,
+                                   'tplmodule' => $tplmodule));
 }
 
 ?>

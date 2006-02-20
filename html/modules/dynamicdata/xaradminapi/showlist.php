@@ -134,9 +134,8 @@ function dynamicdata_adminapi_showlist($args)
                                            'table' => $table,
                                            'catid' => $catid,
                                            'groupby' => $groupby,
-                                           'status' => $status));
-    if (!empty($extend)) $object->extend();
-
+                                           'status' => $status,
+                                           'extend'  => !empty($extend)));
     $object->getItems();
 
     return $object->showList();

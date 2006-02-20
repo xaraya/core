@@ -102,7 +102,8 @@ function dynamicdata_userapi_showdisplay($args)
                                        'itemid'    => $itemid,
                                        'join'      => $join,
                                        'table'     => $table,
-                                       'fieldlist' => $myfieldlist));
+                                       'fieldlist' => $myfieldlist,
+                                       'extend'    => !empty($extend)));
     // we're dealing with a real item, so retrieve the property values
     if (!empty($itemid)) {
         $object->getItem();

@@ -25,6 +25,7 @@ function roles_user_display($args)
     if (!xarVarFetch('itemtype', 'int', $itemtype, 1, XARVAR_NOT_REQUIRED)) return;
     if(!xarVarFetch('tplmodule', 'str', $args['tplmodule'], 'roles', XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('template', 'str', $args['template'], '', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('layout', 'str', $args['layout'], '', XARVAR_NOT_REQUIRED)) {return;}
 
 	$uid = isset($itemid) ? $itemid : $uid;
 
@@ -69,6 +70,7 @@ function roles_user_display($args)
 
 	$types = xarModAPIFunc('roles','user','getitemtypes');
 	$data['itemtypename'] = $types[$itemtype]['label'];
+	$data['layout'] = $args['layout'];
 
     return xarTplModule($args['tplmodule'],'user','display',$data,$args['template']);
 }

@@ -92,6 +92,7 @@
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
                 <input type="hidden" name="uid" id="uid" value="#$uid#" />
                 <input type="hidden" name="confirmation" id="confirmation" value="1" />
+                <input type="hidden" name="returnurl" id="returnurl" value="#$returnurl#" />
                 <input type="submit" value="#xarML('Delete')#" class="xar-margin-thickright" />
                 <input type="button" value="#xarML('Cancel')#" onclick="document.location='&xar-modurl-roles-admin-displayrole;&amp;uid=#$uid#';" class="xar-margin-thickleft" />
             </div>

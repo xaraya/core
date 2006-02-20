@@ -140,6 +140,7 @@ class Dynamic_Object_Master
                                                         'itemtype'  => $this->itemtype,
                                                         'allprops'  => $args['allprops'],
                                                         'objectref' => & $this)); // we pass this object along
+
         }
         if (!empty($this->join)) {
             $meta = xarModAPIFunc('dynamicdata','util','getmeta',
@@ -160,6 +161,7 @@ class Dynamic_Object_Master
                 $this->properties = array_merge($joinprops,$this->properties);
             }
         }
+
         // filter on property status if necessary
         if (isset($this->status) && count($this->fieldlist) == 0) {
             $this->fieldlist = array();
@@ -169,11 +171,67 @@ class Dynamic_Object_Master
                 }
             }
         }
+
         // build the list of relevant data stores where we'll get/set our data
         if (count($this->datastores) == 0 &&
             count($this->properties) > 0) {
            $this->getDataStores();
         }
+
+		// add ancestors' properties to this object if required
+		if (!empty($args['extend'])) {
+		/*
+			$primary = $this->primary;
+			$secondary = $this->secondary;
+			if (!empty($this->objectid)) {
+				$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $this->objectid, 'top' => false));
+			} else {
+				$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('moduleid' => $this->moduleid, 'itemtype' => $this->itemtype, 'top' => false));
+			}
+			// If this is an extended object add the ancestor properties for display purposes
+			if (!empty($ancestors)) {
+				foreach ($ancestors as $ancestor) {
+				   Dynamic_Property_Master::getProperties(array('objectid'  => $ancestor['objectid'],
+																'moduleid'  => $this->moduleid,
+																'itemtype'  => $ancestor['itemtype'],
+																'allprops'  => $args['allprops'],
+																'objectref' => & $this)); // we pass this object along
+
+				}
+			}
+			$this->getDataStores(true);
+			$this->primary = $primary;
+			$this->secondary = $secondary;
+			*/
+			if (!empty($this->objectid)) {
+				$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $this->objectid, 'top' => false));
+			} else {
+				$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('moduleid' => $this->moduleid, 'itemtype' => $this->itemtype, 'top' => false));
+			}
+			// If this is an extended object add the ancestor properties for display purposes
+			if (!empty($ancestors)) {
+				foreach ($ancestors as $ancestor) {
+					$object =& Dynamic_Object_Master::getObject(array('objectid' => $ancestor['objectid']));
+
+					$properties = $object->getProperties();
+					foreach ($properties as &$newproperty) {
+						// ignore if this property already belongs to the object
+						if (isset($this->properties[$newproperty->name])) continue;
+						$args = array('name'  => $newproperty->name,
+									  'type'  => $newproperty->type,
+									  'label' => $newproperty->label);
+						if (!isset($this->datastores[$newproperty->datastore])) {
+							$newstore = $this->property2datastore(&$newproperty);
+							$this->addDatastore($newstore[0],$newstore[1]);
+						}
+						$newproperty->_items =& $this->items;
+						$this->datastores[$newproperty->datastore]->addField(&$newproperty);
+						$this->addProperty($args);
+	//                  $this->fieldlist[] = $newproperty->name;
+					}
+				}
+			}
+		}
     }
 
     /**
@@ -1375,43 +1433,6 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 
         // set the different arguments (item ids, sort, where, numitems, startnum, ...)
         $this->setArguments($args);
-    }
-
-    function extend()
-    {
-        $ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $this->objectid, 'top' => false));
-        // If this is an extended object add the ancestor properties for display purposes
-        if (!empty($ancestors)) {
-        	foreach ($ancestors as $ancestor) {
-        		$object =& Dynamic_Object_Master::getObject(array('objectid' => $ancestor['objectid']));
-
-        		$properties = $object->getProperties();
-        		foreach ($properties as &$newproperty) {
-        			// ignore if we have a fieldlist and this property isn't in it
-        			if (!empty($this->fieldlist) && (!in_array($newproperty->name,$this->fieldlist))) continue;
-        			$args = array('name'  => $newproperty->name,
-        						  'type'  => $newproperty->type,
-        						  'label' => $newproperty->label);
-        			if (!isset($this->datastores[$newproperty->datastore])) {
-        				$newstore = $this->property2datastore(&$newproperty);
-						$this->addDatastore($newstore[0],$newstore[1]);
-        			}
-        			// TODO: are these lines really needed?
-//        			$newproperty->_objectid =& $this->objectid;
-//        			$newproperty->_moduleid =& $this->moduleid;
-//        			$newproperty->_itemtype =& $this->itemtype;
-        			$newproperty->_items =& $this->items;
-					$this->datastores[$newproperty->datastore]->addField(&$newproperty);
-        			$this->addProperty($args);
-        			// TODO: are these lines really needed?
-//        			$this->properties[$newproperty->name]->_objectid =& $this->objectid;
-//        			$this->properties[$newproperty->name]->_moduleid =& $this->moduleid;
-//        			$this->properties[$newproperty->name]->_itemtype =& $this->itemtype;
-//        			$this->properties[$newproperty->name]->_items =& $this->items;
-        			$this->fieldlist[] = $newproperty->name;
-				}
-        	}
-        }
     }
 
     function setArguments($args)
