@@ -30,7 +30,7 @@
 
     <xar:set name="tabclass">$activetab=='showprivileges'?'active':''</xar:set>
     <dd class="#$tabclass#">
-      <a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$uid#" class="active">
+      <a href="&xar-modurl-roles-admin-showprivileges;&amp;uid=#$uid#">
         <xar:mlstring>Privileges</xar:mlstring>
       </a>
     </dd>    
