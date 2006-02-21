@@ -19,6 +19,7 @@ class Dynamic_Select_Property extends Dynamic_Property
     public $format = '6';
     public $template = 'dropdown';
     public $tplmodule = 'base';
+    public $requiresmodule = 'base';
 
     public $options;
     public $func;

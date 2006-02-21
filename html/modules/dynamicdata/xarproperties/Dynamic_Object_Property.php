@@ -35,6 +35,7 @@ class Dynamic_Object_Property extends Dynamic_Select_Property
     public $name = 'object';
     public $label = 'Object';
     public $format = '24';
+    public $requiresmodule = 'dynamicdata';
 
     function Dynamic_Object_Property($args)
     {

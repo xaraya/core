@@ -27,6 +27,7 @@ class Dynamic_FieldType_Property extends Dynamic_Select_Property
     public $name = 'fieldtype';
     public $label = 'Field Type';
     public $format = '22';
+    public $requiresmodule = 'dynamicdata';
 
     function Dynamic_FieldType_Property($args)
     {

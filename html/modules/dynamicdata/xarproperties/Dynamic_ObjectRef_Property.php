@@ -33,6 +33,7 @@ class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
     public $name = 'objectref';
     public $label = 'Select value from other object';
     public $format = '507';
+    public $requiresmodule = 'dynamicdata';
 
     // We explicitly use names here instead of id's, so we are independent of
     // how dd assigns them at a given time. Otherwise the validation is not

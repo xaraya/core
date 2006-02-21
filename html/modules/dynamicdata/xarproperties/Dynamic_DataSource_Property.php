@@ -27,6 +27,7 @@ class Dynamic_DataSource_Property extends Dynamic_Select_Property
     public $name = 'datasource';
     public $label = 'Data Source';
     public $format = '23';
+    public $requiresmodule = 'dynamicdata';
 
     function Dynamic_DataSource_Property($args)
     {

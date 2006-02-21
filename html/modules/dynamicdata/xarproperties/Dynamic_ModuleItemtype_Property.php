@@ -28,6 +28,7 @@ class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
     public $name = 'moduleitemtype';
     public $label = 'Parent';
     public $format = '600';
+    public $requiresmodule = 'dynamicdata';
 
     var $referencemoduleid = 182;
 
