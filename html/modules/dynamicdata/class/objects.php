@@ -1774,6 +1774,15 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 
     function showList($args = array())
     {
+        if (empty($args['layout'])) {
+            $args['layout'] = $this->layout;
+        }
+        if (empty($args['template'])) {
+            $args['template'] = $this->template;
+        }
+        if (empty($args['tplmodule'])) {
+            $args['tplmodule'] = $this->tplmodule;
+        }
         if (!empty($args['extend'])) {
             $this->extend();
         }
@@ -1971,9 +1980,9 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         // with custom tags.
         $args['objectid'] = $this->objectid;
 
-	    $current = xarModAPIFunc('dynamicdata','user','setcontext',$args);
+//	    $current = xarModAPIFunc('dynamicdata','user','setcontext',$args);
 
-        return xarTplObject($current['tplmodule'],$current['template'],'showlist',$args);
+        return xarTplObject($args['tplmodule'],$args['template'],'showlist',$args);
     }
 
     function showView($args = array())
