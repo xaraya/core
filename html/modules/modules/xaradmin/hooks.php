@@ -25,7 +25,7 @@ function modules_admin_hooks($args)
 
     // Get the list of all hook modules, and the current hooks enabled for all modules
     $hooklist = xarModAPIFunc('modules','admin','gethooklist');
-    //debug($hooklist);
+
     $data = array();
     $data['savechangeslabel'] = xarML('Save Changes');
     $data['hookmodules'] = array();
@@ -37,7 +37,7 @@ function modules_admin_hooks($args)
     // via arguments only, for use in BL tags :
     // <xar:module main="false" module="modules" type="admin" func="hooks" curhook="hitcount" return_url="$thisurl" />
     if (empty($return_url)) $return_url = '';
-    
+
     $data['return_url'] = $return_url;
 
     if (!empty($curhook)) {
@@ -49,14 +49,14 @@ function modules_admin_hooks($args)
         $oldcat = '';
         for ($i = 0, $max = count($modList); $i < $max; $i++) {
             $modList[$i]['header'] = '';
-            $modList[$i]['itemtypes'] = array();        
+            $modList[$i]['itemtypes'] = array();
             $modList[$i]['checked'] = array();
             $modList[$i]['links'] = array();
-            
-            $modList[$i]['link'] = xarModURL('modules','admin','modifyorder', 
+
+            $modList[$i]['link'] = xarModURL('modules','admin','modifyorder',
                                              array('modulename' => $curhook,
                                                    'modulehookedname' => $modList[$i]['name'] ));
-            
+
             // Kinda group by category in the display
             if ($oldcat != $modList[$i]['category']) {
                 $modList[$i]['header'] = xarVarPrepForDisplay($modList[$i]['category']);
@@ -88,25 +88,14 @@ function modules_admin_hooks($args)
         $data['curhook'] = $curhook;
         $data['hookedmodules'] = $modList;
         $data['authid'] = xarSecGenAuthKey('modules');
-        
-        if (!xarVarFetch('details', 'bool', $details, false, XARVAR_NOT_REQUIRED)) {return;}
-        if ($details) {
-            $data['DetailsLabel'] = xarML('Hide Details');
-            $data['DetailsURL'] = xarModURL('modules','admin','hooks',
-                                            array('hook' => $curhook, 'details' => false));
-            
-            foreach ($hooklist[$curhook] as $hook => $hookedmods) {
-                $data['hooktypes'][] = $hook;
-            }
-        } else {
-            $data['DetailsLabel'] = xarML('Show Details');
-            $data['DetailsURL'] = xarModURL('modules','admin','hooks',
-                                            array('hook' => $curhook, 'details' => true));
+
+        foreach ($hooklist[$curhook] as $hook => $hookedmods) {
+            $data['hooktypes'][] = $hook;
         }
     }
-    
+
     foreach ($hooklist as $hookmodname => $hooks) {
-        
+
         // Get module display name
         $regid = xarModGetIDFromName($hookmodname);
         $modinfo = xarModGetInfo($regid);
