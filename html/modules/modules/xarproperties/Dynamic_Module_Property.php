@@ -28,6 +28,7 @@ class Dynamic_Module_Property extends Dynamic_Select_Property
     public $name = 'module';
     public $label = 'Module';
     public $format = '19';
+    public $requiresmodule = 'modules';
 
     function Dynamic_Module_Property($args)
     {
