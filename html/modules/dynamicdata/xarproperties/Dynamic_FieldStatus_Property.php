@@ -26,6 +26,7 @@ class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
     public $name = 'fieldstatus';
     public $label = 'Field Status';
     public $format = '25';
+    public $requiresmodule = 'dynamicdata';
 
     function Dynamic_FieldStatus_Property($args)
     {
