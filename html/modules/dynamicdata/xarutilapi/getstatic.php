@@ -89,6 +89,7 @@ function dynamicdata_utilapi_getstatic($args)
         $dbTables =& $dbInfo->getTables();
     }
 
+    // TODO: we lost the linkage with modules here
     $static = array(); $order = 1; $seq=1;
     foreach($dbTables as $tblInfo) {
         $tblColumns =& $tblInfo->getColumns();
