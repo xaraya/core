@@ -74,7 +74,7 @@ function dynamicdata_init()
                     'xar_object_isalias'  => array('type'        => 'integer',
                                                   'size'        => 'tiny',
                                                   'null'        => false,
-                                                  'default'     => '1'),
+                                                  'default'     => '1')
               );
 
     // Create the Table - the function will return the SQL is successful or
@@ -116,7 +116,7 @@ function dynamicdata_init()
                      // 1 -> 3
                      "'objects','Dynamic Objects',$modid,0,'itemid',0,'',0",
                      "'properties','Dynamic Properties',$modid,1,'itemid',0,'',0",
-                     "'sample','Sample Object',$modid,2,'itemid',3,'nothing much...',0",
+                     "'sample','Sample Object',$modid,2,'itemid',3,'nothing much...',0"
                     );
     $objectid = array();
     $idx = 0;
@@ -259,7 +259,7 @@ function dynamicdata_init()
         "'id','Id',$objectid[3],182,2,21,'','dynamic_data',2,1,''",
         "'name','Name',$objectid[3],182,2,2,'please enter your name...','dynamic_data',1,2,'1:30'",
         "'age','Age',$objectid[3],182,2,15,'','dynamic_data',1,3,'0:125'",
-        "'location','Location',$objectid[3],182,2,12,'','dynamic_data',2,4,''",
+        "'location','Location',$objectid[3],182,2,12,'','dynamic_data',2,4,''"
         );
     $propid = array();
     $idx = 0;
@@ -348,7 +348,7 @@ function dynamicdata_init()
         "$propid[22],3,'3'",
         "$propid[23],3,'Baby'",
         "$propid[24],3,'1'",
-        "$propid[25],3,'http://mikespub.net/xaraya/images/sydney1.jpg'",
+        "$propid[25],3,'http://mikespub.net/xaraya/images/sydney1.jpg'"
         );
     foreach ($dataentries as $dataentry) {
         $nextId = $dbconn->GenId($dynamic_data);
@@ -844,7 +844,7 @@ function dynamicdata_createPropDefTable()
                                               'default'     => NULL),
                 /*  */
                     'xar_prop_format'   => array('type'        => 'integer',
-                                              'default'     => '0'),
+                                              'default'     => '0')
               );
 
         // Create the Table - the function will return the SQL is successful or
