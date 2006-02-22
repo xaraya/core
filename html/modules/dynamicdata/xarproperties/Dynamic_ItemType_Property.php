@@ -79,6 +79,7 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
         $data['id']       = !empty($args['id']) ? $args['id'] : $data['name'];
         $data['tabindex'] = !empty($args['tabindex']) ? $args['tabindex'] : 0;
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
+        $data['onchange'] = isset($args['onchange']) ? $args['onchange'] : null; // let tpl decide what to do
 
         if (empty($args['template'])) {
             $args['template'] = 'itemtype';

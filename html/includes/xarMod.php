@@ -82,10 +82,6 @@ define('XARMOD_LOAD_ANYSTATE', 2);
 /*
  * Modules modes
  */
-    //The Shared Mode should not use 2 different tables!!!!!
-    //It should add an extra column
-    //2 different tables multiplies per 2 the number of sql queries we must make
-    //to get the appropriate information
 define('XARMOD_MODE_SHARED', 1);
 define('XARMOD_MODE_PER_SITE', 2);
 
@@ -217,7 +213,6 @@ function xarModDelAllVars($modName)
     if(empty($modName)) throw new EmptyParameterException('modName');
 
     $modBaseInfo = xarMod_getBaseInfo($modName);
-    //if (!isset($modBaseInfo)) return; // throw back
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
@@ -261,7 +256,6 @@ function xarModDelAllVars($modName)
         $stmt  = $dbconn->prepareStatement($query);
         $result = $stmt->executeUpdate(array($modBaseInfo['systemid']));
         $dbconn->commit();
-        return true;
     } catch (SQLException $e) {
         // If there was an SQL exception roll back to where we started
         $dbconn->rollback();
@@ -269,6 +263,7 @@ function xarModDelAllVars($modName)
         // TODO: demote to error? rais other type of exception?
         throw $e;
     }
+    return true;
 }
 
 /**
@@ -294,10 +289,10 @@ function xarModGetUserVar($modName, $name, $uid = NULL, $prep = NULL)
     if (empty($modName)) throw new EmptyParameterException('modName');
 
     // If uid not specified take the current user
-    if ($uid == NULL) $uid=xarUserGetVar('uid');
+    if ($uid == NULL) $uid = xarUserGetVar('uid');
 
     // Anonymous user always uses the module default setting
-    if ($uid==_XAR_ID_UNREGISTERED) return xarModGetVar($modName,$name);
+    if ($uid== _XAR_ID_UNREGISTERED) return xarModGetVar($modName,$name);
 
     return xarVar__GetVarByAlias($modName, $name, $uid, $prep, $type = 'moditemvar');
 }
@@ -331,7 +326,7 @@ function xarModSetUserVar($modName, $name, $value, $uid=NULL)
 
     // For anonymous users no preference can be set
     // MrB: should we raise an exception here?
-    if ($uid==_XAR_ID_UNREGISTERED) return false;
+    if ($uid == _XAR_ID_UNREGISTERED) return false;
 
     return xarVar__SetVarByAlias($modName, $name, $value, $prime = NULL, $description = NULL, $uid, $type = 'moditemvar');
 }
@@ -364,7 +359,7 @@ function xarModDelUserVar($modName, $name, $uid=NULL)
     // MrB: should we continue, can't harm either and we have
     //      a failsafe that records are deleted, bit dirty, but
     //      it would work.
-    if ($uid == 0 ) return true;
+    if ($uid == _XAR_ID_UNREGISTERED ) return true;
 
     return xarVar__DelVarByAlias($modName, $name, $uid, $type = 'moditemvar');
 }
@@ -434,17 +429,8 @@ function xarModGetIDFromName($modName, $type = 'module')
 {
     if (empty($modName)) throw new EmptyParameterException('modName');
 
-    switch($type) {
-        case 'module':
-            default:
-            $modBaseInfo = xarMod_getBaseInfo($modName);
-            break;
-        case 'theme':
-            // MrB: this is obviously very wrong
-            $modBaseInfo = xarMod_getBaseInfo($modName, 'theme');
-            break;
-    }
-
+    // For themes, kinda weird
+    $modBaseInfo = xarMod_getBaseInfo($modName,$type);
     if (!isset($modBaseInfo)) return; // throw back
     // MrB: this is confusing
     return $modBaseInfo['regid'];
@@ -735,20 +721,13 @@ function xarModDBInfoLoad($modName, $modDir = NULL, $type = 'module')
 
     // Get the directory if we don't already have it
     if (empty($modDir)) {
-        switch($type) {
-            case 'module':
-                default:
-                $modBaseInfo = xarMod_getBaseInfo($modName);
-                break;
-            case 'theme':
-                $modBaseInfo = xarMod_getBaseInfo($modName, 'theme');
-                break;
-        }
+        $modBaseInfo = xarMod_getBaseInfo($modName,$type);
         if (!isset($modBaseInfo)) return; // throw back
         $modDir = xarVarPrepForOS($modBaseInfo['directory']);
     } else {
         $modDir = xarVarPrepForOS($modDir);
     }
+
     switch($type) {
         case 'module':
             default:
@@ -1527,9 +1506,10 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
         // Get applicable hooks
         // New query:
         $query = "SELECT DISTINCT tmods.xar_name, hooks.xar_stype
-                  FROM  $hookstable hooks, $modulestable tmods
-                  WHERE hooks.xar_tmodid = tmods.xar_id AND
-                        tmods.xar_name = ?";
+                  FROM  $hookstable hooks, $modulestable tmods, $modulestable smods
+                  WHERE hooks.xar_smodid = smods.xar_id AND
+                        hooks.xar_tmodid = tmods.xar_id AND
+                        smods.xar_name = ?";
         $bindvars = array($callerModName);
 
         $result =& $dbconn->Execute($query,$bindvars);
@@ -1548,6 +1528,7 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
         }
         $result->Close();
     }
+
     if (empty($callerItemType)) {
         if (isset($modHookedCache[$callerModName][''][$hookModName])) {
             // generic hook is enabled

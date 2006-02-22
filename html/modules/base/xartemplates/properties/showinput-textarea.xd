@@ -33,13 +33,11 @@
 </xar:comment>
 
 <xar:set name="textareasource">"
-<!--
 textarea#'.$id.' {
     max-width: 99%;
     width: '. $cols.'em;
     height: '. ($rows * 1.6) .'em;
 }
--->
 "</xar:set>
 <xar:style method="embed" source="'.$textareasource.'" media="all" />
 <div class="xar-form-container-after">
