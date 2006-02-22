@@ -433,19 +433,27 @@ function xarRequestGetInfo()
 
     //CGI-PHP support patch (inc subdirectory install)
     $path = xarServerGetVar('PATH_INFO');
+    $scriptname=xarServerGetVar('SCRIPT_NAME');
+
+    if (strlen(xarCore_getSystemVar('BaseModURL',true))==0) {
+        $basemodurl='index.php';
+    } else {
+        $basemodurl=xarCore_getSystemVar('BaseModURL',true);
+    }
     if ($path == '') $path = substr(xarServerGetVar('REDIRECT_URL'),strlen(xarCore_getSystemVar('BaseURI',true)));
+    $basefix = str_replace($path,'',xarServerGetVar('SCRIPT_NAME')); //Fix for win-apache
     if ($GLOBALS['xarRequest_allowShortURLs'] && empty($modName) && $path != ''
     //end CGI-PHP support patch
-        // IIS fix
-        && $path != xarServerGetVar('SCRIPT_NAME')) {
+        // IIS fix and win-apache
+        && $path != xarServerGetVar('SCRIPT_NAME') && $basefix !=$basemodurl) {
     /*if ($GLOBALS['xarRequest_allowShortURLs'] && empty($modName) && ($path = xarServerGetVar('PATH_INFO')) != ''
-        // IIS fix
+        // IIS fix and win-apache
         && $path != xarServerGetVar('SCRIPT_NAME')) {
     */
         /*
         Note: we need to match anything that might be used as module params here too ! (without compromising security)
         preg_match_all('|/([a-z0-9_ .+-]+)|i', $path, $matches);
-        
+
         The original regular expression prevents the use of titles, even when properly encoded, 
         as parts of a short-url path -- because it wouldn't not permit many characters that would
         in titles, such as parens, commas, or apostrophes.  Since a similiar "security" check is not
