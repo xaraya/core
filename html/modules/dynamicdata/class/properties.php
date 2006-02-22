@@ -402,8 +402,8 @@ class Dynamic_Property
                     $value = $fieldvalue;
                 } else {
                     xarVarFetch($name, 'isset', $namevalue,  NULL, XARVAR_NOT_REQUIRED);
-                    if (isset($fieldvalue)) {
-                        $value = $fieldvalue;
+                    if (isset($namevalue)) {
+                        $value = $namevalue;
                     } else {
                         $isvalid = false;
                     }
@@ -725,7 +725,7 @@ class Dynamic_Property
         // tell the calling function that everything is OK
         return true;
     }
-    
+
     /**
      * Return the module this property belongs to
      *

@@ -35,6 +35,19 @@ class Dynamic_SubForm_Property extends Dynamic_Property
         }
     }
 
+    function checkInput($name='', $value = null)
+    {
+        if (empty($name)) {
+            $name = 'dd_'.$this->id;
+        }
+        // store the fieldname for validations who need them (e.g. file uploads)
+        $this->fieldname = $name;
+        if (!isset($value)) {
+            if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
+        }
+        return $this->validateValue($value);
+    }
+
     function validateValue($value = null)
     {
         if (empty($this->objectid)) {
@@ -144,7 +157,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
 
             // if we don't know we're previewing, we don't really have a choice here
             if (!xarVarFetch('preview', 'isset', $preview, NULL, XARVAR_DONT_SET)) {return;}
-            if (empty($preview)) 
+            if (empty($preview))
             {
                 if (empty($value) || empty($object->itemid)) {
                     $itemid = $object->createItem();
@@ -242,7 +255,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
 
             // if we don't know we're previewing, we don't really have a choice here
             if (!xarVarFetch('preview', 'isset', $preview, NULL, XARVAR_DONT_SET)) {return;}
-            if (empty($preview)) 
+            if (empty($preview))
             {
                 foreach ($childitems as $id => $item) {
                     $item['itemid'] = $id;
@@ -339,7 +352,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
             $value = array();
             // if we don't know we're previewing, we don't really have a choice here
             if (!xarVarFetch('preview', 'isset', $preview, NULL, XARVAR_DONT_SET)) {return;}
-            if (empty($preview)) 
+            if (empty($preview))
             {
                 foreach ($childitems as $id => $item) {
                     $item['itemid'] = $id;
@@ -481,7 +494,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
         if (!isset($template)) {
             $template = 'subform';
         }
-        
+
         return xarTplProperty('dynamicdata', $template, 'showoutput', $data);
     }
 
@@ -530,7 +543,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                     // reset the list of item ids
                     $myobject->itemids = array();
                 }
-                if (!empty($this->link) && !empty($value)) 
+                if (!empty($this->link) && !empty($value))
                 {
                     if (is_numeric($value)) {
                         $where = $this->link . ' eq ' . $value;
@@ -558,7 +571,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                     // reset the list of item ids
                     $myobject->itemids = array();
                 }
-                if (!empty($this->link) && !empty($value)) 
+                if (!empty($this->link) && !empty($value))
                 {
                     if (is_numeric($value)) {
                         $where = $this->link . ' eq ' . $value;
