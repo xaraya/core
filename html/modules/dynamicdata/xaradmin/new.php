@@ -27,7 +27,7 @@ function dynamicdata_admin_new($args)
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
-    
+
     if (empty($modid)) {
         $modid = xarModGetIDFromName('dynamicdata');
     }
@@ -65,7 +65,7 @@ function dynamicdata_admin_new($args)
     $item['itemtype'] = $myobject->itemtype;
     $item['itemid'] = $myobject->itemid;
     $hooks = array();
-    $hooks = xarModCallHooks('item', 'new', $myobject->itemid, $item, $modinfo['name']); 
+    $hooks = xarModCallHooks('item', 'new', $myobject->itemid, $item, $modinfo['name']);
     $data['hooks'] = $hooks;
 
     if(!isset($template)) {
