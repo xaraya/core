@@ -38,13 +38,10 @@ function dynamicdata_admin_modifyconfig()
         $data['fields'] = array();
     }
 
-    // This may not work when moving property classes around manually !
+    // FIXME: This may not work when moving property classes around manually !
     //$data['fieldtypeprop'] =& Dynamic_Property_Master::getProperty(array('type' => 'fieldtype'));
-    if (file_exists('modules/dynamicdata/xarproperties/Dynamic_FieldType_Property.php')) {
-        require_once('modules/dynamicdata/xarproperties/Dynamic_FieldType_Property.php');
-    } else {
-        require_once('includes/properties/Dynamic_FieldType_Property.php');
-    }
+    require_once('modules/dynamicdata/xarproperties/Dynamic_FieldType_Property.php');
+
     $data['fieldtypeprop'] = new Dynamic_FieldType_Property(array('type' => 'fieldtype'));
 
     $data['labels'] = array(
