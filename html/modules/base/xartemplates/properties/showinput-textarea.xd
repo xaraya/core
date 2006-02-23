@@ -10,7 +10,7 @@
     <xar:set name="class">'xar-form-textareamedium'</xar:set>
 </xar:if>
 
-<xar:comment>
+<!--
     Additional CSS support for "pseudo-dynamic" resizing of textareas 
     (as in bug http://bugs.xaraya.com/show_bug.cgi?id=4765)
     
@@ -30,7 +30,7 @@
     max(min)-height, but unfortunately if you use IE-Win, these standard properties aren't supported
     and as a consequence the textareas dimensions will be affected by the DD values alone..
     I'm hesitant to pass along ie-only workarounds at this moment, so be aware of this! (andyv)
-</xar:comment>
+-->
 
 <xar:set name="textareasource">"
 textarea#'.$id.' {

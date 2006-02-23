@@ -1,9 +1,7 @@
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
-</xar:comment>
-<xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!--
     We know that blocks.css file is already included by admin-modify_instance.xd, so no need to do it twice 
-</xar:comment>
+-->
 
 <xar:if condition="!empty($content)">
     <table class="xar-fullwidth">
@@ -58,7 +56,7 @@
         </xar:loop>
     </table>
 
-    <xar:comment>
+    <!--
         <table class="fullwidth">
             <caption>
                 <xar:mlstring>Modify Structure (TODO obviously)</xar:mlstring>
@@ -78,7 +76,7 @@
                 </td>
             </tr>
         </table>
-    </xar:comment>
+    -->
 </xar:if>
 
 <p>

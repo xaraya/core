@@ -1,9 +1,9 @@
-<xar:comment>
+<!--
     Tabs for the Queue section, takes one parameter to decide 
     which tab should be active.
     Variables:
     $active_tab - name of tab which should be active
-</xar:comment>
+-->
 
 <xar:style scope="module" module="base" file="navtabs" />
 <xar:set name="activeclass">''</xar:set>

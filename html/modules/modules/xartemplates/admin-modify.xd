@@ -1,6 +1,4 @@
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
-</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:base-include-javascript module="base" filename="toggle.js" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
@@ -23,7 +21,7 @@
     </h3>
 <!-- The form for editting the module settings and hooks -->
     <form action="&xar-modurl-modules-admin-update;" method="post" enctype="application/x-www-form-urlencoded">
-        <xar:comment>
+        <!--
             <label for="newdisplayname">
                 <xar:mlstring>
                     Enter new display name (Does not work) 
@@ -37,7 +35,7 @@
                 </label>
                 #$displayname# 
             </div>
-        </xar:comment>
+        -->
         <xar:if condition="count($hooklist) eq 0">
             <p>
                 <xar:ml>

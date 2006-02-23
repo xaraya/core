@@ -1,14 +1,12 @@
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
-</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:base-include-javascript module="base" filename="formcheck.js" />
 <script type="text/javascript">
-<!--
+<xar:comment>
     // Enter name of mandatory fields
     var base_fieldRequired = Array("defaultfunction");
     // Enter field description to appear in the dialog box
     var base_fieldDescription = Array("Default Module Function");
-//-->
+//</xar:comment>
 </script> 
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
@@ -99,14 +97,7 @@
             </dd>
         </xar:if>
     </dl>
-    <xar:comment>- - - - - - - - -  Begin Site Display Options - - - - - - 
-    </xar:comment>
-    <xar:ml>
-        <xar:mlstring>#(1) version #(2) (#(3))</xar:mlstring>
-        <xar:mlvar>#$XARCORE_VERSION_ID#</xar:mlvar>
-        <xar:mlvar>#$XARCORE_VERSION_NUM#</xar:mlvar>
-        <xar:mlvar>#$XARCORE_VERSION_SUB#</xar:mlvar>
-    </xar:ml>
+    <!-- Begin Site Display Options -->
     <xar:if condition="$tab eq 'display'">
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                <fieldset>
@@ -276,9 +267,7 @@
                 </div>
             </fieldset>
         </form>
-        <xar:comment>
-            - - - - - - Begin Security Options - - - - - - 
-        </xar:comment>
+        <!-- Begin Security Options -->
         <xar:elseif condition="$tab eq 'security'" />
         <xar:set name="authmodules">
             #xarConfigGetVar('Site.User.AuthenticationModules')# 
@@ -445,9 +434,7 @@
                 </div>
             </fieldset>
         </form>
-        <xar:comment>
-            - - - - - - Begin Locale Options - - - - - - 
-        </xar:comment>
+        <!-- Begin Locale Options -->
         <xar:elseif condition="$tab eq 'locales'" />
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
             <xar:template file="modifyconfig-locales" module="base" type="module" />
@@ -459,9 +446,7 @@
                 </div>
             </fieldset>
         </form>
-        <xar:comment>
-            - - - - - - Begin Other Options - - - - - - 
-        </xar:comment>
+        <!-- Begin Other Options -->
         <xar:elseif condition="$tab eq 'other'" />
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
             <fieldset>

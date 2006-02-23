@@ -1,9 +1,7 @@
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
-</xar:comment>
-<xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!--
     Temporarily using blocks css because it's already implemented in stable scenario.. TODO: convert to native core.css as soon as practicable 
-</xar:comment>
+-->
 <xar:style scope="common" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
