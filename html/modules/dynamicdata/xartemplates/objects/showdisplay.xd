@@ -1,9 +1,9 @@
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
-<xar:comment>This is a generic display template for any DD object. You can use a specific template for one particular object in this directory as showdisplay-[objectname].xd, and/or use templates in your own [module]/xartemplates/objects directory by specifying the tplmodule="..." argument in the xar:data-display BL tag or showDisplay() method call.</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!-- This is a generic display template for any DD object. You can use a specific template for one particular object in this directory as showdisplay-[objectname].xd, and/or use templates in your own [module]/xartemplates/objects directory by specifying the tplmodule="..." argument in the xar:data-display BL tag or showDisplay() method call. -->
 <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
     <xar:template file="catnavigation" />
 </xar:if>
-<xar:comment>The layout could be set directly or through inheritance (for example in the modify prop screen)</xar:comment>
+<!-- The layout could be set directly or through inheritance (for example in the modify prop screen) -->
 <xar:if condition="empty($layout) or $layout eq 'default' or $layout eq 'list' or $layout eq 'dynamic'">
   <xar:foreach in="$properties" key="$name" value="$property">
     <div class="xar-form-input-wrapper">
