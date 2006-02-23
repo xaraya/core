@@ -35,6 +35,13 @@ function dynamicdata_admin_modify($args)
 
     $data = xarModAPIFunc('dynamicdata','admin','menu');
 
+    if (isset($objectid)) {
+	    $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $objectid));
+    } else {
+	    $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('moduleid' => $modid,'itemtype' => $itemtype));
+    }
+    $itemtype = $ancestor['itemtype'];
+
     $myobject = & Dynamic_Object_Master::getObject(array('objectid' => $objectid,
                                          'moduleid' => $modid,
                                          'itemtype' => $itemtype,
