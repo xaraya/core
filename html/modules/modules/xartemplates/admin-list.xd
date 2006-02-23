@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:set name="modstatus">xarSessionGetVar('statusmsg')</xar:set>
 <xar:style scope="module" file="modules" />
 <xar:set name="$modstatus">
@@ -19,7 +19,7 @@
     </p>
 
     <form method="post" action="&xar-modurl-modules-admin-settings;">
-        <xar:comment> Module List Sort and Filter Controls table </xar:comment>
+        <!-- Module List Sort and Filter Controls table -->
         <table class="xar-fullwidth">
             <tr>
                 <th>
@@ -88,7 +88,7 @@
             </tr>
         </table>
         <xar:if condition="$modstatus">
-            <xar:comment> lets display latest status on core modules upgrades if any </xar:comment>
+            <!-- lets display latest status on core modules upgrades if any -->
             <p>
                 <xar:mlstring>
                     Latest status - the following core modules have been successfully upgraded:
@@ -98,11 +98,11 @@
                 #$modstatus#
             </p>
         </xar:if>
-        <xar:comment> the Module Lists css-based styles </xar:comment>
+        <!-- the Module Lists css-based styles -->
         <xar:if condition="$selstyle eq 'compacta' or $selstyle eq 'compactb'">
             <xar:template file="compactlist-ab" type="module" />
         <xar:else />
-            <xar:comment> the Module Lists table-based styles </xar:comment>
+            <!-- the Module Lists table-based styles -->
                 <table class="xar-fullwidth">
                     <tr>
                         <th>
@@ -129,13 +129,13 @@
                     </tr>
                     <xar:foreach in="$listrowsitems" value="$modinfo">
                         <tr>
-                            <xar:comment>
+                            <!--
                             please note any element can be a named anchor as long as 
                             it has id (and name for some browsers) so we shouldnt waste 
                             space with empty anchors here
-                            </xar:comment>
+                            -->
                             <td name="#$modinfo['name']#" id="#$modinfo['name']#">
-                                <xar:comment> if module is active and configurable (admin type) make its name a link to module main admin function </xar:comment>
+                                <!-- if module is active and configurable (admin type) make its name a link to module main admin function -->
                                 <xar:if condition="$modinfo['modconfigurl'] ne ''">
                                     <a href="#$modinfo['modconfigurl']#" title="#$modinfo['adminurltitle']#&nbsp;#$modinfo['displayname']#">#$modinfo['name']#</a>
                                 <xar:else />

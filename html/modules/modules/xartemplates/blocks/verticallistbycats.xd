@@ -1,29 +1,29 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!--
+    we dont really want to display a category if there are no modules that belong to it,
+    even though we're passing all category names to this template from API [andyv]
+-->    
 <xar:foreach in="$catmods" key="$catname" value="$cats">
-    <xar:comment>
-        we dont really want to display a category if there are no modules that belong to it,
-        even though we're passing all category names to this template from API [andyv]
-    </xar:comment>    
     <xar:if condition="count($cats) ne 0">
         <ul class="xar-menu-section">
             <li class="xar-menu-section">
                 <h4>#$catname#</h4>
                 <ul class="xar-menu-item">
                     <xar:foreach in="$cats" value="$mod" key="$modname">
-                        <xar:comment>
+                        <!--
                             here we are dealing with 3 main conditions:
                                 - if module is active and main/overview function is loaded, we display item as having *-current state
                                 - if module is active and main/overview function is not loaded, we allow user to click the item to load main/overview
                                 - if module is not active, user can activate item by clicking its link, upon which s/he loads main/overview function 
                             (some redundancy in template allows to easily port it for drop-down lists implementations in the future)
-                        </xar:comment>
+                        -->
                         <xar:if condition="$mod['features']['modactive'] and !$mod['features']['overview']">
                             <li class="xar-menu-item-current">
                                 <a name="activeitem" title="#$mod['features']['label']#">#$mod['features']['label']#</a>
                                 <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
                                     <ul class="xar-menu-subitem">
                                         <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
-                                            <xar:comment> determine and indicate current states of module functions display </xar:comment>
+                                            <!-- determine and indicate current states of module functions display -->
                                             <xar:if condition="$sublinks['funcactive']">
                                                 <li class="xar-menu-subitem-current"><a name="activesubitem" title="#$sublinks['adminlabel']#">#$sublinks['adminlabel']#</a></li>
                                             <xar:else />
@@ -39,7 +39,7 @@
                                 <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
                                     <ul class="xar-menu-subitem">
                                         <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
-                                            <xar:comment> determine and indicate current states of module functions display </xar:comment>
+                                            <!-- determine and indicate current states of module functions display -->
                                             <xar:if condition="$sublinks['funcactive']">
                                                 <li class="xar-menu-subitem-current"><a name="activesubitem" title="#$sublinks['adminlabel']#">#$sublinks['adminlabel']#</a></li>
                                             <xar:else />
@@ -55,7 +55,7 @@
                                 <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
                                     <ul class="xar-menu-subitem">
                                         <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
-                                            <xar:comment> determine and indicate current states of module functions display </xar:comment>
+                                            <!-- determine and indicate current states of module functions display -->
                                             <xar:if condition="$sublinks['funcactive']">
                                                 <li class="xar-menu-subitem-current"><a name="activesubitem" title="#$sublinks['adminlabel']#">#$sublinks['adminlabel']#</a></li>
                                             <xar:else />
@@ -91,7 +91,7 @@
     </ul>
 </xar:if>
 
-<xar:comment> DO NOT UNCOMMENT - EXAMPLE!
+<!-- DO NOT UNCOMMENT - EXAMPLE!
     
     Below is a typical (simplified) example of nested unordered list that we process in this template:
  
@@ -151,4 +151,4 @@
         - a link can be either real or 'empty' (named anchors) depending on its *-current* status
         - this built-in implementation of vertical menus uses empty links as means of providing visual feedback in all browsers, including those that dont support :hover state on anything except links (surprise: IE/Win) 
 
-</xar:comment>
+-->
