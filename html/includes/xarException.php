@@ -11,24 +11,24 @@
  * @author Marcel van der Boom <marcel@xaraya.com>
  */
 
-/* 
+/*
    For all documentation about exceptions see RFC-0054
 */
 /*
-   NOTE: I'm putting stuff on this all in this file now, we can split things up 
+   NOTE: I'm putting stuff on this all in this file now, we can split things up
          later on
 
    Q: do we need compatability classes for the legacy classes?
-   Q: the exception handler receives the instantiated Exception class. 
-      How do we know there what is available in the derived object so we can 
-      specialize handling? To only allow deriving from XARExceptions and 
+   Q: the exception handler receives the instantiated Exception class.
+      How do we know there what is available in the derived object so we can
+      specialize handling? To only allow deriving from XARExceptions and
       standardize there is probably not enough, but lets do that for now.
 
 */
 
 /*
  * Error constants for exception throwing
- * 
+ *
  * @todo probably move this to core loader or get rid of it completely, doesnt do something sane.
  */
 define('E_XAR_ASSERT', 1);
@@ -120,12 +120,12 @@ function xarError__shutdown_handler()
  */
 function xarErrorSet($major, $errorID, $value = NULL)
 {
-    // MINIMAL backward compatability 
+    // MINIMAL backward compatability
 
     // If $value is a descendant from the old xarException class, get the message from it
     if(is_a($value,'xarException')) {
         $msg = $value->toString();
-    } else { 
+    } else {
         // Probably already a string, use it.
         $msg = $value;
     }

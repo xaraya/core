@@ -1,6 +1,5 @@
 <?php
 /**
- * Remove a role from a privilege assignment
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
