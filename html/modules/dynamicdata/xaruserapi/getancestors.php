@@ -94,7 +94,6 @@ function &dynamicdata_userapi_getancestors($args)
 // -------------- This is a native itemtype. get ready to quit
     		$done = true;
     		$itemtype = $parentitemtype;
-    		echo $itemtype;
     		if ($info=xarModAPIFunc('dynamicdata','user', 'getobjectinfo', array('moduleid' => $moduleid, 'itemtype' => $itemtype))) {
 
 // -------------- A DD wrapper object exists, add it to the ancestor array

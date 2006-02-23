@@ -71,7 +71,6 @@ function dynamicdata_user_display($args)
         $template = $myobject->name;
     }
     // Return the template variables defined in this function
-    echo xarTplModule('dynamicdata','user','display',$data,$template);exit;
     return xarTplModule('dynamicdata','user','display',$data,$template);
 }
 
