@@ -16,7 +16,7 @@ function loadContent(url,tagid) {
     if(url.search(/\&pageName\=module/) == -1) {
         postfix = "&pageName=module";
     }
-    //alert('URL: ' + url + postfix +', TagId: ' + tagid);
+    alert('URL: ' + url + postfix +', TagId: ' + tagid);
     // Make the tag id global in this scope, required for some implementations
     tagToGo = tagid;
     try {

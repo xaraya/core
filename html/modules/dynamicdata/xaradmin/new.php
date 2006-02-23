@@ -34,6 +34,13 @@ function dynamicdata_admin_new($args)
     if (!isset($itemtype)) {
         $itemtype = 0;
     }
+    if (isset($objectid)) {
+	    $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $objectid));
+    } else {
+	    $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('moduleid' => $modid,'itemtype' => $itemtype));
+    }
+    $itemtype = $ancestor['itemtype'];
+
     if (!isset($itemid)) {
         $itemid = 0;
     }

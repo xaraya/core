@@ -75,7 +75,11 @@ function &dynamicdata_userapi_getancestors($args)
     for(;;) {
     	$done = false;
 
-    	if ($parentitemtype >= 1000) {
+    	if (($moduleid == 182) && ($parentitemtype == 0)) {
+// -------------- Special case for DD objects, do nothing
+    		$done = true;
+
+    	} elseif ($parentitemtype >= 1000) {
 
 // -------------- This is a DD object. add it to the ancestor array
 			$thisobject     = $objects[$parentitemtype];
@@ -90,6 +94,7 @@ function &dynamicdata_userapi_getancestors($args)
 // -------------- This is a native itemtype. get ready to quit
     		$done = true;
     		$itemtype = $parentitemtype;
+    		echo $itemtype;
     		if ($info=xarModAPIFunc('dynamicdata','user', 'getobjectinfo', array('moduleid' => $moduleid, 'itemtype' => $itemtype))) {
 
 // -------------- A DD wrapper object exists, add it to the ancestor array
