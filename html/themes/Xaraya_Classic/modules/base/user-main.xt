@@ -38,19 +38,19 @@
             website. 
         </xar:mlstring>
     </p>
-    <xar:comment>
+    <!--
         The following template is just an example of how more static templates 
         can be added to an already static page (the default front page in this case). 
         This question pops up in irc, so people are sometimes unaware of these
         possibilities.. One possibility is to place a static template on the
         same level (or in a subdirectory) as the 'container' template (this one)
         and then insert it with xar:template tag as a system template (with optional wrapper div here):
-    </xar:comment>
+    -->
     <div class="xar-floatright xar-halfwidth xar-margin-thicksides xar-padding-thick xar-mod-body xar-alt xar-sub">
         <xar:template file="glimpse.xt" type="system" />
     </div>
-    <xar:comment>
+    <!--
         Another easy way is to specify a static template as an extra page template of base module:
-    </xar:comment>
+    -->
     <xar:module main="false" module="base" func="main" page="about" />
 </div>

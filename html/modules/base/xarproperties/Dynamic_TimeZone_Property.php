@@ -24,6 +24,13 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_TimeZone_Property extends Dynamic_Select_Property
 {
+    public $requiresmodule = 'base';
+    
+    public $id     = 32;
+    public $name   = 'timezone';
+    public $label  = 'Time Zone';
+    public $format = '32';
+
     function Dynamic_TimeZone_Property($args)
     {
         $this->Dynamic_Select_Property($args);
@@ -146,7 +153,14 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
         $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
         $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
 
-        return xarTplProperty('base', 'timezone', 'showinput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -206,7 +220,14 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
         // old timezone output format
         $data['option']['name'] = $value;
 
-        return xarTplProperty('base', 'timezone', 'showoutput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showoutput', $data);
     }
 
     function getOldOptions()
@@ -265,31 +286,5 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
         }
         return $options;
     }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $baseInfo = array(
-                              'id'         => 32,
-                              'name'       => 'timezone',
-                              'label'      => 'Time Zone',
-                              'format'     => '32',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => 'base',
-                            'aliases' => '',
-                            'args'         => '',
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
-
 ?>

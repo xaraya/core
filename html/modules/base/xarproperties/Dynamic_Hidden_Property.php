@@ -16,6 +16,13 @@
  */
 class Dynamic_Hidden_Property extends Dynamic_Property
 {
+    public $requiresmodule = 'base';
+    
+    public $id     = 18;
+    public $name   = 'hidden';
+    public $label  = 'Hidden';
+    public $format = '18';
+
     function validateValue($value = null)
     {
         if (isset($value) && $value != $this->value) {
@@ -32,22 +39,20 @@ class Dynamic_Hidden_Property extends Dynamic_Property
     {
         extract($args);
         $data = array();
-        /*
-        return '<input type="hidden"'.
-               ' name="' . (!empty($name) ? $name : 'dd_'.$this->id) . '"' .
-               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
-               ' />' .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-        */
+
         $data['name']     = !empty($name) ? $name : 'dd_'.$this->id;
         $data['id']       = !empty($id)   ? $id   : 'dd_'.$this->id;
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-        $template="";
-        return xarTplProperty('base', 'hidden', 'showinput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
 
-
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -57,37 +62,14 @@ class Dynamic_Hidden_Property extends Dynamic_Property
         $data=array();
         $data['hiddenvalue']='';
 
-        $template="";
-        return xarTplProperty('base', 'hidden', 'showoutput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
 
+        return xarTplProperty($module, $template, 'showoutput', $data);
     }
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 18,
-                              'name'       => 'hidden',
-                              'label'      => 'Hidden',
-                              'format'     => '18',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'base',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
-
 ?>

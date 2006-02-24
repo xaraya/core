@@ -20,6 +20,13 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_Image_Property extends Dynamic_TextBox_Property
 {
+    public $requiresmodule = 'base';
+    
+    public $id     = 12;
+    public $name   = 'image';
+    public $label  = 'Image';
+    public $format = '12';
+
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -64,8 +71,13 @@ class Dynamic_Image_Property extends Dynamic_TextBox_Property
         $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
         $data['size']     = !empty($size) ? $size : $this->size;
 
-        $template="";
-        return xarTplProperty('base', 'image', 'showinput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -78,8 +90,6 @@ class Dynamic_Image_Property extends Dynamic_TextBox_Property
         }
         if (!empty($value)) {
             $value = xarVarPrepForDisplay($value);
-        // TODO: add size/alt here ?
-            //return '<img src="'.$value.'" />';
         }
         if (!isset($name)){
             $name=$this->name;
@@ -88,35 +98,13 @@ class Dynamic_Image_Property extends Dynamic_TextBox_Property
         $data['name']  = $name;
         $data['id']    = $this->id;
 
-        $template="";
-        return xarTplProperty('base', 'image', 'showoutput', $data);
-
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+        return xarTplProperty($module, $template, 'showoutput', $data);
     }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 12,
-                              'name'       => 'image',
-                              'label'      => 'Image',
-                              'format'     => '12',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'base',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
 }
-
 ?>

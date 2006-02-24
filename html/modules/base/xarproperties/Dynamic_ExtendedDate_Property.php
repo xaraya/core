@@ -26,6 +26,13 @@ include_once "modules/base/xarproperties/Dynamic_Calendar_Property.php";
  */
 class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
 {
+    public $requiresmodue = 'base';
+
+    public $id     = 47;
+    public $name   = 'extendeddate';
+    public $label  = 'Extended Date';
+    public $format = '47';
+
     /**
      * We allow two validations: date, and datetime (corresponding to the
      * database's date and datetime data types.
@@ -153,7 +160,14 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
         $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
         $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-        return xarTplProperty('base', 'extendeddate', 'showinput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
     /**
@@ -208,35 +222,14 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
         $data['dateformat'] = $dateformat;
         $data['value']      = $value;
 
-        return xarTplProperty('base', 'extendeddate', 'showoutput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showoutput', $data);
     } /* showOutput */
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 47,
-                              'name'       => 'extendeddate',
-                              'label'      => 'Extended Date',
-                              'format'     => '47',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'base',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
-
-
 ?>

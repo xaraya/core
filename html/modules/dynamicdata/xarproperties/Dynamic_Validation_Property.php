@@ -23,7 +23,12 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_Validation_Property extends Dynamic_TextBox_Property
 {
-    public $size = 50;
+    public $id        = 998;
+    public $name      = 'validation';
+    public $label     = 'Validation';
+    public $format    = '998';
+    
+    public $size      = 50;
     public $maxlength = 254;
 
     public $proptype = null;
@@ -138,35 +143,7 @@ class Dynamic_Validation_Property extends Dynamic_TextBox_Property
         return $value;
     }
 
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-    function getBasePropertyInfo()
-    {
-        $args = array();
-        $baseInfo = array(
-                          'id'         => 998,
-                          'name'       => 'validation',
-                          'label'      => 'Validation',
-                          'format'     => '998',
-                          'validation' => '',
-                          'source'     => '',
-                          'dependancies' => '',
-                          'requiresmodule' => 'dynamicdata',
-                          'aliases' => '',
-                          'args'       => serialize( $args ),
-                          // ...
-                         );
-        return $baseInfo;
-    }
 
-    // default showValidation() from Dynamic_TextBox_Property
-
-    // default updateValidation() from Dynamic_TextBox_Property
 
 }
-
 ?>

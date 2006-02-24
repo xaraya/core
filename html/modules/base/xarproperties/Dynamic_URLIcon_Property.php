@@ -24,6 +24,13 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
 {
+    public $requiresmodule = 'base';
+    
+    public $id     = 27;
+    public $name   = 'urlicon';
+    public $label  = 'URL Icon';
+    public $format = '27';
+    
     public $icon;
 
     function Dynamic_URLIcon_Property($args)
@@ -89,9 +96,14 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
         $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
         $data['size']     = !empty($size) ? $size : $this->size;
 
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
 
-        $template="";
-        return xarTplProperty('base', 'urlicon', 'showinput', $data);
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -125,35 +137,17 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
                         $data['icon'] = xarTplGetImage('urlicon.gif','base');
                     }
                 }
-                $template="";
-                return xarTplProperty('base', 'urlicon', 'showoutput', $data);
+                if (empty($module)) {
+                    $module = $this->getModule();
+                }
+                if (empty($template)) {
+                    $template = $this->getTemplate();
+                }
+
+                return xarTplProperty($module, $template, 'showoutput', $data);
             }
         }
         return '';
-    }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-    function getBasePropertyInfo()
-    {
-        $baseInfo = array(
-                          'id'         => 27,
-                          'name'       => 'urlicon',
-                          'label'      => 'URL Icon',
-                          'format'     => '27',
-                          'validation' => '',
-                          'source'     => '',
-                          'dependancies' => '',
-                          'requiresmodule' => 'base',
-                          'aliases' => '',
-                          'args'         => '',
-                          // ...
-                         );
-        return $baseInfo;
     }
 
     /**

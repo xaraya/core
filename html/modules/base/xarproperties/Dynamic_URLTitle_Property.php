@@ -21,6 +21,13 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
 {
+    public $requiresmodule = 'base';
+    
+    public $id     = 41;
+    public $name   = 'urltitle';
+    public $label  = 'URL + Title';
+    public $format = '41';
+
     function checkInput($name='', $value = null)
     {
         if (empty($name)) {
@@ -139,16 +146,8 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         if (empty($title)) {
             $title = '';
         }
-        $data=array();
+        $data = array();
 
-/*        return '<input type="text" name="' . $name . '[title]" value="'. xarVarPrepForDisplay($title) . '" size="'. $size . '" maxlength="'. $maxlength . '"' .
-               ' id="'. $id . '"' .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               ' /> <br />' .
-               '<input type="text" name="' . $name . '[link]" value="'. xarVarPrepForDisplay($link) . '" size="'. $size . '" maxlength="'. $maxlength . '" />' .
-               (!empty($link) && $link != 'http://' ? ' [ <a href="'.$link.'" target="preview">'.xarML('check').'</a> ]' : '') .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-*/
         $data['name']     = $name;
         $data['id']       = $id;
         $data['title']    = xarVarPrepForDisplay($title);
@@ -159,8 +158,14 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         $data['size']     = !empty($size) ? $size : $this->size;
         $data['link']     = xarVarPrepForDisplay($link);
 
-        $template="";
-        return xarTplProperty('base', 'urltitle', 'showinput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -208,33 +213,14 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         $data['link']    = (!empty($link) && $link != 'http://') ? $link : '';
         $data['title']   = (!empty($title)) ? $title : '';
 
-        $template="";
-        return xarTplProperty('base', 'urltitle', 'showoutput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showoutput', $data);
     }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $baseInfo = array(
-                              'id'         => 41,
-                              'name'       => 'urltitle',
-                              'label'      => 'URL + Title',
-                              'format'     => '41',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => 'base',
-                            'aliases' => '',
-                            'args'         => '',
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
 ?>

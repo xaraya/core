@@ -1,16 +1,22 @@
 <?php
 /**
  * Dynamic Subform property
- * @package Xaraya eXtensible Management System
+ *
+ * @package modules
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamicdata module
+ * @subpackage dynamicdata
  * @author mikespub <mikespub@xaraya.com>
  */
 class Dynamic_SubForm_Property extends Dynamic_Property
 {
+    public $id        = 997;
+    public $name      = 'subform';
+    public $label     = 'Sub Form';
+    public $format    = '997';
+
     public $objectid  = 0;
     public $style     = 'serialized';
     public $title     = '';
@@ -458,10 +464,14 @@ class Dynamic_SubForm_Property extends Dynamic_Property
             }
         }
 
-        if (!isset($template)) {
-            $template = 'subform';
+        if (empty($module)) {
+            $module = $this->getModule();
         }
-        return xarTplProperty('dynamicdata', $template, 'showinput', $data);
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -490,11 +500,15 @@ class Dynamic_SubForm_Property extends Dynamic_Property
             $data['object'] =& $this->getObject($value);
         }
 
-        if (!isset($template)) {
-            $template = 'subform';
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
         }
 
-        return xarTplProperty('dynamicdata', $template, 'showoutput', $data);
+        return xarTplProperty($module, $template, 'showoutput', $data);
+    }
     }
 
     function parseValidation($validation = '')
@@ -646,30 +660,6 @@ class Dynamic_SubForm_Property extends Dynamic_Property
     }
 
     /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-    function getBasePropertyInfo()
-    {
-        $baseInfo = array(
-                          'id'         => 997,
-                          'name'       => 'subform',
-                          'label'      => 'Sub Form',
-                          'format'     => '997',
-                          'validation' => '',
-                          'source'     => '',
-                          'dependancies' => '',
-                          'requiresmodule' => 'dynamicdata',
-                          'aliases' => '',
-                          'args'         => '',
-                          // ...
-                         );
-        return $baseInfo;
-    }
-
-    /**
      * Show the current validation rule in a specific form for this property type
      *
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
@@ -711,10 +701,14 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                                    'parentid'   => xarML('List of children (parent id)'));
 
         // allow template override by child classes
-        if (!isset($template)) {
-            $template = 'subform';
+        if (empty($module)) {
+            $module = $this->getModule();
         }
-        return xarTplProperty('dynamicdata', $template, 'validation', $data);
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'validation', $data);
     }
 
     /**

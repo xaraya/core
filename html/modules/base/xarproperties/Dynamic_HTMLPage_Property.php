@@ -21,7 +21,14 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
 {
-    public $basedir = '';
+    public $requiresmodule = 'base';
+    
+    public $id       = 13;
+    public $name     = 'webpage';
+    public $label    = 'HTML Page';
+    public $format   = '13';
+
+    public $basedir  = '';
     public $filetype = '((xml)|(html))?';
 
     function Dynamic_HTMLPage_Property($args)
@@ -105,8 +112,13 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
         $data['tabindex']= !empty($tabindex) ? $tabindex : 0;
         $data['invalid'] = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
 
-        $template="";
-        return xarTplProperty('base', 'webpage', 'showinput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+        return xarTplProperty($module, $template, 'showinput', $data);
 
     }
 
@@ -137,38 +149,13 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
         $data['filetype']=$filetype;
         $data['srcpath']=$srcpath;
 
-        $template="";
-        return xarTplProperty('base', 'webpage', 'showoutput', $data);
-
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+        return xarTplProperty($module, $template, 'showoutput', $data);
     }
-
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 13,
-                              'name'       => 'webpage',
-                              'label'      => 'HTML Page',
-                              'format'     => '13',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'base',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
-
 ?>

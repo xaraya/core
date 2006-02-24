@@ -1,9 +1,9 @@
 <title>#$tpl:pageTitle#</title>
 <xar:blockgroup name="header" id="header" />
 <base href="&xar-baseurl;index.php" />
-<xar:comment>Main CSS rules (note: all default parameters in the tag can be omitted)</xar:comment>
+<!-- Main CSS rules (note: all default parameters in the tag can be omitted) -->
 <xar:style />
-<xar:comment>Styleswitcher CSS files to link to</xar:comment>
+<!-- Styleswitcher CSS files to link to -->
 <xar:template file="styleswitchercsslinks" type="theme" />
 <xar:style scope="common" />
 <!--
@@ -37,8 +37,8 @@
 -->
 <xar:additional-styles />
 <xar:if condition="$styleswitchertype eq 'javascript'">
-    <xar:comment>Styleswitcher JavaScript</xar:comment>
+    <!-- Styleswitcher JavaScript -->
     <script type="text/javascript" src="#$classicthemedir#/scripts/switch_styles.js"></script>
 </xar:if>
-<xar:comment>Head JavaScript - required for all themes</xar:comment>
+<!-- Head JavaScript - required for all themes -->
 <xar:base-render-javascript position="head" />

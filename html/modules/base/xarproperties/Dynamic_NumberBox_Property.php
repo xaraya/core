@@ -20,7 +20,14 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
 {
-    public $size = 10;
+    public $requiresmodule = 'base';
+    
+    public $id        = 15;
+    public $name      = 'integerbox';
+    public $label     = 'Number Box';
+    public $format    = '15';
+
+    public $size      = 10;
     public $maxlength = 30;
 
     function validateValue($value = null)
@@ -64,45 +71,18 @@ class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
 
     // default showOutput() from Dynamic_TextBox_Property
 
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-    function getBasePropertyInfo()
-    {
-        $args = array();
-        $baseInfo = array(
-                          'id'         => 15,
-                          'name'       => 'integerbox',
-                          'label'      => 'Number Box',
-                          'format'     => '15',
-                          'validation' => '',
-                          'source'     => '',
-                          'dependancies' => '',
-                          'requiresmodule' => 'base',
-                          'aliases'        => '',
-                          'args'           => serialize($args)
-                          // ...
-                         );
-        return $baseInfo;
-    }
-
     // Trick: use the parent method with a different template :-)
     function showValidation($args = array())
     {
         // allow template override by child classes
         if (!isset($args['template'])) {
-            $args['template'] = 'floatbox';
+            $args['template'] = $this->getTemplate();
         }
 
         return parent::showValidation($args);
     }
 
     // default updateValidation() from Dynamic_TextBox_Property
-
 }
 
 ?>

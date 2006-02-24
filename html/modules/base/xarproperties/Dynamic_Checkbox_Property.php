@@ -20,6 +20,13 @@ include_once "modules/dynamicdata/class/properties.php";
  */
 class Dynamic_Checkbox_Property extends Dynamic_Property
 {
+    public $requiresmodule = 'base';
+    
+    public $id     = 14;
+    public $name   = 'checkbox';
+    public $label  = 'Checkbox';
+    public $format = '14';
+
     function checkInput($name='', $value = null)
     {
         if (empty($name)) {
@@ -72,9 +79,14 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
         $data['tabindex']=!empty($tabindex) ? $tabindex : 0;
         $data['invalid'] = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid): '';
 
-        $template="";
-        return xarTplProperty('base', 'checkbox', 'showinput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
 
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -93,35 +105,15 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
         } else {
             return xarML('no');
         }*/
-        $template="";
-        return xarTplProperty('base', 'checkbox', 'showoutput', $data);
 
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 14,
-                              'name'       => 'checkbox',
-                              'label'      => 'Checkbox',
-                              'format'     => '14',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'base',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
 }
-
 ?>

@@ -8,14 +8,21 @@
  *
  * @subpackage Base module
  */
-/*
+/**
  * @author mikespub <mikespub@xaraya.com>
 */
 class Dynamic_TColorPicker_Property extends Dynamic_Property
 {
-    public $size = 10;
+    public $requiresmodule = 'base';
+    
+    public $id        = 44;
+    public $name      = 'tcolorpicker';
+    public $label     = 'Tigra Color Picker';
+    public $format    = '44';
+    
+    public $size      = 10;
     public $maxlength = 7;
-    public $min = 7;
+    public $min       = 7;
 
     function validateValue($value = NULL)
     {
@@ -68,18 +75,8 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
             'base','javascript','modulefile',
             array('module' => 'base', 'filename' => 'tcolorpicker.js')
         );
-        /*
-        // Create the tags.
-        $output = '<input type="text" name="'.$name.'" id="'.$id.'_input" value="'.xarVarPrepForDisplay($value).'" size="' . $this->size . '" maxlength="' . $this->maxlength . '" />'
-            . '<a href="javascript:TCP.popup(document.getElementById(\''.$id.'_input\'), 1)">'
-            . '<img src="' . xarTplGetImage('tcolorpicker.gif', 'base') . '" width="15" height="13" border="0" alt="' . xarML('Click Here to select a color') . '" />'
-            . '</a>';
 
-        if (!empty($this->invalid)) {
-            $output .= ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>';
-        }
-        */
-        $data['baseuri']   =xarServerGetBaseURI();
+        $data['baseuri']  = xarServerGetBaseURI();
         $data['name']     = $name;
         $data['id']       = $id;
         $data['size']     = $this->size;
@@ -87,7 +84,14 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-        return xarTplProperty('base', 'tcolorpicker', 'showinput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -101,36 +105,14 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
             $data['value'] = xarVarPrepHTMLDisplay($this->value);
         }
 
-         return xarTplProperty('base', 'tcolorpicker', 'showoutput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showoutput', $data);
     }
-
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 44,
-                              'name'       => 'tcolorpicker',
-                              'label'      => 'Tigra Color Picker',
-                              'format'     => '44',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => 'base',
-                            'aliases'        => '',
-                            'args'           => serialize($args)
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
-
 ?>
