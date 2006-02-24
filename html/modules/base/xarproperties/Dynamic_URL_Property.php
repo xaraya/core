@@ -27,6 +27,13 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_URL_Property extends Dynamic_TextBox_Property
 {
+    public $requiresmodule = 'base';
+    
+    public $id     = 11;
+    public $name   = 'url';
+    public $label  = 'URL';
+    public $format = '11';
+
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -65,17 +72,6 @@ class Dynamic_URL_Property extends Dynamic_TextBox_Property
         }
        $data=array();
 
-/*     return '<input type="text"'.
-               ' name="' . $name . '"' .
-               ' value="'. (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) . '"' .
-               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
-               ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
-               ' id="'. $id . '"' .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               ' />' .
-               (!empty($value) && $value != 'http://' ? ' [ <a href="'.$value.'" target="preview">'.xarML('check').'</a> ]' : '') .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-*/
         $data['name']     = $name;
         $data['id']       = $id;
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
@@ -84,8 +80,14 @@ class Dynamic_URL_Property extends Dynamic_TextBox_Property
         $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
         $data['size']     = !empty($size) ? $size : $this->size;
 
-        $template="";
-        return xarTplProperty('base', 'url', 'showinput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -95,41 +97,22 @@ class Dynamic_URL_Property extends Dynamic_TextBox_Property
             $value = $this->value;
         }
 
-        $data=array();
+        $data = array();
         // TODO: use redirect function here ?
         if (!empty($value) && $value != 'http://') {
             $data['value'] = xarVarPrepForDisplay($value);
             //return '<a href="'.$value.'">'.$value.'</a>';
 
-            $template="";
-            return xarTplProperty('base', 'url', 'showoutput', $data);
+            if (empty($module)) {
+                $module = $this->getModule();
+            }
+            if (empty($template)) {
+                $template = $this->getTemplate();
+            }
+
+            return xarTplProperty($module, $template, 'showoutput', $data);
         }
         return '';
     }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $baseInfo = array(
-                              'id'         => 11,
-                              'name'       => 'url',
-                              'label'      => 'URL',
-                              'format'     => '11',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => 'base',
-                            'aliases' => '',
-                            'args'         => '',
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
 ?>

@@ -17,6 +17,13 @@
  */
 class Dynamic_Calendar_Property extends Dynamic_Property
 {
+    public $requiresmodule = 'base';
+    
+    public $id     = 8;
+    public $name   = 'calendar';
+    public $label  = 'Calendar';
+    public $format = '8';
+    
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -112,7 +119,14 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         $data['value']      = $value;
         $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-        return xarTplProperty('base', 'calendar', 'showinput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -143,33 +157,15 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         $data['value'] = $value;
         // $data['returnvalue']= xarLocaleFormatDate($dateformat, $value);
 
-        return xarTplProperty('base', 'calendar', 'showoutput', $data);
-    }
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
 
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 8,
-                              'name'       => 'calendar',
-                              'label'      => 'Calendar',
-                              'format'     => '8',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'base',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
+        return xarTplProperty($module, $template, 'showoutput', $data);
+    }
 
     function showValidation($args = array())
     {
@@ -229,7 +225,5 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         // tell the calling function that everything is OK
         return true;
     }
-
 }
-
 ?>

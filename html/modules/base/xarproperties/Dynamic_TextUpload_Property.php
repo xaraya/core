@@ -23,6 +23,14 @@ include_once "modules/dynamicdata/class/properties.php";
  */
 class Dynamic_TextUpload_Property extends Dynamic_Property
 {
+    public $requiresmodule = 'base';
+    
+    public $id     = 38;
+    public $name   = 'textupload';
+    public $label  = 'Text Upload';
+    public $format = '38';
+    public $args   = serialize(array('rows' => 20));
+    
     public $rows = 8;
     public $cols = 50;
 
@@ -248,8 +256,14 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         $data['maxsize']  = !empty($maxsize) ? $maxsize: $this->maxsize;
         $data['size']     = !empty($size) ? $size : $this->size;
 
-        $template="";
-        return xarTplProperty('base', 'textupload', 'showinput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showinput', $data);
 
     }
 
@@ -269,8 +283,14 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
             $data['value'] ='';
         }
 
-        $template="";
-        return xarTplProperty('base', 'textupload', 'showoutput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showoutput', $data);
 
     }
 
@@ -292,33 +312,6 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
             // nothing interesting here
         }
     }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-        $args['rows'] = 20;
-
-         $baseInfo = array(
-                              'id'         => 38,
-                              'name'       => 'textupload',
-                              'label'      => 'Text Upload',
-                              'format'     => '38',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => 'base',
-                            'aliases' => '',
-                            'args' => serialize( $args ),
-                            'args'         => '',
-                            // ...
-                           );
-        return $baseInfo;
-     }
 
     function showValidation($args = array())
     {

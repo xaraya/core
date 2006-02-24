@@ -36,9 +36,7 @@ class Dynamic_StaticText_Property extends Dynamic_Property
     {
         extract($args);
 
-/*        return (isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value)) .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-*/      $data=array();
+        $data=array();
 
         if (empty($name)) {
             $name = 'dd_' . $this->id;

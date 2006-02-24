@@ -214,7 +214,7 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
 
         // allow template override by child classes
         if (empty($template)) {
-            $template = 'imagelist';
+            $template = $this->getTemplate();
         }
         return xarTplProperty('base', $template, 'validation', $data);
     }
