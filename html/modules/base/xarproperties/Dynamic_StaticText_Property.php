@@ -14,6 +14,13 @@
 */
 class Dynamic_StaticText_Property extends Dynamic_Property
 {
+    public $requiresmodule = 'base';
+    
+    public $id     = 1;
+    public $name   = 'static';
+    public $label  = 'Static Text';
+    public $format = '1';
+
     function validateValue($value = null)
     {
         if (isset($value) && $value != $this->value) {
@@ -46,54 +53,15 @@ class Dynamic_StaticText_Property extends Dynamic_Property
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-        $template="";
-        return xarTplProperty('base', 'static', 'showinput', $data);
-    }
-     // default showOutput() from Dynamic_Property
-    function showOutput($args = array())
-    {
-        extract($args);
-        if (isset($value)) {
-            return xarVarPrepForDisplay($value);
-        } else {
-            return xarVarPrepForDisplay($this->value);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
         }
 
-        $data=array();
-
-        $data['value'] = $value;
-
-        $template="";
-        return xarTplProperty('base', 'static', 'showoutput', $data);
-
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 1,
-                              'name'       => 'static',
-                              'label'      => 'Static Text',
-                              'format'     => '1',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => 'base',
-                            'aliases'        => '',
-                            'args'           => serialize($args)
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
-
 ?>

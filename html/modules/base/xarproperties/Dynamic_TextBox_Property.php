@@ -22,12 +22,19 @@ include_once "modules/dynamicdata/class/properties.php";
  */
 class Dynamic_TextBox_Property extends Dynamic_Property
 {
-    public $size = 50;
+    public $requiresmodule = 'base';
+    
+    public $id        = 2;
+    public $name      = 'textbox';
+    public $label     = 'Text Box';
+    public $format    = '2';
+    
+    public $size      = 50;
     public $maxlength = 254;
 
-    public $min = null;
-    public $max = null;
-    public $regex = null;
+    public $min       = null;
+    public $max       = null;
+    public $regex     = null;
 
     function Dynamic_TextBox_Property($args)
     {
@@ -91,12 +98,15 @@ class Dynamic_TextBox_Property extends Dynamic_Property
         $data['size']     = !empty($size) ? $size : $this->size;
         $data['onfocus']  = isset($onfocus) ? $onfocus : null; // let tpl decide what to do with it
 
-        // FIXME: this won't work when called by a property from a different module
         // allow template override by child classes (or in BL tags/API calls)
-        if (empty($template)) {
-            $template = 'textbox';
+        if (empty($module)) {
+            $module = $this->getModule();
         }
-        return xarTplProperty('base', $template, 'showinput', $data);
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -112,12 +122,15 @@ class Dynamic_TextBox_Property extends Dynamic_Property
 
         $data['value'] = $value;
 
-    // FIXME: this won't work when called by a property from a different module
         // allow template override by child classes (or in BL tags/API calls)
-        if (empty($template)) {
-            $template = 'textbox';
+        if (empty($module)) {
+            $module = $this->getModule();
         }
-        return xarTplProperty('base', $template, 'showoutput', $data);
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showoutput', $data);
 
     }
 
@@ -138,31 +151,6 @@ class Dynamic_TextBox_Property extends Dynamic_Property
                 $this->regex = join(':', $fields); // the rest belongs to the regular expression
             }
         }
-    }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 2,
-                              'name'       => 'textbox',
-                              'label'      => 'Text Box',
-                              'format'     => '2',
-                              'validation' => '',
-                              'source'     => '',
-                              'dependancies' => '',
-                              'requiresmodule' => 'base',
-                              'aliases' => '',
-                              'args'       => serialize( $args ),
-                            // ...
-                           );
-        return $baseInfo;
     }
 
     /**
