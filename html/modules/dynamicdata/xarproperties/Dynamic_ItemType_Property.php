@@ -24,6 +24,13 @@ include_once "modules/base/xarproperties/Dynamic_NumberBox_Property.php";
  */
 class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
 {
+    public $requiresmodule = 'dynamicdata';
+    
+    public $id       = 20;
+    public $name     = 'itemtype';
+    public $label    = 'Item Type';
+    public $format   = '20';
+
     public $module   = ''; // get itemtypes for this module with getitemtypes()
     public $itemtype = null; // get items for this module+itemtype with getitemlinks()
     public $func     = null; // specific API call to retrieve a list of items
@@ -82,10 +89,14 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
         $data['onchange'] = isset($args['onchange']) ? $args['onchange'] : null; // let tpl decide what to do
 
-        if (empty($args['template'])) {
-            $args['template'] = 'itemtype';
+        if (empty($module)) {
+            $module = $this->getModule();
         }
-        return xarTplProperty('dynamicdata', $args['template'], 'showinput', $data);
+        if (empty($args['template'])) {
+            $args['template'] = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $args['template'], 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -103,10 +114,14 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
         $data['option'] = array('id' => $this->value,
                                 'name' => $this->getOption());
 
-        if (empty($args['template'])) {
-            $args['template'] = 'itemtype';
+        if (empty($module)) {
+            $module = $this->getModule();
         }
-        return xarTplProperty('dynamicdata', $args['template'], 'showoutput', $data);
+        if (empty($args['template'])) {
+            $args['template'] = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showoutput', $data);
     }
 
     function setArguments($args = array())
@@ -288,31 +303,6 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
     }
 
     /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 20,
-                              'name'       => 'itemtype',
-                              'label'      => 'Item Type',
-                              'format'     => '20',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'dynamicdata',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
-    /**
      * Show the current validation rule in a specific form for this property type
      *
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
@@ -355,10 +345,14 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
         $data['other']     = '';
 
         // allow template override by child classes
-        if (!isset($template)) {
-            $template = 'itemtype';
+        if (empty($module)) {
+            $module = $this->getModule();
         }
-        return xarTplProperty('dynamicdata', $template, 'validation', $data);
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'validation', $data);
     }
 
     /**

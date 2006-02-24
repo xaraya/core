@@ -24,6 +24,13 @@ include_once "modules/base/xarproperties/Dynamic_NumberBox_Property.php";
  */
 class Dynamic_ItemID_Property extends Dynamic_NumberBox_Property
 {
+    public $requiresmodule = 'dynamicdata';
+
+    public $id     = 21;
+    public $name   = 'itemid';
+    public $label  = 'Item ID';
+    public $format = '21';
+
     function checkInput($name='', $value = null)
     {
         if (empty($name)) {
@@ -52,37 +59,17 @@ class Dynamic_ItemID_Property extends Dynamic_NumberBox_Property
 
         // Note: item ids are read-only, even (especially) in input forms
 
-        if (!isset($template)) {
-            $template = 'itemid';
+        if (empty($module)) {
+            $module = $this->getModule();
         }
-        return xarTplProperty('dynamicdata', $template, 'showinput', $data);
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
     // default methods from Dynamic_NumberBox_Property
 
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 21,
-                              'name'       => 'itemid',
-                              'label'      => 'Item ID',
-                              'format'     => '21',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'dynamicdata',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
 }
 
 ?>
