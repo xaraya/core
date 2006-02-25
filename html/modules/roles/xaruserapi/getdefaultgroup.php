@@ -18,7 +18,7 @@ function roles_userapi_getdefaultgroup()
 {
     $defaultgroup = xarModGetVar('roles','defaultgroup');
     if(empty($defaultgroup)) {
-        $defaultgroup = 'All'; // TODO: improve on this hardwiring
+        $defaultgroup = 'Users'; // TODO: improve on this hardwiring
     }
     return $defaultgroup;
 }

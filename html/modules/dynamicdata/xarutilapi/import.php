@@ -1,7 +1,5 @@
 <?php
 /**
- * Import an object definition or an object item from XML
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -117,6 +115,7 @@ function dynamicdata_utilapi_import($args)
                 if ($object['moduleid'] == xarModGetIDFromName('dynamicdata')) {
                     $object['itemtype'] = -1;
                 }
+
 
                 $objectid = xarModAPIFunc('dynamicdata','admin','createobject',
                                           $object);
@@ -319,7 +318,6 @@ function dynamicdata_utilapi_import($args)
     if (!empty($file)) {
         fclose($fp);
     }
-
     // adjust maxid (for objects stored in the dynamic_data table)
     if (count($objectcache) > 0 && count($objectmaxid) > 0) {
         foreach (array_keys($objectcache) as $objectid) {
@@ -329,6 +327,7 @@ function dynamicdata_utilapi_import($args)
                 if (empty($itemid)) return;
             }
         }
+		unset($objectcache);
     }
 
     return isset($objectid) ? $objectid : null;

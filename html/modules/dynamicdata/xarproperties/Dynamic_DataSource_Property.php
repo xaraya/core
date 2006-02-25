@@ -1,7 +1,6 @@
 <?php
 /**
  * Dynamic Data source Property
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -28,6 +27,7 @@ class Dynamic_DataSource_Property extends Dynamic_Select_Property
     public $name = 'datasource';
     public $label = 'Data Source';
     public $format = '23';
+    public $requiresmodule = 'dynamicdata';
 
     function __construct($args)
     {

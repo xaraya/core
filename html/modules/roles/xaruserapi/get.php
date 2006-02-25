@@ -25,14 +25,14 @@ function roles_userapi_get($args)
 {
     // Get arguments from argument array
     extract($args);
-    // Argument checks
     if (empty($uid) && empty($name) && empty($uname) && empty($email)) {
         throw new EmptyParameterException('uid or name or uname or email');
     } elseif (!empty($uid) && !is_numeric($uid)) {
         throw new VariableValidationException(array('uid',$uid,'numeric'));
     }
-
-    if (empty($type)) $type = 0;
+    if ((empty($itemid) && !empty($uid))) {
+        $itemid = $uid;
+    }
 
     $xartable =& xarDBGetTables();
     $rolestable = $xartable['roles'];
@@ -68,7 +68,9 @@ function roles_userapi_get($args)
     elseif (!empty($state) && $state != ROLES_STATE_ALL) {
         $q->eq('xar_state',(int)$state);
     }
-    $q->eq('xar_type',$type);
+    if (!empty($type)) {
+	    $q->eq('xar_type',$type);
+	}
     if (!$q->run()) return;
 
     // Check for no rows found, and if so return
