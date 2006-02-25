@@ -509,7 +509,6 @@ class Dynamic_SubForm_Property extends Dynamic_Property
 
         return xarTplProperty($module, $template, 'showoutput', $data);
     }
-    }
 
     function parseValidation($validation = '')
     {
@@ -584,8 +583,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                     // reset the list of item ids
                     $myobject->itemids = array();
                 }
-                if (!empty($this->link) && !empty($value))
-                {
+                if (!empty($this->link) && !empty($value)) {
                     if (is_numeric($value)) {
                         $where = $this->link . ' eq ' . $value;
                     } else {
@@ -602,8 +600,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                             }
                         }
                     }
-                    if( isset($where) )
-                    {
+                    if(isset($where)) {
                         $myobject->getItems(array('where' => $where));
                     } else {
                         // re-initialize the items array
