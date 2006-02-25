@@ -34,9 +34,8 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
             $value = $this->value;
         }
 
-        if( is_array($value) )
-        {
-            $this->value = maskImplode ( $value);
+        if(is_array($value)) {
+            $this->value = maskImplode($value);
         } else {
             $this->value = $value;
         }
@@ -47,27 +46,24 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
     function showInput($args = array())
     {
         extract($args);
-        $data=array();
+        $data = array();
 
-        if (!isset($value))
-        {
+        if (!isset($value)) {
             $data['value'] = $this->value;
         } else {
             $data['value'] = $value;
         }
 
-        if ( !is_array($data['value']) && is_string($data['value']) )
-        {
-            $data['value'] = maskExplode( $data['value'] );
+        if (!is_array($data['value']) && is_string($data['value'])) {
+            $data['value'] = maskExplode($data['value']);
         }
 
-        if (!isset($options) || count($options) == 0)
-        {
+        if (!isset($options) || count($options) == 0) {
             $this->getOptions();
             $options = array();
-            foreach( $this->options as $key => $option )
+            foreach($this->options as $key => $option)
             {
-                $option['checked'] = in_array($option['id'],$data['value']);
+                $option['checked'] = in_array($option['id'], $data['value']);
                 $options[$key] = $option;
             }
         }
@@ -94,37 +90,33 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
             $template = $this->getTemplate();
         }
         return xarTplProperty($module, $template, 'showinput', $data);
-        //return $out;
     }
 
     function showOutput($args = array())
     {
         extract($args);
 
-        if (!isset($value))
-        {
+        if (!isset($value)) {
             $value = $this->value;
         }
 
-        if( !is_array($value) )
-        {
+        if (!is_array($value)) {
             $value = maskExplode($value);
         }
 
         $this->getOptions();
-        $numOptionsSelected=0;
+        $numOptionsSelected = 0;
         $options = array();
-        foreach( $this->options as $key => $option )
+        foreach($this->options as $key => $option)
         {
-            $option['checked'] = in_array($option['id'],$value);
+            $option['checked'] = in_array($option['id'], $value);
             $options[$key] = $option;
-            if( $option['checked'] )
-            {
+            if ($option['checked']) {
                 $numOptionsSelected++;
             }
         }
 
-        $data=array();
+        $data = array();
         $data['options'] = $options;
         $data['numOptionsSelected'] = $numOptionsSelected;
 
@@ -139,21 +131,19 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
 
 }
 
-function maskImplode ( $anArray )
+function maskImplode($anArray)
 {
     $output = '';
-    if( is_array( $anArray ) )
-    {
-        foreach( $anArray as $entry )
-        {
+    if(is_array($anArray)) {
+        foreach($anArray as $entry) {
             $output .= $entry;
         }
     }
     return $output;
 }
 
-function maskExplode ( $aString )
+function maskExplode($aString)
 {
-    return explode(',',substr(chunk_split($aString, 1, ','), 0, -1));
+    return explode(',', substr(chunk_split($aString, 1, ','), 0, -1));
 }
 ?>

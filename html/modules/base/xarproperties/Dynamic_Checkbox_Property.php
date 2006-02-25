@@ -56,12 +56,11 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
         return true;
     }
 
-//    function showInput($name = '', $value = null, $id = '', $tabindex = '')
     function showInput($args = array())
     {
         extract($args);
 
-        $data=array();
+        $data = array();
 
         if (!isset($value)) {
             $value = $this->value;
@@ -72,13 +71,13 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
         if (empty($id)) {
             $id = $name;
         }
-        $data['value']=$value;
-        $data['name']=$name;
-        $data['id']=$id;
-        $data['checked'] = isset($checked) && $checked ? true : false;
+        $data['value']    = $value;
+        $data['name']     = $name;
+        $data['id']       = $id;
+        $data['checked']  = isset($checked) && $checked ? true : false;
         $data['onchange'] = !empty($onchange) ? $onchange : null; // let tpl decide what to do with it
-        $data['tabindex']=!empty($tabindex) ? $tabindex : 0;
-        $data['invalid'] = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid): '';
+        $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
+        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid): '';
 
         if (empty($module)) {
             $module = $this->getModule();
@@ -94,11 +93,11 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
     {
         extract($args);
 
-        $data=array();
+        $data = array();
         if (!isset($value)) {
             $value = $this->value;
         }
-        $data['value']=$value;
+        $data['value'] = $value;
         // TODO: allow different values here, and verify $checked ?
         //Move ML language defines to templates
         /*if (!empty($value)) {
