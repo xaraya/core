@@ -28,6 +28,8 @@ class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
     public $label     = 'Number Box';
     public $format    = '15';
 
+    $aliases = array();
+ 
     public $size      = 10;
     public $maxlength = 30;
 
@@ -77,7 +79,9 @@ class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
     {
         // allow template override by child classes
         if (!isset($args['template'])) {
-            $args['template'] = $this->getTemplate();
+            // can't use this yet, need to decide on a name
+            //$args['template'] = $this->getTemplate();
+            $args['template'] = 'numberbox';
         }
 
         return parent::showValidation($args);

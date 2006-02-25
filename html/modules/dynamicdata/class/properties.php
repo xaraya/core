@@ -317,7 +317,7 @@ class Dynamic_Property
     public $order = 0;
     public $format = '0';
     public $template = '';
-    public $tplmodule = 'dynamic_data';
+    public $tplmodule = 'dynamicdata';
     public $validation = '';
     public $dependancies = '';    // semi-colon seperated list of files that must be present for this property to be available (optional)
     public $requiresmodule = ''; // this module must be available before this property is enabled (optional)
@@ -339,7 +339,7 @@ class Dynamic_Property
     /**
      * Default constructor setting the variables
      */
-    function Dynamic_Property($args)
+    function __construct($args)
     {
 	    $this->args = serialize(array());
 
