@@ -1,7 +1,5 @@
 <?php
 /**
- * Modify an item
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -25,6 +23,7 @@ function dynamicdata_admin_modify($args)
     if(!xarVarFetch('itemtype', 'str:1', $itemtype, 0,                                  XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('notfresh', 'isset', $notfresh,  NULL, XARVAR_DONT_SET)) {return;}
 
     if(!xarVarFetch('itemid',   'isset', $itemid)) {return;}
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
@@ -36,13 +35,24 @@ function dynamicdata_admin_modify($args)
 
     $data = xarModAPIFunc('dynamicdata','admin','menu');
 
+    if (isset($objectid)) {
+	    $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $objectid));
+    } else {
+	    $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('moduleid' => $modid,'itemtype' => $itemtype));
+    }
+    $itemtype = $ancestor['itemtype'];
+
     $myobject = & Dynamic_Object_Master::getObject(array('objectid' => $objectid,
                                          'moduleid' => $modid,
                                          'itemtype' => $itemtype,
                                          'join'     => $join,
                                          'table'    => $table,
                                          'itemid'   => $itemid));
-    $myobject->getItem();
+    if ($notfresh) {
+	    $isvalid = $myobject->checkInput();
+    } else {
+		$myobject->getItem();
+    }
     $data['object'] = & $myobject;
 
     // if we're editing a dynamic property, save its property type to cache
@@ -65,9 +75,9 @@ function dynamicdata_admin_modify($args)
     $item['itemtype'] = $myobject->itemtype;
     $item['itemid'] = $myobject->itemid;
     $hooks = array();
-    $hooks = xarModCallHooks('item', 'modify', $myobject->itemid, $item, $modinfo['name']); 
+    $hooks = xarModCallHooks('item', 'modify', $myobject->itemid, $item, $modinfo['name']);
     $data['hooks'] = $hooks;
-    
+
     if(!isset($template)) {
         $template = $myobject->name;
     }

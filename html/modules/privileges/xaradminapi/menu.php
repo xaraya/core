@@ -1,6 +1,5 @@
 <?php
 /**
- * Generate the common admin menu configuration
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
