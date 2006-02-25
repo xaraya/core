@@ -9,11 +9,35 @@
  *
  * @subpackage Base module
  */
-/*
+/**
  * @author mikespub <mikespub@xaraya.com>
 */
 class Dynamic_TextArea_Property extends Dynamic_Property
 {
+    public $requiresmodule = 'base';
+    
+    public $id      = 3;
+    public $name    = 'textarea_small';
+    public $label   = 'Small Text Area';
+    public $format  = '3';
+    public $args    = serialize(array('rows' => 2));
+    
+    $aliases = array();
+    $aliases[] = array('id'         => 4,
+                       'name'       => 'textarea_medium',
+                       'label'      => 'Medium Text Area',
+                       'format'     => '4',
+                       'requiresmodule' => 'base',
+                       'args' => serialize(array('rows' => 8)));
+
+    $aliases[] = array('id'         => 5,
+                       'name'       => 'textarea_large',
+                       'label'      => 'Large Text Area',
+                       'format'     => '5',
+                       'requiresmodule' => 'base',
+                        'args' => serialize(array('rows' => 20)));
+    public $aliases = $aliases;
+
     public $rows = 8;
     public $cols = 35;
 
@@ -56,25 +80,36 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         $data['rows']     = !empty($rows) ? $rows : $this->rows;
         $data['cols']     = !empty($cols) ? $cols : $this->cols;
 
-        $template="";
-        return xarTplProperty('base', 'textarea', 'showinput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showinput', $data);
 
     }
 
     function showOutput($args = array())
     {
-         extract($args);
-         $data=array();
+        extract($args);
+        $data = array();
 
-         if (isset($value)) {
-            //return xarVarPrepHTMLDisplay($value);
+        if (isset($value)) {
             $data['value'] = xarVarPrepHTMLDisplay($value);
-         } else {
-            //return xarVarPrepHTMLDisplay($this->value);
+        } else {
             $data['value'] = xarVarPrepHTMLDisplay($this->value);
-         }
-         $template="";
-         return xarTplProperty('base', 'textarea', 'showoutput', $data);
+        }
+        
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showoutput', $data);
     }
 
     // check validation for allowed rows/cols (or values)
@@ -89,61 +124,6 @@ class Dynamic_TextArea_Property extends Dynamic_Property
                 $this->cols = $cols;
             }
         }
-    }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-    function getBasePropertyInfo()
-    {
-        $args = array();
-        $args['rows'] = 8;
-        $aliases[] = array(
-                            'id'         => 4,
-                            'name'       => 'textarea_medium',
-                            'label'      => 'Medium Text Area',
-                            'format'     => '4',
-                            'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => 'base',
-                            'args' => serialize( $args ),
-
-                            // ...
-                           );
-
-        $args['rows'] = 20;
-        $aliases[] = array(
-                              'id'         => 5,
-                              'name'       => 'textarea_large',
-                              'label'      => 'Large Text Area',
-                              'format'     => '5',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => 'base',
-                            'args' => serialize( $args ),
-                            // ...
-                           );
-
-        $args['rows'] = 2;
-        $baseInfo = array(
-                            'id'         => 3,
-                            'name'       => 'textarea_small',
-                            'label'      => 'Small Text Area',
-                            'format'     => '3',
-                            'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => 'base',
-                            'aliases' => $aliases,
-                            'args' => serialize( $args ),
-                            // ...
-                           );
-        return $baseInfo;
     }
 
     /**
