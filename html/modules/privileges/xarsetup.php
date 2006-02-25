@@ -179,6 +179,12 @@ function initializeSetup()
     xarRegisterMask('ViewBase','All','base','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('ReadBase','All','base','All','All','ACCESS_READ');
     xarRegisterMask('AdminBase','All','base','All','All','ACCESS_ADMIN');
+    /* This AdminPanel mask is added to replace the adminpanel module equivalent
+     *   - since adminpanel module is removed as of 1.1.0
+     * At some stage we should remove this but practice has been to use this mask in xarSecurityCheck
+     * frequently in module code and templates - left here for now for ease in backward compatibiilty
+     */
+    xarRegisterMask('AdminPanel','All','base','All','All','ACCESS_ADMIN');
 
     xarRegisterMask('AdminInstaller','All','installer','All','All','ACCESS_ADMIN');
 
