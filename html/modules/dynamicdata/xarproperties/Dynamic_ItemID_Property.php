@@ -31,7 +31,7 @@ class Dynamic_ItemID_Property extends Dynamic_NumberBox_Property
     public $label  = 'Item ID';
     public $format = '21';
 
-    function checkInput($name='', $value = null)
+    function checkInput($name = '', $value = null)
     {
         if (empty($name)) {
             $name = 'dd_'.$this->id;
