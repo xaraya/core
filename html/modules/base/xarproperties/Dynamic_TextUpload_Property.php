@@ -29,7 +29,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
     public $name   = 'textupload';
     public $label  = 'Text Upload';
     public $format = '38';
-    public $args   = serialize(array('rows' => 20));
+    public $args   = array('rows' => 20);
     
     public $rows = 8;
     public $cols = 50;
@@ -46,9 +46,9 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
     // this is used by Dynamic_Property_Master::addProperty() to set the $object->upload flag
     public $upload = true;
 
-    function Dynamic_TextUpload_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Property($args);
+        parent::__construct($args);
 
         if (!isset($this->validation)) {
             $this->validation = '';

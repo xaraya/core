@@ -30,11 +30,11 @@ class Dynamic_FieldType_Property extends Dynamic_Select_Property
     public $format = '22';
     public $requiresmodule = 'dynamicdata';
 
-    function Dynamic_FieldType_Property($args)
+    function __construct($args)
     {
         if( !isset($args['skipInit']) || ($args['skipInit'] != true) )
         {
-            $this->Dynamic_Select_Property($args);
+            parent::__construct($args);
             if (count($this->options) == 0) {
                 $proptypes = Dynamic_Property_Master::getPropertyTypes();
                 if (!isset($proptypes)) {
@@ -47,5 +47,4 @@ class Dynamic_FieldType_Property extends Dynamic_Select_Property
         }
     }
 }
-
 ?>

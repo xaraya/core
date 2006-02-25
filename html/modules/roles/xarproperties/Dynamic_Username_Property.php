@@ -10,25 +10,19 @@
  * @subpackage Roles module
  */
 
-/*
+/**
  * Handle Username Property
  * @author mikespub <mikespub@xaraya.com>
  */
 
 class Dynamic_Username_Property extends Dynamic_Property
 {
-    function checkInput($name='', $value = null)
-    {
-        if (empty($name)) {
-            $name = 'dd_'.$this->id;
-        }
-        // store the fieldname for validations who need them (e.g. file uploads)
-        $this->fieldname = $name;
-        if (!isset($value)) {
-            if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
-        }
-        return $this->validateValue($value);
-    }
+    public $requiresmodule = 'roles';
+
+    public $id     = 7;
+    public $name   = 'username';
+    public $label  = 'Username';
+    public $format = '7';
 
     function validateValue($value = null)
     {
@@ -72,7 +66,7 @@ class Dynamic_Username_Property extends Dynamic_Property
         if (empty($id)) {
             $id = $name;
         }
-        $data=array();
+        $data = array();
 
         try {
             $user = xarUserGetVar('name', $value);
@@ -92,7 +86,14 @@ class Dynamic_Username_Property extends Dynamic_Property
         $data['id']   = $id;
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-        return xarTplProperty('roles', 'username', 'showinput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
     function showOutput($args = array())
@@ -119,41 +120,17 @@ class Dynamic_Username_Property extends Dynamic_Property
         $data['id']    = $this->id;
 
         if ($value > 1) {
-            $data['linkurl']=xarModURL('roles','user','display',array('uid' => $value));
-/*          return '<a href="'.xarModURL('roles','user','display',
-                                         array('uid' => $value))
-                    . '">'.xarVarPrepForDisplay($user).'</a>';
-*/
+            $data['linkurl'] = xarModURL('roles','user','display',array('uid' => $value));
         }
 
-        return xarTplProperty('roles', 'username', 'showoutput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showoutput', $data);
     }
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $baseInfo = array(
-                              'id'         => 7,
-                              'name'       => 'username',
-                              'label'      => 'Username',
-                              'format'     => '7',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => 'roles',
-                            'aliases' => '',
-                            'args'         => '',
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
-
 ?>

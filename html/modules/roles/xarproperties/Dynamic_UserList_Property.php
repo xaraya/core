@@ -46,7 +46,7 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
     *   field - name|uname|email|uid
     */
 
-    function Dynamic_UserList_Property($args)
+    function __construct($args)
     {
         // Don't initialise the parent class as it handles the
         // validation in an inappropriate way for user lists.
@@ -124,7 +124,7 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
     function showOutput($args = array())
     {
         extract($args);
-        $data= array();
+        $data = array();
 
         if (!isset($value)) {
             $value = $this->value;
@@ -142,10 +142,17 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
                 // Nothing to do?
             }
         }
-        $data['value']=$value;
-        $data['user']=$user;
+        $data['value'] = $value;
+        $data['user'] = $user;
 
-        return xarTplProperty('roles', 'userlist', 'showoutput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showoutput', $data);
     }
 
     function parseValidation($validation = '')
@@ -217,10 +224,14 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         $data['other']     = '';
 
         // allow template override by child classes
-        if (!isset($template)) {
-            $template = '';
+        if (empty($module)) {
+            $module = $this->getModule();
         }
-        return xarTplProperty('roles', 'userlist', 'validation', $data);
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'validation', $data);
     }
 
     /**
@@ -284,7 +295,5 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         // tell the calling function that everything is OK
         return true;
     }
-
 }
-
 ?>

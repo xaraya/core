@@ -34,9 +34,9 @@ class Dynamic_Validation_Property extends Dynamic_TextBox_Property
 
     public $proptype = null;
 
-    function Dynamic_Validation_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_TextBox_Property($args);
+        parent::__construct($args);
     }
 
     function validateValue($value = null)

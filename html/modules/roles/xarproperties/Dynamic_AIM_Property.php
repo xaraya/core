@@ -26,6 +26,13 @@ include_once "modules/base/xarproperties/Dynamic_URLIcon_Property.php";
  */
 class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
 {
+    public $requiresmodule = 'roles';
+
+    public $id     = 29;
+    public $name   = 'aim';
+    public $label  = 'Aim Address';
+    public $format = '29';
+
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -51,7 +58,7 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
         if (!isset($value)) {
             $value = $this->value;
         }
-        $data=array();
+        $data = array();
 
         if (!empty($value)) {
             $link = 'aim:goim?screenname='.$value.'&message='.xarML('Hello+Are+you+there?');
@@ -74,8 +81,14 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
         $data['size']     = !empty($size) ? $size : $this->size;
         $data['link']     = xarVarPrepForDisplay($link);
         
-        $template="";
-        return xarTplProperty('roles', 'aim', 'showinput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showinput', $data);
 
     }
 
@@ -86,7 +99,7 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
             $value = $this->value;
         }
 
-        $data=array();
+        $data = array();
 
         // TODO: use redirect function here ?
         if (!empty($value)) {
@@ -98,36 +111,18 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
                 $data['name'] = $this->name;
                 $data['id']   = $this->id;
                 $data['image']= xarVarPrepForDisplay($this->icon);
-                $template="";
-                return xarTplProperty('roles', 'aim', 'showoutput', $data );
+                
+                if (empty($module)) {
+                    $module = $this->getModule();
+                }
+                if (empty($template)) {
+                    $template = $this->getTemplate();
+                }
+
+                return xarTplProperty($module, $template, 'showoutput', $data);
             }
         }
         return '';
     }
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 29,
-                              'name'       => 'aim',
-                              'label'      => 'AIM Address',
-                              'format'     => '29',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'roles',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                           );
-        return $baseInfo;
-     }
 }
 ?>

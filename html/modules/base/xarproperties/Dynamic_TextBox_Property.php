@@ -36,9 +36,9 @@ class Dynamic_TextBox_Property extends Dynamic_Property
     public $max       = null;
     public $regex     = null;
 
-    function Dynamic_TextBox_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Property($args);
+        parent::__construct($args);
 
         // check validation for allowed min/max length (or values)
         if (!empty($this->validation)) {

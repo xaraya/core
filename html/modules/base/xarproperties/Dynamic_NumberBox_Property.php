@@ -27,7 +27,7 @@ class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
     public $name      = 'integerbox';
     public $label     = 'Number Box';
     public $format    = '15';
- 
+
     public $size      = 10;
     public $maxlength = 30;
 

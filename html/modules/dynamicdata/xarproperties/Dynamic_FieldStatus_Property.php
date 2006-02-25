@@ -28,9 +28,9 @@ class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
     public $format = '25';
     public $requiresmodule = 'dynamicdata';
 
-    function Dynamic_FieldStatus_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Select_Property($args);
+        parent::__construct($args);
         if (count($this->options) == 0) {
             $this->options = array(
                                  array('id' => 0, 'name' => xarML('Disabled')),
@@ -41,5 +41,4 @@ class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
         }
     }
 }
-
 ?>

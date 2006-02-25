@@ -36,9 +36,9 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
     public $func     = null; // specific API call to retrieve a list of items
     public $options  = array();
 
-    function Dynamic_ItemType_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_NumberBox_Property($args);
+        parent::__construct($args);
 
         // options may be set in one of the child classes
         if (count($this->options) == 0 && !empty($this->validation)) {

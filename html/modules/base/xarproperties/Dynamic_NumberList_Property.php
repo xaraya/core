@@ -21,17 +21,19 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_NumberList_Property extends Dynamic_Select_Property
 {
-    public $id = 16;
-    public $name = 'integerlist';
-    public $label = 'Number List';
+    public $requiresmodule = 'base';
+
+    public $id     = 16;
+    public $name   = 'integerlist';
+    public $label  = 'Number List';
     public $format = '16';
 
     public $min = null;
     public $max = null;
 
-    function Dynamic_NumberList_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Select_Property($args);
+        parent::__construct($args);
         // check validation for allowed min/max values
         if (count($this->options) == 0 && !empty($this->validation) && strchr($this->validation,':')) {
             list($min,$max) = explode(':',$this->validation);

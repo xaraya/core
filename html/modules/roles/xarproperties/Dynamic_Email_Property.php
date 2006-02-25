@@ -22,6 +22,13 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
 
 class Dynamic_Email_Property extends Dynamic_TextBox_Property
 {
+    public $requiresmodule = 'roles';
+
+    public $id     = 26;
+    public $name   = 'email';
+    public $label  = 'E-Mail';
+    public $format = '26';
+    
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -70,21 +77,27 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
         $data['size']     = !empty($size) ? $size : $this->size;
 
 
-        $template="";
-        return xarTplProperty('roles', 'email', 'showinput', $data );
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showinput', $data);
 
     }
 
     function showOutput($args = array())
     {
         extract($args);
-        $data=array();
+        $data = array();
 
         if (!isset($value)) {
             $value = xarVarPrepHTMLDisplay($this->value);
         }
         if (!empty($value)) {
-            $value=xarVarPrepHTMLDisplay($value);
+            $value = xarVarPrepHTMLDisplay($value);
         }
         // TODO: use redirect function here ?
         /*if (!empty($value)) {
@@ -96,34 +109,15 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
         $data['name'] = $this->name;
         $data['id']   = $this->id;
 
-        $template="";
-        return xarTplProperty('roles', 'email', 'showoutput', $data);
-    }
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
 
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 26,
-                              'name'       => 'email',
-                              'label'      => 'E-Mail',
-                              'format'     => '26',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'roles',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
+        return xarTplProperty($module, $template, 'showoutput', $data);
+    }
 }
 
 ?>

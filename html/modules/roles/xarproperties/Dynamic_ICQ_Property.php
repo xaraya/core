@@ -20,6 +20,13 @@ include_once "modules/base/xarproperties/Dynamic_URLIcon_Property.php";
 
 class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
 {
+    public $requiresmodule = 'roles';
+
+    public $id     = 28;
+    public $name   = 'icq';
+    public $label  = 'ICQ Number';
+    public $format = '28';
+    
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -66,8 +73,14 @@ class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
         $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
         $data['size']     = !empty($size) ? $size : $this->size;
  
-        $template="";
-        return xarTplProperty('roles', 'icq', 'showinput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showinput', $data);
 
     }
 
@@ -99,34 +112,14 @@ else
         $data['id']   = $this->id;
         $data['link'] = $link;
 
-        $template="";
-        return xarTplProperty('roles', 'icq', 'showoutput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showoutput', $data);
     }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 28,
-                              'name'       => 'icq',
-                              'label'      => 'ICQ Number',
-                              'format'     => '28',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'roles',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
 }
-
 ?>

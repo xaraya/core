@@ -32,9 +32,9 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
     public $basedir  = '';
     public $filetype = '((xml)|(html))?';
 
-    function Dynamic_HTMLPage_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Select_Property($args);
+        parent::__construct($args);
         // specify base directory in validation field
         if (empty($this->basedir) && !empty($this->validation)) {
             // Hack for passing this thing into transform hooks

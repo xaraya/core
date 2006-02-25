@@ -20,14 +20,16 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 
 class Dynamic_GroupList_Property extends Dynamic_Select_Property
 {
-    public $id = 45;
-    public $name = 'grouplist';
-    public $label = 'Group List';
+    public $requiresmodule = 'roles';
+
+    public $id     = 45;
+    public $name   = 'grouplist';
+    public $label  = 'Group List';
     public $format = '45';
 
     public $ancestorlist = array();
-    public $parentlist = array();
-    public $grouplist = array();
+    public $parentlist   = array();
+    public $grouplist    = array();
 
     /*
     * Options available to user selection
@@ -40,7 +42,7 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
     *   group:name[,name] - select only the given group(s)
     */
 
-    function Dynamic_GroupList_Property($args)
+    function __construct($args)
     {
         // Don't initialise the parent class as it handles the
         // validation in an inappropriate way for user lists.
@@ -140,7 +142,14 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
         $data['group']=$group;
         $data['groupname']=xarVarPrepForDisplay($groupname);
 
-        return xarTplProperty('roles', 'grouplist', 'showoutput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showoutput', $data);
     }
 }
 

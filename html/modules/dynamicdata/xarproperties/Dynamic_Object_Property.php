@@ -39,9 +39,9 @@ class Dynamic_Object_Property extends Dynamic_Select_Property
     public $format = '24';
     public $requiresmodule = 'dynamicdata';
 
-    function Dynamic_Object_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Select_Property($args);
+        parent::__construct($args);
 
         if (!empty($this->validation)) {
             foreach(preg_split('/(?<!\\\);/', $this->validation) as $option) {

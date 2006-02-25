@@ -30,9 +30,9 @@ class Dynamic_SubForm_Property extends Dynamic_Property
     public $arguments = array('objectid','style','title','link','where','input','display','fieldlist');
     public $warnings  = '';
 
-    function Dynamic_SubForm_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Property($args);
+        parent::__construct($args);
 
         // check validation for object, style etc.
         if (!empty($this->validation)) {

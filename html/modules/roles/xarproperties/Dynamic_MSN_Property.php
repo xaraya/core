@@ -10,7 +10,7 @@
  * @subpackage Roles module
  */
 
-/* 
+/** 
  * Handle MSN property
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -20,6 +20,13 @@ include_once "modules/base/xarproperties/Dynamic_URLIcon_Property.php";
 
 class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
 {
+    public $requiresmodule = 'roles';
+
+    public $id     = 30;
+    public $name   = 'msn';
+    public $label  = 'MSN Messenger';
+    public $format = '30';
+
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -47,7 +54,7 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
         if (!isset($value)) {
             $value = $this->value;
         }
-        $data=array();
+        $data = array();
 
         if (!empty($value)) {
 // TODO: what's the link to use for MSN Messenger ??
@@ -70,18 +77,24 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
         $data['size']     = !empty($size) ? $size : $this->size;
         $data['link']     = xarVarPrepForDisplay($link);
 
-      $template="";
-      return xarTplProperty('roles', 'msn', 'showinput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
     function showOutput($args = array())
     {
-            extract($args);
+        extract($args);
         if (!isset($value)) {
             $value = $this->value;
         }
 
-        $data=array();
+        $data = array();
 
         if (!empty($value)) {
             $link = "TODO: what's the link for MSN ?".$value;
@@ -94,40 +107,17 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
                 $data['id']   = $this->id;
                 $data['image']= xarVarPrepForDisplay($this->icon);
 
-            $template="";
-            return xarTplProperty('roles', 'msn', 'showoutput', $data);
+                if (empty($module)) {
+                    $module = $this->getModule();
+                }
+                if (empty($template)) {
+                    $template = $this->getTemplate();
+                }
 
+                return xarTplProperty($module, $template, 'showoutput', $data);
             }
         }
-     return '';   
+        return '';   
     }
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 30,
-                              'name'       => 'msn',
-                              'label'      => 'MSN Messenger',
-                              'format'     => '30',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => 'roles',
-                            'aliases'        => '',
-                            'args'           => serialize($args)
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
-
 ?>

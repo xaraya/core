@@ -20,30 +20,27 @@ class Dynamic_TextArea_Property extends Dynamic_Property
     public $name    = 'textarea_small';
     public $label   = 'Small Text Area';
     public $format  = '3';
-    public $args    = serialize(array('rows' => 2));
-    
-    $aliases = array();
-    $aliases[] = array('id'         => 4,
-                       'name'       => 'textarea_medium',
-                       'label'      => 'Medium Text Area',
-                       'format'     => '4',
-                       'requiresmodule' => 'base',
-                       'args' => serialize(array('rows' => 8)));
-
-    $aliases[] = array('id'         => 5,
-                       'name'       => 'textarea_large',
-                       'label'      => 'Large Text Area',
-                       'format'     => '5',
-                       'requiresmodule' => 'base',
-                        'args' => serialize(array('rows' => 20)));
-    public $aliases = $aliases;
+    public $args    = array('rows' => 2);
+    // TODO: do something about these aliases
+    public $aliases = array(array('id'         => 4,
+                                  'name'       => 'textarea_medium',
+                                  'label'      => 'Medium Text Area',
+                                  'format'     => '4',
+                                  'requiresmodule' => 'base',
+                                  'args' => serialize(array('rows' => 8))),
+                            array('id'         => 5,
+                                  'name'       => 'textarea_large',
+                                  'label'      => 'Large Text Area',
+                                  'format'     => '5',
+                                  'requiresmodule' => 'base',
+                                  'args' => serialize(array('rows' => 20))));
 
     public $rows = 8;
     public $cols = 35;
 
-    function Dynamic_TextArea_Property($args)
+    function __construct($args)
     {
-         $this->Dynamic_Property($args);
+        parent::__construct($args);
 
         // check validation for allowed rows/cols (or values)
         if (!empty($this->validation)) {

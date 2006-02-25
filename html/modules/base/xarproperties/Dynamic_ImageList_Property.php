@@ -31,9 +31,9 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
     public $baseurl = null;
     public $filetype = '(gif|jpg|jpeg|png|bmp)';
 
-    function Dynamic_ImageList_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Select_Property($args);
+        parent::__construct($args);
         if (empty($this->basedir) && !empty($this->validation)) {
             $this->parseValidation($this->validation);
         }

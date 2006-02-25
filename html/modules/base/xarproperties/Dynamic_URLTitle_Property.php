@@ -197,17 +197,13 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         $data=array();
 
         if (empty($link) && empty($title)) {
-            //return '';
         } elseif (empty($link)) {
             $title = xarVarPrepForDisplay($title);
-            //return  $title;
         } elseif (empty($title)) {
             $link = xarVarPrepForDisplay($link);
-            //return '<a href="'.$link.'">'.$link.'</a>';
         } else {
             $title = xarVarPrepForDisplay($title);
             $link = xarVarPrepForDisplay($link);
-            //return '<a href="'.$link.'">'.$title.'</a>';
         }
 
         $data['value']   = $this->value;

@@ -32,11 +32,6 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
     public $label  = 'Time Zone';
     public $format = '32';
 
-    function Dynamic_TimeZone_Property($args)
-    {
-        $this->Dynamic_Select_Property($args);
-    }
-
     // default methods from Dynamic_Select_Property
 
     function validateValue($value = null)

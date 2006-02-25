@@ -1,6 +1,6 @@
 <?php
 /**
- * Handle MSN property
+ * Handle Affero property
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
@@ -10,8 +10,8 @@
  * @subpackage Roles module
  */
 
-/*
- * Handle MSN property
+/**
+ * Handle Affero property
  * @author mikespub <mikespub@xaraya.com>
 */
 
@@ -22,6 +22,13 @@ include_once "modules/base/xarproperties/Dynamic_URLIcon_Property.php";
 
 class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
 {
+    public $requiresmodule = 'roles';
+    
+    public $id     = 40;
+    public $name   = 'affero';
+    public $label  = 'Affero Username';
+    public $format = '40';
+ 
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -70,18 +77,24 @@ class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
         $data['size']     = !empty($size) ? $size : $this->size;
         $data['link']     = xarVarPrepForDisplay($link);
 
-        $template="";
-        return xarTplProperty('roles', 'affero', 'showinput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showinput', $data);
 
     }
 
     function showOutput($args = array())
     {
-         extract($args);
+        extract($args);
         if (!isset($value)) {
             $value = $this->value;
         }
-        $data=array();
+        $data = array();
 
         if (!empty($value)) {
             $link = 'http://svcs.affero.net/user-history.php?ll=lq_members&u='.$value;
@@ -94,38 +107,17 @@ class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
                 $data['id']   = $this->id;
                 $data['image']= xarVarPrepForDisplay($this->icon);
 
-            $template="";
-            return xarTplProperty('roles', 'affero', 'showoutput', $data );
+            if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'showoutput', $data);
            }
         }
         return '';
     }
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-        $args = array();
-         $baseInfo = array(
-                              'id'         => 40,
-                              'name'       => 'affero',
-                              'label'      => 'Affero Username',
-                              'format'     => '40',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'roles',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
 }
-
 ?>

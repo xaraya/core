@@ -29,9 +29,9 @@ class Dynamic_DataSource_Property extends Dynamic_Select_Property
     public $label = 'Data Source';
     public $format = '23';
 
-    function Dynamic_DataSource_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Select_Property($args);
+        parent::__construct($args);
         if (count($this->options) == 0) {
             $sources = Dynamic_DataStore_Master::getDataSources();
             if (!isset($sources)) {

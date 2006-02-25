@@ -28,9 +28,9 @@ class Dynamic_Select_Property extends Dynamic_Property
     public $file;
     public $override = false; // allow values other than those in the options
 
-    function Dynamic_Select_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Property($args);
+        parent::__construct($args);
         if (!isset($this->options)) {
             $this->options = array();
         }

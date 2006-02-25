@@ -34,9 +34,9 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
     
     public $icon;
 
-    function Dynamic_URLIcon_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Property($args);
+        parent::__construct($args);
         // check validation field for icon to use !
         if (!empty($this->validation)) {
            $this->icon = $this->validation;
@@ -77,18 +77,8 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
         if (empty($id)) {
             $id = $name;
         }
-        $data=array();
-/*        return '<input type="text"'.
-               ' name="' . $name . '"' .
-               ' value="'. xarVarPrepForDisplay($value) . '"' .
-               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
-               ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
-               ' id="'. $id . '"' .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               ' />' .
-               (!empty($value) && $value != 'http://' ? ' [ <a href="'.xarVarPrepForDisplay($value).'" target="preview">'.xarML('check').'</a> ]' : '') .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-*/
+        $data = array();
+
         $data['name']     = $name;
         $data['id']       = $id;
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
@@ -113,7 +103,7 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
         if (!isset($value)) {
             $value = $this->value;
         }
-        $data=array();
+        $data = array();
 
         if (!empty($value) && $value != 'http://') {
             $link = $value;

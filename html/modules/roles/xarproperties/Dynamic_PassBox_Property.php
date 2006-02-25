@@ -9,22 +9,29 @@
  * @subpackage Roles module
  */
 
-/* 
+/**
  * Dynamic Passbox property
  * @author mikespub <mikespub@xaraya.com>
  */
 
 class Dynamic_PassBox_Property extends Dynamic_Property
 {
+    public $requiresmodule = 'roles';
+
+    public $id     = 46;
+    public $name   = 'passbox';
+    public $label  = 'Password Text Box';
+    public $format = '46';
+
     public $size = 25;
     public $maxlength = 254;
 
     public $min = 5;
     public $max = null;
 
-    function Dynamic_PassBox_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Property($args);
+        parent::__construct($args);
         // check validation for allowed min/max length (or values)
         if (!empty($this->validation) && strchr($this->validation,':')) {
             list($min,$max) = explode(':',$this->validation);
@@ -42,13 +49,13 @@ class Dynamic_PassBox_Property extends Dynamic_Property
         if (!isset($value)) {
             $value = $this->value;
         }
-    if (is_array($value) && $value[0] == $value[1]) {
-        $value = $value[0];
-    } else {
-        $this->invalid = xarML('text : Passwords did not match');
+        if (is_array($value) && $value[0] == $value[1]) {
+            $value = $value[0];
+        } else {
+            $this->invalid = xarML('text : Passwords did not match');
             $this->value = null;
-        return false;
-    }
+            return false;
+        }
             
         if (!empty($value) && strlen($value) > $this->maxlength) {
             $this->invalid = xarML('text : must be less than #(1) characters long',$this->max + 1);
@@ -89,49 +96,30 @@ class Dynamic_PassBox_Property extends Dynamic_Property
          $data['size']     = !empty($size) ? $size : $this->size;
          $data['confirm']  = !empty($confirm) ? true : false;
 
-        $template="";
-        return xarTplProperty('roles', 'password', 'showinput', $data);
+         if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
 
+        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
     function showOutput($value = null)
     {
-    //we don't really want to show the password, do we?
-    $data=array();
-    $data['value']='';
+        //we don't really want to show the password, do we?
+        $data = array();
+        $data['value'] = '';
 
-    $template="";
-    return xarTplProperty('roles', 'password', 'showoutput', $data);
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
 
-    //return '';
+        return xarTplProperty($module, $template, 'showoutput', $data);
     }
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                                 'id'         => 46,
-                                 'name'       => 'password',
-                                 'label'      => 'Password Text Box',
-                                 'format'     => '46',
-                                 'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => 'roles',
-                            'aliases'        => '',
-                            'args'           => serialize($args)
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
-
 ?>
