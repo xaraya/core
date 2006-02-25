@@ -7,7 +7,7 @@
             <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
             <title>
                 <xar:mlstring>
-                    Now Installing Xaraya :: Welcome to the next level! 
+                    You have chosen to Install or Upgrade Xaraya :: Welcome to the next level!
                 </xar:mlstring>
             </title>
             <meta name="ROBOTS" content="NOINDEX,NOFOLLOW" />
@@ -19,14 +19,19 @@
             <link rel="stylesheet" type="text/css" href="modules/base/xarstyles/xarcore-xhtml1-strict.css" />
         </head>
         <body>
+            <xar:set name="isupgrade">#xarVarGetCached('Upgrade', 'upgrading')#</xar:set>
             <div id="wrapper">
             <div id="footer">
                 <ul id="navlist">
                     <li><a href="http://www.xaraya.com/index.php/xarbb">Support Forums</a></li>
                     <li><a href="news://news.xaraya.com">Newsgroups</a></li>
                     <li><a href="irc://irc.xaraya.com">IRC Support</a></li>
+                    <xar:if condition="$isupgrade eq '1'">
+                        <li><a href="http://xaraya.com/index.php/documentation/586">Upgrade Guide</a></li>
+                    <xar:else />
                     <li><a href="http://xaraya.com/index.php/documentation/96">Prepare for Install</a></li>
                     <li><a href="http://xaraya.com/index.php/documentation/97">Install Guide</a></li>
+                    </xar:if>
                 </ul>
             </div>
                 <div id="main">
