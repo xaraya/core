@@ -123,12 +123,14 @@ function roles_admin_modifyconfig()
                 case 'general':
                     if (!xarVarFetch('itemsperpage', 'str:1:4:', $itemsperpage, '20', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
                     if (!xarVarFetch('defaultauthmodule', 'str:1:', $defaultauthmodule, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+                    if (!xarVarFetch('defaultregmodule', 'str:1:', $defaultregmodule, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
                     if (!xarVarFetch('shorturls', 'checkbox', $shorturls, false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('siteadmin', 'int:1', $siteadmin, xarModGetVar('roles','admin'), XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('defaultgroup', 'str:1', $defaultgroup, 'Users', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
                     xarModSetVar('roles', 'itemsperpage', $itemsperpage);
                     xarModSetVar('roles', 'defaultauthmodule', $defaultauthmodule);
+                    xarModSetVar('roles', 'defaultregmodule', $defaultregmodule);                    
                     xarModSetVar('roles', 'defaultgroup', $defaultgroup);
                     xarModSetVar('roles', 'SupportShortURLs', $shorturls);
                     xarModSetVar('roles', 'admin', $siteadmin);
