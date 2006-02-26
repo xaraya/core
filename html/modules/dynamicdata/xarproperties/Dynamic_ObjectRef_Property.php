@@ -29,12 +29,6 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
 {
-    public $id = 507;
-    public $name = 'objectref';
-    public $label = 'Select value from other object';
-    public $format = '507';
-    public $requiresmodule = 'dynamicdata';
-
     // We explicitly use names here instead of id's, so we are independent of
     // how dd assigns them at a given time. Otherwise the validation is not
     // exportable to other sites.
@@ -42,7 +36,15 @@ class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
     var $store_prop   = 'objectid';   // Name of the property we want to use for storage
     var $display_prop = 'name';       // Name of the property we want to use for displaying.
 
-
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->requiresmodule = 'dynamicdata';
+        $this->id = 507;
+        $this->name = 'objectref';
+        $this->label = 'Select value from other object';
+        $this->format = '507';
+    }
     // Prepare data to be rendered when an input function is called on the property
     // We dont use the parent because we use xarTplProperty at the end of this
     // function and do template overriding slightly different.

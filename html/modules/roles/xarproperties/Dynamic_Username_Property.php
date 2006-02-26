@@ -17,16 +17,17 @@
 
 class Dynamic_Username_Property extends Dynamic_Property
 {
-    function __construct($args) {
+    function __construct($args)
+    {
         parent::__construct($args);
         $this->requiresmodule = 'roles';
-        
+
         $this->id     = 7;
         $this->name   = 'username';
-        $this->tplmodule = 'roles';
         $this->label  = 'Username';
         $this->format = '7';
     }
+
     function validateValue($value = null)
     {
         if (!isset($value)) {

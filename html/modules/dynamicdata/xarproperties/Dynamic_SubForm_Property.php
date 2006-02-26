@@ -12,11 +12,6 @@
  */
 class Dynamic_SubForm_Property extends Dynamic_Property
 {
-    public $id        = 997;
-    public $name      = 'subform';
-    public $label     = 'Sub Form';
-    public $format    = '997';
-
     public $objectid  = 0;
     public $style     = 'serialized';
     public $title     = '';
@@ -33,6 +28,10 @@ class Dynamic_SubForm_Property extends Dynamic_Property
     function __construct($args)
     {
         parent::__construct($args);
+        $this->id        = 997;
+        $this->name      = 'subform';
+        $this->label     = 'Sub Form';
+        $this->format    = '997';
 
         // check validation for object, style etc.
         if (!empty($this->validation)) {

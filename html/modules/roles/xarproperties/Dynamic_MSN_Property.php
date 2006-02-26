@@ -20,12 +20,16 @@ include_once "modules/base/xarproperties/Dynamic_URLIcon_Property.php";
 
 class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
 {
-    public $requiresmodule = 'roles';
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->requiresmodule = 'roles';
 
-    public $id     = 30;
-    public $name   = 'msn';
-    public $label  = 'MSN Messenger';
-    public $format = '30';
+        $this->id     = 30;
+        $this->name   = 'msn';
+        $this->label  = 'MSN Messenger';
+        $this->format = '30';
+    }
 
     function validateValue($value = null)
     {

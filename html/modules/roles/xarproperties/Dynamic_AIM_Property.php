@@ -26,12 +26,16 @@ include_once "modules/base/xarproperties/Dynamic_URLIcon_Property.php";
  */
 class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
 {
-    public $requiresmodule = 'roles';
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->requiresmodule = 'roles';
 
-    public $id     = 29;
-    public $name   = 'aim';
-    public $label  = 'Aim Address';
-    public $format = '29';
+        $this->id     = 29;
+        $this->name   = 'aim';
+        $this->label  = 'Aim Address';
+        $this->format = '29';
+    }
 
     function validateValue($value = null)
     {

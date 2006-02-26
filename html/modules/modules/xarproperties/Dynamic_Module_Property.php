@@ -8,11 +8,10 @@
  * @link http://www.xaraya.com
  *
  * @subpackage Modules module
+ * @author mikespub
  */
 
 /**
- * Dynamic Data Module Property
- * @author mikespub
  * Include the base class
  */
 include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
@@ -24,23 +23,25 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_Module_Property extends Dynamic_Select_Property
 {
-    public $id = 19;
-    public $name = 'module';
-    public $label = 'Module';
-    public $format = '19';
-    public $requiresmodule = 'modules';
-
     function __construct($args)
     {
         parent::__construct($args);
+        $this->id = 19;
+        $this->name = 'module';
+        $this->label = 'Module';
+        $this->format = '19';
+        $this->requiresmodule = 'modules';
+    }
+    
+    function getOptions()
+    {
         if (count($this->options) == 0) {
-            $modlist = xarModAPIFunc('modules',
-                             'admin',
-                             'getlist',$args);
+            $modlist = xarModAPIFunc('modules', 'admin', 'getlist',$args);
             foreach ($modlist as $modinfo) {
                 $this->options[] = array('id' => $modinfo['regid'], 'name' => $modinfo['displayname']);
             }
-        }
+        }    
+        return $this->options;
     }
 }
 

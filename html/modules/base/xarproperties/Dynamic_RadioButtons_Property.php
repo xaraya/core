@@ -21,11 +21,15 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
 {
-    public $id = 34;
-    public $name = 'radio';
-    public $label = 'Radio Buttons';
-    public $format = '34';
-    public $template = 'radio';
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->id = 34;
+        $this->name = 'radio';
+        $this->label = 'Radio Buttons';
+        $this->format = '34';
+        $this->template = 'radio';
+    }
 }
 
 

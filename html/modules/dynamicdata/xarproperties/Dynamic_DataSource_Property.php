@@ -24,14 +24,14 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_DataSource_Property extends Dynamic_Select_Property
 {
-    public $id = 23;
-    public $name = 'datasource';
-    public $label = 'Data Source';
-    public $format = '23';
-
     function __construct($args)
     {
         parent::__construct($args);
+        $this->id = 23;
+        $this->name = 'datasource';
+        $this->label = 'Data Source';
+        $this->format = '23';
+
         if (count($this->options) == 0) {
             $sources = Dynamic_DataStore_Master::getDataSources();
             if (!isset($sources)) {

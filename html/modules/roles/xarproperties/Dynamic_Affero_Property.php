@@ -22,12 +22,16 @@ include_once "modules/base/xarproperties/Dynamic_URLIcon_Property.php";
 
 class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
 {
-    public $requiresmodule = 'roles';
+    function __contruct($args)
+    {
+        parent::__construct($args);
+        $this->requiresmodule = 'roles';
     
-    public $id     = 40;
-    public $name   = 'affero';
-    public $label  = 'Affero Username';
-    public $format = '40';
+        $this->id     = 40;
+        $this->name   = 'affero';
+        $this->label  = 'Affero Username';
+        $this->format = '40';
+    }
  
     function validateValue($value = null)
     {

@@ -20,6 +20,18 @@ include_once "modules/base/xarproperties/Dynamic_URLIcon_Property.php";
 
 class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
 {
+
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->requiresmodule = 'roles';
+        $this->tplmodule = 'roles';
+        $this->id     = 31;
+        $this->name   = 'yahoo';
+        $this->label  = 'Yahoo Messenger';
+        $this->format = '31';
+    }
+
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -97,33 +109,5 @@ class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
         }
         return '';
     }
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 31,
-                              'name'       => 'yahoo',
-                              'label'      => 'Yahoo Messenger',
-                              'format'     => '31',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'roles',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
-
 ?>

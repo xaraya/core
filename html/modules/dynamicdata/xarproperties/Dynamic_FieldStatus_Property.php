@@ -22,15 +22,15 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
 {
-    public $id = 25;
-    public $name = 'fieldstatus';
-    public $label = 'Field Status';
-    public $format = '25';
-    public $requiresmodule = 'dynamicdata';
-
     function __construct($args)
     {
         parent::__construct($args);
+        $this->id = 25;
+        $this->name = 'fieldstatus';
+        $this->label = 'Field Status';
+        $this->format = '25';
+        $this->requiresmodule = 'dynamicdata';
+
         if (count($this->options) == 0) {
             $this->options = array(
                                  array('id' => 0, 'name' => xarML('Disabled')),

@@ -22,13 +22,17 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
 
 class Dynamic_Email_Property extends Dynamic_TextBox_Property
 {
-    public $requiresmodule = 'roles';
-
-    public $id     = 26;
-    public $name   = 'email';
-    public $label  = 'E-Mail';
-    public $format = '26';
-    
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->requiresmodule = 'roles';
+        $this->tplmodule = 'roles';
+        $this->id     = 26;
+        $this->name   = 'email';
+        $this->label  = 'E-Mail';
+        $this->format = '26';
+        
+    }
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -100,11 +104,7 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
             $value = xarVarPrepHTMLDisplay($value);
         }
         // TODO: use redirect function here ?
-        /*if (!empty($value)) {
-            $value = xarVarPrepForDisplay($value);
-            return '<a href="mailto:'.$value.'">'.$value.'</a>';
-        }
-        */
+
         $data['value'] = $value;
         $data['name'] = $this->name;
         $data['id']   = $this->id;

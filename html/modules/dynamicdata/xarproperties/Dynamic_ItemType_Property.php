@@ -24,13 +24,6 @@ include_once "modules/base/xarproperties/Dynamic_NumberBox_Property.php";
  */
 class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
 {
-    public $requiresmodule = 'dynamicdata';
-    
-    public $id       = 20;
-    public $name     = 'itemtype';
-    public $label    = 'Item Type';
-    public $format   = '20';
-
     public $module   = ''; // get itemtypes for this module with getitemtypes()
     public $itemtype = null; // get items for this module+itemtype with getitemlinks()
     public $func     = null; // specific API call to retrieve a list of items
@@ -40,6 +33,11 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
     {
         parent::__construct($args);
 
+        $this->requiresmodule = 'dynamicdata';
+        $this->id       = 20;
+        $this->name     = 'itemtype';
+        $this->label    = 'Item Type';
+        $this->format   = '20';
         // options may be set in one of the child classes
         if (count($this->options) == 0 && !empty($this->validation)) {
             $this->parseValidation($this->validation);

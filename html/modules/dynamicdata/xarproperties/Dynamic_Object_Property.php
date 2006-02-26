@@ -33,16 +33,15 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 
 class Dynamic_Object_Property extends Dynamic_Select_Property
 {
-    public $id = 24;
-    public $name = 'object';
-    public $label = 'Object';
-    public $format = '24';
-    public $requiresmodule = 'dynamicdata';
-
     function __construct($args)
     {
         parent::__construct($args);
-
+        $this->requiresmodule = 'dynamicdata';
+        $this->id     = 24;
+        $this->name   = 'object';
+        $this->label  = 'Object';
+        $this->format = '24';
+    
         if (!empty($this->validation)) {
             foreach(preg_split('/(?<!\\\);/', $this->validation) as $option) {
                 // Semi-colons can be escaped with a '\' prefix.

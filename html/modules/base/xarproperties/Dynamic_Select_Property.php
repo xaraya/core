@@ -14,14 +14,6 @@
 */
 class Dynamic_Select_Property extends Dynamic_Property
 {
-    public $id = 6;
-    public $name = 'dropdown';
-    public $label = 'Dropdown List';
-    public $format = '6';
-    public $template = 'dropdown';
-    public $tplmodule = 'base';
-    public $requiresmodule = 'base';
-
     public $options;
     public $func;
     public $itemfunc;
@@ -31,6 +23,14 @@ class Dynamic_Select_Property extends Dynamic_Property
     function __construct($args)
     {
         parent::__construct($args);
+        $this->id = 6;
+        $this->name = 'dropdown';
+        $this->label = 'Dropdown List';
+        $this->format = '6';
+        $this->template = 'dropdown';
+        $this->tplmodule = 'base';
+        $this->requiresmodule = 'base';
+
         if (!isset($this->options)) {
             $this->options = array();
         }

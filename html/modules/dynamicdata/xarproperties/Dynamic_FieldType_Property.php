@@ -24,17 +24,17 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_FieldType_Property extends Dynamic_Select_Property
 {
-    public $id = 22;
-    public $name = 'fieldtype';
-    public $label = 'Field Type';
-    public $format = '22';
-    public $requiresmodule = 'dynamicdata';
-
     function __construct($args)
     {
         if( !isset($args['skipInit']) || ($args['skipInit'] != true) )
         {
             parent::__construct($args);
+            $this->id = 22;
+            $this->name = 'fieldtype';
+            $this->label = 'Field Type';
+            $this->format = '22';
+            $this->requiresmodule = 'dynamicdata';
+
             if (count($this->options) == 0) {
                 $proptypes = Dynamic_Property_Master::getPropertyTypes();
                 if (!isset($proptypes)) {
