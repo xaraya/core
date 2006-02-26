@@ -18,6 +18,7 @@
  *     installer_admin_upgrade2 function contains the main database upgrade routines
  *     installer_admin_upgrade3 function contains miscellaneous upgrade routines
  *  Please add any special notes for a special upgrade in admin-upgrade3.xd in installer.
+ *  TODO: cleanup and consolidate the upgrade functions in installer
  */
 /**
  * Defines for current upgrade phases
