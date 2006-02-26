@@ -20,12 +20,8 @@ function themes_admin_main()
     // Security Check
     if(!xarSecurityCheck('AdminTheme')) return;
 
-    if (xarModGetVar('modules', 'disableoverview') == 0){
-        // Return the output
-        return array();
-    } else {
         xarResponseRedirect(xarModURL('themes', 'admin', 'list'));
-    }
+
     // success
     return true;
 }

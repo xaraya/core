@@ -24,12 +24,8 @@ function mail_admin_main()
     // Security Check
     if (!xarSecurityCheck('EditMail')) return;
 
-    if (xarModGetVar('modules', 'disableoverview') == 0) {
-        // Return the output
-        return array();
-    } else {
-        xarResponseRedirect(xarModURL('mail', 'admin', 'modifyconfig'));
-    } 
+    xarResponseRedirect(xarModURL('mail', 'admin', 'modifyconfig'));
+
     // success
     return true;
 } 

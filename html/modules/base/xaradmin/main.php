@@ -21,12 +21,8 @@ function base_admin_main()
 // Security Check
     if(!xarSecurityCheck('AdminBase')) return;
 
-    if (xarModGetVar('modules', 'disableoverview') == 0){
-        // Return the output
-        return array();
-    } else {
-        xarResponseRedirect(xarModURL('base', 'admin', 'sysinfo'));
-    }
+    xarResponseRedirect(xarModURL('base', 'admin', 'sysinfo'));
+
     // success
     return true;
 }

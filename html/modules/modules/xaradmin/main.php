@@ -20,12 +20,8 @@ function modules_admin_main()
     // Security Check
     if(!xarSecurityCheck('AdminModules')) return;
 
-    if (xarModGetVar('modules', 'disableoverview') == 0){
-        // Return the output
-        return array();
-    } else {
-        xarResponseRedirect(xarModURL('modules', 'admin', 'list'));
-    }
+    xarResponseRedirect(xarModURL('modules', 'admin', 'list'));
+
     // success
     return true;
 }

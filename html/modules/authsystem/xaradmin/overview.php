@@ -29,6 +29,7 @@ function authsystem_admin_overview()
 
     /* if there is a separate overview function return data to it
      * else just call the main function that usually displays the overview
+     * in this case main function
      */
 
     return xarTplModule('authsystem', 'admin', 'main', $data,'main');
