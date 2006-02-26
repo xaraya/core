@@ -39,10 +39,11 @@ function base_admin_updateconfig()
             if (!xarVarFetch('htmlenitites','checkbox',$FixHTMLEntities,false,XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('themedir','str:1:',$defaultThemeDir,'themes',XARVAR_NOT_REQUIRED)) return;
             xarConfigSetVar('Site.BL.ThemesDirectory', $defaultThemeDir);
- 
+
             xarConfigSetVar('Site.Core.DefaultModuleName', $defaultModuleName);
             xarModSetVar('base','UseAlternatePageTemplate', ($alternatePageTemplate ? 1 : 0));
             xarModSetVar('base','AlternatePageTemplateName', $alternatePageTemplateName);
+
             xarConfigSetVar('Site.Core.DefaultModuleType', $defaultModuleType);
             xarConfigSetVar('Site.Core.DefaultModuleFunction', $defaultModuleFunction);
             xarConfigSetVar('Site.Core.EnableShortURLsSupport', $enableShortURLs);
@@ -113,11 +114,12 @@ function base_admin_updateconfig()
             if (!xarVarFetch('proxyhost','str:1:',$proxyhost,'',XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('proxyport','int:1:',$proxyport,0,XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('editor','str:1:',$editor,'none',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('releasenumber','int:1:',$releasenumber,10,XARVAR_NOT_REQUIRED)) return;
 
             // Save these in normal module variables for now
             xarModSetVar('base','proxyhost',$proxyhost);
             xarModSetVar('base','proxyport',$proxyport);
-
+            xarModSetVar('base','releasenumber', $releasenumber);
             xarConfigSetVar('Site.Core.LoadLegacy', $loadLegacy);
             xarModSetVar('base','editor',$editor);
 

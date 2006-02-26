@@ -536,7 +536,18 @@
                     <xar:data-input type="timezone" name="defaulttimezone" id="defaulttimezone" value="$timezone" />
                 </div>
             </fieldset>
-
+            <fieldset>
+                <legend>
+                    <xar:mlstring>Extension Release Feeds</xar:mlstring>
+                </legend>
+    
+                <div class="xar-form-input-wrapper">
+                    <label for="releasenumber" title="#xarML('Default number to display for release feed')#" class="xar-form-label">
+                        <xar:mlstring>Release Number to display:</xar:mlstring>
+                    </label>
+                    <input type="text" id="releasenumber" name="releasenumber" value="#$releasenumber#" maxlength="4" class="xar-form-textshort" />
+                 </div>
+            </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />

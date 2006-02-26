@@ -3,8 +3,11 @@
     <span class="xar-mod-title"><xar:mlstring>Base Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
-    <h2>
-        <xar:mlstring>Recent Extension Releases</xar:mlstring>
+    <h2><xar:ml>
+        <xar:mlstring>Last #(1) Extension Releases</xar:mlstring>
+        <xar:mlvar>#$releasenumber#
+        </xar:mlvar>
+        </xar:ml>
     </h2>
     <xar:if condition="empty($warning)">
         <xar:if condition="!empty($feedcontent)">

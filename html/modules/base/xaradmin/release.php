@@ -24,6 +24,13 @@ function base_admin_release($args)
     if(!xarSecurityCheck('EditModules')) return;
     extract($args);
 
+    //number of releases to show
+    $releasenumber=(int)xarModGetVar('base','releasenumber');
+
+    if (!isset($releasenumber) || $releasenumber ==0) {
+         $releasenumber=10;
+    }
+
     // allow fopen
     if (!xarFuncIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
     if (!ini_get('allow_url_fopen')) {
@@ -37,7 +44,8 @@ function base_admin_release($args)
     require_once('modules/base/xarclass/feedParser.php');
     // Check and see if a feed has been supplied to us.
     // Need to change the url once release module is moved to 
-    $feedfile = "http://www.xaraya.com/index.php?module=release&func=rssviewnotes&theme=rss";
+    $feedfile = "http://www.xaraya.com/index.php?module=release&func=rssviewnotes&theme=rss&releaseno=$releasenumber";
+
     // Get the feed file (from cache or from the remote site)
     $feeddata = xarModAPIFunc('base', 'user', 'getfile',
                               array('url' => $feedfile,
@@ -45,6 +53,7 @@ function base_admin_release($args)
                                     'cachedir' => 'cache/rss',
                                     'refresh' => 604800,
                                     'extension' => '.xml'));
+
     if (!$feeddata) return;
     // Create a need feedParser object
     $p = new feedParser();
@@ -81,6 +90,7 @@ function base_admin_release($args)
         xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
         return;
     }
+    $data['releasenumber']=$releasenumber;
     $data['feedcontent'] = $feedcontent; 
     return $data;
 }
