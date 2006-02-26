@@ -51,7 +51,8 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         // Don't initialise the parent class as it handles the
         // validation in an inappropriate way for user lists.
         // $this->Dynamic_Select_Property($args);
-        $this->Dynamic_Property($args);
+        //$this->Dynamic_Property($args);
+        parent::__construct($args);
 
         // Initialise the select option list.
         $this->options = array();

@@ -14,12 +14,15 @@
 */
 class Dynamic_StaticText_Property extends Dynamic_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id     = 1;
-    public $name   = 'static';
-    public $label  = 'Static Text';
-    public $format = '1';
+    function __construct($args) {
+        parent::__construct($args);
+        $this->requiresmodule = 'base';
+        $this->tplmodule = 'base';
+        $this->id     = 1;
+        $this->name   = 'static';
+        $this->label  = 'Static Text';
+        $this->format = '1';
+    }
 
     function validateValue($value = null)
     {

@@ -14,16 +14,21 @@
 */
 class Dynamic_TColorPicker_Property extends Dynamic_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id        = 44;
-    public $name      = 'tcolorpicker';
-    public $label     = 'Tigra Color Picker';
-    public $format    = '44';
-    
     public $size      = 10;
     public $maxlength = 7;
     public $min       = 7;
+    
+    function __construct($args) {
+        parent::__construct($args);
+        
+        $this->requiresmodule = 'base';
+        
+        $this->id        = 44;
+        $this->name      = 'tcolorpicker';
+        $this->tplmodule = 'base';
+        $this->label     = 'Tigra Color Picker';
+        $this->format    = '44';
+    }
 
     function validateValue($value = NULL)
     {

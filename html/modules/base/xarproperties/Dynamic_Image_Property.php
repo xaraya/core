@@ -22,9 +22,11 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
 class Dynamic_Image_Property extends Dynamic_TextBox_Property
 {
     function __construct($args) {
+        parent::__construct($args);
         $this->requiresmodule = 'base';
         $this->id     = 12;
         $this->name   = 'image';
+        $this->template = 'image';
         $this->label  = 'Image';
         $this->format = '12';
     }

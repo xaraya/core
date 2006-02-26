@@ -23,23 +23,15 @@ include_once "modules/dynamicdata/class/properties.php";
  */
 class Dynamic_TextUpload_Property extends Dynamic_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id     = 38;
-    public $name   = 'textupload';
-    public $label  = 'Text Upload';
-    public $format = '38';
-    public $args   = array('rows' => 20);
-    
     public $rows = 8;
     public $cols = 50;
-
+    
     public $size = 40;
     public $maxsize = 1000000;
     public $methods = array('trusted'  => false,
-                         'external' => false,
-                         'upload'   => false,
-                         'stored'   => false);
+                            'external' => false,
+                            'upload'   => false,
+                            'stored'   => false);
     public $basedir = null;
     public $importdir = null;
 
@@ -49,10 +41,15 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
     function __construct($args)
     {
         parent::__construct($args);
+        $this->requiresmodule = 'base';
+        
+        $this->id     = 38;
+        $this->name   = 'textupload';
+        $this->tplmodule = 'base';
+        $this->label  = 'Text Upload';
+        $this->format = '38';
+        $this->args   = array('rows' => 20);
 
-        if (!isset($this->validation)) {
-            $this->validation = '';
-        }
         // always parse validation to preset methods here
         $this->parseValidation($this->validation);
 
