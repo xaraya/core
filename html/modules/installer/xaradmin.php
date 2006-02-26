@@ -1203,11 +1203,13 @@ function installer_admin_upgrade1()
 
 function installer_admin_upgrade2()
 {
-    $thisdata['finishearly']=0;
+     $thisdata['finishearly']=0;
      $thisdata['xarProduct'] = xarConfigGetVar('System.Core.VersionId');
      $thisdata['xarVersion'] = xarConfigGetVar('System.Core.VersionNum');
      $thisdata['xarRelease'] = xarConfigGetVar('System.Core.VersionSub');
-
+     
+     //Load this early
+     xarDBLoadTableMaintenanceAPI();
      $sprefix=xarDBGetSiteTablePrefix();
 
     $instancestable = $sprefix."_security_instances";
@@ -2531,8 +2533,9 @@ function installer_admin_upgrade2()
                                                 'CheckTableExists',
                                                 array('table_name' => $table_name['admin_menu']));
     //Let's remove the now unused admin menu table
-   if ($upgrade['admin_menu']) {
-        $adminmenuTable = $systemPrefix .'_admin_menu';
+    if ($upgrade['admin_menu']) {
+
+          $adminmenuTable = $systemPrefix .'_admin_menu';
         $query = xarDBDropTable($adminmenuTable);
         $result = &$dbconn->Execute($query);
      }
