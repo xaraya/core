@@ -46,8 +46,10 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
     {
         // Don't initialise the parent class as it handles the
         // validation in an inappropriate way for user lists.
+        // mrb: too bad then, either override here or do different inheritance, what was below is not done
         // $this->Dynamic_Select_Property($args);
-        $this->Dynamic_Property($args);
+        //$this->Dynamic_Property($args);
+        parent::__construct($args);
 
         // Handle user options if supplied.
         if (!isset($this->options)) {

@@ -20,11 +20,14 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
 {
-    public $id = 39;
-    public $name = 'multiselect';
-    public $label = 'Multi Select';
-    public $format = '39';
-    public $template = 'multiselect';
+    function __construct($args) {
+        parent::__construct($args);
+        $this->id = 39;
+        $this->name = 'multiselect';
+        $this->label = 'Multi Select';
+        $this->format = '39';
+        $this->template = 'multiselect';
+    }
 
     function validateValue($value = null)
     {

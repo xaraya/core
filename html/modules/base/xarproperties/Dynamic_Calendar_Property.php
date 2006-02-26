@@ -17,13 +17,17 @@
  */
 class Dynamic_Calendar_Property extends Dynamic_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id     = 8;
-    public $name   = 'calendar';
-    public $label  = 'Calendar';
-    public $format = '8';
-    
+
+    function __construct($args) {
+        parent::__construct($args);
+        $this->requiresmodule = 'base';
+        $this->tplmodule = 'base';
+        $this->id     = 8;
+        $this->name   = 'calendar';
+        $this->label  = 'Calendar';
+        $this->format = '8';
+    }
+
     function validateValue($value = null)
     {
         if (!isset($value)) {

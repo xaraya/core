@@ -17,12 +17,15 @@
  */
 class Dynamic_Hidden_Property extends Dynamic_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id     = 18;
-    public $name   = 'hidden';
-    public $label  = 'Hidden';
-    public $format = '18';
+    function __construct($args) {
+        parent::__construct($args);
+        $this->id = 18;
+        $this->name = 'hidden';
+        $this->label = 'Hidden'; // ML this?
+        $this->format = '18';
+        $this->requiresmodule = 'base'; // This needed here?
+        $this->tplmodule = 'base';
+    }
 
     function validateValue($value = null)
     {

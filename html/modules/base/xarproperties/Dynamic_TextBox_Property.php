@@ -22,13 +22,6 @@ include_once "modules/dynamicdata/class/properties.php";
  */
 class Dynamic_TextBox_Property extends Dynamic_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id        = 2;
-    public $name      = 'textbox';
-    public $label     = 'Text Box';
-    public $format    = '2';
-    
     public $size      = 50;
     public $maxlength = 254;
 
@@ -39,6 +32,13 @@ class Dynamic_TextBox_Property extends Dynamic_Property
     function __construct($args)
     {
         parent::__construct($args);
+        $this->tplmodule = 'base';
+        $this->id = 2;
+        $this->name = 'textbox';
+        $this->template = 'textbox';
+        $this->label = 'Text Box'; // ML it?
+        $this->format = '2';
+        
 
         // check validation for allowed min/max length (or values)
         if (!empty($this->validation)) {
@@ -105,7 +105,7 @@ class Dynamic_TextBox_Property extends Dynamic_Property
         if (empty($template)) {
             $template = $this->getTemplate();
         }
-
+        //debug($module);
         return xarTplProperty($module, $template, 'showinput', $data);
     }
 

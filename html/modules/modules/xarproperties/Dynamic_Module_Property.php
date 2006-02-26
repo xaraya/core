@@ -30,9 +30,9 @@ class Dynamic_Module_Property extends Dynamic_Select_Property
     public $format = '19';
     public $requiresmodule = 'modules';
 
-    function Dynamic_Module_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Select_Property($args);
+        parent::__construct($args);
         if (count($this->options) == 0) {
             $modlist = xarModAPIFunc('modules',
                              'admin',

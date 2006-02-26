@@ -23,11 +23,15 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_CountryList_Property extends Dynamic_Select_Property
 {
-    public $id = 42;
-    public $name = 'countrylisting';
-    public $label = 'Country Dropdown';
-    public $format = '42';
-    public $template = 'countrylist';
+
+    function __construct($args) {
+        parent::__construct($args);
+        $this->id = 42;
+        $this->name = 'countrylisting';
+        $this->label = 'Country Dropdown';
+        $this->format = '42';
+        $this->template = 'countrylist';
+    }
 
     function validateValue($value = null)
     {

@@ -24,7 +24,7 @@ revisit later on before trusting the branch to be released or used.
   now in the themes table itself.
 * table module_states has been dropped, where the xar_state column is
   now in the modules table itself.
-
+(see DEVupgrades.sql for the above)
 
 !!!OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
 * when encountered, upgrade code to upgrade modules from older
@@ -72,36 +72,69 @@ design work can begin.
 * privileges creates objects now where some number like '1098' enters
   the xar_modid field (which was previously xar_module). This will
   cause confusion. (unfinished?, experiment?, ask marc)
+* we need easy and global xmlhttp request support everywhere.
+* xaraya is an excellent backend, we need a equally excellent front-end companion (like dojo)
 
 !!!KNOWN ISSUES
 * blocks do not end up in groups anymore during installation, need to
   investigate why that is. Most likely a missed spot when doing the
   schema migration. 
+* since we now use the meta info classes, some functions in DD which
+  depend on the linkage info from tables to modules (which was
+  unreliable) is lost, so expect surprising results in 'meta' areas in
+  DD for now until we figure our *if* and *how* we want to link
+  components to physical tables.
+
 
 !!!VIEWS support for backends:
 - mysql   : yes, since 5.0
 - sqlite  : yes, since forever
 - postgres: yes, since 7.3 (at least)
 - mssql   : yes, no idea version wise
+- oracle  : ?
 
 !!!TRANSACTION support for backends:
-- mysql   : yes, innodb engine 
-- sqlite  : yes
+- mysql   : yes, innodb engine only ( gracefull fallback provided by middleware?)
+- sqlite  : yes, since forever
 - postgres: yes
 - mssql   : yes
+- oracle  : ?
 
 !!!FOREIGN KEY support for backends:
 - mysql   : yes, innodb engine only
 - sqlite  : no
 - postgres: yes
 - mssql   : yes, no idea version wise
+- oracle  : ?
+
+!!!TRIGGER support for backends:
+- mysql   : yes, since 5.0.2
+- sqlite  : yes, since forever
+- postgres: yes, at least since 7.3
+- mssql   : yes, at least since mssql server 2000
+- oracle  : ?
 
 !!!MIN. REQUIRED VERSIONS DETERMINED SO FAR
 * PHP      5.0.5
 * Mysql    5.0.18
 * Postgres 8.0.6
-* Sqlite   N/A (embedded in PHP, i think it's 2.8.x for non PDO and 3.x for PDO)
-* MsSql server 2003?
+* Sqlite   N/A (embedded in PHP, i think it's 2.8.x for non PDO and  3.x for PDO)
+* Oracle   ?
+* MsSql    ? (server 2003?)
+
+!!!Requirements for a front end (js) library
+- widget (or controls) is our immediate direct need to lighten the
+  burden on template/theme maintenance
+- having events on the controls to asynchronously load other data is
+  the second need (master detail relations, repopulation combo's etc.)
+- specifying the controls should be a 3 step process maximal:
+  1. include on js entry point for the request
+  2. write the controls inside a xar-template 
+  3. (optional) customize the default behaviour to the applications
+need.
+Whether the tags used are compiled/transformed on the server or
+through a js callback is irrelevant for us.
+- 
 
 
 <!-- 

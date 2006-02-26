@@ -23,13 +23,6 @@ include_once "modules/dynamicdata/class/properties.php";
 
 class Dynamic_FileUpload_Property extends Dynamic_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id     = 9;
-    public $name   = 'fileupload';
-    public $label  = 'File Upload';
-    public $format = '9';
-    
     public $size = 40;
     public $maxsize = 1000000;
     public $basedir = '';
@@ -49,11 +42,13 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
     function __construct($args)
     {
         parent::__construct($args);
-
-        if (empty($this->id)) {
-            $this->id = $this->name;
-        }
-
+        $this->requiresmodule = 'base';
+        $this->tplmodule = 'base';
+        $this->id     = 9;
+        $this->name   = 'fileupload';
+        $this->label  = 'File Upload';
+        $this->format = '9';
+        
         // Determine if the uploads module is hooked to the calling module
         // if so, we will use the uploads modules functionality
         if (xarVarGetCached('Hooks.uploads','ishooked')) {
@@ -69,9 +64,6 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             }
         }
 
-        if (!isset($this->validation)) {
-            $this->validation = '';
-        }
         // always parse validation to preset methods here
         $this->parseValidation($this->validation);
 

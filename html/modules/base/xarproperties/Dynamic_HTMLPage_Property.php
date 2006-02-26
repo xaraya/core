@@ -22,19 +22,17 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id       = 13;
-    public $name     = 'webpage';
-    public $label    = 'HTML Page';
-    public $format   = '13';
-
     public $basedir  = '';
     public $filetype = '((xml)|(html))?';
 
     function __construct($args)
     {
         parent::__construct($args);
+        $this->requiresmodule = 'base';
+        $this->id       = 13;
+        $this->name     = 'webpage';
+        $this->label    = 'HTML Page';
+        $this->format   = '13';
         // specify base directory in validation field
         if (empty($this->basedir) && !empty($this->validation)) {
             // Hack for passing this thing into transform hooks

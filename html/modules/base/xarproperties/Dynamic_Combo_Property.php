@@ -22,11 +22,14 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_Combo_Property extends Dynamic_Select_Property
 {
-    public $id = 506;
-    public $name = 'combo';
-    public $label = 'Combo Dropdown Textbox';
-    public $format = '506';
-    public $template = 'combobox';
+    function __construct($args) {
+        parent::__construct($args);
+        $this->id = 506;
+        $this->name = 'combo';
+        $this->label = 'Combo Dropdown Textbox';
+        $this->format = '506';
+        $this->template = 'combobox';
+    }
 
     function checkInput($name = '', $value = null)
     {

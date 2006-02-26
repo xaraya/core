@@ -22,11 +22,14 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
 {
-    public $id = 1115;
-    public $name = 'checkboxlist';
-    public $label = 'Checkbox List';
-    public $format = '1115';
-    public $template = 'checkboxlist';
+    function __construct($args) {
+        parent::__construct($args);
+        $this->id = 1115;
+        $this->name = 'checkboxlist';
+        $this->label = 'Checkbox List';
+        $this->format = '1115';
+        $this->template = 'checkboxlist';
+    }
 
     function checkInput($name='', $value = null)
     {

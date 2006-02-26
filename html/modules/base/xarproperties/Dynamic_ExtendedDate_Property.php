@@ -23,15 +23,18 @@ include_once "modules/base/xarproperties/Dynamic_Calendar_Property.php";
  * The problem with the normal Calendar property is that it converts
  * everything into a UNIX timestamp, and for most C librarys this does not
  * include dates before 1970. (see Xaraya bugs 2013 and 1428)
+ * TODO: get rid of this one and merge into one calendar property.
  */
 class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
 {
-    public $requiresmodue = 'base';
-
-    public $id     = 47;
-    public $name   = 'extendeddate';
-    public $label  = 'Extended Date';
-    public $format = '47';
+    function __construct($args) {
+        parent::construct($args);
+        $this->id = 47;
+        $this->requiresmodue = 'base';
+        $this->name  = 'extendeddate';
+        $this->label  = 'Extended Date';
+        $this->format = '47';
+    }
 
     /**
      * We allow two validations: date, and datetime (corresponding to the

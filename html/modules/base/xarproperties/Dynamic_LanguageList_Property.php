@@ -21,10 +21,13 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_LanguageList_Property extends Dynamic_Select_Property
 {
-    public $id     = 36;
-    public $name   = 'language';
-    public $label  = 'Language List';
-    public $format = '36';
+    function __construct($args) {
+        parent::__construct($args);
+        $this->id     = 36;
+        $this->name   = 'language';
+        $this->label  = 'Language List';
+        $this->format = '36';
+    }
 
     function getOptions()
     {

@@ -94,7 +94,7 @@ function xarError_init($systemArgs, $whatToLoad)
 
 function debug($anything)
 {
-    throw new DebugException('DEBUGGING',var_export($anything,true));
+    throw new DebugException('DEBUGGING','<pre>'.var_export($anything,true).'</pre>');
 }
 /**
  * Shutdown handler for error subsystem

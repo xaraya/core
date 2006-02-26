@@ -14,34 +14,38 @@
 */
 class Dynamic_TextArea_Property extends Dynamic_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id      = 3;
-    public $name    = 'textarea_small';
-    public $label   = 'Small Text Area';
-    public $format  = '3';
-    public $args    = array('rows' => 2);
-    // TODO: do something about these aliases
-    public $aliases = array(array('id'         => 4,
-                                  'name'       => 'textarea_medium',
-                                  'label'      => 'Medium Text Area',
-                                  'format'     => '4',
-                                  'requiresmodule' => 'base',
-                                  'args' => serialize(array('rows' => 8))),
-                            array('id'         => 5,
-                                  'name'       => 'textarea_large',
-                                  'label'      => 'Large Text Area',
-                                  'format'     => '5',
-                                  'requiresmodule' => 'base',
-                                  'args' => serialize(array('rows' => 20))));
-
     public $rows = 8;
     public $cols = 35;
 
     function __construct($args)
     {
         parent::__construct($args);
+        $this->id = 3;
+        $this->name    = 'textarea_small';
+        $this->label   = 'Small Text Area';
+        $this->format  = '3';
+        $this->tplmodule = 'base';
+        $this->template = 'textarea';
+        $this->args = array('rows' => 2);
+        $this->requiresmodule = 'base';
 
+        // TODO: Get rid of the aliases, use rows and cols as params for the constructor
+        $this->aliases = array(
+                               array('id'         => 4,
+                                     'name'       => 'textarea_medium',
+                                     'label'      => 'Medium Text Area',
+                                     'format'     => '4',
+                                     'requiresmodule' => 'base',
+                                     'args'       => serialize(array('rows' => 8))
+                                     ),
+                               array('id'         => 5,
+                                     'name'       => 'textarea_large',
+                                     'label'      => 'Large Text Area',
+                                     'format'     => '5',
+                                     'requiresmodule' => 'base',
+                                     'args' => serialize(array('rows' => 20))
+                                     )
+                               );
         // check validation for allowed rows/cols (or values)
         if (!empty($this->validation)) {
             $this->parseValidation($this->validation);
@@ -83,7 +87,6 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         if (empty($template)) {
             $template = $this->getTemplate();
         }
-
         return xarTplProperty($module, $template, 'showinput', $data);
 
     }

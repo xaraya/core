@@ -307,6 +307,7 @@ class Dynamic_Property_Master
  */
 class Dynamic_Property
 {
+    // Common attributes
     public $id = 0;
     public $name = 'propertyName';
     public $label = 'Property Label';

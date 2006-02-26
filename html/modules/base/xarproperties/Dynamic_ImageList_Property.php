@@ -21,12 +21,6 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_ImageList_Property extends Dynamic_Select_Property
 {
-    public $id = 35;
-    public $name = 'imagelist';
-    public $label = 'Image List';
-    public $format = '35';
-    public $template = 'imagelist';
-
     public $basedir = '';
     public $baseurl = null;
     public $filetype = '(gif|jpg|jpeg|png|bmp)';
@@ -34,6 +28,11 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
+        $this->id = 35;
+        $this->name = 'imagelist';
+        $this->label = 'Image List';
+        $this->format = '35';
+        $this->template = 'imagelist';
         if (empty($this->basedir) && !empty($this->validation)) {
             $this->parseValidation($this->validation);
         }

@@ -26,10 +26,13 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_DateFormat_Property extends Dynamic_Select_Property
 {
-    public $id     = 33;
-    public $name   = 'dateformat';
-    public $label  = 'Date Format';
-    public $format = '33';
+    function __construct($args) {
+        parent::__construct($args);
+        $this->id     = 33;
+        $this->name   = 'dateformat';
+        $this->label  = 'Date Format';
+        $this->format = '33';
+    }
 
     /**
      * Get Options

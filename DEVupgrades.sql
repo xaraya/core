@@ -59,9 +59,9 @@ ALTER TABLE xar_roles DROP COLUMN xar_auth_module;
 /* block_types table column xar_module replaced by column xar_modid */
 ALTER TABLE xar_block_types ADD COLUMN xar_modid INT(11) NOT NULL DEFAULT '0';
 UPDATE xar_block_types INNER JOIN xar_modules ON xar_block_types.xar_module = xar_modules.xar_name
-SET    xar_block_types = xar_modules.xar_id;
-ALTER TABLE xar_block_types DROP COLUMN xar_module;
+SET    xar_block_types.xar_modid = xar_modules.xar_id;
 DROP INDEX i_xar_block_types2 ON xar_block_types;
+ALTER TABLE xar_block_types DROP COLUMN xar_module;
 CREATE UNIQUE INDEX i_xar_block_types2 ON xar_block_types (xar_modid,xar_type);
 
 /* Themes table gained a xar_state column */

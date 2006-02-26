@@ -22,11 +22,15 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
 {
-    public $id = 1114;
-    public $name = 'checkboxmask';
-    public $label = 'Checkbox Mask';
-    public $format = '1114';
-    public $template = 'checkboxmask';
+    function __construct($args) {
+        parent::__construct($args);
+        $this->id = 1114;
+        $this->name = 'checkboxmask';
+        $this->label = 'Checkbox Mask';
+        $this->format = '1114';
+        $this->template = 'checkboxmask';
+        $this->tplmodule = 'base';
+    }
 
     function validateValue($value = null)
     {

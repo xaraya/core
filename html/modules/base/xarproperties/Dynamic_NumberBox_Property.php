@@ -21,15 +21,18 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id        = 15;
-    public $name      = 'integerbox';
-    public $label     = 'Number Box';
-    public $format    = '15';
+    function __construct($args) {
+        parent::__construct($args);
+        $this->requiresmodule = 'base';
+        
+        $this->id        = 15;
+        $this->name      = 'integerbox';
+        $this->label     = 'Number Box';
+        $this->format    = '15';
 
-    public $size      = 10;
-    public $maxlength = 30;
+        $this->size      = 10;
+        $this->maxlength = 30;
+    }
 
     function validateValue($value = null)
     {

@@ -21,12 +21,15 @@ include_once "modules/dynamicdata/class/properties.php";
  */
 class Dynamic_Checkbox_Property extends Dynamic_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id     = 14;
-    public $name   = 'checkbox';
-    public $label  = 'Checkbox';
-    public $format = '14';
+    function __construct($args) {
+        parent::__construct($args);
+        $this->requiresmodule = 'base';
+        $this->tplmodule = 'base';
+        $this->id     = 14;
+        $this->name   = 'checkbox';
+        $this->label  = 'Checkbox';
+        $this->format = '14';
+    }
 
     function checkInput($name='', $value = null)
     {

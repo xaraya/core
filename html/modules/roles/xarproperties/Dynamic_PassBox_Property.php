@@ -14,15 +14,8 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
-class Dynamic_PassBox_Property extends Dynamic_Property
+class Dynamic_PassBox_Property extends Dynamic_Property // Why not textbox?
 {
-    public $requiresmodule = 'roles';
-
-    public $id     = 46;
-    public $name   = 'passbox';
-    public $label  = 'Password Text Box';
-    public $format = '46';
-
     public $size = 25;
     public $maxlength = 254;
 
@@ -32,6 +25,14 @@ class Dynamic_PassBox_Property extends Dynamic_Property
     function __construct($args)
     {
         parent::__construct($args);
+        $this->requiresmodule = 'roles';
+        $this->tplmodule = 'roles';
+        $this->id     = 46;
+        $this->name   = 'passbox';
+        $this->template ='password';
+        $this->label  = 'Password Text Box';
+        $this->format = '46';
+
         // check validation for allowed min/max length (or values)
         if (!empty($this->validation) && strchr($this->validation,':')) {
             list($min,$max) = explode(':',$this->validation);

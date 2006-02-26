@@ -12,19 +12,19 @@
 include_once "modules/dynamicdata/class/properties.php";
 class Dynamic_Array_Property extends Dynamic_Property
 {
-    public $requiresmodule = 'base';
-
-    public $id     = 999;
-    public $name   = 'array';
-    public $label  = 'Array';
-    public $format = '999';
-
     public $fields = array();
     public $size = 40;
 
     function __construct($args)
     {
         parent::__construct($args);
+        $this->requiresmodule = 'base';
+        $this->tplmodule = 'base';
+        $this->id     = 999;
+        $this->name   = 'array';
+        $this->label  = 'Array';
+        $this->format = '999';
+
         // check validation for list of fields (optional)
         if (!empty($this->validation) && strchr($this->validation,';')) {
             $this->fields = explode(';',$this->validation);
