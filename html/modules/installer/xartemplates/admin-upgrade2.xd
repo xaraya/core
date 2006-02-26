@@ -1,0 +1,29 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+
+<xar:set name="active_step">2</xar:set>
+<div id="install">
+    <xar:template file="upstatus" />
+    <h1>
+        <xar:mlstring>Upgrading your Database</xar:mlstring>
+    </h1>
+<p>
+#$content#
+</p>
+   <xar:if condition="$finishearly ne '1'">
+    <p>
+        <xar:mlstring>
+            Core module database tables have been updated.
+        </xar:mlstring>
+    </p>
+
+    <form action="upgrade.php" method="post">
+        <p class="center">
+            <input type="hidden" name="upgrade_phase" id="upgrade_phase" value="3" />
+            <xar:set name="buttonnext">
+                <xar:mlstring>Continue</xar:mlstring>
+            </xar:set>
+            <input type="submit" value="#$buttonnext#" />
+        </p>
+    </form>
+    </xar:if>
+</div>

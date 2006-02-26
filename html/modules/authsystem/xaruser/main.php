@@ -20,19 +20,11 @@
 */
 function authsystem_user_main()
 {
-
-    $allowregistration = xarModGetVar('registration', 'allowregistration');
-
-	if ($allowregistration != true) {
-		xarResponseRedirect(xarModURL('authsystem',
+    //no registration here - just redirect to the login form
+    xarResponseRedirect(xarModURL('authsystem',
 									  'user',
 									  'showloginform'));
-	} else {
-		xarResponseRedirect(xarModURL('registration',
-									  'user',
-									  'register'));
 
-	}
 	return true;
 }
 

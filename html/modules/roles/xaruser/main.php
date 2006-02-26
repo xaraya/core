@@ -33,21 +33,16 @@ function roles_user_main()
     }
     elseif(xarSecurityCheck('ViewRoles',0)) {
     */
-    $allowregistration = xarModGetVar('roles', 'allowregistration');
+    $defaultauthmodule=(int)xarModGetVar('roles','defaultauthmodule');
 
         if (xarUserIsLoggedIn()) {
            xarResponseRedirect(xarModURL('roles',
                                          'user',
                                          'account'));
-        } elseif ($allowregistration != true) {
-            xarResponseRedirect(xarModURL(xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule')),
+        } else {
+            xarResponseRedirect(xarModURL(xarModGetNameFromID($defaultauthmodule),
                                           'user',
                                           'showloginform'));
-        } else {
-            xarResponseRedirect(xarModURL(xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule')),
-                                          'user',
-                                          'register'));
-
         }
    /*
     }

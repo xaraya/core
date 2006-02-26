@@ -220,48 +220,48 @@ function xarModDelAllVars($modName)
 
     $modBaseInfo = xarMod_getBaseInfo($modName);
     //if (!isset($modBaseInfo)) return; // throw back
+    if (isset($modBaseInfo)) { //only continue if the module info exists
+        $dbconn =& xarDBGetConn();
+        $tables =& xarDBGetTables();
 
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
+        // Takes the right table basing on module mode
+        if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
+            $module_varstable = $tables['system/module_vars'];
+            $module_uservarstable = $tables['system/module_uservars'];
+        } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
+            $module_varstable = $tables['site/module_vars'];
+            $module_uservarstable = $tables['site/module_uservars'];
+        }
 
-    // Takes the right table basing on module mode
-    if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_varstable = $tables['system/module_vars'];
-        $module_uservarstable = $tables['system/module_uservars'];
-    } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_varstable = $tables['site/module_vars'];
-        $module_uservarstable = $tables['site/module_uservars'];
-    }
+        // PostGres (allows only one table in DELETE)
+        // MySql: multiple table delete only from 4.0 up
+        // Select the id's which need to be removed
+        $sql="SELECT $module_varstable.xar_id FROM $module_varstable WHERE $module_varstable.xar_modid = ?";
+        $result =& $dbconn->Execute($sql, array($modBaseInfo['systemid']));
+        if(!$result) return;
 
-    // PostGres (allows only one table in DELETE)
-    // MySql: multiple table delete only from 4.0 up
-    // Select the id's which need to be removed
-    $sql="SELECT $module_varstable.xar_id FROM $module_varstable WHERE $module_varstable.xar_modid = ?";
-    $result =& $dbconn->Execute($sql, array($modBaseInfo['systemid']));
-    if(!$result) return;
+        // Seems that at least mysql and pgsql support the scalar IN operator
+        $idlist = array();
+        while (!$result->EOF) {
+            list($id) = $result->fields;
+            $result->MoveNext();
+            $idlist[] = (int) $id;
+        }
 
-    // Seems that at least mysql and pgsql support the scalar IN operator
-    $idlist = array();
-    while (!$result->EOF) {
-        list($id) = $result->fields;
-        $result->MoveNext();
-        $idlist[] = (int) $id;
-    }
-
-    if (count($idlist) != 0) {
+        if (count($idlist) != 0) {
             $idlist = join(', ', $idlist);
             // CHECKME: can bind variables be used here?
             $sql = "DELETE FROM $module_uservarstable WHERE $module_uservarstable.xar_mvid IN (".$idlist.")";
             $result =& $dbconn->Execute($sql);
             if (!$result) return;
             $result->Close();
+        }
+
+        // Now delete the module vars
+        $query = 'DELETE FROM '.$module_varstable.' WHERE xar_modid = ?';
+        $result =& $dbconn->Execute($query, array($modBaseInfo['systemid']));
+        if (!$result) return;
     }
-
-    // Now delete the module vars
-    $query = 'DELETE FROM '.$module_varstable.' WHERE xar_modid = ?';
-    $result =& $dbconn->Execute($query, array($modBaseInfo['systemid']));
-    if (!$result) return;
-
     return true;
 }
 

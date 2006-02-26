@@ -1,0 +1,22 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+
+<xar:set name="active_step">4</xar:set>
+<div id="install">
+    <xar:template file="upstatus" />
+    <h1>
+        <xar:mlstring>Finalize Upgrade</xar:mlstring>
+    </h1>
+   <p>
+        <xar:mlstring>
+         Thank you, the database and miscellaneous upgrade processes are complete. 
+        </xar:mlstring>
+   </p>
+   <p><xar:mlstring>
+      Please note this upgrade process does not upgrade your theme templates. You should ensure 
+      you update them inline with the UPGRADE.txt recommendations.
+      </xar:mlstring>
+   </p>
+
+        <p><xar:mlstring>It is recommended you go to the </xar:mlstring><a href="&xar-modurl-modules-admin-list;"><xar:mlstring>Admin section of the modules module</xar:mlstring></a><xar:mlstring> to upgrade the modules which have a new version.</xar:mlstring></p>
+
+</div>
