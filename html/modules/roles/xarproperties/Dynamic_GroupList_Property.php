@@ -20,13 +20,6 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 
 class Dynamic_GroupList_Property extends Dynamic_Select_Property
 {
-    public $requiresmodule = 'roles';
-
-    public $id     = 45;
-    public $name   = 'grouplist';
-    public $label  = 'Group List';
-    public $format = '45';
-
     public $ancestorlist = array();
     public $parentlist   = array();
     public $grouplist    = array();
@@ -50,6 +43,11 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
         // $this->Dynamic_Select_Property($args);
         //$this->Dynamic_Property($args);
         parent::__construct($args);
+		$this->id = 45;
+		$this->name = 'grouplist';
+		$this->label = 'Group List';
+		$this->format = '45';
+		$this->requiresmodule = 'roles';
 
         // Handle user options if supplied.
         if (!isset($this->options)) {

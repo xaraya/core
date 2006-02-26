@@ -25,14 +25,14 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_TimeZone_Property extends Dynamic_Select_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id     = 32;
-    public $name   = 'timezone';
-    public $label  = 'Time Zone';
-    public $format = '32';
-
-    // default methods from Dynamic_Select_Property
+    function __construct($args)
+    {
+        parent::__construct($args);
+		$this->id = 32;
+		$this->name = 'timezone';
+		$this->label = 'Time Zone';
+		$this->format = '32';
+	}
 
     function validateValue($value = null)
     {

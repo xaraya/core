@@ -30,7 +30,6 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
     function __construct($args) {
         parent::__construct($args);
         $this->id = 47;
-        $this->requiresmodue = 'base';
         $this->name  = 'extendeddate';
         $this->label  = 'Extended Date';
         $this->format = '47';

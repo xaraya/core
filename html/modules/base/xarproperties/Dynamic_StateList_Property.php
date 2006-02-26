@@ -22,11 +22,15 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_StateList_Property extends Dynamic_Select_Property
 {
-    public $id = 43;
-    public $name = 'statelisting';
-    public $label = 'State Dropdown';
-    public $format = '43';
-    public $template = 'statelist';
+    function __construct($args)
+    {
+        parent::__construct($args);
+		$this->id = 43;
+		$this->name = 'statelisting';
+		$this->label = 'State Dropdown';
+		$this->format = '45';
+		$this->template = 'statelist';
+	}
 
     function validateValue($value = null)
     {

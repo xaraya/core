@@ -28,7 +28,6 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->requiresmodule = 'base';
         $this->id       = 13;
         $this->name     = 'webpage';
         $this->label    = 'HTML Page';

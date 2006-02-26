@@ -26,14 +26,14 @@ class Dynamic_FieldType_Property extends Dynamic_Select_Property
 {
     function __construct($args)
     {
+		parent::__construct($args);
+		$this->id = 22;
+		$this->name = 'fieldtype';
+		$this->label = 'Field Type';
+		$this->format = '22';
+		$this->requiresmodule = 'dynamicdata';
         if( !isset($args['skipInit']) || ($args['skipInit'] != true) )
         {
-            parent::__construct($args);
-            $this->id = 22;
-            $this->name = 'fieldtype';
-            $this->label = 'Field Type';
-            $this->format = '22';
-            $this->requiresmodule = 'dynamicdata';
 
             if (count($this->options) == 0) {
                 $proptypes = Dynamic_Property_Master::getPropertyTypes();

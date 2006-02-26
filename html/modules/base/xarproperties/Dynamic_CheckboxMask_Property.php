@@ -29,7 +29,6 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
         $this->label = 'Checkbox Mask';
         $this->format = '1114';
         $this->template = 'checkboxmask';
-        $this->tplmodule = 'base';
     }
 
     function validateValue($value = null)
