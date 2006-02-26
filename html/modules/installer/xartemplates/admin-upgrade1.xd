@@ -1,0 +1,46 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:set name="active_step">1</xar:set>
+<div id="install">
+    <xar:template file="upstatus" />
+    <h1>
+        <xar:mlstring>Welcome to Xaraya Upgrade</xar:mlstring>
+    </h1>
+     <xar:if condition="$versionlow ne ''">
+        <p><strong><xar:mlstring>WARNING</xar:mlstring></strong>:<p>
+        <p>
+        <xar:ml>
+              <xar:mlstring> Your current site is Xaraya Version #(1). You must upgrade to at least Xaraya Version 1.0.0 before continuing to upgrade to the latest release.
+               </xar:mlstring>
+        <xar:mlvar>#$xarVersion#</xar:mlvar>
+        </xar:ml>
+        </p>
+        <p>
+           <xar:mlstring>Please download the latest Xaraya Core 1.0.x version which is Xaraya 1.0.2 at </xar:mlstring>
+           <a href="http://sourceforge.net/project/showfiles.php?group_id=64578&amp;package_id=168638&amp;release_id=385362">Sourceforge</a>
+           <xar:mlstring> and upgrade your current site before continuing.</xar:mlstring>
+        </p>
+     <xar:else />
+
+        <xar:if condition="$alreadydone ne ''">
+            <p>
+                #$alreadydone#
+            </p>
+        </xar:if>
+
+        <p>
+            #$descr#
+        </p>
+        <p>
+           <xar:mlstring>Please ensure you have reviewed the UPGRADE.txt file and relevant comments for your version upgrade before continuing.</xar:mlstring>
+        </p>
+        <form action="upgrade.php" method="post">
+            <p class="center">
+                <input type="hidden" name="upgrade_phase" id="upgrade_phase" value="2" />
+                <xar:set name="buttonnext">
+                    <xar:mlstring>Continue</xar:mlstring>
+                </xar:set>
+                <input type="submit" value="#$buttonnext#" />
+            </p>
+        </form>
+     </xar:if>
+</div>

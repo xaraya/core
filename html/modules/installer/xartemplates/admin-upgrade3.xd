@@ -1,0 +1,40 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+
+<xar:set name="active_step">3</xar:set>
+<div id="install">
+    <xar:template file="upstatus" />
+    <h1>
+        <xar:mlstring>Miscelleneous Upgrades</xar:mlstring>
+    </h1>
+<p>
+#$content#
+</p>
+    <p>
+        <xar:mlstring>
+            Please note the following special considerations for this particular upgrade:
+        </xar:mlstring>
+    </p>
+        <ul>
+           <li><xar:mlstring>The Adminpanels module has been deprecated and no longer available.
+               Please check your themes for use of any Adminpanel module references and change your 
+               adminpanel block references to an adminmenu block in the Base module.</xar:mlstring></li>
+           <li><xar:mlstring>The core login block and function in Roles module has been moved to the 
+               Authsystem Module at </xar:mlstring><a href="&xar-modurl-authsystem-user-showloginform;">index.php?module=authsystem&amp;function=showloginform</a></li>
+               <xar:mlstring>You may wish to note the URL in case of problems logging in.</xar:mlstring>
+           <li>
+              <xar:mlstring>If you allow User Registration on your site, you must install the Registration module and
+              configure it to continue user registration.
+              </xar:mlstring>
+           </li>
+        </ul>
+    <form action="upgrade.php" method="post">
+        <p class="center">
+            <input type="hidden" name="upgrade_phase" id="upgrade_phase" value="4" />
+            <xar:set name="buttonnext">
+                <xar:mlstring>Continue</xar:mlstring>
+            </xar:set>
+            <input type="submit" value="#$buttonnext#" />
+        </p>
+    </form>
+
+</div>
