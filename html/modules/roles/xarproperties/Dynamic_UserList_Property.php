@@ -54,13 +54,16 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         //$this->Dynamic_Property($args);
         parent::__construct($args);
 
-        // Initialise the select option list.
-        $this->options = array();
+        // Handle options if supplied.
+        if (!isset($this->options)) {
+            $this->options = array();
+        }
 
         // Handle user options if supplied.
-        if (!empty($this->validation)) {
+        if (count($this->options) == 0 && !empty($this->validation)) {
             $this->parseValidation($this->validation);
         }
+
         if (count($this->options) == 0) {
 	        $select_options = array();
             if ($this->userstate <> -1) {
