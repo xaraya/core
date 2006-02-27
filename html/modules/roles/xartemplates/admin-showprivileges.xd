@@ -29,7 +29,7 @@
                 </a>
               </dd>
             </xar:if>
-            <xar:set name="prevgroup"><xar:var name='parents["$i"].parentname' prep="true"/></xar:set>
+            <xar:set name="prevgroup"><xar:var name="parents[$i].parentname" prep="true"/></xar:set>
           </xar:for>
         </dl>
       </div>

@@ -19,9 +19,7 @@
  * the file correctly, resulting in unexpected results.
  */
 $modversion['name'] = 'authsystem';
-// This name is in use for Authentication module as well
-//$modversion['displayname'] = xarML('Authentication');
-$modversion['displayname'] = xarML('AuthSystem');
+$modversion['displayname'] = xarML('Authentication');
 $modversion['id'] = '42';
 $modversion['version'] = '1.0.0';
 //$modversion['version'] = '0.91.0';
