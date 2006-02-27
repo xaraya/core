@@ -26,7 +26,8 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_DateFormat_Property extends Dynamic_Select_Property
 {
-    function __construct($args) {
+    function __construct($args)
+    {
         parent::__construct($args);
     }
 
@@ -54,7 +55,7 @@ class Dynamic_DateFormat_Property extends Dynamic_Select_Property
                                array('id' => '%d %m %Y %H:%M',    'name' => xarML('31 12 2004 24:00')),
                                array('id' => '%b %d %H:%M:%S',    'name' => xarML('12 31 24:00:00')),
                               );
-       
+
         return $this->options;
     }
 }

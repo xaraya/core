@@ -21,7 +21,8 @@ include_once "modules/dynamicdata/class/properties.php";
  */
 class Dynamic_Checkbox_Property extends Dynamic_Property
 {
-    function __construct($args) {
+    function __construct($args)
+    {
         parent::__construct($args);
         $this->tplmodule = 'base';
     }

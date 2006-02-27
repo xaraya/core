@@ -21,7 +21,8 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_LanguageList_Property extends Dynamic_Select_Property
 {
-    function __construct($args) {
+    function __construct($args)
+    {
         parent::__construct($args);
     }
 
@@ -48,7 +49,7 @@ class Dynamic_LanguageList_Property extends Dynamic_Select_Property
             $this->options[] = array('id'   => $locale,
                                      'name' => $name,
                                     );
-        }        
+        }
         return $this->options;
     }
 }

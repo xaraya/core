@@ -24,7 +24,8 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 class Dynamic_CountryList_Property extends Dynamic_Select_Property
 {
 
-    function __construct($args) {
+    function __construct($args)
+    {
         parent::__construct($args);
         $this->template = 'countrylist';
     }

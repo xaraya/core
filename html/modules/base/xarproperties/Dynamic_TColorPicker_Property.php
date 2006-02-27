@@ -17,8 +17,9 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
     public $size      = 10;
     public $maxlength = 7;
     public $min       = 7;
-    
-    function __construct($args) {
+
+    function __construct($args)
+    {
         parent::__construct($args);
         $this->tplmodule = 'base';
     }

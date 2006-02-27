@@ -21,7 +21,8 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
 {
-    function __construct($args) {
+    function __construct($args)
+    {
         parent::__construct($args);
 
         $this->size      = 10;
