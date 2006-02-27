@@ -23,16 +23,16 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
     function __construct($args)
     {
         parent::__construct($args);
+        $this->tplmodule ='roles';
     }
 
     static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();
+        $info->id     = 30;
+        $info->name   = 'msn';
+        $info->desc  = 'MSN Messenger';
         $info->reqmodules = array('roles');
-        $info->id   = 30;
-        $info->name = 'msn';
-        $info->desc = 'MSN Messenger';
-
         return $info;
     }
 

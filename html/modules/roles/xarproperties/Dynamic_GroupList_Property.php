@@ -77,11 +77,10 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
     static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();
-        $info->reqmodules = array('roles');
-        $info->id   = 45;
+        $info->id = 45;
         $info->name = 'grouplist';
         $info->desc = 'Group List';
-
+        $info->reqmodules = array('roles');
         return $info;
     }
 

@@ -29,11 +29,10 @@ class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
     static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();
+        $info->id     = 31;
+        $info->name   = 'yahoo';
+        $info->desc   = 'Yahoo Messenger';
         $info->reqmodules = array('roles');
-        $info->id   = 31;
-        $info->name = 'yahoo';
-        $info->desc = 'Yahoo Messenger';
-
         return $info;
     }
 

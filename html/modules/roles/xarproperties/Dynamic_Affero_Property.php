@@ -25,12 +25,7 @@ class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
     function __contruct($args)
     {
         parent::__construct($args);
-        $this->requiresmodule = 'roles';
-
-        $this->id     = 40;
-        $this->name   = 'affero';
-        $this->label  = 'Affero Username';
-        $this->format = '40';
+        $this->tplmodule = 'roles';
     }
 
     static function getRegistrationInfo()

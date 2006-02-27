@@ -31,11 +31,10 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
     static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();
+        $info->id     = 26;
+        $info->name   = 'email';
+        $info->desc  = 'E-Mail';
         $info->reqmodules = array('roles');
-        $info->id   = 26;
-        $info->name = 'email';
-        $info->desc = 'E-Mail';
-
         return $info;
     }
 

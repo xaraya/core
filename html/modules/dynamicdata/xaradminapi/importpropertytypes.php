@@ -41,11 +41,7 @@ class PropertyDirectoryIterator extends DirectoryIterator
 function dynamicdata_adminapi_importpropertytypes( $args )
 {
     extract( $args );
-
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-
-    $dynamicproptypes = $xartable['dynamic_properties_def'];
+    $dbconn =& xarDBGetConn(); // Need this for the transaction
     $propDirs = array();
 
     // We do the whole thing, or not at all (given proper db support)
@@ -73,13 +69,13 @@ function dynamicdata_adminapi_importpropertytypes( $args )
         // Get list of properties in properties directories
         $proptypes = array(); $numLoaded = 0;
         foreach($propDirs as $PropertiesDir) {
-            // The iterator takes an absolute directory
+            // The iterator takes an absolute directory, so we use a slightly extended class
             $dir = new PropertyDirectoryIterator($PropertiesDir);
             // Loop through properties directory
             for($dir->rewind();$dir->valid();$dir->next()) { 
-                if($dir->isDir()) continue;
-                if($dir->getExtension() != 'php') continue;
-                if(substr($dir->getFileName(),0,1) == '.') continue; // temp for emacs insanity
+                if($dir->isDir()) continue; // no dirs
+                if($dir->getExtension() != 'php') continue; // only php files
+                if(substr($dir->getFileName(),0,1) == '.') continue; // temp for emacs insanity and skip hidden files while we're at it
 
                 // Include the file into the environment
                 xarInclude($dir->getPathName());
@@ -98,7 +94,11 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                 // Call the class method on each property to get the registration info
                 if (!is_callable(array($propertyClass,'getRegistrationInfo'))) continue;
                 $baseInfo = call_user_func(array($propertyClass, 'getRegistrationInfo'));
-                
+                // Fill in the info we dont have in the registration class yet
+                // TODO: see if we can have it in the registration class
+                $baseInfo->class = $propertyClass;
+                $baseInfo->filepath = $PropertiesDir.$dir->getFileName();
+
                 // If required files are not present, continue with the next file
                 // TODO: move this outa here
                 foreach($baseInfo->reqfiles as $required) {
@@ -111,10 +111,6 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                     if(!xarModIsAvailable($required)) continue;
                 }
                                                 
-                // Save the name of the property
-                $baseInfo->class = $propertyClass;
-                $baseInfo->filepath = $PropertiesDir;
-                
                 // Check for aliases
                 if(!empty($baseInfo->aliases)) {
                     // Each alias is also a propertyRegistration object
@@ -138,7 +134,6 @@ function dynamicdata_adminapi_importpropertytypes( $args )
 
     // Sort the property types
     ksort( $proptypes );
-
     return $proptypes;
 }
 ?>
