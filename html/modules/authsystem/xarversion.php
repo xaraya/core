@@ -19,7 +19,9 @@
  * the file correctly, resulting in unexpected results.
  */
 $modversion['name'] = 'authsystem';
-$modversion['displayname'] = xarML('Authentication');
+// This name is in use for Authentication module as well
+//$modversion['displayname'] = xarML('Authentication');
+$modversion['displayname'] = xarML('AuthSystem');
 $modversion['id'] = '42';
 $modversion['version'] = '1.0.0';
 //$modversion['version'] = '0.91.0';
@@ -34,7 +36,7 @@ $modversion['author'] = 'Marco Canini';
 $modversion['contact'] = 'marco.canini@xaraya.com';
 $modversion['admin'] = 1;
 $modversion['user'] = 0;
-$modversion['securityschema'] = array();
+//$modversion['securityschema'] = array();
 $modversion['class'] = 'Authentication';
 $modversion['category'] = 'Global';
 ?>

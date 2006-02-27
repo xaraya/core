@@ -28,8 +28,8 @@
                   <xar:var name="parents[$i].parentname"  prep="true"/>
                 </a>
               </dd>
-            </xar:if> 
-            <xar:set name="prevgroup"><xar:var name="parents[$i].parentname" prep="true"/></xar:set>
+            </xar:if>
+            <xar:set name="prevgroup"><xar:var name='parents["$i"].parentname' prep="true"/></xar:set>
           </xar:for>
         </dl>
       </div>
@@ -48,10 +48,10 @@
             </xar:mlvar>
         </xar:ml>
       </legend>
-    
+
     <xar:if condition="count($inherited) eq 0">
         <p>
-            <xar:mlstring>No privileges inherited.</xar:mlstring>            
+            <xar:mlstring>No privileges inherited.</xar:mlstring>
         </p>
     <xar:else />
         <div class="xar-fullwidth xar-overflow-auto xar-area-large">
@@ -92,7 +92,7 @@
                       </xar:if>
                     </td>
                     <td>
-                      <a href="#$groupurl#&amp;uid=#$loop:item['groupid']#">                
+                      <a href="#$groupurl#&amp;uid=#$loop:item['groupid']#">
                         <xar:var name="loop:item.groupname" prep="true"/>
                       </a>
                     </td>
@@ -111,8 +111,8 @@
           </xar:mlvar>
         </xar:ml>
       </legend>
-      
-      
+
+
       <xar:if condition="count($privileges) eq 0">
         <p>
           <xar:mlstring>No privileges assigned.</xar:mlstring>
@@ -121,7 +121,7 @@
         <p>
           <xar:mlstring>Note: only relevant privileges are shown.</xar:mlstring>
         </p>
-        
+
         <table class="xar-fullwidth">
           <tr>
             <th><xar:mlstring>Name</xar:mlstring></th>
@@ -186,7 +186,7 @@
           <xar:mlstring>User</xar:mlstring>
         </xar:set>
       </xar:if>
-      
+
       <form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
         <div class="xar-form-input-wrapper">
           <label for="privid" title="#xarML('Select the Privilege to add')#" class="xar-form-label">
@@ -198,7 +198,7 @@
               <xar:mlvar>
                 #xarVarPrepForDisplay($pname)#
               </xar:mlvar>
-            </xar:ml>                     
+            </xar:ml>
           </label>
           <select name="privid" id="privid">
           <xar:loop name="$allprivileges">
