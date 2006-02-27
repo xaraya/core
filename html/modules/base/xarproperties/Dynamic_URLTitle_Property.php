@@ -27,7 +27,7 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         $info = new PropertyRegistration();
         $info->reqmodules = array('base');
         $info->id    = 41;
-        $info->name  = 'urtitlel';
+        $info->name  = 'urtitle';
         $info->desc  = 'URL + Title';
 
         return $info;

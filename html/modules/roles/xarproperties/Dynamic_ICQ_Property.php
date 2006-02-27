@@ -25,15 +25,14 @@ class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
         parent::__construct($args);
         $this->tplmodule = 'roles';
     }
-
+    
     static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();
+        $info->id     = 28;
+        $info->name   = 'icq';
+        $info->desc   = 'ICQ Number';
         $info->reqmodules = array('roles');
-        $info->id   = 28;
-        $info->name = 'icq';
-        $info->desc = 'ICQ Number';
-
         return $info;
     }
 

@@ -35,7 +35,7 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         $info->reqmodules = array('roles');
         return $info;
     }
-
+    
     /*
     * Options available to user selection
     * ===================================
@@ -100,6 +100,17 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
                 }
             }
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('roles');
+        $info->id   = 37;
+        $info->name = 'userlist';
+        $info->desc = 'User List';
+
+        return $info;
     }
 
     // TODO: validate the selected user against the specified group(s).
