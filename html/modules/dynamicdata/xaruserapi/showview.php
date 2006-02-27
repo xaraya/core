@@ -1,7 +1,5 @@
 <?php
 /**
- * List some items in a template
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -31,13 +29,24 @@ function dynamicdata_userapi_showview($args)
     if (empty($template)) {
         $template = '';
     }
+    if (empty($tplmodule)) {
+        $tplmodule = 'dynamicdata';
+    }
+
+    // do we want to count?
+    if(empty($count)) {
+        $count=false;
+    } else {
+        $count=true;
+    }
 
     // we got everything via template parameters
     if (isset($items) && is_array($items)) {
         return xarTplModule('dynamicdata','user','showview',
                             array('items' => $items,
                                   'labels' => $labels,
-                                  'layout' => $layout),
+                                  'layout' => $layout,
+                                  'count'  => count($items)), // no overhead, count anyway
                             $template);
     }
 
@@ -140,9 +149,15 @@ function dynamicdata_userapi_showview($args)
                                            'table' => $table,
                                            'catid' => $catid,
                                            'groupby' => $groupby,
-                                           'status' => $status));
+                                           'status' => $status,
+                                           'extend' => !empty($extend)));
     if (!isset($object)) return;
 
+    // Count before numitems!
+    $numthings = 0;
+    if($count) {
+        $numthings = $object->countItems();
+    }
     $object->getItems();
 
     // label to use for the display link (if you don't use linkfield)
@@ -172,7 +187,9 @@ function dynamicdata_userapi_showview($args)
                                    'linkfunc'  => $linkfunc,
                                    'param'     => $param,
                                    'pagerurl'  => $pagerurl,
-                                   'linkfield' => $linkfield));
+                                   'linkfield' => $linkfield,
+                                   'count'     => $numthings,
+                                   'tplmodule' => $tplmodule));
 }
 
 ?>
