@@ -765,22 +765,22 @@ class Dynamic_Property
  */
 class PropertyRegistration
 {
-    public $id       = 0;                      // id of the property, hardcoded to make things easier
-    public $name     = 'propertyType';         // what type of property are we dealing with
-    public $desc     = 'Property Description'; // description of this type
-    public $type     = 1;
-    public $parent   = '';                     // this type is derived from?
-    public $filepath = '';                     // where is our class for it?
-    public $class    = '';                     // what is the class?
-    public $validation = '';                   // what is its default validation?
-    public $source   = 'dynamic_data';         // what source is default for this type?
-    public $reqfiles = '';                     // do we require some files to be present?
-    public $reqmodules = '';                   // do we require some modules to be present?
-    public $args       = '';                   // special args needed?
-    public $aliases    = array();              // aliases for this property
-    public $format     = 0;                    // what format type do we have here?
-                                               // 0 =
-                                               // 1 = 
+    public $id         = 0;                      // id of the property, hardcoded to make things easier
+    public $name       = 'propertyType';         // what type of property are we dealing with
+    public $desc       = 'Property Description'; // description of this type
+    public $type       = 1;
+    public $parent     = '';                     // this type is derived from?
+    public $filepath   = '';                     // where is our class for it?
+    public $class      = '';                     // what is the class?
+    public $validation = '';                     // what is its default validation?
+    public $source     = 'dynamic_data';         // what source is default for this type?
+    public $reqfiles   = array();                // do we require some files to be present?
+    public $reqmodules = array();                // do we require some modules to be present?
+    public $args       = '';                     // special args needed?
+    public $aliases    = array();                // aliases for this property
+    public $format     = 0;                      // what format type do we have here?
+                                                 // 0 = ? what?
+                                                 // 1 = 
     
     function __construct($args=array()) 
     {
@@ -790,6 +790,7 @@ class PropertyRegistration
                 $this->$key = $value;
             }
         }
+        if($this->format == 0 ) $this->format = $this->id;
     }
     
     static function clearCache() 
