@@ -2,12 +2,13 @@
 /**
  * Installer
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package core modules
+ * @copyright (C) 2005-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage Installer
+ * @link http://xaraya.com/index.php/release/200.html
  */
 
 /* Do not allow this script to run if the install script has been removed.
@@ -2484,16 +2485,16 @@ function installer_admin_upgrade2()
         }
 
     //Authsystem ... we need to put this here as the authsystem upgrade is not happening (fully ...)
-    //Here until we isolate prob
+    // Define and setup privs
+    xarRegisterPrivilege('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
+    xarRegisterPrivilege('ViewAthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
+
     xarRegisterMask('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW');
     xarRegisterMask('ViewAuthsystemBlocks','All','authsystem','Block','All','ACCESS_OVERVIEW');
     xarRegisterMask('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditAuthsystem','All','authsystem','All','All','ACCESS_EDIT');
     xarRegisterMask('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
-    // Define and setup privs
-    xarRegisterPrivilege('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
-
-    // Define Module vars
+      // Define Module vars
  	xarModSetVar('authsystem', 'lockouttime', 15);
 	xarModSetVar('authsystem', 'lockouttries', 3);
 	xarModSetVar('authsystem', 'uselockout', false);

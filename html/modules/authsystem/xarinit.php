@@ -24,6 +24,7 @@ function authsystem_init()
 {
     /* Define privielges */
     xarRegisterPrivilege('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
+    xarRegisterPrivilege('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
 
     /* Define Module vars */
  	xarModSetVar('authsystem', 'lockouttime', 15);
@@ -35,8 +36,6 @@ function authsystem_init()
     xarRegisterMask('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditAuthsystem','All','authsystem','All','All','ACCESS_EDIT');
     xarRegisterMask('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
-    /* Define and setup privs */
-    xarRegisterPrivilege('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
 
 
   //Do this in installer so we can load this early, and assign the group later after blocks loaded
