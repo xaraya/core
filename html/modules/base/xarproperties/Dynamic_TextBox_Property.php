@@ -32,19 +32,26 @@ class Dynamic_TextBox_Property extends Dynamic_Property
     function __construct($args)
     {
         parent::__construct($args);
+
+        // Set for runtime
         $this->tplmodule = 'base';
-        $this->id = 2;
-        $this->name = 'textbox';
         $this->template = 'textbox';
-        $this->label = 'Text Box'; // ML it?
-        $this->format = '2';
-        
 
         // check validation for allowed min/max length (or values)
         if (!empty($this->validation)) {
             $this->parseValidation($this->validation);
         }
     }
+
+//     static function getRegistrationInfo()
+//     {
+//         $reg = new PropertyRegistration();
+//         $reg->id =2;
+//         $reg->name = 'textbox';
+//         $reg->desc = 'Text Box';
+//         $reg->format = 2;
+//         return $reg;
+//     }
 
     function validateValue($value = null)
     {

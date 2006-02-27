@@ -20,36 +20,43 @@ class Dynamic_TextArea_Property extends Dynamic_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->id = 3;
-        $this->name    = 'textarea_small';
-        $this->label   = 'Small Text Area';
-        $this->format  = '3';
+
         $this->tplmodule = 'base';
         $this->template = 'textarea';
-        $this->args = array('rows' => 2);
-        $this->requiresmodule = 'base';
 
-        // TODO: Get rid of the aliases, use rows and cols as params for the constructor
-        $this->aliases = array(
-                               array('id'         => 4,
-                                     'name'       => 'textarea_medium',
-                                     'label'      => 'Medium Text Area',
-                                     'format'     => '4',
-                                     'requiresmodule' => 'base',
-                                     'args'       => serialize(array('rows' => 8))
-                                     ),
-                               array('id'         => 5,
-                                     'name'       => 'textarea_large',
-                                     'label'      => 'Large Text Area',
-                                     'format'     => '5',
-                                     'requiresmodule' => 'base',
-                                     'args' => serialize(array('rows' => 20))
-                                     )
-                               );
         // check validation for allowed rows/cols (or values)
         if (!empty($this->validation)) {
             $this->parseValidation($this->validation);
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        // Aliases
+        $a1 = new PropertyRegistration();
+        $a1->id   = 4;
+        $a1->name = 'textarea_medium';
+        $a1->desc = 'Medium Text Area';
+        $a1->format = 4;
+        $a1->args = array('rows' => 8);
+        
+        $a2 = new PropertyRegistration();
+        $a2->id   = 5;
+        $a2->name = 'textarea_large';
+        $a2->desc = 'Medium Text Area';
+        $a2->format = 5;
+        $a2->args = array('rows' => 20);
+
+        // Composite property registration.
+        $info = new PropertyRegistration();
+        $info->id = 3;
+        $info->name = 'textarea_small';
+        $info->desc = 'Small Text Area';
+        $info->format = 3;
+        $info->reqmodules = 'base';
+        $info->args   = array('rows' => 2);
+        $info->aliases = array($a1, $a2);
+        return $info;
     }
 
     function validateValue($value = null)

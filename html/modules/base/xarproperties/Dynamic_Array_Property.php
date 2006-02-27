@@ -20,15 +20,21 @@ class Dynamic_Array_Property extends Dynamic_Property
         parent::__construct($args);
         $this->requiresmodule = 'base';
         $this->tplmodule = 'base';
-        $this->id     = 999;
-        $this->name   = 'array';
-        $this->label  = 'Array';
-        $this->format = '999';
 
         // check validation for list of fields (optional)
         if (!empty($this->validation) && strchr($this->validation,';')) {
             $this->fields = explode(';',$this->validation);
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->id = 999;
+        $info->name = 'array';
+        $info->desc = 'Array';
+        $info->format = 999;
+        return $info;
     }
 
     function validateValue($value = null)

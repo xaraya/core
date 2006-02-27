@@ -304,10 +304,12 @@ class Dynamic_Property_Master
  *
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
+ * @todo is this abstract?
+ * @todo the visibility of most of the attributes can probably be protected
  */
 class Dynamic_Property
 {
-    // Common attributes
+    // Attributes for registration
     public $id = 0;
     public $name = 'propertyName';
     public $label = 'Property Label';
@@ -754,5 +756,76 @@ class Dynamic_Property
         $template = empty($this->template) ? $info['name'] : $info['template'];
         return $template;
     }
+}
+/**
+ * Class to model registration information for a property
+ *
+ * This corresponds directly to the db info we register for a property.
+ *
+ */
+class PropertyRegistration
+{
+    public $id       = 0;                      // id of the property, hardcoded to make things easier
+    public $name     = 'propertyType';         // what type of property are we dealing with
+    public $desc     = 'Property Description'; // description of this type
+    public $type     = 1;
+    public $parent   = '';                     // this type is derived from?
+    public $filepath = '';                     // where is our class for it?
+    public $class    = '';                     // what is the class?
+    public $validation = '';                   // what is its default validation?
+    public $source   = 'dynamic_data';         // what source is default for this type?
+    public $reqfiles = '';                     // do we require some files to be present?
+    public $reqmodules = '';                   // do we require some modules to be present?
+    public $args       = '';                   // special args needed?
+    public $aliases    = array();              // aliases for this property
+    public $format     = 0;                    // what format type do we have here?
+                                               // 0 =
+                                               // 1 = 
+    
+    function __construct($args=array()) 
+    {
+        assert('is_array($args)');
+        if(!empty($args)) {
+            foreach($args as $key=>$value) {
+                $this->$key = $value;
+            }
+        }
+    }
+    
+    static function clearCache() 
+    {
+        $dbconn = &xarDBGetConn();
+        $tables = xarDBGetTables();
+        $sql = "DELETE FROM $tables[dynamic_properties_def]";
+        $res = $dbconn->ExecuteUpdate($sql);
+        return $res;
+    }
+
+    function Register() 
+    {
+        static $stmt = null;
+
+        $dbconn = &xarDBGetConn();
+        $tables = xarDBGetTables();
+        $propdefTable = $tables['dynamic_properties_def'];
+        
+        $sql = "INSERT INTO $propdefTable
+                (xar_prop_id, xar_prop_name, xar_prop_label,
+                 xar_prop_parent, xar_prop_filepath, xar_prop_class,
+                 xar_prop_format, xar_prop_validation, xar_prop_source,
+                 xar_prop_reqfiles, xar_prop_reqmodules, xar_prop_args, xar_prop_aliases)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        if(!isset($stmt)) {
+            $stmt = $dbconn->prepareStatement($sql);
+        }
+        $bindvars = array(
+                          (int) $this->id, $this->name, $this->desc,
+                          $this->parent, $this->filepath, $this->class,
+                          $this->format, $this->validation, $this->source,
+                          $this->reqfiles, $this->reqmodules, $this->args, $this->aliases);
+        $res = $stmt->executeUpdate($bindvars);
+        return $res;                          
+    }
+    
 }
 ?>

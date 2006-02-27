@@ -40,9 +40,8 @@ function dynamicdata_adminapi_importpropertytypes( $args )
             // the module is active.
             $propDirs = $dirs;
         } else {
-            // Get a list of active modules which might have properties
-            $clearCache = "DELETE FROM $dynamicproptypes";
-            $dbconn->Execute($clearCache);
+            // Clear the cache
+            PropertyRegistration::ClearCache();
         
             $activeMods = xarModApiFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
             assert('!empty($activeMods)'); // this should never happen
@@ -60,6 +59,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
             if(!file_exists($PropertiesDir)) continue;
             if ($pdh = opendir($PropertiesDir)) {
                 // Loop through properties directory
+                // TODO: use an iterator here.
                 while (($propertyfile = readdir($pdh)) !== false) {
                     $propertyfilepath = $PropertiesDir . $propertyfile;
                     // Only Process files, not directories
@@ -88,86 +88,49 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                         $msg = 'The class "#(1)" could not be found. (does the class name match the filename?) [Filename: "#(2)"]';
                         throw new ClassNotFoundException($vars,$msg);
                     }
-                    $property = new $propertyClass($args);
-                    
-                    // Get the base information that used to be hardcoded into /modules/dynamicdata/class/properties.php
-                    $baseInfo = $property->getBasePropertyInfo();
-                    
-                    // Ensure that the base properties are all present.
-                    if( !isset($baseInfo['dependancies']) )   $baseInfo['dependancies'] = '';
-                    if( !isset($baseInfo['requiresmodule']) ) $baseInfo['requiresmodule'] = '';
-                    if( !isset($baseInfo['aliases']) )        $baseInfo['aliases'] = '';
-                    if( empty($baseInfo['args']) )            $baseInfo['args'] = serialize(array());
-                    
-                    // If the property needs specific files to exist, check for them
-                    // Example: HTML Area property needs to check to see if HTMLArea javascript files are present
-                    if( isset($baseInfo['dependancies']) && ($baseInfo['dependancies'] != '') )
-                        {
-                            $dependancies = explode(';', $baseInfo['dependancies']);
-                            foreach( $dependancies as $dependancy ) {
-                                // If the file is not there continue to the next property
-                                if( !file_exists($dependancy) )  continue 2;
-                            }
+                    // Call the class method on each property to get the registration info
+                    if (!is_callable(array($propertyClass,'getRegistrationInfo'))) continue;
+                    $baseInfo = call_user_func(array($propertyClass, 'getRegistrationInfo'));
+ 
+                    // If required files are not present, continue with the next property
+                    if(!empty($baseInfo->reqfiles)) {
+                        $files = explode(';',$baseInfo->reqfiles);
+                        foreach($files as $required) {
+                            if(!file_exists($required)) continue;
                         }
-                    
-                    // Check if any Modules are required
-                    // For Example: Categories, Ratings, Hitcount properties all require their respective modules to be enabled
-                    // CHECK: <mrb> do we want the owning module in here?
-                    // ANSWER: probably not, see above (if the $dirs are passed in)
-                    if( isset($baseInfo['requiresmodule']) && ($baseInfo['requiresmodule'] != '') )
-                        {
-                            $modulesNeeded = explode(';', $baseInfo['requiresmodule']);
-                            foreach( $modulesNeeded as $moduleName )
-                                {
-                                    // If a required module is not available continue with the next property
-                                    if( !xarModIsAvailable($moduleName) ) continue 2;
-                                }
-                        }
-                    
-                    
-                    // Save the name of the property
-                    $baseInfo['propertyClass'] = $propertyClass;
-                    $baseInfo['filepath'] = $propertyfilepath;
-                    
-                    
-                    // Check for aliases
-                    if( !isset($baseInfo['aliases']) || 
-                        ($baseInfo['aliases'] == '') || !is_array($baseInfo['aliases']) ) {
-                        // Make sure that this is always available
-                        $baseInfo['aliases'] = '';
-                        
-                        // Add the property to the property type list
-                        $proptypes[$baseInfo['id']] = $baseInfo;
-                        
-                    } elseif ( is_array($baseInfo['aliases']) && (count($baseInfo['aliases']) > 0) ) {
-                        // if aliases are present include them as seperate entries
-                        $aliasList = '';
-                        foreach( $baseInfo['aliases'] as $aliasInfo )
-                            {
-                                // Save the name of the property, for the alias
-                                $aliasInfo['propertyClass'] = $propertyClass;
-                                $aliasInfo['aliases']       = '';
-                                $aliasInfo['filepath']      = $propertyfilepath;
-                                
-                                // Add the alias to the property type list
-                                $proptypes[$aliasInfo['id']] = $aliasInfo;
-                                $aliasList .= $aliasInfo['id'].',';
-                                
-                                // Update Database
-                                updateDB( $aliasInfo, $baseInfo['id'], $propertyfilepath );
-                                
-                            }
-                        
-                        // Store a list of reference ID's from the base property it's aliases
-                        // FIXME: strip the last comma off?
-                        $baseInfo['aliases'] = $aliasList;
-                        
-                        // Add the base property to the property type list
-                        $proptypes[$baseInfo['id']] = $baseInfo;
                     }
                     
+                    // If required modules are not present, continue with the next property
+                    if(!empty($baseInfo->reqmodules)) {
+                        $modules = explode(';', $baseInfo->reqmodules);
+                        foreach($modules as $required) {
+                            if(!xarModIsAvailable($required)) continue;
+                        }
+                    }
+                                           
+                    // Save the name of the property
+                    $baseInfo->class = $propertyClass;
+                    $baseInfo->filepath = $propertyfilepath;
+                    
+                    // Check for aliases
+                    if(!empty($baseInfo->aliases)) {
+                        // There are aliases
+                        $aliasList = '';
+                        // Each alias is also a propertyRegistration object
+                        foreach($baseInfo->aliases as $aliasInfo) {
+                            $aliasInfo->class = $propertyClass;
+                            $aliasInfo->filepath = $propertyfilepath;
+                            $aliasInfo->reqmodules = $baseInfo->reqmodules;
+                            $proptypes[$aliasInfo->id] = $aliasInfo;
+                            $aliasList .= $aliasInfo->id . ',';
+                            // Update Database
+                            $aliasInfo->Register();
+                        }
+                    } 
+                    $proptypes[$baseInfo->id] = $baseInfo;
+
                     // Update database entry for this property (the aliases array, if any, will now be an aliaslist)
-                    updateDB( $baseInfo, '', $propertyfilepath );
+                    $baseInfo->Register();
                 }
                 closedir($pdh);
             }
@@ -183,33 +146,5 @@ function dynamicdata_adminapi_importpropertytypes( $args )
     ksort( $proptypes );
 
     return $proptypes;
-}
-
-function updateDB( $proptype, $parent, $filepath )
-{
-    static $stmt = null;
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-
-    $dynamicproptypes = $xartable['dynamic_properties_def'];
-
-    if(!isset($stmt)) {
-        $insert = "INSERT INTO $dynamicproptypes
-                ( xar_prop_id, xar_prop_name, xar_prop_label,
-                  xar_prop_parent, xar_prop_filepath, xar_prop_class,
-                  xar_prop_format, xar_prop_validation, xar_prop_source,
-                  xar_prop_reqfiles, xar_prop_reqmodules, xar_prop_args,
-                  xar_prop_aliases
-                )
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        $stmt = $dbconn->prepareStatement($insert);
-    }
-
-    $bindvars = array((int) $proptype['id'], $proptype['name'], $proptype['label'],
-                      $parent, $filepath, $proptype['propertyClass'],
-                      $proptype['format'], $proptype['validation'], $proptype['source'],
-                      $proptype['dependancies'], $proptype['requiresmodule'], $proptype['args'],
-                      $proptype['aliases']);
-    $stmt->executeUpdate($bindvars);
 }
 ?>
