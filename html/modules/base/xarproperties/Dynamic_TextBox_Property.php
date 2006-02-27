@@ -113,7 +113,8 @@ class Dynamic_TextBox_Property extends Dynamic_Property
         if (empty($template)) {
             $template = $this->getTemplate();
         }
-        //debug($module);
+        //debug($template);
+        //debug($data);
         return xarTplProperty($module, $template, 'showinput', $data);
     }
 

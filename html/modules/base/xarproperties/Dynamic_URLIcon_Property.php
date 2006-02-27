@@ -39,6 +39,7 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
            */
            $this->icon='';
         }
+        $this->template = 'urlicon';
     }
 
     static function getRegistrationInfo()

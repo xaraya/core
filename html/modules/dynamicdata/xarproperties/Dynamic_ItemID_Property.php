@@ -27,6 +27,8 @@ class Dynamic_ItemID_Property extends Dynamic_NumberBox_Property
     function __construct($args)
     {
         parent::__construct($args);
+        $this->tplmodule = 'dynamic_data';
+        $this->template = 'itemid';
     }
 
     static function getRegistrationInfo()

@@ -135,7 +135,6 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         if (empty($template)) {
             $template = $this->getTemplate();
         }
-
         return xarTplProperty($module, $template, 'showinput', $data);
     }
 

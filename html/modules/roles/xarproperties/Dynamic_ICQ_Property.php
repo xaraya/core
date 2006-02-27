@@ -24,6 +24,7 @@ class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
     {
         parent::__construct($args);
         $this->tplmodule = 'roles';
+        $this->template = 'icq';
     }
     
     static function getRegistrationInfo()

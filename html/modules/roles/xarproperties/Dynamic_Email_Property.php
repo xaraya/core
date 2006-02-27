@@ -26,6 +26,7 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
     {
         parent::__construct($args);
         $this->tplmodule = 'roles';        
+        $this->template = 'email';
     }
 
     static function getRegistrationInfo()

@@ -26,6 +26,7 @@ class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
     {
         parent::__construct($args);
         $this->tplmodule = 'roles';
+        $this->template = 'affero';
     }
 
     static function getRegistrationInfo()
@@ -93,9 +94,7 @@ class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
         if (empty($template)) {
             $template = $this->getTemplate();
         }
-
         return xarTplProperty($module, $template, 'showinput', $data);
-
     }
 
     function showOutput($args = array())

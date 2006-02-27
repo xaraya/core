@@ -18,6 +18,7 @@ class Dynamic_StaticText_Property extends Dynamic_Property
     {
         parent::__construct($args);
         $this->tplmodule = 'base';
+        $this->template = 'static';
     }
 
     static function getRegistrationInfo()
