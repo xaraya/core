@@ -29,11 +29,10 @@ class Dynamic_Array_Property extends Dynamic_Property
     static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 999;
+        $info->id = 999;
         $info->name = 'array';
         $info->desc = 'Array';
-
+        $info->reqmodules = array('base');
         return $info;
     }
 

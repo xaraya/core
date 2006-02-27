@@ -25,6 +25,16 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
     public $showlist = array();
     public $orderlist = array();
     public $showglue = '; ';
+    
+    static function getRegistrationInfo() 
+    {
+        $info = new PropertyRegistration();
+        $info->id = 37;
+        $info->name = 'userlist';
+        $info->desc = 'User List';
+        $info->reqmodules = array('roles');
+        return $info;
+    }
 
     /*
     * Options available to user selection
@@ -48,6 +58,7 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         // $this->Dynamic_Select_Property($args);
         //$this->Dynamic_Property($args);
         parent::__construct($args);
+        $this->tplmodule = 'roles';
 
         // Handle options if supplied.
         if (!isset($this->options)) {

@@ -32,10 +32,10 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
     {
         $info = new PropertyRegistration();
         $info->reqmodules = array('roles');
-        $info->id   = 26;
-        $info->name = 'email';
-        $info->desc = 'E-Mail';
-
+        $info->id     = 26;
+        $info->name   = 'email';
+        $info->desc  = 'E-Mail';
+        $info->reqmodules = array('roles');
         return $info;
     }
 

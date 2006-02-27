@@ -34,11 +34,10 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
     static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();
-        $info->reqmodules = array('roles');
-        $info->id   = 29;
+        $info->id = 29;
         $info->name = 'aim';
-        $info->desc = 'AIM Screen Name';
-
+        $info->desc = 'Aim Address';
+        $info->reqmodules = array('roles');
         return $info;
     }
 

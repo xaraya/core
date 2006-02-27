@@ -30,10 +30,10 @@ class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
     {
         $info = new PropertyRegistration();
         $info->reqmodules = array('roles');
-        $info->id   = 31;
-        $info->name = 'yahoo';
-        $info->desc = 'Yahoo Messenger';
-
+        $info->id     = 31;
+        $info->name   = 'yahoo';
+        $info->desc   = 'Yahoo Messenger';
+        $info->reqmodules = array('roles');
         return $info;
     }
 
