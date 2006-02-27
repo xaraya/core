@@ -45,7 +45,7 @@ class Dynamic_PassBox_Property extends Dynamic_Property // Why not textbox?
         $info = new PropertyRegistration();
         $info->reqmodules = array('roles');
         $info->id   = 46;
-        $info->name = 'passobx';
+        $info->name = 'passbox';
         $info->desc = 'Password Text Box';
 
         return $info;
