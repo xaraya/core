@@ -812,7 +812,7 @@ class PropertyRegistration
         $tables = xarDBGetTables();
         $propdefTable = $tables['dynamic_properties_def'];
         
-        $reqmods = $this->reqmodules;
+        $reqmods = join(';',$this->reqmodules);
         $sql = "INSERT INTO $propdefTable
                 (xar_prop_id, xar_prop_name, xar_prop_label,
                  xar_prop_parent, xar_prop_filepath, xar_prop_class,
