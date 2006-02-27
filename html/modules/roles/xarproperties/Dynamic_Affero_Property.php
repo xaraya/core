@@ -26,7 +26,7 @@ class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
     {
         parent::__construct($args);
         $this->requiresmodule = 'roles';
-    
+
         $this->id     = 40;
         $this->name   = 'affero';
         $this->label  = 'Affero Username';
@@ -39,7 +39,7 @@ class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
         $info->reqmodules = array('roles');
         $info->id   = 40;
         $info->name = 'affero';
-        $info->desc = 'Afferor Username';
+        $info->desc = 'Affero Username';
 
         return $info;
     }
