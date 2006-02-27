@@ -27,11 +27,6 @@ include_once "modules/base/xarproperties/Dynamic_Calendar_Property.php";
  */
 class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
 {
-    function __construct($args)
-    {
-        parent::__construct($args);
-    }
-
     static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();
