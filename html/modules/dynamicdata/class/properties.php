@@ -160,7 +160,7 @@ class Dynamic_Property_Master
         } else {
             $proptypes = Dynamic_Property_Master::getPropertyTypes();
         }
-
+        
         if( isset($proptypes[$args['type']]) && is_array($proptypes[$args['type']]) )
         {
             $propertyInfo  = $proptypes[$args['type']];
@@ -173,6 +173,8 @@ class Dynamic_Property_Master
                 // The preg determines the module name (in a sloppy way, FIX this)
                 xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE,$matches[1],'modules:properties',$propertyClass);
             } else xarLogMessage("WARNING: Property translations for $propertyClass NOT loaded");
+            
+            if(!file_exists($propertyInfo['filepath'])) throw new FileNotFoundException($propertyInfo['filepath']);
             require_once $propertyInfo['filepath'];
 
 
@@ -831,6 +833,7 @@ class PropertyRegistration
             foreach($this->aliases as $aliasInfo) {
                 $aliasInfo->filepath = $this->filepath; // Make sure
                 $aliasInfo->class = $this->class;
+                $aliasInfo->format = $this->format;
                 $aliasInfo->reqmodules = $this->reqmodules;
                 // Recursive!!
                 $aliasInfo->Register();

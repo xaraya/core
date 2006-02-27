@@ -20,16 +20,21 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 
 class Dynamic_UserList_Property extends Dynamic_Select_Property
 {
-    public $id = 37;
-    public $name = 'userlist';
-    public $label = 'User List';
-    public $format = '37';
-
     public $grouplist = array();
     public $userstate = -1;
     public $showlist = array();
     public $orderlist = array();
     public $showglue = '; ';
+    
+    static function getRegistrationInfo() 
+    {
+        $info = new PropertyRegistration();
+        $info->id = 37;
+        $info->name = 'userlist';
+        $info->desc = 'User List';
+        $info->reqmodules = array('roles');
+        return $info;
+    }
 
     /*
     * Options available to user selection
@@ -53,6 +58,7 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         // $this->Dynamic_Select_Property($args);
         //$this->Dynamic_Property($args);
         parent::__construct($args);
+        $this->tplmodule = 'roles';
 
         // Handle options if supplied.
         if (!isset($this->options)) {

@@ -43,11 +43,6 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
         // $this->Dynamic_Select_Property($args);
         //$this->Dynamic_Property($args);
         parent::__construct($args);
-		$this->id = 45;
-		$this->name = 'grouplist';
-		$this->label = 'Group List';
-		$this->format = '45';
-		$this->requiresmodule = 'roles';
 
         // Handle user options if supplied.
         if (!isset($this->options)) {
@@ -77,6 +72,16 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
             $this->options = $options;
         }
 
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->id = 45;
+        $info->name = 'grouplist';
+        $info->desc = 'Group List';
+        $info->reqmodules = array('roles');
+        return $info;
     }
 
     function validateValue($value = null)
