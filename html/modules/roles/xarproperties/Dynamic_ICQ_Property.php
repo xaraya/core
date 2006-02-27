@@ -10,7 +10,7 @@
  * @subpackage Roles module
  */
 
-/* 
+/*
  * Handle Group list property
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -24,16 +24,6 @@ class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
     {
         parent::__construct($args);
         $this->tplmodule = 'roles';
-    }
-    
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->id     = 28;
-        $info->name   = 'icq';
-        $info->desc   = 'ICQ Number';
-        $info->reqmodules = array('roles');
-        return $info;
     }
 
     static function getRegistrationInfo()
@@ -92,7 +82,7 @@ class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
         $data['size']     = !empty($size) ? $size : $this->size;
- 
+
         if (empty($module)) {
             $module = $this->getModule();
         }

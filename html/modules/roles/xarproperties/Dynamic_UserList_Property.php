@@ -25,8 +25,8 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
     public $showlist = array();
     public $orderlist = array();
     public $showglue = '; ';
-    
-    static function getRegistrationInfo() 
+
+    static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();
         $info->id = 37;
@@ -100,17 +100,6 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
                 }
             }
         }
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('roles');
-        $info->id   = 37;
-        $info->name = 'userlist';
-        $info->desc = 'User List';
-
-        return $info;
     }
 
     // TODO: validate the selected user against the specified group(s).

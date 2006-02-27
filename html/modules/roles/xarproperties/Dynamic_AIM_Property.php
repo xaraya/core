@@ -10,7 +10,7 @@
  * @subpackage Roles module
  */
 
-/* 
+/*
  * Handle AIM property
  * @author mikespub <mikespub@xaraya.com>
 */
@@ -29,6 +29,7 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
     function __construct($args)
     {
         parent::__construct($args);
+        $this->tplmodule = 'roles';
     }
 
     static function getRegistrationInfo()
@@ -88,7 +89,7 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
         $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
         $data['size']     = !empty($size) ? $size : $this->size;
         $data['link']     = xarVarPrepForDisplay($link);
-        
+
         if (empty($module)) {
             $module = $this->getModule();
         }
@@ -119,7 +120,7 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
                 $data['name'] = $this->name;
                 $data['id']   = $this->id;
                 $data['image']= xarVarPrepForDisplay($this->icon);
-                
+
                 if (empty($module)) {
                     $module = $this->getModule();
                 }

@@ -20,6 +20,7 @@ class Dynamic_Username_Property extends Dynamic_Property
     function __construct($args)
     {
         parent::__construct($args);
+        $this->tplmodule = 'roles';
     }
 
     static function getRegistrationInfo()
@@ -80,7 +81,7 @@ class Dynamic_Username_Property extends Dynamic_Property
         try {
             $user = xarUserGetVar('name', $value);
 
-            if (empty($user)) 
+            if (empty($user))
                 $user = xarUserGetVar('uname', $value);
         } catch (NotFoundExceptions $e) {
             // Nothing to do?
@@ -117,7 +118,7 @@ class Dynamic_Username_Property extends Dynamic_Property
         $data=array();
         try {
             $user = xarUserGetVar('name', $value);
-            if (empty($user)) 
+            if (empty($user))
                 $user = xarUserGetVar('uname', $value);
         } catch(NotFoundExceptions $e) {
             // Nothing to do?
