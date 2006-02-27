@@ -810,6 +810,7 @@ class PropertyRegistration
         $tables = xarDBGetTables();
         $propdefTable = $tables['dynamic_properties_def'];
         
+        $reqmods = $this->reqmodules;
         $sql = "INSERT INTO $propdefTable
                 (xar_prop_id, xar_prop_name, xar_prop_label,
                  xar_prop_parent, xar_prop_filepath, xar_prop_class,
@@ -823,8 +824,18 @@ class PropertyRegistration
                           (int) $this->id, $this->name, $this->desc,
                           $this->parent, $this->filepath, $this->class,
                           $this->format, $this->validation, $this->source,
-                          $this->reqfiles, $this->reqmodules, $this->args, $this->aliases);
+                          $this->reqfiles, $reqmods, $this->args, $this->aliases);
         $res = $stmt->executeUpdate($bindvars);
+
+        if(!empty($this->aliases)) {
+            foreach($this->aliases as $aliasInfo) {
+                $aliasInfo->filepath = $this->filepath; // Make sure
+                $aliasInfo->class = $this->class;
+                $aliasInfo->reqmodules = $this->reqmodules;
+                // Recursive!!
+                $aliasInfo->Register();
+            }
+        }
         return $res;                          
     }
     

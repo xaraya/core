@@ -105,35 +105,27 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                     if(!file_exists($required)) continue;
                 }
                 
-                
                 // If required modules are not present, continue with the next file
                 // TODO: move this outa here
                 foreach($baseInfo->reqmodules as $required) {
                     if(!xarModIsAvailable($required)) continue;
                 }
-                                
+                                                
                 // Save the name of the property
                 $baseInfo->class = $propertyClass;
                 $baseInfo->filepath = $PropertiesDir;
                 
                 // Check for aliases
                 if(!empty($baseInfo->aliases)) {
-                    // There are aliases
-                    $aliasList = '';
                     // Each alias is also a propertyRegistration object
                     foreach($baseInfo->aliases as $aliasInfo) {
-                        $aliasInfo->class = $propertyClass;
-                        $aliasInfo->filepath = $PropertiesDir;
-                        $aliasInfo->reqmodules = $baseInfo->reqmodules;
                         $proptypes[$aliasInfo->id] = $aliasInfo;
-                        $aliasList .= $aliasInfo->id . ',';
-                        // Update Database
-                        $aliasInfo->Register();
                     }
                 } 
                 $proptypes[$baseInfo->id] = $baseInfo;
                 
-                // Update database entry for this property (the aliases array, if any, will now be an aliaslist)
+                // Update database entry for this property 
+                // This will also do the aliases
                 $baseInfo->Register();
             } // loop over the file in a directory
         } // loop over the directories
