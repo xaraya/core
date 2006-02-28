@@ -114,19 +114,10 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
     /**
      * Show the input according to the requested dateformat.
      */
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        $data = array();
-
-        if (empty($name)) {
-            $name = 'dd_'.$this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        if (!isset($value)) {
-            $value = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
         }
 
         $data['year'] = '';
@@ -137,17 +128,17 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
         $data['sec']  = '00';
 
         // default time is unspecified
-        if (empty($value)) {
-            $value = '';
+        if (empty($data['value'])) {
+            $data['value'] = '';
 
         } elseif ($this->validation == 'date' &&
-            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2})/', $value, $matches)) {
+            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2})/', $data['value'], $matches)) {
             $data['year'] = $matches[1];
             $data['mon']  = $matches[2];
             $data['day']  = $matches[3];
 
         } elseif ($this->validation == 'datetime' &&
-            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})/', $value, $matches)) {
+            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})/', $data['value'], $matches)) {
             $data['year'] = $matches[1];
             $data['mon']  = $matches[2];
             $data['day']  = $matches[3];
@@ -157,28 +148,15 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
         }
         $data['format']   = $this->validation;
 
-        if (!isset($dateformat)) {
+        if (!isset($data['dateformat'])) {
             if ($this->validation == 'date') {
-                $dateformat = '%Y-%m-%d';
+                $data['dateformat'] = '%Y-%m-%d';
             } else {
-                $dateformat = '%Y-%m-%d %H:%M:%S';
+                $data['dateformat'] = '%Y-%m-%d %H:%M:%S';
             }
         }
-        $data['dateformat'] = $dateformat;
-        $data['name']       = $name;
-        $data['id']         = $id;
-        $data['value']      = $value;
-        $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showinput', $data);
+        return parent::showInput($data);
     }
 
     /**

@@ -25,7 +25,8 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->template = 'combobox';
+        $this->tplmodule = 'base';
+        $this->template  = 'combobox';
     }
 
     static function getRegistrationInfo()
@@ -77,48 +78,6 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
         return true;
     }
 
-//    function showInput($name = '', $value = null, $options = array(), $id = '', $tabindex = '')
-    function showInput($args = array())
-    {
-        extract($args);
-
-        $data=array();
-
-        if (!isset($value)) {
-            $data['value'] = $this->value;
-        } else {
-            $data['value'] = $value;
-        }
-
-        if (!isset($options) || count($options) == 0) {
-            $data['options'] = $this->getOptions();
-        } else {
-            $data['options'] = $options;
-        }
-        if (empty($name)) {
-            $data['name'] = 'dd_' . $this->id;
-        } else {
-            $data['name'] = $name;
-        }
-        if (empty($id))
-        {
-            $data['id'] = $data['name'];
-        } else {
-            $data['id']= $id;
-        }
-
-        $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showinput', $data);
-    }
-
     function showOutput($args = array())
     {
         extract($args);
@@ -148,6 +107,4 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
         return xarTplProperty($module, $template, 'showoutput', $data);
     }
 }
-
-
 ?>

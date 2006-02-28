@@ -42,6 +42,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
     {
         parent::__construct($args);
         $this->tplmodule = 'base';
+        $this->template  = 'textupload';
 
         // always parse validation to preset methods here
         $this->parseValidation($this->validation);
@@ -253,20 +254,10 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         $data['rows']     = !empty($rows) ? $rows : $this->rows;
         $data['cols']     = !empty($cols) ? $cols : $this->cols;
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         $data['maxsize']  = !empty($maxsize) ? $maxsize: $this->maxsize;
         $data['size']     = !empty($size) ? $size : $this->size;
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showinput', $data);
-
+        
+        parent::showInput($data);
     }
 
     function showOutput($args = array())
