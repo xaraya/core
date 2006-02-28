@@ -474,6 +474,9 @@ class Dynamic_Property
      * @param $args['value'] value of the field (default is the current value)
      * @param $args['id'] id of the field
      * @param $args['tabindex'] tab index of the field
+     * @param $args['module'] which module is responsible for the templating
+     * @param $args['template'] what's the partial name of the showinput template.
+     * @param $args[*] rest of arguments is passed on to the templating method.
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
@@ -490,7 +493,6 @@ class Dynamic_Property
         if(!isset($data['value']))    $data['value']    = '';
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-        // debug($data);
         // Render it
         return xarTplProperty($data['module'], $data['template'], 'showinput', $data);
     }
