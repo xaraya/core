@@ -18,11 +18,10 @@
  * @returns array
  * @todo change feed url once release module is moved
  */
-function base_admin_release($args)
+function base_admin_release()
 {
     // Security Check
     if(!xarSecurityCheck('EditModules')) return;
-    extract($args);
 
     //number of releases to show
     $releasenumber=(int)xarModGetVar('base','releasenumber');

@@ -1,0 +1,25 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Xaraya Help System</xar:mlstring></span>
+</div>
+<div class="xar-mod-body">
+
+        <img src="#xarTplGetImage('admin.gif','base')# alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
+
+    <h2>
+        <xar:mlstring>Overview Required</xar:mlstring>
+    </h2>
+
+    <p>
+        <xar:mlstring>There are no overviews for this Xaraya extension. If you would like to contribute a help
+        file please contact us at </xar:mlstring><a href="mailto:info@xaraya.com">info@xaraya.com</a><xar:mlstring>. You can also report a missing Overview file by lodging a bug report at </xar:mlstring><a href="http://bugs.xaraya.com">http://bugs.xaraya.com</a></p>
+    <p>
+       <xar:mlstring>You can easily create an overview for a module by following the Example
+       module Overview template at </xar:mlstring><strong>modules/example/xartemplates/admin-main.xd</strong><xar:mlstring> or the online instructions at </xar:mlstring><a href="http://xaraya.com/index.php/team/591"><xar:mlstring>Creating Xaraya Help System Documents</xar:mlstring></a>.
+    </p>
+
+         <p class="xar-sub">
+             <strong>&nbsp;<xar:mlstring>Xaraya Help System  - Overview Required</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.0.0&nbsp; 2006-02-26
+         </p>
+</div>
+

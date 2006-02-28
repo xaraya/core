@@ -2,12 +2,13 @@
 /**
  * Overview displays standard Overview page
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package core modules
+ * @copyright (C) 2005-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage Base Module
+ * @link http://xaraya.com/index.php/release/68.html
  */
 
 /**
@@ -24,14 +25,17 @@ function base_admin_overview()
 {
    /* Security Check */
     if (!xarSecurityCheck('AdminBase',0)) return;
-
+    if (!xarVarFetch('template','str:',$template,'',XARVAR_NOT_REQUIRED)) return;
     $data=array();
-    
     /* if there is a separate overview function return data to it
      * else just call the main function that usually displays the overview 
      */
 
-    return xarTplModule('base', 'admin', 'main', $data,'main');
+   if ($template !='') {
+      return xarTplModule('base', 'admin', 'main', $data,$template);
+   } else {
+       return xarTplModule('base', 'admin', 'main', $data,'main');
+   }
 }
 
 ?>

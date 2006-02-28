@@ -2,12 +2,13 @@
 /**
  * Base block management
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package core modules
+ * @copyright (C) 2005-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage Base module
+ * @link http://xaraya.com/index.php/release/68.html
  */
 
 /**
@@ -202,7 +203,18 @@ function base_adminmenublock_display($blockinfo)
             );
             break;
     }
+    //making a few assumptions here for now about modname and directory
+    if (file_exists('modules/'.$thismodname.'/xaradmin/overview.php')) {
+        if ($thisfuncname<>'overview' && $thisfuncname<>'main') {
+            $overviewlink=xarModURL($thismodname,'admin','overview',array(),NULL,$thisfuncname);
+        } else {
+            $overviewlink=xarModURL($thismodname,'admin','overview');
+        }
+    } else { //no overview exists;
+        $overviewlink=xarModURL('base','admin','overview',array('template'=>'nooverview'));
+    }
 
+    $data['overviewlink']=$overviewlink;
     // Set template base.
     // FIXME: not allowed to set private variables of BL directly
     $blockinfo['_bl_template_base'] = $template;
