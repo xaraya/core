@@ -26,12 +26,8 @@ class Dynamic_FieldType_Property extends Dynamic_Select_Property
 {
     function __construct($args)
     {
-		parent::__construct($args);
-		$this->id = 22;
-		$this->name = 'fieldtype';
-		$this->label = 'Field Type';
-		$this->format = '22';
-		$this->requiresmodule = 'dynamicdata';
+        parent::__construct($args);
+
         if( !isset($args['skipInit']) || ($args['skipInit'] != true) )
         {
 
@@ -45,6 +41,17 @@ class Dynamic_FieldType_Property extends Dynamic_Select_Property
                 }
             }
         }
+    }
+    
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('dynamicdata');
+        $info->id   = 22;
+        $info->name = 'fieldtype';
+        $info->desc = 'Field Type';
+
+        return $info;
     }
 }
 ?>

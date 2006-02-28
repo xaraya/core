@@ -20,12 +20,18 @@ class Dynamic_Calendar_Property extends Dynamic_Property
 
     function __construct($args) {
         parent::__construct($args);
-        $this->requiresmodule = 'base';
         $this->tplmodule = 'base';
-        $this->id     = 8;
-        $this->name   = 'calendar';
-        $this->label  = 'Calendar';
-        $this->format = '8';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 8;
+        $info->name = 'calendar';
+        $info->desc = 'Calendar';
+
+        return $info;
     }
 
     function validateValue($value = null)

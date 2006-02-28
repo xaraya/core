@@ -23,12 +23,18 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
 {
     function __construct($args) {
         parent::__construct($args);
-        $this->requiresmodule = 'base';
         $this->tplmodule = 'base';
-        $this->id     = 14;
-        $this->name   = 'checkbox';
-        $this->label  = 'Checkbox';
-        $this->format = '14';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 14;
+        $info->name = 'checkbox';
+        $info->desc = 'Checkbox';
+
+        return $info;
     }
 
     function checkInput($name='', $value = null)

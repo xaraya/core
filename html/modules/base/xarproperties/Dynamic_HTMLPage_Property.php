@@ -28,10 +28,7 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->id       = 13;
-        $this->name     = 'webpage';
-        $this->label    = 'HTML Page';
-        $this->format   = '13';
+
         // specify base directory in validation field
         if (empty($this->basedir) && !empty($this->validation)) {
             // Hack for passing this thing into transform hooks
@@ -44,6 +41,17 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
             }
             $this->basedir = $basedir;
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 13;
+        $info->name = 'webpage';
+        $info->desc = 'HTML Page';
+
+        return $info;
     }
 
     function validateValue($value = null)

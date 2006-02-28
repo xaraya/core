@@ -24,10 +24,6 @@ class Dynamic_NumberList_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->id = 16;
-        $this->name = 'integerlist';
-        $this->label = 'Number List';
-        $this->format = '16';
 
         // check validation for allowed min/max values
         if (count($this->options) == 0 && !empty($this->validation) && strchr($this->validation,':')) {
@@ -46,6 +42,17 @@ class Dynamic_NumberList_Property extends Dynamic_Select_Property
                 // you're in trouble :)
             }
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 16;
+        $info->name = 'integerlist';
+        $info->desc = 'Number List';
+
+        return $info;
     }
 
     function validateValue($value = null)

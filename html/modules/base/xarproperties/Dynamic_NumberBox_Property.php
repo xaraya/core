@@ -23,15 +23,20 @@ class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
 {
     function __construct($args) {
         parent::__construct($args);
-        $this->requiresmodule = 'base';
-        
-        $this->id        = 15;
-        $this->name      = 'integerbox';
-        $this->label     = 'Number Box';
-        $this->format    = '15';
 
         $this->size      = 10;
         $this->maxlength = 30;
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 15;
+        $info->name = 'integerbox';
+        $info->desc = 'Number Box';
+
+        return $info;
     }
 
     function validateValue($value = null)

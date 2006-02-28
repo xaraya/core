@@ -23,10 +23,17 @@ class Dynamic_LanguageList_Property extends Dynamic_Select_Property
 {
     function __construct($args) {
         parent::__construct($args);
-        $this->id     = 36;
-        $this->name   = 'language';
-        $this->label  = 'Language List';
-        $this->format = '36';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 36;
+        $info->name = 'language';
+        $info->desc = 'Language List';
+
+        return $info;
     }
 
     function getOptions()

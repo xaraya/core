@@ -41,14 +41,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->requiresmodule = 'base';
-        
-        $this->id     = 38;
-        $this->name   = 'textupload';
         $this->tplmodule = 'base';
-        $this->label  = 'Text Upload';
-        $this->format = '38';
-        $this->args   = array('rows' => 20);
 
         // always parse validation to preset methods here
         $this->parseValidation($this->validation);
@@ -74,6 +67,18 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
             $udir = $uname . '_' . $uid;
             $this->importdir = preg_replace('/\{user\}/',$udir,$this->importdir);
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 38;
+        $info->name = 'textupload';
+        $info->desc = 'Text Upload';
+        $info->args = array('rows' => 20);
+
+        return $info;
     }
 
     function validateValue($value = null)

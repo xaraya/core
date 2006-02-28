@@ -24,13 +24,18 @@ class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->id = 34;
-        $this->name = 'radio';
-        $this->label = 'Radio Buttons';
-        $this->format = '34';
         $this->template = 'radio';
     }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 34;
+        $info->name = 'radio';
+        $info->desc = 'Radio Buttons';
+
+        return $info;
+    }
 }
-
-
 ?>

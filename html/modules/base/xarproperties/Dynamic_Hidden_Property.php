@@ -19,12 +19,18 @@ class Dynamic_Hidden_Property extends Dynamic_Property
 {
     function __construct($args) {
         parent::__construct($args);
-        $this->id = 18;
-        $this->name = 'hidden';
-        $this->label = 'Hidden'; // ML this?
-        $this->format = '18';
-        $this->requiresmodule = 'base'; // This needed here?
         $this->tplmodule = 'base';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 18;
+        $info->name = 'hidden';
+        $info->desc = 'Hidden';
+
+        return $info;
     }
 
     function validateValue($value = null)

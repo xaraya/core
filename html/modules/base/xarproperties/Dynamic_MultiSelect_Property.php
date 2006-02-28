@@ -22,11 +22,18 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
 {
     function __construct($args) {
         parent::__construct($args);
-        $this->id = 39;
-        $this->name = 'multiselect';
-        $this->label = 'Multi Select';
-        $this->format = '39';
         $this->template = 'multiselect';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 39;
+        $info->name = 'multiselect';
+        $info->desc = 'multiselect';
+
+        return $info;
     }
 
     function validateValue($value = null)

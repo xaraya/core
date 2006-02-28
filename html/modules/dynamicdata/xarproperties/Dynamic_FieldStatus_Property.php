@@ -25,11 +25,6 @@ class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->id = 25;
-        $this->name = 'fieldstatus';
-        $this->label = 'Field Status';
-        $this->format = '25';
-        $this->requiresmodule = 'dynamicdata';
 
         if (count($this->options) == 0) {
             $this->options = array(
@@ -39,6 +34,17 @@ class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
                                  array('id' => 3, 'name' => xarML('Hidden')),
                              );
         }
+    }
+    
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('dynamicdata');
+        $info->id   = 25;
+        $info->name = 'fieldstatus';
+        $info->desc = 'Field Status';
+
+        return $info;
     }
 }
 ?>

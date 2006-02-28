@@ -27,12 +27,16 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_URL_Property extends Dynamic_TextBox_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id     = 11;
-    public $name   = 'url';
-    public $label  = 'URL';
-    public $format = '11';
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id    = 11;
+        $info->name  = 'url';
+        $info->desc  = 'URL';
+
+        return $info;
+    }
 
     function validateValue($value = null)
     {

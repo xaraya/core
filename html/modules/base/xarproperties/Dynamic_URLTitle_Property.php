@@ -22,12 +22,16 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id     = 41;
-    public $name   = 'urltitle';
-    public $label  = 'URL + Title';
-    public $format = '41';
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id    = 41;
+        $info->name  = 'urtitlel';
+        $info->desc  = 'URL + Title';
+
+        return $info;
+    }
 
     function checkInput($name='', $value = null)
     {

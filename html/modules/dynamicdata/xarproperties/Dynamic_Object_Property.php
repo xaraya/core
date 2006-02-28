@@ -36,11 +36,6 @@ class Dynamic_Object_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->requiresmodule = 'dynamicdata';
-        $this->id     = 24;
-        $this->name   = 'object';
-        $this->label  = 'Object';
-        $this->format = '24';
     
         if (!empty($this->validation)) {
             foreach(preg_split('/(?<!\\\);/', $this->validation) as $option) {
@@ -77,6 +72,17 @@ class Dynamic_Object_Property extends Dynamic_Select_Property
                 }
             }
 //        }
+    }
+    
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('dynamicdata');
+        $info->id   = 24;
+        $info->name = 'object';
+        $info->desc = 'Object';
+
+        return $info;
     }
 }
 

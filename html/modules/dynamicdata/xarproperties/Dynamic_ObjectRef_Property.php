@@ -39,15 +39,26 @@ class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->requiresmodule = 'dynamicdata';
-        $this->id = 507;
-        $this->name = 'objectref';
-        $this->label = 'Select value from other object';
-        $this->format = '507';
     }
-    // Prepare data to be rendered when an input function is called on the property
-    // We dont use the parent because we use xarTplProperty at the end of this
-    // function and do template overriding slightly different.
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('dynamicdata');
+        $info->id   = 507;
+        $info->name = 'objectref';
+        $info->desc = 'Select value from other object';
+
+        return $info;
+    }
+
+    /**
+     * Show input
+     *
+     * Prepare data to be rendered when an input function is called on the property
+     * We dont use the parent because we use xarTplProperty at the end of this
+     * function and do template overriding slightly different.
+     */
     function showInput($args = array())
     {
         $data=array(); $template = null;

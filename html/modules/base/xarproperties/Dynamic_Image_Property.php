@@ -23,12 +23,18 @@ class Dynamic_Image_Property extends Dynamic_TextBox_Property
 {
     function __construct($args) {
         parent::__construct($args);
-        $this->requiresmodule = 'base';
-        $this->id     = 12;
-        $this->name   = 'image';
         $this->template = 'image';
-        $this->label  = 'Image';
-        $this->format = '12';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 12;
+        $info->name = 'image';
+        $info->desc = 'Image';
+
+        return $info;
     }
 
     function validateValue($value = null)

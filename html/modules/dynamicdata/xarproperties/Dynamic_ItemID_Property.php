@@ -27,11 +27,17 @@ class Dynamic_ItemID_Property extends Dynamic_NumberBox_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->requiresmodule = 'dynamicdata';
-        $this->id     = 21;
-        $this->name   = 'itemid';
-        $this->label  = 'Item ID';
-        $this->format = '21';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('dynamicdata');
+        $info->id   = 21;
+        $info->name = 'itemid';
+        $info->desc = 'Item ID';
+
+        return $info;
     }
 
     function checkInput($name = '', $value = null)

@@ -28,11 +28,8 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->id = 35;
-        $this->name = 'imagelist';
-        $this->label = 'Image List';
-        $this->format = '35';
         $this->template = 'imagelist';
+
         if (empty($this->basedir) && !empty($this->validation)) {
             $this->parseValidation($this->validation);
         }
@@ -44,6 +41,17 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
                 $this->baseurl = preg_replace('/\{theme\}/',$curtheme,$this->baseurl);
             }
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 35;
+        $info->name = 'imagelist';
+        $info->desc = 'Image List';
+
+        return $info;
     }
 
     function validateValue($value = null)

@@ -26,11 +26,18 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
 
     function __construct($args) {
         parent::__construct($args);
-        $this->id = 42;
-        $this->name = 'countrylisting';
-        $this->label = 'Country Dropdown';
-        $this->format = '42';
         $this->template = 'countrylist';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 42;
+        $info->name = 'countrylisting';
+        $info->desc = 'Country Dropdown';
+
+        return $info;
     }
 
     function validateValue($value = null)

@@ -28,15 +28,22 @@ class Dynamic_SubForm_Property extends Dynamic_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->id        = 997;
-        $this->name      = 'subform';
-        $this->label     = 'Sub Form';
-        $this->format    = '997';
 
         // check validation for object, style etc.
         if (!empty($this->validation)) {
             $this->parseValidation($this->validation);
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('dynamicdata');
+        $info->id   = 997;
+        $info->name = 'subform';
+        $info->desc = 'Sub Form';
+
+        return $info;
     }
 
     function checkInput($name='', $value = null)

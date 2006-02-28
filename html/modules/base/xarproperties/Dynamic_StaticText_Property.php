@@ -16,12 +16,18 @@ class Dynamic_StaticText_Property extends Dynamic_Property
 {
     function __construct($args) {
         parent::__construct($args);
-        $this->requiresmodule = 'base';
         $this->tplmodule = 'base';
-        $this->id     = 1;
-        $this->name   = 'static';
-        $this->label  = 'Static Text';
-        $this->format = '1';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 1;
+        $info->name = 'static';
+        $info->desc = 'Static Text';
+
+        return $info;
     }
 
     function validateValue($value = null)

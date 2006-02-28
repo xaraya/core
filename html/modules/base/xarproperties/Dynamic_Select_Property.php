@@ -23,13 +23,8 @@ class Dynamic_Select_Property extends Dynamic_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->id = 6;
-        $this->name = 'dropdown';
-        $this->label = 'Dropdown List';
-        $this->format = '6';
-        $this->template = 'dropdown';
+        $this->template  = 'dropdown';
         $this->tplmodule = 'base';
-        $this->requiresmodule = 'base';
 
         if (!isset($this->options)) {
             $this->options = array();
@@ -40,6 +35,16 @@ class Dynamic_Select_Property extends Dynamic_Property
         }
     }
 
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 6;
+        $info->name = 'dropdown';
+        $info->desc = 'Dropdown List';
+
+        return $info;
+    }
     function validateValue($value = null)
     {
         if (isset($value)) {

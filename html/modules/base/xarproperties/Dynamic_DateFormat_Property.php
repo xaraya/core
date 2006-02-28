@@ -28,10 +28,17 @@ class Dynamic_DateFormat_Property extends Dynamic_Select_Property
 {
     function __construct($args) {
         parent::__construct($args);
-        $this->id     = 33;
-        $this->name   = 'dateformat';
-        $this->label  = 'Date Format';
-        $this->format = '33';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 33;
+        $info->name = 'dateformat';
+        $info->desc = 'Date Format';
+
+        return $info;
     }
 
     /**

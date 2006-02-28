@@ -25,12 +25,19 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-		$this->id = 43;
-		$this->name = 'statelisting';
-		$this->label = 'State Dropdown';
-		$this->format = '45';
 		$this->template = 'statelist';
 	}
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 43;
+        $info->name = 'statelisting';
+        $info->desc = 'State Dropdown';
+
+        return $info;
+    }
 
     function validateValue($value = null)
     {

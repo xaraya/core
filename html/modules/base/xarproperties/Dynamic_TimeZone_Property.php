@@ -28,11 +28,18 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-		$this->id = 32;
-		$this->name = 'timezone';
-		$this->label = 'Time Zone';
-		$this->format = '32';
-	}
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id    = 32;
+        $info->name  = 'timezone';
+        $info->desc  = 'Time Zone';
+
+        return $info;
+    }
 
     function validateValue($value = null)
     {

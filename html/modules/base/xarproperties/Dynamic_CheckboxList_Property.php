@@ -24,11 +24,18 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
 {
     function __construct($args) {
         parent::__construct($args);
-        $this->id = 1115;
-        $this->name = 'checkboxlist';
-        $this->label = 'Checkbox List';
-        $this->format = '1115';
         $this->template = 'checkboxlist';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 1115;
+        $info->name = 'checkboxlist';
+        $info->desc = 'Checkbox List';
+
+        return $info;
     }
 
     function checkInput($name='', $value = null)

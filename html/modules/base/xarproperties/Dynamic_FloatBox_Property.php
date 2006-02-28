@@ -23,13 +23,19 @@ class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
 {
     function __construct($args) {
         parent::__construct($args);
-        $this->requiresmodule = 'base';
-        $this->id        = 17;
-        $this->name      = 'floatbox';
-        $this->label     = 'Number Box (float)';
-        $this->format    = '17';
         $this->size      = 10;
         $this->maxlength = 30;
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 17;
+        $info->name = 'floatbox';
+        $info->desc = 'Number Box (float)';
+
+        return $info;
     }
 
     function validateValue($value = null)

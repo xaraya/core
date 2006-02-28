@@ -24,11 +24,18 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
 {
     function __construct($args) {
         parent::__construct($args);
-        $this->id = 506;
-        $this->name = 'combo';
-        $this->label = 'Combo Dropdown Textbox';
-        $this->format = '506';
         $this->template = 'combobox';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 506;
+        $info->name = 'combobox';
+        $info->desc = 'Combo Dropdown Textbox';
+
+        return $info;
     }
 
     function checkInput($name = '', $value = null)

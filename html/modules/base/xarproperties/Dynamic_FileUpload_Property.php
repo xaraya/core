@@ -42,13 +42,8 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->requiresmodule = 'base';
         $this->tplmodule = 'base';
-        $this->id     = 9;
-        $this->name   = 'fileupload';
-        $this->label  = 'File Upload';
-        $this->format = '9';
-        
+
         // Determine if the uploads module is hooked to the calling module
         // if so, we will use the uploads modules functionality
         if (xarVarGetCached('Hooks.uploads','ishooked')) {
@@ -111,6 +106,17 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             $udir = $uname . '_' . $uid;
             $this->importdir = preg_replace('/\{user\}/',$udir,$this->importdir);
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 9;
+        $info->name = 'fileupload';
+        $info->desc = 'File Upload';
+
+        return $info;
     }
 
     function checkInput($name='', $value = null)

@@ -18,7 +18,6 @@ class Dynamic_Array_Property extends Dynamic_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->requiresmodule = 'base';
         $this->tplmodule = 'base';
 
         // check validation for list of fields (optional)
@@ -30,10 +29,11 @@ class Dynamic_Array_Property extends Dynamic_Property
     static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();
-        $info->id = 999;
+        $info->reqmodules = array('base');
+        $info->id   = 999;
         $info->name = 'array';
         $info->desc = 'Array';
-        $info->format = 999;
+
         return $info;
     }
 

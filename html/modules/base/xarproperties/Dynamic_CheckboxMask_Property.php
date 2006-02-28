@@ -1,4 +1,4 @@
-<?php
+n<?php
 /**
  * Checkbox Mask Property
  *
@@ -24,11 +24,18 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
 {
     function __construct($args) {
         parent::__construct($args);
-        $this->id = 1114;
-        $this->name = 'checkboxmask';
-        $this->label = 'Checkbox Mask';
-        $this->format = '1114';
         $this->template = 'checkboxmask';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 1114;
+        $info->name = 'checkboxmask';
+        $info->desc = 'Checkbox Mask';
+
+        return $info;
     }
 
     function validateValue($value = null)

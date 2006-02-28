@@ -26,13 +26,19 @@ class Dynamic_Module_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->id = 19;
-        $this->name = 'module';
-        $this->label = 'Module';
-        $this->format = '19';
-        $this->requiresmodule = 'modules';
     }
-    
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('modules');
+        $info->id   = 19;
+        $info->name = 'module';
+        $info->desc = 'Module';
+
+        return $info;
+    }
+
     function getOptions()
     {
         if (count($this->options) == 0) {

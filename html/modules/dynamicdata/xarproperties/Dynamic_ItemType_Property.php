@@ -33,15 +33,21 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
     {
         parent::__construct($args);
 
-        $this->requiresmodule = 'dynamicdata';
-        $this->id       = 20;
-        $this->name     = 'itemtype';
-        $this->label    = 'Item Type';
-        $this->format   = '20';
         // options may be set in one of the child classes
         if (count($this->options) == 0 && !empty($this->validation)) {
             $this->parseValidation($this->validation);
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('dynamicdata');
+        $info->id   = 20;
+        $info->name = 'itemtype';
+        $info->desc = 'Item Type';
+
+        return $info;
     }
 
     function validateValue($value = null)

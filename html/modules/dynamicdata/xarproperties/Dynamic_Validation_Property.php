@@ -32,10 +32,17 @@ class Dynamic_Validation_Property extends Dynamic_TextBox_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->id        = 998;
-        $this->name      = 'validation';
-        $this->label     = 'Validation';
-        $this->format    = '998';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('dynamicdata');
+        $info->id   = 998;
+        $info->name = 'validation';
+        $info->desc = 'Validation';
+
+        return $info;
     }
 
     function validateValue($value = null)
