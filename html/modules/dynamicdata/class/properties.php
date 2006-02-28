@@ -504,23 +504,17 @@ class Dynamic_Property
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-
-        $data = array();
         $data['id']   = $this->id;
         $data['name'] = $this->name;
-        if (isset($value)) {
-            $data['value'] = xarVarPrepForDisplay($value);
-        } else {
-            $data['value'] = xarVarPrepForDisplay($this->value);
-        }
 
-        if (!isset($template)) {
-            $template = null;
-        }
-        return xarTplProperty('dynamicdata', $template, 'showoutput', $data);
+        if (!isset($data['value'])) $data['value'] = $this->value;
+        $data['value'] = xarVarPrepForDisplay($data['value']);
+        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['template'])) $data['template'] = $this->template;
+        // Render it
+        return xarTplProperty($data['module'], $data['template'], 'showoutput', $data);
     }
 
     /**
