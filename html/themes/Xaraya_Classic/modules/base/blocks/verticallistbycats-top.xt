@@ -122,5 +122,11 @@
                 </li>
             </xar:if>
         </xar:foreach>
+      <li class="cat">
+            <a href="#$overviewlink#" title="#xarML('System help')#" class="empty">
+                Help
+            </a>
+        </li>
+
     </ul>
 </div>
