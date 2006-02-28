@@ -153,15 +153,13 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-         extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (empty($value)) {
-            $returndata= '';
-        }
+        extract($data);
+        if (!isset($value)) $value = $this->value;
+        
+        if (empty($value)) $returndata= '';
+        
         if (is_array($value)) {
             if (isset($value['link'])) {
                 $link = $value['link'];
@@ -178,7 +176,6 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
                 $title = $newval['title'];
             }
         }
-        $data=array();
 
         if (empty($link) && empty($title)) {
         } elseif (empty($link)) {
@@ -194,14 +191,7 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         $data['link']    = (!empty($link) && $link != 'http://') ? $link : '';
         $data['title']   = (!empty($title)) ? $title : '';
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return parent::showOutput($data);
     }
 }
 ?>

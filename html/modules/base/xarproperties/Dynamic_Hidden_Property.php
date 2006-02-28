@@ -45,11 +45,5 @@ class Dynamic_Hidden_Property extends Dynamic_Property
             return true;
         }
     }
-
-    function showOutput($data = array())
-    {
-        $data['hiddenvalue']='';
-        return parent::showOutput($data);
-    }
 }
 ?>

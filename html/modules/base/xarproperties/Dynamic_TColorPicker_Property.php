@@ -83,25 +83,5 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
         return parent::showInput($data);
     }
 
-    function showOutput($args = array())
-    {
-        extract($args);
-        $data = array();
-
-        if (isset($value)) {
-            $data['value'] = xarVarPrepHTMLDisplay($value);
-        } else {
-            $data['value'] = xarVarPrepHTMLDisplay($this->value);
-        }
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
-    }
 }
 ?>

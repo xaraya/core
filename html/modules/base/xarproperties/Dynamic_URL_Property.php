@@ -27,6 +27,12 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_URL_Property extends Dynamic_TextBox_Property
 {
+    function __construct($args) 
+    {
+        parent::__construct($args);
+        $this->template = 'url';
+    }
+
     static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();
@@ -44,7 +50,7 @@ class Dynamic_URL_Property extends Dynamic_TextBox_Property
             $value = $this->value;
         }
         if (!empty($value) && $value != 'http://') {
-        // TODO: add some URL validation routine !
+            // TODO: add some URL validation routine !
             if (preg_match('/[<>"]/',$value)) {
                 $this->invalid = xarML('URL');
                 $this->value = null;
@@ -56,43 +62,6 @@ class Dynamic_URL_Property extends Dynamic_TextBox_Property
             $this->value = '';
         }
         return true;
-    }
-
-    function showInput($data = array())
-    {
-        if (!isset($data['value'])) {
-            $data['value'] = $this->value;
-        }
-        if (empty($data['value'])) {
-            $data['value'] = 'http://';
-        }
-
-        return parent::showInput($data);
-    }
-
-    function showOutput($args = array())
-    {
-        extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-
-        $data = array();
-        // TODO: use redirect function here ?
-        if (!empty($value) && $value != 'http://') {
-            $data['value'] = xarVarPrepForDisplay($value);
-            //return '<a href="'.$value.'">'.$value.'</a>';
-
-            if (empty($module)) {
-                $module = $this->getModule();
-            }
-            if (empty($template)) {
-                $template = $this->getTemplate();
-            }
-
-            return xarTplProperty($module, $template, 'showoutput', $data);
-        }
-        return '';
     }
 }
 ?>

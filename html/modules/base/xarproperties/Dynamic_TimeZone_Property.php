@@ -148,20 +148,17 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
         return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        extract($data);
+        if (!isset($value))  $value = $this->value;
+        
         $offset = null;
         $timezone = null;
         if (empty($value)) {
             $value = 'GMT';
-
         } elseif (is_numeric($value)) {
             $offset = $value;
-
         } elseif (is_array($value)) {
             if (isset($value['offset'])) {
                 $offset = $value['offset'];
@@ -184,7 +181,7 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
                 $value = '';
             }
         }
-        $data = array();
+
         $data['value'] = $value;
         if (isset($timezone)) {
             $data['timezone'] = strtr($timezone, array('/' => ' - ', '_' => ' '));
@@ -204,15 +201,7 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
         }
         // old timezone output format
         $data['option']['name'] = $value;
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return parent::showOutput($data);
     }
 
     function getOldOptions()

@@ -41,11 +41,10 @@ class Dynamic_Image_Property extends Dynamic_TextBox_Property
 
     function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!isset($value)) $value = $this->value;
+        // /me thinks the default of http:// is lame. (because the default isnt a valid value)
         if (!empty($value) && $value != 'http://') {
-        // TODO: add some image validation routine !
+            // TODO: add some image validation routine !
             if (preg_match('/[<>"]/',$value)) {
                 $this->invalid = xarML('image URL');
                 $this->value = null;
@@ -57,18 +56,6 @@ class Dynamic_Image_Property extends Dynamic_TextBox_Property
             $this->value = '';
         }
         return true;
-    }
-
-    function showInput($data = array())
-    {
-        if (!isset($data['value'])) {
-            $data['value'] = $this->value;
-        }
-        if (empty($data['value'])) {
-            $data['value'] = 'http://';
-        }
-
-        return parent::showInput($data);
     }
 }
 ?>

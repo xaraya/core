@@ -260,34 +260,6 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         parent::showInput($data);
     }
 
-    function showOutput($args = array())
-    {
-        extract($args);
-        $data = array();
-
-        // no uploads-specific code here - cfr. transform hook in uploads module
-
-        if (!isset($value)) {
-            $data['value'] = $this->value;
-        }
-        if (!empty($value)) {
-            $data['value'] = xarVarPrepHTMLDisplay($value);
-        } else {
-            $data['value'] ='';
-        }
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
-
-    }
-
-
     function parseValidation($validation = '')
     {
         // Determine if the uploads module is hooked to the calling module
