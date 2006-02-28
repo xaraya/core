@@ -70,33 +70,19 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         return true;
     }
 
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
+        // Make the variables easier to access
+        extract($data);
 
-        $data['name']     = $name;
-        $data['id']       = $id;
+        // Prepare 
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         // TODO: the way the template is organized now, this only works when an id is set.
-        $data['rows']     = !empty($rows) ? $rows : $this->rows;
+        $data['rows']  = !empty($rows) ? $rows : $this->rows;
         $data['cols']     = !empty($cols) ? $cols : $this->cols;
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showinput', $data);
-
+        // Let parent deal with the rest
+        return parent::showInput($data);
     }
 
     function showOutput($args = array())

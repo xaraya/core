@@ -477,9 +477,22 @@ class Dynamic_Property
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        return xarML('This property is unknown...');
+        // Our common items we need
+        if(!isset($data['name']))     $data['name']     = 'dd_'.$this->id;
+        if(!isset($data['id']))       $data['id']       = $data['name'];
+        // mod for the tpl and what tpl the prop wants.
+        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['template'])) $data['template'] = $this->template;
+
+        if(!isset($data['tabindex'])) $data['tabindex'] = 0;
+        if(!isset($data['value']))    $data['value']    = '';
+        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+
+        // debug($data);
+        // Render it
+        return xarTplProperty($data['module'], $data['template'], 'showinput', $data);
     }
 
     /**

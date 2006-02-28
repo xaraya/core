@@ -1,6 +1,23 @@
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-<span class="xar-error"><xar:mlstring>Warning: the template showinput-[property type].xd or showinput-[template].xd is missing for this property !</xar:mlstring></span>
+<xar:if condition="!isset($type)">
+    <xar:set name="type">xarML('[unknown type]')</xar:set>
+</xar:if>
+
+<xar:if condition="!isset($template) or empty($template)">
+    <xar:set name="template">xarML('[unspecified template]')</xar:set>
+</xar:if>
+
+<span class="xar-error">
+    <xar:ml>
+        <xar:mlstring>
+            Warning: the template showinput-#(1).xd or showinput-#(2).xd 
+            is missing for this property !
+        </xar:mlstring>
+        <xar:mlvar>#$type#</xar:mlvar>
+        <xar:mlvar>#$template#</xar:mlvar>
+    </xar:ml>
+</span>
 <br/>
 <input type="text" id="#$id#" name="#$name#" value="#$value#" />
 
