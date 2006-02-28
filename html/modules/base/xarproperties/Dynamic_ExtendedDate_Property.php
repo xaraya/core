@@ -162,16 +162,12 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
     /**
      * Show the output according to the requested dateformat.
      */
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
+        extract($data);
 
-        $data = array();
-
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-
+        if (!isset($value)) $value = $this->value;
+        
         $data['year'] = '';
         $data['mon']  = '';
         $data['day']  = '';
@@ -211,14 +207,7 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
         $data['dateformat'] = $dateformat;
         $data['value']      = $value;
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return parent::showOutput($data);
     } /* showOutput */
 }
 ?>

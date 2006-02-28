@@ -78,32 +78,5 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
 
         return parent::showInput($data);
     }
-
-    function showOutput($args = array())
-    {
-        extract($args);
-
-        $data = array();
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        $data['value'] = $value;
-        // TODO: allow different values here, and verify $checked ?
-        //Move ML language defines to templates
-        /*if (!empty($value)) {
-            return xarML('yes');
-        } else {
-            return xarML('no');
-        }*/
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
-    }
 }
 ?>

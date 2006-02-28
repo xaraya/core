@@ -120,15 +120,12 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
+        extract($data);
 
-        $data=array();
-
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!isset($value)) $value = $this->value;
+        
         // default time is unspecified
         if (empty($value)) {
             $value = -1;
@@ -147,15 +144,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         $data['dateformat'] = $dateformat;
         $data['value'] = $value;
         // $data['returnvalue']= xarLocaleFormatDate($dateformat, $value);
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return parent::showOutput($data);
     }
 
     function showValidation($args = array())

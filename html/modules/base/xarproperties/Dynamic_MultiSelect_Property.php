@@ -93,14 +93,12 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
         return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        $data = array();
+        extract($data);
 
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!isset($value)) $value = $this->value;
+        
         if (empty($value)) {
             $value = array();
         } elseif (!is_array($value)) {
@@ -111,19 +109,12 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
                 $value = $tmp;
             }
         }
-        if (!isset($options)) {
-            $options = $this->getOptions();
-        }
+        if (!isset($options)) $options = $this->getOptions();
+        
         $data['value']= $value;
         $data['options']= $options;
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return parent::showOutput($data);
     }
 }
 ?>

@@ -75,36 +75,8 @@ class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
         return true;
     }
 
-    // default showInput() from Dynamic_TextBox_Property
-
-    function showOutput($args = array())
-    {
-        extract($args);
-        $data = array();
-
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (!empty($value) && !empty($field->validation)) {
-        // TODO: extract precision from field validation too ?
-            //if (is_numeric($field->validation)) {
-            //    $precision = $field->validation;
-            //    return sprintf("%.".$precision."f",$value);
-            //}
-        }
-        $data['value']= xarVarPrepForDisplay($value);
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
-    }
-
     // Trick: use the parent method with a different template :-)
+    // No trick: that how it should have been from the start :-)
     function showValidation($args = array())
     {
         // allow template override by child classes
@@ -114,7 +86,6 @@ class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
 
         return parent::showValidation($args);
     }
-    // default updateValidation() from Dynamic_TextBox_Property
 }
 
 ?>

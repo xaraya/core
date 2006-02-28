@@ -70,32 +70,5 @@ class Dynamic_Image_Property extends Dynamic_TextBox_Property
 
         return parent::showInput($data);
     }
-
-    function showOutput($args = array())
-    {
-        extract($args);
-        $data = array();
-
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (!empty($value)) {
-            $value = xarVarPrepForDisplay($value);
-        }
-        if (!isset($name)){
-            $name=$this->name;
-        }
-        $data['value'] = $value;
-        $data['name']  = $name;
-        $data['id']    = $this->id;
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showoutput', $data);
-    }
 }
 ?>

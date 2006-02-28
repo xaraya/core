@@ -108,14 +108,12 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
         return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        $data = array();
+        extract($data);
 
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!isset($value)) $value = $this->value;
+        
         $basedir = $this->basedir;
         $baseurl = isset($this->baseurl) ? $this->baseurl : $basedir;
         $filetype = $this->filetype;
@@ -125,26 +123,17 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
             preg_match("/$filetype$/",$value) &&
             file_exists($basedir.'/'.$value) &&
             is_file($basedir.'/'.$value)) {
-        //    return '<img src="'.$baseurl.'/'.$value.'" alt="" />';
-           $srcpath=$baseurl.'/'.$value;
+            $srcpath=$baseurl.'/'.$value;
         } else {
-            //return '';
-           $srcpath='';
+            $srcpath='';
         }
 
-        $data['value']=$value;
-        $data['basedir']=$basedir;
-        $data['baseurl'] = $baseurl;
-        $data['filetype']=$filetype;
-        $data['srcpath']=$srcpath;
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        $data['value']    = $value;
+        $data['basedir']  = $basedir;
+        $data['baseurl']  = $baseurl;
+        $data['filetype'] = $filetype;
+        $data['srcpath']  = $srcpath;
+        return parent::showOutput($data);
     }
 
     function parseValidation($validation = '')

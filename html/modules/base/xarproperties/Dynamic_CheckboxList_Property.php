@@ -73,10 +73,8 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
 
     function showInput($data = array())
     {
-        if (!isset($data['value'])) {
-            $data['value'] = $this->value;
-        }
-
+        if (!isset($data['value'])) $data['value'] = $this->value;
+      
         if (empty($data['value'])) {
             $data['value'] = array();
         } elseif (!is_array($data['value']) && is_string($data['value'])) {
@@ -96,33 +94,12 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
         return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-
-        if (!isset($value))
-        {
-            $value = $this->value;
-        }
-
-        if( is_array($value) )
-        {
-            $value = implode(',',$value);
-        }
-
-        $data=array();
-
-        $data['value'] = xarVarPrepForDisplay($value);
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        if (!isset($data['value'])) $data['value'] = $this->value;
+        if (is_array($data['value']) ) $data['value'] = implode(',',$data['value']);
+        return parent::showOutput($data);
     }
-
 }
 
 ?>

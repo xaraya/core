@@ -93,32 +93,20 @@ class Dynamic_Select_Property extends Dynamic_Property
         return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        if (isset($value)) {
-            $this->value = $value;
-        }
-        $data=array();
-        $data['value'] = $this->value;
+        extract($data);
+        if (isset($data['value'])) $this->value = $data['value'];
+        
         // get the option corresponding to this value
         $result = $this->getOption();
         // only apply xarVarPrepForDisplay on strings, not arrays et al.
         if (!empty($result) && is_string($result)) {
             $result = xarVarPrepForDisplay($result);
         }
-        $data['option'] = array('id' => $this->value,
-                                'name' => $result);
+        $data['option'] = array('id' => $this->value, 'name' => $result);
 
-    // FIXME: this won't work when called by a property from a different module
-        // allow template override by child classes (or in BL tags/API calls)
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return parent::showOutput($data);
     }
 
     function parseValidation($validation = '')

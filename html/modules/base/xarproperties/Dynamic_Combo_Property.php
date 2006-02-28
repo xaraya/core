@@ -77,34 +77,5 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
 
         return true;
     }
-
-    function showOutput($args = array())
-    {
-        extract($args);
-        if (isset($value)) {
-            $this->value = $value;
-        }
-        $data=array();
-        $data['value'] = $this->value;
-        // get the option corresponding to this value
-        $result = $this->getOption();
-        $data['option'] = array('id' => $this->value,
-                                'name' => xarVarPrepForDisplay($result));
-
-        // If the value wasn't found in the select list data, then it was
-        // probably typed in -- so just display it.
-        if( !isset($data['option']['name']) || ( $data['option']['name'] == '') )
-        {
-            $data['option']['name'] = xarVarPrepForDisplay($this->value);
-        }
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showoutput', $data);
-    }
 }
 ?>

@@ -46,21 +46,10 @@ class Dynamic_Hidden_Property extends Dynamic_Property
         }
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-
-        $data=array();
         $data['hiddenvalue']='';
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return parent::showOutput($data);
     }
 }
 ?>

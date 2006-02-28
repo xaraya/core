@@ -105,14 +105,12 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
         return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        $data = array();
+        extract($data);
 
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!isset($value)) $value = $this->value;
+        
         $basedir = $this->basedir;
         $filetype = $this->filetype;
         if (!empty($value) &&
@@ -121,24 +119,14 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
             file_exists($basedir.'/'.$value) &&
             is_file($basedir.'/'.$value)) {
             $srcpath = join('', @file($basedir.'/'.$value));
-
         } else {
-        //    return xarVarPrepForDisplay($value);
             $srcpath='';
-            //return '';
         }
-        $data['value']=$value;
-        $data['basedir']=$basedir;
-        $data['filetype']=$filetype;
-        $data['srcpath']=$srcpath;
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        $data['value']    = $value;
+        $data['basedir']  = $basedir;
+        $data['filetype'] = $filetype;
+        $data['srcpath']  = $srcpath;
+        return parent::showOutput($data);
     }
 }
 ?>

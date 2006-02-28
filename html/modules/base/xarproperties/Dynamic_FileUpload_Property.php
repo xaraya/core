@@ -254,9 +254,9 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
     }
 
 //    function showInput($name = '', $value = null, $size = 0, $maxsize = 0, $id = '', $tabindex = '')
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
+        extract($data);
         if (empty($name)) {
             $name = 'dd_'.$this->id;
         }
@@ -316,7 +316,6 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             $allowed = '';
         }
 
-        $data               = array();
         $data['name']       = $name;
         $data['value']      = xarVarPrepForDisplay($value);
         $data['id']         = $id;
@@ -329,13 +328,11 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
+        extract($data);
 
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!isset($value)) $value = $this->value;
 
         if ($this->UploadsModule_isHooked) {
             // @todo get rid of this one too
@@ -352,23 +349,13 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                 // remove any left over values
                 return '';
             }
-            $data = array();
             // if the uploads module is hooked (to be verified and set by the calling module)
             if (!empty($this->basedir) && file_exists($this->basedir . '/'. $value) && is_file($this->basedir . '/'. $value)) {
                 $data['basedir'] = $this->basedir;
             } else {
                 $data['basedir'] = null; // something went wrong here
             }
-            $data['value'] = xarVarPrepForDisplay($value);
-
-             if (empty($module)) {
-                 $module = $this->getModule();
-             }
-             if (empty($template)) {
-                 $template = $this->getTemplate();
-             }
-
-             return xarTplProperty($module, $template, 'showoutput', $data);
+            return parent::showOutput($data);
         } else {
             return '';
         }

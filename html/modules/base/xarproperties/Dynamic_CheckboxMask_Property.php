@@ -77,17 +77,12 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
         return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
+        extract($data);
 
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-
-        if (!is_array($value)) {
-            $value = maskExplode($value);
-        }
+        if (!isset($value)) $value = $this->value;
+        if (!is_array($value)) $value = maskExplode($value);
 
         $this->getOptions();
         $numOptionsSelected = 0;
@@ -101,17 +96,10 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
             }
         }
 
-        $data = array();
         $data['options'] = $options;
         $data['numOptionsSelected'] = $numOptionsSelected;
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        
+        return parent::showOutput($data);
     }
 
 }

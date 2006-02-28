@@ -510,7 +510,9 @@ class Dynamic_Property
         $data['name'] = $this->name;
 
         if (!isset($data['value'])) $data['value'] = $this->value;
-        $data['value'] = xarVarPrepForDisplay($data['value']);
+        // TODO: does this hurt when it is an array?
+        if(is_string($data['value']))
+            $data['value'] = xarVarPrepForDisplay($data['value']);
         if(!isset($data['module']))   $data['module']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         // Render it
