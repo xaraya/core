@@ -3,7 +3,7 @@
         <li class="xar-menu-section">
             <h4>
                 <xar:mlstring>
-                    Contextual Help
+                    Help System
                 </xar:mlstring>
             </h4>
             <ul class="xar-menu-item">
