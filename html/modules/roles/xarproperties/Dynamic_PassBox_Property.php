@@ -25,13 +25,8 @@ class Dynamic_PassBox_Property extends Dynamic_Property // Why not textbox?
     function __construct($args)
     {
         parent::__construct($args);
-        $this->requiresmodule = 'roles';
         $this->tplmodule = 'roles';
-        $this->id     = 46;
-        $this->name   = 'passbox';
         $this->template ='password';
-        $this->label  = 'Password Text Box';
-        $this->format = '46';
 
         // check validation for allowed min/max length (or values)
         if (!empty($this->validation) && strchr($this->validation,':')) {
@@ -43,6 +38,17 @@ class Dynamic_PassBox_Property extends Dynamic_Property // Why not textbox?
                 $this->max = $max; // could be int or float - cfr. FloatBox below
             }
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('roles');
+        $info->id   = 46;
+        $info->name = 'passobx';
+        $info->desc = 'Password Text Box';
+
+        return $info;
     }
 
     function validateValue($value = null)

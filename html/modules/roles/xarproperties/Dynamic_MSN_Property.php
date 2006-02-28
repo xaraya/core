@@ -23,12 +23,17 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->requiresmodule = 'roles';
+    }
 
-        $this->id     = 30;
-        $this->name   = 'msn';
-        $this->label  = 'MSN Messenger';
-        $this->format = '30';
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('roles');
+        $info->id   = 30;
+        $info->name = 'msn';
+        $info->desc = 'MSN Messenger';
+
+        return $info;
     }
 
     function validateValue($value = null)

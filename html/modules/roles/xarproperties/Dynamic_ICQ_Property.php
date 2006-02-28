@@ -30,7 +30,18 @@ class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
         $this->label  = 'ICQ Number';
         $this->format = '28';
     }
-    
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('roles');
+        $info->id   = 28;
+        $info->name = 'icq';
+        $info->desc = 'ICQ Number';
+
+        return $info;
+    }
+
     function validateValue($value = null)
     {
         if (!isset($value)) {

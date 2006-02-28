@@ -25,14 +25,20 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->requiresmodule = 'roles';
-        $this->tplmodule = 'roles';
-        $this->id     = 26;
-        $this->name   = 'email';
-        $this->label  = 'E-Mail';
-        $this->format = '26';
-        
+        $this->tplmodule = 'roles';        
     }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('roles');
+        $info->id   = 26;
+        $info->name = 'email';
+        $info->desc = 'E-Mail';
+
+        return $info;
+    }
+
     function validateValue($value = null)
     {
         if (!isset($value)) {

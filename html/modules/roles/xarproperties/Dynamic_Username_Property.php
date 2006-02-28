@@ -20,12 +20,17 @@ class Dynamic_Username_Property extends Dynamic_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->requiresmodule = 'roles';
+    }
 
-        $this->id     = 7;
-        $this->name   = 'username';
-        $this->label  = 'Username';
-        $this->format = '7';
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('roles');
+        $info->id   = 7;
+        $info->name = 'username';
+        $info->desc = 'Username';
+
+        return $info;
     }
 
     function validateValue($value = null)

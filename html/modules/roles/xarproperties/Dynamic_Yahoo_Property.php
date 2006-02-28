@@ -20,16 +20,21 @@ include_once "modules/base/xarproperties/Dynamic_URLIcon_Property.php";
 
 class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
 {
-
     function __construct($args)
     {
         parent::__construct($args);
-        $this->requiresmodule = 'roles';
         $this->tplmodule = 'roles';
-        $this->id     = 31;
-        $this->name   = 'yahoo';
-        $this->label  = 'Yahoo Messenger';
-        $this->format = '31';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('roles');
+        $info->id   = 31;
+        $info->name = 'yahoo';
+        $info->desc = 'Yahoo Messenger';
+
+        return $info;
     }
 
     function validateValue($value = null)

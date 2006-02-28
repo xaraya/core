@@ -32,7 +32,18 @@ class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
         $this->label  = 'Affero Username';
         $this->format = '40';
     }
- 
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('roles');
+        $info->id   = 40;
+        $info->name = 'affero';
+        $info->desc = 'Afferor Username';
+
+        return $info;
+    }
+
     function validateValue($value = null)
     {
         if (!isset($value)) {

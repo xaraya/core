@@ -29,12 +29,17 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->requiresmodule = 'roles';
+    }
 
-        $this->id     = 29;
-        $this->name   = 'aim';
-        $this->label  = 'Aim Address';
-        $this->format = '29';
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('roles');
+        $info->id   = 29;
+        $info->name = 'aim';
+        $info->desc = 'AIM Screen Name';
+
+        return $info;
     }
 
     function validateValue($value = null)
