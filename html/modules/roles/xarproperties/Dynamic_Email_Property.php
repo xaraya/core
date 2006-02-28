@@ -60,35 +60,6 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
         }
         return true;
     }
-
-    // showInput can be handled by parent
-
-    function showOutput($args = array())
-    {
-        extract($args);
-        $data = array();
-
-        if (!isset($value)) {
-            $value = xarVarPrepHTMLDisplay($this->value);
-        }
-        if (!empty($value)) {
-            $value = xarVarPrepHTMLDisplay($value);
-        }
-        // TODO: use redirect function here ?
-
-        $data['value'] = $value;
-        $data['name'] = $this->name;
-        $data['id']   = $this->id;
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
-    }
 }
 
 ?>

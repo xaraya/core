@@ -69,37 +69,15 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
         return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
+        if (!isset($data['value'])) $data['value'] = $this->value;
+
+        $data['link'] = '';
+        if (!empty($data['value'])) {
+            $data['link'] = "TODO: what's the link for MSN ?".$data['value'];
         }
-
-        $data = array();
-
-        if (!empty($value)) {
-            $link = "TODO: what's the link for MSN ?".$value;
-            $data['link'] = xarVarPrepForDisplay($link);
-
-            if (!empty($this->icon)) {
-                $data['value']= $this->value;
-                $data['icon'] = $this->icon;
-                $data['name'] = $this->name;
-                $data['id']   = $this->id;
-                $data['image']= xarVarPrepForDisplay($this->icon);
-
-                if (empty($module)) {
-                    $module = $this->getModule();
-                }
-                if (empty($template)) {
-                    $template = $this->getTemplate();
-                }
-
-                return xarTplProperty($module, $template, 'showoutput', $data);
-            }
-        }
-        return '';   
+        return parent::showOutput($data);   
     }
 }
 ?>

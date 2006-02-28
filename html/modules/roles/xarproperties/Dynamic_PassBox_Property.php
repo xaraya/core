@@ -96,20 +96,12 @@ class Dynamic_PassBox_Property extends Dynamic_TextBox_Property
         return parent::showInput($data);
     }
 
-    function showOutput($value = null)
+    function showOutput($data = array())
     {
         //we don't really want to show the password, do we?
-        $data = array();
         $data['value'] = '';
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return parent::showOutput($data);
     }
 }
 ?>

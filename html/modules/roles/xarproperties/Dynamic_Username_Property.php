@@ -82,16 +82,12 @@ class Dynamic_Username_Property extends Dynamic_Property
         return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-         extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (empty($value)) {
-            $value = xarUserGetVar('uid');
-        }
-        $data=array();
+        extract($data);
+        if (!isset($value)) $value = $this->value;
+        if (empty($value))  $value = xarUserGetVar('uid');
+        
         try {
             $user = xarUserGetVar('name', $value);
             if (empty($user))
@@ -102,21 +98,11 @@ class Dynamic_Username_Property extends Dynamic_Property
 
         $data['value'] = $value;
         $data['user']  = xarVarPrepForDisplay($user);
-        $data['name']  = $this->name;
-        $data['id']    = $this->id;
 
-        if ($value > 1) {
+        if ($value > 1) { // Why the 1 here?
             $data['linkurl'] = xarModURL('roles','user','display',array('uid' => $value));
         }
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return parent::showOutput($data);
     }
 }
 ?>

@@ -67,42 +67,30 @@ class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
         return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        extract($data);
+        if (!isset($value)) $value = $this->value;
+        
         // TODO: use redirect function here ?
+        $link = '';
         if (!empty($value) && !empty($this->icon)) {
-        // TODO: check this ICQ stuff
-        //<jojodee> Passing the whole lot to the template !
-        //The data is there for anyone that wants to use the vars themselves in the template.
-        $link = '<script language="JavaScript" type="text/javascript"><!--
+            // TODO: check this ICQ stuff
+            // TODO: move this outa here
+            //<jojodee> Passing the whole lot to the template !
+            //The data is there for anyone that wants to use the vars themselves in the template.
+            $link = '<script language="JavaScript" type="text/javascript"><!--
 if ( navigator.userAgent.toLowerCase().indexOf(\'mozilla\') != -1 && navigator.userAgent.indexOf(\'5.\') == -1 )
     document.write(\' <a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="ICQ Number" title="ICQ Number" alt=""/></a>\');
 else
     document.write(\'<a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="ICQ Number" title="ICQ Number" alt=""/></a><a href="http://wwp.icq.com/'.xarVarPrepForDisplay($value).'#pager"><img src="http://web.icq.com/whitepages/online?icq='.xarVarPrepForDisplay($value).'&amp;img=5" width="18" height="18" alt=""/></a>\');
 //--></script><noscript><a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="ICQ Number" title="ICQ Number" border="0" /></a></noscript>';
 
-        } else {
-            $link ='';
         }
 
-        $data['value']= $this->value;
-        $data['icon'] = xarVarPrepForDisplay($this->icon);
-        $data['name'] = $this->name;
-        $data['id']   = $this->id;
+        $data['value'] = $value;
         $data['link'] = $link;
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return parent::showOutput($data);
     }
 }
 ?>

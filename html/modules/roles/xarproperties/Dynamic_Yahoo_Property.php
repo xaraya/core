@@ -72,30 +72,15 @@ class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
         return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
+        if (!isset($data['value'])) $data['value'] = $this->value;
+
+        if (!empty($data['value'])) {
+            $data['link'] = 'http://edit.yahoo.com/config/send_webmesg?.target='.$data['value'].'&.src=pg';
+            $data['link']=xarVarPrepForDisplay($data['link']);
         }
-        $data=array();
-
-        if (!empty($value)) {
-            $link = 'http://edit.yahoo.com/config/send_webmesg?.target='.$value.'&.src=pg';
-            $data['link']=xarVarPrepForDisplay($link);
-
-            if (!empty($this->icon)) {
-                $data['value']= $this->value;
-                $data['icon'] = $this->icon;
-                $data['name'] = $this->name;
-                $data['id']   = $this->id;
-                $data['image']= xarVarPrepForDisplay($this->icon);
-
-                $template="";
-                return xarTplProperty('roles', 'yahoo', 'showoutput', $data);
-            }
-        }
-        return '';
+        return parent::showOutput($data);
     }
 }
 ?>

@@ -74,37 +74,16 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
         return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
+        if (!isset($data['value'])) $data['value'] = $this->value;
+        
+        $data['link'] = '';
+        if (!empty($data['value'])) {
+            $data['link'] = 'aim:goim?screenname='.$data['value'].'&message='.xarML('Hello+Are+you+there?');
+           
         }
-
-        $data = array();
-
-        // TODO: use redirect function here ?
-        if (!empty($value)) {
-            $link = 'aim:goim?screenname='.$value.'&message='.xarML('Hello+Are+you+there?');
-            $data['link'] = xarVarPrepForDisplay($link);
-            if (!empty($this->icon)) {
-                $data['value']= $this->value;
-                $data['icon'] = $this->icon;
-                $data['name'] = $this->name;
-                $data['id']   = $this->id;
-                $data['image']= xarVarPrepForDisplay($this->icon);
-
-                if (empty($module)) {
-                    $module = $this->getModule();
-                }
-                if (empty($template)) {
-                    $template = $this->getTemplate();
-                }
-
-                return xarTplProperty($module, $template, 'showoutput', $data);
-            }
-        }
-        return '';
+        return parent::showOutput($data);
     }
 }
 ?>

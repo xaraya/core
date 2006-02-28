@@ -118,15 +118,11 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
     // TODO: format the output according to the 'showlist'.
     // TODO: provide an option to allow admin to decide whether to wrap the user
     // in a link or not.
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        $data = array();
-
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-
+        extract($data);
+        if (!isset($value)) $value = $this->value;
+        
         if (empty($value)) {
             $user = '';
         } else {
@@ -142,14 +138,7 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         $data['value'] = $value;
         $data['user'] = $user;
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return parent::showOutput($data);
     }
 
     function parseValidation($validation = '')

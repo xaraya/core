@@ -115,14 +115,12 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
 		}
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        $data = array();
+        extract($data);
 
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!isset($value)) $value = $this->value;
+        
         if (empty($value)) {
             $group = array();
             $groupname = '';
@@ -140,14 +138,7 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
         $data['group']=$group;
         $data['groupname']=xarVarPrepForDisplay($groupname);
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return parent::showOutput($data);
     }
 }
 
