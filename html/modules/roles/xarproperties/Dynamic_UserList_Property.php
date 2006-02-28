@@ -26,16 +26,6 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
     public $orderlist = array();
     public $showglue = '; ';
 
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->id = 37;
-        $info->name = 'userlist';
-        $info->desc = 'User List';
-        $info->reqmodules = array('roles');
-        return $info;
-    }
-
     /*
     * Options available to user selection
     * ===================================
@@ -53,22 +43,9 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
 
     function __construct($args)
     {
-        // Don't initialise the parent class as it handles the
-        // validation in an inappropriate way for user lists.
-        // $this->Dynamic_Select_Property($args);
-        //$this->Dynamic_Property($args);
         parent::__construct($args);
         $this->tplmodule = 'roles';
-
-        // Handle options if supplied.
-        if (!isset($this->options)) {
-            $this->options = array();
-        }
-
-        // Handle user options if supplied.
-        if (count($this->options) == 0 && !empty($this->validation)) {
-            $this->parseValidation($this->validation);
-        }
+        $this->template = 'userlist';
 
         if (count($this->options) == 0) {
 	        $select_options = array();
@@ -100,6 +77,16 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
                 }
             }
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->id = 37;
+        $info->name = 'userlist';
+        $info->desc = 'User List';
+        $info->reqmodules = array('roles');
+        return $info;
     }
 
     // TODO: validate the selected user against the specified group(s).

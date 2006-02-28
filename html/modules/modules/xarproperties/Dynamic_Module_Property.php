@@ -21,11 +21,6 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_Module_Property extends Dynamic_Select_Property
 {
-    function __construct($args)
-    {
-        parent::__construct($args);
-    }
-
     static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();
@@ -40,11 +35,12 @@ class Dynamic_Module_Property extends Dynamic_Select_Property
     function getOptions()
     {
         if (count($this->options) == 0) {
-            $modlist = xarModAPIFunc('modules', 'admin', 'getlist',$args);
+            // TODO: wasnt here an $args earlier? where did this go?
+            $modlist = xarModAPIFunc('modules', 'admin', 'getlist');
             foreach ($modlist as $modinfo) {
                 $this->options[] = array('id' => $modinfo['regid'], 'name' => $modinfo['displayname']);
             }
-        }    
+        }
         return $this->options;
     }
 }

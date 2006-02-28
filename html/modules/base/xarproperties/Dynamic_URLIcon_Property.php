@@ -38,6 +38,7 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
            */
            $this->icon='';
         }
+        $this->template = 'urlicon';
     }
 
     static function getRegistrationInfo()
@@ -62,42 +63,6 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
             $this->value = '';
         }
         return true;
-    }
-
-    function showInput($args = array())
-    {
-        extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (empty($value)) {
-            $value = 'http://';
-        }
-
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        $data = array();
-
-        $data['name']     = $name;
-        $data['id']       = $id;
-        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
-        $data['size']     = !empty($size) ? $size : $this->size;
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
     function showOutput($args = array())

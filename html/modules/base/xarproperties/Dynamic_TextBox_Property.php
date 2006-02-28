@@ -79,41 +79,24 @@ class Dynamic_TextBox_Property extends Dynamic_Property
         }
     }
 
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        $data = array();
-
-        if (empty($maxlength) && isset($this->max)) {
+        // Process the parameters
+        if (!isset($data['maxlength']) && isset($this->max)) {
             $this->maxlength = $this->max;
             if ($this->size > $this->maxlength) {
                 $this->size = $this->maxlength;
             }
         }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        $data['name']     = $name;
-        $data['id']       = $id;
-        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
-        $data['size']     = !empty($size) ? $size : $this->size;
-        $data['onfocus']  = isset($onfocus) ? $onfocus : null; // let tpl decide what to do with it
 
-        // allow template override by child classes (or in BL tags/API calls)
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        //debug($module);
-        return xarTplProperty($module, $template, 'showinput', $data);
+        // Prepare for templating
+        $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->value);
+        if(!isset($data['maxlength'])) $data['maxlength'] = $this->maxlength;
+        if(!isset($data['size']))      $data['size']      = $this->size;
+        if(!isset($data['onfocus']))   $data['onfocus']   = null;
+
+        // Let parent deal with the rest
+        return parent::showInput($data);
     }
 
     function showOutput($args = array())
