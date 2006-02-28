@@ -8,7 +8,7 @@
  *
  * @subpackage Roles module
  */
- 
+
 /**
  * validate a user variable
  * @access public
@@ -33,7 +33,7 @@ function roles_userapi_validatevar($args)
 
     switch ($type) {
         case 'email':
-        default;
+        default:
             // all characters must be 7 bit ascii
             $length = strlen($var);
             $idx = 0;
