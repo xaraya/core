@@ -21,9 +21,6 @@ function base_adminapi_getmenulinks()
     $menulinks = array();
     if (xarSecurityCheck('AdminBase',0)) {
 
-        $menulinks[] = Array('url' => xarModURL('base','admin','overview'),
-                             'title' => xarML('Base Overview'),
-                             'label' => xarML('Overview'));
         $menulinks[] = array('url'   => xarModURL('base','admin','sysinfo'),
                              'title' => xarML('View your PHP configuration'),
                              'label' => xarML('System Info'));

@@ -3,7 +3,7 @@
  * utility function pass individual menu items to the main menu
  *
  * @package modules
- * @copyright (C) 2002-2005 The Digital Development Foundation
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -22,9 +22,6 @@ function modules_adminapi_getmenulinks()
     // Security Check
     $menulinks = array();
     if (xarSecurityCheck('AdminModules',0)) {
-            $menulinks[] = Array('url' => xarModURL('modules','admin','overview'),
-            'title' => xarML('Modules Overview'),
-            'label' => xarML('Overview'));
 
         // these links will only be shown to those who can admin the modules
         if(xarModGetUserVar('modules', 'expertlist')){

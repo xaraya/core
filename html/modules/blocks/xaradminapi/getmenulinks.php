@@ -21,11 +21,7 @@ function blocks_adminapi_getmenulinks()
 {
     $menulinks = array();
     if (xarSecurityCheck('EditBlock', 0)) {
-      $menulinks[] = Array('url'   => xarModURL('blocks',
-                                                   'admin',
-                                                   'overview'),
-                              'title' => xarML('Blocks Overview'),
-                              'label' => xarML('Overview'));
+ 
         $menulinks[] = array(
             'url'   => xarModURL('blocks', 'admin', 'view_instances'),
             'title' => xarML('View or edit all block instances'),

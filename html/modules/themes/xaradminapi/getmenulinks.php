@@ -22,12 +22,6 @@ function themes_adminapi_getmenulinks()
     // Security Check
     if (!xarSecurityCheck('AdminTheme',0)) return;
 
-    // Generate security key - redundant here TODO: remove
-    // $data['authid'] = xarSecGenAuthKey();
-    $menulinks[] = Array('url' => xarModURL('themes','admin','overview'),
-    'title' => xarML('Themes Overview'),
-    'label' => xarML('Overview'));
-
     $menulinks[] = array(   'url'   => xarModURL('themes', 'admin', 'list'),
     'title' => xarML('View installed themes on the system'),
     'label' => xarML('View Themes'));
