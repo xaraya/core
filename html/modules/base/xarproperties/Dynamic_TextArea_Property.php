@@ -76,10 +76,10 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         extract($data);
 
         // Prepare 
-        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
+        $data['value'] = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
         // TODO: the way the template is organized now, this only works when an id is set.
         $data['rows']  = !empty($rows) ? $rows : $this->rows;
-        $data['cols']     = !empty($cols) ? $cols : $this->cols;
+        $data['cols']  = !empty($cols) ? $cols : $this->cols;
 
         // Let parent deal with the rest
         return parent::showInput($data);

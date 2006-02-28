@@ -21,6 +21,7 @@ class Dynamic_Username_Property extends Dynamic_Property
     {
         parent::__construct($args);
         $this->tplmodule = 'roles';
+        $this->template = 'username';
     }
 
     static function getRegistrationInfo()
@@ -60,50 +61,25 @@ class Dynamic_Username_Property extends Dynamic_Property
         }
     }
 
-//    function showInput($name = '', $value = null, $id = '', $tabindex = '')
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (empty($value)) {
-            $value = xarUserGetVar('uid');
-        }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        $data = array();
-
+        extract($data);
+        if (!isset($value)) $value = $this->value;
+        if (empty($value))  $value = xarUserGetVar('uid');
+        
         try {
             $user = xarUserGetVar('name', $value);
-
-            if (empty($user))
-                $user = xarUserGetVar('uname', $value);
+            if (empty($user)) $user = xarUserGetVar('uname', $value);
         } catch (NotFoundExceptions $e) {
             // Nothing to do?
         }
 
-        if ($value > 1) {
+        if ($value > 1) { // Why the 1 here?
             $data['linkurl'] = xarModURL('roles','user','display', array('uid' => $value));
         }
         $data['user'] = xarVarprepForDisplay($user);
         $data['value']= $value;
-        $data['name'] = $name;
-        $data['id']   = $id;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showinput', $data);
+        return parent::showInput($data);
     }
 
     function showOutput($args = array())

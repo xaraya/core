@@ -13,8 +13,8 @@
  * Dynamic Passbox property
  * @author mikespub <mikespub@xaraya.com>
  */
-
-class Dynamic_PassBox_Property extends Dynamic_Property // Why not textbox?
+include_once 'modules/base/xarproperties/Dynamic_TextBox_Property.php';
+class Dynamic_PassBox_Property extends Dynamic_TextBox_Property
 {
     public $size = 25;
     public $maxlength = 254;
@@ -79,12 +79,10 @@ class Dynamic_PassBox_Property extends Dynamic_Property // Why not textbox?
         }
     }
 
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
+        extract($data);
         
-        $data = array();
-
         if (empty($maxlength) && isset($this->max)) {
             $this->maxlength = $this->max;
             if ($this->size > $this->maxlength) {
@@ -92,23 +90,10 @@ class Dynamic_PassBox_Property extends Dynamic_Property // Why not textbox?
             }
         }
 
-        $data['name']     = !empty($name) ? $name : 'dd_'.$this->id;
-        $data['id']       = !empty($id)   ? $id   : 'dd_'.$this->id;
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['tabindex'] = !empty($tabindex) ? $tabindex  : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
-        $data['size']     = !empty($size) ? $size : $this->size;
         $data['confirm']  = !empty($confirm) ? true : false;
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showinput', $data);
+        return parent::showInput($data);
     }
 
     function showOutput($value = null)
