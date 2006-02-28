@@ -81,9 +81,9 @@ class Dynamic_Calendar_Property extends Dynamic_Property
 
     function showInput($data = array())
     {
-        if (!isset($data['value'])) {
-            $value = $this->value;
-        }
+        if (!isset($data['value'])) $value = $this->value;
+        if (!isset($data['id'])) $data['id'] = $this->id;
+
         // default time is unspecified
         if (empty($value)) {
             $value = -1;

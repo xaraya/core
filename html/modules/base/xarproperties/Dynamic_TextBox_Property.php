@@ -100,31 +100,6 @@ class Dynamic_TextBox_Property extends Dynamic_Property
         return parent::showInput($data);
     }
 
-    function showOutput($args = array())
-    {
-        extract($args);
-
-        if (isset($value)) {
-            $value=xarVarPrepHTMLDisplay($value);
-        } else {
-            $value=xarVarPrepHTMLDisplay($this->value);
-        }
-        $data=array();
-
-        $data['value'] = $value;
-
-        // allow template override by child classes (or in BL tags/API calls)
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
-
-    }
-
     // check validation for allowed min/max length (or values)
     function parseValidation($validation = '')
     {

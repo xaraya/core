@@ -45,7 +45,7 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         $a2 = new PropertyRegistration();
         $a2->id   = 5;
         $a2->name = 'textarea_large';
-        $a2->desc = 'Medium Text Area';
+        $a2->desc = 'Large Text Area';
         $a2->args = array('rows' => 20);
 
         // Composite property registration.
@@ -83,27 +83,6 @@ class Dynamic_TextArea_Property extends Dynamic_Property
 
         // Let parent deal with the rest
         return parent::showInput($data);
-    }
-
-    function showOutput($args = array())
-    {
-        extract($args);
-        $data = array();
-
-        if (isset($value)) {
-            $data['value'] = xarVarPrepHTMLDisplay($value);
-        } else {
-            $data['value'] = xarVarPrepHTMLDisplay($this->value);
-        }
-        
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
     }
 
     // check validation for allowed rows/cols (or values)

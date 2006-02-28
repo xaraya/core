@@ -103,7 +103,7 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
             $template = $this->getTemplate();
         }
 
-        return xarTplProperty($module, $template, 'showinput', $data);
+        return xarTplProperty($module, $template, 'showoutput', $data);
     }
 }
 ?>
