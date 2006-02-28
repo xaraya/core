@@ -38,7 +38,7 @@
 
     </ul>
 
-<h4><xar:mlstring>View All</xar:mlstring></h4>
+<a name="list" title="list"><h4><xar:mlstring>View All</xar:mlstring></h4></a>
 
     <p>
         <xar:mlstring>The View All option at default setup displays a list of all modules that are available, 
