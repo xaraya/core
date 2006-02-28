@@ -30,6 +30,7 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
     {
         parent::__construct($args);
         $this->tplmodule = 'roles';
+        $this->template = 'aim';
     }
 
     static function getRegistrationInfo()

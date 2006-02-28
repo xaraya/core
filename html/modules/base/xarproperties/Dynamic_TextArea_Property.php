@@ -24,6 +24,9 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         $this->tplmodule = 'base';
         $this->template = 'textarea';
 
+        if(isset($args['rows'])) $this->rows = $args['rows'];
+        if(isset($args['cols'])) $this->cols = $args['cols'];
+
         // check validation for allowed rows/cols (or values)
         if (!empty($this->validation)) {
             $this->parseValidation($this->validation);
@@ -53,6 +56,7 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         $info->desc    = 'Small Text Area';
         $info->args    = array('rows' => 2);
         $info->aliases = array($a1, $a2);
+
         return $info;
     }
 
@@ -61,12 +65,11 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         if (!isset($value)) {
             $value = $this->value;
         }
-    // TODO: allowable HTML ?
+        // TODO: allowable HTML ?
         $this->value = $value;
         return true;
     }
 
-//   function showInput($name = '', $value = null, $rows = 8, $cols = 50, $wrap = 'soft', $id = '', $tabindex = '')
     function showInput($args = array())
     {
         extract($args);
@@ -82,6 +85,7 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
         $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+        // TODO: the way the template is organized now, this only works when an id is set.
         $data['rows']     = !empty($rows) ? $rows : $this->rows;
         $data['cols']     = !empty($cols) ? $cols : $this->cols;
 

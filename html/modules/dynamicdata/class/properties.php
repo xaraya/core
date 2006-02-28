@@ -743,7 +743,7 @@ class Dynamic_Property
     function getModule()
     {
         $info = $this->getBasePropertyInfo();
-        $modulename = $info['tplmodule'];
+        $modulename = empty($this->tplmodule) ? $info['tplmodule'] : $this->tplmodule;
         return $modulename;
     }
     /**
@@ -753,9 +753,9 @@ class Dynamic_Property
      */
     function getTemplate()
     {
-        $info = $this->getBasePropertyInfo();
-//        die(var_dump($info));
-        $template = empty($this->template) ? $info['name'] : $info['template'];
+        // If not specified, default to the registered name of the prop
+        $info = $this->getRegistrationInfo();
+        $template = empty($this->template) ? $info->name : $this->template;
         return $template;
     }
 }
