@@ -28,21 +28,16 @@ class Dynamic_FieldType_Property extends Dynamic_Select_Property
     {
         parent::__construct($args);
 
-        if( !isset($args['skipInit']) || ($args['skipInit'] != true) )
-        {
-
-            if (count($this->options) == 0) {
-                $proptypes = Dynamic_Property_Master::getPropertyTypes();
-                if (!isset($proptypes)) {
-                    $proptypes = array();
-                }
-                foreach ($proptypes as $propid => $proptype) {
-                    $this->options[] = array('id' => $propid, 'name' => $proptype['label']);
-                }
+        if (count($this->options) == 0) {
+            $proptypes = Dynamic_Property_Master::getPropertyTypes();
+            if (!isset($proptypes)) $proptypes = array();
+                
+            foreach ($proptypes as $propid => $proptype) {
+                $this->options[] = array('id' => $propid, 'name' => $proptype['label']);
             }
         }
     }
-    
+        
     static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();

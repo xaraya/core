@@ -19,6 +19,7 @@ class Dynamic_Array_Property extends Dynamic_Property
     {
         parent::__construct($args);
         $this->tplmodule = 'base';
+        $this->template = 'array';
 
         // check validation for list of fields (optional)
         if (!empty($this->validation) && strchr($this->validation,';')) {
@@ -60,12 +61,9 @@ class Dynamic_Array_Property extends Dynamic_Property
 
     function showInput($data = array())
     {
-        if (!isset($data['value'])) {
-            $value = $this->value;
-        }
-        if (isset($data['fields'])) {
-            $this->fields = $data['fields'];
-        }
+        if (!isset($data['value'])) $value = $this->value;
+        if (isset($data['fields'])) $this->fields = $data['fields'];
+        
         if (empty($value)) {
             $value = array('');
         } elseif (!is_array($value)) {
