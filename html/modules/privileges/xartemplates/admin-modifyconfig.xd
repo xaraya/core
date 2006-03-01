@@ -130,7 +130,9 @@
                     <xar:mlstring>Warning: This setting affects the way privileges work on your site. If changed you should retest all the privileges on your site.</xar:mlstring>
                 </div>
                 </xar:comment>
-                <legend>
+             </fieldset>
+            <fieldset>
+               <legend>
                     <xar:mlstring>
                         Last Resort
                     </xar:mlstring>

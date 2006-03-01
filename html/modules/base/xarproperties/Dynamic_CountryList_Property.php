@@ -61,7 +61,6 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
 
         return true;
     }
-
    /**
     * Country list according to ISO 3166
     *

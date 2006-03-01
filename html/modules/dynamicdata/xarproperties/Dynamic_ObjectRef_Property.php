@@ -37,11 +37,8 @@ class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
     var $display_prop = 'name';       // Name of the property we want to use for displaying.
     
     function __construct($args) {
-        parent::__construct($args);
         $this->template = 'objectref';
         $this->tplmodule = 'dynamic_data';
-    }
-
     static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();

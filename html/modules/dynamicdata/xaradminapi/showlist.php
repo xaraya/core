@@ -1,7 +1,6 @@
 <?php
 /**
  * List items in a template
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -22,15 +21,7 @@ function dynamicdata_adminapi_showlist($args)
 {
     extract($args);
 
-    // optional layout for the template
-    if (empty($layout)) {
-        $layout = 'default';
-    }
-    // or optional template, if you want e.g. to handle individual fields
-    // differently for a specific module / item type
-    if (empty($template)) {
-        $template = '';
-    }
+    $current = xarModAPIFunc('dynamicdata','user','setcontext',$args);
 
     // we got everything via template parameters
     if (isset($items) && is_array($items)) {
@@ -113,7 +104,6 @@ function dynamicdata_adminapi_showlist($args)
         // get active properties only (+ not the display only ones)
         $status = 1;
     }
-
     // join a module table to a dynamic object
     if (empty($join)) {
         $join = '';
@@ -144,10 +134,10 @@ function dynamicdata_adminapi_showlist($args)
                                            'table' => $table,
                                            'catid' => $catid,
                                            'groupby' => $groupby,
-                                           'status' => $status));
+                                           'status' => $status,
+                                           'extend'  => !empty($extend)));
     $object->getItems();
 
-    return $object->showList(array('layout'   => $layout,
-                                   'template' => $template));
+    return $object->showList();
 }
 ?>

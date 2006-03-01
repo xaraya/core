@@ -116,7 +116,6 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         $data['jsID']       = str_replace(array('[', ']'), '_', $data['id']);
         // $data['timeval']    = $timeval;
         $data['value']      = $value;
-
         return parent::showInput($data);
     }
 
