@@ -83,7 +83,8 @@ function &xarDBGetConn($index=0)
 {
     // we only want to return the first connection here
     // perhaps we'll add linked list capabilities to this soon
-    return xarDB::$connections[$index];
+    $tmp =& xarDB::getConn($index);
+    return $tmp;
 }
 
 /**
@@ -117,11 +118,8 @@ function &xarDBNewConn($args = NULL)
     if($persistent) $flags |= xarDB::PERSISTENT;
 
     $conn = null;
-    $conn = xarDB::getConnection($dsn,$flags);
-    // Store the connection for global access.
-    xarDB::$connections[] =& $conn;
-
-    xarLogMessage("New connection created, now serving " . count(xarDB::$connections) . " connections");
+    $conn = xarDB::getConnection($dsn,$flags); // cached on dsn hash, so no worries
+    xarLogMessage("New connection created, now serving " . count(xarDB::$count) . " connections");
     return $conn;
 }
 
@@ -205,7 +203,7 @@ function &xarDBNewDataDict(&$dbconn, $mode = 'READONLY')
  */
 function xarDBGetHost()
 {
-    return $GLOBALS['xarDB_systemArgs']['databaseHost'];
+    return xarDB::getHost();
 }
 
 /**
@@ -216,7 +214,7 @@ function xarDBGetHost()
  */
 function xarDBGetType()
 {
-    return $GLOBALS['xarDB_systemArgs']['databaseType'];
+    return xarDB::getType();
 }
 
 /**
@@ -227,7 +225,7 @@ function xarDBGetType()
  */
 function xarDBGetName()
 {
-    return $GLOBALS['xarDB_systemArgs']['databaseName'];
+    return xarDB::getName();
 }
 
 /**
