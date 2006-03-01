@@ -39,6 +39,14 @@ revisit later on before trusting the branch to be released or used.
   content was sensitive you might wanna reverse it in your templates
   too.
 * where applicable all pn compatibility has been removed.
+* The distinction between system and site table mapping have been
+  removed from core. A fullblown alternative has not yet been
+  provided, but we know that just doing system/site mapping is not
+  enough
+  (that said: the table sharing, which is by far the prominent use can
+  be solved very easily by defining views in the backend, we can/should
+  certainly consider adapting the installer to create additional sites
+  into an existing installation.
 
 !!!REFACTORING LIST:
 List of things which need to be refactored before starting the actual

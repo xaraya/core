@@ -547,33 +547,21 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
     switch($type) {
     case 'modvar':
     default:
-        // Takes the right table basing on module mode
-        if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-            $module_varstable = $tables['system/module_vars'];
-        } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-            $module_varstable = $tables['site/module_vars'];
-        }
-
+        $module_varstable = $tables['module_vars'];
         $query = "SELECT xar_name, xar_value FROM $module_varstable WHERE xar_modid = ?";
         $bindvars = array((int)$modBaseInfo['systemid']);
         break;
      case 'moditemvar':
-        // Takes the right table basing on module mode
-        if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-            $module_itemvarstable = $tables['system/module_itemvars'];
-        } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-            $module_itemvarstable = $tables['site/module_itemvars'];
-        }
-        unset($modvarid);
-        $modvarid = xarModGetVarId($modName, $name);
-        if (!$modvarid) return;
+         $module_itemvarstable = $tables['module_itemvars'];
+         unset($modvarid);
+         $modvarid = xarModGetVarId($modName, $name);
+         if (!$modvarid) return;
 
-        $query = "SELECT xar_value FROM $module_itemvarstable WHERE xar_mvid = ? AND xar_itemid = ?";
-        $bindvars = array((int)$modvarid, (int)$itemid);
-        break;
+         $query = "SELECT xar_value FROM $module_itemvarstable WHERE xar_mvid = ? AND xar_itemid = ?";
+         $bindvars = array((int)$modvarid, (int)$itemid);
+         break;
     case 'configvar':
         $config_varsTable = $tables['config_vars'];
-
         $query = "SELECT xar_value FROM $config_varsTable WHERE xar_name=?";
         $bindvars = array($name);
         break;
@@ -666,14 +654,8 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
 
     switch($type) {
         case 'modvar':
-            default:
-            // Takes the right table basing on module mode
-            if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-                $module_varstable = $tables['system/module_vars'];
-            } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-                $module_varstable = $tables['site/module_vars'];
-            }
-
+        default:
+            $module_varstable = $tables['module_vars'];
             // We need the variable id
             unset($modvarid);
             $modvarid = xarModGetVarId($modName, $name);
@@ -693,12 +675,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
 
             break;
         case 'moditemvar':
-            // Takes the right table basing on module mode
-            if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-                $module_itemvarstable = $tables['system/module_itemvars'];
-            } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-                $module_itemvarstable = $tables['site/module_itemvars'];
-            }
+            $module_itemvarstable = $tables['module_itemvars'];
 
             // Get the default setting to compare the value against.
             $modsetting = xarModGetVar($modName, $name);
@@ -805,34 +782,17 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = '
             // Delete all the user variables first
             $modvarid = xarModGetVarId($modName, $name);
             if($modvarid) {
-                // Takes the right table basing on module mode
-                if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-                    $module_itemvarstable = $tables['system/module_itemvars'];
-                } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-                    $module_itemvarstable = $tables['site/module_itemvars'];
-                }
-
+                $module_itemvarstable = $tables['module_itemvars'];
                 $query = "DELETE FROM $module_itemvarstable WHERE xar_mvid = ?";
                 $dbconn->execute($query,array((int)$modvarid));
             }
-            // Takes the right table basing on module mode
-            if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-                $module_varstable = $tables['system/module_vars'];
-            } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-                $module_varstable = $tables['site/module_vars'];
-            }
+            $module_varstable = $tables['module_vars'];
             // Now delete the module var itself
             $query = "DELETE FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
             $dbconn->execute($query,array((int)$modBaseInfo['systemid'], $name));
             break;
         case 'moditemvar':
-            // Takes the right table basing on module mode
-            if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-                $module_itemvarstable = $tables['system/module_itemvars'];
-            } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-                $module_itemvarstable = $tables['site/module_itemvars'];
-            }
-
+            $module_itemvarstable = $tables['module_itemvars'];
             // We need the variable id
             $modvarid = xarModGetVarId($modName, $name);
             if(!$modvarid) return;
