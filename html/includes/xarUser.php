@@ -68,7 +68,7 @@ function xarUser_init($args, $whatElseIsGoingLoaded)
                     'realms'           => $systemPrefix . '_security_realms',
                     'rolemembers' => $systemPrefix . '_rolemembers');
 
-    xarDB_importTables($tables);
+    xarDB::importTables($tables);
 
     $GLOBALS['xarUser_authenticationModules'] = $args['authenticationModules'];
 

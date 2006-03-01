@@ -127,7 +127,7 @@ function xarMod_init($args, $whatElseIsGoingLoaded)
     $tables['hooks']           = $systemPrefix . '_hooks';
     $tables['themes']          = $systemPrefix . '_themes';
 
-    xarDB_importTables($tables);
+    xarDB::importTables($tables);
 
     // Subsystem initialized, register a handler to run when the request is over
     //register_shutdown_function ('xarMod__shutdown_handler');
@@ -1856,7 +1856,7 @@ function xarMod__loadDbInfo($modName, $modDir)
     $tablefunc = $modName . '_' . 'xartables';
 
     if (function_exists($tablefunc)) {
-        xarDB_importTables($tablefunc());
+        xarDB::importTables($tablefunc());
     }
 
     $loadedDbInfoCache[$modName] = true;

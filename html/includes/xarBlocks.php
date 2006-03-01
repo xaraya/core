@@ -34,7 +34,7 @@ function xarBlock_init($args, $whatElseIsGoingLoaded)
         'block_types'           => $systemPrefix . '_block_types'
     );
 
-    xarDB_importTables($tables);
+    xarDB::importTables($tables);
 
     // Decide if we will be using the output caching system
     $outputCachePath = xarCoreGetVarDirPath() . '/cache/output/';

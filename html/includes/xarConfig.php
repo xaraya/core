@@ -36,7 +36,7 @@ function xarConfig_init($args, $whatElseIsGoingLoaded)
 
     $tables = array('config_vars' => $sitePrefix . '_config_vars');
 
-    xarDB_importTables($tables);
+    xarDB::importTables($tables);
     
     // Pre-load site config variables
     // CHECKME: see if this doesn't hurt install before activating :-)

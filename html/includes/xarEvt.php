@@ -211,7 +211,7 @@ function xarEvt__notify($modName, $eventName, $value, $modDir = NULL)
         try {
             xarInclude($xartabfile, XAR_INCLUDE_ONCE);
             $xartabfunc = $modName.'_xartables';
-            if (function_exists($xartabfunc)) xarDB_importTables($xartabfunc());
+            if (function_exists($xartabfunc)) xarDB::importTables($xartabfunc());
         } catch(FileNotFoundException $e) {
             // no worries
         }
