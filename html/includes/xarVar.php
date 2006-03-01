@@ -363,57 +363,57 @@ function xarVarValidate($validation, &$subject, $supress = false, $name='')
 
 /**
  * Check if the value of a variable is available in cache or not
- * See the documentation of protected xarCore_IsCached for details
+ * See the documentation of protected xarCore::isCached for details
  *
  * @access public
  */
 function xarVarIsCached($cacheKey, $name)
 {
-    return xarCore_IsCached($cacheKey, $name);
+    return xarCore::isCached($cacheKey, $name);
 }
 
 /**
  * Get the value of a cached variable
- * See the documentation of protected xarCore_GetCached for details
+ * See the documentation of protected xarCore::getCached for details
  *
  * @access public
  */
 function xarVarGetCached($cacheKey, $name)
 {
-    return xarCore_GetCached($cacheKey, $name);
+    return xarCore::getCached($cacheKey, $name);
 }
 
 /**
  * Set the value of a cached variable
- * See the documentation of protected xarCore_SetCached for details
+ * See the documentation of protected xarCore::setCached for details
  *
  * @access public
  */
 function xarVarSetCached($cacheKey, $name, $value)
 {
-    return xarCore_SetCached($cacheKey, $name, $value);
+    return xarCore::setCached($cacheKey, $name, $value);
 }
 
 /**
  * Delete a cached variable
- * See the documentation of protected xarCore_DelCached for details
+ * See the documentation of protected xarCore::delCached for details
  *
  * @access public
  */
 function xarVarDelCached($cacheKey, $name)
 {
-    return xarCore_DelCached($cacheKey, $name);
+    return xarCore::delCached($cacheKey, $name);
 }
 
 /**
  * Flush a particular cache (e.g. for session initialization)
- * See the documentation of protected xarCore_FlushCached for details
+ * See the documentation of protected xarCore::flushCached for details
  *
  * @access public
  */
 function xarVarFlushCached($cacheKey)
 {
-    return xarCore_FlushCached($cacheKey);
+    return xarCore::flushCached($cacheKey);
 }
 
 

@@ -375,8 +375,8 @@ function xarModGetVarId($modName, $name)
     $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) return; // throw back
 
-    if (xarCore_IsCached('Mod.GetVarID', $modBaseInfo['name'] . $name)) {
-        return xarCore_GetCached('Mod.GetVarID', $modBaseInfo['name'] . $name);
+    if (xarCore::isCached('Mod.GetVarID', $modBaseInfo['name'] . $name)) {
+        return xarCore::getCached('Mod.GetVarID', $modBaseInfo['name'] . $name);
     }
 
     $dbconn =& xarDBGetConn();
@@ -395,7 +395,7 @@ function xarModGetVarId($modName, $name)
     $modvarid = $result->getInt(1);
     $result->Close();
 
-    xarCore_SetCached('Mod.GetVarID', $modName . $name, $modvarid);
+    xarCore::setCached('Mod.GetVarID', $modName . $name, $modvarid);
 
     return $modvarid;
 }
@@ -437,13 +437,13 @@ function xarModGetInfo($modRegId, $type = 'module')
     switch($type) {
         case 'module':
             default:
-            if (xarCore_IsCached('Mod.Infos', $modRegId)) {
-                return xarCore_GetCached('Mod.Infos', $modRegId);
+                if (xarCore::isCached('Mod.Infos', $modRegId)) {
+                    return xarCore::getCached('Mod.Infos', $modRegId);
             }
             break;
         case 'theme':
-            if (xarCore_IsCached('Theme.Infos', $modRegId)) {
-                return xarCore_GetCached('Theme.Infos', $modRegId);
+            if (xarCore::isCached('Theme.Infos', $modRegId)) {
+                return xarCore::getCached('Theme.Infos', $modRegId);
             }
             break;
     }
@@ -563,11 +563,11 @@ function xarModGetInfo($modRegId, $type = 'module')
 
     switch($type) {
         case 'module':
-            default:
-            xarCore_SetCached('Mod.Infos', $modRegId, $modInfo);
+        default:
+            xarCore::setCached('Mod.Infos', $modRegId, $modInfo);
             break;
         case 'theme':
-            xarCore_SetCached('Theme.Infos', $modRegId, $modInfo);
+            xarCore::setCached('Theme.Infos', $modRegId, $modInfo);
             break;
     }
 
@@ -1562,8 +1562,8 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
 {
     if (empty($modOsDir)) throw new EmptyParameterException('modOsDir');
 
-    if (empty($GLOBALS['xarMod_noCacheState']) && xarCore_IsCached('Mod.getFileInfos', $modOsDir)) {
-        return xarCore_GetCached('Mod.getFileInfos', $modOsDir);
+    if (empty($GLOBALS['xarMod_noCacheState']) && xarCore::isCached('Mod.getFileInfos', $modOsDir)) {
+        return xarCore::getCached('Mod.getFileInfos', $modOsDir);
     }
     // Log it when it didnt came from cache
     xarLogMessage("xarMod_getFileInfo ". $modOsDir ." / " . $type);
@@ -1644,7 +1644,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
     }
     $FileInfo['bl_version']     = isset($version['bl_version'])     ? $version['bl_version'] : false;
 
-    xarCore_SetCached('Mod.getFileInfos', $modOsDir, $FileInfo);
+    xarCore::setCached('Mod.getFileInfos', $modOsDir, $FileInfo);
 
     return $FileInfo;
 }
@@ -1683,8 +1683,8 @@ function xarMod_getBaseInfo($modName, $type = 'module')
         $checkNoState = 'xarTheme_noCacheState';
     }
 
-    if (empty($GLOBALS[$checkNoState]) && xarCore_IsCached($cacheCollection, $modName)) {
-        return xarCore_GetCached($cacheCollection, $modName);
+    if (empty($GLOBALS[$checkNoState]) && xarCore::isCached($cacheCollection, $modName)) {
+        return xarCore::getCached($cacheCollection, $modName);
     }
     // Log it when it doesnt come from the cache
     xarLogMessage("xarMod_getBaseInfo ". $modName ." / ". $type);
@@ -1727,7 +1727,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     if (empty($modBaseInfo['state'])) {
         $modBaseInfo['state'] = XARMOD_STATE_UNINITIALISED;
     }
-    xarCore_SetCached($cacheCollection, $name, $modBaseInfo);
+    xarCore::setCached($cacheCollection, $name, $modBaseInfo);
 
     return $modBaseInfo;
 }
@@ -1759,11 +1759,11 @@ function xarMod_getVarsByModule($modName)
     $result =& $stmt->executeQuery(array($modBaseInfo['systemid']),ResultSet::FETCHMODE_ASSOC);
 
     while ($result->next()) {
-        xarCore_SetCached('Mod.Variables.' . $modName, $result->getString('xar_name'), $result->get('xar_value'));
+        xarCore::setCached('Mod.Variables.' . $modName, $result->getString('xar_name'), $result->get('xar_value'));
     }
     $result->Close();
 
-    xarCore_SetCached('Mod.GetVarsByModule', $modName, true);
+    xarCore::setCached('Mod.GetVarsByModule', $modName, true);
     return true;
 }
 
@@ -1807,16 +1807,16 @@ function xarMod_getVarsByName($varName, $type = 'module')
     // Add module variables to cache
     while ($result->next()) {
         // Name is the first field, value the second, cache them like that too.
-        xarCore_SetCached('Mod.Variables.' . $result->getString(1), $varName, $result->get(2));
+        xarCore::setCached('Mod.Variables.' . $result->getString(1), $varName, $result->get(2));
     }
     $result->Close();
     switch($type) {
         case 'module':
-            default:
-            xarCore_SetCached('Mod.GetVarsByName', $varName, true);
+        default:
+            xarCore::setCached('Mod.GetVarsByName', $varName, true);
             break;
         case 'theme':
-            xarCore_SetCached('Theme.GetVarsByName', $varName, true);
+            xarCore::setCached('Theme.GetVarsByName', $varName, true);
             break;
     }
 

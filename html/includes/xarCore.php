@@ -511,8 +511,8 @@ function xarCore_getSystemVar($name)
 {
     static $systemVars = NULL;
 
-    if (xarCore_IsCached('Core.getSystemVar', $name)) {
-        return xarCore_GetCached('Core.getSystemVar', $name);
+    if (xarCore::isCached('Core.getSystemVar', $name)) {
+        return xarCore::getCached('Core.getSystemVar', $name);
     }
     if (!isset($systemVars)) {
         $fileName = xarCoreGetVarDirPath() . '/' . XARCORE_CONFIG_FILE;
@@ -527,7 +527,7 @@ function xarCore_getSystemVar($name)
         throw new VariableNotFoundException($name,"xarCore_getSystemVar: Unknown system variable: '#(1)'.");
     }
 
-    xarCore_SetCached('Core.getSystemVar', $name, $systemVars[$name]);
+    xarCore::setCached('Core.getSystemVar', $name, $systemVars[$name]);
 
     return $systemVars[$name];
 }
@@ -596,69 +596,6 @@ function xarCoreIsApiAllowed($apiType)
 }
 
 /**
-* Get the value of a cached variable
- *
- * @access protected
- * @param key string the key identifying the particular cache you want to access
- * @param name string the name of the variable in that particular cache
- * @return mixed value of the variable, or void if variable isn't cached
- */
-function xarCore_IsCached($cacheKey, $name)
-{
-    return xarCore::isCached($cacheKey, $name);
-}
-
-/**
-* Get the value of a cached variable
- *
- * @access protected
- * @param key string the key identifying the particular cache you want to access
- * @param name string the name of the variable in that particular cache
- * @return mixed value of the variable, or void if variable isn't cached
- */
-function xarCore_GetCached($cacheKey, $name)
-{
-    return xarCore::getCached($cacheKey, $name);
-}
-
-/**
-* Set the value of a cached variable
- *
- * @access protected
- * @param key string the key identifying the particular cache you want to access
- * @param name string the name of the variable in that particular cache
- * @param value string the new value for that variable
- * @return void
- */
-function xarCore_SetCached($cacheKey, $name, $value)
-{
-    return xarCore::setCached($cacheKey, $name, $value);
-}
-
-/**
-* Delete a cached variable
- *
- * @access protected
- * @param key the key identifying the particular cache you want to access
- * @param name the name of the variable in that particular cache
- */
-function xarCore_DelCached($cacheKey, $name)
-{
-    return xarCore::delCached($cacheKey, $name);
-}
-
-/**
-* Flush a particular cache (e.g. for session initialization)
- *
- * @access protected
- * @param cacheKey the key identifying the particular cache you want to wipe out
- */
-function xarCore_FlushCached($cacheKey)
-{
-    return xarCore::flushCached($cacheKey);
-}
-
-/**
 * Checks if a certain function was disabled in php.ini
  *
  * xarCore.php function
@@ -702,11 +639,23 @@ class xarDebug
  * Convenience class for keeping track of core cached stuff
  *
  * @todo this is closer to the caching subsystem than here
+ * @todo i dont like the array shuffling
+ * @todo separate file
+ * @todo this is not xarCore, this is xarCoreCache
  */
 class xarCore
 {
     private static $cacheCollection = array();
 
+    /**
+     * Check if a variable value is cached
+     *
+     * @access protected
+     * @param key string the key identifying the particular cache you want to access
+     * @param name string the name of the variable in that particular cache
+     * @return mixed value of the variable, or false if variable isn't cached
+     * @todo make sure we can make this protected
+     */
     public static function isCached($cacheKey, $name)
     {
         if (!isset(self::$cacheCollection[$cacheKey])) {
@@ -716,6 +665,15 @@ class xarCore
         return isset(self::$cacheCollection[$cacheKey][$name]);
     }
 
+    /**
+     * Get the value of a cached variable
+     *
+     * @access protected
+     * @param key string the key identifying the particular cache you want to access
+     * @param name string the name of the variable in that particular cache
+     * @return mixed value of the variable, or null if variable isn't cached
+     * @todo make sure we can make this protected
+     */
     public static function getCached($cacheKey, $name)
     {
         if (!isset(self::$cacheCollection[$cacheKey][$name])) {
@@ -724,6 +682,16 @@ class xarCore
         return self::$cacheCollection[$cacheKey][$name];
     }
 
+    /**
+     * Set the value of a cached variable
+     *
+     * @access protected
+     * @param key string the key identifying the particular cache you want to access
+     * @param name string the name of the variable in that particular cache
+     * @param value string the new value for that variable
+     * @return null
+     * @todo make sure we can make this protected
+     */
     public static function setCached($cacheKey, $name, $value)
     {
         if (!isset(self::$cacheCollection[$cacheKey])) {
@@ -732,6 +700,16 @@ class xarCore
         self::$cacheCollection[$cacheKey][$name] = $value;
     }
 
+    /**
+     * Delete a cached variable
+     *
+     * @access protected
+     * @param key the key identifying the particular cache you want to access
+     * @param name the name of the variable in that particular cache
+     * @return null
+     * @todo remove the double whammy
+     * @todo make sure we can make this protected
+     */
     public static function delCached($cacheKey, $name)
     {
         if (isset(self::$cacheCollection[$cacheKey][$name])) {
@@ -746,6 +724,14 @@ class xarCore
         }
     }
 
+    /**
+     * Flush a particular cache (e.g. for session initialization)
+     *
+     * @access protected
+     * @param cacheKey the key identifying the particular cache you want to wipe out
+     * @returns null
+     * @todo make sure we can make this protected
+     */
     public static function flushCached($cacheKey)
     {
         if(isset(self::$cacheCollection[$cacheKey])) {

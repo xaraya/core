@@ -131,7 +131,7 @@ class ExceptionRendering
         if (!class_exists("xarRoles"))
             return false;
         
-        if(!xarCore_GetCached('installer','installing')) {
+        if(!xarCore::getCached('installer','installing')) {
             // Dependency!
             $roles = new xarRoles();
             $admins = "Administrators";

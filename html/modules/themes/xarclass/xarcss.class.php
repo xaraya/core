@@ -97,7 +97,7 @@ class xarCSS
         } elseif ($this->scope == 'block') {
             // we basically need to find out which module this block belongs to 
             // and then procede as with module scope
-            $this->base = xarCore_GetCached('Security.Variables', 'currentmodule');
+            $this->base = xarVarGetCached('Security.Variables', 'currentmodule');
         }
         if (isset($media)) $this->media                 = $media;
         if (isset($module)) $this->base                 = $module;

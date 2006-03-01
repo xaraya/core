@@ -133,7 +133,7 @@ function xarConfig_loadVars()
 
     while ($result->next()) {
         $newval = unserialize($result->getString('xar_value'));
-        xarCore_SetCached($cacheCollection, $result->getString('xar_name'), $newval);
+        xarCore::setCached($cacheCollection, $result->getString('xar_name'), $newval);
     }
     $result->Close();
 
@@ -141,7 +141,7 @@ function xarConfig_loadVars()
     //(It's a escape when you are caching at a higher level than that of the
     //individual variables)
     //This whole cache systems must be remade to a central one.    
-    xarCore_SetCached($cacheCollection, 0, true);
+    xarCore::setCached($cacheCollection, 0, true);
 
     return true;
 }
