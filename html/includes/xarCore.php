@@ -17,10 +17,11 @@
  * should be upgraded on each release for
  * better control on config settings
  *
+ * @todo seems that defines are hoggers, move them to class constants?
  */
 define('XARCORE_VERSION_NUM', 'none');
 define('XARCORE_VERSION_ID',  'Xaraya 2 series');
-define('XARCORE_VERSION_SUB', 'adam_baum');
+define('XARCORE_VERSION_SUB', 'etiam infractus');
 
 /*
  * System dependencies for (optional) systems
@@ -604,11 +605,7 @@ function xarCoreIsApiAllowed($apiType)
  */
 function xarCore_IsCached($cacheKey, $name)
 {
-    if (!isset(xarCore::$cacheCollection[$cacheKey])) {
-        xarCore::$cacheCollection[$cacheKey] = array();
-        return false;
-    }
-    return isset(xarCore::$cacheCollection[$cacheKey][$name]);
+    return xarCore::isCached($cacheKey, $name);
 }
 
 /**
@@ -621,10 +618,7 @@ function xarCore_IsCached($cacheKey, $name)
  */
 function xarCore_GetCached($cacheKey, $name)
 {
-    if (!isset(xarCore::$cacheCollection[$cacheKey][$name])) {
-        return;
-    }
-    return xarCore::$cacheCollection[$cacheKey][$name];
+    return xarCore::getCached($cacheKey, $name);
 }
 
 /**
@@ -638,10 +632,7 @@ function xarCore_GetCached($cacheKey, $name)
  */
 function xarCore_SetCached($cacheKey, $name, $value)
 {
-    if (!isset(xarCore::$cacheCollection[$cacheKey])) {
-        xarCore::$cacheCollection[$cacheKey] = array();
-    }
-    xarCore::$cacheCollection[$cacheKey][$name] = $value;
+    return xarCore::setCached($cacheKey, $name, $value);
 }
 
 /**
@@ -653,16 +644,7 @@ function xarCore_SetCached($cacheKey, $name, $value)
  */
 function xarCore_DelCached($cacheKey, $name)
 {
-    if (isset(xarCore::$cacheCollection[$cacheKey][$name])) {
-        unset(xarCore::$cacheCollection[$cacheKey][$name]);
-    }
-    //This unsets the key that said that collection had already been retrieved
-
-    //Seems to have caused a problem because of the expected behaviour of the old code
-    //FIXME: Change how this works for a mainstream function, stop the hacks
-    if (isset(xarCore::$cacheCollection[$cacheKey][0])) {
-        unset(xarCore::$cacheCollection[$cacheKey][0]);
-    }
+    return xarCore::delCached($cacheKey, $name);
 }
 
 /**
@@ -673,9 +655,7 @@ function xarCore_DelCached($cacheKey, $name)
  */
 function xarCore_FlushCached($cacheKey)
 {
-    if (isset(xarCore::$cacheCollection[$cacheKey])) {
-        unset(xarCore::$cacheCollection[$cacheKey]);
-    }
+    return xarCore::flushCached($cacheKey);
 }
 
 /**
@@ -725,6 +705,52 @@ class xarDebug
  */
 class xarCore
 {
-    public static $cacheCollection = array();
+    private static $cacheCollection = array();
+
+    public static function isCached($cacheKey, $name)
+    {
+        if (!isset(self::$cacheCollection[$cacheKey])) {
+            self::$cacheCollection[$cacheKey] = array();
+            return false;
+        }
+        return isset(self::$cacheCollection[$cacheKey][$name]);
+    }
+
+    public static function getCached($cacheKey, $name)
+    {
+        if (!isset(self::$cacheCollection[$cacheKey][$name])) {
+            return;
+        }
+        return self::$cacheCollection[$cacheKey][$name];
+    }
+
+    public static function setCached($cacheKey, $name, $value)
+    {
+        if (!isset(self::$cacheCollection[$cacheKey])) {
+            self::$cacheCollection[$cacheKey] = array();
+        }
+        self::$cacheCollection[$cacheKey][$name] = $value;
+    }
+
+    public static function delCached($cacheKey, $name)
+    {
+        if (isset(self::$cacheCollection[$cacheKey][$name])) {
+            unset(self::$cacheCollection[$cacheKey][$name]);
+        }
+        //This unsets the key that said that collection had already been retrieved
+        
+        //Seems to have caused a problem because of the expected behaviour of the old code
+        //FIXME: Change how this works for a mainstream function, stop the hacks
+        if (isset(self::$cacheCollection[$cacheKey][0])) {
+            unset(self::$cacheCollection[$cacheKey][0]);
+        }
+    }
+
+    public static function flushCached($cacheKey)
+    {
+        if(isset(self::$cacheCollection[$cacheKey])) {
+            unset(self::$cacheCollection[$cacheKey]);
+        }
+    }
 }
 ?>
