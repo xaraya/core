@@ -164,10 +164,10 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
      */
     function showOutput($data = array())
     {
-        extract($data);
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
+        }
 
-        if (!isset($value)) $value = $this->value;
-        
         $data['year'] = '';
         $data['mon']  = '';
         $data['day']  = '';
@@ -176,17 +176,17 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
         $data['sec']  = '';
 
         // default time is unspecified
-        if (empty($value)) {
-            $value = '';
+        if (empty($data['value'])) {
+            $data['value'] = '';
 
         } elseif ($this->validation == 'date' &&
-            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2})/', $value, $matches)) {
+            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2})/', $data['value'], $matches)) {
             $data['year'] = $matches[1];
             $data['mon']  = $matches[2];
             $data['day']  = $matches[3];
 
         } elseif ($this->validation == 'datetime' &&
-            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})/', $value, $matches)) {
+            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})/', $data['value'], $matches)) {
             $data['year'] = $matches[1];
             $data['mon']  = $matches[2];
             $data['day']  = $matches[3];
@@ -196,18 +196,15 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
         }
         $data['format']   = $this->validation;
 
-        if (!isset($dateformat)) {
+        if (!isset($data['dateformat'])) {
             if ($this->validation == 'date') {
-                $dateformat = '%a, %d %B %Y %Z';
+                $data['dateformat'] = '%a, %d %B %Y %Z';
             } else {
-                $dateformat = '%a, %d %B %Y %H:%M:%S %Z';
+                $data['dateformat'] = '%a, %d %B %Y %H:%M:%S %Z';
             }
         }
 
-        $data['dateformat'] = $dateformat;
-        $data['value']      = $value;
-
         return parent::showOutput($data);
-    } /* showOutput */
+    }
 }
 ?>
