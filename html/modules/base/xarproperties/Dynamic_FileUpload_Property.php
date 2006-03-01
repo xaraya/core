@@ -43,6 +43,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
     {
         parent::__construct($args);
         $this->tplmodule = 'base';
+        $this->template  = 'fileupload';
 
         // Determine if the uploads module is hooked to the calling module
         // if so, we will use the uploads modules functionality

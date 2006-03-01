@@ -24,7 +24,8 @@ class Dynamic_Image_Property extends Dynamic_TextBox_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->template = 'image';
+        $this->tplmodule = 'base';
+        $this->template  = 'image';
     }
 
     static function getRegistrationInfo()

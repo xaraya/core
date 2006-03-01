@@ -28,7 +28,8 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->template = 'imagelist';
+        $this->tplmodule = 'base';
+        $this->template  = 'imagelist';
 
         if (empty($this->basedir) && !empty($this->validation)) {
             $this->parseValidation($this->validation);
