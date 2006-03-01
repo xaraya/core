@@ -1789,7 +1789,7 @@ function xarMod_getVarsByName($varName, $type = 'module')
     switch($type) {
         case 'module':
         default:
-            $ownertbl = $tables['modules']
+            $ownertbl = $tables['modules'];
             break;
         case 'theme':
             $ownertbl = $tables['themes'];
