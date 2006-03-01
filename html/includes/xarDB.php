@@ -20,7 +20,6 @@
  * @access protected
  * @global array xarDB_systemArgs
  * @global object dbconn database connection object
- * @global array xarTables database tables used by Xaraya
  * @param string args[databaseType] database type to use
  * @param string args[databaseHost] database hostname
  * @param string args[databaseName] database name
@@ -44,11 +43,7 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     // We do this here so we can remove customisation from creole lib.
     xarDB::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
     
-    if($args['doConnect']) {
-        $dbconn =& xarDBNewConn();
-    }
-
-    $GLOBALS['xarDB_tables'] = array();
+    if($args['doConnect']) $dbconn =& xarDBNewConn();
 
     $systemPrefix = $args['systemTablePrefix'];
     $sitePrefix   = $args['siteTablePrefix'];
@@ -56,8 +51,8 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     // BlockLayout Template Engine Tables
     // FIXME: this doesnt belong here
     // Not trivial to move out though
-    $GLOBALS['xarDB_tables']['template_tags'] = $systemPrefix . '_template_tags';
-
+    $table['template_tags'] = $systemPrefix . '_template_tags';
+    xarDB::importTables($table);
     // All initialized register the shutdown function
     //register_shutdown_function('xarDB__shutdown_handler');
 
@@ -134,12 +129,12 @@ function &xarDBNewConn($args = NULL)
  * Get an array of database tables
  *
  * @access public
- * @global array xarDB_tables array of database tables
  * @return array array of database tables
  */
 function &xarDBGetTables()
 {
-    return $GLOBALS['xarDB_tables'];
+    $tmp =& xarDB::getTables();
+    return $tmp;
 }
 
 /**
@@ -264,12 +259,10 @@ function xarDBGetSiteTablePrefix()
  * Import module tables in the array of known tables
  *
  * @access protected
- * @global xartable array
  */
 function xarDB_importTables($tables)
 {
-    assert('is_array($tables)');
-    $GLOBALS['xarDB_tables'] = array_merge($GLOBALS['xarDB_tables'], $tables);
+    xarDB::importTables($tables);
 }
 
 
