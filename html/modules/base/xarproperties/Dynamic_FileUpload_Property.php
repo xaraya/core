@@ -323,19 +323,10 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         $data['upname']     = $upname;
         $data['size']       = !empty($size) ? $size : $this->size;
         $data['maxsize']    = !empty($maxsize) ? $maxsize : $this->maxsize;
-        $data['tabindex']   = !empty($tabindex) ? $tabindex  : 0;
-        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)',  $this->invalid) : '';
         $data['allowed']    = $allowed;
         $data['extensions'] = $extensions;
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showinput', $data);
+        parent::showInput($data);
     }
 
     function showOutput($args = array())

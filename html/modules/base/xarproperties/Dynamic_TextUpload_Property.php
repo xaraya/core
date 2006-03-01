@@ -254,8 +254,6 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         $data['rows']     = !empty($rows) ? $rows : $this->rows;
         $data['cols']     = !empty($cols) ? $cols : $this->cols;
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         $data['maxsize']  = !empty($maxsize) ? $maxsize: $this->maxsize;
         $data['size']     = !empty($size) ? $size : $this->size;
         
