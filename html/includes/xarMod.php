@@ -117,21 +117,13 @@ function xarMod_init($args, $whatElseIsGoingLoaded)
 
     // Modules Support Tables
     $systemPrefix = xarDBGetSystemTablePrefix();
-    $sitePrefix = xarDBGetSiteTablePrefix();
 
-    // New tables
-    $tables = array('modules' => $systemPrefix . '_modules',
-                    'system/module_vars' => $systemPrefix . '_module_vars',
-                    'site/module_vars' => $sitePrefix . '_module_vars',
-                    'system/module_itemvars' => $systemPrefix . '_module_itemvars',
-                    'site/module_itemvars' => $sitePrefix . '_module_itemvars',
-                    'themes' => $systemPrefix . '_themes');
-
-    // JC -- Question are these depreciated?
-    // Old tables
-    $tables['module_vars']           = $systemPrefix . '_module_vars';
-    $tables['module_itemvars']       = $systemPrefix . '_module_itemvars';
-    $tables['hooks']                 = $systemPrefix . '_hooks';
+    // How we want it
+    $tables['modules']         = $systemPrefix . '_modules';
+    $tables['module_vars']     = $systemPrefix . '_module_vars';
+    $tables['module_itemvars'] = $systemPrefix . '_module_itemvars';
+    $tables['hooks']           = $systemPrefix . '_hooks';
+    $tables['themes']          = $systemPrefix . '_themes';
 
     xarDB_importTables($tables);
 
@@ -218,13 +210,8 @@ function xarModDelAllVars($modName)
     $tables =& xarDBGetTables();
 
     // Takes the right table basing on module mode
-    if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_varstable = $tables['system/module_vars'];
-        $module_itemvarstable = $tables['system/module_itemvars'];
-    } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_varstable = $tables['site/module_vars'];
-        $module_itemvarstable = $tables['site/module_itemvars'];
-    }
+    $module_varstable     = $tables['module_vars'];
+    $module_itemvarstable = $tables['module_itemvars'];
 
     // PostGres (allows only one table in DELETE)
     // MySql: multiple table delete only from 4.0 up
@@ -394,11 +381,7 @@ function xarModGetVarId($modName, $name)
     $tables =& xarDBGetTables();
 
     // Takes the right table basing on module mode
-    if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_varstable = $tables['system/module_vars'];
-    } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_varstable = $tables['site/module_vars'];
-    }
+    $module_varstable = $tables['module_vars'];
 
     $query = "SELECT xar_id FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
     $stmt = $dbconn->prepareStatement($query);
@@ -1767,11 +1750,7 @@ function xarMod_getVarsByModule($modName)
     $tables =& xarDBGetTables();
 
     // Takes the right table basing on module mode
-    if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_varstable = $tables['system/module_vars'];
-    } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_varstable = $tables['site/module_vars'];
-    }
+    $module_varstable = $tables['module_vars'];
 
     $query = "SELECT xar_name, xar_value FROM $module_varstable WHERE xar_modid = ?";
     $stmt =& $dbconn->prepareStatement($query);
@@ -1805,40 +1784,30 @@ function xarMod_getVarsByName($varName, $type = 'module')
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
+    $varstable = $tables['module_vars'];
 
     switch($type) {
-    case 'module':
-    default:
-
-        // NOTE: Not trivial to determine whether we should fetch from system
-        //       or site table because this spans all modules / themes
-        // <mrb> the prefix thing should be rethought, it's not scalable (at least for sites)
-
-        // Takes the right table basing on module mode
-        $module_varstable = $tables['system/module_vars'];
-        $module_table = $tables['modules'];
-
-        $query = "SELECT mods.xar_name, vars.xar_value
-                      FROM $module_table mods , $module_varstable vars
-                      WHERE mods.xar_id = vars.xar_modid AND
-                            vars.xar_name = ?";
-        break;
-    case 'theme':
-        $theme_varsTable = $tables['system/theme_vars'];
-        $query = "SELECT xar_themeName, xar_value
-                  FROM   $theme_varsTable
-                  WHERE  xar_name = ?";
-        break;
+        case 'module':
+        default:
+            $ownertbl = $tables['modules']
+            break;
+        case 'theme':
+            $ownertbl = $tables['themes'];
+            break;
     }
+    $query = "SELECT  owner.xar_name, vars.xar_value
+              FROM    $ownertbl owner, $varstable vars
+              WHERE   owner.xar_id = vars.xar_modid AND 
+                      vars.xar_name = ?";
 
     $stmt =& $dbconn->prepareStatement($query);
     $result =& $stmt->executeQuery(array($varName),ResultSet::FETCHMODE_NUM);
 
     // Add module variables to cache
     while ($result->next()) {
+        // Name is the first field, value the second, cache them like that too.
         xarCore_SetCached('Mod.Variables.' . $result->getString(1), $varName, $result->get(2));
     }
-
     $result->Close();
     switch($type) {
         case 'module':
