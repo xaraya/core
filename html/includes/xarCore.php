@@ -439,16 +439,13 @@ function xarCoreGetVarDirPath()
  * Activates the debugger.
  *
  * @access public
- * @global integer xarDebug
- * @global integer xarDebug_sqlCalls
- * @global string xarDebug_startTime
  * @param integer flags bit mask for the debugger flags
  * @todo  a big part of this should be in the exception (error handling) subsystem.
  * @return void
  */
 function xarCoreActivateDebugger($flags)
 {
-    $GLOBALS['xarDebug'] = $flags;
+    xarDebug::$flags = $flags;
     if ($flags & XARDBG_INACTIVE) {
         // Turn off error reporting
         error_reporting(0);
@@ -468,9 +465,9 @@ function xarCoreActivateDebugger($flags)
         assert_options(ASSERT_WARNING,   1);    // Issue a php warning
         assert_options(ASSERT_BAIL,      0);    // Stop processing?
         assert_options(ASSERT_QUIET_EVAL,0);    // Quiet evaluation of assert condition?
-        $GLOBALS['xarDebug_sqlCalls'] = 0;
+        xarDebug::$sqlCalls = 0;
         $lmtime = explode(' ', microtime());
-        $GLOBALS['xarDebug_startTime'] = $lmtime[1] + $lmtime[0];
+        xarDebug::$startTime = $lmtime[1] + $lmtime[0];
     }
 }
 
@@ -478,15 +475,11 @@ function xarCoreActivateDebugger($flags)
  * Check if the debugger is active
  *
  * @access public
- * @global integer xarDebug
  * @return bool true if the debugger is active, false otherwise
  */
 function xarCoreIsDebuggerActive()
 {
-    if(isset($GLOBALS['xarDebug'])) {
-        return $GLOBALS['xarDebug'] & XARDBG_ACTIVE;
-    } else return false;
-
+    return xarDebug::$flags & XARDBG_ACTIVE;
 }
 
 /**
@@ -498,7 +491,7 @@ function xarCoreIsDebuggerActive()
  */
 function xarCoreIsDebugFlagSet($flag)
 {
-    return ($GLOBALS['xarDebug'] & XARDBG_ACTIVE) && ($GLOBALS['xarDebug'] & $flag);
+    return (xarDebug::$flags & XARDBG_ACTIVE) && (xarDebug::$flags & $flag);
 }
 
 /**
@@ -718,5 +711,16 @@ function xarFuncIsDisabled($funcName)
     }
 
     return (isset($disabled[$funcName]) ? true : false);
+}
+
+/**
+ * Convenience class
+ *
+ */
+class xarDebug
+{
+    public static $flags     = 0; // default off?
+    public static $sqlCalls  = 0; // Should be in flags imo
+    public static $startTime = 0; // Should not be here at all
 }
 ?>
