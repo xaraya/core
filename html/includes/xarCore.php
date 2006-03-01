@@ -598,42 +598,39 @@ function xarCoreIsApiAllowed($apiType)
 * Get the value of a cached variable
  *
  * @access protected
- * @global xarCore_cacheCollection array
  * @param key string the key identifying the particular cache you want to access
  * @param name string the name of the variable in that particular cache
  * @return mixed value of the variable, or void if variable isn't cached
  */
 function xarCore_IsCached($cacheKey, $name)
 {
-    if (!isset($GLOBALS['xarCore_cacheCollection'][$cacheKey])) {
-        $GLOBALS['xarCore_cacheCollection'][$cacheKey] = array();
+    if (!isset(xarCore::$cacheCollection[$cacheKey])) {
+        xarCore::$cacheCollection[$cacheKey] = array();
         return false;
     }
-    return isset($GLOBALS['xarCore_cacheCollection'][$cacheKey][$name]);
+    return isset(xarCore::$cacheCollection[$cacheKey][$name]);
 }
 
 /**
 * Get the value of a cached variable
  *
  * @access protected
- * @global xarCore_cacheCollection array
  * @param key string the key identifying the particular cache you want to access
  * @param name string the name of the variable in that particular cache
  * @return mixed value of the variable, or void if variable isn't cached
  */
 function xarCore_GetCached($cacheKey, $name)
 {
-    if (!isset($GLOBALS['xarCore_cacheCollection'][$cacheKey][$name])) {
+    if (!isset(xarCore::$cacheCollection[$cacheKey][$name])) {
         return;
     }
-    return $GLOBALS['xarCore_cacheCollection'][$cacheKey][$name];
+    return xarCore::$cacheCollection[$cacheKey][$name];
 }
 
 /**
 * Set the value of a cached variable
  *
  * @access protected
- * @global xarCore_cacheCollection array
  * @param key string the key identifying the particular cache you want to access
  * @param name string the name of the variable in that particular cache
  * @param value string the new value for that variable
@@ -641,32 +638,30 @@ function xarCore_GetCached($cacheKey, $name)
  */
 function xarCore_SetCached($cacheKey, $name, $value)
 {
-    if (!isset($GLOBALS['xarCore_cacheCollection'][$cacheKey])) {
-        $GLOBALS['xarCore_cacheCollection'][$cacheKey] = array();
+    if (!isset(xarCore::$cacheCollection[$cacheKey])) {
+        xarCore::$cacheCollection[$cacheKey] = array();
     }
-    $GLOBALS['xarCore_cacheCollection'][$cacheKey][$name] = $value;
+    xarCore::$cacheCollection[$cacheKey][$name] = $value;
 }
 
 /**
 * Delete a cached variable
  *
  * @access protected
- * @global xarCore_cacheCollection array
  * @param key the key identifying the particular cache you want to access
  * @param name the name of the variable in that particular cache
  */
 function xarCore_DelCached($cacheKey, $name)
 {
-    // TODO: check if we don't need to work with $GLOBALS here for some PHP ver
-    if (isset($GLOBALS['xarCore_cacheCollection'][$cacheKey][$name])) {
-        unset($GLOBALS['xarCore_cacheCollection'][$cacheKey][$name]);
+    if (isset(xarCore::$cacheCollection[$cacheKey][$name])) {
+        unset(xarCore::$cacheCollection[$cacheKey][$name]);
     }
     //This unsets the key that said that collection had already been retrieved
 
     //Seems to have caused a problem because of the expected behaviour of the old code
     //FIXME: Change how this works for a mainstream function, stop the hacks
-    if (isset($GLOBALS['xarCore_cacheCollection'][$cacheKey][0])) {
-        unset($GLOBALS['xarCore_cacheCollection'][$cacheKey][0]);
+    if (isset(xarCore::$cacheCollection[$cacheKey][0])) {
+        unset(xarCore::$cacheCollection[$cacheKey][0]);
     }
 }
 
@@ -674,14 +669,12 @@ function xarCore_DelCached($cacheKey, $name)
 * Flush a particular cache (e.g. for session initialization)
  *
  * @access protected
- * @global xarCore_cacheCollection array
  * @param cacheKey the key identifying the particular cache you want to wipe out
  */
 function xarCore_FlushCached($cacheKey)
 {
-    // TODO: check if we don't need to work with $GLOBALS here for some PHP ver
-    if (isset($GLOBALS['xarCore_cacheCollection'][$cacheKey])) {
-        unset($GLOBALS['xarCore_cacheCollection'][$cacheKey]);
+    if (isset(xarCore::$cacheCollection[$cacheKey])) {
+        unset(xarCore::$cacheCollection[$cacheKey]);
     }
 }
 
@@ -714,13 +707,24 @@ function xarFuncIsDisabled($funcName)
 }
 
 /**
- * Convenience class
+ * Convenience class for keeping track of debugger operation
  *
+ * @todo this is close to exceptions or logging than core, see also notes earlier
  */
 class xarDebug
 {
     public static $flags     = 0; // default off?
     public static $sqlCalls  = 0; // Should be in flags imo
     public static $startTime = 0; // Should not be here at all
+}
+
+/**
+ * Convenience class for keeping track of core cached stuff
+ *
+ * @todo this is closer to the caching subsystem than here
+ */
+class xarCore
+{
+    public static $cacheCollection = array();
 }
 ?>
