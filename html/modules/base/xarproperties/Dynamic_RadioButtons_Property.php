@@ -24,7 +24,8 @@ class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->template = 'radio';
+        $this->tplmodule = 'base';
+        $this->template  = 'radio';
     }
 
     static function getRegistrationInfo()

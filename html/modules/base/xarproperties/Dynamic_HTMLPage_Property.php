@@ -28,7 +28,8 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-
+        $this->tplmodule = 'base';
+        $this->template = 'webpage';
         // specify base directory in validation field
         if (empty($this->basedir) && !empty($this->validation)) {
             // Hack for passing this thing into transform hooks
@@ -77,19 +78,15 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
         return false;
     }
 
-//    function showInput($name = '', $value = null, $options = array(), $id = '', $tabindex = '')
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        $data = array();
-
-        if (!isset($value)) {
-            $value = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
         }
-        if (!isset($options) || count($options) == 0) {
-            $options = $this->getOptions();
+        if (!isset($data['options']) || count($data['options']) == 0) {
+            $data['options'] = $this->getOptions();
         }
-        if (count($options) == 0 && !empty($this->basedir)) {
+        if (count($data['options']) == 0 && !empty($this->basedir)) {
             $files = xarModAPIFunc('dynamicdata','admin','browse',
                                    array('basedir' => $this->basedir,
                                          'filetype' => $this->filetype));
@@ -104,28 +101,8 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
             }
             unset($files);
         }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
 
-        $data['name']    = $name;
-        $data['value']    = $value;
-        $data['id']      = $id;
-        $data['options'] = $options;
-        $data['tabindex']= !empty($tabindex) ? $tabindex : 0;
-        $data['invalid'] = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showinput', $data);
-
+        return parent::showInput($data);
     }
 
     function showOutput($args = array())

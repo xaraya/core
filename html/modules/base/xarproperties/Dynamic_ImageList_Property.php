@@ -77,19 +77,15 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
         return false;
     }
 
-//    function showInput($name = '', $value = null, $options = array(), $id = '', $tabindex = '')
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        $data = array();
-
-        if (!isset($value)) {
-            $value = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
         }
-        if (!isset($options) || count($options) == 0) {
-            $options = $this->getOptions();
+        if (!isset($data['options']) || count($data['options']) == 0) {
+            $data['options'] = $this->getOptions();
         }
-        if (count($options) == 0 && !empty($this->basedir)) {
+        if (count($data['options']) == 0 && !empty($this->basedir)) {
             $files = xarModAPIFunc('dynamicdata','admin','browse',
                                    array('basedir' => $this->basedir,
                                          'filetype' => $this->filetype));
@@ -99,34 +95,16 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
             natsort($files);
             array_unshift($files,'');
             foreach ($files as $file) {
-                $options[] = array('id' => $file,
+                $data['options'][] = array('id' => $file,
                                    'name' => $file);
             }
             unset($files);
         }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
 
         $data['basedir'] = $this->basedir;
         $data['baseurl'] = isset($this->baseurl) ? $this->baseurl : $this->basedir;
-        $data['name']    = $name;
-        $data['value']   = $value;
-        $data['id']      = $id;
-        $data['options'] = $options;
-        $data['tabindex']= !empty($tabindex) ? $tabindex : 0;
-        $data['invalid'] = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid)  : '';
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showinput', $data);
+        return parent::showInput($data);
     }
 
     function showOutput($args = array())
