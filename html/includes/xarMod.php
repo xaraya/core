@@ -33,6 +33,7 @@ class ModuleNotActiveException extends xarExceptions
 
 /**
  * State of modules
+ * @todo do we really need 13 module states?
  */
 define('XARMOD_STATE_UNINITIALISED', 1);
 define('XARMOD_STATE_INACTIVE', 2);
@@ -81,6 +82,7 @@ define('XARMOD_LOAD_ANYSTATE', 2);
 
 /*
  * Modules modes
+ * @todo get rid of these
  */
 define('XARMOD_MODE_SHARED', 1);
 define('XARMOD_MODE_PER_SITE', 2);
@@ -1762,7 +1764,6 @@ function xarMod_getVarsByModule($modName)
     $result->Close();
 
     xarCore_SetCached('Mod.GetVarsByModule', $modName, true);
-    break;
     return true;
 }
 

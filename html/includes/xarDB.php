@@ -44,9 +44,6 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     // We do this here so we can remove customisation from creole lib.
     xarDB::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
     
-    // Start the default connection
-    $GLOBALS['xarDB_connections'] = array();
-    
     if($args['doConnect']) {
         $dbconn =& xarDBNewConn();
     }
@@ -58,6 +55,7 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
 
     // BlockLayout Template Engine Tables
     // FIXME: this doesnt belong here
+    // Not trivial to move out though
     $GLOBALS['xarDB_tables']['template_tags'] = $systemPrefix . '_template_tags';
 
     // All initialized register the shutdown function
@@ -84,14 +82,13 @@ function xarDB__shutdown_handler()
  * Get a database connection
  *
  * @access public
- * @global array  xarDB_connections array of database connection objects
  * @return object database connection object
  */
 function &xarDBGetConn($index=0)
 {
     // we only want to return the first connection here
     // perhaps we'll add linked list capabilities to this soon
-    return $GLOBALS['xarDB_connections'][$index];
+    return xarDB::$connections[$index];
 }
 
 /**
@@ -127,9 +124,9 @@ function &xarDBNewConn($args = NULL)
     $conn = null;
     $conn = xarDB::getConnection($dsn,$flags);
     // Store the connection for global access.
-    $GLOBALS['xarDB_connections'][] =& $conn;
+    xarDB::$connections[] =& $conn;
 
-    xarLogMessage("New connection created, now serving " . count($GLOBALS['xarDB_connections']) . " connections");
+    xarLogMessage("New connection created, now serving " . count(xarDB::$connections) . " connections");
     return $conn;
 }
 
