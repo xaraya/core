@@ -21,6 +21,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
     {
         parent::__construct($args);
         $this->tplmodule = 'base';
+        $this->template = 'calendar';
     }
 
     static function getRegistrationInfo()
@@ -78,19 +79,9 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         return true;
     }
 
-//    function showInput($name = '', $value = null, $id = '', $tabindex = '')
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        $data = array();
-
-        if (empty($name)) {
-            $name = 'dd_'.$this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        if (!isset($value)) {
+        if (!isset($data['value'])) {
             $value = $this->value;
         }
         // default time is unspecified
@@ -105,7 +96,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
             // this returns -1 when we have an invalid date (e.g. on purpose)
             $value = strtotime($value);
         }
-        if (!isset($dateformat)) {
+        if (!isset($date['dateformat'])) {
             $dateformat = '%Y-%m-%d %H:%M:%S';
             if ($this->validation == 'date') {
                 $dateformat = '%Y-%m-%d';
@@ -122,20 +113,11 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         // $timeval = xarLocaleFormatDate($dateformat, $value);
         $data['baseuri']    = xarServerGetBaseURI();
         $data['dateformat'] = $dateformat;
-        $data['jsID']       = str_replace(array('[', ']'), '_', $id);
+        $data['jsID']       = str_replace(array('[', ']'), '_', $data['id']);
         // $data['timeval']    = $timeval;
-        $data['name']       = $name;
-        $data['id']         = $id;
         $data['value']      = $value;
-        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showinput', $data);
+        return parent::showInput($data);
     }
 
     function showOutput($args = array())

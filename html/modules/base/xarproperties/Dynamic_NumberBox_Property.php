@@ -77,10 +77,6 @@ class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
         return true;
     }
 
-    // default showInput() from Dynamic_TextBox_Property
-
-    // default showOutput() from Dynamic_TextBox_Property
-
     // Trick: use the parent method with a different template :-)
     function showValidation($args = array())
     {
@@ -93,8 +89,5 @@ class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
 
         return parent::showValidation($args);
     }
-
-    // default updateValidation() from Dynamic_TextBox_Property
 }
-
 ?>

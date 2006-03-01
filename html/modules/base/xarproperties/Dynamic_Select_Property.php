@@ -64,22 +64,16 @@ class Dynamic_Select_Property extends Dynamic_Property
         return false;
     }
 
-//    function showInput($name = '', $value = null, $options = array(), $id = '', $tabindex = '')
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        $data=array();
-
-        if (!isset($value)) {
+        if (!isset($data['value'])) {
             $data['value'] = $this->value;
-        } else {
-            $data['value'] = $value;
         }
-        if (!isset($options) || count($options) == 0) {
+
+        if (!isset($data['options']) || count($data['options']) == 0) {
             $data['options'] = $this->getOptions();
-        } else {
-            $data['options'] = $options;
         }
+
         // check if we need to add the current value to the options
         if (!empty($data['value']) && $this->override) {
             $found = false;
@@ -93,29 +87,10 @@ class Dynamic_Select_Property extends Dynamic_Property
                 $data['options'][] = array('id' => $data['value'], 'name' => $data['value']);
             }
         }
-        if (empty($name)) {
-            $data['name'] = 'dd_' . $this->id;
-        } else {
-            $data['name'] = $name;
-        }
-        if (empty($id)) {
-            $data['id'] = $data['name'];
-        } else {
-            $data['id']= $id;
-        }
+        
         $data['onchange'] = isset($onchange) ? $onchange : null; // let tpl decide what to do
 
-        $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showinput', $data);
-        //return $out;
+        return parent::showInput($data);
     }
 
     function showOutput($args = array())

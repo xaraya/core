@@ -21,6 +21,7 @@ class Dynamic_Hidden_Property extends Dynamic_Property
     {
         parent::__construct($args);
         $this->tplmodule = 'base';
+        $this->template = 'hidden';
     }
 
     static function getRegistrationInfo()
@@ -43,27 +44,6 @@ class Dynamic_Hidden_Property extends Dynamic_Property
         } else {
             return true;
         }
-    }
-
-//    function showInput($name = '', $value = null)
-    function showInput($args = array())
-    {
-        extract($args);
-        $data = array();
-
-        $data['name']     = !empty($name) ? $name : 'dd_'.$this->id;
-        $data['id']       = !empty($id)   ? $id   : 'dd_'.$this->id;
-        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showinput', $data);
     }
 
     function showOutput($args = array())

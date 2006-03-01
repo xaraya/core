@@ -58,20 +58,13 @@ class Dynamic_Array_Property extends Dynamic_Property
         return true;
     }
 
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        if (!isset($value)) {
+        if (!isset($data['value'])) {
             $value = $this->value;
         }
-        if (isset($fields)) {
-            $this->fields = $fields;
+        if (isset($data['fields'])) {
+            $this->fields = $data['fields'];
         }
         if (empty($value)) {
             $value = array('');
@@ -88,9 +81,7 @@ class Dynamic_Array_Property extends Dynamic_Property
         } else {
             $fieldlist = array_keys($value);
         }
-        $data = array();
-        $data['name']     = $name;
-        $data['id']       = $id;
+
         $data['value'] = array();
         foreach ($fieldlist as $field) {
             if (!isset($value[$field])) {
@@ -99,18 +90,10 @@ class Dynamic_Array_Property extends Dynamic_Property
                 $data['value'][$field] = xarVarPrepForDisplay($value[$field]);
             }
         }
-        $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        $data['size']     = !empty($size) ? $size : $this->size;
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
+        $data['size'] = !empty($size) ? $size : $this->size;
 
-        return xarTplProperty($module, $template, 'showinput', $data);
+        return parent::showInput($data);
     }
 
     function showOutput($args = array())

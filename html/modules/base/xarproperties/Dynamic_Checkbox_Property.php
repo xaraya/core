@@ -25,6 +25,7 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
     {
         parent::__construct($args);
         $this->tplmodule = 'base';
+        $this->template  = 'checkbox';
     }
 
     static function getRegistrationInfo()
@@ -66,37 +67,16 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
         return true;
     }
 
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
+        }
 
-        $data = array();
-
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        $data['value']    = $value;
-        $data['name']     = $name;
-        $data['id']       = $id;
         $data['checked']  = isset($checked) && $checked ? true : false;
         $data['onchange'] = !empty($onchange) ? $onchange : null; // let tpl decide what to do with it
-        $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid): '';
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showinput', $data);
+        return parent::showInput($data);
     }
 
     function showOutput($args = array())
