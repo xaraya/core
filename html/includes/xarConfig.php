@@ -117,9 +117,8 @@ function xarConfigSetVar($name, $value)
  * @access private
  * @return bool true on success, or void on database error
  * @raise DATABASE_ERROR
+ * @todo We need some way to delete configuration (useless without a certain module) variables from the table!!!
  */
-//FIXME: We need someway to delete configuration (useless without a certain module) 
-//variables from the table!!!
 function xarConfig_loadVars()
 {
     $cacheCollection = 'Config.Variables';
@@ -127,8 +126,7 @@ function xarConfig_loadVars()
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
-    $query = "SELECT xar_name,
-                     xar_value
+    $query = "SELECT xar_name, xar_value
                 FROM $tables[config_vars]";
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery(array(),ResultSet::FETCHMODE_ASSOC);

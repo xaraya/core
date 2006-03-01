@@ -88,7 +88,7 @@ design work can begin.
 
 !!!VIEWS support for backends:
 - mysql   : yes, since 5.0
-- sqlite  : yes, since forever
+- sqlite  : yes, since forever, but read only (which is a good thing,  but a pain when you're migrating )
 - postgres: yes, since 7.3 (at least)
 - mssql   : yes, no idea version wise
 - oracle  : ?

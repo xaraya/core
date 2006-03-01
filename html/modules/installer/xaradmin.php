@@ -364,7 +364,7 @@ function installer_admin_phase5()
     xarDB_init($systemArgs, $whatToLoad);
 
     // drop all the tables that have this prefix
-    //TODO: in the future need to replace this with a check further down the road
+    // TODO: in the future need to replace this with a check further down the road
     // for which modules are already installed
     
     if (isset($removetables) && $removetables) {
@@ -374,15 +374,22 @@ function installer_admin_phase5()
             $dbconn->begin();
             foreach($dbinfo->getTables() as $tbl) {
                 $table = $tbl->getName();
-                // Same prefix? drop it
                 if(strpos($table,'_') && (substr($table,0,strpos($table,'_')) == $dbPrefix)) {
-                    $sql = xarDBDropTable($table,$dbType);
-                    $dbconn->Execute($sql);
+                    // we have the same prefix.
+                    try {
+                        $sql = xarDBDropTable($table,$dbType);
+                        $dbconn->Execute($sql);
+                    } catch(SQLException $dropfail) {
+                        // retry with drop view
+                        // TODO: this should be transparent in the API
+                        $ddl = "DROP VIEW $table";
+                        $dbconn->Execute($ddl);
+                    }
                 }
             }
             $dbconn->commit();
-        } catch (SQLException $e) {
-            // FUTURE: this will also get raised for views which may be in the database.
+        } catch (Exception $e) {
+            // All other exceptions but the ones we already handled
             $dbconn->rollback();
             throw $e;
         }
