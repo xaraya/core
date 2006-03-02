@@ -67,7 +67,7 @@ function roles_user_usermenu($args)
             if (isset($hooks['dynamicdata'])) {
                 unset($hooks['dynamicdata']);
             }
-            
+
             $data = xarTplModule('roles','user', 'user_menu_form',
                                   array('authid'       => $authid,
                                   'withupload'   => $withupload,
