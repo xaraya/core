@@ -31,8 +31,8 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->tplmodule = "dynamic_data";
-        $this->template = "itemtype";
+        $this->tplmodule = "dynamicdata";
+//        $this->template = "itemtype";
 
         // options may be set in one of the child classes
         if (count($this->options) == 0 && !empty($this->validation)) {
