@@ -61,7 +61,6 @@ function xarVar_init($args, $whatElseIsGoingLoaded)
     /*
      * Initialise the variable cache
      */
-    $GLOBALS['xarVar_cacheCollection'] = array();
     $GLOBALS['xarVar_allowableHTML'] = xarConfigGetVar('Site.Core.AllowableHTML');
     $GLOBALS['xarVar_fixHTMLEntities'] = xarConfigGetVar('Site.Core.FixHTMLEntities');
 
@@ -599,6 +598,10 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
             // We finally found it, update the appropriate cache
             //Couldnt we serialize and unserialize all variables?
             //would that be too time expensive?
+            // <mrb> it doesnt matter, Creole does it automatically if it hasnt already happened.
+            // this also means that if you dont use the neat creole methods, you're on your own.
+            // basically, never serialize anything, let the middleware handle it. on top of that, dont put 
+            // complex datastructures in the db like that, since that sucks to begin with.
             $result->next();
             list($value) = $result->getRow();
             if($type == 'configvar') {
