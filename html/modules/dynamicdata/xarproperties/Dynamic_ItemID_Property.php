@@ -54,33 +54,6 @@ class Dynamic_ItemID_Property extends Dynamic_NumberBox_Property
         }
         return $this->validateValue($value);
     }
-
-// TODO: evaluate if we want some other output here
-//    function showInput($name = '', $value = null)
-    function showInput($args = array())
-    {
-        extract($args);
-        $data = array();
-
-        if (isset($value)) {
-            $data['value']= xarVarPrepForDisplay($value);
-        } else {
-            $data['value']= xarVarPrepForDisplay($this->value);
-        }
-
-        // Note: item ids are read-only, even (especially) in input forms
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showinput', $data);
-    }
-    // default methods from Dynamic_NumberBox_Property
-
 }
 
 ?>
