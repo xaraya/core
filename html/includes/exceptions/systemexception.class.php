@@ -18,16 +18,13 @@ class SystemException extends xarException
     {
         parent::xarException();
         $this->msg = $msg;
-        if (isset($GLOBALS['xarRequest_allowShortURLs']) &&
-            $GLOBALS['xarRequest_allowShortURLs'] &&
-            isset($GLOBALS['xarRequest_shortURLVariables']['module'])) {
-            $this->module = $GLOBALS['xarRequest_shortURLVariables']['module'];
+        if (isset(xarRequest::$allowShortURLs) &&
+            xarRequest::$allowShortURLs &&
+            isset(xarRequest::$shortURLVariables['module'])) {
+            $this->module = xarRequest::$shortURLVariables['module'];
         // Then check in $_GET
         } elseif (isset($_GET['module'])) {
             $this->module = $_GET['module'];
-        // Try to fallback to $HTTP_GET_VARS for older php versions
-        } elseif (isset($GLOBALS['HTTP_GET_VARS']['module'])) {
-            $this->module = $GLOBALS['HTTP_GET_VARS']['module'];
         // Nothing found, return void
         } else {
             $this->module = '';

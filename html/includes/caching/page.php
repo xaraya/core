@@ -194,7 +194,7 @@ function xarPageSetCached($cacheKey, $name, $value)
 
     $xarTpl_themeDir = xarTplGetThemeDir();
     
-    if (xarCore_IsCached('Page.Caching', 'nocache')) { return; }
+    if (xarCore::isCached('Page.Caching', 'nocache')) { return; }
     
     if ($xarPage_cacheHookedOnly) {
         $modName = substr($cacheKey, 0, strpos($cacheKey, '-'));

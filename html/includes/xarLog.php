@@ -151,17 +151,17 @@ function xarLog__shutdown_handler()
 {
      xarLogMessage("xarLog shutdown handler.");
     
-    // If the debugger was active, we can dispose it now.
-    if($GLOBALS['xarDebug'] & XARDBG_SQL) {
-        xarLogMessage("Total SQL queries: $GLOBALS[xarDebug_sqlCalls].");
-    }
+     // If the debugger was active, we can dispose it now.
+     if(xarDebug::$flags & XARDBG_SQL) {
+         xarLogMessage("Total SQL queries: $GLOBALS[xarDebug_sqlCalls].");
+     }
 
-    if ($GLOBALS['xarDebug'] & XARDBG_ACTIVE) {
-        $lmtime = explode(' ', microtime());
-        $endTime = $lmtime[1] + $lmtime[0];
-        $totalTime = ($endTime - $GLOBALS['xarDebug_startTime']);
-        xarLogMessage("Response was served in $totalTime seconds.");
-    }
+     if (xarDebug::$flags & XARDBG_ACTIVE) {
+         $lmtime = explode(' ', microtime());
+         $endTime = $lmtime[1] + $lmtime[0];
+         $totalTime = ($endTime - xarDebug::$startTime);
+         xarLogMessage("Response was served in $totalTime seconds.");
+     }
 
 //During register_shutdown, it's already too late.
 //fwrite presents problems during it.

@@ -86,10 +86,8 @@ class Dynamic_Select_Property extends Dynamic_Property
                 $data['options'][] = array('id' => $data['value'], 'name' => $data['value']);
             }
         }
-        
-        $data['onchange'] = isset($onchange) ? $onchange : null; // let tpl decide what to do
+        if(!isset($data['onchange'])) $data['onchange'] = null; // let tpl decide what to do
         $data['extraparams'] =!empty($extraparams) ? $extraparams : "";
-
         return parent::showInput($data);
     }
 

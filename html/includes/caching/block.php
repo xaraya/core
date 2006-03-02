@@ -66,8 +66,8 @@ function xarBlockIsCached($args)
     
     extract($args);
 
-    if (xarCore_IsCached('Blocks.Caching', 'settings')) {
-        $blocks = xarCore_GetCached('Blocks.Caching', 'settings');
+    if (xarCore::isCached('Blocks.Caching', 'settings')) {
+        $blocks = xarCore::getCached('Blocks.Caching', 'settings');
     } else {
         $systemPrefix = xarDBGetSystemTablePrefix();
         $blocksettings = $systemPrefix . '_cache_blocks';
@@ -103,7 +103,7 @@ function xarBlockIsCached($args)
         } else {
             $blocks = 'noSettings';
         }
-        xarCore_SetCached('Blocks.Caching', 'settings', $blocks);
+        xarCore::setCached('Blocks.Caching', 'settings', $blocks);
     }
     if (isset($blocks[$blockid])) {
         $noCache = $blocks[$blockid]['nocache'];

@@ -33,6 +33,7 @@ class ModuleNotActiveException extends xarExceptions
 
 /**
  * State of modules
+ * @todo do we really need 13 module states?
  */
 define('XARMOD_STATE_UNINITIALISED', 1);
 define('XARMOD_STATE_INACTIVE', 2);
@@ -81,6 +82,7 @@ define('XARMOD_LOAD_ANYSTATE', 2);
 
 /*
  * Modules modes
+ * @todo get rid of these
  */
 define('XARMOD_MODE_SHARED', 1);
 define('XARMOD_MODE_PER_SITE', 2);
@@ -117,23 +119,15 @@ function xarMod_init($args, $whatElseIsGoingLoaded)
 
     // Modules Support Tables
     $systemPrefix = xarDBGetSystemTablePrefix();
-    $sitePrefix = xarDBGetSiteTablePrefix();
 
-    // New tables
-    $tables = array('modules' => $systemPrefix . '_modules',
-                    'system/module_vars' => $systemPrefix . '_module_vars',
-                    'site/module_vars' => $sitePrefix . '_module_vars',
-                    'system/module_itemvars' => $systemPrefix . '_module_itemvars',
-                    'site/module_itemvars' => $sitePrefix . '_module_itemvars',
-                    'themes' => $systemPrefix . '_themes');
+    // How we want it
+    $tables['modules']         = $systemPrefix . '_modules';
+    $tables['module_vars']     = $systemPrefix . '_module_vars';
+    $tables['module_itemvars'] = $systemPrefix . '_module_itemvars';
+    $tables['hooks']           = $systemPrefix . '_hooks';
+    $tables['themes']          = $systemPrefix . '_themes';
 
-    // JC -- Question are these depreciated?
-    // Old tables
-    $tables['module_vars']           = $systemPrefix . '_module_vars';
-    $tables['module_itemvars']       = $systemPrefix . '_module_itemvars';
-    $tables['hooks']                 = $systemPrefix . '_hooks';
-
-    xarDB_importTables($tables);
+    xarDB::importTables($tables);
 
     // Subsystem initialized, register a handler to run when the request is over
     //register_shutdown_function ('xarMod__shutdown_handler');
@@ -218,13 +212,8 @@ function xarModDelAllVars($modName)
     $tables =& xarDBGetTables();
 
     // Takes the right table basing on module mode
-    if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_varstable = $tables['system/module_vars'];
-        $module_itemvarstable = $tables['system/module_itemvars'];
-    } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_varstable = $tables['site/module_vars'];
-        $module_itemvarstable = $tables['site/module_itemvars'];
-    }
+    $module_varstable     = $tables['module_vars'];
+    $module_itemvarstable = $tables['module_itemvars'];
 
     // PostGres (allows only one table in DELETE)
     // MySql: multiple table delete only from 4.0 up
@@ -386,19 +375,15 @@ function xarModGetVarId($modName, $name)
     $modBaseInfo = xarMod_getBaseInfo($modName);
     if (!isset($modBaseInfo)) return; // throw back
 
-    if (xarCore_IsCached('Mod.GetVarID', $modBaseInfo['name'] . $name)) {
-        return xarCore_GetCached('Mod.GetVarID', $modBaseInfo['name'] . $name);
+    if (xarCore::isCached('Mod.GetVarID', $modBaseInfo['name'] . $name)) {
+        return xarCore::getCached('Mod.GetVarID', $modBaseInfo['name'] . $name);
     }
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
     // Takes the right table basing on module mode
-    if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_varstable = $tables['system/module_vars'];
-    } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_varstable = $tables['site/module_vars'];
-    }
+    $module_varstable = $tables['module_vars'];
 
     $query = "SELECT xar_id FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
     $stmt = $dbconn->prepareStatement($query);
@@ -410,7 +395,7 @@ function xarModGetVarId($modName, $name)
     $modvarid = $result->getInt(1);
     $result->Close();
 
-    xarCore_SetCached('Mod.GetVarID', $modName . $name, $modvarid);
+    xarCore::setCached('Mod.GetVarID', $modName . $name, $modvarid);
 
     return $modvarid;
 }
@@ -452,13 +437,13 @@ function xarModGetInfo($modRegId, $type = 'module')
     switch($type) {
         case 'module':
             default:
-            if (xarCore_IsCached('Mod.Infos', $modRegId)) {
-                return xarCore_GetCached('Mod.Infos', $modRegId);
+                if (xarCore::isCached('Mod.Infos', $modRegId)) {
+                    return xarCore::getCached('Mod.Infos', $modRegId);
             }
             break;
         case 'theme':
-            if (xarCore_IsCached('Theme.Infos', $modRegId)) {
-                return xarCore_GetCached('Theme.Infos', $modRegId);
+            if (xarCore::isCached('Theme.Infos', $modRegId)) {
+                return xarCore::getCached('Theme.Infos', $modRegId);
             }
             break;
     }
@@ -578,11 +563,11 @@ function xarModGetInfo($modRegId, $type = 'module')
 
     switch($type) {
         case 'module':
-            default:
-            xarCore_SetCached('Mod.Infos', $modRegId, $modInfo);
+        default:
+            xarCore::setCached('Mod.Infos', $modRegId, $modInfo);
             break;
         case 'theme':
-            xarCore_SetCached('Theme.Infos', $modRegId, $modInfo);
+            xarCore::setCached('Theme.Infos', $modRegId, $modInfo);
             break;
     }
 
@@ -1577,8 +1562,8 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
 {
     if (empty($modOsDir)) throw new EmptyParameterException('modOsDir');
 
-    if (empty($GLOBALS['xarMod_noCacheState']) && xarCore_IsCached('Mod.getFileInfos', $modOsDir)) {
-        return xarCore_GetCached('Mod.getFileInfos', $modOsDir);
+    if (empty($GLOBALS['xarMod_noCacheState']) && xarCore::isCached('Mod.getFileInfos', $modOsDir)) {
+        return xarCore::getCached('Mod.getFileInfos', $modOsDir);
     }
     // Log it when it didnt came from cache
     xarLogMessage("xarMod_getFileInfo ". $modOsDir ." / " . $type);
@@ -1659,7 +1644,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
     }
     $FileInfo['bl_version']     = isset($version['bl_version'])     ? $version['bl_version'] : false;
 
-    xarCore_SetCached('Mod.getFileInfos', $modOsDir, $FileInfo);
+    xarCore::setCached('Mod.getFileInfos', $modOsDir, $FileInfo);
 
     return $FileInfo;
 }
@@ -1698,8 +1683,8 @@ function xarMod_getBaseInfo($modName, $type = 'module')
         $checkNoState = 'xarTheme_noCacheState';
     }
 
-    if (empty($GLOBALS[$checkNoState]) && xarCore_IsCached($cacheCollection, $modName)) {
-        return xarCore_GetCached($cacheCollection, $modName);
+    if (empty($GLOBALS[$checkNoState]) && xarCore::isCached($cacheCollection, $modName)) {
+        return xarCore::getCached($cacheCollection, $modName);
     }
     // Log it when it doesnt come from the cache
     xarLogMessage("xarMod_getBaseInfo ". $modName ." / ". $type);
@@ -1742,7 +1727,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     if (empty($modBaseInfo['state'])) {
         $modBaseInfo['state'] = XARMOD_STATE_UNINITIALISED;
     }
-    xarCore_SetCached($cacheCollection, $name, $modBaseInfo);
+    xarCore::setCached($cacheCollection, $name, $modBaseInfo);
 
     return $modBaseInfo;
 }
@@ -1767,23 +1752,18 @@ function xarMod_getVarsByModule($modName)
     $tables =& xarDBGetTables();
 
     // Takes the right table basing on module mode
-    if ($modBaseInfo['mode'] == XARMOD_MODE_SHARED) {
-        $module_varstable = $tables['system/module_vars'];
-    } elseif ($modBaseInfo['mode'] == XARMOD_MODE_PER_SITE) {
-        $module_varstable = $tables['site/module_vars'];
-    }
+    $module_varstable = $tables['module_vars'];
 
     $query = "SELECT xar_name, xar_value FROM $module_varstable WHERE xar_modid = ?";
     $stmt =& $dbconn->prepareStatement($query);
     $result =& $stmt->executeQuery(array($modBaseInfo['systemid']),ResultSet::FETCHMODE_ASSOC);
 
     while ($result->next()) {
-        xarCore_SetCached('Mod.Variables.' . $modName, $result->getString('xar_name'), $result->get('xar_value'));
+        xarCore::setCached('Mod.Variables.' . $modName, $result->getString('xar_name'), $result->get('xar_value'));
     }
     $result->Close();
 
-    xarCore_SetCached('Mod.GetVarsByModule', $modName, true);
-    break;
+    xarCore::setCached('Mod.GetVarsByModule', $modName, true);
     return true;
 }
 
@@ -1805,48 +1785,38 @@ function xarMod_getVarsByName($varName, $type = 'module')
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
+    $varstable = $tables['module_vars'];
 
     switch($type) {
-    case 'module':
-    default:
-
-        // NOTE: Not trivial to determine whether we should fetch from system
-        //       or site table because this spans all modules / themes
-        // <mrb> the prefix thing should be rethought, it's not scalable (at least for sites)
-
-        // Takes the right table basing on module mode
-        $module_varstable = $tables['system/module_vars'];
-        $module_table = $tables['modules'];
-
-        $query = "SELECT mods.xar_name, vars.xar_value
-                      FROM $module_table mods , $module_varstable vars
-                      WHERE mods.xar_id = vars.xar_modid AND
-                            vars.xar_name = ?";
-        break;
-    case 'theme':
-        $theme_varsTable = $tables['system/theme_vars'];
-        $query = "SELECT xar_themeName, xar_value
-                  FROM   $theme_varsTable
-                  WHERE  xar_name = ?";
-        break;
+        case 'module':
+        default:
+            $ownertbl = $tables['modules'];
+            break;
+        case 'theme':
+            $ownertbl = $tables['themes'];
+            break;
     }
+    $query = "SELECT  owner.xar_name, vars.xar_value
+              FROM    $ownertbl owner, $varstable vars
+              WHERE   owner.xar_id = vars.xar_modid AND 
+                      vars.xar_name = ?";
 
     $stmt =& $dbconn->prepareStatement($query);
     $result =& $stmt->executeQuery(array($varName),ResultSet::FETCHMODE_NUM);
 
     // Add module variables to cache
     while ($result->next()) {
-        xarCore_SetCached('Mod.Variables.' . $result->getString(1), $varName, $result->get(2));
+        // Name is the first field, value the second, cache them like that too.
+        xarCore::setCached('Mod.Variables.' . $result->getString(1), $varName, $result->get(2));
     }
-
     $result->Close();
     switch($type) {
         case 'module':
-            default:
-            xarCore_SetCached('Mod.GetVarsByName', $varName, true);
+        default:
+            xarCore::setCached('Mod.GetVarsByName', $varName, true);
             break;
         case 'theme':
-            xarCore_SetCached('Theme.GetVarsByName', $varName, true);
+            xarCore::setCached('Theme.GetVarsByName', $varName, true);
             break;
     }
 
@@ -1886,7 +1856,7 @@ function xarMod__loadDbInfo($modName, $modDir)
     $tablefunc = $modName . '_' . 'xartables';
 
     if (function_exists($tablefunc)) {
-        xarDB_importTables($tablefunc());
+        xarDB::importTables($tablefunc());
     }
 
     $loadedDbInfoCache[$modName] = true;

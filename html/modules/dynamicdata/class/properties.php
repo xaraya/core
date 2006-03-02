@@ -37,18 +37,10 @@ class Dynamic_Property_Master
         $dynamicprop = $xartable['dynamic_properties'];
 
         $bindvars = array();
-        $query = "SELECT xar_prop_name,
-                         xar_prop_label,
-                         xar_prop_type,
-                         xar_prop_id,
-                         xar_prop_default,
-                         xar_prop_source,
-                         xar_prop_status,
-                         xar_prop_order,
-                         xar_prop_validation,
-                         xar_prop_objectid,
-                         xar_prop_moduleid,
-                         xar_prop_itemtype
+        $query = "SELECT xar_prop_name, xar_prop_label, xar_prop_type,
+                         xar_prop_id, xar_prop_default, xar_prop_source,
+                         xar_prop_status, xar_prop_order, xar_prop_validation,
+                         xar_prop_objectid, xar_prop_moduleid, xar_prop_itemtype
                   FROM $dynamicprop ";
         if (isset($args['objectid'])) {
             $query .= " WHERE xar_prop_objectid = ?";
@@ -92,7 +84,6 @@ class Dynamic_Property_Master
             }
             $result->MoveNext();
         }
-
         $result->Close();
 
         return $properties;

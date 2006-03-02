@@ -211,7 +211,7 @@ function xarEvt__notify($modName, $eventName, $value, $modDir = NULL)
         try {
             xarInclude($xartabfile, XAR_INCLUDE_ONCE);
             $xartabfunc = $modName.'_xartables';
-            if (function_exists($xartabfunc)) xarDB_importTables($xartabfunc());
+            if (function_exists($xartabfunc)) xarDB::importTables($xartabfunc());
         } catch(FileNotFoundException $e) {
             // no worries
         }
@@ -272,8 +272,8 @@ function xarEvt__checkEvent($eventName)
  */
 function xarEvt__GetHandlersList()
 {
-    if (xarCore_IsCached('Evt.Handlers', 'list')) {
-        return xarCore_GetCached('Evt.Handlers', 'list');
+    if (xarCore::isCached('Evt.Handlers', 'list')) {
+        return xarCore::getCached('Evt.Handlers', 'list');
     }
     if (function_exists('xarConfigGetVar')) {
         $handlers = xarConfigGetVar('Site.Evt.Handlers');
@@ -294,7 +294,7 @@ function xarEvt__GetHandlersList()
         }
         $result->Close();
     }
-    xarCore_SetCached('Evt.Handlers', 'list', $handlers);
+    xarCore::setCached('Evt.Handlers', 'list', $handlers);
     return $handlers;
 }
 

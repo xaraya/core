@@ -245,8 +245,8 @@ function xarCacheGetDirSize($dir = FALSE)
 function xarCache_getParents()
 {
     $currentuid = xarSessionGetVar('uid');
-    if (xarCore_IsCached('User.Variables.'.$currentuid, 'parentlist')) {
-        return xarCore_GetCached('User.Variables.'.$currentuid, 'parentlist');
+    if (xarCore::isCached('User.Variables.'.$currentuid, 'parentlist')) {
+        return xarCore::getCached('User.Variables.'.$currentuid, 'parentlist');
     }
     $systemPrefix = xarDBGetSystemTablePrefix();
     $rolemembers = $systemPrefix . '_rolemembers';
@@ -260,7 +260,7 @@ function xarCache_getParents()
         $gidlist[] = $result->getInt(1);
     }
     $result->Close();
-    xarCore_SetCached('User.Variables.'.$currentuid, 'parentlist',$gidlist);
+    xarCore::setCached('User.Variables.'.$currentuid, 'parentlist',$gidlist);
     return $gidlist;
 }
 
