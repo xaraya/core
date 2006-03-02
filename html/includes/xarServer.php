@@ -15,9 +15,7 @@
  *
  * @author Marco Canini <marco@xaraya.com>
  * @access protected
- * @global xarRequest_allowShortURLs bool
  * @global xarRequest_defaultModule array
- * @global xarRequest_shortURLVariables array
  * @param args['generateShortURLs'] bool
  * @param args['defaultModuleName'] string
  * @param args['defaultModuleName'] string
@@ -28,14 +26,13 @@
 
 function xarSerReqRes_init($args, $whatElseIsGoingLoaded)
 {
-    $GLOBALS['xarServer_generateXMLURLs']       = $args['generateXMLURLs'];
-    $GLOBALS['xarRequest_allowShortURLs']       = $args['enableShortURLsSupport'];
-    $GLOBALS['xarRequest_defaultRequestInfo']   = array($args['defaultModuleName'],
-                                                        $args['defaultModuleType'],
-                                                        $args['defaultModuleFunction']);
-    $GLOBALS['xarRequest_shortURLVariables']    = array();
-    $GLOBALS['xarResponse_closeSession']        = $whatElseIsGoingLoaded & XARCORE_SYSTEM_SESSION;
-    $GLOBALS['xarResponse_redirectCalled']      = false;
+    xarServer::$generateXMLURLs = $args['generateXMLURLs'];
+    xarRequest::$allowShortURLs = $args['enableShortURLsSupport'];
+    xarRequest::$defaultRequestInfo  = array($args['defaultModuleName'],
+                                             $args['defaultModuleType'],
+                                             $args['defaultModuleFunction']);
+    xarResponse::$closeSession   = $whatElseIsGoingLoaded & XARCORE_SYSTEM_SESSION;
+    xarResponse::$redirectCalled = false;
 
     // Register the ServerRequest event
     xarEvt_registerEvent('ServerRequest');
@@ -287,7 +284,7 @@ function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target
     }
 
     if (!isset($generateXMLURL)) {
-        $generateXMLURL = $GLOBALS['xarServer_generateXMLURLs'];
+        $generateXMLURL = xarServer::$generateXMLURLs;
     }
 
     if (isset($target)) {
@@ -307,8 +304,6 @@ function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target
  * Get request variable
  *
  * @access public
- * @global xarRequest_shortURLVariables array
- * @global xarRequest_allowshortURLs bool
  * @param name string
  * @param allowOnlyMethod string
  * @return mixed
@@ -319,55 +314,40 @@ function xarRequestGetVar($name, $allowOnlyMethod = NULL)
 {
     if ($allowOnlyMethod == 'GET') {
         // Short URLs variables override GET variables
-        if ($GLOBALS['xarRequest_allowShortURLs'] && isset($GLOBALS['xarRequest_shortURLVariables'][$name])) {
-            $value = $GLOBALS['xarRequest_shortURLVariables'][$name];
-        // Then check in $_GET
+        if (xarRequest::$allowShortURLs && isset(xarRequest::$shortURLVariables[$name])) {
+            $value = xarRequest::$shortURLVariables[$name];
         } elseif (isset($_GET[$name])) {
+            // Then check in $_GET
             $value = $_GET[$name];
-        // Try to fallback to $HTTP_GET_VARS for older php versions
-        } elseif (isset($GLOBALS['HTTP_GET_VARS'][$name])) {
-            $value = $GLOBALS['HTTP_GET_VARS'][$name];
-        // Nothing found, return void
         } else {
+            // Nothing found, return void
             return;
         }
         $method = $allowOnlyMethod;
     } elseif ($allowOnlyMethod == 'POST') {
-        // First check in $_POST
         if (isset($_POST[$name])) {
+            // First check in $_POST
             $value = $_POST[$name];
-        // Try to fallback to $HTTP_POST_VARS for older php versions
-        } elseif (isset($GLOBALS['HTTP_POST_VARS'][$name])) {
-            $value = $GLOBALS['HTTP_POST_VARS'][$name];
-        // Nothing found, return void
         } else {
+            // Nothing found, return void
             return;
         }
         $method = $allowOnlyMethod;
     } else {
-
-        // Short URLs variables override GET and POST variables
-        if ($GLOBALS['xarRequest_allowShortURLs'] && isset($GLOBALS['xarRequest_shortURLVariables'][$name])) {
-            $value = $GLOBALS['xarRequest_shortURLVariables'][$name];
+        if (xarRequest::$allowShortURLs && isset(xarRequest::$shortURLVariables[$name])) {
+            // Short URLs variables override GET and POST variables
+            $value = xarRequest::$shortURLVariables[$name];
             $method = 'GET';
-        // Then check in $_POST
         } elseif (isset($_POST[$name])) {
+            // Then check in $_POST
             $value = $_POST[$name];
             $method = 'POST';
-        // Try to fallback to $HTTP_POST_VARS for older php versions
-        } elseif (isset($GLOBALS['HTTP_POST_VARS'][$name])) {
-            $value = $GLOBALS['HTTP_POST_VARS'][$name];
-            $method = 'POST';
-        // Then check in $_GET
         } elseif (isset($_GET[$name])) {
+            // Then check in $_GET
             $value = $_GET[$name];
             $method = 'GET';
-        // Try to fallback to $HTTP_GET_VARS for older php versions
-        } elseif (isset($GLOBALS['HTTP_GET_VARS'][$name])) {
-            $value = $GLOBALS['HTTP_GET_VARS'][$name];
-            $method = 'GET';
-        // Nothing found, return void
         } else {
+            // Nothing found, return void
             return;
         }
     }
@@ -377,7 +357,6 @@ function xarRequestGetVar($name, $allowOnlyMethod = NULL)
     if (get_magic_quotes_gpc()) {
         xarVar_stripSlashes($value);
     }
-
     return $value;
 }
 
@@ -402,7 +381,6 @@ function xarRequestGetVar($name, $allowOnlyMethod = NULL)
  *
  * @author Marco Canini, Michel Dalle
  * @access public
- * @global xarRequest_allowShortURLs bool
  * @global xarRequest_defaultModule array
  * @return array requested module, type and func
  * @todo <marco> Do we want to use xarVarCleanUntrusted here?
@@ -429,7 +407,7 @@ function xarRequestGetInfo()
     xarVarFetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $modType, 'user');
     xarVarFetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $funcName, 'main');
 
-    if ($GLOBALS['xarRequest_allowShortURLs'] && empty($modName) && ($path = xarServerGetVar('PATH_INFO')) != ''
+    if (xarRequest::$allowShortURLs && empty($modName) && ($path = xarServerGetVar('PATH_INFO')) != ''
         // IIS fix
         && $path != xarServerGetVar('SCRIPT_NAME')) {
         /*
@@ -489,7 +467,7 @@ function xarRequestGetInfo()
         $requestInfo = array($modName, $modType, $funcName);
     } else {
         // If $modName is still empty we use the default module/type/func to be loaded in that such case
-        $requestInfo = $GLOBALS['xarRequest_defaultRequestInfo'];
+        $requestInfo = xarRequest::$defaultRequestInfo;
     }
 
     return $requestInfo;
@@ -518,12 +496,11 @@ function xarRequestIsLocalReferer()
  * Set Short URL Variables
  *
  * @access public
- * @global xarRequest_shortURLVariables array
  * @param vars array
  */
 function xarRequest__setShortURLVars($vars)
 {
-    $GLOBALS['xarRequest_shortURLVariables'] = $vars;
+    xarRequest::$shortURLVariables = $vars;
 }
 
 /**
@@ -537,7 +514,6 @@ function xarRequest__setShortURLVars($vars)
 function xarRequest__resolveModuleAlias($aliasModName)
 {
     $aliasesMap = xarConfigGetVar('System.ModuleAliases');
-    //$aliasesMap = $GLOBALS['xarRequest_aliasesMap'];
 
     if (!empty($aliasesMap[$aliasModName])) {
         return $aliasesMap[$aliasModName];
@@ -552,7 +528,6 @@ function xarRequest__resolveModuleAlias($aliasModName)
  * Carry out a redirect
  *
  * @access public
- * @global xarResponse_redirectCalled bool
  * @param redirectURL string the URL to redirect to
  */
 function xarResponseRedirect($redirectURL)
@@ -560,7 +535,7 @@ function xarResponseRedirect($redirectURL)
     if (headers_sent() == true) return false;
 
     // MrB: We only do this for pn Legacy, consider removing it
-    $GLOBALS['xarResponse_redirectCalled'] = true;
+    xarResponse::$redirectCalled = true;
 
 
     // Remove &amp; entites to prevent redirect breakage
@@ -598,12 +573,32 @@ function xarResponseRedirect($redirectURL)
  *
  * @author Marco Canini
  * @access public
- * @global xarResponse_redirectCalled bool
  * @return bool
  */
 function xarResponseIsRedirected()
 {
-    return $GLOBALS['xarResponse_redirectCalled'];
+    return xarResponse::$redirectCalled;
 }
 
+/** 
+ * Convenience classes
+ *
+ */
+class xarServer
+{
+    public static $generateXMLURLs = true;
+}
+
+class xarRequest
+{
+    public static $allowShortURLs = true;
+    public static $defaultRequestInfo = array();
+    public static $shortURLVariables = array();
+}
+
+class xarResponse
+{
+    public static $closeSession = true;    // we usually will have sessions
+    public static $redirectCalled = false; // do we still need this?
+}
 ?>

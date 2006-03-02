@@ -22,23 +22,15 @@ include_once "modules/dynamicdata/class/properties.php";
  */
 class Dynamic_TextUpload_Property extends Dynamic_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id     = 38;
-    public $name   = 'textupload';
-    public $label  = 'Text Upload';
-    public $format = '38';
-    public $args   = array('rows' => 20);
-    
     public $rows = 8;
     public $cols = 50;
-
+    
     public $size = 40;
     public $maxsize = 1000000;
     public $methods = array('trusted'  => false,
-                         'external' => false,
-                         'upload'   => false,
-                         'stored'   => false);
+                            'external' => false,
+                            'upload'   => false,
+                            'stored'   => false);
     public $basedir = null;
     public $importdir = null;
 
@@ -48,10 +40,9 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
     function __construct($args)
     {
         parent::__construct($args);
+        $this->tplmodule = 'base';
+        $this->template  = 'textupload';
 
-        if (!isset($this->validation)) {
-            $this->validation = '';
-        }
         // always parse validation to preset methods here
         $this->parseValidation($this->validation);
 
@@ -76,6 +67,18 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
             $udir = $uname . '_' . $uid;
             $this->importdir = preg_replace('/\{user\}/',$udir,$this->importdir);
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 38;
+        $info->name = 'textupload';
+        $info->desc = 'Text Upload';
+        $info->args = array('rows' => 20);
+
+        return $info;
     }
 
     function validateValue($value = null)
@@ -250,49 +253,11 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         $data['rows']     = !empty($rows) ? $rows : $this->rows;
         $data['cols']     = !empty($cols) ? $cols : $this->cols;
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         $data['maxsize']  = !empty($maxsize) ? $maxsize: $this->maxsize;
         $data['size']     = !empty($size) ? $size : $this->size;
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showinput', $data);
-
+        
+        parent::showInput($data);
     }
-
-    function showOutput($args = array())
-    {
-        extract($args);
-        $data = array();
-
-        // no uploads-specific code here - cfr. transform hook in uploads module
-
-        if (!isset($value)) {
-            $data['value'] = $this->value;
-        }
-        if (!empty($value)) {
-            $data['value'] = xarVarPrepHTMLDisplay($value);
-        } else {
-            $data['value'] ='';
-        }
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
-
-    }
-
 
     function parseValidation($validation = '')
     {

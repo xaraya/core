@@ -20,11 +20,6 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 
 class Dynamic_UserList_Property extends Dynamic_Select_Property
 {
-    public $id = 37;
-    public $name = 'userlist';
-    public $label = 'User List';
-    public $format = '37';
-
     public $grouplist = array();
     public $userstate = -1;
     public $showlist = array();
@@ -48,18 +43,10 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
 
     function __construct($args)
     {
-        // Don't initialise the parent class as it handles the
-        // validation in an inappropriate way for user lists.
-        // $this->Dynamic_Select_Property($args);
-        $this->Dynamic_Property($args);
+        parent::__construct($args);
+        $this->tplmodule = 'roles';
+        $this->template = 'userlist';
 
-        // Initialise the select option list.
-        $this->options = array();
-
-        // Handle user options if supplied.
-        if (!empty($this->validation)) {
-            $this->parseValidation($this->validation);
-        }
         if (count($this->options) == 0) {
 	        $select_options = array();
             if ($this->userstate <> -1) {
@@ -92,6 +79,16 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         }
     }
 
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->id = 37;
+        $info->name = 'userlist';
+        $info->desc = 'User List';
+        $info->reqmodules = array('roles');
+        return $info;
+    }
+
     // TODO: validate the selected user against the specified group(s).
     function validateValue($value = null)
     {
@@ -121,15 +118,11 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
     // TODO: format the output according to the 'showlist'.
     // TODO: provide an option to allow admin to decide whether to wrap the user
     // in a link or not.
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        $data = array();
-
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-
+        extract($data);
+        if (!isset($value)) $value = $this->value;
+        
         if (empty($value)) {
             $user = '';
         } else {
@@ -145,14 +138,7 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         $data['value'] = $value;
         $data['user'] = $user;
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return parent::showOutput($data);
     }
 
     function parseValidation($validation = '')

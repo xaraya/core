@@ -120,9 +120,9 @@ class xarCache_Storage
         $this->reached = $value;
 
     // CHECKME: we don't need this cached variable anymore, do we ?
-        if ($value && !xarCore_IsCached($this->type . '.Caching', 'cleaned')) {
+        if ($value && !xarCore::isCached($this->type . '.Caching', 'cleaned')) {
             $this->cleanCached();
-            xarCore_SetCached($this->type . '.Caching', 'cleaned', TRUE);
+            xarCore::setCached($this->type . '.Caching', 'cleaned', TRUE);
         }
         return $value;
     }

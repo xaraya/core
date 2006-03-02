@@ -26,12 +26,22 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_URL_Property extends Dynamic_TextBox_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id     = 11;
-    public $name   = 'url';
-    public $label  = 'URL';
-    public $format = '11';
+    function __construct($args) 
+    {
+        parent::__construct($args);
+        $this->template = 'url';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id    = 11;
+        $info->name  = 'url';
+        $info->desc  = 'URL';
+
+        return $info;
+    }
 
     function validateValue($value = null)
     {
@@ -39,7 +49,7 @@ class Dynamic_URL_Property extends Dynamic_TextBox_Property
             $value = $this->value;
         }
         if (!empty($value) && $value != 'http://') {
-        // TODO: add some URL validation routine !
+            // TODO: add some URL validation routine !
             if (preg_match('/[<>"]/',$value)) {
                 $this->invalid = xarML('URL');
                 $this->value = null;
@@ -51,67 +61,6 @@ class Dynamic_URL_Property extends Dynamic_TextBox_Property
             $this->value = '';
         }
         return true;
-    }
-
-//    function showInput($name = '', $value = null, $size = 0, $maxlength = 0, $id = '', $tabindex = '')
-    function showInput($args = array())
-    {
-        extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (empty($value)) {
-            $value = 'http://';
-        }
-        if (empty($name) || !isset($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id) || !isset($id)) {
-            $id = $name;
-        }
-       $data=array();
-
-        $data['name']     = $name;
-        $data['id']       = $id;
-        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
-        $data['size']     = !empty($size) ? $size : $this->size;
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showinput', $data);
-    }
-
-    function showOutput($args = array())
-    {
-        extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-
-        $data = array();
-        // TODO: use redirect function here ?
-        if (!empty($value) && $value != 'http://') {
-            $data['value'] = xarVarPrepForDisplay($value);
-            //return '<a href="'.$value.'">'.$value.'</a>';
-
-            if (empty($module)) {
-                $module = $this->getModule();
-            }
-            if (empty($template)) {
-                $template = $this->getTemplate();
-            }
-
-            return xarTplProperty($module, $template, 'showoutput', $data);
-        }
-        return '';
     }
 }
 ?>

@@ -118,7 +118,7 @@ function privileges_init()
         $query = xarDBCreateIndex($tables['privileges'],$index);
         $dbconn->Execute($query);
 
-        xarDB_importTables(array('privileges' => xarDBGetSiteTablePrefix() . '_privileges'));
+        xarDB::importTables(array('privileges' => xarDBGetSiteTablePrefix() . '_privileges'));
         
         /*********************************************************************
          * CREATE TABLE xar_privmembers (
@@ -137,7 +137,7 @@ function privileges_init()
                                                                      'default'     => '0')));
         $dbconn->Execute($query);
         
-        xarDB_importTables(array('privmembers' => xarDBGetSiteTablePrefix() . '_privmembers'));
+        xarDB::importTables(array('privmembers' => xarDBGetSiteTablePrefix() . '_privmembers'));
         
         $index = array('name'      => 'i_'.$sitePrefix.'_privmembers_id',
                        'fields'    => array('xar_pid','xar_parentid'),
@@ -194,7 +194,7 @@ function privileges_init()
         $query = xarDBCreateIndex($tables['security_acl'],$index);
         $dbconn->Execute($query);
 
-        xarDB_importTables(array('security_acl' => xarDBGetSiteTablePrefix() . '_security_acl'));
+        xarDB::importTables(array('security_acl' => xarDBGetSiteTablePrefix() . '_security_acl'));
         
         /*********************************************************************
          * CREATE TABLE xar_security_masks (
@@ -247,7 +247,7 @@ function privileges_init()
         $query = xarDBCreateIndex($tables['security_masks'],$index);
         $dbconn->Execute($query);
 
-        xarDB_importTables(array('security_masks' => xarDBGetSiteTablePrefix() . '_security_masks'));
+        xarDB::importTables(array('security_masks' => xarDBGetSiteTablePrefix() . '_security_masks'));
         
         /*********************************************************************
          * CREATE TABLE xar_security_instances (
@@ -313,7 +313,7 @@ function privileges_init()
         
         $dbconn->Execute($query);
         
-        xarDB_importTables(array('security_instances' => xarDBGetSiteTablePrefix() . '_security_instances'));
+        xarDB::importTables(array('security_instances' => xarDBGetSiteTablePrefix() . '_security_instances'));
         
         /*********************************************************************
          * CREATE TABLE xar_security_levels (
@@ -398,7 +398,7 @@ function privileges_init()
          TO BE IMPLEMENTED LATER
          $result = $dbconn->Execute($query);
          
-         xarDB_importTables(array('security_instances' => xarDBGetSiteTablePrefix() . '_security_instances'));
+         xarDB::importTables(array('security_instances' => xarDBGetSiteTablePrefix() . '_security_instances'));
          
         */
         $dbconn->commit();

@@ -20,15 +20,24 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id        = 15;
-    public $name      = 'integerbox';
-    public $label     = 'Number Box';
-    public $format    = '15';
+    function __construct($args)
+    {
+        parent::__construct($args);
 
-    public $size      = 10;
-    public $maxlength = 30;
+        $this->size      = 10;
+        $this->maxlength = 30;
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 15;
+        $info->name = 'integerbox';
+        $info->desc = 'Number Box';
+
+        return $info;
+    }
 
     function validateValue($value = null)
     {
@@ -67,10 +76,6 @@ class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
         return true;
     }
 
-    // default showInput() from Dynamic_TextBox_Property
-
-    // default showOutput() from Dynamic_TextBox_Property
-
     // Trick: use the parent method with a different template :-)
     function showValidation($args = array())
     {
@@ -83,8 +88,5 @@ class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
 
         return parent::showValidation($args);
     }
-
-    // default updateValidation() from Dynamic_TextBox_Property
 }
-
 ?>

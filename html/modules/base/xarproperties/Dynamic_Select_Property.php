@@ -13,14 +13,6 @@
 */
 class Dynamic_Select_Property extends Dynamic_Property
 {
-    public $id = 6;
-    public $name = 'dropdown';
-    public $label = 'Dropdown List';
-    public $format = '6';
-    public $template = 'dropdown';
-    public $tplmodule = 'base';
-    public $requiresmodule = 'base';
-
     public $options;
     public $func;
     public $itemfunc;
@@ -30,6 +22,9 @@ class Dynamic_Select_Property extends Dynamic_Property
     function __construct($args)
     {
         parent::__construct($args);
+        $this->template  = 'dropdown';
+        $this->tplmodule = 'base';
+
         if (!isset($this->options)) {
             $this->options = array();
         }
@@ -39,6 +34,16 @@ class Dynamic_Select_Property extends Dynamic_Property
         }
     }
 
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 6;
+        $info->name = 'dropdown';
+        $info->desc = 'Dropdown List';
+
+        return $info;
+    }
     function validateValue($value = null)
     {
         if (isset($value)) {
@@ -58,22 +63,16 @@ class Dynamic_Select_Property extends Dynamic_Property
         return false;
     }
 
-//    function showInput($name = '', $value = null, $options = array(), $id = '', $tabindex = '')
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        $data=array();
-
-        if (!isset($value)) {
+        if (!isset($data['value'])) {
             $data['value'] = $this->value;
-        } else {
-            $data['value'] = $value;
         }
-        if (!isset($options) || count($options) == 0) {
+
+        if (!isset($data['options']) || count($data['options']) == 0) {
             $data['options'] = $this->getOptions();
-        } else {
-            $data['options'] = $options;
         }
+
         // check if we need to add the current value to the options
         if (!empty($data['value']) && $this->override) {
             $found = false;
@@ -87,58 +86,25 @@ class Dynamic_Select_Property extends Dynamic_Property
                 $data['options'][] = array('id' => $data['value'], 'name' => $data['value']);
             }
         }
-        if (empty($name)) {
-            $data['name'] = 'dd_' . $this->id;
-        } else {
-            $data['name'] = $name;
-        }
-        if (empty($id)) {
-            $data['id'] = $data['name'];
-        } else {
-            $data['id']= $id;
-        }
-        $data['onchange'] = isset($onchange) ? $onchange : null; // let tpl decide what to do
-
-        $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
+        if(!isset($data['onchange'])) $data['onchange'] = null; // let tpl decide what to do
         $data['extraparams'] =!empty($extraparams) ? $extraparams : "";
-        $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showinput', $data);
-        //return $out;
+        return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        if (isset($value)) {
-            $this->value = $value;
-        }
-        $data=array();
-        $data['value'] = $this->value;
+        extract($data);
+        if (isset($data['value'])) $this->value = $data['value'];
+        
         // get the option corresponding to this value
         $result = $this->getOption();
         // only apply xarVarPrepForDisplay on strings, not arrays et al.
         if (!empty($result) && is_string($result)) {
             $result = xarVarPrepForDisplay($result);
         }
-        $data['option'] = array('id' => $this->value,
-                                'name' => $result);
+        $data['option'] = array('id' => $this->value, 'name' => $result);
 
-    // FIXME: this won't work when called by a property from a different module
-        // allow template override by child classes (or in BL tags/API calls)
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return parent::showOutput($data);
     }
 
     function parseValidation($validation = '')

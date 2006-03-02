@@ -29,54 +29,25 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
 {
-    public $id = 507;
-    public $name = 'objectref';
-    public $label = 'Select value from other object';
-    public $format = '507';
-    public $requiresmodule = 'dynamicdata';
-
     // We explicitly use names here instead of id's, so we are independent of
     // how dd assigns them at a given time. Otherwise the validation is not
     // exportable to other sites.
     var $refobject    = 'objects';    // Name of the object we want to reference
     var $store_prop   = 'objectid';   // Name of the property we want to use for storage
     var $display_prop = 'name';       // Name of the property we want to use for displaying.
-
-
-    // Prepare data to be rendered when an input function is called on the property
-    // We dont use the parent because we use xarTplProperty at the end of this
-    // function and do template overriding slightly different.
-    function showInput($args = array())
+    
+    function __construct($args) {
+        $this->template = 'objectref';
+        $this->tplmodule = 'dynamic_data';
+    static function getRegistrationInfo()
     {
-        $data=array(); $template = null;
-        extract($args);
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('dynamicdata');
+        $info->id   = 507;
+        $info->name = 'objectref';
+        $info->desc = 'Select value from other object';
 
-        if (!isset($value)) {
-            $data['value'] = $this->value;
-        } else {
-            $data['value'] = $value;
-        }
-
-        if (!isset($options) || count($options) == 0) {
-            $data['options'] = $this->getOptions();
-        } else {
-            $data['options'] = $options;
-        }
-        if (empty($name)) {
-            $data['name'] = 'dd_' . $this->id;
-        } else {
-            $data['name'] = $name;
-        }
-
-        if (empty($id)) {
-            $data['id'] = $data['name'];
-        } else {
-            $data['id']= $id;
-        }
-
-        $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
-        return xarTplProperty('dynamicdata', 'objectref', 'showinput', $data, $template);
+        return $info;
     }
 
     // Return a list of array(id => value) for the possible options

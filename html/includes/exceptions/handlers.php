@@ -140,14 +140,11 @@ class ExceptionHandlers implements IExceptionHandlers
             $rawmsg .= $msg;
             $msg = $rawmsg;
         } else {
-            if ($GLOBALS['xarRequest_allowShortURLs'] && isset($GLOBALS['xarRequest_shortURLVariables']['module'])) {
-                $module = $GLOBALS['xarRequest_shortURLVariables']['module'];
+            if (xarRequest::$allowShortURLs && isset(xarRequest::$shortURLVariables['module'])) {
+                $module = xarRequest::$shortURLVariables['module'];
                 // Then check in $_GET
             } elseif (isset($_GET['module'])) {
                 $module = $_GET['module'];
-                // Try to fallback to $HTTP_GET_VARS for older php versions
-            } elseif (isset($GLOBALS['HTTP_GET_VARS']['module'])) {
-                $module = $GLOBALS['HTTP_GET_VARS']['module'];
                 // Nothing found, return void
             } else {
                 $module = '';

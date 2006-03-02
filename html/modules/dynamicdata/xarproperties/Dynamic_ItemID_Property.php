@@ -23,12 +23,23 @@ include_once "modules/base/xarproperties/Dynamic_NumberBox_Property.php";
  */
 class Dynamic_ItemID_Property extends Dynamic_NumberBox_Property
 {
-    public $requiresmodule = 'dynamicdata';
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->tplmodule = 'dynamic_data';
+        $this->template = 'itemid';
+    }
 
-    public $id     = 21;
-    public $name   = 'itemid';
-    public $label  = 'Item ID';
-    public $format = '21';
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('dynamicdata');
+        $info->id   = 21;
+        $info->name = 'itemid';
+        $info->desc = 'Item ID';
+
+        return $info;
+    }
 
     function checkInput($name = '', $value = null)
     {

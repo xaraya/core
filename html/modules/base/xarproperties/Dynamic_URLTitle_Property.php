@@ -21,12 +21,23 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id     = 41;
-    public $name   = 'urltitle';
-    public $label  = 'URL + Title';
-    public $format = '41';
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->tplmodule = 'base';
+        $this->template  = 'urltitle';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id    = 41;
+        $info->name  = 'urtitle';
+        $info->desc  = 'URL + Title';
+
+        return $info;
+    }
 
     function checkInput($name='', $value = null)
     {
@@ -101,27 +112,14 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         return true;
     }
 
-//    function showInput($name = '', $value = null, $size = 0, $maxlength = 0, $id = '', $tabindex = '')
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        // empty value is allowed here
-        if (!isset($value)) {
+        if (!isset($data['value'])) {
             $value = $this->value;
+        } else {
+            $value = $data['value'];
         }
-        // empty fields are not allowed here
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        if (empty($size)) {
-            $size = $this->size;
-        }
-        if (empty($maxlength)) {
-            $maxlength = $this->maxlength;
-        }
+
         // extract the link and title information
         if (empty($value)) {
         } elseif (is_array($value)) {
@@ -146,37 +144,21 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         if (empty($title)) {
             $title = '';
         }
-        $data = array();
 
-        $data['name']     = $name;
-        $data['id']       = $id;
         $data['title']    = xarVarPrepForDisplay($title);
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
-        $data['size']     = !empty($size) ? $size : $this->size;
         $data['link']     = xarVarPrepForDisplay($link);
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showinput', $data);
+        return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-         extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (empty($value)) {
-            $returndata= '';
-        }
+        extract($data);
+        if (!isset($value)) $value = $this->value;
+        
+        if (empty($value)) $returndata= '';
+        
         if (is_array($value)) {
             if (isset($value['link'])) {
                 $link = $value['link'];
@@ -193,7 +175,6 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
                 $title = $newval['title'];
             }
         }
-        $data=array();
 
         if (empty($link) && empty($title)) {
         } elseif (empty($link)) {
@@ -209,14 +190,7 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         $data['link']    = (!empty($link) && $link != 'http://') ? $link : '';
         $data['title']   = (!empty($title)) ? $title : '';
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return parent::showOutput($data);
     }
 }
 ?>

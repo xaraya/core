@@ -34,14 +34,14 @@ function xarBlock_init($args, $whatElseIsGoingLoaded)
         'block_types'           => $systemPrefix . '_block_types'
     );
 
-    xarDB_importTables($tables);
+    xarDB::importTables($tables);
 
     // Decide if we will be using the output caching system
     $outputCachePath = xarCoreGetVarDirPath() . '/cache/output/';
     if (defined('XARCACHE_BLOCK_IS_ENABLED')) {
-        xarCore_SetCached('xarcache', 'blockCaching', true);
+        xarCore::setCached('xarcache', 'blockCaching', true);
     } else {
-        xarCore_SetCached('xarcache', 'blockCaching', false);
+        xarCore::setCached('xarcache', 'blockCaching', false);
     }
 
     // Subsystem initialized, register a handler to run when the request is over
@@ -81,8 +81,8 @@ function xarBlock_render($blockinfo)
 
     // This lets the security system know what module we're in
     // no need to update / select in database for each block here
-    // xarModSetVar('blocks','currentmodule',$modName);
-    xarCore_SetCached('Security.Variables', 'currentmodule', $modName);
+    // TODO: this looks weird
+    xarVarSetCached('Security.Variables', 'currentmodule', $modName);
 
     // Load the block.
     if (!xarModAPIFunc(
@@ -157,7 +157,7 @@ function xarBlock_renderGroup($groupname, $template = NULL)
 {
     if (empty($groupname)) throw new EmptyParameterException('groupname');
 
-    $blockCaching = xarCore_GetCached('xarcache', 'blockCaching');
+    $blockCaching = xarCore::getCached('xarcache', 'blockCaching');
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
@@ -283,7 +283,7 @@ function xarBlock_renderBlock($args)
     // All the hard work is done in this function.
     // It keeps the core code lighter when standalone blocks are not used.
     $blockinfo = xarModAPIFunc('blocks', 'user', 'getinfo', $args);
-    $blockCaching = xarCore_GetCached('xarcache', 'blockCaching');
+    $blockCaching = xarCore::getCached('xarcache', 'blockCaching');
 
     if (!empty($blockinfo) && $blockinfo['state'] <> 0) {
         if ($blockCaching) {

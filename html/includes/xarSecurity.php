@@ -56,7 +56,7 @@ function xarSecurity_init()
                     'modules' => $prefix . '_modules',
                     'security_privsets' => $prefix . '_security_privsets'
                     );
-    xarDB_importTables($tables);
+    xarDB::importTables($tables);
     //register_shutdown_function ('xarSecurity__shutdown_handler');
     return true;
 }
@@ -524,7 +524,7 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
 {
     // Obviously, do NOT uncomment the next line :-)
     //return true;
-    $installing = xarCore_GetCached('installer','installing');
+    $installing = xarCore::getCached('installer','installing');
 
     if(isset($installing) && ($installing == true)) {
        return true;
@@ -615,7 +615,7 @@ function xarSecGenAuthKey($modName = NULL)
     $authid = md5($key);
 
     // Tell xarCache not to cache this page
-    xarCore_SetCached('Page.Caching', 'nocache', TRUE);
+    xarCore::setCached('Page.Caching', 'nocache', TRUE);
 
     // Return encrypted key
     return $authid;

@@ -21,11 +21,23 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
 {
-    public $id = 1115;
-    public $name = 'checkboxlist';
-    public $label = 'Checkbox List';
-    public $format = '1115';
-    public $template = 'checkboxlist';
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->tplmodule = 'base'; 
+        $this->template  = 'checkboxlist';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 1115;
+        $info->name = 'checkboxlist';
+        $info->desc = 'Checkbox List';
+
+        return $info;
+    }
 
     function checkInput($name='', $value = null)
     {
@@ -58,84 +70,35 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
         return true;
     }
 
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        $data=array();
-
-        if (!isset($value))
-        {
-            $data['value'] = $this->value;
-        } else {
-            $data['value'] = $value;
-        }
-
-        if ( empty($data['value']) ) {
+        if (!isset($data['value'])) $data['value'] = $this->value;
+      
+        if (empty($data['value'])) {
             $data['value'] = array();
-        } elseif ( !is_array($data['value']) && is_string($data['value']) ) {
-            $data['value'] = explode( ',', $data['value'] );
+        } elseif (!is_array($data['value']) && is_string($data['value'])) {
+            $data['value'] = explode(',', $data['value']);
         }
 
-        $data['options'] = array();
-        if (!isset($options) || count($options) == 0)
-        {
+        if (!isset($data['options']) || count($data['options']) == 0) {
             $options = $this->getOptions();
+        } else {
+            $options = array();
         }
-        foreach( $options as $key => $option )
-        {
+        foreach ($options as $key => $option) {
             $option['checked'] = in_array($option['id'],$data['value']);
             $data['options'][$key] = $option;
         }
-        if (empty($name)) {
-            $data['name'] = 'dd_' . $this->id;
-        } else {
-            $data['name'] = $name;
-        }
-        if (empty($id)) {
-            $data['id'] = $data['name'];
-        } else {
-            $data['id']= $id;
-        }
 
-        $data['tabindex'] =!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
-        $data['invalid']  =!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showinput', $data);
+        return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-
-        if (!isset($value))
-        {
-            $value = $this->value;
-        }
-
-        if( is_array($value) )
-        {
-            $value = implode(',',$value);
-        }
-
-        $data=array();
-
-        $data['value'] = xarVarPrepForDisplay($value);
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        if (!isset($data['value'])) $data['value'] = $this->value;
+        if (is_array($data['value']) ) $data['value'] = implode(',',$data['value']);
+        return parent::showOutput($data);
     }
-
 }
 
 ?>

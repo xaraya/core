@@ -25,10 +25,16 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_DateFormat_Property extends Dynamic_Select_Property
 {
-    public $id     = 33;
-    public $name   = 'dateformat';
-    public $label  = 'Date Format';
-    public $format = '33';
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 33;
+        $info->name = 'dateformat';
+        $info->desc = 'Date Format';
+
+        return $info;
+    }
 
     /**
      * Get Options
@@ -43,7 +49,7 @@ class Dynamic_DateFormat_Property extends Dynamic_Select_Property
                                array('id' => '%d %m %Y %H:%M',    'name' => xarML('31 12 2004 24:00')),
                                array('id' => '%b %d %H:%M:%S',    'name' => xarML('12 31 24:00:00')),
                               );
-       
+
         return $this->options;
     }
 }

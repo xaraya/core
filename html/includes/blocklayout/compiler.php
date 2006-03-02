@@ -116,6 +116,13 @@ class DTDIdentifiers
     }
 }
 
+class BLCompilerException extends Exception
+{
+}
+class BLParserException extends Exception
+{
+}
+
 /**
  * xarTpl__CompilerError
  *
@@ -130,7 +137,7 @@ class xarTpl__CompilerError extends Exception
     {
         // FIXME: is this useful at all, if the compiler doesn't work, how are we going to show the exception ?
         //throw a generic exception for now
-        throw new BLException('TBD',$msg);
+        throw new BLCompilerException($msg);
     }
 }
 
@@ -154,7 +161,7 @@ class xarTpl__ParserError extends Exception
         $out .= "Line contents before the parsing error occurred:\n";
         $out .= $posInfo->lineText . " <== Error position\n";
         // throw a generic exception for now, this probably should not do this, but i dunno yet
-        throw new BLException('TBD',$out);
+        throw new BLParserException($out);
     }
 }
 

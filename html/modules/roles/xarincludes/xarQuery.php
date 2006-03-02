@@ -61,7 +61,7 @@ class xarQuery
             throw new ForbiddenOperationException($type,'This operation is not supported yet. "#(1)"');
         }
 
-        $this->key = mktime();
+        $this->key = time();
         $this->tables = array();
         $this->_addtables($tables);
         $this->fields = array();

@@ -17,13 +17,24 @@
  */
 class Dynamic_Calendar_Property extends Dynamic_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id     = 8;
-    public $name   = 'calendar';
-    public $label  = 'Calendar';
-    public $format = '8';
-    
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->tplmodule = 'base';
+        $this->template = 'calendar';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 8;
+        $info->name = 'calendar';
+        $info->desc = 'Calendar';
+
+        return $info;
+    }
+
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -68,21 +79,11 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         return true;
     }
 
-//    function showInput($name = '', $value = null, $id = '', $tabindex = '')
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        $data = array();
+        if (!isset($data['value'])) $value = $this->value;
+        if (!isset($data['id'])) $data['id'] = $this->id;
 
-        if (empty($name)) {
-            $name = 'dd_'.$this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        if (!isset($value)) {
-            $value = $this->value;
-        }
         // default time is unspecified
         if (empty($value)) {
             $value = -1;
@@ -95,7 +96,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
             // this returns -1 when we have an invalid date (e.g. on purpose)
             $value = strtotime($value);
         }
-        if (!isset($dateformat)) {
+        if (!isset($date['dateformat'])) {
             $dateformat = '%Y-%m-%d %H:%M:%S';
             if ($this->validation == 'date') {
                 $dateformat = '%Y-%m-%d';
@@ -112,32 +113,18 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         // $timeval = xarLocaleFormatDate($dateformat, $value);
         $data['baseuri']    = xarServerGetBaseURI();
         $data['dateformat'] = $dateformat;
-        $data['jsID']       = str_replace(array('[', ']'), '_', $id);
+        $data['jsID']       = str_replace(array('[', ']'), '_', $data['id']);
         // $data['timeval']    = $timeval;
-        $data['name']       = $name;
-        $data['id']         = $id;
         $data['value']      = $value;
-        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showinput', $data);
+        return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
+        extract($data);
 
-        $data=array();
-
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!isset($value)) $value = $this->value;
+        
         // default time is unspecified
         if (empty($value)) {
             $value = -1;
@@ -156,15 +143,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         $data['dateformat'] = $dateformat;
         $data['value'] = $value;
         // $data['returnvalue']= xarLocaleFormatDate($dateformat, $value);
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return parent::showOutput($data);
     }
 
     function showValidation($args = array())

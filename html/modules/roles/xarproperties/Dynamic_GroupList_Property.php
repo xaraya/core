@@ -20,13 +20,6 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 
 class Dynamic_GroupList_Property extends Dynamic_Select_Property
 {
-    public $requiresmodule = 'roles';
-
-    public $id     = 45;
-    public $name   = 'grouplist';
-    public $label  = 'Group List';
-    public $format = '45';
-
     public $ancestorlist = array();
     public $parentlist   = array();
     public $grouplist    = array();
@@ -44,35 +37,8 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
 
     function __construct($args)
     {
-        // Don't initialise the parent class as it handles the
-        // validation in an inappropriate way for user lists.
-        // $this->Dynamic_Select_Property($args);
-        $this->Dynamic_Property($args);
+        parent::__construct($args);
 
-        // Handle user options if supplied.
-        if (!isset($this->options)) {
-            $this->options = array();
-        }
-
-        if (!empty($this->validation)) {
-            foreach(preg_split('/(?<!\\\);/', $this->validation) as $option) {
-                // Semi-colons can be escaped with a '\' prefix.
-                $option = str_replace('\;', ';', $option);
-                // An option comes in two parts: option-type:option-value
-                if (strchr($option, ':')) {
-                    list($option_type, $option_value) = explode(':', $option, 2);
-                    if ($option_type == 'ancestor') {
-                        $this->ancestorlist = array_merge($this->ancestorlist, explode(',', $option_value));
-                    }
-                    if ($option_type == 'parent') {
-                        $this->parentlist = array_merge($this->parentlist, explode(',', $option_value));
-                    }
-                    if ($option_type == 'group') {
-                        $this->grouplist = array_merge($this->grouplist, explode(',', $option_value));
-                    }
-                }
-            }
-        }
         if (count($this->options) == 0) {
 	        $select_options = array();
             if (!empty($this->ancestorlist)) {
@@ -84,7 +50,7 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
             if (!empty($this->grouplist)) {
                 $select_options['group'] = implode(',', $this->grouplist);
             }
-// TODO: handle large # of groups too (optional - less urgent than for users)
+            // TODO: handle large # of groups too (optional - less urgent than for users)
             $groups = xarModAPIFunc('roles', 'user', 'getallgroups', $select_options);
             foreach ($groups as $group) {
                 $options[] = array('id' => $group['uid'], 'name' => $group['name']);
@@ -92,6 +58,17 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
             $this->options = $options;
         }
 
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('roles');
+        $info->id = 45;
+        $info->name = 'grouplist';
+        $info->desc = 'Group List';
+        $info->reqmodules = array('roles');
+        return $info;
     }
 
     function validateValue($value = null)
@@ -117,14 +94,33 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
         return false;
     }
 
-    function showOutput($args = array())
+    function parseValidation($validation = '')
     {
-        extract($args);
-        $data = array();
+		foreach(preg_split('/(?<!\\\);/', $this->validation) as $option) {
+			// Semi-colons can be escaped with a '\' prefix.
+			$option = str_replace('\;', ';', $option);
+			// An option comes in two parts: option-type:option-value
+			if (strchr($option, ':')) {
+				list($option_type, $option_value) = explode(':', $option, 2);
+				if ($option_type == 'ancestor') {
+					$this->ancestorlist = array_merge($this->ancestorlist, explode(',', $option_value));
+				}
+				if ($option_type == 'parent') {
+					$this->parentlist = array_merge($this->parentlist, explode(',', $option_value));
+				}
+				if ($option_type == 'group') {
+					$this->grouplist = array_merge($this->grouplist, explode(',', $option_value));
+				}
+			}
+		}
+    }
 
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+    function showOutput($data = array())
+    {
+        extract($data);
+
+        if (!isset($value)) $value = $this->value;
+        
         if (empty($value)) {
             $group = array();
             $groupname = '';
@@ -142,14 +138,7 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
         $data['group']=$group;
         $data['groupname']=xarVarPrepForDisplay($groupname);
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return parent::showOutput($data);
     }
 }
 

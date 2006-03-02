@@ -1,6 +1,7 @@
 <?php
 /**
- * Dynamic TimeZone Property
+
+  * Dynamic TimeZone Property
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -24,14 +25,23 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_TimeZone_Property extends Dynamic_Select_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id     = 32;
-    public $name   = 'timezone';
-    public $label  = 'Time Zone';
-    public $format = '32';
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->tplmodule = 'base';
+        $this->template  = 'timezone';
+    }
 
-    // default methods from Dynamic_Select_Property
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id    = 32;
+        $info->name  = 'timezone';
+        $info->desc  = 'Time Zone';
+
+        return $info;
+    }
 
     function validateValue($value = null)
     {
@@ -89,33 +99,27 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
         return true;
     }
 
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        $data = array();
-
-        if (!isset($value)) {
+        if (!isset($data['value'])) {
             $value = $this->value;
+        } else {
+            $value = $data['value'];
         }
-        if (!isset($options) || count($options) == 0) {
-            $options = $this->options;
-        }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
+
+        if (!isset($data['options']) || count($data['options']) == 0) {
+            $data['options'] = $this->options;
         }
 
         if (!empty($value) && is_numeric($value)) {
             $data['style'] = 'offset';
-            if (empty($options)) {
-                $options = $this->getOldOptions();
+            if (empty($data['options'])) {
+                $data['options'] = $this->getOldOptions();
             }
         } else {
             $data['style'] = 'timezone';
-            if (empty($options)) {
-                $options = $this->getNewOptions();
+            if (empty($data['options'])) {
+                $data['options'] = $this->getNewOptions();
             }
             if (empty($value)) {
                 $data['timezone'] = '';
@@ -139,39 +143,22 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
         }
 
         $data['value']   = $value;
-        $data['name']    = $name;
-        $data['id']      = $id;
-        $data['options'] = $options;
-        $now=time();
+        $data['now']     = time();
 
-        $data['now']=$now;
-        $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showinput', $data);
+        return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        extract($data);
+        if (!isset($value))  $value = $this->value;
+        
         $offset = null;
         $timezone = null;
         if (empty($value)) {
             $value = 'GMT';
-
         } elseif (is_numeric($value)) {
             $offset = $value;
-
         } elseif (is_array($value)) {
             if (isset($value['offset'])) {
                 $offset = $value['offset'];
@@ -194,7 +181,7 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
                 $value = '';
             }
         }
-        $data = array();
+
         $data['value'] = $value;
         if (isset($timezone)) {
             $data['timezone'] = strtr($timezone, array('/' => ' - ', '_' => ' '));
@@ -214,15 +201,7 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
         }
         // old timezone output format
         $data['option']['name'] = $value;
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return parent::showOutput($data);
     }
 
     function getOldOptions()

@@ -21,13 +21,6 @@ include_once "modules/dynamicdata/class/properties.php";
  */
 class Dynamic_TextBox_Property extends Dynamic_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id        = 2;
-    public $name      = 'textbox';
-    public $label     = 'Text Box';
-    public $format    = '2';
-    
     public $size      = 50;
     public $maxlength = 254;
 
@@ -39,11 +32,26 @@ class Dynamic_TextBox_Property extends Dynamic_Property
     {
         parent::__construct($args);
 
+        // Set for runtime
+        $this->tplmodule = 'base';
+        $this->template = 'textbox';
+
         // check validation for allowed min/max length (or values)
         if (!empty($this->validation)) {
             $this->parseValidation($this->validation);
         }
     }
+
+     static function getRegistrationInfo()
+     {
+         $info = new PropertyRegistration();
+         $info->reqmodules = array('base');
+         $info->id   = 2;
+         $info->name = 'textbox';
+         $info->desc = 'Text Box';
+
+         return $info;
+     }
 
     function validateValue($value = null)
     {
@@ -71,66 +79,24 @@ class Dynamic_TextBox_Property extends Dynamic_Property
         }
     }
 
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        $data = array();
-
-        if (empty($maxlength) && isset($this->max)) {
+        // Process the parameters
+        if (!isset($data['maxlength']) && isset($this->max)) {
             $this->maxlength = $this->max;
             if ($this->size > $this->maxlength) {
                 $this->size = $this->maxlength;
             }
         }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        $data['name']     = $name;
-        $data['id']       = $id;
-        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
-        $data['size']     = !empty($size) ? $size : $this->size;
-        $data['onfocus']  = isset($onfocus) ? $onfocus : null; // let tpl decide what to do with it
 
-        // allow template override by child classes (or in BL tags/API calls)
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
+        // Prepare for templating
+        $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->value);
+        if(!isset($data['maxlength'])) $data['maxlength'] = $this->maxlength;
+        if(!isset($data['size']))      $data['size']      = $this->size;
+        if(!isset($data['onfocus']))   $data['onfocus']   = null;
 
-        return xarTplProperty($module, $template, 'showinput', $data);
-    }
-
-    function showOutput($args = array())
-    {
-        extract($args);
-
-        if (isset($value)) {
-            $value=xarVarPrepHTMLDisplay($value);
-        } else {
-            $value=xarVarPrepHTMLDisplay($this->value);
-        }
-        $data=array();
-
-        $data['value'] = $value;
-
-        // allow template override by child classes (or in BL tags/API calls)
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
-
+        // Let parent deal with the rest
+        return parent::showInput($data);
     }
 
     // check validation for allowed min/max length (or values)

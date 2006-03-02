@@ -23,15 +23,11 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_DataSource_Property extends Dynamic_Select_Property
 {
-    public $id = 23;
-    public $name = 'datasource';
-    public $label = 'Data Source';
-    public $format = '23';
-    public $requiresmodule = 'dynamicdata';
-
     function __construct($args)
+    public $requiresmodule = 'dynamicdata';
     {
         parent::__construct($args);
+ 
         if (count($this->options) == 0) {
             $sources = Dynamic_DataStore_Master::getDataSources();
             if (!isset($sources)) {
@@ -44,6 +40,16 @@ class Dynamic_DataSource_Property extends Dynamic_Select_Property
         // allow values other than those in the options
         $this->override = true;
     }
-}
 
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('dynamicdata');
+        $info->id   = 23;
+        $info->name = 'datasource';
+        $info->desc = 'Data Source';
+
+        return $info;
+    }
+}
 ?>

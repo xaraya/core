@@ -21,19 +21,14 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id       = 13;
-    public $name     = 'webpage';
-    public $label    = 'HTML Page';
-    public $format   = '13';
-
     public $basedir  = '';
     public $filetype = '((xml)|(html))?';
 
     function __construct($args)
     {
         parent::__construct($args);
+        $this->tplmodule = 'base';
+        $this->template = 'webpage';
         // specify base directory in validation field
         if (empty($this->basedir) && !empty($this->validation)) {
             // Hack for passing this thing into transform hooks
@@ -46,6 +41,17 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
             }
             $this->basedir = $basedir;
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 13;
+        $info->name = 'webpage';
+        $info->desc = 'HTML Page';
+
+        return $info;
     }
 
     function validateValue($value = null)
@@ -71,19 +77,15 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
         return false;
     }
 
-//    function showInput($name = '', $value = null, $options = array(), $id = '', $tabindex = '')
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        $data = array();
-
-        if (!isset($value)) {
-            $value = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
         }
-        if (!isset($options) || count($options) == 0) {
-            $options = $this->getOptions();
+        if (!isset($data['options']) || count($data['options']) == 0) {
+            $data['options'] = $this->getOptions();
         }
-        if (count($options) == 0 && !empty($this->basedir)) {
+        if (count($data['options']) == 0 && !empty($this->basedir)) {
             $files = xarModAPIFunc('dynamicdata','admin','browse',
                                    array('basedir' => $this->basedir,
                                          'filetype' => $this->filetype));
@@ -98,38 +100,16 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
             }
             unset($files);
         }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
 
-        $data['name']    = $name;
-        $data['value']    = $value;
-        $data['id']      = $id;
-        $data['options'] = $options;
-        $data['tabindex']= !empty($tabindex) ? $tabindex : 0;
-        $data['invalid'] = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showinput', $data);
-
+        return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        $data = array();
+        extract($data);
 
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!isset($value)) $value = $this->value;
+        
         $basedir = $this->basedir;
         $filetype = $this->filetype;
         if (!empty($value) &&
@@ -138,24 +118,14 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
             file_exists($basedir.'/'.$value) &&
             is_file($basedir.'/'.$value)) {
             $srcpath = join('', @file($basedir.'/'.$value));
-
         } else {
-        //    return xarVarPrepForDisplay($value);
             $srcpath='';
-            //return '';
         }
-        $data['value']=$value;
-        $data['basedir']=$basedir;
-        $data['filetype']=$filetype;
-        $data['srcpath']=$srcpath;
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        $data['value']    = $value;
+        $data['basedir']  = $basedir;
+        $data['filetype'] = $filetype;
+        $data['srcpath']  = $srcpath;
+        return parent::showOutput($data);
     }
 }
 ?>

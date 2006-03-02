@@ -33,7 +33,7 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
     // Session Support Tables
     $systemPrefix = xarDBGetSystemTablePrefix();
     $tables = array('session_info' => $systemPrefix . '_session_info');
-    xarDB_importTables($tables);
+    xarDB::importTables($tables);
 
     // Register the SessionCreate event
     xarEvt_registerEvent('SessionCreate');

@@ -12,11 +12,6 @@
  */
 class Dynamic_SubForm_Property extends Dynamic_Property
 {
-    public $id        = 997;
-    public $name      = 'subform';
-    public $label     = 'Sub Form';
-    public $format    = '997';
-
     public $objectid  = 0;
     public $style     = 'serialized';
     public $title     = '';
@@ -33,11 +28,23 @@ class Dynamic_SubForm_Property extends Dynamic_Property
     function __construct($args)
     {
         parent::__construct($args);
+        $this->template = 'subform';
 
         // check validation for object, style etc.
         if (!empty($this->validation)) {
             $this->parseValidation($this->validation);
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('dynamicdata');
+        $info->id   = 997;
+        $info->name = 'subform';
+        $info->desc = 'Sub Form';
+
+        return $info;
     }
 
     function checkInput($name='', $value = null)
@@ -389,18 +396,13 @@ class Dynamic_SubForm_Property extends Dynamic_Property
         return true;
     }
 
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        extract($data);
+
+        if (!isset($value)) $value = $this->value;
+        if (!isset($name)) $name = 'dd_'.$this->id;
+        
         foreach ($this->arguments as $item) {
             if (isset($$item)) {
                 $this->$item = $$item;
@@ -413,10 +415,6 @@ class Dynamic_SubForm_Property extends Dynamic_Property
             $value = $this->_itemid;
         }
 
-        $data = array();
-        $data['name']      = $name;
-        $data['id']        = $id;
-        $data['tabindex']  = !empty($tabindex) ? $tabindex : 0;
         // invalid messages for fields will be shown in the object form by default, so
         // only show explicit warnings for the fields that aren't in the fieldlist here
         $data['invalid']   = !empty($this->warnings) ? xarML('Invalid #(1)', $this->warnings) :'';
@@ -464,14 +462,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
             }
         }
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showinput', $data);
+        return parent::showInput($data);
     }
 
     function showOutput($args = array())

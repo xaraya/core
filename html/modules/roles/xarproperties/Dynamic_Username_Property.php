@@ -17,12 +17,23 @@
 
 class Dynamic_Username_Property extends Dynamic_Property
 {
-    public $requiresmodule = 'roles';
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->tplmodule = 'roles';
+        $this->template = 'username';
+    }
 
-    public $id     = 7;
-    public $name   = 'username';
-    public $label  = 'Username';
-    public $format = '7';
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('roles');
+        $info->id   = 7;
+        $info->name = 'username';
+        $info->desc = 'Username';
+
+        return $info;
+    }
 
     function validateValue($value = null)
     {
@@ -50,65 +61,36 @@ class Dynamic_Username_Property extends Dynamic_Property
         }
     }
 
-//    function showInput($name = '', $value = null, $id = '', $tabindex = '')
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (empty($value)) {
-            $value = xarUserGetVar('uid');
-        }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        $data = array();
-
+        extract($data);
+        if (!isset($value)) $value = $this->value;
+        if (empty($value))  $value = xarUserGetVar('uid');
+        
         try {
             $user = xarUserGetVar('name', $value);
-
-            if (empty($user)) 
-                $user = xarUserGetVar('uname', $value);
+            if (empty($user)) $user = xarUserGetVar('uname', $value);
         } catch (NotFoundExceptions $e) {
             // Nothing to do?
         }
 
-        if ($value > 1) {
+        if ($value > 1) { // Why the 1 here?
             $data['linkurl'] = xarModURL('roles','user','display', array('uid' => $value));
         }
         $data['user'] = xarVarprepForDisplay($user);
         $data['value']= $value;
-        $data['name'] = $name;
-        $data['id']   = $id;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showinput', $data);
+        return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-         extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (empty($value)) {
-            $value = xarUserGetVar('uid');
-        }
-        $data=array();
+        extract($data);
+        if (!isset($value)) $value = $this->value;
+        if (empty($value))  $value = xarUserGetVar('uid');
+        
         try {
             $user = xarUserGetVar('name', $value);
-            if (empty($user)) 
+            if (empty($user))
                 $user = xarUserGetVar('uname', $value);
         } catch(NotFoundExceptions $e) {
             // Nothing to do?
@@ -116,21 +98,11 @@ class Dynamic_Username_Property extends Dynamic_Property
 
         $data['value'] = $value;
         $data['user']  = xarVarPrepForDisplay($user);
-        $data['name']  = $this->name;
-        $data['id']    = $this->id;
 
-        if ($value > 1) {
+        if ($value > 1) { // Why the 1 here?
             $data['linkurl'] = xarModURL('roles','user','display',array('uid' => $value));
         }
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return parent::showOutput($data);
     }
 }
 ?>

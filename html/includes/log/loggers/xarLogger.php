@@ -49,6 +49,7 @@ class xarLogger
     * String containing the format to use when generating timestamps.
     * @var string
     */
+    // Note: before changing this, check windows support for the specifiers
     private $_timeFormat = '%b %d %H:%M:%S';
 
     // Elapsed time.
@@ -129,7 +130,8 @@ class xarLogger
         $microtime = explode(' ', $microtime);
 
         $secs = ((float)$microtime[0] + (float)$microtime[1]);
-
+        // FIXME: this floods the log when the system it runs on uses the C locale, which users
+        // might not be able to fix. (this is the system locale setting)
         return strftime($this->_timeFormat) . ' ' . $microtime[0] . ' +' . number_format(round($secs - $this->_elapsed, 3),3);
     }
 }

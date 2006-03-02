@@ -17,10 +17,11 @@
  * should be upgraded on each release for
  * better control on config settings
  *
+ * @todo seems that defines are hoggers, move them to class constants?
  */
 define('XARCORE_VERSION_NUM', 'none');
 define('XARCORE_VERSION_ID',  'Xaraya 2 series');
-define('XARCORE_VERSION_SUB', 'adam_baum');
+define('XARCORE_VERSION_SUB', 'etiam infractus');
 
 /*
  * System dependencies for (optional) systems
@@ -439,16 +440,13 @@ function xarCoreGetVarDirPath()
  * Activates the debugger.
  *
  * @access public
- * @global integer xarDebug
- * @global integer xarDebug_sqlCalls
- * @global string xarDebug_startTime
  * @param integer flags bit mask for the debugger flags
  * @todo  a big part of this should be in the exception (error handling) subsystem.
  * @return void
  */
 function xarCoreActivateDebugger($flags)
 {
-    $GLOBALS['xarDebug'] = $flags;
+    xarDebug::$flags = $flags;
     if ($flags & XARDBG_INACTIVE) {
         // Turn off error reporting
         error_reporting(0);
@@ -468,9 +466,9 @@ function xarCoreActivateDebugger($flags)
         assert_options(ASSERT_WARNING,   1);    // Issue a php warning
         assert_options(ASSERT_BAIL,      0);    // Stop processing?
         assert_options(ASSERT_QUIET_EVAL,0);    // Quiet evaluation of assert condition?
-        $GLOBALS['xarDebug_sqlCalls'] = 0;
+        xarDebug::$sqlCalls = 0;
         $lmtime = explode(' ', microtime());
-        $GLOBALS['xarDebug_startTime'] = $lmtime[1] + $lmtime[0];
+        xarDebug::$startTime = $lmtime[1] + $lmtime[0];
     }
 }
 
@@ -478,15 +476,11 @@ function xarCoreActivateDebugger($flags)
  * Check if the debugger is active
  *
  * @access public
- * @global integer xarDebug
  * @return bool true if the debugger is active, false otherwise
  */
 function xarCoreIsDebuggerActive()
 {
-    if(isset($GLOBALS['xarDebug'])) {
-        return $GLOBALS['xarDebug'] & XARDBG_ACTIVE;
-    } else return false;
-
+    return xarDebug::$flags & XARDBG_ACTIVE;
 }
 
 /**
@@ -498,7 +492,7 @@ function xarCoreIsDebuggerActive()
  */
 function xarCoreIsDebugFlagSet($flag)
 {
-    return ($GLOBALS['xarDebug'] & XARDBG_ACTIVE) && ($GLOBALS['xarDebug'] & $flag);
+    return (xarDebug::$flags & XARDBG_ACTIVE) && (xarDebug::$flags & $flag);
 }
 
 /**
@@ -517,8 +511,8 @@ function xarCore_getSystemVar($name)
 {
     static $systemVars = NULL;
 
-    if (xarCore_IsCached('Core.getSystemVar', $name)) {
-        return xarCore_GetCached('Core.getSystemVar', $name);
+    if (xarCore::isCached('Core.getSystemVar', $name)) {
+        return xarCore::getCached('Core.getSystemVar', $name);
     }
     if (!isset($systemVars)) {
         $fileName = xarCoreGetVarDirPath() . '/' . XARCORE_CONFIG_FILE;
@@ -533,7 +527,7 @@ function xarCore_getSystemVar($name)
         throw new VariableNotFoundException($name,"xarCore_getSystemVar: Unknown system variable: '#(1)'.");
     }
 
-    xarCore_SetCached('Core.getSystemVar', $name, $systemVars[$name]);
+    xarCore::setCached('Core.getSystemVar', $name, $systemVars[$name]);
 
     return $systemVars[$name];
 }
@@ -602,97 +596,6 @@ function xarCoreIsApiAllowed($apiType)
 }
 
 /**
-* Get the value of a cached variable
- *
- * @access protected
- * @global xarCore_cacheCollection array
- * @param key string the key identifying the particular cache you want to access
- * @param name string the name of the variable in that particular cache
- * @return mixed value of the variable, or void if variable isn't cached
- */
-function xarCore_IsCached($cacheKey, $name)
-{
-    if (!isset($GLOBALS['xarCore_cacheCollection'][$cacheKey])) {
-        $GLOBALS['xarCore_cacheCollection'][$cacheKey] = array();
-        return false;
-    }
-    return isset($GLOBALS['xarCore_cacheCollection'][$cacheKey][$name]);
-}
-
-/**
-* Get the value of a cached variable
- *
- * @access protected
- * @global xarCore_cacheCollection array
- * @param key string the key identifying the particular cache you want to access
- * @param name string the name of the variable in that particular cache
- * @return mixed value of the variable, or void if variable isn't cached
- */
-function xarCore_GetCached($cacheKey, $name)
-{
-    if (!isset($GLOBALS['xarCore_cacheCollection'][$cacheKey][$name])) {
-        return;
-    }
-    return $GLOBALS['xarCore_cacheCollection'][$cacheKey][$name];
-}
-
-/**
-* Set the value of a cached variable
- *
- * @access protected
- * @global xarCore_cacheCollection array
- * @param key string the key identifying the particular cache you want to access
- * @param name string the name of the variable in that particular cache
- * @param value string the new value for that variable
- * @return void
- */
-function xarCore_SetCached($cacheKey, $name, $value)
-{
-    if (!isset($GLOBALS['xarCore_cacheCollection'][$cacheKey])) {
-        $GLOBALS['xarCore_cacheCollection'][$cacheKey] = array();
-    }
-    $GLOBALS['xarCore_cacheCollection'][$cacheKey][$name] = $value;
-}
-
-/**
-* Delete a cached variable
- *
- * @access protected
- * @global xarCore_cacheCollection array
- * @param key the key identifying the particular cache you want to access
- * @param name the name of the variable in that particular cache
- */
-function xarCore_DelCached($cacheKey, $name)
-{
-    // TODO: check if we don't need to work with $GLOBALS here for some PHP ver
-    if (isset($GLOBALS['xarCore_cacheCollection'][$cacheKey][$name])) {
-        unset($GLOBALS['xarCore_cacheCollection'][$cacheKey][$name]);
-    }
-    //This unsets the key that said that collection had already been retrieved
-
-    //Seems to have caused a problem because of the expected behaviour of the old code
-    //FIXME: Change how this works for a mainstream function, stop the hacks
-    if (isset($GLOBALS['xarCore_cacheCollection'][$cacheKey][0])) {
-        unset($GLOBALS['xarCore_cacheCollection'][$cacheKey][0]);
-    }
-}
-
-/**
-* Flush a particular cache (e.g. for session initialization)
- *
- * @access protected
- * @global xarCore_cacheCollection array
- * @param cacheKey the key identifying the particular cache you want to wipe out
- */
-function xarCore_FlushCached($cacheKey)
-{
-    // TODO: check if we don't need to work with $GLOBALS here for some PHP ver
-    if (isset($GLOBALS['xarCore_cacheCollection'][$cacheKey])) {
-        unset($GLOBALS['xarCore_cacheCollection'][$cacheKey]);
-    }
-}
-
-/**
 * Checks if a certain function was disabled in php.ini
  *
  * xarCore.php function
@@ -718,5 +621,122 @@ function xarFuncIsDisabled($funcName)
     }
 
     return (isset($disabled[$funcName]) ? true : false);
+}
+
+/**
+ * Convenience class for keeping track of debugger operation
+ *
+ * @todo this is close to exceptions or logging than core, see also notes earlier
+ */
+class xarDebug
+{
+    public static $flags     = 0; // default off?
+    public static $sqlCalls  = 0; // Should be in flags imo
+    public static $startTime = 0; // Should not be here at all
+}
+
+/**
+ * Convenience class for keeping track of core cached stuff
+ *
+ * @todo this is closer to the caching subsystem than here
+ * @todo i dont like the array shuffling
+ * @todo separate file
+ * @todo this is not xarCore, this is xarCoreCache
+ */
+class xarCore
+{
+    private static $cacheCollection = array();
+
+    /**
+     * Check if a variable value is cached
+     *
+     * @access protected
+     * @param key string the key identifying the particular cache you want to access
+     * @param name string the name of the variable in that particular cache
+     * @return mixed value of the variable, or false if variable isn't cached
+     * @todo make sure we can make this protected
+     */
+    public static function isCached($cacheKey, $name)
+    {
+        if (!isset(self::$cacheCollection[$cacheKey])) {
+            self::$cacheCollection[$cacheKey] = array();
+            return false;
+        }
+        return isset(self::$cacheCollection[$cacheKey][$name]);
+    }
+
+    /**
+     * Get the value of a cached variable
+     *
+     * @access protected
+     * @param key string the key identifying the particular cache you want to access
+     * @param name string the name of the variable in that particular cache
+     * @return mixed value of the variable, or null if variable isn't cached
+     * @todo make sure we can make this protected
+     */
+    public static function getCached($cacheKey, $name)
+    {
+        if (!isset(self::$cacheCollection[$cacheKey][$name])) {
+            return;
+        }
+        return self::$cacheCollection[$cacheKey][$name];
+    }
+
+    /**
+     * Set the value of a cached variable
+     *
+     * @access protected
+     * @param key string the key identifying the particular cache you want to access
+     * @param name string the name of the variable in that particular cache
+     * @param value string the new value for that variable
+     * @return null
+     * @todo make sure we can make this protected
+     */
+    public static function setCached($cacheKey, $name, $value)
+    {
+        if (!isset(self::$cacheCollection[$cacheKey])) {
+            self::$cacheCollection[$cacheKey] = array();
+        }
+        self::$cacheCollection[$cacheKey][$name] = $value;
+    }
+
+    /**
+     * Delete a cached variable
+     *
+     * @access protected
+     * @param key the key identifying the particular cache you want to access
+     * @param name the name of the variable in that particular cache
+     * @return null
+     * @todo remove the double whammy
+     * @todo make sure we can make this protected
+     */
+    public static function delCached($cacheKey, $name)
+    {
+        if (isset(self::$cacheCollection[$cacheKey][$name])) {
+            unset(self::$cacheCollection[$cacheKey][$name]);
+        }
+        //This unsets the key that said that collection had already been retrieved
+        
+        //Seems to have caused a problem because of the expected behaviour of the old code
+        //FIXME: Change how this works for a mainstream function, stop the hacks
+        if (isset(self::$cacheCollection[$cacheKey][0])) {
+            unset(self::$cacheCollection[$cacheKey][0]);
+        }
+    }
+
+    /**
+     * Flush a particular cache (e.g. for session initialization)
+     *
+     * @access protected
+     * @param cacheKey the key identifying the particular cache you want to wipe out
+     * @returns null
+     * @todo make sure we can make this protected
+     */
+    public static function flushCached($cacheKey)
+    {
+        if(isset(self::$cacheCollection[$cacheKey])) {
+            unset(self::$cacheCollection[$cacheKey]);
+        }
+    }
 }
 ?>

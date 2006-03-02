@@ -1,4 +1,4 @@
-<?php
+n<?php
 /**
  * Checkbox Mask Property
  *
@@ -22,11 +22,23 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
 {
-    public $id = 1114;
-    public $name = 'checkboxmask';
-    public $label = 'Checkbox Mask';
-    public $format = '1114';
-    public $template = 'checkboxmask';
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->tplmodule = 'base';
+        $this->template =  'checkboxmask';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 1114;
+        $info->name = 'checkboxmask';
+        $info->desc = 'Checkbox Mask';
+
+        return $info;
+    }
 
     function validateValue($value = null)
     {
@@ -43,66 +55,34 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
         return true;
     }
 
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        $data = array();
-
-        if (!isset($value)) {
+        if (!isset($data['value'])) {
             $data['value'] = $this->value;
-        } else {
-            $data['value'] = $value;
         }
 
         if (!is_array($data['value']) && is_string($data['value'])) {
             $data['value'] = maskExplode($data['value']);
         }
 
-        if (!isset($options) || count($options) == 0) {
+        if (!isset($data['options']) || count($data['options']) == 0) {
             $this->getOptions();
             $options = array();
-            foreach($this->options as $key => $option)
-            {
+            foreach($this->options as $key => $option) {
                 $option['checked'] = in_array($option['id'], $data['value']);
-                $options[$key] = $option;
+                $data['options'][$key] = $option;
             }
         }
-        $data['options'] = $options;
 
-        if (empty($name)) {
-            $data['name'] = 'dd_' . $this->id;
-        } else {
-            $data['name'] = $name;
-        }
-        if (empty($id)) {
-            $data['id'] = $data['name'];
-        } else {
-            $data['id']= $id;
-        }
-
-        $data['tabindex'] =!empty($tabindex) ? ' tabindex="'.$tabindex.'" ' : '';
-        $data['invalid']  =!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '';
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showinput', $data);
+        return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
+        extract($data);
 
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-
-        if (!is_array($value)) {
-            $value = maskExplode($value);
-        }
+        if (!isset($value)) $value = $this->value;
+        if (!is_array($value)) $value = maskExplode($value);
 
         $this->getOptions();
         $numOptionsSelected = 0;
@@ -116,17 +96,10 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
             }
         }
 
-        $data = array();
         $data['options'] = $options;
         $data['numOptionsSelected'] = $numOptionsSelected;
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        
+        return parent::showOutput($data);
     }
 
 }

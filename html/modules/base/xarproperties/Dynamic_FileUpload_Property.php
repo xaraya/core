@@ -23,13 +23,6 @@ include_once "modules/dynamicdata/class/properties.php";
 
 class Dynamic_FileUpload_Property extends Dynamic_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id     = 9;
-    public $name   = 'fileupload';
-    public $label  = 'File Upload';
-    public $format = '9';
-    
     public $size = 40;
     public $maxsize = 1000000;
     public $basedir = '';
@@ -49,10 +42,8 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
     function __construct($args)
     {
         parent::__construct($args);
-
-        if (empty($this->id)) {
-            $this->id = $this->name;
-        }
+        $this->tplmodule = 'base';
+        $this->template  = 'fileupload';
 
         // Determine if the uploads module is hooked to the calling module
         // if so, we will use the uploads modules functionality
@@ -69,9 +60,6 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             }
         }
 
-        if (!isset($this->validation)) {
-            $this->validation = '';
-        }
         // always parse validation to preset methods here
         $this->parseValidation($this->validation);
 
@@ -119,6 +107,17 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             $udir = $uname . '_' . $uid;
             $this->importdir = preg_replace('/\{user\}/',$udir,$this->importdir);
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 9;
+        $info->name = 'fileupload';
+        $info->desc = 'File Upload';
+
+        return $info;
     }
 
     function checkInput($name='', $value = null)
@@ -255,9 +254,9 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
     }
 
 //    function showInput($name = '', $value = null, $size = 0, $maxsize = 0, $id = '', $tabindex = '')
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
+        extract($data);
         if (empty($name)) {
             $name = 'dd_'.$this->id;
         }
@@ -317,35 +316,23 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             $allowed = '';
         }
 
-        $data               = array();
         $data['name']       = $name;
         $data['value']      = xarVarPrepForDisplay($value);
         $data['id']         = $id;
         $data['upname']     = $upname;
         $data['size']       = !empty($size) ? $size : $this->size;
         $data['maxsize']    = !empty($maxsize) ? $maxsize : $this->maxsize;
-        $data['tabindex']   = !empty($tabindex) ? $tabindex  : 0;
-        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)',  $this->invalid) : '';
         $data['allowed']    = $allowed;
         $data['extensions'] = $extensions;
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showinput', $data);
+        parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
+        extract($data);
 
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!isset($value)) $value = $this->value;
 
         if ($this->UploadsModule_isHooked) {
             // @todo get rid of this one too
@@ -362,23 +349,13 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                 // remove any left over values
                 return '';
             }
-            $data = array();
             // if the uploads module is hooked (to be verified and set by the calling module)
             if (!empty($this->basedir) && file_exists($this->basedir . '/'. $value) && is_file($this->basedir . '/'. $value)) {
                 $data['basedir'] = $this->basedir;
             } else {
                 $data['basedir'] = null; // something went wrong here
             }
-            $data['value'] = xarVarPrepForDisplay($value);
-
-             if (empty($module)) {
-                 $module = $this->getModule();
-             }
-             if (empty($template)) {
-                 $template = $this->getTemplate();
-             }
-
-             return xarTplProperty($module, $template, 'showoutput', $data);
+            return parent::showOutput($data);
         } else {
             return '';
         }

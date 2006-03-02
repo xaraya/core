@@ -13,16 +13,27 @@
 */
 class Dynamic_TColorPicker_Property extends Dynamic_Property
 {
-    public $requiresmodule = 'base';
-    
-    public $id        = 44;
-    public $name      = 'tcolorpicker';
-    public $label     = 'Tigra Color Picker';
-    public $format    = '44';
-    
     public $size      = 10;
     public $maxlength = 7;
     public $min       = 7;
+
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->tplmodule = 'base';
+        $this->template = 'tcolorpicker';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 44;
+        $info->name = 'tcolorpicker';
+        $info->desc = 'Tigra Color Picker';
+
+        return $info;
+    }
 
     function validateValue($value = NULL)
     {
@@ -41,26 +52,13 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
         return true;
     }
 
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        $data = array();
-
         if (empty($maxlength) && isset($this->max)) {
             $this->maxlength = $this->max;
             if ($this->size > $this->maxlength) {
                 $this->size = $this->maxlength;
             }
-        }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-
-        if (!isset($value)) {
-            $value = $this->value;
         }
 
         // Include color picker javascript options.
@@ -77,42 +75,12 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
         );
 
         $data['baseuri']  = xarServerGetBaseURI();
-        $data['name']     = $name;
-        $data['id']       = $id;
         $data['size']     = $this->size;
         $data['maxlength']= $this->maxlength;
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showinput', $data);
+        return parent::showInput($data);
     }
 
-    function showOutput($args = array())
-    {
-        extract($args);
-        $data = array();
-
-        if (isset($value)) {
-            $data['value'] = xarVarPrepHTMLDisplay($value);
-        } else {
-            $data['value'] = xarVarPrepHTMLDisplay($this->value);
-        }
-
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
-    }
 }
 ?>

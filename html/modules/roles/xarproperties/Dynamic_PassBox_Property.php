@@ -13,16 +13,9 @@
  * Dynamic Passbox property
  * @author mikespub <mikespub@xaraya.com>
  */
-
-class Dynamic_PassBox_Property extends Dynamic_Property
+include_once 'modules/base/xarproperties/Dynamic_TextBox_Property.php';
+class Dynamic_PassBox_Property extends Dynamic_TextBox_Property
 {
-    public $requiresmodule = 'roles';
-
-    public $id     = 46;
-    public $name   = 'passbox';
-    public $label  = 'Password Text Box';
-    public $format = '46';
-
     public $size = 25;
     public $maxlength = 254;
 
@@ -32,6 +25,9 @@ class Dynamic_PassBox_Property extends Dynamic_Property
     function __construct($args)
     {
         parent::__construct($args);
+        $this->tplmodule = 'roles';
+        $this->template ='password';
+
         // check validation for allowed min/max length (or values)
         if (!empty($this->validation) && strchr($this->validation,':')) {
             list($min,$max) = explode(':',$this->validation);
@@ -42,6 +38,17 @@ class Dynamic_PassBox_Property extends Dynamic_Property
                 $this->max = $max; // could be int or float - cfr. FloatBox below
             }
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('roles');
+        $info->id   = 46;
+        $info->name = 'passbox';
+        $info->desc = 'Password Text Box';
+
+        return $info;
     }
 
     function validateValue($value = null)
@@ -72,12 +79,10 @@ class Dynamic_PassBox_Property extends Dynamic_Property
         }
     }
 
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
+        extract($data);
         
-        $data = array();
-
         if (empty($maxlength) && isset($this->max)) {
             $this->maxlength = $this->max;
             if ($this->size > $this->maxlength) {
@@ -85,41 +90,18 @@ class Dynamic_PassBox_Property extends Dynamic_Property
             }
         }
 
+        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
+        $data['confirm']  = !empty($confirm) ? true : false;
 
-//         $data['name']     = !empty($name) ? $name : 'dd_'.$this->id;
-         $data['name']     = !empty($name) ? $name : 'dd_'.$this->id;
-         $data['id']       = !empty($id)   ? $id   : 'dd_'.$this->id;
-         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-         $data['tabindex'] = !empty($tabindex) ? $tabindex  : 0;
-         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-         $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
-         $data['size']     = !empty($size) ? $size : $this->size;
-         $data['confirm']  = !empty($confirm) ? true : false;
-
-         if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showinput', $data);
+        return parent::showInput($data);
     }
 
-    function showOutput($value = null)
+    function showOutput($data = array())
     {
         //we don't really want to show the password, do we?
-        $data = array();
         $data['value'] = '';
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return parent::showOutput($data);
     }
 }
 ?>

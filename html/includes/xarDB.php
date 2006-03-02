@@ -20,7 +20,6 @@
  * @access protected
  * @global array xarDB_systemArgs
  * @global object dbconn database connection object
- * @global array xarTables database tables used by Xaraya
  * @param string args[databaseType] database type to use
  * @param string args[databaseHost] database hostname
  * @param string args[databaseName] database name
@@ -44,22 +43,18 @@ function xarDB_init($args, $whatElseIsGoingLoaded)
     // We do this here so we can remove customisation from creole lib.
     xarDB::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
     
-    // Start the default connection
-    $GLOBALS['xarDB_connections'] = array();
-    
     if($args['doConnect']) {
-        $dbconn =& xarDBNewConn();
     }
-
-    $GLOBALS['xarDB_tables'] = array();
-
+    
+    if($args['doConnect']) $dbconn =& xarDBNewConn();
     $systemPrefix = $args['systemTablePrefix'];
     $sitePrefix   = $args['siteTablePrefix'];
 
     // BlockLayout Template Engine Tables
     // FIXME: this doesnt belong here
-    $GLOBALS['xarDB_tables']['template_tags'] = $systemPrefix . '_template_tags';
-
+    // Not trivial to move out though
+    $table['template_tags'] = $systemPrefix . '_template_tags';
+    xarDB::importTables($table);
     // All initialized register the shutdown function
     //register_shutdown_function('xarDB__shutdown_handler');
 
@@ -84,14 +79,14 @@ function xarDB__shutdown_handler()
  * Get a database connection
  *
  * @access public
- * @global array  xarDB_connections array of database connection objects
  * @return object database connection object
  */
 function &xarDBGetConn($index=0)
 {
     // we only want to return the first connection here
     // perhaps we'll add linked list capabilities to this soon
-    return $GLOBALS['xarDB_connections'][$index];
+    $tmp =& xarDB::getConn($index);
+    return $tmp;
 }
 
 /**
@@ -123,13 +118,12 @@ function &xarDBNewConn($args = NULL)
     // Set flags
     $flags = 0;
     if($persistent) $flags |= xarDB::PERSISTENT;
-
     $conn = null;
     $conn = xarDB::getConnection($dsn,$flags);
-    // Store the connection for global access.
-    $GLOBALS['xarDB_connections'][] =& $conn;
 
-    xarLogMessage("New connection created, now serving " . count($GLOBALS['xarDB_connections']) . " connections");
+    $conn = null;
+    $conn = xarDB::getConnection($dsn,$flags); // cached on dsn hash, so no worries
+    xarLogMessage("New connection created, now serving " . count(xarDB::$count) . " connections");
     return $conn;
 }
 
@@ -137,12 +131,12 @@ function &xarDBNewConn($args = NULL)
  * Get an array of database tables
  *
  * @access public
- * @global array xarDB_tables array of database tables
  * @return array array of database tables
  */
 function &xarDBGetTables()
 {
-    return $GLOBALS['xarDB_tables'];
+    $tmp =& xarDB::getTables();
+    return $tmp;
 }
 
 /**
@@ -213,7 +207,7 @@ function &xarDBNewDataDict(&$dbconn, $mode = 'READONLY')
  */
 function xarDBGetHost()
 {
-    return $GLOBALS['xarDB_systemArgs']['databaseHost'];
+    return xarDB::getHost();
 }
 
 /**
@@ -224,7 +218,7 @@ function xarDBGetHost()
  */
 function xarDBGetType()
 {
-    return $GLOBALS['xarDB_systemArgs']['databaseType'];
+    return xarDB::getType();
 }
 
 /**
@@ -235,7 +229,7 @@ function xarDBGetType()
  */
 function xarDBGetName()
 {
-    return $GLOBALS['xarDB_systemArgs']['databaseName'];
+    return xarDB::getName();
 }
 
 /**
@@ -267,12 +261,10 @@ function xarDBGetSiteTablePrefix()
  * Import module tables in the array of known tables
  *
  * @access protected
- * @global xartable array
  */
 function xarDB_importTables($tables)
 {
-    assert('is_array($tables)');
-    $GLOBALS['xarDB_tables'] = array_merge($GLOBALS['xarDB_tables'], $tables);
+    xarDB::importTables($tables);
 }
 
 
