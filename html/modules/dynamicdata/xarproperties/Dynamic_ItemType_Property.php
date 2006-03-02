@@ -32,8 +32,7 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->tplmodule = "dynamicdata";
-//        $this->template = "itemtype";
+        // Tplmodule and template are by default those of the numberbox (whatever they may be)
 
         // options may be set in one of the child classes
         if (count($this->options) == 0 && !empty($this->validation)) {
@@ -72,62 +71,49 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
         }
     }
 
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        if (!empty($args)) {
-            $this->setArguments($args);
+        if (!empty($data)) {
+            $this->setArguments($data);
         }
         if (empty($this->module)) {
             // let Dynamic_NumberBox_Property handle the rest
-            return parent::showInput($args);
+            return parent::showInput($data);
         }
 
-        $data = array();
         $data['options']  = $this->getOptions();
         if (empty($data['options'])) {
             // let Dynamic_NumberBox_Property handle the rest
-            return parent::showInput($args);
+            return parent::showInput($data);
         }
         $data['value']    = $this->value; // cfr. setArguments()
         $data['name']     = !empty($this->fieldname) ? $this->fieldname : 'dd_' . $this->id;
-        $data['id']       = !empty($args['id']) ? $args['id'] : $data['name'];
-        $data['tabindex'] = !empty($args['tabindex']) ? $args['tabindex'] : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
-        $data['onchange'] = isset($args['onchange']) ? $args['onchange'] : null; // let tpl decide what to do
+        if(!isset($data['onchange'])) $data['onchange'] = null; // let tpl decide what to do
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($args['template'])) {
-            $args['template'] = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $args['template'], 'showinput', $data);
+        // Once we get here, we dont let our parent dictate what we need anymore for rendering
+        $this->tplmodule = 'dynamic_data';
+        $this->template = 'itemtype';
+        return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        if (!empty($args)) {
-            $this->setArguments($args);
+        if (!empty($data)) {
+            $this->setArguments($data);
         }
         if (empty($this->module)) {
             // let Dynamic_NumberBox_Property handle the rest
-            return parent::showOutput($args);
+            return parent::showOutput($data);
         }
 
-        $data = array();
         $data['value'] = $this->value;
         $data['option'] = array('id' => $this->value,
                                 'name' => $this->getOption());
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($args['template'])) {
-            $args['template'] = $this->getTemplate();
-        }
-
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        // Once we get here, we dont let our parent dictate what we need anymore for rendering
+        $this->tplmodule = 'dynamic_data';
+        $this->template = 'itemtype';
+        return parent::showOutput($data);
     }
 
     function setArguments($args = array())
