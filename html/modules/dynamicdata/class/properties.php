@@ -798,14 +798,14 @@ class PropertyRegistration
     {
         $dbconn =& xarDBGetConn();
         $tables = xarDBGetTables();
-        // Sort by required module(s) and then by id
+        // Sort by required module(s) and then by name
         $query = "SELECT  xar_prop_id, xar_prop_name, xar_prop_label,
                           xar_prop_parent, xar_prop_filepath, xar_prop_class,
                           xar_prop_format, xar_prop_validation, xar_prop_source,
                           xar_prop_reqfiles,xar_prop_reqmodules, xar_prop_args,
                           xar_prop_aliases
                   FROM    $tables[dynamic_properties_def]
-                  ORDER BY xar_prop_reqmodules, xar_prop_id";
+                  ORDER BY xar_prop_reqmodules, xar_prop_name";
         $result =& $dbconn->executeQuery($query);
         $proptypes = array();
         if($result->RecordCount() == 0 ) {

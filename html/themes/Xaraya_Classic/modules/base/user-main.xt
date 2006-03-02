@@ -5,12 +5,21 @@
 </h1>
 <div class="xar-mod-body xar-overflow-auto">
     <xar:set name="versionnum">XARCORE_VERSION_NUM</xar:set>
+    <xar:if condition="defined('XARCORE_VERSION_REV')">
+        <xar:set name="mtrev">XARCORE_VERSION_REV</xar:set>
+    </xar:if>
     <h2>
         <xar:ml>
             <xar:mlstring>Xaraya has reached Production Stable Version #(1)</xar:mlstring>
             <xar:mlvar>#$versionnum#</xar:mlvar>
         </xar:ml>
     </h2>
+    <xar:if condition="isset($mtrev)">
+        <p>
+            <xar:mlstring>Monotone base revsision: </xar:mlstring>
+            <a href="http://mt.xaraya.com/com.xaraya.core/revision.psp?id=#$mtrev#">#$mtrev#</a>
+        </p>
+    </xar:if>
     <p>
         <xar:mlstring>
             This means we feel our functionality is complete, our core

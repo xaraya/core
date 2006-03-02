@@ -118,6 +118,7 @@ function xarConfigSetVar($name, $value)
  * @return bool true on success, or void on database error
  * @raise DATABASE_ERROR
  * @todo We need some way to delete configuration (useless without a certain module) variables from the table!!!
+ * @todo look into removing the serialisation, creole does this when needed, automatically
  */
 function xarConfig_loadVars()
 {

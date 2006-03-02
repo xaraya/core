@@ -28,11 +28,6 @@ class Dynamic_Validation_Property extends Dynamic_TextBox_Property
 
     public $proptype = null;
 
-    function __construct($args)
-    {
-        parent::__construct($args);
-    }
-
     static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();

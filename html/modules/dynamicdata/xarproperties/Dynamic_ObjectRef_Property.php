@@ -73,11 +73,9 @@ class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
 
     // Produce option(id,value) and value to pass to template
     // We cant trust the parent right now because that is using xarTplModule and not xarTplProperty
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        $data=array(); $template = null;
-        extract($args);
-        if (isset($value)) $this->value = $value;
+        if (isset($data['value'])) $this->value = $data['value'];
 
         $data['value'] = $this->value;
         // get the option corresponding to this value
@@ -85,8 +83,7 @@ class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
         // only apply xarVarPrepForDisplay on strings, not arrays et al.
         if (!empty($result) && is_string($result)) $result = xarVarPrepForDisplay($result);
         $data['option'] = array('id' => $this->value, 'name' => $result);
-        // If children call us, they can pass in template
-        return xarTplProperty('dynamicdata', 'objectref', 'showoutput', $data, $template);
+        return parent::showInput($data);
     }
 
     // Show the validation output.
