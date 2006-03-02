@@ -33,9 +33,11 @@ class Dynamic_FieldType_Property extends Dynamic_Select_Property
             if (!isset($proptypes)) $proptypes = array();
                 
             foreach ($proptypes as $propid => $proptype) {
-                $this->options[] = array('id' => $propid, 'name' => $proptype['label']);
+                $this->options[$proptype['label']] = array('id' => $propid, 'name' => $proptype['label']);
             }
         }
+        // sort em by name
+        ksort($this->options);
     }
         
     static function getRegistrationInfo()
