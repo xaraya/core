@@ -24,13 +24,8 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
 {
-    public $id = 600;
-    public $name = 'moduleitemtype';
-    public $label = 'Parent';
-    public $format = '600';
-    public $requiresmodule = 'dynamicdata';
 
-    var $referencemoduleid = 182;
+    public $referencemoduleid = 182;
 
     function Dynamic_ModuleItemtype_Property($args)
     {
@@ -39,6 +34,22 @@ class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
         if (isset($modid)) $this->referencemoduleid = $modid;
 		$this->options = $this->getOptions();
 	}
+
+    function __construct($args)
+    {
+        parent::__construct($args);
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('dynamicdata');
+        $info->id   = 600;
+        $info->name = 'moduleitemtype';
+        $info->desc = 'Parent';
+
+        return $info;
+    }
 
     function validateValue($value = null)
     {

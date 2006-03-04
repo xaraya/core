@@ -36,9 +36,11 @@ class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
     var $store_prop   = 'objectid';   // Name of the property we want to use for storage
     var $display_prop = 'name';       // Name of the property we want to use for displaying.
     
-    function __construct($args) {
+    function __construct($args) 
+    {
         $this->template = 'objectref';
-        $this->tplmodule = 'dynamic_data';
+        $this->tplmodule = 'dynamicdata';
+    }
     static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();
