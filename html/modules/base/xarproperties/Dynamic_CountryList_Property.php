@@ -23,8 +23,8 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_CountryList_Property extends Dynamic_Select_Property
 {
-    public $id = 42;
     function __construct($args)
+    {
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template  = 'countrylist';
@@ -39,6 +39,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $info->desc = 'Country Dropdown';
 
         return $info;
+    }
 
     function validateValue($value = null)
     {
