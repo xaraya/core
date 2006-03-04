@@ -122,11 +122,12 @@
                 </li>
             </xar:if>
         </xar:foreach>
-      <li class="cat">
+        <xar:if condition="$showhelp eq '1'">
+        <li class="cat">
             <a href="#$overviewlink#" title="#xarML('System help')#" class="empty">
                 Help
             </a>
         </li>
-
+        </xar:if>
     </ul>
 </div>
