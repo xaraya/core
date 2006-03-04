@@ -25,7 +25,6 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
 {
     public $id = 42;
     function __construct($args)
-    public $label = 'Country Dropdown';
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template  = 'countrylist';
