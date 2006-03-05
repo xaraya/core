@@ -600,7 +600,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
             //would that be too time expensive?
             // <mrb> it doesnt matter, Creole does it automatically if it hasnt already happened.
             // this also means that if you dont use the neat creole methods, you're on your own.
-            // basically, never serialize anything, let the middleware handle it. on top of that, dont put 
+            // basically, never serialize anything, let the middleware handle it. on top of that, dont put
             // complex datastructures in the db like that, since that sucks to begin with.
             $result->next();
             list($value) = $result->getRow();
@@ -967,51 +967,6 @@ function xarVarCleanUntrusted($var)
     $var = preg_replace($search, $replace, $var);
 
     return $var;
-}
-
-/**
- * Clean user input
- *
- * Gets a global variable, cleaning it up to try to ensure that
- * hack attacks don't work. Can have as many parameters as needed.
- *
- * @access public
- * @return mixed prepared variable if only one variable passed in, otherwise an array of prepared variables
- * @todo <marco> FIXME: This function will not work if the security system is not loaded!
- * @deprec
- */
-function xarVarCleanFromInput()
-{
-    // Issue a WARNING as this function is deprecated
-    xarLogMessage('Using deprecated function xarVarCleanFromInput, use xarVarFetch instead',XARLOG_LEVEL_WARNING);
-    $resarray = array();
-    foreach (func_get_args() as $name) {
-        if (empty($name)) {
-            // you sure you want to return like this ?
-            return;
-        }
-
-        $var = xarRequestGetVar($name);
-        if (!isset($var)) {
-            array_push($resarray, NULL);
-            continue;
-        }
-
-        // TODO: <marco> Document this security check!
-        if (!function_exists('xarSecurityCheck') || !xarSecurityCheck('AdminAll',0)) {
-            $var = xarVarCleanUntrusted($var);
-        }
-
-        // Add to result array
-        array_push($resarray, $var);
-    }
-
-    // Return vars
-    if (func_num_args() == 1) {
-        return $resarray[0];
-    } else {
-        return $resarray;
-    }
 }
 
 /**
