@@ -24,10 +24,9 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 class Dynamic_DataSource_Property extends Dynamic_Select_Property
 {
     function __construct($args)
-    public $requiresmodule = 'dynamicdata';
     {
         parent::__construct($args);
- 
+
         if (count($this->options) == 0) {
             $sources = Dynamic_DataStore_Master::getDataSources();
             if (!isset($sources)) {

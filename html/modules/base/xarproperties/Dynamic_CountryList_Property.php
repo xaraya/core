@@ -23,9 +23,8 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_CountryList_Property extends Dynamic_Select_Property
 {
-    public $id = 42;
     function __construct($args)
-    public $label = 'Country Dropdown';
+    {
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template  = 'countrylist';
@@ -40,6 +39,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $info->desc = 'Country Dropdown';
 
         return $info;
+	}
 
     function validateValue($value = null)
     {
@@ -312,7 +312,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'zm', 'name'=>xarML('Zambia'));
         $coptions[] = array('id' =>'zw', 'name'=>xarML('Zimbabwe'));
         $this->options = $coptions;
-       return $this->options;
+		return $this->options;
    }
 }
 ?>
