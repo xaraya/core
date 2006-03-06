@@ -526,30 +526,30 @@ if (empty($itemidfield)) {
             return $this->primary;
         }
 
-        // Try to get the primary field via the meta table
+        // Get meta info on the table
+        $columns = xarModAPIFunc(
+            'dynamicdata', 'util', 'getmeta',
+            array('db' => '', 'table' => $table)
+        );
 
-        $table = $this->name;
+        // Check each column in turn, and stop if a primary key found.
+        foreach ($columns as $column) {
+            if (!empty($column['primary'])) {
+               $this->primary = $column;
+               return $column;
+            }
+        }
 
-        $dbconn =& xarDBGetConn();
+        // If no primary key, then try looking for autoincrement columns.
+        foreach ($columns as $column) {
+            if (!empty($column['autoincrement'])) {
+               $this->primary = $column;
+               return $column;
+            }
+        }
 
-        $systemPrefix = xarDBGetSystemTablePrefix();
-        $metaTable = $systemPrefix . '_tables';
-
-    // TODO: improve this once we can define better relationships
-        $query = "SELECT xar_field, xar_type
-                    FROM $metaTable
-                   WHERE xar_primary_key = 1
-                     AND xar_table=?";
-
-        $result =& $dbconn->Execute($query,array($table));
-
-        if (!$result || $result->EOF) return;
-
-        list($field, $type) = $result->fields;
-        $result->Close();
-
-        $this->primary = $field;
-        return $field;
+        // No primary key was found.
+        return;
     }
 
     function getNext($args = array())

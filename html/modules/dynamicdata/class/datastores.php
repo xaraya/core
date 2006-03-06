@@ -122,35 +122,13 @@ class Dynamic_DataStore_Master
             }
         }
 
-        $dbconn =& xarDBGetConn();
-        $xartable =& xarDBGetTables();
-
-        $systemPrefix = xarDBGetSystemTablePrefix();
-        $metaTable = $systemPrefix . '_tables';
-
-    // TODO: remove Xaraya system tables from the list of available sources ?
-        $query = "SELECT xar_table,
-                         xar_field,
-                         xar_type,
-                         xar_size
-                  FROM $metaTable
-                  ORDER BY xar_table ASC, xar_field ASC";
-
-        $result =& $dbconn->Execute($query);
-
-        if (!$result) return;
-
-        // add the list of table + field
-        while (!$result->EOF) {
-            list($table, $field, $type, $size) = $result->fields;
-        // TODO: what kind of security checks do we want/need here ?
-            //if (xarSecAuthAction(0, 'DynamicData::Field', "$name:$type:$id", ACCESS_READ)) {
-            //}
-            $sources[] = "$table.$field";
-            $result->MoveNext();
+        // Get table list from database, not xar_tables.
+        $tables = xarModAPIFunc('dynamicdata', 'util', 'getmeta', array('db' => '', 'table' => ''));
+        foreach($tables as $table) {
+           foreach($table as $column) {
+              $sources[] = $column['source'];
+           }
         }
-
-        $result->Close();
 
         return $sources;
     }
