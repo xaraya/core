@@ -11,17 +11,17 @@
  *
  * @package dynamicdata
  */
-class Dynamic_UserSettings_DataStore extends Dynamic_DataStore
+class Dynamic_UserSettings_DataStore extends Dynamic_DataStore // Consider inheriting from ModuleVar Datastore
 {
-    var $modname;
+    public $modname;
 
-    function Dynamic_UserSettings_DataStore($name)
+    function __construct($name)
     {
         // invoke the default constructor from our parent class
-        $this->Dynamic_DataStore($name);
+        parent::__construct($name);
 
         // keep track of the concerned module for user settings
-    // TODO: the concerned module is currently hiding in the third part of the name :)
+        // TODO: the concerned module is currently hiding in the third part of the name :)
         list($fixed1,$fixed2,$modid) = explode('_',$name);
         if (empty($modid)) {
             $modid = xarModGetIDFromName(xarModGetName());
@@ -30,14 +30,6 @@ class Dynamic_UserSettings_DataStore extends Dynamic_DataStore
         if (!empty($modinfo['name'])) {
             $this->modname = $modinfo['name'];
         }
-    }
-
-    /**
-     * Get the field name used to identify this property (we use the name of the property here)
-     */
-    function getFieldName(&$property)
-    {
-        return $property->name;
     }
 
     function getItem($args)

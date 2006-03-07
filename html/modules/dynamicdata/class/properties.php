@@ -106,6 +106,7 @@ class Dynamic_Property_Master
         }
 
         // "beautify" label based on name if not specified
+        // TODO: this is a presentation issue, doesnt belong here.
         if (!isset($args['label']) && !empty($args['name'])) {
             $args['label'] = strtr($args['name'], '_', ' ');
             $args['label'] = ucwords($args['label']);
