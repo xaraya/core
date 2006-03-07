@@ -756,6 +756,14 @@ class PropertyRegistration
     {
         static $stmt = null;
 
+        // Sanity checks (silent)
+        foreach($this->reqfiles as $required) {
+            if(!file_exists($required)) return false;
+        }
+        foreach($this->reqmodules as $required) {
+            if(!xarModIsAvailable($required)) return false;
+        }
+            
         $dbconn = &xarDBGetConn();
         $tables = xarDBGetTables();
         $propdefTable = $tables['dynamic_properties_def'];
@@ -787,7 +795,7 @@ class PropertyRegistration
                 $aliasInfo->format = $this->format;
                 $aliasInfo->reqmodules = $this->reqmodules;
                 // Recursive!!
-                $aliasInfo->Register();
+                $res = $aliasInfo->Register();
             }
         }
         return $res;                          
