@@ -3,7 +3,7 @@
  * Import an object definition or an object item from XML
  *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -16,8 +16,10 @@
  * @param $args['file'] location of the .xml file containing the object definition, or
  * @param $args['xml'] XML string containing the object definition
  * @param $args['keepitemid'] (try to) keep the item id of the different items (default false)
- * @returns mixed
- * @return object id on success, null on failure
+ * @return array object id on success, null on failure
+ * @todo MichelV <1> add a check for already present definitions
+                     so the errors get more gracious
+                 <2> make sure an error doesn't kill the process, but offers a return option
  */
 function dynamicdata_utilapi_import($args)
 {
@@ -211,6 +213,7 @@ function dynamicdata_utilapi_import($args)
                 $key = $matches[1];
                 $value = $matches[2];
                 if (isset($property[$key])) {
+                    // TODO: make sure we do not encounter this error when there are duplicate labels due to spaces
                     $msg = xarML('Duplicate definition for #(1) key #(2) on line #(3)','property',xarVarPrepForDisplay($key),$count);
                     xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
                                     new SystemException($msg));
