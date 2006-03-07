@@ -26,7 +26,7 @@ class Dynamic_DataSource_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
- 
+
         if (count($this->options) == 0) {
             $sources = Dynamic_DataStore_Master::getDataSources();
             if (!isset($sources)) {

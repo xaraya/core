@@ -312,7 +312,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'zm', 'name'=>xarML('Zambia'));
         $coptions[] = array('id' =>'zw', 'name'=>xarML('Zimbabwe'));
         $this->options = $coptions;
-       return $this->options;
+		return $this->options;
    }
 }
 ?>

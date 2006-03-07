@@ -27,13 +27,13 @@ class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
 
     public $referencemoduleid = 182;
 
-    function Dynamic_ModuleItemtype_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Select_Property($args);
+        parent::__construct($args);
         extract($args);
         if (isset($modid)) $this->referencemoduleid = $modid;
 		$this->options = $this->getOptions();
-	}
+    }
 
     function __construct($args)
     {
@@ -102,6 +102,17 @@ class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
 			$this->options[] = array('id' => 0, 'name' => xarML('no itemtypes defined'));
 		}
 		return $this->options;
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('dynamicdata');
+        $info->id   = 600;
+        $info->name = 'moduleitemtype';
+        $info->desc = 'Parent';
+
+        return $info;
     }
 }
 ?>
