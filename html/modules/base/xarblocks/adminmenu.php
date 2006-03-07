@@ -207,7 +207,10 @@ function base_adminmenublock_display($blockinfo)
             break;
     }
     //making a few assumptions here for now about modname and directory
-    //we want modtype as well?
+    //very rough - but let's use what we have for now
+    //Leave way open for real help system
+    //TODO : move any final help functions to some module or api when decided
+
     if (file_exists('modules/'.$thismodname.'/xaradmin/overview.php')) {
         if ($thisfuncname<>'overview' && $thisfuncname<>'main') {
             $overviewlink=xarModURL($thismodname,'admin','overview',array(),NULL,$thisfuncname);
