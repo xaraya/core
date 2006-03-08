@@ -607,6 +607,7 @@ function xarCoreIsApiAllowed($apiType)
  * xarCore.php function
  * @access public
  * @param string The function name; case-sensitive
+ * @todo this seems out of place here.
  */
 function xarFuncIsDisabled($funcName)
 {
