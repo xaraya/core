@@ -30,14 +30,7 @@ class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-        extract($args);
-        if (isset($modid)) $this->referencemoduleid = $modid;
-		$this->options = $this->getOptions();
-    }
-
-    function __construct($args)
-    {
-        parent::__construct($args);
+        if (isset($args['modid'])) $this->referencemoduleid = $args['modid'];
     }
 
     static function getRegistrationInfo()
