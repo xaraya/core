@@ -1,7 +1,7 @@
 <?php
 /**
- *
  * Dynamic Data Module Itemtype Property
+ *
  * A dropdown giving the extensions based on a given module
  * to use for displaying possible parents of an extension
  *
@@ -95,17 +95,6 @@ class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
 			$this->options[] = array('id' => 0, 'name' => xarML('no itemtypes defined'));
 		}
 		return $this->options;
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('dynamicdata');
-        $info->id   = 600;
-        $info->name = 'moduleitemtype';
-        $info->desc = 'Parent';
-
-        return $info;
     }
 }
 ?>
