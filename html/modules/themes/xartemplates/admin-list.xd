@@ -166,7 +166,7 @@
             <xar:else />
             <!--
                 the Module Lists table-based styles 
-            --.
+            -->
             <table class="xar-fullwidth">
                 <tr>
                     <th>
