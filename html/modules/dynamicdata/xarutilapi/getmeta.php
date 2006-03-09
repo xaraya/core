@@ -150,6 +150,9 @@ function dynamicdata_utilapi_getmeta($args)
                 $proptype = 21; // Item ID
             }
 
+            // JDJ: added 'primary' and 'autoincrement' fields.
+            // If this causes a problem, it could be made optional.
+            // It is used by the FlatTable datastore to determine the primary key.
             $columns[$name] = array('name' => $name,
                                    'label' => $label,
                                    'type' => $proptype,
@@ -158,7 +161,9 @@ function dynamicdata_utilapi_getmeta($args)
                                    'source' => $curtable . '.' . $fieldname,
                                    'status' => $status,
                                    'order' => $id,
-                                   'validation' => $validation);
+                                   'validation' => $validation,
+                                   'primary' => $field->primary_key,
+                                   'autoincrement' => $field->auto_increment);
             $id++;
         }
         $metadata[$curtable] = $columns;
