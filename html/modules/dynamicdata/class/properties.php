@@ -106,6 +106,7 @@ class Dynamic_Property_Master
         }
 
         // "beautify" label based on name if not specified
+        // TODO: this is a presentation issue, doesnt belong here.
         if (!isset($args['label']) && !empty($args['name'])) {
             $args['label'] = strtr($args['name'], '_', ' ');
             $args['label'] = ucwords($args['label']);
@@ -755,6 +756,14 @@ class PropertyRegistration
     {
         static $stmt = null;
 
+        // Sanity checks (silent)
+        foreach($this->reqfiles as $required) {
+            if(!file_exists($required)) return false;
+        }
+        foreach($this->reqmodules as $required) {
+            if(!xarModIsAvailable($required)) return false;
+        }
+            
         $dbconn = &xarDBGetConn();
         $tables = xarDBGetTables();
         $propdefTable = $tables['dynamic_properties_def'];
@@ -786,7 +795,7 @@ class PropertyRegistration
                 $aliasInfo->format = $this->format;
                 $aliasInfo->reqmodules = $this->reqmodules;
                 // Recursive!!
-                $aliasInfo->Register();
+                $res = $aliasInfo->Register();
             }
         }
         return $res;                          
