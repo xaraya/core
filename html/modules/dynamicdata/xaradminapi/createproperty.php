@@ -65,7 +65,7 @@ function dynamicdata_adminapi_createproperty($args)
     if(!xarSecurityCheck('AdminDynamicDataItem',1,'Item',"$moduleid:$itemtype:All")) return;
 
     // get the properties of the 'properties' object
-    $fields = xarModAPIFunc('dynamicdata','user','getprop',
+    $fields =& xarModAPIFunc('dynamicdata','user','getprop',
                             array('objectid' => 2)); // the properties
 
     $values = array();
