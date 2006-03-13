@@ -444,7 +444,9 @@ class PHPMailer
             //XARAYA MODIFICATION -- Start
             if (!xarFuncIsDisabled('ini_set')) ini_set("sendmail_from", $this->Sender);
             //XARAYA MODIFICATION -- End
-            $params = sprintf("-oi -f %s", $this->Sender);
+            //SF issue 1312256
+            //$params = sprintf("-oi -f %s", $this->Sender);
+            $params = sprintf("-oi -f%s", $this->Sender);
               $rt = @mail($to, $this->EncodeHeader($this->Subject), $body,
                         $header, $params);
         }
