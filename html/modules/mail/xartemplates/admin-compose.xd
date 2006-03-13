@@ -34,6 +34,7 @@
                 </label>
                 <input type="text" id="email" name="email" value="#$email#" maxlength="255" class="xar-form-textlong" />
             </div>
+            <!--
             <div class="xar-form-input-wrapper">
                 <label for="name" title="#xarML('Recipient Name.')#" class="xar-form-label">
                     <xar:mlstring>
@@ -42,6 +43,7 @@
                 </label>
                 <input type="text" id="name" name="name" value="#$name#" maxlength="100" class="xar-form-textlong" />
             </div>
+            -->
             <div class="xar-form-input-wrapper">
                 <label for="emailcc" title="#xarML('Recipient CC.')#" class="xar-form-label">
                     <xar:mlstring>
