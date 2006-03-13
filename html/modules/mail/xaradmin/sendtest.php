@@ -29,8 +29,8 @@ function mail_admin_sendtest()
     if (!xarVarFetch('name', 'str:1', $name, '')) return;
     if (!xarVarFetch('emailcc', 'email', $emailcc, '')) return;
     if (!xarVarFetch('namecc', 'str:1', $namecc, '')) return;
-    if (!xarVarFetch('emailcc', 'email', $emailbcc, '')) return;
-    if (!xarVarFetch('namecc', 'str:1', $namebcc, '')) return;
+    if (!xarVarFetch('emailbcc', 'email', $emailbcc, '')) return;
+    if (!xarVarFetch('namebcc', 'str:1', $namebcc, '')) return;
 
     // Confirm authorisation code.
     if (!xarSecConfirmAuthKey()) return;

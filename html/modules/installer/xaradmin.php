@@ -17,7 +17,9 @@
  * @author Marcel van der Boom <marcel@hsdev.com>
  */
 
-if (!file_exists('install.php')) {xarCore_die(xarML('Already installed'));}
+
+/* TODO: temp change so this will run for upgrade as well. Need to address this in better way.
+if (!file_exists('install.php') and !file_exists('upgrade.php')) {xarCore_die(xarML('Already installed'));}
 
 /**
  * Dead
