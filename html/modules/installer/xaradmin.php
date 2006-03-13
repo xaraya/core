@@ -16,6 +16,7 @@
  * @author Paul Rosania
  * @author Marcel van der Boom <marcel@hsdev.com>
  */
+
 if (!file_exists('install.php')) {xarCore_die(xarML('Already installed'));}
 
 /**
@@ -696,7 +697,7 @@ function installer_admin_create_administrator()
                                  'groups'   => array(array('gid'      => $leftBlockGroup,
                                                            'template' => '')),
                                  'template' => '',
-                                 'state'    =>  2))) {
+                                 'state'    =>  2))) { 
             return;
         }
     }

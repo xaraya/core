@@ -6,11 +6,13 @@
 <ul class="xar-menu-section">
     <li class="xar-menu-section">
         <ul class="xar-menu-item">
+            <xar:if condition="$showhelp eq '1'">
             <li class="xar-menu-item">
                 <a title="#xarML('System help')#" href="#$overviewlink#">
                     <xar:mlstring>Help</xar:mlstring>
                 </a>
             </li>
+            </xar:if>
             <xar:foreach in="$adminmods" value="$mod" key="$modname">
                 <xar:if condition="$mod['features']['modactive'] and !$mod['features']['overview']">
                     <li class="xar-menu-item-current"><a name="activeitem" title="#$mod['features']['label']#">#$mod['features']['label']#</a>
