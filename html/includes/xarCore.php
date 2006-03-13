@@ -145,7 +145,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     xarPHPCompat::loadAll('includes/phpcompat');
 
     /**
-        * At this point we should be able to catch all low level errors, so we can start the debugger
+     * At this point we should be able to catch all low level errors, so we can start the debugger
+     * Set the types of debug you want to see by adding flags to the activation
      *
      * FLAGS:
      *
@@ -157,7 +158,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      * Flags can be OR-ed together
      */
-    xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT );
+    xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT);
 
     /*
      * If there happens something we want to be able to log it
