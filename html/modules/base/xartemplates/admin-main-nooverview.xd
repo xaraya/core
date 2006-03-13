@@ -11,10 +11,10 @@
     </h2>
 
     <p>
-        <xar:mlstring>There are no overviews for this Xaraya extension. If you would like to contribute a help
+        <xar:mlstring>There is no overview for this Xaraya extension function. If you would like to contribute a help
         file please contact us at </xar:mlstring><a href="mailto:info@xaraya.com">info@xaraya.com</a><xar:mlstring>. You can also report a missing Overview file by lodging a bug report at </xar:mlstring><a href="http://bugs.xaraya.com">http://bugs.xaraya.com</a></p>
     <p>
-       <xar:mlstring>You can easily create an overview for a module by following the Example
+       <xar:mlstring>To create an Overview for a module you can follow the Example
        module Overview template at </xar:mlstring><strong>modules/example/xartemplates/admin-main.xd</strong><xar:mlstring> or the online instructions at </xar:mlstring><a href="http://xaraya.com/index.php/team/591"><xar:mlstring>Creating Xaraya Help System Documents</xar:mlstring></a>.
     </p>
 
