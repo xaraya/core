@@ -445,7 +445,7 @@ class PHPMailer
             if (!xarFuncIsDisabled('ini_set')) ini_set("sendmail_from", $this->Sender);
             //XARAYA MODIFICATION -- End
             $params = sprintf("-oi -f %s", $this->Sender);
-            $rt = @mail($to, $this->EncodeHeader($this->Subject), $body,
+              $rt = @mail($to, $this->EncodeHeader($this->Subject), $body,
                         $header, $params);
         }
         else
@@ -821,13 +821,13 @@ class PHPMailer
 
         // Get  client IP addr
         //
-        //$forwarded = xarServerGetVar('HTTP_X_FORWARDED_FOR');
-        //if (!empty($forwarded)) {
-        //    $ipAddress = preg_replace('/,.*/', '', $forwarded);
-        //} else {
-        //    $ipAddress = xarServerGetVar('REMOTE_ADDR');
-        //}
-        //$result .= $this->HeaderLine("Received", "from [$ipAddress] by " . xarServerGetVar('HTTP_HOST') . "; " . date('r'));
+        $forwarded = xarServerGetVar('HTTP_X_FORWARDED_FOR');
+        if (!empty($forwarded)) {
+            $ipAddress = preg_replace('/,.*/', '', $forwarded);
+        } else {
+            $ipAddress = xarServerGetVar('REMOTE_ADDR');
+        }
+        $result .= $this->HeaderLine("Received", "from [$ipAddress] by " . xarServerGetVar('HTTP_HOST') . "; " . date('r'));
 
         $result .= sprintf("Message-ID: <%s@%s>%s", $uniq_id, $this->ServerHostname(), $this->LE);
         $result .= $this->HeaderLine("X-Priority", $this->Priority);
