@@ -111,7 +111,8 @@ function base_menublock_display($blockinfo)
     // Sort Order, Status, Common Labels and Links Display preparation
     //$menustyle = xarModGetVar('adminpanels','menustyle');
     $logoutlabel = xarVarPrepForDisplay(xarML('logout'));
-    $logouturl = xarModURL('roles' ,'user', 'logout', array());
+    $authmod=xarModGetVar('roles','defaultauthmodule');
+    $logouturl = xarModURL(xarModGetNameFromID($authmod) ,'user', 'logout', array());
     $loggedin = xarUserIsLoggedIn();
 
     // Get current URL
