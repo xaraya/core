@@ -103,7 +103,7 @@ function xarServerGetBaseURI()
   // it can be used to configure Xaraya for mod_rewrite by
   // setting BaseURI = '' in config.php
   $BaseURI =  xarCore_getSystemVar('BaseURI',true);
-  if( isSet( $BaseURI) )
+  if( isset( $BaseURI) )
   {
     // If BaseURI set, just use it
     return  $BaseURI;
