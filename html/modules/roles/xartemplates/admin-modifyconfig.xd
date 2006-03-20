@@ -288,6 +288,8 @@
                                 &nbsp;
                             </th>
                         </tr>
+                        <xar:comment>TODO: jojodee- not working yet, comment out until the code is there. 
+                                    There is no code to redirect after login. We need to adjust for the now used moduservars too
                         <tr>
                             <td style="width: 100px">
                                 userhome
@@ -308,8 +310,9 @@
                                 </xar:if>
                             </td>
                         </tr>
+                        </xar:comment>
                         <xar:comment> jojodee: comment out primary parent until there is supporting code in place.
-                        <<tr>
+                        <tr>
                             <td style="width: 100px">
                                 primaryparent
                             </td>
