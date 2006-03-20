@@ -288,15 +288,15 @@
                                 &nbsp;
                             </th>
                         </tr>
-                        <xar:comment>TODO: jojodee- not working yet, comment out until the code is there. 
-                                    There is no code to redirect after login. We need to adjust for the now used moduservars too
+                        <xar:comment>
+                            TODO: jojodee- not working yet, comment out until the code is there.
+                            There is no code to redirect after login. We need to adjust for the now used moduservars too
                         <tr>
                             <td style="width: 100px">
                                 userhome
                             </td>
                             <td style="width: 400px">
-                                <xar:comment>jojodee - adjust explanation given primary parent or the  code is not yet provided</xar:comment>
-                                <xar:mlstring>The user's home page, which is initially displayed when the user logs in. The home page can be user specific or inherited from the direct parent group. The home page is specified in a similar manner to user menu item shortcuts in the modify or edit role page.</xar:mlstring>
+                                      <xar:mlstring>The user's home page, which is initially displayed when the user logs in. The home page can be user specific or inherited from the direct parent group. The home page is specified in a similar manner to user menu item shortcuts in the modify or edit role page.</xar:mlstring>
                             </td>
                             <td style="width: 50px; text-align: center;">
                                 <xar:if condition="xarModGetVar('roles','userhome')">
