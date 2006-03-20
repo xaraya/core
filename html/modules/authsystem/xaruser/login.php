@@ -59,12 +59,13 @@ function authsystem_user_login()
         xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
         return;
     }
+    $redirect=xarServerGetBaseURL();
     if (!xarVarFetch('rememberme','checkbox',$rememberme,false,XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('redirecturl','str:1:100',$redirecturl,'index.php',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('redirecturl','str:1:254',$redirecturl,$redirect,XARVAR_NOT_REQUIRED)) return;
 
     // Defaults
     if (preg_match('/authsystem/',$redirecturl)) {
-        $redirecturl = 'index.php';
+        $redirecturl = $redirect;
     }
 
     // Scan authentication modules and set user state appropriately
