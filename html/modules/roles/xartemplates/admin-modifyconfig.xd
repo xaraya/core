@@ -293,7 +293,8 @@
                                 userhome
                             </td>
                             <td style="width: 400px">
-                                <xar:mlstring>The user's home page, which is initially displayed when the user logs in. The home page can be user specific or inherited from a parent group</xar:mlstring>
+                                <xar:comment>jojodee - adjust explanation given primary parent or the  code is not yet provided</xar:comment>
+                                <xar:mlstring>The user's home page, which is initially displayed when the user logs in. The home page can be user specific or inherited from the direct parent group. The home page is specified in a similar manner to user menu item shortcuts in the modify or edit role page.</xar:mlstring>
                             </td>
                             <td style="width: 50px; text-align: center;">
                                 <xar:if condition="xarModGetVar('roles','userhome')">
@@ -307,7 +308,8 @@
                                 </xar:if>
                             </td>
                         </tr>
-                        <tr>
+                        <xar:comment> jojodee: comment out primary parent until there is supporting code in place.
+                        <<tr>
                             <td style="width: 100px">
                                 primaryparent
                             </td>
@@ -326,6 +328,7 @@
                                 </xar:if>
                             </td>
                         </tr>
+                        </xar:comment>
                         <tr>
                             <td style="width: 100px">
                                 passwordupdate
