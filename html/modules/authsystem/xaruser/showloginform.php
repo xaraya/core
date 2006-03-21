@@ -18,7 +18,8 @@ function authsystem_user_showloginform($args = array())
 {
     #redirecturl
     extract($args);
-    if (!isset($redirecturl)) $redirecturl = 'index.php';
+    $redirected=xarServerGetBaseURL();
+    if (!isset($redirecturl)) $redirecturl = $redirected;
 
     xarVarFetch('redirecturl', 'str', $data['redirecturl'], $redirecturl, XARVAR_NOT_REQUIRED);
 

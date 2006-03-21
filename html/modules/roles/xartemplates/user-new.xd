@@ -20,7 +20,7 @@
             </p>
         </xar:comment>
         <p>
-            <a href="index.php">
+            <a href="&xar-baseurl;">
                 <xar:mlstring>
                     Do not accept terms and conditions
                 </xar:mlstring>

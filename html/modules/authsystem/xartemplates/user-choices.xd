@@ -5,7 +5,7 @@
     <fieldset>
       <legend><xar:mlstring>Login</xar:mlstring></legend>
 
-      <input type="hidden" name="redirecturl" id="returnurl" value="index.php" />
+      <input type="hidden" name="redirecturl" id="returnurl" value="&xar-baseurl;" />
 
       <div class="xar-form-input-wrapper">
         <label for="username" class="xar-form-label"><xar:mlstring>Username</xar:mlstring></label>
