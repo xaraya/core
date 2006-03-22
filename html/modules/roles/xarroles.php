@@ -207,7 +207,7 @@ class xarRoles
             'val_code' =>    $row['xar_valcode'],
             'state' =>       $row['xar_state'],
             'auth_module' => $row['xar_auth_module'],
-            'duvs'		  => $duvs	);
+            'duvs'		  => $duvs);
         // create and return the role object
         return new xarRole($pargs);
     }
@@ -1115,9 +1115,12 @@ class xarRole
             list($uid, $name, $type, $parentid, $uname, $email, $pass,
                 $date_reg, $val_code, $state, $auth_module) = $result->fields;
             $vars = array();
-            if (!empty($duvs)) {
-                $duvs = unserialize($duvs);
-                foreach ($duvs as $key => $value) $vars[$key] = $value;
+
+            $duvarray = array('userhome','primaryparent','passwordupdate','timezone');
+            $duvs = array();
+            foreach ($duvarray as $key) {
+        	    $duv = xarModGetUserVar('roles',$key,$uid);
+			    if (!empty($duv)) $duvs[$key] = $duv;
             }
             $pargs = array('uid' => $uid,
                 'name' => $name,
@@ -1129,11 +1132,9 @@ class xarRole
                 'date_reg' => $date_reg,
                 'val_code' => $val_code,
                 'state' => $state,
-                'auth_module' => $auth_module);
-			$duvarray = array('userhome','primaryparent','passwordupdate','timezone');
-			$vars = array();
-			foreach ($duvarray as $key) $vars[$key] = xarModGetUserVar('roles',$key,$pargs['uid']);
-            $pargs = array_merge($pargs,$vars);
+                'auth_module' => $auth_module,
+                'duvs'=>$duvs);
+
             $parents[] = new xarRole($pargs);
             $result->MoveNext();
         }
