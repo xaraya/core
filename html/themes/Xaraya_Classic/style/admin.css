@@ -9,6 +9,9 @@ body {
     padding: 0;
 }
 
+img {
+    border:0px;
+}
 #wrapper {
     width: 760px;
     margin-right: auto;
