@@ -2,8 +2,8 @@
 /**
  * Modify the configuration parameters
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package core modules
+ * @copyright (C) 2005-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -18,7 +18,8 @@
  * @param   no parameters
  * @return  the data for template
  * @throws  XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION'
- * @todo    nothing
+ * @todo    remove at some stage if not used. Created for the move of mod overview var
+ *          and never in a release, but this var is not used now due to help system.
 */
 function modules_admin_modifyconfig()
 {
