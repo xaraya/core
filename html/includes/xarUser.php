@@ -141,7 +141,7 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
     }
     if ($userId == XARUSER_AUTH_FAILED || $userId == XARUSER_AUTH_DENIED) {
         if (xarModGetVar('privileges','lastresort')) {
-            $secret = unserialize(xarModGetVar('privileges','lastresort'));
+            $secret = @unserialize(xarModGetVar('privileges','lastresort'));
             if ($secret['name'] == MD5($userName) && $secret['password'] == MD5($password)) {
                 $userId = XARUSER_LAST_RESORT;
                 $rememberMe = 0;
@@ -276,6 +276,11 @@ function xarUserSetNavigationThemeName($themeName)
 function xarUserGetNavigationLocale()
 {
     if (xarUserIsLoggedIn()) {
+        $uid = xarUserGetVar('uid');
+          //last resort user is falling over on this uservar by setting multiple times
+         //return true for last resort user - use default locale
+         if ($uid==XARUSER_LAST_RESORT) return true;
+
         $locale = xarModGetUserVar('roles', 'locale');
         if (!isset($locale)) {
             // CHECKME: why is this here? The logic of falling back is already in the modgetuservar

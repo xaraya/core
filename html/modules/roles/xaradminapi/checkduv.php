@@ -31,7 +31,9 @@ function roles_adminapi_checkduv($args)
 			}
 			break;
 		case 1 :
-		default:
+		default: 
+            // TODO: investigate how this case would differ now or 
+            //   how the State has been handled since conversion to moduservars
 			$result = false;
 			$duvs = xarModGetVar('roles',$name);
 			if (isset($duvs)) {

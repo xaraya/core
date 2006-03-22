@@ -102,18 +102,22 @@ function authsystem_user_login()
             case 'authsystem':
                 //Set a $lastresort flag var
                 $lastresort=false;
-
                 // Still need to check if user exists as the user may be
                 // set to inactive in the user table
                 //Get and check last resort first before going to db table
-                if (xarModGetVar('privileges','lastresort')) {
-                    $secret = unserialize(xarModGetVar('privileges','lastresort'));
-                    if ($secret['name'] == MD5($uname) && $secret['password'] == MD5($pass)) {
-                        $lastresort=true;
-                        $state = ROLES_STATE_ACTIVE;
-                        break; //let's go straight to login api
+                $lastresortvalue=array();
+                $lastresortvalue=xarModGetVar('privileges','lastresort');
+                if (isset($lastresortvalue)) {
+                    $secret = @unserialize(xarModGetVar('privileges','lastresort'));
+                    if (is_array($secret)) {
+                        if ($secret['name'] == MD5($uname) && $secret['password'] == MD5($pass)) {
+                            $lastresort=true;
+                            $state = ROLES_STATE_ACTIVE;
+                            break; //let's go straight to login api
+                        }
                     }
                 }
+
                 // check for user and grab uid if exists
                 $user = xarModAPIFunc('roles',
                             'user',
@@ -241,7 +245,9 @@ function authsystem_user_login()
             }
 
             // Log the user in
-            $res = xarModAPIFunc('authsystem','user','login',array('uname' => $uname, 'pass' => $pass, 'rememberme' => $rememberme));
+            $defaultauthmodule=xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule'));
+            if (!isset($defaultauthmodule)) $defaultauthmodules='authsystem';
+            $res = xarModAPIFunc($defaultauthmodule,'user','login',array('uname' => $uname, 'pass' => $pass, 'rememberme' => $rememberme));
             if ($res === NULL) return;
             elseif ($res == false) {
                 // Problem logging in

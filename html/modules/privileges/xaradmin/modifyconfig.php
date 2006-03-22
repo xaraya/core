@@ -67,7 +67,9 @@ function privileges_admin_modifyconfig()
                     xarModSetVar('privileges', 'inheritdeny', $inheritdeny);
                     if (!xarVarFetch('lastresort', 'checkbox', $lastresort, false, XARVAR_NOT_REQUIRED)) return;
                     xarModSetVar('privileges', 'lastresort', $lastresort);
-                    if (!$lastresort) xarModDelVar('privileges', 'lastresort',$lastresort);
+                    if (!$lastresort) {
+                        xarModDelVar('privileges', 'lastresort',$lastresort);
+                    }
                     if (!xarVarFetch('exceptionredirect', 'checkbox', $data['exceptionredirect'], false, XARVAR_NOT_REQUIRED)) return;
                     xarModSetVar('privileges', 'exceptionredirect', $data['exceptionredirect']);
                     break;

@@ -35,7 +35,7 @@ function authsystem_userapi_login($args)
         $rememberme = 0;
     }
 
-if ((!isset($uname)) ||
+    if ((!isset($uname)) ||
         (!isset($pass))) {
         $msg = xarML('Wrong arguments to authsystem_userapi_login.');
         xarErrorSet(XAR_SYSTEM_EXCEPTION,
