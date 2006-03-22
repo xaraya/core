@@ -5,7 +5,8 @@ html\/var\/cache\/templates\/CACHEKEYS$
 html\/var\/cache\/rss\/.*\.xml$
 html\/var\/logs\/log\.txt$
 html\/var\/ibrowser\/\.inc$
-html\/modules/(addressbook|articles|autolinks|auth(email|ldap|invision|phpbb2|sql|sso|url))\/.*
+html\/var\/ibrowser\/\.*
+html\/modules/(addressbook|articles|autolinks|auth(email|ldap|invision|invision2|phpbb2|sql|sso|url))\/.*
 html\/modules\/(bbcode|bkview|bloggerapi)\/.*
 html\/modules\/(cachesecurity|categories|calendar|censor|changelog|chat|comments|commerce|contact|converter|courses)\/.*
 html\/modules\/(dyn(amic_planning|_example)|dailydelicious)\/.*
