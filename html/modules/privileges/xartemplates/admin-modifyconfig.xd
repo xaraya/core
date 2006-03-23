@@ -107,7 +107,7 @@
                     </xar:mlstring>
                 </legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="lastresort" title="#xarML('Show exceptions messages or redirect to a login screen')#" class="xar-form-label">
+                    <label for="exceptionredirect" title="#xarML('Show exceptions messages or redirect to a login screen')#" class="xar-form-label">
                         <xar:mlstring>Exception Redirect:</xar:mlstring>
                     </label>
                     <xar:if condition="xarModGetVar('privileges', 'exceptionredirect')">
