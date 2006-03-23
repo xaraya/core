@@ -472,8 +472,11 @@ class xarMasks
 
         // check if the exception needs to be caught here or not
         if ($catch && !$pass) {
-            if (xarModGetVar('privileges','exceptionredirect')) {
-                xarResponseRedirect(xarModURL('roles','user','register'));
+            $loginlink='';
+            if (xarModGetVar('privileges','exceptionredirect') && !xarUserIsLoggedIn()) {
+                //TODO: jojodee - re bug 5506 this is a quick fix for now so it works some.
+                // See the bug for detail.
+                 xarResponseRedirect(xarModURL('authsystem','user','showloginform'));
             } else {
                 $msg = xarML('No privilege for #(1)',$mask->getName());
                 xarErrorSet(XAR_USER_EXCEPTION, 'NO_PRIVILEGES',
