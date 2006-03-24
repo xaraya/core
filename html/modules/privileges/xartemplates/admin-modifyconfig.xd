@@ -115,7 +115,9 @@
                     <xar:else />
                         <input type="checkbox" name="exceptionredirect" id="exceptionredirect" value="1" />
                     </xar:if>
-                    <xar:mlstring>This redirects to the login screen when a user doesn't have the proper privileges.</xar:mlstring>
+                    <xar:mlstring>This redirects a non-logged in user to the login screen if they don't have the proper privileges. </xar:mlstring>
+                </div>
+                <div class="xar-form-input-wrapper-after"><xar:mlstring>A logged in user will see the exception error message that can be changed with a base module override template (message-NO_PRIVILEGES.xt).</xar:mlstring>
                 </div>
                 <xar:comment>
                 <div class="xar-form-input-wrapper">
