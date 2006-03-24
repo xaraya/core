@@ -154,6 +154,8 @@ function dynamicdata_utilapi_getmeta($args)
             // JDJ: added 'primary' and 'autoincrement' fields.
             // If this causes a problem, it could be made optional.
             // It is used by the FlatTable datastore to determine the primary key.
+            // Jojodee: is causing probs with sqlite at least in installer
+            // made some changes - please review
             $columns[$name] = array('name' => $name,
                                    'label' => $label,
                                    'type' => $proptype,
@@ -163,8 +165,18 @@ function dynamicdata_utilapi_getmeta($args)
                                    'status' => $status,
                                    'order' => $id,
                                    'validation' => $validation,
-                                   'primary' => $field->primary_key,
-                                   'autoincrement' => $field->auto_increment);
+                                   //'primary' => isset($field->primary_key)?$field->primary_key : '',
+                                   //'autoincrement' => isset($field->auto_increment))? $field->auto_increment : ''
+                                   );
+            if (isset($field->primary_key)) {
+               $newelement=array('primary'=>$field->primary_key);
+               array_merge($columns[$name],$newelement);
+            }
+            if (isset($field->auto_increment)) {
+               $newelement=array('autoincrement'=>$field->auto_increment);
+               array_merge($columns[$name],$newelement);
+
+            }
             $id++;
         }
         $metadata[$curtable] = $columns;
