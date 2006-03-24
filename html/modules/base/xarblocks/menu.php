@@ -2,12 +2,13 @@
 /**
  * Menu Block
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage  Base  module
+ * @subpackage Base module
+ * @link http://xaraya.com/index.php/release/68.html
  */
 
 /**
@@ -247,7 +248,7 @@ function base_menublock_display($blockinfo)
                  * or we should be using a general function  not specific to a possibly unreliable
                  * existance of module var name such as aliasname and useModuleAlias
                  * These are set in Example module - as examples, but no guarantee people use them
-                 * We need to review the module alias functions 
+                 * We need to review the module alias functions
                  */
                 $useAliasName=xarModGetVar($mod['name'], 'useModuleAlias');
                 $aliasname= xarModGetVar($mod['name'],'aliasname');

@@ -2,12 +2,12 @@
 /**
  * Overview displays standard Overview page
  *
- * @package core modules
- * @copyright (C) 2005-2006 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Base Module
+ * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
 
