@@ -73,7 +73,7 @@
                     </li>
                 </xar:if>
 
-                <xar:if condition="$metMinMemRequirement">
+                <xar:if condition="$metMinMemRequirement and !$memory_warning">
                     <li class="success">
                         <xar:ml>
                             <xar:mlstring>
@@ -85,11 +85,27 @@
                             </xar:mlvar>
                         </xar:ml>
                         <xar:mlstring>
-                            Especially if you are planning to install modules during the install phase, a lot of memory is
+                            If you are planning to install modules during the install phase, a lot of memory is
                             required. When in doubt, <strong>do a core only install</strong> and install modules manually later.
                         </xar:mlstring>
                     </li>
-                <xar:else/>
+                <xar:elseif condition="$memory_warning" />
+                    <li class="warning">
+                       <xar:ml>
+                           <xar:mlstring>
+                                Xaraya needs a MINIMUM of 8 Megabyte of PHP memory (16M or higher STRONGLY recommended).
+                                The current memory limit is <strong>#(1)</strong>.
+                            </xar:mlstring>
+                            <xar:mlvar>
+                                #$memory_limit#
+                            </xar:mlvar>
+                        </xar:ml>
+                        <xar:mlstring>
+                            Please double check your PHP memory limit. Installation requires a lot of memory especially if you are planning to install modules during this phase.
+                            If in doubt about your PHP memory limit, <strong>do a core only install</strong> and install modules manually later.
+                        </xar:mlstring>
+                    </li>
+                <xar:else />
                     <li class="failure">
                         <xar:ml>
                             <xar:mlstring>
@@ -101,7 +117,7 @@
                             </xar:mlvar>
                         </xar:ml>
                         <xar:mlstring>
-                            Especially if you are planning to install modules during the install phase, a lot of memory is
+                            If you are planning to install modules during the install phase, a lot of memory is
                             required. When in doubt, do a core only install and install modules manually later.
                         </xar:mlstring>
                     </li>

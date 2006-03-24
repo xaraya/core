@@ -160,7 +160,7 @@ function installer_admin_phase3()
     $phpLanguageFilesIsWritable = xarMLS__iswritable($phpLanguageDir);
     $xmlLanguageFilesIsWritable = xarMLS__iswritable($xmlLanguageDir);
     $memLimit = trim(ini_get('memory_limit'));
-    $memLimit = empty($memLimit) ? '8M' : $memLimit;
+    $memLimit = empty($memLimit) ? xarML('Undetermined') : $memLimit;
     $memVal = substr($memLimit,0,strlen($memLimit)-1);
     switch(strtolower($memLimit{strlen($memLimit)-1})) {
         case 'g': $memVal *= 1024;
@@ -193,6 +193,7 @@ function installer_admin_phase3()
     $data['xmlLanguageDir']             = $xmlLanguageDir;
     $data['xmlLanguageFilesIsWritable'] = $xmlLanguageFilesIsWritable;
     $data['memory_limit']               = $memLimit;
+    $data['memory_warning']              = $memLimit == xarML('Undetermined');
     $data['metMinMemRequirement']       = $memVal >= 8 * 1024 * 1024;
 
     $data['language']    = $install_language;
