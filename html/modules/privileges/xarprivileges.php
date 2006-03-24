@@ -472,12 +472,14 @@ class xarMasks
 
         // check if the exception needs to be caught here or not
         if ($catch && !$pass) {
-            if (xarModGetVar('privileges','exceptionredirect')) {
-                xarResponseRedirect(xarModURL('roles','user','register'));
+            if (xarModGetVar('privileges','exceptionredirect') && !xarUserIsLoggedIn()) {
+                $authenticationmod=xarModGetNameFromId(xarModGetVar('roles','defaultauthmodule'));
+                xarResponseRedirect(xarModURL($authenticationmod,'user','showloginform'));
+
             } else {
                 $msg = xarML('No privilege for #(1)',$mask->getName());
                 xarErrorSet(XAR_USER_EXCEPTION, 'NO_PRIVILEGES',
-                               new DefaultUserException($msg));
+                           new DefaultUserException($msg));
             }
         }
 
