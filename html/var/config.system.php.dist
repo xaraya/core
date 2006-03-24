@@ -34,10 +34,11 @@ $systemConfiguration['DB.Persistent'] = false;
  * trap every message that comes from PHP and if
  * possible to show a gracefully error page.
  * This is an advanced option, leave it to false if unsure.
+ * TODO: move this out of here
  * TODO: review this in code, it is known to hide some errors
  * TODO: it also is known to break a PHP5 installation due to the introduction
  *       of E_STRICT error level (see xarException phpErrorHandler function)
- * TODO: move this out of here
+ *       If so set this to false
  */
 $systemConfiguration['Exception.EnablePHPErrorHandler'] = true;
 
@@ -48,7 +49,7 @@ $systemConfiguration['Exception.EnablePHPErrorHandler'] = true;
  * Normally you want this to be set to E_ALL during development and something a bit lower
  * for a production system.
  * NOTE: Also set this option if you suffer from the changes wrt references
- *       in php4.4 and php5.x versions or the bug in the zend optimizer
+ *       in php4.4 and php5.x versions or the bug in the zend optimizer eg: E_ALL ^ E_NOTICE
  */
  $systemConfiguration['Exception.ErrorLevel'] = E_ALL;
 
