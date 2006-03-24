@@ -2,11 +2,13 @@
 /**
  * Check a roles DUV
  *
- * @package core modules
- * @copyright (C) 2005-2006 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Roles Module
+ *
+ * @subpackage Roles module
+ * @link http://xaraya.com/index.php/release/27.html
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 /**
@@ -32,7 +34,7 @@ function roles_adminapi_checkduv($args)
 			break;
 		case 1 :
 		default: 
-            // TODO: investigate how this case would differ now or 
+            // TODO: investigate how this case would differ now or
             //   how the State has been handled since conversion to moduservars
 			$result = false;
 			$duvs = xarModGetVar('roles',$name);

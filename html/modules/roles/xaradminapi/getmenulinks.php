@@ -30,7 +30,7 @@ function roles_adminapi_getmenulinks()
     }*/
 
     if (xarSecurityCheck('EditRole',0)) {
-  
+
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                   'admin',
                                                   'showusers'),
