@@ -2,12 +2,13 @@
 /**
  * Core configuration
  *
- * @package core modules
- * @copyright (C) 2005-2006 The Digital Development Foundation
+ * @package Installer
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage Installer
+ * @link http://xaraya.com/index.php/release/200.html
  */
 /*
  * @author Marcel van der Boom <marcel@xaraya.com>

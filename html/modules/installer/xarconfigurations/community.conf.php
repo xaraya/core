@@ -2,12 +2,13 @@
 /**
  * Community configuration
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package Installer
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage Installer
+ * @link http://xaraya.com/index.php/release/200.html
  */
 /*
  * @author Marc Lutolf
@@ -25,7 +26,7 @@ function installer_community_moduleoptions()
         array('name' => "example",              'regid' => 36),
         array('name' => "hitcount",             'regid' => 177),
         array('name' => "ratings",              'regid' => 41),
-        array('name' => "registration",         'regid' => 30205), 
+        array('name' => "registration",         'regid' => 30205),
         array('name' => "search",               'regid' => 32),
         array('name' => "sniffer",              'regid' => 755),
         array('name' => "stats",                'regid' => 34),
