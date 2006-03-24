@@ -44,7 +44,14 @@ function mail_admin_modifyconfig()
 
     // Get encoding
     $data['encoding'] = xarModGetVar('mail', 'encoding');
-
+    
+    //redirect address - ensure it's set
+    $redirectaddress = trim(xarModGetVar('mail', 'redirectaddress'));
+    if (isset($redirectaddress) && !empty($redirectaddress)){
+        $data['redirectaddress']=xarVarPrepForDisplay($redirectaddress);
+    }else{
+        $data['redirectaddress']='';
+    }
     // Include 'formcheck' JavaScript.
     // TODO: move this to a template widget when available.
     xarModAPIfunc(
