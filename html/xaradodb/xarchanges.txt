@@ -9,10 +9,13 @@ Changes made to ADOdb library ONLY in this Xaraya 1.1.x series
 
 2006-02-19: Current adodb version in repo: 4.71-1
             None of the specific xaraya changes in the 1.0.x series
-            have been made at this stage. Only xaraya class extension 
+            have been made at this stage. Only xaraya class extension
             files and xartests directory added, and this xarchanges.txt file.
             1.0.x series changes have been left for reference.
 
+            html/xaradodb/datadict/datadict-sqlite.inc.php is our file
+            and retained for this series.
+            
 File removal: server.php [Bug 5233] Xaraya Directory Traversal Vulnerability
 
 
