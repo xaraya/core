@@ -56,7 +56,7 @@ h2 { font-size: 1.2em; }
 h3 { font-size: 1em; }
 h4 { font-size: .82em; }
 
-p {
+p, ul {
     font-size: .80em;
     text-align: left;
     line-height: 1.5em;
@@ -228,7 +228,7 @@ p.complete, p.active, p.greyed {
 }
 
 h3 { text-align: left; }
-ul { text-align: left; font-size: 0.8em;}
+
 ul li.success { list-style: none;}
 ul li.failure { list-style: none;}
 ul li.warning { list-style: none;}
