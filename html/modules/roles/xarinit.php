@@ -206,7 +206,7 @@ function roles_activate()
     if (xarModGetVar('roles','itemsperpage')) return true;
     xarModSetVar('roles', 'rolesdisplay', 'tabbed');
     xarModSetVar('roles', 'locale', '');
-    xarModSetVar('roles', 'userhome', 0);
+    xarModSetVar('roles', 'userhome', '');
     xarModSetVar('roles', 'primaryparent', 0);
     xarModSetVar('roles', 'defaultgroup', 'Users');
     $lockdata = array('roles' => array( array('uid' => 4,
@@ -310,6 +310,7 @@ function roles_upgrade($oldVersion)
 //				return;
 				die(xarML('I could not detect and load an authentication module (default is Authsystem). Please make an authentication module available and try again'));
 		    }
+            xarModSetVar('roles', 'userhome', '');
             break;
 
     }
