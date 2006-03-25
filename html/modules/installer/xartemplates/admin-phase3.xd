@@ -51,7 +51,7 @@
                     <li class="success">
                         <xar:ml>
                             <xar:mlstring>
-                            PHP Version is greater than or equal to 4.1.2. Your PHP Version is #(1)
+                            SUCCESS: PHP Version is greater than or equal to 4.1.2. Your PHP Version is #(1)
                             </xar:mlstring>
                             <xar:mlvar>
                                 #$phpVersion#
@@ -62,7 +62,7 @@
                     <li class="failure">
                         <xar:ml>
                             <xar:mlstring>
-                            PHP Version is less than 4.1.2. Your PHP Version is #(1) please upgrade PHP.
+                            ERROR: PHP Version is less than 4.1.2. Your PHP Version is #(1) please upgrade PHP.
                             </xar:mlstring>
                             <xar:mlvar>
                                 #$phpVersion#
@@ -75,7 +75,7 @@
                     <li class="success">
                         <xar:ml>
                             <xar:mlstring>
-                                Xaraya needs a MINIMUM of 8 Megabyte of PHP memory (16M or higher STRONGLY recommended).
+                                SUCCESS: Xaraya needs a MINIMUM of 8 Megabyte of PHP memory (16M or higher STRONGLY recommended).
                                 The current memory limit is #(1).
                             </xar:mlstring>
                             <xar:mlvar>
@@ -91,7 +91,7 @@
                     <li class="warning">
                        <xar:ml>
                            <xar:mlstring>
-                                Xaraya needs a MINIMUM of 8 Megabyte of PHP memory (16M or higher STRONGLY recommended).
+                                WARNING: Xaraya needs a MINIMUM of 8 Megabyte of PHP memory (16M or higher STRONGLY recommended).
                                 The current memory limit is <strong>#(1)</strong>.
                             </xar:mlstring>
                             <xar:mlvar>
@@ -107,7 +107,7 @@
                     <li class="failure">
                         <xar:ml>
                             <xar:mlstring>
-                                Xaraya needs a MINIMUM of 8 Megabyte of PHP memory (16M or higher STRONGLY recommended).
+                                ERROR: Xaraya needs a MINIMUM of 8 Megabyte of PHP memory (16M or higher STRONGLY recommended).
                                 The current memory limit is #(1).
                             </xar:mlstring>
                             <xar:mlvar>
@@ -124,8 +124,8 @@
                     <li class="warning">
                         <xar:ml>
                             <xar:mlstring>
-                                Your max_execution_time for a php script is set to #(1) seconds. 30 seconds is often adequate but the recommended value is 60 seconds. How much you need will depend on your system
-                                and number of modules you choose install during this installation.
+                                WARNING: Your max_execution_time for a php script is set to #(1) seconds. 30 seconds is often adequate but the recommended value is 60 seconds. How much you need will depend on your system
+                                and number of modules you choose during this installation.
                                 If in doubt about your maximum (script) execution time, <strong>do a core only install</strong> and install modules manually later.
                             </xar:mlstring>
                             <xar:mlvar>
@@ -137,8 +137,8 @@
                    <li class="success">
                         <xar:ml>
                             <xar:mlstring>
-                                Your max_execution_time for a php script is set to #(1) seconds. The recommended value is 60 seconds but how much you need will depend on your system 
-                                and number of modules you choose install during this installation.
+                                SUCCESS: Your max_execution_time for a php script is set to #(1) seconds. 30 seconds is often adequate but the recommended value is 60 seconds. How much you need will depend on your system
+                                and number of modules you choose during this installation.
                                 If in doubt about your maximum (script) execution time, <strong>do a core only install</strong> and install modules manually later.
                             </xar:mlstring>
                             <xar:mlvar>
@@ -150,13 +150,13 @@
 
                 <xar:if condition="$systemConfigIsWritable">
                     <li class="success">
-                        <xar:mlstring>The installer can write to the configuration file.</xar:mlstring>
+                        <xar:mlstring>SUCCESS: The installer can write to the configuration file.</xar:mlstring>
                     </li>
                  <xar:else />
                     <li class="failure">
                         <xar:ml>
                             <xar:mlstring>
-                                The installer cannot write to the configuration file.
+                                ERROR: The installer cannot write to the configuration file.
                                 Please verify that your webserver has write access to the file #(1)
                             </xar:mlstring>
                             <xar:mlvar>
@@ -170,7 +170,7 @@
                     <li class="success">
                         <xar:ml>
                             <xar:mlstring>
-                                The installer can write to the directory #(1)
+                                SUCCESS: The installer can write to the directory #(1)
                             </xar:mlstring> 
                             <xar:mlvar>
                                 #$cacheDir#
@@ -181,7 +181,7 @@
                     <li class="failure">
                         <xar:ml>
                             <xar:mlstring>
-                                The installer cannot write to the directory #(1).
+                                ERROR: The installer cannot write to the directory #(1).
                                 Please verify that your webserver has write access to the directory #(2)
                             </xar:mlstring> 
                             <xar:mlvar>
@@ -198,7 +198,7 @@
                     <li class="success">
                         <xar:ml>
                             <xar:mlstring>
-                                The installer can write to the directory #(1)
+                                SUCCESS: The installer can write to the directory #(1)
                             </xar:mlstring> 
                             <xar:mlvar>
                                 #$cacheTemplatesDir#
@@ -209,7 +209,7 @@
                     <li class="failure">
                         <xar:ml>
                             <xar:mlstring>
-                                The installer cannot write to the directory #(1).
+                                ERROR: The installer cannot write to the directory #(1).
                                 Please verify that your webserver has write access to the directory #(2)
                             </xar:mlstring> 
                             <xar:mlvar>
@@ -226,7 +226,7 @@
                     <li class="success">
                         <xar:ml>
                             <xar:mlstring>
-                                The installer can write to the directory #(1)
+                                SUCCESS: The installer can write to the directory #(1)
                             </xar:mlstring>
                             <xar:mlvar>
                                 #$rssTemplatesDir#
@@ -237,7 +237,7 @@
                     <li class="failure">
                         <xar:ml>
                             <xar:mlstring>
-                                The installer cannot write to the #(1).
+                                ERROR: The installer cannot write to the #(1).
                                 Please verify that your webserver has write access to the directory #(2)
                             </xar:mlstring> 
                             <xar:mlvar>
@@ -256,7 +256,7 @@
                 <li class="success">
                      <xar:ml>
                         <xar:mlstring>
-                            The installer can write to the directory #(1)
+                            SUCCESS: The installer can write to the directory #(1)
                         </xar:mlstring>
                         <xar:mlvar>
                             #$adodbTemplatesDir#
@@ -267,7 +267,7 @@
                    <li class="failure">
                         <xar:ml>
                         <xar:mlstring>
-                            The installer cannot write to the directory #(1).
+                            ERROR: The installer cannot write to the directory #(1).
                             Please verify that your webserver has write access to the directory #(2)
                         </xar:mlstring>
                         <xar:mlvar>
@@ -291,7 +291,7 @@
                     <li class="success">
                         <xar:ml>
                             <xar:mlstring>
-                                Xaraya can write to the directory #(1) and all its files and subdirectories.
+                                SUCCESS: Xaraya can write to the directory #(1) and all its files and subdirectories.
                             </xar:mlstring>
                             <xar:mlvar>
                                 #$phpLanguageDir#
@@ -302,7 +302,7 @@
                     <li class="warning">
                         <xar:ml>
                             <xar:mlstring>
-                                Xaraya cannot write to the directory #(1) and all its files and subdirectories.
+                                WARNING: Xaraya cannot write to the directory #(1) and all its files and subdirectories.
                             </xar:mlstring>
                             <xar:mlvar>
                                 #$phpLanguageDir#
@@ -326,7 +326,7 @@
                     <li class="success">
                         <xar:ml>
                             <xar:mlstring>
-                                Xaraya can write to the directory #(1) and all its files and subdirectories.
+                                SUCCESS: Xaraya can write to the directory #(1) and all its files and subdirectories.
                             </xar:mlstring>
                             <xar:mlvar>
                                 #$xmlLanguageDir#
@@ -337,7 +337,7 @@
                     <li class="warning">
                         <xar:ml>
                             <xar:mlstring>
-                                Xaraya cannot write to the directory #(1) and all its files and subdirectories.
+                                WARNING: Xaraya cannot write to the directory #(1) and all its files and subdirectories.
                             </xar:mlstring>
                             <xar:mlvar>
                                 #$xmlLanguageDir#
@@ -376,63 +376,63 @@
             <ul>
                 <xar:if condition="$xmlextension">
                     <li class="success">
-                        <xar:mlstring>The XML Extension is loaded.</xar:mlstring>
+                        <xar:mlstring>SUCCESS: The XML Extension is loaded.</xar:mlstring>
                     </li>
                 <xar:else />
                     <li class="warning">
-                        <xar:mlstring>The XML Extension is not loaded.</xar:mlstring>
+                        <xar:mlstring>WARNING: The XML Extension is not loaded.</xar:mlstring>
                     </li>
                 </xar:if>
                 <xar:if condition="$mysqlextension">
                     <li class="success">
-                        <xar:mlstring>The MySQL Extension is loaded.</xar:mlstring>
+                        <xar:mlstring>SUCCESS: The MySQL Extension is loaded.</xar:mlstring>
                     </li>
                 <xar:else />
                     <li class="warning">
-                        <xar:mlstring>MySQL as database will not be available</xar:mlstring>
+                        <xar:mlstring>WARNING: MySQL as database will not be available</xar:mlstring>
                     </li>
                 </xar:if>
                 <xar:if condition="$pgsqlextension">
                     <li class="success">
-                        <xar:mlstring>The PGSQL Extension is loaded.</xar:mlstring>
+                        <xar:mlstring>SUCCESS: The PGSQL Extension is loaded.</xar:mlstring>
                     </li>
                 <xar:else />
                    <li class="warning">
-                       <xar:mlstring>PostgreSQL as database will not be available</xar:mlstring>
+                       <xar:mlstring>WARNING: PostgreSQL as database will not be available</xar:mlstring>
                    </li>
                 </xar:if>
                 <xar:if condition="$xsltextension">
                     <li class="success">
-                        <xar:mlstring>The XSL Extension is loaded.</xar:mlstring>
+                        <xar:mlstring>SUCCESS: The XSL Extension is loaded.</xar:mlstring>
                     </li>
                 <xar:else />
                     <li class="warning">
                     <xar:mlstring>
-                        The XSLT Extension is not loaded.
+                        WARNING: The XSLT Extension is not loaded.
                         This extension is only needed for the XSLT transform module at this time.
                     </xar:mlstring>
                     </li>
                 </xar:if>
                 <xar:if condition="$ldapextension">
                     <li class="success">
-                        <xar:mlstring>The LDAP Extension is loaded.</xar:mlstring>
+                        <xar:mlstring>SUCCESS: The LDAP Extension is loaded.</xar:mlstring>
                     </li>
                 <xar:else />
                     <li class="warning">
                         <xar:mlstring>
-                            The LDAP Extension is not loaded.
+                            WARNING: The LDAP Extension is not loaded.
                             This extension is only needed if you intend on using LDAP authentication with the Xaraya LDAP Modules.
                         </xar:mlstring>
                     </li>
                 </xar:if>
                 <xar:if condition="$gdextension">
                     <li class="success">
-                        <xar:mlstring>The GD Extension is loaded.</xar:mlstring>
+                        <xar:mlstring>SUCCESS: The GD Extension is loaded.</xar:mlstring>
                     </li>
                 <xar:else />
                     <li class="warning">
                         <xar:mlstring>
-                            The GD Extension is not loaded.
+                            WARNING: The GD Extension is not loaded.
                             This extension is only needed for the images module at this time for resizing of thumbnails.
                         </xar:mlstring>
                     </li>

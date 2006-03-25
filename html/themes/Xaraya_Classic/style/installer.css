@@ -229,22 +229,43 @@ p.complete, p.active, p.greyed {
 
 h3 { text-align: left; }
 
-ul li.success { list-style: none;}
-ul li.failure { list-style: none;}
-ul li.warning { list-style: none;}
+ul li.success { list-style: none; padding-bottom:4px; line-height:1.4em;}
+ul li.failure { list-style: none;padding-bottom:4px;line-height:1.4em;}
+ul li.warning { list-style: none;padding-bottom:4px;line-height:1.4em;}
 
 .failure:before {
     content: "\2717";
     color: red;
     font-size: large;
+    font-weight: bold;
 }
 .success:before {
     content: "\2713";
     color: green;
     font-size: large;
+    font-weight: bold;
 }
 .warning:before {
     content: "\2621";
     color: orange;
     font-size: large;
+    font-weight: bold;
+}
+
+.failure:first-letter {
+    color: red;
+    font-size: large;
+    font-weight: bold;
+}
+.success:first-letter {
+
+    color: green;
+    font-size: large;
+    font-weight: bold;
+}
+.warning:first-letter {
+
+    color: orange;
+    font-size: large;
+    font-weight: bold;
 }

@@ -371,7 +371,7 @@ function dynamicdata_init()
 // TODO:                /* more fields we need to add :) */
                             'xar_relation_todo'  => array('type'        => 'integer',
                                                          'null'        => false,
-                                                         'default'     => '0'),
+                                                         'default'     => '0')
                      );
 
     // Create the Table - the function will return the SQL is successful or
