@@ -159,6 +159,7 @@ function installer_admin_phase3()
     $adodbTemplatesIsWritable   = (check_dir($adodbTemplatesDir) || @mkdir($adodbTemplatesDir, 0700));
     $phpLanguageFilesIsWritable = xarMLS__iswritable($phpLanguageDir);
     $xmlLanguageFilesIsWritable = xarMLS__iswritable($xmlLanguageDir);
+    $maxexectime = trim(ini_get('max_execution_time'));
     $memLimit = trim(ini_get('memory_limit'));
     $memLimit = empty($memLimit) ? xarML('Undetermined') : $memLimit;
     $memVal = substr($memLimit,0,strlen($memLimit)-1);
@@ -192,6 +193,8 @@ function installer_admin_phase3()
     $data['phpLanguageFilesIsWritable'] = $phpLanguageFilesIsWritable;
     $data['xmlLanguageDir']             = $xmlLanguageDir;
     $data['xmlLanguageFilesIsWritable'] = $xmlLanguageFilesIsWritable;
+    $data['maxexectime']                = $maxexectime;
+    $data['maxexectimepass']            = $maxexectime<=30;
     $data['memory_limit']               = $memLimit;
     $data['memory_warning']             = $memLimit == xarML('Undetermined');
     $data['metMinMemRequirement']       = $memVal >= 8 * 1024 * 1024 || $data['memory_warning'];
