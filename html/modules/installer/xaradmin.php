@@ -193,8 +193,8 @@ function installer_admin_phase3()
     $data['xmlLanguageDir']             = $xmlLanguageDir;
     $data['xmlLanguageFilesIsWritable'] = $xmlLanguageFilesIsWritable;
     $data['memory_limit']               = $memLimit;
-    $data['memory_warning']              = $memLimit == xarML('Undetermined');
-    $data['metMinMemRequirement']       = $memVal >= 8 * 1024 * 1024;
+    $data['memory_warning']             = $memLimit == xarML('Undetermined');
+    $data['metMinMemRequirement']       = $memVal >= 8 * 1024 * 1024 || $data['memory_warning'];
 
     $data['language']    = $install_language;
     $data['phase']       = 3;
