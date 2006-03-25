@@ -10,7 +10,7 @@
         <div>
             <input type="hidden" name="install_language" id="install_language" value="#$language#" />
             <p class="xar-normal">
-                <xar:mlstring>Please enter the settings for your Administrator account. This information is necessary in order to properly secure your Xaraya installation. These settings can be changed at any point in the future by visiting the roles module.</xar:mlstring>
+                <xar:mlstring>Please enter the settings for your Administrator account. This information is necessary in order to properly secure your Xaraya installation. These settings can be changed at any point in the future by visiting the Roles module.</xar:mlstring>
             </p>
 
             <xar:if condition="!empty($msg)">

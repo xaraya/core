@@ -18,6 +18,7 @@
 function roles_userapi_getdefaultgroup()
 {
 	$authmodule = xarModGetVar('roles','defaultauthmodule');
+	$regmodule = xarModGetVar('roles','defaultregmodule');	
     $defaultrole = xarModGetVar('roles', 'defaultgroup');
     if (isset($defaultrole) && !empty($defaultrole)) {
         $defaultgroup = $defaultrole;

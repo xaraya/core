@@ -13,7 +13,7 @@
         <p><xar:mlstring>Note the following:</xar:mlstring>
             <ul>
                 <li><xar:mlstring>If you do not have root access to your database (due to virtual hosting etc), you will need to have a pre-existing database installed and configured before you proceed.</xar:mlstring></li>
-                <li><xar:mlstring>If you plan to use a SQLite or PostgresSQL database please ensure your database already exists before your proceed.</xar:mlstring></li>
+                <li><xar:mlstring>If you plan to use a SQLite or PostgreSQL database please ensure your database already exists before your proceed.</xar:mlstring></li>
                 <li><xar:mlstring>If you plan on <strong>upgrading</strong> an existing Xaraya then please run the <strong>upgrade.php</strong> script, not this install script.</xar:mlstring>
                 <li><xar:mlstring>If you plan to convert from another Weblog/CMS to Xaraya, first install Xaraya as normal and then run the appropriate import script to import your prior Weblog/CMS data.</xar:mlstring></li>
             </ul>
@@ -82,11 +82,11 @@
         <p>
             <label class="block" for="install_create_database">
                 <input type="checkbox" name="install_create_database" id="install_create_database" value="1" />
-                <xar:mlstring>Create the database</xar:mlstring>
+                <xar:mlstring>Create the database (MySQL only)</xar:mlstring>
             </label>
         </p>
         <p class="xar-sub">
-            <xar:mlstring>This option specifies whether you need the install to create the empty database for you first or whether it can just populate an already existing database. If you cannot create databases through phpMyAdmin because of virtual hosting or MySQL security settings, the installer will not be able to create the database for you. It will be able to populate an already existing one though.</xar:mlstring>
+            <xar:mlstring>If checked, this Create the Database option allows the install process to create an empty database for you rather than just populating an existing one. If you cannot create databases through phpMyAdmin because of virtual hosting or MySQL security settings, the installer will <strong>not</strong> be able to create the database for you. It will be able to populate an already existing database.</xar:mlstring>
         </p>
         <input type="hidden" name="install_phase" id="install_phase" value="5" />
         <xar:set name="buttonnext">

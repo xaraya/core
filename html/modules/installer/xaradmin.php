@@ -405,7 +405,7 @@ function installer_admin_phase5()
             if ($parts[0] == $dbPrefix) $tables[] = $table;
             $result->MoveNext();
         }
-       foreach ($tables as $table) {
+         foreach ($tables as $table) {
             // FIXME: a lot!
             // 1. the drop table drops the sequence while the table gets dropped in the second statement
             //    so if that fails, the table remains while the sequence is gone, at least transactions is needed
@@ -490,6 +490,8 @@ function installer_admin_bootstrap()
             if (!xarModAPIFunc('modules','admin','activate', array('regid'=> $regid))) return;
         }
     }
+    //now make sure we set default authmodule
+    xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
 
     // load themes into *_themes table
     if (!xarModAPIFunc('themes', 'admin', 'regenerate')) {
@@ -736,15 +738,6 @@ function installer_admin_create_administrator()
             return;
         }
     }
-
-    // Initialise authentication
-    // TODO: this is happening late here because we need to create a block
-//	$regid = xarModGetIDFromName('authsystem');
-//	if (isset($regid)) {
-//		if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
-		// Activate the module
-//		if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
-//	}
 
     xarResponseRedirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
 }
@@ -1036,6 +1029,8 @@ function installer_admin_confirm_configuration()
                 return;
             }
         }
+     //TODO: Check why this var is being reset to null in sqlite install - reset here for now to be sure
+    xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
 
         xarResponseRedirect(xarModURL('installer', 'admin', 'cleanup'));
     }

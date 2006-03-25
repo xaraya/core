@@ -18,7 +18,7 @@
             <h4 style="margin-top:100px;">
              <xar:mlstring>Has your browser stopped loading the page?</xar:mlstring>
              </h4>
-             <h4><xar:mlstring>If your browser did not automatically redirect, please </xar:mlstring>
+             <h4><xar:mlstring>If your browser did not automatically redirect, please </xar:mlstring><br />
                 <a href="&xar-modurl-installer-admin-bootstrap;&amp;install_language=#$language#">
                     <xar:mlstring>click to manually continue to next stage</xar:mlstring>
                 </a>
@@ -37,7 +37,7 @@
             </h4>
             <h4>
                 <xar:ml>
-                    <xar:mlstring>If you continue, tables using the #(1)_ prefix will be overwritten.</xar:mlstring>
+                    <xar:mlstring>If you continue, any tables using the #(1)_ prefix will be overwritten.</xar:mlstring>
                     <xar:mlvar>#$dbPrefix#</xar:mlvar>
                 </xar:ml>
             </h4>

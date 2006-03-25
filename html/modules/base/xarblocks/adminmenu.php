@@ -22,7 +22,9 @@ function base_adminmenublock_init()
     // Nothing to configure...
     // TODO: ...yet
     return array('nocache' => 1,
-                 'showhelp' => true);
+                 'showlogout' => 1,
+                 'menustyle' => 'bycat',
+                 'showhelp' => 1);
 }
 
 /**
@@ -81,6 +83,7 @@ function base_adminmenublock_display($blockinfo)
     // SETTING 1: Show a logout link in the block?
     $showlogout = false;
     if(isset($vars['showlogout']) && $vars['showlogout']) $showlogout = true;
+    /// Show a help link
     $showhelp = false;
     if(isset($vars['showhelp'])&& $vars['showhelp']) $showhelp =true;
 
