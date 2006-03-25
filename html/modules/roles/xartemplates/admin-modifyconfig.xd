@@ -203,7 +203,7 @@
                         </xar:mlstring>
                     </label>
                     <xar:set name="defaultauthmodule">xarModGetVar('roles','defaultauthmodule')</xar:set>
-                    <xar:data-input type="module" name="defaultauthmodule" class="authentication" value="" />
+                    <xar:data-input type="module" name="defaultauthmodule" class="Authentication" value="" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="defaultregmodule" title="#xarML('Select the module that manages registration of users')#" class="xar-form-label">
@@ -212,7 +212,7 @@
                         </xar:mlstring>
                     </label>
                     <xar:set name="defaultregmodule">xarModGetVar('roles','defaultregmodule')</xar:set>
-                    <xar:data-input type="module" name="defaultregmodule" class="registration" value="" />
+                    <xar:data-input type="module" name="defaultregmodule" class="Registration" value="" />
                 </div>
             </fieldset>
             <fieldset>
