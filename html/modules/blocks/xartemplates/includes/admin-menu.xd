@@ -1,0 +1,58 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:comment>Common Administration menu</xar:comment>
+<xar:style scope="module" module="base" file="navtabs" />
+
+<xar:set name="activetab">$_bl_module_func</xar:set>
+<div>
+  <dl class="xar-tabs">
+    <dt class="help" title="Choose an action to perform">
+      <xar:mlstring>Actions:</xar:mlstring>
+    </dt>
+    <xar:sec mask="EditBlock" catch="false">
+        <xar:set name="tabclass">$activetab=='view_instances'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+          <a href="&xar-modurl-blocks-admin-view_instances;">
+            <xar:mlstring>View Blocks</xar:mlstring>
+          </a>
+        </dd>
+    </xar:sec>
+    <xar:sec mask="AddBlock" catch="false">
+        <xar:set name="tabclass">$activetab=='new_instance'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+            <a href="&xar-modurl-blocks-admin-new_instance;" >
+                <xar:mlstring>New Block</xar:mlstring>
+            </a>
+        </dd>
+    </xar:sec>
+    <xar:sec mask="AdminBlock" catch="false">
+        <xar:set name="tabclass">$activetab=='view_groups'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+          <a href="&xar-modurl-blocks-admin-view_groups;">
+            <xar:mlstring>Block Groups</xar:mlstring>
+          </a>
+        </dd>
+    </xar:sec>
+    <xar:sec mask="AdminBlock" catch="false">
+        <xar:set name="tabclass">$activetab=='view_types'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+          <a href="&xar-modurl-blocks-admin-view_types;">
+            <xar:mlstring>Block Types</xar:mlstring>
+          </a>
+        </dd>
+    </xar:sec>
+    <xar:sec mask="AdminBlock" catch="false">
+        <xar:set name="tabclass">$activetab=='modifyconfig'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+          <a href="&xar-modurl-blocks-admin-modifyconfig;">
+            <xar:mlstring>Modify Config</xar:mlstring>
+          </a>
+        </dd>
+    </xar:sec>
+    <xar:set name="tabclass">$activetab=='overview'?'active':''</xar:set>
+    <dd class="#$tabclass#">
+      <a href="&xar-modurl-blocks-admin-overview;">
+        <xar:mlstring>Overview</xar:mlstring>
+      </a>
+    </dd>
+  </dl>
+</div>
