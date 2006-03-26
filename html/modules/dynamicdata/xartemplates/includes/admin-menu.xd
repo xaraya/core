@@ -1,0 +1,43 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:comment>Common Administration menu</xar:comment>
+<xar:style scope="module" module="base" file="navtabs" />
+
+<xar:set name="activetab">$_bl_module_func</xar:set>
+<div>
+  <dl class="xar-tabs">
+    <dt class="help" title="#xarML('Choose an action to perform')#">
+      <xar:mlstring>Actions:</xar:mlstring>
+    </dt>
+    <xar:sec mask="EditDynamicData" catch="false">
+        <xar:set name="tabclass">$activetab=='view'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+          <a href="&xar-modurl-dynamicdata-admin-view;">
+            <xar:mlstring>Manage DD Objects</xar:mlstring>
+          </a>
+        </dd>
+    </xar:sec>
+
+    <xar:sec mask="AdminExample" catch="false">
+        <xar:set name="tabclass">$activetab=='modifyconfig'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+          <a href="&xar-modurl-dynamicdata-admin-modifyconfig;">
+            <xar:mlstring>List Property Types</xar:mlstring>
+          </a>
+        </dd>
+    </xar:sec>
+    <xar:sec mask="DeleteExample" catch="false">
+        <xar:set name="tabclass">$activetab=='utilities'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+            <a href="&xar-modurl-dynamicdata-admin-utilities;" >
+                <xar:mlstring>Utilities</xar:mlstring>
+            </a>
+        </dd>
+    </xar:sec>
+    <xar:set name="tabclass">$activetab=='overview'?'active':''</xar:set>
+    <dd class="#$tabclass#">
+      <a href="&xar-modurl-dynamicdata-admin-overview;">
+        <xar:mlstring>Overview</xar:mlstring>
+      </a>
+    </dd>
+  </dl>
+</div>
