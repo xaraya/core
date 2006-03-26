@@ -6,13 +6,14 @@
     </span>
 </div>
 <div class="xar-mod-body">
+ <xar:template type="module" file="admin-menu" />
     <h2>
         <xar:mlstring>System Information</xar:mlstring>
     </h2>
     <dl class="xar-tabs">
         <dt class="help" title="#xarML('Click on a tab to display specific information from your server php installation')#">
             <xar:mlstring>
-                PHP Info Sort Information:
+                PHP Information:
             </xar:mlstring>
         </dt>
         <xar:set name="tabclass">$what==1?'active':''</xar:set>

@@ -19,15 +19,16 @@
     </span>
 </div>
 <div class="xar-mod-body">
+ <xar:template type="module" file="admin-menu" />
     <h2>
         <xar:mlstring>
             Modify System Configuration 
         </xar:mlstring>
     </h2>
     <dl class="xar-tabs">
-        <dt class="help" title="#xarML('Choose a set of configuration options')#">
+        <dt class="help" title="#xarML('Choose a set of configuration options to modify')#">
             <xar:mlstring>
-                Actions: 
+                Modify:
             </xar:mlstring>
         </dt>
         <xar:if condition="$tab eq 'display'">
