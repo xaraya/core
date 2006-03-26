@@ -203,12 +203,14 @@
                                                 array('id' => 'none', 'name' => 'No Value'),
                                                 array('id' => 'domain', 'name' => 'Current Domain'),
                                                 array('id' => 'theme', 'name' => 'Current Theme'),
-                                                array('id' => 'group', 'name' => 'Primary Parent Group'),
-                                                array('id' => 'string', 'name' => 'Text Value'),)
+                                               array('id' => 'string', 'name' => 'Text Value'),)
                                                 </xar:set>
+                                                 <xar:comment> Remove primary parent group until it works in code.. array('id' => 'group', 'name' => 'Primary Parent Group')</xar:comment>
                         <xar:data-input name="realmvalue" property="$radio" value="$realmvalue" options="$options" />
                         <br />
+                        <p class="xar-form-input-wrapper-after">
                         <xar:mlstring>Security checks will match any privilege that contains the above choice in its realm</xar:mlstring>
+                        </p>
                     </div>
                     <div class="xar-form-input-wrapper">
                     <label for="pname" title="#xarML('Text value for realm')#" class="xar-form-label">
