@@ -5,6 +5,7 @@
     <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
+  <xar:template type="module" file="admin-menu" />
     <h2>
       <xar:if condition="$ptype eq 0">
         <xar:mlstring>Show Privileges of User:</xar:mlstring>

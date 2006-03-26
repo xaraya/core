@@ -3,8 +3,8 @@
 <xar:set name="activetab">$_bl_module_func</xar:set>
 <div>
   <dl class="xar-tabs">
-    <dt class="help" title="Choose an action to perform on the selected user">
-      <xar:mlstring>Actions:</xar:mlstring>
+    <dt class="help" title="#xarML('Choose an action to perform on the selected user')#">
+      <xar:mlstring>Manage role:</xar:mlstring>
     </dt>
 
     <xar:set name="tabclass">$activetab=='displayrole'?'active':''</xar:set>

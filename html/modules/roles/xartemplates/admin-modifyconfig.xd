@@ -10,6 +10,7 @@
     </span>
 </div>
 <div class="xar-mod-body">
+  <xar:template type="module" file="admin-menu" />
     <h2>
         <xar:mlstring>
             Modify Configuration 
@@ -19,7 +20,7 @@
         <dl class="xar-tabs">
             <dt class="help">
                 <xar:mlstring>
-                    Actions: 
+                    Configure: 
                 </xar:mlstring>
             </dt>
             <xar:if condition="$tab eq 'general'">

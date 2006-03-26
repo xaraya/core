@@ -12,6 +12,7 @@
      </span>
 </div>
 <div class="xar-mod-body">
+   <xar:template type="module" file="admin-menu" />
     <h2>
         <xar:mlstring>Recall / Purge</xar:mlstring>
     </h2>
@@ -19,7 +20,7 @@
     <div>
         <dl class="xar-tabs">
             <dt class="help">
-                <xar:mlstring>Actions:</xar:mlstring>
+                <xar:mlstring>Choose:</xar:mlstring>
             </dt>
             <xar:if condition="$operation eq 'recall'">
                 <dd class="active">

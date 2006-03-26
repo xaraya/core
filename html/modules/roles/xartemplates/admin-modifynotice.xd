@@ -4,6 +4,7 @@
     <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
+  <xar:template type="module" file="admin-menu" />
     <h2>
             <a href="&xar-modurl-roles-admin-createmail;">
                 <xar:mlstring>Messaging System:</xar:mlstring>
@@ -14,7 +15,7 @@
     <div>
         <dl class="xar-tabs">
             <dt class="help">
-                <xar:mlstring>Actions:</xar:mlstring>
+                <xar:mlstring>Options:</xar:mlstring>
             </dt>
             <dd>
                 <a href="&xar-modurl-roles-admin-createmail;">
