@@ -41,9 +41,6 @@ function modules_adminapi_activate ($args)
                            'executeinitfunction',
                            array('regid'    => $regid,
                                  'function' => 'activate'))) {
-        // INSERT STARTS
-        return;
-        // INSERT ENDS
         $msg = xarML('Unable to execute "activate" function in the xarinit.php file of module (#(1))',
 $modInfo['displayname']);
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
