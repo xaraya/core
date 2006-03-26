@@ -8,11 +8,12 @@
     <h2>
             <xar:mlstring>Manage Realms</xar:mlstring>
     </h2>
-<xar:set name="activetab">$_bl_module_func</xar:set>
-  <dl class="xar-tabs">
-    <dt class="help" title="#xarML('Choose an action to perform')#">
-      <xar:mlstring>Manage Realms:</xar:mlstring>
-    </dt>
+  <xar:if condition="xarModGetVar('privileges','showrealms')">
+      <xar:set name="activetab">$_bl_module_func</xar:set>
+      <dl class="xar-tabs">
+      <dt class="help" title="#xarML('Choose an action to perform')#">
+          <xar:mlstring>Manage Realms:</xar:mlstring>
+      </dt>
      <xar:set name="tabclass">$activetab=='viewrealms'?'active':''</xar:set>
         <dd class="#$tabclass#">
           <a href="&xar-modurl-privileges-admin-viewrealms;">
@@ -27,6 +28,7 @@
         </dd>
 
   </dl>
+
         <table class="xar-fullwidth xar-clearboth">
             <tr>
                 <th style="text-align: left; padding-left: .5em;">
@@ -48,5 +50,11 @@
                 </tr>
             </xar:loop>
         </table>
-
+    <xar:else />
+      <p>
+            <xar:mlstring>
+            You can use Realms to differentiate sections or content on your site, or 'slice' it by theme, or domain name, or other.
+            You must </xar:mlstring><a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=realms" title="#xarML('Enable the Realms options')#"><xar:mlstring>enable Realms on your site</xar:mlstring></a>
+            <xar:mlstring> in the Privileges config options for realms create and modify options to display here.</xar:mlstring>        </p>
+    </xar:if>
 </div> <!-- mod body -->
