@@ -28,7 +28,7 @@ function roles_adminapi_checkduv($args)
 		case 0 :
 			$result = false;
 			$duvs = xarModGetVar('roles',$name);
-			if (isset($duvs)) {
+			if ($duvs) {
 				$result = true;
 			}
 			break;
@@ -38,7 +38,7 @@ function roles_adminapi_checkduv($args)
             //   how the State has been handled since conversion to moduservars
 			$result = false;
 			$duvs = xarModGetVar('roles',$name);
-			if (isset($duvs)) {
+			if ($duvs) {
     			$result = true;
 			}
 	}

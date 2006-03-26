@@ -176,10 +176,10 @@ function roles_admin_modifyconfig()
                         if (!xarVarFetch($duv, 'int', $$duv, null, XARVAR_DONT_SET)) return;
                         if (isset($$duv)) {
                             if ($$duv) {
-                                xarModSetVar('roles',$duv,1);
+                                xarModSetVar('roles',$duv,true);
                                 xarModSetVar('roles',$userduv,'');
                             } else {
-                                xarModSetVar('roles',$duv,0);
+                                xarModSetVar('roles',$duv,false);
                             }
                         }
                     }
