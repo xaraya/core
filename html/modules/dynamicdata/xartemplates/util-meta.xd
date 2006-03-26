@@ -1,12 +1,16 @@
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <xar:style scope="module" file="dd" />
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span>
+    <span class="xar-mod-title">
+        <xar:mlstring>
+            Dynamic Data Administration
+        </xar:mlstring>
+    </span>
 </div>
 <div class="xar-mod-body">
-    <h2>
-        <xar:mlstring>Meta Table Definitions</xar:mlstring>
-    </h2>
+   <xar:template type="module" file="admin-menu" />
+   <h2><xar:mlstring>Utilities - Meta Table Definitions</xar:mlstring></h2>
+   <xar:template type="module" file="utility-menu" />
 
     <xar:if condition="empty($export)">
         <xar:if condition="!empty($databases)">

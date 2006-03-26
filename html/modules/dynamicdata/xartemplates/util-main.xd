@@ -1,10 +1,12 @@
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <div class="xar-mod-head">
-    <span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span>
+    <span class="xar-mod-title">
+        <xar:mlstring>Dynamic Data Utilities</xar:mlstring>
+    </span>
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:mlstring>Utilities</xar:mlstring>
+        <xar:mlstring>Query Dynamic Objects or Database Tables</xar:mlstring>
     </h2>
 
     <ul>
