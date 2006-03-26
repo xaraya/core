@@ -25,6 +25,7 @@
     <span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
+   <xar:template type="module" file="admin-menu" />
     <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
         <fieldset>
             <legend>

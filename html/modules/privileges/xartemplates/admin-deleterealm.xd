@@ -3,24 +3,32 @@
     <span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
-    <div style="margin: auto; width: 100%;">
-        <h2 style="width:100%;height:1.5em;">
-            <span style="width:95%;float:left;text-align:left;">
-                <xar:mlstring>Delete Realm</xar:mlstring>
-            </span>
-        </h2>
-        <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
-        </xar:if>
-        <dl class="xar-tabs">
-            <dd  class="active" style="float: right; margin-right: .5em; text-align: left;">
-                <a href="#xarModURL('privileges','admin','viewrealms')#">
-                    <xar:mlstring>View Realms</xar:mlstring>
-                </a>
-            </dd>    
-        </dl>
-        <div class="xar-norm-outline xar-fullwidth" style="margin-top:1px;">
-            <form action="&xar-modurl-privileges-admin-deleterealm;" method="post" enctype="application/x-www-form-urlencoded" >
-                <div style="text-align: center">
+ <xar:template type="module" file="admin-menu" />
+
+    <h2>
+            <xar:mlstring>Manage Realms</xar:mlstring>
+    </h2>
+<xar:set name="activetab">$_bl_module_func</xar:set>
+  <dl class="xar-tabs">
+    <dt class="help" title="#xarML('Choose an action to perform')#">
+      <xar:mlstring>Manage Realms:</xar:mlstring>
+    </dt>
+     <xar:set name="tabclass">$activetab=='viewrealms'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+          <a href="&xar-modurl-privileges-admin-viewrealms;">
+            <xar:mlstring>View Realms</xar:mlstring>
+          </a>
+        </dd>
+        <xar:set name="tabclass">$activetab=='newrealm'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+            <a href="&xar-modurl-privileges-admin-newrealm;" >
+                <xar:mlstring>Add Realm</xar:mlstring>
+            </a>
+        </dd>
+    </dl>
+
+    <form action="&xar-modurl-privileges-admin-deleterealm;" method="post" enctype="application/x-www-form-urlencoded" >
+        <div style="text-align: center">
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
                 <input type="hidden" name="rid" id="rid" value="#$rid#" />
                 <input type="hidden" name="confirmed" id="confirmed" value="1" />
@@ -31,8 +39,6 @@
                 <input type="submit" value="#xarML('Confirm')#"  tabindex="1" /><br />
 
                 <p><a href="&xar-modurl-privileges-admin-viewrealms;"><xar:mlstring>Cancel the deletion</xar:mlstring></a></p>
-               </div>
-            </form>        
         </div>
-    </div> <!-- margin auto -->
+    </form>
 </div> <!-- mod body -->

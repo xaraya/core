@@ -3,21 +3,30 @@
     <span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
-    <h2 style="width:100%;height:1.5em;">
-        <span style="width:95%;float:left;text-align:left;">
-            <xar:mlstring>View Realms</xar:mlstring>
-        </span>
+   <xar:template type="module" file="admin-menu" />
+
+    <h2>
+            <xar:mlstring>Manage Realms</xar:mlstring>
     </h2>
-    <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
-    </xar:if>
-    <dl class="xar-tabs">
-        <dd  class="active" style="float: right; margin-right: .5em; text-align: left;">
-            <a href="#xarModURL('privileges','admin','newrealm')#">
+<xar:set name="activetab">$_bl_module_func</xar:set>
+  <dl class="xar-tabs">
+    <dt class="help" title="#xarML('Choose an action to perform')#">
+      <xar:mlstring>Manage Realms:</xar:mlstring>
+    </dt>
+     <xar:set name="tabclass">$activetab=='viewrealms'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+          <a href="&xar-modurl-privileges-admin-viewrealms;">
+            <xar:mlstring>View Realms</xar:mlstring>
+          </a>
+        </dd>
+        <xar:set name="tabclass">$activetab=='newrealm'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+            <a href="&xar-modurl-privileges-admin-newrealm;" >
                 <xar:mlstring>Add Realm</xar:mlstring>
             </a>
-        </dd>    
-    </dl>
-    <div style="width: 35em; margin-top:1px;">
+        </dd>
+
+  </dl>
         <table class="xar-fullwidth xar-clearboth">
             <tr>
                 <th style="text-align: left; padding-left: .5em;">
@@ -33,11 +42,11 @@
                         <a href="#xarModURL('privileges','admin','modifyrealm', array('rid' => $loop:item['rid']))#">#xarVarPrepForDisplay($loop:item['name'])#</a>
                     </td>
                     <td style="text-align: center">
-                        <a href="#xarModURL('privileges','admin','modifyrealm', array('rid' => $loop:item['rid']))#" title="#xarML('Modify this realm')#"><img src="modules/roles/xarimages/infoicon.gif" style="vertical-align: middle;"/></a>&nbsp;
-                        <a href="#xarModURL('privileges','admin','deleterealm', array('rid' => $loop:item['rid']))#" title="#xarML('Delete this realm')#"><img src="modules/roles/xarimages/delete.gif" style="vertical-align: middle;"/></a>
+                        <a href="#xarModURL('privileges','admin','modifyrealm', array('rid' => $loop:item['rid']))#" alt="#xarML('Modify this realm')#" title="#xarML('Modify this realm')#"><img src="#xarTplGetImage('infoicon.gif', 'roles')#" style="vertical-align: middle;"/></a>&nbsp;
+                        <a href="#xarModURL('privileges','admin','deleterealm', array('rid' => $loop:item['rid']))#" alt="#xarML('Delete this realm')#" title="#xarML('Delete this realm')#"><img src="#xarTplGetImage('delete.png', 'roles')#" style="vertical-align: middle;"/></a>
                     </td>
                 </tr>
             </xar:loop>
         </table>
-    </div>
+
 </div> <!-- mod body -->

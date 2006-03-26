@@ -26,6 +26,7 @@
   <span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
+ <xar:template type="module" file="admin-menu" />
   <h2>
     <xar:mlstring>Modify Privilege:</xar:mlstring> #$pname#
   </h2>
@@ -51,7 +52,7 @@
   <div>
     <dl class="xar-tabs">
       <dt class="help" title="#xarML('Choose an action to perform on this privilege')#">
-        <xar:mlstring>Actions</xar:mlstring> :
+        <xar:mlstring>Manage privilege</xar:mlstring> :
       </dt>
       <dd>
         <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;pid=#$ppid#"><xar:mlstring>Display</xar:mlstring></a>
