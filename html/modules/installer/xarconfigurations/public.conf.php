@@ -50,7 +50,7 @@ function installer_public_privilegeoptions()
                   array(
                         'item' => 'p2',
                         'option' => 'false',
-                        'comment' => xarML('Unregistered users have read access to the non-core modules of the site. If this option is not chosen unregistered users see only the first page.')
+                        'comment' => xarML('Unregistered users have read access to the non-core modules of the site and can submit articles. If this option is not chosen unregistered users see only the first page.')
                         )
                   );
 }
