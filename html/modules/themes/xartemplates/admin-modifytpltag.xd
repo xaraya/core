@@ -3,6 +3,7 @@
     <span class="xar-mod-title"><xar:mlstring>Themes Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
+   <xar:template type="module" file="admin-menu" />
     <h2>
         <xar:mlstring>Modify Template Tag</xar:mlstring>
     </h2>
