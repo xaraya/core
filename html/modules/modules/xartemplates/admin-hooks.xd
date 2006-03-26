@@ -9,6 +9,7 @@
         <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
     </div>
     <div class="xar-mod-body">
+     <xar:template type="module" file="admin-menu" />
         <h2>
             <xar:mlstring>Configure Hooks</xar:mlstring>
         </h2>
