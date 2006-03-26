@@ -51,7 +51,7 @@
         #xarVarPrepForDisplay($name)#
       </div>
       
-    <xar:if condition="xarModGetVar('roles','userhome')">
+    <xar:if condition="xarModGetVar('roles','setuserhome')">
         <div class="xar-form-input-wrapper">
             <span class="xar-form-label">
                 <xar:mlstring>Home:</xar:mlstring>
@@ -59,7 +59,7 @@
             #xarVarPrepForDisplay($phome)#&nbsp;
         </div>
     </xar:if>                        
-    <xar:if condition="xarModGetVar('roles','primaryparent')">
+    <xar:if condition="xarModGetVar('roles','setprimaryparent')">
         <div class="xar-form-input-wrapper">
             <span class="xar-form-label">
                 <xar:mlstring>Primary Group:</xar:mlstring>

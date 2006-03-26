@@ -5,7 +5,7 @@
 <xar:set name="activetab">$_bl_module_func</xar:set>
 <div>
   <dl class="xar-tabs">
-    <dt class="help" title="Choose an action to perform">
+    <dt class="help" title="#xarML('Choose an action to perform')#">
       <xar:mlstring>Actions:</xar:mlstring>
     </dt>
     <xar:sec mask="AdminAuthsystem" catch="false">

@@ -116,7 +116,7 @@
                     </label>
                     <input type="text" name="pemail" id="pemail" value="#$pemail#" maxlength="255" class="xar-form-textlong" />
                 </div>
-                <xar:if condition="xarModGetVar('roles','userhome')">
+                <xar:if condition="xarModGetVar('roles','setuserhome')">
                     <div class="xar-form-input-wrapper">
                         <label for="phome" title="#xarML('Home URL')#" class="xar-form-label">
                             <xar:mlstring>
@@ -126,7 +126,7 @@
                         <input type="text" name="phome" id="phome" value="#$phome#" size="40" maxlength="100" tabindex="7" />
                     </div>
                 </xar:if>                        
-                <xar:if condition="xarModGetVar('roles','primaryparent')">
+                <xar:if condition="xarModGetVar('roles','setprimaryparent')">
                     <div class="xar-form-input-wrapper">
                         <label for="phome" title="#xarML('Home URL')#" class="xar-form-label">
                             <xar:mlstring>

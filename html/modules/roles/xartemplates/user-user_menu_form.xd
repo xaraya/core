@@ -63,7 +63,7 @@
                 </label>
                 <input type="text" name="email" id="email" value="" size="40" maxlength="60" />
             </div>
-            <xar:if condition="xarModGetVar('roles','userhome')">
+            <xar:if condition="xarModGetVar('roles','setuserhome')">
                 <div class="xar-form-input-wrapper">
                     <label for="home" class="xar-form-label">
                         <xar:mlstring>

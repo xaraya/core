@@ -289,10 +289,6 @@
                                 &nbsp;
                             </th>
                         </tr>
-                        <xar:comment>
-                            TODO: jojodee- not working yet, comment out until the code is there.
-                            There is no code to redirect after login. We need to adjust for the now used moduservars too
-                         </xar:comment>
                         <tr>
                             <td style="width: 100px">
                                 userhome
@@ -301,12 +297,12 @@
                                       <xar:mlstring>The user's home page, which is initially displayed when the user logs in. The home page can be user specific or inherited from the direct parent group. The home page is specified in a similar manner to user menu item shortcuts in the modify or edit role page.</xar:mlstring>
                             </td>
                             <td style="width: 50px; text-align: center;">
-                                <xar:if condition="xarModGetVar('roles','userhome')">
-                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','userhome' => 0))#">
+                                <xar:if condition="xarModGetVar('roles','setuserhome')">
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setuserhome' => 0))#">
                                         <xar:mlstring>Deactivate</xar:mlstring>
                                     </a>
                                 <xar:else />
-                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','userhome' => 1))#">
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setuserhome' => 1))#">
                                         <xar:mlstring>Activate</xar:mlstring>
                                     </a>
                                 </xar:if>
@@ -322,12 +318,12 @@
                                 <xar:mlstring>The user's primary parent group. Inherited properties from this parent take precendence over inherited properties from other parent groups.</xar:mlstring>
                             </td>
                             <td style="width: 50px; text-align: center;">
-                                <xar:if condition="xarModGetVar('roles','primaryparent')">
-                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','primaryparent' => 0))#">
+                                <xar:if condition="xarModGetVar('roles','setprimaryparent')">
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setprimaryparent' => 0))#">
                                         <xar:mlstring>Deactivate</xar:mlstring>
                                     </a>
                                 <xar:else />
-                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','primaryparent' => 1))#">
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setprimaryparent' => 1))#">
                                         <xar:mlstring>Activate</xar:mlstring>
                                     </a>
                                 </xar:if>
@@ -342,12 +338,12 @@
                                 <xar:mlstring>The date the last time this role's password was changed.</xar:mlstring>
                             </td>
                             <td style="width: 50px; text-align: center;">
-                                <xar:if condition="xarModGetVar('roles','passwordupdate')">
-                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','passwordupdate' => 0))#">
+                                <xar:if condition="xarModGetVar('roles','setpasswordupdate')">
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setpasswordupdate' => 0))#">
                                         <xar:mlstring>Deactivate</xar:mlstring>
                                     </a>
                                 <xar:else />
-                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','passwordupdate' => 1))#">
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setpasswordupdate' => 1))#">
                                         <xar:mlstring>Activate</xar:mlstring>
                                     </a>
                                 </xar:if>
@@ -361,11 +357,11 @@
                                 <xar:mlstring>This role's timezone.</xar:mlstring>
                             </td>
                             <td style="width: 50px; text-align: center;">
-                                <xar:if condition="xarModGetVar('roles','timezone')">
-                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','timezone' => 0))#">
+                                <xar:if condition="xarModGetVar('roles','settimezone')">
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','settimezone' => 0))#">
                                         <xar:mlstring>Deactivate</xar:mlstring>
                                     </a>
-                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','timezone' => 1))#">
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','settimezone' => 1))#">
                                         <xar:mlstring>Activate</xar:mlstring>
                                     </a>
                                 </xar:if>

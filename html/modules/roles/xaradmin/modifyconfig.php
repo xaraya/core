@@ -168,12 +168,19 @@ function roles_admin_modifyconfig()
         case 'links':
             switch ($data['tab']) {
                 case 'duvs':
-                    $duvarray = array('userhome','primaryparent','passwordupdate','timezone');
-                    foreach ($duvarray as $duv) {
+                    $duvarray = array('setuserhome'=>'userhome',
+                                      'setprimaryparent'=>'primaryparent',
+                                      'setpasswordupdate'=>'passwordupdate',
+                                      'settimezone'=>'timezone');
+                    foreach ($duvarray as $duv=>$userduv) {
                         if (!xarVarFetch($duv, 'int', $$duv, null, XARVAR_DONT_SET)) return;
                         if (isset($$duv)) {
-                            if ($$duv) xarModSetVar('roles',$duv,1);
-                            else xarModSetVar('roles',$duv,0);
+                            if ($$duv) {
+                                xarModSetVar('roles',$duv,1);
+                                xarModSetVar('roles',$userduv,'');
+                            } else {
+                                xarModSetVar('roles',$duv,0);
+                            }
                         }
                     }
                     break;

@@ -86,7 +86,7 @@ function roles_admin_updaterole()
         }
     }
     $duvs = array();
-    if (isset($phome) && xarModGetVar('roles','userhome'))
+    if (isset($phome) && xarModGetVar('roles','setuserhome'))
             $duvs['userhome'] = $phome;
 
     // assemble the args into an array for the role constructor

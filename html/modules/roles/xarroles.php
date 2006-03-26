@@ -1404,7 +1404,7 @@ class xarRole
     function getHome()
     {
         $duv = isset($this->duvs['userhome']) ? $this->duvs['userhome'] : "";
-        return $duv;
+         return $duv;
     }
     function getPrimaryParent()
     {

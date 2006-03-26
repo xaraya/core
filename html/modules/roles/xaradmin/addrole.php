@@ -102,9 +102,9 @@ function roles_admin_addrole()
     // assemble the args into an array for the role constructor
     if ($ptype == 0) {
         $duvs = array();
-        if (isset($phome) && xarModGetVar('roles','userhome'))
+        if (isset($phome) && xarModGetVar('roles','setuserhome'))
             $duvs['userhome'] = $phome;
-        if (isset($pprimaryparent) && xarModGetVar('roles','primaryparent'))
+        if (isset($pprimaryparent) && xarModGetVar('roles','setprimaryparent'))
             $duvs['primaryparent'] = $pprimaryparent;
 
         $pargs = array('name' => $pname,
