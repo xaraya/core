@@ -3,10 +3,18 @@
     <span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
+    <xar:template type="module" file="admin-menu" />
     <h2>
         <xar:mlstring>Mail Queue</xar:mlstring>
     </h2>
 
+   <xar:comment>
+       We want to show this option so people know it is available.
+       We only show this if we can use it eg scheduler is installed and hooked to mail
+   </xar:comment>
+
+   <xar:if condition="xarModIsAvailable('scheduler') and xarModIsHooked('mail','scheduler')">
+   <xar:comment>We only show this if we can use it eg scheduler is installed and hooked to mail </xar:comment>
     <xar:if condition="!empty($log)">
         <pre>#$log#</pre>
 
@@ -83,7 +91,7 @@
         <input type="hidden" name="action" value="process" />
         <input type="submit" value="#xarML('Process Queue')#" />
     </form>
-    
+
     <table width="100%" border="0" cellspacing="0" cellpadding="2">
     <tr>
         <th>
@@ -121,4 +129,13 @@
     </tr>
     </xar:if>
     </table>
+    <xar:else />
+        <p>
+            <xar:mlstring>
+            You can schedule mail for sending later by installing and using the Scheduler module.
+            Install Scheduler first. Mail supplies the hooks so you must also </xar:mlstring>
+            <a href="&xar-modurl-modules-admin-hooks;&amp;hook=mail" title="Hook mail to scheduler to activate queue processing">hook Mail module to Scheduler</a>
+            <xar:mlstring> to use this option.</xar:mlstring>
+        </p>
+    </xar:if>
 </div>

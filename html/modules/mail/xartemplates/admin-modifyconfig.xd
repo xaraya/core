@@ -11,6 +11,7 @@
     <span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
+ <xar:template type="module" file="admin-menu" />
     <h2>
         <xar:mlstring>Modify Mail Configuration</xar:mlstring>
     </h2>

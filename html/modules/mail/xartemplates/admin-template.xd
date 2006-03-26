@@ -15,12 +15,17 @@
     </span>
 </div>
 <div class="xar-mod-body">
+ <xar:template type="module" file="admin-menu" />
     <h2>
         <xar:mlstring>
             Configure Notification Template 
         </xar:mlstring>
     </h2>
     <xar:if condition="!empty($settings)">
+       <p>
+           <a href="&xar-modurl-modules-admin-hooks;&amp;hook=mail" title="Configure mail hooks"><xar:mlstring>Hook the mail module to content types</xar:mlstring></a><xar:mlstring> to receive notifications on add, edit or delete.
+            </xar:mlstring>
+        </p>
         <p>
             <xar:mlstring>
                 The mail module is currently hooked to the following modules : 

@@ -11,6 +11,7 @@
     <span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
+ <xar:template type="module" file="admin-menu" />
     <form action="&xar-modurl-mail-admin-sendtest;" method="post" onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);" enctype="application/x-www-form-urlencoded">
         <fieldset>
             <legend>

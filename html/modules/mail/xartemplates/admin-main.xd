@@ -9,6 +9,7 @@
     </span>
 </div>
 <div class="xar-mod-body">
+ <xar:template type="module" file="admin-menu" />
     <img src="#xarTplGetImage('admin.gif', 'mail')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
     <h2><xar:mlstring>Overview</xar:mlstring></h2>
     <h3><xar:mlstring>What is it?</xar:mlstring></h3>
