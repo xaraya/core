@@ -3,7 +3,7 @@
     <span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
-
+ <xar:template type="module" file="admin-menu" />
     <xar:if condition="!empty($tid)">
         <h2>
             <xar:mlstring>View Block Type</xar:mlstring>
