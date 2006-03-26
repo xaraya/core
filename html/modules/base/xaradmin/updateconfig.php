@@ -11,7 +11,7 @@
  * @link http://xaraya.com/index.php/release/68.html
  * @author Marcel van der Boom
  */
- */
+
 /**
  * Update site configuration
  *
