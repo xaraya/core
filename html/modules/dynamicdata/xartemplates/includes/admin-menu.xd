@@ -17,7 +17,7 @@
         </dd>
     </xar:sec>
 
-    <xar:sec mask="AdminExample" catch="false">
+    <xar:sec mask="AdminDynamicData" catch="false">
         <xar:set name="tabclass">$activetab=='modifyconfig'?'active':''</xar:set>
         <dd class="#$tabclass#">
           <a href="&xar-modurl-dynamicdata-admin-modifyconfig;">
@@ -25,7 +25,7 @@
           </a>
         </dd>
     </xar:sec>
-    <xar:sec mask="DeleteExample" catch="false">
+    <xar:sec mask="AdminDynamicData" catch="false">
         <xar:set name="tabclass">$activetab=='utilities'?'active':''</xar:set>
         <dd class="#$tabclass#">
             <a href="&xar-modurl-dynamicdata-admin-utilities;" >
