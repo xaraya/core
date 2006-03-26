@@ -191,6 +191,15 @@
                         </label>
                         <input type="password" name="ppass2" id="ppass2" value="" maxlength="40" class="xar-form-textmedium" />
                     </div>
+                    
+                    <xar:if condition="xarModGetVar('roles','setpasswordupdate')">
+                    <div class="xar-form-input-wrapper">
+                        <label for="upasswordupdate" class="xar-form-label">
+                            <xar:mlstring>Password last updated:</xar:mlstring>
+                        </label>
+                        #xarLocaleGetFormattedDate('medium', $upasswordupdate)# #xarLocaleGetFormattedTime('medium', $upasswordupdate)#
+                    </div>
+                    </xar:if>
                 </xar:if>
 
                 <xar:if condition="!empty($hooks) and count($hooks) gt 0">

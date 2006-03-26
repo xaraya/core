@@ -35,6 +35,7 @@ function roles_user_display($args)
     $item['itemtype'] = 0; // handle groups differently someday ?
     $item['returnurl'] = xarModURL('roles', 'user', 'display',
                                    array('uid' => $uid));
+
     $hooks = array();
     $hooks = xarModCallHooks('item', 'display', $uid, $item);
     $data['hooks'] = $hooks;

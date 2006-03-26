@@ -63,6 +63,7 @@ function roles_user_usermenu($args)
             $authid = xarSecGenAuthKey();
             $submitlabel = xarML('Submit');
             $item['module'] = 'roles';
+            $upasswordupdate = $role->getPasswordUpdate();
 
             $hooks = xarModCallHooks('item','modify',$uid,$item);
             if (isset($hooks['dynamicdata'])) {
@@ -78,7 +79,8 @@ function roles_user_usermenu($args)
                                   'hooks'        => $hooks,
                                   'emailaddress' => $email,
                                   'submitlabel'  => $submitlabel,
-                                  'uid'          => $uid));
+                                  'uid'          => $uid,
+                                  'upasswordupdate' => $upasswordupdate));
             break;
 
         case 'formenhanced':
@@ -113,6 +115,9 @@ function roles_user_usermenu($args)
                 // Check to make sure passwords match
                 if ($pass1 == $pass2){
                     $pass = $pass1;
+                    if (xarModGetVar('roles','setpasswordupdate')){
+                        $passwordupdate=time();
+                    }
                 } else {
                     $msg = xarML('The passwords do not match');
                     xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
@@ -129,7 +134,8 @@ function roles_user_usermenu($args)
                                          'home' => $home,
                                          'email' => $oldemail,
                                          'state' => ROLES_STATE_ACTIVE,
-                                         'pass' => $pass))) return;
+                                         'pass' => $pass,
+                                         'passwordupdate' => $passwordupdate))) return;
             }
             if (!empty($email)){
                 // Steps for changing email address.

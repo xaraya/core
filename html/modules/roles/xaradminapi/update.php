@@ -76,7 +76,7 @@ function roles_adminapi_update($args)
                   SET xar_name = ?, xar_uname = ?, xar_email = ?,
                       xar_pass = ?, xar_valcode = ?, xar_state = ?
                 WHERE xar_uid = ?";
-        $bindvars = array($name,$uname,$email,$home,$cryptpass,$valcode,$state,$uid);
+        $bindvars = array($name,$uname,$email,$cryptpass,$valcode,$state,$uid);
     } else {
         $query = "UPDATE $rolesTable
                 SET xar_name = ?, xar_uname = ?, xar_email = ?,
@@ -84,7 +84,12 @@ function roles_adminapi_update($args)
                 WHERE xar_uid = ?";
         $bindvars = array($name,$uname,$email,$valcode,$state,$uid);
     }
-	xarModSetUserVar('roles','userhome',$home, $uid);
+    if (xarModGetVar('roles','setuserhome')) {
+	    xarModSetUserVar('roles','userhome',$home, $uid);
+    }
+	if (isset($passwordupdate) && xarModGetVar('roles','setpasswordupdate')) {
+        xarModSetUserVar('roles','passwordupdate',$passwordupdate, $uid);
+    }
     $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
@@ -94,6 +99,7 @@ function roles_adminapi_update($args)
     $item['home'] = $home;
     $item['uname'] = $uname;
     $item['email'] = $email;
+
     xarModCallHooks('item', 'update', $uid, $item);
 
     return true;

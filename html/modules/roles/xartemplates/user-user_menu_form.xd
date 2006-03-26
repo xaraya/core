@@ -100,6 +100,14 @@
                 </label>
                 <input type="password" name="pass2" id="pass2" value="" size="20" maxlength="40" />
             </div>
+            <xar:if condition="xarModGetVar('roles','setpasswordupdate')">
+                    <div class="xar-form-input-wrapper">
+                        <label for="upasswordupdate" class="xar-form-label">
+                            <xar:mlstring>Password last updated:</xar:mlstring>
+                        </label>
+                        #xarLocaleGetFormattedDate('medium', $upasswordupdate)# #xarLocaleGetFormattedTime('medium', $upasswordupdate)#
+                    </div>
+            </xar:if>
             <div class="xar-form-input-wrapper">
                 <xar:data-getitem name="$properties" module="roles" itemid="$uid" />
             </div>

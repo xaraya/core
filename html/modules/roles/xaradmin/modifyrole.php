@@ -101,7 +101,11 @@ function roles_admin_modifyrole()
     } else {
         $data['pstate'] = $role->getState();
     }
-
+    if (xarModGetVar('roles','setpasswordupdate')) {
+         $data['upasswordupdate'] = $role->getPasswordUpdate();
+    }else {
+         $data['upasswordupdate'] ='';
+    }
     // call item modify hooks (for DD etc.)
     $item = $data;
     $item['module']= 'roles';

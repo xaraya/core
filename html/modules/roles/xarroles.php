@@ -1411,6 +1411,11 @@ class xarRole
         $duv = isset($this->duvs['primaryparent']) ? $this->duvs['primaryparent'] : "";
         return $duv;
     }
+    function getPasswordUpdate()
+    {
+        $duv = isset($this->duvs['passwordupdate']) ? $this->duvs['passwordupdate'] : "";
+         return $duv;
+    }
     function getUname()
     {
         return $this->uname;
@@ -1459,6 +1464,10 @@ class xarRole
     function setHome($var)
     {
         $this->userhome = $var;
+    }
+    function setPasswordUpdate($var)
+    {
+        $this->passwordupdate= $var;
     }
     function setPrimaryParent($var)
     {

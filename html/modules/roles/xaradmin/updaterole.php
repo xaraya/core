@@ -89,6 +89,11 @@ function roles_admin_updaterole()
     if (isset($phome) && xarModGetVar('roles','setuserhome'))
             $duvs['userhome'] = $phome;
 
+            if ((!empty($ppass1))  && xarModGetVar('roles','setpasswordupdate')){
+                //assume if it's not empty then it's already been matched with ppass2
+                $duvs['passwordupdate']=time();
+            }
+
     // assemble the args into an array for the role constructor
     $pargs = array('uid' => $uid,
         'name' => $pname,
