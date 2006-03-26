@@ -16,7 +16,7 @@
           </a>
         </dd>
     </xar:sec>
-    <xar:sec mask="DeleteExample" catch="false">
+    <xar:sec mask="DeleteRole" catch="false">
         <xar:set name="tabclass">$activetab=='newrole'?'active':''</xar:set>
         <dd class="#$tabclass#">
             <a href="&xar-modurl-roles-admin-newrole;" >
