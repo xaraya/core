@@ -6,7 +6,12 @@
   <xar:set name="evt_change">'return true;'</xar:set>
 </xar:if>
 
-<select name="#$name#" id="#$id#" tabindex="#$tabindex#" onchange="#$evt_change#">
+
+<xar:if condition="isset($style)">
+    <select name="#$name#" id="#$id#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#" >
+<xar:else/>
+    <select name="#$name#" id="#$id#" tabindex="#$tabindex#" onchange="#$evt_change#" >
+</xar:if>
     <xar:foreach in="$options" value="$option" >
         <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
             <xar:if condition="$option['id'] eq $value" >

@@ -157,7 +157,7 @@ class Dynamic_DataStore
 
     public $cache = 0;
 
-    function Dynamic_DataStore($name)
+    function __construct($name)
     {
         $this->name = $name;
         $this->fields = array();

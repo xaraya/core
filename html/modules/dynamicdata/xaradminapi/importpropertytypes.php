@@ -10,6 +10,7 @@
  * @subpackage Dynamicdata module
  * @author mikespub <mikespub@xaraya.com>
  */
+
 /**
  * Check the properties directory for properties and import them into the Property Type table.
  *
@@ -19,7 +20,6 @@
  * @return an array of the property types currently available
  * @raise BAD_PARAM, NO_PERMISSION
  */
-
 class PropertyDirectoryIterator extends DirectoryIterator
 {
     public function __construct($file) 
@@ -78,52 +78,39 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                 if(substr($dir->getFileName(),0,1) == '.') continue; // temp for emacs insanity and skip hidden files while we're at it
 
                 // Include the file into the environment
+                $before = get_declared_classes();
                 xarInclude($dir->getPathName());
+                $newClasses = array_diff(get_declared_classes(),$before);
                 
-                // See what class we have here
-                // TODO: make this independent from the file someday
-                $propertyClass = basename($dir->getFileName(),'.php');
-
-                if(!class_exists($propertyClass)) {
-                    $vars = array($propertyClass, $dir->getFileName());
-                    $msg = 'The class "#(1)" could not be found. (does the class name match the filename?) [Filename: "#(2)"]';
-                    throw new ClassNotFoundException($vars,$msg);
-                }
-
-                // Main part
-                // Call the class method on each property to get the registration info
-                if (!is_callable(array($propertyClass,'getRegistrationInfo'))) continue;
-                $baseInfo = call_user_func(array($propertyClass, 'getRegistrationInfo'));
-                // Fill in the info we dont have in the registration class yet
-                // TODO: see if we can have it in the registration class
-                $baseInfo->class = $propertyClass;
-                $baseInfo->filepath = $PropertiesDir.$dir->getFileName();
-
-                // If required files are not present, continue with the next file
-                // TODO: move this outa here
-                foreach($baseInfo->reqfiles as $required) {
-                    if(!file_exists($required)) continue;
-                }
+                // See what class(es) we have here
+                foreach($newClasses as $index => $propertyClass) {
+                    // If it doesnt exist something weird is goin on
+                    if(!class_exists($propertyClass)) continue;
+                    
+                    // Main part
+                    // Call the class method on each property to get the registration info
+                    if (!is_callable(array($propertyClass,'getRegistrationInfo'))) continue;
+                    $baseInfo = call_user_func(array($propertyClass, 'getRegistrationInfo'));
+                    // Fill in the info we dont have in the registration class yet
+                    // TODO: see if we can have it in the registration class
+                    $baseInfo->class = $propertyClass;
+                    $baseInfo->filepath = $PropertiesDir.$dir->getFileName();
+                    
+                     // Check for aliases
+                    if(!empty($baseInfo->aliases)) {
+                        // Each alias is also a propertyRegistration object
+                        foreach($baseInfo->aliases as $aliasInfo) {
+                            $proptypes[$aliasInfo->id] = $aliasInfo;
+                        }
+                    } 
+                    $proptypes[$baseInfo->id] = $baseInfo;
                 
-                // If required modules are not present, continue with the next file
-                // TODO: move this outa here
-                foreach($baseInfo->reqmodules as $required) {
-                    if(!xarModIsAvailable($required)) continue;
-                }
-                                                
-                // Check for aliases
-                if(!empty($baseInfo->aliases)) {
-                    // Each alias is also a propertyRegistration object
-                    foreach($baseInfo->aliases as $aliasInfo) {
-                        $proptypes[$aliasInfo->id] = $aliasInfo;
-                    }
-                } 
-                $proptypes[$baseInfo->id] = $baseInfo;
-                
-                // Update database entry for this property 
-                // This will also do the aliases
-                $baseInfo->Register();
-            } // loop over the file in a directory
+                    // Update database entry for this property 
+                    // This will also do the aliases
+                    // TODO: check the result, now silent failure
+                    $registered = $baseInfo->Register();
+                } // next property class in the same file
+            } // loop over the files in a directory
         } // loop over the directories
         $dbconn->commit();
     } catch(Exception $e) {

@@ -76,8 +76,9 @@ class Dynamic_Object_Master
      * @param $args['fieldlist'] optional list of properties to use, or
      * @param $args['status'] optional status of the properties to use
      * @param $args['allprops'] skip disabled properties by default
+     * @todo  This does too much, split it up
      */
-    function Dynamic_Object_Master($args)
+    function __construct($args)
     {
         $this->properties = array();
         $this->datastores = array();
@@ -889,10 +890,10 @@ class Dynamic_Object extends Dynamic_Object_Master
      *
      * @param $args['itemid'] item id of the object to get
      */
-    function Dynamic_Object($args)
+    function __construct($args)
     {
         // get the object type information from our parent class
-        $this->Dynamic_Object_Master($args);
+        parent::__construct($args);
 
         // set the specific item id (or 0)
         if (isset($args['itemid'])) {
@@ -1418,7 +1419,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
      * @param $args['numitems'] number of items to retrieve
      * @param $args['startnum'] start number
      */
-    function Dynamic_Object_List($args)
+    function __construct($args)
     {
         // initialize the list of item ids
         $this->itemids = array();
@@ -1426,7 +1427,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         $this->items = array();
 
         // get the object type information from our parent class
-        $this->Dynamic_Object_Master($args);
+        parent::__construct($args);
 
         // see if we can access these objects, at least in overview
         if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->moduleid.':'.$this->itemtype.':All')) return;

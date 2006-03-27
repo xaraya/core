@@ -1,4 +1,4 @@
-<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="modstatus">
     xarSessionGetVar('statusmsg') 
 </xar:set>
@@ -146,9 +146,9 @@
             </tr>
         </table>
         <xar:if condition="$modstatus">
-            <!--
+            <xar:comment>
                 lets display latest status on themes upgrades if any 
-            -->
+            </xar:comment>
             <p>
                 <xar:mlstring>
                     Latest status - the following core modules have been successfully upgraded: 
@@ -158,13 +158,13 @@
                 #$modstatus# 
             </p>
         </xar:if>
-        <!--
+        <xar:comment>
             the Module Lists css-based styles 
-        -->
+        </xar:comment>
         <xar:if condition="$selstyle eq 'compacta' or $selstyle eq 'compactb'">
             <xar:template file="compactlist-ab" type="module" />
             <xar:else />
-            <!--
+            <xar:comment>
                 the Module Lists table-based styles 
             -->
             <table class="xar-fullwidth">
@@ -197,13 +197,13 @@
                 </tr>
                 <xar:foreach in="$listrowsitems" value="$modinfo">
                     <tr>
-                        <!--
+                        <xar:comment>
                             please note any element can be a named anchor as long as it has id (and name for some browsers) so we shouldnt waste space with empty anchors here 
-                        -->
+                        </xar:comment>
                         <td>
-                            <!--
+                            <xar:comment>
                                 if module is active and configurable (admin type) make its name a link to module main admin function 
-                            -->
+                            </xar:comment>
                             #$modinfo['displayname']# 
                         </td>
                         <td class="xar-align-right">
