@@ -166,7 +166,7 @@
             <xar:else />
             <xar:comment>
                 the Module Lists table-based styles 
-            -->
+            </xar:comment>
             <table class="xar-fullwidth">
                 <tr>
                     <th>
