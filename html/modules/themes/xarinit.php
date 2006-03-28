@@ -23,7 +23,7 @@ xarDBLoadTableMaintenanceAPI();
  * @raise DATABASE_ERROR
  */
 function themes_init()
-{ 
+{
     // Get database information
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
@@ -33,11 +33,11 @@ function themes_init()
 
     $tables['themes'] = $systemPrefix . '_themes';
     $tables['theme_states'] = $sitePrefix . '_theme_states';
-    $tables['theme_vars'] = $sitePrefix . '_theme_vars'; 
+    $tables['theme_vars'] = $sitePrefix . '_theme_vars';
     // Create tables
     /**
      * Here we create all the tables for the theme system
-     * 
+     *
      * prefix_themes       - basic theme info
      * prefix_theme_states - table to hold states for unshared themes
      * prefix_theme_vars   - theme variables table
@@ -99,7 +99,7 @@ function themes_init()
 
     $query = xarDBCreateTable($tables['theme_states'], $fields);
     $res = &$dbconn->Execute($query);
-    if (!$res) return; 
+    if (!$res) return;
     // prefix_theme_vars
     /**
      * CREATE TABLE xar_theme_vars (
@@ -126,19 +126,19 @@ function themes_init()
     if (!$res) return;
 
     xarModSetVar('themes', 'default', 'Xaraya_Classic');
-    xarModSetVar('themes', 'selsort', 'nameasc'); 
+
 
     // Make sure we dont miss empty variables (which were not passed thru)
     // FIXME: how would these values ever be passed in?
     if (empty($selstyle)) $selstyle = 'plain';
     if (empty($selfilter)) $selfilter = XARMOD_STATE_ANY;
     if (empty($hidecore)) $hidecore = 0;
-    if (empty($selsort)) $selsort = 'namedesc';
+    if (empty($selclass)) $selclass = 'all';
 
     xarModSetVar('themes', 'hidecore', $hidecore);
     xarModSetVar('themes', 'selstyle', $selstyle);
     xarModSetVar('themes', 'selfilter', $selfilter);
-    xarModSetVar('themes', 'selsort', $selsort);
+    xarModSetVar('themes', 'selclass', $selclass);
 
     xarModSetVar('themes', 'SiteName', 'Your Site Name');
     xarModSetVar('themes', 'SiteSlogan', 'Your Site Slogan');
@@ -150,7 +150,7 @@ function themes_init()
     xarModSetVar('themes', 'ShowTemplates', 0);
     //Moved here in 1.1.x series
     xarModSetVar('themes', 'usedashboard', 0);
-    xarModSetVar('themes', 'dashtemplate', 'dashboard');    
+    xarModSetVar('themes', 'dashtemplate', 'dashboard');
 
     // Register theme tags.
     // Additional styles, see bug 3868 note below.
@@ -166,35 +166,35 @@ function themes_init()
     // Set up usermenu hook
     if (!xarModRegisterHook('item', 'usermenu', 'GUI', 'themes', 'user', 'usermenu')) {
         return false;
-    } 
+    }
 
-    // Register the meta blocktype 
+    // Register the meta blocktype
     if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
                         array('modName' => 'themes',
-                              'blockType' => 'meta'))) return; 
+                              'blockType' => 'meta'))) return;
 
     // Initialisation successful
     return true;
-} 
+}
 
 /**
  * Upgrade the themes theme from an old version
- * 
+ *
  * @param oldversion $ the old version to upgrade from
  * @returns bool
  */
 function themes_upgrade($oldversion)
-{ 
+{
     // Upgrade dependent on old version number
     switch ($oldversion) {
         case '1.0':
             if (!xarModRegisterHook('item', 'usermenu', 'GUI', 'themes', 'user', 'usermenu')) {
                 return false;
-            } 
+            }
 
         case '1.1':
             if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
-                array('modName' => 'themes', 'blockType' => 'meta'))) return; 
+                array('modName' => 'themes', 'blockType' => 'meta'))) return;
 
         case '1.2':
         case '1.3.0':
@@ -236,12 +236,12 @@ function themes_upgrade($oldversion)
 
 /**
  * Delete the themes theme
- * 
- * @param none $ 
+ *
+ * @param none $
  * @returns bool
  */
 function themes_delete()
-{ 
+{
     // this module cannot be removed
     return false;
 }

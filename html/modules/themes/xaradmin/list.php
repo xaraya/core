@@ -39,7 +39,7 @@ function themes_admin_list()
     $data['regen']                                  = $regen;
     $data['selstyle']                               = xarModGetUserVar('themes', 'selstyle');
     $data['selfilter']                              = xarModGetUserVar('themes', 'selfilter');
-    $data['selsort']                                = xarModGetUserVar('themes', 'selsort');
+    $data['selclass']                               = xarModGetUserVar('themes', 'selclass');
     $data['useicons']                               = xarModGetUserVar('themes', 'useicons');
 
     // select vars for drop-down menus
@@ -62,21 +62,27 @@ function themes_admin_list()
     $data['filter'][XARTHEME_STATE_MISSING_FROM_ACTIVE]         = xarML('Missing (Active)');
     $data['filter'][XARTHEME_STATE_MISSING_FROM_UPGRADED]       = xarML('Missing (Upgraded)');
 
-    $data['sort']['nameasc']                        = xarML('Name [a-z]');
-    $data['sort']['namedesc']                       = xarML('Name [z-a]');
-
     $data['default']                           = xarModGetVar('themes', 'default', 1);
 
     // obtain list of modules based on filtering criteria
 /*     if($regen){ */
         // lets regenerate the list on each reload, for now
         if(!xarModAPIFunc('themes', 'admin', 'regenerate')) return;
-        $themelist = xarModAPIFunc('themes','admin','getthemelist',  array('filter'=> array('State' => $data['selfilter'])));
+
+        // assemble filter for theme list
+        $filter = array('State' => $data['selfilter']);
+        if ($data['selclass'] != 'all') {
+            $filter['Class'] = strtr($data['selclass'], array('system' => 0, 'utility' => 1, 'user' => 2));
+        }
+        // get themes
+        $themelist = xarModAPIFunc('themes','admin','getthemelist',  array('filter'=> $filter));
 /*         , array('filter'=> array('State' => $data['selfilter'][0]))); */
 /*     }else{ */
 /*         // or just fetch the quicker old list */
 /*         $themelist = xarModAPIFunc('themes','admin','GetThemeList', array('filter'=> array('State' => $data['selfilter']))); */
 /*     } */
+
+
 
     // get action icons/images
     $img_disabled       = xarTplGetImage('set1/disabled.png');
@@ -284,9 +290,6 @@ function themes_admin_list()
 
     // detailed info image url
     $data['infoimage'] = xarTplGetImage('help.gif');
-
-    // not ideal but would do for now - reverse sort by module names
-    if($data['selsort'] == 'namedesc') krsort($data['listrowsitems']);
 
     // Send to template
     return $data;

@@ -24,14 +24,14 @@ function themes_admin_settings()
     if (!xarVarFetch('hidecore',  'str:1:', $hidecore,  '0',                  XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('selstyle',  'str:1:', $selstyle,  'plain',              XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('selfilter', 'str:1:', $selfilter, 'XARTHEME_STATE_ANY', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('selsort',   'str:1:', $selsort,   'namedesc',           XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('selclass',  'str:1:', $selclass,  'all',                XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('regen',     'str:1:', $regen,     false,                XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('useicons',  'checkbox', $useicons, 'XARTHEME_STATE_ANY', XARVAR_NOT_REQUIRED)) return;
 
     if (!xarModSetUserVar('themes', 'hidecore', $hidecore)) return;
     if (!xarModSetUserVar('themes', 'selstyle', $selstyle)) return;
     if (!xarModSetUserVar('themes', 'selfilter', $selfilter)) return;
-    if (!xarModSetUserVar('themes', 'selsort', $selsort)) return;
+    if (!xarModSetUserVar('themes', 'selclass', $selclass)) return;
     if (!xarModSetUserVar('themes', 'useicons', $useicons)) return;
 
     xarResponseRedirect(xarModURL('themes', 'admin', 'list', array('regen' => $regen = 1)));

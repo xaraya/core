@@ -64,7 +64,7 @@
     </p>
     <form method="post" action="&xar-modurl-themes-admin-settings;">
         <xar:comment>
-            Theme List Sort and Filter Controls table
+            Theme List Filter Controls table
         </xar:comment>
         <table class="xar-fullwidth">
             <tr>
@@ -83,9 +83,9 @@
                     </label>
                 </th>
                 <th>
-                    <label for="sort">
+                    <label for="class">
                         <xar:mlstring>
-                            Sort by
+                            Class
                         </xar:mlstring>
                     </label>
                 </th>
@@ -132,9 +132,9 @@
                     </select>
                 </td>
                 <td class="xar-align-center">
-                    <select name="selsort" id="selsort" onchange="this.form.submit()">
-                        <xar:foreach in="$sort" key="$key" value="$value">
-                            <xar:if condition="$key eq $selsort">
+                    <select name="selclass" id="selclass" onchange="this.form.submit()">
+                        <xar:foreach in="$class" key="$key" value="$value">
+                            <xar:if condition="$key eq $selclass">
                                 <option value="#$key#" selected="selected">
                                     #$value#
                                 </option>
