@@ -18,7 +18,7 @@
 function themes_admin_list() 
 {
 
-/* TODO (till 1.0): 
+/* TODO (how much of this has been accomplished?): 
 
 - simplify installation/deinstallation procedure
     - transparent On/Off mode for 'non-core themes'
