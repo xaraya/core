@@ -273,10 +273,14 @@
                 </td><td align="center" valign="center" width="340">
 
                     <xar:if condition="empty($modinfo['preview'])">
-                        <div class="xar-accent" style="width: 300px; height: 225px; line-height: 225px;">
-                            <div class="no_image_text">
-                                <xar:mlstring>(Preview not available)</xar:mlstring>
-                            </div>
+                        <div class="xar-alt xar-alt-outline xar-sub" style="width: 300px; height: 225px;">
+                            <xar:ml>
+                                <xar:mlstring>
+                                    Preview not available.  Screenshot not found at
+                                    <em>themes/#(1)/images/preview.jpg</em>
+                                </xar:mlstring>
+                                <xar:mlvar>#$modinfo['directory']#</xar:mlvar>
+                            </xar:ml>
                         </div>
                     <xar:else />
                         <a href="#$modinfo['preview']#" title="#xarML('View full-size image')#">
