@@ -90,6 +90,9 @@
                     </label>
                 </th>
                 <th>
+                    <br />
+                </th>
+                <th>
                     <label for="reload">
                         <xar:mlstring>
                             Action
@@ -144,6 +147,18 @@
                     </select>
                 </td>
                 <td class="xar-align-center">
+                    <xar:if condition="$useicons eq true">
+                        <input type="checkbox" name="useicons" id="useicons" value="1" checked="checked" onchange="this.form.submit()" />
+                    <xar:else />
+                        <input type="checkbox" name="useicons" id="useicons" value="1" onchange="this.form.submit()" />
+                    </xar:if>
+                    <label for="useicons">
+                        <xar:mlstring>
+                            Use Icons
+                        </xar:mlstring>
+                    </label>
+                </td>
+                <td class="xar-align-center">
                     <input type="submit" name="reload" id="reload" value="#xarML('Refresh')#" />
                 </td>
             </tr>
@@ -162,12 +177,9 @@
             </p>
         </xar:if>
         <xar:comment>
-            the Module Lists css-based styles
+            the module shows themes in preview mode
         </xar:comment>
         <xar:if condition="$selstyle eq 'preview'">
-            <xar:comment>
-                special thumbnail-based preview mode
-            </xar:comment>
 
             <xar:foreach in="$listrowsitems" value="$modinfo">
 
@@ -326,7 +338,7 @@
                             #$modinfo['version']#
                         </td>
                         <td class="xar-align-center">
-                            <xar:if condition="$selstyle eq 'icons'">
+                            <xar:if condition="$useicons eq true">
                                 <a href="#$modinfo['infourlnew']#&amp;theme=print" title="#$infolabel#" onclick="window.open(this.getAttribute('href'));return false;">
                                     <img src="#$infoimg#" alt="#$infolabel#" />
                                 </a>
@@ -359,7 +371,7 @@
                             </xar:if>
                         </td>
                         <td class="xar-nowrap xar-align-center">
-                            <xar:if condition="$selstyle eq 'icons'">
+                            <xar:if condition="$useicons eq true">
                                 <xar:if condition="$modinfo['actionurl'] eq ''">
                                     <img src="#$modinfo['actionimg1']#" alt="#xarML('n/a')#" />
                                     <xar:else />
@@ -407,7 +419,7 @@
         </xar:if>
     </form>
 </div>
-<xar:if condition="$selstyle eq 'icons'">
+<xar:if condition="$useicons eq true">
     <div class="xar-mod-foot xar-align-center">
         <img src="#xarTplGetImage('set1/disabled.png')#" alt="#$imgdisabled#" class="xar-margin-thicksides" />
         #$imgdisabled#
