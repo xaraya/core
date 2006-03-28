@@ -933,7 +933,6 @@ function installer_admin_confirm_configuration()
         xarModAPIFunc('modules','admin','regenerate');
 
         // load the modules from the configuration
-        var_dump($options2);
         foreach ($options2 as $module) {
             if(in_array($module['item'],$chosen)) {
                 $dependents = xarModAPIFunc('modules','admin','getalldependencies',array('regid'=>$module['item']));

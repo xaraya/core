@@ -17,7 +17,7 @@
  */
 function privileges_adminapi_createobjects($args)
 {
-    $moduleid = 1098;
+    $moduleid = 1098; // A bit of elaboration on this value would be nice
 
 # --------------------------------------------------------
 #
