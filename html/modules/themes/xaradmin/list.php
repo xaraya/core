@@ -48,9 +48,9 @@ function themes_admin_list()
 
     // labels for class names
     $data['class']['all']                           = xarML('All');
-    $data['class']['user']                          = xarML('User');
     $data['class']['system']                        = xarML('System');
     $data['class']['utility']                       = xarML('Utility');
+    $data['class']['user']                          = xarML('User');
 
     $data['filter'][XARTHEME_STATE_ANY]                         = xarML('All');
     $data['filter'][XARTHEME_STATE_INSTALLED]                   = xarML('Installed');

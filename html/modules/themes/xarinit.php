@@ -134,11 +134,13 @@ function themes_init()
     if (empty($selfilter)) $selfilter = XARMOD_STATE_ANY;
     if (empty($hidecore)) $hidecore = 0;
     if (empty($selclass)) $selclass = 'all';
+    if (empty($useicons)) $useicons = false;
 
     xarModSetVar('themes', 'hidecore', $hidecore);
     xarModSetVar('themes', 'selstyle', $selstyle);
     xarModSetVar('themes', 'selfilter', $selfilter);
     xarModSetVar('themes', 'selclass', $selclass);
+    xarModSetVar('themes', 'useicons', $useicons);
 
     xarModSetVar('themes', 'SiteName', 'Your Site Name');
     xarModSetVar('themes', 'SiteSlogan', 'Your Site Slogan');
@@ -228,7 +230,8 @@ function themes_upgrade($oldversion)
         */
 
       case '1.8.0' :
-      //current version
+        xarModSetVar('themes', 'selclass', 'all');
+        xarModSetVar('themes', 'useicons', false);
     }
     // Update successful
     return true;

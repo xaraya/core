@@ -281,7 +281,7 @@
                     <xar:else />
                         <a href="#$modinfo['preview']#" title="#xarML('View full-size image')#">
                             <xar:if condition="xarModIsAvailable('images')">
-                                <xar:template file="showimg" />
+                                <xar:template file="showimg" subdata="array('modinfo' =&gt; $modinfo)" />
                             <xar:else />
                                 <img src="#$modinfo['preview']#" height="300" width="225" class="xar-alt-outline" alt="#xarML('Thumbnail image for this theme')#" />
                             </xar:if>
@@ -310,6 +310,11 @@
                     <th>
                         <xar:mlstring>
                             Info
+                        </xar:mlstring>
+                    </th>
+                    <th>
+                        <xar:mlstring>
+                            Class
                         </xar:mlstring>
                     </th>
                     <th>
@@ -361,6 +366,9 @@
                                     </a>
                                 </noscript>
                             </xar:if>
+                        </td>
+                        <td>
+                            #$modinfo['classlabel']#
                         </td>
                         <td>
                             #$modinfo['statelabel']#
