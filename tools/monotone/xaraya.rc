@@ -126,6 +126,11 @@ function parse_statusmsg(msg)
          table.insert(lines,"\t* "..file..rename_string)
          rename_string = nil
       end
+      -- Handle new directories (mt.26)
+      _,_,file = string.find(line,'^add_dir "(.-)"')
+      if(file~=nil) then 
+         table.insert(lines,"\t* "..file..": new dir") 
+      end
       -- Handle new files
       _,_,file = string.find(line,'^add_file "(.-)"')
       if(file~=nil) then 
