@@ -67,5 +67,15 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
                 return;
         }
     }
+
+    /* When we encounter the open form of the template tag, do nothing yet */
+    function renderBeginTag()
+    {
+    }
+
+    /* Similarly for the end tag of the open form */
+    function renderEndTag()
+    {
+    }
 }
 ?>

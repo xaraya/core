@@ -19,7 +19,7 @@
  * DONT EVEN THINK ABOUT UNCOMMENTING THIS
  *
  */
-  //define('XAR_BL_USE_XSLT',true);
+define('XAR_BL_USE_XSLT',true);
 
 /**
  * Defines for token handling
@@ -214,7 +214,7 @@ class xarTpl__Compiler extends xarTpl__CompilerError
         
         // XSLT-SECTION
         if(defined('XAR_BL_USE_XSLT')) {
-            // If the filename contains 'modules' add a dummy tag
+            // If the filename contains 'modules' add a root tag
             xarLogMessage("Compiling : $fileName");
             $location = dirname($fileName);
             $pathelements = explode('/',$location);
@@ -223,8 +223,8 @@ class xarTpl__Compiler extends xarTpl__CompilerError
                 //if(!(basename($fileName) == 'default.xt' || basename($fileName) =='admin.xt')) {
                 xarLogMessage('NOT a page template, adding dummy root tag');
                 $templateSource ="
-<!DOCTYPE dummy SYSTEM \"http://xartest.hsdev.com:81/includes/transforms/xar_entities.dtd\">
-<xar:dummy xmlns:xar=\"http://xaraya.com/2004/blocklayout\">\n".$templateSource .'</xar:dummy>';
+<!DOCTYPE template SYSTEM \"http://xartest.hsdev.com:81/includes/transforms/xar_entities.dtd\">
+<xar:template xmlns:xar=\"http://xaraya.com/2004/blocklayout\">\n".$templateSource .'</xar:template>';
             }
         }
 
