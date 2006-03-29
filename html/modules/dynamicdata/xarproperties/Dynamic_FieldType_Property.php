@@ -32,6 +32,7 @@ class Dynamic_FieldType_Property extends Dynamic_Select_Property
             if (!isset($proptypes)) $proptypes = array();
                 
             foreach ($proptypes as $propid => $proptype) {
+                // TODO: label isnt guaranteed to be unique, if not, leads to some surprises.
                 $this->options[$proptype['label']] = array('id' => $propid, 'name' => $proptype['label']);
             }
         }
