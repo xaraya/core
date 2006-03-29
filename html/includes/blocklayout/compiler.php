@@ -19,7 +19,7 @@
  * DONT EVEN THINK ABOUT UNCOMMENTING THIS
  *
  */
-  //define('XAR_BL_USE_XSLT',true);
+define('XAR_BL_USE_XSLT',true);
 
 /**
  * Defines for token handling
