@@ -1,4 +1,10 @@
-<h1 class="xar-mod-head">
+<!-- 
+     In 2.x each x[d|t] file *can* have a root tag in the form 
+     of an open xar:template tag. It is very likely that the optional
+     character of this might change to a requirement in the 2.x line.
+-->
+<xar:template>
+    <h1 class="xar-mod-head">
     <xar:mlstring>
         Thank you for installing and trying Xaraya! 
     </xar:mlstring>
@@ -63,3 +69,4 @@
     -->
     <xar:module main="false" module="base" func="main" page="about" />
 </div>
+</xar:template>

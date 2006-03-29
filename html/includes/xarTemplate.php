@@ -1133,6 +1133,30 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
     return $output;
 }
 
+/** 
+ * Determine wether a source template needs compilation
+ * based on modification time of the compiled file and
+ * the modification of the source file
+ * 
+ * @param  string  $sourceFileName   file path to the source file
+ * @param  string  $cachedFileName   filled with the name of the cached file name
+ * @return boolean $needsCompilation true - needs to be compiled, false - no need to compile.
+ */
+function xarTpl__needsCompilation($sourceFileName,&$cachedFileName)
+{
+    $needsCompilation = true; // Assume we do
+    $cachedFileName = null;
+    if ($GLOBALS['xarTpl_cacheTemplates']) {
+        $cacheKey = xarTpl__GetCacheKey($sourceFileName);
+        $cachedFileName = XAR_TPL_CACHE_DIR . '/' . $cacheKey . '.php';
+        if (file_exists($cachedFileName)
+            && (!file_exists($sourceFileName) || (filemtime($sourceFileName) < filemtime($cachedFileName)))) {
+            $needsCompilation = false;
+        }
+    }
+    return $needsCompilation;
+}
+
 /**
  * Execute template from file
  *
@@ -1182,17 +1206,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
         }
     }
 
-    $needCompilation = true;
-    $cachedFileName = null;
-    if ($GLOBALS['xarTpl_cacheTemplates']) {
-        $cacheKey = xarTpl__GetCacheKey($sourceFileName);
-        $cachedFileName = XAR_TPL_CACHE_DIR . '/' . $cacheKey . '.php';
-        if (file_exists($cachedFileName)
-            && (!file_exists($sourceFileName) || (filemtime($sourceFileName) < filemtime($cachedFileName)))) {
-            $needCompilation = false;
-        }
-    }
-
+    $needCompilation = xarTpl__needsCompilation($sourceFileName,$cachedFileName);
     if (!file_exists($sourceFileName) && $needCompilation == true)
         throw new FileNotFoundException($sourceFileName);
 
@@ -1461,6 +1475,7 @@ function xarTpl_modifyHeaderContent($sourceFileName, &$tplOutput)
     return $foundHeaderContent;
 }
 
+
 /**
  * Load template from file (e.g. for use with recurring template snippets someday,
  * using xarTplString() to "fill in" the template afterwards)
@@ -1472,16 +1487,7 @@ function xarTpl_modifyHeaderContent($sourceFileName, &$tplOutput)
  */
 function xarTpl__loadFromFile($sourceFileName)
 {
-    $needCompilation = true;
-
-    if ($GLOBALS['xarTpl_cacheTemplates']) {
-        $cacheKey = xarTpl__SetCacheKey($sourceFileName);
-        $cachedFileName = XAR_TPL_CACHE_DIR . '/' . $cacheKey . '.php';
-        if (file_exists($cachedFileName)
-            && (!file_exists($sourceFileName) || (filemtime($sourceFileName) < filemtime($cachedFileName)))) {
-            $needCompilation = false;
-        }
-    }
+    $needCompilation = xarTpl__needsCompilation($sourceFileName,$cachedFileName);
 
     if (!file_exists($sourceFileName) && $needCompilation == true) {
         throw new FileNotFoundException($sourceFileName);
