@@ -17,9 +17,9 @@
  * @author Marty Vance
  */
 function themes_admin_updateconfig()
-{ 
+{
     // Confirm authorisation code
-    if (!xarSecConfirmAuthKey()) return; 
+    if (!xarSecConfirmAuthKey()) return;
     // Security Check
     if (!xarSecurityCheck('AdminTheme')) return;
     // Get parameters
@@ -37,6 +37,7 @@ function themes_admin_updateconfig()
     // enable or disable dashboard
     if(!xarVarFetch('dashboard', 'checkbox', $dashboard, false, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dashtemplate', 'str:1:', $dashtemplate, 'dashboard', XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('usermenu', 'checkbox', $usermenu, false, XARVAR_DONT_SET)) {return;}
     xarModSetVar('themes', 'SiteName', $sitename);
     xarModSetVar('themes', 'SiteTitleSeparator', $separator);
     xarModSetVar('themes', 'SiteTitleOrder', $pagetitle);
@@ -61,10 +62,46 @@ function themes_admin_updateconfig()
     xarModSetVar('themes', 'selstyle', $selstyle);
     xarModSetVar('themes', 'selfilter', $selfilter);
     xarModSetVar('themes', 'selsort', $selsort);
+
+    // Only go through updatehooks() if there was a change.
+    if (xarModIsHooked('themes', 'roles') != $usermenu) {
+
+
+        $hooked_roles = array();
+        if ($usermenu) {
+            $hooked_roles[0] = 1;
+            // turning on, so remember previous hook config
+            if (xarModIsHooked('themes', 'roles', 1)) {
+                xarModSetVar('themes', 'group_hooked', true);
+            }
+        } else {
+            // turning off, so restore previous hook config
+            if (xarModGetVar('themes', 'group_hooked')) {
+                $hooked_roles[0] = 2;
+                $hooked_roles[1] = 1; // groups only
+                xarModSetVar('themes', 'group_hooked', false);
+            } else {
+                $hooked_roles[0] = 0; // nothing hooked at all
+            }
+        }
+
+        // we need to redirect instead of using xarModAPIFunc() because the
+        // updatehooks() API function calls xarVarFetch rather than taking
+        // input via an $args array.
+        $redirecturl = xarModURL('modules', 'admin', 'updatehooks', array(
+            'authid' => xarSecGenAuthKey('modules'),
+            'curhook' => 'themes',
+            'hooked_roles' => $hooked_roles,
+            'return_url' => xarModURL('themes', 'admin', 'modifyconfig'),
+        ));
+    } else {
+        $redirecturl = xarModURL('themes', 'admin', 'modifyconfig');
+    }
+
     // lets update status and display updated configuration
-    xarResponseRedirect(xarModURL('themes', 'admin', 'modifyconfig')); 
+    xarResponseRedirect($redirecturl);
     // Return
     return true;
-} 
+}
 
 ?>
