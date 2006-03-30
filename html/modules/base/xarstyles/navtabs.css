@@ -2,10 +2,10 @@
 dl.xar-tabs {
     float: left;
     width: 100%;
-    background: #e0e0e0 url("../xarimages/navtabs_bg.gif") repeat-x bottom;
+    background: white url("../xarimages/navtabs_bg.gif") repeat-x bottom;
     font-size: 93%;
     line-height: normal;
-    margin: 0;
+    margin: 0 0 10px 0;
     padding: 10px 0 0;
 }
 html * dl.xar-tabs {
