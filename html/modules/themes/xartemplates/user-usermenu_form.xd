@@ -11,7 +11,7 @@
             <label for="defaulttheme" title="#xarML('Select the theme you would like to use on this site.')#" class="xar-form-label">
                 <xar:mlstring>Site Theme:</xar:mlstring>
             </label>
-            <select name="defaulttheme" id="defaulttheme" onchange="this.form.submit()">
+            <select name="defaulttheme" id="defaulttheme">
                 <xar:loop name="$themes">
                     <xar:if condition="$loop:item['name'] eq $defaulttheme">
                         <option value="#$loop:item['regid']#" selected="selected">#$loop:item['name']#</option>
