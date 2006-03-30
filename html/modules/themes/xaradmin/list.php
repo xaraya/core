@@ -72,7 +72,10 @@ function themes_admin_list()
         // assemble filter for theme list
         $filter = array('State' => $data['selfilter']);
         if ($data['selclass'] != 'all') {
-            $filter['Class'] = strtr($data['selclass'], array('system' => 0, 'utility' => 1, 'user' => 2));
+            $filter['Class'] = strtr(
+                $data['selclass'],
+                array('system' => 0, 'utility' => 1, 'user' => 2)
+            );
         }
         // get themes
         $themelist = xarModAPIFunc('themes','admin','getthemelist',  array('filter'=> $filter));
@@ -118,58 +121,36 @@ function themes_admin_list()
 /*         } */
 
         // for the sake of clarity, lets prepare all our links in advance
-        $initialiseurl              = xarModURL('themes',
-                                    'admin',
-                                    'install',
-                                     array( 'id'        => $thisthemeid,
-                                            'authid'    => $authid));
-        $activateurl                = xarModURL('themes',
-                                    'admin',
-                                    'activate',
-                                     array( 'id'        => $thisthemeid,
-                                            'authid'    => $authid));
-        $deactivateurl              = xarModURL('themes',
-                                    'admin',
-                                    'deactivate',
-                                     array( 'id'        => $thisthemeid,
-                                            'authid'    => $authid));
-        $removeurl                  = xarModURL('themes',
-                                    'admin',
-                                    'remove',
-                                     array( 'id'        => $thisthemeid,
-                                            'authid'    => $authid));
-        $upgradeurl                 = xarModURL('themes',
-                                    'admin',
-                                    'upgrade',
-                                     array( 'id'        => $thisthemeid,
-                                            'authid'    => $authid));
-
+        $initialiseurl = xarModURL('themes', 'admin', 'install',
+            array('id' => $thisthemeid, 'authid' => $authid)
+        );
+        $activateurl = xarModURL('themes', 'admin', 'activate',
+            array('id' => $thisthemeid, 'authid' => $authid)
+        );
+        $deactivateurl = xarModURL('themes', 'admin', 'deactivate',
+            array('id' => $thisthemeid, 'authid' => $authid)
+        );
+        $removeurl = xarModURL('themes', 'admin', 'remove',
+            array('id' => $thisthemeid, 'authid' => $authid)
+        );
+        $upgradeurl = xarModURL('themes', 'admin', 'upgrade',
+            array('id' => $thisthemeid, 'authid' => $authid)
+        );
 
         // common urls
-        $listrows[$i]['editurl']    = xarModURL('themes',
-                                    'admin',
-                                    'modify',
-                                     array( 'id'        => $thisthemeid,
-                                            'authid'    => $authid));
-        $listrows[$i]['infourl']    = xarModURL('themes',
-                                    'admin',
-                                    'themesinfo',
-                                     array( 'id'        => $thisthemeid));
+        $listrows[$i]['editurl'] = xarModURL('themes', 'admin', 'modify',
+            array('id' => $thisthemeid, 'authid' => $authid)
+        );
+        $listrows[$i]['infourl'] = xarModURL('themes', 'admin', 'themesinfo',
+            array('id' => $thisthemeid)
+        );
         // added due to the feature request - opens info in new window
-        $listrows[$i]['infourlnew'] = xarModURL('themes',
-                                    'admin',
-                                    'themesinfo',
-                                    array( 'id'        => $thisthemeid));
-        $listrows[$i]['defaulturl']= xarModURL('themes',
-                                    'admin',
-                                    'setdefault',
-                                     array( 'id'        => $thisthemeid,
-                                            'authid'    => $authid));
-
-
-
-        // image urls
-
+        $listrows[$i]['infourlnew'] = xarModURL('themes', 'admin', 'themesinfo',
+            array('id' => $thisthemeid)
+        );
+        $listrows[$i]['defaulturl']= xarModURL('themes', 'admin', 'setdefault',
+            array('id' => $thisthemeid, 'authid' => $authid)
+        );
 
         // common listitems
         $listrows[$i]['coretheme']      = $coretheme;
@@ -180,7 +161,7 @@ function themes_admin_list()
         $listrows[$i]['class']          = $theme['class'];
         $listrows[$i]['directory']      = $theme['directory'];
 
-        if (empty($theme['state'])){
+        if (empty($theme['state'])) {
             $theme['state'] = 1;
         }
 
@@ -255,6 +236,7 @@ function themes_admin_list()
             $statelabel = xarML('Missing');
             $listrows[$i]['state'] = 4;
 
+            $listrows[$i]['removelabel']        = xarML('Remove');
             $listrows[$i]['actionlabel']        = xarML('Remove');
             $listrows[$i]['actionurl']          = $removeurl;
             $listrows[$i]['removeurl']          = $removeurl;

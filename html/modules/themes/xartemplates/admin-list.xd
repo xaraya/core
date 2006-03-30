@@ -4,11 +4,6 @@
 <xar:set name="modstatus">
     xarSessionGetVar('statusmsg')
 </xar:set>
-<xar:set name="imgdisabled">
-    <xar:mlstring>
-        Disabled
-    </xar:mlstring>
-</xar:set>
 <xar:set name="imgactivate">
     <xar:mlstring>
         Activate
@@ -394,8 +389,8 @@
                                 <xar:if condition="$modinfo['removeurl'] eq ''">
                                     <img src="#$modinfo['actionimg2']#" alt="#xarML('n/a')#" />
                                     <xar:else />
-                                    <a href="#$modinfo['removeurl']#" title="#$modinfo['actionlabel']#">
-                                        <img src="#$modinfo['actionimg2']#" alt="#$modinfo['actionlabel']#" />
+                                    <a href="#$modinfo['removeurl']#" title="#$modinfo['removelabel']#">
+                                        <img src="#$modinfo['actionimg2']#" alt="#$modinfo['removelabel']#" />
                                     </a>
                                 </xar:if>
                                 <xar:if condition="($modinfo['state'] eq 3) and ($modinfo['class'] eq 2) and $modinfo['directory'] ne $default">
@@ -403,7 +398,7 @@
                                         <img src="#xarTplGetImage('set1/setdefault.png')#" alt="#$imgsetdefault#" />
                                     </a>
                                     <xar:else />
-                                    <img src="#$modinfo['actionimg2']#" alt="#xarML('n/a')#" />
+                                    <img src="#xarTplGetImage('set1/none.png')#" alt="#xarML('n/a')#" />
                                 </xar:if>
                                 <xar:else />
                                 <a href="#$modinfo['actionurl']#">
@@ -433,8 +428,6 @@
 </div>
 <xar:if condition="$useicons eq true">
     <div class="xar-mod-foot xar-align-center">
-        <img src="#xarTplGetImage('set1/disabled.png')#" alt="#$imgdisabled#" class="xar-margin-thicksides" />
-        #$imgdisabled#
         <img src="#xarTplGetImage('set1/activate.png')#" alt="#$imgactivate#" class="xar-margin-thicksides" />
         #$imgactivate#
         <img src="#xarTplGetImage('set1/deactivate.png')#" alt="#$imgdeactivate#" class="xar-margin-thicksides" />
