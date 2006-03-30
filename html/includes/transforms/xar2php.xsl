@@ -299,7 +299,10 @@
 
   <!-- xar:ml -->
   <xsl:template match="xar:ml">
-    <xsl:apply-templates/>
+    <xsl:param name="php"/>
+    <xsl:apply-templates>
+      <xsl:with-param name="php" select="$php"/>
+    </xsl:apply-templates>
   </xsl:template>
 
   <!-- xar:mlvar -->
@@ -381,14 +384,17 @@ foreach(</xsl:text><xsl:value-of select="@name"/>
   <xsl:template match="*/text()">
     <xsl:param name="php"/>
     <xsl:choose>
-      <xsl:when test="substring(.,1,1) = '#'">
+      <xsl:when test="substring(normalize-space(.),1,1) = '#'">
         <!-- The string starts with # so, let's resolve it -->
         <xsl:call-template name="resolvePHP">
-          <xsl:with-param name="expr" select="."/>
+          <xsl:with-param name="expr" select="normalize-space(.)"/>
           <xsl:with-param name="php" select="$php"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
+        <!-- This is the point where we can do automatic translation 
+             of textnodes without requiring xar:mlstring 
+        -->
         <xsl:copy/>
       </xsl:otherwise>
     </xsl:choose>
@@ -440,7 +446,7 @@ foreach(</xsl:text><xsl:value-of select="@name"/>
   </xsl:template>
 
   <!-- Identity transform for things we dont explicitly match-->
-  <xsl:template match="node()">
+  <xsl:template match="node()"> <!-- this matches only complete nodes!!! -->
     <xsl:param name="php"/>
     <xsl:if test="$php = 'on'">
       <xsl:call-template name="phpoff"/>
@@ -452,8 +458,15 @@ foreach(</xsl:text><xsl:value-of select="@name"/>
       <xsl:for-each select="@*">
         <xsl:value-of select="name()"/><xsl:text>="</xsl:text>
         <xsl:choose>
-          <!-- If it is in #...# resolve it for sure -->
-          <xsl:when test="string-length(.) &gt; 1 and substring(.,1,1) = '#' and substring(.,string-length(.),1) = '#'">
+          <!-- If it is #$...# resolve it for sure -->
+          <xsl:when test="string-length(.) &gt; 3 and substring(.,1,2) = '#$' and substring(.,string-length(.),1) = '#'">
+            <xsl:call-template name="resolvePHP">
+              <xsl:with-param name="expr" select="."/>
+              <xsl:with-param name="php" select="'off'"/>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- If it is #xar...(...)# resolve it for sure -->
+          <xsl:when test="substring(.,1,4) = '#xar' and substring(.,string-length(.),2) = ')#'">
             <xsl:call-template name="resolvePHP">
               <xsl:with-param name="expr" select="."/>
               <xsl:with-param name="php" select="'off'"/>
