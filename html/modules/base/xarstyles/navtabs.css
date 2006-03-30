@@ -23,7 +23,6 @@ dl.xar-tabs dd {
     background: url("../xarimages/navtabs_left.gif") no-repeat left top;
     margin: 0;
     padding: 0 0 0 9px;
-    border-bottom: 1px solid #696969;
 }
 dl.xar-tabs a {
     float: left;
@@ -44,7 +43,6 @@ dl.xar-tabs a:hover {
 }
 dl.xar-tabs dd.active {
     background-image: url("../xarimages/navtabs_left_on.gif");
-    border-bottom: none;
 }
 dl.xar-tabs dd.active a {
     background-image: url("../xarimages/navtabs_right_on.gif");
