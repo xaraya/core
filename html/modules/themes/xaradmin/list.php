@@ -23,6 +23,7 @@ function themes_admin_list()
     // form parameters
     if (!xarVarFetch('startnum', 'isset', $startnum,    NULL,  XARVAR_DONT_SET)) return;
     if (!xarVarFetch('regen',    'isset', $regen,       NULL,  XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('sort',     'enum:asc:desc:', $sort, NULL,  XARVAR_DONT_SET)) return;
     //if (!xarVarFetch('selfilter','isset', $selfilter,   NULL,  XARVAR_DONT_SET)) return;
 
     $data['items'] = array();
@@ -85,7 +86,21 @@ function themes_admin_list()
 /*         $themelist = xarModAPIFunc('themes','admin','GetThemeList', array('filter'=> array('State' => $data['selfilter']))); */
 /*     } */
 
-
+    // set sorting vars
+    if (empty($sort)) $sort = 'asc'; // this is default for getthemelist()
+    if ($sort == 'desc') {
+        $themelist = array_reverse($themelist);
+        $newsort = 'asc';
+        $sortimage = xarTplGetImage('arrow_up.gif', 'base');
+        $sortlabel = xarML('Sort Ascending');
+    } else {
+        $newsort = 'desc';
+        $sortimage = xarTplGetImage('arrow_down.gif', 'base');
+        $sortlabel = xarML('Sort Descending');
+    }
+    $data['sorturl'] = xarServerGetCurrentURL(array('sort' => $newsort));
+    $data['sortimage'] = $sortimage;
+    $data['sortlabel'] = $sortlabel;
 
     // get action icons/images
     $img_disabled       = xarTplGetImage('set1/disabled.png');

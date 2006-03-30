@@ -303,9 +303,14 @@
             <table class="xar-fullwidth">
                 <tr>
                     <th>
-                        <xar:mlstring>
-                            Name
-                        </xar:mlstring>
+                        <a href="#$sorturl#" title="#$sortlabel#">
+                            <xar:mlstring>
+                                Name
+                            </xar:mlstring>
+                        </a>
+                        <a href="#$sorturl#" title="#$sortlabel#">
+                            <img src="#$sortimage#" alt="#$sortlabel#" />
+                        </a>
                     </th>
                     <th>
                         <xar:mlstring>
