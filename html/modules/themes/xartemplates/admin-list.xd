@@ -187,7 +187,9 @@
                         <td>#$modinfo['displayname']#</td>
                     </tr>
                     <tr>
-                        <td><strong><xar:mlstring>Description</xar:mlstring></strong></td>
+                        <td valign="top">
+                            <strong><xar:mlstring>Description</xar:mlstring></strong>
+                        </td>
                         <td>#$modinfo['description']#</td>
                     </tr>
                     <tr>
@@ -210,7 +212,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><strong><xar:mlstring>Options</xar:mlstring></strong></td>
+                        <td valign="top">
+                            <strong><xar:mlstring>Actions</xar:mlstring></strong>
+                        </td>
                         <td>
                             <xar:if condition="$useicons eq true">
                                 <a href="#$modinfo['infourl']#" title="#$infolabel#">
@@ -265,24 +269,26 @@
                     </tr>
                     </table>
 
-                </td><td align="center" valign="center" width="340">
+                </td><td align="center" valign="center" width="250">
 
                     <xar:if condition="empty($modinfo['preview'])">
-                        <div class="xar-alt xar-alt-outline xar-sub" style="width: 300px; height: 225px;">
-                            <xar:ml>
-                                <xar:mlstring>
-                                    Preview not available.  Screenshot not found at
-                                    <em>themes/#(1)/images/preview.jpg</em>
-                                </xar:mlstring>
-                                <xar:mlvar>#$modinfo['directory']#</xar:mlvar>
-                            </xar:ml>
+                        <div class="xar-alt xar-alt-outline xar-sub" style="width: 250px; height: 187px">
+                            <div style="margin-top: 75px;">
+                                <xar:ml>
+                                    <xar:mlstring>
+                                        Thumbnail not available.  Please place a screenshot at
+                                        <em>themes/#(1)/images/preview.jpg</em>
+                                    </xar:mlstring>
+                                    <xar:mlvar>#$modinfo['directory']#</xar:mlvar>
+                                </xar:ml>
+                            </div>
                         </div>
                     <xar:else />
                         <a href="#$modinfo['preview']#" title="#xarML('View full-size image')#">
                             <xar:if condition="xarModIsAvailable('images')">
                                 <xar:template file="showimg" subdata="array('modinfo' =&gt; $modinfo)" />
                             <xar:else />
-                                <img src="#$modinfo['preview']#" height="300" width="225" class="xar-alt-outline" alt="#xarML('Thumbnail image for this theme')#" />
+                                <img src="#$modinfo['preview']#" height="250" width="187" class="xar-alt-outline" alt="#xarML('Thumbnail image for this theme')#" />
                             </xar:if>
                         </a>
                     </xar:if>
