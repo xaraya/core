@@ -23,6 +23,7 @@
                 </xar:mlstring>
             </legend>
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
+
             <div class="xar-form-input-wrapper">
                 <label for="sitename" class="xar-form-label">
                     <xar:mlstring>
@@ -60,64 +61,6 @@
             </div>
             #xarVarDelCached('Mod.Variables.themes','SiteFooter')#
 
-            <div class="xar-form-input-wrapper-after">
-                <xar:if condition="#xarModIsHooked('themes', 'roles')#">
-                    <input type="checkbox" name="usermenu" id="usermenu" value="1" checked="checked" />
-                    <xar:else />
-                    <input type="checkbox" name="usermenu" id="usermenu" value="1" />
-                </xar:if>
-                <label for="usermenu" title="#xarML('Allow users to select themes from their Account Details page.')#">
-                    <xar:mlstring>
-                        Allow theme selection in Account Info pages
-                    </xar:mlstring>
-                </label>
-            </div>
-
-
-        </fieldset>
-      <fieldset>
-            <legend>
-                <xar:mlstring>
-                    Admin Dashboard
-                </xar:mlstring>
-            </legend>
-            <div class="xar-form-input-wrapper-after">
-                <xar:if condition="$dashboard">
-                    <input type="checkbox" name="dashboard" id="dashboard" value="1" checked="checked" />
-                    <xar:else />
-                    <input type="checkbox" name="dashboard" id="dashboard" value="1" />
-                </xar:if>
-                <label for="dashboard" title="#xarML('Use the Admin Dashboard to manage all your Admin settings from a single page.')#">
-                    <xar:mlstring>
-                        Enable the Admin Dashboard.
-                    </xar:mlstring>
-                </label>
-            </div>
-
-            <div class="xar-form-input-wrapper">
-                <label for="dashtemplate" title="#xarML('Template name for the dashboard - no trailing suffix, defaults to \'dashboard\'')#" class="xar-form-label">
-                    <xar:mlstring>
-                        Dashboard Template name
-                    </xar:mlstring>
-                </label>
-                <input type="text" name="dashtemplate" id="dashtemplate" value="#$dashtemplate#" size="30" maxlength="100" />
-                    <xar:mlstring>(without the .xt extension)</xar:mlstring>
-
-            <div class="xar-form-input-wrapper-after">
-                    <xar:mlstring>
-                        The Admin Dashboard is automatically used with all admin functions.
-                        You can also use <strong>admin-modulename.xt</strong> page templates, where <strong>modulename</strong> is the name of a module.
-                        These 'admin' templates can be used with the Dashboard turned on, or individually with Dashboard turned off.
-                    </xar:mlstring>
-            </div>
-            </div>
-        </fieldset>
-        <fieldset>
-            <legend>
-                <xar:mlstring>
-                    Page Title Options
-                </xar:mlstring>
-            </legend>
             <div class="xar-form-input-wrapper">
                 <label for="separator" class="xar-form-label">
                     <xar:mlstring>
@@ -164,7 +107,7 @@
                                 Theme Driven
                             </xar:mlstring>
                         </option>
-                        <xar:elseif condition="xarModGetVar('themes', 'SiteTitleOrder') eq 'sp'" />
+                    <xar:elseif condition="xarModGetVar('themes', 'SiteTitleOrder') eq 'sp'" />
                         <option value="default">
                             <xar:mlstring>
                                 Site Name - Module Name - Page Name
@@ -195,7 +138,7 @@
                                 Theme Driven
                             </xar:mlstring>
                         </option>
-                        <xar:elseif condition="xarModGetVar('themes', 'SiteTitleOrder') eq 'mps'" />
+                    <xar:elseif condition="xarModGetVar('themes', 'SiteTitleOrder') eq 'mps'" />
                         <option value="default">
                             <xar:mlstring>
                                 Site Name - Module Name - Page Name
@@ -226,7 +169,7 @@
                                 Theme Driven
                             </xar:mlstring>
                         </option>
-                        <xar:elseif condition="xarModGetVar('themes', 'SiteTitleOrder') eq 'pms'" />
+                    <xar:elseif condition="xarModGetVar('themes', 'SiteTitleOrder') eq 'pms'" />
                         <option value="default">
                             <xar:mlstring>
                                 Site Name - Module Name - Page Name
@@ -252,7 +195,7 @@
                                 Theme Driven
                             </xar:mlstring>
                         </option>
-                        <xar:elseif condition="xarModGetVar('themes', 'SiteTitleOrder') eq 'to'" />
+                    <xar:elseif condition="xarModGetVar('themes', 'SiteTitleOrder') eq 'to'" />
                         <option value="default">
                             <xar:mlstring>
                                 Site Name - Module Name - Page Name
@@ -283,7 +226,7 @@
                                 Theme Driven
                             </xar:mlstring>
                         </option>
-                        <xar:elseif condition="xarModGetVar('themes', 'SiteTitleOrder') eq 'theme'" />
+                    <xar:elseif condition="xarModGetVar('themes', 'SiteTitleOrder') eq 'theme'" />
                         <option value="default">
                             <xar:mlstring>
                                 Site Name - Module Name - Page Name
@@ -316,6 +259,55 @@
                         </option>
                     </xar:if>
                 </select>
+            </div>
+
+        </fieldset>
+      <fieldset>
+            <legend>
+                <xar:mlstring>
+                    Theme Options
+                </xar:mlstring>
+            </legend>
+            <div class="xar-form-input-wrapper-after">
+                <xar:if condition="$dashboard">
+                    <input type="checkbox" name="dashboard" id="dashboard" value="1" checked="checked" />
+                    <xar:else />
+                    <input type="checkbox" name="dashboard" id="dashboard" value="1" />
+                </xar:if>
+                <label for="dashboard" title="#xarML('Use the Admin Dashboard to manage all your Admin settings from a single page.')#">
+                    <xar:mlstring>
+                        Enable the Admin Dashboard.
+                    </xar:mlstring>
+                </label>
+            </div>
+
+            <div class="xar-form-input-wrapper">
+                <label for="dashtemplate" title="#xarML('Template name for the dashboard - no trailing suffix, defaults to \'dashboard\'')#" class="xar-form-label">
+                    <xar:mlstring>
+                        Dashboard Template name
+                    </xar:mlstring>
+                </label>
+                <input type="text" name="dashtemplate" id="dashtemplate" value="#$dashtemplate#" size="30" maxlength="100" />
+                <xar:mlstring>(without the .xt extension)</xar:mlstring>
+                <div class="xar-form-input-wrapper-after">
+                    <xar:mlstring>
+                        The Admin Dashboard is automatically used with all admin functions.
+                        You can also use <strong>admin-modulename.xt</strong> page templates, where <strong>modulename</strong> is the name of a module.
+                        These 'admin' templates can be used with the Dashboard turned on, or individually with Dashboard turned off.
+                    </xar:mlstring>
+                </div>
+            </div>
+            <div class="xar-form-input-wrapper-after">
+                <xar:if condition="#xarModIsHooked('themes', 'roles')#">
+                    <input type="checkbox" name="usermenu" id="usermenu" value="1" checked="checked" />
+                    <xar:else />
+                    <input type="checkbox" name="usermenu" id="usermenu" value="1" />
+                </xar:if>
+                <label for="usermenu" title="#xarML('Allow users to select themes from their Account Details page.')#">
+                    <xar:mlstring>
+                        Allow users to set their theme in User Account page
+                    </xar:mlstring>
+                </label>
             </div>
         </fieldset>
         <fieldset>
