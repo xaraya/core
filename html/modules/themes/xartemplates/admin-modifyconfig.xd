@@ -68,7 +68,7 @@
                 </xar:if>
                 <label for="usermenu" title="#xarML('Allow users to select themes from their Account Details page.')#">
                     <xar:mlstring>
-                        Let users select theme from their Account Info page
+                        Allow theme selection in Account Info pages
                     </xar:mlstring>
                 </label>
             </div>
