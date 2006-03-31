@@ -6,7 +6,7 @@
 
 /* min-width equvivalent */
 div#xc-outer-wrapper
-{ width: 740px; }
+{ width:auto; }
 /*{ width: expression((body.clientWidth <= 740) ? "740px" : "auto"); } */
 
 
