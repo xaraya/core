@@ -28,6 +28,16 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
         if (!isset($value)) {
             $value = $this->value;
         }
+
+         if (!empty($value) && strlen($value) > $this->maxlength) {
+            $this->invalid = xarML('E-Mail : must be less than #(1) characters long',$this->maxlength + 1);
+            $this->value = $value;
+            return false;
+        } elseif (isset($this->min) && strlen($value) < $this->min) {
+            $this->invalid = xarML('E-Mail : must be at least #(1) characters long',$this->min);
+            $this->value = $value;
+            return false;
+        }
         if (!empty($value)) {
             // cfr. pnVarValidate in pnLegacy.php
             $regexp = '/^(?:[^\s\000-\037\177\(\)<>@,;:\\"\[\]]\.?)+@(?:[^\s\000-\037\177\(\)<>@,;:\\\"\[\]]\.?)+\.[a-z]{2,6}$/Ui';
@@ -35,7 +45,7 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
                 $this->value = $value;
             } else {
                 $this->invalid = xarML('E-Mail');
-                $this->value = null;
+                $this->value = $value;
                 return false;
             }
         } else {

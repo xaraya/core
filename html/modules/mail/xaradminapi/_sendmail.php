@@ -186,7 +186,7 @@ function mail_adminapi__sendmail($args)
     }// if
 
     // Add a "CC" address
-    if (!xarModGetVar('mail','redirectsending')) {
+    if (xarModGetVar('mail','redirectsending')) {
         $mail->ClearCCs();
         $ccrecipients = array();
     }
@@ -214,7 +214,7 @@ function mail_adminapi__sendmail($args)
     }// if
 
     // Add a "BCC" address
-    if (!xarModGetVar('mail','redirectsending')) {
+    if (xarModGetVar('mail','redirectsending')) {
         $mail->ClearBCCs();
         $bccrecipients = array();
     }

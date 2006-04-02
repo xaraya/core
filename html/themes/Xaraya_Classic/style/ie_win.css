@@ -5,7 +5,9 @@
     across the board and dont burden good browsers with extra css, workarounds and hacks */
 
 /* min-width equvivalent */
-div#xc-outer-wrapper { width: expression((body.clientWidth <= 740) ? "740px" : "auto"); }
+div#xc-outer-wrapper
+{ width:auto; }
+/*{ width: expression((body.clientWidth <= 740) ? "740px" : "auto"); } */
 
 
 div.xc-side-content,
