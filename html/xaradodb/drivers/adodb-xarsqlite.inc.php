@@ -5,6 +5,8 @@ include_once(ADODB_DIR . '/drivers/adodb-sqlite.inc.php');
 class ADODB_xarsqlite extends ADODB_sqlite 
 {
     var $dataProvider = 'sqlite';
+    // Override recordset class too 
+    var $rsPrefix = "ADORecordSet_xar";
 
     function _connect($argHostname, $argUsername, $argPassword, $argDatabasename)
     {
@@ -228,6 +230,21 @@ class ADODB_xarsqlite extends ADODB_sqlite
         if(!$this->Execute($copytonewsql)) return false;         // copy data back to original table
         if(!$this->Execute($droptempsql)) return false;          // drop the temp table
         return true;
+    }
+}
+
+class ADORecordset_xarsqlite extends ADORecordset_sqlite 
+{
+    
+    function &FetchField($fieldOffset = -1)
+    {
+        // Run normal
+        $fld =& parent::FetchField($fieldOffset);
+        // Only return the field name, not the sqlite constructed tablename_tab.fieldname
+        // Bit weird, when did this change in sqlite extension? or how? oh, well, eradicate
+        $dotPos = strpos($fld->name,'.');
+        if($dotPos !== false) $fld->name = substr($fld->name,$dotPos+1);
+        return $fld;
     }
 }
 

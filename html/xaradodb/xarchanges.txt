@@ -6,6 +6,12 @@ when we want things merged into the upstream code.
 =============================================================
 Changes made to ADOdb library ONLY in this Xaraya 1.1.x series
 =============================================================
+2006-03-05:
+        drivers/adodob-xarsqlite.inc.php:
+                override the recordset class too, the associative
+                returns of sqlite somehow include the table name 
+                (only observed when aliased in the query, since not
+                many modules use GetRowAssoc() ) (cfr. mime module )
 
 2006-02-19: Current adodb version in repo: 4.71-1
             None of the specific xaraya changes in the 1.0.x series
