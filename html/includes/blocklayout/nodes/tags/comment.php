@@ -55,11 +55,5 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
         }
         return "echo $code;";
     }
-
-    function render()
-    {
-        // This is just here to prevent the abstract method to kick in
-        return '';
-    }
 }
 ?>

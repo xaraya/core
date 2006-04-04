@@ -44,9 +44,9 @@ class ExceptionHandlers implements IExceptionHandlers
             $data = array('major'     => 'MAJOR TBD (Code was: '. $e->getCode().')',
                           'type'      => get_class($e), // consider stripping of 'Exception'
                           'title'     => get_class($e) . ' ['.$e->getCode().'] was raised (native)',
-                          'short'     => $e->getMessage(), 
+                          'short'     => htmlspecialchars($e->getMessage()), 
                           'long'      => 'LONG msg TBD',
-                          'hint'      => (method_exists($e,'getHint'))? $e->getHint() : 'No hint available',
+                          'hint'      => (method_exists($e,'getHint'))? htmlspecialchars($e->getHint()) : 'No hint available',
                           'stack'     => htmlspecialchars($trace),
                           'product'   => 'Product TBD', 
                           'component' => 'Component TBD');

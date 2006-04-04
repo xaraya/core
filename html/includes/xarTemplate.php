@@ -1159,7 +1159,7 @@ function xarTpl__needsCompilation($sourceFileName,&$cachedFileName)
         if ( file_exists($cachedFileName) &&
              ( !file_exists($sourceFileName) || 
                ( filemtime($sourceFileName) < filemtime($cachedFileName) 
-                 // && filemtime('includes/transforms/xar2php.xsl') < filemtime($cachedFileName)
+                 && filemtime('includes/transforms/xar2php.xsl') < filemtime($cachedFileName)
                )
              )
            ) {

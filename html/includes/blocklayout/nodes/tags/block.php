@@ -1,7 +1,7 @@
 <?php
 
 /**
-* xarTpl__XarBlockNode: <xar:block> tag class
+ * xarTpl__XarBlockNode: <xar:block> tag class
  *
  * Tag summary:
  *   Mandatory attributes: either 'instance' or ('module' and 'type')
@@ -11,6 +11,7 @@
  * @package blocklayout
  * @access private
  * @todo try to get rid of the dependency with xarVar.php (xarVar_addslashes)
+ * @todo there is a return in the middle of this handler (effectively ignoring children) CORRECT THIS!
  */
 class xarTpl__XarBlockNode extends xarTpl__TplTagNode
 {
@@ -23,7 +24,7 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
     }
     
     function renderBeginTag()
-   {
+    {
         extract($this->attributes);
         
         if (empty($instance) && (empty($module) || empty($type))) {
@@ -85,11 +86,6 @@ EOT;
     function renderEndTag()
     {
         return '';
-    }
-
-    function render()
-    {
-        return $this->renderBeginTag();
     }
 }
 ?>

@@ -116,10 +116,12 @@ class DTDIdentifiers
     }
 }
 
-class BLCompilerException extends Exception
+/* This one exception depends on BL being inside Xaraya, try to correct this later */
+class BLCompilerException extends xarExceptions
 {
 }
-class BLParserException extends Exception
+
+class BLParserException extends BLCompilerException
 {
 }
 
@@ -137,7 +139,7 @@ class xarTpl__CompilerError extends Exception
     {
         // FIXME: is this useful at all, if the compiler doesn't work, how are we going to show the exception ?
         //throw a generic exception for now
-        throw new BLCompilerException($msg);
+        throw new BLCompilerException(null,$msg);
     }
 }
 
@@ -156,12 +158,13 @@ class xarTpl__ParserError extends Exception
 {
     function raiseError($type, $msg, $posInfo)
     {
-        $out  = 'Template error in file '.$posInfo->fileName.' at line '.$posInfo->line. ', column '.$posInfo->column.":\n\n";
+        $out  = "Template error in file '#(1)' at line #(2), column #(3):\n\n";
         $out .= $msg."\n\n";
         $out .= "Line contents before the parsing error occurred:\n";
-        $out .= $posInfo->lineText . " <== Error position\n";
+        $out .= "#(4) <== Error position\n";
+        $vars = array($posInfo->fileName,$posInfo->line,$posInfo->column,$posInfo->lineText);
         // throw a generic exception for now, this probably should not do this, but i dunno yet
-        throw new BLParserException($out);
+        throw new BLParserException($vars,$out);
     }
 }
 
@@ -1394,7 +1397,7 @@ class xarTpl__ExpressionTransformer
  *
  * @package blocklayout
  */
-class xarTpl__Node extends xarTpl__PositionInfo
+abstract class xarTpl__Node extends xarTpl__PositionInfo
 {
     public $tagName;   // This is an internal name of the node, not the actual tag name
     protected $isPHPCode = false;
@@ -1409,6 +1412,7 @@ class xarTpl__Node extends xarTpl__PositionInfo
     // constructor. Oh, the beauty of PHP :-(
     // Like this we can call parent::constructor(...) in the subclasses independent
     // of the base class.
+    // TODO: With PHP5 being required now, we can change this to something sane
     function xarTpl__Node(&$parser, $nodeName)
     {
         // If constructor is defined in subclass, that one is called!!
@@ -1423,51 +1427,27 @@ class xarTpl__Node extends xarTpl__PositionInfo
         $this->column   = $parser->column;
         $this->lineText = $parser->lineText;
     }
-    
-    function render()
-    {
-        die('xarTpl__Node::render: abstract');
-    }
 
-    function renderBeginTag()
-    {
-        die('xarTpl__Node::renderBeginTag: abstract');
-    }
-
-    function renderEndTag()
-    {
-        die('xarTpl__Node::renderEndTag: abstract');
-    }
+    // These methods should be implemented by child classes
+    abstract function render();
 
     function hasChildren()
-    {
-        return $this->hasChildren;
-    }
+    { return $this->hasChildren; }
 
     function hasText()
-    {
-        return $this->hasText;
-    }
+    { return $this->hasText; }
 
     function isAssignable()
-    {
-        return $this->isAssignable;
-    }
+    { return $this->isAssignable; }
 
     function isPHPCode()
-    {
-        return $this->isPHPCode;
-    }
+    { return $this->isPHPCode; }
 
     function needAssignment()
-    {
-        return $this->needAssignment;
-    }
+    { return $this->needAssignment; }
 
     function needParameter()
-    {
-        return $this->needParameter;
-    }
+    { return $this->needParameter; }
 }
 
 /**
@@ -1483,7 +1463,7 @@ class xarTpl__Node extends xarTpl__PositionInfo
  * needParameter -> false
  * @package blocklayout
  */
-class xarTpl__TplTagNode extends xarTpl__Node
+abstract class xarTpl__TplTagNode extends xarTpl__Node
 {
     public $attributes;
     public $parentTagName;
@@ -1505,6 +1485,34 @@ class xarTpl__TplTagNode extends xarTpl__Node
         $this->parentTagName = $parentTagName;
         $this->attributes = $attributes;  
     }
+
+    // If we get here, the render method was called but not implemented in the tag,
+    // which means the user specified it as <xar:tag ..../>
+    // We (try to) treat this like <xar:tag></xar:tag> which is effectively the same.
+    // Furthermore, we dont want this called directly, but we cant right now due to the class structure
+    // we have, so TODO here ;-)
+    public function render()
+    {
+        return $this->renderBeginTag() . $this->renderEndTag();
+    }
+
+    // Similarly if we get here, the renderBeginTag and renderEndTag method were not
+    // implemented by the tag, either by mistake, or it just has a render method.
+    // In both cases, we should error out with an explanatory message
+    // 
+    function renderBeginTag()
+    {
+        $msg = "The tag 'xar:#(1)' implementation is incomplete (render or renderBegintag is missing), or the tag does not support the open form.";
+        throw new BLParserException($this->tagName,$msg);
+    }
+    
+    // We probably never reach this, but it balances out nicely. (hint for refactoring there though)
+    function renderEndTag()
+    {
+        $msg = "The tag 'xar:#(1)' implementation is incomplete (render or renderEndtag is missing), or the tag does not support the open form.";
+        throw new BLParserException($this->tagName,$msg);
+    }
+
 }
 
 /**
@@ -1520,7 +1528,7 @@ class xarTpl__TplTagNode extends xarTpl__Node
  * needParameter -> false
  * @package blocklayout
  */
-class xarTpl__EntityNode extends xarTpl__Node
+abstract class xarTpl__EntityNode extends xarTpl__Node
 {
     public $entityType;
     public $parameters;
@@ -1543,6 +1551,12 @@ class xarTpl__EntityNode extends xarTpl__Node
         parent::constructor($parser, $tagName);
         $this->entityType = $parentTagName;
         $this->parameters = $parameters;
+    }
+
+    function render()
+    {
+        $msg = "The entity '#(1)' did not implement a render method!!";
+        throw new BLParserException($this->tagName,$msg);
     }
 }
 
@@ -1569,6 +1583,12 @@ class xarTpl__InstructionNode extends xarTpl__Node
         $this->instruction = $instruction;
         $this->isPHPCode = true;
 
+    }
+
+    function render()
+    {
+        $msg = "The instruction '#(1)' did not implement a render method!!";
+        throw new BLParserException($this->tagName,$msg);
     }
 }
 
@@ -1597,16 +1617,15 @@ class xarTpl__DocumentNode extends xarTpl__Node
         $this->isAssignable = false;
     }
 
+    // These 3 methods here are kinda weird.
+    function render() 
+    { return ''; }
 
     function renderBeginTag()
-    {
-        return '';
-    }
+    { return ''; }
 
     function renderEndTag()
-    {
-        return '';
-    }
+    { return ''; }
 }
 
 /**

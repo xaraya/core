@@ -1,5 +1,4 @@
 <?php
-
 /**
 * xarTpl__XarLoopNode: <xar:loop> tag class
  *
@@ -17,7 +16,7 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
         $this->hasText = true;
         $this->isAssignable = false;
     }
-
+    
     function loopCounter($operator = NULL)
     {
         static $loopCounter = 0;
@@ -80,14 +79,14 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
             $loop->item  =& '.$loopName.'->item; 
             $loop->number= '.$loopName.'->number;
             '. $idpart;
-            return $output;
-        }
+        return $output;
+    }
         
-        function renderEndTag()
-       {
-            // Decrement the loopCounter and retrieve its new value
-            $previousLoop = xarTpl__XarLoopNode::loopCounter('--');
-            $output = '} ';
+    function renderEndTag()
+    {
+        // Decrement the loopCounter and retrieve its new value
+        $previousLoop = xarTpl__XarLoopNode::loopCounter('--');
+        $output = '} ';
         if($previousLoop >= 1 ) {
             $output .= '$loop = unserialize($loop_'.$previousLoop.'_save);';
         } 

@@ -9,14 +9,30 @@
   <!-- 
        Issues to be researched:
        
-       - how to cross the border? i.e. how do parameters from the module get
-       passed into the xslt processor
+       - [DONE] how to cross the border? i.e. how do parameters from the module get
+         passed into the xslt processor (see parameter section below and xsltransformer.php )
        - how do we create a suiteable test suite (make a compilation of the core templates?)
        - can we make a stub inserting some random values for the template vars, so we can compare somehow
        - is merging with other output namespaces just a question of copying output (xhtml in our case)
        - how do we handle #$var# constructs?
+         * ideally i want to handle it through separation of the template in two sections, data and presentation, 
+           both in the xml domain: 
+         * one way of doing that is to make #$var# ~ &var; but this is a pain to handle for XSLT, 
+           since it assumes entities to be known/declared at transform time, which is clearly not the case
+         * another separation mechanism is to create a "data" section (xml fragment) to go with the template: like
+           <tpldata>
+             <vars>
+               <var name="var">value</var>
+               ...
+             </vars>
+           </tpldata>
+           or something like that, generated dynamically, From then on we can reach each var by using XPath expressions like
+           /tpldata/vars/var[@name='varname']
+           which sounds sort of attractive because it is almost exactly like the array stuff, but then XML compliant. It also
+           means that we need to translate each and every template to this syntax.
        - the xarBLCompiler.php does some processing here and there, which of these need to stay in php, which
-       of them can be done by xsl?
+         of them can be done by xsl? We can take them on a case by case basis, since php functions can be called reasonably
+         easy from within the transform, but each case is a weakness in portability
   -->
   
   <!-- Parameters -->
@@ -407,6 +423,7 @@ foreach(</xsl:text><xsl:value-of select="@name"/>
     </xsl:if>
     <xsl:choose>
       <xsl:when test="string-length(@module) = 0">
+        <!-- Obviously this sucks -->
         <xsl:text>echo $_bl_mainModuleOutput;</xsl:text>
       </xsl:when>
       <xsl:otherwise>

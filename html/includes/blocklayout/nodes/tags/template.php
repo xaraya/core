@@ -8,6 +8,13 @@
  */
 class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
 {
+    function constructor(&$parser, $tagName, $parentTagName='', $parameters=array())
+    {
+        parent::constructor($parser, $tagName, $parentTagName, $parameters);
+        $this->hasChildren = true;
+        $this->hasText = true;
+    }
+
     function render()
     {
         $subdata = '$_bl_data';  // Subdata defaults to the data of the current template
@@ -69,13 +76,16 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
     }
 
     /* When we encounter the open form of the template tag, do nothing yet */
+    // Bit weird now, cos we have hasText = true, correct later, so TODO here
     function renderBeginTag()
     {
+        return "''";
     }
 
     /* Similarly for the end tag of the open form */
     function renderEndTag()
     {
+        return "''";
     }
 }
 ?>

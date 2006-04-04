@@ -1,7 +1,6 @@
 <?php
-
 /**
-* xarTpl__XarBlockGroupNode: <xar:blockgroup> tag class
+ * xarTpl__XarBlockGroupNode: <xar:blockgroup> tag class
  *
  * @package blocklayout
  * @access private
@@ -22,7 +21,7 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
     }
 
     function renderBeginTag()
-   {
+    {
         extract($this->attributes);
         
         if (isset($name)) {
@@ -37,20 +36,20 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
         // blockgroup template is going to be used. 
         if (isset($template)) {            
             $children =& $this->children; 
-            for($i=0;$i<count($children); $i++) {
+            for($i=0;$i < count($children); $i++) {
                 $children[$i]->blockgrouptemplate = $template;
             }
         }
         return $code;
-   }
+    }
     
     function renderEndTag()
-   {
+    {
         return '';
-   }
+    }
     
     function render()
-   {
+    {
         extract($this->attributes);
         
         if (!isset($name)) {
@@ -63,6 +62,6 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
         } else {
             return 'xarBlock_renderGroup("' . xarVar_addSlashes($name) . '")';
         }
-   }
+    }
 }
 ?>
