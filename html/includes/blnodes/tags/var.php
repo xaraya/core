@@ -54,6 +54,9 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
                 }
                 $value = "xarThemeGetVar('".$themeName."', '".$name."')";
                 break;
+            case 'request':
+                $value = 'xarRequestGetVar("'.$name.'")';
+                break;
             case 'local':
                 // Resolve the name, note that this works for both name="test" and name="$test"
                 $value = xarTpl__ExpressionTransformer::transformPHPExpression(XAR_TOKEN_VAR_START . $name);
