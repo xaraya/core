@@ -6,9 +6,7 @@
         </xar:mlstring>
     </label> 
     <div class="xar-form-container-after">
-        <textarea name="metadescription" id="metadescription#$blockid#" class="xar-form-textarealarge">
-            #$metadescription# 
-        </textarea>
+        <textarea name="metadescription" id="metadescription#$blockid#" class="xar-form-textarealarge">#$metadescription#</textarea>
     </div>
 </div>
 <div class="xar-form-input-wrapper">
@@ -18,9 +16,7 @@
         </xar:mlstring>
     </label> 
     <div class="xar-form-container-after">
-        <textarea name="metakeywords" id="metakeywords#$blockid#" class="xar-form-textarealarge">
-            #$metakeywords# 
-        </textarea>
+        <textarea name="metakeywords" id="metakeywords#$blockid#" class="xar-form-textarealarge">#$metakeywords#</textarea>
     </div>
 </div>
 <div class="xar-form-input-wrapper-after">

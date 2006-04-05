@@ -43,7 +43,7 @@
 <link rel="pingback" href="&xar-baseurl;ws.php" />
 <link rel="Top" type="text/html" href="#$baseurl#" />
 <link rel="Parent" type="text/html" href="#$baseurl#" />
-<link rel="author" href="mailto:#xarModGetVar('mail', 'adminmail', 1)#" />
+<link rel="author" href="#xarModGetVar('themes', 'SiteName', 1)#" />
 
 <xar:if condition="!empty($copyrightpage)">
     <link rel="copyright" type="text/html" href="#$copyrightpage#" />
