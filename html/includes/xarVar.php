@@ -885,7 +885,7 @@ function xarVarLoad ($includes_type, $filename)
     if (!function_exists($function_name)) {
         // Raise an exception
         $msg = 'The #(1) type \'#(2)\' could not be found.';
-        $params = arrary($includes_type, $filename);
+        $params = array($includes_type, $filename);
         throw new BadParameterException($params,$msg);
     }
 
