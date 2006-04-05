@@ -1,19 +1,19 @@
 <?php
-
-/**
-* xarTpl__XarLoopNode: <xar:loop> tag class
- *
- * @package blocklayout
- *
- * @todo why do we need both loop:number and loop:index? i think loop:number should refer to the loop number
- * 
- */
+  /**
+   * xarTpl__XarLoopNode: <xar:loop> tag class
+   *
+   * @package blocklayout
+   *
+   * @author Marco Canini <marco@xaraya.com>
+   * @author Marcel van der Boom <marcel@hsdev.com>
+   * @author Dan Wells <?>
+   * @todo why do we need both loop:number and loop:index? i think loop:number should refer to the loop number
+   */
 class xarTpl__XarLoopNode extends xarTpl__TplTagNode
 {
     function loopCounter($operator = NULL)
     {
         static $loopCounter = 0;
-        static $loopStack = array();
         if (isset($operator)) {
             if ($operator == '++') {
                 $loopCounter++;
@@ -57,16 +57,16 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
                 return;
             }
             // Make the id property point to the same loop so loop:id:index etc. works too
-            $idpart = $loopName.'->'.$id.'='.$loopName.'; $loop->'.$id.'=& '.$loopName.'->'.$id.';';
+            $idpart = '$loop->'.$id.'=& '.$loopName.'; ';
         }
         $output = '';
         if($loopCounter > 1) {
             $previousLoop ='$loop_'.($loopCounter-1);
-            $output .= $previousLoop.'_save=serialize('.$previousLoop.');';
+            $output .= $previousLoop.'_save=serialize($loop);';
         }
         $output .= $loopName.'->index=-1; '.$loopName.'->number='.$loopCounter.';
         foreach ('.$name.' as '.$loopName.'->key => '.$loopName.'->item ) {
-            unset($loop); '.$loopName.'->index++;
+            '.$loopName.'->index++;
             $loop->index = '.$loopName.'->index;
             $loop->key   = '.$loopName.'->key; 
             $loop->item  =& '.$loopName.'->item; 
@@ -77,22 +77,25 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
         
         function renderEndTag()
        {
-            // Decrement the loopCounter and retrieve its new value
-            $previousLoop = xarTpl__XarLoopNode::loopCounter('--');
-            $output = '} ';
-        if($previousLoop >= 1 ) {
-            $output .= '$loop = unserialize($loop_'.$previousLoop.'_save);';
-        } 
-        return $output;
-    }
+           // Decrement the loopCounter and retrieve its new value
+           $previousLoop = xarTpl__XarLoopNode::loopCounter('--');
+           $output = '} ';
+           if($previousLoop >= 1 ) {
+               $output .= '$loop = unserialize($loop_'.$previousLoop.'_save);
+            unset($loop_'.($previousLoop+1).');';
+           } else {
+               $output .= 'unset($loop);unset($loop_1);';
+           }
+           return $output;
+       }
     
-    function hasChildren()
-    {
-        return true;
-    }
-    
-    function hasText()
-    {
+        function hasChildren()
+        {
+            return true;
+        }
+        
+        function hasText()
+        {
         return true;
     }
     
