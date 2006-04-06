@@ -22,7 +22,7 @@
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @throws  none
- * @todo    none
+ * @todo    evaluate scoping 
 */
 
 
@@ -422,6 +422,7 @@ class xarMasks
             $textvalue = '';
         }
         switch($realmvalue) {
+            // <mrb> i dont grok this, theme can be realm?
             case "theme":
                 $mask->setRealm(xarModGetVar('themes', 'default'));
                 break;
@@ -452,6 +453,7 @@ class xarMasks
         // get the uid of the role we will check against
         // an empty role means take the current user
         if ($rolename == '') {
+            // mrb: again?
             $userID = xarSessionGetVar('uid');
             if (empty($userID)) {
                 $userID = _XAR_ID_UNREGISTERED;
@@ -899,7 +901,7 @@ class xarPrivileges extends xarMasks
             $this->dbconn->Execute($query,array($module));
             $this->dbconn->commit();
         } catch (SQLException $e) {
-            $this->dbconn->rollback(); // redundant? we need to investigate concurently and locking
+            $this->dbconn->rollback(); // redundant? we need to investigate concurency and locking
             throw $e;
         }
         return true;
@@ -985,7 +987,7 @@ class xarPrivileges extends xarMasks
  * @param   none
  * @return  array of privileges
  * @throws  none
- * @todo    none
+ * @todo    use associative fetching and one getrow statement.
 */
     function getprivileges()
     {
@@ -999,7 +1001,9 @@ class xarPrivileges extends xarMasks
                       FROM $this->privilegestable p, $this->privmemberstable pm
                       WHERE p.xar_pid = pm.xar_pid
                       ORDER BY p.xar_name";
-            $result = $this->dbconn->Execute($query);
+            $stmt = $this->dbconn->prepareStatement($query);
+            // The fetchmode *needed* to be here, dunno why. Exception otherwise
+            $result = $stmt->executeQuery($query,ResultSet::FETCHMODE_NUM);
 
             while($result->next()) {
                 list($pid, $name, $realm, $module, $component, $instance, $level,
@@ -1032,7 +1036,8 @@ class xarPrivileges extends xarMasks
  * @param   string $arg indicates what types of elements to get
  * @return  array of privileges
  * @throws  none
- * @todo    none
+ * @todo    use associative fetching and one getrow
+ * @todo    cache with statics?
 */
     function gettoplevelprivileges($arg)
     {
@@ -1040,14 +1045,14 @@ class xarPrivileges extends xarMasks
         if($arg == "all") {
              $fromclause = "FROM $this->privilegestable p,$this->privmemberstable pm
                         WHERE p.xar_pid = pm.xar_pid
-                        AND pm.xar_parentid = 0
+                        AND pm.xar_parentid = ?
                         ORDER BY p.xar_name";
         } elseif ($arg == "assigned"){
              $fromclause = "FROM $this->privilegestable p,$this->privmemberstable pm,
                             $this->acltable acl
                             WHERE p.xar_pid = pm.xar_pid
                             AND p.xar_pid = acl.xar_permid
-                            AND pm.xar_parentid = 0
+                            AND pm.xar_parentid = ?
                             ORDER BY p.xar_name";
         }
         $query = "SELECT p.xar_pid,
@@ -1060,7 +1065,7 @@ class xarPrivileges extends xarMasks
                     p.xar_description,
                     pm.xar_parentid ";
         $query .= $fromclause;
-        $result = $this->dbconn->Execute($query);
+        $result = $this->dbconn->Execute($query,array(0));
 
         $privileges = array();
         $pids = array();
@@ -1105,37 +1110,25 @@ class xarPrivileges extends xarMasks
 */
     function getrealms()
     {
-    if ((!isset($allrealms)) || count($allrealms)==0) {
-            $query = "SELECT xar_rid,
-                            xar_name
-                        FROM $this->realmstable";
+        static $allreams = array(); // Get them once
 
+        if (empty($allrealms)) {
+            $query = "SELECT xar_rid, xar_name FROM $this->realmstable";
             $result = $this->dbconn->Execute($query);
 
-// add some extra lines we want
-            $realms = array();
-//          $realms[] = array('rid' => -2,
-//                             'name' => ' ');
-            $realms[] = array('rid' => -1,
-                               'name' => 'All');
-//          $realms[] = array('rid' => 0,
-//                             'name' => 'None');
+            // add some extra lines we want
+            // $allrealms[] = array('rid' => -2,'name' => ' ');
+            $allrealms[] = array('rid' => -1,'name' => 'All');
+            // $allrealms[] = array('rid' => 0, 'name' => 'None');
 
-// add the realms from the database
-// TODO: maybe remove the key, don't really need it
-            $ind = 2;
+            // add the realms from the database
             while(!$result->EOF) {
                 list($rid, $name) = $result->fields;
-                $realms[] = array('rid' => $rid,
-                                   'name' => $name);
+                $allrealms[] = array('rid' => $rid,'name' => $name);
                 $result->MoveNext();
             }
-            $allrealms = $realms;
-            return $realms;
         }
-        else {
-            return $allrealms;
-        }
+        return $allrealms;
     }
 
 /**
@@ -1150,11 +1143,14 @@ class xarPrivileges extends xarMasks
  * @return  array of module ids and names
  * @throws  none
  * @todo    this isn't really the right place for this function
+ * @todo    ucfirst is a presentation issue.
  */
     
     function getmodules()
     {
-        if ((!isset($allmodules)) || count($allmodules)==0) {
+        static $allmodules = array();
+
+        if (empty($allmodules)) {
             $query = "SELECT modules.xar_id, modules.xar_name
                       FROM $this->modulestable modules 
                       WHERE modules.xar_state = ?
@@ -1162,15 +1158,11 @@ class xarPrivileges extends xarMasks
             $result = $this->dbconn->Execute($query,array(3));
             
             // add some extra lines we want
-            $modules = array();
-            //          $modules[] = array('id' => -2,
-            //                             'name' => ' ');
-            $modules[] = array('id' => -1,
-                               'name' => 'All',
-                               'display' => 'All');
-            //          $modules[] = array('id' => 0,
-            //                             'name' => 'None');
-            
+            // $allmodules[] = array('id' => -2, 'name' => ' ');
+            $allmodules[] = array('id' => -1,
+                                  'name' => 'All',
+                                  'display' => 'All');
+            // $allmodules[] = array('id' => 0, 'name' => 'None');
             // add the modules from the database
             // TODO: maybe remove the key, don't really need it
             while(!$result->EOF) {
@@ -1181,11 +1173,8 @@ class xarPrivileges extends xarMasks
                                    'display' => ucfirst($name));
                 $result->MoveNext();
             }
-            $allmodules = $modules;
-            return $modules;
-        } else {
-            return $allmodules;
         }
+        return $allmodules;
     }
 
 /**
@@ -1290,7 +1279,7 @@ class xarPrivileges extends xarMasks
             // check if the query is there
             if ($selection =='') {
                 $msg = xarML('A query is missing in component #(1) of module #(2)', $component, $module);
-
+                // TODO: make it descendent from xarExceptions.
                 throw new Exception($msg);
             }
 
@@ -1337,11 +1326,10 @@ class xarPrivileges extends xarMasks
     function getChildren($pid)
     {
         $subprivileges = array();
-        $ind = 0;
+        $ind = 1;
         foreach($this->getprivileges() as $subprivilege){
             if ($subprivilege['parentid'] == $pid) {
-                $ind = $ind + 1;
-                $subprivileges[$ind] = $subprivilege;
+                $subprivileges[$ind++] = $subprivilege;
             }
         }
         return $subprivileges;
@@ -1360,7 +1348,7 @@ class xarPrivileges extends xarMasks
     {
 
         $instance = "";
-        foreach ($instances as $inst) {
+        foreach ($instances as $inst) { // mrb: why not use join()?
             $instance .= $inst . ":";
         }
         if ($instance =="") {
@@ -1372,13 +1360,13 @@ class xarPrivileges extends xarMasks
 
         if($pid==0) {
             $pargs = array('name' => $name,
-                        'realm' => $realm,
-                        'module' => $module,
-                        'component' => $component,
-                        'instance' => $instance,
-                        'level' => $level,
-                        'parentid' => 0
-                        );
+                           'realm' => $realm,
+                           'module' => $module,
+                           'component' => $component,
+                           'instance' => $instance,
+                           'level' => $level,
+                           'parentid' => 0
+                           );
             $priv = new xarPrivilege($pargs);
             if ($priv->add()) {
                 return $priv->getID();
@@ -1415,11 +1403,19 @@ class xarPrivileges extends xarMasks
 */
     function getPrivilege($pid)
     {
-        $query = "SELECT * FROM $this->privilegestable WHERE xar_pid = ?";
-        //Execute the query, bail if an exception was thrown
-        $result = $this->dbconn->Execute($query,array($pid));
+        static $stmt = null;  // Statement only needs to be prepared once.
 
-        if (!$result->EOF) {
+        $cacheKey = 'Privilege.ByPid';
+        if(xarVarIsCached($cacheKey,$pid)) {
+            return xarVarGetCached($cacheKey,$pid);
+        }
+        // Need to get it
+        $query = "SELECT * FROM $this->privilegestable WHERE xar_pid = ?";
+        if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
+        //Execute the query, bail if an exception was thrown
+        $result = $stmt->executeQuery(array($pid),ResultSet::FETCHMODE_NUM);
+
+        if ($result->next()) {
             list($pid,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
             $pargs = array('pid'=>$pid,
                            'name'=>$name,
@@ -1430,9 +1426,13 @@ class xarPrivileges extends xarMasks
                            'level'=>$level,
                            'description'=>$description,
                            'parentid'=>0);
-            return new xarPrivilege($pargs);
+            
+            $priv = new xarPrivilege($pargs);
+            xarVarSetCached($cacheKey,$pid,$priv);
+            return $priv;
+        } else {
+            return null;
         }
-        return;
     }
 
 /**
