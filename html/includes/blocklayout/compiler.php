@@ -182,7 +182,7 @@ class xarTpl__Compiler extends xarTpl__CompilerError
     public $parser;
     public $codeGenerator;
 
-    function xarTpl__Compiler()
+    function __construct()
     {
         $this->parser = new xarTpl__Parser();
         $this->codeGenerator = new xarTpl__CodeGenerator();
@@ -1240,7 +1240,7 @@ class xarTpl__TemplateVariables
 {
     public $tplVars = array();
 
-    function xarTpl__TemplateVariables()
+    function __construct()
     {
         // Fill defaults
         $this->tplVars['version'] = '1.0';
@@ -1413,7 +1413,7 @@ abstract class xarTpl__Node extends xarTpl__PositionInfo
     // Like this we can call parent::constructor(...) in the subclasses independent
     // of the base class.
     // TODO: With PHP5 being required now, we can change this to something sane
-    function xarTpl__Node(&$parser, $nodeName)
+    function __construct(&$parser, $nodeName)
     {
         // If constructor is defined in subclass, that one is called!!
         $this->constructor($parser, $nodeName);
@@ -1470,7 +1470,7 @@ abstract class xarTpl__TplTagNode extends xarTpl__Node
     public $children;
     
     // Do the same here as we do in tplnode class
-    function xarTpl__TplTagNode(&$parser, $tagName, $parentTagName, $attributes) 
+    function __construct(&$parser, $tagName, $parentTagName, $attributes) 
     {
         // If constructor method is defined in subclass that one is called!!
         $this->isPHPCode = true;
@@ -1534,7 +1534,7 @@ abstract class xarTpl__EntityNode extends xarTpl__Node
     public $parameters;
     public $hasExtras = false;
     
-    function xarTpl__EntityNode(&$parser, $tagName, $entityType, $parameters) 
+    function __construct(&$parser, $tagName, $entityType, $parameters) 
     {
         // Register whether the entity is followed by extra params
         // Bug 3603 workaround
@@ -1577,7 +1577,7 @@ class xarTpl__InstructionNode extends xarTpl__Node
 {
     public $instruction;
     
-    function xarTpl__InstructionNode(&$parser, $tagName, $instruction)
+    function __construct(&$parser, $tagName, $instruction)
     {
         parent::constructor($parser,$tagName);
         $this->instruction = $instruction;
@@ -1642,7 +1642,7 @@ class xarTpl__TextNode extends xarTpl__Node
 {
     public $content;
 
-    function xarTpl__TextNode(&$parser, $tagName, $content)
+    function __construct(&$parser, $tagName, $content)
     {
         parent::constructor($parser, $tagName);
         $this->content = $content;
