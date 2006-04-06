@@ -5,6 +5,7 @@
  *
  * @package blocklayout
  * @access private
+ * @todo deprecate this or at least make key an attribute, it's not content.
  */
 class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
 {
@@ -14,11 +15,6 @@ class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
         $this->hasText = true;
     }
 
-    function render()
-    {
-        return $this->renderBeginTag() . $this->renderEndTag();
-    }
-    
     function renderBeginTag()
     {
         $key = '';

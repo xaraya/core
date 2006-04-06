@@ -12,7 +12,7 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
     {
         parent::__construct($parser, $tagName, $parentTagName, $parameters);
         $this->hasChildren = true;
-        $this->hasText = true;
+        $this->hasText = true; // TODO: see below 
     }
 
     function render()

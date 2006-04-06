@@ -23,6 +23,7 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
         $this->needAssignment = true;
     }
 
+    // We could leave this out ( <xar:set name="test"/> ) ~ unset($test) ?
     function render()
     {
         return '';

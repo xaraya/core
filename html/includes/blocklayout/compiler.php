@@ -1450,12 +1450,14 @@ abstract class xarTpl__Node extends xarTpl__PositionInfo
  * needAssignment -> false
  * needParameter -> false
  * @package blocklayout
+ * @todo look at the signature, it's redundant.
+ * @todo attributes can be dealt with more centrally, to make it easier for the nodes. (like id, class or other common attributes )
  */
 abstract class xarTpl__TplTagNode extends xarTpl__Node
 {
-    public $attributes;
-    public $parentTagName;
-    public $children;
+    protected $attributes;
+    protected $parentTagName;
+    public    $children;
     
     // Do the same here as we do in tplnode class
     function __construct(&$parser, $tagName, $parentTagName, $attributes) 
@@ -1510,9 +1512,9 @@ abstract class xarTpl__TplTagNode extends xarTpl__Node
  */
 abstract class xarTpl__EntityNode extends xarTpl__Node
 {
-    public $entityType;
-    public $parameters;
-    public $hasExtras = false;
+    private   $entityType;
+    protected $parameters;
+    protected $hasExtras = false;
     
     function __construct(&$parser, $tagName, $entityType, $parameters) 
     {
@@ -1548,7 +1550,7 @@ abstract class xarTpl__EntityNode extends xarTpl__Node
  */
 class xarTpl__InstructionNode extends xarTpl__Node
 {
-    public $instruction;
+    protected $instruction;
     
     function __construct(&$parser, $tagName, $instruction)
     {
@@ -1605,7 +1607,7 @@ class xarTpl__DocumentNode extends xarTpl__Node
  * xarTpl__TextNode
  * hasChildren -> false
  * hasText -> false
- * isAssignable -> true
+ * isAssignable -> false
  * isPHPCode -> false
  * needAssignment -> false
  * needParameter -> false
@@ -1613,7 +1615,7 @@ class xarTpl__DocumentNode extends xarTpl__Node
  */
 class xarTpl__TextNode extends xarTpl__Node
 {
-    public $content;
+    private $content;
 
     function __construct(&$parser, $tagName, $content)
     {

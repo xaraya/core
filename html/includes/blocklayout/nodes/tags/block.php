@@ -15,7 +15,7 @@
  */
 class xarTpl__XarBlockNode extends xarTpl__TplTagNode
 {
-    var $blockgrouptemplate = NULL;
+    public $blockgrouptemplate = NULL; // is written to by blockgroup node 
     
     function __construct(&$parser, $tagName, $parentTagName='', $parameters=array())
     {
