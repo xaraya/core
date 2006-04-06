@@ -31,6 +31,7 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
     $GLOBALS['xarSession_systemArgs'] = $args;
 
     // Session Support Tables
+    // TODO: this should be moved to the session class
     $systemPrefix = xarDBGetSystemTablePrefix();
     $tables = array('session_info' => $systemPrefix . '_session_info');
     xarDB::importTables($tables);
@@ -38,8 +39,10 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
     // Register the SessionCreate event
     xarEvt_registerEvent('SessionCreate');
 
-    xarSession__setup($args);
-
+    // Set up the session object
+    $session = new xarSession($args);
+  
+    // TODO: move to class
     if (ini_get('register_globals')) {
         // First thing we do is ensure that there is no attempted pollution
         // of the session namespace (yes, we still need this in this case)
@@ -52,9 +55,8 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
     // Start the session, this will call xarSession__phpRead, and
     // it will tell us if we need to start a new session or just
     // to continue the current session
-    session_start();
-
-    $sessionId = session_id();
+    $session->start();
+    $sessionId = $session->id();
 
     // TODO : add an admin option to re-activate this e.g. for
     //        Security Level "High" ?
@@ -67,12 +69,12 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
         $ipAddress = xarServerGetVar('REMOTE_ADDR');
     }
 
-    if ($GLOBALS['xarSession_isNewSession']) {
-        xarSession__new($sessionId, $ipAddress);
+    if ($session->isNew()) {
+        $session->register($ipAddress);
     } else {
         // Not all ISPs have a fixed IP or a reliable X_FORWARDED_FOR
         // so we don't test for the IP-address session var
-        xarSession__current($sessionId);
+        $session->current();
     }
     
     // Subsystem initialized, register a handler to run when the request is over
@@ -202,52 +204,84 @@ function xarSession_close()
     session_write_close();
 }
 
-// PRIVATE FUNCTIONS
-
 /**
- * Set all PHP options for Xaraya session handling
+ * Class to model the default session handler
  *
- * @param $args['securityLevel'] the current security level
- * @param $args['duration'] duration of the session
- * @param $args['inactivityTimeout']
- * @return bool
+ *
+ * @todo this is a temp, since the obvious plan is to have a factory here
  */
-function xarSession__setup($args)
+class xarSession 
 {
-    //All in here is based on the possibility of changing
-    //PHP's session related configuration
-    if (!xarFuncIsDisabled('ini_set'))
+    private $db;               // We store sessioninfo in the database
+    private $tbl;              // Container for the session info
+    private $isNew = true;     // Flag signalling if we're dealing with a new session
+
+    private $sessionId = null; // The id assigned to us.
+    private $ipAddress = '';   // IP-address belonging to this session.
+
+    function __construct(&$args)
     {
-        // PHP configuration variables
-        // Stop adding SID to URLs
-        ini_set('session.use_trans_sid', 0);
+        // Set up our container.
+        $this->db =& xarDBGetConn();
+        $tbls =& xarDBGetTables();
+        $this->tbl = $tbls['session_info'];
 
-        // User-defined save handler
-        ini_set('session.save_handler', 'user');
-    
-        // How to store data
-        ini_set('session.serialize_handler', 'php');
-    
-        // Use cookie to store the session ID
-        ini_set('session.use_cookies', 1);
-    
-        // Name of our cookie
-        if (empty($args['cookieName'])) {
-            $args['cookieName'] = 'XARAYASID';
-        }
-        ini_set('session.name', $args['cookieName']);
+        // Set up the environment
+        $this->setup($args);
 
-        if (empty($args['cookiePath'])) {
-            $path = xarServerGetBaseURI();
-            if (empty($path)) {
-                $path = '/';
+        // Assign the handlers
+        session_set_save_handler(
+                             array(&$this,"open"),
+                             array(&$this,"close"),
+                             array(&$this,"read"),
+                             array(&$this,"write"),
+                             array(&$this,"destroy"),
+                             array(&$this,"gc"));
+    }
+
+    /**
+     * Set all PHP options for Xaraya session handling
+     *
+     * @param $args['securityLevel'] the current security level
+     * @param $args['duration'] duration of the session
+     * @param $args['inactivityTimeout']
+     * @return bool
+     */
+    private function setup(&$args)
+    {
+        //All in here is based on the possibility of changing
+        //PHP's session related configuration
+        if (!xarFuncIsDisabled('ini_set')) {
+            // PHP configuration variables
+            // Stop adding SID to URLs
+            ini_set('session.use_trans_sid', 0);
+            
+            // User-defined save handler
+            ini_set('session.save_handler', 'user');
+            
+            // How to store data
+            ini_set('session.serialize_handler', 'php');
+            
+            // Use cookie to store the session ID
+            ini_set('session.use_cookies', 1);
+            
+            // Name of our cookie
+            if (empty($args['cookieName'])) {
+                $args['cookieName'] = 'XARAYASID';
             }
-        } else {
-            $path = $args['cookiePath'];
-        }
-
-        // Lifetime of our cookie
-        switch ($args['securityLevel']) {
+            ini_set('session.name', $args['cookieName']);
+            
+            if (empty($args['cookiePath'])) {
+                $path = xarServerGetBaseURI();
+                if (empty($path)) {
+                    $path = '/';
+                }
+            } else {
+                $path = $args['cookiePath'];
+            }
+            
+            // Lifetime of our cookie
+            switch ($args['securityLevel']) {
             case 'High':
                 // Session lasts duration of browser
                 $lifetime = 0;
@@ -271,126 +305,120 @@ function xarSession__setup($args)
                 // (Currently set to 25 years)
                 $lifetime = 788940000;
                 break;
+            }
+            ini_set('session.cookie_lifetime', $lifetime);
+            
+            // Referer check for the session cookie
+            if (!empty($args['refererCheck'])) {
+                ini_set('session.referer_check', $args['refererCheck']);
+            }
+            
+            // Cookie path
+            // this should be customized for multi-server setups wanting to share
+            // sessions
+            ini_set('session.cookie_path', $path);
+            
+            // Cookie domain
+            // this is only necessary for sharing sessions across multiple servers,
+            // and should be configurable for multi-site setups
+            // Example: .Xaraya.com for all *.Xaraya.com servers
+            // Example: www.Xaraya.com for www.Xaraya.com and *.www.Xaraya.com
+            //$domain = xarServerGetVar('HTTP_HOST');
+            //$domain = preg_replace('/:.*/', '', $domain);
+            if (!empty($args['cookieDomain'])) {
+                ini_set('session.cookie_domain', $args['cookieDomain']);
+            }
+            
+            // Garbage collection
+            ini_set('session.gc_probability', 1);
+            
+            // Inactivity timeout for user sessions
+            ini_set('session.gc_maxlifetime', $args['inactivityTimeout'] * 60);
+            
+            // Auto-start session
+            ini_set('session.auto_start', 1);
         }
-        ini_set('session.cookie_lifetime', $lifetime);
-
-        // Referer check for the session cookie
-        if (!empty($args['refererCheck'])) {
-            ini_set('session.referer_check', $args['refererCheck']);
-        }
-
-        // Cookie path
-        // this should be customized for multi-server setups wanting to share
-        // sessions
-        ini_set('session.cookie_path', $path);
-
-        // Cookie domain
-        // this is only necessary for sharing sessions across multiple servers,
-        // and should be configurable for multi-site setups
-        // Example: .Xaraya.com for all *.Xaraya.com servers
-        // Example: www.Xaraya.com for www.Xaraya.com and *.www.Xaraya.com
-        //$domain = xarServerGetVar('HTTP_HOST');
-        //$domain = preg_replace('/:.*/', '', $domain);
-        if (!empty($args['cookieDomain'])) {
-            ini_set('session.cookie_domain', $args['cookieDomain']);
-        }
-    
-        // Garbage collection
-        ini_set('session.gc_probability', 1);
-    
-        // Inactivity timeout for user sessions
-        ini_set('session.gc_maxlifetime', $args['inactivityTimeout'] * 60);
-
-        // Auto-start session
-        ini_set('session.auto_start', 1);
+        return true;
     }
 
-    // Session handlers
-    $session = new xarSession();
+    /**
+     * Start the session
+     *
+     * This will call the handler, and it will tell us if
+     * we need a new session or just continue the old one
+     *
+     */
+    function start()
+    {
+        session_start();
+    }
 
-    return true;
-}
-
-/**
- * Continue a current session
- * @private
- * @param sessionId the session ID
- */
-function xarSession__current($sessionId)
-{
-    // lastused field will be updated when writing the session variables
-    return true;
-}
-
-/**
- * Create a new session
- * @private
- * @param sessionId the session ID
- * @param ipAddress the IP address of the host with this session
- */
-function xarSession__new($sessionId, $ipAddress)
-{
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-
-    $sessioninfoTable = $xartable['session_info'];
-
-    try {
-        $dbconn->begin();
-        $query = "INSERT INTO $sessioninfoTable
+    /** 
+     * Set or get the session id
+     *
+     */
+    function id($id= null)
+    {
+        if(isset($id)) 
+            $this->sessionId = session_id($id);
+        else
+            $this->sessionId = session_id();
+        return $this->sessionId;
+    }
+    
+    /**
+     * Getter for new isNew
+     *
+     */
+    function isNew() 
+    {
+        return $this->isNew;
+    }
+    
+    /**
+     * Register a new session in our containser
+     *
+     */
+    function register($ipAddress)
+    {
+        try {
+            $this->db->begin();
+            $query = "INSERT INTO $this->tbl
                   (xar_sessid, xar_ipaddr, xar_uid, xar_firstused, xar_lastused)
                   VALUES (?,?,?,?,?)";
-        $bindvars = array($sessionId, $ipAddress, _XAR_ID_UNREGISTERED, time(), time());
-        $dbconn->Execute($query,$bindvars);
-        $dbconn->commit();
-    } catch (SQLException $e) {
-        $dbconn->rollback();
-        throw $e;
+            $bindvars = array($this->sessionId, $ipAddress, _XAR_ID_UNREGISTERED, time(), time());
+            $this->db->Execute($query,$bindvars);
+            $this->db->commit();
+        } catch (SQLException $e) {
+            $this->db->rollback();
+            throw $e;
+        }
+        // Generate a random number, used for
+        // some authentication
+        srand((double) microtime() * 1000000);
+        xarSessionSetVar('rand', rand());
+        
+        $this->ipAddress = $ipAddress;
+        // Congratulations. We have created a new session
+        xarEvt_trigger('SessionCreate');
+        return true;
     }
 
-    // Generate a random number, used for
-    // some authentication
-    srand((double) microtime() * 1000000);
-    xarSessionSetVar('rand', rand());
-
-    // Congratulations. We have created a new session
-    xarEvt_trigger('SessionCreate');
-
-    return true;
-}
-
-/**
- * Class to model the default session handler
- *
- *
- * @todo this is a temp, since the obvious plan is to have a factory here
- */
-class xarSession 
-{
-    private $db;     // We store sessioninfo in the database
-    private $tbl;    // Container for the session info
-
-    function __construct()
-    {
-        $this->db =& xarDBGetConn();
-        $tbls =& xarDBGetTables();
-        $this->tbl = $tbls['session_info'];
-        session_set_save_handler(
-                             array(&$this,"open"),
-                             array(&$this,"close"),
-                             array(&$this,"read"),
-                             array(&$this,"write"),
-                             array(&$this,"destroy"),
-                             array(&$this,"gc"));
+    /**
+     * Continue an existing session
+     *
+     */
+    function current()
+    {  return true;
     }
+
 
     /**
      * PHP function to open the session
      * @private
      */
     function open($path, $name)
-    {
-        // Nothing to do - database opened elsewhere
+    {   // Nothing to do - database opened elsewhere
         return true;
     }
 
@@ -399,8 +427,7 @@ class xarSession
      * @private
      */
     function close()
-    {
-        // Nothing to do - database closed elsewhere
+    {   // Nothing to do - database closed elsewhere
         return true;
     }
 
@@ -417,8 +444,9 @@ class xarSession
         $result =& $this->db->Execute($query,array($sessionId),ResultSet::FETCHMODE_NUM);
         
         if (!$result->EOF) {
-            $GLOBALS['xarSession_isNewSession'] = false;
-            list($XARSVuid, $GLOBALS['xarSession_ipAddress'], $lastused, $vars) = $result->getRow();
+            // Already have this session
+            $this->isNew = false;
+            list($XARSVuid, $this->ipAddress, $lastused, $vars) = $result->getRow();
             // in case garbage collection didn't have the opportunity to do its job
             if (!empty($GLOBALS['xarSession_systemArgs']['securityLevel']) &&
                 $GLOBALS['xarSession_systemArgs']['securityLevel'] == 'High') {
@@ -426,15 +454,14 @@ class xarSession
                 if ($lastused < $timeoutSetting) {
                     // force a reset of the userid (but use the same sessionid)
                     xarSession_setUserInfo(_XAR_ID_UNREGISTERED, 0);
-                    $GLOBALS['xarSession_ipAddress'] = '';
+                    $this->ipAddress = '';
                     $vars = '';
                 }
             }
         } else {
-            $GLOBALS['xarSession_isNewSession'] = true;
             $_SESSION['XARSVuid'] = _XAR_ID_UNREGISTERED;
             
-            $GLOBALS['xarSession_ipAddress'] = '';
+            $this->ipAddress = '';
             $vars = '';
         }
         $result->Close();
@@ -463,7 +490,7 @@ class xarSession
             $this->db->executeUpdate($query);
             $this->db->commit();
         } catch (Exception $e) {
-            //$dbconn->rollback();
+            //$this->db->rollback(); (why was commented out again?)
             throw $e;
         }
         return true;
