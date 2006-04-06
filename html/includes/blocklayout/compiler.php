@@ -1407,21 +1407,9 @@ abstract class xarTpl__Node extends xarTpl__PositionInfo
     protected $needAssignment = false;
     protected $needParameter = false;
 
-    // What we're doing here is create an alias for the constructor, so
-    // it derives properly. That way we decouple the class name from the 
-    // constructor. Oh, the beauty of PHP :-(
-    // Like this we can call parent::constructor(...) in the subclasses independent
-    // of the base class.
-    // TODO: With PHP5 being required now, we can change this to something sane
     function __construct(&$parser, $nodeName)
     {
-        // If constructor is defined in subclass, that one is called!!
-        $this->constructor($parser, $nodeName);
-    }
-    
-    function constructor(&$parser, $tagName, $parentTagName='', $attributes=array())
-    {
-        $this->tagName  = $tagName;
+        $this->tagName  = $nodeName;
         $this->fileName = $parser->fileName;
         $this->line     = $parser->line;
         $this->column   = $parser->column;
@@ -1472,20 +1460,12 @@ abstract class xarTpl__TplTagNode extends xarTpl__Node
     // Do the same here as we do in tplnode class
     function __construct(&$parser, $tagName, $parentTagName, $attributes) 
     {
-        // If constructor method is defined in subclass that one is called!!
+        parent::__construct($parser, $tagName);
         $this->isPHPCode = true;
-        $this->constructor($parser, $tagName, $parentTagName, $attributes);
-    }
-    
-    
-    function constructor(&$parser, $tagName, $parentTagName='', $attributes=array())
-    {
-        // TplNode has no parent, nor attributes, separation is here.
-        parent::constructor($parser, $tagName);
         $this->parentTagName = $parentTagName;
         $this->attributes = $attributes;  
     }
-
+    
     // If we get here, the render method was called but not implemented in the tag,
     // which means the user specified it as <xar:tag ..../>
     // We (try to) treat this like <xar:tag></xar:tag> which is effectively the same.
