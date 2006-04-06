@@ -180,6 +180,7 @@ function roles_activate()
     $role = xarFindRole('Anonymous');
     xarConfigSetVar('Site.User.AnonymousUID', $role->getID());
     // set the current session information to the right anonymous uid
+    // TODO: make the setUserInfo a class static in xarSession.php
     xarSession_setUserInfo($role->getID(), 0);
     $role = xarFindRole('Admin');
     xarModSetVar('roles', 'admin', $role->getID());

@@ -307,13 +307,7 @@ function xarSession__setup($args)
 
     // Session handlers
     $session = new xarSession();
-    session_set_save_handler(
-                             array(&$session,"open"),
-                             array(&$session,"close"),
-                             array(&$session,"read"),
-                             array(&$session,"write"),
-                             array(&$session,"destroy"),
-                             array(&$session,"gc"));
+
     return true;
 }
 
@@ -380,7 +374,14 @@ class xarSession
     {
         $this->db =& xarDBGetConn();
         $tbls =& xarDBGetTables();
-        $this->tbl = $this->tables['session_info'];
+        $this->tbl = $tbls['session_info'];
+        session_set_save_handler(
+                             array(&$this,"open"),
+                             array(&$this,"close"),
+                             array(&$this,"read"),
+                             array(&$this,"write"),
+                             array(&$this,"destroy"),
+                             array(&$this,"gc"));
     }
 
     /**

@@ -162,6 +162,7 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
     else $rememberMe = 1;
 
     // Set user session information
+    // TODO: make this a class static in xarSession.php
     if (!xarSession_setUserInfo($userId, $rememberMe)) return; // throw back
 
     // Set user auth module information
