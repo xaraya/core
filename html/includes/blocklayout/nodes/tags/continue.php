@@ -8,9 +8,9 @@
  */
 class xarTpl__XarContinueNode extends xarTpl__TplTagNode
 {
-    function constructor(&$parser, $tagName, $parentTagName='', $attributes=array())
+    function __construct(&$parser, $tagName, $parentTagName='', $attributes=array())
     {
-        parent::constructor($parser, $tagName, $parentTagName, $attributes);
+        parent::__construct($parser, $tagName, $parentTagName, $attributes);
         $this->isAssignable = false;
     }
 

@@ -14,9 +14,9 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
 {
     private $iecondition = '';
 
-    function constructor(&$parser,$tagName, $parentTagName='', $attributes=array())
+    function __construct(&$parser,$tagName, $parentTagName='', $attributes=array())
     {
-        parent::constructor($parser, $tagName, $parentTagName, $attributes);
+        parent::__construct($parser, $tagName, $parentTagName, $attributes);
         // We parse the content inside, what to do when it generates '--' in the output, that would make the output
         // invalid. 
         // Do we care? we're dealing with templates here, what content will be generated is of another parsers concern.

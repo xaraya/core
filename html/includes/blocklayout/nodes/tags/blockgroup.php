@@ -10,9 +10,9 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
 {
     public $template = NULL;
     
-    function constructor(&$parser, $tagName, $parentTagName='', $attributes=array())
+    function __construct(&$parser, $tagName, $parentTagName='', $attributes=array())
     {
-        parent::constructor($parser, $tagName, $parentTagName, $attributes);
+        parent::__construct($parser, $tagName, $parentTagName, $attributes);
         $this->hasChildren = true;
         // FIXME: this should be true on closed form and false on open form, but 
         // we only know that while generating the code into the template, so we

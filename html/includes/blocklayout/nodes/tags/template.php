@@ -8,9 +8,9 @@
  */
 class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
 {
-    function constructor(&$parser, $tagName, $parentTagName='', $parameters=array())
+    function __construct(&$parser, $tagName, $parentTagName='', $parameters=array())
     {
-        parent::constructor($parser, $tagName, $parentTagName, $parameters);
+        parent::__construct($parser, $tagName, $parentTagName, $parameters);
         $this->hasChildren = true;
         $this->hasText = true;
     }
