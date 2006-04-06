@@ -306,12 +306,14 @@ function xarSession__setup($args)
     }
 
     // Session handlers
-    session_set_save_handler("xarSession__phpOpen",
-                             "xarSession__phpClose",
-                             "xarSession__phpRead",
-                             "xarSession__phpWrite",
-                             "xarSession__phpDestroy",
-                             "xarSession__phpGC");
+    $session = new xarSession();
+    session_set_save_handler(
+                             array(&$session,"open"),
+                             array(&$session,"close"),
+                             array(&$session,"read"),
+                             array(&$session,"write"),
+                             array(&$session,"destroy"),
+                             array(&$session,"gc"));
     return true;
 }
 
@@ -364,167 +366,169 @@ function xarSession__new($sessionId, $ipAddress)
 }
 
 /**
- * PHP function to open the session
- * @private
+ * Class to model the default session handler
+ *
+ *
+ * @todo this is a temp, since the obvious plan is to have a factory here
  */
-function xarSession__phpOpen($path, $name)
+class xarSession 
 {
-    // Nothing to do - database opened elsewhere
-    return true;
-}
+    private $db;     // We store sessioninfo in the database
+    private $tbl;    // Container for the session info
 
-/**
- * PHP function to close the session
- * @private
- */
-function xarSession__phpClose()
-{
-    // Nothing to do - database closed elsewhere
-    return true;
-}
+    function __construct()
+    {
+        $this->db =& xarDBGetConn();
+        $tbls =& xarDBGetTables();
+        $this->tbl = $this->tables['session_info'];
+    }
 
-/**
- * PHP function to read a set of session variables
- * @private
- */
-function xarSession__phpRead($sessionId)
-{
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    /**
+     * PHP function to open the session
+     * @private
+     */
+    function open($path, $name)
+    {
+        // Nothing to do - database opened elsewhere
+        return true;
+    }
 
-    $sessioninfoTable = $xartable['session_info'];
+    /**
+     * PHP function to close the session
+     * @private
+     */
+    function close()
+    {
+        // Nothing to do - database closed elsewhere
+        return true;
+    }
 
-    // FIXME: in session2 the uid is not used anymore, can we safely migrate this 
-    //        out? At least the roles/privileges modules are using it actively
-    $query = "SELECT xar_uid, xar_ipaddr, xar_lastused, xar_vars
-              FROM $sessioninfoTable WHERE xar_sessid = ?";
-
-    $result =& $dbconn->Execute($query,array($sessionId),ResultSet::FETCHMODE_NUM);
-
-    if (!$result->EOF) {
-        $GLOBALS['xarSession_isNewSession'] = false;
-        list($XARSVuid, $GLOBALS['xarSession_ipAddress'], $lastused, $vars) = $result->getRow();
-        // in case garbage collection didn't have the opportunity to do its job
-        if (!empty($GLOBALS['xarSession_systemArgs']['securityLevel']) &&
-            $GLOBALS['xarSession_systemArgs']['securityLevel'] == 'High') {
-            $timeoutSetting = time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60);
-            if ($lastused < $timeoutSetting) {
-                // force a reset of the userid (but use the same sessionid)
-                xarSession_setUserInfo(_XAR_ID_UNREGISTERED, 0);
-                $GLOBALS['xarSession_ipAddress'] = '';
-                $vars = '';
-            }
-        }
-    } else {
-        $GLOBALS['xarSession_isNewSession'] = true;
-        $_SESSION['XARSVuid'] = _XAR_ID_UNREGISTERED;
+    /**
+     * PHP function to read a set of session variables
+     * @private
+     */
+    function read($sessionId)
+    {
+        // FIXME: in session2 the uid is not used anymore, can we safely migrate this 
+        //        out? At least the roles/privileges modules are using it actively
+        $query = "SELECT xar_uid, xar_ipaddr, xar_lastused, xar_vars
+              FROM $this->tbl WHERE xar_sessid = ?";
+        $result =& $this->db->Execute($query,array($sessionId),ResultSet::FETCHMODE_NUM);
         
-        $GLOBALS['xarSession_ipAddress'] = '';
-        $vars = '';
+        if (!$result->EOF) {
+            $GLOBALS['xarSession_isNewSession'] = false;
+            list($XARSVuid, $GLOBALS['xarSession_ipAddress'], $lastused, $vars) = $result->getRow();
+            // in case garbage collection didn't have the opportunity to do its job
+            if (!empty($GLOBALS['xarSession_systemArgs']['securityLevel']) &&
+                $GLOBALS['xarSession_systemArgs']['securityLevel'] == 'High') {
+                $timeoutSetting = time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60);
+                if ($lastused < $timeoutSetting) {
+                    // force a reset of the userid (but use the same sessionid)
+                    xarSession_setUserInfo(_XAR_ID_UNREGISTERED, 0);
+                    $GLOBALS['xarSession_ipAddress'] = '';
+                    $vars = '';
+                }
+            }
+        } else {
+            $GLOBALS['xarSession_isNewSession'] = true;
+            $_SESSION['XARSVuid'] = _XAR_ID_UNREGISTERED;
+            
+            $GLOBALS['xarSession_ipAddress'] = '';
+            $vars = '';
+        }
+        $result->Close();
+
+        // We *have to* make sure this returns a string!! 
+        return (string) $vars;
     }
-    $result->Close();
 
-    return $vars;
-}
-
-/**
- * PHP function to write a set of session variables
- * @private
- */
-function xarSession__phpWrite($sessionId, $vars)
-{
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-
-    $sessioninfoTable = $xartable['session_info'];
-    try {
-        $dbconn->begin();
-        // FIXME: We had to do qstr here, cos the query failed for some reason
-        // This is apparently because this is in a session write handler.
-        // Additional notes:
-        // * apache 2 on debian linux segfaults
-        // UPDATE: Could this be because the xar_vars column is a BLOB (i.e. binary) ?
-        $query = "UPDATE $sessioninfoTable SET xar_vars = ". $dbconn->qstr($vars) . ", xar_lastused = " . $dbconn->qstr(time()). "WHERE xar_sessid = ".$dbconn->qstr($sessionId);
-        $dbconn->executeUpdate($query);
-        $dbconn->commit();
-    } catch (Exception $e) {
-        //$dbconn->rollback();
-        throw $e;
+    /**
+     * PHP function to write a set of session variables
+     * @private
+     */
+    function write($sessionId, $vars)
+    {
+        try {
+            $this->db->begin();
+            // FIXME: We had to do qstr here, cos the query failed for some reason
+            // This is apparently because this is in a session write handler.
+            // Additional notes:
+            // * apache 2 on debian linux segfaults
+            // UPDATE: Could this be because the xar_vars column is a BLOB (i.e. binary) ?
+            $query = "UPDATE $this->tbl SET xar_vars = ". 
+                $this->db->qstr($vars) . ", xar_lastused = " . 
+                $this->db->qstr(time()). "WHERE xar_sessid = ".
+                $this->db->qstr($sessionId);
+            $this->db->executeUpdate($query);
+            $this->db->commit();
+        } catch (Exception $e) {
+            //$dbconn->rollback();
+            throw $e;
+        }
+        return true;
     }
-    return true;
-}
 
-/**
- * PHP function to destroy a session
- * @private
- */
-function xarSession__phpDestroy($sessionId)
-{
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-
-    $sessioninfoTable = $xartable['session_info'];
-
-    try {
-        $dbconn->begin();
-        $query = "DELETE FROM $sessioninfoTable WHERE xar_sessid = ?";
-        $dbconn->execute($query,array($sessionId));
-        $dbconn->commit();
-    } catch (SQLException $e) {
-        $dbconn->rollback();
-        throw $e;
+    /**
+     * PHP function to destroy a session
+     * @private
+     */
+    function destroy($sessionId)
+    {
+        try {
+            $this->db->begin();
+            $query = "DELETE FROM $this->tbl WHERE xar_sessid = ?";
+            $this->db->execute($query,array($sessionId));
+            $this->db->commit();
+        } catch (SQLException $e) {
+            $this->db->rollback();
+            throw $e;
+        }
+        return true;
     }
-    return true;
-}
 
-/**
- * PHP function to garbage collect session information
- * @private
- */
-function xarSession__phpGC($maxlifetime)
-{
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-
-    $sessioninfoTable = $xartable['session_info'];
-
-    $timeoutSetting = time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60);
-    $bindvars = array();
-    switch ($GLOBALS['xarSession_systemArgs']['securityLevel']) {
-    case 'Low':
-        // Low security - delete session info if user decided not to
-        //                remember themself
-        $where = "xar_remembersess = ? AND 
-                  xar_lastused < ?";
-        $bindvars[] = 0;
-        $bindvars[] = $timeoutSetting;
-        break;
-    case 'Medium':
-        // Medium security - delete session info if session cookie has
-        //                   expired or user decided not to remember
-        //                   themself
-        $where = "(xar_remembersess = ? AND xar_lastused <  ?) OR
+    /**
+     * PHP function to garbage collect session information
+     * @private
+     */
+    function gc($maxlifetime)
+    {
+        $timeoutSetting = time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60);
+        $bindvars = array();
+        switch ($GLOBALS['xarSession_systemArgs']['securityLevel']) {
+        case 'Low':
+            // Low security - delete session info if user decided not to
+            //                remember themself
+            $where = "xar_remembersess = ? AND  xar_lastused < ?";
+            $bindvars[] = 0;
+            $bindvars[] = $timeoutSetting;
+            break;
+        case 'Medium':
+            // Medium security - delete session info if session cookie has
+            //                   expired or user decided not to remember
+            //                   themself
+            $where = "(xar_remembersess = ? AND xar_lastused <  ?) OR
                    xar_firstused < ?";
-        $bindvars[] = 0;
-        $bindvars[] = $timeoutSetting;
-        $bindvars[] = (time()- ($GLOBALS['xarSession_systemArgs']['duration'] * 86400));
-        break;
-    case 'High':
-    default:
-        // High security - delete session info if user is inactive
-        $where = "xar_lastused < ?";
-        $bindvars[] = $timeoutSetting;
-        break;
+            $bindvars[] = 0;
+            $bindvars[] = $timeoutSetting;
+            $bindvars[] = (time()- ($GLOBALS['xarSession_systemArgs']['duration'] * 86400));
+            break;
+        case 'High':
+        default:
+            // High security - delete session info if user is inactive
+            $where = "xar_lastused < ?";
+            $bindvars[] = $timeoutSetting;
+            break;
+        }
+        try {
+            $this->db->begin();
+            $query = "DELETE FROM $this->tbl WHERE $where";
+            $this->db->Execute($query,$bindvars);
+            $this->db->commit();
+        } catch (SQLException $e) {
+            $this->db->rollback();
+            throw $e;
+        }
+        return true;
     }
-    try {
-        $dbconn->begin();
-        $query = "DELETE FROM $sessioninfoTable WHERE $where";
-        $dbconn->Execute($query,$bindvars);
-        $dbconn->commit();
-    } catch (SQLException $e) {
-        $dbconn->rollback();
-        throw $e;
-    }
-    return true;
 }
 ?>
