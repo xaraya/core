@@ -439,7 +439,7 @@ class xarRole
     public $auth_module;  //no idea what this is (not used by groups)
     public $duvs;         //property for holding dynamic user vars
     public $parentlevel;  //we use this just to store transient information
-    var $basetype;     //the base itemtype. we add this so it can be passed rather than calculated here
+    public $basetype;     //the base itemtype. we add this so it can be passed rather than calculated here
 
     public $dbconn;
     public $rolestable;
