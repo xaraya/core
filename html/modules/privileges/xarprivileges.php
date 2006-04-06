@@ -371,6 +371,7 @@ class xarMasks
     function xarSecurityCheck($mask,$catch=1,$component='',$instance='',$module='',$rolename='',$pnrealm=0,$pnlevel=0)
     {
         $userID = xarSessionGetVar('uid');
+        xarLogMessage("PRIVS: uid in security check: $userID");
         if ($userID == XARUSER_LAST_RESORT) return true;
 
         $maskname = $mask;
@@ -460,7 +461,6 @@ class xarMasks
         else {
             $role = $roles->findRole($rolename);
         }
-
         // check if we already have the irreducible set of privileges for the current user
         if (!xarVarIsCached('Security.Variables','privilegeset.'.$mask->module) || !empty($rolename)) {
             // get the privileges and test against them
@@ -989,28 +989,22 @@ class xarPrivileges extends xarMasks
 */
     function getprivileges()
     {
-    if ((!isset($allprivileges)) || count($allprivileges)==0) {
-            $query = "SELECT p.xar_pid,
-                        p.xar_name,
-                        p.xar_realm,
-                        p.xar_module,
-                        p.xar_component,
-                        p.xar_instance,
-                        p.xar_level,
-                        p.xar_description,
-                        pm.xar_parentid
-                        FROM $this->privilegestable p, $this->privmemberstable pm
-                        WHERE p.xar_pid = pm.xar_pid
-                        ORDER BY p.xar_name";
+        static $allprivileges = array();
 
+        if (empty($allprivileges)) {
+            xarLogMessage('PRIV: getting all privs, once!');
+            $query = "SELECT p.xar_pid, p.xar_name, p.xar_realm,
+                             p.xar_module, p.xar_component, p.xar_instance,
+                             p.xar_level,  p.xar_description, pm.xar_parentid
+                      FROM $this->privilegestable p, $this->privmemberstable pm
+                      WHERE p.xar_pid = pm.xar_pid
+                      ORDER BY p.xar_name";
             $result = $this->dbconn->Execute($query);
 
-
-            $privileges = array();
-            while(!$result->EOF) {
+            while($result->next()) {
                 list($pid, $name, $realm, $module, $component, $instance, $level,
                         $description,$parentid) = $result->fields;
-                $privileges[] = array('pid' => $pid,
+                $allprivileges[] = array('pid' => $pid,
                                    'name' => $name,
                                    'realm' => $realm,
                                    'module' => $module,
@@ -1019,14 +1013,10 @@ class xarPrivileges extends xarMasks
                                    'level' => $level,
                                    'description' => $description,
                                    'parentid' => $parentid);
-                $result->MoveNext();
             }
-            $allprivileges = $privileges;
-            return $privileges;
         }
-        else {
-            return $allprivileges;
-        }
+        return $allprivileges;
+        
     }
 
 /**
@@ -1052,8 +1042,7 @@ class xarPrivileges extends xarMasks
                         WHERE p.xar_pid = pm.xar_pid
                         AND pm.xar_parentid = 0
                         ORDER BY p.xar_name";
-        }
-        elseif ($arg == "assigned"){
+        } elseif ($arg == "assigned"){
              $fromclause = "FROM $this->privilegestable p,$this->privmemberstable pm,
                             $this->acltable acl
                             WHERE p.xar_pid = pm.xar_pid
@@ -2285,7 +2274,7 @@ class xarPrivilege extends xarMask
  * @param   none
  * @return  boolean
  * @throws  none
- * @todo    none
+ * @todo    seems to me this belong in roles module instead?
 */
     function getRoles()
     {
