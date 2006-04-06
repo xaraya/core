@@ -1536,20 +1536,13 @@ abstract class xarTpl__EntityNode extends xarTpl__Node
     
     function __construct(&$parser, $tagName, $entityType, $parameters) 
     {
+        parent::__construct($parser, $tagName);
         // Register whether the entity is followed by extra params
         // Bug 3603 workaround
         // TODO: centralize this further into xarModUrl
         $this->hasExtras = $parser->peek(5) == '&amp;';
         $this->isPHPCode = true;
-        // If constructor method is defined in subclass that one is called!!
-        $this->constructor($parser, $tagName, $entityType, $parameters);
-    }
-    
-    function constructor(&$parser, $tagName, $parentTagName='', $parameters=array())
-    {
-        // TODO: refactor the interface here, PHP5 insists on have the naming of parameters the same
-        parent::constructor($parser, $tagName);
-        $this->entityType = $parentTagName;
+        $this->entityType = $entityType;
         $this->parameters = $parameters;
     }
 
@@ -1579,7 +1572,7 @@ class xarTpl__InstructionNode extends xarTpl__Node
     
     function __construct(&$parser, $tagName, $instruction)
     {
-        parent::constructor($parser,$tagName);
+        parent::__construct($parser,$tagName);
         $this->instruction = $instruction;
         $this->isPHPCode = true;
 
@@ -1609,9 +1602,9 @@ class xarTpl__DocumentNode extends xarTpl__Node
     public $children;
     public $variables;
 
-    function constructor(&$parser, $nodeName) 
+    function __construct(&$parser, $nodeName) 
     {
-        parent::constructor($parser, $nodeName);
+        parent::__construct($parser, $nodeName);
         $this->hasChildren = true;
         $this->hasText = true;
         $this->isAssignable = false;
@@ -1644,7 +1637,7 @@ class xarTpl__TextNode extends xarTpl__Node
 
     function __construct(&$parser, $tagName, $content)
     {
-        parent::constructor($parser, $tagName);
+        parent::__construct($parser, $tagName);
         $this->content = $content;
         $this->isAssignable = false;
     }
