@@ -118,10 +118,10 @@ class xarMasks
             else {
                 $query = "SELECT * FROM $this->maskstable
                         WHERE (xar_component = ?)
-                        OR (xar_component = 'All')
-                        OR (xar_component = 'None')
+                        OR (xar_component = ?)
+                        OR (xar_component = ?)
                         ORDER BY xar_module, xar_component, xar_name";
-                $bindvars = array($component);
+                $bindvars = array($component,'All','None');
             }
         }
         else {
@@ -132,12 +132,14 @@ class xarMasks
             }
             else {
                 $query = "SELECT *
-                    FROM $this->maskstable WHERE (xar_module = ?)
-                    AND ((xar_component = ?)
-                    OR (xar_component = 'All')
-                    OR (xar_component = 'None'))
+                          FROM $this->maskstable
+                          WHERE (xar_module = ?) AND
+                          ((xar_component = ?) OR
+                           (xar_component = ?) OR
+                           (xar_component = ?)
+                            )
                     ORDER BY xar_module, xar_component, xar_name";
-                $bindvars = array($module,$component);
+                $bindvars = array($module,$component,'All','None');
             }
         }
         $result = $this->dbconn->Execute($query,$bindvars);
@@ -1003,14 +1005,14 @@ class xarPrivileges extends xarMasks
         if($arg == "all") {
              $fromclause = "FROM $this->privilegestable p,$this->privmemberstable pm
                         WHERE p.xar_pid = pm.xar_pid
-                        AND pm.xar_parentid = 0
+                        AND pm.xar_parentid = ?
                         ORDER BY p.xar_name";
         } elseif ($arg == "assigned"){
              $fromclause = "FROM $this->privilegestable p,$this->privmemberstable pm,
                             $this->acltable acl
                             WHERE p.xar_pid = pm.xar_pid
                             AND p.xar_pid = acl.xar_permid
-                            AND pm.xar_parentid = 0
+                            AND pm.xar_parentid = ?
                             ORDER BY p.xar_name";
         }
         $query = "SELECT p.xar_pid,
@@ -1023,7 +1025,7 @@ class xarPrivileges extends xarMasks
                     p.xar_description,
                     pm.xar_parentid ";
         $query .= $fromclause;
-        $result = $this->dbconn->Execute($query);
+        $result = $this->dbconn->Execute($query,array(0));
         if (!$result) return;
 
         $privileges = array();
