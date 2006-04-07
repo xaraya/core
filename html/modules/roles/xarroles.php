@@ -817,6 +817,7 @@ class xarRole
         if (empty($allprivileges)) {
             $query = "SELECT xar_pid, xar_name FROM $this->privilegestable ORDER BY xar_name";
             $result = $this->dbconn->Execute($query);
+            if (!$result) return;
 
             $ind = 0;
             while (!$result->EOF) {
