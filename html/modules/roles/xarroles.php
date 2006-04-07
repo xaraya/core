@@ -145,7 +145,15 @@ class xarRoles
      */
     function getRole($uid)
     {
-        return $this->_lookuprole('xar_uid',(int) $uid);
+        $cacheKey = 'Roles.ByUid';
+        if(xarVarIsCached($cacheKey,$uid)) {
+            return xarVarGetCached($cacheKey,$uid);
+        }
+        // Need to get it from DB.
+        // TODO: move caching to _lookuprole?
+        $r = $this->_lookuprole('xar_uid',(int) $uid);
+        xarVarSetCached($cacheKey,$uid,$r);
+        return $r;
     }
 
     /**
@@ -805,27 +813,19 @@ class xarRole
      */
     function getAllPrivileges()
     {
-        if ((!isset($allprivileges)) || count($allprivileges) == 0) {
-            $query = "SELECT xar_pid, xar_name
-                      FROM $this->privilegestable
-                      ORDER BY xar_name";
-
+        static $allprivileges = array();
+        if (empty($allprivileges)) {
+            $query = "SELECT xar_pid, xar_name FROM $this->privilegestable ORDER BY xar_name";
             $result = $this->dbconn->Execute($query);
-            if (!$result) return;
-            $privileges = array();
+
             $ind = 0;
             while (!$result->EOF) {
                 list($pid, $name) = $result->fields;
-                $ind = $ind + 1;
-                $privileges[$ind] = array('pid' => $pid,
-                    'name' => $name);
+                $allprivileges[$ind++] = array('pid' => $pid, 'name' => $name);
                 $result->MoveNext();
             }
-            $allprivileges = $privileges;
-            return $privileges;
-        } else {
-            return $allprivileges;
         }
+        return $allprivileges;
     }
 
 
@@ -837,11 +837,18 @@ class xarRole
      */
     function getAssignedPrivileges()
     {
-        $query = "SELECT xar_pid, xar_name, xar_realm, xar_module,
-                    xar_component, xar_instance, xar_level, xar_description
-                  FROM $this->privilegestable p, $this->acltable acl
-                  WHERE p.xar_pid = acl.xar_permid AND acl.xar_partid = ?";
-        // Execute the query, bail if an exception was thrown
+        static $stmt = null;  // For each uid, the query is the same, prepare it once.
+
+        $cacheKey = "Privileges.ByUid";
+        if(xarVarIsCached($cacheKey,$this->uid)) {
+            return xarVarGetCached($cacheKey,$this->uid);
+        }
+        // We'll have to get it.
+        xarLogMessage("ROLE: getting privileges for uid: $this->uid");
+        $query = "SELECT  xar_pid, xar_name, xar_realm, xar_module,
+                          xar_component, xar_instance, xar_level, xar_description
+                  FROM    $this->privilegestable p, $this->acltable acl
+                  WHERE   p.xar_pid = acl.xar_permid AND acl.xar_partid = ?";
         $result = $this->dbconn->Execute($query,array($this->uid));
         if (!$result) return;
 
@@ -862,6 +869,7 @@ class xarRole
             array_push($privileges, $perm);
             $result->MoveNext();
         }
+        xarVarSetCached($cacheKey,$this->uid,$privileges);
         return $privileges;
     }
 
@@ -1100,10 +1108,19 @@ class xarRole
      */
     function getParents()
     {
+        static $stmt = null;  // The query below is the same for each uid, prepare it once.
+
+        $cacheKey = 'RoleParents.ByUid';
         // create an array to hold the objects to be returned
         $parents = array();
         // if this is the root return an empty array
         if ($this->getID() == 1) return $parents;
+
+        // if it's cached, we can return it
+        if(xarVarIsCached($cacheKey,$this->uid)) {
+            return xarVarGetCached($cacheKey,$this->uid);
+        }
+
         // if this is a user just perform a SELECT on the rolemembers table
         $query = "SELECT r.*
                     FROM $this->rolestable r, $this->rolememberstable rm
