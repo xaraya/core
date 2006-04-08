@@ -240,9 +240,14 @@
                         </td>
                         <td>
                             <xar:if condition="$useicons eq true">
-                                <a href="#$modinfo['infourl']#" title="#$infolabel#">
+                                <a href="#$modinfo['infourlnew']#&amp;theme=print" title="#$infolabel#" onclick="window.open(this.getAttribute('href'));return false;">
                                     <img src="#$infoimg#" alt="#$infolabel#" />
                                 </a>
+                                <noscript>
+                                    <a href="#$modinfo['infourl']#" title="#$infolabel#">
+                                        <img src="#$infoimg#" alt="#$infolabel#" />
+                                    </a>
+                                </noscript>
                                 <xar:if condition="$modinfo['actionurl'] eq ''">
                                     <img src="#$modinfo['actionimg1']#" alt="#xarML('n/a')#" />
                                     <xar:else />
@@ -265,10 +270,18 @@
                                     <img src="#xarTplGetImage('set1/none.png')#" alt="#xarML('n/a')#" />
                                 </xar:if>
                             <xar:else />
-
-                                <a href="#$modinfo['infourl']#">
-                                    <xar:mlstring>Info</xar:mlstring>
+                                <a href="#$modinfo['infourlnew']#&amp;theme=print" onclick="window.open(this.getAttribute('href'));return false;">
+                                    <xar:mlstring>
+                                        Info
+                                    </xar:mlstring>
                                 </a>
+                                <noscript>
+                                    <a href="#$modinfo['infourl']#">
+                                        <xar:mlstring>
+                                            Info
+                                        </xar:mlstring>
+                                    </a>
+                                </noscript>
                                 |
                                 <a href="#$modinfo['actionurl']#">
                                     #$modinfo['actionlabel']#
