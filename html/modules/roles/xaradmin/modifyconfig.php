@@ -96,7 +96,9 @@ function roles_admin_modifyconfig()
             $data['authid'] = xarSecGenAuthKey();
             $data['updatelabel'] = xarML('Update Roles Configuration');
             $hooks = array();
+
             switch ($data['tab']) {
+
                 case 'hooks':
                     // Item type 0 is the default itemtype for 'user' roles.
                     $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
@@ -114,7 +116,8 @@ function roles_admin_modifyconfig()
             }
 
             $data['hooks'] = $hooks;
-
+            $data['defaultauthmod'] = xarModGetVar('roles', 'defaultauthmodule');
+            $data['defaultregmod'] = xarModGetVar('roles', 'defaultregmodule');
             break;
 
         case 'update':
@@ -123,7 +126,7 @@ function roles_admin_modifyconfig()
             switch ($data['tab']) {
                 case 'general':
                     if (!xarVarFetch('itemsperpage', 'str:1:4:', $itemsperpage, '20', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-                    if (!xarVarFetch('defaultauthmodule', 'str:1:', $defaultauthmodule, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+                    if (!xarVarFetch('defaultauthmodule', 'str:1:', $defaultauthmodule, xarModGetIDFromName('authsystem'), XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
                     if (!xarVarFetch('defaultregmodule', 'str:1:', $defaultregmodule, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
                     if (!xarVarFetch('shorturls', 'checkbox', $shorturls, false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('siteadmin', 'int:1', $siteadmin, xarModGetVar('roles','admin'), XARVAR_NOT_REQUIRED)) return;
@@ -187,6 +190,8 @@ function roles_admin_modifyconfig()
                 }
         break;
     }
+
+
     $data['authid'] = xarSecGenAuthKey();
     return $data;
 }
