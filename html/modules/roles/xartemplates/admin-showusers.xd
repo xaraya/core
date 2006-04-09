@@ -34,12 +34,14 @@
 
     <xar:if condition="$selstyle eq '0'">
     <xar:elseif condition="$selstyle eq '1'"/>
+    <xar:comment>This inclusion looks neater but the content looks outdated. Not sure which is 'supposed' to be here.
         <fieldset>
           <legend><xar:mlstring>Role hierarchy</xar:mlstring></legend>
             <div name="tree" id="tree" class="tree">
                 <xar:template file="tree" />
           </div>
         </fieldset>
+    </xar:comment>
         <fieldset>
           <legend><xar:mlstring>Role hierarchy</xar:mlstring></legend>
           <div>
