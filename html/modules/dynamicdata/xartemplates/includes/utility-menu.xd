@@ -2,6 +2,7 @@
 <xar:comment>Common Administration menu</xar:comment>
 <xar:style scope="module" module="base" file="navtabs" />
 <xar:set name="activetab">$_bl_module_func</xar:set>
+<xar:set name="activetype">$_bl_module_type</xar:set>
 <div>
     <dl class="xar-tabs">
         <dt class="help" title="#xarML('Select a utility function')#">
