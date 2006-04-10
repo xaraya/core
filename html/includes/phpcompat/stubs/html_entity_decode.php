@@ -20,7 +20,7 @@
 
 function html_entity_decode($string)
 {
-    require_once 'functions/_html_entity_decode.php';
+    require_once dirname(__FILE__) . '/functions/_html_entity_decode.php';
     return _html_entity_decode($string);
 }
 

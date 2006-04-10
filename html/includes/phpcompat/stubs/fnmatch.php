@@ -19,7 +19,7 @@
 
 function fnmatch($pattern, $string)
 {
-    require_once 'functions/_fnmatch.php';
+    require_once dirname(__FILE__) . '/functions/_fnmatch.php';
     return _fnmatch($pattern, $string);
 }
 

@@ -19,7 +19,7 @@
 
 function file_get_contents($filename, $use_include_path = false, $resource_context = null)
 {
-    require_once 'functions/_file_get_contents.php';
+    require_once dirname(__FILE__) . '/functions/_file_get_contents.php';
     return _file_get_contents($filename, $use_include_path, $resource_context);
 }
 
