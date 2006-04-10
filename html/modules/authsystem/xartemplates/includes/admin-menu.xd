@@ -17,7 +17,7 @@
         </dd>
     </xar:sec>
     <xar:sec mask="AdminAuthsystem" catch="false">
-        <xar:set name="tabclass">$activetab=='overview'?'active':''</xar:set>
+        <xar:set name="tabclass">$activetab=='main'?'active':''</xar:set>
         <dd class="#$tabclass#">
             <a href="&xar-modurl-authsystem-admin-overview;" >
                 <xar:mlstring>Overview</xar:mlstring>

@@ -25,7 +25,7 @@
         </dd>
     </xar:sec>
 
-    <xar:set name="tabclass">$activetab=='overview'?'active':''</xar:set>
+    <xar:set name="tabclass">$activetab=='main'?'active':''</xar:set>
     <dd class="#$tabclass#">
       <a href="&xar-modurl-modules-admin-overview;">
         <xar:mlstring>Overview</xar:mlstring>
