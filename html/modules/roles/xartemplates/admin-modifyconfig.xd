@@ -97,7 +97,7 @@
                 <dd class="active">
                     <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=memberlist">
                         <xar:mlstring>
-                            Member List 
+                            Member Options
                         </xar:mlstring>
                     </a>
                 </dd>
@@ -105,7 +105,7 @@
                 <dd>
                     <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=memberlist">
                         <xar:mlstring>
-                            Member List 
+                            Member Options
                         </xar:mlstring>
                     </a>
                 </dd>
@@ -442,7 +442,7 @@
             <fieldset>
                 <legend>
                     <xar:mlstring>
-                        Member List Options 
+                        Member Options
                     </xar:mlstring>
                 </legend>
                 <div class="xar-form-input-wrapper-after">
@@ -465,7 +465,7 @@
                     </xar:if>
                     <label for="searchbyemail" title="#xarML('Allow user search by email address')#">
                         <xar:mlstring>
-                            Allow Searching By Email 
+                            Allow Searching By Email
                         </xar:mlstring>
                     </label>
                 </div>
@@ -474,6 +474,18 @@
                         Caution: this option may reveal enough information to compromise a user's login. 
                     </xar:mlstring>
                 </p>
+                <div class="xar-form-input-wrapper-after">
+                    <xar:if condition="xarModGetVar('roles', 'usereditaccount')">
+                        <input type="checkbox" name="usereditaccount" id="usereditaccount" value="1" checked="checked" />
+                        <xar:else />
+                        <input type="checkbox" name="usereditaccount" id="usereditaccount" value="1" />
+                    </xar:if>
+                    <label for="usereditaccount" title="#xarML('Allow users to edit their account details by default')#">
+                        <xar:mlstring>
+                            Allow users to edit their account details by default (toggles Roles hook to Roles)
+                        </xar:mlstring>
+                    </label>
+                </div>
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">

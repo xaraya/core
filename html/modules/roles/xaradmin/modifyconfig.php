@@ -118,6 +118,14 @@ function roles_admin_modifyconfig()
             $data['hooks'] = $hooks;
             $data['defaultauthmod'] = xarModGetVar('roles', 'defaultauthmodule');
             $data['defaultregmod'] = xarModGetVar('roles', 'defaultregmodule');
+            
+            //check for roles hook in case it's set independently elsewhere
+            if (xarModIsHooked('roles', 'roles')) {
+                xarModSetVar('roles','usereditaccount',true);
+            } else {
+                xarModSetVar('roles','usereditaccount',false);
+            }
+
             break;
 
         case 'update':
@@ -155,9 +163,26 @@ function roles_admin_modifyconfig()
                     if (!xarVarFetch('searchbyemail', 'checkbox', $searchbyemail, false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('displayrolelist', 'checkbox', $displayrolelist, false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('usersendemails', 'checkbox', $usersendemails, false, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('usereditaccount', 'checkbox', $usereditaccount, true, XARVAR_NOT_REQUIRED)) return;
+
                     xarModSetVar('roles', 'searchbyemail', $searchbyemail);
                     xarModSetVar('roles', 'usersendemails', $usersendemails);
-                    xarModSetVar('roles', 'displayrolelist', $displayrolelist);                    
+                    xarModSetVar('roles', 'displayrolelist', $displayrolelist);
+                    xarModSetVar('roles', 'usereditaccount', $usereditaccount);
+                    
+                    if ($usereditaccount) {
+                        //check and hook Roles to roles if not already hooked
+                         if (!xarModIsHooked('roles', 'roles')) {
+                         xarModAPIFunc('modules','admin','enablehooks',
+                                 array('callerModName' => 'roles',
+                                       'hookModName' => 'roles'));
+                         }
+                    } else {
+                         //unhook roles from roles
+                         xarModAPIFunc('modules','admin','disablehooks',
+                                 array('callerModName' => 'roles',
+                                       'hookModName' => 'roles'));
+                   }
                     break;
             }
 
