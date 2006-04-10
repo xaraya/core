@@ -18,14 +18,14 @@ function roles_userapi_getmenulinks()
 {
     //If we have turned on role list (memberlist) display and users have requisite level to see them
     if (xarModGetVar('roles', 'displayrolelist') && xarSecurityCheck('ViewRoles',0) ){
-        if (true) {
+
             $menulinks[] = Array('url'   => xarModURL('roles',
                                                       'user',
                                                       'view'),
                                  'title' => xarML('View All Users'),
                                  'label' => xarML('Memberslist'));
 
-        }
+     
     }
     if (true) {
         if (xarUserIsLoggedIn()){
