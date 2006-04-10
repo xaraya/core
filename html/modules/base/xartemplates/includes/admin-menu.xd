@@ -9,7 +9,11 @@
       <xar:mlstring>Actions:</xar:mlstring>
     </dt>
     <xar:sec mask="AdminBase" catch="false">
-        <xar:set name="tabclass">$activetab=='new'?'active':''</xar:set>
+        <xar:if condition="$activetab eq 'new' or $activetab eq 'sysinfo'">
+            <xar:set name="tabclass">'active'</xar:set>
+        <xar:else />
+            <xar:set name="tabclass">''</xar:set>
+        </xar:if>
         <dd class="#$tabclass#">
           <a href="&xar-modurl-base-admin-sysinfo;">
             <xar:mlstring>System Information</xar:mlstring>
@@ -32,7 +36,7 @@
           </a>
         </dd>
     </xar:sec>
-    <xar:set name="tabclass">$activetab=='overview'?'active':''</xar:set>
+    <xar:set name="tabclass">$activetab=='main'?'active':''</xar:set>
     <dd class="#$tabclass#">
       <a href="&xar-modurl-base-admin-overview;">
         <xar:mlstring>Overview</xar:mlstring>
