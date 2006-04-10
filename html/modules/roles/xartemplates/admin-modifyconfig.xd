@@ -446,6 +446,18 @@
                     </xar:mlstring>
                 </legend>
                 <div class="xar-form-input-wrapper-after">
+                    <xar:if condition="xarModGetVar('roles', 'displayrolelist')">
+                        <input type="checkbox" name="displayrolelist" id="displayrolelist" value="1" checked="checked" />
+                        <xar:else />
+                        <input type="checkbox" name="displayrolelist" id="displayrolelist" value="1" />
+                    </xar:if>
+                    <label for="displayrolelist" title="#xarML('Display roles (memberlist) in user menu?')#">
+                        <xar:mlstring>
+                            Display roles (member list) as user menu option?
+                        </xar:mlstring>
+                    </label>
+                </div>
+                <div class="xar-form-input-wrapper-after">
                     <xar:if condition="xarModGetVar('roles', 'searchbyemail')">
                         <input type="checkbox" name="searchbyemail" id="searchbyemail" value="1" checked="checked" />
                         <xar:else />
@@ -457,7 +469,7 @@
                         </xar:mlstring>
                     </label>
                 </div>
-                <p>
+                <p class="xar-form-input-wrapper-after">
                     <xar:mlstring>
                         Caution: this option may reveal enough information to compromise a user's login. 
                     </xar:mlstring>

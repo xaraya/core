@@ -153,9 +153,11 @@ function roles_admin_modifyconfig()
                     break;
                 case 'memberlist':
                     if (!xarVarFetch('searchbyemail', 'checkbox', $searchbyemail, false, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('displayrolelist', 'checkbox', $displayrolelist, false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('usersendemails', 'checkbox', $usersendemails, false, XARVAR_NOT_REQUIRED)) return;
                     xarModSetVar('roles', 'searchbyemail', $searchbyemail);
                     xarModSetVar('roles', 'usersendemails', $usersendemails);
+                    xarModSetVar('roles', 'displayrolelist', $displayrolelist);                    
                     break;
             }
 
