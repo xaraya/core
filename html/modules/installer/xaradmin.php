@@ -1224,7 +1224,7 @@ function installer_admin_upgrade2()
     $blocktypestable=$sprefix.'_block_types';
     $hitcounttable =$sprefix.'_hitcount';
     $ratingstable=$sprefix.'_ratings';
-
+    $dbconn =& xarDBGetConn();
     //Upgrade the Base module
     $content='';
         // upgrades for the base module (since it is a core module, and they cannot be upgraded in the normal way)
@@ -1262,7 +1262,7 @@ function installer_admin_upgrade2()
         $content .= "Base module not available - no upgrade carried out.<br />";
     } // endif modavailable('base')
 
-    $dbconn =& xarDBGetConn();
+
 
 
     // replace DynamicData component 'Type' by 'Field'
@@ -2543,6 +2543,7 @@ function installer_admin_upgrade2()
         $query = xarDBDropTable($adminmenuTable);
         $result = &$dbconn->Execute($query);
      }
+     //Register a mask to maintain backward compatibility - this mask is used a lot as a hack for admin perm check in themes
     xarRegisterMask('AdminPanel','All','base','All','All','ACCESS_ADMIN');
 
     //We need to upgrade the blocks, and as the block is the same we could just change the type id of any login.

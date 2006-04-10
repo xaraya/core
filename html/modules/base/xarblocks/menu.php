@@ -112,7 +112,9 @@ function base_menublock_display($blockinfo)
     // Sort Order, Status, Common Labels and Links Display preparation
     //$menustyle = xarModGetVar('adminpanels','menustyle');
     $logoutlabel = xarVarPrepForDisplay(xarML('logout'));
-    $authmod=xarModGetVar('roles','defaultauthmodule');
+    //jojodee - only default authentication module, authsystem, provides logout
+    //may want to look at other options for authentication modules
+    $authmod=xarModGetIDFromName('authsystem');
     $logouturl = xarModURL(xarModGetNameFromID($authmod) ,'user', 'logout', array());
     $loggedin = xarUserIsLoggedIn();
 

@@ -16,24 +16,28 @@
  */
 function roles_userapi_getmenulinks()
 {
+    //If we have turned on role list (memberlist) display and users have requisite level to see them
+    if (xarModGetVar('roles', 'displayrolelist') && xarSecurityCheck('ViewRoles',0) ){
 
-    if (xarModGetVar('roles', 'allowregistration')){
-    // Security check
-        if (true) {
             $menulinks[] = Array('url'   => xarModURL('roles',
                                                       'user',
                                                       'view'),
                                  'title' => xarML('View All Users'),
                                  'label' => xarML('Memberslist'));
-            if (xarUserIsLoggedIn()){
-                $menulinks[] = Array('url'   => xarModURL('roles',
-                                                          'user',
-                                                          'account'),
-                                     'title' => xarML('Your Custom Configuration'),
-                                     'label' => xarML('Your Account'));
-            }
+
+     
+    }
+    if (true) {
+        if (xarUserIsLoggedIn()){
+            $menulinks[] = Array('url'   => xarModURL('roles','user','account'),
+                                 'title' => xarML('Your Custom Configuration'),
+                                 'label' => xarML('Your Account'));
         }
     }
+    //jojodee- Moved to Registration Module. Needed for reading/checking when registering. Most sites will require these
+    //Can still be provided with custom pages, or install Registration module and turn registration off if you don't need it.
+    // we don't really want to introduce dependency here on non-core module and poll for registration allowed.
+    /*
     if (xarModGetVar('roles', 'showprivacy')){
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                   'user',
@@ -48,7 +52,7 @@ function roles_userapi_getmenulinks()
                              'title' => xarML('Terms of Use for this website'),
                              'label' => xarML('Terms of Use'));
     }
-
+    */
     if (empty($menulinks)){
         $menulinks = '';
     }
