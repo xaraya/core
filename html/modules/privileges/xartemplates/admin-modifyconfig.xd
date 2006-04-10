@@ -312,6 +312,13 @@
                     Registered Masks
                 </xar:mlstring>
             </legend>
+            <p class="xar-form-input-wrapper">
+                <xar:mlstring>
+                  This option is provided for Web Developer convenience. In general most Site Administrators
+                  should not need to access the Masks list provided below. Editing of the masks without an
+                  understanding of how they function can result in access problems to content on your site.
+                </xar:mlstring>
+            </p>
             <xar:data-list module="1098" itemtype="3" tplmodule="privileges" />
         </fieldset>
         <fieldset>

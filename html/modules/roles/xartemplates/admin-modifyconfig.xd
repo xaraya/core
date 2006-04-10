@@ -480,9 +480,9 @@
                         <xar:else />
                         <input type="checkbox" name="usereditaccount" id="usereditaccount" value="1" />
                     </xar:if>
-                    <label for="usereditaccount" title="#xarML('Allow users to edit their account details by default')#">
+                    <label for="usereditaccount" title="#xarML('Allow users to edit their account details')#">
                         <xar:mlstring>
-                            Allow users to edit their account details by default (toggles Roles hook to Roles)
+                            Allow users to edit their member account details (toggles Roles hook to Roles)
                         </xar:mlstring>
                     </label>
                 </div>
