@@ -68,36 +68,13 @@ class xarRoles
      */
     function getgroups()
     {
-        // check if we already have the groups stored
-        // mrb: why not use a static here, seems safer? (since the class doesnt seem to be a singleton, at least not enforced)
-        if ((!isset($this->allgroups)) || count($this->allgroups) == 0) {
-        	$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27));
-        	$basetypes = array();
-        	foreach ($types as $key => $value) {
-        		$basetype = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $key, 'moduleid' => 27));
-        		if ($basetype['itemtype'] == ROLES_GROUPTYPE) $basetypes[] = $key;
-        	}
-            // set up the query and get the groups
-            $q = new xarQuery('SELECT');
-            $q->addtable($this->rolestable,'r');
-            $q->addtable($this->rolememberstable,'rm');
-            $q->join('r.xar_uid','rm.xar_uid');
-            $q->addfield('r.xar_uid AS uid');
-            $q->addfield('r.xar_name AS name');
-            $q->addfield('r.xar_users AS users');
-            $q->addfield('rm.xar_parentid AS parentid');
-            $c = array();
-        	foreach ($basetypes as $type) {
-	            $c[] = $q->eq('r.xar_type',$type);
-	        }
-	        $q->qor($c);
-            $q->eq('r.xar_state',ROLES_STATE_ACTIVE);
-            $q->setorder('r.xar_name');
+        static $allgroups = array();
+        if (empty($allgroups)) {
+        	$q = $this->_getgroupsquery();
             if (!$q->run()) return;
-
-            $this->allgroups = $q->output();
+            $allgroups = $q->output();
         }
-        return $this->allgroups;
+        return $allgroups;
     }
 
     /**
@@ -115,10 +92,45 @@ class xarRoles
      */
     function getgroup($uid)
     {
-        foreach($this->getgroups() as $group) {
-            if ($group['uid'] == $uid) return $group;
-        }
+		$q = $this->_getgroupsquery();
+		$q->eq('r.xar_uid',$uid);
+		if (!$q->run()) return;
+		if ($q->row() != array()) return $q->row();
         return false;
+    }
+
+    /**
+     * _getgroupsquery: query for getting groups
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access private
+     * @todo none
+     */
+    private function _getgroupsquery()
+    {
+		$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27));
+		$basetypes = array();
+		foreach ($types as $key => $value) {
+			$basetype = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $key, 'moduleid' => 27));
+			if ($basetype['itemtype'] == ROLES_GROUPTYPE) $basetypes[] = $key;
+		}
+		// set up the query and get the groups
+		$q = new xarQuery('SELECT');
+		$q->addtable($this->rolestable,'r');
+		$q->addtable($this->rolememberstable,'rm');
+		$q->join('r.xar_uid','rm.xar_uid');
+		$q->addfield('r.xar_uid AS uid');
+		$q->addfield('r.xar_name AS name');
+		$q->addfield('r.xar_users AS users');
+		$q->addfield('rm.xar_parentid AS parentid');
+		$c = array();
+		foreach ($basetypes as $type) {
+			$c[] = $q->eq('r.xar_type',$type);
+		}
+		$q->qor($c);
+		$q->eq('r.xar_state',ROLES_STATE_ACTIVE);
+		$q->setorder('r.xar_name');
+        return $q;
     }
 
     /**
@@ -194,7 +206,7 @@ class xarRoles
         return $this->_lookuprole('xar_uname',$uname);
     }
 
-    function _lookuprole($field,$value,$state=ROLES_STATE_ALL)
+    private function _lookuprole($field,$value,$state=ROLES_STATE_ALL)
     {
         // retrieve the object's data from the repository
         // set up and execute the query
