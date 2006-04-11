@@ -77,33 +77,35 @@ class xarQuery
         // Prepare the statement
         $stmt = $this->dbconn->prepareStatement($this->statement);
 
-        // NON SELECT
+        // Not a select, execute and return
         if ($this->type != 'SELECT') {
-            // DML statements return the number of affected rows
             $this->rows = $stmt->executeUpdate($this->bindvars);
-            $this->bindvars = array();
-            return true;
+            $this->bindvars = array(); //?
+            // TODO: it would be nice to return the nr of rows here, we get that for free 
+            //       in the callee then, and it's consistent with creole interface.
+            return true; 
         }
 
-        // SELECT statement
+        // If there is a limit, configure the statement as such
         if($this->rowstodo != 0 && $this->limits == 1 && $this->israwstatement) {
+            $begin = $this->startat-1;
             $stmt->setLimit($this->rowstodo);
-            $stmt->setOffset($this->startat-1);
-            $result = $stmt->executeQuery($this->bindvars);
+            $stmt->setOffset($begin);
             $this->statement .= " LIMIT " . $begin . "," . $this->rowstodo;
-        } else {
-            $result = $stmt->executeQuery($this->bindvars);
-            $this->bindvars = array();
-            $this->rows = $result->getRecordCount();
-        }
-        $result->first(); // adodb used to do this, emulate 
+        } 
+
+        // Execute the configured statement.
+        $result = $stmt->executeQuery($this->bindvars);
+        $this->rows = $result->getRecordCount();
+        $result->first(); // adodb used to do this, emulate @todo: get rid of this, it's wrong here.
         $this->result =& $result;
 
-        if (($result->fields) === false)
-            $numfields = 0;
-        else
-            $numfields = count($result->fields); // Better than the private var, fields should still be proteced
+        $numfields = 0;
+        if (($result->fields) !== false)
+            // TODO: fields member should be protected (see creole, we changed this specifically for this)
+            $numfields = count($result->fields);
 
+        
         $this->output = array();
         if ($display == 1) {
             // Request to fill the output array with the results
@@ -114,8 +116,6 @@ class xarQuery
                     $result->setFetchMode(ResultSet::FETCHMODE_ASSOC);
                     $result->next(); $result->previous();
                     for ($i=0;$i< $numfields;$i++) {
-                        // Fetchfield was the only one used throughout the whole codebase, simulate it here instead of in creole
-                        //$o = $result->FetchField($i);
                         // FIXME: get rid of it more globally since this never was portable anyway and it kills performance
                         $tmp = array_slice($result->fields,$i,1);
                         $finally_we_got_the_name_of_the_field  = key($tmp);
