@@ -18,8 +18,7 @@
  *
  */
 class SessionException extends Exception
-{
-}
+{}
 
 /**
  * Initialise the Session Support
@@ -98,6 +97,11 @@ function xarSession__shutdown_handler()
     xarSession_Close();
 }
 
+/**
+ * Get the configured security level
+ *
+ * @todo Is this used anywhere outside the session class itself?
+ */
 function xarSessionGetSecurityLevel()
 {
     return $GLOBALS['xarSession_systemArgs']['securityLevel'];
@@ -116,64 +120,22 @@ function xarSessionGetSecurityLevel()
  *
  * @param name name of the session variable to get
  */
-function xarSessionGetVar($name)
-{
-    $var = xarSession::PREFIX . $name;
-
-    // First try to handle stuff through _SESSION
-    if (isset($_SESSION[$var])) {
-        return $_SESSION[$var];
-    } elseif ($name == 'uid') {
-        $_SESSION[$var] = _XAR_ID_UNREGISTERED;
-        return $_SESSION[$var];
-    }
-}
+function xarSessionGetVar($name) { return xarSession::getVar($name); }
 
 /**
  * Set a session variable
  * @param name name of the session variable to set
  * @param value value to set the named session variable
  */
-function xarSessionSetVar($name, $value)
-{
-    assert('!is_null($value); /* Not allowed to set variable to NULL value */');
-    // security checks : do not allow to set the uid or mess with the session serialization
-    if ($name == 'uid' || strpos($name,'|') !== FALSE) return false;
-
-    $var = xarSession::PREFIX . $name;
-
-    // also needed for PHP 4.1.2 - cfr. bug 3679
-    if (isset($_SESSION)) {
-        $_SESSION[$var] = $value;
-    }
-    return true;
-}
+function xarSessionSetVar($name, $value){ return xarSession::setVar($name, $value); }
 
 /**
  * Delete a session variable
  * @param name name of the session variable to delete
  */
-function xarSessionDelVar($name)
-{
-    if ($name == 'uid') return false;
+function xarSessionDelVar($name){ return xarSession::delVar($name); }
 
-    $var = xarSession::PREFIX . $name;
-
-    if (!isset($_SESSION[$var])) {
-        return false;
-    }
-    unset($_SESSION[$var]);
-    // still needed here too
-    if (ini_get('register_globals')) {
-        session_unregister($var);
-    }
-    return true;
-}
-
-function xarSessionGetId()
-{
-    return session_id();
-}
+function xarSessionGetId(){ return xarSession::getId(); }
 
 // PROTECTED FUNCTIONS
 
@@ -188,7 +150,7 @@ function xarSession_setUserInfo($userId, $rememberSession)
         $query = "UPDATE $sessioninfoTable
                   SET xar_uid = ? ,xar_remembersess = ?
                   WHERE xar_sessid = ?";
-        $bindvars = array($userId, $rememberSession, session_id());
+        $bindvars = array($userId, $rememberSession, xarSession::getId());
         $dbconn->Execute($query,$bindvars);
         $dbconn->commit();
     } catch (SQLException $e) {
@@ -211,7 +173,23 @@ function xarSession_close()
  *
  * @todo this is a temp, since the obvious plan is to have a factory here
  */
-class xarSession 
+interface IsessionHandler
+{
+    public function register($ipAddress);
+    public function start();
+    public function id($id = null);
+    public function isNew();
+    public function current();
+
+    public function open($path, $name);
+    public function close();
+    public function read($sessionId);
+    public function write($sessionId, $vars);
+    public function destroy($sessionId);
+    public function gc($maxlifetime);
+}
+
+class xarSession implements IsessionHandler
 {
     const  PREFIX='XARSV';    // Reserved by us for our session vars
     private $db;               // We store sessioninfo in the database
@@ -233,12 +211,10 @@ class xarSession
 
         // Assign the handlers
         session_set_save_handler(
-                             array(&$this,"open"),
-                             array(&$this,"close"),
-                             array(&$this,"read"),
-                             array(&$this,"write"),
-                             array(&$this,"destroy"),
-                             array(&$this,"gc"));
+          array(&$this,"open"),    array(&$this,"close"),
+          array(&$this,"read"),    array(&$this,"write"),
+          array(&$this,"destroy"), array(&$this,"gc")
+        );
     }
 
     /**
@@ -358,16 +334,22 @@ class xarSession
     /** 
      * Set or get the session id
      *
+     * @todo the static vs runtime method sucks, do we really need that?
      */
     function id($id= null)
     {
-        if(isset($id)) 
-            $this->sessionId = session_id($id);
-        else
-            $this->sessionId = session_id();
+        $this->sessionId = self::getId($id);
         return $this->sessionId;
     }
     
+    static function getId($id = null)
+    {
+        if(isset($id)) 
+            return session_id($id);
+        else
+            return session_id();
+    }
+        
     /**
      * Getter for new isNew
      *
@@ -560,5 +542,52 @@ class xarSession
         }
         return true;
     }
+
+    static function getVar($name)
+    {
+        $var = self::PREFIX . $name;
+
+        if (isset($_SESSION[$var])) {
+            return $_SESSION[$var];
+        } elseif ($name == 'uid') {
+            // mrb: why is this again?
+            $_SESSION[$var] = _XAR_ID_UNREGISTERED;
+            return $_SESSION[$var];
+        }
+    }
+
+    static function setVar($name, $value)
+    {
+        assert('!is_null($value); /* Not allowed to set variable to NULL value */');
+        // security checks : do not allow to set the uid or mess with the session serialization
+        if ($name == 'uid' || strpos($name,'|') !== FALSE) return false;
+
+        $var = self::PREFIX . $name;
+
+        // also needed for PHP 4.1.2 - cfr. bug 3679
+        if (isset($_SESSION)) {
+            $_SESSION[$var] = $value;
+        }
+        return true;
+    }
+    
+    static function delVar($name)
+    {
+        if ($name == 'uid') return false;
+        
+        $var = self::PREFIX . $name;
+
+        if (!isset($_SESSION[$var])) {
+            return false;
+        }
+        unset($_SESSION[$var]);
+        // still needed here too
+        // mrb: why?
+        if (ini_get('register_globals')) {
+            session_unregister($var);
+        }
+        return true;
+    }
+
 }
 ?>
