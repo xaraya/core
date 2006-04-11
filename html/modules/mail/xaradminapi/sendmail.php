@@ -17,10 +17,10 @@
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @param  $ 'info' is the email address we are sending (required)
- * @param  $ 'name' is the name of the email receipitent
+ * @param  $ 'name' is the name of the email recipient
  * @param  $ 'recipients' is an array of recipients (required) // NOTE: $info or $recipients is required, not both
  * @param  $ 'ccinfo' is the email address we are sending (optional)
- * @param  $ 'ccname' is the name of the email receipitent (optional)
+ * @param  $ 'ccname' is the name of the email recipient (optional)
  * @param  $ 'ccrecipients' is an array of cc recipients (optional)
  * @param  $ 'bccinfo' is the email address we are sending (required)
  * @param  $ 'bccname' is the name of the email receipitent (optional)
