@@ -10,6 +10,7 @@
  * @author Marco Canini <marco@xaraya.com>
  * @author Michel Dalle
  * @author Marcel van der Boom <marcel@xaraya.com>
+ * @todo We have to define a public interface so NOWHERE ever anyone else touches anything related to the session implementation
  */
 
 /**
@@ -47,12 +48,12 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
         // First thing we do is ensure that there is no attempted pollution
         // of the session namespace (yes, we still need this in this case)
         foreach($GLOBALS as $k=>$v) {
-            if (substr($k,0,5) == 'XARSV') {
+            if (substr($k,0,5) == xarSession::PREFIX) {
                 throw new SessionException('xarSession_init: Session Support initialisation failed.');
             }
         }
     }
-    // Start the session, this will call xarSession__phpRead, and
+    // Start the session, this will call xarSession:read, and
     // it will tell us if we need to start a new session or just
     // to continue the current session
     $session->start();
@@ -117,7 +118,7 @@ function xarSessionGetSecurityLevel()
  */
 function xarSessionGetVar($name)
 {
-    $var = 'XARSV' . $name;
+    $var = xarSession::PREFIX . $name;
 
     // First try to handle stuff through _SESSION
     if (isset($_SESSION[$var])) {
@@ -139,7 +140,7 @@ function xarSessionSetVar($name, $value)
     // security checks : do not allow to set the uid or mess with the session serialization
     if ($name == 'uid' || strpos($name,'|') !== FALSE) return false;
 
-    $var = 'XARSV' . $name;
+    $var = xarSession::PREFIX . $name;
 
     // also needed for PHP 4.1.2 - cfr. bug 3679
     if (isset($_SESSION)) {
@@ -156,7 +157,7 @@ function xarSessionDelVar($name)
 {
     if ($name == 'uid') return false;
 
-    $var = 'XARSV' . $name;
+    $var = xarSession::PREFIX . $name;
 
     if (!isset($_SESSION[$var])) {
         return false;
@@ -195,7 +196,7 @@ function xarSession_setUserInfo($userId, $rememberSession)
         throw $e;
     }
 
-    $_SESSION['XARSVuid'] = $userId;
+    $_SESSION[xarSession::PREFIX.'uid'] = $userId;
     return true;
 }
 
@@ -212,6 +213,7 @@ function xarSession_close()
  */
 class xarSession 
 {
+    const  PREFIX='XARSV';    // Reserved by us for our session vars
     private $db;               // We store sessioninfo in the database
     private $tbl;              // Container for the session info
     private $isNew = true;     // Flag signalling if we're dealing with a new session
@@ -459,7 +461,7 @@ class xarSession
                 }
             }
         } else {
-            $_SESSION['XARSVuid'] = _XAR_ID_UNREGISTERED;
+            $_SESSION[self::PREFIX.'uid'] = _XAR_ID_UNREGISTERED;
             
             $this->ipAddress = '';
             $vars = '';

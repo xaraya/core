@@ -100,7 +100,12 @@ class xarQuery
         // SELECT statement
         if($this->rowstodo != 0 && $this->limits == 1 && $this->israwstatement) {
             $begin = $this->startat-1;
-            $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin);
+            if ($this->usebinding) {
+	            $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin,$this->bindvars);
+                $this->bindvars = array();
+            } else {
+	            $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin);
+            }
             $this->statement .= " LIMIT " . $begin . "," . $this->rowstodo;
         } else {
             if ($this->usebinding) {
@@ -910,7 +915,12 @@ class xarQuery
             $this->clearsorts();
             $this->addfield('COUNT(*)');
             $this->setstatement();
-            $result = $this->dbconn->Execute($this->statement);
+            if ($this->usebinding) {
+                $result = $this->dbconn->Execute($this->statement,$this->bindvars);
+                $this->bindvars = array();
+            } else {
+                $result = $this->dbconn->Execute($this->statement);
+            }
             list($this->rows) = $result->fields;
             $this->fields = $temp1;
             $this->sorts = $temp2;
