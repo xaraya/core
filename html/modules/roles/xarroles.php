@@ -1328,7 +1328,7 @@ class xarRole
      * @param none $
      * @return array of privilege objects
      * @throws none
-     * @todo is this still used? 
+     * @todo is this still used?
      */
     function getPrivileges()
     {
