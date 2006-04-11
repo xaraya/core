@@ -74,24 +74,29 @@ class xarQuery
         //FIXME: PHP5 hack
         $this->open();
         $this->setstatement($statement);
+        // Prepare the statement
+        $stmt = $this->dbconn->prepareStatement($this->statement);
+
         // NON SELECT
         if ($this->type != 'SELECT') {
-            $result = $this->dbconn->Execute($this->statement,$this->bindvars);
+            // DML statements return the number of affected rows
+            $this->rows = $stmt->executeUpdate($this->bindvars);
             $this->bindvars = array();
-            $this->rows = $result;
             return true;
         }
 
         // SELECT statement
         if($this->rowstodo != 0 && $this->limits == 1 && $this->israwstatement) {
-            $begin = $this->startat-1;
-            $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin,$this->bindvars);
+            $stmt->setLimit($this->rowstodo);
+            $stmt->setOffset($this->startat-1);
+            $result = $stmt->executeQuery($this->bindvars);
             $this->statement .= " LIMIT " . $begin . "," . $this->rowstodo;
         } else {
-            $result = $this->dbconn->Execute($this->statement,$this->bindvars);
+            $result = $stmt->executeQuery($this->bindvars);
             $this->bindvars = array();
             $this->rows = $result->getRecordCount();
         }
+        $result->first(); // adodb used to do this, emulate 
         $this->result =& $result;
 
         if (($result->fields) === false)
@@ -101,8 +106,11 @@ class xarQuery
 
         $this->output = array();
         if ($display == 1) {
+            // Request to fill the output array with the results
             if ($statement == '') {
+                // No statement yet
                 if ($this->fields == array() && $numfields > 0) {
+                    // No fields explicitly specified, but we got some from the db
                     $result->setFetchMode(ResultSet::FETCHMODE_ASSOC);
                     $result->next(); $result->previous();
                     for ($i=0;$i< $numfields;$i++) {
@@ -557,45 +565,32 @@ class xarQuery
         $condition = $this->conditions[$key];
 
         if (!isset($condition['field2']) || $condition['field2'] === 'NULL') {
-                return $condition['field1'] . " IS NULL";
+            return $condition['field1'] . " IS NULL";
         }
 
         if (eregi('IN', $condition['op'])) {
+            // IN (a,b,c,d) 
             if (is_array($condition['field2'])) {
                 $elements = array();
-                if ($this->usebinding) {
-                    foreach ($condition['field2'] as $element) {
-                        $this->bindvars[] = $element;
-                        $elements[] = '?';
-                    }
-                } else {
-                    foreach ($condition['field2'] as $element) $elements[] = $this->dbconn->qstr($element);
+                foreach ($condition['field2'] as $element) {
+                    $this->bindvars[] = $element;
+                    $elements[] = '?';
                 }
-
                 $sqlfield = '(' . implode(',',$elements) . ')';
             }
             else {
                 $sqlfield = '(' . $condition['field2'] . ')';
             }
+        } elseif (!eregi('JOIN', $condition['op'])) {
+            // normal condition fld1 = value
+            $this->bindvars[] = $condition['field2'];
+            $sqlfield = '?';
         } else {
-            if (gettype($condition['field2']) == 'string' && !eregi('JOIN', $condition['op'])) {
-                if ($this->usebinding) {
-                    $this->bindvars[] = $condition['field2'];
-                    $sqlfield = '?';
-                } else {
-                    $sqlfield = $this->dbconn->qstr($condition['field2']);
-                }
-            }
-            else {
-                if ($this->usebinding && !eregi('JOIN', $condition['op'])) {
-                    $this->bindvars[] = $condition['field2'];
-                    $sqlfield = '?';
-                } else {
-                    $sqlfield = $condition['field2'];
-                }
-                $condition['op'] = eregi('JOIN', $condition['op']) ? '=' : $condition['op'];
-            }
+            // possibly a join fld1 = fld2
+            $sqlfield = $condition['field2'];
         }
+        $condition['op'] = eregi('JOIN', $condition['op']) ? '=' : $condition['op'];
+        
         return $condition['field1'] . " " . $condition['op'] . " " . $sqlfield;
     }
 
