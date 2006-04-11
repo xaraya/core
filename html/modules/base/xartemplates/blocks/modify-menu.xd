@@ -81,8 +81,9 @@
     </xar:comment>
 </xar:if>
 
-<p>
-    <xar:mlstring>Add New Menu Item</xar:mlstring>
+
+<p class="xar-form-textmedium xar-padding-medium " style="display:block;">
+    <strong><xar:mlstring>Add New Menu Item</xar:mlstring></strong>
 </p>
 
 <div class="xar-form-input-wrapper">
@@ -106,59 +107,61 @@
     <input type="text" name="new_linkdesc" id="new_linkdesc" maxlength="255" class="xar-form-textlong" />
 </div>
 
-<p>
-    <xar:mlstring>Menu Extras</xar:mlstring>
+<p class="xar-form-textmedium xar-padding-medium " style="display:block;">
+    <strong><xar:mlstring>Menu Extras</xar:mlstring></strong>
 </p>
 
 <div class="xar-form-input-wrapper">
     <label for="displaymodules" title="#xarML('To display a restricted list of modules, enter their names separated by commas in the text box at right, and choose Manual List from the dropdown.')#" class="xar-form-label">
         <xar:mlstring>
-            Display Modules 
+            Display Modules
         </xar:mlstring>
     </label>
     <select name="displaymodules" id="displaymodules">
         <xar:if condition="$displaymodules eq 'None'">
             <option value="None" selected="selected">
                 <xar:mlstring>
-                    None 
+                    None
                 </xar:mlstring>
             </option>
         <xar:else />
             <option value="None">
                 <xar:mlstring>
-                    None 
+                    None
                 </xar:mlstring>
             </option>
         </xar:if>
         <xar:if condition="$displaymodules eq 'All'">
             <option value="All" selected="selected">
                 <xar:mlstring>
-                    All Modules 
+                    All Modules
                 </xar:mlstring>
             </option>
         <xar:else />
             <option value="All">
                 <xar:mlstring>
-                    All Modules 
+                    All Modules
                 </xar:mlstring>
             </option>
         </xar:if>
         <xar:if condition="$displaymodules eq 'List'">
             <option value="List" selected="selected">
                 <xar:mlstring>
-                    Manual List 
+                    Manual List
                 </xar:mlstring>
             </option>
         <xar:else />
             <option value="List">
                 <xar:mlstring>
-                    Manual List 
+                    Manual List
                 </xar:mlstring>
             </option>
         </xar:if>
     </select>
-    &nbsp;
-    <input class="xar-norm" type="text" name="modulelist" id="modulelist" size="50" maxlength="255" value="#$modulelist#" />
+    <div class="xar-form-container-after">
+        <p><xar:mlstring>To display a restricted list of modules in the menu, enter their names separated by commas in the field below, and choose Manual List from the dropdown.</xar:mlstring></p>
+        <p><input type="text" name="modulelist" id="modulelist" size="50" maxlength="255" value="#$modulelist#" /></p>
+    </div>
 </div>
 
 <div class="xar-form-input-wrapper-after">
@@ -202,3 +205,4 @@
     <input type="text" name="marker" id="marker" value="#xarVarPrepForDisplay($marker)#" maxlength="255" class="xar-form-textshort" />
     </div>
 </xar:if>
+

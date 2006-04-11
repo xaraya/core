@@ -380,7 +380,8 @@
                     </li>
                 <xar:else />
                     <li class="warning">
-                        <xar:mlstring>WARNING: The XML Extension is not loaded.</xar:mlstring>
+                        <xar:mlstring>WARNING: The XML Extension is not loaded. You will require this extension
+                        if you plan to use the Xaraya Translations module.</xar:mlstring>
                     </li>
                 </xar:if>
                 <xar:if condition="$mysqlextension">

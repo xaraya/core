@@ -9,7 +9,11 @@
       <xar:mlstring>Actions:</xar:mlstring>
     </dt>
     <xar:sec mask="EditBlock" catch="false">
-        <xar:set name="tabclass">$activetab=='view_instances'?'active':''</xar:set>
+        <xar:if condition="$activetab eq 'view_instances' or $activetab eq 'modify_instance' or $activetab eq 'delete_instance'">
+            <xar:set name="tabclass">'active'</xar:set>
+        <xar:else />
+            <xar:set name="tabclass">''</xar:set>
+        </xar:if>
         <dd class="#$tabclass#">
           <a href="&xar-modurl-blocks-admin-view_instances;">
             <xar:mlstring>View Blocks</xar:mlstring>
@@ -25,7 +29,11 @@
         </dd>
     </xar:sec>
     <xar:sec mask="AdminBlock" catch="false">
-        <xar:set name="tabclass">$activetab=='view_groups'?'active':''</xar:set>
+        <xar:if condition="$activetab eq 'view_groups' or $activetab eq 'modify_group' or $activetab eq 'delete_group'">
+            <xar:set name="tabclass">'active'</xar:set>
+        <xar:else />
+            <xar:set name="tabclass">''</xar:set>
+        </xar:if>
         <dd class="#$tabclass#">
           <a href="&xar-modurl-blocks-admin-view_groups;">
             <xar:mlstring>Block Groups</xar:mlstring>

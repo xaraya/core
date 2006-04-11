@@ -9,7 +9,13 @@
       <xar:mlstring>Actions:</xar:mlstring>
     </dt>
     <xar:sec mask="EditRole" catch="false">
-        <xar:set name="tabclass">$activetab=='showusers'?'active':''</xar:set>
+        <xar:if condition="$activetab eq 'showusers' or $activetab eq 'displayrole'
+        or $activetab eq 'modifyrole' or $activetab eq 'deleterole' or $activetab eq 'showprivileges'  or $activetab eq 'testprivileges'">
+            <xar:set name="tabclass">'active'</xar:set>
+        <xar:else />
+            <xar:set name="tabclass">''</xar:set>
+        </xar:if>
+
         <dd class="#$tabclass#">
           <a href="&xar-modurl-roles-admin-showusers;">
             <xar:mlstring>Groups &amp; Users</xar:mlstring>
@@ -25,7 +31,11 @@
         </dd>
     </xar:sec>
     <xar:sec mask="AdminRole" catch="false">
-        <xar:set name="tabclass">$activetab=='createmail'?'active':''</xar:set>
+        <xar:if condition="$activetab eq 'createmail' or $activetab eq 'modifyemail' or $activetab eq 'modifynotice'">
+            <xar:set name="tabclass">'active'</xar:set>
+        <xar:else />
+            <xar:set name="tabclass">''</xar:set>
+        </xar:if>
         <dd class="#$tabclass#">
           <a href="&xar-modurl-roles-admin-createmail;">
             <xar:mlstring>Messaging</xar:mlstring>
@@ -56,7 +66,7 @@
           </a>
         </dd>
     </xar:sec>
-    <xar:set name="tabclass">$activetab=='overview'?'active':''</xar:set>
+    <xar:set name="tabclass">$activetab=='main'?'active':''</xar:set>
     <dd class="#$tabclass#">
       <a href="&xar-modurl-roles-admin-overview;">
         <xar:mlstring>Overview</xar:mlstring>

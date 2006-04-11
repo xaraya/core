@@ -118,7 +118,7 @@
                         </label>
                         <input type="text" name="phome" id="phome" value="#xarVarPrepForDisplay($phome)#" size="40" maxlength="100" tabindex="7" />
                         <p class="xar-form-input-wrapper-after">
-                            <xar:mlstring>You can also use the same shortcut syntax as in the Base user menu block</xar:mlstring>
+                            <xar:mlstring>You can use the module shortcut syntax available in the Base user menu block.</xar:mlstring>
                         </p>
                     </div>
                 </xar:if>
