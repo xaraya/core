@@ -58,7 +58,12 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
 
     // If it's new, register it, otherwise use the existing.
     if ($session->isNew()) {
-        $session->register($ipAddress);
+        if($session->register($ipAddress)) {
+            // Congratulations. We have created a new session
+            xarEvt_trigger('SessionCreate');
+        } else {
+            // Registering failed, now what?
+        }
     } else {
         // Not all ISPs have a fixed IP or a reliable X_FORWARDED_FOR
         // so we don't test for the IP-address session var
@@ -102,29 +107,13 @@ function xarSessionGetSecurityLevel()
  * require.  This avoids blatant or accidental over-writing of session
  * variables.
  *
-
-/**
- * Get a session variable
- *
- * @param name name of the session variable to get
+ * The old interface as wrappers for the class methods are here, see xarSession class 
+ * for the implementation
  */
 function xarSessionGetVar($name) { return xarSession::getVar($name); }
-
-/**
- * Set a session variable
- * @param name name of the session variable to set
- * @param value value to set the named session variable
- */
 function xarSessionSetVar($name, $value){ return xarSession::setVar($name, $value); }
-
-/**
- * Delete a session variable
- * @param name name of the session variable to delete
- */
 function xarSessionDelVar($name){ return xarSession::delVar($name); }
-
 function xarSessionGetId(){ return xarSession::getId(); }
-
 // PROTECTED FUNCTIONS
 /** mrb: if it's protected, how come roles uses it? */
 function xarSession_setUserInfo($userId, $rememberSession)
@@ -155,6 +144,7 @@ interface IsessionHandler
 class xarSession implements IsessionHandler
 {
     const  PREFIX='XARSV';    // Reserved by us for our session vars
+    const  COOKIE='XARAYASID';// Our cookiename
     private $db;               // We store sessioninfo in the database
     private $tbl;              // Container for the session info
     private $isNew = true;     // Flag signalling if we're dealing with a new session
@@ -218,9 +208,7 @@ class xarSession implements IsessionHandler
             ini_set('session.use_cookies', 1);
             
             // Name of our cookie
-            if (empty($args['cookieName'])) {
-                $args['cookieName'] = 'XARAYASID';
-            }
+            if (empty($args['cookieName'])) $args['cookieName'] = self::COOKIE;
             ini_set('session.name', $args['cookieName']);
             
             if (empty($args['cookiePath'])) {
@@ -312,7 +300,7 @@ class xarSession implements IsessionHandler
      */
     function id($id= null)
     {
-        $this->sessionId = self::getId($id);
+        $this->sessionId = $this->getId($id);
         return $this->sessionId;
     }
     
@@ -354,11 +342,9 @@ class xarSession implements IsessionHandler
         // Generate a random number, used for
         // some authentication
         srand((double) microtime() * 1000000);
-        xarSessionSetVar('rand', rand());
+        $this->setVar('rand', rand());
         
         $this->ipAddress = $ipAddress;
-        // Congratulations. We have created a new session
-        xarEvt_trigger('SessionCreate');
         return true;
     }
 
@@ -411,7 +397,7 @@ class xarSession implements IsessionHandler
                 $timeoutSetting = time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60);
                 if ($lastused < $timeoutSetting) {
                     // force a reset of the userid (but use the same sessionid)
-                    xarSession_setUserInfo(_XAR_ID_UNREGISTERED, 0);
+                    $this->setUserInfo(_XAR_ID_UNREGISTERED, 0);
                     $this->ipAddress = '';
                     $vars = '';
                 }
@@ -517,6 +503,11 @@ class xarSession implements IsessionHandler
         return true;
     }
 
+    /**
+     * Get a session variable
+     *
+     * @param name name of the session variable to get
+     */
     static function getVar($name)
     {
         $var = self::PREFIX . $name;
@@ -530,6 +521,11 @@ class xarSession implements IsessionHandler
         }
     }
 
+    /**
+     * Set a session variable
+     * @param name name of the session variable to set
+     * @param value value to set the named session variable
+     */
     static function setVar($name, $value)
     {
         assert('!is_null($value); /* Not allowed to set variable to NULL value */');
@@ -537,14 +533,14 @@ class xarSession implements IsessionHandler
         if ($name == 'uid' || strpos($name,'|') !== FALSE) return false;
 
         $var = self::PREFIX . $name;
-
-        // also needed for PHP 4.1.2 - cfr. bug 3679
-        if (isset($_SESSION)) {
-            $_SESSION[$var] = $value;
-        }
+        $_SESSION[$var] = $value;
         return true;
     }
-    
+
+    /**
+     * Delete a session variable
+     * @param name name of the session variable to delete
+     */    
     static function delVar($name)
     {
         if ($name == 'uid') return false;
