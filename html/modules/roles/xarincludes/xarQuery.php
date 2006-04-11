@@ -46,7 +46,7 @@ class xarQuery
     public $limits = 1;
 
 // Flags
-// Set to true to use binding variables 
+// Set to true to use binding variables
     public $usebinding = true;
 // Two unrelated conditions will be inserted into the query as AND or OR
     public $implicitconjunction = "AND";
@@ -93,7 +93,7 @@ class xarQuery
             } else {
                 $result = $this->dbconn->Execute($this->statement);
             }
-            $this->rows = $result; 
+            $this->rows = $result;
             return true;
         }
 
@@ -113,9 +113,9 @@ class xarQuery
         }
         $this->result =& $result;
 
-        if (($result->fields) === false) 
+        if (($result->fields) === false)
             $numfields = 0;
-        else 
+        else
             $numfields = count($result->fields); // Better than the private var, fields should still be proteced
 
         $this->output = array();
@@ -123,7 +123,7 @@ class xarQuery
             if ($statement == '') {
                 if ($this->fields == array() && $numfields > 0) {
                     $result->setFetchMode(ResultSet::FETCHMODE_ASSOC);
-                    $result->next(); $result->previous(); 
+                    $result->next(); $result->previous();
                     for ($i=0;$i< $numfields;$i++) {
                         // Fetchfield was the only one used throughout the whole codebase, simulate it here instead of in creole
                         //$o = $result->FetchField($i);
@@ -248,7 +248,7 @@ class xarQuery
         elseif ($numargs == 1) {
             $field = func_get_arg(0);
             if (!is_array($field)) {
-                if (!is_string($field)) 
+                if (!is_string($field))
                     throw new BadParameterException($field,'The field #(1) you are trying to add needs to be a string or an array.');
                 else {
                     if ($this->type == 'SELECT') {
@@ -570,17 +570,48 @@ class xarQuery
     }
     function _getcondition($key)
     {
+        if (!isset($this->dbconn)) $this->dbconn =& xarDBGetConn();
         $condition = $this->conditions[$key];
-        if (gettype($condition['field2']) == 'string' && $condition['op'] != 'join') {
-            $sqlfield = $this->dbconn->qstr($condition['field2']);
+
+        if (!isset($condition['field2']) || $condition['field2'] === 'NULL') {
+                return $condition['field1'] . " IS NULL";
         }
-        else {
-            $sqlfield = $condition['field2'];
-            $condition['op'] = $condition['op'] == 'join' ? '=' : $condition['op'];
-        }
-        if ($condition['op'] == 'in') {
-            foreach ($condition['field2'] as $element) $elements[] = $this->dbconn->qstr($element);
-            $sqlfield = '(' . implode(',',$elements) . ')';
+
+        if ($condition['op'] == 'in' || $condition['op'] == 'IN') {
+            if (is_array($condition['field2'])) {
+                $elements = array();
+                if ($this->usebinding) {
+                    foreach ($condition['field2'] as $element) {
+                        $this->bindvars[] = $element;
+                        $elements[] = '?';
+                    }
+                } else {
+                    foreach ($condition['field2'] as $element) $elements[] = $this->dbconn->qstr($element);
+                }
+
+                $sqlfield = '(' . implode(',',$elements) . ')';
+            }
+            else {
+                $sqlfield = '(' . $condition['field2'] . ')';
+            }
+        } else {
+            if (gettype($condition['field2']) == 'string' && !eregi('JOIN', $condition['op'])) {
+                if ($this->usebinding) {
+                    $this->bindvars[] = $condition['field2'];
+                    $sqlfield = '?';
+                } else {
+                    $sqlfield = $this->dbconn->qstr($condition['field2']);
+                }
+            }
+            else {
+                if ($this->usebinding && !eregi('JOIN', $condition['op'])) {
+                    $this->bindvars[] = $condition['field2'];
+                    $sqlfield = '?';
+                } else {
+                    $sqlfield = $condition['field2'];
+                }
+                $condition['op'] = eregi('JOIN', $condition['op']) ? '=' : $condition['op'];
+            }
         }
         return $condition['field1'] . " " . $condition['op'] . " " . $sqlfield;
     }
