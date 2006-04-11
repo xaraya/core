@@ -16,27 +16,27 @@
  * from any module
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
- * @param  $ 'info' is the email address we are sending (required)
- * @param  $ 'name' is the name of the email recipient
- * @param  $ 'recipients' is an array of recipients (required) // NOTE: $info or $recipients is required, not both
- * @param  $ 'ccinfo' is the email address we are sending (optional)
- * @param  $ 'ccname' is the name of the email recipient (optional)
+ * @param  string $ 'info' is the email address we are sending (required)
+ * @param  string $ 'name' is the name of the email recipient
+ * @param  array  $ 'recipients' is an array of recipients (required) // NOTE: $info or $recipients is required, not both
+ * @param  string $ 'ccinfo' is the email address we are sending (optional)
+ * @param  string $ 'ccname' is the name of the email recipient (optional)
  * @param  $ 'ccrecipients' is an array of cc recipients (optional)
  * @param  $ 'bccinfo' is the email address we are sending (required)
  * @param  $ 'bccname' is the name of the email receipitent (optional)
  * @param  $ 'bccrecipients' is an array of bcc recipients (optional)
- * @param  $ 'subject' is the subject of the email (required)
- * @param  $ 'message' is the body of the email (required)
- * @param  $ 'htmlmessage' is the html body of the email
+ * @param  string $ 'subject' is the subject of the email (required)
+ * @param  string $ 'message' is the body of the email (required)
+ * @param  string $ 'htmlmessage' is the html body of the email
  * @param  $ 'priority' is the priority of the message
  * @param  $ 'encoding' is the encoding of the message
  * @param  $ 'wordwrap' is the column width of the message
- * @param  $ 'from' is who the email is from
- * @param  $ 'fromname' is the name of the person the email is from
- * @param  $ 'attachName' is the name of an attachment to a message
- * @param  $ 'attachPath' is the path of the attachment
- * @param  $ 'usetemplates' set to true to use templates in xartemplates (default = true)
- * @param  $ 'when' timestamp specifying that this mail should be sent 'no earlier than' (default is now)
+ * @param  string $ 'from' is who the email is from
+ * @param  string $ 'fromname' is the name of the person the email is from
+ * @param  string $ 'attachName' is the name of an attachment to a message
+ * @param  string $ 'attachPath' is the path of the attachment
+ * @param  string $ 'usetemplates' set to true to use templates in xartemplates (default = true)
+ * @param  int $ 'when' timestamp specifying that this mail should be sent 'no earlier than' (default is now)
  *                  This requires installation and configuration of the scheduler module
  */
 function mail_adminapi_sendmail($args)
