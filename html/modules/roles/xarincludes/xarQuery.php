@@ -256,13 +256,11 @@ class xarQuery
 
     function addfields($tables)
     {
-        //?
         $this->_addfields($tables);
     }
 
     function addtables($tables)
     {
-        //?
         $this->_addtables($tables);
     }
 
@@ -565,9 +563,13 @@ class xarQuery
         if (eregi('IN', $condition['op'])) {
             if (is_array($condition['field2'])) {
                 $elements = array();
-                foreach ($condition['field2'] as $element) {
-                    $this->bindvars[] = $element;
-                    $elements[] = '?';
+                if ($this->usebinding) {
+                    foreach ($condition['field2'] as $element) {
+                        $this->bindvars[] = $element;
+                        $elements[] = '?';
+                    }
+                } else {
+                    foreach ($condition['field2'] as $element) $elements[] = $this->dbconn->qstr($element);
                 }
 
                 $sqlfield = '(' . implode(',',$elements) . ')';
@@ -577,11 +579,15 @@ class xarQuery
             }
         } else {
             if (gettype($condition['field2']) == 'string' && !eregi('JOIN', $condition['op'])) {
-                $this->bindvars[] = $condition['field2'];
-                $sqlfield = '?';
+                if ($this->usebinding) {
+                    $this->bindvars[] = $condition['field2'];
+                    $sqlfield = '?';
+                } else {
+                    $sqlfield = $this->dbconn->qstr($condition['field2']);
+                }
             }
             else {
-                if (!eregi('JOIN', $condition['op'])) {
+                if ($this->usebinding && !eregi('JOIN', $condition['op'])) {
                     $this->bindvars[] = $condition['field2'];
                     $sqlfield = '?';
                 } else {
