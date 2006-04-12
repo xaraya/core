@@ -18,8 +18,7 @@
  *
  */
 class SessionException extends Exception
-{
-}
+{}
 
 /**
  * Initialise the Session Support
@@ -29,40 +28,27 @@ class SessionException extends Exception
  */
 function xarSession_init($args, $whatElseIsGoingLoaded)
 {
+    /* @todo: get rid of the global */
     $GLOBALS['xarSession_systemArgs'] = $args;
-
-    // Session Support Tables
-    // TODO: this should be moved to the session class
-    $systemPrefix = xarDBGetSystemTablePrefix();
-    $tables = array('session_info' => $systemPrefix . '_session_info');
-    xarDB::importTables($tables);
 
     // Register the SessionCreate event
     xarEvt_registerEvent('SessionCreate');
 
+    // Register tables this subsystem uses
+    $systemPrefix = xarDBGetSystemTablePrefix();
+    $tables = array('session_info' => $systemPrefix . '_session_info');
+    xarDB::importTables($tables); 
+
     // Set up the session object
     $session = new xarSession($args);
   
-    // TODO: move to class
-    if (ini_get('register_globals')) {
-        // First thing we do is ensure that there is no attempted pollution
-        // of the session namespace (yes, we still need this in this case)
-        foreach($GLOBALS as $k=>$v) {
-            if (substr($k,0,5) == xarSession::PREFIX) {
-                throw new SessionException('xarSession_init: Session Support initialisation failed.');
-            }
-        }
-    }
     // Start the session, this will call xarSession:read, and
     // it will tell us if we need to start a new session or just
     // to continue the current session
     $session->start();
     $sessionId = $session->id();
 
-    // TODO : add an admin option to re-activate this e.g. for
-    //        Security Level "High" ?
-
-    // Get  client IP addr
+    // Get  client IP addr, so we can register or continue a session
     $forwarded = xarServerGetVar('HTTP_X_FORWARDED_FOR');
     if (!empty($forwarded)) {
         $ipAddress = preg_replace('/,.*/', '', $forwarded);
@@ -70,8 +56,14 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
         $ipAddress = xarServerGetVar('REMOTE_ADDR');
     }
 
+    // If it's new, register it, otherwise use the existing.
     if ($session->isNew()) {
-        $session->register($ipAddress);
+        if($session->register($ipAddress)) {
+            // Congratulations. We have created a new session
+            xarEvt_trigger('SessionCreate');
+        } else {
+            // Registering failed, now what?
+        }
     } else {
         // Not all ISPs have a fixed IP or a reliable X_FORWARDED_FOR
         // so we don't test for the IP-address session var
@@ -95,9 +87,14 @@ function xarSession__shutdown_handler()
     // Close the session we started on init
     // as this is a shutdown handler, we know it will only
     // run if the subsystem was initialized as well
-    xarSession_Close();
+    session_write_close(); // This writes 'dirty' session data at the end of the request
 }
 
+/**
+ * Get the configured security level
+ *
+ * @todo Is this used anywhere outside the session class itself?
+ */
 function xarSessionGetSecurityLevel()
 {
     return $GLOBALS['xarSession_systemArgs']['securityLevel'];
@@ -110,100 +107,17 @@ function xarSessionGetSecurityLevel()
  * require.  This avoids blatant or accidental over-writing of session
  * variables.
  *
-
-/**
- * Get a session variable
- *
- * @param name name of the session variable to get
+ * The old interface as wrappers for the class methods are here, see xarSession class 
+ * for the implementation
  */
-function xarSessionGetVar($name)
-{
-    $var = xarSession::PREFIX . $name;
-
-    // First try to handle stuff through _SESSION
-    if (isset($_SESSION[$var])) {
-        return $_SESSION[$var];
-    } elseif ($name == 'uid') {
-        $_SESSION[$var] = _XAR_ID_UNREGISTERED;
-        return $_SESSION[$var];
-    }
-}
-
-/**
- * Set a session variable
- * @param name name of the session variable to set
- * @param value value to set the named session variable
- */
-function xarSessionSetVar($name, $value)
-{
-    assert('!is_null($value); /* Not allowed to set variable to NULL value */');
-    // security checks : do not allow to set the uid or mess with the session serialization
-    if ($name == 'uid' || strpos($name,'|') !== FALSE) return false;
-
-    $var = xarSession::PREFIX . $name;
-
-    // also needed for PHP 4.1.2 - cfr. bug 3679
-    if (isset($_SESSION)) {
-        $_SESSION[$var] = $value;
-    }
-    return true;
-}
-
-/**
- * Delete a session variable
- * @param name name of the session variable to delete
- */
-function xarSessionDelVar($name)
-{
-    if ($name == 'uid') return false;
-
-    $var = xarSession::PREFIX . $name;
-
-    if (!isset($_SESSION[$var])) {
-        return false;
-    }
-    unset($_SESSION[$var]);
-    // still needed here too
-    if (ini_get('register_globals')) {
-        session_unregister($var);
-    }
-    return true;
-}
-
-function xarSessionGetId()
-{
-    return session_id();
-}
-
+function xarSessionGetVar($name) { return xarSession::getVar($name); }
+function xarSessionSetVar($name, $value){ return xarSession::setVar($name, $value); }
+function xarSessionDelVar($name){ return xarSession::delVar($name); }
+function xarSessionGetId(){ return xarSession::getId(); }
 // PROTECTED FUNCTIONS
-
+/** mrb: if it's protected, how come roles uses it? */
 function xarSession_setUserInfo($userId, $rememberSession)
-{
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-
-    $sessioninfoTable = $xartable['session_info'];
-    try {
-        $dbconn->begin();
-        $query = "UPDATE $sessioninfoTable
-                  SET xar_uid = ? ,xar_remembersess = ?
-                  WHERE xar_sessid = ?";
-        $bindvars = array($userId, $rememberSession, session_id());
-        $dbconn->Execute($query,$bindvars);
-        $dbconn->commit();
-    } catch (SQLException $e) {
-        $dbconn->rollback();
-        throw $e;
-    }
-
-    $_SESSION[xarSession::PREFIX.'uid'] = $userId;
-    return true;
-}
-
-function xarSession_close()
-{
-    session_write_close();
-}
+{ return xarSession::setUserInfo($userId, $rememberSession); }
 
 /**
  * Class to model the default session handler
@@ -211,9 +125,26 @@ function xarSession_close()
  *
  * @todo this is a temp, since the obvious plan is to have a factory here
  */
-class xarSession 
+interface IsessionHandler
+{
+    public function register($ipAddress);
+    public function start();
+    public function id($id = null);
+    public function isNew();
+    public function current();
+
+    public function open($path, $name);
+    public function close();
+    public function read($sessionId);
+    public function write($sessionId, $vars);
+    public function destroy($sessionId);
+    public function gc($maxlifetime);
+}
+
+class xarSession implements IsessionHandler
 {
     const  PREFIX='XARSV';    // Reserved by us for our session vars
+    const  COOKIE='XARAYASID';// Our cookiename
     private $db;               // We store sessioninfo in the database
     private $tbl;              // Container for the session info
     private $isNew = true;     // Flag signalling if we're dealing with a new session
@@ -233,12 +164,21 @@ class xarSession
 
         // Assign the handlers
         session_set_save_handler(
-                             array(&$this,"open"),
-                             array(&$this,"close"),
-                             array(&$this,"read"),
-                             array(&$this,"write"),
-                             array(&$this,"destroy"),
-                             array(&$this,"gc"));
+          array(&$this,"open"),    array(&$this,"close"),
+          array(&$this,"read"),    array(&$this,"write"),
+          array(&$this,"destroy"), array(&$this,"gc")
+        );
+
+        // Check for pollution
+        if (ini_get('register_globals')) {
+            // First thing we do is ensure that there is no attempted pollution
+            // of the session namespace (yes, we still need this in this case)
+            foreach($GLOBALS as $k=>$v) {
+                if (substr($k,0,5) == self::PREFIX) {
+                    throw new SessionException('xarSession_init: Session Support initialisation failed.');
+                }
+            }
+        }
     }
 
     /**
@@ -268,9 +208,7 @@ class xarSession
             ini_set('session.use_cookies', 1);
             
             // Name of our cookie
-            if (empty($args['cookieName'])) {
-                $args['cookieName'] = 'XARAYASID';
-            }
+            if (empty($args['cookieName'])) $args['cookieName'] = self::COOKIE;
             ini_set('session.name', $args['cookieName']);
             
             if (empty($args['cookiePath'])) {
@@ -358,16 +296,22 @@ class xarSession
     /** 
      * Set or get the session id
      *
+     * @todo the static vs runtime method sucks, do we really need that?
      */
     function id($id= null)
     {
-        if(isset($id)) 
-            $this->sessionId = session_id($id);
-        else
-            $this->sessionId = session_id();
+        $this->sessionId = $this->getId($id);
         return $this->sessionId;
     }
     
+    static function getId($id = null)
+    {
+        if(isset($id)) 
+            return session_id($id);
+        else
+            return session_id();
+    }
+        
     /**
      * Getter for new isNew
      *
@@ -398,11 +342,9 @@ class xarSession
         // Generate a random number, used for
         // some authentication
         srand((double) microtime() * 1000000);
-        xarSessionSetVar('rand', rand());
+        $this->setVar('rand', rand());
         
         $this->ipAddress = $ipAddress;
-        // Congratulations. We have created a new session
-        xarEvt_trigger('SessionCreate');
         return true;
     }
 
@@ -455,7 +397,7 @@ class xarSession
                 $timeoutSetting = time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60);
                 if ($lastused < $timeoutSetting) {
                     // force a reset of the userid (but use the same sessionid)
-                    xarSession_setUserInfo(_XAR_ID_UNREGISTERED, 0);
+                    $this->setUserInfo(_XAR_ID_UNREGISTERED, 0);
                     $this->ipAddress = '';
                     $vars = '';
                 }
@@ -560,5 +502,90 @@ class xarSession
         }
         return true;
     }
+
+    /**
+     * Get a session variable
+     *
+     * @param name name of the session variable to get
+     */
+    static function getVar($name)
+    {
+        $var = self::PREFIX . $name;
+
+        if (isset($_SESSION[$var])) {
+            return $_SESSION[$var];
+        } elseif ($name == 'uid') {
+            // mrb: why is this again?
+            $_SESSION[$var] = _XAR_ID_UNREGISTERED;
+            return $_SESSION[$var];
+        }
+    }
+
+    /**
+     * Set a session variable
+     * @param name name of the session variable to set
+     * @param value value to set the named session variable
+     */
+    static function setVar($name, $value)
+    {
+        assert('!is_null($value); /* Not allowed to set variable to NULL value */');
+        // security checks : do not allow to set the uid or mess with the session serialization
+        if ($name == 'uid' || strpos($name,'|') !== FALSE) return false;
+
+        $var = self::PREFIX . $name;
+        $_SESSION[$var] = $value;
+        return true;
+    }
+
+    /**
+     * Delete a session variable
+     * @param name name of the session variable to delete
+     */    
+    static function delVar($name)
+    {
+        if ($name == 'uid') return false;
+        
+        $var = self::PREFIX . $name;
+
+        if (!isset($_SESSION[$var])) {
+            return false;
+        }
+        unset($_SESSION[$var]);
+        // still needed here too
+        // mrb: why?
+        if (ini_get('register_globals')) {
+            session_unregister($var);
+        }
+        return true;
+    }
+
+    /**
+     * Set user info
+     *
+     * @todo this seems a strang duck (only used in roles by the looks of it)
+     */
+    static function setUserInfo($userId, $rememberSession)
+    {
+        $dbconn =& xarDBGetConn();
+        $xartable =& xarDBGetTables();
+
+        $sessioninfoTable = $xartable['session_info'];
+        try {
+            $dbconn->begin();
+            $query = "UPDATE $sessioninfoTable
+                      SET xar_uid = ? ,xar_remembersess = ?
+                      WHERE xar_sessid = ?";
+            $bindvars = array($userId, $rememberSession, self::getId());
+            $dbconn->Execute($query,$bindvars);
+            $dbconn->commit();
+        } catch (SQLException $e) {
+            $dbconn->rollback();
+            throw $e;
+        }
+
+        $_SESSION[self::PREFIX.'uid'] = $userId;
+    return true;
+    }
+
 }
 ?>

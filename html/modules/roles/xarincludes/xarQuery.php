@@ -26,143 +26,83 @@ class xarQuery
     public $version = "1.3";
     public $id;
     public $type;
-    public $tables;
-    public $fields;
-    public $conditions;
-    public $conjunctions;
-    public $bindings;
-    public $sorts;
-    public $result;
-    public $rows = 0;
-    public $rowstodo = 0;
-    public $startat = 1;
-    public $output;
-    public $row;
+    public $tables       = array();
+    public $fields       = array();
+    public $conditions   = array();
+    public $conjunctions = array();
+    public $bindings     = array();
+    public $sorts        = array();
+    public $result       = array();
+    public $rows         = 0;
+    public $rowstodo     = 0;
+    public $startat      = 1;
+    public $output       = array();
+    public $row          = array();
     public $dbconn;
     public $statement;
     public $israwstatement = 0;
-    public $bindvars;
+    public $bindvars       = array();
     public $bindstring;
-    public $limits = 1;
+    public $limits         = 1;
 
-// Flags
-// Set to true to use binding variables
-    public $usebinding = true;
-// Two unrelated conditions will be inserted into the query as AND or OR
+    // Flags
+    // Two unrelated conditions will be inserted into the query as AND or OR
     public $implicitconjunction = "AND";
 
-//---------------------------------------------------------
-// Constructor
-//---------------------------------------------------------
-    function xarQuery($type='SELECT',$tables='',$fields='')
+    //---------------------------------------------------------
+    // Constructor
+    //---------------------------------------------------------
+    function __construct($type='SELECT',$tables='',$fields='')
     {
-        if (in_array($type,array("SELECT","INSERT","UPDATE","DELETE"))) $this->type = $type;
-        else {
+        // Check if we're called ok
+        if (!in_array($type,array("SELECT","INSERT","UPDATE","DELETE")))
             throw new ForbiddenOperationException($type,'This operation is not supported yet. "#(1)"');
-        }
-
-        $this->key = time();
-        $this->tables = array();
-        $this->_addtables($tables);
-        $this->fields = array();
+        
+        // Set the defaults
+        $this->type = $type;             // querytype
+        $this->key = time();             // ?
+        $this->_addtables($tables);      
         $this->_addfields($fields);
-        $this->conditions = array();
-        $this->conjunctions = array();
-        $this->bindings = array();
-        $this->sorts = array();
-        $this->result = array();
-        $this->output = array();
-        $this->row = array();
-        $this->bindvars = array();
         $this->dbconn =& xarDBGetConn();
     }
 
-//---------------------------------------------------------
-// Execute a query
-//---------------------------------------------------------
+    //---------------------------------------------------------
+    // Execute a query
+    //---------------------------------------------------------
     function run($statement='',$display=1)
     {
         //FIXME: PHP5 hack
         $this->open();
         $this->setstatement($statement);
-        // NON SELECT
+        // Prepare the statement
+        $stmt = $this->dbconn->prepareStatement($this->statement);
+
+        // Not a select, execute and return
         if ($this->type != 'SELECT') {
-            if ($this->usebinding) {
-                $result = $this->dbconn->Execute($this->statement,$this->bindvars);
-                $this->bindvars = array();
-            } else {
-                $result = $this->dbconn->Execute($this->statement);
-            }
-            $this->rows = $result;
-            return true;
+            $this->rows = $stmt->executeUpdate($this->bindvars);
+            $this->bindvars = array(); //?
+            // TODO: it would be nice to return the nr of rows here, we get that for free 
+            //       in the callee then, and it's consistent with creole interface.
+            return true; 
         }
 
-        // SELECT statement
+        // If there is a limit, configure the statement as such
         if($this->rowstodo != 0 && $this->limits == 1 && $this->israwstatement) {
             $begin = $this->startat-1;
-            if ($this->usebinding) {
-	            $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin,$this->bindvars);
-                $this->bindvars = array();
-            } else {
-	            $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin);
-            }
+            $stmt->setLimit($this->rowstodo);
+            $stmt->setOffset($begin);
             $this->statement .= " LIMIT " . $begin . "," . $this->rowstodo;
-        } else {
-            if ($this->usebinding) {
-                $result = $this->dbconn->Execute($this->statement,$this->bindvars);
-                $this->bindvars = array();
-            } else {
-                $result = $this->dbconn->Execute($this->statement);
-            }
-            $this->rows = $result->getRecordCount();
-        }
-        $this->result =& $result;
+        } 
 
-        if (($result->fields) === false)
-            $numfields = 0;
-        else
-            $numfields = count($result->fields); // Better than the private var, fields should still be proteced
+        // Execute the configured statement.
+        $result = $stmt->executeQuery($this->bindvars,ResultSet::FETCHMODE_ASSOC);
+        $this->rows = $result->getRecordCount();
 
         $this->output = array();
         if ($display == 1) {
-            if ($statement == '') {
-                if ($this->fields == array() && $numfields > 0) {
-                    $result->setFetchMode(ResultSet::FETCHMODE_ASSOC);
-                    $result->next(); $result->previous();
-                    for ($i=0;$i< $numfields;$i++) {
-                        // Fetchfield was the only one used throughout the whole codebase, simulate it here instead of in creole
-                        //$o = $result->FetchField($i);
-                        // FIXME: get rid of it more globally since this never was portable anyway and it kills performance
-                        $tmp = array_slice($result->fields,$i,1);
-                        $finally_we_got_the_name_of_the_field  = key($tmp);
-                        $this->fields[$finally_we_got_the_name_of_the_field]['name'] = strtolower($finally_we_got_the_name_of_the_field);
-                    }
-                    $result->setFetchMode(ResultSet::FETCHMODE_NUM);
-                    $result->next(); $result->previous();
-                }
-                while (!$result->EOF) {
-                    $i=0; $line=array();
-                    foreach ($this->fields as $key => $value ) {
-                        if(!empty($value['alias']))
-                            $line[$value['alias']] = $result->fields[$i];
-                        elseif(!empty($value['name']))
-                            $line[$value['name']] = $result->fields[$i];
-                        else
-                            $line[] = $result->fields[$i];
-                        $i++;
-                    }
-                    $this->output[] = $line;
-                    $result->MoveNext();
-                }
-            } else {
-                while (!$result->EOF) {
-                    $line = array();
-                    for ($i=0;$i< $numfields;$i++) {
-                        $line[] = $result->fields[$i];
-                    }
-                    $this->output[] = $line;
-                    $result->MoveNext();
-                }
+            // Request to fill the output array with the results
+            while($result->next()) {
+                $this->output[] = $result->getRow();
             }
         }
         return true;
@@ -190,7 +130,7 @@ class xarQuery
 
     function row($row=0)
     {
-        if ($this->output == array()) return array();
+        if (empty($this->output)) return $this->output;
         return $this->output[$row];
     }
 
@@ -455,7 +395,7 @@ class xarQuery
     }
     function removefield($myfield)
     {
-        for($i=0;$i<count($this->fields);$i++)
+        for($i=0;$i < count($this->fields);$i++)
             if ($this->fields[$i]['name'] == $myfield) {
                 unset($this->fields[$i]);
                 break;
@@ -464,7 +404,7 @@ class xarQuery
     function setalias($name='',$alias='')
     {
         if($name == '' || $alias == '') return false;
-        for($i=0;$i<count($this->tables);$i++) {
+        for($i=0;$i < count($this->tables);$i++) {
             if ($this->tables[$i]['name'] == $name) {
                 $this->tables[$i]['alias'] = $alias;
                 return true;
@@ -496,6 +436,7 @@ class xarQuery
         foreach ($this->conditions as $condition) {
             if (is_array($condition)) {
                 if (gettype($condition['field2']) == 'string' && $condition['op'] != 'join') {
+                    // FIXME: dont use qstr
                     $sqlfield = $this->dbconn->qstr($condition['field2']);
                 }
                 else {
@@ -555,6 +496,7 @@ class xarQuery
     {
         $binding = $this->binding[$key];
         if (gettype($binding['field2']) == 'string' && $binding['op'] != 'join') {
+            // FIXME: dont use qstr, use bindvars
             $sqlfield = $this->dbconn->qstr($binding['field2']);
         }
         else {
@@ -579,45 +521,32 @@ class xarQuery
         $condition = $this->conditions[$key];
 
         if (!isset($condition['field2']) || $condition['field2'] === 'NULL') {
-                return $condition['field1'] . " IS NULL";
+            return $condition['field1'] . " IS NULL";
         }
 
         if (eregi('IN', $condition['op'])) {
+            // IN (a,b,c,d) 
             if (is_array($condition['field2'])) {
                 $elements = array();
-                if ($this->usebinding) {
-                    foreach ($condition['field2'] as $element) {
-                        $this->bindvars[] = $element;
-                        $elements[] = '?';
-                    }
-                } else {
-                    foreach ($condition['field2'] as $element) $elements[] = $this->dbconn->qstr($element);
+                foreach ($condition['field2'] as $element) {
+                    $this->bindvars[] = $element;
+                    $elements[] = '?';
                 }
-
                 $sqlfield = '(' . implode(',',$elements) . ')';
             }
             else {
                 $sqlfield = '(' . $condition['field2'] . ')';
             }
+        } elseif (!eregi('JOIN', $condition['op'])) {
+            // normal condition fld1 = value
+            $this->bindvars[] = $condition['field2'];
+            $sqlfield = '?';
         } else {
-            if (gettype($condition['field2']) == 'string' && !eregi('JOIN', $condition['op'])) {
-                if ($this->usebinding) {
-                    $this->bindvars[] = $condition['field2'];
-                    $sqlfield = '?';
-                } else {
-                    $sqlfield = $this->dbconn->qstr($condition['field2']);
-                }
-            }
-            else {
-                if ($this->usebinding && !eregi('JOIN', $condition['op'])) {
-                    $this->bindvars[] = $condition['field2'];
-                    $sqlfield = '?';
-                } else {
-                    $sqlfield = $condition['field2'];
-                }
-                $condition['op'] = eregi('JOIN', $condition['op']) ? '=' : $condition['op'];
-            }
+            // possibly a join fld1 = fld2
+            $sqlfield = $condition['field2'];
         }
+        $condition['op'] = eregi('JOIN', $condition['op']) ? '=' : $condition['op'];
+        
         return $condition['field1'] . " " . $condition['op'] . " " . $sqlfield;
     }
 
@@ -632,7 +561,7 @@ class xarQuery
                 foreach ($conjunction['conditions'] as $condition) {
                     $i++;
                     $this->cstring .= $this->_getcondition($condition);
-                    if ($i<$count) $this->cstring .= " " . $conjunction['conj'] . " ";
+                    if ($i < $count) $this->cstring .= " " . $conjunction['conj'] . " ";
                     else $this->cstring .= ") ";
                 }
             }
@@ -719,7 +648,7 @@ class xarQuery
 
     function assembledtables()
     {
-        if (count($this->tables) == 0) return "*MISSING*";
+        if (count($this->tables) == 0) return "*MISSING*"; // FIXME: why *MISSING* (assert maybe?)
         $t = '';
         foreach ($this->tables as $table) {
             if (is_array($table)) {
@@ -759,33 +688,16 @@ class xarQuery
                 if (is_array($field)) {
                     if(isset($field['name']) && isset($field['value'])) {
                         $names .= $field['name'] . ", ";
-                        if ($this->usebinding) {
-                            $bindvalues .= "?, ";
-                            $this->bindvars[] = $field['value'];
-                        }
-                        else {
-                            if (gettype($field['value']) == 'string') {
-                                $sqlfield = $this->dbconn->qstr($field['value']);
-                            }
-                            else {
-                                $sqlfield = $field['value'];
-                            }
-                            $values .= $sqlfield . ", ";
-                        }
+                        $bindvalues .= "?, ";
+                        $this->bindvars[] = $field['value'];
                     }
                 }
                 else {
                 }
             }
             $names = substr($names,0,strlen($names)-2);
-            if ($this->usebinding) {
-                $bindvalues = substr($bindvalues,0,strlen($bindvalues)-2);
-                $this->bindstring .= $names . ") VALUES (" . $bindvalues . ")";
-            }
-            else {
-                $values = substr($values,0,strlen($values)-2);
-                $this->bindstring .= $names . ") VALUES (" . $values . ")";
-            }
+            $bindvalues = substr($bindvalues,0,strlen($bindvalues)-2);
+            $this->bindstring .= $names . ") VALUES (" . $bindvalues . ")";
             break;
         case "UPDATE" :
             if($this->fields == array('*')) {
@@ -794,19 +706,8 @@ class xarQuery
             foreach ($this->fields as $field) {
                 if (is_array($field)) {
                     if(isset($field['name']) && isset($field['value'])) {
-                        if ($this->usebinding) {
-                            $this->bindstring .= $field['name'] . " = ?, ";
-                            $this->bindvars[] = $field['value'];
-                        }
-                        else {
-                            if (gettype($field['value']) == 'string') {
-                                $sqlfield = $this->dbconn->qstr($field['value']);
-                            }
-                            else {
-                                $sqlfield = $field['value'];
-                            }
-                            $this->bindstring .= $field['name'] . " = " . $sqlfield . ", ";
-                        }
+                        $this->bindstring .= $field['name'] . " = ?, ";
+                        $this->bindvars[] = $field['value'];
                     }
                 }
                 else {
@@ -908,24 +809,6 @@ class xarQuery
     }
     function getrows()
     {
-        if ($this->type == 'SELECT' && $this->rowstodo != 0 && $this->limits == 1 && $this->israwstatement) {
-            $temp1 = $this->fields;
-            $this->clearfields();
-            $temp2 = $this->sorts;
-            $this->clearsorts();
-            $this->addfield('COUNT(*)');
-            $this->setstatement();
-            if ($this->usebinding) {
-                $result = $this->dbconn->Execute($this->statement,$this->bindvars);
-                $this->bindvars = array();
-            } else {
-                $result = $this->dbconn->Execute($this->statement);
-            }
-            list($this->rows) = $result->fields;
-            $this->fields = $temp1;
-            $this->sorts = $temp2;
-            $this->setstatement();
-        }
         return $this->rows;
     }
     function getrowstodo()
@@ -1020,10 +903,12 @@ class xarQuery
             $this->statement = $this->_statement();
         }
     }
+
+    /** These last three can probably be removed **/
     function tostring()
     {
         $this->setstatement();
-        if ($this->usebinding) $this->bindstatement();
+        $this->bindstatement();
         return $this->getstatement();
     }
     function qecho()
