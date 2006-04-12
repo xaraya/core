@@ -975,7 +975,7 @@ class xarRole
     {
         $query = "SELECT r.xar_uid, r.xar_name, r.xar_type, r.xar_uname,
                          r.xar_email, r.xar_pass, r.xar_date_reg,
-                         r.xar_valcode, r.xar_state,r.xar_auth_modid
+                         r.xar_valcode, r.xar_state,r.xar_auth_module
                   FROM $this->rolestable r, $this->rolememberstable rm
                   WHERE r.xar_uid = rm.xar_uid AND
                         r.xar_type = ? AND
