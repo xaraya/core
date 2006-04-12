@@ -20,7 +20,8 @@ define('ROLES_STATE_ACTIVE',3);
 define('ROLES_STATE_PENDING',4);
 define('ROLES_STATE_CURRENT',98);
 define('ROLES_STATE_ALL',99);
-
+define('ROLES_USERTYPE',0);
+define('ROLES_GROUPTYPE',1);
 /**
  * xarRoles: class for the role repository
  *
@@ -972,40 +973,20 @@ class xarRole
      */
     function getUsers($state = ROLES_STATE_CURRENT, $startnum = 0, $numitems = 0, $order = 'name', $selection = NULL)
     {
+        $query = "SELECT r.xar_uid, r.xar_name, r.xar_type, r.xar_uname,
+                         r.xar_email, r.xar_pass, r.xar_date_reg,
+                         r.xar_valcode, r.xar_state,r.xar_auth_module
+                  FROM $this->rolestable r, $this->rolememberstable rm
+                  WHERE r.xar_uid = rm.xar_uid AND
+                        r.xar_type = ? AND
+                        r.xar_state != ? AND
+                        rm.xar_parentid = ?";
         // set up the query and get the data
         if ($state == ROLES_STATE_CURRENT) {
-            $query = "SELECT r.xar_uid,
-                        r.xar_name,
-                        r.xar_type,
-                        r.xar_uname,
-                        r.xar_email,
-                        r.xar_pass,
-                        r.xar_date_reg,
-                        r.xar_valcode,
-                        r.xar_state,
-                        r.xar_auth_module
-                        FROM $this->rolestable r, $this->rolememberstable rm
-                        WHERE r.xar_uid = rm.xar_uid
-                        AND r.xar_type = 0
-                        AND r.xar_state != " . ROLES_STATE_DELETED .
-                        " AND rm.xar_parentid = ?";
-            $bindvars = array($this->uid);
+             $bindvars = array(ROLES_USERTYPE,ROLES_STATE_DELETED,$this->uid);
+
         } else {
-            $query = "SELECT r.xar_uid,
-                        r.xar_name,
-                        r.xar_type,
-                        r.xar_uname,
-                        r.xar_email,
-                        r.xar_pass,
-                        r.xar_date_reg,
-                        r.xar_valcode,
-                        r.xar_state,
-                        r.xar_auth_module
-                        FROM $this->rolestable r, $this->rolememberstable rm
-                        WHERE r.xar_uid = rm.xar_uid
-                        AND r.xar_type = 0 AND r.xar_state = ?
-                        AND rm.xar_parentid = ?";
-            $bindvars = array($state, $this->uid);
+             $bindvars = array(ROLES_USERTYPE, $state, $this->uid);
         }
         if (isset($selection)) $query .= $selection;
         $query .= " ORDER BY xar_" . $order;

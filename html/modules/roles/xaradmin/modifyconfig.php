@@ -179,9 +179,11 @@ function roles_admin_modifyconfig()
                          }
                     } else {
                          //unhook roles from roles
+                         if (xarModIsHooked('roles', 'roles')) {
                          xarModAPIFunc('modules','admin','disablehooks',
                                  array('callerModName' => 'roles',
                                        'hookModName' => 'roles'));
+                         }
                    }
                     break;
             }
