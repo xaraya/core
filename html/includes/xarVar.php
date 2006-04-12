@@ -1358,15 +1358,16 @@ function xarVarPrepEmailDisplay()
  * @access public
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
+ * @todo This makes no sense to me anymore (mrb)
  */
 function xarVarPrepForOS()
 {
-    static $special_characters = array(':'  => ' ',
-                                       '/'  => ' ',
-                                       '\\' => ' ',
-                                       '..' => ' ',
-                                       '?'  => ' ',
-                                       '*'  => ' ');
+    static $special_characters = array(':'  => ' ',   // for things like c:/file.txt?
+                                       //'/'  => ' ', // this makes vars with relative paths unusable (cfr. bug 5559 )
+                                       '\\' => ' ',   // for unc paths?
+                                       '..' => ' ',   
+                                       '?'  => ' ',   // why?
+                                       '*'  => ' ');  
 
     $args = func_get_args();
 
