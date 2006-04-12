@@ -95,58 +95,14 @@ class xarQuery
         } 
 
         // Execute the configured statement.
-        $result = $stmt->executeQuery($this->bindvars);
+        $result = $stmt->executeQuery($this->bindvars,ResultSet::FETCHMODE_ASSOC);
         $this->rows = $result->getRecordCount();
-        $result->first(); // adodb used to do this, emulate @todo: get rid of this, it's wrong here.
-        $this->result =& $result;
 
-        $numfields = 0;
-        if (($result->fields) !== false)
-            // TODO: fields member should be protected (see creole, we changed this specifically for this)
-            $numfields = count($result->fields);
-
-        
         $this->output = array();
         if ($display == 1) {
             // Request to fill the output array with the results
-            if ($statement == '') {
-                // No statement yet
-                if ($this->fields == array() && $numfields > 0) {
-                    // No fields explicitly specified, but we got some from the db
-                    $result->setFetchMode(ResultSet::FETCHMODE_ASSOC);
-                    $result->next(); $result->previous();
-                    for ($i=0;$i< $numfields;$i++) {
-                        // FIXME: get rid of it more globally since this never was portable anyway and it kills performance
-                        $tmp = array_slice($result->fields,$i,1);
-                        $finally_we_got_the_name_of_the_field  = key($tmp);
-                        $this->fields[$finally_we_got_the_name_of_the_field]['name'] = strtolower($finally_we_got_the_name_of_the_field);
-                    }
-                    $result->setFetchMode(ResultSet::FETCHMODE_NUM);
-                    $result->next(); $result->previous();
-                }
-                while (!$result->EOF) {
-                    $i=0; $line=array();
-                    foreach ($this->fields as $key => $value ) {
-                        if(!empty($value['alias']))
-                            $line[$value['alias']] = $result->fields[$i];
-                        elseif(!empty($value['name']))
-                            $line[$value['name']] = $result->fields[$i];
-                        else
-                            $line[] = $result->fields[$i];
-                        $i++;
-                    }
-                    $this->output[] = $line;
-                    $result->MoveNext();
-                }
-            } else {
-                while (!$result->EOF) {
-                    $line = array();
-                    for ($i=0;$i< $numfields;$i++) {
-                        $line[] = $result->fields[$i];
-                    }
-                    $this->output[] = $line;
-                    $result->MoveNext();
-                }
+            while($result->next()) {
+                $this->output[] = $result->getRow();
             }
         }
         return true;
@@ -174,7 +130,7 @@ class xarQuery
 
     function row($row=0)
     {
-        if ($this->output == array()) return array();
+        if (empty($this->output)) return $this->output;
         return $this->output[$row];
     }
 
@@ -853,20 +809,6 @@ class xarQuery
     }
     function getrows()
     {
-        if ($this->type == 'SELECT' && $this->rowstodo != 0 && $this->limits == 1 && $this->israwstatement) {
-            $temp1 = $this->fields;
-            $this->clearfields();
-            $temp2 = $this->sorts;
-            $this->clearsorts();
-            $this->addfield('COUNT(*)');
-            $this->setstatement();
-            
-            $result = $this->dbconn->Execute($this->statement,$this->bindvars);
-            list($this->rows) = $result->fields;
-            $this->fields = $temp1;
-            $this->sorts = $temp2;
-            $this->setstatement();
-        }
         return $this->rows;
     }
     function getrowstodo()
@@ -961,6 +903,8 @@ class xarQuery
             $this->statement = $this->_statement();
         }
     }
+
+    /** These last three can probably be removed **/
     function tostring()
     {
         $this->setstatement();
