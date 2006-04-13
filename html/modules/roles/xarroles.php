@@ -274,6 +274,7 @@ class xarRoles
 
         // Execute the query, bail if an exception was thrown
         $result = $stmt->executeQuery(array($parentname));
+        $result->first();
 
         // create the parent object
         list($uid, $name, $type, $parentid, $uname, $email, $pass,
@@ -293,6 +294,7 @@ class xarRoles
         // retrieve the child's data from the repository
         // Execute the query, bail if an exception was thrown
         $result = $stmt->executeQuery(array($childname));
+        $result->first();
 
         // create the child object
         list($uid, $name, $type, $parentid, $uname, $email, $pass,
@@ -309,7 +311,7 @@ class xarRoles
                        'state' => $state,
                        'auth_module' => $auth_module);
         $child = new xarRole($pargs);
-        // done
+       // done
         return $parent->addMember($child);
     }
 

@@ -372,7 +372,7 @@ class xarMasks
     {
         $userID = xarSessionGetVar('uid');
         xarLogMessage("PRIVS: uid in security check: $userID");
-        if ($userID == 3) return true;
+        if ($userID == XARUSER_LAST_RESORT) return true;
 
         $maskname = $mask;
         $mask =  $this->getMask($mask);
