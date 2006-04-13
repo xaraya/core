@@ -29,7 +29,7 @@ function roles_userapi_getallgroups($args)
     $q->addtable($xartable['roles'],'r');
     $q->addtable($xartable['rolemembers'], 'rm');
     $q->join('rm.xar_uid','r.xar_uid');
-    $q->addfields(array('r.xar_uid','r.xar_name','r.xar_users','rm.xar_parentid'));
+    $q->addfields(array('r.xar_uid AS uid','r.xar_name AS name','r.xar_users AS users','rm.xar_parentid AS parentid'));
 
     $conditions = array();
     // Restriction by group.
@@ -85,17 +85,7 @@ function roles_userapi_getallgroups($args)
     $q->eq('r.xar_type',ROLES_GROUPTYPE);
     $q->ne('r.xar_state',ROLES_STATE_DELETED);
     $q->run();
-
-//this is a kludge, but xarQuery doesn't have this functionality yet
-    $groups = array();
-    foreach ($q->output() as $group) {
-        $groups[] = array('uid' => $group['r.xar_uid'],
-                          'name' => $group['r.xar_name'],
-                          'users' => $group['r.xar_users'],
-                          'parentid' => $group['rm.xar_parentid']);
-    }
-
-    return $groups;
+    return $q->output();
 }
 
 function _getDescendants($ancestor,$groups)
