@@ -23,7 +23,7 @@
                 <xar:mlstring>Configure Hooks</xar:mlstring>
             </a>
         </dd>
-    </xar:sec>
+
 
     <xar:set name="tabclass">$activetab=='main'?'active':''</xar:set>
     <dd class="#$tabclass#">
@@ -31,5 +31,6 @@
         <xar:mlstring>Overview</xar:mlstring>
       </a>
     </dd>
+    </xar:sec>    
   </dl>
 </div>

@@ -23,6 +23,7 @@
     <xar:template file="headtagcontent" type="theme" />
 </head>
 <body>
+
     <div id="xc-outer-wrapper">
         <xar:template file="pageheader" type="theme" />
         <xar:if condition="!empty($topnavblocksgroup)">

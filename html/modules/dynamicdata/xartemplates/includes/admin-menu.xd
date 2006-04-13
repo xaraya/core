@@ -43,11 +43,13 @@
             </a>
         </dd>
     </xar:sec>
+    <xar:sec mask="EditDynamicData" catch="false">
     <xar:set name="tabclass">$activetab=='main'?'active':''</xar:set>
     <dd class="#$tabclass#">
       <a href="&xar-modurl-dynamicdata-admin-overview;">
         <xar:mlstring>Overview</xar:mlstring>
       </a>
     </dd>
+    </xar:sec>
   </dl>
 </div>

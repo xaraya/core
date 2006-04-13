@@ -8,7 +8,7 @@
     <dt class="help" title="Choose an action to perform">
       <xar:mlstring>Actions:</xar:mlstring>
     </dt>
-    <xar:sec mask="ViewThemes" catch="false">
+    <xar:sec mask="AdminTheme" catch="false">
         <xar:set name="tabclass">$activetab=='list'?'active':''</xar:set>
         <dd class="#$tabclass#">
           <a href="&xar-modurl-themes-admin-list;">
@@ -32,11 +32,13 @@
           </a>
         </dd>
     </xar:sec>
+    <xar:sec mask="AdminTheme" catch="false">
     <xar:set name="tabclass">$activetab=='main'?'active':''</xar:set>
     <dd class="#$tabclass#">
       <a href="&xar-modurl-themes-admin-overview;">
         <xar:mlstring>Overview</xar:mlstring>
       </a>
     </dd>
+    </xar:sec>
   </dl>
 </div>
