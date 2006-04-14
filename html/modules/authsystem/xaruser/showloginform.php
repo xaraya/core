@@ -18,18 +18,23 @@
  */
 function authsystem_user_showloginform($args = array())
 {
-    #redirecturl
+   // #redirecturl
     extract($args);
     $redirected=xarServerGetBaseURL();
     if (!isset($redirecturl)) $redirecturl = $redirected;
 
     xarVarFetch('redirecturl', 'str', $data['redirecturl'], $redirecturl, XARVAR_NOT_REQUIRED);
 
-
+    $defaultauthmodule=(int)xarModGetVar('roles','defaultauthmodule');
+    $authmodule=xarModGetNameFromID($defaultauthmodule);
+    if (!file_exists('modules/'.$authmodule.'/xaruser/showloginform.php')) {
+            $authmodule='authsystem'; // incase the authmodule doesn't provide a login
+    }
     if (!xarUserIsLoggedIn()) {
       // Security check
       if (!xarSecurityCheck('ViewAuthsystem')) return;
       $data['loginlabel'] = xarML('Log In');
+      $data['loginurl']=xarModURL($authmodule,'user','login');
 
 
       return $data;

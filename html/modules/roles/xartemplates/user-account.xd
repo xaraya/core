@@ -55,11 +55,9 @@
                         #$hookoutput#
                     </xar:foreach>
                 </xar:if>
-                <xar:set name="authmodule">xarModGetVar('roles','defaultauthmodule')</xar:set>
-                <xar:if condition="!empty($authmodule)">
-                    <xar:set name="authmodule">xarModGetNameFromID($authmodule)</xar:set>
+                <xar:if condition="!empty($logoutmodule)">
                     <dd>
-                        <a href="#xarModURL($authmodule,'user','logout')#">
+                        <a href="#xarModURL($logoutmodule,'user','logout')#">
                             <xar:mlstring>
                                 Logout 
                             </xar:mlstring>

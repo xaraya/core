@@ -20,9 +20,15 @@ function authsystem_user_logout()
 
     // Get input parameters
     if (!xarVarFetch('redirecturl','str:1:254',$redirecturl,$redirect,XARVAR_NOT_REQUIRED)) return;
-
+   
+    $defaultauthmodule=(int)xarModGetVar('roles','defaultauthmodule');
+    $authmodule=xarModGetNameFromID($defaultauthmodule);
+    if (!file_exists('modules/'.$authmodule.'/xaruser/logout.php')) {
+            $authmodule='authsystem'; // incase the authmodule doesn't provide a login
+    }
     // Defaults
-    if (preg_match('/authsystem/',$redirecturl)) {
+    //if (preg_match('/$authmodule}/',$redirecturl)) {
+    if (strstr($redirecturl,$authmodule)) {
         $redirecturl = $redirect;
     }
 

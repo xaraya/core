@@ -34,8 +34,12 @@ function roles_user_main()
     }
     elseif(xarSecurityCheck('ViewRoles',0)) {
     */
-    //$defaultauthmodule=(int)xarModGetVar('roles','defaultauthmodule');
-    $defaultauthmodule=xarModGetIDFromName('authsystem');
+
+    $defaultauthmodule=(int)xarModGetVar('roles','defaultauthmodule');
+    $authmodule=xarModGetNameFromID($defaultauthmodule);
+    if (!file_exists('modules/'.$authmodule.'/xaruser/showloginform.php')) {
+            $authmodule='authsystem'; // incase the authmodule doesn't provide a login
+    }
     //jojodee -Need to use default authsystem for now. Most authentication modules don't have login forms
     //When we have better guidelines for authmodules this would be  a good option 
     //to have their own login forms. Some do now but only as a block which makes it hacky.
@@ -45,7 +49,7 @@ function roles_user_main()
                                          'user',
                                          'account'));
         } else {
-            xarResponseRedirect(xarModURL(xarModGetNameFromID($defaultauthmodule),
+            xarResponseRedirect(xarModURL($authmodule,
                                           'user',
                                           'showloginform'));
         }
