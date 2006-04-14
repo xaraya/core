@@ -44,7 +44,7 @@ class xarDB extends Creole
         return self::$firstDSN['database'];
     }
 
-    private function setFirstDSN()
+    private static function setFirstDSN()
     {
         $conn = self::$connections[0];
         self::$firstDSN = $conn->getDSN();

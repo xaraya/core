@@ -25,7 +25,7 @@ class Dynamic_Object_Master
     public $label = null;
     public $moduleid = null;
     public $itemtype = null;
-    var $parent = null;
+    public $parent = null;
 
     public $urlparam = 'itemid';
     public $maxid = 0;
