@@ -3,8 +3,10 @@
  * Short description of purpose of file
  *
  * @package validation
- * @copyright (C) 2003 by the Xaraya Development Team.
-*/
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
 
 /**
  * Full Email Check -- Checks first thru the regexp and then by mx records
