@@ -81,11 +81,10 @@
         </p>
 
         <pre>
-<code>&lt;!-- <xar:mlstring>avoid errors when the dynamic data module isn't activated</xar:mlstring> --&gt;
-&lt;xar:if condition="xarModIsAvailable('dynamicdata')"&gt;
+<code>
 &lt;xar:data-getitems name="&#36;properties" value="&#36;values" module="users" 
  itemids="&#36;uidlist" /&gt;
-&lt;/xar:if&gt;</code>
+</code>
 </pre> 
 
         <p>
@@ -93,14 +92,13 @@
         </p>
 
 <pre>
-<code>    &lt;!-- <xar:mlstring>avoid errors when the dynamic data module isn't activated</xar:mlstring> --&gt;
-    &lt;xar:if condition="xarModIsAvailable('dynamicdata')"&gt;
+<code>
     &lt;xar:foreach in="&#36;properties" key="&#36;name"&gt;
         &lt;th width="10%"&gt;
             &lt;xar:data-label property="&#36;properties[&#36;name]" /&gt;
         &lt;/th&gt;
     &lt;/xar:foreach&gt;
-    &lt;/xar:if&gt;</code>
+</code>
 </pre> 
 
         <p>
@@ -108,8 +106,7 @@
         </p>
 
         <pre>
-<code>    &lt;!-- <xar:mlstring>avoid errors when the dynamic data module isn't activated</xar:mlstring> --&gt;
-    &lt;xar:if condition="xarModIsAvailable('dynamicdata')"&gt;
+<code>
     &lt;xar:foreach in="&#36;properties" key="&#36;name"&gt;
         &lt;td class="xar-norm"&gt;
         &lt;!-- <xar:mlstring>avoid errors if the value isn't defined for this 
@@ -122,7 +119,7 @@
         &lt;/xar:if&gt;
         &lt;/td&gt;
     &lt;/xar:foreach&gt;
-    &lt;/xar:if&gt;</code>
+</code>
 </pre> 
 
         <p>
