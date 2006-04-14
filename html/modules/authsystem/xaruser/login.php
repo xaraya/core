@@ -245,13 +245,16 @@ function authsystem_user_login()
             }
 
             // Log the user in
-            //$defaultauthmodule=xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule'));
-            //if (!isset($defaultauthmodule)) $defaultauthmodules='authsystem';
+            $defaultauthmodule=xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule'));
+            if (!isset($defaultauthmodule)) $defaultauthmodules='authsystem';
             //jojodee - retain authsystem here for compatibility with current authentication modules
-            //they do not supply their own login forms
-            $defaultauthmodule='authsystem';
-            $res = xarModAPIFunc($defaultauthmodule,'user','login',array('uname' => $uname, 'pass' => $pass, 'rememberme' => $rememberme));
-            if ($res === NULL) return;
+            //they do not all supply their own login forms
+            if (!file_exists('modules/'.$defaultauthmodule.'/xaruser/login.php')) {
+               $defaultauthmodule='authsystem';
+            }
+           $res = xarModAPIFunc($defaultauthmodule,'user','login',array('uname' => $uname, 'pass' => $pass, 'rememberme' => $rememberme));
+
+           if ($res === NULL) return;
             elseif ($res == false) {
                 // Problem logging in
                 // TODO - work out flow, put in appropriate HTML
