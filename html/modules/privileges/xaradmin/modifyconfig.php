@@ -78,11 +78,13 @@ function privileges_admin_modifyconfig()
                     if (!xarVarFetch('enablerealms', 'bool', $data['enablerealms'], false, XARVAR_NOT_REQUIRED)) return;
                     xarModSetVar('privileges', 'showrealms', $data['enablerealms']);
                     if (!xarVarFetch('realmvalue', 'str', $realmvalue, 'none', XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('realmcomparison', 'str', $realmcomparison, 'exact', XARVAR_NOT_REQUIRED)) return;
                     if ($realmvalue == 'string') {
                         if (!xarVarFetch('textvalue', 'str', $textvalue, '', XARVAR_NOT_REQUIRED)) return;
                         $realmvalue = empty($textvalue) ? 'none' : 'string:' . $textvalue;
                     }
                     xarModSetVar('privileges', 'realmvalue', $realmvalue);
+                    xarModSetVar('privileges', 'realmcomparison', $realmcomparison);
                     break;
                 case 'lastresort':
                     if (!xarVarFetch('name', 'str', $name, '', XARVAR_NOT_REQUIRED)) return;
