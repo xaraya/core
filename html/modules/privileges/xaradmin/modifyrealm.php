@@ -51,6 +51,7 @@ function privileges_admin_modifyrealm()
         $q = new xarQuery('UPDATE',$xartable['security_realms']);
         $q->addfield('xar_name', $name);
         if(!$q->run()) return;
+        xarResponseRedirect(xarModURL('privileges', 'admin', 'viewrealms'));
     }
 
     $data['rid'] = $rid;

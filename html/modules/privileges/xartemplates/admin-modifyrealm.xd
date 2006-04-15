@@ -4,27 +4,10 @@
 </div>
 <div class="xar-mod-body">
    <xar:template type="module" file="admin-menu" />
-   <xar:set name="activetab">$_bl_module_func</xar:set>
-   <dl class="xar-tabs">
-  <dt class="help" title="#xarML('Choose an action to perform')#">
-      <xar:mlstring>Manage Realms:</xar:mlstring>
-    </dt>
-       <xar:set name="tabclass">$activetab=='viewrealms'?'active':''</xar:set>
-        <dd class="#$tabclass#">
-          <a href="&xar-modurl-privileges-admin-viewrealms;">
-            <xar:mlstring>View Realms</xar:mlstring>
-          </a>
-        </dd>
-        <xar:set name="tabclass">$activetab=='newrealm'?'active':''</xar:set>
-        <dd class="#$tabclass#">
-            <a href="&xar-modurl-privileges-admin-newrealm;" >
-                <xar:mlstring>Add Realm</xar:mlstring>
-            </a>
-        </dd>
+   <xar:template type="module" file="admin-realms" />
 
-  </dl>
-  </div>
-    <form name="privilegeform" id="privilegeform" action="#xarModURL('privileges','admin','modifyrealm')#" method="post" enctype="application/x-www-form-urlencoded">
+
+    <form id="privilegeform" action="&xar-modurl-privileges-admin-modifyrealm;" method="post" enctype="application/x-www-form-urlencoded">
         <fieldset>
             <legend>
             <xar:mlstring>
@@ -37,7 +20,7 @@
                 Name:
                 </xar:mlstring>
             </label>
-            <input type="text" name="name" id="name" value="#$name#" size="20" maxlength="20" tabindex="1" class="xar-form-textmedium" />
+                <input type="text" name="name" id="name" value="#$name#" size="20" maxlength="20" tabindex="1" class="xar-form-textmedium" />
             </div>
         </fieldset>
         <fieldset>

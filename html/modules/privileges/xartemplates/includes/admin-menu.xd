@@ -24,7 +24,11 @@
         </dd>
     </xar:sec>
     <xar:sec mask="AdminPrivilege" catch="false">
-        <xar:set name="tabclass">$activetab=='viewrealms'?'active':''</xar:set>
+       <xar:if condition="$activetab eq 'viewreams' or $activetab eq 'newrealm' or $activetab eq 'viewrealms' or $activetab eq 'modifyrealm' or $activetab eq 'deleterealm'">
+         <xar:set name="tabclass">'active'</xar:set>
+      <xar:else />
+         <xar:set name="tabclass">''</xar:set>
+      </xar:if>
         <dd class="#$tabclass#">
           <a href="&xar-modurl-privileges-admin-viewrealms;">
             <xar:mlstring>Manage Realms</xar:mlstring>
