@@ -3,11 +3,13 @@
  * Short description of purpose of file
  *
  * @package validation
- * @copyright (C) 2003 by the Xaraya Development Team.
-*/
-
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
 /**
  * Integer Validation Class
+ * @return true on success of validation (value is an integer)
  */
 function variable_validations_int (&$subject, $parameters, $supress_soft_exc, &$name)
 {

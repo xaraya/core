@@ -3,11 +3,13 @@
  * Class for conversion between charsets
  *
  * @package multilanguage
- * @copyright (C) 2003,2004,2005 by the Xaraya Development Team.
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
  * @author Mikolaj Jedrzejak <mikolajj@op.pl>
  * @author Vladimirs Metenchuks <voll@xaraya.com>
-*/ 
+*/
 
 define ("CONVERT_TABLES_DIR", 'includes/transforms/convtables/');
 
@@ -19,7 +21,7 @@ class xarCharset
 
     /**
      * Converts unicode number to UTF-8 multibyte character
-     * 
+     *
      * @access private
      * @param  integer     Hexadecimal value of a unicode char.
      * @return string      Encoded hexadecimal value as a regular char.
@@ -131,14 +133,14 @@ class xarCharset
      * Creates table with two SBCS (Single Byte Character Set).
      * Every conversion go through this table.
      *
-     * The file with encoding tables have to be save in 
+     * The file with encoding tables have to be save in
      * "Format A" of unicode.org charset table format
      *
      * @param string First encoding name and filename.
      * @param string Second encoding name and filename. Optional for building a joined table.
      * @return array Table necessary to convert one encoding to another.
      **/
-    function &initConvertTable ($firstEncoding, $secondEncoding = "") 
+    function &initConvertTable ($firstEncoding, $secondEncoding = "")
     {
         if ($this->lastConversion == $firstEncoding.':'.$secondEncoding) {
             return $this->conversionTable;
@@ -170,11 +172,11 @@ class xarCharset
         $this->conversionTable =& $convertTable;
         return $convertTable;
     }
-    
+
 
     /**
      *  Converts string from one charset to another
-     * 
+     *
      * @param string The input string you want to change.
      * @param string Source charset.
      * @param string Target charset.
@@ -184,7 +186,7 @@ class xarCharset
     function convertByTable ($inString, $fromCharset = '', $toCharset = '', $turnOnEntities = false)
     {
         /**
-         * Check are there all variables 
+         * Check are there all variables
          **/
         if ($inString == '') {
             return '';
@@ -195,9 +197,9 @@ class xarCharset
             xarLogMessage("xarCharset error, empty variable \$toCharset in convertByTable() function.");
             return $inString;
         }
-         
+
         $outString = "";
-        
+
         // Convert charset encoding names to lowercase
         $fromCharset = strtolower($fromCharset);
         $toCharset   = strtolower($toCharset);
@@ -206,7 +208,7 @@ class xarCharset
             xarLogMessage("xarCharset - you are trying to convert string from ". $fromCharset ." to ". $fromCharset);
             return $inString;
         }
-        
+
         if ($fromCharset == "utf-8") {
             // Converts from multibyte char string.
             $CharsetTable =& $this->initConvertTable ($toCharset);
@@ -270,7 +272,7 @@ class xarCharset
 
     /**
      *  Converts string from one charset to another
-     * 
+     *
      * @param string The input string you want to change.
      * @param string Source charset.
      * @param string Target charset.

@@ -1,19 +1,16 @@
 <?php
 /**
- * File: $Id:
- * 
  * Stub file_get_contents
- * 
+ *
  * @package PHP Version Compatibility Library
- * @copyright (C) 2004 by the Xaraya Development Team.
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Paul Crovella
  */
-
 /**
  * Stub for the file_get_contents() function
- * 
+ *
  * @see _file_get_contents()
  */
 
