@@ -79,8 +79,8 @@ function privileges_admin_modifyconfig()
                     xarModSetVar('privileges', 'showrealms', $data['enablerealms']);
                     if (!xarVarFetch('realmvalue', 'str', $realmvalue, 'none', XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('realmcomparison', 'str', $realmcomparison, 'exact', XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('textvalue', 'str', $textvalue, '', XARVAR_NOT_REQUIRED)) return;
                     if ($realmvalue == 'string') {
-                        if (!xarVarFetch('textvalue', 'str', $textvalue, '', XARVAR_NOT_REQUIRED)) return;
                         $realmvalue = empty($textvalue) ? 'none' : 'string:' . $textvalue;
                     }
                     xarModSetVar('privileges', 'realmvalue', $realmvalue);
