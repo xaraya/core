@@ -189,9 +189,13 @@
                 <fieldset>
                     <legend>
                         <xar:mlstring>
-                            Global Values 
+                            Realm Privilege Options
                         </xar:mlstring>
                     </legend>
+                     <p class="xar-form-input-wrapper-after xar-padding-endsthick">
+                        <xar:mlstring>Security checks will look for a match on the realm part of any privilege you define, with the 'realm mask' as defined below.</xar:mlstring>
+                        </p>
+
                     <div class="xar-form-input-wrapper">
                         <label for="maskvalue" title="#xarML('The following choice will be inserted into any mask')#" class="xar-form-label">
                             <xar:mlstring>
@@ -202,8 +206,8 @@
                                                 array('id' => 'none', 'name' => 'No Value'),
                                                 array('id' => 'domain', 'name' => 'Current Domain'),
                                                 array('id' => 'theme', 'name' => 'Current Theme'),
-                                                array('id' => 'string', 'name' => 'Text Value'),
-                                                array('id' => 'group', 'name' => 'Primary Parent Group')
+                                                array('id' => 'group', 'name' => 'Primary Parent Group'),
+                                                array('id' => 'string', 'name' => 'Text Value')
                                                 )
                                                 </xar:set>
 
@@ -219,9 +223,6 @@
                         </xar:foreach>
                         </div>
 
-                        <p class="xar-form-input-wrapper-after xar-padding-endsthick">
-                        <xar:mlstring>Security checks will match any privilege that contains the above choice in its realm</xar:mlstring>
-                        </p>
                     </div>
                     <div class="xar-form-input-wrapper">
                     <label for="pname" title="#xarML('Text value for realm')#" class="xar-form-label">

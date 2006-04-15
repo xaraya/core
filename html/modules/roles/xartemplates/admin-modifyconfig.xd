@@ -452,11 +452,14 @@
                         <input type="checkbox" name="displayrolelist" id="displayrolelist" value="1" />
                     </xar:if>
                     <label for="displayrolelist" title="#xarML('Display roles (memberlist) in user menu?')#">
-                        <xar:mlstring>
-                            Display roles (member list) as user menu option?
-                        </xar:mlstring>
+                        <strong><xar:mlstring>
+                            Display member list as Roles menu option?
+                        </xar:mlstring></strong>
                     </label>
                 </div>
+                <p class="xar-form-container-after xar-padding-bottomthick">
+                        <xar:mlstring>NOTE: This is a convenience option. The memberlist is available regardless for all users that have Read privileges for Roles.</xar:mlstring>
+                </p>
                 <div class="xar-form-input-wrapper-after">
                     <xar:if condition="xarModGetVar('roles', 'searchbyemail')">
                         <input type="checkbox" name="searchbyemail" id="searchbyemail" value="1" checked="checked" />
@@ -464,12 +467,12 @@
                         <input type="checkbox" name="searchbyemail" id="searchbyemail" value="1" />
                     </xar:if>
                     <label for="searchbyemail" title="#xarML('Allow user search by email address')#">
-                        <xar:mlstring>
+                        <strong><xar:mlstring>
                             Allow Searching By Email
-                        </xar:mlstring>
+                        </xar:mlstring></strong>
                     </label>
                 </div>
-                <p class="xar-form-input-wrapper-after">
+                <p class="xar-form-input-wrapper-after  xar-padding-bottomthick"">
                     <xar:mlstring>
                         Caution: this option may reveal enough information to compromise a user's login. 
                     </xar:mlstring>
@@ -481,11 +484,17 @@
                         <input type="checkbox" name="usereditaccount" id="usereditaccount" value="1" />
                     </xar:if>
                     <label for="usereditaccount" title="#xarML('Allow users to edit their account details')#">
-                        <xar:mlstring>
-                            Allow users to edit their member account details (toggles Roles hook to Roles)
-                        </xar:mlstring>
+                        <strong><xar:mlstring>
+                            Allow users to edit their member account details
+                        </xar:mlstring></strong>
                     </label>
                 </div>
+                 <p class="xar-form-input-wrapper-after  xar-padding-bottomthick"">
+                    <xar:mlstring>
+                         (toggles Roles hook to Roles)
+                    </xar:mlstring>
+                </p>
+
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">

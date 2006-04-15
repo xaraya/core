@@ -7,19 +7,27 @@
         <img src="#xarTplGetImage('admin.gif','base')# alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
 
     <h2>
-        <xar:mlstring>Overview Required</xar:mlstring>
+        <xar:mlstring>Help File Not Found</xar:mlstring>
     </h2>
 
     <p>
-        <xar:mlstring>There is no overview for this Xaraya extension function. If you would like to contribute a help
-        file please contact us at </xar:mlstring><a href="mailto:info@xaraya.com">info@xaraya.com</a><xar:mlstring>. You can also report a missing Overview file by lodging a bug report at </xar:mlstring><a href="http://bugs.xaraya.com">http://bugs.xaraya.com</a></p>
+        <xar:mlstring>There is no help information for this Xaraya extension.</xar:mlstring>
+    </p>
     <p>
-       <xar:mlstring>To create an Overview for a module you can follow the Example
-       module Overview template at </xar:mlstring><strong>modules/example/xartemplates/admin-main.xd</strong><xar:mlstring> or the online instructions at </xar:mlstring><a href="http://xaraya.com/index.php/team/591"><xar:mlstring>Creating Xaraya Help System Documents</xar:mlstring></a>.
+       <xar:mlstring>The Xaraya help system is not fully implemented at this stage.
+       Most links display an existing extension Overview. This link will be replaced in the near future by a 
+       global Help system.
+       </xar:mlstring>
+    </p>
+    <p>
+        <xar:mlstring>You can report a missing Overview file by lodging a bug report at </xar:mlstring>
+        <a href="http://bugs.xaraya.com">http://bugs.xaraya.com</a>
+        <xar:mlstring> If you are interested in helping to write an Overview for a module 
+        see </xar:mlstring><strong>modules/example/xartemplates/admin-main.xd</strong><xar:mlstring> as an example.</xar:mlstring>
     </p>
 
          <p class="xar-sub">
-             <strong>&nbsp;<xar:mlstring>Xaraya Help System  - Overview Required</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.0.0&nbsp; 2006-02-26
+             <strong>&nbsp;<xar:mlstring>Xaraya Help System </xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.0.0&nbsp; 2006-02-26
          </p>
 </div>
 

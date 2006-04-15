@@ -2527,7 +2527,7 @@ function installer_admin_upgrade2()
         //will use admin.xt if present
         xarModSetVar('themes','dashtemplate','admin');
     }else{
-        //set it to the new dashboard template
+        //set it to the new nothing - as the file may not exist
         xarModSetVar('themes','dashtemplate','dashboard');
     }
 
