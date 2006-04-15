@@ -20,7 +20,7 @@ function privileges_admin_modifyrealm()
     // Security Check
     if(!xarSecurityCheck('EditPrivilege',0,'Realm')) return;
 
-    if (!xarVarFetch('rid',      'int', $rid,      '',      XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('rid',       'int', $rid,      '',      XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('name',      'str:1.20', $name,      '',      XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('confirmed', 'bool', $confirmed, false, XARVAR_NOT_REQUIRED)) return;
 
@@ -50,6 +50,7 @@ function privileges_admin_modifyrealm()
 
         $q = new xarQuery('UPDATE',$xartable['security_realms']);
         $q->addfield('xar_name', $name);
+        $q->eq('xar_rid', $rid);        
         if(!$q->run()) return;
         xarResponseRedirect(xarModURL('privileges', 'admin', 'viewrealms'));
     }
