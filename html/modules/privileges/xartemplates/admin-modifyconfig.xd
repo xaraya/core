@@ -385,8 +385,8 @@
                             Mask to test
                         </xar:mlstring>
                     </label>
-                    <input type="text" name="testmask" id="testmask" value="All" />
-                    <xar:mlstring>Adding a mask name here will show only the checks involving that mask</xar:mlstring>              
+                    <input type="text" name="testmask" id="testmask" value="#xarModGetVar('privileges', 'testmask')#" />
+                    <xar:mlstring>Adding a mask name here will show only the checks involving that mask</xar:mlstring>
                 </div>
             </fieldset>
             <fieldset>

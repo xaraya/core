@@ -7,7 +7,7 @@
 
    <xar:template type="module" file="admin-realms" />
 
-    <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-newrealm;" method="post" enctype="application/x-www-form-urlencoded">
+    <form id="privilegeform" action="&xar-modurl-privileges-admin-newrealm;" method="post" enctype="application/x-www-form-urlencoded">
         <fieldset>
             <legend>
             <xar:mlstring>

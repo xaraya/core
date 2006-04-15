@@ -110,7 +110,7 @@ function privileges_admin_modifyconfig()
                     xarModSetVar('privileges', 'test', $test);
                     if (!xarVarFetch('testdeny', 'checkbox', $testdeny, false, XARVAR_NOT_REQUIRED)) return;
                     xarModSetVar('privileges', 'testdeny', $testdeny);
-                    if (!xarVarFetch('testmask', 'checkbox', $testmask, false, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('testmask', 'str', $testmask, 'All', XARVAR_NOT_REQUIRED)) return;
                     xarModSetVar('privileges', 'testmask', $testmask);
                     break;
             }
