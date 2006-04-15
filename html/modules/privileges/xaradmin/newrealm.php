@@ -43,6 +43,9 @@ function privileges_admin_newrealm()
         $q = new xarQuery('INSERT',$xartable['security_realms']);
         $q->addfield('xar_name', $name);
         if(!$q->run()) return;
+        
+        //Redirect to view page
+        xarResponseRedirect(xarModURL('privileges', 'admin', 'viewrealms'));
     }
 
     $data['authid'] = xarSecGenAuthKey();

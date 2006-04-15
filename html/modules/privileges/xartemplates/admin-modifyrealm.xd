@@ -15,18 +15,19 @@
             </xar:mlstring>
             </legend>
             <div class="xar-form-input-wrapper">
-            <label for="name" title="#xarML('Name of the realm')#" class="xar-form-label">
+            <label for="newname" title="#xarML('Name of the realm')#" class="xar-form-label">
                 <xar:mlstring>
                 Name:
                 </xar:mlstring>
             </label>
-                <input type="text" name="name" id="name" value="#$name#" size="20" maxlength="20" tabindex="1" class="xar-form-textmedium" />
+                <input type="text" name="newname" id="newname" value="#$name#" size="20" maxlength="20" tabindex="1" class="xar-form-textmedium" />
             </div>
         </fieldset>
         <fieldset>
             <div class="xar-form-input-wrapper-after">
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
             <input type="hidden" name="rid" id="rid" value="#$rid#" />
+            <input type="hidden" name="name" id="name" value="#$name#" />
             <input type="hidden" name="confirmed" id="confirmed" value="true" />
             <xar:set name="tmpchgvalue"><xar:mlstring>Save</xar:mlstring></xar:set>
             <input type="submit" value="#$tmpchgvalue#" tabindex="2" />

@@ -407,7 +407,9 @@
                         </xar:mlstring>
                     </label>
                     <input type="text" name="testmask" id="testmask" value="#xarModGetVar('privileges', 'testmask')#" />
-                    <xar:mlstring>Adding a mask name here will show only the checks involving that mask</xar:mlstring>
+                    <p class="xar-form-input-wrapper-after">
+                         <xar:mlstring>Adding a mask name here will show only the checks involving that mask</xar:mlstring>
+                    </p>
                 </div>
             </fieldset>
             <fieldset>

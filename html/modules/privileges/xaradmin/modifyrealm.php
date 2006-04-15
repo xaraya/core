@@ -21,9 +21,8 @@ function privileges_admin_modifyrealm()
     if(!xarSecurityCheck('EditPrivilege',0,'Realm')) return;
 
     if (!xarVarFetch('rid',       'int', $rid,      '',      XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('name',      'str:1.20', $name,      '',      XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('confirmed', 'bool', $confirmed, false, XARVAR_NOT_REQUIRED)) return;
-
+    if (!xarVarFetch('name',      'str:1.20', $name,      '',      XARVAR_NOT_REQUIRED)) {return;}
     $xartable =& xarDBGetTables();
 
     if (empty($confirmed)) {
@@ -35,21 +34,22 @@ function privileges_admin_modifyrealm()
         if ($result)
         $name = $result['name'];
     } else {
+        if (!xarVarFetch('newname',   'str:1.20',$newname, '',XARVAR_NOT_REQUIRED)) {return;}
         if (!xarSecConfirmAuthKey()) return;
 
         $q = new xarQuery('SELECT',$xartable['security_realms'],'xar_name');
-        $q->eq('xar_name', $name);
+        $q->eq('xar_name', $newname);
         if(!$q->run()) return;
 
-        if ($q->getrows() > 0) {
-            $msg = xarML('There is already a realm with the name #(1)', $name);
+        if ($q->getrows() > 0 && ($newname !=$name)) {
+            $msg = xarML('There is already a realm with the name #(1)', $newname);
             xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA',
                            new DefaultUserException($msg));
             return;
         }
 
         $q = new xarQuery('UPDATE',$xartable['security_realms']);
-        $q->addfield('xar_name', $name);
+        $q->addfield('xar_name', $newname);
         $q->eq('xar_rid', $rid);        
         if(!$q->run()) return;
         xarResponseRedirect(xarModURL('privileges', 'admin', 'viewrealms'));
@@ -57,6 +57,7 @@ function privileges_admin_modifyrealm()
 
     $data['rid'] = $rid;
     $data['name'] = $name;
+    $data['newname'] = '';
     $data['authid'] = xarSecGenAuthKey();
     return $data;
 }
