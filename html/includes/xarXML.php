@@ -3,13 +3,13 @@
  * XML services for Xaraya
  *
  * @package xml
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marcel van der Boom <marcel@xaraya.com>
  */
 
-/** 
+/**
  * This subsystem offers an interface to Xaraya to handle XML data
  * It includes:
  * - Generic XML parser with an interface to parse any XML data including the
@@ -48,16 +48,16 @@ define('XARXML_ENTITY_SEP', chr(12));
 if(!defined('XML_ELEMENT_NODE'))       define('XML_ELEMENT_NODE'      , 1);
 if(!defined('XML_ATTRIBUTE_NODE'))     define('XML_ATTRIBUTE_NODE'    , 2);
 if(!defined('XML_TEXT_NODE'))          define('XML_TEXT_NODE'         , 3);
-if(!defined('XML_CDATA_SECTION_NODE')) define('XML_CDATA_SECTION_NODE', 4);     
-if(!defined('XML_ENTITY_REF_NODE'))    define('XML_ENTITY_REF_NODE'   ,    5);     
+if(!defined('XML_CDATA_SECTION_NODE')) define('XML_CDATA_SECTION_NODE', 4);
+if(!defined('XML_ENTITY_REF_NODE'))    define('XML_ENTITY_REF_NODE'   ,    5);
 if(!defined('XML_ENTITY_NODE'))        define('XML_ENTITY_NODE'       , 6);
 if(!defined('XML_PI_NODE'))            define('XML_PI_NODE'           , 7);
 if(!defined('XML_COMMENT_NODE'))       define('XML_COMMENT_NODE'      , 8);
 if(!defined('XML_DOCUMENT_NODE'))      define('XML_DOCUMENT_NODE'     , 9);
-if(!defined('XML_DOCUMENT_TYPE_NODE')) define('XML_DOCUMENT_TYPE_NODE',10);     
-if(!defined('XML_DOCUMENT_FRAG_NODE')) define('XML_DOCUMENT_FRAG_NODE',11);     
+if(!defined('XML_DOCUMENT_TYPE_NODE')) define('XML_DOCUMENT_TYPE_NODE',10);
+if(!defined('XML_DOCUMENT_FRAG_NODE')) define('XML_DOCUMENT_FRAG_NODE',11);
 if(!defined('XML_NOTATION_NODE'))      define('XML_NOTATION_NODE'     ,12);
-     
+
 if(!defined('XML_ENTITY_DECL_NODE'))   define('XML_ENTITY_DECL_NODE'  ,17);
 
 if(!defined('XML_GLOBAL_NAMESPACE')) define('XML_GLOBAL_NAMESPACE', 1);
@@ -70,8 +70,8 @@ define('XARXML_BLOCKREAD_SIZE',4096);
 // This is mainly a switch for using xml_parse or
 // xml_parse_into_struct. It all depends whether the
 // re-arranging of the php generated struct is faster
-// then creating our own struct 
-// Using the chunk based parser, for large files 
+// then creating our own struct
+// Using the chunk based parser, for large files
 // and using 'true' SAX parsing (like direct filters or
 // chaining handlers, will be much faster and cost less
 // memory. We make it definable anyway, so we can prove
@@ -87,7 +87,7 @@ define('XARXML_HSTATE_DTDCLOSE_EXPECTED', 8);
 define('XARXML_HSTATE_DTDGATHERING'     ,16);
 
 // Attribute names for the tree constructed by the default handler
-define('XARXML_ATTR_TAGINDEX','tagindex'); 
+define('XARXML_ATTR_TAGINDEX','tagindex');
 define('XARXML_ATTR_TYPE','type');
 define('XARXML_ATTR_NAME','name');
 define('XARXML_ATTR_CHILDREN','children');
@@ -104,7 +104,7 @@ define('XARXML_ATTR_NAMESPACES','namespaces');
  *
  * @access protected
  */
-function xarXml_init($args, $whatElseIsGoingLoaded) 
+function xarXml_init($args, $whatElseIsGoingLoaded)
 {
     return true;
 
@@ -123,35 +123,35 @@ function xarXml_init($args, $whatElseIsGoingLoaded)
  * @package xml
  * @todo do not assume the result will be a parse tree, it's non-sax-like
  */
-class xarXmlParser 
+class xarXmlParser
 {
     var $encoding;      // Which input encoding are we gonna use for parsing?
     var $handler;       // Which handler object is attached to this parser?
     var $parser=NULL;   // The parser object itself
     var $tree=array();  // Resulting parse tree
-    
+
     /**
      * Construct the xarXmlParser object
      *
-     * For xaraya we need to be able to set encoding, 
+     * For xaraya we need to be able to set encoding,
      * and have support for namespaces
      *
      * @access public
-     * @param string $encoding character encoding to use (see top of file) 
+     * @param string $encoding character encoding to use (see top of file)
      * @param object $handler which handler object handles the events generated
      * @todo build in recognition of domxml availability and set that as default handler
      */
-    function xarXmlParser($encoding=XARXML_CHARSET_DEFAULT,$handler=NULL) 
+    function xarXmlParser($encoding=XARXML_CHARSET_DEFAULT,$handler=NULL)
     {
         $this->encoding=$encoding;
-               
+
         $defHandlerClass = XARXML_DEFAULTHANDLER;
         if(is_object($handler) && is_subclass_of($handler,XARXML_HANDLERCLASS))
             $this->handler =& $handler;
         else
             $this->handler = new $defHandlerClass();
     }
-    
+
     /**
      * Parse a string
      *
@@ -159,7 +159,7 @@ class xarXmlParser
      * @param string $xmldata string representation of xmldata to parse
      * @todo check the string more thoroughly, seems to be delicate
      */
-    function parseString($xmldata) 
+    function parseString($xmldata)
     {
         $this->__activate();
         if(!$this->__parse($xmldata, true)) {
@@ -168,14 +168,14 @@ class xarXmlParser
         }
         return $this->__deactivate();
     }
-    
+
     /**
      * Parse a file
      *
      * @access public
      * @param string $fileName path to file to parse
      */
-    function parseFile($fileName) 
+    function parseFile($fileName)
     {
         $fp = fopen($fileName,"r");
         if(!is_resource($fp)) {
@@ -203,7 +203,7 @@ class xarXmlParser
                 $xml .= $xmldata;
             }
         }
-        
+
         // Parse in whole
         if (!XARXML_PARSEWHILEREAD) {
             if (!$this->__parse($xml,true)) {
@@ -224,7 +224,7 @@ class xarXmlParser
      * @param bool   $final   denotes whether this is the last chunk we can expect
      * @todo put the $vals and $index arrays to use, we get them nearly for free here when parsing as a whole
      */
-    function __parse($xmldata, $final) 
+    function __parse($xmldata, $final)
     {
         $vals=array(); $index=array();
         // FIXME: actually put that arrays to use in the handler,
@@ -242,7 +242,7 @@ class xarXmlParser
      * @access private
      *
      */
-    function __getErrorInfo() 
+    function __getErrorInfo()
     {
         $error = xml_get_error_code($this->parser);
         $this->lastmsg = "[".xml_get_current_line_number($this->parser).":"
@@ -250,19 +250,19 @@ class xarXmlParser
             .xml_error_string($error);
     }
 
-        
+
     /**
      * Set a parser option
-     * 
+     *
      * @access public
      * @param integer $option option to be set, one of the XML_OPTION_* constants
      * @param mixed   $value  value to set the option to
      */
-    function setOption($option, $value) 
+    function setOption($option, $value)
     {
         return xml_parser_set_option($this->parser, $option, $value);
     }
-    
+
     /**
      * Get a parser option
      *
@@ -274,8 +274,8 @@ class xarXmlParser
         return xml_parser_get_option($this->parser, $option);
     }
 
-    
-    /** 
+
+    /**
      * Private methods
      *
      */
@@ -284,7 +284,7 @@ class xarXmlParser
      * Activate the parser
      *
      * This method activates the parser to be set up for parsring a string
-     * or a file. This activate/deactivate logic is necessary because the 
+     * or a file. This activate/deactivate logic is necessary because the
      * parser can only parse 1 file/string during it's instantation. When
      * you try to parser consecutive documents with the same instance all
      * kinds of weird errors are happening.
@@ -293,7 +293,7 @@ class xarXmlParser
      * @param string $resolve_base the base from which system/public ids are resolved
      *
      */
-    function __activate($resolve_base = NULL) 
+    function __activate($resolve_base = NULL)
     {
         $this->parser=xml_parser_create_ns($this->encoding, XARXML_NAMESPACE_SEP);
         $this->setOption(XML_OPTION_CASE_FOLDING,false);
@@ -309,7 +309,7 @@ class xarXmlParser
      *
      * @access private
      */
-    function __deactivate() 
+    function __deactivate()
     {
         $this->__geterrorinfo();
         $this->tree = $this->handler->_tree;
@@ -322,15 +322,15 @@ class xarXmlParser
      *
      * @access private
      */
-    function __free() 
-    { 
-        return xml_parser_free($this->parser); 
+    function __free()
+    {
+        return xml_parser_free($this->parser);
     }
 
     /**
      * Set the handlers
      *
-     * For the registered handler to the parser, this private method 
+     * For the registered handler to the parser, this private method
      * activates them.
      *
      * @access private
@@ -358,7 +358,7 @@ class xarXmlParser
  * This class forms the base for defining handlers. Override
  * this class with your own methods with the same name to create
  * a xml handler object which handles the parsing for you.
- * 
+ *
  * @package xml
  * @todo test,test,test
  * @todo document the strange xml_set_object thingie
@@ -405,7 +405,7 @@ class xarAbstractXmlHandler
  * parsed xml
  *
  * @package xml
- * 
+ *
  */
 class xarXmlDefaultHandler extends xarAbstractXmlHandler
 {
@@ -415,22 +415,22 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
     var $_nsregister=array();
     var $_state = XARXML_HSTATE_INITIAL;
     var $_dtd_data ='';
-    
-    /** 
-     * We need a base for resolving entities when they are not 
+
+    /**
+     * We need a base for resolving entities when they are not
      * specified relatively. On creation of the handler this can have a number of values
      * 1. path of the file we're handling, so relative paths can be resolved
      * 2. NULL if we're not in a file at all
      * 3. url?
      */
-    var $_resolve_base=NULL;     
+    var $_resolve_base=NULL;
 
     /**
      * Constructor
      *
      * @param integer $indexstart where to start counting
      */
-    function xarXmlDefaultHandler($indexstart=1) 
+    function xarXmlDefaultHandler($indexstart=1)
     {
         $this->_tagindex=$indexstart;
     }
@@ -441,10 +441,10 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
      * @param object $parser the parser to which the handler is attached
      * @param string $data   string data found in the construct
      */
-    function default_handler($parser, $data) 
+    function default_handler($parser, $data)
     {
         if(!trim($data)) return true; // nothing to do here
-        
+
         // If we've never been here before add the initial doc node
         if($this->_state == XARXML_HSTATE_INITIAL) {
             $this->_tree[0][XARXML_ATTR_TYPE] = XML_DOCUMENT_NODE;
@@ -452,7 +452,7 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
             $this->_tree[0][XARXML_ATTR_TAGINDEX]=$this->_tagindex;
             $this->_tagindex++;
             $this->_state = XARXML_HSTATE_NORMAL;
-        }            
+        }
 
         // Subminiparser to extract the DOCTYPE
         //echo "$data\n";
@@ -511,7 +511,7 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
 
         }
         return true;
-     
+
     }
 
 
@@ -521,7 +521,7 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
      * @param object $parser the parser to which this handler is attached
      * @param string $data   character data found
      */
-    function character_data($parser, $data) 
+    function character_data($parser, $data)
     {
         // this handler can be called multiple times, so make sure we're not
         // overwriting ourselves, trust the depth to put things in the right place
@@ -536,7 +536,7 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
      * Start element handler
      *
      * This gets called when the start of a new <tag> is encountered
-     * the tagname and its attributes are passed in as parameters. 
+     * the tagname and its attributes are passed in as parameters.
      *
      * @param $parser  object the parser which this handler is attached to
      * @param $tagname string the start tag found
@@ -544,14 +544,14 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
      * @todo the ID attribute should be unique, check for that somehow
      *
      */
-    function open_tag($parser, $tagname, $attribs, $type=XML_ELEMENT_NODE) 
+    function open_tag($parser, $tagname, $attribs, $type=XML_ELEMENT_NODE)
     {
         // Next line is basically the crux of the whole thing, to construct the tree
         $this->_tree[$this->_depth] = &$this->_tree[$this->_depth -1][XARXML_ATTR_CHILDREN][];
         $this->_tree[$this->_depth][XARXML_ATTR_NAME]= $tagname;
         $this->_tree[$this->_depth][XARXML_ATTR_TYPE] = $type;
         $this->_tree[$this->_depth][XARXML_ATTR_TAGINDEX]=$this->_tagindex;
-        
+
         $attribs and $this->_tree[$this->_depth][XARXML_ATTR_ATTRIBUTES] = $attribs;
         // See if the ns handler has registered namespaces
         if(count($this->_nsregister) > 0 ) {
@@ -564,19 +564,19 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
         $this->_tagindex++;
         $this->_depth++;
     }
-        
+
     /**
      * Close element handler
      *
      * This handler is called when a closing </tag> is found. As tags in xml
-     * should be properly nested we can count on these functions to be 
+     * should be properly nested we can count on these functions to be
      * called in order
      *
      * @param $parser object the parser to which handler is attached
      * @param $tagnam string tag which is closing
      *
      */
-    function close_tag($parser, $tagname) 
+    function close_tag($parser, $tagname)
     {
         $this->_depth--;
         // We did the children thing already, so, we can get away with it now
@@ -587,14 +587,14 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
      * Processing instruction handler
      *
      * We handle the processing instruction the same as a normal tag, but
-     * distinguish it by using the type flag, adding the actual instructions 
+     * distinguish it by using the type flag, adding the actual instructions
      * as content for the tag. This is not entirely right, but enough for now
      *
      * @param object $parser the parser to which this handler is attached
      * @param string $target the part after the <? in the document
      * @param string $data   the contents of the processing instruction
      */
-    function process_instruction($parser, $target , $data) 
+    function process_instruction($parser, $target , $data)
     {
         $this->open_tag($parser,$target,array(), XML_PI_NODE);
         $this->character_data($parser,$data);
@@ -603,19 +603,19 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
 
     /**
      * Handler called when an external entity reference is found
-     * 
-     * This can get messy. The system_id or public_id or both, refer to the 
-     * location where the contents of the exernal entity can be found. 
+     *
+     * This can get messy. The system_id or public_id or both, refer to the
+     * location where the contents of the exernal entity can be found.
      *
      * We support the system_id for now. We take the class of the current handler
      * and instantiate a subparser which parses the externatl entity. That subtree
      * is inserted into the children element of the entity reference node as an entity
      * node.
      *
-     * @todo figure out the logic for public_id and system id 
-     * 
+     * @todo figure out the logic for public_id and system id
+     *
     */
-    function external_entity_reference($parser, $entity_names,  $resolve_base, $system_id, $public_id) 
+    function external_entity_reference($parser, $entity_names,  $resolve_base, $system_id, $public_id)
     {
         //echo "External entity ref handler\n";
         $entity_list = explode(XARXML_ENTITY_SEP,$entity_names);
@@ -632,7 +632,7 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
                 // couldn't find it directly through absolute reference, try relative
                 // if that doesn't help, the parser will raise an error for us
                 if($this->_resolve_base) $system_id=$this->_resolve_base ."/". $system_id;
-            } 
+            }
             if(!file_exists($system_id)) return false;
 
             // External entities may be empty
@@ -651,7 +651,7 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
         $this->_tree[$this->_depth-1][XARXML_ATTR_CHILDREN] = $ee_tree;
         $this->_tree[$this->_depth-1][XARXML_ATTR_CHILDREN][0][XARXML_ATTR_TYPE] =  XML_ENTITY_NODE;
         $this->_tree[$this->_depth-1][XARXML_ATTR_CHILDREN][0][XARXML_ATTR_NAME] =  $entity;
-      
+
         $this->close_tag($parser, $entity);
         //print_r($this->_tree);
         return true;
@@ -662,12 +662,12 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
      *
      * Likely we don't need this, but here it is for your overriding pleasure
      */
-    function unparsed_entity($parser, $entity_name, $resolve_base, $system_id, $public_id, $notation_name) 
+    function unparsed_entity($parser, $entity_name, $resolve_base, $system_id, $public_id, $notation_name)
     {
         //echo "Unparsed entity handler for $entity_name, $resolve_base, $system_id, $public_id, $notation_name\n";
         return true;
     }
-    
+
     /**
      * Handler for notation declarations
      *
@@ -675,7 +675,7 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
      *
      * @todo at least add the node into the tree for this handler
      */
-    function notation_declaration($parser, $notation_name, $resolve_base, $system_id, $public_id) 
+    function notation_declaration($parser, $notation_name, $resolve_base, $system_id, $public_id)
     {
         //echo "Notation declaration handler for $notation_name, $resolve_base, $system_id, $public_id\n";
         return true;
@@ -683,14 +683,14 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
 
     /**
      * Handler for namespace declarations.
-     * 
-     * Handler to be called when a namespace is declared. 
-     * Namespace declarations occur inside start tags. 
-     * But the namespace declaration start handler is called 
-     * before the start tag handler for each namespace declared 
+     *
+     * Handler to be called when a namespace is declared.
+     * Namespace declarations occur inside start tags.
+     * But the namespace declaration start handler is called
+     * before the start tag handler for each namespace declared
      * in that start tag.
      */
-    function start_namespace($parser, $prefix, $uri) 
+    function start_namespace($parser, $prefix, $uri)
     {
         // We found a namespace declaration, register them so, the open tag can handle it
         $this->_nsregister[$prefix]= $uri;
@@ -700,16 +700,16 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
     /**
      * Handler for namespace declarations
      *
-     * Handler to be called when leaving the scope of a 
-     * namespace declaration. This will be called, for each 
-     * namespace declaration, after the handler for the end 
+     * Handler to be called when leaving the scope of a
+     * namespace declaration. This will be called, for each
+     * namespace declaration, after the handler for the end
      * tag of the element in which the namespace was declared.
      *
      * @access protected
      * @param object $parser parser object to which handler is attached
      * @param string $prefix by which prefix is this namespace identified in the doc
      */
-    function end_namespace($parser, $prefix) 
+    function end_namespace($parser, $prefix)
     {
         // Reset the namespace register, bit paranoid, but can't hurt
         $this->_nsregister=array();
@@ -721,7 +721,7 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
      *
      * @access protected
      */
-    function _reset() 
+    function _reset()
     {
         $this->_dtd_data='';
         $this->_state = XARXML_HSTATE_INITIAL;
@@ -747,7 +747,7 @@ function getElementsByname($name,$tree=NULL)
     // return array of nodes which are of type XML_ELEMENT_NODE and have name = $name
     // First node of the tree will always be document node
     $results = queryTree($tree[0],$query, XML_ELEMENT_NODE);
-    
+
     return $results;
 }
 
@@ -758,7 +758,7 @@ function getSubTree($element_id, $tree=NULL)
                   'match' => $element_id);
     if(!$tree) return;
     $results = queryTree($tree[0],$query, XML_ELEMENT_NODE,true);
-    
+
     return $results;
 }
 
@@ -768,17 +768,17 @@ function getSubTree($element_id, $tree=NULL)
  * @todo remove the @
  *
  */
-function queryTree($subtree, $query, $nodetype,$returnsubtree=false) 
+function queryTree($subtree, $query, $nodetype,$returnsubtree=false)
 {
     $results = array();
-    
+
     // If the node has children inspect them first, so we have simpler code in the second part (the unset)
     if(array_key_exists(XARXML_ATTR_CHILDREN, $subtree)) {
         foreach($subtree[XARXML_ATTR_CHILDREN] as $child) {
             $results = array_merge($results, queryTree($child,$query,$nodetype,$returnsubtree));
         }
     }
-    
+
     // Inspect this node
     if((@$subtree[XARXML_ATTR_TYPE] == $nodetype) && ($subtree[$query['type']] === $query['match'])) {
         // We found a node, add it to the result array
@@ -787,8 +787,8 @@ function queryTree($subtree, $query, $nodetype,$returnsubtree=false)
         }
         $results[] = $subtree;
     }
-    
-    return $results;   
+
+    return $results;
 }
 
 

@@ -4,6 +4,10 @@
  *
  * Utilizes JavaScript based WYSIWYG Editor, HTMLArea
  *
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
  * @package dynamicdata
  * @subpackage properties
  */
@@ -61,7 +65,7 @@ class Dynamic_Hardcore_Property extends Dynamic_Property
 
         $template="hardcore";
         return xarTplModule('dynamicdata', 'admin', 'showinput', $data , $template);
-        
+
     }
 
     function showOutput($args = array())

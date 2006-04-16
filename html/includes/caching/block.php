@@ -1,11 +1,12 @@
 <?php
 /**
  * Xaraya Web Interface Entry Point
- * 
+ *
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2002 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
  * @subpackage Page/Block Caching
  * @author mikespub
  * @author jsb
@@ -15,8 +16,7 @@
 /**
  * Initialise the block caching options
  *
- * @returns bool
- * @return true on success, false on failure
+ * @return bool true on success, false on failure
  */
 function xarBlockCache_init($args = array())
 {
@@ -61,9 +61,9 @@ function xarBlockIsCached($args)
            $xarBlock_cacheTime,
            $blockCacheExpireTime,
            $xarBlock_noCache;
-    
+
     $xarTpl_themeDir = xarTplGetThemeDir();
-    
+
     extract($args);
 
     if (xarCore_IsCached('Blocks.Caching', 'settings')) {
@@ -155,7 +155,7 @@ function xarBlockIsCached($args)
     } else {
         $factors .= xarSessionGetVar('uid');
     }
-    
+
     if (isset($blockinfo)) {
         $factors .= md5(serialize($blockinfo));
     }
@@ -195,7 +195,7 @@ function xarBlockSetCached($cacheKey, $name, $value)
     global $xarBlock_cacheTime,
            $blockCacheExpireTime,
            $xarBlock_noCache;
-    
+
     if ($xarBlock_noCache == 1) {
         $xarBlock_noCache = '';
         return;

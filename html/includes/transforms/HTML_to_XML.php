@@ -1,11 +1,15 @@
 <?php
-
-function variable_transforms_HTML_to_XML ($text) 
+/**
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
+/**
+  * Taken from Reverend's Jim feedparser
+  * @link {http://revjim.net/code/feedParser/feedParser-0.5.phps}
+  */
+function variable_transforms_HTML_to_XML ($text)
 {
-
-    //Taken from Reverend's Jim feedparser
-    //http://revjim.net/code/feedParser/feedParser-0.5.phps
-
     static $entities = array(
         '&nbsp;'   => "&#160;",
         '&iexcl;'  => "&#161;",
