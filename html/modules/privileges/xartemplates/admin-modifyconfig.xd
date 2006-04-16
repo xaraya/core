@@ -356,7 +356,7 @@
         ------------------- Begin Testing --------------------- 
     </xar:comment>
     <xar:if condition="$tab eq 'testing'">
-        <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded" >
+        <form method="post" id="testerform" name="testerform" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded" >
             <fieldset>
                 <legend>
                     <xar:mlstring>
@@ -372,13 +372,13 @@
                         <xar:mlstring>Tester Group:</xar:mlstring>
                     </label>
 
-                    <select name="testergroup" id="testergroup" size="1" onchange="this.form.action=this.form.submit();">
+                    <select name="testergroup" id="testergroup" size="1" onchange="this.form.submit(testerform.phase.value='modify');" >
 
-                    <xar:foreach in="$testerlist" key="$k" value="$testers" >
-                         <xar:if condition="$testerlist[$k]['uid'] eq $testergroup">
-                            <option value="#$testerlist[$k]['uid']#" selected="selected">#$testerlist[$k]['name']#</option>
+                    <xar:foreach in="$grouplist" key="$k" value="$testers" >
+                         <xar:if condition="$grouplist[$k]['uid'] eq $testergroup">
+                            <option value="#$grouplist[$k]['uid']#" selected="selected">#$grouplist[$k]['name']#</option>
                         <xar:else />
-                            <option name="testgroup.#$testerlist[$k]#" value="#$testerlist[$k]['uid']#">#$testerlist[$k]['name']#</option>
+                            <option name="testgroup.#$grouplist[$k]#" value="#$grouplist[$k]['uid']#">#$grouplist[$k]['name']#</option>
                         </xar:if>
                     </xar:foreach>
                     </select>
@@ -390,7 +390,6 @@
                         <xar:mlstring>Tester:</xar:mlstring>
                     </label>
                     <select name="tester" id="tester" size="1"">
-
                     <xar:foreach in="$testusers" key="$k" value="$testers" >
                         <xar:if condition="$testusers[$k]['uid'] eq $tester">
                             <option value="#$testusers[$k]['uid']#" selected="selected">#$testusers[$k]['uname']#</option>
@@ -401,20 +400,21 @@
                     </select>
                     <!--<xar:data-input type="userlist" name="tester" uid="4" value="$tester" />-->
 
-                    <xar:mlstring>This user can see the security check messages</xar:mlstring>
-                </div>
-                <xar:if condition="$warning">
-                <p class="xar-form-input-wrapper-after xar-error">
+                    <span class="xar-error">
                    <xar:ml>
                     <xar:mlstring>
-                    NOTE: <strong>#(1)</strong> is not an Administrator and will see ALL security check messages!
+                    The current tester is <strong>#(1)</strong>.
                     </xar:mlstring>
                     <xar:mlvar>
                        #xarUserGetVar('uname',$tester)#
                     </xar:mlvar>
                    </xar:ml>
+                </span>
+                </div>
+                <p class="xar-form-input-wrapper-after">
+
+                <xar:mlstring>They will see the security check messages.</xar:mlstring>
                 </p>
-                </xar:if>
                 <div class="xar-form-input-wrapper">
                     <label for="test" title="#xarML('Non Deny checks only shows checks that do not involve DENYs')#" class="xar-form-label">
                         <xar:mlstring>
@@ -453,14 +453,14 @@
                     </p>
                 </div>
             </fieldset>
-            <fieldset>
+
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="hidden" name="phase" id="phase" value="update" />
                     <input type="hidden" name="tab" id="tab" value="#$tab#" />
-                    <input type="submit" value="#xarML('Update Privileges Configuration')#" />
+                    <input type="submit" value="#xarML('Update Tester Configuration')#" />
                 </div>
-            </fieldset>
+
         </form>
     </xar:if>
 </div>

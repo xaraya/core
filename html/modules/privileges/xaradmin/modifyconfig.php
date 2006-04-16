@@ -20,7 +20,8 @@ function privileges_admin_modifyconfig()
     if (!xarSecurityCheck('AdminPrivilege')) return;
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('tester', 'int', $data['tester'], xarModGetVar('privileges', 'tester'), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('testergroup', 'int', $testergroup, xarModGetVar('privileges', 'testergroup'), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('tester', 'int', $tester, xarModGetVar('privileges', 'tester'), XARVAR_NOT_REQUIRED)) return;
 
     switch (strtolower($phase)) {
         case 'modify':
@@ -63,20 +64,20 @@ function privileges_admin_modifyconfig()
                          $testmask='All';
                      }
                      $data['testmask']=$testmask;
-
-                     $testergroup=xarModGetVar('privileges','testergroup');
+                     $settestergroup=xarModGetVar('privileges','testergroup');
+                     if (!isset($settestergroupp) || empty($settestergroup)) {
+                         $settestergroup='Administrators';
+                     }
                      if (!isset($testergroup) || empty($testergroup)) {
-                         $testergroup='Administrators';
+                         $testergroup=$settestergroup;
                      }
                      $data['testergroup']=$testergroup;
 
-                     $testerlist=xarGetGroups();
-                     $data['testerlist']=$testerlist;
+                     $grouplist=xarGetGroups();
+                     $data['grouplist']=$grouplist;
 
                      $testgrouprole=xarFindRole('Administrators');
                      $testgroupuid=$testgrouprole->uid;
-
-                     $data['warning']=$testergroup <> $testgroupuid ? true: false;
 
                      $testusers=xarModAPIFunc('roles','user','getUsers',array('uid'=>$testergroup));
                      $data['testusers']=$testusers;
@@ -136,6 +137,7 @@ function privileges_admin_modifyconfig()
                     xarModSetVar('privileges','lastresort',serialize($secret));
                     break;
                 case 'testing':
+                    if (!xarVarFetch('tester', 'int', $data['tester'], xarModGetVar('privileges', 'tester'), XARVAR_NOT_REQUIRED)) return;
                     xarModSetVar('privileges', 'tester', $data['tester']);
                     if (!xarVarFetch('test', 'checkbox', $test, false, XARVAR_NOT_REQUIRED)) return;
                     xarModSetVar('privileges', 'test', $test);
@@ -143,7 +145,6 @@ function privileges_admin_modifyconfig()
                     xarModSetVar('privileges', 'testdeny', $testdeny);
                     if (!xarVarFetch('testmask', 'str', $testmask, 'All', XARVAR_NOT_REQUIRED)) return;
                     xarModSetVar('privileges', 'testmask', $testmask);
-                    if (!xarVarFetch('testergroup', 'int', $testergroup, xarModGetVar('privileges', 'testergroup'), XARVAR_NOT_REQUIRED)) return;
                     xarModSetVar('privileges', 'testergroup', $testergroup);
                     break;
             }
