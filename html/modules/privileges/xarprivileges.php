@@ -630,10 +630,9 @@ class xarMasks
         $candebug = (xarSessionGetVar('uid') == xarModGetVar('privileges','tester'));
         $test = xarModGetVar('privileges','test') && $candebug;
         $testdeny = xarModGetVar('privileges','testdeny') && $candebug;
-        $testmask = xarModGetVar('privileges','testmask') && $candebug;
+        $testmask = xarModGetVar('privileges','testmask') ;
         $matched = false;
         $pass = false;
-
         // Note : DENY rules override all others here...
         foreach ($privilegeset['privileges'] as $privilege) {
             if($testdeny && ($testmask == $mask->getName() || $testmask == "All")) {

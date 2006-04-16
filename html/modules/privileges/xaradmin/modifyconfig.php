@@ -45,16 +45,47 @@ function privileges_admin_modifyconfig()
                     }
                     break;
                 case 'realms':
-                $data['showrealms'] = xarModGetVar('privileges', 'showrealms');
-                $realmvalue = xarModGetVar('privileges', 'realmvalue');
-                if (strpos($realmvalue,'string:') === 0) {
-                    $textvalue = substr($realmvalue,7);
-                    $realmvalue = 'string';
-                } else {
-                    $textvalue = '';
-                }
-                $data['realmvalue'] = $realmvalue;
-                $data['textvalue'] = $textvalue;
+                    $data['showrealms'] = xarModGetVar('privileges', 'showrealms');
+                    $realmvalue = xarModGetVar('privileges', 'realmvalue');
+                    if (strpos($realmvalue,'string:') === 0) {
+                       $textvalue = substr($realmvalue,7);
+                       $realmvalue = 'string';
+                    } else {
+                        $textvalue = '';
+                    }
+                    $data['realmvalue'] = $realmvalue;
+                    $data['textvalue'] = $textvalue;
+                break;
+
+                case 'testing':
+                     $testmask=trim(xarModGetVar('privileges', 'testmask'));
+                     if (!isset($testmask) || empty($testmask)) {
+                         $testmask='All';
+                     }
+                     $data['testmask']=$testmask;
+
+                     $testergroup=xarModGetVar('privileges','testergroup');
+                     if (!isset($testergroup) || empty($testergroup)) {
+                         $testergroup='Administrators';
+                     }
+                     $data['testergroup']=$testergroup;
+
+                     $testerlist=xarGetGroups();
+                     $data['testerlist']=$testerlist;
+
+                     $testgrouprole=xarFindRole('Administrators');
+                     $testgroupuid=$testgrouprole->uid;
+
+                     $data['warning']=$testergroup <> $testgroupuid ? true: false;
+
+                     $testusers=xarModAPIFunc('roles','user','getUsers',array('uid'=>$testergroup));
+                     $data['testusers']=$testusers;
+
+                     $tester=xarModGetVar('privileges','tester');
+                     if (!isset($tester) || empty($tester)) {
+                         $tester='Administrator';
+                     }
+                     $data['tester']=$tester;
                 break;
             }
             break;
@@ -112,6 +143,8 @@ function privileges_admin_modifyconfig()
                     xarModSetVar('privileges', 'testdeny', $testdeny);
                     if (!xarVarFetch('testmask', 'str', $testmask, 'All', XARVAR_NOT_REQUIRED)) return;
                     xarModSetVar('privileges', 'testmask', $testmask);
+                    if (!xarVarFetch('testergroup', 'int', $testergroup, xarModGetVar('privileges', 'testergroup'), XARVAR_NOT_REQUIRED)) return;
+                    xarModSetVar('privileges', 'testergroup', $testergroup);
                     break;
             }
 
