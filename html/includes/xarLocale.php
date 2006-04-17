@@ -14,7 +14,7 @@
  *
  */
 class LocaleNotFoundException extends NotFoundExceptions
-{ 
+{
     protected $message = 'The locale "#(1)" could not be found or is currently unavailable';
 }
 
@@ -367,6 +367,7 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffs
     // replace the locale formatting style with valid strftime() style
     $locale_format = str_replace('HH','%H',$locale_format);
     $locale_format = str_replace('hh','%I',$locale_format);
+    $locale_format = str_replace('h', '%h',$locale_format);
     $locale_format = str_replace('mm','%M',$locale_format);
     $locale_format = str_replace('ss','%S',$locale_format);
     $locale_format = str_replace('a','%p',$locale_format);

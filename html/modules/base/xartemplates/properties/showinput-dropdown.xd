@@ -6,7 +6,6 @@
   <xar:set name="evt_change">'return true;'</xar:set>
 </xar:if>
 
-
 <xar:if condition="isset($style)">
     <select name="#$name#" id="#$id#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#" >
 <xar:else/>

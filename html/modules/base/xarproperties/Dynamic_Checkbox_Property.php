@@ -72,9 +72,8 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
             $data['value'] = $this->value;
         }
 
-        $data['checked']  = isset($checked) && $checked ? true : false;
-        $data['onchange'] = !empty($onchange) ? $onchange : null; // let tpl decide what to do with it
-
+        $data['checked']  = isset($data['checked']) && $data['checked'] ? true : false;
+        if(!isset($data['onchange'])) $data['onchange'] = null; // let tpl decide what to do
         return parent::showInput($data);
     }
 }
