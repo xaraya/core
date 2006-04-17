@@ -404,12 +404,12 @@
                 </xar:if>
                 <xar:if condition="$xsltextension">
                     <li class="success">
-                        <xar:mlstring>SUCCESS: The XSL Extension is loaded.</xar:mlstring>
+                        <xar:mlstring>SUCCESS: The PHP4 XSLT Extension is loaded.</xar:mlstring>
                     </li>
                 <xar:else />
                     <li class="warning">
                     <xar:mlstring>
-                        WARNING: The XSLT Extension is not loaded.
+                        WARNING: The PHP4 XSLT Extension is not loaded.
                         This extension is only needed for the XSLT transform module at this time.
                     </xar:mlstring>
                     </li>
