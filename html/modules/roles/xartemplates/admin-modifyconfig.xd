@@ -445,21 +445,7 @@
                         Member Options
                     </xar:mlstring>
                 </legend>
-                <div class="xar-form-input-wrapper-after">
-                    <xar:if condition="xarModGetVar('roles', 'displayrolelist')">
-                        <input type="checkbox" name="displayrolelist" id="displayrolelist" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="displayrolelist" id="displayrolelist" value="1" />
-                    </xar:if>
-                    <label for="displayrolelist" title="#xarML('Display roles (memberlist) in user menu?')#">
-                        <strong><xar:mlstring>
-                            Display member list as Roles menu option?
-                        </xar:mlstring></strong>
-                    </label>
-                </div>
-                <p class="xar-form-container-after xar-padding-bottomthick">
-                        <xar:mlstring>NOTE: This is a convenience option. The memberlist is available regardless for all users that have Read privileges for Roles.</xar:mlstring>
-                </p>
+
                 <div class="xar-form-input-wrapper-after">
                     <xar:if condition="xarModGetVar('roles', 'searchbyemail')">
                         <input type="checkbox" name="searchbyemail" id="searchbyemail" value="1" checked="checked" />
@@ -474,7 +460,7 @@
                 </div>
                 <p class="xar-form-input-wrapper-after  xar-padding-bottomthick"">
                     <xar:mlstring>
-                        Caution: this option may reveal enough information to compromise a user's login. 
+                        CAUTION: this option may reveal enough information to compromise a user's login.
                     </xar:mlstring>
                 </p>
                 <div class="xar-form-input-wrapper-after">
@@ -491,10 +477,25 @@
                 </div>
                  <p class="xar-form-input-wrapper-after  xar-padding-bottomthick"">
                     <xar:mlstring>
-                         (toggles Roles hook to Roles)
+                         This toggles the Roles hook to the Roles module.
                     </xar:mlstring>
                 </p>
-
+                <div class="xar-form-input-wrapper-after">
+                    <xar:if condition="xarModGetVar('roles', 'displayrolelist')">
+                        <input type="checkbox" name="displayrolelist" id="displayrolelist" value="1" checked="checked" />
+                        <xar:else />
+                        <input type="checkbox" name="displayrolelist" id="displayrolelist" value="1" />
+                    </xar:if>
+                    <label for="displayrolelist" title="#xarML('Display roles (memberlist) in user menu?')#">
+                        <strong><xar:mlstring>
+                            Display member list as Roles menu option?
+                        </xar:mlstring></strong>
+                    </label>
+                </div>
+                <p class="xar-form-container-after xar-padding-bottomthick">
+                        <xar:mlstring>NOTE: This is a convenience option. The members list is available
+                        regardless of its inclusion in the menu, for all users that have Read privileges for Roles.</xar:mlstring>
+                </p>
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
