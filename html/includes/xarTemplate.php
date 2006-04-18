@@ -1217,11 +1217,30 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
             if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
         }
     }
+    // Load translations for the template
+    $tplpath = explode("/", $sourceFileName);
+    $tplPathCount = count($tplpath);
+    switch ($tplpath[0]) {
+        case 'modules': $dnType = XARMLS_DNTYPE_MODULE; break;
+        case 'themes':  $dnType = XARMLS_DNTYPE_THEME; break;
+    }
+    $dnName = $tplpath[1];
+    $stack = array();
+    if ($tplpath[2] == 'xartemplates') $tplpath[2] = 'templates';
+    for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
+    $ctxType = $tplpath[0].':'.implode("/", $stack);
+    $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
+    /* This $dnType check is a workaround for non-standard templates like we need in workflows etc. */
+    if(isset($dnType)) {
+        if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
+    }
 
     $needCompilation = xarTpl__needsCompilation($sourceFileName,$cachedFileName);
     if (!file_exists($sourceFileName) && $needCompilation == true)
         throw new FileNotFoundException($sourceFileName);
 
+    $needCompilation = true;
+    $cachedFileName = null;
     xarLogMessage("Using template : $sourceFileName");
     //xarLogVariable('needCompilation', $needCompilation, XARLOG_LEVEL_ERROR);
     $templateCode = null;

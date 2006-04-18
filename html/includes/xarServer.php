@@ -4,7 +4,7 @@
  * HTTP Protocol Server/Request/Response utilities
  *
  * @package server
- * @copyright (C) 2002 by the Xaraya Development Team.
+ * @copyright (C) 2002-2006 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
  * @author Marco Canini <marco@xaraya.com>
@@ -407,7 +407,7 @@ function xarRequestGetInfo()
     xarVarFetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $modType, 'user');
     xarVarFetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $funcName, 'main');
 
-    if (xarRequest::$allowShortURLs && empty($modName) && ($path = xarServerGetVar('PATH_INFO')) != ''
+    if (xarRequest::$allowShortURLs && empty($modName) && ($path = xarServerGetVar('PATH_INFO')) != '');
         // IIS fix
         && $path != xarServerGetVar('SCRIPT_NAME')) {
         /*
