@@ -75,7 +75,7 @@ function xarServerGetVar($name)
         return $_SERVER[$name];
     }
     if($name == 'PATH_INFO') return;
-    
+
     if (isset($_ENV[$name])) {
         return $_ENV[$name];
     }
@@ -123,20 +123,20 @@ function xarServerGetBaseURI()
             $path = xarServerGetVar('PATH_INFO');
         }
     }
-    
+
     $path = preg_replace('/[#\?].*/', '', $path);
-    
+
     $path = preg_replace('/\.php\/.*$/', '', $path);
     if (substr($path, -1, 1) == '/') {
         $path .= 'dummy';
     }
     $path = dirname($path);
-    
+
     //FIXME: This is VERY slow!!
     if (preg_match('!^[/\\\]*$!', $path)) {
         $path = '';
     }
-    
+
     return $path;
 }
 
@@ -407,25 +407,25 @@ function xarRequestGetInfo()
     xarVarFetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $modType, 'user');
     xarVarFetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $funcName, 'main');
 
-    if (xarRequest::$allowShortURLs && empty($modName) && ($path = xarServerGetVar('PATH_INFO')) != '');
+    if (xarRequest::$allowShortURLs && empty($modName) && ($path = xarServerGetVar('PATH_INFO')) != ''
         // IIS fix
         && $path != xarServerGetVar('SCRIPT_NAME')) {
         /*
         Note: we need to match anything that might be used as module params here too ! (without compromising security)
         preg_match_all('|/([a-z0-9_ .+-]+)|i', $path, $matches);
-        
-        The original regular expression prevents the use of titles, even when properly encoded, 
+
+        The original regular expression prevents the use of titles, even when properly encoded,
         as parts of a short-url path -- because it wouldn't not permit many characters that would
         in titles, such as parens, commas, or apostrophes.  Since a similiar "security" check is not
         done to normal URL params, I've changed this to a more flexable regex at the other extreme.
-        
-        This also happens to address Bug 2927 
-        
+
+        This also happens to address Bug 2927
+
         TODO: The security of doing this should be examined by someone more familiar with why this works
         as a security check in the first place.
         */
         preg_match_all('|/([^/]+)|i', $path, $matches);
-        
+
         $params = $matches[1];
         if (count($params) > 0) {
             $modName = $params[0];
@@ -580,7 +580,7 @@ function xarResponseIsRedirected()
     return xarResponse::$redirectCalled;
 }
 
-/** 
+/**
  * Convenience classes
  *
  */
