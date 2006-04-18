@@ -32,9 +32,9 @@ class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
     // We explicitly use names here instead of id's, so we are independent of
     // how dd assigns them at a given time. Otherwise the validation is not
     // exportable to other sites.
-    var $refobject    = 'objects';    // Name of the object we want to reference
-    var $store_prop   = 'objectid';   // Name of the property we want to use for storage
-    var $display_prop = 'name';       // Name of the property we want to use for displaying.
+    public $refobject    = 'objects';    // Name of the object we want to reference
+    public $store_prop   = 'objectid';   // Name of the property we want to use for storage
+    public $display_prop = 'name';       // Name of the property we want to use for displaying.
 
     function __construct($args)
     {

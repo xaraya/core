@@ -19,6 +19,11 @@
  *
  * @todo seems that defines are hoggers, move them to class constants?
  */
+
+// For migration purposes, cos we're lazy 
+define('XARCORE_GENERATION',2);
+
+// The actual version information
 define('XARCORE_VERSION_NUM', '[ongoing development version]');
 define('XARCORE_VERSION_ID',  'Xaraya 2 series');
 define('XARCORE_VERSION_SUB', 'etiam infractus');

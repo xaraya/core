@@ -482,6 +482,12 @@ abstract class ResultSetCommon {
                 //bah
                 return $this->getRow($args);
                 break;
+            case 'fetchRow':
+                $res = $this->getRow();
+                $this->next();
+                return $res;
+                break;
+            case 'numRows':
             case 'RecordCount':
                 // Used all over the place, migrated core over already,
                 // Can't hurt to leave it in place
