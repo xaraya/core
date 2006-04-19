@@ -216,7 +216,7 @@ class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
          $baseInfo = array(
                               'id'             => 507,
                               'name'           => 'objectref',
-                              'label'          => 'Select value from other object',
+                              'label'          => 'Object Reference',
                               'format'         => '507',
                               'validation'     => '',
                               'source'         => '',
