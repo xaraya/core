@@ -241,7 +241,7 @@ class xarCharset
                 if (in_array($hexChar, $CharsetTable[$fromCharset])) {
                     $unicodeHexChar = array_search($hexChar, $CharsetTable[$fromCharset]);
                     if ($toCharset != "utf-8") {
-                        if (array_key_exists($unicodeHexChar, $CharsetTable[$toCharset])) {
+                        if (isset($CharsetTable[$toCharset][$unicodeHexChar])) {
                             if ($turnOnEntities == true) {
                                 $outString .= $this->utf8ToEntities($this->unicodeNumberToUtf8Char($unicodeHexChar));
                             } else {

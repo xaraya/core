@@ -92,17 +92,17 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
         }
 
         /* default values - you shouldn't rely on these! */
-        if (!array_key_exists('modname', $args)) {
+        if (!isset($args['modname'])) {
             list($mod, $type, $func) = xarRequestGetInfo();
             $args['modname'] = $mod;
         }
-        if (!array_key_exists('modid', $args)) {
+        if (!isset($args['modid'])) {
             $args['modid'] = xarModGetIDFromName($mod);
         }
-        if (!array_key_exists('itemtype', $args)) {
+        if (!isset($args['itemtype'])) {
             $args['itemtype'] = $this->itemtype;
         }
-        if (!array_key_exists('objectid', $args)) {
+        if (!isset($args['objectid'])) {
             $args['objectid'] = '';
         }
         $items = array();

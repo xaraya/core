@@ -35,7 +35,7 @@
  */
 function xarDB_init($args, $whatElseIsGoingLoaded)
 {
-    if(!array_key_exists('doConnect',$args)) $args['doConnect'] = true;
+    if(!isset($args['doConnect'])) $args['doConnect'] = true;
     $GLOBALS['xarDB_systemArgs'] = $args;
     
     include_once 'creole/xarCreole.php';

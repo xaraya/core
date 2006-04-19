@@ -324,8 +324,8 @@ class PHPBackendGenerator
             fputs($fp2, 'global $xarML_PHPBackend_entries;'."\n");
             fputs($fp2, 'global $xarML_PHPBackend_keyEntries;'."\n");
             foreach ($vals as $node) {
-                if (!array_key_exists('tag',$node)) continue;
-                if (!array_key_exists('value',$node)) $node['value'] = '';
+                if (!isset($node['tag'])) continue;
+                if (!isset($node['value'])) $node['value'] = '';
                 if ($node['tag'] == 'STRING') {
                     $node['value'] = str_replace('\'', '\\\'', $node['value']);
                     $start = '$xarML_PHPBackend_entries[\''.$node['value']."']";
@@ -349,8 +349,8 @@ class PHPBackendGenerator
             global $xarML_PHPBackend_entries;
             global $xarML_PHPBackend_keyEntries;
             foreach ($vals as $node) {
-                if (!array_key_exists('tag',$node)) continue;
-                if (!array_key_exists('value',$node)) $node['value'] = '';
+                if (!isset($node['tag'])) continue;
+                if (!isset($node['value'])) $node['value'] = '';
                 if ($node['tag'] == 'STRING') {
                     $node['value'] = str_replace('\'', '\\\'', $node['value']);
                     $entryIndex = $node['value'];

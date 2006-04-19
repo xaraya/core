@@ -122,7 +122,7 @@ function xarDB__mysqlAlterTable($tableName, $args)
 
             // Add table options, if any
             // FIXME: when the callee was more sensible, we could simplify this
-            if(array_key_exists('increment_start',$coldef)) {
+            if(isset($coldef['increment_start'])) {
                 if($coldef['increment_start'] > 0) {
                     $sql.= 'AUTO_INCREMENT=' .$coldef['increment_start'] . ' ';
                 }

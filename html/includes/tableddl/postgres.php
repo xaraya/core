@@ -67,27 +67,27 @@ function xarDB__postgresqlCreateTable($tableName, $fields)
         // the values from $this_field was causing an infinite loop -
         // now check to see if the key exists before assigning to $sql_fields
         $sqlDDL = $field_name;
-        if (array_key_exists("type", $this_field))
+        if (isset($this_field['type']))
             $sqlDDL = $sqlDDL . ' ' . $this_field['type'];
 
         // PosgreSQL doesn't handle unsigned
-        //if (array_key_exists("unsigned", $this_field))
+        //if (isset($this_field['unsigned']))
         //    $sqlDDL = $sqlDDL . ' ' . $this_field['unsigned'];
 
-        if (array_key_exists("null", $this_field))
+        if (isset($this_field['null']))
             $sqlDDL = $sqlDDL . ' ' . $this_field['null'];
 
-        if (array_key_exists("default", $this_field))
+        if (isset($this_field['default']))
             $sqlDDL = $sqlDDL . ' ' . $this_field['default'];
 
         // PosgreSQL doesn't handle auto_increment - this should be a sequence
-        //if (array_key_exists("auto_increment", $this_field))
+        //if (isset($this_field['auto_increment']))
         //    $sqlDDL = $sqlDDL . ' ' . $this_field['auto_increment'];
 
         $sql_fields[] = $sqlDDL;
 
         // Check for primary key
-        if (array_key_exists("primary_key", $this_field)) {
+        if (isset($this_field['primary_key'])) {
             if ($this_field['primary_key'] == true) {
                 $primary_key[] = $field_name;
             }
@@ -128,7 +128,7 @@ function xarDB__postgresqlAlterTable($tableName, $args)
             // Add column values if they exist
             // Note:  PostgreSQL does not support default or null values in ALTER TABLE
             $sqlDDL = "";
-            if (array_key_exists("type", $this_field))
+            if (isset($this_field['type']))
                 $sqlDDL = $sqlDDL . ' ' . $this_field['type'];
             $sql .= $sqlDDL;
             break;

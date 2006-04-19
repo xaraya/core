@@ -31,9 +31,7 @@ function blocks_userapi_getinfo($args)
 
     // Exit now for templates that have not been recompiled - at least one of these elements
     // will be missing.
-    if (!array_key_exists('instance', $args)
-        || !array_key_exists('module', $args)
-        || !array_key_exists('type', $args)) {
+    if (!isset($args['instance']) || !isset($args['module']) || !isset($args['type'])) {
         return;
     }
 

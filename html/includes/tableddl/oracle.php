@@ -40,28 +40,28 @@ function xarDB__oracleCreateTable($tableName, $fields)
         $this_field = xarDB__oracleColumnDefinition($field_name, $parameters);
 
         $sqlDDL = $field_name;
-        if (array_key_exists("type", $this_field))
+        if (isset($this_field['type']))
             $sqlDDL = $sqlDDL . ' ' . $this_field['type'];
 
         // Oracle doesn't handle unsigned
-        //if (array_key_exists("unsigned", $this_field))
+        //if (isset($this_field['unsigned']))
         //    $sqlDDL = $sqlDDL . ' ' . $this_field['unsigned'];
 
         // Order of default and null clause matter
-        if (array_key_exists("default", $this_field))
+        if (isset($this_field['default']))
             $sqlDDL = $sqlDDL . ' ' . $this_field['default'];
 
-        if (array_key_exists("null", $this_field))
+        if (isset($this_field['null']))
             $sqlDDL = $sqlDDL . ' ' . $this_field['null'];
 
         // Oracle doesn't handle auto_increment - this should be a sequence
-        //if (array_key_exists("auto_increment", $this_field))
+        //if (isset($this_field['auto_increment']))
         //    $sqlDDL = $sqlDDL . ' ' . $this_field['auto_increment'];
 
         $sql_fields[] = $sqlDDL;
 
         // Check for primary key
-        if (array_key_exists("primary_key", $this_field)) {
+        if (isset($this_field['primary_key'])) {
             if ($this_field['primary_key'] == true) {
                 $primary_key[] = $field_name;
             }
@@ -102,9 +102,9 @@ function xarDB__oracleAlterTable($tableName, $args)
             // Add column values if they exist
             // Note:  Oracle does not support null values in ALTER TABLE
             $sqlDDL = "";
-            if (array_key_exists("type", $this_field))
+            if (isset($this_field['type'])) 
                 $sqlDDL = $sqlDDL . ' ' . $this_field['type'];
-            if (array_key_exists("default", $this_field))
+            if (isset($this_field['default'])) 
                 $sqlDDL = $sqlDDL . ' ' . $this_field['default'];
             $sql .= $sqlDDL;
             break;
