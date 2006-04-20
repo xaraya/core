@@ -49,11 +49,10 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         return true;
     }
 
-//    function showInput($name = '', $value = null, $options = array(), $id = '', $tabindex = '')
     function showInput($args = array())
     {
         extract($args);
-        
+
         $data=array();
 
         if (!isset($value)) {
@@ -68,51 +67,41 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $data['value'] = $value;
         $data['name']  = $name;
         $data['id']    = $id;
-        $coptions = getCountryList();
+        $options = $this->getOptions();
 
-        $data['coptions'] = $coptions;
+        $data['options'] = $options;
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
         $data['tabindex'] =! empty($tabindex) ? $tabindex: 0;
 
-        $template="";
-        return xarTplProperty('base', 'countrylist', 'showinput', $data);
+        if (!isset($template) || empty($template)) {
+            $template = 'countrylist';
+        }
+        return xarTplProperty('base', $template, 'showinput', $data);
 
     }
 
     function showOutput($args = array())
     {
          extract($args);
+        if (isset($value)) $data['value']=$this->value;
 
-         $data=array();
-         if (isset($value)) {
-             $data['value']=xarVarPrepHTMLDisplay($value);
-         } else {
-             $data['value']=xarVarPrepHTMLDisplay($this->value);
-         }
-         if (isset($name)) {
-           $data['name']=$name;
-         }
-         if (isset($id)) {
-             $data['id']=$id;
-         }
+        // get the option corresponding to this value
+        $result = $this->getOption();
 
-         $countrynames= getCountryList();
-         $countryname='';
+        // only apply xarVarPrepForDisplay on strings, not arrays et al.
+        //but if we prep this the entities don't render correctly!
+        // for now prep in the templte and remove if necessary
+        if (!empty($result) && is_string($result)) {
+            //$result = xarVarPrepForDisplay($result);
+        }
+        $data['value'] = array('id' => $this->value, 'name' => $result);
 
-         foreach ($countrynames as $countrydata) {
-             foreach ($countrydata as $k) {
-               if ($k == $data['value']) {
-                   $countryname=$countrydata['name'];
-               }
-             }
-         }
-         $data['countryname']=$countryname;
-         $template="";
+        if (!isset($template) || empty($template)) {
+            $template = 'countrylist';
+        }
 
-         return xarTplProperty('base', 'countrylist', 'showoutput', $data);
-
+         return xarTplProperty('base', $template, 'showoutput', $data);
     }
-
 
     /**
      * Get the base information for this property.
@@ -138,7 +127,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
                            );
         return $baseInfo;
      }
-}
+
    /**
     * Country list according to ISO 3166
     *
@@ -146,7 +135,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
     * Updated 2005-10-15 with ISO 3166 country codes
     * Credit to Pedro Innecco for corrections and updates
     */
-   function getCountryList()
+   function getOptions()
    {
         $coptions = array();
         $coptions[] = array('id' =>'--', 'name' =>xarML('Please select'));
@@ -243,7 +232,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'gw', 'name'=>xarML('Guinea-Bissau'));
         $coptions[] = array('id' =>'gy', 'name'=>xarML('Guyana'));
         $coptions[] = array('id' =>'ht', 'name'=>xarML('Haiti'));
-        $coptions[] = array('id' =>'hm', 'name'=>xarML('Heard Island & McDonald Islands'));
+        $coptions[] = array('id' =>'hm', 'name'=>xarML('Heard Island &#38; McDonald Islands'));
         $coptions[] = array('id' =>'hn', 'name'=>xarML('Honduras'));
         $coptions[] = array('id' =>'hk', 'name'=>xarML('Hong Kong'));
         $coptions[] = array('id' =>'hu', 'name'=>xarML('Hungary'));
@@ -338,7 +327,7 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'st', 'name'=>xarML('S&#227;o Tom&#233; and Pr&#237;ncipe'));
         $coptions[] = array('id' =>'sa', 'name'=>xarML('Saudi Arabia'));
         $coptions[] = array('id' =>'sn', 'name'=>xarML('Senegal'));
-        $coptions[] = array('id' =>'cs', 'name'=>xarML('Serbia & Montenegro'));
+        $coptions[] = array('id' =>'cs', 'name'=>xarML('Serbia &#38; Montenegro'));
         $coptions[] = array('id' =>'sc', 'name'=>xarML('Seychelles'));
         $coptions[] = array('id' =>'sl', 'name'=>xarML('Sierra Leone'));
         $coptions[] = array('id' =>'sg', 'name'=>xarML('Singapore'));
@@ -347,12 +336,12 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'sb', 'name'=>xarML('Solomon Islands'));
         $coptions[] = array('id' =>'so', 'name'=>xarML('Somalia'));
         $coptions[] = array('id' =>'za', 'name'=>xarML('South Africa'));
-        $coptions[] = array('id' =>'gs', 'name'=>xarML('Sth Georgia & the South Sandwich Islands'));
+        $coptions[] = array('id' =>'gs', 'name'=>xarML('Sth Georgia &#38; the South Sandwich Islands'));
         $coptions[] = array('id' =>'es', 'name'=>xarML('Spain'));
         $coptions[] = array('id' =>'lk', 'name'=>xarML('Sri Lanka'));
         $coptions[] = array('id' =>'sd', 'name'=>xarML('Sudan'));
         $coptions[] = array('id' =>'sr', 'name'=>xarML('Suriname'));
-        $coptions[] = array('id' =>'sj', 'name'=>xarML('Svalbard & Jan Mayen'));
+        $coptions[] = array('id' =>'sj', 'name'=>xarML('Svalbard &#38; Jan Mayen'));
         $coptions[] = array('id' =>'sz', 'name'=>xarML('Swaziland'));
         $coptions[] = array('id' =>'se', 'name'=>xarML('Sweden'));
         $coptions[] = array('id' =>'ch', 'name'=>xarML('Switzerland'));
@@ -385,11 +374,13 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $coptions[] = array('id' =>'vn', 'name'=>xarML('Vietnam'));
         $coptions[] = array('id' =>'vg', 'name'=>xarML('Virgin Islands, British'));
         $coptions[] = array('id' =>'vi', 'name'=>xarML('Virgin Islands, U.S.'));
-        $coptions[] = array('id' =>'wf', 'name'=>xarML('Wallis & Futuna'));
+        $coptions[] = array('id' =>'wf', 'name'=>xarML('Wallis &#38; Futuna'));
         $coptions[] = array('id' =>'eh', 'name'=>xarML('Western Sahara'));
         $coptions[] = array('id' =>'ye', 'name'=>xarML('Yemen'));
         $coptions[] = array('id' =>'zm', 'name'=>xarML('Zambia'));
         $coptions[] = array('id' =>'zw', 'name'=>xarML('Zimbabwe'));
-       return $coptions;
+        $this->options = $coptions;
+		return $this->options;
    }
+}
 ?>
