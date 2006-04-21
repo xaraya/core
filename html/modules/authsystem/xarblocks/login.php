@@ -11,10 +11,11 @@
  * @link http://xaraya.com/index.php/release/42.html
  */
 
-/* Login via a block.
+/**
+ * Login via a block: initialise block
  *
  * @author Jim McDonald
- * initialise block
+ * @return array
  */
 function authsystem_loginblock_init()
 {

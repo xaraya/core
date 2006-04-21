@@ -18,7 +18,7 @@
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
  * @access public
  * @param none $
- * @returns bool
+ * @return bool
  */
 function authsystem_init()
 {
@@ -27,9 +27,9 @@ function authsystem_init()
     xarRegisterPrivilege('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
 
     /* Define Module vars */
- 	xarModSetVar('authsystem', 'lockouttime', 15);
-	xarModSetVar('authsystem', 'lockouttries', 3);
-	xarModSetVar('authsystem', 'uselockout', false);
+    xarModSetVar('authsystem', 'lockouttime', 15);
+    xarModSetVar('authsystem', 'lockouttries', 3);
+    xarModSetVar('authsystem', 'uselockout', false);
     /* Define Masks */
     xarRegisterMask('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW');
     xarRegisterMask('ViewAuthsystemBlocks','All','authsystem','Block','All','ACCESS_OVERVIEW');
@@ -59,8 +59,8 @@ function authsystem_init()
         }
     }
 */
-	// Make this the default authentication module
-	xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
+    // Make this the default authentication module
+    xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
 
     return true;
 }
@@ -75,7 +75,7 @@ function authsystem_activate()
                    array('modName' => 'authsystem',
                          'blockType' => 'login'));
     if (!$bid) return;
-    
+
   return true;
 }
 
@@ -84,7 +84,7 @@ function authsystem_activate()
  *
  * @access public
  * @param oldVersion $
- * @returns bool
+ * @return bool true on success of upgrade
  */
 function authsystem_upgrade($oldVersion)
 {
@@ -96,18 +96,18 @@ function authsystem_upgrade($oldVersion)
 
           /* Define Module vars */
           xarModSetVar('authsystem', 'lockouttime', 15);
-  	      xarModSetVar('authsystem', 'lockouttries', 3);
-	      xarModSetVar('authsystem', 'uselockout', false);
+          xarModSetVar('authsystem', 'lockouttries', 3);
+          xarModSetVar('authsystem', 'uselockout', false);
           /* Define Masks */
           xarRegisterMask('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW');
           xarRegisterMask('ViewAuthsystemBlocks','All','authsystem','Block','All','ACCESS_OVERVIEW');
           xarRegisterMask('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
           xarRegisterMask('EditAuthsystem','All','authsystem','All','All','ACCESS_EDIT');
           xarRegisterMask('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
-  
+
             //Set the default authmodule if not already set
-   	        $isdefaultauth = xarModGetVar('roles','defaultauthmodule');
-   	        if (!isset($isdefaultauth)) {
+            $isdefaultauth = xarModGetVar('roles','defaultauthmodule');
+            if (!isset($isdefaultauth)) {
                xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
             }
 
@@ -143,7 +143,7 @@ function authsystem_upgrade($oldVersion)
  *
  * @access public
  * @param none $
- * @returns bool
+ * @return bool true on success of deletion
  */
 function authsystem_delete()
 {

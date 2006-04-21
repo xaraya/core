@@ -1,6 +1,6 @@
 <?php
 /**
- * Modify Function to the Blocks Admin
+ * Modify Function for the Blocks Admin
  *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
@@ -10,9 +10,8 @@
  * @subpackage Authsystem module
  * @link http://xaraya.com/index.php/release/42.html
  */
-
 /**
- * Modify Function to the Blocks Admin
+ * Modify Function for the Blocks Admin
  * @author Jim McDonald
  * @param $blockinfo array containing title,content
  */

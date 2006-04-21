@@ -17,7 +17,6 @@
  * @param $args['uname'] user name of user
  * @param $args['pass'] password of user
  * @param $args['rememberme'] remember this user (optional)
- * @returns int
  * @return true on success, false on failure
  */
 function authsystem_userapi_login($args)

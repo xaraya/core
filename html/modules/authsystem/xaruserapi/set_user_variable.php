@@ -12,12 +12,12 @@
  */
 /**
  * set a user variable (currently unused)
- * @public
+ * @access public
  * @author Gregor J. Rothfuss
  * @param args['uid'] user id
  * @param args['name'] variable name
  * @param args['value'] variable value
- * @returns bool
+ * @return bool
  */
 function authsystem_userapi_set_user_variable($args)
 {
