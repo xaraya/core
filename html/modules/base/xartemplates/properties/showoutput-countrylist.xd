@@ -1,5 +1,5 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 
-<xar:if condition="!empty($value)" >
-#$value#
+<xar:if condition="!empty($value['name'])" >
+#xarVarPrepForDisplay($value['name'])#
 </xar:if>

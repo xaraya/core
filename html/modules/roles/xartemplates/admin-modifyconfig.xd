@@ -333,7 +333,7 @@
                                 passwordupdate
                             </td>
                             <td style="width: 400px">
-                                <xar:mlstring>The date the last time this role's password was changed.</xar:mlstring>
+                                <xar:mlstring>The date and time this role's password was last changed.</xar:mlstring>
                             </td>
                             <td style="width: 50px; text-align: center;">
                                 <xar:if condition="xarModGetVar('roles','setpasswordupdate')">
@@ -347,6 +347,7 @@
                                 </xar:if>
                             </td>
                         </tr>
+                        <xar:comment> jojodee : this seems redundant to me. We can create and use a timezone DD property for the role.
                         <tr>
                             <td style="width: 100px">
                                 timezone
@@ -365,6 +366,7 @@
                                 </xar:if>
                             </td>
                         </tr>
+                        </xar:comment>
                     </table>
                 </fieldset>
                 <fieldset>
