@@ -12,11 +12,11 @@
  */
 /**
  * get a user variable (currently unused)
- * @public
+ * @access public
  * @author Marco Canini
  * @param args['uid'] user id
  * @param args['name'] variable name
- * @returns string
+ * @return string
  */
 function authsystem_userapi_get_user_variable($args)
 {

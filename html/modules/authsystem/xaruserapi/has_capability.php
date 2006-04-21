@@ -12,10 +12,10 @@
  */
 /**
  * check whether this module has a certain capability
- * @public
- * @param args['capability'] the capability to check for
+ * @access public
+ * @param string args['capability'] the capability to check for
  * @author Marco Canini
- * @returns bool
+ * @return bool
  */
 function authsystem_userapi_has_capability($args)
 {

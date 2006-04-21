@@ -16,16 +16,17 @@
  * initiated without defining arguments.  Function decides if user is logged in
  * and returns user to correct location.
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @author  Jo Dalle Nogare<jojodee@xaraya.com> 
-*/
+ * @author  Jo Dalle Nogare<jojodee@xaraya.com>
+ * @return bool true
+ */
 function authsystem_user_main()
 {
     //no registration here - just redirect to the login form
     xarResponseRedirect(xarModURL('authsystem',
-									  'user',
-									  'showloginform'));
+                                      'user',
+                                      'showloginform'));
 
-	return true;
+    return true;
 }
 
 ?>

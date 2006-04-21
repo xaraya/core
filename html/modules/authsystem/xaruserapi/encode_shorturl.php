@@ -23,8 +23,7 @@
  *
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
  * @param $args the function and arguments passed to xarModURL
- * @returns string
- * @return path to be added to index.php for a short URL, or empty if failed
+ * @return string path to be added to index.php for a short URL, or empty if failed
  */
 function authsystem_userapi_encode_shorturl($args)
 {
@@ -62,7 +61,7 @@ function authsystem_userapi_encode_shorturl($args)
         default:
             break;
     }
-    
+
 
     // If no short URL path was obtained above, then there is no encoding.
     if (empty($path)) {

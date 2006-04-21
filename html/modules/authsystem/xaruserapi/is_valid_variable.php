@@ -14,7 +14,7 @@
  * check whether a user variable is available from this module (currently unused)
  * @public
  * @author Marco Canini
- * @returns boolean
+ * @return boolean true
  */
 function authsystem_userapi_is_valid_variable($args)
 {

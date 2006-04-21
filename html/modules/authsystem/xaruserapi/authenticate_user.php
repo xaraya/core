@@ -16,9 +16,8 @@
  * @author Marco Canini
  * @param args['uname'] user name of user
  * @param args['pass'] password of user
- * @returns int
  * @todo use roles api, not direct db
- * @return uid on successful authentication, XARUSER_AUTH_FAILED otherwise
+ * @return int uid on successful authentication, XARUSER_AUTH_FAILED otherwise
  */
 function authsystem_userapi_authenticate_user($args)
 {
