@@ -619,8 +619,8 @@ function xarModGetInfo($modRegId, $type = 'module')
 }
 
 function xarModGetNameFromID($regid) {
-	$modinfo = xarModGetInfo($regid);
-	return $modinfo['name'];
+    $modinfo = xarModGetInfo($regid);
+    return $modinfo['name'];
 }
 
 
@@ -1443,24 +1443,24 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
         if (!xarModIsAvailable($hook['module'])) continue;
         if ($hook['area'] == 'GUI') {
             $isGUI = true;
-            if (!xarModLoad($hook['module'], $hook['type'])) return;
+            if (!xarModLoad($hook['module'], $hook['type'])) continue; // return; Bug 4843 return causes all hooks to fail
             $res = xarModFunc($hook['module'],
                               $hook['type'],
                               $hook['func'],
                               array('objectid' => $hookId,
                               'extrainfo' => $extraInfo));
-            if (!isset($res)) return;
+            if (!isset($res)) continue; //return;
             // Note: hook modules can only register 1 hook per hookObject, hookAction and hookArea
             //       so using the module name as key here is OK (and easier for designers)
             $output[$hook['module']] = $res;
         } else {
-            if (!xarModAPILoad($hook['module'], $hook['type'])) return;
+            if (!xarModAPILoad($hook['module'], $hook['type'])) continue; //return;
             $res = xarModAPIFunc($hook['module'],
                                  $hook['type'],
                                  $hook['func'],
                                  array('objectid' => $hookId,
                                        'extrainfo' => $extraInfo));
-            if (!isset($res)) return;
+            if (!isset($res)) continue; //return;
             $extraInfo = $res;
         }
     }
@@ -2248,7 +2248,7 @@ function xarModUnregisterHook($hookObject,
  *
  * This is only a convenience wrapper fot xarRequest function
  *
- * @todo evalutate dependency consequences
+ * @todo evaluate dependency consequences
 */
 function xarModGetAlias($var)
 {
@@ -2270,9 +2270,10 @@ function xarModSetAlias($alias, $modName)
 
 /**
  * Delete an alias for a module
- * @todo evalutate dependency consequences
- *
-*/
+ * @todo evaluate dependency consequences
+ * @param string $alias
+ * @param string $modName
+ */
 function xarModDelAlias($alias, $modName)
 {
     if (!xarModAPILoad('modules', 'admin')) return;
@@ -2284,6 +2285,7 @@ function xarModDelAlias($alias, $modName)
  * get name of current top-level module
  *
  * @access public
+ * @param none
  * @return string the name of the current top-level module, false if not in a module
  */
 function xarModGetName()

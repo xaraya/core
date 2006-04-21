@@ -14,7 +14,7 @@
 
 /**
  * Initialise the Session Support
- * 
+ *
  * @author Jim McDonald, Marco Canini <marco@xaraya.com>
  * @return bool true
  */
@@ -66,7 +66,7 @@ function xarSession_init(&$args, $whatElseIsGoingLoaded)
         // so we don't test for the IP-address session var
         xarSession__current($sessionId);
     }
-    
+
     // Subsystem initialized, register a handler to run when the request is over
     register_shutdown_function ('xarSession__shutdown_handler');
     return true;
@@ -75,7 +75,7 @@ function xarSession_init(&$args, $whatElseIsGoingLoaded)
 /**
  * Shutdown handler for the session subsystem
  *
- * This function is the shutdown handler for the 
+ * This function is the shutdown handler for the
  * sessions subsystem. It runs on the end of a request
  *
  */
@@ -98,7 +98,7 @@ function xarSessionGetSecurityLevel()
  * own prefix, and also to force users to set new values for them if they
  * require.  This avoids blatant or accidental over-writing of session
  * variables.
- *
+ */
 
 /**
  * Get a session variable
@@ -179,7 +179,8 @@ function xarSessionSetVar($name, $value)
 
 /**
  * Delete a session variable
- * @param name name of the session variable to delete
+ * @param string name name of the session variable to delete
+ * @return bool true
  */
 function xarSessionDelVar($name)
 {
@@ -272,13 +273,13 @@ function xarSession__setup($args)
 
         // User-defined save handler
         ini_set('session.save_handler', 'user');
-    
+
         // How to store data
         ini_set('session.serialize_handler', 'php');
-    
+
         // Use cookie to store the session ID
         ini_set('session.use_cookies', 1);
-    
+
         // Name of our cookie
         if (empty($args['cookieName'])) {
             $args['cookieName'] = 'XARAYASID';
@@ -342,10 +343,10 @@ function xarSession__setup($args)
         if (!empty($args['cookieDomain'])) {
             ini_set('session.cookie_domain', $args['cookieDomain']);
         }
-    
+
         // Garbage collection
         ini_set('session.gc_probability', 1);
-    
+
         // Inactivity timeout for user sessions
         ini_set('session.gc_maxlifetime', $args['inactivityTimeout'] * 60);
 
@@ -427,7 +428,7 @@ function xarSession__phpClose()
 
 /**
  * PHP function to read a set of session variables
- * @private
+ * @access private
  */
 function xarSession__phpRead($sessionId)
 {
@@ -436,7 +437,7 @@ function xarSession__phpRead($sessionId)
 
     $sessioninfoTable = $xartable['session_info'];
 
-    // FIXME: in session2 the uid is not used anymore, can we safely migrate this 
+    // FIXME: in session2 the uid is not used anymore, can we safely migrate this
     //        out? At least the roles/privileges modules are using it actively
     $query = "SELECT xar_uid, xar_ipaddr, xar_lastused, xar_vars
               FROM $sessioninfoTable WHERE xar_sessid = ?";
@@ -481,7 +482,7 @@ function xarSession__phpRead($sessionId)
 
 /**
  * PHP function to write a set of session variables
- * @private
+ * @access private
  */
 function xarSession__phpWrite($sessionId, $vars)
 {
@@ -510,7 +511,7 @@ function xarSession__phpWrite($sessionId, $vars)
 
 /**
  * PHP function to destroy a session
- * @private
+ * @access private
  */
 function xarSession__phpDestroy($sessionId)
 {
@@ -528,7 +529,7 @@ function xarSession__phpDestroy($sessionId)
 
 /**
  * PHP function to garbage collect session information
- * @private
+ * @access private
  */
 function xarSession__phpGC($maxlifetime)
 {
@@ -571,9 +572,9 @@ function xarSession__phpGC($maxlifetime)
  *
  * @author Marcel van der Boom <marcel@xaraya.com>
  * @link http://www.php.net/manual/en/ref.session.php
- * @return bool 
+ * @return int
  */
-function xarSession__UseOldSessions() 
+function xarSession__UseOldSessions()
 {
     return (phpversion() < "4.2.0" ? 1 : 0);
 }

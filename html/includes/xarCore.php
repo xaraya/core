@@ -715,8 +715,8 @@ function xarCore_SetCached($cacheKey, $name, $value)
  *
  * @access protected
  * @global xarCore_cacheCollection array
- * @param key the key identifying the particular cache you want to access
- * @param name the name of the variable in that particular cache
+ * @param string key the key identifying the particular cache you want to access
+ * @param string name the name of the variable in that particular cache
  */
 function xarCore_DelCached($cacheKey, $name)
 {
