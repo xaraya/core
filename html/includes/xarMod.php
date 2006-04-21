@@ -1443,24 +1443,24 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
         if (!xarModIsAvailable($hook['module'])) continue;
         if ($hook['area'] == 'GUI') {
             $isGUI = true;
-            if (!xarModLoad($hook['module'], $hook['type'])) continue; // return; Bug 4843 return causes all hooks to fail
+            if (!xarModLoad($hook['module'], $hook['type'])) return;//continue; //  Bug 4843 return causes all hooks to fail when one load fails
             $res = xarModFunc($hook['module'],
                               $hook['type'],
                               $hook['func'],
                               array('objectid' => $hookId,
                               'extrainfo' => $extraInfo));
-            if (!isset($res)) continue; //return;
+            if (!isset($res)) return;//continue;
             // Note: hook modules can only register 1 hook per hookObject, hookAction and hookArea
             //       so using the module name as key here is OK (and easier for designers)
             $output[$hook['module']] = $res;
         } else {
-            if (!xarModAPILoad($hook['module'], $hook['type'])) continue; //return;
+            if (!xarModAPILoad($hook['module'], $hook['type'])) return;//continue;
             $res = xarModAPIFunc($hook['module'],
                                  $hook['type'],
                                  $hook['func'],
                                  array('objectid' => $hookId,
                                        'extrainfo' => $extraInfo));
-            if (!isset($res)) continue; //return;
+            if (!isset($res)) return;//continue;
             $extraInfo = $res;
         }
     }
