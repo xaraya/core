@@ -1133,11 +1133,11 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
     return $output;
 }
 
-/** 
+/**
  * Determine wether a source template needs compilation
  * based on modification time of the compiled file and
  * the modification of the source file
- * 
+ *
  * @param  string  $sourceFileName   file path to the source file
  * @param  string  $cachedFileName   filled with the name of the cached file name
  * @return boolean $needsCompilation true - needs to be compiled, false - no need to compile.
@@ -1145,7 +1145,7 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
 function xarTpl__needsCompilation($sourceFileName,&$cachedFileName)
 {
     $needsCompilation = true; // Assume we do
-    // Hmm, do we set it or not? Usecase: 
+    // Hmm, do we set it or not? Usecase:
     //$cachedFileName = null;
     if ($GLOBALS['xarTpl_cacheTemplates']) {
         $cacheKey = xarTpl__GetCacheKey($sourceFileName);
@@ -1157,8 +1157,8 @@ function xarTpl__needsCompilation($sourceFileName,&$cachedFileName)
         // 4. DEBUG: when the XSL transformation file has NOT been changed more recently than the compiled template
         // THEN we do NOT need to compile the file.
         if ( file_exists($cachedFileName) &&
-             ( !file_exists($sourceFileName) || 
-               ( filemtime($sourceFileName) < filemtime($cachedFileName) 
+             ( !file_exists($sourceFileName) ||
+               ( filemtime($sourceFileName) < filemtime($cachedFileName)
                  && filemtime('includes/transforms/xar2php.xsl') < filemtime($cachedFileName)
                )
              )
