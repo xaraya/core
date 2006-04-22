@@ -32,10 +32,10 @@
                      &nbsp;
                  </td>
                  <td class="xar-align-center">
-                     <img src="modules/roles/xarimages/ob_mail_unreaded.gif" alt="#xarML('Unread messages')#" />
+                     <img src="#xarTplGetImage('ob_mail_unreaded.gif','roles')#" alt="#xarML('Unread messages')#" />
                  </td>
                  <td class="xar-align-center">
-                     <img src="modules/roles/xarimages/ob_mail_total.gif" alt="#xarML('Total messages')#" />
+                     <img src="#xarTplGetImage('ob_mail_total.gif','roles')#" alt="#xarML('Total messages')#" />
                  </td>
              </tr>
          </xar:if>
@@ -43,9 +43,9 @@
              <tr>
                  <td>
                      <xar:if condition="!empty($dd['userurl'])">
-                         <img src="modules/roles/xarimages/ob_user.gif" alt="" class="xar-valign-middle" />
+                         <img src="#xarTplGetImage('ob_user.gif','roles')#" alt="" class="xar-valign-middle" />
                          <xar:else />
-                         <img src="modules/roles/xarimages/ob_user_other.gif" alt="" class="xar-valign-middle" />
+                         <img src="#xarTplGetImage('ob_user_other.gif','roles')#" alt="" class="xar-valign-middle" />
                      </xar:if>
                      <a href="#$dd['userurl']#">
                          #xarVarPrepForDisplay($dd['name'])#
@@ -74,7 +74,7 @@
      </tr>
      <tr>
          <td>
-             <img src="modules/roles/xarimages/ob_users.gif" alt="" class="xar-valign-middle" />
+             <img src="#xarTplGetImage('ob_users.gif','roles')#" alt="" class="xar-valign-middle" />
              <xar:mlstring>Total users</xar:mlstring>
          </td>
          <td>
@@ -85,7 +85,7 @@
      </tr>
      <tr>
          <td>
-             <img src="modules/roles/xarimages/ob_users_an.gif" alt="" class="xar-valign-middle" />
+             <img src="#xarTplGetImage('ob_users_an.gif','roles')#" alt="" class="xar-valign-middle" />
              <xar:mlstring>Total guests</xar:mlstring>
          </td>
          <td>
