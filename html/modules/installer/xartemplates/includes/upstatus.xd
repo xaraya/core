@@ -10,7 +10,6 @@
 <xar:set name="steptext[4]">
     <xar:mlstring>Finalize Upgrade</xar:mlstring>
 </xar:set>
-
 <div id="status">
     <xar:for start="$phase = 1" test="$phase lt $active_step" iter="$phase++">
         <p class="complete">

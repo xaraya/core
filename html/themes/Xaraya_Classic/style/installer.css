@@ -9,7 +9,7 @@ body {
 }
 
 #wrapper {
-    margin-top: 5%;
+    margin-top: 2%;
     width: 760px;
     margin-right: auto;
     margin-left: auto;
@@ -21,7 +21,7 @@ body {
 #main {
     margin-top: 0px;
     margin-bottom: 0px;
-    padding: 70px 0 95px 0;
+    padding: 30px 0 95px 0;
 }
 
 #install { padding: 0 0 0 20px; }
@@ -56,7 +56,7 @@ h2 { font-size: 1.2em; }
 h3 { font-size: 1em; }
 h4 { font-size: .82em; }
 
-p, ul {
+p, ul, ol {
     font-size: .80em;
     text-align: left;
     line-height: 1.5em;

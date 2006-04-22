@@ -2,37 +2,58 @@
 <xar:set name="active_step">1</xar:set>
 <div id="install">
     <xar:template file="upstatus" />
-    <h1>
-        <xar:mlstring>Welcome to Xaraya Upgrade</xar:mlstring>
-    </h1>
+    <h1><xar:mlstring>Welcome to Xaraya Upgrade</xar:mlstring></h1>
      <xar:if condition="$versionlow ne ''">
         <p><strong><xar:mlstring>WARNING</xar:mlstring></strong>:<p>
-        <p>
-        <xar:ml>
-              <xar:mlstring> Your current site is Xaraya Version #(1). You must upgrade to at least Xaraya Version 1.0.0 before continuing to upgrade to the latest release.
-               </xar:mlstring>
-        <xar:mlvar>#$xarVersion#</xar:mlvar>
-        </xar:ml>
-        </p>
-        <p>
-           <xar:mlstring>Please download the latest Xaraya Core 1.0.x version which is Xaraya 1.0.2 at </xar:mlstring>
-           <a href="http://sourceforge.net/project/showfiles.php?group_id=64578&amp;package_id=168638&amp;release_id=385362">Sourceforge</a>
-           <xar:mlstring> and upgrade your current site before continuing.</xar:mlstring>
-        </p>
+          #$versionlow#
      <xar:else />
-
         <xar:if condition="$alreadydone ne ''">
-            <p>
-                #$alreadydone#
-            </p>
+            <p>#$alreadydone#</p>
         </xar:if>
-
+        <p>#$descr#</p>
         <p>
-            #$descr#
-        </p>
-        <p>
-           <xar:mlstring>Please ensure you have reviewed the UPGRADE.txt file and relevant comments for your version upgrade before continuing.</xar:mlstring>
-        </p>
+           <xar:set name="xarguidelines">'http://www.xaraya.com/index.php/documentation/586'</xar:set>
+           <xar:ml>
+             <xar:mlstring>
+               Ensure you have reviewed the UPGRADE.txt file or the <a href="#(1)">Xaraya Upgrade Guidelines</a>, and relevant
+               comments for your version upgrade before continuing.
+             </xar:mlstring>
+             <xar:mlvar>#$xarguidelines#</xar:mlvar>
+           </xar:ml>
+           <xar:mlstring>
+               This upgrade process updates your database and some system files but <strong>cannot upgrade</strong> your theme and templates!
+           </xar:mlstring>
+    </p>
+    <p>
+        <xar:mlstring>
+            To ensure a quick and smooth upgrade, please check and address the following important theme and template considerations <strong>before</strong> continuing.
+        </xar:mlstring>
+    </p>
+    <xar:comment>PLEASE ADD SPECIFIC UPGRADE CONSIDERATIONS FOR THE NEW XAR VERSION HERE BELOW </xar:comment>
+        <ol>
+           <li><xar:mlstring>The Adminpanels module has been deprecated as of Version 1.1 and no longer available. The blocks have been moved to the Base module.</xar:mlstring>
+               <ul>
+                 <li><xar:mlstring>Please check your theme templates for use of any Adminpanel module references. You will need to change references to <strong>adminpanels</strong> in your theme or templates
+                 to <strong>base</strong> module. Remember particularly to change 'adminmenu' and 'waiting content' blocks tags to refer now to the base module, and update other Adminpanels links.</xar:mlstring>
+                <li><xar:mlstring>Make sure your Adminpanel block templates for any compact menu block, adminmenu or waiting content blocks are also moved to <strong>modules/base</strong> directory in your theme.</xar:mlstring></li>
+                </ul>
+           </li>
+           <li><xar:mlstring>The core login block and function in Roles module has been moved as of Version 1.1 to the
+               Authsystem Module at </xar:mlstring><a href="&xar-modurl-authsystem-user-showloginform;">index.php?module=authsystem&amp;function=showloginform</a>
+               <xar:mlstring>You should be aware of the change but can still browse to </xar:mlstring><a href="&xar-modurl-roles-user-main;">index.php?module=roles</a> to login.</li>
+               <xar:mlstring>You may wish to note the URL in case of problems logging in.</xar:mlstring>
+           <li>
+              <xar:mlstring>If you allow User Registration on your site, you must ensure you have the <strong>Registration module</strong> in your Xaraya module directory,
+              install, and configure it to continue user registration on your site as from Version 1.1 .
+              </xar:mlstring>
+           </li>
+           <li>
+               <xar:mlstring>The Country Listing Dynamic Data property has changed templates in Version 1.1 to refer to ID as value
+                instead of Name. If you have been using this DD property, you will have to override the template to
+                continue to use Name as the value.
+               </xar:mlstring>
+           </li>
+        </ol>
         <form action="upgrade.php" method="post">
             <p class="center">
                 <input type="hidden" name="upgrade_phase" id="upgrade_phase" value="2" />

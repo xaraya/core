@@ -8,11 +8,11 @@
     </h1>
    <p>
         <xar:mlstring>
-         Thank you, the database and miscellaneous upgrade processes are complete. 
+         Thank you, the database and miscellaneous upgrade processes are complete!
         </xar:mlstring>
    </p>
    <p><xar:mlstring>
-      Please note this upgrade process does not upgrade your theme templates. You should ensure 
+      Remember that this upgrade process does not upgrade your theme or templates. You should ensure
       you update them inline with the UPGRADE.txt recommendations.
       </xar:mlstring>
    </p>

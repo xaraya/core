@@ -14,8 +14,10 @@
       <div class="xar-form-input-wrapper">
         <label for="password" class="xar-form-label"><xar:mlstring>Password</xar:mlstring></label>
         <input type="password" name="pass" id="password" maxlength="64" size="20" tabindex="2" />
-        <a href="&xar-modurl-roles-user-lostpassword;"><xar:mlstring>Forget your password?</xar:mlstring></a>
       </div>
+      <p class="xar-form-input-wrapper-after">
+        <a href="&xar-modurl-roles-user-lostpassword;"><xar:mlstring>Forget your password?</xar:mlstring></a>
+      </p>
       <div class="xar-form-input-wrapper-after">
         <input type="checkbox" name="rememberme" id="remembermeform" value="1" tabindex="3" />
         <label for="remembermeform"><xar:mlstring>Remember me</xar:mlstring></label>
