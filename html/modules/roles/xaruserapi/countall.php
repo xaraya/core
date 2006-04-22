@@ -39,8 +39,10 @@ function roles_userapi_countall($args)
     }
 
     //suppress display of pending users to non-admins
-    if (!xarSecurityCheck("AdminRole",0)) $query .= " AND xar_state != " . ROLES_STATE_PENDING;
-
+    if (!xarSecurityCheck("AdminRole",0)) {
+         $query .= " AND xar_state != ?";
+         $bindvars[] = ROLES_STATE_PENDING;
+    }
 
     if (isset($selection)) $query .= $selection;
 
@@ -59,7 +61,8 @@ function roles_userapi_countall($args)
         $bindvars[] = (int) $thisrole['uid'];
     }
 
-    $query .= " AND xar_type = 0";
+    $query .= " AND xar_type = ?";
+    $bindvars[] = 0; //user 
 
 // cfr. xarcachemanager - this approach might change later
     $expire = xarModGetVar('roles','cache.userapi.countall');
