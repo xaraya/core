@@ -30,7 +30,7 @@
         </ul>
     </p>
 
-    <h3><xar:mlstring>System Settings Check</xar:mlstring></h3>
+    <h3><xar:mlstring>PHP Settings Check</xar:mlstring></h3>
     
     <form action="install.php" method="post">
         <div>
@@ -38,14 +38,14 @@
             <p>
                 <xar:ml>
                     <xar:mlstring>
-                        For Xaraya to function properly, the installer must write your database information to the file #(1).
-                        If your settings are not correct, this script will not be able to do so.
+                        Xaraya has recommended settings for PHP. If your PHP settings do not meet requirements you may have difficulties in running install to completion.
                     </xar:mlstring>
                     <xar:mlvar>
                         #$systemConfigFile#
                     </xar:mlvar>
                 </xar:ml>
             </p>
+
             <ul>
                 <xar:if condition="$metRequiredPHPVersion">
                     <li class="success">
@@ -124,9 +124,11 @@
                     <li class="warning">
                         <xar:ml>
                             <xar:mlstring>
-                                WARNING: Your max_execution_time for a php script is set to #(1) seconds. 30 seconds is often adequate but the recommended value is 60 seconds. How much you need will depend on your system
-                                and number of modules you choose during this installation.
-                                If in doubt about your maximum (script) execution time, <strong>do a core only install</strong> and install modules manually later.
+                                WARNING: Your max_execution_time for a php script is set to #(1) seconds. 30 seconds is
+                                usually sufficient but you may want to increase it for a full distribution install. How much time 
+                                you need will depend on your system and number of modules you choose during this installation. 
+                                If in doubt about your maximum (script) execution time, <strong>do a core only install</strong> 
+                                and install modules manually later.
                             </xar:mlstring>
                             <xar:mlvar>
                                 #$maxexectime#
@@ -137,9 +139,11 @@
                    <li class="success">
                         <xar:ml>
                             <xar:mlstring>
-                                SUCCESS: Your max_execution_time for a php script is set to #(1) seconds. 30 seconds is often adequate but the recommended value is 60 seconds. How much you need will depend on your system
-                                and number of modules you choose during this installation.
-                                If in doubt about your maximum (script) execution time, <strong>do a core only install</strong> and install modules manually later.
+                                SUCCESS: Your max_execution_time for a php script is set to #(1) seconds. 30 seconds is
+                                usually sufficient but you may want to increase it for a full distribution install. How much time 
+                                you need will depend on your system and number of modules you choose during this installation. 
+                                If in doubt about your maximum (script) execution time, <strong>do a core only install</strong> 
+                                and install modules manually later.
                             </xar:mlstring>
                             <xar:mlvar>
                                 #$maxexectime#
@@ -147,10 +151,23 @@
                         </xar:ml>
                    </li>
                 </xar:if>
-
+            </ul>
+       <h3><xar:mlstring> File Settings Check</xar:mlstring></h3>
+            <p>
+                <xar:ml>
+                    <xar:mlstring>
+                        For Xaraya to function properly, the installer must write your database information to the configuration file #(1).
+                        If your settings are not correct, this script will not be able to do so.
+                    </xar:mlstring>
+                    <xar:mlvar>
+                        #$systemConfigFile#
+                    </xar:mlvar>
+                </xar:ml>
+            </p>
+            <ul>
                 <xar:if condition="$systemConfigIsWritable">
                     <li class="success">
-                        <xar:mlstring>SUCCESS: The installer can write to the configuration file.</xar:mlstring>
+                        <xar:mlstring>SUCCESS: The installer can write to your configuration file.</xar:mlstring>
                     </li>
                  <xar:else />
                     <li class="failure">
