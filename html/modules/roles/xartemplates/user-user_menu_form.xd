@@ -63,7 +63,7 @@
                 </label>
                 <input type="text" name="email" id="email" value="" size="40" maxlength="60" />
             </div>
-            <xar:if condition="xarModGetVar('roles','setuserhome')">
+            <xar:if condition="xarModGetVar('roles','setuserhome') and xarModGetVar('roles','allowuserhomeedit')">
                 <div class="xar-form-input-wrapper">
                     <label for="home" class="xar-form-label">
                         <xar:mlstring>
@@ -72,6 +72,8 @@
                     </label>
                     <input type="text" name="home" id="home" value="#$home#" size="40" maxlength="100" />
                 </div>
+            <xar:elseif condition="xarModGetVar('roles','setuserhome')" />
+                 <input type="hidden" name="home" id="home" value="#$home#" />
             </xar:if>
             <xar:if condition="xarModGetVar('roles', 'requirevalidation')">
                 <div class="xar-form-input-wrapper">

@@ -1439,11 +1439,19 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
     foreach ($hooklist as $hook) {
         //THIS IS BROKEN
         //$hook['type'] and $type in the xarModIsAvailable ARE NOT THE SAME THING
-//        if (!xarModIsAvailable($hook['module'], $hook['type'])) continue;
+        //if (!xarModIsAvailable($hook['module'], $hook['type'])) continue;
         if (!xarModIsAvailable($hook['module'])) continue;
         if ($hook['area'] == 'GUI') {
             $isGUI = true;
-            if (!xarModLoad($hook['module'], $hook['type'])) return;//continue; //  Bug 4843 return causes all hooks to fail when one load fails
+            if (!xarModLoad($hook['module'], $hook['type']))  return;
+            // return; Bug 4843 return causes all hooks to fail
+            /* jojodee : it's not the return causing the fail necessarily. In fact there is no logical fail due to api or mod not loading
+                in many cases, as the module or hook function is successfully loaded. The failure is in some modules' hook
+                functions that do not set return after a priv check but return unset. It should return empty, not unset.
+                Only a few of the newer modules or hook functions seem to be doing this and these have been corrected where possible in code.
+                We still need a review of this function - and at each step where there is now an existing return.
+            */
+
             $res = xarModFunc($hook['module'],
                               $hook['type'],
                               $hook['func'],
@@ -1454,13 +1462,13 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
             //       so using the module name as key here is OK (and easier for designers)
             $output[$hook['module']] = $res;
         } else {
-            if (!xarModAPILoad($hook['module'], $hook['type'])) return;//continue;
+            if (!xarModAPILoad($hook['module'], $hook['type']))  return; //return;
             $res = xarModAPIFunc($hook['module'],
                                  $hook['type'],
                                  $hook['func'],
                                  array('objectid' => $hookId,
                                        'extrainfo' => $extraInfo));
-            if (!isset($res)) return;//continue;
+            if (!isset($res))  return; //return;
             $extraInfo = $res;
         }
     }

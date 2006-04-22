@@ -16,11 +16,13 @@
  * @author Paul Rosania
  * @author Marcel van der Boom <marcel@hsdev.com>
  */
-
-
-/* TODO: temp change so this will run for upgrade as well. Need to address this in better way.
+/* TODO: temp change so this will run for upgrade as well. Need to address this in better way. */
 if (!file_exists('install.php') and !file_exists('upgrade.php')) {xarCore_die(xarML('Already installed'));}
 
+/* FOR UPGRADE: Add instruction text needed before upgrade for a specific upgrade to admin-upgrade1.xd
+                Add upgrade code to installer_admin_upgrade2() function - (still needs to be cleaned up) 
+                Any special misc upgrade scripts to installer_admin_upgrade3()
+*/
 /**
  * Dead
  *
@@ -1192,10 +1194,11 @@ function installer_admin_upgrade1()
     }
     
     if ($data['xarVersion'] < '1.0.0') {
+        $data['downloadit']="<a href=\"http://www.xaraya.com/index.php/docs/75\">Xaraya</a>";
         $data['versionlow']=
-        xarML('<p><strong>WARNING</strong>: Your current site is #(1).
-               You must upgrade to Xaraya Version <strong>1.0.x</strong> before continuing.</p>
-               <p>Please download the Version 1.0.2 and upgrade your Xaraya site before continuing</p>', $data['xarVersion']);
+        xarML('<p>Your current site is <strong>Xaraya Version #(1)</strong>.
+                You must have at least Xaraya Version <strong>1.0.0</strong> installed before continuing to upgrade to the latest release.</p>
+               <p>Please download the latest Xaraya Core 1.0.x version at #(2) and upgrade your current site before continuing.</p>', $data['xarVersion'], $data['downloadit']);
     }else{
         $data['versionlow']='';
     }
@@ -1261,8 +1264,6 @@ function installer_admin_upgrade2()
     } else {
         $content .= "Base module not available - no upgrade carried out.<br />";
     } // endif modavailable('base')
-
-
 
 
     // replace DynamicData component 'Type' by 'Field'
@@ -1817,10 +1818,27 @@ function installer_admin_upgrade2()
                              'module'  =>  'mail',
                              'set'     =>  'exact'),
                        array('name'    =>  'redirectaddress',
-                             'module'  =>  'mail',
+                             'module'  =>  'privileges',
                              'set'     =>  ''),
+                       array('name'    =>  'displayrolelist',
+                             'module'  =>  'roles',
+                             'set'     =>  'false'),
+                        array('name'    => 'usereditaccount',
+                             'module'  =>  'roles',
+                             'set'     =>  'true'),
+                        array('name'    => 'allowuserhomeedit',
+                             'module'  =>  'roles',
+                             'set'     =>  'false'),
+                        array('name'    => 'setuserhome',
+                             'module'  =>  'roles',
+                             'set'     =>  'false'),
+                        array('name'    => 'setprimaryparent',
+                             'module'  =>  'roles',
+                             'set'     =>  'false'),
+                        array('name'    => 'setpasswordupdate',
+                             'module'  =>  'roles',
+                             'set'     =>  'false')
                           );
-
     foreach($modvars as $modvar){
         foreach($modvar as $var){
             $currentvar = xarModGetVar("$var[module]", "$var[name]");
@@ -2624,7 +2642,7 @@ function installer_admin_upgrade3()
     $content='';
     // Propsinplace scenario, flush the property cache, so on upgrade all proptypes
     // are properly set in the database.
-    $content .=  "<p><strong>Flushing the property cache</strong></p>";
+    $content .=  "<h3><strong>Flushing the property cache</strong></h3>";
     if(!xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush' => true))) {
         $content .=  "<p>WARNING: Flushing property cache failed</p>";
     } else {

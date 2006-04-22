@@ -23,7 +23,7 @@
 function dynamicdata_user_search($args)
 {
 // Security Check
-    if(!xarSecurityCheck('ViewDynamicData')) return;
+    if(!xarSecurityCheck('ViewDynamicData',0)) return '';
 
     $data = array();
 

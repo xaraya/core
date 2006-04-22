@@ -18,6 +18,7 @@
  * better control on config settings
  *
  */
+define('XARCORE_GENERATION',1); 
 define('XARCORE_VERSION_NUM', '1.1.0');
 define('XARCORE_VERSION_ID',  'Xaraya');
 define('XARCORE_VERSION_SUB', 'adam_baum');

@@ -460,12 +460,13 @@
                         </xar:mlstring></strong>
                     </label>
                 </div>
-                <p class="xar-form-input-wrapper-after  xar-padding-bottomthick"">
+                <p class="xar-form-container-after">
                     <xar:mlstring>
-                        CAUTION: this option may reveal enough information to compromise a user's login.
+                        CAUTION: this may reveal enough information to compromise a user's login.
                     </xar:mlstring>
                 </p>
-                <div class="xar-form-input-wrapper-after">
+
+                <div class="xar-form-input-wrapper-after xar-padding-thicktop">
                     <xar:if condition="xarModGetVar('roles', 'usereditaccount')">
                         <input type="checkbox" name="usereditaccount" id="usereditaccount" value="1" checked="checked" />
                         <xar:else />
@@ -477,12 +478,36 @@
                         </xar:mlstring></strong>
                     </label>
                 </div>
-                 <p class="xar-form-input-wrapper-after  xar-padding-bottomthick"">
+                 <p class="xar-form-input-wrapper-after">
                     <xar:mlstring>
                          This toggles the Roles hook to the Roles module.
                     </xar:mlstring>
                 </p>
-                <div class="xar-form-input-wrapper-after">
+
+                <xar:if condition="xarModGetVar('roles', 'setuserhome')">
+                <div class="xar-form-input-wrapper-after xar-padding-thicktop">
+                    <xar:if condition="xarModGetVar('roles', 'allowuserhomeedit')">
+                        <input type="checkbox" name="userhomeedit" id="userhomeedit" value="1" checked="checked" />
+                        <xar:else />
+                        <input type="checkbox" name="userhomeedit" id="userhomeedit" value="1" />
+                    </xar:if>
+                    <label for="allowuserhomeedit" title="#xarML('Allow users to edit their user home page in their account')#">
+                        <strong><xar:mlstring>
+                            Allow users to set Home Page in their member account
+                        </xar:mlstring></strong>
+                    </label>
+                </div>
+                <xar:else />
+                <div class="xar-form-input-wrapper-after xar-padding-thicktop">
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <label for="allowuserhomeedit" title="#xarML('Allow users to edit their user home page in their account')#">
+                        <strong><xar:mlstring>Allow users to set Home Page in their member account</xar:mlstring></strong>
+                            <br /><xar:mlstring> (only available if the dynamic user variable Userhome is activated)</xar:mlstring>
+                    </label>
+                </div>
+                </xar:if>
+
+                <div class="xar-form-input-wrapper-after xar-padding-thicktop">
                     <xar:if condition="xarModGetVar('roles', 'displayrolelist')">
                         <input type="checkbox" name="displayrolelist" id="displayrolelist" value="1" checked="checked" />
                         <xar:else />
