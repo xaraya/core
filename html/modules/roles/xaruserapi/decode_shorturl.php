@@ -24,16 +24,9 @@
  * /roles/list/viewall
  * /roles/list/X
  * /roles/list/viewall/X
- * /roles/login
- * /roles/logout
  * /roles/password
- * /roles/privacy
- * /roles/register
- * /roles/register/registration
- * /roles/register/checkage
  * /roles/settings
  * /roles/settings/form (deprecated)
- * /roles/terms
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @author the roles module development team
@@ -78,9 +71,6 @@ function roles_userapi_decode_shorturl($params)
     } elseif (preg_match('/^password/i',$params[1])) {
         return array('lostpassword', $args);
 
-    } elseif (preg_match('/^login/i',$params[1])) {
-        return array('showloginform', $args);
-
     } elseif (preg_match('/^account/i',$params[1])) {
         if (!empty($params[2]) && preg_match('/^(\w+)/i',$params[2],$matches)) {
             // Note: this handles usermenu requests for hooked modules (including roles itself)
@@ -88,14 +78,6 @@ function roles_userapi_decode_shorturl($params)
         }
         return array('account', $args);
 
-    } elseif (preg_match('/^terms/i',$params[1])) {
-        return array('terms', $args);
-
-    } elseif (preg_match('/^privacy/i',$params[1])) {
-        return array('privacy', $args);
-
-    } elseif (preg_match('/^logout/i',$params[1])) {
-        return array('logout', $args);
 
     } elseif (preg_match('/^settings/i',$params[1])) {
         if (!empty($params[2]) && preg_match('/^form/i',$params[2],$matches)) {
@@ -103,18 +85,6 @@ function roles_userapi_decode_shorturl($params)
             $args['phase'] = 'form';
         }
         return array('usermenu', $args);
-
-    } elseif (preg_match('/^register/i',$params[1])) {
-        if (!empty($params[2])) {
-            if ($params[2] == 'registration' || $params[2] == 'registerform') {
-                $args['phase'] = 'registerform';
-            } elseif ($params[2] == 'checkage') {
-                $args['phase'] = 'checkage';
-            } else {
-                // unsupported phase - must be passed via forms
-            }
-        }
-        return array('register', $args);
 
     } elseif (preg_match('/^(\d+)/',$params[1],$matches)) {
         // something that starts with a number must be for the display function
