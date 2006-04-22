@@ -1,0 +1,31 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:comment>Common Administration menu</xar:comment>
+<xar:style scope="module" module="base" file="navtabs" />
+<xar:set name="activetab">$_bl_module_func</xar:set>
+    <h2>
+            <xar:mlstring>Manage Realms</xar:mlstring>
+    </h2>
+<div>
+   <dl class="xar-tabs">
+  <dt class="help" title="#xarML('Choose an action to perform')#">
+      <xar:mlstring>Manage Realms:</xar:mlstring>
+    </dt>
+      <xar:if condition="$activetab eq 'viewrealms' or $activetab eq 'modifyrealm' or $activetab eq 'deleterealm'">
+         <xar:set name="tabclass">'active'</xar:set>
+      <xar:else />
+         <xar:set name="tabclass">''</xar:set>
+      </xar:if>
+        <dd class="#$tabclass#">
+          <a href="&xar-modurl-privileges-admin-viewrealms;">
+            <xar:mlstring>View Realms</xar:mlstring>
+          </a>
+        </dd>
+        <xar:set name="tabclass">$activetab=='newrealm'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+            <a href="&xar-modurl-privileges-admin-newrealm;" >
+                <xar:mlstring>Add Realm</xar:mlstring>
+            </a>
+        </dd>
+
+  </dl>
+</div>
