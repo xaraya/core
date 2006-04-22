@@ -25,16 +25,7 @@
  * /roles/list/X
  * /roles/list/viewall/X
  *
- * /roles/login
- * /roles/logout
  * /roles/password
- * /roles/privacy
- * /roles/terms
- *
- * /roles/register
- * /roles/register/registration
- * /roles/register/checkage
- *
  * /roles/settings
  * /roles/settings/form (deprecated)
  *
@@ -82,11 +73,7 @@ function roles_userapi_encode_shorturl($args)
             $path[] = 'password';
             break;
 
-        case 'showloginform':
-            $path[] = 'login';
-            break;
-
-        case 'account':
+         case 'account':
             $path[] = 'account';
             if(!empty($moduleload)) {
                 // Note: this handles usermenu requests for hooked modules (including roles itself).
@@ -95,13 +82,7 @@ function roles_userapi_encode_shorturl($args)
             }
             break;
 
-        case 'terms':
-        case 'privacy':
-        case 'logout':
-            $path[] = $func;
-            break;
-
-        case 'usermenu':
+          case 'usermenu':
             $path[] = 'settings';
             if (!empty($phase) && ($phase == 'formbasic' || $phase == 'form')) {
                 // Note : this URL format is no longer in use
@@ -110,20 +91,7 @@ function roles_userapi_encode_shorturl($args)
             }
             break;
 
-        case 'register':
-            $path[] = 'register';
-            if (!empty($phase)) {
-                // Bug 4404: registerform and registration are aliases.
-                if ($phase == 'registerform' || $phase == 'registration' || $phase == 'checkage') {
-                    unset($args['phase']);
-                    $path[] = ($phase == 'registerform' ? 'registration' : $phase);
-                } else {
-                    // unsupported phase - must be passed via forms
-                }
-            }
-            break;
-
-        case 'display':
+          case 'display':
             // check for required parameters
             if (isset($uid) && is_numeric($uid)) {
                 unset($args['uid']);
