@@ -105,6 +105,7 @@ function roles_user_usermenu($args)
             $uname = xarUserGetVar('uname');
             // Confirm authorisation code.
             if (!xarSecConfirmAuthKey()) return;
+            if (!isset($passwordupdate)) $passwordupdate='';
             if (!empty($pass1)){
                 $minpasslength = xarModGetVar('roles', 'minpasslength');
                 if (strlen($pass2) < $minpasslength) {
