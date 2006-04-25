@@ -39,6 +39,17 @@
                 :
                 #xarVarPrepForDisplay($name)# 
             </p>
+            <xar:if condition="!empty($homelink)">
+            <p>
+                <strong>
+                    <xar:mlstring>
+                        Home Page
+                    </xar:mlstring>
+                </strong>
+                :
+                <a href="#$homelink#" title="#xarML('Home Page')#"><xar:mlstring>My Home Page</xar:mlstring></a>
+            </p>
+            </xar:if>
         </xar:if>
         <xar:if condition="xarModIsAvailable('dynamicdata')">
             <xar:data-getitem name="$properties" module="roles" itemid="$uid" />

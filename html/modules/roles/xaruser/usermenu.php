@@ -106,6 +106,22 @@ function roles_user_usermenu($args)
             // Confirm authorisation code.
             if (!xarSecConfirmAuthKey()) return;
             if (!isset($passwordupdate)) $passwordupdate='';
+           
+            /* Check if external urls are allowed in home page */
+            $allowexternalurl=xarModGetVar('roles','allowexternalurl');
+            $url_parts = parse_url($home);
+            if (!$allowexternalurl) {
+                if ((preg_match("%^http://%", $home, $matches)) &&
+                ($url_parts['host'] != $_SERVER["SERVER_NAME"]) &&
+                ($url_parts['host'] != $_SERVER["HTTP_HOST"])) {
+
+                  $msg = xarML('External URLs such as #(1) are not permitted in your User Account.', $home);
+                  xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+                  $home=''; //reset and return with error
+                    return;
+                }
+            }
+
             if (!empty($pass1)){
                 $minpasslength = xarModGetVar('roles', 'minpasslength');
                 if (strlen($pass2) < $minpasslength) {
@@ -124,6 +140,7 @@ function roles_user_usermenu($args)
                     xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
                     return;
                 }
+
                 $oldemail = xarUserGetVar('email');
                 // The API function is called.
                 if(!xarModAPIFunc('roles',
@@ -232,6 +249,7 @@ function roles_user_usermenu($args)
                 }
             } else {
                 $email = xarUserGetVar('email');
+
                 // The API function is called.
                 if(!xarModAPIFunc('roles',
                                   'admin',

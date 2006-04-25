@@ -1,0 +1,34 @@
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<xar:comment>
+Generic page for display of URL in an IFrame.
+ Variables: title - string, title of page
+            page - full url of the page to be displayed
+</xar:comment>
+<script type="text/javascript">
+function IntegrateIt() {
+    var here = document.getElementById('integratordiv');
+    var where = window.frames[0].document.body.innerHTML;
+    where.innerHTML = here
+}
+</script>
+<xar:if condition="!isset($title)">
+    <xar:set name="title"><xar:mlstring>External Page</xar:mlstring></xar:set>
+</xar:if>
+<xar:if condition="xarUserIsLoggedIn() and xarSecurityCheck('ReadBase')">
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">#$title#</span>
+    </div>
+    <div id="integratordiv">
+        <iframe onload="IntegrateIt();" id="integrator" src="#$page#" frameborder="no" class="xar-fullwidth" height="600" scrolling="auto">
+        </iframe>
+    </div>
+
+  <xar:if condition="!empty($hooks)">
+    <br />
+    <xar:foreach in="$hooks" key="$hookmodule">
+        #$hooks[$hookmodule]#
+    </xar:foreach>
+  </xar:if>
+<xar:else />
+   <xar:mlstring>You do not have permission to access this page.</xar:mlstring>
+</xar:if>

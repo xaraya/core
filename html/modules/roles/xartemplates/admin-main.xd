@@ -112,17 +112,29 @@
         <li><xar:mlstring><strong>Email Messaging</strong> : Configure email notifications to users on registration, change of passwords, and account activation including template customization. You can also email groups of users from this view.</xar:mlstring></li>
         <li><xar:mlstring><strong>Recall/Purge</strong> : Users or groups that have been deleted can be recalled from this screen  or purged for good from the system.</xar:mlstring></li>
         <li><xar:mlstring><strong>Site Lock</strong> : Lock your site to registration or login during maintenance or updates.</xar:mlstring></li>
-        <li><xar:mlstring><strong>Modify Config</strong> : Set general site options such as lockout times, designated Administrator, site terms and privacy policy, as well as setting user site registration options, and managing filtering and dynamic data.</xar:mlstring></li>
+        <li><xar:mlstring><strong>Modify Config</strong> : Set general site options including:</xar:mlstring>
+            <ul>
+               <li><xar:mlstring>designated site Administrator and default registration User group</xar:mlstring></li>
+               <li><xar:mlstring>default Authentication and Registration module</xar:mlstring></li>
+               <li><xar:mlstring>activation of user variables and Dynamic Data for roles</xar:mlstring></li>
+               <li><xar:mlstring>Special Member Options such as User Home, editing of Member Account and search by Email</xar:mlstring></li>
+
+            </ul>
+        </li>
     </ul>
     <h3>
         <xar:mlstring>Included Blocks</xar:mlstring>
     </h3>
     <ul>
         <li>
-            <xar:mlstring><strong>Online Block</strong> shows the number visiting your site right now.</xar:mlstring>
+            <xar:mlstring><strong>Online Block</strong> shows the number visiting your site right now</xar:mlstring>
         </li>
+        <li>
+            <xar:mlstring><strong>Language Block</strong> - allow users to select their default language</xar:mlstring>
+        </li>
+
        <li>
-            <xar:mlstring>Login Block - moved to Authsystem (authentication) module at Xaraya version 1.1.0</xar:mlstring>
+            <xar:mlstring>Login Block - deprecated here and moved to Authsystem (authentication) module at Xaraya version 1.1.0</xar:mlstring>
         </li>
 
     </ul>
@@ -157,7 +169,7 @@
 
   </ul>
   <p class="xar-sub">
-    <strong>&nbsp;<xar:mlstring>Roles Module - Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.1.0&nbsp; 2005-11-02
+    <strong>&nbsp;<xar:mlstring>Roles Module Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.1.1&nbsp; 2006-04-22
   </p>
 </div>
 

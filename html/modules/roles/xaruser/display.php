@@ -30,11 +30,47 @@ function roles_user_display($args)
     
     $data['email'] = xarVarPrepForDisplay($data['email']);
 
+
     $item = $data;
     $item['module'] = 'roles';
     $item['itemtype'] = 0; // handle groups differently someday ?
     $item['returnurl'] = xarModURL('roles', 'user', 'display',
                                    array('uid' => $uid));
+
+   //Setup user home url if Userhome is activated and user can set the URL
+    //So it can display in link of User account page
+    $externalurl=false; //used as a flag for userhome external url
+    if (xarModAPIFunc('roles','admin','checkduv',array('name' => 'setuserhome', 'state' => 1)) &&
+        xarModGetVar('roles', 'allowuserhomeedit')) {
+       
+        $role = xarUFindRole(xarUserGetVar('uname',$uid));
+        $url=$role->getHome(); //what about last resort here?
+        if (!isset($url) || empty($url)) {
+            // take the first home url encountered - other viable option atm?
+            foreach ($role->getParents() as $parent) {
+                $parenturl = $parent->getHome();
+                if (!empty($parenturl))  {
+                    $url = $parenturl;
+                    break;
+                }
+            }
+        }
+        //We have a home url - let us see if it is a shortcut, or internal, or external URL
+        $homeurldata =xarModAPIFunc('roles','user','userhome',array('url'=>$url,'truecurrenturl'=>$item['returnurl']));
+        if (!is_array($homeurldata) || !$homeurldata) {
+            $externalurl=false;
+            $homeurl=xarServerGetBaseURL(array(),false);
+        } else{
+           $externalurl=$homeurldata['externalurl'];
+           $homeurl=$homeurldata['redirecturl'];
+        }
+
+        $data['externalurl']=$externalurl;
+        $data['homelink']=$homeurl;
+    } else {
+        $data['homelink']='';
+    }
+
 
     $hooks = array();
     $hooks = xarModCallHooks('item', 'display', $uid, $item);

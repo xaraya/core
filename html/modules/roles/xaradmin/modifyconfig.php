@@ -165,18 +165,20 @@ function roles_admin_modifyconfig()
                     if (!xarVarFetch('usersendemails', 'checkbox', $usersendemails, false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('usereditaccount', 'checkbox', $usereditaccount, true, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('userhomeedit', 'checkbox', $userhomeedit, false, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('allowexternalurl', 'checkbox', $allowexternalurl, false, XARVAR_NOT_REQUIRED)) return;
 
-                    xarModSetVar('roles', 'searchbyemail', $searchbyemail);
+                    xarModSetVar('roles', 'searchbyemail', $searchbyemail); //search by email
                     xarModSetVar('roles', 'usersendemails', $usersendemails);
-                    xarModSetVar('roles', 'displayrolelist', $displayrolelist);
-                    xarModSetVar('roles', 'usereditaccount', $usereditaccount);
+                    xarModSetVar('roles', 'displayrolelist', $displayrolelist); //display member list in Roles menu links
+                    xarModSetVar('roles', 'usereditaccount', $usereditaccount); //allow users to edit account
+                    xarModSetVar('roles', 'allowexternalurl', $allowexternalurl); //allow users to set external urls for home page
 
-                    if (xarModGetVar('roles', 'setuserhome')==true) { //we only want it set true if we are using setuserhome
+                    if (xarModGetVar('roles', 'setuserhome')==true) { //we only want to allow option of users editing home page if we are using homepages
                        $allowuserhomeedit = $userhomeedit ==true ? true:false;
                     }else {
                         $allowuserhomeedit=false;
                     }
-                    xarModSetVar('roles', 'allowuserhomeedit', $allowuserhomeedit);
+                    xarModSetVar('roles', 'allowuserhomeedit', $allowuserhomeedit); //allow users to set their own homepage
                     if ($usereditaccount) {
                         //check and hook Roles to roles if not already hooked
                          if (!xarModIsHooked('roles', 'roles')) {

@@ -12,6 +12,7 @@
  */
 /**
  * log a user in
+ * @deprecated  As of release 1.1, replaced by authsystem-userapi-login()
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param $args['uname'] user name of user
  * @param $args['pass'] password of user
