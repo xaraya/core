@@ -166,12 +166,14 @@ function roles_admin_modifyconfig()
                     if (!xarVarFetch('usereditaccount', 'checkbox', $usereditaccount, true, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('userhomeedit', 'checkbox', $userhomeedit, false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('allowexternalurl', 'checkbox', $allowexternalurl, false, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('loginredirect', 'checkbox', $loginredirect, true, XARVAR_NOT_REQUIRED)) return;
 
                     xarModSetVar('roles', 'searchbyemail', $searchbyemail); //search by email
                     xarModSetVar('roles', 'usersendemails', $usersendemails);
                     xarModSetVar('roles', 'displayrolelist', $displayrolelist); //display member list in Roles menu links
                     xarModSetVar('roles', 'usereditaccount', $usereditaccount); //allow users to edit account
                     xarModSetVar('roles', 'allowexternalurl', $allowexternalurl); //allow users to set external urls for home page
+                    xarModSetVar('roles', 'loginredirect', $loginredirect); //search by email
 
                     if (xarModGetVar('roles', 'setuserhome')==true) { //we only want to allow option of users editing home page if we are using homepages
                        $allowuserhomeedit = $userhomeedit ==true ? true:false;

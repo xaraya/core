@@ -278,7 +278,8 @@ function authsystem_user_login()
                 }
             }
             $externalurl=false; //used as a flag for userhome external url
-            if (xarModAPIFunc('roles','admin','checkduv',array('name' => 'setuserhome', 'state' => 1))) {
+            if (xarModGetVar('roles', 'loginredirect')) { //only redirect to home page if this option is set
+              if (xarModAPIFunc('roles','admin','checkduv',array('name' => 'setuserhome', 'state' => 1))) {
                $truecurrenturl = xarServerGetCurrentURL(array(), false);
                 $role = xarUFindRole($uname);
                 $url = $lastresort ? '[base]' : $role->getHome();
@@ -305,10 +306,9 @@ function authsystem_user_login()
                     $redirecturl=$urldata['redirecturl'];
                 }
 
-            }
-
+              }
+            } //end get homepage redirect data
             if ($externalurl) {
-
                 /* Open in IFrame - works if you need it */
                 /* $data['page'] = $redirecturl;
                    $data['title'] = xarML('Home Page');

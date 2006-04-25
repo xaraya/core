@@ -40,9 +40,8 @@ function roles_user_display($args)
    //Setup user home url if Userhome is activated and user can set the URL
     //So it can display in link of User account page
     $externalurl=false; //used as a flag for userhome external url
-    if (xarModAPIFunc('roles','admin','checkduv',array('name' => 'setuserhome', 'state' => 1)) &&
-        xarModGetVar('roles', 'allowuserhomeedit')) {
-       
+    if (xarModAPIFunc('roles','admin','checkduv',array('name' => 'setuserhome', 'state' => 1))) {
+
         $role = xarUFindRole(xarUserGetVar('uname',$uid));
         $url=$role->getHome(); //what about last resort here?
         if (!isset($url) || empty($url)) {
@@ -68,6 +67,7 @@ function roles_user_display($args)
         $data['externalurl']=$externalurl;
         $data['homelink']=$homeurl;
     } else {
+        $data['externalurl']=false;
         $data['homelink']='';
     }
 

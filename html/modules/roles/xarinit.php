@@ -214,8 +214,10 @@ function roles_activate()
     xarModSetVar('roles', 'settimezone',false);
     xarModSetVar('roles', 'defaultgroup', 'Users');
     xarModSetVar('roles', 'displayrolelist', false);  
-    xarModSetVar('roles', 'usereditaccount', true);   
+    xarModSetVar('roles', 'usereditaccount', true);
     xarModSetVar('roles', 'allowuserhomeedit', false);
+    xarModSetVar('roles', 'loginredirect', true);
+    xarModSetVar('roles', 'allowexternalurl', false);
     $lockdata = array('roles' => array( array('uid' => 4,
                                               'name' => 'Administrators',
                                               'notify' => TRUE)),
@@ -327,6 +329,8 @@ function roles_upgrade($oldVersion)
             xarModSetVar('roles', 'displayrolelist',false);
             xarModSetVar('roles', 'usereditaccount', true);
             xarModSetVar('roles', 'allowuserhomeedit', false);
+            xarModSetVar('roles', 'loginredirect', true);
+            xarModSetVar('roles', 'allowexternalurl', false);
             break;
 
     }

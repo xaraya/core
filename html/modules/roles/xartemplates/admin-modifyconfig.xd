@@ -506,6 +506,20 @@
              <fieldset>
                 <legend><xar:mlstring>User Homepage Options</xar:mlstring></legend>
                 <xar:if condition="xarModGetVar('roles', 'setuserhome')">
+                
+                <div class="xar-form-input-wrapper-after xar-padding-thicktop">
+                    <xar:if condition="xarModGetVar('roles', 'loginredirect')">
+                        <input type="checkbox" name="loginredirect" id="loginredirect" value="1" checked="checked" />
+                        <xar:else />
+                        <input type="checkbox" name="loginredirect" id="loginredirect" value="1" />
+                    </xar:if>
+                    <label for="allowexternalurl" title="#xarML('Redirect users to Home Page on login?')#">
+                        <strong><xar:mlstring>
+                           Redirect users to Home Page on login?
+                        </xar:mlstring></strong>
+                    </label>
+                </div>
+
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">
                     <xar:if condition="xarModGetVar('roles', 'allowuserhomeedit')">
                         <input type="checkbox" name="userhomeedit" id="userhomeedit" value="1" checked="checked" />
@@ -518,6 +532,7 @@
                         </xar:mlstring></strong>
                     </label>
                 </div>
+
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">
                     <xar:if condition="xarModGetVar('roles', 'allowexternalurl')">
                         <input type="checkbox" name="allowexternalurl" id="allowexternalurl" value="1" checked="checked" />
@@ -536,7 +551,7 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <label for="allowuserhomeedit" title="#xarML('Allow users to edit their user home page in their account')#">
                         <strong><xar:mlstring>Allow users to set Home Page in their member account</xar:mlstring></strong>
-                            <br /><xar:mlstring> (only available if the dynamic user variable Userhome is activated)</xar:mlstring>
+                            <br /><xar:mlstring> (options for Home Page only available if the dynamic user variable Userhome is activated)</xar:mlstring>
                     </label>
                 </div>
                 </xar:if>
