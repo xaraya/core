@@ -28,7 +28,10 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
     {
         return (int)$property->id;
     }
-
+    /**
+     * Get the item
+     * @param id $args['itemid']
+     */
     function getItem($args)
     {
         $itemid = $args['itemid'];
@@ -42,7 +45,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         $xartable =& xarDBGetTables();
 
         $dynamicdata = $xartable['dynamic_data'];
-        
+
         $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
         $query = "SELECT xar_dd_propid, xar_dd_value
                     FROM $dynamicdata
@@ -70,7 +73,10 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         $result->Close();
         return $itemid;
     }
-
+    /**
+     * Create an item
+     * @param array $args with $itemid,
+     */
     function createItem($args)
     {
         extract($args);
@@ -114,7 +120,11 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
         return $itemid;
     }
-
+    /**
+     * Update the item
+     * @param id $itemid in array $args
+     * @return id $itemid
+     */
     function updateItem($args)
     {
         $itemid = $args['itemid'];
@@ -167,7 +177,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             } else {
                 $nextId = $dbconn->GenId($dynamicdata);
 
-                $query = "INSERT INTO $dynamicdata 
+                $query = "INSERT INTO $dynamicdata
                             (xar_dd_id, xar_dd_propid, xar_dd_itemid, xar_dd_value)
                           VALUES (?,?,?,?)";
                 $bindvars = array($nextId,$propid,$itemid, (string) $value);
@@ -454,7 +464,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $query .= ", MAX(CASE WHEN xar_dd_propid = $propid THEN $propval ELSE '' END) AS dd_$propid \n";
             }
             $query .= " FROM $dynamicdata
-                       WHERE xar_dd_propid IN (" . join(', ',$propids) . ") 
+                       WHERE xar_dd_propid IN (" . join(', ',$propids) . ")
                     GROUP BY xar_dd_itemid ";
 
             if (count($this->where) > 0) {
@@ -680,7 +690,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         if (count($itemids) > 0) {
             $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
             if($dbconn->databaseType == 'sqlite') {
-                $query = "SELECT COUNT(*) 
+                $query = "SELECT COUNT(*)
                           FROM (SELECT DISTINCT xar_dd_itemid
                                 WHERE xar_dd_propid IN ($bindmarkers) "; // WATCH OUT, STILL UNBALANCED
             } else {
@@ -735,7 +745,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             foreach ($this->where as $whereitem) {
                 $query .= $whereitem['join'] . ' (xar_dd_propid = ' . $whereitem['field'] . ' AND xar_dd_value ' . $whereitem['clause'] . ') ';
             }
-            
+
             // Balance parentheses.
             if($dbconn->databaseType == 'sqlite') $query .= ")";
             if (!empty($this->cache)) {
@@ -757,7 +767,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
             if($dbconn->databaseType == 'sqlite' ) {
                 $query = "SELECT COUNT(*)
-                          FROM (SELECT DISTINCT xar_dd_itemid FROM $dynamicdata 
+                          FROM (SELECT DISTINCT xar_dd_itemid FROM $dynamicdata
                           WHERE xar_dd_propid IN ($bindmarkers)) ";
             } else {
                 $query = "SELECT COUNT(DISTINCT xar_dd_itemid)
@@ -784,9 +794,9 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
     /**
      * get next item id (for objects stored only in dynamic data table)
      *
-     * @param $args['objectid'] dynamic object id for the item, or
-     * @param $args['modid'] module id for the item +
-     * @param $args['itemtype'] item type of the item
+     * @param id $args['objectid'] dynamic object id for the item, or
+     * @param id $args['modid'] module id for the item +
+     * @param int $args['itemtype'] item type of the item
      * @return integer value of the next id
      * @raise BAD_PARAM, NO_PERMISSION
      */
