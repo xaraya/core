@@ -1,0 +1,33 @@
+CHECKLIST FOR MTN .26 migration
+
+db migrate
+rosterify
+database size
+check .mt -> mtn replacement
+test some working copies
+
+DATABASES 
+
+  core 
+     migrate:   YES
+     rosterify: YES
+  modules
+     migrate:   YES 
+     rosterify: YES (got 1 bad signature warning, but process completed successfully)
+     size:      OLD: 315M NEW: 256M
+  themes
+     migrate:   YES
+     rosterify: YES
+     size:      OLD: 5.3M NEW: 4.1M
+  languages
+  
+SCRIPTS
+
+  init scripts
+    change ports to 4691
+  pull and checkout scripts
+  upgrade viewmtn to
+  
+MISC
+  are any of the fixes since .26 release important to us?
+  do we want to use usher?
