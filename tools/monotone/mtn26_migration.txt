@@ -20,13 +20,15 @@ DATABASES
      rosterify: YES
      size:      OLD: 5.3M NEW: 4.1M
   languages
-  
+     migrate:   YES
+     rosterify  YES
+     size:      OLD: 38M NEW: 30M
 SCRIPTS
-
+  xaraya.rc
   init scripts
     change ports to 4691
   pull and checkout scripts
-  upgrade viewmtn to
+  upgrade viewmtn
   
 MISC
   are any of the fixes since .26 release important to us?
