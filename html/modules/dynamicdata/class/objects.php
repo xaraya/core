@@ -1069,7 +1069,9 @@ class Dynamic_Object extends Dynamic_Object_Master
             } else {
                 $fieldlist = array_keys($this->properties);
             }
-        }
+        }else{
+		$fieldlist = $args['fieldlist'];
+	}
 
         $fields = array();
         foreach ($fieldlist as $name) {
