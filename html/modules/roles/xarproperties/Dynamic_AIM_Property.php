@@ -27,7 +27,7 @@ include_once "modules/base/xarproperties/Dynamic_URLIcon_Property.php";
  */
 class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
 {
-        function checkInput($name='', $value = null)
+    function checkInput($name='', $value = null)
     {
         if (empty($name)) {
             $name = 'dd_'.$this->id;

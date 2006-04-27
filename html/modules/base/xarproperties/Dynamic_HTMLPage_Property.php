@@ -145,7 +145,6 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
     }
 
 
-
     /**
      * Get the base information for this property.
      *
