@@ -503,7 +503,7 @@
                         regardless of its inclusion in the menu, for all users that have Read privileges for Roles.</xar:mlstring>
                 </p>
             </fieldset>
-             <fieldset>
+            <fieldset>
                 <legend><xar:mlstring>User Homepage Options</xar:mlstring></legend>
                 <xar:if condition="xarModGetVar('roles', 'setuserhome')">
                 
@@ -555,8 +555,6 @@
                     </label>
                 </div>
                 </xar:if>
-            </fieldset>
-            <fieldset>
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="hidden" name="phase" id="phase" value="update" />

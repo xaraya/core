@@ -1266,6 +1266,7 @@ function installer_admin_upgrade2()
     } // endif modavailable('base')
 
 
+
     // replace DynamicData component 'Type' by 'Field'
     $content .=  "Updating security instance for DynamicData.<br />";
     $query = "UPDATE $instancestable
