@@ -93,6 +93,7 @@ function authsystem_upgrade($oldVersion)
         case '0.91.0':
            /* Define privielges */
            xarRegisterPrivilege('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
+           xarRegisterPrivilege('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
 
           /* Define Module vars */
           xarModSetVar('authsystem', 'lockouttime', 15);

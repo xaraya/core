@@ -20,8 +20,8 @@
 if (!file_exists('install.php') and !file_exists('upgrade.php')) {xarCore_die(xarML('Already installed'));}
 
 /* FOR UPGRADE: Add instruction text needed before upgrade for a specific upgrade to admin-upgrade1.xd
-                Add upgrade code to installer_admin_upgrade2() function - (still needs to be cleaned up) 
-                Any special misc upgrade scripts to installer_admin_upgrade3()
+                Add upgrade code to installer_admin_upgrade2() function, currently sorted by version upgrade
+                Any misc upgrade scripts not related to any specific version to installer_admin_upgrade3() eg flush cache
 */
 /**
  * Dead
@@ -1458,7 +1458,6 @@ function installer_admin_upgrade2()
             }
         }
     }
-
 
       // Check the installed privs and masks.
     $content .= "<p><strong>Checking Privilege Structure</strong></p>";

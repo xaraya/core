@@ -194,8 +194,7 @@ function initializeSetup()
     xarRegisterMask('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditAuthsystem','All','authsystem','All','All','ACCESS_EDIT');
     xarRegisterMask('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
-
-    xarRegisterMask('ViewLogin','All','roles','Block','login:Login:All','ACCESS_OVERVIEW');
+   // xarRegisterMask('ViewLogin','All','roles','Block','login:Login:All','ACCESS_OVERVIEW'); //No longer required in V1.1
     xarRegisterMask('ViewRolesBlocks','All','roles','Block','All','ACCESS_OVERVIEW');
     xarRegisterMask('ViewRoles','All','roles','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('ReadRole','All','roles','All','All','ACCESS_READ');
