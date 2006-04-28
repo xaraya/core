@@ -90,6 +90,8 @@ function installer_public_commentnoncore()
 {
     xarRegisterPrivilege('CommentNonCore','All','empty','All','All','ACCESS_NONE','Read access only to none-core modules');
     xarRegisterPrivilege('CommentAccess','All','All','All','All','ACCESS_COMMENT','Comment access to all modules');
+    xarRegisterPrivilege('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW','View authsystem user pages');
+ 
     xarMakePrivilegeRoot('CommentNonCore');
     xarMakePrivilegeRoot('CommentAccess');
     xarMakePrivilegeMember('CommentAccess','CommentNonCore');

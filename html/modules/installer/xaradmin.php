@@ -1177,7 +1177,6 @@ function installer_admin_finish()
 
 function installer_admin_upgrade1()
 {
-
     $data['xarProduct'] = xarConfigGetVar('System.Core.VersionId');
     $data['xarVersion'] = xarConfigGetVar('System.Core.VersionNum');
     $data['xarRelease'] = xarConfigGetVar('System.Core.VersionSub');
@@ -1208,6 +1207,10 @@ function installer_admin_upgrade1()
     return $data;
 }
 
+/**
+ * Upgrades necessary since Version 1.0.0 RC1
+ * Arranged by versions
+ */
 function installer_admin_upgrade2()
 {
      $thisdata['finishearly']=0;
@@ -1217,716 +1220,17 @@ function installer_admin_upgrade2()
      
      //Load this early
      xarDBLoadTableMaintenanceAPI();
-     $sprefix=xarDBGetSiteTablePrefix();
+     $sitePrefix=xarDBGetSiteTablePrefix();
+     $systemPrefix=xarDBGetSystemTablePrefix();
+     $dbconn =& xarDBGetConn();
+/**
+ * Version 1.0 Release Upgrades
+ * Version 1.0 Release candidate upgrades are also included here
+ *             to ensure any version 1.0 installs are upgraded appropriately
+ */
+
+    $content = "<p><strong>Checking Site Configuration Variables Structure</strong></p>";
 
-    $instancestable = $sprefix."_security_instances";
-    $privilegestable = $sprefix."_privileges";
-    $modulestable=$sprefix.'_modules';
-    $categorytable=$sprefix.'_categories';
-    $blockinstancetable=$sprefix.'_block_instances';
-    $blocktypestable=$sprefix.'_block_types';
-    $hitcounttable =$sprefix.'_hitcount';
-    $ratingstable=$sprefix.'_ratings';
-    $dbconn =& xarDBGetConn();
-    //Upgrade the Base module
-    $content='';
-        // upgrades for the base module (since it is a core module, and they cannot be upgraded in the normal way)
-        // - theme tags for JavaScript
-        if (xarModIsAvailable('base')) {
-            // Add theme tags that do not yet exist.
-            // Leave the attributes open for now, until we know how it's going to work.
-            $module_base_update_count = 0;
-
-            // Include a JavaScript file in a page,
-            $base_update_theme_tag = 'base-include-javascript';
-            if (!xarTplGetTagObjectFromName($base_update_theme_tag)) {
-            xarTplRegisterTag(
-                'base', $base_update_theme_tag, array(),
-                'base_javascriptapi_handlemodulejavascript'
-            );
-            $module_base_update_count += 1;
-            $content .= "Base module: added theme tag '$base_update_theme_tag'.<br />";
-        }
-        // Render JavaScript in a page
-        $base_update_theme_tag = 'base-render-javascript';
-        if (!xarTplGetTagObjectFromName($base_update_theme_tag)) {
-            xarTplRegisterTag(
-                'base', $base_update_theme_tag, array(),
-                'base_javascriptapi_handlerenderjavascript'
-            );
-            $module_base_update_count += 1;
-           $content .= "Base module: added theme tag '$base_update_theme_tag'.<br />";
-        }
-
-        if ($module_base_update_count == 0) {
-            $content .= "Base module does not require updating.<br />";
-        }
-    } else {
-        $content .= "Base module not available - no upgrade carried out.<br />";
-    } // endif modavailable('base')
-
-
-    // replace DynamicData component 'Type' by 'Field'
-    $content .=  "Updating security instance for DynamicData.<br />";
-    $query = "UPDATE $instancestable
-              SET xar_component='Field'
-              WHERE xar_module='dynamicdata' AND xar_component='Type'";
-    $result =& $dbconn->Execute($query);
-
-    $content .=  "Updating privileges for DynamicData.<br />";
-    $query = "UPDATE $privilegestable
-              SET xar_component='Field'
-              WHERE xar_module='dynamicdata' AND xar_component='Type'";
-    $result =& $dbconn->Execute($query);
-
-
-    //check roles instances
-    $rolesupdate=false;
-    $rolesinstance ='SELECT DISTINCT xar_name FROM ' . xarDBGetSystemTablePrefix() . '_roles';
-    $systemPrefix = xarDBGetSystemTablePrefix();
-    $roleMembersTable    = $systemPrefix . '_rolemembers';
-    $dbconn =& xarDBGetConn();
-
-    // Do the Parent instance
-    $query = "SELECT xar_iid, xar_header, xar_query
-                FROM $instancestable
-                WHERE xar_module= 'roles' AND xar_component = 'Relation' AND xar_header='Parent:'";
-    $result =&$dbconn->Execute($query);
-
-    list($iid, $header, $xarquery) = $result->fields;
-    if ($rolesinstance != $xarquery) {
-        $rolesupdate=true;
-        $content .= "Attempting to update roles instance with component Relation and header Parent:.<br />";
-
-        $instances = array(array('header' => 'Parent:',
-                                 'query' => $rolesinstance,
-                                 'limit' => 20));
-        xarDefineInstance('roles','Relation',$instances,0,$roleMembersTable,'xar_uid','xar_parentid','Instances of the roles module, including multilevel nesting');
-    }
-    if (!$rolesupdate) {
-       $content .= "Roles security_instance entry Relation/Parent does not require updating.<br />";
-    }
-
-    // Do the Child instance
-    $query = "SELECT xar_iid, xar_header, xar_query
-            FROM $instancestable
-            WHERE xar_module= 'roles' AND xar_component = 'Relation' AND xar_header='Child:'";
-    $result =&$dbconn->Execute($query);
-
-    list($iid, $header, $xarquery) = $result->fields;
-    if ($rolesinstance != $xarquery) {
-        $rolesupdate=true;
-        $content .= "Attempting to update roles instance with component Relation and header Child:.<br />";
-
-        $instances = array(array('header' => 'Child:',
-                                 'query' => $rolesinstance,
-                                 'limit' => 20));
-        xarDefineInstance('roles','Relation',$instances,0,$roleMembersTable,'xar_uid','xar_parentid','Instances of the roles module, including multilevel nesting');
-    }
-    if (!$rolesupdate) {
-       $content .= "Roles security_instance entry Relation/Child does not require updating.<br />";
-    }
-
-    // Upgrade will check to make sure that upgrades in the past have worked, and if not, correct them now.
-    $sitePrefix = xarDBGetSiteTablePrefix();
-    $content .= "<p><strong>Checking Table Structure</strong></p>";
-
-    $dbconn =& xarDBGetConn();
-    // create and populate the security levels table
-    $table_name['security_levels'] = $sitePrefix . '_security_levels';
-
-    $upgrade['security_levels'] = xarModAPIFunc('installer',
-                                                'admin',
-                                                'CheckTableExists',
-                                                array('table_name' => $table_name['security_levels']));
-    if (!$upgrade['security_levels']) {
-        $content .= "$table_name[security_levels] table does not exist, attempting to create... ";
-        $leveltable = $table_name['security_levels'];
-        $query = xarDBCreateTable($table_name['security_levels'],
-                 array('xar_lid'  => array('type'       => 'integer',
-                                          'null'        => false,
-                                          'default'     => '0',
-                                          'increment'   => true,
-                                          'primary_key' => true),
-                       'xar_level' => array('type'      => 'integer',
-                                          'null'        => false,
-                                          'default'     => '0'),
-                       'xar_leveltext' => array('type'=> 'varchar',
-                                          'size'        => 255,
-                                          'null'        => false,
-                                          'default'     => ''),
-                       'xar_sdescription' => array('type'=> 'varchar',
-                                          'size'        => 255,
-                                          'null'        => false,
-                                          'default'     => ''),
-                       'xar_ldescription' => array('type'=> 'varchar',
-                                          'size'        => 255,
-                                          'null'        => false,
-                                          'default'     => '')));
-        $result = $dbconn->Execute($query);
-        if (!$result){
-            $content .= "failed</font><br/>\r\n";
-        } else {
-            $content .= "done!</font><br/>\r\n";
-        }
-
-        $content .= "Attempting to set index and fill $table_name[security_levels]... ";
-
-        $sitePrefix = xarDBGetSiteTablePrefix();
-        $index = array('name'      => 'i_'.$sitePrefix.'_security_levels_level',
-                       'fields'    => array('xar_level'),
-                       'unique'    => FALSE);
-        $query = xarDBCreateIndex($leveltable,$index);
-        $result = @$dbconn->Execute($query);
-
-        $nextId = $dbconn->GenId($leveltable);
-        $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                  VALUES ($nextId, -1, 'ACCESS_INVALID', 'Access Invalid', '')";
-        $result =& $dbconn->Execute($query);
-
-        $nextId = $dbconn->GenId($leveltable);
-        $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                  VALUES ($nextId, 0, 'ACCESS_NONE', 'No Access', '')";
-        $result =& $dbconn->Execute($query);
-
-        $nextId = $dbconn->GenId($leveltable);
-        $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                  VALUES ($nextId, 100, 'ACCESS_OVERVIEW', 'Overview Access', '')";
-        $result =& $dbconn->Execute($query);
-
-        $nextId = $dbconn->GenId($leveltable);
-        $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                  VALUES ($nextId, 200, 'ACCESS_READ', 'Read Access', '')";
-        $result =& $dbconn->Execute($query);
-
-        $nextId = $dbconn->GenId($leveltable);
-        $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                  VALUES ($nextId, 300, 'ACCESS_COMMENT', 'Comment Access', '')";
-        $result =& $dbconn->Execute($query);
-
-        $nextId = $dbconn->GenId($leveltable);
-        $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                  VALUES ($nextId, 400, 'ACCESS_MODERATE', 'Moderate Access', '')";
-        $result =& $dbconn->Execute($query);
-
-        $nextId = $dbconn->GenId($leveltable);
-        $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                  VALUES ($nextId, 500, 'ACCESS_EDIT', 'Edit Access', '')";
-        $result =& $dbconn->Execute($query);
-
-        $nextId = $dbconn->GenId($leveltable);
-        $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                  VALUES ($nextId, 600, 'ACCESS_ADD', 'Add Access', '')";
-        $result =& $dbconn->Execute($query);
-
-        $nextId = $dbconn->GenId($leveltable);
-        $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                  VALUES ($nextId, 700, 'ACCESS_DELETE', 'Delete Access', '')";
-        $result =& $dbconn->Execute($query);
-
-        $nextId = $dbconn->GenId($leveltable);
-        $query = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                  VALUES ($nextId, 800, 'ACCESS_ADMIN', 'Admin Access', '')";
-        $result =& $dbconn->Execute($query);
-
-        if (!$result){
-            $content .= "failed</font><br/>\r\n";
-        } else {
-            $content .= "done!</font><br/>\r\n";
-        }
-    } else {
-        $content .= "<p>$table_name[security_levels] already exists, moving to next check. </p>";
-    }
-
-    // Drop the admin_wc table and the hooks for the admin panels.
-    $table_name['admin_wc'] = $sitePrefix . '_admin_wc';
-
-    $upgrade['waiting_content'] = xarModAPIFunc('installer',
-                                                'admin',
-                                                'CheckTableExists',
-                                                array('table_name' => $table_name['admin_wc']));
-    if ($upgrade['waiting_content']) {
-        $content .= "<p>$table_name[admin_wc] table still exists, attempting to drop... </p>";
-            xarModRegisterHook('item', 'waitingcontent', 'GUI',
-                               'articles', 'admin', 'waitingcontent');
-            xarModUnregisterHook('item', 'create', 'API',
-                                 'adminpanels', 'admin', 'createwc');
-            xarModUnregisterHook('item', 'update', 'API',
-                                 'adminpanels', 'admin', 'deletewc');
-            xarModUnregisterHook('item', 'delete', 'API',
-                                 'adminpanels', 'admin', 'deletewc');
-            xarModUnregisterHook('item', 'remove', 'API',
-                                 'adminpanels', 'admin', 'deletewc');
-
-            // Generate the SQL to drop the table using the API
-            $query = xarDBDropTable($table_name['admin_wc']);
-            $result =& $dbconn->Execute($query);
-            if (!$result){
-                $content .= "failed</font><br/>\r\n";
-            } else {
-                $content .= "done!</font><br/>\r\n";
-            }
-    } else {
-        $content .= "<p>$table_name[admin_wc] has been dropped previously, moving to next check. </p>";
-    }
-
-    // Drop the security_privsets table
-    $table_name['security_privsets'] = $sitePrefix . '_security_privsets';
-
-    $upgrade['security_privsets'] = xarModAPIFunc('installer',
-                                                'admin',
-                                                'CheckTableExists',
-                                                array('table_name' => $table_name['security_privsets']));
-    if ($upgrade['security_privsets']) {
-        $content .= "<p>$table_name[security_privsets] table still exists, attempting to drop... </p>";
-        // Generate the SQL to drop the table using the API
-        $query = xarDBDropTable($table_name['security_privsets']);
-        $result =& $dbconn->Execute($query);
-        if (!$result){
-            $content .= "<p>failed</p>";
-        } else {
-            $content .= "<p>done!</p>";
-        }
-    } else {
-        $content .= "<p>$table_name[security_privsets] has been dropped previously, moving to next check. </p>";
-    }
-
-    // Dynamic Data Change to prop type.
-    $dynproptable = xarDBGetSiteTablePrefix() . '_dynamic_properties';
-
-    $query = "SELECT xar_prop_type
-              FROM $dynproptable
-              WHERE xar_prop_name='default'
-              AND xar_prop_objectid=2";
-    // Check for db errors
-    $result =& $dbconn->Execute($query);
-
-    list($prop_type) = $result->fields;
-    $result->Close();
-
-    if ($prop_type != 3){
-        $content .= "Dynamic Data table 'default' property with objectid 2 is not set to property type 3, attempting to change... ";
-        // Generate the SQL to drop the table using the API
-        $query = "UPDATE $dynproptable
-                     SET xar_prop_type=3
-                   WHERE xar_prop_objectid=2
-                     AND xar_prop_name='default'";
-        // Check for db errors
-        $result =& $dbconn->Execute($query);
-        if (!$result){
-            $content .= "<p>failed</p>";
-        } else {
-            $content .= "<p>done!</p>";
-        }
-    } else {
-        $content .= "<p>Dynamic Data table 'default' property with objectid 2 has correct property type of 3, moving to next check. </p>";
-    }
-
-    // ****************************
-    // * Changes to blocks tables *
-    // ****************************
-
-    {
-        // Bugs 1581/1586/1838: Update the blocks table definitions.
-        // Use the data dictionary to do the checking and altering.
-        $content .= "<p><strong>Checking Block Table Definitions</strong></p>";
-        $dbconn =& xarDBGetConn();
-        $datadict =& xarDBNewDataDict($dbconn, 'CREATE');
-
-        // Upgrade the xar_block_instances table.
-        $blockinstancestable = xarDBGetSiteTablePrefix() . '_block_instances';
-        // Get column definitions for block instances table.
-        $columns = $datadict->getColumns($blockinstancestable);
-        // Do we have a xar_name column?
-        $blocks_column_found = false;
-        foreach($columns as $column) {
-            if ($column->name == 'xar_name') {
-                $blocks_column_found = true;
-                break;
-            }
-        }
-        // Upgrade the table (xar_block_instances) if the name column is not found.
-        if (!$blocks_column_found) {
-            // Create the column.
-            $result = $datadict->addColumn($blockinstancestable, 'xar_name C(100) Null');
-            // Update the name column with unique values.
-            $query = "UPDATE $blockinstancestable"
-                . " SET xar_name = " . $dbconn->Concat("'block_'", 'xar_id')
-                . " WHERE xar_name IS NULL";
-            $dbconn->Execute($query);
-            // Now make it mandatory, and add a unique index.
-            $result = $datadict->alterColumn($blockinstancestable, 'xar_name C(100) NotNull');
-            $result = $datadict->createIndex(
-                'i_'.xarDBGetSiteTablePrefix().'_block_instances_u2',
-                $blockinstancestable,
-                'xar_name',
-                array('UNIQUE')
-            );
-            $content .= "<p>Added column xar_name to table $blockinstancestable</p>";
-        } else {
-            $content .= "<p>Table $blockinstancestable is up-to-date</p>";
-        }
-
-        // Upgrade the xar_block_group_instances table.
-        $blockgroupinstancestable = xarDBGetSiteTablePrefix() . '_block_group_instances';
-        // Get column definitions for block instances table.
-        $columns = $datadict->getColumns($blockgroupinstancestable);
-        // Do we have a xar_template column?
-        $blocks_column_found = false;
-        foreach($columns as $column) {
-            if ($column->name == 'xar_template') {
-                $blocks_column_found = true;
-                break;
-            }
-        }
-        if (!$blocks_column_found) {
-            // Create the column.
-            $result = $datadict->addColumn($blockgroupinstancestable, 'xar_template C(100) Null');
-            $content .= "<p>Added column xar_template to table $blockgroupinstancestable</p>";
-        } else {
-            $content .= "<p>Table $blockgroupinstancestable is up-to-date</p>";
-        }
-
-        // Upgrade the xar_block_types table.
-        $blocktypestable = xarDBGetSiteTablePrefix() . '_block_types';
-        // Get column definitions for block instances table.
-        $columns = $datadict->getColumns($blocktypestable);
-
-        // Do we have a xar_template column?
-        $blocks_column_found = false;
-        foreach($columns as $column) {
-            if ($column->name == 'xar_info') {
-                $blocks_column_found = true;
-                break;
-            }
-        }
-
-        if (!$blocks_column_found) {
-            // Create the column.
-            $result = $datadict->addColumn($blocktypestable, 'xar_info X(2000) Null');
-            $content .= "<p>Added column xar_info to table $blocktypestable</p>";
-        } else {
-            $content .= "<p>Table $blocktypestable already has a xar_info column</p>";
-        }
-
-        // Ensure the module and type columns are the correct length.
-        $data = 'xar_type C(64) NotNull DEFAULT \'\',
-        xar_module C(64) NotNull DEFAULT \'\'';
-        $result = $datadict->changeTable($blocktypestable, $data);
-        $content .= "<p>Table $blocktypestable xar_module and xar_type columns are up-to-date</p>";
-
-        // Drop index i_xar_block_types and create unique compound index
-        // i_xar_block_types2 on xar_module and xar_type.
-        $indexes = $datadict->getIndexes($blocktypestable);
-        $indexname = 'i_' . xarDBGetSiteTablePrefix() . '_block_types';
-        if (isset($indexes[$indexname])) {
-            $result = $datadict->dropIndex($indexname, $blocktypestable);
-            $content .= "Dropped index $indexname from table $blocktypestable<br/>";
-        }
-        $indexname .= '2';
-        if (!isset($indexes[$indexname])) {
-            $result = $datadict->createIndex($indexname, $blocktypestable, 'xar_module,xar_type', array('UNIQUE'));
-            $content .= "<p>Created unique index $indexname on table $blocktypestable</p>";
-        }
-    }
-
-    // Add the syndicate block type and syndicate block for RSS display.
-    $content .= "<p><strong>Checking Installed Blocks</strong></p>";
-
-    $upgrade['syndicate'] = xarModAPIFunc(
-        'blocks', 'admin', 'block_type_exists',
-        array(
-            'modName'      => 'themes',
-            'blockType'    => 'syndicate'
-        )
-    );
-    if ($upgrade['syndicate']) {
-        $content .= "Syndicate block exists, attempting to remove... ";
-        $blockGroupsTable = xarDBGetSiteTablePrefix() . '_block_groups';
-        // Register blocks
-        if (!xarModAPIFunc('blocks',
-                           'admin',
-                           'unregister_block_type',
-                           array('modName'  => 'themes',
-                                 'blockType'=> 'syndicate'))) return;
-
-        $query = "SELECT    xar_id as id
-                  FROM      $blockGroupsTable
-                  WHERE     xar_name = 'syndicate'";
-        // Check for db errors
-        $result =& $dbconn->Execute($query);
-        if (!$result) return;
-
-        // Freak if we don't get one and only one result
-        if ($result->PO_RecordCount() != 1) {
-            $msg = xarML("Group 'syndicate' not found.");
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                           new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return;
-        }
-        list ($syndicateBlockGroup) = $result->fields;
-        $result = xarModAPIFunc('blocks', 'admin', 'delete_group', array('gid' => $syndicateBlockGroup));
-
-        if (!$result){
-            $content .= "<p>failed</p>";
-        } else {
-            $content .= "<p>done!</p>";
-        }
-    } else {
-        $content .= "<p>Syndicate block type does not exist, moving to next check. </p>";
-    }
-
-    // Set any empty modvars.
-    $content .= "<p><strong>Checking Module and Config Variables</strong></p>";
-
-    /* Bug 2204 - the mod var roles - admin is more than likely set in 99.9 percent installs
-                  since it was introduced around the beginning of 2004. Let's check it's set,
-                  and use that, else check for a new name. If the new name in that rare case
-                  is not Admin, then we'll have to display message to check and set as such first.
-    */
-  $realadmin = xarModGetVar('roles','admin');
-
-    if (!isset($realadmin) || empty($realadmin)) {
-        $admin = xarUFindRole('Admin');
-        if (!isset($admin)) $admin = xarFindRole('Admin');
-        if (!isset($admin)) {
-            $content .= "<h2 style=\"color:red; font-weigh:bold;\">WARNING!</h2><p>Your installation has a missing roles variable.</p>";
-            $content .= "<p>Please change your administrator username to 'Admin' and re-run upgrade.php</p>
-                  <p>You can change it back once your site is upgraded.</p>";
-
-            $content .= "<p>REMEMBER! Don't forget to re-run upgrade.php</p>";
-            //CatchOutput();
-           $thisdata['content']=$content;
-           $thisdata['finishearly']=1;
-            return $thisdata;
-        }
-    } else {
-
-        $thisadmin= xarUserGetVar('uname', $realadmin);
-         $admin = xarUFindRole($thisadmin);
-    }
-
-
-    $role = xarFindRole('Everybody');
-
-    /* Bug 2204 - this var is not reliable for admin name
-       if (!isset($admin)) $admin = xarFindRole(xarModGetVar('mail','adminname'));
-    */
-    $modvars[] = array(array('name'    =>  'hidecore',
-                             'module'  =>  'themes',
-                             'set'     =>  0),
-                       array('name'    =>  'selstyle',
-                             'module'  =>  'themes',
-                             'set'     =>  'plain'),
-                       array('name'    =>  'rssxml',
-                             'module'  =>  'themes',
-                             'set'     =>  '<?xml version="1.0" encoding="utf-8"?>'),
-                       array('name'    =>  'selfilter',
-                             'module'  =>  'themes',
-                             'set'     =>  'XARMOD_STATE_ANY'),
-                       array('name'    =>  'selsort',
-                             'module'  =>  'themes',
-                             'set'     =>  'namedesc'),
-                       array('name'    =>  'SiteTitleSeparator',
-                             'module'  =>  'themes',
-                             'set'     =>  ' :: '),
-                       array('name'    =>  'SiteTitleOrder',
-                             'module'  =>  'themes',
-                             'set'     =>  'default'),
-                       array('name'    =>  'SiteFooter',
-                             'module'  =>  'themes',
-                             'set'     =>  '<a href="http://www.xaraya.com"><img src="modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" class="xar-noborder" /></a>'),
-                       array('name'    =>  'everybody',
-                             'module'  =>  'roles',
-                             'set'     =>  $role->getID()),
-                       array('name'    =>  'allowregistration',
-                             'module'  =>  'roles',
-                             'set'     =>  1),
-                       array('name'    =>  'ShowPHPCommentBlockInTemplates',
-                             'module'  =>  'themes',
-                             'set'     =>  0),
-                       array('name'    =>  'ShowTemplates',
-                             'module'  =>  'themes',
-                             'set'     =>  0),
-                       array('name'    =>  'CollapsedBranches',
-                             'module'  =>  'comments',
-                             'set'     =>  serialize(array())),
-                       array('name'    =>  'expertlist',
-                             'module'  =>  'modules',
-                             'set'     =>  0),
-                       array('name'    =>  'lockdata',
-                             'module'  =>  'roles',
-                             'set'     =>  serialize(array('roles' => array( array('uid' => 4,
-                                                  'name' => 'Administrators',
-                                                  'notify' => TRUE)
-                                           ),
-                                          'message' => '',
-                                          'locked' => 0,
-                                          'notifymsg' => ''))),
-                       array('name'    =>  'askwelcomeemail',
-                             'module'  =>  'roles',
-                             'set'     =>  1),
-                       array('name'    =>  'askvalidationemail',
-                             'module'  =>  'roles',
-                             'set'     =>  1),
-                       array('name'    =>  'askdeactivationemail',
-                             'module'  =>  'roles',
-                             'set'     =>  1),
-                       array('name'    =>  'askpendingemail',
-                             'module'  =>  'roles',
-                             'set'     =>  1),
-                       array('name'    =>  'askpasswordemail',
-                             'module'  =>  'roles',
-                             'set'     =>  1),
-                       array('name'    =>  'admin',
-                             'module'  =>  'roles',
-                             'set'     =>  $admin->getID()),
-                       array('name'    =>  'uniqueemail',
-                             'module'  =>  'roles',
-                             'set'     =>  true),
-                       array('name'    =>  'rolesdisplay',
-                             'module'  =>  'roles',
-                             'set'     =>  'tabbed'),
-                       array('name'    =>  'showrealms',
-                             'module'  =>  'privileges',
-                             'set'     =>  0),
-                       array('name'    =>  'inheritdeny',
-                             'module'  =>  'privileges',
-                             'set'     =>  true),
-                       array('name'    =>  'tester',
-                             'module'  =>  'privileges',
-                             'set'     =>  0),
-                       array('name'    =>  'test',
-                             'module'  =>  'privileges',
-                             'set'     =>  false),
-                       array('name'    =>  'testdeny',
-                             'module'  =>  'privileges',
-                             'set'     =>  false),
-                       array('name'    =>  'testmask',
-                             'module'  =>  'privileges',
-                             'set'     =>  'All'),
-                       array('name'    =>  'realmvalue',
-                             'module'  =>  'privileges',
-                             'set'     =>  'none'),
-                       array('name'    =>  'realmcomparison',
-                             'module'  =>  'privileges',
-                             'set'     =>  'exact'),
-                       array('name'    =>  'suppresssending',
-                             'module'  =>  'mail',
-                             'set'     =>  'false'),
-                       array('name'    =>  'redirectsending',
-                             'module'  =>  'mail',
-                             'set'     =>  'exact'),
-                       array('name'    =>  'redirectaddress',
-                             'module'  =>  'privileges',
-                             'set'     =>  ''),
-                       array('name'    =>  'displayrolelist',
-                             'module'  =>  'roles',
-                             'set'     =>  'false'),
-                        array('name'    => 'usereditaccount',
-                             'module'  =>  'roles',
-                             'set'     =>  'true'),
-                        array('name'    => 'allowuserhomeedit',
-                             'module'  =>  'roles',
-                             'set'     =>  'false'),
-                        array('name'    => 'setuserhome',
-                             'module'  =>  'roles',
-                             'set'     =>  'false'),
-                        array('name'    => 'setprimaryparent',
-                             'module'  =>  'roles',
-                             'set'     =>  'false'),
-                        array('name'    => 'setpasswordupdate',
-                             'module'  =>  'roles',
-                             'set'     =>  'false')
-                          );
-    foreach($modvars as $modvar){
-        foreach($modvar as $var){
-            $currentvar = xarModGetVar("$var[module]", "$var[name]");
-            if (isset($currentvar)){
-                if (isset($var['override'])) {
-                    xarModSetVar($var['module'], $var['name'], $var['set']);
-                    $content .= "<p>$var[module] -> $var[name] has been overridden, proceeding to next check</p>";
-                }
-                else $content .= "<p>$var[module] -> $var[name] is set, proceeding to next check</p>";
-            } else {
-                xarModSetVar($var['module'], $var['name'], $var['set']);
-                $content .= "<p>$var[module] -> $var[name] empty, attempting to set.... done!</p>";
-            }
-        }
-    }
-
-// TODO: save modified email templates from module variables to var/messages !
-
-    // Delete any empty modvars.
-    $delmodvars[] = array(array('name'    =>  'showtacs',
-                                'module'  =>  'roles'),
-                          array('name'    =>  'confirmationtitle',
-                                'module'  =>  'roles'),
-                          array('name'    =>  'confirmationemail',
-                                'module'  =>  'roles'),
-                          array('name'    =>  'remindertitle',
-                                'module'  =>  'roles'),
-                          array('name'    =>  'reminderemail',
-                                'module'  =>  'roles'),
-                          array('name'    =>  'validationtitle',
-                                'module'  =>  'roles'),
-                          array('name'    =>  'validationemail',
-                                'module'  =>  'roles'),
-                          array('name'    =>  'deactivationtitle',
-                                'module'  =>  'roles'),
-                          array('name'    =>  'deactivationemail',
-                                'module'  =>  'roles'),
-                          array('name'    =>  'pendingtitle',
-                                'module'  =>  'roles'),
-                          array('name'    =>  'pendingemail',
-                                'module'  =>  'roles'),
-                          array('name'    =>  'passwordtitle',
-                                'module'  =>  'roles'),
-                          array('name'    =>  'passwordemail',
-                                'module'  =>  'roles'),
-                         );
-
-    foreach($delmodvars as $delmodvar){
-        foreach($delmodvar as $var){
-            $currentvar = xarModGetVar("$var[module]", "$var[name]");
-            if (!isset($currentvar)){
-                $content .= "<p>$var[module] -> $var[name] is deleted, proceeding to next check</p>";
-            } else {
-                xarModDelVar($var['module'], $var['name']);
-                $content .= "<p>$var[module] -> $var[name] has value, attempting to delete.... done!</p>";
-            }
-        }
-    }
-
-    // Set Config Vars
-    $roleanon = xarFindRole('Anonymous');
-    $configvars[] = array(array('name'    =>  'Site.User.AnonymousUID',
-                                'set'     =>  $roleanon->getID()),
-                          array('name'    =>  'System.Core.VersionNum',
-                                'set'     =>  XARCORE_VERSION_NUM));
-
-    foreach($configvars as $configvar){
-        foreach($configvar as $var){
-            $currentvar = xarConfigGetVar("$var[name]");
-            if ($currentvar == $var['set']){
-                $content .= "<p>$var[name] is set, proceeding to next check</p>";
-            } else {
-                xarConfigSetVar($var['name'], $var['set']);
-                $content .= "<p>$var[name] incorrect, attempting to set.... done!</p>";
-            }
-        }
-    }
-
-    $timezone = xarConfigGetVar('Site.Core.TimeZone');
-    if (!isset($timezone) || substr($timezone,0,2) == 'US') {
-        xarConfigSetVar('Site.Core.TimeZone', '');
-        $content .= "<p>Site.Core.TimeZone incorrect, attempting to set.... done!</p>";
-    }
-    $offset = xarConfigGetVar('Site.MLS.DefaultTimeOffset');
-    if (!isset($offset)) {
-        xarConfigSetVar('Site.MLS.DefaultTimeOffset', 0);
-        $content .= "<p>Site.MLS.DefaultTimeOffset incorrect, attempting to set.... done!</p>";
-    }
     $cookiename = xarConfigGetVar('Site.Session.CookieName');
     if (!isset($cookiename)) {
         xarConfigSetVar('Site.Session.CookieName', '');
@@ -1948,389 +1252,6 @@ function installer_admin_upgrade2()
         $content .= "<p>Site.Session.RefererCheck incorrect, attempting to set.... done!</p>";
     }
 
-    // Check the installed roles
-    $content .= "<p><strong>Checking Role Structure</strong></p>";
-
-    $upgrade['myself'] = xarModAPIFunc('roles',
-                                       'user',
-                                       'get',
-                                       array('uname' => 'myself'));
-    if (!$upgrade['myself']) {
-        $content .= "Myself role does not exist, attempting to create... ";
-        //This creates the new Myself role and makes it a child of Everybody
-        $result = xarMakeUser('Myself','myself','myself@xaraya.com','password');
-        $result .= xarMakeRoleMemberByName('Myself','Everybody');
-        if (!$result){
-            $content .= "<p>failed</p>";
-        } else {
-            $content .= "<p>done!</p>";
-        }
-    } else {
-        $content .= "<p>Myself role has been created previously, moving to next check. </p>";
-    }
-
-    $upgrade['roles_masks'] = xarMaskExists('AttachRole',$module='roles');
-    if (!$upgrade['roles_masks']) {
-        $content .= "<p>AttachRole, RemoveRole masks do not exist, attempting to create... done! </p>";
-        xarRegisterMask('AttachRole','All','roles','Relation','All','ACCESS_ADD');
-        xarRegisterMask('RemoveRole','All','roles','Relation','All','ACCESS_DELETE');
-    } else {
-        $content .= "<p>AttachRole, RemoveRole masks have been created previously, moving to next check. </p>";
-    }
-
-    // Check the installed privs and masks.
-    $content .= "<p><strong>Checking Privilege Structure</strong></p>";
-
-    $upgrade['article_masks'] = xarMaskExists('ReadArticlesBlock',$module='articles');
-    if (!$upgrade['article_masks']) {
-        $content .= "<p>Articles Masks do not exist, attempting to create... done! </p>";
-            // Remove Masks and Instances
-            xarRemoveMasks('articles');
-            xarRemoveInstances('articles');
-            $instances = array(
-                               array('header' => 'external', // this keyword indicates an external "wizard"
-                                     'query'  => xarModURL('articles', 'admin', 'privileges'),
-                                     'limit'  => 0
-                                    )
-                            );
-            xarDefineInstance('articles', 'Article', $instances);
-            $xartable =& xarDBGetTables();
-            $query = "SELECT DISTINCT instances.xar_title FROM $xartable[block_instances] as instances LEFT JOIN $xartable[block_types] as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'articles'";
-            $instances = array(
-                                array('header' => 'Article Block Title:',
-                                        'query' => $query,
-                                        'limit' => 20
-                                    )
-                            );
-            xarDefineInstance('articles','Block',$instances);
-
-            xarRegisterMask('ViewArticles','All','articles','Article','All','ACCESS_OVERVIEW');
-            xarRegisterMask('ReadArticles','All','articles','Article','All','ACCESS_READ');
-            xarRegisterMask('SubmitArticles','All','articles','Article','All','ACCESS_COMMENT');
-            xarRegisterMask('EditArticles','All','articles','Article','All','ACCESS_EDIT');
-            xarRegisterMask('DeleteArticles','All','articles','Article','All','ACCESS_DELETE');
-            xarRegisterMask('AdminArticles','All','articles','Article','All','ACCESS_ADMIN');
-            xarRegisterMask('ReadArticlesBlock','All','articles','Block','All','ACCESS_READ');
-    } else {
-        $content .= "<p>Articles Masks have been created previously, moving to next check. </p>";
-    }
-
-    $upgrade['category_masks'] = xarMaskExists('ViewCategoryLink',$module='categories');
-    if (!$upgrade['category_masks']) {
-        $content .= "<p>Category Masks do not exist, attempting to create... done!</p>";
-            // Remove Masks and Instances
-        $instances = array(
-                           array('header' => 'external', // this keyword indicates an external "wizard"
-                                 'query'  => xarModURL('categories', 'admin', 'privileges'),
-                                 'limit'  => 0
-                                )
-                          );
-        xarDefineInstance('categories', 'Link', $instances);
-        xarRegisterMask('ViewCategoryLink','All','categories','Link','All:All:All:All','ACCESS_OVERVIEW');
-        xarRegisterMask('SubmitCategoryLink','All','categories','Link','All:All:All:All','ACCESS_COMMENT');
-        xarRegisterMask('EditCategoryLink','All','categories','Link','All:All:All:All','ACCESS_EDIT');
-        xarRegisterMask('DeleteCategoryLink','All','categories','Link','All:All:All:All','ACCESS_DELETE');
-        xarRegisterMask('AdminCategories','All','categories','Category','All:All','ACCESS_ADMIN');
-    } else {
-        $content .= "<p>Category Masks have been created previously, moving to next check. </p>";
-    }
-
-    $upgrade['priv_masks'] = xarMaskExists('AssignPrivilege',$module='privileges');
-    if (!$upgrade['priv_masks']) {
-        $content .= "<p>Some Privileges Masks do not exist, attempting to create... done! </p>";
-
-        // create a couple of new masks
-        //xarRegisterMask('ViewPanel','All','adminpanels','All','All','ACCESS_OVERVIEW');
-        xarRegisterMask('AssignPrivilege','All','privileges','All','All','ACCESS_ADD');
-        xarRegisterMask('DeassignPrivilege','All','privileges','All','All','ACCESS_DELETE');
-    } else {
-        $content .= "<p>Privileges Masks have been created previously, moving to next check. </p>";
-    }
-
-    $upgrade['priv_masks'] = xarMaskExists('pnLegacyMask',$module='All');
-    if (!$upgrade['priv_masks']) {
-        $content .= "<p>pnLegacy Masks do not exist, attempting to create... done!</p>";
-
-        // create a couple of new masks
-        xarRegisterMask('pnLegacyMask','All','All','All','All','ACCESS_NONE');
-    } else {
-        $content .= "<p>pnLegacy Masks have been created previously, moving to next check.</p>";
-    }
-
-    $upgrade['priv_masks'] = xarMaskExists('ViewPrivileges','privileges','Realm');
-    if (!$upgrade['priv_masks']) {
-        $content .= "<p>Privileges realm Masks do not exist, attempting to create... done! </p>";
-
-        // create a couple of new masks
-        xarRegisterMask('ViewPrivileges','All','privileges','Realm','All','ACCESS_OVERVIEW');
-        xarRegisterMask('ReadPrivilege','All','privileges','Realm','All','ACCESS_READ');
-        xarRegisterMask('EditPrivilege','All','privileges','Realm','All','ACCESS_EDIT');
-        xarRegisterMask('AddPrivilegem','All','privileges','Realm','All','ACCESS_ADD');
-        xarRegisterMask('DeletePrivilege','All','privileges','Realm','All','ACCESS_DELETE');
-    } else {
-        $content .= "<p>Privileges realm masks have been created previously, moving to next check. </p>";
-    }
-
-    $upgrade['priv_locks'] = xarPrivExists('GeneralLock');
-    if (!$upgrade['priv_locks']) {
-        $content .= "<p>Privileges Locks do not exist, attempting to create... done! </p>";
-
-        // This creates the new lock privileges and assigns them to the relevant roles
-        xarRegisterPrivilege('GeneralLock','All','empty','All','All','ACCESS_NONE',xarML('A container privilege for denying access to certain roles'));
-        xarRegisterPrivilege('LockMyself','All','roles','Roles','Myself','ACCESS_NONE',xarML('Deny access to Myself role'));
-        xarRegisterPrivilege('LockEverybody','All','roles','Roles','Everybody','ACCESS_NONE',xarML('Deny access to Everybody role'));
-        xarRegisterPrivilege('LockAnonymous','All','roles','Roles','Anonymous','ACCESS_NONE',xarML('Deny access to Anonymous role'));
-        xarRegisterPrivilege('LockAdministrators','All','roles','Roles','Administrators','ACCESS_NONE',xarML('Deny access to Administrators role'));
-        xarRegisterPrivilege('LockAdministration','All','privileges','Privileges','Administration','ACCESS_NONE',xarML('Deny access to Administration privilege'));
-        xarRegisterPrivilege('LockGeneralLock','All','privileges','Privileges','GeneralLock','ACCESS_NONE',xarML('Deny access to GeneralLock privilege'));
-        xarMakePrivilegeRoot('GeneralLock');
-        xarMakePrivilegeMember('LockMyself','GeneralLock');
-        xarMakePrivilegeMember('LockEverybody','GeneralLock');
-        xarMakePrivilegeMember('LockAnonymous','GeneralLock');
-        xarMakePrivilegeMember('LockAdministrators','GeneralLock');
-        xarMakePrivilegeMember('LockAdministration','GeneralLock');
-        xarMakePrivilegeMember('LockGeneralLock','GeneralLock');
-        xarAssignPrivilege('Administration','Administrators');
-        xarAssignPrivilege('GeneralLock','Everybody');
-        xarAssignPrivilege('GeneralLock','Administrators');
-        xarAssignPrivilege('GeneralLock','Users');
-
-    } else {
-        $content .= "<p>Privileges Locks have been created previously, moving to next check. </p>";
-    }
-
-    $upgrade['priv_masks'] = xarMaskExists('AdminPrivilege',$module='privileges');
-    if (!$upgrade['priv_masks']) {
-        $content .= "<p>Some Privileges Masks do not exist, attempting to create... done! </p>";
-
-        // create a couple of new masks
-        xarRegisterMask('AdminPrivilege','All','privileges','All','All','ACCESS_ADMIN');
-    } else {
-        $content .= "<p>0.9.11 Privileges Masks have been created previously, moving to next check.</p>";
-    }
-
-    //Move this mask from privileges module
-    xarUnregisterMask('AssignRole');
-
-    // Check the installed privs and masks.
-    $content .= "<p><strong>Checking Time / Date Structure</strong></p>";
-
-    include 'includes/xarDate.php';
-    $dbconn =& xarDBGetConn();
-    $sitePrefix = xarDBGetSiteTablePrefix();
-    $rolestable = $sitePrefix . '_roles';
-
-    $query = " SELECT xar_uid, xar_date_reg FROM $rolestable";
-    $result = &$dbconn->Execute($query);
-    if (!$result) return;
-
-    while (!$result->EOF) {
-        list($uid,$datereg) = $result->fields;
-        $thisdate = new xarDate();
-        if(!is_numeric($datereg)) {
-            $thisdate->DBtoTS($datereg);
-            $datereg = $thisdate->getTimestamp();
-            $query = "UPDATE $rolestable SET xar_date_reg = $datereg WHERE xar_uid = $uid";
-            if(!$dbconn->Execute($query)) return;
-        }
-        $result->MoveNext();
-    }
-
-    $content .= "<p>Time / Date structure verified in Roles. </p> ";
-
-    // Check the installed privs and masks.
-    $content .= "<p><strong>Update Xaraya Installer theme name</strong></p>";
-    $dbconn =& xarDBGetConn();
-    $sitePrefix = xarDBGetSiteTablePrefix();
-    $themestable = $sitePrefix . '_themes';
-    $query = "SELECT xar_id FROM $themestable WHERE xar_name = 'Xaraya Installer'";
-    $result =& $dbconn->Execute($query);
-    if ($result->EOF){
-        $content .= "<p>Theme name update not required.</p>";
-    } else {
-        $query2 = "UPDATE $themestable SET xar_name = 'Xaraya_Installer' WHERE xar_name = 'Xaraya Installer'";
-        // Check for db errors
-        $result2 =& $dbconn->Execute($query2);
-        if (!$result2){
-            $content .= "<p>Theme name update failed</p>";
-        } else {
-            $content .= "<p>Theme name updated.</p>";
-        }
-    }
-
-    // Bug 1716 module states table
-    {
-        $module_states_table = $sitePrefix . '_module_states';
-        $content .= "<p><strong>Upgrade $module_states_table table</strong></p>";
-
-        // TODO: use adodb transactions to ensure atomicity?
-        // The changes for bug 1716:
-        // - add xar_id as primary key
-        // - make index on xar_regid unique
-
-        $dbconn =& xarDBGetConn();
-        $datadict =& xarDBNewDataDict($dbconn, 'CREATE');
-
-        // Upgrade the module states table.
-        // Get column definitions for module states table.
-        $columns = $datadict->getColumns($module_states_table);
-        // Do we have a xar_id column?
-        $modules_column_found = false;
-        foreach($columns as $column) {
-            if ($column->name == 'xar_id') {
-                $modules_column_found = true;
-                break;
-            }
-        }
-        // Upgrade the table (xar_module_states) if the name column is not found.
-        if (!$modules_column_found) {
-            // Create the column.
-            $result = $datadict->addColumn($module_states_table, 'xar_id I AUTO PRIMARY');
-            if ($result) {
-                $content .= "<p>Added column xar_id to table $module_states_table</p>";
-            } else {
-                $content .= "<p>Failed to add column xar_id to table $module_states_table</p>";
-            }
-
-            // Bug #1971 - Have to use GenId to create values for xar_id on
-            // existing rows or the create unique index will fail
-            // TODO: check this: can PGSQL do this? Can it create a primary key on a table
-            // with existing rows, when the primary key is, by definition, NOT NULL?
-            // MySQL will automatically prefill the column with autoincrement values, but I
-            // doubt PGSQL will.
-            $query = "SELECT xar_regid, xar_state
-                      FROM $module_states_table
-                      WHERE xar_id IS NULL";
-            $result = &$dbconn->Execute($query);
-            if ($result) {
-                // Get items from result array
-                while (!$result->EOF) {
-                    list ($regid, $state) = $result->fields;
-                    $seqId = $dbconn->GenId($module_states_table);
-                    $query = "UPDATE $module_states_table
-                              SET xar_id = $seqId
-                              WHERE xar_regid = $regid
-                              AND xar_state = $state";
-                    $updresult = &$dbconn->Execute($query);
-                    if (!$updresult) {
-                        $content .= "<p>FAILED to update the $module_states_table table ID column</p>";
-                    }
-
-                    $result->MoveNext();
-                }
-                // Close result set
-                $result->Close();
-            }
-
-        } else {
-            $content .= "<p>Table $module_states_table does not require updating</p>";
-        }
-
-        // Drop index i_xar_module_states_regid and create unique index
-        // i_xar_module_states_regid2 on xar_regid.
-        // By renaming the index, we know that it has been changed.
-        $indexes = $datadict->getIndexes($module_states_table);
-        $indexname = 'i_' . xarDBGetSiteTablePrefix() . '_module_states_regid';
-        if (isset($indexes[$indexname])) {
-            $result = $datadict->dropIndex($indexname, $module_states_table);
-            if ($result) {
-                $content .= "<p>Dropped non-unique index $indexname from table $module_states_table</p>";
-            } else {
-                $content .= "<p>Failed to drop non-unique index $indexname from table $module_states_table</p>";
-            }
-        }
-
-        $indexname .= '2';
-        if (!isset($indexes[$indexname])) {
-            // We need to remove duplicate regids before creating a unique index on that column.
-            $query = "select min(xar_id), xar_regid from $module_states_table group by xar_regid having count(xar_regid) > 1";
-            $result = &$dbconn->Execute($query);
-            if ($result) {
-                // Get items from result array
-                while (!$result->EOF) {
-                    list ($xar_min_id, $xar_regid) = $result->fields;
-                    $query2 = "delete from $module_states_table where xar_id <> $xar_min_id and xar_regid = $xar_regid";
-                    $result2 = &$dbconn->Execute($query2);
-                    $result2->close();
-                    $content .= "<p>Deleted duplicate module state rows (xar_regid=$xar_regid, leaving xar_id=$xar_min_id)</p>";
-
-                    $result->MoveNext();
-                }
-            }
-
-            // Create the unique index.
-            $result = $datadict->createIndex($indexname, $module_states_table, 'xar_regid', array('UNIQUE'));
-            if ($result) {
-                $content .= "<p>Created unique index $indexname on $module_states_table.regid</p>";
-            } else {
-                $content .= "<p>Failed to create unique index $indexname on $module_states_table.regid</p>";
-            }
-        }
-    }
-
-    // If output caching if enabled, check to see if the table xar_cache_blocks exists.
-    // If it does not exist, disable output caching so that xarcachemanager can be upgraded.
-    $content .= "<p><strong>Checking for and adding the xarCache block cache table</strong></p>";
-
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-    $cacheblockstable = xarDBGetSiteTablePrefix() . '_cache_blocks';
-    $datadict =& xarDBNewDataDict($dbconn, 'ALTERTABLE');
-    $flds = "
-        xar_bid             I           NotNull DEFAULT 0,
-        xar_nocache         L           NotNull DEFAULT 0,
-        xar_page            L           NotNull DEFAULT 0,
-        xar_user            L           NotNull DEFAULT 0,
-        xar_expire          I           Null
-    ";
-    // Create or alter the table as necessary.
-    $result = $datadict->changeTable($cacheblockstable, $flds);
-
-    if (!$result) {return;}
-
-    // Create a unique key on the xar_bid collumn
-    /* $result = $datadict->createIndex('i_' . xarDBGetSiteTablePrefix() . '_cache_blocks_1',                                     $cacheblockstable,
-                                     'xar_bid',
-                                     array('UNIQUE'));
-    $content .= "<p>...done.</p>";
-    */
-
-    // Bug 630, let's throw the reminder back up after upgrade.
-
-    if (!xarModAPIFunc('blocks', 'user', 'get', array('name' => 'reminder'))) {
-        $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot.';
-        $varshtml['expire'] = time() + 7*24*60*60; // 7 days
-
-        $htmlBlockType = xarModAPIFunc(
-            'blocks', 'user', 'getblocktype',
-            array('module' => 'base', 'type' => 'html')
-        );
-
-        if (empty($htmlBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-            return;
-        }
-
-        // Get the first available group ID, and assume that will be
-        // visible to the administrator.
-        $allgroups = xarModAPIFunc(
-            'blocks', 'user', 'getallgroups',
-            array('order' => 'id')
-        );
-        $topgroup = array_shift($allgroups);
-
-        if (!xarModAPIFunc(
-            'blocks', 'admin', 'create_instance',
-            array(
-                'title'    => 'Reminder',
-                'name'     => 'reminder',
-                'content'  => $varshtml,
-                'type'     => $htmlBlockType['tid'],
-                'groups'   => array(array('gid' => $topgroup['gid'])),
-                'state'    => 2))) {
-            return;
-        }
-    } // End bug 630
-
     // after 0911, make sure CSS class lib is deployed and css tags are registered
     $content .= "<p><strong>Making sure CSS tags are registered</strong></p>";
     if(!xarModAPIFunc('themes', 'css', 'registercsstags')) {
@@ -2341,7 +1262,7 @@ function installer_admin_upgrade2()
 
     // Bug 3164, store locale in ModUSerVar
     xarModSetVar('roles', 'locale', '');
-
+  
   $content .= "<p><strong>Checking <strong>include/properties</strong> directory for moved DD properties</strong></p>";
     //From 1.0.0rc2 propsinplace was merged and dd propertie began to move to respective modules
     //Check they don't still exisit in the includes directory  bug 4371
@@ -2461,9 +1382,108 @@ function installer_admin_upgrade2()
          $content .= "<p>Done! All properties have been checked and verified for location!</p>";
     }
 
+/* End Version 1.0.0 Release Updates */
+
+/** Version 1.0.1 Release Upgrades : NONE */
+
+/* Version 1.0.2 Release Upgrades : NONE */
+
+/* Version 1.1.0 Release Upgrades */
+
+    // Set any empty modvars.
+    $content .= "<p><strong>Checking Module and Config Variables</strong></p>";
+
+    $modvars[] = array(array('name'    =>  'inheritdeny',
+                             'module'  =>  'privileges',
+                             'set'     =>  true),
+                       array('name'    =>  'tester',
+                             'module'  =>  'privileges',
+                             'set'     =>  0),
+                       array('name'    =>  'test',
+                             'module'  =>  'privileges',
+                             'set'     =>  false),
+                       array('name'    =>  'testdeny',
+                             'module'  =>  'privileges',
+                             'set'     =>  false),
+                       array('name'    =>  'testmask',
+                             'module'  =>  'privileges',
+                             'set'     =>  'All'),
+                       array('name'    =>  'realmvalue',
+                             'module'  =>  'privileges',
+                             'set'     =>  'none'),
+                       array('name'    =>  'realmcomparison',
+                             'module'  =>  'privileges',
+                             'set'     =>  'exact'),
+                       array('name'    =>  'suppresssending',
+                             'module'  =>  'mail',
+                             'set'     =>  'false'),
+                       array('name'    =>  'redirectsending',
+                             'module'  =>  'mail',
+                             'set'     =>  'exact'),
+                       array('name'    =>  'redirectaddress',
+                             'module'  =>  'privileges',
+                             'set'     =>  ''),
+                       array('name'    =>  'displayrolelist',
+                             'module'  =>  'roles',
+                             'set'     =>  'false'),
+                        array('name'    => 'usereditaccount',
+                             'module'  =>  'roles',
+                             'set'     =>  'true'),
+                        array('name'    => 'allowuserhomeedit',
+                             'module'  =>  'roles',
+                             'set'     =>  'false'),
+                        array('name'    => 'setuserhome',
+                             'module'  =>  'roles',
+                             'set'     =>  'false'),
+                        array('name'    => 'setprimaryparent',
+                             'module'  =>  'roles',
+                             'set'     =>  'false'),
+                        array('name'    => 'setpasswordupdate',
+                             'module'  =>  'roles',
+                             'set'     =>  'false')
+                          );
+    foreach($modvars as $modvar){
+        foreach($modvar as $var){
+            $currentvar = xarModGetVar("$var[module]", "$var[name]");
+            if (isset($currentvar)){
+                if (isset($var['override'])) {
+                    xarModSetVar($var['module'], $var['name'], $var['set']);
+                    $content .= "<p>$var[module] -> $var[name] has been overridden, proceeding to next check</p>";
+                }
+                else $content .= "<p>$var[module] -> $var[name] is set, proceeding to next check</p>";
+            } else {
+                xarModSetVar($var['module'], $var['name'], $var['set']);
+                $content .= "<p>$var[module] -> $var[name] empty, attempting to set.... done!</p>";
+            }
+        }
+    }
+
+
+      // Check the installed privs and masks.
+    $content .= "<p><strong>Checking Privilege Structure</strong></p>";
+
+    $upgrade['priv_masks'] = xarMaskExists('ViewPrivileges','privileges','Realm');
+    if (!$upgrade['priv_masks']) {
+        $content .= "<p>Privileges realm Masks do not exist, attempting to create... done! </p>";
+
+        // create a couple of new masks
+        xarRegisterMask('ViewPrivileges','All','privileges','Realm','All','ACCESS_OVERVIEW');
+        xarRegisterMask('ReadPrivilege','All','privileges','Realm','All','ACCESS_READ');
+        xarRegisterMask('EditPrivilege','All','privileges','Realm','All','ACCESS_EDIT');
+        xarRegisterMask('AddPrivilege','All','privileges','Realm','All','ACCESS_ADD');
+        xarRegisterMask('DeletePrivilege','All','privileges','Realm','All','ACCESS_DELETE');
+    } else {
+        $content .= "<p>Privileges realm masks have been created previously, moving to next check. </p>";
+    }
+    if (xarPrivExists('CasualAccess')) {
+        xarMakePrivilegeMember('ViewAuthsystem','CasualAccess');
+    }elseif (xarPrivExists('ReadNonCore')) {
+        xarMakePrivilegeMember('ViewAuthsystem','ReadNonCore');
+    }
+
+
     $content .= "<p><strong>Updating Roles and Authsystem for changes in User Login and Authentication</strong></p>";
 
-    //TODO: tidy up - look at this and other changes once we finish the refactoring for this and adminpanels
     //Check for allow registration in existing Roles module
     $allowregistration =xarModGetVar('roles','allowregistration');
     if (isset($allowregistration) && ($allowregistration==1)) {
@@ -2476,7 +1496,6 @@ function installer_admin_upgrade2()
     }
 
     //we need to check the login block is the Authsystem login block, not the Roles
-    //see if there is an existing roles login blocktype instance
     //As the block is the same we could just change the type id of any login block type.
     $blocktypeTable = $systemPrefix .'_block_types';
     $blockinstanceTable = $systemPrefix .'_block_instances';
@@ -2505,35 +1524,26 @@ function installer_admin_upgrade2()
 
         }
 
-    //Authsystem ... we need to put this here as the authsystem upgrade is not happening (fully ...)
-    // Define and setup privs
+    // Define and setup privs that may not be registered
     xarRegisterPrivilege('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
-    xarRegisterPrivilege('ViewAthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
-
+    xarRegisterPrivilege('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
+    xarUnregisterMask('ViewLogin');
     xarRegisterMask('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW');
     xarRegisterMask('ViewAuthsystemBlocks','All','authsystem','Block','All','ACCESS_OVERVIEW');
     xarRegisterMask('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditAuthsystem','All','authsystem','All','All','ACCESS_EDIT');
     xarRegisterMask('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
+     //Register a mask to maintain backward compatibility - this mask is used a lot as a hack for admin perm check in themes
+    xarRegisterMask('AdminPanel','All','base','All','All','ACCESS_ADMIN');
       // Define Module vars
+    xarMakePrivilegeMember('ViewAuthsystem','CasualAccess');
  	xarModSetVar('authsystem', 'lockouttime', 15);
 	xarModSetVar('authsystem', 'lockouttries', 3);
 	xarModSetVar('authsystem', 'uselockout', false);
 	xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
-	//End of this authsystem info that should be adde din the module upgrade function
-      if (count($blockproblem) >0) {
-        $content .= "<p><span style=\"color:red;\">WARNING!</span> There was a problem in updating Waiting Content and Adminpanels menu block to Base blocks. Please check!</p>";
 
-     }else {
-        $content .= "<p>Done! Roles, authentication and registration checked!</p>";
-    }
-
-    $content .= "<p><strong>Removing Adminpanels module - moving functions to other  modules</strong></p>";
-   // Move of Adminpanels module overviews modvar to Modules module
-    $oldvalue=xarModGetVar('adminpanels','overview');
-    if (isset($oldvalue)) {
-        xarModSetVar('modules','overview',$oldvalue);
-    }
+    $content .= "<p><strong>Removing Adminpanels module and move functions to other  modules</strong></p>";
+    // Adminpanels module overviews modvar is deprecated
     // Move off Adminpanels dashboard modvar to Themes module
     $oldvalue=xarModGetVar('adminpanels','dashboard');
     if (isset($oldvalue)) {
@@ -2546,7 +1556,7 @@ function installer_admin_upgrade2()
         xarModSetVar('themes','dashtemplate','admin');
     }else{
         //set it to the new nothing - as the file may not exist
-        xarModSetVar('themes','dashtemplate','dashboard');
+        xarModSetVar('themes','dashtemplate','');
     }
 
     $table_name['admin_menu']=$sitePrefix . '_admin_menu';
@@ -2556,13 +1566,10 @@ function installer_admin_upgrade2()
                                                 array('table_name' => $table_name['admin_menu']));
     //Let's remove the now unused admin menu table
     if ($upgrade['admin_menu']) {
-
-          $adminmenuTable = $systemPrefix .'_admin_menu';
+        $adminmenuTable = $systemPrefix .'_admin_menu';
         $query = xarDBDropTable($adminmenuTable);
         $result = &$dbconn->Execute($query);
      }
-     //Register a mask to maintain backward compatibility - this mask is used a lot as a hack for admin perm check in themes
-    xarRegisterMask('AdminPanel','All','base','All','All','ACCESS_ADMIN');
 
     //We need to upgrade the blocks, and as the block is the same we could just change the type id of any login.
     $blocktypeTable = $systemPrefix .'_block_types';
@@ -2614,19 +1621,66 @@ function installer_admin_upgrade2()
 
         }
       }
-
-     // Delete any module variables
-     //Problem if adminpanels does not exist
-      xarModDelAllVars('adminpanels');
-      // Remove Masks and Instances
-      xarRemoveMasks('adminpanels');
-      xarRemoveInstances('adminpanels');
-
     if (count($blockproblem) >0) {
         $content .= "<p><span style=\"color:red;\">WARNING!</span> There was a problem in updating Waiting Content and Adminpanels menu block to Base blocks. Please check!</p>";
     }else {
         $content .= "<p>Done! Waiting content and Admin Menu block updated in Base module!</p>";
     }
+
+    $content .= "<p>Removing unused adminpanel module variables</p>";
+    $delmodvars[] = array(array('name'    =>  'showlogout',
+                               'module'  =>  'adminpanels'),
+                         array('name'    =>  'dashboard',
+                               'module'  =>  'adminpanels'),
+                         array('name'    =>  'overview',
+                               'module'  =>  'adminpanels'),
+                         array('name'    =>  'menustyle',
+                               'module'  =>  'adminpanels')
+                         );
+
+     foreach($delmodvars as $delmodvar){
+        foreach($delmodvar as $var){
+            $currentvar = xarModGetVar("$var[module]", "$var[name]");
+            if (!isset($currentvar)){
+                $content .= "<p>$var[module] -> $var[name] is deleted, proceeding to next check</p>";
+            } else {
+                xarModDelVar($var['module'], $var['name']);
+                $content .= "<p>$var[module] -> $var[name] has value, attempting to delete.... done!</p>";
+            }
+        }
+    }
+
+    // Remove Masks and Instances
+    xarRemoveMasks('adminpanels');
+    xarRemoveInstances('adminpanels');
+    
+    //Remove the Adminpanel module entry
+    $aperror=0;
+    $moduleTable = $systemPrefix .'_modules';
+    $moduleStatesTable=$systemPrefix .'_module_states';
+    $adminpanels='adminpanels';
+    $query = "SELECT xar_name,
+                     xar_regid
+              FROM $moduleTable
+              WHERE xar_name = ?";
+    $result = &$dbconn->Execute($query,array($adminpanels));
+    list($name, $adminregid) = $result->fields;
+    if (!$result) $aperror=1;
+    if (isset($adminregid) and $aperror<=0) {
+        $query = "DELETE FROM $moduleTable WHERE xar_regid = ?";
+        $result = &$dbconn->Execute($query,array($adminregid));
+        if (!$result) $aperror=1;
+        $query = "DELETE FROM $moduleStatesTable WHERE xar_regid = ?";
+        $result = &$dbconn->Execute($query,array($adminregid));
+        if (!$result) $aperror=1;
+    }
+    if ($aperror<=0) {
+          $content .= "<p>Done! Adminpanel module has been removed!</p>";
+    }else {
+         $content .= "<p><span style=\"color:red;\">WARNING!</span> There was a problem removing Adminpanel module from the module listing.You may wish to remove it manually from your module listing after you log in.</p>";
+    }
+
+/* End of Version 1.1.0 Release Upgrades */
 
     $thisdata['content']=$content;
     $thisdata['phase'] = 2;
@@ -2634,13 +1688,52 @@ function installer_admin_upgrade2()
 
     return $thisdata;
 }
+// Miscellaneous upgrade functions that always run each upgrade
+// Version independent
 function installer_admin_upgrade3()
 {
     $thisdata['xarProduct'] = xarConfigGetVar('System.Core.VersionId');
     $thisdata['xarVersion'] = xarConfigGetVar('System.Core.VersionNum');
     $thisdata['xarRelease'] = xarConfigGetVar('System.Core.VersionSub');
     $content='';
-    // Propsinplace scenario, flush the property cache, so on upgrade all proptypes
+    
+  // Bug 630, let's throw the reminder back up after upgrade.
+    if (!xarModAPIFunc('blocks', 'user', 'get', array('name' => 'reminder'))) {
+        $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot.';
+        $varshtml['expire'] = time() + 7*24*60*60; // 7 days
+
+        $htmlBlockType = xarModAPIFunc(
+            'blocks', 'user', 'getblocktype',
+            array('module' => 'base', 'type' => 'html')
+        );
+
+        if (empty($htmlBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+            return;
+        }
+
+        // Get the first available group ID, and assume that will be
+        // visible to the administrator.
+        $allgroups = xarModAPIFunc(
+            'blocks', 'user', 'getallgroups',
+            array('order' => 'id')
+        );
+        $topgroup = array_shift($allgroups);
+
+        if (!xarModAPIFunc(
+            'blocks', 'admin', 'create_instance',
+            array(
+                'title'    => 'Reminder',
+                'name'     => 'reminder',
+                'content'  => $varshtml,
+                'type'     => $htmlBlockType['tid'],
+                'groups'   => array(array('gid' => $topgroup['gid'])),
+                'state'    => 2))) {
+            return;
+        }
+    } // End bug 630
+
+
+    // Flush the property cache, so on upgrade all proptypes
     // are properly set in the database.
     $content .=  "<h3><strong>Flushing the property cache</strong></h3>";
     if(!xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush' => true))) {
@@ -2648,7 +1741,6 @@ function installer_admin_upgrade3()
     } else {
         $content .=  "<p>Success! Flushing property cache complete</p>";
     }
-
 
     $thisdata['content']=$content;
     $thisdata['phase'] = 3;
