@@ -36,11 +36,20 @@ with the old resultset!!!!!
 PostgreSQL
 ----------
 
+SQL level:
 PREPARE <plan-name> AS <query without bindvars>
 EXECUTE <plan-name> 
 
 PREPARE <plan-name> (datatype_1,...,datatyp_n) AS <query with bindvars>
 EXECUTE <plan-name> value_1,...,value_n
+
+At the php level:
+
+$conn = pg_connect("dbname=mary");
+
+$result = pg_prepare($dbconn, "my_query", 'SELECT * FROM shops WHERE name = $1');
+$result = pg_execute($dbconn, "my_query", array("Joe's Widgets"));
+$result = pg_execute($dbconn, "my_query", array("Clothes Clothes Clothes"));
 
 MSSQL
 -----
