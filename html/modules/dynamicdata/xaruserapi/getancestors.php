@@ -17,6 +17,7 @@ function &dynamicdata_userapi_getancestors($args)
     $base = isset($base) ? $base : true;
 
 // -------------- Get the info of this object
+// Q: why not use the DD api for this? (getObjectInfo) For the construction?
 	$xartable =& xarDBGetTables();
 	$q = new xarQuery('SELECT',$xartable['dynamic_objects']);
 	$q->addfields(array('xar_object_id AS objectid','xar_object_moduleid AS moduleid','xar_object_itemtype AS itemtype','xar_object_parent AS parent'));
@@ -38,7 +39,7 @@ function &dynamicdata_userapi_getancestors($args)
 	    $q->eq('xar_object_itemtype',$itemtype);
 		if (!$q->run()) return;
 		$result = $q->row();
-		if ($result == array()) {
+		if (empty($result)) {
 			if ($base) {
 				$info = xarModAPIFunc('dynamicdata','user', 'getobjectinfo', array('moduleid' => $moduleid, 'itemtype' => $itemtype));
 				if (empty($info)) {
@@ -46,8 +47,6 @@ function &dynamicdata_userapi_getancestors($args)
 					$info = array('objectid' => 0, 'itemtype' => $itemtype, 'name' => xarModGetNameFromID($moduleid));
 				}
 				$result = array($info);
-			} else {
-				$result = array();
 			}
 			return $result;
 		}
@@ -55,10 +54,9 @@ function &dynamicdata_userapi_getancestors($args)
    }
 
 // -------------- Include the last descendant - this object, or not
+    $ancestors = array();
     if ($top) {
     	$ancestors[] = xarModAPIFunc('dynamicdata','user', 'getobjectinfo', array('objectid' => $objectid));
-    } else {
-    	$ancestors = array();
     }
 
 // -------------- Get all the dynamic objects at once
