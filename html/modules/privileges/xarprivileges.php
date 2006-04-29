@@ -1149,29 +1149,27 @@ class xarPrivileges extends xarMasks
     function getmodules()
     {
         static $allmodules = array();
-
+        
         if (empty($allmodules)) {
             $query = "SELECT modules.xar_id, modules.xar_name
                       FROM $this->modulestable modules
                       WHERE modules.xar_state = ?
                       ORDER BY modules.xar_name";
-            $result = $this->dbconn->Execute($query,array(3));
+            $stmt = $this->dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery(array(3));
 
             // add some extra lines we want
             // $allmodules[] = array('id' => -2, 'name' => ' ');
-            $allmodules[] = array('id' => -1,
-                                  'name' => 'All',
-                                  'display' => 'All');
+            $allmodules[] = array('id' => -1,'name' => 'All','display' => 'All');
             // $allmodules[] = array('id' => 0, 'name' => 'None');
             // add the modules from the database
             // TODO: maybe remove the key, don't really need it
-            while(!$result->EOF) {
+            while($result->next()) {
                 list($mid, $name) = $result->fields;
-                $modules[] = array('id' => $mid,
-                                   'name' => $name,
-                                   //'display' => xarModGetDisplayableName($name),
-                                   'display' => ucfirst($name));
-                $result->MoveNext();
+                $allmodules[] = array('id' => $mid,
+                                      'name' => $name,
+                                      //'display' => xarModGetDisplayableName($name),
+                                      'display' => ucfirst($name));
             }
         }
         return $allmodules;
