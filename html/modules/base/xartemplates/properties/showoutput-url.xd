@@ -1,2 +1,2 @@
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<a href="#$value#">#$value#</a> 
+<a href="#$value#"><xar:var name="value" prep="true"/></a> 

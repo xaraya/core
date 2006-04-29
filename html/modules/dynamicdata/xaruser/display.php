@@ -57,7 +57,7 @@ function dynamicdata_user_display($args)
     $myobject->getItem();
 
     $data = array();
-    $data['object'] =& $myobject;
+    //$data['object'] =& $myobject;
 
     $modinfo = xarModGetInfo($myobject->moduleid);
     $item = array();
@@ -70,6 +70,26 @@ function dynamicdata_user_display($args)
                                          'join'     => $join,
                                          'table'    => $table,
                                          'itemid'   => $itemid));
+    // First transform hooks, create an array of things eligible and pass that along
+    $totransform = array(); $totransform['transform'] = array(); // we must do this, otherwise we lose track of what got transformed
+    foreach($myobject->properties as $pname => $pobj) {
+        // *never* transform an ID
+        // TODO: there is probably lots more to skip here.
+        if($pobj->type == '21') continue;
+        $totransform['transform'][] = $pname;
+        $totransform[$pname] = $pobj->value;
+    }
+    $transformed = xarModCallHooks('item','transform',$myobject->itemid, $totransform, $modinfo['name'],$myobject->itemtype);
+    // Ok, we got the transformed values, now what?
+    foreach($transformed as $pname => $tvalue) {
+        if($pname == 'transform') continue;
+        $myobject->properties[$pname]->value = $tvalue;
+    }
+    
+    // *Now* we can set the data stuff
+    $data['object'] =& $myobject;
+
+    // Display hooks
     $hooks = array();
     $hooks = xarModCallHooks('item', 'display', $myobject->itemid, $item, $modinfo['name']);
     $data['hooks'] = $hooks;

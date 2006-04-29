@@ -4,5 +4,5 @@
     <a href="#$basedir#/#$value#" title="#xarML('Download')#">#$value#</a>
 <xar:else/> 
     <!-- something went wrong here - the file doesn't exist -->
-    #$value#
+    <xar:var name="value" prep="true"/>
 </xar:if>
