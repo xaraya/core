@@ -1038,21 +1038,40 @@ class Dynamic_Object extends Dynamic_Object_Master
         if (!empty($args['preview'])) $this->checkInput();
         
         if (count($args['fieldlist']) > 0 || !empty($this->status)) {
+            // Explicit fieldlist or status has value
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
                     $thisprop = $this->properties[$name];
                     if ($thisprop->status != 3)
-                        $args['properties'][$name] = & $this->properties[$name];
+                        $args['properties'][$name] =& $this->properties[$name];
                 }
             }
         } else {
-            foreach ($this->properties as $property) {
-                if ($property->status != 3)
-                    $args['properties'][$property->name] = $property;
+            // Do them all, except for status = 3 (what was that again?)
+            // TODO: this is exactly the same as in the display function, consolidate it.
+            $totransform = array(); $totransform['transform'] = array();
+            foreach($this->properties as $pname => $pobj) {
+                // *never* transform an ID
+                // TODO: there is probably lots more to skip here.
+                if($pobj->type == '21') continue;
+                $totransform['transform'][] = $pname;
+                $totransform[$pname] = $pobj->value;
             }
-        }
+        
+            // CHECKME: is $this->tplmodule safe here?
+            $transformed = xarModCallHooks('item','transform',$this->itemid, $totransform, $this->tplmodule,$this->itemtype);
 
+            foreach ($this->properties as $property) {
+                if ($property->status != 3 and $property->type != 21) {
+                    // sigh, 5 letters, but so many hours to discover them
+                    // anyways, clone the property, so we can safely change it, PHP 5 specific!!
+                    $args['properties'][$property->name] = clone $property;
+                    $args['properties'][$property->name]->value = $transformed[$property->name];
+                }
+            }
+
+        }
         // pass some extra template variables for use in BL tags, API calls etc.
         if (empty($this->name)) {
            $args['objectname'] = null;
@@ -1078,7 +1097,6 @@ class Dynamic_Object extends Dynamic_Object_Master
         } else {
             $args['catid'] = null;
         }
-
         return xarTplObject($args['tplmodule'],$args['template'],'showdisplay',$args);
     }
 
