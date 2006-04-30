@@ -36,7 +36,6 @@ function authsystem_user_showloginform($args = array())
       $data['loginlabel'] = xarML('Log In');
       $data['loginurl']=xarModURL($authmodule,'user','login');
 
-
       return $data;
     } else {
       xarResponseRedirect($data['redirecturl']);
