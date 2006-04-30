@@ -18,11 +18,9 @@
  */
 function authsystem_user_showloginform($args = array())
 {
-   // #redirecturl
-    extract($args);
-    $redirected=xarServerGetBaseURL();
-    if (!isset($redirecturl)) $redirecturl = $redirected;
 
+    extract($args);
+    if (!isset($redirecturl)) $redirecturl = xarServerGetBaseURL();
     xarVarFetch('redirecturl', 'str:1:254', $data['redirecturl'], $redirecturl, XARVAR_NOT_REQUIRED);
 
     $defaultauthmodule=(int)xarModGetVar('roles','defaultauthmodule');
