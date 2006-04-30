@@ -48,6 +48,7 @@ define('XAR_TOKEN_EQUAL_SIGN'        , '='    );
 define('XAR_TOKEN_APOS'              , "'"    );
 define('XAR_TOKEN_QUOTE'             , '"'    );
 define('XAR_TOKEN_SPACE'             , ' '    );
+define('XAR_TOKEN_CR'                , "\n"   );
 define('XAR_NAMESPACE_PREFIX'        , 'xar'  );          // Our own default namespace prefix
 define('XAR_FUNCTION_PREFIX'         , 'xar'  );          // Function prefix (used in check for allowed functions)
 define('XAR_ROOTTAG_NAME'            , 'blocklayout');    // Default name of the root tag
@@ -877,7 +878,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                 $this->raiseError(XAR_BL_INVALID_TAG,"Unclosed tag.", $this);
                 return;
             }
-            if ($token == XAR_TOKEN_SPACE || $token == XAR_TOKEN_TAG_END || $token == XAR_TOKEN_ENDTAG_START) {
+            if ($token == XAR_TOKEN_SPACE || $token == XAR_TOKEN_CR || $token == XAR_TOKEN_TAG_END || $token == XAR_TOKEN_ENDTAG_START) {
                 break;
             }
             $tagName .= $token;
@@ -889,7 +890,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         
         // Parse the attributes
         $attributes = array();
-        if ($token == XAR_TOKEN_SPACE) {
+        if ($token == XAR_TOKEN_SPACE || $token == XAR_TOKEN_CR) {
             while (true) {
                 $attribute = $this->parseTagAttribute();
                 if (!isset($attribute)) return; // throw back
