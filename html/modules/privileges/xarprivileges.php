@@ -477,9 +477,10 @@ class xarMasks
         // check if the exception needs to be caught here or not
         if ($catch && !$pass) {
             if (xarModGetVar('privileges','exceptionredirect') && !xarUserIsLoggedIn()) {
-                //authsystem will handle the authentication module
-                xarResponseRedirect(xarModURL('authsystem','user','showloginform'));
-
+                //authsystem will handle the authentication 
+                //Redirect to login for anon users, and take their current url as well for redirect after login
+                $requrl = urlencode(xarServerGetCurrentUrl());
+                xarResponseRedirect(xarModURL('authsystem','user','showloginform',array('redirecturl'=> $requrl)));
             } else {
                 $msg = xarML('No privilege for #(1)',$mask->getName());
                 xarErrorSet(XAR_USER_EXCEPTION, 'NO_PRIVILEGES',
