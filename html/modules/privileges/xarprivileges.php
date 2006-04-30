@@ -484,10 +484,12 @@ class xarMasks
 
         // check if the exception needs to be caught here or not
         if ($catch && !$pass) {
-            if (xarModGetVar('privileges','exceptionredirect')) {
-                // TODO: 1. this function doesnt exist
-                // TODO: 2. when the privileges on the redirect page fail=> BOOM!
-                xarResponseRedirect(xarModURL('roles','user','register'));
+            if (xarModGetVar('privileges','exceptionredirect') && $userID = _XAR_ID_UNREGISTERED) {
+                // TODO: 1. when the privileges on the redirect page fail=> BOOM! (unlikely now)
+                // Give user another chance if not logged on 
+                $mod = xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule'));
+                $requrl = urlencode(xarServerGetCurrentUrl());
+                xarResponseRedirect(xarModURL($mod,'user','showloginform',array('redirecturl'=> $requrl)));
             } else {
                 $msg = xarML('No privilege for #(1)',$mask->getName());
                 throw new Exception($msg);

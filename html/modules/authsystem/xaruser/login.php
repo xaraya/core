@@ -49,7 +49,7 @@ function authsystem_user_login()
 		throw new EmptyParameterException('password');
     }
     if (!xarVarFetch('rememberme','checkbox',$rememberme,false,XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('redirecturl','str:1:100',$redirecturl,'index.php',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('redirecturl','str:1:300',$redirecturl,'index.php',XARVAR_NOT_REQUIRED)) return;
 
     // Defaults
     if (preg_match('/authsystem/',$redirecturl)) {

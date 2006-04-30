@@ -532,18 +532,13 @@ function xarRequest__resolveModuleAlias($aliasModName)
  */
 function xarResponseRedirect($redirectURL)
 {
+    $redirectURL=urldecode($redirectURL); // this is safe if called multiple times.
     if (headers_sent() == true) return false;
 
     // MrB: We only do this for pn Legacy, consider removing it
     xarResponse::$redirectCalled = true;
 
-
-    // Remove &amp; entites to prevent redirect breakage
-    // according to besfred's php.net research str_replace is faster
-    // if it was preg_replace it should have been
-    // $redirectURL = preg_replace('!&amp;!', '&', $redirectURL);
-    // to be able to work properly
-    // for now we use str_replace tho, end of discussion :-)
+    // Remove &amp; entities to prevent redirect breakage
     $redirectURL = str_replace('&amp;', '&', $redirectURL);
 
     if (substr($redirectURL, 0, 4) != 'http') {

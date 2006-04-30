@@ -217,6 +217,9 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     }
 
     if (($flags & XARVAR_DONT_SET) || ($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue)) {
+        // TODO: when fetching an optional var using ----^ the exception is not thrown when the variable
+        // fetched does not pass validation, i doubt we want that. Means that an optional fetch never validates and
+        // always gets the default value?
         $supress = true;
     } else {
         $supress = false;
