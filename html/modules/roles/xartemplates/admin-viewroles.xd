@@ -1,5 +1,5 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<style type="text/css">@import url(modules/roles/xartemplates/includes/roletree.css);</style>
+<xar:style module='roles' type='module' file='roletree.css' />
 <script type="text/javascript" src="modules/roles/xartemplates/xarTree.js"></script>
 <script language="JavaScript">
 <!--
