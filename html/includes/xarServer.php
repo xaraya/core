@@ -234,34 +234,7 @@ function xarRequest__resolveModuleAlias($aliasModName)
  */
 function xarResponseRedirect($redirectURL)
 {
-    $redirectURL=urldecode($redirectURL); // this is safe if called multiple times.
-    if (headers_sent() == true) return false;
-
-    // MrB: We only do this for pn Legacy, consider removing it
-    xarResponse::$redirectCalled = true;
-
-    // Remove &amp; entities to prevent redirect breakage
-    $redirectURL = str_replace('&amp;', '&', $redirectURL);
-
-    if (substr($redirectURL, 0, 4) != 'http') {
-        // Removing leading slashes from redirect url
-        $redirectURL = preg_replace('!^/*!', '', $redirectURL);
-
-        // Get base URL
-        $baseurl = xarServer::getBaseURL();
-
-        $redirectURL = $baseurl.$redirectURL;
-    }
-
-    if (preg_match('/IIS/', xarServer::getVar('SERVER_SOFTWARE')) && preg_match('/CGI/', xarServer::getVar('GATEWAY_INTERFACE')) ) {
-      $header = "Refresh: 0; URL=$redirectURL";
-    } else {
-      $header = "Location: $redirectURL";
-    }// if
-
-    // Start all over again
-    header($header);
-    exit();
+    return xarResponse::Redirect($redirectURL);
 }
 
 /**
@@ -608,5 +581,37 @@ class xarResponse
 {
     public static $closeSession = true;    // we usually will have sessions
     public static $redirectCalled = false; // do we still need this?
+
+    static function Redirect($url)
+    {
+        $redirectURL=urldecode($url); // this is safe if called multiple times.
+        if (headers_sent() == true) return false;
+        
+        // MrB: We only do this for pn Legacy, consider removing it
+        self::$redirectCalled = true;
+        
+        // Remove &amp; entities to prevent redirect breakage
+        $redirectURL = str_replace('&amp;', '&', $redirectURL);
+        
+        if (substr($redirectURL, 0, 4) != 'http') {
+            // Removing leading slashes from redirect url
+            $redirectURL = preg_replace('!^/*!', '', $redirectURL);
+            
+            // Get base URL
+            $baseurl = xarServer::getBaseURL();
+            
+            $redirectURL = $baseurl.$redirectURL;
+        }
+        
+        if (preg_match('/IIS/', xarServer::getVar('SERVER_SOFTWARE')) && preg_match('/CGI/', xarServer::getVar('GATEWAY_INTERFACE')) ) {
+            $header = "Refresh: 0; URL=$redirectURL";
+        } else {
+            $header = "Location: $redirectURL";
+        }// if
+        
+        // Start all over again
+        header($header);
+        exit();
+    }
 }
 ?>
