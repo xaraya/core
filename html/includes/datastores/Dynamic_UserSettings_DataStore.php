@@ -26,7 +26,7 @@ class Dynamic_UserSettings_DataStore extends Dynamic_DataStore // Consider inher
         if (empty($modid)) {
             $modid = xarMod::getRegID(xarMod::getName());
         }
-        $modinfo = xarModGetInfo($modid);
+        $modinfo = xarMod::getInfo($modid);
         if (!empty($modinfo['name'])) {
             $this->modname = $modinfo['name'];
         }

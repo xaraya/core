@@ -400,162 +400,6 @@ function xarModGetVarId($modName, $name)
     return $modvarid;
 }
 
-
-/**
- * Get information on module
- *
- * @access public
- * @param modRegId string module id
- * @param type determines theme or module
- * @return array of module information
- * @raise DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
- */
-function xarModGetInfo($modRegId, $type = 'module')
-{
-    if (empty($modRegId)) throw new EmptyParameterException('modRegid');
-
-    switch($type) {
-        case 'module':
-            default:
-                if (xarCore::isCached('Mod.Infos', $modRegId)) {
-                    return xarCore::getCached('Mod.Infos', $modRegId);
-            }
-            break;
-        case 'theme':
-            if (xarCore::isCached('Theme.Infos', $modRegId)) {
-                return xarCore::getCached('Theme.Infos', $modRegId);
-            }
-            break;
-    }
-    // Log it when it doesnt come from the cache
-    xarLogMessage("xarModGetInfo ". $modRegId ." / " . $type);
-
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
-
-    switch($type) {
-        case 'module':
-        default:
-            $the_table = $tables['modules'];
-            $query = "SELECT xar_id,
-                             xar_name,
-                             xar_directory,
-                             xar_mode,
-                             xar_version,
-                             xar_admin_capable,
-                             xar_user_capable,
-                             xar_state
-                       FROM  $the_table WHERE xar_regid = ?";
-            break;
-        case 'theme':
-            $the_table = $tables['themes'];
-            $query = "SELECT xar_id,
-                             xar_name,
-                             xar_directory,
-                             xar_mode,
-                             xar_version,
-                             xar_state
-                       FROM  $the_table WHERE xar_regid = ?";
-            break;
-    }
-    $stmt = $dbconn->prepareStatement($query);
-    $result = $stmt->executeQuery(array($modRegId),ResultSet::FETCHMODE_NUM);
-
-    if (!$result->next()) {
-        $result->close();
-        throw new IDNotFoundException($modRegId);
-    }
-
-    switch($type) {
-        case 'module':
-        default:
-            list($modInfo['systemid'],
-                 $modInfo['name'],
-                 $modInfo['directory'],
-                 $mode,
-                 $modInfo['version'],
-                 $modInfo['admincapable'],
-                 $modInfo['usercapable'],
-                 $modInfo['state']) = $result->getRow();
-            break;
-        case 'theme':
-            list($modInfo['systemid'],
-                 $modInfo['name'],
-                 $modInfo['directory'],
-                 $mode,
-                 $modInfo['version'],
-                 $modInfo['state']) = $result->getRow();
-            break;
-    }
-    $result->Close();
-    unset($result);
-
-    $modInfo['regid'] = (int) $modRegId;
-    $modInfo['mode'] = (int) $mode;
-    $modInfo['displayname'] = xarMod::getDisplayName($modInfo['name'], $type);
-    $modInfo['displaydescription'] = xarModGetDisplayableDescription($modInfo['name'], $type);
-
-    // Shortcut for os prepared directory
-    $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
-
-    switch($type) {
-        case 'module':
-        default:
-            if (!isset($modInfo['state'])) $modInfo['state'] = XARMOD_STATE_MISSING_FROM_UNINITIALISED; //return; // throw back
-            $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
-            break;
-        case 'theme':
-            if (!isset($modInfo['state'])) {
-                $modInfo['state']= XARTHEME_STATE_MISSING_FROM_UNINITIALISED;
-            }
-            $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory'], $type = 'theme');
-            break;
-    }
-
-    if (!isset($modFileInfo)) {
-        // We couldn't get file info, fill in unknowns.
-        // The exception for this is logged in getFileInfo
-        $modFileInfo['class'] = xarML('Unknown');
-        $modFileInfo['description'] = xarML('This module is not installed properly. Not all info could be retrieved');
-        $modFileInfo['category'] = xarML('Unknown');
-        $modFileInfo['displayname'] = xarML('Unknown');
-        $modFileInfo['displaydescription'] = xarML('Unknown');
-        $modFileInfo['author'] = xarML('Unknown');
-        $modFileInfo['contact'] = xarML('Unknown');
-        $modFileInfo['admin'] = xarML('Unknown');
-        $modFileInfo['user'] = xarML('Unknown');
-        $modFileInfo['dependency'] = array();
-        $modFileInfo['extensions'] = array();
-
-        $modFileInfo['xar_version'] = xarML('Unknown');
-        $modFileInfo['bl_version'] = xarML('Unknown');
-        $modFileInfo['class'] = xarML('Unknown');
-        $modFileInfo['author'] = xarML('Unknown');
-        $modFileInfo['homepage'] = xarML('Unknown');
-        $modFileInfo['email'] = xarML('Unknown');
-        $modFileInfo['description'] = xarML('Unknown');
-        $modFileInfo['contactinfo'] = xarML('Unknown');
-        $modFileInfo['publishdate'] = xarML('Unknown');
-        $modFileInfo['license'] = xarML('Unknown');
-    }
-
-    $modInfo = array_merge($modFileInfo, $modInfo);
-
-    switch($type) {
-        case 'module':
-        default:
-            xarCore::setCached('Mod.Infos', $modRegId, $modInfo);
-            break;
-        case 'theme':
-            xarCore::setCached('Theme.Infos', $modRegId, $modInfo);
-            break;
-    }
-
-    return $modInfo;
-}
-
-
-
 /**
  * Load the modType of module identified by modName.
  *
@@ -1863,7 +1707,7 @@ function xarModUnregisterHook($hookObject,
 }
 
 /**
- * Wrapper function to support Xaraya 1 API for module managment
+ * Wrapper functions to support Xaraya 1 API for module managment
  *
  */
 function xarModGetName()             { return xarMod::getName();       }
@@ -1875,6 +1719,11 @@ function xarModGetDisplayableName($modName = NULL, $type = 'module')
 function xarModGetIDFromName($modName, $type = 'module')
 {
     return xarMod::getRegID($modName, $type);
+}
+
+function xarModGetInfo($modRegId, $type = 'module')
+{
+    return xarMod::getInfo($modRegId, $type);
 }
 
 function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'module')
@@ -1905,7 +1754,7 @@ class xarMod
         if(!isset($regID)) {
             list($modName) = xarRequest::getInfo();
         } else {
-            $modinfo = xarModGetInfo($regID);
+            $modinfo = self::getInfo($regID);
             $modName = $modinfo['name'];
         }
         return $modName;
@@ -1961,7 +1810,7 @@ class xarMod
      */
     static function getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'module')
     {
-        $tmp = xarModGetInfo($modRegid, $type);
+        $tmp = self::getInfo($modRegid, $type);
         return $tmp['state'];
     }
 
@@ -2003,6 +1852,159 @@ class xarMod
         }
         //xarLogMessage("xarMod::isAvailable: end $type:$modName");
         return $modAvailableCache[$modBaseInfo['name']];
+    }
+
+    /**
+     * Get information on module
+     *
+     * @access public
+     * @param modRegId string module id
+     * @param type determines theme or module
+     * @return array of module information
+     * @raise DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
+     */
+    function getInfo($modRegId, $type = 'module')
+    {
+        if (empty($modRegId)) throw new EmptyParameterException('modRegid');
+        
+        switch($type) {
+        case 'module':
+        default:
+            if (xarCore::isCached('Mod.Infos', $modRegId)) {
+                return xarCore::getCached('Mod.Infos', $modRegId);
+            }
+            break;
+        case 'theme':
+            if (xarCore::isCached('Theme.Infos', $modRegId)) {
+                return xarCore::getCached('Theme.Infos', $modRegId);
+            }
+            break;
+        }
+        // Log it when it doesnt come from the cache
+        xarLogMessage("xarMod::getInfo ". $modRegId ." / " . $type);
+        
+        $dbconn =& xarDBGetConn();
+        $tables =& xarDBGetTables();
+        
+        switch($type) {
+        case 'module':
+        default:
+            $the_table = $tables['modules'];
+            $query = "SELECT xar_id,
+                             xar_name,
+                             xar_directory,
+                             xar_mode,
+                             xar_version,
+                             xar_admin_capable,
+                             xar_user_capable,
+                             xar_state
+                       FROM  $the_table WHERE xar_regid = ?";
+            break;
+        case 'theme':
+            $the_table = $tables['themes'];
+            $query = "SELECT xar_id,
+                             xar_name,
+                             xar_directory,
+                             xar_mode,
+                             xar_version,
+                             xar_state
+                       FROM  $the_table WHERE xar_regid = ?";
+            break;
+        }
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery(array($modRegId),ResultSet::FETCHMODE_NUM);
+        
+        if (!$result->next()) {
+            $result->close();
+            throw new IDNotFoundException($modRegId);
+        }
+        
+        switch($type) {
+        case 'module':
+        default:
+            list($modInfo['systemid'],
+                 $modInfo['name'],
+                 $modInfo['directory'],
+                 $mode,
+                 $modInfo['version'],
+                 $modInfo['admincapable'],
+                 $modInfo['usercapable'],
+                 $modInfo['state']) = $result->getRow();
+            break;
+        case 'theme':
+            list($modInfo['systemid'],
+                 $modInfo['name'],
+                 $modInfo['directory'],
+                 $mode,
+                 $modInfo['version'],
+                 $modInfo['state']) = $result->getRow();
+            break;
+        }
+        $result->Close();
+        unset($result);
+        
+        $modInfo['regid'] = (int) $modRegId;
+        $modInfo['mode'] = (int) $mode;
+        $modInfo['displayname'] = self::getDisplayName($modInfo['name'], $type);
+        $modInfo['displaydescription'] = xarModGetDisplayableDescription($modInfo['name'], $type);
+        
+        // Shortcut for os prepared directory
+        $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
+        
+        switch($type) {
+        case 'module':
+        default:
+            if (!isset($modInfo['state'])) $modInfo['state'] = XARMOD_STATE_MISSING_FROM_UNINITIALISED; //return; // throw back
+            $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
+            break;
+        case 'theme':
+            if (!isset($modInfo['state'])) {
+                $modInfo['state']= XARTHEME_STATE_MISSING_FROM_UNINITIALISED;
+            }
+            $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory'], $type = 'theme');
+            break;
+        }
+        
+        if (!isset($modFileInfo)) {
+            // We couldn't get file info, fill in unknowns.
+            // The exception for this is logged in getFileInfo
+            $modFileInfo['class'] = xarML('Unknown');
+            $modFileInfo['description'] = xarML('This module is not installed properly. Not all info could be retrieved');
+            $modFileInfo['category'] = xarML('Unknown');
+            $modFileInfo['displayname'] = xarML('Unknown');
+            $modFileInfo['displaydescription'] = xarML('Unknown');
+            $modFileInfo['author'] = xarML('Unknown');
+            $modFileInfo['contact'] = xarML('Unknown');
+            $modFileInfo['admin'] = xarML('Unknown');
+            $modFileInfo['user'] = xarML('Unknown');
+            $modFileInfo['dependency'] = array();
+            $modFileInfo['extensions'] = array();
+            
+            $modFileInfo['xar_version'] = xarML('Unknown');
+            $modFileInfo['bl_version'] = xarML('Unknown');
+            $modFileInfo['class'] = xarML('Unknown');
+            $modFileInfo['author'] = xarML('Unknown');
+            $modFileInfo['homepage'] = xarML('Unknown');
+            $modFileInfo['email'] = xarML('Unknown');
+            $modFileInfo['description'] = xarML('Unknown');
+            $modFileInfo['contactinfo'] = xarML('Unknown');
+            $modFileInfo['publishdate'] = xarML('Unknown');
+            $modFileInfo['license'] = xarML('Unknown');
+        }
+        
+        $modInfo = array_merge($modFileInfo, $modInfo);
+        
+        switch($type) {
+        case 'module':
+        default:
+            xarCore::setCached('Mod.Infos', $modRegId, $modInfo);
+            break;
+        case 'theme':
+            xarCore::setCached('Theme.Infos', $modRegId, $modInfo);
+            break;
+        }
+        
+        return $modInfo;
     }
 }
 

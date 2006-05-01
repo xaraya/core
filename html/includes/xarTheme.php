@@ -100,7 +100,7 @@ function xarThemeGetIDFromName($themeName,$id='regid')
  */
 function xarThemeGetInfo($regId)
 {
-    return xarModGetInfo($regId, $type = 'theme');
+    return xarMod::getInfo($regId, $type = 'theme');
 }
 
 
