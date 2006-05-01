@@ -1475,11 +1475,23 @@ function installer_admin_upgrade2()
     } else {
         $content .= "<p>Privileges realm masks have been created previously, moving to next check. </p>";
     }
-    if (xarPrivExists('CasualAccess')) {
-        xarMakePrivilegeMember('ViewAuthsystem','CasualAccess');
-    }elseif (xarPrivExists('ReadNonCore')) {
-        xarMakePrivilegeMember('ViewAuthsystem','ReadNonCore');
-    }
+        $parentpriv= new xarPrivileges();
+        $priv=$parentpriv->findPrivilege('CasualAccess');
+
+        $privileges = new xarPrivileges();
+        $thispriv= $privileges->findPrivilege('ViewAuthsystem');
+        $parents= $thispriv->getparents();
+        $casual=false;
+        $readcore=false;
+        foreach ($parents as $parent) {
+             if ($parent->getName() == 'CasualAccess') $casual=true;
+             if ($parent->getName() == 'ReadNonCore') $readcore=true;
+        }
+        if (xarPrivExists('CasualAccess') && !$casual)  {
+           xarMakePrivilegeMember('ViewAuthsystem','CasualAccess');
+        }elseif (xarPrivExists('ReadNonCore') && !$readcore) {
+            xarMakePrivilegeMember('ViewAuthsystem','ReadNonCore');
+        }
 
 
     $content .= "<p><strong>Updating Roles and Authsystem for changes in User Login and Authentication</strong></p>";
@@ -1536,7 +1548,6 @@ function installer_admin_upgrade2()
      //Register a mask to maintain backward compatibility - this mask is used a lot as a hack for admin perm check in themes
     xarRegisterMask('AdminPanel','All','base','All','All','ACCESS_ADMIN');
       // Define Module vars
-    xarMakePrivilegeMember('ViewAuthsystem','CasualAccess');
  	xarModSetVar('authsystem', 'lockouttime', 15);
 	xarModSetVar('authsystem', 'lockouttries', 3);
 	xarModSetVar('authsystem', 'uselockout', false);
@@ -1545,19 +1556,10 @@ function installer_admin_upgrade2()
     $content .= "<p><strong>Removing Adminpanels module and move functions to other  modules</strong></p>";
     // Adminpanels module overviews modvar is deprecated
     // Move off Adminpanels dashboard modvar to Themes module
-    $oldvalue=xarModGetVar('adminpanels','dashboard');
-    if (isset($oldvalue)) {
-        xarModSetVar('themes','usedashboard',$oldvalue);
-    }
-    //dashtemplate will always override admin.xt
+    //Safest way is to just set the dash off for now
 
-    if (isset($oldvalue) && ($oldvalue==1)) {
-        //will use admin.xt if present
-        xarModSetVar('themes','dashtemplate','admin');
-    }else{
-        //set it to the new nothing - as the file may not exist
+        xarModSetVar('themes','usedashboard',false);
         xarModSetVar('themes','dashtemplate','');
-    }
 
     $table_name['admin_menu']=$sitePrefix . '_admin_menu';
     $upgrade['admin_menu'] = xarModAPIFunc('installer',
