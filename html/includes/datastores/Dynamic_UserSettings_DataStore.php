@@ -24,7 +24,7 @@ class Dynamic_UserSettings_DataStore extends Dynamic_DataStore // Consider inher
         // TODO: the concerned module is currently hiding in the third part of the name :)
         list($fixed1,$fixed2,$modid) = explode('_',$name);
         if (empty($modid)) {
-            $modid = xarModGetIDFromName(xarModGetName());
+            $modid = xarModGetIDFromName(xarMod::getName());
         }
         $modinfo = xarModGetInfo($modid);
         if (!empty($modinfo['name'])) {

@@ -304,7 +304,7 @@ function xarTplSetPageTitle($title = NULL, $module = NULL)
         $separator  = xarModGetVar('themes', 'SiteTitleSeparator');
         if (empty($module)) {
             // FIXME: the ucwords is layout stuff which doesn't belong here
-            $module = ucwords(xarModGetDisplayableName());
+            $module = ucwords(xarMod::getDisplayName());
         }
         switch(strtolower($order)) {
             case 'default':

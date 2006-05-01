@@ -512,7 +512,7 @@ function xarModGetInfo($modRegId, $type = 'module')
 
     $modInfo['regid'] = (int) $modRegId;
     $modInfo['mode'] = (int) $mode;
-    $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name'], $type);
+    $modInfo['displayname'] = xarMod::getDisplayName($modInfo['name'], $type);
     $modInfo['displaydescription'] = xarModGetDisplayableDescription($modInfo['name'], $type);
 
     // Shortcut for os prepared directory
@@ -1190,26 +1190,6 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
 }
 
 
-/**
- * Get the displayable name for modName
- *
- * The displayable name is sensible to user language.
- *
- * @access public
- * @param modName string registered name of module
- * @return string the displayable name
- */
-function xarModGetDisplayableName($modName = NULL, $type = 'module')
-{
-    if (empty($modName)) {
-        $modName = xarModGetName();
-    }
-    $modInfo = xarMod_getFileInfo($modName, $type);
-
-    //xarLogMessage("xarModGetDisplayableName ". $modName ." / " . $type);
-
-    return xarML($modInfo['displayname']);
-}
 
 /**
  * Get the displayable description for modName
@@ -1225,7 +1205,7 @@ function xarModGetDisplayableDescription($modName = NULL, $type = 'module')
     //xarLogMessage("xarModGetDisplayableDescription ". $modName ." / " . $type);
 
     if (empty($modName)) {
-        $modName = xarModGetName();
+        $modName = xarMod::getName();
     }
     $modInfo = xarMod_getFileInfo($modName, $type);
     return xarML($modInfo['displaydescription']);
@@ -1666,7 +1646,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     $modBaseInfo['state'] = (int) $state;
     $modBaseInfo['name'] = $name;
     $modBaseInfo['directory'] = $directory;
-    $modBaseInfo['displayname'] = xarModGetDisplayableName($directory, $type);
+    $modBaseInfo['displayname'] = xarMod::getDisplayName($directory, $type);
     $modBaseInfo['displaydescription'] = xarModGetDisplayableDescription($directory, $type);
     // Shortcut for os prepared directory
     // TODO: <marco> get rid of it since useless
@@ -1912,17 +1892,18 @@ function xarModUnregisterHook($hookObject,
  *
  */
 function xarModGetName() { return xarMod::getName(); }
+function xarModGetDisplayableName($modName = NULL, $type = 'module') 
+{   return xarMod::getDisplayName($modName, $type);
+}
 function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'module')
-{
-    return xarMod::getState($modRegId, $modMode, $type);
+{   return xarMod::getState($modRegId, $modMode, $type);
 }
 function xarModIsAvailable($modName, $type = 'module')
-{
-    return xarMod::isAvailable($modName, $type);
+{   return xarMod::isAvailable($modName, $type);
 }
 
 /**
- * Preliminary class to module xarMod interface
+ * Preliminary class to model xarMod interface
  *
  */
 class xarMod
@@ -1938,6 +1919,23 @@ class xarMod
         list($modName) = xarRequest::getInfo();
         return $modName;
     }
+
+    /**
+     * Get the displayable name for modName
+     *
+     * The displayable name is sensible to user language.
+     *
+     * @access public
+     * @param modName string registered name of module
+     * @return string the displayable name
+     */
+    static function getDisplayName($modName = NULL, $type = 'module')
+    {
+        if (empty($modName)) $modName = self::getName();
+        $modInfo = xarMod_getFileInfo($modName, $type);
+        return xarML($modInfo['displayname']);
+    }
+
 
     /**
      * Get the module's current state
