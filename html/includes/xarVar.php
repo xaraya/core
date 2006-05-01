@@ -352,59 +352,17 @@ function xarVarValidate($validation, &$subject, $supress = false, $name='')
  */
 
 /**
- * Check if the value of a variable is available in cache or not
- * See the documentation of protected xarCore::isCached for details
+ * Wrapper functions for var caching as in Xaraya 1 API
+ * See the documentation of protected xarCore::*Cached for details
  *
  * @access public
+ * @see xarCore
  */
-function xarVarIsCached($cacheKey, $name)
-{
-    return xarCore::isCached($cacheKey, $name);
-}
-
-/**
- * Get the value of a cached variable
- * See the documentation of protected xarCore::getCached for details
- *
- * @access public
- */
-function xarVarGetCached($cacheKey, $name)
-{
-    return xarCore::getCached($cacheKey, $name);
-}
-
-/**
- * Set the value of a cached variable
- * See the documentation of protected xarCore::setCached for details
- *
- * @access public
- */
-function xarVarSetCached($cacheKey, $name, $value)
-{
-    return xarCore::setCached($cacheKey, $name, $value);
-}
-
-/**
- * Delete a cached variable
- * See the documentation of protected xarCore::delCached for details
- *
- * @access public
- */
-function xarVarDelCached($cacheKey, $name)
-{
-    return xarCore::delCached($cacheKey, $name);
-}
-
-/**
- * Flush a particular cache (e.g. for session initialization)
- * See the documentation of protected xarCore::flushCached for details
- *
- * @access public
- */
-function xarVarFlushCached($cacheKey)
-{
-    return xarCore::flushCached($cacheKey);
-}
+function xarVarIsCached($cacheKey,  $name)         { return xarCore::isCached($cacheKey, $name);         }
+function xarVarGetCached($cacheKey, $name)         { return xarCore::getCached($cacheKey, $name);        }
+function xarVarSetCached($cacheKey, $name, $value) { return xarCore::setCached($cacheKey, $name, $value);}
+function xarVarDelCached($cacheKey, $name)         { return xarCore::delCached($cacheKey, $name);        }
+function xarVarFlushCached($cacheKey)              { return xarCore::flushCached($cacheKey);             }
 
 
 /**
@@ -439,7 +397,6 @@ function xarVar_addSlashes($var)
  * @param level string
  * @return array
  */
-
 function xarVar__getAllowedTags($level)
 {
     // Get the allowed HTML from the config var.  At some
@@ -504,7 +461,6 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
         return;
     }
 
-
     // We didn't find it in the single var cache, let's check the cached collection by whole/name
     // TODO: caching for the other types
     switch($type) {
@@ -515,7 +471,6 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
     default:
         break;
     }
-
 
     // Still no luck, let's do the hard work then
     $baseinfotype = 'module';
@@ -690,6 +645,11 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
         case 'configvar':
 
             // FIXME: do we really want that ?
+            // This way, worst case: 3 queries:
+            // 1. deleting it
+            // 2. Getting a new id (for some backends)
+            // 3. inserting it.
+            // Question is wether we want to invent new configvars on the fly or not
             xarVar__DelVarByAlias($modname = NULL, $name, $itemid = NULL, $type = 'configvar');
 
             $config_varsTable = $tables['config_vars'];
@@ -779,7 +739,6 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = '
             $module_varstable = $tables['module_vars'];
             // Now delete the module var itself
             $query = "DELETE FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
-            $dbconn->execute($query,array((int)$modBaseInfo['systemid'], $name));
             break;
         case 'moditemvar':
             $module_itemvarstable = $tables['module_itemvars'];
@@ -789,15 +748,15 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = '
 
             $query = "DELETE FROM $module_itemvarstable WHERE xar_mvid = ? AND xar_itemid = ?";
             $bindvars = array((int)$modvarid, (int)$itemid);
-            $dbconn->execute($query,$bindvars);
             break;
         case 'configvar':
             $config_varsTable = $tables['config_vars'];
             $query = "DELETE FROM $config_varsTable WHERE xar_name = ?";
             $bindvars = array($name);
-            $dbconn->execute($query,$bindvars);
             break;
         }
+        $dbconn->execute($query,$bindvars);
+
         // All done, commit
         $dbconn->commit();
     } catch (SQLException $e) {
@@ -819,7 +778,6 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = '
                 xarVarDelCached('Config.Variables.', $name);
             break;
     }
-
     return true;
 }
 
@@ -1133,15 +1091,18 @@ function xarVarPrepEmailDisplay()
  * @access public
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
+ *
+ * @todo the / also prevents relative access in some cases (template tag for example)
+ * @todo this puts responsibility on callee to know how things work, and gets a mangled name back, not very nice
  */
 function xarVarPrepForOS()
 {
-    static $special_characters = array(':'  => ' ',
-                                       '/'  => ' ',
-                                       '\\' => ' ',
-                                       '..' => ' ',
-                                       '?'  => ' ',
-                                       '*'  => ' ');
+    static $special_characters = array(':'  => ' ',  // c:\foo\bar
+                                       '/'  => ' ',  // /etc/passwd
+                                       '\\' => ' ',  // \\financialserver\fire.these.people
+                                       '..' => ' ',  // ../../../etc/passwd
+                                       '?'  => ' ',  // wildcard
+                                       '*'  => ' '); // wildcard
 
     $args = func_get_args();
 
