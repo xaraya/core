@@ -24,7 +24,7 @@ class Dynamic_ModuleVariables_DataStore extends Dynamic_DataStore
         // TODO: the concerned module is currently hiding in the third part of the data store name :)
         list($fixed1,$fixed2,$modid) = explode('_',$name);
         if (empty($modid)) {
-            $modid = xarModGetIDFromName(xarMod::getName());
+            $modid = xarMod::getRegID(xarMod::getName());
         }
         $modinfo = xarModGetInfo($modid);
         if (!empty($modinfo['name'])) {

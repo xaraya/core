@@ -77,7 +77,7 @@ function xarThemeDelVar($themeName, $name)
  *
  * @access public
  * @param themeName The name of the theme
- * @return xarModGetIDFromName for processing
+ * @return theme RegID for processing
  * @raise DATABASE_ERROR, BAD_PARAM, THEME_NOT_EXIST
  */
 function xarThemeGetIDFromName($themeName,$id='regid')

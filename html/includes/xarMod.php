@@ -402,26 +402,6 @@ function xarModGetVarId($modName, $name)
 
 
 /**
- * Get module registry ID by name
- *
- * @access public
- * @param modName string The name of the module
- * @param type determines theme or module
- * @return string The module registry ID.
- * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
- */
-function xarModGetIDFromName($modName, $type = 'module')
-{
-    if (empty($modName)) throw new EmptyParameterException('modName');
-
-    // For themes, kinda weird
-    $modBaseInfo = xarMod_getBaseInfo($modName,$type);
-    if (!isset($modBaseInfo)) return; // throw back
-    // MrB: this is confusing
-    return $modBaseInfo['regid'];
-}
-
-/**
  * Get information on module
  *
  * @access public
@@ -1895,6 +1875,11 @@ function xarModGetName() { return xarMod::getName(); }
 function xarModGetDisplayableName($modName = NULL, $type = 'module') 
 {   return xarMod::getDisplayName($modName, $type);
 }
+function xarModGetIDFromName($modName, $type = 'module')
+{
+    return xarMod::getRegID($modName, $type);
+}
+
 function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'module')
 {   return xarMod::getState($modRegId, $modMode, $type);
 }
@@ -1936,6 +1921,25 @@ class xarMod
         return xarML($modInfo['displayname']);
     }
 
+    /**
+     * Get module registry ID by name
+     *
+     * @access public
+     * @param modName string The name of the module
+     * @param type determines theme or module
+     * @return string The module registry ID.
+     * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
+     */
+    static function getRegID($modName, $type = 'module')
+    {
+        if (empty($modName)) throw new EmptyParameterException('modName');
+        
+        // For themes, kinda weird
+        $modBaseInfo = xarMod_getBaseInfo($modName,$type);
+        if (!isset($modBaseInfo)) return; // throw back
+        // MrB: this is confusing
+        return $modBaseInfo['regid'];
+    }
 
     /**
      * Get the module's current state
