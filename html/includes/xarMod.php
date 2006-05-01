@@ -145,120 +145,203 @@ function xarMod__shutdown_handler()
 }
 
 /**
- * Get a module variable
- *
- * @access public
- * @param modName The name of the module
- * @param name The name of the variable
- * @return mixed The value of the variable or void if variable doesn't exist
- * @raise DATABASE_ERROR, BAD_PARAM
+ * Wrapper functions to support Xaraya 1 API for modvars
  */
 function xarModGetVar($modName, $name, $prep = NULL)
-{
-    if (empty($modName)) throw new EmptyParameterException('modName');
-    return xarVar__GetVarByAlias($modName, $name, $uid = NULL, $prep, 'modvar');
-}
+{   return xarModVars::get($modName, $name, $prep); }
 
-/**
- * Set a module variable
- *
- * @access public
- * @param modName The name of the module
- * @param name The name of the variable
- * @param value The value of the variable
- * @return bool true on success
- * @raise DATABASE_ERROR, BAD_PARAM
- * @todo  We could delete the item vars for the module with the new value to save space?
- */
 function xarModSetVar($modName, $name, $value)
-{
-    if (empty($modName)) throw new EmptyParameterException('modName');
-    return xarVar__SetVarByAlias($modName, $name, $value, $prime = NULL, $description = NULL, $uid = NULL, $type = 'modvar');
-}
+{   return xarModVars::set($modName, $name, $value); }
 
-
-/**
- * Delete a module variable
- *
- * @access public
- * @param modName The name of the module
- * @param name The name of the variable
- * @return bool true on success
- * @raise DATABASE_ERROR, BAD_PARAM
- * @todo Add caching for item variables?
- */
 function xarModDelVar($modName, $name)
+{   return xarModVars::delete($modName, $name); }
+
+function xarModDelAllVars($modName)
+{   return xarModVars::delete_all($modName); }
+
+function xarModGetVarId($modName, $name)
+{   return xarModVars::getID($modName, $name); }
+
+/**
+ * Interface declaration for classes dealing with sets of variables
+ *
+ * @todo this should probably be higher in the foodchain later on
+ */
+interface IxarVars
 {
-    if (empty($modName)) throw new EmptyParameterException('modName');
-    return xarVar__DelVarByAlias($modName, $name, $uid = NULL, $type = 'modvar');
+    static function get($scope, $name);
+    static function set($scope, $name, $value);
+    static function delete($scope, $name);
+    static function delete_all($scope);
 }
 
 /**
- * Delete all module variables
+ * Class to model interface to module variables
  *
- * @access public
- * @param modName The name of the module
- * @return bool true on success
- * @raise DATABASE_ERROR, BAD_PARAM
- * @todo Add caching for item variables?
  */
-function xarModDelAllVars($modName)
+class xarModVars implements IxarVars
 {
-    if(empty($modName)) throw new EmptyParameterException('modName');
-
-    $modBaseInfo = xarMod_getBaseInfo($modName);
-
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
-
-    // Takes the right table basing on module mode
-    $module_varstable     = $tables['module_vars'];
-    $module_itemvarstable = $tables['module_itemvars'];
-
-    // PostGres (allows only one table in DELETE)
-    // MySql: multiple table delete only from 4.0 up
-    // Select the id's which need to be removed
-    $sql="SELECT $module_varstable.xar_id FROM $module_varstable WHERE $module_varstable.xar_modid = ?";
-    $stmt = $dbconn->prepareStatement($sql);
-    $result = $stmt->executeQuery(array($modBaseInfo['systemid']), ResultSet::FETCHMODE_NUM);
-
-    // Seems that at least mysql and pgsql support the scalar IN operator
-    $idlist = array();
-    while ($result->next()) {
-        $idlist[] = $result->getInt(1);
+    /**
+     * Get a module variable
+     *
+     * @access public
+     * @param modName The name of the module
+     * @param name The name of the variable
+     * @return mixed The value of the variable or void if variable doesn't exist
+     * @raise DATABASE_ERROR, BAD_PARAM
+     */
+    static function get($modName, $name, $prep = NULL)
+    {
+        if (empty($modName)) throw new EmptyParameterException('modName');
+        return xarVar__GetVarByAlias($modName, $name, $uid = NULL, $prep, 'modvar');
     }
-    $result->close();
-    unset($result);
 
-    // We delete the module vars and the user vars in a transaction, which either succeeds completely or totally fails
-    try {
-        $dbconn->begin();
-        if(count($idlist) != 0 ) {
-            $bindmarkers = '?' . str_repeat(',?', count($idlist) -1);
-            $sql = "DELETE FROM $module_itemvarstable WHERE $module_itemvarstable.xar_mvid IN (".$bindmarkers.")";
-            $stmt = $dbconn->prepareStatement($sql);
-            $result = $stmt->executeUpdate($idlist);
+    /**
+     * Set a module variable
+     *
+     * @access public
+     * @param modName The name of the module
+     * @param name The name of the variable
+     * @param value The value of the variable
+     * @return bool true on success
+     * @raise DATABASE_ERROR, BAD_PARAM
+     * @todo  We could delete the item vars for the module with the new value to save space?
+     */
+    static function set($modName, $name, $value)
+    {
+        if (empty($modName)) throw new EmptyParameterException('modName');
+        return xarVar__SetVarByAlias($modName, $name, $value, $prime = NULL, $description = NULL, $uid = NULL, $type = 'modvar');
+    }
+
+    /**
+     * Delete a module variable
+     *
+     * @access public
+     * @param modName The name of the module
+     * @param name The name of the variable
+     * @return bool true on success
+     * @raise DATABASE_ERROR, BAD_PARAM
+     * @todo Add caching for item variables?
+     */
+    static function delete($modName, $name)
+    {
+        if (empty($modName)) throw new EmptyParameterException('modName');
+        return xarVar__DelVarByAlias($modName, $name, $uid = NULL, $type = 'modvar');
+    }
+
+    /**
+     * Delete all module variables
+     *
+     * @access public
+     * @param modName The name of the module
+     * @return bool true on success
+     * @raise DATABASE_ERROR, BAD_PARAM
+     * @todo Add caching for item variables?
+     */
+    static function delete_all($modName)
+    {
+        if(empty($modName)) throw new EmptyParameterException('modName');
+        
+        $modBaseInfo = xarMod_getBaseInfo($modName);
+        
+        $dbconn =& xarDBGetConn();
+        $tables =& xarDBGetTables();
+        
+        // Takes the right table basing on module mode
+        $module_varstable     = $tables['module_vars'];
+        $module_itemvarstable = $tables['module_itemvars'];
+        
+        // PostGres (allows only one table in DELETE)
+        // MySql: multiple table delete only from 4.0 up
+        // Select the id's which need to be removed
+        $sql="SELECT $module_varstable.xar_id FROM $module_varstable WHERE $module_varstable.xar_modid = ?";
+        $stmt = $dbconn->prepareStatement($sql);
+        $result = $stmt->executeQuery(array($modBaseInfo['systemid']), ResultSet::FETCHMODE_NUM);
+        
+        // Seems that at least mysql and pgsql support the scalar IN operator
+        $idlist = array();
+        while ($result->next()) {
+            $idlist[] = $result->getInt(1);
         }
-
-        // Now delete the module vars
-        $query = "DELETE FROM $module_varstable WHERE xar_modid = ?";
-        $stmt  = $dbconn->prepareStatement($query);
-        $result = $stmt->executeUpdate(array($modBaseInfo['systemid']));
-        $dbconn->commit();
-    } catch (SQLException $e) {
-        // If there was an SQL exception roll back to where we started
-        $dbconn->rollback();
-        // and raise it again so the handler catches
-        // TODO: demote to error? rais other type of exception?
-        throw $e;
+        $result->close();
+        unset($result);
+        
+        // We delete the module vars and the user vars in a transaction, which either succeeds completely or totally fails
+        try {
+            $dbconn->begin();
+            if(count($idlist) != 0 ) {
+                $bindmarkers = '?' . str_repeat(',?', count($idlist) -1);
+                $sql = "DELETE FROM $module_itemvarstable WHERE $module_itemvarstable.xar_mvid IN (".$bindmarkers.")";
+                $stmt = $dbconn->prepareStatement($sql);
+                $result = $stmt->executeUpdate($idlist);
+            }
+            
+            // Now delete the module vars
+            $query = "DELETE FROM $module_varstable WHERE xar_modid = ?";
+            $stmt  = $dbconn->prepareStatement($query);
+            $result = $stmt->executeUpdate(array($modBaseInfo['systemid']));
+            $dbconn->commit();
+        } catch (SQLException $e) {
+            // If there was an SQL exception roll back to where we started
+            $dbconn->rollback();
+            // and raise it again so the handler catches
+            // TODO: demote to error? rais other type of exception?
+            throw $e;
+        }
+        return true;
     }
-    return true;
+
+    /**
+     * Support function for xarMod*UserVar functions
+     *
+     * private function which delivers a module user variable
+     * id based on the module name and the variable name
+     *
+     * @access private
+     * @param modName The name of the module
+     * @param name    The name of the variable
+     * @return int id identifier for the variable
+     * @raise BAD_PARAM
+     * @see xarModSetUserVar, xarModGetUserVar, xarModDelUserVar
+     */
+    static function getID($modName, $name)
+    {
+        // Module name and variable name are both necesary
+        if (empty($modName) or empty($name)) throw new EmptyParameterException('modName and/or name');
+        
+        // Retrieve module info, so we can decide where to look
+        $modBaseInfo = xarMod_getBaseInfo($modName);
+        if (!isset($modBaseInfo)) return; // throw back
+        
+        if (xarCore::isCached('Mod.GetVarID', $modBaseInfo['name'] . $name)) {
+            return xarCore::getCached('Mod.GetVarID', $modBaseInfo['name'] . $name);
+        }
+        
+        $dbconn =& xarDBGetConn();
+        $tables =& xarDBGetTables();
+        
+        // Takes the right table basing on module mode
+        $module_varstable = $tables['module_vars'];
+        
+        $query = "SELECT xar_id FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery(array((int)$modBaseInfo['systemid'],$name),ResultSet::FETCHMODE_NUM);
+        // If there is no such thing, the callee is responsible, return null
+        if(!$result->next()) return;
+        
+        // Return the ID
+        $modvarid = $result->getInt(1);
+        $result->Close();
+        
+        xarCore::setCached('Mod.GetVarID', $modName . $name, $modvarid);
+        return $modvarid;
+    }   
 }
 
 /**
  * Get a user variable for a module
  *
- * This is basically the same as xarModSetVar, but this
+ * This is basically the same as xarModVars::set(), but this
  * allows for getting variable values which are tied to
  * a specific item for a certain module. Typical usage
  * is storing user preferences.
@@ -269,7 +352,7 @@ function xarModDelAllVars($modName)
  * @param uid     User id for which value is to be retrieved
  * @return mixed Teh value of the variable or void if variable doesn't exist.
  * @raise  DATABASE_ERROR, BAD_PARAM (indirect)
- * @see  xarModGetVar
+ * @see  xarModVars::get()
  * @todo Mrb : Add caching?
  */
 function xarModGetUserVar($modName, $name, $uid = NULL, $prep = NULL)
@@ -281,7 +364,7 @@ function xarModGetUserVar($modName, $name, $uid = NULL, $prep = NULL)
     if ($uid == NULL) $uid = xarUserGetVar('uid');
 
     // Anonymous user always uses the module default setting
-    if ($uid== _XAR_ID_UNREGISTERED) return xarModGetVar($modName,$name);
+    if ($uid== _XAR_ID_UNREGISTERED) return xarModVars::get($modName,$name);
 
     return xarVar__GetVarByAlias($modName, $name, $uid, $prep, $type = 'moditemvar');
 }
@@ -289,7 +372,7 @@ function xarModGetUserVar($modName, $name, $uid = NULL, $prep = NULL)
 /**
  * Set a user variable for a module
  *
- * This is basically the same as xarModSetVar, but this
+ * This is basically the same as xarModVars::set(), but this
  * allows for setting variable values which are tied to
  * a specific user for a certain module. Typical usage
  * is storing user preferences.
@@ -302,7 +385,7 @@ function xarModGetUserVar($modName, $name, $uid = NULL, $prep = NULL)
  * @param uid     User id for which value needs to be set
  * @return bool true on success false on failure
  * @raise BAD_PARAM
- * @see xarModSetVar
+ * @see xarModVars::set()
  * @todo Add caching?
  */
 function xarModSetUserVar($modName, $name, $value, $uid=NULL)
@@ -323,7 +406,7 @@ function xarModSetUserVar($modName, $name, $value, $uid=NULL)
 /**
  * Delete a user variable for a module
  *
- * This is the same as xarModDelVar but this allows
+ * This is the same as xarModVars::delete() but this allows
  * for deleting a specific user variable, effectively
  * setting the value for that user to the default setting
  *
@@ -333,7 +416,7 @@ function xarModSetUserVar($modName, $name, $value, $uid=NULL)
  * @param uid     User id of the user to delete the variable for.
  * @return bool true on success
  * @raise BAD_PARAM
- * @see xarModDelVar
+ * @see xarModVars::delete()
  * @todo Add caching?
  */
 function xarModDelUserVar($modName, $name, $uid=NULL)
@@ -353,52 +436,6 @@ function xarModDelUserVar($modName, $name, $uid=NULL)
     return xarVar__DelVarByAlias($modName, $name, $uid, $type = 'moditemvar');
 }
 
-/**
- * Support function for xarMod*UserVar functions
- *
- * private function which delivers a module user variable
- * id based on the module name and the variable name
- *
- * @access private
- * @param modName The name of the module
- * @param name    The name of the variable
- * @return int id identifier for the variable
- * @raise BAD_PARAM
- * @see xarModSetUserVar, xarModGetUserVar, xarModDelUserVar
-*/
-function xarModGetVarId($modName, $name)
-{
-    // Module name and variable name are both necesary
-    if (empty($modName) or empty($name)) throw new EmptyParameterException('modName and/or name');
-
-    // Retrieve module info, so we can decide where to look
-    $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) return; // throw back
-
-    if (xarCore::isCached('Mod.GetVarID', $modBaseInfo['name'] . $name)) {
-        return xarCore::getCached('Mod.GetVarID', $modBaseInfo['name'] . $name);
-    }
-
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
-
-    // Takes the right table basing on module mode
-    $module_varstable = $tables['module_vars'];
-
-    $query = "SELECT xar_id FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
-    $stmt = $dbconn->prepareStatement($query);
-    $result = $stmt->executeQuery(array((int)$modBaseInfo['systemid'],$name),ResultSet::FETCHMODE_NUM);
-    // If there is no such thing, the callee is responsible, return null
-    if(!$result->next()) return;
-
-    // Return the ID
-    $modvarid = $result->getInt(1);
-    $result->Close();
-
-    xarCore::setCached('Mod.GetVarID', $modName . $name, $modvarid);
-
-    return $modvarid;
-}
 
 /**
  * Load the modType of module identified by modName.
@@ -910,7 +947,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
         // The encode_shorturl will be in userapi.
         // Note: if a module declares itself as supporting short URLs, then the encoding
         // API subsequently fails to load, then we want those errors to be raised.
-        if ($modType == 'user' && xarModGetVar($modName, 'SupportShortURLs') && xarModAPILoad($modName, $modType)) {
+        if ($modType == 'user' && xarModVars::get($modName, 'SupportShortURLs') && xarModAPILoad($modName, $modType)) {
             $encoderArgs = $args;
             $encoderArgs['func'] = $funcName;
 

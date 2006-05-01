@@ -46,11 +46,11 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
                     $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'module\' attribute in <xar:var> tag.', $this);
                     return;
                 }
-                $value = "xarModGetVar('".$module."', '".$name."')";
+                $value = "xarModVars::get('".$module."', '".$name."')";
                 break;
             case 'theme':
                 if (!isset($themeName)) {
-                    $themeName = xarModGetVar('themes', 'default');
+                    $themeName = xarModVars::get('themes', 'default');
                 }
                 $value = "xarThemeGetVar('".$themeName."', '".$name."')";
                 break;

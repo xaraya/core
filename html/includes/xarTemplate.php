@@ -151,8 +151,9 @@ function xarTplGetThemeName()
 {
     if(isset($GLOBALS['xarTpl_themeName'])) return  $GLOBALS['xarTpl_themeName'];
     // If it is not set, set it return the default theme.
+    // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
     if (function_exists('xarModGetVar')) {
-        $defaultTheme = xarModGetVar('themes', 'default');
+        $defaultTheme = xarModVars::get('themes', 'default');
         if (!empty($defaultTheme)) xarTplSetThemeName($defaultTheme);
     }
     assert('isset($GLOBALS["xarTpl_themeName"]; /* Themename could not be set properly */');
@@ -297,11 +298,12 @@ function xarTplSetDoctype($doctypeName)
 function xarTplSetPageTitle($title = NULL, $module = NULL)
 {
     xarLogMessage("TPL: Setting pagetitle to $title");
+    // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable!!!
     if (!function_exists('xarModGetVar')){
         $GLOBALS['xarTpl_pageTitle'] = $title;
     } else {
-        $order      = xarModGetVar('themes', 'SiteTitleOrder');
-        $separator  = xarModGetVar('themes', 'SiteTitleSeparator');
+        $order      = xarModVars::get('themes', 'SiteTitleOrder');
+        $separator  = xarModVars::get('themes', 'SiteTitleSeparator');
         if (empty($module)) {
             // FIXME: the ucwords is layout stuff which doesn't belong here
             $module = ucwords(xarMod::getDisplayName());
@@ -309,16 +311,16 @@ function xarTplSetPageTitle($title = NULL, $module = NULL)
         switch(strtolower($order)) {
             case 'default':
             default:
-                $GLOBALS['xarTpl_pageTitle'] = xarModGetVar('themes', 'SiteName') . $separator . $module . $separator . $title;
+                $GLOBALS['xarTpl_pageTitle'] = xarModVars::get('themes', 'SiteName') . $separator . $module . $separator . $title;
             break;
             case 'sp':
-                $GLOBALS['xarTpl_pageTitle'] = xarModGetVar('themes', 'SiteName') . $separator . $title;
+                $GLOBALS['xarTpl_pageTitle'] = xarModVars::get('themes', 'SiteName') . $separator . $title;
             break;
             case 'mps':
-                $GLOBALS['xarTpl_pageTitle'] = $module . $separator . $title . $separator .  xarModGetVar('themes', 'SiteName');
+                $GLOBALS['xarTpl_pageTitle'] = $module . $separator . $title . $separator .  xarModVars::get('themes', 'SiteName');
             break;
             case 'pms':
-                $GLOBALS['xarTpl_pageTitle'] = $title . $separator .  $module . $separator . xarModGetVar('themes', 'SiteName');
+                $GLOBALS['xarTpl_pageTitle'] = $title . $separator .  $module . $separator . xarModVars::get('themes', 'SiteName');
             break;
             case 'to':
                 $GLOBALS['xarTpl_pageTitle'] = $title;
@@ -470,8 +472,9 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     // 1. Only create a link somewhere on the page, when clicked opens a page with the variables on that page
     // 2. Create a page in the themes module with an interface
     // 3. Use 1. to link to 2.
+    // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
     if (function_exists('xarModGetVar')){
-        $var_dump = xarModGetVar('themes', 'var_dump');
+        $var_dump = xarModVars::get('themes', 'var_dump');
         if ($var_dump == true){
             if (function_exists('var_export')) {
                 $pre = var_export($tplData, true);
@@ -1400,8 +1403,9 @@ function xarTpl_outputPHPCommentBlockInTemplates()
         // Default to not show the comments
         $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
         // CHECKME: not sure if this is needed, e.g. during installation
+        // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
         if (function_exists('xarModGetVar')){
-            $showphpcbit = xarModGetVar('themes', 'ShowPHPCommentBlockInTemplates');
+            $showphpcbit = xarModVars::get('themes', 'ShowPHPCommentBlockInTemplates');
             if (!empty($showphpcbit)) {
                 $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 1;
             }
@@ -1417,7 +1421,7 @@ function xarTpl_outputPHPCommentBlockInTemplates()
  * @global int xarTpl_showTemplateFilenames
  * @return int value of xarTpl_showTemplateFilenames (0 or 1)
  *
- * @todo Check whether the check for xarModGetVar is needed
+ * @todo Check whether the check for xarModVars::get is needed
  * @todo Rethink this function
  */
 function xarTpl_outputTemplateFilenames()
@@ -1426,8 +1430,9 @@ function xarTpl_outputTemplateFilenames()
         // Default to not showing it
         $GLOBALS['xarTpl_showTemplateFilenames'] = 0;
         // CHECKME: not sure if this is needed, e.g. during installation
+        // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
         if (function_exists('xarModGetVar')){
-            $showtemplates = xarModGetVar('themes', 'ShowTemplates');
+            $showtemplates = xarModVars::get('themes', 'ShowTemplates');
             if (!empty($showtemplates)) {
                 $GLOBALS['xarTpl_showTemplateFilenames'] = 1;
             }

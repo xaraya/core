@@ -495,7 +495,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
      case 'moditemvar':
          $module_itemvarstable = $tables['module_itemvars'];
          unset($modvarid);
-         $modvarid = xarModGetVarId($modName, $name);
+         $modvarid = xarModVars::getId($modName, $name);
          if (!$modvarid) return;
 
          $query = "SELECT xar_value FROM $module_itemvarstable WHERE xar_mvid = ? AND xar_itemid = ?";
@@ -516,7 +516,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
         $result->close(); unset($result);
 
         // If there is no such thing, return the global setting for moditemvars
-        if ($type == 'moditemvar') return xarModGetVar($modName, $name);
+        if ($type == 'moditemvar') return xarModVars::get($modName, $name);
         return;
     }
 
@@ -603,7 +603,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             $module_varstable = $tables['module_vars'];
             // We need the variable id
             unset($modvarid);
-            $modvarid = xarModGetVarId($modName, $name);
+            $modvarid = xarModVars::getId($modName, $name);
 
             if($value === false) $value = 0;
             if($value === true) $value = 1;
@@ -623,11 +623,11 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             $module_itemvarstable = $tables['module_itemvars'];
 
             // Get the default setting to compare the value against.
-            $modsetting = xarModGetVar($modName, $name);
+            $modsetting = xarModVars::get($modName, $name);
 
             // We need the variable id
             unset($modvarid);
-            $modvarid = xarModGetVarId($modName, $name);
+            $modvarid = xarModVars::getId($modName, $name);
             if(!$modvarid) throw new VariableNotFoundException($name);
 
             // First delete it.
@@ -730,7 +730,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = '
         case 'modvar':
         default:
             // Delete all the user variables first
-            $modvarid = xarModGetVarId($modName, $name);
+            $modvarid = xarModVars::getId($modName, $name);
             if($modvarid) {
                 $module_itemvarstable = $tables['module_itemvars'];
                 $query = "DELETE FROM $module_itemvarstable WHERE xar_mvid = ?";
@@ -743,7 +743,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = '
         case 'moditemvar':
             $module_itemvarstable = $tables['module_itemvars'];
             // We need the variable id
-            $modvarid = xarModGetVarId($modName, $name);
+            $modvarid = xarModVars::getId($modName, $name);
             if(!$modvarid) return;
 
             $query = "DELETE FROM $module_itemvarstable WHERE xar_mvid = ? AND xar_itemid = ?";

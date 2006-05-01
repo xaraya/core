@@ -3,7 +3,7 @@
 /**
 * xarTpl__XarModEntityNode
  *
- * Module variables entities, basically wraps xarModGetVar($module,$varname)
+ * Module variables entities, basically wraps xarModVars::get($module,$varname)
  *
  * @package blocklayout
  * @access private
@@ -18,7 +18,7 @@ class xarTpl__XarModEntityNode extends xarTpl__EntityNode
         }
         $module = $this->parameters[0];
         $name = $this->parameters[1];
-        return "xarModGetVar('".$module."', '".$name."')";
+        return "xarModVars::get('".$module."', '".$name."')";
     }
 }
 ?>

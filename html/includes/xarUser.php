@@ -145,8 +145,8 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
         }
     }
     if ($userId == XARUSER_AUTH_FAILED || $userId == XARUSER_AUTH_DENIED) {
-        if (xarModGetVar('privileges','lastresort')) {
-            $secret = unserialize(xarModGetVar('privileges','lastresort'));
+        if (xarModVars::get('privileges','lastresort')) {
+            $secret = unserialize(xarModVars::get('privileges','lastresort'));
             if ($secret['name'] == MD5($userName) && $secret['password'] == MD5($password)) {
                 $userId = XARUSER_LAST_RESORT;
                 $rememberMe = 0;
@@ -292,9 +292,9 @@ function xarUserGetNavigationLocale()
         $locale = xarModGetUserVar('roles', 'locale');
         if (!isset($locale)) {
             // CHECKME: why is this here? The logic of falling back is already in the modgetuservar
-            $siteLocale = xarModGetVar('roles', 'locale');
+            $siteLocale = xarModVars::get('roles', 'locale');
             if (!isset($siteLocale)) {
-                xarModSetVar('roles', 'locale', '');
+                xarModVars::set('roles', 'locale', '');
             }
         }
         if (empty($locale)) {
@@ -340,9 +340,9 @@ function xarUserSetNavigationLocale($locale)
             $userLocale = xarModGetUserVar('roles', 'locale');
             if (!isset($userLocale)) {
                 // CHECKME: Why is this here? the fallback logic is already in modgetuservar
-                $siteLocale = xarModGetVar('roles', 'locale');
+                $siteLocale = xarModVars::get('roles', 'locale');
                 if (!isset($siteLocale)) {
-                    xarModSetVar('roles', 'locale', '');
+                    xarModVars::set('roles', 'locale', '');
                 }
             }
             xarModSetUserVar('roles', 'locale', $locale);
@@ -423,7 +423,7 @@ function xarUserGetVar($name, $userId = NULL)
             xarCore::setCached('User.Variables.'.$userId, 'email', $userRole['email']);
 
         } elseif (!xarUser__isVarDefined($name)) {
-            if (xarModGetVar('roles',$name)) {
+            if (xarModVars::get('roles',$name)) {
                 $value = xarModGetUserVar('roles',$name,$userId);
                 if ($value == null) {
                     xarCore::setCached('User.Variables.'.$userId, $name, false);
@@ -567,7 +567,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
         xarUser__setUsersTableUserVar($name, $value, $userId);
 
     } elseif (!xarUser__isVarDefined($name)) {
-        if (xarModGetVar('roles',$name)) {
+        if (xarModVars::get('roles',$name)) {
             xarCore::setCached('User.Variables.'.$userId, $name, false);
             throw new xarException($name,'User variable #(1) was not correctly registered');
         } else {

@@ -57,7 +57,7 @@ class Dynamic_UserSettings_DataStore extends Dynamic_DataStore // Consider inher
                 $this->fields[$field]->setValue($value);
             //} else {
                 // use the equivalent module variable as default
-            //    $this->fields[$field]->setValue(xarModGetVar($this->modname,$field));
+            //    $this->fields[$field]->setValue(xarModVars::get($this->modname,$field));
             }
         }
         return $itemid;

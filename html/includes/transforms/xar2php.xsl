@@ -158,7 +158,7 @@
   </xsl:if>
   <xsl:choose>
     <xsl:when test="@scope = 'module'">
-      <xsl:text>xarModGetVar('</xsl:text><xsl:value-of select="@module"/><xsl:text>', '</xsl:text>
+      <xsl:text>xarModVars::get('</xsl:text><xsl:value-of select="@module"/><xsl:text>', '</xsl:text>
       <xsl:value-of select="@name"/><xsl:text>');</xsl:text>
     </xsl:when>
     <xsl:when test="@scope = 'local' or not(@scope)">

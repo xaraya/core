@@ -47,8 +47,8 @@ function xarThemeSetVar($themeName, $name, $prime = NULL, $value, $description='
     $modVarName = $themeName . '_' . $name;
     // Make sure we set it as modvar first
     // TODO: this sucks
-    if(!xarModGetVar('themes',$modVarName)) {
-        xarModSetVar('themes',$modVarName,$value);
+    if(!xarModVars::get('themes',$modVarName)) {
+        xarModVars::set('themes',$modVarName,$value);
     }
     return xarVar__SetVarByAlias('themes', $modVarName, $value, $prime, $description, $itemid, $type = 'moditemvar');
 }

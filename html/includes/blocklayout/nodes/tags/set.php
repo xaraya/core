@@ -49,8 +49,8 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
         // Allow suppression of template comments (important when using a tag as a child tag)
         if(isset($nonmarkup) && strtolower($nonmarkup) == 'no') {
             $this->_nonmarkup = false;
-            $this->_showTemplates = xarModGetVar('themes','ShowTemplates');
-            $code.= 'xarModSetVar(\'themes\',\'ShowTemplates\',0);';
+            $this->_showTemplates = xarModVars::get('themes','ShowTemplates');
+            $code.= 'xarModVars::set(\'themes\',\'ShowTemplates\',0);';
         }
         $code.= XAR_TOKEN_VAR_START . $this->_name;
         return $code;
@@ -62,7 +62,7 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
         
         if(!$this->_nonmarkup) {
             // Restore the setting from just before the set tag
-            $code.='xarModSetVar(\'themes\',\'ShowTemplates\','.$this->_showTemplates.');';
+            $code.='xarModVars::set(\'themes\',\'ShowTemplates\','.$this->_showTemplates.');';
         }
         /**
         *  Register the variable in the bl_data array so it's passed to included templates
