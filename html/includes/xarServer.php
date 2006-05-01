@@ -139,80 +139,7 @@ function xarServerGetBaseURL()
  */
 function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target = NULL)
 {
-    $server   = xarServer::getHost();
-    $protocol = xarServer::getProtocol();
-    $baseurl  = "$protocol://$server";
-
-    // get current URI
-    $request = xarServer::getVar('REQUEST_URI');
-
-    if (empty($request)) {
-        // adapted patch from Chris van de Steeg for IIS
-        // TODO: please test this :)
-        $scriptname = xarServer::getVar('SCRIPT_NAME');
-        $pathinfo = xarServer::getVar('PATH_INFO');
-        if ($pathinfo == $scriptname) {
-            $pathinfo = '';
-        }
-        if (!empty($scriptname)) {
-            $request = $scriptname . $pathinfo;
-            $querystring = xarServer::getVar('QUERY_STRING');
-            if (!empty($querystring)) $request .= '?'.$querystring;
-        } else {
-            $request = '/';
-        }
-    }
-
-    // Note to Dracos: please don't replace & with &amp; here just yet - give me some time to test this first :-)
-    // Mike can we change these now, so we can work on validation a bit?
-
-    // add optional parameters
-    if (count($args) > 0) {
-        if (strpos($request,'?') === false) $request .= '?';
-        else $request .= '&';
-
-        foreach ($args as $k=>$v) {
-            if (is_array($v)) {
-                foreach($v as $l=>$w) {
-                    // TODO: replace in-line here too ?
-                    if (!empty($w)) $request .= $k . "[$l]=$w&";
-                }
-            } else {
-                // if this parameter is already in the query string...
-                if (preg_match("/(&|\?)($k=[^&]*)/",$request,$matches)) {
-                    $find = $matches[2];
-                    // ... replace it in-line if it's not empty
-                    if (!empty($v)) {
-                        $request = preg_replace("/(&|\?)".preg_quote($find)."/","$1$k=$v",$request);
-
-                    // ... or remove it otherwise
-                    } elseif ($matches[1] == '?') {
-                        $request = preg_replace("/\?".preg_quote($find)."(&|)/",'?',$request);
-                    } else {
-                        $request = str_replace("&$find",'',$request);
-                    }
-                } elseif (!empty($v)) {
-                    $request .= "$k=$v&";
-                }
-            }
-        }
-
-        $request = substr($request, 0, -1);
-    }
-
-    if (!isset($generateXMLURL)) {
-        $generateXMLURL = xarServer::$generateXMLURLs;
-    }
-
-    if (isset($target)) {
-        $request .= '#' . urlencode($target);
-    }
-
-    if ($generateXMLURL) {
-        $request = htmlspecialchars($request);
-    }
-
-    return $baseurl . $request;
+    return xarServer::getCurrentUrl($args = array(), $generateXMLURL = NULL, $target = NULL);
 }
 
 // REQUEST FUNCTIONS
@@ -587,13 +514,85 @@ class xarServer
     {
         static $baseurl = null;
         if (isset($baseurl))  return $baseurl;
-
+        
         $server   = self::getHost();
         $protocol = self::getProtocol();
         $path     = self::getBaseURI();
         
         $baseurl = "$protocol://$server$path/";
         return $baseurl;
+    }
+    
+    static function getCurrentUrl($args = array(), $generateXMLURL = NULL, $target = NULL)
+    {
+        $server   = self::getHost();
+        $protocol = self::getProtocol();
+        $baseurl  = "$protocol://$server";
+        
+        // get current URI
+        $request = self::getVar('REQUEST_URI');
+        
+        if (empty($request)) {
+            // adapted patch from Chris van de Steeg for IIS
+            // TODO: please test this :)
+            $scriptname = self::getVar('SCRIPT_NAME');
+            $pathinfo   = self::getVar('PATH_INFO');
+            if ($pathinfo == $scriptname) {
+                $pathinfo = '';
+            }
+            if (!empty($scriptname)) {
+                $request = $scriptname . $pathinfo;
+                $querystring = self::getVar('QUERY_STRING');
+                if (!empty($querystring)) $request .= '?'.$querystring;
+            } else {
+                $request = '/';
+            }
+        }
+        
+        // Note to Dracos: please don't replace & with &amp; here just yet - give me some time to test this first :-)
+        // Mike can we change these now, so we can work on validation a bit?
+        
+        // add optional parameters
+        if (count($args) > 0) {
+            if (strpos($request,'?') === false) 
+                $request .= '?';
+            else 
+                $request .= '&';
+            
+            foreach ($args as $k=>$v) {
+                if (is_array($v)) {
+                    foreach($v as $l=>$w) {
+                        // TODO: replace in-line here too ?
+                        if (!empty($w)) $request .= $k . "[$l]=$w&";
+                    }
+                } else {
+                    // if this parameter is already in the query string...
+                    if (preg_match("/(&|\?)($k=[^&]*)/",$request,$matches)) {
+                        $find = $matches[2];
+                        // ... replace it in-line if it's not empty
+                        if (!empty($v)) {
+                            $request = preg_replace("/(&|\?)".preg_quote($find)."/","$1$k=$v",$request);
+                            
+                            // ... or remove it otherwise
+                        } elseif ($matches[1] == '?') {
+                            $request = preg_replace("/\?".preg_quote($find)."(&|)/",'?',$request);
+                        } else {
+                            $request = str_replace("&$find",'',$request);
+                        }
+                    } elseif (!empty($v)) {
+                        $request .= "$k=$v&";
+                    }
+                }
+            }
+            // Strip off last &
+            $request = substr($request, 0, -1);
+        }
+        
+        // Finish up
+        if (!isset($generateXMLURL)) $generateXMLURL = self::$generateXMLURLs;
+        if (isset($target)) $request .= '#' . urlencode($target);
+        if ($generateXMLURL) $request = htmlspecialchars($request);
+        return $baseurl . $request;
     }
 }
 
