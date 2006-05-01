@@ -27,7 +27,7 @@ class LocaleNotFoundException extends NotFoundExceptions
  * @access public
  * @return array locale data
  * @raise  LOCALE_NOT_EXIST
- * @todo   figure out why we go through this function for xarModIsAvailable
+ * @todo   figure out why we go through this function for xarMod::isAvailable
  */
 function &xarMLSLoadLocaleData($locale = NULL)
 {

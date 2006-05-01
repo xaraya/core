@@ -124,7 +124,7 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
     foreach($GLOBALS['xarUser_authenticationModules'] as $authModName) {
         // Bug #918 - If the module has been deactivated, then continue
         // checking with the next available authentication module
-        if (!xarModIsAvailable($authModName)) continue;
+        if (!xarMod::isAvailable($authModName)) continue;
 
         // Every authentication module must at least implement the
         // authentication interface so there's at least the authenticate_user

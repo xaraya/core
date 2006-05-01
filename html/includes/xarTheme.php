@@ -143,7 +143,7 @@ function xarThemeGetDisplayableName($themeName)
  */
 function xarThemeIsAvailable($themeName)
 {
-    return xarModIsAvailable($themeName, $type = 'theme');
+    return xarMod::isAvailable($themeName, $type = 'theme');
 }
 
 

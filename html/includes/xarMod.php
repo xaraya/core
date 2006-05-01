@@ -1231,46 +1231,6 @@ function xarModGetDisplayableDescription($modName = NULL, $type = 'module')
     return xarML($modInfo['displaydescription']);
 }
 
-/**
- * Check if a module is installed and its state is XARMOD_STATE_ACTIVE
- *
- * @access public
- * @static modAvailableCache array
- * @param modName string registered name of module
- * @param type determines theme or module
- * @return mixed true if the module is available
- * @raise DATABASE_ERROR, BAD_PARAM
- */
-function xarModIsAvailable($modName, $type = 'module')
-{
-    //xarLogMessage("xarModIsAvailable: begin $type:$modName");
-
-    // FIXME: there is no point to the cache here, since
-    // xarMod_getBaseInfo() caches module details anyway.
-    static $modAvailableCache = array();
-
-    if (empty($modName)) throw new EmptyParameterException('modName');
-
-    // Get the real module details.
-    // The module details will be cached anyway.
-    $modBaseInfo = xarMod_getBaseInfo($modName, $type);
-
-    // Return null if the result wasn't set
-    if (!isset($modBaseInfo)) return false; // throw back
-
-    if (!empty($GLOBALS['xarMod_noCacheState']) || !isset($modAvailableCache[$modBaseInfo['name']])) {
-        // We should be ok now, return the state of the module
-        $modState = $modBaseInfo['state'];
-        $modAvailableCache[$modBaseInfo['name']] = false;
-
-        if ($modState == XARMOD_STATE_ACTIVE) {
-            $modAvailableCache[$modBaseInfo['name']] = true;
-        }
-    }
-    //xarLogMessage("xarModIsAvailable: end $type:$modName");
-
-    return $modAvailableCache[$modBaseInfo['name']];
-}
 
 /**
  * Carry out hook operations for module
@@ -1338,9 +1298,9 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
     // Call each hook
     foreach ($hooklist as $hook) {
         //THIS IS BROKEN
-        //$hook['type'] and $type in the xarModIsAvailable ARE NOT THE SAME THING
-//        if (!xarModIsAvailable($hook['module'], $hook['type'])) continue;
-        if (!xarModIsAvailable($hook['module'])) continue;
+        //$hook['type'] and $type in the xarMod::isAvailable ARE NOT THE SAME THING
+//        if (!xarMod::isAvailable($hook['module'], $hook['type'])) continue;
+        if (!xarMod::isAvailable($hook['module'])) continue;
         if ($hook['area'] == 'GUI') {
             $isGUI = true;
             if (!xarModLoad($hook['module'], $hook['type'])) return;
@@ -1956,6 +1916,10 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
 {
     return xarMod::getState($modRegId, $modMode, $type);
 }
+function xarModIsAvailable($modName, $type = 'module')
+{
+    return xarMod::isAvailable($modName, $type);
+}
 
 /**
  * Preliminary class to module xarMod interface
@@ -1993,6 +1957,45 @@ class xarMod
         return $tmp['state'];
     }
 
+    /**
+     * Check if a module is installed and its state is XARMOD_STATE_ACTIVE
+     *
+     * @access public
+     * @static modAvailableCache array
+     * @param modName string registered name of module
+     * @param type determines theme or module
+     * @return mixed true if the module is available
+     * @raise DATABASE_ERROR, BAD_PARAM
+     */
+    static function isAvailable($modName, $type = 'module')
+    {
+        //xarLogMessage("xarMod::isAvailable: begin $type:$modName");
+        
+        // FIXME: there is no point to the cache here, since
+        // xarMod_getBaseInfo() caches module details anyway.
+        static $modAvailableCache = array();
+        
+        if (empty($modName)) throw new EmptyParameterException('modName');
+        
+        // Get the real module details.
+        // The module details will be cached anyway.
+        $modBaseInfo = xarMod_getBaseInfo($modName, $type);
+        
+        // Return null if the result wasn't set
+        if (!isset($modBaseInfo)) return false; // throw back
+        
+        if (!empty($GLOBALS['xarMod_noCacheState']) || !isset($modAvailableCache[$modBaseInfo['name']])) {
+            // We should be ok now, return the state of the module
+            $modState = $modBaseInfo['state'];
+            $modAvailableCache[$modBaseInfo['name']] = false;
+            
+            if ($modState == XARMOD_STATE_ACTIVE) {
+                $modAvailableCache[$modBaseInfo['name']] = true;
+            }
+        }
+        //xarLogMessage("xarMod::isAvailable: end $type:$modName");
+        return $modAvailableCache[$modBaseInfo['name']];
+    }
 }
 
 

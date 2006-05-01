@@ -42,7 +42,7 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
     // TODO: improve this ?
             list($fmod,$ftype,$ffunc) = explode('_',$function);
             // see if the module is available
-            if (!xarModIsAvailable($fmod)) {
+            if (!xarMod::isAvailable($fmod)) {
                 continue;
             }
             // see if we're dealing with an API function or a GUI one

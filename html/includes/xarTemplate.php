@@ -1950,7 +1950,7 @@ function xarTplGetTagObjectFromName($tag_name)
     $result->Close();
 
     // Module must be active for the tag to be active
-    if(!xarModIsAvailable($module)) return; //throw back
+    if(!xarMod::isAvailable($module)) return; //throw back
 
     $obj = unserialize($obj);
 
