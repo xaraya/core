@@ -1595,10 +1595,6 @@ to upgrade the modules which have a new version.
 <?php
 }
 
-CatchOutput();
-// done
-exit;
-
 /**
  * Helper function to render the output as we have it so far
  *
@@ -1610,4 +1606,8 @@ function CatchOutput()
     xarTplSetPageTitle(xarML('Upgrade Xaraya'));
     echo xarTpl_renderPage($out,NULL, 'installer');
 }
+
+// Main thing
+CatchOutput();
+
 ?>
