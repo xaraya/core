@@ -182,9 +182,11 @@ function xarTheme_getBaseInfo($themeName)
  */
 function xarTheme_getVarsByTheme($themeName)
 {
-    // This is wrong, get them for themes module for now
-    //return xarMod_getVarsByModule($themeName, $type = 'theme');
-    return xarMod_getVarsByModule('themes');
+    // TODO: we would need to return all mod item vars here where:
+    // mod  = themes
+    // item = the theme
+    // For now, return the vars of the themes module
+    return xarModVars::load('themes');
 }
 
 /**

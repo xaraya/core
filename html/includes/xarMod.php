@@ -162,6 +162,9 @@ interface IxarVars
 function xarModGetVar($modName, $name, $prep = NULL)
 {   return xarModVars::get($modName, $name, $prep); }
 
+function xarMod_getVarsByModule($modName)
+{   return xarModVars::load($modName);}
+
 function xarModSetVar($modName, $name, $value)
 {   return xarModVars::set($modName, $name, $value); }
 
@@ -181,8 +184,9 @@ function xarModGetVarId($modName, $name)
  */
 interface IxarModVars extends IxarVars
 {
-    static function getID($scope, $name);
+    static function getID     ($scope, $name);
     static function delete_all($scope);
+    static function load      ($scope);
 }
 
 /**
@@ -204,6 +208,41 @@ class xarModVars implements IxarModVars
     {
         if (empty($modName)) throw new EmptyParameterException('modName');
         return xarVar__GetVarByAlias($modName, $name, $uid = NULL, $prep, 'modvar');
+    }
+
+    /**
+     * Load all module variables for a particular module
+     *
+     * @author Michel Dalle
+     * @access protected
+     * @param modName string
+     * @return mixed true on success
+     * @raise DATABASE_ERROR, BAD_PARAM
+     */
+    static function load($modName)
+    {
+        if (empty($modName)) throw new EmptyParameterException('modName');
+        
+        $modBaseInfo = xarMod_getBaseInfo($modName);
+        if (!isset($modBaseInfo)) return;
+        
+        $dbconn =& xarDBGetConn();
+        $tables =& xarDBGetTables();
+        
+        // Takes the right table basing on module mode
+        $module_varstable = $tables['module_vars'];
+        
+        $query = "SELECT xar_name, xar_value FROM $module_varstable WHERE xar_modid = ?";
+        $stmt =& $dbconn->prepareStatement($query);
+        $result =& $stmt->executeQuery(array($modBaseInfo['systemid']),ResultSet::FETCHMODE_ASSOC);
+        
+        while ($result->next()) {
+            xarCore::setCached('Mod.Variables.' . $modName, $result->getString('xar_name'), $result->get('xar_value'));
+        }
+        $result->Close();
+        
+        xarCore::setCached('Mod.GetVarsByModule', $modName, true);
+        return true;
     }
 
     /**
@@ -1529,42 +1568,6 @@ function xarMod_getBaseInfo($modName, $type = 'module')
 
     return $modBaseInfo;
 }
-
-/**
- * Get all module variables for a particular module
- *
- * @author Michel Dalle
- * @access protected
- * @param modName string
- * @return mixed true on success
- * @raise DATABASE_ERROR, BAD_PARAM
- */
-function xarMod_getVarsByModule($modName)
-{
-    if (empty($modName)) throw new EmptyParameterException('modName');
-
-    $modBaseInfo = xarMod_getBaseInfo($modName);
-    if (!isset($modBaseInfo)) return;
-
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
-
-    // Takes the right table basing on module mode
-    $module_varstable = $tables['module_vars'];
-
-    $query = "SELECT xar_name, xar_value FROM $module_varstable WHERE xar_modid = ?";
-    $stmt =& $dbconn->prepareStatement($query);
-    $result =& $stmt->executeQuery(array($modBaseInfo['systemid']),ResultSet::FETCHMODE_ASSOC);
-
-    while ($result->next()) {
-        xarCore::setCached('Mod.Variables.' . $modName, $result->getString('xar_name'), $result->get('xar_value'));
-    }
-    $result->Close();
-
-    xarCore::setCached('Mod.GetVarsByModule', $modName, true);
-    return true;
-}
-
 
 /**
  * Get all module variables with a particular name

@@ -48,11 +48,11 @@ class Dynamic_ModuleVariables_DataStore extends Dynamic_DataStore
         }
 
         // let's cheat a little bit here, and preload everything :-)
-        xarMod_getVarsByModule($this->modname);
+        xarModVars::load($this->modname);
 
         foreach ($fieldlist as $field) {
             // get the value from the module variables
-        // TODO: use $field.$itemid for modules with several itemtypes ? [like articles :)]
+            // TODO: use $field.$itemid for modules with several itemtypes ? [like articles :)]
             $value = xarModVars::get($this->modname,$field);
             // set the value for this property
             $this->fields[$field]->setValue($value);
