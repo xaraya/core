@@ -192,55 +192,48 @@ function xarVarBatchFetch()
  */
 function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags = XARVAR_GET_OR_POST, $prep = XARVAR_PREP_FOR_NOTHING)
 {
-    assert('is_int($flags)');
-    assert('empty($name) || preg_match("/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/", $name)');
+    assert('is_int($flags); /* Flags passed to xarVarFetch are not of integer type */');
+    assert('empty($name) || preg_match("/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/", $name); /* Variable name does not match expression for valid variable names */');
 
     $allowOnlyMethod = NULL;
     if ($flags & XARVAR_GET_ONLY) $allowOnlyMethod = 'GET';
     if ($flags & XARVAR_POST_ONLY) $allowOnlyMethod = 'POST';
 
-    if ($flags & XARVAR_DONT_SET) {
-        if (isset($value)) {
-            $oldValue = $value;
-        } else {
-            $oldValue = null;
-        }
-    }
-
     //This allows us to have a extract($args) before the xarVarFetch and still run
     //the variables thru the tests here.
-
-    // FIXME: this flag doesn't seem to work !?
-    //The FLAG here, stops xarVarFetch from reusing the variable if already present
-    if (!isset($value) || ($flags & XARVAR_DONT_REUSE)) {
-        $value = xarRequestGetVar($name, $allowOnlyMethod);
+    if ($flags & XARVAR_DONT_SET) {
+        $oldValue = null;
+        if (isset($value)) $oldValue = $value;
     }
 
+    // FIXME: this flag doesn't seem to work !?
+    // The FLAG here, stops xarVarFetch from reusing the variable if already present
+    if (!isset($value) || ($flags & XARVAR_DONT_REUSE)) {
+        $value = xarRequest::getVar($name, $allowOnlyMethod);
+    }
+
+    // TODO: use try/catch clause to implement the suppressing, letting the validators except at will.
+    $supress = false;
     if (($flags & XARVAR_DONT_SET) || ($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue)) {
         // TODO: when fetching an optional var using ----^ the exception is not thrown when the variable
         // fetched does not pass validation, i doubt we want that. Means that an optional fetch never validates and
         // always gets the default value?
         $supress = true;
-    } else {
-        $supress = false;
-    }
-
+    } 
+    // Validate the value
     $result = xarVarValidate($validation, $value, $supress, $name);
 
     if (!$result) {
-    // CHECKME:  even for the XARVAR_DONT_SET flag !?
-        // if you set a non-null default value, assume you want to use it here
+        // First make sure we don't pass any invalid values back
+        $value = null;
+        // CHECKME:  even for the XARVAR_DONT_SET flag !?
         if (($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue)) {
+            // if you set a non-null default value, assume you want to use it here
             $value = $defaultValue;
-
-        // with XARVAR_DONT_SET, make sure we don't pass invalid old values back either
         } elseif (($flags & XARVAR_DONT_SET) && isset($oldValue) && xarVarValidate($validation, $oldValue, $supress)) {
+            // with XARVAR_DONT_SET, make sure we don't pass invalid old values back either
             $value = $oldValue;
-
-        // make sure we don't pass any invalid values back
-        } else {
-            $value = null;
-        }
+        } 
     } else {
         // Check prep of $value
         if ($prep & XARVAR_PREP_FOR_DISPLAY) {
@@ -260,7 +253,6 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
             $value = trim($value);
         }
     }
-
     return true;
 }
 
@@ -313,10 +305,6 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  */
 function xarVarValidate($validation, &$subject, $supress = false, $name='')
 {
-// <nuncanada> For now, i have moved all validations to html/modules/variable/validations
-//             I think that will incentivate 3rd party devs to create and send new validations back to us..
-//             As id/int/str are used in every page view, probably they should be here.
-
     $valParams = explode(':', $validation);
     $valType = strtolower(array_shift($valParams));
 
@@ -463,7 +451,6 @@ function xarVar__getAllowedTags($level)
             $allowedHTML[] = $k;
         }
     }
-
     return $allowedHTML;
 }
 
@@ -482,11 +469,8 @@ function xarVar__getAllowedTags($level)
 function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = NULL, $type = 'modvar')
 {
     if (empty($name)) throw new EmptyParameterException('name');
-
-    if (empty($prep)) {
-        $prep = XARVAR_PREP_FOR_NOTHING;
-    }
-
+    if (empty($prep)) $prep = XARVAR_PREP_FOR_NOTHING;
+    
     // Lets first check to see if any of our type vars are alread set in the cache.
     $cacheName = $name;
     switch($type) {

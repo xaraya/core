@@ -141,12 +141,12 @@ function xarBlockIsCached($args)
         $blockCacheExpireTime = $xarBlock_cacheTime;
     }
 
-    $factors = xarServerGetVar('HTTP_HOST') . $xarTpl_themeDir .
+    $factors = xarServer::getVar('HTTP_HOST') . $xarTpl_themeDir .
                xarUserGetNavigationLocale();
 
     if ($pageShared == 0) {
-        $factors .= xarServerGetVar('REQUEST_URI');
-        $param = xarServerGetVar('QUERY_STRING');
+        $factors .= xarServer::getVar('REQUEST_URI');
+        $param = xarServer::getVar('QUERY_STRING');
         if (!empty($param)) {
             $factors .= '?' . $param;
         }
@@ -207,7 +207,7 @@ function xarBlockSetCached($cacheKey, $name, $value)
     }
 
     if (// the http request is a GET AND
-        xarServerGetVar('REQUEST_METHOD') == 'GET' &&
+        xarServer::getVar('REQUEST_METHOD') == 'GET' &&
     // CHECKME: do we really want to check this again, or do we ignore it ?
         // the cache entry doesn't exist or has expired (no log here) AND
         !($GLOBALS['xarBlock_cacheStorage']->isCached($cacheKey, $blockCacheExpireTime, 0)) &&

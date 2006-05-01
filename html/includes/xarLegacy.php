@@ -124,7 +124,7 @@ function xarModEmailURL($modName = NULL, $modType = 'user', $funcName = 'main', 
 //      to xarModURL to handle this functionality. See bug #372
 // Let's depreciate it for 1.0.0  next release I will remove it.
     if (empty($modName)) {
-        return xarServerGetBaseURL() . 'index.php';
+        return xarServer::getBaseURL() . 'index.php';
     }
 
     // The arguments
@@ -152,7 +152,7 @@ function xarModEmailURL($modName = NULL, $modType = 'user', $funcName = 'main', 
     }
 
     // The URL
-    return xarServerGetBaseURL() . $url;
+    return xarServer::getBaseURL() . $url;
 }
 
 /**

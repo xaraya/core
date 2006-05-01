@@ -1058,7 +1058,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
 
     // No module specified - just jump to the home page.
     if (empty($modName)) {
-        return xarServerGetBaseURL() . $BaseModURL;
+        return xarServer::getBaseURL() . $BaseModURL;
     }
 
     // Take the global setting for XML format generation, if not specified.
@@ -1186,7 +1186,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
     }
 
     // Return the URL.
-    return xarServerGetBaseURL() . $path;
+    return xarServer::getBaseURL() . $path;
 }
 
 
@@ -1316,7 +1316,7 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
         if (isset($extraInfo) && is_array($extraInfo) && !empty($extraInfo['module'])) {
             $modName = $extraInfo['module'];
         } else {
-            list($modName) = xarRequestGetInfo();
+            list($modName) = xarRequest::getInfo();
             $extraInfo['module'] = $modName;
         }
     } else {
@@ -1479,7 +1479,7 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
     if (empty($hookModName)) throw new EmptyParameterException('hookModName');
 
     if (empty($callerModName)) {
-        list($callerModName) = xarRequestGetInfo();
+        list($callerModName) = xarRequest::getInfo();
     }
 
     // Get all hook modules for the caller module once
@@ -1981,13 +1981,12 @@ function xarModUnregisterHook($hookObject,
 /**
  * Resolve a module alias
  *
- * This is only a convenience wrapper fot xarRequest function
  *
- * @todo evalutate dependency consequences
 */
 function xarModGetAlias($var)
 {
-    return xarRequest__resolveModuleAlias($var);
+    $aliasesMap = xarConfigGetVar('System.ModuleAliases');
+    return (!empty($aliasesMap[$var])) ? $aliasesMap[$var] : $var;
 }
 
 /**
@@ -2024,7 +2023,7 @@ function xarModDelAlias($alias, $modName)
 function xarModGetName()
 {
     //TODO Work around for the prefix.
-    list($modName) = xarRequestGetInfo();
+    list($modName) = xarRequest::getInfo();
     return $modName;
 }
 
