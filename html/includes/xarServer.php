@@ -124,16 +124,7 @@ function xarServerGetProtocol()
  */
 function xarServerGetBaseURL()
 {
-    static $baseurl = null;
-
-    if (isset($baseurl))  return $baseurl;
-
-    $server   = xarServer::getHost();
-    $protocol = xarServer::getProtocol();
-    $path     = xarServer::getBaseURI();
-
-    $baseurl = "$protocol://$server$path/";
-    return $baseurl;
+    return xarServer::getBaseURL();
 }
 
 /**
@@ -472,7 +463,7 @@ function xarResponseRedirect($redirectURL)
         $redirectURL = preg_replace('!^/*!', '', $redirectURL);
 
         // Get base URL
-        $baseurl = xarServerGetBaseURL();
+        $baseurl = xarServer::getBaseURL();
 
         $redirectURL = $baseurl.$redirectURL;
     }
@@ -590,6 +581,19 @@ class xarServer
             }
         }
         return 'http';
+    }
+    
+    static function getBaseURL()
+    {
+        static $baseurl = null;
+        if (isset($baseurl))  return $baseurl;
+
+        $server   = self::getHost();
+        $protocol = self::getProtocol();
+        $path     = self::getBaseURI();
+        
+        $baseurl = "$protocol://$server$path/";
+        return $baseurl;
     }
 }
 

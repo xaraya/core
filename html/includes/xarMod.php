@@ -1058,7 +1058,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
 
     // No module specified - just jump to the home page.
     if (empty($modName)) {
-        return xarServerGetBaseURL() . $BaseModURL;
+        return xarServer::getBaseURL() . $BaseModURL;
     }
 
     // Take the global setting for XML format generation, if not specified.
@@ -1186,7 +1186,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
     }
 
     // Return the URL.
-    return xarServerGetBaseURL() . $path;
+    return xarServer::getBaseURL() . $path;
 }
 
 
