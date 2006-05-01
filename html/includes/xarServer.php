@@ -201,14 +201,7 @@ function xarRequestGetInfo()
  */
 function xarRequestIsLocalReferer()
 {
-    $server  = xarServer::getHost();
-    $referer = xarServer::getVar('HTTP_REFERER');
-
-    if (!empty($referer) && preg_match("!^https?://$server(:\d+|)/!", $referer)) {
-        return true;
-    } else {
-        return false;
-    }
+    return xarRequest::IsLocalReferer();
 }
 
 
@@ -609,6 +602,18 @@ class xarRequest
             $requestInfo = self::$defaultRequestInfo;
         }
         return $requestInfo;
+    }
+    
+    static function IsLocalReferer()
+    {
+        $server  = xarServer::getHost();
+        $referer = xarServer::getVar('HTTP_REFERER');
+        
+        if (!empty($referer) && preg_match("!^https?://$server(:\d+|)/!", $referer)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
