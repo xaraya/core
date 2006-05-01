@@ -206,17 +206,6 @@ function xarRequestIsLocalReferer()
 
 
 /**
- * Set Short URL Variables
- *
- * @access public
- * @param vars array
- */
-function xarRequest__setShortURLVars($vars)
-{
-    xarRequest::$shortURLVariables = $vars;
-}
-
-/**
  * Checks if a module name is an alias for some other module
  *
  * @access private
@@ -579,11 +568,9 @@ class xarRequest
                                 $args['module'] = $modName;
                                 $args['type'] = $modType;
                                 $args['func'] = $funcName;
-                                xarRequest__setShortURLVars($args);
+                                self::$shortURLVariables = $args;
                             } else {
-                                xarRequest__setShortURLVars(array('module' => $modName,
-                                                                  'type' => $modType,
-                                                                  'func' => $funcName));
+                                self::$shortURLVariables = array('module' => $modName,'type' => $modType,'func' => $funcName));
                             }
                         }
                     }
