@@ -1008,29 +1008,6 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
     return xarServer::getBaseURL() . $path;
 }
 
-
-
-/**
- * Get the displayable description for modName
- *
- * The displayable description is sensible to user language.
- *
- * @access public
- * @param modName string registered name of module
- * @return string the displayable description
- */
-function xarModGetDisplayableDescription($modName = NULL, $type = 'module')
-{
-    //xarLogMessage("xarModGetDisplayableDescription ". $modName ." / " . $type);
-
-    if (empty($modName)) {
-        $modName = xarMod::getName();
-    }
-    $modInfo = xarMod_getFileInfo($modName, $type);
-    return xarML($modInfo['displaydescription']);
-}
-
-
 /**
  * Carry out hook operations for module
  * Some commonly used hooks are :
@@ -1466,7 +1443,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
     $modBaseInfo['name'] = $name;
     $modBaseInfo['directory'] = $directory;
     $modBaseInfo['displayname'] = xarMod::getDisplayName($directory, $type);
-    $modBaseInfo['displaydescription'] = xarModGetDisplayableDescription($directory, $type);
+    $modBaseInfo['displaydescription'] = xarMod::getDisplayDescription($directory, $type);
     // Shortcut for os prepared directory
     // TODO: <marco> get rid of it since useless
     $modBaseInfo['osdirectory'] = xarVarPrepForOS($directory);
@@ -1714,24 +1691,22 @@ function xarModGetName()             { return xarMod::getName();       }
 function xarModGetNameFromID($regid) { return xarMod::getName($regid); }
 
 function xarModGetDisplayableName($modName = NULL, $type = 'module') 
-{   return xarMod::getDisplayName($modName, $type);
-}
+{   return xarMod::getDisplayName($modName, $type); }
+
+function xarModGetDisplayableDescription($modName = NULL, $type = 'module')
+{   return xarMod::getDisplayDescription($modName,$type); }
+    
 function xarModGetIDFromName($modName, $type = 'module')
-{
-    return xarMod::getRegID($modName, $type);
-}
+{   return xarMod::getRegID($modName, $type); }
 
 function xarModGetInfo($modRegId, $type = 'module')
-{
-    return xarMod::getInfo($modRegId, $type);
-}
+{   return xarMod::getInfo($modRegId, $type); }
 
 function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'module')
-{   return xarMod::getState($modRegId, $modMode, $type);
-}
+{   return xarMod::getState($modRegId, $modMode, $type); }
+
 function xarModIsAvailable($modName, $type = 'module')
-{   return xarMod::isAvailable($modName, $type);
-}
+{   return xarMod::isAvailable($modName, $type); }
 
 /**
  * Preliminary class to model xarMod interface
@@ -1774,6 +1749,24 @@ class xarMod
         if (empty($modName)) $modName = self::getName();
         $modInfo = xarMod_getFileInfo($modName, $type);
         return xarML($modInfo['displayname']);
+    }
+
+    /**
+     * Get the displayable description for modName
+     *
+     * The displayable description is sensible to user language.
+     *
+     * @access public
+     * @param modName string registered name of module
+     * @return string the displayable description
+     */
+    static function getDisplayDescription($modName = NULL, $type = 'module')
+    {
+        //xarLogMessage("xarMod::getDisplayDescription ". $modName ." / " . $type);
+        if (empty($modName)) $modName = self::getName();
+    
+        $modInfo = xarMod_getFileInfo($modName, $type);
+        return xarML($modInfo['displaydescription']);
     }
 
     /**
@@ -1863,7 +1856,7 @@ class xarMod
      * @return array of module information
      * @raise DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
      */
-    function getInfo($modRegId, $type = 'module')
+    static function getInfo($modRegId, $type = 'module')
     {
         if (empty($modRegId)) throw new EmptyParameterException('modRegid');
         
@@ -1946,7 +1939,7 @@ class xarMod
         $modInfo['regid'] = (int) $modRegId;
         $modInfo['mode'] = (int) $mode;
         $modInfo['displayname'] = self::getDisplayName($modInfo['name'], $type);
-        $modInfo['displaydescription'] = xarModGetDisplayableDescription($modInfo['name'], $type);
+        $modInfo['displaydescription'] = self::getDisplayDescription($modInfo['name'], $type);
         
         // Shortcut for os prepared directory
         $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
