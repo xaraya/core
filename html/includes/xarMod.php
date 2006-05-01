@@ -554,11 +554,6 @@ function xarModGetInfo($modRegId, $type = 'module')
     return $modInfo;
 }
 
-function xarModGetNameFromID($regid)
-{
-    $modinfo = xarModGetInfo($regid);
-    return $modinfo['name'];
-}
 
 
 /**
@@ -1871,7 +1866,9 @@ function xarModUnregisterHook($hookObject,
  * Wrapper function to support Xaraya 1 API for module managment
  *
  */
-function xarModGetName() { return xarMod::getName(); }
+function xarModGetName()             { return xarMod::getName();       }
+function xarModGetNameFromID($regid) { return xarMod::getName($regid); }
+
 function xarModGetDisplayableName($modName = NULL, $type = 'module') 
 {   return xarMod::getDisplayName($modName, $type);
 }
@@ -1894,14 +1891,23 @@ function xarModIsAvailable($modName, $type = 'module')
 class xarMod
 {
     /**
-     * get name of current top-level module
+     * Get name of a module
+     *
+     * If regID is passed in, return the name of that module, otherwise use
+     * current toplevel module.
      *
      * @access public
-     * @return string the name of the current top-level module, false if not in a module
+     * @param  $regID integer optional regID for module
+     * @return string the name of the current top-level module
      */
-    static function getName()
+    static function getName($regID = NULL)
     {
-        list($modName) = xarRequest::getInfo();
+        if(!isset($regID)) {
+            list($modName) = xarRequest::getInfo();
+        } else {
+            $modinfo = xarModGetInfo($regID);
+            $modName = $modinfo['name'];
+        }
         return $modName;
     }
 
