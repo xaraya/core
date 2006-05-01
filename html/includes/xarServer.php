@@ -83,48 +83,7 @@ function xarServerGetVar($name)
  */
 function xarServerGetBaseURI()
 {
-  // Allows overriding the Base URI from config.php
-  // it can be used to configure Xaraya for mod_rewrite by
-  // setting BaseURI = '' in config.php
-  try {
-      $BaseURI =  xarCore_getSystemVar('BaseURI');
-      return $BaseURI;
-  } catch(VariableNotFoundException $e) {
-      // We need to build it
-  }
-
-  // Get the name of this URI
-  $path = xarServer::getVar('REQUEST_URI');
-
-  //if ((empty($path)) ||
-  //    (substr($path, -1, 1) == '/')) {
-  //what's wrong with a path (cfr. Indexes index.php, mod_rewrite etc.) ?
-    if (empty($path)) {
-        // REQUEST_URI was empty or pointed to a path
-        // adapted patch from Chris van de Steeg for IIS
-        // Try SCRIPT_NAME
-        $path = xarServer::getVar('SCRIPT_NAME');
-        if (empty($path)) {
-            // No luck there either
-            // Try looking at PATH_INFO
-            $path = xarServer::getVar('PATH_INFO');
-        }
-    }
-
-    $path = preg_replace('/[#\?].*/', '', $path);
-
-    $path = preg_replace('/\.php\/.*$/', '', $path);
-    if (substr($path, -1, 1) == '/') {
-        $path .= 'dummy';
-    }
-    $path = dirname($path);
-
-    //FIXME: This is VERY slow!!
-    if (preg_match('!^[/\\\]*$!', $path)) {
-        $path = '';
-    }
-
-    return $path;
+    return xarServer::getBaseURI();
 }
 
 /**
@@ -191,7 +150,7 @@ function xarServerGetBaseURL()
 
     $server = xarServerGetHost();
     $protocol = xarServerGetProtocol();
-    $path = xarServerGetBaseURI();
+    $path = xarServer::getBaseURI();
 
     $baseurl = "$protocol://$server$path/";
     return $baseurl;
@@ -579,6 +538,51 @@ class xarServer
         if (isset($_ENV[$name]))    return $_ENV[$name];
         if ($val = getenv($name))   return $val;
         return; // we found nothing here
+    }
+
+    static function getBaseURI()
+    {
+        // Allows overriding the Base URI from config.php
+        // it can be used to configure Xaraya for mod_rewrite by
+        // setting BaseURI = '' in config.php
+        try {
+            $BaseURI =  xarCore_getSystemVar('BaseURI');
+            return $BaseURI;
+        } catch(VariableNotFoundException $e) {
+            // We need to build it
+        }
+        
+        // Get the name of this URI
+        $path = self::getVar('REQUEST_URI');
+        
+        //if ((empty($path)) ||
+        //    (substr($path, -1, 1) == '/')) {
+        //what's wrong with a path (cfr. Indexes index.php, mod_rewrite etc.) ?
+        if (empty($path)) {
+            // REQUEST_URI was empty or pointed to a path
+            // adapted patch from Chris van de Steeg for IIS
+            // Try SCRIPT_NAME
+            $path = self::getVar('SCRIPT_NAME');
+            if (empty($path)) {
+                // No luck there either
+                // Try looking at PATH_INFO
+                $path = self::getVar('PATH_INFO');
+            }
+        }
+        
+        $path = preg_replace('/[#\?].*/', '', $path);
+        
+        $path = preg_replace('/\.php\/.*$/', '', $path);
+        if (substr($path, -1, 1) == '/') {
+            $path .= 'dummy';
+        }
+        $path = dirname($path);
+        
+        //FIXME: This is VERY slow!!
+        if (preg_match('!^[/\\\]*$!', $path)) {
+            $path = '';
+        }
+        return $path;
     }
 }
 

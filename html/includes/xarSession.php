@@ -212,7 +212,7 @@ class xarSession implements IsessionHandler
             ini_set('session.name', $args['cookieName']);
             
             if (empty($args['cookiePath'])) {
-                $path = xarServerGetBaseURI();
+                $path = xarServer::getBaseURI();
                 if (empty($path)) {
                     $path = '/';
                 }
