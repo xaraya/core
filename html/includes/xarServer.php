@@ -1,5 +1,4 @@
 <?php
-
 /**
  * HTTP Protocol Server/Request/Response utilities
  *
@@ -23,16 +22,14 @@
  * @param whatElseIsGoingLoaded integer
  * @return bool true
  */
-
 function xarSerReqRes_init($args, $whatElseIsGoingLoaded)
 {
-    xarServer::$generateXMLURLs = $args['generateXMLURLs'];
-    xarRequest::$allowShortURLs = $args['enableShortURLsSupport'];
-    xarRequest::$defaultRequestInfo  = array($args['defaultModuleName'],
-                                             $args['defaultModuleType'],
-                                             $args['defaultModuleFunction']);
-    xarResponse::$closeSession   = $whatElseIsGoingLoaded & XARCORE_SYSTEM_SESSION;
-    xarResponse::$redirectCalled = false;
+    // Use $args to configure the classes
+    xarServer::init($args);
+    xarRequest::init($args);
+    // TODO: we will migrate the whatelseblah out later on, to keep the init interface clean, we trick it a bit for now.
+    $args['whatelseisgoingloaded'] = $whatElseIsGoingLoaded;
+    xarResponse::init($args);
 
     // Register the ServerRequest event
     xarEvt_registerEvent('ServerRequest');
@@ -41,8 +38,6 @@ function xarSerReqRes_init($args, $whatElseIsGoingLoaded)
     //register_shutdown_function ('xarServer__shutdown_handler');
     return true;
 }
-
-// SERVER FUNCTIONS
 
 /**
  * Shutdown handler for the xarServer subsystem
@@ -55,199 +50,36 @@ function xarServer__shutdown_handler()
 }
 
 /**
- * Gets a server variable
+ * Wrapper functions to support Xaraya 1 API Server functions
  *
- * Returns the value of $name server variable.
- * Accepted values for $name are exactly the ones described by the
- * {@link http://www.php.net/manual/en/reserved.variables.html PHP manual}.
- * If the server variable doesn't exist void is returned.
- *
- * @author Marco Canini <marco@xaraya.com>
- * @author Michel Dalle
- * @access public
- * @param name string the name of the variable
- * @return mixed value of the variable
  */
-function xarServerGetVar($name)
-{
-    return xarServer::getVar($name);
-}
-
-/**
- * Get base URI for Xaraya
- *
- * @access public
- * @return string base URI for Xaraya
- * @todo remove whatever may come after the PHP script - TO BE CHECKED !
- * @todo See code comments.
- */
-function xarServerGetBaseURI()
-{
-    return xarServer::getBaseURI();
-}
-
-/**
- * Gets the host name
- *
- * Returns the server host name fetched from HTTP headers when possible.
- * The host name is in the canonical form (host + : + port) when the port is different than 80.
- *
- * @author Marco Canini <marco@xaraya.com>
- * @access public
- * @return string HTTP host name
- */
-
-function xarServerGetHost()
-{
-    return xarServer::getHost();
-}
-
-/**
- * Gets the current protocol
- *
- * Returns the HTTP protocol used by current connection, it could be 'http' or 'https'.
- *
- * @author Marco Canini <marco@xaraya.com>
- * @access public
- * @return string current HTTP protocol
- */
-function xarServerGetProtocol()
-{
-    return xarServer::getProtocol();
-}
-
-/**
- * get base URL for Xaraya
- *
- * @access public
- * @return string base URL for Xaraya
- */
-function xarServerGetBaseURL()
-{
-    return xarServer::getBaseURL();
-}
-
-/**
- * Get current URL (and optionally add/replace some parameters)
- *
- * @access public
- * @param args array additional parameters to be added to/replaced in the URL (e.g. theme, ...)
- * @param generateXMLURL boolean over-ride Server default setting for generating XML URLs (true/false/NULL)
- * @param target string add a 'target' component to the URL
- * @return string current URL
- * @todo cfr. BaseURI() for other possible ways, or try PHP_SELF
- */
+function xarServerGetVar($name) { return xarServer::getVar($name); }
+function xarServerGetBaseURI()  { return xarServer::getBaseURI();  }
+function xarServerGetHost()     { return xarServer::getHost();     }
+function xarServerGetProtocol() { return xarServer::getProtocol(); }
+function xarServerGetBaseURL()  { return xarServer::getBaseURL();  }
 function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target = NULL)
 {
     return xarServer::getCurrentUrl($args = array(), $generateXMLURL, $target);
 }
 
-// REQUEST FUNCTIONS
-
 /**
- * Get request variable
+ * Wrapper function to support Xaraya 1 API Request functions
  *
- * @access public
- * @param name string
- * @param allowOnlyMethod string
- * @return mixed
- * @todo change order (POST normally overrides GET)
- * @todo have a look at raw post data options (xmlhttp postings)
  */
-function xarRequestGetVar($name, $allowOnlyMethod = NULL)
-{
+function xarRequestGetVar($name, $allowOnlyMethod = NULL) 
+{ 
     return xarRequest::getVar($name, $allowOnlyMethod);
 }
+function xarRequestGetInfo()        { return xarRequest::getInfo();        }
+function xarRequestIsLocalReferer() { return xarRequest::IsLocalReferer(); }
 
 /**
- * Gets request info for current page.
+ * Wrapper functions to support Xaraya 1 API Response functions
  *
- * Example of short URL support :
- *
- * index.php/<module>/<something translated in xaruserapi.php of that module>, or
- * index.php/<module>/admin/<something translated in xaradminapi.php>
- *
- * We rely on function <module>_<type>_decode_shorturl() to translate PATH_INFO
- * into something the module can work with for the input variables.
- * On output, the short URLs are generated by <module>_<type>_encode_shorturl(),
- * that is called automatically by xarModURL().
- *
- * Short URLs are enabled/disabled globally based on a base configuration
- * setting, and can be disabled per module via its admin configuration
- *
- * TODO: evaluate and improve this, obviously :-)
- * + check security impact of people combining PATH_INFO with func/type param
- *
- * @author Marco Canini, Michel Dalle
- * @access public
- * @global xarRequest_defaultModule array
- * @return array requested module, type and func
- * @todo <marco> Do we want to use xarVarCleanUntrusted here?
- * @todo <mikespub> Allow user select start page
- * @todo <marco> Do we need to do a preg_match on $params[1] here?
- * @todo <mikespub> you mean for upper-case Admin, or to support other funcs than user and admin someday ?
- * @todo <marco> Investigate this aliases thing before to integrate and promote it!
  */
-function xarRequestGetInfo()
-{
-    return xarRequest::getInfo();
-}
-
-/**
- * Check to see if this is a local referral
- *
- * @access public
- * @return bool true if locally referred, false if not
- */
-function xarRequestIsLocalReferer()
-{
-    return xarRequest::IsLocalReferer();
-}
-
-
-/**
- * Checks if a module name is an alias for some other module
- *
- * @access private
- * @param aliasModName name of the module
- * @return string containing the module name
- * @raise BAD_PARAM
- */
-function xarRequest__resolveModuleAlias($aliasModName)
-{
-    $aliasesMap = xarConfigGetVar('System.ModuleAliases');
-
-    if (!empty($aliasesMap[$aliasModName])) {
-        return $aliasesMap[$aliasModName];
-    } else {
-        return $aliasModName;
-    }
-}
-
-// RESPONSE FUNCTIONS
-
-/**
- * Carry out a redirect
- *
- * @access public
- * @param redirectURL string the URL to redirect to
- */
-function xarResponseRedirect($redirectURL)
-{
-    return xarResponse::Redirect($redirectURL);
-}
-
-/**
- * Checks if a redirection header has already been sent.
- *
- * @author Marco Canini
- * @access public
- * @return bool
- */
-function xarResponseIsRedirected()
-{
-    return xarResponse::$redirectCalled;
-}
+function xarResponseRedirect($redirectURL) { return xarResponse::Redirect($redirectURL); }
+function xarResponseIsRedirected()         { return xarResponse::$redirectCalled;       }
 
 /**
  * Convenience classes
@@ -257,7 +89,28 @@ class xarServer
 {
     public static $generateXMLURLs = true;
 
-        
+    /**
+     * Initialize
+     *
+     */
+    static function init($args)
+    {
+        self::$generateXMLURLs = $args['generateXMLURLs'];
+    }
+    /**
+     * Gets a server variable
+     *
+     * Returns the value of $name server variable.
+     * Accepted values for $name are exactly the ones described by the
+     * {@link http://www.php.net/manual/en/reserved.variables.html PHP manual}.
+     * If the server variable doesn't exist void is returned.
+     *
+     * @author Marco Canini <marco@xaraya.com>
+     * @author Michel Dalle
+     * @access public
+     * @param name string the name of the variable
+     * @return mixed value of the variable
+     */
     static function getVar($name) 
     {
         assert('version_compare("5.0",phpversion()) <= 0; /* The minimum PHP version supported by Xaraya is 5.0 */');
@@ -268,6 +121,14 @@ class xarServer
         return; // we found nothing here
     }
 
+    /**
+     * Get base URI for Xaraya
+     *
+     * @access public
+     * @return string base URI for Xaraya
+     * @todo remove whatever may come after the PHP script - TO BE CHECKED !
+     * @todo See code comments.
+     */
     static function getBaseURI()
     {
         // Allows overriding the Base URI from config.php
@@ -299,7 +160,7 @@ class xarServer
         }
         
         $path = preg_replace('/[#\?].*/', '', $path);
-        
+      
         $path = preg_replace('/\.php\/.*$/', '', $path);
         if (substr($path, -1, 1) == '/') {
             $path .= 'dummy';
@@ -313,6 +174,16 @@ class xarServer
         return $path;
     }
 
+    /**
+     * Gets the host name
+     *
+     * Returns the server host name fetched from HTTP headers when possible.
+     * The host name is in the canonical form (host + : + port) when the port is different than 80.
+     *
+     * @author Marco Canini <marco@xaraya.com>
+     * @access public
+     * @return string HTTP host name
+     */
     static function getHost()
     {
         $server = self::getVar('HTTP_HOST');
@@ -325,6 +196,15 @@ class xarServer
         return $server;
     }
 
+    /**
+     * Gets the current protocol
+     *
+     * Returns the HTTP protocol used by current connection, it could be 'http' or 'https'.
+     *
+     * @author Marco Canini <marco@xaraya.com>
+     * @access public
+     * @return string current HTTP protocol
+     */
     static function getProtocol()
     {
         if (function_exists('xarConfigGetVar')) {
@@ -340,6 +220,12 @@ class xarServer
         return 'http';
     }
     
+    /**
+     * get base URL for Xaraya
+     *
+     * @access public
+     * @return string base URL for Xaraya
+     */
     static function getBaseURL()
     {
         static $baseurl = null;
@@ -353,6 +239,16 @@ class xarServer
         return $baseurl;
     }
     
+    /**
+     * Get current URL (and optionally add/replace some parameters)
+     *
+     * @access public
+     * @param args array additional parameters to be added to/replaced in the URL (e.g. theme, ...)
+     * @param generateXMLURL boolean over-ride Server default setting for generating XML URLs (true/false/NULL)
+     * @param target string add a 'target' component to the URL
+     * @return string current URL
+     * @todo cfr. BaseURI() for other possible ways, or try PHP_SELF
+     */
     static function getCurrentUrl($args = array(), $generateXMLURL = NULL, $target = NULL)
     {
         $server   = self::getHost();
@@ -432,6 +328,28 @@ class xarRequest
     public static $defaultRequestInfo = array();
     public static $shortURLVariables = array();
 
+    /**
+     * Initialize
+     *
+     */
+    static function init($args)
+    {
+        self::$allowShortURLs = $args['enableShortURLsSupport'];
+        self::$defaultRequestInfo = array($args['defaultModuleName'],
+                                          $args['defaultModuleType'],
+                                          $args['defaultModuleFunction']);
+    }
+
+    /**
+     * Get request variable
+     *
+     * @access public
+     * @param name string
+     * @param allowOnlyMethod string
+     * @return mixed
+     * @todo change order (POST normally overrides GET)
+     * @todo have a look at raw post data options (xmlhttp postings)
+     */
     static function getVar($name, $allowOnlyMethod = NULL)
     {
         if ($allowOnlyMethod == 'GET') {
@@ -482,6 +400,34 @@ class xarRequest
         return $value;
     }
 
+    /**
+     * Gets request info for current page.
+     *
+     * Example of short URL support :
+     *
+     * index.php/<module>/<something translated in xaruserapi.php of that module>, or
+     * index.php/<module>/admin/<something translated in xaradminapi.php>
+     *
+     * We rely on function <module>_<type>_decode_shorturl() to translate PATH_INFO
+     * into something the module can work with for the input variables.
+     * On output, the short URLs are generated by <module>_<type>_encode_shorturl(),
+     * that is called automatically by xarModURL().
+     *
+     * Short URLs are enabled/disabled globally based on a base configuration
+     * setting, and can be disabled per module via its admin configuration
+     *
+     * TODO: evaluate and improve this, obviously :-)
+     * + check security impact of people combining PATH_INFO with func/type param
+     *
+     * @author Marco Canini, Michel Dalle
+     * @access public
+     * @global xarRequest_defaultModule array
+     * @return array requested module, type and func
+     * @todo <mikespub> Allow user select start page
+     * @todo <marco> Do we need to do a preg_match on $params[1] here?
+     * @todo <mikespub> you mean for upper-case Admin, or to support other funcs than user and admin someday ?
+     * @todo <marco> Investigate this aliases thing before to integrate and promote it!
+     */
     static function getInfo()
     {
         static $requestInfo = NULL;
@@ -527,7 +473,7 @@ class xarRequest
                 if (isset($params[1]) && $params[1] == 'admin') $modType = 'admin';
                 
                 // Check if this is an alias for some other module
-                $modName = xarRequest__resolveModuleAlias($modName);
+                $modName = self::resolveModuleAlias($modName);
                 // Call the appropriate decode_shorturl function
                 if (xarModIsAvailable($modName) && xarModGetVar($modName, 'SupportShortURLs') && xarModAPILoad($modName, $modType)) {
                     $loopHole = array($modName,$modType,$funcName);
@@ -543,7 +489,7 @@ class xarRequest
                                 $args['func'] = $funcName;
                                 self::$shortURLVariables = $args;
                             } else {
-                                self::$shortURLVariables = array('module' => $modName,'type' => $modType,'func' => $funcName));
+                                self::$shortURLVariables = array('module' => $modName,'type' => $modType,'func' => $funcName);
                             }
                         }
                     }
@@ -554,7 +500,7 @@ class xarRequest
         
         if (!empty($modName)) {
             // Check if this is an alias for some other module
-            $modName = xarRequest__resolveModuleAlias($modName);
+            $modName = self::resolveModuleAlias($modName);
             // Cache values into info static var
             $requestInfo = array($modName, $modType, $funcName);
         } else {
@@ -564,6 +510,12 @@ class xarRequest
         return $requestInfo;
     }
     
+    /**
+     * Check to see if this is a local referral
+     *
+     * @access public
+     * @return bool true if locally referred, false if not
+     */
     static function IsLocalReferer()
     {
         $server  = xarServer::getHost();
@@ -575,6 +527,20 @@ class xarRequest
             return false;
         }
     }
+
+    /**
+     * Checks if a module name is an alias for some other module
+     *
+     * @access private
+     * @param var string name of the module
+     * @return string containing the module name
+     * @raise BAD_PARAM
+     */
+    private static function resolveModuleAlias($var)
+    {
+        $aliasesMap = xarConfigGetVar('System.ModuleAliases');
+        return (!empty($aliasesMap[$var])) ? $aliasesMap[$var] : $var;
+    }
 }
 
 class xarResponse
@@ -582,6 +548,22 @@ class xarResponse
     public static $closeSession = true;    // we usually will have sessions
     public static $redirectCalled = false; // do we still need this?
 
+    /**
+     * initialize
+     *
+     */
+    static function init($args)
+    {
+        // What does this do in the category useful?
+        self::$closeSession = $args['whatelseisgoingloaded'] & XARCORE_SYSTEM_SESSION;
+    }
+
+    /**
+     * Carry out a redirect
+     *
+     * @access public
+     * @param redirectURL string the URL to redirect to
+     */
     static function Redirect($url)
     {
         $redirectURL=urldecode($url); // this is safe if called multiple times.
@@ -612,6 +594,18 @@ class xarResponse
         // Start all over again
         header($header);
         exit();
+    }
+    
+    /**
+     * Checks if a redirection header has already been sent.
+     *
+     * @author Marco Canini
+     * @access public
+     * @return bool
+     */
+    static function IsRedirected()
+    {
+        return self::$redirectCalled;
     }
 }
 ?>

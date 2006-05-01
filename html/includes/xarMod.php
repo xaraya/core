@@ -1981,13 +1981,12 @@ function xarModUnregisterHook($hookObject,
 /**
  * Resolve a module alias
  *
- * This is only a convenience wrapper fot xarRequest function
  *
- * @todo evalutate dependency consequences
 */
 function xarModGetAlias($var)
 {
-    return xarRequest__resolveModuleAlias($var);
+    $aliasesMap = xarConfigGetVar('System.ModuleAliases');
+    return (!empty($aliasesMap[$var])) ? $aliasesMap[$var] : $var;
 }
 
 /**
