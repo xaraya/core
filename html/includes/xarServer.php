@@ -156,7 +156,7 @@ function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target
  */
 function xarRequestGetVar($name, $allowOnlyMethod = NULL)
 {
-    return xarRequest::getVar($name, $allowOnlyMethod)
+    return xarRequest::getVar($name, $allowOnlyMethod);
 }
 
 /**
@@ -190,86 +190,7 @@ function xarRequestGetVar($name, $allowOnlyMethod = NULL)
  */
 function xarRequestGetInfo()
 {
-    static $requestInfo = NULL;
-    static $loopHole = NULL;
-    if (is_array($requestInfo)) {
-        return $requestInfo;
-    } elseif (is_array($loopHole)) {
-    // FIXME: Security checks in functions used by decode_shorturl cause infinite loops,
-    //        because they request the current module too at the moment - unnecessary ?
-        xarLogMessage('Avoiding loop in xarRequestGetInfo()');
-        return $loopHole;
-    }
-
-    // Get variables
-    xarVarFetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $modName, NULL, XARVAR_NOT_REQUIRED);
-    xarVarFetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $modType, 'user');
-    xarVarFetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $funcName, 'main');
-
-    if (xarRequest::$allowShortURLs && empty($modName) && ($path = xarServer::getVar('PATH_INFO')) != ''
-        // IIS fix
-        && $path != xarServer::getVar('SCRIPT_NAME')) {
-        /*
-        Note: we need to match anything that might be used as module params here too ! (without compromising security)
-        preg_match_all('|/([a-z0-9_ .+-]+)|i', $path, $matches);
-
-        The original regular expression prevents the use of titles, even when properly encoded,
-        as parts of a short-url path -- because it wouldn't not permit many characters that would
-        in titles, such as parens, commas, or apostrophes.  Since a similiar "security" check is not
-        done to normal URL params, I've changed this to a more flexable regex at the other extreme.
-
-        This also happens to address Bug 2927
-
-        TODO: The security of doing this should be examined by someone more familiar with why this works
-        as a security check in the first place.
-        */
-        preg_match_all('|/([^/]+)|i', $path, $matches);
-
-        $params = $matches[1];
-        if (count($params) > 0) {
-            $modName = $params[0];
-            // if the second part is not admin, it's user by default
-            if (isset($params[1]) && $params[1] == 'admin') $modType = 'admin';
-            else $modType = 'user';
-            // Check if this is an alias for some other module
-            $modName = xarRequest__resolveModuleAlias($modName);
-            // Call the appropriate decode_shorturl function
-            if (xarModIsAvailable($modName) && xarModGetVar($modName, 'SupportShortURLs') && xarModAPILoad($modName, $modType)) {
-                $loopHole = array($modName,$modType,$funcName);
-            // don't throw exception on missing file or function anymore
-                $res = xarModAPIFunc($modName, $modType, 'decode_shorturl', $params, 0);
-                if (isset($res) && is_array($res)) {
-                    list($funcName, $args) = $res;
-                    if (!empty($funcName)) { // bingo
-                        // Forward decoded args to xarRequest::getVar
-                        if (isset($args) && is_array($args)) {
-                            $args['module'] = $modName;
-                            $args['type'] = $modType;
-                            $args['func'] = $funcName;
-                            xarRequest__setShortURLVars($args);
-                        } else {
-                            xarRequest__setShortURLVars(array('module' => $modName,
-                            'type' => $modType,
-                            'func' => $funcName));
-                        }
-                    }
-                }
-                $loopHole = NULL;
-            }
-        }
-    }
-
-    if (!empty($modName)) {
-        // Check if this is an alias for some other module
-        $modName = xarRequest__resolveModuleAlias($modName);
-        // Cache values into info static var
-        $requestInfo = array($modName, $modType, $funcName);
-    } else {
-        // If $modName is still empty we use the default module/type/func to be loaded in that such case
-        $requestInfo = xarRequest::$defaultRequestInfo;
-    }
-
-    return $requestInfo;
+    return xarRequest::getInfo();
 }
 
 /**
@@ -604,6 +525,90 @@ class xarRequest
             xarVar_stripSlashes($value);
         }
         return $value;
+    }
+
+    static function getInfo()
+    {
+        static $requestInfo = NULL;
+        static $loopHole = NULL;
+        if (is_array($requestInfo)) {
+            return $requestInfo;
+        } elseif (is_array($loopHole)) {
+            // FIXME: Security checks in functions used by decode_shorturl cause infinite loops,
+            //        because they request the current module too at the moment - unnecessary ?
+            xarLogMessage('Avoiding loop in xarRequest::getInfo()');
+            return $loopHole;
+        }
+
+        // Get variables
+        xarVarFetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $modName, NULL, XARVAR_NOT_REQUIRED);
+        xarVarFetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $modType, 'user');
+        xarVarFetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $funcName, 'main');
+
+        if (self::$allowShortURLs && empty($modName) && ($path = xarServer::getVar('PATH_INFO')) != ''
+            // IIS fix
+            && $path != xarServer::getVar('SCRIPT_NAME')) {
+            /*
+             Note: we need to match anything that might be used as module params here too ! (without compromising security)
+             preg_match_all('|/([a-z0-9_ .+-]+)|i', $path, $matches);
+
+             The original regular expression prevents the use of titles, even when properly encoded,
+             as parts of a short-url path -- because it wouldn't not permit many characters that would
+             in titles, such as parens, commas, or apostrophes.  Since a similiar "security" check is not
+             done to normal URL params, I've changed this to a more flexable regex at the other extreme.
+             
+             This also happens to address Bug 2927
+             
+             TODO: The security of doing this should be examined by someone more familiar with why this works
+             as a security check in the first place.
+            */
+            preg_match_all('|/([^/]+)|i', $path, $matches);
+            
+            $params = $matches[1];
+            if (count($params) > 0) {
+                $modName = $params[0];
+                // if the second part is not admin, it's user by default
+                $modType = 'user';
+                if (isset($params[1]) && $params[1] == 'admin') $modType = 'admin';
+                
+                // Check if this is an alias for some other module
+                $modName = xarRequest__resolveModuleAlias($modName);
+                // Call the appropriate decode_shorturl function
+                if (xarModIsAvailable($modName) && xarModGetVar($modName, 'SupportShortURLs') && xarModAPILoad($modName, $modType)) {
+                    $loopHole = array($modName,$modType,$funcName);
+                    // don't throw exception on missing file or function anymore
+                    $res = xarModAPIFunc($modName, $modType, 'decode_shorturl', $params, 0);
+                    if (isset($res) && is_array($res)) {
+                        list($funcName, $args) = $res;
+                        if (!empty($funcName)) { // bingo
+                            // Forward decoded args to xarRequest::getVar
+                            if (isset($args) && is_array($args)) {
+                                $args['module'] = $modName;
+                                $args['type'] = $modType;
+                                $args['func'] = $funcName;
+                                xarRequest__setShortURLVars($args);
+                            } else {
+                                xarRequest__setShortURLVars(array('module' => $modName,
+                                                                  'type' => $modType,
+                                                                  'func' => $funcName));
+                            }
+                        }
+                    }
+                    $loopHole = NULL;
+                }
+            }
+        }
+        
+        if (!empty($modName)) {
+            // Check if this is an alias for some other module
+            $modName = xarRequest__resolveModuleAlias($modName);
+            // Cache values into info static var
+            $requestInfo = array($modName, $modType, $funcName);
+        } else {
+            // If $modName is still empty we use the default module/type/func to be loaded in that such case
+            $requestInfo = self::$defaultRequestInfo;
+        }
+        return $requestInfo;
     }
 }
 

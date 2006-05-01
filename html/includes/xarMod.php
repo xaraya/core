@@ -1316,7 +1316,7 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
         if (isset($extraInfo) && is_array($extraInfo) && !empty($extraInfo['module'])) {
             $modName = $extraInfo['module'];
         } else {
-            list($modName) = xarRequestGetInfo();
+            list($modName) = xarRequest::getInfo();
             $extraInfo['module'] = $modName;
         }
     } else {
@@ -1479,7 +1479,7 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
     if (empty($hookModName)) throw new EmptyParameterException('hookModName');
 
     if (empty($callerModName)) {
-        list($callerModName) = xarRequestGetInfo();
+        list($callerModName) = xarRequest::getInfo();
     }
 
     // Get all hook modules for the caller module once
@@ -2024,7 +2024,7 @@ function xarModDelAlias($alias, $modName)
 function xarModGetName()
 {
     //TODO Work around for the prefix.
-    list($modName) = xarRequestGetInfo();
+    list($modName) = xarRequest::getInfo();
     return $modName;
 }
 
