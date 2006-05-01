@@ -154,7 +154,6 @@ interface IxarVars
     static function get       ($scope, $name);
     static function set       ($scope, $name, $value);
     static function delete    ($scope, $name);
-    static function delete_all($scope);
 }
 
 /**
@@ -183,6 +182,7 @@ function xarModGetVarId($modName, $name)
 interface IxarModVars extends IxarVars
 {
     static function getID($scope, $name);
+    static function delete_all($scope);
 }
 
 /**
@@ -364,7 +364,13 @@ function xarModDelUserVar($modName, $name, $uid=NULL)
 interface IxarModUserVars extends IxarVars
 {}
 
-class xarModUserVars extends xarModVars implements IxarModUserVars
+/**
+ * Class to implement the interface to module user vars
+ *
+ * @todo decide on sessionvars for anonymous users
+ * @todo when yes on the previous todo, remember promotion of the vars
+ */
+class xarModUserVars implements IxarModUserVars
 {
     /**
      * Get a user variable for a module
@@ -392,7 +398,7 @@ class xarModUserVars extends xarModVars implements IxarModUserVars
         if ($uid == NULL) $uid = xarUserGetVar('uid');
 
         // Anonymous user always uses the module default setting
-        if ($uid== _XAR_ID_UNREGISTERED) return parent::get($modName,$name);
+        if ($uid== _XAR_ID_UNREGISTERED) return xarModVars::get($modName,$name);
 
         return xarVar__GetVarByAlias($modName, $name, $uid, $prep, $type = 'moditemvar');
     }
