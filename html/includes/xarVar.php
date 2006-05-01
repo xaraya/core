@@ -209,7 +209,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     // FIXME: this flag doesn't seem to work !?
     // The FLAG here, stops xarVarFetch from reusing the variable if already present
     if (!isset($value) || ($flags & XARVAR_DONT_REUSE)) {
-        $value = xarRequestGetVar($name, $allowOnlyMethod);
+        $value = xarRequest::getVar($name, $allowOnlyMethod);
     }
 
     // TODO: use try/catch clause to implement the suppressing, letting the validators except at will.

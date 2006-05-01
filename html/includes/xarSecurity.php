@@ -635,7 +635,7 @@ function xarSecGenAuthKey($modName = NULL)
 function xarSecConfirmAuthKey($modName = NULL, $authIdVarName = 'authid')
 {
     if(!isset($modName)) list($modName) = xarRequestGetInfo();
-    $authid = xarRequestGetVar($authIdVarName);
+    $authid = xarRequest::getVar($authIdVarName);
 
     // Regenerate static part of key
     $partkey = xarSessionGetVar('rand') . strtolower($modName);

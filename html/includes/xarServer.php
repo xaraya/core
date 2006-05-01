@@ -139,7 +139,7 @@ function xarServerGetBaseURL()
  */
 function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target = NULL)
 {
-    return xarServer::getCurrentUrl($args = array(), $generateXMLURL = NULL, $target = NULL);
+    return xarServer::getCurrentUrl($args = array(), $generateXMLURL, $target);
 }
 
 // REQUEST FUNCTIONS
@@ -156,52 +156,7 @@ function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target
  */
 function xarRequestGetVar($name, $allowOnlyMethod = NULL)
 {
-    if ($allowOnlyMethod == 'GET') {
-        // Short URLs variables override GET variables
-        if (xarRequest::$allowShortURLs && isset(xarRequest::$shortURLVariables[$name])) {
-            $value = xarRequest::$shortURLVariables[$name];
-        } elseif (isset($_GET[$name])) {
-            // Then check in $_GET
-            $value = $_GET[$name];
-        } else {
-            // Nothing found, return void
-            return;
-        }
-        $method = $allowOnlyMethod;
-    } elseif ($allowOnlyMethod == 'POST') {
-        if (isset($_POST[$name])) {
-            // First check in $_POST
-            $value = $_POST[$name];
-        } else {
-            // Nothing found, return void
-            return;
-        }
-        $method = $allowOnlyMethod;
-    } else {
-        if (xarRequest::$allowShortURLs && isset(xarRequest::$shortURLVariables[$name])) {
-            // Short URLs variables override GET and POST variables
-            $value = xarRequest::$shortURLVariables[$name];
-            $method = 'GET';
-        } elseif (isset($_POST[$name])) {
-            // Then check in $_POST
-            $value = $_POST[$name];
-            $method = 'POST';
-        } elseif (isset($_GET[$name])) {
-            // Then check in $_GET
-            $value = $_GET[$name];
-            $method = 'GET';
-        } else {
-            // Nothing found, return void
-            return;
-        }
-    }
-
-    $value = xarMLS_convertFromInput($value, $method);
-
-    if (get_magic_quotes_gpc()) {
-        xarVar_stripSlashes($value);
-    }
-    return $value;
+    return xarRequest::getVar($name, $allowOnlyMethod)
 }
 
 /**
@@ -286,7 +241,7 @@ function xarRequestGetInfo()
                 if (isset($res) && is_array($res)) {
                     list($funcName, $args) = $res;
                     if (!empty($funcName)) { // bingo
-                        // Forward decoded args to xarRequestGetVar
+                        // Forward decoded args to xarRequest::getVar
                         if (isset($args) && is_array($args)) {
                             $args['module'] = $modName;
                             $args['type'] = $modType;
@@ -400,7 +355,6 @@ function xarResponseRedirect($redirectURL)
     } else {
       $header = "Location: $redirectURL";
     }// if
-
 
     // Start all over again
     header($header);
@@ -601,6 +555,56 @@ class xarRequest
     public static $allowShortURLs = true;
     public static $defaultRequestInfo = array();
     public static $shortURLVariables = array();
+
+    static function getVar($name, $allowOnlyMethod = NULL)
+    {
+        if ($allowOnlyMethod == 'GET') {
+            // Short URLs variables override GET variables
+            if (self::$allowShortURLs && isset(self::$shortURLVariables[$name])) {
+                $value = self::$shortURLVariables[$name];
+            } elseif (isset($_GET[$name])) {
+                // Then check in $_GET
+                $value = $_GET[$name];
+            } else {
+                // Nothing found, return void
+                return;
+            }
+            $method = $allowOnlyMethod;
+        } elseif ($allowOnlyMethod == 'POST') {
+            if (isset($_POST[$name])) {
+                // First check in $_POST
+                $value = $_POST[$name];
+            } else {
+                // Nothing found, return void
+                return;
+            }
+            $method = $allowOnlyMethod;
+        } else {
+            if (self::$allowShortURLs && isset(self::$shortURLVariables[$name])) {
+                // Short URLs variables override GET and POST variables
+                $value = self::$shortURLVariables[$name];
+                $method = 'GET';
+            } elseif (isset($_POST[$name])) {
+                // Then check in $_POST
+                $value = $_POST[$name];
+                $method = 'POST';
+            } elseif (isset($_GET[$name])) {
+                // Then check in $_GET
+                $value = $_GET[$name];
+                $method = 'GET';
+            } else {
+                // Nothing found, return void
+                return;
+            }
+        }
+        
+        $value = xarMLS_convertFromInput($value, $method);
+        
+        if (get_magic_quotes_gpc()) {
+            xarVar_stripSlashes($value);
+        }
+        return $value;
+    }
 }
 
 class xarResponse
