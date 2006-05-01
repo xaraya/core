@@ -1475,23 +1475,8 @@ function installer_admin_upgrade2()
     } else {
         $content .= "<p>Privileges realm masks have been created previously, moving to next check. </p>";
     }
-        $parentpriv= new xarPrivileges();
-        $priv=$parentpriv->findPrivilege('CasualAccess');
 
-        $privileges = new xarPrivileges();
-        $thispriv= $privileges->findPrivilege('ViewAuthsystem');
-        $parents= $thispriv->getparents();
-        $casual=false;
-        $readcore=false;
-        foreach ($parents as $parent) {
-             if ($parent->getName() == 'CasualAccess') $casual=true;
-             if ($parent->getName() == 'ReadNonCore') $readcore=true;
-        }
-        if (xarPrivExists('CasualAccess') && !$casual)  {
-           xarMakePrivilegeMember('ViewAuthsystem','CasualAccess');
-        }elseif (xarPrivExists('ReadNonCore') && !$readcore) {
-            xarMakePrivilegeMember('ViewAuthsystem','ReadNonCore');
-        }
+
 
 
     $content .= "<p><strong>Updating Roles and Authsystem for changes in User Login and Authentication</strong></p>";
@@ -1537,8 +1522,12 @@ function installer_admin_upgrade2()
         }
 
     // Define and setup privs that may not be registered
-    xarRegisterPrivilege('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
-    xarRegisterPrivilege('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
+    if (!xarPrivExists('AdminAuthsystem')) {
+        xarRegisterPrivilege('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
+    }
+    if (!xarPrivExists('ViewAuthsystem')) {
+        xarRegisterPrivilege('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
+    }
     xarUnregisterMask('ViewLogin');
     xarRegisterMask('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW');
     xarRegisterMask('ViewAuthsystemBlocks','All','authsystem','Block','All','ACCESS_OVERVIEW');
@@ -1547,19 +1536,37 @@ function installer_admin_upgrade2()
     xarRegisterMask('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
      //Register a mask to maintain backward compatibility - this mask is used a lot as a hack for admin perm check in themes
     xarRegisterMask('AdminPanel','All','base','All','All','ACCESS_ADMIN');
+    // Test for existance of privilege already assigned to priv group
+    // If not add it
+    $privileges = new xarPrivileges();
+    $thispriv= $privileges->findPrivilege('ViewAuthsystem');
+    $parents= $thispriv->getparents();
+    $casual=false;
+    $readcore=false;
+    foreach ($parents as $parent) {
+         if ($parent->getName() == 'CasualAccess') $casual=true;
+         if ($parent->getName() == 'ReadNonCore') $readcore=true;
+    }
+    if (xarPrivExists('CasualAccess') && !$casual)  {
+       xarMakePrivilegeMember('ViewAuthsystem','CasualAccess');
+    }elseif (xarPrivExists('ReadNonCore') && !$readcore) {
+        xarMakePrivilegeMember('ViewAuthsystem','ReadNonCore');
+    }
+
       // Define Module vars
  	xarModSetVar('authsystem', 'lockouttime', 15);
 	xarModSetVar('authsystem', 'lockouttries', 3);
 	xarModSetVar('authsystem', 'uselockout', false);
 	xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
 
+
     $content .= "<p><strong>Removing Adminpanels module and move functions to other  modules</strong></p>";
     // Adminpanels module overviews modvar is deprecated
     // Move off Adminpanels dashboard modvar to Themes module
     //Safest way is to just set the dash off for now
 
-        xarModSetVar('themes','usedashboard',false);
-        xarModSetVar('themes','dashtemplate','');
+    xarModSetVar('themes','usedashboard',false);
+    xarModSetVar('themes','dashtemplate','admin');
 
     $table_name['admin_menu']=$sitePrefix . '_admin_menu';
     $upgrade['admin_menu'] = xarModAPIFunc('installer',
