@@ -593,8 +593,6 @@ function xarResponseRedirect($redirectURL)
     // First checks if there's a pending exception, if so does not redirect browser
     if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return false;
 
-    $redirectURL=urldecode($redirectURL); // this is safe if called multiple times
-
     if (headers_sent() == true) return false;
 
     // MrB: We only do this for pn Legacy, consider removing it
