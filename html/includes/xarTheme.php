@@ -84,7 +84,7 @@ function xarThemeGetIDFromName($themeName,$id='regid')
 {
     if (empty($themeName)) throw new EmptyParameterException('themeName');
 
-    $themeBaseInfo = xarMod_getBaseInfo($themeName, 'theme');
+    $themeBaseInfo = xarMod::getBaseInfo($themeName, 'theme');
     if (!isset($themeBaseInfo)) return; // throw back
 
     return $themeBaseInfo[$id];
@@ -170,7 +170,7 @@ function xarTheme_getFileInfo($themeOsDir)
  */
 function xarTheme_getBaseInfo($themeName)
 {
-    return xarMod_getBaseInfo($themeName, $type = 'theme');
+    return xarMod::getBaseInfo($themeName, $type = 'theme');
 }
 
 /**

@@ -64,19 +64,19 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
     function bindDomain($dnType, $dnName='xaraya')
     {
         if (parent::bindDomain($dnType, $dnName)) return true;
-// FIXME: I should comment it because it creates infinite loop
-// MLS -> xarMod_getBaseInfo -> xarDisplayableName -> xarMod_getFileInfo -> MLS
-// We don't use and don't translate KEYS files now,
-// but I will recheck this code in the menus clone
-//        if ($dnType == XARMLS_DNTYPE_MODULE) {
-//            $this->loadKEYS($dnName);
-//        }
+        // FIXME: I should comment it because it creates infinite loop
+        // MLS -> xarMod::getBaseInfo -> xarDisplayableName -> xarMod_getFileInfo -> MLS
+        // We don't use and don't translate KEYS files now,
+        // but I will recheck this code in the menus clone
+        //        if ($dnType == XARMLS_DNTYPE_MODULE) {
+        //            $this->loadKEYS($dnName);
+        //        }
         return false;
     }
 /*
     function loadKEYS($dnName)
     {
-        $modBaseInfo = xarMod_getBaseInfo($dnName);
+        $modBaseInfo = xarMod::getBaseInfo($dnName);
         $fileName = "modules/$modBaseInfo[directory]/KEYS";
         if (file_exists($fileName)) {
 

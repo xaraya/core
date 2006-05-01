@@ -131,7 +131,7 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
         // user api function
         if (!xarModAPILoad($authModName, 'user')) continue;
 
-        $modInfo = xarMod_GetBaseInfo($authModName);
+        $modInfo = xarMod::getBaseInfo($authModName);
         $modId = $modInfo['systemid'];
 
         // CHECKME: Does this raise an exception??? If so:

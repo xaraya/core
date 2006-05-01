@@ -476,7 +476,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
     $baseinfotype = 'module';
 
     if($type != 'configvar') {
-        $modBaseInfo = xarMod_getBaseInfo($modName, $baseinfotype);
+        $modBaseInfo = xarMod::getBaseInfo($modName, $baseinfotype);
         if (!isset($modBaseInfo)) return; // throw back
     }
 
@@ -587,7 +587,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
     case 'modvar':
     case 'moditemvar':
     default:
-        $modBaseInfo = xarMod_getBaseInfo($modName);
+        $modBaseInfo = xarMod::getBaseInfo($modName);
         if(!isset($modBaseInfo)) throw new ModuleNotFoundException($modName);
         break;
     case 'configvar':
@@ -715,7 +715,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = '
         case 'modvar':
         case 'moditemvar':
             default:
-            $modBaseInfo = xarMod_getBaseInfo($modName);
+            $modBaseInfo = xarMod::getBaseInfo($modName);
             if (!isset($modBaseInfo)) return; // throw back
             break;
         case 'configvar':

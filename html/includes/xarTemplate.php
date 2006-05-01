@@ -625,7 +625,7 @@ function xarTplGetImage($modImage, $modName = NULL)
 
     // get module directory (could be different from module name)
     if(function_exists('xarMod_getBaseInfo')) {
-        $modBaseInfo = xarMod_getBaseInfo($modName);
+        $modBaseInfo = xarMod::getBaseInfo($modName);
         if (!isset($modBaseInfo)) return; // throw back
         $modOsDir = $modBaseInfo['osdirectory'];
     } else {
@@ -1279,7 +1279,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
 function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tplSubPart = '')
 {
     if(function_exists('xarMod_getBaseInfo')) {
-        if(!($modBaseInfo = xarMod_getBaseInfo($modName))) return;
+        if(!($modBaseInfo = xarMod::getBaseInfo($modName))) return;
         $modOsDir = $modBaseInfo['osdirectory'];
     } elseif(!empty($modName)) {
         $modOsDir = $modName;
@@ -1811,7 +1811,7 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
         $dbconn->begin();
         $tag_id = $dbconn->GenId($tag_table);
 
-        $modInfo = xarMod_GetBaseInfo($tag->getModule());
+        $modInfo = xarMod::GetBaseInfo($tag->getModule());
         $modId = $modInfo['systemid'];
         $query = "INSERT INTO $tag_table
                   (xar_id, xar_name, xar_modid, xar_handler, xar_data)

@@ -223,7 +223,7 @@ class xarModVars implements IxarModVars
     {
         if (empty($modName)) throw new EmptyParameterException('modName');
         
-        $modBaseInfo = xarMod_getBaseInfo($modName);
+        $modBaseInfo = xarMod::getBaseInfo($modName);
         if (!isset($modBaseInfo)) return;
         
         $dbconn =& xarDBGetConn();
@@ -291,7 +291,7 @@ class xarModVars implements IxarModVars
     {
         if(empty($modName)) throw new EmptyParameterException('modName');
         
-        $modBaseInfo = xarMod_getBaseInfo($modName);
+        $modBaseInfo = xarMod::getBaseInfo($modName);
         
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
@@ -359,7 +359,7 @@ class xarModVars implements IxarModVars
         if (empty($modName) or empty($name)) throw new EmptyParameterException('modName and/or name');
         
         // Retrieve module info, so we can decide where to look
-        $modBaseInfo = xarMod_getBaseInfo($modName);
+        $modBaseInfo = xarMod::getBaseInfo($modName);
         if (!isset($modBaseInfo)) return; // throw back
         
         if (xarCore::isCached('Mod.GetVarID', $modBaseInfo['name'] . $name)) {
@@ -537,7 +537,7 @@ function xarModPrivateLoad($modName, $modType, $flags = 0)
     // Log it when it doesnt come from the cache
     xarLogMessage("xarModLoad: loading $modName:$modType");
 
-    $modBaseInfo = xarMod_getBaseInfo($modName);
+    $modBaseInfo = xarMod::getBaseInfo($modName);
     if (!isset($modBaseInfo)) throw new ModuleNotFoundException($modName);
 
     if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE && !($flags & XARMOD_LOAD_ANYSTATE) ) {
@@ -637,7 +637,7 @@ function xarModDBInfoLoad($modName, $modDir = NULL, $type = 'module')
 
     // Get the directory if we don't already have it
     if (empty($modDir)) {
-        $modBaseInfo = xarMod_getBaseInfo($modName,$type);
+        $modBaseInfo = xarMod::getBaseInfo($modName,$type);
         if (!isset($modBaseInfo)) return; // throw back
         $modDir = xarVarPrepForOS($modBaseInfo['directory']);
     } else {
@@ -680,7 +680,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
     if (empty($funcName)) throw new EmptyParameterException('modName');
 
     // good thing this information is cached :)
-    $modBaseInfo = xarMod_getBaseInfo($modName);
+    $modBaseInfo = xarMod::getBaseInfo($modName);
 
     // Build function name and call function
     $modFunc = "{$modName}_{$modType}_{$funcName}";
@@ -788,7 +788,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
         // let's check for that function again to be sure
         if (!function_exists($modAPIFunc)) {
             // good thing this information is cached :)
-            $modBaseInfo = xarMod_getBaseInfo($modName);
+            $modBaseInfo = xarMod::getBaseInfo($modName);
             if (!isset($modBaseInfo)) {return;} // throw back
 
             $funcFile = 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.'api/'.strtolower($funcName).'.php';
@@ -1486,88 +1486,6 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
     return $FileInfo;
 }
 
-/**
- * Load a module's base information
- *
- * @access protected
- * @param modName string the module's name
- * @param type determines theme or module
- * @return mixed an array of base module info on success
- * @raise DATABASE_ERROR, MODULE_NOT_EXIST
- */
-function xarMod_getBaseInfo($modName, $type = 'module')
-{
-    if (empty($modName)) throw new EmptyParameterException('modName');
-
-    if ($type != 'module' && $type != 'theme') {
-        throw new BadParameterException($type,'The value of the "type" parameter must be "module" or "theme", it was "#(1)"');
-    }
-
-    // FIXME: <MrB> I've seen cases where the cache info is not in sync
-    // with reality. I've take a couple ones out, but I haven't tested all
-    // the way through.
-    // <mikespub> There were some issues where you tried to initialize/activate
-    // several modules one after the other during the same page request (e.g. at
-    // installation), since the state changes of those modules weren't taken
-    // into account. The GLOBALS['xarMod_noCacheState'] flag tells Xaraya *not*
-    // to cache module (+state) information in that case...
-
-    if ($type == 'module') {
-        $cacheCollection = 'Mod.BaseInfos';
-        $checkNoState = 'xarMod_noCacheState';
-    } else {
-        $cacheCollection = 'Theme.BaseInfos';
-        $checkNoState = 'xarTheme_noCacheState';
-    }
-
-    if (empty($GLOBALS[$checkNoState]) && xarCore::isCached($cacheCollection, $modName)) {
-        return xarCore::getCached($cacheCollection, $modName);
-    }
-    // Log it when it doesnt come from the cache
-    xarLogMessage("xarMod_getBaseInfo ". $modName ." / ". $type);
-
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
-
-    $table = $tables[$type.'s'];
-
-    $query = "SELECT items.xar_regid, items.xar_directory, items.xar_mode,
-                     items.xar_id, items.xar_state, items.xar_name
-              FROM   $table items
-              WHERE  items.xar_name = ? OR items.xar_directory = ?";
-    $bindvars = array($modName, $modName);
-    $stmt = $dbconn->prepareStatement($query);
-    $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
-
-    if (!$result->next()) {
-        $result->Close();
-        return;
-    }
-
-    $modBaseInfo = array();
-    list($regid,  $directory, $mode, $systemid, $state, $name) = $result->getRow();
-    $result->Close();
-
-    $modBaseInfo['regid'] = (int) $regid;
-    $modBaseInfo['mode'] = (int) $mode;
-    $modBaseInfo['systemid'] = (int) $systemid;
-    $modBaseInfo['state'] = (int) $state;
-    $modBaseInfo['name'] = $name;
-    $modBaseInfo['directory'] = $directory;
-    $modBaseInfo['displayname'] = xarMod::getDisplayName($directory, $type);
-    $modBaseInfo['displaydescription'] = xarMod::getDisplayDescription($directory, $type);
-    // Shortcut for os prepared directory
-    // TODO: <marco> get rid of it since useless
-    $modBaseInfo['osdirectory'] = xarVarPrepForOS($directory);
-
-    // This needed?
-    if (empty($modBaseInfo['state'])) {
-        $modBaseInfo['state'] = XARMOD_STATE_UNINITIALISED;
-    }
-    xarCore::setCached($cacheCollection, $name, $modBaseInfo);
-
-    return $modBaseInfo;
-}
 
 /**
  * Get all module variables with a particular name
@@ -1697,7 +1615,7 @@ function xarModRegisterHook($hookObject,
     try {
         $dbconn->begin();
         // New query: the same but insert the modid's instead of the modnames into tmodule
-        $tmodInfo = xarMod_getBaseInfo($hookModName);
+        $tmodInfo = xarMod::getBaseInfo($hookModName);
         $tmodId = $tmodInfo['systemid'];
         $query = "INSERT INTO $hookstable
                   (xar_id, xar_object, xar_action, xar_tarea, xar_tmodid, xar_ttype, xar_tfunc)
@@ -1742,7 +1660,7 @@ function xarModUnregisterHook($hookObject,
     try {
         $dbconn->begin();
         // New query: same but test on tmodid instead of tmodname
-        $tmodInfo = xarMod_getBaseInfo($hookModName);
+        $tmodInfo = xarMod::getBaseInfo($hookModName);
         $tmodId = $tmodInfo['systemid'];
         $query = "DELETE FROM $hookstable
                   WHERE xar_object = ?
@@ -1777,6 +1695,9 @@ function xarModGetIDFromName($modName, $type = 'module')
 
 function xarModGetInfo($modRegId, $type = 'module')
 {   return xarMod::getInfo($modRegId, $type); }
+
+function xarMod_getBaseInfo($modName, $type = 'module')
+{   return xarMod::getBaseInfo($modName, $type); }
 
 function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'module')
 {   return xarMod::getState($modRegId, $modMode, $type); }
@@ -1859,7 +1780,7 @@ class xarMod
         if (empty($modName)) throw new EmptyParameterException('modName');
         
         // For themes, kinda weird
-        $modBaseInfo = xarMod_getBaseInfo($modName,$type);
+        $modBaseInfo = self::getBaseInfo($modName,$type);
         if (!isset($modBaseInfo)) return; // throw back
         // MrB: this is confusing
         return $modBaseInfo['regid'];
@@ -1898,14 +1819,14 @@ class xarMod
         //xarLogMessage("xarMod::isAvailable: begin $type:$modName");
         
         // FIXME: there is no point to the cache here, since
-        // xarMod_getBaseInfo() caches module details anyway.
+        // xarMod::getBaseInfo() caches module details anyway.
         static $modAvailableCache = array();
         
         if (empty($modName)) throw new EmptyParameterException('modName');
         
         // Get the real module details.
         // The module details will be cached anyway.
-        $modBaseInfo = xarMod_getBaseInfo($modName, $type);
+        $modBaseInfo = self::getBaseInfo($modName, $type);
         
         // Return null if the result wasn't set
         if (!isset($modBaseInfo)) return false; // throw back
@@ -2072,8 +1993,85 @@ class xarMod
             xarCore::setCached('Theme.Infos', $modRegId, $modInfo);
             break;
         }
-        
         return $modInfo;
+    }
+
+    /**
+     * Load a module's base information
+     *
+     * @access public
+     * @param modName string the module's name
+     * @param type determines theme or module
+     * @return mixed an array of base module info on success
+     * @raise DATABASE_ERROR, MODULE_NOT_EXIST
+     */
+    static function getBaseInfo($modName, $type = 'module')
+    {
+        if (empty($modName)) throw new EmptyParameterException('modName');
+        
+        if ($type != 'module' && $type != 'theme') {
+            throw new BadParameterException($type,'The value of the "type" parameter must be "module" or "theme", it was "#(1)"');
+        }
+        
+        // The GLOBALS['xarMod_noCacheState'] flag tells Xaraya *not*
+        // to cache module (+state) where this would lead to problems
+        // like in the installer for example.        
+        if ($type == 'module') {
+            $cacheCollection = 'Mod.BaseInfos';
+            $checkNoState = 'xarMod_noCacheState';
+        } else {
+            $cacheCollection = 'Theme.BaseInfos';
+            $checkNoState = 'xarTheme_noCacheState';
+        }
+        
+        if (empty($GLOBALS[$checkNoState]) && xarCore::isCached($cacheCollection, $modName)) {
+            return xarCore::getCached($cacheCollection, $modName);
+        }
+        // Log it when it doesnt come from the cache
+        xarLogMessage("xarMod::getBaseInfo ". $modName ." / ". $type);
+        
+        $dbconn =& xarDBGetConn();
+        $tables =& xarDBGetTables();
+        
+        // theme+s or module+s
+        $table = $tables[$type.'s'];
+        
+        $query = "SELECT items.xar_regid, items.xar_directory, items.xar_mode,
+                     items.xar_id, items.xar_state, items.xar_name
+              FROM   $table items
+              WHERE  items.xar_name = ? OR items.xar_directory = ?";
+        $bindvars = array($modName, $modName);
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
+        
+        if (!$result->next()) {
+            $result->Close();
+            return;
+        }
+        
+        $modBaseInfo = array();
+        list($regid,  $directory, $mode, $systemid, $state, $name) = $result->getRow();
+        $result->Close();
+        
+        $modBaseInfo['regid'] = (int) $regid;
+        $modBaseInfo['mode'] = (int) $mode;
+        $modBaseInfo['systemid'] = (int) $systemid;
+        $modBaseInfo['state'] = (int) $state;
+        $modBaseInfo['name'] = $name;
+        $modBaseInfo['directory'] = $directory;
+        $modBaseInfo['displayname'] = xarMod::getDisplayName($directory, $type);
+        $modBaseInfo['displaydescription'] = xarMod::getDisplayDescription($directory, $type);
+        // Shortcut for os prepared directory
+        // TODO: <marco> get rid of it since useless
+        $modBaseInfo['osdirectory'] = xarVarPrepForOS($directory);
+        
+        // This needed?
+        if (empty($modBaseInfo['state'])) {
+            $modBaseInfo['state'] = XARMOD_STATE_UNINITIALISED;
+        }
+        xarCore::setCached($cacheCollection, $name, $modBaseInfo);
+        
+        return $modBaseInfo;
     }
 }
 
