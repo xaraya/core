@@ -32,7 +32,7 @@ function xarSerReqRes_init($args, $whatElseIsGoingLoaded)
     xarResponse::init($args);
 
     // Register the ServerRequest event
-    xarEvt_registerEvent('ServerRequest');
+    xarEvents::register('ServerRequest');
 
     // Subsystem initialized, register a handler to run when the request is over
     //register_shutdown_function ('xarServer__shutdown_handler');

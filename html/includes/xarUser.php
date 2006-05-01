@@ -76,9 +76,9 @@ function xarUser_init($args, $whatElseIsGoingLoaded)
     xarTplSetThemeName(xarUserGetNavigationThemeName());
 
     // Register the UserLogin event
-    xarEvt_registerEvent('UserLogin');
+    xarEvents::register('UserLogin');
     // Register the UserLogout event
-    xarEvt_registerEvent('UserLogout');
+    xarEvents::register('UserLogout');
 
     // Subsystem initialized, register a handler to run when the request is over
     //register_shutdown_function ('xarUser__shutdown_handler');
@@ -198,7 +198,7 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
     // FIXME: <marco> here we could also set a last_logon timestamp
 
     // User logged in successfully, trigger the proper event with the new userid
-    xarEvt_trigger('UserLogin',$userId);
+    xarEvents::trigger('UserLogin',$userId);
 
     return true;
 }
@@ -227,7 +227,7 @@ function xarUserLogOut()
     xarSessionDelVar('authenticationModule');
 
     // User logged out successfully, trigger the proper event with the old userid
-    xarEvt_trigger('UserLogout',$userId);
+    xarEvents::trigger('UserLogout',$userId);
 
     return true;
 }

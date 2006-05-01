@@ -32,7 +32,7 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
     $GLOBALS['xarSession_systemArgs'] = $args;
 
     // Register the SessionCreate event
-    xarEvt_registerEvent('SessionCreate');
+    xarEvents::register('SessionCreate');
 
     // Register tables this subsystem uses
     $systemPrefix = xarDBGetSystemTablePrefix();
@@ -60,7 +60,7 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
     if ($session->isNew()) {
         if($session->register($ipAddress)) {
             // Congratulations. We have created a new session
-            xarEvt_trigger('SessionCreate');
+            xarEvents::trigger('SessionCreate');
         } else {
             // Registering failed, now what?
         }

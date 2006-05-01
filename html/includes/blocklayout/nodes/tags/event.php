@@ -24,7 +24,7 @@ class xarTpl__XarEventNode extends xarTpl__TplTagNode
             return;
         }
         
-        return "xarEvt_trigger('$name')";
+        return "xarEvents::trigger('$name')";
     }
 }
 ?>

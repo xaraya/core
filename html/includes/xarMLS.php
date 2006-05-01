@@ -77,9 +77,9 @@ function xarMLS_init($args, $whatElseIsGoingLoaded)
 
     // Register MLS events
     // These should be done before the xarMLS_setCurrentLocale function
-    xarEvt_registerEvent('MLSMissingTranslationString');
-    xarEvt_registerEvent('MLSMissingTranslationKey');
-    xarEvt_registerEvent('MLSMissingTranslationDomain');
+    xarEvents::register('MLSMissingTranslationString');
+    xarEvents::register('MLSMissingTranslationKey');
+    xarEvents::register('MLSMissingTranslationDomain');
 
     if (!($whatElseIsGoingLoaded & XARCORE_SYSTEM_USER)) {
         // The User System won't be started
