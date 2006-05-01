@@ -99,14 +99,7 @@ function xarServerGetBaseURI()
 
 function xarServerGetHost()
 {
-    $server = xarServer::getVar('HTTP_HOST');
-    if (empty($server)) {
-        // HTTP_HOST is reliable only for HTTP 1.1
-        $server = xarServer::getVar('SERVER_NAME');
-        $port = xarServer::getVar('SERVER_PORT');
-        if ($port != '80') $server .= ":$port";
-    }
-    return $server;
+    return xarServer::getHost();
 }
 
 /**
@@ -120,20 +113,7 @@ function xarServerGetHost()
  */
 function xarServerGetProtocol()
 {
-    if (function_exists('xarConfigGetVar')){
-        if (xarConfigGetVar('Site.Core.EnableSecureServer') == true){
-            if (preg_match('/^http:/', $_SERVER['REQUEST_URI'])) {
-                return 'http';
-            }
-            $HTTPS = xarServer::getVar('HTTPS');
-            // IIS seems to set HTTPS = off for some reason
-            return (!empty($HTTPS) && $HTTPS != 'off') ? 'https' : 'http';
-        } else {
-            return 'http';
-        }
-    } else {
-        return 'http';
-    }
+    return xarServer::getProtocol();
 }
 
 /**
@@ -148,9 +128,9 @@ function xarServerGetBaseURL()
 
     if (isset($baseurl))  return $baseurl;
 
-    $server = xarServerGetHost();
-    $protocol = xarServerGetProtocol();
-    $path = xarServer::getBaseURI();
+    $server   = xarServer::getHost();
+    $protocol = xarServer::getProtocol();
+    $path     = xarServer::getBaseURI();
 
     $baseurl = "$protocol://$server$path/";
     return $baseurl;
@@ -168,9 +148,9 @@ function xarServerGetBaseURL()
  */
 function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target = NULL)
 {
-    $server = xarServerGetHost();
-    $protocol = xarServerGetProtocol();
-    $baseurl = "$protocol://$server";
+    $server   = xarServer::getHost();
+    $protocol = xarServer::getProtocol();
+    $baseurl  = "$protocol://$server";
 
     // get current URI
     $request = xarServer::getVar('REQUEST_URI');
@@ -427,7 +407,7 @@ function xarRequestGetInfo()
  */
 function xarRequestIsLocalReferer()
 {
-    $server = xarServerGetHost();
+    $server  = xarServer::getHost();
     $referer = xarServer::getVar('HTTP_REFERER');
 
     if (!empty($referer) && preg_match("!^https?://$server(:\d+|)/!", $referer)) {
@@ -583,6 +563,33 @@ class xarServer
             $path = '';
         }
         return $path;
+    }
+
+    static function getHost()
+    {
+        $server = self::getVar('HTTP_HOST');
+        if (empty($server)) {
+            // HTTP_HOST is reliable only for HTTP 1.1
+            $server = self::getVar('SERVER_NAME');
+            $port   = self::getVar('SERVER_PORT');
+            if ($port != '80') $server .= ":$port";
+        }
+        return $server;
+    }
+
+    static function getProtocol()
+    {
+        if (function_exists('xarConfigGetVar')) {
+            if (xarConfigGetVar('Site.Core.EnableSecureServer') == true) {
+                if (preg_match('/^http:/', self::getVar('REQUEST_URI'))) {
+                    return 'http';
+                }
+                $HTTPS = self::getVar('HTTPS');
+                // IIS seems to set HTTPS = off for some reason
+                return (!empty($HTTPS) && $HTTPS != 'off') ? 'https' : 'http';
+            }
+        }
+        return 'http';
     }
 }
 
