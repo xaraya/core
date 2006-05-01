@@ -1596,30 +1596,18 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
 
     include($fileName);
 
-    if (!isset($themeinfo)){
-        $themeinfo = array();
-    }
-    if (!isset($modversion)){
-        $modversion = array();
-    }
+    if (!isset($themeinfo))  $themeinfo = array();
+    if (!isset($modversion)) $modversion = array();
+    
     $version = array_merge($themeinfo, $modversion);
 
     // name and id are required, assert them, otherwise the module is invalid
     assert('isset($version["name"]) && isset($version["id"]); /* Both name and id need to be present in xarversion.php */');
     $FileInfo['name']           = $version['name'];
     $FileInfo['id']             = (int) $version['id'];
-    if (isset($version['displayname'])) {
-        $FileInfo['displayname'] = $version['displayname'];
-    } else {
-        $FileInfo['displayname'] = $version['name'];
-    }
-
+    $FileInfo['displayname']    = isset($version['displayname'])    ? $version['displayname'] : $version['name'];
     $FileInfo['description']    = isset($version['description'])    ? $version['description'] : false;
-    if (isset($version['displaydescription'])) {
-        $FileInfo['displaydescription'] = $version['displaydescription'];
-    } else {
-        $FileInfo['displaydescription'] = $FileInfo['description'];
-    }
+    $FileInfo['displaydescription'] = isset($version['displaydescription']) ? $version['displaydescription'] : $FileInfo['description'];
     $FileInfo['admin']          = isset($version['admin'])          ? $version['admin'] : false;
     $FileInfo['admin_capable']  = isset($version['admin'])          ? $version['admin'] : false;
     $FileInfo['user']           = isset($version['user'])           ? $version['user'] : false;
@@ -1647,7 +1635,6 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
     $FileInfo['bl_version']     = isset($version['bl_version'])     ? $version['bl_version'] : false;
 
     xarCore::setCached('Mod.getFileInfos', $modOsDir, $FileInfo);
-
     return $FileInfo;
 }
 
@@ -1866,23 +1853,6 @@ function xarMod__loadDbInfo($modName, $modDir)
     return true;
 }
 
-/**
- * Get the module's current state
- *
- * @access public
- * @param  integer the module's registered id
- * @param modMode integer the module's site mode
- * @param type determines theme or module
- * @return mixed the module's current state
- * @raise DATABASE_ERROR, MODULE_NOT_EXIST
- * @todo implement the xarMod__setState reciproke
- * @todo We dont need this, used nowhere
- */
-function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'module')
-{
-    $tmp = xarModGetInfo($modRegid, $type);
-    return $tmp['state'];
-}
 
 /**
  * register a hook function
@@ -1977,54 +1947,105 @@ function xarModUnregisterHook($hookObject,
     return true;
 }
 
-
 /**
- * Resolve a module alias
+ * Wrapper function to support Xaraya 1 API for module managment
  *
- *
-*/
-function xarModGetAlias($var)
-{
-    $aliasesMap = xarConfigGetVar('System.ModuleAliases');
-    return (!empty($aliasesMap[$var])) ? $aliasesMap[$var] : $var;
-}
-
-/**
- * Set an alias for a module
- *
- * @todo evalutate dependency consequences
- *
-*/
-function xarModSetAlias($alias, $modName)
-{
-    if (!xarModAPILoad('modules', 'admin')) return;
-    $args = array('modName' => $modName, 'aliasModName' => $alias);
-    return xarModAPIFunc('modules', 'admin', 'add_module_alias', $args);
-}
-
-/**
- * Delete an alias for a module
- * @todo evalutate dependency consequences
- *
-*/
-function xarModDelAlias($alias, $modName)
-{
-    if (!xarModAPILoad('modules', 'admin')) return;
-    $args = array('modName' => $modName, 'aliasModName' => $alias);
-    return xarModAPIFunc('modules', 'admin', 'delete_module_alias', $args);
-}
-
-/**
- * get name of current top-level module
- *
- * @access public
- * @return string the name of the current top-level module, false if not in a module
  */
-function xarModGetName()
+function xarModGetName() { return xarMod::getName(); }
+function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'module')
 {
-    //TODO Work around for the prefix.
-    list($modName) = xarRequest::getInfo();
-    return $modName;
+    return xarMod::getState($modRegId, $modMode, $type);
 }
 
+/**
+ * Preliminary class to module xarMod interface
+ *
+ */
+class xarMod
+{
+    /**
+     * get name of current top-level module
+     *
+     * @access public
+     * @return string the name of the current top-level module, false if not in a module
+     */
+    static function getName()
+    {
+        list($modName) = xarRequest::getInfo();
+        return $modName;
+    }
+
+    /**
+     * Get the module's current state
+     *
+     * @access public
+     * @param  integer the module's registered id
+     * @param modMode integer the module's site mode
+     * @param type determines theme or module
+     * @return mixed the module's current state
+     * @raise DATABASE_ERROR, MODULE_NOT_EXIST
+     * @todo implement the xarMod__setState reciproke
+     * @todo We dont need this, used nowhere
+     */
+    static function getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'module')
+    {
+        $tmp = xarModGetInfo($modRegid, $type);
+        return $tmp['state'];
+    }
+
+}
+
+
+/**
+ * Wrapper functions to support Xaraya 1 API for module aliases
+ *
+ */
+function xarModGetAlias($alias) { return xarModAlias::resolve($alias);}
+function xarModSetAlias($alias, $modName) { return xarModAlias::set($alias,$modName);}
+function xarModDelAlias($alias, $modName) { return xarModAlias::delete($alias,$modName);}
+
+interface IxarModAlias
+{
+    static function resolve($alias);
+    static function set($alias,$modName);
+    static function delete($alias,$modName);
+}
+
+/**
+ * Class to model interface to module aliases
+ *
+ * @todo evaluate dependency consequences
+ * @todo evaluate usage in modules, it's not very common, as in, perhaps worth to scrap an bolt onto a request mapper
+ */
+class xarModAlias implements IxarModAlias
+{
+    /**
+     * Resolve an alias for a module
+     */
+    static function resolve($alias)
+    {
+        $aliasesMap = xarConfigGetVar('System.ModuleAliases');
+        return (!empty($aliasesMap[$alias])) ? $aliasesMap[$alias] : $alias;
+    }
+
+    /**
+     * Set an alias for a module
+     */
+    static function set($alias,$modName)
+    {
+        if (!xarModAPILoad('modules', 'admin')) return;
+        $args = array('modName' => $modName, 'aliasModName' => $alias);
+        return xarModAPIFunc('modules', 'admin', 'add_module_alias', $args);
+    }
+
+    /**
+     * Delete an alias for a module
+     */
+    static function delete($alias, $modName)
+    {
+        if (!xarModAPILoad('modules', 'admin')) return;
+        $args = array('modName' => $modName, 'aliasModName' => $alias);
+        return xarModAPIFunc('modules', 'admin', 'delete_module_alias', $args);
+    }
+}
 ?>

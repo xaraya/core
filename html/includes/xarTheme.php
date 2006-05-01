@@ -209,6 +209,6 @@ function xarTheme_getVarsByName($name)
  */
 function xarTheme_getState($themeRegId, $themeMode)
 {
-    return xarMod_getState($themeRegId, $themeMode, $type = 'theme');
+    return xarMod::getState($themeRegId, $themeMode, $type = 'theme');
 }
 ?>
