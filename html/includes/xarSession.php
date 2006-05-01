@@ -49,11 +49,11 @@ function xarSession_init($args, $whatElseIsGoingLoaded)
     $sessionId = $session->id();
 
     // Get  client IP addr, so we can register or continue a session
-    $forwarded = xarServerGetVar('HTTP_X_FORWARDED_FOR');
+    $forwarded = xarServer::getVar('HTTP_X_FORWARDED_FOR');
     if (!empty($forwarded)) {
         $ipAddress = preg_replace('/,.*/', '', $forwarded);
     } else {
-        $ipAddress = xarServerGetVar('REMOTE_ADDR');
+        $ipAddress = xarServer::getVar('REMOTE_ADDR');
     }
 
     // If it's new, register it, otherwise use the existing.
@@ -227,7 +227,7 @@ class xarSession implements IsessionHandler
                 $lifetime = 0;
                 // Referer check defaults to the current host for security level High
                 if (empty($args['refererCheck'])) {
-                    $host = xarServerGetVar('HTTP_HOST');
+                    $host = xarServer::getVar('HTTP_HOST');
                     $host = preg_replace('/:.*/', '', $host);
                     // this won't work for non-standard ports
                     //if (!xarFuncIsDisabled('ini_set')) ini_set('session.referer_check', "$host$path");
@@ -263,7 +263,7 @@ class xarSession implements IsessionHandler
             // and should be configurable for multi-site setups
             // Example: .Xaraya.com for all *.Xaraya.com servers
             // Example: www.Xaraya.com for www.Xaraya.com and *.www.Xaraya.com
-            //$domain = xarServerGetVar('HTTP_HOST');
+            //$domain = xarServer::getVar('HTTP_HOST');
             //$domain = preg_replace('/:.*/', '', $domain);
             if (!empty($args['cookieDomain'])) {
                 ini_set('session.cookie_domain', $args['cookieDomain']);

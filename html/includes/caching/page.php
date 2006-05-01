@@ -95,7 +95,7 @@ function xarPageIsCached($cacheKey, $name = '')
 
     $xarTpl_themeDir = xarTplGetThemeDir();
 
-    $page = xarServerGetVar('HTTP_HOST') . $xarTpl_themeDir .
+    $page = xarServer::getVar('HTTP_HOST') . $xarTpl_themeDir .
             xarUserGetNavigationLocale();
 
     // add user groups as a factor if necessary
@@ -105,8 +105,8 @@ function xarPageIsCached($cacheKey, $name = '')
         $page .= join(';',$gidlist);
     }
 
-    $page .= xarServerGetVar('REQUEST_URI');
-    $param = xarServerGetVar('QUERY_STRING');
+    $page .= xarServer::getVar('REQUEST_URI');
+    $param = xarServer::getVar('QUERY_STRING');
     if (!empty($param)) {
         $page .= '?' . $param;
     }
@@ -121,7 +121,7 @@ function xarPageIsCached($cacheKey, $name = '')
         // (display views can be cached OR it is not a display view) AND
         (($xarPage_cacheDisplay == 1) || (!strpos($cacheKey, '-display'))) &&
         // the http request is a GET OR a HEAD AND
-        (xarServerGetVar('REQUEST_METHOD') == 'GET' || xarServerGetVar('REQUEST_METHOD') == 'HEAD') &&
+        (xarServer::getVar('REQUEST_METHOD') == 'GET' || xarServer::getVar('REQUEST_METHOD') == 'HEAD') &&
         // (we're caching the output of all themes OR this is the theme we're caching) AND
         (empty($xarOutput_cacheTheme) ||
          strpos($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
@@ -210,7 +210,7 @@ function xarPageSetCached($cacheKey, $name, $value)
         // (display views can be cached OR it is not a display view) AND
         (($xarPage_cacheDisplay == 1) || (!strpos($cacheKey, '-display'))) &&
         // the http request is a GET OR a HEAD AND
-        (xarServerGetVar('REQUEST_METHOD') == 'GET' || xarServerGetVar('REQUEST_METHOD') == 'HEAD') &&
+        (xarServer::getVar('REQUEST_METHOD') == 'GET' || xarServer::getVar('REQUEST_METHOD') == 'HEAD') &&
         // (we're caching the output of all themes OR this is the theme we're caching) AND
         (empty($xarOutput_cacheTheme) ||
          strpos($xarTpl_themeDir, $xarOutput_cacheTheme)) &&

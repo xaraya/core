@@ -70,20 +70,7 @@ function xarServer__shutdown_handler()
  */
 function xarServerGetVar($name)
 {
-    assert('version_compare("4.1.2",phpversion()) <= 0; /* The minimum PHP version supported by Xaraya is 4.1.2 */');
-    if (isset($_SERVER[$name])) {
-        return $_SERVER[$name];
-    }
-    if($name == 'PATH_INFO') return;
-
-    if (isset($_ENV[$name])) {
-        return $_ENV[$name];
-    }
-
-    if ($val = getenv($name)) {
-        return $val;
-    }
-    return; // we found nothing here
+    return xarServer::getVar($name);
 }
 
 /**
@@ -107,7 +94,7 @@ function xarServerGetBaseURI()
   }
 
   // Get the name of this URI
-  $path = xarServerGetVar('REQUEST_URI');
+  $path = xarServer::getVar('REQUEST_URI');
 
   //if ((empty($path)) ||
   //    (substr($path, -1, 1) == '/')) {
@@ -116,11 +103,11 @@ function xarServerGetBaseURI()
         // REQUEST_URI was empty or pointed to a path
         // adapted patch from Chris van de Steeg for IIS
         // Try SCRIPT_NAME
-        $path = xarServerGetVar('SCRIPT_NAME');
+        $path = xarServer::getVar('SCRIPT_NAME');
         if (empty($path)) {
             // No luck there either
             // Try looking at PATH_INFO
-            $path = xarServerGetVar('PATH_INFO');
+            $path = xarServer::getVar('PATH_INFO');
         }
     }
 
@@ -153,11 +140,11 @@ function xarServerGetBaseURI()
 
 function xarServerGetHost()
 {
-    $server = xarServerGetVar('HTTP_HOST');
+    $server = xarServer::getVar('HTTP_HOST');
     if (empty($server)) {
         // HTTP_HOST is reliable only for HTTP 1.1
-        $server = xarServerGetVar('SERVER_NAME');
-        $port = xarServerGetVar('SERVER_PORT');
+        $server = xarServer::getVar('SERVER_NAME');
+        $port = xarServer::getVar('SERVER_PORT');
         if ($port != '80') $server .= ":$port";
     }
     return $server;
@@ -179,7 +166,7 @@ function xarServerGetProtocol()
             if (preg_match('/^http:/', $_SERVER['REQUEST_URI'])) {
                 return 'http';
             }
-            $HTTPS = xarServerGetVar('HTTPS');
+            $HTTPS = xarServer::getVar('HTTPS');
             // IIS seems to set HTTPS = off for some reason
             return (!empty($HTTPS) && $HTTPS != 'off') ? 'https' : 'http';
         } else {
@@ -227,27 +214,27 @@ function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target
     $baseurl = "$protocol://$server";
 
     // get current URI
-    $request = xarServerGetVar('REQUEST_URI');
+    $request = xarServer::getVar('REQUEST_URI');
 
     if (empty($request)) {
         // adapted patch from Chris van de Steeg for IIS
-    // TODO: please test this :)
-        $scriptname = xarServerGetVar('SCRIPT_NAME');
-        $pathinfo = xarServerGetVar('PATH_INFO');
+        // TODO: please test this :)
+        $scriptname = xarServer::getVar('SCRIPT_NAME');
+        $pathinfo = xarServer::getVar('PATH_INFO');
         if ($pathinfo == $scriptname) {
             $pathinfo = '';
         }
         if (!empty($scriptname)) {
             $request = $scriptname . $pathinfo;
-            $querystring = xarServerGetVar('QUERY_STRING');
+            $querystring = xarServer::getVar('QUERY_STRING');
             if (!empty($querystring)) $request .= '?'.$querystring;
         } else {
             $request = '/';
         }
     }
 
-// Note to Dracos: please don't replace & with &amp; here just yet - give me some time to test this first :-)
-// Mike can we change these now, so we can work on validation a bit?
+    // Note to Dracos: please don't replace & with &amp; here just yet - give me some time to test this first :-)
+    // Mike can we change these now, so we can work on validation a bit?
 
     // add optional parameters
     if (count($args) > 0) {
@@ -257,7 +244,7 @@ function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target
         foreach ($args as $k=>$v) {
             if (is_array($v)) {
                 foreach($v as $l=>$w) {
-                // TODO: replace in-line here too ?
+                    // TODO: replace in-line here too ?
                     if (!empty($w)) $request .= $k . "[$l]=$w&";
                 }
             } else {
@@ -407,9 +394,9 @@ function xarRequestGetInfo()
     xarVarFetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $modType, 'user');
     xarVarFetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $funcName, 'main');
 
-    if (xarRequest::$allowShortURLs && empty($modName) && ($path = xarServerGetVar('PATH_INFO')) != ''
+    if (xarRequest::$allowShortURLs && empty($modName) && ($path = xarServer::getVar('PATH_INFO')) != ''
         // IIS fix
-        && $path != xarServerGetVar('SCRIPT_NAME')) {
+        && $path != xarServer::getVar('SCRIPT_NAME')) {
         /*
         Note: we need to match anything that might be used as module params here too ! (without compromising security)
         preg_match_all('|/([a-z0-9_ .+-]+)|i', $path, $matches);
@@ -482,7 +469,7 @@ function xarRequestGetInfo()
 function xarRequestIsLocalReferer()
 {
     $server = xarServerGetHost();
-    $referer = xarServerGetVar('HTTP_REFERER');
+    $referer = xarServer::getVar('HTTP_REFERER');
 
     if (!empty($referer) && preg_match("!^https?://$server(:\d+|)/!", $referer)) {
         return true;
@@ -551,7 +538,7 @@ function xarResponseRedirect($redirectURL)
         $redirectURL = $baseurl.$redirectURL;
     }
 
-    if (preg_match('/IIS/', xarServerGetVar('SERVER_SOFTWARE')) && preg_match('/CGI/', xarServerGetVar('GATEWAY_INTERFACE')) ) {
+    if (preg_match('/IIS/', xarServer::getVar('SERVER_SOFTWARE')) && preg_match('/CGI/', xarServer::getVar('GATEWAY_INTERFACE')) ) {
       $header = "Refresh: 0; URL=$redirectURL";
     } else {
       $header = "Location: $redirectURL";
@@ -582,6 +569,17 @@ function xarResponseIsRedirected()
 class xarServer
 {
     public static $generateXMLURLs = true;
+
+        
+    static function getVar($name) 
+    {
+        assert('version_compare("5.0",phpversion()) <= 0; /* The minimum PHP version supported by Xaraya is 5.0 */');
+        if (isset($_SERVER[$name])) return $_SERVER[$name];
+        if($name == 'PATH_INFO')    return;
+        if (isset($_ENV[$name]))    return $_ENV[$name];
+        if ($val = getenv($name))   return $val;
+        return; // we found nothing here
+    }
 }
 
 class xarRequest
