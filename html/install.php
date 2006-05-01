@@ -191,13 +191,6 @@ function xarInstallMain()
         ob_end_clean();
     }
 
-    if (xarResponseIsRedirected()) {
-        // If the redirection header was yet sent we can't handle exceptions
-        // However if we're here with a thrown exception it means that the mod developer
-        // is not checking exceptions, so it's also their fault.
-        return true;
-    }
-
     // Render page using the installer.xt page template
     $pageOutput = xarTpl_renderPage($mainModuleOutput,NULL,'installer');
 

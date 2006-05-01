@@ -107,8 +107,6 @@ function xarMain()
         // We're all done, one ServerRequest made
         xarEvt_trigger('ServerRequest');
 
-        if (xarResponseIsRedirected()) return true;
-
         // Note : the page template may be set to something else in the module function
         if (xarTplGetPageTemplateName() == 'default' && $modType != 'admin') {
             // NOTE: we should fallback to the way we were handling this before

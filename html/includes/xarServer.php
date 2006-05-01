@@ -79,7 +79,6 @@ function xarRequestIsLocalReferer() { return xarRequest::IsLocalReferer(); }
  *
  */
 function xarResponseRedirect($redirectURL) { return xarResponse::Redirect($redirectURL); }
-function xarResponseIsRedirected()         { return xarResponse::$redirectCalled;       }
 
 /**
  * Convenience classes
@@ -546,7 +545,6 @@ class xarRequest
 class xarResponse
 {
     public static $closeSession = true;    // we usually will have sessions
-    public static $redirectCalled = false; // do we still need this?
 
     /**
      * initialize
@@ -569,9 +567,6 @@ class xarResponse
         $redirectURL=urldecode($url); // this is safe if called multiple times.
         if (headers_sent() == true) return false;
         
-        // MrB: We only do this for pn Legacy, consider removing it
-        self::$redirectCalled = true;
-        
         // Remove &amp; entities to prevent redirect breakage
         $redirectURL = str_replace('&amp;', '&', $redirectURL);
         
@@ -593,19 +588,11 @@ class xarResponse
         
         // Start all over again
         header($header);
+
+        // NOTE: we *could* return for pure '1 exit point' but then we'd have to keep track of more,
+        // so for now, we exit here explicitly. Besides the end of index.php this should be the only 
+        // exit point.
         exit();
-    }
-    
-    /**
-     * Checks if a redirection header has already been sent.
-     *
-     * @author Marco Canini
-     * @access public
-     * @return bool
-     */
-    static function IsRedirected()
-    {
-        return self::$redirectCalled;
     }
 }
 ?>
