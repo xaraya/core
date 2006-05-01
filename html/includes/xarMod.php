@@ -145,6 +145,19 @@ function xarMod__shutdown_handler()
 }
 
 /**
+ * Interface declaration for classes dealing with sets of variables
+ *
+ * @todo this should probably be higher in the foodchain later on
+ */
+interface IxarVars
+{
+    static function get       ($scope, $name);
+    static function set       ($scope, $name, $value);
+    static function delete    ($scope, $name);
+    static function delete_all($scope);
+}
+
+/**
  * Wrapper functions to support Xaraya 1 API for modvars
  */
 function xarModGetVar($modName, $name, $prep = NULL)
@@ -162,24 +175,21 @@ function xarModDelAllVars($modName)
 function xarModGetVarId($modName, $name)
 {   return xarModVars::getID($modName, $name); }
 
+
 /**
- * Interface declaration for classes dealing with sets of variables
+ * Build upon IxarVars to define interface for ModVars
  *
- * @todo this should probably be higher in the foodchain later on
  */
-interface IxarVars
+interface IxarModVars extends IxarVars
 {
-    static function get($scope, $name);
-    static function set($scope, $name, $value);
-    static function delete($scope, $name);
-    static function delete_all($scope);
+    static function getID($scope, $name);
 }
 
 /**
  * Class to model interface to module variables
  *
  */
-class xarModVars implements IxarVars
+class xarModVars implements IxarModVars
 {
     /**
      * Get a module variable
@@ -302,7 +312,7 @@ class xarModVars implements IxarVars
      * @param name    The name of the variable
      * @return int id identifier for the variable
      * @raise BAD_PARAM
-     * @see xarModSetUserVar, xarModGetUserVar, xarModDelUserVar
+     * @see xarModUserVars::set(), xarModUserVars::get(), xarModUserVars::delete()
      */
     static function getID($modName, $name)
     {
@@ -339,102 +349,122 @@ class xarModVars implements IxarVars
 }
 
 /**
- * Get a user variable for a module
+ * Wrapper functions for xarModUserVars to support Xaraya 1 API
  *
- * This is basically the same as xarModVars::set(), but this
- * allows for getting variable values which are tied to
- * a specific item for a certain module. Typical usage
- * is storing user preferences.
- *
- * @access public
- * @param modName The name of the module
- * @param name    The name of the variable to get
- * @param uid     User id for which value is to be retrieved
- * @return mixed Teh value of the variable or void if variable doesn't exist.
- * @raise  DATABASE_ERROR, BAD_PARAM (indirect)
- * @see  xarModVars::get()
- * @todo Mrb : Add caching?
  */
 function xarModGetUserVar($modName, $name, $uid = NULL, $prep = NULL)
-{
-    // Module name and variable name are necessary
-    if (empty($modName)) throw new EmptyParameterException('modName');
+{   return xarModUserVars::get($modName, $name, $uid, $prep); }
 
-    // If uid not specified take the current user
-    if ($uid == NULL) $uid = xarUserGetVar('uid');
-
-    // Anonymous user always uses the module default setting
-    if ($uid== _XAR_ID_UNREGISTERED) return xarModVars::get($modName,$name);
-
-    return xarVar__GetVarByAlias($modName, $name, $uid, $prep, $type = 'moditemvar');
-}
-
-/**
- * Set a user variable for a module
- *
- * This is basically the same as xarModVars::set(), but this
- * allows for setting variable values which are tied to
- * a specific user for a certain module. Typical usage
- * is storing user preferences.
- * Only deviations from the module vars are stored.
- *
- * @access public
- * @param modName The name of the module to set a user variable for
- * @param name    The name of the variable to set
- * @param value   Value to set the variable to.
- * @param uid     User id for which value needs to be set
- * @return bool true on success false on failure
- * @raise BAD_PARAM
- * @see xarModVars::set()
- * @todo Add caching?
- */
 function xarModSetUserVar($modName, $name, $value, $uid=NULL)
-{
-    // Module name and variable name are necessary
-    if (empty($modName)) throw new EmptyParameterException('modName');
+{   return xarModUserVars::set($modName, $name, $uid, $value); }
 
-    // If no uid specified assume current user
-    if ($uid == NULL) $uid = xarUserGetVar('uid');
-
-    // For anonymous users no preference can be set
-    // MrB: should we raise an exception here?
-    if ($uid == _XAR_ID_UNREGISTERED) return false;
-
-    return xarVar__SetVarByAlias($modName, $name, $value, $prime = NULL, $description = NULL, $uid, $type = 'moditemvar');
-}
-
-/**
- * Delete a user variable for a module
- *
- * This is the same as xarModVars::delete() but this allows
- * for deleting a specific user variable, effectively
- * setting the value for that user to the default setting
- *
- * @access public
- * @param modName The name of the module to set a variable for
- * @param name    The name of the variable to set
- * @param uid     User id of the user to delete the variable for.
- * @return bool true on success
- * @raise BAD_PARAM
- * @see xarModVars::delete()
- * @todo Add caching?
- */
 function xarModDelUserVar($modName, $name, $uid=NULL)
+{   return xarModUserVars::delete($modName, $name, $uid); }
+
+interface IxarModUserVars extends IxarVars
+{}
+
+class xarModUserVars extends xarModVars implements IxarModUserVars
 {
-    // ModName and name are required
-    if (empty($modName)) throw new EmptyParameterException('modName');
+    /**
+     * Get a user variable for a module
+     *
+     * This is basically the same as xarModVars::set(), but this
+     * allows for getting variable values which are tied to
+     * a specific item for a certain module. Typical usage
+     * is storing user preferences.
+     *
+     * @access public
+     * @param modName The name of the module
+     * @param name    The name of the variable to get
+     * @param uid     User id for which value is to be retrieved
+     * @return mixed Teh value of the variable or void if variable doesn't exist.
+     * @raise  DATABASE_ERROR, BAD_PARAM (indirect)
+     * @see  xarModVars::get()
+     * @todo Mrb : Add caching?
+     */
+    static function get($modName, $name, $uid = NULL, $prep = NULL)
+    {
+        // Module name and variable name are necessary
+        if (empty($modName)) throw new EmptyParameterException('modName');
+        
+        // If uid not specified take the current user
+        if ($uid == NULL) $uid = xarUserGetVar('uid');
 
-    // If uid is not set assume current user
-    if ($uid == NULL) $uid = xarUserGetVar('uid');
+        // Anonymous user always uses the module default setting
+        if ($uid== _XAR_ID_UNREGISTERED) return parent::get($modName,$name);
 
-    // Deleting for anonymous user is useless return true
-    // MrB: should we continue, can't harm either and we have
-    //      a failsafe that records are deleted, bit dirty, but
-    //      it would work.
-    if ($uid == _XAR_ID_UNREGISTERED ) return true;
+        return xarVar__GetVarByAlias($modName, $name, $uid, $prep, $type = 'moditemvar');
+    }
 
-    return xarVar__DelVarByAlias($modName, $name, $uid, $type = 'moditemvar');
+    /**
+     * Set a user variable for a module
+     *
+     * This is basically the same as xarModVars::set(), but this
+     * allows for setting variable values which are tied to
+     * a specific user for a certain module. Typical usage
+     * is storing user preferences.
+     * Only deviations from the module vars are stored.
+     *
+     * @access public
+     * @param modName The name of the module to set a user variable for
+     * @param name    The name of the variable to set
+     * @param value   Value to set the variable to.
+     * @param uid     User id for which value needs to be set
+     * @return bool true on success false on failure
+     * @raise BAD_PARAM
+     * @see xarModVars::set()
+     * @todo Add caching?
+     */
+    static function set($modName, $name, $value, $uid=NULL)
+    {
+        // Module name and variable name are necessary
+        if (empty($modName)) throw new EmptyParameterException('modName');
+        
+        // If no uid specified assume current user
+        if ($uid == NULL) $uid = xarUserGetVar('uid');
+        
+        // For anonymous users no preference can be set
+        // MrB: should we raise an exception here?
+        if ($uid == _XAR_ID_UNREGISTERED) return false;
+        
+        return xarVar__SetVarByAlias($modName, $name, $value, $prime = NULL, $description = NULL, $uid, $type = 'moditemvar');
+    }
+
+    /**
+     * Delete a user variable for a module
+     *
+     * This is the same as xarModVars::delete() but this allows
+     * for deleting a specific user variable, effectively
+     * setting the value for that user to the default setting
+     *
+     * @access public
+     * @param modName The name of the module to set a variable for
+     * @param name    The name of the variable to set
+     * @param uid     User id of the user to delete the variable for.
+     * @return bool true on success
+     * @raise BAD_PARAM
+     * @see xarModVars::delete()
+     * @todo Add caching?
+     */
+    static function delete($modName, $name, $uid=NULL)
+    {
+        // ModName and name are required
+        if (empty($modName)) throw new EmptyParameterException('modName');
+        
+        // If uid is not set assume current user
+        if ($uid == NULL) $uid = xarUserGetVar('uid');
+        
+        // Deleting for anonymous user is useless return true
+        // MrB: should we continue, can't harm either and we have
+        //      a failsafe that records are deleted, bit dirty, but
+        //      it would work.
+        if ($uid == _XAR_ID_UNREGISTERED ) return true;
+        
+        return xarVar__DelVarByAlias($modName, $name, $uid, $type = 'moditemvar');
+    }
 }
+
 
 
 /**

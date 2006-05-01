@@ -632,7 +632,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
 
             // First delete it.
             // FIXME: do we really want that ?
-            xarModDelUserVar($modName,$name,$itemid);
+            xarModUserVars::delete($modName,$name,$itemid);
 
             // Only store setting if different from global setting
             if ($value != $modsetting) {

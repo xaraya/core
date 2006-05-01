@@ -260,7 +260,7 @@ function xarUserGetNavigationThemeName()
 
     if (xarUserIsLoggedIn()){
         $uid = xarUserGetVar('uid');
-        $userThemeName = xarModGetUserVar('themes', 'default', $uid);
+        $userThemeName = xarModUserVars::get('themes', 'default', $uid);
         if ($userThemeName) $themeName=$userThemeName;
     }
 
@@ -277,7 +277,7 @@ function xarUserSetNavigationThemeName($themeName)
 {
     assert('$themeName != ""');
     // uservar system takes care of dealing with anynomous
-    xarModSetUserVar('themes', 'default', $themeName);
+    xarModUserVars::set('themes', 'default', $themeName);
 }
 
 /**
@@ -289,7 +289,7 @@ function xarUserSetNavigationThemeName($themeName)
 function xarUserGetNavigationLocale()
 {
     if (xarUserIsLoggedIn()) {
-        $locale = xarModGetUserVar('roles', 'locale');
+        $locale = xarModUserVars::get('roles', 'locale');
         if (!isset($locale)) {
             // CHECKME: why is this here? The logic of falling back is already in the modgetuservar
             $siteLocale = xarModVars::get('roles', 'locale');
@@ -302,13 +302,13 @@ function xarUserGetNavigationLocale()
             if (!isset($locale)) {
                 $locale = xarMLSGetSiteLocale();
             }
-            xarModSetUserVar('roles', 'locale', $locale);
+            xarModUserVars::set('roles', 'locale', $locale);
         } else {
             $siteLocales = xarMLSListSiteLocales();
             if (!in_array($locale, $siteLocales)) {
                 // Locale not available, use the default
                 $locale = xarMLSGetSiteLocale();
-                xarModSetUserVar('roles', 'locale', $locale);
+                xarModUserVars::set('roles', 'locale', $locale);
                 xarLogMessage("WARNING: falling back to default locale: $locale in xarUserGetNavigationLocale function");
             }
         }
@@ -337,7 +337,7 @@ function xarUserSetNavigationLocale($locale)
     if (xarMLSGetMode() != XARMLS_SINGLE_LANGUAGE_MODE) {
         xarSessionSetVar('navigationLocale', $locale);
         if (xarUserIsLoggedIn()) {
-            $userLocale = xarModGetUserVar('roles', 'locale');
+            $userLocale = xarModUserVars::get('roles', 'locale');
             if (!isset($userLocale)) {
                 // CHECKME: Why is this here? the fallback logic is already in modgetuservar
                 $siteLocale = xarModVars::get('roles', 'locale');
@@ -345,7 +345,7 @@ function xarUserSetNavigationLocale($locale)
                     xarModVars::set('roles', 'locale', '');
                 }
             }
-            xarModSetUserVar('roles', 'locale', $locale);
+            xarModUserVars::set('roles', 'locale', $locale);
         }
         return true;
     }
@@ -424,7 +424,7 @@ function xarUserGetVar($name, $userId = NULL)
 
         } elseif (!xarUser__isVarDefined($name)) {
             if (xarModVars::get('roles',$name)) {
-                $value = xarModGetUserVar('roles',$name,$userId);
+                $value = xarModUserVars::get('roles',$name,$userId);
                 if ($value == null) {
                     xarCore::setCached('User.Variables.'.$userId, $name, false);
                     // Here we can't raise an exception because they're all optional
@@ -571,7 +571,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
             xarCore::setCached('User.Variables.'.$userId, $name, false);
             throw new xarException($name,'User variable #(1) was not correctly registered');
         } else {
-            xarModSetUserVar('roles',$name,$value,$userId);
+            xarModUserVars::set('roles',$name,$value,$userId);
         }
     } else {
         // retrieve the user item
