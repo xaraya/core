@@ -277,6 +277,14 @@ function authsystem_user_login()
                     return;
                 }
             }
+            //FR for last login - first capture the last login for this user
+            $thislastlogin =xarModGetUserVar('roles','userlastlogin');
+            if (!empty($thislastlogin)) {
+                //move this to a session var for this user
+                    xarSessionSetVar('roles_thislastlogin',$thislastlogin);
+            }
+            xarModSetUserVar('roles','userlastlogin',time()); //this is what everyone else will see
+
             $externalurl=false; //used as a flag for userhome external url
             if (xarModGetVar('roles', 'loginredirect')) { //only redirect to home page if this option is set
               if (xarModAPIFunc('roles','admin','checkduv',array('name' => 'setuserhome', 'state' => 1))) {

@@ -84,24 +84,27 @@
                     </label>
                 </div>
             </xar:if>
+
             <div class="xar-form-input-wrapper">
                 <label for="pass1" class="xar-form-label">
                     <xar:mlstring>
-                        Password 
+                        Password
                     </xar:mlstring>
-                    : 
+                    :
                 </label>
                 <input type="password" name="pass1" id="pass1" value="" size="20" maxlength="40" />
             </div>
+
             <div class="xar-form-input-wrapper">
                 <label for="pass2" class="xar-form-label">
                     <xar:mlstring>
-                        Confirm Password 
+                        Confirm Password
                     </xar:mlstring>
-                    : 
+                    :
                 </label>
                 <input type="password" name="pass2" id="pass2" value="" size="20" maxlength="40" />
             </div>
+
             <xar:if condition="xarModGetVar('roles','setpasswordupdate')">
                     <div class="xar-form-input-wrapper">
                         <label for="upasswordupdate" class="xar-form-label">
@@ -110,6 +113,25 @@
                         #xarLocaleGetFormattedDate('medium', $upasswordupdate)# #xarLocaleGetFormattedTime('medium', $upasswordupdate)#
                     </div>
             </xar:if>
+            <xar:if condition="xarModGetVar('roles','setuserlastlogin')">
+                <xar:if condition="!empty($usercurrentlogin)">
+                    <div class="xar-form-input-wrapper">
+                        <label for="thislogin" class="xar-form-label">
+                            <xar:mlstring>Time of Current Login:</xar:mlstring>
+                        </label>
+                            #xarLocaleGetFormattedDate('medium', $usercurrentlogin)#  #xarLocaleGetFormattedTime('medium', $usercurrentlogin)#
+                    </div>
+                </xar:if>
+                <xar:if condition="!empty($userlastlogin)">
+                    <div class="xar-form-input-wrapper">
+                        <label for="lastlogin" class="xar-form-label">
+                            <xar:mlstring>Time of Last Login:</xar:mlstring>
+                        </label>
+                            #xarLocaleGetFormattedDate('medium', $userlastlogin)#  #xarLocaleGetFormattedTime('medium', $userlastlogin)#
+                    </div>
+                </xar:if>
+            </xar:if>
+
             <div class="xar-form-input-wrapper">
                 <xar:data-getitem name="$properties" module="roles" itemid="$uid" />
             </div>

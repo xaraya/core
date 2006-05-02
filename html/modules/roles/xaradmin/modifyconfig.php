@@ -118,7 +118,7 @@ function roles_admin_modifyconfig()
             $data['hooks'] = $hooks;
             $data['defaultauthmod'] = xarModGetVar('roles', 'defaultauthmodule');
             $data['defaultregmod'] = xarModGetVar('roles', 'defaultregmodule');
-            $data['allowuserhomeedit'] = xarModGetVar('roles', 'allowuserhomeedit');            
+            $data['allowuserhomeedit'] = xarModGetVar('roles', 'allowuserhomeedit');
             //check for roles hook in case it's set independently elsewhere
             if (xarModIsHooked('roles', 'roles')) {
                 xarModSetVar('roles','usereditaccount',true);
@@ -214,6 +214,7 @@ function roles_admin_modifyconfig()
                     $duvarray = array('setuserhome'=>'userhome',
                                       'setprimaryparent'=>'primaryparent',
                                       'setpasswordupdate'=>'passwordupdate',
+                                      'setuserlastlogin' =>'userlastlogin',
                                       'settimezone'=>'timezone');
                     foreach ($duvarray as $duv=>$userduv) {
                         if (!xarVarFetch($duv, 'int', $$duv, null, XARVAR_DONT_SET)) return;

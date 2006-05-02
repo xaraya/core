@@ -50,8 +50,20 @@ function roles_admin_displayrole()
         //get the data for a group
 
     }
+    if (xarModGetVar('roles','setuserlastlogin')) {
+        //only display it for current user or admin
+        if (xarUserIsLoggedIn() && xarUserGetVar('uid')==$uid) {
+            $data['userlastlogin']=xarSessionGetVar('roles_thislastlogin');
+        }elseif (xarSecurityCheck('AdminRole',0)){
+            $data['userlastlogin']= xarModGetUserVar('roles','userlastlogin',$uid);
+        }else{
+            $data['userlastlogin']='';
+        }
+    }else{
+        $data['userlastlogin']='';
+    }
 
-
+    $data['upasswordupdate'] = xarModGetUserVar('roles','passwordupdate');//now user mod var not 'duv'. $role->getPasswordUpdate();
 
     $item = $data;
     $item['module'] = 'roles';

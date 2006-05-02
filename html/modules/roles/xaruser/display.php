@@ -37,7 +37,7 @@ function roles_user_display($args)
     $item['returnurl'] = xarModURL('roles', 'user', 'display',
                                    array('uid' => $uid));
 
-   //Setup user home url if Userhome is activated and user can set the URL
+    //Setup user home url if Userhome is activated and user can set the URL
     //So it can display in link of User account page
     $externalurl=false; //used as a flag for userhome external url
     if (xarModAPIFunc('roles','admin','checkduv',array('name' => 'setuserhome', 'state' => 1))) {
@@ -70,7 +70,22 @@ function roles_user_display($args)
         $data['externalurl']=false;
         $data['homelink']='';
     }
-
+    if (xarModGetVar('roles','setuserlastlogin')) {
+        //only display it for current user or admin
+        if (xarUserIsLoggedIn() && xarUserGetVar('uid')==$uid) {
+            $data['userlastlogin']=xarSessionGetVar('roles_thislastlogin');
+            $data['usercurrentlogin']=xarModGetUserVar('roles','userlastlogin',$uid);
+        }elseif (xarSecurityCheck('AdminRole',0)){
+            $data['usercurrentlogin']='';
+            $data['userlastlogin']= xarModGetUserVar('roles','userlastlogin',$uid);
+        }else{
+            $data['userlastlogin']='';
+            $data['usercurrentlogin']='';
+        }
+    }else{
+        $data['userlastlogin']='';
+        $data['usercurrentlogin']='';
+    }
 
     $hooks = array();
     $hooks = xarModCallHooks('item', 'display', $uid, $item);

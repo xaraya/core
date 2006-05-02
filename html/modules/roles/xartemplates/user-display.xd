@@ -39,6 +39,20 @@
                 :
                 #xarVarPrepForDisplay($name)# 
             </p>
+
+            </xar:if>
+
+           <xar:if condition="!empty($userlastlogin)">
+            <p>
+                <strong>
+                    <xar:mlstring>
+                        Time of Last Login
+                    </xar:mlstring>
+                </strong>
+                :
+                #xarLocaleGetFormattedDate('medium', $userlastlogin)#  #xarLocaleGetFormattedTime('medium', $userlastlogin)#
+            </p>
+            </xar:if>
             <xar:if condition="!empty($homelink)">
             <p>
                 <strong>
@@ -47,9 +61,8 @@
                     </xar:mlstring>
                 </strong>
                 :
-                <a href="#$homelink#" title="#xarML('Home Page')#"><xar:mlstring>My Home Page</xar:mlstring></a>
+                <a href="#$homelink#" title="#xarML('Home Page')#">#$homelink#</a>
             </p>
-            </xar:if>
         </xar:if>
         <xar:if condition="xarModIsAvailable('dynamicdata')">
             <xar:data-getitem name="$properties" module="roles" itemid="$uid" />

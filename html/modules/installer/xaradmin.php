@@ -1430,6 +1430,9 @@ function installer_admin_upgrade2()
                         array('name'    => 'usereditaccount',
                              'module'  =>  'roles',
                              'set'     =>  'true'),
+                        array('name'    => 'userlastlogin',
+                             'module'  =>  'roles',
+                             'set'     =>  ''),
                         array('name'    => 'allowuserhomeedit',
                              'module'  =>  'roles',
                              'set'     =>  'false'),
@@ -1440,6 +1443,9 @@ function installer_admin_upgrade2()
                              'module'  =>  'roles',
                              'set'     =>  'false'),
                         array('name'    => 'setpasswordupdate',
+                             'module'  =>  'roles',
+                             'set'     =>  'false'),
+                        array('name'    => 'setuserlastlogin',
                              'module'  =>  'roles',
                              'set'     =>  'false')
                           );

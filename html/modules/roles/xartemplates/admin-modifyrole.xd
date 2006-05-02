@@ -191,7 +191,7 @@
                         </label>
                         <input type="password" name="ppass2" id="ppass2" value="" maxlength="40" class="xar-form-textmedium" />
                     </div>
-                    
+
                     <xar:if condition="xarModGetVar('roles','setpasswordupdate')">
                     <div class="xar-form-input-wrapper">
                         <label for="upasswordupdate" class="xar-form-label">
@@ -201,7 +201,16 @@
                     </div>
                     </xar:if>
                 </xar:if>
-
+                <xar:if condition="xarModGetVar('roles','setuserlastlogin')">
+                    <xar:if condition="!empty($userlastlogin)">
+                    <div class="xar-form-input-wrapper">
+                        <label for="lastlogin" class="xar-form-label">
+                            <xar:mlstring>Last login time:</xar:mlstring>
+                        </label>
+                            #xarLocaleGetFormattedDate('medium', $userlastlogin)#  #xarLocaleGetFormattedTime('medium', $userlastlogin)#
+                    </div>
+                    </xar:if>
+                </xar:if>
                 <xar:if condition="!empty($hooks) and count($hooks) gt 0">
                     <xar:foreach in="$hooks" key="$hookmodule">
                         #$hooks[$hookmodule]#

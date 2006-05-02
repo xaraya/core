@@ -231,9 +231,11 @@
                 <fieldset>
                     <legend>
                         <xar:mlstring>
-                            Basic User Variables 
+                            Basic User Variables
                         </xar:mlstring>
                     </legend>
+                    <p> <xar:mlstring>Always available in a user role, and can  be retrieved as <strong>xarUserGetVar('varname')</strong></xar:mlstring>
+                    </p>
                     <table style="width: 90%">
                         <tr>
                             <th style="width: 100px">
@@ -272,9 +274,12 @@
                 <fieldset>
                     <legend>
                         <xar:mlstring>
-                            Dynamic User Variables 
+                            Dynamic Roles Variables
                         </xar:mlstring>
                     </legend>
+                    <p> <xar:mlstring>Optional in a user role. Once activated they can be retrieved as <strong>xarModGetUserVar('roles','varname')</strong></xar:mlstring>
+                    </p>
+
                     <table style="width: 90%">
                         <tr>
                             <th style="width: 100px">
@@ -342,6 +347,25 @@
                                     </a>
                                 <xar:else />
                                     <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setpasswordupdate' => 1))#">
+                                        <xar:mlstring>Activate</xar:mlstring>
+                                    </a>
+                                </xar:if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 100px">
+                                userlastlogin
+                            </td>
+                            <td style="width: 400px">
+                                <xar:mlstring>The date and time this role last logged in.</xar:mlstring>
+                            </td>
+                            <td style="width: 50px; text-align: center;">
+                                <xar:if condition="xarModGetVar('roles','setuserlastlogin')">
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setuserlastlogin' => 0))#">
+                                        <xar:mlstring>Deactivate</xar:mlstring>
+                                    </a>
+                                <xar:else />
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setuserlastlogin' => 1))#">
                                         <xar:mlstring>Activate</xar:mlstring>
                                     </a>
                                 </xar:if>
@@ -528,7 +552,7 @@
                     </xar:if>
                     <label for="allowuserhomeedit" title="#xarML('Allow users to edit their user home page in their account')#">
                         <strong><xar:mlstring>
-                            Allow users to set Home Page in their member account
+                            Allow users to set Home Page in their member account 
                         </xar:mlstring></strong>
                     </label>
                 </div>
