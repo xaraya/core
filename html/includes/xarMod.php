@@ -627,40 +627,6 @@ function xarModAPILoad($modName, $modType = 'user')
 }
 
 /**
- * Load database definition for a module
- *
- * @param modName name of module to load database definition for
- * @param modDir directory that module is in (if known)
- * @param type determines theme or module
- * @return bool true on success
- * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
- */
-function xarModDBInfoLoad($modName, $modDir = NULL, $type = 'module')
-{
-    if (empty($modName)) throw new EmptyParameterException('modName');
-
-    // Get the directory if we don't already have it
-    if (empty($modDir)) {
-        $modBaseInfo = xarMod::getBaseInfo($modName,$type);
-        if (!isset($modBaseInfo)) return; // throw back
-        $modDir = xarVarPrepForOS($modBaseInfo['directory']);
-    } else {
-        $modDir = xarVarPrepForOS($modDir);
-    }
-
-    switch($type) {
-    case 'module':
-    default:
-        xarMod::loadDbInfo($modBaseInfo['name'], $modDir);
-        return true;
-        break;
-    case 'theme':
-        return true;
-        break;
-    }
-}
-
-/**
  * Call a module GUI function.
  *
  * @access public
@@ -1523,6 +1489,9 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
 function xarMod__loadDbInfo($modName, $modDir)
 {   return xarMod::loadDbInfo($modName, $modDir); }
 
+function xarModDBInfoLoad($modName, $modDir = NULL, $type = 'module')
+{   return xarMod::loadDbInfo($modName, $modDir, $type); }
+
 function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'module')
 {   return xarMod::getState($modRegId, $modMode, $type); }
 
@@ -1997,13 +1966,22 @@ class xarMod
      * 
      * @todo make this private again
      */
-    static function loadDbInfo($modName, $modDir)
+    static function loadDbInfo($modName, $modDir = NULL, $type = 'module')
     {
+        if($type == 'theme') return true; // sigh.
         static $loadedDbInfoCache = array();
         
         if (empty($modName)) throw new EmptyParameterException('modName');
-        if (empty($modDir))  throw new EmptyParameterException('modDir');
-        
+
+        // Get the directory if we don't already have it
+        if (empty($modDir)) {
+            $modBaseInfo = self::getBaseInfo($modName,$type);
+            if (!isset($modBaseInfo)) return; // throw back
+            $modDir = xarVarPrepForOS($modBaseInfo['directory']);
+        } else {
+            $modDir = xarVarPrepForOS($modDir);
+        }
+
         // Check to ensure we aren't doing this twice
         if (isset($loadedDbInfoCache[$modName])) return true;
                 

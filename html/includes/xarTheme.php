@@ -113,7 +113,8 @@ function xarThemeGetInfo($regId)
  */
 function xarThemeDBInfoLoad($themeName, $themeDir = NULL)
 {
-    return xarModDBInfoLoad($themeName, $themeDir, $type = 'theme');
+    // Just for consistency we do this now, but this just returns true, nothing more
+    return xarMod::loadDbInfo($themeName, $themeDir, $type = 'theme');
 }
 
 
