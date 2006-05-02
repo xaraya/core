@@ -9,7 +9,7 @@
  * @author Jim McDonald
  * @author Marco Canini <marco@xaraya.com>
  * @author Marcel van der Boom <marcel@xaraya.com>
- * @todo Use serialize in module variables?
+ * @todo the double headed theme/module stuff needs to go, a theme is not a module
  */
 
 /**
@@ -90,14 +90,6 @@ define('XARMOD_MODE_PER_SITE', 2);
 define('XARTHEME_MODE_SHARED', 1);
 define('XARTHEME_MODE_PER_SITE', 2);
 
-
-/*
- * Used caches are:
- * Mod.Variables
- * Mod.Infos
- * Mod.BaseInfos
- */
-
 /**
  * Start the module subsystem
  *
@@ -105,41 +97,12 @@ define('XARTHEME_MODE_PER_SITE', 2);
  * @param args['generateShortURLs'] bool
  * @param args['generateXMLURLs'] bool
  * @return bool true
+ * @todo this is just a wrapper, it can be removed eventually
  */
 function xarMod_init($args, $whatElseIsGoingLoaded)
 {
     // Initialize the interfaces and stuff.
-    xarMod::init($args);
-
-    // Register the events for this subsystem
-    xarEvents::register('ModLoad');
-    xarEvents::register('ModAPILoad');
-
-    // Modules Support Tables
-    $systemPrefix = xarDBGetSystemTablePrefix();
-
-    // How we want it
-    $tables['modules']         = $systemPrefix . '_modules';
-    $tables['module_vars']     = $systemPrefix . '_module_vars';
-    $tables['module_itemvars'] = $systemPrefix . '_module_itemvars';
-    $tables['hooks']           = $systemPrefix . '_hooks';
-    $tables['themes']          = $systemPrefix . '_themes';
-
-    xarDB::importTables($tables);
-
-    // Subsystem initialized, register a handler to run when the request is over
-    //register_shutdown_function ('xarMod__shutdown_handler');
-    return true;
-}
-
-/**
- * Shutdown handler for the modules subsystem
- *
- * @access private
- */
-function xarMod__shutdown_handler()
-{
-    //xarLogMessage("xarMod shutdown handler");
+    return xarMod::init($args);
 }
 
 /**
@@ -1181,10 +1144,20 @@ function xarModAPILoad($modName, $modType = 'user')
 {   return xarMod::apiLoad($modName, $modType); }
 
 /**
+ * Interface declaration for xarMod
+ *
+ * @todo this is very likely to change, it was created as baseline for refactoring
+ */
+interface IxarMod 
+{
+    
+}
+
+/**
  * Preliminary class to model xarMod interface
  *
  */
-class xarMod
+class xarMod implements IxarMod
 {
     static $genShortUrls = false;
     static $genXmlUrls   = true;
@@ -1197,6 +1170,23 @@ class xarMod
     {
         self::$genShortUrls = $args['enableShortURLsSupport'];
         self::$genXmlUrls   = $args['generateXMLURLs'];
+
+        // Register the events for this subsystem
+        xarEvents::register('ModLoad');
+        xarEvents::register('ModAPILoad');
+        
+        // Modules Support Tables
+        $systemPrefix = xarDBGetSystemTablePrefix();
+        
+        // How we want it
+        $tables['modules']         = $systemPrefix . '_modules';
+        $tables['module_vars']     = $systemPrefix . '_module_vars';
+        $tables['module_itemvars'] = $systemPrefix . '_module_itemvars';
+        $tables['hooks']           = $systemPrefix . '_hooks';
+        $tables['themes']          = $systemPrefix . '_themes';
+        
+        xarDB::importTables($tables);
+        return true;
     }
 
     /**

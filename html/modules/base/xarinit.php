@@ -217,7 +217,7 @@ function base_init()
         // Start Modules Support
         $systemArgs = array('enableShortURLsSupport' => false,
                             'generateXMLURLs' => false);
-        xarMod_init($systemArgs, $whatToLoad);
+        xarMod::init($systemArgs);
 
         /**************************************************************
          * Install modules table and insert the modules module

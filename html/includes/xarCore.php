@@ -368,7 +368,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         include 'includes/xarMod.php';
         $systemArgs = array('enableShortURLsSupport' => xarConfigGetVar('Site.Core.EnableShortURLsSupport'),
                             'generateXMLURLs' => true);
-        xarMod_init($systemArgs, $whatToLoad);
+        xarMod::init($systemArgs);
         $whatToLoad ^= XARCORE_BIT_MODULES;
     }
 
