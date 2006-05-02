@@ -107,7 +107,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         }
 
         // FIXME: I should comment it because it creates infinite loop
-        // MLS -> xarMod::getBaseInfo -> xarDisplayableName -> xarMod_getFileInfo -> MLS
+        // MLS -> xarMod::getBaseInfo -> xarDisplayableName -> xarMod::getFileInfo -> MLS
         // We don't use and don't translate KEYS files now,
         // but I will recheck this code in the menus clone
         // if ($dnType == XARMLS_DNTYPE_MODULE) {

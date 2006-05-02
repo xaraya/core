@@ -154,11 +154,12 @@ function xarThemeIsAvailable($themeName)
  *
  * @access protected
  * @param themeOSdir the theme's directory
- * @return xarMod_getFileInfo for processing
+ * @return xarMod::getFileInfo for processing
+ * @todo move to own class so we can protect it
  */
 function xarTheme_getFileInfo($themeOsDir)
 {
-    return xarMod_getFileInfo($themeOsDir, $type = 'theme');
+    return xarMod::getFileInfo($themeOsDir, $type = 'theme');
 }
 
 /**

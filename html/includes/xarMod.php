@@ -400,6 +400,10 @@ function xarModSetUserVar($modName, $name, $value, $uid=NULL)
 function xarModDelUserVar($modName, $name, $uid=NULL)
 {   return xarModUserVars::delete($modName, $name, $uid); }
 
+/**
+ * Interface declaration for module user vars
+ *
+ */
 interface IxarModUserVars extends IxarVars
 {}
 
@@ -1399,95 +1403,6 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
 }
 
 /**
- * Get info from xarversion.php for module specified by modOsDir
- *
- * @access protected
- * @param modOSdir the module's directory
- * @param type determines theme or module
- * @return array an array of module file information
- * @raise MODULE_FILE_NOT_EXIST
- * @todo <marco> #1 FIXME: admin or admin capable?
- */
-function xarMod_getFileInfo($modOsDir, $type = 'module')
-{
-    if (empty($modOsDir)) throw new EmptyParameterException('modOsDir');
-
-    if (empty($GLOBALS['xarMod_noCacheState']) && xarCore::isCached('Mod.getFileInfos', $modOsDir)) {
-        return xarCore::getCached('Mod.getFileInfos', $modOsDir);
-    }
-    // Log it when it didnt came from cache
-    xarLogMessage("xarMod_getFileInfo ". $modOsDir ." / " . $type);
-
-
-    // TODO redo legacy support via type.
-    switch($type) {
-        case 'module':
-            default:
-            // Spliffster, additional mod info from modules/$modDir/xarversion.php
-            $fileName = 'modules/' . $modOsDir . '/xarversion.php';
-
-            // If the locale is already present, it means we can make the translations available
-            if(!empty($GLOBALS['xarMLS_currentLocale']))
-                xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
-            break;
-        case 'theme':
-            $fileName = xarConfigGetVar('Site.BL.ThemesDirectory'). '/' . $modOsDir . '/xartheme.php';
-            break;
-    }
-
-    if (!file_exists($fileName)) {
-        // Don't raise an exception, it is too harsh, but log it tho (bug 295)
-        xarLogMessage("xarMod_getFileInfo: Could not find xarversion.php, skipping $modOsDir");
-        // throw new FileNotFoundException($fileName);
-        return;
-    }
-
-    include($fileName);
-
-    if (!isset($themeinfo))  $themeinfo = array();
-    if (!isset($modversion)) $modversion = array();
-    
-    $version = array_merge($themeinfo, $modversion);
-
-    // name and id are required, assert them, otherwise the module is invalid
-    assert('isset($version["name"]) && isset($version["id"]); /* Both name and id need to be present in xarversion.php */');
-    $FileInfo['name']           = $version['name'];
-    $FileInfo['id']             = (int) $version['id'];
-    $FileInfo['displayname']    = isset($version['displayname'])    ? $version['displayname'] : $version['name'];
-    $FileInfo['description']    = isset($version['description'])    ? $version['description'] : false;
-    $FileInfo['displaydescription'] = isset($version['displaydescription']) ? $version['displaydescription'] : $FileInfo['description'];
-    $FileInfo['admin']          = isset($version['admin'])          ? $version['admin'] : false;
-    $FileInfo['admin_capable']  = isset($version['admin'])          ? $version['admin'] : false;
-    $FileInfo['user']           = isset($version['user'])           ? $version['user'] : false;
-    $FileInfo['user_capable']   = isset($version['user'])           ? $version['user'] : false;
-    $FileInfo['securityschema'] = isset($version['securityschema']) ? $version['securityschema'] : false;
-    $FileInfo['class']          = isset($version['class'])          ? $version['class'] : false;
-    $FileInfo['category']       = isset($version['category'])       ? $version['category'] : false;
-    $FileInfo['locale']         = isset($version['locale'])         ? $version['locale'] : 'en_US.iso-8859-1';
-    $FileInfo['author']         = isset($version['author'])         ? $version['author'] : false;
-    $FileInfo['contact']        = isset($version['contact'])        ? $version['contact'] : false;
-    $FileInfo['dependency']     = isset($version['dependency'])     ? $version['dependency'] : array();
-    $FileInfo['dependencyinfo'] = isset($version['dependencyinfo']) ? $version['dependencyinfo'] : array();
-    $FileInfo['extensions']     = isset($version['extensions'])     ? $version['extensions'] : array();
-    $FileInfo['directory']      = isset($version['directory'])      ? $version['directory'] : false;
-    $FileInfo['homepage']       = isset($version['homepage'])       ? $version['homepage'] : false;
-    $FileInfo['email']          = isset($version['email'])          ? $version['email'] : false;
-    $FileInfo['contact_info']   = isset($version['contact_info'])   ? $version['contact_info'] : false;
-    $FileInfo['publish_date']   = isset($version['publish_date'])   ? $version['publish_date'] : false;
-    $FileInfo['license']        = isset($version['license'])        ? $version['license'] : false;
-    $FileInfo['version']        = isset($version['version'])        ? $version['version'] : false;
-    // Check that 'xar_version' key exists before assigning
-    if (!$FileInfo['version'] && isset($version['xar_version'])) {
-        $FileInfo['version'] = $version['xar_version'];
-    }
-    $FileInfo['bl_version']     = isset($version['bl_version'])     ? $version['bl_version'] : false;
-
-    xarCore::setCached('Mod.getFileInfos', $modOsDir, $FileInfo);
-    return $FileInfo;
-}
-
-
-/**
  * Get all module variables with a particular name
  *
  * @author Michel Dalle
@@ -1699,6 +1614,9 @@ function xarModGetInfo($modRegId, $type = 'module')
 function xarMod_getBaseInfo($modName, $type = 'module')
 {   return xarMod::getBaseInfo($modName, $type); }
 
+function xarMod_getFileInfo($modOsDir, $type = 'module')
+{   return xarMod::getFileInfo($modOsDir, $type); }
+
 function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'module')
 {   return xarMod::getState($modRegId, $modMode, $type); }
 
@@ -1744,7 +1662,7 @@ class xarMod
     static function getDisplayName($modName = NULL, $type = 'module')
     {
         if (empty($modName)) $modName = self::getName();
-        $modInfo = xarMod_getFileInfo($modName, $type);
+        $modInfo = self::getFileInfo($modName, $type);
         return xarML($modInfo['displayname']);
     }
 
@@ -1762,7 +1680,7 @@ class xarMod
         //xarLogMessage("xarMod::getDisplayDescription ". $modName ." / " . $type);
         if (empty($modName)) $modName = self::getName();
     
-        $modInfo = xarMod_getFileInfo($modName, $type);
+        $modInfo = self::getFileInfo($modName, $type);
         return xarML($modInfo['displaydescription']);
     }
 
@@ -1945,13 +1863,13 @@ class xarMod
         case 'module':
         default:
             if (!isset($modInfo['state'])) $modInfo['state'] = XARMOD_STATE_MISSING_FROM_UNINITIALISED; //return; // throw back
-            $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
+            $modFileInfo = self::getFileInfo($modInfo['osdirectory']);
             break;
         case 'theme':
             if (!isset($modInfo['state'])) {
                 $modInfo['state']= XARTHEME_STATE_MISSING_FROM_UNINITIALISED;
             }
-            $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory'], $type = 'theme');
+            $modFileInfo = self::getFileInfo($modInfo['osdirectory'], $type = 'theme');
             break;
         }
         
@@ -2073,6 +1991,94 @@ class xarMod
         
         return $modBaseInfo;
     }
+
+    /**
+     * Get info from xarversion.php for module specified by modOsDir
+     *
+     * @access protected
+     * @param modOSdir the module's directory
+     * @param type determines theme or module
+     * @return array an array of module file information
+     * @raise MODULE_FILE_NOT_EXIST
+     * @todo <marco> #1 FIXME: admin or admin capable?
+     */
+    function getFileInfo($modOsDir, $type = 'module')
+    {
+        if (empty($modOsDir)) throw new EmptyParameterException('modOsDir');
+        
+        if (empty($GLOBALS['xarMod_noCacheState']) && xarCore::isCached('Mod.getFileInfos', $modOsDir)) {
+            return xarCore::getCached('Mod.getFileInfos', $modOsDir);
+        }
+        // Log it when it didnt came from cache
+        xarLogMessage("xarMod::getFileInfo ". $modOsDir ." / " . $type);
+        
+        
+        // TODO redo legacy support via type.
+        switch($type) {
+        case 'module':
+        default:
+            // Spliffster, additional mod info from modules/$modDir/xarversion.php
+            $fileName = 'modules/' . $modOsDir . '/xarversion.php';
+            
+            // If the locale is already present, it means we can make the translations available
+            if(!empty($GLOBALS['xarMLS_currentLocale']))
+                xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
+            break;
+        case 'theme':
+            $fileName = xarConfigGetVar('Site.BL.ThemesDirectory'). '/' . $modOsDir . '/xartheme.php';
+            break;
+        }
+        
+        if (!file_exists($fileName)) {
+            // Don't raise an exception, it is too harsh, but log it tho (bug 295)
+            xarLogMessage("xarMod::getFileInfo: Could not find xarversion.php, skipping $modOsDir");
+            // throw new FileNotFoundException($fileName);
+            return;
+        }
+        
+        include($fileName);
+        
+        if (!isset($themeinfo))  $themeinfo = array();
+        if (!isset($modversion)) $modversion = array();
+        
+        $version = array_merge($themeinfo, $modversion);
+        
+        // name and id are required, assert them, otherwise the module is invalid
+        assert('isset($version["name"]) && isset($version["id"]); /* Both name and id need to be present in xarversion.php */');
+        $FileInfo['name']           = $version['name'];
+        $FileInfo['id']             = (int) $version['id'];
+        $FileInfo['displayname']    = isset($version['displayname'])    ? $version['displayname'] : $version['name'];
+        $FileInfo['description']    = isset($version['description'])    ? $version['description'] : false;
+        $FileInfo['displaydescription'] = isset($version['displaydescription']) ? $version['displaydescription'] : $FileInfo['description'];
+        $FileInfo['admin']          = isset($version['admin'])          ? $version['admin'] : false;
+        $FileInfo['admin_capable']  = isset($version['admin'])          ? $version['admin'] : false;
+        $FileInfo['user']           = isset($version['user'])           ? $version['user'] : false;
+        $FileInfo['user_capable']   = isset($version['user'])           ? $version['user'] : false;
+        $FileInfo['securityschema'] = isset($version['securityschema']) ? $version['securityschema'] : false;
+        $FileInfo['class']          = isset($version['class'])          ? $version['class'] : false;
+        $FileInfo['category']       = isset($version['category'])       ? $version['category'] : false;
+        $FileInfo['locale']         = isset($version['locale'])         ? $version['locale'] : 'en_US.iso-8859-1';
+        $FileInfo['author']         = isset($version['author'])         ? $version['author'] : false;
+        $FileInfo['contact']        = isset($version['contact'])        ? $version['contact'] : false;
+        $FileInfo['dependency']     = isset($version['dependency'])     ? $version['dependency'] : array();
+        $FileInfo['dependencyinfo'] = isset($version['dependencyinfo']) ? $version['dependencyinfo'] : array();
+        $FileInfo['extensions']     = isset($version['extensions'])     ? $version['extensions'] : array();
+        $FileInfo['directory']      = isset($version['directory'])      ? $version['directory'] : false;
+        $FileInfo['homepage']       = isset($version['homepage'])       ? $version['homepage'] : false;
+        $FileInfo['email']          = isset($version['email'])          ? $version['email'] : false;
+        $FileInfo['contact_info']   = isset($version['contact_info'])   ? $version['contact_info'] : false;
+        $FileInfo['publish_date']   = isset($version['publish_date'])   ? $version['publish_date'] : false;
+        $FileInfo['license']        = isset($version['license'])        ? $version['license'] : false;
+        $FileInfo['version']        = isset($version['version'])        ? $version['version'] : false;
+        // Check that 'xar_version' key exists before assigning
+        if (!$FileInfo['version'] && isset($version['xar_version'])) {
+            $FileInfo['version'] = $version['xar_version'];
+        }
+        $FileInfo['bl_version']     = isset($version['bl_version'])     ? $version['bl_version'] : false;
+        
+        xarCore::setCached('Mod.getFileInfos', $modOsDir, $FileInfo);
+        return $FileInfo;
+    }
 }
 
 
@@ -2087,15 +2093,15 @@ function xarModDelAlias($alias, $modName) { return xarModAlias::delete($alias,$m
 interface IxarModAlias
 {
     static function resolve($alias);
-    static function set($alias,$modName);
-    static function delete($alias,$modName);
+    static function set    ($alias,$modName);
+    static function delete ($alias,$modName);
 }
 
 /**
  * Class to model interface to module aliases
  *
  * @todo evaluate dependency consequences
- * @todo evaluate usage in modules, it's not very common, as in, perhaps worth to scrap an bolt onto a request mapper
+ * @todo evaluate usage in modules, it's not very common, as in, perhaps worth to scrap and bolt onto a request mapper
  */
 class xarModAlias implements IxarModAlias
 {
