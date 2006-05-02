@@ -637,81 +637,18 @@ function xarModAPILoad($modName, $modType = 'user')
  */
 function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
 {
-    //xarLogMessage("xarModFunc: begin $modName:$modType:$funcName");
-
     if (empty($modName)) throw new EmptyParameterException('modName');
 
-    if (!xarCoreIsApiAllowed($modType)) {
-        // InputValidationException is more clear here, even though it's not user input.
-        throw new BadParameterException(array($modType,$modName), 'The API named: "#(1)" is not allowed for module "#(2)"');
-    }
-    if (empty($funcName)) throw new EmptyParameterException('modName');
-
-    // good thing this information is cached :)
-    $modBaseInfo = xarMod::getBaseInfo($modName);
-
-    // Build function name and call function
-    $modFunc = "{$modName}_{$modType}_{$funcName}";
-    $found = true;
-    $isLoaded = true;
-    $msg='';
-    if (!function_exists($modFunc)) {
-        // attempt to load the module's api
-        xarModLoad($modName, $modType);
-        // let's check for that function again to be sure
-        if (!function_exists($modFunc)) {
-            if (!isset($modBaseInfo)) return; // throw back
-
-            $funcFile = 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.'/'.strtolower($funcName).'.php';
-            if (!file_exists($funcFile)) {
-                $found = false;
-            } else {
-                ob_start();
-                $r = require_once $funcFile;
-                $error_msg = strip_tags(ob_get_contents());
-                ob_end_clean();
-
-                if (empty($r) || !$r) {
-                    $msg = "Could not load function file: [#(1)]\n\nError Caught: #(2)";
-                    $params= array($funcFile,$error_msg);
-                    $isLoaded = false;
-                }
-
-                if (!function_exists($modFunc)) {
-                    $found = false;
-                }
-            }
-        }
-
-        if ($found) {
-            // Load the translations file - only if we have successfuly loaded the module function.
-            if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modBaseInfo['name'], 'modules:'.$modType, $funcName) === NULL) {return;}
-        }
-    }
-
-    if (!$found) {
-        // if it's loaded but not found, then set the error message to that
-        if (!$isLoaded || empty($msg)) {
-            $msg = 'Module function #(1) does not exist.';
-            $params = array($modFunc);
-        }
-        throw new FunctionNotFoundException($params,$msg);
-    }
-
-    $tplData = $modFunc($args);
-    if (!is_array($tplData)) {
-        return $tplData;
-    }
-
+    $tplData = xarMod__callfunc($modName,$modType,$funcName,$args);
+    // If we have a string of data, we assume someone else did xarTpl* for us
+    if (!is_array($tplData)) return $tplData;
+    
+    // See if we have a special template to apply
     $templateName = NULL;
-    if (isset($tplData['_bl_template'])) {
-        $templateName = $tplData['_bl_template'];
-    }
-
-    $tplOutput = xarTplModule($modBaseInfo['name'], $modType, $funcName, $tplData, $templateName);
-
-    //xarLogMessage("xarModFunc: end $modName:$modType:$funcName");
-
+    if (isset($tplData['_bl_template'])) $templateName = $tplData['_bl_template'];
+    
+    // Create the output.
+    $tplOutput = xarTplModule($modName, $modType, $funcName, $tplData, $templateName);
     return $tplOutput;
 }
 
@@ -734,8 +671,13 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
  */
 function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
 {
-    //xarLogMessage("xarModAPIFunc: begin $modName:$modType:$funcName");
+    if (empty($modName)) throw new EmptyParameterException('modName');
+    return xarMod__callfunc($modName, $modType, $funcName, $args,'api');
+}
 
+function xarMod__callfunc($modName,$modType,$funcName,$args,$funcType = '')
+{
+    assert('($funcType == "api" or $funcType==""); /* Wrong funcType argument in private callFunc method */');
     if (empty($modName)) throw new EmptyParameterException('modName');
     
     if (!xarCoreIsApiAllowed($modType)) {
@@ -748,18 +690,22 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
     $modBaseInfo = xarMod::getBaseInfo($modName);
 
     // Build function name and call function
-    $modAPIFunc = "{$modName}_{$modType}api_{$funcName}";
+    $modFunc = "{$modName}_{$modType}{$funcType}_{$funcName}";
     $found = true;
     $isLoaded = true;
     $msg = '';
-    if (!function_exists($modAPIFunc)) {
+    if (!function_exists($modFunc)) {
         // attempt to load the module's api
-        xarModAPILoad($modName, $modType);
+        if ($funcType == 'api') {
+            xarModAPILoad($modName, $modType);
+        } else {
+            xarModLoad($modName,$modType);
+        }
         // let's check for that function again to be sure
-        if (!function_exists($modAPIFunc)) {
+        if (!function_exists($modFunc)) {
             if (!isset($modBaseInfo)) {return;} // throw back
 
-            $funcFile = 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.'api/'.strtolower($funcName).'.php';
+            $funcFile = 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.$funcType.'/'.strtolower($funcName).'.php';
             if (!file_exists($funcFile)) {
                 $found = false;
             } else {
@@ -773,31 +719,26 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
                     $params = array($funcFile, $error_msg);
                     $isLoaded = false;
                 }
-
-                if (!function_exists($modAPIFunc)) {
-                    $found = false;
-                }
+                if (!function_exists($modFunc)) $found = false;
             }
         }
 
         if ($found) {
             // Load the translations file, only if we have loaded the API function for the first time here.
-            if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType.'api', $funcName) === NULL) {return;}
+            if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType.$funcType, $funcName) === NULL) {return;}
         }
     }
 
     if (!$found) {
         if (!$isLoaded || empty($msg)) {
-            $msg = 'Module API function #(1) does not exist or could not be loaded.';
-            $params = array($modAPIFunc);
+            // if it's loaded but not found, then set the error message to that
+            $msg = 'Module '. strtoupper($funcType) .' function #(1) does not exist or could not be loaded.';
+            $params = array($modFunc);
         }
         throw new FunctionNotFoundException($params, $msg);
     }
 
-    $funcResult = $modAPIFunc($args);
-
-    //xarLogMessage("xarModAPIFunc: end $modName:$modType:$funcName");
-
+    $funcResult = $modFunc($args);
     return $funcResult;
 }
 
