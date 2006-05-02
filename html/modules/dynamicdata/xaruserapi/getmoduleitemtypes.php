@@ -37,8 +37,12 @@
 
 		$types = array();
 		if ($native) {
-			if ($nativetypes = xarModAPIFunc($module,'user','getitemtypes',array(),0)) $types = $nativetypes;
-
+            // Try to get the itemtypes
+            try {
+                $types = xarModAPIFunc($module,'user','getitemtypes',array());
+            } catch ( FunctionNotFoundException $e) {
+                // No worries
+            }
 		}
 		if ($extensions) {
 			// Get all the objects at once

@@ -110,7 +110,11 @@ class Dynamic_DataStore_Master
 
         // try to get the meta table definition
         if (!empty($args['table'])) {
-            $meta = xarModAPIFunc('dynamicdata','util','getmeta',$args,0);
+            try {
+                $meta = xarModAPIFunc('dynamicdata','util','getmeta',$args);
+            } catch ( NotFoundExceptions $e ) {
+                // No worries
+            }
             if (!empty($meta) && !empty($meta[$args['table']])) {
                 foreach ($meta[$args['table']] as $column) {
                     if (!empty($column['source'])) {

@@ -587,8 +587,6 @@ function xarModPrivateLoad($modName, $modType, $flags = 0)
     return true;
 }
 
-
-
 /**
  * Load the modType of module identified by modName.
  *
@@ -668,7 +666,6 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
             if (!file_exists($funcFile)) {
                 $found = false;
             } else {
-
                 ob_start();
                 $r = require_once $funcFile;
                 $error_msg = strip_tags(ob_get_contents());
@@ -732,33 +729,34 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
  * @param modType string type of function to run
  * @param funcName string specific function to run
  * @param args array arguments to pass to the function
- * @param throwException boolean optional flag to throw an exception if the function doesn't exist or not (default = 1)
  * @return mixed The output of the function, or false on failure
  * @raise BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
  */
-function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = array(), $throwException = 1)
+function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
 {
     //xarLogMessage("xarModAPIFunc: begin $modName:$modType:$funcName");
 
     if (empty($modName)) throw new EmptyParameterException('modName');
+    
     if (!xarCoreIsApiAllowed($modType)) {
         // InputValidationException is more clear here, even though it's not user input.
         throw new BadParameterException(array($modType,$modName), 'The API named: "#(1)" is not allowed for module "#(2)"');
     }
     if (empty($funcName)) throw new EmptyParameterException('modName');
 
+    // good thing this information is cached :)
+    $modBaseInfo = xarMod::getBaseInfo($modName);
 
     // Build function name and call function
     $modAPIFunc = "{$modName}_{$modType}api_{$funcName}";
     $found = true;
     $isLoaded = true;
+    $msg = '';
     if (!function_exists($modAPIFunc)) {
         // attempt to load the module's api
-        xarModAPILoad($modName, $modType, $throwException);
+        xarModAPILoad($modName, $modType);
         // let's check for that function again to be sure
         if (!function_exists($modAPIFunc)) {
-            // good thing this information is cached :)
-            $modBaseInfo = xarMod::getBaseInfo($modName);
             if (!isset($modBaseInfo)) {return;} // throw back
 
             $funcFile = 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.'api/'.strtolower($funcName).'.php';
@@ -783,26 +781,17 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
         }
 
         if ($found) {
-            // Load the translations file.
-            // Load only if we have loaded the API function for the first time here.
+            // Load the translations file, only if we have loaded the API function for the first time here.
             if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType.'api', $funcName) === NULL) {return;}
         }
     }
 
     if (!$found) {
-        if ($throwException) {
-            if (!$isLoaded || empty($msg)) {
-                $msg = 'Module API function #(1) does not exist or could not be loaded.';
-                $params = array($modAPIFunc);
-            }
-
-            // MrB: When there is a parse error in the api file we sometimes end up
-            // here, the error is never shown !!!! (xmlrpc for example)
-            // TODO: the isloaded stuff -should- fix the problem above
-            //       someone needs to double check this to be sure
-            throw new FunctionNotFoundException($params, $msg);
+        if (!$isLoaded || empty($msg)) {
+            $msg = 'Module API function #(1) does not exist or could not be loaded.';
+            $params = array($modAPIFunc);
         }
-        return;
+        throw new FunctionNotFoundException($params, $msg);
     }
 
     $funcResult = $modAPIFunc($args);
@@ -2007,6 +1996,10 @@ function xarModGetAlias($alias) { return xarModAlias::resolve($alias);}
 function xarModSetAlias($alias, $modName) { return xarModAlias::set($alias,$modName);}
 function xarModDelAlias($alias, $modName) { return xarModAlias::delete($alias,$modName);}
 
+/** 
+ * Interface declaration for module aliases
+ *
+ */
 interface IxarModAlias
 {
     static function resolve($alias);

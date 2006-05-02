@@ -55,6 +55,15 @@ revisit later on before trusting the branch to be released or used.
   eachother.
 * DROPPED API: xarMod_getVarsByName, xarTheme_getVarsByName (were
   protected and never used)
+* DROPPED API: $throwException parameter in xarModAPIFunc
+
+!!DIFFERENCES BETWEEN PHP 5.0 and 5.1
+* do not agree on what function_exists() / is_callable() /
+  method_exists() should return
+* In PHP 5.0.4 (and earlier versions I believe) the shutdown function is called after the output buffering callback.
+* In PHP 5.1.2 (not sure when the change occurred) the shutdown function is called before the output buffering callback.
+* apparently PHP 5.1 allows headers to be sent in a shutdown function  (arguably wrong)
+
 
 !!!REFACTORING LIST:
 List of things which need to be refactored before starting the actual

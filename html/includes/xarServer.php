@@ -477,7 +477,11 @@ class xarRequest
                 if (xarMod::isAvailable($modName) && xarModVars::get($modName, 'SupportShortURLs') && xarModAPILoad($modName, $modType)) {
                     $loopHole = array($modName,$modType,$funcName);
                     // don't throw exception on missing file or function anymore
-                    $res = xarModAPIFunc($modName, $modType, 'decode_shorturl', $params, 0);
+                    try {
+                        $res = xarModAPIFunc($modName, $modType, 'decode_shorturl', $params);
+                    } catch ( NotFoundExceptions $e) {
+                        // No worry
+                    }
                     if (isset($res) && is_array($res)) {
                         list($funcName, $args) = $res;
                         if (!empty($funcName)) { // bingo
