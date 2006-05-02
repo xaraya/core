@@ -30,14 +30,42 @@
         <li>
             <xar:mlstring>Roles have inheritance. A role inherits all the privileges of all of its parents, but can
             override them. If you give a group editing privileges, for instance, any other role that is a member of 
-            that group inherits the editing privileges. If you want to restrict the privileges of some of the members, 
+            that group inherits the editing privileges. If you want to restrict the privileges of some of the members,
             simply assign them a different set of privileges (say reading), and the privileges of the parent will be 
             overridden.</xar:mlstring>
         </li>
     </ul>
-    <h3>
+    <h2>
         <xar:mlstring>How to use it?</xar:mlstring>
+    </h2>
+    
+    <h3>
+        <xar:mlstring>Menu Options</xar:mlstring>
     </h3>
+
+    <p>
+        <xar:mlstring>The roles module provides key functions to manage the users and groups on your site:</xar:mlstring>
+    </p>
+    <ul>
+        <li><xar:mlstring><strong>View Groups/users</strong> : a tabbed interface to user and roles listings with a variety of display options. You can also add users from this view, delete or modify users, email groups of users, test their privileges, and view users by various sorting and selection criteria.</xar:mlstring></li>
+        <li><xar:mlstring><strong>Add Group/User</strong> : A form for creation of a new user or group. If you have hooked Dynamic Data to Roles and created extra properties for your users, these will also be displayed here.</xar:mlstring></li>
+        <li><xar:mlstring><strong>Email Messaging</strong> : Configure email notifications to users on registration, change of passwords, and account activation including template customization. You can also email groups of users from this view.</xar:mlstring></li>
+        <li><xar:mlstring><strong>Recall/Purge</strong> : Users or groups that have been deleted can be recalled from this screen  or purged for good from the system.</xar:mlstring></li>
+        <li><xar:mlstring><strong>Site Lock</strong> : Lock your site to registration or login during maintenance or updates.</xar:mlstring></li>
+        <li><xar:mlstring><strong>Modify Config</strong> : Set general site options including:</xar:mlstring>
+            <ul>
+               <li><xar:mlstring>designated site Administrator and default registration User group</xar:mlstring></li>
+               <li><xar:mlstring>default Authentication and Registration module</xar:mlstring></li>
+               <li><xar:mlstring>activation of user variables and Dynamic Data for roles such as Last Login, User Home, Last Password Update</xar:mlstring></li>
+               <li><xar:mlstring>Role Member Account Options realted to User Home, editing of Member Account, and search by Email</xar:mlstring></li>
+
+            </ul>
+        </li>
+    </ul>
+    <h3>
+        <xar:mlstring>Default Roles </xar:mlstring>
+    </h3>
+
     <p>
         <xar:mlstring>The roles on your site are arranged in a tree. At the top of the tree is a role called Everybody, which represents the "group of all groups" on your site. Every user and every group is a member or descendent of Everybody.</xar:mlstring>
     </p>
@@ -98,30 +126,15 @@
         <xar:mlstring>Always keep in mind: When you create a role, until you've assigned it some privileges, it will only have those privileges it inherits from its parents.</xar:mlstring>
     </p>
     
+   <h3><xar:mlstring>Extending Roles</xar:mlstring></h3>
+   <p>
+      <xar:mlstring>You can extend roles by hooking in the functionality of other modules to roles.
+      Dynamic Data module for example, enables you to add further custom fields to your user roles. </xar:mlstring></p>
+   <p><xar:mlstring>There is a set of sample 'user' dynamic data (file called users.xml) you can </xar:mlstring><a href="&xar-modurl-dynamicdata-util-import;"><xar:mlstring>import into Roles</xar:mlstring></a>
+      <xar:mlstring> including timezone, aim, irc, msn, yahoom, avatar, user signature and so on that can also be utilized by other modules.
+       Some such as the Forum module(xarbb) automatically integrate this data.</xar:mlstring>
+   </p>
 
-    <h3>
-        <xar:mlstring>Menu Options</xar:mlstring>
-    </h3>
-
-    <p>
-        <xar:mlstring>The roles module provides key functions to manage the users and groups on your site:</xar:mlstring>
-    </p>
-    <ul>
-        <li><xar:mlstring><strong>View Groups/users</strong> : a tabbed interface to user and roles listings with a variety of display options. You can also add users from this view, delete or modify users, email groups of users, test their privileges, and view users by various sorting and selection criteria.</xar:mlstring></li>
-        <li><xar:mlstring><strong>Add Group/User</strong> : A form for creation of a new user or group. If you have hooked Dynamic Data to Roles and created extra properties for your users, these will also be displayed here.</xar:mlstring></li>
-        <li><xar:mlstring><strong>Email Messaging</strong> : Configure email notifications to users on registration, change of passwords, and account activation including template customization. You can also email groups of users from this view.</xar:mlstring></li>
-        <li><xar:mlstring><strong>Recall/Purge</strong> : Users or groups that have been deleted can be recalled from this screen  or purged for good from the system.</xar:mlstring></li>
-        <li><xar:mlstring><strong>Site Lock</strong> : Lock your site to registration or login during maintenance or updates.</xar:mlstring></li>
-        <li><xar:mlstring><strong>Modify Config</strong> : Set general site options including:</xar:mlstring>
-            <ul>
-               <li><xar:mlstring>designated site Administrator and default registration User group</xar:mlstring></li>
-               <li><xar:mlstring>default Authentication and Registration module</xar:mlstring></li>
-               <li><xar:mlstring>activation of user variables and Dynamic Data for roles</xar:mlstring></li>
-               <li><xar:mlstring>Special Member Options such as User Home, editing of Member Account and search by Email</xar:mlstring></li>
-
-            </ul>
-        </li>
-    </ul>
     <h3>
         <xar:mlstring>Included Blocks</xar:mlstring>
     </h3>
@@ -154,6 +167,7 @@
         <xar:mlstring>Roles provides a number of Dynamic Data properties that you can use either in Roles or
         other module on your site.</xar:mlstring>
     </p>
+
    <h3><xar:mlstring>Further Information</xar:mlstring></h3>
    <p>
       <xar:mlstring>Further information on the Roles module can be found at:</xar:mlstring>
@@ -169,7 +183,7 @@
 
   </ul>
   <p class="xar-sub">
-    <strong>&nbsp;<xar:mlstring>Roles Module Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.1.1&nbsp; 2006-04-22
+    <strong>&nbsp;<xar:mlstring>Roles Module Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.1.2&nbsp; 2006-04-30
   </p>
 </div>
 
