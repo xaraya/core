@@ -102,18 +102,16 @@ define('XARTHEME_MODE_PER_SITE', 2);
  * Start the module subsystem
  *
  * @access protected
- * @global xarMod_generateShortURLs bool
- * @global xarMod_generateXMLURLs bool
  * @param args['generateShortURLs'] bool
  * @param args['generateXMLURLs'] bool
  * @return bool true
  */
 function xarMod_init($args, $whatElseIsGoingLoaded)
 {
-    // generateShortURLs
-    $GLOBALS['xarMod_generateShortURLs'] = $args['enableShortURLsSupport'];
-    $GLOBALS['xarMod_generateXMLURLs'] = $args['generateXMLURLs'];
+    // Initialize the interfaces and stuff.
+    xarMod::init($args);
 
+    // Register the events for this subsystem
     xarEvents::register('ModLoad');
     xarEvents::register('ModAPILoad');
 
@@ -629,8 +627,6 @@ function xarMod__URLaddParametersToPath($args, $path, $pini, $psep)
  * Generates an URL that reference to a module function.
  *
  * @access public
- * @global xarMod_generateShortURLs bool
- * @global xarMod_generateXMLURLs bool
  * @param modName string registered name of module
  * @param modType string type of function
  * @param funcName string module function
@@ -663,7 +659,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
     if (empty($modName)) return xarServer::getBaseURL() . $BaseModURL;
     
     // Take the global setting for XML format generation, if not specified.
-    if (!isset($generateXMLURL)) $generateXMLURL = $GLOBALS['xarMod_generateXMLURLs'];
+    if (!isset($generateXMLURL)) $generateXMLURL = xarMod::$genXmlUrls;
     
     // If an entry point has been set, then modify the URL entry point and modType.
     if (!empty($entrypoint)) {
@@ -686,7 +682,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
 
     // Check the global short URL setting before trying to load the URL encoding function
     // for the module. This also applies to custom entry points.
-    if ($GLOBALS['xarMod_generateShortURLs']) {
+    if (xarMod::$genShortUrls) {
         // The encode_shorturl will be in userapi.
         // Note: if a module declares itself as supporting short URLs, then the encoding
         // API subsequently fails to load, then we want those errors to be raised.
@@ -1190,6 +1186,19 @@ function xarModAPILoad($modName, $modType = 'user')
  */
 class xarMod
 {
+    static $genShortUrls = false;
+    static $genXmlUrls   = true;
+
+    /**
+     * Initialize
+     *
+     */
+    static function init($args)
+    {
+        self::$genShortUrls = $args['enableShortURLsSupport'];
+        self::$genXmlUrls   = $args['generateXMLURLs'];
+    }
+
     /**
      * Get name of a module
      *
