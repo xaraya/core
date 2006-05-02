@@ -63,7 +63,7 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
             } else {
             // TODO: don't we want auto-loading for xarModFunc too ???
                 // try to load the module GUI
-                if (!xarModLoad($fmod,$ftype)) {
+                if (!xarMod::load($fmod,$ftype)) {
                     continue;
                 }
                 // try to invoke the function with some common parameters

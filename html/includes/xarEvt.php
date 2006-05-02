@@ -35,8 +35,8 @@
  *
  * Module package: 
  * ---------------
- * ModLoad    - event is issued at the end of the xarModLoad function, just before returning true
- * ModAPILoad - event is issued at the end of the xarModAPILoad function, just before returning true
+ * ModLoad    - event is issued at the end of the xarMod::load method, just before returning true
+ * ModAPILoad - event is issued at the end of the xarMod::apiLoad function, just before returning true
  *
  * Server package:
  * ---------------
@@ -216,7 +216,7 @@ class xarEvents implements IxarEvents
         // We can't rely on the API, the event system IS the API!
         // - no use of xarModAPIFunc because that sets exceptions and we 
         //   don't want that when a module doesn't react to an event.
-        // - we could use xarModAPILoad. This will create another event ModAPILoad 
+        // - we could use xarMod::apiLoad. This will create another event ModAPILoad 
         //   if the api wasn't loaded yet. The event will *not* be created if the
         //   API was already loaded. However, this would mean that all module APIs
         //   are always loaded, which is a bit too much, so we should try it another way

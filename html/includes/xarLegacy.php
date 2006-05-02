@@ -58,7 +58,7 @@ function xarGetStatusMsg()
 
 function xarBlockTypeExists($modName, $blockType)
 {
-    if (!xarModAPILoad('blocks', 'admin')) return;
+    if (!xarMod::apiLoad('blocks', 'admin')) return;
     $args = array('modName'=>$modName, 'blockType'=>$blockType);
     return xarModAPIFunc('blocks', 'admin', 'block_type_exists', $args);
 }

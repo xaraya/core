@@ -129,7 +129,7 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
         // Every authentication module must at least implement the
         // authentication interface so there's at least the authenticate_user
         // user api function
-        if (!xarModAPILoad($authModName, 'user')) continue;
+        if (!xarMod::apiLoad($authModName, 'user')) continue;
 
         $modInfo = xarMod::getBaseInfo($authModName);
         $modId = $modInfo['systemid'];
@@ -483,7 +483,7 @@ function xarUserGetVar($name, $userId = NULL)
 
         if ($useAuthSystem == true) {
             $authModName = 'authsystem';
-            if (!xarModAPILoad($authModName, 'user')) return; // throw back
+            if (!xarMod::apiLoad($authModName, 'user')) return; // throw back
         }
 
         $value = xarModAPIFunc($authModName, 'user', 'get_user_variable',
@@ -626,7 +626,7 @@ function xarUserSetVar($name, $value, $userId = NULL)
     if ($useAuthSystem == true) {
         if ($prop_dtype == XARUSER_DUD_TYPE_CORE) return true; // Already updated
         $authModName = 'authsystem';
-        if (!xarModAPILoad($authModName, 'user')) return; // throw back
+        if (!xarMod::apiLoad($authModName, 'user')) return; // throw back
     }
 
     if (!xarModAPIFunc($authModName, 'user', 'set_user_variable',
@@ -715,7 +715,7 @@ function xarUser__getAuthModule($userId)
     }
     $result->Close();
 
-    if (!xarModAPILoad($authModName, 'user')) return;
+    if (!xarMod::apiLoad($authModName, 'user')) return;
 
     return $authModName;
 }
