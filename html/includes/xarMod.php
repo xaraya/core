@@ -514,66 +514,6 @@ class xarModUserVars implements IxarModUserVars
     }
 }
 
-
-
-/**
- * Load the modType of module identified by modName.
- *
- * @access private
- * @param modName string - name of module to load
- * @param modType string - type of functions to load
- * @param flags number - flags to modify function behaviour
- * @return mixed
- * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_NOT_ACTIVE
- */
-function xarModPrivateLoad($modName, $modType, $flags = 0)
-{
-    static $loadedModuleCache = array();
-    if (empty($modName)) throw new EmptyParameterException('modName');
-
-    // Make sure we access the cache with lower case key, return true when we already loaded
-    $cacheKey = strtolower($modName.$modType);
-    if (isset($loadedModuleCache[$cacheKey])) return true;
-    
-    // Log it when it doesnt come from the cache
-    xarLogMessage("xarMod::load: loading $modName:$modType");
-
-    $modBaseInfo = xarMod::getBaseInfo($modName);
-    if (!isset($modBaseInfo)) throw new ModuleNotFoundException($modName);
-
-    if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE && !($flags & XARMOD_LOAD_ANYSTATE) ) {
-        throw new ModuleNotActiveException($modName);
-    }
-
-    // Load the module files
-    $modDir = $modBaseInfo['directory'];
-    $fileName = 'modules/'.$modDir.'/xar'.$modType.'.php';
-
-    // Removed the exception.  Causing some wierd results with modules without an api.
-    // <nuncanada> But now we wont know if something was loaded or not!
-    // <nuncanada> We need some way to find it out.
-    // Assume failure
-    $loadedModuleCache[$cacheKey] = false;
-    if (file_exists($fileName)) {
-        xarInclude($fileName);
-        $loadedModuleCache[$cacheKey] = true;
-    } elseif (is_dir('modules/'.$modDir.'/xar'.$modType)) {
-        // this is OK too - do nothing
-        $loadedModuleCache[$cacheKey] = true;
-    }
-
-    // Load the module translations files (common functions, uncut functions etc.)
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:', $modType) === NULL) return;
-
-    // Load database info
-    xarMod::loadDbInfo($modName, $modDir);
-
-    // Module loaded successfully, trigger the proper event
-    xarEvents::trigger('ModLoad', $modName);
-    return true;
-}
-
-
 /**
  * Encode parts of a URL.
  * This will encode the path parts, the and GET parameter names
@@ -1880,7 +1820,7 @@ class xarMod
             // InputValidationException is more clear here, even though it's not user input.
             throw new BadParameterException(array($modType,$modName), 'The API named: "#(1)" is not allowed for module "#(2)"');
         }
-        return xarModPrivateLoad($modName, $modType);
+        return self::privateLoad($modName, $modType);
     }
 
     /**
@@ -1899,9 +1839,65 @@ class xarMod
             throw new BadParameterException(array($modType,$modName), 'The API named: "#(1)" is not allowed for module "#(2)"');
         }
         
-        return xarModPrivateLoad($modName, $modType.'api', XARMOD_LOAD_ANYSTATE);
+        return self::privateLoad($modName, $modType.'api', XARMOD_LOAD_ANYSTATE);
     }
 
+    /**
+     * Load the modType of module identified by modName.
+     *
+     * @access private
+     * @param modName string - name of module to load
+     * @param modType string - type of functions to load
+     * @param flags number - flags to modify function behaviour
+     * @return mixed
+     * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_NOT_ACTIVE
+     */
+    static private function privateLoad($modName, $modType, $flags = 0)
+    {
+        static $loadedModuleCache = array();
+        if (empty($modName)) throw new EmptyParameterException('modName');
+        
+        // Make sure we access the cache with lower case key, return true when we already loaded
+        $cacheKey = strtolower($modName.$modType);
+        if (isset($loadedModuleCache[$cacheKey])) return true;
+        
+        // Log it when it doesnt come from the cache
+        xarLogMessage("xarMod::load: loading $modName:$modType");
+        
+        $modBaseInfo = self::getBaseInfo($modName);
+        if (!isset($modBaseInfo)) throw new ModuleNotFoundException($modName);
+        
+        if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE && !($flags & XARMOD_LOAD_ANYSTATE) ) {
+            throw new ModuleNotActiveException($modName);
+        }
+        
+        // Load the module files
+        $modDir = $modBaseInfo['directory'];
+        $fileName = 'modules/'.$modDir.'/xar'.$modType.'.php';
+        
+        // Removed the exception.  Causing some wierd results with modules without an api.
+        // <nuncanada> But now we wont know if something was loaded or not!
+        // <nuncanada> We need some way to find it out.
+        // Assume failure
+        $loadedModuleCache[$cacheKey] = false;
+        if (file_exists($fileName)) {
+            xarInclude($fileName);
+            $loadedModuleCache[$cacheKey] = true;
+        } elseif (is_dir('modules/'.$modDir.'/xar'.$modType)) {
+            // this is OK too - do nothing
+            $loadedModuleCache[$cacheKey] = true;
+        }
+
+        // Load the module translations files (common functions, uncut functions etc.)
+        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:', $modType) === NULL) return;
+        
+        // Load database info
+        self::loadDbInfo($modName, $modDir);
+        
+        // Module loaded successfully, trigger the proper event
+        xarEvents::trigger('ModLoad', $modName);
+        return true;
+    }
 }
 
 
