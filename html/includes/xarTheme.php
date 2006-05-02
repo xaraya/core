@@ -191,18 +191,6 @@ function xarTheme_getVarsByTheme($themeName)
 }
 
 /**
- * Get all theme variables with a particular name
- *
- * @access protected
- * @return bool true on success
- * @raise DATABASE_ERROR, BAD_PARAM
- */
-function xarTheme_getVarsByName($name)
-{
-    return xarMod_getVarsByName($name, $type = 'theme');
-}
-
-/**
  * Get the theme's current state
  *
  * @param themeRegId the theme's registered id

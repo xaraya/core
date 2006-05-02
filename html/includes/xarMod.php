@@ -1403,61 +1403,6 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
 }
 
 /**
- * Get all module variables with a particular name
- *
- * @author Michel Dalle
- * @access protected
- * @param name string
- * @return mixed true on success
- * @raise DATABASE_ERROR, BAD_PARAM
- * @todo <marco> #1 fetch from site table too ?
- * @todo <mrb> #2 fetch from site table too? (yes i know it's the same, just making you thing twice before changing this)
- */
-function xarMod_getVarsByName($varName, $type = 'module')
-{
-    if (empty($varName)) throw new EmptyParameterException('varName');
-
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
-    $varstable = $tables['module_vars'];
-
-    switch($type) {
-        case 'module':
-        default:
-            $ownertbl = $tables['modules'];
-            break;
-        case 'theme':
-            $ownertbl = $tables['themes'];
-            break;
-    }
-    $query = "SELECT  owner.xar_name, vars.xar_value
-              FROM    $ownertbl owner, $varstable vars
-              WHERE   owner.xar_id = vars.xar_modid AND 
-                      vars.xar_name = ?";
-
-    $stmt =& $dbconn->prepareStatement($query);
-    $result =& $stmt->executeQuery(array($varName),ResultSet::FETCHMODE_NUM);
-
-    // Add module variables to cache
-    while ($result->next()) {
-        // Name is the first field, value the second, cache them like that too.
-        xarCore::setCached('Mod.Variables.' . $result->getString(1), $varName, $result->get(2));
-    }
-    $result->Close();
-    switch($type) {
-        case 'module':
-        default:
-            xarCore::setCached('Mod.GetVarsByName', $varName, true);
-            break;
-        case 'theme':
-            xarCore::setCached('Theme.GetVarsByName', $varName, true);
-            break;
-    }
-
-    return true;
-}
-
-/**
  * register a hook function
  *
  * @access public
