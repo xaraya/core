@@ -579,7 +579,7 @@ function xarModPrivateLoad($modName, $modType, $flags = 0)
     if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modBaseInfo['name'], 'modules:', $modType) === NULL) return;
 
     // Load database info
-    xarMod__loadDbInfo($modBaseInfo['name'], $modDir);
+    xarMod::loadDbInfo($modBaseInfo['name'], $modDir);
 
     // Module loaded successfully, trigger the proper event
     xarEvents::trigger('ModLoad', $modBaseInfo['name']);
@@ -649,14 +649,14 @@ function xarModDBInfoLoad($modName, $modDir = NULL, $type = 'module')
     }
 
     switch($type) {
-        case 'module':
-            default:
-            xarMod__loadDbInfo($modBaseInfo['name'], $modDir);
-            return true;
-            break;
-        case 'theme':
-            return true;
-            break;
+    case 'module':
+    default:
+        xarMod::loadDbInfo($modBaseInfo['name'], $modDir);
+        return true;
+        break;
+    case 'theme':
+        return true;
+        break;
     }
 }
 
@@ -1458,48 +1458,6 @@ function xarMod_getVarsByName($varName, $type = 'module')
 }
 
 /**
- * Load database definition for a module
- *
- * @access private
- * @param modName string name of module to load database definition for
- * @param modOsDir string directory that module is in
- * @return mixed true on success
- * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
- */
-function xarMod__loadDbInfo($modName, $modDir)
-{
-    static $loadedDbInfoCache = array();
-
-    if (empty($modName)) throw new EmptyParameterException('modName');
-    if (empty($modDir))  throw new EmptyParameterException('modDir');
-
-
-    // Check to ensure we aren't doing this twice
-    if (isset($loadedDbInfoCache[$modName])) {
-        return true;
-    }
-
-    // Load the database definition if required
-    $osxartablefile = "modules/$modDir/xartables.php";
-
-    if (!file_exists($osxartablefile)) {
-        return false;
-    }
-    include_once $osxartablefile;
-
-    $tablefunc = $modName . '_' . 'xartables';
-
-    if (function_exists($tablefunc)) {
-        xarDB::importTables($tablefunc());
-    }
-
-    $loadedDbInfoCache[$modName] = true;
-
-    return true;
-}
-
-
-/**
  * register a hook function
  *
  * @access public
@@ -1616,6 +1574,9 @@ function xarMod_getBaseInfo($modName, $type = 'module')
 
 function xarMod_getFileInfo($modOsDir, $type = 'module')
 {   return xarMod::getFileInfo($modOsDir, $type); }
+
+function xarMod__loadDbInfo($modName, $modDir)
+{   return xarMod::loadDbInfo($modName, $modDir); }
 
 function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'module')
 {   return xarMod::getState($modRegId, $modMode, $type); }
@@ -2002,7 +1963,7 @@ class xarMod
      * @raise MODULE_FILE_NOT_EXIST
      * @todo <marco> #1 FIXME: admin or admin capable?
      */
-    function getFileInfo($modOsDir, $type = 'module')
+    static function getFileInfo($modOsDir, $type = 'module')
     {
         if (empty($modOsDir)) throw new EmptyParameterException('modOsDir');
         
@@ -2078,6 +2039,39 @@ class xarMod
         
         xarCore::setCached('Mod.getFileInfos', $modOsDir, $FileInfo);
         return $FileInfo;
+    }
+
+    /**
+     * Load database definition for a module
+     *
+     * @access private
+     * @param modName string name of module to load database definition for
+     * @param modOsDir string directory that module is in
+     * @return mixed true on success
+     * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
+     * 
+     * @todo make this private again
+     */
+    static function loadDbInfo($modName, $modDir)
+    {
+        static $loadedDbInfoCache = array();
+        
+        if (empty($modName)) throw new EmptyParameterException('modName');
+        if (empty($modDir))  throw new EmptyParameterException('modDir');
+        
+        // Check to ensure we aren't doing this twice
+        if (isset($loadedDbInfoCache[$modName])) return true;
+                
+        // Load the database definition if required
+        $osxartablefile = "modules/$modDir/xartables.php";
+        if (!file_exists($osxartablefile)) return false;
+        include_once $osxartablefile;
+        
+        $tablefunc = $modName . '_' . 'xartables';
+        if (function_exists($tablefunc)) xarDB::importTables($tablefunc());
+                
+        $loadedDbInfoCache[$modName] = true;
+        return true;
     }
 }
 
