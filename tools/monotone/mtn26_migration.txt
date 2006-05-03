@@ -1,9 +1,10 @@
 CHECKLIST FOR MTN .26 migration
 
+notice to migrate private branches http://venge.net/monotone/wiki/RosterifyingPrivateBranches
 db migrate
 rosterify
 database size
-check .mt -> mtn replacement
+active branches to reduce
 test some working copies
 
 DATABASES 
@@ -11,25 +12,40 @@ DATABASES
   core 
      migrate:   YES
      rosterify: YES
+     size:
+     branches:  YES (how many?)
   modules
      migrate:   YES 
      rosterify: YES (got 1 bad signature warning, but process completed successfully)
      size:      OLD: 315M NEW: 256M
+     branches:  ?
   themes
      migrate:   YES
      rosterify: YES
      size:      OLD: 5.3M NEW: 4.1M
+     branches:  ?
   languages
      migrate:   YES
      rosterify  YES
      size:      OLD: 38M NEW: 30M
+     branches:  ?
+  artwork
+     migrate:
+     rosterify:
+     size:
+     branches:  ?
 SCRIPTS
   xaraya.rc
   init scripts
-    change ports to 4691
+    change ports to 4691 
   pull and checkout scripts
   upgrade viewmtn
-  
+  misc or all
+   change called executable to mtn 
+   change referenced workspace directories to _MTN
+   remove .mt-attr files (modify any hooks that check for it)
+   change ignore file to .mtn-ignore
+   change firewall/port redirection to reference port 4691
 MISC
   are any of the fixes since .26 release important to us?
   do we want to use usher?
