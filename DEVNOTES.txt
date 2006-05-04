@@ -24,6 +24,9 @@ revisit later on before trusting the branch to be released or used.
   now in the themes table itself.
 * table module_states has been dropped, where the xar_state column is
   now in the modules table itself.
+* table config_vars has been dropped, now managed by module_vars where
+  modid==0
+
 (see DEVupgrades.sql for the above)
 
 !!!OTHER CHANGES POSSIBLY AFFECTING UPGRADES:

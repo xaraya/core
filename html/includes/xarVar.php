@@ -478,6 +478,8 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
     if($type != 'configvar') {
         $modBaseInfo = xarMod::getBaseInfo($modName, $baseinfotype);
         if (!isset($modBaseInfo)) return; // throw back
+    } else {
+        $modBaseInfo['systemid'] = 0;
     }
 
 
@@ -505,7 +507,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
         $config_varsTable = $tables['config_vars'];
         
         $query = "SELECT xar_value FROM $config_varsTable WHERE xar_name=? AND xar_modid=?";
-        $bindvars = array($name,0);
+        $bindvars = array($name,(int)$modBaseInfo['systemid']);
         break;
     }
 
