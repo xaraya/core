@@ -83,10 +83,13 @@ function base_init()
          * Here we install the configuration table and set some default
          * configuration variables
          *********************************************************************/
-        $configVarsTable  = $systemPrefix . '_config_vars';
+        // TODO: we now use module_vars, but namewise it would be better to use config_vars here
+        // TODO: revisit this when we know its all working out, for now, minimal change.
+        $configVarsTable  = $systemPrefix . '_module_vars';
         /*********************************************************************
          * CREATE TABLE xar_config_vars (
          *  xar_id int(11) unsigned NOT NULL auto_increment,
+         *  xar_modid int(11) unsigned NOT NULL default '0',
          *  xar_name varchar(64) NOT NULL default '',
          *  xar_value longtext,
          *  PRIMARY KEY  (xar_id),
@@ -96,6 +99,7 @@ function base_init()
 
         $fields = array(
                         'xar_id'    => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
+                        'xar_modid' => array('type'=>'integer','null'=>false,'increment'=>false),
                         'xar_name'  => array('type'=>'varchar','size'=>64,'null'=>false),
                         'xar_value' => array('type'=>'text','size'=>'long')
                         );
@@ -103,13 +107,25 @@ function base_init()
         $query = xarDBCreateTable($configVarsTable,$fields);
         $dbconn->Execute($query);
 
-        // config var name should be unique
+        // config var name should be unique in scope
+        // TODO: nameing of index is now confusing, see above.
         $index = array('name'   => 'i_'.$systemPrefix.'_config_name',
-                       'fields' => array('xar_name'),
+                       'fields' => array('xar_name', 'xar_modid'),
                        'unique' => true);
 
         $query = xarDBCreateIndex($configVarsTable,$index);
         $dbconn->Execute($query);
+
+        $index = array('name' => 'i_' . $systemPrefix . '_module_vars_modid',
+                       'fields' => array('xar_modid'));
+        $query = xarDBCreateIndex($configVarsTable, $index);
+        $dbconn->Execute($query);
+
+        $index = array('name' => 'i_' . $systemPrefix . '_module_vars_name',
+                       'fields' => array('xar_name'));
+        $query = xarDBCreateIndex($configVarsTable, $index);
+        $dbconn->Execute($query);
+
 
         include_once 'includes/xarConfig.php';
 
@@ -188,7 +204,6 @@ function base_init()
 
         $authModules = array('authsystem');
         xarConfigSetVar('Site.User.AuthenticationModules',$authModules);
-
         $templateTagsTable = $systemPrefix . '_template_tags';
         /*********************************************************************
          * CREATE TABLE xar_template_tags (

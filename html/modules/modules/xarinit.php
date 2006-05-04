@@ -95,37 +95,7 @@ function modules_init()
         $savedmodid = $dbconn->PO_Insert_ID($tables['modules'], 'xar_id');
 
 
-        /**
-         * CREATE TABLE xar_module_vars (
-         *   xar_id int(11) NOT NULL auto_increment,
-         *   xar_mod_id int(11) NOT NULL default 0,
-         *   xar_name varchar(64) NOT NULL default '',
-         *   xar_value longtext,
-         *   PRIMARY KEY  (xar_id)
-         * )
-         */
-        $fields = array(
-                        'xar_id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
-                        'xar_modid' => array('type' => 'integer', 'null' => false),
-                        'xar_name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        'xar_value' => array('type' => 'text', 'size' => 'long')
-                        );
-
-        // Create the module vars table
-        $query = xarDBCreateTable($tables['module_vars'], $fields);
-        $dbconn->Execute($query);
-
-        $index = array('name' => 'i_' . $sitePrefix . '_module_vars_modid',
-                       'fields' => array('xar_modid'));
-
-        $query = xarDBCreateIndex($tables['module_vars'], $index);
-        $dbconn->Execute($query);
-
-        $index = array('name' => 'i_' . $sitePrefix . '_module_vars_name',
-                       'fields' => array('xar_name'));
-        $query = xarDBCreateIndex($tables['module_vars'], $index);
-        $dbconn->Execute($query);
-
+        /** Module vars table is created earlier now (base mod, where config_vars table was created */
 
         /**
          * CREATE TABLE xar_module_itemvars (

@@ -74,9 +74,15 @@ ALTER TABLE xar_modules ADD COLUMN xar_state INT(11) NOT NULL DEFAULT '0';
 UPDATE xar_modules INNER JOIN xar_module_states ON xar_modules.xar_regid = xar_module_states.xar_regid
 SET    xar_modules.xar_state = xar_module_states.xar_state;
 
+/* Storage of config_vars and module_vars is consolidated into one table now */
+/* Copy the entries of the config_vars table to the module vars table */
+INSERT INTO xar_module_vars (xar_modid, xar_name, xar_value)
+SELECT 0,xar_name,xar_value FROM xar_config_vars
+
 /* Easy ones, tables not needed anymore */
 DROP TABLE xar_admin_menu;
 DROP TABLE xar_theme_vars;
 DROP TABLE xar_tables;
 DROP TABLE xar_theme_states;
 DROP TABLE xar_module_states;
+DROP TABLE xar_config_vars;

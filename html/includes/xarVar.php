@@ -503,8 +503,9 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
          break;
     case 'configvar':
         $config_varsTable = $tables['config_vars'];
-        $query = "SELECT xar_value FROM $config_varsTable WHERE xar_name=?";
-        $bindvars = array($name);
+        
+        $query = "SELECT xar_value FROM $config_varsTable WHERE xar_name=? AND xar_modid=?";
+        $bindvars = array($name,0);
         break;
     }
 
@@ -538,8 +539,8 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
 
         default:
             // We finally found it, update the appropriate cache
-            //Couldnt we serialize and unserialize all variables?
-            //would that be too time expensive?
+            // Couldnt we serialize and unserialize all variables?
+            // would that be too time expensive?
             // <mrb> it doesnt matter, Creole does it automatically if it hasnt already happened.
             // this also means that if you dont use the neat creole methods, you're on your own.
             // basically, never serialize anything, let the middleware handle it. on top of that, dont put
@@ -661,9 +662,9 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             //Insert
             $seqId = $dbconn->GenId($config_varsTable);
             $query = "INSERT INTO $config_varsTable
-                      (xar_id, xar_name, xar_value)
-                      VALUES (?,?,?)";
-            $bindvars = array($seqId, $name, $serialvalue);
+                      (xar_id, xar_modid, xar_name, xar_value)
+                      VALUES (?,?,?,?)";
+            $bindvars = array($seqId, 0, $name, $serialvalue);
 
             break;
     }
@@ -739,6 +740,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = '
             $module_varstable = $tables['module_vars'];
             // Now delete the module var itself
             $query = "DELETE FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
+            $bindvars = array($modBaseInfo['systemid'],$name);
             break;
         case 'moditemvar':
             $module_itemvarstable = $tables['module_itemvars'];
@@ -751,8 +753,8 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = '
             break;
         case 'configvar':
             $config_varsTable = $tables['config_vars'];
-            $query = "DELETE FROM $config_varsTable WHERE xar_name = ?";
-            $bindvars = array($name);
+            $query = "DELETE FROM $config_varsTable WHERE xar_name = ? AND xar_modid=?";
+            $bindvars = array($name,0);
             break;
         }
         $dbconn->execute($query,$bindvars);
