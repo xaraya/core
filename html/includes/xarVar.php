@@ -488,6 +488,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
     $bindvars = array();
 
     switch($type) {
+    case 'configvar':
     case 'modvar':
     default:
         $module_varstable = $tables['module_vars'];
@@ -503,12 +504,6 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
          $query = "SELECT xar_value FROM $module_itemvarstable WHERE xar_mvid = ? AND xar_itemid = ?";
          $bindvars = array((int)$modvarid, (int)$itemid);
          break;
-    case 'configvar':
-        $config_varsTable = $tables['config_vars'];
-        
-        $query = "SELECT xar_value FROM $config_varsTable WHERE xar_name=? AND xar_modid=?";
-        $bindvars = array($name,(int)$modBaseInfo['systemid']);
-        break;
     }
 
     // TODO : Here used to be a resultset cache option, reconsider it
@@ -524,9 +519,12 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
     }
 
     switch($type) {
+        case 'configvar':
         case 'modvar':
             while ($result->next()) {
-                xarVarSetCached($cacheCollection, $result->getString(1), $result->get(2));
+                $value = $result->get(2); // Unlike creole->set this does *not* unserialize/escape automatically
+                if($type == 'configvar') $value = unserialize($value);
+                xarVarSetCached($cacheCollection, $result->getString(1), $value);
             }
             //Special value to tell this select has already been run, any
             //variable not found now on is missing
@@ -537,25 +535,14 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
             } else {
                 return;
             }
-        break;
-
+            break;
         default:
             // We finally found it, update the appropriate cache
-            // Couldnt we serialize and unserialize all variables?
-            // would that be too time expensive?
-            // <mrb> it doesnt matter, Creole does it automatically if it hasnt already happened.
-            // this also means that if you dont use the neat creole methods, you're on your own.
-            // basically, never serialize anything, let the middleware handle it. on top of that, dont put
-            // complex datastructures in the db like that, since that sucks to begin with.
             $result->next();
             list($value) = $result->getRow();
-            if($type == 'configvar') {
-                $value = unserialize($value);
-            }
             xarVarSetCached($cacheCollection, $cacheName, $value);
         break;
     }
-
     $result->Close();
 
     // Optionally prepare it
@@ -594,6 +581,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
         if(!isset($modBaseInfo)) throw new ModuleNotFoundException($modName);
         break;
     case 'configvar':
+        $modBaseInfo['systemid'] = 0;
         break;
     }
 
@@ -646,7 +634,6 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             }
             break;
         case 'configvar':
-
             // FIXME: do we really want that ?
             // This way, worst case: 3 queries:
             // 1. deleting it
@@ -666,7 +653,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             $query = "INSERT INTO $config_varsTable
                       (xar_id, xar_modid, xar_name, xar_value)
                       VALUES (?,?,?,?)";
-            $bindvars = array($seqId, 0, $name, $serialvalue);
+            $bindvars = array($seqId, $modBaseInfo['systemid'], $name, $serialvalue);
 
             break;
     }
@@ -693,7 +680,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
             xarVarSetCached('ModItem.Variables.' . $modName, $cachename, $value);
             break;
         case 'configvar':
-                xarVarSetCached('Config.Variables', $name, $value);
+            xarVarSetCached('Config.Variables', $name, $value);
             break;
     }
 
@@ -722,6 +709,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = '
             if (!isset($modBaseInfo)) return; // throw back
             break;
         case 'configvar':
+            $modBaseInfo['systemid'] = 0;
             break;
     }
 
@@ -756,7 +744,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = '
         case 'configvar':
             $config_varsTable = $tables['config_vars'];
             $query = "DELETE FROM $config_varsTable WHERE xar_name = ? AND xar_modid=?";
-            $bindvars = array($name,0);
+            $bindvars = array($name,$modBaseInfo['systemid']);
             break;
         }
         $dbconn->execute($query,$bindvars);
@@ -795,6 +783,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = '
  * @return string the string in the new context
  * @raise EMPTY_PARAM
  * @todo  Would it be useful to be able to transform arrays of strings at once?
+ * @todo  This is a bit weird, perhaps use a factory class and hide the loading details?
  */
 function xarVarTransform ($string, $sourceContext, $targetContext)
 {
@@ -816,6 +805,8 @@ function xarVarTransform ($string, $sourceContext, $targetContext)
  * @param filename The name file to be used
  * @return string the function anme
  * @raise BAD_PARAM
+ * @todo also a bit weird
+ * @see xarVarTransform
  */
 function xarVarLoad ($includes_type, $filename)
 {

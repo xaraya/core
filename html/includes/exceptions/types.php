@@ -34,7 +34,7 @@ abstract class xarExceptions extends Exception implements IxarExceptions
     protected $variables = array();
     protected $hint      = "No hint available";
 
-    /*
+    /**
      All exceptions have the same interface from XAR point of view
      so we dont allow this to be overridden just now. The message parameter
      may be overridden though. If not supplied the default message
@@ -116,7 +116,6 @@ abstract class DeprecationExceptions extends xarExceptions
 
 /* ANYTHING BELOW THIS LINE IS UP FOR REVIEW AND SHOULD PROBABLY BE MOVED OR REWRITTEN */
 
-
 // Anything going wrong with parameters in functions and method derives from this
 // FIXME: this is weak
 // FIXME: it's probably better to bring this under validation? In some cases even assertions.
@@ -134,7 +133,6 @@ class BadParameterException extends ParameterExceptions
 }
 
 // Functions 
-// FIXME: this is almost isolated in xarMod. Only installer uses it too.
 class FunctionNotFoundException extends NotFoundExceptions
 { 
     protected $message = 'The function "#(1)" could not be found or not be loaded.';

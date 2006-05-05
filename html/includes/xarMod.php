@@ -179,6 +179,7 @@ class xarModVars implements IxarModVars
      * @param modName string
      * @return mixed true on success
      * @raise DATABASE_ERROR, BAD_PARAM
+     * @todo  This is has some duplication with xarVar.php
      */
     static function load($modName)
     {

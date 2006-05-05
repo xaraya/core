@@ -120,11 +120,6 @@ function xarTpl_init($args, $whatElseIsGoingLoaded)
     // This is wrong here as well, but it's better at least than in xarMod
     include "includes/xarTheme.php";
 
-    // NOTE: starting from 0.9.11 we attempt to link core css to any css-aware xhtml theme
-    // immediate goal is elimination of inline styles, consistency and other core UI related issues
-    // no need to init anything, the css tags api is handling everything css related now..
-    // DONE: removed all but legacy css handling from core to themes module
-
     // Subsystem initialized, register a handler to run when the request is over
     //register_shutdown_function ('xarTemplate__shutdown_handler');
     return true;
@@ -547,7 +542,7 @@ function xarTplProperty($modName, $propertyName, $tplType = 'showoutput', $tplDa
 }
 
 /**
- * Renders an object through an object template (TODO)
+ * Renders an object through an object template 
  *
  * @author Marcel van der Boom <marcel@xaraya.com>
  * @access public
@@ -1568,7 +1563,7 @@ function xarTpl__getCacheKey($sourceFileName)
 /**
  * Model of a tag attribute
  *
- * Mainly uses fro custom tags
+ * Mainly uses for custom tags
  *
  * @package blocklayout
  * @access protected

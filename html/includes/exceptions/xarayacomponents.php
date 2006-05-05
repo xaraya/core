@@ -7,7 +7,6 @@ $core = array(
               array('name' => 'installer', 'fullname' => 'Installer', 'description' => 'Product installer'),
               array('name' => 'privileges', 'fullname' => 'Privileges', 'description' => 'Privileges core modules'),
               array('name' => 'roles', 'fullname' => 'Roles', 'description' => 'Roles core module, manages users and groups'),
-              array('name' => 'adminpanels', 'fullname' => 'Adminpanels', 'description' => 'Adminpanels core module'),
               array('name' => '', 'fullname' => 'Database', 'description' => 'Database structure / schema / layout'),
               array('name' => '', 'fullname' => 'Miscellaneous', 'description' => 'Other problems / issues'),
               array('name' => 'authsystem', 'fullname' => 'AuthSystem', 'description' => 'User Authentication System'),
