@@ -1,51 +1,151 @@
 CHECKLIST FOR MTN .26 migration
 
-notice to migrate private branches http://venge.net/monotone/wiki/RosterifyingPrivateBranches
-db migrate
-rosterify
-database size
-active branches to reduce
-test some working copies
+We need to migrate from monotone version .25 to monotone .26. The
+changes in mt.26 are of such nature that this needs to be coordinated
+centrally, since the revision history will be reconstructed into
+another storage format in monotone internally.
 
-DATABASES 
+This means that the 'conversion' needs to be done on one database and
+on one database only, after which people have to redownload the db.
 
-  core 
+This document aims to construct a checklist for the activities
+involved and put them in prioritized order.
+
+Basic procedure for migrating a *central* database:
+
+mt.26 -d your.db db migrate
+mt.26 -d your.db db rosterify
+
+The above readies a db to .26 format.
+
+
+DATABASES pre-flight testing
+
+  core.db
      migrate:   YES
      rosterify: YES
      size:
      branches:  YES (how many?)
-  modules
+  modules.db
      migrate:   YES 
      rosterify: YES (got 1 bad signature warning, but process completed successfully)
      size:      OLD: 315M NEW: 256M
      branches:  ?
-  themes
+  themes.db
      migrate:   YES
      rosterify: YES
      size:      OLD: 5.3M NEW: 4.1M
      branches:  ?
-  languages
+  languages.db
      migrate:   YES
      rosterify  YES
      size:      OLD: 38M NEW: 30M
      branches:  ?
-  artwork
+  artwork.db
      migrate:
      rosterify:
      size:
      branches:  ?
+
+**Estimated downtime**: at least 5 hours.
+
+
+PRIORITIZED CHECKLIST
+
+* complete the plan
+* write a notification to xar.devel explaining what the plan is and a rough timeline
+  focus on the private branches!! (see below: PRIVATE BRANCHES)
+* back up the mt.25 databases
+* remove the nightly downloads from web view (mt.xaraya.com)
+* stop cron jobs
+  - on davinci: generating the initial download
+  - on newton: all monotone related
+  - other?
+* change the lua scripts in /etc/monotone 
+  - cia notifications  (Q: use the nonce hooks? A: yes, but post-flight)
+  - nntp notifications (Q: use the nonce hooks? A: yes, but post-fligh)
+* if applicable recompile monotone on mt.xaraya.com
+* db migrate on all databases on mt.xaraya.com
+* db rosterify on all databases on mt.xaraya.com
+* db check all databases, resolve all errors/warnings
+* rename all databases *.db -> *.mtn (recommended naming)
+* change server setup to reflect mt.26 changes:
+  - adjust rc script on server
+  - change default port to 4691 (core database)
+  - double check aliases and symlinks (executable name changed from monotone to mtn) 
+* start mt.26 serving but dont allow traffic yet
+* upgrade viewmtn to support mt.26 (upstream is ready), reincorporate our changes
+* rewrite and start cron jobs on mt.xaraya.com
+  - check that the initial dbs are generated ok
+  - check that the nightlies are generated ok by the (rewritten) cron job
+* enable the (nightly) downloads again
+* CHECKPOINT: distributed revisions might start getting created again *POINT OF NO RETURN*
+* Adapt xaraya.rc, if needed.
+* Incrementally adjust working directories while in-flight:
+  - .mt-ignore -> .mtn-ignore (should be automatic)
+  - remove .mt-attrs files 
+  
+
+
+PRIVATE BRANCHES 
+Rosterifying private branches can be problematic, as
+revisions found in the private database will conflict with revisions
+in the main database. The procedure below can be used to work around
+these problems with out any data loss.
+
+Make sure you make a backup of your database before attempting any of these steps.
+
+STEPS TO PERFORM FOR PRIVATE BRANCHES
+
+1. If your db contains both the com.xaraya.* branches and your private
+branches create a new database and pull ONLY your private branches
+into it, so all your private branches are in that db.
+2. Rosterify your PRIVATE database.
+   $ mtn db migrate --db private.mtn
+   $ mtn db rosterify --db private.mtn
+3. Make sure the rosterify went ok and double-check the revisions in
+   your private database and the main database making sure they have 
+   the same revision IDs (you only have to check the latest version). 
+4. Next get a list of all the revisions in the main database and
+   delete the certificates for those revisions from your PRIVATE database.
+   $ for RID in `mtn automate select i: --db main.mtn`; do 
+        mtn --db private.mtn db execute "DELETE FROM revision_certs  WHERE id = '$RID'"; 
+     done
+     
+     Now your private database contains a rosterified version of your
+     private branches with no conflicting rosterified certs. 
+5. Fix the epochs for your private branches. To do this, get the
+   epochs from the main database and set them in the private database.
+   $ mtn --db main.mtn ls epochs
+   $ mtn --db private.mtn db set_epoch net.venge.monotone <main.mtn epoch>
+   (repeat for each overlapping branch)
+6. Pull the main db into your private db.
+
+
+To merge into the above somewhere:
+
+check .mt -> mtn replacement
+test some working copies
+database size
+active branches to reduce
+test some working copies
+
 SCRIPTS
-  xaraya.rc
-  init scripts
-    change ports to 4691 
   pull and checkout scripts
-  upgrade viewmtn
+
   misc or all
    change called executable to mtn 
    change referenced workspace directories to _MTN
    remove .mt-attr files (modify any hooks that check for it)
-   change ignore file to .mtn-ignore
+
    change firewall/port redirection to reference port 4691
 MISC
-  are any of the fixes since .26 release important to us?
-  do we want to use usher?
+
+Q&A
+---
+Q: are any of the fixes since .26 release important to us?
+A: no
+
+Q: do we want to use usher?
+A: no
+
