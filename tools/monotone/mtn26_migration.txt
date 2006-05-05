@@ -15,6 +15,7 @@ Basic procedure for migrating a *central* database:
 
 mt.26 -d your.db db migrate
 mt.26 -d your.db db rosterify
+mt.26 -d your.db db check
 
 The above readies a db to .26 format.
 
@@ -24,28 +25,33 @@ DATABASES pre-flight testing
   core.db
      migrate:   YES
      rosterify: YES
-     size:
+     size:      OLD: 170M NEW: 115M
      branches:  YES (how many?)
+     time:      roughly 1 hour
   modules.db
      migrate:   YES 
      rosterify: YES (got 1 bad signature warning, but process completed successfully)
      size:      OLD: 315M NEW: 256M
      branches:  ?
+     time:      estimated 2 hours
   themes.db
      migrate:   YES
      rosterify: YES
      size:      OLD: 5.3M NEW: 4.1M
      branches:  ?
+     time:      estimated 20 mins
   languages.db
      migrate:   YES
      rosterify  YES
      size:      OLD: 38M NEW: 30M
      branches:  ?
+     time:      estimated 30 mins
   artwork.db
      migrate:
      rosterify:
      size:
      branches:  ?
+     times:
 
 **Estimated downtime**: at least 5 hours.
 
@@ -123,23 +129,22 @@ into it, so all your private branches are in that db.
 
 
 To merge into the above somewhere:
-
-check .mt -> mtn replacement
-test some working copies
-database size
-active branches to reduce
-test some working copies
+- check .mt -> mtn replacement
+- test some working copies
+- check the pagesize sqlite setting centrally
+- how do we deal with people who 'missed' the process, i.e. they come
+with mt.25 changes, or patches, after the fact? (A: probably rosterify
+locally as if it were private?, ask in #monotone?)
+- 
 
 SCRIPTS
-  pull and checkout scripts
-
   misc or all
    change called executable to mtn 
    change referenced workspace directories to _MTN
    remove .mt-attr files (modify any hooks that check for it)
 
    change firewall/port redirection to reference port 4691
-MISC
+
 
 Q&A
 ---
@@ -148,4 +153,24 @@ A: no
 
 Q: do we want to use usher?
 A: no
+
+Q: pull and checkout scripts?
+A: no such thing centrally, people who have em, should convert themselves
+
+Q: active branches to reduce?
+A: none, it doesnt matter
+
+Q: if we plan right after 1.1. release that typically means people start
+downloading and support goes up a notch in the 2-3 weeks after that,
+unavoidably leading to some patches which need to be put in. How do we
+deal with that, since we will be in the midst of the mt.26 transition
+and loading another burden on top of the extra patch activity?
+        
+TIMELINE
+--------
+* after 1.1 release
+* at a time at least 3 people can commit a day at the same time
+* the notification should be at least 1 week in advance
+* guestimate of the whole process: 2 weeks minimum, assume project
+freeze during it worst case.
 
