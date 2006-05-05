@@ -88,10 +88,10 @@
 
     <p><xar:mlstring>You can set privileges for this module based on the following included masks:</xar:mlstring></p>
         <ul>
-            <li><xar:mlstring>ViewBase</xar:mlstring></li>
-            <li><xar:mlstring>ReadBase</xar:mlstring></li>
-            <li><xar:mlstring>AdminBase</xar:mlstring></li>
-            <li><xar:mlstring>ViewBaseBlocks, ReadBaseBlocks, EditBaseBlocks, AddBaseBlocks, DeleteBaseBlocks, AdminBaseBlocks.</xar:mlstring></li>
+            <li>ViewBase</li>
+            <li>ReadBase</li>
+            <li>AdminBase</li>
+            <li>ViewBaseBlocks, ReadBaseBlocks, EditBaseBlocks, AddBaseBlocks, DeleteBaseBlocks, AdminBaseBlocks.</li>
         </ul>
     <p><xar:mlstring>See the documentation for further information on privileges, masks and configuring them in your system.</xar:mlstring></p>
 

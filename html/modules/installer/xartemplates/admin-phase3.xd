@@ -427,7 +427,7 @@
                     <li class="warning">
                     <xar:mlstring>
                         WARNING: The PHP4 XSLT Extension is not loaded.
-                        This extension is only needed for the XSLT transform module at this time.
+                        This PHP4 extension is only needed for the PHP4 XSLT transform module at this time.
                     </xar:mlstring>
                     </li>
                 </xar:if>

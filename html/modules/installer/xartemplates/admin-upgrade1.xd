@@ -38,10 +38,9 @@
                 <li><xar:mlstring>Make sure your Adminpanel block templates for any compact menu block, adminmenu or waiting content blocks are also moved to <strong>modules/base</strong> directory in your theme.</xar:mlstring></li>
                 </ul>
            </li>
-           <li><xar:mlstring>The core login block and function in Roles module has been moved as of Version 1.1 to the
+           <li><xar:mlstring>As of Version 1.1 the core login block and function in the Roles module has been moved to the
                Authsystem Module at </xar:mlstring><a href="&xar-modurl-authsystem-user-showloginform;">index.php?module=authsystem&amp;function=showloginform</a>
-               <xar:mlstring>You should be aware of the change but can still browse to </xar:mlstring><a href="&xar-modurl-roles-user-main;">index.php?module=roles</a> to login.</li>
-               <xar:mlstring>You may wish to note the URL in case of problems logging in.</xar:mlstring>
+               <xar:mlstring>You can still login by browsing to </xar:mlstring><a href="&xar-modurl-roles-user-main;">index.php?module=roles</a>.</li>
            <li>
               <xar:mlstring>If you allow User Registration on your site, you must ensure you have the <strong>Registration module</strong> in your Xaraya module directory,
               install, and configure it to continue user registration on your site as from Version 1.1 .

@@ -59,11 +59,28 @@ function roles_user_usermenu($args)
             $uid = xarUserGetVar('uid');
             $email = xarUserGetVar('email');
             $role = xarUFindRole($uname);
-            $home = xarModGetUserVar('roles','userhome');// now user var not 'duv'. $role->getHome();
+            $home = xarModGetUserVar('roles','userhome');// now user mod var not 'duv'. $role->getHome();
+            
+            if (xarModGetVar('roles','setuserlastlogin')) {
+            //only display it for current user or admin
+                if (xarUserIsLoggedIn() && xarUserGetVar('uid')==$uid) { //they should be but ..
+                    $userlastlogin=xarSessionGetVar('roles_thislastlogin');
+                    $usercurrentlogin=xarModGetUserVar('roles','userlastlogin',$uid);
+                }elseif (xarSecurityCheck('AdminRole',0)){
+                    $usercurrentlogin='';
+                    $userlastlogin= xarModGetUserVar('roles','userlastlogin',$uid);
+                }else{
+                    $userlastlogin='';
+                    $usercurrentlogin='';
+                }
+            }else{
+                $userlastlogin='';
+                $usercurrentlogin='';
+            }
             $authid = xarSecGenAuthKey();
             $submitlabel = xarML('Submit');
             $item['module'] = 'roles';
-            $upasswordupdate = xarModGetUserVar('roles','passwordupdate');//now user var not 'duv'. $role->getPasswordUpdate();
+            $upasswordupdate = xarModGetUserVar('roles','passwordupdate');//now user mod var not 'duv'. $role->getPasswordUpdate();
 
             $hooks = xarModCallHooks('item','modify',$uid,$item);
             if (isset($hooks['dynamicdata'])) {
@@ -80,8 +97,10 @@ function roles_user_usermenu($args)
                                   'emailaddress' => $email,
                                   'submitlabel'  => $submitlabel,
                                   'uid'          => $uid,
-                                  'upasswordupdate' => $upasswordupdate));
-            break;
+                                  'upasswordupdate' => $upasswordupdate,
+                                  'usercurrentlogin'   => $usercurrentlogin,
+                                  'userlastlogin'   => $userlastlogin));
+                 break;
 
         case 'formenhanced':
             $name = xarUserGetVar('name');
@@ -105,8 +124,8 @@ function roles_user_usermenu($args)
             $uname = xarUserGetVar('uname');
             // Confirm authorisation code.
             if (!xarSecConfirmAuthKey()) return;
-            if (!isset($passwordupdate)) $passwordupdate='';
-           
+            $dopasswordupdate=false; //switch
+
             /* Check if external urls are allowed in home page */
             $allowexternalurl=xarModGetVar('roles','allowexternalurl');
             $url_parts = parse_url($home);
@@ -133,7 +152,7 @@ function roles_user_usermenu($args)
                 if ($pass1 == $pass2){
                     $pass = $pass1;
                     if (xarModGetVar('roles','setpasswordupdate')){
-                        $passwordupdate=time();
+                        $dopasswordupdate=true;
                     }
                 } else {
                     $msg = xarML('The passwords do not match');
@@ -153,7 +172,7 @@ function roles_user_usermenu($args)
                                          'email' => $oldemail,
                                          'state' => ROLES_STATE_ACTIVE,
                                          'pass' => $pass,
-                                         'passwordupdate' => $passwordupdate))) return;
+                                         'dopasswordupdate' => $dopasswordupdate))) return;
             }
             if (!empty($email)){
                 // Steps for changing email address.

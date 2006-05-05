@@ -106,6 +106,18 @@ function roles_admin_modifyrole()
     }else {
          $data['upasswordupdate'] ='';
     }
+    if (xarModGetVar('roles','setuserlastlogin')) {
+        //only display it for current user or admin
+        if (xarUserIsLoggedIn() && xarUserGetVar('uid')==$uid) {
+            $data['userlastlogin']=xarSessionGetVar('roles_thislastlogin');
+        }elseif (xarSecurityCheck('AdminRole',0)){
+            $data['userlastlogin']= xarModGetUserVar('roles','userlastlogin',$uid);
+        }else{
+            $data['userlastlogin']='';
+        }
+    }else{
+        $data['userlastlogin']='';
+    }
     // call item modify hooks (for DD etc.)
     $item = $data;
     $item['module']= 'roles';

@@ -67,7 +67,6 @@
             <xar:data-output type="grouplist" name="pprimaryparent" id="pprimaryparent" value="$pprimaryparent"/>
         </div>
     </xar:if>                        
-
       <xar:if condition="$type eq 0">
         <div class="xar-form-input-wrapper">
           <span class="xar-form-label">
@@ -82,6 +81,22 @@
           </span>
           #xarVarPrepForDisplay($email)#
         </div>
+      </xar:if>
+      <xar:if condition="xarModGetVar('roles','setuserlastlogin')">
+        <div class="xar-form-input-wrapper">
+            <span class="xar-form-label">
+                <xar:mlstring>Last Login:</xar:mlstring>
+            </span>
+            #xarLocaleGetFormattedDate('medium', $userlastlogin)#  #xarLocaleGetFormattedTime('medium', $userlastlogin)#&nbsp;
+        </div>
+      </xar:if>
+      <xar:if condition="xarModGetVar('roles','setpasswordupdate')">
+          <div class="xar-form-input-wrapper">
+              <label for="upasswordupdate" class="xar-form-label">
+                  <xar:mlstring>Password last updated:</xar:mlstring>
+              </label>
+              #xarLocaleGetFormattedDate('medium', $upasswordupdate)# #xarLocaleGetFormattedTime('medium', $upasswordupdate)#
+          </div>
       </xar:if>
 
       <xar:if condition="xarModIsAvailable('dynamicdata')">

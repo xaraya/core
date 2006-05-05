@@ -90,9 +90,11 @@ function installer_public_commentnoncore()
 {
     xarRegisterPrivilege('CommentNonCore','All','empty','All','All','ACCESS_NONE','Read access only to none-core modules');
     xarRegisterPrivilege('CommentAccess','All','All','All','All','ACCESS_COMMENT','Comment access to all modules');
+    xarRegisterPrivilege('ViewRegistrationLogin','All','registration','Block','rlogin:Login:All','ACCESS_OVERVIEW','View the User Access block');
     xarMakePrivilegeRoot('CommentNonCore');
     xarMakePrivilegeRoot('CommentAccess');
     xarMakePrivilegeMember('CommentAccess','CommentNonCore');
+    xarMakePrivilegeMember('CommentAccess','ViewRegistrationLogin');
     xarMakePrivilegeMember('DenyPrivileges','CommentNonCore');
     //xarMakePrivilegeMember('DenyAdminPanels','CommentNonCore');
     xarMakePrivilegeMember('DenyBlocks','CommentNonCore');

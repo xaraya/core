@@ -71,7 +71,18 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
             $this->importdir = preg_replace('/\{user\}/',$udir,$this->importdir);
         }
     }
-
+    function checkInput($name='', $value = null)
+    {
+        if (empty($name)) {
+            $name = 'dd_'.$this->id;
+        }
+        // store the fieldname for validations who need them (e.g. file uploads)
+        $this->fieldname = $name;
+        if (!isset($value)) {
+            if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
+        }
+        return $this->validateValue($value);
+    }
     function validateValue($value = null)
     {
         // the variable corresponding to the file upload field is no longer set in PHP 4.2.1+
