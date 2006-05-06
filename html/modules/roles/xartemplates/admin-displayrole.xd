@@ -82,7 +82,7 @@
           #xarVarPrepForDisplay($email)#
         </div>
       </xar:if>
-      <xar:if condition="xarModGetVar('roles','setuserlastlogin')">
+      <xar:if condition="$userlastlogin ne ''">
         <div class="xar-form-input-wrapper">
             <span class="xar-form-label">
                 <xar:mlstring>Last Login:</xar:mlstring>
