@@ -28,7 +28,6 @@ function installer_intranet_moduleoptions()
         array('name' => "search",               'regid' => 32),
         array('name' => "sniffer",              'regid' => 755),
         array('name' => "stats",                'regid' => 34),
-        array('name' => "wiki",                 'regid' => 28),
         array('name' => "xmlrpcserver",         'regid' => 743),
         array('name' => "xmlrpcsystemapi",      'regid' => 744),
         array('name' => "xmlrpcvalidatorapi",   'regid' => 746),
