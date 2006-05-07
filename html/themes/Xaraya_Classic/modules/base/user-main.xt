@@ -1,56 +1,103 @@
 <h1 class="xar-mod-head">
     <xar:mlstring>
-        Thank you for installing and trying Xaraya! 
+        Thank you for installing Xaraya!
     </xar:mlstring>
 </h1>
 <div class="xar-mod-body xar-overflow-auto">
     <xar:set name="versionnum">XARCORE_VERSION_NUM</xar:set>
-    <h2>
-        <xar:ml>
-            <xar:mlstring>Xaraya has reached Production Stable Version #(1)</xar:mlstring>
-            <xar:mlvar>#$versionnum#</xar:mlvar>
-        </xar:ml>
-    </h2>
-    <p>
-        <xar:mlstring>
-            This means we feel our functionality is complete, our core
-            features are mature and the use of the modules in our distribution is
-            stable enough to move to <strong>Xaraya 1.0</strong> and beyond!
-        </xar:mlstring>
-    </p>
-    <p>
-        <xar:mlstring>
-            We still need you to keep filing  any
-            unexpected functionality in our <a href="http://bugs.xaraya.com">bug tracker</a>.
-        </xar:mlstring>
-        <xar:mlstring>
-            Thank you for your support, and feel free to join our
-        development or user discussions to become involved in our
-        community.
-        </xar:mlstring>
-    </p>
-    <p>
-        <xar:mlstring>
-            For more information on Xaraya, please visit 
-            <a href="http://www.xaraya.com">
-                Xaraya's
-            </a>
-            website. 
-        </xar:mlstring>
-    </p>
+     <h2><xar:mlstring>Welcome to your new Xaraya Site</xar:mlstring></h2>
+
     <xar:comment>
-        The following template is just an example of how more static templates 
-        can be added to an already static page (the default front page in this case). 
+        The following template is just an example of how more static templates
+        can be added to an already static page (the default front page in this case).
         This question pops up in irc, so people are sometimes unaware of these
         possibilities.. One possibility is to place a static template on the
         same level (or in a subdirectory) as the 'container' template (this one)
         and then insert it with xar:template tag as a system template (with optional wrapper div here):
     </xar:comment>
     <div class="xar-floatright xar-halfwidth xar-margin-thicksides xar-padding-thick xar-mod-body xar-alt xar-sub">
-        <xar:template file="glimpse.xt" type="system" />
+        <xar:template file="about.xt" type="system" />
     </div>
+
+    <p>
+      <xar:ml>
+            <xar:mlstring>You have successfully installed <strong>Xaraya Version #(1)</strong>! You now have the tools
+            to easily build custom design and functionality into your web site. This installation provides some out of the box functionality
+            to get you started.
+            </xar:mlstring>
+            <xar:mlvar>#$versionnum#</xar:mlvar>
+        </xar:ml>
+    </p>
+    
+
+    <p>
+        <xar:mlstring>
+            The advantage of Xaraya is in it's unparalleled flexibility and powerful Blocklayout theme system. These work together
+            enabling you to meet the most demanding of project specifications. Whether your requirements are
+            small business or a community site, a company intranet or multi-server web installation, you can feel confident
+            knowing that Xaraya not only provides the flexibility you need but key features of performance, stability, security, and ease of maintenance.
+        </xar:mlstring>
+    </p>
+
+    <h2>
+       <xar:mlstring>Getting started</xar:mlstring>
+    </h2>
+    <p>
+        <xar:mlstring>
+           In Xaraya, User and Group Roles and Privileges set by the site Administrator dictate what a user can and cannot see or do on the site.
+           If you are new to Xaraya and are used to a separate Admin area you may prefer a separate look to your Administration area rather than the default Admin Menu.
+           Start by logging into your site as Administrator and turning on the Admin Dashboard
+        </xar:mlstring>
+        <xar:if condition="xarUserIsLoggedIn() and xarSecurityCheck('AdminTheme',0)">
+            <xar:mlstring>in your </xar:mlstring><a href="&xar-modurl-themes-admin-modifyconfig;"><xar:mlstring>Themes Module Modify Config</xar:mlstring></a><xar:mlstring> option.</xar:mlstring>
+        <xar:else />
+            <xar:mlstring>in your Themes Module Modify Config option.</xar:mlstring>
+        </xar:if>
+    </p>
+
+    <h4><xar:mlstring>Explore</xar:mlstring></h4>
+
+    <p>
+        <xar:mlstring>
+          Explore Xaraya by starting with the modules in your Admin Menu and reading the Overviews.
+          Some of the core modules such as Base, Themes, Blocks, and Roles are good places to start. For example, 
+          the Base module is set as the default module in this installation, and provides the site frontpage. You can change this 'default' module in, coincidentally, the Base module.
+        </xar:mlstring>
+    </p>
+    <p>
+        <xar:mlstring>
+          You can activate and install additional non-core modules in your Modules Administration to explore further.
+        </xar:mlstring>
+    </p>
+    <p>
+        <xar:mlstring>
+          You can add a new <em>block</em> of content anywhere on your page by defining a new block instance in the Blocks module and assigning to a default blockgroup.
+          You can explore Blocklayout for even further control of layout in your theme.
+        </xar:mlstring>
+    </p>
+
+    <xar:module main="false" module="base" func="main" page="glimpse" />
+
     <xar:comment>
         Another easy way is to specify a static template as an extra page template of base module:
     </xar:comment>
-    <xar:module main="false" module="base" func="main" page="about" />
+
+    <h4><xar:mlstring>Getting Help</xar:mlstring></h4>
+    <p>
+        <xar:mlstring>
+            We invite you to become further involved in our community by joining our development or user discussions
+            at </xar:mlstring><a href="http://www.xaraya.com">http://www.xaraya.com</a><xar:mlstring>, via
+            mailing lists or IRC.
+        </xar:mlstring>
+        <xar:mlstring>
+            You can contribute easily to making Xaraya an even better product by filing any unexpected functionality in our </xar:mlstring>
+            <a href="http://bugs.xaraya.com"><xar:mlstring>bug tracker</xar:mlstring></a>.<xar:mlstring> Thank you for your support.
+            For more information on Xaraya, please visit
+            <a href="http://www.xaraya.com">
+                Xaraya's
+            </a>
+            website.
+        </xar:mlstring>
+
+    </p>
 </div>
