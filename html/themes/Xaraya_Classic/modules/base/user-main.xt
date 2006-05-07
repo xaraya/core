@@ -15,7 +15,7 @@
         same level (or in a subdirectory) as the 'container' template (this one)
         and then insert it with xar:template tag as a system template (with optional wrapper div here):
     </xar:comment>
-    <div class="xar-floatright xar-halfwidth xar-margin-thicksides xar-padding-thick xar-mod-body xar-alt xar-sub">
+    <div class="xar-floatright xar-halfwidth xar-margin-thicksides xar-padding-thick xar-mod-body xar-alt xar-sidebox">
         <xar:template file="about.xt" type="system" />
     </div>
 
@@ -29,10 +29,9 @@
         </xar:ml>
     </p>
     
-
     <p>
         <xar:mlstring>
-            The advantage of Xaraya is in it's unparalleled flexibility and powerful Blocklayout theme system. These work together
+            The advantage of Xaraya is in it's flexibility and powerful Blocklayout theme system. These work together
             enabling you to meet the most demanding of project specifications. Whether your requirements are
             small business or a community site, a company intranet or multi-server web installation, you can feel confident
             knowing that Xaraya not only provides the flexibility you need but key features of performance, stability, security, and ease of maintenance.
@@ -76,6 +75,9 @@
         </xar:mlstring>
     </p>
 
+    <div class="xar-floatright xar-halfwidth xar-margin-thick xar-padding-thick xar-mod-body xar-alt xar-sidebox">
+        <xar:template file="hint.xt" type="system" />
+    </div>
     <xar:module main="false" module="base" func="main" page="glimpse" />
 
     <xar:comment>

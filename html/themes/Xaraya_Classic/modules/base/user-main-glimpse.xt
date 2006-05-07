@@ -1,8 +1,5 @@
 <h4><xar:mlstring>A glimpse into Xaraya's Theme System</xar:mlstring></h4>
 
-    <div class="xar-floatright xar-halfwidth xar-margin-thick xar-padding-thick xar-mod-body xar-alt xar-sub">
-        <xar:template file="hint.xt" type="system" />
-    </div>
 <p>
     <xar:mlstring>
         A feature of Xaraya is it's powerful <a href="http://xaraya.com/documentation/rfcs/rfc0010.html">Blocklayout Theme System</a>
@@ -12,7 +9,7 @@
 
 <p> 
     <xar:ml>
-    <xar:mlstring>This particular page is an example of content written in 
+    <xar:mlstring>This particular page is an example of content written in
     an <em>override</em> template and located in (#(1)/themename/modules/base/user-main.xt).
     The template overrides the original that is located in the <em>base</em> module.
      This means its content is determined by the active theme in a Xaraya installation and not by the <em>internal</em> template
