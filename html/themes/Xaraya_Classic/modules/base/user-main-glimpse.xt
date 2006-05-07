@@ -12,7 +12,7 @@
 
 <p> 
     <xar:ml>
-    <xar:mlstring>This particlar page is an example of content written in 
+    <xar:mlstring>This particular page is an example of content written in 
     an <em>override</em> template and located in (#(1)/themename/modules/base/user-main.xt).
     The template overrides the original that is located in the <em>base</em> module.
      This means its content is determined by the active theme in a Xaraya installation and not by the <em>internal</em> template
