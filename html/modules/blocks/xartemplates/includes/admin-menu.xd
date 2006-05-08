@@ -29,7 +29,7 @@
         </dd>
     </xar:sec>
     <xar:sec mask="AdminBlock" catch="false">
-        <xar:if condition="$activetab eq 'view_groups' or $activetab eq 'modify_group' or $activetab eq 'delete_group'">
+        <xar:if condition="$activetab eq 'view_groups' or $activetab eq 'new_group'or $activetab eq 'modify_group' or $activetab eq 'delete_group'">
             <xar:set name="tabclass">'active'</xar:set>
         <xar:else />
             <xar:set name="tabclass">''</xar:set>
