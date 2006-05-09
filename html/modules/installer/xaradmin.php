@@ -1192,7 +1192,7 @@ function installer_admin_upgrade1()
         $data['alreadydone']='';
     }
     
-    if ($data['xarVersion'] < '1.0.0') {
+    if ($data['xarVersion'] < '1.0') {
         $data['downloadit']="<a href=\"http://www.xaraya.com/index.php/docs/75\">Xaraya</a>";
         $data['versionlow']=
         xarML('<p>Your current site is <strong>Xaraya Version #(1)</strong>.
