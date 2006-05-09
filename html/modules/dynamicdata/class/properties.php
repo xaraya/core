@@ -813,7 +813,7 @@ class PropertyRegistration
                           xar_prop_aliases
                   FROM    $tables[dynamic_properties_def]
                   ORDER BY xar_prop_reqmodules, xar_prop_name";
-        $result =& $dbconn->executeQuery($query);
+        $result = $dbconn->executeQuery($query);
         $proptypes = array();
         if($result->RecordCount() == 0 ) {
             $proptypes = xarModAPIFunc('dynamicdata','admin','importpropertytypes',array('flush'=>false));

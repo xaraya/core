@@ -30,16 +30,15 @@ function modules_admin_install()
 
     //First check the modules dependencies
     // TODO: investigate try/catch clause here, it's not trivial
-    if (!xarModAPIFunc('modules','admin','verifydependency',array('regid'=>$id))) {
-        //Oops, we got problems...
-
+    try {
+        xarModAPIFunc('modules','admin','verifydependency',array('regid'=>$id));
+                
         //Checking if the user has already passed thru the GUI:
         xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
-    } else {
-        //No dependencies problems, jump dependency GUI
-        $command = true;
+    } catch (ModuleNotFoundException $e) {
+        $command = false;
     }
-
+    
     if (!$command) {
         //Let's make a nice GUI to show the user the options
         $data = array();

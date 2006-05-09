@@ -90,7 +90,7 @@ class ExceptionHandlers implements IExceptionHandlers
             $errLevel = xarCore_getSystemVar('Exception.ErrorLevel');
         } catch(Exception $e) {
             // Oh well.
-            $errLevel = E_STRICT;
+            $errLevel = E_STRICT | E_ALL;
         }
         if (!error_reporting() || !($errorType & $errLevel)) {
             // Log the message so it is not lost.

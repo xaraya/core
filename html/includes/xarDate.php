@@ -17,13 +17,13 @@
 class xarDate 
 {
 
-    var $year;
-    var $month;
-    var $day;
-    var $hour;
-    var $minute;
-    var $second;
-    var $timestamp;
+    public $year;
+    public $month;
+    public $day;
+    public $hour;
+    public $minute;
+    public $second;
+    public $timestamp;
 
     function xarDate($hour=0,$minute=0,$second=0,$month=0,$day=0,$year=0) 
     {

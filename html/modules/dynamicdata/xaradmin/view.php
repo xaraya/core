@@ -74,14 +74,13 @@ function dynamicdata_admin_view($args)
     $data['modlist'] = array();
     if ($objectid == 1 && empty($table)) {
         $objects = xarModAPIFunc('dynamicdata','user','getobjects');
+        xarLogMessage('AFTER getobjects');
         $seenmod = array();
         foreach ($objects as $object) {
             $seenmod[$object['moduleid']] = 1;
         }
 
-        $modList = xarModAPIFunc('modules',
-                          'admin',
-                          'getlist',
+        $modList = xarModAPIFunc('modules','admin','getlist',
                           array('orderBy'     => 'category/name'));
         $oldcat = '';
         for ($i = 0, $max = count($modList); $i < $max; $i++) {

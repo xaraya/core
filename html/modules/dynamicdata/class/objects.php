@@ -444,7 +444,6 @@ class Dynamic_Object_Master
         $dynamicobjects = $xartable['dynamic_objects'];
 
         $bindvars = array();
-        xarLogMessage("DB: query in getObjects");
         $query = "SELECT xar_object_id,
                          xar_object_name,
                          xar_object_label,
@@ -461,7 +460,7 @@ class Dynamic_Object_Master
             $bindvars[] = $modid;
         }
         $stmt = $dbconn->prepareStatement($query);
-        $result =& $stmt->executeQuery($bindvars);
+        $result = $stmt->executeQuery($bindvars);
 
         $objects = array();
         while ($result->next()) {

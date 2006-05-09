@@ -357,7 +357,7 @@ function xarModGetUserVar($modName, $name, $uid = NULL, $prep = NULL)
 {   return xarModUserVars::get($modName, $name, $uid, $prep); }
 
 function xarModSetUserVar($modName, $name, $value, $uid=NULL)
-{   return xarModUserVars::set($modName, $name, $uid, $value); }
+{   return xarModUserVars::set($modName, $name, $value, $uid); }
 
 function xarModDelUserVar($modName, $name, $uid=NULL)
 {   return xarModUserVars::delete($modName, $name, $uid); }
