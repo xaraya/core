@@ -29,7 +29,7 @@ DATABASES pre-flight testing
      branches:  YES (how many?)
      time:      roughly 1 hour
   modules.db
-     migrate:   YES 
+     migrate:   YES
      rosterify: YES (got 1 bad signature warning, but process completed successfully)
      size:      OLD: 315M NEW: 256M
      branches:  ?
@@ -67,7 +67,7 @@ PRIORITIZED CHECKLIST
   - on davinci: generating the initial download
   - on newton: all monotone related
   - other?
-* change the lua scripts in /etc/monotone 
+* change the lua scripts in /etc/monotone
   - cia notifications  (Q: use the nonce hooks? A: yes, but post-flight)
   - nntp notifications (Q: use the nonce hooks? A: yes, but post-fligh)
 * if applicable recompile monotone on mt.xaraya.com
@@ -78,8 +78,8 @@ PRIORITIZED CHECKLIST
 * change server setup to reflect mt.26 changes:
   - adjust rc script on server
   - change default port to 4691 (core database)
-  - double check aliases and symlinks (executable name changed from monotone to mtn) 
-* start mt.26 serving but dont allow traffic yet
+  - double check aliases and symlinks (executable name changed from monotone to mtn)
+* start mt.26 serving but do not allow traffic yet
 * upgrade viewmtn to support mt.26 (upstream is ready), reincorporate our changes
 * rewrite and start cron jobs on mt.xaraya.com
   - check that the initial dbs are generated ok
@@ -89,11 +89,11 @@ PRIORITIZED CHECKLIST
 * Adapt xaraya.rc, if needed.
 * Incrementally adjust working directories while in-flight:
   - .mt-ignore -> .mtn-ignore (should be automatic)
-  - remove .mt-attrs files 
-  
+  - remove .mt-attrs files
 
 
-PRIVATE BRANCHES 
+
+PRIVATE BRANCHES
 Rosterifying private branches can be problematic, as
 revisions found in the private database will conflict with revisions
 in the main database. The procedure below can be used to work around
@@ -103,20 +103,23 @@ Make sure you make a backup of your database before attempting any of these step
 
 STEPS TO PERFORM FOR PRIVATE BRANCHES
 
-1. Rosterify your PRIVATE database.
-   $ mtn db migrate --db private.db
-   $ mtn db rosterify --db private.db
-2. Make sure the rosterify went ok and double-check the revisions in
-   your private database and the main database making sure they have 
-   the same revision IDs (you only have to check the latest version). 
+1. If your db contains both the com.xaraya.* branches and your private
+branches, create a new database and ONLY pull your private branches
+into it, so all your private branches are in that db.
+2. Rosterify your PRIVATE database.
+   $ mtn db migrate --db private.mtn
+   $ mtn db rosterify --db private.mtn
+3. Make sure the rosterify went ok and double-check the revisions in
+   your private database and the main database making sure they have
+   the same revision IDs (you only have to check the latest version).
 3. Next get a list of all the revisions in the MAIN database and
    delete the certificates for those revisions from your PRIVATE database.
-   $ for RID in `mtn automate select i: --db main.mtn`; do 
-        mtn --db private.mtn db execute "DELETE FROM revision_certs  WHERE id = '$RID'"; 
+   $ for RID in `mtn automate select i: --db main.mtn`; do
+        mtn --db private.mtn db execute "DELETE FROM revision_certs  WHERE id = '$RID'";
      done
-     
+
      Now your private database contains a rosterified version of your
-     private branches with no conflicting rosterified certs. 
+     private branches with no conflicting rosterified certs.
 4. Fix the epochs for your private branches. To do this, get the
    epochs from the main database and set them in the private database.
    $ mtn --db main.mtn ls epochs
@@ -132,7 +135,7 @@ To merge into the above somewhere:
 - how do we deal with people who 'missed' the process, i.e. they come
 with mt.25 changes, or patches, after the fact? (A: probably rosterify
 locally as if it were private?, ask in #monotone?)
-- make inventory of working directories on newton/einstein/davinci and document 
+- make inventory of working directories on newton/einstein/davinci and document
   the steps to take to move them into .26 land.
   newton:
     - MLS working dirs
@@ -141,7 +144,7 @@ locally as if it were private?, ask in #monotone?)
   einstein:
     - none that i know of
   davinci:
-    - client area for producing nightly areas 
+    - client area for producing nightly areas
         * can just be cleaned and reinitialized
     - test area
         * forget about this, manual reconstruction
@@ -152,7 +155,7 @@ locally as if it were private?, ask in #monotone?)
 
 SCRIPTS
   misc or all
-   change called executable to mtn 
+   change called executable to mtn
    change referenced workspace directories to _MTN
    remove .mt-attr files (modify any hooks that check for it)
 
@@ -178,7 +181,7 @@ downloading and support goes up a notch in the 2-3 weeks after that,
 unavoidably leading to some patches which need to be put in. How do we
 deal with that, since we will be in the midst of the mt.26 transition
 and loading another burden on top of the extra patch activity?
-        
+
 TIMELINE
 --------
 * after 1.1 release
@@ -189,38 +192,43 @@ freeze during it worst case.
 
 Concept notification message to .devel list
 -------------------------------------------
-For those of you using monotone locally, we have scheduled a monotone migration to version .26. What is written below is IMPORTANT for you if you use monotone, so please read it carefully.
+For those of you that are using monotone locally, we have scheduled a monotone migration to version .26. What is written below is IMPORTANT for you if you use monotone, so please read it carefully.
 
 Since migrating to this version involves a complete rebuild of the database, this affects developers who have databases which contain revisions pulled from our mt.xaraya.com database. For people who have branches in their database(s) outside the com.xaraya.* hierarchy the story is somewhat more complex.
 
-The databases on our server need to be migrated to the new format and everyone needs to grab a new copy of the database, either by pulling into their own new mt.26 db or downloading the initial db we have been putting up for download.
+The databases on our server need to be migrated to the new format and everyone needs to grab a new copy of the database, either by pulling into their own new mt.26 db or downloading the initial db we have been putting up for download (preferred).
 
 We have planned this migration on:
 
- Saturday MAY 20 and Sunday MAY 21
+ Saturday MAY 20 and Sunday MAY 21 <TIME SLOT?>
 
-During this time the monotone service on our server will be down.
+During this time the monotone service on our server will be down, meaning you cannot pull, push or view revisions via mt.xaraya.com.
 
-I've divided the 'monotone users related to xaraya' in a number of groups and will describe what you need to do / be aware of on a group by group basis. 
+I've divided the users of the Xaraya monotone databases in a number of groups and will describe what you need to do / be aware of on a group by group basis.
+
+The groups:
 
 Group 0: "EVERYONE"
-	Everyone.
+    Everyone.
 
 Group 1: "READERS"
   People using monotone just to pull our repositories, i.e. you do a mt pull / mt update but nothing more than that. You have a db for xaraya and no other work is stored in the database.
 
 Group 2: "WRITERS"
-  All activities as in Group 1, but you also commit work, i.e. you have executed mt commit in your db,i.e. you have branches we have, but you have revisions we dont have.
+  All activities as in Group 1, but you also commit work, i.e. you have executed mt commit in your db, i.e. you have branches we have, but you have revisions we don't have.
 
 Group 3: "PUBLISHERS"
   All activities as in Group 2, but you've also send your commits out to somewhere, be it our server, your own, or anyone elses, i.e. you have executed mt push at some point.
 
 Group 4: "CUSTOMIZERS"
-  Activities as in Group 2, but you also have created 'branches' based on any of the com.xaraya.* branches and named them otherwise. These are so called 'private branches', i.e. you have branches we dont have, but which contain revisions we both have.
+  Activities as in Group 2, but you also have created 'branches' based on any of the com.xaraya.* branches and named them otherwise. These are so called 'private branches', i.e. you have branches we dont have, and that contain revisions we both have.
+
+Actions:
 
 "EVERYONE"
 ----------
-Possibly redundant, bug if you value your data, you'd make a backup of everything created when setting up your monotone environment.
+Possibly redundant, if you value your data, you'd make a backup of everything created when setting up your monotone environment.
+After the migration is complete, you can upgrade your monotone executable to the .26 version.
 
 "READERS"
 ---------
@@ -232,7 +240,7 @@ See also 'references' below for links to background information.
 "WRITERS"
 ---------
 Activities as described under READERS do apply for WRITERS too.
-Since your database (we call it PRIVATE db) contains revisions we dont have, you have to migrate your own db yourself. For this you have to follow the steps under "PRIVATE BRANCHES".
+Since your database (we call it PRIVATE db) may contain revisions we don not have, you have to migrate your own db yourself. For this you have to follow the steps under "PRIVATE BRANCHES".
 
 See also 'references' below for links to background information.
 
@@ -246,11 +254,11 @@ See also 'references' below for links to background information.
 
 "CUSTOMIZERS"
 -------------
-Activities as describend under WRITERS do apply for CUSTOMIZERS too.
+Activities as described under WRITERS do apply for CUSTOMIZERS too.
 The only difference with WRITERS is that your branches have names (and presumably revisions) we do not have in our database. The procedure to follow is as outlined in PRIVATE BRANCHES
 
 
-PRIVATE BRANCHES 
+PRIVATE BRANCHES
 ----------------
 Rosterifying private branches can be problematic, as
 revisions found in the private database will conflict with revisions
@@ -266,16 +274,16 @@ Make sure you make a backup of your database before attempting any of these step
      $ mtn db migrate --db PRIVATE.db
      $ mtn db rosterify --db PRIVATE.db
 2. Make sure the rosterify went ok and double-check the revisions in
-   your PRIVATE.db database and the MAIN.db database making sure they have 
-   the same revision IDs (you only have to check the latest version). 
+   your PRIVATE.db database and the MAIN.db database making sure they have
+   the same revision IDs (you only have to check the latest version).
 3. Next get a list of all the revisions in the MAIN.db database and
    delete the certificates for those revisions from your PRIVATE.db database.
-   $ for RID in `mtn automate select i: --db MAIN.db`; do 
-        mtn --db PRIVATE.db db execute "DELETE FROM revision_certs WHERE id = '$RID'"; 
+   $ for RID in `mtn automate select i: --db MAIN.db`; do
+        mtn --db PRIVATE.db db execute "DELETE FROM revision_certs WHERE id = '$RID'";
      done
-     
+
      Now your PRIVATE.db database contains a rosterified version of your
-     PRIVATE.db branches with no conflicting rosterified certs. 
+     PRIVATE.db branches with no conflicting rosterified certs.
 4. Fix the epochs for your private branches. To do this, get the
    epochs from the main database and set them in the private database.
    $ mtn --db MAIN.db ls epochs
@@ -283,7 +291,7 @@ Make sure you make a backup of your database before attempting any of these step
    (repeat for each overlapping branch)
 5. Pull the main db revisions into your private db.
 
-If you have further questions or need assistance: 
+If you have further questions or need assistance:
   post here, mailto:marcel@xaraya.com or catch MrB on IRC
 
 marcel
@@ -292,3 +300,8 @@ references
 [1] http://venge.net/monotone/wiki/RosterifyingPrivateBranches
 [2] http://venge.net/monotone/UPGRADE
 [3] http://venge.net/monotone/NEWS
+
+____
+Notes MichelV:
+Epoch = ?
+
