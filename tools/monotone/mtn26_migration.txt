@@ -97,22 +97,19 @@ PRIVATE BRANCHES
 Rosterifying private branches can be problematic, as
 revisions found in the private database will conflict with revisions
 in the main database. The procedure below can be used to work around
-these problems with out any data loss.
+these problems without any data loss.
 
 Make sure you make a backup of your database before attempting any of these steps.
 
 STEPS TO PERFORM FOR PRIVATE BRANCHES
 
-1. If your db contains both the com.xaraya.* branches and your private
-branches create a new database and pull ONLY your private branches
-into it, so all your private branches are in that db.
-2. Rosterify your PRIVATE database.
-   $ mtn db migrate --db private.mtn
-   $ mtn db rosterify --db private.mtn
-3. Make sure the rosterify went ok and double-check the revisions in
+1. Rosterify your PRIVATE database.
+   $ mtn db migrate --db private.db
+   $ mtn db rosterify --db private.db
+2. Make sure the rosterify went ok and double-check the revisions in
    your private database and the main database making sure they have 
    the same revision IDs (you only have to check the latest version). 
-4. Next get a list of all the revisions in the main database and
+3. Next get a list of all the revisions in the MAIN database and
    delete the certificates for those revisions from your PRIVATE database.
    $ for RID in `mtn automate select i: --db main.mtn`; do 
         mtn --db private.mtn db execute "DELETE FROM revision_certs  WHERE id = '$RID'"; 
@@ -120,12 +117,12 @@ into it, so all your private branches are in that db.
      
      Now your private database contains a rosterified version of your
      private branches with no conflicting rosterified certs. 
-5. Fix the epochs for your private branches. To do this, get the
+4. Fix the epochs for your private branches. To do this, get the
    epochs from the main database and set them in the private database.
    $ mtn --db main.mtn ls epochs
-   $ mtn --db private.mtn db set_epoch net.venge.monotone <main.mtn epoch>
+   $ mtn --db private.mtn db set_epoch com.xaraya.core <main.mtn epoch>
    (repeat for each overlapping branch)
-6. Pull the main db into your private db.
+5. Pull the main db into your private db.
 
 
 To merge into the above somewhere:
@@ -192,5 +189,106 @@ freeze during it worst case.
 
 Concept notification message to .devel list
 -------------------------------------------
-<fill this in>
+For those of you using monotone locally, we have scheduled a monotone migration to version .26. What is written below is IMPORTANT for you if you use monotone, so please read it carefully.
 
+Since migrating to this version involves a complete rebuild of the database, this affects developers who have databases which contain revisions pulled from our mt.xaraya.com database. For people who have branches in their database(s) outside the com.xaraya.* hierarchy the story is somewhat more complex.
+
+The databases on our server need to be migrated to the new format and everyone needs to grab a new copy of the database, either by pulling into their own new mt.26 db or downloading the initial db we have been putting up for download.
+
+We have planned this migration on:
+
+ Saturday MAY 20 and Sunday MAY 21
+
+During this time the monotone service on our server will be down.
+
+I've divided the 'monotone users related to xaraya' in a number of groups and will describe what you need to do / be aware of on a group by group basis. 
+
+Group 0: "EVERYONE"
+	Everyone.
+
+Group 1: "READERS"
+  People using monotone just to pull our repositories, i.e. you do a mt pull / mt update but nothing more than that. You have a db for xaraya and no other work is stored in the database.
+
+Group 2: "WRITERS"
+  All activities as in Group 1, but you also commit work, i.e. you have executed mt commit in your db,i.e. you have branches we have, but you have revisions we dont have.
+
+Group 3: "PUBLISHERS"
+  All activities as in Group 2, but you've also send your commits out to somewhere, be it our server, your own, or anyone elses, i.e. you have executed mt push at some point.
+
+Group 4: "CUSTOMIZERS"
+  Activities as in Group 2, but you also have created 'branches' based on any of the com.xaraya.* branches and named them otherwise. These are so called 'private branches', i.e. you have branches we dont have, but which contain revisions we both have.
+
+"EVERYONE"
+----------
+Possibly redundant, bug if you value your data, you'd make a backup of everything created when setting up your monotone environment.
+
+"READERS"
+---------
+After the migration is complete, people in this group grab a new copy of the database and throw away the old one. Database wise, that is the only thing to do.
+For each of your working copies, you have to adapt the 'meta info' of your working copy. This means adapting the information in each working copy, so monotone knows it's from a .26 db. This can be done in a number of ways, which are well documented by the monotone people.
+
+See also 'references' below for links to background information.
+
+"WRITERS"
+---------
+Activities as described under READERS do apply for WRITERS too.
+Since your database (we call it PRIVATE db) contains revisions we dont have, you have to migrate your own db yourself. For this you have to follow the steps under "PRIVATE BRANCHES".
+
+See also 'references' below for links to background information.
+
+"PUBLISHERS"
+------------
+Activities as described under WRITERS do apply for PUBLISHERS too.
+If you have pushed your revisions to somewhere else, you'll have to manage those destinations similar to what we're describing to you here now. This means you have to inform your users that a migration is going to occur (which can be separate from our migration) informing them what to do.
+You also have to follow the setup under PRIVATE BRANCHES.
+
+See also 'references' below for links to background information.
+
+"CUSTOMIZERS"
+-------------
+Activities as describend under WRITERS do apply for CUSTOMIZERS too.
+The only difference with WRITERS is that your branches have names (and presumably revisions) we do not have in our database. The procedure to follow is as outlined in PRIVATE BRANCHES
+
+
+PRIVATE BRANCHES 
+----------------
+Rosterifying private branches can be problematic, as
+revisions found in the private database will conflict with revisions
+in the main database. The procedure below can be used to work around
+these problems without any data loss.
+We call the Xaraya db *after* migration: MAIN.db
+We call your db PRIVATE.db
+
+Make sure you make a backup of your database before attempting any of these steps.
+
+1. Rosterify your PRIVATE.db database.
+   Roughly:
+     $ mtn db migrate --db PRIVATE.db
+     $ mtn db rosterify --db PRIVATE.db
+2. Make sure the rosterify went ok and double-check the revisions in
+   your PRIVATE.db database and the MAIN.db database making sure they have 
+   the same revision IDs (you only have to check the latest version). 
+3. Next get a list of all the revisions in the MAIN.db database and
+   delete the certificates for those revisions from your PRIVATE.db database.
+   $ for RID in `mtn automate select i: --db MAIN.db`; do 
+        mtn --db PRIVATE.db db execute "DELETE FROM revision_certs WHERE id = '$RID'"; 
+     done
+     
+     Now your PRIVATE.db database contains a rosterified version of your
+     PRIVATE.db branches with no conflicting rosterified certs. 
+4. Fix the epochs for your private branches. To do this, get the
+   epochs from the main database and set them in the private database.
+   $ mtn --db MAIN.db ls epochs
+   $ mtn --db PRIVATE.db db set_epoch com.xaraya.core [main epoch]
+   (repeat for each overlapping branch)
+5. Pull the main db revisions into your private db.
+
+If you have further questions or need assistance: 
+  post here, mailto:marcel@xaraya.com or catch MrB on IRC
+
+marcel
+
+references
+[1] http://venge.net/monotone/wiki/RosterifyingPrivateBranches
+[2] http://venge.net/monotone/UPGRADE
+[3] http://venge.net/monotone/NEWS
