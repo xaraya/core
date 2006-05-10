@@ -103,19 +103,16 @@ Make sure you make a backup of your database before attempting any of these step
 
 STEPS TO PERFORM FOR PRIVATE BRANCHES
 
-1. If your db contains both the com.xaraya.* branches and your private
-branches, create a new database and ONLY pull your private branches
-into it, so all your private branches are in that db.
-2. Rosterify your PRIVATE database.
-   $ mtn db migrate --db private.mtn
-   $ mtn db rosterify --db private.mtn
-3. Make sure the rosterify went ok and double-check the revisions in
-   your private database and the main database making sure they have
-   the same revision IDs (you only have to check the latest version).
+1. Rosterify your PRIVATE database.
+   $ mtn db migrate --db private.db
+   $ mtn db rosterify --db private.db
+2. Make sure the rosterify went ok and double-check the revisions in
+   your private database and the main database making sure they have 
+   the same revision IDs (you only have to check the latest version). 
 3. Next get a list of all the revisions in the MAIN database and
    delete the certificates for those revisions from your PRIVATE database.
-   $ for RID in `mtn automate select i: --db main.mtn`; do
-        mtn --db private.mtn db execute "DELETE FROM revision_certs  WHERE id = '$RID'";
+   $ for RID in `mtn automate select i: --db main.db`; do
+        mtn --db private.db db execute "DELETE FROM revision_certs  WHERE id = '$RID'";
      done
 
      Now your private database contains a rosterified version of your
@@ -218,7 +215,7 @@ Group 2: "WRITERS"
   All activities as in Group 1, but you also commit work, i.e. you have executed mt commit in your db, i.e. you have branches we have, but you have revisions we don't have.
 
 Group 3: "PUBLISHERS"
-  All activities as in Group 2, but you've also send your commits out to somewhere, be it our server, your own, or anyone elses, i.e. you have executed mt push at some point.
+  All activities as in Group 2, but you've also sent your commits out to somewhere, be it our server, your own, or anyone elses, i.e. you have executed mt push at some point.
 
 Group 4: "CUSTOMIZERS"
   Activities as in Group 2, but you also have created 'branches' based on any of the com.xaraya.* branches and named them otherwise. These are so called 'private branches', i.e. you have branches we dont have, and that contain revisions we both have.
@@ -240,7 +237,7 @@ See also 'references' below for links to background information.
 "WRITERS"
 ---------
 Activities as described under READERS do apply for WRITERS too.
-Since your database (we call it PRIVATE db) may contain revisions we don not have, you have to migrate your own db yourself. For this you have to follow the steps under "PRIVATE BRANCHES".
+Since your database (we call it PRIVATE db) may contain revisions we do not have, you have to migrate your own db yourself. For this you have to follow the steps under "PRIVATE BRANCHES".
 
 See also 'references' below for links to background information.
 
@@ -255,7 +252,7 @@ See also 'references' below for links to background information.
 "CUSTOMIZERS"
 -------------
 Activities as described under WRITERS do apply for CUSTOMIZERS too.
-The only difference with WRITERS is that your branches have names (and presumably revisions) we do not have in our database. The procedure to follow is as outlined in PRIVATE BRANCHES
+The only difference for CUSTOMIZERS is that your branches have names (and presumably revisions) we do not have in our database. The procedure to follow is as outlined in PRIVATE BRANCHES
 
 
 PRIVATE BRANCHES
@@ -287,8 +284,16 @@ Make sure you make a backup of your database before attempting any of these step
 4. Fix the epochs for your private branches. To do this, get the
    epochs from the main database and set them in the private database.
    $ mtn --db MAIN.db ls epochs
+   ( this lists something like this:
+        a961d43d88ba448e7a4c7740dfd65934a7391aec com.xaraya.core
+        22d0bf3ad2d785efd29ce5ef9f4e0022e3ffd29f com.xaraya.core.1.0
+        387ab4e788a85b1eb22d51bd770b1c9e28328cdd com.xaraya.core.2.x
+        etc...
+        first column : epoch
+        second column: branch
+   )
    $ mtn --db PRIVATE.db db set_epoch com.xaraya.core [main epoch]
-   (repeat for each overlapping branch)
+   (repeat this for each overlapping branch)
 5. Pull the main db revisions into your private db.
 
 If you have further questions or need assistance:
