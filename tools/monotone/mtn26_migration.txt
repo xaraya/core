@@ -231,7 +231,7 @@ After the migration is complete, you can upgrade your monotone executable to the
 
 "READERS"
 ---------
-After the migration is complete, people in this group grab a new copy of our database and throw away your old one. Database wise, that is the only thing to do.
+After the migration is complete, people in this group grab a new copy of our database and throw away their old one. Database wise, that is the only thing to do.
 For each of your working copies, you have to adapt the 'meta info' of your working copy. This means adapting the information in each working copy so monotone knows it's from a .26 db. This can be done in a number of ways which are well documented by the monotone people.
 
 See also 'references' below for links to background information.
