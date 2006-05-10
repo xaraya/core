@@ -191,11 +191,11 @@ Concept notification message to .devel list
 -------------------------------------------
 For those of you that are using monotone locally, we have scheduled a monotone migration to version .26. What is written below is IMPORTANT for you if you use monotone, so please read it carefully.
 
-Since migrating to this version involves a complete rebuild of the database, this affects developers who have databases which contain revisions pulled from our mt.xaraya.com database. For people who have branches in their database(s) outside the com.xaraya.* hierarchy the story is somewhat more complex.
+Migrating to version 0.26 involves a complete rebuild of the database at mt.xaraya.com. This migration therefore affects all developers who have databases which contain revisions pulled from our mt.xaraya.com database. Further, for people who have branches in their database(s) outside the com.xaraya.* hierarchy the story is somewhat more complex.
 
-We are migrating to this new version because it contains bugfixes and features which are essential to us. (like keeping branches mergeable, speed issues etc.). Behind the scenes i have been using mt.26 for a while now and i'm convinced you will find the newer version worth the pain of the migration.
+We are migrating to this new version because it contains bugfixes and features which are essential to us (like keeping branches mergeable, speed issues etc). Behind the scenes I have been using mt.26 for a while now and I'm convinced you will find the newer version worth the pain of the migration.
 
-The databases on our server need to be migrated to the new format and everyone needs to grab a new copy of the database, either by pulling into their own new mt.26 db or downloading the initial db we have been putting up for download. Although the so called 'initial pull' will be much faster, the initial download will still be the preferred method to get a copy of the repository.
+The migration converts all databases on our server to a new format. Because of this everyone needs to grab a new copy of the database. This can be done by either pulling into a new mt.26 db of their own, or downloading a copy of the new migrated db that we will provide for download as in the past. Pulling into a new mt.26db (the so called 'initial pull') will be much faster than in prior versions. However the preferred method to get a copy of the repository is by doing an initial download of the database.
 
 We have planned this migration on:
 
@@ -214,7 +214,7 @@ Group 1: "READERS"
   People using monotone just to pull our repositories, i.e. you do a mt pull / mt update but nothing more than that. You have a db for xaraya and no other work is stored in the database.
 
 Group 2: "WRITERS"
-  All activities as in Group 1, but you also commit work, i.e. you have executed mt commit in your db, i.e. you have branches we have, but you have revisions we don't have.
+  All activities as in Group 1 but you also commit work, i.e. you have executed mt commit in your db, and therefore you have branches we have but also revisions we don't have.
 
 Group 3: "PUBLISHERS"
   All activities as in Group 2, but you've also sent your commits out to somewhere, be it our server, your own, or anyone elses, i.e. you have executed mt push at some point.
@@ -231,8 +231,8 @@ After the migration is complete, you can upgrade your monotone executable to the
 
 "READERS"
 ---------
-After the migration is complete, people in this group grab a new copy of the database and throw away the old one. Database wise, that is the only thing to do.
-For each of your working copies, you have to adapt the 'meta info' of your working copy. This means adapting the information in each working copy, so monotone knows it's from a .26 db. This can be done in a number of ways, which are well documented by the monotone people.
+After the migration is complete, people in this group grab a new copy of our database and throw away your old one. Database wise, that is the only thing to do.
+For each of your working copies, you have to adapt the 'meta info' of your working copy. This means adapting the information in each working copy so monotone knows it's from a .26 db. This can be done in a number of ways which are well documented by the monotone people.
 
 See also 'references' below for links to background information.
 
@@ -246,7 +246,7 @@ See also 'references' below for links to background information.
 "PUBLISHERS"
 ------------
 Activities as described under WRITERS do apply for PUBLISHERS too.
-If you have pushed your revisions to somewhere else, you'll have to manage those destinations similar to what we're describing to you here now. This means you have to inform your users that a migration is going to occur (which can be separate from our migration) informing them what to do.
+If you have pushed your revisions to somewhere else, you'll have to manage those destinations similar to what we're describing to you here now. This means you have to inform your users that a migration is going to occur (which can be separate from our migration) and inform them of what to do.
 You also have to follow the setup under PRIVATE BRANCHES.
 
 See also 'references' below for links to background information.
@@ -254,12 +254,12 @@ See also 'references' below for links to background information.
 "CUSTOMIZERS"
 -------------
 Activities as described under WRITERS do apply for CUSTOMIZERS too.
-The only difference for CUSTOMIZERS is that your branches have names (and presumably revisions) we do not have in our database. The procedure to follow is as outlined in PRIVATE BRANCHES
+The only difference for CUSTOMIZERS is that your branches have names (and presumably revisions) that we do not have in our database. The procedure to follow is as outlined in PRIVATE BRANCHES.
 
 
 PRIVATE BRANCHES
 ----------------
-Rosterifying private branches can be problematic, as
+Rosterifying [Note 1] private branches can be problematic, as
 revisions found in the private database will conflict with revisions
 in the main database. The procedure below can be used to work around
 these problems without any data loss.
@@ -283,7 +283,7 @@ Make sure you make a backup of your database before attempting any of these step
 
      Now your PRIVATE.db database contains a rosterified version of your
      PRIVATE.db branches with no conflicting rosterified certs.
-4. Fix the epochs for your private branches. To do this, get the
+4. Fix the epochs for your private branches [Note 2]. To do this, get the
    epochs from the main database and set them in the private database.
    $ mtn --db MAIN.db ls epochs
    ( this lists something like this:
@@ -309,6 +309,13 @@ references
 [3] http://venge.net/monotone/NEWS
 
 ____
-Notes MichelV:
+Note 1:
+Rosterifying =?
+A: Process of converting the database into the new Monotone 0.26 data structure format (rosters).
+
+Note 2:
 Epoch = ?
-A: identifier of the birth of a branch (i think ;-) ). Not very important.
+A: An identifier set at zero on the birth of a branch. The epoch is used to identify
+   whether the branch has been regenerated since birth.  When a branch is
+   regenerated a new randomly generated identifier is set as the epoch.
+   Epochs must be the same to sync revisions between branches.
