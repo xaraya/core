@@ -1192,7 +1192,7 @@ function installer_admin_upgrade1()
         $data['alreadydone']='';
     }
     
-    if ($data['xarVersion'] < '1.0.0') {
+    if ($data['xarVersion'] < '1.0') {
         $data['downloadit']="<a href=\"http://www.xaraya.com/index.php/docs/75\">Xaraya</a>";
         $data['versionlow']=
         xarML('<p>Your current site is <strong>Xaraya Version #(1)</strong>.
@@ -1527,6 +1527,7 @@ function installer_admin_upgrade2()
 
         }
 
+
     // Define and setup privs that may not be registered
     if (!xarPrivExists('AdminAuthsystem')) {
         xarRegisterPrivilege('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
@@ -1569,8 +1570,15 @@ function installer_admin_upgrade2()
     $content .= "<p><strong>Removing Adminpanels module and move functions to other  modules</strong></p>";
     // Adminpanels module overviews modvar is deprecated
     // Move off Adminpanels dashboard modvar to Themes module
-    //Safest way is to just set the dash off for now
 
+    //Check that we have waiting content hooks activated for Articles and adminpanels
+    //if so set them now for Base
+    if (xarModIsHooked('articles','adminpanels')) {
+        //set it to Base now
+         xarModAPIFunc('modules','admin','enablehooks',
+                       array('callerModName' => 'base', 'hookModName' => 'articles'));
+    }
+    //Safest way is to just set the dash off for now
     xarModSetVar('themes','usedashboard',false);
     xarModSetVar('themes','dashtemplate','admin');
 

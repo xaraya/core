@@ -289,13 +289,17 @@
                 </label>
                 <input type="text" name="dashtemplate" id="dashtemplate" value="#$dashtemplate#" size="30" maxlength="100" />
                 <xar:mlstring>(without the .xt extension)</xar:mlstring>
+                <div  class="xar-form-input-wrapper-after">
+                    <xar:mlstring>
+                        The Admin Dashboard is automatically used with all admin functions. The default page template name is <strong>dashboard.xt</strong>.
+                    </xar:mlstring>
+                </div >
                 <div class="xar-form-input-wrapper-after">
                     <xar:mlstring>
-                        The Admin Dashboard is automatically used with all admin functions.
-                        You can also use <strong>admin-modulename.xt</strong> page templates, where <strong>modulename</strong> is the name of a module.
-                        These 'admin' templates can be used with the Dashboard turned on, or individually with Dashboard turned off.
+                        A page template called <strong>admin.xt</strong> will be used automatically without this switch and can be customised on a module by module basis (eg admin-articles.xt).
                     </xar:mlstring>
-                </div>
+                </div >
+
             </div>
             <div class="xar-form-input-wrapper-after">
                 <xar:if condition="#xarModIsHooked('themes', 'roles')#">

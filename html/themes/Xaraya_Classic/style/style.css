@@ -352,6 +352,8 @@ not sure if we still using this rule anywhere TODO: check
 -------------------------------------------------------------------------[comment] */
 
 /* THEME SPECIFIC ANONYMOUS CLASSES  [gen_heading] */
+.xar-sidebox {font-size:90%;}
+
 div.xar-block-body-topnav li, div.xar-block-body-topnav ul {
     display: inline;
     list-style-type: none;

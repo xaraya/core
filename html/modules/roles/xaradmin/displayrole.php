@@ -54,8 +54,8 @@ function roles_admin_displayrole()
         //only display it for current user or admin
         if (xarUserIsLoggedIn() && xarUserGetVar('uid')==$uid) {
             $data['userlastlogin']=xarSessionGetVar('roles_thislastlogin');
-        }elseif (xarSecurityCheck('AdminRole',0)){
-            $data['userlastlogin']= xarModGetUserVar('roles','userlastlogin',$uid);
+        }elseif (xarSecurityCheck('AdminRole',0,'Roles',$name) && xarModGetUserVar('roles','userlastlogin',$uid)<>''){
+            $data['userlastlogin']=xarModGetUserVar('roles','userlastlogin',$uid);
         }else{
             $data['userlastlogin']='';
         }

@@ -1,0 +1,10 @@
+<h4><xar:mlstring>Which template do I edit?</xar:mlstring></h4>
+<p>
+    <xar:mlstring>
+        When working on a theme you should edit <em>override</em> theme templates not internal system templates. Turn on <em>Show template filenames in HTML comments</em> in
+        the Themes Modify Config page. This allows you to see which template is providing output by simply looking at the page source. Once you
+        have identified a template, create an <strong>override</strong> template in your theme.
+        Learn how you can </xar:mlstring><a href="http://xaraya.com/index.php/documentation/25"><xar:mlstring>override templates</xar:mlstring></a>
+        <xar:mlstring> with an Articles module example.</xar:mlstring>
+</p>
+

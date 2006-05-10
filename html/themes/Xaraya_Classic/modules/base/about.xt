@@ -1,0 +1,22 @@
+<h4>
+    <xar:mlstring>
+        About the Xaraya Classic theme
+    </xar:mlstring>
+</h4> 
+<p>
+    <xar:mlstring>
+        This theme is called Xaraya_Classic and comes installed by default
+with every Xaraya distribution package. It is 100% table-free, totally CSS driven and provides a pleasant way to
+explore Xaraya. It also uses examples with commented source demonstrating Xaraya's templating
+power and flexibility.
+    </xar:mlstring>
+</p>
+<p>
+    <xar:mlstring>
+       We advise you to  keep this theme unmodified in
+your Xaraya theme directory where it will be used for future upgrades of your Xaraya site.
+    </xar:mlstring>
+</p>
+
+
+

@@ -23,7 +23,7 @@
     </p>
 
     <ul>
-        <li><xar:mlstring>Xaraya's privileges are extremely flexible. You can define privileges at the level of site, modules, component classes within modules, or single instances of those classes.</xar:mlstring>
+        <li><xar:mlstring>Xaraya's privileges are extremely flexible. You can define privileges at the level of site, realms, modules, component classes within modules, or single instances of those classes.</xar:mlstring>
         </li>
         <li>
             <xar:mlstring>You can use privileges as building blocks. Assemble them into compound privileges tailored to any specific role on the site.</xar:mlstring>
@@ -36,12 +36,12 @@
         </li>
     </ul>
 
-    <h3>
+    <h2>
         <xar:mlstring>How to use it?</xar:mlstring>
-    </h3>
+    </h2>
 
     <p>
-        <xar:mlstring>Clicking on the View Privileges link gives you an overview of all the privileges on your system. Compound privileges are collapsed, but you can click on them to open them up and view their components.</xar:mlstring>
+        <xar:mlstring>Clicking on the <strong>View Privileges</strong> link gives you an overview of all the privileges on your system. Compound privileges are collapsed, but you can click on them to open them up and view their components.</xar:mlstring>
     </p>
 
     <p>
@@ -54,25 +54,26 @@
 
     <ul>
         <li>
-            <xar:mlstring>Administration: a privilege that gives a role complete access to all resources on the site. At installation this privilege is assigned to the role Administrators and is inherited by the user Admin.</xar:mlstring>
+            <xar:mlstring><strong>Administration</strong>: a privilege that gives a role complete access to all resources on the site. At installation this privilege is assigned to the role Administrators and is inherited by the user Admin.</xar:mlstring>
         </li>
         <li>
-            <xar:mlstring>CasualAccess: this is the privilege assigned to unregistered users on the site. It is initially defined to allow viewing access of the front page, as well as access to the login block.</xar:mlstring>
+            <xar:mlstring><strong>CasualAccess</strong>: this is the privilege assigned to unregistered users on the site. It is initially defined to allow viewing access of the front page, as well as access to the login block.</xar:mlstring>
         </li>
         <li>
-            <xar:mlstring>GeneralLock: a privilege that restricts access to certain basic roles and privileges the system requires, such as the default admin. This is to avoid inadvertent removal.</xar:mlstring>
+            <xar:mlstring><strong>GeneralLock</strong>: a privilege that restricts access to certain basic roles and privileges the system requires, such as the default admin. This is to avoid inadvertent removal.</xar:mlstring>
         </li>
     </ul>
 
     <p>
-        <xar:mlstring>All privileges in the system can be changed or removed. (For those protected by GeneralLock 
-        above this takes a bit more doing.) You can also combine privileges by using them as elements to create 
-        compound privileges, or make new privileges of your choosing. There is no limit to the number of privileges 
+        <xar:mlstring>All privileges in the system can be changed or removed but it is recommended you do not remove the 
+        default and Locked privileges unless you are sure you understand what you are doing (for those protected by GeneralLock
+        above this takes a bit more doing). You can also combine privileges by using them as elements to create
+        compound privileges, or make new privileges of your choosing. There is no limit to the number of privileges
         you can create or their levels of nesting.</xar:mlstring>
     </p>
-    <h4>
+        <h3>
         <xar:mlstring>Level of Access</xar:mlstring>
-    </h4>
+    </h3>
 
     <p>
         <xar:mlstring>When you create a privilege you can assign one of a number of predefined levels of 
@@ -91,10 +92,32 @@
         <li><xar:mlstring><em>Admin</em> : full administration access</xar:mlstring></li>
     </ul>
     <p>
-        <xar:mlstring>Remember that you can assign privileges  to the Myself role, and those privileges will 
+        <xar:mlstring>Remember that you can assign privileges  to the <strong>Myself</strong> role, and those privileges will
         only apply to a specific user and the content owned or authored by that specific eg they could edit 
         their own articles, or comments but not articles or comments created by others.</xar:mlstring>
     </p>
+    <h3><a name="modifyconfig"></a><xar:mlstring>Privileges Configuration Settings</xar:mlstring></h3>
+    <h4><a name="lastresort"></a><a name="modifyconfig"></a><xar:mlstring>Last Resort Admin</xar:mlstring>
+    </h4>
+    <p>
+        <xar:mlstring><strong>Last Resort Administrator</strong> is a special Administrator that lies outside the
+        roles and privileges system in Xaraya. The Last Resort Administrator can always access your site. Creation of
+        a Last Resort administrator is optional by going to <strong>Privileges - Modify Config</strong> and checking the Last Resort option.</xar:mlstring></p>
+        <p><xar:mlstring>
+            You will be prompted for a username for the Last Resort administrator and a password. If you do create a Last Resort administrator
+            be sure to protect the user name and password as this Admin will always be able to access the site irregardless of what happens to the site privileges.
+        </xar:mlstring>
+    </p>
+    <h4><xar:mlstring>Realms</xar:mlstring></h4>
+    <p>
+        <xar:mlstring>
+        Realms is a feature new in Xaraya 1.1. By activating Realms you will be prompted to specify a privilege 
+        mask that will be by privileges for testing whether a realm is current or not. In addition to the Realm definition, 
+        you will also be provided an additional Realms Management function to define realm names for your site. 
+        See </xar:mlstring><a href="http://xaraya.com/index.php/documentation/607"><xar:mlstring>Xaraya Realms</xar:mlstring></a><xar:mlstring> for more information.
+        </xar:mlstring>
+    </p>
+
     <h3>
         <xar:mlstring>Included Blocks</xar:mlstring>
     </h3>
@@ -125,6 +148,6 @@
 
   </ul>
   <p class="xar-sub">
-    <strong>&nbsp;<xar:mlstring>Privileges  Module - Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 0.1.0&nbsp; 2005-11-03
+    <strong>&nbsp;<xar:mlstring>Privileges  Module Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.0.0&nbsp; 2006-05-03
   </p>
 </div>
