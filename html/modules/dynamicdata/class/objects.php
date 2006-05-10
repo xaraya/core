@@ -696,7 +696,7 @@ class Dynamic_Object_Master
      * @returns integer
      * @return the object id of the created item
      */
-    function createObject($args)
+    static function createObject($args)
     {
         if (!isset($args['moduleid']))  $args['moduleid'] = null;
         if (!isset($args['itemtype']))  $args['itemtype'] = null;
