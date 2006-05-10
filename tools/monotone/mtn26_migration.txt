@@ -135,7 +135,23 @@ To merge into the above somewhere:
 - how do we deal with people who 'missed' the process, i.e. they come
 with mt.25 changes, or patches, after the fact? (A: probably rosterify
 locally as if it were private?, ask in #monotone?)
-- 
+- make inventory of working directories on newton/einstein/davinci and document 
+  the steps to take to move them into .26 land.
+  newton:
+    - MLS working dirs
+    - auto dirs for producing downloads/documentation etc.
+    - all live sites run from monotone
+  einstein:
+    - none that i know of
+  davinci:
+    - client area for producing nightly areas 
+        * can just be cleaned and reinitialized
+    - test area
+        * forget about this, manual reconstruction
+    - viewmtn area:
+        * resource from upstream
+        * re-apply css changes
+        * add new css changes for new views in newer viewmtn
 
 SCRIPTS
   misc or all
@@ -173,4 +189,8 @@ TIMELINE
 * the notification should be at least 1 week in advance
 * guestimate of the whole process: 2 weeks minimum, assume project
 freeze during it worst case.
+
+Concept notification message to .devel list
+-------------------------------------------
+<fill this in>
 
