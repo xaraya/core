@@ -193,7 +193,9 @@ For those of you that are using monotone locally, we have scheduled a monotone m
 
 Since migrating to this version involves a complete rebuild of the database, this affects developers who have databases which contain revisions pulled from our mt.xaraya.com database. For people who have branches in their database(s) outside the com.xaraya.* hierarchy the story is somewhat more complex.
 
-The databases on our server need to be migrated to the new format and everyone needs to grab a new copy of the database, either by pulling into their own new mt.26 db or downloading the initial db we have been putting up for download (preferred).
+We are migrating to this new version because it contains bugfixes and features which are essential to us. (like keeping branches mergeable, speed issues etc.). Behind the scenes i have been using mt.26 for a while now and i'm convinced you will find the newer version worth the pain of the migration.
+
+The databases on our server need to be migrated to the new format and everyone needs to grab a new copy of the database, either by pulling into their own new mt.26 db or downloading the initial db we have been putting up for download. Although the so called 'initial pull' will be much faster, the initial download will still be the preferred method to get a copy of the repository.
 
 We have planned this migration on:
 
@@ -309,4 +311,4 @@ references
 ____
 Notes MichelV:
 Epoch = ?
-
+A: identifier of the birth of a branch (i think ;-) ). Not very important.
