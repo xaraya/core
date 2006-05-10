@@ -213,14 +213,14 @@ Group 2: "WRITERS"
   All activities as in Group 1, but you also commit work, i.e. you have executed mt commit in your db,i.e. you have branches we have, but you have revisions we dont have.
 
 Group 3: "PUBLISHERS"
-  All activities as in Group 2, but you've also send your commits out to somewhere, be it our server, your own, or anyone elses, i.e. you have executed mt push at some point.
+  All activities as in Group 2, but you've also sent your commits out to somewhere, be it our server, your own, or anyone elses, i.e. you have executed mt push at some point.
 
 Group 4: "CUSTOMIZERS"
   Activities as in Group 2, but you also have created 'branches' based on any of the com.xaraya.* branches and named them otherwise. These are so called 'private branches', i.e. you have branches we dont have, but which contain revisions we both have.
 
 "EVERYONE"
 ----------
-Possibly redundant, bug if you value your data, you'd make a backup of everything created when setting up your monotone environment.
+Possibly redundant, but if you value your data, you'd make a backup of everything created when setting up your monotone environment.
 
 "READERS"
 ---------
@@ -247,7 +247,7 @@ See also 'references' below for links to background information.
 "CUSTOMIZERS"
 -------------
 Activities as describend under WRITERS do apply for CUSTOMIZERS too.
-The only difference with WRITERS is that your branches have names (and presumably revisions) we do not have in our database. The procedure to follow is as outlined in PRIVATE BRANCHES
+The only difference for CUSTOMIZERS is that your branches have names (and presumably revisions) we do not have in our database. The procedure to follow is as outlined in PRIVATE BRANCHES
 
 
 PRIVATE BRANCHES 
@@ -279,8 +279,16 @@ Make sure you make a backup of your database before attempting any of these step
 4. Fix the epochs for your private branches. To do this, get the
    epochs from the main database and set them in the private database.
    $ mtn --db MAIN.db ls epochs
+   ( this lists something like this:
+        a961d43d88ba448e7a4c7740dfd65934a7391aec com.xaraya.core
+        22d0bf3ad2d785efd29ce5ef9f4e0022e3ffd29f com.xaraya.core.1.0
+        387ab4e788a85b1eb22d51bd770b1c9e28328cdd com.xaraya.core.2.x
+        etc...
+        first column : epoch
+        second column: branch
+   )
    $ mtn --db PRIVATE.db db set_epoch com.xaraya.core [main epoch]
-   (repeat for each overlapping branch)
+   (repeat this for each overlapping branch)
 5. Pull the main db revisions into your private db.
 
 If you have further questions or need assistance: 
