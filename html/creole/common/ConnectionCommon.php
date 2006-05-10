@@ -63,6 +63,11 @@ abstract class ConnectionCommon {
      * @var int
      */
     protected $flags = 0;
+    
+    /* XARAYA MODIFICATION */
+    // Adodb has a method on a connection(!!) for affected rows 
+    protected $affected_rows = 0;
+    /* END XARAYA MODIFICATION */
         
     /**
      * This "magic" method is invoked upon serialize() and works in tandem with the __wakeup()
@@ -266,6 +271,8 @@ abstract class ConnectionCommon {
                  $res->first();
             } else {
                 $res = $stmt->executeUpdate($bindvars);
+                // Save it, for adodb compat for the the method Affected_Rows
+                $this->affected_rows = $res;
                 if($res == 0 ) $res=true;
             }
             if(!$res) {
@@ -342,6 +349,10 @@ abstract class ConnectionCommon {
                 // This has no realistic equivalent in creole, probably leave it in
                 return $this->dsn['phptype'];
                 break;
+            case 'hasTransactions':
+                // all of em have, from the point of view of the callee
+                return true;
+                break;
             default:
                 // We want to leave this in, so the migration errors show up nicely 
                 throw new Exception("Unknown property $propname accessed for connection");
@@ -356,6 +367,16 @@ abstract class ConnectionCommon {
                 // (roles and dd only)
                 // DOH! we dont want this
                 return  "'".str_replace("'","\\'",$args[0])."'";
+                break;
+            case 'StartTrans':
+                return $this->begin();
+                break;
+            case 'CompleteTrans':
+                $this->commit(); 
+                return true;
+                break;
+            case 'Affected_Rows':
+                return $this->affected_rows;
                 break;
             default:
                 // We do want to leave this in, so the migration erros show up nicely

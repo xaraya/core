@@ -123,7 +123,7 @@ function xarErrorSet($major, $errorID, $value = NULL)
     // MINIMAL backward compatability
 
     // If $value is a descendant from the old xarException class, get the message from it
-    if(is_a($value,'xarException')) {
+    if($value instanceof xarException) {
         $msg = $value->toString();
     } else {
         // Probably already a string, use it.
