@@ -1,15 +1,14 @@
 <?php
+
 /**
  * Data Store is a flat SQL table (= typical module tables)
  *
  * @package dynamicdata
  * @subpackage datastores
+ * @todo Remove much of the duplication (query generation is repeated in parts several times here)
  */
 
-/**
- * include the base class
- *
- */
+// include the base class
 include_once "includes/datastores/Dynamic_SQL_DataStore.php";
 
 /**
@@ -19,10 +18,7 @@ include_once "includes/datastores/Dynamic_SQL_DataStore.php";
  */
 class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 {
-
-    /**
-     * Get the field name used to identify this property (we use the name of the table field here)
-     */
+    // Get the field name used to identify this property (we use the name of the table field here)
     function getFieldName(&$property)
     {
         // support [database.]table.field syntax
@@ -40,9 +36,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         $itemidfield = $this->primary;
 
         // can't really do much without the item id field at the moment
-        if (empty($itemidfield)) {
-            return;
-        }
+        if (empty($itemidfield)) return;
 
         $tables = array($table);
         $more = '';
@@ -52,6 +46,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             $keys = array();
             $where = array();
             $andor = 'AND';
+
             foreach ($this->join as $info) {
                 $tables[] = $info['table'];
                 foreach ($info['fields'] as $field) {
@@ -63,10 +58,6 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
                 if (!empty($info['where'])) {
                     $where[] = '(' . $info['where'] . ')';
                 }
-                // not relevant here
-                //if (!empty($info['andor'])) {
-                //    $andor = $info['andor'];
-                //}
                 if (!empty($info['more'])) {
                     $more .= ' ' . $info['more'];
                 }
@@ -80,9 +71,9 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         $dbconn =& xarDBGetConn();
 
-        $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
-                    FROM " . join(', ', $tables) . $more . "
-                   WHERE $itemidfield = ?";
+        $query = "SELECT $itemidfield, " . join(', ', $fieldlist)
+            . " FROM " . join(', ', $tables) . $more
+            . " WHERE $itemidfield = ?";
 
         if (count($this->join) > 0) {
             if (count($keys) > 0) {
@@ -93,21 +84,19 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             }
         }
 
-        $result =& $dbconn->Execute($query,array((int)$itemid));
+        $result =& $dbconn->Execute($query, array((int)$itemid));
 
         if (!$result) return;
 
-        if ($result->EOF) {
-            return;
-        }
+        if ($result->EOF) return;
+
         $values = $result->fields;
         $result->Close();
 
         $newitemid = array_shift($values);
+
         // oops, something went seriously wrong here...
-        if (empty($itemid) || $newitemid != $itemid || count($values) != count($fieldlist)) {
-            return;
-        }
+        if (empty($itemid) || $newitemid != $itemid || count($values) != count($fieldlist)) return;
 
         foreach ($fieldlist as $field) {
             // set the value for this property
@@ -123,18 +112,14 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         $itemidfield = $this->primary;
 
         // can't really do much without the item id field at the moment
-        if (empty($itemidfield)) {
-            return;
-        }
+        if (empty($itemidfield)) return;
 
         $fieldlist = array_keys($this->fields);
-        if (count($fieldlist) < 1) {
-            return;
-        }
+        if (count($fieldlist) < 1) return;
 
         $dbconn =& xarDBGetConn();
 
-    // TODO: this won't work for objects with several static tables !
+        // TODO: this won't work for objects with several static tables
         if (empty($itemid)) {
             // get the next id (or dummy) from ADODB for this table
             $itemid = $dbconn->GenId($table);
@@ -163,16 +148,15 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             // get the value from the corresponding property
             $value = $this->fields[$field]->getValue();
             // skip fields where values aren't set
-            if (!isset($value)) {
-                continue;
-            }
+            if (!isset($value)) continue;
+
             // TODO: improve this based on static table info
             $query .= $join . " ? ";
             $bindvars[] = $value;
             $join = ', ';
         }
         $query .= " )";
-        $result = & $dbconn->Execute($query,$bindvars);
+        $result = & $dbconn->Execute($query, $bindvars);
         if (!$result) return;
 
         // get the real next id from ADODB for this table now
@@ -181,10 +165,11 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         }
 
         if (empty($itemid)) {
-            $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                         'item id from table '.$table, 'Dynamic_FlatTable_DataStore', 'createItem', 'DynamicData');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException($msg));
+            $msg = xarML(
+                'Invalid #(1) from table #(2) in class #(3) method #(4)',
+                'item id', $table, 'Dynamic_FlatTable_DataStore', 'createItem'
+            );
+            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
             return;
         }
         $this->fields[$itemidfield]->setValue($itemid);
@@ -198,14 +183,10 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         $itemidfield = $this->primary;
 
         // can't really do much without the item id field at the moment
-        if (empty($itemidfield)) {
-            return;
-        }
+        if (empty($itemidfield)) return;
 
         $fieldlist = array_keys($this->fields);
-        if (count($fieldlist) < 1) {
-            return;
-        }
+        if (count($fieldlist) < 1) return;
 
         $dbconn =& xarDBGetConn();
 
@@ -217,9 +198,8 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             $value = $this->fields[$field]->getValue();
 
             // skip fields where values aren't set, and don't update the item id either
-            if (!isset($value) || $field == $itemidfield) {
-                continue;
-            }
+            if (!isset($value) || $field == $itemidfield) continue;
+
             // TODO: improve this based on static table info
             $query .= $join . $field . '=?';
             $bindvars[] = $value;
@@ -241,15 +221,13 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         $itemidfield = $this->primary;
 
         // can't really do much without the item id field at the moment
-        if (empty($itemidfield)) {
-            return;
-        }
+        if (empty($itemidfield)) return;
 
         $dbconn =& xarDBGetConn();
 
         $query = "DELETE FROM $table WHERE $itemidfield = ?";
         
-        $result =& $dbconn->Execute($query,array((int)$itemid));
+        $result =& $dbconn->Execute($query, array((int)$itemid));
         if (!$result) return;
 
         return $itemid;
@@ -257,16 +235,9 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
     function getItems($args = array())
     {
-        if (!empty($args['numitems'])) {
-            $numitems = $args['numitems'];
-        } else {
-            $numitems = 0;
-        }
-        if (!empty($args['startnum'])) {
-            $startnum = $args['startnum'];
-        } else {
-            $startnum = 1;
-        }
+        $numitems = (!empty($args['numitems']) ? $args['numitems'] : 0);
+        $startnum = (!empty($args['startnum']) ? $args['startnum'] : 1);
+
         if (!empty($args['itemids'])) {
             $itemids = $args['itemids'];
         } elseif (isset($this->_itemids)) {
@@ -274,19 +245,16 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         } else {
             $itemids = array();
         }
+
         // check if it's set here - could be 0 (= empty) too
-        if (isset($args['cache'])) {
-            $this->cache = $args['cache'];
-        }
+        if (isset($args['cache'])) $this->cache = $args['cache'];
 
         $table = $this->name;
         $itemidfield = $this->primary;
 
         // can't really do much without the item id field at the moment
-        if (empty($itemidfield)) {
-// CHECKME: test working without the item id field
-            return;
-        }
+        // CHECKME: test working without the item id field
+        if (empty($itemidfield)) return;
 
         $tables = array($table);
         $more = '';
@@ -318,41 +286,36 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         }
 
         $fieldlist = array_keys($this->fields);
-        if (count($fieldlist) < 1) {
-            return;
-        }
+        if (count($fieldlist) < 1) return;
 
         // check if we're dealing with GROUP BY fields and/or COUNT, SUM etc. operations
-        $isgrouped = 0;
-        if (count($this->groupby) > 0) {
-            $isgrouped = 1;
-        }
+        $isgrouped = ((count($this->groupby) > 0) ? 1 : 0);
+
         $newfields = array();
         foreach ($fieldlist as $field) {
             if (!empty($this->fields[$field]->operation)) {
-                $newfields[] = $this->fields[$field]->operation . '(' . $field . ') AS ' . $this->fields[$field]->operation . '_' . $this->fields[$field]->name;
+                $newfields[] = $this->fields[$field]->operation
+                    . '(' . $field . ') AS '
+                    . $this->fields[$field]->operation . '_' . $this->fields[$field]->name;
                 $isgrouped = 1;
             } else {
                 $newfields[] = $field;
             }
         }
 
-/*
-// CHECKME: test working without the item id field
-if (empty($itemidfield)) {
-    $isgrouped = 1;
-}
-*/
+        // CHECKME: test working without the item id field
+        //if (empty($itemidfield)) $isgrouped = 1;
+
         $dbconn =& xarDBGetConn();
 
         if ($isgrouped) {
-            $query = "SELECT " . join(', ', $newfields) . "
-                        FROM " . join(', ', $tables) . $more . " ";
+            $query = "SELECT " . join(', ', $newfields)
+                . " FROM " . join(', ', $tables) . $more . " ";
         } else {
             // Note: Oracle doesn't like having the same field in a sub-query twice,
             //       so we use an alias for the primary field here
-            $query = "SELECT $itemidfield AS ddprimaryid, " . join(', ', $fieldlist) . "
-                        FROM " . join(', ', $tables) . $more . " ";
+            $query = "SELECT $itemidfield AS ddprimaryid, " . join(', ', $fieldlist)
+                . " FROM " . join(', ', $tables) . $more . " ";
         }
 
         $next = 'WHERE';
@@ -372,7 +335,7 @@ if (empty($itemidfield)) {
             $bindmarkers = '?' . str_repeat(',?',count($itemids)-1);
             $query .= " $next $itemidfield IN ($bindmarkers) ";
             foreach ($itemids as $itemid) {
-                $bindvars[] = (int) $itemid;
+                $bindvars[] = (int)$itemid;
             }
         } elseif (count($itemids) == 1) {
             $query .= " $next $itemidfield = ? ";
@@ -380,7 +343,8 @@ if (empty($itemidfield)) {
         } elseif (count($this->where) > 0) {
             $query .= " $next ";
             foreach ($this->where as $whereitem) {
-                $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
+                $query .= $whereitem['join'] . ' ' . $whereitem['pre']
+                    . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
             }
         }
         if (count($this->join) > 0 && count($where) > 0) {
@@ -421,12 +385,9 @@ if (empty($itemidfield)) {
         }
         if (!$result) return;
 
-        if (count($itemids) == 0 && !$isgrouped) {
-            $saveids = 1;
-        } else {
-            $saveids = 0;
-        }
+        $saveids = ((count($itemids) == 0 && !$isgrouped) ? 1 : 0);
         $itemid = 0;
+
         while (!$result->EOF) {
             $values = $result->fields;
             if ($isgrouped) {
@@ -434,6 +395,7 @@ if (empty($itemidfield)) {
             } else {
                 $itemid = array_shift($values);
             }
+
             // oops, something went seriously wrong here...
             if (empty($itemid) || count($values) != count($fieldlist)) {
                 $result->MoveNext();
@@ -441,9 +403,7 @@ if (empty($itemidfield)) {
             }
 
             // add this itemid to the list
-            if ($saveids) {
-                $this->_itemids[] = $itemid;
-            }
+            if ($saveids) $this->_itemids[] = $itemid;
 
             foreach ($fieldlist as $field) {
                 // add the item to the value list for this property
@@ -464,6 +424,7 @@ if (empty($itemidfield)) {
         } else {
             $itemids = array();
         }
+
         // check if it's set here - could be 0 (= empty) too
         if (isset($args['cache'])) {
             $this->cache = $args['cache'];
@@ -473,43 +434,85 @@ if (empty($itemidfield)) {
         $itemidfield = $this->primary;
 
         // can't really do much without the item id field at the moment
-        if (empty($itemidfield)) {
-            return;
+        if (empty($itemidfield)) return;
+
+        $tables = array($table);
+        $more = '';
+
+        // join with another table
+        if (count($this->join) > 0) {
+            $keys = array();
+            $where = array();
+            $andor = 'AND';
+
+            foreach ($this->join as $info) {
+                $tables[] = $info['table'];
+                foreach ($info['fields'] as $field) {
+                    $this->fields[$field] =& $this->extra[$field];
+                }
+                if (!empty($info['key'])) {
+                    $keys[] = $info['key'] . ' = ' . $itemidfield;
+                }
+                if (!empty($info['where'])) {
+                    $where[] = '(' . $info['where'] . ')';
+                }
+                if (!empty($info['andor'])) {
+                    $andor = $info['andor'];
+                }
+                if (!empty($info['more'])) {
+                    $more .= ' ' . $info['more'];
+                }
+                // TODO: sort clauses for the joined table ?
+            }
         }
 
         $dbconn =& xarDBGetConn();
 
-        if($dbconn->databaseType == 'sqlite') {
-            $query = "SELECT COUNT(*) 
-                      FROM (SELECT DISTINCT $itemidfield FROM $table "; // WATCH OUT, STILL UNBALANCED
+        if ($dbconn->databaseType == 'sqlite') {
+            // WATCH OUT, STILL UNBALANCED
+            $query = "SELECT COUNT(*) FROM (SELECT DISTINCT $itemidfield FROM " . join(', ', $tables) . $more . " ";
         } else {
-            $query = "SELECT COUNT(DISTINCT $itemidfield)
-                    FROM $table ";
+            $query = "SELECT COUNT(DISTINCT $itemidfield) FROM " . join(', ', $tables) . $more . " ";
+        }
+
+        $next = 'WHERE';
+        if (count($this->join) > 0) {
+            if (count($keys) > 0) {
+                $query .= " $next " . join(' AND ', $keys);
+                $next = 'AND';
+            }
+            if (count($where) > 0) {
+                $query .= " $next ( " . join(' AND ', $where);
+                $next = $andor;
+            }
         }
 
         $bindvars = array();
         if (count($itemids) > 1) {
             $bindmarkers = '?' . str_repeat(',?',count($itemids)-1);
-            $query .= " WHERE $itemidfield IN ($bindmarkers) ";
+            $query .= " $next $itemidfield IN ($bindmarkers) ";
             foreach ($itemids as $itemid) {
                 $bindvars[] = (int) $itemid;
             }
         } elseif (count($itemids) == 1) {
-            $query .= " WHERE $itemidfield = ? ";
+            $query .= " $next $itemidfield = ? ";
             $bindvars[] = (int)$itemids[0];
         } elseif (count($this->where) > 0) {
-            $query .= " WHERE ";
+            $query .= " $next ";
             foreach ($this->where as $whereitem) {
                 $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
             }
         }
+        if (count($this->join) > 0 && count($where) > 0) {
+            $query .= " ) ";
+        }
 
-        // TODO: GROUP BY, LEFT JOIN, ... ? -> cfr. relationships
-        if($dbconn->databaseType == 'sqlite') $query.=")";
+        if ($dbconn->databaseType == 'sqlite') $query .= ")";
+
         if (!empty($this->cache)) {
-            $result =& $dbconn->CacheExecute($this->cache,$query,$bindvars);
+            $result =& $dbconn->CacheExecute($this->cache, $query, $bindvars);
         } else {
-            $result =& $dbconn->Execute($query,$bindvars);
+            $result =& $dbconn->Execute($query, $bindvars);
         }
         if (!$result || $result->EOF) return;
 
@@ -560,26 +563,15 @@ if (empty($itemidfield)) {
         $itemidfield = $this->primary;
 
         // can't really do much without the item id field at the moment
-        if (empty($itemidfield)) {
-            return;
-        }
-
+        if (empty($itemidfield)) return;
+ 
         $fieldlist = array_keys($this->fields);
-        if (count($fieldlist) < 1) {
-            return;
-        }
+        if (count($fieldlist) < 1) return;
 
         if (!isset($temp['result'])) {
-            if (!empty($args['numitems'])) {
-                $numitems = $args['numitems'];
-            } else {
-                $numitems = 0;
-            }
-            if (!empty($args['startnum'])) {
-                $startnum = $args['startnum'];
-            } else {
-                $startnum = 1;
-            }
+            $numitems = (!empty($args['numitems']) ? $args['numitems'] : 0);
+            $startnum = (!empty($args['startnum']) ? $args['startnum'] : 1);
+
             if (!empty($args['itemids'])) {
                 $itemids = $args['itemids'];
             } elseif (isset($this->_itemids)) {
@@ -590,8 +582,7 @@ if (empty($itemidfield)) {
 
             $dbconn =& xarDBGetConn();
 
-            $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
-                        FROM $table ";
+            $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . " FROM $table ";
 
             $bindvars = array();
             if (count($itemids) > 1) {
