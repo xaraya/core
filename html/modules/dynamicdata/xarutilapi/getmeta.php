@@ -1,4 +1,4 @@
-<?php
+cd <?php
 /**
  * (try to) get the "meta" properties of tables
  *
@@ -164,7 +164,7 @@ function dynamicdata_utilapi_getmeta($args)
                                    'source' => $curtable . '.' . $fieldname,
                                    'status' => $status,
                                    'order' => $id,
-                                   'validation' => $validation,
+                                   'validation' => $validation
                                    //'primary' => isset($field->primary_key)?$field->primary_key : '',
                                    //'autoincrement' => isset($field->auto_increment))? $field->auto_increment : ''
                                    );
