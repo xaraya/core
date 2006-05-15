@@ -66,7 +66,8 @@ function privileges_admin_modifyconfig()
                      $data['testmask']=$testmask;
                      $settestergroup=xarModGetVar('privileges','testergroup');
                      if (!isset($settestergroupp) || empty($settestergroup)) {
-                         $settestergroup='Administrators';
+                         $settestergrouprole=xarFindRole('Administrators');
+                         $settestergroup=$settestergrouprole->uid;
                      }
                      if (!isset($testergroup) || empty($testergroup)) {
                          $testergroup=$settestergroup;
@@ -76,15 +77,17 @@ function privileges_admin_modifyconfig()
                      $grouplist=xarGetGroups();
                      $data['grouplist']=$grouplist;
 
-                     $testgrouprole=xarFindRole('Administrators');
-                     $testgroupuid=$testgrouprole->uid;
-
                      $testusers=xarModAPIFunc('roles','user','getUsers',array('uid'=>$testergroup));
-                     $data['testusers']=$testusers;
 
-                     $tester=xarModGetVar('privileges','tester');
+                     $data['testusers']=$testusers; //array
+
+                     $settester=xarModGetVar('privileges','tester'); //uid
+                     if (!isset($settester) || empty($settester)) {
+                         $testerrole=xarFindRole('Administrator');
+                         $settester=$testerrole->uid;
+                     }
                      if (!isset($tester) || empty($tester)) {
-                         $tester='Administrator';
+                         $tester=$settester;
                      }
                      $data['tester']=$tester;
                 break;
