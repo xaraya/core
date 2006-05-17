@@ -125,7 +125,8 @@
                         </label>
                         <input type="text" name="phome" id="phome" value="#$phome#" size="40" maxlength="100" tabindex="7" />
                     </div>
-                </xar:if>                        
+                </xar:if>
+                <xar:comment> Comment out until code is in place
                 <xar:if condition="xarModGetVar('roles','setprimaryparent')">
                     <div class="xar-form-input-wrapper">
                         <label for="phome" title="#xarML('Home URL')#" class="xar-form-label">
@@ -135,7 +136,8 @@
                         </label>
                     <xar:data-input type="grouplist" name="pprimaryparent" id="pprimaryparent" value="$pparentid" tabindex="8" />
                     </div>
-                </xar:if>                        
+                </xar:if>
+                </xar:comment>
                 <div class="xar-form-input-wrapper">
                     <label for="pstate" title="#xarML('Status of this user')#" class="xar-form-label">
                         <xar:mlstring>
