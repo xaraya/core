@@ -21,45 +21,39 @@ The above readies a db to .26 format.
 
 
 DATABASES pre-flight testing
-
-  core.db
+[DONE]  core.db
      migrate:   YES
      rosterify: YES
-     size:      OLD: 170M NEW: 115M
-     branches:  YES (how many?)
-     time:      roughly 1 hour
+     size:      168M -> 129M
+     time:      minimal 3 hours (davinci is slower than my testmachine)
   modules.db
      migrate:   YES
      rosterify: YES (got 1 bad signature warning, but process completed successfully)
-     size:      OLD: 315M NEW: 256M
-     branches:  ?
-     time:      estimated 2 hours
-  themes.db
+     size:      320M -> 
+     time:      minimal 4 hours (davinci is slower than my testmachine)
+[DONE]  themes.db
      migrate:   YES
      rosterify: YES
-     size:      OLD: 5.3M NEW: 4.1M
-     branches:  ?
-     time:      estimated 20 mins
-  languages.db
+     size:      6.0M -> 4.5M
+     time:      13 mins
+[DONE]  languages.db
      migrate:   YES
      rosterify  YES
-     size:      OLD: 38M NEW: 30M
-     branches:  ?
-     time:      estimated 30 mins
-  artwork.db
-     migrate:
-     rosterify:
-     size:
-     branches:  ?
-     times:
+     size:      42M -> 32M 
+     time:      10 mins
+[DONE]  artwork.db
+     migrate:   YES
+     rosterify: YES
+     size:      53M -> 39M 
+     times:     10mins
 
-**Estimated downtime**: at least 5 hours.
+**Estimated downtime**: at least 9 hours.
 
 
 PRIORITIZED CHECKLIST
 
 * complete the plan
-* write a notification to xar.devel explaining what the plan is and a rough timeline
+* [DONE] write a notification to xar.devel explaining what the plan is and a rough timeline
   focus on the private branches!! (see below: PRIVATE BRANCHES)
 * back up the mt.25 databases
 * remove the nightly downloads from web view (mt.xaraya.com)
@@ -68,19 +62,21 @@ PRIORITIZED CHECKLIST
   - on newton: all monotone related
   - other?
 * change the lua scripts in /etc/monotone
-  - cia notifications  (Q: use the nonce hooks? A: yes, but post-flight)
-  - nntp notifications (Q: use the nonce hooks? A: yes, but post-fligh)
-* if applicable recompile monotone on mt.xaraya.com
+  - cia notifications  
+  - nntp notifications 
+* [DONE] if applicable recompile monotone on mt.xaraya.com
 * db migrate on all databases on mt.xaraya.com
 * db rosterify on all databases on mt.xaraya.com
 * db check all databases, resolve all errors/warnings
-* rename all databases *.db -> *.mtn (recommended naming)
+[WONT]* rename all databases \*.db -> \*.mtn (recommended naming)
 * change server setup to reflect mt.26 changes:
   - adjust rc script on server
   - change default port to 4691 (core database)
   - double check aliases and symlinks (executable name changed from monotone to mtn)
 * start mt.26 serving but do not allow traffic yet
-* upgrade viewmtn to support mt.26 (upstream is ready), reincorporate our changes
+* [DONE] upgrade viewmtn to support mt.26 (upstream is ready), reincorporate our changes
+  (not done our customizations wrt statusses of branches yet, but that's not critical)
+  new temp viewmtn setup can be tested at http://mt.xaraya.com/viewmtn26
 * rewrite and start cron jobs on mt.xaraya.com
   - check that the initial dbs are generated ok
   - check that the nightlies are generated ok by the (rewritten) cron job
@@ -90,8 +86,6 @@ PRIORITIZED CHECKLIST
 * Incrementally adjust working directories while in-flight:
   - .mt-ignore -> .mtn-ignore (should be automatic)
   - remove .mt-attrs files
-
-
 
 PRIVATE BRANCHES
 Rosterifying private branches can be problematic, as
@@ -110,13 +104,14 @@ STEPS TO PERFORM FOR PRIVATE BRANCHES
    your private database and the main database making sure they have 
    the same revision IDs (you only have to check the latest version). 
 3. Next get a list of all the revisions in the MAIN database and
-   delete the certificates for those revisions from your PRIVATE database.
-   $ for RID in `mtn automate select i: --db main.db`; do
-        mtn --db private.db db execute "DELETE FROM revision_certs  WHERE id = '$RID'";
-     done
+   delete the certificates for those revisions from your PRIVATE database::
+   
+    $for RID in `mtn automate select i: --db main.db`; do
+      mtn --db private.db db execute "DELETE FROM revision_certs  WHERE id = '$RID'";
+    done
 
-     Now your private database contains a rosterified version of your
-     private branches with no conflicting rosterified certs.
+   Now your private database contains a rosterified version of your
+   private branches with no conflicting rosterified certs.
 4. Fix the epochs for your private branches. To do this, get the
    epochs from the main database and set them in the private database.
    $ mtn --db main.mtn ls epochs
@@ -127,37 +122,35 @@ STEPS TO PERFORM FOR PRIVATE BRANCHES
 
 To merge into the above somewhere:
 - check .mt -> mtn replacement
-- test some working copies
+- [DONE] test some working copies
 - check the pagesize sqlite setting centrally
 - how do we deal with people who 'missed' the process, i.e. they come
 with mt.25 changes, or patches, after the fact? (A: probably rosterify
 locally as if it were private?, ask in #monotone?)
-- make inventory of working directories on newton/einstein/davinci and document
-  the steps to take to move them into .26 land.
-  newton:
-    - MLS working dirs
-    - auto dirs for producing downloads/documentation etc.
-    - all live sites run from monotone
-  einstein:
-    - none that i know of
-  davinci:
-    - client area for producing nightly areas
-        * can just be cleaned and reinitialized
-    - test area
-        * forget about this, manual reconstruction
-    - viewmtn area:
-        * resource from upstream
-        * re-apply css changes
-        * add new css changes for new views in newer viewmtn
+- make inventory of working directories on newton/einstein/davinci and document  the steps to take to move them into .26 land.
+* newton:
+  - MLS working dirs
+  - auto dirs for producing downloads/documentation etc.
+  - all live sites run from monotone
+* einstein:
+  - none that i know of
+* davinci:
+  - client area for producing nightly areas
+    * can just be cleaned and reinitialized
+  - test area
+    * forget about this, manual reconstruction
+  - viewmtn area:
+    * [DONE] resource from upstream
+    * [DONE] re-apply css changes
+    * add new css changes for new views in newer viewmtn
+    * move the viewmtn26 area into the document root
+        - save the dbdown and download locations!!!
 
-SCRIPTS
-  misc or all
-   change called executable to mtn
-   change referenced workspace directories to _MTN
-   remove .mt-attr files (modify any hooks that check for it)
-
-   change firewall/port redirection to reference port 4691
-
+ATTENTION POINTS FOR SCRIPTS
+    * change called executable to mtn or realias
+    * change referenced workspace directories to _MTN
+    * remove .mt-attr files (modify any hooks that check for it)
+    * change firewall/port redirection to reference port 4691
 
 Q&A
 ---
@@ -178,14 +171,18 @@ downloading and support goes up a notch in the 2-3 weeks after that,
 unavoidably leading to some patches which need to be put in. How do we
 deal with that, since we will be in the midst of the mt.26 transition
 and loading another burden on top of the extra patch activity?
+A: date set on weekend of May 20.
+
+Q: use the nonce hooks in the new setup? 
+A: yes, but post-flight
 
 TIMELINE
 --------
 * after 1.1 release
 * at a time at least 3 people can commit a day at the same time
-* the notification should be at least 1 week in advance
+* [DONE] the notification should be at least 1 week in advance
 * guestimate of the whole process: 2 weeks minimum, assume project
-freeze during it worst case.
+  freeze during it worst case.
 
 Concept notification message to .devel list
 -------------------------------------------
@@ -269,15 +266,18 @@ We call your db PRIVATE.db
 Make sure you make a backup of your database before attempting any of these steps.
 
 1. Rosterify your PRIVATE.db database.
-   Roughly:
+   Roughly::
+   
      $ mtn db migrate --db PRIVATE.db
      $ mtn db rosterify --db PRIVATE.db
+     
 2. Make sure the rosterify went ok and double-check the revisions in
    your PRIVATE.db database and the MAIN.db database making sure they have
    the same revision IDs (you only have to check the latest version).
 3. Next get a list of all the revisions in the MAIN.db database and
-   delete the certificates for those revisions from your PRIVATE.db database.
-   $ for RID in `mtn automate select i: --db MAIN.db`; do
+   delete the certificates for those revisions from your PRIVATE.db database::
+   
+    $for RID in `mtn automate select i: --db MAIN.db`; do
         mtn --db PRIVATE.db db execute "DELETE FROM revision_certs WHERE id = '$RID'";
      done
 
@@ -285,15 +285,18 @@ Make sure you make a backup of your database before attempting any of these step
      PRIVATE.db branches with no conflicting rosterified certs.
 4. Fix the epochs for your private branches [Note 2]. To do this, get the
    epochs from the main database and set them in the private database.
-   $ mtn --db MAIN.db ls epochs
-   ( this lists something like this:
+   
+   $mtn --db MAIN.db ls epochs
+   
+   this lists something like this:
         a961d43d88ba448e7a4c7740dfd65934a7391aec com.xaraya.core
         22d0bf3ad2d785efd29ce5ef9f4e0022e3ffd29f com.xaraya.core.1.0
         387ab4e788a85b1eb22d51bd770b1c9e28328cdd com.xaraya.core.2.x
         etc...
         first column : epoch
         second column: branch
-   )
+   
+   
    $ mtn --db PRIVATE.db db set_epoch com.xaraya.core [main epoch]
    (repeat this for each overlapping branch)
 5. Pull the main db revisions into your private db.
@@ -308,14 +311,12 @@ references
 [2] http://venge.net/monotone/UPGRADE
 [3] http://venge.net/monotone/NEWS
 
-____
+NOTES
+-----
 Note 1:
-Rosterifying =?
+Q: What is Rosterifying?
 A: Process of converting the database into the new Monotone 0.26 data structure format (rosters).
 
 Note 2:
-Epoch = ?
-A: An identifier set at zero on the birth of a branch. The epoch is used to identify
-   whether the branch has been regenerated since birth.  When a branch is
-   regenerated a new randomly generated identifier is set as the epoch.
-   Epochs must be the same to sync revisions between branches.
+Q: What is an Epoch?
+A: An identifier set at zero on the birth of a branch. The epoch is used to identify whether the branch has been regenerated since birth.  When a branch is regenerated a new randomly generated identifier is set as the epoch. Epochs must be the same to sync revisions between branches.
