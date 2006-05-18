@@ -1714,12 +1714,30 @@ function installer_admin_upgrade2()
 // Miscellaneous upgrade functions that always run each upgrade
 // Version independent
 function installer_admin_upgrade3()
-{
+{   
+    $content='';
     $thisdata['xarProduct'] = xarConfigGetVar('System.Core.VersionId');
     $thisdata['xarVersion'] = xarConfigGetVar('System.Core.VersionNum');
     $thisdata['xarRelease'] = xarConfigGetVar('System.Core.VersionSub');
     $content='';
-    
+
+    // Set Config Vars - add those that need to be set each upgrade here.
+    $roleanon = xarFindRole('Anonymous');
+    $configvars[] = array( 
+                           array('name'    =>  'System.Core.VersionNum',
+                                 'set'     =>  XARCORE_VERSION_NUM));
+
+    foreach($configvars as $configvar){
+        foreach($configvar as $var){
+            $currentvar = xarConfigGetVar("$var[name]");
+            if ($currentvar == $var['set']){
+                $content .= "$var[name] is set, proceeding to next check<br />";
+            } else {
+                xarConfigSetVar($var['name'], $var['set']);
+                $content .= "$var[name] incorrect, attempting to set.... done!<br />";
+            }
+        }
+    }
   // Bug 630, let's throw the reminder back up after upgrade.
     if (!xarModAPIFunc('blocks', 'user', 'get', array('name' => 'reminder'))) {
         $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot.';
