@@ -28,9 +28,10 @@ function themes_admin_modifyconfig()
     $data['configoverview'] = xarVarPrepForDisplay(xarML('Configure Overview'));
     $data['showhelplabel'] = xarVarPrepForDisplay(xarML('Show module "Help" in the menu:'));
     $data['showhelp'] = xarModGetVar('modules', 'showhelp') ? 'checked' : '' ;
-    $data['submitbutton'] = xarVarPrepForDisplay(xarML('Submit')); 
+    $data['submitbutton'] = xarVarPrepForDisplay(xarML('Submit'));
     // Dashboard
     $data['dashboard']= xarModGetVar('themes', 'usedashboard');
+    $data['adminpagemenu']= xarModGetVar('themes', 'adminpagemenu');    
     $data['dashtemplate']= trim(xarModGetVar('themes', 'dashtemplate'));
     if (!isset($data['dashtemplate']) || trim ($data['dashtemplate']=='')) {
         $data['dashtemplate']='dashboard';

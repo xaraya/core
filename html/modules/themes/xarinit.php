@@ -153,7 +153,7 @@ function themes_init()
     //Moved here in 1.1.x series
     xarModSetVar('themes', 'usedashboard', 0);
     xarModSetVar('themes', 'dashtemplate', 'dashboard');
-
+    xarModSetVar('themes', 'adminpagemenu', 1);
     // Register theme tags.
     // Additional styles, see bug 3868 note below.
 //     xarTplRegisterTag('themes', 'themes-additional-styles', array(), 'themes_userapi_handleadditionalstyles');
