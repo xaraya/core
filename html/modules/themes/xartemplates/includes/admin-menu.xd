@@ -1,5 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:comment>Common Administration menu</xar:comment>
+<xar:if condition="xarModGetVar('themes','adminpagemenu')">
 <xar:style scope="module" module="base" file="navtabs" />
 
 <xar:set name="activetab">$_bl_module_func</xar:set>
@@ -42,3 +43,4 @@
     </xar:sec>
   </dl>
 </div>
+</xar:if>

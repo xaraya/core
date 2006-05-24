@@ -36,6 +36,7 @@ function themes_admin_updateconfig()
     if (!xarVarFetch('AtomTag', 'str:1:', $atomtag, '', XARVAR_NOT_REQUIRED)) return;
     // enable or disable dashboard
     if(!xarVarFetch('dashboard', 'checkbox', $dashboard, false, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('adminpagemenu', 'checkbox', $adminpagemenu, false, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dashtemplate', 'str:1:', $dashtemplate, 'dashboard', XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('usermenu', 'checkbox', $usermenu, false, XARVAR_DONT_SET)) {return;}
     xarModSetVar('themes', 'SiteName', $sitename);
@@ -49,6 +50,7 @@ function themes_admin_updateconfig()
     xarModSetVar('themes', 'AtomTag', $atomtag);
     xarModSetVar('themes', 'var_dump', $var_dump);
     xarModSetVar('themes', 'usedashboard', ($dashboard) ? 1 : 0);
+    xarModSetVar('themes', 'adminpagemenu', ($adminpagemenu) ? 1 : 0);    
     xarModSetVar('themes', 'dashtemplate', $dashtemplate);
     xarConfigSetVar('Site.BL.CacheTemplates',$cachetemplates);
 
