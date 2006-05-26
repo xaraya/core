@@ -478,10 +478,14 @@ function privileges_init()
     xarDB_importTables(array('security_instances' => xarDBGetSiteTablePrefix() . '_security_instances'));
 
 */
-# --------------------------------------------------------
-#
-# Set up modvars
-#
+
+    // Initialisation successful
+    return true;
+}
+
+function privileges_activate()
+{
+    // On activation, set our variables
     xarModSetVar('privileges', 'showrealms', false);
     xarModSetVar('privileges', 'inheritdeny', true);
     xarModSetVar('privileges', 'tester', 0);
@@ -490,8 +494,6 @@ function privileges_init()
     xarModSetVar('privileges', 'testmask', 'All');
     xarModSetVar('privileges', 'realmvalue', 'none');
     xarModSetVar('privileges', 'realmcomparison','exact');
-
-    // Initialisation successful
     return true;
 }
 
