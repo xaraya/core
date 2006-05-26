@@ -652,7 +652,6 @@ class xarMasks
                 xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
             }
             if ($privilege->level == 0 && $privilege->includes($mask)) {
-            	xarModSetVar('privileges','inheritdeny',true);
                 if (!xarModGetVar('privileges','inheritdeny') && is_object($role)) {
 					if($thistest) {
 						echo "We don't inherit <strong>denys</strong>, ";
