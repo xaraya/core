@@ -1705,6 +1705,12 @@ function installer_admin_upgrade2()
 
 /* End of Version 1.1.0 Release Upgrades */
 
+/* Version 1.1.x Release Upgrades */
+
+    xarModSetVar('themes', 'adminpagemenu', 1);
+
+/* End of Version 1.1.x Release Upgrades */
+
     $thisdata['content']=$content;
     $thisdata['phase'] = 2;
     $thisdata['phase_label'] = xarML('Step Two');

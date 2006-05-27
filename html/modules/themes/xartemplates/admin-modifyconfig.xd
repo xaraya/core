@@ -302,6 +302,18 @@
 
             </div>
             <div class="xar-form-input-wrapper-after">
+                <xar:if condition="$adminpagemenu">
+                    <input type="checkbox" name="adminpagemenu" id="adminpagemenu" value="1" checked="checked" />
+                    <xar:else />
+                    <input type="checkbox" name="adminpagemenu" id="adminpagemenu" value="1" />
+                </xar:if>
+                <label for="adminpagemenu" title="#xarML('Use submenus in the page for admin functions.')#">
+                    <xar:mlstring>
+                        Enable InPage Admin SubMenus
+                    </xar:mlstring>
+                </label>
+            </div>
+            <div class="xar-form-input-wrapper-after">
                 <xar:if condition="#xarModIsHooked('themes', 'roles')#">
                     <input type="checkbox" name="usermenu" id="usermenu" value="1" checked="checked" />
                     <xar:else />

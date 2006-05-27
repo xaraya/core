@@ -1,8 +1,8 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Account Validation</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Account Validated</xar:mlstring></h2>
-<xar:if condition="xarModGetVar('roles', 'explicitapproval')">
-<p><xar:mlstring>Your account has been validated, but must be reviewed by the administrator.  You should be activated shortly</xar:mlstring></p>
+<xar:if condition="$pending">
+<p><xar:mlstring>Your account has been validated, but must be reviewed by the administrator before it is activated.  Your account should be activated shortly.</xar:mlstring></p>
 <xar:else />
 <p><xar:mlstring>Your account has been validated and you can now log in.</xar:mlstring></p>
 </xar:if>

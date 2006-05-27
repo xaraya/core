@@ -11,7 +11,7 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 
-/* 
+/*
  * Handle Group list property
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -32,7 +32,7 @@ class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
             if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
         }
         return $this->validateValue($value);
-    }    
+    }
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -78,7 +78,7 @@ class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
         $data['size']     = !empty($size) ? $size : $this->size;
- 
+
         $template="";
         return xarTplProperty('roles', 'icq', 'showinput', $data);
 
