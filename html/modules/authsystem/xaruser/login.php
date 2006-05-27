@@ -119,10 +119,7 @@ function authsystem_user_login()
                 }
 
                 // check for user and grab uid if exists
-                $user = xarModAPIFunc('roles',
-                            'user',
-                            'get',
-                           array('uname' => $uname));
+                $user = xarModAPIFunc('roles','user','get', array('uname' => $uname));
 
                 // Make sure we haven't already found authldap module
                 if (empty($user) && ($extAuthentication == false))
@@ -194,7 +191,7 @@ function authsystem_user_login()
         case ROLES_STATE_NOTVALIDATED:
 
             // User has not validated.
-            xarResponseRedirect(xarModURL('roles', 'user', 'getvalidation'));
+            xarResponseRedirect(xarModURL('roles', 'user', 'getvalidation')); //send to validation and check there
 
             break;
 

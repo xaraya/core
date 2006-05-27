@@ -44,6 +44,7 @@ function roles_user_getvalidation()
     if (!xarVarFetch('phase','str:1:100',$phase,'startvalidation',XARVAR_NOT_REQUIRED)) return;
 
     xarTplSetPageTitle(xarML('Validate Your Account'));
+
     //FIXME : jojodee - this is convoluted. Probably best we use this as central point for allocating
     // to whatever pluggable registration we have. If we end up back here so be it for now.
     $regmoduleid=(int)xarModGetVar('roles','defaultregmodule');
@@ -53,27 +54,39 @@ function roles_user_getvalidation()
         //fallback to? Use our known registration module for now
         $regmodule='registration';
     }
-    $regmoduleid=(int)xarModGetVar('roles','defaultauthmodule');
+    $authmoduleid=(int)xarModGetVar('roles','defaultauthmodule');
     if (isset($authmoduleid)) {
         $authmodule=xarModGetNameFromID($authmoduleid);
     }else {
         //fallback to? Use our known auth module for now
         $authmodule='authsystem';
     }
+    
+    //Set some general vars that we need in various options
+    $pending = xarModGetVar($regmodule, 'explicitapproval');
+    $loginlink =xarModURL($authmodule,'user','main');
+
+    $tplvars=array();
+    $tplvars['loginlink']=$loginlink;
+    $tplvars['pending']=$pending;
     switch(strtolower($phase)) {
 
         case 'startvalidation':
         default:
+            $data = xarTplModule($regmodule,'user', 'startvalidation',
+                                                    array('phase'   => $phase,
+                                                          'uname'   => $uname,
+                                                          'sent'    => $sent,
+                                                          'valcode' => $valcode,
+                                                          'validatelabel' => xarML('Validate Your Account'),
+                                                          'resendlabel' => xarML('Resend Validation Information')));
 
-            $data = xarTplModule($regmodule,'user', 'startvalidation', array('phase'   => $phase,
-                                                                          'uname'   => $uname,
-                                                                          'sent'    => $sent,
-                                                                          'valcode' => $valcode,
-                                                                           'validatelabel' => xarML('Validate Your Account'),
-                                                                           'resendlabel' => xarML('Resend Validation Information')));
+
+
             break;
 
         case 'getvalidate':
+
 
             // check for user and grab uid if exists
             $status = xarModAPIFunc('roles',
@@ -83,9 +96,9 @@ function roles_user_getvalidation()
 
 
             // Trick the system when a user has double validated.
-            if (empty($status['valcode'])){
-                $data = xarTplModule('roles','user', 'getvalidation');
-                return $data;
+            if (empty($status['valcode']) && $pending <>1){
+                $data = xarTplModule('roles','user','getvalidation',$tplvars);
+                    return $data;
             }
 
             // Check Validation codes to ensure a match.
@@ -94,9 +107,8 @@ function roles_user_getvalidation()
                 xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                 return;
             }
-            $pending = xarModGetVar($regmodule, 'explicitapproval');
-            if ($pending == 1 && ($status['uid'] != xarModGetVar('roles','admin')))  {
 
+            if ($pending == 1 && ($status['uid'] != xarModGetVar('roles','admin')))  {
                 // Update the user status table to reflect a pending account.
                 if (!xarModAPIFunc('roles',
                                    'user',
@@ -125,11 +137,10 @@ function roles_user_getvalidation()
                                           'state' => ROLES_STATE_ACTIVE))) return;
                 //send welcome email (option)
                 if (xarModGetVar($regmodule, 'sendwelcomeemail')) {
-                    if (!xarModAPIFunc('roles',
-                                       'admin',
-                                       'senduseremail',
+                    if (!xarModAPIFunc('roles','admin','senduseremail',
                                     array('uid' => array($status['uid'] => '1'),
                                           'mailtype' => 'welcome'))) {
+
                         $msg = xarML('Problem sending welcome email');
                         xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                     }
@@ -137,7 +148,7 @@ function roles_user_getvalidation()
 
                 $url = xarModUrl('roles', 'user', 'main');
 
-                $time = '3';
+                $time = '4';
                 xarVarSetCached('Meta.refresh','url', $url);
                 xarVarSetCached('Meta.refresh','time', $time);
             }
@@ -163,7 +174,7 @@ function roles_user_getvalidation()
 
             xarModSetVar('roles', 'lastuser', $status['uid']);
 
-            $data = xarTplModule('roles','user', 'getvalidation',array('pending'=>$pending));
+            $data = xarTplModule('roles','user', 'getvalidation', $tplvars);
 
             break;
 
