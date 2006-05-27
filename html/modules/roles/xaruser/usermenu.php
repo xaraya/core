@@ -10,13 +10,12 @@
  * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
-/*
- * Main user menu
+/**
+ * Show the user menu
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 function roles_user_usermenu($args)
 {
-
     // Security check
     if (!xarSecurityCheck('ViewRoles')) return;
     extract($args);
@@ -60,7 +59,7 @@ function roles_user_usermenu($args)
             $email = xarUserGetVar('email');
             $role = xarUFindRole($uname);
             $home = xarModGetUserVar('roles','userhome');// now user mod var not 'duv'. $role->getHome();
-            
+
             if (xarModGetVar('roles','setuserlastlogin')) {
             //only display it for current user or admin
                 if (xarUserIsLoggedIn() && xarUserGetVar('uid')==$uid) { //they should be but ..
@@ -86,7 +85,7 @@ function roles_user_usermenu($args)
             if (isset($hooks['dynamicdata'])) {
                 unset($hooks['dynamicdata']);
             }
-            
+
             $data = xarTplModule('roles','user', 'user_menu_form',
                                   array('authid'       => $authid,
                                   'withupload'   => $withupload,
