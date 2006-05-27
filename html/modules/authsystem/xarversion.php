@@ -19,7 +19,7 @@
  * the file correctly, resulting in unexpected results.
  */
 $modversion['name'] = 'authsystem';
-$modversion['displayname'] = xarML('Authentication');
+$modversion['displayname'] = xarML('Authsystem');
 $modversion['id'] = '42';
 $modversion['version'] = '1.0.0';
 $modversion['description'] = 'Xaraya default authentication module';

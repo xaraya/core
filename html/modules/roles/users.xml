@@ -116,7 +116,7 @@
       <source>dynamic_data</source>
       <status>2</status>
       <order>11</order>
-      <validation>8:40</validation>
+      <validation>8:35</validation>
     </property>
     <property name="extra_info">
       <id>37</id>
@@ -126,7 +126,7 @@
       <source>dynamic_data</source>
       <status>2</status>
       <order>12</order>
-      <validation>8:40</validation>
+      <validation>8:35</validation>
     </property>
   </properties>
 </object>
