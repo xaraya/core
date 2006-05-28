@@ -54,6 +54,12 @@ function roles_user_getvalidation()
         //fallback to? Use our known registration module for now
         $regmodule='registration';
     }
+    if (!xarModIsAvailable($regmodule)) {
+        //we have to provide an error, we can't really go on
+        $msg = xarML('There is currently a system problem with User Validation, please contact the Administrator');
+        xarErrorSet(XAR_USER_EXCEPTION, 'CANNOT_CONTINUE', new DefaultUserException($msg));
+	}
+
     $authmoduleid=(int)xarModGetVar('roles','defaultauthmodule');
     if (isset($authmoduleid)) {
         $authmodule=xarModGetNameFromID($authmoduleid);
@@ -61,7 +67,7 @@ function roles_user_getvalidation()
         //fallback to? Use our known auth module for now
         $authmodule='authsystem';
     }
-    
+
     //Set some general vars that we need in various options
     $pending = xarModGetVar($regmodule, 'explicitapproval');
     $loginlink =xarModURL($authmodule,'user','main');
@@ -69,6 +75,7 @@ function roles_user_getvalidation()
     $tplvars=array();
     $tplvars['loginlink']=$loginlink;
     $tplvars['pending']=$pending;
+
     switch(strtolower($phase)) {
 
         case 'startvalidation':
@@ -80,13 +87,9 @@ function roles_user_getvalidation()
                                                           'valcode' => $valcode,
                                                           'validatelabel' => xarML('Validate Your Account'),
                                                           'resendlabel' => xarML('Resend Validation Information')));
-
-
-
             break;
 
         case 'getvalidate':
-
 
             // check for user and grab uid if exists
             $status = xarModAPIFunc('roles',
@@ -115,7 +118,8 @@ function roles_user_getvalidation()
                                    'updatestatus',
                                     array('uname' => $uname,
                                           'state' => ROLES_STATE_PENDING)));
-                /*Send Pending Email toggable ?
+
+                /*Send Pending Email toggable ?   User email
                 if (!xarModAPIFunc( 'authentication',
                                 'admin',
                                 'sendpendingemail',
@@ -126,7 +130,6 @@ function roles_user_getvalidation()
                     $msg = xarML('Problem sending pending email');
                     xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                 }*/
-
 
                } else {
                 // Update the user status table to reflect a validated account.
@@ -152,7 +155,9 @@ function roles_user_getvalidation()
                 xarVarSetCached('Meta.refresh','url', $url);
                 xarVarSetCached('Meta.refresh','time', $time);
             }
-
+            /* Let us reserve this and use the Registration email for admin
+               TODO: Need to review this, and  for validating changed emails */
+            /*
             if (xarModGetVar($regmodule, 'sendnotice')){
 
                 $adminname = xarModGetVar('mail', 'adminname');
@@ -170,6 +175,29 @@ function roles_user_getvalidation()
                                          'name' => $adminname,
                                          'subject' => $messagetitle,
                                          'message' => $message))) return;
+            }
+            */
+
+            if (isset($regmodule) && xarModGetVar($regmodule, 'sendnotice')){ // send the registration email
+                if (xarModGetVar('registration', 'showterms') == 1) {
+                    // User has agreed to the terms and conditions.
+                        $terms= '';
+                        $terms = xarML('This user has agreed to the site terms and conditions.');
+                    }
+                    $status = xarModAPIFunc('roles','user','get',array('uname' => $uname)); //check status as it may have changed
+
+                    $emailargs = array('adminname'    => xarModGetVar('mail', 'adminname'),
+                                       'adminemail'   => xarModGetVar('registration', 'notifyemail'),
+                                       'userrealname' => $status['name'],
+                                       'username'     => $status['uname'],
+                                       'useremail'    => $status['email'],
+                                       'terms'        => $terms,
+                                       'uid'          => $status['uid'],
+                                       'userstatus'   => $status['state']
+                                       );
+                    if (!xarModAPIFunc('registration', 'user', 'notifyadmin', $emailargs)) {
+                           return; // TODO ...something here if the email is not sent..
+                    }
             }
 
             xarModSetVar('roles', 'lastuser', $status['uid']);
@@ -191,11 +219,12 @@ function roles_user_getvalidation()
                                       'mailtype' => 'confirmation',
                                       'ip' => xarML('Cannot resend IP'),
                                       'pass' => xarML('Can Not Resend Password')))) {
+
                     $msg = xarML('Problem resending confirmation email');
                     xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                 }
 
-            $data = xarTplModule('roles','user', 'getvalidation',$tplvars);
+            $data = xarTplModule('roles','user', 'getvalidation', $tplvars);
 
             // Redirect
             xarResponseRedirect(xarModURL('roles', 'user', 'getvalidation',array('sent' => 1)));
