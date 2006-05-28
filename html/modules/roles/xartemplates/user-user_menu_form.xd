@@ -63,6 +63,15 @@
                 </label>
                 <input type="text" name="email" id="email" value="" size="40" maxlength="60" />
             </div>
+            <xar:if condition="xarModGetVar('roles', 'requirevalidation')">
+                <div class="xar-form-input-wrapper">
+                    <label for="email">
+                        <xar:mlstring>
+                            Changing your email address will require you to revalidate your account. 
+                        </xar:mlstring>
+                    </label>
+                </div>
+            </xar:if>
             <xar:if condition="xarModGetVar('roles','setuserhome') and xarModGetVar('roles','allowuserhomeedit')">
                 <div class="xar-form-input-wrapper">
                     <label for="home" class="xar-form-label">
@@ -75,16 +84,7 @@
             <xar:elseif condition="xarModGetVar('roles','setuserhome')" />
                  <input type="hidden" name="home" id="home" value="#$home#" />
             </xar:if>
-            <xar:if condition="xarModGetVar('roles', 'requirevalidation')">
-                <div class="xar-form-input-wrapper">
-                    <label for="email">
-                        <xar:mlstring>
-                            Changing your email address will require you to revalidate your account. 
-                        </xar:mlstring>
-                    </label>
-                </div>
-            </xar:if>
-
+   
             <div class="xar-form-input-wrapper">
                 <label for="pass1" class="xar-form-label">
                     <xar:mlstring>

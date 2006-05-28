@@ -119,6 +119,7 @@ function roles_admin_modifyconfig()
             $data['defaultauthmod'] = xarModGetVar('roles', 'defaultauthmodule');
             $data['defaultregmod'] = xarModGetVar('roles', 'defaultregmodule');
             $data['allowuserhomeedit'] = xarModGetVar('roles', 'allowuserhomeedit');
+            $data['requirevalidation'] = xarModGetVar('roles', 'requirevalidation');
             //check for roles hook in case it's set independently elsewhere
             if (xarModIsHooked('roles', 'roles')) {
                 xarModSetVar('roles','usereditaccount',true);
@@ -167,14 +168,15 @@ function roles_admin_modifyconfig()
                     if (!xarVarFetch('userhomeedit', 'checkbox', $userhomeedit, false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('allowexternalurl', 'checkbox', $allowexternalurl, false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('loginredirect', 'checkbox', $loginredirect, true, XARVAR_NOT_REQUIRED)) return;
-
+                    if (!xarVarFetch('requirevalidation', 'checkbox', $requirevalidation, true, XARVAR_NOT_REQUIRED)) return;
+                   
                     xarModSetVar('roles', 'searchbyemail', $searchbyemail); //search by email
                     xarModSetVar('roles', 'usersendemails', $usersendemails);
                     xarModSetVar('roles', 'displayrolelist', $displayrolelist); //display member list in Roles menu links
                     xarModSetVar('roles', 'usereditaccount', $usereditaccount); //allow users to edit account
                     xarModSetVar('roles', 'allowexternalurl', $allowexternalurl); //allow users to set external urls for home page
                     xarModSetVar('roles', 'loginredirect', $loginredirect); //search by email
-
+                    xarModSetVar('roles', 'requirevalidation', $requirevalidation); //require revalidation if email changed
                     if (xarModGetVar('roles', 'setuserhome')==true) { //we only want to allow option of users editing home page if we are using homepages
                        $allowuserhomeedit = $userhomeedit ==true ? true:false;
                     }else {

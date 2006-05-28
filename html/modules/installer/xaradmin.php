@@ -1708,7 +1708,7 @@ function installer_admin_upgrade2()
 /* Version 1.1.x Release Upgrades */
 
     xarModSetVar('themes', 'adminpagemenu', 1);
-
+    xarModSetVar('roles', 'requirevalidation', true); //reuse this older var for user email changes, this validation is separate to registration validation
 /* End of Version 1.1.x Release Upgrades */
 
     $thisdata['content']=$content;
