@@ -590,13 +590,13 @@
                     </label>
                 </div>
                 </xar:if>
+            </fieldset>
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="hidden" name="phase" id="phase" value="update" />
                     <input type="hidden" name="tab" id="tab" value="#$tab#" />
                     <input type="submit" value="#xarML('Update Roles Configuration')#" />
                 </div>
-            </fieldset>
         </form>
     </xar:if>
 </div>
