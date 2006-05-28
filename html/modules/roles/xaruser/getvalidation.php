@@ -99,7 +99,7 @@ function roles_user_getvalidation()
 
 
             // Trick the system when a user has double validated.
-            if (empty($status['valcode']) && $pending <>1){
+            if (empty($status['valcode'])){
                 $data = xarTplModule('roles','user','getvalidation',$tplvars);
                     return $data;
             }
@@ -119,7 +119,7 @@ function roles_user_getvalidation()
                                     array('uname' => $uname,
                                           'state' => ROLES_STATE_PENDING)));
 
-                /*Send Pending Email toggable ?   User email
+                /*Send Pending Email toggable ?   User email 
                 if (!xarModAPIFunc( 'authentication',
                                 'admin',
                                 'sendpendingemail',
@@ -131,7 +131,7 @@ function roles_user_getvalidation()
                     xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                 }*/
 
-               } else {
+            } else {
                 // Update the user status table to reflect a validated account.
                 if (!xarModAPIFunc('roles',
                                    'user',
