@@ -43,7 +43,7 @@ function roles_admin_createpassword()
      }
      if (!xarModGetVar('roles', 'askpasswordemail')) {
         xarResponseRedirect(xarModURL('roles', 'admin', 'showusers',
-                      array('uid' => $data['groupuid'], 'state' => $data['state'])));
+                      array('uid' => $groupuid, 'state' => $state)));
         return true;
     }
     else {
