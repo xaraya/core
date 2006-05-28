@@ -43,7 +43,7 @@
                 </xar:mlstring>
                 :
             </legend>
-            <p>
+            <p class="xar-form-input-wrapper-before xar-padding-thick">
                 <xar:mlstring>Ask about sending a notification when an administrator changes the state of a user to:</xar:mlstring>
             </p>
             <div class="xar-form-input-wrapper-after">
@@ -90,7 +90,7 @@
                     </label>
                 </div>
         
-                <p>
+                <p class="xar-form-input-wrapper-before xar-padding-thick">
                     <xar:mlstring>Ask about sending a notification when an administrator:</xar:mlstring>
                 </p>
         
