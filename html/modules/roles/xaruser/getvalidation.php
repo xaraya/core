@@ -155,30 +155,8 @@ function roles_user_getvalidation()
                 xarVarSetCached('Meta.refresh','url', $url);
                 xarVarSetCached('Meta.refresh','time', $time);
             }
-            /* Let us reserve this and use the Registration email for admin
-               TODO: Need to review this, and  for validating changed emails */
-            /*
-            if (xarModGetVar($regmodule, 'sendnotice')){
-
-                $adminname = xarModGetVar('mail', 'adminname');
-                $adminemail = xarModGetVar('mail', 'adminmail');
-                $message = "".xarML('A new user has registered or changed their email address.  Here are the details')." \n\n";
-                $message .= "".xarML('Username')." = $status[name]\n";
-                $message .= "".xarML('Email Address')." = $status[email]";
-
-                $messagetitle = "".xarML('A user has registered or updated information')."";
-
-                if (!xarModAPIFunc('mail',
-                                   'admin',
-                                   'sendmail',
-                                   array('info' => $adminemail,
-                                         'name' => $adminname,
-                                         'subject' => $messagetitle,
-                                         'message' => $message))) return;
-            }
-            */
-
-            if (isset($regmodule) && xarModGetVar($regmodule, 'sendnotice')){ // send the registration email
+            //TODO: this gets sent for new users and when email address changes and requires validation atm
+            if (isset($regmodule) && xarModGetVar($regmodule, 'sendnotice')){ // send the registration email for new
                 if (xarModGetVar('registration', 'showterms') == 1) {
                     // User has agreed to the terms and conditions.
                         $terms= '';
@@ -198,6 +176,30 @@ function roles_user_getvalidation()
                     if (!xarModAPIFunc('registration', 'user', 'notifyadmin', $emailargs)) {
                            return; // TODO ...something here if the email is not sent..
                     }
+            } elseif  (xarModGetVar('roles', 'requirevalidation')) {
+             //send this email if we know for sure email validation only is required, not validation for new users
+
+            /* Now Registration email above is sent to admin when new users register and require validation
+               but also if new user registration and email change validation is required
+               No way to tell a new user requiring validation from someone changing their email and needing validation
+               TODO: Need to review this as nonvalidated currently also has dueal meaning for validating changed emails
+          */
+
+                $adminname = xarModGetVar('mail', 'adminname');
+                $adminemail = xarModGetVar('mail', 'adminmail');
+                $message = "".xarML('A new user has registered or changed their email address.  Here are the details')." \n\n";
+                $message .= "".xarML('Username')." = $status[name]\n";
+                $message .= "".xarML('Email Address')." = $status[email]";
+
+                $messagetitle = "".xarML('A user has registered or updated information')."";
+
+                if (!xarModAPIFunc('mail',
+                                   'admin',
+                                   'sendmail',
+                                   array('info' => $adminemail,
+                                         'name' => $adminname,
+                                         'subject' => $messagetitle,
+                                         'message' => $message))) return;
             }
 
             xarModSetVar('roles', 'lastuser', $status['uid']);
