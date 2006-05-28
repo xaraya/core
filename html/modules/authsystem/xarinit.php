@@ -30,6 +30,7 @@ function authsystem_init()
     xarModSetVar('authsystem', 'lockouttime', 15);
     xarModSetVar('authsystem', 'lockouttries', 3);
     xarModSetVar('authsystem', 'uselockout', false);
+    xarModSetVar('authsystem', 'SupportShortURLs', false);
     /* Define Masks */
     xarRegisterMask('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW');
     xarRegisterMask('ViewAuthsystemBlocks','All','authsystem','Block','All','ACCESS_OVERVIEW');

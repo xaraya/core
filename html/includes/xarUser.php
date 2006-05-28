@@ -183,6 +183,7 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
 */
 
     // FIXME: <marco> here we could also set a last_logon timestamp
+    //<jojodee> currently set in individual authsystem when success on login returned to it
 
     // User logged in successfully, trigger the proper event with the new userid
     xarEvt_trigger('UserLogin',$userId);
