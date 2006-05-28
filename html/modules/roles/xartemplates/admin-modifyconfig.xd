@@ -507,7 +507,18 @@
                          This toggles the Roles hook to the Roles module.
                     </xar:mlstring>
                 </p>
-
+                <div class="xar-form-input-wrapper-after xar-padding-thicktop">
+                    <xar:if condition="xarModGetVar('roles', 'requirevalidation')">
+                        <input type="checkbox" name="requirevalidation" id="requirevalidation" value="1" checked="checked" />
+                        <xar:else />
+                        <input type="checkbox" name="requirevalidation" id="requirevalidation" value="1" />
+                    </xar:if>
+                    <label for="requirevalidation" title="#xarML('Require users to revalidate when they change email address?')#">
+                        <strong><xar:mlstring>
+                            Members must validate if they change their email account?
+                        </xar:mlstring></strong>
+                    </label>
+                </div>
 
 
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">

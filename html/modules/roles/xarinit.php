@@ -220,6 +220,7 @@ function roles_activate()
     xarModSetVar('roles', 'allowuserhomeedit', false);
     xarModSetVar('roles', 'loginredirect', true);
     xarModSetVar('roles', 'allowexternalurl', false);
+    xarModSetVar('roles', 'requirevalidation', true);    
     $lockdata = array('roles' => array( array('uid' => 4,
                                               'name' => 'Administrators',
                                               'notify' => TRUE)),
@@ -298,7 +299,6 @@ function roles_upgrade($oldVersion)
 				$result = xarModAPIfunc('blocks', 'admin', 'delete_type', array('module' => 'roles', 'type' => 'login'));
 				// delete the old roles modvars
 				xarModDelVar('roles', 'allowregistration');
-				xarModDelVar('roles', 'requirevalidation');
 				xarModDelVar('roles', 'rolesperpage');
 				xarModDelVar('roles', 'uniqueemail');
 				xarModDelVar('roles', 'askwelcomeemail');
