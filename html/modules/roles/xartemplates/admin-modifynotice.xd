@@ -104,11 +104,15 @@
                         <xar:mlstring>Changes A User's Password</xar:mlstring>
                     </label>
                 </div>
+            <!-- jojodee - we already have user hooks in the modifyconfig user hooks sections, 
+                 so comment out until we know if there is another good reason to have them here as well -->
+            <!--
             <xar:if condition="!empty($hooks)">
                 <xar:foreach in="$hooks" key="$module" value="$output">
                     #$output#
                 </xar:foreach>
             </xar:if>
+            -->
         </fieldset>
         <fieldset>
             <div class="xar-form-input-wrapper-after">
