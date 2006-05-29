@@ -10,12 +10,10 @@
  * @subpackage Mail System
  * @link http://xaraya.com/index.php/release/771.html
  */
-
 /**
  * utility function utility function to replace %%calls%%
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
- * @returns array
  * @return array containing the search and replace items
  */
 function mail_adminapi_replace($args)
@@ -80,5 +78,4 @@ function mail_adminapi_replace($args)
                  'htmlmessage'  => $htmlmessage);
 
 }
-
 ?>
