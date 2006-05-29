@@ -15,8 +15,8 @@
 /**
  * Update site configuration
  *
- * @param string tab
- * @return void?
+ * @param string tab Part of the config to update
+ * @return bool true on success of update
  * @todo move in timezone var when we support them
  * @todo decide whether a site admin can set allowed locales for users
  * @todo update auth system part when we figure out how to do it

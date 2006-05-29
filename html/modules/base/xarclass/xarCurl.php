@@ -10,9 +10,17 @@
  * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
-
-/*
+/**
  * Simple curl class.
+ *
+ * Example use:
+ * $curl = new xarCurl(); // or $curl = xarModAPIfunc('base', 'user', 'newcurl');
+ * $curl->seturl('http://www.xaraya.com/');
+ * $curl->get('module' => 'articles'); // could use post()
+ * $curl->get('aid' => '123');
+ * $page_text = $curl->exec();
+ * if ($curl->errno <> 0) {...raise error...}
+ *
  *
  * @author  Jason Judge <judgej@xaraya.com>
  * @access  public
@@ -21,15 +29,6 @@
  * @throws  no exceptions
  * @todo    nice handling of protocols other than http.
  */
-
-// Example:
-// $curl = new xarCurl(); // or $curl = xarModAPIfunc('base', 'user', 'newcurl');
-// $curl->seturl('http://www.xaraya.com/');
-// $curl->get('module' => 'articles'); // could use post()
-// $curl->get('aid' => '123');
-// $page_text = $curl->exec();
-// if ($curl->errno <> 0) {...raise error...}
-
 class xarCurl
 {
     // The curl object.
@@ -81,7 +80,7 @@ class xarCurl
         CURLINFO_EFFECTIVE_URL => 'url',
         CURLINFO_HTTP_CODE => 'http_code',
         CURLINFO_HEADER_SIZE => 'header_size',
-        CURLINFO_REQUEST_SIZE => 'request_size', 
+        CURLINFO_REQUEST_SIZE => 'request_size',
         CURLINFO_FILETIME => 'filetime',
         CURLINFO_SSL_VERIFYRESULT => 'ssl_verify_result',
         CURLINFO_TOTAL_TIME => 'total_time',
@@ -120,7 +119,7 @@ class xarCurl
         402 => 'PaymentRequired',
         403 => 'Forbidden',
         404 => 'Not found',
-        
+
         // Error 5xx
         500 => 'Internal Error',
         501 => 'Not implemented',
@@ -128,9 +127,12 @@ class xarCurl
         503 => 'Gateway timeout'
     );
 
-    // Constructor: create the PHP curl object.
-    // A url can be passed in at this point, or added later.
-    // A session will be opened immediately the object is created.
+    /**
+     * Constructor: create the PHP curl object.
+     * A url can be passed in at this point, or added later.
+     * A session will be opened immediately the object is created.
+     * @return array
+     */
     function xarCurl($args)
     {
         extract($args);
@@ -143,7 +145,7 @@ class xarCurl
 
         // Initialize a session.
         $this->init();
-        
+
         // If the URL is not set here, then it can be set as a property later.
         // It is just included here for consistency with curl_init(string url).
         if (isset($url)) {
@@ -166,14 +168,16 @@ class xarCurl
         return true;
     }
 
-    // Initialize a new session.
-    // This only needs to be called to reopen a new session after the initial
-    // session is closed. Alternatively, discard the object and create a new one.
+    /**
+     * Initialize a new session.
+     * This only needs to be called to reopen a new session after the initial
+     * session is closed. Alternatively, discard the object and create a new one.
+     */
     function init()
     {
         // Close any old session.
         $this->close();
-        
+
         $this->curl = curl_init();
 
         // Set a few default options.
@@ -237,17 +241,21 @@ class xarCurl
         return true;
     }
 
-    // Set the URL.
+    /**
+     * Set the URL.
+     */
     function seturl($url)
     {
         // TODO: Do a quick check: we don't want XML-encoded
         // URLs here, just a plain URL.
         $this->url = $url;
     }
-    
-    // Add POST parameters (name/value pair or an array)
-    // Can be called as many times as necessary to load up 
-    // all the POST parameters.
+
+    /**
+     * Add POST parameters (name/value pair or an array)
+     * Can be called as many times as necessary to load up
+     * all the POST parameters.
+     */
     function post($name = '', $value = '')
     {
         return $this->_param($name, $value, 'POST');
@@ -271,9 +279,11 @@ class xarCurl
         $this->setopt(CURLOPT_INFILESIZE, $size);
     }
 
-    // Execute the fetch.
-    // TODO: handle a 'moved' response by going to the new location (calling exec a
-    // second time will rebuild the GET and POST parameters on the new URL).
+    /**
+     * Execute the fetch.
+     * @TODO handle a 'moved' response by going to the new location (calling exec a
+     * second time will rebuild the GET and POST parameters on the new URL).
+     */
     function exec()
     {
         // Minimum requirements is for a curl object and a URL
@@ -388,9 +398,11 @@ class xarCurl
         return $result;
     }
 
-    // Get info fields from the curl object.
-    // These info fields will remain available even after the curl session
-    // has been closed.
+    /**
+     * Get info fields from the curl object.
+     * These info fields will remain available even after the curl session
+     * has been closed.
+     */
     function getinfo($option = NULL)
     {
         // Info values and elements.
@@ -430,7 +442,9 @@ class xarCurl
         return $result;
     }
 
-    // Close the curl handle (i.e. session), if currently open.
+    /**
+     * Close the curl handle (i.e. session), if currently open.
+     */
     function close()
     {
         if (!isset($this->curl)) {
@@ -456,7 +470,7 @@ class xarCurl
     * This method extracted from other classes in Xaraya (see nusoap).
     *
     * @param    string $buffer
-    * @returns  string
+    * @return   string
     * @access   public
     */
     function _decode_chunked($buffer)
@@ -464,7 +478,7 @@ class xarCurl
         $length = 0;
         $new = '';
         $crnl = "\r\n";
-        
+
         // Read chunk-size, chunk-extension (if any) and CRLF.
         // Get the position of the linebreak.
         $chunkend = strpos($buffer, $crnl) + 2;
@@ -473,7 +487,7 @@ class xarCurl
         $chunkstart = $chunkend;
         while ($chunk_size > 0) {
             $chunkend = strpos($buffer, $crnl, $chunkstart + $chunk_size);
-            
+
             // Just in case we got a broken connection
             if ($chunkend == FALSE) {
                 $chunk = substr($buffer, $chunkstart);
@@ -482,7 +496,7 @@ class xarCurl
                 $length += strlen($chunk);
                 break;
             }
-            
+
             // read chunk-data and CRLF
             $chunk = substr($buffer, $chunkstart, $chunkend - $chunkstart);
             // append chunk-data to entity-body
@@ -490,7 +504,7 @@ class xarCurl
             $length += strlen($chunk);
             // read chunk-size and CRLF
             $chunkstart = $chunkend + 2;
-            
+
             $chunkend = strpos($buffer, $crnl, $chunkstart) + 2;
             if ($chunkend == FALSE) {
                 break; //Just in case we got a broken connection
