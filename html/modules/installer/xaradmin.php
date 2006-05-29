@@ -1732,15 +1732,15 @@ function installer_admin_upgrade3()
     $configvars[] = array( 
                            array('name'    =>  'System.Core.VersionNum',
                                  'set'     =>  XARCORE_VERSION_NUM));
-
+    $content .=  "<h3><strong>Updating Required Configuration Variables</strong></h3>";
     foreach($configvars as $configvar){
         foreach($configvar as $var){
             $currentvar = xarConfigGetVar("$var[name]");
             if ($currentvar == $var['set']){
-                $content .= "$var[name] is set, proceeding to next check<br />";
+                $content .= "<p>$var[name] is set, proceeding to next check</p>";
             } else {
                 xarConfigSetVar($var['name'], $var['set']);
-                $content .= "$var[name] incorrect, attempting to set.... done!<br />";
+                $content .= "<p>$var[name] incorrect, attempting to set.... done!</p>";
             }
         }
     }
