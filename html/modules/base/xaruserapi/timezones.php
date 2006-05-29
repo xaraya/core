@@ -10,8 +10,9 @@
  * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
-/* Simplified timezone list (based on modules/timezone/tzdata.php)
- *(cfr. modules/timezone/xaradmin/regenerate.php)
+/**
+ * Simplified timezone list (based on modules/timezone/tzdata.php)
+ * (cfr. modules/timezone/xaradmin/regenerate.php)
  *
  * @param $args['timezone'] string timezone we're looking for (default all)
  * @param $args['time'] integer timestamp for the period we're interested in (unsupported)

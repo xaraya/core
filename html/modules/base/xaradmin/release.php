@@ -16,7 +16,7 @@
  * @author John Cox
  * @access public
  * @param none
- * @returns array
+ * @return array Information of recent releases from http://www.xaraya.com/
  * @todo change feed url once release module is moved
  */
 function base_admin_release()
@@ -43,7 +43,7 @@ function base_admin_release()
     // Require the feedParser class
     require_once('modules/base/xarclass/feedParser.php');
     // Check and see if a feed has been supplied to us.
-    // Need to change the url once release module is moved to 
+    // Need to change the url once release module is moved to
     $feedfile = "http://www.xaraya.com/index.php?module=release&func=rssviewnotes&theme=rss&releaseno=$releasenumber";
 
     // Get the feed file (from cache or from the remote site)
@@ -91,7 +91,7 @@ function base_admin_release()
         return;
     }
     $data['releasenumber']=$releasenumber;
-    $data['feedcontent'] = $feedcontent; 
+    $data['feedcontent'] = $feedcontent;
     return $data;
 }
 ?>

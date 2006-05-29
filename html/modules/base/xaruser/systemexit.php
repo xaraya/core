@@ -10,7 +10,8 @@
  * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
-/* Renders a core exception and then exits
+/**
+ * Renders a core exception and then exits
  *
  * @subpackage base
  * @author Marc Lutolf

@@ -16,7 +16,7 @@
  * Main admin gui function, entry point
  * @author John Robeson
  * @author Greg Allan
- * @return bool
+ * @return bool true on success of return to sysinfo
  */
 function base_admin_main()
 {

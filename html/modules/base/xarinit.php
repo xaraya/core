@@ -169,11 +169,11 @@ function base_init()
     xarConfig_init($systemArgs, $whatToLoad);
     // Start Variable Utils
     xarVar_init($systemArgs, $whatToLoad);
-    
+
     $allowableHTML = array (
-        '!--'=>2, 'a'=>2, 'b'=>2, 'blockquote'=>2,'br'=>2, 'center'=>2, 
+        '!--'=>2, 'a'=>2, 'b'=>2, 'blockquote'=>2,'br'=>2, 'center'=>2,
         'div'=>2, 'em'=>2, 'font'=>0, 'hr'=>2, 'i'=>2, 'img'=>0, 'li'=>2,
-        'marquee'=>0, 'ol'=>2, 'p'=>2, 'pre'=> 2, 'span'=>0,'strong'=>2, 
+        'marquee'=>0, 'ol'=>2, 'p'=>2, 'pre'=> 2, 'span'=>0,'strong'=>2,
         'tt'=>2, 'ul'=>2, 'table'=>2, 'td'=>2, 'th'=>2, 'tr'=> 2);
 
     xarConfigSetVar('Site.Core.AllowableHTML',$allowableHTML);
@@ -224,7 +224,7 @@ function base_init()
     xarConfigSetVar('Site.MLS.TranslationsBackend', 'xml2php');
     // FIXME: <marco> Temporary config vars, ask them at install time
     xarConfigSetVar('Site.MLS.MLSMode', 'SINGLE');
-    
+
     // The installer should now set the default locale based on the
     // chose language, let's make sure that is true
     if(!xarConfigGetVar('Site.MLS.DefaultLocale')) {
@@ -277,7 +277,7 @@ function base_init()
                            array('directory' => 'modules', 'initfunc'  => 'init'))) {
         return;
     }
-    
+
     /****************************************************************
     * Install roles module and set up default roles
     ****************************************************************/
@@ -307,8 +307,8 @@ function base_init()
 
     $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
-    
-    // Bug #1813 - Have to use GenId to get or create the sequence for xar_id or 
+
+    // Bug #1813 - Have to use GenId to get or create the sequence for xar_id or
     // the sequence for xar_id will not be available in PostgreSQL
     $seqId = $dbconn->GenId($systemModuleStatesTable);
 
@@ -328,7 +328,7 @@ function base_init()
     $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
 
-    // Bug #1813 - Have to use GenId to create the sequence for xar_id or 
+    // Bug #1813 - Have to use GenId to create the sequence for xar_id or
     // the sequence for xar_id will not be available in PostgreSQL
     $seqId = $dbconn->GenId($systemModuleStatesTable);
 
@@ -348,7 +348,7 @@ function base_init()
     $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
 
-    // Bug #1813 - Have to use GenId to create the sequence for xar_id or 
+    // Bug #1813 - Have to use GenId to create the sequence for xar_id or
     // the sequence for xar_id will not be available in PostgreSQL
     $seqId = $dbconn->GenId($systemModuleStatesTable);
 
@@ -367,7 +367,7 @@ function base_init()
     $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
 
-    // Bug #1813 - Have to use GenId to get or create the sequence for xar_id or 
+    // Bug #1813 - Have to use GenId to get or create the sequence for xar_id or
     // the sequence for xar_id will not be available in PostgreSQL
     $seqId = $dbconn->GenId($systemModuleStatesTable);
 
@@ -387,7 +387,7 @@ function base_init()
     $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
 
-    // Bug #1813 - Have to use GenId to get or create the sequence for xar_id or 
+    // Bug #1813 - Have to use GenId to get or create the sequence for xar_id or
     // the sequence for xar_id will not be available in PostgreSQL
     $seqId = $dbconn->GenId($systemModuleStatesTable);
 
@@ -429,7 +429,7 @@ function base_init()
 
     // TODO: is this is correct place for a default value for a modvar?
     xarModSetVar('base', 'AlternatePageTemplate', 'homepage');
-    
+
     // Initialisation successful
     return true;
 }
@@ -454,7 +454,7 @@ function base_upgrade($oldVersion)
  * Delete the base module
  *
  * @param none
- * @returns bool
+ * @return bool false, as this module cannot be removed
  */
 function base_delete()
 {

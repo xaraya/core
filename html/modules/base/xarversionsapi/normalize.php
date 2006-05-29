@@ -10,12 +10,11 @@
  * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
-/*
+/**
  * Base User version management functions
  * @author Jason Judge
  * @todo none
  */
-
 function base_versionsapi__normalize($ver, $sep, $rule)
 {
     $sep2 = preg_quote($sep);
@@ -52,8 +51,8 @@ function base_versionsapi__normalize($ver, $sep, $rule)
  * or shortcut $which = xarModAPIFunc('base', 'versions', 'compare', array($version1, $version2));
  *
  * @author Jason Judge
- * @param $args['ver'] 
- * @param $args['vers'] 
+ * @param $args['ver']
+ * @param $args['vers']
  * @param $args['rule'] allow only 'numeric' levels or 'alpha' strings (default: numeric)
  * @param $args['sep'] level separator character (default: '.')
  * @returns array or string of normalized version numbers

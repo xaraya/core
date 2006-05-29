@@ -10,12 +10,11 @@
  * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
-/*
+/**
  * Return a new xarCurl object.
  * $args are passed directly to the class.
  */
-
-function base_userapi_newcurl($args) 
+function base_userapi_newcurl($args)
 {
     include_once 'modules/base/xarclass/xarCurl.php';
 

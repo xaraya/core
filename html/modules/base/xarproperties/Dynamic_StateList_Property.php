@@ -10,13 +10,15 @@
  * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
-/*
+/**
+ * Show a dropdown of US states
+ *
  * @author John Cox
-*/
+ */
 include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 
 /**
- * handle the userlist property
+ * handle the StateList property
  *
  * @package dynamicdata
  *
@@ -65,7 +67,7 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
         $data['value'] = $value;
         $data['name']  = $name;
         $data['id']    = $id;
-       
+
        /*
         $out = '<select' .
        ' name="' . $name . '"' .
@@ -196,8 +198,7 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
     /**
      * Get the base information for this property.
      *
-     * @returns array
-     * @return base information for this property
+     * @return array Base information for this property
      **/
      function getBasePropertyInfo()
      {

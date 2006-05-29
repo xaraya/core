@@ -16,22 +16,21 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
-$modversion['name'] = 'Base';
-$modversion['id'] = '68';
-$modversion['displayname'] = xarML('Base');
-$modversion['version'] = '0.1.0';
-$modversion['description'] = 'Home Page';
+$modversion['name']         = 'Base';
+$modversion['id']           = '68';
+$modversion['displayname']  = xarML('Base');
+$modversion['version']      = '0.1.0';
+$modversion['description']  = 'Home Page';
 $modversion['displaydescription'] = xarML('Home Page');
-$modversion['credits'] = 'xardocs/credits.txt';
-$modversion['help'] = 'xardocs/help.txt';
-$modversion['changelog'] = 'xardocs/changelog.txt';
-$modversion['license'] = 'xardocs/license.txt';
-$modversion['official'] = 1;
-$modversion['author'] = 'John Robeson, Greg Allan';
-$modversion['contact'] = 'johnny@xaraya.com';
-$modversion['admin'] = 1;
-$modversion['user'] = 1;
-$modversion['securityschema'] = array('base::' => '::');;
-$modversion['class'] = 'Core Admin';
-$modversion['category'] = 'Global';
+$modversion['credits']      = 'xardocs/credits.txt';
+$modversion['help']         = 'xardocs/help.txt';
+$modversion['changelog']    = 'xardocs/changelog.txt';
+$modversion['license']      = 'xardocs/license.txt';
+$modversion['official']     = 1;
+$modversion['author']       = 'John Robeson, Greg Allan';
+$modversion['contact']      = 'johnny@xaraya.com';
+$modversion['admin']        = 1;
+$modversion['user']         = 1;
+$modversion['class']        = 'Core Admin';
+$modversion['category']     = 'Global';
 ?>

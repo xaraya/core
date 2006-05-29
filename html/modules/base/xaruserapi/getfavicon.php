@@ -10,8 +10,10 @@
  * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
-/* Gets a file from the Internet
+/**
+ * Gets a file from the Internet
  * Returns the favicon (if any) from a given url
+ * When no icon is found, an empty one is returned, defined in this function
  *
  * @author Panayotis Vryonis (lilina package)
  * @access public
@@ -52,12 +54,12 @@ function base_userapi_getfavicon($args)
     'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' .
     'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP//AAD//wAA//8AAP//AAD//wAA//8AAP//' .
     'AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAA=');
-    
+
     $ico_url = __getFaviconURL($url) ;
     if(!$ico_url) {
         return false ;
     }
-    
+
     $cached_ico = 'var/cache/rss/' . md5($ico_url) . ".ico" ;
     $cachetime = 30 * 24 * 60 * 60; // 30 days
 
@@ -78,17 +80,17 @@ function __getFaviconURL($url)
     }
 
     $url_parts = @parse_url($url);
-    
+
     if (empty($url_parts)) {
         return false;
     }
-    
+
     $full_url = "http://$url_parts[host]";
-    
+
     if(isset($url_parts['port'])){
         $full_url .= ":$url_parts[port]";
     }
-    
+
     $favicon_url = $full_url . "/favicon.ico" ;
     return $favicon_url;
 }

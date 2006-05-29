@@ -1,6 +1,6 @@
 <?php
 /**
- * Display a php error in raw html 
+ * Display a php error in raw html
  *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
@@ -10,7 +10,7 @@
  * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
-/*
+/**
  * This function displays a PHP error in raw html and then exits.
  * If we are here it's because the error makes it impossible to give a standard rendering
  *

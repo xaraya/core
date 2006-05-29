@@ -15,8 +15,7 @@
  *
  * @author mikespub
  * @param $args the function and arguments passed to xarModURL
- * @returns string
- * @return path to be added to index.php for a short URL, or empty if failed
+ * @return string Path to be added to index.php for a short URL, or empty if failed
  */
 function base_userapi_encode_shorturl($args)
 {

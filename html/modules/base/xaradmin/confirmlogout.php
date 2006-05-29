@@ -17,13 +17,13 @@
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  * @param   no parameters
- * @return  data for template
+ * @return  array data for template
  * @throws  no exceptions
  * @todo    nothing
 */
 function base_admin_confirmlogout()
 {
     // Template does it all
-    return array();    
+    return array();
 }
 ?>
