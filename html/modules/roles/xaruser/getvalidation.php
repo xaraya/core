@@ -31,9 +31,7 @@ function roles_user_getvalidation()
     //If a user is already logged in, no reason to see this.
     //We are going to send them to their account.
     if (xarUserIsLoggedIn()) {
-       xarResponseRedirect(xarModURL('roles',
-                                     'user',
-                                     'account',
+       xarResponseRedirect(xarModURL('roles', 'user', 'account',
                                       array('uid' => xarUserGetVar('uid'))));
        return true;
     }
@@ -51,7 +49,7 @@ function roles_user_getvalidation()
     if (isset($regmoduleid)) {
         $regmodule=xarModGetNameFromID($regmoduleid);
     }else{
-        //fallback to? Use our known registration module for now
+        //fallback to?  This is not a core module. Leave for now once until we are sure the default is set elsewhere.
         $regmodule='registration';
     }
     if (!xarModIsAvailable($regmodule)) {
@@ -161,7 +159,7 @@ function roles_user_getvalidation()
                 if (xarModGetVar('registration', 'showterms') == 1) {
                     // User has agreed to the terms and conditions.
                         $terms = xarML('This user has agreed to the site terms and conditions.');
-                    }
+                }
                     $status = xarModAPIFunc('roles','user','get',array('uname' => $uname)); //check status as it may have changed
 
                     $emailargs = array('adminname'    => xarModGetVar('mail', 'adminname'),
@@ -210,13 +208,9 @@ function roles_user_getvalidation()
 
         case 'resend':
             // check for user and grab uid if exists
-            $status = xarModAPIFunc('roles',
-                                    'user',
-                                    'get',
-                                    array('uname' => $uname));
-            if (!xarModAPIFunc( 'roles',
-                                'admin',
-                                'senduseremail',
+            $status = xarModAPIFunc('roles', 'user', 'get', array('uname' => $uname));
+
+            if (!xarModAPIFunc( 'roles','admin','senduseremail',
                                 array('uid' => array($status['uid'] => '1'),
                                       'mailtype' => 'confirmation',
                                       'ip' => xarML('Cannot resend IP'),
