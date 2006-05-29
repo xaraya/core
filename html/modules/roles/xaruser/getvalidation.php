@@ -58,7 +58,7 @@ function roles_user_getvalidation()
         //we have to provide an error, we can't really go on
         $msg = xarML('There is currently a system problem with User Validation, please contact the Administrator');
         xarErrorSet(XAR_USER_EXCEPTION, 'CANNOT_CONTINUE', new DefaultUserException($msg));
-	}
+    }
 
     $authmoduleid=(int)xarModGetVar('roles','defaultauthmodule');
     if (isset($authmoduleid)) {
@@ -119,7 +119,7 @@ function roles_user_getvalidation()
                                     array('uname' => $uname,
                                           'state' => ROLES_STATE_PENDING)));
 
-                /*Send Pending Email toggable ?   User email 
+                /*Send Pending Email toggable ?   User email
                 if (!xarModAPIFunc( 'authentication',
                                 'admin',
                                 'sendpendingemail',
@@ -157,9 +157,9 @@ function roles_user_getvalidation()
             }
             //TODO: this gets sent for new users and when email address changes and requires validation atm
             if (isset($regmodule) && xarModGetVar($regmodule, 'sendnotice')){ // send the registration email for new
+                $terms= '';
                 if (xarModGetVar('registration', 'showterms') == 1) {
                     // User has agreed to the terms and conditions.
-                        $terms= '';
                         $terms = xarML('This user has agreed to the site terms and conditions.');
                     }
                     $status = xarModAPIFunc('roles','user','get',array('uname' => $uname)); //check status as it may have changed
