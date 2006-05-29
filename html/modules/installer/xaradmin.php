@@ -1706,8 +1706,8 @@ function installer_admin_upgrade2()
 /* End of Version 1.1.0 Release Upgrades */
 
 /* Version 1.1.x Release Upgrades */
-
-    xarModSetVar('themes', 'adminpagemenu', 1);
+    xarModSetVar('themes', 'adminpagemenu', 1); //New variables to switch admin in page menus (tabs) on and off
+    xarModSetVar('privileges', 'inheritdeny', true); //Was not set in privileges activation in 1.1, isrequired, maybe missing in new installs
     xarModSetVar('roles', 'requirevalidation', true); //reuse this older var for user email changes, this validation is separate to registration validation
 /* End of Version 1.1.x Release Upgrades */
 
