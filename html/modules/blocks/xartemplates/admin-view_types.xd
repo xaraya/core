@@ -8,7 +8,9 @@
         <h2>
             <xar:mlstring>View Block Type</xar:mlstring>
         </h2>
-
+        <h4>
+            <a href="&xar-modurl-blocks-admin-new_type;"><xar:mlstring>Add New Block Type</xar:mlstring></a>
+        </h4>
         <fieldset>
             <legend>
                 <xar:mlstring>Selected Block Details</xar:mlstring>
@@ -72,6 +74,7 @@
 
         <xar:comment>Table of overrideable parameters (see xar:block tag)</xar:comment>
         <xar:if condition="!empty($params)">
+
             <fieldset>
                 <legend>
                     <xar:mlstring>Block Parameters Customisable Through &lt;xar:block&gt; Tag</xar:mlstring>
@@ -110,6 +113,9 @@
         <h2>
             <xar:mlstring>View Block Types</xar:mlstring>
         </h2>
+        <h4>
+            <a href="&xar-modurl-blocks-admin-new_type;"><xar:mlstring>Add New Block Type</xar:mlstring></a>
+        </h4>        
         <table class="xar-fullwidth">
             <tr>
                 <th title="#xarML('The module listed is the module from which this block originates')#"><xar:mlstring>Module</xar:mlstring></th>

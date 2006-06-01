@@ -42,7 +42,11 @@
         </dd>
     </xar:sec>
     <xar:sec mask="AdminBlock" catch="false">
-        <xar:set name="tabclass">$activetab=='view_types'?'active':''</xar:set>
+       <xar:if condition="$activetab eq 'view_types' or $activetab eq 'new_type'">
+            <xar:set name="tabclass">'active'</xar:set>
+       <xar:else />
+            <xar:set name="tabclass">''</xar:set>
+       </xar:if>
         <dd class="#$tabclass#">
           <a href="&xar-modurl-blocks-admin-view_types;">
             <xar:mlstring>Block Types</xar:mlstring>
