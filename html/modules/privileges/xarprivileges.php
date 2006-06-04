@@ -425,6 +425,19 @@ class xarMasks
             case "string":
                 $mask->setRealm($textvalue);
                 break;
+            case "group":
+                $thisname=xarUserGetVar('uname');
+                $role = xarUFindRole($thisname);
+                $parent='Everybody'; //set a default
+                //grab the first parentname until we have something better implemented
+                //TODO - big one - fix this. Currently similar implementation as the parent used in Userhome.
+                //Review what we are to do with primary parent and implement correctly if we decide to keep it.
+                foreach ($role->getParents() as $parent) {
+                    $parent = $parent->name;
+                    break;
+                }
+                $mask->setRealm($parent);
+                break;
             case "none":
             default:
                 $mask->setRealm('All');
