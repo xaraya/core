@@ -232,7 +232,7 @@
                     </label>
                     <input type="text" name="textvalue" id="name" value="#$textvalue#" size="20" maxlength="20" class="xar-form-textmedium" />
                     &nbsp;
-                    <xar:mlstring>(applies only to the Text Value option above)</xar:mlstring>
+                    <xar:mlstring>(only applies when Text Value option is chosen)</xar:mlstring>
                     </div>
                     <div class="xar-form-input-wrapper">
                         <label for="maskvalue" title="#xarML('The following choice will be inserted into any mask')#" class="xar-form-label">
