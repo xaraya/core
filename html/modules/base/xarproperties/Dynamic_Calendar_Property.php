@@ -54,6 +54,8 @@ class Dynamic_Calendar_Property extends Dynamic_Property
             }
             // this returns -1 when we have an invalid date (e.g. on purpose)
             $this->value = strtotime($value);
+            // starting with PHP 5.1.0, strtotime returns false instead of -1
+            if ($this->value === false) $this->value = -1;
             if ($this->value >= 0) {
                 // adjust for the user's timezone offset
                 $this->value -= xarMLS_userOffset($this->value) * 3600;
@@ -100,6 +102,8 @@ class Dynamic_Calendar_Property extends Dynamic_Property
             }
             // this returns -1 when we have an invalid date (e.g. on purpose)
             $value = strtotime($value);
+            // starting with PHP 5.1.0, strtotime returns false instead of -1
+            if ($value === false) $value = -1;
         }
         if (!isset($dateformat)) {
             $dateformat = '%Y-%m-%d %H:%M:%S';
@@ -146,7 +150,10 @@ class Dynamic_Calendar_Property extends Dynamic_Property
             if (!preg_match('/[a-zA-Z]+/',$value)) {
                 $value .= ' GMT';
             }
+            // this returns -1 when we have an invalid date (e.g. on purpose)
             $value = strtotime($value);
+            // starting with PHP 5.1.0, strtotime returns false instead of -1
+            if ($value === false) $value = -1;
         }
         if (!isset($dateformat)) {
             $dateformat = '%a, %d %B %Y %H:%M:%S %Z';
