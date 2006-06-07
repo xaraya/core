@@ -37,7 +37,7 @@ class xarDate
 
     function setnow() 
     {
-        $this->timestamp = mktime();
+        $this->timestamp = time();
         $this->extract();
     }
 

@@ -64,7 +64,7 @@ class xarQuery
             return;
         }
 
-        $this->key = mktime();
+        $this->key = time();
         $this->tables = array();
         $this->_addtables($tables);
         $this->fields = array();
