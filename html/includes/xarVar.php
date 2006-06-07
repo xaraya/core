@@ -56,7 +56,7 @@ define('XARVAR_PREP_TRIM',        8);
  * @todo <johnny> fix the load level stuff here... it's inconsistant to the rest of the core
  * @todo <mrb> remove the two settings allowablehtml and fixhtmlentities
  */
-function xarVar_init($args, $whatElseIsGoingLoaded)
+function xarVar_init(&$args, $whatElseIsGoingLoaded)
 {
     /*
      * Initialise the variable cache

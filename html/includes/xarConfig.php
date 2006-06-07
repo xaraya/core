@@ -29,7 +29,7 @@ class ConfigurationException extends ConfigurationExceptions
  * @param integer whatElseIsGoingLoaded
  * @return bool
 */
-function xarConfig_init($args, $whatElseIsGoingLoaded)
+function xarConfig_init(&$args, $whatElseIsGoingLoaded)
 {
     // Configuration Unit Tables
     $sitePrefix = xarDBGetSiteTablePrefix();
@@ -42,7 +42,7 @@ function xarConfig_init($args, $whatElseIsGoingLoaded)
     // Pre-load site config variables
     // CHECKME: see if this doesn't hurt install before activating :-)
     xarConfig_loadVars();
-    
+
     // Subsystem initialized, register a handler to run when the request is over
     //register_shutdown_function ('xarConfig__shutdown_handler');
     return true;

@@ -22,7 +22,7 @@
  * @param  whatElseIsGoingLoaded integer
  * @return bool
  */
-function xarBlock_init($args, $whatElseIsGoingLoaded)
+function xarBlock_init(&$args, $whatElseIsGoingLoaded)
 {
     // Blocks Support Tables
     $systemPrefix = xarDBGetSystemTablePrefix();

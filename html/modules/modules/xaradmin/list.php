@@ -96,6 +96,7 @@ function modules_admin_list()
 
     // now we can prepare data for template
     // we will use standard xarMod api calls as much as possible
+    //We want class as Authentication for auth mods so need to allow for this. Use hardcode list or core mods for now.
     $coreMods = array('base','roles','privileges','blocks','themes','authsystem','mail','dynamicdata','installer','modules');
     foreach($modlist as $mod){
 

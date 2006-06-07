@@ -2,10 +2,10 @@
 /**
  * Import PostNuke .71+ cleanup for your Xaraya test site
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @package tools
+ * @copyright (C) 2003 The Digital Development Foundation
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage import
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -59,7 +59,7 @@
         }
         $url = xarModURL('xarbb','user','main');
     }
-    
+
     xarModDelVar('installer','ptid');
 
     echo '<a href="import_pn.php">Return to start</a>&nbsp;&nbsp;&nbsp;

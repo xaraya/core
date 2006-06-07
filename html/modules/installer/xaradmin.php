@@ -704,12 +704,12 @@ function installer_admin_create_administrator()
 
     // Initialise authentication
     // TODO: this is happening late here because we need to create a block
-    $regid = xarModGetIDFromName('authsystem');
-    if (isset($regid)) {
-        if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
-        // Activate the module
-        if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
-    }
+//	$regid = xarModGetIDFromName('authsystem');
+//	if (isset($regid)) {
+//		if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
+		// Activate the module
+//		if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
+//	}
 
     xarResponseRedirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
 }
@@ -1015,6 +1015,7 @@ function installer_admin_cleanup()
     // log in admin user
     $uname = xarModGetVar('roles','lastuser');
     $pass = xarModGetVar('roles','adminpass');
+
     if (!xarUserLogIn($uname, $pass, 0)) {
         $msg = xarML('Cannot log in the default administrator. Check your setup.');
         throw new Exception($msg);
@@ -1045,7 +1046,7 @@ function installer_admin_cleanup()
     }
     list ($rightBlockGroup) = $result->fields;
 
-
+   //Get the info and add the Login block which is now in authsystem module
 	$loginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
                                     array('module' => 'authsystem',
                                           'type'   => 'login'));

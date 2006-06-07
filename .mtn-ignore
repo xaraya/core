@@ -22,7 +22,7 @@ html\/modules\/(mailbag|messages|mime|metaweblogapi|moveabletype|mybookmarks|mul
 html\/modules\/(nameday|navigator|netquery|news(groups|letter))\/.*
 html\/modules\/(object|opentracker|overlib)\/.*
 html\/modules\/(paypal(ipn|setup)|photoshare|phpldapadmin|ping|pmember|polls|pubsub)\/.*
-html\/modules\/(ratings|recommend|referer|release|reports)\/.*
+html\/modules\/(ratings|recommend|referer|registration|release|reports)\/.*
 html\/modules\/(scheduler|search|shopping|site(cloud|contact|tools)|smilies|sniffer|soapserver|stats|subitems|surveys)\/.*
 html\/modules\/(tasks|timezone|tinymce|todolist|trackback|translations)\/.*
 html\/modules\/(unittests|uploads|userpoints)\/.*

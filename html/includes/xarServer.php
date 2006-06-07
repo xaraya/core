@@ -22,7 +22,7 @@
  * @param whatElseIsGoingLoaded integer
  * @return bool true
  */
-function xarSerReqRes_init($args, $whatElseIsGoingLoaded)
+function xarSerReqRes_init(&$args, $whatElseIsGoingLoaded)
 {
     // Use $args to configure the classes
     xarServer::init($args);

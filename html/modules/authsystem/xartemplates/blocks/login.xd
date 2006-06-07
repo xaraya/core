@@ -25,20 +25,6 @@
         <input type="submit" value="#xarML('Log In')#" />
     </p>
 
-    <xar:if condition="xarModIsAvailable('registration') and xarModGetVar('registration', 'allowregistration')">
-        <p>
-            <xar:if condition="xarModGetVar('registration', 'minage') eq 0">
-                <a href="&xar-modurl-registration-user-register;&amp;phase=registerform">
-                    <xar:mlstring>Register new account</xar:mlstring>
-                </a>
-            <xar:else />
-                <a href="&xar-modurl-registration-user-register;&amp;phase=checkage">
-                    <xar:mlstring>Register new account</xar:mlstring>
-                </a>
-            </xar:if>
-        </p>
-    </xar:if>
-
     <p>
         <a href="&xar-modurl-roles-user-lostpassword;">
             <xar:mlstring>Request new password</xar:mlstring>

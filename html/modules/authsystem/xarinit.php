@@ -39,8 +39,15 @@ function authsystem_init()
     xarRegisterPrivilege('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
 
 
-/*  Do this in installer so we can load this early, and assign the group later after blocks loaded
-    if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'login'))) {
+  //Do this in installer so we can load this early, and assign the group later after blocks loaded
+  /*
+   if (!xarModAPIFunc('blocks',
+            'admin',
+            'register_block_type',
+            array('modName' => 'authsystem',
+                  'blockType' => 'login'))) return;
+
+     if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'login'))) {
         $rightgroup = xarModAPIFunc('blocks', 'user', 'getgroup', array('name'=> 'right'));
         if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
                            array('title'    => 'Login',
@@ -64,10 +71,12 @@ function authsystem_init()
 function authsystem_activate()
 {
    /* Register blocks */
+
     $bid = xarModAPIFunc('blocks','admin','register_block_type',
                    array('modName' => 'authsystem',
                          'blockType' => 'login'));
-    if (!$bid) return;    
+    if (!$bid) return;
+    
   return true;
 }
 
@@ -83,10 +92,48 @@ function authsystem_upgrade($oldVersion)
     /* Upgrade dependent on old version number */
     switch ($oldVersion) {
         case '0.91.0':
-            break;
-        case '1.0.0':
-        //Current version
-            break;
+           /* Define privielges */
+           xarRegisterPrivilege('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
+
+          /* Define Module vars */
+          xarModSetVar('authsystem', 'lockouttime', 15);
+  	      xarModSetVar('authsystem', 'lockouttries', 3);
+	      xarModSetVar('authsystem', 'uselockout', false);
+          /* Define Masks */
+          xarRegisterMask('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW');
+          xarRegisterMask('ViewAuthsystemBlocks','All','authsystem','Block','All','ACCESS_OVERVIEW');
+          xarRegisterMask('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
+          xarRegisterMask('EditAuthsystem','All','authsystem','All','All','ACCESS_EDIT');
+          xarRegisterMask('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
+  
+            //Set the default authmodule if not already set
+   	        $isdefaultauth = xarModGetVar('roles','defaultauthmodule');
+   	        if (!isset($isdefaultauth)) {
+               xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
+            }
+
+           // Get database setup
+           $dbconn =& xarDBGetConn();
+           $xartable =& xarDBGetTables();
+           $systemPrefix = xarDBGetSystemTablePrefix();
+           $modulesTable = $systemPrefix .'_modules';
+           $modid=xarModGetIDFromName('authsystem');
+           // update the modversion class and admin capable
+           $query = "UPDATE $modulesTable
+                     SET xar_class         = 'Authentication',
+                         xar_admin_capable = 1
+                     WHERE xar_regid = ?";
+           $bindvars = array($modid);
+           $result =& $dbconn->Execute($query,$bindvars);
+
+           if (!$result) return;
+            //create the blocktype
+            $bid = xarModAPIFunc('blocks','admin','register_block_type',
+                   array('modName' => 'authsystem',
+                         'blockType' => 'login'));
+           if (!$bid) return;
+       break;
+
     }
     // Update successful
     return true;

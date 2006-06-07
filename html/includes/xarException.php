@@ -79,7 +79,7 @@ class ErrorDeprecationException extends DeprecationExceptions
  * @return bool true
  * @todo   can we move the stacks above into the init?
  */
-function xarError_init($systemArgs, $whatToLoad)
+function xarError_init(&$systemArgs, $whatToLoad)
 {
     // Send all exceptions to the default exception handler, no excuses
     set_exception_handler(array('ExceptionHandlers','defaulthandler'));

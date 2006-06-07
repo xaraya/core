@@ -99,7 +99,7 @@ define('XARTHEME_MODE_PER_SITE', 2);
  * @return bool true
  * @todo this is just a wrapper, it can be removed eventually
  */
-function xarMod_init($args, $whatElseIsGoingLoaded)
+function xarMod_init(&$args, $whatElseIsGoingLoaded)
 {
     // Initialize the interfaces and stuff.
     return xarMod::init($args);

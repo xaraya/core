@@ -1,6 +1,7 @@
 <?php
 /**
  * Initialise the Authsystem module
+ *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -18,7 +19,7 @@
  * the file correctly, resulting in unexpected results.
  */
 $modversion['name'] = 'authsystem';
-$modversion['displayname'] = xarML('System Authentication');
+$modversion['displayname'] = xarML('Authentication');
 $modversion['id'] = '42';
 $modversion['version'] = '1.0.0';
 $modversion['description'] = 'Xaraya default authentication module';

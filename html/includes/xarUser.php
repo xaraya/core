@@ -58,7 +58,7 @@ define('XARUSER_LAST_RESORT', -3);
  * @param args[authenticationModules] array
  * @return bool true on success
  */
-function xarUser_init($args, $whatElseIsGoingLoaded)
+function xarUser_init(&$args, $whatElseIsGoingLoaded)
 {
     // User System and Security Service Tables
     $systemPrefix = xarDBGetSystemTablePrefix();

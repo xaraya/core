@@ -165,6 +165,7 @@ function roles_activate()
     xarModSetVar('roles', 'locale', '');
     xarModSetVar('roles', 'userhome', 0);
     xarModSetVar('roles', 'primaryparent', 0);
+    xarModSetVar('roles', 'defaultgroup', 'Users');
     $lockdata = array('roles' => array( array('uid' => 4,
                                               'name' => 'Administrators',
                                               'notify' => TRUE)),
@@ -285,6 +286,7 @@ function roles_upgrade($oldVersion)
 			}
 		    if (!xarModAPIFunc('roles','admin','createobjects')) return;
             break;
+
     }
     // Update successful
     return true;

@@ -10,11 +10,6 @@
       <div class="xar-form-input-wrapper">
         <label for="username" class="xar-form-label"><xar:mlstring>Username</xar:mlstring></label>
         <input type="text" name="uname" id="username" maxlength="255" size="20" tabindex="1" />
-        <xar:if condition="xarModIsAvailable('registration') and xarModGetVar('registration', 'minage') eq 0">
-              <a href="&xar-modurl-registration-user-register;&amp;phase=registerform"><xar:mlstring>Want to register?</xar:mlstring></a>
-          <xar:elseif condition="xarModIsAvailable('registration')" />
-              <a href="&xar-modurl-registration-user-register;&amp;phase=checkage"><xar:mlstring>Want to register?</xar:mlstring></a>
-        </xar:if>
       </div>
       <div class="xar-form-input-wrapper">
         <label for="password" class="xar-form-label"><xar:mlstring>Password</xar:mlstring></label>

@@ -37,7 +37,7 @@ require_once dirname(__FILE__)."/transforms/xarCharset.php";
  * @access protected
  * @return bool true
  */
-function xarMLS_init($args, $whatElseIsGoingLoaded)
+function xarMLS_init(&$args, $whatElseIsGoingLoaded)
 {
     switch ($args['MLSMode']) {
     case XARMLS_SINGLE_LANGUAGE_MODE:
@@ -192,10 +192,11 @@ function xarML($string/*, ...*/)
     if(empty($string)) return '';
 
     // Make sure string is sane
-    $string=preg_replace('[\x0d]','',$string);
-    // Delete extra whitespaces and spaces around newline
-    $string = preg_replace('/[\t ]+/',' ',$string);
-    $string = preg_replace('/\s*\n\s*/',"\n",$string);
+    // - hex 0D -> ''
+    // - space around newline -> ' '
+    // - multiple newlines -> 1 newline
+    $string = preg_replace(array('[\x0d]','/[\t ]+/','/\s*\n\s*/'),
+                           array('',' ',"\n"),$string);
 
     if (isset($GLOBALS['xarMLS_backend'])) {
         $trans = $GLOBALS['xarMLS_backend']->translate($string,1);

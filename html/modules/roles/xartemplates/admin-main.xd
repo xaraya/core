@@ -118,11 +118,12 @@
     </h3>
     <ul>
         <li>
-            <xar:mlstring>Login Block allows users to login</xar:mlstring>
+            <xar:mlstring><strong>Online Block</strong> shows the number visiting your site right now.</xar:mlstring>
         </li>
-        <li>
-            <xar:mlstring>Online Block shows the number visiting your site right now.</xar:mlstring>
+       <li>
+            <xar:mlstring>Login Block - moved to Authsystem (authentication) module at Xaraya version 1.1.0</xar:mlstring>
         </li>
+
     </ul>
     <h3>
         <xar:mlstring>Included Hooks</xar:mlstring>

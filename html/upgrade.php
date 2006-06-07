@@ -1572,8 +1572,48 @@ if (empty($step)) {
         echo "<br />Done! All properties have been checked and verified for location!<br /><br />";
     }
 
+    echo "<h5>Updating Roles and Authsystem for changes in User Login and Authentication</h5>";
+    echo "<div>";
+    //Check for allow registration in existing Roles module
+    $allowregistration =xarModGetVar('roles','allowregistration');
+    if (isset($allowregistration) && ($allowregistration==1)) {
+        //We need to tell user about the new Registration module - let's just warn them for now
+        if (!xarModIsAvailable('registration')){
+            echo "<h2 style=\"color:red;\">WARNING!</h2>Your setup indicates you allow User Registration on your site.<br />";
+            echo "<br />Handling of User Registration has changed in this version. Please install and activate the <strong>Registration</strong> module to continue User Registration on your site.<br />";
+            echo "You should also remove any existing login blocks and install the Registration module Login block if you wish to include a Registration link in the block.</br></br />";
+        }
+    }
 
+   //we need to check the login block is the Authsystem login block, not the Roles
+    //see if there is an existing roles login blocktype instance
+    //As the block is the same we could just change the type id of any login.
+    $blocktypeTable = $systemPrefix .'_block_types';
+        $query = "SELECT xar_id,
+                         xar_type,
+                         xar_module
+                         FROM $blocktypeTable
+                 WHERE xar_type='login' and xar_module='roles'";
+        $result =& $dbconn->Execute($query);
+        if (!$result) return;
+        list($blockid,$blocktype,$module)= $result->fields;
+        $blocktype = array('id' => $blockid,
+                           'blocktype' => $blocktype,
+                           'module'=> $module);
 
+    if (is_array($blocktype) && $blocktype['module']=='roles') {
+        $blockid=$blocktype['id'];
+        //set the module to authsystem and it can be used for the existing block instance if any as blocks are the same
+        $query = "UPDATE $blocktypeTable
+                  SET xar_module = 'authsystem'
+                  WHERE xar_id=?";
+        $bindvars=array($blockid);
+        $result =& $dbconn->Execute($query,$bindvars);
+        if (!$result) return;
+    }else {
+        echo "</div>";
+        echo "<br />Done! Roles, authentication and registration checked!<br /><br />";
+    }
     // More or less generic stuff
     echo "<h5>Generic upgrade activities</h5>";
     // Propsinplace scenario, flush the property cache, so on upgrade all proptypes

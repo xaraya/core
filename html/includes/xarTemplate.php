@@ -86,7 +86,7 @@ define('XAR_TPL_CACHE_DIR',xarCoreGetVarDirPath() . XARCORE_TPL_CACHEDIR);
  * @param  int    $whatElseIsGoingLoaded Bitfield to specify which subsystem will be loaded.
  * @return bool true
  */
-function xarTpl_init($args, $whatElseIsGoingLoaded)
+function xarTpl_init(&$args, $whatElseIsGoingLoaded)
 {
     $GLOBALS['xarTpl_themesBaseDir']   = $args['themesBaseDirectory'];
     $GLOBALS['xarTpl_defaultThemeDir'] = $args['defaultThemeDir'];

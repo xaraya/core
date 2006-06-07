@@ -39,7 +39,7 @@ class LoggerException extends Exception
     // Fill in later.
 }
 
-function xarLog_init($args, &$whatElseIsGoingLoaded) 
+function xarLog_init(&$args, &$whatElseIsGoingLoaded) 
 {
 
     $GLOBALS['xarLog_loggers'] = array();
