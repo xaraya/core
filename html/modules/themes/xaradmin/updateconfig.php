@@ -32,7 +32,9 @@ function themes_admin_updateconfig()
     if (!xarVarFetch('footer', 'str:1:', $footer, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('copyright', 'str:1:', $copyright, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('AtomTag', 'str:1:', $atomtag, '', XARVAR_NOT_REQUIRED)) return;
-
+    // enable or disable dashboard
+    if(!xarVarFetch('dashboard', 'checkbox', $dashboard, false, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dashtemplate', 'str:1:', $dashtemplate, 'dashboard', XARVAR_DONT_SET)) {return;}
     xarModSetVar('themes', 'SiteName', $sitename);
     xarModSetVar('themes', 'SiteTitleSeparator', $separator);
     xarModSetVar('themes', 'SiteTitleOrder', $pagetitle);
@@ -43,6 +45,8 @@ function themes_admin_updateconfig()
     xarModSetVar('themes', 'ShowTemplates', $showtemplates);
     xarModSetVar('themes', 'AtomTag', $atomtag);
     xarModSetVar('themes', 'var_dump', $var_dump);
+    xarModSetVar('themes', 'usedashboard', ($dashboard) ? 1 : 0);
+    xarModSetVar('themes', 'dashtemplate', $dashtemplate);
     xarConfigSetVar('Site.BL.CacheTemplates',$cachetemplates);
 
     // make sure we dont miss empty variables (which were not passed thru)
@@ -54,7 +58,7 @@ function themes_admin_updateconfig()
     xarModSetVar('themes', 'hidecore', $hidecore);
     xarModSetVar('themes', 'selstyle', $selstyle);
     xarModSetVar('themes', 'selfilter', $selfilter);
-    xarModSetVar('themes', 'selsort', $selsort); 
+    xarModSetVar('themes', 'selsort', $selsort);
     // lets update status and display updated configuration
     xarResponseRedirect(xarModURL('themes', 'admin', 'modifyconfig')); 
     // Return

@@ -19,16 +19,20 @@ function privileges_admin_modifyconfig()
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('tester', 'int', $data['tester'], xarModGetVar('privileges', 'tester'), XARVAR_NOT_REQUIRED)) return;
+
     switch (strtolower($phase)) {
         case 'modify':
         default:
+            if (!isset($phase)) {
+                xarSessionSetVar('statusmsg', '');
+            }
             $data['inheritdeny'] = xarModGetVar('privileges', 'inheritdeny');
             $data['authid'] = xarSecGenAuthKey();
             switch ($data['tab']) {
                 case 'lastresort':
                     //Check for existence of a last resort admin for feedback to user
                     $lastresort  = xarModGetVar('privileges', 'lastresort');
-                    if (($lastresort) && strlen(trim($lastresort))>1) { 
+                    if (($lastresort) && strlen(trim($lastresort))>1) {
                       //could just be true, we want to know if the name is set
                       $islastresort=unserialize($lastresort);
                       if (isset($islastresort['name'])){

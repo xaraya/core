@@ -108,6 +108,9 @@ function themes_init()
     xarModSetVar('themes', 'SiteFooter', '<a href="http://www.xaraya.com"><img src="modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" class="xar-noborder" /></a>');
     xarModSetVar('themes', 'ShowPHPCommentBlockInTemplates', 0);
     xarModSetVar('themes', 'ShowTemplates', 0);
+    //Moved here in 1.1.x series
+    xarModSetVar('themes', 'usedashboard', 0);
+    xarModSetVar('themes', 'dashtemplate', 'dashboard');    
 
     // Register theme tags.
 
@@ -165,13 +168,20 @@ function themes_upgrade($oldversion)
             if(!xarModAPIFunc('blocks','admin','block_type_exists',array('modName' => 'themes','blockType' => 'meta'))) {
                 if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
                                     array('modName' => 'themes',
-                                          'blockType' => 'meta'))) return; 
+                                          'blockType' => 'meta'))) return;
             }
+      case '1.7.0':
+        /* TODO: update when we up the version number */
+        /* These done in the upgrade.php file
+           xarModSetVar('themes', 'usedashboard', 0);
+        */
 
-    } 
+      case '1.8.0' :
+      //current version
+    }
     // Update successful
     return true;
-} 
+}
 
 /**
  * Delete the themes theme

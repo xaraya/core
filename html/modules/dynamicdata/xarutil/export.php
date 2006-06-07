@@ -1,5 +1,7 @@
 <?php
 /**
+ * Export an object definition or an object item to XML
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -148,11 +150,12 @@ function dynamicdata_util_export($args)
 
     $data['xml'] = xarVarPrepForDisplay($xml);
 
-    if (xarModGetVar('modules','usedashboard')) {
-        xarTplSetPageTemplateName('admin');
+    if (xarModGetVar('themes','usedashboard')) {
+        $admin_tpl = xarModGetVar('themes','dashtemplate');
     }else {
-        xarTplSetPageTemplateName('default');
+       $admin_tpl='default';
     }
+    xarTplSetPageTemplateName($admin_tpl);
 
     return $data;
 }

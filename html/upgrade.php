@@ -1574,6 +1574,7 @@ if (empty($step)) {
 
     echo "<h5>Updating Roles and Authsystem for changes in User Login and Authentication</h5>";
     echo "<div>";
+    //TODO: tidy up - look at this and other changes once we finish the refactoring for this and adminpanels
     //Check for allow registration in existing Roles module
     $allowregistration =xarModGetVar('roles','allowregistration');
     if (isset($allowregistration) && ($allowregistration==1)) {
@@ -1585,37 +1586,152 @@ if (empty($step)) {
         }
     }
 
-   //we need to check the login block is the Authsystem login block, not the Roles
+    //we need to check the login block is the Authsystem login block, not the Roles
     //see if there is an existing roles login blocktype instance
-    //As the block is the same we could just change the type id of any login.
+    //As the block is the same we could just change the type id of any login block type.
     $blocktypeTable = $systemPrefix .'_block_types';
+    $blockinstanceTable = $systemPrefix .'_block_instances';
+    $blockproblem=array();
+       //Get the block type id of the existing block type
         $query = "SELECT xar_id,
                          xar_type,
                          xar_module
                          FROM $blocktypeTable
                  WHERE xar_type='login' and xar_module='roles'";
         $result =& $dbconn->Execute($query);
-        if (!$result) return;
         list($blockid,$blocktype,$module)= $result->fields;
         $blocktype = array('id' => $blockid,
                            'blocktype' => $blocktype,
                            'module'=> $module);
 
-    if (is_array($blocktype) && $blocktype['module']=='roles') {
-        $blockid=$blocktype['id'];
-        //set the module to authsystem and it can be used for the existing block instance if any as blocks are the same
-        $query = "UPDATE $blocktypeTable
-                  SET xar_module = 'authsystem'
-                  WHERE xar_id=?";
-        $bindvars=array($blockid);
-        $result =& $dbconn->Execute($query,$bindvars);
-        if (!$result) return;
-    }else {
+        if (is_array($blocktype) && $blocktype['module']=='roles') {
+
+            $blockid=$blocktype['id'];
+            //set the module to authsystem and it can be used for the existing block instance
+            $query = "UPDATE $blocktypeTable
+                      SET xar_module = 'authsystem'
+                      WHERE xar_id=?";
+            $bindvars=array($blockid);
+            $result =& $dbconn->Execute($query,$bindvars);
+
+        }
+
+    //Authsystem ... we need to put this here as the authsystem upgrade is not happening (fully ...)
+    //Here until we isolate prob
+    xarRegisterMask('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW');
+    xarRegisterMask('ViewAuthsystemBlocks','All','authsystem','Block','All','ACCESS_OVERVIEW');
+    xarRegisterMask('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
+    xarRegisterMask('EditAuthsystem','All','authsystem','All','All','ACCESS_EDIT');
+    xarRegisterMask('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
+    // Define and setup privs
+    xarRegisterPrivilege('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
+
+    // Define Module vars
+ 	xarModSetVar('authsystem', 'lockouttime', 15);
+	xarModSetVar('authsystem', 'lockouttries', 3);
+	xarModSetVar('authsystem', 'uselockout', false);
+	xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
+	//End of this authsystem info that should be adde din the module upgrade function
+      if (count($blockproblem) >0) {
+      echo "</div>";
+        echo "<br /><span style=\"color:red;\">WARNING!</span> There was a problem in updating Waiting Content and Adminpanels menu block to Base blocks. Please check!<br /><br />";
+
+     }else {
         echo "</div>";
         echo "<br />Done! Roles, authentication and registration checked!<br /><br />";
     }
+
+    echo "<h5>Removing Adminpanels module - moving functions to other  modules</h5>";
+    echo "<div>";
+    //TODO: Tidy this up - does the job for now
+    // Move of Adminpanels module overviews modvar to Modules module
+    $oldvalue=xarModGetVar('adminpanels','overview');
+    xarModSetVar('modules','overview',$oldvalue);
+    // Move of Adminpanels dashboard modvar to Themes module
+    $oldvalue=xarModGetVar('adminpanels','dashboard');
+    xarModSetVar('themes','usedashboard',$oldvalue);
+    //dashtemplate will always override admin.xt
+    if (isset($oldvalue) && $oldvalue==1) {
+        //will use admin.xt if present
+        xarModSetVar('themes','dashtemplate','admin');
+    }else{
+        //set it to the new dashboard template
+        xarModSetVar('themes','dashtemplate','dashboard');
+    }
+
+    //Let's remove the now unused admin menu table
+    $adminmenuTable = $systemPrefix .'_admin_menu';
+    $query = xarDBDropTable($adminmenuTable);
+    $result = &$dbconn->Execute($query);
+
+    //We need to upgrade the blocks, and as the block is the same we could just change the type id of any login.
+    $blocktypeTable = $systemPrefix .'_block_types';
+    $blockinstanceTable = $systemPrefix .'_block_instances';
+    $newblocks=array('waitingcontent','adminmenu');
+    $blockproblem=array();
+    foreach ($newblocks as $newblock) {
+        // We don't need to register new block = just change the existing block
+
+        //Get the ID of the old block type
+        $query = "SELECT xar_id,
+                         xar_type,
+                         xar_module
+                         FROM $blocktypeTable
+                 WHERE xar_type='".$newblock."' and xar_module='adminpanels'";
+        $result =& $dbconn->Execute($query);
+
+        if ($result) {
+            list($blockid,$blocktype,$module)= $result->fields;
+            //update the module name in the block with that id to 'base'
+            $blocktype = array('id' => $blockid,
+                           'blocktype' => $blocktype,
+                           'module'=> $module);
+
+            if (is_array($blocktype) && $blocktype['module']=='adminpanels') {
+               $blockid=$blocktype['id'];
+               //set the module to base
+               $query = "UPDATE $blocktypeTable
+                         SET xar_module = 'base'
+                         WHERE xar_id=?";
+               $bindvars=array($blockid);
+               $result =& $dbconn->Execute($query,$bindvars);
+
+
+               if (($newblock='waitingcontent') && isset($blockid)) {
+               //We need to disable existing hooks and enable new ones - but which :)
+               $hookTable = $systemPrefix .'_hooks';
+               $query = "UPDATE $hookTable
+                         SET xar_smodule = 'base'
+                         WHERE xar_action='waitingcontent' AND xar_smodule='adminpanels'";
+               }
+            }
+            //Remove the original block
+            if (!xarModAPIFunc('blocks','admin','unregister_block_type',
+                       array('modName'  => 'adminpanels',
+                             'blockType'=> $newblock))) {
+              $blockproblem[]=1;
+            }
+
+        }
+      }
+     // Delete any module variables
+      xarModDelAllVars('adminpanels');
+      // Remove Masks and Instances
+      xarRemoveMasks('adminpanels');
+      xarRemoveInstances('adminpanels');
+
+    if (count($blockproblem) >0) {
+      echo "</div>";
+        echo "<br /><span style=\"color:red;\">WARNING!</span> There was a problem in updating Waiting Content and Adminpanels menu block to Base blocks. Please check!<br /><br />";
+    }else {
+        echo "</div>";
+        echo "<br />Done! Waiting content and Admin Menu block updated in Base module!<br /><br />";
+    }
+
+
     // More or less generic stuff
     echo "<h5>Generic upgrade activities</h5>";
+
     // Propsinplace scenario, flush the property cache, so on upgrade all proptypes
     // are properly set in the database.
     echo "Flushing the property cache";
@@ -1625,9 +1741,13 @@ if (empty($step)) {
 
 ?>
 <div class="xar-mod-body"><h2><?php echo $complete; ?></h2><br />
-Thank you, the upgrades are complete. It is recommended you go to the
-<a href="<?php echo xarModUrl('modules','admin','list'); ?>">admin section of the modules module</a>
-to upgrade the modules which have a new version.
+Thank you, the database upgrades are complete.<br />Please note this upgrade process does not upgrade your themes.
+<ul>
+<li>The Adminpanels module has been deprecated and no longer available. Please check your themes for use of any Adminpanel module references and change your adminpanel block references to an adminmenu block in the Base module.</li>
+<li>The core login block and function in Roles module has been moved to the Authsystem Module at <a href="<?php echo xarModUrl('authsystem','user','showloginform'); ?>">index.php?module=authsystem&amp;function=showloginform</a></li>
+</ul>
+<p>It is recommended you go to the <a href="<?php echo xarModUrl('modules','admin','list'); ?>">admin section of the modules module</a>
+to upgrade the modules which have a new version.</p><br /><br />
 </div>
 </div>
 </div>

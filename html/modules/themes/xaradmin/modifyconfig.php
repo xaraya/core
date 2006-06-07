@@ -1,6 +1,7 @@
 <?php
 /**
  * Modify the configuration parameters
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -23,7 +24,16 @@ function themes_admin_modifyconfig()
     // everything else happens in Template for now
     // prepare labels and values for display by the template
     $data['title'] = xarVarPrepForDisplay(xarML('Configure Themes'));
+    $data['configoverview'] = xarVarPrepForDisplay(xarML('Configure Overview'));
+    $data['showhelplabel'] = xarVarPrepForDisplay(xarML('Show module "Help" in the menu:'));
+    $data['showhelp'] = xarModGetVar('modules', 'showhelp') ? 'checked' : '' ;
     $data['submitbutton'] = xarVarPrepForDisplay(xarML('Submit')); 
+    // Dashboard
+    $data['dashboard']= xarModGetVar('themes', 'usedashboard');
+    $data['dashtemplate']= trim(xarModGetVar('themes', 'dashtemplate'));
+    if (!isset($data['dashtemplate']) || trim ($data['dashtemplate']=='')) {
+        $data['dashtemplate']='dashboard';
+    }
     // everything else happens in Template for now
     return $data;
 } 

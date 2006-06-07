@@ -613,7 +613,7 @@ function installer_admin_create_administrator()
     if (!$modifiedrole) {return;}
 
     // Register Block types
-    $blocks = array('finclude','html','menu','php','text','content');
+    $blocks = array('adminmenu','waitingcontent','finclude','html','menu','php','text','content');
 
     foreach ($blocks as $block) {
         if (!xarModAPIFunc('blocks', 'admin', 'register_block_type', array('modName'  => 'base', 'blockType'=> $block))) return;
@@ -676,6 +676,7 @@ function installer_admin_create_administrator()
         }
     }
 
+    
     $now = time();
 
     $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot .';
@@ -1051,10 +1052,21 @@ function installer_admin_cleanup()
                                     array('module' => 'authsystem',
                                           'type'   => 'login'));
 
-    $loginBlockTypeId = $loginBlockType['tid'];
-    assert('is_numeric($loginBlockTypeId)');
+    if (empty($loginBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+        return;
+    }
+   //Check for any sign of the Registration module (may have been installed in the configurations)
+	$regloginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
+                                    array('module' => 'registration',
+                                          'type'   => 'rlogin'));
 
-    if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'login'))) {
+    if (empty($regloginBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+        //return; no don't return, it may not have been loaded
+    }
+    $loginBlockTypeId = $loginBlockType['tid'];
+    //We only want to create the login block if one doesn't already exist - with registration module or authsystem
+    //Registration module might be selected in the config options
+    if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'login')) && !isset($regloginBlockType['tid'])) {
         if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
                            array('title'    => 'Login',
                                  'name'     => 'login',

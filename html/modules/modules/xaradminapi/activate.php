@@ -1,6 +1,7 @@
 <?php
 /**
  * Activate a module
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -44,6 +45,7 @@ function modules_adminapi_activate ($args)
                               'state' => XARMOD_STATE_ACTIVE));
 
     if (function_exists('xarOutputFlushCached') && function_exists('xarModGetName') && xarModGetName() != 'installer') {
+        xarOutputFlushCached('base');
         xarOutputFlushCached('modules');
         xarOutputFlushCached('base-block');
     }

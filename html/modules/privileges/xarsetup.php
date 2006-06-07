@@ -1,6 +1,7 @@
 <?php
 /**
  * Default setup for roles and privileges
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -199,7 +200,7 @@ function initializeSetup()
     xarRegisterMask('ViewPrivileges','All','privileges','Realm','All','ACCESS_OVERVIEW');
     xarRegisterMask('ReadPrivilege','All','privileges','Realm','All','ACCESS_READ');
     xarRegisterMask('EditPrivilege','All','privileges','Realm','All','ACCESS_EDIT');
-    xarRegisterMask('AddPrivilegem','All','privileges','Realm','All','ACCESS_ADD');
+    xarRegisterMask('AddPrivilege','All','privileges','Realm','All','ACCESS_ADD');
     xarRegisterMask('DeletePrivilege','All','privileges','Realm','All','ACCESS_DELETE');
 
     xarRegisterMask('EditModules','All','modules','All','All','ACCESS_EDIT');

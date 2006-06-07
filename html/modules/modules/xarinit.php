@@ -220,9 +220,9 @@ function modules_activate()
     if (empty($selfilter)) xarModSetVar('modules', 'selfilter', XARMOD_STATE_ANY);
     if (empty($selsort)) xarModSetVar('modules', 'selsort', 'nameasc');
 
-    // New here in 2.x series
-    xarModSetVar('modules', 'disableoverview',0);
-    xarModSetVar('modules', 'usedashboard',0);
+    
+   
+    
 
     // Register the blocks here, since this is the earlies point we can do it
     // Register blocks

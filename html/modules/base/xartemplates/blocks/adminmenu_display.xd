@@ -1,0 +1,22 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:if condition="$menustyle eq byname">
+    <p><xar:mlstring>By Name</xar:mlstring>
+    <br />
+    #$data#</p>
+<xar:elseif condition="$menustyle eq bycat" />
+    <p><xar:mlstring>By Category</xar:mlstring>
+    <br />
+    #$data#</p>
+<xar:elseif condition="$menustyle eq byweight" />
+    <p><xar:mlstring>By Weight</xar:mlstring>
+    <br />
+    #$data#</p>
+<xar:elseif condition="$menustyle eq bygroup" />
+    <p><xar:mlstring>By Group</xar:mlstring>
+    <br />
+    #$data#</p>
+<xar:else />
+    <p><xar:mlstring>By Category</xar:mlstring>
+    <br />
+    #$data#</p>
+</xar:if>

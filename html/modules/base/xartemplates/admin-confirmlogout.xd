@@ -1,0 +1,21 @@
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<div class="xar-mod-body">
+    <div class="xar-mod-head">
+        <span class="xar-mod-title"><xar:mlstring>Administration</xar:mlstring></span>
+    </div>
+    <h2>
+        <xar:mlstring>Confirm Logout</xar:mlstring>
+    </h2>
+    <p>
+        <xar:mlstring>Are you sure? Click "Cancel" to return to the previous admin panel</xar:mlstring>
+    </p>
+
+    <div class="xar-align-center">
+        <xar:set name="authmodule">xarModGetVar('roles','defaultauthmodule')</xar:set>
+        <xar:if condition="!empty($authmodule)">
+            <xar:set name="authmodule">xarModGetNameFromID($authmodule)</xar:set>
+            [<a href="#xarModURL($authmodule,'user','logout')#"><xar:mlstring>Logout</xar:mlstring></a>]
+        </xar:if>
+        [<a href="javascript:top.history.go(-1)"><xar:mlstring>Cancel</xar:mlstring></a>] 
+    </div>
+</div>

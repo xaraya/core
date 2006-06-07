@@ -184,6 +184,9 @@ function roles_activate()
     // TODO: make the setUserInfo a class static in xarSession.php
     xarSession_setUserInfo($role->getID(), 0);
     $role = xarFindRole('Admin');
+    if (!isset($role)) {
+      $role=xarUFindRole('Admin');
+    }
     xarModSetVar('roles', 'admin', $role->getID());
 
     // --------------------------------------------------------
