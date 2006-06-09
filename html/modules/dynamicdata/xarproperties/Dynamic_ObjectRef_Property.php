@@ -125,16 +125,23 @@ class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
         $objInfo  = Dynamic_Object_Master::getObjectInfo(array('name' => $this->refobject));
         
         // TODO: do we need to check whether the properties are actually in the object?
-        $item =  xarModApiFunc('dynamicdata', 'user', 'getitem', array (
+        $items =  xarModApiFunc('dynamicdata', 'user', 'getitems', array (
                                     'modid'    => $objInfo['moduleid'],
                                     'itemtype' => $objInfo['itemtype'],
-                                    'itemid'   => $this->value,
+                                    // Note: store_prop might not be the itemid here
+                                    'where'    => $this->store_prop . " eq '" . $this->value . "'",
                                     'fieldlist'=> $this->display_prop . ',' . $this->store_prop)
                              );
 
-        if (!empty($item) && isset($item[$this->display_prop])) {
-            if ($check) return true;
-            return $item[$this->display_prop];
+        if (!empty($items)) {
+            foreach ($items as $id => $item) {
+                if (isset($item[$this->store_prop]) &&
+                    isset($item[$this->display_prop]) &&
+                    $item[$this->store_prop] == $this->value) {
+                    if ($check) return true;
+                    return $item[$this->display_prop];
+                }
+            }
         }
         if ($check) return false;
         return $this->value;
