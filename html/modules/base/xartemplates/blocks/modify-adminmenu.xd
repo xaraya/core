@@ -9,7 +9,16 @@
         <xar:mlstring>Show A Logout Link In This Admin Menu</xar:mlstring>
     </label>
 </div>
-
+<div class="xar-form-input-wrapper-after">
+    <xar:if condition="$showhelp eq 1">
+        <input type="checkbox" name="showhelp" id="showhelp#$blockid#" value="1" checked="checked" />
+    <xar:else />
+        <input type="checkbox" name="showhelp" id="showhelp#$blockid#" value="1" />
+    </xar:if>
+    <label for="showhelp#$blockid#" title="#xarML('By checking this box a Help link will be shown in the panel instance.')#">
+        <xar:mlstring>Show A Help Link In This Admin Menu</xar:mlstring>
+    </label>
+</div>
 <div class="xar-form-input-wrapper">
     <label for="menustyle" title="#xarML('How should the menu items be ordered?')#" class="xar-form-label">
         <xar:mlstring>Sort Admin Menu Items:</xar:mlstring>

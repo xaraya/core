@@ -101,8 +101,11 @@
                             <xar:mlstring>Home:</xar:mlstring>
                         </label>
                         <input type="text" name="phome" id="phome" value="#xarVarPrepForDisplay($phome)#" size="40" maxlength="100" tabindex="7" />
+                        <p class="xar-form-input-wrapper-after">
+                            <xar:mlstring>You can also use the same shortcut syntax as in the Base user menu block</xar:mlstring>
+                        </p>
                     </div>
-                </xar:if>                        
+                </xar:if>
                 <xar:if condition="xarModGetVar('roles','primaryparent')">
                     <div class="xar-form-input-wrapper">
                         <label for="phome" title="#xarML('Home URL')#" class="xar-form-label">

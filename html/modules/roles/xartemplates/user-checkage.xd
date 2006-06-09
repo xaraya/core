@@ -7,5 +7,5 @@
 </xar:ml></p>
 <p><a href="&xar-modurl-roles-user-register;&amp;phase=registerform"><xar:ml><xar:mlstring>I am #(1) or older</xar:mlstring><xar:mlvar>#$minage#</xar:mlvar></xar:ml></a></p>
 <p><xar:ml><xar:mlstring>By clicking on the above link you certify that you are either #(1) or over, or that you have parental consent to register here.</xar:mlstring><xar:mlvar>#$minage#</xar:mlvar></xar:ml></p>
-<p><a href="index.php"><xar:ml><xar:mlstring>I am not #(1) or older</xar:mlstring><xar:mlvar>#$minage#</xar:mlvar></xar:ml></a></p>
+<p><a href="&xar-baseurl;"><xar:ml><xar:mlstring>I am not #(1) or older</xar:mlstring><xar:mlvar>#$minage#</xar:mlvar></xar:ml></a></p>
 </div>

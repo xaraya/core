@@ -72,10 +72,11 @@
                 </xar:if>
                 <label for="dashboard" title="#xarML('Use the Admin Dashboard to manage all your Admin settings from a single page.')#">
                     <xar:mlstring>
-                        Enable the Admin Dashboard (this overrides other admin templates).
+                        Enable the Admin Dashboard.
                     </xar:mlstring>
                 </label>
             </div>
+
             <div class="xar-form-input-wrapper">
                 <label for="dashtemplate" title="#xarML('Template name for the dashboard - no trailing suffix, defaults to \'dashboard\'')#" class="xar-form-label">
                     <xar:mlstring>
@@ -83,8 +84,15 @@
                     </xar:mlstring>
                 </label>
                 <input type="text" name="dashtemplate" id="dashtemplate" value="#$dashtemplate#" size="30" maxlength="100" />
-                    <xar:mlstring>(without the .xt extension)
+                    <xar:mlstring>(without the .xt extension)</xar:mlstring>
+
+            <div class="xar-form-input-wrapper-after">
+                    <xar:mlstring>
+                        The Admin Dashboard is automatically used with all admin functions.
+                        You can also use <strong>admin-modulename.xt</strong> page templates, where <strong>modulename</strong> is the name of a module.
+                        These 'admin' templates can be used with the Dashboard turned on, or individually with Dashboard turned off.
                     </xar:mlstring>
+            </div>
             </div>
         </fieldset>
         <fieldset>

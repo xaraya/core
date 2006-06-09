@@ -3,7 +3,7 @@
  * The Core
  *
  * @package core
- * @copyright (C) 2002-2004 by the Xaraya Development Team.
+ * @copyright (C) 2002-2006 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
  * @author Marco Canini

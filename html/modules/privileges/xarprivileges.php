@@ -1,6 +1,7 @@
 <?php
 /**
  * Privileges administration API
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -484,12 +485,10 @@ class xarMasks
 
         // check if the exception needs to be caught here or not
         if ($catch && !$pass) {
-            if (xarModGetVar('privileges','exceptionredirect') && $userID = _XAR_ID_UNREGISTERED) {
-                // TODO: 1. when the privileges on the redirect page fail=> BOOM! (unlikely now)
-                // Give user another chance if not logged on 
-                $mod = xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule'));
-                $requrl = urlencode(xarServerGetCurrentUrl());
-                xarResponseRedirect(xarModURL($mod,'user','showloginform',array('redirecturl'=> $requrl)));
+            if (xarModGetVar('privileges','exceptionredirect') && !xarUserIsLoggedIn()) {
+                $authenticationmod=xarModGetNameFromId(xarModGetVar('roles','defaultauthmodule'));
+                xarResponseRedirect(xarModURL($authenticationmod,'user','showloginform'));
+
             } else {
                 $msg = xarML('No privilege for #(1)',$mask->getName());
                 throw new Exception($msg);

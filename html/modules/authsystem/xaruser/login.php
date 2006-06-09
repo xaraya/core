@@ -54,7 +54,7 @@ function authsystem_user_login()
 
     // Defaults
     if (preg_match('/authsystem/',$redirecturl)) {
-        $redirecturl = 'index.php';
+        $redirecturl = $redirect;
     }
 
     // Scan authentication modules and set user state appropriately
@@ -89,7 +89,8 @@ function authsystem_user_login()
                 break;
 
             case 'authsystem':
-
+                //Set a $lastresort flag var
+                $lastresort=false;
                 // Still need to check if user exists as the user may be
                 // set to inactive in the user table
                 //Get and check last resort first before going to db table
@@ -219,7 +220,9 @@ function authsystem_user_login()
             }
 
             // Log the user in
-            $res = xarModAPIFunc('authsystem','user','login',array('uname' => $uname, 'pass' => $pass, 'rememberme' => $rememberme));
+            $defaultauthmodule=xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule'));
+            if (!isset($defaultauthmodule)) $defaultauthmodules='authsystem';
+            $res = xarModAPIFunc($defaultauthmodule,'user','login',array('uname' => $uname, 'pass' => $pass, 'rememberme' => $rememberme));
             if ($res === NULL) return;
             elseif ($res == false) {
                 // Problem logging in

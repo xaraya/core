@@ -110,7 +110,8 @@ function base_menublock_display($blockinfo)
 
     // Sort Order, Status, Common Labels and Links Display preparation
     $logoutlabel = xarVarPrepForDisplay(xarML('logout'));
-    $logouturl = xarModURL('roles' ,'user', 'logout', array());
+    $authmod=xarModGetVar('roles','defaultauthmodule');
+    $logouturl = xarModURL(xarModGetNameFromID($authmod) ,'user', 'logout', array());
     $loggedin = xarUserIsLoggedIn();
 
     // Get current URL
@@ -245,7 +246,7 @@ function base_menublock_display($blockinfo)
                  * or we should be using a general function  not specific to a possibly unreliable
                  * existance of module var name such as aliasname and useModuleAlias
                  * These are set in Example module - as examples, but no guarantee people use them
-                 * We need to review the module alias functions - get and del don't seem to work at all!
+                 * We need to review the module alias functions 
                  */
                 $useAliasName=xarModGetVar($mod['name'], 'useModuleAlias');
                 $aliasname= xarModGetVar($mod['name'],'aliasname');

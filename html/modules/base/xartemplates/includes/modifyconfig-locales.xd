@@ -1,11 +1,11 @@
 <!-- Initialization of some information -->
 <xar:set name="mlsmode">#xarConfigGetVar('Site.MLS.MLSMode')#</xar:set>
 <xar:set name="single_checked">false</xar:set>
-<xar:if condition="$mlsmode == 'SINGLE'"><xar:set name="single_checked">true</xar:set></xar:if>
+<xar:if condition="$mlsmode eq 'SINGLE'"><xar:set name="single_checked">true</xar:set></xar:if>
 <xar:set name="boxed_checked">false</xar:set>
-<xar:if condition="$mlsmode == 'BOXED'"><xar:set name="boxed_checked">true</xar:set></xar:if>
+<xar:if condition="$mlsmode eq 'BOXED'"><xar:set name="boxed_checked">true</xar:set></xar:if>
 <xar:set name="unboxed_checked">false</xar:set>
-<xar:if condition="$mlsmode == 'UNBOXED'"><xar:set name="unboxed_checked">true</xar:set></xar:if>
+<xar:if condition="$mlsmode eq 'UNBOXED'"><xar:set name="unboxed_checked">true</xar:set></xar:if>
 
 <fieldset>
     <legend>

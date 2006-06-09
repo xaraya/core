@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @copyright (C) 2002-2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -73,16 +73,16 @@ function dynamicdata_utilapi_importproperties($args)
     // create new properties
     foreach ($fields as $name => $field) {
         $prop_id = xarModAPIFunc('dynamicdata','admin','createproperty',
-                                array('name' => $name,
-                                      'label' => $field['label'],
-                                      'objectid' => $objectid,
-                                      'moduleid' => $modid,
-                                      'itemtype' => $itemtype,
-                                      'type' => $field['type'],
-                                      'default' => $field['default'],
-                                      'source' => $field['source'],
-                                      'status' => $field['status'],
-                                      'order' => $field['order'],
+                                array('name'       => $name,
+                                      'label'      => $field['label'],
+                                      'objectid'   => $objectid,
+                                      'moduleid'   => $modid,
+                                      'itemtype'   => $itemtype,
+                                      'type'       => $field['type'],
+                                      'default'    => $field['default'],
+                                      'source'     => $field['source'],
+                                      'status'     => $field['status'],
+                                      'order'      => $field['order'],
                                       'validation' => $field['validation']));
         if (empty($prop_id)) {
             return;

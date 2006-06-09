@@ -16,12 +16,14 @@
  */
 function authsystem_user_logout()
 {
+    $redirect=xarServerGetBaseURL();
+
     // Get input parameters
-    if (!xarVarFetch('redirecturl','str:1:100',$redirecturl,'index.php',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('redirecturl','str:1:254',$redirecturl,$redirect,XARVAR_NOT_REQUIRED)) return;
 
     // Defaults
     if (preg_match('/authsystem/',$redirecturl)) {
-        $redirecturl = 'index.php';
+        $redirecturl = $redirect;
     }
 
     // Log user out

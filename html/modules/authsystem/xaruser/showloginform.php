@@ -9,10 +9,12 @@
  *
  * @subpackage Authsystem module
  * @link http://xaraya.com/index.php/release/42.html
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
  */
 /**
  * Shows the user login form when login block is not active
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @author  Jo Dalle Nogare <jojodeexaraya.com>
  */
 function authsystem_user_showloginform($args = array())
 {

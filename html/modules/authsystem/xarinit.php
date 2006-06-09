@@ -15,7 +15,7 @@
 /**
  * Initialise the Authsystem module
  *
- * @author Jo Dalle Nogare
+ * @author Jo Dalle Nogare <jojodee@xaraya.com>
  * @access public
  * @param none $
  * @returns bool

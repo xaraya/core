@@ -1,4 +1,22 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+    <xar:if condition="$showhelp eq '1'">
+    <ul class="xar-menu-section">
+        <li class="xar-menu-section">
+            <h4>
+                <xar:mlstring>
+                    Help System
+                </xar:mlstring>
+            </h4>
+            <ul class="xar-menu-item">
+                <li class="xar-menu-item">
+                    <a title="#xarML('System help')#" href="#$overviewlink#">
+                        <xar:mlstring>Help</xar:mlstring>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    </xar:if>
 <xar:foreach in="$catmods" key="$catname" value="$cats">
     <xar:comment>
         we dont really want to display a category if there are no modules that belong to it,

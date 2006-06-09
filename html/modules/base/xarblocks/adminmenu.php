@@ -2,12 +2,13 @@
 /**
  * Base block management
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package core modules
+ * @copyright (C) 2005-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage Base module
+ * @link http://xaraya.com/index.php/release/68.html
  */
 
 /**
@@ -20,7 +21,8 @@ function base_adminmenublock_init()
 {
     // Nothing to configure...
     // TODO: ...yet
-    return array('nocache' => 1);
+    return array('nocache' => 1,
+                 'showhelp' => true);
 }
 
 /**
@@ -40,7 +42,7 @@ function base_adminmenublock_info()
         'text_type' => 'adminmenu',
         'module' => 'base',
         'text_type_long' => 'Admin Menu',
-        'allow_multiple' => false,
+        'allow_multiple' => true,
         'form_content' => false,
         'form_refresh' => false,
         'show_preview' => false
@@ -66,11 +68,11 @@ function base_adminmenublock_display($blockinfo)
     } else {
         $vars = $blockinfo['content'];
     }
-    
+
     // are there any admin modules, then get the whole list sorted by names
     // checking this as early as possible
     $mods = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('AdminCapable' => 1)));
-  
+
 
     // which module is loaded atm?
     // we need it's name, type and function - dealing only with admin type mods, aren't we?
@@ -79,14 +81,16 @@ function base_adminmenublock_display($blockinfo)
     // SETTING 1: Show a logout link in the block?
     $showlogout = false;
     if(isset($vars['showlogout']) && $vars['showlogout']) $showlogout = true;
-    
-    // SETTING 2: Menustyle 
+    $showhelp = false;
+    if(isset($vars['showhelp'])&& $vars['showhelp']) $showhelp =true;
+
+    // SETTING 2: Menustyle
     if(!isset($vars['menustyle'])) {
         // If it is not set, revert to the default setting
         $vars['menustyle'] = xarModGetVar('modules', 'menustyle');
     }
-    
-    
+
+
     // Get current URL for later comparisons because we need to compare
     // xhtml compliant url, we fetch the default 'XML'-formatted URL.
     $currenturl = xarServerGetCurrentURL();
@@ -202,13 +206,29 @@ function base_adminmenublock_display($blockinfo)
             );
             break;
     }
+    //making a few assumptions here for now about modname and directory
+    //very rough - but let's use what we have for now
+    //Leave way open for real help system
+    //TODO : move any final help functions to some module or api when decided
 
+    if (file_exists('modules/'.$thismodname.'/xaradmin/overview.php')) {
+        if ($thisfuncname<>'overview' && $thisfuncname<>'main') {
+            $overviewlink=xarModURL($thismodname,'admin','overview',array(),NULL,$thisfuncname);
+        } else {
+            $overviewlink=xarModURL($thismodname,'admin','overview');
+        }
+    } else { //no overview exists;
+        $overviewlink=xarModURL('base','admin','overview',array('template'=>'nooverview'));
+    }
+
+    $data['overviewlink']=$overviewlink;
     // Set template base.
     // FIXME: not allowed to set private variables of BL directly
     $blockinfo['_bl_template_base'] = $template;
 
     // Populate block info and pass to BlockLayout.
     $data['showlogout'] = $showlogout;
+    $data['showhelp']  =  $showhelp;
     $data['menustyle']  = $vars['menustyle'];
     $blockinfo['content'] = $data;
     return $blockinfo;
