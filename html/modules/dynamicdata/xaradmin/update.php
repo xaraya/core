@@ -68,6 +68,9 @@ function dynamicdata_admin_update($args)
         $data['itemid'] = $itemid;
         $data['authid'] = xarSecGenAuthKey();
         $data['preview'] = $preview;
+        if (!empty($return_url)) {
+            $data['return_url'] = $return_url;
+        }
 
         $modinfo = xarModGetInfo($myobject->moduleid);
         $item = array();
