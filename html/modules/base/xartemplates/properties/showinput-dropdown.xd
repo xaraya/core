@@ -8,7 +8,7 @@
 
 <select name="#$name#" id="#$id#" tabindex="#$tabindex#" onchange="#$evt_change#">
     <xar:foreach in="$options" value="$option" >
-        <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
+        <xar:if condition="empty($option['id']) or $option['id'] nd $option['name']">
             <xar:if condition="$option['id'] eq $value" >
                 <option value="#$option['id']#" selected="selected">#$option['name']#</option>
             <xar:else />
