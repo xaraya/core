@@ -23,14 +23,15 @@
     <h4><xar:mlstring>Blocks and blockgroups</xar:mlstring></h4>
 
     <p>
-        <xar:mlstring>You can use blocks alone, or create a containing 'blockgroup' in which to place your blocks. 
+        <xar:mlstring>You can use blocks alone, or create a containing 'blockgroup' in which to place your blocks.
         Xaraya has pre-configured blockgroups created at installation time. These blockgroups include right,
         left, center, topnav and header blockgroups. They are used in the default Xaraya theme and have blocks already assigned
         to them. In the case of these default blockgroups, the name reflects the position that the blockgroups have
         been placed in the default theme although you could rename them.</xar:mlstring>
     </p>
     <p>
-        <xar:mlstring>You must tell Xaraya where you want to place your blockgroups in your site page by using the 'blockgroup' tag and placing it in your template page or module template. eg
+        <xar:mlstring>You must tell Xaraya where you want to place your blockgroups in your site page by using the 'blockgroup' tag and
+        placing it in your template page or module template. eg
          <code>&lt;xar:blockgroup name="right" id="right" /&gt;</code>.  The default blockgroups have already been
          placed in the default theme template.</xar:mlstring>
     </p><br />
@@ -43,8 +44,8 @@
       <h4><xar:mlstring>Creating new instances of blocks</xar:mlstring></h4>
       <p>
           <xar:mlstring>Each module may provide the code and templates for one or more types of blocks.
-          For example the Articles module provides a 'featured article' block, and a 'top items' block. 
-          The Base module provides a 'menu' block among others. You can create one or more instances of a block 
+          For example the Articles module provides a 'featured article' block, and a 'top items' block.
+          The Base module provides a 'menu' block among others. You can create one or more instances of a block
           and place them in one or more blockgroups using the options provided in the Blocks module menu:</xar:mlstring>
       </p><br />
 
@@ -72,14 +73,17 @@
       </ul><br />
 
       <h3><xar:mlstring>Using and templating blocks and blockgroups</xar:mlstring></h3>
+
+
       <p><xar:mlstring>Each block and blockgroup container has it's own template or uses a supplied default.</xar:mlstring></p>
+      <p> <xar:mlstring>A blockgroup can hold more than one block instance and you can have each of those instances use its own template by using an inner template.</xar:mlstring><p>
       <p>
-          <xar:mlstring>The blockgroup templates (outer container templates) are kept in your 
-          <code>theme/yourthemes/blocks</code> directory. If there is no specific blockgroup template it will use the 
-          preloaded default blockgroup template.</xar:mlstring>
+          <xar:mlstring>The blockgroup templates (outer container templates) are kept in your
+          <code>theme/yourthemes/blocks</code> directory. If there is no specific blockgroup template it will use the
+          preloaded default blockgroup template. The general name for the template is <code>blocktype-innertemplatename.xt</code></xar:mlstring>
       </p>
        <p>
-           <xar:mlstring>The templates provided for each block come with the module that provides the block. 
+           <xar:mlstring>The templates provided for each block come with the module that provides the block.
            You can override these templates if you want, and so produce your own layouts for the block content.
            If you do wish to create your own overrides for block templates (inner templates) then they should be placed in
            <code>themes/yourtheme/modules/themodule/blocks</code> where 'themodule' is the module providing the block.</xar:mlstring>
@@ -93,6 +97,16 @@
 
        <p><xar:mlstring>The Blocks Module has no hooks included at this time.</xar:mlstring></p><br />
 
+       <H3><xar:mlstring>Help documents for each admin option</xar:mlstring></h3>
+       <a name="modify_instance"><h4><xar:mlstring>Modify Instance</xar:mlstring></h4></a>
+       <p>
+        <xar:mlstring>You can set the location of a block on the page and the templates it uses for its instance.
+            The inner template is the template the block instance uses. The outer template is the template used for the blockgroup.
+            You can set the templates in the text box in the following format: [outer-template][semi-colon][inner-template]. Both entries are the names for the templates only.</xar:mlstring><br />
+            <xar:mlstring>An example: right;bigtext for the articles random block means the group template is right.xt in the <code>themes/[yourtheme]/blocks</code> directory.
+            Then the articles random block instance will be shown using the <code>[yourtheme]/modules/articles/blocks/random-bigtext.xt</code> template.
+            </xar:mlstring>
+       </p>
       <h3><xar:mlstring>Further Information</xar:mlstring></h3>
       <p>
           <xar:mlstring>Further information on the Blocks module can be found at</xar:mlstring>
