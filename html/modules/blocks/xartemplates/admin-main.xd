@@ -80,13 +80,14 @@
       <p>
           <xar:mlstring>The blockgroup templates (outer container templates) are kept in your
           <code>theme/yourthemes/blocks</code> directory. If there is no specific blockgroup template it will use the
-          preloaded default blockgroup template. The general name for the template is <code>blocktype-innertemplatename.xt</code></xar:mlstring>
+          preloaded default blockgroup template.</xar:mlstring>
       </p>
        <p>
-           <xar:mlstring>The templates provided for each block come with the module that provides the block.
-           You can override these templates if you want, and so produce your own layouts for the block content.
-           If you do wish to create your own overrides for block templates (inner templates) then they should be placed in
-           <code>themes/yourtheme/modules/themodule/blocks</code> where 'themodule' is the module providing the block.</xar:mlstring>
+           <xar:mlstring>The templates provided for each block come with the module that provides the block. These templates are referred to as inner templates.
+           You can override these inner templates if you want, and so produce your own layouts for the block content.
+           If you do wish to create your own overrides for block (inner) templates then they should be placed in
+           <code>themes/yourtheme/modules/themodule/blocks</code> where 'themodule' is the module providing the block.
+           The general name for the template is <code>blocktype-innertemplatename.xt</code></xar:mlstring>
        </p><br />
 
        <h3><xar:mlstring>Included Blocks</xar:mlstring></h3>
