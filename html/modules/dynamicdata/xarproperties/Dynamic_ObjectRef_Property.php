@@ -84,16 +84,63 @@ class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
         $items =  xarModApiFunc('dynamicdata', 'user', 'getitems', array (
                                     'modid'    => $objInfo['moduleid'],
                                     'itemtype' => $objInfo['itemtype'],
+                                    'sort'     => $this->display_prop,
                                     'fieldlist'=> $this->display_prop . ',' . $this->store_prop)
                              );
         $options = array();
         foreach($items as $item) {
             $options[] = array('id' => $item[$this->store_prop], 'name' => $item[$this->display_prop]);
         }
+        //$this->options = $options;
         return $options;
     }
     
-    
+    /**
+     * Retrieve or check an individual option on demand
+     */
+    function getOption($check = false)
+    {
+        if (!isset($this->value)) {
+             if ($check) return true;
+             return null;
+        }
+        if (count($this->options) > 0) {
+            foreach ($this->options as $option) {
+                if ($option['id'] == $this->value) {
+                    if ($check) return true;
+                    return $option['name'];
+                }
+            }
+            if ($check) return false;
+        }
+
+        // we don't want to check empty values for items
+        if (empty($this->value)) {
+             if ($check) return true;
+             return $this->value;
+        }
+
+        // The object we need to query is in $this->refobject, we display the value of 
+        // the property in $this->display_prop and the id comes from $this->store_prop
+        $objInfo  = Dynamic_Object_Master::getObjectInfo(array('name' => $this->refobject));
+        
+        // TODO: do we need to check whether the properties are actually in the object?
+        $item =  xarModApiFunc('dynamicdata', 'user', 'getitem', array (
+                                    'modid'    => $objInfo['moduleid'],
+                                    'itemtype' => $objInfo['itemtype'],
+                                    'itemid'   => $this->value,
+                                    'fieldlist'=> $this->display_prop . ',' . $this->store_prop)
+                             );
+
+        if (!empty($item) && isset($item[$this->display_prop])) {
+            if ($check) return true;
+            return $item[$this->display_prop];
+        }
+        if ($check) return false;
+        return $this->value;
+    }
+
+
     // Produce option(id,value) and value to pass to template
     // We cant trust the parent right now because that is using xarTplModule and not xarTplProperty
     function showOutput($args = array())
