@@ -1,7 +1,5 @@
 <?php
 /**
- * Get the relationships between a particular module and others
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -49,11 +47,9 @@ function dynamicdata_utilapi_getrelations($args)
         $invalid[] = 'item type';
     }
     if (count($invalid) > 0) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    join(', ',$invalid), 'util', 'getrelations', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array(join(', ',$invalid), 'util', 'getrelations', 'DynamicData');
+        throw new BadParameterException($vars,$msg);
     }
 
     if (isset($propertybag["$modid:$itemtype"])) {

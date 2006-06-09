@@ -1,7 +1,5 @@
 <?php
 /**
- * Display the roles this privilege is assigned to
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -60,7 +58,8 @@ function privileges_admin_viewroles()
                              'admin',
                              'removerole',
                              array('pid'=>$pid));
-    $data['trees'] = $renderer->drawtrees($data['show']);
+    //    $data['trees'] = $renderer->drawtrees($data['show']);
+    $data['trees'] = $renderer->maketrees($data['show']);
     $data['parents'] = $parents;
     $data['groups'] = xarModAPIFunc('roles','user','getallgroups');
     return $data;

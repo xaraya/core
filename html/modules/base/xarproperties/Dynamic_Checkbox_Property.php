@@ -1,7 +1,6 @@
 <?php
 /**
  * Checkbox Property
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -21,6 +20,24 @@ include_once "modules/dynamicdata/class/properties.php";
  */
 class Dynamic_Checkbox_Property extends Dynamic_Property
 {
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->tplmodule = 'base';
+        $this->template  = 'checkbox';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 14;
+        $info->name = 'checkbox';
+        $info->desc = 'Checkbox';
+
+        return $info;
+    }
+
     function checkInput($name='', $value = null)
     {
         if (empty($name)) {
@@ -49,80 +66,15 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
         return true;
     }
 
-//    function showInput($name = '', $value = null, $id = '', $tabindex = '')
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-
-        $data=array();
-
-        if (!isset($value)) {
-            $value = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
         }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        $data['value']=$value;
-        $data['name']=$name;
-        $data['id']=$id;
-        $data['checked'] = isset($checked) && $checked ? true : false;
-        $data['onchange'] = !empty($onchange) ? $onchange : null; // let tpl decide what to do with it
-        $data['tabindex']=!empty($tabindex) ? $tabindex : 0;
-        $data['invalid'] = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid): '';
 
-        $template="";
-        return xarTplProperty('base', 'checkbox', 'showinput', $data);
-
+        $data['checked']  = isset($data['checked']) && $data['checked'] ? true : false;
+        if(!isset($data['onchange'])) $data['onchange'] = null; // let tpl decide what to do
+        return parent::showInput($data);
     }
-
-    function showOutput($args = array())
-    {
-        extract($args);
-
-        $data=array();
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        $data['value']=$value;
-        // TODO: allow different values here, and verify $checked ?
-        //Move ML language defines to templates
-        /*if (!empty($value)) {
-            return xarML('yes');
-        } else {
-            return xarML('no');
-        }*/
-        $template="";
-        return xarTplProperty('base', 'checkbox', 'showoutput', $data);
-
-    }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 14,
-                              'name'       => 'checkbox',
-                              'label'      => 'Checkbox',
-                              'format'     => '14',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => '',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
 }
-
 ?>

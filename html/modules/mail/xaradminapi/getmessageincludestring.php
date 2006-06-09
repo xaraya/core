@@ -1,7 +1,6 @@
 <?php
 /**
  * Return message 
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -19,21 +18,19 @@
 function mail_adminapi_getmessageincludestring($args)
 {
     extract($args);
-    if (!isset($template)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_DATA', new SystemException('No template name was given.'));
-    }
+    if (!isset($template)) throw new EmptyParameterException('template');
 
     if(!isset($module)){
         list($module) = xarRequestGetInfo();
     }
 
-// Get the template that defines the substitution vars
+    // Get the template that defines the substitution vars
     $messaginghome = xarCoreGetVarDirPath() . "/messaging/" . $module;
-    if (!file_exists($messaginghome . "/includes/" . $template . ".xd")) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The variables template was not found.'));
-    }
+    $vartemplate = $messaginghome . "/includes/" . $template . ".xd";
+    if (!file_exists($vartemplate)) throw new FileNotFoundException($vartemplate);
+   
     $string = '';
-    $fd = fopen($messaginghome . "/includes/" . $template . ".xd", 'r');
+    $fd = fopen($vartemplate, 'r');
     while(!feof($fd)) {
         $line = fgets($fd, 1024);
         $string .= $line;

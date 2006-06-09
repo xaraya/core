@@ -1,7 +1,6 @@
 <?php
 /**
  * Modify site configuration 
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -36,7 +35,7 @@ function base_admin_modifyconfig()
 
     $localehome = xarCoreGetVarDirPath() . "/locales";
     if (!file_exists($localehome)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE', new SystemException('The locale directory was not found.'));
+        throw new DirectoryNotFoundException($localehome);
     }
     $dd = opendir($localehome);
     $locales = array();

@@ -1,7 +1,6 @@
 <?php
 /**
  * Dynamic Color Picker property
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -9,14 +8,32 @@
  *
  * @subpackage Base module
  */
-/*
+/**
  * @author mikespub <mikespub@xaraya.com>
 */
 class Dynamic_TColorPicker_Property extends Dynamic_Property
 {
-    var $size = 10;
-    var $maxlength = 7;
-    var $min = 7;
+    public $size      = 10;
+    public $maxlength = 7;
+    public $min       = 7;
+
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->tplmodule = 'base';
+        $this->template = 'tcolorpicker';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 44;
+        $info->name = 'tcolorpicker';
+        $info->desc = 'Tigra Color Picker';
+
+        return $info;
+    }
 
     function validateValue($value = NULL)
     {
@@ -35,26 +52,13 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
         return true;
     }
 
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        $data = array();
-
         if (empty($maxlength) && isset($this->max)) {
             $this->maxlength = $this->max;
             if ($this->size > $this->maxlength) {
                 $this->size = $this->maxlength;
             }
-        }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-
-        if (!isset($value)) {
-            $value = $this->value;
         }
 
         // Include color picker javascript options.
@@ -69,69 +73,14 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
             'base','javascript','modulefile',
             array('module' => 'base', 'filename' => 'tcolorpicker.js')
         );
-        /*
-        // Create the tags.
-        $output = '<input type="text" name="'.$name.'" id="'.$id.'_input" value="'.xarVarPrepForDisplay($value).'" size="' . $this->size . '" maxlength="' . $this->maxlength . '" />'
-            . '<a href="javascript:TCP.popup(document.getElementById(\''.$id.'_input\'), 1)">'
-            . '<img src="' . xarTplGetImage('tcolorpicker.gif', 'base') . '" width="15" height="13" border="0" alt="' . xarML('Click Here to select a color') . '" />'
-            . '</a>';
 
-        if (!empty($this->invalid)) {
-            $output .= ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>';
-        }
-        */
-        $data['baseuri']   =xarServerGetBaseURI();
-        $data['name']     = $name;
-        $data['id']       = $id;
+        $data['baseuri']  = xarServerGetBaseURI();
         $data['size']     = $this->size;
         $data['maxlength']= $this->maxlength;
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-        return xarTplProperty('base', 'tcolorpicker', 'showinput', $data);
+        return parent::showInput($data);
     }
-
-    function showOutput($args = array())
-    {
-        extract($args);
-        $data = array();
-
-        if (isset($value)) {
-            $data['value'] = xarVarPrepHTMLDisplay($value);
-        } else {
-            $data['value'] = xarVarPrepHTMLDisplay($this->value);
-        }
-
-         return xarTplProperty('base', 'tcolorpicker', 'showoutput', $data);
-    }
-
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 44,
-                              'name'       => 'tcolorpicker',
-                              'label'      => 'Tigra Color Picker',
-                              'format'     => '44',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => '',
-                            'aliases'        => '',
-                            'args'           => serialize($args)
-                            // ...
-                           );
-        return $baseInfo;
-     }
 
 }
-
 ?>

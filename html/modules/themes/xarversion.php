@@ -1,7 +1,6 @@
 <?php
 /**
  * Themes administration and initialization
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -21,7 +20,7 @@
  */
 $modversion['name']           = 'Themes Administration';
 $modversion['id']             = '70';
-$modversion['version']        = '1.7.0';
+$modversion['version']        = '1.8.0';
 $modversion['displayname']    = xarML('Themes');
 $modversion['description']    = 'Configure themes, change site appearance';
 $modversion['displaydescription'] = xarML('Configure themes, change site appearance');

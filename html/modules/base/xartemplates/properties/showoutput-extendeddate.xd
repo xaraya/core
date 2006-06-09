@@ -1,14 +1,14 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-<xar:comment>
+<!--
     We can't use xarLocaleFormatDate() here because timestamps might be out of range,
     but we could use locale-dependent years, months, days etc.
-</xar:comment>
+-->
 <xar:if condition="!empty($year)">
     #$year#-#$mon#-#$day#
     <xar:if condition="!empty($format) and $format eq 'datetime'">
         #$hour#:#$min#:#$sec#
     </xar:if>
 <xar:else/>
-    #$value#
+    <xar:var name="value" prep="true"/>
 </xar:if>

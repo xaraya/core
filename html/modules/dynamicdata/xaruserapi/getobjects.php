@@ -1,7 +1,5 @@
 <?php
 /**
- * Get the list of defined dynamic objects
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -20,7 +18,7 @@
  */
 function dynamicdata_userapi_getobjects($args = array())
 {
-    return Dynamic_Object_Master::getObjects();
+    return Dynamic_Object_Master::getObjects($args);
 }
 
 ?>

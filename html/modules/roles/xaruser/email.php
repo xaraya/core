@@ -24,8 +24,7 @@ function roles_user_email($args)
     // we can only send emails to other members if we are logged in
     if(!xarUserIsLoggedIn())
     {
-        xarErrorSet(XAR_USER_EXCEPTION, 'NOT_LOGGED_IN', new DefaultUserException());
-        return;
+        throw new ForbiddenOperationException(null,'You are not logged in, sending emails is not allowed');
     }
 
     extract($args);
@@ -38,20 +37,15 @@ function roles_user_email($args)
     // just ensure the state is pulled back the start ('modify').
     $valid_flag = true;
     $error_message = '';
-    $valid_flag &= xarVarFetch('subject', 'html:restricted', $subject);
-    $valid_flag &= xarVarFetch('message', 'html:restricted', $message);
-
-    if (!$valid_flag) {
-        // The input failed validation.
-
+    // WATCH OUT: &= is not the same as =&
+    try {
+        xarVarFetch('subject', 'html:restricted', $subject);
+        xarVarFetch('message', 'html:restricted', $message);
+    } catch (ValidationExceptions $e) {
         // Ensure we don't sent the e-mail.
         $phase = 'modify';
-
         // Catch the error message.
-        $error_message = xarErrorRender('text');
-
-        // Clear the errors since we are handling it locally.
-        xarErrorHandled();
+        $error_message = $e->getMessage();
     }
 
     // Security Check
@@ -117,7 +111,7 @@ function roles_user_email($args)
             )) return;
 
             // lets update status and display updated configuration
-            xarResponseRedirect(xarModURL('roles', 'user', 'view'));
+            xarResponseRedirect(xarModURL('roles', 'user', 'viewlist'));
 
             break;
     }

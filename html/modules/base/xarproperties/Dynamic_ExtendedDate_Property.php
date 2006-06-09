@@ -18,14 +18,32 @@ include_once "modules/base/xarproperties/Dynamic_Calendar_Property.php";
 /**
  * The extended date property converts the value provided by the javascript
  * calendar into a universal YYYY-MM-DD format for storage in most databases
- * supporting the 'date' type. 
+ * supporting the 'date' type.
  *
  * The problem with the normal Calendar property is that it converts
  * everything into a UNIX timestamp, and for most C librarys this does not
  * include dates before 1970. (see Xaraya bugs 2013 and 1428)
+ * TODO: get rid of this one and merge into one calendar property.
  */
 class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
 {
+    function __construct($args)
+    {
+        $this->tplmodule = 'base';
+        $this->template  = 'extendeddate';    
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 47;
+        $info->name = 'extendeddate';
+        $info->desc = 'Extended Date';
+
+        return $info;
+    }
+
     /**
      * We allow two validations: date, and datetime (corresponding to the
      * database's date and datetime data types.
@@ -82,7 +100,7 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
             preg_match('/\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}/', $value))
             ) {
 
-            /* TODO: use xaradodb to format the date */
+            /* TODO: use middleware to format the date? */
             $this->value = $value;
             return true;
 
@@ -96,19 +114,10 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
     /**
      * Show the input according to the requested dateformat.
      */
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        $data = array();
-
-        if (empty($name)) {
-            $name = 'dd_'.$this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        if (!isset($value)) {
-            $value = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
         }
 
         $data['year'] = '';
@@ -119,17 +128,17 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
         $data['sec']  = '00';
 
         // default time is unspecified
-        if (empty($value)) {
-            $value = '';
+        if (empty($data['value'])) {
+            $data['value'] = '';
 
         } elseif ($this->validation == 'date' &&
-            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2})/', $value, $matches)) {
+            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2})/', $data['value'], $matches)) {
             $data['year'] = $matches[1];
             $data['mon']  = $matches[2];
             $data['day']  = $matches[3];
 
         } elseif ($this->validation == 'datetime' &&
-            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})/', $value, $matches)) {
+            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})/', $data['value'], $matches)) {
             $data['year'] = $matches[1];
             $data['mon']  = $matches[2];
             $data['day']  = $matches[3];
@@ -139,34 +148,24 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
         }
         $data['format']   = $this->validation;
 
-        if (!isset($dateformat)) {
+        if (!isset($data['dateformat'])) {
             if ($this->validation == 'date') {
-                $dateformat = '%Y-%m-%d';
+                $data['dateformat'] = '%Y-%m-%d';
             } else {
-                $dateformat = '%Y-%m-%d %H:%M:%S';
+                $data['dateformat'] = '%Y-%m-%d %H:%M:%S';
             }
         }
-        $data['dateformat'] = $dateformat;
-        $data['name']       = $name;
-        $data['id']         = $id;
-        $data['value']      = $value;
-        $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-        return xarTplProperty('base', 'extendeddate', 'showinput', $data);
+        return parent::showInput($data);
     }
 
     /**
      * Show the output according to the requested dateformat.
      */
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-
-        $data = array();
-
-        if (!isset($value)) {
-            $value = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
         }
 
         $data['year'] = '';
@@ -177,17 +176,17 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
         $data['sec']  = '';
 
         // default time is unspecified
-        if (empty($value)) {
-            $value = '';
+        if (empty($data['value'])) {
+            $data['value'] = '';
 
         } elseif ($this->validation == 'date' &&
-            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2})/', $value, $matches)) {
+            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2})/', $data['value'], $matches)) {
             $data['year'] = $matches[1];
             $data['mon']  = $matches[2];
             $data['day']  = $matches[3];
 
         } elseif ($this->validation == 'datetime' &&
-            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})/', $value, $matches)) {
+            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})/', $data['value'], $matches)) {
             $data['year'] = $matches[1];
             $data['mon']  = $matches[2];
             $data['day']  = $matches[3];
@@ -197,46 +196,15 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
         }
         $data['format']   = $this->validation;
 
-        if (!isset($dateformat)) {
+        if (!isset($data['dateformat'])) {
             if ($this->validation == 'date') {
-                $dateformat = '%a, %d %B %Y %Z';
+                $data['dateformat'] = '%a, %d %B %Y %Z';
             } else {
-                $dateformat = '%a, %d %B %Y %H:%M:%S %Z';
+                $data['dateformat'] = '%a, %d %B %Y %H:%M:%S %Z';
             }
         }
 
-        $data['dateformat'] = $dateformat;
-        $data['value']      = $value;
-
-        return xarTplProperty('base', 'extendeddate', 'showoutput', $data);
-    } /* showOutput */
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 47,
-                              'name'       => 'extendeddate',
-                              'label'      => 'Extended Date',
-                              'format'     => '47',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => '',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
+        return parent::showOutput($data);
+    }
 }
-
-
 ?>

@@ -1,7 +1,6 @@
 <?php
 /**
  * Get a list of modules that matches required criteria.
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -56,12 +55,7 @@ function modules_adminapi_getlist($args)
 
     if (!isset($filter)) $filter = array();
 
-    if (!is_array($filter)) {
-        $msg = xarML('Parameter filter must be an array.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    if (!is_array($filter)) throw new BadParameterException('filter','Parameter filter must be an array.');
 
     // Optional arguments.
     if (!isset($startNum)) $startNum = 1;
@@ -72,16 +66,13 @@ function modules_adminapi_getlist($args)
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
     $modulestable = $tables['modules'];
-    $module_statesTables = array($tables['system/module_states'], $tables['site/module_states']);
 
     // Construct the order by clause and join it up into one string
     $orderFields = explode('/', $orderBy);
     $orderByClauses = array(); $extraSelectClause = '';
     foreach ($orderFields as $orderField) {
-        if (!isset($validOrderFields[$orderField])) {
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'orderBy');
-            return;
-        }
+        if (!isset($validOrderFields[$orderField])) throw new BadParameterExceptions('orderBy');
+
         // Here $validOrderFields[$orderField] is the table alias
         $orderByClauses[] = $validOrderFields[$orderField] . '.xar_' . $orderField;
         if ($validOrderFields[$orderField] == 'mods') {
@@ -119,97 +110,85 @@ function modules_adminapi_getlist($args)
     if (isset($filter['State'])) {
         if ($filter['State'] != XARMOD_STATE_ANY) {
             if ($filter['State'] != XARMOD_STATE_INSTALLED) {
-                $whereClauses[] = 'states.xar_state = ?';
+                $whereClauses[] = 'mods.xar_state = ?';
                 $bindvars[] = $filter['State'];
             } else {
-                $whereClauses[] = 'states.xar_state != ? AND states.xar_state < ? AND states.xar_state != ?';
+                $whereClauses[] = 'mods.xar_state != ? AND mods.xar_state < ? AND mods.xar_state != ?';
                 $bindvars[] = XARMOD_STATE_UNINITIALISED;
                 $bindvars[] = XARMOD_STATE_MISSING_FROM_INACTIVE;
                 $bindvars[] = XARMOD_STATE_MISSING_FROM_UNINITIALISED;
             }
         }
     } else {
-        $whereClauses[] = 'states.xar_state = ?';
+        $whereClauses[] = 'mods.xar_state = ?';
         $bindvars[] = XARMOD_STATE_ACTIVE;
     }
 
-    // Here we do 2 SELECTs: one for SHARED moded modules and
-    // one for PER_SITE moded modules
-    // Maybe this could be done with a single query?
+
     $modList = array(); $mode = XARMOD_MODE_SHARED;
-    for ($i = 0; $i < 2; $i++ ) {
-        $module_statesTable = $module_statesTables[$i];
 
-        $query = "SELECT mods.xar_regid, mods.xar_name, mods.xar_directory,
-                         mods.xar_version, mods.xar_id, states.xar_state
-                  FROM $modulestable mods
-                  LEFT JOIN $module_statesTable states ON mods.xar_regid = states.xar_regid";
+    $query = "SELECT mods.xar_regid, mods.xar_name, mods.xar_directory,
+                     mods.xar_version, mods.xar_id, mods.xar_state
+                  FROM $modulestable mods ";
+    
+    // Add the first mode to the where clauses and join it into one string
+    array_unshift($whereClauses, 'mods.xar_mode = ?');
+    array_unshift($bindvars,$mode);
+    $whereClause = join(' AND ', $whereClauses);
+    $query .= " WHERE $whereClause ORDER BY $orderByClause";
 
-        // Add the first mode to the where clauses and join it into one string
-        array_unshift($whereClauses, 'mods.xar_mode = ?');
-        array_unshift($bindvars,$mode);
-        $whereClause = join(' AND ', $whereClauses);
-        $query .= " WHERE $whereClause ORDER BY $orderByClause";
+    $result = $dbconn->SelectLimit($query, $numItems, $startNum - 1,$bindvars);
 
-        $result = $dbconn->SelectLimit($query, $numItems, $startNum - 1,$bindvars);
-        if (!$result) return;
+    while(!$result->EOF) {
+        list($modInfo['regid'],
+             $modInfo['name'],
+             $modInfo['directory'],
+             $modInfo['version'],
+             $modInfo['systemid'],
+             $modState) = $result->fields;
 
-        while(!$result->EOF) {
-            list($modInfo['regid'],
-                 $modInfo['name'],
-                 $modInfo['directory'],
-                 $modInfo['version'],
-                 $modInfo['systemid'],
-                 $modState) = $result->fields;
+        if (xarVarIsCached('Mod.Infos', $modInfo['regid'])) {
+            // Get infos from cache
+            $modList[] = xarVarGetCached('Mod.Infos', $modInfo['regid']);
+        } else {
+            $modInfo['mode'] = (int) $mode;
+            $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name']);
+            $modInfo['displaydescription'] = xarModGetDisplayableDescription($modInfo['name']);
+            // Shortcut for os prepared directory
+            $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
+            
+            $modInfo['state'] = (int) $modState;
 
-            if (xarVarIsCached('Mod.Infos', $modInfo['regid'])) {
-                // Get infos from cache
-                $modList[] = xarVarGetCached('Mod.Infos', $modInfo['regid']);
-            } else {
-                $modInfo['mode'] = (int) $mode;
-                $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name']);
-                $modInfo['displaydescription'] = xarModGetDisplayableDescription($modInfo['name']);
-                // Shortcut for os prepared directory
-                $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
+            xarVarSetCached('Mod.BaseInfos', $modInfo['name'], $modInfo);
 
-                $modInfo['state'] = (int) $modState;
-
-                xarVarSetCached('Mod.BaseInfos', $modInfo['name'], $modInfo);
-
-                $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
-                if (isset($modFileInfo)) {
-                    //     $modInfo = array_merge($modInfo, $modFileInfo);
-                    $modInfo = array_merge($modFileInfo, $modInfo);
-                    xarVarSetCached('Mod.Infos', $modInfo['regid'], $modInfo);
-                    switch ($modInfo['state']) {
-                        case XARMOD_STATE_MISSING_FROM_UNINITIALISED:
-                            $modInfo['state'] = XARMOD_STATE_UNINITIALISED;
-                            break;
-                        case XARMOD_STATE_MISSING_FROM_INACTIVE:
-                            $modInfo['state'] = XARMOD_STATE_INACTIVE;
-                            break;
-                        case XARMOD_STATE_MISSING_FROM_ACTIVE:
-                            $modInfo['state'] = XARMOD_STATE_ACTIVE;
-                            break;
-                        case XARMOD_STATE_MISSING_FROM_UPGRADED:
-                            $modInfo['state'] = XARMOD_STATE_UPGRADED;
-                            break;
-                    }
+            $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
+            if (isset($modFileInfo)) {
+                //     $modInfo = array_merge($modInfo, $modFileInfo);
+                $modInfo = array_merge($modFileInfo, $modInfo);
+                xarVarSetCached('Mod.Infos', $modInfo['regid'], $modInfo);
+                switch ($modInfo['state']) {
+                case XARMOD_STATE_MISSING_FROM_UNINITIALISED:
+                    $modInfo['state'] = XARMOD_STATE_UNINITIALISED;
+                    break;
+                case XARMOD_STATE_MISSING_FROM_INACTIVE:
+                    $modInfo['state'] = XARMOD_STATE_INACTIVE;
+                    break;
+                case XARMOD_STATE_MISSING_FROM_ACTIVE:
+                    $modInfo['state'] = XARMOD_STATE_ACTIVE;
+                    break;
+                case XARMOD_STATE_MISSING_FROM_UPGRADED:
+                    $modInfo['state'] = XARMOD_STATE_UPGRADED;
+                    break;
                 }
-
-                $modList[] = $modInfo;
             }
-            $modInfo = array();
-            $result->MoveNext();
-        }
 
-        $result->Close();
-        // Go over to the next mode
-        $mode = XARMOD_MODE_PER_SITE;
-        array_shift($whereClauses);
-        array_shift($bindvars);
+            $modList[] = $modInfo;
+        }
+        $modInfo = array();
+        $result->MoveNext();
     }
 
+    $result->Close();
     return $modList;
 }
 ?>

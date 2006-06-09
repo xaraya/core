@@ -90,8 +90,6 @@ function roles_admin_asknotification($args)
             $uid = unserialize(base64_decode($uid));
             if (!xarModAPIFunc('roles','admin','senduseremail', array( 'uid' => $uid, 'mailtype' => $data['mailtype'], 'subject' => $data['subject'], 'message' => $data['message'], 'pass' => $data['pass'], 'ip' => $data['ip']))) {
                 return;
-                $msg = xarML('Problem sending email for #(1) Userid: #(2)',$data['mailtype'],$uid);
-                xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
             }
             xarResponseRedirect(xarModURL('roles', 'admin', 'showusers',
                               array('uid' => $data['groupuid'], 'state' => $data['state'])));

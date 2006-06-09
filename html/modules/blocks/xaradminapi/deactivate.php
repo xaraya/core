@@ -1,7 +1,5 @@
 <?php
 /**
- * Deactivate a block
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -36,8 +34,7 @@ function blocks_adminapi_deactivate($args)
 
     // Deactivate
     $query = "UPDATE $blockstable SET xar_state = ?  WHERE xar_id = ?";
-    $result =& $dbconn->Execute($query,array(0, $bid));
-    if (!$result) return;
+    $dbconn->Execute($query,array(0, $bid));
 
     return true;
 }

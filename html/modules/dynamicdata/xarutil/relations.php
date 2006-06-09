@@ -49,7 +49,10 @@ function dynamicdata_util_relations($args)
     $data['prop'] = xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 'fieldtype', 'name' => 'dummy'));
 
     $dbconn =& xarDBGetConn();
-    $data['tables'] = $dbconn->MetaTables();
+    $dbInfo = $dbconn->getDatabaseInfo();
+    // Pass the full info object to the template, let them figure out how and what
+    $data['tables'] = $dbInfo->getTables();
+
     $data['objects'] = xarModAPIFunc('dynamicdata','user','getobjects');
 
     if (!empty($table) || !empty($objectid)) {
@@ -57,24 +60,24 @@ function dynamicdata_util_relations($args)
                                 array('objectid' => $objectid,
                                       'table' => $table));
         $data['fields'] = $object->properties;
-if (empty($table)) {
-$table = $objectid;
-}
+        if (empty($table)) {
+            $table = $objectid;
+        }
         $relations = xarModGetVar('dynamicdata','relations');
         if (!empty($relations)) {
             $data['relations'] = unserialize($relations);
         } else {
             $data['relations'] = array();
         }
-//echo '<pre>',var_dump($data['relations']),'</pre>';
+        //echo '<pre>',var_dump($data['relations']),'</pre>';
         if (!empty($withtable) || !empty($withobjectid)) {
             $withobject = xarModAPIFunc('dynamicdata','user','getobject',
                                         array('objectid' => $withobjectid,
                                               'table' => $withtable));
             $data['withfields'] = $withobject->properties;
-if (empty($withtable)) {
-$withtable = $withobjectid;
-}
+            if (empty($withtable)) {
+                $withtable = $withobjectid;
+            }
         }
         if (!empty($confirm)) {
             if (!xarSecConfirmAuthKey()) return;
@@ -86,27 +89,27 @@ $withtable = $withobjectid;
             }
             $data['relations'][$table][$withtable][] = array('from' => $field, 'to' => $withfield, 'type' => $relation);
             switch ($relation) {
-                case 'parent':
-                    $data['relations'][$withtable][$table][] = array('from' => $withfield, 'to' => $field, 'type' => 'child');
-                    break;
-                case 'child':
-                    $data['relations'][$withtable][$table][] = array('from' => $withfield, 'to' => $field, 'type' => 'parent');
-                    break;
-                case 'direct':
-                    $data['relations'][$withtable][$table][] = array('from' => $withfield, 'to' => $field, 'type' => 'directfrom');
-                    break;
-                case 'directfrom':
-                    $data['relations'][$withtable][$table][] = array('from' => $withfield, 'to' => $field, 'type' => 'direct');
-                    break;
-                case 'recursive':
-                    // nothing more to add
-                    break;
-                case 'extension':
-                    $data['relations'][$withtable][$table][] = array('from' => $withfield, 'to' => $field, 'type' => 'extended');
-                    break;
-                case 'extended':
-                    $data['relations'][$withtable][$table][] = array('from' => $withfield, 'to' => $field, 'type' => 'extension');
-                    break;
+            case 'parent':
+                $data['relations'][$withtable][$table][] = array('from' => $withfield, 'to' => $field, 'type' => 'child');
+                break;
+            case 'child':
+                $data['relations'][$withtable][$table][] = array('from' => $withfield, 'to' => $field, 'type' => 'parent');
+                break;
+            case 'direct':
+                $data['relations'][$withtable][$table][] = array('from' => $withfield, 'to' => $field, 'type' => 'directfrom');
+                break;
+            case 'directfrom':
+                $data['relations'][$withtable][$table][] = array('from' => $withfield, 'to' => $field, 'type' => 'direct');
+                break;
+            case 'recursive':
+                // nothing more to add
+                break;
+            case 'extension':
+                $data['relations'][$withtable][$table][] = array('from' => $withfield, 'to' => $field, 'type' => 'extended');
+                break;
+            case 'extended':
+                $data['relations'][$withtable][$table][] = array('from' => $withfield, 'to' => $field, 'type' => 'extension');
+                break;
             }
             $relations = serialize($data['relations']);
             xarModSetVar('dynamicdata','relations',$relations);

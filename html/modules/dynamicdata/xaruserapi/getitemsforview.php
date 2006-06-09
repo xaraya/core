@@ -1,7 +1,5 @@
 <?php
 /**
- * Return the properties and items
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -24,12 +22,16 @@ function dynamicdata_userapi_getitemsforview($args)
         $args['status'] = 1;
     }
     $args['getobject'] = 1;
-    $object =  xarModAPIFunc('dynamicdata','user','getitems',$args);
-    if (!isset($object)) {
+    $objects =  xarModAPIFunc('dynamicdata','user','getitems',$args);
+    if (!isset($objects)) {
         return array(array(), array());
     }
-    $properties = & $object->getProperties();
-    $items = & $object->items;
+    $properties = array();
+    $items = array();
+    foreach ($objects as $object) {
+		$properties = array_merge($properties,  $object->getProperties());
+		$items = array_merge($items,  $object->items);
+    }
     return array(& $properties, & $items);
 }
 

@@ -1,7 +1,5 @@
 <?php
 /**
- * Update/insert a template tag
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -27,10 +25,7 @@ function themes_admin_removetpltag()
     if (!xarSecurityCheck('AdminTheme', 0, 'All', '::')) return;
 
     if(!xarTplUnregisterTag($tagname)) {
-        $msg = xarML('Could not unregister (#(1)).', $tagname);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                        new SystemException($msg));
-       return;
+        throw new TagRegistrationException($tagname,'Could not unregister tag (#(1)).');
     }
 
     xarResponseRedirect(xarModUrl('themes', 'admin', 'listtpltags'));

@@ -1,6 +1,5 @@
 <?php
 /**
- * Remove a role from a privilege assignment
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
@@ -34,11 +33,8 @@ function privileges_admin_removerole()
         (($roleid == 2) && ($pid == 6)) ||
         (($roleid == 4) && ($pid == 2)))
         {
-        $msg = xarML('This privilege cannot be removed');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
-        return;
-    }
+            throw new ForbiddenOperationException(null,'This privilege cannot be removed');
+        }
 
 // Clear Session Vars
     xarSessionDelVar('privileges_statusmsg');

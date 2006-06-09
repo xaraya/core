@@ -61,10 +61,7 @@ function dynamicdata_util_import($args)
                 }
             }
             if (empty($found) || !file_exists($basedir . '/' . $file)) {
-                $msg = xarML('File not found');
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                               new SystemException($msg));
-                return;
+                throw new FileNotFoundException($basedir,'No files were found to import in directory "#(1)"');
             }
             $objectid = xarModAPIFunc('dynamicdata','util','import',
                                       array('file' => $basedir . '/' . $file,

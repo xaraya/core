@@ -22,6 +22,23 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_Combo_Property extends Dynamic_Select_Property
 {
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->tplmodule = 'base';
+        $this->template  = 'combobox';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 506;
+        $info->name = 'combobox';
+        $info->desc = 'Combo Dropdown Textbox';
+
+        return $info;
+    }
 
     function checkInput($name = '', $value = null)
     {
@@ -60,96 +77,5 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
 
         return true;
     }
-
-//    function showInput($name = '', $value = null, $options = array(), $id = '', $tabindex = '')
-    function showInput($args = array())
-    {
-        extract($args);
-
-        $data=array();
-
-        if (!isset($value)) {
-            $data['value'] = $this->value;
-        } else {
-            $data['value'] = $value;
-        }
-
-        if (!isset($options) || count($options) == 0) {
-            $data['options'] = $this->getOptions();
-        } else {
-            $data['options'] = $options;
-        }
-        if (empty($name)) {
-            $data['name'] = 'dd_' . $this->id;
-        } else {
-            $data['name'] = $name;
-        }
-        if (empty($id))
-        {
-            $data['id'] = $data['name'];
-        } else {
-            $data['id']= $id;
-        }
-
-        $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
-
-        $template="";
-        return xarTplProperty('base', 'combobox', 'showinput', $data);
-    }
-
-    function showOutput($args = array())
-    {
-        extract($args);
-        if (isset($value)) {
-            $this->value = $value;
-        }
-        $data=array();
-        $data['value'] = $this->value;
-        // get the option corresponding to this value
-        $result = $this->getOption();
-        $data['option'] = array('id' => $this->value,
-                                'name' => xarVarPrepForDisplay($result));
-
-        // If the value wasn't found in the select list data, then it was
-        // probably typed in -- so just display it.
-        if( !isset($data['option']['name']) || ( $data['option']['name'] == '') )
-        {
-            $data['option']['name'] = xarVarPrepForDisplay($this->value);
-        }
-
-        $template="";
-        return xarTplProperty('base', 'combobox', 'showoutput', $data);
-    }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 506,
-                              'name'       => 'combo',
-                              'label'      => 'Combo Dropdown Textbox',
-                              'format'     => '506',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => '',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
-
-
 }
-
-
 ?>

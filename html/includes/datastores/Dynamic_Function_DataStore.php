@@ -42,7 +42,7 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
     // TODO: improve this ?
             list($fmod,$ftype,$ffunc) = explode('_',$function);
             // see if the module is available
-            if (!xarModIsAvailable($fmod)) {
+            if (!xarMod::isAvailable($fmod)) {
                 continue;
             }
             // see if we're dealing with an API function or a GUI one
@@ -59,18 +59,11 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
                 // see if we got something interesting in return
                 if (isset($value)) {
                     $this->fields[$function]->setValue($value);
-                } elseif (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                    // ignore any exceptions on retrieval for now
-                    xarErrorFree();
-                }
+                } 
             } else {
             // TODO: don't we want auto-loading for xarModFunc too ???
                 // try to load the module GUI
-                if (!xarModLoad($fmod,$ftype)) {
-                    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                        // ignore any exceptions on retrieval for now
-                        xarErrorFree();
-                    }
+                if (!xarMod::load($fmod,$ftype)) {
                     continue;
                 }
                 // try to invoke the function with some common parameters
@@ -84,10 +77,7 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
                 // see if we got something interesting in return
                 if (isset($value)) {
                     $this->fields[$function]->setValue($value);
-                } elseif (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                    // ignore any exceptions on retrieval for now
-                    xarErrorFree();
-                }
+                } 
             }
         }
         return $itemid;
@@ -102,17 +92,17 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
         }
 
         /* default values - you shouldn't rely on these! */
-        if (!array_key_exists('modname', $args)) {
-            list($mod, $type, $func) = xarRequestGetInfo();
+        if (!isset($args['modname'])) {
+            list($mod, $type, $func) = xarRequest::getInfo();
             $args['modname'] = $mod;
         }
-        if (!array_key_exists('modid', $args)) {
-            $args['modid'] = xarModGetIDFromName($mod);
+        if (!isset($args['modid'])) {
+            $args['modid'] = xarMod::getRegID($mod);
         }
-        if (!array_key_exists('itemtype', $args)) {
+        if (!isset($args['itemtype'])) {
             $args['itemtype'] = $this->itemtype;
         }
-        if (!array_key_exists('objectid', $args)) {
+        if (!isset($args['objectid'])) {
             $args['objectid'] = '';
         }
         $items = array();

@@ -11,18 +11,19 @@
  * @todo bring back possibility of time authorized keys
  * @todo this needs another place
  * @todo this needs documentation
+ * @todo why do we need this?
  */
 
 class xarDate 
 {
 
-    var $year;
-    var $month;
-    var $day;
-    var $hour;
-    var $minute;
-    var $second;
-    var $timestamp;
+    public $year;
+    public $month;
+    public $day;
+    public $hour;
+    public $minute;
+    public $second;
+    public $timestamp;
 
     function xarDate($hour=0,$minute=0,$second=0,$month=0,$day=0,$year=0) 
     {

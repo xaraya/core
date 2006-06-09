@@ -1,7 +1,5 @@
 <?php
 /**
- * Create a new dynamic object
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -22,6 +20,7 @@
  * @param $args['config'] some configuration for the object (free to define and use)
  * @param $args['objectid'] object id of the object to create (for import only)
  * @param $args['maxid'] for purely dynamic objects, the current max. itemid (for import only)
+ * @param $args['parent'] itemtype of the parent of this object
  * @returns int
  * @return object ID on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION

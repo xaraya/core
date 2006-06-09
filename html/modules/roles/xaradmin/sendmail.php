@@ -63,11 +63,10 @@ function roles_admin_sendmail()
 
     // Get the template that defines the substitution vars
     $messaginghome = xarCoreGetVarDirPath() . "/messaging/roles";
-    if (!file_exists($messaginghome . "/includes/message-vars.xd")) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The variables template was not found.'));
-    }
+    $msgvarstemplate = $messaginghome . "/includes/message-vars.xd";
+    if (!file_exists($msgvarstemplate)) throw new FileNotFoundException($msgvarstemplate);
     $string = '';
-    $fd = fopen($messaginghome . "/includes/message-vars.xd", 'r');
+    $fd = fopen($msgvarstemplate, 'r');
     while(!feof($fd)) {
         $line = fgets($fd, 1024);
         $string .= $line;
@@ -88,6 +87,7 @@ function roles_admin_sendmail()
         $data['recipientusername'] = $user['username'];
         $data['recipientemail'] = $user['email'];
 
+        // TODO: try to move this to xarTplFile, since xarTplString uses eval
         $mailsubject = xarTplString($subject, $data);
         $mailmessage = xarTplString($message, $data);
 

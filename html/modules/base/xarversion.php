@@ -9,6 +9,8 @@
  *
  * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
+ * @author John Robeson
+ * @author Greg Allan
 */
 /* WARNING
  * Modification of this file is not supported.

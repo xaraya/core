@@ -5,20 +5,25 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-    <xar:comment>   IMPORTANT! - we need to get blocks data early in source by assigning 
+    <!--   IMPORTANT! - we need to get blocks data early in source by assigning 
                     'to be later used'  blockgroups and/or individual instances to local vars,
                     otherwise block stylesheets/embedded styles cannot be delivered in time to head section
                     TODO: this is a known major shortcoming of blocks subsystem - FIX ASAP
-    </xar:comment>
+    -->
     <xar:set name="topnavblocksgroup"><xar:blockgroup name="topnav" id="topnav" /></xar:set>
+    <xar:if condition="!empty($topnavblocksgroup)">
+        <div id="classictopnavigation">
+            <xar:var name="topnavblocksgroup" />
+        </div>
+    </xar:if>
     <xar:set name="rightblocksgroup"><xar:blockgroup name="right" id="right" /></xar:set>
     <xar:set name="leftblocksgroup"><xar:blockgroup name="left" id="left" /></xar:set>
     <xar:set name="centerblocksgroup"><xar:blockgroup name="center" id="center" /></xar:set>
     
-    <xar:comment>prepare some other common local variables which may be used in the theme</xar:comment>
+    <!-- prepare some other common local variables which may be used in the theme -->
     <xar:set name="classicthemedir">#xarTplGetThemeDir()#</xar:set>
     <xar:set name="sitename"><xar:var scope="module" module="themes" name="SiteName" /></xar:set>
-    <xar:comment>Type of styleswitcher to use (if any). Supported values are 'none', 'javascript' or 'php' (not yet).</xar:comment>
+    <!-- Type of styleswitcher to use (if any). Supported values are 'none', 'javascript' or 'php' (not yet). -->
     <xar:set name="styleswitchertype">'javascript'</xar:set>
     <xar:template file="headtagcontent" type="theme" />
 </head>
@@ -33,9 +38,9 @@
         <xar:template file="pageblockgroups" type="theme" />
         <xar:template file="pagefooter" type="theme" />
     </div>
-    <xar:comment>
+    <!--
         Body JavaScript - required for all html themes
-    </xar:comment>
+    -->
     <xar:base-render-javascript position="body" />
 </body>
 </html>

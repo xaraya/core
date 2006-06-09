@@ -20,18 +20,16 @@ function roles_adminapi_addgroup($args)
 {
     extract($args);
 
-    if(!isset($gname)) {
-        $msg = xarML('Wrong arguments to groups_adminapi_addgroup.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
-    }
+    if(!isset($gname)) throw new EmptyParameterException('gname');
 
-// Security Check
+    // Security Check
     if(!xarSecurityCheck('AddRole')) return;
 
-    return xarMakeGroup($gname);
+	$new = array(
+				'uname' => $gname,
+				'itemtype' =< ROLES_GROUPTYPE
+				);
+    return xarModAPIFunc('roles','admin','create',$new);
 }
 
 ?>

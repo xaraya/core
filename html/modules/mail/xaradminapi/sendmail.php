@@ -1,7 +1,6 @@
 <?php
 /**
  * send mail
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -44,23 +43,9 @@ function mail_adminapi_sendmail($args)
     extract($args);
 
     // Argument check
-    $invalid = array();
-
-    if (!isset($info) && !isset($recipients)) {
-        $invalid[] = 'info/recipients';
-    }
-    if (!isset($subject)) {
-        $invalid[] = 'subject';
-    }
-    if (!isset($message)) {
-        $invalid[] = 'message';
-    }
-
-    if (count($invalid) > 0) {
-        $msg = xarML('Wrong arguments to mail_adminapi', join(', ', $invalid), 'admin', 'sendmail', 'Mail');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    }
+    if (!isset($info) && !isset($recipients)) throw new EmptyParameterException('info or recipients');
+    if (!isset($subject)) throw new EmptyParameterException('subject');
+    if (!isset($message)) throw new EmptyParameterException('message');
 
     // Check if HTML mail has been configured by the admin
     // and send to sendhtmlmail()

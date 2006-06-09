@@ -1,7 +1,6 @@
 <?php
 /**
  * Numberlist property
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -21,12 +20,10 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_NumberList_Property extends Dynamic_Select_Property
 {
-    var $min = null;
-    var $max = null;
-
-    function Dynamic_NumberList_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Select_Property($args);
+        parent::__construct($args);
+
         // check validation for allowed min/max values
         if (count($this->options) == 0 && !empty($this->validation) && strchr($this->validation,':')) {
             list($min,$max) = explode(':',$this->validation);
@@ -44,6 +41,17 @@ class Dynamic_NumberList_Property extends Dynamic_Select_Property
                 // you're in trouble :)
             }
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 16;
+        $info->name = 'integerlist';
+        $info->desc = 'Number List';
+
+        return $info;
     }
 
     function validateValue($value = null)
@@ -88,37 +96,6 @@ class Dynamic_NumberList_Property extends Dynamic_Select_Property
             return false;
         }
     }
-
-    // default showInput() from Dynamic_Select_Property
-
-    // default showOutput() from Dynamic_Select_Property
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 16,
-                              'name'       => 'integerlist',
-                              'label'      => 'Number List',
-                              'format'     => '16',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => '',
-                            'aliases'        => '',
-                            'args'           => serialize($args)
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
 
 ?>

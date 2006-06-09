@@ -1,7 +1,5 @@
 <?php
 /**
- * Register block type
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -37,7 +35,8 @@ function blocks_adminapi_create_type($args)
         $info = serialize($info);
     }
 
-    $origtype = xarModAPIFunc('blocks', 'user', 'getblocktype', array('module'=>$module, 'type'=>$type));
+    $origtype = xarModAPIFunc('blocks', 'user', 'getblocktype',
+                              array('module'=>$module, 'type'=>$type));
 
     if (!empty($origtype)) {
         // Already registered - no need to raise an error, since we are where we wanted to be.
@@ -49,19 +48,30 @@ function blocks_adminapi_create_type($args)
     $xartable =& xarDBGetTables();
     $block_types_table = $xartable['block_types'];
 
-    $nextID = $dbconn->GenId($block_types_table);
-    $query = 'INSERT INTO ' . $block_types_table
-        . ' (xar_id, xar_module, xar_type, xar_info) VALUES (?, ?, ?, ?)';
-    $result =& $dbconn->Execute($query, array($nextID, $module, $type, $info));
-    if (!$result) {return;}
-
-    if (empty($nextID)) {
-        $nextID = $dbconn->PO_Insert_ID($block_types_table, 'xar_id');
+    $modInfo = xarMod_GetBaseInfo($module);
+    $modId = $modInfo['systemid'];
+    assert('$modId != 0;');
+    try {
+        $dbconn->begin();
+        $nextID = $dbconn->GenId($block_types_table);
+        $query = "INSERT INTO $block_types_table
+                  (xar_id, xar_modid, xar_type, xar_info) VALUES (?, ?, ?, ?)";
+        $bindvars = array($nextID, $modId, $type, $info);
+        $dbconn->Execute($query, $bindvars);
+        // FIXME: This is now a problem, since we have now of knowing whether that ID
+        // is already known, since we might have statements pending in a transaction.
+        // MySQL[Innodb] test: as long as it is inside the same transaction, it works
+        if (empty($nextID)) {
+            $nextID = $dbconn->PO_Insert_ID($block_types_table, 'xar_id');
+        }
+        assert('$nextID >0');
+        // Update the block info details.
+        xarModAPIfunc('blocks', 'admin', 'update_type_info', array('tid' => $nextID));
+        $dbconn->commit();
+    } catch (Exception $e) {
+        $dbconn->rollback();
+        throw $e;
     }
-
-    // Update the block info details.
-    xarModAPIfunc('blocks', 'admin', 'update_type_info', array('tid' => $nextID));
-
     return $nextID;
 }
 

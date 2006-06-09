@@ -1,7 +1,6 @@
 <?php
 /**
  * Image Property
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -21,13 +20,30 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_Image_Property extends Dynamic_TextBox_Property
 {
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->tplmodule = 'base';
+        $this->template  = 'image';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 12;
+        $info->name = 'image';
+        $info->desc = 'Image';
+
+        return $info;
+    }
+
     function validateValue($value = null)
     {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!isset($value)) $value = $this->value;
+        // /me thinks the default of http:// is lame. (because the default isnt a valid value)
         if (!empty($value) && $value != 'http://') {
-        // TODO: add some image validation routine !
+            // TODO: add some image validation routine !
             if (preg_match('/[<>"]/',$value)) {
                 $this->invalid = xarML('image URL');
                 $this->value = null;
@@ -40,84 +56,5 @@ class Dynamic_Image_Property extends Dynamic_TextBox_Property
         }
         return true;
     }
-
-//    function showInput($name = '', $value = null,  $size = 0, $maxlength = 0, $id = '', $tabindex = '')
-    function showInput($args = array())
-    {
-        extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (empty($value)) {
-            $value = 'http://';
-        }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        $data['name']     = $name;
-        $data['id']       = $id;
-        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
-        $data['size']     = !empty($size) ? $size : $this->size;
-
-        $template="";
-        return xarTplProperty('base', 'image', 'showinput', $data);
-    }
-
-    function showOutput($args = array())
-    {
-        extract($args);
-        $data = array();
-
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (!empty($value)) {
-            $value = xarVarPrepForDisplay($value);
-        // TODO: add size/alt here ?
-            //return '<img src="'.$value.'" />';
-        }
-        if (!isset($name)){
-            $name=$this->name;
-        }
-        $data['value'] = $value;
-        $data['name']  = $name;
-        $data['id']    = $this->id;
-
-        $template="";
-        return xarTplProperty('base', 'image', 'showoutput', $data);
-
-    }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 12,
-                              'name'       => 'image',
-                              'label'      => 'Image',
-                              'format'     => '12',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => '',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
 }
-
 ?>

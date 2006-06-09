@@ -22,7 +22,7 @@ include_once dirname(__FILE__)."/exception.class.php";
 
 class ErrorCollection extends xarException
 {
-    var $exceptions = array();
+    public $exceptions = array();
 
     function ErrorCollection() 
     {

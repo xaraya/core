@@ -1,7 +1,6 @@
 <?php
 /**
  * Imagelist property
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -21,13 +20,16 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_ImageList_Property extends Dynamic_Select_Property
 {
-    var $basedir = '';
-    var $baseurl = null;
-    var $filetype = '(gif|jpg|jpeg|png|bmp)';
+    public $basedir = '';
+    public $baseurl = null;
+    public $filetype = '(gif|jpg|jpeg|png|bmp)';
 
-    function Dynamic_ImageList_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Select_Property($args);
+        parent::__construct($args);
+        $this->tplmodule = 'base';
+        $this->template  = 'imagelist';
+
         if (empty($this->basedir) && !empty($this->validation)) {
             $this->parseValidation($this->validation);
         }
@@ -39,6 +41,17 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
                 $this->baseurl = preg_replace('/\{theme\}/',$curtheme,$this->baseurl);
             }
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 35;
+        $info->name = 'imagelist';
+        $info->desc = 'Image List';
+
+        return $info;
     }
 
     function validateValue($value = null)
@@ -64,19 +77,15 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
         return false;
     }
 
-//    function showInput($name = '', $value = null, $options = array(), $id = '', $tabindex = '')
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        $data = array();
-
-        if (!isset($value)) {
-            $value = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
         }
-        if (!isset($options) || count($options) == 0) {
-            $options = $this->getOptions();
+        if (!isset($data['options']) || count($data['options']) == 0) {
+            $data['options'] = $this->getOptions();
         }
-        if (count($options) == 0 && !empty($this->basedir)) {
+        if (count($data['options']) == 0 && !empty($this->basedir)) {
             $files = xarModAPIFunc('dynamicdata','admin','browse',
                                    array('basedir' => $this->basedir,
                                          'filetype' => $this->filetype));
@@ -86,40 +95,24 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
             natsort($files);
             array_unshift($files,'');
             foreach ($files as $file) {
-                $options[] = array('id' => $file,
+                $data['options'][] = array('id' => $file,
                                    'name' => $file);
             }
             unset($files);
         }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
 
         $data['basedir'] = $this->basedir;
         $data['baseurl'] = isset($this->baseurl) ? $this->baseurl : $this->basedir;
-        $data['name']    = $name;
-        $data['value']   = $value;
-        $data['id']      = $id;
-        $data['options'] = $options;
-        $data['tabindex']= !empty($tabindex) ? $tabindex : 0;
-        $data['invalid'] = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid)  : '';
 
-        $template="";
-        return xarTplProperty('base', 'imagelist', 'showinput', $data);
-
+        return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        $data = array();
+        extract($data);
 
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!isset($value)) $value = $this->value;
+        
         $basedir = $this->basedir;
         $baseurl = isset($this->baseurl) ? $this->baseurl : $basedir;
         $filetype = $this->filetype;
@@ -129,22 +122,17 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
             preg_match("/$filetype$/",$value) &&
             file_exists($basedir.'/'.$value) &&
             is_file($basedir.'/'.$value)) {
-        //    return '<img src="'.$baseurl.'/'.$value.'" alt="" />';
-           $srcpath=$baseurl.'/'.$value;
+            $srcpath=$baseurl.'/'.$value;
         } else {
-            //return '';
-           $srcpath='';
+            $srcpath='';
         }
 
-        $data['value']=$value;
-        $data['basedir']=$basedir;
-        $data['baseurl'] = $baseurl;
-        $data['filetype']=$filetype;
-        $data['srcpath']=$srcpath;
-
-        $template="";
-        return xarTplProperty('base', 'imagelist', 'showoutput', $data);
-
+        $data['value']    = $value;
+        $data['basedir']  = $basedir;
+        $data['baseurl']  = $baseurl;
+        $data['filetype'] = $filetype;
+        $data['srcpath']  = $srcpath;
+        return parent::showOutput($data);
     }
 
     function parseValidation($validation = '')
@@ -163,31 +151,6 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
             $this->basedir = $validation;
         }
     }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 35,
-                              'name'       => 'imagelist',
-                              'label'      => 'Image List',
-                              'format'     => '35',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => '',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
 
     function showValidation($args = array())
     {
@@ -225,7 +188,7 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
 
         // allow template override by child classes
         if (empty($template)) {
-            $template = 'imagelist';
+            $template = $this->getTemplate();
         }
         return xarTplProperty('base', $template, 'validation', $data);
     }

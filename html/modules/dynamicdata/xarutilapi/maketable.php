@@ -1,7 +1,6 @@
 <?php
 /**
  * Create a flat table corresponding to some dynamic object definition
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -168,8 +167,7 @@ function dynamicdata_utilapi_maketable($args)
     // raise an exception if it fails, in this case $query is empty
     $query = xarDBCreateTable($table,$fields);
     if (empty($query)) return; // throw back
-    $result = $dbconn->Execute($query);
-    if (!$result) return;
+    $dbconn->Execute($query);
 
     return true;
 }

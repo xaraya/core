@@ -19,9 +19,7 @@
 function roles_adminapi_getmessageincludestring($args)
 {
     extract($args);
-    if (!isset($template)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_DATA', new SystemException('No template name was given.'));
-    }
+    if (!isset($template)) throw new EmptyParameterException('template');
 
     if(!isset($module)){
         list($module) = xarRequestGetInfo();
@@ -29,11 +27,11 @@ function roles_adminapi_getmessageincludestring($args)
 
 // Get the template that defines the substitution vars
     $messaginghome = xarCoreGetVarDirPath() . "/messaging/" . $module;
-    if (!file_exists($messaginghome . "/includes/" . $template . ".xd")) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The variables template was not found.'));
-    }
+    $msgtemplate = $messaginghome . "/includes/" . $template . ".xd";
+    if (!file_exists($msgtemplate)) throw new FileNotFoundException($msgtemplate);
+
     $string = '';
-    $fd = fopen($messaginghome . "/includes/" . $template . ".xd", 'r');
+    $fd = fopen($msgtemplate, 'r');
     while(!feof($fd)) {
         $line = fgets($fd, 1024);
         $string .= $line;

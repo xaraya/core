@@ -1,7 +1,6 @@
 <?php
 /**
  * Delete a block instance
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -22,11 +21,7 @@ function blocks_adminapi_delete_instance($args)
     extract($args);
 
     // Argument check
-    if (!isset($bid) || !is_numeric($bid)) {
-        $msg = xarML('Invalid parameter');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return false;
-    }
+    if (!isset($bid) || !is_numeric($bid)) throw new BadParameterException('bid');
 
     // Security
     if (!xarSecurityCheck('DeleteBlock', 1, 'Block', "::$bid")) {return;}
@@ -38,13 +33,11 @@ function blocks_adminapi_delete_instance($args)
 
     $query = "DELETE FROM $block_group_instances_table
               WHERE xar_instance_id = ?";
-    $result =& $dbconn->Execute($query,array($bid));
-    if (!$result) {return;}
+    $result = $dbconn->Execute($query,array($bid));
 
     $query = "DELETE FROM $block_instances_table
               WHERE xar_id = ?";
-    $result =& $dbconn->Execute($query,array($bid));
-    if (!$result) {return;}
+    $result = $dbconn->Execute($query,array($bid));
 
     xarModAPIFunc('blocks', 'admin', 'resequence');
 

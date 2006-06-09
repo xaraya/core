@@ -1,7 +1,6 @@
 <?php
 /**
  * Dynamic Select Property
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -24,49 +23,32 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_FieldType_Property extends Dynamic_Select_Property
 {
-    function Dynamic_FieldType_Property($args)
+    function __construct($args)
     {
-        if( !isset($args['skipInit']) || ($args['skipInit'] != true) )
-        {
-            $this->Dynamic_Select_Property($args);
-            if (count($this->options) == 0) {
-                $proptypes = Dynamic_Property_Master::getPropertyTypes();
-                if (!isset($proptypes)) {
-                    $proptypes = array();
-                }
-                foreach ($proptypes as $propid => $proptype) {
-                    $this->options[] = array('id' => $propid, 'name' => $proptype['label']);
-                }
+        parent::__construct($args);
+
+        if (count($this->options) == 0) {
+            $proptypes = Dynamic_Property_Master::getPropertyTypes();
+            if (!isset($proptypes)) $proptypes = array();
+                
+            foreach ($proptypes as $propid => $proptype) {
+                // TODO: label isnt guaranteed to be unique, if not, leads to some surprises.
+                $this->options[$proptype['label']] = array('id' => $propid, 'name' => $proptype['label']);
             }
         }
+        // sort em by name
+        ksort($this->options);
     }
+        
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('dynamicdata');
+        $info->id   = 22;
+        $info->name = 'fieldtype';
+        $info->desc = 'Field Type';
 
-    // default methods from Dynamic_Select_Property
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 22,
-                              'name'       => 'fieldtype',
-                              'label'      => 'Field Type',
-                              'format'     => '22',
-                            'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'dynamicdata',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
+        return $info;
+    }
 }
-
 ?>

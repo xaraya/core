@@ -1,7 +1,5 @@
 <?php
 /**
- * Display an item in a template
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -22,6 +20,10 @@ function dynamicdata_userapi_showdisplay($args)
 {
     extract($args);
 
+    // optional layout for the template
+    if (empty($tplmodule)) {
+        $tplmodule = 'dynamicdata';
+    }
     // optional layout for the template
     if (empty($layout)) {
         $layout = 'default';
@@ -48,11 +50,9 @@ function dynamicdata_userapi_showdisplay($args)
         $modid = xarModGetIDFromName($modname);
     }
     if (empty($modid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'user', 'showdisplay', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('module name', 'user', 'showdisplay', 'dynamicdata');
+        throw new BadParameterException($vars,$msg);
     }
 
     if (empty($itemtype) || !is_numeric($itemtype)) {
@@ -102,7 +102,8 @@ function dynamicdata_userapi_showdisplay($args)
                                        'itemid'    => $itemid,
                                        'join'      => $join,
                                        'table'     => $table,
-                                       'fieldlist' => $myfieldlist));
+                                       'fieldlist' => $myfieldlist,
+                                       'extend'    => !empty($extend)));
     // we're dealing with a real item, so retrieve the property values
     if (!empty($itemid)) {
         $object->getItem();
@@ -114,7 +115,8 @@ function dynamicdata_userapi_showdisplay($args)
     }
 
     return $object->showDisplay(array('layout'   => $layout,
-                                      'template' => $template));
+                                      'template' => $template,
+                                      'tplmodule'=> $tplmodule));
 }
 
 ?>

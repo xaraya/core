@@ -63,103 +63,74 @@ function initializeSetup()
 
     $query1 = "SELECT DISTINCT xar_name FROM $blockGroupsTable";
     $query2 = "SELECT DISTINCT xar_id FROM $blockGroupsTable";
-    $instances = array(array('header'  => 'Group Name:',
-                             'query'   => $query1,
-                             'limit'   => 20),
-                       array('header'  => 'Group ID:',
-                             'query'   => $query2,
-                             'limit'   => 20));
+    $instances = array(array('header'  => 'Group Name:','query'   => $query1,'limit'   => 20),
+                       array('header'  => 'Group ID:',  'query'   => $query2,'limit'   => 20));
 
     xarDefineInstance('blocks','BlockGroups',$instances);
 
     $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable ";
     $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id";
     $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id";
-    $instances = array(array('header' => 'Block Type:',
-                             'query' => $query1,
-                             'limit' => 20),
-                       array('header' => 'Block Title:',
-                             'query' => $query2,
-                             'limit' => 20),
-                       array('header' => 'Block ID:',
-                             'query' => $query3,
-                             'limit' => 20));
+    $instances = array(array('header' => 'Block Type:' ,'query' => $query1, 'limit' => 20),
+                       array('header' => 'Block Title:','query' => $query2, 'limit' => 20),
+                       array('header' => 'Block ID:'   ,'query' => $query3, 'limit' => 20));
     xarDefineInstance('blocks','Blocks',$instances);
 
+    //--------------------------------- Modules Module
+
+    // TODO: check bind variables
+    $query1 = "SELECT DISTINCT btypes.xar_type FROM $blockTypesTable btypes, $modulesTable mods WHERE btypes.xar_modid = mods.xar_name AND mods.xar_name = 'modules'";
+    $query2 = "SELECT DISTINCT instances.xar_title FROM $modulesTable mods, $blockInstancesTable instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE btypes.xar_modid = mods.xar_id AND mods.xar_name = 'modules'";
+    $query3 = "SELECT DISTINCT instances.xar_id FROM $modulesTable mods, $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE btypes.xar_modid = mods.xar_id AND mods.xar_name = 'modules'";
+    $instances = array(array('header' => 'Block Type:' , 'query' => $query1,'limit' => 20),
+                       array('header' => 'Block Title:', 'query' => $query2,'limit' => 20),
+                       array('header' => 'Block ID:'   , 'query' => $query3,'limit' => 20));
+    xarDefineInstance('modules','Block',$instances);
+
    //--------------------------------- Roles Module
-    $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable WHERE xar_module = 'roles'";
-    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'roles'";
-    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'roles'";
-    $instances = array(array('header' => 'Block Type:',
-                             'query' => $query1,
-                             'limit' => 20),
-                       array('header' => 'Block Title:',
-                             'query' => $query2,
-                             'limit' => 20),
-                       array('header' => 'Block ID:',
-                             'query' => $query3,
-                             'limit' => 20));
+    $query1 = "SELECT DISTINCT btypes.xar_type FROM $modulesTable mods, $blockTypesTable btypes WHERE btypes.xar_modid = mods.xar_id AND mods.xar_name = 'roles'";
+    $query2 = "SELECT DISTINCT instances.xar_title FROM $modulesTable mods, $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE btypes.xar_modid = mods.xar_id AND mods.xar_name = 'roles'";
+    $query3 = "SELECT DISTINCT instances.xar_id FROM $modulesTable mods, $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE btypes.xar_modid = mods.xar_id AND mods.xar_name = 'roles'";
+    $instances = array(array('header' => 'Block Type:' , 'query' => $query1, 'limit' => 20),
+                       array('header' => 'Block Title:', 'query' => $query2, 'limit' => 20),
+                       array('header' => 'Block ID:'   , 'query' => $query3, 'limit' => 20));
     xarDefineInstance('roles','Block',$instances);
 
     $query = "SELECT DISTINCT xar_name FROM $rolesTable";
-    $instances = array(array('header' => 'Users and Groups',
-                             'query' => $query,
-                             'limit' => 20));
+    $instances = array(array('header' => 'Users and Groups','query' => $query, 'limit' => 20));
     xarDefineInstance('roles','Roles',$instances,0,$roleMembersTable,'xar_uid','xar_parentid','Instances of the roles module, including multilevel nesting');
 
-    $instances = array(array('header' => 'Parent:',
-                             'query' => $query,
-                             'limit' => 20),
-                       array('header' => 'Child:',
-                             'query' => $query,
-                             'limit' => 20));
+    $instances = array(array('header' => 'Parent:','query' => $query, 'limit' => 20),
+                       array('header' => 'Child:', 'query' => $query, 'limit' => 20));
     xarDefineInstance('roles','Relation',$instances,0,$roleMembersTable,'xar_uid','xar_parentid','Instances of the roles module, including multilevel nesting');
 
    // ----------------------------- Privileges Module
     $query = "SELECT DISTINCT xar_name FROM $privilegesTable";
-    $instances = array(array('header' => 'Privileges',
-                             'query' => $query,
-                             'limit' => 20));
+    $instances = array(array('header' => 'Privileges','query' => $query, 'limit' => 20));
     xarDefineInstance('privileges','Privileges',$instances,0,$privMembersTable,'xar_pid','xar_parentid','Instances of the privileges module, including multilevel nesting');
 
     // ----------------------------- Base Module
-    $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable WHERE xar_module = 'base'";
-    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'base'";
-    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'base'";
-    $instances = array(array('header' => 'Block Type:',
-                             'query' => $query1,
-                             'limit' => 20),
-                       array('header' => 'Block Title:',
-                             'query' => $query2,
-                             'limit' => 20),
-                       array('header' => 'Block ID:',
-                             'query' => $query3,
-                             'limit' => 20));
+    $query1 = "SELECT DISTINCT btypes.xar_type FROM $modulesTable mods, $blockTypesTable btypes WHERE btypes.xar_modid = mods.xar_id AND mods.xar_name = 'base'";
+    $query2 = "SELECT DISTINCT instances.xar_title FROM $modulesTable mods, $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE btypes.xar_modid = mods.xar_id AND mods.xar_name = 'base'";
+    $query3 = "SELECT DISTINCT instances.xar_id FROM $modulesTable mods, $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE btypes.xar_modid = mods.xar_id AND mods.xar_name = 'base'";
+    $instances = array(array('header' => 'Block Type:' ,'query' => $query1, 'limit' => 20),
+                       array('header' => 'Block Title:','query' => $query2, 'limit' => 20),
+                       array('header' => 'Block ID:'   ,'query' => $query3, 'limit' => 20));
     xarDefineInstance('base','Block',$instances);
 
    // ------------------------------- Themes Module
     $query1 = "SELECT DISTINCT xar_name FROM $themesTable";
     $query2 = "SELECT DISTINCT xar_regid FROM $themesTable";
-    $instances = array(array('header' => 'Theme Name:',
-                             'query' => $query1,
-                             'limit' => 20),
-                       array('header' => 'Theme ID:',
-                             'query' => $query2,
-                             'limit' => 20));
+    $instances = array(array('header' => 'Theme Name:', 'query' => $query1, 'limit' => 20),
+                       array('header' => 'Theme ID:',   'query' => $query2, 'limit' => 20));
     xarDefineInstance('themes','Themes',$instances);
 
-    $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable WHERE xar_module = 'themes'";
-    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'themes'";
-    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'themes'";
-    $instances = array(array('header' => 'Block Type:',
-                             'query' => $query1,
-                             'limit' => 20),
-                       array('header' => 'Block Title:',
-                             'query' => $query2,
-                             'limit' => 20),
-                       array('header' => 'Block ID:',
-                             'query' => $query3,
-                             'limit' => 20));
+    $query1 = "SELECT DISTINCT btypes.xar_type FROM $modulesTable mods, $blockTypesTable btypes WHERE btypes.xar_modid = mods.xar_id AND mods.xar_name = 'themes'";
+    $query2 = "SELECT DISTINCT instances.xar_title FROM $modulesTable mods, $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE btypes.xar_modid = mods.xar_id AND mods.xar_name = 'themes'";
+    $query3 = "SELECT DISTINCT instances.xar_id FROM $modulesTable mods, $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE btypes.xar_modid = mods.xar_id AND mods.xar_name = 'themes'";
+    $instances = array(array('header' => 'Block Type:', 'query' => $query1, 'limit' => 20),
+                       array('header' => 'Block Title:','query' => $query2, 'limit' => 20),
+                       array('header' => 'Block ID:',   'query' => $query3, 'limit' => 20));
     xarDefineInstance('themes','Block',$instances);
 
     /*********************************************************************
@@ -194,6 +165,12 @@ function initializeSetup()
     xarRegisterMask('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditAuthsystem','All','authsystem','All','All','ACCESS_EDIT');
     xarRegisterMask('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
+
+    xarRegisterMask('ViewPanel','All','modules','All','All','ACCESS_OVERVIEW');
+    xarRegisterMask('EditPanel','All','modules','All','All','ACCESS_EDIT');
+    xarRegisterMask('AddPanel','All','modules','Item','All','ACCESS_ADD');
+    xarRegisterMask('DeletePanel','All','modules','All','All','ACCESS_DELETE');
+    xarRegisterMask('AdminPanel','All','modules','All','All','ACCESS_ADMIN');
 
     xarRegisterMask('ViewLogin','All','roles','Block','login:Login:All','ACCESS_OVERVIEW');
     xarRegisterMask('ViewRolesBlocks','All','roles','Block','All','ACCESS_OVERVIEW');

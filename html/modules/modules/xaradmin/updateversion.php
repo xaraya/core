@@ -1,7 +1,5 @@
 <?php
 /**
- * Update the module version in the database
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -23,14 +21,7 @@ function modules_admin_updateversion()
     // Get parameters from input
     xarVarFetch('id', 'id', $regId);
 
-    if (!isset($regId)) {
-        $msg = xarML('Invalid module id');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                        new SystemException($msg));
-        return;
-    }
-
-    //if (!xarSecConfirmAuthKey()) return;
+    if (!isset($regId)) throw new EmptyParameterException('regid');
 
     // Security Check
     if(!xarSecurityCheck('AdminModules')) return;

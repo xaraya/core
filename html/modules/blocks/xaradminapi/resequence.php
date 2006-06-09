@@ -1,7 +1,5 @@
 <?php
 /**
- * Resequence a blocks table
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -36,9 +34,7 @@ function blocks_adminapi_resequence($args)
         . ' FROM ' . $block_group_instances_table
         . $where_clause
         .' ORDER BY xar_group_id, xar_position, xar_id';
-
     $qresult =& $dbconn->Execute($query, $bind);
-    if (!$qresult) {return;}
 
     // Fix sequence numbers
     $last_gid = NULL;
@@ -55,9 +51,7 @@ function blocks_adminapi_resequence($args)
             $query = 'UPDATE ' . $block_group_instances_table
                 . ' SET xar_position = ? WHERE xar_id = ? AND xar_position <> ?';
             $bind = array($position, $link_id, $position);
-
-            $uresult =& $dbconn->Execute($query, $bind);
-            if (!$uresult) {return;}
+            $dbconn->Execute($query, $bind);
         }
 
         $position++;

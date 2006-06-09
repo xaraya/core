@@ -27,22 +27,14 @@ function roles_userapi_getdeleteduser($args)
 
     // Argument checks
     if (empty($uid) && empty($name) && empty($uname) && empty($email)) {
-        $msg = xarML('Wrong arguments to roles_userapi_get.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
+        throw new EmptyParameterException('uid or name or uname or email');
     } elseif (!empty($uid) && !is_numeric($uid)) {
-        $msg = xarML('Wrong arguments to roles_userapi_get.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
+        throw new VariableValidationException(array('uid',$uid,'numeric'));
     }
 
     // Set type to user
     if (empty($type)){
-        $type = 0;
+        $type = ROLES_USERTYPE;
     }
 
     // Security Check
@@ -64,8 +56,8 @@ function roles_userapi_getdeleteduser($args)
                    xar_valcode,
                    xar_state
             FROM $rolestable
-            WHERE xar_state = 0
-            AND xar_type = ?";
+            WHERE xar_state = ? AND xar_type = ?";
+    $bindvars[] = 0;
     $bindvars[] = $type;
 
     if (!empty($uid) && is_numeric($uid)) {
@@ -85,7 +77,7 @@ function roles_userapi_getdeleteduser($args)
     }
 
     $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
+
 
     // Check for no rows found, and if so return
     if ($result->EOF) {

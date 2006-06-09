@@ -1,7 +1,6 @@
 <?php
 /**
  * create a new group
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -22,16 +21,10 @@ function blocks_adminapi_create_group($args)
     // Get arguments from argument array
     extract($args);
 
-    if (!isset($template)) {
-        $template = '';
-    }
+    if (!isset($template)) $template = '';
 
     // Argument check
-    if ((!isset($name))) {
-        $msg = xarML('Empty name in adminapi create group');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    }
+    if ((!isset($name))) throw new EmptyParameterException('name');
 
     // Security
     if (!xarSecurityCheck('AddBlock', 1, 'Block', "All:$name:All")) {return;}
@@ -45,9 +38,7 @@ function blocks_adminapi_create_group($args)
     $nextId = $dbconn->GenId($block_groups_table);
     $query = 'INSERT INTO ' . $block_groups_table
         . ' (xar_id, xar_name, xar_template) VALUES (?, ?, ?)';
-
-    $result =& $dbconn->Execute($query , array($nextId, $name, $template));
-    if (!$result) {return;}
+    $dbconn->Execute($query , array($nextId, $name, $template));
 
     // Get group ID as index of groups table
     $group_id = $dbconn->PO_Insert_ID($block_groups_table, 'xar_id');

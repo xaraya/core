@@ -1,7 +1,6 @@
 <?php
 /**
  * Get field properties for a specific module + item type
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -78,11 +77,9 @@ function dynamicdata_userapi_getprop($args)
         $invalid[] = 'item type';
     }
     if (count($invalid) > 0) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    join(', ',$invalid), 'user', 'getprop', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array(join(', ',$invalid), 'user', 'getprop', 'DynamicData');
+        throw new BadParameterException($vars,$msg);
     }
 
     if (empty($static) && isset($propertybag["$modid:$itemtype"])) {

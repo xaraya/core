@@ -22,7 +22,6 @@ $modversion['name'] = 'authsystem';
 $modversion['displayname'] = xarML('Authentication');
 $modversion['id'] = '42';
 $modversion['version'] = '1.0.0';
-//$modversion['version'] = '0.91.0';
 $modversion['description'] = 'Xaraya default authentication module';
 $modversion['displaydescription'] = xarML('Xaraya default authentication module');
 $modversion['credits'] = 'xardocs/credits.txt';

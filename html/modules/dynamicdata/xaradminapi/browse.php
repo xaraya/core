@@ -1,7 +1,6 @@
 <?php
 /**
  * Dynamic data browse function
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -15,12 +14,8 @@ function dynamicdata_adminapi_browse($args)
     // Argument check - make sure that all required arguments are present
     // and in the right format, if not then set an appropriate error
     // message and return
-    if (empty($args['basedir']) || empty($args['filetype'])) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'base directory', 'admin', 'browse', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    }
+    if (empty($args['basedir'])) throw new EmptyParameterException('basedir');
+    if (empty($args['filetype'])) throw new EmptyParameterException('filetype');
 
     // Security check - we require OVERVIEW rights here for now...
     if(!xarSecurityCheck('ViewDynamicData')) return;

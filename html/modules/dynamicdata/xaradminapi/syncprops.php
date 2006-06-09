@@ -1,7 +1,5 @@
 <?php
 /**
- * Resynchronise properties with object
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -36,10 +34,9 @@ function dynamicdata_adminapi_syncprops($args)
         $invalid[] = 'item type';
     }
     if (count($invalid) > 0) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    join(', ',$invalid), 'admin', 'syncprops', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array(join(', ',$invalid), 'admin', 'syncprops', 'DynamicData');
+        throw new BadParameterException($vars,$msg);
     }
 
     $dbconn =& xarDBGetConn();
@@ -51,8 +48,7 @@ function dynamicdata_adminapi_syncprops($args)
             SET xar_prop_moduleid = ?, xar_prop_itemtype = ?
             WHERE xar_prop_objectid = ?";
     $bindvars = array($moduleid, $itemtype, $objectid);
-    $result = $dbconn->Execute($sql,$bindvars);
-    if (!$result) return;
+    $dbconn->Execute($sql,$bindvars);
 
     return true;
 }

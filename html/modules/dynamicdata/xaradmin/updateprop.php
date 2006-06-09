@@ -1,7 +1,6 @@
 <?php
 /**
  * Update the dynamic properties for a module + itemtype
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -68,11 +67,9 @@ function dynamicdata_admin_updateprop()
         }
     }
     if (empty($modid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module id', 'admin', 'updateprop', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('module id', 'admin', 'updateprop', 'dynamicdata');
+        throw new BadParameterException($vars,$msg);
     }
 
     $fields = xarModAPIFunc('dynamicdata','user','getprop',

@@ -1,7 +1,6 @@
 <?php
 /**
  * Main function
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -23,7 +22,7 @@ function base_user_main($args)
     if (!empty($page)){
         xarTplSetPageTitle($page);
         /* Cache the custom page name so it is accessible elsewhere */
-        xarVarSetCached('Base.pages','page',$page);        
+        xarVarSetCached('Base.pages','page',$page);
     } else {
         $pageTemplate = xarModGetVar('base', 'AlternatePageTemplateName');
         if (xarModGetVar('base', 'UseAlternatePageTemplate') != '' &&

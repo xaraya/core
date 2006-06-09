@@ -22,34 +22,15 @@ function roles_adminapi_delete($args)
     extract($args);
 
     // Argument check
-    if (!isset($uid)) {
-        $msg = xarML('Wrong arguments to roles_adminapi_delete.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
-    }
+    if (!isset($uid)) throw new EmptyParameterException('uid');
 
     // The user API function is called.
-    $item = xarModAPIFunc('roles',
-            'user',
-            'get',
-            array('uid' => $uid));
+    $item = xarModAPIFunc('roles', 'user', 'get', array('uid' => $uid));
 
-    if ($item == false) {
-        $msg = xarML('No such user','roles');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'ID_NOT_EXIST',
-                     new SystemException($msg));
-        return false;
-    }
+    if ($item == false) throw new IDNotFoundException($uid,'User with id "#(1)" could not be found');
 
-// CHECKME: is this correct now ? (tid obviously wasn't)
     // Security check
-        if (!xarSecurityCheck('DeleteRole',0,'Item',"$item[name]::$uid")) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+    if (!xarSecurityCheck('DeleteRole',0,'Item',"$item[name]::$uid")) return;
 
     // Get datbase setup
     $dbconn =& xarDBGetConn();
@@ -58,8 +39,7 @@ function roles_adminapi_delete($args)
 
     // Delete the item
     $query = "DELETE FROM $rolestable WHERE xar_uid = ?";
-    $result =& $dbconn->Execute($query,array($uid));
-    if (!$result) return;
+    $dbconn->Execute($query,array($uid));
 
     // Let any hooks know that we have deleted this user.
     $item['module'] = 'roles';
