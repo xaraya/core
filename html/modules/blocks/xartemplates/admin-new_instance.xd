@@ -52,10 +52,11 @@
             </div>
 
             <div class="xar-form-input-wrapper">
-                <label for="block_template" title="#xarML('This field is optional.  This is a specific override template that you want to use for this block.')#" class="xar-form-label">
-                    <xar:mlstring>Template (optional):</xar:mlstring>
+                <label for="block_template" title="#xarML('Instance templates that you want to use for this block instance.')#" class="xar-form-label">
+                    <xar:mlstring>Instance Template (optional):</xar:mlstring>
                 </label>
                 <input type="text" name="block_template" id="block_template" value="" maxlength="255" class="xar-form-textlong" />
+                (Specified as <code>outer<strong>;</strong>inner</code>)
             </div>
 
             <div class="xar-form-input-wrapper">
