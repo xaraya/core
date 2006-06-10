@@ -223,7 +223,12 @@ function roles_admin_modifyconfig()
                         if (isset($$duv)) {
                             if ($$duv) {
                                 xarModSetVar('roles',$duv,true);
-                                xarModSetVar('roles',$userduv,'');
+                                if ($userduv =='primaryparent') { // let us set it to the default Role
+                                    $defaultrole=xarModGetVar('roles','defaultgroup');
+                                    xarModSetVar('roles','primaryparent', $defaultrole);
+                                }else {
+                                   xarModSetVar('roles',$userduv,'');
+                                }
                             } else {
                                 xarModSetVar('roles',$duv,false);
                             }
