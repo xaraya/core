@@ -12,84 +12,122 @@
     <h3><xar:mlstring>What is it?</xar:mlstring></h3>
 
     <p>
-    <xar:mlstring>The Blocks Module controls the configuration, display position and grouping of "blocks"
-    on your website. Blocks provide a way to display content or functionality on your site
-    in addition to the usual content provided by a module such as article or forum display.
-    Blocks can be placed anywhere in your site's page displays. The Blocks module is a core module within
-    Xaraya, and cannot be removed.</xar:mlstring>
+    <xar:mlstring>The Blocks Module controls the configuration, display position and grouping of 'blocks' 
+    of content or functionality on your website. The Blocks module is a core module within Xaraya and cannot be removed.</xar:mlstring>
     </p>
 
-    <h3><xar:mlstring>How to use it?</xar:mlstring></h3>
-    <h4><xar:mlstring>Blocks and blockgroups</xar:mlstring></h4>
-
+    <h2><xar:mlstring>How to use it?</xar:mlstring></h2>
+    
+    <h3><xar:mlstring>Block Types</xar:mlstring></h3>
     <p>
-        <xar:mlstring>You can use blocks alone, or create a containing 'blockgroup' in which to place your blocks.
-        Xaraya has pre-configured blockgroups created at installation time. These blockgroups include right,
-        left, center, topnav and header blockgroups. They are used in the default Xaraya theme and have blocks already assigned
-        to them. In the case of these default blockgroups, the name reflects the position that the blockgroups have
-        been placed in the default theme although you could rename them.</xar:mlstring>
+        <xar:mlstring>Each module can provide a block type along with the code and templates for it. A block type defines a specific display
+        of content or functionality that you can place on your site. For example the Articles module provides a 'featured article' block type,
+        and a 'top items' block type. The Base module provides a 'menu' block type, among others.</xar:mlstring>
     </p>
-    <p>
-        <xar:mlstring>You must tell Xaraya where you want to place your blockgroups in your site page by using the 'blockgroup' tag and
-        placing it in your template page or module template. eg
-         <code>&lt;xar:blockgroup name="right" id="right" /&gt;</code>.  The default blockgroups have already been
-         placed in the default theme template.</xar:mlstring>
-    </p><br />
-    <p><xar:mlstring>The Blocks module has two menu options which allow you to view and create new blockgroups.</xar:mlstring></p>
-    <br />
-    <ul>
-        <li><xar:mlstring><strong>View Groups</strong>: View the defined Block Groups.</xar:mlstring></li>
-        <li><xar:mlstring><strong>Add Group</strong>: Add a new block group for template positioning.</xar:mlstring></li>
-     </ul><br />
-      <h4><xar:mlstring>Creating new instances of blocks</xar:mlstring></h4>
-      <p>
-          <xar:mlstring>Each module may provide the code and templates for one or more types of blocks.
-          For example the Articles module provides a 'featured article' block, and a 'top items' block.
-          The Base module provides a 'menu' block among others. You can create one or more instances of a block
-          and place them in one or more blockgroups using the options provided in the Blocks module menu:</xar:mlstring>
-      </p><br />
-
-      <ul>
-        <li><xar:mlstring><strong>View Instances</strong>: View the current instances that are actively in use by your Xaraya System.</xar:mlstring></li>
-        <li><xar:mlstring><strong>Add instance</strong>: Add a new block instance to be displayed on your site.</xar:mlstring></li>
-      </ul>
-      <p>
-         <xar:mlstring>Block types are defined by a module, and installed when you install the module.
-         You can create a new block instance from any of your installed block types using the Add instance option.</xar:mlstring>
-      </p><br />
-      <h4><xar:mlstring>Block Types </xar:mlstring></h4>
-
-      <p>
-          <xar:mlstring>A site admin or a developer may provide a new block type after a module is installed.
-          This new block type can be installed with an upgrade process, or alternatively if no upgrade is provided
-          to load the block type, you can add it with the options provided by the Blocks module. You should not
-          normally have to add a block in this manner. In addition the Block Types options allow you to view all block types that
-          are installed and their associated module.</xar:mlstring>
-      </p><br />
+    <p><xar:mlstring>These different block types are installed at the time of module installation, and removed when a module is uninstalled.
+        The block types are also upgraded when a module is upgraded.</xar:mlstring>
+    </p>
+    <p><xar:mlstring>The Blocks module enables you to work with <strong>Block Types</strong> to:</xar:mlstring></p>
        <ul>
-        <li><xar:mlstring><strong>Add Block Type</strong>: scan a module for a new block type. This specific function is probably best left to the advanced user.
-            Be certain to learn more about it before using it.</xar:mlstring></li>
-        <li><xar:mlstring><strong>View Block Types</strong>: lists all the registered block types, and references which module they belong to.</xar:mlstring></li>
+        <li><a name="view_types"><xar:mlstring><strong>View Block Types:</strong></xar:mlstring></a><xar:mlstring> lists all the registered block types in your Xaraya installation with reference to which
+            module they belong.</xar:mlstring></li>
+        <li><a name="new_type"><xar:mlstring><strong>Add a New Block Type:</strong></xar:mlstring></a>
+            <xar:mlstring>scans a module for a new block type. This option is added mainly for Developer convenience.
+            Sometimes a developer provides a block type or upgrade of a block outside of a normal module release or
+            upgrade. This option allows the block to be loaded and registered in your Xaraya installation. Normally
+            you should never need to use this option in the process of administering your site.</xar:mlstring></li>
       </ul><br />
 
-      <h3><xar:mlstring>Using and templating blocks and blockgroups</xar:mlstring></h3>
+    <h3><xar:mlstring>Using Blocks and Block Groups</xar:mlstring></h3>
+    <p>
+        <xar:mlstring>There are a number of steps required to create a new block of content or functionality for your site, and display it:
+        </xar:mlstring>
+    </p>
+    <ol>
+        <li><xar:mlstring>Create a new block instance based on any of your installed block types</xar:mlstring></li>
+        <li><xar:mlstring>Assign the block instance to an existing block group during block creation or modification (optional)</xar:mlstring></li>
+        <li><xar:mlstring>If you need a new block group, create one and then assign the block instance to it</xar:mlstring></li>
+        <li><xar:mlstring>Add a <strong>blockgroup tag</strong> in your theme template so Xaraya knows where to display your blocks. eg
+        <code>&lt;xar:blockgroup name="right" id="right" /&gt;</code>.</xar:mlstring></li>
+    </ol>
+     <p>
+        <xar:mlstring>Xaraya has pre-configured block groups created at installation time that include <em>right</em>,
+        <em>left</em>, <em>center</em>, <em>topnav</em> and <em>header</em> block groups. Special block group tags are used in the default Xaraya theme to 
+        place and display them and the block instances already assigned to them. In the case of the default block groups 
+        their name reflects the position where they are located in the default theme. You can rename these block groups as the names are not significant in themselves</xar:mlstring>
+    </p>
+    <xar:set name="rfcblocklink">'http://xaraya.com/documentation/rfcs/rfc0010.html#block'</xar:set>
+    <p><xar:ml>
+        <xar:mlstring>Note: you do not have to allocated a block instance to a blockgroup. You can place the block instance display directly
+        into your theme templates using a <strong>block</strong> tag. Please check <a href="#(1)">RFC0010</a> for details on using this tag.</xar:mlstring>
+       <xar:mlvar>#$rfcblocklink#</xar:mlvar>
+       </xar:ml>
+    </p>
 
+     <h4><xar:mlstring>Creating and Viewing Block Groups</xar:mlstring></h4>
+    <p><xar:mlstring>The Blocks module provides a number of options to work with <strong>Block Goups</strong>:</xar:mlstring></p>
+    <ul>
+        <li><a name="view_groups"><xar:mlstring><strong>View Block Groups:</strong></xar:mlstring></a><xar:mlstring> displays all the defined Block Groups on your site with links to Edit or Delete options</xar:mlstring></li>
+        <li><a name="new_group"><xar:mlstring><strong>Add Block Group:</strong></xar:mlstring> </a><xar:mlstring>  option presents a simple input screen so you can add a new block group</xar:mlstring></li>
+     </ul>
+      <h4><xar:mlstring>Creating, Viewing  and Modifying Block Instances</xar:mlstring></h4>
 
-      <p><xar:mlstring>Each block and blockgroup container has it's own template or uses a supplied default.</xar:mlstring></p>
-      <p> <xar:mlstring>A blockgroup can hold more than one block instance and you can have each of those instances use its own template by using an inner template.</xar:mlstring><p>
       <p>
-          <xar:mlstring>The blockgroup templates (outer container templates) are kept in your
-          <code>theme/yourthemes/blocks</code> directory. If there is no specific blockgroup template it will use the
-          preloaded default blockgroup template.</xar:mlstring>
+          <xar:mlstring>Creating and modifying block instances with Xaraya is simple:</xar:mlstring>
       </p>
-       <p>
-           <xar:mlstring>The templates provided for each block come with the module that provides the block. These templates are referred to as inner templates.
-           You can override these inner templates if you want, and so produce your own layouts for the block content.
-           If you do wish to create your own overrides for block (inner) templates then they should be placed in
-           <code>themes/yourtheme/modules/themodule/blocks</code> where 'themodule' is the module providing the block.
-           The general name for the template is <code>blocktype-innertemplatename.xt</code></xar:mlstring>
-       </p><br />
+      <ul>
+        <li><a name="view_instances"><xar:mlstring><strong>View Block Instances:</strong></xar:mlstring> </a><xar:mlstring>  displays all current block instances that are available for use in your Xaraya site. From this menu option
+        you can <code>modify</code> or <code>delete</code> any of the listed block instances.</xar:mlstring></li>
+        <li><a name="new_instance"><xar:mlstring><strong>Add New Block Instance:</strong></xar:mlstring> </a><xar:mlstring>  Create and make available a new block instance for display on your site. As part of this process you
+        may nominate which block type to use for creation of the block instance, and optionally assign the block instance to a Block Group.</xar:mlstring></li>
+        <li><a name="modify_instance"><xar:mlstring><strong>Modify a Block Instance:</strong></xar:mlstring> </a><xar:mlstring> from the View Block Instance listing provides the option to allocate the block instance
+          to one or more Block Groups. In addition, you can optionally specify whether the block instances should use an
+          override block instance (inner) template or block group (outer) template (see Templating Blocks and Block Groups). Each module also specifies any special content here that is available for configuration for this specific block type.
+          </xar:mlstring></li>
+      </ul> 
+      <h3><xar:mlstring>Templating Blocks and Block Groups</xar:mlstring></h3>
+      <p>
+           <xar:mlstring>As with other Xaraya content, you can provide your own override templates for block 
+           instances and create your own templates for block groups. To do this note the following:</xar:mlstring>
+      </p>
 
+      <ol>
+          <li><xar:mlstring><strong>Inner template</strong> is used for display of the content in a block instance and
+              supplied by the module that provides the block type. They can be overridden like any other Xaraya template. 
+              Overrides for for block instance <strong>inner</strong> templates should be be placed in
+              <code>themes/[yourtheme]/modules/[themodule]/blocks</code> where <code>[themodule]</code> is the module providing
+              the block type. The general name for the template is <code>blocktype-innertemplatename.xt</code></xar:mlstring></li>
+          <li><xar:mlstring><strong> Outer template</strong> is the name given to the template used for the block instance's block group.
+              Some 'outer' templates are installed by default with Xaraya, but you can also create your own 'outer'
+              templates. The <strong>outer templates</strong> are stored in your <code>theme/[yourtheme]/blocks</code>
+              directory. If there is no specific block group template the block group will use the preinstalled 'default'
+              block group template.</xar:mlstring></li>
+      </ol>
+
+      <h4><xar:mlstring>How to tell Xaraya which inner and outer templates to use</xar:mlstring></h4>
+        <p><xar:mlstring>You can tell Xaraya which inner and outer templates to use when you create a
+            new block instance or modify an existing one. Using the Blocks module, there are two places you can set either the inner
+            template, the outer template or both. </xar:mlstring></p><br />
+        <ul>
+            <li><xar:mlstring>The field labelled <strong>Instance Template (optional):</strong> sets the default
+            inner and outer template used for the block instance and any block group. You can specify inner, outer, both inner and outer or none.
+            You use the following format: <code>[outer-template][semi-colon][inner-template]</code>. Both are specified without the file extension.</xar:mlstring></li>
+            <li><xar:mlstring>If you add a block instance to a block group, another input field will appear, labelled with the name of the block group.
+            You can also add a specific inner, outer or both inner and outer template in this field using the same syntax. Specifying
+            an inner or outer template in this block group template field will override any other templates.</xar:mlstring></li>
+         </ul>
+         <p><xar:mlstring><strong>An example:</strong> if you create an articles' featureditems block instance and you are using the Xaraya_Classic default theme</xar:mlstring></p>
+            <ul>
+            <li><xar:mlstring>By default, this block instance will use the article module's inner template called <code>featureditems.xd</code> located in modules/articles/xartemplates/blocks</xar:mlstring></li>
+            <li><xar:mlstring>If you have allocated the featured article block instance to a block group called 'right' it will use, by default, the outer template
+                located at <code>themes/Xaraya_Classic/blocks/right.xt</code>. If the 'right' outer template did not exist it will use one called 'default.xt' 
+                in that same directory.</xar:mlstring></li>
+            <li><xar:mlstring>If you wish to override both outer and inner templates for the featureditems block then the syntax example of:
+            <strong>left;weeklyfeature</strong> would mean means the outer template is one created and called <code><strong>left</strong>.xt</code> in the <code>themes/Xaraya_Classic/blocks</code> directory.
+            The article module's featureditems block instance will be displayed using the <code>themes/Xaraya_Classic/modules/articles/blocks/featureditems-<strong>weeklyfeature</strong>.xt</code> template.
+            You could just specify outer or inner template if required by adding <code>left;</code> or <code>;weeklyfeature</code> to specify outer and inner respectively.</xar:mlstring></li>
+        </ul>
+       <br />
        <h3><xar:mlstring>Included Blocks</xar:mlstring></h3>
 
        <p><xar:mlstring>The Blocks Module has no blocks included at this time.</xar:mlstring></p><br />
@@ -98,16 +136,7 @@
 
        <p><xar:mlstring>The Blocks Module has no hooks included at this time.</xar:mlstring></p><br />
 
-       <H3><xar:mlstring>Help documents for each admin option</xar:mlstring></h3>
-       <a name="modify_instance"><h4><xar:mlstring>Modify Instance</xar:mlstring></h4></a>
-       <p>
-        <xar:mlstring>You can set the location of a block on the page and the templates it uses for its instance.
-            The inner template is the template the block instance uses. The outer template is the template used for the blockgroup.
-            You can set the templates in the text box in the following format: [outer-template][semi-colon][inner-template]. Both entries are the names for the templates only.</xar:mlstring><br />
-            <xar:mlstring>An example: right;bigtext for the articles random block means the group template is right.xt in the <code>themes/[yourtheme]/blocks</code> directory.
-            Then the articles random block instance will be shown using the <code>[yourtheme]/modules/articles/blocks/random-bigtext.xt</code> template.
-            </xar:mlstring>
-       </p>
+
       <h3><xar:mlstring>Further Information</xar:mlstring></h3>
       <p>
           <xar:mlstring>Further information on the Blocks module can be found at</xar:mlstring>
@@ -120,6 +149,6 @@
           </li>
       </ul>
       <p class="xar-sub">
-         <strong>&nbsp;<xar:mlstring>BlocksModule - Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.0.0&nbsp; 2005-10-28
+         <strong>&nbsp;<xar:mlstring>Blocks Module Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.1.0&nbsp; 2006-06-09
       </p>
 </div>
