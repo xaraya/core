@@ -7,6 +7,7 @@
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span>
 </div>
+
 <div class="xar-mod-body">
   <xar:template type="module" file="admin-menu" />
     <h2>
@@ -127,7 +128,18 @@
                         <label for="phome" title="#xarML('Home URL')#" class="xar-form-label">
                             <xar:mlstring>Primary Group:</xar:mlstring>
                         </label>
-                        <xar:data-input type="grouplist" name="pprimaryparent" id="pprimaryparent" value="$pprimaryparent" tabindex="8"/>
+                        <select name="pprimaryparent" id="pprimaryparent" size="1">
+                            <xar:foreach in="$parents" key="$k" value="$v">
+                                <xar:if condition="$v['parentid'] eq $pprimaryparent">
+                                    <option value="#$v['parentid']#" selected="selected">#$v['parentuname']#</option>
+                                <xar:else />
+                                    <option value="#$v['parentid']#">#$v['parentuname']#</option>
+                                </xar:if>
+                            </xar:foreach>
+                        </select>
+                        <!-- We only want to select from existing parents here
+                          <xar:data-input type="grouplist" name="pprimaryparent" id="pprimaryparent" value="$pprimaryparent" tabindex="8"/>
+                        -->
                     </div>
                 </xar:if>                        
 

@@ -26,6 +26,7 @@ function roles_admin_modifyrole()
     if (!xarVarFetch('state', 'str:1:', $state, '', XARVAR_DONT_SET)) return;
     if (!xarVarFetch('phome', 'str', $data['phome'], '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pprimaryparent', 'int', $data['primaryparent'], '', XARVAR_NOT_REQUIRED)) return;
+
     // Call the Roles class and get the role to modify
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
@@ -38,7 +39,8 @@ function roles_admin_modifyrole()
     foreach ($role->getParents() as $parent) {
         if(xarSecurityCheck('RemoveRole',0,'Relation',$parent->getName() . ":" . $role->getName())) {
             $parents[] = array('parentid' => $parent->getID(),
-                'parentname' => $parent->getName());
+                               'parentname' => $parent->getName(),
+                               'parentuname'=> $parent->getUname());
             $names[] = $parent->getName();
         }
     }
@@ -83,13 +85,15 @@ function roles_admin_modifyrole()
     } else {
         $data['phome'] = $role->getHome();
     }
-
-    if (!empty($primaryparent)) {
+    //Primary parent is a name string (apparently looking at other code) but passed in here as an int
+    //we want to pass it to the template as an int as well
+    if (!empty($primaryparent) && is_int($primaryparent)) { //we have a uid
         $data['pprimaryparent'] = $primaryparent;
     } else {
-        $data['pprimaryparent'] = $role->getPrimaryParent();
+        $primaryparent = $role->getPrimaryParent(); //this is a string name 
+        $prole = xarUFindRole($primaryparent);
+        $data['pprimaryparent'] = $prole->getID();//pass in the uid
     }
-
     if (!empty($email)) {
         $data['pemail'] = $email;
     } else {

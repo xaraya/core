@@ -27,6 +27,18 @@ function roles_admin_updaterole()
     if (!xarVarFetch('pprimaryparent', 'int', $pprimaryparent, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('returnurl', 'str', $returnurl, '', XARVAR_NOT_REQUIRED)) return;
 
+    //we want primary parent as a name string not int
+    //(apparently going from other code, and for consistency with other stored roles like default one)
+    //The default should also already be set
+    //Grab it here if primary parent modvar is activated
+    if (!empty($pprimaryparent) && is_integer($pprimaryparent) && xarModGetVar('roles','setprimaryparent')) {
+        $primaryrole = new xarRoles();
+        $primaryp = $primaryrole->getRole($pprimaryparent);
+        $primaryparent = $primaryp->uname;
+    } else {
+        $primaryparent='';
+    }
+
     //Save the old state and type
     $roles = new xarRoles();
     $oldrole = $roles->getRole($uid);
@@ -48,10 +60,7 @@ function roles_admin_updaterole()
         if (!xarVarFetch('pstate', 'int:1:', $pstate)) return;
 
         // check for duplicate username
-        $user = xarModAPIFunc('roles',
-            'user',
-            'get',
-            array('uname' => $puname));
+        $user = xarModAPIFunc('roles','user','get',array('uname' => $puname));
 
         if (($user != false) && ($user['uid'] != $uid)) {
             $msg = xarML('That username is already taken.');
@@ -89,18 +98,20 @@ function roles_admin_updaterole()
     if (isset($phome) && xarModGetVar('roles','setuserhome'))
             $duvs['userhome'] = $phome;
 
-            if ((!empty($ppass1))  && xarModGetVar('roles','setpasswordupdate')){
-                //assume if it's not empty then it's already been matched with ppass2
-                $duvs['passwordupdate']=time();
-            }
-
+    if ((!empty($ppass1))  && xarModGetVar('roles','setpasswordupdate')){
+        //assume if it's not empty then it's already been matched with ppass2
+        $duvs['passwordupdate']=time();
+    }
+    if (xarModGetVar('roles','setprimaryparent')) {
+        $duvs['primaryparent']=$primaryparent;
+    }
     // assemble the args into an array for the role constructor
     $pargs = array('uid' => $uid,
         'name' => $pname,
         'type' => $ptype,
         'uname' => $puname,
         'userhome' => $phome,
-        'primaryparent' => $pprimaryparent,
+        'primaryparent' => $primaryparent,
         'email' => $pemail,
         'pass' => $ppass1,
         'state' => $pstate,
