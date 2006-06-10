@@ -126,7 +126,8 @@
                         <input type="text" name="phome" id="phome" value="#$phome#" size="40" maxlength="100" tabindex="7" />
                     </div>
                 </xar:if>
-                <xar:comment> Comment out until code is in place
+                <xar:comment> There is no real use displaying this here. The role is not yet created
+                              So the primary parent will be for now the same as the set parent on role creation
                 <xar:if condition="xarModGetVar('roles','setprimaryparent')">
                     <div class="xar-form-input-wrapper">
                         <label for="phome" title="#xarML('Home URL')#" class="xar-form-label">
