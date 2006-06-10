@@ -1,5 +1,9 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 
 <xar:if condition="$srcpath ne ''" >
-     <img src="#$baseurl#/#$value#" alt="" />
+    <xar:comment>
+        <xar:set name="size">getimagesize($basedir.'/'.$value)</xar:set>
+        <img src="#$baseurl#/#$value#" width="#$size[0]#" height="#$size[1]#" alt="#$value#" />
+    </xar:comment>
+    <img src="#$baseurl#/#$value#" alt="" />
 </xar:if>
