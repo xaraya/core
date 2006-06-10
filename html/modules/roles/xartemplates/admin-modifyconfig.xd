@@ -318,7 +318,7 @@
                             </td>
                             <td style="width: 400px">
                                 <xar:mlstring>The user's primary parent group. 
-                                Inherited properties from this parent take precendence over inherited properties from other parent groups.</xar:mlstring>
+                                A primary parent take precendence over other parent groups for realm and user home settings.</xar:mlstring>
                             </td>
                             <td style="width: 50px; text-align: center;">
                                 <xar:if condition="xarModGetVar('roles','setprimaryparent')">
