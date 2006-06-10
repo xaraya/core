@@ -25,7 +25,8 @@ function roles_admin_displayrole()
     $parents = array();
     foreach ($role->getParents() as $parent) {
         $parents[] = array('parentid' => $parent->getID(),
-            'parentname' => $parent->getName());
+                           'parentname' => $parent->getName(),
+                           'parentuname' => $parent->getUname());
     }
     $data['parents'] = $parents;
 
@@ -38,7 +39,11 @@ function roles_admin_displayrole()
     $data['type'] = $role->getType();
     $data['name'] = $name;
     $data['phome'] = $role->getHome();
-    $data['pprimaryparent'] = $role->getPrimaryParent();
+    
+    $primaryparent = $role->getPrimaryParent();
+    $prole = xarUFindRole($primaryparent);
+    $data['primaryparent'] = $primaryparent;
+    $data['pprimaryparent'] = $prole->getID();//pass in the uid
     //get the data for a user
     if ($data['type'] == 0) {
         $data['uname'] = $role->getUser();

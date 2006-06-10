@@ -62,9 +62,9 @@
     <xar:if condition="xarModGetVar('roles','setprimaryparent')">
         <div class="xar-form-input-wrapper">
             <span class="xar-form-label">
-                <xar:mlstring>Primary Group:</xar:mlstring>
+                <xar:mlstring>Primary Parent Group:</xar:mlstring>
             </span>
-            <xar:data-output type="grouplist" name="pprimaryparent" id="pprimaryparent" value="$pprimaryparent"/>
+            #xarVarPrepForDisplay($primaryparent)#
         </div>
     </xar:if>                        
       <xar:if condition="$type eq 0">
