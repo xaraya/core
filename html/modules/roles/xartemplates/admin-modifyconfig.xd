@@ -547,7 +547,7 @@
                         <xar:else />
                         <input type="checkbox" name="loginredirect" id="loginredirect" value="1" />
                     </xar:if>
-                    <label for="allowexternalurl" title="#xarML('Redirect users to Home Page on login?')#">
+                    <label for="loginredirect" title="#xarML('Redirect users to Home Page on login?')#">
                         <strong><xar:mlstring>
                            Redirect users to Home Page on login?
                         </xar:mlstring></strong>
@@ -560,7 +560,7 @@
                         <xar:else />
                         <input type="checkbox" name="userhomeedit" id="userhomeedit" value="1" />
                     </xar:if>
-                    <label for="allowuserhomeedit" title="#xarML('Allow users to edit their user home page in their account')#">
+                    <label for="userhomeedit" title="#xarML('Allow users to edit their user home page in their account')#">
                         <strong><xar:mlstring>
                             Allow users to set Home Page in their member account 
                         </xar:mlstring></strong>
