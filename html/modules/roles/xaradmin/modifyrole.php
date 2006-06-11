@@ -87,12 +87,16 @@ function roles_admin_modifyrole()
     }
     //Primary parent is a name string (apparently looking at other code) but passed in here as an int
     //we want to pass it to the template as an int as well
-    if (!empty($primaryparent) && is_int($primaryparent)) { //we have a uid
-        $data['pprimaryparent'] = $primaryparent;
+    if (xarModGetVar('roles','setprimaryparent')) {
+        if (!empty($primaryparent) && is_int($primaryparent)) { //we have a uid
+            $data['pprimaryparent'] = $primaryparent;
+        } else {
+            $primaryparent = $role->getPrimaryParent(); //this is a string name
+            $prole = xarUFindRole($primaryparent);
+            $data['pprimaryparent'] = $prole->getID();//pass in the uid
+        }
     } else {
-        $primaryparent = $role->getPrimaryParent(); //this is a string name 
-        $prole = xarUFindRole($primaryparent);
-        $data['pprimaryparent'] = $prole->getID();//pass in the uid
+        $data['pprimaryparent'] ='';
     }
     if (!empty($email)) {
         $data['pemail'] = $email;

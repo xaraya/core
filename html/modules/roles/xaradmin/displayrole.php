@@ -40,18 +40,18 @@ function roles_admin_displayrole()
     $data['name'] = $name;
     $data['phome'] = $role->getHome();
     
-    $primaryparent = $role->getPrimaryParent();
-    $prole = xarUFindRole($primaryparent);
-    $data['primaryparent'] = $primaryparent;
-    $data['pprimaryparent'] = $prole->getID();//pass in the uid
-    
     if (xarModGetVar('roles','setprimaryparent')) { //we have activated primary parent
+        $primaryparent = $role->getPrimaryParent();
+        $prole = xarUFindRole($primaryparent);
+        $data['primaryparent'] = $primaryparent;
+        $data['pprimaryparent'] = $prole->getID();//pass in the uid
         if (!isset($data['phome']) || empty ($data['phome'])) {
             $parenthome = $prole->getHome(); //get the primary parent home
             $data['parenthome']=$parenthome;
         }
     } else {
         $data['parenthome']='';
+        $data['pprimaryparent'] ='';
     }
     //get the data for a user
     if ($data['type'] == 0) {
