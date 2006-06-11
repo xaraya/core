@@ -52,6 +52,7 @@ function roles_admin_displayrole()
     } else {
         $data['parenthome']='';
         $data['pprimaryparent'] ='';
+        $data['primaryparent'] ='';
     }
     //get the data for a user
     if ($data['type'] == 0) {
