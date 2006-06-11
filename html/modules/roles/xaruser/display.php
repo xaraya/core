@@ -45,12 +45,20 @@ function roles_user_display($args)
         $role = xarUFindRole(xarUserGetVar('uname',$uid));
         $url=$role->getHome(); //what about last resort here?
         if (!isset($url) || empty($url)) {
-            // take the first home url encountered - other viable option atm?
-            foreach ($role->getParents() as $parent) {
-                $parenturl = $parent->getHome();
-                if (!empty($parenturl))  {
-                    $url = $parenturl;
-                    break;
+            //we now have primary parent implemented so can use this if activated
+            if (xarModGetVar('roles','setprimaryparent')) { //primary parent is activated
+                $primaryparent = $role->getPrimaryParent();
+                $primaryparentrole = xarUFindRole($primaryparent);
+                $parenturl = $primaryparentrole->getHome();
+                if (!empty($parenturl)) $url= $parenturl;
+            } else {
+                // take the first home url encountered - other viable option atm?
+                foreach ($role->getParents() as $parent) {
+                    $parenturl = $parent->getHome();
+                    if (!empty($parenturl))  {
+                        $url = $parenturl;
+                        break;
+                    }
                 }
             }
         }

@@ -410,6 +410,8 @@ class xarMasks
             $textvalue = '';
         }
         switch($realmvalue) {
+            //jojodee - should we not have a mapping so we can define realms of different types?
+            //perhaps something for later.
             case "theme":
                 $mask->setRealm(xarModGetVar('themes', 'default'));
                 break;
@@ -424,6 +426,25 @@ class xarMasks
                 break;
             case "string":
                 $mask->setRealm($textvalue);
+                break;
+            case "group":
+                //get some info on the user
+                $thisname=xarUserGetVar('uname');
+                $role = xarUFindRole($thisname);
+                $parent='Everybody'; //set a default
+                //We now have primary parent implemented
+                //Use primary parent if implemented else get first parent??
+                //TODO: this needs to be review
+                $useprimary = xarModAPIFunc('roles','admin','checkduv',array('name' => 'setprimaryparent', 'state' => 1));
+                if ($useprimary) { //grab the primary parent
+                    $parent=$role->getPrimaryParent();
+                }else { //we don't have a primary parent so use the first parent?? ... hmm review
+                    foreach ($role->getParents() as $parent) {
+                      $parent = $parent->name;
+                        break;
+                    }
+                }
+                $mask->setRealm($parent);
                 break;
             case "none":
             default:

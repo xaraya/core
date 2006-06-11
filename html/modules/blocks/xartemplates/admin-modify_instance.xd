@@ -210,9 +210,10 @@
 
             <div class="xar-form-input-wrapper">
                 <label for="block_template" title="#xarML('Format is: [outer-template][semi-colon][inner-template].')#" class="xar-form-label">
-                    <xar:mlstring>Instance Template:</xar:mlstring>
+                    <xar:mlstring>Instance Template (optional):</xar:mlstring>
                 </label>
                 <input type="text" name="block_template" id="block_template" value="#xarVarPrepForDisplay($instance['template'])#" maxlength="255" class="xar-form-textlong" />
+                (Specified as <code>outer<strong>;</strong>inner</code>)
             </div>
 
         </fieldset>

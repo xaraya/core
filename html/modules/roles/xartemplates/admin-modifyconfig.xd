@@ -312,13 +312,13 @@
                             </td>
                         </tr>
 
-                        <xar:comment> jojodee: comment out primary parent until there is supporting code in place.
                         <tr>
                             <td style="width: 100px">
                                 primaryparent
                             </td>
                             <td style="width: 400px">
-                                <xar:mlstring>The user's primary parent group. Inherited properties from this parent take precendence over inherited properties from other parent groups.</xar:mlstring>
+                                <xar:mlstring>The user's primary parent group. 
+                                A primary parent take precendence over other parent groups for realm and user home settings.</xar:mlstring>
                             </td>
                             <td style="width: 50px; text-align: center;">
                                 <xar:if condition="xarModGetVar('roles','setprimaryparent')">
@@ -332,7 +332,6 @@
                                 </xar:if>
                             </td>
                         </tr>
-                        </xar:comment>
                         <tr>
                             <td style="width: 100px">
                                 passwordupdate
@@ -548,7 +547,7 @@
                         <xar:else />
                         <input type="checkbox" name="loginredirect" id="loginredirect" value="1" />
                     </xar:if>
-                    <label for="allowexternalurl" title="#xarML('Redirect users to Home Page on login?')#">
+                    <label for="loginredirect" title="#xarML('Redirect users to Home Page on login?')#">
                         <strong><xar:mlstring>
                            Redirect users to Home Page on login?
                         </xar:mlstring></strong>
@@ -561,7 +560,7 @@
                         <xar:else />
                         <input type="checkbox" name="userhomeedit" id="userhomeedit" value="1" />
                     </xar:if>
-                    <label for="allowuserhomeedit" title="#xarML('Allow users to edit their user home page in their account')#">
+                    <label for="userhomeedit" title="#xarML('Allow users to edit their user home page in their account')#">
                         <strong><xar:mlstring>
                             Allow users to set Home Page in their member account 
                         </xar:mlstring></strong>
