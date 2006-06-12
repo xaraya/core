@@ -1,6 +1,6 @@
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
-<xar:comment>You can use different admin-modifyhook-[objectname].xd templates for different objects</xar:comment>
-<xar:comment>Contrary to admin-newhook.xd, it is not recommended to use preset="yes" here</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!-- You can use different admin-modifyhook-[objectname].xd templates for different objects -->
+<!-- Contrary to admin-newhook.xd, it is not recommended to use preset="yes" here -->
 <xar:foreach in="$properties" key="$name">
     <div class="xar-form-input-wrapper">
         <xar:data-label property="$properties[$name]" label="id" />

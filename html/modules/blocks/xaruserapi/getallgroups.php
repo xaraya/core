@@ -1,7 +1,5 @@
 <?php
 /**
- * Get a single block type.
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -55,12 +53,11 @@ function blocks_userapi_getallgroups($args)
     $block_groups_table =& $xartable['block_groups'];
     $query = 'SELECT xar_id as gid, xar_name as name, xar_template as template'
         . ' FROM ' . $block_groups_table . $where_clause . $orderby;
-    $result =& $dbconn->Execute($query, $bind);
-    if (!$result) {return;}
+    $result = $dbconn->Execute($query, $bind,ResultSet::FETCHMODE_ASSOC);
 
     $block_groups = array();
     while(!$result->EOF) {
-        $group = $result->GetRowAssoc(false);
+        $group = $result->fields;
         $block_groups[$group['gid']] = $group;
         $result->MoveNext();
     }

@@ -32,14 +32,13 @@ function themes_init()
     $systemPrefix = xarDBGetSystemTablePrefix();
 
     $tables['themes'] = $systemPrefix . '_themes';
-    $tables['theme_states'] = $sitePrefix . '_theme_states';
     $tables['theme_vars'] = $sitePrefix . '_theme_vars'; 
+
     // Create tables
     /**
      * Here we create all the tables for the theme system
      * 
      * prefix_themes       - basic theme info
-     * prefix_theme_states - table to hold states for unshared themes
      * prefix_theme_vars   - theme variables table
      */
     // prefix_themes
@@ -61,10 +60,12 @@ function themes_init()
      *   xar_xaraya_version varchar(10) NOT NULL default '',
      *   xar_bl_version varchar(10) NOT NULL default '',
      *   xar_class int(10) unsigned NOT NULL default '0',
+     *   xar_state int(11) not null defaul '1'
      *   PRIMARY KEY  (xar_id)
-     * )TYPE=MyISAM;
+     * ) 
      */
-    $fields = array('xar_id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
+    $fields = array(
+        'xar_id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
         'xar_name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
         'xar_regid' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
         'xar_directory' => array('type' => 'varchar', 'size' => 64, 'null' => false),
@@ -79,58 +80,20 @@ function themes_init()
         'xar_version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
         'xar_xaraya_version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
         'xar_bl_version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
-        'xar_class' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0')
+        'xar_class' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
+        'xar_state' => array('type' => 'integer', 'null' => false, 'default' => '1')
         );
 
     $query = xarDBCreateTable($tables['themes'], $fields);
     $result =& $dbconn->Execute($query);
-    if(!$result) return;
-
-    // prefix_theme_states
-    /**
-     * CREATE TABLE xar_theme_states (
-     *   xar_regid int(10) unsigned NOT NULL default '0',
-     *   xar_state int(11) NOT NULL default '1'
-     * ) TYPE=MyISAM;
-     */
-    $fields = array('xar_regid' => array('type' => 'integer', 'null' => false, 'unsigned' => true, 'primary_key' => false),
-        'xar_state' => array('type' => 'integer', 'null' => false, 'default' => '0')
-        );
-
-    $query = xarDBCreateTable($tables['theme_states'], $fields);
-    $res = &$dbconn->Execute($query);
-    if (!$res) return; 
-    // prefix_theme_vars
-    /**
-     * CREATE TABLE xar_theme_vars (
-     *   xar_id int(11) NOT NULL auto_increment,
-     *   xar_themeName varchar(64) NOT NULL default '',
-     *   xar_name varchar(64) NOT NULL default '',
-     *   xar_prime int(1) NOT NULL default 1,
-     *   xar_description varchar(255) NOT NULL default '',
-     *   xar_value longtext,
-     *   PRIMARY KEY  (xar_id)
-     * ) TYPE=MyISAM;
-     */
-    $fields = array('xar_id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
-        'xar_themeName' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_prime' => array('type' => 'integer', 'null' => false, 'default' => 1),
-        'xar_description' => array('type' => 'varchar', 'size' => 255, 'null' => false),
-        'xar_value' => array('type' => 'text', 'size' => 'longtext')
-        );
-
-    $query = xarDBCreateTable($tables['theme_vars'], $fields);
-
-    $res = &$dbconn->Execute($query);
-    if (!$res) return;
-
+    
     xarModSetVar('themes', 'default', 'Xaraya_Classic');
     xarModSetVar('themes', 'selsort', 'nameasc'); 
 
     // Make sure we dont miss empty variables (which were not passed thru)
     // FIXME: how would these values ever be passed in?
     if (empty($selstyle)) $selstyle = 'plain';
+    // TODO: this is themes, not mods
     if (empty($selfilter)) $selfilter = XARMOD_STATE_ANY;
     if (empty($hidecore)) $hidecore = 0;
     if (empty($selsort)) $selsort = 'namedesc';
@@ -153,9 +116,6 @@ function themes_init()
     xarModSetVar('themes', 'dashtemplate', 'dashboard');    
 
     // Register theme tags.
-    // Additional styles, see bug 3868 note below.
-//     xarTplRegisterTag('themes', 'themes-additional-styles', array(), 'themes_userapi_handleadditionalstyles');
-// deprecated by andyv in corecss - delete comments
 
     // register complete set of css tags is now encapsulated in the module's api function
     if(!xarModAPIFunc('themes', 'css', 'registercsstags', array())) {
@@ -201,14 +161,6 @@ function themes_upgrade($oldversion)
             // Register additional styles tag.
             // This is for bug 3868 only - available to those that want to use it, but
             // not a permanent replacement for the additional styles global or corecss.
-            // TODO: we should not have to 'unregister' a tag just in case.
-//             xarTplUnregisterTag('themes-additional-styles');
-//             xarTplRegisterTag(
-//                 'themes', 'themes-additional-styles',
-//                 array(), 'themes_userapi_handleadditionalstyles'
-//             );
-
-// deprecated by andyv in corecss - delete comments
 
             // register complete set of css tags is now encapsulated in the module's api function
             if(!xarModAPIFunc('themes', 'css', 'registercsstags', array())) {

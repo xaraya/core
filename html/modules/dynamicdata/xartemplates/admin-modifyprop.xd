@@ -1,4 +1,4 @@
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:base-include-javascript module="base" filename="toggle.js" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
@@ -61,7 +61,7 @@
         </fieldset>
     </xar:if>
 
-    <xar:comment>This is where the list of properties shown starts</xar:comment>
+    <!-- This is where the list of properties shown starts -->
     <xar:if condition="!isset($layout)">
       <xar:set name="layout">'default'</xar:set>
     </xar:if>
@@ -97,9 +97,9 @@
       <fieldset>
         <legend>#$statictitle#</legend>
 
-        <xar:comment>
+        <!--
         TODO: very much under construction, obviously :-)
-        </xar:comment>
+        -->
 
         <!-- don't accept updates for this (for now) -->
         <table class="xar-fullwidth">
@@ -170,9 +170,9 @@
             #$relationstitle# 
         </h2>
 
-        <xar:comment>
+        <!--
         TODO: very much under construction, obviously :-)
-        </xar:comment>
+        -->
         <form method="post" action="&xar-modurl-dynamicdata-admin-modifyprop;">
             <!-- don't accept updates for this (for now) -->
             <xar:foreach in="$relations" value="$relation">

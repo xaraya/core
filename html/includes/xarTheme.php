@@ -8,14 +8,8 @@
  * 
  * @subpackage themes
  * @author mrb <marcel@xaraya.com> (this tag means responsible person)
+ * @todo Most of this doesnt belong here, but in the themes module, move it away
 */
-
-
-
-// Theme Function Wrappers
-// FIXME: This should be done better integrated
-//        We have no redundancy at least with xarMod.php now, but it's still a bit messy
-
 
 /**
  * get a theme variable
@@ -28,13 +22,11 @@
  */
 function xarThemeGetVar($themeName, $name, $prep = NULL)
 {
-    if (empty($themeName)) {
-        $msg = xarML('Empty themeName (#(1)).', '$themeName');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    }
+    if (empty($themeName)) throw new EmptyParameterException('themename');
 
-    return xarVar__GetVarByAlias($themeName, $name, $uid = NULL, $prep, $type = 'themevar');
+    $itemid = xarThemeGetIDFromName($themeName,'systemid');
+    $modVarName = $themeName . '_' . $name;
+    return xarVar__GetVarByAlias('themes', $modVarName, $itemid, $prep, $type = 'moditemvar');
 }
 
 /**
@@ -49,13 +41,16 @@ function xarThemeGetVar($themeName, $name, $prep = NULL)
  */
 function xarThemeSetVar($themeName, $name, $prime = NULL, $value, $description='')
 {
-    if (empty($themeName)) {
-        $msg = xarML('Empty themeName (#(1)).', '$themeName');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    }
+    if (empty($themeName)) throw new EmptyParameterException('themename');
 
-    return xarVar__SetVarByAlias($themeName, $name, $value, $prime, $description, $uid = NULL, $type = 'themevar');
+    $itemid = xarThemeGetIDFromName($themeName,'systemid');
+    $modVarName = $themeName . '_' . $name;
+    // Make sure we set it as modvar first
+    // TODO: this sucks
+    if(!xarModVars::get('themes',$modVarName)) {
+        xarModVars::set('themes',$modVarName,$value);
+    }
+    return xarVar__SetVarByAlias('themes', $modVarName, $value, $prime, $description, $itemid, $type = 'moditemvar');
 }
 
 
@@ -70,12 +65,11 @@ function xarThemeSetVar($themeName, $name, $prime = NULL, $value, $description='
  */
 function xarThemeDelVar($themeName, $name)
 {
-    if (empty($themeName)) {
-        $msg = xarML('Empty themeName (#(1)).', '$themeName');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));return;
-    }
+    if (empty($themeName)) throw new EmptyParameterException('themename');
 
-    return xarVar__DelVarByAlias($themeName, $name, $uid = NULL, $type = 'themevar');
+    $itemid = xarThemeGetIDFromName($themeName,'systemid');
+    $modVarName = $themeName . '_' . $name;
+    return xarVar__DelVarByAlias('themes', $modVarName, $itemid, $type = 'moditemvar');
 }
 
 /**
@@ -83,12 +77,17 @@ function xarThemeDelVar($themeName, $name)
  *
  * @access public
  * @param themeName The name of the theme
- * @return xarModGetIDFromName for processing
+ * @return theme RegID for processing
  * @raise DATABASE_ERROR, BAD_PARAM, THEME_NOT_EXIST
  */
-function xarThemeGetIDFromName($themeName)
+function xarThemeGetIDFromName($themeName,$id='regid')
 {
-    return xarModGetIDFromName($themeName, $type = 'theme');
+    if (empty($themeName)) throw new EmptyParameterException('themeName');
+
+    $themeBaseInfo = xarMod::getBaseInfo($themeName, 'theme');
+    if (!isset($themeBaseInfo)) return; // throw back
+
+    return $themeBaseInfo[$id];
 }
 
 /**
@@ -101,7 +100,7 @@ function xarThemeGetIDFromName($themeName)
  */
 function xarThemeGetInfo($regId)
 {
-    return xarModGetInfo($regId, $type = 'theme');
+    return xarMod::getInfo($regId, $type = 'theme');
 }
 
 
@@ -114,7 +113,8 @@ function xarThemeGetInfo($regId)
  */
 function xarThemeDBInfoLoad($themeName, $themeDir = NULL)
 {
-    return xarModDBInfoLoad($themeName, $themeDir, $type = 'theme');
+    // Just for consistency we do this now, but this just returns true, nothing more
+    return xarMod::loadDbInfo($themeName, $themeDir, $type = 'theme');
 }
 
 
@@ -131,7 +131,7 @@ function xarThemeGetDisplayableName($themeName)
     // The theme display name is language sensitive,
     // so it's fetched through xarML.
     // TODO: need to think of something that actually works.
-    return xarML($themeName);
+    return $themeName;
 }
 
 /**
@@ -144,7 +144,7 @@ function xarThemeGetDisplayableName($themeName)
  */
 function xarThemeIsAvailable($themeName)
 {
-    return xarModIsAvailable($themeName, $type = 'theme');
+    return xarMod::isAvailable($themeName, $type = 'theme');
 }
 
 
@@ -155,11 +155,12 @@ function xarThemeIsAvailable($themeName)
  *
  * @access protected
  * @param themeOSdir the theme's directory
- * @return xarMod_getFileInfo for processing
+ * @return xarMod::getFileInfo for processing
+ * @todo move to own class so we can protect it
  */
 function xarTheme_getFileInfo($themeOsDir)
 {
-    return xarMod_getFileInfo($themeOsDir, $type = 'theme');
+    return xarMod::getFileInfo($themeOsDir, $type = 'theme');
 }
 
 /**
@@ -171,7 +172,7 @@ function xarTheme_getFileInfo($themeOsDir)
  */
 function xarTheme_getBaseInfo($themeName)
 {
-    return xarMod_getBaseInfo($themeName, $type = 'theme');
+    return xarMod::getBaseInfo($themeName, $type = 'theme');
 }
 
 /**
@@ -183,19 +184,11 @@ function xarTheme_getBaseInfo($themeName)
  */
 function xarTheme_getVarsByTheme($themeName)
 {
-    return xarMod_getVarsByModule($name, $type = 'theme');
-}
-
-/**
- * Get all theme variables with a particular name
- *
- * @access protected
- * @return bool true on success
- * @raise DATABASE_ERROR, BAD_PARAM
- */
-function xarTheme_getVarsByName($name)
-{
-    return xarMod_getVarsByName($name, $type = 'theme');
+    // TODO: we would need to return all mod item vars here where:
+    // mod  = themes
+    // item = the theme
+    // For now, return the vars of the themes module
+    return xarModVars::load('themes');
 }
 
 /**
@@ -204,9 +197,10 @@ function xarTheme_getVarsByName($name)
  * @param themeRegId the theme's registered id
  * @param themeThemee the theme's site mode
  * @return to xarMod__getState for processing
+ * @todo we dont need this
  */
 function xarTheme_getState($themeRegId, $themeMode)
 {
-    return xarMod_getState($themeRegId, $themeMode, $type = 'theme');
+    return xarMod::getState($themeRegId, $themeMode, $type = 'theme');
 }
 ?>

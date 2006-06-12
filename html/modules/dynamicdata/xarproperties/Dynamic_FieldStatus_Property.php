@@ -1,7 +1,5 @@
 <?php
 /**
- * Dynamic Data Field Status Property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -23,9 +21,10 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
 {
-    function Dynamic_FieldStatus_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Select_Property($args);
+        parent::__construct($args);
+
         if (count($this->options) == 0) {
             $this->options = array(
                                  array('id' => 0, 'name' => xarML('Disabled')),
@@ -35,33 +34,16 @@ class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
                              );
         }
     }
+    
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('dynamicdata');
+        $info->id   = 25;
+        $info->name = 'fieldstatus';
+        $info->desc = 'Field Status';
 
-    // default methods from Dynamic_Select_Property
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 25,
-                              'name'       => 'fieldstatus',
-                              'label'      => 'Field Status',
-                              'format'     => '25',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'dynamicdata',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
+        return $info;
+    }
 }
-
 ?>

@@ -1,16 +1,31 @@
-<h1 class="xar-mod-head">
+<!-- 
+     In 2.x each x[d|t] file *can* have a root tag in the form 
+     of an open xar:template tag. It is very likely that the optional
+     character of this might change to a requirement in the 2.x line.
+-->
+<xar:template>
+    <h1 class="xar-mod-head">
     <xar:mlstring>
         Thank you for installing and trying Xaraya! 
     </xar:mlstring>
 </h1>
 <div class="xar-mod-body xar-overflow-auto">
     <xar:set name="versionnum">XARCORE_VERSION_NUM</xar:set>
+    <xar:if condition="defined('XARCORE_VERSION_REV')">
+        <xar:set name="mtrev">XARCORE_VERSION_REV</xar:set>
+    </xar:if>
     <h2>
         <xar:ml>
             <xar:mlstring>Xaraya has reached Production Stable Version #(1)</xar:mlstring>
             <xar:mlvar>#$versionnum#</xar:mlvar>
         </xar:ml>
     </h2>
+    <xar:if condition="isset($mtrev)">
+        <p>
+            <xar:mlstring>Monotone base revsision: </xar:mlstring>
+            <a href="http://mt.xaraya.com/com.xaraya.core/revision.psp?id=#$mtrev#">#$mtrev#</a>
+        </p>
+    </xar:if>
     <p>
         <xar:mlstring>
             This means we feel our functionality is complete, our core
@@ -38,19 +53,20 @@
             website. 
         </xar:mlstring>
     </p>
-    <xar:comment>
+    <!--
         The following template is just an example of how more static templates 
         can be added to an already static page (the default front page in this case). 
         This question pops up in irc, so people are sometimes unaware of these
         possibilities.. One possibility is to place a static template on the
         same level (or in a subdirectory) as the 'container' template (this one)
         and then insert it with xar:template tag as a system template (with optional wrapper div here):
-    </xar:comment>
+    -->
     <div class="xar-floatright xar-halfwidth xar-margin-thicksides xar-padding-thick xar-mod-body xar-alt xar-sub">
         <xar:template file="glimpse.xt" type="system" />
     </div>
-    <xar:comment>
+    <!--
         Another easy way is to specify a static template as an extra page template of base module:
-    </xar:comment>
+    -->
     <xar:module main="false" module="base" func="main" page="about" />
 </div>
+</xar:template>

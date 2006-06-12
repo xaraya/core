@@ -1,1 +1,1 @@
-<img src="#xarTplGetImage("blank.gif",'roles')#" alt="" style="margin: 0 0.25em 0 0,25em; vertical-align: middle; width: 1em; height: 21px;" />
+<img src="#xarTplGetImage('blank.gif','roles')#" alt="" style="margin: 0 0.25em 0 0,25em; vertical-align: middle; width: 1em; height: 21px;" />

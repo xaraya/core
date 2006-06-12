@@ -1,7 +1,6 @@
 <?php
 /**
  * Initialise the mail module
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -42,17 +41,16 @@ function mail_init()
         return false;
     }
     // when a module item is deleted
-    if (!xarModRegisterHook('item', 'delete', 'API',
-            'mail', 'admin', 'hookmaildelete')) {
+    if (!xarModRegisterHook('item', 'delete', 'API', 'mail', 'admin', 'hookmaildelete')) {
         return false;
     }
     // when a module item is changed
-    if (!xarModRegisterHook('item', 'update', 'API',
-            'mail', 'admin', 'hookmailchange')) {
+    if (!xarModRegisterHook('item', 'update', 'API','mail', 'admin', 'hookmailchange')) {
         return false;
     }
 
-    return true;
+    // Run the upgrades after this initial version
+    return mail_upgrade('0.1.0');
 }
 
 /**
@@ -102,6 +100,19 @@ function mail_upgrade($oldVersion)
                 }
             }
         }
+    case '0.1.1':
+        // From 0.1.1 -> 2.0.0 we added a mod var which holds the admin id for mail, the adminname is obsolete (no free email choice anymore)
+        // Try to find a reasonable admin (the designated one, for example ;-) )
+        $desigAdmin = xarModGetVar('roles','admin');
+        // In current xar this always fails as mail is installed before roles gets initialized
+        // in the off chance someone is actually ugrading, we leave it in. 
+        if(!empty($desigAdmin)) {
+            xarModSetVar('mail','admin_outgoing', $desigAdmin);
+        }
+        xarModDelVar('mail','adminname');
+        xarModDelVar('mail','adminmail');
+    case'2.0.0':
+        // current version
     }
     return true;
 }

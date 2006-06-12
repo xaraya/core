@@ -11,7 +11,7 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 
-/* 
+/*
  * Handle Group list property
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -21,6 +21,23 @@ include_once "modules/base/xarproperties/Dynamic_URLIcon_Property.php";
 
 class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
 {
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->tplmodule = 'roles';
+        $this->template = 'icq';
+    }
+    
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->id     = 28;
+        $info->name   = 'icq';
+        $info->desc   = 'ICQ Number';
+        $info->reqmodules = array('roles');
+        return $info;
+    }
+
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -40,94 +57,41 @@ class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
         return true;
     }
 
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (!empty($value)) {
-            $link = 'http://wwp.icq.com/scripts/search.dll?to=' . $value;
-        } else {
-            $link = '';
-        }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
+        if(!isset($data['value'])) $data['value'] = $this->value;
 
-        $data['link']     = $link;
-        $data['name']     = $name;
-        $data['id']       = $id;
-        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
-        $data['size']     = !empty($size) ? $size : $this->size;
- 
-        $template="";
-        return xarTplProperty('roles', 'icq', 'showinput', $data);
-
+        $data['link'] ='';
+        if(!empty($data['value'])) {
+            $data['link'] = 'http://wwp.icq.com/scripts/search.dll?to=' . $data['value'];
+        }
+        return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        extract($data);
+        if (!isset($value)) $value = $this->value;
+        
         // TODO: use redirect function here ?
+        $link = '';
         if (!empty($value) && !empty($this->icon)) {
-        // TODO: check this ICQ stuff
-        //<jojodee> Passing the whole lot to the template !
-        //The data is there for anyone that wants to use the vars themselves in the template.
-        $link = '<script language="JavaScript" type="text/javascript"><!--
+            // TODO: check this ICQ stuff
+            // TODO: move this outa here
+            //<jojodee> Passing the whole lot to the template !
+            //The data is there for anyone that wants to use the vars themselves in the template.
+            $link = '<script language="JavaScript" type="text/javascript"><!--
 if ( navigator.userAgent.toLowerCase().indexOf(\'mozilla\') != -1 && navigator.userAgent.indexOf(\'5.\') == -1 )
     document.write(\' <a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="ICQ Number" title="ICQ Number" alt=""/></a>\');
 else
     document.write(\'<a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="ICQ Number" title="ICQ Number" alt=""/></a><a href="http://wwp.icq.com/'.xarVarPrepForDisplay($value).'#pager"><img src="http://web.icq.com/whitepages/online?icq='.xarVarPrepForDisplay($value).'&amp;img=5" width="18" height="18" alt=""/></a>\');
 //--></script><noscript><a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="ICQ Number" title="ICQ Number" border="0" /></a></noscript>';
 
-        } else {
-            $link ='';
         }
 
-        $data['value']= $this->value;
-        $data['icon'] = xarVarPrepForDisplay($this->icon);
-        $data['name'] = $this->name;
-        $data['id']   = $this->id;
+        $data['value'] = $value;
         $data['link'] = $link;
-
-        $template="";
-        return xarTplProperty('roles', 'icq', 'showoutput', $data);
+        return parent::showOutput($data);
     }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 28,
-                              'name'       => 'icq',
-                              'label'      => 'ICQ Number',
-                              'format'     => '28',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'roles',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
 }
-
 ?>

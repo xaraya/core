@@ -1,7 +1,5 @@
 <?php
 /**
- * Get the list of defined dynamic objects
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -21,7 +19,7 @@
  */
 function dynamicdata_userapi_getobjects($args = array())
 {
-    return Dynamic_Object_Master::getObjects();
+    return Dynamic_Object_Master::getObjects($args);
 }
 
 ?>

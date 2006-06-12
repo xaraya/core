@@ -84,9 +84,7 @@ textarea#license, select#configuration {
 }
 
 label.block {
-    display: block;
     padding: .5em 0;
-    clear: both;
 }
 
 div.configuration {

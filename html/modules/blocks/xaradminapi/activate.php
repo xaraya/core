@@ -1,7 +1,5 @@
 <?php
 /**
- * Activate a block
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -23,11 +21,7 @@ function blocks_adminapi_activate($args)
     extract($args);
 
     // Argument check
-    if (!isset($bid) || !is_numeric($bid)) {
-        $msg = xarML('Wrong arguments for blocks_adminapi_activate');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    }
+    if (!isset($bid) || !is_numeric($bid)) throw new BadParameterException('bid');
 
     // Security
     if(!xarSecurityCheck('CommentBlock',1,'Block',"::$bid")) {return;}
@@ -36,11 +30,9 @@ function blocks_adminapi_activate($args)
     $xartable =& xarDBGetTables();
     $blockstable = $xartable['block_instances'];
 
-    // Deactivate
-    $query = "UPDATE $blockstable SET xar_state = ? WHERE xar_id = ?";
-    $result =& $dbconn->Execute($query,array(2,$bid));
-    if (!$result) {return;}
-
+    // Activate
+    $query = "UPDATE $blockstable SET xar_state=? WHERE xar_id=?";
+    $dbconn->Execute($query,array(2,$bid));
     return true;
 }
 

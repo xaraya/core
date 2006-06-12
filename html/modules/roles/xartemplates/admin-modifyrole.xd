@@ -9,19 +9,18 @@
 </div>
 <div class="xar-mod-body">
     <h2>
-        <xar:if condition="$ptype eq 0">
-            <xar:mlstring>Manage User:</xar:mlstring>
-        <xar:else/>
-            <xar:mlstring>Manage Group:</xar:mlstring>
-        </xar:if>
-        '#$pname#'
+        <xar:ml>
+            <xar:mlstring>Manage #(1) '#(2)':</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+            <xar:mlvar>#$pname#</xar:mlvar>
+        </xar:ml>
     </h2>
 
     <xar:if condition="count($parents) ne 0">
         <div>
             <dl class="xar-tabs">
-                <dt class="help" title="These are the groups that #$pname# is a member of">
-                    <xar:mlstring>Parent Groups:</xar:mlstring>
+                <dt class="help" title="These are the parents that #$pname# is a member of">
+                    <xar:mlstring>Parents:</xar:mlstring>
                 </dt>
                 <xar:set name="prevgroup">""</xar:set>
                 <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
@@ -42,13 +41,12 @@
     <!-- Show the general tab list for roles -->
     <xar:template file="tablist" />
     <fieldset>
-        <legend>
-            <xar:if condition="$ptype eq 0">
-                <xar:mlstring>User Properties</xar:mlstring>
-            <xar:else/>
-                <xar:mlstring>Group Properties</xar:mlstring>
-            </xar:if>
-        </legend>
+      <legend>
+        <xar:ml>
+            <xar:mlstring>#(1) Properties:</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+        </xar:ml>
+      </legend>
     
         <form action="&xar-modurl-roles-admin-updaterole;" method="post" enctype="application/x-www-form-urlencoded">
             <xar:if condition="$frozen">
@@ -60,11 +58,10 @@
                 </div>
 
                 <p>
-                    <xar:if condition="$ptype eq 0">
-                        <xar:mlstring>This User cannot be edited or deleted.</xar:mlstring>
-                    <xar:else />
-                        <xar:mlstring>This Group cannot be edited or deleted.</xar:mlstring>
-                    </xar:if>
+                <xar:ml>
+                    <xar:mlstring>This #(1) cannot be edited or deleted.</xar:mlstring>
+                    <xar:mlvar>#$itemtypename#</xar:mlvar>
+                </xar:ml>
                 </p>
             <xar:else />
                 <div class="xar-form-input-wrapper">
@@ -74,43 +71,31 @@
                     <input type="text" name="pname" id="pname" value="#xarVarPrepForDisplay($pname)#" maxlength="255" class="xar-form-textlong" />
                 </div>
         
-                <xar:if condition="$ptype eq 1 and $haschildren">
+                <xar:if condition="$basetype eq ROLES_GROUPTYPE and $haschildren">
                     <div class="xar-form-input-wrapper">
                         <label title="#xarML('Type of Role')#" class="xar-form-label">
                             <xar:mlstring>Type:</xar:mlstring>
                         </label>
+                    #$itemtypename#
                         <xar:comment>
                             value should still be there in the form, otherwise validation will fail,
                             do it with a hidden input now, but this should really be done with readonly attribute
                         </xar:comment>
-                        <xar:if condition="$ptype eq 1">
-                            <input type="text" name="ptypedisplay" value="#xarML('Group')#" disabled="disabled" />
-                        <xar:else />
-                            <input type="text" name="ptypedisplay" value="#xarML('User')#" disabled="disabled" />
-                        </xar:if>
-                        <input type="hidden" name="ptype" value="#$ptype#" />
+                        <input type="hidden" name="itemtype" value="#$itemtype#" />
                     </div>
                 <xar:else />                
                     <div class="xar-form-input-wrapper">
-                        <label for="ptype" title="#xarML('Type of Role')#" class="xar-form-label">
-                            <xar:mlstring>Type:</xar:mlstring>
+                        <label for="itemtype" title="#xarML('Type of Role')#" class="xar-form-label">
+                                <xar:mlstring>Type:</xar:mlstring>
                         </label>
-                        <select name="ptype" id="ptype" onchange="this.form.action='&xar-modurl-roles-admin-modifyrole;';this.form.submit();">
-                            <xar:if condition="$ptype eq 1">
-                                <option value="1" selected="selected">Group</option>
-                            <xar:else />
-                                <option value="1">Group</option>
-                            </xar:if>
-                            <xar:if condition="$ptype eq 0">
-                                <option value="0" selected="selected">User</option>
-                            <xar:else />
-                                <option value="0">User</option>
-                            </xar:if>
-                        </select>
+                        <xar:set name="moduleitemtype">xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 600))</xar:set>
+                        <xar:set name="$onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();\""</xar:set>                    
+                        <xar:data-input property="$moduleitemtype" name="itemtype" modid="27" value="$itemtype" onchange="$onchange" />
                     </div>
                 </xar:if>
 
-                <xar:if condition="xarModGetVar('roles','userhome')">
+            <xar:if condition="$basetype eq ROLES_USERTYPE">
+               <xar:if condition="xarModGetVar('roles','userhome')">
                     <div class="xar-form-input-wrapper">
                         <label for="phome" title="#xarML('Home URL')#" class="xar-form-label">
                             <xar:mlstring>Home:</xar:mlstring>
@@ -130,7 +115,6 @@
                     </div>
                 </xar:if>                        
 
-                <xar:if condition="$ptype eq 0">
                     <p class="xar-clearboth">
                         <xar:mlstring>The fields below only apply for Users.</xar:mlstring>
                     </p>
@@ -208,10 +192,10 @@
     </fieldset>
 
     <fieldset>
-        <legend><xar:mlstring>Group Memberships</xar:mlstring></legend>
+        <legend><xar:mlstring>Memberships</xar:mlstring></legend>
         <table class="xar-fullwidth">
-            <tr>
-                <th><xar:mlstring>Group</xar:mlstring></th>
+          <tr>
+            <th><xar:mlstring>Parent</xar:mlstring></th>
                 <th><xar:mlstring>Remove</xar:mlstring></th>
             </tr>
             <xar:loop name="$parents">
@@ -237,19 +221,23 @@
                 </tr>
             </xar:loop>
         </table>
+        <xar:ml>
+            <xar:mlstring>Add #(1) #(2) to a Parent:</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+            <xar:mlvar>#$pname#</xar:mlvar>
+        </xar:ml>
         <xar:if condition="$frozen">
-            <p>
-                <xar:if condition="$ptype eq 0">
-                    <xar:mlstring>This User cannot be edited or deleted.</xar:mlstring>
-                <xar:else />
-                    <xar:mlstring>This Group cannot be edited or deleted.</xar:mlstring>
-                </xar:if>
-            </p>
-        <xar:else />
-            <form action="&xar-modurl-roles-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">
-                <div class="xar-form-input-wrapper">
-                    <label for="roleid" title="#xarML('Choose group to assign membership')#" class="xar-form-label">
-                        <xar:mlstring>Add to Group:</xar:mlstring>
+          <p>
+        <xar:ml>
+            <xar:mlstring>This #(1) cannot be edited or deleted.</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+        </xar:ml>
+          </p>
+          <xar:else />
+          <form action="&xar-modurl-roles-admin-addmember;" method="post" enctype="application/x-www-form-urlencoded">
+            <div class="xar-form-input-wrapper">
+              <label for="roleid" title="#xarML('Choose a parent to assign membership')#" class="xar-form-label">
+                <xar:mlstring>Add to:</xar:mlstring>
                     </label>
                     <select name="roleid" id="roleid">
                         <xar:loop name="$groups">

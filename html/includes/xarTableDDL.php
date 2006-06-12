@@ -44,12 +44,7 @@
 function xarDBCreateDatabase($databaseName, $databaseType = NULL)
 {
     // perform validations on input arguments
-    if (empty($databaseName)) {
-        $msg = xarML('Empty database_name.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    if (empty($databaseName)) throw new EmptyParameterException('databaseName');
     if (empty($databaseType)) {
         $databaseType = xarDBGetType();
     }
@@ -74,10 +69,7 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
             break;
         // Other DBs go here
         default:
-            $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                           new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return;
+            throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
     }
     return $sql;
 
@@ -87,62 +79,27 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
  * Generate the SQL to create a table
  *
  * @access public
- * @param tableName the physical table name
- * @param fields an array containing the fields to create
- * @param databaseType database type (optional)
- * @return string|false the generated SQL statement, or false on failure
+ * @param tableName the table to alter
+ * @param args['command'] command to perform on table(add,modify,drop,rename)
+ * @param args['field'] name of column to alter
+ * @param args['type'] column type
+ * @param args['size'] size of column if varying data
+ * @param args['default'] default value of data
+ * @param args['null'] null or not null (true/false)
+ * @param args['unsigned'] allow unsigned data (true/false)
+ * @param args['increment'] auto incrementing files
+ * @param args['primary_key'] primary key
+ * @param databaseType the database type (optional)
+ * @return string generated sql
+ * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
 function xarDBCreateTable($tableName, $fields, $databaseType="")
 {
     // perform validations on input arguments
-    if (empty($tableName)) {
-        $msg = xarML('Empty tableName.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
-    if (!is_array($fields)) {
-        $msg = xarML('Not array fields.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
-
+    if (empty($tableName)) throw new EmptyParameterException('tableName');
+    if (!is_array($fields)) throw new BadParameterException('fields','The #(1) parameter is not an array');
     if (empty($databaseType)) {
         $databaseType = xarDBGetType();
-    }
-
-    // save table definition
-    $systemPrefix = xarDBGetSystemTablePrefix();
-    $metaTable = $systemPrefix . '_tables';
-    if ($tableName != $metaTable) {
-        $dbconn =& xarDBGetConn();
-        while (list($field_name, $parameters) = each($fields)) {
-            $nextId = $dbconn->GenId($metaTable);
-            $query = "INSERT INTO $metaTable (
-                      xar_tableid, xar_table, xar_field,  xar_type,
-                      xar_size,  xar_default, xar_null, xar_unsigned,
-                      xar_increment, xar_primary_key)
-                    VALUES (?,?,?,?,?,?,?,?,?,?)";
-            if (!isset($parameters['default'])) {
-                $defaultval = '';
-            } elseif (is_string($parameters['default'])) {
-                $defaultval = $parameters['default'];
-            } else {
-                $defaultval = serialize($parameters['default']);
-            }
-            $bindvars = array($nextId,$tableName,$field_name,
-                              (empty($parameters['type']) ? '' : $parameters['type']),
-                              (empty($parameters['size']) ? '' : $parameters['size']),
-                              $defaultval,
-                              (empty($parameters['null']) ? '0' : '1'),
-                              (empty($parameters['unsigned']) ? '0' : '1'),
-                              (empty($parameters['increment']) ? '0' : '1'),
-                              (empty($parameters['primary_key']) ? '0' : '1'));
-                  //    xar_width,
-                  //    xar_decimals,
-            $result =& $dbconn->Execute($query,$bindvars);
-        }
     }
 
     // Select the correct database type
@@ -171,10 +128,7 @@ function xarDBCreateTable($tableName, $fields, $databaseType="")
             break;
         // Other DBs go here
         default:
-            $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return;
+            throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
     }
     return $sql;
 }
@@ -200,64 +154,13 @@ function xarDBCreateTable($tableName, $fields, $databaseType="")
 function xarDBAlterTable($tableName, $args, $databaseType = NULL)
 {
     // perform validations on input arguments
-    if (empty($tableName)) {
-        $msg = xarML('Empty tableName.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    if (empty($tableName)) throw new EmptyParameterException('tableName');
     if (!is_array($args) || !isset($args['command'])) {
-        $msg = xarML('Invalid args (must be an array, command key must be set).');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
+        throw new BadParameterException('args','Invalid parameter "args", it must be an array, and the "command" key must be set');
     }
 
     if (empty($databaseType)) {
         $databaseType = xarDBGetType();
-    }
-
-    // save table definition
-    if (isset($args['command']) && $args['command'] == 'add') {
-        $systemPrefix = xarDBGetSystemTablePrefix();
-        $metaTable = $systemPrefix . '_tables';
-
-        $dbconn =& xarDBGetConn();
-        $nextId = $dbconn->GenId($metaTable);
-        $query = "INSERT INTO $metaTable (
-                      xar_tableid, xar_table, xar_field, xar_type,
-                      xar_size,  xar_default, xar_null,  xar_unsigned,
-                      xar_increment, xar_primary_key)
-                    VALUES (?,?,?,?,?,?,?,?,?,?)";
-        if (!isset($parameters['default'])) {
-            $defaultval = '';
-        } elseif (is_string($parameters['default'])) {
-            $defaultval = $parameters['default'];
-        } else {
-            $defaultval = serialize($parameters['default']);
-        }
-        $bindvars = array($nextId,$tableName,$args['field'],
-                          (empty($args['type']) ? '' : $args['type']),
-                          (empty($args['size']) ? '' : $args['size']),
-                          $defaultval,
-                          (empty($args['null']) ? '0' : '1'),
-                          (empty($args['unsigned']) ? '0' : '1'),
-                          (empty($args['increment']) ? '0' : '1'),
-                          (empty($args['primary_key']) ? '0' : '1'));
-                  //    xar_width,
-                  //    xar_decimals,
-        $result =& $dbconn->Execute($query,$bindvars);
-
-    } elseif (isset($args['command']) && $args['command'] == 'rename') {
-
-        $systemPrefix = xarDBGetSystemTablePrefix();
-        $metaTable = $systemPrefix . '_tables';
-
-        $dbconn =& xarDBGetConn();
-        $nextId = $dbconn->GenId($metaTable);
-        $query = "UPDATE $metaTable SET xar_table = ? WHERE xar_table = ?";
-        $bindvars = array((string) $args['new_name'], (string) $tableName);
-        $result =& $dbconn->Execute($query,$bindvars);
     }
 
     // Select the correct database type
@@ -286,10 +189,7 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
             break;
         // Other DBs go here
         default:
-            $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return;
+            throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
     }
     return $sql;
 }
@@ -306,24 +206,9 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
 function xarDBDropTable($tableName, $databaseType = NULL)
 {
     // perform validations on input arguments
-    if (empty($tableName)) {
-        $msg = xarML('Empty tableName.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    if (empty($tableName)) throw new EmptyParameterException('tableName');
     if (empty($databaseType)) {
         $databaseType = xarDBGetType();
-    }
-
-    // remove table definition
-    $systemPrefix = xarDBGetSystemTablePrefix();
-    $metaTable = $systemPrefix . '_tables';
-    if ($tableName != $metaTable) {
-        $dbconn =& xarDBGetConn();
-        $query = "DELETE FROM $metaTable WHERE xar_table=?";
-        $result =& $dbconn->Execute($query,array($tableName));
-        xarErrorFree();
     }
 
     switch($databaseType) {
@@ -347,10 +232,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
             break;
         // Other DBs go here
         default:
-            $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                           new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return;
+            throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
     }
     return $sql;
 
@@ -369,17 +251,9 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
 {
 
     // perform validations on input arguments
-    if (empty($tableName)) {
-        $msg = xarML('Empty tableName.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    if (empty($tableName)) throw new EmptyParameterException('tableName');
     if (!is_array($index) || !is_array($index['fields']) || empty($index['name'])) {
-        $msg = xarML('Invalid index (must be an array, fields key must be an array, name key must be set).');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
+        throw new BadParameterException('index','The parameter "#(1)" must be an array, the "fields" key inside it must be an array and the "name" key must be set).');
     }
     // default for unique
     if (!isset($index['unique'])) {
@@ -420,10 +294,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
 
         // Other DBs go here
         default:
-            $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return;
+            throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
     }
     return $sql;
 }
@@ -441,17 +312,9 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
 function xarDBDropIndex($tableName, $index, $databaseType = NULL)
 {
     // perform validations on input arguments
-    if (empty($tableName)) {
-        $msg = xarML('Empty tableName.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    if (empty($tableName)) throw new EmptyParameterException('tableName');
     if (!is_array($index) ||  empty($index['name'])) {
-        $msg = xarML('Invalid index (must be an array, fields key must be an array, name key must be set).');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
+        throw new BadParameterException('index','The parameter "#(1)" must be an array, the "fields" key inside it must be an array and the "name" key must be set).');
     }
     if (empty($databaseType)) {
         $databaseType = xarDBGetType();
@@ -475,10 +338,7 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
             break;
         // Other DBs go here
         default:
-            $msg = xarML('Unknown database type: \'#(1)\'.', $databaseType);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return;
+            throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
     }
     return $sql;
 }

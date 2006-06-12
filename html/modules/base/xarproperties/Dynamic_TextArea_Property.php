@@ -10,17 +10,23 @@
  * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
-/*
+/**
  * @author mikespub <mikespub@xaraya.com>
 */
 class Dynamic_TextArea_Property extends Dynamic_Property
 {
-    var $rows = 8;
-    var $cols = 35;
- 
-    function Dynamic_TextArea_Property($args)
+    public $rows = 8;
+    public $cols = 35;
+
+    function __construct($args)
     {
-         $this->Dynamic_Property($args);
+        parent::__construct($args);
+
+        $this->tplmodule = 'base';
+        $this->template = 'textarea';
+
+        if(isset($args['rows'])) $this->rows = $args['rows'];
+        if(isset($args['cols'])) $this->cols = $args['cols'];
 
         // check validation for allowed rows/cols (or values)
         if (!empty($this->validation)) {
@@ -28,54 +34,56 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         }
     }
 
+    static function getRegistrationInfo()
+    {
+        // Aliases
+        $a1 = new PropertyRegistration();
+        $a1->id   = 4;
+        $a1->name = 'textarea_medium';
+        $a1->desc = 'Medium Text Area';
+        $a1->args = array('rows' => 8);
+        
+        $a2 = new PropertyRegistration();
+        $a2->id   = 5;
+        $a2->name = 'textarea_large';
+        $a2->desc = 'Large Text Area';
+        $a2->args = array('rows' => 20);
+
+        // Composite property registration.
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id      = 3;
+        $info->name    = 'textarea_small';
+        $info->desc    = 'Small Text Area';
+        $info->args    = array('rows' => 2);
+        $info->aliases = array($a1, $a2);
+
+        return $info;
+    }
+
     function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;
         }
-    // TODO: allowable HTML ?
+        // TODO: allowable HTML ?
         $this->value = $value;
         return true;
     }
 
-//   function showInput($name = '', $value = null, $rows = 8, $cols = 50, $wrap = 'soft', $id = '', $tabindex = '')
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
+        // Make the variables easier to access
+        extract($data);
 
-        $data['name']     = $name;
-        $data['id']       = $id;
-        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        $data['rows']     = !empty($rows) ? $rows : $this->rows;
-        $data['cols']     = !empty($cols) ? $cols : $this->cols;
+        // Prepare 
+        $data['value'] = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
+        // TODO: the way the template is organized now, this only works when an id is set.
+        $data['rows']  = !empty($rows) ? $rows : $this->rows;
+        $data['cols']  = !empty($cols) ? $cols : $this->cols;
 
-        $template="";
-        return xarTplProperty('base', 'textarea', 'showinput', $data);
-
-    }
-
-    function showOutput($args = array())
-    {
-         extract($args);
-         $data=array();
-         
-         if (isset($value)) {
-            //return xarVarPrepHTMLDisplay($value);
-            $data['value'] = xarVarPrepHTMLDisplay($value);
-         } else {
-            //return xarVarPrepHTMLDisplay($this->value);
-            $data['value'] = xarVarPrepHTMLDisplay($this->value);
-         }
-         $template="";
-         return xarTplProperty('base', 'textarea', 'showoutput', $data);
+        // Let parent deal with the rest
+        return parent::showInput($data);
     }
 
     // check validation for allowed rows/cols (or values)
@@ -90,61 +98,6 @@ class Dynamic_TextArea_Property extends Dynamic_Property
                 $this->cols = $cols;
             }
         }
-    }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-    function getBasePropertyInfo()
-    {
-        $args = array();
-        $args['rows'] = 8;
-        $aliases[] = array(
-                            'id'         => 4,
-                            'name'       => 'textarea_medium',
-                            'label'      => 'Medium Text Area',
-                            'format'     => '4',
-                            'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => '',
-                            'args' => serialize( $args ),
-                            
-                            // ...
-                           );
-     
-        $args['rows'] = 20;     
-        $aliases[] = array(
-                              'id'         => 5,
-                              'name'       => 'textarea_large',
-                              'label'      => 'Large Text Area',
-                              'format'     => '5',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => '',
-                            'args' => serialize( $args ),
-                            // ...
-                           );
-
-        $args['rows'] = 2;
-        $baseInfo = array(
-                            'id'         => 3,
-                            'name'       => 'textarea_small',
-                            'label'      => 'Small Text Area',
-                            'format'     => '3',
-                            'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => '',
-                            'aliases' => $aliases,
-                            'args' => serialize( $args ),
-                            // ...
-                           );
-        return $baseInfo;
     }
 
     /**

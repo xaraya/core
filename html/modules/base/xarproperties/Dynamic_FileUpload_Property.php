@@ -24,29 +24,27 @@ include_once "modules/dynamicdata/class/properties.php";
 
 class Dynamic_FileUpload_Property extends Dynamic_Property
 {
-    var $size = 40;
-    var $maxsize = 1000000;
-    var $basedir = '';
-    var $filetype;
-    var $UploadsModule_isHooked = FALSE;
-    var $basePath;
-    var $multiple = TRUE;
-    var $methods = array('trusted'  => false,
+    public $size = 40;
+    public $maxsize = 1000000;
+    public $basedir = '';
+    public $filetype;
+    public $UploadsModule_isHooked = FALSE;
+    public $basePath;
+    public $multiple = TRUE;
+    public $methods = array('trusted'  => false,
                          'external' => false,
                          'upload'   => false,
                          'stored'   => false);
-    var $importdir = null;
+    public $importdir = null;
 
     // this is used by Dynamic_Property_Master::addProperty() to set the $object->upload flag
-    var $upload = true;
+    public $upload = true;
 
-    function Dynamic_FileUpload_Property($args)
+    function __construct($args)
     {
-        parent::Dynamic_Property($args);
-
-        if (empty($this->id)) {
-            $this->id = $this->name;
-        }
+        parent::__construct($args);
+        $this->tplmodule = 'base';
+        $this->template  = 'fileupload';
 
         // Determine if the uploads module is hooked to the calling module
         // if so, we will use the uploads modules functionality
@@ -63,9 +61,6 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             }
         }
 
-        if (!isset($this->validation)) {
-            $this->validation = '';
-        }
         // always parse validation to preset methods here
         $this->parseValidation($this->validation);
 
@@ -113,6 +108,17 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             $udir = $uname . '_' . $uid;
             $this->importdir = preg_replace('/\{user\}/',$udir,$this->importdir);
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 9;
+        $info->name = 'fileupload';
+        $info->desc = 'File Upload';
+
+        return $info;
     }
 
     function checkInput($name='', $value = null)
@@ -174,14 +180,11 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                                           'methods' => $this->methods,
                                           'override' => $override,
                                           'maxsize' => $this->maxsize));
+            // TODO: this raises exceptions now, we want to catch some of them
+            // TODO: Insert try/catch clause once we know what uploads raises
+            // TODO:
             if (!isset($return) || !is_array($return) || count($return) < 2) {
                 $this->value = null;
-            // CHECKME: copied from autolinks :)
-                // 'text' rendering will return an array
-                $errorstack = xarErrorGet();
-                $errorstack = array_shift($errorstack);
-                $this->invalid = $errorstack['short'];
-                xarErrorHandled();
                 return false;
             }
             if (empty($return[0])) {
@@ -252,9 +255,9 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
     }
 
 //    function showInput($name = '', $value = null, $size = 0, $maxsize = 0, $id = '', $tabindex = '')
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
+        extract($data);
         if (empty($name)) {
             $name = 'dd_'.$this->id;
         }
@@ -288,6 +291,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             } else {
                 $override = null;
             }
+            // @todo try to get rid of this
             return xarModAPIFunc('uploads','admin','showinput',
                                  array('id' => $name, // not $this->id
                                        'value' => $value,
@@ -313,31 +317,26 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             $allowed = '';
         }
 
-        $data               = array();
         $data['name']       = $name;
         $data['value']      = xarVarPrepForDisplay($value);
         $data['id']         = $id;
         $data['upname']     = $upname;
         $data['size']       = !empty($size) ? $size : $this->size;
         $data['maxsize']    = !empty($maxsize) ? $maxsize : $this->maxsize;
-        $data['tabindex']   = !empty($tabindex) ? $tabindex  : 0;
-        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)',  $this->invalid) : '';
         $data['allowed']    = $allowed;
         $data['extensions'] = $extensions;
 
-        $template="";
-        return xarTplProperty('base', 'fileupload', 'showinput', $data);
+        parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
+        extract($data);
 
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!isset($value)) $value = $this->value;
 
         if ($this->UploadsModule_isHooked) {
+            // @todo get rid of this one too
             return xarModAPIFunc('uploads','user','showoutput',
                                  array('value' => $value,
                                        'format' => 'fileupload',
@@ -351,17 +350,13 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
                 // remove any left over values
                 return '';
             }
-            $data = array();
             // if the uploads module is hooked (to be verified and set by the calling module)
             if (!empty($this->basedir) && file_exists($this->basedir . '/'. $value) && is_file($this->basedir . '/'. $value)) {
                 $data['basedir'] = $this->basedir;
             } else {
                 $data['basedir'] = null; // something went wrong here
             }
-            $data['value'] = xarVarPrepForDisplay($value);
-
-            $template="";
-            return xarTplProperty('base', 'fileupload', 'showoutput', $data);
+            return parent::showOutput($data);
         } else {
             return '';
         }
@@ -395,31 +390,6 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             // use the default values
         }
     }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 9,
-                              'name'       => 'fileupload',
-                              'label'      => 'File Upload',
-                              'format'     => '9',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => '',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
 
     function showValidation($args = array())
     {

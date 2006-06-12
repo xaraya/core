@@ -20,10 +20,9 @@ function authsystem_user_showloginform($args = array())
 {
     #redirecturl
     extract($args);
-    $redirected=xarServerGetBaseURL();
-    if (!isset($redirecturl)) $redirecturl = $redirected;
+    if (!isset($redirecturl)) $redirecturl = xarServerGetBaseURL();
 
-    xarVarFetch('redirecturl', 'str', $data['redirecturl'], $redirecturl, XARVAR_NOT_REQUIRED);
+    xarVarFetch('redirecturl', 'str:1:300', $data['redirecturl'], $redirecturl, XARVAR_NOT_REQUIRED);
 
 
     if (!xarUserIsLoggedIn()) {
