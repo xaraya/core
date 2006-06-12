@@ -1,7 +1,6 @@
 <?php
 /**
  * Authenticate a user
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -33,7 +32,6 @@ function authsystem_userapi_authenticate_user($args)
     $rolestable = $xartable['roles'];
     $query = "SELECT xar_uid, xar_pass FROM $rolestable WHERE xar_uname = ?";
     $result =& $dbconn->Execute($query,array($uname));
-    if (!$result) return;
 
     if ($result->EOF) {
         $result->Close();

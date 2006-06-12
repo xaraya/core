@@ -85,10 +85,7 @@ function xarDB__sqliteAlterTable($tableName, $args)
     switch ($args['command']) {
         case 'add':
             if (empty($args['field'])) {
-                $msg = xarML('Invalid args (field key must be set).');
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-                return;
+                throw new BadParameterException('args','Invalid parameter "#(1)" (field key must be set).');
             }
            
             $sql = 'ALTER TABLE '.$tableName.' ADD '.$args['field'].' ';
@@ -106,18 +103,12 @@ function xarDB__sqliteAlterTable($tableName, $args)
             break;
         case 'rename':
             if (empty($args['new_name'])) {
-                $msg = xarML('Invalid args (new_name key must be set.)');
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                    new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-                return;
+                throw new BadParameterException('args','Invalid parameter "#(1)" (new_name key must be set.)');
             }
             $sql = 'ALTER TABLE '.$tableName.' RENAME TO '.$args['new_name'];
             break;
         default:
-            $msg = xarML('Unknown command: \'#(1)\'.', $args['command']);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                    new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return;
+            throw new BadParameterException($args['command'],'Unknown command: "#(1)"');
         }
 
         return $sql;

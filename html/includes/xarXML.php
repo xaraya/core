@@ -525,7 +525,7 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
     {
         // this handler can be called multiple times, so make sure we're not
         // overwriting ourselves, trust the depth to put things in the right place
-        if(array_key_exists(XARXML_ATTR_CONTENT,$this->_tree[$this->_depth-1])) {
+        if(isset($this->_tree[$this->_depth-1][XARXML_ATTR_CONTENT])) {
             $this->_tree[$this->_depth-1][XARXML_ATTR_CONTENT] .= trim($data);
         } else {
             $this->_tree[$this->_depth-1][XARXML_ATTR_CONTENT] = trim($data);
@@ -773,7 +773,7 @@ function queryTree($subtree, $query, $nodetype,$returnsubtree=false)
     $results = array();
     
     // If the node has children inspect them first, so we have simpler code in the second part (the unset)
-    if(array_key_exists(XARXML_ATTR_CHILDREN, $subtree)) {
+    if(isset($subtree[XARXML_ATTR_CHILDREN])) {
         foreach($subtree[XARXML_ATTR_CHILDREN] as $child) {
             $results = array_merge($results, queryTree($child,$query,$nodetype,$returnsubtree));
         }

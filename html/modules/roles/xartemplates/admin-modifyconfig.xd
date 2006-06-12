@@ -112,7 +112,7 @@
         </dl>
     </div>
     <xar:comment>
-        ------------------- Begin General Options --------------------- 
+        - - - - - - - - - - - - - - - - - - - Begin General Options - - - - - - - - - - - - - - - - - - - - - 
     </xar:comment>
     <xar:if condition="$tab eq 'general'">
         <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
@@ -225,7 +225,7 @@
             </fieldset>
         </form>
         <xar:comment>
-            - - - - - - - - - - - - - - - - - Begin User Variable Options - - - - - - - - - - - - - - - - - - - 
+        - - - - - - - - - - - - - - - - - - - Begin User Variable Options - - - - - - - - - - - - - - - - - - - - - 
         </xar:comment>
         <xar:elseif condition="$tab eq 'duvs'" />
             <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
@@ -288,16 +288,12 @@
                                 &nbsp;
                             </th>
                         </tr>
-                        <xar:comment>
-                            TODO: jojodee- not working yet, comment out until the code is there.
-                            There is no code to redirect after login. We need to adjust for the now used moduservars too
-                         </xar:comment>
                         <tr>
                             <td style="width: 100px">
                                 userhome
                             </td>
                             <td style="width: 400px">
-                                      <xar:mlstring>The user's home page, which is initially displayed when the user logs in. The home page can be user specific or inherited from the direct parent group. The home page is specified in a similar manner to user menu item shortcuts in the modify or edit role page.</xar:mlstring>
+                                <xar:mlstring>The user's home page, which is initially displayed when the user logs in. The home page can be user specific or inherited from a parent group</xar:mlstring>
                             </td>
                             <td style="width: 50px; text-align: center;">
                                 <xar:if condition="xarModGetVar('roles','userhome')">
@@ -311,8 +307,6 @@
                                 </xar:if>
                             </td>
                         </tr>
-
-                        <xar:comment> jojodee: comment out primary parent until there is supporting code in place.
                         <tr>
                             <td style="width: 100px">
                                 primaryparent
@@ -332,7 +326,6 @@
                                 </xar:if>
                             </td>
                         </tr>
-                        </xar:comment>
                         <tr>
                             <td style="width: 100px">
                                 passwordupdate
@@ -411,7 +404,7 @@
             </p>
         </xar:if>
         <xar:comment>
-            ----------------- Begin Group Hooks Options ------------------- 
+            - - - - - - - - - - - - - - - - - Begin Group Hooks Options - - - - - - - - - - - - - - - - - - - 
         </xar:comment>
         <xar:elseif condition="$tab eq 'grouphooks'" />
         <xar:if condition="!empty($hooks)">
@@ -440,7 +433,7 @@
             </p>
         </xar:if>
         <xar:comment>
-            ----------------- Begin Member List Options ------------------- 
+            - - - - - - - - - - - - - - - - - Begin Member List Options - - - - - - - - - - - - - - - - - - - 
         </xar:comment>
         <xar:elseif condition="$tab eq 'memberlist'" />
         <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">

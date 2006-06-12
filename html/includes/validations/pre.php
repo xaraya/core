@@ -84,6 +84,7 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                 case 'sql' :
                     // Preparing for use as a quoted SQL string.
                     $dbconn =& xarDBGetConn();
+                    // FIXME: when using bindvars this can be just (string) $subject
                     $subject = $dbconn->qstr($subject);
                     break;
 
@@ -100,10 +101,11 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                     );
                     // The token must start with a letter or underscore.
                     // Raise an error if not.
-                    if (!empty($subject) && !preg_match('/^[a-zA-Z_]/', $subject) && !$supress_soft_exc) {
-                        $msg = xarML('Value "#(1)" is not a valid variable name', $subject);
-                        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-                        $return = false;
+                    if (!empty($subject) && !preg_match('/^[a-zA-Z_]/', $subject)) { 
+                        $msg = 'Value "#(1)" is not a valid variable name';
+                        if(!$supress_soft_exc) 
+                            throw new VariableValidationException($subject,$msg);
+                        return false;
                     }
                     break;
 
@@ -197,15 +199,14 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                 break;
             }
     }
-    
+
+    // CHECKME: since we either handle it directly and/or the stack is never filled. Is this still needed?
     if (!$return && !empty($fieldname) && !$supress_soft_exc) {
         // Add another error message, naming the field.
         // Combine it with the 'short' details of the last message logged,
         // with the assumption that it will contain some useful details.
-        $errorstack =& xarErrorGet();
-        $error = array_shift($errorstack);
-        $msg = xarML('Field "#(1)" is invalid. [#(2)]', $fieldname, $error['short']);
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+        $msg = 'Field "#(1)" is invalid. [#(2)]';
+        throw new VariableValidationException(array($fieldname,'UNKNOWN'),$msg);
     }
 
     // Single point of exit.

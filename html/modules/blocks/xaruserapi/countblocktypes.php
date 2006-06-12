@@ -1,7 +1,6 @@
 <?php
 /**
  * Count the number of block types
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -26,34 +25,27 @@ function blocks_userapi_countblocktypes($args)
 {
     extract($args);
 
-    $where = array();
     $bind = array();
-
-    if (!empty($module)) {
-        $where[] = 'xar_module = ?';
-        $bind[] = $module;
-    }
-
-    if (!empty($type)) {
-        $where[] = 'xar_type = ?';
-        $bind[] = $type;
-    }
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $block_types_table = $xartable['block_types'];
+    $modules_table     = $xartable['modules'];
 
-    $query = 'SELECT count(xar_id) FROM ' . $block_types_table;
-
-    if (!empty($where)) {
-        $query .= ' WHERE ' . implode(' AND ', $where);
+    $query = "SELECT count(btypes.xar_id) 
+              FROM $block_types_table btypes, $modules_table mods 
+              WHERE btypes.xar_modid = mods.xar_id ";
+    if(!empty($module)) {
+        $query .= "AND mods.xar_name = ? ";
+        $bind[] = $module;
     }
-
+    if (!empty($type)) {
+        $query .= 'AND btypes.xar_type = ?';
+        $bind[] = $type;
+    }
     $result =& $dbconn->Execute($query, $bind);
-    if (!$result) {return;}
 
     list ($count) = $result->fields;
-
     return (int)$count;
 }
 

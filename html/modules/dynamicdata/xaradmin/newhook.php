@@ -1,7 +1,6 @@
 <?php
 /**
  * Select dynamicdata for a new item
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -24,13 +23,7 @@ function dynamicdata_admin_newhook($args)
 {
     extract($args);
 
-    if (!isset($extrainfo)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'extrainfo', 'admin', 'modifyhook', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
-    }
+    if (!isset($extrainfo)) throw new EmptyParameterException('extrainfo');
 
     // When called via hooks, the module name may be empty, so we get it from
     // the current module
@@ -42,14 +35,12 @@ function dynamicdata_admin_newhook($args)
 
     $modid = xarModGetIDFromName($modname);
     if (empty($modid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'admin', 'modifyhook', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('module name', 'admin', 'modifyhook', 'dynamicdata');
+        throw new BadParameterException($vars,$msg);
     }
 
-    if (!empty($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype'])) {
+    if (isset($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype'])) {
         $itemtype = $extrainfo['itemtype'];
     } else {
         $itemtype = 0;
@@ -62,25 +53,38 @@ function dynamicdata_admin_newhook($args)
     } else {
         $itemid = 0;
     }
-    $object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
-                                       'itemtype' => $itemtype,
-                                       'itemid'   => $itemid));
-    if (!isset($object)) return;
+    $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
 
-    // if we are in preview mode, we need to check for any preview values
-    if (!xarVarFetch('preview', 'isset', $preview,  NULL, XARVAR_DONT_SET)) {return;}
-    if (!empty($preview)) {
-        $object->checkInput();
-    }
+    $data = "";
+    foreach ($tree as $branch) {
+    	if ($branch['objectid'] == 0) continue;
+    	// TODO: this next line jumps over itemtypes that correspond to wrappers of native itemtypes
+    	// TODO: make this more robust
+    	if ($branch['itemtype'] < 1000) continue;
 
-    if (!empty($object->template)) {
-        $template = $object->template;
-    } else {
-        $template = $object->name;
+		$object = & Dynamic_Object_Master::getObject(array(
+										   'objectid' => $branch['objectid'],
+										   'moduleid' => $modid,
+										   'itemtype' => $itemtype,
+										   'itemid'   => $itemid));
+		if (!isset($object)) return;
+
+		// if we are in preview mode, we need to check for any preview values
+		if (!xarVarFetch('preview', 'isset', $preview,  NULL, XARVAR_DONT_SET)) {return;}
+		if (!empty($preview)) {
+			$object->checkInput();
+		}
+
+		if (!empty($object->template)) {
+			$template = $object->template;
+		} else {
+			$template = $object->name;
+		}
+		$data .= xarTplModule('dynamicdata','admin','newhook',
+							array('properties' => & $object->properties),
+							$template);
     }
-    return xarTplModule('dynamicdata','admin','newhook',
-                        array('properties' => & $object->properties),
-                        $template);
+    return $data;
 }
 
 ?>

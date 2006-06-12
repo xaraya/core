@@ -1,7 +1,6 @@
 <?php
 /**
  * Date Format Property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -27,46 +26,32 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_DateFormat_Property extends Dynamic_Select_Property
 {
-    function Dynamic_DateFormat_Property($args)
+    static function getRegistrationInfo()
     {
-        $this->Dynamic_Select_Property($args);
-        if (count($this->options) == 0) {
-            $this->options = array(
-                                 array('id' => '%m/%d/%Y %H:%M:%S',     'name' => xarML('12/31/2004 24:00:00')),
-                                 array('id' => '%d/%m/%Y %H:%M:%S',     'name' => xarML('31/12/2004 24:00:00')),
-                                 array('id' => '%Y/%m/%d %H:%M:%S',     'name' => xarML('2004/12/31 24:00:00')),
-                                 array('id' => '%d %m %Y %H:%M',        'name' => xarML('31 12 2004 24:00')),
-                                 array('id' => '%b %d %H:%M:%S',        'name' => xarML('12 31 24:00:00')),
-                             );
-        }
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 33;
+        $info->name = 'dateformat';
+        $info->desc = 'Date Format';
+
+        return $info;
     }
 
-    // default methods from Dynamic_Select_Property
-
     /**
-     * Get the base information for this property.
+     * Get Options
      *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 33,
-                              'name'       => 'dateformat',
-                              'label'      => 'Date Format',
-                              'format'     => '33',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => '',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
+     * Get a list of date formats
+     */
+    function getOptions()
+    {
+        $this->options = array(array('id' => '%m/%d/%Y %H:%M:%S', 'name' => xarML('12/31/2004 24:00:00')),
+                               array('id' => '%d/%m/%Y %H:%M:%S', 'name' => xarML('31/12/2004 24:00:00')),
+                               array('id' => '%Y/%m/%d %H:%M:%S', 'name' => xarML('2004/12/31 24:00:00')),
+                               array('id' => '%d %m %Y %H:%M',    'name' => xarML('31 12 2004 24:00')),
+                               array('id' => '%b %d %H:%M:%S',    'name' => xarML('12 31 24:00:00')),
+                              );
 
+        return $this->options;
+    }
 }
 ?>
