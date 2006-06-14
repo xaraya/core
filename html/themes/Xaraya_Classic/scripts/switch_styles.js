@@ -29,7 +29,7 @@ function getActiveStyleSheetProperty(property)
 {
     var i, a;
     for (i=0; (a = document.getElementsByTagName("link")[i]); i++) {
-        if (a.getAttribute("rel").indexOf("style") != -1 && !a.disabled && a.getAttribute("title").indexOf(property) != -1) {
+      if (a.getAttribute("rel").indexOf("style") != -1 && !a.disabled && a.getAttribute("title") && a.getAttribute("title").indexOf(property) != -1) {
             return a.getAttribute("title");
         }    
     }

@@ -16,6 +16,7 @@
  */
 function roles_user_usermenu($args)
 {
+
     // Security check
     if (!xarSecurityCheck('ViewRoles')) return;
     extract($args);
@@ -79,7 +80,7 @@ function roles_user_usermenu($args)
             $authid = xarSecGenAuthKey();
             $submitlabel = xarML('Submit');
             $item['module'] = 'roles';
-            $upasswordupdate = xarModGetUserVar('roles','passwordupdate');//now user mod var not 'duv'. $role->getPasswordUpdate();
+            $item['itemtype'] = ROLES_USERTYPE;
 
             $hooks = xarModCallHooks('item','modify',$uid,$item);
             if (isset($hooks['dynamicdata'])) {
@@ -123,42 +124,17 @@ function roles_user_usermenu($args)
             $uname = xarUserGetVar('uname');
             // Confirm authorisation code.
             if (!xarSecConfirmAuthKey()) return;
-            $dopasswordupdate=false; //switch
-
-            /* Check if external urls are allowed in home page */
-            $allowexternalurl=xarModGetVar('roles','allowexternalurl');
-            $url_parts = parse_url($home);
-            if (!$allowexternalurl) {
-                if ((preg_match("%^http://%", $home, $matches)) &&
-                ($url_parts['host'] != $_SERVER["SERVER_NAME"]) &&
-                ($url_parts['host'] != $_SERVER["HTTP_HOST"])) {
-
-                  $msg = xarML('External URLs such as #(1) are not permitted in your User Account.', $home);
-                  xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-                  $home=''; //reset and return with error
-                    return;
-                }
-            }
-
             if (!empty($pass1)){
                 $minpasslength = xarModGetVar('roles', 'minpasslength');
                 if (strlen($pass2) < $minpasslength) {
-                    $msg = xarML('Your password must be #(1) characters long.', $minpasslength);
-                    xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-                    return;
+                    throw new VariableValidationException(array('password','*password value hidden*','minimum length: '.$minpasslength));
                 }
                 // Check to make sure passwords match
                 if ($pass1 == $pass2){
                     $pass = $pass1;
-                    if (xarModGetVar('roles','setpasswordupdate')){
-                        $dopasswordupdate=true;
-                    }
                 } else {
-                    $msg = xarML('The passwords do not match');
-                    xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-                    return;
+                    throw new VariableValidationException(array('passwords','*password values hidden*','must be equal'));
                 }
-
                 $oldemail = xarUserGetVar('email');
                 // The API function is called.
                 if(!xarModAPIFunc('roles',
@@ -170,8 +146,7 @@ function roles_user_usermenu($args)
                                          'home' => $home,
                                          'email' => $oldemail,
                                          'state' => ROLES_STATE_ACTIVE,
-                                         'pass' => $pass,
-                                         'dopasswordupdate' => $dopasswordupdate))) return;
+                                         'pass' => $pass))) return;
             }
             if (!empty($email)){
                 // Steps for changing email address.
@@ -188,9 +163,7 @@ function roles_user_usermenu($args)
                                                   'type' => 'email'));
 
                 if ($emailcheck == false) {
-                        $msg = xarML('There is an error in the supplied email address');
-                        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-                        return;
+                    throw new VariableValidationException(array('email',$email,'valid address'));
                 }
 
                 if(xarModGetVar('roles','uniqueemail')) {
@@ -201,9 +174,7 @@ function roles_user_usermenu($args)
                                            array('email' => $email));
                     if ($user != false) {
                         unset($user);
-                        $msg = xarML('That email address is already registered.');
-                        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-                        return;
+                        throw new DuplicateException(array('email address',$email));
                     }
                 }
 
@@ -213,9 +184,8 @@ function roles_user_usermenu($args)
                     $disallowedemails = unserialize($disallowedemails);
                     $disallowedemails = explode("\r\n", $disallowedemails);
                     if (in_array ($email, $disallowedemails)) {
-                        $msg = xarML('That email address is either reserved or not allowed on this website');
-                        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-                        return;
+                        $msg = 'That email address is either reserved or not allowed on this website';
+                        throw new ForbiddenOperationException(null,$msg);
                     }
                 }
                 // Step 3
@@ -254,12 +224,10 @@ function roles_user_usermenu($args)
                                              'state'    => ROLES_STATE_NOTVALIDATED))) return;
                     // Step 4
                     //Send validation email
-                    if (!xarModAPIFunc( 'roles',
-                                        'admin',
-                                        'senduseremail',
+                    if (!xarModAPIFunc( 'roles', 'admin', 'senduseremail',
                                         array('uid' => array($uid => '1'), 'mailtype' => 'validation'))) {
                         $msg = xarML('Problem sending confirmation email');
-                        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+                        throw new Exception($msg);
                     }
                     // Step 5
                     // Log the user out. This needs to happen last
@@ -267,7 +235,6 @@ function roles_user_usermenu($args)
                 }
             } else {
                 $email = xarUserGetVar('email');
-
                 // The API function is called.
                 if(!xarModAPIFunc('roles',
                                   'admin',

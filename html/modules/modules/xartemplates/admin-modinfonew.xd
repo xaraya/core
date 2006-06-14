@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
 </div>
@@ -176,8 +176,8 @@
         </div>
     </div>
     <hr class="xar-clearboth xar-border-solid xar-border-thin" />
-    <xar:comment>
-    <!-- Module Navigation -->
+    <!--
+    Module Navigation
     <div class="xar-clearboth">
         <div class="xar-floatleft xar-thirdwidth">
             <p class="xar-mod-title">
@@ -190,5 +190,5 @@
             </p>
         </div>
     </div>
-    </xar:comment>
+    -->
 </div>

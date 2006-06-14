@@ -1,4 +1,4 @@
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span>
 </div>
@@ -46,6 +46,7 @@
           <input type="hidden" name="join" id="join" value="#$object:join#" />
           <input type="hidden" name="table" id="table" value="#$object:table#" />
           <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#" />
+            <input type="hidden" name="notfresh" id="notfresh" value="true" />
           
           <input type="submit" name="preview" value="#xarML('Preview')#" class="xar-margin-thickright" />
           <input type="submit" value="#xarML('Create')#" class="xar-mamgin-thickleft" />

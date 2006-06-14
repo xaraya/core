@@ -1,14 +1,26 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!--  License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-<xar:if condition="count($options) gt 5">
-    <xar:set name="size">5</xar:set>
-<xar:else />
-    <xar:set name="size">count($options)</xar:set>
+<xar:if condition="!isset($size)">
+    <xar:if condition="count($options) gt 5">
+        <xar:set name="size">5</xar:set>
+    <xar:else />
+        <xar:set name="size">count($options)</xar:set>
+    </xar:if>
+</xar:if>
+
+<xar:if condition="isset($onchange)">
+  <xar:set name="evt_change">$onchange</xar:set>
+<xar:else/>
+  <xar:set name="evt_change">'return true;'</xar:set>
 </xar:if>
 
 <xar:if condition="!empty($single)">
     <xar:if condition="count($options) gt 0">
-        <select name="#$name#[]" id="#$id#"  size="#$size#" tabindex="#$tabindex#" >
+        <xar:if condition="isset($style)">
+            <select name="#$name#[]" id="#$id#" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#" >
+        <xar:else/>
+            <select name="#$name#[]" id="#$id#" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" >
+        </xar:if>
             <xar:foreach in="$options" value="$option" >
                 <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
                     <xar:if condition="in_array($option['id'],$value)" >
@@ -28,7 +40,11 @@
     </xar:if>
 <xar:else/>
     <xar:if condition="count($options) gt 0">
-        <select name="#$name#[]" id="#$id#"  multiple="multiple" size="#$size#" tabindex="#$tabindex#" >
+        <xar:if condition="isset($style)">
+            <select name="#$name#[]" id="#$id#" multiple="multiple" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#" >
+        <xar:else/>
+            <select name="#$name#[]" id="#$id#" multiple="multiple" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" >
+        </xar:if>
             <xar:foreach in="$options" value="$option" >
                 <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
                     <xar:if condition="in_array($option['id'],$value)" >

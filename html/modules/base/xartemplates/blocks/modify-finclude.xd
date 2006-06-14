@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-form-input-wrapper">
     <label for="url#$blockid#" title="#xarML('Enter the path of the file to include.')#" class="xar-form-label">
         <xar:mlstring>File:</xar:mlstring>

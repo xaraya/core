@@ -1,0 +1,146 @@
+Notebook style scratch doc for the mail modules (created during
+design/implementation of mail-in scenario) This document is roughly
+conforming to the structured text format (stx) which will give people
+who actually want pretty docs a head start. (google: stx2any for
+details)  
+
+! TODOLIST
+* add xmlhttp stuff to the std. dd tags which generate the
+  view/form/display screens, so in case the screen design is fit to do
+  so, they can be used (also for commerce) 
+* add property to the qdef object where you can specify how to store
+  the queue items (sequence types as in the structures which triggered
+  the implementation in the first place) 
+* provide a usecase with some data 
+* augment the new/create/view/modify/update standard functions with
+  checks for the itemtype to validate whether we use our registered
+  definition
+* create entry point where the mta can pipe the mail content into
+  (ws.php?) [DONE]
+* draw a nice diagram of the flows through the system for incoming and
+  outgoing at least.  
+
+! GENERAL 
+The idea of the mail-in scenario was triggered by the implementation
+of so called abstract datastructures for xaraya. Initially i started
+with sequences, specialized into stacks, queues and deques. (see below
+the includes directory in the core repository for their specific
+meanings).  To be able to test these thouroughly i needed an
+application and stumbled upon some TODOs in the mail module, combined
+with my own need for a mail interface to xaraya directly (trouble
+ticket system).
+
+Based on that, the sequences code was created in the mail module.
+
+Coming from the above the scenario idea is roughly as follows:
+
+Mail queues come in a couple of flavours:
+# incoming 
+  - get filled by something external to xaraya, usualy some mta like
+  thing
+  - get emptied by xaraya after processing is complete. The details
+  for processing are somewhat subtle (see below)
+# outgoing 
+  - get filled by xaraya, typically something like a newsletter module
+    or create notifications, etc.
+  - get emptied by xaraya after processing is done.
+
+There are some special types considered ( like a ''black hole'' which
+would be a queue which never contains anything (visible) but still can
+emit (radiate) or eat items.) For now, we'll focus on incoming and
+outgoing queues.
+
+Typically a queue can be processed directly or on a triggered
+basis. If the queue is processed directly, it's not much of a queue in
+practice because the items put into the queue are directly processed
+and removed, so (assuming succesfull operation) the queue size is at
+most one (not counting concurrent access and timing).
+It gets more interesting if a queue is processed in a deferred manner,
+either by a threshold parameter, or based on some schedule. 
+* threshold: when a queue reaches a certain size/age the processing
+  code kicks in and issues whatever is defined as the processing code
+  for the queue, the code is executed only when a request (through
+  whatever means), reaches that code, so this is sort of unpredictable
+  when things will actually run.
+* scheduled: a process indepent on the (passive) xaraya process
+  triggers an processing run, based on (external) parameter like time
+  or load.    
+
+Let's see what an incoming mail item process would look like:
+# the process starts at an entry point where xaraya 'receives' mail
+  through some mta magic routing the (raw) content of the mail item
+  into xaraya.
+# the mail modules receives this content and, based on some matching
+  on headers or whatever, puts this into a specific queue for further
+  processing by xaraya.
+# by hooking other modules into the mail module a 'create' signal is
+  generated whenever an item enters into some mail queue, which in
+  turn allows the modules to do with the content whatever they
+  please. 
+# optionally after these hooks run, the mail module removes the processed items
+  from the queue one by one. (and in turn generates delete hook calls
+  for those operations)
+
+Similarly an outgoing queue:
+# xaraya (in whatever area) creates some item.
+# if the mail module is hooked in, this item gets posted into the
+  right queue by the mail module. When direct processing is enabled,
+  the item is processed directly in the hook call and removed from the
+  queue again.
+# when deferred processing is enabled, after putting the item into the
+  queue, the mail module is finished.
+# after the time comes to actually process a queue, the items are sent
+  off to their destinations and removed from the queue on successfull
+  completion (and in turn generate the delete hook triggers for those
+  who need them)
+
+That's about the basic flow through the system. 
+
+! QUEUES
+Receiving items and putting them somewhere is one thing. Doing that in
+a smart way is another thing. Some notes follow on that
+
+! Alternative 1: One master Queue / multiple reference Queues
+One way to deal with Qs is to define one master Q which receives all
+(incoming) items. Regardless of what should be done with the item, it
+gets pushed into the master Q. Next to the master Q at least one
+reference Q should be defined, which holds references to items in the
+master Q as its items.
+Multiple reference Qs may contain references to the same item in the
+master Q. Inserting items (references) in the reference Qs doesnt have
+to happen at the same time as inserting the references into the
+different reference Qs
+
+Pros:
+- simple: just store the damn thing :-)
+- one item can be handled in multiple ways 
+- more flexible(?)
+
+Cons:
+- need a reference counter for each item
+- sounds complex
+- one item can be handled in multiple ways
+
+! Alternative 2: All Qs are equal
+Apart from their type designation (incoming, outgoing etc.) all Qs are
+created equal. This means that on reception the mail module needs to
+decide for itself where the item should be put away. This would
+presumably be done with some mapping functionality which takes the
+input of the mail item and based on its content decides in which Q the
+item should arrive. After that, the initial processing is done.
+
+Pros:
+- feels elegant
+
+Cons:
+- limitation of an item being only in 1 Q
+- mapping needs to make sure there is only one
+  Q which maps
+- complex mappings may lead to slower handling
+
+I've chosen to continue with Alternative 2 for now.
+
+dnl Local Variables: 
+dnl mode:stx 
+dnl End: 
+

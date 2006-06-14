@@ -25,47 +25,28 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_Module_Property extends Dynamic_Select_Property
 {
-    function Dynamic_Module_Property($args)
+    static function getRegistrationInfo()
     {
-        $this->Dynamic_Select_Property($args);
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('modules');
+        $info->id   = 19;
+        $info->name = 'module';
+        $info->desc = 'Module';
+
+        return $info;
+    }
+
+    function getOptions()
+    {
         if (count($this->options) == 0) {
-            $modlist = xarModAPIFunc('modules',
-                             'admin',
-                             'getlist',$args);
+            // TODO: wasnt here an $args earlier? where did this go?
+            $modlist = xarModAPIFunc('modules', 'admin', 'getlist');
             foreach ($modlist as $modinfo) {
                 $this->options[] = array('id' => $modinfo['regid'], 'name' => $modinfo['displayname']);
             }
         }
+        return $this->options;
     }
-
-    // default methods from Dynamic_Select_Property
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 19,
-                              'name'       => 'module',
-                              'label'      => 'Module',
-                              'format'     => '19',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => 'modules',
-                            'aliases'        => '',
-                            'args'           => serialize($args)
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
 
 ?>

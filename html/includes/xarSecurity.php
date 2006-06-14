@@ -54,10 +54,9 @@ function xarSecurity_init()
                     'security_instances' => $prefix . '_security_instances',
                     'security_levels' => $prefix . '_security_levels',
                     'modules' => $prefix . '_modules',
-                    'module_states' => $prefix . '_module_states',
                     'security_privsets' => $prefix . '_security_privsets'
                     );
-    xarDB_importTables($tables);
+    xarDB::importTables($tables);
     //register_shutdown_function ('xarSecurity__shutdown_handler');
     return true;
 }
@@ -523,7 +522,9 @@ function xarQueryMask($mask, $showException=1, $component='', $instance='', $mod
  */
 function xarSecurityCheck($mask, $showException=1, $component='', $instance='', $module='', $role='',$pnrealm=0,$pnlevel=0)
 {
-    $installing = xarCore_GetCached('installer','installing');
+    // Obviously, do NOT uncomment the next line :-)
+    //return true;
+    $installing = xarCore::getCached('installer','installing');
 
     if(isset($installing) && ($installing == true)) {
        return true;
@@ -585,29 +586,6 @@ function xarRemoveMasks($module)
 }
 
 /**
-
- * see if a user is authorised to carry out a particular task
- *
- * @access public
- * @param  integer realm the realm to authorize
- * @param  string component the component to authorize
- * @param  string instance the instance to authorize
- * @param  integer level the level of access required
- * @param  integer userId  user id to check for authorisation
- * @return bool
- * @raise DATABASE_ERROR
- */
-function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId = NULL)
-{
-    return pnSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId);
-    $msg = xarML('Security Realm #(1) - Component #(2) - Instance #(3) - Level #(4) : This call needs to be converted to the Xaraya security system',
-                 $testRealm, $testComponent, $testInstance, $testLevel);
-    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DEPRECATED_API',
-                    new SystemException($msg));
-    return true;
-}
-
-/**
  * Generate an authorisation key
  *
  * The authorisation key is used to confirm that actions requested by a
@@ -626,7 +604,7 @@ function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel,
 function xarSecGenAuthKey($modName = NULL)
 {
     if (empty($modName)) {
-        list($modName) = xarRequestGetInfo();
+        list($modName) = xarRequest::getInfo();
     }
 
     // Date gives extra security but leave it out for now
@@ -637,7 +615,7 @@ function xarSecGenAuthKey($modName = NULL)
     $authid = md5($key);
 
     // Tell xarCache not to cache this page
-    xarCore_SetCached('Page.Caching', 'nocache', TRUE);
+    xarCore::setCached('Page.Caching', 'nocache', TRUE);
 
     // Return encrypted key
     return $authid;
@@ -656,8 +634,8 @@ function xarSecGenAuthKey($modName = NULL)
  */
 function xarSecConfirmAuthKey($modName = NULL, $authIdVarName = 'authid')
 {
-    if(!isset($modName)) list($modName) = xarRequestGetInfo();
-    $authid = xarRequestGetVar($authIdVarName);
+    if(!isset($modName)) list($modName) = xarRequest::getInfo();
+    $authid = xarRequest::getVar($authIdVarName);
 
     // Regenerate static part of key
     $partkey = xarSessionGetVar('rand') . strtolower($modName);
@@ -688,9 +666,7 @@ function xarSecConfirmAuthKey($modName = NULL, $authIdVarName = 'authid')
         return true;
     }
     // Not found, assume invalid
-        xarErrorSet(XAR_USER_EXCEPTION, 'FORBIDDEN_OPERATION',
-                       new DefaultUserException());
-        return;
+    throw new ForbiddenOperationException();
 }
 
 ?>

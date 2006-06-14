@@ -3,7 +3,7 @@
 $core = array(
               array('name' => '', 'fullname' => 'BlockLayout', 'description' => 'Templating engine'),
               array('name' => 'XMLS', 'fullname' => 'Multi-Language', 'description' => 'The multi-language system and translation engine'),
-              array('name' => 'adodb', 'fullname' => 'ADODB', 'description' => 'Database abstraction layer'),
+              array('name' => 'creole', 'fullname' => 'CREOLE', 'description' => 'Database abstraction layer'),
               array('name' => 'installer', 'fullname' => 'Installer', 'description' => 'Product installer'),
               array('name' => 'privileges', 'fullname' => 'Privileges', 'description' => 'Privileges core modules'),
               array('name' => 'roles', 'fullname' => 'Roles', 'description' => 'Roles core module, manages users and groups'),

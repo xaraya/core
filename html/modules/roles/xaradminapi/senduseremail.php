@@ -29,14 +29,10 @@
  */
 function roles_adminapi_senduseremail($args)
 {
-
     // Send Email
     extract($args);
-    if ((!isset($uid)) || (!isset($mailtype))) {
-        $msg = xarML('Wrong arguments to roles_adminapi_senduseremail. uid: #(1) type: #(2)',$uid,$mailtype);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return false;
-    }
+    if (!isset($uid)) throw new EmptyParameterException('uid');
+    if (!isset($mailtype)) throw new EmptyParameterException('mailtype');
 
     // Get the predefined email if none is defined
     $strings = xarModAPIFunc('roles','admin','getmessagestrings', array('module' => 'roles','template' => $mailtype));
@@ -50,7 +46,7 @@ function roles_adminapi_senduseremail($args)
     //if (is_array($uid)) {
         foreach ($uid as $userid => $val) {
             ///get the user info
-            $user = xarModAPIFunc('roles','user','get', array('uid' => $userid));
+            $user = xarModAPIFunc('roles','user','get', array('itemid' => $userid, 'itemtype' => ROLES_USERTYPE));
             if (!isset($pass)) $pass = '';
             if (!isset($ip)) $ip = '';
             if (isset($user['valcode'])) $validationlink = xarServerGetBaseURL() . "val.php?v=".$user['valcode']."&u=".$userid;
@@ -76,23 +72,23 @@ function roles_adminapi_senduseremail($args)
                           'recipientname' => $user['name']);
 
             // retrieve the dynamic properties (if any) for use in the e-mail too
-            if (xarModIsAvailable('dynamicdata')) {
-                // get the Dynamic Object defined for this module and item id
-                $object = xarModAPIFunc('dynamicdata','user','getobject',
+                
+            // get the Dynamic Object defined for this module and item id
+            $object = xarModAPIFunc('dynamicdata','user','getobject',
                                          array('module' => 'roles',
                                                // we know the item id now...
-                                               'itemid' => $userid));
-                if (isset($object) && !empty($object->objectid)) {
-                    // retrieve the item itself
-                    $itemid = $object->getItem();
-                    if (!empty($itemid) && $itemid == $userid) {
-                        // get the Dynamic Properties of this object
-                        $properties =& $object->getProperties();
-                        foreach (array_keys($properties) as $key) {
-                            // add the property name/value to the search/replace lists
-                            if (isset($properties[$key]->value)) {
-                                $data[$key] = $properties[$key]->value; // we'll use the raw value here, not ->showOutput();
-                            }
+                                               'itemid' => $userid,
+                                               'itemtype' => ROLES_USERTYPE));
+            if (isset($object) && !empty($object->objectid)) {
+                // retrieve the item itself
+                $itemid = $object->getItem();
+                if (!empty($itemid) && $itemid == $userid) {
+                    // get the Dynamic Properties of this object
+                    $properties =& $object->getProperties();
+                    foreach (array_keys($properties) as $key) {
+                        // add the property name/value to the search/replace lists
+                        if (isset($properties[$key]->value)) {
+                            $data[$key] = $properties[$key]->value; // we'll use the raw value here, not ->showOutput();
                         }
                     }
                 }

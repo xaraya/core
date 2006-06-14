@@ -1,7 +1,6 @@
 <?php
 /**
  * Dynamic Item Id property Property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -25,7 +24,25 @@ include_once "modules/base/xarproperties/Dynamic_NumberBox_Property.php";
  */
 class Dynamic_ItemID_Property extends Dynamic_NumberBox_Property
 {
-    function checkInput($name='', $value = null)
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->tplmodule = 'dynamic_data';
+        $this->template = 'itemid';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('dynamicdata');
+        $info->id   = 21;
+        $info->name = 'itemid';
+        $info->desc = 'Item ID';
+
+        return $info;
+    }
+
+    function checkInput($name = '', $value = null)
     {
         if (empty($name)) {
             $name = 'dd_'.$this->id;
@@ -37,53 +54,6 @@ class Dynamic_ItemID_Property extends Dynamic_NumberBox_Property
         }
         return $this->validateValue($value);
     }
-
-// TODO: evaluate if we want some other output here
-//    function showInput($name = '', $value = null)
-    function showInput($args = array())
-    {
-        extract($args);
-        $data = array();
-
-        if (isset($value)) {
-            $data['value']= xarVarPrepForDisplay($value);
-        } else {
-            $data['value']= xarVarPrepForDisplay($this->value);
-        }
-
-        // Note: item ids are read-only, even (especially) in input forms
-
-        if (!isset($template)) {
-            $template = 'itemid';
-        }
-        return xarTplProperty('dynamicdata', $template, 'showinput', $data);
-    }
-    // default methods from Dynamic_NumberBox_Property
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 21,
-                              'name'       => 'itemid',
-                              'label'      => 'Item ID',
-                              'format'     => '21',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'dynamicdata',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
 }
 
 ?>

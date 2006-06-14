@@ -1,7 +1,5 @@
 <?php
 /**
- * Upgrade a module
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -24,12 +22,7 @@ function modules_adminapi_upgrade($args)
     extract($args);
 
     // Argument check
-    if (!isset($regid)) {
-        $msg = xarML('Empty regid (#(1)).', $regid);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    if (!isset($regid)) throw new EmptyParameterException('regid');
 
     // Get module information
     $modInfo = xarModGetInfo($regid);
@@ -84,8 +77,7 @@ function modules_adminapi_upgrade($args)
     $bindvars = array($modFileInfo['version'], $modFileInfo['admin_capable'],
                       $modFileInfo['user_capable'],$modFileInfo['class'],
                       $modFileInfo['category'], $regid);
-    $result = $dbconn->Execute($sql,$bindvars);
-    if (!$result) return;
+    $dbconn->Execute($sql,$bindvars);
 
     // Message to display in the module list view (only for core modules atm)
     if(!xarSessionGetVar('statusmsg')){

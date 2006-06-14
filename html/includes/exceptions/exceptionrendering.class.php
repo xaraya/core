@@ -12,21 +12,21 @@
 
 class ExceptionRendering
 {
-    var $exception;
-    var $id;
-    var $major;
-    var $type;
-    var $defaults;
-    var $title;
-    var $short;
-    var $long;
-    var $hint;
-    var $stack;
-    var $linebreak = "<br/>";
-    var $openstrong = "<strong>";
-    var $closestrong = "</strong>";
-    var $openpre = "<pre>";
-    var $closepre = "</pre>";
+    public $exception;
+    public $id;
+    public $major;
+    public $type;
+    public $defaults;
+    public $title;
+    public $short;
+    public $long;
+    public $hint;
+    public $stack;
+    public $linebreak = "<br/>";
+    public $openstrong = "<strong>";
+    public $closestrong = "</strong>";
+    public $openpre = "<pre>";
+    public $closepre = "</pre>";
 
     function ExceptionRendering($exception = NULL)
     {
@@ -36,7 +36,7 @@ class ExceptionRendering
         switch ($this->major) {
             case XAR_SYSTEM_EXCEPTION:
                 include(dirname(__FILE__) . "/systemexception.defaults.php");
-                if (!array_key_exists($this->id, $this->defaults)) {
+                if (!isset($this->defaults[$this->id])) {
                     $this->id = "EXCEPTION_FAILURE";
                 }
                 $this->load();
@@ -44,7 +44,7 @@ class ExceptionRendering
                 break;
             case XAR_USER_EXCEPTION:
                 include(dirname(__FILE__) . "/defaultuserexception.defaults.php");
-                if (array_key_exists($this->id, $this->defaults)) {
+                if (isset($this->defaults[$this->id])) {
                     $this->load();
                 }
                 else {
@@ -57,7 +57,7 @@ class ExceptionRendering
                 break;
             case XAR_SYSTEM_MESSAGE:
                 include(dirname(__FILE__) . "/systemmessage.defaults.php");
-                if (array_key_exists($this->id, $this->defaults)) {
+                if (isset($this->defaults[$this->id])) {
                     $this->load();
                 }
                 else {
@@ -78,10 +78,10 @@ class ExceptionRendering
     function load()
     {
         $id = $this->id;
-        $this->title = array_key_exists("title", $this->defaults[$id]) ? $this->defaults[$id]['title'] : '';
-        $this->short = array_key_exists("short", $this->defaults[$id]) ? $this->defaults[$id]['short'] : '';
-        $this->long = array_key_exists("long", $this->defaults[$id]) ? $this->defaults[$id]['long'] : '';
-        $this->hint = array_key_exists("hint", $this->defaults[$id]) ? $this->defaults[$id]['hint'] : '';
+        $this->title = isset($this->defaults[$id]['title']) ? $this->defaults[$id]['title'] : '';
+        $this->short = isset($this->defaults[$id]['short']) ? $this->defaults[$id]['short'] : '';
+        $this->long = isset($this->defaults[$id]['long'])   ? $this->defaults[$id]['long'] : '';
+        $this->hint = isset( $this->defaults[$id]['hint'])  ? $this->defaults[$id]['hint'] : '';
     }
 
     function getMajor()
@@ -131,7 +131,7 @@ class ExceptionRendering
         if (!class_exists("xarRoles"))
             return false;
         
-        if(!xarCore_GetCached('installer','installing')) {
+        if(!xarCore::getCached('installer','installing')) {
             // Dependency!
             $roles = new xarRoles();
             $admins = "Administrators";
