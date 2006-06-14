@@ -1,0 +1,66 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:comment>Common Administration menu</xar:comment>
+<xar:style scope="module" module="base" file="navtabs" />
+
+<xar:set name="activetab">$_bl_module_func</xar:set>
+<div>
+  <dl class="xar-tabs">
+    <dt class="help" title="#xarML('Choose an action to perform')#">
+      <xar:mlstring>Actions:</xar:mlstring>
+    </dt>
+    <xar:sec mask="EditRole" catch="false">
+        <xar:set name="tabclass">$activetab=='showusers'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+          <a href="&xar-modurl-roles-admin-showusers;">
+            <xar:mlstring>Groups &amp; Users</xar:mlstring>
+          </a>
+        </dd>
+    </xar:sec>
+    <xar:sec mask="DeleteExample" catch="false">
+        <xar:set name="tabclass">$activetab=='newrole'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+            <a href="&xar-modurl-roles-admin-newrole;" >
+                <xar:mlstring>Add Group/User</xar:mlstring>
+            </a>
+        </dd>
+    </xar:sec>
+    <xar:sec mask="AdminRole" catch="false">
+        <xar:set name="tabclass">$activetab=='createmail'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+          <a href="&xar-modurl-roles-admin-createmail;">
+            <xar:mlstring>Messaging</xar:mlstring>
+          </a>
+        </dd>
+    </xar:sec>
+    <xar:sec mask="AdminRole" catch="false">
+        <xar:set name="tabclass">$activetab=='purge'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+          <a href="&xar-modurl-roles-admin-purge;">
+            <xar:mlstring>Recall/Purge</xar:mlstring>
+          </a>
+        </dd>
+    </xar:sec>
+       <xar:sec mask="AdminRole" catch="false">
+        <xar:set name="tabclass">$activetab=='sitelock'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+          <a href="&xar-modurl-roles-admin-sitelock;">
+            <xar:mlstring>SiteLock</xar:mlstring>
+          </a>
+        </dd>
+    </xar:sec>
+    <xar:sec mask="AdminRole" catch="false">
+        <xar:set name="tabclass">$activetab=='modifyconfig'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+          <a href="&xar-modurl-roles-admin-modifyconfig;">
+            <xar:mlstring>Modify Config</xar:mlstring>
+          </a>
+        </dd>
+    </xar:sec>
+    <xar:set name="tabclass">$activetab=='overview'?'active':''</xar:set>
+    <dd class="#$tabclass#">
+      <a href="&xar-modurl-roles-admin-overview;">
+        <xar:mlstring>Overview</xar:mlstring>
+      </a>
+    </dd>
+  </dl>
+</div>

@@ -1,6 +1,7 @@
 <?php
 /**
  * Initialise the mail module
+ *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -34,7 +35,7 @@ function mail_init()
     xarModSetVar('mail', 'ShowTemplates', false);
     xarModSetVar('mail', 'suppresssending', false);
     xarModSetVar('mail', 'redirectsending', false);
-    xarModSetVar('mail', 'redirectaddress', false);
+    xarModSetVar('mail', 'redirectaddress', '');
     // when a module item is created
     if (!xarModRegisterHook('item', 'create', 'API',
             'mail', 'admin', 'hookmailcreate')) {
@@ -100,7 +101,14 @@ function mail_upgrade($oldVersion)
                 }
             }
         }
+
     case '0.1.1':
+        xarModSetVar('mail', 'ShowTemplates', false);
+        xarModSetVar('mail', 'suppresssending', false);
+        xarModSetVar('mail', 'redirectsending', false);
+        xarModSetVar('mail', 'redirectaddress', '');
+
+
         // From 0.1.1 -> 2.0.0 we added a mod var which holds the admin id for mail, the adminname is obsolete (no free email choice anymore)
         // Try to find a reasonable admin (the designated one, for example ;-) )
         $desigAdmin = xarModGetVar('roles','admin');
@@ -136,7 +144,11 @@ function mail_delete()
     xarModDelVar('mail', 'smtpPort');
     xarModDelVar('mail', 'smtpHost');
     xarModDelVar('mail', 'encoding');
-    xarModDelVar('mail', 'ShowTemplates');    
+    xarModDelVar('mail', 'ShowTemplates');  
+    xarModDelVar('mail', 'ShowTemplates');
+    xarModDelVar('mail', 'suppresssending');
+    xarModDelVar('mail', 'redirectsending');
+    xarModDelVar('mail', 'redirectaddress');
     // Remove Masks and Instances
     xarRemoveMasks('mail');
     xarRemoveInstances('mail');

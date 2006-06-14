@@ -1,0 +1,70 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:comment>Common Administration menu</xar:comment>
+<xar:style scope="module" module="base" file="navtabs" />
+<xar:set name="activetab">$_bl_module_func</xar:set>
+<div>
+    <dl class="xar-tabs">
+        <dt class="help" title="#xarML('Select a utility function')#">
+            <xar:mlstring>
+                Utility
+            </xar:mlstring>
+                :
+        </dt>
+        <xar:sec mask="EditDynamicData" catch="false">
+            <xar:set name="tabclass">$activetab=='query'?'active':''</xar:set>
+            <dd class="#$tabclass#">
+                <a href="&xar-modurl-dynamicdata-admin-query;">
+                   <xar:mlstring>Query</xar:mlstring>
+                </a>
+            </dd>
+        </xar:sec>
+        <xar:sec mask="EditDynamicData" catch="false">
+            <xar:set name="tabclass">$activetab=='import'?'active':''</xar:set>
+            <dd class="#$tabclass#">
+               <a href="&xar-modurl-dynamicdata-util-import;">
+                    <xar:mlstring>Import</xar:mlstring>
+              </a>
+            </dd>
+        </xar:sec>
+        <xar:sec mask="EditDynamicData" catch="false">
+            <xar:set name="tabclass">$activetab=='export'?'active':''</xar:set>
+            <dd class="#$tabclass#">
+               <a href="&xar-modurl-dynamicdata-util-export;">
+                    <xar:mlstring>Export</xar:mlstring>
+              </a>
+            </dd>
+        </xar:sec>
+        <xar:sec mask="EditDynamicData" catch="false">
+            <xar:set name="tabclass">$activetab=='static'?'active':''</xar:set>
+            <dd class="#$tabclass#">
+               <a href="&xar-modurl-dynamicdata-util-static;">
+                    <xar:mlstring>Table Definition</xar:mlstring>
+              </a>
+            </dd>
+        </xar:sec>
+        <xar:sec mask="EditDynamicData" catch="false">
+            <xar:set name="tabclass">$activetab=='relations'?'active':''</xar:set>
+            <dd class="#$tabclass#">
+               <a href="&xar-modurl-dynamicdata-util-relations;">
+                    <xar:mlstring>Relationships</xar:mlstring>
+              </a>
+            </dd>
+        </xar:sec>
+        <xar:sec mask="EditDynamicData" catch="false">
+            <xar:set name="tabclass">$activetab=='meta'?'active':''</xar:set>
+            <dd class="#$tabclass#">
+               <a href="&xar-modurl-dynamicdata-util-meta;">
+                    <xar:mlstring>Meta Definitions</xar:mlstring>
+              </a>
+            </dd>
+        </xar:sec>
+        <xar:sec mask="EditDynamicData" catch="false">
+            <xar:set name="tabclass">$activetab=='migrate'?'active':''</xar:set>
+            <dd class="#$tabclass#">
+               <a href="&xar-modurl-dynamicdata-util-migrate;">
+                    <xar:mlstring>Migrate Items</xar:mlstring>
+              </a>
+            </dd>
+        </xar:sec>
+        </dl>
+</div>

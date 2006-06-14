@@ -1,0 +1,42 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:comment>Common Administration menu</xar:comment>
+<xar:style scope="module" module="base" file="navtabs" />
+
+<xar:set name="activetab">$_bl_module_func</xar:set>
+<div>
+  <dl class="xar-tabs">
+    <dt class="help" title="#xarML('Choose an action to perform')#">
+      <xar:mlstring>Actions:</xar:mlstring>
+    </dt>
+    <xar:sec mask="AdminBase" catch="false">
+        <xar:set name="tabclass">$activetab=='new'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+          <a href="&xar-modurl-base-admin-sysinfo;">
+            <xar:mlstring>System Information</xar:mlstring>
+          </a>
+        </dd>
+    </xar:sec>
+    <xar:sec mask="AdminBase" catch="false">
+        <xar:set name="tabclass">$activetab=='release'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+            <a href="&xar-modurl-base-admin-release;" >
+                <xar:mlstring>Latest Xaraya Releases</xar:mlstring>
+            </a>
+        </dd>
+    </xar:sec>
+    <xar:sec mask="AdminBase" catch="false">
+        <xar:set name="tabclass">$activetab=='modifyconfig'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+          <a href="&xar-modurl-base-admin-modifyconfig;">
+            <xar:mlstring>Modify Config</xar:mlstring>
+          </a>
+        </dd>
+    </xar:sec>
+    <xar:set name="tabclass">$activetab=='overview'?'active':''</xar:set>
+    <dd class="#$tabclass#">
+      <a href="&xar-modurl-base-admin-overview;">
+        <xar:mlstring>Overview</xar:mlstring>
+      </a>
+    </dd>
+  </dl>
+</div>

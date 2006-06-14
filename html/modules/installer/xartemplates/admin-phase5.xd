@@ -11,13 +11,16 @@
         <form action="install.php" method="post">
             <h4>
                 <input type="hidden" name="install_phase" id="install_phase" value="6" />
-                <xar:mlstring>This may take a moment. Thank you for your patience.</xar:mlstring>
+                <xar:mlstring>This may take a moment, please wait...</xar:mlstring>
             </h4>
-            <h4>
-                <xar:mlstring>If your browser does not redirect automatically to the next page in a few seconds,
-                please click here : </xar:mlstring>
+            <h4><xar:mlstring>Thank you for your patience.</xar:mlstring>
+            </h4>
+            <h4 style="margin-top:100px;">
+             <xar:mlstring>Has your browser stopped loading the page?</xar:mlstring>
+             </h4>
+             <h4><xar:mlstring>If your browser did not automatically redirect, please </xar:mlstring><br />
                 <a href="&xar-modurl-installer-admin-bootstrap;&amp;install_language=#$language#">
-                    <xar:mlstring>continue</xar:mlstring>
+                    <xar:mlstring>click to manually continue to next stage</xar:mlstring>
                 </a>
             </h4>
         </form>
@@ -34,7 +37,7 @@
             </h4>
             <h4>
                 <xar:ml>
-                    <xar:mlstring>If you continue, tables using the #(1)_ prefix will be overwritten.</xar:mlstring>
+                    <xar:mlstring>If you continue, any tables using the #(1)_ prefix will be overwritten.</xar:mlstring>
                     <xar:mlvar>#$dbPrefix#</xar:mlvar>
                 </xar:ml>
             </h4>

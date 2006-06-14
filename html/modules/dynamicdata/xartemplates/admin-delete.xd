@@ -3,6 +3,7 @@
     <span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
+   <xar:template type="module" file="admin-menu" />
     <h2>
         <xar:ml>
             <xar:mlstring>Delete Item #(1) in #(2)</xar:mlstring>
@@ -10,7 +11,15 @@
             <xar:mlvar>#$object:label#</xar:mlvar>
         </xar:ml>
     </h2>
-
+     <xar:if condition="!empty($object:objectid) and $object:objectid eq 1 and $object:itemid lt 3">
+            <h3 class="xar-align-center">
+                <xar:mlstring>Warning! This is a system object used internally by the Dynamic Data module.</xar:mlstring>
+            </h3>
+                
+            <p class="xar-align-center">
+                <xar:mlstring>Deleting this object may break the Dynamic Data module. </xar:mlstring>
+            </p>
+        </xar:if>
     <h3 class="xar-align-center">
         <xar:mlstring>Confirm Deleting This Item?</xar:mlstring>
     </h3>

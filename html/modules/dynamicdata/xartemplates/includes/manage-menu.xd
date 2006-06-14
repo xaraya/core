@@ -1,0 +1,31 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:comment>Common Administration menu</xar:comment>
+<xar:style scope="module" module="base" file="navtabs" />
+<xar:set name="activetab">$_bl_module_func</xar:set>
+<div>
+    <dl class="xar-tabs">
+        <dt class="help" title="#xarML('Select object function')#">
+            <xar:mlstring>
+                Manage
+            </xar:mlstring>
+                :
+        </dt>
+        <xar:sec mask="EditDynamicData" catch="false">
+            <xar:set name="tabclass">$activetab=='view'?'active':''</xar:set>
+            <dd class="#$tabclass#">
+                <a href="&xar-modurl-dynamicdata-admin-view;">
+                   <xar:mlstring>View Dynamic Object Items</xar:mlstring>
+                </a>
+            </dd>
+        </xar:sec>
+        <xar:sec mask="AdminDynamicData" catch="false">
+            <xar:set name="tabclass">$activetab=='new'?'active':''</xar:set>
+            <dd class="#$tabclass#">
+                <a href="&xar-modurl-dynamicdata-admin-new;">
+                   <xar:mlstring>New Dynamic Object Item</xar:mlstring>
+                </a>
+            </dd>
+        </xar:sec>
+
+        </dl>
+</div>

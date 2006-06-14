@@ -10,6 +10,7 @@
     </span>
 </div>
 <div class="xar-mod-body">
+  <xar:template type="module" file="admin-menu" />
     <h2>
         <xar:mlstring>
             Modify Configuration 
@@ -19,7 +20,7 @@
         <dl class="xar-tabs">
             <dt class="help">
                 <xar:mlstring>
-                    Actions: 
+                    Configure: 
                 </xar:mlstring>
             </dt>
             <xar:if condition="$tab eq 'general'">
@@ -203,7 +204,7 @@
                         </xar:mlstring>
                     </label>
                     <xar:set name="defaultauthmodule">xarModGetVar('roles','defaultauthmodule')</xar:set>
-                    <xar:data-input type="module" name="defaultauthmodule" class="authentication" value="" />
+                    <xar:data-input type="module" name="defaultauthmodule" class="Authentication" value="" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="defaultregmodule" title="#xarML('Select the module that manages registration of users')#" class="xar-form-label">
@@ -212,7 +213,7 @@
                         </xar:mlstring>
                     </label>
                     <xar:set name="defaultregmodule">xarModGetVar('roles','defaultregmodule')</xar:set>
-                    <xar:data-input type="module" name="defaultregmodule" class="registration" value="" />
+                    <xar:data-input type="module" name="defaultregmodule" class="Registration" value="" />
                 </div>
             </fieldset>
             <fieldset>

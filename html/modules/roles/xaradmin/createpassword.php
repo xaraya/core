@@ -9,7 +9,6 @@
  *
  * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
- * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * createpassword - create a new password for the user

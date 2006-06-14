@@ -8,6 +8,7 @@
     </span>
 </div>
 <div class="xar-mod-body">
+<xar:template type="module" file="admin-menu" />
     <h2>
         <xar:mlstring>
             Modify Configuration

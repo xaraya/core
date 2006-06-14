@@ -154,8 +154,9 @@ function installer_admin_phase3()
     $rssTemplatesIsWritable     = (check_dir($rssTemplatesDir) || @mkdir($rssTemplatesDir, 0700));
     $phpLanguageFilesIsWritable = xarMLS__iswritable($phpLanguageDir);
     $xmlLanguageFilesIsWritable = xarMLS__iswritable($xmlLanguageDir);
+    $maxexectime = trim(ini_get('max_execution_time'));
     $memLimit = trim(ini_get('memory_limit'));
-    $memLimit = empty($memLimit) ? '8M' : $memLimit;
+    $memLimit = empty($memLimit) ? xarML('Undetermined') : $memLimit;
     $memVal = substr($memLimit,0,strlen($memLimit)-1);
     switch(strtolower($memLimit{strlen($memLimit)-1})) {
         case 'g': $memVal *= 1024;
@@ -185,8 +186,11 @@ function installer_admin_phase3()
     $data['phpLanguageFilesIsWritable'] = $phpLanguageFilesIsWritable;
     $data['xmlLanguageDir']             = $xmlLanguageDir;
     $data['xmlLanguageFilesIsWritable'] = $xmlLanguageFilesIsWritable;
+    $data['maxexectime']                = $maxexectime;
+    $data['maxexectimepass']            = $maxexectime<=30;
     $data['memory_limit']               = $memLimit;
-    $data['metMinMemRequirement']       = $memVal >= 8 * 1024 * 1024;
+    $data['memory_warning']             = $memLimit == xarML('Undetermined');
+    $data['metMinMemRequirement']       = $memVal >= 8 * 1024 * 1024 || $data['memory_warning'];
 
     $data['language']    = $install_language;
     $data['phase']       = 3;
@@ -476,6 +480,8 @@ function installer_admin_bootstrap()
                            array('regid'=> $regid)))
             throw new Exception("activation of $regid failed");//return;
     }
+    //now make sure we set default authmodule
+    xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
 
     // load themes into *_themes table
     if (!xarModAPIFunc('themes', 'admin', 'regenerate')) {
@@ -703,15 +709,6 @@ function installer_admin_create_administrator()
             return;
         }
     }
-
-    // Initialise authentication
-    // TODO: this is happening late here because we need to create a block
-//	$regid = xarModGetIDFromName('authsystem');
-//	if (isset($regid)) {
-//		if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
-		// Activate the module
-//		if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
-//	}
 
     xarResponseRedirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
 }
@@ -1000,6 +997,8 @@ function installer_admin_confirm_configuration()
                 return;
             }
         }
+     //TODO: Check why this var is being reset to null in sqlite install - reset here for now to be sure
+    xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
 
         xarResponseRedirect(xarModURL('installer', 'admin', 'cleanup'));
     }

@@ -18,7 +18,13 @@ function dynamicdata_admin_utilities($args)
     if (!xarSecurityCheck('EditDynamicData')) return;
     extract($args);
     if(!xarVarFetch('q','str', $data['option'], 'query', XARVAR_NOT_REQUIRED)) {return;}
-    xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Your Account Preferences')));
-    return $data;
+    xarTplSetPageTitle(xarVarPrepForDisplay(xarML($data['option'])));
+    if (empty($data['option']) || $data['option'] == 'query') {
+        xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'query'));
+    } else {
+        xarResponseRedirect(xarModURL('dynamicdata', 'util', $data['option']));
+    }
+
+    //return $data;
 }
 ?>

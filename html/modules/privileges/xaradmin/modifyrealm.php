@@ -32,6 +32,7 @@ function privileges_admin_modifyrealm()
         $q->eq('xar_rid', $rid);
         if(!$q->run()) return;
         $result = $q->row();
+        if ($result)
         $name = $result['name'];
     } else {
         if (!xarSecConfirmAuthKey()) return;

@@ -165,7 +165,7 @@ function roles_activate()
     if (xarModGetVar('roles','itemsperpage')) return true;
     xarModSetVar('roles', 'rolesdisplay', 'tabbed');
     xarModSetVar('roles', 'locale', '');
-    xarModSetVar('roles', 'userhome', 0);
+    xarModSetVar('roles', 'userhome', '');
     xarModSetVar('roles', 'primaryparent', 0);
     xarModSetVar('roles', 'defaultgroup', 'Users');
     $lockdata = array('roles' => array( array('uid' => 4,

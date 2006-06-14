@@ -3,20 +3,27 @@
     <span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
-    <xar:if condition="xarTplAddStyleLink('base', 'navtabs')">
-    </xar:if>
-    <dl class="xar-tabs">
-        <dd  class="active" style="float: right; margin-right: .5em; text-align: left;">
-        <a href="#xarModURL('privileges','admin','viewrealms')#">
+   <xar:template type="module" file="admin-menu" />
+   <xar:set name="activetab">$_bl_module_func</xar:set>
+   <dl class="xar-tabs">
+  <dt class="help" title="#xarML('Choose an action to perform')#">
+      <xar:mlstring>Manage Realms:</xar:mlstring>
+    </dt>
+       <xar:set name="tabclass">$activetab=='viewrealms'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+          <a href="&xar-modurl-privileges-admin-viewrealms;">
             <xar:mlstring>View Realms</xar:mlstring>
-        </a>
-        </dd>    
-        <dd  class="active" style="float: right; margin-right: .5em; text-align: left;">
-        <a href="#xarModURL('privileges','admin','newrealm')#">
-            <xar:mlstring>Add Realm</xar:mlstring>
-        </a>
-        </dd>    
-    </dl>
+          </a>
+        </dd>
+        <xar:set name="tabclass">$activetab=='newrealm'?'active':''</xar:set>
+        <dd class="#$tabclass#">
+            <a href="&xar-modurl-privileges-admin-newrealm;" >
+                <xar:mlstring>Add Realm</xar:mlstring>
+            </a>
+        </dd>
+
+  </dl>
+  </div>
     <form name="privilegeform" id="privilegeform" action="#xarModURL('privileges','admin','modifyrealm')#" method="post" enctype="application/x-www-form-urlencoded">
         <fieldset>
             <legend>
@@ -25,7 +32,7 @@
             </xar:mlstring>
             </legend>
             <div class="xar-form-input-wrapper">
-            <label for="pname" title="#xarML('Name of the realm')#" class="xar-form-label">
+            <label for="name" title="#xarML('Name of the realm')#" class="xar-form-label">
                 <xar:mlstring>
                 Name:
                 </xar:mlstring>

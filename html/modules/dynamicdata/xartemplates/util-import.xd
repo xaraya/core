@@ -3,14 +3,19 @@
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:mlstring>
-            Dynamic Data Administration 
+            Dynamic Data Administration
         </xar:mlstring>
     </span>
 </div>
+
 <div class="xar-mod-body">
+   <xar:template type="module" file="admin-menu" />
+   <h2><xar:mlstring>Utilities - Import Dynamic Data Object Definition </xar:mlstring></h2>
+   <xar:template type="module" file="utility-menu" />
+
     <xar:if condition="!empty($warning)">
         <p>
-            #$warning# 
+            #$warning#
         </p>
     </xar:if>
     <form method="post" action="&xar-modurl-dynamicdata-util-import;">

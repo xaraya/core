@@ -3,6 +3,7 @@
     <span class="xar-mod-title"><xar:mlstring>Base Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
+ <xar:template type="module" file="admin-menu" />
     <h2><xar:ml>
         <xar:mlstring>Last #(1) Xaraya Extension Releases</xar:mlstring>
         <xar:mlvar>#$releasenumber#

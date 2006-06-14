@@ -11,8 +11,9 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
- * Displays the dynamic user menu.  Currently does not work, due to design
- * of menu not in place, and DD not in place.
+ * Displays the dynamic user menu.
+ * Currently does not work, due to design
+ * of menu not in place, and DD not in place. 
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @todo    Finish this function.
  */
@@ -20,9 +21,12 @@ function roles_user_account()
 {
     if(!xarVarFetch('moduleload','str', $data['moduleload'], '', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarUserIsLoggedIn()){
-        xarResponseRedirect(xarModURL('roles',
-                                      'user',
-                                      'register'));
+        //let's make sure other modules tht refer here get to the login form
+        $authmodule=xarModGetNameFromId(xarModGetVar('roles','defaultauthmodule'));
+        if (!isset($authmodule) || empty($authmodule)) {
+            $authmodule='authsystem';
+        }
+        xarResponseRedirect(xarModURL($authmodule,'user','showloginform'));
     }
 
     $data['uid'] = xarUserGetVar('uid');

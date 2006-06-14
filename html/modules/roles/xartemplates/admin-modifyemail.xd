@@ -4,10 +4,11 @@
 </xar:if>
 <xar:style scope="module" module="base" file="navtabs" />
 <xar:set name="messagetitle">#xarML('Write this string in the message body or subject to display the corresponding information')#</xar:set>
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span>
+</div>
 <div class="xar-mod-body">
-    <div class="xar-mod-head">
-        <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span>
-    </div>
+  <xar:template type="module" file="admin-menu" />
 
     <h2>
         <a href="&xar-modurl-roles-admin-createmail;">
@@ -20,7 +21,7 @@
     <div>
         <dl class="xar-tabs">
             <dt class="help">
-                <xar:mlstring>Actions:</xar:mlstring>
+                <xar:mlstring>Options:</xar:mlstring>
             </dt>
             <dd>
                 <a href="&xar-modurl-roles-admin-createmail;">
