@@ -19,9 +19,9 @@
 </xar:if>
 <xar:elseif condition="$method eq 'import'" />
 <xar:if condition="$loop:item['condition'] ne ''">
-#$openconditionalcomment##$loop:item['condition']##$closeconditionalbracket#<style type="#$loop:item['type']#">@import url(#$loop:item['url']#) #$loop:item['media']#;</style>#$closeconditionalcomment#
+#$openconditionalcomment##$loop:item['condition']##$closeconditionalbracket#<style type="#$loop:item['type']#" media="#$loop:item['media']#">@import url(#$loop:item['url']#);</style>#$closeconditionalcomment#
 <xar:else />
-<style type="#$loop:item['type']#">@import url(#$loop:item['url']#) #$loop:item['media']#;</style>
+<style type="#$loop:item['type']#" media="#$loop:item['media']#">@import url(#$loop:item['url']#);</style>
 </xar:if>
 <xar:elseif condition="$method eq 'embed'" />
 <xar:if condition="$loop:item['condition'] ne ''">
