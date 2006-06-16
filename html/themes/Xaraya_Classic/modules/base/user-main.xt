@@ -19,7 +19,7 @@
             <xar:mlstring>Xaraya has reached Production Stable Version #(1)</xar:mlstring>
             <xar:mlvar>#$versionnum#</xar:mlvar>
         </xar:ml>
-    </p>
+    </h2>
     
     <p>
         <xar:mlstring>
