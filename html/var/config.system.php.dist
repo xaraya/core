@@ -47,7 +47,7 @@ $systemConfiguration['DB.Persistent'] = false;
  * Normally you want this to be set to E_STRICT during development and something a bit lower
  * for a production system.
  * NOTE: Also set this option if you suffer from the changes wrt references
- *       in php4.4 and php5.x versions or the bug in the zend optimizer eg: E_ALL ^ E_NOTICE
+ *       in php4.4 and php5.x versions or the bug in the zend optimizer
  */
  $systemConfiguration['Exception.ErrorLevel'] = E_ALL;
 
@@ -58,7 +58,6 @@ $systemConfiguration['DB.Persistent'] = false;
  *       in php4.4 and php5.x versions or the bug in the zend optimizer
  */
  $systemConfiguration['Exception.ErrorLevel'] = E_ALL;
-
 /*
  * Global error level, optional
  * If set it is passed directly into the error_reporting() function of PHP
@@ -68,7 +67,6 @@ $systemConfiguration['DB.Persistent'] = false;
  *       in php4.4 and php5.x versions or the bug in the zend optimizer
  */
  $systemConfiguration['Exception.ErrorLevel'] = E_ALL;
-
 /*
  * This value is used to change the default behavior of the
  * xarServerGetBaseURL() and xarModURL() functions to allow you

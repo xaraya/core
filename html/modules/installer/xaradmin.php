@@ -422,7 +422,8 @@ function installer_admin_phase5()
     // We can now pass control to xaraya.
     include_once 'includes/xarConfig.php';
 
-    xarConfig_init(array(),XARCORE_SYSTEM_DATABASE);
+    $a = array();
+    xarConfig_init($a,XARCORE_SYSTEM_DATABASE);
     xarConfigSetVar('Site.MLS.DefaultLocale', $install_language);
 
     // Set the allowed locales to our "C" locale and the one used during installation
@@ -615,7 +616,6 @@ function installer_admin_create_administrator()
 
     xarModSetVar('roles', 'lastuser', $userName);
     xarModSetVar('roles', 'adminpass', $pass);// <-- come again? why store the pass?
-
     // create a role from the data
     $role = new xarRole($pargs);
 
@@ -687,7 +687,7 @@ function installer_admin_create_administrator()
         }
     }
 
-    
+
     $now = time();
 
     $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot .';
@@ -1026,7 +1026,7 @@ function installer_admin_cleanup()
         throw new Exception($msg);
     }
 
-    $remove = xarModDelVar('roles','adminpass');
+//    $remove = xarModDelVar('roles','adminpass');
     $remove = xarModDelVar('installer','modules');
 
     // Load up database
@@ -1051,12 +1051,12 @@ function installer_admin_cleanup()
     }
     list ($rightBlockGroup) = $result->fields;
 
-   //Get the info and add the Login block which is now in authsystem module
-	$loginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
-                                    array('module' => 'authsystem',
-                                          'type'   => 'login'));
-
-    if (empty($loginBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+	$loginBlockTypeId = xarModAPIFunc('blocks',
+					'admin',
+					'register_block_type',
+					array('modName' => 'authsystem',
+						  'blockType' => 'login'));
+    if (empty($loginBlockTypeId) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return;
     }
    //Check for any sign of the Registration module (may have been installed in the configurations)
@@ -1067,7 +1067,7 @@ function installer_admin_cleanup()
     if (empty($regloginBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         //return; no don't return, it may not have been loaded
     }
-    $loginBlockTypeId = $loginBlockType['tid'];
+
     //We only want to create the login block if one doesn't already exist - with registration module or authsystem
     //Registration module might be selected in the config options
     if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'login')) && !isset($regloginBlockType['tid'])) {
@@ -1146,7 +1146,7 @@ function installer_admin_upgrade1()
     }else{
         $data['alreadydone']='';
     }
-    
+
     if ($data['xarVersion'] < '1.0') {
         $data['downloadit']="<a href=\"http://www.xaraya.com/index.php/docs/75\">Xaraya</a>";
         $data['versionlow']=
@@ -1172,7 +1172,7 @@ function installer_admin_upgrade2()
      $thisdata['xarProduct'] = xarConfigGetVar('System.Core.VersionId');
      $thisdata['xarVersion'] = xarConfigGetVar('System.Core.VersionNum');
      $thisdata['xarRelease'] = xarConfigGetVar('System.Core.VersionSub');
-     
+
      //Load this early
      xarDBLoadTableMaintenanceAPI();
 
@@ -1218,7 +1218,7 @@ function installer_admin_upgrade2()
 
     // Bug 3164, store locale in ModUSerVar
     xarModSetVar('roles', 'locale', '');
-  
+
   $content .= "<p><strong>Checking <strong>include/properties</strong> directory for moved DD properties</strong></p>";
     //From 1.0.0rc2 propsinplace was merged and dd propertie began to move to respective modules
     //Check they don't still exisit in the includes directory  bug 4371
@@ -1729,7 +1729,7 @@ function installer_admin_upgrade2()
     // Remove Masks and Instances
     xarRemoveMasks('adminpanels');
     xarRemoveInstances('adminpanels');
-    
+
     //Remove the Adminpanel module entry
     $aperror=0;
     $moduleTable = $systemPrefix .'_modules';
@@ -1773,7 +1773,7 @@ function installer_admin_upgrade2()
 // Miscellaneous upgrade functions that always run each upgrade
 // Version independent
 function installer_admin_upgrade3()
-{   
+{
     $content='';
     $thisdata['xarProduct'] = xarConfigGetVar('System.Core.VersionId');
     $thisdata['xarVersion'] = xarConfigGetVar('System.Core.VersionNum');
@@ -1782,7 +1782,7 @@ function installer_admin_upgrade3()
 
     // Set Config Vars - add those that need to be set each upgrade here.
     $roleanon = xarFindRole('Anonymous');
-    $configvars[] = array( 
+    $configvars[] = array(
                            array('name'    =>  'System.Core.VersionNum',
                                  'set'     =>  XARCORE_VERSION_NUM));
     $content .=  "<h3><strong>Updating Required Configuration Variables</strong></h3>";
