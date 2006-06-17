@@ -128,11 +128,11 @@ class Dynamic_DataStore_Master
         }
 
         $dbconn =& xarDBGetConn();
-        $dbInfo =& $dbconn->getDatabaseInfo();
-        $dbTables =& $dbInfo->getTables();
+        $dbInfo = $dbconn->getDatabaseInfo();
+        $dbTables = $dbInfo->getTables();
         foreach($dbTables as $tblInfo)
         {
-            $tblColumns =& $tblInfo->getColumns();
+            $tblColumns = $tblInfo->getColumns();
             foreach($tblColumns as $colInfo)
             {
                 $sources[] = $tblInfo->getName().".".$colInfo->getName();
