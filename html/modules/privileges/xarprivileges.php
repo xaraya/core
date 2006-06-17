@@ -492,7 +492,7 @@ class xarMasks
                 $requrl = xarServerGetCurrentUrl(array(),false);
                 xarResponseRedirect(xarModURL('authsystem','user','showloginform',array('redirecturl'=> $requrl),false));
             } else {
-                $msg = xarML('No privilege for #(1)',$mask->getName());
+                $msg = xarML('You don\'t have the correct privileges for this operation');
                 throw new Exception($msg);
             }
         }

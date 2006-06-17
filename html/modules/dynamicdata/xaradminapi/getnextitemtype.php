@@ -21,13 +21,7 @@
 function dynamicdata_adminapi_getnextitemtype($args = array())
 {
     extract($args);
-    if(!isset($modid)) {
-        $msg = xarML('Wrong arguments to dynamicdata_adminapi_getnextitemtype.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
-    }
+    if (empty($modid)) throw new EmptyParameterException('modid');
 	$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes', array('moduleid' => $modid));
 	$ids = array_keys($types);
 	sort($ids);

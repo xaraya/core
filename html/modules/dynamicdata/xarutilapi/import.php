@@ -114,11 +114,8 @@ function dynamicdata_utilapi_import($args)
                 // make sure we drop the object id, because it might already exist here
                 unset($object['objectid']);
 
-                // for objects that belong to dynamicdata itself, reset the itemtype too
-                if ($object['moduleid'] == xarModGetIDFromName('dynamicdata')) {
-                    $object['itemtype'] = -1;
-                }
-
+				$object['itemtype'] = xarModAPIFunc('dynamicdata','admin','getnextitemtype',
+                                               array('modid' => $object['moduleid']));
 
                 $objectid = xarModAPIFunc('dynamicdata','admin','createobject',
                                           $object);
