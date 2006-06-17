@@ -47,6 +47,7 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
         $info->id   = 20;
         $info->name = 'itemtype';
         $info->desc = 'Item Type';
+		$info->filepath   = 'modules/dynamicdata/xarproperties';
 
         return $info;
     }
@@ -338,10 +339,10 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
 
         // allow template override by child classes
         if (empty($module)) {
-            $module = $this->getModule();
+            $module = 'dynamicadata';
         }
         if (empty($template)) {
-            $template = $this->getTemplate();
+            $template = 'itemtype';
         }
 
         return xarTplProperty($module, $template, 'validation', $data);
