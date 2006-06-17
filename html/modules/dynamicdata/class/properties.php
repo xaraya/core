@@ -12,6 +12,12 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
+define('DD_PROPERTYSTATE_DISABLED',0);
+define('DD_PROPERTYSTATE_HIDDEN',1);
+define('DD_PROPERTYSTATE_NOINPUT',2);
+define('DD_PROPERTYSTATE_DISPLAYONLY',4);
+define('DD_PROPERTYSTATE_ACTIVE',8);
+
 /**
  * Utility Class to manage Dynamic Properties
  *
@@ -723,7 +729,7 @@ class PropertyRegistration
     public $desc       = 'Property Description'; // description of this type
     public $type       = 1;
     public $parent     = '';                     // this type is derived from?
-    public $filepath   = '';                     // where is our class for it?
+    public $filepath   = 'modules/dynamicdata/xarproperties';                     // where is our class for it?
     public $class      = '';                     // what is the class?
     public $validation = '';                     // what is its default validation?
     public $source     = 'dynamic_data';         // what source is default for this type?
