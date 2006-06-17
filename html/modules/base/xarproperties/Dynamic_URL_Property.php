@@ -40,7 +40,6 @@ class Dynamic_URL_Property extends Dynamic_TextBox_Property
         $info->id    = 11;
         $info->name  = 'url';
         $info->desc  = 'URL';
-		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

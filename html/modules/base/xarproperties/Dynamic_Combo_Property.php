@@ -37,7 +37,6 @@ class Dynamic_Combo_Property extends Dynamic_Select_Property
         $info->id   = 506;
         $info->name = 'combobox';
         $info->desc = 'Combo Dropdown Textbox';
-		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

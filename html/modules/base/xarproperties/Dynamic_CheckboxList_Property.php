@@ -36,7 +36,6 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
         $info->id   = 1115;
         $info->name = 'checkboxlist';
         $info->desc = 'Checkbox List';
-		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

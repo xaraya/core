@@ -38,7 +38,6 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
         $info->id   = 42;
         $info->name = 'countrylisting';
         $info->desc = 'Country Dropdown';
-		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

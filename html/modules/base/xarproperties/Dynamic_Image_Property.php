@@ -35,7 +35,6 @@ class Dynamic_Image_Property extends Dynamic_TextBox_Property
         $info->id   = 12;
         $info->name = 'image';
         $info->desc = 'Image';
-		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

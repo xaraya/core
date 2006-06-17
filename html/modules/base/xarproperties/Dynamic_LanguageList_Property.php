@@ -28,7 +28,6 @@ class Dynamic_LanguageList_Property extends Dynamic_Select_Property
         $info->id   = 36;
         $info->name = 'language';
         $info->desc = 'Language List';
-		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

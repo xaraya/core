@@ -40,7 +40,6 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
         $info->id    = 32;
         $info->name  = 'timezone';
         $info->desc  = 'Time Zone';
-		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }
@@ -154,7 +153,7 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
     {
         extract($data);
         if (!isset($value))  $value = $this->value;
-        
+
         $offset = null;
         $timezone = null;
         if (empty($value)) {
