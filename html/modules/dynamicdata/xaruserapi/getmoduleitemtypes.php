@@ -21,11 +21,7 @@
 		extract($args);
 		// Argument checks
 		if (empty($moduleid) && empty($module)) {
-			$msg = xarML('Wrong arguments to dynamicdata_userapi_getmoduleitemtypes.');
-			xarErrorSet(XAR_SYSTEM_EXCEPTION,
-						'BAD_PARAM',
-						 new SystemException($msg));
-			return false;
+			throw new BadParameterException('moduleid or module');
 		}
 		if (empty($module)) {
 			$info = xarModGetInfo($moduleid);
