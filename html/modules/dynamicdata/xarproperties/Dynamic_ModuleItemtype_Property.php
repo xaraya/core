@@ -64,7 +64,7 @@ class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
     function showOutput($args = array())
     {
         extract($args);
-        if (isset($modid)) $this->referencemoduleid = $modid;
+		if (!empty($modid)) $this->referencemoduleid = $modid;
 		$this->options = $this->getOptions();
         if (isset($value)) {
             $this->value = $value;
