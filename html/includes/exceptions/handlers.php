@@ -78,31 +78,41 @@ class ExceptionHandlers implements IExceptionHandlers
     /**
      * PHP error handler bridge to Xaraya exceptions
      *
+     * @param  integer $errorType level of the error raised by PHP
+     * @param  string  $errorString errormessage issued
+     * @param  string  $file file is which the error occurred
+     * @param  integer $line linenumber on which the error occurred
      * @author Marco Canini <marco@xaraya.com>
      * @access private
      * @return void
      */
-    final public static function phperrors($errorType, $errorString, $file, $line)
+    final public static function phperrors($errorRaised, $errorString, $file, $line)
     {
         //Checks for a @ presence in the given line, should stop from setting Xaraya errors
+        $oldLevel = error_reporting();
         try {
-            // We'll try
-            $errLevel = xarCore_getSystemVar('Exception.ErrorLevel');
+            // We'll try to get the configured threshold
+            $errThreshold = xarCore_getSystemVar('Exception.ErrorLevel');
         } catch(Exception $e) {
-            // Oh well.
-            $errLevel = E_STRICT | E_ALL;
+            // Oh well, show everything so construct the maximum bitmask
+            // Note that E_ALL is already a summed bitmask value (2047) while E_STRICT is *NOT* (2048)
+            // MrB: if there are actually E_STRICT errors, this is known to break *some* installs ( mine ;-) )
+            $errThreshold = E_STRICT + E_ALL;
         }
-        if (!error_reporting() || !($errorType & $errLevel)) {
+        // Only continue rendering if:
+        // 1. the level was not 0 (either explicitly set or due to an @ on the line causing the error)
+        // 2. the raised Errorlevel is included in the threshold bitmask
+        if ( $oldLevel == 0 or ($errorRaised & $errThreshold != $errorRaised )) {
             // Log the message so it is not lost.
             // TODO: make this message available to calling functions that suppress errors through '@'.
-            $msg = "PHP error code $errorType at line $line of $file: $errorString";
+            $msg = "PHP error code $errorRaised at line $line of $file: $errorString";
             try {
                 // We'll try to log it.
                 xarLogMessage($msg);
             } catch(Exception $e) {
                 // Oh well, forget it then
             }
-            return; // no need to raise exception
+            return true; // no need to raise exception
         }
 
         //Newer php versions have a 5th parameter that will give us back the context
@@ -136,7 +146,7 @@ class ExceptionHandlers implements IExceptionHandlers
         if (!function_exists('xarModURL')) {
             $rawmsg = "Normal Xaraya error processing has stopped because of an error encountered.\n\n";
             $rawmsg .= "The last registered error message is:\n\n";
-            $rawmsg .= "PHP Error code: " . $errorType . "\n\n";
+            $rawmsg .= "PHP Error code: " . $errorRaised . "\n\n";
             $rawmsg .= $msg;
             $msg = $rawmsg;
         } else {
@@ -171,7 +181,7 @@ class ExceptionHandlers implements IExceptionHandlers
             }
         }
         // Throw an exception to let the default handler handle the rest.
-        throw new PHPException($msg,$errorType);
+        throw new PHPException($msg,$errorRaised);
     }
 
     // Private methods

@@ -66,12 +66,14 @@ class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
         $items =  xarModApiFunc('dynamicdata', 'user', 'getitems', array (
                                     'modid'    => $objInfo['moduleid'],
                                     'itemtype' => $objInfo['itemtype'],
+                                    'sort'     => $this->display_prop,
                                     'fieldlist'=> $this->display_prop . ',' . $this->store_prop)
                              );
         $options = array();
         foreach($items as $item) {
             $options[] = array('id' => $item[$this->store_prop], 'name' => $item[$this->display_prop]);
         }
+        //$this->options = $options;
         return $options;
     }
 

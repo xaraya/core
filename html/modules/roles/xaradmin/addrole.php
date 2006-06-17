@@ -37,7 +37,7 @@ function roles_admin_addrole()
         xarVarFetch('ppass2', 'str:1:', $ppass2, NULL, XARVAR_NOT_REQUIRED);
         xarVarFetch('pstate', 'str:1:', $pstate, NULL, XARVAR_NOT_REQUIRED);
         xarVarFetch('phome', 'str', $phome, NULL, XARVAR_NOT_REQUIRED);
-        xarVarFetch('pprimaryparent', 'int', $pprimaryparent, NULL, XARVAR_NOT_REQUIRED);
+        xarVarFetch('pprimaryparent', 'int', $pprimaryparent, NULL, XARVAR_NOT_REQUIRED); // this seems redundant here
     }
     // checks specific only to users
     if ($basetype == ROLES_USERTYPE) {
@@ -80,8 +80,11 @@ function roles_admin_addrole()
         $duvs = array();
         if (isset($phome) && xarModGetVar('roles','setuserhome'))
             $duvs['userhome'] = $phome;
-        if (isset($pprimaryparent) && xarModGetVar('roles','setprimaryparent'))
-            $duvs['primaryparent'] = $pprimaryparent;
+        if (xarModGetVar('roles','setprimaryparent')) { //For a new role surely this is the same as the parentid
+            //the primary parent is a string name inline with default role etc
+	        $parentrole= xarModAPIFunc('roles', 'user', 'get', array('uid'  => $pparentid, 'type'   => 1));
+            $duvs['primaryparent'] = $parentrole['uname'];
+        }
 
         $args = array('realname' => $pname,
             'itemtype' => $itemtype,

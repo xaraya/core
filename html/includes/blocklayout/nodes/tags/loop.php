@@ -71,8 +71,10 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
         if($loopCounter > 1) {
             $previousLoop ='$loop_'.($loopCounter-1);
             $output .= $previousLoop.'_save=serialize($loop);';
+        } else {
+            $output .= '$loop=(object) null;';
         }
-        $output .= $loopName.'->index=-1; '.$loopName.'->number='.$loopCounter.';
+        $output .= $loopName .'=(object) null;'.$loopName.'->index=-1; '.$loopName.'->number='.$loopCounter.';
         foreach ('.$name.' as '.$loopName.'->key => '.$loopName.'->item ) {
             '.$loopName.'->index++;
             $loop->index = '.$loopName.'->index;

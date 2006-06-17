@@ -23,7 +23,7 @@ class Dynamic_DataStore_Master
     /**
      * Class method to get a new dynamic data store (of the right type)
      */
-    function &getDataStore($name = '_dynamic_data_', $type = 'data')
+    static function &getDataStore($name = '_dynamic_data_', $type = 'data')
     {
         switch ($type)
         {
@@ -128,11 +128,11 @@ class Dynamic_DataStore_Master
         }
 
         $dbconn =& xarDBGetConn();
-        $dbInfo =& $dbconn->getDatabaseInfo();
-        $dbTables =& $dbInfo->getTables();
+        $dbInfo = $dbconn->getDatabaseInfo();
+        $dbTables = $dbInfo->getTables();
         foreach($dbTables as $tblInfo)
         {
-            $tblColumns =& $tblInfo->getColumns();
+            $tblColumns = $tblInfo->getColumns();
             foreach($tblColumns as $colInfo)
             {
                 $sources[] = $tblInfo->getName().".".$colInfo->getName();

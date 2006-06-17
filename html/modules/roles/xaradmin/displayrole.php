@@ -25,7 +25,8 @@ function roles_admin_displayrole()
     $parents = array();
     foreach ($role->getParents() as $parent) {
         $parents[] = array('parentid' => $parent->getID(),
-            'parentname' => $parent->getName());
+                           'parentname' => $parent->getName(),
+                           'parentuname' => $parent->getUname());
     }
     $data['parents'] = $parents;
 
@@ -41,7 +42,21 @@ function roles_admin_displayrole()
 	$data['itemtypename'] = $types[$data['itemtype']]['label'];
     $data['name'] = $name;
     $data['phome'] = $role->getHome();
-    $data['pprimaryparent'] = $role->getPrimaryParent();
+    
+    if (xarModGetVar('roles','setprimaryparent')) { //we have activated primary parent
+        $primaryparent = $role->getPrimaryParent();
+        $prole = xarUFindRole($primaryparent);
+        $data['primaryparent'] = $primaryparent;
+        $data['pprimaryparent'] = $prole->getID();//pass in the uid
+        if (!isset($data['phome']) || empty ($data['phome'])) {
+            $parenthome = $prole->getHome(); //get the primary parent home
+            $data['parenthome']=$parenthome;
+        }
+    } else {
+        $data['parenthome']='';
+        $data['pprimaryparent'] ='';
+        $data['primaryparent'] ='';
+    }
     //get the data for a user
     if ($data['basetype'] == ROLES_USERTYPE) {
         $data['uname'] = $role->getUser();

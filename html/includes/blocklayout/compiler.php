@@ -88,7 +88,7 @@ define('XAR_BL_DEPRECATED_ATTRIBUTE','DEPRECATED_ATTRIBUTE');
 class DTDIdentifiers
 {
     // List taken from : http://www.w3.org/QA/2002/04/valid-dtd-list.html
-    function get($key) 
+    static function get($key) 
     {    
         $dtds = array
         (
@@ -1149,7 +1149,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 class xarTpl__NodesFactory extends xarTpl__ParserError
 {
 
-    function createTplTagNode($tagName, $attributes, $parentTagName, &$parser)
+    static function createTplTagNode($tagName, $attributes, $parentTagName, &$parser)
     {
         // If the root tag comes along, check if we already have it
         if($tagName == XAR_ROOTTAG_NAME && $parser->tagRootSeen) {
@@ -1174,13 +1174,13 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         return $node;
     }
 
-    function class_exists($classname)
+    static function class_exists($classname)
     {
       // In >= PHP 5 we want to prevent __autoload to kick in.
       return (version_compare('5.0.0',phpversion(),'le')) ? class_exists($classname,false) : class_exists($classname);
     }
 
-    function createTplEntityNode($entityType, $parameters, &$parser)
+    static function createTplEntityNode($entityType, $parameters, &$parser)
     {
         $entityClass = 'xarTpl__Xar'.$entityType.'EntityNode';
         $entityFile = XAR_NODES_LOCATION . 'entities/' .strtolower($entityType) . '.php';
@@ -1194,7 +1194,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         return $node;
     }
 
-    function createTplInstructionNode($instruction, &$parser)
+    static function createTplInstructionNode($instruction, &$parser)
     {
         $instructionClass = 'xarTpl__XarApiInstructionNode';
         $instructionFile = XAR_NODES_LOCATION . 'instructions/api.php';
@@ -1212,13 +1212,13 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         return $node;
     }
 
-    function createTextNode($content, &$parser)
+    static function createTextNode($content, &$parser)
     {
         $node = new xarTpl__TextNode($parser, 'TextNode', $content);
         return $node;
     }
 
-    function createDocumentNode(&$parser)
+    static function createDocumentNode(&$parser)
     {
         $node = new xarTpl__DocumentNode($parser,'DocumentNode');
         return $node;
@@ -1281,7 +1281,7 @@ class xarTpl__ExpressionTransformer
      * Property ::= Name | Name '.' ArrayKey | Name ':' Property
      * Name     ::= ([0-9a-zA-Z_])+
      */
-    function transformBLExpression($blExpression)
+    static function transformBLExpression($blExpression)
     {
         $blExpression = xarTpl__ExpressionTransformer::normalize($blExpression);
 
@@ -1315,7 +1315,7 @@ class xarTpl__ExpressionTransformer
         return $expression;
     }
 
-    function transformPHPExpression($phpExpression)
+    static function transformPHPExpression($phpExpression)
     {
         $phpExpression =xarTpl__ExpressionTransformer::normalize($phpExpression);
         // This regular expression matches variables in their notation as 
@@ -1377,7 +1377,7 @@ class xarTpl__ExpressionTransformer
         return (strlen($a) < strlen($b)) ? 1 : -1;
     }
 
-    function normalize($expr)
+    static function normalize($expr)
     {
         /* If the expression is enclosed in # s, ignore them */
         if(empty($expr)) return $expr;

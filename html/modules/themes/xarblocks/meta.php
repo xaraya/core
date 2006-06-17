@@ -79,7 +79,10 @@ function themes_metablock_display($blockinfo)
     // Get current content
     if (!is_array($blockinfo['content'])) {
         $vars = unserialize($blockinfo['content']);
+    } else {
+        $vars = $blockinfo['content'];
     }
+    $meta = array();
 
     // Description
     $incomingdesc = xarVarGetCached('Blocks.articles', 'summary');

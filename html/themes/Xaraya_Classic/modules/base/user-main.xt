@@ -14,13 +14,19 @@
     <xar:if condition="defined('XARCORE_VERSION_REV')">
         <xar:set name="mtrev">XARCORE_VERSION_REV</xar:set>
     </xar:if>
+
     <h2>
         <xar:ml>
             <xar:mlstring>Xaraya has reached Production Stable Version #(1)</xar:mlstring>
             <xar:mlvar>#$versionnum#</xar:mlvar>
         </xar:ml>
     </h2>
-    
+    <xar:if condition="isset($mtrev)">
+        <p>
+            <xar:mlstring>Monotone base revision: </xar:mlstring>
+            <a href="http://mt.xaraya.com/com.xaraya.core/revision.psp?id=#$mtrev#">#$mtrev#</a>
+        </p>
+    </xar:if>
     <p>
         <xar:mlstring>
             The advantage of Xaraya is in it's flexibility and powerful Blocklayout theme system. These work together
@@ -33,12 +39,7 @@
     <h2>
        <xar:mlstring>Getting started</xar:mlstring>
     </h2>
-    <xar:if condition="isset($mtrev)">
-        <p>
-            <xar:mlstring>Monotone base revsision: </xar:mlstring>
-            <a href="http://mt.xaraya.com/com.xaraya.core/revision.psp?id=#$mtrev#">#$mtrev#</a>
-        </p>
-    </xar:if>
+
     <p>
         <xar:mlstring>
            In Xaraya, User and Group Roles and Privileges set by the site Administrator dictate what a user can and cannot see or do on the site.

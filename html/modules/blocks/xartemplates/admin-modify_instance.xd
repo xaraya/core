@@ -45,7 +45,7 @@
                 </label>
                 <input type="text" name="block_title" id="block_title" value="#xarVarPrepForDisplay($instance['title'])#" maxlength="255" class="xar-form-textmedium" />
             </div>
-            
+
             <div class="xar-form-input-wrapper">
                 <label for="block_state" title="#xarML('This is the default state of the block.  Maximized is visible, hidden is not.')#" class="xar-form-label">
                     <xar:mlstring>Default State:</xar:mlstring>
@@ -54,26 +54,26 @@
                     <xar:if condition="$instance['state'] eq 0">
                         <option value="0" selected="selected">
                             <xar:mlstring>
-                                Hidden 
+                                Hidden
                             </xar:mlstring>
                         </option>
                         <xar:else />
                         <option value="0">
                             <xar:mlstring>
-                                Hidden 
+                                Hidden
                             </xar:mlstring>
                         </option>
                     </xar:if>
                     <xar:if condition="$instance['state'] eq 2">
                         <option value="2" selected="selected">
                             <xar:mlstring>
-                                Maximized 
+                                Maximized
                             </xar:mlstring>
                         </option>
                         <xar:else />
                         <option value="2">
                             <xar:mlstring>
-                                Maximized 
+                                Maximized
                             </xar:mlstring>
                         </option>
                     </xar:if>
@@ -81,10 +81,10 @@
             </div>
 
             <xar:comment>
-                It is likely this section will be removed, since blocks generally do not use it. 
+                It is likely this section will be removed, since blocks generally do not use it.
             </xar:comment>
             <xar:if condition="isset($block_settings['form_refresh']) and $block_settings['form_refresh'] eq true">
- 
+
                 <div class="xar-form-input-wrapper">
                     <label for="block_refresh" title="#xarML('If your block uses a refresh time, this field needs to be filled in.')#" class="xar-form-label">
                         <xar:mlstring>Refresh:</xar:mlstring>
@@ -114,7 +114,7 @@
             </legend>
 
             <xar:comment>
-                This 'content' section is deprecated - it will be removed once the PHP block no longer uses it. 
+                This 'content' section is deprecated - it will be removed once the PHP block no longer uses it.
             </xar:comment>
 
             <xar:if condition="isset($block_settings['form_content']) and $block_settings['form_content'] eq true">
@@ -127,11 +127,11 @@
             </xar:if>
 
             <xar:if condition="!empty($extra_fields)">
-                    #$extra_fields# 
+                    #$extra_fields#
                 <xar:if condition="!empty($hooks)">
                     <xar:foreach in="$hooks" key="$module" value="$output">
                         #$output#
-                    </xar:foreach> 
+                    </xar:foreach>
                 </xar:if>
             <xar:else />
                 <p>
@@ -148,7 +148,7 @@
 
             <xar:if condition="$group_method eq 'min'">
                 <xar:comment>
-                    Provide a 'new group' drop-down list. 
+                    Provide a 'new group' drop-down list.
                 </xar:comment>
 
                 <div class="xar-form-input-wrapper">
@@ -158,13 +158,13 @@
                     <select name="block_new_group" id="block_new_group">
                         <option value="" selected="selected">
                             <xar:mlstring>
-                                -- no new group -- 
+                                -- no new group --
                             </xar:mlstring>
                         </option>
                         <xar:loop name="$block_groups">
                             <xar:if condition="empty($loop:item['selected'])">
                                 <option value="#$loop:item['gid']#">
-                                    #xarVarPrepForDisplay($loop:item['name'])# 
+                                    #xarVarPrepForDisplay($loop:item['name'])#
                                 </option>
                             </xar:if>
                         </xar:loop>
@@ -176,7 +176,7 @@
                 <xar:if condition="$group_method eq 'max' or !empty($loop:item['selected'])">
 
                     <div class="xar-form-input-wrapper">
-                        <label for="group_templates_#$loop:item.gid#" class="xar-form-label">
+                        <label for="group_templates_#$loop:item.gid#" class="xar-form-label" title="#xarML('Format is: [outer-template][semi-colon][inner-template].')#">
                             #xarVarPrepForDisplay($loop:item['name'])# <xar:mlstring>Group:</xar:mlstring>
                         </label>
                         <xar:if condition="$group_method eq 'max' or !empty($loop:item['selected'])">
@@ -186,7 +186,7 @@
                                     <input type="checkbox" name="block_remove_groups[#$loop:item.gid#]" id="block_remove_groups_#$loop:item.gid#" value="on" />
                                     <label for="block_remove_groups_#$loop:item.gid#">
                                         <xar:mlstring>
-                                            Remove 
+                                            Remove
                                         </xar:mlstring>
                                     </label>
                                     <input type="hidden" name="block_groups[#$loop:item.gid#]" id="block_groups_#$loop:item.gid#" value="on" />
@@ -199,7 +199,7 @@
                                 </xar:if>
                                 <label for="block_groups_#$loop:item.gid#">
                                     <xar:mlstring>
-                                        Selected 
+                                        Selected
                                     </xar:mlstring>
                                 </label>
                             </xar:if>
@@ -209,10 +209,11 @@
             </xar:loop>
 
             <div class="xar-form-input-wrapper">
-                <label for="block_template" title="#xarML('Optional default template for the block instance when no more specific template defined for the group instance. Format is: [outer-template][semi-colon][inner-template].')#" class="xar-form-label">
-                    <xar:mlstring>Instance Template:</xar:mlstring>
+                <label for="block_template" title="#xarML('Format is: [outer-template][semi-colon][inner-template].')#" class="xar-form-label">
+                    <xar:mlstring>Instance Template (optional):</xar:mlstring>
                 </label>
                 <input type="text" name="block_template" id="block_template" value="#xarVarPrepForDisplay($instance['template'])#" maxlength="255" class="xar-form-textlong" />
+                (Specified as <code>outer<strong>;</strong>inner</code>)
             </div>
 
         </fieldset>

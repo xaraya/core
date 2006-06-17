@@ -28,6 +28,18 @@ function roles_admin_updaterole()
     if (!xarVarFetch('pprimaryparent', 'int', $pprimaryparent, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('returnurl', 'str', $returnurl, '', XARVAR_NOT_REQUIRED)) return;
 
+    //we want primary parent as a name string not int
+    //(apparently going from other code, and for consistency with other stored roles like default one)
+    //The default should also already be set
+    //Grab it here if primary parent modvar is activated
+    if (!empty($pprimaryparent) && is_integer($pprimaryparent) && xarModGetVar('roles','setprimaryparent')) {
+        $primaryrole = new xarRoles();
+        $primaryp = $primaryrole->getRole($pprimaryparent);
+        $primaryparent = $primaryp->uname;
+    } else {
+        $primaryparent='';
+    }
+
     //Save the old state and type
     $roles = new xarRoles();
     $oldrole = $roles->getRole($uid);
@@ -49,10 +61,7 @@ function roles_admin_updaterole()
         if (!xarVarFetch('pstate', 'int:1:', $pstate)) return;
 
         // check for duplicate username
-        $user = xarModAPIFunc('roles',
-            'user',
-            'get',
-            array('uname' => $puname));
+        $user = xarModAPIFunc('roles','user','get',array('uname' => $puname));
 
         if (($user != false) && ($user['uid'] != $uid)) {
             throw new DuplicateException(array('user',$puname));

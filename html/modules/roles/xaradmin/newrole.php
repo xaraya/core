@@ -93,12 +93,17 @@ function roles_admin_newrole()
     } else {
         $data['phome'] = '';
     }
-
-    if (isset($primaryparent)) {
+    //Primary parent is a name string (apparently looking at other code) but passed in here as an int
+    //we want to pass it to the template as an int as well
+    //Preparing it here but no real use in this function afaik. The Primary parent will be the same as the parent on creation
+    if (isset($primaryparent) && is_int($primaryparent)) { //we have a uid
         $data['pprimaryparent'] = $primaryparent;
     } else {
-        $data['pprimaryparent'] = '';
+        //this is a new role. Let's set it at the current default roles group
+        $data['primaryparent'] =     xarModGetVar('roles','defaultgroup');
+        $data['pprimaryparent'] = $defaultRole['uid'];;//pass in the uid
     }
+
 
     if (isset($pparentid)) {
         $data['pparentid'] = $pparentid;

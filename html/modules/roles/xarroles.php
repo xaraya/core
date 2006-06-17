@@ -389,7 +389,7 @@ class xarRoles
             array('name' => 'xar_uname',       'value' => $uname),
             array('name' => 'xar_email',       'value' => $email),
             array('name' => 'xar_pass',        'value' => $pass),
-            array('name' => 'xar_date_reg',    'value' => mktime()),
+            array('name' => 'xar_date_reg',    'value' => time()),
             array('name' => 'xar_valcode',     'value' => $valcode),
             array('name' => 'xar_state',       'value' => $state),
             array('name' => 'xar_auth_modid', 'value' => $authmodule),
@@ -429,7 +429,7 @@ class xarRoles
             return false;
         }
 
-        $createdate = mktime();
+        $createdate = time();
         $query = "INSERT INTO $this->rolestable
                     (xar_uid, xar_name, xar_type, xar_uname,xar_date_reg)
                   VALUES (?,?,?,?,?)";
@@ -508,7 +508,7 @@ class xarRole
         if (!isset($pass)) $pass = '';
         if (!isset($state)) $state = ROLES_STATE_INACTIVE;
         // FIXME: why is date_reg a varchar in the database and not a date field?
-        if (!isset($date_reg)) $date_reg = mktime();
+        if (!isset($date_reg)) $date_reg = time();
         if (!isset($val_code)) $val_code = 'createdbyadmin';
         // FIXME: what is a sensible default for auth_module?
         if (!isset($auth_module)) $auth_module = 0;
@@ -573,7 +573,7 @@ class xarRole
             array('name' => 'xar_uid',        'value' => $nextId),
             array('name' => 'xar_name',       'value' => $this->name),
             array('name' => 'xar_uname',      'value' => $this->uname),
-            array('name' => 'xar_date_reg',   'value' => mktime()),
+            array('name' => 'xar_date_reg',   'value' => time()),
             array('name' => 'xar_valcode',    'value' => $this->val_code),
 			array('name' => 'xar_auth_modid', 'value' => $this->auth_module),
 			array('name' => 'xar_type',       'value' => $this->type),
@@ -752,8 +752,8 @@ class xarRole
 
         $deleted = xarML('deleted');
         $q = new xarQuery('UPDATE',$this->rolestable);
-        $q->addfield('xar_uname',$this->getUser() . "[" . $deleted . "]" . mktime());
-        $q->addfield('xar_email',$this->getEmail() . "[" . $deleted . "]" . mktime());
+        $q->addfield('xar_uname',$this->getUser() . "[" . $deleted . "]" . time());
+        $q->addfield('xar_email',$this->getEmail() . "[" . $deleted . "]" . time());
         $q->addfield('xar_state',ROLES_STATE_DELETED);
         $q->eq('xar_uid',$this->getID());
 
