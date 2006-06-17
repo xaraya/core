@@ -22,7 +22,7 @@
 function dynamicdata_user_search($args)
 {
 // Security Check
-    if(!xarSecurityCheck('ViewDynamicData',0)) return '';
+    if(!xarSecurityCheck('ViewDynamicData')) return;
 
     $data = array();
 
@@ -107,7 +107,7 @@ function dynamicdata_user_search($args)
         }
         if (!empty($q) && count($wherelist) > 0) {
             $where = join(' or ',$wherelist);
-            $status = 1;
+            $status = DD_PROPERTYSTATE_ACTIVE;
             $pagerurl = xarModURL('dynamicdata','user','search',
                                   array('modid' => ($modid == $mymodid) ? null : $modid,
                                         'itemtype' => empty($itemtype) ? null : $itemtype,

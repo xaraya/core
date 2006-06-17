@@ -237,33 +237,35 @@ function dynamicdata_init()
 
         $properties = array(
                             // 1 -> 9
-                            array('objectid'  ,'Id'                 ,$objectid[1],182,0,21,''            ,$dynamic_objects.'.xar_object_id'         ,1,1 ,'integer'),
-                            array('name'      ,'Name'               ,$objectid[1],182,0,2 ,''            ,$dynamic_objects.'.xar_object_name'       ,1,2 ,'varchar (30)'),
-                            array('label'     ,'Label'              ,$objectid[1],182,0,2 ,''            ,$dynamic_objects.'.xar_object_label'      ,1,3 ,'varchar (254)'),
-                            array('moduleid'  ,'Module'             ,$objectid[1],182,0,19,'182'         ,$dynamic_objects.'.xar_object_moduleid'   ,1,4 ,'integer'),
-                            array('itemtype'  ,'Item Type'          ,$objectid[1],182,0,20,'0'           ,$dynamic_objects.'.xar_object_itemtype'   ,1,5 ,'integer'),
-                            array('urlparam'  ,'URL Param'          ,$objectid[1],182,0,2 ,'itemid'      ,$dynamic_objects.'.xar_object_urlparam'   ,1,6 ,'varchar (30)'),
-                            array('maxid'     ,'Max Id'             ,$objectid[1],182,0,15,'0'           ,$dynamic_objects.'.xar_object_maxid'      ,2,7 ,'integer'),
-                            array('config'    ,'Config'             ,$objectid[1],182,0,4 ,''            ,$dynamic_objects.'.xar_object_config'     ,2,8 ,'text'),
-                            array('isalias'   ,'Alias in short URLs',$objectid[1],182,0,14,'1'           ,$dynamic_objects.'.xar_object_isalias'    ,$objectid[1],182 ,'integer (tiny)'),
-                            array('parent'    ,'Parent',             $objectid[1],182,0,600,'0'          ,$dynamic_objects.'.xar_object_parent'     ,1,6 ,'integer'),
-                            array('id'        ,'Id'                 ,$objectid[2],182,1,21,''            ,$dynamic_properties.'.xar_prop_id'        ,1,1 ,'integer'),
-                            array('name'      ,'Name'               ,$objectid[2],182,1,2 ,''            ,$dynamic_properties.'.xar_prop_name'      ,2,2 ,'varchar (30)'),
-                            array('label'     ,'Label'              ,$objectid[2],182,1,2 ,''            ,$dynamic_properties.'.xar_prop_label'     ,1,3 ,'varchar (254)'),
-                            array('objectid'  ,'Object'             ,$objectid[2],182,1,24,''            ,$dynamic_properties.'.xar_prop_objectid'  ,1,4 ,'integer'),
-                            array('moduleid'  ,'Module'             ,$objectid[2],182,1,19,''            ,$dynamic_properties.'.xar_prop_moduleid'  ,2,5 ,'integer'),
-                            array('itemtype'  ,'Item Type'          ,$objectid[2],182,1,20,''            ,$dynamic_properties.'.xar_prop_itemtype'  ,2,6 ,'integer'),
-                            array('type'      ,'Property Type'      ,$objectid[2],182,1,22,''            ,$dynamic_properties.'.xar_prop_type'      ,1,7 ,'integer'),
-                            array('default'   ,'Default'            ,$objectid[2],182,1,3 ,''            ,$dynamic_properties.'.xar_prop_default'   ,1,8 ,'varchar (254)'),
-                            array('source'    ,'Source'             ,$objectid[2],182,1,23,'dynamic_data',$dynamic_properties.'.xar_prop_source'    ,1,9 ,'varchar (254)'),
-                            array('status'    ,'Status'             ,$objectid[2],182,1,25,'1'           ,$dynamic_properties.'.xar_prop_status'    ,1,10,'integer (tiny)'),
-                            array('order'     ,'Order'              ,$objectid[2],182,1,15,'0'           ,$dynamic_properties.'.xar_prop_order'     ,2,11,'integer (tiny)'),
-                            array('validation','Validation'         ,$objectid[2],182,1,2 ,''            ,$dynamic_properties.'.xar_prop_validation',2,12,'varchar (254)'),
-                            // 22 -> 25
-                            array('id'        ,'Id'                 ,$objectid[3],182,2,21,''                         ,'dynamic_data',2,1,''),
-                            array('name'      ,'Name'               ,$objectid[3],182,2,2 ,'please enter your name...','dynamic_data',1,2,'1:30'),
-                            array('age'       ,'Age'                ,$objectid[3],182,2,15,''                         ,'dynamic_data',1,3,'0:125'),
-                            array('location'  ,'Location'           ,$objectid[3],182,2,12,''                         ,'dynamic_data',2,4,'')
+                            array('objectid'  ,'Id'                 ,$objectid[1],182,0,21,''            ,$dynamic_objects.'.xar_object_id'         ,DD_PROPERTYSTATE_NOINPUT | DD_PROPERTYSTATE_ACTIVE,1 ,'integer'),
+                            array('name'      ,'Name'               ,$objectid[1],182,0,2 ,''            ,$dynamic_objects.'.xar_object_name'       ,DD_PROPERTYSTATE_ACTIVE,2 ,'varchar (30)'),
+                            array('label'     ,'Label'              ,$objectid[1],182,0,2 ,''            ,$dynamic_objects.'.xar_object_label'      ,DD_PROPERTYSTATE_ACTIVE,3 ,'varchar (254)'),
+                            array('moduleid'  ,'Module'             ,$objectid[1],182,0,19,'182'         ,$dynamic_objects.'.xar_object_moduleid'   ,DD_PROPERTYSTATE_ACTIVE,4 ,'integer'),
+                            array('itemtype'  ,'Item Type'          ,$objectid[1],182,0,20,'0'           ,$dynamic_objects.'.xar_object_itemtype'   ,DD_PROPERTYSTATE_ACTIVE,5 ,'integer'),
+                            array('urlparam'  ,'URL Param'          ,$objectid[1],182,0,2 ,'itemid'      ,$dynamic_objects.'.xar_object_urlparam'   ,DD_PROPERTYSTATE_ACTIVE,6 ,'varchar (30)'),
+                            array('maxid'     ,'Max Id'             ,$objectid[1],182,0,15,'0'           ,$dynamic_objects.'.xar_object_maxid'      ,DD_PROPERTYSTATE_DISPLAYONLY,7 ,'integer'),
+                            array('config'    ,'Config'             ,$objectid[1],182,0,4 ,''            ,$dynamic_objects.'.xar_object_config'     ,DD_PROPERTYSTATE_DISPLAYONLY,8 ,'text'),
+// TODO: (random) Review this. I don't really understand the status
+//                            array('isalias'   ,'Alias in short URLs',$objectid[1],182,0,14,'1'           ,$dynamic_objects.'.xar_object_isalias'    ,$objectid[1],182 ,'integer (tiny)'),
+                            array('isalias'   ,'Alias in short URLs',$objectid[1],182,0,14,'1'           ,$dynamic_objects.'.xar_object_isalias'    ,DD_PROPERTYSTATE_ACTIVE,182 ,'integer (tiny)'),
+                            array('parent'    ,'Parent',             $objectid[1],182,0,600,'0'          ,$dynamic_objects.'.xar_object_parent'     ,DD_PROPERTYSTATE_ACTIVE,6 ,'integer'),
+                            array('id'        ,'Id'                 ,$objectid[2],182,1,21,''            ,$dynamic_properties.'.xar_prop_id'        ,DD_PROPERTYSTATE_ACTIVE,1 ,'integer'),
+                            array('name'      ,'Name'               ,$objectid[2],182,1,2 ,''            ,$dynamic_properties.'.xar_prop_name'      ,DD_PROPERTYSTATE_DISPLAYONLY,2 ,'varchar (30)'),
+                            array('label'     ,'Label'              ,$objectid[2],182,1,2 ,''            ,$dynamic_properties.'.xar_prop_label'     ,DD_PROPERTYSTATE_ACTIVE,3 ,'varchar (254)'),
+                            array('objectid'  ,'Object'             ,$objectid[2],182,1,24,''            ,$dynamic_properties.'.xar_prop_objectid'  ,DD_PROPERTYSTATE_ACTIVE,4 ,'integer'),
+                            array('moduleid'  ,'Module'             ,$objectid[2],182,1,19,''            ,$dynamic_properties.'.xar_prop_moduleid'  ,DD_PROPERTYSTATE_DISPLAYONLY,5 ,'integer'),
+                            array('itemtype'  ,'Item Type'          ,$objectid[2],182,1,20,''            ,$dynamic_properties.'.xar_prop_itemtype'  ,DD_PROPERTYSTATE_DISPLAYONLY,6 ,'integer'),
+                            array('type'      ,'Property Type'      ,$objectid[2],182,1,22,''            ,$dynamic_properties.'.xar_prop_type'      ,DD_PROPERTYSTATE_ACTIVE,7 ,'integer'),
+                            array('default'   ,'Default'            ,$objectid[2],182,1,3 ,''            ,$dynamic_properties.'.xar_prop_default'   ,DD_PROPERTYSTATE_ACTIVE,8 ,'varchar (254)'),
+                            array('source'    ,'Source'             ,$objectid[2],182,1,23,'dynamic_data',$dynamic_properties.'.xar_prop_source'    ,DD_PROPERTYSTATE_ACTIVE,9 ,'varchar (254)'),
+                            array('status'    ,'Status'             ,$objectid[2],182,1,25,'1'           ,$dynamic_properties.'.xar_prop_status'    ,DD_PROPERTYSTATE_ACTIVE,10,'integer (tiny)'),
+                            array('order'     ,'Order'              ,$objectid[2],182,1,15,'0'           ,$dynamic_properties.'.xar_prop_order'     ,DD_PROPERTYSTATE_DISPLAYONLY,11,'integer (tiny)'),
+                            array('validation','Validation'         ,$objectid[2],182,1,2 ,''            ,$dynamic_properties.'.xar_prop_validation',DD_PROPERTYSTATE_DISPLAYONLY,12,'varchar (254)'),
+                            // 23 -> 26
+                            array('id'        ,'Id'                 ,$objectid[3],182,2,21,''                         ,'dynamic_data',DD_PROPERTYSTATE_DISPLAYONLY,1,''),
+                            array('name'      ,'Name'               ,$objectid[3],182,2,2 ,'please enter your name...','dynamic_data',DD_PROPERTYSTATE_ACTIVE,2,'1:30'),
+                            array('age'       ,'Age'                ,$objectid[3],182,2,15,''                         ,'dynamic_data',DD_PROPERTYSTATE_ACTIVE,3,'0:125'),
+                            array('location'  ,'Location'           ,$objectid[3],182,2,12,''                         ,'dynamic_data',DD_PROPERTYSTATE_DISPLAYONLY,4,'')
                             );
 
         $propid = array();
@@ -335,20 +337,20 @@ function dynamicdata_init()
         $stmt = $dbconn->prepareStatement($sql);
 
         $dataentries = array(
-                             array($propid[22],1,'1'),
-                             array($propid[23],1,'Johnny'),
-                             array($propid[24],1,'32'),
-                             array($propid[25],1,'http://mikespub.net/xaraya/images/cuernos1.jpg'),
+                             array($propid[23],1,'1'),
+                             array($propid[24],1,'Johnny'),
+                             array($propid[25],1,'32'),
+                             array($propid[26],1,'http://mikespub.net/xaraya/images/cuernos1.jpg'),
 
-                             array($propid[22],2,'2'),
-                             array($propid[23],2,'Nancy'),
-                             array($propid[24],2,'29'),
-                             array($propid[25],2,'http://mikespub.net/xaraya/images/agra1.jpg'),
+                             array($propid[23],2,'2'),
+                             array($propid[24],2,'Nancy'),
+                             array($propid[25],2,'29'),
+                             array($propid[26],2,'http://mikespub.net/xaraya/images/agra1.jpg'),
 
-                             array($propid[22],3,'3'),
-                             array($propid[23],3,'Baby'),
-                             array($propid[24],3,'1'),
-                             array($propid[25],3,'http://mikespub.net/xaraya/images/sydney1.jpg')
+                             array($propid[23],3,'3'),
+                             array($propid[24],3,'Baby'),
+                             array($propid[25],3,'1'),
+                             array($propid[26],3,'http://mikespub.net/xaraya/images/sydney1.jpg')
                              );
 
         foreach ($dataentries as &$dataentry) {

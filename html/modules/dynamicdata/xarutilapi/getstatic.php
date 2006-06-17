@@ -23,7 +23,7 @@
  * @param $args['table']  table name of table you're looking for (better)
  * @returns mixed
  * @return value of the field, or false on failure
- * @raise BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
+ * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
  * @todo split off the common parts which are also in getmeta
  */
 function dynamicdata_utilapi_getstatic($args)
@@ -111,8 +111,8 @@ function dynamicdata_utilapi_getstatic($args)
                 $name = $name . '_' . $i;
                 $label = $label . '_' . $i;
             }
-            $status = 1;
-            
+            $status = DD_PROPERTYSTATE_ACTIVE;
+
             // assign some default validation for now
             $datatype = strtolower(CreoleTypes::getCreoleName($colInfo->getType()));
             //            $datatype = $colInfo->getNativeType();
@@ -158,7 +158,7 @@ function dynamicdata_utilapi_getstatic($args)
             case 'text':
             case 'clob':
                 $proptype = 4; // Medium Text Area
-                $status = 2;
+                $status = DD_PROPERTYSTATE_DISPLAYONLY;
                 $validation ='';
                 break;
             case 'longvarbinary':
@@ -166,13 +166,13 @@ function dynamicdata_utilapi_getstatic($args)
             case 'binary':
             case 'blob':       // caution, could be binary too !
                 $proptype = 4; // Medium Text Area
-                $status = 2;
+                $status = DD_PROPERTYSTATE_DISPLAYONLY;
                 break;
             default:
                 $proptype = 1; // Static Text
                 break;
             }
-            
+
             // try to figure out if it's the item id
             // TODO: let modules define this
             //debug($colInfo);
@@ -181,7 +181,7 @@ function dynamicdata_utilapi_getstatic($args)
                 $proptype = 21; // Item ID
                 $validation ='';
             }
-            
+
             $static[$name] = array('name' => $name,
                                    'label' => $label,
                                    'type' => $proptype,
