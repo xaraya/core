@@ -756,7 +756,8 @@ class xarMasks
                 }
             }
         }
-        if (!$matched && ($privilegeset['children'] != array())) $pass = $this->testprivileges($mask,$privilegeset['children'],$pass,$role);
+        if (!$matched && ($privilegeset['children'] != array()))
+        	$pass = $this->testprivileges($mask,$privilegeset['children'],$pass,$role);
         return $pass;
     }
 
@@ -1169,7 +1170,7 @@ class xarPrivileges extends xarMasks
     function getmodules()
     {
         static $allmodules = array();
-        
+
         if (empty($allmodules)) {
             $query = "SELECT modules.xar_id, modules.xar_name
                       FROM $this->modulestable modules
