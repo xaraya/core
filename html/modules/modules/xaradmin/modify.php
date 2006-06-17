@@ -45,10 +45,16 @@ function modules_admin_modify($args)
     $hooklist = xarModAPIFunc('modules','admin','gethooklist',
                               array('modName' => $modName));
 
-    // Get the list of all item types for this module (if any)
-    $itemtypes = xarModAPIFunc($modName,'user','getitemtypes',
-                               // don't throw an exception if this function doesn't exist
-                               array(), 0);
+            if (isset($itemtypes)) $modList[$i]['itemtypes'] = $itemtypes;
+
+
+	// Get the list of all item types for this module (if any)
+	try {
+		$itemtypes = xarModAPIFunc($modName,'user','getitemtypes',array());
+	} catch ( FunctionNotFoundException $e) {
+		// No worries
+	}
+
     if (isset($itemtypes)) {
         $data['itemtypes'] = $itemtypes;
     } else {
@@ -58,11 +64,11 @@ function modules_admin_modify($args)
     // $data[hooklist] is the master array which holds all info
     // about the registered hooks.
     $data['hooklist'] = array();
-    
+
     // Loop over available $key => $value pairs in hooklist
     // $modname is assigned key (name of module)
     // $hooks is assigned object:action:area
-    // MrB: removed the details check, it's simpler to have the same datastructure 
+    // MrB: removed the details check, it's simpler to have the same datastructure
     // allways, and I think there's not much of a performance hit.
     // TODO: make the different hooks selectable per type of hook
     foreach ($hooklist as $hookmodname => $hooks) {
@@ -71,8 +77,8 @@ function modules_admin_modify($args)
         $data['hooklist'][$hookmodname]['hooks'] = array();
         // Fill in the details for the different hooks
         foreach ($hooks as $hook => $modules) {
-            if (!empty($modules[$modName])) {
-                foreach ($modules[$modName] as $itemType => $val) {
+            if (!empty($modules[$modInfo['systemid']])) {
+                foreach ($modules[$modInfo['systemid']] as $itemType => $val) {
                     $data['hooklist'][$hookmodname]['checked'][$itemType] = 1;
                 }
             }
