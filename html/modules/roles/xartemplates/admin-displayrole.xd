@@ -64,11 +64,19 @@
         </div>
     </xar:if>                        
     <xar:if condition="xarModGetVar('roles','setprimaryparent')">
+        <xar:if condition="empty($phome) and !empty($parenthome)">
+          <div class="xar-form-input-wrapper">
+            <span class="xar-form-label">
+                <xar:mlstring>Primary Parent Home:</xar:mlstring>
+            </span>
+            #xarVarPrepForDisplay($parenthome)#
+        </div>
+        </xar:if>
         <div class="xar-form-input-wrapper">
             <span class="xar-form-label">
-                <xar:mlstring>Primary Group:</xar:mlstring>
+                <xar:mlstring>Primary Parent Group:</xar:mlstring>
             </span>
-            <xar:data-output type="grouplist" name="pprimaryparent" id="pprimaryparent" value="$pprimaryparent"/>
+            #xarVarPrepForDisplay($primaryparent)#
         </div>
     </xar:if>                        
 

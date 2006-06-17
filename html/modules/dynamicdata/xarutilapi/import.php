@@ -255,8 +255,20 @@ function dynamicdata_utilapi_import($args)
                         }
                     }
                 }
-                // create the item
-                $itemid = $objectcache[$objectid]->createItem($item);
+                if (!empty($item['itemid'])) {
+                    // check if the item already exists
+                    $olditemid = $objectcache[$objectid]->getItem(array('itemid' => $item['itemid']));
+                    if (!empty($olditemid) && $olditemid == $item['itemid']) {
+                        // update the item
+                        $itemid = $objectcache[$objectid]->updateItem($item);
+                    } else {
+                        // create the item
+                        $itemid = $objectcache[$objectid]->createItem($item);
+                    }
+                } else {
+                    // create the item
+                    $itemid = $objectcache[$objectid]->createItem($item);
+                }
                 if (empty($itemid)) {
                     fclose($fp);
                     return;

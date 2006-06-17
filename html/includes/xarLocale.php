@@ -342,6 +342,10 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffs
     }
 
     if (empty($timestamp)) {
+        // starting with PHP 5.1.0, strtotime returns false instead of -1
+        if (isset($timestamp) && $timestamp === false) {
+            return '';
+        }
         if ($addoffset) {
             $timestamp = xarMLS_userTime();
         } else {
@@ -414,6 +418,10 @@ function xarLocaleFormatDate($format = null, $timestamp = null, $addoffset = tru
     // CHECKME: should we default to current time only when timestamp is not set at all ?
     //if (!isset($timestamp)) {
     if (empty($timestamp)) {
+        // starting with PHP 5.1.0, strtotime returns false instead of -1
+        if (isset($timestamp) && $timestamp === false) {
+            return '';
+        }
         if ($addoffset) {
             $timestamp = xarMLS_userTime();
         } else {
@@ -470,6 +478,9 @@ function xarMLS_strftime($format=null,$timestamp=null)
         $timestamp = xarMLS_userTime();
     } elseif ($timestamp < 0) {
         // invalid dates < 0 (e.g. from strtotime) return an empty date string
+        return '';
+    } elseif ($timestamp === false) {
+        // starting with PHP 5.1.0, strtotime returns false instead of -1
         return '';
     }
 

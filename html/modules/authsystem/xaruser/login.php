@@ -253,34 +253,42 @@ function authsystem_user_login()
 
             $externalurl=false; //used as a flag for userhome external url
             if (xarModGetVar('roles', 'loginredirect')) { //only redirect to home page if this option is set
-              if (xarModAPIFunc('roles','admin','checkduv',array('name' => 'setuserhome', 'state' => 1))) {
-               $truecurrenturl = xarServerGetCurrentURL(array(), false);
-                $role = xarUFindRole($uname);
-                $url = $lastresort ? '[base]' : $role->getHome();
-                if (!isset($url) || empty($url)) {
-                   // take the first home url encountered.
-                   // TODO: what would be a more logical choice?
-                    foreach ($role->getParents() as $parent) {
-                        $parenturl = $parent->getHome();
-                        if (!empty($parenturl))  {
-                            $url = $parenturl;
-                            break;
+                if (xarModAPIFunc('roles','admin','checkduv',array('name' => 'setuserhome', 'state' => 1))) {
+                    $truecurrenturl = xarServerGetCurrentURL(array(), false);
+                    $role = xarUFindRole($uname);
+                    $url = $lastresort ? '[base]' : $role->getHome();
+                    if (!isset($url) || empty($url)) {
+                       //jojodee - we now have primary parent implemented so can use this if activated
+                       if (xarModGetVar('roles','setprimaryparent')) { //primary parent is activated
+                          //TODO: we should really take this out and do this once somewhere for use in other cases
+                           $primaryparent = $role->getPrimaryParent();
+                           $primaryparentrole = xarUFindRole($primaryparent);
+                           $parenturl = $primaryparentrole->getHome();
+                           if (!empty($parenturl)) $url= $parenturl;
+                       } else {
+                           // take the first home url encountered.
+                           // TODO: what would be a more logical choice?
+                            foreach ($role->getParents() as $parent) {
+                                $parenturl = $parent->getHome();
+                                if (!empty($parenturl))  {
+                                    $url = $parenturl;
+                                    break;
+                                }
+                            }
                         }
                     }
-                }
 
-                /* move the half page of code out to a Roles function. No need to repeat everytime it's used*/
-                $urldata=xarModAPIFunc('roles','user','userhome',array('url'=>$url,'truecurrenturl'=>$truecurrenturl));
-                $data=array();
-                if (!is_array($urldata) || !$urldata) {
-                    $externalurl=false;
-                    $redirecturl=xarServerGetBaseURL();
-                } else{
-                    $externalurl=$urldata['externalurl'];
-                    $redirecturl=$urldata['redirecturl'];
+                    /* move the half page of code out to a Roles function. No need to repeat everytime it's used*/
+                    $urldata=xarModAPIFunc('roles','user','userhome',array('url'=>$url,'truecurrenturl'=>$truecurrenturl));
+                    $data=array();
+                    if (!is_array($urldata) || !$urldata) {
+                        $externalurl=false;
+                        $redirecturl=xarServerGetBaseURL();
+                    } else{
+                        $externalurl=$urldata['externalurl'];
+                        $redirecturl=$urldata['redirecturl'];
+                    }
                 }
-
-              }
             } //end get homepage redirect data
             if ($externalurl) {
                 /* Open in IFrame - works if you need it */
