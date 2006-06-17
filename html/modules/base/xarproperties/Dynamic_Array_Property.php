@@ -35,6 +35,7 @@ class Dynamic_Array_Property extends Dynamic_Property
         $info->name = 'array';
         $info->desc = 'Array';
         $info->reqmodules = array('base');
+		$info->filepath   = 'modules/base/xarproperties';
         return $info;
     }
     function checkInput($name='', $value = null)

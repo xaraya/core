@@ -77,6 +77,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         $info->id   = 38;
         $info->name = 'textupload';
         $info->desc = 'Text Upload';
+		$info->filepath   = 'modules/base/xarproperties';
         $info->args = array('rows' => 20);
 
         return $info;

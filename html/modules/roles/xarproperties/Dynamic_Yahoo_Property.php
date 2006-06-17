@@ -36,6 +36,7 @@ class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
         $info->name   = 'yahoo';
         $info->desc   = 'Yahoo Messenger';
         $info->reqmodules = array('roles');
+		$info->filepath   = 'modules/roles/xarproperties';
         return $info;
     }
 

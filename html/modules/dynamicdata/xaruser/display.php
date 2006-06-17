@@ -22,12 +22,13 @@ function dynamicdata_user_display($args)
     extract($args);
 
     if(!xarVarFetch('objectid', 'isset', $objectid,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',    'isset', $modid,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('modid',    'int',   $modid,     182,  XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemid',   'isset', $itemid,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('tplmodule','str',   $tplmodule, 'dynamicdata', XARVAR_DONT_SET)) {return;}
 
 /*  // we could also pass along the parameters to the template, and let it retrieve the object
     // but in this case, we'd need to retrieve the object label anyway
@@ -41,10 +42,15 @@ function dynamicdata_user_display($args)
         if(!xarSecurityCheck('AdminDynamicData')) return;
     }
 
-    if (isset($objectid)) {
-	    $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $objectid));
+    if($modid == 182) {
+    	// Dynamicdata module is special
+    	$ancestor = array('objectid' => $objectid, 'modid' => $modid, 'itemtype' => $itemtype);
     } else {
-	    $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('moduleid' => $modid,'itemtype' => $itemtype));
+		if (isset($objectid)) {
+			$ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $objectid));
+		} else {
+			$ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('moduleid' => $modid,'itemtype' => $itemtype));
+		}
     }
     $itemtype = $ancestor['itemtype'];
 
@@ -64,7 +70,7 @@ function dynamicdata_user_display($args)
     $item = array();
     $item['module'] = $modinfo['name'];
     $item['itemtype'] = $itemtype;
-    $item['returnurl'] = xarModURL('dynamicdata','user','display',
+    $item['returnurl'] = xarModURL($tplmodule,'user','display',
                                    array('objectid' => $objectid,
                                          'moduleid' => $modid,
                                          'itemtype' => $itemtype,
@@ -86,7 +92,7 @@ function dynamicdata_user_display($args)
         if($pname == 'transform') continue;
         $myobject->properties[$pname]->value = $tvalue;
     }
-    
+
     // *Now* we can set the data stuff
     $data['object'] =& $myobject;
 
@@ -99,7 +105,7 @@ function dynamicdata_user_display($args)
         $template = $myobject->name;
     }
     // Return the template variables defined in this function
-    return xarTplModule('dynamicdata','user','display',$data,$template);
+    return xarTplModule($tplmodule,'user','display',$data,$template);
 }
 
 

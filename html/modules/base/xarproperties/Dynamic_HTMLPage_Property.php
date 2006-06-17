@@ -51,6 +51,7 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
         $info->id   = 13;
         $info->name = 'webpage';
         $info->desc = 'HTML Page';
+		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

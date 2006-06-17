@@ -51,6 +51,7 @@ class Dynamic_NumberList_Property extends Dynamic_Select_Property
         $info->id   = 16;
         $info->name = 'integerlist';
         $info->desc = 'Number List';
+		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

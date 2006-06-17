@@ -32,6 +32,7 @@ function dynamicdata_admin_modify($args)
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('notfresh', 'isset', $notfresh,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('tplmodule','str',   $tplmodule, 'dynamicdata', XARVAR_DONT_SET)) {return;}
 
     if(!xarVarFetch('itemid',   'isset', $itemid)) {return;}
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
@@ -43,10 +44,15 @@ function dynamicdata_admin_modify($args)
 
     $data = xarModAPIFunc('dynamicdata','admin','menu');
 
-    if (isset($objectid)) {
-	    $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $objectid));
+    if($modid == 182) {
+    	// Dynamicdata module is special
+    	$ancestor = array('objectid' => $objectid, 'modid' => $modid, 'itemtype' => $itemtype);
     } else {
-	    $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('moduleid' => $modid,'itemtype' => $itemtype));
+		if (isset($objectid)) {
+			$ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $objectid));
+		} else {
+			$ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('moduleid' => $modid,'itemtype' => $itemtype));
+		}
     }
     $itemtype = $ancestor['itemtype'];
 
@@ -55,7 +61,8 @@ function dynamicdata_admin_modify($args)
                                          'itemtype' => $itemtype,
                                          'join'     => $join,
                                          'table'    => $table,
-                                         'itemid'   => $itemid));
+                                         'itemid'   => $itemid,
+                                         'tplmodule' => $tplmodule));
     if ($notfresh) {
 	    $isvalid = $myobject->checkInput();
     } else {
@@ -73,6 +80,7 @@ function dynamicdata_admin_modify($args)
     $data['itemid'] = $itemid;
     $data['authid'] = xarSecGenAuthKey();
     $data['preview'] = $preview;
+    $data['tplmodule'] = $tplmodule;
 
     $modinfo = xarModGetInfo($myobject->moduleid);
     $item = array();
@@ -89,7 +97,7 @@ function dynamicdata_admin_modify($args)
     if(!isset($template)) {
         $template = $myobject->name;
     }
-    return xarTplModule('dynamicdata','admin','modify',$data,$template);
+    return xarTplModule($tplmodule,'admin','modify',$data,$template);
 }
 
 ?>

@@ -33,6 +33,7 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
         $info->id   = 44;
         $info->name = 'tcolorpicker';
         $info->desc = 'Tigra Color Picker';
+		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

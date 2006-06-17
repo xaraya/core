@@ -114,11 +114,8 @@ function dynamicdata_utilapi_import($args)
                 // make sure we drop the object id, because it might already exist here
                 unset($object['objectid']);
 
-                // for objects that belong to dynamicdata itself, reset the itemtype too
-                if ($object['moduleid'] == xarModGetIDFromName('dynamicdata')) {
-                    $object['itemtype'] = -1;
-                }
-
+				$object['itemtype'] = xarModAPIFunc('dynamicdata','admin','getnextitemtype',
+                                               array('modid' => $object['moduleid']));
 
                 $objectid = xarModAPIFunc('dynamicdata','admin','createobject',
                                           $object);
@@ -167,6 +164,9 @@ function dynamicdata_utilapi_import($args)
                 $property = array();
                 $property['name'] = $matches[1];
             } elseif (preg_match('#</property>#',$line)) {
+                // remove the id in case we get a conflict with an existing id in the db
+                // dd will allocate a new one. Maybe do this more elegantly
+                unset($property['id']);
                 // let's create the property now...
                 $property['objectid'] = $objectid;
                 $property['moduleid'] = $object['moduleid'];
@@ -175,8 +175,6 @@ function dynamicdata_utilapi_import($args)
                     fclose($fp);
                     throw new BadParameterException(null,'Missing keys in property definition');
                 }
-                // make sure we drop the property id, because it might already exist here
-                unset($property['id']);
                 // convert property type to numeric if necessary
                 if (!is_numeric($property['type'])) {
                     if (isset($name2id[$property['type']])) {
@@ -191,6 +189,8 @@ function dynamicdata_utilapi_import($args)
 
                 $prop_id = xarModAPIFunc('dynamicdata','admin','createproperty',
                                          $property);
+                // make sure we drop the property, because it might already exist here
+                unset($property);
                 if (!isset($prop_id)) {
                     fclose($fp);
                     return;
@@ -209,8 +209,10 @@ function dynamicdata_utilapi_import($args)
             } elseif (preg_match('#</properties>#',$line)) {
                 $what = 'object';
             } elseif (preg_match('#<items>#',$line)) {
+            	unset($item);
                 $what = 'item';
             } elseif (preg_match('#</object>#',$line)) {
+            	unset($object);
                 $what = '';
             } else {
                 // multi-line entries not relevant here

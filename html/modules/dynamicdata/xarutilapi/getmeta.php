@@ -1,4 +1,4 @@
-cd <?php
+<?php
 /**
  * (try to) get the "meta" properties of tables
  *
@@ -18,7 +18,7 @@ cd <?php
  * @param $args['table']  optional table you're looking for
  * @returns mixed
  * @return array of field definitions, or null on failure
- * @raise BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
+ * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
  * @todo split off the common parts which are also in getstatic.php
  */
 function dynamicdata_utilapi_getmeta($args)
@@ -34,7 +34,7 @@ function dynamicdata_utilapi_getmeta($args)
     }
 
     $dbconn =& xarDBGetConn();
-    // dbInfo holds the meta information about the database 
+    // dbInfo holds the meta information about the database
     $dbInfo =& $dbconn->getDatabaseInfo();
 
     // Note: this only works if we use the same database connection
@@ -61,7 +61,7 @@ function dynamicdata_utilapi_getmeta($args)
              $metadata[$curtable] = $propertybag[$curtable];
              continue;
         }
-        
+
         // Get the columns and the primary keys
         $fields =& $tblInfo->getColumns();
         $keyInfo = $tblInfo->getPrimaryKey();
@@ -85,7 +85,7 @@ function dynamicdata_utilapi_getmeta($args)
                 $name = $name . '_' . $i;
                 $label = $label . '_' . $i;
             }
-            $status = 1;
+            $status = DD_PROPERTYSTATE_ACTIVE;
 
             // assign some default validation for now
             $validation = $datatype;
@@ -130,15 +130,15 @@ function dynamicdata_utilapi_getmeta($args)
                     break;
                 case 'text':
                     $proptype = 4; // Medium Text Area
-                    $status = 2;
+                    $status = DD_PROPERTYSTATE_DISPLAYONLY;
                     break;
                 case 'longtext':
                     $proptype = 5; // Large Text Area
-                    $status = 2;
+                    $status = DD_PROPERTYSTATE_DISPLAYONLY;
                     break;
                 case 'blob':       // caution, could be binary too !
                     $proptype = 4; // Medium Text Area
-                    $status = 2;
+                    $status = DD_PROPERTYSTATE_DISPLAYONLY;
                     break;
                 case 'enum':
                     $proptype = 6; // Dropdown
@@ -167,7 +167,7 @@ function dynamicdata_utilapi_getmeta($args)
                                    'label' => $label,
                                    'type' => $proptype,
                                    'id' => $id,
-                                   'default' => $default, 
+                                   'default' => $default,
                                    'source' => $curtable . '.' . $fieldname,
                                    'status' => $status,
                                    'order' => $id,

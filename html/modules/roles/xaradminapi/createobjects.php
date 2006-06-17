@@ -41,7 +41,7 @@ function roles_adminapi_createobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 21,
                                     'source'   =>  $prefix . '_roles.xar_uid',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_NOINPUT,
                                     'order'    => 1,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -53,7 +53,7 @@ function roles_adminapi_createobjects($args)
                                     'type'     => 20,
                                     'default'  => 1,
                                     'source'   =>  $prefix . '_roles.xar_type',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_NOINPUT,
                                     'order'    => 3,
                                     ))) {
                                     return;}
@@ -79,7 +79,7 @@ function roles_adminapi_createobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 21,
                                     'source'   =>  $prefix . '_roles.xar_uid',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_DISPLAYONLY,
                                     'order'    => 1,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -91,7 +91,7 @@ function roles_adminapi_createobjects($args)
                                     'type'     => 2,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_roles.xar_name',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_ACTIVE,
                                     'order'    => 2,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -103,7 +103,7 @@ function roles_adminapi_createobjects($args)
                                     'type'     => 20,
                                     'default'  => 2,
                                     'source'   =>  $prefix . '_roles.xar_type',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_DISPLAYONLY,
                                     'order'    => 3,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -115,7 +115,7 @@ function roles_adminapi_createobjects($args)
                                     'type'     => 2,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_roles.xar_uname',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_ACTIVE,
                                     'order'    => 4,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -127,7 +127,7 @@ function roles_adminapi_createobjects($args)
                                     'type'     => 26,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_roles.xar_email',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_ACTIVE,
                                     'order'    => 5,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -139,7 +139,7 @@ function roles_adminapi_createobjects($args)
                                     'type'     => 26,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_roles.xar_pass',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_DISPLAYONLY,
                                     'order'    => 6,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -151,7 +151,7 @@ function roles_adminapi_createobjects($args)
                                     'type'     => 2,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_roles.xar_date_reg',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_ACTIVE,
                                     'order'    => 7,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -163,7 +163,7 @@ function roles_adminapi_createobjects($args)
                                     'type'     => 2,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_roles.xar_valcode',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_DISPLAYONLY,
                                     'order'    => 8,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -175,7 +175,7 @@ function roles_adminapi_createobjects($args)
                                     'type'     => 15,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_roles.xar_state',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_DISPLAYONLY,
                                     'order'    => 9,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -187,7 +187,7 @@ function roles_adminapi_createobjects($args)
                                     'type'     => 2,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_roles.xar_auth_modid',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_DISPLAYONLY,
                                     'order'    => 10,
                                     ))) return;
 
@@ -212,7 +212,7 @@ function roles_adminapi_createobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 21,
                                     'source'   =>  $prefix . '_roles.xar_uid',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_DISPLAYONLY,
                                     'order'    => 1,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -224,7 +224,7 @@ function roles_adminapi_createobjects($args)
                                     'type'     => 2,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_roles.xar_name',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_ACTIVE,
                                     'order'    => 2,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -236,7 +236,7 @@ function roles_adminapi_createobjects($args)
                                     'type'     => 20,
                                     'default'  => 3,
                                     'source'   =>  $prefix . '_roles.xar_type',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_DISPLAYONLY,
                                     'order'    => 3,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -248,7 +248,7 @@ function roles_adminapi_createobjects($args)
                                     'type'     => 15,
                                     'default'  => 0,
                                     'source'   =>  $prefix . '_roles.xar_users',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_ACTIVE,
                                     'order'    => 4,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -260,7 +260,7 @@ function roles_adminapi_createobjects($args)
                                     'type'     => 2,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_roles.xar_uname',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_DISPLAYONLY,
                                     'order'    => 5,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -272,7 +272,7 @@ function roles_adminapi_createobjects($args)
                                     'type'     => 2,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_roles.xar_date_reg',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_ACTIVE,
                                     'order'    => 6,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -284,7 +284,7 @@ function roles_adminapi_createobjects($args)
                                     'type'     => 2,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_roles.xar_valcode',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_DISPLAYONLY,
                                     'order'    => 7,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -296,7 +296,7 @@ function roles_adminapi_createobjects($args)
                                     'type'     => 15,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_roles.xar_state',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_DISPLAYONLY,
                                     'order'    => 8,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -308,7 +308,7 @@ function roles_adminapi_createobjects($args)
                                     'type'     => 2,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_roles.xar_auth_modid',
-                                    'status'   => 1,
+                                    'status'   => DD_PROPERTYSTATE_DISPLAYONLY,
                                     'order'    => 9,
                                     ))) return;
 

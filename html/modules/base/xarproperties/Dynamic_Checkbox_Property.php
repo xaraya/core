@@ -36,6 +36,7 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
         $info->id   = 14;
         $info->name = 'checkbox';
         $info->desc = 'Checkbox';
+		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

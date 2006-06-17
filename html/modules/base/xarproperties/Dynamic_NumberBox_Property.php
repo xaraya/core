@@ -36,6 +36,7 @@ class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
         $info->id   = 15;
         $info->name = 'integerbox';
         $info->desc = 'Number Box';
+		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

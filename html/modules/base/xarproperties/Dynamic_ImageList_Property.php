@@ -51,6 +51,7 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
         $info->id   = 35;
         $info->name = 'imagelist';
         $info->desc = 'Image List';
+		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

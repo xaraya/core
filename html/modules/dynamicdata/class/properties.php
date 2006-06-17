@@ -12,6 +12,12 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
+define('DD_PROPERTYSTATE_DISABLED',0);
+define('DD_PROPERTYSTATE_HIDDEN',1);
+define('DD_PROPERTYSTATE_NOINPUT',2);
+define('DD_PROPERTYSTATE_DISPLAYONLY',4);
+define('DD_PROPERTYSTATE_ACTIVE',8);
+
 /**
  * Utility Class to manage Dynamic Properties
  *
@@ -153,7 +159,7 @@ class Dynamic_Property_Master
         } else {
             $proptypes = Dynamic_Property_Master::getPropertyTypes();
         }
-        
+
         if( isset($proptypes[$args['type']]) && is_array($proptypes[$args['type']]) )
         {
             $propertyInfo  = $proptypes[$args['type']];
@@ -166,7 +172,7 @@ class Dynamic_Property_Master
                 // The preg determines the module name (in a sloppy way, FIX this)
                 xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE,$matches[1],'modules:properties',$propertyClass);
             } else xarLogMessage("WARNING: Property translations for $propertyClass NOT loaded");
-            
+
             if(!file_exists($propertyInfo['filepath'])) throw new FileNotFoundException($propertyInfo['filepath']);
             require_once $propertyInfo['filepath'];
 
@@ -257,7 +263,7 @@ class Dynamic_Property
     public $type = 1;
     public $default = '';
     public $source = 'dynamic_data';
-    public $status = 1;
+    public $status = DD_PROPERTYSTATE_ACTIVE;
     public $order = 0;
     public $format = '0';
     public $requiresmodule = ''; // this module must be available before this property is enabled (optional)
@@ -723,7 +729,7 @@ class PropertyRegistration
     public $desc       = 'Property Description'; // description of this type
     public $type       = 1;
     public $parent     = '';                     // this type is derived from?
-    public $filepath   = '';                     // where is our class for it?
+    public $filepath   = 'modules/dynamicdata/xarproperties';                     // where is our class for it?
     public $class      = '';                     // what is the class?
     public $validation = '';                     // what is its default validation?
     public $source     = 'dynamic_data';         // what source is default for this type?
@@ -733,9 +739,9 @@ class PropertyRegistration
     public $aliases    = array();                // aliases for this property
     public $format     = 0;                      // what format type do we have here?
                                                  // 0 = ? what?
-                                                 // 1 = 
-    
-    function __construct($args=array()) 
+                                                 // 1 =
+
+    function __construct($args=array())
     {
         assert('is_array($args)');
         if(!empty($args)) {
@@ -744,8 +750,8 @@ class PropertyRegistration
             }
         }
     }
-    
-    static function clearCache() 
+
+    static function clearCache()
     {
         $dbconn = &xarDBGetConn();
         $tables = xarDBGetTables();
@@ -754,7 +760,7 @@ class PropertyRegistration
         return $res;
     }
 
-    function Register() 
+    function Register()
     {
         static $stmt = null;
 
@@ -765,11 +771,11 @@ class PropertyRegistration
         foreach($this->reqmodules as $required) {
             if(!xarModIsAvailable($required)) return false;
         }
-            
+
         $dbconn = &xarDBGetConn();
         $tables = xarDBGetTables();
         $propdefTable = $tables['dynamic_properties_def'];
-        
+
         // Make sure the db is the same as in the old days
         $reqmods = join(';',$this->reqmodules);
         if($this->format == 0) $this->format = $this->id;
@@ -800,7 +806,7 @@ class PropertyRegistration
                 $res = $aliasInfo->Register();
             }
         }
-        return $res;                          
+        return $res;
     }
 
     static function &Retrieve()
@@ -842,6 +848,6 @@ class PropertyRegistration
         }
         $result->close();
         return $proptypes;
-    }   
+    }
 }
 ?>

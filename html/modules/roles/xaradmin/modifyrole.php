@@ -68,8 +68,9 @@ function roles_admin_modifyrole()
     $data['pname'] = $name;
 
 // Security Check
-//    if (!xarSecurityCheck('EditRole',1,'Roles',$name)) return;
-    $data['frozen'] = !xarSecurityCheck('EditRole',0,'Roles',$name);
+    if (!xarSecurityCheck('EditRole',0,'Roles',$name))
+	    if (!xarSecurityCheck('ReadRole',1,'Roles',$name)) return;
+	$data['frozen'] = !xarSecurityCheck('EditRole',0,'Roles',$name);
 
     if (isset($itemtype)) {
         $data['itemtype'] = $itemtype;

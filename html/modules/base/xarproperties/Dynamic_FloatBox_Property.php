@@ -35,6 +35,7 @@ class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
         $info->id   = 17;
         $info->name = 'floatbox';
         $info->desc = 'Number Box (float)';
+		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

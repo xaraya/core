@@ -37,6 +37,7 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
         $info->id   = 1114;
         $info->name = 'checkboxmask';
         $info->desc = 'Checkbox Mask';
+		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

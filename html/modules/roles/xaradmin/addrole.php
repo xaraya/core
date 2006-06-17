@@ -86,7 +86,7 @@ function roles_admin_addrole()
             $duvs['primaryparent'] = $parentrole['uname'];
         }
 
-        $args = array('name' => $pname,
+        $args = array('realname' => $pname,
             'itemtype' => $itemtype,
             'parentid' => $pparentid,
             'uname' => $puname,
@@ -99,7 +99,7 @@ function roles_admin_addrole()
             'basetype' => $basetype,
             );
     } else {
-        $args = array('name' => $pname,
+        $args = array('realname' => $pname,
             'itemtype' => $itemtype,
             'parentid' => $pparentid,
             'uname' => xarSessionGetVar('uid') . time(),

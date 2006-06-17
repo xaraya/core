@@ -36,6 +36,7 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         $info->id    = 41;
         $info->name  = 'urtitle';
         $info->desc  = 'URL + Title';
+		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

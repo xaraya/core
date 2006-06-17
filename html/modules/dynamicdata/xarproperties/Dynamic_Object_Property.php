@@ -80,6 +80,7 @@ class Dynamic_Object_Property extends Dynamic_Select_Property
         $info->id   = 24;
         $info->name = 'object';
         $info->desc = 'Object';
+		$info->filepath   = 'modules/dynamicdata/xarproperties';
 
         return $info;
     }

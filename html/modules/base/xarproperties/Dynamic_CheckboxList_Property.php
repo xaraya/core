@@ -25,7 +25,7 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->tplmodule = 'base'; 
+        $this->tplmodule = 'base';
         $this->template  = 'checkboxlist';
     }
 
@@ -36,6 +36,7 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
         $info->id   = 1115;
         $info->name = 'checkboxlist';
         $info->desc = 'Checkbox List';
+		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }
@@ -52,6 +53,7 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
         }
         return $this->validateValue($value);
     }
+
 
     function validateValue($value = null)
     {
@@ -74,7 +76,7 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
     function showInput($data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
-      
+
         if (empty($data['value'])) {
             $data['value'] = array();
         } elseif (!is_array($data['value']) && is_string($data['value'])) {
@@ -84,13 +86,12 @@ class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
         if (!isset($data['options']) || count($data['options']) == 0) {
             $options = $this->getOptions();
         } else {
-            $options = array();
+            $options = $data['options'];
         }
         foreach ($options as $key => $option) {
             $option['checked'] = in_array($option['id'],$data['value']);
             $data['options'][$key] = $option;
         }
-
         return parent::showInput($data);
     }
 

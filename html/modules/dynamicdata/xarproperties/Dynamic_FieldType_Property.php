@@ -48,6 +48,7 @@ class Dynamic_FieldType_Property extends Dynamic_Select_Property
         $info->id   = 22;
         $info->name = 'fieldtype';
         $info->desc = 'Field Type';
+		$info->filepath   = 'modules/dynamicdata/xarproperties';
 
         return $info;
     }

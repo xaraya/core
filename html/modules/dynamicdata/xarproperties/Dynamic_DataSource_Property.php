@@ -48,6 +48,7 @@ class Dynamic_DataSource_Property extends Dynamic_Select_Property
         $info->id   = 23;
         $info->name = 'datasource';
         $info->desc = 'Data Source';
+		$info->filepath   = 'modules/dynamicdata/xarproperties';
 
         return $info;
     }
