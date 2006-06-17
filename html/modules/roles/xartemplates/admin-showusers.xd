@@ -10,7 +10,6 @@
 <xar:base-include-javascript module="roles" filename="tree.js" position="head" />
 <xar:style scope="module" module="base" file="navtabs" />
 <xar:style scope="module" file="roletree" />
-<xar:style scope="module" file="tree" />
 <xar:additional-styles />
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span>
@@ -40,12 +39,14 @@
                 <xar:template file="tree" />
           </div>
         </fieldset>
+        <!--
         <fieldset>
           <legend><xar:mlstring>Role hierarchy</xar:mlstring></legend>
           <div>
             #$roletree#
           </div>
         </fieldset>
+        -->
     <xar:elseif condition="$selstyle eq '2'"/>
         <div>
             <dl class="xar-tabs">

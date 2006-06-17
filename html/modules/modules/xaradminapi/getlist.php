@@ -128,9 +128,9 @@ function modules_adminapi_getlist($args)
     $modList = array(); $mode = XARMOD_MODE_SHARED;
 
     $query = "SELECT mods.xar_regid, mods.xar_name, mods.xar_directory,
-                     mods.xar_version, mods.xar_id, mods.xar_state
+                     mods.xar_version, mods.xar_id, mods.xar_category, mods.xar_state
                   FROM $modulestable mods ";
-    
+
     // Add the first mode to the where clauses and join it into one string
     array_unshift($whereClauses, 'mods.xar_mode = ?');
     array_unshift($bindvars,$mode);
@@ -145,6 +145,7 @@ function modules_adminapi_getlist($args)
              $modInfo['directory'],
              $modInfo['version'],
              $modInfo['systemid'],
+             $modInfo['category'],
              $modState) = $result->fields;
 
         if (xarVarIsCached('Mod.Infos', $modInfo['regid'])) {
@@ -156,7 +157,7 @@ function modules_adminapi_getlist($args)
             $modInfo['displaydescription'] = xarModGetDisplayableDescription($modInfo['name']);
             // Shortcut for os prepared directory
             $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
-            
+
             $modInfo['state'] = (int) $modState;
 
             xarVarSetCached('Mod.BaseInfos', $modInfo['name'], $modInfo);
