@@ -191,7 +191,7 @@ class Dynamic_Property_Master
         return $property;
     }
 
-    function createProperty($args)
+    static function createProperty($args)
     {
         $object = new Dynamic_Object(array('objectid' => 2)); // the Dynamic Properties = 2
         $objectid = $object->createItem($args);
@@ -199,12 +199,12 @@ class Dynamic_Property_Master
         return $objectid;
     }
 
-    function updateProperty($args)
+    static function updateProperty($args)
     {
         // TODO: what if the property type changes to something incompatible ?
     }
 
-    function deleteProperty($args)
+    static function deleteProperty($args)
     {
         if (empty($args['itemid'])) return;
 
