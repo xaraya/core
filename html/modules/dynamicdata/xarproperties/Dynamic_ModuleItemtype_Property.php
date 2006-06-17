@@ -73,7 +73,7 @@ class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
         if ($this->value < 1000) {
 			$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes', array('moduleid' => $this->referencemoduleid));
 			// we may still have a loose end in the module: no appropriate parent
-			$name = isset($types[$this->value]) ? $types[$this->value]['label'] : xarML('not available');
+			$name = isset($types[$this->value]) ? $types[$this->value]['label'] : xarML('base itemtype');
 			$data['option'] = array('id' => $this->referencemoduleid,
 									'name' => $name);
 			if (empty($template)) {

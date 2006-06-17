@@ -66,22 +66,22 @@ div.tree ul ul span.a.lastnode {
 /* Span-B: Plus/Minus icon */
 div.tree ul span.b {
 }
-div.tree ul span.a.children span.b {
-    background: url(../xarimages/minus.gif) 0 50% no-repeat;
+/*div.tree ul span.a.children span.b {
+    background: url(../xarimages/k2.gif) 0 50% no-repeat;
     cursor: pointer;
 }
 div.tree li.closed span.a.children span.b {
-    background: url(../xarimages/plus.gif) 0 50% no-repeat;
+    background: url(../xarimages/k3.gif) 0 50% no-repeat;
     cursor: pointer;
-}
+}*/
 
 /* Span-C: Spacing and extending tree line below the icon */
 div.tree span.c {
     margin-left: 16px;
 }
-div.tree span.a.children span.c {
+/*div.tree span.a.children span.c {
     background: url(../xarimages/I-bottom.png) 0 50% no-repeat;
-}
+}*/
 div.tree span.a.spanClosed span.c {
     background-image: none;
 }
