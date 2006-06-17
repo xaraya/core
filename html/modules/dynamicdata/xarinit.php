@@ -234,7 +234,9 @@ function dynamicdata_init()
                 xar_prop_order, xar_prop_validation)
             VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
-
+        
+        // TEMP FIX for the constants, rewrite this
+        require_once 'modules/dynamicdata/class/properties.php';
         $properties = array(
                             // 1 -> 9
                             array('objectid'  ,'Id'                 ,$objectid[1],182,0,21,''            ,$dynamic_objects.'.xar_object_id'         ,DD_PROPERTYSTATE_NOINPUT | DD_PROPERTYSTATE_ACTIVE,1 ,'integer'),

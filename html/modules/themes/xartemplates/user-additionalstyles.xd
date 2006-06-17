@@ -1,4 +1,5 @@
 <!-- This template was formatted without indentation on purpose - to keep the output as compact as possible for better readability in source -->
+<!-- TODO: this should not be necessary -->
 <xar:if condition="isset($styles) and is_array($styles)">
 <xar:foreach in="$styles" key="$scope" value="$style">
 <xar:if condition="$comments">

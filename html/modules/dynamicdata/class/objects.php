@@ -703,7 +703,7 @@ class Dynamic_Object_Master
         return $objectid;
     }
 
-    function updateObject($args)
+    static function updateObject($args)
     {
         if (empty($args['objectid'])) return;
         if (!isset($args['moduleid']))  $args['moduleid'] = null;

@@ -204,7 +204,7 @@ class Dynamic_Property_Master
         // TODO: what if the property type changes to something incompatible ?
     }
 
-    function deleteProperty($args)
+    static function deleteProperty($args)
     {
         if (empty($args['itemid'])) return;
 

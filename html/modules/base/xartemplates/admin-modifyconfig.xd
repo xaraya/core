@@ -1,4 +1,5 @@
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!-- TODO: split this file up in parts -->
 <xar:base-include-javascript module="base" filename="formcheck.js" />
 <script type="text/javascript">
 <xar:comment>
@@ -131,7 +132,7 @@
                 <p class="xar-form-input-wrapper-after">
                     <xar:mlstring>The Default Module supplies the main entry (front) page to your site. The
                         Default Module Function below provides the template for this frontpage. You can customize and
-                        override this template in your theme.
+                        override this template in your theme. [TODO: belongs in modules (the var)]
                     </xar:mlstring>
                 </p>
                 <div class="xar-form-input-wrapper">
@@ -164,7 +165,7 @@
                         </xar:if>
                         <label for="alternatepagetemplate" title="#xarML('Use an alternate default page template.')#">
                             <xar:mlstring>
-                                Use Alternate Page Template 
+                                Use Alternate Page Template [TODO: belongs in themes module (the var)]
                             </xar:mlstring>
                         </label>
                     </div>
@@ -180,7 +181,7 @@
                 <div class="xar-form-input-wrapper">
                     <label for="defaulttype" title="#xarML('The default type of module to be loaded.')#" class="xar-form-label">
                         <xar:mlstring>
-                            Default Module Type: 
+                            Default Module Type: [TODO: belongs in modules module (the var)]
                         </xar:mlstring>
                     </label>
                     <select name="defaulttype" id="defaulttype" size="1">
@@ -212,7 +213,7 @@
                 <div class="xar-form-input-wrapper">
                     <label for="defaultfunction" title="#xarML('The default function of module to be loaded.')#" class="xar-form-label">
                         <xar:mlstring>
-                            Default Module Function: 
+                            Default Module Function: [TODO: belongs in modules module (the var)]
                         </xar:mlstring>
                     </label>
                     <input type="text" id="defaultfunction" name="defaultfunction" value="#xarConfigGetVar('Site.Core.DefaultModuleFunction')#" maxlength="100" class="xar-form-textlong" />
@@ -227,7 +228,7 @@
                 <div class="xar-form-input-wrapper">
                     <label for="themedir" title="#xarML('The default directory for site themes - no trailing slash.')#" class="xar-form-label">
                         <xar:mlstring>
-                            Default Theme Directory: 
+                            Default Theme Directory: [TODO: belongs in themes module (the var)]
                         </xar:mlstring>
                     </label>
                     <input type="text" id="themedir" name="themedir" value="#xarConfigGetVar('Site.BL.ThemesDirectory')#" maxlength="100" class="xar-form-textlong" />
