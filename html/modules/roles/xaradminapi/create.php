@@ -40,13 +40,14 @@ function roles_adminapi_create($args)
     if ($baseitemtype == ROLES_USERTYPE) {
 		if (!isset($uname)) throw new EmptyParameterException('uname');
 		if (!isset($email)) throw new EmptyParameterException('email');
-		if (!isset($realname)) throw new EmptyParameterException('realname');
+		if (!isset($realname) && !isset($name)) throw new EmptyParameterException('realname');
 		if (!isset($state)) throw new EmptyParameterException('state');
 		if (!isset($pass)) throw new EmptyParameterException('pass');
 		$args['cryptpass'] = md5($pass);
     } elseif ($baseitemtype == ROLES_GROUPTYPE) {
-		if (!isset($name)) throw new EmptyParameterException('name');
+		if (!isset($realname) && !isset($name)) throw new EmptyParameterException('realname or name');
     }
+	$args['name'] = isset($realname) ? $realname : $name;
 	$args['type'] = $itemtype;
 	if (empty($authmodule)) {
         $modInfo = xarMod_GetBaseInfo('authsystem');
