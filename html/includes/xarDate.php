@@ -81,11 +81,23 @@ class xarDate
         }
     }
 
-    function display($format) 
+    function display($format='Y-m-d')
     {
         return date($format,$this->timestamp); 
     }
-    
+
+    function getTimearray()
+    {
+        return array(
+        			'year' => $this->year,
+        			'month' => $this->month,
+        			'day' => $this->day,
+        			'hour' => $this->hour,
+        			'minute' => $this->minute,
+        			'second' => $this->second,
+        		);
+    }
+
     function getTimestamp() 
     { 
         return $this->timestamp; 

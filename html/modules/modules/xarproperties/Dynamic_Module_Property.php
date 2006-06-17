@@ -32,6 +32,7 @@ class Dynamic_Module_Property extends Dynamic_Select_Property
         $info->id   = 19;
         $info->name = 'module';
         $info->desc = 'Module';
+		$info->filepath   = 'modules/modules/xarproperties';
 
         return $info;
     }

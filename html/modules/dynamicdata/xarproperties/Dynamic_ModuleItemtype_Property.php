@@ -40,6 +40,7 @@ class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
         $info->id   = 600;
         $info->name = 'moduleitemtype';
         $info->desc = 'Parent';
+		$info->filepath   = 'modules/dynamicdata/xarproperties';
 
         return $info;
     }

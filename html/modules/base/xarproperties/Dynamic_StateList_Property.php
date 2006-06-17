@@ -38,6 +38,7 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
         $info->id   = 43;
         $info->name = 'statelisting';
         $info->desc = 'State Dropdown';
+		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

@@ -87,6 +87,7 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         $info->name = 'userlist';
         $info->desc = 'User List';
         $info->reqmodules = array('roles');
+		$info->filepath   = 'modules/roles/xarproperties';
         return $info;
     }
 

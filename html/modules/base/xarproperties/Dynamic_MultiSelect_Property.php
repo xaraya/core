@@ -34,6 +34,7 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
         $info->id   = 39;
         $info->name = 'multiselect';
         $info->desc = 'multiselect';
+		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

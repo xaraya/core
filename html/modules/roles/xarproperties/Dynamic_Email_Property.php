@@ -38,6 +38,7 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
         $info->name   = 'email';
         $info->desc  = 'E-Mail';
         $info->reqmodules = array('roles');
+		$info->filepath   = 'modules/roles/xarproperties';
         return $info;
     }
 

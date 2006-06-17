@@ -33,6 +33,7 @@ class Dynamic_DateFormat_Property extends Dynamic_Select_Property
         $info->id   = 33;
         $info->name = 'dateformat';
         $info->desc = 'Date Format';
+		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

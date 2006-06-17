@@ -48,7 +48,8 @@ class Dynamic_PassBox_Property extends Dynamic_TextBox_Property
         $a1->id = 461;
         $a1->name = 'password';
         $a1->desc = 'Password Text Box';
-        
+		$a1->filepath   = 'modules/roles/xarproperties';
+
         $info = new PropertyRegistration();
         $info->reqmodules = array('roles');
         $info->id   = 46;

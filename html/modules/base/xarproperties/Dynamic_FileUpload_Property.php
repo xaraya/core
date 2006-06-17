@@ -117,6 +117,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         $info->id   = 9;
         $info->name = 'fileupload';
         $info->desc = 'File Upload';
+		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

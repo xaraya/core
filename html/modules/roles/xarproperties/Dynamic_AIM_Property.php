@@ -41,6 +41,7 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
         $info->id   = 29;
         $info->name = 'aim';
         $info->desc = 'AIM Screen Name';
+		$info->filepath   = 'modules/roles/xarproperties';
 
         return $info;
     }

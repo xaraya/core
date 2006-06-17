@@ -41,6 +41,7 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
         $info->id   = 47;
         $info->name = 'extendeddate';
         $info->desc = 'Extended Date';
+		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

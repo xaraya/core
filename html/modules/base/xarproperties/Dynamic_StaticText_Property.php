@@ -29,6 +29,7 @@ class Dynamic_StaticText_Property extends Dynamic_Property
         $info->id   = 1;
         $info->name = 'static';
         $info->desc = 'Static Text';
+		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

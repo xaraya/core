@@ -50,6 +50,7 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
         $info->id    = 27;
         $info->name  = 'urlicon';
         $info->desc  = 'URL Icon';
+		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

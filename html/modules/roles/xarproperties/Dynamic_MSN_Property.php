@@ -35,6 +35,7 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
         $info->name   = 'msn';
         $info->desc  = 'MSN Messenger';
         $info->reqmodules = array('roles');
+		$info->filepath   = 'modules/roles/xarproperties';
         return $info;
     }
 

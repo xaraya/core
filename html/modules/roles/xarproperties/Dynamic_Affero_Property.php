@@ -37,6 +37,7 @@ class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
         $info->id   = 40;
         $info->name = 'affero';
         $info->desc = 'Affero Username';
+		$info->filepath   = 'modules/roles/xarproperties';
 
         return $info;
     }

@@ -36,6 +36,7 @@ class Dynamic_Validation_Property extends Dynamic_TextBox_Property
         $info->id   = 998;
         $info->name = 'validation';
         $info->desc = 'Validation';
+		$info->filepath   = 'modules/dynamicdata/xarproperties';
 
         return $info;
     }
