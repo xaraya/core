@@ -23,6 +23,7 @@ class Dynamic_Username_Property extends Dynamic_Property
         parent::__construct($args);
         $this->tplmodule = 'roles';
         $this->template = 'username';
+		$this->filepath   = 'modules/roles/xarproperties';
     }
 
     static function getRegistrationInfo()
@@ -32,7 +33,6 @@ class Dynamic_Username_Property extends Dynamic_Property
         $info->id   = 7;
         $info->name = 'username';
         $info->desc = 'Username';
-		$info->filepath   = 'modules/roles/xarproperties';
 
         return $info;
     }
@@ -68,7 +68,7 @@ class Dynamic_Username_Property extends Dynamic_Property
         extract($data);
         if (!isset($value)) $value = $this->value;
         if (empty($value))  $value = xarUserGetVar('uid');
-        
+
         try {
             $user = xarUserGetVar('name', $value);
             if (empty($user)) $user = xarUserGetVar('uname', $value);
@@ -89,7 +89,7 @@ class Dynamic_Username_Property extends Dynamic_Property
         extract($data);
         if (!isset($value)) $value = $this->value;
         if (empty($value))  $value = xarUserGetVar('uid');
-        
+
         try {
             $user = xarUserGetVar('name', $value);
             if (empty($user))

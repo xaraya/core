@@ -28,6 +28,7 @@ class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
         parent::__construct($args);
         $this->tplmodule = 'roles';
         $this->template = 'affero';
+		$this->filepath   = 'modules/roles/xarproperties';
     }
 
     static function getRegistrationInfo()
@@ -37,7 +38,6 @@ class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
         $info->id   = 40;
         $info->name = 'affero';
         $info->desc = 'Affero Username';
-		$info->filepath   = 'modules/roles/xarproperties';
 
         return $info;
     }
@@ -69,7 +69,7 @@ class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
         $link = '';
         if (!empty($value)) {
             $link = 'http://svcs.affero.net/user-history.php?ll=lq_members&u='.$value;
-        } 
+        }
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
         $data['link']     = xarVarPrepForDisplay($link);
         return parent::showInput($data);
@@ -78,11 +78,11 @@ class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
     function showOutput($data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
-        
+
         $data['link'] = '';
         if (!empty($data['value'])) {
             $data['link'] = 'http://svcs.affero.net/user-history.php?ll=lq_members&u='.$data['value'];
-           
+
         }
         return parent::showOutput($data);
     }

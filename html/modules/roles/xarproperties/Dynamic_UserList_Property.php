@@ -47,6 +47,7 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         parent::__construct($args);
         $this->tplmodule = 'roles';
         $this->template = 'userlist';
+		$this->filepath   = 'modules/roles/xarproperties';
 
         if (count($this->options) == 0) {
 	        $select_options = array();
@@ -87,7 +88,6 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         $info->name = 'userlist';
         $info->desc = 'User List';
         $info->reqmodules = array('roles');
-		$info->filepath   = 'modules/roles/xarproperties';
         return $info;
     }
 
@@ -124,7 +124,7 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
     {
         extract($data);
         if (!isset($value)) $value = $this->value;
-        
+
         if (empty($value)) {
             $user = '';
         } else {

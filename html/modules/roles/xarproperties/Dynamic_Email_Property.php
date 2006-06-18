@@ -11,7 +11,7 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 
-/* 
+/*
  * Handle E-mail property
  * @author mikespub <mikespub@xaraya.com>
 */
@@ -26,8 +26,9 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
     function __construct($args)
     {
         parent::__construct($args);
-        $this->tplmodule = 'roles';        
+        $this->tplmodule = 'roles';
         $this->template = 'email';
+		$this->filepath   = 'modules/roles/xarproperties';
     }
 
     static function getRegistrationInfo()
@@ -38,7 +39,6 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
         $info->name   = 'email';
         $info->desc  = 'E-Mail';
         $info->reqmodules = array('roles');
-		$info->filepath   = 'modules/roles/xarproperties';
         return $info;
     }
 

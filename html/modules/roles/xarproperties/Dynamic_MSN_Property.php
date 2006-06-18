@@ -11,7 +11,7 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 
-/** 
+/**
  * Handle MSN property
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -26,6 +26,7 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
         parent::__construct($args);
         $this->tplmodule = 'roles';
         $this->template = 'msn';
+		$this->filepath   = 'modules/roles/xarproperties';
     }
 
     static function getRegistrationInfo()
@@ -35,7 +36,6 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
         $info->name   = 'msn';
         $info->desc  = 'MSN Messenger';
         $info->reqmodules = array('roles');
-		$info->filepath   = 'modules/roles/xarproperties';
         return $info;
     }
 
@@ -79,7 +79,7 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
         if (!empty($data['value'])) {
             $data['link'] = "TODO: what's the link for MSN ?".$data['value'];
         }
-        return parent::showOutput($data);   
+        return parent::showOutput($data);
     }
 }
 ?>

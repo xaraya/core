@@ -28,6 +28,7 @@ class Dynamic_PassBox_Property extends Dynamic_TextBox_Property
         parent::__construct($args);
         $this->tplmodule = 'roles';
         $this->template ='password';
+		$this->filepath   = 'modules/roles/xarproperties';
 
         // check validation for allowed min/max length (or values)
         if (!empty($this->validation) && strchr($this->validation,':')) {
@@ -48,7 +49,6 @@ class Dynamic_PassBox_Property extends Dynamic_TextBox_Property
         $a1->id = 461;
         $a1->name = 'password';
         $a1->desc = 'Password Text Box';
-		$a1->filepath   = 'modules/roles/xarproperties';
 
         $info = new PropertyRegistration();
         $info->reqmodules = array('roles');
@@ -56,7 +56,6 @@ class Dynamic_PassBox_Property extends Dynamic_TextBox_Property
         $info->name = 'passbox';
         $info->desc = 'Password Text Box';
         $info->aliases = array($a1);
-		$info->filepath   = 'modules/roles/xarproperties';
         $info->aliases = array($a1);
 
         return $info;
