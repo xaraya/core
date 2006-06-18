@@ -119,36 +119,6 @@ design work can begin.
   components to physical tables.
 
 
-!!!VIEWS support for backends:
-- mysql   : yes, since 5.0
-- sqlite  : yes, since forever, but read only (which is a good thing,  but a pain when you're migrating )
-- postgres: yes, since 7.3 (at least)
-- mssql   : yes, no idea version wise
-- oracle  : ?
-
-!!!TRANSACTION support for backends:
-- mysql   : yes, innodb engine only ( gracefull fallback provided by middleware?)
-- sqlite  : yes, since forever
-- postgres: yes
-- mssql   : yes
-- oracle  : ?
-==> SUPPORTED BY ALL, BEING USED RIGHT NOW.
-
-!!!FOREIGN KEY support for backends:
-- mysql   : yes, innodb engine only
-- sqlite  : no, accepts syntax, but doesnt act (triggers is the  proposed alternative)
-- postgres: yes
-- mssql   : yes, no idea version wise
-- oracle  : ?
-
-!!!TRIGGER support for backends:
-- mysql   : yes, since 5.0.2
-- sqlite  : yes, since forever
-- postgres: yes, at least since 7.3
-- mssql   : yes, at least since mssql server 2000
-- oracle  : ?
-==> SUPPORTED BY ALL, WORTH CONSIDERING
-
 !!!MIN. REQUIRED VERSIONS DETERMINED SO FAR
 * PHP      5.0.5
 * Mysql    5.0.18
@@ -171,37 +141,6 @@ Whether the tags used are compiled/transformed on the server or
 through a js callback is irrelevant for us.
 - 
 
-!!!TRIGGER SYNTAX
-
-mysql:
-        CREATE TRIGGER someTriggerName BEFORE INSERT ON sometable
-        FOR EACH ROW
-        BEGIN
-            SET NEW.guid = UUID();
-        END
-        --> no instead of trigger (no need)
-        --> only before insert, not after insert
-
-sqlite:
-        // This trigger runs instead of the supplied statement to
-        // workaround the read-only limitation of a view
-        CREATE TRIGGER someTriggerName INSTEAD OF INSERT ON SomeView
-        FOR EACH ROW
-        BEGIN
-            INSERT INTO RealTable VALUES( new.fieldName1, new.FieldName2,...,new.FieldNameN)
-        END;
-
-        // This trigger runs when an update occurs on sometable.somefield
-        CREATE TRIGGER someTriggerName AFTER UPDATE OF somefield ON  sometable
-        FOR EACH ROW
-        BEGIN
-            UPDATE someOtherTable SET someOtherField = new.somefield WHERE someOtherTable.YetAnotherField = old.AgainSomethingElse;
-        END;
-
-        The trick is the new an old designators obviously
-        -> on update new and old are valid
-        -> on insert new is valid
-        -> on delete old is valid
 
 
 <!-- 
