@@ -47,7 +47,7 @@ function &dynamicdata_userapi_getitem($args)
     $modinfo = xarModGetInfo($modid);
 
     if (empty($itemtype)) $itemtype = 0;
-    
+
     $invalid = array();
     if (!isset($modid) || !is_numeric($modid) || empty($modinfo['name'])) {
         $invalid[] = 'module id';
@@ -76,51 +76,40 @@ function &dynamicdata_userapi_getitem($args)
 
     // limit to property fields of a certain status (e.g. active)
     if (!isset($status)) $status = null;
-   
+
     // join a module table to a dynamic object
     if (empty($join)) $join = '';
-    
+
     // make some database table available via DD
     if (empty($table)) $table = '';
-    
+
     $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
-
-
-    // No tree, either borked or nothing to do, get outta here
-    if(empty($tree)) return $nullreturn;
-
-    $objectarray = $itemsarray = array();
+//    $objectarray = $itemsarray = array();
+	$object =& Dynamic_Object_Master::getObject(array('moduleid'  => $modid,
+									   'itemtype'  => $itemtype,
+									   'itemid'    => $itemid,
+									   'fieldlist' => $fieldlist,
+									   'join'      => $join,
+									   'table'     => $table,
+									   'status'    => $status));
+	if (!isset($object) || empty($object->objectid)) return $nullreturn;
 	foreach ($tree as $branch) {
-		$object =& Dynamic_Object_Master::getObject(array('moduleid'  => $modid,
-										   'itemtype'  => $branch['itemtype'],
-										   'itemid'    => $itemid,
-										   'fieldlist' => $fieldlist,
-										   'join'      => $join,
-										   'table'     => $table,
-										   'status'    => $status));
-        // No object or no objectid, borkie norkie
-		if (!isset($object) || empty($object->objectid)) return $nullreturn;
+		$newobject = & Dynamic_Object_Master::getObjectList(array('moduleid'  => $modid,
+											   'itemtype'  => $branch['itemtype']));
+		$object->add($newobject);
+    }
 
-        // Get the item
-		if (!empty($itemid)) $result = $object->getItem();
+	// Get the item
+	if (!empty($itemid)) $object->getItem();
 
-        // ..check it
-        if (!empty($preview)) $object->checkInput();
-		
-		if (!empty($getobject)) {
-            // Indicated that whole object(s) needs to be returned
-			$objectarray[] = $object;
-		} elseif (isset($result)) {
-            // Merge the fieldvalues with what we already have (composing the total object?)
-            $itemsarray = array_merge($itemsarray, $object->getFieldValues());
-        }
-	}
-    // FIXME: this wont work now, since apparently we would need to loop over the objectarray?
-    
-    //$objectData = $object->getFieldValues();
-    //return $objectData;
+	// ..check it
+	if (!empty($preview)) $object->checkInput();
 
-    return $itemsarray;
+    if (!empty($getobject)) {
+        return $object;
+    }
+    $objectData = $object->getFieldValues();
+    return $objectData;
 }
 
 ?>

@@ -30,6 +30,7 @@ class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
+		$this->filepath   = 'modules/dynamicdata/xarproperties';
         if (isset($args['modid'])) $this->referencemoduleid = $args['modid'];
     }
 
@@ -64,7 +65,7 @@ class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
     function showOutput($args = array())
     {
         extract($args);
-        if (isset($modid)) $this->referencemoduleid = $modid;
+		if (!empty($modid)) $this->referencemoduleid = $modid;
 		$this->options = $this->getOptions();
         if (isset($value)) {
             $this->value = $value;
@@ -72,7 +73,7 @@ class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
         if ($this->value < 1000) {
 			$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes', array('moduleid' => $this->referencemoduleid));
 			// we may still have a loose end in the module: no appropriate parent
-			$name = isset($types[$this->value]) ? $types[$this->value]['label'] : xarML('not available');
+			$name = isset($types[$this->value]) ? $types[$this->value]['label'] : xarML('base itemtype');
 			$data['option'] = array('id' => $this->referencemoduleid,
 									'name' => $name);
 			if (empty($template)) {

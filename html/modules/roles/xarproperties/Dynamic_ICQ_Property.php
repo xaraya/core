@@ -35,6 +35,7 @@ class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
         $info->name   = 'icq';
         $info->desc   = 'ICQ Number';
         $info->reqmodules = array('roles');
+		$info->filepath   = 'modules/roles/xarproperties';
         return $info;
     }
 

@@ -21,6 +21,7 @@ class Dynamic_Array_Property extends Dynamic_Property
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template = 'array';
+		$this->filepath   = 'modules/base/xarproperties';
 
         // check validation for list of fields (optional)
         if (!empty($this->validation) && strchr($this->validation,';')) {
@@ -75,7 +76,7 @@ class Dynamic_Array_Property extends Dynamic_Property
     {
         if (!isset($data['value'])) $value = $this->value;
         if (isset($data['fields'])) $this->fields = $data['fields'];
-        
+
         if (empty($value)) {
             $value = array('');
         } elseif (!is_array($value)) {
@@ -110,7 +111,7 @@ class Dynamic_Array_Property extends Dynamic_Property
     {
         extract($data);
         if (!isset($value)) $value = $this->value;
-        
+
         if (empty($value)) {
             $value = array('');
         } elseif (!is_array($value)) {
@@ -126,7 +127,7 @@ class Dynamic_Array_Property extends Dynamic_Property
         } else {
             $fieldlist = array_keys($value);
         }
- 
+
         $data['value'] = array();
         foreach ($fieldlist as $field) {
             if (!isset($value[$field])) {

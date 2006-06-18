@@ -32,6 +32,7 @@ class Dynamic_Username_Property extends Dynamic_Property
         $info->id   = 7;
         $info->name = 'username';
         $info->desc = 'Username';
+		$info->filepath   = 'modules/roles/xarproperties';
 
         return $info;
     }

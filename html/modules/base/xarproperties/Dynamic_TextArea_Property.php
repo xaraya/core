@@ -24,6 +24,7 @@ class Dynamic_TextArea_Property extends Dynamic_Property
 
         $this->tplmodule = 'base';
         $this->template = 'textarea';
+		$this->filepath   = 'modules/base/xarproperties';
 
         if(isset($args['rows'])) $this->rows = $args['rows'];
         if(isset($args['cols'])) $this->cols = $args['cols'];
@@ -42,7 +43,7 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         $a1->name = 'textarea_medium';
         $a1->desc = 'Medium Text Area';
         $a1->args = array('rows' => 8);
-        
+
         $a2 = new PropertyRegistration();
         $a2->id   = 5;
         $a2->name = 'textarea_large';
@@ -87,7 +88,7 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         // Make the variables easier to access
         extract($data);
 
-        // Prepare 
+        // Prepare
         $data['value'] = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
         // TODO: the way the template is organized now, this only works when an id is set.
         $data['rows']  = !empty($rows) ? $rows : $this->rows;

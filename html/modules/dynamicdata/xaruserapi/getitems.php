@@ -125,31 +125,36 @@ function &dynamicdata_userapi_getitems($args)
     }
 
     $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
-    $objectarray = $itemsarray = array();
+	$object = & Dynamic_Object_Master::getObjectList(array('moduleid'  => $modid,
+										   'itemtype'  => $itemtype,
+										   'itemids' => $itemids,
+										   'sort' => $sort,
+										   'numitems' => $numitems,
+										   'startnum' => $startnum,
+										   'where' => $where,
+										   'fieldlist' => $fieldlist,
+										   'join' => $join,
+										   'table' => $table,
+										   'catid' => $catid,
+										   'groupby' => $groupby,
+										   'status' => $status,
+										   'itemtype'  => $itemtype));
+	if (!isset($object) || empty($object->objectid)) return $nullreturn;
     foreach ($tree as $branch) {
-		$object = & Dynamic_Object_Master::getObjectList(array('moduleid'  => $modid,
-											   'itemtype'  => $branch['itemtype'],
-											   'itemids' => $itemids,
-											   'sort' => $sort,
-											   'numitems' => $numitems,
-											   'startnum' => $startnum,
-											   'where' => $where,
-											   'fieldlist' => $fieldlist,
-											   'join' => $join,
-											   'table' => $table,
-											   'catid' => $catid,
-											   'groupby' => $groupby,
-											   'status' => $status));
-		if (!isset($object)) return $nullreturn;
-		// $items[$itemid]['fields'][$name]['value'] --> $items[$itemid][$name] now
-		if (!empty($getobject)) {
-			$object->getItems();
-			$objectarray[] = $object;
-		} else {
-			$objectarray = $object->getItems();
-        }
+		$newobject = & Dynamic_Object_Master::getObjectList(array('moduleid'  => $modid,
+											   'itemtype'  => $branch['itemtype']));
+		$object->add($newobject);
     }
-	return $objectarray;
+    if (!isset($object)) return $nullreturn;
+    // $items[$itemid]['fields'][$name]['value'] --> $items[$itemid][$name] now
+
+    if (!empty($getobject)) {
+        $object->getItems();
+        return $object;
+    } else {
+        $result = $object->getItems();
+        return $result;
+    }
 }
 
 ?>

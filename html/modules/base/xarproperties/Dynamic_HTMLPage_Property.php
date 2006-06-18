@@ -110,7 +110,7 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
         extract($data);
 
         if (!isset($value)) $value = $this->value;
-        
+
         $basedir = $this->basedir;
         $filetype = $this->filetype;
         if (!empty($value) &&

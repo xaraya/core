@@ -153,7 +153,7 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
     {
         extract($data);
         if (!isset($value))  $value = $this->value;
-        
+
         $offset = null;
         $timezone = null;
         if (empty($value)) {

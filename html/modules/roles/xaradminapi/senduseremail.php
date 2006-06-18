@@ -12,8 +12,8 @@
  */
 
 /**
- * Send emails to users by mailtype 
- * 
+ * Send emails to users by mailtype
+ *
  * Ex: Lost Password, Confirmation
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
@@ -46,7 +46,7 @@ function roles_adminapi_senduseremail($args)
     //if (is_array($uid)) {
         foreach ($uid as $userid => $val) {
             ///get the user info
-            $user = xarModAPIFunc('roles','user','get', array('itemid' => $userid, 'itemtype' => ROLES_USERTYPE));
+            $user = xarModAPIFunc('roles','user','get', array('uid' => $userid, 'itemtype' => ROLES_USERTYPE));
             if (!isset($pass)) $pass = '';
             if (!isset($ip)) $ip = '';
             if (isset($user['valcode'])) $validationlink = xarServerGetBaseURL() . "val.php?v=".$user['valcode']."&u=".$userid;
@@ -72,7 +72,7 @@ function roles_adminapi_senduseremail($args)
                           'recipientname' => $user['name']);
 
             // retrieve the dynamic properties (if any) for use in the e-mail too
-                
+
             // get the Dynamic Object defined for this module and item id
             $object = xarModAPIFunc('dynamicdata','user','getobject',
                                          array('module' => 'roles',

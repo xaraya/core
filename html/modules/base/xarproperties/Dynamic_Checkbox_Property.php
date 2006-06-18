@@ -27,6 +27,7 @@ class Dynamic_Checkbox_Property extends Dynamic_Property
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template  = 'checkbox';
+		$this->filepath   = 'modules/base/xarproperties';
     }
 
     static function getRegistrationInfo()

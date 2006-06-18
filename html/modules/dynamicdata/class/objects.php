@@ -56,7 +56,7 @@ class Dynamic_Object_Master
     // secondary key could be item type (e.g. for articles)
     public $secondary = null;
     // set this true to automatically filter by current itemtype on secondary key
-    public $filter;
+    public $filter = true;
 
     // flag indicating if this object has some property that provides file upload
     public $upload = false;
@@ -168,12 +168,11 @@ class Dynamic_Object_Master
         if (isset($this->status) && count($this->fieldlist) == 0) {
             $this->fieldlist = array();
             foreach ($this->properties as $name => $property) {
-                if ($property->status == $this->status) {
+                if ($property->status & $this->status) {
                     $this->fieldlist[] = $name;
                 }
             }
         }
-
         // build the list of relevant data stores where we'll get/set our data
         if (count($this->datastores) == 0 &&
             count($this->properties) > 0) {
@@ -181,60 +180,49 @@ class Dynamic_Object_Master
         }
 
 		// add ancestors' properties to this object if required
-		if (!empty($args['extend'])) {
-		/*
-			$primary = $this->primary;
-			$secondary = $this->secondary;
+		if (!(empty($args['extend']) || ($args['extend'] == 'false'))) {
 			if (!empty($this->objectid)) {
 				$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $this->objectid, 'top' => false));
 			} else {
-				$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('moduleid' => $this->moduleid, 'itemtype' => $this->itemtype, 'top' => false));
+				$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('moduleid' => $this->moduleid, 'itemtype' => $this->itemtype, 'top' => true));
 			}
 			// If this is an extended object add the ancestor properties for display purposes
 			if (!empty($ancestors)) {
 				foreach ($ancestors as $ancestor) {
-				   Dynamic_Property_Master::getProperties(array('objectid'  => $ancestor['objectid'],
-																'moduleid'  => $this->moduleid,
-																'itemtype'  => $ancestor['itemtype'],
-																'allprops'  => $args['allprops'],
-																'objectref' => & $this)); // we pass this object along
-
-				}
-			}
-			$this->getDataStores(true);
-			$this->primary = $primary;
-			$this->secondary = $secondary;
-			*/
-			if (!empty($this->objectid)) {
-				$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $this->objectid, 'top' => false));
-			} else {
-				$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('moduleid' => $this->moduleid, 'itemtype' => $this->itemtype, 'top' => false));
-			}
-			// If this is an extended object add the ancestor properties for display purposes
-			if (!empty($ancestors)) {
-				foreach ($ancestors as $ancestor) {
-					$object =& Dynamic_Object_Master::getObject(array('objectid' => $ancestor['objectid']));
-
-					$properties = $object->getProperties();
-					foreach ($properties as &$newproperty) {
-						// ignore if this property already belongs to the object
-						if (isset($this->properties[$newproperty->name])) continue;
-						$args = array('name'  => $newproperty->name,
-									  'type'  => $newproperty->type,
-									  'label' => $newproperty->label);
-						if (!isset($this->datastores[$newproperty->datastore])) {
-							$newstore = $this->property2datastore($newproperty);
-							$this->addDatastore($newstore[0],$newstore[1]);
-						}
-						$newproperty->_items =& $this->items;
-						$this->datastores[$newproperty->datastore]->addField($newproperty);
-						$this->addProperty($args);
-	//                  $this->fieldlist[] = $newproperty->name;
-					}
+					if ($ancestor['objectid']) $this->add($ancestor['objectid']);
 				}
 			}
 		}
     }
+
+    /**
+     * Add one object to another
+     * This is basically adding the properties
+     */
+    function add($object=null)
+    {
+    	if (is_numeric($object)) {
+			$object =& Dynamic_Object_Master::getObject(array('objectid' => $object));
+    	}
+    	if (!is_object($object))
+    		throw new EmptyParameterException(array(),'Not a valid object');
+		$properties = $object->getProperties();
+		foreach ($properties as &$newproperty) {
+			// ignore if this property already belongs to the object
+			if (isset($this->properties[$newproperty->name])) continue;
+			$args = array('name'  => $newproperty->name,
+						  'type'  => $newproperty->type,
+						  'label' => $newproperty->label);
+			if (!isset($this->datastores[$newproperty->datastore])) {
+				$newstore = $this->property2datastore($newproperty);
+				$this->addDatastore($newstore[0],$newstore[1]);
+			}
+			$newproperty->_items =& $this->items;
+			$this->datastores[$newproperty->datastore]->addField($newproperty);
+			$this->addProperty($args);
+//                  $this->fieldlist[] = $newproperty->name;
+		}
+	}
 
     /**
      * Get the data stores where the dynamic properties of this object are kept
@@ -306,7 +294,7 @@ class Dynamic_Object_Master
                 $this->primary = $name;
             }
             // keep track of what property holds the secondary key (item type)
-            if (!isset($this->secondary) && $property->type == 20 && !empty($this->filter)) {
+            if (empty($this->secondary) && $property->type == 20 && !empty($this->filter)) {
                 $this->secondary = $name;
             }
         }
@@ -445,6 +433,7 @@ class Dynamic_Object_Master
         $dynamicobjects = $xartable['dynamic_objects'];
 
         $bindvars = array();
+        xarLogMessage("DB: query in getObjects");
         $query = "SELECT xar_object_id,
                          xar_object_name,
                          xar_object_label,
@@ -702,24 +691,25 @@ class Dynamic_Object_Master
         if (!isset($args['moduleid']))  $args['moduleid'] = null;
         if (!isset($args['itemtype']))  $args['itemtype'] = null;
         if (!isset($args['classname'])) $args['classname'] = null;
-        
+
         // create the Dynamic Objects item corresponding to this object
         $object =& Dynamic_Object_Master::getObject(array('objectid' => 1, // the Dynamic Objects = 1
                                                           'moduleid' => $args['moduleid'],
                                                           'itemtype' => $args['itemtype'],
                                                           'classname' => $args['classname']));
         $objectid = $object->createItem($args);
+        xarLogMessage("Class: " . get_class() . ". Creating an object of class " . $args['classname'] . ". Objectid: " . $objectid . ", module: " . $args['moduleid'] . ", itemtype: " . $args['itemtype']);
         unset($object);
         return $objectid;
     }
 
-    function updateObject($args)
+    static function updateObject($args)
     {
         if (empty($args['objectid'])) return;
         if (!isset($args['moduleid']))  $args['moduleid'] = null;
         if (!isset($args['itemtype']))  $args['itemtype'] = null;
         if (!isset($args['classname'])) $args['classname'] = null;
-        
+
         // update the Dynamic Objects item corresponding to this object
         $object =& Dynamic_Object_Master::getObject(array('objectid' => 1, // the Dynamic Objects = 1
                                                           'moduleid' => $args['moduleid'],
@@ -732,13 +722,13 @@ class Dynamic_Object_Master
         return $itemid;
     }
 
-    function deleteObject($args)
+    static function deleteObject($args)
     {
         if (empty($args['objectid'])) return;
         if (!isset($args['moduleid']))  $args['moduleid'] = null;
         if (!isset($args['itemtype']))  $args['itemtype'] = null;
         if (!isset($args['classname'])) $args['classname'] = null;
-        
+
         // get the Dynamic Objects item corresponding to this object
         $object =& Dynamic_Object_Master::getObject(array('objectid' => 1, // the Dynamic Objects = 1
                                                           'moduleid' => $args['moduleid'],
@@ -884,7 +874,7 @@ class Dynamic_Object extends Dynamic_Object_Master
 
         // set the specific item id (or 0)
         if (isset($args['itemid'])) $this->itemid = $args['itemid'];
-        
+
         // see if we can access this object, at least in overview
         if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->moduleid.':'.$this->itemtype.':'.$this->itemid)) return;
 
@@ -979,10 +969,10 @@ class Dynamic_Object extends Dynamic_Object_Master
         if (empty($args['viewfunc']))    $args['viewfunc'] = $this->viewfunc;
         if (empty($args['fieldlist']))   $args['fieldlist'] = $this->fieldlist;
         if (empty($args['fieldprefix'])) $args['fieldprefix'] = $this->fieldprefix;
-        
+
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
         if (!empty($args['preview'])) $this->checkInput();
-        
+
         if (count($args['fieldlist']) > 0 || !empty($this->status)) {
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
@@ -1033,22 +1023,23 @@ class Dynamic_Object extends Dynamic_Object_Master
         if (empty($args['tplmodule'])) $args['tplmodule'] = $this->tplmodule;
         if (empty($args['viewfunc']))  $args['viewfunc'] = $this->viewfunc;
         if (empty($args['fieldlist'])) $args['fieldlist'] = $this->fieldlist;
-        
+
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
         if (!empty($args['preview'])) $this->checkInput();
-        
+
         if (count($args['fieldlist']) > 0 || !empty($this->status)) {
             // Explicit fieldlist or status has value
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
                     $thisprop = $this->properties[$name];
-                    if ($thisprop->status != 3)
+                    if ($thisprop->status != DD_PROPERTYSTATE_HIDDEN)
                         $args['properties'][$name] =& $this->properties[$name];
                 }
             }
         } else {
-            // Do them all, except for status = 3 (what was that again?)
+            $args['properties'] = $this->properties;
+            // Do them all, except for status = DD_PROPERTYSTATE_HIDDEN
             // TODO: this is exactly the same as in the display function, consolidate it.
             $totransform = array(); $totransform['transform'] = array();
             foreach($this->properties as $pname => $pobj) {
@@ -1058,12 +1049,12 @@ class Dynamic_Object extends Dynamic_Object_Master
                 $totransform['transform'][] = $pname;
                 $totransform[$pname] = $pobj->value;
             }
-        
+
             // CHECKME: is $this->tplmodule safe here?
             $transformed = xarModCallHooks('item','transform',$this->itemid, $totransform, $this->tplmodule,$this->itemtype);
 
             foreach ($this->properties as $property) {
-                if ($property->status != 3 and $property->type != 21) {
+                if (($property->status != DD_PROPERTYSTATE_HIDDEN) && ($property->type != 21) && isset($transformed[$property->name])) {
                     // sigh, 5 letters, but so many hours to discover them
                     // anyways, clone the property, so we can safely change it, PHP 5 specific!!
                     $args['properties'][$property->name] = clone $property;
@@ -1226,6 +1217,7 @@ class Dynamic_Object extends Dynamic_Object_Master
             if (empty($itemid)) return;
         }
 
+        xarLogMessage("Class: " . get_class() . ". Creating an item. Itemid: " . $this->itemid . ", module: " . $modinfo['name'] . ", itemtype: " . $this->itemtype);
         // call create hooks for this item
         // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
         // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles / roles
@@ -1304,6 +1296,7 @@ class Dynamic_Object extends Dynamic_Object_Master
         }
 
         $modinfo = xarModGetInfo($this->moduleid);
+        xarLogMessage("Class: " . get_class() . ". Deleting an item. Itemid: " . $this->itemid . ", module: " . $modinfo['name'] . ", itemtype: " . $this->itemtype);
 
     // TODO: this won't work for objects with several static tables !
         // delete the item in all the data stores
@@ -1761,22 +1754,24 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($args['tplmodule'])) $args['tplmodule'] = $this->tplmodule;
         // Are we extending here?
         if (!empty($args['extend']))   $this->extend();
-        
+
         if (empty($args['viewfunc']))    $args['viewfunc'] = $this->viewfunc;
         if (empty($args['fieldprefix'])) $args['fieldprefix'] = $this->fieldprefix;
         if (empty($args['fieldlist']))   $args['fieldlist'] = $this->fieldlist;
-        
-        if (count($args['fieldlist']) > 0 || !empty($this->status)) {
+
+ 		if (!empty($this->status)) $state = $this->status;
+ 		else $state = DD_PROPERTYSTATE_ACTIVE | ~DD_PROPERTYSTATE_DISPLAYONLY;
+        if (count($args['fieldlist']) > 0) {
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
-                    if ($this->properties[$name]->status != 3)
+                    if ($this->properties[$name]->status & $state)
                         $args['properties'][$name] = & $this->properties[$name];
                 }
             }
         } else {
             foreach ($this->properties as $property) {
-                if ($property->status != 3)
+                if ($property->status & $state)
                     $args['properties'][$property->name] = $property;
             }
         }
@@ -1788,7 +1783,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($args['linklabel'])) $args['linklabel'] = xarML('Display');
         if (empty($args['param']))     $args['param'] = $this->urlparam;
         if (empty($args['linkfield'])) $args['linkfield'] = '';
-        
+
         $modinfo = xarModGetInfo($this->moduleid);
         $modname = $modinfo['name'];
 
@@ -1812,7 +1807,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($itemtype)) $itemtype = null; // don't add to URL
         $table = (empty($this->table)) ? null: $this->table;
         $args['objectname'] = empty($this->name) ? null : $this->name;
-        
+
         $args['modname'] = $modname;
         $args['itemtype'] = $itemtype;
         $args['links'] = array();
@@ -1843,20 +1838,23 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                                        'olink'  => xarModURL($args['urlmodule'],$linktype,$linkfunc,
                                                    array('itemtype'     => $itemtype,
                                                          'table'        => $table,
-                                                         $args['param'] => $itemid)),
+                                                         $args['param'] => $itemid,
+                                                         'template'     => $args['template'])),
                                        'ojoin'  => '');
                 }
                 $options[] = array('otitle' => xarML('Edit'),
                                    'olink'  => xarModURL($args['urlmodule'],'admin','modify',
                                                array('itemtype'     => $itemtype,
                                                      'table'        => $table,
-                                                     $args['param'] => $itemid)),
+                                                     $args['param'] => $itemid,
+                                                     'template'     => $args['template'])),
                                    'ojoin'  => '|');
                 $options[] = array('otitle' => xarML('Delete'),
                                    'olink'  => xarModURL($args['urlmodule'],'admin','delete',
                                                array('itemtype'     => $itemtype,
                                                      'table'        => $table,
-                                                     $args['param'] => $itemid)),
+                                                     $args['param'] => $itemid,
+                                                     'template'     => $args['template'])),
                                    'ojoin'  => '|');
             } elseif(xarSecurityCheck('EditDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
                 if ($dummy_mode && $this->items[$itemid]['moduleid'] != 182) {
@@ -1868,14 +1866,16 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                                        'olink'  => xarModURL($args['urlmodule'],$linktype,$linkfunc,
                                                    array('itemtype'     => $itemtype,
                                                          'table'        => $table,
-                                                         $args['param'] => $itemid)),
+                                                         $args['param'] => $itemid,
+                                                         'template'     => $args['template'])),
                                        'ojoin'  => '');
                 }
                 $options[] = array('otitle' => xarML('Edit'),
                                    'olink'  => xarModURL($args['urlmodule'],'admin','modify',
                                                array('itemtype'     => $itemtype,
                                                      'table'        => $table,
-                                                     $args['param'] => $itemid)),
+                                                     $args['param'] => $itemid,
+                                                     'template'     => $args['template'])),
                                    'ojoin'  => '|');
             } elseif(xarSecurityCheck('ReadDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
                 if ($dummy_mode && $this->items[$itemid]['moduleid'] != 182) {
@@ -1887,7 +1887,8 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                                        'olink'  => xarModURL($args['urlmodule'],$linktype,$linkfunc,
                                                    array('itemtype'     => $itemtype,
                                                          'table'        => $table,
-                                                         $args['param'] => $itemid)),
+                                                         $args['param'] => $itemid,
+                                                         'template'     => $args['template'])),
                                        'ojoin'  => '');
                 }
             }
@@ -1944,19 +1945,22 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($args['tplmodule'])) $args['tplmodule'] = $this->tplmodule;
         if (empty($args['viewfunc']))  $args['viewfunc'] = $this->viewfunc;
         if (empty($args['fieldlist'])) $args['fieldlist'] = $this->fieldlist;
-        
-        if (count($args['fieldlist']) > 0 || !empty($this->status)) {
+        if (!empty($args['extend']))   $this->extend();
+
+ 		if (!empty($this->status)) $state = $this->status;
+ 		else $state = DD_PROPERTYSTATE_ACTIVE | ~DD_PROPERTYSTATE_DISPLAYONLY;
+        if (count($args['fieldlist']) > 0) {
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
                     $thisprop = $this->properties[$name];
-                    if ($thisprop->status != 3)
+                    if ($thisprop->status & $state)
                         $args['properties'][$name] = & $this->properties[$name];
                 }
             }
         } else {
             foreach ($this->properties as $property) {
-                if ($property->status != 3)
+                if ($property->status & $state)
                     $args['properties'][$property->name] = $property;
             }
         }
@@ -1968,7 +1972,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($args['linklabel'])) $args['linklabel'] = xarML('Display');
         if (empty($args['param']))     $args['param'] = $this->urlparam;
         if (empty($args['linkfield'])) $args['linkfield'] = '';
-        
+
         // pass some extra template variables for use in BL tags, API calls etc.
         $args['moduleid'] = $this->moduleid;
 

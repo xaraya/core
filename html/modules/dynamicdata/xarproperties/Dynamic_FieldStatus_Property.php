@@ -24,17 +24,19 @@ class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
+		$this->filepath   = 'modules/dynamicdata/xarproperties';
 
         if (count($this->options) == 0) {
             $this->options = array(
-                                 array('id' => 0, 'name' => xarML('Disabled')),
-                                 array('id' => 1, 'name' => xarML('Active')),
-                                 array('id' => 2, 'name' => xarML('Display Only')),
-                                 array('id' => 3, 'name' => xarML('Hidden')),
+                                 array('id' => DD_PROPERTYSTATE_ACTIVE, 'name' => xarML('Active')),
+                                 array('id' => DD_PROPERTYSTATE_DISABLED, 'name' => xarML('Disabled')),
+                                 array('id' => DD_PROPERTYSTATE_NOINPUT, 'name' => xarML('No Input Allowed')),
+                                 array('id' => DD_PROPERTYSTATE_DISPLAYONLY, 'name' => xarML('Display Only')),
+                                 array('id' => DD_PROPERTYSTATE_HIDDEN, 'name' => xarML('Hidden')),
                              );
         }
     }
-    
+
     static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();

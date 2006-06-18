@@ -98,7 +98,7 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
         extract($data);
 
         if (!isset($value)) $value = $this->value;
-        
+
         if (empty($value)) {
             $value = array();
         } elseif (!is_array($value)) {
@@ -110,7 +110,7 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
             }
         }
         if (!isset($options)) $options = $this->getOptions();
-        
+
         $data['value']= $value;
         $data['options']= $options;
 

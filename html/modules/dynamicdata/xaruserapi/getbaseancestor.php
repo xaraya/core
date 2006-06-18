@@ -7,7 +7,6 @@ function &dynamicdata_userapi_getbaseancestor($args)
     $ancestors = xarModAPIFunc('dynamicdata','user','getancestors',$args);
     $ancestors = array_shift($ancestors);
     return $ancestors;
-
 }
 
 ?>

@@ -20,6 +20,7 @@ class Dynamic_StaticText_Property extends Dynamic_Property
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template = 'static';
+        $this->filepath = 'modules/base/xarproperties';
     }
 
     static function getRegistrationInfo()

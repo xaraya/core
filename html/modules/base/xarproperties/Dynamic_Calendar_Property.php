@@ -23,6 +23,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template = 'calendar';
+		$this->filepath   = 'modules/base/xarproperties';
     }
 
     static function getRegistrationInfo()
@@ -129,7 +130,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         extract($data);
 
         if (!isset($value)) $value = $this->value;
-        
+
         // default time is unspecified
         if (empty($value)) {
             $value = -1;

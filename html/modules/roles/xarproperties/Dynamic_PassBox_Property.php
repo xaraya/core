@@ -48,12 +48,15 @@ class Dynamic_PassBox_Property extends Dynamic_TextBox_Property
         $a1->id = 461;
         $a1->name = 'password';
         $a1->desc = 'Password Text Box';
-        
+		$a1->filepath   = 'modules/roles/xarproperties';
+
         $info = new PropertyRegistration();
         $info->reqmodules = array('roles');
         $info->id   = 46;
         $info->name = 'passbox';
         $info->desc = 'Password Text Box';
+        $info->aliases = array($a1);
+		$info->filepath   = 'modules/roles/xarproperties';
         $info->aliases = array($a1);
 
         return $info;
@@ -82,7 +85,7 @@ class Dynamic_PassBox_Property extends Dynamic_TextBox_Property
             $this->value = null;
             return false;
         }
-            
+
         if (!empty($value) && strlen($value) > $this->maxlength) {
             $this->invalid = xarML('text : must be less than #(1) characters long',$this->max + 1);
             $this->value = null;
@@ -101,7 +104,7 @@ class Dynamic_PassBox_Property extends Dynamic_TextBox_Property
     function showInput($data = array())
     {
         extract($data);
-        
+
         if (empty($maxlength) && isset($this->max)) {
             $this->maxlength = $this->max;
             if ($this->size > $this->maxlength) {

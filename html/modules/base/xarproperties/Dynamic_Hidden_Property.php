@@ -23,6 +23,7 @@ class Dynamic_Hidden_Property extends Dynamic_Property
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template = 'hidden';
+		$this->filepath   = 'modules/base/xarproperties';
     }
 
     static function getRegistrationInfo()

@@ -99,7 +99,7 @@ class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
 
         $data['options'] = $options;
         $data['numOptionsSelected'] = $numOptionsSelected;
-        
+
         return parent::showOutput($data);
     }
 

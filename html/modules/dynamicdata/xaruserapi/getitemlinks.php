@@ -1,7 +1,6 @@
 <?php
 /**
- * Pass individual item links 
- *
+ * Pass individual item links
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -27,7 +26,7 @@ function dynamicdata_userapi_getitemlinks($args)
     if (empty($itemtype)) {
         $itemtype = null;
     }
-    $status = 1;
+    $status = DD_PROPERTYSTATE_ACTIVE;
     list($properties,$items) = xarModAPIFunc('dynamicdata','user','getitemsforview',
                                                    // for items managed by DD itself only
                                              array('modid' => xarModGetIDFromName('dynamicdata'),

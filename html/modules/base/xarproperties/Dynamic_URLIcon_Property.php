@@ -71,7 +71,7 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
     {
         extract($data);
         if (!isset($value))  $value = $this->value;
-        
+
         if (!empty($value) && $value != 'http://') {
             $link = $value;
             $data['link']=xarVarPrepForDisplay($link);
@@ -84,7 +84,7 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
                 } elseif ($data['icon']=='') {
                     /* We don't have a validated icon to display, use favicon */
                     $data['value']= $value;
-                    
+
                     /* FIXME: getfavicon needs to send back nothing if the favicon doens't exist. */
                     $data['icon'] = xarModAPIFunc('base',
                                                   'user',

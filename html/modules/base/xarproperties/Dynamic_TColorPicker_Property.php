@@ -24,6 +24,7 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template = 'tcolorpicker';
+        $this->filepath = 'modules/base/xarproperties';
     }
 
     static function getRegistrationInfo()

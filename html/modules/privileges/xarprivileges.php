@@ -513,7 +513,7 @@ class xarMasks
                 $requrl = xarServerGetCurrentUrl(array(),false);
                 xarResponseRedirect(xarModURL('authsystem','user','showloginform',array('redirecturl'=> $requrl),false));
             } else {
-                $msg = xarML('No privilege for #(1)',$mask->getName());
+                $msg = xarML('You don\'t have the correct privileges for this operation');
                 throw new Exception($msg);
             }
         }
@@ -777,7 +777,8 @@ class xarMasks
                 }
             }
         }
-        if (!$matched && ($privilegeset['children'] != array())) $pass = $this->testprivileges($mask,$privilegeset['children'],$pass,$role);
+        if (!$matched && ($privilegeset['children'] != array()))
+        	$pass = $this->testprivileges($mask,$privilegeset['children'],$pass,$role);
         return $pass;
     }
 
@@ -1190,7 +1191,7 @@ class xarPrivileges extends xarMasks
     function getmodules()
     {
         static $allmodules = array();
-        
+
         if (empty($allmodules)) {
             $query = "SELECT modules.xar_id, modules.xar_name
                       FROM $this->modulestable modules

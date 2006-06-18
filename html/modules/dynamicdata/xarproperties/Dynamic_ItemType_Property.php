@@ -33,6 +33,7 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
     {
         parent::__construct($args);
         // Tplmodule and template are by default those of the numberbox (whatever they may be)
+		$this->filepath   = 'modules/dynamicdata/xarproperties';
 
         // options may be set in one of the child classes
         if (count($this->options) == 0 && !empty($this->validation)) {
@@ -338,10 +339,10 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
 
         // allow template override by child classes
         if (empty($module)) {
-            $module = $this->getModule();
+            $module = 'dynamicadata';
         }
         if (empty($template)) {
-            $template = $this->getTemplate();
+            $template = 'itemtype';
         }
 
         return xarTplProperty($module, $template, 'validation', $data);

@@ -26,6 +26,7 @@ class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template  = 'radio';
+
     }
 
     static function getRegistrationInfo()
@@ -37,6 +38,12 @@ class Dynamic_RadioButtons_Property extends Dynamic_Select_Property
         $info->desc = 'Radio Buttons';
 
         return $info;
+    }
+
+    function showOutput($data = array())
+    {
+        $this->template  = 'dropdown';
+        return parent::showOutput($data);
     }
 }
 ?>
