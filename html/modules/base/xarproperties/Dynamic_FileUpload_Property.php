@@ -45,6 +45,7 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template  = 'fileupload';
+		$this->filepath   = 'modules/base/xarproperties';
 
         // Determine if the uploads module is hooked to the calling module
         // if so, we will use the uploads modules functionality
@@ -117,7 +118,6 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
         $info->id   = 9;
         $info->name = 'fileupload';
         $info->desc = 'File Upload';
-		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }

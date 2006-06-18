@@ -24,6 +24,7 @@ class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
+		$this->filepath   = 'modules/dynamicdata/xarproperties';
 
         if (count($this->options) == 0) {
             $this->options = array(
@@ -43,7 +44,6 @@ class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
         $info->id   = 25;
         $info->name = 'fieldstatus';
         $info->desc = 'Field Status';
-		$info->filepath   = 'modules/dynamicdata/xarproperties';
 
         return $info;
     }

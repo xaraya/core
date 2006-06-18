@@ -29,6 +29,7 @@ class Dynamic_ItemID_Property extends Dynamic_NumberBox_Property
         parent::__construct($args);
         $this->tplmodule = 'dynamic_data';
         $this->template = 'itemid';
+		$this->filepath   = 'modules/dynamicdata/xarproperties';
     }
 
     static function getRegistrationInfo()
@@ -38,7 +39,6 @@ class Dynamic_ItemID_Property extends Dynamic_NumberBox_Property
         $info->id   = 21;
         $info->name = 'itemid';
         $info->desc = 'Item ID';
-		$info->filepath   = 'modules/dynamicdata/xarproperties';
 
         return $info;
     }

@@ -36,6 +36,7 @@ class Dynamic_TextBox_Property extends Dynamic_Property
         // Set for runtime
         $this->tplmodule = 'base';
         $this->template = 'textbox';
+		$this->filepath   = 'modules/base/xarproperties';
 
         // check validation for allowed min/max length (or values)
         if (!empty($this->validation)) {
@@ -45,12 +46,11 @@ class Dynamic_TextBox_Property extends Dynamic_Property
 
      static function getRegistrationInfo()
      {
-         $info = new PropertyRegistration();
-         $info->reqmodules = array('base');
-         $info->id   = 2;
-         $info->name = 'textbox';
-         $info->desc = 'Text Box';
-		$info->filepath   = 'modules/base/xarproperties';
+		$info = new PropertyRegistration();
+		$info->reqmodules = array('base');
+		$info->id   = 2;
+		$info->name = 'textbox';
+		$info->desc = 'Text Box';
 
          return $info;
      }

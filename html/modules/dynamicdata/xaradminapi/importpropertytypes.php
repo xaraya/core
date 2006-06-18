@@ -95,11 +95,13 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                     // Main part
                     // Call the class method on each property to get the registration info
                     if (!is_callable(array($propertyClass,'getRegistrationInfo'))) continue;
-                    $baseInfo = call_user_func(array($propertyClass, 'getRegistrationInfo'));
+                    $property = new $propertyClass(array());
+                    $baseInfo = $property->getRegistrationInfo();
+//if ($baseInfo->id == 15) {var_dump($baseInfo);echo "<br />";var_dump($property->filepath);exit;}
                     // Fill in the info we dont have in the registration class yet
                     // TODO: see if we can have it in the registration class
                     $baseInfo->class = $propertyClass;
-                    $baseInfo->filepath .= "/$propertyClass.php";
+                    $baseInfo->filepath = $property->filepath . "/$propertyClass.php";
 
                      // Check for aliases
                     if(!empty($baseInfo->aliases)) {

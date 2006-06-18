@@ -25,7 +25,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
 {
     public $rows = 8;
     public $cols = 50;
-    
+
     public $size = 40;
     public $maxsize = 1000000;
     public $methods = array('trusted'  => false,
@@ -43,6 +43,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template  = 'textupload';
+		$this->filepath   = 'modules/base/xarproperties';
 
         // always parse validation to preset methods here
         $this->parseValidation($this->validation);
@@ -77,7 +78,6 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         $info->id   = 38;
         $info->name = 'textupload';
         $info->desc = 'Text Upload';
-		$info->filepath   = 'modules/base/xarproperties';
         $info->args = array('rows' => 20);
 
         return $info;
@@ -268,7 +268,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
         $data['maxsize']  = !empty($maxsize) ? $maxsize: $this->maxsize;
         $data['size']     = !empty($size) ? $size : $this->size;
-        
+
         parent::showInput($data);
     }
 

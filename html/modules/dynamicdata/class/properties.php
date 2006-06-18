@@ -121,6 +121,7 @@ class Dynamic_Property_Master
 
         // get a new property
         $property =& Dynamic_Property_Master::getProperty($args);
+        if ($args['id'] == 15) {var_dump($args);exit;}
 
         // for dynamic object lists, put a reference to the $items array in the property
         if (method_exists($objectref, 'getItems')) {
@@ -164,7 +165,7 @@ class Dynamic_Property_Master
         {
             $propertyInfo  = $proptypes[$args['type']];
             $propertyClass = $propertyInfo['propertyClass'];
-            // Filepath is complete rel path to the php file, and decoupled from the class name
+            // Filepath is complete real path to the php file, and decoupled from the class name
             // We should load the MLS translations for the right context here, in case the property
             // PHP file contains xarML() statements
             // See bug 5097
@@ -268,6 +269,7 @@ class Dynamic_Property
     public $format = '0';
     public $requiresmodule = ''; // this module must be available before this property is enabled (optional)
     public $aliases = '';        // If the same property class is reused directly with just different base info, supply the alternate base properties here (optional)
+    public $filepath   = 'modules/dynamicdata/xarproperties';                     // where is our class for it?
 
     // Attributes for runtime
     public $template = '';
@@ -729,7 +731,6 @@ class PropertyRegistration
     public $desc       = 'Property Description'; // description of this type
     public $type       = 1;
     public $parent     = '';                     // this type is derived from?
-    public $filepath   = 'modules/dynamicdata/xarproperties';                     // where is our class for it?
     public $class      = '';                     // what is the class?
     public $validation = '';                     // what is its default validation?
     public $source     = 'dynamic_data';         // what source is default for this type?

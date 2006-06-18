@@ -44,7 +44,6 @@ class Dynamic_SubForm_Property extends Dynamic_Property
         $info->id   = 997;
         $info->name = 'subform';
         $info->desc = 'Sub Form';
-		$info->filepath   = 'modules/dynamicdata/xarproperties';
 
         return $info;
     }

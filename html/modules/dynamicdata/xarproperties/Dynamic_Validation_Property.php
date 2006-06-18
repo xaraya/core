@@ -23,11 +23,17 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  * @package dynamicdata
  */
 class Dynamic_Validation_Property extends Dynamic_TextBox_Property
-{    
+{
     public $size      = 50;
     public $maxlength = 254;
 
     public $proptype = null;
+
+    function __construct($args)
+    {
+        parent::__construct($args);
+		$this->filepath   = 'modules/dynamicdata/xarproperties';
+    }
 
     static function getRegistrationInfo()
     {
@@ -36,7 +42,6 @@ class Dynamic_Validation_Property extends Dynamic_TextBox_Property
         $info->id   = 998;
         $info->name = 'validation';
         $info->desc = 'Validation';
-		$info->filepath   = 'modules/dynamicdata/xarproperties';
 
         return $info;
     }

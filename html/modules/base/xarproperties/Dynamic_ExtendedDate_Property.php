@@ -30,8 +30,10 @@ class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
 {
     function __construct($args)
     {
+        parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template  = 'extendeddate';
+        $this->filepath  = 'extendeddate';
     }
 
     static function getRegistrationInfo()

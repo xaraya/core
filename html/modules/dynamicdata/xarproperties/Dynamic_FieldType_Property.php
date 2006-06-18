@@ -27,11 +27,12 @@ class Dynamic_FieldType_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
+		$this->filepath   = 'modules/dynamicdata/xarproperties';
 
         if (count($this->options) == 0) {
             $proptypes = Dynamic_Property_Master::getPropertyTypes();
             if (!isset($proptypes)) $proptypes = array();
-                
+
             foreach ($proptypes as $propid => $proptype) {
                 // TODO: label isnt guaranteed to be unique, if not, leads to some surprises.
                 $this->options[$proptype['label']] = array('id' => $propid, 'name' => $proptype['label']);
@@ -40,7 +41,7 @@ class Dynamic_FieldType_Property extends Dynamic_Select_Property
         // sort em by name
         ksort($this->options);
     }
-        
+
     static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();
@@ -48,7 +49,6 @@ class Dynamic_FieldType_Property extends Dynamic_Select_Property
         $info->id   = 22;
         $info->name = 'fieldtype';
         $info->desc = 'Field Type';
-		$info->filepath   = 'modules/dynamicdata/xarproperties';
 
         return $info;
     }

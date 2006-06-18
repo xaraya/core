@@ -26,6 +26,7 @@ class Dynamic_Select_Property extends Dynamic_Property
         parent::__construct($args);
         $this->template  = 'dropdown';
         $this->tplmodule = 'base';
+		$this->filepath   = 'modules/base/xarproperties';
 
         if (!isset($this->options)) {
             $this->options = array();
@@ -43,7 +44,6 @@ class Dynamic_Select_Property extends Dynamic_Property
         $info->id   = 6;
         $info->name = 'dropdown';
         $info->desc = 'Dropdown List';
-		$info->filepath   = 'modules/base/xarproperties';
 
         return $info;
     }
@@ -98,7 +98,7 @@ class Dynamic_Select_Property extends Dynamic_Property
     {
         extract($data);
         if (isset($data['value'])) $this->value = $data['value'];
-        
+
         // get the option corresponding to this value
         $result = $this->getOption();
         // only apply xarVarPrepForDisplay on strings, not arrays et al.

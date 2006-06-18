@@ -35,7 +35,8 @@ class Dynamic_Object_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-        
+		$this->filepath   = 'modules/dynamicdata/xarproperties';
+
         if (!empty($this->validation)) {
             foreach(preg_split('/(?<!\\\);/', $this->validation) as $option) {
                 // Semi-colons can be escaped with a '\' prefix.
@@ -72,7 +73,7 @@ class Dynamic_Object_Property extends Dynamic_Select_Property
             }
 //        }
     }
-    
+
     static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();
@@ -80,7 +81,6 @@ class Dynamic_Object_Property extends Dynamic_Select_Property
         $info->id   = 24;
         $info->name = 'object';
         $info->desc = 'Object';
-		$info->filepath   = 'modules/dynamicdata/xarproperties';
 
         return $info;
     }
