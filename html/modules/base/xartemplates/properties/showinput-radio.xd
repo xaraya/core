@@ -1,27 +1,59 @@
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-<xar:if condition="isset($onchange)">
-  <xar:set name="evt_change">$onchange</xar:set>
-<xar:else/>
-  <xar:set name="evt_change">'return true;'</xar:set>
+<xar:if condition="empty($layout) or $layout eq 'default'">
+    <xar:if condition="isset($onchange)">
+      <xar:set name="evt_change">$onchange</xar:set>
+    <xar:else/>
+      <xar:set name="evt_change">'return true;'</xar:set>
+    </xar:if>
+
+    <xar:foreach in="$options" value="$option" key="$key">
+        <xar:if condition="$key == 0">
+            <xar:set name="theID">$id</xar:set>
+        <xar:else />
+            <xar:set name="theID">$id.'_'.$key</xar:set>
+        </xar:if>
+
+        <xar:if condition="$option['id'] eq $value" >
+            <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" checked="checked" />
+        <xar:else />
+            <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" />
+        </xar:if>
+
+        <label for="#$theID#">#$option['name']# </label>
+
+    </xar:foreach>
+<xar:elseif condition="$layout eq 'vertical'" />
+    <xar:if condition="isset($onchange)">
+      <xar:set name="evt_change">$onchange</xar:set>
+    <xar:else/>
+      <xar:set name="evt_change">'return true;'</xar:set>
+    </xar:if>
+
+    <xar:foreach in="$options" value="$option" key="$key">
+        <xar:if condition="$key == 0">
+            <xar:set name="theID">$id</xar:set>
+        <xar:else />
+            <xar:set name="theID">$id.'_'.$key</xar:set>
+        </xar:if>
+
+        <xar:if condition="$option['id'] eq $value" >
+            <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" checked="checked" />
+        <xar:else />
+            <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" />
+        </xar:if>
+
+        <label for="#$theID#">#$option['name']# </label>
+        <br />
+    </xar:foreach>
+<xar:else />
+<p>
+  <xar:mlstring>Specify your own layout here...</xar:mlstring>
+</p>
+<p>
+  <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
+</p>
 </xar:if>
-
-<xar:foreach in="$options" value="$option" key="$key">
-    <xar:if condition="$key == 0">
-        <xar:set name="theID">$id</xar:set>
-    <xar:else />
-        <xar:set name="theID">$id.'_'.$key</xar:set>
-    </xar:if>
-
-    <xar:if condition="$option['id'] eq $value" >
-        <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" checked="checked" />
-    <xar:else />
-        <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" />
-    </xar:if>
-
-    <label for="#$theID#">#$option['name']# </label>
-
-</xar:foreach>
 
 <xar:if condition="!empty($invalid)">
     <span class="xar-error">#$invalid#</span>
