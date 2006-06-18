@@ -254,7 +254,7 @@ class Dynamic_TimeZone_Property extends Dynamic_Select_Property
         }
         $timezones = xarModAPIFunc('base','user','timezones');
         $options = array();
-        $options[] = array('id' => '', 'name' => '');
+//        $options[] = array('id' => '', 'name' => '');
         foreach ($timezones as $timezone => $info) {
             $name = strtr($timezone, array('/' => ' - ', '_' => ' '));
             $options[] = array('id' => $timezone, 'name' => $name, 'offset' => $info[0]);

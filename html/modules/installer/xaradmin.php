@@ -1127,6 +1127,11 @@ function installer_admin_cleanup()
 function installer_admin_finish()
 {
     xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush' => true));
+    // Until here we have been using a hardcoded default timezone as a placeholder. Now load a "real" default zone via the API
+    $zones = array_keys(xarModAPIFunc('base','user','timezones'));
+    $defaultzone = array_shift($zones);
+	xarConfigSetVar('System.Core.TimeZone', $defaultzone);
+	xarConfigSetVar('Site.Core.TimeZone', $defaultzone);
     xarResponseRedirect('index.php');
 }
 

@@ -150,7 +150,7 @@ function base_init()
         /****************************************************************
          * Set System Configuration Variables
          *****************************************************************/
-        xarConfigSetVar('System.Core.TimeZone', '');
+        xarConfigSetVar('System.Core.TimeZone', 'Etc/UTC');
         xarConfigSetVar('System.Core.VersionNum', XARCORE_VERSION_NUM);
         xarConfigSetVar('System.Core.VersionId', XARCORE_VERSION_ID);
         xarConfigSetVar('System.Core.VersionSub', XARCORE_VERSION_SUB);
@@ -162,7 +162,7 @@ function base_init()
         xarConfigSetVar('Site.BL.ThemesDirectory','themes');
         xarConfigSetVar('Site.BL.CacheTemplates',true);
         xarConfigSetVar('Site.Core.FixHTMLEntities',true);
-        xarConfigSetVar('Site.Core.TimeZone', '');
+        xarConfigSetVar('Site.Core.TimeZone', 'Etc/UTC');
         xarConfigSetVar('Site.Core.EnableShortURLsSupport', false);
         // when installing via https, we assume that we want to support that :)
         $HTTPS = xarServerGetVar('HTTPS');
@@ -241,7 +241,7 @@ function base_init()
          * Install modules table and insert the modules module
          **************************************************************/
         xarInstallAPIFunc('initialise', array('directory' => 'modules', 'initfunc'  => 'init'));
-        
+
         /****************************************************************
          * Install roles module and set up default roles
          ****************************************************************/
@@ -254,8 +254,8 @@ function base_init()
 
         $modulesTable = $systemPrefix .'_modules';
 
-        $newModSql   = "INSERT INTO $modulesTable 
-                        (xar_id, xar_name, xar_regid, xar_directory, 
+        $newModSql   = "INSERT INTO $modulesTable
+                        (xar_id, xar_name, xar_regid, xar_directory,
                          xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable, xar_state)
                         VALUES (?,?,?,?,?,?,?,?,?,?,?)";
         $newStmt     = $dbconn->prepareStatement($newModSql);
@@ -268,7 +268,7 @@ function base_init()
             $modversion=array();$bindvars = array();
             include_once "modules/$modName/xarversion.php";
             $bindvars = array($id,                     // system id, generated
-                              $modName,         
+                              $modName,
                               $modversion['id'],       // regid, from xarversion
                               $modName,
                               $modversion['version'],
