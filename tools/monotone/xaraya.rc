@@ -8,7 +8,7 @@
 --
 -- A so called rcfile can live in 3 places:
 -- 1. $HOME/.monotone/monotonerc
--- 2. <workdir>/MT/monotonerc
+-- 2. <workdir>/_MTN/monotonerc
 -- 3. specified on commandline as --rcfile=<file> or --rcfle=<directory>
 --
 -- The places 1. and 2. are checked automatically by monotone where
@@ -18,7 +18,7 @@
 -- directory will load
 --
 -- This file focusses on settings and hooks for the Xaraya project and
--- the obvious location would be <workdir>/MT/monotonerc if you use 
+-- the obvious location would be <workdir>/_MTN/monotonerc if you use 
 -- monotone for projects other than Xaraya and you dont want to have
 -- the settings applied to those other projects, or $HOME/.monotone/monotonerc
 -- if you want the settings in this file to be applicable for all your
@@ -33,7 +33,7 @@
 
 --
 -- Line endings, a never ending story. Anyways, we want both the internal
--- representation and the external to have CR only
+-- representation and the external to have LF only
 function get_linesep_conv(filename)
    return {"LF","LF"}
 end
@@ -116,8 +116,8 @@ function parse_statusmsg(msg)
    local parsed = ""
 
    for line in string.gfind(msg, pattern) do 
-      -- Handle renames
-      _,_,file = string.find(line,'^rename_file "(.-)"') -- which file?
+      -- Handle renames (stanza changed in mt.26)
+      _,_,file = string.find(line,'^rename "(.-)"') -- which file?
       if(file~=nil) then 
          rename_string = ": renamed ("..file..")" 
       end
@@ -126,16 +126,22 @@ function parse_statusmsg(msg)
          table.insert(lines,"\t* "..file..rename_string)
          rename_string = nil
       end
+      -- Handle new directories (mt.26)
+      _,_,file = string.find(line,'^add_dir "(.-)"')
+      if(file~=nil) then 
+         table.insert(lines,"\t* "..file..": new dir") 
+      end
       -- Handle new files
       _,_,file = string.find(line,'^add_file "(.-)"')
       if(file~=nil) then 
          table.insert(lines,"\t* "..file..": new file") 
       end
       -- Handle dropped files
-      _,_,file = string.find(line,'^delete_file "(.-)"')
+      _,_,file = string.find(line,'^delete "(.-)"')
       if(file~=nil) then
          table.insert(lines,"\t* "..file..": dropped")
       end
+      
       
       -- Handle changed files
       _,_,file = string.find(line,'^patch "(.-)"')
@@ -242,5 +248,7 @@ function ignore_branch(name)
    if name=='com.xaraya.core.ddprops' then return true end
    if name=='com.xaraya.core.changesdue' then return true end
    if name=='com.xaraya.core.creole' then return true end
+   if name=='com.xaraya.core.blimprovs' then return true end
+   if name=='com.xaraya.core.uitesting' then return true end
    return false
 end
