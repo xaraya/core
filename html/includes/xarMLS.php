@@ -75,6 +75,9 @@ function xarMLS_init(&$args, $whatElseIsGoingLoaded)
     $GLOBALS['xarMLS_defaultTimeOffset'] = isset($args['defaultTimeOffset']) ?
                                            $args['defaultTimeOffset'] : 0;
 
+    // Set the timezone
+	date_default_timezone_set ($GLOBALS['xarMLS_defaultTimeZone']);
+
     // Register MLS events
     // These should be done before the xarMLS_setCurrentLocale function
     xarEvents::register('MLSMissingTranslationString');
@@ -278,9 +281,9 @@ function xarLocaleGetInfo($locale)
  */
 function xarLocaleGetString($localeInfo)
 {
-    if (!isset($localeInfo['lang']) || 
-        !isset($localeInfo['country']) || 
-        !isset($localeInfo['specializer']) || 
+    if (!isset($localeInfo['lang']) ||
+        !isset($localeInfo['country']) ||
+        !isset($localeInfo['specializer']) ||
         !isset($localeInfo['charset'])) {
         throw new BadParameterException('localeInfo');
     }
@@ -663,7 +666,7 @@ function xarMLS__getSingleByteCharset($langISO2Code)
 interface ITranslationsBackend {
     // Get the string based translation associated to the string param.
     function translate($string);
-   
+
     // Get the key based translation associated to the key param.
     function translateByKey($key);
 
@@ -685,7 +688,7 @@ interface ITranslationsBackend {
 
 /**
  * Base class for the translation backends
- * 
+ *
  * A translation entry is an array that contains not only the translation,
  * but also the a list of references where it appears in the source by
  * reporting the file name and the line number.
@@ -845,7 +848,7 @@ function xarMLS__mkdirr($path)
     if (is_dir($path) || empty($path)) {
         return true;
     }
-         
+
     // Crawl up the directory tree
     $next_path = substr($path, 0, strrpos($path, '/'));
     if (xarMLS__mkdirr($next_path)) {
@@ -896,5 +899,5 @@ function xarMLS__iswritable($directory=NULL)
         return $isWritable;
     }
 }
-                                                    
+
 ?>
