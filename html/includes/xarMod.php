@@ -185,25 +185,25 @@ class xarModVars implements IxarModVars
     static function load($modName)
     {
         if (empty($modName)) throw new EmptyParameterException('modName');
-        
+
         $modBaseInfo = xarMod::getBaseInfo($modName);
         if (!isset($modBaseInfo)) return;
-        
+
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
-        
+
         // Takes the right table basing on module mode
         $module_varstable = $tables['module_vars'];
-        
+
         $query = "SELECT xar_name, xar_value FROM $module_varstable WHERE xar_modid = ?";
         $stmt =& $dbconn->prepareStatement($query);
         $result =& $stmt->executeQuery(array($modBaseInfo['systemid']),ResultSet::FETCHMODE_ASSOC);
-        
+
         while ($result->next()) {
             xarCore::setCached('Mod.Variables.' . $modName, $result->getString('xar_name'), $result->get('xar_value'));
         }
         $result->Close();
-        
+
         xarCore::setCached('Mod.GetVarsByModule', $modName, true);
         return true;
     }
@@ -253,23 +253,23 @@ class xarModVars implements IxarModVars
     static function delete_all($modName)
     {
         if(empty($modName)) throw new EmptyParameterException('modName');
-        
+
         $modBaseInfo = xarMod::getBaseInfo($modName);
-        
+
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
-        
+
         // Takes the right table basing on module mode
         $module_varstable     = $tables['module_vars'];
         $module_itemvarstable = $tables['module_itemvars'];
-        
+
         // PostGres (allows only one table in DELETE)
         // MySql: multiple table delete only from 4.0 up
         // Select the id's which need to be removed
         $sql="SELECT $module_varstable.xar_id FROM $module_varstable WHERE $module_varstable.xar_modid = ?";
         $stmt = $dbconn->prepareStatement($sql);
         $result = $stmt->executeQuery(array($modBaseInfo['systemid']), ResultSet::FETCHMODE_NUM);
-        
+
         // Seems that at least mysql and pgsql support the scalar IN operator
         $idlist = array();
         while ($result->next()) {
@@ -277,7 +277,7 @@ class xarModVars implements IxarModVars
         }
         $result->close();
         unset($result);
-        
+
         // We delete the module vars and the user vars in a transaction, which either succeeds completely or totally fails
         try {
             $dbconn->begin();
@@ -287,7 +287,7 @@ class xarModVars implements IxarModVars
                 $stmt = $dbconn->prepareStatement($sql);
                 $result = $stmt->executeUpdate($idlist);
             }
-            
+
             // Now delete the module vars
             $query = "DELETE FROM $module_varstable WHERE xar_modid = ?";
             $stmt  = $dbconn->prepareStatement($query);
@@ -320,34 +320,34 @@ class xarModVars implements IxarModVars
     {
         // Module name and variable name are both necesary
         if (empty($modName) or empty($name)) throw new EmptyParameterException('modName and/or name');
-        
+
         // Retrieve module info, so we can decide where to look
         $modBaseInfo = xarMod::getBaseInfo($modName);
         if (!isset($modBaseInfo)) return; // throw back
-        
+
         if (xarCore::isCached('Mod.GetVarID', $modBaseInfo['name'] . $name)) {
             return xarCore::getCached('Mod.GetVarID', $modBaseInfo['name'] . $name);
         }
-        
+
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
-        
+
         // Takes the right table basing on module mode
         $module_varstable = $tables['module_vars'];
-        
+
         $query = "SELECT xar_id FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array((int)$modBaseInfo['systemid'],$name),ResultSet::FETCHMODE_NUM);
         // If there is no such thing, the callee is responsible, return null
         if(!$result->next()) return;
-        
+
         // Return the ID
         $modvarid = $result->getInt(1);
         $result->Close();
-        
+
         xarCore::setCached('Mod.GetVarID', $modName . $name, $modvarid);
         return $modvarid;
-    }   
+    }
 }
 
 /**
@@ -399,7 +399,7 @@ class xarModUserVars implements IxarModUserVars
     {
         // Module name and variable name are necessary
         if (empty($modName)) throw new EmptyParameterException('modName');
-        
+
         // If uid not specified take the current user
         if ($uid == NULL) $uid = xarUserGetVar('uid');
 
@@ -432,14 +432,14 @@ class xarModUserVars implements IxarModUserVars
     {
         // Module name and variable name are necessary
         if (empty($modName)) throw new EmptyParameterException('modName');
-        
+
         // If no uid specified assume current user
         if ($uid == NULL) $uid = xarUserGetVar('uid');
-        
+
         // For anonymous users no preference can be set
         // MrB: should we raise an exception here?
         if ($uid == _XAR_ID_UNREGISTERED) return false;
-        
+
         return xarVar__SetVarByAlias($modName, $name, $value, $prime = NULL, $description = NULL, $uid, $type = 'moditemvar');
     }
 
@@ -463,16 +463,16 @@ class xarModUserVars implements IxarModUserVars
     {
         // ModName and name are required
         if (empty($modName)) throw new EmptyParameterException('modName');
-        
+
         // If uid is not set assume current user
         if ($uid == NULL) $uid = xarUserGetVar('uid');
-        
+
         // Deleting for anonymous user is useless return true
         // MrB: should we continue, can't harm either and we have
         //      a failsafe that records are deleted, bit dirty, but
         //      it would work.
         if ($uid == _XAR_ID_UNREGISTERED ) return true;
-        
+
         return xarVar__DelVarByAlias($modName, $name, $uid, $type = 'moditemvar');
     }
 }
@@ -622,10 +622,10 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
 
     // No module specified - just jump to the home page.
     if (empty($modName)) return xarServer::getBaseURL() . $BaseModURL;
-    
+
     // Take the global setting for XML format generation, if not specified.
     if (!isset($generateXMLURL)) $generateXMLURL = xarMod::$genXmlUrls;
-    
+
     // If an entry point has been set, then modify the URL entry point and modType.
     if (!empty($entrypoint)) {
         if (is_array($entrypoint)) {
@@ -720,7 +720,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
             $baseargs = array('module' => $modName);
             if ($modType !== 'user')  $baseargs['type'] = $modType;
             if ($funcName !== 'main') $baseargs['func'] = $funcName;
-            
+
             // Standard entry point - index.php or BaseModURL if provided in config.system.php
             $args = $baseargs + $args;
         }
@@ -734,7 +734,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
 
     // Add the fragment if required.
     if (isset($fragment)) $path .= '#' . urlencode($fragment);
-    
+
     // Encode the URL if an XML-compatible format is required.
     if ($generateXMLURL) $path = htmlspecialchars($path);
 
@@ -773,7 +773,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
  * @todo <marco> <mikespub> re-evaluate how GUI / API hooks are handled
  * @todo add itemtype (in extrainfo or as additional parameter)
  */
-function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerModName = NULL, $callerItemType = '')
+function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo = NULL, $callerModName = NULL, $callerItemType = '')
 {
     //if ($hookObject != 'item' && $hookObject != 'category') {
     //    throw new BadParameterException('hookObject');
@@ -1097,18 +1097,18 @@ function xarModUnregisterHook($hookObject, $hookAction, $hookArea,$hookModName, 
  * Wrapper functions to support Xaraya 1 API for module managment
  *
  */
-function xarModGetName()             
+function xarModGetName()
 {   return xarMod::getName(); }
 
-function xarModGetNameFromID($regid) 
+function xarModGetNameFromID($regid)
 {   return xarMod::getName($regid); }
 
-function xarModGetDisplayableName($modName = NULL, $type = 'module') 
+function xarModGetDisplayableName($modName = NULL, $type = 'module')
 {   return xarMod::getDisplayName($modName, $type); }
 
 function xarModGetDisplayableDescription($modName = NULL, $type = 'module')
 {   return xarMod::getDisplayDescription($modName,$type); }
-    
+
 function xarModGetIDFromName($modName, $type = 'module')
 {   return xarMod::getRegID($modName, $type); }
 
@@ -1150,9 +1150,9 @@ function xarModAPILoad($modName, $modType = 'user')
  *
  * @todo this is very likely to change, it was created as baseline for refactoring
  */
-interface IxarMod 
+interface IxarMod
 {
-    
+
 }
 
 /**
@@ -1176,17 +1176,17 @@ class xarMod implements IxarMod
         // Register the events for this subsystem
         xarEvents::register('ModLoad');
         xarEvents::register('ModAPILoad');
-        
+
         // Modules Support Tables
         $systemPrefix = xarDBGetSystemTablePrefix();
-        
+
         // How we want it
         $tables['modules']         = $systemPrefix . '_modules';
         $tables['module_vars']     = $systemPrefix . '_module_vars';
         $tables['module_itemvars'] = $systemPrefix . '_module_itemvars';
         $tables['hooks']           = $systemPrefix . '_hooks';
         $tables['themes']          = $systemPrefix . '_themes';
-        
+
         xarDB::importTables($tables);
         return true;
     }
@@ -1241,7 +1241,7 @@ class xarMod implements IxarMod
     {
         //xarLogMessage("xarMod::getDisplayDescription ". $modName ." / " . $type);
         if (empty($modName)) $modName = self::getName();
-    
+
         $modInfo = self::getFileInfo($modName, $type);
         return xarML($modInfo['displaydescription']);
     }
@@ -1258,7 +1258,7 @@ class xarMod implements IxarMod
     static function getRegID($modName, $type = 'module')
     {
         if (empty($modName)) throw new EmptyParameterException('modName');
-        
+
         // For themes, kinda weird
         $modBaseInfo = self::getBaseInfo($modName,$type);
         if (!isset($modBaseInfo)) return; // throw back
@@ -1297,25 +1297,25 @@ class xarMod implements IxarMod
     static function isAvailable($modName, $type = 'module')
     {
         //xarLogMessage("xarMod::isAvailable: begin $type:$modName");
-        
+
         // FIXME: there is no point to the cache here, since
         // xarMod::getBaseInfo() caches module details anyway.
         static $modAvailableCache = array();
-        
+
         if (empty($modName)) throw new EmptyParameterException('modName');
-        
+
         // Get the real module details.
         // The module details will be cached anyway.
         $modBaseInfo = self::getBaseInfo($modName, $type);
-        
+
         // Return null if the result wasn't set
         if (!isset($modBaseInfo)) return false; // throw back
-        
+
         if (!empty($GLOBALS['xarMod_noCacheState']) || !isset($modAvailableCache[$modBaseInfo['name']])) {
             // We should be ok now, return the state of the module
             $modState = $modBaseInfo['state'];
             $modAvailableCache[$modBaseInfo['name']] = false;
-            
+
             if ($modState == XARMOD_STATE_ACTIVE) {
                 $modAvailableCache[$modBaseInfo['name']] = true;
             }
@@ -1336,7 +1336,7 @@ class xarMod implements IxarMod
     static function getInfo($modRegId, $type = 'module')
     {
         if (empty($modRegId)) throw new EmptyParameterException('modRegid');
-        
+
         switch($type) {
         case 'module':
         default:
@@ -1352,10 +1352,10 @@ class xarMod implements IxarMod
         }
         // Log it when it doesnt come from the cache
         xarLogMessage("xarMod::getInfo ". $modRegId ." / " . $type);
-        
+
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
-        
+
         switch($type) {
         case 'module':
         default:
@@ -1383,12 +1383,12 @@ class xarMod implements IxarMod
         }
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($modRegId),ResultSet::FETCHMODE_NUM);
-        
+
         if (!$result->next()) {
             $result->close();
             throw new IDNotFoundException($modRegId);
         }
-        
+
         switch($type) {
         case 'module':
         default:
@@ -1412,15 +1412,15 @@ class xarMod implements IxarMod
         }
         $result->Close();
         unset($result);
-        
+
         $modInfo['regid'] = (int) $modRegId;
         $modInfo['mode'] = (int) $mode;
         $modInfo['displayname'] = self::getDisplayName($modInfo['name'], $type);
         $modInfo['displaydescription'] = self::getDisplayDescription($modInfo['name'], $type);
-        
+
         // Shortcut for os prepared directory
         $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
-        
+
         switch($type) {
         case 'module':
         default:
@@ -1434,7 +1434,7 @@ class xarMod implements IxarMod
             $modFileInfo = self::getFileInfo($modInfo['osdirectory'], $type = 'theme');
             break;
         }
-        
+
         if (!isset($modFileInfo)) {
             // We couldn't get file info, fill in unknowns.
             // The exception for this is logged in getFileInfo
@@ -1449,7 +1449,7 @@ class xarMod implements IxarMod
             $modFileInfo['user'] = xarML('Unknown');
             $modFileInfo['dependency'] = array();
             $modFileInfo['extensions'] = array();
-            
+
             $modFileInfo['xar_version'] = xarML('Unknown');
             $modFileInfo['bl_version'] = xarML('Unknown');
             $modFileInfo['class'] = xarML('Unknown');
@@ -1461,9 +1461,9 @@ class xarMod implements IxarMod
             $modFileInfo['publishdate'] = xarML('Unknown');
             $modFileInfo['license'] = xarML('Unknown');
         }
-        
+
         $modInfo = array_merge($modFileInfo, $modInfo);
-        
+
         switch($type) {
         case 'module':
         default:
@@ -1488,14 +1488,14 @@ class xarMod implements IxarMod
     static function getBaseInfo($modName, $type = 'module')
     {
         if (empty($modName)) throw new EmptyParameterException('modName');
-        
+
         if ($type != 'module' && $type != 'theme') {
             throw new BadParameterException($type,'The value of the "type" parameter must be "module" or "theme", it was "#(1)"');
         }
-        
+
         // The GLOBALS['xarMod_noCacheState'] flag tells Xaraya *not*
         // to cache module (+state) where this would lead to problems
-        // like in the installer for example.        
+        // like in the installer for example.
         if ($type == 'module') {
             $cacheCollection = 'Mod.BaseInfos';
             $checkNoState = 'xarMod_noCacheState';
@@ -1503,19 +1503,19 @@ class xarMod implements IxarMod
             $cacheCollection = 'Theme.BaseInfos';
             $checkNoState = 'xarTheme_noCacheState';
         }
-        
+
         if (empty($GLOBALS[$checkNoState]) && xarCore::isCached($cacheCollection, $modName)) {
             return xarCore::getCached($cacheCollection, $modName);
         }
         // Log it when it doesnt come from the cache
         xarLogMessage("xarMod::getBaseInfo ". $modName ." / ". $type);
-        
+
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
-        
+
         // theme+s or module+s
         $table = $tables[$type.'s'];
-        
+
         $query = "SELECT items.xar_regid, items.xar_directory, items.xar_mode,
                      items.xar_id, items.xar_state, items.xar_name
               FROM   $table items
@@ -1523,16 +1523,16 @@ class xarMod implements IxarMod
         $bindvars = array($modName, $modName);
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
-        
+
         if (!$result->next()) {
             $result->Close();
             return;
         }
-        
+
         $modBaseInfo = array();
         list($regid,  $directory, $mode, $systemid, $state, $name) = $result->getRow();
         $result->Close();
-        
+
         $modBaseInfo['regid'] = (int) $regid;
         $modBaseInfo['mode'] = (int) $mode;
         $modBaseInfo['systemid'] = (int) $systemid;
@@ -1544,13 +1544,13 @@ class xarMod implements IxarMod
         // Shortcut for os prepared directory
         // TODO: <marco> get rid of it since useless
         $modBaseInfo['osdirectory'] = xarVarPrepForOS($directory);
-        
+
         // This needed?
         if (empty($modBaseInfo['state'])) {
             $modBaseInfo['state'] = XARMOD_STATE_UNINITIALISED;
         }
         xarCore::setCached($cacheCollection, $name, $modBaseInfo);
-        
+
         return $modBaseInfo;
     }
 
@@ -1567,21 +1567,21 @@ class xarMod implements IxarMod
     static function getFileInfo($modOsDir, $type = 'module')
     {
         if (empty($modOsDir)) throw new EmptyParameterException('modOsDir');
-        
+
         if (empty($GLOBALS['xarMod_noCacheState']) && xarCore::isCached('Mod.getFileInfos', $modOsDir)) {
             return xarCore::getCached('Mod.getFileInfos', $modOsDir);
         }
         // Log it when it didnt came from cache
         xarLogMessage("xarMod::getFileInfo ". $modOsDir ." / " . $type);
-        
-        
+
+
         // TODO redo legacy support via type.
         switch($type) {
         case 'module':
         default:
             // Spliffster, additional mod info from modules/$modDir/xarversion.php
             $fileName = 'modules/' . $modOsDir . '/xarversion.php';
-            
+
             // If the locale is already present, it means we can make the translations available
             if(!empty($GLOBALS['xarMLS_currentLocale']))
                 xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
@@ -1590,21 +1590,21 @@ class xarMod implements IxarMod
             $fileName = xarConfigGetVar('Site.BL.ThemesDirectory'). '/' . $modOsDir . '/xartheme.php';
             break;
         }
-        
+
         if (!file_exists($fileName)) {
             // Don't raise an exception, it is too harsh, but log it tho (bug 295)
             xarLogMessage("xarMod::getFileInfo: Could not find xarversion.php, skipping $modOsDir");
             // throw new FileNotFoundException($fileName);
             return;
         }
-        
+
         include($fileName);
-        
+
         if (!isset($themeinfo))  $themeinfo = array();
         if (!isset($modversion)) $modversion = array();
-        
+
         $version = array_merge($themeinfo, $modversion);
-        
+
         // name and id are required, assert them, otherwise the module is invalid
         assert('isset($version["name"]) && isset($version["id"]); /* Both name and id need to be present in xarversion.php */');
         $FileInfo['name']           = $version['name'];
@@ -1637,7 +1637,7 @@ class xarMod implements IxarMod
             $FileInfo['version'] = $version['xar_version'];
         }
         $FileInfo['bl_version']     = isset($version['bl_version'])     ? $version['bl_version'] : false;
-        
+
         xarCore::setCached('Mod.getFileInfos', $modOsDir, $FileInfo);
         return $FileInfo;
     }
@@ -1650,14 +1650,14 @@ class xarMod implements IxarMod
      * @param modOsDir string directory that module is in
      * @return mixed true on success
      * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
-     * 
+     *
      * @todo make this private again
      */
     static function loadDbInfo($modName, $modDir = NULL, $type = 'module')
     {
         if($type == 'theme') return true; // sigh.
         static $loadedDbInfoCache = array();
-        
+
         if (empty($modName)) throw new EmptyParameterException('modName');
 
         // Get the directory if we don't already have it
@@ -1671,15 +1671,15 @@ class xarMod implements IxarMod
 
         // Check to ensure we aren't doing this twice
         if (isset($loadedDbInfoCache[$modName])) return true;
-                
+
         // Load the database definition if required
         $osxartablefile = "modules/$modDir/xartables.php";
         if (!file_exists($osxartablefile)) return false;
         include_once $osxartablefile;
-        
+
         $tablefunc = $modName . '_' . 'xartables';
         if (function_exists($tablefunc)) xarDB::importTables($tablefunc());
-                
+
         $loadedDbInfoCache[$modName] = true;
         return true;
     }
@@ -1701,16 +1701,16 @@ class xarMod implements IxarMod
         $tplData = self::callFunc($modName,$modType,$funcName,$args);
         // If we have a string of data, we assume someone else did xarTpl* for us
         if (!is_array($tplData)) return $tplData;
-        
+
         // See if we have a special template to apply
         $templateName = NULL;
         if (isset($tplData['_bl_template'])) $templateName = $tplData['_bl_template'];
-        
+
         // Create the output.
         $tplOutput = xarTplModule($modName, $modType, $funcName, $tplData, $templateName);
         return $tplOutput;
     }
-    
+
     /**
      * Call a module API function.
      *
@@ -1737,23 +1737,23 @@ class xarMod implements IxarMod
     /**
      * Work horse method for the lazy calling of module functions
      *
-     * @access private 
+     * @access private
      */
     private static function callFunc($modName,$modType,$funcName,$args,$funcType = '')
     {
         assert('($funcType == "api" or $funcType==""); /* Wrong funcType argument in private callFunc method */');
         if (empty($modName)) throw new EmptyParameterException('modName');
-        
+
         if (!xarCoreIsApiAllowed($modType)) {
             // InputValidationException is more clear here, even though it's not user input.
             throw new BadParameterException(array($modType,$modName), 'The API named: "#(1)" is not allowed for module "#(2)"');
         }
         if (empty($funcName)) throw new EmptyParameterException('modName');
-        
+
         // good thing this information is cached :)
         $modBaseInfo = self::getBaseInfo($modName);
         if (!isset($modBaseInfo)) {return;} // throw back
-        
+
         // Build function name and call function
         $modFunc = "{$modName}_{$modType}{$funcType}_{$funcName}";
         $found = true;
@@ -1777,7 +1777,7 @@ class xarMod implements IxarMod
                     $r = require_once $funcFile;
                     $error_msg = strip_tags(ob_get_contents());
                     ob_end_clean();
-                    
+
                     if (empty($r) || !$r) {
                         $msg = "Could not load function file: [#(1)].\n\n Error Caught:\n #(2)";
                         $params = array($funcFile, $error_msg);
@@ -1786,13 +1786,13 @@ class xarMod implements IxarMod
                     if (!function_exists($modFunc)) $found = false;
                 }
             }
-            
+
             if ($found) {
                 // Load the translations file, only if we have loaded the API function for the first time here.
                 if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType.$funcType, $funcName) === NULL) {return;}
             }
         }
-        
+
         if (!$found) {
             if (!$isLoaded || empty($msg)) {
                 // if it's loaded but not found, then set the error message to that
@@ -1801,7 +1801,7 @@ class xarMod implements IxarMod
             }
             throw new FunctionNotFoundException($params, $msg);
         }
-        
+
         $funcResult = $modFunc($args);
         return $funcResult;
     }
@@ -1839,7 +1839,7 @@ class xarMod implements IxarMod
             // InputValidationException is more clear here, even though it's not user input.
             throw new BadParameterException(array($modType,$modName), 'The API named: "#(1)" is not allowed for module "#(2)"');
         }
-        
+
         return self::privateLoad($modName, $modType.'api', XARMOD_LOAD_ANYSTATE);
     }
 
@@ -1857,25 +1857,25 @@ class xarMod implements IxarMod
     {
         static $loadedModuleCache = array();
         if (empty($modName)) throw new EmptyParameterException('modName');
-        
+
         // Make sure we access the cache with lower case key, return true when we already loaded
         $cacheKey = strtolower($modName.$modType);
         if (isset($loadedModuleCache[$cacheKey])) return true;
-        
+
         // Log it when it doesnt come from the cache
         xarLogMessage("xarMod::load: loading $modName:$modType");
-        
+
         $modBaseInfo = self::getBaseInfo($modName);
         if (!isset($modBaseInfo)) throw new ModuleNotFoundException($modName);
-        
+
         if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE && !($flags & XARMOD_LOAD_ANYSTATE) ) {
             throw new ModuleNotActiveException($modName);
         }
-        
+
         // Load the module files
         $modDir = $modBaseInfo['directory'];
         $fileName = 'modules/'.$modDir.'/xar'.$modType.'.php';
-        
+
         // Removed the exception.  Causing some wierd results with modules without an api.
         // <nuncanada> But now we wont know if something was loaded or not!
         // <nuncanada> We need some way to find it out.
@@ -1891,10 +1891,10 @@ class xarMod implements IxarMod
 
         // Load the module translations files (common functions, uncut functions etc.)
         if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:', $modType) === NULL) return;
-        
+
         // Load database info
         self::loadDbInfo($modName, $modDir);
-        
+
         // Module loaded successfully, trigger the proper event
         xarEvents::trigger('ModLoad', $modName);
         return true;
@@ -1910,7 +1910,7 @@ function xarModGetAlias($alias) { return xarModAlias::resolve($alias);}
 function xarModSetAlias($alias, $modName) { return xarModAlias::set($alias,$modName);}
 function xarModDelAlias($alias, $modName) { return xarModAlias::delete($alias,$modName);}
 
-/** 
+/**
  * Interface declaration for module aliases
  *
  */
