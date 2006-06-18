@@ -97,7 +97,7 @@ function roles_user_usermenu($args)
                                   'emailaddress' => $email,
                                   'submitlabel'  => $submitlabel,
                                   'uid'          => $uid,
-                                  'upasswordupdate' => $upasswordupdate,
+                                    //'upasswordupdate' => $upasswordupdate,
                                   'usercurrentlogin'   => $usercurrentlogin,
                                   'userlastlogin'   => $userlastlogin));
                  break;

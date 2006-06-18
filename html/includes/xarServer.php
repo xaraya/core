@@ -60,7 +60,7 @@ function xarServerGetProtocol() { return xarServer::getProtocol(); }
 function xarServerGetBaseURL()  { return xarServer::getBaseURL();  }
 function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target = NULL)
 {
-    return xarServer::getCurrentUrl($args = array(), $generateXMLURL, $target);
+    return xarServer::getCurrentUrl($args, $generateXMLURL, $target);
 }
 
 /**

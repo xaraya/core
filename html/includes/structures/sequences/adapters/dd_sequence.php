@@ -112,7 +112,7 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
     
     /* Private helper function */
     /* Refresh the sequence data */
-    private function &getSequence()
+    private function getSequence()
     {
         $this->seqObject = xarModApiFunc('dynamicdata','user','getobject',$this->seqInfo);
         $params = array('modid'     => $this->seqInfo['moduleid'],

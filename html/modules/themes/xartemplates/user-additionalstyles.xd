@@ -1,4 +1,5 @@
 <!-- This template was formatted without indentation on purpose - to keep the output as compact as possible for better readability in source -->
+<!-- TODO: this should not be necessary -->
 <xar:if condition="isset($styles) and is_array($styles)">
 <xar:foreach in="$styles" key="$scope" value="$style">
 <xar:if condition="$comments">
@@ -21,7 +22,7 @@
 <xar:if condition="$loop:item['condition'] ne ''">
 <xar:comment iecondition="#$loop:item['condition']#"><style type="#$loop:item['type']#" media="#$loop:item['media']#">@import url(#$loop:item['url']#) #$loop:item['media']#;</style></xar:comment>
 <xar:else />
-<style type="#$loop:item['type']#" media="#$loop:item['media']#">@import url(#$loop:item['url']#);</style>
+<style type="#$loop:item['type']#" media="#$loop:item['media']#">@import url(#$loop:item['url']#); #$loop:item['media']#;</style>
 </xar:if>
 <xar:elseif condition="$method eq 'embed'" />
 <xar:if condition="$loop:item['condition'] ne ''">

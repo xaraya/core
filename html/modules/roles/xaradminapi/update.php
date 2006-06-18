@@ -50,14 +50,14 @@ function roles_adminapi_update($args)
     }
 
     //FIXME: we need to standardize to 'itemtype' everywhere
-    $args['type'] = $itemtype;
+    //$args['type'] = $itemtype;
 
     $role = new xarRole($args);
     $role->update();
 	xarModSetUserVar('roles','userhome',$home,$uid);
 
     $item['module'] = 'roles';
-    $item['itemtype'] = $itemtype;
+    //$item['itemtype'] = $itemtype;
     $item['itemid'] = $uid;
     $item['name'] = $name;
     $item['home'] = $home;
