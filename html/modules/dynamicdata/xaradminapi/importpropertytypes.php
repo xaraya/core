@@ -97,7 +97,6 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                     if (!is_callable(array($propertyClass,'getRegistrationInfo'))) continue;
                     $property = new $propertyClass(array());
                     $baseInfo = $property->getRegistrationInfo();
-//if ($baseInfo->id == 15) {var_dump($baseInfo);echo "<br />";var_dump($property->filepath);exit;}
                     // Fill in the info we dont have in the registration class yet
                     // TODO: see if we can have it in the registration class
                     $baseInfo->class = $propertyClass;

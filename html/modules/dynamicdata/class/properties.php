@@ -121,7 +121,6 @@ class Dynamic_Property_Master
 
         // get a new property
         $property =& Dynamic_Property_Master::getProperty($args);
-        if ($args['id'] == 15) {var_dump($args);exit;}
 
         // for dynamic object lists, put a reference to the $items array in the property
         if (method_exists($objectref, 'getItems')) {
