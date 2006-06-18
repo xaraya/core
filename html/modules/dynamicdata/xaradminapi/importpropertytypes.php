@@ -23,7 +23,7 @@
  */
 class PropertyDirectoryIterator extends DirectoryIterator
 {
-    public function __construct($file) 
+    public function __construct($file)
     {
         parent::__construct(realpath($file));
     }
@@ -57,16 +57,13 @@ function dynamicdata_adminapi_importpropertytypes( $args )
         } else {
             // Clear the cache
             PropertyRegistration::ClearCache();
-        
+
             $activeMods = xarModApiFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
             assert('!empty($activeMods)'); // this should never happen
-            
+
             foreach($activeMods as $modInfo) {
                 // FIXME: the modinfo directory does NOT end with a /
-                $dir = 'modules/' .$modInfo['osdirectory'] . '/xarproperties/';
-                if(file_exists($dir)){
-                    $propDirs[] = $dir;
-                }
+                $propDirs[] = 'modules/' .$modInfo['osdirectory'] . '/xarproperties/';
             }
         }
 
@@ -76,21 +73,25 @@ function dynamicdata_adminapi_importpropertytypes( $args )
             // The iterator takes an absolute directory, so we use a slightly extended class
             $dir = new PropertyDirectoryIterator($PropertiesDir);
             // Loop through properties directory
-            for($dir->rewind();$dir->valid();$dir->next()) { 
+            for($dir->rewind();$dir->valid();$dir->next()) {
                 if($dir->isDir()) continue; // no dirs
                 if($dir->getExtension() != 'php') continue; // only php files
-                if(substr($dir->getFileName(),0,1) == '.') continue; // temp for emacs insanity and skip hidden files while we're at it
+                if($dir->isDot()) continue; // temp for emacs insanity and skip hidden files while we're at it
 
                 // Include the file into the environment
-                $before = get_declared_classes();
                 xarInclude($dir->getPathName());
-                $newClasses = array_diff(get_declared_classes(),$before);
-                
+			} // loop over the files in a directory
+		} // loop over the directories
+                $newClasses = get_declared_classes();
+                // ANSWER: probably not, see above (if the $dirs are passed in)
+
                 // See what class(es) we have here
                 foreach($newClasses as $index => $propertyClass) {
                     // If it doesnt exist something weird is goin on
-                    if(!class_exists($propertyClass)) continue;
-                    
+
+					if(!is_subclass_of ($propertyClass, 'Dynamic_Property')) {;continue;}
+					$processedClasses[] = $propertyClass;
+
                     // Main part
                     // Call the class method on each property to get the registration info
                     if (!is_callable(array($propertyClass,'getRegistrationInfo'))) continue;
@@ -98,24 +99,22 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                     // Fill in the info we dont have in the registration class yet
                     // TODO: see if we can have it in the registration class
                     $baseInfo->class = $propertyClass;
-                    $baseInfo->filepath = $PropertiesDir.$dir->getFileName();
-                    
+                    $baseInfo->filepath .= "/$propertyClass.php";
+
                      // Check for aliases
                     if(!empty($baseInfo->aliases)) {
                         // Each alias is also a propertyRegistration object
                         foreach($baseInfo->aliases as $aliasInfo) {
                             $proptypes[$aliasInfo->id] = $aliasInfo;
                         }
-                    } 
+                    }
                     $proptypes[$baseInfo->id] = $baseInfo;
-                
-                    // Update database entry for this property 
+
+                    // Update database entry for this property
                     // This will also do the aliases
                     // TODO: check the result, now silent failure
                     $registered = $baseInfo->Register();
                 } // next property class in the same file
-            } // loop over the files in a directory
-        } // loop over the directories
         $dbconn->commit();
     } catch(Exception $e) {
         // TODO: catch more specific exceptions than all?
