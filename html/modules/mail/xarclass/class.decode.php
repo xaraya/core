@@ -13,7 +13,7 @@ if(!class_exists('PEAR')) {
          */
         function raiseError($msg='Unknown error')
         {
-            echo $msg."\n"; // TODO: call xarErrorSet here.
+            echo $msg."\n"; // TODO: raise exception here?
             return false;
         }
         
