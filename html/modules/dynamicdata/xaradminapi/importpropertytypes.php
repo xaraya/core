@@ -63,7 +63,10 @@ function dynamicdata_adminapi_importpropertytypes( $args )
 
             foreach($activeMods as $modInfo) {
                 // FIXME: the modinfo directory does NOT end with a /
-                $propDirs[] = 'modules/' .$modInfo['osdirectory'] . '/xarproperties/';
+                $dir = 'modules/' .$modInfo['osdirectory'] . '/xarproperties/';
+                if(file_exists($dir)){
+                    $propDirs[] = $dir;
+                }
             }
         }
 
