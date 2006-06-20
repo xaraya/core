@@ -205,11 +205,11 @@
                             </xar:mlstring>
                         </label>
                         <xar:set name="realmoptions">array(
-                                                array('id' => 'none', 'name' => 'No Value'),
-                                                array('id' => 'domain', 'name' => 'Current Domain'),
-                                                array('id' => 'theme', 'name' => 'Current Theme'),
-                                                array('id' => 'group', 'name' => 'Primary Parent Group'),
-                                                array('id' => 'string', 'name' => 'Text Value')
+                                                array('id' => 'none', 'name' => xarML('No Value')),
+                                                array('id' => 'domain', 'name' => xarML('Current Domain')),
+                                                array('id' => 'theme', 'name' => xarML('Current Theme')),
+                                                array('id' => 'group', 'name' => xarML('Primary Parent Group')),
+                                                array('id' => 'string', 'name' => xarML('Text Value'))
                                                 )
                                                 </xar:set>
                        <div class="xar-form-container-after">
