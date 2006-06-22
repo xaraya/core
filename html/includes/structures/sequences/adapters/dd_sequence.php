@@ -2,7 +2,10 @@
 /**
  * Sequence implemented as a dd object, very inefficient implementation for now.
  *
- * 
+ * @todo check the object definition, optionally autocreating one if none found
+ * @todo the whole sequences subtree needs unit tests, pronto
+ * @todo we have to clarify the interaction between these datastructures and 
+ *       datastores.
  */
 include_once dirname(__FILE__).'/array_sequence.php';
 class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceAdapter

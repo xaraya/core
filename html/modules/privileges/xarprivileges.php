@@ -816,7 +816,7 @@ class xarMasks
             }
             $stmt = $this->dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
-            $result->next();
+            if(!$result->next()) return; // Mask isn't there.
             $pargs = $result->getRow();
             if(is_null($pargs['module'])) $pargs['module'] = 'All';
 //            $pargs['module'] = xarModGetNameFromID($pargs['module']);

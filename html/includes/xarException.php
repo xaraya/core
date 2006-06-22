@@ -148,7 +148,9 @@ function xarErrorSet($major, $errorID, $value = NULL)
  */
 function xarCurrentErrorType()
 {
-    return;
+    // return NO exception for code which tests for this, if there was an exception
+    // it has already been raised before the code reaches this point.
+    return XAR_NO_EXCEPTION;
 }
 
 /**

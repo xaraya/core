@@ -86,3 +86,6 @@ DROP TABLE xar_tables;
 DROP TABLE xar_theme_states;
 DROP TABLE xar_module_states;
 DROP TABLE xar_config_vars;
+
+/* DD extending */
+ALTER TABLE xar_dynamic_objects ADD COLUMN xar_object_parent INT(11) NOT NULL DEFAULT '0';

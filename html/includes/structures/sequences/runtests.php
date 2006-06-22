@@ -3,7 +3,7 @@
 
 // Save the directory where we are now
 $savedir = getcwd();
-chdir('/var/mt/xar/core/mail-in/html');
+chdir('/var/mt/xar/core/core.2.x/html');
 include 'includes/xarCore.php';
 // TODO: don't load the whole core
 xarCoreInit(XARCORE_SYSTEM_ALL);
