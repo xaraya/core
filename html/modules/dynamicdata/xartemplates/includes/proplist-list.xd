@@ -13,13 +13,13 @@
 </xar:if>
 
 <xar:foreach in="$fields" value="$field">
-    <xar:comment>Include the edit-part for a property</xar:comment>
+    <!-- Include the edit-part for a property -->
     <xar:template file="editproperty" 
                   module="dynamicdata" 
                   subdata="array('field' =&gt; $field, 'labels' =&gt; $labels,'fieldtypeprop' =&gt; $fieldtypeprop, 'fieldstatusprop' =&gt; $fieldstatusprop)"/>
 </xar:foreach>
 
-<xar:comment>Include the part for creating a new property</xar:comment>
+<!-- Include the part for creating a new property -->
 <xar:template file="newproperty" module="dynamicdata"/>
 
 
@@ -36,10 +36,10 @@
 </xar:if>
 <fieldset>
 <div class="xar-align-center">
-  <xar:comment>
+  <!--
     Optional extra table for data sources - use a text box if you want to make this configurable
     <input type="text" name="table" id="table" value="#$table#" />
-  </xar:comment>
+  -->
   <xar:if condition="!empty($table)">
     <input type="hidden" name="table" id="table" value="#$table#" />
   </xar:if>

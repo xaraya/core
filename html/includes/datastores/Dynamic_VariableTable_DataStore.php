@@ -54,20 +54,18 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         $bindvars = $propids;
         $bindvars[] = (int)$itemid;
 
-        $result =& $dbconn->Execute($query,$bindvars);
-
-        if (!$result) return;
+        $result =& $dbconn->Execute($query,$bindvars,ResultSet::FETCHMODE_NUM);
 
         if ($result->EOF) {
             return;
         }
         while (!$result->EOF) {
-            list($propid, $value) = $result->fields;
+            list($propid, $value) = $result->getRow();
             if (isset($value)) {
                 // set the value for this property
                 $this->fields[$propid]->setValue($value);
             }
-            $result->MoveNext();
+            $result->next();
         }
 
         $result->Close();
@@ -114,8 +112,8 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             $query = "INSERT INTO $dynamicdata (xar_dd_id,xar_dd_propid,xar_dd_itemid,xar_dd_value)
                       VALUES (?,?,?,?)";
             $bindvars = array($nextId,$propid,$itemid, (string) $value);
-            $result =& $dbconn->Execute($query,$bindvars);
-            if (!$result) return;
+            $dbconn->Execute($query,$bindvars);
+
         }
 
         return $itemid;
@@ -148,16 +146,15 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         $bindvars = $propids;
         $bindvars[] = (int)$itemid;
 
-        $result =& $dbconn->Execute($query,$bindvars);
-        if (!$result) return;
+        $result =& $dbconn->Execute($query,$bindvars,ResultSet::FETCHMODE_NUM);
+
 
         $datafields = array();
         while (!$result->EOF) {
-            list($dd_id,$propid) = $result->fields;
+            list($dd_id,$propid) = $result->getRow();
             $datafields[$propid] = $dd_id;
-            $result->MoveNext();
+            $result->next();
         }
-
         $result->Close();
 
         foreach ($propids as $propid) {
@@ -182,8 +179,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                           VALUES (?,?,?,?)";
                 $bindvars = array($nextId,$propid,$itemid, (string) $value);
             }
-            $result =& $dbconn->Execute($query,$bindvars);
-            if (!$result) return;
+            $dbconn->Execute($query,$bindvars);
         }
         return $itemid;
     }
@@ -209,9 +205,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                      AND xar_dd_itemid = ?";
         $bindvars = $propids;
         $bindvars[] = (int)$itemid;
-
-        $result =& $dbconn->Execute($query,$bindvars);
-        if (!$result) return;
+        $dbconn->Execute($query,$bindvars);
 
         return $itemid;
     }
@@ -273,7 +267,6 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $result =& $dbconn->Execute($query,$bindvars);
             }
 
-            if (!$result) return;
 
             if (count($this->sort) > 0) {
                 $items = array();
@@ -283,7 +276,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             }
 
             while (!$result->EOF) {
-                list($itemid,$propid, $value) = $result->fields;
+                list($itemid,$propid, $value) = $result->getRow();
                 if (isset($value)) {
                     if ($dosort) {
                         $items[$itemid][$propid] = $value;
@@ -292,7 +285,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                         $this->fields[$propid]->setItemValue($itemid,$value);
                     }
                 }
-                $result->MoveNext();
+                $result->next();
             }
 
             $result->Close();
@@ -400,11 +393,10 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 }
             }
 
-            if (!$result) return;
 
             $itemidlist = array();
             while (!$result->EOF) {
-                $values = $result->fields;
+                $values = $result->getRow();
                 $itemid = array_shift($values);
                 $itemidlist[$itemid] = 1;
                 $propid = array_shift($values);
@@ -420,7 +412,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                         $this->extra[$field]->setItemValue($itemid,$value);
                     }
                 }
-                $result->MoveNext();
+                $result->next();
             }
             // add the itemids to the list
             $this->_itemids = array_keys($itemidlist);
@@ -492,7 +484,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 if (!empty($this->cache)) {
                     $result =& $dbconn->CacheSelectLimit($this->cache, $query, $numitems, $startnum-1);
                 } else {
-                    $result =& $dbconn->SelectLimit($query, $numitems, $startnum-1);
+                    $result = $dbconn->SelectLimit($query, $numitems, $startnum-1);
                 }
             } else {
                 if (!empty($this->cache)) {
@@ -502,7 +494,6 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 }
             }
 
-            if (!$result) return;
 
             $isgrouped = 0;
             if (count($this->groupby) > 0) {
@@ -521,7 +512,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 }
             }
             while (!$result->EOF) {
-                $values = $result->fields;
+                $values = $result->getRow();
                 $itemid = array_shift($values);
                 // oops, something went seriously wrong here...
                 if (empty($itemid) || count($values) != count($propids)) {
@@ -607,7 +598,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                         $this->fields[$propid]->setItemValue($curid,$curval);
                     }
                 }
-                $result->MoveNext();
+                $result->next();
             }
             $result->Close();
 
@@ -635,8 +626,8 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         // here we grab everyting
         } else {
             $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
-            $query = "SELECT xar_dd_itemid,
-                             xar_dd_propid,
+            $query = "SELECT DISTINCT xar_dd_propid,
+                             xar_dd_itemid,
                              xar_dd_value
                         FROM $dynamicdata
                        WHERE xar_dd_propid IN ($bindmarkers)";
@@ -647,17 +638,15 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $result =& $dbconn->Execute($query,$propids);
             }
 
-            if (!$result) return;
-
             $itemidlist = array();
             while (!$result->EOF) {
-                list($itemid,$propid, $value) = $result->fields;
+                list($propid,$itemid,$value) = $result->getRow();
                 $itemidlist[$itemid] = 1;
                 if (isset($value)) {
                     // add the item to the value list for this property
                     $this->fields[$propid]->setItemValue($itemid,$value);
                 }
-                $result->MoveNext();
+                $result->next();
             }
             // add the itemids to the list
             $this->_itemids = array_keys($itemidlist);
@@ -719,9 +708,9 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $result =& $dbconn->Execute($query,$bindvars);
             }
 
-            if (!$result || $result->EOF) return;
+            if ($result->EOF) return;
 
-            $numitems = $result->fields[0];
+            $numitems = $result->getInt(1);
 
             $result->Close();
 
@@ -754,9 +743,9 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $result =& $dbconn->Execute($query);
             }
 
-            if (!$result || $result->EOF) return;
+            if ($result->EOF) return;
 
-            $numitems = $result->fields[0];
+            $numitems = $result->getInt(1);
 
             $result->Close();
 
@@ -781,9 +770,9 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $result =& $dbconn->Execute($query,$propids);
             }
 
-            if (!$result || $result->EOF) return;
+            if ($result->EOF) return;
 
-            $numitems = $result->fields[0];
+            $numitems = $result->getInt(1);
 
             $result->Close();
 
@@ -794,9 +783,9 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
     /**
      * get next item id (for objects stored only in dynamic data table)
      *
-     * @param id $args['objectid'] dynamic object id for the item, or
-     * @param id $args['modid'] module id for the item +
-     * @param int $args['itemtype'] item type of the item
+     * @param $args['objectid'] dynamic object id for the item, or
+     * @param $args['modid'] module id for the item +
+     * @param $args['itemtype'] item type of the item
      * @return integer value of the next id
      * @raise BAD_PARAM, NO_PERMISSION
      */
@@ -814,11 +803,8 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         }
 
         if (!empty($invalid)) {
-            $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                         $invalid, 'Dynamic_VariableTable_DataStore', 'getNextId', 'DynamicData');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException($msg));
-            return;
+            $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+            throw new BadParameterException(array($invalid, 'Dynamic_VariableTable_DataStore', 'getNextId', 'DynamicData'),$msg);
         }
 
         $dbconn =& xarDBGetConn();
@@ -839,9 +825,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             $bindvars[] = (int)$modid;
             $bindvars[] = (int)$itemtype;
         }
-
-        $result =& $dbconn->Execute($query,$bindvars);
-        if (!$result) return;
+        $dbconn->Execute($query,$bindvars);
 
         // get it back (WARNING : this is *not* guaranteed to be unique on heavy-usage sites !)
         $bindvars = array();
@@ -857,10 +841,10 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             $bindvars[] = (int)$itemtype;
         }
 
-        $result =& $dbconn->Execute($query,$bindvars);
-        if (!$result || $result->EOF) return;
+        $result = $dbconn->Execute($query,$bindvars,ResultSet::FETCHMODE_NUM);
+        if ($result->EOF) return;
 
-        $nextid = $result->fields[0];
+        $nextid = $result->getInt(1);
 
         $result->Close();
 

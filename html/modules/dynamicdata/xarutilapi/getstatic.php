@@ -24,6 +24,7 @@
  * @returns mixed
  * @return value of the field, or false on failure
  * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
+ * @todo split off the common parts which are also in getmeta
  */
 function dynamicdata_utilapi_getstatic($args)
 {
@@ -50,11 +51,9 @@ function dynamicdata_utilapi_getstatic($args)
         $invalid[] = 'item type';
     }
     if (count($invalid) > 0) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    join(', ',$invalid), 'util', 'getstatic', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array(join(', ',$invalid), 'util', 'getstatic', 'DynamicData');
+        throw new BadParameterException($vars,$msg);
     }
     if (empty($table)) {
         $table = '';
@@ -81,65 +80,52 @@ function dynamicdata_utilapi_getstatic($args)
         }
     }
 
-    $bindvars = array();
-    $query = "SELECT xar_tableid,
-                     xar_table,
-                     xar_field,
-                     xar_type,
-                     xar_size,
-                     xar_default,
-                     xar_increment,
-                     xar_primary_key
-              FROM $metaTable ";
+    $dbInfo =& $dbconn->getDatabaseInfo();
+    $dbTables = array();
 
-    // it's easy if the table name is known
-    if (!empty($table)) {
-        $query .= " WHERE xar_table = ?";
-        $bindvars[] =  $table;
-    // otherwise try to get any table that starts with prefix_modulename
+    if(!empty($table)) {
+        // it's easy if the table name is known
+        $dbTables[] = $dbInfo->getTable($table);
     } else {
-        $query .= " WHERE xar_table LIKE ?";
-        $bindvars[] = $systemPrefix . '_' . $modinfo['name'] . '%';
+        $dbTables =& $dbInfo->getTables();
     }
-    $query .= " ORDER BY xar_tableid ASC";
 
-    $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
-
-    $static = array();
-
-    // add the list of table + field
-    $order = 1;
-    while (!$result->EOF) {
-        list($id,$table, $field, $datatype, $size, $default,$increment,$primary_key) = $result->fields;
-    // TODO: what kind of security checks do we want/need here ?
-        //if (xarSecAuthAction(0, 'DynamicData::Field', "$name:$type:$id", ACCESS_READ)) {
-        //}
-
-        // assign some default label for now, by removing the first part (xar_)
-// TODO: let modules define this
-        $name = preg_replace('/^.+?_/','',$field);
-        $label = strtr($name,'_',' ');
-        $label = ucwords($label);
-        if (isset($static[$name])) {
-            $i = 1;
-            while (isset($static[$name . '_' . $i])) {
-                $i++;
+    // TODO: we lost the linkage with modules here
+    $static = array(); $order = 1; $seq=1;
+    foreach($dbTables as $tblInfo) {
+        $tblColumns =& $tblInfo->getColumns();
+        $table = $tblInfo->getName();
+        foreach($tblColumns as $colInfo) {
+            $field = $colInfo->getName();
+            $id = $seq++;
+            $default = $colInfo->getDefaultValue();
+            // Construct name and label from the columnname
+            $name = preg_replace('/^.+?_/','',$field);
+            $label = strtr($name,'_',' ');
+            $label = ucwords($label);
+            if(isset($static[$name])) {
+                $i = 1;
+                while(isset($static[$name . '_' . $i])) {
+                    $i++;
+                }
+                $name = $name . '_' . $i;
+                $label = $label . '_' . $i;
             }
-            $name = $name . '_' . $i;
-            $label = $label . '_' . $i;
-        }
+            $status = DD_PROPERTYSTATE_ACTIVE;
 
-        $status = 1;
+            // assign some default validation for now
+            $datatype = strtolower(CreoleTypes::getCreoleName($colInfo->getType()));
+            //            $datatype = $colInfo->getNativeType();
+            $size = $colInfo->getSize();
 
-        // assign some default validation for now
-// TODO: improve this based on property type validations
-        $validation = $datatype;
-        $validation .= empty($size) ? '' : ' (' . $size . ')';
+            // TODO: improve this based on property type validations
+            $validation = $datatype;
+            $validation .= empty($size) ? '' : ' (' . $size . ')';
 
-        // (try to) assign some default property type for now
-        // = obviously limited to basic data types in this case
-        switch ($datatype) {
+            // (try to) assign some default property type for now
+            // = obviously limited to basic data types in this case
+            // cfr. creole/CreoleTypes.php
+            switch ($datatype) {
             case 'char':
             case 'varchar':
                 $proptype = 2; // Text Box
@@ -147,9 +133,16 @@ function dynamicdata_utilapi_getstatic($args)
                     $validation = "0:$size";
                 }
                 break;
+            case 'smallint':
+            case 'tinyint':
+            case 'bigint':
             case 'integer':
+            case 'year':
                 $proptype = 15; // Number Box
                 break;
+            case 'numeric':
+            case 'decimal':
+            case 'double':
             case 'float':
                 $proptype = 17; // Number Box (float)
                 break;
@@ -157,45 +150,50 @@ function dynamicdata_utilapi_getstatic($args)
                 $proptype = 14; // Checkbox
                 break;
             case 'date':
-            case 'datetime':
+            case 'time':
             case 'timestamp':
                 $proptype = 8; // Calendar
                 break;
+            case 'longvarchar':
             case 'text':
+            case 'clob':
                 $proptype = 4; // Medium Text Area
-                $status = 2;
+                $status = DD_PROPERTYSTATE_DISPLAYONLY;
+                $validation ='';
                 break;
+            case 'longvarbinary':
+            case 'varbinary':
+            case 'binary':
             case 'blob':       // caution, could be binary too !
                 $proptype = 4; // Medium Text Area
-                $status = 2;
+                $status = DD_PROPERTYSTATE_DISPLAYONLY;
                 break;
             default:
                 $proptype = 1; // Static Text
                 break;
-        }
+            }
 
-        // try to figure out if it's the item id
-// TODO: let modules define this
-        if (!empty($increment) || !empty($primary_key)) {
-            // not allowed to modify primary key !
-            $proptype = 21; // Item ID
-        }
+            // try to figure out if it's the item id
+            // TODO: let modules define this
+            //debug($colInfo);
+            if ($colInfo->isAutoIncrement()) {
+                // not allowed to modify primary key !
+                $proptype = 21; // Item ID
+                $validation ='';
+            }
 
-        $static[$name] = array('name' => $name,
-                               'label' => $label,
-                               'type' => $proptype,
-                               'id' => $id,
-                               'default' => $default,
-                               'source' => $table . '.' . $field,
-                               'status' => $status,
-                               'order' => $order,
-                               'validation' => $validation);
-        $order++;
-        $result->MoveNext();
-    }
-
-    $result->Close();
-
+            $static[$name] = array('name' => $name,
+                                   'label' => $label,
+                                   'type' => $proptype,
+                                   'id' => $id,
+                                   'default' => $default,
+                                   'source' => $table . '.' . $field,
+                                   'status' => $status,
+                                   'order' => $order,
+                                   'validation' => $validation);
+            $order++;
+        } // next column
+    } // next table
     $propertybag["$modid:$itemtype:$table"] = $static;
     return $static;
 }

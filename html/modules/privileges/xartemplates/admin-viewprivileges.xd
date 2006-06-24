@@ -25,7 +25,16 @@
     </h2>
     <xar:template file="tablist" />
     <br />
-    <xar:loop name="$trees">
+    <!--<xar:loop name="$trees">
         #$loop:item['tree']#
     </xar:loop>
+    -->
+    <fieldset>
+        <legend><xar:mlstring>Privilege hierarchy</xar:mlstring></legend>
+        <style type="text/css">
+            ul.tree { margin-left: 4em;}
+            ul.tree div.preamble { position: absolute; left: 3em; }
+        </style>
+        <xar:template file="tree" />
+    </fieldset>
 </div>

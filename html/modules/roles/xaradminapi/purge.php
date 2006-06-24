@@ -25,9 +25,7 @@ function roles_adminapi_purge($args)
 
 
     if ($state == ROLES_STATE_ACTIVE) {
-        $msg = xarML('Cannot Purge Active Users');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION', new SystemException($msg));
-        return;
+        throw new ForbiddenOperation(null,'Purging active users is not allowed');
     }
 
     $items = xarModAPIFunc('roles',
@@ -43,11 +41,8 @@ function roles_adminapi_purge($args)
                 'get',
                 array('uid' => $item['uid']));
 
-    // Security check
-        if (!xarSecurityCheck('DeleteRole',0,'Item',"$item[name]::$item[uid]")) {
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-            return;
-        }
+        // Security check
+        if (!xarSecurityCheck('DeleteRole',0,'Item',"$item[name]::$item[uid]")) return;
 
         // Call the Roles class
         $roles = new xarRoles();

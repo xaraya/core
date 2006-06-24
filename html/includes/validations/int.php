@@ -16,35 +16,33 @@ function variable_validations_int (&$subject, $parameters, $supress_soft_exc, &$
 
     $value = intval($subject);
 
+    if ($name == '') $name = '<unknown>';
+    $msg = 'Not an integer';
     if ("$subject" != "$value") {
-        if ($name != '')
-            $msg = xarML('Variable #(1) is not an integer: "#(2)"', $name, $subject);
-        else
-            $msg = xarML('Not an integer: "#(1)"', $subject);
-        if (!$supress_soft_exc) xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+        if (!$supress_soft_exc) throw new VariableValidationException(array($name,$subject,$msg));
         return false;
     }
 
     if (isset($parameters[0]) && trim($parameters[0]) != '') {
         if (!is_numeric($parameters[0])) {
-            $msg = 'Parameter "'.$parameters[0].'" is not a Numeric Type';
-            xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-            return;
+            // We need a number for the minimum
+            throw new BadParameterException($parameters[0],'The parameter specifying the minimum value should be numeric. It is: "#(1)"');
         } elseif ($value < (int) $parameters[0]) {
-            $msg = xarML('Integer Value "#(1)" is smaller than the specified minimum "#(2)"', $value, $parameters[0]);
-            if (!$supress_soft_exc) xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+            $msg = 'Integer Value "#(1)" is smaller than the specified minimum "#(2)"';
+            if (!$supress_soft_exc) 
+                throw new VariableValidationException(array($value,$parameters[0]),$msg);
             return false;
         }
     }
 
     if (isset($parameters[1]) && trim($parameters[1]) != '') {
         if (!is_numeric($parameters[1])) {
-            $msg = 'Parameter "'.$parameters[1].'" is not a Numeric Type';
-            xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-            return;
+            // We need a number for the maximum
+            throw new BadParameterException($parameters[1],'The parameter specifying the maximum value should be numeric. It is: "#(1)"');
         } elseif ($value > (int) $parameters[1]) {
-            $msg = xarML('Integer Value "#(1)" is bigger than the specified maximum "#(2)"', $value, $parameters[1]);
-            if (!$supress_soft_exc) xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+            $msg = 'Integer Value "#(1)" is larger than the specified minimum "#(2)"';
+            if (!$supress_soft_exc) 
+                throw new VariableValidationException(array($value,$parameters[1]),$msg);
             return false;
         }
     }

@@ -245,23 +245,22 @@ function xarCacheGetDirSize($dir = FALSE)
 function xarCache_getParents()
 {
     $currentuid = xarSessionGetVar('uid');
-    if (xarCore_IsCached('User.Variables.'.$currentuid, 'parentlist')) {
-        return xarCore_GetCached('User.Variables.'.$currentuid, 'parentlist');
+    if (xarCore::isCached('User.Variables.'.$currentuid, 'parentlist')) {
+        return xarCore::getCached('User.Variables.'.$currentuid, 'parentlist');
     }
     $systemPrefix = xarDBGetSystemTablePrefix();
     $rolemembers = $systemPrefix . '_rolemembers';
     $dbconn =& xarDBGetConn();
     $query = "SELECT xar_parentid FROM $rolemembers WHERE xar_uid = ?";
-    $result =& $dbconn->Execute($query,array($currentuid));
-    if (!$result) return;
+    $stmt =& $dbconn->prepareStatement($query);
+    $result =& $stmt->executeQuery(array($currentuid));
+
     $gidlist = array();
-    while(!$result->EOF) {
-        list($parentid) = $result->fields;
-        $gidlist[] = $parentid;
-        $result->MoveNext();
+    while($result->next()) {
+        $gidlist[] = $result->getInt(1);
     }
     $result->Close();
-    xarCore_SetCached('User.Variables.'.$currentuid, 'parentlist',$gidlist);
+    xarCore::setCached('User.Variables.'.$currentuid, 'parentlist',$gidlist);
     return $gidlist;
 }
 

@@ -1,6 +1,4 @@
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
-</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <form action="&xar-modurl-authsystem-user-login;" method="post" class="xar-margin-none">
     <p>
         <input type="hidden" name="redirecturl" id="returnurl#$blockid#" value="#$return_url#" />

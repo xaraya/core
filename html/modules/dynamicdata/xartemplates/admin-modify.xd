@@ -1,4 +1,4 @@
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span>
 </div>
@@ -37,10 +37,12 @@
         </div>
     </xar:if>
 
-    <fieldset>
-      <legend><xar:mlstring>Preview</xar:mlstring></legend>
-      <xar:data-display object="$object" />
-    </fieldset>
+    <xar:if condition="isset($preview)">
+        <fieldset>
+            <legend><xar:mlstring>Preview</xar:mlstring></legend>
+            <xar:data-display object="$object" />
+        </fieldset>
+    </xar:if>
 
     <xar:set name="isupload">#$object:upload#</xar:set>
     <xar:if condition="!empty($isupload)">
@@ -83,6 +85,7 @@
               <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
             </xar:if>
             <input type="submit" name="preview" value="#xarML('Preview')#" class="xar-margin-thickright" />
+            <input type="hidden" name="notfresh" id="notfresh" value="true" />
             <input type="submit" value="#xarML('Update')#" class="xar-margin-thickleft" />
         </div>
 

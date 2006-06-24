@@ -1,7 +1,5 @@
 <?php
 /**
- * Modify theme settings
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -33,7 +31,8 @@ function themes_admin_modify()
     // Security Check
     if (!xarSecurityCheck('AdminTheme', 0, 'All', '$themeName::$regId')) return;
 
-    $themevars = xarTheme_getVarsByTheme($themeName);
+    $themevars = array();
+    //xarTheme_getVarsByTheme($themeName);
 
     $displayInfo = array();
     foreach($themeInfo as $k => $v) {
