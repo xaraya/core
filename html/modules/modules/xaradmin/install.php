@@ -27,7 +27,8 @@
 function modules_admin_install()
 {
     // Security and sanity checks
-    if (!xarSecConfirmAuthKey()) return;
+    // TODO: check under what conditions this is needed
+//    if (!xarSecConfirmAuthKey()) return;
 
     if (!xarVarFetch('id', 'int:1:', $id)) return;
 
@@ -35,13 +36,13 @@ function modules_admin_install()
     // TODO: investigate try/catch clause here, it's not trivial
     try {
         xarModAPIFunc('modules','admin','verifydependency',array('regid'=>$id));
-                
+
         //Checking if the user has already passed thru the GUI:
         xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
     } catch (ModuleNotFoundException $e) {
         $command = false;
     }
-    
+
     if (!$command) {
         //Let's make a nice GUI to show the user the options
         $data = array();
@@ -71,9 +72,10 @@ function modules_admin_install()
     $minfo=xarModGetInfo($id);
     //Bail if we've lost our module
     if ($minfo['state'] != XARMOD_STATE_MISSING_FROM_INACTIVE) {
-        //Installs with dependencies, first initialise the necessary dependecies
+        //Installs with dependencies, first initialise the necessary dependencies
         //then the module itself
-        if (!xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$id))) {
+        xarConfigSetVar('modulestoinstall',array());
+        if (!xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$id, 'phase' => 0))) {
             // Don't return yet - the stack is rendered here.
             //return;
         }
@@ -89,7 +91,7 @@ function modules_admin_install()
     }
 
     // The module might have properties, after installing, flush the property cache otherwise you will
-    // get errors on displaying the property. 
+    // get errors on displaying the property.
     if(!xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush' => true))) {
         return false; //FIXME: Do we want an exception here if flushing fails?
     }
