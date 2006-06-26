@@ -23,7 +23,7 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
         
         // File attribute is mandatory
         if (!isset($file)) {
-            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'file\' attribute in <xar:template> tag.', $this);
+            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'file\' attribute in <xar:template> tag.');
             return;
         }
         
@@ -70,7 +70,7 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
                 return "xarTplFile(\"$tplFile\",$subdata)";
                 break;
             default:
-                $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,"Invalid value '$type' for 'type' attribute in <xar:template> tag.", $this);
+                $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,"Invalid value '$type' for 'type' attribute in <xar:template> tag.");
                 return;
         }
     }

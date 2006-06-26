@@ -15,7 +15,7 @@ class xarTpl__XarUrlEntityNode extends xarTpl__EntityNode
     function render()
     {
         if (count($this->parameters) < 3) {
-            $this->raiseError(XAR_BL_MISSING_PARAMETER,'Parameters mismatch in &xar-url entity.', $this);
+            $this->raiseError(XAR_BL_MISSING_PARAMETER,'Parameters mismatch in &xar-url entity.');
             return;
         }
         $module = $this->parameters[0];
@@ -23,7 +23,7 @@ class xarTpl__XarUrlEntityNode extends xarTpl__EntityNode
             $tplVars =& xarTpl__TemplateVariables::instance();
             $module = $tplVars->get('module');
             if (empty($module)) {
-                $this->raiseError(XAR_BL_MISSING_PARAMETER,'Empty module parameter in &xar-url entity.', $this);
+                $this->raiseError(XAR_BL_MISSING_PARAMETER,'Empty module parameter in &xar-url entity.');
                 return;
             }
         }

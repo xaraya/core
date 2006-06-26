@@ -32,12 +32,12 @@ class xarTpl__XarMlvarNode extends xarTpl__TplTagNode
         }
         
         if (count($this->children) != 1) {
-            $this->raiseError(XAR_BL_INVALID_TAG,'The <xar:mlvar> tag can contain only one child tag.', $this);
+            $this->raiseError(XAR_BL_INVALID_TAG,'The <xar:mlvar> tag can contain only one child tag.');
             return;
         }
         
         if (count($this->attributes) != 0) {
-            $this->raiseError(XAR_BL_INVALID_TAG,'The <xar:mlvar> tag takes no attributes.', $this);
+            $this->raiseError(XAR_BL_INVALID_TAG,'The <xar:mlvar> tag takes no attributes.');
             return;
         }
         

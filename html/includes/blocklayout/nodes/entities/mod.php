@@ -13,7 +13,7 @@ class xarTpl__XarModEntityNode extends xarTpl__EntityNode
     function render()
     {
         if (count($this->parameters) != 2) {
-            $this->raiseError(XAR_BL_MISSING_PARAMETER,'Parameters mismatch in &xar-mod entity.', $this);
+            $this->raiseError(XAR_BL_MISSING_PARAMETER,'Parameters mismatch in &xar-mod entity.');
             return;
         }
         $module = $this->parameters[0];

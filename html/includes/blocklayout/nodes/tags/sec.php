@@ -23,7 +23,7 @@ class xarTpl__XarSecNode extends xarTpl__TplTagNode
         extract($this->attributes);
         
         if (!isset($mask)) {
-            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'mask\' attribute in <xar:sec> tag.', $this);
+            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'mask\' attribute in <xar:sec> tag.');
             return;
         }
         
@@ -33,7 +33,7 @@ class xarTpl__XarSecNode extends xarTpl__TplTagNode
             $catch = 0;
         } else {
             $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,'Invalid \'catch\' attribute in <xar:sec> tag.'.
-                              ' \'catch\' must be boolean (true or false).', $this);
+                              ' \'catch\' must be boolean (true or false).');
             return;
         }
         

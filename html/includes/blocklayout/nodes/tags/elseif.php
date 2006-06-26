@@ -21,7 +21,7 @@ class xarTpl__XarElseifNode extends xarTpl__TplTagNode
         extract($this->attributes);
         
         if (!isset($condition)) {
-            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'condition\' attribute in <xar:elseif> tag.', $this);
+            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'condition\' attribute in <xar:elseif> tag.');
             return;
         }
         

@@ -36,7 +36,7 @@ class xarTpl__XarSetNode extends xarTpl__TplTagNode
         extract($this->attributes);
         
         if (!isset($name)) {
-            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'name\' attribute in <xar:set> tag.', $this);
+            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'name\' attribute in <xar:set> tag.');
             return;
         }
         // Allow specifying name="test" and name="$test" and deprecate the $ form over time

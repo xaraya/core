@@ -28,12 +28,12 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
         extract($this->attributes);
         
         if (!isset($in)) {
-            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'in\' attribute in <xar:foreach> tag.', $this);
+            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'in\' attribute in <xar:foreach> tag.');
             return;
         }
         
         if (!array($in)) {
-            $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,'Invalid \'in\' attribute in <xar:foreach> tag. \'in\' must be an array', $this);
+            $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,'Invalid \'in\' attribute in <xar:foreach> tag. \'in\' must be an array');
             return;
         }
         
@@ -59,7 +59,7 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
             $this->attr_key = $key;
             return "if(isset($key)) $this->keysavename = $key; foreach (array_keys($in) as $key) { ";
         } else {
-            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'key\' or \'value\' attribute in <xar:foreach> tag.', $this);
+            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'key\' or \'value\' attribute in <xar:foreach> tag.');
             return;
         }
    }

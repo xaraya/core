@@ -26,7 +26,7 @@ class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
         $dtd = '';              // We dont force a DTD if not specified
         extract($this->attributes);
         if(!isset($version)) {
-            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'version\' attribute in <xar:blocklayout> tag.', $this);
+            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'version\' attribute in <xar:blocklayout> tag.');
             return;
         }
         

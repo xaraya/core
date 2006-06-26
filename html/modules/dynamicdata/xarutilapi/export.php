@@ -8,6 +8,7 @@
  * @subpackage Dynamic Data module
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
+ * @todo move the xml generate code into a template based system.
  */
 /**
  * Export an object definition or an object item to XML

@@ -16,7 +16,7 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
         extract($this->attributes);
         
         if (!isset($name)) {
-            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'name\' attribute in <xar:var> tag.', $this);
+            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'name\' attribute in <xar:var> tag.');
             return;
         }
         
@@ -43,7 +43,7 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
                 break;
             case 'module':
                 if (!isset($module)) {
-                    $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'module\' attribute in <xar:var> tag.', $this);
+                    $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'module\' attribute in <xar:var> tag.');
                     return;
                 }
                 $value = "xarModVars::get('".$module."', '".$name."')";
@@ -63,7 +63,7 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
                 if (!isset($value)) return; // throw back
                     break;
             default:
-                $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,'Invalid value for \'scope\' attribute in <xar:var> tag.', $this);
+                $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,'Invalid value for \'scope\' attribute in <xar:var> tag.');
                 return;
         }
         return $prefix . $value . $postfix;
