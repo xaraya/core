@@ -1,7 +1,5 @@
 <?php
 /**
- * Import an object definition or an object item from XML
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}

@@ -22,7 +22,25 @@ function dynamicdata_adminapi_showlist($args)
 {
     extract($args);
 
-    $current = xarModAPIFunc('dynamicdata','user','setcontext',$args);
+//    $current = xarModAPIFunc('dynamicdata','user','setcontext',$args);
+
+    // optional layout for the template
+    if (empty($layout)) {
+        $layout = 'default';
+    }
+    // or optional template, if you want e.g. to handle individual fields
+    // differently for a specific module / item type
+    if (empty($template)) {
+        $template = '';
+    }
+    if (empty($tplmodule)) {
+        $tplmodule = 'dynamicdata';
+    }
+
+    // do we want to count?
+    if(empty($count)) {
+        $count=false;
+    }
 
     // we got everything via template parameters
     if (isset($items) && is_array($items)) {
@@ -137,8 +155,43 @@ function dynamicdata_adminapi_showlist($args)
                                            'groupby' => $groupby,
                                            'status' => $status,
                                            'extend'  => !empty($extend)));
+    if (!isset($object)) return;
+    // Count before numitems!
+    $numthings = 0;
+    if($count) {
+        $numthings = $object->countItems();
+    }
     $object->getItems();
 
-    return $object->showList();
+    // label to use for the display link (if you don't use linkfield)
+    if (empty($linklabel)) {
+        $linklabel = '';
+    }
+    // function to use in the display link
+    if (empty($linkfunc)) {
+        $linkfunc = '';
+    }
+    // URL parameter for the item id in the display link (e.g. exid, aid, uid, ...)
+    if (empty($param)) {
+        $param = '';
+    }
+    // field to add the display link to (otherwise it'll be in a separate column)
+    if (empty($linkfield)) {
+        $linkfield = '';
+    }
+    // current URL for the pager (defaults to current URL)
+    if (empty($pagerurl)) {
+        $pagerurl = '';
+    }
+
+    return $object->showList(array('layout'    => $layout,
+                                   'template'  => $template,
+                                   'linklabel' => $linklabel,
+                                   'linkfunc'  => $linkfunc,
+                                   'param'     => $param,
+                                   'pagerurl'  => $pagerurl,
+                                   'linkfield' => $linkfield,
+                                   'count'     => $numthings,
+                                   'tplmodule' => $tplmodule));
 }
 ?>

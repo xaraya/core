@@ -20,19 +20,15 @@ function dynamicdata_userapi_getitemsforview($args)
 {
     if (empty($args['fieldlist']) && empty($args['status'])) {
         // get the Active properties only (not those for Display Only)
-        $args['status'] = 1;
+        $args['status'] = DD_PROPERTYSTATE_ACTIVE;
     }
     $args['getobject'] = 1;
-    $objects =  xarModAPIFunc('dynamicdata','user','getitems',$args);
-    if (!isset($objects)) {
+    $object =  xarModAPIFunc('dynamicdata','user','getitems',$args);
+    if (!isset($object)) {
         return array(array(), array());
     }
-    $properties = array();
-    $items = array();
-    foreach ($objects as $object) {
-		$properties = array_merge($properties,  $object->getProperties());
-		$items = array_merge($items,  $object->items);
-    }
+    $properties = & $object->getProperties();
+    $items = & $object->items;
     return array(& $properties, & $items);
 }
 
