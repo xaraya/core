@@ -84,11 +84,11 @@ function modules_adminapi_installwithdependencies ($args)
 				$dependency = array();
 			}
 
-			$modstack = xarConfigGetVar('modulestoinstall');
+			$modstack = unserialize(xarSessionGetVar('modulestoinstall'));
 			$teststack = $modstack;
 			if ($mainId != array_pop($teststack)) {
 				array_push($modstack,$mainId);
-				xarConfigSetVar('modulestoinstall',$modstack);
+				xarSessionSetVar('modulestoinstall',serialize($modstack));
 			}
 
 			//The dependencies are ok, assuming they shouldnt change in the middle of the
@@ -118,9 +118,9 @@ function modules_adminapi_installwithdependencies ($args)
 			}
 
 		case 1:
-			$modstack = xarConfigGetVar('modulestoinstall');
+			$modstack = unserialize(xarSessionGetVar('modulestoinstall'));
 			$mainId = array_pop($modstack);
-			xarConfigSetVar('modulestoinstall',$modstack);
+			xarSessionSetVar('modulestoinstall',serialize($modstack));
 
 			//Checks if the module is already initialised
 			if (!$initialised) {
@@ -138,8 +138,8 @@ function modules_adminapi_installwithdependencies ($args)
 			}
 
 			if (empty($modstack)) {
-			    xarSessionDelVar('installing');
 				// Looks like we're done
+			    xarSessionDelVar('modulestoinstall');
 				// set the target location (anchor) to go to within the page
 				$target = $modInfo['name'];
 

@@ -75,7 +75,7 @@ function modules_admin_install()
     if ($minfo['state'] != XARMOD_STATE_MISSING_FROM_INACTIVE) {
         //Installs with dependencies, first initialise the necessary dependencies
         //then the module itself
-        xarConfigSetVar('modulestoinstall',array());
+        xarSessionSetVar('modulestoinstall',serialize(array()));
         if (!xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$id, 'phase' => 0))) {
             // Don't return yet - the stack is rendered here.
             //return;
