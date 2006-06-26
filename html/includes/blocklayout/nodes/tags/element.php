@@ -73,6 +73,9 @@ class xarTpl__XarElementNode extends xarTpl__TplTagNode
     {
         $name = '';
         extract($this->attributes);
+        if(empty($name)) {
+            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,"The <xar:element/> tag requires a 'name' attribute.",$this);
+        }
         $this->name = xarTpl__ExpressionTransformer::transformPHPExpression($name);
     }
  }
