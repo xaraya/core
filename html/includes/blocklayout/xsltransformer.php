@@ -25,7 +25,9 @@ class BlocklayoutXSLTProcessor
         $this->xslProc->registerPHPFunctions();
 
         // Set up the stylesheet
-        $this->xslProc->importStyleSheet(DOMDocument::load($xslFile));
+        $domDoc = new DOMDocument();
+        $domDoc->load($xslFile);
+        $this->xslProc->importStyleSheet($domDoc);
         
         // Set up the document to transform
         $this->xmlDoc = new DOMDocument();
