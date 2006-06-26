@@ -138,6 +138,7 @@ function modules_adminapi_installwithdependencies ($args)
 			}
 
 			if (empty($modstack)) {
+			    xarSessionDelVar('installing');
 				// Looks like we're done
 				// set the target location (anchor) to go to within the page
 				$target = $modInfo['name'];

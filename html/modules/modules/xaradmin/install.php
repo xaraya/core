@@ -69,6 +69,7 @@ function modules_admin_install()
         return;
     }
 
+    xarSessionSetVar('installing',true);
     $minfo=xarModGetInfo($id);
     //Bail if we've lost our module
     if ($minfo['state'] != XARMOD_STATE_MISSING_FROM_INACTIVE) {
@@ -80,6 +81,7 @@ function modules_admin_install()
             //return;
         }
     }
+    xarSessionDelVar('installing');
 
     // set the target location (anchor) to go to within the page
     $target = $minfo['name'];
