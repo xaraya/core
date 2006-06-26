@@ -79,14 +79,14 @@ function dynamicdata_utilapi_getstatic($args)
         }
     }
 
-    $dbInfo =& $dbconn->getDatabaseInfo();
+    $dbInfo = $dbconn->getDatabaseInfo();
     $dbTables = array();
 
     if(!empty($table)) {
         // it's easy if the table name is known
         $dbTables[] = $dbInfo->getTable($table);
     } else {
-        $dbTables =& $dbInfo->getTables();
+        $dbTables = $dbInfo->getTables();
     }
 
     // TODO: we lost the linkage with modules here

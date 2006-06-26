@@ -640,7 +640,7 @@ class Dynamic_Object_Master
      * @returns object
      * @return the requested object definition
      */
-    function &getObjectInterface($args)
+    static function &getObjectInterface($args)
     {
         require_once 'modules/dynamicdata/class/interface.php';
 
