@@ -8,6 +8,8 @@
 
 /**
  * Boolean Validation Function
+ *
+ * @throws VariableValidationException
  */
 function variable_validations_bool (&$subject, $parameters=null, $supress_soft_exc, &$name)
 {

@@ -10,6 +10,8 @@
 
 /**
  * Checkbox Validation Class
+ *
+ * @throws VariableValidationException
  */
 function variable_validations_checkbox (&$subject, $parameters, $supress_soft_exc, &$name)
 {

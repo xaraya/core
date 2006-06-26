@@ -10,6 +10,8 @@
 /**
  * Integer Validation Class
  * @return true on success of validation (value is an integer)
+ *
+ * @throws VariableValidationException, BadParameterException
  */
 function variable_validations_int (&$subject, $parameters, $supress_soft_exc, &$name)
 {

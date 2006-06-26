@@ -14,11 +14,13 @@
  *
  * @package validation
  * @copyright (C) 2003 by the Xaraya Development Team.
-*/
+ **/
 
 /**
  * String List Validation Class
- */
+ *
+ * @throws VariableValidationException, BadParameterException
+ **/
 function variable_validations_strlist (&$subject, $parameters, $supress_soft_exc, &$name)
 {
     $return = true;

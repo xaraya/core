@@ -38,7 +38,7 @@
  * @param databaseName
  * @param databaseType
  * @return string sql statement for database creation
- * @raise BAD_PARAM
+ * @throws EmptyParameterException, BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
 function xarDBCreateDatabase($databaseName, $databaseType = NULL)
@@ -91,6 +91,7 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
  * @param args['primary_key'] primary key
  * @param databaseType the database type (optional)
  * @return string generated sql
+ * @throws EmptyParameterException, BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
 function xarDBCreateTable($tableName, $fields, $databaseType="")
@@ -148,6 +149,7 @@ function xarDBCreateTable($tableName, $fields, $databaseType="")
  * @param args['increment'] auto incrementing files
  * @param args['primary_key'] primary key
  * @param databaseType the database type (optional)
+ * @throws EmptyParameterException, BadParameterException
  * @return string generated sql
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
@@ -245,6 +247,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
  * @param index an array containing the index name, type and fields array
  * @param databaseType is an optional parameter to specify the database type
  * @return string|false the generated SQL statement, or false on failure
+ * @throws EmptyParameterException, BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
 function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
@@ -306,7 +309,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
  * @param name a db index name
  * @param databaseType
  * @return string|false generated sql to drop an index
- * @raise BAD_PARAM
+ * @throws EmptyParameterException, BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
 function xarDBDropIndex($tableName, $index, $databaseType = NULL)

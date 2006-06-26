@@ -39,6 +39,8 @@ class ApiDeprecationException extends DeprecationExceptions
 * xarVarPrepForStore()  -> use bind vars or dbconn->qstr() method
 * xarPage_sessionLess() -> xarPageCache_sessionLess()
 * xarPage_httpCacheHeaders() -> xarPageCache_sendHeaders()
+* xarVarCleanUntrused   -> use xarVarFetch validations
+* xarVarCleanFromInput  -> use xarVarFetch validations
 */
 
 
@@ -99,7 +101,7 @@ function xarUser_getThemeName()
  * @access public
  * @param string component the component to add
  * @param string schema the security schema to add
- *
+ * @throws ApiDeprecationException
  * Will fail if an attempt is made to overwrite an existing schema
  */
 function xarSecAddSchema($component, $schema)
@@ -239,5 +241,36 @@ function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel,
     return pnSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId);
 }
 
+/**
+ * Cleans a variable.
+ *
+ *
+ * Cleaning it up to try to ensure that hack attacks
+ * don't work. Typically used for cleaning variables
+ * coming from user input.
+ *
+ * @access public
+ * @param var variable to clean
+ * @return string prepared variable
+ * @deprecated
+ */
+function xarVarCleanUntrusted($var)
+{
+    // Issue a WARNING as this function is deprecated
+    xarLogMessage('Using deprecated function xarVarCleanUntrusted, use ??? instead',XARLOG_LEVEL_WARNING);
+    $search = array('|</?\s*SCRIPT[^>]*>|si',
+                    '|</?\s*FRAME[^>]*>|si',
+                    '|</?\s*OBJECT[^>]*>|si',
+                    '|</?\s*META[^>]*>|si',
+                    '|</?\s*APPLET[^>]*>|si',
+                    '|</?\s*LINK[^>]*>|si',
+                    '|</?\s*IFRAME[^>]*>|si',
+                    '|STYLE\s*=\s*"[^"]*"|si');
+    // short open tag <  followed by ? (we do it like this otherwise our qa tests go bonkers)
+    $replace = array('');
+    // Clean var
+    $var = preg_replace($search, $replace, $var);
 
+    return $var;
+}
 ?>

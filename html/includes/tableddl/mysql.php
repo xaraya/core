@@ -91,7 +91,7 @@ function xarDB__mysqlCreateTable($tableName, $fields)
  * @param args['after_field']
  * @param args['new_name'] new name of table
  * @return string|false mysql specific sql to alter a table
- * @raise BAD_PARAM
+ * @throws BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
 function xarDB__mysqlAlterTable($tableName, $args)

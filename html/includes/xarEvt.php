@@ -108,7 +108,7 @@ class xarEvents implements IxarEvents
      * @access  public
      * @param   $eventName string Which event are we registering?
      * @return  bool  true on success
-     * @throws  EMPTY_PARAM
+     * @throws  EmptyParameterException
      * @todo    make this protected in the real sense again, only core should call it
      */
     static function register($eventName)
@@ -126,7 +126,7 @@ class xarEvents implements IxarEvents
      * @access  private
      * @param   $eventName Name of the event to check
      * @return  bool 
-     * @throws  EVENT_NOT_REGISTERED
+     * @throws  EventRegistrationException
      */
     private static function check($eventName)
     {
@@ -205,7 +205,7 @@ class xarEvents implements IxarEvents
      * @param   $value     mixed  Optional value to pass to the event handler 
      * @param   $modDir    string The directory of the module
      * @return  void
-     * @throws  BAD_PARAM
+     * @throws  EmptyParameterException
      * @todo    Analyze thoroughly for performance issues.
      */
     private static function notify($modName, $eventName, $value, $modDir = NULL)

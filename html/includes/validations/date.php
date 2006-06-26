@@ -25,6 +25,8 @@
  * Syntax is (when used from xarVarValidate) is:
  *  display-format[:store-format[:input-format:...]]
  * where each format string uses the format specifiers as defined by strftime()
+ *
+ * @throws VariableValidationException
  */
 
 function variable_validations_date (&$subject, $parameters, $supress_soft_exc, &$name)

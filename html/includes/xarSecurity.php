@@ -630,6 +630,7 @@ function xarSecGenAuthKey($modName = NULL)
  * @access public
  * @param string authIdVarName
  * @return bool true if the key is valid, false if it is not
+ * @throws ForbiddenOperationException
  * @todo bring back possibility of time authorized keys
  */
 function xarSecConfirmAuthKey($modName = NULL, $authIdVarName = 'authid')

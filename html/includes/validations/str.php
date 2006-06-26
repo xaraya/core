@@ -4,11 +4,13 @@
  *
  * @package validation
  * @copyright (C) 2003 by the Xaraya Development Team.
-*/
+ **/
 
 /**
  * Strings Validation Class
- */
+ *
+ * @throws VariableValidationException, BadParameterException
+ **/
 function variable_validations_str (&$subject, $parameters, $supress_soft_exc, &$name)
 {
     if ($name == '') $name = '<unknown>';

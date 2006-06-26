@@ -9,7 +9,9 @@
 
 /**
  * notempty Validation Function
- */
+ *
+ * @throws VariableValidationException 
+ **/
 function variable_validations_notempty (&$subject, $parameters, $supress_soft_exc, &$name)
 {
     if (empty($subject)) {

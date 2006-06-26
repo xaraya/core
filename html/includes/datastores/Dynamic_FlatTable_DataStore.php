@@ -115,6 +115,12 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         return $itemid;
     }
 
+    /**
+     * Create an item in the flat table
+     *
+     * @return bool true on success, false on failure
+     * @throws BadParameterException
+     **/
     function createItem($args)
     {
         $itemid = $args['itemid'];
@@ -511,6 +517,12 @@ if (empty($itemidfield)) {
         return $numitems;
     }
 
+    /**
+     * Get the primary key of this item
+     *
+     * @return string name of the column which is the primary key
+     * @todo ill defined, primary key can have combined columns, should perhaps return object(set) reference
+     **/
     function getPrimary()
     {
         if (!empty($this->primary)) {

@@ -92,6 +92,13 @@ function xarError_init(&$systemArgs, $whatToLoad)
     return true;
 }
 
+/**
+ * Debug function
+ *
+ * @return void
+ * @throws DebugException
+ * @author Marcel van der Boom
+ **/
 function debug($anything)
 {
     throw new DebugException('DEBUGGING',var_export($anything,true));
@@ -116,6 +123,7 @@ function xarError__shutdown_handler()
  * @param major integer error major number
  * @param errorID string error identifier
  * @param value error object
+ * @throws ErrorDeprecationException
  * @return void
  */
 function xarErrorSet($major, $errorID, $value = NULL)

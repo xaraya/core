@@ -134,6 +134,7 @@ class BLParserException extends BLCompilerException
  *
  * @package blocklayout
  * @access private
+ * @throws BLCompilerException
  */
 class xarTpl__CompilerError extends Exception
 {
@@ -152,6 +153,7 @@ class xarTpl__CompilerError extends Exception
  *
  * @package blocklayout
  * @access private
+ * @throws BLParserException
  * @todo evaluate whether the exception needs to be a system exception
  * @todo ML for the error message?
  * @todo Does the exception need to be a system exception?
@@ -1468,27 +1470,47 @@ abstract class xarTpl__TplTagNode extends xarTpl__Node
         $this->attributes = $attributes;  
     }
     
-    // If we get here, the render method was called but not implemented in the tag,
-    // which means the user specified it as <xar:tag ..../>
-    // We (try to) treat this like <xar:tag></xar:tag> which is effectively the same.
-    // Furthermore, we dont want this called directly, but we cant right now due to the class structure
-    // we have, so TODO here ;-)
+    /**
+     * Render a closed tag, abstract catcher
+     * 
+     * If we get here, the render method was called but not implemented in the tag,
+     * which means the user specified it as <xar:tag ..../>
+     * We (try to) treat this like <xar:tag></xar:tag> which is effectively the same.
+     * Furthermore, we dont want this called directly, but we cant right now due to the class structure
+     * we have, so TODO here ;-)
+     * @return void
+     * @author Marcel van der Boom
+     **/
     public function render()
     {
         return $this->renderBeginTag() . $this->renderEndTag();
     }
 
-    // Similarly if we get here, the renderBeginTag and renderEndTag method were not
-    // implemented by the tag, either by mistake, or it just has a render method.
-    // In both cases, we should error out with an explanatory message
-    // 
+    /**
+     * Render the begin tag, abstract catcher
+     *
+     * Similarly if we get here, the renderBeginTag and renderEndTag method were not
+     * implemented by the tag, either by mistake, or it just has a render method.
+     * In both cases, we should error out with an explanatory message
+     * @return void
+     * @throws BLParserException
+     * @author Marcel van der Boom
+     **/
     function renderBeginTag()
     {
         $msg = "The tag 'xar:#(1)' implementation is incomplete (render or renderBegintag is missing), or the tag does not support the open form.";
         throw new BLParserException($this->tagName,$msg);
     }
     
-    // We probably never reach this, but it balances out nicely. (hint for refactoring there though)
+     
+    /**
+     * End tag rendering, abstract catcher
+     *
+     * We probably never reach this, but it balances out nicely. (hint for refactoring there though)
+     * @return void
+     * @throws BLParserException
+     * @author Marcel van der Boom
+     **/
     function renderEndTag()
     {
         $msg = "The tag 'xar:#(1)' implementation is incomplete (render or renderEndtag is missing), or the tag does not support the open form.";
@@ -1528,6 +1550,13 @@ abstract class xarTpl__EntityNode extends xarTpl__Node
         $this->parameters = $parameters;
     }
 
+    /**
+     * Render the code, catcher
+     *
+     * @return void
+     * @throws BLParserException
+     * @author Marcel van der Boom
+     **/
     function render()
     {
         $msg = "The entity '#(1)' did not implement a render method!!";
@@ -1560,6 +1589,13 @@ class xarTpl__InstructionNode extends xarTpl__Node
 
     }
 
+    /**
+     * Render the instruction code, abstrac catcher
+     *
+     * @return void
+     * @throws BLParserException
+     * @author Marcel van der Boom
+     **/
     function render()
     {
         $msg = "The instruction '#(1)' did not implement a render method!!";

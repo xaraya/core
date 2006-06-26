@@ -27,6 +27,7 @@ class ExceptionHandlers implements IExceptionHandlers
      * We define this handler here, because it needs to be defined before set_exception_handler
      *
      * @param  Exception $exception The exception object
+     * @throws Exception
      * @todo Get rid of the redundant parts
      * @return void
      */
@@ -84,6 +85,7 @@ class ExceptionHandlers implements IExceptionHandlers
      * @param  integer $line linenumber on which the error occurred
      * @author Marco Canini <marco@xaraya.com>
      * @access private
+     * @throws PHPException
      * @return void
      */
     final public static function phperrors($errorRaised, $errorString, $file, $line)

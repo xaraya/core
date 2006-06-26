@@ -164,7 +164,7 @@ class xarModVars implements IxarModVars
      * @param modName The name of the module
      * @param name The name of the variable
      * @return mixed The value of the variable or void if variable doesn't exist
-     * @raise DATABASE_ERROR, BAD_PARAM
+     * @throws EmptyParameterException
      */
     static function get($modName, $name, $prep = NULL)
     {
@@ -179,7 +179,7 @@ class xarModVars implements IxarModVars
      * @access protected
      * @param modName string
      * @return mixed true on success
-     * @raise DATABASE_ERROR, BAD_PARAM
+     * @throws EmptyParameterException
      * @todo  This is has some duplication with xarVar.php
      */
     static function load($modName)
@@ -216,7 +216,7 @@ class xarModVars implements IxarModVars
      * @param name The name of the variable
      * @param value The value of the variable
      * @return bool true on success
-     * @raise DATABASE_ERROR, BAD_PARAM
+     * @throws EmptyParameterException
      * @todo  We could delete the item vars for the module with the new value to save space?
      */
     static function set($modName, $name, $value)
@@ -232,7 +232,7 @@ class xarModVars implements IxarModVars
      * @param modName The name of the module
      * @param name The name of the variable
      * @return bool true on success
-     * @raise DATABASE_ERROR, BAD_PARAM
+     * @throws EmptyParameterException
      * @todo Add caching for item variables?
      */
     static function delete($modName, $name)
@@ -247,7 +247,7 @@ class xarModVars implements IxarModVars
      * @access public
      * @param modName The name of the module
      * @return bool true on success
-     * @raise DATABASE_ERROR, BAD_PARAM
+     * @throws EmptyParameterException, SQLException
      * @todo Add caching for item variables?
      */
     static function delete_all($modName)
@@ -313,7 +313,7 @@ class xarModVars implements IxarModVars
      * @param modName The name of the module
      * @param name    The name of the variable
      * @return int id identifier for the variable
-     * @raise BAD_PARAM
+     * @throws EmptyParameterException
      * @see xarModUserVars::set(), xarModUserVars::get(), xarModUserVars::delete()
      */
     static function getID($modName, $name)
@@ -391,7 +391,7 @@ class xarModUserVars implements IxarModUserVars
      * @param name    The name of the variable to get
      * @param uid     User id for which value is to be retrieved
      * @return mixed Teh value of the variable or void if variable doesn't exist.
-     * @raise  DATABASE_ERROR, BAD_PARAM (indirect)
+     * @throws EmptyParameterException
      * @see  xarModVars::get()
      * @todo Mrb : Add caching?
      */
@@ -424,7 +424,7 @@ class xarModUserVars implements IxarModUserVars
      * @param value   Value to set the variable to.
      * @param uid     User id for which value needs to be set
      * @return bool true on success false on failure
-     * @raise BAD_PARAM
+     * @throws EmptyParameterException
      * @see xarModVars::set()
      * @todo Add caching?
      */
@@ -455,7 +455,7 @@ class xarModUserVars implements IxarModUserVars
      * @param name    The name of the variable to set
      * @param uid     User id of the user to delete the variable for.
      * @return bool true on success
-     * @raise BAD_PARAM
+     * @throws EmptyParameterException
      * @see xarModVars::delete()
      * @todo Add caching?
      */

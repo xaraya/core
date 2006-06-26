@@ -189,9 +189,14 @@ class xarLogger_simple extends xarLogger
         }
     }
 
-    // Prepares the logfile for writing
-    // @param file $file Path to the logger file
-    // @access private
+    /**
+     * Prepare the logfile for writing
+     *
+     * @param file $file Path to the logger file
+     * @access private
+     * @throws LoggerException
+     * @return bool true on success
+     **/
     function _prepareLogfile()
     {
         if (file_exists($this->_filename)) {
@@ -214,9 +219,16 @@ class xarLogger_simple extends xarLogger
         return true;
     }
 
-    // Opens the logfile for writing. File should always exist, as
-    // setConfig() will have created it if it doesn't.
-    // @access private
+    /**
+     * Open the logfile for writing.
+     *
+     * The file should always exist, as setConfig() will have created it
+     * if it did not
+     *
+     * @access private
+     * @throws LoggerException
+     * @return bool true on succes, false on failure
+     **/
     function _openLogfile()
     {
         // Log file is already open.

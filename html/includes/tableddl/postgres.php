@@ -112,7 +112,7 @@ function xarDB__postgresqlCreateTable($tableName, $fields)
  * @param args['field'] name of column to modify
  * @param args['new_name'] new name of table
  * @return string|false postgres specific sql to alter a table
- * @raise BAD_PARAM
+ * @throws BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
 function xarDB__postgresqlAlterTable($tableName, $args)

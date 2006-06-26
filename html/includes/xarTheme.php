@@ -18,7 +18,7 @@
  * @param themeName The name of the theme
  * @param name The name of the variable
  * @return mixed The value of the variable or void if variable doesn't exist
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws EmptyParameterException
  */
 function xarThemeGetVar($themeName, $name, $prep = NULL)
 {
@@ -37,7 +37,7 @@ function xarThemeGetVar($themeName, $name, $prep = NULL)
  * @param name The name of the variable
  * @param value The value of the variable
  * @return bool true on success
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws EmptyParameterException
  */
 function xarThemeSetVar($themeName, $name, $prime = NULL, $value, $description='')
 {
@@ -61,7 +61,7 @@ function xarThemeSetVar($themeName, $name, $prime = NULL, $value, $description='
  * @param themeName The name of the theme
  * @param name The name of the variable
  * @return bool true on success
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws EmptyParameterException
  */
 function xarThemeDelVar($themeName, $name)
 {
@@ -78,7 +78,7 @@ function xarThemeDelVar($themeName, $name)
  * @access public
  * @param themeName The name of the theme
  * @return theme RegID for processing
- * @raise DATABASE_ERROR, BAD_PARAM, THEME_NOT_EXIST
+ * @throws EmptyParameterException
  */
 function xarThemeGetIDFromName($themeName,$id='regid')
 {

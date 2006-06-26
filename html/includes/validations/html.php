@@ -8,6 +8,8 @@
 
 /**
  * HTML Validation Class
+ *
+ * @throws VariableValidationException
  */
 function variable_validations_html (&$subject, $parameters, $supress_soft_exc, &$name)
 {
