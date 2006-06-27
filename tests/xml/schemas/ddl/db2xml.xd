@@ -18,9 +18,12 @@
         </xar:if>
         <xar:set name="column_name">#$column:getName()#</xar:set>
         <xar:set name="isPrimary">'false'</xar:set>
-        <xar:if condition="#isset($prim_columns.$column_name)#">
-          <xar:set name="isPrimary">'true'</xar:set>
-        </xar:if>
+        <xar:foreach in="$prim_columns" value="$prim_column">
+          <xar:if condition="#$prim_column:getName() eq $column_name#">
+            <xar:set name="isPrimary">'true'</xar:set>
+            <xar:break/>
+          </xar:if>
+        </xar:foreach>
         <xar:set name="type">CreoleTypes::getCreoleName($column->getType())</xar:set>
         <column name="#$column_name#" 
                 description=""
