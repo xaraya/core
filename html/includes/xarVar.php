@@ -655,15 +655,8 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
     }
 
     if (!empty($query)){
-        try {
-            $dbconn->begin();
-            $stmt = $dbconn->prepareStatement($query);
-            $stmt->executeUpdate($bindvars);
-            $dbconn->commit();
-        } catch (SQLException $e) {
-            $dbconn->rollback();
-            throw $e;
-        }
+        $stmt = $dbconn->prepareStatement($query);
+        $stmt->executeUpdate($bindvars);
     }
 
     switch($type) {

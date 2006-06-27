@@ -1864,16 +1864,9 @@ function xarTplUnregisterTag($tag_name)
     $xartable =& xarDBGetTables();
 
     $tag_table = $xartable['template_tags'];
-    try {
-        $dbconn->begin();
-        $query = "DELETE FROM $tag_table WHERE xar_name = ?";
-        $stmt = $dbconn->prepareStatement($query);
-        $stmt->executeUpdate(array($tag_name));
-        $dbconn->commit();
-    } catch (SQLException $e) {
-        $dbconn->rollback();
-        throw $e;
-    }
+    $query = "DELETE FROM $tag_table WHERE xar_name = ?";
+    $stmt = $dbconn->prepareStatement($query);
+    $stmt->executeUpdate(array($tag_name));
     return true;
 }
 

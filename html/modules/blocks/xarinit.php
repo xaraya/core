@@ -245,14 +245,16 @@ function blocks_init()
          xarModSetVar('blocks','blocksuparrow','upb.gif');
          xarModSetVar('blocks','blocksdownarrow','downb.gif');
         */
-        
-        // Initialisation successful
-        xarModSetVar('blocks', 'selstyle', 'plain');
-        xarModSetVar('blocks', 'itemsperpage', 20);
+        $dbconn->commit();
     } catch (Exception $e) {
         $dbconn->rollback();
         throw $e;
     }
+        
+    // Initialisation successful
+    xarModSetVar('blocks', 'selstyle', 'plain');
+    xarModSetVar('blocks', 'itemsperpage', 20);
+        
     return true;
 }
 

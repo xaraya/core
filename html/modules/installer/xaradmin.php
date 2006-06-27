@@ -884,6 +884,7 @@ function installer_admin_confirm_configuration()
             $dbconn->Execute($query);
             $query = "DELETE FROM " . $sitePrefix . '_security_acl';
             $dbconn->Execute($query);
+            $dbconn->commit();
         } catch(SQLException $e) {
             $dbconn->rollback();
             throw $e;

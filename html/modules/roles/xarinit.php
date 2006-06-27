@@ -30,8 +30,9 @@ function roles_init()
     $tables['roles'] = $sitePrefix . '_roles';
     $tables['rolemembers'] = $sitePrefix . '_rolemembers';
 
-    // We want this to succeed completely or not at all
+    // Create tables inside a transaction
     try {
+        $dbconn->begin();
         /**
          * CREATE TABLE xar_roles (
          *    xar_uid int(11) NOT NULL auto_increment,
@@ -144,7 +145,6 @@ function roles_init()
         $dbconn->rollback();
         throw $e;
     }
-
 
     //Database Initialisation successful
     return true;
