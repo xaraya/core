@@ -22,6 +22,10 @@ function dynamicdata_adminapi_getmenulinks()
     $menulinks = array();
     if (xarSecurityCheck('AdminDynamicData',0)) {
 
+        $menulinks[] = Array('url' => xarModURL('dynamicdata','admin','overview'),
+                               'title' => xarML('DynamicData Overview'),
+                              'label' => xarML('Overview'));
+
         $menulinks[] = Array('url'   => xarModURL('dynamicdata',
                                                    'admin',
                                                    'view'),
