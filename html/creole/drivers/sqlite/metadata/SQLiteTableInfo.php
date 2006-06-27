@@ -42,7 +42,7 @@ class SQLiteTableInfo extends TableInfo {
         // two separate queries.  The first gets names and default values
         // the second will fill in some more details.
         
-        $sql = 'PRAGMA table_info('.$this->name.')';
+        $sql = "PRAGMA table_info('".$this->name."')";
                 
         $res = sqlite_query($this->conn->getResource(), $sql);
         
@@ -111,7 +111,7 @@ class SQLiteTableInfo extends TableInfo {
         // columns have to be loaded first
         if (!$this->colsLoaded) $this->initColumns();        
 
-        $sql = 'PRAGMA index_list('.$this->name.')';
+        $sql = "PRAGMA index_list('".$this->name."')";
         $res = sqlite_query($this->conn->getResource(), $sql);
         
         while($row = sqlite_fetch_array($res, SQLITE_ASSOC)) {        
@@ -119,7 +119,7 @@ class SQLiteTableInfo extends TableInfo {
             $this->indexes[$name] = new IndexInfo($name);
             
             // get columns for that index
-            $res2 = sqlite_query($this->conn->getResource(), 'PRAGMA index_info('.$name.')');
+            $res2 = sqlite_query($this->conn->getResource(), "PRAGMA index_info('$name')");
             while($row2 = sqlite_fetch_array($res2, SQLITE_ASSOC)) {
                 $colname = $row2['name'];
                 $this->indexes[$name]->addColumn($this->columns[ $colname ]);
