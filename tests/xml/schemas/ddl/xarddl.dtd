@@ -34,14 +34,11 @@
 		* removed attribute defaultTranslateMethode (with e?) from 'database' element
 		* removed phpName, ideMethod, skipSql, readOnly, abstract, isTree, interface, phpNamingMethod attributes from 'table' element
 		* removed phpName, peerName, phpType, inheritance, inputValidator, phpNamingMethod, lazyload attributes from 'column' element 
-		* where no child definitios were left due to removals, declared elements EMPTY
+		* where no child definitions were left due to removals, declared elements EMPTY
 		* removed element 'external-schemal 
 		* removed 'alias' attribute from 'table' element
 		* removed 'package' attribute from 'database'+'table' elements
-		* removed 'scale' attribute from 'column' element
-		* removed BIT, TINYINT, SMALLINT, BIGINT, OTHER, PHP_OBJECT, DISTINCT, 
-			STRUCT, ARRAY, REF, BOOLEANINT, BOOLEANCHAR, NUMERIC, REAL, NULL, CLOB, BLOB
-			LONGVARCHAR, LONGVARBINARY, DOUBLE from values for 'type' attribute for 'column' element
+		* removed PHP_OBJECT, DISTINCT, STRUCT, ARRAY, REF, NULL from values for 'type' attribute for 'column' element
 -->
 
 <!ELEMENT database (table+)>
@@ -58,9 +55,17 @@
   name CDATA #REQUIRED
   primaryKey (true|false) "false"
   required (true|false) "false"
-  type (INTEGER|FLOAT|DECIMAL|CHAR|VARCHAR|DATE|TIME|TIMESTAMP|BINARY|VARBINARY|BOOLEAN) "VARCHAR"
+  type (TINYINT|SMALLINT|BIGINT|INTEGER|
+        FLOAT|DECIMAL|NUMERIC|REAL|DOUBLE|
+        CHAR|VARCHAR|LONGVARCHAR|
+        DATE|TIME|TIMESTAMP|
+        BINARY|VARBINARY|LONGVARBINART|BLOB|CLOB
+        BOOLEAN|BIT|BOOLEANINT|BOOLEANCHAR
+        OTHER
+       ) "VARCHAR"
   size CDATA #IMPLIED
   default CDATA #IMPLIED
+  scale CDATA #IMPLIED
   autoIncrement (true|false) "false"
   description CDATA #IMPLIED
 >

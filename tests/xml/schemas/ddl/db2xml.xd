@@ -27,7 +27,8 @@
         <xar:set name="type">CreoleTypes::getCreoleName($column->getType())</xar:set>
         <column name="#$column_name#" 
                 description=""
-                size="#$column:getSize()#" 
+                size="#$column:getSize()#"
+                scale="#$column:getScale()#"
                 type="#$type#"
                 default="#$column:getDefaultValue()#"
                 autoIncrement="#$autoinc#"
