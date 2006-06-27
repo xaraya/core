@@ -79,20 +79,20 @@ function dynamicdata_utilapi_getstatic($args)
         }
     }
 
-    $dbInfo =& $dbconn->getDatabaseInfo();
+    $dbInfo = $dbconn->getDatabaseInfo();
     $dbTables = array();
 
     if(!empty($table)) {
         // it's easy if the table name is known
         $dbTables[] = $dbInfo->getTable($table);
     } else {
-        $dbTables =& $dbInfo->getTables();
+        $dbTables = $dbInfo->getTables();
     }
 
     // TODO: we lost the linkage with modules here
     $static = array(); $order = 1; $seq=1;
     foreach($dbTables as $tblInfo) {
-        $tblColumns =& $tblInfo->getColumns();
+        $tblColumns = $tblInfo->getColumns();
         $table = $tblInfo->getName();
         foreach($tblColumns as $colInfo) {
             $field = $colInfo->getName();
