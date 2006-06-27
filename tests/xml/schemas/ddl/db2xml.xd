@@ -1,0 +1,54 @@
+<database name="#$dbname#">
+  <xar:foreach in="$tables" value="$table">
+    <table name="#$table:getName()#">
+      <xar:set name="primary">#$table:getPrimaryKey()#</xar:set>
+      <xar:set name="prim_columns">array()</xar:set>
+      <xar:if condition="is_object($primary)">
+        <xar:set name="prim_columns">#$primary:getColumns()#</xar:set>
+      </xar:if>
+      <xar:set name="columns">#$table:getColumns()#</xar:set>
+      <xar:foreach in="$columns" value="$column">
+        <xar:set name="autoinc">'false'</xar:set>
+        <xar:if condition="#$column:isAutoIncrement()#">
+          <xar:set name="autoinc">'true'</xar:set>
+        </xar:if>
+        <xar:set name="required">'true'</xar:set>
+        <xar:if condition="#$column:isNullable()#">
+          <xar:set name="required">'false'</xar:set>
+        </xar:if>
+        <xar:set name="column_name">#$column:getName()#</xar:set>
+        <xar:set name="isPrimary">'false'</xar:set>
+        <xar:if condition="#isset($prim_columns.$column_name)#">
+          <xar:set name="isPrimary">'true'</xar:set>
+        </xar:if>
+        <xar:set name="type">CreoleTypes::getCreoleName($column->getType())</xar:set>
+        <column name="#$column_name#" 
+                description=""
+                size="#$column:getSize()#" 
+                type="#$type#"
+                default="#$column:getDefaultValue()#"
+                autoIncrement="#$autoinc#"
+                required="#$required#"
+                primaryKey="#$isPrimary#"
+                />
+      </xar:foreach>
+      <xar:set name="indexes">#$table:getIndexes()#</xar:set>
+      <xar:foreach in="$indexes" value="$index">
+        <xar:set name="index_columns">#$index:getColumns()#</xar:set>
+        <xar:if condition="#$index:isUnique()#">
+          <unique name="#$index:getName()#">
+            <xar:foreach in="$index_columns" value="$index_column">
+              <unique-column name="#$index_column:getName()#"/>
+            </xar:foreach>                          
+          </unique>
+        <xar:else/>
+          <index name="#$index:getName()#">
+            <xar:foreach in="$index_columns" value="$index_column">
+              <index-column name="#$index_column:getName()#"/>
+            </xar:foreach>                          
+          </index>
+        </xar:if>
+      </xar:foreach>
+    </table>
+  </xar:foreach>
+</database>

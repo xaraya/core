@@ -1,0 +1,81 @@
+<!--
+		DTD to define an XML variety to generate DDL for creating
+		storage objects (be it tables in an sql db or dd objects)
+		
+		The DTD is based on the propel XML database DTD which in turn was
+		based on the apache torque DTD. We keep a *very strict* log of
+		our changes. The propel framework has bits and pieces of code we
+		can reuse, and every deviation from their schema will induce a code
+		change.
+		
+		The initial goals are:
+		1. to create an absolute minimal DTD to replace xartableddl and xardatadict
+		2. stay compatible with the original DTD it was based on.
+		3. be able to generate more structured schema's from the DTD (like RNG)
+		4. be able to produce the xml from the database itself.
+		
+		Initial xarddl.dtd was based on:
+			Propel XML database schema DTD
+			$Id: database.dtd,v 1.7 2005/03/30 11:38:18 hlellelid Exp $
+		Changelog in applied order (meaning, if you make a change, at to the bottom):
+		* removed element 'reference'			- used in foreign key to specify references
+		* removed element 'foreign-key'	  - to define foreign key relationships
+		* removed element 'rule'					- to define validation rules
+		* removed element 'validator'     - grouped rule elements
+		* removed element 'vendor'        - used for vendor specific definitions in xml
+		* removed element 'inheritance'	  - used for linking code classes to the columns
+		* removed element 'parameter'     - used as child of the vendor element to define parameters
+		* removed element 'id-method-parameter' - used to customize id generation
+		* removed attribute defaultPHPNameingMethod from 'database' element (including referencing comments)
+		* removed attribute heavyIndexing from 'database'+'column' element
+		* removed attribute baseClass from 'database'+'column' element
+		* removed attribute basePeer from 'database'+'column' element
+		* removed attribute defaultIdMethod from 'database' element
+		* removed attribute defaultTranslateMethode (with e?) from 'database' element
+		* removed phpName, ideMethod, skipSql, readOnly, abstract, isTree, interface, phpNamingMethod attributes from 'table' element
+		* removed phpName, peerName, phpType, inheritance, inputValidator, phpNamingMethod, lazyload attributes from 'column' element 
+		* where no child definitios were left due to removals, declared elements EMPTY
+		* removed element 'external-schemal 
+		* removed 'alias' attribute from 'table' element
+		* removed 'package' attribute from 'database'+'table' elements
+		* removed 'scale' attribute from 'column' element
+		* removed BIT, TINYINT, SMALLINT, BIGINT, OTHER, PHP_OBJECT, DISTINCT, 
+			STRUCT, ARRAY, REF, BOOLEANINT, BOOLEANCHAR, NUMERIC, REAL, NULL, CLOB, BLOB
+			LONGVARCHAR, LONGVARBINARY, DOUBLE from values for 'type' attribute for 'column' element
+-->
+
+<!ELEMENT database (table+)>
+<!ATTLIST database  name CDATA #IMPLIED>
+
+<!ELEMENT table (column+,(index|unique)*)>
+<!ATTLIST table
+  name CDATA #REQUIRED
+  description CDATA #IMPLIED
+>
+
+<!ELEMENT column EMPTY>
+<!ATTLIST column
+  name CDATA #REQUIRED
+  primaryKey (true|false) "false"
+  required (true|false) "false"
+  type (INTEGER|FLOAT|DECIMAL|CHAR|VARCHAR|DATE|TIME|TIMESTAMP|BINARY|VARBINARY|BOOLEAN) "VARCHAR"
+  size CDATA #IMPLIED
+  default CDATA #IMPLIED
+  autoIncrement (true|false) "false"
+  description CDATA #IMPLIED
+>
+
+<!ELEMENT index (index-column+)>
+<!ATTLIST index  name CDATA #IMPLIED>
+
+<!ELEMENT index-column EMPTY>
+<!ATTLIST index-column  
+	name CDATA #REQUIRED  
+	size CDATA #IMPLIED
+>
+
+<!ELEMENT unique (unique-column+)>
+<!ATTLIST unique  name CDATA #IMPLIED>
+
+<!ELEMENT unique-column EMPTY>
+<!ATTLIST unique-column  name CDATA #REQUIRED>
