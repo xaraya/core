@@ -1,4 +1,4 @@
-cd <?php
+<?php
 /**
  * (try to) get the "meta" properties of tables
  *
