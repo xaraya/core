@@ -39,6 +39,7 @@ CREATE TABLE <xsl:value-of select="@name"/>
 (
   <xsl:apply-templates select="column"/>
 );
+COMMENT ON TABLE <xsl:value-of select="@name"/> IS '<xsl:value-of select="@description"/>';
 <xsl:apply-templates select="index"/>
 </xsl:template>
 

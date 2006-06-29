@@ -4,9 +4,14 @@
   Schema which contains all the tricks in the trade, to which the implementation
   should react responsibly
 -->
-
 <database name="devtest">
-  <table name="first"
-         description="A nice table with some sort of description">
-  </table>
+  <table name="first" description="A nice table with some sort of description">
+    <column name="id" description="A unique id column" size="11" type="INTEGER"
+            autoIncrement="true" required="true" primaryKey="true"/>
+    <column name="ref_id" description="A reference to an id column" size="11" type="INTEGER"
+            required="true"/>
+    <index type="default" name="i_xar_block_group_instances">
+      <index-column name="ref_id"/>
+    </index>
+ </table>
 </database>
