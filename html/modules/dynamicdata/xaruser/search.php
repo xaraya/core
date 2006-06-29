@@ -107,7 +107,7 @@ function dynamicdata_user_search($args)
         }
         if (!empty($q) && count($wherelist) > 0) {
             $where = join(' or ',$wherelist);
-            $status = DD_PROPERTYSTATE_ACTIVE;
+            $status = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
             $pagerurl = xarModURL('dynamicdata','user','search',
                                   array('modid' => ($modid == $mymodid) ? null : $modid,
                                         'itemtype' => empty($itemtype) ? null : $itemtype,

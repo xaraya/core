@@ -12,12 +12,6 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
-define('DD_PROPERTYSTATE_DISABLED',0);
-define('DD_PROPERTYSTATE_HIDDEN',1);
-define('DD_PROPERTYSTATE_NOINPUT',2);
-define('DD_PROPERTYSTATE_DISPLAYONLY',4);
-define('DD_PROPERTYSTATE_ACTIVE',8);
-
 /**
  * Utility Class to manage Dynamic Properties
  *
@@ -26,6 +20,18 @@ define('DD_PROPERTYSTATE_ACTIVE',8);
  */
 class Dynamic_Property_Master
 {
+	const DD_DISPLAYSTATE_DISABLED = 0;
+	const DD_DISPLAYSTATE_HIDDEN = 3;
+	const DD_DISPLAYSTATE_DISPLAYONLY = 2;
+	const DD_DISPLAYSTATE_ACTIVE = 1;
+
+	const DD_INPUTSTATE_ADDMODIFY = 32;
+	const DD_INPUTSTATE_NOINPUT = 64;
+	const DD_INPUTSTATE_ADD = 96;
+	const DD_INPUTSTATE_MODIFY = 128;
+
+	const DD_DISPLAYMASK = 31;
+
     /**
      * Get the dynamic properties of an object
      *
@@ -263,7 +269,7 @@ class Dynamic_Property
     public $type = 1;
     public $default = '';
     public $source = 'dynamic_data';
-    public $status = DD_PROPERTYSTATE_ACTIVE;
+    public $status = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
     public $order = 0;
     public $format = '0';
     public $requiresmodule = ''; // this module must be available before this property is enabled (optional)

@@ -23,16 +23,17 @@ function dynamicdata_admin_updateprop()
 {
     // Get parameters from whatever input we need.  All arguments to this
     // function should be obtained from xarVarFetch()
-    if(!xarVarFetch('objectid',      'isset', $objectid,       NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',         'isset', $modid,          NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype',      'isset', $itemtype,       NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('table',         'isset', $table,          NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_label',      'isset', $dd_label,       NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_type',       'isset', $dd_type,        NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_default',    'isset', $dd_default,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_source',     'isset', $dd_source,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_status',     'isset', $dd_status,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_validation', 'isset', $dd_validation,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('objectid',          'isset', $objectid,          NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('modid',             'isset', $modid,             NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('itemtype',          'isset', $itemtype,          NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('table',             'isset', $table,             NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dd_label',          'isset', $dd_label,          NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dd_type',           'isset', $dd_type,           NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dd_default',        'isset', $dd_default,        NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dd_source',         'isset', $dd_source,         NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('display_dd_status', 'isset', $display_dd_status, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('input_dd_status',   'isset', $input_dd_status,   NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dd_validation',     'isset', $dd_validation,     NULL, XARVAR_DONT_SET)) {return;}
 
     // Confirm authorisation code.
     if (!xarSecConfirmAuthKey()) return;
@@ -106,6 +107,13 @@ function dynamicdata_admin_updateprop()
             if (!isset($dd_validation[$id])) {
                 $dd_validation[$id] = null;
             }
+            if (!isset($display_dd_status[$id])) {
+                $display_dd_status[$id] = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
+            }
+            if (!isset($input_dd_status[$id])) {
+                $input_dd_status[$id] = Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY;
+            }
+            $dd_status[$id] = $display_dd_status[$id] + $input_dd_status[$id];
             if (!xarModAPIFunc('dynamicdata','admin','updateprop',
                               array('prop_id' => $id,
                               //      'modid' => $modid,
@@ -123,7 +131,6 @@ function dynamicdata_admin_updateprop()
             }
         }
     }
-
     $i++;
     // insert new field
     if (!empty($dd_label[0]) && !empty($dd_type[0])) {
@@ -131,6 +138,13 @@ function dynamicdata_admin_updateprop()
         $name = strtolower($dd_label[0]);
         $name = preg_replace('/[^a-z0-9_]+/','_',$name);
         $name = preg_replace('/_$/','',$name);
+		if (!isset($display_dd_status[0])) {
+			$display_dd_status[0] = DD_DISPLAYSTATE_ACTIVE;
+		}
+		if (!isset($input_dd_status[0])) {
+			$input_dd_status[0] = DD_INPUTSTATE_ADDMODIFY;
+		}
+		$dd_status[0] = $display_dd_status[0] | ($input_dd_status[0] << 4);
         $prop_id = xarModAPIFunc('dynamicdata','admin','createproperty',
                                 array('name' => $name,
                                       'label' => $dd_label[0],

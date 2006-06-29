@@ -99,7 +99,7 @@ function dynamicdata_userapi_showview($args)
     // don't try getting the where clause via input variables, obviously !
     if (empty($where)) $where = '';
     if (empty($groupby)) $groupby = '';
-    
+
     // check the optional field list
     if (!empty($fieldlist)) {
         // support comma-separated field list
@@ -112,18 +112,18 @@ function dynamicdata_userapi_showview($args)
         $status = null;
     } else {
         $myfieldlist = null;
-        $status = ~DD_PROPERTYSTATE_DISPLAYONLY | DD_PROPERTYSTATE_ACTIVE;
+        $status = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
     }
 
     // join a module table to a dynamic object
     if (empty($join)) $join = '';
-    
+
     // make some database table available via DD
     if (empty($table)) $table = '';
-    
+
     // select in some category
     if (empty($catid)) $catid = '';
-    
+
     $object = & Dynamic_Object_Master::getObjectList(array('moduleid'  => $modid,
                                            'itemtype'  => $itemtype,
                                            'itemids' => $itemids,
@@ -148,19 +148,19 @@ function dynamicdata_userapi_showview($args)
 
     // label to use for the display link (if you don't use linkfield)
     if (empty($linklabel)) $linklabel = '';
-    
+
     // function to use in the display link
     if (empty($linkfunc)) $linkfunc = '';
-    
+
     // URL parameter for the item id in the display link (e.g. exid, aid, uid, ...)
     if (empty($param)) $param = '';
-    
+
     // field to add the display link to (otherwise it'll be in a separate column)
     if (empty($linkfield)) $linkfield = '';
-    
+
     // current URL for the pager (defaults to current URL)
     if (empty($pagerurl)) $pagerurl = '';
-    
+
     return $object->showView(array('layout'    => $layout,
                                    'template'  => $template,
                                    'linklabel' => $linklabel,
