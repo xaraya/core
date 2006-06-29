@@ -96,7 +96,10 @@
 	Ideally these would be children of the 'column' element so the attributes
 	can be defined on them specifically (e.g. 'precision' which only makes sense for numbers and perhaps time)
 	
-	* scale attribute is confusing, i'd rather use 'precision' or 'decimals'
+	* scale attribute is confusing, i'd rather use 'precision' or 'decimals' (also see previous point)
+	
+	* think about constraints, both on column and table level, they fit in nicely as
+	children of the 'column' or 'table' elements.
 	
 	* the mixed case use of 'autoIncrement' and 'primaryKey' are not needed, lead
 	to confusion only
@@ -122,5 +125,10 @@
 	
 	* an 'id' attribute on all tags supported.
 	
-	*    
+	* vendor parameters *are* useful, add them back at some point, but only if
+	we implement right away the support of those parameters (i.e. not only do the
+	familiar mysql table type stuff, but also other parameters)
+	
+	* xaraya doesnt use foreign keys yet, doesnt mean we cant have support in the
+	schema for it though.
 -->
