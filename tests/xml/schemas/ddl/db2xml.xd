@@ -39,19 +39,15 @@
       <xar:set name="indexes">#$table:getIndexes()#</xar:set>
       <xar:foreach in="$indexes" value="$index">
         <xar:set name="index_columns">#$index:getColumns()#</xar:set>
+        <xar:set name="index_type">'default'</xar:set>
         <xar:if condition="#$index:isUnique()#">
-          <unique name="#$index:getName()#">
-            <xar:foreach in="$index_columns" value="$index_column">
-              <unique-column name="#$index_column:getName()#"/>
-            </xar:foreach>                          
-          </unique>
-        <xar:else/>
-          <index name="#$index:getName()#">
-            <xar:foreach in="$index_columns" value="$index_column">
-              <index-column name="#$index_column:getName()#"/>
-            </xar:foreach>                          
-          </index>
+          <xar:set name="index_type">'unique'</xar:set>
         </xar:if>
+        <index type="#$index_type#" name="#$index:getName()#">
+          <xar:foreach in="$index_columns" value="$index_column">
+            <index-column name="#$index_column:getName()#"/>
+          </xar:foreach>                          
+        </index>
       </xar:foreach>
     </table>
   </xar:foreach>

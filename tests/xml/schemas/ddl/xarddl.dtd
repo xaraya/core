@@ -39,12 +39,14 @@
 		* removed 'alias' attribute from 'table' element
 		* removed 'package' attribute from 'database'+'table' elements
 		* removed PHP_OBJECT, DISTINCT, STRUCT, ARRAY, REF, NULL from values for 'type' attribute for 'column' element
+		* consolidated 'unique' and 'index' into 'index type="unique"'
+		* removed elements 'unique' and 'unique-column'
 -->
 
 <!ELEMENT database (table+)>
 <!ATTLIST database  name CDATA #IMPLIED>
 
-<!ELEMENT table (column+,(index|unique)*)>
+<!ELEMENT table (column+,index*)>
 <!ATTLIST table
   name CDATA #REQUIRED
   description CDATA #IMPLIED
@@ -59,8 +61,8 @@
         FLOAT|DECIMAL|NUMERIC|REAL|DOUBLE|
         CHAR|VARCHAR|LONGVARCHAR|
         DATE|TIME|TIMESTAMP|
-        BINARY|VARBINARY|LONGVARBINART|BLOB|CLOB
-        BOOLEAN|BIT|BOOLEANINT|BOOLEANCHAR
+        BINARY|VARBINARY|LONGVARBINART|BLOB|CLOB|
+        BOOLEAN|BIT|BOOLEANINT|BOOLEANCHAR|
         OTHER
        ) "VARCHAR"
   size CDATA #IMPLIED
@@ -71,7 +73,10 @@
 >
 
 <!ELEMENT index (index-column+)>
-<!ATTLIST index  name CDATA #IMPLIED>
+<!ATTLIST index  
+	name CDATA #IMPLIED
+	type (default|unique) "default"
+>
 
 <!ELEMENT index-column EMPTY>
 <!ATTLIST index-column  
@@ -79,8 +84,43 @@
 	size CDATA #IMPLIED
 >
 
-<!ELEMENT unique (unique-column+)>
-<!ATTLIST unique  name CDATA #IMPLIED>
-
-<!ELEMENT unique-column EMPTY>
-<!ATTLIST unique-column  name CDATA #REQUIRED>
+<!--
+	Wishes:
+	* the type attribute should only designate an 'abstract' type, not related
+	to the database types like TINYINT or something. the storage types used by
+	different databases can be figured out by the generator in combination with
+	other information supplied in the xml.
+	
+	Proposed set of types:
+	- char | binary | number | boolean | date | time
+	Ideally these would be children of the 'column' element so the attributes
+	can be defined on them specifically (e.g. 'precision' which only makes sense for numbers and perhaps time)
+	
+	* scale attribute is confusing, i'd rather use 'precision' or 'decimals'
+	
+	* the mixed case use of 'autoIncrement' and 'primaryKey' are not needed, lead
+	to confusion only
+	
+	* [DONE] the elements 'index' and 'unique' are the same, index type='unique' would
+	be better imo. Similarly, unique-column and index-column are then redundant, either
+	to be replaced by just a 'index-column' element, or <column name="colname"/> to reference
+	a column in the table definition.
+	
+	* an element 'primary' as a grouper around the 'column' element would be nice
+	Example:
+	<table name="test">
+		<column name="normal" type="INTEGER" size="4"/>
+		<primary>
+			<column name="ref_id" type="INTEGER" size="10"/>
+			<column name="ref1_id" type="INTEGER" size="10"/>
+		</primary>
+	</table>
+	Primary keys are either automatically indexed, or should always be indexed, the
+	generator can take this into account. 
+	
+	* partial set of the tags removed from the original.
+	
+	* an 'id' attribute on all tags supported.
+	
+	*    
+-->

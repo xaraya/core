@@ -5,15 +5,14 @@
 // of a Xaraya directory
 
 /* We need a (fake) ip address to run xar */
-putenv("REMOTE_ADDR=10.0.0.1");
+putenv("REMOTE_ADDR=127.0.0.1");
 $user = 'Admin';
 $pass = '12345';
 $tpl  ='/var/mt/xar/core/core.2.x/tests/xml/schemas/ddl/db2xml.xd';
-
+/* End configurable stuff */
 
 include 'includes/xarCore.php';
 xarCoreInit(XARCORE_SYSTEM_ALL);
-//echo "Core initialized\n";
 
 /* Make sure we handle boney instead of fancy */
 set_exception_handler(array('ExceptionHandlers','bone'));
@@ -21,19 +20,16 @@ set_exception_handler(array('ExceptionHandlers','bone'));
 if(!xarUserLogin($user,$pass)) {
     echo "Authentication failed\n";
     return 1;
-} else {
-    //echo "Authenticated\n";
 }
 
-$dbconn = xarDbGetconn();
-$dbInfo = $dbconn->getDatabaseInfo();
+$dbconn = xarDbGetconn();               // Connection object
+$dbInfo = $dbconn->getDatabaseInfo();   // DatabaseInfo object
 $tplData = array(
-    'dbname' => $dbInfo->getName(),
-    'tables' => $dbInfo->getTables());
+    'dbname' => $dbInfo->getName(),     // string
+    'tables' => $dbInfo->getTables());  // array of TableInfo objects
 
 // Produce the xml
-$blc = xarTpl__getCompilerInstance();
-$tpc = $blc->compileFile($tpl);
-$out = xarTpl__execute($tpc,$tplData, $tpl);
+$blc = xarTpl__getCompilerInstance();   // xarBLCompiler object
+$out = xarTpl__execute($blc->compileFile($tpl),$tplData, $tpl);
 echo $out;
 ?>
