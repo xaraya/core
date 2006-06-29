@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<!--
+  Schema which contains all the tricks in the trade, to which the implementation
+  should react responsibly
+-->
+
+<database name="devtest">
+  <table name="first"
+         description="A nice table with some sort of description">
+  </table>
+</database>

@@ -12,7 +12,7 @@
   <xsl:import href="xml2ddl-base.xsl"/>
   
   <!-- Global variables -->
-  <xsl:variable name="vendor">mysql</xsl:variable>
+  <xsl:variable name="vendor">oracle</xsl:variable>
   
 <!-- 
     We probably want to specify parameters at some point like:
@@ -28,48 +28,33 @@
     - assuming for now we want to drop before create
   </xsl:with-param>
 </xsl:call-template>
-/* Disable foreign key checks until we're done */
-SET FOREIGN_KEY_CHECKS = 0;
 <xsl:apply-templates/>
-SET FOREIGN_KEY_CHECKS = 1;
 </xsl:template>
 
 <xsl:template match="database">
-<xsl:call-template name="dynheader"/>
-CREATE DATABASE <xsl:value-of select="@name"/>;
-<xsl:apply-templates />
+  <xsl:call-template name="dynheader"/>
+  <xsl:call-template name="TODO"/>
+  <xsl:apply-templates />
 </xsl:template>
 
 <xsl:template match="table">
   <xsl:call-template name="dynheader"/>
-DROP TABLE IF EXISTS <xsl:value-of select="@name"/>;
-CREATE TABLE <xsl:value-of select="@name"/> 
-(
+  <xsl:call-template name="TODO"/>
 <xsl:apply-templates select="column"/>
-)
-COMMENT='<xsl:value-of select="@description"/>';
 <xsl:apply-templates select="index"/>
 </xsl:template>
 
 <xsl:template match="table/column">
-<xsl:text>  </xsl:text>
-<xsl:value-of select="@name"/><xsl:text> </xsl:text>
-<xsl:value-of select="@type"/>(<xsl:value-of select="@size"/>)<xsl:text> </xsl:text>
-<xsl:if test="@required ='true'"> NOT NULL</xsl:if>
-<xsl:if test="@default != ''"> DEFAULT '<xsl:value-of select="@default"/>'</xsl:if>
-<xsl:if test="@autoIncrement ='true'"> AUTO_INCREMENT</xsl:if>
-<xsl:if test="@primaryKey = 'true'"> PRIMARY KEY</xsl:if>
-<xsl:if test="position() != last()"><xsl:text>,</xsl:text></xsl:if>
-<xsl:value-of select="$CR"/></xsl:template>
+  <xsl:call-template name="TODO"/>
+</xsl:template>
 
 <xsl:template match="table/index">
-<xsl:text>CREATE </xsl:text>
-<xsl:if test="@type='unique'"><xsl:text>UNIQUE </xsl:text></xsl:if>
-<xsl:text>INDEX </xsl:text><xsl:value-of select="@name"/> ON <xsl:value-of select="../@name"/>(<xsl:apply-templates/>);
+  <xsl:call-template name="TODO"/>
+  <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="table/index/index-column">
-<xsl:value-of select="@name"/>
-<xsl:if test="position() != last()"><xsl:text>,</xsl:text></xsl:if></xsl:template>
+  <xsl:call-template name="TODO"/>
+</xsl:template>
 
 </xsl:stylesheet>

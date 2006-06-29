@@ -32,7 +32,11 @@ xar-model.xml: db2xml db2xml.xd
 	cd $(XARROOT) && ./db2xml > $(PWD)/$@
 	
 %.sql: %.xml xar-model.xml
-	$(XSLTPROC) xml2ddl-mysql.xsl $< > $@
+	$(XSLTPROC) xml2ddl-mysql.xsl $< > $(*F).mysql.sql
+	$(XSLTPROC) xml2ddl-sqlite.xsl $< > $(*F).sqlite.sql
+	$(XSLTPROC) xml2ddl-pgsql.xsl $< > $(*F).pgsql.sql
+	$(XSLTPROC) xml2ddl-oracle.xsl $< > $(*F).oracle.sql
+	$(XSLTPROC) xml2ddl-mssql.xsl $< > $(*F).mssql.sql
 
 clean:
 	$(RM) *.rng *.xsd *.rnc *.sql xar-model.xml
