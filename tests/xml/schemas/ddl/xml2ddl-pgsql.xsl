@@ -34,6 +34,7 @@ CREATE TABLE <xsl:value-of select="@name"/>
 <xsl:for-each select="./column">
   <xsl:text>COMMENT ON COLUMN </xsl:text><xsl:value-of select="../@name"/>.<xsl:value-of select="@name"/><xsl:text> IS '</xsl:text><xsl:value-of select="@description"/>';
 </xsl:for-each>
+<xsl:apply-templates select="primary"/>
 <xsl:apply-templates select="index"/>
 </xsl:template>
 

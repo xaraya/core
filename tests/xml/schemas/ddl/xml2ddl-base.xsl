@@ -57,20 +57,30 @@
 
 <!-- Default create database statement -->
 <xsl:template match="database">
-<xsl:call-template name="dynheader"/>
-CREATE DATABASE <xsl:value-of select="@name"/>;
+  <xsl:call-template name="dynheader"/>
+  <xsl:text>CREATE DATABASE </xsl:text><xsl:value-of select="@name"/>;
 <xsl:apply-templates />
 </xsl:template>
 
 <!-- Index base create is pretty portable -->
 <xsl:template match="table/index">
-<xsl:text>CREATE </xsl:text>
-<xsl:if test="@type='unique'"><xsl:text>UNIQUE </xsl:text></xsl:if>
-<xsl:text>INDEX </xsl:text><xsl:value-of select="@name"/> ON <xsl:value-of select="../@name"/>(<xsl:apply-templates/>);
+  <xsl:text>CREATE </xsl:text>
+  <xsl:if test="@type='unique'"><xsl:text>UNIQUE </xsl:text></xsl:if>
+  <xsl:text>INDEX </xsl:text><xsl:value-of select="@name"/> ON <xsl:value-of select="../@name"/>(<xsl:apply-templates/>);
 </xsl:template>
 
 <xsl:template match="table/index/index-column">
-<xsl:value-of select="@name"/>
-<xsl:if test="position() != last()"><xsl:text>,</xsl:text></xsl:if></xsl:template>
-</xsl:stylesheet>  
+  <xsl:value-of select="@name"/>
+  <xsl:if test="position() != last()"><xsl:text>,</xsl:text></xsl:if></xsl:template>
   
+<!-- Primary key creation -->
+<xsl:template match="table/primary">
+  <xsl:text>ALTER TABLE </xsl:text>
+  <xsl:value-of select="../@name"/>
+  <xsl:text> ADD PRIMARY KEY (</xsl:text>
+  <xsl:for-each select="./column">
+    <xsl:value-of select="@name"/>
+    <xsl:if test="position != last()"><xsl:text>,</xsl:text></xsl:if>
+  </xsl:for-each>);
+</xsl:template>
+</xsl:stylesheet>

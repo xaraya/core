@@ -36,10 +36,16 @@ CREATE TABLE <xsl:value-of select="@name"/>
 (
   <xsl:apply-templates select="column"/>
 );
+<xsl:apply-templates select="primary"/>
 <xsl:apply-templates select="index"/>
 </xsl:template>
 
 <xsl:template match="table/column">
+  <xsl:call-template name="TODO"/>
+</xsl:template>
+
+<xsl:template match="table/primary">
+  /* Sqlite can only specify primary key constraints in a column spec */
   <xsl:call-template name="TODO"/>
 </xsl:template>
 

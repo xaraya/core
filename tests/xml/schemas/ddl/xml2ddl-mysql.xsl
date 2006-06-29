@@ -34,6 +34,7 @@ CREATE TABLE <xsl:value-of select="@name"/>
 <xsl:apply-templates select="column"/>
 )
 COMMENT='<xsl:value-of select="@description"/>';
+<xsl:apply-templates select="primary"/>
 <xsl:apply-templates select="index"/>
 </xsl:template>
 
@@ -44,7 +45,6 @@ COMMENT='<xsl:value-of select="@description"/>';
 <xsl:if test="@required ='true'"> NOT NULL</xsl:if>
 <xsl:if test="@default != ''"> DEFAULT '<xsl:value-of select="@default"/>'</xsl:if>
 <xsl:if test="@autoIncrement ='true'"> AUTO_INCREMENT</xsl:if>
-<xsl:if test="@primaryKey = 'true'"> PRIMARY KEY</xsl:if>
 <xsl:if test="position() != last()"><xsl:text>,</xsl:text></xsl:if>
 <xsl:value-of select="$CR"/></xsl:template>
 
