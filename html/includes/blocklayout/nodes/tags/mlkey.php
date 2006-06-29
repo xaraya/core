@@ -20,11 +20,11 @@ class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
         $key = '';
         
         if (count($this->children) == 0) {
-            $this->raiseError(XAR_BL_INVALID_TAG,'Missing the key inside <xar:mlkey> tag.', $this);
+            $this->raiseError(XAR_BL_INVALID_TAG,'Missing the key inside <xar:mlkey> tag.');
             return;
         }
         if (count($this->attributes) != 0) {
-            $this->raiseError(XAR_BL_INVALID_TAG,'The <xar:mlkey> tag takes no attributes.', $this);
+            $this->raiseError(XAR_BL_INVALID_TAG,'The <xar:mlkey> tag takes no attributes.');
             return;
         }
         // Children of mlkey are only of text type (the text to be translated)
@@ -44,7 +44,7 @@ class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
         // FIXME: chose 3 for now, out of laziness.
         $key = trim(addslashes($key));
         if ($key == '') {
-            $this->raiseError(XAR_BL_INVALID_TAG,'Missing content in <xar:mlkey> tag.', $this);
+            $this->raiseError(XAR_BL_INVALID_TAG,'Missing content in <xar:mlkey> tag.');
             return;
         }
         

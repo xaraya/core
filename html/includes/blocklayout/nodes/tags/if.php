@@ -20,7 +20,7 @@ class xarTpl__XarIfNode extends xarTpl__TplTagNode
         extract($this->attributes);
         
         if (!isset($condition) or trim($condition) == '') {
-            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'condition\' attribute in <xar:if> tag.', $this);
+            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'condition\' attribute in <xar:if> tag.');
             return;
         }
         

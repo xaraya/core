@@ -39,6 +39,13 @@ class LoggerException extends Exception
     // Fill in later.
 }
 
+/**
+ * Initialize the logging subsystem
+ *
+ * @return void
+ * @throws LoggerException
+ * @author Marcel van der Boom
+ **/
 function xarLog_init(&$args, &$whatElseIsGoingLoaded) 
 {
 
@@ -176,6 +183,13 @@ function xarLog__shutdown_handler()
  */
 }
 
+/**
+ * Add a logger to active loggers
+ *
+ * @return void
+ * @throws LoggerException
+ * @author Marcel van der Boom
+ **/
 function xarLog__add_logger($type, $config_args)
 {
     if (!xarInclude ('includes/log/loggers/'.$type.'.php')) {

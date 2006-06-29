@@ -34,7 +34,7 @@ function dynamicdata_init()
     //Load Table Maintenance API
     xarDBLoadTableMaintenanceAPI();
 
-    // Create all in one swoop (or not)
+    // Create tables inside a transaction
     try {
         $dbconn->begin();
         /**
@@ -381,141 +381,143 @@ function dynamicdata_init()
 
         // Add Dynamic Data Properties Definition Table
         dynamicdata_createPropDefTable();
-
-        /**
-         * Set module variables
-         */
-        xarModSetVar('dynamicdata', 'SupportShortURLs', 1);
-
-        /**
-         * Register blocks
-         */
-        xarModAPIFunc('blocks','admin','register_block_type', array('modName'=>'dynamicdata','blockType'=>'form'));
-
-        /**
-         * Register hooks
-         */
-        // when a new module item is being specified
-        xarModRegisterHook('item', 'new', 'GUI', 'dynamicdata', 'admin', 'newhook');
-
-        // when a module item is created (uses 'dd_*')
-        xarModRegisterHook('item', 'create', 'API','dynamicdata', 'admin', 'createhook');
-
-        // when a module item is being modified (uses 'dd_*')
-        xarModRegisterHook('item', 'modify', 'GUI','dynamicdata', 'admin', 'modifyhook');
-
-        // when a module item is updated (uses 'dd_*')
-        xarModRegisterHook('item', 'update', 'API','dynamicdata', 'admin', 'updatehook');
-
-        // when a module item is deleted
-        xarModRegisterHook('item', 'delete', 'API', 'dynamicdata', 'admin', 'deletehook');
-
-        // when a module configuration is being modified (uses 'dd_*')
-        xarModRegisterHook('module', 'modifyconfig', 'GUI','dynamicdata', 'admin', 'modifyconfighook');
-
-        // when a module configuration is updated (uses 'dd_*')
-        xarModRegisterHook('module', 'updateconfig', 'API','dynamicdata', 'admin', 'updateconfighook');
-
-        // when a whole module is removed, e.g. via the modules admin screen
-        // (set object ID to the module name !)
-        xarModRegisterHook('module', 'remove', 'API','dynamicdata', 'admin', 'removehook');
-
-        //  Ideally, people should be able to use the dynamic fields in their
-        //  module templates as if they were normal fields, this means
-        //  adapting the get() function in the user API of the module, and/or
-        //  using some common data retrieval function (DD) in the future...
-
-        /*  display hook is now disabled by default - use the BL tags or APIs instead
-         // when a module item is being displayed
-         xarModRegisterHook('item', 'display', 'GUI','dynamicdata', 'user', 'displayhook');
-        */
-
-        xarModRegisterHook('item', 'search', 'GUI', 'dynamicdata', 'user', 'search');
-
-        /**
-         * Register BL tags
-         */
-        // TODO: move this to some common place in Xaraya ?
-        // Register BL user tags
-        // output this property
-        xarTplRegisterTag('dynamicdata', 'data-output', array(), 'dynamicdata_userapi_handleOutputTag');
-        // display this item
-        xarTplRegisterTag('dynamicdata', 'data-display',array(), 'dynamicdata_userapi_handleDisplayTag');
-        // view a list of these items
-        xarTplRegisterTag('dynamicdata', 'data-view', array(),'dynamicdata_userapi_handleViewTag');
-
-        // Register BL admin tags
-        // input field for this property
-        xarTplRegisterTag('dynamicdata', 'data-input', array(), 'dynamicdata_adminapi_handleInputTag');
-        // input form for this item
-        xarTplRegisterTag('dynamicdata', 'data-form', array(), 'dynamicdata_adminapi_handleFormTag');
-        // admin list for these items
-        xarTplRegisterTag('dynamicdata', 'data-list', array(), 'dynamicdata_adminapi_handleListTag');
-
-        // Register BL item tags to get properties and values directly in the template
-        // get properties for this item
-        xarTplRegisterTag('dynamicdata', 'data-getitem', array(),'dynamicdata_userapi_handleGetItemTag');
-        // get properties and item values for these items
-        xarTplRegisterTag('dynamicdata', 'data-getitems', array(),'dynamicdata_userapi_handleGetItemsTag');
-
-        // Register BL utility tags to avoid OO problems with the BL compiler
-        // get label for this object or property
-        xarTplRegisterTag('dynamicdata', 'data-label', array(),'dynamicdata_userapi_handleLabelTag');
-        // get value or invoke method for this object or property
-        xarTplRegisterTag('dynamicdata', 'data-object', array(), 'dynamicdata_userapi_handleObjectTag');
-
-        /*********************************************************************
-         * Register the module components that are privileges objects
-         * Format is
-         * register(Name,Realm,Module,Component,Instance,Level,Description)
-         *********************************************************************/
-
-        xarRegisterMask('ViewDynamicData','All','dynamicdata','All','All','ACCESS_OVERVIEW');
-        xarRegisterMask('EditDynamicData','All','dynamicdata','All','All','ACCESS_EDIT');
-        xarRegisterMask('AdminDynamicData','All','dynamicdata','All','All','ACCESS_ADMIN');
-
-        xarRegisterMask('ViewDynamicDataItems','All','dynamicdata','Item','All:All:All','ACCESS_OVERVIEW');
-        xarRegisterMask('ReadDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_READ');
-        xarRegisterMask('EditDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_EDIT');
-        xarRegisterMask('AddDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_ADD');
-        xarRegisterMask('DeleteDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_DELETE');
-        xarRegisterMask('AdminDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_ADMIN');
-
-        xarRegisterMask('ReadDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_READ');
-        xarRegisterMask('EditDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_EDIT');
-        xarRegisterMask('AddDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_ADD');
-        xarRegisterMask('DeleteDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_DELETE');
-        xarRegisterMask('AdminDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_ADMIN');
-
-        xarRegisterMask('ViewDynamicDataBlocks','All','dynamicdata','Block','All:All:All','ACCESS_OVERVIEW');
-        xarRegisterMask('ReadDynamicDataBlock','All','dynamicdata','Block','All:All:All','ACCESS_READ');
-        /*********************************************************************
-         * Define instances for this module
-         * Format is
-         * setInstance(Module,Component,Query,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
-         *********************************************************************/
-
-        $instances = array(
-                           array('header' => 'external', // this keyword indicates an external "wizard"
-                                 'query'  => xarModURL('dynamicdata', 'admin', 'privileges'),
-                                 'limit'  => 0
-                                 )
-                           );
-        xarDefineInstance('dynamicdata','Item',$instances);
-
-        $instances = array(
-                           array('header' => 'external', // this keyword indicates an external "wizard"
-                                 'query'  => xarModURL('dynamicdata', 'admin', 'privileges'),
-                                 'limit'  => 0
-                                 )
-                           );
-        xarDefineInstance('dynamicdata','Field',$instances);
-
+        
         $dbconn->commit();
     } catch (Exception $e) {
+        // nice try
         $dbconn->rollback();
         throw $e;
     }
+        
+    /**
+     * Set module variables
+     */
+    xarModSetVar('dynamicdata', 'SupportShortURLs', 1);
+
+    /**
+     * Register blocks
+     */
+    xarModAPIFunc('blocks','admin','register_block_type', array('modName'=>'dynamicdata','blockType'=>'form'));
+
+    /**
+     * Register hooks
+     */
+    // when a new module item is being specified
+    xarModRegisterHook('item', 'new', 'GUI', 'dynamicdata', 'admin', 'newhook');
+
+    // when a module item is created (uses 'dd_*')
+    xarModRegisterHook('item', 'create', 'API','dynamicdata', 'admin', 'createhook');
+
+    // when a module item is being modified (uses 'dd_*')
+    xarModRegisterHook('item', 'modify', 'GUI','dynamicdata', 'admin', 'modifyhook');
+
+    // when a module item is updated (uses 'dd_*')
+    xarModRegisterHook('item', 'update', 'API','dynamicdata', 'admin', 'updatehook');
+
+    // when a module item is deleted
+    xarModRegisterHook('item', 'delete', 'API', 'dynamicdata', 'admin', 'deletehook');
+
+    // when a module configuration is being modified (uses 'dd_*')
+    xarModRegisterHook('module', 'modifyconfig', 'GUI','dynamicdata', 'admin', 'modifyconfighook');
+
+    // when a module configuration is updated (uses 'dd_*')
+    xarModRegisterHook('module', 'updateconfig', 'API','dynamicdata', 'admin', 'updateconfighook');
+
+    // when a whole module is removed, e.g. via the modules admin screen
+    // (set object ID to the module name !)
+    xarModRegisterHook('module', 'remove', 'API','dynamicdata', 'admin', 'removehook');
+
+    //  Ideally, people should be able to use the dynamic fields in their
+    //  module templates as if they were normal fields, this means
+    //  adapting the get() function in the user API of the module, and/or
+    //  using some common data retrieval function (DD) in the future...
+
+    /*  display hook is now disabled by default - use the BL tags or APIs instead
+     // when a module item is being displayed
+     xarModRegisterHook('item', 'display', 'GUI','dynamicdata', 'user', 'displayhook');
+    */
+
+    xarModRegisterHook('item', 'search', 'GUI', 'dynamicdata', 'user', 'search');
+
+    /**
+     * Register BL tags
+     */
+    // TODO: move this to some common place in Xaraya ?
+    // Register BL user tags
+    // output this property
+    xarTplRegisterTag('dynamicdata', 'data-output', array(), 'dynamicdata_userapi_handleOutputTag');
+    // display this item
+    xarTplRegisterTag('dynamicdata', 'data-display',array(), 'dynamicdata_userapi_handleDisplayTag');
+    // view a list of these items
+    xarTplRegisterTag('dynamicdata', 'data-view', array(),'dynamicdata_userapi_handleViewTag');
+
+    // Register BL admin tags
+    // input field for this property
+    xarTplRegisterTag('dynamicdata', 'data-input', array(), 'dynamicdata_adminapi_handleInputTag');
+    // input form for this item
+    xarTplRegisterTag('dynamicdata', 'data-form', array(), 'dynamicdata_adminapi_handleFormTag');
+    // admin list for these items
+    xarTplRegisterTag('dynamicdata', 'data-list', array(), 'dynamicdata_adminapi_handleListTag');
+
+    // Register BL item tags to get properties and values directly in the template
+    // get properties for this item
+    xarTplRegisterTag('dynamicdata', 'data-getitem', array(),'dynamicdata_userapi_handleGetItemTag');
+    // get properties and item values for these items
+    xarTplRegisterTag('dynamicdata', 'data-getitems', array(),'dynamicdata_userapi_handleGetItemsTag');
+
+    // Register BL utility tags to avoid OO problems with the BL compiler
+    // get label for this object or property
+    xarTplRegisterTag('dynamicdata', 'data-label', array(),'dynamicdata_userapi_handleLabelTag');
+    // get value or invoke method for this object or property
+    xarTplRegisterTag('dynamicdata', 'data-object', array(), 'dynamicdata_userapi_handleObjectTag');
+
+    /*********************************************************************
+     * Register the module components that are privileges objects
+     * Format is
+     * register(Name,Realm,Module,Component,Instance,Level,Description)
+     *********************************************************************/
+
+    xarRegisterMask('ViewDynamicData','All','dynamicdata','All','All','ACCESS_OVERVIEW');
+    xarRegisterMask('EditDynamicData','All','dynamicdata','All','All','ACCESS_EDIT');
+    xarRegisterMask('AdminDynamicData','All','dynamicdata','All','All','ACCESS_ADMIN');
+
+    xarRegisterMask('ViewDynamicDataItems','All','dynamicdata','Item','All:All:All','ACCESS_OVERVIEW');
+    xarRegisterMask('ReadDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_READ');
+    xarRegisterMask('EditDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_EDIT');
+    xarRegisterMask('AddDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_ADD');
+    xarRegisterMask('DeleteDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_DELETE');
+    xarRegisterMask('AdminDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_ADMIN');
+
+    xarRegisterMask('ReadDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_READ');
+    xarRegisterMask('EditDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_EDIT');
+    xarRegisterMask('AddDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_ADD');
+    xarRegisterMask('DeleteDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_DELETE');
+    xarRegisterMask('AdminDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_ADMIN');
+
+    xarRegisterMask('ViewDynamicDataBlocks','All','dynamicdata','Block','All:All:All','ACCESS_OVERVIEW');
+    xarRegisterMask('ReadDynamicDataBlock','All','dynamicdata','Block','All:All:All','ACCESS_READ');
+    /*********************************************************************
+     * Define instances for this module
+     * Format is
+     * setInstance(Module,Component,Query,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
+     *********************************************************************/
+
+    $instances = array(
+                       array('header' => 'external', // this keyword indicates an external "wizard"
+                             'query'  => xarModURL('dynamicdata', 'admin', 'privileges'),
+                             'limit'  => 0
+                             )
+                       );
+    xarDefineInstance('dynamicdata','Item',$instances);
+
+    $instances = array(
+                       array('header' => 'external', // this keyword indicates an external "wizard"
+                             'query'  => xarModURL('dynamicdata', 'admin', 'privileges'),
+                             'limit'  => 0
+                             )
+                       );
+    xarDefineInstance('dynamicdata','Field',$instances);
+
     // Initialisation successful
     return true;
 }

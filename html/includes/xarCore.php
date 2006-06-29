@@ -516,6 +516,7 @@ function xarCoreIsDebugFlagSet($flag)
  * @access protected
  * @static systemVars array
  * @param string name name of core system variable to get
+ * @throws FileNotFoundException, VariableNotFoundException
  * @todo check if we need both the isCached and static
  */
 function xarCore_getSystemVar($name)
@@ -551,6 +552,7 @@ function xarCore_getSystemVar($name)
  * @param  string $fileName name of the file to load
  * @param  bool   $flags  can this file only be loaded once, or multiple times? XAR_INCLUDE_ONCE
  * @return bool   true if file was loaded successfully
+ * @throws FileNotFoundException
  * @todo  remove the may not exist flag, raise FileNotFound
  */
 function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE)

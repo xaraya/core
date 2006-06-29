@@ -13,7 +13,7 @@ class xarTpl__XarApiInstructionNode extends xarTpl__InstructionNode
     function render()
     {
         if (strlen($this->instruction) <= 1) {
-            $this->raiseError(XAR_BL_INVALID_INSTRUCTION,'Invalid API reference instruction.', $this);
+            $this->raiseError(XAR_BL_INVALID_INSTRUCTION,'Invalid API reference instruction.');
         }
         $funcName = substr($this->instruction, 0, strpos($this->instruction, '('));
 
@@ -28,7 +28,7 @@ class xarTpl__XarApiInstructionNode extends xarTpl__InstructionNode
         }
         
         if(!function_exists($funcName)) {
-            $this->raiseError(XAR_BL_INVALID_INSTRUCTION,'Invalid API reference instruction or invalid function syntax.', $this);
+            $this->raiseError(XAR_BL_INVALID_INSTRUCTION,'Invalid API reference instruction or invalid function syntax.');
             return;
         }
         return $instruction;

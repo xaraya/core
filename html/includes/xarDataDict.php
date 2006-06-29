@@ -18,7 +18,6 @@
  *
  * @author Richard Cave <rcave@xaraya.com>
  * @access public
- * @throws none
  */
 class xarDataDict 
 {
@@ -33,7 +32,6 @@ class xarDataDict
      * @access  public
      * @param   object $dbconn Database connection
      * @return  none
-     * @throws  none
     */
     function xarDataDict(&$dbconn) 
     {
@@ -58,7 +56,7 @@ class xarDataDict
      * @param   $fields string or array containing column info
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
-     * @throws  none
+     * @throws  EmptyParameterException
     */
     function addColumn($table, $fields)
     {
@@ -88,7 +86,7 @@ class xarDataDict
      * @param   $fields string or array containing column info
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
-     * @throws  none
+     * @throws  EmptyParameterException
     */
     function alterColumn($table, $fields)
     {
@@ -122,7 +120,6 @@ class xarDataDict
      * @param   $fields string or array containing field info
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
-     * @throws  none
     */
     function alterTable($table, $fields)
     {
@@ -143,8 +140,8 @@ class xarDataDict
      * @param   $table name of the table
      * @param   $fields string or array containing field info
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
+     * @throws EmptyParameterException
      * @return  integer
-     * @throws  none
     */
     function changeTable($table, $fields)
     {
@@ -175,7 +172,7 @@ class xarDataDict
      * @param   $options array containing database options
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
-     * @throws  none
+     * @throws  EmptyParameterException
     */
     function createDatabase($database, $options = false)
     {
@@ -207,7 +204,7 @@ class xarDataDict
      * @param   $options array containing index creation options
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
-     * @throws  none
+     * @throws  EmptyParameterException
     */
     function createIndex($index, $table, $fields, $options = false)
     {
@@ -239,7 +236,7 @@ class xarDataDict
      * @param   $table name of the table
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
-     * @throws  none
+     * @throws  EmptyParameterException
     */
     function dropIndex($index, $table)
     {
@@ -281,7 +278,7 @@ class xarDataDict
      * @param   $options array containing table creationg options
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
-     * @throws  none
+     * @throws  EmptyParameterException
     */
     function createTable($table, $fields, $options = false)
     {
@@ -311,7 +308,7 @@ class xarDataDict
      * @param   $fields string or array containing column info
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
-     * @throws  none
+     * @throws  EmptyParameterException
     */
     function dropColumn($table, $fields)
     {
@@ -340,7 +337,7 @@ class xarDataDict
      * @param   $table name of the table
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
-     * @throws  none
+     * @throws  EmptyParameterException
     */
     function dropTable($table)
     {
@@ -369,7 +366,6 @@ class xarDataDict
      * @param   $contOnError continue on error, default is true
      * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @return  integer
-     * @throws  none
     */
     function executeSQLArray($sql, $contOnError = true)
     {
@@ -390,7 +386,7 @@ class xarDataDict
      * @returns array on success, false on failure
      * @return  returns an array of ADOFieldObject's, one field
      *          object for every column of $table, false otherwise
-     * @throws  none
+     * @throws  EmptyParameterException
     */
     function getColumns($table)
     {
@@ -410,7 +406,7 @@ class xarDataDict
      * @param   none
      * @returns array on success, false on failure
      * @return  array of primary keys for the table, false otherwise
-     * @throws  none
+     * @throws  EmptyParameterException
     */
     function getPrimaryKeys($table)
     {
@@ -431,7 +427,7 @@ class xarDataDict
      * @param   primary boolean include primary keys (default false)
      * @returns array on success, false on failure
      * @return  returns an array of ADODB index arrays or false if none
-     * @throws  none
+     * @throws  EmptyParameterException
     */
     function getIndexes($table, $primary = false)
     {
@@ -450,7 +446,6 @@ class xarDataDict
      * @param   xartables true if only Xaraya tables, false for all tables
      * @returns array on success, false on failure
      * @return  array of tables available in the database, false otherwise
-     * @throws  none
      * @todo    flag for Xaraya system vs site tables
     */
     function getTables($xartables = true)
@@ -484,7 +479,6 @@ class xarDataDict
      * @param   none
      * @returns array on success, false on failure
      * @return  array of tables available in the database, false otherwise
-     * @throws  none
     */
     function getSystemTables()
     {
@@ -526,7 +520,6 @@ class xarDataDict
      * @param   none
      * @returns array on success, false on failure
      * @return  array of tables available in the database, false otherwise
-     * @throws  none
     */
     function getSiteTables()
     {
@@ -571,7 +564,6 @@ class xarDataDict
      * @param   xartables true if only Xaraya tables, false for all tables
      * @returns array on success, false on failure
      * @return  array of columns names for the table, false otherwise
-     * @throws  none
      * @todo    flag for Xaraya system vs site tables
     */
     function getTableDefinitions($xartables = true)
@@ -661,7 +653,6 @@ class xarDataDict
  *
  * @author Richard Cave <rcave@xaraya.com>
  * @access public
- * @throws none
  */
 class xarMetaData 
 {
@@ -676,7 +667,6 @@ class xarMetaData
      * @access  public
      * @param   object $dbconn database connection (optional)
      * @return  none
-     * @throws  none
     */
     function xarMetaData($dbconn = false) 
     {
@@ -701,7 +691,6 @@ class xarMetaData
      * @param   none
      * @returns array on success, false on failure
      * @return  array of databases available on the server, false otherwise
-     * @throws  none
      * @todo    make this work for all database types
     */
     function getDatabases()
@@ -725,7 +714,6 @@ class xarMetaData
      * @param   none
      * @returns array on success, false on failure
      * @return  array of tables available in the database, false otherwise
-     * @throws  none
     */
     function getTables($type='TABLES')
     {
@@ -751,7 +739,6 @@ class xarMetaData
      * @returns array on success, false on failure
      * @return  returns an array of ADOFieldObject's, one field
      *          object for every column of $table, false otherwise
-     * @throws  none
     */
     function getColumns($table)
     {
@@ -774,7 +761,6 @@ class xarMetaData
      * @param   none
      * @returns array on success, false on failure
      * @return  array of columns names for the table, false otherwise
-     * @throws  none
     */
     function getColumnNames($table)
     {
@@ -795,7 +781,6 @@ class xarMetaData
      * @param   none
      * @returns array on success, false on failure
      * @return  array of primary keys for the table, false otherwise
-     * @throws  none
      * @todo    The method name suggests that multiple keys are retrieved, which is not true, multiple attribs maybe, but only 1 key.
     */
     function getPrimaryKeys($table)

@@ -9,7 +9,9 @@
 
 /**
  * Lists Validation Function
- */
+ *
+ * @throws VariableValidationException 
+ **/
 function variable_validations_list (&$subject, $parameters, $supress_soft_exc, &$name)
 {
     if ($name == '') $name = '<unknown>';

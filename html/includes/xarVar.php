@@ -47,9 +47,6 @@ define('XARVAR_PREP_TRIM',        8);
  * @access protected
  * @global xarVar_allowableHTML array
  * @global xarVar_fixHTMLEntities bool
- * @global xarVar_enableCensoringWords bool
- * @global xarVar_censoredWords array
- * @global xarVar_censoredWordsReplacers array
  * @param args array
  * @param whatElseIsGoingLoaded integer
  * @return bool
@@ -109,7 +106,6 @@ function xarVar__shutdown_handler()
  * @access public
  * @param arrays The arrays storing information equivalent to the xarVarFetch interface
  * @return array With the respective exceptions in case of failure
- * @raise BAD_PARAM
  */
 function xarVarBatchFetch()
 {
@@ -188,7 +184,6 @@ function xarVarBatchFetch()
  * @param flags integer bitmask which modify the behaviour of function
  * @param prep will prep the value with xarVarPrepForDisplay, xarVarPrepHTMLDisplay, or dbconn->qstr()
  * @return mixed
- * @raise BAD_PARAM
  */
 function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags = XARVAR_GET_OR_POST, $prep = XARVAR_PREP_FOR_NOTHING)
 {
@@ -301,6 +296,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  * @access public
  * @param validation mixed the validation to be performed
  * @param subject string the subject on which the validation must be performed, will be where the validated value will be returned
+ * @throws EmptyParameterException
  * @return bool true if the $subject validates correctly, false otherwise
  */
 function xarVarValidate($validation, &$subject, $supress = false, $name='')
@@ -421,7 +417,7 @@ function xarVar__getAllowedTags($level)
  * @param prep determines the prepping for the variable
  * @param type determines type of variable to process
  * @return mixed The value of the variable or void if variable doesn't exist
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws EmptyParameterException
  */
 function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = NULL, $type = 'modvar')
 {
@@ -565,7 +561,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
  * @param name The name of the variable
  * @param value The value of the variable
  * @return bool true on success
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws EmptyParameterException, ModuleNotFoundException, VariableNotFoundException, SQLException
  * @todo  We could delete the user vars for the module with the new value to save space?
  */
 function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $description = NULL, $itemid = NULL, $type = 'modvar')
@@ -659,15 +655,8 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
     }
 
     if (!empty($query)){
-        try {
-            $dbconn->begin();
-            $stmt = $dbconn->prepareStatement($query);
-            $stmt->executeUpdate($bindvars);
-            $dbconn->commit();
-        } catch (SQLException $e) {
-            $dbconn->rollback();
-            throw $e;
-        }
+        $stmt = $dbconn->prepareStatement($query);
+        $stmt->executeUpdate($bindvars);
     }
 
     switch($type) {
@@ -694,7 +683,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
  * @param modName The name of the module
  * @param name The name of the variable
  * @return bool true on success
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws EmptyParameterException
  * @todo Add caching for user variables?
  */
 function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = 'modvar')
@@ -716,46 +705,37 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = '
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
-    try {
-        switch($type) {
-        case 'modvar':
-        default:
-            // Delete all the user variables first
-            $modvarid = xarModVars::getId($modName, $name);
-            if($modvarid) {
-                $module_itemvarstable = $tables['module_itemvars'];
-                $query = "DELETE FROM $module_itemvarstable WHERE xar_mvid = ?";
-                $dbconn->execute($query,array((int)$modvarid));
-            }
-            $module_varstable = $tables['module_vars'];
-            // Now delete the module var itself
-            $query = "DELETE FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
-            $bindvars = array($modBaseInfo['systemid'],$name);
-            break;
-        case 'moditemvar':
+    switch($type) {
+    case 'modvar':
+    default:
+        // Delete all the user variables first
+        $modvarid = xarModVars::getId($modName, $name);
+        if($modvarid) {
             $module_itemvarstable = $tables['module_itemvars'];
-            // We need the variable id
-            $modvarid = xarModVars::getId($modName, $name);
-            if(!$modvarid) return;
-
-            $query = "DELETE FROM $module_itemvarstable WHERE xar_mvid = ? AND xar_itemid = ?";
-            $bindvars = array((int)$modvarid, (int)$itemid);
-            break;
-        case 'configvar':
-            $config_varsTable = $tables['config_vars'];
-            $query = "DELETE FROM $config_varsTable WHERE xar_name = ? AND xar_modid=?";
-            $bindvars = array($name,$modBaseInfo['systemid']);
-            break;
+            $query = "DELETE FROM $module_itemvarstable WHERE xar_mvid = ?";
+            $dbconn->execute($query,array((int)$modvarid));
         }
-        $dbconn->execute($query,$bindvars);
+        $module_varstable = $tables['module_vars'];
+        // Now delete the module var itself
+        $query = "DELETE FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
+        $bindvars = array($modBaseInfo['systemid'],$name);
+        break;
+    case 'moditemvar':
+        $module_itemvarstable = $tables['module_itemvars'];
+        // We need the variable id
+        $modvarid = xarModVars::getId($modName, $name);
+        if(!$modvarid) return;
 
-        // All done, commit
-        $dbconn->commit();
-    } catch (SQLException $e) {
-        $dbconn->rollback();
-        throw $e;
+        $query = "DELETE FROM $module_itemvarstable WHERE xar_mvid = ? AND xar_itemid = ?";
+        $bindvars = array((int)$modvarid, (int)$itemid);
+        break;
+    case 'configvar':
+        $config_varsTable = $tables['config_vars'];
+        $query = "DELETE FROM $config_varsTable WHERE xar_name = ? AND xar_modid=?";
+        $bindvars = array($name,$modBaseInfo['systemid']);
+        break;
     }
-
+    $dbconn->execute($query,$bindvars);
 
     switch($type) {
         case 'modvar':
@@ -781,7 +761,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = '
  * @param sourceContext The name of the module
  * @param targetContext The name of the module
  * @return string the string in the new context
- * @raise EMPTY_PARAM
+ * @throws EmptyParameterException
  * @todo  Would it be useful to be able to transform arrays of strings at once?
  * @todo  This is a bit weird, perhaps use a factory class and hide the loading details?
  */
@@ -804,7 +784,7 @@ function xarVarTransform ($string, $sourceContext, $targetContext)
  * @param string The drivers directory
  * @param filename The name file to be used
  * @return string the function anme
- * @raise BAD_PARAM
+ * @throws BadParameterException
  * @todo also a bit weird
  * @see xarVarTransform
  */
@@ -839,7 +819,7 @@ function xarVarLoad ($includes_type, $filename)
  * @param string The string to be Converted
  * @param targetContext The name of the context to escape for
  * @return string the string escape for the context
- * @raise EMPTY_PARAM
+ * @throws EmptyParameterException
  * @todo Would it be useful to be able to transform arrays of strings at once?
  */
 function xarVarEscape ($string, $targetContext, $extras = array())
@@ -874,40 +854,6 @@ function xarVarEscape ($string, $targetContext, $extras = array())
                      escaped html, which shouldnt...
     ----------------------------------------------------------------------
 */
-
-
-/**
- * Cleans a variable.
- *
- *
- * Cleaning it up to try to ensure that hack attacks
- * don't work. Typically used for cleaning variables
- * coming from user input.
- *
- * @access public
- * @param var variable to clean
- * @return string prepared variable
- * @deprecated
- */
-function xarVarCleanUntrusted($var)
-{
-    // Issue a WARNING as this function is deprecated
-    xarLogMessage('Using deprecated function xarVarCleanUntrusted, use ??? instead',XARLOG_LEVEL_WARNING);
-    $search = array('|</?\s*SCRIPT[^>]*>|si',
-                    '|</?\s*FRAME[^>]*>|si',
-                    '|</?\s*OBJECT[^>]*>|si',
-                    '|</?\s*META[^>]*>|si',
-                    '|</?\s*APPLET[^>]*>|si',
-                    '|</?\s*LINK[^>]*>|si',
-                    '|</?\s*IFRAME[^>]*>|si',
-                    '|STYLE\s*=\s*"[^"]*"|si');
-    // short open tag <  followed by ? (we do it like this otherwise our qa tests go bonkers)
-    $replace = array('');
-    // Clean var
-    $var = preg_replace($search, $replace, $var);
-
-    return $var;
-}
 
 /**
  * Ready user output

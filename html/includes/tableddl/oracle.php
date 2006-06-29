@@ -86,7 +86,7 @@ function xarDB__oracleCreateTable($tableName, $fields)
  * @param args['field'] name of column to modify
  * @param args['new_name'] new name of table
  * @return string|false oracle specific sql to alter a table
- * @raise BAD_PARAM
+ * @throws BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
 function xarDB__oracleAlterTable($tableName, $args)

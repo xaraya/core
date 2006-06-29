@@ -38,12 +38,12 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
         extract($this->attributes);
         
         if (!isset($name)) {
-            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'name\' attribute in <xar:loop> tag.', $this);
+            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'name\' attribute in <xar:loop> tag.');
             return;
         }
         
         if (isset($prefix)) {
-            $this->raiseError(XAR_BL_DEPRECATED_ATTRIBUTE,'Use of deprecated \'prefix\' attribute in <xar:loop> tag.',$this);
+            $this->raiseError(XAR_BL_DEPRECATED_ATTRIBUTE,'Use of deprecated \'prefix\' attribute in <xar:loop> tag.');
             return;
         }
         
@@ -61,7 +61,7 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
             // <mrb> I have a complete class for this locally, which checks agains the xml spec, 
             // lets do it simple for now, just make sure it doesnt start with a number. (bug 4050)
             if(is_numeric(substr($id,0,1))) {
-                $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,'The id attribute must start with a letter',$this);
+                $this->raiseError(XAR_BL_INVALID_ATTRIBUTE,'The id attribute must start with a letter');
                 return;
             }
             // Make the id property point to the same loop so loop:id:index etc. works too

@@ -20,7 +20,7 @@ class xarTpl__XarEventNode extends xarTpl__TplTagNode
         extract($this->attributes);
         
         if (!isset($name)) {
-            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'name\' attribute in <xar:event> tag.', $this);
+            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'name\' attribute in <xar:event> tag.');
             return;
         }
         

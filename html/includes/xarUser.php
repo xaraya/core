@@ -104,7 +104,7 @@ function xarUser__shutdown_handler()
  * @param password string the password of the user logging in
  * @param rememberMe bool whether or not to remember this login
  * @return bool true if the user successfully logged in
- * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
+ * @throws EmptyParameterException, SQLException
  * @todo <marco> #1 here we could also set a last_logon timestamp
  */
 function xarUserLogIn($userName, $password, $rememberMe=0)

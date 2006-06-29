@@ -13,7 +13,7 @@ class xarTpl__XarVarEntityNode extends xarTpl__EntityNode
     function render()
     {
         if (count($this->parameters) != 1) {
-            $this->raiseError(XAR_BL_MISSING_PARAMETER,'Parameters mismatch in &xar-var entity.', $this);
+            $this->raiseError(XAR_BL_MISSING_PARAMETER,'Parameters mismatch in &xar-var entity.');
             return;
         }
         $name = xarTpl__ExpressionTransformer::transformBLExpression($this->parameters[0]);

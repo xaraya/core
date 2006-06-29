@@ -23,12 +23,12 @@ class xarTpl__XarMlNode extends xarTpl__TplTagNode
         if (count($this->children) == 0 ||
             ($this->children[0]->tagName != 'mlkey' &&
              $this->children[0]->tagName != 'mlstring')) {
-            $this->raiseError(XAR_BL_INVALID_TAG,'Missing mlkey and mlstring tags in <xar:ml> tag.', $this);
+            $this->raiseError(XAR_BL_INVALID_TAG,'Missing mlkey and mlstring tags in <xar:ml> tag.');
             return;
         }
         $mlNode = $this->children[0];
         if (!isset($mlNode)) {
-            $this->raiseError(XAR_BL_INVALID_TAG,'Missing \'mlkey\' and \'mlstring\' tags in <xar:ml> tag.', $this);
+            $this->raiseError(XAR_BL_INVALID_TAG,'Missing \'mlkey\' and \'mlstring\' tags in <xar:ml> tag.');
             return;
         }
         $params = '';
@@ -39,7 +39,7 @@ class xarTpl__XarMlNode extends xarTpl__TplTagNode
                 continue;
             }
             if ($node->tagName != 'mlvar') {
-                $this->raiseError(XAR_BL_INVALID_TAG,"The '".$this->tagName."' tag cannot have children of type '".$node->tagName."'.", $node);
+                $node->raiseError(XAR_BL_INVALID_TAG,"The '".$this->tagName."' tag cannot have children of type '".$node->tagName."'.");
                 return;
             }
             $params .= $node->render();

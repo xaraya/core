@@ -64,7 +64,6 @@ function xarConfig__shutdown_handler()
  * @access public
  * @param string name the name of the variable
  * @return mixed value of the variable(string), or void if variable doesn't exist
- * @raise DATABASE_ERROR, BAD_PARAM
  * @todo do we need these aliases anymore ?
  * @todo return proper site prefix when we can store site vars
  */
@@ -104,7 +103,6 @@ function xarConfigGetVar($name, $prep = NULL)
  * @return bool true on success, or false if you're trying to set unallowed variables
  * @todo return states that it should return false if we're setting
  *       unallowed variables.. there is no such code to do that in the function
- * @raise DATABASE_ERROR, BAD_PARAM
  */
 function xarConfigSetVar($name, $value)
 {
@@ -117,7 +115,6 @@ function xarConfigSetVar($name, $value)
  *
  * @access private
  * @return bool true on success, or void on database error
- * @raise DATABASE_ERROR
  * @todo We need some way to delete configuration (useless without a certain module) variables from the table!!!
  * @todo look into removing the serialisation, creole does this when needed, automatically (well, almost)
  */

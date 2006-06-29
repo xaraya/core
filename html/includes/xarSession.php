@@ -152,6 +152,13 @@ class xarSession implements IsessionHandler
     private $sessionId = null; // The id assigned to us.
     private $ipAddress = '';   // IP-address belonging to this session.
 
+    /**
+     * Constructor for the session handler
+     *
+     * @return void
+     * @throws SessionException
+     * @author Marcel van der Boom
+     **/
     function __construct(&$args)
     {
         // Set up our container.
@@ -324,6 +331,7 @@ class xarSession implements IsessionHandler
     /**
      * Register a new session in our containser
      *
+     * @throws SQLException
      */
     function register($ipAddress)
     {
@@ -416,7 +424,9 @@ class xarSession implements IsessionHandler
 
     /**
      * PHP function to write a set of session variables
-     * @private
+     *
+     * @access private
+     * @throws Exception
      */
     function write($sessionId, $vars)
     {
@@ -442,7 +452,9 @@ class xarSession implements IsessionHandler
 
     /**
      * PHP function to destroy a session
-     * @private
+     *
+     * @access private
+     * @throws SQLException
      */
     function destroy($sessionId)
     {
@@ -460,7 +472,9 @@ class xarSession implements IsessionHandler
 
     /**
      * PHP function to garbage collect session information
-     * @private
+     *
+     * @access private
+     * @throws SQLException
      */
     function gc($maxlifetime)
     {
@@ -562,6 +576,7 @@ class xarSession implements IsessionHandler
     /**
      * Set user info
      *
+     * @throws SQLException
      * @todo this seems a strang duck (only used in roles by the looks of it)
      */
     static function setUserInfo($userId, $rememberSession)

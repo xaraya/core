@@ -13,6 +13,14 @@ class SequenceAdapter implements iAdapter, iSequenceAdapter
     private $implementor;
     // iAdapter implementation
     // Our children have nothing to say, we do the construction
+    
+    /**
+     * Constructor for sequence adapter
+     *
+     * @return void
+     * @throws Exception
+     * @author Marcel van der Boom
+     **/
     final public function __construct($type = 'array', $args = array())
     {
         switch($type) {
@@ -36,6 +44,13 @@ class SequenceAdapter implements iAdapter, iSequenceAdapter
     // iSequenceAdapter implementation
 
     // I want to have this protected but php wont let me
+    /**
+     * Getters
+     *
+     * @return mixed
+     * @throws Exception
+     * @author Marcel van der Boom
+     **/
     public function __get($property) 
     {
         switch($property) {

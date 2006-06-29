@@ -23,7 +23,6 @@
  */
 function mail_init()
 {
-// TODO: create separate xar_mail_queue table here someday
     xarModSetVar('mail', 'server', 'mail');
     xarModSetVar('mail', 'replyto', '0');
     xarModSetVar('mail', 'wordwrap', '78');

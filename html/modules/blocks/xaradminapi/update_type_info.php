@@ -46,17 +46,10 @@ function blocks_adminapi_update_type_info($args)
 
     $block_types_table =& $xartable['block_types'];
     
-    try {
-        $dbconn->begin();
-        // Update the info column for the block in the database.
-        $query = "UPDATE $block_types_table SET xar_info = ? WHERE xar_id = ?";
-        $bind = array(serialize($block_info), $type['tid']);
-        $dbconn->Execute($query, $bind);
-        $dbconn->commit();
-    } catch (SQLException $e) {
-        $dbconn->rollback();
-        throw $e;
-    }
+    // Update the info column for the block in the database.
+    $query = "UPDATE $block_types_table SET xar_info = ? WHERE xar_id = ?";
+    $bind = array(serialize($block_info), $type['tid']);
+    $dbconn->Execute($query, $bind);
     return true;
 }
 

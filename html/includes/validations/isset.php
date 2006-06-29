@@ -16,7 +16,7 @@
  * @param parameters
  * @param subject The parameter to check for
  * @return bool true on isset, false on !isset
- * @throws BAD_DATA
+ * @throws VariableValidationException
  */
 function variable_validations_isset (&$subject, $parameters, $supress_soft_exc)
 {

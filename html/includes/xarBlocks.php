@@ -151,7 +151,7 @@ function xarBlock_render($blockinfo)
  * @param string groupname the name of the block group
  * @param string template optional template to apply to all blocks in the group
  * @return string
- * @raise BAD_PARAM, DATABASE_ERROR
+ * @throws EmptyParameterException
  */
 function xarBlock_renderGroup($groupname, $template = NULL)
 {

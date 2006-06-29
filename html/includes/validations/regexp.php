@@ -9,7 +9,9 @@
 
 /**
  * Regular Expression Validation Class
- */
+ *
+ * @throws VariableValidationException 
+ **/
 function variable_validations_regexp (&$subject, $parameters, $supress_soft_exc, &$name)
 {
     if ($name == '') $name = '<unknown>';

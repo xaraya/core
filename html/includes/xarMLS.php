@@ -35,6 +35,7 @@ require_once dirname(__FILE__)."/transforms/xarCharset.php";
  *
  * @author Marco Canini <marco@xaraya.com>
  * @access protected
+ * @throws Exception
  * @return bool true
  */
 function xarMLS_init(&$args, $whatElseIsGoingLoaded)
@@ -228,6 +229,7 @@ function xarML($string/*, ...*/)
  *
  * @author Marco Canini <marco@xaraya.com>
  * @access public
+ * @throws BadParameterException
  * @return string the translation string, or the key if no translation is available
  */
 function xarMLByKey($key/*, ...*/)
@@ -277,6 +279,7 @@ function xarLocaleGetInfo($locale)
  *
  * @author Marco Canini <marco@xaraya.com>
  * @access public
+ * @throws BadParameterException
  * @return string locale string
  */
 function xarLocaleGetString($localeInfo)
@@ -694,6 +697,7 @@ interface ITranslationsBackend {
  * reporting the file name and the line number.
  *
  * @package multilanguage
+ * @throws Exception, BadParameterException
  */
 abstract class xarMLS__ReferencesBackend implements ITranslationsBackend
 {

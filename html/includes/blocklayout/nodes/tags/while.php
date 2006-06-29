@@ -23,7 +23,7 @@ class xarTpl__XarWhileNode extends xarTpl__TplTagNode
         extract($this->attributes);
         
         if (!isset($condition)) {
-            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'condition\' attribute in <xar:while> tag.', $this);
+            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'condition\' attribute in <xar:while> tag.');
             return;
         }
         

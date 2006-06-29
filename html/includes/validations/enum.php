@@ -8,6 +8,8 @@
 
 /**
  * Enum Validation Function
+ *
+ * @throws VariableValidationException
  */
 function variable_validations_enum (&$subject, $parameters, $supress_soft_exc, &$name)
 {

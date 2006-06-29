@@ -40,7 +40,8 @@
  *
  * @package validation
  * @copyright (C) 2003 by the Xaraya Development Team.
-*/
+ * @throws VariableValidationException 
+**/
 
 /**
  * Strings Validation Class

@@ -9,6 +9,8 @@
 /**
  * validate an email address
  *
+ *
+ * @throws VariableValidationException
  */
 function variable_validations_email (&$subject, $parameters=null, $supress_soft_exc, &$name)
 {

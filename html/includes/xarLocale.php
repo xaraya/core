@@ -26,7 +26,7 @@ class LocaleNotFoundException extends NotFoundExceptions
  * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return array locale data
- * @raise  LOCALE_NOT_EXIST
+ * @throws LocaleNotFoundException
  * @todo   figure out why we go through this function for xarMod::isAvailable
  */
 function &xarMLSLoadLocaleData($locale = NULL)
@@ -643,6 +643,7 @@ function xarMLS_strftime($format=null,$timestamp=null)
  * in the form of a locale data array
  *
  * @package multilanguage
+ * @throws  XMLParseException
  */
 class xarMLS__LocaleDataLoader
 {

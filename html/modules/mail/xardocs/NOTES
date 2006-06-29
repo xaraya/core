@@ -1,4 +1,4 @@
-Notebook style scratch doc for the mail modules (created during
+Notebook style scratch doc for the mail module (created during
 design/implementation of mail-in scenario) This document is roughly
 conforming to the structured text format (stx) which will give people
 who actually want pretty docs a head start. (google: stx2any for
@@ -15,9 +15,9 @@ details)
 * augment the new/create/view/modify/update standard functions with
   checks for the itemtype to validate whether we use our registered
   definition
-* create entry point where the mta can pipe the mail content into
-  (ws.php?) [DONE]
-* draw a nice diagram of the flows through the system for incoming and
+* [DONE] create entry point where the mta can pipe the mail content into
+  (ws.php?)
+* [DONE] draw a nice diagram of the flows through the system for incoming and
   outgoing at least.  
 
 ! GENERAL 
@@ -25,7 +25,7 @@ The idea of the mail-in scenario was triggered by the implementation
 of so called abstract datastructures for xaraya. Initially i started
 with sequences, specialized into stacks, queues and deques. (see below
 the includes directory in the core repository for their specific
-meanings).  To be able to test these thouroughly i needed an
+meanings).  To be able to test these thoroughly i needed an
 application and stumbled upon some TODOs in the mail module, combined
 with my own need for a mail interface to xaraya directly (trouble
 ticket system).
@@ -96,7 +96,7 @@ Similarly an outgoing queue:
 
 That's about the basic flow through the system. 
 
-! QUEUES
+!QUEUES
 Receiving items and putting them somewhere is one thing. Doing that in
 a smart way is another thing. Some notes follow on that
 

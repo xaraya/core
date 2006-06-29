@@ -32,7 +32,8 @@
  *    'keylist:int;keylist:int;'
  *    e.g. $x[123][456] = 'anything'
  *
- */
+ * @throws VariableValidationException
+ **/
 function variable_validations_keylist (&$subject, $parameters, $supress_soft_exc, &$name)
 {
     if ($name == '') $name = '<unknown>';

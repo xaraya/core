@@ -10,6 +10,8 @@
 
 /**
  * Array Validation Function
+ *
+ * @throws VariableValidationException, BadParameterException
  */
 function variable_validations_array (&$subject, $parameters, $supress_soft_exc, &$name)
 {

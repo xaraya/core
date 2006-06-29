@@ -120,7 +120,14 @@ function &xarDBNewConn($args = NULL)
     if($persistent) $flags |= xarDB::PERSISTENT;
     $conn = null;
     $conn = xarDB::getConnection($dsn,$flags);
-
+    
+    // if code uses assoc fetching and makes a mess of column names, correct
+    // this by forcing returns to be lowercase
+    // <mrb> : this is not for nothing a COMPAT flag. the problem still lies
+    //         in creating the database schema case sensitive in the first 
+    //         place. Unfortunately, that is just not portable.
+    $flags |= xarDB::COMPAT_ASSOC_LOWER;
+    
     $conn = null;
     $conn = xarDB::getConnection($dsn,$flags); // cached on dsn hash, so no worries
     xarLogMessage("New connection created, now serving " . count(xarDB::$count) . " connections");

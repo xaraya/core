@@ -18,7 +18,7 @@ class xarTpl__XarModuleNode extends xarTpl__TplTagNode
         extract($this->attributes);
         
         if (!isset($main)) {
-            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'main\' attribute in <xar:module> tag.', $this);
+            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'main\' attribute in <xar:module> tag.');
             return;
         }
         

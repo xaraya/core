@@ -17,6 +17,7 @@
  * All xml files are encoded in UTF-8. This backend is useful only when
  * running Xaraya in the multi-language mode (UTF-8).
  * @package multilanguage
+ * @throws Exception, XMLParseException
  */
 class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {

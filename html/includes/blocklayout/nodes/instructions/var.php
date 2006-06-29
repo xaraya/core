@@ -13,7 +13,7 @@ class xarTpl__XarVarInstructionNode extends xarTpl__InstructionNode
     function render()
     {
         if (strlen($this->instruction) <= 1) {
-            $this->raiseError(XAR_BL_INVALID_INSTRUCTION,'Invalid variable reference instruction.', $this);
+            $this->raiseError(XAR_BL_INVALID_INSTRUCTION,'Invalid variable reference instruction.');
             return;
         }
         // FIXME: Can we pre-determine here whether a variable exist?

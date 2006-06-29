@@ -28,7 +28,7 @@ class xarTpl__XarBlockNode extends xarTpl__TplTagNode
         extract($this->attributes);
         
         if (empty($instance) && (empty($module) || empty($type))) {
-            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE, 'Tag <xar:block> requires either an \'instance\' or both a \'module\' and \'type\' tag.', $this);
+            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE, 'Tag <xar:block> requires either an \'instance\' or both a \'module\' and \'type\' tag.');
             return;
         }
         

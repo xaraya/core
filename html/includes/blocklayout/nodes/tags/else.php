@@ -24,7 +24,7 @@ class xarTpl__XarElseNode extends xarTpl__TplTagNode
                     $output = "} else { ";
                     break;
                 default:
-                    $this->raiseError(XAR_BL_INVALID_TAG,"The <xar:else> tag cannot be placed under '".$this->parentTagName."' tag.", $this);
+                    $this->raiseError(XAR_BL_INVALID_TAG,"The <xar:else> tag cannot be placed under '".$this->parentTagName."' tag.");
                     return;
         }
                 return $output;

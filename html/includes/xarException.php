@@ -92,6 +92,13 @@ function xarError_init(&$systemArgs, $whatToLoad)
     return true;
 }
 
+/**
+ * Debug function
+ *
+ * @return void
+ * @throws DebugException
+ * @author Marcel van der Boom
+ **/
 function debug($anything)
 {
     throw new DebugException('DEBUGGING',var_export($anything,true));
@@ -116,6 +123,7 @@ function xarError__shutdown_handler()
  * @param major integer error major number
  * @param errorID string error identifier
  * @param value error object
+ * @throws ErrorDeprecationException
  * @return void
  */
 function xarErrorSet($major, $errorID, $value = NULL)
@@ -148,7 +156,9 @@ function xarErrorSet($major, $errorID, $value = NULL)
  */
 function xarCurrentErrorType()
 {
-    return;
+    // return NO exception for code which tests for this, if there was an exception
+    // it has already been raised before the code reaches this point.
+    return XAR_NO_EXCEPTION;
 }
 
 /**

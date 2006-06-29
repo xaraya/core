@@ -62,7 +62,15 @@ class ArraySequence implements iSequence, iSequenceAdapter
         $this->items = array();
         return true;
     }
-    // Map the getters 
+    
+    /**
+     * Getter mapper
+     *
+     * @return mixed
+     * @throws Exception
+     * @author Marcel van der Boom
+     * @todo arguably evil
+     **/
     public function __get($name)
     {
         switch($name) {

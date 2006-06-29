@@ -84,6 +84,7 @@ define('XAR_TPL_CACHE_DIR',xarCoreGetVarDirPath() . XARCORE_TPL_CACHEDIR);
  * @global string xarTpl_JavaScript
  * @param  array  $args                  Elements: themesBaseDir, defaultThemeName, enableTemplateCaching
  * @param  int    $whatElseIsGoingLoaded Bitfield to specify which subsystem will be loaded.
+ * @throws DirectoryNotFoundException, FileNotFoundException, ConfigurationException
  * @return bool true
  */
 function xarTpl_init(&$args, $whatElseIsGoingLoaded)
@@ -1062,7 +1063,7 @@ function xarTpl__getCompilerInstance()
  * @param  array  $tplData        Template variables
  * @param  string $sourceFileName
  * @return string output
- *
+ * @throws Exception
  * @todo Can we migrate the eval() out, as that is hard to cache?
  * @todo $sourceFileName looks wrong here
  */
@@ -1175,7 +1176,7 @@ function xarTpl__needsCompilation($sourceFileName,&$cachedFileName)
  * @param  string $sourceFileName       From which file do we want to execute?
  * @param  array  $tplData              Template variables
  * @return mixed
- *
+ * @throws FileNotFoundException
  * @todo  inserting the header part like this is not output agnostic
  * @todo  insert log warning when double entry in cachekeys occurs? (race condition)
  * @todo  make the checking whethet templatecode is set more robst (related to templated exception handling)
@@ -1496,6 +1497,7 @@ function xarTpl_modifyHeaderContent($sourceFileName, &$tplOutput)
  * @global bool xarTpl_cacheTemplates Do we cache templates?
  * @param  string $sourceFileName     From which file do we want to load?
  * @return mixed
+ * @throws FileNotFoundException
  */
 function xarTpl__loadFromFile($sourceFileName)
 {
@@ -1567,7 +1569,7 @@ function xarTpl__getCacheKey($sourceFileName)
  *
  * @package blocklayout
  * @access protected
- *
+ * @throws BadParamterException
  * @todo see FIXME
  */
 class xarTemplateAttribute
@@ -1654,6 +1656,14 @@ class xarTemplateTag
     public $_needAssignment = false;
     public $_needParameter = false;
 
+    /**
+     * Constructor 
+     *
+     * @return void
+     * @throws BadParameterException
+     * @author Marcel van der Boom
+     * @todo change constructor to __construct
+     **/
     function xarTemplateTag($module, $name, $attributes = array(), $handler = NULL, $flags = XAR_TPL_TAG_ISPHPCODE)
     {
         // See defines at top of file
@@ -1743,6 +1753,13 @@ class xarTemplateTag
     return $this->_handler;
     }
 
+    /**
+     * Call the handler defined for the registered tag
+     *
+     * @return string code produced by the handler
+     * @throws BadParameterException
+     * @author Marcel van der Boom
+     **/
     function callHandler($args, $handler_type='render')
     {
         // FIXME: get rid of this once installation includes the right serialized info
@@ -1778,7 +1795,7 @@ class xarTemplateTag
  * @param string  $tag_handler Which function is the handler?
  * @param integer $flags       Bitfield which contains the flags to turn on for the tag registration.
  * @return bool
- *
+ * @throws DuplicateTagException, SQLException
  * @todo Make this more generic, now only 'childless' tags are supported (only one handler)
  * @todo Consider using handler-array (define 'events' like in SAX)
  * @todo wrap the registration into constructor, either it succeeds creating the object or not, not having an object without succeeding sql.
@@ -1833,6 +1850,7 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
  * @access public
  * @param  string $tag      tag to remove
  * @return bool
+ * @throws SQLException
  * @todo   wrap in unregister method of tag class? (kinda compicates things, as now no object is needed)
  **/
 function xarTplUnregisterTag($tag_name)
@@ -1846,16 +1864,9 @@ function xarTplUnregisterTag($tag_name)
     $xartable =& xarDBGetTables();
 
     $tag_table = $xartable['template_tags'];
-    try {
-        $dbconn->begin();
-        $query = "DELETE FROM $tag_table WHERE xar_name = ?";
-        $stmt = $dbconn->prepareStatement($query);
-        $stmt->executeUpdate(array($tag_name));
-        $dbconn->commit();
-    } catch (SQLException $e) {
-        $dbconn->rollback();
-        throw $e;
-    }
+    $query = "DELETE FROM $tag_table WHERE xar_name = ?";
+    $stmt = $dbconn->prepareStatement($query);
+    $stmt->executeUpdate(array($tag_name));
     return true;
 }
 
@@ -1867,7 +1878,7 @@ function xarTplUnregisterTag($tag_name)
  * @param   string    $name Name of the tag
  * @param   array     $args Attribute array
  * @return  bool
- *
+ * @throws  BLException, BLValidationException
  * @todo Rename the function to reflect that it is a protected function
  * @todo wrap in method of tag or attribute class (or both)
 */

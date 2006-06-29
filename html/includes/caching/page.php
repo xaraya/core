@@ -435,6 +435,9 @@ function xarPage_autoCacheLogStatus($status = 'MISS')
                         $fp = @fopen($xarOutput_cacheCollection.'/autocache.stats', 'w');
                         if ($fp) {
                             foreach ($autocachestats as $url => $stats) {
+                                if ($stats['HIT'] + $stats['MISS'] < 2) {
+                                    continue;
+                                }
                                 @fwrite($fp, $url . ' ' . $stats['HIT'] . ' ' . $stats['MISS'] . ' ' . $autocachefirstseen[$url] . ' ' . $autocachelastseen[$url] . "\n");
                             }
                             @fclose($fp);

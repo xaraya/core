@@ -14,6 +14,7 @@
  * It will return true when the value validated is a number in the format
                 - 1.234
  * @return true on success (value is validated as a float number
+ * @throws VariableValidationException, BadParameterException
  */
 function variable_validations_float (&$subject, $parameters, $supress_soft_exc, &$name)
 {

@@ -25,7 +25,7 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
         extract($this->attributes);
         
         if (isset($name)) {
-            $this->raiseError(XAR_BL_INVALID_TAG,'Cannot have \'name\' attribute in open <xar:blockgroup> tag.', $this);
+            $this->raiseError(XAR_BL_INVALID_TAG,'Cannot have \'name\' attribute in open <xar:blockgroup> tag.');
             return;
         }
         
@@ -53,7 +53,7 @@ class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
         extract($this->attributes);
         
         if (!isset($name)) {
-            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'name\' attribute in <xar:blockgroup> tag.', $this);
+            $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'name\' attribute in <xar:blockgroup> tag.');
             return;
         }
         
