@@ -7,9 +7,12 @@
 
 TRANG=trang
 PHP=php5
+XSLTPROC=xsltproc
+XARROOT=/var/mt/xar/core/core.2.x/html
 
-all: xarddl.rng xarddl.xsd xarddl.rnc
-	
+all: xarddl.rng xarddl.xsd xarddl.rnc xar-model.sql
+
+# Generating stuff from the DTD
 %.xsd: %.dtd
 	$(TRANG) -I dtd -O xsd $< $@
 %.rng: %.dtd
@@ -17,5 +20,11 @@ all: xarddl.rng xarddl.xsd xarddl.rnc
 %.rnc: %.dtd
 	$(TRANG) -I dtd -O rnc $< $@
 
+# Getting an xml schema from a xar installation (see db2xml)
+xar-model.xml: db2xml db2xml.xd
+	cd $(XARROOT) && ./db2xml > $(PWD)/$@
+	
+%.sql: %.xml xar-model.xml
+	$(XSLTPROC) xml2ddl.xsl $< > $@
 clean:
-	$(RM) *.rng *.xsd *.rnc
+	$(RM) *.rng *.xsd *.rnc *.sql xar-model.xml
