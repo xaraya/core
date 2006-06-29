@@ -43,6 +43,15 @@
 </xsl:text>
 </xsl:template>
 
+<!-- Index base create is pretty portable -->
+<xsl:template match="table/index">
+<xsl:text>CREATE </xsl:text>
+<xsl:if test="@type='unique'"><xsl:text>UNIQUE </xsl:text></xsl:if>
+<xsl:text>INDEX </xsl:text><xsl:value-of select="@name"/> ON <xsl:value-of select="../@name"/>(<xsl:apply-templates/>);
+</xsl:template>
 
+<xsl:template match="table/index/index-column">
+<xsl:value-of select="@name"/>
+<xsl:if test="position() != last()"><xsl:text>,</xsl:text></xsl:if></xsl:template>
 </xsl:stylesheet>  
   

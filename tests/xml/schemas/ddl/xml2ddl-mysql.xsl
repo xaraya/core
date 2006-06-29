@@ -25,6 +25,7 @@
 <xsl:call-template name="topheader">
   <xsl:with-param name="dbname"><xsl:value-of select="/database/@name"/></xsl:with-param>
   <xsl:with-param name="remarks">
+    - reference: http://dev.mysql.com/doc/refman/5.0/en/index.html
     - assuming for now we want to drop before create
   </xsl:with-param>
 </xsl:call-template>
@@ -61,15 +62,5 @@ COMMENT='<xsl:value-of select="@description"/>';
 <xsl:if test="@primaryKey = 'true'"> PRIMARY KEY</xsl:if>
 <xsl:if test="position() != last()"><xsl:text>,</xsl:text></xsl:if>
 <xsl:value-of select="$CR"/></xsl:template>
-
-<xsl:template match="table/index">
-<xsl:text>CREATE </xsl:text>
-<xsl:if test="@type='unique'"><xsl:text>UNIQUE </xsl:text></xsl:if>
-<xsl:text>INDEX </xsl:text><xsl:value-of select="@name"/> ON <xsl:value-of select="../@name"/>(<xsl:apply-templates/>);
-</xsl:template>
-
-<xsl:template match="table/index/index-column">
-<xsl:value-of select="@name"/>
-<xsl:if test="position() != last()"><xsl:text>,</xsl:text></xsl:if></xsl:template>
 
 </xsl:stylesheet>

@@ -25,6 +25,7 @@
 <xsl:call-template name="topheader">
   <xsl:with-param name="dbname"><xsl:value-of select="/database/@name"/></xsl:with-param>
   <xsl:with-param name="remarks">
+    - reference: http://download-uk.oracle.com/docs/cd/B19188_01/doc/B15917/toc.htm
     - assuming for now we want to drop before create
   </xsl:with-param>
 </xsl:call-template>
@@ -39,21 +40,14 @@
 
 <xsl:template match="table">
   <xsl:call-template name="dynheader"/>
-  <xsl:call-template name="TODO"/>
-<xsl:apply-templates select="column"/>
+CREATE TABLE <xsl:value-of select="@name"/> 
+(
+  <xsl:apply-templates select="column"/>
+)
 <xsl:apply-templates select="index"/>
 </xsl:template>
 
 <xsl:template match="table/column">
-  <xsl:call-template name="TODO"/>
-</xsl:template>
-
-<xsl:template match="table/index">
-  <xsl:call-template name="TODO"/>
-  <xsl:apply-templates/>
-</xsl:template>
-
-<xsl:template match="table/index/index-column">
   <xsl:call-template name="TODO"/>
 </xsl:template>
 
