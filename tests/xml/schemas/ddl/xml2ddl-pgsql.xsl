@@ -39,7 +39,10 @@ CREATE TABLE <xsl:value-of select="@name"/>
 (
   <xsl:apply-templates select="column"/>
 );
-COMMENT ON TABLE <xsl:value-of select="@name"/> IS '<xsl:value-of select="@description"/>';
+<xsl:text>COMMENT ON TABLE </xsl:text><xsl:value-of select="@name"/><xsl:text> IS '</xsl:text><xsl:value-of select="@description"/>';
+<xsl:for-each select="./column">
+  <xsl:text>COMMENT ON COLUMN </xsl:text><xsl:value-of select="../@name"/>.<xsl:value-of select="@name"/><xsl:text> IS '</xsl:text><xsl:value-of select="@description"/>';
+</xsl:for-each>
 <xsl:apply-templates select="index"/>
 </xsl:template>
 
