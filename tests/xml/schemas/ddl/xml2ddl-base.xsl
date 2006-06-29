@@ -69,7 +69,7 @@
   <xsl:text>INDEX </xsl:text><xsl:value-of select="@name"/> ON <xsl:value-of select="../@name"/>(<xsl:apply-templates/>);
 </xsl:template>
 
-<xsl:template match="table/index/index-column">
+<xsl:template match="table/index/column">
   <xsl:value-of select="@name"/>
   <xsl:if test="position() != last()"><xsl:text>,</xsl:text></xsl:if></xsl:template>
   

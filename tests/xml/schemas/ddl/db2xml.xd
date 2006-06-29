@@ -38,10 +38,10 @@
         </xar:if>
         <index type="#$index_type#" name="#$index:getName()#">
           <xar:foreach in="$index_columns" value="$index_column">
-            <index-column name="#$index_column:getName()#"/>
+            <column name="#$index_column:getName()#"/>
           </xar:foreach>                          
         </index>
-      </xar:foreach>
+      </xar:foreach> 
     </table>
   </xar:foreach>
 </database>

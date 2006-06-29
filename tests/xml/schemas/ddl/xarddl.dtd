@@ -43,6 +43,7 @@
 		* removed elements 'unique' and 'unique-column'
 		* added definition for 'primary' element.
 		* removed attribute 'primaryKey' from 'column' element
+		* removed element 'index-column', replaced it with 'column' to sync it up with 'primary' definition
 -->
 
 <!ELEMENT database (table+)>
@@ -74,16 +75,10 @@
   description CDATA #IMPLIED
 >
 
-<!ELEMENT index (index-column+)>
+<!ELEMENT index (column+)>
 <!ATTLIST index  
 	name CDATA #IMPLIED
 	type (default|unique) "default"
->
-
-<!ELEMENT index-column EMPTY>
-<!ATTLIST index-column  
-	name CDATA #REQUIRED  
-	size CDATA #IMPLIED
 >
 
 <!--
@@ -103,7 +98,7 @@
 	* think about constraints, both on column and table level, they fit in nicely as
 	children of the 'column' or 'table' elements.
 	
-	* the mixed case use of 'autoIncrement' and 'primaryKey' are not needed, lead
+	* the mixed case use of 'autoIncrement' is not needed, lead
 	to confusion only
 	
 	* [DONE] the elements 'index' and 'unique' are the same, index type='unique' would
