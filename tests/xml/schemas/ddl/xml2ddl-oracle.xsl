@@ -11,16 +11,7 @@
   -->
   <xsl:import href="xml2ddl-base.xsl"/>
   
-  <!-- Global variables -->
-  <xsl:variable name="vendor">oracle</xsl:variable>
-  
-<!-- 
-    We probably want to specify parameters at some point like:
-    - drop4create - drop tables before creating them
-    - createdb    - create the database too
-    - tableprefix - self explanatory
-    - etc.
--->
+<!-- Things to do before we start handling elements -->
 <xsl:template match="/">
 <xsl:call-template name="topheader">
   <xsl:with-param name="dbname"><xsl:value-of select="/database/@name"/></xsl:with-param>

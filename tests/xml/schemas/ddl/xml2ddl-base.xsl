@@ -4,16 +4,28 @@
   <xsl:output method="text" />
   <xsl:strip-space elements="*"/>
 
+  <!-- 
+      We probably want to specify parameters at some point like:
+      - vendor      - generate ddl compatible with $vendor backend
+      - version     - generate ddl compatible with $vendor-$version backend 
+      - drop4create - drop tables before creating them
+      - createdb    - create the database too
+      - tableprefix - self explanatory
+      - etc.
+  -->  
+  <xsl:param name="vendor"  />
+  <xsl:param name="version" />
+  
   <!-- Variables, xslt style -->
   <xsl:variable name="CR">
 <xsl:text>
 </xsl:text>
   </xsl:variable>
   
-<!-- File header -->
-<xsl:template name="topheader">
-<xsl:param name="dbname"/>
-<xsl:param name="remarks"/>
+  <!-- File header -->
+  <xsl:template name="topheader">
+    <xsl:param name="dbname"/>
+    <xsl:param name="remarks"/>
 /* ---------------------------------------------------------------------------
  * Model generated from: TODO
  * Name                : <xsl:value-of select="$dbname"/>
@@ -33,13 +45,13 @@
 
 <!-- Easy TODO inclusion -->
 <xsl:template name="TODO">
-<xsl:text>/* TODO: Template for: </xsl:text>
-<xsl:value-of select="local-name()"/>
-<xsl:text> </xsl:text>
-<xsl:value-of select="@name"/>
-<xsl:text> handling (vendor: </xsl:text>
-<xsl:value-of select="$vendor"/>
-<xsl:text>) */
+  <xsl:text>/* TODO: Template for: </xsl:text>
+  <xsl:value-of select="local-name()"/>
+  <xsl:text> </xsl:text>
+  <xsl:value-of select="@name"/>
+  <xsl:text> handling (vendor: </xsl:text>
+  <xsl:value-of select="$vendor"/>
+  <xsl:text>) */
 </xsl:text>
 </xsl:template>
 

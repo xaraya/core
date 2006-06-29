@@ -18,7 +18,7 @@
 			Propel XML database schema DTD
 			$Id: database.dtd,v 1.7 2005/03/30 11:38:18 hlellelid Exp $
 		Changelog in applied order (meaning, if you make a change, at to the bottom):
-		* removed element 'reference'			- used in foreign key to specify references
+		* removed element 'reference'			- used in 'foreign-key' to specify references
 		* removed element 'foreign-key'	  - to define foreign key relationships
 		* removed element 'rule'					- to define validation rules
 		* removed element 'validator'     - grouped rule elements
