@@ -32,15 +32,9 @@
 <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="database">
-  <xsl:call-template name="dynheader"/>
-  <xsl:call-template name="TODO"/>
-  <xsl:apply-templates />
-</xsl:template>
-
 <xsl:template match="table">
   <xsl:call-template name="dynheader"/>
-/* TODO: Dropping a table is not clear how that works */
+/* TODO: Dropping a table is not clear how that works when it does not exist */
 CREATE TABLE <xsl:value-of select="@name"/>
 (
   <xsl:apply-templates select="column"/>

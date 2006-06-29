@@ -33,9 +33,9 @@
 </xsl:template>
 
 <xsl:template match="database">
-  <xsl:call-template name="dynheader"/>
-  <xsl:call-template name="TODO"/>
-  <xsl:apply-templates />
+<xsl:call-template name="dynheader"/>
+/* Connecting to the database will create the database if it does not exist for sqlite */
+<xsl:apply-templates />
 </xsl:template>
 
 <xsl:template match="table">

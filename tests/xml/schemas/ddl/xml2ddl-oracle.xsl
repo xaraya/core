@@ -32,12 +32,6 @@
 <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="database">
-  <xsl:call-template name="dynheader"/>
-  <xsl:call-template name="TODO"/>
-  <xsl:apply-templates />
-</xsl:template>
-
 <xsl:template match="table">
   <xsl:call-template name="dynheader"/>
 CREATE TABLE <xsl:value-of select="@name"/> 

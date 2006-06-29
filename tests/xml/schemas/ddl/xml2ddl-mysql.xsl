@@ -35,12 +35,6 @@ SET FOREIGN_KEY_CHECKS = 0;
 SET FOREIGN_KEY_CHECKS = 1;
 </xsl:template>
 
-<xsl:template match="database">
-<xsl:call-template name="dynheader"/>
-CREATE DATABASE <xsl:value-of select="@name"/>;
-<xsl:apply-templates />
-</xsl:template>
-
 <xsl:template match="table">
   <xsl:call-template name="dynheader"/>
 DROP TABLE IF EXISTS <xsl:value-of select="@name"/>;

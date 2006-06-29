@@ -43,6 +43,13 @@
 </xsl:text>
 </xsl:template>
 
+<!-- Default create database statement -->
+<xsl:template match="database">
+<xsl:call-template name="dynheader"/>
+CREATE DATABASE <xsl:value-of select="@name"/>;
+<xsl:apply-templates />
+</xsl:template>
+
 <!-- Index base create is pretty portable -->
 <xsl:template match="table/index">
 <xsl:text>CREATE </xsl:text>
