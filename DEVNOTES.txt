@@ -124,6 +124,7 @@ design work can begin.
 * Mysql    5.0.18
 * Postgres 8.0.6
 * Sqlite   N/A (embedded in PHP, i think it's 2.8.x for non PDO and  3.x for PDO)
+           There seems to be a sqlite3 extension floating around for php5
 * Oracle   ?
 * MsSql    ? (server 2003?)
 
@@ -139,12 +140,4 @@ design work can begin.
 need.
 Whether the tags used are compiled/transformed on the server or
 through a js callback is irrelevant for us.
-- 
-
-
-
-<!-- 
-% Local Variables:
-% mode: stx
-% End:
--->
+ 

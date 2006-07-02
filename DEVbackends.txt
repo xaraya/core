@@ -7,6 +7,7 @@ VIEWS support
 - postgres: yes, since 7.3 (at least)
 - mssql   : yes, no idea version wise
 - oracle  : ?
+==> SUPPPORTED BY ALL, WORTH CONSIDERING
 
 TRANSACTION support
 ===================
@@ -121,3 +122,16 @@ Native query preparation support
 					$result = pg_execute($dbconn, "my_query", array("Clothes Clothes Clothes"));
 - mssql		:	Unknown, it's possible in embedded SQL, no idea if transact SQL does support it.
 - oracle	: 	most likely
+
+
+Syntax support for SQL:
+          | comment       |
+----------|---------------|
+mysql     | --, #, /*..*/ |
+pgsql     | --, /*..*/    |
+sqlite    | --, /*..*/    |
+oracle    | /*..*/        |
+mssql     | /*..*/        |
+----------|---------------|
+Recommend:| /* ... */     |
+
