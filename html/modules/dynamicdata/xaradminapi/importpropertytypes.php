@@ -73,6 +73,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
         // Get list of properties in properties directories
         $proptypes = array(); $numLoaded = 0;
         foreach($propDirs as $PropertiesDir) {
+        	if (!file_exists($PropertiesDir)) continue;
             // The iterator takes an absolute directory, so we use a slightly extended class
             $dir = new PropertyDirectoryIterator($PropertiesDir);
             // Loop through properties directory

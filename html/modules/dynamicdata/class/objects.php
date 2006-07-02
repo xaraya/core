@@ -640,7 +640,7 @@ class Dynamic_Object_Master
      * @returns object
      * @return the requested object definition
      */
-    function &getObjectInterface($args)
+    static function &getObjectInterface($args)
     {
         require_once 'modules/dynamicdata/class/interface.php';
 
@@ -1033,13 +1033,13 @@ class Dynamic_Object extends Dynamic_Object_Master
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
                     $thisprop = $this->properties[$name];
-                    if ($thisprop->status != DD_PROPERTYSTATE_HIDDEN)
+                    if (($thisprop->status & Dynamic_Property_Master::DD_DISPLAYMASK) != Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN)
                         $args['properties'][$name] =& $this->properties[$name];
                 }
             }
         } else {
             $args['properties'] = $this->properties;
-            // Do them all, except for status = DD_PROPERTYSTATE_HIDDEN
+            // Do them all, except for status = Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN
             // TODO: this is exactly the same as in the display function, consolidate it.
             $totransform = array(); $totransform['transform'] = array();
             foreach($this->properties as $pname => $pobj) {
@@ -1054,7 +1054,7 @@ class Dynamic_Object extends Dynamic_Object_Master
             $transformed = xarModCallHooks('item','transform',$this->itemid, $totransform, $this->tplmodule,$this->itemtype);
 
             foreach ($this->properties as $property) {
-                if (($property->status != DD_PROPERTYSTATE_HIDDEN) && ($property->type != 21) && isset($transformed[$property->name])) {
+                if ((($property->status & Dynamic_Property_Master::DD_DISPLAYMASK) != Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN) && ($property->type != 21) && isset($transformed[$property->name])) {
                     // sigh, 5 letters, but so many hours to discover them
                     // anyways, clone the property, so we can safely change it, PHP 5 specific!!
                     $args['properties'][$property->name] = clone $property;
@@ -1760,7 +1760,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($args['fieldlist']))   $args['fieldlist'] = $this->fieldlist;
 
  		if (!empty($this->status)) $state = $this->status;
- 		else $state = DD_PROPERTYSTATE_ACTIVE | ~DD_PROPERTYSTATE_DISPLAYONLY;
+ 		else $state = DD_DISPLAYSTATE_ACTIVE | ~DD_DISPLAYSTATE_DISPLAYONLY;
         if (count($args['fieldlist']) > 0) {
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
@@ -1948,7 +1948,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (!empty($args['extend']))   $this->extend();
 
  		if (!empty($this->status)) $state = $this->status;
- 		else $state = DD_PROPERTYSTATE_ACTIVE | ~DD_PROPERTYSTATE_DISPLAYONLY;
+ 		else $state = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
         if (count($args['fieldlist']) > 0) {
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {

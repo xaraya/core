@@ -184,9 +184,8 @@ function dynamicdata_init()
                                                            'default'     => 'dynamic_data'),
                             /* is this property active ? (unused at the moment) */
                             'xar_prop_status'     => array('type'        => 'integer',
-                                                           'size'        => 'tiny',
                                                            'null'        => false,
-                                                           'default'     => '1'),
+                                                           'default'     => '33'),
                             /* the order of this property */
                             'xar_prop_order'      => array('type'        => 'integer',
                                                            'size'        => 'tiny',
@@ -234,40 +233,40 @@ function dynamicdata_init()
                 xar_prop_order, xar_prop_validation)
             VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
-        
+
         // TEMP FIX for the constants, rewrite this
         require_once 'modules/dynamicdata/class/properties.php';
         $properties = array(
                             // 1 -> 9
-                            array('objectid'  ,'Id'                 ,$objectid[1],182,0,21,''            ,$dynamic_objects.'.xar_object_id'         ,DD_PROPERTYSTATE_NOINPUT | DD_PROPERTYSTATE_ACTIVE,1 ,'integer'),
-                            array('name'      ,'Name'               ,$objectid[1],182,0,2 ,''            ,$dynamic_objects.'.xar_object_name'       ,DD_PROPERTYSTATE_ACTIVE,2 ,'varchar (30)'),
-                            array('label'     ,'Label'              ,$objectid[1],182,0,2 ,''            ,$dynamic_objects.'.xar_object_label'      ,DD_PROPERTYSTATE_ACTIVE,3 ,'varchar (254)'),
-                            array('moduleid'  ,'Module'             ,$objectid[1],182,0,19,'182'         ,$dynamic_objects.'.xar_object_moduleid'   ,DD_PROPERTYSTATE_ACTIVE,4 ,'integer'),
-                            array('itemtype'  ,'Item Type'          ,$objectid[1],182,0,20,'0'           ,$dynamic_objects.'.xar_object_itemtype'   ,DD_PROPERTYSTATE_ACTIVE,5 ,'integer'),
-                            array('urlparam'  ,'URL Param'          ,$objectid[1],182,0,2 ,'itemid'      ,$dynamic_objects.'.xar_object_urlparam'   ,DD_PROPERTYSTATE_ACTIVE,6 ,'varchar (30)'),
-                            array('maxid'     ,'Max Id'             ,$objectid[1],182,0,15,'0'           ,$dynamic_objects.'.xar_object_maxid'      ,DD_PROPERTYSTATE_DISPLAYONLY,7 ,'integer'),
-                            array('config'    ,'Config'             ,$objectid[1],182,0,4 ,''            ,$dynamic_objects.'.xar_object_config'     ,DD_PROPERTYSTATE_DISPLAYONLY,8 ,'text'),
+                            array('objectid'  ,'Id'                 ,$objectid[1],182,0,21,''            ,$dynamic_objects.'.xar_object_id'         ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_NOINPUT,1 ,'inDynamic_Property_Master::teger'),
+                            array('name'      ,'Name'               ,$objectid[1],182,0,2 ,''            ,$dynamic_objects.'.xar_object_name'       ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,2 ,'varchar (30)'),
+                            array('label'     ,'Label'              ,$objectid[1],182,0,2 ,''            ,$dynamic_objects.'.xar_object_label'      ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,3 ,'varchar (254)'),
+                            array('moduleid'  ,'Module'             ,$objectid[1],182,0,19,'182'         ,$dynamic_objects.'.xar_object_moduleid'   ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,4 ,'integer'),
+                            array('itemtype'  ,'Item Type'          ,$objectid[1],182,0,20,'0'           ,$dynamic_objects.'.xar_object_itemtype'   ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,5 ,'integer'),
+                            array('urlparam'  ,'URL Param'          ,$objectid[1],182,0,2 ,'itemid'      ,$dynamic_objects.'.xar_object_urlparam'   ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,6 ,'varchar (30)'),
+                            array('maxid'     ,'Max Id'             ,$objectid[1],182,0,15,'0'           ,$dynamic_objects.'.xar_object_maxid'      ,Dynamic_Property_Master::DD_DISPLAYSTATE_DISPLAYONLY | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,7 ,'integer'),
+                            array('config'    ,'Config'             ,$objectid[1],182,0,4 ,''            ,$dynamic_objects.'.xar_object_config'     ,Dynamic_Property_Master::DD_DISPLAYSTATE_DISPLAYONLY | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,8 ,'text'),
 // TODO: (random) Review this. I don't really understand the status
 //                            array('isalias'   ,'Alias in short URLs',$objectid[1],182,0,14,'1'           ,$dynamic_objects.'.xar_object_isalias'    ,$objectid[1],182 ,'integer (tiny)'),
-                            array('isalias'   ,'Alias in short URLs',$objectid[1],182,0,14,'1'           ,$dynamic_objects.'.xar_object_isalias'    ,DD_PROPERTYSTATE_ACTIVE,182 ,'integer (tiny)'),
-                            array('parent'    ,'Parent',             $objectid[1],182,0,600,'0'          ,$dynamic_objects.'.xar_object_parent'     ,DD_PROPERTYSTATE_ACTIVE,6 ,'integer'),
-                            array('id'        ,'Id'                 ,$objectid[2],182,1,21,''            ,$dynamic_properties.'.xar_prop_id'        ,DD_PROPERTYSTATE_ACTIVE,1 ,'integer'),
-                            array('name'      ,'Name'               ,$objectid[2],182,1,2 ,''            ,$dynamic_properties.'.xar_prop_name'      ,DD_PROPERTYSTATE_DISPLAYONLY,2 ,'varchar (30)'),
-                            array('label'     ,'Label'              ,$objectid[2],182,1,2 ,''            ,$dynamic_properties.'.xar_prop_label'     ,DD_PROPERTYSTATE_ACTIVE,3 ,'varchar (254)'),
-                            array('objectid'  ,'Object'             ,$objectid[2],182,1,24,''            ,$dynamic_properties.'.xar_prop_objectid'  ,DD_PROPERTYSTATE_ACTIVE,4 ,'integer'),
-                            array('moduleid'  ,'Module'             ,$objectid[2],182,1,19,''            ,$dynamic_properties.'.xar_prop_moduleid'  ,DD_PROPERTYSTATE_DISPLAYONLY,5 ,'integer'),
-                            array('itemtype'  ,'Item Type'          ,$objectid[2],182,1,20,''            ,$dynamic_properties.'.xar_prop_itemtype'  ,DD_PROPERTYSTATE_DISPLAYONLY,6 ,'integer'),
-                            array('type'      ,'Property Type'      ,$objectid[2],182,1,22,''            ,$dynamic_properties.'.xar_prop_type'      ,DD_PROPERTYSTATE_ACTIVE,7 ,'integer'),
-                            array('default'   ,'Default'            ,$objectid[2],182,1,3 ,''            ,$dynamic_properties.'.xar_prop_default'   ,DD_PROPERTYSTATE_ACTIVE,8 ,'varchar (254)'),
-                            array('source'    ,'Source'             ,$objectid[2],182,1,23,'dynamic_data',$dynamic_properties.'.xar_prop_source'    ,DD_PROPERTYSTATE_ACTIVE,9 ,'varchar (254)'),
-                            array('status'    ,'Status'             ,$objectid[2],182,1,25,'1'           ,$dynamic_properties.'.xar_prop_status'    ,DD_PROPERTYSTATE_ACTIVE,10,'integer (tiny)'),
-                            array('order'     ,'Order'              ,$objectid[2],182,1,15,'0'           ,$dynamic_properties.'.xar_prop_order'     ,DD_PROPERTYSTATE_DISPLAYONLY,11,'integer (tiny)'),
-                            array('validation','Validation'         ,$objectid[2],182,1,2 ,''            ,$dynamic_properties.'.xar_prop_validation',DD_PROPERTYSTATE_DISPLAYONLY,12,'varchar (254)'),
+                            array('isalias'   ,'Alias in short URLs',$objectid[1],182,0,14,'1'           ,$dynamic_objects.'.xar_object_isalias'    ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,182 ,'integer (tiny)'),
+                            array('parent'    ,'Parent',             $objectid[1],182,0,600,'0'          ,$dynamic_objects.'.xar_object_parent'     ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,6 ,'integer'),
+                            array('id'        ,'Id'                 ,$objectid[2],182,1,21,''            ,$dynamic_properties.'.xar_prop_id'        ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,1 ,'integer'),
+                            array('name'      ,'Name'               ,$objectid[2],182,1,2 ,''            ,$dynamic_properties.'.xar_prop_name'      ,Dynamic_Property_Master::DD_DISPLAYSTATE_DISPLAYONLY | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,2 ,'varchar (30)'),
+                            array('label'     ,'Label'              ,$objectid[2],182,1,2 ,''            ,$dynamic_properties.'.xar_prop_label'     ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,3 ,'varchar (254)'),
+                            array('objectid'  ,'Object'             ,$objectid[2],182,1,24,''            ,$dynamic_properties.'.xar_prop_objectid'  ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,4 ,'integer'),
+                            array('moduleid'  ,'Module'             ,$objectid[2],182,1,19,''            ,$dynamic_properties.'.xar_prop_moduleid'  ,Dynamic_Property_Master::DD_DISPLAYSTATE_DISPLAYONLY | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,5 ,'integer'),
+                            array('itemtype'  ,'Item Type'          ,$objectid[2],182,1,20,''            ,$dynamic_properties.'.xar_prop_itemtype'  ,Dynamic_Property_Master::DD_DISPLAYSTATE_DISPLAYONLY | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,6 ,'integer'),
+                            array('type'      ,'Property Type'      ,$objectid[2],182,1,22,''            ,$dynamic_properties.'.xar_prop_type'      ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,7 ,'integer'),
+                            array('default'   ,'Default'            ,$objectid[2],182,1,3 ,''            ,$dynamic_properties.'.xar_prop_default'   ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,8 ,'varchar (254)'),
+                            array('source'    ,'Source'             ,$objectid[2],182,1,23,'dynamic_data',$dynamic_properties.'.xar_prop_source'    ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE,9 ,'varchar (254)'),
+                            array('status'    ,'Status'             ,$objectid[2],182,1,25,'1'           ,$dynamic_properties.'.xar_prop_status'    ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,10,'integer (tiny)'),
+                            array('order'     ,'Order'              ,$objectid[2],182,1,15,'0'           ,$dynamic_properties.'.xar_prop_order'     ,Dynamic_Property_Master::DD_DISPLAYSTATE_DISPLAYONLY | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,11,'integer (tiny)'),
+                            array('validation','Validation'         ,$objectid[2],182,1,2 ,''            ,$dynamic_properties.'.xar_prop_validation',Dynamic_Property_Master::DD_DISPLAYSTATE_DISPLAYONLY | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,12,'varchar (254)'),
                             // 23 -> 26
-                            array('id'        ,'Id'                 ,$objectid[3],182,2,21,''                         ,'dynamic_data',DD_PROPERTYSTATE_DISPLAYONLY,1,''),
-                            array('name'      ,'Name'               ,$objectid[3],182,2,2 ,'please enter your name...','dynamic_data',DD_PROPERTYSTATE_ACTIVE,2,'1:30'),
-                            array('age'       ,'Age'                ,$objectid[3],182,2,15,''                         ,'dynamic_data',DD_PROPERTYSTATE_ACTIVE,3,'0:125'),
-                            array('location'  ,'Location'           ,$objectid[3],182,2,12,''                         ,'dynamic_data',DD_PROPERTYSTATE_DISPLAYONLY,4,'')
+                            array('id'        ,'Id'                 ,$objectid[3],182,2,21,''                         ,'dynamic_data',Dynamic_Property_Master::DD_DISPLAYSTATE_DISPLAYONLY | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,1,''),
+                            array('name'      ,'Name'               ,$objectid[3],182,2,2 ,'please enter your name...','dynamic_data',Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,2,'1:30'),
+                            array('age'       ,'Age'                ,$objectid[3],182,2,15,''                         ,'dynamic_data',Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,3,'0:125'),
+                            array('location'  ,'Location'           ,$objectid[3],182,2,12,''                         ,'dynamic_data',Dynamic_Property_Master::DD_DISPLAYSTATE_DISPLAYONLY | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,4,'')
                             );
 
         $propid = array();
