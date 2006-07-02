@@ -64,7 +64,7 @@
         FLOAT|DECIMAL|NUMERIC|REAL|DOUBLE|
         CHAR|VARCHAR|LONGVARCHAR|
         DATE|TIME|TIMESTAMP|
-        BINARY|VARBINARY|LONGVARBINART|BLOB|CLOB|
+        BINARY|VARBINARY|LONGVARBINARY|BLOB|CLOB|
         BOOLEAN|BIT|BOOLEANINT|BOOLEANCHAR|
         OTHER
        ) "VARCHAR"
@@ -83,10 +83,10 @@
 
 <!--
 	Wishes:
-	* the type attribute should only designate an 'abstract' type, not related
-	to the database types like TINYINT or something. the storage types used by
-	different databases can be figured out by the generator in combination with
-	other information supplied in the xml.
+	* the 'type' attribute for the 'column' element should only designate an 
+	'abstract' type, not related	to the database types like TINYINT or something. 
+	The storage types used by different databases can be figured out by the 
+	generator in combination with other information supplied in the xml.
 	
 	Proposed set of types:
 	- char | binary | number | boolean | date | time

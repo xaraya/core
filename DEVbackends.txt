@@ -135,3 +135,60 @@ mssql     | /*..*/        |
 ----------|---------------|
 Recommend:| /* ... */     |
 
+Datatype notes:
+
+Acceptance in SQL: 
+(NOTE: means nothing about actual storage and how it behaves, just means SQL doesnt produce an error)
+
+                                      mysql   pgsql   sqlite    oracle   mssql
+tinyint                                X       -        X         X        X
+smallint                               X       X        X         X        X
+mediumint                              X       -        X         -        -
+bigint                                 X       X        X         X        X
+int                                    X       X        X         -        X
+integer                                X       X        X         X        -
+       
+bit                                    X       X        X         X        X
+bool                                   X       -        X         -        -
+boolean                                X       X        X         -        -
+
+float                                  X       -        X         X        X
+double [precision]                     X       X        X         X        X
+real                                   -       X        X         X        X
+
+decimal                                X       X        X         X        X
+numeric                                X       X        X         X        X
+dec                                    X       -        X         -        -
+fixed                                  X       -        X         -        -
+
+char                                   X       X        X         X        X
+varchar                                X       X        X         X        X
+text                                   X       X        X         -        X
+tinytext                               X       -        X         -        -
+mediumtext                             X       -        X         -        -
+longtext                               X       -        X         -        -
+
+money                                  -       X        X         -        X
+smallmoney                             -       -        X         -        X
+
+date                                   X       X        X         X        -
+datetime                               X       X        X         -        X
+smalldatetime                          -       -        X         -        X 
+timestamp                              X       X        X         X        X
+interval                               -       X        X         -        -
+time                                   X       X        X         X        -
+year                                   X       -        X         -        -
+
+binary                                 X       -        X         X        X
+bytea                                  -       X        X         -        -
+varbinary                              X       -        X         X        X
+long varbinary                         X       -        X         X        -
+image                                  -       -        X         -        X
+blob                                   X       -        X         -        -
+tinyblob                               X       -        X         -        -
+mediumblob                             X       -        X         -        -
+longblob                               X       -        X         -        -
+
+rowid                                  -       -        X         X        -
+serial                                 -       X        X         -        -
+bigserial                              -       X        X         -        -
