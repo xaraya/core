@@ -17,6 +17,7 @@
 /* The primary key index is automatically adapted */
 RENAME TABLE xar_module_uservars TO xar_module_itemvars;
 ALTER TABLE xar_module_itemvars CHANGE COLUMN xar_uid xar_itemid INT(11) UNSIGNED NOT NULL DEFAULT '0';
+ALTER TABLE xar_module_itemvars CHANGE COLUMN xar_mvid INT(11) UNSIGNED NOT NULL DEFAULT '0';
 
 /* Hooks table smodule and tmodule changed to smodid and tmodid where the registration is the module id now instead of the name */
 /* First add the two new colum definitions */

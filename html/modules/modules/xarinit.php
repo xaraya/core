@@ -107,7 +107,7 @@ function modules_init()
          * )
          */
         $fields = array(
-                        'xar_mvid' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
+                        'xar_mvid' => array('type' => 'integer', 'null' => false, 'primary_key' => true),
                         'xar_itemid' => array('type' => 'integer', 'null' => false, 'unsigned' => true, 'primary_key' => true),
                         'xar_value' => array('type' => 'text', 'size' => 'long')
                         );
