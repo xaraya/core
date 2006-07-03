@@ -238,7 +238,7 @@ function dynamicdata_init()
         require_once 'modules/dynamicdata/class/properties.php';
         $properties = array(
                             // 1 -> 9
-                            array('objectid'  ,'Id'                 ,$objectid[1],182,0,21,''            ,$dynamic_objects.'.xar_object_id'         ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_NOINPUT,1 ,'inDynamic_Property_Master::teger'),
+                            array('objectid'  ,'Id'                 ,$objectid[1],182,0,21,''            ,$dynamic_objects.'.xar_object_id'         ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_NOINPUT,1 ,'Dynamic_Property_Master::integer'),
                             array('name'      ,'Name'               ,$objectid[1],182,0,2 ,''            ,$dynamic_objects.'.xar_object_name'       ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,2 ,'varchar (30)'),
                             array('label'     ,'Label'              ,$objectid[1],182,0,2 ,''            ,$dynamic_objects.'.xar_object_label'      ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,3 ,'varchar (254)'),
                             array('moduleid'  ,'Module'             ,$objectid[1],182,0,19,'182'         ,$dynamic_objects.'.xar_object_moduleid'   ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY,4 ,'integer'),
