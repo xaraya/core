@@ -13,39 +13,56 @@
   
 <!-- Things to do before we start handling elements -->
 <xsl:template match="/">
-<xsl:call-template name="topheader">
-  <xsl:with-param name="dbname"><xsl:value-of select="/database/@name"/></xsl:with-param>
-  <xsl:with-param name="remarks">
+  <xsl:call-template name="topheader">
+    <xsl:with-param name="dbname"><xsl:value-of select="/database/@name"/></xsl:with-param>
+    <xsl:with-param name="remarks">
     - reference: http://dev.mysql.com/doc/refman/5.0/en/index.html
     - assuming for now we want to drop before create
-  </xsl:with-param>
-</xsl:call-template>
-/* Disable foreign key checks until we're done */
-SET FOREIGN_KEY_CHECKS = 0;
-<xsl:apply-templates/>
-SET FOREIGN_KEY_CHECKS = 1;
+    </xsl:with-param>
+  </xsl:call-template>
+  <xsl:text>/* Disable foreign key checks until we're done */</xsl:text>
+  <xsl:value-of select="$CR"/>
+  <xsl:text>SET FOREIGN_KEY_CHECKS = 0;</xsl:text>
+  <xsl:value-of select="$CR"/>
+  <xsl:apply-templates/>
+  <xsl:text>SET FOREIGN_KEY_CHECKS = 1;</xsl:text>
+  <xsl:value-of select="$CR"/>
 </xsl:template>
 
 <xsl:template match="table">
   <xsl:call-template name="dynheader"/>
-DROP TABLE IF EXISTS <xsl:value-of select="@name"/>;
-CREATE TABLE <xsl:value-of select="@name"/> 
-(
-<xsl:apply-templates select="column"/>
-)
-COMMENT='<xsl:value-of select="@description"/>';
-<xsl:apply-templates select="primary"/>
-<xsl:apply-templates select="index"/>
+  <xsl:text>DROP TABLE IF EXISTS </xsl:text><xsl:value-of select="@name"/><xsl:text>;</xsl:text>
+  <xsl:value-of select="$CR"/>
+  <xsl:text>CREATE TABLE </xsl:text><xsl:value-of select="@name"/> 
+  <xsl:text>(</xsl:text>
+  <xsl:apply-templates select="column"/>
+  <xsl:text>)</xsl:text>
+  <xsl:if test="@description != ''">
+    <xsl:text>COMMENT='</xsl:text>
+    <xsl:value-of select="@description"/>
+    <xsl:text>'</xsl:text>
+  </xsl:if>
+  <xsl:text>;</xsl:text>
+  <xsl:value-of select="$CR"/>
+  <xsl:apply-templates select="primary"/>
+  <xsl:apply-templates select="index"/>
 </xsl:template>
 
 <xsl:template match="table/column">
-<xsl:text>  </xsl:text>
-<xsl:value-of select="@name"/><xsl:text> </xsl:text>
-<xsl:value-of select="@type"/>(<xsl:value-of select="@size"/>)<xsl:text> </xsl:text>
-<xsl:if test="@required ='true'"> NOT NULL</xsl:if>
-<xsl:if test="@default != ''"> DEFAULT '<xsl:value-of select="@default"/>'</xsl:if>
-<xsl:if test="@autoIncrement ='true'"> AUTO_INCREMENT</xsl:if>
-<xsl:if test="position() != last()"><xsl:text>,</xsl:text></xsl:if>
-<xsl:value-of select="$CR"/></xsl:template>
-
+  <xsl:text>  </xsl:text>
+  <xsl:value-of select="@name"/><xsl:text> </xsl:text>
+  <xsl:choose>
+    <xsl:when test="@type = 'LONGVARCHAR'">
+      <xsl:text>MEDIUMTEXT</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="@type"/>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:if test="@size != ''">(<xsl:value-of select="@size"/>)<xsl:text> </xsl:text></xsl:if>
+  <xsl:if test="@required ='true'"> NOT NULL</xsl:if>
+  <xsl:if test="@default != ''"> DEFAULT '<xsl:value-of select="@default"/>'</xsl:if>
+  <xsl:if test="@autoIncrement ='true'"> AUTO_INCREMENT</xsl:if>
+  <xsl:if test="position() != last()"><xsl:text>,</xsl:text></xsl:if>
+  <xsl:value-of select="$CR"/></xsl:template>
 </xsl:stylesheet>

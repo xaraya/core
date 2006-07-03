@@ -80,7 +80,7 @@
   <xsl:text> ADD PRIMARY KEY (</xsl:text>
   <xsl:for-each select="./column">
     <xsl:value-of select="@name"/>
-    <xsl:if test="position != last()"><xsl:text>,</xsl:text></xsl:if>
+    <xsl:if test="position() != last()"><xsl:text>,</xsl:text></xsl:if>
   </xsl:for-each>);
 </xsl:template>
 </xsl:stylesheet>

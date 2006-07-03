@@ -87,8 +87,11 @@
 	'abstract' type, not related	to the database types like TINYINT or something. 
 	The storage types used by different databases can be figured out by the 
 	generator in combination with other information supplied in the xml.
+  This is basically what creole does, but the mapping they use is a set of
+	types (JDBC types actually) which are still close to the actual type of the 
+	database. Since this code is in place, we might as well use it.
 	
-	Proposed set of types:
+	Example set of more abstract types:
 	- char | binary | number | boolean | date | time
 	Ideally these would be children of the 'column' element so the attributes
 	can be defined on them specifically (e.g. 'precision' which only makes sense for numbers and perhaps time)
@@ -127,5 +130,19 @@
 	familiar mysql table type stuff, but also other parameters)
 	
 	* xaraya doesnt use foreign keys yet, doesnt mean we cant have support in the
-	schema for it though.
+	schema for it though.         
+	
+	* other than the precise size="14" it could be comfortable to specify 'qualitative' sizes.
+	For example:
+    	small      64K  'c64'       'amoebe'
+    	medium      1M  'pda'       'fly'
+    	large      16M  'notebook'  'dog'
+    	long      256M  'laptop'    'ape'
+    	huge        4G  'desktop'   'human'
+	where the generator translates
+	this into something for the backend that fits. The second column would be 
+	comfortable from a developer perspective without having to know what column
+	type it actually translates into, it guarantees to be capable of storing the
+	specified size (at minimum)
+	
 -->
