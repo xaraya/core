@@ -125,27 +125,23 @@ function privileges_init()
          * CREATE TABLE xar_privmembers (
          *   xar_pid int(11) NOT NULL default '0',
          *   xar_parentid int(11) NOT NULL default '0',
-         *   KEY xar_pid (xar_pid,xar_parentid)
+         *   PRIMARY KEY xar_pid (xar_pid,xar_parentid)
          * )
          *********************************************************************/
         
         $query = xarDBCreateTable($tables['privmembers'],
-                                  array('xar_pid'       => array('type'       => 'integer',
+                                  array('xar_pid'       => array('type'        => 'integer',
                                                                  'null'        => false,
-                                                                 'default'     => '0'),
-                                        'xar_parentid'      => array('type'   => 'integer',
+                                                                 'default'     => '0',
+                                                                 'primary_key' => true),
+                                        'xar_parentid'      => array('type'        => 'integer',
                                                                      'null'        => false,
-                                                                     'default'     => '0')));
+                                                                     'default'     => '0',
+                                                                     'primary_key' => true)));
         $dbconn->Execute($query);
         
         xarDB::importTables(array('privmembers' => xarDBGetSiteTablePrefix() . '_privmembers'));
         
-        $index = array('name'      => 'i_'.$sitePrefix.'_privmembers_id',
-                       'fields'    => array('xar_pid','xar_parentid'),
-                       'unique'    => TRUE);
-        $query = xarDBCreateIndex($tables['privmembers'],$index);
-        $dbconn->Execute($query);
-
         $index = array('name'      => 'i_'.$sitePrefix.'_privmembers_pid',
                        'fields'    => array('xar_pid'),
                        'unique'    => FALSE);

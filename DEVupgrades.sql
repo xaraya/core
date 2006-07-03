@@ -90,3 +90,12 @@ DROP TABLE xar_config_vars;
 
 /* DD extending */
 ALTER TABLE xar_dynamic_objects ADD COLUMN xar_object_parent INT(11) NOT NULL DEFAULT '0';
+
+/* Defining a primary key for xar_(priv|role)members instead of the artificial unique key */
+DROP INDEX i_xar_privmembers_id;
+ALTER TABLE xar_privmembers ADD PRIMARY KEY (xar_pid,xar_parentid);
+DROP INDEX i_xar_rolememb_id;
+ALTER TABLE xar_rolemembers ADD PRIMARY KEY (xar_uid,xar_parentid);
+
+DROP INDEX i_xar_cache_blocks_1;
+ALTER TABLE xar_cache_blocks ADD PRIMARY KEY (xar_bid);

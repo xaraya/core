@@ -178,7 +178,8 @@ function blocks_init()
         $query = xarDBCreateTable($prefix . '_cache_blocks',
                                   array('xar_bid'          => array('type'        => 'integer',
                                                                     'null'        => false,
-                                                                    'default'     => '0'),
+                                                                    'default'     => '0',
+                                                                    'primary_key' => true),
                                         'xar_nocache'    => array('type'        => 'integer',
                                                                   'null'        => false,
                                                                   'default'     => '0'),
@@ -192,18 +193,6 @@ function blocks_init()
                                                                  'null'        => true)));
         $dbconn->Execute($query);
         
-        $query = xarDBCreateIndex($prefix . '_cache_blocks',
-                                  array('name' => 'i_' . $prefix . '_cache_blocks_1',
-                                        'fields' => array('xar_bid'),
-                                        'unique' => true));
-        $dbconn->Execute($query);
-        /*
-         // Create a unique key on the xar_bid collumn
-         $result = $datadict->createIndex('i_' . xarDBGetSiteTablePrefix() . '_cache_blocks_1',
-         $cacheblockstable,
-         'xar_bid',
-         array('UNIQUE'));
-        */
         // *_userblocks
         /* Removed Collapsing blocks to see if there is a better solution.
          $query = xarDBCreateTable($prefix . '_userblocks',
