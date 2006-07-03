@@ -2,7 +2,35 @@
   <xar:foreach in="$tables" value="$table">
     <table name="#$table:getName()#">
       <xar:set name="columns">#$table:getColumns()#</xar:set>
+      <xar:set name="primary">#$table:getPrimaryKey()#</xar:set>
+      <xar:set name="prim_columns">array()</xar:set>
+      <xar:if condition="is_object($primary)">
+        <xar:set name="prim_columns">#$primary:getColumns()#</xar:set>
+      </xar:if>
+      <xar:set name="dealt_with">array()</xar:set>
+      <xar:if condition="count($prim_columns)"> 
+        <primary>
+          <xar:foreach in="$prim_columns" value="$prim_column">
+            <xar:set name="autoinc">'false'</xar:set>
+            <xar:if condition="#$prim_column:isAutoIncrement()#">
+              <xar:set name="autoinc">'true'</xar:set>
+            </xar:if>
+            <xar:set name="required">'true'</xar:set>
+            <xar:if condition="#$prim_column:isNullable()#">
+              <xar:set name="required">'false'</xar:set>
+            </xar:if>
+            <xar:set name="type">CreoleTypes::getCreoleName($prim_column->getType())</xar:set>
+            <column name="#$prim_column:getName()#" description=""
+                    type="#$type#" size="#$prim_column:getSize()#" scale="#$prim_column:getScale()#"
+                    default="#$prim_column:getDefaultValue()#" required="#$required#" autoIncrement="#$autoinc#" />
+            <xar:set name="elems">array_push($dealt_with,$prim_column->getName())</xar:set>
+          </xar:foreach> 
+        </primary>
+      </xar:if>
       <xar:foreach in="$columns" value="$column">
+        <xar:if condition="#in_array($column:getName(),$dealt_with)#">
+          <xar:continue />
+        </xar:if>
         <xar:set name="autoinc">'false'</xar:set>
         <xar:if condition="#$column:isAutoIncrement()#">
           <xar:set name="autoinc">'true'</xar:set>
@@ -11,24 +39,11 @@
         <xar:if condition="#$column:isNullable()#">
           <xar:set name="required">'false'</xar:set>
         </xar:if>
-        <xar:set name="column_name">#$column:getName()#</xar:set>
         <xar:set name="type">CreoleTypes::getCreoleName($column->getType())</xar:set>
-        <column name="#$column_name#" description=""
+        <column name="#$column:getName()#" description=""
                 type="#$type#" size="#$column:getSize()#" scale="#$column:getScale()#"
                 default="#$column:getDefaultValue()#" required="#$required#" autoIncrement="#$autoinc#" />
       </xar:foreach>
-      <xar:set name="primary">#$table:getPrimaryKey()#</xar:set>
-      <xar:set name="prim_columns">array()</xar:set>
-      <xar:if condition="is_object($primary)">
-        <xar:set name="prim_columns">#$primary:getColumns()#</xar:set>
-      </xar:if>
-      <xar:if condition="count($prim_columns)"> 
-        <primary>
-            <xar:foreach in="$prim_columns" value="$prim_column">
-                <column name="#$prim_column:getName()#"/>
-            </xar:foreach> 
-        </primary>
-      </xar:if>
       <xar:set name="indexes">#$table:getIndexes()#</xar:set>
       <xar:foreach in="$indexes" value="$index">
         <xar:set name="index_columns">#$index:getColumns()#</xar:set>

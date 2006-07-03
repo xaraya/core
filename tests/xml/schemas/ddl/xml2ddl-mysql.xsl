@@ -35,7 +35,8 @@
   <xsl:value-of select="$CR"/>
   <xsl:text>CREATE TABLE </xsl:text><xsl:value-of select="@name"/> 
   <xsl:text>(</xsl:text>
-  <xsl:apply-templates select="column"/>
+  <xsl:value-of select="$CR"/>
+  <xsl:apply-templates select="primary/column | column"/>
   <xsl:text>)</xsl:text>
   <xsl:if test="@description != ''">
     <xsl:text>COMMENT='</xsl:text>
@@ -48,7 +49,7 @@
   <xsl:apply-templates select="index"/>
 </xsl:template>
 
-<xsl:template match="table/column">
+<xsl:template match="column">
   <xsl:text>  </xsl:text>
   <xsl:value-of select="@name"/><xsl:text> </xsl:text>
   <xsl:choose>

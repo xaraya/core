@@ -27,7 +27,7 @@
   <xsl:call-template name="dynheader"/>
 CREATE TABLE <xsl:value-of select="@name"/> 
 (
-  <xsl:apply-templates select="column"/>
+  <xsl:apply-templates select="primary/column | column"/>
 );
 <xsl:apply-templates select="primary"/>
 <xsl:apply-templates select="index"/>

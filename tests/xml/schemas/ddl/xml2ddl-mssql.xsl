@@ -28,7 +28,7 @@
 /* TODO: Dropping a table is not clear how that works when it does not exist */
 CREATE TABLE <xsl:value-of select="@name"/>
 (
-  <xsl:apply-templates select="column"/>
+  <xsl:apply-templates select="primary/column | column"/>
 );
 <xsl:apply-templates select="primary"/>
 <xsl:apply-templates select="index"/>

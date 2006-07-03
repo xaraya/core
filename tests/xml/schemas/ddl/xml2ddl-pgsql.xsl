@@ -31,7 +31,7 @@
   <xsl:value-of select="@name"/>
   <xsl:text>(</xsl:text>
   <xsl:value-of select="$CR"/>
-  <xsl:apply-templates select="column"/>
+  <xsl:apply-templates select="primary/column | column"/>
   <xsl:text>);</xsl:text>
   <xsl:value-of select="$CR"/>
   <xsl:if test="@description != ''">
@@ -55,7 +55,7 @@
   <xsl:apply-templates select="index"/>
 </xsl:template>
 
-<xsl:template match="table/column">
+<xsl:template match="column">
   <xsl:text>  </xsl:text>
   <xsl:value-of select="@name"/><xsl:text> </xsl:text>
   <xsl:choose>

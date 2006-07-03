@@ -15,6 +15,8 @@
   -->  
   <xsl:param name="vendor"  />
   <xsl:param name="version" />
+  <xsl:param name="dbcreate"/>
+  <xsl:param name="drop4create"/>
   
   <!-- Variables, xslt style -->
   <xsl:variable name="CR">
