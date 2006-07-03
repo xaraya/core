@@ -162,7 +162,8 @@ dec                                    X       -        X         -        -
 fixed                                  X       -        X         -        -
 
 char                                   X       X        X         X        X
-varchar                                X       X        X         X        X
+varchar                                X       X        X         X        X   
+longvarchar                            -       -        X         X        -
 text                                   X       X        X         -        X
 tinytext                               X       -        X         -        -
 mediumtext                             X       -        X         -        -
