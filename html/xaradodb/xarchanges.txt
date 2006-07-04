@@ -6,6 +6,10 @@ when we want things merged into the upstream code.
 =============================================================
 Changes made to ADOdb library ONLY in this Xaraya 1.1.x series
 =============================================================
+2006-07-02: Update adodb version in repo to 4.90
+            Removed server.php [Bug 5233]
+            No other changes applied, the sqlite files retained as per prior notes for this 1.1.x series
+
 2006-03-05:
         drivers/adodob-xarsqlite.inc.php:
                 override the recordset class too, the associative
