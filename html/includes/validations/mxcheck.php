@@ -31,7 +31,9 @@ ifsnow is korean phper. Is sorry to be unskillful to English. *^^*;;
 /**
  * valdidate email
  *
- */
+ *
+ * @throws VariableValidationException 
+ **/
 function variable_validations_mxcheck (&$subject, $parameters=null, $supress_soft_exc) 
 {
 
@@ -92,21 +94,20 @@ function variable_validations_mxcheck (&$subject, $parameters=null, $supress_sof
                 // Server about listener's address reacts to 550 codes if there does not exist
                 // checking that mailbox is in own E-Mail account.
                 if ( !ereg ( "^250", $From ) || !ereg ( "^250", $To )) {
-
                     //We should add some caching for these cases to avoid an excessive
                     // hardware consumption exploit thru sending many of these e-mails to be checked
 
-                    $msg = xarML('Invalid e-mail #(1), the mail server doesnt recognize it.', $subject);
-                    if (!$supress_soft_exc) xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-
+                    $msg = 'Invalid e-mail #(1), the mail server doesnt recognize it.';
+                    if (!$supress_soft_exc) 
+                        throw new VariableValidationException($subject,$msg);
                     return false;
                 }
         }
     } else { // Failure in socket connection
-
-        $msg = xarML('Unable to connect to the mail server #(1) for e-mail #(2).', $ConnectAddress, $subject);
-        if (!$supress_soft_exc) xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-
+        // TODO: use try catch here
+        // CHECK: is this considered to be a validation exception?
+        $msg = 'Unable to connect to the mail server #(1) for e-mail #(2).';
+        if (!$supress_soft_exc) throw new VariableValidationException(array($ConnectAddress, $subject),$msg);
         return false;
     }
 

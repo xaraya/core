@@ -98,9 +98,9 @@
       <fieldset>
         <legend>#$statictitle#</legend>
 
-        <xar:comment>
+        <!--
         TODO: very much under construction, obviously :-)
-        </xar:comment>
+        -->
 
         <!-- don't accept updates for this (for now) -->
         <table class="xar-fullwidth">
@@ -171,9 +171,9 @@
             #$relationstitle# 
         </h2>
 
-        <xar:comment>
+        <!--
         TODO: very much under construction, obviously :-)
-        </xar:comment>
+        -->
         <form method="post" action="&xar-modurl-dynamicdata-admin-modifyprop;">
             <!-- don't accept updates for this (for now) -->
             <xar:foreach in="$relations" value="$relation">

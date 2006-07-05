@@ -1,6 +1,4 @@
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
-</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <!-- FIXME: use proper nesting in the data, not the elseif constructs -->
 <xar:if condition="!empty($usercontent)">
     <ul class="xar-menu-section">
@@ -49,10 +47,7 @@
         </li>
     </ul>
 </xar:if>
-<xar:comment>
-    modified modules section, quickly brought in line with verticallistbyname.xd and verticallistbycats.xd templates in adminpanels 
-    TODO: see if the menus management can be achieved in one place to avoid duplication and to maintain healthy xhtml structures [andyv] 
-</xar:comment>
+
 <xar:if condition="!empty($usermods)">
     <ul class="xar-menu-section">
         <li class="xar-menu-section">
@@ -71,9 +66,9 @@
                             <xar:if condition="$indlinks ne ''">
                                 <ul class="xar-menu-subitem">
                                     <xar:foreach in="$indlinks" value="$sublinks" key="$sublink">
-                                        <xar:comment>
+                                        <!--
                                             determine and indicate current states of module functions display 
-                                        </xar:comment>
+                                        -->
                                         <xar:if condition="$sublinks['funcactive']">
                                             <li class="xar-menu-subitem-current">
                                                 <a name="activesubitem" title="#$sublinks['usertitle']#">

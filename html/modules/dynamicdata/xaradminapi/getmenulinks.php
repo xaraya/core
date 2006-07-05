@@ -1,7 +1,6 @@
 <?php
 /**
  * Utility to get menu links
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -22,6 +21,10 @@ function dynamicdata_adminapi_getmenulinks()
 {
     $menulinks = array();
     if (xarSecurityCheck('AdminDynamicData',0)) {
+
+        $menulinks[] = Array('url' => xarModURL('dynamicdata','admin','overview'),
+                               'title' => xarML('DynamicData Overview'),
+                              'label' => xarML('Overview'));
 
         $menulinks[] = Array('url'   => xarModURL('dynamicdata',
                                                    'admin',

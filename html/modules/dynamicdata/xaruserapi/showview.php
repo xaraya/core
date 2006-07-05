@@ -1,7 +1,5 @@
 <?php
 /**
- * List some items in a template
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -31,13 +29,20 @@ function dynamicdata_userapi_showview($args)
     if (empty($template)) {
         $template = '';
     }
+    if (empty($tplmodule)) {
+        $tplmodule = 'dynamicdata';
+    }
+
+    // do we want to count?
+    if(empty($count)) $count=false;
 
     // we got everything via template parameters
     if (isset($items) && is_array($items)) {
         return xarTplModule('dynamicdata','user','showview',
                             array('items' => $items,
                                   'labels' => $labels,
-                                  'layout' => $layout),
+                                  'layout' => $layout,
+                                  'count'  => count($items)), // no overhead, count anyway
                             $template);
     }
 
@@ -59,18 +64,16 @@ function dynamicdata_userapi_showview($args)
             $modname = $modinfo['name'];
     }
     if (empty($modid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'user', 'showview', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('module name', 'user', 'showview', 'dynamicdata');
+        throw new BadParameterException($vars,$msg);
     }
 
     if (empty($itemtype) || !is_numeric($itemtype)) {
         $itemtype = null;
     }
 
-// TODO: what kind of security checks do we want/need here ?
+    // TODO: what kind of security checks do we want/need here ?
     if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:All")) return;
 
     // try getting the item id list via input variables if necessary
@@ -94,12 +97,8 @@ function dynamicdata_userapi_showview($args)
     }
 
     // don't try getting the where clause via input variables, obviously !
-    if (empty($where)) {
-        $where = '';
-    }
-    if (empty($groupby)) {
-        $groupby = '';
-    }
+    if (empty($where)) $where = '';
+    if (empty($groupby)) $groupby = '';
 
     // check the optional field list
     if (!empty($fieldlist)) {
@@ -113,22 +112,17 @@ function dynamicdata_userapi_showview($args)
         $status = null;
     } else {
         $myfieldlist = null;
-        // get active properties only (+ not the display only ones)
-        $status = 1;
+        $status = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
     }
 
     // join a module table to a dynamic object
-    if (empty($join)) {
-        $join = '';
-    }
+    if (empty($join)) $join = '';
+
     // make some database table available via DD
-    if (empty($table)) {
-        $table = '';
-    }
+    if (empty($table)) $table = '';
+
     // select in some category
-    if (empty($catid)) {
-        $catid = '';
-    }
+    if (empty($catid)) $catid = '';
 
     $object = & Dynamic_Object_Master::getObjectList(array('moduleid'  => $modid,
                                            'itemtype'  => $itemtype,
@@ -142,31 +136,30 @@ function dynamicdata_userapi_showview($args)
                                            'table' => $table,
                                            'catid' => $catid,
                                            'groupby' => $groupby,
-                                           'status' => $status));
+                                           'status' => $status,
+                                           'extend' => !empty($extend)));
     if (!isset($object)) return;
-
+    // Count before numitems!
+    $numthings = 0;
+    if($count) {
+        $numthings = $object->countItems();
+    }
     $object->getItems();
 
     // label to use for the display link (if you don't use linkfield)
-    if (empty($linklabel)) {
-        $linklabel = '';
-    }
+    if (empty($linklabel)) $linklabel = '';
+
     // function to use in the display link
-    if (empty($linkfunc)) {
-        $linkfunc = '';
-    }
+    if (empty($linkfunc)) $linkfunc = '';
+
     // URL parameter for the item id in the display link (e.g. exid, aid, uid, ...)
-    if (empty($param)) {
-        $param = '';
-    }
+    if (empty($param)) $param = '';
+
     // field to add the display link to (otherwise it'll be in a separate column)
-    if (empty($linkfield)) {
-        $linkfield = '';
-    }
+    if (empty($linkfield)) $linkfield = '';
+
     // current URL for the pager (defaults to current URL)
-    if (empty($pagerurl)) {
-        $pagerurl = '';
-    }
+    if (empty($pagerurl)) $pagerurl = '';
 
     return $object->showView(array('layout'    => $layout,
                                    'template'  => $template,
@@ -174,7 +167,9 @@ function dynamicdata_userapi_showview($args)
                                    'linkfunc'  => $linkfunc,
                                    'param'     => $param,
                                    'pagerurl'  => $pagerurl,
-                                   'linkfield' => $linkfield));
+                                   'linkfield' => $linkfield,
+                                   'count'     => $numthings,
+                                   'tplmodule' => $tplmodule));
 }
 
 ?>

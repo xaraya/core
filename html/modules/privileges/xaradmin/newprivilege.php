@@ -1,6 +1,5 @@
 <?php
 /**
- * Create a new privilege
  *
  * @package core modules
  * @copyright (C) 2002-2006 The Digital Development Foundation

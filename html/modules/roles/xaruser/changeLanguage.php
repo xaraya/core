@@ -1,7 +1,6 @@
 <?php
 /**
  * Changes the navigation language
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -25,10 +24,7 @@ function roles_user_changelanguage()
     if (!isset($locales)) return; // throw back
     // Check if requested locale is supported
     if (!in_array($locale, $locales)) {
-        $msg = xarML('Unsupported locale.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
+        throw new LocaleNotFoundException($locale);
     }
     if (xarUserSetNavigationLocale($locale) == false) {
         // Wrong MLS mode

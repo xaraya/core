@@ -1,7 +1,6 @@
 <?php
 /**
  * Dynamic Validation property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -25,14 +24,26 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_Validation_Property extends Dynamic_TextBox_Property
 {
-    var $size = 50;
-    var $maxlength = 254;
+    public $size      = 50;
+    public $maxlength = 254;
 
-    var $proptype = null;
+    public $proptype = null;
 
-    function Dynamic_Validation_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_TextBox_Property($args);
+        parent::__construct($args);
+		$this->filepath   = 'modules/dynamicdata/xarproperties';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('dynamicdata');
+        $info->id   = 998;
+        $info->name = 'validation';
+        $info->desc = 'Validation';
+
+        return $info;
     }
 
     function validateValue($value = null)
@@ -140,35 +151,7 @@ class Dynamic_Validation_Property extends Dynamic_TextBox_Property
         return $value;
     }
 
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-    function getBasePropertyInfo()
-    {
-        $args = array();
-        $baseInfo = array(
-                          'id'         => 998,
-                          'name'       => 'validation',
-                          'label'      => 'Validation',
-                          'format'     => '998',
-                          'validation' => '',
-                          'source'     => '',
-                          'dependancies' => '',
-                          'requiresmodule' => 'dynamicdata',
-                          'aliases' => '',
-                          'args'       => serialize( $args ),
-                          // ...
-                         );
-        return $baseInfo;
-    }
 
-    // default showValidation() from Dynamic_TextBox_Property
-
-    // default updateValidation() from Dynamic_TextBox_Property
 
 }
-
 ?>

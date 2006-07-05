@@ -29,165 +29,120 @@ function roles_init()
     $sitePrefix = xarDBGetSiteTablePrefix();
     $tables['roles'] = $sitePrefix . '_roles';
     $tables['rolemembers'] = $sitePrefix . '_rolemembers';
-    // prefix_roles
-    /**
-     * CREATE TABLE xar_roles (
-     *    xar_uid int(11) NOT NULL auto_increment,
-     *    xar_name varchar(100) NOT NULL default '',
-     *    xar_type int(11) NOT NULL default '0',
-     *    xar_users int(11) NOT NULL default '0',
-     *    xar_uname varchar(100) NOT NULL default '',
-     *    xar_email varchar(100) NOT NULL default '',
-     *    xar_pass varchar(100) NOT NULL default '',
-     *    xar_date_reg datetime NOT NULL default '0000-00-00 00:00:00',
-     *    xar_valcode varchar(35) NOT NULL default '',
-     *    xar_state int(3) NOT NULL default '0',
-     *    xar_auth_module varchar(100) NOT NULL default '',
-     *    PRIMARY KEY  (xar_uid)
-     * )
-     */
 
-    $query = xarDBCreateTable($tables['roles'],
-        array('xar_uid' => array('type' => 'integer',
-                'null' => false,
-                'default' => '0',
-                'increment' => true,
-                'primary_key' => true),
-            'xar_name' => array('type' => 'varchar',
-                'size' => 255,
-                'null' => false,
-                'default' => ''),
-            'xar_type' => array('type' => 'integer',
-                'null' => false,
-                'default' => '0'),
-            'xar_users' => array('type' => 'integer',
-                'null' => false,
-                'default' => '0'),
-            'xar_uname' => array('type' => 'varchar',
-                'size' => 255,
-                'null' => false,
-                'default' => ''),
-            'xar_email' => array('type' => 'varchar',
-                'size' => 255,
-                'null' => false,
-                'default' => ''),
-            'xar_pass' => array('type' => 'varchar',
-                'size' => 100,
-                'null' => false,
-                'default' => ''),
-            'xar_date_reg' => array('type' => 'varchar',
-                'size' => 100,
-                'null' => false,
-                'default' => '0000-00-00 00:00:00'),
-            'xar_valcode' => array('type' => 'varchar',
-                'size' => 35,
-                'null' => false,
-                'default' => ''),
-            'xar_state' => array('type' => 'integer',
-                'null' => false,
-                'default' => '3'),
-            'xar_auth_module' => array('type' => 'varchar',
-                'size' => 100,
-                'null' => false,
-                'default' => '')));
+    // Create tables inside a transaction
+    try {
+        $dbconn->begin();
+        /**
+         * CREATE TABLE xar_roles (
+         *    xar_uid int(11) NOT NULL auto_increment,
+         *    xar_name varchar(100) NOT NULL default '',
+         *    xar_type int(11) NOT NULL default '0',
+         *    xar_users int(11) NOT NULL default '0',
+         *    xar_uname varchar(100) NOT NULL default '',
+         *    xar_email varchar(100) NOT NULL default '',
+         *    xar_pass varchar(100) NOT NULL default '',
+         *    xar_date_reg datetime NOT NULL default '0000-00-00 00:00:00',
+         *    xar_valcode varchar(35) NOT NULL default '',
+         *    xar_state int(3) NOT NULL default '0',
+         *    xar_auth_modid int(11) NOT NULL default '0',
+         *    PRIMARY KEY  (xar_uid)
+         * )
+         */
 
-    if (!$dbconn->Execute($query)) return;
+        $fields = array(
+                        'xar_uid' => array('type' => 'integer','null' => false,'default' => '0','increment' => true, 'primary_key' => true),
+                        'xar_name' => array('type' => 'varchar','size' => 255,'null' => false,'default' => ''),
+                        'xar_type' => array('type' => 'integer', 'null' => false, 'default' => '0'),
+                        'xar_users' => array('type' => 'integer', 'null' => false, 'default' => '0'),
+                        'xar_uname' => array('type' => 'varchar', 'size' => 255, 'null' => false, 'default' => ''),
+                        'xar_email' => array('type' => 'varchar', 'size' => 255,'null' => false,'default' => ''),
+                        'xar_pass' => array('type' => 'varchar',  'size' => 100, 'null' => false, 'default' => ''),
+                        'xar_date_reg' => array('type' => 'varchar', 'size' => 100, 'null' => false, 'default' => '0000-00-00 00:00:00'),
+                        'xar_valcode' => array('type' => 'varchar', 'size' => 35, 'null' => false, 'default' => ''),
+                        'xar_state' => array('type' => 'integer', 'null' => false,'default' => '3'),
+                        'xar_auth_modid' => array('type' => 'integer', 'unsigneded' => true,'null' => false, 'default' => '0'));
+        $query = xarDBCreateTable($tables['roles'],$fields);
+        $dbconn->Execute($query);
 
-    // role type is used in all group look-ups (e.g. security checks)
-    $index = array('name' => 'i_' . $sitePrefix . '_roles_type',
-        'fields' => array('xar_type')
-        );
-    $query = xarDBCreateIndex($tables['roles'], $index);
-    $result = &$dbconn->Execute($query);
-    if (!$result) return;
-    // username must be unique (for login) + don't allow groupname to be the same either
-    $index = array('name' => 'i_' . $sitePrefix . '_roles_uname',
-        'fields' => array('xar_uname'),
-        'unique' => true
-        );
-    $query = xarDBCreateIndex($tables['roles'], $index);
-    $result = &$dbconn->Execute($query);
-    if (!$result) return;
-    // allow identical "real names" here
-    $index = array('name' => 'i_' . $sitePrefix . '_roles_name',
-        'fields' => array('xar_name'),
-        'unique' => false
-        );
-    $query = xarDBCreateIndex($tables['roles'], $index);
-    $result = &$dbconn->Execute($query);
-    if (!$result) return;
-    // allow identical e-mail here (???) + is empty for groups !
-    $index = array('name' => 'i_' . $sitePrefix . '_roles_email',
-        'fields' => array('xar_email'),
-        'unique' => false
-        );
-    $query = xarDBCreateIndex($tables['roles'], $index);
-    $result = &$dbconn->Execute($query);
-    if (!$result) return;
-    // role state is used in many user lookups
-    $index = array('name' => 'i_' . $sitePrefix . '_roles_state',
-        'fields' => array('xar_state'),
-        'unique' => false
-        );
-    $query = xarDBCreateIndex($tables['roles'], $index);
-    $result = &$dbconn->Execute($query);
-    if (!$result) return;
+        // role type is used in all group look-ups (e.g. security checks)
+        $index = array('name' => 'i_' . $sitePrefix . '_roles_type',
+                       'fields' => array('xar_type')
+                       );
+        $query = xarDBCreateIndex($tables['roles'], $index);
+        $dbconn->Execute($query);
 
-    // prefix_rolemembers
-    /**
-     * CREATE TABLE xar_rolemembers (
-     *    xar_uid int(11) NOT NULL default '0',
-     *    xar_parentid int(11) NOT NULL default '0'
-     * )
-     */
+        // username must be unique (for login) + don't allow groupname to be the same either
+        $index = array('name' => 'i_' . $sitePrefix . '_roles_uname',
+                       'fields' => array('xar_uname'),
+                       'unique' => true
+                       );
+        $query = xarDBCreateIndex($tables['roles'], $index);
+        $dbconn->Execute($query);
 
-    $query = xarDBCreateTable($tables['rolemembers'],
-        array('xar_uid' => array('type' => 'integer',
-                'null' => false,
-                'default' => '0'),
-            'xar_parentid' => array('type' => 'integer',
-                'null' => false,
-                'default' => '0')));
-    if (!$dbconn->Execute($query)) return;
+        // allow identical "real names" here
+        $index = array('name' => 'i_' . $sitePrefix . '_roles_name',
+                       'fields' => array('xar_name'),
+                       'unique' => false
+                       );
+        $query = xarDBCreateIndex($tables['roles'], $index);
+        $dbconn->Execute($query);
 
-    $index = array('name' => 'i_' . $sitePrefix . '_rolememb_id',
-        'fields' => array('xar_uid','xar_parentid'),
-        'unique' => true);
-    $query = xarDBCreateIndex($tables['rolemembers'], $index);
-    if (!$dbconn->Execute($query)) return;
+        // allow identical e-mail here (???) + is empty for groups !
+        $index = array('name' => 'i_' . $sitePrefix . '_roles_email',
+                       'fields' => array('xar_email'),
+                       'unique' => false
+                       );
+        $query = xarDBCreateIndex($tables['roles'], $index);
+        $dbconn->Execute($query);
 
-    $index = array('name' => 'i_' . $sitePrefix . '_rolememb_uid',
-        'fields' => array('xar_uid'),
-        'unique' => false);
-    $query = xarDBCreateIndex($tables['rolemembers'], $index);
-    if (!$dbconn->Execute($query)) return;
+        // role state is used in many user lookups
+        $index = array('name' => 'i_' . $sitePrefix . '_roles_state',
+                       'fields' => array('xar_state'),
+                       'unique' => false
+                       );
+        $query = xarDBCreateIndex($tables['roles'], $index);
+        $dbconn->Execute($query);
 
-    $index = array('name' => 'i_' . $sitePrefix . '_rolememb_parentid',
-        'fields' => array('xar_parentid'),
-        'unique' => false);
-    $query = xarDBCreateIndex($tables['rolemembers'], $index);
-    if (!$dbconn->Execute($query)) return;
+
+        /**
+         * CREATE TABLE xar_rolemembers (
+         *    xar_uid int(11) NOT NULL default '0',
+         *    xar_parentid int(11) NOT NULL default '0'
+         * )
+         */
+
+        $query = xarDBCreateTable($tables['rolemembers'],
+                                  array('xar_uid' => array('type'        => 'integer',
+                                                           'null'        => false,
+                                                           'default'     => '0',
+                                                           'primary_key' => true),
+                                        'xar_parentid' => array('type'        => 'integer',
+                                                                'null'        => false,
+                                                                'default'     => '0',
+                                                                'primary_key' => true)));
+        $dbconn->Execute($query);
+
+        $index = array('name' => 'i_' . $sitePrefix . '_rolememb_uid',
+                       'fields' => array('xar_uid'),
+                       'unique' => false);
+        $query = xarDBCreateIndex($tables['rolemembers'], $index);
+        $dbconn->Execute($query);
+
+        $index = array('name' => 'i_' . $sitePrefix . '_rolememb_parentid',
+                       'fields' => array('xar_parentid'),
+                       'unique' => false);
+        $query = xarDBCreateIndex($tables['rolemembers'], $index);
+        $dbconn->Execute($query);
+
+        // We're done, commit
+        $dbconn->commit();
+    } catch (Exception $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
+
     //Database Initialisation successful
-
-# --------------------------------------------------------
-#
-# Register hooks
-#
-    if (!xarModRegisterHook('item', 'search', 'GUI',
-            'roles', 'user', 'search')) {
-        return false;
-    }
-    if (!xarModRegisterHook('item', 'usermenu', 'GUI',
-            'roles', 'user', 'usermenu')) {
-        return false;
-    }
-    xarModAPIFunc('modules', 'admin', 'enablehooks',
-        array('callerModName' => 'roles', 'hookModName' => 'roles'));
-    // This won't work because the dynamicdata hooks aren't registered yet when this is
-    // called at installation --> put in xarinit.php of dynamicdata instead
-    //xarModAPIFunc('modules','admin','enablehooks',
-    // array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
-
     return true;
 }
 
@@ -196,10 +151,10 @@ function roles_activate()
     //TODO: this stuff is happening here because at install blocks is not yet installed
 
     // only go through this once
-# --------------------------------------------------------
-#
-# Create some modvars
-#
+    // --------------------------------------------------------
+    //
+    // Create some modvars
+    //
     //TODO: improve on this hardwiring
     xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem')); //Setting a default
     xarModSetVar('roles', 'defaultregmodule', '');
@@ -224,9 +179,9 @@ function roles_activate()
     $lockdata = array('roles' => array( array('uid' => 4,
                                               'name' => 'Administrators',
                                               'notify' => TRUE)),
-                                  'message' => '',
-                                  'locked' => 0,
-                                  'notifymsg' => '');
+                      'message' => '',
+                      'locked' => 0,
+                      'notifymsg' => '');
     xarModSetVar('roles', 'lockdata', serialize($lockdata));
 
     xarModSetVar('roles', 'itemsperpage', 20);
@@ -236,6 +191,7 @@ function roles_activate()
     $role = xarFindRole('Anonymous');
     xarConfigSetVar('Site.User.AnonymousUID', $role->getID());
     // set the current session information to the right anonymous uid
+    // TODO: make the setUserInfo a class static in xarSession.php
     xarSession_setUserInfo($role->getID(), 0);
     $role = xarFindRole('Admin');
     if (!isset($role)) {
@@ -243,28 +199,20 @@ function roles_activate()
     }
     xarModSetVar('roles', 'admin', $role->getID());
 
+    // --------------------------------------------------------
+    //
+    // Register block types
+    //
+    xarModAPIFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'online'));
+    xarModAPIFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'user'));
+    xarModAPIFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'language'));
 
-# --------------------------------------------------------
-#
-# Register block types
-#
-    if (!xarModAPIFunc('blocks',
-            'admin',
-            'register_block_type',
-            array('modName' => 'roles',
-                'blockType' => 'online'))) return;
+    // Register hooks here, init is too soon
+    xarModRegisterHook('item', 'search', 'GUI','roles', 'user', 'search');
+    xarModRegisterHook('item', 'usermenu', 'GUI','roles', 'user', 'usermenu');
 
-    if (!xarModAPIFunc('blocks',
-            'admin',
-            'register_block_type',
-            array('modName' => 'roles',
-                'blockType' => 'user'))) return;
-
-    if (!xarModAPIFunc('blocks',
-            'admin',
-            'register_block_type',
-            array('modName' => 'roles',
-                'blockType' => 'language'))) return;
+    xarModAPIFunc('modules', 'admin', 'enablehooks', array('callerModName' => 'roles', 'hookModName' => 'roles'));
+    xarModAPIFunc('modules','admin','enablehooks',array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
 
     return true;
 }
@@ -279,62 +227,77 @@ function roles_activate()
  */
 function roles_upgrade($oldVersion)
 {
-	// Upgrade dependent on old version number
+    // Upgrade dependent on old version number
     switch ($oldVersion) {
         case '1.01':
             break;
-      case '1.1.0':
+        case '1.1.1':
+            // is there an authentication module?
+            $regid = xarModGetIDFromName('authentication');
 
-        	// is there an authentication module?
-			$regid = xarModGetIDFromName('authsystem');
+            if (isset($regid)) {
+                // remove the login block type and block from roles
+                $result = xarModAPIfunc('blocks', 'admin', 'delete_type', array('module' => 'roles', 'type' => 'login'));
 
-			if (isset($regid)) {
+                // install the authentication module
+                if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid))) return;
+                    // Activate the module
+                if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
 
-				// upgrade and activate the authsystem module - should be done before roles upgrade
-				//if (!xarModAPIFunc('modules', 'admin', 'upgrade', array('regid' => $regid))) return;
-					// Activate the module
-				//if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
+                // create the new authentication modvars
+                // TODO: dont do this here, but i dont know how to do it otherwise, since apparently the
+                //       roles values are needed
+                xarModSetVar('authentication', 'allowregistration', xarModGetVar('roles', 'allowregistration'));
+                xarModSetVar('authentication', 'requirevalidation', xarModGetVar('roles', 'requirevalidation'));
+                xarModSetVar('authentication', 'itemsperpage', xarModGetVar('roles', 'rolesperpage'));
+                xarModSetVar('authentication', 'uniqueemail', xarModGetVar('roles', 'uniqueemail'));
+                xarModSetVar('authentication', 'askwelcomeemail', xarModGetVar('roles', 'askwelcomeemail'));
+                xarModSetVar('authentication', 'askvalidationemail', xarModGetVar('roles', 'askvalidationemail'));
+                xarModSetVar('authentication', 'askdeactivationemail', xarModGetVar('roles', 'askdeactivationemail'));
+                xarModSetVar('authentication', 'askpendingemail', xarModGetVar('roles', 'askpendingemail'));
+                xarModSetVar('authentication', 'askpasswordemail', xarModGetVar('roles', 'askpasswordemail'));
+                xarModSetVar('authentication', 'defaultgroup', xarModGetVar('roles', 'defaultgroup'));
+                xarModSetVar('authentication', 'lockouttime', 15);
+                xarModSetVar('authentication', 'lockouttries', 3);
+                xarModSetVar('authentication', 'minage', xarModGetVar('roles', 'minage'));
+                xarModSetVar('authentication', 'disallowednames', xarModGetVar('roles', 'disallowednames'));
+                xarModSetVar('authentication', 'disallowedemails', xarModGetVar('roles', 'disallowedemails'));
+                xarModSetVar('authentication', 'disallowedips', xarModGetVar('roles', 'disallowedips'));
 
-				// remove the login block type and block from roles
-				$result = xarModAPIfunc('blocks', 'admin', 'delete_type', array('module' => 'roles', 'type' => 'login'));
-				// delete the old roles modvars
-				xarModDelVar('roles', 'allowregistration');
-				xarModDelVar('roles', 'rolesperpage');
-				xarModDelVar('roles', 'uniqueemail');
-				xarModDelVar('roles', 'askwelcomeemail');
-				xarModDelVar('roles', 'askvalidationemail');
-				xarModDelVar('roles', 'askdeactivationemail');
-				xarModDelVar('roles', 'askpendingemail');
-				xarModDelVar('roles', 'askpasswordemail');
-				xarModDelVar('roles', 'lockouttime');
-				xarModDelVar('roles', 'lockouttries');
-				xarModDelVar('roles', 'minage');
-				xarModDelVar('roles', 'disallowednames');
-				xarModDelVar('roles', 'disallowedemails');
-				xarModDelVar('roles', 'disallowedips');
+                // delete the old roles modvars
+                xarModDelVar('roles', 'allowregistration');
+                xarModDelVar('roles', 'requirevalidation');
+                xarModDelVar('roles', 'rolesperpage');
+                xarModDelVar('roles', 'uniqueemail');
+                xarModDelVar('roles', 'askwelcomeemail');
+                xarModDelVar('roles', 'askvalidationemail');
+                xarModDelVar('roles', 'askdeactivationemail');
+                xarModDelVar('roles', 'askpendingemail');
+                xarModDelVar('roles', 'askpasswordemail');
+                xarModDelVar('roles', 'defaultgroup');
+                xarModDelVar('roles', 'lockouttime');
+                xarModDelVar('roles', 'lockouttries');
+                xarModDelVar('roles', 'minage');
+                xarModDelVar('roles', 'disallowednames');
+                xarModDelVar('roles', 'disallowedemails');
+                xarModDelVar('roles', 'disallowedips');
 
-				// create one new roles modvar
-				xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
- 			} else {
-//				$msg = xarML('I could not load the authentication module. Please make it available and try again');
-//				xarErrorSet(XAR_USER_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new DefaultUserException($msg));
-//				return;
-				die(xarML('I could not detect and load an authentication module (default is Authsystem). Please make an authentication module available and try again'));
-		    }
-            xarModSetVar('roles', 'locale', '');
-            xarModSetVar('roles', 'userhome', '');
-            xarModSetVar('roles', 'userlastlogin', '');            
-            xarModSetVar('roles', 'primaryparent', '');
-            xarModSetVar('roles', 'setuserhome',false);
-            xarModSetVar('roles', 'setprimaryparent', false);
-            xarModSetVar('roles', 'setpasswordupdate',false);
-            xarModSetVar('roles', 'setuserlastlogin',false);
-            xarModSetVar('roles', 'settimezone',false);
-            xarModSetVar('roles', 'displayrolelist',false);
-            xarModSetVar('roles', 'usereditaccount', true);
-            xarModSetVar('roles', 'allowuserhomeedit', false);
-            xarModSetVar('roles', 'loginredirect', true);
-            xarModSetVar('roles', 'allowexternalurl', false);
+                // create one new roles modvar
+                xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authentication'));
+            } else {
+                throw Exception('I could not load the authentication module. Please make it available and try again');
+            }
+            break;
+        case '1.1.1':
+        	$roles_objects = array('role','user','group');
+			$existing_objects  = xarModApiFunc('dynamicdata','user','getobjects');
+			foreach($existing_objects as $objectid => $objectinfo) {
+				if(in_array($objectinfo['name'], $roles_objects)) {
+					// KILL
+					if(!xarModApiFunc('dynamicdata','admin','deleteobject', array('objectid' => $objectid))) return;
+				}
+			}
+		    if (!xarModAPIFunc('roles','admin','createobjects')) return;
             break;
 
     }
@@ -362,20 +325,28 @@ function roles_delete()
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
-    $query = xarDBDropTable($tables['roles']);
-    if (empty($query)) return; // throw back
-    if (!$dbconn->Execute($query)) return;
+    try {
+        $dbconn->begin();
+        // drop roles table
+        $query = xarDBDropTable($tables['roles']);
+        $dbconn->Execute($query);
 
-    $query = xarDBDropTable($tables['rolemembers']);
-    if (empty($query)) return; // throw back
-    if (!$dbconn->Execute($query)) return;
+        // drop role_members table
+        $query = xarDBDropTable($tables['rolemembers']);
+        $dbconn->Execute($query);
 
-    /**
-     * Remove modvars, instances and masks
-     */
-    xarModDelAllVars('roles');
-    xarRemoveMasks('roles');
-    xarRemoveInstances('roles');
+        /**
+         * Remove modvars, instances and masks
+         */
+        xarModDelAllVars('roles');
+        xarRemoveMasks('roles');
+        xarRemoveInstances('roles');
+
+        $dbconn->commit();
+    } catch (Exception $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
 
     // Deletion successful
     return true;

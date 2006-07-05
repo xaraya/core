@@ -13,7 +13,7 @@ include_once dirname(__FILE__)."/exception.class.php";
 
 class SystemMessage extends xarException
 {
-    var $link;
+    public $link;
 
     function SystemMessage($msg = '', $link = NULL)
     {
@@ -24,7 +24,7 @@ class SystemMessage extends xarException
 
     function load($id) 
     {
-        if (array_key_exists($id, $this->defaults)) parent::load($id);
+        if (isset($this->defaults[$id])) parent::load($id); // why the check if not used?
         else {
             $this->title = $id;
             $this->short = "No further information available";

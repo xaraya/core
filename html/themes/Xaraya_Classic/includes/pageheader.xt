@@ -1,13 +1,13 @@
 <xar:set name="siteslogan"><xar:var scope="module" module="themes" name="SiteSlogan" /></xar:set>
 <div id="xc-header">
     <div id="xc-header-rightbevel">
-        <xar:comment>Right bevel is purely decorational - needs extra div-box</xar:comment>
+        <!-- Right bevel is purely decorational - needs extra div-box -->
     </div>
-    <xar:comment>See if we need the styleswitcher controls here</xar:comment>
+    <!-- See if we need the styleswitcher controls here -->
     <xar:if condition="$styleswitchertype ne 'none'">
         <xar:template file="styleswitchercontrols" type="theme" />
     </xar:if>
-    <xar:comment>Logo and bevel are combined and positioned with css</xar:comment>
+    <!-- Logo and bevel are combined and positioned with css -->
     <h1>
         <a href="&xar-baseurl;" title="#$sitename#">
             <span>#$sitename#</span>

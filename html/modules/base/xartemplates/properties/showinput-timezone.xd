@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
 <xar:if condition="empty($style) or $style eq 'offset'">
 <select name="#$name#" id="#$id#" tabindex="#$tabindex#" >
@@ -22,11 +22,11 @@
             <xar:else/>
                 <xar:set name="plus">'+'</xar:set>
             </xar:if>
-            <xar:comment> if you want to show the current time (without daylight saving)
+            <!-- if you want to show the current time (without daylight saving)
                 <xar:set name="fields">explode(':',$option['offset'])</xar:set>
                 <xar:set name="offset">($fields[0] * 60 + $fields[1]) * 60</xar:set>
                 <xar:set name="gmtime">gmdate('H:i',$now + $offset)</xar:set>
-            </xar:comment>
+            -->
             <xar:set name="label">$option['name'] . ' (GMT ' . $plus . $option['offset'] . ')'</xar:set>
         <xar:else/>
             <xar:set name="label">$option['name']</xar:set>

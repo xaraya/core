@@ -41,12 +41,7 @@ function privileges_admin_modifyrealm()
         $q->eq('xar_name', $newname);
         if(!$q->run()) return;
 
-        if ($q->getrows() > 0 && (strtolower($newname) !=strtolower($name))) {
-            $msg = xarML('There is already a realm with the name #(1)', $newname);
-            xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA',
-                           new DefaultUserException($msg));
-            return;
-        }
+        if ($q->getrows() > 0) throw new DuplicateException(array('realm',$newname));
 
         $q = new xarQuery('UPDATE',$xartable['security_realms']);
         $q->addfield('xar_name', $newname);

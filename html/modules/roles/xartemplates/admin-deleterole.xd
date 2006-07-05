@@ -6,12 +6,11 @@
 <div class="xar-mod-body">
   <xar:template type="module" file="admin-menu" />
     <h2>
-        <xar:if condition="$ptype eq 0">
-            <xar:mlstring>Manage The User:</xar:mlstring>
-        <xar:else/>
-            <xar:mlstring>Manage The Group:</xar:mlstring>
-        </xar:if>
-        #xarVarPrepForDisplay($name)#
+        <xar:ml>
+            <xar:mlstring>Manage #(1) '#(2)':</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+            <xar:mlvar>#$name#</xar:mlvar>
+        </xar:ml>
     </h2>
 
     <xar:if condition="count($parents) gt 0">
@@ -73,39 +72,28 @@
 
     <xar:if condition="$frozen">
         <p>
-            <xar:if condition="$ptype eq 1">
-                <xar:ml>
-                    <xar:mlstring>You do not have the privileges to delete Group #(1)</xar:mlstring>
-                    <xar:mlvar>#$name#</xar:mlvar>
-                </xar:ml>
-            <xar:else />
-                <xar:ml>
-                    <xar:mlstring>You do not have the privileges to delete User #(1)</xar:mlstring>
-                    <xar:mlvar>#$name#</xar:mlvar>
-                </xar:ml>
-            </xar:if>
+            <xar:ml>
+                <xar:mlstring>You do not have the privileges to delete #(1) #(2)</xar:mlstring>
+                <xar:mlvar>#$itemtypename#</xar:mlvar>
+                <xar:mlvar>#$name#</xar:mlvar>
+            </xar:ml>
         </p>
     <xar:else />
         <form method="post" action="&xar-modurl-roles-admin-deleterole;" enctype="application/x-www-form-urlencoded">
     
             <h3 class="xar-align-center">
-                <xar:if condition="$ptype eq 1">
-                    <xar:ml>
-                        <xar:mlstring>Confirm the deletion of Group #(1)</xar:mlstring>
-                        <xar:mlvar>#$name#</xar:mlvar>
-                    </xar:ml>
-                <xar:else />
-                    <xar:ml>
-                        <xar:mlstring>Confirm the deletion of User #(1)</xar:mlstring>
-                        <xar:mlvar>#$name#</xar:mlvar>
-                    </xar:ml>
-                </xar:if>
+                <xar:ml>
+                    <xar:mlstring>Confirm the deletion of #(1) #(2)</xar:mlstring>
+                    <xar:mlvar>#$itemtypename#</xar:mlvar>
+                    <xar:mlvar>#$name#</xar:mlvar>
+                </xar:ml>
             </h3>
     
             <div class="xar-align-center">
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
                 <input type="hidden" name="uid" id="uid" value="#$uid#" />
                 <input type="hidden" name="confirmation" id="confirmation" value="1" />
+                <input type="hidden" name="returnurl" id="returnurl" value="#$returnurl#" />
                 <input type="submit" value="#xarML('Delete')#" class="xar-margin-thickright" />
                 <input type="button" value="#xarML('Cancel')#" onclick="document.location='&xar-modurl-roles-admin-displayrole;&amp;uid=#$uid#';" class="xar-margin-thickleft" />
             </div>

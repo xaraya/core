@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-align-center">
 <p><xar:ml>
     <xar:mlstring>Welcome, #(1)</xar:mlstring>

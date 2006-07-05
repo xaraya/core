@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:set name="alttext"><xar:mlstring>Click Here to Pick up the date</xar:mlstring></xar:set>
 
 <xar:if condition="empty($tabindex)">

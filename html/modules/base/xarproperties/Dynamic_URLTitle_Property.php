@@ -1,7 +1,6 @@
 <?php
 /**
  * Dynamic URL Title Property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -23,6 +22,24 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
 {
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->tplmodule = 'base';
+        $this->template  = 'urltitle';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id    = 41;
+        $info->name  = 'urtitle';
+        $info->desc  = 'URL + Title';
+
+        return $info;
+    }
+
     function checkInput($name='', $value = null)
     {
         if (empty($name)) {
@@ -96,27 +113,14 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         return true;
     }
 
-//    function showInput($name = '', $value = null, $size = 0, $maxlength = 0, $id = '', $tabindex = '')
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        // empty value is allowed here
-        if (!isset($value)) {
+        if (!isset($data['value'])) {
             $value = $this->value;
+        } else {
+            $value = $data['value'];
         }
-        // empty fields are not allowed here
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        if (empty($size)) {
-            $size = $this->size;
-        }
-        if (empty($maxlength)) {
-            $maxlength = $this->maxlength;
-        }
+
         // extract the link and title information
         if (empty($value)) {
         } elseif (is_array($value)) {
@@ -141,39 +145,21 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
         if (empty($title)) {
             $title = '';
         }
-        $data=array();
 
-/*        return '<input type="text" name="' . $name . '[title]" value="'. xarVarPrepForDisplay($title) . '" size="'. $size . '" maxlength="'. $maxlength . '"' .
-               ' id="'. $id . '"' .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               ' /> <br />' .
-               '<input type="text" name="' . $name . '[link]" value="'. xarVarPrepForDisplay($link) . '" size="'. $size . '" maxlength="'. $maxlength . '" />' .
-               (!empty($link) && $link != 'http://' ? ' [ <a href="'.$link.'" target="preview">'.xarML('check').'</a> ]' : '') .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-*/
-        $data['name']     = $name;
-        $data['id']       = $id;
         $data['title']    = xarVarPrepForDisplay($title);
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
-        $data['size']     = !empty($size) ? $size : $this->size;
         $data['link']     = xarVarPrepForDisplay($link);
 
-        $template="";
-        return xarTplProperty('base', 'urltitle', 'showinput', $data);
+        return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-         extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (empty($value)) {
-            $returndata= '';
-        }
+        extract($data);
+        if (!isset($value)) $value = $this->value;
+
+        if (empty($value)) $returndata= '';
+
         if (is_array($value)) {
             if (isset($value['link'])) {
                 $link = $value['link'];
@@ -190,53 +176,22 @@ class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
                 $title = $newval['title'];
             }
         }
-        $data=array();
 
         if (empty($link) && empty($title)) {
-            //return '';
         } elseif (empty($link)) {
             $title = xarVarPrepForDisplay($title);
-            //return  $title;
         } elseif (empty($title)) {
             $link = xarVarPrepForDisplay($link);
-            //return '<a href="'.$link.'">'.$link.'</a>';
         } else {
             $title = xarVarPrepForDisplay($title);
             $link = xarVarPrepForDisplay($link);
-            //return '<a href="'.$link.'">'.$title.'</a>';
         }
 
         $data['value']   = $this->value;
         $data['link']    = (!empty($link) && $link != 'http://') ? $link : '';
         $data['title']   = (!empty($title)) ? $title : '';
 
-        $template="";
-        return xarTplProperty('base', 'urltitle', 'showoutput', $data);
+        return parent::showOutput($data);
     }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $baseInfo = array(
-                              'id'         => 41,
-                              'name'       => 'urltitle',
-                              'label'      => 'URL + Title',
-                              'format'     => '41',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => '',
-                            'aliases' => '',
-                            'args'         => '',
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
 ?>

@@ -33,6 +33,8 @@ function privileges_adminapi_createobjects($args)
                                     'parent'    => 0,
                                     ));
 	if (!$objectid) return;
+	$status1 = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY;
+	$status2 = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_NOINPUT;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
                                     'name'     => 'id',
                                     'label'    => 'ID',
@@ -41,7 +43,7 @@ function privileges_adminapi_createobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 21,
                                     'source'   =>  $prefix . '_privileges.xar_pid',
-                                    'status'   => 1,
+                                    'status'   => $status2,
                                     'order'    => 1,
                                     ))) return;
 
@@ -66,7 +68,7 @@ function privileges_adminapi_createobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 21,
                                     'source'   =>  $prefix . '_privileges.xar_pid',
-                                    'status'   => 1,
+                                    'status'   => $status2,
                                     'order'    => 1,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -78,7 +80,7 @@ function privileges_adminapi_createobjects($args)
                                     'type'     => 2,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_privileges.xar_name',
-                                    'status'   => 1,
+                                    'status'   => $status1,
                                     'order'    => 2,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -90,7 +92,7 @@ function privileges_adminapi_createobjects($args)
                                     'type'     => 2,
                                     'default'  => '',
                                     'source'   =>  $prefix . '_privileges.xar_realm',
-                                    'status'   => 1,
+                                    'status'   => $status1,
                                     'order'    => 3,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -102,7 +104,7 @@ function privileges_adminapi_createobjects($args)
                                     'type'     => 2,
                                     'default'  => '',
                                     'source'   =>  $prefix . '_privileges.xar_module',
-                                    'status'   => 1,
+                                    'status'   => $status1,
                                     'order'    => 4,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -114,7 +116,7 @@ function privileges_adminapi_createobjects($args)
                                     'type'     => 2,
                                     'default'  => '',
                                     'source'   =>  $prefix . '_privileges.xar_component',
-                                    'status'   => 1,
+                                    'status'   => $status1,
                                     'order'    => 5,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -126,7 +128,7 @@ function privileges_adminapi_createobjects($args)
                                     'type'     => 2,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_privileges.xar_instance',
-                                    'status'   => 1,
+                                    'status'   => $status1,
                                     'order'    => 6,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -138,7 +140,7 @@ function privileges_adminapi_createobjects($args)
                                     'type'     => 15,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_privileges.xar_level',
-                                    'status'   => 1,
+                                    'status'   => $status1,
                                     'order'    => 7,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -150,7 +152,7 @@ function privileges_adminapi_createobjects($args)
                                     'type'     => 2,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_privileges.xar_description',
-                                    'status'   => 1,
+                                    'status'   => $status2,
                                     'order'    => 8,
                                     ))) return;
 
@@ -175,7 +177,7 @@ function privileges_adminapi_createobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 21,
                                     'source'   =>  $prefix . '_security_masks.xar_sid',
-                                    'status'   => 1,
+                                    'status'   => $status2,
                                     'order'    => 1,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -187,7 +189,7 @@ function privileges_adminapi_createobjects($args)
                                     'type'     => 2,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_security_masks.xar_name',
-                                    'status'   => 1,
+                                    'status'   => $status1,
                                     'order'    => 2,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -199,7 +201,7 @@ function privileges_adminapi_createobjects($args)
                                     'type'     => 2,
                                     'default'  => '',
                                     'source'   =>  $prefix . '_security_masks.xar_realm',
-                                    'status'   => 1,
+                                    'status'   => $status1,
                                     'order'    => 3,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -210,8 +212,8 @@ function privileges_adminapi_createobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 2,
                                     'default'  => '',
-                                    'source'   =>  $prefix . '_security_masks.xar_module',
-                                    'status'   => 1,
+                                    'source'   =>  $prefix . '_security_masks.xar_modid',
+                                    'status'   => $status1,
                                     'order'    => 4,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -223,7 +225,7 @@ function privileges_adminapi_createobjects($args)
                                     'type'     => 2,
                                     'default'  => '',
                                     'source'   =>  $prefix . '_security_masks.xar_component',
-                                    'status'   => 1,
+                                    'status'   => $status1,
                                     'order'    => 5,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -235,7 +237,7 @@ function privileges_adminapi_createobjects($args)
                                     'type'     => 2,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_security_masks.xar_instance',
-                                    'status'   => 1,
+                                    'status'   => $status1,
                                     'order'    => 6,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -247,7 +249,7 @@ function privileges_adminapi_createobjects($args)
                                     'type'     => 15,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_security_masks.xar_level',
-                                    'status'   => 1,
+                                    'status'   => $status1,
                                     'order'    => 7,
                                     ))) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
@@ -259,7 +261,7 @@ function privileges_adminapi_createobjects($args)
                                     'type'     => 2,
 //                                    'default'  => '',
                                     'source'   =>  $prefix . '_security_masks.xar_description',
-                                    'status'   => 1,
+                                    'status'   => $status2,
                                     'order'    => 8,
                                     ))) return;
 

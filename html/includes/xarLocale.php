@@ -10,6 +10,15 @@
  */
 
 /**
+ * Exceptions defined for this subsystem
+ *
+ */
+class LocaleNotFoundException extends NotFoundExceptions
+{
+    protected $message = 'The locale "#(1)" could not be found or is currently unavailable';
+}
+
+/**
  * Gets the locale data for a certain locale.
  * Locale data is an associative array, its keys are described at the top
  * of this file
@@ -17,8 +26,8 @@
  * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return array locale data
- * @raise  LOCALE_NOT_EXIST
- * @todo   figure out why we go through this function for xarModIsAvailable
+ * @throws LocaleNotFoundException
+ * @todo   figure out why we go through this function for xarMod::isAvailable
  */
 function &xarMLSLoadLocaleData($locale = NULL)
 {
@@ -41,12 +50,10 @@ function &xarMLSLoadLocaleData($locale = NULL)
         if (strstr($locale,'ISO')) {
             $locale = str_replace('ISO','iso',$locale);
             if (!in_array($locale, $siteLocales)) {
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
-                return $nullreturn;
+                throw new LocaleNotFoundException($locale);
             }
         } else {
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE');
-            return $nullreturn;
+            throw new LocaleNotFoundException($locale);
         }
     }
 
@@ -77,10 +84,7 @@ function &xarMLSLoadLocaleData($locale = NULL)
             $siteCharset = $parsedLocale['charset'];
             $res = $GLOBALS['xarMLS_localeDataLoader']->load($utf8locale);
             if (isset($res) && $res == false) {
-                // Can we use xarML here? border case, play it safe for now.
-                $msg = "The locale '$utf8locale' could not be loaded";
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_EXIST',$msg);
-                return $nullreturn;
+                throw new LocaleNotFoundException($utf8locale);
             }
             if (!isset($res)) return $nullreturn; // Throw back
             $tempArray = $GLOBALS['xarMLS_localeDataLoader']->getLocaleData();
@@ -97,9 +101,8 @@ function &xarMLSLoadLocaleData($locale = NULL)
             if (!isset($res)) return $nullreturn; // Throw back
             if ($res == false) {
                 // Can we use xarML here? border case, play it safe for now.
-                $msg = "The locale '$locale' could not be loaded";
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_EXIST',$msg);
-                return $nullreturn;
+                throw new LocaleNotFoundException($locale);
+
             }
             $GLOBALS['xarMLS_localeDataCache'][$locale] = $GLOBALS['xarMLS_localeDataLoader']->getLocaleData();
         }
@@ -368,6 +371,7 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffs
     // replace the locale formatting style with valid strftime() style
     $locale_format = str_replace('HH','%H',$locale_format);
     $locale_format = str_replace('hh','%I',$locale_format);
+    $locale_format = str_replace('h', '%h',$locale_format);
     $locale_format = str_replace('mm','%M',$locale_format);
     $locale_format = str_replace('ss','%S',$locale_format);
     $locale_format = str_replace('a','%p',$locale_format);
@@ -639,19 +643,20 @@ function xarMLS_strftime($format=null,$timestamp=null)
  * in the form of a locale data array
  *
  * @package multilanguage
+ * @throws  XMLParseException
  */
 class xarMLS__LocaleDataLoader
 {
-    var $curData;
-    var $curPath;
+    public $curData;
+    public $curPath;
 
-    var $parser;
+    public $parser;
 
-    var $localeData;
+    public $localeData;
 
-    var $attribsStack = array();
+    public $attribsStack = array();
 
-    var $tmpVars;
+    public $tmpVars;
 
     function load($locale)
     {
@@ -693,9 +698,7 @@ class xarMLS__LocaleDataLoader
             if (!xml_parse($this->parser, $data, feof($fp))) {
                 $errstr = xml_error_string(xml_get_error_code($this->parser));
                 $line = xml_get_current_line_number($this->parser);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'XML_PARSER_ERROR',
-                               new SystemException("XML parser error in $fileName: $errstr at line $line."));
-                return;
+                throw new XMLParseException(array($fileName,$line,$errstr));
             }
         }
 
