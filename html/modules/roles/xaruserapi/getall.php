@@ -25,16 +25,11 @@ function roles_userapi_getall($args)
     extract($args);
 
     // Optional arguments.
-    if (!isset($startnum)) {
-        $startnum = 1;
-    }
+    if (!isset($startnum)) $startnum = 1;
+    if (!isset($numitems)) $numitems = -1;
 
-    if (!isset($numitems)) {
-        $numitems = -1;
-    }
-
-    // Security check
-    if(!xarSecurityCheck('ReadRole')) {return;}
+    // Security check - need overview level to see that the roles exist
+    if (!xarSecurityCheck('ViewRoles')) return;
 
     // Get database setup
     $dbconn =& xarDBGetConn();
@@ -58,6 +53,7 @@ function roles_userapi_getall($args)
             }
         }
     }
+
     // Restriction by group.
     if (isset($group)) {
         $groups = explode(',', $group);
@@ -162,8 +158,8 @@ function roles_userapi_getall($args)
         $query .= ' ORDER BY ' . implode(', ', $order_clause);
     }
 
-// cfr. xarcachemanager - this approach might change later
-    $expire = xarModGetVar('roles','cache.userapi.getall');
+    // cfr. xarcachemanager - this approach might change later
+    $expire = xarModGetVar('roles', 'cache.userapi.getall');
     if ($startnum == 0) { // deprecated - use countall() instead
         if (!empty($expire)){
             $result = $dbconn->CacheExecute($expire,$query,$bindvars);
@@ -202,6 +198,21 @@ function roles_userapi_getall($args)
                     'email'     => $email,
                     'pass'      => $pass,
                     'state'     => $state,
+                    'date_reg'  => $date_reg
+                );
+            }
+        } elseif (xarSecurityCheck('ViewRoles', 0, 'All', "$uname:All:$uid")) {
+            // If we only have overview privilege, then supply more restricted information.
+            if (!empty($uidlist)) {
+                $roles[$uid] = array(
+                    'uid'       => (int) $uid,
+                    'name'      => $name,
+                    'date_reg'  => $date_reg
+                );
+            } else {
+                $roles[] = array(
+                    'uid'       => (int) $uid,
+                    'name'      => $name,
                     'date_reg'  => $date_reg
                 );
             }
