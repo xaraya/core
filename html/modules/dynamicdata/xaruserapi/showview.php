@@ -31,7 +31,10 @@ function dynamicdata_userapi_showview($args)
     if (empty($template)) {
         $template = '';
     }
-
+    
+    if (empty($tplmodule)) {
+        $tplmodule = 'dynamicdata';
+    }
     // we got everything via template parameters
     if (isset($items) && is_array($items)) {
         return xarTplModule('dynamicdata','user','showview',
@@ -169,6 +172,7 @@ function dynamicdata_userapi_showview($args)
     }
 
     return $object->showView(array('layout'    => $layout,
+                                   'tplmodule' => $tplmodule,
                                    'template'  => $template,
                                    'linklabel' => $linklabel,
                                    'linkfunc'  => $linkfunc,
