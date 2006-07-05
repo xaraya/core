@@ -16,7 +16,6 @@
  * @author Marc Lutolf
  */
 $coremodules = array(
-   // array('name' => "adminpanels",  'regid' => 9),
     array('name' => "authsystem",   'regid' => 42),
     array('name' => "base",         'regid' => 68),
     array('name' => "blocks",       'regid' => 13),

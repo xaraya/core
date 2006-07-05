@@ -11,33 +11,25 @@
  *
  * @package dynamicdata
  */
-class Dynamic_UserSettings_DataStore extends Dynamic_DataStore
+class Dynamic_UserSettings_DataStore extends Dynamic_DataStore // Consider inheriting from ModuleVar Datastore
 {
-    var $modname;
+    public $modname;
 
-    function Dynamic_UserSettings_DataStore($name)
+    function __construct($name)
     {
         // invoke the default constructor from our parent class
-        $this->Dynamic_DataStore($name);
+        parent::__construct($name);
 
         // keep track of the concerned module for user settings
-    // TODO: the concerned module is currently hiding in the third part of the name :)
+        // TODO: the concerned module is currently hiding in the third part of the name :)
         list($fixed1,$fixed2,$modid) = explode('_',$name);
         if (empty($modid)) {
-            $modid = xarModGetIDFromName(xarModGetName());
+            $modid = xarMod::getRegID(xarMod::getName());
         }
-        $modinfo = xarModGetInfo($modid);
+        $modinfo = xarMod::getInfo($modid);
         if (!empty($modinfo['name'])) {
             $this->modname = $modinfo['name'];
         }
-    }
-
-    /**
-     * Get the field name used to identify this property (we use the name of the property here)
-     */
-    function getFieldName(&$property)
-    {
-        return $property->name;
     }
 
     function getItem($args)
@@ -54,18 +46,16 @@ class Dynamic_UserSettings_DataStore extends Dynamic_DataStore
             return;
         }
 
-    // TODO: introduce xarModGetUserVars ?
-
         foreach ($fieldlist as $field) {
             // get the value from the user variables
-            $value = xarModGetUserVar($this->modname,$field,$itemid);
+            $value = xarModUserVars::get($this->modname,$field,$itemid);
 
             // set the value for this property
             if (isset($value)) {
                 $this->fields[$field]->setValue($value);
             //} else {
                 // use the equivalent module variable as default
-            //    $this->fields[$field]->setValue(xarModGetVar($this->modname,$field));
+            //    $this->fields[$field]->setValue(xarModVars::get($this->modname,$field));
             }
         }
         return $itemid;
@@ -73,7 +63,7 @@ class Dynamic_UserSettings_DataStore extends Dynamic_DataStore
 
     function createItem($args)
     {
-        // There's no difference with updateItem() here, because xarModSetUserVar() handles that
+        // There's no difference with updateItem() here, because xarModUserVars:set() handles that
         return $this->updateItem($args);
     }
 
@@ -98,7 +88,7 @@ class Dynamic_UserSettings_DataStore extends Dynamic_DataStore
             if (!isset($value)) {
                 continue;
             }
-            xarModSetUserVar($this->modname,$field,$value,$itemid);
+            xarModUserVars::set($this->modname,$field,$value,$itemid);
         }
         return $itemid;
     }
@@ -118,7 +108,7 @@ class Dynamic_UserSettings_DataStore extends Dynamic_DataStore
         }
 
         foreach ($fieldlist as $field) {
-            xarModDelUserVar($this->modname,$field,$itemid);
+            xarModUserVars::delete($this->modname,$field,$itemid);
         }
 
         return $itemid;

@@ -11,18 +11,20 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
- * create a user
+ * Create a user
+ *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['uname'] username of the user
- * @param $args['realname'] real name of the user
- * @param $args['email'] email address of the user
- * @param $args['pass'] password of the user
- * @param $args['date'] registration date
- * @param $args['valcode'] validation code
- * @param $args['state'] state of the account
- * @param $args['authmodule'] authentication module
- * @param $args['uid'] user id to be used (import only)
- * @param $args['cryptpass'] encrypted password to be used (import only)
+ * @param string $args['uname'] username of the user
+ * @param string $args['realname'] real name of the user
+ * @param string $args['email'] email address of the user
+ * @param string $args['pass'] password of the user
+ * @param string $args['date'] registration date
+ * @param string $args['valcode'] validation code
+ * @param int    $args['state'] state of the account
+ * @param string $args['authmodule'] authentication module
+ * @param int    $args['uid'] user id to be used (import only)
+ * @param string $args['cryptpass'] encrypted password to be used (import only)
+ * @param int    $args['itemtype'] item type to create
  * @returns int
  * @return user ID on success, false on failure
  */
@@ -32,91 +34,33 @@ function roles_adminapi_create($args)
     // Get arguments
     extract($args);
 
-    $invalid = array();
-    if (!isset($uname)) {
-        $invalid[] = 'uname';
-    } 
-    if (!isset($email)) {
-        $invalid[] = 'email';
-    } 
-    if (!isset($realname)) {
-        $invalid[] = 'realname';
-    } 
-    if (!isset($state)) {
-        $invalid[] = 'state';
-    } 
-    if (!isset($pass)) {
-        $invalid[] = 'pass';
-    } 
-    if (count($invalid) > 0) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)', 
-            join(', ', $invalid), 
-            'admin', 'create', 'roles');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    } 
+    $baseitemtype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
+	$args['basetype'] = $baseitemtype;
 
-    // Get datbase setup
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-
-    $rolestable = $xartable['roles'];
-
-    // Check if that username exists
-    $query = "SELECT xar_uid FROM $rolestable
-            WHERE xar_uname= ? AND xar_type = 0";
-    $result =& $dbconn->Execute($query,array($uname));
-    if (!$result) return;
-
-    if ($result->RecordCount() > 0) {
-        return 0;  // username is already there
+    if ($baseitemtype == ROLES_USERTYPE) {
+		if (!isset($uname)) throw new EmptyParameterException('uname');
+		if (!isset($email)) throw new EmptyParameterException('email');
+		if (!isset($realname) && !isset($name)) throw new EmptyParameterException('realname');
+		if (!isset($state)) throw new EmptyParameterException('state');
+		if (!isset($pass)) throw new EmptyParameterException('pass');
+		$args['cryptpass'] = md5($pass);
+    } elseif ($baseitemtype == ROLES_GROUPTYPE) {
+		if (!isset($realname) && !isset($name)) throw new EmptyParameterException('realname or name');
     }
+	$args['name'] = isset($realname) ? $realname : $name;
+	$args['type'] = $itemtype;
+	if (empty($authmodule)) {
+        $modInfo = xarMod_GetBaseInfo('authsystem');
+        $args['modId'] = $modInfo['systemid'];
+	}
 
-    // Get next ID in table
-    if (empty($uid) || !is_numeric($uid)) {
-        $nextId = $dbconn->GenId($rolestable);
-    } else {
-        $nextId = $uid;
-    }
-
-// TODO: check this
-    if (empty($authmodule)) {
-        $authmodule = 'authsystem';
-    }
-
-    // Add item, with encrypted passwd
-
-    if (empty($cryptpass)) {
-        $cryptpass=md5($pass);
-    }
-
-    // Put registratation date in timestamp format
-    //$date_reg = $dbconn->DBTimeStamp($date);
-    $date_reg = $date;
-
-    // TODO: for now, convert the timestamp to a simple string since we are
-    // storing the date in a varchar field
-    //$date_reg = trim($date_reg,"'");
-
-    $query = "INSERT INTO $rolestable (
-              xar_uid, xar_uname, xar_name, xar_type,
-              xar_pass, xar_email, xar_date_reg, xar_valcode,
-              xar_state, xar_auth_module
-              )
-            VALUES (?,?,?,?,?,?,?,?,?,?)";
-    $bindvars = array($nextId, $uname, $realname, 0,
-                      $cryptpass,$email,$date_reg,$valcode,
-                      $state,$authmodule);
-    $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
-
-    // Get the ID of the user that we created.
-    if (empty($uid) || !is_numeric($uid)) {
-        $uid = $dbconn->PO_Insert_ID($rolestable, 'xar_uid');
-    }
+    $role = new xarRole($args);
+    $role->add();
+    $uid = $role->getID();
 
     // Let any hooks know that we have created a new user.
     $item['module'] = 'roles';
+    $item['itemtype'] = $itemtype;
     $item['itemid'] = $uid;
     xarModCallHooks('item', 'create', $uid, $item);
 

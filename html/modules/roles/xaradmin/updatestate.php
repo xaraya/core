@@ -57,11 +57,12 @@ function roles_admin_updatestate()
         break;
     }
 
+    // Why so late? uids check never reaches this.
     if ( (!isset($uids)) || (!isset($data['status']))
     || (!is_numeric($data['status'])) || ($data['status'] < 1) || ($data['status'] > 4) ) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)','parameters', 'admin', 'updatestate', 'Roles');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',new SystemException($msg." -- ".$uids." -- ".$data['status']));
-        return;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('parameters', 'admin', 'updatestate', 'Roles');
+        throw new BadParameterException($vars,$msg);
     }
     $roles = new xarRoles();
     $uidnotify = array();

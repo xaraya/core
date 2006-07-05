@@ -40,7 +40,7 @@ class Dynamic_Hook_DataStore extends Dynamic_DataStore
         $modname = $args['modname'];
 
         foreach (array_keys($this->fields) as $hook) {
-            if (xarModIsAvailable($hook)) {
+            if (xarMod::isAvailable($hook)) {
             // TODO: find some more consistent way to do this !
                 $value = xarModAPIFunc($hook,'user','get',
                                        array('modname' => $modname,
@@ -51,10 +51,7 @@ class Dynamic_Hook_DataStore extends Dynamic_DataStore
                 // see if we got something interesting in return
                 if (isset($value)) {
                     $this->fields[$hook]->setValue($value);
-                } elseif (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                    // ignore any exceptions on retrieval for now
-                    xarErrorFree();
-                }
+                } 
             }
         }
         return $itemid;

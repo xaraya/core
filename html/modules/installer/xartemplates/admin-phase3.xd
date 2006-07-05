@@ -1,18 +1,6 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="active_step">3</xar:set>
-<xar:set name="successtitle">
-    <xar:mlstring>SUCCESS</xar:mlstring>
-</xar:set>
-<xar:set name="failuretitle">
-    <xar:mlstring>
-        FAILURE 
-    </xar:mlstring>
-</xar:set>
-<xar:set name="warningtitle">
-    <xar:mlstring>
-        CAUTION
-    </xar:mlstring>
-</xar:set>
+
 <div id="install">
     <xar:template file="status" />
     <h2><xar:mlstring>Capabilities inventory</xar:mlstring></h2>
@@ -51,7 +39,7 @@
                     <li class="success">
                         <xar:ml>
                             <xar:mlstring>
-                            SUCCESS: PHP Version is greater than or equal to 4.1.2. Your PHP Version is #(1)
+                                PHP Version is greater than or equal to 5.0. Your PHP Version is #(1)
                             </xar:mlstring>
                             <xar:mlvar>
                                 #$phpVersion#
@@ -62,7 +50,7 @@
                     <li class="failure">
                         <xar:ml>
                             <xar:mlstring>
-                            ERROR: PHP Version is less than 4.1.2. Your PHP Version is #(1) please upgrade PHP.
+                                PHP Version is less than 5.0. Your PHP Version is #(1) please upgrade PHP.
                             </xar:mlstring>
                             <xar:mlvar>
                                 #$phpVersion#
@@ -266,36 +254,6 @@
                         </xar:ml>
                     </li>
                 </xar:if>
-
-
-
-            <xar:if condition="$adodbTemplatesIsWritable">
-                <li class="success">
-                     <xar:ml>
-                        <xar:mlstring>
-                            SUCCESS: The installer can write to the directory #(1)
-                        </xar:mlstring>
-                        <xar:mlvar>
-                            #$adodbTemplatesDir#
-                        </xar:mlvar>
-                    </xar:ml>
-                </li>
-            <xar:else />
-                   <li class="failure">
-                        <xar:ml>
-                        <xar:mlstring>
-                            ERROR: The installer cannot write to the directory #(1).
-                            Please verify that your webserver has write access to the directory #(2)
-                        </xar:mlstring>
-                        <xar:mlvar>
-                            #$adodbTemplatesDir#
-                        </xar:mlvar>
-                        <xar:mlvar>
-                            #$adodbTemplatesDir#
-                        </xar:mlvar>
-                    </xar:ml>
-                    </li>
-            </xar:if>
             </ul>
             <h3><xar:mlstring>Locales Settings Check</xar:mlstring></h3>
             <p>
@@ -456,7 +414,7 @@
                     </li>
                 </xar:if>
             </ul>
-            <xar:if condition="$systemConfigIsWritable AND $cacheTemplatesIsWritable AND $cacheIsWritable AND $rssTemplatesIsWritable AND $adodbTemplatesIsWritable AND $metMinMemRequirement">
+            <xar:if condition="$systemConfigIsWritable AND $cacheTemplatesIsWritable AND $cacheIsWritable AND $rssTemplatesIsWritable AND $metMinMemRequirement">
                 <input type="hidden" name="install_phase" id="install_phase" value="4" />
                 <xar:set name="buttonnext">
                     <xar:mlstring>Continue</xar:mlstring>

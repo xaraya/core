@@ -1,7 +1,6 @@
 <?php
 /**
  * Get message templates
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -25,10 +24,8 @@ function mail_adminapi_getmessagetemplates($args)
     }
 
     $messaginghome = xarCoreGetVarDirPath() . "/messaging/" . $module;
-    if (!file_exists($messaginghome)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The messaging directory was not found.'));
-        return;
-    }
+    if (!file_exists($messaginghome)) throw new DirectoryNotFoundException($messaginghome);
+
     $dd = opendir($messaginghome);
     $templates = array();
     while (($filename = readdir($dd)) !== false) {

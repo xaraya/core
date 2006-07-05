@@ -1,18 +1,18 @@
-<xar:comment> we need to see if type is admin or user here, since we don't know who called us anymore </xar:comment>
+<!--  we need to see if type is admin or user here, since we don't know who called us anymore -->
 <xar:set name="tmpreq">#xarRequestGetInfo()#</xar:set>
 <xar:if condition="empty($viewfunc)">
     <xar:set name="viewfunc">'view'</xar:set>
 </xar:if>
 
 <xar:if condition="!empty($tmpreq) and $tmpreq[1] eq 'admin' and $tmpreq[2] eq 'view'">
-<xar:comment> from admin-objectlist.xd </xar:comment>
+<!-- from admin-objectlist.xd -->
 <xar:categories-navigation layout="trails" showchildren="1" module="$modname" type="admin" func="$viewfunc" itemtype="$itemtype" itemid="0" catid="$catid" showcatcount="1" />
 
 <xar:elseif condition="isset($itemid)"/>
-<xar:comment> from user-objectdisplay.xd </xar:comment>
+<!-- from user-objectdisplay.xd -->
 <xar:categories-navigation layout="trails" showchildren="1" module="$modname" func="$viewfunc" itemtype="$itemtype" itemid="$itemid" catid="$catid" showcatcount="1" />
 
 <xar:else/>
-<xar:comment> from user-objectview.xd </xar:comment>
+<!-- from user-objectview.xd -->
 <xar:categories-navigation layout="trails" showchildren="1" module="$modname" func="$viewfunc" itemtype="$itemtype" catid="$catid" showcatcount="1" />
 </xar:if>

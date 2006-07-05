@@ -25,10 +25,8 @@ function roles_admin_modifyemail($args)
 
 // Get the list of available templates
     $messaginghome = xarCoreGetVarDirPath() . "/messaging/roles";
-    if (!file_exists($messaginghome)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The messaging directory was not found.'));
-        return;
-    }
+    if (!file_exists($messaginghome)) throw new DirectoryNotFoundException($messaginghome);
+
     $dd = opendir($messaginghome);
 // FIXME: what's the blank template supposed to do ?
     //$templates = array(array('key' => 'blank', 'value' => xarML('Empty')));
@@ -85,31 +83,29 @@ function roles_admin_modifyemail($args)
             if (is_writable($filename) && is_writable($messaginghome)) {
                unlink($filename);
                if (!$handle = fopen($filename, 'a')) {
-                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('Cannot open the template.'));
+                   throw new FileNotFoundException($filename,'Could not open the file "#(1)" for appending');
                }
                if (fwrite($handle, $subject) === FALSE) {
-                   echo "Cannot write to file ($filename)";
-                   exit;
+                   throw new FileNotFoundException($filename,'Could not write to the file "#(1)" for writing');
                }
                fclose($handle);
             } else {
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'CONFIG_ERROR', new SystemException('The messaging template ' . $filename . ' is not writable or not allowed to delete files from '.$messaginghome.'.'));
-                return;                        
+                $msg = 'The messaging template "#(1)" is not writable or it is not allowed to delete files from #(2)';
+                throw new ConfigurationException(array($filename,$messaginghome),$msg);
             }
             $filename = $filebase . 'message.xd';
             if (is_writable($filename) && is_writable($messaginghome)) {
                unlink($filename);
                if (!$handle = fopen($filename, 'a')) {
-                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('Cannot open the template.'));
+                   throw new FileNotFoundException($filename,'Could not open the file "#(1)" for appending');
                }
                if (fwrite($handle, $message) === FALSE) {
-                   echo "Cannot write to file ($filename)";
-                   exit;
+                   throw new FileNotFoundException($filename,'Could not write to the file "#(1)" for writing');
                }
                fclose($handle);
             } else {
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'CONFIG_ERROR', new SystemException('The messaging template ' . $filename . ' is not writable or not allowed to delete files from '.$messaginghome.'.'));
-                return;                        
+                $msg = 'The messaging template "#(1)" is not writable or it is not allowed to delete files from #(2)';
+                throw new ConfigurationException(array($filename,$messaginghome),$msg);
             }
             xarResponseRedirect(xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => $data['mailtype'])));
             return true;

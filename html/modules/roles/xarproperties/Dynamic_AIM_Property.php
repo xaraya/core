@@ -11,7 +11,7 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 
-/* 
+/*
  * Handle AIM property
  * @author mikespub <mikespub@xaraya.com>
 */
@@ -27,18 +27,25 @@ include_once "modules/base/xarproperties/Dynamic_URLIcon_Property.php";
  */
 class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
 {
-    function checkInput($name='', $value = null)
+    function __construct($args)
     {
-        if (empty($name)) {
-            $name = 'dd_'.$this->id;
-        }
-        // store the fieldname for validations who need them (e.g. file uploads)
-        $this->fieldname = $name;
-        if (!isset($value)) {
-            if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
-        }
-        return $this->validateValue($value);
+        parent::__construct($args);
+        $this->tplmodule = 'roles';
+        $this->template = 'aim';
+		$this->filepath   = 'modules/roles/xarproperties';
     }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('roles');
+        $info->id   = 29;
+        $info->name = 'aim';
+        $info->desc = 'AIM Screen Name';
+
+        return $info;
+    }
+
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -58,89 +65,27 @@ class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
         return true;
     }
 
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        $data=array();
+        if(!isset($data['value'])) $data['value'] = $this->value;
 
-        if (!empty($value)) {
-            $link = 'aim:goim?screenname='.$value.'&message='.xarML('Hello+Are+you+there?');
-        } else {
-            $link = '';
+        $data['link'] ='';
+        if(!empty($data['value'])) {
+            $data['link'] = 'aim:goim?screenname='.$data['value'].'&message='.xarML('Hello+Are+you+there?');
         }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-
-        $data['name']     = $name;
-        $data['id']       = $id;
-        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['tabindex'] = !empty($tabindex) ? ' tabindex="'.$tabindex.'"': '';
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
-        $data['size']     = !empty($size) ? $size : $this->size;
-        $data['link']     = xarVarPrepForDisplay($link);
-        
-        $template="";
-        return xarTplProperty('roles', 'aim', 'showinput', $data);
-
+        return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        if (!isset($data['value'])) $data['value'] = $this->value;
 
-        $data=array();
+        $data['link'] = '';
+        if (!empty($data['value'])) {
+            $data['link'] = 'aim:goim?screenname='.$data['value'].'&message='.xarML('Hello+Are+you+there?');
 
-        // TODO: use redirect function here ?
-        if (!empty($value)) {
-            $link = 'aim:goim?screenname='.$value.'&message='.xarML('Hello+Are+you+there?');
-            $data['link'] = xarVarPrepForDisplay($link);
-            if (!empty($this->icon)) {
-                $data['value']= $this->value;
-                $data['icon'] = $this->icon;
-                $data['name'] = $this->name;
-                $data['id']   = $this->id;
-                $data['image']= xarVarPrepForDisplay($this->icon);
-                $template="";
-                return xarTplProperty('roles', 'aim', 'showoutput', $data );
-            }
         }
-        return '';
+        return parent::showOutput($data);
     }
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 29,
-                              'name'       => 'aim',
-                              'label'      => 'AIM Address',
-                              'format'     => '29',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'roles',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                           );
-        return $baseInfo;
-     }
 }
 ?>
