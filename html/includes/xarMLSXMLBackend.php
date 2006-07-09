@@ -3,7 +3,8 @@
  * Multi Language System - XML Translations Backend
  *
  * @package multilanguage
- * @copyright (C) 2002 by the Xaraya Development Team.
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage xml_backend

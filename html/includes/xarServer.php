@@ -1,5 +1,4 @@
 <?php
-
 /**
  * HTTP Protocol Server/Request/Response utilities
  *

@@ -12,8 +12,8 @@
  * that need to check whether the proper things are loaded themselves.
  *
  * @package events
- * @copyright (C) 2002-2004 The Digital Development Foundation
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marco Canini <marco@xaraya.com>
  * @author Marcel van der Boom <marcel@xaraya.com>
