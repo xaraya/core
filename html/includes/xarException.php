@@ -3,9 +3,9 @@
  * Exception Handling System
  *
  * @package exceptions
- * @copyright (C) 2006 by the Digital Xaraya Development Foundation
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.com/documentation/rfcs/rfc0054.html
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
  * @author Marco Canini <marco@xaraya.com>
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @author Marcel van der Boom <marcel@xaraya.com>
