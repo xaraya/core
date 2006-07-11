@@ -44,7 +44,7 @@ function roles_userapi_getdefaultauthdata()
         if (file_exists('modules/'.$defaultauthmodulename.'/xaruser/login.php')) {
             $defaultauthmodlogin=$defaultauthmodulename;
         } else{
-           $defaultauthmodlogin='authsystem';
+            $defaultauthmodlogin='authsystem';
         }
     } else {
         $defaultauthmodulename='authsystem';
