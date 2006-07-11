@@ -139,11 +139,8 @@ abstract class DatabaseInfo {
    */
   public function hasTable($name)
   {
-      // XARAYA MODIFICATION
-      // This should probably be sent upstream
-      if(!$this->tablesLoaded) $this->initTables();
-      // END XARAYA MODIFICATION
-      return isset($this->tables[strtoupper($name)]);
+    if(!$this->tablesLoaded) $this->initTables();
+    return isset($this->tables[strtoupper($name)]);
   }
 
     /**
