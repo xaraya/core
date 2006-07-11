@@ -25,11 +25,12 @@ function roles_userapi_getdefaultauthdata()
 
     if (isset($defaultauthmoduleid) && !empty($defaultauthmoduleid)) {
         $defaultauthmodulename =xarModGetNameFromId($defaultauthmoduleid);
+        //check the module is still available else we have no alternative to fall back
+        if (!xarModIsAvailable($defaultauthmodulename)) {
+           $defaultauthmodulename='authsystem'; //core authentication
+        }
     }
-    //check the module is still available else we have no alternative to fall back
-    if (!xarModIsAvailable($defaultauthmodulename)) {
-       $defaultauthmodulename='authsystem'; //core authentication
-    }
+
     // <jojodee> do we reset the default authmodule modvar here? Review - may only be non-active due to upgrade
 
     if (isset($defaultauthmodulename)) {
@@ -41,18 +42,21 @@ function roles_userapi_getdefaultauthdata()
         }
         //check for default login function provided
         if (file_exists('modules/'.$defaultauthmodulename.'/xaruser/login.php')) {
-            $defaultauthmodlogout=$defaultauthmodulename;
+            $defaultauthmodlogin=$defaultauthmodulename;
         } else{
            $defaultauthmodlogin='authsystem';
         }
     } else {
         $defaultauthmodulename='authsystem';
+        $defaultauthmodlogin='authsystem';
+        $defaultauthmodlogout='authsystem';
     }
 
     $defaultauthdata = array ('defaultauthmodname' => $defaultauthmodulename,
                               'defaultlogoutmodname'  => $defaultauthmodlogout,
                               'defaultloginmodname'   => $defaultauthmodlogin
                               );
+
     return $defaultauthdata;
 }
 
