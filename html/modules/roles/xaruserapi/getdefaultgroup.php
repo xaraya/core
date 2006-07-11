@@ -18,7 +18,10 @@
 function roles_userapi_getdefaultgroup()
 {
 	$authmodule = xarModGetVar('roles','defaultauthmodule');
-	$regmodule = xarModGetVar('roles','defaultregmodule');	
+	$regmodule = xarModGetVar('roles','defaultregmodule');
+
+    //<jojodee> This is the only relevant one afaik
+    //former vars were needed in the intial split with registration and authentication in the 'old' authentication module
     $defaultrole = xarModGetVar('roles', 'defaultgroup');
     if (isset($defaultrole) && !empty($defaultrole)) {
         $defaultgroup = $defaultrole;

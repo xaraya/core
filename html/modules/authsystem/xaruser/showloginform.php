@@ -22,17 +22,15 @@ function authsystem_user_showloginform($args = array())
     extract($args);
     if (!isset($redirecturl)) $redirecturl = xarServerGetBaseURL();
     xarVarFetch('redirecturl', 'str:1:254', $data['redirecturl'], $redirecturl, XARVAR_NOT_REQUIRED);
+    
+    $defaultauthdata=xarModAPIFunc('roles','user','getdefaultauthdata');
+    $defaultloginmodname=$defaultauthdata['defaultloginmodname'];
 
-    $defaultauthmodule=(int)xarModGetVar('roles','defaultauthmodule');
-    $authmodule=xarModGetNameFromID($defaultauthmodule);
-    if (!file_exists('modules/'.$authmodule.'/xaruser/showloginform.php')) {
-            $authmodule='authsystem'; // incase the authmodule doesn't provide a login
-    }
     if (!xarUserIsLoggedIn()) {
       // Security check
       if (!xarSecurityCheck('ViewAuthsystem')) return;
       $data['loginlabel'] = xarML('Log In');
-      $data['loginurl']=xarModURL($authmodule,'user','login');
+      $data['loginurl']=xarModURL($defaultloginmodname,'user','login');
 
       return $data;
     } else {
