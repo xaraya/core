@@ -50,7 +50,7 @@ function authsystem_user_login()
     }
     $redirect=xarServerGetBaseURL();
     if (!xarVarFetch('rememberme','checkbox',$rememberme,false,XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('redirecturl','str:1:300',$redirecturl,$redirect,XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('redirecturl','str:1:254',$redirecturl,$redirect,XARVAR_NOT_REQUIRED)) return;
 
     // Defaults
     if (preg_match('/authsystem/',$redirecturl)) {
@@ -94,18 +94,20 @@ function authsystem_user_login()
                 // Still need to check if user exists as the user may be
                 // set to inactive in the user table
                 //Get and check last resort first before going to db table
-                if (xarModGetVar('privileges','lastresort')) {
-                    $secret = unserialize(xarModGetVar('privileges','lastresort'));
-                    if ($secret['name'] == MD5($uname) && $secret['password'] == MD5($pass)) {
-                        $state = ROLES_STATE_ACTIVE;
-                        break; //let's go straight to login api
+                $lastresortvalue=array();
+                $lastresortvalue=xarModGetVar('privileges','lastresort');
+                if (isset($lastresortvalue)) {
+                    $secret = @unserialize(xarModGetVar('privileges','lastresort'));
+                    if (is_array($secret)) {
+                        if ($secret['name'] == MD5($uname) && $secret['password'] == MD5($pass)) {
+                            $lastresort=true;
+                            $state = ROLES_STATE_ACTIVE;
+                            break; //let's go straight to login api
+                        }
                     }
                 }
                 // check for user and grab uid if exists
-                $user = xarModAPIFunc('roles',
-                            'user',
-                            'get',
-                           array('uname' => $uname));
+                $user = xarModAPIFunc('roles','user','get', array('uname' => $uname));
 
                 // Make sure we haven't already found authldap module
                 if (empty($user) && ($extAuthentication == false))
@@ -214,10 +216,12 @@ function authsystem_user_login()
                 }
             }
 
-            // Log the user in
-            $defaultauthmodule=xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule'));
-            if (!isset($defaultauthmodule)) $defaultauthmodules='authsystem';
-            $res = xarModAPIFunc($defaultauthmodule,'user','login',array('uname' => $uname, 'pass' => $pass, 'rememberme' => $rememberme));
+
+            // Get the default authentication data - we need to check again as authsystem is always installed and users could get here direct
+            $defaultauthdata=xarModAPIFunc('roles','user','getdefaultauthdata');
+            $defaultloginmodname=$defaultauthdata['defaultloginmodname'];
+            $res = xarModAPIFunc($defaultloginmodname,'user','login',array('uname' => $uname, 'pass' => $pass, 'rememberme' => $rememberme));
+ 
             if ($res === NULL) return;
             elseif ($res == false) {
                 // Problem logging in

@@ -57,17 +57,13 @@ function roles_user_getvalidation()
         throw new ModuleNotFoundException($regmodule);
     }
 
-    $authmoduleid=(int)xarModGetVar('roles','defaultauthmodule');
-    if (isset($authmoduleid)) {
-        $authmodule=xarModGetNameFromID($authmoduleid);
-    }else {
-        //fallback to? Use our known auth module for now
-        $authmodule='authsystem';
-    }
+    $defaultauthdata=xarModAPIFunc('roles','user','getdefaultauthdata');
+    $defaultloginmodname=$defaultauthdata['defaultloginmodname'];
+    $authmodule=$defaultauthdata['defaultauthmodname'];
 
     //Set some general vars that we need in various options
     $pending = xarModGetVar($regmodule, 'explicitapproval');
-    $loginlink =xarModURL($authmodule,'user','main');
+    $loginlink =xarModURL($defaultloginmodname,'user','main');
 
     $tplvars=array();
     $tplvars['loginlink']=$loginlink;
