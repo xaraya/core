@@ -72,6 +72,19 @@ class ErrorDeprecationException extends DeprecationExceptions
 }
 
 /**
+ * General exception to cater for situation where the called function should really raise one
+ * and the callee should catch it, instead of the callee raising the exception. To prevent hub-hopping
+ * all over the code
+ * 
+ * @todo we need a way to determine the usage of this, because each use signals a 'code out of place' error
+ */
+class GeneralException extends xarExceptions
+{
+    protected $message = "An unknown error occurred.";
+    protected $hint    = "The code raised an exception, but the nature of the error could not be determind";
+}
+
+/**
  * Initializes the Error Handling System
  *
  * @author Marco Canini <marco@xaraya.com>

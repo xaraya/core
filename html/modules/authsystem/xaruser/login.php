@@ -110,17 +110,14 @@ function authsystem_user_login()
                 // Make sure we haven't already found authldap module
                 if (empty($user) && ($extAuthentication == false))
                 {
-					throw new BadParameterException(null,xarML('Problem logging in: Invalid username or password.'));
+                    throw new BadParameterException(null,xarML('Problem logging in: Invalid username or password.'));
                 } elseif (empty($user)) {
                     // Check if user has been deleted.
-                    $user = xarModAPIFunc('roles',
-                                          'user',
-                                          'getdeleteduser',
-                                          array('uname' => $uname));
-                    if (xarCurrentErrorType() == XAR_USER_EXCEPTION)
-                    {
+                    try {
+                        $user = xarModAPIFunc('roles','user','getdeleteduser',
+                                                array('uname' => $uname));
+                    } catch (xarExceptions $e) {
                         //getdeleteduser raised an exception
-                        xarErrorFree();
                     }
                 }
 
@@ -212,10 +209,8 @@ function authsystem_user_login()
                 }
 
                 if (!$letthru) {
-                    xarErrorSet(XAR_SYSTEM_MESSAGE,
-                    'SITE_LOCKED',
-                     new SystemMessage($lockvars['message']));
-                     return;
+                    // This is *not* an error condition, consider making a template
+                    throw new GeneralException(null,$lockvars['message']);
                 }
             }
 
@@ -235,11 +230,11 @@ function authsystem_user_login()
                     // set the time for fifteen minutes from now
                     xarSessionSetVar('authsystem.login.lockedout', time() + (60 * $lockouttime));
                     xarSessionSetVar('authsystem.login.attempts', 0);
-					throw new ForbiddenOperationException($lockouttime,xarML('Problem logging in: Invalid username or password.  Your account has been locked for #(1) minutes.'));
+                    throw new ForbiddenOperationException($lockouttime,xarML('Problem logging in: Invalid username or password.  Your account has been locked for #(1) minutes.'));
                 } else{
                     $newattempts = $attempts + 1;
                     xarSessionSetVar('authsystem.login.attempts', $newattempts);
-					throw new ForbiddenOperationException($newattempts,xarML('Problem logging in: Invalid username or password.  You have tried to log in #(1) times.'));
+                    throw new ForbiddenOperationException($newattempts,xarML('Problem logging in: Invalid username or password.  You have tried to log in #(1) times.'));
                     return;
                 }
             }
