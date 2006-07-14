@@ -1439,6 +1439,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             $this->fieldlist = $args['fieldlist'];
             $this->getDataStores(true);
         } elseif (isset($args['status']) && (!isset($this->status) || $args['status'] != $this->status)) {
+        echo "hi";
             $this->status = $args['status'];
             $this->fieldlist = array();
             foreach ($this->properties as $name => $property) {
@@ -1760,7 +1761,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($args['fieldlist']))   $args['fieldlist'] = $this->fieldlist;
 
  		if (!empty($this->status)) $state = $this->status;
- 		else $state = DD_DISPLAYSTATE_ACTIVE | ~DD_DISPLAYSTATE_DISPLAYONLY;
+ 		else $state = DD_DISPLAYSTATE_ACTIVE;
         if (count($args['fieldlist']) > 0) {
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
@@ -1771,12 +1772,11 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             }
         } else {
             foreach ($this->properties as $property) {
-                if ($property->status & $state)
+                if (($property->status & Dynamic_Property_Master::DD_DISPLAYMASK) == ($state & Dynamic_Property_Master::DD_DISPLAYMASK))
                     $args['properties'][$property->name] = $property;
             }
         }
-
-        $args['items'] = & $this->items;
+       $args['items'] = & $this->items;
 
         // add link to display the item
         if (empty($args['linkfunc']))  $args['linkfunc'] = $this->linkfunc;
