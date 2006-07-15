@@ -20,17 +20,17 @@
  */
 class Dynamic_Property_Master
 {
-	const DD_DISPLAYSTATE_DISABLED = 0;
-	const DD_DISPLAYSTATE_HIDDEN = 3;
-	const DD_DISPLAYSTATE_DISPLAYONLY = 2;
-	const DD_DISPLAYSTATE_ACTIVE = 1;
+    const DD_DISPLAYSTATE_DISABLED = 0;
+    const DD_DISPLAYSTATE_HIDDEN = 3;
+    const DD_DISPLAYSTATE_DISPLAYONLY = 2;
+    const DD_DISPLAYSTATE_ACTIVE = 1;
 
-	const DD_INPUTSTATE_ADDMODIFY = 32;
-	const DD_INPUTSTATE_NOINPUT = 64;
-	const DD_INPUTSTATE_ADD = 96;
-	const DD_INPUTSTATE_MODIFY = 128;
+    const DD_INPUTSTATE_ADDMODIFY = 32;
+    const DD_INPUTSTATE_NOINPUT = 64;
+    const DD_INPUTSTATE_ADD = 96;
+    const DD_INPUTSTATE_MODIFY = 128;
 
-	const DD_DISPLAYMASK = 31;
+    const DD_DISPLAYMASK = 31;
 
     /**
      * Get the dynamic properties of an object
@@ -300,7 +300,7 @@ class Dynamic_Property
      */
     function __construct($args)
     {
-	    $this->args = serialize(array());
+        $this->args = serialize(array());
 
         if (!empty($args) && is_array($args) && count($args) > 0) {
             foreach ($args as $key => $val) {
@@ -379,7 +379,7 @@ class Dynamic_Property
                 }
                 throw new BadParameterException($vars,$msg);
             */
-            	return false;
+                return false;
             }
             // store the fieldname for validations who need them (e.g. file uploads)
             $name = empty($name) ? 'dd_'.$this->id : $name;

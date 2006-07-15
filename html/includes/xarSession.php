@@ -3,8 +3,8 @@
  * Session Support
  *
  * @package sessions
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Jim McDonald
  * @author Marco Canini <marco@xaraya.com>
@@ -110,10 +110,14 @@ function xarSessionGetSecurityLevel()
  * The old interface as wrappers for the class methods are here, see xarSession class 
  * for the implementation
  */
-function xarSessionGetVar($name) { return xarSession::getVar($name); }
-function xarSessionSetVar($name, $value){ return xarSession::setVar($name, $value); }
-function xarSessionDelVar($name){ return xarSession::delVar($name); }
-function xarSessionGetId(){ return xarSession::getId(); }
+function xarSessionGetVar($name) 
+{ return xarSession::getVar($name); }
+function xarSessionSetVar($name, $value)
+{ return xarSession::setVar($name, $value); }
+function xarSessionDelVar($name)
+{ return xarSession::delVar($name); }
+function xarSessionGetId()
+{ return xarSession::getId(); }
 // PROTECTED FUNCTIONS
 /** mrb: if it's protected, how come roles uses it? */
 function xarSession_setUserInfo($userId, $rememberSession)

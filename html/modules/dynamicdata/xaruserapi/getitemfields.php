@@ -30,22 +30,22 @@ function dynamicdata_userapi_getitemfields($args)
 
     $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
     foreach ($tree as $branch) {
-		$fields = xarModAPIFunc('dynamicdata','user','getprop',
-								array('modid'    => $modid,
-									  'itemtype' => $branch['itemtype']));
+        $fields = xarModAPIFunc('dynamicdata','user','getprop',
+                                array('modid'    => $modid,
+                                      'itemtype' => $branch['itemtype']));
 
-		foreach ($fields as $name => $info) {
-			if (empty($info['label'])) continue;
-			if (!empty($proptypes[$info['type']])) {
-				$type = $proptypes[$info['type']]['name'];
-			} else {
-				$type = $info['type'];
-			}
-			$itemfields[$name] = array('name'  => $name,
-									   'label' => $info['label'],
-									   'type'  => $type);
-		}
-	}
+        foreach ($fields as $name => $info) {
+            if (empty($info['label'])) continue;
+            if (!empty($proptypes[$info['type']])) {
+                $type = $proptypes[$info['type']]['name'];
+            } else {
+                $type = $info['type'];
+            }
+            $itemfields[$name] = array('name'  => $name,
+                                       'label' => $info['label'],
+                                       'type'  => $type);
+        }
+    }
     return $itemfields;
 }
 

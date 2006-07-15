@@ -70,8 +70,8 @@ function roles_userapi_get($args)
         $q->eq('xar_state',(int)$state);
     }
     if (!empty($type)) {
-	    $q->eq('xar_type',$type);
-	}
+        $q->eq('xar_type',$type);
+    }
     if (!$q->run()) return;
 
     // Check for no rows found, and if so return
