@@ -33,24 +33,22 @@ function modules_adminapi_getmenulinks()
                                 'title' => xarML('View list of all installed modules on the system'),
                                 'label' => xarML('View All'));
         }
-        
+
 /*         $menulinks[] = Array('url'  => xarModURL('modules','admin','prefs'), */
 /*                             'title' => xarML('Set various options'), */
 /*                             'label' => xarML('Preferences')); */
-        
+
         $menulinks[] = Array('url'  => xarModURL('modules','admin','hooks'),
                             'title' => xarML('Extend the functionality of your modules via hooks'),
                             'label' => xarML('Configure Hooks'));
-        
+
 /*         $menulinks[] = Array('url'   => xarModURL('modules','admin','tools'), */
 /*                              'title' => xarML('Use these tools to build and verify elements of modules.'), */
 /*                              'label' => xarML('Toolbox')); */
 
-/* This only holds the module overview mod var transferred from adminpanles - was never in a release and we don't use this now.
         $menulinks[] = Array('url'  => xarModURL('modules','admin','modifyconfig'),
                             'title' => xarML('Modify configuration parameters'),
                             'label' => xarML('Modify config'));
-*/
     }
     return $menulinks;
 }
