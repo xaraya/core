@@ -1,7 +1,5 @@
 <?php
 /**
- * Update hooks when migrating module items
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -49,10 +47,9 @@ function dynamicdata_utilapi_updatehooks($args)
         }
     }
     if (count($invalid) > 0) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    join(', ',$invalid), 'admin', 'updatehooks', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array(join(', ',$invalid), 'admin', 'updatehooks', 'DynamicData');
+        throw new BadParameterException($vars,$msg);
     }
 
     // Security check - important to do this as early on as possible to
@@ -202,8 +199,7 @@ function dynamicdata_utilapi_updatehooks($args)
                          AND $typefield = ?
                          AND $idfield IN ($bindmarkers)";
             if (empty($debug)) {
-                $result = $dbconn->Execute($query, $bindvars);
-                if (!$result) return;
+                $dbconn->Execute($query, $bindvars);
             } else {
                 $debug .= xarML('Updating hook #(1) from #(2) to #(3) for items #(4)',
                                 $tohook, "$from[module]:$from[itemtype]", "$to[module]:$to[itemtype]", join(',',array_keys($itemids)));
@@ -214,44 +210,46 @@ function dynamicdata_utilapi_updatehooks($args)
             continue;
         }
         // if the itemids changed too
-        foreach ($itemids as $itemid => $newid) {
-            if (empty($itemid) || empty($newid)) continue;
-            if ($from['module'] == $to['module'] && $from['itemtype'] == $to['itemtype'] && $itemid == $newid) {
-                // nothing changes for hooks
-                continue;
+        try {
+            $dbconn->begin();
+            foreach ($itemids as $itemid => $newid) {
+                if (empty($itemid) || empty($newid)) continue;
+                if ($from['module'] == $to['module'] && $from['itemtype'] == $to['itemtype'] && $itemid == $newid) {
+                    // nothing changes for hooks
+                    continue;
+                }
+                $bindvars = array();
+                $set = array();
+                if ($from['module'] != $to['module']) {
+                    $bindvars[] = (int) $to['module'];
+                    $set[] = $modfield . ' = ?';
+                }
+                if ($from['itemtype'] != $to['itemtype']) {
+                    $bindvars[] = (int) $to['itemtype'];
+                    $set[] = $typefield . ' = ?';
+                }
+                if ($itemid != $newid) {
+                    $bindvars[] = (int) $newid;
+                    $set[] = $idfield . ' = ?';
+                }
+                $bindvars[] = (int) $from['module'];
+                $bindvars[] = (int) $from['itemtype'];
+                $bindvars[] = (int) $itemid;
+                $query = "UPDATE $table SET " . join(', ',$set) . " WHERE $modfield = ?  AND $typefield = ? AND $idfield = ?";
+                $dbconn->Execute($query, $bindvars);
+
+                if (!empty($debug)) {
+                    $debug .= xarML('Updating hook #(1) from #(2) to #(3)',
+                                    $tohook, "$from[module]:$from[itemtype]:$itemid", "$to[module]:$to[itemtype]:$newid");
+                    $debug .= "\n";
+                    //echo var_dump($query);
+                    //echo var_dump($bindvars);
+                }
             }
-            $bindvars = array();
-            $set = array();
-            if ($from['module'] != $to['module']) {
-                $bindvars[] = (int) $to['module'];
-                $set[] = $modfield . ' = ?';
-            }
-            if ($from['itemtype'] != $to['itemtype']) {
-                $bindvars[] = (int) $to['itemtype'];
-                $set[] = $typefield . ' = ?';
-            }
-            if ($itemid != $newid) {
-                $bindvars[] = (int) $newid;
-                $set[] = $idfield . ' = ?';
-            }
-            $bindvars[] = (int) $from['module'];
-            $bindvars[] = (int) $from['itemtype'];
-            $bindvars[] = (int) $itemid;
-            $query = "UPDATE $table
-                         SET " . join(', ',$set) . "
-                       WHERE $modfield = ?
-                         AND $typefield = ?
-                         AND $idfield = ?";
-            if (empty($debug)) {
-                $result = $dbconn->Execute($query, $bindvars);
-                if (!$result) return;
-            } else {
-                $debug .= xarML('Updating hook #(1) from #(2) to #(3)',
-                                $tohook, "$from[module]:$from[itemtype]:$itemid", "$to[module]:$to[itemtype]:$newid");
-                $debug .= "\n";
-                //echo var_dump($query);
-                //echo var_dump($bindvars);
-            }
+            $dbconn->commit();
+        } catch(SQLException $e) {
+            $dbconn->rollback();
+            throw $e;
         }
     }
 

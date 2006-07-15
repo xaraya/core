@@ -176,8 +176,9 @@
             </label>
         </p>
       </form>
-      <xar:foreach in="$trees" value="$drawtree">
+      <xar:template file="tree"/>
+<!--      <xar:foreach in="$trees" value="$drawtree">
         #$drawtree['tree']#
-      </xar:foreach>
+      </xar:foreach> -->
     </fieldset>
 </div>

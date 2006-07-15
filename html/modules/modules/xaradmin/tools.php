@@ -1,7 +1,5 @@
 <?php
 /**
- * Tools to build and verify modules elements
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}

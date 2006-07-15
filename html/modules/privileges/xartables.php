@@ -1,7 +1,6 @@
 <?php
 /**
  * Table information for privileges module
- *
  * @package core modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -34,7 +33,6 @@ function privileges_xartables()
     $levels       = xarDBGetSiteTablePrefix() . '_security_levels';
     $instances   = xarDBGetSiteTablePrefix() . '_instances';
     $modules     = xarDBGetSiteTablePrefix() . '_modules';
-    $module_states   = xarDBGetSiteTablePrefix() . '_module_states';
     $privsets    = xarDBGetSiteTablePrefix() . '_security_privsets';
 
     // Set the table names
@@ -47,7 +45,6 @@ function privileges_xartables()
     $tables['security_levels'] = $levels;
     $tables['instances']      = $instances;
     $tables['modules']      = $modules;
-    $tables['module_states']      = $module_states;
     $tables['security_privsets']      = $privsets;
 
     // Return the table information

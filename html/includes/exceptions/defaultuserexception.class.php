@@ -13,7 +13,7 @@ include_once dirname(__FILE__)."/exception.class.php";
 
 class DefaultUserException extends xarException
 {
-    var $link;
+    public $link;
 
     function DefaultUserException($msg = '', $link = NULL)
     {
@@ -24,7 +24,7 @@ class DefaultUserException extends xarException
 
     function load($id) 
     {
-        if (array_key_exists($id, $this->defaults)) parent::load($id);
+        if (isset($this->defaults[$id])) parent::load($id);
         else {
             $this->title = $id;
             $this->short = "No further information available";

@@ -1,7 +1,6 @@
 <?php
 /**
  * Hook function to send mail on creation of an item
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -22,13 +21,9 @@ function mail_adminapi_hookmailcreate($args)
 {
     extract($args);
 
-    if (!isset($objectid) || !is_numeric($objectid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-            'object ID', 'admin', 'hookmailcreate', 'mail');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-            new SystemException($msg));
-        return;
-    }
+    if (!isset($objectid)) throw new EmptyParameterException('objectid');
+    if (!is_numeric($objectid)) throw new BadParameterException(array('objectid',$objectid),'Parameter #(1) ["#(2)"] is not numeric');
+
     if (!isset($extrainfo) || !is_array($extrainfo)) {
         $extrainfo = array();
     }
@@ -44,13 +39,7 @@ function mail_adminapi_hookmailcreate($args)
     }
 
     $modid = xarModGetIDFromName($modname);
-    if (empty($modid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-            'module name', 'admin', 'hookmailcreate', 'mail');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-            new SystemException($msg));
-        return;
-    }
+    if (empty($modid))  throw new IDNotFoundException("modid for $modname");
 
     if (!isset($itemtype) || !is_numeric($itemtype)) {
          if (isset($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype'])) {
