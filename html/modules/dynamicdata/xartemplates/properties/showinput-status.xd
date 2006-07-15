@@ -1,0 +1,39 @@
+<xar:if condition="isset($onchange)">
+  <xar:set name="evt_change">$onchange</xar:set>
+<xar:else/>
+  <xar:set name="evt_change">'return true;'</xar:set>
+</xar:if>
+
+<xar:if condition="isset($style)">
+    <select name="display_#$name#" id="display_#$id#_" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#" >
+<xar:else/>
+    <select name="display_#$name#" id="display_#$id#" tabindex="#$tabindex#" onchange="#$evt_change#" >
+</xar:if>
+    <xar:foreach in="$options['display']" value="$row">
+        <xar:if condition="$row['id'] eq $value['display']" >
+            <option value="#$row['id']#" selected="selected">#$row['name']#</option>
+        <xar:else />
+            <option value="#$row['id']#">#$row['name']#</option>
+        </xar:if>
+    </xar:foreach>
+</select>
+
+<xar:set name="tabindex">$tabindex + 1</xar:set>
+<xar:if condition="isset($style)">
+    <select name="input_#$name#" id="input_#$id#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#" >
+<xar:else/>
+    <select name="input_#$name#" id="input_#$id#" tabindex="#$tabindex#" onchange="#$evt_change#" >
+</xar:if>
+    <xar:foreach in="$options['input']" value="$row">
+        <xar:if condition="$row['id'] eq $value['input']" >
+            <option value="#$row['id']#" selected="selected">#$row['name']#</option>
+        <xar:else />
+            <option value="#$row['id']#">#$row['name']#</option>
+        </xar:if>
+    </xar:foreach>
+</select>
+
+<xar:if condition="!empty($invalid)">
+    <span class="xar-error">#$invalid#</span>
+</xar:if>
+
