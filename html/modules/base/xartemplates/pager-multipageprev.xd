@@ -1,7 +1,7 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:comment> Pager for displaying prev page links on multi-page documents </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!-- Pager for displaying prev page links on multi-page documents -->
 
-<xar:comment> Display first-page link if there is more than one page and we are not on that page </xar:comment>
+<!-- Display first-page link if there is more than one page and we are not on that page -->
 <div class="xar-pager">
     <xar:if condition="$currentpagenum ne $firstpagenum">
         <a title="#xarML('First page')#" href="#$firsturl#">&lt;&lt;</a>
@@ -9,7 +9,7 @@
         &nbsp;
     </xar:if>
 
-    <xar:comment> Display previous-page link if we are not on the first page </xar:comment>
+    <!-- Display previous-page link if we are not on the first page -->
     <xar:if condition="$currentpagenum ne $firstpagenum">
         &nbsp;<a title="#xarML('Previous page')#" href="#$prevpageurl#">#xarML('prev')#  (#$prevpage#/#$totalpages#)</a>
     </xar:if>

@@ -36,7 +36,10 @@ function roles_admin_displayrole()
     $data['frozen'] = xarSecurityCheck('ViewRoles',0,'Roles',$name);
 
     $data['uid'] = $role->getID();
-    $data['type'] = $role->getType();
+    $data['itemtype'] = $role->getType();
+	$data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
+	$types = xarModAPIFunc('roles','user','getitemtypes');
+	$data['itemtypename'] = $types[$data['itemtype']]['label'];
     $data['name'] = $name;
     $data['phome'] = $role->getHome();
     
@@ -55,9 +58,8 @@ function roles_admin_displayrole()
         $data['primaryparent'] ='';
     }
     //get the data for a user
-    if ($data['type'] == 0) {
+    if ($data['basetype'] == ROLES_USERTYPE) {
         $data['uname'] = $role->getUser();
-        $data['type'] = $role->getType();
         $data['email'] = $role->getEmail();
         $data['state'] = $role->getState();
         $data['valcode'] = $role->getValCode();
@@ -82,7 +84,7 @@ function roles_admin_displayrole()
 
     $item = $data;
     $item['module'] = 'roles';
-    $item['itemtype'] = $data['type']; // handle groups differently someday ?
+    $item['itemtype'] = $data['itemtype']; // handle groups differently someday ?
     $item['returnurl'] = xarModURL('roles', 'user', 'display',
                                    array('uid' => $uid));
     $hooks = array();

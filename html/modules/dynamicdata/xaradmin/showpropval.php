@@ -1,7 +1,6 @@
 <?php
 /**
  * Show validation of some property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -37,10 +36,7 @@ function dynamicdata_admin_showpropval($args)
     $newid = $myobject->getItem();
 
     if (empty($newid) || empty($myobject->properties['id']->value)) {
-        $msg = xarML('Invalid item id');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                    new SystemException($msg));
-        return;
+        throw new BadParameterException(null,'Invalid item id');
     }
 
     // check if the module+itemtype this property belongs to is hooked to the uploads module

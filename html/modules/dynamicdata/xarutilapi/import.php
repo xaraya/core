@@ -1,7 +1,5 @@
 <?php
 /**
- * Import an object definition or an object item from XML
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -17,6 +15,7 @@
  * @param $args['file'] location of the .xml file containing the object definition, or
  * @param $args['xml'] XML string containing the object definition
  * @param $args['keepitemid'] (try to) keep the item id of the different items (default false)
+ * @param $args['objectname'] optional name to override object name we're importing.
  * @return array object id on success, null on failure
  * @todo MichelV <1> add a check for already present definitions
                      so the errors get more gracious
@@ -31,15 +30,9 @@ function dynamicdata_utilapi_import($args)
     extract($args);
 
     if (empty($xml) && empty($file)) {
-        $msg = xarML('Missing import file or XML content');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                        new SystemException($msg));
-        return;
+        throw new EmptyParameterException('xml or file');
     } elseif (!empty($file) && (!file_exists($file) || !preg_match('/\.xml$/',$file)) ) {
-        $msg = xarML('Invalid import file');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                        new SystemException($msg));
-        return;
+        throw new BadParameterException($file,'Invalid importfile "#(1)"');
     }
 
     $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
@@ -58,12 +51,7 @@ function dynamicdata_utilapi_import($args)
 
     if (!empty($file)) {
         $fp = @fopen($file, 'r');
-        if (!$fp) {
-            $msg = xarML('Unable to open import file');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                           new SystemException($msg));
-            return;
-        }
+        if (!$fp) throw new BadParameterException($file,'Unable to open file "#(1)" for reading.');
     } else {
         $lines = preg_split("/\r?\n/", $xml);
         $maxcount = count($lines);
@@ -86,7 +74,12 @@ function dynamicdata_utilapi_import($args)
         if (empty($what)) {
             if (preg_match('#<object name="(\w+)">#',$line,$matches)) { // in case we import the object definition
                 $object = array();
-                $object['name'] = $matches[1];
+                if(empty($objectname)) {
+                    $object['name'] = $matches[1];
+                } else {
+                    // Overide was passed in thru $args
+                    $object['name'] = $objectname;
+                }
                 $what = 'object';
             } elseif (preg_match('#<items>#',$line)) { // in case we only import data
                 $what = 'item';
@@ -97,39 +90,32 @@ function dynamicdata_utilapi_import($args)
                 $key = $matches[1];
                 $value = $matches[2];
                 if (isset($object[$key])) {
-                    $msg = xarML('Duplicate definition for #(1) key #(2) on line #(3)','object',xarVarPrepForDisplay($key),$count);
-                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                    new SystemException($msg));
                     fclose($fp);
-                    return;
+                    $msg = 'Duplicate definition for #(1) key #(2) on line #(3)';
+                    $vars = array('object',xarVarPrepForDisplay($key),$count);
+                    throw new DuplicateException($vars,$msg);
                 }
                 $object[$key] = strtr($value,$specialchars);
             } elseif (preg_match('#<config>#',$line)) {
                 if (isset($object['config'])) {
-                    $msg = xarML('Duplicate definition for #(1) key #(2) on line #(3)','object','config',$count);
-                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                    new SystemException($msg));
                     fclose($fp);
-                    return;
+                    $msg = 'Duplicate definition for #(1) key #(2) on line #(3)';
+                    $vars = array('object','config',$count);
+                    throw new DuplicateException($vars,$msg);
                 }
                 $config = array();
                 $what = 'config';
             } elseif (preg_match('#<properties>#',$line)) {
                 // let's create the object now...
                 if (empty($object['name']) || empty($object['moduleid'])) {
-                    $msg = xarML('Missing keys in object definition');
-                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                    new SystemException($msg));
                     fclose($fp);
-                    return;
+                    throw new BadParameterException(null,'Missing keys in object definition');
                 }
                 // make sure we drop the object id, because it might already exist here
                 unset($object['objectid']);
 
-                // for objects that belong to dynamicdata itself, reset the itemtype too
-                if ($object['moduleid'] == xarModGetIDFromName('dynamicdata')) {
-                    $object['itemtype'] = -1;
-                }
+				$object['itemtype'] = xarModAPIFunc('dynamicdata','admin','getnextitemtype',
+                                               array('modid' => $object['moduleid']));
 
                 $objectid = xarModAPIFunc('dynamicdata','admin','createobject',
                                           $object);
@@ -159,11 +145,10 @@ function dynamicdata_utilapi_import($args)
                 $key = $matches[1];
                 $value = $matches[2];
                 if (isset($config[$key])) {
-                    $msg = xarML('Duplicate definition for #(1) key #(2) on line #(3)','config',xarVarPrepForDisplay($key),$count);
-                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                    new SystemException($msg));
+                    $msg = 'Duplicate definition for #(1) key #(2) on line #(3)';
+                    $vars = array('config',xarVarPrepForDisplay($key),$count);
                     fclose($fp);
-                    return;
+                    throw new DuplicateException($vars,$msg);
                 }
                 $config[$key] = strtr($value,$specialchars);
             } elseif (preg_match('#</config>#',$line)) {
@@ -179,19 +164,17 @@ function dynamicdata_utilapi_import($args)
                 $property = array();
                 $property['name'] = $matches[1];
             } elseif (preg_match('#</property>#',$line)) {
+                // remove the id in case we get a conflict with an existing id in the db
+                // dd will allocate a new one. Maybe do this more elegantly
+                unset($property['id']);
                 // let's create the property now...
                 $property['objectid'] = $objectid;
                 $property['moduleid'] = $object['moduleid'];
                 $property['itemtype'] = $object['itemtype'];
                 if (empty($property['name']) || empty($property['type'])) {
-                    $msg = xarML('Missing keys in property definition');
-                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                    new SystemException($msg));
                     fclose($fp);
-                    return;
+                    throw new BadParameterException(null,'Missing keys in property definition');
                 }
-                // make sure we drop the property id, because it might already exist here
-                unset($property['id']);
                 // convert property type to numeric if necessary
                 if (!is_numeric($property['type'])) {
                     if (isset($name2id[$property['type']])) {
@@ -206,6 +189,8 @@ function dynamicdata_utilapi_import($args)
 
                 $prop_id = xarModAPIFunc('dynamicdata','admin','createproperty',
                                          $property);
+                // make sure we drop the property, because it might already exist here
+                unset($property);
                 if (!isset($prop_id)) {
                     fclose($fp);
                     return;
@@ -215,18 +200,19 @@ function dynamicdata_utilapi_import($args)
                 $value = $matches[2];
                 if (isset($property[$key])) {
                     // TODO: make sure we do not encounter this error when there are duplicate labels due to spaces
-                    $msg = xarML('Duplicate definition for #(1) key #(2) on line #(3)','property',xarVarPrepForDisplay($key),$count);
-                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                    new SystemException($msg));
                     fclose($fp);
-                    return;
+                    $msg = 'Duplicate definition for #(1) key #(2) on line #(3)';
+                    $vars = array('property',xarVarPrepForDisplay($key),$count);
+                    throw new DuplicateException($vars,$msg);
                 }
                 $property[$key] = strtr($value,$specialchars);
             } elseif (preg_match('#</properties>#',$line)) {
                 $what = 'object';
             } elseif (preg_match('#<items>#',$line)) {
+            	unset($item);
                 $what = 'item';
             } elseif (preg_match('#</object>#',$line)) {
+            	unset($object);
                 $what = '';
             } else {
                 // multi-line entries not relevant here
@@ -242,11 +228,10 @@ function dynamicdata_utilapi_import($args)
                     if (isset($objectinfo) && !empty($objectinfo['objectid'])) {
                         $objectname2objectid[$objectname] = $objectinfo['objectid'];
                     } else {
-                        $msg = xarML('Unknown #(1) "#(2)" on line #(3)','object',xarVarPrepForDisplay($objectname),$count);
-                        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                        new SystemException($msg));
+                        $msg = 'Unknown #(1) "#(2)" on line #(3)';
+                        $vars = array('object',xarVarPrepForDisplay($objectname),$count);
                         fclose($fp);
-                        return;
+                        throw new BadParameterException($vars,$msg);
                     }
                 }
                 $objectid = $objectname2objectid[$objectname];
@@ -300,11 +285,10 @@ function dynamicdata_utilapi_import($args)
                 $key = $matches[1];
                 $value = $matches[2];
                 if (isset($item[$key])) {
-                    $msg = xarML('Duplicate definition for #(1) key #(2) on line #(3)','item',xarVarPrepForDisplay($key),$count);
-                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                    new SystemException($msg));
+                    $msg = 'Duplicate definition for #(1) key #(2) on line #(3)';
+                    $vars = array('item',xarVarPrepForDisplay($key),$count);
                     fclose($fp);
-                    return;
+                    throw new DuplicateException($vars,$msg);
                 }
                 $item[$key] = strtr($value,$specialchars);
                 $closetag = 'N/A';
@@ -313,11 +297,10 @@ function dynamicdata_utilapi_import($args)
                 $key = $matches[1];
                 $value = $matches[2];
                 if (isset($item[$key])) {
-                    $msg = xarML('Duplicate definition for #(1) key #(2)','item',xarVarPrepForDisplay($key));
-                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                    new SystemException($msg));
+                    $msg = 'Duplicate definition for #(1) key #(2)';
+                    $vars = array('item',xarVarPrepForDisplay($key));
                     fclose($fp);
-                    return;
+                    throw new DuplicateException($vars,$msg);
                 }
                 $item[$key] = strtr($value,$specialchars);
                 $closetag = $key;
@@ -325,22 +308,20 @@ function dynamicdata_utilapi_import($args)
                 // multi-line entries *are* relevant here
                 $value = $matches[1];
                 if (!isset($item[$closetag])) {
-                    $msg = xarML('Undefined #(1) key #(2)','item',xarVarPrepForDisplay($closetag));
-                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                    new SystemException($msg));
+                    $msg = 'Undefined #(1) key #(2)';
+                    $vars = array('item',xarVarPrepForDisplay($closetag));
                     fclose($fp);
-                    return;
+                    throw new BadParameterException($vars,$msg);
                 }
                 $item[$closetag] .= strtr($value,$specialchars);
                 $closetag = 'N/A';
             } elseif ($closetag != 'N/A') {
                 // multi-line entries *are* relevant here
                 if (!isset($item[$closetag])) {
-                    $msg = xarML('Undefined #(1) key #(2)','item',xarVarPrepForDisplay($closetag));
-                    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                                    new SystemException($msg));
+                    $msg = 'Undefined #(1) key #(2)';
+                    $vars = array('item',xarVarPrepForDisplay($closetag));
                     fclose($fp);
-                    return;
+                    throw new BadParameterException($vars,$msg);
                 }
                 $item[$closetag] .= strtr($line,$specialchars);
             } elseif (preg_match('#</items>#',$line)) {
@@ -355,7 +336,6 @@ function dynamicdata_utilapi_import($args)
     if (!empty($file)) {
         fclose($fp);
     }
-
     // adjust maxid (for objects stored in the dynamic_data table)
     if (count($objectcache) > 0 && count($objectmaxid) > 0) {
         foreach (array_keys($objectcache) as $objectid) {
@@ -365,6 +345,7 @@ function dynamicdata_utilapi_import($args)
                 if (empty($itemid)) return;
             }
         }
+		unset($objectcache);
     }
 
     return isset($objectid) ? $objectid : null;

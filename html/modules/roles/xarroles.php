@@ -11,6 +11,7 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 
+/** Marc: we *really* need to discuss this, wrt performance and bind variables */
 include_once dirname(__FILE__).'/xarincludes/xarQuery.php';
 
 define('ROLES_STATE_DELETED',0);
@@ -20,8 +21,11 @@ define('ROLES_STATE_ACTIVE',3);
 define('ROLES_STATE_PENDING',4);
 define('ROLES_STATE_CURRENT',98);
 define('ROLES_STATE_ALL',99);
-define('ROLES_USERTYPE',0);
-define('ROLES_GROUPTYPE',1);
+
+define('ROLES_ROLETYPE',1);
+define('ROLES_USERTYPE',2);
+define('ROLES_GROUPTYPE',3);
+
 /**
  * xarRoles: class for the role repository
  *
@@ -34,11 +38,11 @@ define('ROLES_GROUPTYPE',1);
  */
 class xarRoles
 {
-    var $allgroups = array();
-    var $users = array();
-    var $dbconn;
-    var $rolestable;
-    var $rolememberstable;
+    public $allgroups = array();
+    public $users = array();
+    public $dbconn;
+    public $rolestable;
+    public $rolememberstable;
 
     function xarRoles()
     {
@@ -65,25 +69,13 @@ class xarRoles
      */
     function getgroups()
     {
-        // check if we already have the groups stored
-        if ((!isset($this->allgroups)) || count($this->allgroups) == 0) {
-            // set up the query and get the groups
-            $q = new xarQuery('SELECT');
-            $q->addtable($this->rolestable,'r');
-            $q->addtable($this->rolememberstable,'rm');
-            $q->join('r.xar_uid','rm.xar_uid');
-            $q->addfield('r.xar_uid AS uid');
-            $q->addfield('r.xar_name AS name');
-            $q->addfield('r.xar_users AS users');
-            $q->addfield('rm.xar_parentid AS parentid');
-            $q->eq('r.xar_type',1);
-            $q->eq('r.xar_state',ROLES_STATE_ACTIVE);
-            $q->setorder('r.xar_name');
+        static $allgroups = array();
+        if (empty($allgroups)) {
+        	$q = $this->_getgroupsquery();
             if (!$q->run()) return;
-
-            $this->allgroups = $q->output();
+            $allgroups = $q->output();
         }
-        return $this->allgroups;
+        return $allgroups;
     }
 
     /**
@@ -101,10 +93,45 @@ class xarRoles
      */
     function getgroup($uid)
     {
-        foreach($this->getgroups() as $group) {
-            if ($group['uid'] == $uid) return $group;
-        }
+		$q = $this->_getgroupsquery();
+		$q->eq('r.xar_uid',$uid);
+		if (!$q->run()) return;
+		if ($q->row() != array()) return $q->row();
         return false;
+    }
+
+    /**
+     * _getgroupsquery: query for getting groups
+     *
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @access private
+     * @todo none
+     */
+    private function _getgroupsquery()
+    {
+		$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27));
+		$basetypes = array();
+		foreach ($types as $key => $value) {
+			$basetype = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $key, 'moduleid' => 27));
+			if ($basetype['itemtype'] == ROLES_GROUPTYPE) $basetypes[] = $key;
+		}
+		// set up the query and get the groups
+		$q = new xarQuery('SELECT');
+		$q->addtable($this->rolestable,'r');
+		$q->addtable($this->rolememberstable,'rm');
+		$q->join('r.xar_uid','rm.xar_uid');
+		$q->addfield('r.xar_uid AS uid');
+		$q->addfield('r.xar_name AS name');
+		$q->addfield('r.xar_users AS users');
+		$q->addfield('rm.xar_parentid AS parentid');
+		$c = array();
+		foreach ($basetypes as $type) {
+			$c[] = $q->eq('r.xar_type',$type);
+		}
+		$q->qor($c);
+		$q->eq('r.xar_state',ROLES_STATE_ACTIVE);
+		$q->setorder('r.xar_name');
+        return $q;
     }
 
     /**
@@ -168,7 +195,7 @@ class xarRoles
      * @param string $
      * @return role object
      * @throws none
-     * @todo none
+     * @todo cache this too?
      */
     function findRole($name)
     {
@@ -180,7 +207,7 @@ class xarRoles
         return $this->_lookuprole('xar_uname',$uname);
     }
 
-    function _lookuprole($field,$value,$state=ROLES_STATE_ALL)
+    private function _lookuprole($field,$value,$state=ROLES_STATE_ALL)
     {
         // retrieve the object's data from the repository
         // set up and execute the query
@@ -199,11 +226,13 @@ class xarRoles
         $row = $q->row();
         if (empty($row)) return;
 
-        $duvarray = array('userhome','primaryparent','passwordupdate','timezone','userlastlogin');
+        $duvarray = array('userhome','primaryparent','passwordupdate','timezone');
         $duvs = array();
         foreach ($duvarray as $key) {
-            $duv = xarModGetUserVar('roles',$key,$row['xar_uid']);
-            if (!empty($duv)) $duvs[$key] = $duv;
+            if (xarModGetVar('roles',$key)) {
+                $duvs[$key] = xarModGetUserVar('roles',$key,$row['xar_uid']);
+                $duvs[$key] = ($duvs[$key] == 1) ? '' : $duv;
+            }
         }
         $pargs = array(
             'uid' =>         $row['xar_uid'],
@@ -216,8 +245,8 @@ class xarRoles
             'date_reg' =>    $row['xar_date_reg'],
             'val_code' =>    $row['xar_valcode'],
             'state' =>       $row['xar_state'],
-            'auth_module' => $row['xar_auth_module'],
-            'duvs'          => $duvs);
+            'auth_module' => $row['xar_auth_modid'],
+            'duvs'          => $duvs    );
         // create and return the role object
         return new xarRole($pargs);
     }
@@ -235,51 +264,55 @@ class xarRoles
      * @return boolean
      * @throws none
      * @todo create exceptions for bad input
+     * @todo seems we could do this in one query instead of two?
      */
     function makeMemberByName($childname, $parentname)
     {
         // retrieve the parent's data from the repository
         $query = "SELECT * FROM $this->rolestable WHERE xar_name = ?";
+        // Prepare it once
+        $stmt = $this->dbconn->prepareStatement($query);
+
         // Execute the query, bail if an exception was thrown
-        $result = $this->dbconn->Execute($query,array($parentname));
-        if (!$result) return;
+        $result = $stmt->executeQuery(array($parentname));
+        $result->first();
+
         // create the parent object
         list($uid, $name, $type, $parentid, $uname, $email, $pass,
             $date_reg, $val_code, $state, $auth_module) = $result->fields;
         $pargs = array('uid' => $uid,
-            'name' => $name,
-            'type' => $type,
-            'parentid' => $parentid,
-            'uname' => $uname,
-            'email' => $email,
-            'pass' => $pass,
-            'date_reg' => $date_reg,
-            'val_code' => $val_code,
-            'state' => $state,
-            'auth_module' => $auth_module);
+                       'name' => $name,
+                       'type' => $type,
+                       'parentid' => $parentid,
+                       'uname' => $uname,
+                       'email' => $email,
+                       'pass' => $pass,
+                       'date_reg' => $date_reg,
+                       'val_code' => $val_code,
+                       'state' => $state,
+                       'auth_module' => $auth_module);
         $parent = new xarRole($pargs);
         // retrieve the child's data from the repository
-        $query = "SELECT * FROM $this->rolestable
-                  WHERE xar_name = ?";
         // Execute the query, bail if an exception was thrown
-        $result = $this->dbconn->Execute($query,array($childname));
-        if (!$result) return;
+        $result = $stmt->executeQuery(array($childname));
+        $result->first();
+
         // create the child object
         list($uid, $name, $type, $parentid, $uname, $email, $pass,
             $date_reg, $val_code, $state, $auth_module) = $result->fields;
         $pargs = array('uid' => $uid,
-            'name' => $name,
-            'type' => $type,
-            'parentid' => $parentid,
-            'uname' => $uname,
-            'email' => $email,
-            'pass' => $pass,
-            'date_reg' => $date_reg,
-            'val_code' => $val_code,
-            'state' => $state,
-            'auth_module' => $auth_module);
+                       'name' => $name,
+                       'type' => $type,
+                       'parentid' => $parentid,
+                       'uname' => $uname,
+                       'email' => $email,
+                       'pass' => $pass,
+                       'date_reg' => $date_reg,
+                       'val_code' => $val_code,
+                       'state' => $state,
+                       'auth_module' => $auth_module);
         $child = new xarRole($pargs);
-        // done
+       // done
         return $parent->addMember($child);
     }
 
@@ -304,13 +337,13 @@ class xarRoles
                   WHERE xar_name = ?";
         // Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query,array($rootname));
-        if (!$result) return;
+
         // create the entry
         list($uid) = $result->fields;
         $query = "INSERT INTO $this->rolememberstable
-                VALUES (?,0)";
+                VALUES (?,?)";
         // Execute the query, bail if an exception was thrown
-        if (!$this->dbconn->Execute($query, array($uid))) return;
+        $this->dbconn->Execute($query, array($uid,0));
         // done
         return true;
     }
@@ -334,28 +367,17 @@ class xarRoles
     {
         // TODO: validate the email address
         if (empty($name) && empty($uname) || empty($email)) {
-            $msg = xarML('You must enter a user name and a valid email address.',
-                'roles');
-            xarErrorSet(XAR_USER_EXCEPTION,
-                'DUPLICATE_DATA',
-                new DefaultUserException($msg));
-            xarSessionSetVar('errormsg', _MODARGSERROR);
-            return false;
+            $msg = 'You must enter a user name and a valid email address.';
+            throw new EmptyParameterException(null,$msg);
         }
         // Confirm that this group or user does not already exist
         $q = new xarQuery('SELECT',$this->rolestable);
         $q->eq('xar_uname',$uname);
 
         if (!$q->run()) return;
-        if ($q->getrows() == 1) {
-            $msg = xarML('This entry already exists.',
-                'roles');
-            xarErrorSet(XAR_USER_EXCEPTION,
-                'DUPLICATE_DATA',
-                new DefaultUserException($msg));
-            xarSessionSetVar('errormsg', _GROUPALREADYEXISTS);
-            return false;
-        }
+        if ($q->getrows() > 0)
+            throw new DuplicateException(array('user',$uname));
+
         // create an ID for the user
         $nextId = $this->dbconn->genID($this->rolestable);
 
@@ -363,14 +385,14 @@ class xarRoles
         $tablefields = array(
             array('name' => 'xar_uid',         'value' => $nextId),
             array('name' => 'xar_name',        'value' => $name),
-            array('name' => 'xar_type',        'value' => 0),
+            array('name' => 'xar_type',        'value' => ROLES_USERTYPE),
             array('name' => 'xar_uname',       'value' => $uname),
             array('name' => 'xar_email',       'value' => $email),
             array('name' => 'xar_pass',        'value' => $pass),
             array('name' => 'xar_date_reg',    'value' => time()),
             array('name' => 'xar_valcode',     'value' => $valcode),
             array('name' => 'xar_state',       'value' => $state),
-            array('name' => 'xar_auth_module', 'value' => $authmodule),
+            array('name' => 'xar_auth_modid', 'value' => $authmodule),
         );
         $q = new xarQuery('INSERT',$this->rolestable);
         $q->addfields($tablefields);
@@ -402,22 +424,18 @@ class xarRoles
         if (!$q->run()) return;
 
         $row = $q->row();
-        if ($row['COUNT(*)'] == 1) {
-            $msg = xarML('This entry already exists.',
-                'roles');
-            xarErrorSet(XAR_USER_EXCEPTION,
-                'DUPLICATE_DATA',
-                new DefaultUserException($msg));
+        if ($row['COUNT(*)'] > 0) {
+            throw new DuplicateException(array('group',$name));
             return false;
         }
 
         $createdate = time();
         $query = "INSERT INTO $this->rolestable
                     (xar_uid, xar_name, xar_type, xar_uname,xar_date_reg)
-                  VALUES (?,?,1,?,?)";
+                  VALUES (?,?,?,?,?)";
         $bindvars = array($this->dbconn->genID($this->rolestable),
-                          $name, $uname, $createdate);
-        if (!$this->dbconn->Execute($query,$bindvars)) return;
+                          $name, ROLES_GROUPTYPE, $uname, $createdate);
+        $this->dbconn->Execute($query,$bindvars);
         // done
         return true;
     }
@@ -435,29 +453,28 @@ class xarRoles
  */
 class xarRole
 {
-    var $uid;          //the id of this user or group
-    var $name;         //the name of this user or group
-    var $type;         //the type of this role (0=user, 1=group)
-    var $parentid;     //the id of the parent of this role
-    var $uname;        //the user name (not used by groups)
-    var $email;        //the email address (not used by groups)
-    var $pass;         //the password (not used by groups)
-    var $date_reg;     //the date of registration
-    var $val_code;     //the validation code of this user or group
-    var $state;        //the state of this user or group
-    var $auth_module;  //no idea what this is (not used by groups)
-//    var $userhome;     //home page for this role
-//    var $primaryparent;//primary group for this role
-    var $duvs;         //property for holding dynamic user vars
-    var $parentlevel;  //we use this just to store transient information
+    public $uid;          //the id of this user or group
+    public $name;         //the name of this user or group
+    public $type;         //the type of this role (0=user, 1=group)
+    public $parentid;     //the id of the parent of this role
+    public $uname;        //the user name (not used by groups)
+    public $email;        //the email address (not used by groups)
+    public $pass;         //the password (not used by groups)
+    public $date_reg;     //the date of registration
+    public $val_code;     //the validation code of this user or group
+    public $state;        //the state of this user or group
+    public $auth_module;  //no idea what this is (not used by groups)
+    public $duvs;         //property for holding dynamic user vars
+    public $parentlevel;  //we use this just to store transient information
+    public $basetype;     //the base itemtype. we add this so it can be passed rather than calculated here
 
-    var $dbconn;
-    var $rolestable;
-    var $rolememberstable;
-    var $privilegestable;
-    var $acltable;
+    public $dbconn;
+    public $rolestable;
+    public $rolememberstable;
+    public $privilegestable;
+    public $acltable;
 
-    var $allprivileges;
+    public $allprivileges;
 
     /**
      * xarRole: constructor for the role object
@@ -483,8 +500,10 @@ class xarRole
         $this->acltable = $xartable['security_acl'];
 
         if (!isset($uid)) $uid = 0;
-        if (!isset($parentid)) $parentid = 0;
-        if (!isset($uname)) $uname = xarSessionGetVar('uid') . time();
+        if (!isset($type)) $type = ROLES_USERTYPE;
+        if (!isset($parentid)) $parentid = 1;
+        if (!isset($uname)) $uname = xarSessionGetVar('uid') . microtime();
+        usleep(1);// <-- Huh? why?
         if (!isset($email)) $email = '';
         if (!isset($pass)) $pass = '';
         if (!isset($state)) $state = ROLES_STATE_INACTIVE;
@@ -493,6 +512,7 @@ class xarRole
         if (!isset($val_code)) $val_code = 'createdbyadmin';
         // FIXME: what is a sensible default for auth_module?
         if (!isset($auth_module)) $auth_module = 0;
+        if (!isset($basetype)) $basetype = 0;
 
         $this->uid = (int) $uid;
         $this->name = $name;
@@ -506,7 +526,8 @@ class xarRole
         $this->val_code = $val_code;
         $this->auth_module = $auth_module;
         $this->parentlevel = 0;
-        $this->duvs = isset($duvs) ? $duvs : array();
+		$this->duvs = isset($duvs) ? $duvs : array();
+        $this->basetype = $basetype;
     }
 
     /**
@@ -521,30 +542,19 @@ class xarRole
      * @throws none
      * @todo none
      */
+
     function add()
     {
-        if (empty($this->name)) {
-            $msg = xarML('You must enter a name.',
-                'roles');
-            xarErrorSet(XAR_USER_EXCEPTION,
-                'DUPLICATE_DATA',
-                new DefaultUserException($msg));
-            xarSessionSetVar('errormsg', _MODARGSERROR);
-            return false;
-        }
+        if (empty($this->name))
+            throw new EmptyParameterException('name');
+
         // TODO: validate the email address
-        if ((empty($this->type)) && (empty($this->uname) || empty($this->email))) {
-            $msg = xarML('You must enter a user name and a valid email address.',
-                'roles');
-            xarErrorSet(XAR_USER_EXCEPTION,
-                'DUPLICATE_DATA',
-                new DefaultUserException($msg));
-            xarSessionSetVar('errormsg', _MODARGSERROR);
-            return false;
-        }
+        if (($this->basetype == ROLES_USERTYPE) && (empty($this->uname) || empty($this->email)))
+            throw new EmptyParameterException('user name and valid email address.');
+
         // Confirm that this group or user does not already exist
         $q = new xarQuery('SELECT',$this->rolestable);
-        if ($this->type == 1) {
+        if ($this->basetype == ROLES_GROUPTYPE) {
             $q->eq('xar_name',$this->name);
         } else {
             $q->eq('xar_uname',$this->uname);
@@ -552,39 +562,29 @@ class xarRole
 
         if (!$q->run()) return;
 
-        if ($q->getrows() == 1) {
-            $msg = xarML('This entry already exists.',
-                'roles');
-            xarErrorSet(XAR_USER_EXCEPTION,
-                'DUPLICATE_DATA',
-                new DefaultUserException($msg));
-            xarSessionSetVar('errormsg', _GROUPALREADYEXISTS);
-            return false;
-        }
+        if ($q->getrows() > 0) {
+            throw new DuplicateException(array('role',($this->type==1)?$this->name:$this->uname));
+            }
 
         $nextId = $this->dbconn->genID($this->rolestable);
 
-        $tablefields = array(
-            array('name' => 'xar_uid',      'value' => $nextId),
-            array('name' => 'xar_name',     'value' => $this->name),
-            array('name' => 'xar_uname',    'value' => $this->uname),
-            array('name' => 'xar_date_reg', 'value' => time()),
-            array('name' => 'xar_valcode',  'value' => $this->val_code),
-        );
         $q = new xarQuery('INSERT',$this->rolestable);
+        $tablefields = array(
+            array('name' => 'xar_uid',        'value' => $nextId),
+            array('name' => 'xar_name',       'value' => $this->name),
+            array('name' => 'xar_uname',      'value' => $this->uname),
+            array('name' => 'xar_date_reg',   'value' => time()),
+            array('name' => 'xar_valcode',    'value' => $this->val_code),
+			array('name' => 'xar_auth_modid', 'value' => $this->auth_module),
+			array('name' => 'xar_type',       'value' => $this->type),
+        );
         $q->addfields($tablefields);
-        if ($this->type == 1) {
-            $groupfields = array(
-                array('name' => 'xar_type', 'value' => 1)
-            );
-            $q->addfields($groupfields);
-        } else {
+        if ($this->basetype == ROLES_USERTYPE) {
             $userfields = array(
-                array('name' => 'xar_type',       'value' => 0),
                 array('name' => 'xar_email',      'value' => $this->email),
                 array('name' => 'xar_pass',       'value' => md5($this->pass)),
                 array('name' => 'xar_state',      'value' => $this->state),
-                array('name' => 'xar_auth_module','value' => $this->auth_module)
+                array('name' => 'xar_auth_modid','value' => $this->auth_module)
             );
             $q->addfields($userfields);
         }
@@ -639,13 +639,13 @@ class xarRole
             // get the current count
             $query = "SELECT xar_users FROM $this->rolestable WHERE xar_uid = ?";
             $result = $this->dbconn->Execute($query,array($this->getID()));
-            if (!$result) return;
+
             // add 1 and update.
             list($users) = $result->fields;
             $users = $users + 1;
             $query = "UPDATE " . $this->rolestable . " SET xar_users = ? WHERE xar_uid = ?";
             $bindvars = array($users,$this->getID());
-            if (!$this->dbconn->Execute($query,$bindvars)) return;
+            $this->dbconn->Execute($query,$bindvars);
         }
         // empty the privset cache
         // $privileges = new xarPrivileges();
@@ -664,27 +664,27 @@ class xarRole
      * @param role $ object
      * @return boolean
      * @throws none
-     * @todo none
+     * @todo add transaction around the delete and the update
      */
     function removeMember($member)
     {
         // delete the relevant entry from the rolemembers table
         $query = "DELETE FROM $this->rolememberstable WHERE xar_uid= ? AND xar_parentid= ?";
         $bindvars = array($member->getID(), $this->getID());
-        if (!$this->dbconn->Execute($query,$bindvars)) return;
+        $this->dbconn->Execute($query,$bindvars);
         // for children that are users
         // subtract 1 from the users field of the parent group. This is for display purposes.
         if ($member->isUser()) {
             // get the current count.
             $query = "SELECT xar_users FROM $this->rolestable WHERE xar_uid = ?";
             $result = $this->dbconn->Execute($query,array($this->getID()));
-            if (!$result) return;
+
             // subtract 1 and update.
             list($users) = $result->fields;
             $users = $users - 1;
             $query = "UPDATE " . $this->rolestable . " SET xar_users = ? WHERE xar_uid = ?";
             $bindvars = array($users, $this->getID());
-            if (!$this->dbconn->Execute($query,$bindvars)) return;
+            $this->dbconn->Execute($query,$bindvars);
         }
         // empty the privset cache
         // $privileges = new xarPrivileges();
@@ -701,7 +701,7 @@ class xarRole
         $q->addfield('xar_uname',$this->uname);
         $q->addfield('xar_email',$this->email);
         $q->addfield('xar_state',$this->state);
-        $q->addfield('xar_auth_module',$this->auth_module);
+        $q->addfield('xar_auth_modid',$this->auth_module);
         if ($this->pass != '') $q->addfield('xar_pass',md5($this->pass));
         $q->eq('xar_uid',$this->getID());
 
@@ -729,7 +729,7 @@ class xarRole
         $query = "SELECT xar_parentid FROM $this->rolememberstable WHERE xar_uid= ?";
         // Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query,array($this->getID()));
-        if (!$result) return;
+
         // get the Roles class so we can use its methods
         $parts = new xarRoles();
         // go through the list, retrieving the roles and detaching each one
@@ -818,7 +818,6 @@ class xarRole
         if (empty($allprivileges)) {
             $query = "SELECT xar_pid, xar_name FROM $this->privilegestable ORDER BY xar_name";
             $result = $this->dbconn->Execute($query);
-            if (!$result) return;
 
             $ind = 0;
             while (!$result->EOF) {
@@ -836,6 +835,7 @@ class xarRole
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @return array of privilege objects
+     * @todo seems to me this belongs in privileges.
      */
     function getAssignedPrivileges()
     {
@@ -851,12 +851,12 @@ class xarRole
                           xar_component, xar_instance, xar_level, xar_description
                   FROM    $this->privilegestable p, $this->acltable acl
                   WHERE   p.xar_pid = acl.xar_permid AND acl.xar_partid = ?";
-        $result = $this->dbconn->Execute($query,array($this->uid));
-        if (!$result) return;
+        if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery(array($this->uid));
 
         include_once 'modules/privileges/xarprivileges.php';
         $privileges = array();
-        while (!$result->EOF) {
+        while ($result->next()) {
             list($pid, $name, $realm, $module, $component, $instance, $level,
                 $description) = $result->fields;
             $perm = new xarPrivilege(array('pid' => $pid,
@@ -869,7 +869,6 @@ class xarRole
                     'description' => $description,
                     'parentid' => 0));
             array_push($privileges, $perm);
-            $result->MoveNext();
         }
         xarVarSetCached($cacheKey,$this->uid,$privileges);
         return $privileges;
@@ -884,6 +883,7 @@ class xarRole
      */
     function getInheritedPrivileges()
     {
+        // mrb: is this only dependent on $this->uid? if so, we can cache it too.
         $ancestors = $this->getAncestors();
         $inherited = array();
         foreach ($ancestors as $ancestor) {
@@ -927,7 +927,7 @@ class xarRole
         // create an entry in the privmembers table
         $query = "INSERT INTO $this->acltable VALUES (?,?)";
         $bindvars = array($this->getID(),$perm->getID());
-        if (!$this->dbconn->Execute($query,$bindvars)) return;
+        $this->dbconn->Execute($query,$bindvars);
         // empty the privset cache
         // $privileges = new xarPrivileges();
         // $privileges->forgetprivsets();
@@ -950,7 +950,7 @@ class xarRole
         $query = "DELETE FROM $this->acltable
                   WHERE xar_partid= ? AND xar_permid= ?";
         $bindvars = array($this->uid, $perm->getID());
-        if (!$this->dbconn->Execute($query,$bindvars)) return;
+        $this->dbconn->Execute($query,$bindvars);
         // empty the privset cache
         // $privileges = new xarPrivileges();
         // $privileges->forgetprivsets();
@@ -975,7 +975,7 @@ class xarRole
     {
         $query = "SELECT r.xar_uid, r.xar_name, r.xar_type, r.xar_uname,
                          r.xar_email, r.xar_pass, r.xar_date_reg,
-                         r.xar_valcode, r.xar_state,r.xar_auth_module
+                         r.xar_valcode, r.xar_state,r.xar_auth_modid
                   FROM $this->rolestable r, $this->rolememberstable rm
                   WHERE r.xar_uid = rm.xar_uid AND
                         r.xar_type = ? AND
@@ -995,7 +995,7 @@ class xarRole
         } else {
             $result = $this->dbconn->Execute($query,$bindvars);
         }
-        if (!$result) return;
+
         // CHECKME: I suppose this is what you meant here ?
         $parentid = $this->uid;
         // arrange the data in an array of role objects
@@ -1004,19 +1004,24 @@ class xarRole
             list($uid, $name, $type, $uname, $email, $pass,
                 $date_reg, $val_code, $state, $auth_module) = $result->fields;
             $pargs = array('uid' => $uid,
-                'name' => $name,
-                'type' => $type,
-                'parentid' => $parentid,
-                'uname' => $uname,
-                'email' => $email,
-                'pass' => $pass,
-                'date_reg' => $date_reg,
-                'val_code' => $val_code,
-                'state' => $state,
-                'auth_module' => $auth_module);
-            $duvarray = array('userhome','primaryparent','passwordupdate','timezone','userlastlogin');
+                           'name' => $name,
+                           'type' => $type,
+                           'parentid' => $parentid,
+                           'uname' => $uname,
+                           'email' => $email,
+                           'pass' => $pass,
+                           'date_reg' => $date_reg,
+                           'val_code' => $val_code,
+                           'state' => $state,
+                           'auth_module' => $auth_module);
+            $duvarray = array('userhome','primaryparent','passwordupdate','timezone');
             $vars = array();
-            foreach ($duvarray as $key) $vars[$key] = xarModGetUserVar('roles',$key,$pargs['uid']);
+            foreach ($duvarray as $key) {
+                if (xarModGetVar('roles',$key)) {
+                    $vars[$key] = xarModGetUserVar('roles',$key,$pargs['uid']);
+                    $vars[$key] = ($vars[$key] == 1) ? '' : $vars[$key];
+                }
+            }
             $pargs = array_merge($pargs,$vars);
             $users[] = new xarRole($pargs);
             $result->MoveNext();
@@ -1105,40 +1110,39 @@ class xarRole
 
         // if this is a user just perform a SELECT on the rolemembers table
         $query = "SELECT r.*
-                    FROM $this->rolestable r, $this->rolememberstable rm
-                    WHERE r.xar_uid = rm.xar_parentid
-                    AND rm.xar_uid = ?";
-        $result = $this->dbconn->Execute($query,array($this->uid));
-        if (!$result) return;
+                  FROM $this->rolestable r, $this->rolememberstable rm
+                  WHERE r.xar_uid = rm.xar_parentid AND rm.xar_uid = ?";
+        if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery(array($this->uid));
+
         // collect the table values and use them to create new role objects
-        while (!$result->EOF) {
+        while ($result->next()) {
             list($uid, $name, $type, $parentid, $uname, $email, $pass,
                 $date_reg, $val_code, $state, $auth_module) = $result->fields;
-            $vars = array();
-
-            $duvarray = array('userhome','primaryparent','passwordupdate','timezone','userlastlogin');
-            $duvs = array();
-            foreach ($duvarray as $key) {
-                $duv = xarModGetUserVar('roles',$key,$uid);
-                if (!empty($duv)) $duvs[$key] = $duv;
-            }
             $pargs = array('uid' => $uid,
-                'name' => $name,
-                'type' => $type,
-                'parentid' => $parentid,
-                'uname' => $uname,
-                'email' => $email,
-                'pass' => $pass,
-                'date_reg' => $date_reg,
-                'val_code' => $val_code,
-                'state' => $state,
-                'auth_module' => $auth_module,
-                'duvs'=>$duvs);
-
+                           'name' => $name,
+                           'type' => $type,
+                           'parentid' => $parentid,
+                           'uname' => $uname,
+                           'email' => $email,
+                           'pass' => $pass,
+                           'date_reg' => $date_reg,
+                           'val_code' => $val_code,
+                           'state' => $state,
+                           'auth_module' => $auth_module);
+            $duvarray = array('userhome','primaryparent','passwordupdate','timezone');
+            $vars = array();
+            foreach ($duvarray as $key) {
+                if (xarModGetVar('roles',$key)) {
+                    $vars[$key] = xarModGetUserVar('roles',$key,$pargs['uid']);
+                    $vars[$key] = ($vars[$key] == 1) ? '' : $vars[$key];
+                }
+            }
+            $pargs = array_merge($pargs,$vars);
             $parents[] = new xarRole($pargs);
-            $result->MoveNext();
         }
         // done
+        xarVarSetCached($cacheKey,$this->uid,$parents);
         return $parents;
     }
 
@@ -1155,6 +1159,7 @@ class xarRole
     {
         // if this is the root return an empty array
         if ($this->getID() == 1) return array();
+
         // start by getting an array of the parents
         $parents = $this->getParents();
         $parents1 = array();
@@ -1196,7 +1201,7 @@ class xarRole
      * @param integer state get users in this state
      * @return list of users
      * @throws none
-     * @todo none
+     * @todo evaluate performance of this (3 loops, of which 2 nested)
      */
     function getDescendants($state = ROLES_STATE_CURRENT, $grpflag=0)
     {
@@ -1206,7 +1211,7 @@ class xarRole
         $groups = $roles->getSubGroups($this->uid);
         $ua = array();
         foreach($users as $user){
-            //using the ID as the key so that if a person is in more than one sub group they only get one email
+            //using the ID as the key so that if a person is in more than one sub group they only get one email (mrb: email?)
             $ua[$user->getID()] = $user;
         }
         //Get the sub groups and go for another round
@@ -1243,8 +1248,8 @@ class xarRole
     /**
      * isUser: checks whether this role is a user
      *
-     * Users have type = 0.
-     * Groups have type = 1.
+     * Users have type = 2.
+     * Groups have type = 3.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @access public
@@ -1255,7 +1260,8 @@ class xarRole
      */
     function isUser()
     {
-        return $this->getType() == 0;
+		$base = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $this->getType(), 'moduleid' => 27));
+        return $base['itemtype'] == ROLES_USERTYPE;
     }
 
     /**
@@ -1338,14 +1344,14 @@ class xarRole
      * @param none $
      * @return array of privilege objects
      * @throws none
-     * @todo none
+     * @todo is this still used?
      */
     function getPrivileges()
     {
         /*  // start by getting an array of all the privileges
             $query = "SELECT * FROM $this->privilegestable";
             $result = $this->dbconn->Execute($query);
-            if (!$result) return;
+
 
             $privileges = array();
             while(!$result->EOF) {
@@ -1390,7 +1396,7 @@ class xarRole
      * @param n $ /a
      * @return n /a
      * @throws none
-     * @todo none
+     * @todo since there are so many a generalized getter (magic __get() ) might be more pleasurable
      */
     function getID()
     {
@@ -1403,22 +1409,12 @@ class xarRole
     function getHome()
     {
         $duv = isset($this->duvs['userhome']) ? $this->duvs['userhome'] : "";
-         return $duv;
+        return $duv;
     }
     function getPrimaryParent()
     {
         $duv = isset($this->duvs['primaryparent']) ? $this->duvs['primaryparent'] : "";
         return $duv;
-    }
-    function getPasswordUpdate()
-    {
-        $duv = isset($this->duvs['passwordupdate']) ? $this->duvs['passwordupdate'] : "";
-         return $duv;
-    }
-    function getUserLastLogin()
-    {
-        $duv = isset($this->duvs['userlastlogin']) ? $this->duvs['userlastlogin'] : "";
-         return $duv;
     }
     function getUname()
     {
@@ -1468,14 +1464,6 @@ class xarRole
     function setHome($var)
     {
         $this->userhome = $var;
-    }
-    function setPasswordUpdate($var)
-    {
-        $this->passwordupdate= $var;
-    }
-    function setUserLastLogin($var)
-    {
-        $this->userlastlogin= $var;
     }
     function setPrimaryParent($var)
     {

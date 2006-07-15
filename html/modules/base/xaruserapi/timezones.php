@@ -33,6 +33,8 @@ function base_userapi_timezones($args)
 
     // Zone    NAME    GMTOFF    RULES    FORMAT    [UNTIL]
 
+	$Zones['Etc/UTC'] = array('0:00','-','UTC');
+	$Zones['Etc/GMT'] = array('0:00','-','GMT');
     $Zones['Africa/Abidjan'] = array('0:00', '-', 'GMT');
     $Zones['Africa/Accra'] = array('0:00', 'Ghana', '%s');
     $Zones['Africa/Addis_Ababa'] = array('3:00', '-', 'EAT');
