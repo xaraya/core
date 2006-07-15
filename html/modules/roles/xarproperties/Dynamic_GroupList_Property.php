@@ -69,7 +69,7 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
             }
         }
         if (count($this->options) == 0) {
-	        $select_options = array();
+            $select_options = array();
             if (!empty($this->ancestorlist)) {
                 $select_options['ancestor'] = implode(',', $this->ancestorlist);
             }

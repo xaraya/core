@@ -24,25 +24,25 @@ function roles_adminapi_checkduv($args)
     if (!isset($name)) return false;
     $state = isset($state) ? $state : 0;
 
-	switch ($state) {
-		case 0 :
-			$result = false;
-			$duvs = xarModGetVar('roles',$name);
-			if ($duvs) {
-				$result = true;
-			}
-			break;
-		case 1 :
-		default: 
+    switch ($state) {
+        case 0 :
+            $result = false;
+            $duvs = xarModGetVar('roles',$name);
+            if ($duvs) {
+                $result = true;
+            }
+            break;
+        case 1 :
+        default: 
             // TODO: investigate how this case would differ now or
             //   how the State has been handled since conversion to moduservars
-			$result = false;
-			$duvs = xarModGetVar('roles',$name);
-			if ($duvs) {
-    			$result = true;
-			}
-	}
-	return $result;
+            $result = false;
+            $duvs = xarModGetVar('roles',$name);
+            if ($duvs) {
+                $result = true;
+            }
+    }
+    return $result;
 }
 
 ?>

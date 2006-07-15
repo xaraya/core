@@ -477,8 +477,8 @@ function installer_admin_bootstrap()
 
 
     $regid=xarModGetIDFromName('authsystem');
-	if (empty($regid)) {
-		die(xarML('I cannot load the Authsystem module. Please make it available and reinstall'));
+    if (empty($regid)) {
+        die(xarML('I cannot load the Authsystem module. Please make it available and reinstall'));
     }
 
 
@@ -542,7 +542,7 @@ function installer_admin_bootstrap()
 #
 # Create wrapper DD objects for the native itemtypes of the privileges module
 #
-	if (!xarModAPIFunc('privileges','admin','createobjects')) return;
+    if (!xarModAPIFunc('privileges','admin','createobjects')) return;
 
     xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
 }
@@ -1088,7 +1088,7 @@ function installer_admin_cleanup()
     list ($rightBlockGroup) = $result->fields;
 
    //Get the info and add the Login block which is now in authsystem module
-	$loginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
+    $loginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
                                     array('module' => 'authsystem',
                                           'type'   => 'login'));
 
@@ -1096,7 +1096,7 @@ function installer_admin_cleanup()
         return;
     }
    //Check for any sign of the Registration module (may have been installed in the configurations)
-	$regloginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
+    $regloginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
                                     array('module' => 'registration',
                                           'type'   => 'rlogin'));
 
@@ -1561,10 +1561,10 @@ function installer_admin_upgrade2()
     }
 
       // Define Module vars
- 	xarModSetVar('authsystem', 'lockouttime', 15);
-	xarModSetVar('authsystem', 'lockouttries', 3);
-	xarModSetVar('authsystem', 'uselockout', false);
-	xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
+     xarModSetVar('authsystem', 'lockouttime', 15);
+    xarModSetVar('authsystem', 'lockouttries', 3);
+    xarModSetVar('authsystem', 'uselockout', false);
+    xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
 
 
     $content .= "<p><strong>Removing Adminpanels module and move functions to other  modules</strong></p>";

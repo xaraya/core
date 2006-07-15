@@ -614,7 +614,8 @@ class PHPMailer
      * @access public
      * @return bool
      */
-    function SetLanguage($lang_type, $lang_path = "language/") {
+    function SetLanguage($lang_type, $lang_path = "language/") 
+    {
         if(file_exists($lang_path.'phpmailer.lang-'.$lang_type.'.php'))
             include($lang_path.'phpmailer.lang-'.$lang_type.'.php');
         else if(file_exists($lang_path.'phpmailer.lang-en.php'))
@@ -955,7 +956,8 @@ class PHPMailer
      * Returns the start of a message boundary.
      * @access private
      */
-    function GetBoundary($boundary, $charSet, $contentType, $encoding) {
+    function GetBoundary($boundary, $charSet, $contentType, $encoding) 
+    {
         $result = "";
         if($charSet == "") { $charSet = $this->CharSet; }
         if($contentType == "") { $contentType = $this->ContentType; }

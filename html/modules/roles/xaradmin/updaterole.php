@@ -179,9 +179,9 @@ function roles_admin_updaterole()
 
     // redirect to the next page
     if (empty($returnurl)) {
-	    xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole', array('uid' => $uid)));
+        xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole', array('uid' => $uid)));
     } else {
-	    xarResponseRedirect($returnurl);
+        xarResponseRedirect($returnurl);
     }
 }
 
