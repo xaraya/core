@@ -27,7 +27,7 @@ class Dynamic_FieldType_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-		$this->filepath   = 'modules/dynamicdata/xarproperties';
+        $this->filepath   = 'modules/dynamicdata/xarproperties';
 
         if (count($this->options) == 0) {
             $proptypes = Dynamic_Property_Master::getPropertyTypes();

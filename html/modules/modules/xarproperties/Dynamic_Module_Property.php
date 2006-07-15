@@ -28,7 +28,7 @@ class Dynamic_Module_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-		$this->filepath   = 'modules/modules/xarproperties';
+        $this->filepath   = 'modules/modules/xarproperties';
     }
 
     static function getRegistrationInfo()

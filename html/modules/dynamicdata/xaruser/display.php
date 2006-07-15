@@ -43,14 +43,14 @@ function dynamicdata_user_display($args)
     }
 
     if($modid == 182) {
-    	// Dynamicdata module is special
-    	$ancestor = array('objectid' => $objectid, 'modid' => $modid, 'itemtype' => $itemtype);
+        // Dynamicdata module is special
+        $ancestor = array('objectid' => $objectid, 'modid' => $modid, 'itemtype' => $itemtype);
     } else {
-		if (isset($objectid)) {
-			$ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $objectid));
-		} else {
-			$ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('moduleid' => $modid,'itemtype' => $itemtype));
-		}
+        if (isset($objectid)) {
+            $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $objectid));
+        } else {
+            $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('moduleid' => $modid,'itemtype' => $itemtype));
+        }
     }
     $itemtype = $ancestor['itemtype'];
 

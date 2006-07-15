@@ -26,7 +26,7 @@ class Dynamic_Select_Property extends Dynamic_Property
         parent::__construct($args);
         $this->template  = 'dropdown';
         $this->tplmodule = 'base';
-		$this->filepath   = 'modules/base/xarproperties';
+        $this->filepath   = 'modules/base/xarproperties';
 
         if (!isset($this->options)) {
             $this->options = array();

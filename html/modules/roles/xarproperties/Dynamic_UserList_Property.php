@@ -47,10 +47,10 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         parent::__construct($args);
         $this->tplmodule = 'roles';
         $this->template = 'userlist';
-		$this->filepath   = 'modules/roles/xarproperties';
+        $this->filepath   = 'modules/roles/xarproperties';
 
         if (count($this->options) == 0) {
-	        $select_options = array();
+            $select_options = array();
             if ($this->userstate <> -1) {
                 $select_options['state'] = $this->userstate;
             }

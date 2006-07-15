@@ -778,7 +778,7 @@ class xarMasks
             }
         }
         if (!$matched && ($privilegeset['children'] != array()))
-        	$pass = $this->testprivileges($mask,$privilegeset['children'],$pass,$role);
+            $pass = $this->testprivileges($mask,$privilegeset['children'],$pass,$role);
         return $pass;
     }
 

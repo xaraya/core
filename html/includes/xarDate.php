@@ -89,13 +89,13 @@ class xarDate
     function getTimearray()
     {
         return array(
-        			'year' => $this->year,
-        			'month' => $this->month,
-        			'day' => $this->day,
-        			'hour' => $this->hour,
-        			'minute' => $this->minute,
-        			'second' => $this->second,
-        		);
+                    'year' => $this->year,
+                    'month' => $this->month,
+                    'day' => $this->day,
+                    'hour' => $this->hour,
+                    'minute' => $this->minute,
+                    'second' => $this->second,
+                );
     }
 
     function getTimestamp() 

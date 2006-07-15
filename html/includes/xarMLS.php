@@ -77,7 +77,7 @@ function xarMLS_init(&$args, $whatElseIsGoingLoaded)
                                            $args['defaultTimeOffset'] : 0;
 
     // Set the timezone
-	date_default_timezone_set ($GLOBALS['xarMLS_defaultTimeZone']);
+    date_default_timezone_set ($GLOBALS['xarMLS_defaultTimeZone']);
 
     // Register MLS events
     // These should be done before the xarMLS_setCurrentLocale function

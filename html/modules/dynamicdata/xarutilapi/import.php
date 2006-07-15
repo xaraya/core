@@ -114,7 +114,7 @@ function dynamicdata_utilapi_import($args)
                 // make sure we drop the object id, because it might already exist here
                 unset($object['objectid']);
 
-				$object['itemtype'] = xarModAPIFunc('dynamicdata','admin','getnextitemtype',
+                $object['itemtype'] = xarModAPIFunc('dynamicdata','admin','getnextitemtype',
                                                array('modid' => $object['moduleid']));
 
                 $objectid = xarModAPIFunc('dynamicdata','admin','createobject',
@@ -209,10 +209,10 @@ function dynamicdata_utilapi_import($args)
             } elseif (preg_match('#</properties>#',$line)) {
                 $what = 'object';
             } elseif (preg_match('#<items>#',$line)) {
-            	unset($item);
+                unset($item);
                 $what = 'item';
             } elseif (preg_match('#</object>#',$line)) {
-            	unset($object);
+                unset($object);
                 $what = '';
             } else {
                 // multi-line entries not relevant here
@@ -345,7 +345,7 @@ function dynamicdata_utilapi_import($args)
                 if (empty($itemid)) return;
             }
         }
-		unset($objectcache);
+        unset($objectcache);
     }
 
     return isset($objectid) ? $objectid : null;

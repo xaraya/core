@@ -289,15 +289,15 @@ function roles_upgrade($oldVersion)
             }
             break;
         case '1.1.1':
-        	$roles_objects = array('role','user','group');
-			$existing_objects  = xarModApiFunc('dynamicdata','user','getobjects');
-			foreach($existing_objects as $objectid => $objectinfo) {
-				if(in_array($objectinfo['name'], $roles_objects)) {
-					// KILL
-					if(!xarModApiFunc('dynamicdata','admin','deleteobject', array('objectid' => $objectid))) return;
-				}
-			}
-		    if (!xarModAPIFunc('roles','admin','createobjects')) return;
+            $roles_objects = array('role','user','group');
+            $existing_objects  = xarModApiFunc('dynamicdata','user','getobjects');
+            foreach($existing_objects as $objectid => $objectinfo) {
+                if(in_array($objectinfo['name'], $roles_objects)) {
+                    // KILL
+                    if(!xarModApiFunc('dynamicdata','admin','deleteobject', array('objectid' => $objectid))) return;
+                }
+            }
+            if (!xarModAPIFunc('roles','admin','createobjects')) return;
             break;
 
     }

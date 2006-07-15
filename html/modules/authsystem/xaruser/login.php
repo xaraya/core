@@ -31,7 +31,7 @@ function authsystem_user_login()
     global $xarUser_authenticationModules;
 
     if (!$_COOKIE) {
-		throw new BadParameterException(null,xarML('You must enable cookies on your browser to run Xaraya. Check the browser configuration options to make sure cookies are enabled, click on  the "Back" button of the browser and try again.'));
+        throw new BadParameterException(null,xarML('You must enable cookies on your browser to run Xaraya. Check the browser configuration options to make sure cookies are enabled, click on  the "Back" button of the browser and try again.'));
     }
 
     $unlockTime  = (int) xarSessionGetVar('authsystem.login.lockedout');
@@ -39,14 +39,14 @@ function authsystem_user_login()
     $lockouttries =xarModGetVar('authsystem','lockouttries') ? xarModGetVar('authsystem','lockouttries') : 3;
 
     if ((time() < $unlockTime) && (xarModGetVar('authsystem','uselockout')==true)) {
-		throw new ForbiddenOperationException($lockouttime,xarML('Your account has been locked for #(1) minutes.'));
+        throw new ForbiddenOperationException($lockouttime,xarML('Your account has been locked for #(1) minutes.'));
     }
 
     if (!xarVarFetch('uname','str:1:100',$uname)) {
-		throw new EmptyParameterException('username');
+        throw new EmptyParameterException('username');
     }
     if (!xarVarFetch('pass','str:1:100',$pass)) {
-		throw new EmptyParameterException('password');
+        throw new EmptyParameterException('password');
     }
     $redirect=xarServerGetBaseURL();
     if (!xarVarFetch('rememberme','checkbox',$rememberme,false,XARVAR_NOT_REQUIRED)) return;
@@ -156,13 +156,13 @@ function authsystem_user_login()
         case ROLES_STATE_DELETED:
 
             // User is deleted by all means.  Return a message that says the same.
-			throw new ForbiddenOperationException(null,xarML('Your account has been terminated by your request or at the adminstrator\'s discretion.'));
+            throw new ForbiddenOperationException(null,xarML('Your account has been terminated by your request or at the adminstrator\'s discretion.'));
             break;
 
         case ROLES_STATE_INACTIVE:
 
             // User is inactive.  Return message stating.
-				throw new ForbiddenOperationException(null,xarML('Your account has been marked as inactive.  Contact the adminstrator with further questions.'));
+                throw new ForbiddenOperationException(null,xarML('Your account has been marked as inactive.  Contact the adminstrator with further questions.'));
             break;
 
         case ROLES_STATE_NOTVALIDATED:
@@ -305,7 +305,7 @@ function authsystem_user_login()
         case ROLES_STATE_PENDING:
 
             // User is pending activation
-					throw new ForbiddenOperationException(null,xarML('Your account has not yet been activated by the site administrator'));
+                    throw new ForbiddenOperationException(null,xarML('Your account has not yet been activated by the site administrator'));
             break;
     }
 

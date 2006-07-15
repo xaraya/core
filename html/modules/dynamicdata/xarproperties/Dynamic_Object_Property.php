@@ -35,7 +35,7 @@ class Dynamic_Object_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-		$this->filepath   = 'modules/dynamicdata/xarproperties';
+        $this->filepath   = 'modules/dynamicdata/xarproperties';
 
         if (!empty($this->validation)) {
             foreach(preg_split('/(?<!\\\);/', $this->validation) as $option) {

@@ -34,8 +34,6 @@
         </ol>
 
     <h3><xar:mlstring>Included Blocks</xar:mlstring></h3>
-
-    <ol>
    <ul>
         <li><p><strong><xar:mlstring>Admin menu - Adminpanels</xar:mlstring></strong>:
         <xar:mlstring>An Adminpanel block can be configured in a number of ways. After creating the Adminpanel Menu block instance you have the option of overriding the default sort order
@@ -56,8 +54,7 @@
         <li><p><xar:mlstring><strong>menu</strong>: Construct menus.</xar:mlstring></p></li>
         <li><p><xar:mlstring><strong>php</strong>: Execute PHP code in a block.</xar:mlstring></p></li>
         <li><p><xar:mlstring><strong>text</strong>: Include plain text in a block.</xar:mlstring></p></li>
-      </ul>
-    </ol>
+    </ul>
     <p><xar:mlstring><strong>Expire a Block</strong></xar:mlstring></p>
 
     <p>

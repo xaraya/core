@@ -1906,9 +1906,12 @@ class xarMod implements IxarMod
  * Wrapper functions to support Xaraya 1 API for module aliases
  *
  */
-function xarModGetAlias($alias) { return xarModAlias::resolve($alias);}
-function xarModSetAlias($alias, $modName) { return xarModAlias::set($alias,$modName);}
-function xarModDelAlias($alias, $modName) { return xarModAlias::delete($alias,$modName);}
+function xarModGetAlias($alias) 
+{ return xarModAlias::resolve($alias);}
+function xarModSetAlias($alias, $modName) 
+{ return xarModAlias::set($alias,$modName);}
+function xarModDelAlias($alias, $modName) 
+{ return xarModAlias::delete($alias,$modName);}
 
 /**
  * Interface declaration for module aliases

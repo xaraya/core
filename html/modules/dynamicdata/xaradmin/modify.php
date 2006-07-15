@@ -45,14 +45,14 @@ function dynamicdata_admin_modify($args)
     $data = xarModAPIFunc('dynamicdata','admin','menu');
 
     if($modid == 182) {
-    	// Dynamicdata module is special
-    	$ancestor = array('objectid' => $objectid, 'modid' => $modid, 'itemtype' => $itemtype);
+        // Dynamicdata module is special
+        $ancestor = array('objectid' => $objectid, 'modid' => $modid, 'itemtype' => $itemtype);
     } else {
-		if (isset($objectid)) {
-			$ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $objectid));
-		} else {
-			$ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('moduleid' => $modid,'itemtype' => $itemtype));
-		}
+        if (isset($objectid)) {
+            $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $objectid));
+        } else {
+            $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('moduleid' => $modid,'itemtype' => $itemtype));
+        }
     }
     $itemtype = $ancestor['itemtype'];
 
@@ -64,9 +64,9 @@ function dynamicdata_admin_modify($args)
                                          'itemid'   => $itemid,
                                          'tplmodule' => $tplmodule));
     if ($notfresh) {
-	    $isvalid = $myobject->checkInput();
+        $isvalid = $myobject->checkInput();
     } else {
-		$myobject->getItem();
+        $myobject->getItem();
     }
     $data['object'] = & $myobject;
 

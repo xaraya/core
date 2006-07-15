@@ -71,7 +71,7 @@ class xarRoles
     {
         static $allgroups = array();
         if (empty($allgroups)) {
-        	$q = $this->_getgroupsquery();
+            $q = $this->_getgroupsquery();
             if (!$q->run()) return;
             $allgroups = $q->output();
         }
@@ -93,10 +93,10 @@ class xarRoles
      */
     function getgroup($uid)
     {
-		$q = $this->_getgroupsquery();
-		$q->eq('r.xar_uid',$uid);
-		if (!$q->run()) return;
-		if ($q->row() != array()) return $q->row();
+        $q = $this->_getgroupsquery();
+        $q->eq('r.xar_uid',$uid);
+        if (!$q->run()) return;
+        if ($q->row() != array()) return $q->row();
         return false;
     }
 
@@ -109,28 +109,28 @@ class xarRoles
      */
     private function _getgroupsquery()
     {
-		$types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27));
-		$basetypes = array();
-		foreach ($types as $key => $value) {
-			$basetype = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $key, 'moduleid' => 27));
-			if ($basetype['itemtype'] == ROLES_GROUPTYPE) $basetypes[] = $key;
-		}
-		// set up the query and get the groups
-		$q = new xarQuery('SELECT');
-		$q->addtable($this->rolestable,'r');
-		$q->addtable($this->rolememberstable,'rm');
-		$q->join('r.xar_uid','rm.xar_uid');
-		$q->addfield('r.xar_uid AS uid');
-		$q->addfield('r.xar_name AS name');
-		$q->addfield('r.xar_users AS users');
-		$q->addfield('rm.xar_parentid AS parentid');
-		$c = array();
-		foreach ($basetypes as $type) {
-			$c[] = $q->eq('r.xar_type',$type);
-		}
-		$q->qor($c);
-		$q->eq('r.xar_state',ROLES_STATE_ACTIVE);
-		$q->setorder('r.xar_name');
+        $types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27));
+        $basetypes = array();
+        foreach ($types as $key => $value) {
+            $basetype = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $key, 'moduleid' => 27));
+            if ($basetype['itemtype'] == ROLES_GROUPTYPE) $basetypes[] = $key;
+        }
+        // set up the query and get the groups
+        $q = new xarQuery('SELECT');
+        $q->addtable($this->rolestable,'r');
+        $q->addtable($this->rolememberstable,'rm');
+        $q->join('r.xar_uid','rm.xar_uid');
+        $q->addfield('r.xar_uid AS uid');
+        $q->addfield('r.xar_name AS name');
+        $q->addfield('r.xar_users AS users');
+        $q->addfield('rm.xar_parentid AS parentid');
+        $c = array();
+        foreach ($basetypes as $type) {
+            $c[] = $q->eq('r.xar_type',$type);
+        }
+        $q->qor($c);
+        $q->eq('r.xar_state',ROLES_STATE_ACTIVE);
+        $q->setorder('r.xar_name');
         return $q;
     }
 
@@ -526,7 +526,7 @@ class xarRole
         $this->val_code = $val_code;
         $this->auth_module = $auth_module;
         $this->parentlevel = 0;
-		$this->duvs = isset($duvs) ? $duvs : array();
+        $this->duvs = isset($duvs) ? $duvs : array();
         $this->basetype = $basetype;
     }
 
@@ -575,8 +575,8 @@ class xarRole
             array('name' => 'xar_uname',      'value' => $this->uname),
             array('name' => 'xar_date_reg',   'value' => time()),
             array('name' => 'xar_valcode',    'value' => $this->val_code),
-			array('name' => 'xar_auth_modid', 'value' => $this->auth_module),
-			array('name' => 'xar_type',       'value' => $this->type),
+            array('name' => 'xar_auth_modid', 'value' => $this->auth_module),
+            array('name' => 'xar_type',       'value' => $this->type),
         );
         $q->addfields($tablefields);
         if ($this->basetype == ROLES_USERTYPE) {
@@ -1260,7 +1260,7 @@ class xarRole
      */
     function isUser()
     {
-		$base = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $this->getType(), 'moduleid' => 27));
+        $base = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $this->getType(), 'moduleid' => 27));
         return $base['itemtype'] == ROLES_USERTYPE;
     }
 

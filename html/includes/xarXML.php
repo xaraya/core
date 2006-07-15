@@ -338,7 +338,7 @@ class xarXmlParser
     function __activateHandlers()
     {
         $par = $this->parser;
-        xml_set_object($par,$this->handler);
+        xml_set_object($par, $this->handler);
         xml_set_default_handler($par,               'default_handler');
         xml_set_character_data_handler($par,        'character_data');
         xml_set_element_handler($par,               'open_tag',

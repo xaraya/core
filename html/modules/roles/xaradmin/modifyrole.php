@@ -69,17 +69,17 @@ function roles_admin_modifyrole()
 
 // Security Check
     if (!xarSecurityCheck('EditRole',0,'Roles',$name))
-	    if (!xarSecurityCheck('ReadRole',1,'Roles',$name)) return;
-	$data['frozen'] = !xarSecurityCheck('EditRole',0,'Roles',$name);
+        if (!xarSecurityCheck('ReadRole',1,'Roles',$name)) return;
+    $data['frozen'] = !xarSecurityCheck('EditRole',0,'Roles',$name);
 
     if (isset($itemtype)) {
         $data['itemtype'] = $itemtype;
     } else {
         $data['itemtype'] = $role->getType();
     }
-	$data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
-	$types = xarModAPIFunc('roles','user','getitemtypes');
-	$data['itemtypename'] = $types[$data['itemtype']]['label'];
+    $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
+    $types = xarModAPIFunc('roles','user','getitemtypes');
+    $data['itemtypename'] = $types[$data['itemtype']]['label'];
 
     if (!empty($uname)) {
         $data['puname'] = $uname;

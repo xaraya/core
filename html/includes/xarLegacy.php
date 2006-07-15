@@ -57,6 +57,7 @@ function xarGetStatusMsg()
         return $errmsg;
     }
     return $msg;
+}
 
 function xarBlockTypeExists($modName, $blockType)
 {

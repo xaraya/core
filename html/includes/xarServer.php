@@ -53,11 +53,16 @@ function xarServer__shutdown_handler()
  * Wrapper functions to support Xaraya 1 API Server functions
  *
  */
-function xarServerGetVar($name) { return xarServer::getVar($name); }
-function xarServerGetBaseURI()  { return xarServer::getBaseURI();  }
-function xarServerGetHost()     { return xarServer::getHost();     }
-function xarServerGetProtocol() { return xarServer::getProtocol(); }
-function xarServerGetBaseURL()  { return xarServer::getBaseURL();  }
+function xarServerGetVar($name) 
+{ return xarServer::getVar($name); }
+function xarServerGetBaseURI()  
+{ return xarServer::getBaseURI();  }
+function xarServerGetHost()     
+{ return xarServer::getHost();     }
+function xarServerGetProtocol() 
+{ return xarServer::getProtocol(); }
+function xarServerGetBaseURL()  
+{ return xarServer::getBaseURL();  }
 function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target = NULL)
 {
     return xarServer::getCurrentUrl($args, $generateXMLURL, $target);
@@ -71,14 +76,17 @@ function xarRequestGetVar($name, $allowOnlyMethod = NULL)
 { 
     return xarRequest::getVar($name, $allowOnlyMethod);
 }
-function xarRequestGetInfo()        { return xarRequest::getInfo();        }
-function xarRequestIsLocalReferer() { return xarRequest::IsLocalReferer(); }
+function xarRequestGetInfo()        
+{ return xarRequest::getInfo();        }
+function xarRequestIsLocalReferer() 
+{ return xarRequest::IsLocalReferer(); }
 
 /**
  * Wrapper functions to support Xaraya 1 API Response functions
  *
  */
-function xarResponseRedirect($redirectURL) { return xarResponse::Redirect($redirectURL); }
+function xarResponseRedirect($redirectURL) 
+{ return xarResponse::Redirect($redirectURL); }
 
 /**
  * Convenience classes

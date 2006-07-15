@@ -39,7 +39,7 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-		$this->filepath   = 'modules/roles/xarproperties';
+        $this->filepath   = 'modules/roles/xarproperties';
 
         if (count($this->options) == 0) {
             $select_options = array();
@@ -99,23 +99,23 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
 
     function parseValidation($validation = '')
     {
-		foreach(preg_split('/(?<!\\\);/', $this->validation) as $option) {
-			// Semi-colons can be escaped with a '\' prefix.
-			$option = str_replace('\;', ';', $option);
-			// An option comes in two parts: option-type:option-value
-			if (strchr($option, ':')) {
-				list($option_type, $option_value) = explode(':', $option, 2);
-				if ($option_type == 'ancestor') {
-					$this->ancestorlist = array_merge($this->ancestorlist, explode(',', $option_value));
-				}
-				if ($option_type == 'parent') {
-					$this->parentlist = array_merge($this->parentlist, explode(',', $option_value));
-				}
-				if ($option_type == 'group') {
-					$this->grouplist = array_merge($this->grouplist, explode(',', $option_value));
-				}
-			}
-		}
+        foreach(preg_split('/(?<!\\\);/', $this->validation) as $option) {
+            // Semi-colons can be escaped with a '\' prefix.
+            $option = str_replace('\;', ';', $option);
+            // An option comes in two parts: option-type:option-value
+            if (strchr($option, ':')) {
+                list($option_type, $option_value) = explode(':', $option, 2);
+                if ($option_type == 'ancestor') {
+                    $this->ancestorlist = array_merge($this->ancestorlist, explode(',', $option_value));
+                }
+                if ($option_type == 'parent') {
+                    $this->parentlist = array_merge($this->parentlist, explode(',', $option_value));
+                }
+                if ($option_type == 'group') {
+                    $this->grouplist = array_merge($this->grouplist, explode(',', $option_value));
+                }
+            }
+        }
     }
 
     function showOutput($data = array())
