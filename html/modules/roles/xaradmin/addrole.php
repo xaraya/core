@@ -106,7 +106,7 @@ function roles_admin_addrole()
             $duvs['userhome'] = $phome;
         if (xarModGetVar('roles','setprimaryparent')) { //For a new role surely this is the same as the parentid
             //the primary parent is a string name inline with default role etc
-	        $parentrole= xarModAPIFunc('roles', 'user', 'get', array('uid'  => $pparentid, 'type'   => 1));
+            $parentrole= xarModAPIFunc('roles', 'user', 'get', array('uid'  => $pparentid, 'type'   => 1));
             $duvs['primaryparent'] = $parentrole['uname'];
         }
 

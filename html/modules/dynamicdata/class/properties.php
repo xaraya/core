@@ -737,7 +737,7 @@ class Dynamic_Property
         $info = $this->getBasePropertyInfo();
         $modulename = $info['requiresmodule'];
 
-	    if (empty($modulename)) {
+        if (empty($modulename)) {
             //Do some funky error handling thing here
             return;
         }

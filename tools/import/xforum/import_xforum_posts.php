@@ -133,7 +133,7 @@
         $cid = xarModAPIFunc('comments','user','add',$data);
 
         $cupdata = array("fid" => $fid,
-    			    	"ttitle" => $subject,
+                        "ttitle" => $subject,
                         "tposter" =>$fuid,
                         "treplies" => 1,
                         "treplier" => $fuid);

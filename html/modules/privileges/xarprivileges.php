@@ -655,7 +655,7 @@ class xarMasks
         $matched = false;
         $pass = false;
         // Note : DENY rules override all others here...
-		$thistest = $testdeny && ($testmask == $mask->getName() || $testmask == "All");
+        $thistest = $testdeny && ($testmask == $mask->getName() || $testmask == "All");
         foreach ($privilegeset['privileges'] as $privilege) {
             if($thistest) {
                 echo "Comparing <font color='blue'>[" . $privilege->present() . "]</font> against  <font color='green'>[". $mask->present() . "]</font> <b>for deny</b>. ";
@@ -674,33 +674,33 @@ class xarMasks
             }
             if ($privilege->level == 0 && $privilege->includes($mask)) {
                 if (!xarModGetVar('privileges','inheritdeny') && is_object($role)) {
-					if($thistest) {
-						echo "We don't inherit <strong>denys</strong>, ";
-					}
+                    if($thistest) {
+                        echo "We don't inherit <strong>denys</strong>, ";
+                    }
                     $privs = $role->getAssignedPrivileges();
                     $isassigned = false;
                     foreach ($privs as $priv) {
                         if ($privilege == $priv) {
-							if($thistest) {
-								echo "but <font color='blue'>[" . $privilege->present() . "] wins</font> because directly assigned. Continuing with other checks...<br />";
-							}
+                            if($thistest) {
+                                echo "but <font color='blue'>[" . $privilege->present() . "] wins</font> because directly assigned. Continuing with other checks...<br />";
+                            }
                             return false;
                             break;
                         }
                     }
-					if($thistest) {
-						echo "and <font color='blue'>[" . $privilege->present() . "] wins</font> is not directly assigned. Ignoring..<br/>";
-					}
+                    if($thistest) {
+                        echo "and <font color='blue'>[" . $privilege->present() . "] wins</font> is not directly assigned. Ignoring..<br/>";
+                    }
                 } else {
-					if($thistest) {
-						echo "<font color='blue'>[" . $privilege->present() . "] wins</font>. Continuing with other checks...<br />";
-					}
+                    if($thistest) {
+                        echo "<font color='blue'>[" . $privilege->present() . "] wins</font>. Continuing with other checks...<br />";
+                    }
                     return false;
                 }
             } else {
-	            if($thistest) {
-	            	echo "Continuing with other checks..<br />";
-	            }
+                if($thistest) {
+                    echo "Continuing with other checks..<br />";
+                }
             }
         }
 

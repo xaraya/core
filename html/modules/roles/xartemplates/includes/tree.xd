@@ -58,6 +58,7 @@
                         </xar:if>
 
                     <xar:comment>---------------------------------- Email item
+                    </xar:comment>
                         <xar:if condition="($node['users'] gt 0) and ($drawchildren)">
                         <xar:else />
                             <a href="#xarModURL('roles', 'admin', 'createmail', array('uid' => $node['uid']))#" title="#xarML('Email the Users in this Group')#" style="margin: 0 0.25em 0 0.25em;">

@@ -14,7 +14,7 @@
             <ul>
                 <li><xar:mlstring>If you do not have root access to your database (due to virtual hosting etc), you will need to have a pre-existing database installed and configured before you proceed.</xar:mlstring></li>
                 <li><xar:mlstring>If you plan to use a SQLite or PostgreSQL database please ensure your database already exists before your proceed.</xar:mlstring></li>
-                <li><xar:mlstring>If you plan on <strong>upgrading</strong> an existing Xaraya then please run the <strong>upgrade.php</strong> script, not this install script.</xar:mlstring>
+                <li><xar:mlstring>If you plan on <strong>upgrading</strong> an existing Xaraya then please run the <strong>upgrade.php</strong> script, not this install script.</xar:mlstring></li>
                 <li><xar:mlstring>If you plan to convert from another Weblog/CMS to Xaraya, first install Xaraya as normal and then run the appropriate import script to import your prior Weblog/CMS data.</xar:mlstring></li>
             </ul>
         </p>
