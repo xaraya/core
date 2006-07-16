@@ -1759,8 +1759,8 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($args['fieldprefix'])) $args['fieldprefix'] = $this->fieldprefix;
         if (empty($args['fieldlist']))   $args['fieldlist'] = $this->fieldlist;
 
- 		if (!empty($this->status)) $state = $this->status;
- 		else $state = DD_DISPLAYSTATE_ACTIVE;
+         if (!empty($this->status)) $state = $this->status;
+         else $state = DD_DISPLAYSTATE_ACTIVE;
         if (count($args['fieldlist']) > 0) {
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
