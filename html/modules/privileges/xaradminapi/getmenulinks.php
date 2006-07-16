@@ -18,42 +18,25 @@
  */
 function privileges_adminapi_getmenulinks()
 {
+	/*
+	This menu gets its data from the adminmenu.php file in the module's xardataapi folder.
+	You can add or change menu items by changing the data there.
+	Or you can create your own menu items here. They should have the form of this example:
+
     $menulinks = array();
-    if (xarSecurityCheck('EditPrivilege',0)) {
-        $menulinks[] = Array('url' => xarModURL('privileges','admin','overview'),
-                               'title' => xarML('Privileges Overview'),
-                              'label' => xarML('Overview'));
-
-        $menulinks[] = Array('url'   => xarModURL('privileges',
+    .....
+    if (xarSecurityCheck('EditRole',0)) {
+        $menulinks[] = array('url'   => xarModURL('roles',
                                                   'admin',
-                                                  'viewprivileges',array('phase' => 'active')),
-                              'title' => xarML('View all privileges on the system'),
-                              'label' => xarML('View Privileges'));
+                                                  'viewroles'),
+                              'title' => xarML('View and edit the groups on the system'),
+                              'label' => xarML('View All Groups'));
     }
-
-    if (xarSecurityCheck('AssignPrivilege',0)) {
-        $menulinks[] = Array('url'   => xarModURL('privileges',
-                                                  'admin',
-                                                  'newprivilege'),
-                              'title' => xarML('Add a new privilege to the system'),
-                              'label' => xarML('Add Privilege'));
-    }
-
-    if (xarSecurityCheck('ReadPrivilege',0,'Realm') && xarModGetVar('privileges','showrealms')) {
-        $menulinks[] = Array('url'   => xarModURL('privileges',
-                                                  'admin',
-                                                  'viewrealms'),
-                              'title' => xarML('Add, change or delete realms'),
-                              'label' => xarML('Manage Realms'));
-    }
-
-    if (xarSecurityCheck('AdminPrivilege',0)) {
-        $menulinks[] = Array('url'   => xarModURL('privileges',
-                                                  'admin',
-                                                  'modifyconfig'),
-                              'title' => xarML('Modify the privileges module configuration'),
-                              'label' => xarML('Modify Config'));
-    }
+    .....
     return $menulinks;
+    */
+
+    // No special menu. Just return a standard array
+    return xarModAPIFunc('base','admin','menuarray');
 }
 ?>

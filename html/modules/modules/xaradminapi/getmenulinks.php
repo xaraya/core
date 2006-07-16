@@ -19,38 +19,26 @@
  */
 function modules_adminapi_getmenulinks()
 {
-    // Security Check
+	/*
+	This menu gets its data from the adminmenu.php file in the module's xardataapi folder.
+	You can add or change menu items by changing the data there.
+	Or you can create your own menu items here. They should have the form of this example:
+
     $menulinks = array();
-    if (xarSecurityCheck('AdminModules',0)) {
-
-        // these links will only be shown to those who can admin the modules
-        if(xarModGetUserVar('modules', 'expertlist')){
-            $menulinks[] = Array('url'  => xarModURL('modules','admin','expertlist'),
-                                'title' => xarML('View list of all installed modules on the system'),
-                                'label' => xarML('View All'));
-        }else{
-            $menulinks[] = Array('url'  => xarModURL('modules','admin','list'),
-                                'title' => xarML('View list of all installed modules on the system'),
-                                'label' => xarML('View All'));
-        }
-
-/*         $menulinks[] = Array('url'  => xarModURL('modules','admin','prefs'), */
-/*                             'title' => xarML('Set various options'), */
-/*                             'label' => xarML('Preferences')); */
-
-        $menulinks[] = Array('url'  => xarModURL('modules','admin','hooks'),
-                            'title' => xarML('Extend the functionality of your modules via hooks'),
-                            'label' => xarML('Configure Hooks'));
-
-/*         $menulinks[] = Array('url'   => xarModURL('modules','admin','tools'), */
-/*                              'title' => xarML('Use these tools to build and verify elements of modules.'), */
-/*                              'label' => xarML('Toolbox')); */
-
-        $menulinks[] = Array('url'  => xarModURL('modules','admin','modifyconfig'),
-                            'title' => xarML('Modify configuration parameters'),
-                            'label' => xarML('Modify config'));
+    .....
+    if (xarSecurityCheck('EditRole',0)) {
+        $menulinks[] = array('url'   => xarModURL('roles',
+                                                  'admin',
+                                                  'viewroles'),
+                              'title' => xarML('View and edit the groups on the system'),
+                              'label' => xarML('View All Groups'));
     }
+    .....
     return $menulinks;
+    */
+
+    // No special menu. Just return a standard array
+    return xarModAPIFunc('base','admin','menuarray');
 }
 
 ?>

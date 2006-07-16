@@ -18,16 +18,26 @@
  */
 function authsystem_adminapi_getmenulinks()
 {
-    $menulinks = array();
+	/*
+	This menu gets its data from the adminmenu.php file in the module's xardataapi folder.
+	You can add or change menu items by changing the data there.
+	Or you can create your own menu items here. They should have the form of this example:
 
-    if (xarSecurityCheck('AdminAuthsystem',0)) {
-        $menulinks[] = Array('url'   => xarModURL('authsystem',
+    $menulinks = array();
+    .....
+    if (xarSecurityCheck('EditRole',0)) {
+        $menulinks[] = array('url'   => xarModURL('roles',
                                                   'admin',
-                                                  'modifyconfig'),
-                              'title' => xarML('Modify the Authsystem authentication configuration'),
-                              'label' => xarML('Modify Config'));
+                                                  'viewroles'),
+                              'title' => xarML('View and edit the groups on the system'),
+                              'label' => xarML('View All Groups'));
     }
+    .....
     return $menulinks;
+    */
+
+    // No special menu. Just return a standard array
+    return xarModAPIFunc('base','admin','menuarray');
 }
 
 ?>

@@ -19,33 +19,25 @@
  */
 function dynamicdata_adminapi_getmenulinks()
 {
+	/*
+	This menu gets its data from the adminmenu.php file in the module's xardataapi folder.
+	You can add or change menu items by changing the data there.
+	Or you can create your own menu items here. They should have the form of this example:
+
     $menulinks = array();
-    if (xarSecurityCheck('AdminDynamicData',0)) {
-
-        $menulinks[] = Array('url' => xarModURL('dynamicdata','admin','overview'),
-                               'title' => xarML('DynamicData Overview'),
-                              'label' => xarML('Overview'));
-
-        $menulinks[] = Array('url'   => xarModURL('dynamicdata',
-                                                   'admin',
-                                                   'view'),
-                              'title' => xarML('View module objects using dynamic data'),
-                              'label' => xarML('View Objects'));
-    }
-    if (xarSecurityCheck('AdminDynamicData',0)) {
-        $menulinks[] = Array('url'   => xarModURL('dynamicdata',
+    .....
+    if (xarSecurityCheck('EditRole',0)) {
+        $menulinks[] = array('url'   => xarModURL('roles',
                                                   'admin',
-                                                  'modifyconfig'),
-                              'title' => xarML('Configure the default property types'),
-                              'label' => xarML('Property Types'));
+                                                  'viewroles'),
+                              'title' => xarML('View and edit the groups on the system'),
+                              'label' => xarML('View All Groups'));
     }
-    if (xarSecurityCheck('AdminDynamicData',0)) {
-        $menulinks[] = Array('url'   => xarModURL('dynamicdata',
-                                                  'admin',
-                                                  'utilities'),
-                              'title' => xarML('Import/export and other utilities'),
-                              'label' => xarML('Utilities'));
-    }
+    .....
     return $menulinks;
+    */
+
+    // No special menu. Just return a standard array
+    return xarModAPIFunc('base','admin','menuarray');
 }
 ?>
