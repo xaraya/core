@@ -1052,12 +1052,9 @@ function installer_admin_cleanup()
     }
     list ($rightBlockGroup) = $result->fields;
 
-    $loginBlockTypeId = xarModAPIFunc('blocks',
-                    'admin',
-                    'register_block_type',
-                    array('modName' => 'authsystem',
-                          'blockType' => 'login'));
-    if (empty($loginBlockTypeId) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+    $loginBlockTypeId = xarModAPIFunc('blocks','admin','register_block_type',
+                    array('modName' => 'authsystem', 'blockType' => 'login'));
+    if (empty($loginBlockTypeId)) {
         return;
     }
    //Check for any sign of the Registration module (may have been installed in the configurations)
@@ -1065,7 +1062,7 @@ function installer_admin_cleanup()
                                     array('module' => 'registration',
                                           'type'   => 'rlogin'));
 
-    if (empty($regloginBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+    if (empty($regloginBlockType)) {
         //return; no don't return, it may not have been loaded
     }
 
@@ -1813,7 +1810,7 @@ function installer_admin_upgrade3()
             array('module' => 'base', 'type' => 'html')
         );
 
-        if (empty($htmlBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+        if (empty($htmlBlockType)) {
             return;
         }
 
