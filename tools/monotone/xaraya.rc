@@ -291,6 +291,7 @@ function validate_commit_message (commit_msg, stanza)
     end
     function failed(nr,desc,msg) 
         nr=nr or 0.00; desc=desc or "ERR: no description for test given"
+        msg=msg or 'ERR: no failure message given for test'
         print("FAILED QA test "..nr..": "..desc.."\n"..msg); cancommit=false 
     end
     
@@ -298,9 +299,12 @@ function validate_commit_message (commit_msg, stanza)
     status_table=parse_basic_io(stanza)
     commit_files = {}
     for index,io_line in status_table do
+        -- For changed files take the value on same line
         if io_line.name=='patch'  then table.insert(commit_files,io_line.values[1]) end
         -- For renamed files, take the new one
         if io_line.name=='rename' then table.insert(commit_files,status_table[index+1].values[1]) end
+        -- For new files, take the value on the same line
+        if io_line.name=='add_file' then table.insert(commit_files,io_line.values[1]) end
     end
     
     -- Run qa checks on the files contained in this revision
