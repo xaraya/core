@@ -24,7 +24,7 @@ class Dynamic_TextArea_Property extends Dynamic_Property
 
         $this->tplmodule = 'base';
         $this->template = 'textarea';
-		$this->filepath   = 'modules/base/xarproperties';
+        $this->filepath   = 'modules/base/xarproperties';
 
         if(isset($args['rows'])) $this->rows = $args['rows'];
         if(isset($args['cols'])) $this->cols = $args['cols'];

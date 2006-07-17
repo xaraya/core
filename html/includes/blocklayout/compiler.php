@@ -5,8 +5,8 @@
  * The compiler is responsible for compiling xar + xml -> php + xml
  *
  * @package blocklayout
- * @copyright (C) 2003,2004 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marco Canini <marco@xaraya.com>
  * @author Paul Rosania  <paul@xaraya.com>
@@ -1317,6 +1317,15 @@ class xarTpl__ExpressionTransformer
         return $expression;
     }
 
+    /**
+     * Transform a PHP expression from a template to a valid piece of PHP code
+     *
+     * @return string Valid PHP expression
+     * @author Marcel van der Boom
+     * @todo if expressions were always between #...# this would be easier
+     * @todo if the key / objectmember is a variable, make sure it fits the regex for a valid variable name
+     * @todo the convenience operators may conflict in some situations with the MLS ( like 'le' for french)
+     **/
     static function transformPHPExpression($phpExpression)
     {
         $phpExpression =xarTpl__ExpressionTransformer::normalize($phpExpression);
@@ -1342,8 +1351,6 @@ class xarTpl__ExpressionTransformer
         // NOTE: The behaviour of this method along with the BLExpression method above CHANGED. Part 
         //       of the resolving is now done by the previous method (i.e. a complete expression is passed into it)
         
-        // TODO: of course, if all this was between #...# it would be a lot easier ;-)
-        // TODO: if variable array key or object member, make sure it starts with a letter
         $regex = "/((\\\$[a-z_][a-z0-9_\[\]\$]*)([:|\.][$]{0,1}[0-9a-z_\]\[\$]+)*)/i";
         if (preg_match_all($regex, $phpExpression,$matches)) {
             // Resolve BL expressions inside the php Expressions
@@ -1361,8 +1368,6 @@ class xarTpl__ExpressionTransformer
             }
         }
 
-        // TODO: this needs to be replaced with something else since it's way too harsh now
-        //       ( for example: 'le' is a french word which is now unusable )
         $findLogic      = array(' eq ', ' ne ', ' lt ', ' gt ', ' id ', ' nd ', ' le ', ' ge ');
         $replaceLogic   = array(' == ', ' != ',  ' < ',  ' > ', ' === ', ' !== ', ' <= ', ' >= ');
 
@@ -1476,10 +1481,10 @@ abstract class xarTpl__TplTagNode extends xarTpl__Node
      * If we get here, the render method was called but not implemented in the tag,
      * which means the user specified it as <xar:tag ..../>
      * We (try to) treat this like <xar:tag></xar:tag> which is effectively the same.
-     * Furthermore, we dont want this called directly, but we cant right now due to the class structure
-     * we have, so TODO here ;-)
+     *
      * @return void
      * @author Marcel van der Boom
+     * @todo   refactor the classes so this method cannot be called directly (i.e. protected)
      **/
     public function render()
     {
@@ -1538,12 +1543,17 @@ abstract class xarTpl__EntityNode extends xarTpl__Node
     protected $parameters;
     protected $hasExtras = false;
     
+    /**
+     * Constructor for entity nodes
+     *
+     * @return void
+     * @author Marcel van der Boom
+     * @todo   centralize the hasExtras in xarModUrl, i.e. dont hack it in here (see bug 3603)
+     **/
     function __construct(&$parser, $tagName, $entityType, $parameters) 
     {
         parent::__construct($parser, $tagName);
         // Register whether the entity is followed by extra params
-        // Bug 3603 workaround
-        // TODO: centralize this further into xarModUrl
         $this->hasExtras = $parser->peek(5) == '&amp;';
         $this->isPHPCode = true;
         $this->entityType = $entityType;

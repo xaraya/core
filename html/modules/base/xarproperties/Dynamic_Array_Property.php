@@ -21,7 +21,7 @@ class Dynamic_Array_Property extends Dynamic_Property
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template = 'array';
-		$this->filepath   = 'modules/base/xarproperties';
+        $this->filepath   = 'modules/base/xarproperties';
 
         // check validation for list of fields (optional)
         if (!empty($this->validation) && strchr($this->validation,';')) {

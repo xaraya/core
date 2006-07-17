@@ -11,6 +11,8 @@
  */
 /**
  * @author Paul Rosania
+ * @param string page The page to use if the admin has enabled different page templates
+ * @return mixed
  */
 function base_user_main($args)
 {

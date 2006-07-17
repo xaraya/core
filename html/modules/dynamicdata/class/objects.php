@@ -179,20 +179,20 @@ class Dynamic_Object_Master
            $this->getDataStores();
         }
 
-		// add ancestors' properties to this object if required
-		if (!(empty($args['extend']) || ($args['extend'] == 'false'))) {
-			if (!empty($this->objectid)) {
-				$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $this->objectid, 'top' => false));
-			} else {
-				$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('moduleid' => $this->moduleid, 'itemtype' => $this->itemtype, 'top' => true));
-			}
-			// If this is an extended object add the ancestor properties for display purposes
-			if (!empty($ancestors)) {
-				foreach ($ancestors as $ancestor) {
-					if ($ancestor['objectid']) $this->add($ancestor['objectid']);
-				}
-			}
-		}
+        // add ancestors' properties to this object if required
+        if (!(empty($args['extend']) || ($args['extend'] == 'false'))) {
+            if (!empty($this->objectid)) {
+                $ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $this->objectid, 'top' => false));
+            } else {
+                $ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('moduleid' => $this->moduleid, 'itemtype' => $this->itemtype, 'top' => true));
+            }
+            // If this is an extended object add the ancestor properties for display purposes
+            if (!empty($ancestors)) {
+                foreach ($ancestors as $ancestor) {
+                    if ($ancestor['objectid']) $this->add($ancestor['objectid']);
+                }
+            }
+        }
     }
 
     /**
@@ -201,28 +201,28 @@ class Dynamic_Object_Master
      */
     function add($object=null)
     {
-    	if (is_numeric($object)) {
-			$object =& Dynamic_Object_Master::getObject(array('objectid' => $object));
-    	}
-    	if (!is_object($object))
-    		throw new EmptyParameterException(array(),'Not a valid object');
-		$properties = $object->getProperties();
-		foreach ($properties as &$newproperty) {
-			// ignore if this property already belongs to the object
-			if (isset($this->properties[$newproperty->name])) continue;
-			$args = array('name'  => $newproperty->name,
-						  'type'  => $newproperty->type,
-						  'label' => $newproperty->label);
-			if (!isset($this->datastores[$newproperty->datastore])) {
-				$newstore = $this->property2datastore($newproperty);
-				$this->addDatastore($newstore[0],$newstore[1]);
-			}
-			$newproperty->_items =& $this->items;
-			$this->datastores[$newproperty->datastore]->addField($newproperty);
-			$this->addProperty($args);
+        if (is_numeric($object)) {
+            $object =& Dynamic_Object_Master::getObject(array('objectid' => $object));
+        }
+        if (!is_object($object))
+            throw new EmptyParameterException(array(),'Not a valid object');
+        $properties = $object->getProperties();
+        foreach ($properties as &$newproperty) {
+            // ignore if this property already belongs to the object
+            if (isset($this->properties[$newproperty->name])) continue;
+            $args = array('name'  => $newproperty->name,
+                          'type'  => $newproperty->type,
+                          'label' => $newproperty->label);
+            if (!isset($this->datastores[$newproperty->datastore])) {
+                $newstore = $this->property2datastore($newproperty);
+                $this->addDatastore($newstore[0],$newstore[1]);
+            }
+            $newproperty->_items =& $this->items;
+            $this->datastores[$newproperty->datastore]->addField($newproperty);
+            $this->addProperty($args);
 //                  $this->fieldlist[] = $newproperty->name;
-		}
-	}
+        }
+    }
 
     /**
      * Get the data stores where the dynamic properties of this object are kept
@@ -423,7 +423,7 @@ class Dynamic_Object_Master
      * @returns array
      * @return array of object definitions
      */
-	static function &getObjects($args=array())
+    static function &getObjects($args=array())
     {
         extract($args);
         $nullreturn = NULL;
@@ -1104,8 +1104,8 @@ class Dynamic_Object extends Dynamic_Object_Master
                 $fieldlist = array_keys($this->properties);
             }
         }else{
-		$fieldlist = $args['fieldlist'];
-	}
+        $fieldlist = $args['fieldlist'];
+    }
 
         $fields = array();
         foreach ($fieldlist as $name) {
@@ -1439,7 +1439,6 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             $this->fieldlist = $args['fieldlist'];
             $this->getDataStores(true);
         } elseif (isset($args['status']) && (!isset($this->status) || $args['status'] != $this->status)) {
-        echo "hi";
             $this->status = $args['status'];
             $this->fieldlist = array();
             foreach ($this->properties as $name => $property) {
@@ -1760,8 +1759,8 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($args['fieldprefix'])) $args['fieldprefix'] = $this->fieldprefix;
         if (empty($args['fieldlist']))   $args['fieldlist'] = $this->fieldlist;
 
- 		if (!empty($this->status)) $state = $this->status;
- 		else $state = DD_DISPLAYSTATE_ACTIVE;
+         if (!empty($this->status)) $state = $this->status;
+         else $state = DD_DISPLAYSTATE_ACTIVE;
         if (count($args['fieldlist']) > 0) {
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
@@ -1933,7 +1932,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         // with custom tags.
         $args['objectid'] = $this->objectid;
 
-//	    $current = xarModAPIFunc('dynamicdata','user','setcontext',$args);
+//        $current = xarModAPIFunc('dynamicdata','user','setcontext',$args);
 
         return xarTplObject($args['tplmodule'],$args['template'],'showlist',$args);
     }
@@ -1947,8 +1946,8 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if (empty($args['fieldlist'])) $args['fieldlist'] = $this->fieldlist;
         if (!empty($args['extend']))   $this->extend();
 
- 		if (!empty($this->status)) $state = $this->status;
- 		else $state = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
+         if (!empty($this->status)) $state = $this->status;
+         else $state = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
         if (count($args['fieldlist']) > 0) {
             $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {

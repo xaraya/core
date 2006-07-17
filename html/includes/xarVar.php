@@ -3,8 +3,8 @@
  * Variable utilities
  *
  * @package variables
- * @copyright (C) 2002 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marco Canini marco@xaraya.com
  */
@@ -354,11 +354,16 @@ function xarVarValidate($validation, &$subject, $supress = false, $name='')
  * @access public
  * @see xarCore
  */
-function xarVarIsCached($cacheKey,  $name)         { return xarCore::isCached($cacheKey, $name);         }
-function xarVarGetCached($cacheKey, $name)         { return xarCore::getCached($cacheKey, $name);        }
-function xarVarSetCached($cacheKey, $name, $value) { return xarCore::setCached($cacheKey, $name, $value);}
-function xarVarDelCached($cacheKey, $name)         { return xarCore::delCached($cacheKey, $name);        }
-function xarVarFlushCached($cacheKey)              { return xarCore::flushCached($cacheKey);             }
+function xarVarIsCached($cacheKey,  $name)         
+{ return xarCore::isCached($cacheKey, $name);         }
+function xarVarGetCached($cacheKey, $name)         
+{ return xarCore::getCached($cacheKey, $name);        }
+function xarVarSetCached($cacheKey, $name, $value) 
+{ return xarCore::setCached($cacheKey, $name, $value);}
+function xarVarDelCached($cacheKey, $name)         
+{ return xarCore::delCached($cacheKey, $name);        }
+function xarVarFlushCached($cacheKey)              
+{ return xarCore::flushCached($cacheKey);             }
 
 
 /**

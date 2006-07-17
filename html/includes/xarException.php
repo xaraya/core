@@ -3,9 +3,9 @@
  * Exception Handling System
  *
  * @package exceptions
- * @copyright (C) 2006 by the Digital Xaraya Development Foundation
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.com/documentation/rfcs/rfc0054.html
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
  * @author Marco Canini <marco@xaraya.com>
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @author Marcel van der Boom <marcel@xaraya.com>
@@ -69,6 +69,19 @@ class ErrorDeprecationException extends DeprecationExceptions
 {
     protected $message ="This exception was called through a deprecated API (usually xarErrorSet).\n Original error: #(1)";
     protected $hint    ="You should not use xarErrorSet anymore, but raise/catch real exceptions.\n Replace the 'xarErrorSet()' in the code with a try/catch block or delete it if the exception can be caught automatically.";
+}
+
+/**
+ * General exception to cater for situation where the called function should really raise one
+ * and the callee should catch it, instead of the callee raising the exception. To prevent hub-hopping
+ * all over the code
+ * 
+ * @todo we need a way to determine the usage of this, because each use signals a 'code out of place' error
+ */
+class GeneralException extends xarExceptions
+{
+    protected $message = "An unknown error occurred.";
+    protected $hint    = "The code raised an exception, but the nature of the error could not be determind";
 }
 
 /**

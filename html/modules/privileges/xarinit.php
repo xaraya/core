@@ -10,7 +10,7 @@
  * @subpackage Privileges module
  * @link http://xaraya.com/index.php/release/1098.html
  */
- 
+
  /**
  * Purpose of file:  Initialisation functions for the security module
  * Initialise the privileges module

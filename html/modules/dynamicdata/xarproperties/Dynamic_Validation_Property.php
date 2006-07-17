@@ -32,7 +32,7 @@ class Dynamic_Validation_Property extends Dynamic_TextBox_Property
     function __construct($args)
     {
         parent::__construct($args);
-		$this->filepath   = 'modules/dynamicdata/xarproperties';
+        $this->filepath   = 'modules/dynamicdata/xarproperties';
     }
 
     static function getRegistrationInfo()

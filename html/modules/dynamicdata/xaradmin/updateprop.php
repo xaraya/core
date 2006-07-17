@@ -138,13 +138,13 @@ function dynamicdata_admin_updateprop()
         $name = strtolower($dd_label[0]);
         $name = preg_replace('/[^a-z0-9_]+/','_',$name);
         $name = preg_replace('/_$/','',$name);
-		if (!isset($display_dd_status[0])) {
-			$display_dd_status[0] = DD_DISPLAYSTATE_ACTIVE;
-		}
-		if (!isset($input_dd_status[0])) {
-			$input_dd_status[0] = DD_INPUTSTATE_ADDMODIFY;
-		}
-		$dd_status[0] = $display_dd_status[0] | ($input_dd_status[0] << 4);
+        if (!isset($display_dd_status[0])) {
+            $display_dd_status[0] = DD_DISPLAYSTATE_ACTIVE;
+        }
+        if (!isset($input_dd_status[0])) {
+            $input_dd_status[0] = DD_INPUTSTATE_ADDMODIFY;
+        }
+        $dd_status[0] = $display_dd_status[0] | ($input_dd_status[0] << 4);
         $prop_id = xarModAPIFunc('dynamicdata','admin','createproperty',
                                 array('name' => $name,
                                       'label' => $dd_label[0],

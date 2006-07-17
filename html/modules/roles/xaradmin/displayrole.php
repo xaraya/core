@@ -37,9 +37,9 @@ function roles_admin_displayrole()
 
     $data['uid'] = $role->getID();
     $data['itemtype'] = $role->getType();
-	$data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
-	$types = xarModAPIFunc('roles','user','getitemtypes');
-	$data['itemtypename'] = $types[$data['itemtype']]['label'];
+    $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
+    $types = xarModAPIFunc('roles','user','getitemtypes');
+    $data['itemtypename'] = $types[$data['itemtype']]['label'];
     $data['name'] = $name;
     $data['phome'] = $role->getHome();
     

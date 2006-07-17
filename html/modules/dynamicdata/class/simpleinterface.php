@@ -16,7 +16,7 @@ class Simple_Object_Interface extends Dynamic_Object_Interface
         if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
         }
-	}
+    }
 
     function handle($args = array())
     {
@@ -32,9 +32,9 @@ class Simple_Object_Interface extends Dynamic_Object_Interface
         if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
         }
-		$this->object =& Dynamic_Object_Master::getObject($this->args);
-		if (empty($this->object)) return;
-		return $this->object->{$this->args['method']}($this->args);
+        $this->object =& Dynamic_Object_Master::getObject($this->args);
+        if (empty($this->object)) return;
+        return $this->object->{$this->args['method']}($this->args);
     }
 }
 

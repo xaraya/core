@@ -3,8 +3,8 @@
  * Module handling subsystem
  *
  * @package modules
- * @copyright (C) 2002 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Jim McDonald
  * @author Marco Canini <marco@xaraya.com>
@@ -1906,9 +1906,12 @@ class xarMod implements IxarMod
  * Wrapper functions to support Xaraya 1 API for module aliases
  *
  */
-function xarModGetAlias($alias) { return xarModAlias::resolve($alias);}
-function xarModSetAlias($alias, $modName) { return xarModAlias::set($alias,$modName);}
-function xarModDelAlias($alias, $modName) { return xarModAlias::delete($alias,$modName);}
+function xarModGetAlias($alias) 
+{ return xarModAlias::resolve($alias);}
+function xarModSetAlias($alias, $modName) 
+{ return xarModAlias::set($alias,$modName);}
+function xarModDelAlias($alias, $modName) 
+{ return xarModAlias::delete($alias,$modName);}
 
 /**
  * Interface declaration for module aliases

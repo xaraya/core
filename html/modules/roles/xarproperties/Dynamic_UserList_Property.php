@@ -47,10 +47,10 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         parent::__construct($args);
         $this->tplmodule = 'roles';
         $this->template = 'userlist';
-		$this->filepath   = 'modules/roles/xarproperties';
+        $this->filepath   = 'modules/roles/xarproperties';
 
         if (count($this->options) == 0) {
-	        $select_options = array();
+            $select_options = array();
             if ($this->userstate <> -1) {
                 $select_options['state'] = $this->userstate;
             }
@@ -145,31 +145,35 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
 
     function parseValidation($validation = '')
     {
-        foreach(preg_split('/(?<!\\\);/', $validation) as $option) {
-            // Semi-colons can be escaped with a '\' prefix.
-            $option = str_replace('\;', ';', $option);
-            // An option comes in two parts: option-type:option-value
-            if (strchr($option, ':')) {
-                list($option_type, $option_value) = explode(':', $option, 2);
-                if ($option_type == 'state' && is_numeric($option_value)) {
-                    $this->userstate = $option_value;
-                }
-                if ($option_type == 'showglue') {
-                    $this->showglue = $option_value;
-                }
-                if ($option_type == 'group') {
-                    $this->grouplist = array_merge($this->grouplist, explode(',', $option_value));
-                }
-                if ($option_type == 'show') {
-                    $this->showlist = array_merge($this->showlist, explode(',', $option_value));
-                    // Remove invalid elements (fields that are not valid).
-                    $showfilter = create_function(
-                        '$a', 'return preg_match(\'/^[-]?(name|uname|email|uid|state|date_reg)$/\', $a);'
-                    );
-                    $this->showlist = array_filter($this->showlist, $showfilter);
-                }
-                if ($option_type == 'order') {
-                    $this->orderlist = array_merge($this->orderlist, explode(',', $option_value));
+        if (preg_match('/^xarModAPIFunc/i',$validation)) {
+            return parent::parseValidation($validation);
+        } else {
+            foreach(preg_split('/(?<!\\\);/', $validation) as $option) {
+                // Semi-colons can be escaped with a '\' prefix.
+                $option = str_replace('\;', ';', $option);
+                // An option comes in two parts: option-type:option-value
+                if (strchr($option, ':')) {
+                    list($option_type, $option_value) = explode(':', $option, 2);
+                    if ($option_type == 'state' && is_numeric($option_value)) {
+                        $this->userstate = $option_value;
+                    }
+                    if ($option_type == 'showglue') {
+                        $this->showglue = $option_value;
+                    }
+                    if ($option_type == 'group') {
+                        $this->grouplist = array_merge($this->grouplist, explode(',', $option_value));
+                    }
+                    if ($option_type == 'show') {
+                        $this->showlist = array_merge($this->showlist, explode(',', $option_value));
+                        // Remove invalid elements (fields that are not valid).
+                        $showfilter = create_function(
+                            '$a', 'return preg_match(\'/^[-]?(name|uname|email|uid|state|date_reg)$/\', $a);'
+                        );
+                        $this->showlist = array_filter($this->showlist, $showfilter);
+                    }
+                    if ($option_type == 'order') {
+                        $this->orderlist = array_merge($this->orderlist, explode(',', $option_value));
+                    }
                 }
             }
         }

@@ -35,24 +35,24 @@ function roles_adminapi_create($args)
     extract($args);
 
     $baseitemtype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
-	$args['basetype'] = $baseitemtype;
+    $args['basetype'] = $baseitemtype;
 
     if ($baseitemtype == ROLES_USERTYPE) {
-		if (!isset($uname)) throw new EmptyParameterException('uname');
-		if (!isset($email)) throw new EmptyParameterException('email');
-		if (!isset($realname) && !isset($name)) throw new EmptyParameterException('realname');
-		if (!isset($state)) throw new EmptyParameterException('state');
-		if (!isset($pass)) throw new EmptyParameterException('pass');
-		$args['cryptpass'] = md5($pass);
+        if (!isset($uname)) throw new EmptyParameterException('uname');
+        if (!isset($email)) throw new EmptyParameterException('email');
+        if (!isset($realname) && !isset($name)) throw new EmptyParameterException('realname');
+        if (!isset($state)) throw new EmptyParameterException('state');
+        if (!isset($pass)) throw new EmptyParameterException('pass');
+        $args['cryptpass'] = md5($pass);
     } elseif ($baseitemtype == ROLES_GROUPTYPE) {
-		if (!isset($realname) && !isset($name)) throw new EmptyParameterException('realname or name');
+        if (!isset($realname) && !isset($name)) throw new EmptyParameterException('realname or name');
     }
-	$args['name'] = isset($realname) ? $realname : $name;
-	$args['type'] = $itemtype;
-	if (empty($authmodule)) {
+    $args['name'] = isset($realname) ? $realname : $name;
+    $args['type'] = $itemtype;
+    if (empty($authmodule)) {
         $modInfo = xarMod_GetBaseInfo('authsystem');
         $args['modId'] = $modInfo['systemid'];
-	}
+    }
 
     $role = new xarRole($args);
     $role->add();

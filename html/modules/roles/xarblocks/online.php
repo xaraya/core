@@ -80,6 +80,7 @@ function roles_onlineblock_display($blockinfo)
         $args['numusers'] = 0;
     }
 
+    // FIXME: there could be many active users, but we only want a handful of them.
     $zz = xarModAPIFunc(
         'roles', 'user', 'getallactive',
         array(

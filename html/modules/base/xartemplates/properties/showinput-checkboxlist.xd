@@ -36,7 +36,7 @@
             </xar:if>
 
             <label for="#$theID#">#$option['name']# </label>  
-            <br 7>
+            <br />
         </xar:foreach>
     <xar:else />
         <xar:mlstring>No options specified for CheckBox List in validation field.</xar:mlstring>

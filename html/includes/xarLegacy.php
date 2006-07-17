@@ -3,8 +3,8 @@
  * Legacy Functions
  *
  * @package legacy
- * @copyright (C) 2006 The Digital Development Foundation
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marco Canini
 */
@@ -57,6 +57,7 @@ function xarGetStatusMsg()
         return $errmsg;
     }
     return $msg;
+}
 
 function xarBlockTypeExists($modName, $blockType)
 {

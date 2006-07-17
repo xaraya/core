@@ -530,11 +530,11 @@ function installer_admin_bootstrap()
 
     // --------------------------------------------------------
 # Create wrapper DD objects for the native itemtypes of the roles module
-	if (!xarModAPIFunc('roles','admin','createobjects'))
+    if (!xarModAPIFunc('roles','admin','createobjects'))
         throw new Exception("Creating objects for roles module failed");
 # --------------------------------------------------------
 # Create wrapper DD objects for the native itemtypes of the privileges module
-	if (!xarModAPIFunc('privileges','admin','createobjects'))
+    if (!xarModAPIFunc('privileges','admin','createobjects'))
         throw new Exception("Creating objects for privileges module failed");
 
     xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
@@ -1052,20 +1052,17 @@ function installer_admin_cleanup()
     }
     list ($rightBlockGroup) = $result->fields;
 
-	$loginBlockTypeId = xarModAPIFunc('blocks',
-					'admin',
-					'register_block_type',
-					array('modName' => 'authsystem',
-						  'blockType' => 'login'));
-    if (empty($loginBlockTypeId) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+    $loginBlockTypeId = xarModAPIFunc('blocks','admin','register_block_type',
+                    array('modName' => 'authsystem', 'blockType' => 'login'));
+    if (empty($loginBlockTypeId)) {
         return;
     }
    //Check for any sign of the Registration module (may have been installed in the configurations)
-	$regloginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
+    $regloginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
                                     array('module' => 'registration',
                                           'type'   => 'rlogin'));
 
-    if (empty($regloginBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+    if (empty($regloginBlockType)) {
         //return; no don't return, it may not have been loaded
     }
 
@@ -1131,8 +1128,8 @@ function installer_admin_finish()
     // Until here we have been using a hardcoded default timezone as a placeholder. Now load a "real" default zone via the API
     $zones = array_keys(xarModAPIFunc('base','user','timezones'));
     $defaultzone = array_shift($zones);
-	xarConfigSetVar('System.Core.TimeZone', $defaultzone);
-	xarConfigSetVar('Site.Core.TimeZone', $defaultzone);
+    xarConfigSetVar('System.Core.TimeZone', $defaultzone);
+    xarConfigSetVar('Site.Core.TimeZone', $defaultzone);
     xarResponseRedirect('index.php');
 }
 
@@ -1620,10 +1617,10 @@ function installer_admin_upgrade2()
     }
 
       // Define Module vars
- 	xarModSetVar('authsystem', 'lockouttime', 15);
-	xarModSetVar('authsystem', 'lockouttries', 3);
-	xarModSetVar('authsystem', 'uselockout', false);
-	xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
+     xarModSetVar('authsystem', 'lockouttime', 15);
+    xarModSetVar('authsystem', 'lockouttries', 3);
+    xarModSetVar('authsystem', 'uselockout', false);
+    xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
 
 
     $content .= "<p><strong>Removing Adminpanels module and move functions to other  modules</strong></p>";
@@ -1813,7 +1810,7 @@ function installer_admin_upgrade3()
             array('module' => 'base', 'type' => 'html')
         );
 
-        if (empty($htmlBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+        if (empty($htmlBlockType)) {
             return;
         }
 

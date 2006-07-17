@@ -43,7 +43,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template  = 'textupload';
-		$this->filepath   = 'modules/base/xarproperties';
+        $this->filepath   = 'modules/base/xarproperties';
 
         // always parse validation to preset methods here
         $this->parseValidation($this->validation);

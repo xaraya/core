@@ -92,12 +92,9 @@ class MySQLResultSet extends ResultSetCommon implements ResultSet {
      * @see ResultSet::close()
      */ 
     function close()
-    {   
-        // XARAYA MODIFICATION
-        //  @mysql_free_result($this->result);
+    {        
         if(is_resource($this->result))
             @mysql_free_result($this->result);
-        // END XARAYA MODIFICATION
         $this->fields = array();
     }    
         

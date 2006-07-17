@@ -14,6 +14,6 @@
  */
 function roles_admin_delete()
 {
-	return xarModFunc('roles','admin','deleterole');
+    return xarModFunc('roles','admin','deleterole');
 }
 ?>
