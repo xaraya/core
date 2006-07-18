@@ -33,8 +33,11 @@
 --
 -- Configuration variables
 --
--- Location of QA tests
-qa_location = "/var/mt/xar/com.xaraya.qa.tests/tests/"
+-- Location of QA tests, allow it to be overridable earlier 
+-- Example for OSX or linux:
+qa_location=qa_location or "/var/mt/xar/com.xaraya.qa.tests/test/"
+-- Example for Windows:
+-- qa_location=qa_location or "d:/var/mt/xar/com.xaraya.qa.tests/test/"
 
 --
 -- Line endings, a never ending story. Anyways, we want both the internal
@@ -286,11 +289,11 @@ end
 function validate_commit_message (commit_msg, stanza)
     cancommit=true -- assume all well
     function passed(nr,desc)     
-        nr=nr or 0.00; desc=desc or "ERR: no description for test given"
+        nr=nr or '0.00'; desc=desc or "ERR: no description for test given"
         print("PASSED QA test "..nr..": "..desc) 
     end
     function failed(nr,desc,msg) 
-        nr=nr or 0.00; desc=desc or "ERR: no description for test given"
+        nr=nr or '0.00'; desc=desc or "ERR: no description for test given"
         msg=msg or 'ERR: no failure message given for test'
         print("FAILED QA test "..nr..": "..desc.."\n"..msg); cancommit=false 
     end
@@ -309,13 +312,14 @@ function validate_commit_message (commit_msg, stanza)
     
     -- Run qa checks on the files contained in this revision
     local pcloc=qa_location..'pre-commit/'
-    if(io.open(pcloc,'r')) then
-        print("mtn: Running QA tests from: " .. pcloc)
-        _sysres = includedir(pcloc)
-        if cancommit then
-            return cancommit,"All seems OK, committing this revision"
-        else
-            return cancommit,"One or more tests failed, NOT commiting"
-        end
+    print("mtn: Running QA tests from: " .. pcloc)
+    -- TODO: opening the pcloc location on windows errors out, so we dont have
+    -- a graceful fallback at this time.
+    _sysres = includedir(pcloc)
+    if cancommit then
+        return cancommit,"All seems OK, committing this revision"
+    else
+        return cancommit,"One or more tests failed, NOT commiting"
     end
+    return false, "ERR: xaraya.rc hook code error, hook reached end?"
 end
