@@ -22,22 +22,22 @@ function base_adminapi_menuarray()
     $urlinfo = xarRequestGetInfo();
     $tabs = xarModAPIFunc($urlinfo[0],'data','adminmenu');
     $menulinks = array();
-	foreach($tabs as $tab) {
-		$url = isset($tab['target']) ? xarModURL($urlinfo[0],'admin',$tab['target']) : xarServerGetBaseURL();
-		$label = isset($tab['label']) ? $tab['label'] : xarML('Missing label');
-		$title = isset($tab['title']) ? $tab['title'] : $label;
-		$link = array('url'   => $url,
-							  'title' => $title,
-							  'label' => $label
-					   );
-		if(isset($tab['mask'])) {
-		    if (xarSecurityCheck($tab['mask'],0)) {
-				$menulinks[] = $link;
-		    }
-		} else {
-			$menulinks[] = $link;
-		}
-	}
+    foreach($tabs as $tab) {
+        $url = isset($tab['target']) ? xarModURL($urlinfo[0],'admin',$tab['target']) : xarServerGetBaseURL();
+        $label = isset($tab['label']) ? $tab['label'] : xarML('Missing label');
+        $title = isset($tab['title']) ? $tab['title'] : $label;
+        $link = array('url'   => $url,
+                              'title' => $title,
+                              'label' => $label
+                       );
+        if(isset($tab['mask'])) {
+            if (xarSecurityCheck($tab['mask'],0)) {
+                $menulinks[] = $link;
+            }
+        } else {
+            $menulinks[] = $link;
+        }
+    }
     return $menulinks;
 }
 

@@ -72,67 +72,67 @@ function roles_userapi_getallroles($args)
     $q->addfield('r.xar_auth_modid AS auth_modid');
 
     // Inclusions
-	$includedgroups = array();
+    $includedgroups = array();
     if (!isset($baseitemtype)) {
-		$basetype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
+        $basetype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
     }
     if (isset($include)) {
         foreach (explode(',', $include) as $include_field) {
             if ($baseitemtype == ROLES_USERTYPE) {
-				$q->ne('xar_uname',xarModAPIFunc('roles', 'user', 'get', array('uname' => $include_field)));
+                $q->ne('xar_uname',xarModAPIFunc('roles', 'user', 'get', array('uname' => $include_field)));
             } elseif ($baseitemtype == ROLES_GROUPTYPE) {
-				$q->ne('xar_name',xarModAPIFunc('roles', 'user', 'get', array('name' => $include_field)));
-				$includedgroups[] = $include_field;
-			}
+                $q->ne('xar_name',xarModAPIFunc('roles', 'user', 'get', array('name' => $include_field)));
+                $includedgroups[] = $include_field;
+            }
         }
     }
 
     // Exclusions
-	$excludedgroups = array();
+    $excludedgroups = array();
     if (!isset($baseitemtype)) {
-		$basetype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
+        $basetype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
     }
     if (isset($exclude)) {
         foreach (explode(',', $exclude) as $exclude_field) {
             if ($baseitemtype == ROLES_USERTYPE) {
-				$q->ne('xar_uname',xarModAPIFunc('roles', 'user', 'get', array('uname' => $exclude_field)));
+                $q->ne('xar_uname',xarModAPIFunc('roles', 'user', 'get', array('uname' => $exclude_field)));
             } elseif ($baseitemtype == ROLES_GROUPTYPE) {
-				$q->ne('xar_name',xarModAPIFunc('roles', 'user', 'get', array('name' => $exclude_field)));
-				$excludedgroups[] = $exclude_field;
-			}
+                $q->ne('xar_name',xarModAPIFunc('roles', 'user', 'get', array('name' => $exclude_field)));
+                $excludedgroups[] = $exclude_field;
+            }
         }
     }
 
     if ($includedgroups != array() || $excludedgroups != array()) {
-		$q->addtable($xartable['rolemembers'],'rm');
-		$q->join('r.xar_uid','rm.xar_uid');
+        $q->addtable($xartable['rolemembers'],'rm');
+        $q->join('r.xar_uid','rm.xar_uid');
         foreach ($includedgroups as $include) {
-        	$q->eq('rm.xar_parentid',$include);
+            $q->eq('rm.xar_parentid',$include);
         }
         foreach ($excludedgroups as $exclude) {
-        	$q->ne('rm.xar_parentid',$exclude);
+            $q->ne('rm.xar_parentid',$exclude);
         }
     }
 
 // cfr. xarcachemanager - this approach might change later
     $expire = xarModGetVar('roles','cache.userapi.getallroles');
-	if (!empty($expire)){
-    	$expire = unserialize($expire);
-		$q = $expire;
-	}
+    if (!empty($expire)){
+        $expire = unserialize($expire);
+        $q = $expire;
+    }
 
     if ($startnum == 0) {
-    	$q->setstartat($startnum);
-    	$q->setrowstodo($numitems);
+        $q->setstartat($startnum);
+        $q->setrowstodo($numitems);
     }
-	if (!$q->run()) return;
-	$items['nativeitems'] = $q->output();
+    if (!$q->run()) return;
+    $items['nativeitems'] = $q->output();
     $itemids = array();
     foreach ($items['nativeitems'] as $item) $itemids[] = $item['uid'];
     $items['dditems'] = xarModAPIFunc('dynamicdata','user','getitems',array('moduleid' => 27, 'itemtype' => $itemtype, 'itemids' => $itemids,'getobject' => true));
 /*    for ($i = 0, $max = count($items); $i < $max; $i++) {
-    	if (!isset($properties[$items[$i]['uid']])) continue;
-    	$items[$i] = array_merge($items[$i],$properties[$items[$i]['uid']]);
+        if (!isset($properties[$items[$i]['uid']])) continue;
+        $items[$i] = array_merge($items[$i],$properties[$items[$i]['uid']]);
     }
 */    return $items;
 }

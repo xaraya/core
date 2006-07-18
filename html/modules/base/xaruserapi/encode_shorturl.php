@@ -23,34 +23,34 @@ function base_userapi_encode_shorturl($args)
     extract($args);
 
     // Check if we have something to work with
-    if (!isset($func)) {
-        return;
-    }
+    if (!isset($func)) {return;}
 
-    // Note : make sure you don't pass the following variables as arguments in
-    // your module too - adapt here if necessary
+    $path = array();
+    $get = $args;
 
-    // default path is empty -> no short URL
-    $path = '';
-    // if we want to add some common arguments as URL parameters below
-    $join = '?';
-    // we can't rely on xarModGetName() here -> you must specify the modname !
+    // This module name.
     $module = 'base';
 
-    // specify some short URLs relevant to your module
+    // Start the path with the module name
+    // TODO: support module aliases - allow the page name to be an alias
+    $path[] = $module;
+    
     if ($func == 'main') {
-        // check for required parameters
-        if (!empty($page) && is_string($page)) {
-            $path = '/' . $module . '/' . rawurlencode($page);
-        } else {
-            $path = '/' . $module . '/';
-        }
-    } else {
-        // anything else that you haven't defined a short URL equivalent for
-        // -> don't create a path here
-    }
+        // Consume the 'func' parameter.
+        unset($get['func']);
 
-    return $path;
+        if (isset($page)) {
+            // A page name has been passed in - consume it and add it to the path.
+            unset($get['page']);
+            $path[] = $page;
+        }
+    }
+    
+    // Any GET parameters in the args that have not been consumed, will
+    // be passed back in the 'get' array, and so will be added to the
+    // end of the URL.
+
+    return array('path' => $path, 'get' => $get);
 }
 
 ?>

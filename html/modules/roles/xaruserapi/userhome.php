@@ -21,11 +21,7 @@ function roles_userapi_userhome($args)
 {
     extract ($args);
     if(!isset($url) || !isset($truecurrenturl)) {
-        $msg = xarML('Wrong arguments to roles_userapi_userhome.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
+        throw new BadParameterException(null,'Wrong arguments to roles_userapi_userhome.');
     }
 
     if(!xarSecurityCheck('ReadRole')) return;
@@ -113,9 +109,10 @@ function roles_userapi_userhome($args)
                         $externalurl=true;
                     }
                     if (!$allowexternalurl && $externalurl) {
-                        $msg = xarML('External URLs such as #(1) are not permitted in your User Account. Please edit your User Home setting or contact Administration to correct this.', $url);
-                        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-                        return xarTplModule('roles','user','account',array('moduleload'=>'roles'));
+                        $msg = 'External URLs such as #(1) are not permitted in your User Account. Please edit your User Home setting or contact Administration to correct this.';
+                        throw new BadParameterException($url,$msg);
+                        // TODO: what should we do about this here?
+                        // return xarTplModule('roles','user','account',array('moduleload'=>'roles'));
                     }
                 }
                 // BUG 2023: Make sure manual URLs are prepped for XML, consistent with xarModURL()

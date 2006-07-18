@@ -20,10 +20,10 @@
  */
 function mail_adminapi_getmenulinks()
 {
-	/*
-	This menu gets its data from the adminmenu.php file in the module's xardataapi folder.
-	You can add or change menu items by changing the data there.
-	Or you can create your own menu items here. They should have the form of this example:
+    /*
+    This menu gets its data from the adminmenu.php file in the module's xardataapi folder.
+    You can add or change menu items by changing the data there.
+    Or you can create your own menu items here. They should have the form of this example:
 
     $menulinks = array();
     .....
@@ -39,11 +39,11 @@ function mail_adminapi_getmenulinks()
     */
 
     $menulinks = xarModAPIFunc('base','admin','menuarray');
-	if (xarModIsAvailable('scheduler')) {
-		$menulinks[] = array('url' => xarModURL('mail','admin','viewq'),
-							 'title' => xarML('View all mails scheduled to be sent later'),
-							 'label' => xarML('View Mail Queue'));
-	}
+    if (xarModIsAvailable('scheduler')) {
+        $menulinks[] = array('url' => xarModURL('mail','admin','viewq'),
+                             'title' => xarML('View all mails scheduled to be sent later'),
+                             'label' => xarML('View Mail Queue'));
+    }
     return $menulinks;
 }
 ?>

@@ -71,16 +71,15 @@ class SQLiteTableInfo extends TableInfo {
             } else {
                 $type = $fulltype;
             }
-            
+            // If column is primary key and of type INTEGER, it is auto increment
+            // See: http://sqlite.org/faq.html#q1
+            $is_auto_increment = ($row['pk'] == 1 && $fulltype == 'INTEGER');
             $not_null = $row['notnull'];
             $is_nullable = !$not_null;
             
             $default_val = $row['dflt_value'];
             
-            // XARAYA MODIFICATION
-            //$this->columns[$name] = new ColumnInfo($this, $name, SQLiteTypes::getType($type), $type, $size, $scale, $is_nullable, $default_val);
-            $this->columns[$name] = new ColumnInfo($this, $name, SQLiteTypes::getType($type), $type, $size, $scale, $is_nullable, $default_val,$is_auto_increment);
-            // END XARAYA MODIFICATION
+            $this->columns[$name] = new ColumnInfo($this, $name, SQLiteTypes::getType($type), $type, $size, $scale, $is_nullable, $default_val, $is_auto_increment);
             
             if (($row['pk'] == 1) || (strtolower($type) == 'integer primary key')) {
                 if ($this->primaryKey === null) {

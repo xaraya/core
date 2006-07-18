@@ -23,7 +23,7 @@ class Dynamic_Username_Property extends Dynamic_Property
         parent::__construct($args);
         $this->tplmodule = 'roles';
         $this->template = 'username';
-		$this->filepath   = 'modules/roles/xarproperties';
+        $this->filepath   = 'modules/roles/xarproperties';
     }
 
     static function getRegistrationInfo()

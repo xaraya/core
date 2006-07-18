@@ -36,7 +36,7 @@ function authsystem_userapi_login($args)
 
     if ((!isset($uname)) ||
         (!isset($pass))) {
-		throw new BadParameterException(null,xarML('Wrong arguments to authsystem_userapi_login.'));
+        throw new BadParameterException(null,xarML('Wrong arguments to authsystem_userapi_login.'));
     }
 
     return xarUserLogIn($uname, $pass, $rememberme);

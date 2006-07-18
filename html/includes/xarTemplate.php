@@ -3,8 +3,8 @@
  * BlockLayout Template Engine
  *
  * @package blocklayout
- * @copyright (C) 2002 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Paul Rosania <paul@xaraya.com>
  * @author Marco Canini <marco@xaraya.com>

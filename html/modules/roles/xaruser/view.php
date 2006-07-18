@@ -31,9 +31,9 @@ function roles_user_view($args)
     $data['items'] = array();
     $data['pager'] = '';
 
-	$roles = xarModAPIFunc('roles', 'user', 'getallroles',$args);
-	$items = $roles['nativeitems'];
-	$objectlists = $roles['dditems'];
+    $roles = xarModAPIFunc('roles', 'user', 'getallroles',$args);
+    $items = $roles['nativeitems'];
+    $objectlists = $roles['dditems'];
 
     // keep track of the selected uid's
 
@@ -41,11 +41,11 @@ function roles_user_view($args)
     $ddlabels = xarModAPIFunc('dynamicdata','user','getitemfields',array('modid' => 27, 'itemtype' => $args['itemtype']));
     foreach ($ddlabels as $label) $itemlabels[] = $label['label'];
 
-	$data['total'] = count($items);
+    $data['total'] = count($items);
     $data['itemtype'] = $args['itemtype'];
-	$data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
-	$types = xarModAPIFunc('roles','user','getitemtypes');
-	$data['itemtypename'] = $types[$data['itemtype']]['label'];
+    $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
+    $types = xarModAPIFunc('roles','user','getitemtypes');
+    $data['itemtypename'] = $types[$data['itemtype']]['label'];
     $data['items'] = $items;
     $data['objectlists'] = $objectlists;
     $data['itemlabels'] = $itemlabels;

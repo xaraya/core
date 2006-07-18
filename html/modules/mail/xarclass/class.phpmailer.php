@@ -614,7 +614,8 @@ class PHPMailer
      * @access public
      * @return bool
      */
-    function SetLanguage($lang_type, $lang_path = "./") {
+    function SetLanguage($lang_type, $lang_path = "./") 
+    {
         // XARAYA-MODIFICATION
         // we can translate ourselves thank you
         $lang_type = 'xar';
@@ -959,7 +960,8 @@ class PHPMailer
      * Returns the start of a message boundary.
      * @access private
      */
-    function GetBoundary($boundary, $charSet, $contentType, $encoding) {
+    function GetBoundary($boundary, $charSet, $contentType, $encoding) 
+    {
         $result = "";
         if($charSet == "") { $charSet = $this->CharSet; }
         if($contentType == "") { $contentType = $this->ContentType; }

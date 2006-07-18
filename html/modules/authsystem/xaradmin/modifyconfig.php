@@ -29,8 +29,8 @@ function authsystem_admin_modifyconfig()
             $data['authid'] = xarSecGenAuthKey();
             $data['shorturlschecked'] = xarModGetVar('authsystem', 'SupportShortURLs') ? true : false;
             $data['uselockout'] =  xarModGetVar('authsystem,', 'uselockout') ? 'checked' : '';
-			$data['lockouttime'] = xarModGetVar('authsystem,', 'lockouttime')? xarModGetVar('authsystem,', 'lockouttime'): 15; //minutes
-			$data['lockouttries'] = xarModGetVar('authsystem,', 'lockouttries') ? xarModGetVar('authsystem,', 'lockouttries'): 3;
+            $data['lockouttime'] = xarModGetVar('authsystem,', 'lockouttime')? xarModGetVar('authsystem,', 'lockouttime'): 15; //minutes
+            $data['lockouttries'] = xarModGetVar('authsystem,', 'lockouttries') ? xarModGetVar('authsystem,', 'lockouttries'): 3;
 
             break;
 

@@ -180,12 +180,6 @@
       <form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
         <div class="xar-form-input-wrapper">
           <label for="privid" title="#xarML('Select the Privilege to add')#" class="xar-form-label">
-      <form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
-        <div class="xar-form-input-wrapper">
-          <label for="privid" title="#xarML('Select the Privilege to add')#" class="xar-form-label">
-      <form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
-        <div class="xar-form-input-wrapper">
-          <label for="privid" title="#xarML('Select the Privilege to add')#" class="xar-form-label">
             <xar:ml>
               <xar:mlstring>Assign a Privilege to #(1) '#(2)'</xar:mlstring>
               <xar:mlvar>

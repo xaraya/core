@@ -23,7 +23,8 @@
  * @author Marcel van der Boom <mrb@hsdev.com>
  **/
 
-class VariableStream {
+class VariableStream 
+{
     public $position;
     public $varname;
     

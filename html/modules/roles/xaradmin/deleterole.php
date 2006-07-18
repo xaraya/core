@@ -28,9 +28,9 @@ function roles_admin_deleterole()
     $roles = new xarRoles();
     // get the role to be deleted
     $role = $roles->getRole($uid);
-	$itemtype = $role->getType();
+    $itemtype = $role->getType();
 
-	// get the array of parents of this role
+    // get the array of parents of this role
     // need to display this in the template
     $parents = array();
     foreach ($role->getParents() as $parent) {
@@ -60,14 +60,14 @@ function roles_admin_deleterole()
         throw new ForbiddenOperationException($role->getName(),$msg);
     }
 
-	$types = xarModAPIFunc('roles','user','getitemtypes');
-	$data['itemtypename'] = $types[$itemtype]['label'];
+    $types = xarModAPIFunc('roles','user','getitemtypes');
+    $data['itemtypename'] = $types[$itemtype]['label'];
 
     if (empty($confirmation)) {
         // Load Template
-		$data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
-		$types = xarModAPIFunc('roles','user','getitemtypes');
-		$data['itemtypename'] = $types[$itemtype]['label'];
+        $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
+        $types = xarModAPIFunc('roles','user','getitemtypes');
+        $data['itemtypename'] = $types[$itemtype]['label'];
         $data['authid'] = xarSecGenAuthKey();
         $data['uid'] = $uid;
         $data['ptype'] = $role->getType();
@@ -98,11 +98,11 @@ function roles_admin_deleterole()
             throw new ForbiddenOperation($role->getName(),'The user "#(1)" has an active session and can not be removed at this time.');
         }
         // redirect to the next page
-		if (empty($returnurl)) {
-			xarResponseRedirect(xarModURL('roles', 'admin', 'showusers'));
-		} else {
-			xarResponseRedirect($returnurl);
-		}
+        if (empty($returnurl)) {
+            xarResponseRedirect(xarModURL('roles', 'admin', 'showusers'));
+        } else {
+            xarResponseRedirect($returnurl);
+        }
     }
 }
 ?>

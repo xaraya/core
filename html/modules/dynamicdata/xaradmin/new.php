@@ -31,14 +31,14 @@ function dynamicdata_admin_new($args)
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
 
     if($modid == 182) {
-    	// Dynamicdata module is special
-    	$ancestor = array('objectid' => $objectid, 'modid' => $modid, 'itemtype' => $itemtype);
+        // Dynamicdata module is special
+        $ancestor = array('objectid' => $objectid, 'modid' => $modid, 'itemtype' => $itemtype);
     } else {
-		if (isset($objectid)) {
-			$ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $objectid));
-		} else {
-			$ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('moduleid' => $modid,'itemtype' => $itemtype));
-		}
+        if (isset($objectid)) {
+            $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $objectid));
+        } else {
+            $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('moduleid' => $modid,'itemtype' => $itemtype));
+        }
     }
     $itemtype = $ancestor['itemtype'];
 
@@ -57,10 +57,10 @@ function dynamicdata_admin_new($args)
                                          'tplmodule' => $tplmodule));
 
     if (isset($myobject->properties['moduleid'])) {
-		if ($notfresh) $isvalid = $myobject->checkInput();
-		$itemtype = xarModAPIFunc('dynamicdata','admin', 'getnextitemtype', array('modid' => $myobject->properties['moduleid']->value));
-		$myobject->properties['itemtype']->value = $itemtype;
-	}
+        if ($notfresh) $isvalid = $myobject->checkInput();
+        $itemtype = xarModAPIFunc('dynamicdata','admin', 'getnextitemtype', array('modid' => $myobject->properties['moduleid']->value));
+        $myobject->properties['itemtype']->value = $itemtype;
+    }
     $data['object'] =& $myobject;
     $data['tplmodule'] = $tplmodule;
 
