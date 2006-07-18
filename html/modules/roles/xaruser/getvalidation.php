@@ -46,7 +46,8 @@ function roles_user_getvalidation()
     //FIXME : jojodee - this is convoluted. Probably best we use this as central point for allocating
     // to whatever pluggable registration we have. If we end up back here so be it for now.
     $regmoduleid=(int)xarModGetVar('roles','defaultregmodule');
-    if (isset($regmoduleid)) {
+    // This will be 0 if empty, so check for larger value
+    if ((is_int($regmoduleid)) && ($regmoduleid > 0)) {
         $regmodule=xarModGetNameFromID($regmoduleid);
     }else{
         //fallback to?  This is not a core module. Leave for now once until we are sure the default is set elsewhere.
@@ -148,8 +149,8 @@ function roles_user_getvalidation()
             $lastlogin =xarModGetUserVar('roles','userlastlogin',$status['uid']);
             if (!isset($lastlogin) || empty($lastlogin)) {
                 $newuser=true;
-            } 
-            //TODO : This registration and validation processes need to be totally revamped and clearly defined - make do for now 
+            }
+            //TODO : This registration and validation processes need to be totally revamped and clearly defined - make do for now
             /* use the $newuser var to test for new user - no other way atm afaik as the process is shared for the new user
                                      process and the change email process and they may be totally separate
                                   */
@@ -160,7 +161,7 @@ function roles_user_getvalidation()
                     // User has agreed to the terms and conditions.
                         $terms = xarML('This user has agreed to the site terms and conditions.');
                 }
-                
+
                 $status = xarModAPIFunc('roles','user','get',array('uname' => $uname)); //check status as it may have changed
 
                 $emailargs =  array('adminname'    => xarModGetVar('mail', 'adminname'),
@@ -175,7 +176,7 @@ function roles_user_getvalidation()
                 if (!xarModAPIFunc('registration', 'user', 'notifyadmin', $emailargs)) {
                     return; // TODO ...something here if the email is not sent..
                 }
-            
+
             } elseif  (xarModGetVar('roles', 'requirevalidation') && !$newuser && xarModGetVar('roles','askwelcomeemail')) {
              //send this email if we know for sure email validation only is required, not validation for new users - a roles function
 
