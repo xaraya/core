@@ -42,6 +42,14 @@ function roles_user_getvalidation()
     if (!xarVarFetch('phase','str:1:100',$phase,'startvalidation',XARVAR_NOT_REQUIRED)) return;
 
     xarTplSetPageTitle(xarML('Validate Your Account'));
+    /* This function to be provided with support functions to ensure we have got a default regmodule,
+        if we need it. Tis should make it easier to move the User registration validation out of
+        email revalidation soon, once we have all the registration default module instances captured in the new function.
+
+    //$defaultauthdata=xarModAPIFunc('roles','user','getdefaultregdata');
+
+    */
+
     $regmoduleid=(int)xarModGetVar('roles','defaultregmodule');
     //FIXME : jojodee - this is convoluted. Probably best we use this as central point for allocating
     // to whatever pluggable registration we have. If we end up back here so be it for now.
