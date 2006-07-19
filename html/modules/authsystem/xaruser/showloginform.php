@@ -28,6 +28,11 @@ function authsystem_user_showloginform($args = array())
 
     if (!xarUserIsLoggedIn()) {
       // Security check
+      // TODO: if exception redirects are set to ON we end up here, if further
+      // more anon has no priv for ViewAuthSystem, we end up here again => infinite loop
+      // 1. augment (i.e. hack it in) to force the check to go?
+      // 2. why is this security check here in the first place (a usecase would be nice)
+      
       if (!xarSecurityCheck('ViewAuthsystem')) return;
       $data['loginlabel'] = xarML('Log In');
       $data['loginurl']=xarModURL($defaultloginmodname,'user','login');
