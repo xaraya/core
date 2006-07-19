@@ -39,6 +39,8 @@ function loadContent(url, tagid, method, formobj, local_debug)
     method = method.toUpperCase();
     var argstr = null;
     var join = '';
+    
+    url = url.replace(/&amp;/g,'&');
 
     // prepare strings according to method
     if (method == 'POST') {
@@ -125,9 +127,10 @@ function processReqChange()
                 tag.innerHTML = req.responseText;
                 if (debug) alert(req.responseText);
                 newtag = document.getElementById(tagToGo);
+                
                 if(newtag == null) {
-                    alert('cant find the new tag [' + tagToGo + ']');
-                    tag.innerHTML = req.responseText;
+                    if (debug) alert('cant find the new tag [' + tagToGo + ']');
+                    tag.id = tagToGo;
                     document.body.style.cursor='default';
                     return false;
                 } else {
