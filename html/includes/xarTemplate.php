@@ -543,7 +543,7 @@ function xarTplProperty($modName, $propertyName, $tplType = 'showoutput', $tplDa
 }
 
 /**
- * Renders an object through an object template 
+ * Renders an object through an object template
  *
  * @author Marcel van der Boom <marcel@xaraya.com>
  * @access public
@@ -1657,7 +1657,7 @@ class xarTemplateTag
     public $_needParameter = false;
 
     /**
-     * Constructor 
+     * Constructor
      *
      * @return void
      * @throws BadParameterException
