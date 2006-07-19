@@ -53,7 +53,7 @@ function roles_user_getvalidation()
     $regmoduleid=(int)xarModGetVar('roles','defaultregmodule');
     //FIXME : jojodee - this is convoluted. Probably best we use this as central point for allocating
     // to whatever pluggable registration we have. If we end up back here so be it for now.
-    if (isset($regmoduleid)){
+    if (is_int($regmoduleid) && ($regmoduleid > 0)){
         $regmodule=xarModGetNameFromID($regmoduleid);
         if (!xarModIsAvailable($regmodule)) {
             //we have to provide an error, we can't really go on
@@ -63,6 +63,13 @@ function roles_user_getvalidation()
     }else{
         //fallback to?  This is not a core module. Leave for now once until we are sure the default is set elsewhere.
         $regmodule='registration';
+        // As now this one is always set with an error, test for this module.
+        // If not available, pass error.
+        if (!xarModIsAvailable($regmodule)) {
+            //we have to provide an error, we can't really go on
+            $msg = xarML('There is currently a system problem with User Validation, please contact the Administrator');
+            xarErrorSet(XAR_USER_EXCEPTION, 'CANNOT_CONTINUE', new DefaultUserException($msg));
+        }
     }
 
     $defaultauthdata=xarModAPIFunc('roles','user','getdefaultauthdata');
