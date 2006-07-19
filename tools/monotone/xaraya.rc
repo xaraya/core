@@ -35,9 +35,9 @@
 --
 -- Location of QA tests, allow it to be overridable earlier 
 -- Example for OSX or linux:
-qa_location=qa_location or "/var/mt/xar/com.xaraya.qa.tests/test/"
+qa_location=qa_location or "/var/mt/xar/com.xaraya.qa.tests/tests/"
 -- Example for Windows:
--- qa_location=qa_location or "d:/var/mt/xar/com.xaraya.qa.tests/test/"
+-- qa_location=qa_location or "d:/var/mt/xar/com.xaraya.qa.tests/tests/"
 
 --
 -- Line endings, a never ending story. Anyways, we want both the internal
