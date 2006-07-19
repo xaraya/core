@@ -97,7 +97,7 @@ function dynamicdata_admin_view($args)
             if (!empty($seenmod[$modList[$i]['regid']])) {
                 continue;
             }
-            if ($oldcat != $modList[$i]['category']) {
+            if (isset($modList[$i]['category']) && $oldcat != $modList[$i]['category']) {
                 $modList[$i]['header'] = xarVarPrepForDisplay($modList[$i]['category']);
                 $oldcat = $modList[$i]['category'];
             } else {
