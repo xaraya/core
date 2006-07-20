@@ -175,6 +175,7 @@ function installer_admin_phase3()
     $data['xmlextension']             = extension_loaded('xml');
     $data['mysqlextension']           = extension_loaded('mysql');
     $data['pgsqlextension']           = extension_loaded ('pgsql');
+    // This is called xsl in PHP5.x Should check for that when php version is 5 or higher
     $data['xsltextension']            = extension_loaded ('xslt');
     $data['ldapextension']            = extension_loaded ('ldap');
     $data['gdextension']              = extension_loaded ('gd');
@@ -708,12 +709,12 @@ function installer_admin_create_administrator()
                                  'groups'   => array(array('gid'      => $leftBlockGroup,
                                                            'template' => '')),
                                  'template' => '',
-                                 'state'    =>  2))) { 
+                                 'state'    =>  2))) {
             return;
         }
     }
 
-    
+
     $now = time();
 
     $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot .';
@@ -1191,7 +1192,7 @@ function installer_admin_upgrade1()
     }else{
         $data['alreadydone']='';
     }
-    
+
     if ($data['xarVersion'] < '1.0') {
         $data['downloadit']="<a href=\"http://www.xaraya.com/index.php/docs/75\">Xaraya</a>";
         $data['versionlow']=
@@ -1217,7 +1218,7 @@ function installer_admin_upgrade2()
      $thisdata['xarProduct'] = xarConfigGetVar('System.Core.VersionId');
      $thisdata['xarVersion'] = xarConfigGetVar('System.Core.VersionNum');
      $thisdata['xarRelease'] = xarConfigGetVar('System.Core.VersionSub');
-     
+
      //Load this early
      xarDBLoadTableMaintenanceAPI();
 
@@ -1263,7 +1264,7 @@ function installer_admin_upgrade2()
 
     // Bug 3164, store locale in ModUSerVar
     xarModSetVar('roles', 'locale', '');
-  
+
   $content .= "<p><strong>Checking <strong>include/properties</strong> directory for moved DD properties</strong></p>";
     //From 1.0.0rc2 propsinplace was merged and dd propertie began to move to respective modules
     //Check they don't still exisit in the includes directory  bug 4371
@@ -1676,7 +1677,7 @@ function installer_admin_upgrade2()
     // Remove Masks and Instances
     xarRemoveMasks('adminpanels');
     xarRemoveInstances('adminpanels');
-    
+
     //Remove the Adminpanel module entry
     $aperror=0;
     $moduleTable = $systemPrefix .'_modules';
@@ -1720,7 +1721,7 @@ function installer_admin_upgrade2()
 // Miscellaneous upgrade functions that always run each upgrade
 // Version independent
 function installer_admin_upgrade3()
-{   
+{
     $content='';
     $thisdata['xarProduct'] = xarConfigGetVar('System.Core.VersionId');
     $thisdata['xarVersion'] = xarConfigGetVar('System.Core.VersionNum');
@@ -1729,7 +1730,7 @@ function installer_admin_upgrade3()
 
     // Set Config Vars - add those that need to be set each upgrade here.
     $roleanon = xarFindRole('Anonymous');
-    $configvars[] = array( 
+    $configvars[] = array(
                            array('name'    =>  'System.Core.VersionNum',
                                  'set'     =>  XARCORE_VERSION_NUM));
     $content .=  "<h3><strong>Updating Required Configuration Variables</strong></h3>";

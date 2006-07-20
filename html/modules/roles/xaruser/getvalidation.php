@@ -42,20 +42,34 @@ function roles_user_getvalidation()
     if (!xarVarFetch('phase','str:1:100',$phase,'startvalidation',XARVAR_NOT_REQUIRED)) return;
 
     xarTplSetPageTitle(xarML('Validate Your Account'));
+    /* This function to be provided with support functions to ensure we have got a default regmodule,
+        if we need it. Tis should make it easier to move the User registration validation out of
+        email revalidation soon, once we have all the registration default module instances captured in the new function.
 
+    //$defaultauthdata=xarModAPIFunc('roles','user','getdefaultregdata');
+
+    */
+
+    $regmoduleid=(int)xarModGetVar('roles','defaultregmodule');
     //FIXME : jojodee - this is convoluted. Probably best we use this as central point for allocating
     // to whatever pluggable registration we have. If we end up back here so be it for now.
-    $regmoduleid=(int)xarModGetVar('roles','defaultregmodule');
-    if (isset($regmoduleid)) {
+    if (is_int($regmoduleid) && ($regmoduleid > 0)){
         $regmodule=xarModGetNameFromID($regmoduleid);
+        if (!xarModIsAvailable($regmodule)) {
+            //we have to provide an error, we can't really go on
+            $msg = xarML('There is currently a system problem with User Validation, please contact the Administrator');
+            xarErrorSet(XAR_USER_EXCEPTION, 'CANNOT_CONTINUE', new DefaultUserException($msg));
+        }
     }else{
         //fallback to?  This is not a core module. Leave for now once until we are sure the default is set elsewhere.
         $regmodule='registration';
-    }
-    if (!xarModIsAvailable($regmodule)) {
-        //we have to provide an error, we can't really go on
-        $msg = xarML('There is currently a system problem with User Validation, please contact the Administrator');
-        xarErrorSet(XAR_USER_EXCEPTION, 'CANNOT_CONTINUE', new DefaultUserException($msg));
+        // As now this one is always set with an error, test for this module.
+        // If not available, pass error.
+        if (!xarModIsAvailable($regmodule)) {
+            //we have to provide an error, we can't really go on
+            $msg = xarML('There is currently a system problem with User Validation, please contact the Administrator');
+            xarErrorSet(XAR_USER_EXCEPTION, 'CANNOT_CONTINUE', new DefaultUserException($msg));
+        }
     }
 
     $defaultauthdata=xarModAPIFunc('roles','user','getdefaultauthdata');
@@ -148,8 +162,8 @@ function roles_user_getvalidation()
             $lastlogin =xarModGetUserVar('roles','userlastlogin',$status['uid']);
             if (!isset($lastlogin) || empty($lastlogin)) {
                 $newuser=true;
-            } 
-            //TODO : This registration and validation processes need to be totally revamped and clearly defined - make do for now 
+            }
+            //TODO : This registration and validation processes need to be totally revamped and clearly defined - make do for now
             /* use the $newuser var to test for new user - no other way atm afaik as the process is shared for the new user
                                      process and the change email process and they may be totally separate
                                   */
@@ -160,7 +174,7 @@ function roles_user_getvalidation()
                     // User has agreed to the terms and conditions.
                         $terms = xarML('This user has agreed to the site terms and conditions.');
                 }
-                
+
                 $status = xarModAPIFunc('roles','user','get',array('uname' => $uname)); //check status as it may have changed
 
                 $emailargs =  array('adminname'    => xarModGetVar('mail', 'adminname'),
@@ -175,7 +189,7 @@ function roles_user_getvalidation()
                 if (!xarModAPIFunc('registration', 'user', 'notifyadmin', $emailargs)) {
                     return; // TODO ...something here if the email is not sent..
                 }
-            
+
             } elseif  (xarModGetVar('roles', 'requirevalidation') && !$newuser && xarModGetVar('roles','askwelcomeemail')) {
              //send this email if we know for sure email validation only is required, not validation for new users - a roles function
 
