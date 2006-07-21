@@ -1,89 +1,57 @@
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
-</xar:comment>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>
-            User Information 
-        </xar:mlstring>
+        <xar:ml>
+            <xar:mlstring>#(1) Information</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+        </xar:ml>
     </span>
 </div>
 <div class="xar-mod-body">
-    <xar:if condition="strtolower($uname) ne 'anonymous' and strtolower($uname) ne 'myself'">
-        <xar:if condition="xarModGetVar('roles', 'usersendemails')">
-            <p>
-                <strong>
-                    <xar:mlstring>
-                        Email 
-                    </xar:mlstring>
-                </strong>
-                :
-                <a href="&xar-modurl-roles-user-email;&amp;uid=#$uid#">
-                    <xar:ml>
+    <xar:if condition="$uid eq 0">
+        <xar:ml>
+            <xar:mlstring>No #(1) to display</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+        </xar:ml>
+    <xar:else/>                
+        <xar:if condition="($basetype eq ROLES_USERTYPE) and (strtolower($uname) ne 'anonymous') and (strtolower($uname) ne 'myself')">
+            <xar:if condition="xarModGetVar('roles', 'usersendemails')">
+                <p>
+                    <strong>
                         <xar:mlstring>
-                            Send an Email to #(1) 
+                            Email 
                         </xar:mlstring>
-                        <xar:mlvar>
-                            #xarVarPrepForDisplay($name)# 
-                        </xar:mlvar>
-                    </xar:ml>
-                </a>
-            </p>
-            <xar:else />
-            <p>
-                <strong>
-                    <xar:mlstring>
-                        Name 
-                    </xar:mlstring>
-                </strong>
+                    </strong>
                 :
-                #xarVarPrepForDisplay($name)# 
-            </p>
-
-            </xar:if>
-
-           <xar:if condition="!empty($userlastlogin)">
-            <p>
-                <strong>
-                    <xar:mlstring>
-                        Time of Last Login
-                    </xar:mlstring>
-                </strong>
+                    <a href="&xar-modurl-roles-user-email;&amp;uid=#$uid#">
+                        <xar:ml>
+                            <xar:mlstring>
+                                Send an Email to #(1) 
+                            </xar:mlstring>
+                            <xar:mlvar>
+                                #xarVarPrepForDisplay($name)# 
+                            </xar:mlvar>
+                        </xar:ml>
+                    </a>
+                </p>
+                <xar:else />
+                <p>
+                    <strong>
+                        <xar:mlstring>
+                            Name 
+                        </xar:mlstring>
+                    </strong>
                 :
-                #xarLocaleGetFormattedDate('medium', $userlastlogin)#  #xarLocaleGetFormattedTime('medium', $userlastlogin)#
-            </p>
-            </xar:if>
-            <xar:if condition="!empty($homelink)">
-            <p>
-                <strong>
-                    <xar:mlstring>
-                        Home Page
-                    </xar:mlstring>
-                </strong>
-                :
-                <a href="#$homelink#" title="#xarML('Home Page')#">#$homelink#</a>
-            </p>
-        </xar:if>
-        <xar:if condition="xarModIsAvailable('dynamicdata')">
-            <xar:data-getitem name="$properties" module="roles" itemid="$uid" />
-            <xar:if condition="isset($properties) and count($properties) gt 0">
-                <xar:foreach in="$properties" key="$name">
-                    <p>
-                        <strong>
-                            <xar:data-label property="$properties[$name]" />
-                        </strong>
-                        : 
-                        <xar:data-output property="$properties[$name]" />
-                    </p>
-                </xar:foreach>
+                    #xarVarPrepForDisplay($name)# 
+                </p>
             </xar:if>
         </xar:if>
+        <p>
+        <xar:if condition="!empty($hooks)">
+            <xar:foreach in="$hooks" key="$module" value="$output">
+                #$output#
+            </xar:foreach>
+        </xar:if>
+        </p>
     </xar:if>
-    <p>
-    <xar:if condition="!empty($hooks)">
-        <xar:foreach in="$hooks" key="$module" value="$output">
-            #$output#
-        </xar:foreach>
-    </xar:if>
-    </p>
 </div>

@@ -28,6 +28,7 @@ class xarPHPCompat
      * @access private
      * @param  string $directory The directory to loop over
      * @param  string $manipulator The xarPHPCompat loader to apply to each .php file
+     * @todo   use directory iterator?
      */
     function loopDir ($directory, $manipulator)
     {

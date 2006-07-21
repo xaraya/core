@@ -1,7 +1,6 @@
 <?php
 /**
  * Get admin menu links
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -18,20 +17,25 @@
  */
 function base_adminapi_getmenulinks()
 {
-     // Security Check
-    $menulinks = array();
-    if (xarSecurityCheck('AdminBase',0)) {
+    /*
+    This menu gets its data from the adminmenu.php file in the module's xardataapi folder.
+    You can add or change menu items by changing the data there.
+    Or you can create your own menu items here. They should have the form of this example:
 
-        $menulinks[] = array('url'   => xarModURL('base','admin','sysinfo'),
-                             'title' => xarML('View your PHP configuration'),
-                             'label' => xarML('System Info'));
-        $menulinks[] = array('url'   => xarModURL('base','admin','release'),
-                             'title' => xarML('View recent released extensions'),
-                             'label' => xarML('Extension Releases'));
-        $menulinks[] = array('url'   => xarModURL('base','admin','modifyconfig'),
-                             'title' => xarML('Modify Base configuration values'),
-                             'label' => xarML('Modify Config'));
+    $menulinks = array();
+    .....
+    if (xarSecurityCheck('EditRole',0)) {
+        $menulinks[] = array('url'   => xarModURL('roles',
+                                                  'admin',
+                                                  'viewroles'),
+                              'title' => xarML('View and edit the groups on the system'),
+                              'label' => xarML('View All Groups'));
     }
+    .....
     return $menulinks;
+    */
+
+    // No special menu. Just return a standard array
+    return xarModAPIFunc('base','admin','menuarray');
 }
 ?>

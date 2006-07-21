@@ -1,7 +1,6 @@
 <?php
 /**
  * Get a user variable
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -26,10 +25,7 @@ function authsystem_userapi_get_user_variable($args)
     extract($args);
 
     if (!isset($uid) || !isset($name)) {
-        $msg = xarML('Empty uid (#(1)) or name (#(2))', $uid, $name);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
+        throw new BadParameterException(array($uid,$name),'Empty uid (#(1)) or name (#(2))');
     }
 
     if (!isset($vars[$uid])) {
@@ -43,10 +39,7 @@ function authsystem_userapi_get_user_variable($args)
 
         // throw back an exception if the user doesn't exist
         //if (...) {
-        //    $msg = xarML('User identified by uid #(1) does not exist.', $uid);
-        //    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'ID_NOT_EXIST',
-        //                  new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        //    return;
+        //    throw new IDNotFoundException($uid,'User identified by uid #(1) does not exist.');
         //}
 
         // $vars[$uid][$name] = $value;

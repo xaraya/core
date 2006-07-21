@@ -27,21 +27,20 @@
 function modules_admin_install()
 {
     // Security and sanity checks
-    if (!xarSecConfirmAuthKey()) return;
+    // TODO: check under what conditions this is needed
+//    if (!xarSecConfirmAuthKey()) return;
 
     if (!xarVarFetch('id', 'int:1:', $id)) return;
 
     //First check the modules dependencies
-    if (!xarModAPIFunc('modules','admin','verifydependency',array('regid'=>$id))) {
-        //Oops, we got problems...
-        //Handle the exception with a nice GUI:
-        xarErrorHandled();
+    // TODO: investigate try/catch clause here, it's not trivial
+    try {
+        xarModAPIFunc('modules','admin','verifydependency',array('regid'=>$id));
 
         //Checking if the user has already passed thru the GUI:
         xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
-    } else {
-        //No dependencies problems, jump dependency GUI
-        $command = true;
+    } catch (ModuleNotFoundException $e) {
+        $command = false;
     }
 
     if (!$command) {
@@ -53,10 +52,12 @@ function modules_admin_install()
         //3rd has only 'regid' key with the ID of the module
 
         // get any dependency info on this module for a better message if something is missing
-        $thisinfo = xarModGetInfo($id);
-        if (!isset($thisinfo)) xarErrorHandled();
-        if (isset($thisinfo['dependencyinfo'])) $data['dependencyinfo'] = $thisinfo['dependencyinfo'];
-        else $data['dependencyinfo'] = array();
+        try {
+            $thisinfo = xarModGetInfo($id);
+            $data['dependencyinfo'] = $thisinfo['dependencyinfo'];
+        } catch (NotFoundExceptions $e) {
+            $data['dependencyinfo'] = array();
+        }
 
         $data['authid']       = xarSecGenAuthKey();
         $data['dependencies'] = xarModAPIFunc('modules','admin','getalldependencies',array('regid'=>$id));
@@ -68,38 +69,31 @@ function modules_admin_install()
         return;
     }
 
+    xarSessionSetVar('installing',true);
     $minfo=xarModGetInfo($id);
     //Bail if we've lost our module
     if ($minfo['state'] != XARMOD_STATE_MISSING_FROM_INACTIVE) {
-        //Installs with dependencies, first initialise the necessary dependecies
+        //Installs with dependencies, first initialise the necessary dependencies
         //then the module itself
-        if (!xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$id))) {
+        xarSessionSetVar('modulestoinstall',serialize(array()));
+        if (!xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$id, 'phase' => 0))) {
             // Don't return yet - the stack is rendered here.
             //return;
         }
     }
-
-    // Send the full error stack to the install template for rendering.
-    // (The hope is that all errors can be rendered like this eventually)
-    if (xarCurrentErrorType()) {
-        // Get the error stack
-        $errorstack = xarErrorget();
-        // Free up the error stack since we are handling it locally.
-        xarErrorFree();
-        // Return the stack for rendering.
-        return array('errorstack' => $errorstack);
-    }
+    xarSessionDelVar('installing');
 
     // set the target location (anchor) to go to within the page
     $target = $minfo['name'];
-    
+
     if (function_exists('xarOutputFlushCached')) {
         xarOutputFlushCached('base');
+        xarOutputFlushCached('modules');
         xarOutputFlushCached('base-block');
     }
 
     // The module might have properties, after installing, flush the property cache otherwise you will
-    // get errors on displaying the property. 
+    // get errors on displaying the property.
     if(!xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush' => true))) {
         return false; //FIXME: Do we want an exception here if flushing fails?
     }

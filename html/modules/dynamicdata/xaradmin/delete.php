@@ -1,7 +1,6 @@
 <?php
 /**
  * Delete an item
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -28,6 +27,7 @@ function dynamicdata_admin_delete($args)
     if(!xarVarFetch('noconfirm','isset', $noconfirm, NULL,                              XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('tplmodule','str',   $tplmodule, 'dynamicdata', XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
 
     $myobject = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
@@ -68,7 +68,7 @@ function dynamicdata_admin_delete($args)
         if(!isset($template)) {
             $template = $myobject->name;
         }
-        return xarTplModule('dynamicdata','admin','delete',$data,$template);
+        return xarTplModule($tplmodule,'admin','delete',$data,$template);
     }
 
     // If we get here it means that the user has confirmed the action

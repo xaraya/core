@@ -13,31 +13,23 @@
  */
 class Dynamic_ModuleVariables_DataStore extends Dynamic_DataStore
 {
-    var $modname;
+    public $modname;
 
-    function Dynamic_ModuleVariables_DataStore($name)
+    function __construct($name)
     {
         // invoke the default constructor from our parent class
-        $this->Dynamic_DataStore($name);
+        parent::__construct($name);
 
         // keep track of the concerned module for module settings
-    // TODO: the concerned module is currently hiding in the third part of the data store name :)
+        // TODO: the concerned module is currently hiding in the third part of the data store name :)
         list($fixed1,$fixed2,$modid) = explode('_',$name);
         if (empty($modid)) {
-            $modid = xarModGetIDFromName(xarModGetName());
+            $modid = xarMod::getRegID(xarMod::getName());
         }
-        $modinfo = xarModGetInfo($modid);
+        $modinfo = xarMod::getInfo($modid);
         if (!empty($modinfo['name'])) {
             $this->modname = $modinfo['name'];
         }
-    }
-
-    /**
-     * Get the field name used to identify this property (we use the name of the property here)
-     */
-    function getFieldName(&$property)
-    {
-        return $property->name;
     }
 
     function getItem($args)
@@ -56,12 +48,12 @@ class Dynamic_ModuleVariables_DataStore extends Dynamic_DataStore
         }
 
         // let's cheat a little bit here, and preload everything :-)
-        xarMod_getVarsByModule($this->modname);
+        xarModVars::load($this->modname);
 
         foreach ($fieldlist as $field) {
             // get the value from the module variables
-        // TODO: use $field.$itemid for modules with several itemtypes ? [like articles :)]
-            $value = xarModGetVar($this->modname,$field);
+            // TODO: use $field.$itemid for modules with several itemtypes ? [like articles :)]
+            $value = xarModVars::get($this->modname,$field);
             // set the value for this property
             $this->fields[$field]->setValue($value);
         }
@@ -70,7 +62,7 @@ class Dynamic_ModuleVariables_DataStore extends Dynamic_DataStore
 
     function createItem($args)
     {
-        // There's no difference with updateItem() here, because xarModSetVar() handles that
+        // There's no difference with updateItem() here, because xarModVars:set() handles that
         return $this->updateItem($args);
     }
 
@@ -96,7 +88,7 @@ class Dynamic_ModuleVariables_DataStore extends Dynamic_DataStore
             if (!isset($value)) {
                 continue;
             }
-            xarModSetVar($this->modname,$field,$value);
+            xarModVars::set($this->modname,$field,$value);
         }
         return $itemid;
     }
@@ -117,7 +109,7 @@ class Dynamic_ModuleVariables_DataStore extends Dynamic_DataStore
         }
 
         foreach ($fieldlist as $field) {
-            xarModDelVar($this->modname,$field);
+            xarModVars::delete($this->modname,$field);
         }
 
         return $itemid;

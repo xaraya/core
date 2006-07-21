@@ -1,2 +1,2 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<a href="#$value#">#$value#</a> 
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<a href="#$value#"><xar:var name="value" prep="true"/></a> 

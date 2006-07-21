@@ -1,7 +1,5 @@
 <?php
 /**
- * Dynamic Object Property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -34,9 +32,10 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
 
 class Dynamic_Object_Property extends Dynamic_Select_Property
 {
-    function Dynamic_Object_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Select_Property($args);
+        parent::__construct($args);
+        $this->filepath   = 'modules/dynamicdata/xarproperties';
 
         if (!empty($this->validation)) {
             foreach(preg_split('/(?<!\\\);/', $this->validation) as $option) {
@@ -75,34 +74,16 @@ class Dynamic_Object_Property extends Dynamic_Select_Property
 //        }
     }
 
-    // default methods from Dynamic_Select_Property
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('dynamicdata');
+        $info->id   = 24;
+        $info->name = 'object';
+        $info->desc = 'Object';
 
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 24,
-                              'name'       => 'object',
-                              'label'      => 'Object',
-                              'format'     => '24',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => 'dynamicdata',
-                            'aliases'        => '',
-                            'args'           => serialize($args)
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
+        return $info;
+    }
 }
 
 ?>
