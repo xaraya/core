@@ -369,8 +369,10 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffs
     // grab the right set of locale data
     $locale_format = $localeData["/timeFormats/$length"];
     // replace the locale formatting style with valid strftime() style
-    $locale_format = str_replace('H','%H',$locale_format); // Bug 5806
+
     $locale_format = str_replace('HH','%H',$locale_format);
+    $locale_format = str_replace('H','%H',$locale_format); // Bug 5806
+    $locale_format = str_replace('%%H','%H',$locale_format); // Bug 5806
     $locale_format = str_replace('hh','%I',$locale_format);
     $locale_format = str_replace('mm','%M',$locale_format);
     $locale_format = str_replace('ss','%S',$locale_format);
