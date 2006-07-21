@@ -591,7 +591,7 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
      * as content for the tag. This is not entirely right, but enough for now
      *
      * @param object $parser the parser to which this handler is attached
-     * @param string $target the part after the <? in the document
+     * @param string $target the part after the '<?' in the document
      * @param string $data   the contents of the processing instruction
      */
     function process_instruction($parser, $target , $data)
