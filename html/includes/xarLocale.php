@@ -2,10 +2,12 @@
 /**
  * Locales (Multi Language System)
  *
- * @package multilanguage
+ * @package core
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
+ * @subpackage multilanguage
  * @author Marco Canini <marco@xaraya.com>
  */
 
@@ -329,6 +331,7 @@ function xarLocaleGetFormattedUTCTime($length = 'short',$timestamp = null, $addo
  *  @param string $length what time locale we want (short|medium|long)
  *  @param int $timestamp optional unix timestamp in UTC to format
  *  @param bool $addoffset add user timezone offset (default true)
+ * @todo MichelV: why are the formatting rules not the same as PHP rules for strftime?
  */
 function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffset = true)
 {
@@ -366,6 +369,7 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffs
     // grab the right set of locale data
     $locale_format = $localeData["/timeFormats/$length"];
     // replace the locale formatting style with valid strftime() style
+    $locale_format = str_replace('H','%H',$locale_format); // Bug 5806
     $locale_format = str_replace('HH','%H',$locale_format);
     $locale_format = str_replace('hh','%I',$locale_format);
     $locale_format = str_replace('mm','%M',$locale_format);
