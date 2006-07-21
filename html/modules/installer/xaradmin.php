@@ -279,7 +279,7 @@ function installer_admin_phase5()
 
     // allow only a-z 0-9 and _ in table prefix
     if (!preg_match('/^\w*$/',$dbPrefix)) {
-        $msg = xarML('Invalid character in table prefix');
+        $msg = xarML('Invalid character in table prefix. Only use a-z, a _ and/or 0-9 in the prefix.');
         xarCore_die($msg);
         return;
     }
