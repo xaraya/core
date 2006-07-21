@@ -135,9 +135,7 @@ function roles_user_getvalidation()
 
             } else {
                 // Update the user status table to reflect a validated account.
-                if (!xarModAPIFunc('roles',
-                                   'user',
-                                   'updatestatus',
+                if (!xarModAPIFunc('roles', 'user', 'updatestatus',
                                     array('uname' => $uname,
                                           'state' => ROLES_STATE_ACTIVE))) return;
                 //send welcome email (option)
@@ -195,15 +193,13 @@ function roles_user_getvalidation()
 
                 $adminname = xarModGetVar('mail', 'adminname');
                 $adminemail = xarModGetVar('mail', 'adminmail');
-                $message = "".xarML('A new user has registered or changed their email address.  Here are the details')." \n\n";
+                $message = "".xarML('A user has revalidated their changed email address.  Here are the details')." \n\n";
                 $message .= "".xarML('Username')." = $status[name]\n";
                 $message .= "".xarML('Email Address')." = $status[email]";
 
-                $messagetitle = "".xarML('A user has registered or updated information')."";
+                $messagetitle = "".xarML('A user has updated information')."";
 
-                if (!xarModAPIFunc('mail',
-                                   'admin',
-                                   'sendmail',
+                if (!xarModAPIFunc('mail', 'admin', 'sendmail',
                                    array('info' => $adminemail,
                                          'name' => $adminname,
                                          'subject' => $messagetitle,

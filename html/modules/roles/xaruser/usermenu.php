@@ -174,16 +174,19 @@ function roles_user_usermenu($args)
                                          'dopasswordupdate' => $dopasswordupdate))) return;
             }
             if (!empty($email)){
-                // Steps for changing email address.
-                // 1) Validate the new email address for errors.
-                // 2) Log user out.
-                // 3) Change user status to 2 (if validation is set as option)
-                // 4) Registration process takes over from there.
+                /* updated steps for changing email address
+                   1) Validate the new email address for errors.
+                   2) Check if validation is required and if so create confirmation code
+                   3) Change user status to 2 (if validation is set as option)
+                   4) If validation is required for a change, if user is logged in (ie existing user), log user out.
+                   4b) Display appropriate message
+                   5) Registration process takes over from there. : 
+                      we need to change this as registration is separate and should only take over if it's a new user
+                      The validation of emails for existing users is another function that shares some aspects of the process as registration
+                */
 
                 // Step 1
-                $emailcheck = xarModAPIFunc('roles',
-                                            'user',
-                                            'validatevar',
+                $emailcheck = xarModAPIFunc('roles','user','validatevar',
                                             array('var' => $email,
                                                   'type' => 'email'));
 
@@ -195,9 +198,7 @@ function roles_user_usermenu($args)
 
                 if(xarModGetVar('roles','uniqueemail')) {
                     // check for duplicate email address
-                    $user = xarModAPIFunc('roles',
-                                          'user',
-                                          'get',
+                    $user = xarModAPIFunc('roles', 'user','get',
                                            array('email' => $email));
                     if ($user != false) {
                         unset($user);
@@ -218,7 +219,8 @@ function roles_user_usermenu($args)
                         return;
                     }
                 }
-                // Step 3
+                // Step 2 Check for validation required or not
+
                 $requireValidation = xarModGetVar('roles', 'requirevalidation');
                 if ((!xarModGetVar('roles', 'requirevalidation')) || (xarUserGetVar('uname') == 'admin')){
                     // The API function is called.
@@ -231,20 +233,16 @@ function roles_user_usermenu($args)
                                              'home' => $home,
                                              'email' => $email,
                                              'state' => ROLES_STATE_ACTIVE))) return;
-                } else {
-
+                } else { // if we need validation
                     // Step 2
                     // Create confirmation code and time registered
-                    $confcode = xarModAPIFunc('roles',
-                                              'user',
-                                              'makepass');
+                    //jojodee - can't create time registered here - this is used for existing users as well
+                    $confcode = xarModAPIFunc('roles','user','makepass');
 
                     // Step 3
                     // Set the user to not validated
                     // The API function is called.
-                    if(!xarModAPIFunc('roles',
-                                      'admin',
-                                      'update',
+                    if(!xarModAPIFunc('roles', 'admin', 'update',
                                        array('uid'      => $uid,
                                              'uname'    => $uname,
                                              'name'     => $name,
@@ -254,10 +252,9 @@ function roles_user_usermenu($args)
                                              'state'    => ROLES_STATE_NOTVALIDATED))) return;
                     // Step 4
                     //Send validation email
-                    if (!xarModAPIFunc( 'roles',
-                                        'admin',
-                                        'senduseremail',
-                                        array('uid' => array($uid => '1'), 'mailtype' => 'validation'))) {
+                    if (!xarModAPIFunc( 'roles',  'admin', 'senduseremail',
+                                  array('uid' => array($uid => '1'), 'mailtype' => 'validation'))) {
+
                         $msg = xarML('Problem sending confirmation email');
                         xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                     }

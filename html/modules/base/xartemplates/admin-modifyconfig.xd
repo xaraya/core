@@ -412,16 +412,16 @@
                             Cookie Name: 
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="cookiename" name="cookiename" value="#xarConfigGetVar('Site.Session.CookieName')#" maxlength="10" class="xar-form-textmedium" />
+                    <input type="text" id="cookiename" name="cookiename" value="#xarConfigGetVar('Site.Session.CookieName')#" maxlength="20" class="xar-form-textmedium" />
                     <xar:mlstring>Default: XARAYASID</xar:mlstring>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="cookiepath" title="#xarML('Override the default cookie path')#" class="xar-form-label">
                         <xar:mlstring>
-                            Cookie Path: 
+                            Cookie Path:
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="cookiepath" name="cookiepath" value="#xarConfigGetVar('Site.Session.CookiePath')#" maxlength="10" class="xar-form-textmedium" />
+                    <input type="text" id="cookiepath" name="cookiepath" value="#xarConfigGetVar('Site.Session.CookiePath')#" maxlength="20" class="xar-form-textmedium" />
                     <xar:ml><xar:mlstring>Default: #(1) (limited to the Xaraya directory)</xar:mlstring><xar:mlvar>#xarServerGetBaseURI()#</xar:mlvar></xar:ml>
                 </div>
                 <div class="xar-form-input-wrapper">
@@ -430,7 +430,7 @@
                             Cookie Domain: 
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="cookiedomain" name="cookiedomain" value="#xarConfigGetVar('Site.Session.CookieDomain')#" maxlength="10" class="xar-form-textmedium" />
+                    <input type="text" id="cookiedomain" name="cookiedomain" value="#xarConfigGetVar('Site.Session.CookieDomain')#" maxlength="20" class="xar-form-textmedium" />
                     <xar:mlstring>Default: none (not shared across hosts)</xar:mlstring>
                 </div>
                 <div class="xar-form-input-wrapper">
@@ -439,7 +439,7 @@
                             Referer Check: 
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="referercheck" name="referercheck" value="#xarConfigGetVar('Site.Session.RefererCheck')#" maxlength="10" class="xar-form-textmedium" />
+                    <input type="text" id="referercheck" name="referercheck" value="#xarConfigGetVar('Site.Session.RefererCheck')#" maxlength="40" class="xar-form-textmedium" />
                     <xar:ml><xar:mlstring>Default: #(1) for security level 'High'</xar:mlstring><xar:mlvar>#xarServerGetVar('HTTP_HOST')#</xar:mlvar></xar:ml>
                 </div>
             </fieldset>
