@@ -37,7 +37,7 @@
           </a>
         </dd>
 
-    <xar:set name="tabclass">$activetab=='main'?'active':''</xar:set>
+    <xar:set name="tabclass">($activetab=='main' or $activetab=='overview')?'active':''</xar:set>
     <dd class="#$tabclass#">
       <a href="&xar-modurl-base-admin-overview;">
         <xar:mlstring>Overview</xar:mlstring>

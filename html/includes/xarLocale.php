@@ -2,10 +2,12 @@
 /**
  * Locales (Multi Language System)
  *
- * @package multilanguage
+ * @package core
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
+ * @subpackage multilanguage
  * @author Marco Canini <marco@xaraya.com>
  */
 
@@ -17,7 +19,7 @@
  * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return array locale data
- * @raise  LOCALE_NOT_EXIST
+ * @throws  LOCALE_NOT_EXIST
  * @todo   figure out why we go through this function for xarModIsAvailable
  */
 function &xarMLSLoadLocaleData($locale = NULL)
@@ -170,7 +172,7 @@ function xarLocaleFormatCurrency($currency, $localeData = NULL)
  * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string formatted number
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  */
 function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
 {
@@ -323,12 +325,13 @@ function xarLocaleGetFormattedUTCTime($length = 'short',$timestamp = null, $addo
 }
 
 /**
- *  Grab the formated time by the user's current locale settings
+ * Grab the formated time by the user's current locale settings
  *
- *  @access public
- *  @param string $length what time locale we want (short|medium|long)
- *  @param int $timestamp optional unix timestamp in UTC to format
- *  @param bool $addoffset add user timezone offset (default true)
+ * @access public
+ * @param string $length what time locale we want (short|medium|long)
+ * @param int $timestamp optional unix timestamp in UTC to format
+ * @param bool $addoffset add user timezone offset (default true)
+ * @todo MichelV: why are the formatting rules not the same as PHP rules for strftime?
  */
 function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffset = true)
 {
@@ -366,14 +369,17 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffs
     // grab the right set of locale data
     $locale_format = $localeData["/timeFormats/$length"];
     // replace the locale formatting style with valid strftime() style
+
     $locale_format = str_replace('HH','%H',$locale_format);
+    $locale_format = str_replace('H','%H',$locale_format); // Bug 5806
+    $locale_format = str_replace('%%H','%H',$locale_format); // Now put back the double replaced ones.
     $locale_format = str_replace('hh','%I',$locale_format);
     $locale_format = str_replace('mm','%M',$locale_format);
     $locale_format = str_replace('ss','%S',$locale_format);
     $locale_format = str_replace('a','%p',$locale_format);
     $locale_format = str_replace('z','%Z',$locale_format);
     // format the single digit flags
-// FIXME: there's an overlap between H and HH (replaced to %H) here !
+
     if (strpos($locale_format,'H') !== false)
         $locale_format = str_replace('%H',sprintf('%1d',gmstrftime('%H',$timestamp)),$locale_format);
     if (strpos($locale_format,'h') !== false)
@@ -638,7 +644,7 @@ function xarMLS_strftime($format=null,$timestamp=null)
  * This class loads a valid locale descriptor XML file and returns its content
  * in the form of a locale data array
  *
- * @package multilanguage
+ * @subpackage multilanguage
  */
 class xarMLS__LocaleDataLoader
 {
@@ -762,7 +768,9 @@ class xarMLS__LocaleDataLoader
     {
         return array($path, (int) $content);
     }
-
+    /**
+     * @return array
+     */
     function groupingSizeTagHandler($path, $attribs, $content)
     {
         return array($path, (int) $content);
@@ -777,7 +785,9 @@ class xarMLS__LocaleDataLoader
         }
         return array($path, $value);
     }
-
+    /**
+     * @return array
+     */
     function monthTagHandler($path, $attribs, $content)
     {
         if (isset($this->tmpVars['monthNum'])) {
@@ -791,7 +801,9 @@ class xarMLS__LocaleDataLoader
                        $monthNum.'/short' => $attribs['short']);
         return array($path, $value);
     }
-
+    /**
+     * @return array
+     */
     function weekdayTagHandler($path, $attribs, $content)
     {
         if (isset($this->tmpVars['weekdayNum'])) {

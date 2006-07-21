@@ -2296,6 +2296,7 @@ function xarModDelAlias($alias, $modName)
  * @access public
  * @param none
  * @return string the name of the current top-level module, false if not in a module
+ * @todo if we do this one, we also should do xarModGetFunc, xarModGetType
  */
 function xarModGetName()
 {

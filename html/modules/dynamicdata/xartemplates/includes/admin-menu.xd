@@ -6,6 +6,7 @@
 <xar:set name="request">xarRequestGetInfo()</xar:set>
 <xar:set name="activetab">#$request.2#</xar:set>
 <xar:set name="activetype">#$request.1#</xar:set>
+
 <div>
   <dl class="xar-tabs">
     <dt class="help" title="#xarML('Choose an action to perform')#">
@@ -46,7 +47,7 @@
         </dd>
     </xar:sec>
     <xar:sec mask="EditDynamicData" catch="false">
-    <xar:set name="tabclass">$activetab=='main'?'active':''</xar:set>
+    <xar:set name="tabclass">($activetab=='main' or $activetab=='overview')?'active':''</xar:set>
     <dd class="#$tabclass#">
       <a href="&xar-modurl-dynamicdata-admin-overview;">
         <xar:mlstring>Overview</xar:mlstring>

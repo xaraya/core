@@ -174,11 +174,12 @@ function installer_admin_phase3()
     // Extension Check
     $data['xmlextension']             = extension_loaded('xml');
     $data['mysqlextension']           = extension_loaded('mysql');
-    $data['pgsqlextension']           = extension_loaded ('pgsql');
+    $data['pgsqlextension']           = extension_loaded('pgsql');
+    $data['sqliteextension']          = extension_loaded('sqlite');
     // This is called xsl in PHP5.x Should check for that when php version is 5 or higher
-    $data['xsltextension']            = extension_loaded ('xslt');
-    $data['ldapextension']            = extension_loaded ('ldap');
-    $data['gdextension']              = extension_loaded ('gd');
+   //$data['xsltextension']            = extension_loaded ('xslt');
+   // $data['ldapextension']            = extension_loaded ('ldap');
+   // $data['gdextension']              = extension_loaded ('gd');
 
     $data['metRequiredPHPVersion']    = $metRequiredPHPVersion;
     $data['phpVersion']               = PHP_VERSION;
@@ -278,7 +279,7 @@ function installer_admin_phase5()
 
     // allow only a-z 0-9 and _ in table prefix
     if (!preg_match('/^\w*$/',$dbPrefix)) {
-        $msg = xarML('Invalid character in table prefix');
+        $msg = xarML('Invalid character in table prefix. Only use a-z, a _ and/or 0-9 in the prefix.');
         xarCore_die($msg);
         return;
     }
@@ -781,7 +782,7 @@ function installer_admin_choose_configuration()
     }
 
     if (count($awol) != 0) {
-        $msg = xarML("Xaraya cannot install bcause the following core modules are missing or corrupted: #(1)",implode(', ', $awol));
+        $msg = xarML("Xaraya cannot install because the following core modules are missing or corrupted: #(1)",implode(', ', $awol));
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
                        new SystemException($msg));
         return;
@@ -1482,9 +1483,6 @@ function installer_admin_upgrade2()
     } else {
         $content .= "<p>Privileges realm masks have been created previously, moving to next check. </p>";
     }
-
-
-
 
     $content .= "<p><strong>Updating Roles and Authsystem for changes in User Login and Authentication</strong></p>";
 
