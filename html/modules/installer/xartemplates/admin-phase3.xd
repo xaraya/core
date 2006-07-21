@@ -390,6 +390,7 @@
                 </xar:ml>
 
             </p>
+
             <ul>
                 <xar:if condition="$xmlextension">
                     <li class="success">
@@ -399,6 +400,20 @@
                     <li class="warning">
                         <xar:mlstring>WARNING: The XML Extension is not loaded. You will require this extension
                         if you plan to use the Xaraya Translations module.</xar:mlstring>
+                    </li>
+                </xar:if>
+            </ul>
+            <h3>
+                <xar:mlstring>You will need at least one available database type</xar:mlstring>
+            </h3>
+            <ul>
+                <xar:if condition="$mysqlextension OR $pgsqlextension OR $sqliteextension">
+                    <li class="success">
+                        <xar:mlstring>SUCCESS: You have at least one database type available.</xar:mlstring>
+                    </li>
+                <xar:else />
+                    <li class="warning">
+                        <xar:mlstring>WARNING: You do not have a supported database type available.</xar:mlstring>
                     </li>
                 </xar:if>
                 <xar:if condition="$mysqlextension">
@@ -417,6 +432,15 @@
                 <xar:else />
                    <li class="warning">
                        <xar:mlstring>WARNING: PostgreSQL as database will not be available</xar:mlstring>
+                   </li>
+                </xar:if>
+                <xar:if condition="$sqliteextension">
+                    <li class="success">
+                        <xar:mlstring>SUCCESS: The SQLite Extension is loaded.</xar:mlstring>
+                    </li>
+                <xar:else />
+                   <li class="warning">
+                       <xar:mlstring>WARNING: SQLITE as database will not be available</xar:mlstring>
                    </li>
                 </xar:if>
                 <xar:comment>

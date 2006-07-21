@@ -174,7 +174,8 @@ function installer_admin_phase3()
     // Extension Check
     $data['xmlextension']             = extension_loaded('xml');
     $data['mysqlextension']           = extension_loaded('mysql');
-    $data['pgsqlextension']           = extension_loaded ('pgsql');
+    $data['pgsqlextension']           = extension_loaded('pgsql');
+    $data['sqliteextension']          = extension_loaded('sqlite');
     // This is called xsl in PHP5.x Should check for that when php version is 5 or higher
    //$data['xsltextension']            = extension_loaded ('xslt');
    // $data['ldapextension']            = extension_loaded ('ldap');
