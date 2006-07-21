@@ -108,13 +108,6 @@ function modules_admin_list()
         // we will disable certain actions
         $modinfo = xarModGetInfo($thismodid);
         $coremod = in_array(strtolower($modinfo['name']),$coreMods);
-        /* coreMods are hardcoded so we can gain independance from class for now for core mods
-        if(substr($modinfo['class'], 0, 4)  == 'Core'){
-            $coremod = true;
-        }else{
-            $coremod = false;
-        }
-        */
 
         // lets omit core modules if a user chosen to hide them from the list
         if($coremod && $data['hidecore']) continue;

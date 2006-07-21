@@ -11,6 +11,7 @@
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
+
 /**
  * Check the properties directory for properties and import them into the Property Type table.
  *
@@ -20,187 +21,114 @@
  * @return an array of the property types currently available
  * @throws BAD_PARAM, NO_PERMISSION
  */
+class PropertyDirectoryIterator extends DirectoryIterator
+{
+    public function __construct($file)
+    {
+        parent::__construct(realpath($file));
+    }
+
+    public function getExtension()
+    {
+        $filename = $this->GetFilename();
+        $extension = strrpos($filename, ".", 1) + 1;
+        if ($extension != false)
+            return strtolower(substr($filename, $extension, strlen($filename) - $extension));
+        else
+            return "";
+    }
+}
 
 function dynamicdata_adminapi_importpropertytypes( $args )
 {
     extract( $args );
-
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-
-    $dynamicproptypes = $xartable['dynamic_properties_def'];
+    $dbconn =& xarDBGetConn(); // Need this for the transaction
     $propDirs = array();
-    if(isset($dirs) && is_array($dirs)) {
-      // We got an array of directories passed in for which to import properties
-      // typical usecase: a module which has its own property, during install phase needs that property before
-      // the module is active.
-      $propDirs = $dirs;
-    } else {
-      // Get a list of active modules which might have properties
-      $clearCache = "DELETE FROM $dynamicproptypes";
-      $result =& $dbconn->Execute($clearCache);
-      if(!$result) return; // db error
 
-      $activeMods = xarModApiFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
-      if(empty($activeMods)) return; // this should never happen
-      $propDirs[] = 'includes/properties/'; // Initialize it with the core location of properties
+    // We do the whole thing, or not at all (given proper db support)
+    try {
+        $dbconn->begin();
 
-      foreach($activeMods as $modInfo) {
-        // FIXME: the modinfo directory does NOT end with a /
-        $propDirs[] = 'modules/' .$modInfo['osdirectory'] . '/xarproperties/';
-      }
-    }
+        if(isset($dirs) && is_array($dirs)) {
+            // We got an array of directories passed in for which to import properties
+            // typical usecase: a module which has its own property, during install phase needs that property before
+            // the module is active.
+            $propDirs = $dirs;
+        } else {
+            // Clear the cache
+            PropertyRegistration::ClearCache();
 
-    // Get list of properties in properties directories
-    $proptypes = array(); $numLoaded = 0;
-    foreach($propDirs as $PropertiesDir) {
+            $activeMods = xarModApiFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+            assert('!empty($activeMods)'); // this should never happen
 
-        // Open Properties Directory if it exists, otherwise go to the next one
-        if(!file_exists($PropertiesDir)) continue;
-        if ($pdh = opendir($PropertiesDir)) {
-            // Loop through properties directory
-            while (($propertyfile = readdir($pdh)) !== false)
-            {
-                $propertyfilepath = $PropertiesDir . $propertyfile;
-                // Only Process files, not directories
-                if(!is_file($propertyfilepath)) continue;
-
-                // Get the name of each file, assumed to be the name of the property
-                // FIXME: <mrb> decouple the classname from the filename someday
-                $fileparts = explode('.',$propertyfile);
-                // Only worry about php files, not backup files or other garbage that might be present
-                if (count($fileparts) != 2) continue;
-                $propertyClass = $fileparts[0];
-                $type = $fileparts[1];
-
-                // Only worry about php files, not security place holder .html files or other garbage that might be present
-                if( $type != 'php') continue;
-
-                // Include the file into the environment
-                require_once $propertyfilepath;
-
-                // Tell the property to skip initialization, this is only really needed for Dynamic_FieldType_Property
-                // because it causes this function to recurse.
-                $args['skipInit'] = true;
-
-                // Instantiate a copy of this class
-                if(!class_exists($propertyClass)) {
-                    // TODO: <mrb> raise exception?
-                  xarLogMessage("DD : The class $propertyClass does not match the filename $propertyfile",XARLOG_LEVEL_WARNING);
-                    continue;
+            foreach($activeMods as $modInfo) {
+                // FIXME: the modinfo directory does NOT end with a /
+                $dir = 'modules/' .$modInfo['osdirectory'] . '/xarproperties/';
+                if(file_exists($dir)){
+                    $propDirs[] = $dir;
                 }
-                $property = new $propertyClass($args);
-
-                // Get the base information that used to be hardcoded into /modules/dynamicdata/class/properties.php
-                $baseInfo = $property->getBasePropertyInfo();
-
-                // Ensure that the base properties are all present.
-                if( !isset($baseInfo['dependancies']) )   $baseInfo['dependancies'] = '';
-                if( !isset($baseInfo['requiresmodule']) ) $baseInfo['requiresmodule'] = '';
-                if( !isset($baseInfo['aliases']) )        $baseInfo['aliases'] = '';
-                if( empty($baseInfo['args']) )            $baseInfo['args'] = serialize(array());
-
-                // If the property needs specific files to exist, check for them
-                // Example: HTML Area property needs to check to see if HTMLArea javascript files are present
-                if( isset($baseInfo['dependancies']) && ($baseInfo['dependancies'] != '') )
-                {
-                    $dependancies = explode(';', $baseInfo['dependancies']);
-                    foreach( $dependancies as $dependancy ) {
-                        // If the file is not there continue to the next property
-                        if( !file_exists($dependancy) )  continue 2;
-                    }
-                }
-
-                // Check if any Modules are required
-                // For Example: Categories, Ratings, Hitcount properties all require their respective modules to be enabled
-                // CHECK: <mrb> do we want the owning module in here?
-                // ANSWER: probably not, see above (if the $dirs are passed in)
-                if( isset($baseInfo['requiresmodule']) && ($baseInfo['requiresmodule'] != '') )
-                {
-                    $modulesNeeded = explode(';', $baseInfo['requiresmodule']);
-                    foreach( $modulesNeeded as $moduleName )
-                    {
-                        // If a required module is not available continue with the next property
-                        if( !xarModIsAvailable($moduleName) ) continue 2;
-                    }
-                }
-
-
-                // Save the name of the property
-                $baseInfo['propertyClass'] = $propertyClass;
-                $baseInfo['filepath'] = $propertyfilepath;
-
-
-                // Check for aliases
-                if( !isset($baseInfo['aliases']) || ($baseInfo['aliases'] == '') || !is_array($baseInfo['aliases']) )
-                {
-                    // Make sure that this is always available
-                    $baseInfo['aliases'] = '';
-
-                    // Add the property to the property type list
-                    $proptypes[$baseInfo['id']] = $baseInfo;
-
-                } else if ( is_array($baseInfo['aliases']) && (count($baseInfo['aliases']) > 0) ) {
-                    // if aliases are present include them as seperate entries
-                    $aliasList = '';
-                    foreach( $baseInfo['aliases'] as $aliasInfo )
-                    {
-                        // Save the name of the property, for the alias
-                        $aliasInfo['propertyClass'] = $propertyClass;
-                        $aliasInfo['aliases']       = '';
-                        $aliasInfo['filepath']      = $propertyfilepath;
-
-                        // Add the alias to the property type list
-                        $proptypes[$aliasInfo['id']] = $aliasInfo;
-                        $aliasList .= $aliasInfo['id'].',';
-
-                        // Update Database
-                        updateDB( $aliasInfo, $baseInfo['id'], $propertyfilepath );
-
-                    }
-
-                    // Store a list of reference ID's from the base property it's aliases
-                    // FIXME: strip the last comma off?
-                    $baseInfo['aliases'] = $aliasList;
-
-                    // Add the base property to the property type list
-                    $proptypes[$baseInfo['id']] = $baseInfo;
-                }
-
-                // Update database entry for this property (the aliases array, if any, will now be an aliaslist)
-                updateDB( $baseInfo, '', $propertyfilepath );
             }
-            closedir($pdh);
         }
 
-        // Sort the property types
-        ksort( $proptypes );
+        // Get list of properties in properties directories
+        $proptypes = array(); $numLoaded = 0;
+        foreach($propDirs as $PropertiesDir) {
+            if (!file_exists($PropertiesDir)) continue;
+            // The iterator takes an absolute directory, so we use a slightly extended class
+            $dir = new PropertyDirectoryIterator($PropertiesDir);
+            // Loop through properties directory
+            for($dir->rewind();$dir->valid();$dir->next()) {
+                if($dir->isDir()) continue; // no dirs
+                if($dir->getExtension() != 'php') continue; // only php files
+                if($dir->isDot()) continue; // temp for emacs insanity and skip hidden files while we're at it
 
+                // Include the file into the environment
+                xarInclude($dir->getPathName());
+            } // loop over the files in a directory
+        } // loop over the directories
+        $newClasses = get_declared_classes();
+        // ANSWER: probably not, see above (if the $dirs are passed in)
+
+        // See what class(es) we have here
+        foreach($newClasses as $index => $propertyClass) {
+            // If it doesnt exist something weird is goin on
+
+            if(!is_subclass_of ($propertyClass, 'Dynamic_Property')) {;continue;}
+            $processedClasses[] = $propertyClass;
+
+            // Main part
+            // Call the class method on each property to get the registration info
+            if (!is_callable(array($propertyClass,'getRegistrationInfo'))) continue;
+            $property = new $propertyClass(array());
+            $baseInfo = $property->getRegistrationInfo();
+            // Fill in the info we dont have in the registration class yet
+            // TODO: see if we can have it in the registration class
+            $baseInfo->class = $propertyClass;
+            $baseInfo->filepath = $property->filepath . "/$propertyClass.php";
+
+             // Check for aliases
+            if(!empty($baseInfo->aliases)) {
+                // Each alias is also a propertyRegistration object
+                foreach($baseInfo->aliases as $aliasInfo) {
+                    $proptypes[$aliasInfo->id] = $aliasInfo;
+                }
+            }
+            $proptypes[$baseInfo->id] = $baseInfo;
+
+            // Update database entry for this property
+            // This will also do the aliases
+            // TODO: check the result, now silent failure
+            $registered = $baseInfo->Register();
+        } // next property class in the same file
+        $dbconn->commit();
+    } catch(Exception $e) {
+        // TODO: catch more specific exceptions than all?
+        $dbconn->rollback();
+        throw $e;
     }
+
+    // Sort the property types
+    ksort( $proptypes );
     return $proptypes;
-}
-
-function updateDB( $proptype, $parent, $filepath )
-{
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-
-    $dynamicproptypes = $xartable['dynamic_properties_def'];
-
-    $insert = "INSERT INTO $dynamicproptypes
-                ( xar_prop_id, xar_prop_name, xar_prop_label,
-                  xar_prop_parent, xar_prop_filepath, xar_prop_class,
-                  xar_prop_format, xar_prop_validation, xar_prop_source,
-                  xar_prop_reqfiles, xar_prop_reqmodules, xar_prop_args,
-                  xar_prop_aliases
-                )
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
-    $bindvars = array((int) $proptype['id'], $proptype['name'], $proptype['label'],
-                      $parent, $filepath, $proptype['propertyClass'],
-                      $proptype['format'], $proptype['validation'], $proptype['source'],
-                      $proptype['dependancies'], $proptype['requiresmodule'], $proptype['args'],
-                      $proptype['aliases']);
-    $result =& $dbconn->Execute($insert,$bindvars);
 }
 ?>

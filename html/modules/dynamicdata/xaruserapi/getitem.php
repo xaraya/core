@@ -1,7 +1,6 @@
 <?php
 /**
  * Get all data fields for an item
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -40,24 +39,14 @@ function &dynamicdata_userapi_getitem($args)
     $nullreturn = NULL;
 
     if (empty($modid) && empty($moduleid)) {
-        if (empty($module)) {
-            $modname = xarModGetName();
-        } else {
-            $modname = $module;
-        }
-        if (is_numeric($modname)) {
-            $modid = $modname;
-        } else {
-            $modid = xarModGetIDFromName($modname);
-        }
+        $modname = empty($module) ? xarModGetName() : $module;
+        $modid   = is_numeric($modname) ? $modname : xarModGetIDFromName($modname);
     } elseif (empty($modid)) {
         $modid = $moduleid;
     }
     $modinfo = xarModGetInfo($modid);
 
-    if (empty($itemtype)) {
-        $itemtype = 0;
-    }
+    if (empty($itemtype)) $itemtype = 0;
 
     $invalid = array();
     if (!isset($modid) || !is_numeric($modid) || empty($modinfo['name'])) {
@@ -70,11 +59,9 @@ function &dynamicdata_userapi_getitem($args)
         $invalid[] = 'item id';
     }
     if (count($invalid) > 0) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    join(', ',$invalid), 'user', 'getall', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $nullreturn;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array(join(', ',$invalid), 'user', 'getall', 'DynamicData');
+        throw new BadParameterException($vars,$msg);
     }
 
     if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:$itemid")) return $nullreturn;
@@ -88,20 +75,17 @@ function &dynamicdata_userapi_getitem($args)
     }
 
     // limit to property fields of a certain status (e.g. active)
-    if (!isset($status)) {
-        $status = null;
-    }
+    if (!isset($status)) $status = null;
 
     // join a module table to a dynamic object
-    if (empty($join)) {
-        $join = '';
-    }
-    // make some database table available via DD
-    if (empty($table)) {
-        $table = '';
-    }
+    if (empty($join)) $join = '';
 
-    $object = & Dynamic_Object_Master::getObject(array('moduleid'  => $modid,
+    // make some database table available via DD
+    if (empty($table)) $table = '';
+
+    $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
+//    $objectarray = $itemsarray = array();
+    $object =& Dynamic_Object_Master::getObject(array('moduleid'  => $modid,
                                        'itemtype'  => $itemtype,
                                        'itemid'    => $itemid,
                                        'fieldlist' => $fieldlist,
@@ -109,12 +93,17 @@ function &dynamicdata_userapi_getitem($args)
                                        'table'     => $table,
                                        'status'    => $status));
     if (!isset($object) || empty($object->objectid)) return $nullreturn;
-    if (!empty($itemid)) {
-        $object->getItem();
+    foreach ($tree as $branch) {
+        $newobject = & Dynamic_Object_Master::getObjectList(array('moduleid'  => $modid,
+                                               'itemtype'  => $branch['itemtype']));
+        $object->add($newobject);
     }
-    if (!empty($preview)) {
-        $object->checkInput();
-    }
+
+    // Get the item
+    if (!empty($itemid)) $object->getItem();
+
+    // ..check it
+    if (!empty($preview)) $object->checkInput();
 
     if (!empty($getobject)) {
         return $object;

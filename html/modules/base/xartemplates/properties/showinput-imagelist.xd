@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:if condition="count($options) gt 0">
     <select name="#$name#" id="#$id#" tabindex="#$tabindex#" >
         <xar:foreach in="$options" value="$option" >

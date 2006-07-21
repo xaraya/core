@@ -1,7 +1,5 @@
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html
-    Default layout for a list of objects 
-</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!-- Default layout for a list of objects -->
 <div class="xar-fullwidth">
     <xar:if condition="!empty($newlink)">
         <a href="#$newlink#">

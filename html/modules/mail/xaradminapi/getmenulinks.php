@@ -20,32 +20,29 @@
  */
 function mail_adminapi_getmenulinks()
 {
-    // Security Check
-    $menulinks = array();
-    if (xarSecurityCheck('AdminMail', 0)) {
+    /*
+    This menu gets its data from the adminmenu.php file in the module's xardataapi folder.
+    You can add or change menu items by changing the data there.
+    Or you can create your own menu items here. They should have the form of this example:
 
-        $menulinks[] = Array('url' => xarModURL('mail',
-                'admin',
-                'compose'),
-            'title' => xarML('Test your email configuration'),
-            'label' => xarML('Test Configuration'));
-        if (xarModIsAvailable('scheduler')) {
-            $menulinks[] = Array('url' => xarModURL('mail',
-                    'admin',
-                    'viewq'),
-                'title' => xarML('View all mails scheduled to be sent later'),
-                'label' => xarML('View Mail Queue'));
-        }
-        $menulinks[] = Array('url' => xarModURL('mail',
-                'admin',
-                'template'),
-            'title' => xarML('Change the mail template for notifications'),
-            'label' => xarML('Notification Template'));
-        $menulinks[] = Array('url' => xarModURL('mail',
-                'admin',
-                'modifyconfig'),
-            'title' => xarML('Modify the configuration for the utility mail module'),
-            'label' => xarML('Modify Config'));
+    $menulinks = array();
+    .....
+    if (xarSecurityCheck('EditRole',0)) {
+        $menulinks[] = array('url'   => xarModURL('roles',
+                                                  'admin',
+                                                  'viewroles'),
+                              'title' => xarML('View and edit the groups on the system'),
+                              'label' => xarML('View All Groups'));
+    }
+    .....
+    return $menulinks;
+    */
+
+    $menulinks = xarModAPIFunc('base','admin','menuarray');
+    if (xarModIsAvailable('scheduler')) {
+        $menulinks[] = array('url' => xarModURL('mail','admin','viewq'),
+                             'title' => xarML('View all mails scheduled to be sent later'),
+                             'label' => xarML('View Mail Queue'));
     }
     return $menulinks;
 }

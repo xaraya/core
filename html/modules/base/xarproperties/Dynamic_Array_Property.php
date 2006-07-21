@@ -13,16 +13,30 @@
 include_once "modules/dynamicdata/class/properties.php";
 class Dynamic_Array_Property extends Dynamic_Property
 {
-    var $fields = array();
-    var $size = 40;
+    public $fields = array();
+    public $size = 40;
 
-    function Dynamic_Array_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Property($args);
+        parent::__construct($args);
+        $this->tplmodule = 'base';
+        $this->template = 'array';
+        $this->filepath   = 'modules/base/xarproperties';
+
         // check validation for list of fields (optional)
         if (!empty($this->validation) && strchr($this->validation,';')) {
             $this->fields = explode(';',$this->validation);
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->id = 999;
+        $info->name = 'array';
+        $info->desc = 'Array';
+        $info->reqmodules = array('base');
+        return $info;
     }
     function checkInput($name='', $value = null)
     {
@@ -58,21 +72,11 @@ class Dynamic_Array_Property extends Dynamic_Property
         return true;
     }
 
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (isset($fields)) {
-            $this->fields = $fields;
-        }
+        if (!isset($data['value'])) $value = $this->value;
+        if (isset($data['fields'])) $this->fields = $data['fields'];
+
         if (empty($value)) {
             $value = array('');
         } elseif (!is_array($value)) {
@@ -88,9 +92,7 @@ class Dynamic_Array_Property extends Dynamic_Property
         } else {
             $fieldlist = array_keys($value);
         }
-        $data = array();
-        $data['name']     = $name;
-        $data['id']       = $id;
+
         $data['value'] = array();
         foreach ($fieldlist as $field) {
             if (!isset($value[$field])) {
@@ -99,20 +101,17 @@ class Dynamic_Array_Property extends Dynamic_Property
                 $data['value'][$field] = xarVarPrepForDisplay($value[$field]);
             }
         }
-        $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        $data['size']     = !empty($size) ? $size : $this->size;
 
-        $template = "";
-        return xarTplProperty('base', 'array', 'showinput', $data);
+        $data['size'] = !empty($size) ? $size : $this->size;
+
+        return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        extract($data);
+        if (!isset($value)) $value = $this->value;
+
         if (empty($value)) {
             $value = array('');
         } elseif (!is_array($value)) {
@@ -128,7 +127,7 @@ class Dynamic_Array_Property extends Dynamic_Property
         } else {
             $fieldlist = array_keys($value);
         }
-        $data = array();
+
         $data['value'] = array();
         foreach ($fieldlist as $field) {
             if (!isset($value[$field])) {
@@ -137,34 +136,7 @@ class Dynamic_Array_Property extends Dynamic_Property
                 $data['value'][$field] = xarVarPrepForDisplay($value[$field]);
             }
         }
-
-        $template = "";
-        return xarTplProperty('base', 'array', 'showoutput', $data);
+        return parent::showOutput($data);
     }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $baseInfo = array(
-                           'id'         => 999,
-                           'name'       => 'array',
-                           'label'      => 'Array',
-                           'format'     => '999',
-                           'validation' => '',
-                           'source'     => '',
-                           'dependancies' => '',
-                           'requiresmodule' => '',
-                           'aliases' => '',
-                           'args'         => '',
-                           // ...
-                          );
-        return $baseInfo;
-     }
 }
-
 ?>

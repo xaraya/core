@@ -10,11 +10,29 @@
  * @author Marco Canini <marco@xaraya.com>
  */
 
+/**
+ * Exceptions for this subsystem
+ *
+ */
+class DuplicateTagException extends DuplicationExceptions
+{
+    protected $message = 'The tag definition for the tag: "#(1)" already exists.';
+}
 
-  /**
-   * Defines for template handling
-   *
-   */
+class BLValidationException extends ValidationExceptions
+{
+    protected $message = 'A blocklayout tag or attribute construct was invalid, see the tag documentation for the correct syntax';
+}
+
+class BLException extends xarExceptions
+{
+    protected $message = 'Unknown blocklayout exception (TODO)';
+}
+
+/**
+ * Defines for template handling
+ *
+ */
 
 /// OLD STUFF //////////////////////////////////
 define ('XAR_TPL_OPTIONAL', 2);
@@ -44,16 +62,14 @@ define('XAR_TPL_TAG_ISASSIGNABLE'              ,4);
 define('XAR_TPL_TAG_ISPHPCODE'                 ,8);
 define('XAR_TPL_TAG_NEEDASSIGNMENT'            ,16);
 define('XAR_TPL_TAG_NEEDPARAMETER'             ,32);
-define('XAR_TPL_TAG_NEEDEXCEPTIONSCONTROL'     ,64);
 
 /**
  * Miscelaneous defines
  *
  */
 // Let's do this once here, not scattered all over the place
-if(function_exists('xarCoreGetVarDirPath')) {
-    define('XAR_TPL_CACHE_DIR',xarCoreGetVarDirPath() . '/cache/templates');
-}
+define('XAR_TPL_CACHE_DIR',xarCoreGetVarDirPath() . XARCORE_TPL_CACHEDIR);
+
 /**
  * Initializes the BlockLayout Template Engine
  *
@@ -68,6 +84,7 @@ if(function_exists('xarCoreGetVarDirPath')) {
  * @global string xarTpl_JavaScript
  * @param  array  $args                  Elements: themesBaseDir, defaultThemeName, enableTemplateCaching
  * @param  int    $whatElseIsGoingLoaded Bitfield to specify which subsystem will be loaded.
+ * @throws DirectoryNotFoundException, FileNotFoundException, ConfigurationException
  * @return bool true
  */
 function xarTpl_init(&$args, $whatElseIsGoingLoaded)
@@ -81,33 +98,28 @@ function xarTpl_init(&$args, $whatElseIsGoingLoaded)
 
     if (!xarTplSetThemeDir($args['defaultThemeDir'])) {
         // If there is no theme, there is no page template, we dont know what to do now.
-        xarCore_die("xarTpl_init: Nonexistent theme directory '" . $args['defaultThemeDir'] ."'");
+        throw new DirectoryNotFoundException(array($args['defaultThemeDir'],"xarTpl_init: Nonexistent theme directory #(1)"));
     }
     if (!xarTplSetPageTemplateName('default')) {
         // If there is no page template, we can't show anything
-        xarCore_die("xarTpl_init: Nonexistent default.xt page in theme directory '". xarTplGetThemeDir() ."'");
-    }
-
-    if ($GLOBALS['xarTpl_cacheTemplates']) {
-        if (!is_writeable(XAR_TPL_CACHE_DIR)) {
-            $msg = "xarTpl_init: Cannot write in cache/templates directory '"
-                . XAR_TPL_CACHE_DIR . "', but the setting: 'cache templates' is set to 'On'.\n"
-                ."Either change the permissions on the mentioned file/directory or set template caching to 'Off' (not recommended).";
-            $GLOBALS['xarTpl_cacheTemplates'] = false;
-            // Set the exception, but do not return just yet, because we *can* continue.
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'CONFIG_ERROR', $msg);
-        }
+        throw new FileNotFoundException('default.xt',"xarTpl_init: Nonexistent #(1) page in theme directory '". xarTplGetThemeDir() ."'");
     }
 
     $GLOBALS['xarTpl_additionalStyles'] = '';
+    if ($GLOBALS['xarTpl_cacheTemplates']) {
+        if (!is_writeable(XAR_TPL_CACHE_DIR)) {
+            $msg = "xarTpl_init: Cannot write in '". XAR_TPL_CACHEDIR ."' directory '"
+                . XAR_TPL_CACHE_DIR . "', but the setting: 'cache templates' is set to 'On'.\n"
+                ."Either change the permissions on the mentioned file/directory or set template caching to 'Off' (not recommended).";
+            $GLOBALS['xarTpl_cacheTemplates'] = false;
+            // Set the exception, but we *could* continue (only slow, so an error might be in place here). Let's see
+            // how the exception feels like in practice for a while
+            throw new ConfigurationException(NULL, $msg);
+        }
+    }
 
     // This is wrong here as well, but it's better at least than in xarMod
     include "includes/xarTheme.php";
-
-    // NOTE: starting from 0.9.11 we attempt to link core css to any css-aware xhtml theme
-    // immediate goal is elimination of inline styles, consistency and other core UI related issues
-    // no need to init anything, the css tags api is handling everything css related now..
-    // DONE: removed all but legacy css handling from core to themes module
 
     // Subsystem initialized, register a handler to run when the request is over
     //register_shutdown_function ('xarTemplate__shutdown_handler');
@@ -135,8 +147,9 @@ function xarTplGetThemeName()
 {
     if(isset($GLOBALS['xarTpl_themeName'])) return  $GLOBALS['xarTpl_themeName'];
     // If it is not set, set it return the default theme.
+    // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
     if (function_exists('xarModGetVar')) {
-        $defaultTheme = xarModGetVar('themes', 'default');
+        $defaultTheme = xarModVars::get('themes', 'default');
         if (!empty($defaultTheme)) xarTplSetThemeName($defaultTheme);
     }
     assert('isset($GLOBALS["xarTpl_themeName"]; /* Themename could not be set properly */');
@@ -280,28 +293,30 @@ function xarTplSetDoctype($doctypeName)
  */
 function xarTplSetPageTitle($title = NULL, $module = NULL)
 {
+    xarLogMessage("TPL: Setting pagetitle to $title");
+    // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable!!!
     if (!function_exists('xarModGetVar')){
         $GLOBALS['xarTpl_pageTitle'] = $title;
     } else {
-        $order      = xarModGetVar('themes', 'SiteTitleOrder');
-        $separator  = xarModGetVar('themes', 'SiteTitleSeparator');
+        $order      = xarModVars::get('themes', 'SiteTitleOrder');
+        $separator  = xarModVars::get('themes', 'SiteTitleSeparator');
         if (empty($module)) {
             // FIXME: the ucwords is layout stuff which doesn't belong here
-            $module = ucwords(xarModGetDisplayableName());
+            $module = ucwords(xarMod::getDisplayName());
         }
         switch(strtolower($order)) {
             case 'default':
             default:
-                $GLOBALS['xarTpl_pageTitle'] = xarModGetVar('themes', 'SiteName') . $separator . $module . $separator . $title;
+                $GLOBALS['xarTpl_pageTitle'] = xarModVars::get('themes', 'SiteName') . $separator . $module . $separator . $title;
             break;
             case 'sp':
-                $GLOBALS['xarTpl_pageTitle'] = xarModGetVar('themes', 'SiteName') . $separator . $title;
+                $GLOBALS['xarTpl_pageTitle'] = xarModVars::get('themes', 'SiteName') . $separator . $title;
             break;
             case 'mps':
-                $GLOBALS['xarTpl_pageTitle'] = $module . $separator . $title . $separator .  xarModGetVar('themes', 'SiteName');
+                $GLOBALS['xarTpl_pageTitle'] = $module . $separator . $title . $separator .  xarModVars::get('themes', 'SiteName');
             break;
             case 'pms':
-                $GLOBALS['xarTpl_pageTitle'] = $title . $separator .  $module . $separator . xarModGetVar('themes', 'SiteName');
+                $GLOBALS['xarTpl_pageTitle'] = $title . $separator .  $module . $separator . xarModVars::get('themes', 'SiteName');
             break;
             case 'to':
                 $GLOBALS['xarTpl_pageTitle'] = $title;
@@ -453,8 +468,9 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     // 1. Only create a link somewhere on the page, when clicked opens a page with the variables on that page
     // 2. Create a page in the themes module with an interface
     // 3. Use 1. to link to 2.
+    // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
     if (function_exists('xarModGetVar')){
-        $var_dump = xarModGetVar('themes', 'var_dump');
+        $var_dump = xarModVars::get('themes', 'var_dump');
         if ($var_dump == true){
             if (function_exists('var_export')) {
                 $pre = var_export($tplData, true);
@@ -527,7 +543,7 @@ function xarTplProperty($modName, $propertyName, $tplType = 'showoutput', $tplDa
 }
 
 /**
- * Renders an object through an object template (TODO)
+ * Renders an object through an object template 
  *
  * @author Marcel van der Boom <marcel@xaraya.com>
  * @access public
@@ -600,12 +616,12 @@ function xarTplGetImage($modImage, $modName = NULL)
     // obtain current module name if not specified
     // FIXME: make a fallback for weird requests
     if(!isset($modName)){
-        list($modName) = xarRequestGetInfo();
+        list($modName) = xarRequest::getInfo();
     }
 
     // get module directory (could be different from module name)
     if(function_exists('xarMod_getBaseInfo')) {
-        $modBaseInfo = xarMod_getBaseInfo($modName);
+        $modBaseInfo = xarMod::getBaseInfo($modName);
         if (!isset($modBaseInfo)) return; // throw back
         $modOsDir = $modBaseInfo['osdirectory'];
     } else {
@@ -692,12 +708,12 @@ function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions
     // If this request was the same as the last one, then return the cached pager details.
     // TODO: is there a better way of caching for each unique request?
     $request = md5($currentItem . ':' . $lastItem . ':' . $itemsPerPage . ':' . serialize($blockOptions));
-    if (xarCore_GetCached('Pager.core', 'request') == $request) {
-        return xarCore_GetCached('Pager.core', 'details');
+    if (xarCore::getCached('Pager.core', 'request') == $request) {
+        return xarCore::getCached('Pager.core', 'details');
     }
 
     // Record the values in this request.
-    xarCore_SetCached('Pager.core', 'request', $request);
+    xarCore::setCached('Pager.core', 'request', $request);
 
     // Max number of items in a block of pages.
     $itemsPerBlock = ($blockSize * $itemsPerPage);
@@ -821,7 +837,7 @@ function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions
     }
 
     // Cache all the pager details.
-    xarCore_SetCached('Pager.core', 'details', $data);
+    xarCore::setCached('Pager.core', 'details', $data);
 
     return $data;
 }
@@ -863,12 +879,12 @@ function xarTplGetPager($startNum, $total, $urltemplate, $itemsPerPage = 10, $bl
     // Couple of cached values used in various pages.
     // It is unclear what these values are supposed to be used for.
     if ($data['prevblockpages'] > 0) {
-        xarCore_SetCached('Pager.first', 'leftarrow', $data['firsturl']);
+        xarCore::setCached('Pager.first', 'leftarrow', $data['firsturl']);
     }
 
     // Links for next block of pages.
     if ($data['nextblockpages'] > 0) {
-        xarCore_SetCached('Pager.last', 'rightarrow', $data['lasturl']);
+        xarCore::setCached('Pager.last', 'rightarrow', $data['lasturl']);
     }
 
     return trim(xarTplModule('base', 'pager', $template, $data));
@@ -955,7 +971,7 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
 
     //if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:pages', $templateName) === NULL) return;
 
-    return xarTpl__executeFromFile($sourceFileName, $tplData);
+    return xarTpl__executeFromFile($sourceFileName, $tplData, 'page');
 }
 
 /**
@@ -1035,7 +1051,7 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
  */
 function xarTpl__getCompilerInstance()
 {
-    include_once 'includes/xarBLCompiler.php';
+    include_once 'includes/blocklayout/compiler.php';
     return xarTpl__Compiler::instance();
 }
 
@@ -1047,31 +1063,57 @@ function xarTpl__getCompilerInstance()
  * @param  array  $tplData        Template variables
  * @param  string $sourceFileName
  * @return string output
- *
+ * @throws Exception
  * @todo Can we migrate the eval() out, as that is hard to cache?
  * @todo $sourceFileName looks wrong here
  */
-function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedFileName = null)
+function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedFileName = null, $tplType = 'module')
 {
     assert('is_array($tplData); /* Template data should always be passed in an array */');
 
     //POINT of ENTRY for cleaning variables
     // We need to be able to figure what is the template output type: RSS, XHTML, XML or whatever
-
     $tplData['_bl_data'] = $tplData;
     extract($tplData, EXTR_OVERWRITE);
 
+    // Avoid evalling alltogether if we can
+    // TODO: Although this should never happen in production systems, it eats the memory
+    // out of any server. At least we're not using eval anymore :-)
+    // NOTES:
+    // 1. If safe mode is ON this will most likely NOT work without specific configuration, do we want to go that far?
+    // 2. An alternative is write a stream wrapper class around $templateCode and use include/require on the streadm
+    //    (This should theoretically work, but it crashes me all over the place and introduces a whole new class)
+    // 3. If all else fails we can still fall back to the eval.
+    // yeah, getting rid of eval isnt your daily walk in the park
+    $tmpPending = false; $useEval = false;
     // Start output buffering
     ob_start();
+    // FIXME: add better escape clause when safe mode is on to fall back to eval
+    if(!isset($cachedFileName) && !$useEval) {
+        $cachedFileName = tempnam("","");
+        $fd = fopen($cachedFileName,"w");
+        $tmpPending = true; // We got to remove this one again too
+        fwrite($fd,$templateCode);
+        fclose($fd);
+    }
+
     if(!isset($cachedFileName)) {
-        // This eval is only used for cases like xarTplString, which is quite rare, and should probably not exist
-        // TODO: consider writing it to a temp file and using include here too, so the bytecacher can use it (risky?)
-        // and we can get rid of the eval alltogether.
-        eval('?>' . $templateCode);
+        eval('?> '.$templateCode);
     } else {
-        // Otherwise use an include, much better :-)
         assert('file_exists($cachedFileName); /* Compiled templated disappeared in mid air, race condition? */');
-        $res = include($cachedFileName);
+        if($tplType=='page') set_exception_handler(array('ExceptionHandlers','bone'));
+        try {
+            // Let's see what we cooked up in the compiler
+            $res = include($cachedFileName);
+        } catch (Exception $e) {
+            // Any exception inside the compile template invalidates our output from it.
+            // Destroy its buffer, and raise exactly that exception, letting the exception handlers
+            // take care of the rest. nice, very nice :-)
+            ob_end_clean();
+            if($tmpPending) unlink($cachedFileName);
+            throw $e;
+        }
+        if($tmpPending) unlink($cachedFileName);
     }
 
     if($sourceFileName != '') {
@@ -1091,6 +1133,42 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
 }
 
 /**
+ * Determine wether a source template needs compilation
+ * based on modification time of the compiled file and
+ * the modification of the source file
+ *
+ * @param  string  $sourceFileName   file path to the source file
+ * @param  string  $cachedFileName   filled with the name of the cached file name
+ * @return boolean $needsCompilation true - needs to be compiled, false - no need to compile.
+ */
+function xarTpl__needsCompilation($sourceFileName,&$cachedFileName)
+{
+    $needsCompilation = true; // Assume we do
+    // Hmm, do we set it or not? Usecase:
+    //$cachedFileName = null;
+    if ($GLOBALS['xarTpl_cacheTemplates']) {
+        $cacheKey = xarTpl__GetCacheKey($sourceFileName);
+        $cachedFileName = XAR_TPL_CACHE_DIR . '/' . $cacheKey . '.php';
+        // Logic here is:
+        // 1. if the compiled template file exists AND
+        // 2. The source file does not exist ( we will have to fall back, but it's weird) OR
+        // 3. modification time of source is smaller than modification time of the compiled template AND
+        // 4. DEBUG: when the XSL transformation file has NOT been changed more recently than the compiled template
+        // THEN we do NOT need to compile the file.
+        if ( file_exists($cachedFileName) &&
+             ( !file_exists($sourceFileName) ||
+               ( filemtime($sourceFileName) < filemtime($cachedFileName)
+                 && filemtime('includes/transforms/xar2php.xsl') < filemtime($cachedFileName)
+               )
+             )
+           ) {
+           $needsCompilation = false;
+        }
+    }
+    return $needsCompilation;
+}
+
+/**
  * Execute template from file
  *
  * @access private
@@ -1098,12 +1176,12 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
  * @param  string $sourceFileName       From which file do we want to execute?
  * @param  array  $tplData              Template variables
  * @return mixed
- *
+ * @throws FileNotFoundException
  * @todo  inserting the header part like this is not output agnostic
  * @todo  insert log warning when double entry in cachekeys occurs? (race condition)
  * @todo  make the checking whethet templatecode is set more robst (related to templated exception handling)
  */
-function xarTpl__executeFromFile($sourceFileName, $tplData)
+function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
 {
     assert('is_array($tplData); /* Template data should always be passed in an array */');
 
@@ -1119,50 +1197,37 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     // Load translations for the template
     $tplpath = explode("/", $newFileName);
     $tplPathCount = count($tplpath);
-    switch ($tplpath[0]) {
+    if($tplPathCount > 1) {
+        switch ($tplpath[0]) {
         case 'modules': $dnType = XARMLS_DNTYPE_MODULE; break;
         case 'themes':  $dnType = XARMLS_DNTYPE_THEME; break;
-    }
-    $dnName = $tplpath[1];
-    $stack = array();
-    if ($tplpath[2] == 'xartemplates') $tplpath[2] = 'templates';
-    for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
-    $ctxType = $tplpath[0].':'.implode("/", $stack);
-    $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
-    /* This $dnType check is a workaround for non-standard templates like we need in workflows etc. */
-    /* Temporary partial fix for Bug 5156. This is a temporary workaround and
-       while here, themes cannot be translated. This should be fixed as soon as possible */
-    if(isset($dnType)) {
-        if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
-    }
- 
-    $needCompilation = true;
-    $cachedFileName = null;
-    if ($GLOBALS['xarTpl_cacheTemplates']) {
-        $cacheKey = xarTpl__GetCacheKey($sourceFileName);
-        $cachedFileName = XAR_TPL_CACHE_DIR . '/' . $cacheKey . '.php';
-        if (file_exists($cachedFileName)
-            && (!file_exists($sourceFileName) || (filemtime($sourceFileName) < filemtime($cachedFileName)))) {
-            $needCompilation = false;
+        }
+
+        $dnName = $tplpath[1];
+
+        $stack = array();
+        if ($tplpath[2] == 'xartemplates') $tplpath[2] = 'templates';
+        for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
+        $ctxType = $tplpath[0].':'.implode("/", $stack);
+        $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
+        /* Temporary partial fix for Bug 5156. This is a temporary workaround and
+         while here, themes cannot be translated. This should be fixed as soon as possible */
+        if(isset($dnType)) {
+            if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
         }
     }
 
-    if (!file_exists($sourceFileName) && $needCompilation == true) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'TEMPLATE_NOT_EXIST', $sourceFileName);
-        return;
-    }
+    $needCompilation = xarTpl__needsCompilation($sourceFileName,$cachedFileName);
+    if (!file_exists($sourceFileName) && $needCompilation == true)
+        throw new FileNotFoundException($sourceFileName);
+
     xarLogMessage("Using template : $sourceFileName");
     //xarLogVariable('needCompilation', $needCompilation, XARLOG_LEVEL_ERROR);
     $templateCode = null;
     if ($needCompilation) {
         $blCompiler = xarTpl__getCompilerInstance();
-        $lasterror = xarCurrentError();
+        // TODO: possibly wrap this in an exception catcher.
         $templateCode = $blCompiler->compileFile($sourceFileName);
-        // we check the error stack here to make sure no new errors happened during compile
-        // but we do not check the core stack
-        if (!isset($templateCode) || xarCurrentError() != $lasterror) {
-            return; // exception! throw back
-        }
         if ($GLOBALS['xarTpl_cacheTemplates']) {
             $fd = fopen($cachedFileName, 'w');
             if(xarTpl_outputPHPCommentBlockInTemplates()) {
@@ -1173,6 +1238,11 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
                               . "\n */\n?>\n";
                 fwrite($fd, $commentBlock);
             }
+            // Replace useless php context switches.
+            // This sometimes seems to improve rendering end speed, dunno, bytecacher dependent?
+            /* $templateCode = preg_replace(array('/\?>[\s\n]+<\?php/','/<\?php[\s\n]+\?>/'),
+                                         array(' ',' '),$templateCode);
+            */
             fwrite($fd, $templateCode);
             fclose($fd);
             // Add an entry into CACHEKEYS
@@ -1182,7 +1252,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
 
     // Execute either the compiled template, or the code determined
     // TODO: this signature sucks
-    $output = xarTpl__execute($templateCode,$tplData, $sourceFileName, $cachedFileName);
+    $output = xarTpl__execute($templateCode,$tplData, $sourceFileName, $cachedFileName, $tplType);
     return $output;
 }
 
@@ -1205,7 +1275,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
 function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tplSubPart = '')
 {
     if(function_exists('xarMod_getBaseInfo')) {
-        if(!($modBaseInfo = xarMod_getBaseInfo($modName))) return;
+        if(!($modBaseInfo = xarMod::getBaseInfo($modName))) return;
         $modOsDir = $modBaseInfo['osdirectory'];
     } elseif(!empty($modName)) {
         $modOsDir = $modName;
@@ -1229,10 +1299,10 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
     $use_internal = false;
     unset($sourceFileName);
 
-    // xarLogMessage("TPL: 1. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase-$templateName.xt")
-    // xarLogMessage("TPL: 2. $tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xd")
-    // xarLogMessage("TPL: 3. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase.xt")
-    // xarLogMessage("TPL: 4. $tplBaseDir/xartemplates/$tplSubPart/$tplBase.xd")
+    xarLogMessage("TPL: 1. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase-$templateName.xt");
+    xarLogMessage("TPL: 2. $tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xd");
+    xarLogMessage("TPL: 3. $tplThemesDir/$tplBaseDir/$tplSubPart/$tplBase.xt");
+    xarLogMessage("TPL: 4. $tplBaseDir/xartemplates/$tplSubPart/$tplBase.xd");
 
     $canTemplateName = strtr($templateName, "-", "/");
     $canonical = ($canTemplateName == $templateName) ? false : true;
@@ -1329,8 +1399,9 @@ function xarTpl_outputPHPCommentBlockInTemplates()
         // Default to not show the comments
         $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
         // CHECKME: not sure if this is needed, e.g. during installation
+        // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
         if (function_exists('xarModGetVar')){
-            $showphpcbit = xarModGetVar('themes', 'ShowPHPCommentBlockInTemplates');
+            $showphpcbit = xarModVars::get('themes', 'ShowPHPCommentBlockInTemplates');
             if (!empty($showphpcbit)) {
                 $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 1;
             }
@@ -1346,7 +1417,7 @@ function xarTpl_outputPHPCommentBlockInTemplates()
  * @global int xarTpl_showTemplateFilenames
  * @return int value of xarTpl_showTemplateFilenames (0 or 1)
  *
- * @todo Check whether the check for xarModGetVar is needed
+ * @todo Check whether the check for xarModVars::get is needed
  * @todo Rethink this function
  */
 function xarTpl_outputTemplateFilenames()
@@ -1355,8 +1426,9 @@ function xarTpl_outputTemplateFilenames()
         // Default to not showing it
         $GLOBALS['xarTpl_showTemplateFilenames'] = 0;
         // CHECKME: not sure if this is needed, e.g. during installation
+        // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
         if (function_exists('xarModGetVar')){
-            $showtemplates = xarModGetVar('themes', 'ShowTemplates');
+            $showtemplates = xarModVars::get('themes', 'ShowTemplates');
             if (!empty($showtemplates)) {
                 $GLOBALS['xarTpl_showTemplateFilenames'] = 1;
             }
@@ -1416,6 +1488,7 @@ function xarTpl_modifyHeaderContent($sourceFileName, &$tplOutput)
     return $foundHeaderContent;
 }
 
+
 /**
  * Load template from file (e.g. for use with recurring template snippets someday,
  * using xarTplString() to "fill in" the template afterwards)
@@ -1424,30 +1497,22 @@ function xarTpl_modifyHeaderContent($sourceFileName, &$tplOutput)
  * @global bool xarTpl_cacheTemplates Do we cache templates?
  * @param  string $sourceFileName     From which file do we want to load?
  * @return mixed
+ * @throws FileNotFoundException
  */
 function xarTpl__loadFromFile($sourceFileName)
 {
-    $needCompilation = true;
-
-    if ($GLOBALS['xarTpl_cacheTemplates']) {
-        $cacheKey = xarTpl__SetCacheKey($sourceFileName);
-        $cachedFileName = XAR_TPL_CACHE_DIR . '/' . $cacheKey . '.php';
-        if (file_exists($cachedFileName)
-            && (!file_exists($sourceFileName) || (filemtime($sourceFileName) < filemtime($cachedFileName)))) {
-            $needCompilation = false;
-        }
-    }
+    $needCompilation = xarTpl__needsCompilation($sourceFileName,$cachedFileName);
 
     if (!file_exists($sourceFileName) && $needCompilation == true) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'TEMPLATE_NOT_EXIST', $sourceFileName);
-        return;
+        throw new FileNotFoundException($sourceFileName);
     }
 
     //xarLogVariable('needCompilation', $needCompilation, XARLOG_LEVEL_ERROR);
     if ($needCompilation) {
         $blCompiler = xarTpl__getCompilerInstance();
         $templateCode = $blCompiler->compileFile($sourceFileName);
-        if (!isset($templateCode) || xarCurrentErrorType() != XAR_NO_EXCEPTION) {
+        // TODO: CHECK THIS, we might not need this anymore
+        if (!isset($templateCode)) {
             return; // exception! throw back
         }
         if ($GLOBALS['xarTpl_cacheTemplates']) {
@@ -1500,33 +1565,28 @@ function xarTpl__getCacheKey($sourceFileName)
 /**
  * Model of a tag attribute
  *
- * Mainly uses fro custom tags
+ * Mainly uses for custom tags
  *
  * @package blocklayout
  * @access protected
- *
+ * @throws BadParamterException
  * @todo see FIXME
  */
 class xarTemplateAttribute
 {
-    var $_name;     // Attribute name
-    var $_flags;    // Attribute flags (datatype, required/optional, etc.)
+    public $_name;     // Attribute name
+    public $_flags;    // Attribute flags (datatype, required/optional, etc.)
 
     function xarTemplateAttribute($name, $flags = NULL)
     {
         // See defines at top of file
         if (!eregi(XAR_TPL_ATTRIBUTE_REGEX, $name)) {
-            $msg = xarML("Illegal attribute name ('#(1)'): Attribute name may contain letters, numbers, _ and -, and must start with a letter.", $name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                           new SystemException($msg));
-            return;
+            // This should be a XML validation exception perhaps?
+            throw new BadParamterException($name,'The attribute name "#(1)" is invalid. Attribute names contain letters, numbers, _ and -, and must start with a letter.');
         }
 
         if (!is_integer($flags) && $flags != NULL) {
-            $msg = xarML("Illegal attribute flags ('#(1)'): flags must be of integer type.", $flags);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                           new SystemException($msg));
-            return;
+            throw new BadParameterException($flags,"Illegal attribute flags ('#(1)'): flags must be of integer type.");
         }
 
         $this->_name  = $name;
@@ -1582,44 +1642,44 @@ class xarTemplateAttribute
  */
 class xarTemplateTag
 {
-    var $_name = NULL;          // Name of the tag
-    var $_attributes = array(); // Array with the supported attributes
-    var $_handler = NULL;       // Name of the handler function
-    var $_module;               // Modulename
-    var $_type;                 // Type of the handler (user/admin etc.)
-    var $_func;                 // Function name
+    public $_name = NULL;          // Name of the tag
+    public $_attributes = array(); // Array with the supported attributes
+    public $_handler = NULL;       // Name of the handler function
+    public $_module;               // Modulename
+    public $_type;                 // Type of the handler (user/admin etc.)
+    public $_func;                 // Function name
     // properties for registering what kind of tag we have here
-    var $_hasChildren = false;
-    var $_hasText = false;
-    var $_isAssignable = false;
-    var $_isPHPCode = true;
-    var $_needAssignment = false;
-    var $_needParameter = false;
-    var $_needExceptionsControl = false;
+    public $_hasChildren = false;
+    public $_hasText = false;
+    public $_isAssignable = false;
+    public $_isPHPCode = true;
+    public $_needAssignment = false;
+    public $_needParameter = false;
 
-
+    /**
+     * Constructor 
+     *
+     * @return void
+     * @throws BadParameterException
+     * @author Marcel van der Boom
+     * @todo change constructor to __construct
+     **/
     function xarTemplateTag($module, $name, $attributes = array(), $handler = NULL, $flags = XAR_TPL_TAG_ISPHPCODE)
     {
         // See defines at top of file
         if (!eregi(XAR_TPL_TAGNAME_REGEX, $name)) {
-            $msg = xarML("Illegal tag definition: '#(1)' is an invalid tag name.", $name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN', new SystemException($msg));
-            return;
+            throw new BadParameterException($name,'Illegal tag definition: "#(1)" is an invalid tag name.');
         }
 
         if (preg_match("/($module)_(\w+)api_(.*)/",$handler,$matches)) {
             $this->_type = $matches[2];
             $this->_func = $matches[3];
         } else {
-            $msg = xarML("Illegal tag definition: '#(1)' is an invalid handler.", $handler);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN', new SystemException($msg));
-            return;
+            throw new BadParameterException($handler,'Illegal tag definition: "#(1)" is an invalid handler.');
         }
 
         if (!is_integer($flags)) {
-            $msg = xarML("Illegal tag registration flags ('#(1)'): flags must be of integer type.", $flags);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN', new SystemException($msg));
-            return;
+            throw new BadParameterException($flags,'Illegal tag registration flags ("#(1)"): flags must be of integer type.');
         }
 
         // Everything seems to be in order, set the properties
@@ -1641,7 +1701,6 @@ class xarTemplateTag
         $this->_isPHPCode      = ($flags & XAR_TPL_TAG_ISPHPCODE)      == XAR_TPL_TAG_ISPHPCODE;
         $this->_needAssignment = ($flags & XAR_TPL_TAG_NEEDASSIGNMENT) == XAR_TPL_TAG_NEEDASSIGNMENT;
         $this->_needParameter  = ($flags & XAR_TPL_TAG_NEEDPARAMETER)  == XAR_TPL_TAG_NEEDPARAMETER;
-        $this->_needExceptionsControl = ($flags & XAR_TPL_TAG_NEEDEXCEPTIONSCONTROL)   == XAR_TPL_TAG_NEEDEXCEPTIONSCONTROL;
     }
 
     function hasChildren()
@@ -1674,11 +1733,6 @@ class xarTemplateTag
         return $this->_needParameter;
     }
 
-    function needExceptionsControl()
-    {
-        return $this->_needExceptionsControl;
-    }
-
     function getAttributes()
     {
         return $this->_attributes;
@@ -1699,6 +1753,13 @@ class xarTemplateTag
     return $this->_handler;
     }
 
+    /**
+     * Call the handler defined for the registered tag
+     *
+     * @return string code produced by the handler
+     * @throws BadParameterException
+     * @author Marcel van der Boom
+     **/
     function callHandler($args, $handler_type='render')
     {
         // FIXME: get rid of this once installation includes the right serialized info
@@ -1709,12 +1770,9 @@ class xarTemplateTag
                 $this->_type = $matches[2];
                 $this->_func = $matches[3];
             } else {
-                $msg = xarML("Illegal tag definition: '#(1)' is an invalid handler.", $handler);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                               new SystemException($msg));
                 // FIXME: why is this needed?
                 $this->_name = NULL;
-                return;
+                throw new BadParameterException($handler,'Illegal tag definition: "#(1)" is an invalid handler.');
             }
         }
         // Add the type to the args
@@ -1737,7 +1795,7 @@ class xarTemplateTag
  * @param string  $tag_handler Which function is the handler?
  * @param integer $flags       Bitfield which contains the flags to turn on for the tag registration.
  * @return bool
- *
+ * @throws DuplicateTagException, SQLException
  * @todo Make this more generic, now only 'childless' tags are supported (only one handler)
  * @todo Consider using handler-array (define 'events' like in SAX)
  * @todo wrap the registration into constructor, either it succeeds creating the object or not, not having an object without succeeding sql.
@@ -1747,10 +1805,7 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
     // Check to make sure tag does not exist first
     if (xarTplGetTagObjectFromName($tag_name) != NULL) {
         // Already registered
-        $msg = xarML('<xar:#(1)> tag is already defined.', $tag_name);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                       new SystemException($msg));
-        return false;
+        throw new DuplicateTagException($tag_name,'<xar:#(1)> tag is already defined.');
     }
 
     // Validity of tagname is checked in class.
@@ -1764,22 +1819,28 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
     $tag_table = $systemPrefix . '_template_tags';
 
     // Get next ID in table
-    $tag_id = $dbconn->GenId($tag_table);
+    try {
+        $dbconn->begin();
+        $tag_id = $dbconn->GenId($tag_table);
 
-    $query = "INSERT INTO $tag_table
-                (xar_id, xar_name, xar_module, xar_handler, xar_data)
-              VALUES
-                (?,?,?,?,?)";
+        $modInfo = xarMod::GetBaseInfo($tag->getModule());
+        $modId = $modInfo['systemid'];
+        $query = "INSERT INTO $tag_table
+                  (xar_id, xar_name, xar_modid, xar_handler, xar_data)
+                  VALUES(?,?,?,?,?)";
+        $bindvars = array($tag_id,
+                          $tag->getName(),
+                          $modId,
+                          $tag->getHandler(),
+                          serialize($tag));
 
-    $bindvars = array($tag_id,
-                      $tag->getName(),
-                      $tag->getModule(),
-                      $tag->getHandler(),
-                      serialize($tag));
-
-    $result = $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
-
+        $stmt = $dbconn->prepareStatement($query);
+        $stmt->executeUpdate($bindvars);
+        $dbconn->commit();
+    } catch (SQLException $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
     return true;
 }
 
@@ -1789,6 +1850,7 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
  * @access public
  * @param  string $tag      tag to remove
  * @return bool
+ * @throws SQLException
  * @todo   wrap in unregister method of tag class? (kinda compicates things, as now no object is needed)
  **/
 function xarTplUnregisterTag($tag_name)
@@ -1802,12 +1864,9 @@ function xarTplUnregisterTag($tag_name)
     $xartable =& xarDBGetTables();
 
     $tag_table = $xartable['template_tags'];
-
     $query = "DELETE FROM $tag_table WHERE xar_name = ?";
-
-    $result =& $dbconn->Execute($query,array($tag_name));
-    if (!$result) return;
-
+    $stmt = $dbconn->prepareStatement($query);
+    $stmt->executeUpdate(array($tag_name));
     return true;
 }
 
@@ -1819,7 +1878,7 @@ function xarTplUnregisterTag($tag_name)
  * @param   string    $name Name of the tag
  * @param   array     $args Attribute array
  * @return  bool
- *
+ * @throws  BLException, BLValidationException
  * @todo Rename the function to reflect that it is a protected function
  * @todo wrap in method of tag or attribute class (or both)
 */
@@ -1827,10 +1886,9 @@ function xarTplCheckTagAttributes($name, $args)
 {
     $tag_ref = xarTplGetTagObjectFromName($name);
     if ($tag_ref == NULL) {
-        $msg = xarML('<xar:#(1)> tag is not defined.', $name);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                       new SystemException($msg));
-        return;
+        // Throw a generic BL exception for now
+        $msg = '<xar:#(1)> tag is not defined.';
+        throw new BLException($name,$msg);
     }
 
     $tag_attrs = $tag_ref->getAttributes();
@@ -1855,16 +1913,10 @@ function xarTplCheckTagAttributes($name, $args)
             }
 
             // bad type for attribute
-            $msg = xarML("'#(1)' attribute in <xar:#(2)> tag does not have correct type. See tag documentation.", $attr_name, $name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                            new SystemException($msg));
-            return false;
+            throw new BLValidationException(array($attr_name,$name),'"#(1)" attribute in <xar:#(2)> tag does not have correct type. See tag documentation.');
         } elseif ($attr->isRequired()) {
             // required attribute is missing!
-            $msg = xarML("Required '#(1)' attribute is missing from <xar:#(2)> tag. See tag documentation.", $attr_name, $name);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                            new SystemException($msg));
-            return false;
+            throw new BLValidationException(array($attr_name,$name),'Required "#(1)" attribute is missing from <xar:#(2)> tag. See tag documentation.');
         }
     }
 
@@ -1893,21 +1945,23 @@ function xarTplGetTagObjectFromName($tag_name)
 
     $systemPrefix = xarDBGetSystemTablePrefix();
     $tag_table = $systemPrefix . '_template_tags';
-    $query = "SELECT xar_data, xar_module FROM $tag_table WHERE xar_name=?";
+    $mod_table = $systemPrefix . '_modules';
+    $query = "SELECT tags.xar_data, mods.xar_name
+              FROM $tag_table tags, $mod_table mods
+              WHERE tags.xar_modid = mods.xar_id AND tags.xar_name=?";
 
-    $result =& $dbconn->SelectLimit($query, 1,-1,array($tag_name));
-    if (!$result) return;
+    $result = $dbconn->SelectLimit($query, 1,-1,array($tag_name),ResultSet::FETCHMODE_NUM);
 
     if ($result->EOF) {
         $result->Close();
         return NULL; // tag does not exist
     }
 
-    list($obj,$module) = $result->fields;
+    list($obj,$module) = $result->getRow();
     $result->Close();
 
     // Module must be active for the tag to be active
-    if(!xarModIsAvailable($module)) return; //throw back
+    if(!xarMod::isAvailable($module)) return; //throw back
 
     $obj = unserialize($obj);
 

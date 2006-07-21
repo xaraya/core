@@ -19,7 +19,7 @@
  */
 
 include_once dirname(__FILE__).'/xarMLS.php';
-class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
+class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
     function xarMLS__PHPTranslationsBackend($locales)
     {
@@ -64,19 +64,19 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
     function bindDomain($dnType, $dnName='xaraya')
     {
         if (parent::bindDomain($dnType, $dnName)) return true;
-// FIXME: I should comment it because it creates infinite loop
-// MLS -> xarMod_getBaseInfo -> xarDisplayableName -> xarMod_getFileInfo -> MLS
-// We don't use and don't translate KEYS files now,
-// but I will recheck this code in the menus clone
-//        if ($dnType == XARMLS_DNTYPE_MODULE) {
-//            $this->loadKEYS($dnName);
-//        }
+        // FIXME: I should comment it because it creates infinite loop
+        // MLS -> xarMod::getBaseInfo -> xarDisplayableName -> xarMod::getFileInfo -> MLS
+        // We don't use and don't translate KEYS files now,
+        // but I will recheck this code in the menus clone
+        //        if ($dnType == XARMLS_DNTYPE_MODULE) {
+        //            $this->loadKEYS($dnName);
+        //        }
         return false;
     }
 /*
     function loadKEYS($dnName)
     {
-        $modBaseInfo = xarMod_getBaseInfo($dnName);
+        $modBaseInfo = xarMod::getBaseInfo($dnName);
         $fileName = "modules/$modBaseInfo[directory]/KEYS";
         if (file_exists($fileName)) {
 
@@ -95,7 +95,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
     {
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
 //            $msg = xarML("Context type: #(1) and file name: #(2)", $ctxType, $ctxName);
-//            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($msg));
+//            throw new ContextNotFoundException?
 //            return;
             return true;
         }

@@ -1,4 +1,4 @@
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:style scope="module" file="dd" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
@@ -82,7 +82,7 @@
                             <xar:foreach in="$modulelist" key="$modid" value="$modlabel">
                                 <xar:if condition="!in_array($modid,$modulesupported)">
                                 <xar:elseif condition="$modid eq 151" />
-                                    <xar:comment> preset to articles </xar:comment>
+                                    <!-- TODO: keep this preset to articles? -->
                                     <option value="#$modid#" selected="selected">#$modlabel#</option>
                                 <xar:else/>
                                     <option value="#$modid#">#$modlabel#</option>
@@ -103,7 +103,7 @@
                             <xar:foreach in="$modulelist" key="$modid" value="$modlabel">
                                 <xar:if condition="!in_array($modid,$modulesupported)">
                                 <xar:elseif condition="$modid eq 151" />
-                                    <xar:comment> preset to articles </xar:comment>
+                                    <!-- TODO: keep this preset to articles? -->
                                     <option value="#$modid#" selected="selected">#$modlabel#</option>
                                 <xar:else/>
                                     <option value="#$modid#">#$modlabel#</option>
@@ -123,7 +123,7 @@
                         <xar:mlstring>Item Type Route:</xar:mlstring>
                     </label>
                     <span class="xar-nowrap">
-                        <xar:comment> get the list of itemtypes for that module </xar:comment>
+                        <!--  get the list of itemtypes for that module -->
                         <xar:if condition="!isset($from['itemtype'])">
                             <select name="from[itemtype]" id="from_itemtype">
                                 <xar:foreach in="$fromitemtypes" key="$itemtype" value="$info">
@@ -159,7 +159,7 @@
                         <label for="from_itemid" title="#xarML('List of items for this module+itemtype')#" class="xar-form-label">
                             <xar:mlstring>Items:</xar:mlstring>
                         </label>
-                        <xar:comment> get the list of items for that module+itemtype </xar:comment>
+                        <!--  get the list of items for that module+itemtype -->
                         <xar:if condition="!isset($from['itemid'])">
                             <select name="from[itemid][]" id="from_itemid" multiple="multiple">
                                 <xar:foreach in="$fromitems" key="$itemid" value="$info">

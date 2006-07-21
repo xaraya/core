@@ -24,9 +24,22 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_CountryList_Property extends Dynamic_Select_Property
 {
-    function Dynamic_CountryList_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Select_Property($args);
+        parent::__construct($args);
+        $this->tplmodule = 'base';
+        $this->template  = 'countrylist';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 42;
+        $info->name = 'countrylisting';
+        $info->desc = 'Country Dropdown';
+
+        return $info;
     }
 
     function validateValue($value = null)
@@ -48,86 +61,6 @@ class Dynamic_CountryList_Property extends Dynamic_Select_Property
 
         return true;
     }
-
-    function showInput($args = array())
-    {
-        extract($args);
-
-        $data=array();
-
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        $data['value'] = $value;
-        $data['name']  = $name;
-        $data['id']    = $id;
-        $options = $this->getOptions();
-
-        $data['options'] = $options;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
-        $data['tabindex'] =! empty($tabindex) ? $tabindex: 0;
-
-        if (!isset($template) || empty($template)) {
-            $template = 'countrylist';
-        }
-        return xarTplProperty('base', $template, 'showinput', $data);
-
-    }
-
-    function showOutput($args = array())
-    {
-         extract($args);
-        if (isset($value)) $data['value']=$this->value;
-
-        // get the option corresponding to this value
-        $result = $this->getOption();
-
-        // only apply xarVarPrepForDisplay on strings, not arrays et al.
-        //but if we prep this the entities don't render correctly!
-        // for now prep in the templte and remove if necessary
-        if (!empty($result) && is_string($result)) {
-            //$result = xarVarPrepForDisplay($result);
-        }
-        $data['value'] = array('id' => $this->value, 'name' => $result);
-
-        if (!isset($template) || empty($template)) {
-            $template = 'countrylist';
-        }
-
-         return xarTplProperty('base', $template, 'showoutput', $data);
-    }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 42,
-                              'name'       => 'countrylisting',
-                              'label'      => 'Country Dropdown',
-                              'format'     => '42',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => '',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
    /**
     * Country list according to ISO 3166
     *
