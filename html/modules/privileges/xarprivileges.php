@@ -871,9 +871,13 @@ class xarPrivileges extends xarMasks
                     $description, $iid
                 );
             } else {
-                // FIXME: be explicit with the table columns.
-            $query = "INSERT INTO $this->instancestable VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-                $bindvars = array(
+            $query = "INSERT INTO $this->instancestable
+                     ( xar_iid, xar_module, xar_component, xar_header,
+                       xar_query, xar_limit, xar_propagate,
+                       xar_instancetable2, xar_instancechildid,
+                       xar_instanceparentid, xar_description)
+                     VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+                    $bindvars = array(
                     $this->dbconn->genID($this->instancestable),
                               $module, $type, $instance['header'],
                               $instance['query'], $instance['limit'],
@@ -1259,7 +1263,6 @@ class xarPrivileges extends xarMasks
 */
     function getinstances($module, $component)
     {
-
 
         if ($component =="All") {
             $componentstring = "";
