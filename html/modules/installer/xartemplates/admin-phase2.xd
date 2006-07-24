@@ -22,10 +22,16 @@
             
             <label class="block" for="disagree"><input type="radio" name="agree" id="disagree" value="disagree" checked="checked" />
                 <xar:mlstring>
-                    I have read and do NOT agree to abide by the Terms and Conditions as stated above 
+                    I have read and do NOT agree to abide by the Terms and Conditions as stated above
                 </xar:mlstring>
             </label>
         </p>
+        <xar:if condition="$retry eq 1">
+        <p style="color: red;">
+            <xar:mlstring>We ask you agree to the Terms and Conditions above in order to continue installing.
+            </xar:mlstring>
+        </p>
+        </xar:if>
         <div class="xar-align-center">
             <xar:set name="buttonnext">
                 <xar:mlstring>

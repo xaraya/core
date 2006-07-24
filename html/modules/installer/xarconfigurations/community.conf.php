@@ -100,6 +100,7 @@ function installer_community_casualaccess()
     xarMakePrivilegeMember('ViewRegistrationLogin','CasualAccess');
     xarMakePrivilegeMember('ViewLogin','CasualAccess');
     xarMakePrivilegeMember('ViewBlocks','CasualAccess');
+    xarMakePrivilegeMember('ViewAuthsystem','CasualAccess');
     xarMakePrivilegeMember('ViewLoginItems','CasualAccess');
 }
 
@@ -121,6 +122,7 @@ function installer_community_readnoncore()
     xarMakePrivilegeRoot('DenyModules');
     xarMakePrivilegeRoot('DenyThemes');
     xarMakePrivilegeMember('ReadAccess','ReadNonCore');
+    xarMakePrivilegeMember('ViewAuthsystem','ReadNonCore');
     xarMakePrivilegeMember('DenyPrivileges','ReadNonCore');
     //xarMakePrivilegeMember('DenyAdminPanels','ReadNonCore');
     xarMakePrivilegeMember('DenyBlocks','ReadNonCore');

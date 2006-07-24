@@ -181,15 +181,15 @@ function blocks_init()
                                     'unique' => false));
     $result =& $dbconn->Execute($query);
     if (!$result) return;
-    
+
     // create table for block instance specific output cache configuration
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
     // Cache blocks table is not in xartables
     $cacheblockstable =  xarDBGetSystemTablePrefix() . '_cache_blocks';
-    //jojodee: for some reason php5.0.3 does not like the datadict approach
-    //changing now to usual creation approach to get installer working
+
+    //There was a problem in php 5.0.3, and also sqlite and postgres with L data type do replacing datadict method
 
     $query = xarDBCreateTable($prefix . '_cache_blocks',
                              array('xar_bid'          => array('type'        => 'integer',
@@ -210,7 +210,7 @@ function blocks_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
-/*
+   /*
     // Get a data dictionary object with item create methods.
     $datadict =& xarDBNewDataDict($dbconn, 'ALTERTABLE');
 
@@ -226,8 +226,8 @@ function blocks_init()
     $result = $datadict->changeTable($cacheblockstable, $flds);
     if (!$result) {return;}
     */
-    //jojodee: for some reason php5.0.3 does not like the datadict approach
-    //changing now to usual creation approach to get installer working
+
+    //There was a problem in php 5.0.3, and also sqlite and postgres with L data type do replacing datadict method
 
     $query = xarDBCreateIndex($prefix . '_cache_blocks',
                               array('name' => 'i_' . $prefix . '_cache_blocks_1',
@@ -275,20 +275,18 @@ function blocks_init()
                      array(new xarTemplateAttribute('bid', XAR_TPL_STRING|XAR_TPL_REQUIRED)),
                      'blocks_userapi_handleStateIconTag');
     */
-    /* these can't be set because they are part of the core
-       and when the core is installed, blocks is installed
-       before the modules module is so, the module_vars table
-       isn't even created at this point.
 
-    xarModSetVar('blocks','collapseable',1);
-    xarModSetVar('blocks','blocksuparrow','upb.gif');
-    xarModSetVar('blocks','blocksdownarrow','downb.gif');
-    */
+    /* These modvars can be set here now as modules module is installed prior to blocks  if needed */
+    //xarModSetVar('blocks','collapseable',1);
+    //xarModSetVar('blocks','blocksuparrow','upb.gif');
+    //xarModSetVar('blocks','blocksdownarrow','downb.gif');
 
-    // Initialisation successful
     xarModSetVar('blocks', 'selstyle', 'plain');
     xarModSetVar('blocks', 'itemsperpage', 20);
-    return true;
+
+     /* This init function brings our module to version 1.0, run the upgrades for the rest of the initialisation */
+    return blocks_upgrade('1.0');
+
 }
 
 /**
@@ -298,9 +296,76 @@ function blocks_upgrade($oldVersion)
 {
     switch($oldVersion) {
     case '1.0':
-        // compatability upgrade, nothing to be done
+
+    case '1.0.0':
+        /* There are old block instances defined previously in privs xarsetup.php file and used in the Block module.
+           From this version we are adding management of security for blocks to Blocks module
+           Old functionality in modules still exists. 
+           Note that the old instances and masks and code in the files was not 'matched' so don't think they worked properly in any case.
+        */
+        xarRemoveInstances('blocks');
+        //setup the new ones
+        $dbconn =& xarDBGetConn();
+        $xartable =& xarDBGetTables();
+        $systemPrefix = xarDBGetSystemTablePrefix();
+
+        $blockGroupsTable    = $systemPrefix . '_block_groups';
+        $blockTypesTable     = $systemPrefix . '_block_types';
+        $blockInstancesTable = $systemPrefix . '_block_instances';
+
+        //Set up the block group instances for this module - these are the same as previously defined and retained
+        $query1 = "SELECT DISTINCT xar_name FROM $blockGroupsTable";
+        $query2 = "SELECT DISTINCT xar_id FROM $blockGroupsTable";
+        $instances = array(array('header'  => 'Group Name:',
+                             'query'   => $query1,
+                             'limit'   => 20),
+                       array('header'  => 'Group ID:',
+                             'query'   => $query2,
+                             'limit'   => 20));
+
+        xarDefineInstance('blocks','BlockGroup',$instances);
+
+        //The block instances differ and now defined on name (not title)
+        //These need to be upgraded
+        $query1 = "SELECT DISTINCT xar_module FROM $blockTypesTable ";
+        $query2 = "SELECT xar_type FROM $blockTypesTable ";
+        $query3 = "SELECT DISTINCT instances.xar_name FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id";
+        $instances = array(array('header' => 'Module Name:',
+                                 'query' => $query1,
+                                 'limit' => 20),
+                           array('header' => 'Block Type:',
+                                 'query' => $query2,
+                                 'limit' => 20),
+                           array('header' => 'Block Name:',
+                                 'query' => $query3,
+                                 'limit' => 20));
+        xarDefineInstance('blocks','Block',$instances);
+
+        //Set up the security masks
+         xarRemoveMasks('blocks'); 
+         /* remove and redefine new ones. The old ones do not seem to be working in any case in installs */
+
+        //Unsure if this  Comment is used at all but left for compatiblity with prior setup
+        xarRegisterMask('CommentBlock','All','blocks','All','All','ACCESS_EDIT');
+
+        // Blockgroups - in case people can edit block group
+        xarRegisterMask('EditBlockGroup',  'All', 'blockgroup', 'Blockgroup', 'All', 'ACCESS_EDIT');
+        //Blocks block? could be a use ...
+        xarRegisterMask('ReadBlocksBlock', 'All', 'blocks', 'Block', 'All:All:All', 'ACCESS_OVERVIEW');
+        //And standard masks for the rest - keep names the same as any prior so minimal sec checks in templates still work
+        xarRegisterMask('ViewBlock',    'All', 'blocks', 'Block', 'All:All:All', 'ACCESS_OVERVIEW');
+        xarRegisterMask('ReadBlock',    'All', 'blocks', 'Block', 'All:All:All', 'ACCESS_READ');
+        xarRegisterMask('ModerateBlock','All', 'blocks', 'Block', 'All:All:All', 'ACCESS_MODERATE');
+        xarRegisterMask('EditBlock',    'All', 'blocks', 'Block', 'All:All:All', 'ACCESS_EDIT');
+        xarRegisterMask('AddBlock',     'All', 'blocks', 'Block', 'All:All:All', 'ACCESS_ADD');
+        xarRegisterMask('DeleteBlock',  'All', 'blocks', 'Block', 'All:All:All', 'ACCESS_DELETE');
+        xarRegisterMask('AdminBlock',   'All', 'blocks', 'Block', 'All:All:All', 'ACCESS_ADMIN');
+
+    case '1.0.1': /* current version */
+
         break;
     }
+    /* Update successful */
     return true;
 }
 

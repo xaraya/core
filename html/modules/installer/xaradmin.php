@@ -84,6 +84,7 @@ function installer_admin_phase1()
 function installer_admin_phase2()
 {
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
+    xarVarFetch('retry','int:1',$data['retry'],NULL, XARVAR_NOT_REQUIRED);
 
     $data['language'] = $install_language;
     $data['phase'] = 2;
@@ -127,12 +128,13 @@ function check_dir($dirname)
 function installer_admin_phase3()
 {
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
-
     if (!xarVarFetch('agree','regexp:(agree|disagree)',$agree)) return;
+
+    $retry=1;
 
     if ($agree != 'agree') {
         // didn't agree to license, don't install
-        xarResponseRedirect('install.php?install_phase=2&install_language='.$install_language);
+        xarResponseRedirect('install.php?install_phase=2&install_language='.$install_language.'&retry=1');
     }
 
     //Defaults
@@ -483,22 +485,22 @@ function installer_admin_bootstrap()
         die(xarML('I cannot load the Authsystem module. Please make it available and reinstall'));
     }
 
-
     // Set the state and activate the following modules
-    $modlist=array('roles','privileges','blocks','authsystem','themes');
+    // jojodee - Modules, authsystem, base, installer, blocks and themes are already activated in base init
+    // We run them through roles and privileges as special cases that need an 'activate' phase. Others don't.
+   $modlist=array('roles','privileges');
     foreach ($modlist as $mod) {
-        // Set state to inactive
+        // Set state to inactive first
         $regid=xarModGetIDFromName($mod);
         if (isset($regid)) {
             if (!xarModAPIFunc('modules','admin','setstate',
                                 array('regid'=> $regid, 'state'=> XARMOD_STATE_INACTIVE))) return;
 
-            // Activate the module
+            // Then run activate function
             if (!xarModAPIFunc('modules','admin','activate', array('regid'=> $regid))) return;
         }
     }
-    //now make sure we set default authmodule
-    xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
+
 
     // load themes into *_themes table
     if (!xarModAPIFunc('themes', 'admin', 'regenerate')) {
@@ -534,16 +536,10 @@ function installer_admin_bootstrap()
         }
     }
 
-    //initialise and activate base module by setting the states
-    $baseId = xarModGetIDFromName('base');
-    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_INACTIVE))) return;
-    // Set module state to active
-    if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_ACTIVE))) return;
+/* --------------------------------------------------------
+ * Create wrapper DD objects for the native itemtypes of the privileges module
+ */
 
-# --------------------------------------------------------
-#
-# Create wrapper DD objects for the native itemtypes of the privileges module
-#
     if (!xarModAPIFunc('privileges','admin','createobjects')) return;
 
     xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
@@ -643,7 +639,7 @@ function installer_admin_create_administrator()
     $modifiedrole = $role->update();
     if (!$modifiedrole) {return;}
 
-    // Register Block types
+    // Register Block types from modules installed before block apis (base)
     $blocks = array('adminmenu','waitingcontent','finclude','html','menu','php','text','content');
 
     foreach ($blocks as $block) {
@@ -715,7 +711,6 @@ function installer_admin_create_administrator()
         }
     }
 
-
     $now = time();
 
     $varshtml['html_content'] = 'Please delete install.php and upgrade.php from your webroot .';
@@ -745,7 +740,6 @@ function installer_admin_create_administrator()
             return;
         }
     }
-
     xarResponseRedirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
 }
 
@@ -1037,7 +1031,7 @@ function installer_admin_confirm_configuration()
             }
         }
      //TODO: Check why this var is being reset to null in sqlite install - reset here for now to be sure
-    xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
+     //xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
 
         xarResponseRedirect(xarModURL('installer', 'admin', 'cleanup'));
     }
@@ -1097,23 +1091,16 @@ function installer_admin_cleanup()
     if (empty($loginBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
         return;
     }
-   //Check for any sign of the Registration module (may have been installed in the configurations)
-    $regloginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
-                                    array('module' => 'registration',
-                                          'type'   => 'rlogin'));
 
-    if (empty($regloginBlockType) && xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-        //return; no don't return, it may not have been loaded
-    }
+    // Forget the registration module. Registration login block can be installed later if needed
     $loginBlockTypeId = $loginBlockType['tid'];
-    //We only want to create the login block if one doesn't already exist - with registration module or authsystem
-    //Registration module might be selected in the config options
-    if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'login')) && !isset($regloginBlockType['tid'])) {
+
+    if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'login'))) {
         if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
                            array('title'    => 'Login',
                                  'name'     => 'login',
                                  'type'     => $loginBlockTypeId,
-                                 'groups'    => array(array('gid'      => $rightBlockGroup,
+                                 'groups'    => array(array('gid'     => $rightBlockGroup,
                                                            'template' => '')),
                                  'template' => '',
                                  'state'    => 2))) {
@@ -1704,11 +1691,15 @@ function installer_admin_upgrade2()
 
 /* End of Version 1.1.0 Release Upgrades */
 
-/* Version 1.1.x Release Upgrades */
+/* Version 1.1.1 Release Upgrades */
     xarModSetVar('themes', 'adminpagemenu', 1); //New variables to switch admin in page menus (tabs) on and off
     xarModSetVar('privileges', 'inheritdeny', true); //Was not set in privileges activation in 1.1, isrequired, maybe missing in new installs
     xarModSetVar('roles', 'requirevalidation', true); //reuse this older var for user email changes, this validation is separate to registration validation
-/* End of Version 1.1.x Release Upgrades */
+/* End of Version 1.1.1 Release Upgrades */
+/* Version 1.1.2 Release Upgrades */
+   //Module Upgrades should take care of most
+   //Need to convert privileges but only if we decide to update the current Blocks module functions' privilege checks
+/* End 1.1.2 Release Upgrades */
 
     $thisdata['content']=$content;
     $thisdata['phase'] = 2;

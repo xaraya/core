@@ -298,7 +298,7 @@ function modules_activate()
     xarModSetVar('modules', 'selfilter', $selfilter);
     xarModSetVar('modules', 'selsort', $selsort);
 
-    // New in 1.1.x series
+    // New in 1.1.x series but not used
     xarModSetVar('modules', 'disableoverview',0);
 
     return true;
