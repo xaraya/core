@@ -58,9 +58,12 @@ function initializeSetup()
     $privMembersTable    = $systemPrefix . '_privmembers';
     $themesTable         = $systemPrefix . '_themes';
 
-    //-------------------------------- Blocks Module
-
-
+    /*-------------------------------- Blocks Module
+     *jojodee - why are the block instance defines here? Modules module is now loaded prior.
+     * Move this (at post v1.1.1) back to Blocks initialization, try and keep everything in the blocks xarinit as much as possible.
+     * TODO: Review all others and move out to their respective modules if possible.
+     */
+    /*
     $query1 = "SELECT DISTINCT xar_name FROM $blockGroupsTable";
     $query2 = "SELECT DISTINCT xar_id FROM $blockGroupsTable";
     $instances = array(array('header'  => 'Group Name:',
@@ -85,7 +88,7 @@ function initializeSetup()
                              'query' => $query3,
                              'limit' => 20));
     xarDefineInstance('blocks','Blocks',$instances);
-
+    */
    //--------------------------------- Roles Module
     $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable WHERE xar_module = 'roles'";
     $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'roles'";
@@ -137,8 +140,8 @@ function initializeSetup()
                              'limit' => 20));
     xarDefineInstance('base','Block',$instances);
 
-   // ------------------------------- Themes Module
-    $query1 = "SELECT DISTINCT xar_name FROM $themesTable";
+   // ------------------------------- Themes Module - move to themes module install
+   /* $query1 = "SELECT DISTINCT xar_name FROM $themesTable";
     $query2 = "SELECT DISTINCT xar_regid FROM $themesTable";
     $instances = array(array('header' => 'Theme Name:',
                              'query' => $query1,
@@ -161,7 +164,7 @@ function initializeSetup()
                              'query' => $query3,
                              'limit' => 20));
     xarDefineInstance('themes','Block',$instances);
-
+   */
     /*********************************************************************
     * Register the module components that are privileges objects
     * Format is
@@ -188,12 +191,13 @@ function initializeSetup()
     xarRegisterMask('AdminPanel','All','base','All','All','ACCESS_ADMIN');
 
     xarRegisterMask('AdminInstaller','All','installer','All','All','ACCESS_ADMIN');
-
+   /* Moved to Auth System module
     xarRegisterMask('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW');
     xarRegisterMask('ViewAuthsystemBlocks','All','authsystem','Block','All','ACCESS_OVERVIEW');
     xarRegisterMask('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditAuthsystem','All','authsystem','All','All','ACCESS_EDIT');
     xarRegisterMask('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
+    */
    // xarRegisterMask('ViewLogin','All','roles','Block','login:Login:All','ACCESS_OVERVIEW'); //No longer required in V1.1
     xarRegisterMask('ViewRolesBlocks','All','roles','Block','All','ACCESS_OVERVIEW');
     xarRegisterMask('ViewRoles','All','roles','All','All','ACCESS_OVERVIEW');
@@ -206,18 +210,19 @@ function initializeSetup()
 
     xarRegisterMask('AttachRole','All','roles','Relation','All','ACCESS_ADD');
     xarRegisterMask('RemoveRole','All','roles','Relation','All','ACCESS_DELETE');
-
+    /* Move to Mail
     xarRegisterMask('EditMail','All','mail','All','All','ACCESS_EDIT');
     xarRegisterMask('AddMail','All','mail','All','All','ACCESS_ADD');
     xarRegisterMask('DeleteMail', 'All','mail','All','All','ACCESS_DELETE');
     xarRegisterMask('AdminMail','All','mail','All','All','ACCESS_ADMIN');
-
+    */
+    /* Post V1.1.1 Moved to Blocks module initialization and upgrade
     xarRegisterMask('CommentBlock','All','blocks','All','All','ACCESS_EDIT');
     xarRegisterMask('EditBlock','All','blocks','All','All','ACCESS_EDIT');
     xarRegisterMask('AddBlock','All','blocks','All','All','ACCESS_ADD');
     xarRegisterMask('DeleteBlock','All','blocks','All','All','ACCESS_DELETE');
     xarRegisterMask('AdminBlock','All','blocks','All','All','ACCESS_ADMIN');
-
+    */
     xarRegisterMask('AssignPrivilege','All','privileges','All','All','ACCESS_ADD');
     xarRegisterMask('DeassignPrivilege','All','privileges','All','All','ACCESS_DELETE');
     xarRegisterMask('ViewPrivileges','All','privileges','All','All','ACCESS_READ');
@@ -234,10 +239,10 @@ function initializeSetup()
 
     xarRegisterMask('EditModules','All','modules','All','All','ACCESS_EDIT');
     xarRegisterMask('AdminModules','All','modules','All','All','ACCESS_ADMIN');
-
+    /* Move to themes module
     xarRegisterMask('ViewThemes','All','themes','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('AdminTheme','All','themes','All','All','ACCESS_ADMIN');
-
+    */
     // Initialisation successful
     return true;
 }

@@ -299,7 +299,7 @@ function base_init()
     $modulesTable = $systemPrefix .'_modules';
     $systemModuleStatesTable = $systemPrefix .'_module_states';
 
-    // Install authsystem module
+    // Insert authsystem module entry
     $seqId = $dbconn->GenId($modulesTable);
     $query = "INSERT INTO $modulesTable
               (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
@@ -319,7 +319,7 @@ function base_init()
     $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
 
-    // Install base module
+    // Insert base module entry
     $seqId = $dbconn->GenId($modulesTable);
     $query = "INSERT INTO $modulesTable
               (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
@@ -332,14 +332,14 @@ function base_init()
     // the sequence for xar_id will not be available in PostgreSQL
     $seqId = $dbconn->GenId($systemModuleStatesTable);
 
-    // Set installer to active
+    // Set Base to active
     $query = "INSERT INTO $systemModuleStatesTable (xar_id, xar_regid, xar_state
               ) VALUES (?, 68, 3)";
 
     $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
 
-    // Install installer module
+    // Insert installer module entry
     $seqId = $dbconn->GenId($modulesTable);
     $query = "INSERT INTO $modulesTable
               (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
@@ -359,7 +359,8 @@ function base_init()
     $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
 
-    // Install blocks module
+    // Insert blocks module entry
+    // Update the version number as required
     $seqId = $dbconn->GenId($modulesTable);
     $query = "INSERT INTO $modulesTable
               (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
@@ -377,13 +378,12 @@ function base_init()
     $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
 
-    // Install themes module
+    // Insert themes module entry
     $seqId = $dbconn->GenId($modulesTable);
-    // FIXME: the theme version should not be hard-coded here.
-    // Fetch it from the modules/themes/xarversion.php script
+    // Version number will be updated from the modules/themes/xarversion.php script
     $query = "INSERT INTO $modulesTable
               (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable
-     ) VALUES (?, 'themes', 70, 'themes', '1.3.1', 1, 'Core Utility', 'Global', 1, 0)";
+     ) VALUES (?, 'themes', 70, 'themes', '1.4.0', 1, 'Core Utility', 'Global', 1, 0)";
     $result =& $dbconn->Execute($query,array($seqId));
     if (!$result) return;
 
@@ -400,12 +400,22 @@ function base_init()
     /**************************************************************
     * Install the blocks module
     **************************************************************/
-    // FIXME: the installation of the blocks module depends on the modules module
-    // to be present, doh !
+    // the installation of the blocks module depends on the modules module
     if (!xarInstallAPIFunc('initialise',
                            array('directory'=>'blocks', 'initfunc'=>'init'))) {
         return;
     }
+    
+    /**************************************************************
+    * Install the authsystem module
+    **************************************************************/
+    if (!xarInstallAPIFunc('initialise',
+                           array('directory'=>'authsystem', 'initfunc'=>'init'))) {
+        return;
+    }
+    /**************************************************************
+    * Install the themes module
+    **************************************************************/
 
     if (!xarInstallAPIFunc('initialise',
                            array('directory'=>'themes', 'initfunc'=>'init'))) {

@@ -96,6 +96,7 @@ function installer_public_commentnoncore()
     xarMakePrivilegeMember('CommentAccess','ViewRegistrationLogin');
     xarMakePrivilegeMember('DenyPrivileges','CommentNonCore');
     //xarMakePrivilegeMember('DenyAdminPanels','CommentNonCore');
+    xarMakePrivilegeMember('ViewAuthsystem','CommentNonCore');
     xarMakePrivilegeMember('DenyBlocks','CommentNonCore');
     xarMakePrivilegeMember('DenyMail','CommentNonCore');
     xarMakePrivilegeMember('DenyModules','CommentNonCore');
@@ -123,6 +124,7 @@ function installer_public_moderatenoncore()
     xarMakePrivilegeMember('ModerateAccess','ModerateNonCore');
     xarMakePrivilegeMember('DenyPrivileges','ModerateNonCore');
     //xarMakePrivilegeMember('DenyAdminPanels','ModerateNonCore');
+    xarMakePrivilegeMember('ViewAuthsystem','ModerateNonCore');
     xarMakePrivilegeMember('DenyBlocks','ModerateNonCore');
     xarMakePrivilegeMember('DenyMail','ModerateNonCore');
     xarMakePrivilegeMember('DenyModules','ModerateNonCore');
@@ -162,6 +164,7 @@ function installer_public_readnoncore2()
     xarMakePrivilegeMember('ReadAccess','ReadNonCore');
     xarMakePrivilegeMember('DenyPrivileges','ReadNonCore');
     //xarMakePrivilegeMember('DenyAdminPanels','ReadNonCore');
+    xarMakePrivilegeMember('ViewAuthsystem','ReadNonCore');
     xarMakePrivilegeMember('DenyBlocks','ReadNonCore');
     xarMakePrivilegeMember('DenyMail','ReadNonCore');
     xarMakePrivilegeMember('DenyModules','ReadNonCore');
