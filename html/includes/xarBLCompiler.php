@@ -242,22 +242,22 @@ class xarTpl__PositionInfo extends xarTpl__ParserError
  */
 class xarTpl__CodeGenerator extends xarTpl__PositionInfo
 {
-    var $isPHPBlock = false;
+    var $_isPHPBlock = false;
     var $pendingExceptionsControl = false;
-    var $code;
+    var $code = '';
 
     function isPHPBlock()
     {
-        return $this->isPHPBlock;
+        return $this->_isPHPBlock;
     }
 
     function setPHPBlock($isPHPBlock)
     {
         $code = '';
         // Only change when needed
-        if($this->isPHPBlock != $isPHPBlock) {
-            $this->isPHPBlock = $isPHPBlock;
-            $code = ($isPHPBlock)? '<?php ' : '?>';
+        if($this->isPHPBlock() != $isPHPBlock) {
+            $this->_isPHPBlock = $isPHPBlock;
+            $code = ($isPHPBlock) ? '<?php ' : '?>';
         }
         return $code;
     }
@@ -272,10 +272,9 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
         $this->pendingExceptionsControl = $pendingExceptionsControl;
     }
 
-    function generate(&$documentTree)
+    function generate($documentTree)
     {
         // Start the code generation
-        $this->code = '';
         $this->code = $this->generateNode($documentTree);
         if (!isset($this->code)) return; // throw back
 
