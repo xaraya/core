@@ -29,9 +29,12 @@ function getActiveStyleSheetProperty(property)
 {
     var i, a;
     for (i=0; (a = document.getElementsByTagName("link")[i]); i++) {
-        if (a.getAttribute("rel").indexOf("style") != -1 && !a.disabled && a.getAttribute("title").indexOf(property) != -1) {
-            return a.getAttribute("title");
-        }    
+        if (a.getAttribute('title') != undefined)
+        {
+            if (a.getAttribute("rel").indexOf("style") != -1 && !a.disabled && a.getAttribute("title").indexOf(property) != -1) {
+                return a.getAttribute("title");
+            }
+        }
     }
     return null;
 }
