@@ -629,18 +629,6 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
                         VALUES (?,?,?)";
                 $bindvars = array($modvarid, $itemid, (string)$value);
             }
-
-            // FIXME: do we really want that ?
-            xarThemeDelVar($modName, $name);
-
-            $seqId = $dbconn->GenId($theme_varsTable);
-            $query = "INSERT INTO $theme_varsTable
-                         (xar_id, xar_themename,
-                          xar_name, xar_prime,
-                          xar_value, xar_description)
-                      VALUES (?,?,?,?,?,?)";
-            $bindvars = array($seqId, $modName, $name, $prime, (string)$value, $description);
-
             break;
         case 'configvar':
             // FIXME: do we really want that ?
