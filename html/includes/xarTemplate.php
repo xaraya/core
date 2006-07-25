@@ -77,7 +77,6 @@ define('XAR_TPL_CACHE_DIR',xarCoreGetVarDirPath() . XARCORE_TPL_CACHEDIR);
  * @author Paul Rosania <paul@xaraya.com>
  * @author Marco Canini <marco@xaraya.com>
  * @access protected
- * @global bool   xarTpl_cacheTemplates
  * @global string xarTpl_themesBaseDir
  * @global string xarTpl_defaultThemeName
  * @global string xarTpl_additionalStyles
@@ -92,7 +91,6 @@ function xarTpl_init(&$args, $whatElseIsGoingLoaded)
 {
     $GLOBALS['xarTpl_themesBaseDir']   = $args['themesBaseDirectory'];
     $GLOBALS['xarTpl_defaultThemeDir'] = $args['defaultThemeDir'];
-    $GLOBALS['xarTpl_cacheTemplates']  = $args['enableTemplatesCaching'];
     $GLOBALS['xarTpl_generateXMLURLs'] = $args['generateXMLURLs'];
     // set when page template root tag is compiled (dtd attribute value)
     $GLOBALS['xarTpl_doctype'] = '';
@@ -107,19 +105,9 @@ function xarTpl_init(&$args, $whatElseIsGoingLoaded)
     }
 
     $GLOBALS['xarTpl_additionalStyles'] = '';
-    // @todo use xarTemplateCache class
-    if ($GLOBALS['xarTpl_cacheTemplates']) {
-        // TODO: bring in xarTemplateCache class 
-        if (!is_writeable(XAR_TPL_CACHE_DIR)) {
-            $msg = "xarTpl_init: Cannot write in '". XAR_TPL_CACHEDIR ."' directory '"
-                . XAR_TPL_CACHE_DIR . "', but the setting: 'cache templates' is set to 'On'.\n"
-                ."Either change the permissions on the mentioned file/directory or set template caching to 'Off' (not recommended).";
-            $GLOBALS['xarTpl_cacheTemplates'] = false;
-            // Set the exception, but we *could* continue (only slow, so an error might be in place here). Let's see
-            // how the exception feels like in practice for a while
-            throw new ConfigurationException(NULL, $msg);
-        }
-    }
+    
+    // @todo move out XAR_TPL_CACHE_DIR to class
+    xarTemplateCache::init(XAR_TPL_CACHE_DIR, $args['enableTemplatesCaching']);
 
     // This is wrong here as well, but it's better at least than in xarMod
     include "includes/xarTheme.php";
@@ -1143,7 +1131,6 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
  * Execute template from file
  *
  * @access private
- * @global bool   xarTpl_cacheTemplates
  * @param  string $sourceFileName       From which file do we want to execute?
  * @param  array  $tplData              Template variables
  * @return mixed
@@ -1470,9 +1457,34 @@ function xarTpl_modifyHeaderContent($sourceFileName, &$tplOutput)
  * @author Marcel van der Boom <mrb@hsdev.com>
  * @todo bring this into the cache hierarchy in general so it can inherit from xarCache or something like that.
  * @todo this is still poorly abstracted, i would like to make a difference between the cache and its entries
+ * @todo yes, i know this is similar to caching/storage/filesystem, but that one isnt ready yet :-) getting to that later.
  **/
 class xarTemplateCache
 {
+    private static $dir     = '';    // location
+    private static $active  = true;  // template cache is active by default.
+    
+    /**
+     * Initialize template cache
+     *
+     * @param string $dir    location of the cache
+     * @param bool   $active is the cache active?
+    **/
+    public static function init($dir, $active)
+    { 
+        if($active === false) self::$active = false;
+        
+        if(!is_writable($dir) && self::isActive()) {
+            $msg = "xarTemplateCache::init: Cannot write in the directory '#(1)', "
+                  ."but the setting: 'cache templates' is set to 'On'.\n"
+                  ."Either change the permissions on the mentioned file/directory or set template caching to 'Off' (not recommended).";
+                    // Set the exception, but we *could* continue (only slow, so an error might be in place here). Let's see
+                    // how the exception feels like in practice for a while
+                    throw new ConfigurationException($dir, $msg);
+        }
+        self::$dir = $dir;
+    }
+    
     /** 
      * Get the cache key for a sourcefile
      *
@@ -1499,7 +1511,7 @@ class xarTemplateCache
     static function saveKey($fileName)
     {
         if(self::isActive()) {
-            if($fd = fopen(XAR_TPL_CACHE_DIR . '/CACHEKEYS', 'a')) {
+            if($fd = fopen(self::$dir . '/CACHEKEYS', 'a')) {
                 fwrite($fd, self::getKey($fileName).': '.$fileName."\n");
                 fclose($fd);
                 return true;
@@ -1513,8 +1525,7 @@ class xarTemplateCache
     **/
     private static function isActive()
     {
-        assert('isset($GLOBALS["xarTpl_cacheTemplates"]);');
-        return $GLOBALS['xarTpl_cacheTemplates'];
+        return self::$active;
     }
     
     // Things really belonging somewhere else
@@ -1568,7 +1579,29 @@ class xarTemplateCache
     
     public static function cacheFile($fileName)
     {
-        return XAR_TPL_CACHE_DIR . '/' . self::getKey($fileName) . '.php';
+        return self::$dir . '/' . self::getKey($fileName) . '.php';
+    }
+    
+    public static function sourceFile($key)
+    {
+        $sourceFile = '[unknown]';
+        if(self::isActive()) {
+            $fileName = $key . '.php';
+            if ($fd = fopen(self::$dir . '/CACHEKEYS', 'r')) {
+                while($cache_entry = fscanf($fd, "%s\t%s\n")) {
+                    list($hash, $template) = $cache_entry;
+                    // Strip the colon
+                    $hash = substr($hash,0,-1);
+                    if($hash == $base) {
+                        // Found the file, source is $template
+                        $sourceFile = $template;
+                        break;
+                    }
+                }
+                fclose($fd);
+            }
+        }
+        return $sourceFile;
     }
 }
 
