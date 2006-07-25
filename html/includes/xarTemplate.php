@@ -929,7 +929,7 @@ function xarTplFile($fileName, $tplData)
 function xarTplCompileString($templateSource)
 {
     $blCompiler = xarTpl__getCompilerInstance();
-    return $blCompiler->compile($templateSource);
+    return $blCompiler->compileString($templateSource);
 }
 
 /**
@@ -1047,12 +1047,12 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
  * Get BL compiler instance
  *
  * @access private
- * @return object xarTpl__Compiler()
+ * @return object xarBLCompiler()
  */
 function xarTpl__getCompilerInstance()
 {
     include_once 'includes/blocklayout/compiler.php';
-    return xarTpl__Compiler::instance();
+    return xarBLCompiler::instance();
 }
 
 /**

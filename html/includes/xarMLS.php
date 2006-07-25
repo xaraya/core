@@ -77,7 +77,14 @@ function xarMLS_init(&$args, $whatElseIsGoingLoaded)
                                            $args['defaultTimeOffset'] : 0;
 
     // Set the timezone
-    date_default_timezone_set ($GLOBALS['xarMLS_defaultTimeZone']);
+    if(function_exists('date_default_timezone_set')) {
+        // PHP 5.1 only
+        date_default_timezone_set ($GLOBALS['xarMLS_defaultTimeZone']);
+    } else {
+        // TODO: find alternative for the above, what is it for anyway? shouldn't the server already have one?
+        // TODO: if so, how to get it?
+        // Now what?
+    }
 
     // Register MLS events
     // These should be done before the xarMLS_setCurrentLocale function

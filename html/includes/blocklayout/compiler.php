@@ -128,25 +128,6 @@ class BLParserException extends BLCompilerException
 }
 
 /**
- * xarTpl__CompilerError
- *
- * For now just a stub class to a system exception
- *
- * @package blocklayout
- * @access private
- * @throws BLCompilerException
- */
-class xarTpl__CompilerError extends Exception
-{
-    function raiseError($msg)
-    {
-        // FIXME: is this useful at all, if the compiler doesn't work, how are we going to show the exception ?
-        //throw a generic exception for now
-        throw new BLCompilerException(null,$msg);
-    }
-}
-
-/**
  * xarTpl__ParserError
  *
  * class to hold parser errors
@@ -172,40 +153,62 @@ class xarTpl__ParserError extends Exception
     }
 }
 
+/** 
+ *  Interface definition for the blocklayout compiler, these are the things
+ *  it offers, no more, no less
+ *
+ */
+interface IxarBLCompiler
+{
+    static function &instance();        // Get an instance of the compiler
+    function compileFile($fileName);    // compile a file
+    function compileString(&$data);     // compile a string
+}
+
 /**
- * xarTpl__Compiler - the abstraction of the BL compiler
+ * xarBLCompiler - the abstraction of the BL compiler
  *
  * The compiler holds the parser and the code generator as objects
  *
  * @package blocklayout
- * @access private
+ * @access public
  */
-class xarTpl__Compiler extends xarTpl__CompilerError
+class xarBLCompiler implements IxarBLCompiler
 {
     private static $instance = null;
     public $parser;
     public $codeGenerator;
 
-    function __construct()
+    /**
+     * Private constructor, since this is a Singleton
+     */
+    private function __construct()
     {
         $this->parser = new xarTpl__Parser();
         $this->codeGenerator = new xarTpl__CodeGenerator();
     }
 
-    static function &instance() 
+    /**
+     * Implementation of the interface
+     */
+    public static function &instance() 
     {
         if(self::$instance == null) {
-            self::$instance = new xarTpl__Compiler();
+            self::$instance = new xarBLCompiler();
         }
         return self::$instance;
     }
+
+    public function compileString(&$data)
+    {
+        return $this->compile($data);
+    }
     
-    function compileFile($fileName)
+    public function compileFile($fileName)
     {
         // The @ makes the code better to handle, leave it.
         if (!($fp = @fopen($fileName, 'r'))) {
-            $this->raiseError("Cannot open template file '$fileName'.");
-            return;
+            throw new BLCompilerException($fileName,"Cannot open template file '#(1)'");
         }
         
         if ($fsize = filesize($fileName)) {
@@ -240,7 +243,10 @@ class xarTpl__Compiler extends xarTpl__CompilerError
         return $res;
     }
 
-    function compile(&$templateSource)
+    /**
+     * Private methods
+     */
+    private function compile(&$templateSource)
     {
         // EXPERIMENTAL, USE AT OWN RISK, I DONT EVEN WANNA KNOW
         if(defined('XAR_BL_USE_XSLT')) {
