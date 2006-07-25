@@ -23,14 +23,14 @@
         </xar:if>
             <xar:foreach in="$options" value="$option" >
                 <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
-                    <xar:if condition="in_array($option['id'],$value)" >
+                    <xar:if condition="!empty($value) AND in_array($option['id'],$value)" >
                         <option value="#$option['id']#" selected="selected">#$option['name']#</option>
-                        <xar:else />
+                    <xar:else />
                         <option value="#$option['id']#">#$option['name']#</option>
                     </xar:if>
-                    <xar:elseif condition="in_array($option['id'],$value)" />
+                <xar:elseif condition="!empty($value) AND in_array($option['id'],$value)" />
                     <option selected="selected">#$option['name']#</option>
-                    <xar:else />
+                <xar:else />
                     <option>#$option['name']#</option>
                 </xar:if>
             </xar:foreach>
@@ -47,14 +47,14 @@
         </xar:if>
             <xar:foreach in="$options" value="$option" >
                 <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
-                    <xar:if condition="in_array($option['id'],$value)" >
+                    <xar:if condition="!empty($value) AND in_array($option['id'],$value)" >
                         <option value="#$option['id']#" selected="selected">#$option['name']#</option>
-                        <xar:else />
+                    <xar:else />
                         <option value="#$option['id']#">#$option['name']#</option>
                     </xar:if>
-                    <xar:elseif condition="in_array($option['id'],$value)" />
+                <xar:elseif condition="!empty($value) AND in_array($option['id'],$value)" />
                     <option selected="selected">#$option['name']#</option>
-                    <xar:else />
+                <xar:else />
                     <option>#$option['name']#</option>
                 </xar:if>
             </xar:foreach>

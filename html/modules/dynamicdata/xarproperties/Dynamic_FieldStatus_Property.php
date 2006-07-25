@@ -76,5 +76,10 @@ class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
         $data['extraparams'] =!empty($extraparams) ? $extraparams : "";
         return parent::showInput($data);
     }
+
+    function getOption($check = false)
+    {
+		//TODO: get this working
+    }
 }
 ?>
