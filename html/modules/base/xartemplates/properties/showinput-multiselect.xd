@@ -23,19 +23,19 @@
         </xar:if>
             <xar:foreach in="$options" value="$option" >
                 <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
-                    <xar:if condition="!empty($value) AND in_array($option['id'],$value)" >
+                    <xar:if condition="in_array($option['id'],$value)" >
                         <option value="#$option['id']#" selected="selected">#$option['name']#</option>
                     <xar:else />
                         <option value="#$option['id']#">#$option['name']#</option>
                     </xar:if>
-                <xar:elseif condition="!empty($value) AND in_array($option['id'],$value)" />
+                <xar:elseif condition="in_array($option['id'],$value)" />
                     <option selected="selected">#$option['name']#</option>
                 <xar:else />
                     <option>#$option['name']#</option>
                 </xar:if>
             </xar:foreach>
         </select>
-        <xar:else />
+    <xar:else />
         <xar:mlstring>Options not specified in validation field.</xar:mlstring>
     </xar:if>
 <xar:else/>
@@ -47,19 +47,19 @@
         </xar:if>
             <xar:foreach in="$options" value="$option" >
                 <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
-                    <xar:if condition="!empty($value) AND in_array($option['id'],$value)" >
+                    <xar:if condition="in_array($option['id'],$value)" >
                         <option value="#$option['id']#" selected="selected">#$option['name']#</option>
                     <xar:else />
                         <option value="#$option['id']#">#$option['name']#</option>
                     </xar:if>
-                <xar:elseif condition="!empty($value) AND in_array($option['id'],$value)" />
+                <xar:elseif condition="in_array($option['id'],$value)" />
                     <option selected="selected">#$option['name']#</option>
                 <xar:else />
                     <option>#$option['name']#</option>
                 </xar:if>
             </xar:foreach>
         </select>
-        <xar:else />
+    <xar:else />
         <xar:mlstring>Options not specified in validation field.</xar:mlstring>
     </xar:if>
 </xar:if>
