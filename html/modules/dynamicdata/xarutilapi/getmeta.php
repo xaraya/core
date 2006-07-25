@@ -35,7 +35,7 @@ function dynamicdata_utilapi_getmeta($args)
 
     $dbconn =& xarDBGetConn();
     // dbInfo holds the meta information about the database
-    $dbInfo =& $dbconn->getDatabaseInfo();
+    $dbInfo = $dbconn->getDatabaseInfo();
 
     // Note: this only works if we use the same database connection
     if (!empty($db) && $db != $dbInfo->getName()) {
@@ -49,7 +49,7 @@ function dynamicdata_utilapi_getmeta($args)
     if (!empty($table)) {
         $tables = array($dbInfo->getTable($table));
     } else {
-        $tables =& $dbInfo->getTables();
+        $tables = $dbInfo->getTables();
     }
     if (!isset($tables)) return;
 
@@ -63,7 +63,7 @@ function dynamicdata_utilapi_getmeta($args)
         }
 
         // Get the columns and the primary keys
-        $fields =& $tblInfo->getColumns();
+        $fields = $tblInfo->getColumns();
         $keyInfo = $tblInfo->getPrimaryKey();
         $id = 1;
         $columns = array();
