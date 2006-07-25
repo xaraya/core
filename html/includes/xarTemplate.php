@@ -68,6 +68,7 @@ define('XAR_TPL_TAG_NEEDPARAMETER'             ,32);
  *
  */
 // Let's do this once here, not scattered all over the place
+// @todo move to xarTemplateCache
 define('XAR_TPL_CACHE_DIR',xarCoreGetVarDirPath() . XARCORE_TPL_CACHEDIR);
 
 /**
@@ -106,7 +107,9 @@ function xarTpl_init(&$args, $whatElseIsGoingLoaded)
     }
 
     $GLOBALS['xarTpl_additionalStyles'] = '';
+    // @todo use xarTemplateCache class
     if ($GLOBALS['xarTpl_cacheTemplates']) {
+        // TODO: bring in xarTemplateCache class 
         if (!is_writeable(XAR_TPL_CACHE_DIR)) {
             $msg = "xarTpl_init: Cannot write in '". XAR_TPL_CACHEDIR ."' directory '"
                 . XAR_TPL_CACHE_DIR . "', but the setting: 'cache templates' is set to 'On'.\n"
@@ -925,6 +928,7 @@ function xarTplFile($fileName, $tplData)
  * @access public
  * @param  string $templateSource template source
  * @return string compiled template
+ * @todo    subclass xarBLCompiler, it has this method
  */
 function xarTplCompileString($templateSource)
 {
@@ -1088,7 +1092,8 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
     $tmpPending = false; $useEval = false;
     // Start output buffering
     ob_start();
-    // FIXME: add better escape clause when safe mode is on to fall back to eval
+    // @todo: add better escape clause when safe mode is on to fall back to eval
+    // @todo: extend xarTemplateCache to do this too
     if(!isset($cachedFileName) && !$useEval) {
         $cachedFileName = tempnam("","");
         $fd = fopen($cachedFileName,"w");
@@ -1110,9 +1115,11 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
             // Destroy its buffer, and raise exactly that exception, letting the exception handlers
             // take care of the rest. nice, very nice :-)
             ob_end_clean();
+            // @todo use xarTemplateCache class for this too 
             if($tmpPending) unlink($cachedFileName);
             throw $e;
         }
+        // @todo use xarTemplateCache class
         if($tmpPending) unlink($cachedFileName);
     }
 
@@ -1133,42 +1140,6 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
 }
 
 /**
- * Determine wether a source template needs compilation
- * based on modification time of the compiled file and
- * the modification of the source file
- *
- * @param  string  $sourceFileName   file path to the source file
- * @param  string  $cachedFileName   filled with the name of the cached file name
- * @return boolean $needsCompilation true - needs to be compiled, false - no need to compile.
- */
-function xarTpl__needsCompilation($sourceFileName,&$cachedFileName)
-{
-    $needsCompilation = true; // Assume we do
-    // Hmm, do we set it or not? Usecase:
-    //$cachedFileName = null;
-    if ($GLOBALS['xarTpl_cacheTemplates']) {
-        $cacheKey = xarTpl__GetCacheKey($sourceFileName);
-        $cachedFileName = XAR_TPL_CACHE_DIR . '/' . $cacheKey . '.php';
-        // Logic here is:
-        // 1. if the compiled template file exists AND
-        // 2. The source file does not exist ( we will have to fall back, but it's weird) OR
-        // 3. modification time of source is smaller than modification time of the compiled template AND
-        // 4. DEBUG: when the XSL transformation file has NOT been changed more recently than the compiled template
-        // THEN we do NOT need to compile the file.
-        if ( file_exists($cachedFileName) &&
-             ( !file_exists($sourceFileName) ||
-               ( filemtime($sourceFileName) < filemtime($cachedFileName)
-                 && filemtime('includes/transforms/xar2php.xsl') < filemtime($cachedFileName)
-               )
-             )
-           ) {
-           $needsCompilation = false;
-        }
-    }
-    return $needsCompilation;
-}
-
-/**
  * Execute template from file
  *
  * @access private
@@ -1180,12 +1151,15 @@ function xarTpl__needsCompilation($sourceFileName,&$cachedFileName)
  * @todo  inserting the header part like this is not output agnostic
  * @todo  insert log warning when double entry in cachekeys occurs? (race condition)
  * @todo  make the checking whethet templatecode is set more robst (related to templated exception handling)
+ * @todo  subclass xarBLCompiler
  */
 function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
 {
     assert('is_array($tplData); /* Template data should always be passed in an array */');
 
     // Process non-default themes base directory
+    // @todo dont do file munging here, it should be determined 
+    // in getsourcefilename or xarTplGetThemeDir before this function ever runs.
     $newFileName = $sourceFileName;
     if ($GLOBALS['xarTpl_themesBaseDir'] != 'themes') {
         $themePathLen = strlen($GLOBALS['xarTpl_themesBaseDir']);
@@ -1195,6 +1169,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     }
 
     // Load translations for the template
+    // @todo this is too specific
     $tplpath = explode("/", $newFileName);
     $tplPathCount = count($tplpath);
     if($tplPathCount > 1) {
@@ -1217,37 +1192,37 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
         }
     }
 
-    $needCompilation = xarTpl__needsCompilation($sourceFileName,$cachedFileName);
-    if (!file_exists($sourceFileName) && $needCompilation == true)
-        throw new FileNotFoundException($sourceFileName);
-
-    xarLogMessage("Using template : $sourceFileName");
-    //xarLogVariable('needCompilation', $needCompilation, XARLOG_LEVEL_ERROR);
+    xarLogMessage("Using template : $sourceFileName"); // erm... the wrong line on $newfileName aboven isnt used here?
     $templateCode = null;
-    if ($needCompilation) {
+    // @todo get rid of the cachedFileName usage
+    $cachedFileName = xarTemplateCache::cacheFile($sourceFileName);
+    
+    if (xarTemplateCache::isDirty($sourceFileName)) {
+        // @todo move to xarTemplateCache class
+        if (!file_exists($sourceFileName))  throw new FileNotFoundException($sourceFileName);
+        
         $blCompiler = xarTpl__getCompilerInstance();
-        // TODO: possibly wrap this in an exception catcher.
+        // @todo possibly wrap this in an exception catcher.
         $templateCode = $blCompiler->compileFile($sourceFileName);
-        if ($GLOBALS['xarTpl_cacheTemplates']) {
-            $fd = fopen($cachedFileName, 'w');
-            if(xarTpl_outputPHPCommentBlockInTemplates()) {
-                $commentBlock = "<?php\n/*"
-                              . "\n * Source:     " . $sourceFileName
-                              . "\n * Theme:      " . xarTplGetThemeName()
-                              . "\n * Compiled: ~ " . date('Y-m-d H:i:s T', filemtime($cachedFileName))
-                              . "\n */\n?>\n";
-                fwrite($fd, $commentBlock);
-            }
-            // Replace useless php context switches.
-            // This sometimes seems to improve rendering end speed, dunno, bytecacher dependent?
-            /* $templateCode = preg_replace(array('/\?>[\s\n]+<\?php/','/<\?php[\s\n]+\?>/'),
-                                         array(' ',' '),$templateCode);
-            */
-            fwrite($fd, $templateCode);
-            fclose($fd);
-            // Add an entry into CACHEKEYS
-            xarTpl__SetCacheKey($sourceFileName);
+
+        $out = '';
+        
+        if(xarTpl_outputPHPCommentBlockInTemplates()) {
+            $commentBlock = "<?php\n/*"
+                          . "\n * Source:     " . $sourceFileName
+                          . "\n * Theme:      " . xarTplGetThemeName()
+                          . "\n * Compiled: ~ " . date('Y-m-d H:i:s T', filemtime($cachedFileName)) //<-- WATCH OUT!
+                          . "\n */\n?>\n";
+            $out .= $commentBlock;
         }
+        // Replace useless php context switches.
+        // This sometimes seems to improve rendering end speed, dunno, bytecacher dependent?
+        /* $templateCode = preg_replace(array('/\?>[\s\n]+<\?php/','/<\?php[\s\n]+\?>/'),
+                                     array(' ',' '),$templateCode);
+        */
+        $out .= $templateCode;
+        // Save the entry in templatecache (if active)
+        xarTemplateCache::saveEntry($sourceFileName,$out);
     }
 
     // Execute either the compiled template, or the code determined
@@ -1488,79 +1463,116 @@ function xarTpl_modifyHeaderContent($sourceFileName, &$tplOutput)
     return $foundHeaderContent;
 }
 
-
 /**
- * Load template from file (e.g. for use with recurring template snippets someday,
- * using xarTplString() to "fill in" the template afterwards)
+ * Class to model the xar compiled template cache
  *
- * @access private
- * @global bool xarTpl_cacheTemplates Do we cache templates?
- * @param  string $sourceFileName     From which file do we want to load?
- * @return mixed
- * @throws FileNotFoundException
- */
-function xarTpl__loadFromFile($sourceFileName)
+ * @package blocklayout
+ * @author Marcel van der Boom <mrb@hsdev.com>
+ * @todo bring this into the cache hierarchy in general so it can inherit from xarCache or something like that.
+ * @todo this is still poorly abstracted, i would like to make a difference between the cache and its entries
+ **/
+class xarTemplateCache
 {
-    $needCompilation = xarTpl__needsCompilation($sourceFileName,$cachedFileName);
-
-    if (!file_exists($sourceFileName) && $needCompilation == true) {
-        throw new FileNotFoundException($sourceFileName);
+    /** 
+     * Get the cache key for a sourcefile
+     *
+     * @access public
+     * @param  string $fileName  For which file do we need the key?
+     * @return string            The cache key for this sourcefilename
+     * @todo what if cache is not active? still return the md5 key?
+    **/
+    static function getKey($fileName) 
+    {
+        // Simple MD5 hash over the filename determines the key for the cache
+        return md5($fileName); 
     }
-
-    //xarLogVariable('needCompilation', $needCompilation, XARLOG_LEVEL_ERROR);
-    if ($needCompilation) {
-        $blCompiler = xarTpl__getCompilerInstance();
-        $templateCode = $blCompiler->compileFile($sourceFileName);
-        // TODO: CHECK THIS, we might not need this anymore
-        if (!isset($templateCode)) {
-            return; // exception! throw back
+    
+    /**
+     * Save the cache key for a sourcefile
+     *
+     * @access public
+     * @param  string $sourceFileName  For which file are we entering the key?
+     * @return bool true on success, false on failure
+     * @todo   exceptions?
+     * @todo   typically writing of these keys occurs in bursts, can we leave file open until we're done?
+    **/
+    static function saveKey($fileName)
+    {
+        if(self::isActive()) {
+            if($fd = fopen(XAR_TPL_CACHE_DIR . '/CACHEKEYS', 'a')) {
+                fwrite($fd, self::getKey($fileName).': '.$fileName."\n");
+                fclose($fd);
+                return true;
+            }
         }
-        if ($GLOBALS['xarTpl_cacheTemplates']) {
-            $fd = fopen($cachedFileName, 'w');
-            fwrite($fd, $templateCode);
-            fclose($fd);
-            // Add an entry into CACHEKEYS
-            xarTpl__SetCacheKey($sourceFileName);
-        }
-        return $templateCode;
+        return false;
     }
-
-    // Load cached template file
-    $output = implode('', file($cachedFileName));
-
-    // Return output
-    return $output;
+    
+    /**
+     * Private methods
+    **/
+    private static function isActive()
+    {
+        assert('isset($GLOBALS["xarTpl_cacheTemplates"]);');
+        return $GLOBALS['xarTpl_cacheTemplates'];
+    }
+    
+    // Things really belonging somewhere else
+    
+    /**
+     * Save an entry into the template cache
+     *
+     * @param  string $fileName  for which source file?
+     * @param  string $data      what to save
+     * @return bool   true on success, false on failure
+     * @todo   doesnt belong here
+    **/
+    public static function saveEntry($fileName, $data)
+    {
+        if(self::isActive()) {
+            // write data into the cache file
+            if($fd = fopen(self::cacheFile($fileName), 'w')) {
+                fwrite($fd, $data); fclose($fd);
+            }
+        }
+        // Add an entry into CACHEKEYS if needed
+        return self::saveKey($fileName);
+    }
+    
+    /**
+     * Determine if a cache entry is dirty, i.e. needs recompilation.
+     *
+     * @param  string $fileName source file
+     * @return bool  true when cache entry is dirty, false otherwise
+     * @todo doesnt belong in this class
+    **/
+    public static function isDirty($fileName)
+    {
+        if(self::isActive()) {
+            $cacheFile = self::cacheFile($fileName);
+            // Logic here is:
+            // 1. if the compiled template file exists AND
+            // 2. The source file does not exist ( we will have to fall back, but it's weird) OR
+            // 3. modification time of source is smaller than modification time of the compiled template AND
+            // 4. DEBUG: when the XSL transformation file has NOT been changed more recently than the compiled template
+            // THEN we do NOT need to compile the file.
+            if ( file_exists($cacheFile) &&
+                 ( !file_exists($fileName) ||
+                   ( filemtime($fileName) < filemtime($cacheFile)
+                     && filemtime('includes/transforms/xar2php.xsl') < filemtime($cacheFile)
+                   ) ) ) return false; // not dirty
+            
+        }
+        return true; // either cache not active of entry needs recompilation
+    }
+    
+    public static function cacheFile($fileName)
+    {
+        return XAR_TPL_CACHE_DIR . '/' . self::getKey($fileName) . '.php';
+    }
 }
 
-/**
- * Set the cache key for a sourcefile
- *
- * @access private
- * @param  string $cacheKey        The key to add
- * @param  string $sourceFileName  For which file are we entering the key?
- * @return boolean
- */
-function xarTpl__SetCacheKey($sourceFileName)
-{
-    $cacheKey = xarTpl__getCacheKey($sourceFileName);
-    $fd = fopen(XAR_TPL_CACHE_DIR . '/CACHEKEYS', 'a');
-    fwrite($fd, $cacheKey. ': '.$sourceFileName . "\n");
-    fclose($fd);
-    return true;
-}
 
-/** Get the cache key for a sourcefile
- *
- * @access private
- * @param  string $sourceFileName  For which file do we need the key?
- * @return string                  The cache key for this sourcefilename
- *
- * @todo  consider using a static array
- */
-function xarTpl__getCacheKey($sourceFileName)
-{
-    return md5($sourceFileName);
-}
 
 /**
  * Model of a tag attribute
