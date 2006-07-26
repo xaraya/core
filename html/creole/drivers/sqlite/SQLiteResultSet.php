@@ -115,8 +115,6 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet {
     public function close()
     {
         $this->fields = array();
-        // XARAYA MODIFICATION
         $this->result = null;
-        // END XARAYA MODIFICATION
     }
 }
