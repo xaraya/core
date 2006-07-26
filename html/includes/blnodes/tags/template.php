@@ -36,8 +36,6 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
             case 'module':
                 // Module attribute is optional
                 if(!isset($module)) {
-                    // Default to the active module
-                    $module = 'xarModGetName()';
                     // No module attribute specified, determine it
                     // The module which needs to be passed in needs to come from the location of the
                     // template which holds the tag, not the active module although they will be the same
@@ -53,8 +51,8 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
                             break;
                         }
                     }
-                    // We dont need to resolve, since its either a path component or the string 'xarModGetName()'
-                    return "xarTpl_includeModuleTemplate($module, \"$file\", $subdata)";
+                    // Still not set, then make it use the currently active module (NOTE: pay attention to the quotes here)
+                    if(!isset($module)) $module = '".xarModGetName()."';
                 }
                 // Resolve the module attribute
                 $module = xarTpl__ExpressionTransformer::transformPHPExpression($module);
