@@ -840,9 +840,15 @@ function xarTplGetPager($startNum, $total, $urltemplate, $itemsPerPage = 10, $bl
  * @param  array  $tplData      template variables
  * @return string filled-in template
  */
-function xarTplString($templateCode, $tplData)
+function xarTplString($templateCode, &$tplData)
 {
-    return xarTpl__execute($templateCode, $tplData);
+    // Pretend as if the cache is fully operational and we'll be fine
+    xarTemplateCache::saveEntry('memory',$templateCode);
+    
+    // Execute the cache file
+    $compiled = new xarCompiledTemplate(xarTemplateCache::cacheFile('memory'));
+    $out = $compiled->execute($tplData);
+    return $out;
 }
 
 /**
@@ -853,7 +859,7 @@ function xarTplString($templateCode, $tplData)
  * @param  array  $tplData  template variables
  * @return string filled-in template
  */
-function xarTplFile($fileName, $tplData)
+function xarTplFile($fileName, &$tplData)
 {
     return xarTpl__executeFromFile($fileName, $tplData);
 }
@@ -990,68 +996,6 @@ function xarTpl__getCompilerInstance()
 }
 
 /**
- * Execute Template, i.e. run the compiled php code of a cached template
- *
- * @access private
- * @param  string $templateCode   Templatecode to execute
- * @param  array  $tplData        Template variables
- * @param  string $sourceFileName
- * @return string output
- * @throws Exception
- * @todo Can we migrate the eval() out, as that is hard to cache?
- * @todo $sourceFileName looks wrong here
- */
-function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedFileName = null, $tplType = 'module')
-{
-    assert('is_array($tplData); /* Template data should always be passed in an array */');
-
-    // POINT of ENTRY for cleaning variables (we have em all here)
-    // We need to be able to figure what is the template output type: RSS, XHTML, XML or whatever
-    $tplData['_bl_data'] = $tplData;
-
-    // Avoid evalling alltogether if we can
-    // TODO: Although this should never happen in production systems (not having a cached template i mean), it eats the memory
-    // out of any server. At least we're not using eval anymore :-)
-    // NOTES:
-    // 1. If safe mode is ON this will most likely NOT work without specific configuration, do we want to go that far?
-    // 2. An alternative is write a stream wrapper class around $templateCode and use include/require on the streadm
-    //    (This should theoretically work, but it crashes me all over the place and introduces a whole new class)
-    // 3. If all else fails we can still fall back to the eval.
-    // yeah, getting rid of eval isnt your daily walk in the park
-    $tmpPending = false; $useEval = false;
-
-    // @todo: add better escape clause when safe mode is on to fall back to eval
-    // @todo: extend xarTemplateCache to do this too
-    if(!isset($cachedFileName) && !$useEval) {
-        $cachedFileName = tempnam("","");
-        $fd = fopen($cachedFileName,"w");
-        $tmpPending = true; // We got to remove this one again too
-        fwrite($fd,$templateCode);
-        fclose($fd);
-    }
-
-    if(!isset($cachedFileName)) {
-        // old eval keep around until we know all the consequences.
-        ob_start();
-        extract($tplData, EXTR_OVERWRITE);
-        eval('?> '.$templateCode);
-        $output = ob_get_contents();
-        ob_end_clean();
-    } else {
-        // Compiling, the new way.
-        $compiled = new xarCompiledTemplate($cachedFileName,$sourceFileName, $tplType);
-        try {
-            $output = $compiled->execute($tplData);
-        } catch (Exception $e) {
-            if($tmpPending) unlink($cachedFileName);
-            throw $e;            
-        }
-    }
-    // Return output
-    return $output;
-}
-
-/**
  * Execute template from file
  *
  * @access private
@@ -1124,8 +1068,10 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     // @todo get rid of the cachedFileName usage
     $cachedFileName = xarTemplateCache::cacheFile($sourceFileName);
     
-    // TODO: this signature sucks
-    $output = xarTpl__execute($templateCode,$tplData, $sourceFileName, $cachedFileName, $tplType);
+    // Execute the compiled template from the cache file
+    $compiled = new xarCompiledTemplate($cachedFileName,$sourceFileName,$tplType);
+    // @todo throw this away.
+    $output = $compiled->execute($tplData);
     return $output;
 }
 
@@ -1387,8 +1333,10 @@ interface IxarTemplateCache
  **/
 class xarTemplateCache implements ixarTemplateCache
 {
-    private static $dir     = '';    // location
-    private static $active  = true;  // template cache is active by default.
+    // Inactive means that we reuse one file in the cache all the time.
+    private static $inactiveKeySeed    = 'youreallyreallyneedtocachetemplates';
+    private static $dir         = '';    // location
+    private static $active      = true;  // template cache is active by default.
     
     /**
      * Initialize template cache
@@ -1400,13 +1348,16 @@ class xarTemplateCache implements ixarTemplateCache
     { 
         if($active === false) self::$active = false;
         
-        if(!is_writable($dir) && self::isActive()) {
-            $msg = "xarTemplateCache::init: Cannot write in the directory '#(1)', "
-                  ."but the setting: 'cache templates' is set to 'On'.\n"
-                  ."Either change the permissions on the mentioned file/directory or set template caching to 'Off' (not recommended).";
-                    // Set the exception, but we *could* continue (only slow, so an error might be in place here). Let's see
-                    // how the exception feels like in practice for a while
-                    throw new ConfigurationException($dir, $msg);
+        if(!is_writable($dir)) {
+            $msg = "xarTemplateCache::init: Cannot write in the directory '#(1)', ";
+            if(self::isActive()) {
+                $msg .= "but the setting: 'cache templates' is set to 'On'.\n";
+            } else {
+                $msg .= "and the setting: 'cache template ' is set to 'Off.\n"
+                      . "Although you can switch the template cache to off (not recommended), i still need that directory to be writable.\n";
+            }
+            $msg .= "You need to change the permissions on the mentioned file/directory.";
+            throw new ConfigurationException($dir, $msg);
         }
         self::$dir = $dir;
     }
@@ -1422,6 +1373,7 @@ class xarTemplateCache implements ixarTemplateCache
     public static function getKey($fileName) 
     {
         // Simple MD5 hash over the filename determines the key for the cache
+        if(!self::isActive()) $fileName=self::$inactiveKeySeed;
         return md5($fileName); 
     }
     
@@ -1433,16 +1385,16 @@ class xarTemplateCache implements ixarTemplateCache
      * @return bool true on success, false on failure
      * @todo   exceptions?
      * @todo   typically writing of these keys occurs in bursts, can we leave file open until we're done?
+     * @todo   hmm, write the key when inactive too? feels like not, to keep it minimal
     **/
     public static function saveKey($fileName)
     {
-        if(self::isActive()) {
-            if($fd = fopen(self::$dir . '/CACHEKEYS', 'a')) {
-                fwrite($fd, self::getKey($fileName).': '.$fileName."\n");
-                fclose($fd);
-                return true;
-            }
-        }
+        if(!self::isActive()) return true;
+        if($fd = fopen(self::$dir . '/CACHEKEYS', 'a')) {
+            fwrite($fd, self::getKey($fileName).': '.$fileName."\n");
+            fclose($fd);
+            return true;
+        } 
         return false;
     }
     
@@ -1466,11 +1418,9 @@ class xarTemplateCache implements ixarTemplateCache
     **/
     public static function saveEntry($fileName, $data)
     {
-        if(self::isActive()) {
-            // write data into the cache file
-            if($fd = fopen(self::cacheFile($fileName), 'w')) {
-                fwrite($fd, $data); fclose($fd);
-            }
+        // write data into the cache file
+        if($fd = fopen(self::cacheFile($fileName), 'w')) {
+            fwrite($fd, $data); fclose($fd);
         }
         // Add an entry into CACHEKEYS if needed
         return self::saveKey($fileName);
@@ -1481,46 +1431,44 @@ class xarTemplateCache implements ixarTemplateCache
      *
      * @param  string $fileName source file
      * @return bool  true when cache entry is dirty, false otherwise
-     * @todo doesnt belong in this class
     **/
     public static function isDirty($fileName)
     {
-        if(self::isActive()) {
-            $cacheFile = self::cacheFile($fileName);
-            // Logic here is:
-            // 1. if the compiled template file exists AND
-            // 2. The source file does not exist ( we will have to fall back, but it's weird) OR
-            // 3. modification time of source is smaller than modification time of the compiled template AND
-            // 4. DEBUG: when the XSL transformation file has NOT been changed more recently than the compiled template
-            // THEN we do NOT need to compile the file.
-            if ( file_exists($cacheFile) &&
-                 ( !file_exists($fileName) ||
-                   ( filemtime($fileName) < filemtime($cacheFile)
-                     && filemtime('includes/transforms/xar2php.xsl') < filemtime($cacheFile)
-                   ) ) ) return false; // not dirty
+        if(!self::isActive()) return true; // always dirty
+        
+        $cacheFile = self::cacheFile($fileName);
+        // Logic here is:
+        // 1. if the compiled template file exists AND
+        // 2. The source file does not exist ( we will have to fall back, but it's weird) OR
+        // 3. modification time of source is smaller than modification time of the compiled template AND
+        // 4. DEBUG: when the XSL transformation file has NOT been changed more recently than the compiled template
+        // THEN we do NOT need to compile the file.
+        if ( file_exists($cacheFile) &&
+             ( !file_exists($fileName) ||
+               ( filemtime($fileName) < filemtime($cacheFile)
+                 && filemtime('includes/transforms/xar2php.xsl') < filemtime($cacheFile)
+               ) ) ) return false; // not dirty
             
-        }
         return true; // either cache not active of entry needs recompilation
     }
     
     public static function cacheFile($fileName)
     {
-        if(self::isActive()) {
-            return self::$dir . '/' . self::getKey($fileName) . '.php';
-        }
+        return self::$dir . '/' . self::getKey($fileName) . '.php';
     }
     
     public static function sourceFile($key)
     {
-        $sourceFile = '[unknown]';
+        $sourceFile = null;
         if(self::isActive()) {
             $fileName = $key . '.php';
             if ($fd = fopen(self::$dir . '/CACHEKEYS', 'r')) {
                 while($cache_entry = fscanf($fd, "%s\t%s\n")) {
                     list($hash, $template) = $cache_entry;
+                    
                     // Strip the colon
                     $hash = substr($hash,0,-1);
-                    if($hash == $base) {
+                    if($hash == $key) {
                         // Found the file, source is $template
                         $sourceFile = $template;
                         break;
@@ -1950,7 +1898,7 @@ function xarTplGetTagObjectFromName($tag_name)
  *
  * @package blocklayout
  * @author  Marcel van der Boom <mrb@hsdev.com>
- * @todo    decorate this with a Stream object so we can compile anything that is a stream. 
+ * @todo    decorate this with a Stream object so we can compile anything that is a stream? 
  * @todo    use a xarTemplate base class?
 **/
 class xarCompiledTemplate 
@@ -1968,10 +1916,14 @@ class xarCompiledTemplate
         $this->type     = $type;
     }
     
-    public function &execute($bindvars = array())
+    public function &execute(&$bindvars)
     {
         assert('isset($this->fileName); /* No source to execute from */');
         assert('file_exists($this->fileName); /* Compiled templated disappeared in mid air, race condition? */');
+        assert('is_array($bindvars); /* Template data needs to be passed in as an array */');
+        
+        // Do we really need this?
+        $bindvars['_bl_data'] =& $bindvars;
         
         // Executing means generating output, start a buffer for it
         ob_start();

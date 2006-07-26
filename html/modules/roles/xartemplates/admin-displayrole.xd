@@ -113,7 +113,7 @@
       </xar:if>
 
       <xar:if condition="xarModIsAvailable('dynamicdata')">
-        <xar:data-getitem name="$properties" module="roles" itemtype="$type" itemid="$uid" />
+        <xar:data-getitem name="$properties" module="roles" itemtype="$itemtype" itemid="$uid" />
         <xar:if condition="isset($properties) and count($properties) gt 0">
           <xar:foreach in="$properties" key="$name">
             <div class="xar-form-input-wrapper">

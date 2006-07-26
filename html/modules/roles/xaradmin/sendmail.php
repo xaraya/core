@@ -88,7 +88,7 @@ function roles_admin_sendmail()
         $data['recipientusername'] = $user['username'];
         $data['recipientemail'] = $user['email'];
 
-        // TODO: try to move this to xarTplFile, since xarTplString uses eval
+        // Get the output through BL
         $mailsubject = xarTplString($subject, $data);
         $mailmessage = xarTplString($message, $data);
 
