@@ -64,14 +64,6 @@ define('XAR_TPL_TAG_NEEDASSIGNMENT'            ,16);
 define('XAR_TPL_TAG_NEEDPARAMETER'             ,32);
 
 /**
- * Miscelaneous defines
- *
- */
-// Let's do this once here, not scattered all over the place
-// @todo move to xarTemplateCache
-define('XAR_TPL_CACHE_DIR',xarCoreGetVarDirPath() . XARCORE_TPL_CACHEDIR);
-
-/**
  * Initializes the BlockLayout Template Engine
  *
  * @author Paul Rosania <paul@xaraya.com>
@@ -106,8 +98,8 @@ function xarTpl_init(&$args, $whatElseIsGoingLoaded)
 
     $GLOBALS['xarTpl_additionalStyles'] = '';
     
-    // @todo move out XAR_TPL_CACHE_DIR to class
-    xarTemplateCache::init(XAR_TPL_CACHE_DIR, $args['enableTemplatesCaching']);
+    // @todo is the core define still needed now?
+    xarTemplateCache::init(xarCoreGetVarDirPath() . XARCORE_TPL_CACHEDIR, $args['enableTemplatesCaching']);
 
     // This is wrong here as well, but it's better at least than in xarMod
     include "includes/xarTheme.php";
@@ -1579,7 +1571,9 @@ class xarTemplateCache
     
     public static function cacheFile($fileName)
     {
-        return self::$dir . '/' . self::getKey($fileName) . '.php';
+        if(self::isActive()) {
+            return self::$dir . '/' . self::getKey($fileName) . '.php';
+        }
     }
     
     public static function sourceFile($key)

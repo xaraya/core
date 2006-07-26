@@ -15,8 +15,8 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
         $this->xarCache_Storage($args);
 
         if ($this->type == 'template') {
-        // CHECKME: this assumes that we create this instance after loading xarTemplate.php
-            $this->dir = XAR_TPL_CACHE_DIR;
+            // CHECKME: this assumes that we create this instance after loading xarTemplate.php
+            $this->dir = xarCoreGetVarDirPath() . XARCORE_TPL_CACHEDIR;
 
         } else {
             $this->dir = realpath($this->cachedir . '/' . $this->type);
