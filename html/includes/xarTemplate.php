@@ -71,7 +71,6 @@ define('XAR_TPL_TAG_NEEDPARAMETER'             ,32);
  * @access protected
  * @global string xarTpl_themesBaseDir
  * @global string xarTpl_defaultThemeName
- * @global string xarTpl_additionalStyles
  * @global string xarTpl_doctype
  * @global string xarTpl_JavaScript
  * @param  array  $args                  Elements: themesBaseDir, defaultThemeName, enableTemplateCaching
@@ -96,8 +95,6 @@ function xarTpl_init(&$args, $whatElseIsGoingLoaded)
         throw new FileNotFoundException('default.xt',"xarTpl_init: Nonexistent #(1) page in theme directory '". xarTplGetThemeDir() ."'");
     }
 
-    $GLOBALS['xarTpl_additionalStyles'] = '';
-    
     // @todo is the core define still needed now?
     xarTemplateCache::init(xarCoreGetVarDirPath() . XARCORE_TPL_CACHEDIR, $args['enableTemplatesCaching']);
 
@@ -323,44 +320,6 @@ function xarTplGetPageTitle()
     return '';
 }
 
-/**
- * Add stylesheet link for a module (after rc3 this function is a legacy)
- *
- * @access public (deprecated - all CSS issues are normally handled by the css classlib via bl tags)
- * @param  string $module
- * @param  string $file
- * @param  string $fileext
- * @param  string $themefolder ('' or path no leading or trailing /, )
- * @media  string $media (multiple values supported as a comma separated list "screen, print")
- * @todo   can deprecate after adoption of template css tags
- * @return bool
- */
-function xarTplAddStyleLink($module = null, $file = null, $fileext = null, $themefolder = null, $media = null, $scope = 'module')
-{
-    $method = 'link';
-    $args = compact('module', 'file', 'fileext', 'themefolder', 'media', 'scope', 'method');
-
-    // make sure we can use css object
-    require_once "modules/themes/xarclass/xarcss.class.php";
-    $obj = new xarCSS($args);
-    return $obj->run_output();
-}
-
-/**
- * Add JavaScript code to template output **deprecated**
- *
- * @access public
- * @param  string $position Either 'head' or 'body'
- * @param  string $owner    Who produced this snippet?
- * @param  string $code     The JavaScript Code itself
- * @deprec 2004-03-20       This is now handled by a custom tag of the base module
- * @return bool
- */
-function xarTplAddJavaScriptCode($position, $owner, $code)
-{
-    assert('$position == "head" || $position == "body"');
-    return xarTplAddJavaScript($position, 'code', "<!-- JavaScript code from {$owner} -->\n" . $code);
-}
 
 /**
  * Add JavaScript code or links to template output
@@ -922,7 +881,6 @@ function xarTplCompileString($templateSource)
  * @author Paul Rosania <paul@xaraya.com>
  * @author Marco Canini <marco@xaraya.com>
  * @access protected
- * @global string xarTpl_additionalStyles
  * @param  string $mainModuleOutput       the module output
  * @param  string $otherModulesOutput
  * @param  string $templateName           the template page to use
@@ -942,11 +900,6 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
 
     $tpl = (object) null; // Create an object to hold the 'specials'
     $tpl->pageTitle = xarTplGetPageTitle();
-    // leaving it ON here for pure legacy support, css classlib in themes mod must have legacy enabled to support it
-    // TODO: remove whenever the legacy can be dropped <andy>
-
-    // NOTE: This MUST be a reference, since we havent filled the global yet at this point
-    $tpl->additionalStyles =& $GLOBALS['xarTpl_additionalStyles'];
 
     $tplData = array(
         'tpl'                      => $tpl,
