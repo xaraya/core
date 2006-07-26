@@ -54,13 +54,6 @@ class SQLiteTableInfo extends TableInfo {
             $fulltype = $row['type'];            
             $size = null;
             $scale = null;
-            // XARAYA MODIFICATION
-            // when column is integer primary key, docs say its auto increment
-            $is_auto_increment = false;
-            if(($row['pk'] == 1 && $fulltype == 'INTEGER')) 
-                $is_auto_increment = true;
-            // END XARAYA MODIFICATION
-            
             if (preg_match('/^([^\(]+)\(\s*(\d+)\s*,\s*(\d+)\s*\)$/', $fulltype, $matches)) {
                 $type = $matches[1];
                 $size = $matches[2];
