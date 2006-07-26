@@ -34,8 +34,9 @@ function blocks_adminapi_delete_cacheinstance($args)
     $xartable =& xarDBGetTables();
     if (!empty($xartable['cache_blocks'])) {
         $cacheblockstable = $xartable['cache_blocks'];
-        $query = "DELETE FROM $cacheblockstable WHERE xar_bid = ?";
-        $dbconn->ExecuteUpdate($query,array($bid));
+        $query = "DELETE FROM $cacheblockstable WHERE xar_bid=?";
+        $stmt = $dbconn->prepareStatement($query);
+        $stmt->ExecuteUpdate(array($bid));
     }
     return true;
 }
