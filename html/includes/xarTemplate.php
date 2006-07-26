@@ -882,21 +882,18 @@ function xarTplCompileString($templateSource)
  * @author Marco Canini <marco@xaraya.com>
  * @access protected
  * @param  string $mainModuleOutput       the module output
- * @param  string $otherModulesOutput
- * @param  string $templateName           the template page to use
+ * @param  string $pageTemplate           the page template to use (without extension .xt)
  * @return string
  *
  * @todo Needs a rewrite, i.e. finalisation of tplOrder scenario
  */
-function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templateName = NULL)
+function xarTpl_renderPage($mainModuleOutput, $pageTemplate = NULL)
 {
-    if (empty($templateName)) {
-        $templateName = xarTplGetPageTemplateName();
-    }
+    if (empty($pageTemplate)) $pageTemplate = xarTplGetPageTemplateName();
 
     // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
-    $templateName = xarVarPrepForOS($templateName);
-    $sourceFileName = xarTplGetThemeDir() . "/pages/$templateName.xt";
+    $pageTemplate = xarVarPrepForOS($pageTemplate);
+    $sourceFileName = xarTplGetThemeDir() . "/pages/$pageTemplate.xt";
 
     $tpl = (object) null; // Create an object to hold the 'specials'
     $tpl->pageTitle = xarTplGetPageTitle();
@@ -1082,8 +1079,8 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
  * @throws FileNotFoundException
  * @todo  inserting the header part like this is not output agnostic
  * @todo  insert log warning when double entry in cachekeys occurs? (race condition)
- * @todo  make the checking whethet templatecode is set more robst (related to templated exception handling)
- * @todo  subclass xarBLCompiler
+ * @todo  make the checking whether templatecode is set more robust (related to templated exception handling)
+ * @todo  subclass xarBLCompiler?
  */
 function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
 {
@@ -1396,6 +1393,20 @@ function xarTpl_modifyHeaderContent($sourceFileName, &$tplOutput)
 }
 
 /**
+ * Declare an interface for the xarTemplateCache class so we dont shoot
+ * ourselves in the foot.
+**/
+interface IxarTemplateCache
+{
+    static function init($dir, $active);
+    static function getKey($fileName);
+    static function saveKey($fileName);
+    static function saveEntry($fileName, $data);
+    static function isDirty($fileName);
+    static function cacheFile($fileName);   // wrong for sure
+    static function sourceFile($key);       // arguably wrong
+}
+/**
  * Class to model the xar compiled template cache
  *
  * @package blocklayout
@@ -1438,7 +1449,7 @@ class xarTemplateCache
      * @return string            The cache key for this sourcefilename
      * @todo what if cache is not active? still return the md5 key?
     **/
-    static function getKey($fileName) 
+    public static function getKey($fileName) 
     {
         // Simple MD5 hash over the filename determines the key for the cache
         return md5($fileName); 
@@ -1453,7 +1464,7 @@ class xarTemplateCache
      * @todo   exceptions?
      * @todo   typically writing of these keys occurs in bursts, can we leave file open until we're done?
     **/
-    static function saveKey($fileName)
+    public static function saveKey($fileName)
     {
         if(self::isActive()) {
             if($fd = fopen(self::$dir . '/CACHEKEYS', 'a')) {
@@ -1631,9 +1642,11 @@ class xarTemplateAttribute
  * @todo Make this more general
  * @todo _module, _type and _func and _handler introduce unneeded redundancy
  * @todo pass handler check at template registration someday (<mrb>what does this mean?)
+ * @todo abstract the storing of the tag registration in a cache like interface (TagTemplateCache)
  */
 class xarTemplateTag
 {
+    // These need to stay public otherwise the (de)serialization from their storage into the database doesnt work!
     public $_name = NULL;          // Name of the tag
     public $_attributes = array(); // Array with the supported attributes
     public $_handler = NULL;       // Name of the handler function
@@ -1654,9 +1667,8 @@ class xarTemplateTag
      * @return void
      * @throws BadParameterException
      * @author Marcel van der Boom
-     * @todo change constructor to __construct
      **/
-    function xarTemplateTag($module, $name, $attributes = array(), $handler = NULL, $flags = XAR_TPL_TAG_ISPHPCODE)
+    function __construct($module, $name, $attributes = array(), $handler = NULL, $flags = XAR_TPL_TAG_ISPHPCODE)
     {
         // See defines at top of file
         if (!eregi(XAR_TPL_TAGNAME_REGEX, $name)) {
@@ -1682,10 +1694,10 @@ class xarTemplateTag
         if (is_array($attributes)) {
             $this->_attributes = $attributes;
         }
-        $this->_setflags($flags);
+        $this->setFlags($flags);
     }
 
-    function _setflags($flags)
+    private function setFlags($flags)
     {
         $this->_hasChildren    = ($flags & XAR_TPL_TAG_HASCHILDREN)    == XAR_TPL_TAG_HASCHILDREN;
         $this->_hasText        = ($flags & XAR_TPL_TAG_HASTEXT)        == XAR_TPL_TAG_HASTEXT;
@@ -1695,54 +1707,54 @@ class xarTemplateTag
         $this->_needParameter  = ($flags & XAR_TPL_TAG_NEEDPARAMETER)  == XAR_TPL_TAG_NEEDPARAMETER;
     }
 
-    function hasChildren()
+    public function hasChildren()
     {
         return $this->_hasChildren;
     }
 
-    function hasText()
+    public function hasText()
     {
         return $this->_hasText;
     }
 
-    function isAssignable()
+    public function isAssignable()
     {
         return $this->_isAssignable;
     }
 
-    function isPHPCode()
+    public function isPHPCode()
     {
         return $this->_isPHPCode;
     }
 
-    function needAssignement()
+    public function needAssignement()
     {
         return $this->_needAssignment;
     }
 
-    function needParameter()
+    public function needParameter()
     {
         return $this->_needParameter;
     }
 
-    function getAttributes()
+    public function getAttributes()
     {
         return $this->_attributes;
     }
 
-    function getName()
+    public function getName()
     {
         return $this->_name;
     }
 
-    function getModule()
+    public function getModule()
     {
-    return $this->_module;
+        return $this->_module;
     }
 
-    function getHandler()
+    public function getHandler()
     {
-    return $this->_handler;
+        return $this->_handler;
     }
 
     /**
@@ -1752,7 +1764,7 @@ class xarTemplateTag
      * @throws BadParameterException
      * @author Marcel van der Boom
      **/
-    function callHandler($args, $handler_type='render')
+    public function callHandler($args, $handler_type='render')
     {
         // FIXME: get rid of this once installation includes the right serialized info
         if (empty($this->_type) || empty($this->_func)) {
@@ -1955,6 +1967,7 @@ function xarTplGetTagObjectFromName($tag_name)
     // Module must be active for the tag to be active
     if(!xarMod::isAvailable($module)) return; //throw back
 
+    // WATCH OUT!: unserializing an object doesnt unserialize their private parts
     $obj = unserialize($obj);
 
     $tag_objects[$tag_name] = $obj;

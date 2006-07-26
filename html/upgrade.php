@@ -79,7 +79,7 @@ function xarUpgradeMain()
         ob_end_clean();
     }
 
-    $pageOutput = xarTpl_renderPage($mainModuleOutput,NULL,'installer');
+    $pageOutput = xarTpl_renderPage($mainModuleOutput,'installer');
     echo $pageOutput;
     return true;
 }

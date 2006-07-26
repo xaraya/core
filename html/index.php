@@ -138,7 +138,6 @@ function xarMain()
         }
 
         // Render page
-        //$pageOutput = xarTpl_renderPage($mainModuleOutput, NULL, $template);
         $pageOutput = xarTpl_renderPage($mainModuleOutput);
 
         if ($pageCaching == 1) {

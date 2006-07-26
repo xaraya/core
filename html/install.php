@@ -192,7 +192,7 @@ function xarInstallMain()
     }
 
     // Render page using the installer.xt page template
-    $pageOutput = xarTpl_renderPage($mainModuleOutput,NULL,'installer');
+    $pageOutput = xarTpl_renderPage($mainModuleOutput,'installer');
 
     echo $pageOutput;
     return true;
