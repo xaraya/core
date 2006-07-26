@@ -474,10 +474,11 @@ abstract class ResultSetCommon {
                 break;
             case 'GetRowAssoc':
                 // We have to reget the current row in associative mode
-                // Only seen in modules, prolly remove it her
-                if($this->getFetchMode() != ResultSet::FETCHMODE_ASSOC) {
+                // Only seen in modules, prolly remove it here
+                if ($this->getFetchMode() != ResultSet::FETCHMODE_ASSOC) {
                     $this->setFetchMode(ResultSet::FETCHMODE_ASSOC);
-                    $this->next(); $this->previous();                
+                    $this->next(); 
+                    $this->previous();                
                 }
                 //bah
                 return $this->getRow($args);
@@ -493,6 +494,9 @@ abstract class ResultSetCommon {
                 // Can't hurt to leave it in place
                 return $this->getRecordCount();
                 break;
+            case 'FieldCount':
+                $count = count($this->fields);
+                return $count;
             default:
                 // We leave this in so any api migration error show up in a nice way
                 throw new Exception("Unknown method call $method for connection");
