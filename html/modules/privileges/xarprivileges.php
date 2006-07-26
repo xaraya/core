@@ -421,8 +421,12 @@ class xarMasks
                 $parts = explode('.',$host);
                 if (count($parts) < 2) {
                     $mask->setRealm('All');
-                } else {
-                    $mask->setRealm($parts[0]);
+                } else { //doublecheck
+                    if ($parts[0]=='www') {
+                        $mask->setRealm($parts[1]);
+                    } else {
+                        $mask->setRealm($parts[0]);
+                    }
                 }
                 break;
             case "string":
