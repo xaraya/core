@@ -6,13 +6,13 @@
 
 class xarCache_FileSystem_Storage extends xarCache_Storage
 {
-    var $dir = '';
-    var $blksize = 0;
-    var $bsknown = FALSE;
+    public $dir = '';
+    public $blksize = 0;
+    public $bsknown = FALSE;
 
-    function xarCache_FileSystem_Storage($args = array())
+    public function __construct($args = array())
     {
-        $this->xarCache_Storage($args);
+        parent::__construct($args);
 
         if ($this->type == 'template') {
             // CHECKME: this assumes that we create this instance after loading xarTemplate.php
@@ -25,7 +25,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
         $this->storage = 'filesystem';
     }
 
-    function isCached($key = '', $expire = 0, $log = 1)
+    public function isCached($key = '', $expire = 0, $log = 1)
     {
         if (empty($expire)) {
             $expire = $this->expire;
@@ -55,7 +55,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
         }
     }
 
-    function getCached($key = '', $output = 0, $expire = 0)
+    public function getCached($key = '', $output = 0, $expire = 0)
     {
         if (empty($expire)) {
             $expire = $this->expire;
@@ -89,7 +89,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
         return $data;
     }
 
-    function setCached($key = '', $value = '', $expire = 0)
+    public function setCached($key = '', $value = '', $expire = 0)
     {
         if (empty($expire)) {
             $expire = $this->expire;
@@ -115,7 +115,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
         }
     }
 
-    function delCached($key = '')
+    public function delCached($key = '')
     {
         if (!empty($this->code)) {
             $key .= '-' . $this->code;
@@ -128,7 +128,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
         }
     }
 
-    function flushCached($key = '')
+    public function flushCached($key = '')
     {
         $this->_flushDirCached($key, $this->dir);
 
@@ -139,7 +139,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
         }
     }
 
-    function cleanCached($expire = 0)
+    public function cleanCached($expire = 0)
     {
         if (empty($expire)) {
             $expire = $this->expire;
@@ -183,7 +183,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
         }
     }
 
-    function getCacheSize($countitems = false)
+    public function getCacheSize($countitems = false)
     {
         if (empty($this->blksize)) {
             $dirstat = stat($this->dir);
@@ -206,7 +206,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
         return $this->size;
     }
 
-    function saveFile($key = '', $filename = '')
+    public function saveFile($key = '', $filename = '')
     {
         if (empty($filename)) return;
 
@@ -224,7 +224,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
     /**
      * private function for use in flushCached()
      */
-    function _flushDirCached($key = '', $dir = false)
+    private function _flushDirCached($key = '', $dir = false)
     {
         if (!$dir || !is_dir($dir)) {
             return;
@@ -251,7 +251,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
     /**
      * private function for use in getCacheSize()
      */
-    function _getCacheDirSize($dir = FALSE, $countitems = false)
+    private function _getCacheDirSize($dir = FALSE, $countitems = false)
     {
         $size = 0;
         $count = 0;
@@ -300,7 +300,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
         return $size;
     }
 
-    function getCachedList()
+    public function getCachedList()
     {
         $list = array();
         if ($handle = @opendir($this->dir)) {

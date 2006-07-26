@@ -2,24 +2,24 @@
 
 class xarCache_Storage
 {
-    var $storage = ''; // filesystem, database, memcached, ...
-    var $cachedir = 'var/cache/output';
-    var $type = ''; // page, block, template, ...
-    var $code = ''; // URL factors et al.
-    var $size = null;
-    var $numitems = 0;
-    var $compressed = false;
-    var $sizelimit = 10000000;
-    var $reached = null;
-    var $expire = 0;
-    var $logfile = null;
-    var $logsize = 2000000; // for each logfile
-    var $modtime = 0; // last modification time
+    public $storage = ''; // filesystem, database, memcached, ...
+    public $cachedir = 'var/cache/output';
+    public $type = ''; // page, block, template, ...
+    public $code = ''; // URL factors et al.
+    public $size = null;
+    public $numitems = 0;
+    public $compressed = false;
+    public $sizelimit = 10000000;
+    public $reached = null;
+    public $expire = 0;
+    public $logfile = null;
+    public $logsize = 2000000; // for each logfile
+    public $modtime = 0; // last modification time
 
     /**
      * Constructor
      */
-    function xarCache_Storage($args = array())
+    public function __construct($args = array())
     {
         if (!empty($args['type'])) {
             $this->type = strtolower($args['type']);
@@ -45,58 +45,58 @@ class xarCache_Storage
         $this->cachedir = realpath($this->cachedir);
     }
 
-    function setCode($code = '')
+    public function setCode($code = '')
     {
         $this->code = $code;
     }
 
-    function setExpire($expire = 0)
+    public function setExpire($expire = 0)
     {
         $this->expire = $expire;
     }
 
-    function getLastModTime()
+    public function getLastModTime()
     {
         return $this->modtime;
     }
 
-    function isCached($key = '', $expire = 0, $log = 1)
+    public function isCached($key = '', $expire = 0, $log = 1)
     {
         return false;
     }
 
-    function getCached($key = '', $output = 0, $expire = 0)
+    public function getCached($key = '', $output = 0, $expire = 0)
     {
         return '';
     }
 
-    function setCached($key = '', $value = '', $expire = 0)
+    public function setCached($key = '', $value = '', $expire = 0)
     {
     }
 
-    function delCached($key = '')
+    public function delCached($key = '')
     {
     }
 
-    function flushCached($key = '')
+    public function flushCached($key = '')
     {
     }
 
-    function cleanCached($expire = 0)
+    public function cleanCached($expire = 0)
     {
     }
 
-    function getCacheSize($countitems = false)
+    public function getCacheSize($countitems = false)
     {
         return $this->size;
     }
 
-    function getCacheItems()
+    public function getCacheItems()
     {
         return $this->numitems;
     }
 
-    function sizeLimitReached()
+    public function sizeLimitReached()
     {
         if (isset($this->reached)) {
             return $this->reached;
@@ -127,7 +127,7 @@ class xarCache_Storage
         return $value;
     }
 
-    function logStatus($status = 'MISS', $key = '')
+    public function logStatus($status = 'MISS', $key = '')
     {
         if (empty($this->logfile) || empty($_SERVER['HTTP_HOST']) ||
             empty($_SERVER['REQUEST_URI']) || empty($_SERVER['REMOTE_ADDR'])) {
@@ -152,16 +152,16 @@ class xarCache_Storage
         }
     }
 
-    function saveFile($key = '', $filename = '')
+    public function saveFile($key = '', $filename = '')
     {
     }
 
-    function getCachedList()
+    public function getCachedList()
     {
         return array();
     }
 
-    function getCachedKeys()
+    public function getCachedKeys()
     {
         $list = $this->getCachedList();
         $keys = array();

@@ -6,19 +6,18 @@
 
 class xarCache_Database_Storage extends xarCache_Storage
 {
-    var $table = '';
-    var $lastkey = null;
-    var $lastid = null;
-    var $value = null;
+    public $table = '';
+    public $lastkey = null;
+    public $lastid = null;
+    public $value = null;
 
-    function xarCache_Database_Storage($args = array())
+    public function __construct($args = array())
     {
-        $this->xarCache_Storage($args);
-
+        parent::__construct($args);
         $this->storage = 'database';
     }
 
-    function getTable()
+    public function getTable()
     {
         if (!empty($this->table)) {
             return $this->table;
@@ -32,7 +31,7 @@ class xarCache_Database_Storage extends xarCache_Storage
         }
     }
 
-    function isCached($key = '', $expire = 0, $log = 1)
+    public function isCached($key = '', $expire = 0, $log = 1)
     {
         if (empty($expire)) {
             $expire = $this->expire;
@@ -75,7 +74,7 @@ class xarCache_Database_Storage extends xarCache_Storage
         }
     }
 
-    function getCached($key = '', $output = 0, $expire = 0)
+    public function getCached($key = '', $output = 0, $expire = 0)
     {
         if (empty($expire)) {
             $expire = $this->expire;
@@ -125,7 +124,7 @@ class xarCache_Database_Storage extends xarCache_Storage
         }
     }
 
-    function setCached($key = '', $value = '', $expire = 0)
+    public function setCached($key = '', $value = '', $expire = 0)
     {
         if (empty($expire)) {
             $expire = $this->expire;
@@ -170,7 +169,7 @@ class xarCache_Database_Storage extends xarCache_Storage
         $this->lastkey = null;
     }
 
-    function delCached($key = '')
+    public function delCached($key = '')
     {
         $table = $this->getTable();
         if (empty($table)) return;
@@ -191,7 +190,7 @@ class xarCache_Database_Storage extends xarCache_Storage
         $this->lastkey = null;
     }
 
-    function flushCached($key = '')
+    public function flushCached($key = '')
     {
         $table = $this->getTable();
         if (empty($table)) return;
@@ -217,7 +216,7 @@ class xarCache_Database_Storage extends xarCache_Storage
         $this->lastkey = null;
     }
 
-    function cleanCached($expire = 0)
+    public function cleanCached($expire = 0)
     {
         if (empty($expire)) {
             $expire = $this->expire;
@@ -260,7 +259,7 @@ class xarCache_Database_Storage extends xarCache_Storage
         $this->lastkey = null;
     }
 
-    function getCacheSize($countitems = false)
+    public function getCacheSize($countitems = false)
     {
         $table = $this->getTable();
         if (empty($table)) return;
@@ -293,7 +292,7 @@ class xarCache_Database_Storage extends xarCache_Storage
         return $size;
     }
 
-    function saveFile($key = '', $filename = '')
+    public function saveFile($key = '', $filename = '')
     {
         if (empty($filename)) return;
 
@@ -320,7 +319,7 @@ class xarCache_Database_Storage extends xarCache_Storage
         }
     }
 
-    function getCachedList()
+    public function getCachedList()
     {
         $table = $this->getTable();
         if (empty($table)) return false;
