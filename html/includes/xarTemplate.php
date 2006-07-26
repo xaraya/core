@@ -453,19 +453,22 @@ function xarTplBlock($modName, $blockType, $tplData = array(), $tplName = NULL, 
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
+
 /**
- * Renders a property through a property template.
+ * Renders a DD element (object or property) through a template.
  *
  * @author Marcel van der Boom <marcel@xaraya.com>
- * @access public
- * @param  string $modName      the module name owning the property, with fall-back to dynamicdata
- * @param  string $propertyName the name of the property type, or some other name specified in BL tag or API call
- * @param  string $tplType      the template type to render ( showoutput(default)|showinput|showhidden|validation|label )
+ * @access private
+ * @param  string $modName      the module name owning the object/property, with fall-back to dynamicdata
+ * @param  string $ddName       the name of the object/property type, or some other name specified in BL tag or API call
+ * @param  string $tplType      the template type to render 
+ *                              properties: ( showoutput(default)|showinput|showhidden|validation|label )
+ *                              objects   : ( showdisplay(default)|showview|showform|showlist )
  * @param  array  $tplData      arguments for the template
  * @param  string $tplBase      the template type can be overridden too ( unused )
  * @return string xarTpl__executeFromFile($sourceFileName, $tplData)
  */
-function xarTplProperty($modName, $propertyName, $tplType = 'showoutput', $tplData = array(), $tplBase = NULL)
+function xarTpl__DDElement($modName, $ddName, $tplType, $tplData, $tplBase,$elements)
 {
     $tplType = xarVarPrepForOS($tplType);
 
@@ -473,46 +476,23 @@ function xarTplProperty($modName, $propertyName, $tplType = 'showoutput', $tplDa
     $templateBase   = xarVarPrepForOS(empty($tplBase) ? $tplType : $tplBase);
 
     // Get the right source filename
-    $sourceFileName = xarTpl__GetSourceFileName($modName, $templateBase, $propertyName, 'properties');
+    $sourceFileName = xarTpl__GetSourceFileName($modName, $templateBase, $ddName, $elements);
 
     // Final fall-back to default template in dynamicdata
     if ((empty($sourceFileName) || !file_exists($sourceFileName)) &&
         $modName != 'dynamicdata') {
-        $sourceFileName = xarTpl__GetSourceFileName('dynamicdata', $templateBase, $propertyName, 'properties');
+        $sourceFileName = xarTpl__GetSourceFileName('dynamicdata', $templateBase, $ddName, $elements);
     }
 
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
-
-/**
- * Renders an object through an object template
- *
- * @author Marcel van der Boom <marcel@xaraya.com>
- * @access public
- * @param  string $modName      the module name owning the object, with fall-back to dynamicdata
- * @param  string $objectName   the name of the object, or some other name specified in BL tag or API call
- * @param  string $tplType      the template type to render ( showdisplay(default)|showview|showform|showlist )
- * @param  array  $tplData      arguments for the template
- * @param  string $tplBase      the template type can be overridden too ( unused )
- * @return string xarTpl__executeFromFile($sourceFileName, $tplData)
- */
+function xarTplProperty($modName, $propertyName, $tplType = 'showoutput', $tplData = array(), $tplBase = NULL)
+{    
+    return xarTpl__DDElement($modName,$propertyName,$tplType,$tplData,$tplBase,'properties');
+}
 function xarTplObject($modName, $objectName, $tplType = 'showdisplay', $tplData = array(), $tplBase = NULL)
-{
-    $tplType = xarVarPrepForOS($tplType);
-
-    // Template type for the object can be overridden too (currently unused)
-    $templateBase   = xarVarPrepForOS(empty($tplBase) ? $tplType : $tplBase);
-
-    // Get the right source filename
-    $sourceFileName = xarTpl__GetSourceFileName($modName, $templateBase, $objectName, 'objects');
-
-    // Final fall-back to default template in dynamicdata
-    if ((empty($sourceFileName) || !file_exists($sourceFileName)) &&
-        $modName != 'dynamicdata') {
-        $sourceFileName = xarTpl__GetSourceFileName('dynamicdata', $templateBase, $objectName, 'objects');
-    }
-
-    return xarTpl__executeFromFile($sourceFileName, $tplData);
+{    
+    return xarTpl__DDElement($modName,$objectName,$tplType,$tplData,$tplBase,'objects');     
 }
 
 /**
@@ -839,6 +819,8 @@ function xarTplGetPager($startNum, $total, $urltemplate, $itemsPerPage = 10, $bl
  * @param  string $templateCode pre-compiled template code (see xarTplCompileString)
  * @param  array  $tplData      template variables
  * @return string filled-in template
+ * @todo   this is not MLS-aware (never was)
+ * @todo   how 'special' should the 'memory' file be, namewise?
  */
 function xarTplString($templateCode, &$tplData)
 {
@@ -956,7 +938,6 @@ function xarTpl_includeThemeTemplate($templateName, $tplData)
     // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
     $templateName = xarVarPrepForOS($templateName);
     $sourceFileName = xarTplGetThemeDir() ."/includes/$templateName.xt";
-    // if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:includes', $templateName) === NULL) return;
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
@@ -976,7 +957,6 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
     $sourceFileName = xarTplGetThemeDir() . "/modules/$modName/includes/$templateName.xt";
     if (!file_exists($sourceFileName)) {
         $sourceFileName = "modules/$modName/xartemplates/includes/$templateName.xd";
-        //if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates/includes', $templateName) === NULL) return;
     }
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
@@ -1001,26 +981,24 @@ function xarTpl__getCompilerInstance()
  * @access private
  * @param  string $sourceFileName       From which file do we want to execute?
  * @param  array  $tplData              Template variables
- * @return mixed
- * @throws FileNotFoundException
- * @todo  inserting the header part like this is not output agnostic
+ * @param  string $tplType              'module' or 'page'
+ * @return string generated output from the file
  * @todo  insert log warning when double entry in cachekeys occurs? (race condition)
  * @todo  make the checking whether templatecode is set more robust (related to templated exception handling)
  * @todo  subclass xarBLCompiler?
  */
 function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
 {
-    assert('is_array($tplData); /* Template data should always be passed in an array */');
+    assert('is_array($tplData); /* Template data should always be passed in as array */');
 
     // Load translations for the template
     xarMLSLoadTranslations($sourceFileName);
 
     xarLogMessage("Using template : $sourceFileName"); 
     $templateCode = null;
-
     // Determine if we need to compile this template
     if (xarTemplateCache::isDirty($sourceFileName)) {
-        // Get an instace of xarSourceTemplate
+        // Get an instance of xarSourceTemplate
         $srcTemplate = new xarSourceTemplate($sourceFileName);
         
         // Compile it
@@ -1036,6 +1014,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     $cachedFileName = xarTemplateCache::cacheFile($sourceFileName);
     
     // Execute the compiled template from the cache file
+    // @todo the tplType should be irrelevant
     $compiled = new xarCompiledTemplate($cachedFileName,$sourceFileName,$tplType);
     $output = $compiled->execute($tplData);
     return $output;
