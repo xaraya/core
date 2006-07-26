@@ -822,6 +822,7 @@ function xarTplString($templateCode, &$tplData)
     xarTemplateCache::saveEntry('memory',$templateCode);
     
     // Execute the cache file
+    include_once('includes/blocklayout/template/compiled.php');
     $compiled = new xarCompiledTemplate(xarTemplateCache::cacheFile('memory'));
     $out = $compiled->execute($tplData);
     return $out;
@@ -853,7 +854,8 @@ function xarTplFile($fileName, &$tplData)
  */
 function xarTplCompileString($templateSource)
 {
-    $blCompiler = xarTpl__getCompilerInstance();
+    include_once 'includes/blocklayout/compiler.php';
+    $blCompiler = xarBLCompiler::instance();
     return $blCompiler->compileString($templateSource);
 }
 
@@ -956,18 +958,6 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
 // PRIVATE FUNCTIONS
 
 /**
- * Get BL compiler instance
- *
- * @access private
- * @return object xarBLCompiler()
- */
-function xarTpl__getCompilerInstance()
-{
-    include_once 'includes/blocklayout/compiler.php';
-    return xarBLCompiler::instance();
-}
-
-/**
  * Execute template from file
  *
  * @access private
@@ -991,6 +981,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     // Determine if we need to compile this template
     if (xarTemplateCache::isDirty($sourceFileName)) {
         // Get an instance of xarSourceTemplate
+        include_once('includes/blocklayout/template/source.php');
         $srcTemplate = new xarSourceTemplate($sourceFileName);
         
         // Compile it
@@ -1007,6 +998,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     
     // Execute the compiled template from the cache file
     // @todo the tplType should be irrelevant
+    include_once('includes/blocklayout/template/compiled.php');
     $compiled = new xarCompiledTemplate($cachedFileName,$sourceFileName,$tplType);
     $output = $compiled->execute($tplData);
     return $output;
@@ -1533,7 +1525,7 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
  * @param  string $tag      tag to remove
  * @return bool
  * @throws SQLException
- * @todo   wrap in unregister method of tag class? (kinda compicates things, as now no object is needed)
+ * @todo   wrap in unregister method of tag class? (kinda compiclates things, as now no object is needed)
  **/
 function xarTplUnregisterTag($tag_name)
 {
@@ -1652,131 +1644,4 @@ function xarTplGetTagObjectFromName($tag_name)
 
     return $obj;
 }
-
-/**
- * Class to model a compiled template
- *
- * @package blocklayout
- * @todo    decorate this with a Stream object so we can compile anything that is a stream? 
- * @todo    use a xarTemplate base class?
-**/
-class xarCompiledTemplate 
-{
-    protected $fileName = null;   // where is it stored? 
-    private   $source   = null;   // source file
-    private   $type     = null;
-    
-    public function __construct($fileName,$source=null,$type='module') 
-    {
-        // @todo keep here?
-        if (!file_exists($fileName))  throw new FileNotFoundException($fileName); // we only do files atm
-        $this->fileName = $fileName;
-        $this->source   = $source;
-        $this->type     = $type;
-    }
-    
-    public function &execute(&$bindvars)
-    {
-        assert('isset($this->fileName); /* No source to execute from */');
-        assert('file_exists($this->fileName); /* Compiled templated disappeared in mid air, race condition? */');
-        assert('is_array($bindvars); /* Template data needs to be passed in as an array */');
-        
-        // Do we really need this?
-        $bindvars['_bl_data'] =& $bindvars;
-        
-        // Executing means generating output, start a buffer for it
-        ob_start();
-        
-        // Make the bindvars known in the scope.
-        extract($bindvars,EXTR_OVERWRITE);
-        
-        if($this->type=='page') set_exception_handler(array('ExceptionHandlers','bone'));
-        
-        try {
-            //
-            // Let's see what we cooked up in the compiler, this one line is where it all happens. :-)
-            //
-            $res = include($this->fileName);
-        } catch (Exception $e) {
-            // Any exception inside the compiled template invalidates our output from it.
-            // Clear its buffer, and raise exactly that exception, letting the exception handlers
-            // take care of the rest. nice, very nice :-)
-            ob_end_clean();
-            throw $e;
-        }
-
-        if(isset($this->source)) {
-            $prelimOut = ob_get_contents();
-            ob_end_clean();
-            ob_start();
-            // this outputs the template and deals with start comments accordingly.
-            echo xarTpl_outputTemplate($this->source, $prelimOut);
-        }
-
-        // Fetch output and clean buffer
-        $output = ob_get_contents();
-        ob_end_clean();
-        return $output;
-    }
-}
-
-/**
- * Define an interface for the xarSourceTemplate class so we obey our own stuff.
-**/
-interface IxarSourceTemplate
-{
-    function &compile();
-    function &execute();
-}
-
-/**
- * Class to model the source template
- *
- * @package blocklayout
- * @todo    decorate this with a Stream object so we can compile anything that is a stream. 
- **/
-class xarSourceTemplate extends xarCompiledTemplate implements IxarSourceTemplate
-{
-    public function __construct($fileName) 
-    {
-        parent::__construct($fileName);
-    }
-
-    /**
-     * compile a source template into templatecode
-     *
-     * @return string the compiled template code.
-     **/
-    public function &compile() 
-    {
-        assert('isset($this->fileName); /* No source to compile from */');
-        $blCompiler = xarTpl__getCompilerInstance();
-        $templateCode = $blCompiler->compileFile($this->fileName);
-
-        $out = '';
-        if(xarTpl_outputPHPCommentBlockInTemplates()) {
-            // FIXME: this is weird stuff:
-            // theme is irrelevant, date is seen in the filesystem, sourcefile in CACHEKEYS, why? it complicates the system a lot.
-            $commentBlock = "<?php\n/*"
-                          . "\n * Source:     " . $this->fileName         // redundant
-                          . "\n * Theme:      " . xarTplGetThemeName()  // confusing (can be any theme now, its the theme during compilation, which is also shown on the above line)
-                          . "\n * Compiled: ~ " . date('Y-m-d H:i:s T') // redundant
-                          . "\n */\n?>\n";
-            $out .= $commentBlock;
-        }
-        // Replace useless php context switches.
-        // This sometimes seems to improve rendering end speed, dunno, bytecacher dependent?
-        /* $templateCode = preg_replace(array('/\?>[\s\n]+<\?php/','/<\?php[\s\n]+\?>/'),
-                                     array(' ',' '),$templateCode);
-        */
-        $out .= $templateCode;
-        return $out;
-    }
-    
-    public function &execute()
-    {
-        // not yet
-    }
-}
-
 ?>
