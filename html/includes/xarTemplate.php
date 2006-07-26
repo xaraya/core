@@ -908,6 +908,7 @@ function xarTpl_renderPage($mainModuleOutput, $pageTemplate = NULL)
     return xarTpl__executeFromFile($sourceFileName, $tplData, 'page');
 }
 
+
 /**
  * Render a block box
  *
@@ -1098,7 +1099,8 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     }
 
     // Load translations for the template
-    // @todo this is too specific
+    // @todo this is too specific for mls, it should just receive a filename
+    // and solve its own problems :-)
     $tplpath = explode("/", $newFileName);
     $tplPathCount = count($tplpath);
     if($tplPathCount > 1) {
@@ -1121,40 +1123,26 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
         }
     }
 
-    xarLogMessage("Using template : $sourceFileName"); // erm... the wrong line on $newfileName aboven isnt used here?
+    xarLogMessage("Using template : $sourceFileName"); 
     $templateCode = null;
-    // @todo get rid of the cachedFileName usage
-    $cachedFileName = xarTemplateCache::cacheFile($sourceFileName);
-    
-    if (xarTemplateCache::isDirty($sourceFileName)) {
-        // @todo move to xarTemplateCache class
-        if (!file_exists($sourceFileName))  throw new FileNotFoundException($sourceFileName);
-        
-        $blCompiler = xarTpl__getCompilerInstance();
-        // @todo possibly wrap this in an exception catcher.
-        $templateCode = $blCompiler->compileFile($sourceFileName);
 
-        $out = '';
+    // Determine if we need to compile this template
+    if (xarTemplateCache::isDirty($sourceFileName)) {
+        // Get an instace of xarSourceTemplate
+        $srcTemplate = new xarSourceTemplate($sourceFileName);
         
-        if(xarTpl_outputPHPCommentBlockInTemplates()) {
-            $commentBlock = "<?php\n/*"
-                          . "\n * Source:     " . $sourceFileName
-                          . "\n * Theme:      " . xarTplGetThemeName()
-                          . "\n * Compiled: ~ " . date('Y-m-d H:i:s T', filemtime($cachedFileName)) //<-- WATCH OUT!
-                          . "\n */\n?>\n";
-            $out .= $commentBlock;
-        }
-        // Replace useless php context switches.
-        // This sometimes seems to improve rendering end speed, dunno, bytecacher dependent?
-        /* $templateCode = preg_replace(array('/\?>[\s\n]+<\?php/','/<\?php[\s\n]+\?>/'),
-                                     array(' ',' '),$templateCode);
-        */
-        $out .= $templateCode;
+        // Compile it
+        // @todo return a xarCompiledTemplate object here.
+        $templateCode = $srcTemplate->compile();
+
         // Save the entry in templatecache (if active)
-        xarTemplateCache::saveEntry($sourceFileName,$out);
+        xarTemplateCache::saveEntry($sourceFileName,$templateCode);
     }
 
     // Execute either the compiled template, or the code determined
+    // @todo get rid of the cachedFileName usage
+    $cachedFileName = xarTemplateCache::cacheFile($sourceFileName);
+    
     // TODO: this signature sucks
     $output = xarTpl__execute($templateCode,$tplData, $sourceFileName, $cachedFileName, $tplType);
     return $output;
@@ -1395,6 +1383,7 @@ function xarTpl_modifyHeaderContent($sourceFileName, &$tplOutput)
 /**
  * Declare an interface for the xarTemplateCache class so we dont shoot
  * ourselves in the foot.
+ * @todo make caches all have the same interface
 **/
 interface IxarTemplateCache
 {
@@ -1415,7 +1404,7 @@ interface IxarTemplateCache
  * @todo this is still poorly abstracted, i would like to make a difference between the cache and its entries
  * @todo yes, i know this is similar to caching/storage/filesystem, but that one isnt ready yet :-) getting to that later.
  **/
-class xarTemplateCache
+class xarTemplateCache implements ixarTemplateCache
 {
     private static $dir     = '';    // location
     private static $active  = true;  // template cache is active by default.
@@ -1975,4 +1964,56 @@ function xarTplGetTagObjectFromName($tag_name)
     return $obj;
 }
 
+/**
+ * Define an interface for the xarSourceTemplate class so we obey our own stuff.
+**/
+interface IxarSourceTemplate
+{
+    function &compile();
+}
+
+/**
+ * Class to model the source template
+ *
+ * @package blocklayout
+ * @author  Marcel van der Boom <mrb@hsdev.com>
+ * @todo    decorate this with a Stream object so we can compile anything that is a stream. 
+ **/
+class xarSourceTemplate implements IxarSourceTemplate
+{
+    private $source = null; // refactor to stream object later on
+    
+    public function __construct($fileName) 
+    {
+        // @todo keep here?
+        if (!file_exists($fileName))  throw new FileNotFoundException($this->source); // we only do files atm
+        $this->source = $fileName;
+    }
+    
+    public function &compile() 
+    {
+        assert('isset($this->source); /* No source to compile from */');
+        $blCompiler = xarTpl__getCompilerInstance();
+        $templateCode = $blCompiler->compileFile($this->source);
+
+        $out = '';
+        if(xarTpl_outputPHPCommentBlockInTemplates()) {
+            // FIXME: this is weird stuff:
+            // theme is irrelevant, date is seen in the filesystem, sourcefile in CACHEKEYS, why? it complicates the system a lot.
+            $commentBlock = "<?php\n/*"
+                          . "\n * Source:     " . $this->source         // redundant
+                          . "\n * Theme:      " . xarTplGetThemeName()  // confusing (can be any theme now, its the theme during compilation, which is also shown on the above line)
+                          . "\n * Compiled: ~ " . date('Y-m-d H:i:s T') // redundant
+                          . "\n */\n?>\n";
+            $out .= $commentBlock;
+        }
+        // Replace useless php context switches.
+        // This sometimes seems to improve rendering end speed, dunno, bytecacher dependent?
+        /* $templateCode = preg_replace(array('/\?>[\s\n]+<\?php/','/<\?php[\s\n]+\?>/'),
+                                     array(' ',' '),$templateCode);
+        */
+        $out .= $templateCode;
+        return $out;
+    }
+}
 ?>
