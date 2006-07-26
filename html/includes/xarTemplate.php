@@ -8,12 +8,15 @@
  * @link http://www.xaraya.com
  * @author Paul Rosania <paul@xaraya.com>
  * @author Marco Canini <marco@xaraya.com>
- */
+ * @author Marcel van der Boom <mrb@hsdev.com>
+ * @author Andy Varganov <andyv@xaraya.com>
+ * @author Jason Judge
+**/
 
 /**
  * Exceptions for this subsystem
  *
- */
+**/
 class DuplicateTagException extends DuplicationExceptions
 {
     protected $message = 'The tag definition for the tag: "#(1)" already exists.';
@@ -48,14 +51,14 @@ define ('XAR_TPL_ANY', XAR_TPL_STRING|XAR_TPL_BOOLEAN|XAR_TPL_INTEGER|XAR_TPL_FL
 /**
  * Define for reg expressions for attributes and tags
  *
- */
+**/
 define ('XAR_TPL_ATTRIBUTE_REGEX','^[a-z][-_a-z0-9]*$');
 define ('XAR_TPL_TAGNAME_REGEX',  '^[a-z][-_a-z0-9]*$');
 
 /**
  * Defines for tag properties
  *
- */
+**/
 define('XAR_TPL_TAG_HASCHILDREN'               ,1);
 define('XAR_TPL_TAG_HASTEXT'                   ,2);
 define('XAR_TPL_TAG_ISASSIGNABLE'              ,4);
@@ -66,8 +69,6 @@ define('XAR_TPL_TAG_NEEDPARAMETER'             ,32);
 /**
  * Initializes the BlockLayout Template Engine
  *
- * @author Paul Rosania <paul@xaraya.com>
- * @author Marco Canini <marco@xaraya.com>
  * @access protected
  * @global string xarTpl_themesBaseDir
  * @global string xarTpl_defaultThemeName
@@ -77,7 +78,7 @@ define('XAR_TPL_TAG_NEEDPARAMETER'             ,32);
  * @param  int    $whatElseIsGoingLoaded Bitfield to specify which subsystem will be loaded.
  * @throws DirectoryNotFoundException, FileNotFoundException, ConfigurationException
  * @return bool true
- */
+**/
 function xarTpl_init(&$args, $whatElseIsGoingLoaded)
 {
     $GLOBALS['xarTpl_themesBaseDir']   = $args['themesBaseDirectory'];
@@ -376,8 +377,6 @@ function xarTplGetJavaScript($position = '', $index = '')
 /**
  * Turns module output into a template.
  *
- * @author Paul Rosania <paul@xaraya.com>
- * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @param  string $modName      the module name
  * @param  string $modType      user|admin
@@ -429,8 +428,6 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
 /**
  * Renders a block content through a block template.
  *
- * @author Paul Rosania <paul@xaraya.com>
- * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @param  string $modName   the module name
  * @param  string $blockType the block type (xar_block_types.xar_type)
@@ -457,7 +454,6 @@ function xarTplBlock($modName, $blockType, $tplData = array(), $tplName = NULL, 
 /**
  * Renders a DD element (object or property) through a template.
  *
- * @author Marcel van der Boom <marcel@xaraya.com>
  * @access private
  * @param  string $modName      the module name owning the object/property, with fall-back to dynamicdata
  * @param  string $ddName       the name of the object/property type, or some other name specified in BL tag or API call
@@ -518,7 +514,6 @@ function xarTplObject($modName, $objectName, $tplType = 'showdisplay', $tplData 
  *        don't contain nasty stuff. Filter as appropriate when using
  *        this function to generate image URLs...
  *
- * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  * @param   string $modImage the module image url relative to xarimages/
  * @param   string $modName  the module to check for the image <optional>
@@ -584,7 +579,6 @@ function xarTplGetImage($modImage, $modName = NULL)
 /**
  * Creates pager information with no assumptions to output format.
  *
- * @author Jason Judge
  * @since 2003/10/09
  * @access public
  * @param integer $startNum     start item
@@ -767,7 +761,6 @@ function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions
 /**
  * Equivalent of pnHTML()'s Pager function (to get rid of pnHTML calls in modules while waiting for widgets)
  *
- * @author Jason Judge
  * @since 1.13 - 2003/10/09
  * @access public
  * @param integer $startnum     start item
@@ -866,8 +859,6 @@ function xarTplCompileString($templateSource)
 /**
  * Renders a page template.
  *
- * @author Paul Rosania <paul@xaraya.com>
- * @author Marco Canini <marco@xaraya.com>
  * @access protected
  * @param  string $mainModuleOutput       the module output
  * @param  string $pageTemplate           the page template to use (without extension .xt)
@@ -1271,7 +1262,6 @@ interface IxarTemplateCache
  * Class to model the xar compiled template cache
  *
  * @package blocklayout
- * @author Marcel van der Boom <mrb@hsdev.com>
  * @todo bring this into the cache hierarchy in general so it can inherit from xarCache or something like that.
  * @todo this is still poorly abstracted, i would like to make a difference between the cache and its entries
  * @todo yes, i know this is similar to caching/storage/filesystem, but that one isnt ready yet :-) getting to that later.
@@ -1529,7 +1519,6 @@ class xarTemplateTag
      *
      * @return void
      * @throws BadParameterException
-     * @author Marcel van der Boom
      **/
     function __construct($module, $name, $attributes = array(), $handler = NULL, $flags = XAR_TPL_TAG_ISPHPCODE)
     {
@@ -1842,7 +1831,6 @@ function xarTplGetTagObjectFromName($tag_name)
  * Class to model a compiled template
  *
  * @package blocklayout
- * @author  Marcel van der Boom <mrb@hsdev.com>
  * @todo    decorate this with a Stream object so we can compile anything that is a stream? 
  * @todo    use a xarTemplate base class?
 **/
@@ -1919,7 +1907,6 @@ interface IxarSourceTemplate
  * Class to model the source template
  *
  * @package blocklayout
- * @author  Marcel van der Boom <mrb@hsdev.com>
  * @todo    decorate this with a Stream object so we can compile anything that is a stream. 
  **/
 class xarSourceTemplate extends xarCompiledTemplate implements IxarSourceTemplate
