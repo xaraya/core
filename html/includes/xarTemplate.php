@@ -904,7 +904,6 @@ function xarTpl_renderPage($mainModuleOutput, $pageTemplate = NULL)
     );
 
     //if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:pages', $templateName) === NULL) return;
-
     return xarTpl__executeFromFile($sourceFileName, $tplData, 'page');
 }
 
@@ -1006,13 +1005,12 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
 {
     assert('is_array($tplData); /* Template data should always be passed in an array */');
 
-    //POINT of ENTRY for cleaning variables
+    // POINT of ENTRY for cleaning variables (we have em all here)
     // We need to be able to figure what is the template output type: RSS, XHTML, XML or whatever
     $tplData['_bl_data'] = $tplData;
-    extract($tplData, EXTR_OVERWRITE);
 
     // Avoid evalling alltogether if we can
-    // TODO: Although this should never happen in production systems, it eats the memory
+    // TODO: Although this should never happen in production systems (not having a cached template i mean), it eats the memory
     // out of any server. At least we're not using eval anymore :-)
     // NOTES:
     // 1. If safe mode is ON this will most likely NOT work without specific configuration, do we want to go that far?
@@ -1021,8 +1019,7 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
     // 3. If all else fails we can still fall back to the eval.
     // yeah, getting rid of eval isnt your daily walk in the park
     $tmpPending = false; $useEval = false;
-    // Start output buffering
-    ob_start();
+
     // @todo: add better escape clause when safe mode is on to fall back to eval
     // @todo: extend xarTemplateCache to do this too
     if(!isset($cachedFileName) && !$useEval) {
@@ -1034,38 +1031,22 @@ function xarTpl__execute($templateCode, $tplData, $sourceFileName = '', $cachedF
     }
 
     if(!isset($cachedFileName)) {
-        eval('?> '.$templateCode);
-    } else {
-        assert('file_exists($cachedFileName); /* Compiled templated disappeared in mid air, race condition? */');
-        if($tplType=='page') set_exception_handler(array('ExceptionHandlers','bone'));
-        try {
-            // Let's see what we cooked up in the compiler
-            $res = include($cachedFileName);
-        } catch (Exception $e) {
-            // Any exception inside the compile template invalidates our output from it.
-            // Destroy its buffer, and raise exactly that exception, letting the exception handlers
-            // take care of the rest. nice, very nice :-)
-            ob_end_clean();
-            // @todo use xarTemplateCache class for this too 
-            if($tmpPending) unlink($cachedFileName);
-            throw $e;
-        }
-        // @todo use xarTemplateCache class
-        if($tmpPending) unlink($cachedFileName);
-    }
-
-    if($sourceFileName != '') {
-        $tplOutput = ob_get_contents();
-        ob_end_clean();
+        // old eval keep around until we know all the consequences.
         ob_start();
-        // this outputs the template and deals with start comments accordingly.
-        echo xarTpl_outputTemplate($sourceFileName, $tplOutput);
+        extract($tplData, EXTR_OVERWRITE);
+        eval('?> '.$templateCode);
+        $output = ob_get_contents();
+        ob_end_clean();
+    } else {
+        // Compiling, the new way.
+        $compiled = new xarCompiledTemplate($cachedFileName,$sourceFileName, $tplType);
+        try {
+            $output = $compiled->execute($tplData);
+        } catch (Exception $e) {
+            if($tmpPending) unlink($cachedFileName);
+            throw $e;            
+        }
     }
-
-    // Fetch output and clean buffer
-    $output = ob_get_contents();
-    ob_end_clean();
-
     // Return output
     return $output;
 }
@@ -1965,11 +1946,76 @@ function xarTplGetTagObjectFromName($tag_name)
 }
 
 /**
+ * Class to model a compiled template
+ *
+ * @package blocklayout
+ * @author  Marcel van der Boom <mrb@hsdev.com>
+ * @todo    decorate this with a Stream object so we can compile anything that is a stream. 
+ * @todo    use a xarTemplate base class?
+**/
+class xarCompiledTemplate 
+{
+    protected $fileName = null;   // where is it stored? 
+    private   $source   = null;   // source file
+    private   $type     = null;
+    
+    public function __construct($fileName,$source=null,$type='module') 
+    {
+        // @todo keep here?
+        if (!file_exists($fileName))  throw new FileNotFoundException($fileName); // we only do files atm
+        $this->fileName = $fileName;
+        $this->source   = $source;
+        $this->type     = $type;
+    }
+    
+    public function &execute($bindvars = array())
+    {
+        assert('isset($this->fileName); /* No source to execute from */');
+        assert('file_exists($this->fileName); /* Compiled templated disappeared in mid air, race condition? */');
+        
+        // Executing means generating output, start a buffer for it
+        ob_start();
+        
+        // Make the bindvars known in the scope.
+        extract($bindvars,EXTR_OVERWRITE);
+        
+        if($this->type=='page') set_exception_handler(array('ExceptionHandlers','bone'));
+        
+        try {
+            //
+            // Let's see what we cooked up in the compiler, this one line is where it all happens. :-)
+            //
+            $res = include($this->fileName);
+        } catch (Exception $e) {
+            // Any exception inside the compiled template invalidates our output from it.
+            // Clear its buffer, and raise exactly that exception, letting the exception handlers
+            // take care of the rest. nice, very nice :-)
+            ob_end_clean();
+            throw $e;
+        }
+
+        if(isset($this->source)) {
+            $prelimOut = ob_get_contents();
+            ob_end_clean();
+            ob_start();
+            // this outputs the template and deals with start comments accordingly.
+            echo xarTpl_outputTemplate($this->source, $prelimOut);
+        }
+
+        // Fetch output and clean buffer
+        $output = ob_get_contents();
+        ob_end_clean();
+        return $output;
+    }
+}
+
+/**
  * Define an interface for the xarSourceTemplate class so we obey our own stuff.
 **/
 interface IxarSourceTemplate
 {
     function &compile();
+    function &execute();
 }
 
 /**
@@ -1979,29 +2025,30 @@ interface IxarSourceTemplate
  * @author  Marcel van der Boom <mrb@hsdev.com>
  * @todo    decorate this with a Stream object so we can compile anything that is a stream. 
  **/
-class xarSourceTemplate implements IxarSourceTemplate
+class xarSourceTemplate extends xarCompiledTemplate implements IxarSourceTemplate
 {
-    private $source = null; // refactor to stream object later on
-    
     public function __construct($fileName) 
     {
-        // @todo keep here?
-        if (!file_exists($fileName))  throw new FileNotFoundException($this->source); // we only do files atm
-        $this->source = $fileName;
+        parent::__construct($fileName);
     }
-    
+
+    /**
+     * compile a source template into templatecode
+     *
+     * @return string the compiled template code.
+     **/
     public function &compile() 
     {
-        assert('isset($this->source); /* No source to compile from */');
+        assert('isset($this->fileName); /* No source to compile from */');
         $blCompiler = xarTpl__getCompilerInstance();
-        $templateCode = $blCompiler->compileFile($this->source);
+        $templateCode = $blCompiler->compileFile($this->fileName);
 
         $out = '';
         if(xarTpl_outputPHPCommentBlockInTemplates()) {
             // FIXME: this is weird stuff:
             // theme is irrelevant, date is seen in the filesystem, sourcefile in CACHEKEYS, why? it complicates the system a lot.
             $commentBlock = "<?php\n/*"
-                          . "\n * Source:     " . $this->source         // redundant
+                          . "\n * Source:     " . $this->fileName         // redundant
                           . "\n * Theme:      " . xarTplGetThemeName()  // confusing (can be any theme now, its the theme during compilation, which is also shown on the above line)
                           . "\n * Compiled: ~ " . date('Y-m-d H:i:s T') // redundant
                           . "\n */\n?>\n";
@@ -2015,5 +2062,11 @@ class xarSourceTemplate implements IxarSourceTemplate
         $out .= $templateCode;
         return $out;
     }
+    
+    public function &execute()
+    {
+        // not yet
+    }
 }
+
 ?>
