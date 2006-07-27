@@ -3,7 +3,7 @@
  * Xaraya Installer
  *
  * package installer
- * @copyright (C) 2002-2005 The Digital Development Foundation
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -192,7 +192,7 @@ function xarInstallMain()
     }
 
     // Render page using the installer.xt page template
-    $pageOutput = xarTpl_renderPage($mainModuleOutput,NULL,'installer');
+    $pageOutput = xarTpl_renderPage($mainModuleOutput,'installer');
 
     echo $pageOutput;
     return true;

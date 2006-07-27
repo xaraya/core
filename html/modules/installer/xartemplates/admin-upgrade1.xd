@@ -4,7 +4,7 @@
     <xar:template file="upstatus" />
     <h1><xar:mlstring>Welcome to Xaraya Upgrade</xar:mlstring></h1>
      <xar:if condition="$versionlow ne ''">
-        <p><strong><xar:mlstring>WARNING</xar:mlstring></strong>:<p>
+        <p><strong><xar:mlstring>WARNING</xar:mlstring></strong>:</p>
           #$versionlow#
      <xar:else />
         <xar:if condition="$alreadydone ne ''">
@@ -23,18 +23,18 @@
            <xar:mlstring>
                This upgrade process updates your database and some system files but <strong>cannot upgrade</strong> your theme and templates!
            </xar:mlstring>
-    </p>
-    <p>
-        <xar:mlstring>
+         </p>
+         <p>
+           <xar:mlstring>
             To ensure a quick and smooth upgrade, please check and address the following important theme and template considerations <strong>before</strong> continuing.
-        </xar:mlstring>
-    </p>
-    <xar:comment>PLEASE ADD SPECIFIC UPGRADE CONSIDERATIONS FOR THE NEW XAR VERSION HERE BELOW </xar:comment>
+          </xar:mlstring>
+        </p>
+        <xar:comment>PLEASE ADD SPECIFIC UPGRADE CONSIDERATIONS FOR THE NEW XAR VERSION HERE BELOW </xar:comment>
         <ol>
            <li><xar:mlstring>The Adminpanels module has been deprecated as of Version 1.1 and no longer available. The blocks have been moved to the Base module.</xar:mlstring>
                <ul>
                  <li><xar:mlstring>Please check your theme templates for use of any Adminpanel module references. You will need to change references to <strong>adminpanels</strong> in your theme or templates
-                 to <strong>base</strong> module. Remember particularly to change 'adminmenu' and 'waiting content' blocks tags to refer now to the base module, and update other Adminpanels links.</xar:mlstring>
+                 to <strong>base</strong> module. Remember particularly to change 'adminmenu' and 'waiting content' blocks tags to refer now to the base module, and update other Adminpanels links.</xar:mlstring></li>
                 <li><xar:mlstring>Make sure your Adminpanel block templates for any compact menu block, adminmenu or waiting content blocks are also moved to <strong>modules/base</strong> directory in your theme.</xar:mlstring></li>
                 </ul>
            </li>

@@ -85,25 +85,25 @@ function &dynamicdata_userapi_getitem($args)
 
     $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
 //    $objectarray = $itemsarray = array();
-	$object =& Dynamic_Object_Master::getObject(array('moduleid'  => $modid,
-									   'itemtype'  => $itemtype,
-									   'itemid'    => $itemid,
-									   'fieldlist' => $fieldlist,
-									   'join'      => $join,
-									   'table'     => $table,
-									   'status'    => $status));
-	if (!isset($object) || empty($object->objectid)) return $nullreturn;
-	foreach ($tree as $branch) {
-		$newobject = & Dynamic_Object_Master::getObjectList(array('moduleid'  => $modid,
-											   'itemtype'  => $branch['itemtype']));
-		$object->add($newobject);
+    $object =& Dynamic_Object_Master::getObject(array('moduleid'  => $modid,
+                                       'itemtype'  => $itemtype,
+                                       'itemid'    => $itemid,
+                                       'fieldlist' => $fieldlist,
+                                       'join'      => $join,
+                                       'table'     => $table,
+                                       'status'    => $status));
+    if (!isset($object) || empty($object->objectid)) return $nullreturn;
+    foreach ($tree as $branch) {
+        $newobject = & Dynamic_Object_Master::getObjectList(array('moduleid'  => $modid,
+                                               'itemtype'  => $branch['itemtype']));
+        $object->add($newobject);
     }
 
-	// Get the item
-	if (!empty($itemid)) $object->getItem();
+    // Get the item
+    if (!empty($itemid)) $object->getItem();
 
-	// ..check it
-	if (!empty($preview)) $object->checkInput();
+    // ..check it
+    if (!empty($preview)) $object->checkInput();
 
     if (!empty($getobject)) {
         return $object;

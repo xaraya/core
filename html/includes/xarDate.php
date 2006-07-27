@@ -3,8 +3,8 @@
  *
  * Wrapper class for PHP date functions
  *
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marc Lutolf
  *
@@ -89,13 +89,13 @@ class xarDate
     function getTimearray()
     {
         return array(
-        			'year' => $this->year,
-        			'month' => $this->month,
-        			'day' => $this->day,
-        			'hour' => $this->hour,
-        			'minute' => $this->minute,
-        			'second' => $this->second,
-        		);
+                    'year' => $this->year,
+                    'month' => $this->month,
+                    'day' => $this->day,
+                    'hour' => $this->hour,
+                    'minute' => $this->minute,
+                    'second' => $this->second,
+                );
     }
 
     function getTimestamp() 

@@ -32,9 +32,9 @@ function privileges_adminapi_createobjects($args)
                                     'itemtype' => $itemtype,
                                     'parent'    => 0,
                                     ));
-	if (!$objectid) return;
-	$status1 = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY;
-	$status2 = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_NOINPUT;
+    if (!$objectid) return;
+    $status1 = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY;
+    $status2 = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_NOINPUT;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
                                     'name'     => 'id',
                                     'label'    => 'ID',
@@ -59,7 +59,7 @@ function privileges_adminapi_createobjects($args)
                                     'itemtype' => $itemtype,
                                     'parent'    => 0,
                                     ));
-	if (!$objectid) return;
+    if (!$objectid) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
                                     'name'     => 'id',
                                     'label'    => 'ID',
@@ -168,7 +168,7 @@ function privileges_adminapi_createobjects($args)
                                     'itemtype' => $itemtype,
                                     'parent'    => 0,
                                     ));
-	if (!$objectid) return;
+    if (!$objectid) return;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
                                     'name'     => 'id',
                                     'label'    => 'ID',

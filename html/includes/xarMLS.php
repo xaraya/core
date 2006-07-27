@@ -3,8 +3,8 @@
  * Multi Language System
  *
  * @package multilanguage
- * @copyright (C) 2002 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marco Canini <marco@xaraya.com>
  * @todo Dynamic Translations
@@ -77,7 +77,14 @@ function xarMLS_init(&$args, $whatElseIsGoingLoaded)
                                            $args['defaultTimeOffset'] : 0;
 
     // Set the timezone
-	date_default_timezone_set ($GLOBALS['xarMLS_defaultTimeZone']);
+    if(function_exists('date_default_timezone_set')) {
+        // PHP 5.1 only
+        date_default_timezone_set ($GLOBALS['xarMLS_defaultTimeZone']);
+    } else {
+        // TODO: find alternative for the above, what is it for anyway? shouldn't the server already have one?
+        // TODO: if so, how to get it?
+        // Now what?
+    }
 
     // Register MLS events
     // These should be done before the xarMLS_setCurrentLocale function
@@ -480,6 +487,45 @@ function xarMLS_setCurrentLocale($locale)
     xarMLS_loadTranslations(XARMLS_DNTYPE_CORE, 'xaraya', 'core:', 'core');
 
     //xarMLSLoadLocaleData($locale);
+}
+
+function xarMLSLoadTranslations($sourceFileName)
+{
+    // Process non-default themes base directory
+    // @todo dont do file munging here, it should be determined 
+    // in getsourcefilename or xarTplGetThemeDir before this function ever runs.
+    $newFileName = $sourceFileName;
+    if ($GLOBALS['xarTpl_themesBaseDir'] != 'themes') {
+        $themePathLen = strlen($GLOBALS['xarTpl_themesBaseDir']);
+        if (!strncmp($sourceFileName, $GLOBALS['xarTpl_themesBaseDir'], $themePathLen)) {
+            $newFileName = 'themes' . substr($sourceFileName, $themePathLen);
+        }
+    }
+
+    // Load translations for the template
+    // @todo this is too specific for mls, it should just receive a filename
+    // and solve its own problems :-)
+    $tplpath = explode("/", $newFileName);
+    $tplPathCount = count($tplpath);
+    if($tplPathCount > 1) {
+        switch ($tplpath[0]) {
+        case 'modules': $dnType = XARMLS_DNTYPE_MODULE; break;
+        case 'themes':  $dnType = XARMLS_DNTYPE_THEME; break;
+        }
+
+        $dnName = $tplpath[1];
+
+        $stack = array();
+        if ($tplpath[2] == 'xartemplates') $tplpath[2] = 'templates';
+        for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
+        $ctxType = $tplpath[0].':'.implode("/", $stack);
+        $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
+        /* Temporary partial fix for Bug 5156. This is a temporary workaround and
+         while here, themes cannot be translated. This should be fixed as soon as possible */
+        if(isset($dnType)) {
+            if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
+        }
+    }
 }
 
 /**

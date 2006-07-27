@@ -232,7 +232,7 @@ class xarXmlParser
         if(XARXML_PARSEWHILEREAD) {
             return xml_parse($this->parser,$xmldata, $final);
         } else {
-            return xml_parse_into_struct($this->parser, $xmldata, &$vals, &$index);
+            return xml_parse_into_struct($this->parser, $xmldata, $vals, $index);
         }
     }
 
@@ -338,7 +338,7 @@ class xarXmlParser
     function __activateHandlers()
     {
         $par = $this->parser;
-        xml_set_object($par,&$this->handler);
+        xml_set_object($par, $this->handler);
         xml_set_default_handler($par,               'default_handler');
         xml_set_character_data_handler($par,        'character_data');
         xml_set_element_handler($par,               'open_tag',
@@ -591,7 +591,7 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
      * as content for the tag. This is not entirely right, but enough for now
      *
      * @param object $parser the parser to which this handler is attached
-     * @param string $target the part after the <? in the document
+     * @param string $target the part after the '<?' in the document
      * @param string $data   the contents of the processing instruction
      */
     function process_instruction($parser, $target , $data)

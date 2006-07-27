@@ -3,8 +3,8 @@
  * Legacy Functions
  *
  * @package legacy
- * @copyright (C) 2006 The Digital Development Foundation
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marco Canini
 */
@@ -35,12 +35,14 @@ class ApiDeprecationException extends DeprecationExceptions
 * MODULE SYSTEM FUNCTIONS
 
 * DEPRECATED XAR FUNCTIONS
-* xarModEmailURL        -> no direct equivalent
-* xarVarPrepForStore()  -> use bind vars or dbconn->qstr() method
-* xarPage_sessionLess() -> xarPageCache_sessionLess()
-* xarPage_httpCacheHeaders() -> xarPageCache_sendHeaders()
-* xarVarCleanUntrused   -> use xarVarFetch validations
-* xarVarCleanFromInput  -> use xarVarFetch validations
+* xarModEmailURL                -> no direct equivalent
+* xarVarPrepForStore()          -> use bind vars or dbconn->qstr() method
+* xarPage_sessionLess()         -> xarPageCache_sessionLess()
+* xarPage_httpCacheHeaders()    -> xarPageCache_sendHeaders()
+* xarVarCleanUntrused           -> use xarVarFetch validations
+* xarVarCleanFromInput          -> use xarVarFetch validations
+* xarTplAddStyleLink            -> use xar:style tag
+* xarTplAddJavaScriptCode       -> use xar:base-include-javascript
 */
 
 
@@ -57,6 +59,7 @@ function xarGetStatusMsg()
         return $errmsg;
     }
     return $msg;
+}
 
 function xarBlockTypeExists($modName, $blockType)
 {
@@ -273,4 +276,47 @@ function xarVarCleanUntrusted($var)
 
     return $var;
 }
+
+/**
+ * Add stylesheet link for a module (after rc3 this function is a legacy)
+ *
+ *  (deprecated - all CSS issues are normally handled by the css classlib via bl tags)
+ * @access public
+ * @deprec 
+ * @since  2006-07-23
+ * @param  string $module
+ * @param  string $file
+ * @param  string $fileext
+ * @param  string $themefolder ('' or path no leading or trailing /, )
+ * @param  string $media (multiple values supported as a comma separated list "screen, print")
+ * @return bool
+ */
+function xarTplAddStyleLink($module = null, $file = null, $fileext = null, $themefolder = null, $media = null, $scope = 'module')
+{
+    $method = 'link';
+    $args = compact('module', 'file', 'fileext', 'themefolder', 'media', 'scope', 'method');
+
+    // make sure we can use css object
+    require_once "modules/themes/xarclass/xarcss.class.php";
+    $obj = new xarCSS($args);
+    return $obj->run_output();
+}
+
+/**
+ * Add JavaScript code to template output **deprecated**
+ *
+ * @access public
+ * @param  string $position Either 'head' or 'body'
+ * @param  string $owner    Who produced this snippet?
+ * @param  string $code     The JavaScript Code itself
+ * @deprec This is now handled by a custom tag of the base module
+ * @since  2004-03-20
+ * @return bool
+ */
+function xarTplAddJavaScriptCode($position, $owner, $code)
+{
+    assert('$position == "head" || $position == "body"');
+    return xarTplAddJavaScript($position, 'code', "<!-- JavaScript code from {$owner} -->\n" . $code);
+}
+
 ?>

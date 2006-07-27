@@ -13,8 +13,7 @@
  *
  * @param $args['objectid'] ID of the object
  * @param $args['extrainfo'] extra information
- * @returns bool
- * @return true on success, false on failure
+ * @return bool true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
 function dynamicdata_user_displayhook($args)
@@ -62,27 +61,27 @@ function dynamicdata_user_displayhook($args)
     $data = "";
     $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
     foreach ($tree as $branch) {
-    	if ($branch['objectid'] == 0) continue;
-    	// TODO: this next line jumps over itemtypes that correspond to wrappers of native itemtypes
-    	// TODO: make this more robust
+        if ($branch['objectid'] == 0) continue;
+        // TODO: this next line jumps over itemtypes that correspond to wrappers of native itemtypes
+        // TODO: make this more robust
 
-		$object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
-										   'itemtype' => $branch['itemtype'],
-										   'itemid'   => $itemid));
-		if (!isset($object)) return;
+        $object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
+                                           'itemtype' => $branch['itemtype'],
+                                           'itemid'   => $itemid));
+        if (!isset($object)) return;
 
-		$object->getItem();
+        $object->getItem();
 
-		if (!empty($object->template)) {
-			$template = $object->template;
-		} else {
-			$template = $object->name;
-		}
-		$data .= xarTplModule('dynamicdata','user','displayhook',
-							array('properties' => & $object->properties),
-							$template);
-	}
-	return $data;
+        if (!empty($object->template)) {
+            $template = $object->template;
+        } else {
+            $template = $object->name;
+        }
+        $data .= xarTplModule('dynamicdata','user','displayhook',
+                            array('properties' => & $object->properties),
+                            $template);
+    }
+    return $data;
 }
 
 ?>

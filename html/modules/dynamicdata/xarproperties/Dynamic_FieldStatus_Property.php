@@ -24,7 +24,7 @@ class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
     function __construct($args)
     {
         parent::__construct($args);
-		$this->filepath   = 'modules/dynamicdata/xarproperties';
+        $this->filepath   = 'modules/dynamicdata/xarproperties';
         $this->tplmodule =  'dynamicdata';
         $this->template =  'status';
 
@@ -63,10 +63,10 @@ class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
             $value = $data['value'];
         }
 
-		$valuearray['display'] = $value & 31;
-		$valuearray['input'] = $value & 992;
+        $valuearray['display'] = $value & 31;
+        $valuearray['input'] = $value & 992;
 
-		$data['value'] = $valuearray;
+        $data['value'] = $valuearray;
 
         if (!isset($data['options']) || count($data['options']) == 0) {
             $data['options'] = $this->getOptions();

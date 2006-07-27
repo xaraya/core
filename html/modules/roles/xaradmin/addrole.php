@@ -29,7 +29,7 @@ function roles_admin_addrole()
     if (!xarVarFetch('itemtype', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;
     // get the rest for users only
     // TODO: need to see what to do with auth module
-	$basetype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
+    $basetype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
     if ($basetype == ROLES_USERTYPE) {
         xarVarFetch('puname', 'str:1:35:', $puname, NULL, XARVAR_NOT_REQUIRED);
         xarVarFetch('pemail', 'str:1:', $pemail, NULL, XARVAR_NOT_REQUIRED);
@@ -82,7 +82,7 @@ function roles_admin_addrole()
             $duvs['userhome'] = $phome;
         if (xarModGetVar('roles','setprimaryparent')) { //For a new role surely this is the same as the parentid
             //the primary parent is a string name inline with default role etc
-	        $parentrole= xarModAPIFunc('roles', 'user', 'get', array('uid'  => $pparentid, 'type'   => 1));
+            $parentrole= xarModAPIFunc('roles', 'user', 'get', array('uid'  => $pparentid, 'type'   => 1));
             $duvs['primaryparent'] = $parentrole['uname'];
         }
 

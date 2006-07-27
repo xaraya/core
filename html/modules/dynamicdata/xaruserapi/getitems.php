@@ -125,25 +125,25 @@ function &dynamicdata_userapi_getitems($args)
     }
 
     $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
-	$object = & Dynamic_Object_Master::getObjectList(array('moduleid'  => $modid,
-										   'itemtype'  => $itemtype,
-										   'itemids' => $itemids,
-										   'sort' => $sort,
-										   'numitems' => $numitems,
-										   'startnum' => $startnum,
-										   'where' => $where,
-										   'fieldlist' => $fieldlist,
-										   'join' => $join,
-										   'table' => $table,
-										   'catid' => $catid,
-										   'groupby' => $groupby,
-										   'status' => $status,
-										   'itemtype'  => $itemtype));
-	if (!isset($object) || empty($object->objectid)) return $nullreturn;
+    $object = & Dynamic_Object_Master::getObjectList(array('moduleid'  => $modid,
+                                           'itemtype'  => $itemtype,
+                                           'itemids' => $itemids,
+                                           'sort' => $sort,
+                                           'numitems' => $numitems,
+                                           'startnum' => $startnum,
+                                           'where' => $where,
+                                           'fieldlist' => $fieldlist,
+                                           'join' => $join,
+                                           'table' => $table,
+                                           'catid' => $catid,
+                                           'groupby' => $groupby,
+                                           'status' => $status,
+                                           'itemtype'  => $itemtype));
+    if (!isset($object) || empty($object->objectid)) return $nullreturn;
     foreach ($tree as $branch) {
-		$newobject = & Dynamic_Object_Master::getObjectList(array('moduleid'  => $modid,
-											   'itemtype'  => $branch['itemtype']));
-		$object->add($newobject);
+        $newobject = & Dynamic_Object_Master::getObjectList(array('moduleid'  => $modid,
+                                               'itemtype'  => $branch['itemtype']));
+        $object->add($newobject);
     }
     if (!isset($object)) return $nullreturn;
     // $items[$itemid]['fields'][$name]['value'] --> $items[$itemid][$name] now

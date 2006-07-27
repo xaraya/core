@@ -48,12 +48,12 @@ function modules_admin_modify($args)
             if (isset($itemtypes)) $modList[$i]['itemtypes'] = $itemtypes;
 
 
-	// Get the list of all item types for this module (if any)
-	try {
-		$itemtypes = xarModAPIFunc($modName,'user','getitemtypes',array());
-	} catch ( FunctionNotFoundException $e) {
-		// No worries
-	}
+    // Get the list of all item types for this module (if any)
+    try {
+        $itemtypes = xarModAPIFunc($modName,'user','getitemtypes',array());
+    } catch ( FunctionNotFoundException $e) {
+        // No worries
+    }
 
     if (isset($itemtypes)) {
         $data['itemtypes'] = $itemtypes;

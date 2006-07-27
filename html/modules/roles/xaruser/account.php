@@ -20,29 +20,22 @@
 function roles_user_account()
 {
     if(!xarVarFetch('moduleload','str', $data['moduleload'], '', XARVAR_NOT_REQUIRED)) {return;}
-   //let's make sure other modules that refer here get to the login form
-    $defaultauthmodule=xarModGetNameFromId(xarModGetVar('roles','defaultauthmodule'));
-    if (!isset($defaultauthmodule) || empty($defaultauthmodule)) {
-            $authmodule='authsystem';
-    } else{
-           $authmodule=$defaultauthmodule;
-    }
-   
-    if (!xarUserIsLoggedIn()){
 
-        if (!file_exists('modules/'.$authmodule.'/xaruser/showloginform.php')) {
-            $authmodule='authsystem'; // incase the authmodule doesn't provide a login
-        }
-            xarResponseRedirect(xarModURL($authmodule,'user','showloginform'));
+    //let's make sure other modules that refer here get to a default and existing login or logout form
+    $defaultauthdata=xarModAPIFunc('roles','user','getdefaultauthdata');
+    $defaultauthmodname=$defaultauthdata['defaultauthmodname'];
+    $defaultloginmodname=$defaultauthdata['defaultloginmodname'];
+    $defaultlogoutmodname=$defaultauthdata['defaultlogoutmodname'];
+
+    if (!xarUserIsLoggedIn()){
+        xarResponseRedirect(xarModURL($defaultloginmodname,'user','showloginform'));
     }
-    if (!file_exists('modules/'.$authmodule.'/xaruser/logout.php')) {
-        $logoutmodule='authsystem'; // incase the authmodule doesn't provide a login
-    }else{
-        $logoutmodule=$authmodule;
-    }
+
     $data['uid'] = xarUserGetVar('uid');
     $data['name'] = xarUserGetVar('name');
-    $data['logoutmodule']=$logoutmodule;
+    $data['logoutmodule']=$defaultlogoutmodname;
+    $data['loginmodule']=$defaultloginmodname;
+    $data['authmodule']=$defaultauthmodname;
     if ($data['uid'] == XARUSER_LAST_RESORT) {
         $data['message'] = xarML('You are logged in as the last resort administrator.');
     } else  {

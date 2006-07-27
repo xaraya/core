@@ -6,6 +6,7 @@ html\/var\/cache\/database\/.*
 html\/var\/cache\/rss\/.*
 html\/creole_svn\/.*
 html\/var\/logs\/log\.txt$
+html\/var\/processes\/.*
 html\/modules/(authentication|autodoc|addressbook|articles|autolinks|auth(email|ldap|invision|phpbb2|sql|sso|url))\/.*
 html\/modules\/(bbcode|bkview|bloggerapi)\/.*
 html\/modules\/(cachesecurity|categories|calendar|censor|changelog|chat|comments|commerce|customers|contact|converter|courses)\/.*

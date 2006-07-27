@@ -41,7 +41,7 @@ class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
         parent::__construct($args);
         $this->template = 'objectref';
         $this->tplmodule = 'dynamicdata';
-		$this->filepath   = 'modules/dynamicdata/xarproperties';
+        $this->filepath   = 'modules/dynamicdata/xarproperties';
     }
 
     static function getRegistrationInfo()

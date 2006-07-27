@@ -26,10 +26,7 @@ function roles_adminapi_addgroup($args)
     // Security Check
     if(!xarSecurityCheck('AddRole')) return;
 
-	$new = array(
-				'uname' => $gname,
-				'itemtype' =< ROLES_GROUPTYPE
-				);
+    $new = array('uname' => $gname, 'itemtype' => ROLES_GROUPTYPE );
     return xarModAPIFunc('roles','admin','create',$new);
 }
 

@@ -122,7 +122,7 @@ function dynamicdata_adminapi_showlist($args)
         $myfieldlist = null;
         // get active properties only (+ not the display only ones)
         $status = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
-	}
+    }
     // join a module table to a dynamic object
     if (empty($join)) {
         $join = '';

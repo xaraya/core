@@ -1,6 +1,6 @@
 <xar:style scope="module" module="base" file="navtabs" />
-<xar:comment>CHANGE THIS LATER</xar:comment>
-<xar:set name="activetab">$_bl_module_func</xar:set>
+<xar:set name="request">xarRequestGetInfo()</xar:set>
+<xar:set name="activetab">#$request.2#</xar:set>
 <div>
   <dl class="xar-tabs">
     <dt class="help" title="#xarML('Choose an action to perform on the selected user')#">

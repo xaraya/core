@@ -5,8 +5,8 @@
  * The compiler is responsible for compiling xar + xml -> php + xml
  *
  * @package blocklayout
- * @copyright (C) 2003,2004 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marco Canini <marco@xaraya.com>
  * @author Paul Rosania  <paul@xaraya.com>
@@ -128,25 +128,6 @@ class BLParserException extends BLCompilerException
 }
 
 /**
- * xarTpl__CompilerError
- *
- * For now just a stub class to a system exception
- *
- * @package blocklayout
- * @access private
- * @throws BLCompilerException
- */
-class xarTpl__CompilerError extends Exception
-{
-    function raiseError($msg)
-    {
-        // FIXME: is this useful at all, if the compiler doesn't work, how are we going to show the exception ?
-        //throw a generic exception for now
-        throw new BLCompilerException(null,$msg);
-    }
-}
-
-/**
  * xarTpl__ParserError
  *
  * class to hold parser errors
@@ -172,40 +153,62 @@ class xarTpl__ParserError extends Exception
     }
 }
 
+/** 
+ *  Interface definition for the blocklayout compiler, these are the things
+ *  it offers, no more, no less
+ *
+ */
+interface IxarBLCompiler
+{
+    static function &instance();        // Get an instance of the compiler
+    function compileFile($fileName);    // compile a file
+    function compileString(&$data);     // compile a string
+}
+
 /**
- * xarTpl__Compiler - the abstraction of the BL compiler
+ * xarBLCompiler - the abstraction of the BL compiler
  *
  * The compiler holds the parser and the code generator as objects
  *
  * @package blocklayout
- * @access private
+ * @access public
  */
-class xarTpl__Compiler extends xarTpl__CompilerError
+class xarBLCompiler implements IxarBLCompiler
 {
     private static $instance = null;
     public $parser;
     public $codeGenerator;
 
-    function __construct()
+    /**
+     * Private constructor, since this is a Singleton
+     */
+    private function __construct()
     {
         $this->parser = new xarTpl__Parser();
         $this->codeGenerator = new xarTpl__CodeGenerator();
     }
 
-    static function &instance() 
+    /**
+     * Implementation of the interface
+     */
+    public static function &instance() 
     {
         if(self::$instance == null) {
-            self::$instance = new xarTpl__Compiler();
+            self::$instance = new xarBLCompiler();
         }
         return self::$instance;
     }
+
+    public function compileString(&$data)
+    {
+        return $this->compile($data);
+    }
     
-    function compileFile($fileName)
+    public function compileFile($fileName)
     {
         // The @ makes the code better to handle, leave it.
         if (!($fp = @fopen($fileName, 'r'))) {
-            $this->raiseError("Cannot open template file '$fileName'.");
-            return;
+            throw new BLCompilerException($fileName,"Cannot open template file '#(1)'");
         }
         
         if ($fsize = filesize($fileName)) {
@@ -240,7 +243,10 @@ class xarTpl__Compiler extends xarTpl__CompilerError
         return $res;
     }
 
-    function compile(&$templateSource)
+    /**
+     * Private methods
+     */
+    private function compile(&$templateSource)
     {
         // EXPERIMENTAL, USE AT OWN RISK, I DONT EVEN WANNA KNOW
         if(defined('XAR_BL_USE_XSLT')) {
@@ -1317,6 +1323,15 @@ class xarTpl__ExpressionTransformer
         return $expression;
     }
 
+    /**
+     * Transform a PHP expression from a template to a valid piece of PHP code
+     *
+     * @return string Valid PHP expression
+     * @author Marcel van der Boom
+     * @todo if expressions were always between #...# this would be easier
+     * @todo if the key / objectmember is a variable, make sure it fits the regex for a valid variable name
+     * @todo the convenience operators may conflict in some situations with the MLS ( like 'le' for french)
+     **/
     static function transformPHPExpression($phpExpression)
     {
         $phpExpression =xarTpl__ExpressionTransformer::normalize($phpExpression);
@@ -1342,8 +1357,6 @@ class xarTpl__ExpressionTransformer
         // NOTE: The behaviour of this method along with the BLExpression method above CHANGED. Part 
         //       of the resolving is now done by the previous method (i.e. a complete expression is passed into it)
         
-        // TODO: of course, if all this was between #...# it would be a lot easier ;-)
-        // TODO: if variable array key or object member, make sure it starts with a letter
         $regex = "/((\\\$[a-z_][a-z0-9_\[\]\$]*)([:|\.][$]{0,1}[0-9a-z_\]\[\$]+)*)/i";
         if (preg_match_all($regex, $phpExpression,$matches)) {
             // Resolve BL expressions inside the php Expressions
@@ -1361,8 +1374,6 @@ class xarTpl__ExpressionTransformer
             }
         }
 
-        // TODO: this needs to be replaced with something else since it's way too harsh now
-        //       ( for example: 'le' is a french word which is now unusable )
         $findLogic      = array(' eq ', ' ne ', ' lt ', ' gt ', ' id ', ' nd ', ' le ', ' ge ');
         $replaceLogic   = array(' == ', ' != ',  ' < ',  ' > ', ' === ', ' !== ', ' <= ', ' >= ');
 
@@ -1476,10 +1487,10 @@ abstract class xarTpl__TplTagNode extends xarTpl__Node
      * If we get here, the render method was called but not implemented in the tag,
      * which means the user specified it as <xar:tag ..../>
      * We (try to) treat this like <xar:tag></xar:tag> which is effectively the same.
-     * Furthermore, we dont want this called directly, but we cant right now due to the class structure
-     * we have, so TODO here ;-)
+     *
      * @return void
      * @author Marcel van der Boom
+     * @todo   refactor the classes so this method cannot be called directly (i.e. protected)
      **/
     public function render()
     {
@@ -1538,12 +1549,17 @@ abstract class xarTpl__EntityNode extends xarTpl__Node
     protected $parameters;
     protected $hasExtras = false;
     
+    /**
+     * Constructor for entity nodes
+     *
+     * @return void
+     * @author Marcel van der Boom
+     * @todo   centralize the hasExtras in xarModUrl, i.e. dont hack it in here (see bug 3603)
+     **/
     function __construct(&$parser, $tagName, $entityType, $parameters) 
     {
         parent::__construct($parser, $tagName);
         // Register whether the entity is followed by extra params
-        // Bug 3603 workaround
-        // TODO: centralize this further into xarModUrl
         $this->hasExtras = $parser->peek(5) == '&amp;';
         $this->isPHPCode = true;
         $this->entityType = $entityType;

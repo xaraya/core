@@ -32,9 +32,9 @@ function roles_admin_newrole()
     if (!xarVarFetch('phome', 'str', $home, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pprimaryparent', 'int', $primaryparent, '', XARVAR_NOT_REQUIRED)) return;
 
-	$data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
-	$types = xarModAPIFunc('roles','user','getitemtypes');
-	$data['itemtypename'] = $types[$itemtype]['label'];
+    $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
+    $types = xarModAPIFunc('roles','user','getitemtypes');
+    $data['itemtypename'] = $types[$itemtype]['label'];
 
     // Security Check
     if (!xarSecurityCheck('AddRole')) return;
@@ -116,10 +116,10 @@ function roles_admin_newrole()
     $item['module'] = 'roles';
     $data['hooks'] = xarModCallHooks('item', 'new', '', $item);
 
-	$data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSecGenAuthKey();
     $data['addlabel'] = xarML('Add');
     $data['groups'] = $groups;
     $data['return_url'] = $return_url;
     return $data;
-}
+} 
 ?>

@@ -11,7 +11,9 @@
  * @author Marcel van der Boom <marcel@hsdev.com>
  */
 
-// TODO: can this global be eliminated?
+/**
+ * @todo can this global be eliminated?
+ */
 var req;
 var tagToGo; // Apparently at least safari needs this
 var debug = 0;
@@ -37,34 +39,45 @@ function loadContent(url, tagid, method, formobj, local_debug)
     if (local_debug != null) var debug = local_debug
     if (method == null || method == '') method = 'GET'
     method = method.toUpperCase();
-    var argstr = null;
+    var argstr = '';
     var join = '';
+    var pagepat = /\&pageName\=module/;
+    var postfix ='&pageName=module';
+    /**
+     * @todo the url handling needs to be documented, a bit strange to do this here
+     */
+    url = url.replace(/&amp;/g,'&');
 
     // prepare strings according to method
     if (method == 'POST') {
         try {
-            argstr = '';
             for ( i = 0; i < formobj.elements.length; i++ ) {
                 if (formobj.elements[i].name.length > 0) {
-                    argstr = argstr + join + formobj.elements[i].name + "="+formobj.elements[i].value;
+                    argstr = argstr + join + formobj.elements[i].name + "=" + formobj.elements[i].value;
                     join = '&';
                 }
             }
         } catch(e) {
-            alert(e);
+            if(debug) alert(e);
             return false;
         }
-        if (argstr.search(/\&pageName\=module/) == -1) argstr=argstr+"&pageName=module";
+        if (argstr.search(pagepat) == -1) argstr = argstr + postfix;
     } else if (method == 'GET') {
-        if (url.search(/\&pageName\=module/) == -1) url=url+"&pageName=module";
+        if (url.search(pagepat) == -1) url = url + postfix;
     }
-    if (debug) alert("Method: "+method+"\nURL: "+url+"\nArgs: "+argstr);
+    if (debug) alert("Method: " + method + "\nURL: " + url + "\nArgs: " + argstr);
 
     tagToGo = tagid; // required for some implementations
     try {
         if (window.XMLHttpRequest) {
-            document.body.style.cursor='wait';
             req = new XMLHttpRequest();
+        } else if (window.ActiveXObject) {
+            req = new ActiveXObject("Microsoft.XMLHTTP");
+        } else {
+            return true; // do the normal action -- should we have an "incompatible browser" error here?
+        }
+        if (req) {
+            document.body.style.cursor = 'wait';
             req.onreadystatechange = processReqChange;
             req.open(method, url, true);
             if (method == 'POST') {
@@ -72,27 +85,11 @@ function loadContent(url, tagid, method, formobj, local_debug)
                 req.setRequestHeader("Content-length", argstr.length);
                 req.setRequestHeader("Connection", "close");
             }
-            req.send(argstr);
-            return false;
-        } else if (window.ActiveXObject) {
-            document.body.style.cursor='wait';
-            req = new ActiveXObject("Microsoft.XMLHTTP");
-            if (req) {
-                req.onreadystatechange = processReqChange;
-                req.open(method, url, true);
-                if (method == 'POST') {
-                    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    req.setRequestHeader("Content-length", argstr.length);
-                    req.setRequestHeader("Connection", "close");
-                }
-                req.send(argstr);
-            }
-            return false;
-        } else {
-            return true; // do the normal action -- should we have an "incompatible browser" error here?
+            req.send(argstr)
         }
+        return false;
     } catch(e) {
-        alert(e);
+        if(debug) alert(e);
         return false
     }
 }
@@ -104,8 +101,7 @@ function loadContent(url, tagid, method, formobj, local_debug)
 *
 * @author  Marcel van der Boom <marcel@hsdev.com>
 * @access  public
-* @return  nothing
-* @throws  no exceptions
+* @return  void
 */
 function processReqChange()
 {
@@ -116,6 +112,7 @@ function processReqChange()
                 tag = document.getElementById(tagToGo);
                 if(tag == null) {
                     // not found, fallback
+                    document.body.style.cursor='default'; // set back to be sure
                     document.location = req.url; // TODO: take out 'pageName' var here
                     return true;
                 }
@@ -125,17 +122,17 @@ function processReqChange()
                 tag.innerHTML = req.responseText;
                 if (debug) alert(req.responseText);
                 newtag = document.getElementById(tagToGo);
+                
                 if(newtag == null) {
-                    alert('cant find the new tag [' + tagToGo + ']');
-                    tag.innerHTML = req.responseText;
-                    document.body.style.cursor='default';
-                    return false;
+                    if (debug) alert('cant find the new tag [' + tagToGo + ']');
+                    // put back the original id
+                    tag.id = tagToGo;
                 } else {
                     copyofnew = newtag.cloneNode(true);
                     myparent.replaceChild(copyofnew,tag);
-                    document.body.style.cursor='default';
-                    return false; // cancel the normal action
                 }
+                document.body.style.cursor='default';
+                return false; // cancel the normal action
             } else {
                 // CHECKME: as we are in a looping thingie, displaying an alert here
                 // might be premature, but if it really fails how would we know? Just

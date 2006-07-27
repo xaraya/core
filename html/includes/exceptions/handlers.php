@@ -124,27 +124,10 @@ class ExceptionHandlers implements IExceptionHandlers
         // Make cached files also display their source file if it's a template
         // This is just for convenience when giving support, as people will probably
         // not look in the CACHEKEYS file to mention the template.
-        if(isset($GLOBALS['xarTpl_cacheTemplates'])) {
-            $sourcetmpl='';
-            $base = basename(strval($file),'.php');
-            $varDir = xarCoreGetVarDirPath();
-            if (file_exists($varDir . XARCORE_TPL_CACHEDIR .'/CACHEKEYS')) {
-                $fd = fopen($varDir . XARCORE_TPL_CACHEDIR .'/CACHEKEYS', 'r');
-                while($cache_entry = fscanf($fd, "%s\t%s\n")) {
-                    list($hash, $template) = $cache_entry;
-                    // Strip the colon
-                    $hash = substr($hash,0,-1);
-                    if($hash == $base) {
-                        // Found the file, source is $template
-                        $sourcetmpl = $template;
-                        break;
-                    }
-                }
-                fclose($fd);
-            }
-        }
+        $key = basename(strval($file),'.php');
+        $sourceFile = xarTemplateCache::sourceFile($key);
         
-        if(isset($sourcetmpl) && $sourcetmpl != '') $msg .= "\n\n[".$sourcetmpl."]";
+        $msg .= "\n\n[".$sourceFile."]";
         if (!function_exists('xarModURL')) {
             $rawmsg = "Normal Xaraya error processing has stopped because of an error encountered.\n\n";
             $rawmsg .= "The last registered error message is:\n\n";

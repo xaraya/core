@@ -24,7 +24,7 @@ function roles_admin_updaterole()
     if (!xarVarFetch('pname', 'str:1:35:', $pname)) return;
     if (!xarVarFetch('itemtype', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('phome', 'str', $phome, '', XARVAR_NOT_REQUIRED)) return;
-	$basetype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
+    $basetype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
     if (!xarVarFetch('pprimaryparent', 'int', $pprimaryparent, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('returnurl', 'str', $returnurl, '', XARVAR_NOT_REQUIRED)) return;
 
@@ -95,7 +95,7 @@ function roles_admin_updaterole()
         'email' => $pemail,
         'pass' => $ppass1,
         'state' => $pstate,
-		'duvs' => $duvs,
+        'duvs' => $duvs,
         'basetype' => $basetype,
         );
 
@@ -103,7 +103,7 @@ function roles_admin_updaterole()
 
     //Change the defaultgroup var values if the name is changed
     if ($basetype == ROLES_GROUPTYPE) {
-    	$defaultgroup = xarModAPIFunc('roles','user','getdefaultgroup');
+        $defaultgroup = xarModAPIFunc('roles','user','getdefaultgroup');
         $defaultgroupuid = xarModAPIFunc('roles','user','get',
                                                      array('uname'  => $defaultgroup,
                                                            'type'   => ROLES_GROUPTYPE));
@@ -151,9 +151,9 @@ function roles_admin_updaterole()
 
     // redirect to the next page
     if (empty($returnurl)) {
-	    xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole', array('uid' => $uid)));
+        xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole', array('uid' => $uid)));
     } else {
-	    xarResponseRedirect($returnurl);
+        xarResponseRedirect($returnurl);
     }
 }
 

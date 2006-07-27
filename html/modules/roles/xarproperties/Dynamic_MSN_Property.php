@@ -26,7 +26,7 @@ class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
         parent::__construct($args);
         $this->tplmodule = 'roles';
         $this->template = 'msn';
-		$this->filepath   = 'modules/roles/xarproperties';
+        $this->filepath   = 'modules/roles/xarproperties';
     }
 
     static function getRegistrationInfo()

@@ -54,13 +54,6 @@ class SQLiteTableInfo extends TableInfo {
             $fulltype = $row['type'];            
             $size = null;
             $scale = null;
-            // XARAYA MODIFICATION
-            // when column is integer primary key, docs say its auto increment
-            $is_auto_increment = false;
-            if(($row['pk'] == 1 && $fulltype == 'INTEGER')) 
-                $is_auto_increment = true;
-            // END XARAYA MODIFICATION
-            
             if (preg_match('/^([^\(]+)\(\s*(\d+)\s*,\s*(\d+)\s*\)$/', $fulltype, $matches)) {
                 $type = $matches[1];
                 $size = $matches[2];
@@ -71,16 +64,15 @@ class SQLiteTableInfo extends TableInfo {
             } else {
                 $type = $fulltype;
             }
-            
+            // If column is primary key and of type INTEGER, it is auto increment
+            // See: http://sqlite.org/faq.html#q1
+            $is_auto_increment = ($row['pk'] == 1 && $fulltype == 'INTEGER');
             $not_null = $row['notnull'];
             $is_nullable = !$not_null;
             
             $default_val = $row['dflt_value'];
             
-            // XARAYA MODIFICATION
-            //$this->columns[$name] = new ColumnInfo($this, $name, SQLiteTypes::getType($type), $type, $size, $scale, $is_nullable, $default_val);
-            $this->columns[$name] = new ColumnInfo($this, $name, SQLiteTypes::getType($type), $type, $size, $scale, $is_nullable, $default_val,$is_auto_increment);
-            // END XARAYA MODIFICATION
+            $this->columns[$name] = new ColumnInfo($this, $name, SQLiteTypes::getType($type), $type, $size, $scale, $is_nullable, $default_val, $is_auto_increment);
             
             if (($row['pk'] == 1) || (strtolower($type) == 'integer primary key')) {
                 if ($this->primaryKey === null) {

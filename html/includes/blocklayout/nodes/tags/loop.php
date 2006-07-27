@@ -6,7 +6,7 @@
    *
    * @author Marco Canini <marco@xaraya.com>
    * @author Marcel van der Boom <marcel@hsdev.com>
-   * @author Dan Wells <?>
+   * @author Dan Wells 
    * @todo why do we need both loop:number and loop:index? i think loop:number should refer to the loop number
    */
 class xarTpl__XarLoopNode extends xarTpl__TplTagNode

@@ -3,8 +3,8 @@
  * Module handling subsystem
  *
  * @package modules
- * @copyright (C) 2002 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Jim McDonald
  * @author Marco Canini <marco@xaraya.com>
@@ -637,8 +637,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
 
     // If we have an empty argument (ie null => null) then set a flag and
     // remove that element.
-    // NOTE: array_key_exists is 30x slower than isset, but we can not use it here
-    // FIXME: this begs to be refactored.
+    // FIXME: this is way too hacky, NULL as a key for an array sooner or later will fail. (php 4.2.2 ?)
     if (is_array($args) && @array_key_exists(NULL, $args) && $args[NULL] === NULL) {
         // This flag means that the GET part of the URL must be opened.
         $open_get_flag = true;
@@ -1906,9 +1905,12 @@ class xarMod implements IxarMod
  * Wrapper functions to support Xaraya 1 API for module aliases
  *
  */
-function xarModGetAlias($alias) { return xarModAlias::resolve($alias);}
-function xarModSetAlias($alias, $modName) { return xarModAlias::set($alias,$modName);}
-function xarModDelAlias($alias, $modName) { return xarModAlias::delete($alias,$modName);}
+function xarModGetAlias($alias) 
+{ return xarModAlias::resolve($alias);}
+function xarModSetAlias($alias, $modName) 
+{ return xarModAlias::set($alias,$modName);}
+function xarModDelAlias($alias, $modName) 
+{ return xarModAlias::delete($alias,$modName);}
 
 /**
  * Interface declaration for module aliases

@@ -63,8 +63,8 @@ revisit later on before trusting the branch to be released or used.
 !!DIFFERENCES BETWEEN PHP 5.0 and 5.1
 * do not agree on what function_exists() / is_callable() /
   method_exists() should return
-* In PHP 5.0.4 (and earlier versions I believe) the shutdown function is called after the output buffering callback.
-* In PHP 5.1.2 (not sure when the change occurred) the shutdown function is called before the output buffering callback.
+* In PHP 5.0.4 (and earlier versions I believe) the shutdown function is called *after* the output buffering callback.
+* In PHP 5.1.2 (not sure when the change occurred) the shutdown function is called *before* the output buffering callback.
 * apparently PHP 5.1 allows headers to be sent in a shutdown function  (arguably wrong)
 
 
@@ -106,7 +106,12 @@ design work can begin.
   that place is obviously creole, but for shielding and triggering we
   dont have an abstraction and the more complex modules go through a
   whole lot of hoops sometimes which the backend could do in a jiffy.
-
+* the installer tries to throw all database onto one pile, we need to split 
+	the database configuration screens into different ones for each backend
+	* sqlite has no user and password
+	* sqlite uses a directory for a host
+	* mysql can support different table drivers (myisam, innodb) transparently
+	
 
 !!!KNOWN ISSUES
 * blocks do not end up in groups anymore during installation, need to
@@ -117,13 +122,14 @@ design work can begin.
   unreliable) is lost, so expect surprising results in 'meta' areas in
   DD for now until we figure our *if* and *how* we want to link
   components to physical tables.
-
+* datadict is absent in 2.x since that lived in adodb, creole does not have it
+* there is no upgrade routine for upgrading 1.x to 2.x
 
 !!!MIN. REQUIRED VERSIONS DETERMINED SO FAR
 * PHP      5.0.5
 * Mysql    5.0.18
 * Postgres 8.0.6
-* Sqlite   N/A (embedded in PHP, i think it's 2.8.x for non PDO and  3.x for PDO)
+* Sqlite   N/A (embedded in PHP, i think it's 2.8.x for non PDO and 3.x for PDO)
            There seems to be a sqlite3 extension floating around for php5
 * Oracle   ?
 * MsSql    ? (server 2003?)

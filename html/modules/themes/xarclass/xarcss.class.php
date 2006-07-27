@@ -9,12 +9,13 @@
  *
  * @subpackage Themes module
  * @link http://xaraya.com/index.php/release/70.html
- */
+**/
 
-/* Xaraya CSS class library
+/**
+ * Defines for this library
  *
  * @author Andy Varganov <andyv@xaraya.com>
- */
+**/
 
 define("CSSRELSTYLESHEET", "stylesheet");
 define("CSSRELALTSTYLESHEET", "alternate stylesheet");
@@ -37,7 +38,7 @@ define("CSSCOMMONBASE", "base");
  *
  *
  * @package themes
- */
+**/
 class xarCSS
 {
     // class vars and their defaults
@@ -138,9 +139,6 @@ class xarCSS
             case 'render':
                 $data['styles'] = $tagqueue->deliver($this->sort);
                 break;
-            case 'renderlegacy':
-                $data['styles'] = $tagqueue->deliverlegacy($this->sort);
-                break;
             default:
                 $this->tagdata['url'] = $this->geturl();
                 $tagqueue->register($this->tagdata);
@@ -224,12 +222,8 @@ class xarCSS
 
 class tagqueue
 {
-    public $legacy = true; // Also register the global which existed before the css stuff?
-
     function tagqueue()
     {
-        // TODO: uncomment this :-)
-        //$this->legacy = xarConfigGetVar('Site.Core.LoadLegacy');
     }
 
     // FIXME: $args is used as boolean OR an array depending on the call,
@@ -242,11 +236,6 @@ class tagqueue
             case 'register':
                 // Put it in the queue
                 $queue[$args['scope']][$args['method']][$args['url']] = $args;
-                // Also fill up the legacy global.
-                if($this->legacy) {
-                    // This actually gets called too much, filling up 1 line at a time
-                    $GLOBALS['xarTpl_additionalStyles'] = xarModApiFunc( 'themes','user','deliver', array('method' => 'renderlegacy','base' => 'theme'));
-                }
                 return true;
             case 'deliver':
                 $styles = $queue;
@@ -258,8 +247,6 @@ class tagqueue
                 }
                 $queue = array();
                 return $styles;
-            case 'deliverlegacy':
-                return $queue;
             default:
                 return false;
         }
@@ -273,11 +260,6 @@ class tagqueue
     function deliver($sort=true)
     {
         return $this->queue('deliver',$sort);
-    }
-
-    function deliverlegacy($sort = true)
-    {
-        return $this->queue('deliverlegacy',$sort);
     }
 }
 ?>

@@ -23,7 +23,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template = 'calendar';
-		$this->filepath   = 'modules/base/xarproperties';
+        $this->filepath   = 'modules/base/xarproperties';
     }
 
     static function getRegistrationInfo()
