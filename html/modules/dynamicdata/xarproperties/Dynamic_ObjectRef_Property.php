@@ -90,7 +90,7 @@ class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
         // only apply xarVarPrepForDisplay on strings, not arrays et al.
         if (!empty($result) && is_string($result)) $result = xarVarPrepForDisplay($result);
         $data['option'] = array('id' => $this->value, 'name' => $result);
-        return parent::showInput($data);
+        return parent::showOutput($data);
     }
 
     // Show the validation output.
