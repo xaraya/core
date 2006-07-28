@@ -371,6 +371,7 @@ function xarMLS_userOffset($timestamp = null)
     //          (see also 'locale' in xarUserGetNavigationLocale())
         // get the correct timezone offset for this user
         if (xarUserIsLoggedIn()) {
+            //jojodee - We should perhaps use something a little more reliable than this dd user var - see bug 5847
             $offset = xarUserGetVar('timezone');
             // get the actual timezone for the user (in addition to the timezone offset)
             if (isset($offset) && !is_numeric($offset)) {
@@ -381,7 +382,8 @@ function xarMLS_userOffset($timestamp = null)
                 }
             }
         }
-        if (!isset($offset)) {
+        //bug 5847 - $offset will be false if the user is logged in, rather than NULL. Cannot check for !isset.
+        if (!($offset)) {
             // use default time offset for this site
             $offset = $GLOBALS['xarMLS_defaultTimeOffset'];
             // use default timezone for this site
@@ -394,7 +396,7 @@ function xarMLS_userOffset($timestamp = null)
                                 array('timezone' => $timezone,
                                       // pass the timestamp *with* the offset
                                       'time'     => $timestamp + $offset * 3600));
-        //echo $adjust;
+
     } else {
         $adjust = 0;
     }
