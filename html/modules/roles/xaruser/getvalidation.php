@@ -55,31 +55,37 @@ function roles_user_getvalidation()
     $authmodule=$defaultauthdata['defaultauthmodname'];
 
     //Set some general vars that we need in various options
-    $pending = xarModGetVar($regmodule, 'explicitapproval');
+    $newpending = xarModGetVar($regmodule, 'explicitapproval');
+    $userpending = xarModGetVar($authmodule, 'explicitapproval');
     $loginlink =xarModURL($defaultloginmodname,'user','main');
-
-    $tplvars=array();
-    $tplvars['loginlink']=$loginlink;
-    $tplvars['pending']=$pending;
 
     // Users can be newly registering, or existing users revalidating their accounts
     // Using this workaround to tell the difference until we can separate the processes further
     $newuser=false;
-    if (isset($uname) && !empty($uname)) {
+
+    if (!empty($uname)) {
         // check for user and grab uid if exists
         $status = xarModAPIFunc('roles', 'user', 'get', array('uname' => $uname));
         $lastlogin =xarModGetUserVar('roles','userlastlogin',$status['uid']);
         if (!isset($lastlogin) || empty($lastlogin)) {
             $newuser=true;
         }
-    } else {
-       //they shouldn't be in here
     }
+    $tplvars=array();
+    $tplvars['loginlink']=$loginlink;
+    //we need to know whether pending refers to a new user, or one revalidating
+    if ($newuser) {
+        $tplvars['pending']=$newpending;
+    }else {
+        $tplvars['pending']=$userpending;
+    }
+
     switch(strtolower($phase)) {
 
         case 'startvalidation':
         default:
-            $data = xarTplModule($regmodule,'user', 'startvalidation',
+            //values will be empty for vars for users entering through login
+            $data = xarTplModule('roles','user', 'startvalidation',
                                                     array('phase'   => $phase,
                                                           'uname'   => $uname,
                                                           'sent'    => $sent,
@@ -104,7 +110,8 @@ function roles_user_getvalidation()
             }
 
             //Process users that need to be approved first and put in status PENDING
-            if ($pending == 1 && ($status['uid'] != xarModGetVar('roles','admin')))  {
+            //These include new users or existing users that require approval
+            if (($newpending == 1 || $userpending==1) && ($status['uid'] != xarModGetVar('roles','admin')))  {
                 // Update the user status table to reflect a pending account.
                 if (!xarModAPIFunc('roles', 'user', 'updatestatus',
                                     array('uname' => $uname,
@@ -113,7 +120,7 @@ function roles_user_getvalidation()
                 //Do Pending email notifications
                 //Only for existing users. New users are handled below with all new user notifications
 
-                if (!$newuser && xarModGetVar('roles','askpendingemail')==1) {
+                if (!$newuser) { //we already know they are pending
                 // Admin wants to be notified when accounts of existing users are set to pending
                     if (!xarModAPIFunc( 'roles', 'admin', 'sendpendingemail',
                                   array('uid'     => $status['uid'],
@@ -131,7 +138,7 @@ function roles_user_getvalidation()
                                     array('uname' => $uname,
                                           'state' => ROLES_STATE_ACTIVE))) return;
 
-                //send welcome email to the user
+                //send welcome email to the user - we should have 2 different ones here
                 if (xarModGetVar($regmodule, 'sendwelcomeemail')) {
                     if (!xarModAPIFunc('roles','admin','senduseremail',
                                     array('uid' => array($status['uid'] => '1'),
@@ -179,7 +186,7 @@ function roles_user_getvalidation()
             //Note - we are taking advantage of user notification vars here - there is no separate admin vars for notifys
                 $adminname = xarModGetVar('mail', 'adminname');
                 $adminemail = xarModGetVar('mail', 'adminmail');
-                $message = "".xarML('A user has revalidated their changed email address.  Here are the details')." \n\n";
+                $message = "".xarML('A user has re-validated their changed email address.  Here are the details')." \n\n";
                 $message .= "".xarML('Username')." = $status[name]\n";
                 $message .= "".xarML('Email Address')." = $status[email]";
 
@@ -217,7 +224,8 @@ function roles_user_getvalidation()
             // Redirect
             xarResponseRedirect(xarModURL('roles', 'user', 'getvalidation',array('sent' => 1)));
 
-    }
+        }
+
     return $data;
 }
 ?>

@@ -44,7 +44,7 @@
                 :
             </legend>
             <p class="xar-form-input-wrapper-before xar-padding-thick">
-                <xar:mlstring>Admin will being promopted to send an existing user an email if their status is changed to any of the following checked options.
+                <xar:mlstring>Admin will be prompted to send an email to an existing user if the user status is changed to any of the following checked options.
                     Admin will also be notified when status is changed automatically by the system (eg when an account is set to pending and requires approval):</xar:mlstring>
             </p>
             <div class="xar-form-input-wrapper-after">
