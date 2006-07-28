@@ -129,9 +129,7 @@ function authsystem_user_login()
                     return;
                 } elseif (empty($user)) {
                     // Check if user has been deleted.
-                    $user = xarModAPIFunc('roles',
-                                          'user',
-                                          'getdeleteduser',
+                    $user = xarModAPIFunc('roles', 'user', 'getdeleteduser',
                                           array('uname' => $uname));
                     if (xarCurrentErrorType() == XAR_USER_EXCEPTION)
                     {
@@ -139,7 +137,6 @@ function authsystem_user_login()
                         xarErrorFree();
                     }
                 }
-
 
                 if (!empty($user)) {
                     $rolestate = $user['state'];
@@ -189,9 +186,8 @@ function authsystem_user_login()
             break;
 
         case ROLES_STATE_NOTVALIDATED:
-
-            // User has not validated.
-            xarResponseRedirect(xarModURL('roles', 'user', 'getvalidation')); //send to validation and check there
+            //User still must validate
+            xarResponseRedirect(xarModURL('roles', 'user', 'getvalidation'));
 
             break;
 
