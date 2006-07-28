@@ -24,10 +24,10 @@ function roles_userapi_getdefaultregdata()
     $defaultregmodname='';
     $defaultregmodactive=false;
     //get the default reg module if it exits
-    $defaultregmodid =xarModGetVar('roles','defaultregmodule');
+    $defaultregmodid =(int)xarModGetVar('roles','defaultregmodule');
 
     if (isset($defaultregmodid) && is_int($defaultregmodid) && ($defaultregmodid > 0)) {
-        $defaultregmodname =xarModGetNameFromId($defaultregmodid);
+        $defaultregmodname = xarModGetNameFromId($defaultregmodid);
         //check the module is available
         if (xarModIsAvailable($defaultregmodname)) {
            //We can't really assume people will want this module as registration,
