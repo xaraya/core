@@ -42,36 +42,13 @@ function roles_user_getvalidation()
     if (!xarVarFetch('phase','str:1:100',$phase,'startvalidation',XARVAR_NOT_REQUIRED)) return;
 
     xarTplSetPageTitle(xarML('Validate Your Account'));
-    /* This function to be provided with support functions to ensure we have got a default regmodule,
-        if we need it. Tis should make it easier to move the User registration validation out of
-        email revalidation soon, once we have all the registration default module instances captured in the new function.
 
-    //$defaultauthdata=xarModAPIFunc('roles','user','getdefaultregdata');
+    //Get default registration module info if any
+    $defaultregdata=xarModAPIFunc('roles','user','getdefaultregdata');
+    $regmodule=$defaultregdata['defaultregmodulename'];
+    $regmoduleactive=$defaultregdata['$defaultregmodactive'];
 
-    */
-
-    $regmoduleid=(int)xarModGetVar('roles','defaultregmodule');
-    //FIXME : jojodee - this is convoluted. Probably best we use this as central point for allocating
-    // to whatever pluggable registration we have. If we end up back here so be it for now.
-    if (is_int($regmoduleid) && ($regmoduleid > 0)){
-        $regmodule=xarModGetNameFromID($regmoduleid);
-        if (!xarModIsAvailable($regmodule)) {
-            //we have to provide an error, we can't really go on
-            $msg = xarML('There is currently a system problem with User Validation, please contact the Administrator');
-            xarErrorSet(XAR_USER_EXCEPTION, 'CANNOT_CONTINUE', new DefaultUserException($msg));
-        }
-    }else{
-        //fallback to?  This is not a core module. Leave for now once until we are sure the default is set elsewhere.
-        $regmodule='registration';
-        // As now this one is always set with an error, test for this module.
-        // If not available, pass error.
-        if (!xarModIsAvailable($regmodule)) {
-            //we have to provide an error, we can't really go on
-            $msg = xarML('There is currently a system problem with User Validation, please contact the Administrator');
-            xarErrorSet(XAR_USER_EXCEPTION, 'CANNOT_CONTINUE', new DefaultUserException($msg));
-        }
-    }
-
+    //Get default authentication module info if any
     $defaultauthdata=xarModAPIFunc('roles','user','getdefaultauthdata');
     $defaultloginmodname=$defaultauthdata['defaultloginmodname'];
     $authmodule=$defaultauthdata['defaultauthmodname'];
