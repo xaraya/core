@@ -38,6 +38,7 @@ function xarCache_init($args = false)
     }
 
     // load the caching configuration
+    // FIXME: can we get rid of the @ ?
     if (@!include($xarVarDir . '/cache/config.caching.php')) {
         // if the config file is missing, turn caching off
         @unlink($cacheDir . '/cache.touch');
@@ -52,14 +53,14 @@ function xarCache_init($args = false)
 
     if (file_exists($cacheDir . '/cache.pagelevel')) {
         define('XARCACHE_PAGE_IS_ENABLED',1);
-        require_once('includes/caching/page.php');
+        sys::import('caching.page');
         // Note : we may already exit here if session-less page caching is enabled
         xarPageCache_init($cachingConfiguration);
     }
 
     if (file_exists($cacheDir . '/cache.blocklevel')) {
         define('XARCACHE_BLOCK_IS_ENABLED',1);
-        require_once('includes/caching/block.php');
+        sys::import('caching.block');
         xarBlockCache_init($cachingConfiguration);
     }
 
@@ -190,7 +191,7 @@ function xarCache_CleanCached($cacheType)
  * @author jsb
  * @deprec 2005-02-01
  */
-function xarCache_SizeLimit($dir = FALSE, $cacheType)
+function xarCache_SizeLimit($dir = false, $cacheType)
 {
     if (empty($cacheType) || empty($GLOBALS['xar' . $cacheType . '_cacheStorage'])) {
         return;
@@ -212,7 +213,7 @@ function xarCache_SizeLimit($dir = FALSE, $cacheType)
  * @todo   $dir changes type
  * @deprec 2005-02-01
  */
-function xarCacheGetDirSize($dir = FALSE)
+function xarCacheGetDirSize($dir = false)
 {
     if (empty($dir)) {
         return 0;
@@ -278,47 +279,47 @@ function xarCache_getParents()
  */
 function xarCache_getStorage($args)
 {
-    include_once 'includes/caching/storage.php';
+    sys::import('caching.storage');
     switch ($args['storage'])
     {
         case 'database':
-            include_once 'includes/caching/storage/database.php';
+            sys::import('caching.storage.database');
             $classname = 'xarCache_Database_Storage';
             break;
 
         case 'memcached':
             if (extension_loaded('memcache')) {
-                include_once 'includes/caching/storage/memcached.php';
+                sys::import('caching.storage.memcached');
                 $classname = 'xarCache_MemCached_Storage';
             } else {
-                include_once 'includes/caching/storage/filesystem.php';
+                sys::import('caching.storage.filesystem');
                 $classname = 'xarCache_FileSystem_Storage';
             }
             break;
 
         case 'mmcache':
             if (function_exists('mmcache')) {
-                include_once 'includes/caching/storage/mmcache.php';
+                sys::import('caching.storage.mmcache');
                 $classname = 'xarCache_MMCache_Storage';
             } else {
-                include_once 'includes/caching/storage/filesystem.php';
+                sys::import('caching.storage.filesystem');
                 $classname = 'xarCache_FileSystem_Storage';
             }
             break;
 
         case 'eaccelerator':
             if (function_exists('eaccelerator')) {
-                include_once 'includes/caching/storage/eaccelerator.php';
+                sys::import('caching.storage.eaccelarator');
                 $classname = 'xarCache_eAccelerator_Storage';
             } else {
-                include_once 'includes/caching/storage/filesystem.php';
+                sys::import('caching.storage.filesystem');
                 $classname = 'xarCache_FileSystem_Storage';
             }
             break;
 
         case 'filesystem':
         default:
-            include_once 'includes/caching/storage/filesystem.php';
+            sys::import('caching.storage.filesystem');
             $classname = 'xarCache_FileSystem_Storage';
             break;
     }

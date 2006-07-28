@@ -181,7 +181,11 @@ function modules_adminmenublock_display($blockinfo)
                     }
                     // For active module we need to display the mod functions links
                     // call the api function to obtain function links, but don't raise an exception if it's not there
-                    $menulinks = xarModAPIFunc($modname, 'admin', 'getmenulinks', array(), false);
+                    try {
+                        $menulinks = xarModAPIFunc($modname, 'admin', 'getmenulinks', array(), false);
+                    } catch (FunctionNotFoundException $e){
+                        // It's OK
+                    }
 
                     // scan array and prepare the links
                     if (!empty($menulinks)) {

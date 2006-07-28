@@ -424,7 +424,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
 {
     if (empty($name)) throw new EmptyParameterException('name');
     if (empty($prep)) $prep = XARVAR_PREP_FOR_NOTHING;
-    
+
     // Lets first check to see if any of our type vars are alread set in the cache.
     $cacheName = $name;
     switch($type) {
@@ -479,7 +479,6 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
         $modBaseInfo['systemid'] = 0;
     }
 
-
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
     $bindvars = array();
@@ -502,7 +501,6 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
          $bindvars = array((int)$modvarid, (int)$itemid);
          break;
     }
-
     // TODO : Here used to be a resultset cache option, reconsider it
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
@@ -799,7 +797,7 @@ function xarVarLoad ($includes_type, $filename)
 
     if (!function_exists($function_name)) {
         if (file_exists($function_file)) {
-            include_once($function_file);
+            sys::import("$includes_type.$filename");
         }
     }
 

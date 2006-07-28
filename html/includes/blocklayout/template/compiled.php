@@ -65,6 +65,7 @@ class xarCompiledTemplate
             ob_end_clean();
             ob_start();
             // this outputs the template and deals with start comments accordingly.
+            // @todo bring this in here, not pull in from xarTemplate
             echo xarTpl_outputTemplate($this->source, $prelimOut);
         }
 

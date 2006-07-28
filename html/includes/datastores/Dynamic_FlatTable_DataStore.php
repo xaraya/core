@@ -7,10 +7,10 @@
  */
 
 /**
- * include the base class
+ * Parent class is SQL datastore
  *
  */
-include_once "includes/datastores/Dynamic_SQL_DataStore.php";
+sys::import('datastores.Dynamic_SQL_DataStore');
 
 /**
  * Class for flat table

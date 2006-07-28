@@ -424,9 +424,8 @@ class xarDataDict
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
      * @param   table name of table
-     * @param   primary boolean include primary keys (default false)
-     * @returns array on success, false on failure
-     * @return  returns an array of ADODB index arrays or false if none
+     * @param   bool $primary also get primary keys (default false)
+     * @return  array  returns an array of ADODB index arrays or false if none
      * @throws  EmptyParameterException
     */
     function getIndexes($table, $primary = false)

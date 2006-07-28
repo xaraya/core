@@ -15,7 +15,7 @@
  * Include the base class
  *
  */
-include_once "modules/base/xarproperties/Dynamic_NumberBox_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_NumberBox_Property');
 
 /**
  * Handle the item type property

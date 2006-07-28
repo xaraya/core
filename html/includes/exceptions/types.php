@@ -69,7 +69,7 @@ abstract class xarExceptions extends Exception implements IxarExceptions
 /**
  * System types
  */
-// PHP errors (includes assertions)
+// PHP errors (including assertions)
 final class PHPException extends Exception 
 {
 }

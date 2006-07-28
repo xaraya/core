@@ -1,7 +1,6 @@
 <?php
-
-include_once dirname(__FILE__).'/interfaces.php';
-include_once dirname(__FILE__).'/adapters/sequence_adapter.php';
+sys::import('structures.sequences.interfaces');
+sys::import('structures.sequences.adapters.sequence_adapter');
 
 /**
  * A stack manipulates only the item at the head of the sequence

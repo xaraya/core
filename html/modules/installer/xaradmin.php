@@ -297,7 +297,7 @@ function installer_admin_phase5()
                         'doConnect' => false);
 
     // {ML_dont_parse 'includes/xarDB.php'}
-    include_once 'includes/xarDB.php';
+    sys::import('xarDB');
     xarDB_Init($init_args, XARCORE_SYSTEM_NONE);
 
     // Not all Database Servers support selecting the specific db *after* connecting
@@ -408,7 +408,7 @@ function installer_admin_phase5()
     // install the security stuff here, but disable the registerMask and
     // and xarSecurityCheck functions until we've finished the installation process
 
-    include_once 'includes/xarSecurity.php';
+    sys::import('xarSecurity');
     xarSecurity_init();
 
     // Load in modules/installer/xarinit.php and start the install
@@ -421,7 +421,7 @@ function installer_admin_phase5()
 
     // If we are here, the base system has completed
     // We can now pass control to xaraya.
-    include_once 'includes/xarConfig.php';
+    sys::import('xarConfig');
 
     $a = array();
     xarConfig_init($a,XARCORE_SYSTEM_DATABASE);
@@ -562,7 +562,7 @@ function installer_admin_create_administrator()
     $data['phase'] = 6;
     $data['phase_label'] = xarML('Create Administrator');
 
-    include_once 'modules/roles/xarroles.php';
+    sys::import('modules.roles.xarroles');
     $role = xarFindRole('Admin');
 
     if (!xarVarFetch('create', 'isset', $create, FALSE, XARVAR_NOT_REQUIRED)) return;

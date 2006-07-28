@@ -4,7 +4,10 @@
 // Save the directory where we are now
 $savedir = getcwd();
 chdir('/var/mt/xar/core/core.2.x/html');
-include 'includes/xarCore.php';
+
+include('includes/xarPreCore.php');
+sys::import('xarCore');
+
 // TODO: don't load the whole core
 xarCoreInit(XARCORE_SYSTEM_ALL);
 
@@ -21,8 +24,8 @@ if(!xarUserLogin('Admin','12345')) {
 }
 
 
-include_once('includes/structures/sequences/queue.php');
-include_once('includes/structures/sequences/stack.php');
+sys::import('structures.sequences.queue');
+sys::import('structures.sequences.stack');
 m('WHY IS THIS NOT USING THE LOVELY UNITTESTS?');
 $l=0;
 m('Testing DD queue',$l++);

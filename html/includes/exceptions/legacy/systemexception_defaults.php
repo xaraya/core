@@ -33,7 +33,7 @@ if(!function_exists('xarML')) {
         'CONTEXT_NOT_EXIST' => array(
             'title' => xarML('Context does not exist'),
             'short' => xarML('A context element was not found.'),
-            'long' => xarML('This error is a catchall to describe situations where a context element (block, template, include) was expected but not found.') ),
+            'long' => xarML('This error is a catchall to describe situations where a context element (block, template, phpcode) was expected but not found.') ),
         'DATABASE_ERROR' => array(
             'title' => xarML('Database Error'),
             'short' => xarML('An error was encountered while attempting a database operation.'),

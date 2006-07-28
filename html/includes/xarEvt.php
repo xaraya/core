@@ -229,14 +229,16 @@ class xarEvents implements IxarEvents
         $xarapifile="modules/{$modDir}/xareventapi.php";
         $xartabfile="modules/{$modDir}/xartables.php";    
         
-        static $loaded = array();
-        
+        static $loaded = array(); // keep track of what files we have loaded before
+                
         //If not loaded, try to
+        // @todo We could use sys::import maybe?
         if (!isset($loaded[$xarapifile])) {
             try {
-                $loaded[$xarapifile] = xarInclude($xarapifile, XAR_INCLUDE_ONCE);
-            } catch(FileNotFoundException $e) {
-                $loaded[$xarapifile] = false;
+                sys::import('modules.'.$modDir.'.xareventapi');
+                $loaded[$xarapifile] = true;
+            } catch(PHPException $e) {
+                // TODO: what other exceptions can be raised besides PHP ones?
             }
         }
         
@@ -248,14 +250,17 @@ class xarEvents implements IxarEvents
         if (function_exists($funcGeneral))  $funcToRunGeneral = $funcGeneral;
         
         if (isset($funcToRun) || isset($funcToRunGeneral)) {
-            //LAZY LOAD!
-            // We may need the tables
-            try {
-                xarInclude($xartabfile, XAR_INCLUDE_ONCE);
-                $xartabfunc = $modName.'_xartables';
-                if (function_exists($xartabfunc)) xarDB::importTables($xartabfunc());
-            } catch(FileNotFoundException $e) {
-                // no worries
+            if(!isset($loaded[$xartabfile])) {
+                // We may need the tables
+                try {
+                    // @todo we could use sys::import maybe?
+                    include $xartabfile;
+                    $loaded[$xartabfile] = true;
+                    $xartabfunc = $modName.'_xartables';
+                    if (function_exists($xartabfunc)) xarDB::importTables($xartabfunc());
+                } catch(PHPException $e) {
+                    // TODO: what other exceptions can be raised by include besides PHP ones?
+                }
             }
         }
         

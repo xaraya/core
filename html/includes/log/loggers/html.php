@@ -8,10 +8,10 @@
 */
 
 /**
- * Include the base file
+ * Simple logger is the parent class
  *
  */
-include_once ('./includes/log/loggers/simple.php');
+sys::import('log.loggers.simple');
 
 /**
  * HTMLLoggger

@@ -1,7 +1,7 @@
 <?php
 
-include_once dirname(__FILE__).'/interfaces.php';
-include_once dirname(__FILE__).'/adapters/sequence_adapter.php';
+sys::import('structures.sequences.interfaces');
+sys::import('structures.sequences.adapters.sequence_adapter');
 
 // A deque can be manipulated at both ends
 

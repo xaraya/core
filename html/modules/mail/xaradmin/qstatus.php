@@ -33,7 +33,7 @@ function mail_admin_qstatus($args)
         } else {
             // We have some qInfo, retrieve details
             // We have an object, so we can count the items in it.
-            include_once('includes/structures/sequences/queue.php');
+            sys::import('structures.sequences.queue');
             $q = new Queue('dd',array('name'=>$qName));
             $queues[$index]['count'] = $q->size;
             // Determine status

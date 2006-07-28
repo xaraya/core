@@ -81,6 +81,7 @@ define('XAR_TPL_TAG_NEEDPARAMETER'             ,32);
 **/
 function xarTpl_init(&$args, $whatElseIsGoingLoaded)
 {
+    
     $GLOBALS['xarTpl_themesBaseDir']   = $args['themesBaseDirectory'];
     $GLOBALS['xarTpl_defaultThemeDir'] = $args['defaultThemeDir'];
     $GLOBALS['xarTpl_generateXMLURLs'] = $args['generateXMLURLs'];
@@ -97,11 +98,11 @@ function xarTpl_init(&$args, $whatElseIsGoingLoaded)
     }
 
     // @todo is the core define still needed now?
-    include_once('includes/caching/template.php');
+    sys::import('caching.template');
     xarTemplateCache::init(xarCoreGetVarDirPath() . XARCORE_TPL_CACHEDIR, $args['enableTemplatesCaching']);
 
     // This is wrong here as well, but it's better at least than in xarMod
-    include "includes/xarTheme.php";
+    sys::import('xarTheme');
 
     // Subsystem initialized, register a handler to run when the request is over
     //register_shutdown_function ('xarTemplate__shutdown_handler');
@@ -822,7 +823,7 @@ function xarTplString($templateCode, &$tplData)
     xarTemplateCache::saveEntry('memory',$templateCode);
     
     // Execute the cache file
-    include_once('includes/blocklayout/template/compiled.php');
+    sys::import('blocklayout.template.compiled');
     $compiled = new xarCompiledTemplate(xarTemplateCache::cacheFile('memory'));
     $out = $compiled->execute($tplData);
     return $out;
@@ -854,7 +855,7 @@ function xarTplFile($fileName, &$tplData)
  */
 function xarTplCompileString($templateSource)
 {
-    include_once 'includes/blocklayout/compiler.php';
+    sys::import('blocklayout.compiler');
     $blCompiler = xarBLCompiler::instance();
     return $blCompiler->compileString($templateSource);
 }
@@ -981,7 +982,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     // Determine if we need to compile this template
     if (xarTemplateCache::isDirty($sourceFileName)) {
         // Get an instance of xarSourceTemplate
-        include_once('includes/blocklayout/template/source.php');
+        sys::import('blocklayout.template.source');
         $srcTemplate = new xarSourceTemplate($sourceFileName);
         
         // Compile it
@@ -998,7 +999,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     
     // Execute the compiled template from the cache file
     // @todo the tplType should be irrelevant
-    include_once('includes/blocklayout/template/compiled.php');
+    sys::import('blocklayout.template.compiled');
     $compiled = new xarCompiledTemplate($cachedFileName,$sourceFileName,$tplType);
     $output = $compiled->execute($tplData);
     return $output;

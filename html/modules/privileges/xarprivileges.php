@@ -471,7 +471,7 @@ class xarMasks
         $mask->normalize();
 
         // get the Roles class
-        include_once 'modules/roles/xarroles.php';
+        sys::import('modules.roles.xarroles');
         $roles = new xarRoles();
         // get the uid of the role we will check against
         // an empty role means take the current user
@@ -2331,7 +2331,7 @@ class xarPrivilege extends xarMask
         $result = $this->dbconn->Execute($query,array($this->pid));
 
         // make objects from the db entries retrieved
-        include_once 'modules/roles/xarroles.php';
+        sys::import('modules.roles.xarroles');
         $roles = array();
         //      $ind = 0;
         while(!$result->EOF) {

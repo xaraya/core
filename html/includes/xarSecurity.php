@@ -21,18 +21,17 @@
  *
  */
 
-    //Maybe changing this touch to a centralized API would be a good idea?
-    //Even if in the end it would use touched files too...
-$here = dirname(__FILE__);
-include_once "$here/xarCore.php";
+//Maybe changing this touch to a centralized API would be a good idea?
+//Even if in the end it would use touched files too...
+sys::import('xarCore'); // Why is this?
 if (file_exists(xarCoreGetVarDirPath() . '/security/on.touch')) {
-    include_once "$here/xarCacheSecurity.php";
- }
+    sys::import('xarCacheSecurity');
+}
 
 // FIXME: Can we reverse this? (i.e. the module loading the files from here?)
 //        said another way, can we move the two files to /includes (partially preferably)
-include_once "$here/../modules/privileges/xarprivileges.php";
-include_once "$here/../modules/roles/xarroles.php";
+sys::import('modules.privileges.xarprivileges');
+sys::import('modules.roles.xarroles');
 
 
 /**
@@ -76,6 +75,7 @@ function xarSecurity__shutdown_handler()
  * Should wrap this in a static one day, but the information
  * isn't critical so we'll do it later
  */
+// FIXME: lonely vars go out of scope (same note as above, more important now with sys::import())
 $schemas = array();
 
 
@@ -419,7 +419,7 @@ function xarIsAncestor($name1, $name2)
  */
 function xarTree()
 {
-    include_once 'modules/roles/xartreerenderer.php';
+    sys::import('modules.roles.xartreerenderer');
     $tree = new xarTreeRenderer();
     return $tree;
 }
@@ -468,8 +468,8 @@ function xarPrivExists($name)
 {
     $privileges = new xarPrivileges();
     $priv = $privileges->findPrivilege($name);
-    if ($priv) return TRUE;
-    else return FALSE;
+    if ($priv) return true;
+    else return false;
 }
 
 /* xarMaskExists: checks whether a mask exists.
@@ -484,9 +484,9 @@ function xarPrivExists($name)
 function xarMaskExists($name,$module="All",$component="All")
 {
     $masks = new xarMasks();
-    $mask = $masks->getMask($name,$module,$component,TRUE);
-    if ($mask) return TRUE;
-    else return FALSE;
+    $mask = $masks->getMask($name,$module,$component,true);
+    if ($mask) return true;
+    else return false;
 }
 
 /* xarQueryMask: returns a mask suitable for inclusion in a structured query
@@ -615,7 +615,7 @@ function xarSecGenAuthKey($modName = NULL)
     $authid = md5($key);
 
     // Tell xarCache not to cache this page
-    xarCore::setCached('Page.Caching', 'nocache', TRUE);
+    xarCore::setCached('Page.Caching', 'nocache', true);
 
     // Return encrypted key
     return $authid;

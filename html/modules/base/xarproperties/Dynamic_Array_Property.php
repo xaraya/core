@@ -10,7 +10,7 @@
  * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
-include_once "modules/dynamicdata/class/properties.php";
+sys::import('modules.dynamicdata.class.properties');
 class Dynamic_Array_Property extends Dynamic_Property
 {
     public $fields = array();

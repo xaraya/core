@@ -8,7 +8,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
 {
     public $dir = '';
     public $blksize = 0;
-    public $bsknown = FALSE;
+    public $bsknown = false;
 
     public function __construct($args = array())
     {
@@ -190,10 +190,10 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
             // we know the filesystem blocksize, use this to better calc the disk usage
             if ($dirstat['blksize'] > 0) {
                 $this->blksize = $dirstat['blksize'] / 8;
-                $this->bsknown = TRUE;
+                $this->bsknown = true;
             } else { // just count of the used bytes
                 $this->blksize = 1;
-                $this->bsknown = FALSE;
+                $this->bsknown = false;
             }
         }
 
@@ -232,7 +232,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
 
         if (substr($dir,-1) != "/") $dir .= "/";
         if ($dirId = opendir($dir)) {
-            while (($item = readdir($dirId)) !== FALSE) {
+            while (($item = readdir($dirId)) !== false) {
                 if ($item[0] != '.') {
                     if (is_dir($dir . $item)) {
                         $this->_flushDirCached($key, $dir . $item);
@@ -251,7 +251,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
     /**
      * private function for use in getCacheSize()
      */
-    private function _getCacheDirSize($dir = FALSE, $countitems = false)
+    private function _getCacheDirSize($dir = false, $countitems = false)
     {
         $size = 0;
         $count = 0;
@@ -260,7 +260,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
             if ($dir && is_dir($dir)) {
                 if (substr($dir,-1) != "/") $dir .= "/";
                 if ($dirId = opendir($dir)) {
-                    while (($item = readdir($dirId)) !== FALSE) {
+                    while (($item = readdir($dirId)) !== false) {
                         if ($item != "." && $item != "..") {
                             $filestat = stat($dir . $item);
                             $size += ($filestat['blocks'] * $this->blksize);
@@ -278,7 +278,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
             if ($dir && is_dir($dir)) {
                 if (substr($dir,-1) != "/") $dir .= "/";
                 if ($dirId = opendir($dir)) {
-                    while (($item = readdir($dirId)) !== FALSE) {
+                    while (($item = readdir($dirId)) !== false) {
                         if ($item != "." && $item != "..") {
                             if (is_dir($dir . $item)) {
                                 $size += $this->_getCacheDirSize($dir . $item, $countitems);

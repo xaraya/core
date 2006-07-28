@@ -26,18 +26,18 @@ class SequenceAdapter implements iAdapter, iSequenceAdapter
         switch($type) {
         case 'array':
             // Sequence stored as plain array, volatile
-            $classfile = 'array_sequence.php';
+            $adapter   = 'array_sequence';
             $class='ArraySequence';
             break;
         case 'dd':
             // Sequence stored in dd object, persistent
-            $classfile = 'dd_sequence.php';
+            $adapter   = 'dd_sequence';
             $class= 'DynamicDataSequence';
             break;
         default:
             throw new Exception("Sequence type $type is not supported");
         }
-        include_once dirname(__FILE__).'/'.$classfile;
+        sys::import('structures.sequences.adapters.'.$adapter);
         $this->implementor = new $class($args);
     }
 

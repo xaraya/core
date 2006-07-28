@@ -36,7 +36,7 @@
 
 // XARAYA MODIFICATION
 // We dont care if it's here or not
-// require_once 'PEAR.php';
+// require once 'PEAR.php';
 // END XARAYA MODIFICATION
 
 /**

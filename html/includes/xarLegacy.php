@@ -43,6 +43,7 @@ class ApiDeprecationException extends DeprecationExceptions
 * xarVarCleanFromInput          -> use xarVarFetch validations
 * xarTplAddStyleLink            -> use xar:style tag
 * xarTplAddJavaScriptCode       -> use xar:base-include-javascript
+* xarInclude                    -> use sys:import('dot.separated.path.below.includes') 
 */
 
 
@@ -319,4 +320,40 @@ function xarTplAddJavaScriptCode($position, $owner, $code)
     return xarTplAddJavaScript($position, 'code', "<!-- JavaScript code from {$owner} -->\n" . $code);
 }
 
+/*
+ * xarInclude flags
+ */
+define('XAR_INCLUDE_ONCE'         , 1);
+
+/**
+ * Load a file and capture any php errors
+ *
+ * @access public
+ * @param  string $fileName name of the file to load
+ * @param  bool   $flags  can this file only be loaded once, or multiple times? XAR_INCLUDE_ONCE
+ * @return bool   true if file was loaded successfully
+ * @throws FileNotFoundException
+ * @todo  we probably want to deprecate this one in favour of sys::import(some.dot.path)
+ */
+function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE)
+{
+    // If the file isn't there return according to the flags
+    if (!file_exists($fileName)) throw new FileNotFoundException($fileName);
+
+    // Catch output, if any (more like suppressing it)
+    ob_start();
+    if ($flags & XAR_INCLUDE_ONCE) {
+        $r = include_once($fileName);
+    } else {
+        $r = include($fileName);
+    }
+    ob_end_clean();
+
+    if (empty($r) || !$r) {
+        // TODO: we probably *should* raise an exception here, but which one?
+        return false;
+    }
+
+    return true;
+}
 ?>

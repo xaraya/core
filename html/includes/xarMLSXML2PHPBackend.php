@@ -16,7 +16,8 @@
  *
  * @package multilanguage
  */
-include_once dirname(__FILE__). '/xarMLS.php';
+sys::import('xarMLS');
+
 class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
     public $gen;
@@ -185,6 +186,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
             return true;
         }
+        // @todo do we need to guard this?
         include $fileName;
 
         return true;

@@ -13,7 +13,7 @@
  * @author mikespub <mikespub@xaraya.com>
 */
 /* Include parent class */
-include_once "modules/dynamicdata/class/properties.php";
+sys::import('modules.dynamicdata.class.properties');
 
 /**
  * Handle text upload property

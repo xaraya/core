@@ -114,7 +114,7 @@ function privileges_admin_modifyprivilege()
     if(isset($show)) {$data['show'] = $show;}
     else {$data['show'] = 'assigned';}
 
-    include_once 'modules/privileges/xartreerenderer.php';
+    sys::import('modules.privileges.xartreerenderer');
     $renderer = new xarTreeRenderer();
 
     // $data['tree'] = $renderer->drawtree($renderer->maketree($priv));

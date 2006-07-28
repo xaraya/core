@@ -14,7 +14,7 @@
  * @author Roger Keays <roger.keays@ninthave.net>
  */
 
-include_once "modules/base/xarproperties/Dynamic_Calendar_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_Calendar_Property');
 
 /**
  * The extended date property converts the value provided by the javascript

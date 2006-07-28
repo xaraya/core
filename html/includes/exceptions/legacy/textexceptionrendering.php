@@ -10,10 +10,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 
-if (!class_exists('ExceptionRendering')) {
-    include_once(dirname(__FILE__) . "/exceptionrendering.class.php");
-}
-
+sys::import('exceptions.legacy.exceptionrendering');
 class TextExceptionRendering extends ExceptionRendering
 {
     public $linebreak = "\n";

@@ -40,15 +40,10 @@ function modules_adminapi_executeinitfunction ($args)
     // Get module database info, they might be needed in the function to be called
     xarMod__loadDbInfo($modInfo['name'], $modInfo['osdirectory']);
 
-    // pnAPI compatibility
     $xarinitfile = '';
     if (file_exists('modules/'. $modInfo['osdirectory'] .'/xarinit.php')) {
         $xarinitfile = 'modules/'. $modInfo['osdirectory'] .'/xarinit.php';
-    } elseif (file_exists('modules/'. $modInfo['osdirectory'] .'/pninit.php')) {
-        // ok, i'll leave it in for now.
-        $xarinitfile = 'modules/'. $modInfo['osdirectory'] .'/pninit.php';
     }
-
     // If there is no xarinit file, there is apparently nothing to init.
     // TODO: we migh consider making it required.
     if (empty($xarinitfile)) return true;
@@ -56,7 +51,7 @@ function modules_adminapi_executeinitfunction ($args)
 
     // if (!empty($xarinitfile)) {
     ob_start();
-    $r = include_once($xarinitfile);
+    $r = sys::import('modules.'.$modInfo['osdirectory'].'.xarinit');
     $error_msg = strip_tags(ob_get_contents());
     ob_end_clean();
 

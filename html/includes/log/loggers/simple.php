@@ -49,9 +49,9 @@
 */
 
 /**
- * Include the base file
+ * Make sure the base class is available
  */
-include_once "includes/log/loggers/xarLogger.php";
+sys::import('log.loggers.xarLogger');
 
 /**
  * Simple logging class

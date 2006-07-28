@@ -18,7 +18,7 @@
 /**
  * Include the base class
  */
-include_once "modules/base/xarproperties/Dynamic_URLIcon_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_URLIcon_Property');
 
 /**
  * Class to handle the AIM property

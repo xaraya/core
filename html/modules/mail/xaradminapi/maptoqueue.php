@@ -10,7 +10,7 @@ function mail_adminapi_maptoqueue($args)
     extract($args);
     if(!isset($msg_structure)) return;
 
-    include_once('includes/structures/sequences/queue.php');
+    sys::import('structures.sequences.queue');
     // Test mapping, map em all to the masterq
     $q = new Queue('dd',array('name' => 'masterq'));
     return $q;

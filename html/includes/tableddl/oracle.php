@@ -142,7 +142,7 @@ function xarDB__oracleAlterTable($tableName, $args)
             }
 
             // check to make sure we have an action to perform on the colunm
-            if (empty($args['null']) && $args['null']!=FALSE) {
+            if (empty($args['null']) && $args['null']!=false) {
                 throw new BadParameterException('args','Invalid parameter "#(1)" (type,size,default,null, unsigned, increment, or primary_key must be set)');
             }
             // prep the first part of the query
@@ -164,10 +164,10 @@ function xarDB__oracleAlterTable($tableName, $args)
             }
 
             // see if the want to add null
-            if ($args['null']==FALSE){
+            if ($args['null']==false){
                 $sql.=' NULL ';
             }
-            if ($args['null']==TRUE){
+            if ($args['null']==true){
                 $sql.=' NOT NULL ';
             }
 

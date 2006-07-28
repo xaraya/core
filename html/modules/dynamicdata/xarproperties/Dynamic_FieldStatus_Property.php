@@ -12,7 +12,7 @@
  * Dynamic Data Field Status Property
  * @author mikespub <mikespub@xaraya.com>
 */
-include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_Select_Property');
 
 /**
  * Class to handle field status
@@ -79,7 +79,7 @@ class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
 
     function getOption($check = false)
     {
-		//TODO: get this working
+        //TODO: get this working
     }
 }
 ?>

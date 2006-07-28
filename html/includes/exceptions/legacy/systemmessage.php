@@ -9,13 +9,13 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 
-include_once dirname(__FILE__)."/exception.class.php";
+sys::import('exceptions.legacy.exception');
 
-class DefaultUserException extends xarException
+class SystemMessage extends xarException
 {
     public $link;
 
-    function DefaultUserException($msg = '', $link = NULL)
+    function SystemMessage($msg = '', $link = NULL)
     {
         parent::xarException();
         $this->msg = $msg;
@@ -24,7 +24,7 @@ class DefaultUserException extends xarException
 
     function load($id) 
     {
-        if (isset($this->defaults[$id])) parent::load($id);
+        if (isset($this->defaults[$id])) parent::load($id); // why the check if not used?
         else {
             $this->title = $id;
             $this->short = "No further information available";

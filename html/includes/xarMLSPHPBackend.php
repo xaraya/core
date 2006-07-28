@@ -18,7 +18,7 @@
  * @package multilanguage
  */
 
-include_once dirname(__FILE__).'/xarMLS.php';
+sys::import('xarMLS');
 class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
     function xarMLS__PHPTranslationsBackend($locales)
@@ -99,6 +99,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
 //            return;
             return true;
         }
+        // @todo do we need to wrap this into a try/catch construct?
         include $fileName;
 
         return true;

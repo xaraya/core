@@ -9,8 +9,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 
-include_once dirname(__FILE__)."/exception.class.php";
-
+sys::import('exception.legacy.exception');
 class NoException extends xarException
 {
     function NoException() 

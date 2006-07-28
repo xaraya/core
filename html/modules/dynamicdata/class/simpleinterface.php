@@ -5,7 +5,7 @@
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
  */
-require_once 'modules/dynamicdata/class/interface.php';
+sys::import('modules.dynamicdata.class.interface');
 
 class Simple_Object_Interface extends Dynamic_Object_Interface
 {

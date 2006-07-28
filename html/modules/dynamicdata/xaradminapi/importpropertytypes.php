@@ -71,6 +71,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
         }
 
         // Get list of properties in properties directories
+        static $loaded = array();
         $proptypes = array(); $numLoaded = 0;
         foreach($propDirs as $PropertiesDir) {
             if (!file_exists($PropertiesDir)) continue;
@@ -83,11 +84,19 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                 if($dir->isDot()) continue; // temp for emacs insanity and skip hidden files while we're at it
 
                 // Include the file into the environment
-                xarInclude($dir->getPathName());
+                $file = $dir->getPathName();
+                if(!isset($loaded[$file])) {
+                    // FIXME: later -> include
+                    $dp = str_replace('/','.',substr($PropertiesDir.basename($file),0,-4));
+                    sys::import($dp);
+                    $loaded[$file] = true;
+                }
             } // loop over the files in a directory
         } // loop over the directories
+
+        // FIXME: this wont work reliable enough, since we have the static now
+        // might as well put this directly after the include above.
         $newClasses = get_declared_classes();
-        // ANSWER: probably not, see above (if the $dirs are passed in)
 
         // See what class(es) we have here
         foreach($newClasses as $index => $propertyClass) {

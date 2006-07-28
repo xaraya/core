@@ -136,7 +136,7 @@ function base_init()
     }
     
     // Start Configuration Unit
-    include_once 'includes/xarConfig.php';
+    sys::import('xarConfig');
     $systemArgs = array();
     // change this loadlevel to the proper level
     $whatToLoad = XARCORE_SYSTEM_DATABASE;
@@ -234,7 +234,7 @@ function base_init()
     $dbconn->Execute($query);
 
     // {ML_dont_parse 'includes/xarMod.php'}
-    include_once 'includes/xarMod.php';
+    sys::import('xarMod');
 
     // Start Modules Support
     $systemArgs = array('enableShortURLsSupport' => false,
@@ -273,6 +273,7 @@ function base_init()
             // Insert module
             $id = $dbconn->GenId($modulesTable);
             $modversion=array();$bindvars = array();
+            // NOTE: We can not use the sys::import here, since the variable scope is important.
             include_once "modules/$modName/xarversion.php";
             $bindvars = array($id,                     // system id, generated
                               $modName,

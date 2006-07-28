@@ -7,7 +7,8 @@
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @author Marcel van der Boom <mrb@hsdev.com>
  **/
-include_once('includes/blocklayout/template/compiled.php');
+
+sys::import('blocklayout.template.compiled');
 
 /**
  * Define an interface for the xarSourceTemplate class so we obey our own stuff.
@@ -39,7 +40,7 @@ class xarSourceTemplate extends xarCompiledTemplate implements IxarSourceTemplat
     public function &compile() 
     {
         assert('isset($this->fileName); /* No source to compile from */');
-        include_once 'includes/blocklayout/compiler.php';
+        sys::import('blocklayout.compiler');
         $blCompiler = xarBLCompiler::instance();
         $templateCode = $blCompiler->compileFile($this->fileName);
 

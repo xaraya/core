@@ -14,7 +14,7 @@
  * Dynamic File Upload Property
  */
 /* Include parent class */
-include_once "modules/dynamicdata/class/properties.php";
+sys::import('modules.dynamicdata.class.properties');
 
 /**
  * Class to handle file upload properties

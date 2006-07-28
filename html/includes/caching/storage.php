@@ -104,17 +104,17 @@ class xarCache_Storage
 
         $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
         if (file_exists($lockfile)) {
-            $value = TRUE;
+            $value = true;
         } elseif (mt_rand(1,5) > 1) {
             // on average, 4 out of 5 pages go by without checking
-            $value = FALSE;
+            $value = false;
         } else {
             $size = $this->getCacheSize();
             if ($size >= $this->sizelimit) {
-                $value = TRUE;
+                $value = true;
                 @touch($lockfile);
             } else {
-                $value = FALSE;
+                $value = false;
             }
         }
         $this->reached = $value;
@@ -122,7 +122,7 @@ class xarCache_Storage
     // CHECKME: we don't need this cached variable anymore, do we ?
         if ($value && !xarCore::isCached($this->type . '.Caching', 'cleaned')) {
             $this->cleanCached();
-            xarCore::setCached($this->type . '.Caching', 'cleaned', TRUE);
+            xarCore::setCached($this->type . '.Caching', 'cleaned', true);
         }
         return $value;
     }

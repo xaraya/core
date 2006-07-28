@@ -75,7 +75,7 @@ function mail_adminapi__sendmail($args)
     // so it be commented out for the time being.
     //ini_set("sendmail_from", $from);
 
-    include_once 'modules/mail/xarclass/class.phpmailer.php';
+    sys::import('modules.mail.xarclass.phpmailer');
 
     $mail = new phpmailer();
     $mail->PluginDir = 'modules/mail/xarclass/';

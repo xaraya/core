@@ -548,7 +548,7 @@ class xarSession implements IsessionHandler
     {
         assert('!is_null($value); /* Not allowed to set variable to NULL value */');
         // security checks : do not allow to set the uid or mess with the session serialization
-        if ($name == 'uid' || strpos($name,'|') !== FALSE) return false;
+        if ($name == 'uid' || strpos($name,'|') !== false) return false;
 
         $var = self::PREFIX . $name;
         $_SESSION[$var] = $value;

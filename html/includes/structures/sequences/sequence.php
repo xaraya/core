@@ -8,7 +8,7 @@
  * to implement stacks, queues, deques or other special linear lists. 
  * 
  */
-include_once dirname(__FILE__).'/interfaces.php';
+sys::import('structures.sequences.interfaces');
 class Sequence extends SequenceAdapter implements iSequence
 {
     /* 

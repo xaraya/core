@@ -235,7 +235,7 @@ function dynamicdata_init()
         $stmt = $dbconn->prepareStatement($sql);
 
         // TEMP FIX for the constants, rewrite this
-        require_once 'modules/dynamicdata/class/properties.php';
+        sys::import('modules.dynamicdata.class.properties');
         $properties = array(
                             // 1 -> 9
                             array('objectid'  ,'Id'                 ,$objectid[1],182,0,21,''            ,$dynamic_objects.'.xar_object_id'         ,Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_NOINPUT,1 ,'Dynamic_Property_Master::integer'),

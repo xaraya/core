@@ -19,7 +19,8 @@
  */
 function themes_userapi_register($args)
 {
-    require_once "modules/themes/xarclass/xarcss.class.php";
+    // FIXME: the double dot in the filename prevents sys::import from working
+    sys::import('modules.themes.xarclass.xarcss');
     $obj = new xarCSS($args);
     return $obj->run_output();
 }

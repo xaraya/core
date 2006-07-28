@@ -162,7 +162,7 @@ function xarDB__mysqlAlterTable($tableName, $args)
             }
 
             // check to make sure we have an action to perform on the colunm
-            if (empty($args['null']) && $args['null']!=FALSE) {
+            if (empty($args['null']) && $args['null']!=false) {
                 throw new BadParameterException('args','Invalid parameter "#(1)" (type,size,default,null, unsigned, increment, or primary_key must be set)');
             }
             // prep the first part of the query
@@ -185,7 +185,7 @@ function xarDB__mysqlAlterTable($tableName, $args)
             }
 
             // see if the want to add null
-            if ($args['null']==TRUE){
+            if ($args['null']==true){
                 $sql.=' NOT NULL ';
             }
 

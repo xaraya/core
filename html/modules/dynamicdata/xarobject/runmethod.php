@@ -12,7 +12,7 @@
 /**
  * @author Marc Lutolf <mfl@netspan.ch>
  */
-require_once 'modules/dynamicdata/class/simpleinterface.php';
+sys::import('modules.dynamicdata.class.simpleinterface');
 function dynamicdata_object_runmethod($args)
 {
     if (empty($args['moduleid']) && !empty($args['module'])) {

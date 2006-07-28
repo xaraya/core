@@ -29,7 +29,7 @@ function mail_cliapi_process($args)
     if(strlen($input) == 0) return 0; // ok, but nothing to do here
 
     // 2. Parse the input, we do this early so it never enters the system when it cannot be parsed.
-    include_once "modules/mail/xarclass/class.decode.php";
+    sys::import('modules.mail.xarclass.decode');
     $parser = new xarMailParser($input);
     $structure = $parser->decode();
     if($parser->isError($structure)) return _fatal("Could not parse input");

@@ -20,7 +20,7 @@
 */
 
 // We base it on the select property
-include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_Select_Property');
 
 /**
  * Handle the objectreference property

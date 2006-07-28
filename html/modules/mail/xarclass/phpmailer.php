@@ -476,6 +476,7 @@ class PHPMailer
      */
     function SmtpSend($header, $body)
     {
+        // @todo do we want sys::import here too? since this is third party and all.
         include_once($this->PluginDir . "class.smtp.php");
         $error = "";
         $bad_rcpt = array();

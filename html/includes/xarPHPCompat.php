@@ -52,7 +52,11 @@ class xarPHPCompat
     function loadFunction ($path, $function)
     {
         if (!function_exists($function)) {
-            include $path . $function . '.php';
+            // FIXME: i blindly did a sys::import here, 
+            // but PHPCompat isnt loaded by 2.x so no idea what consequences this will have if we do load it
+            $dp = str_replace('includes/','',$path);
+            $dp = str_replace('/','.',$dp);
+            sys::import($dp.'.'.$function);
         }
     }
 
@@ -66,7 +70,11 @@ class xarPHPCompat
     function loadConstant ($path, $constant)
     {
         if (!defined($constant)) {
-            include $path . $constant . '.php';
+            // FIXME: i blindly did a sys::import here, 
+            // but PHPCompat isnt loaded by 2.x so no idea what consequences this will have if we do load it
+            $dp = str_replace('includes/','',$path);
+            $dp = str_replace('/','.',$dp);
+            sys::import($dp.'.'.$constant);
         }
     }
 }

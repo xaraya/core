@@ -28,48 +28,48 @@ class Dynamic_DataStore_Master
         switch ($type)
         {
             case 'table':
-                require_once "includes/datastores/Dynamic_FlatTable_DataStore.php";
+                sys::import('datastores.Dynamic_FlatTable_DataStore');
                 $datastore = new Dynamic_FlatTable_DataStore($name);
                 break;
             case 'data':
-                require_once "includes/datastores/Dynamic_VariableTable_DataStore.php";
+                sys::import('datastores.Dynamic_VariableTable_DataStore');
                 $datastore = new Dynamic_VariableTable_DataStore($name);
                 break;
             case 'hook':
-                require_once "includes/datastores/Dynamic_Hook_DataStore.php";
+                sys::import('datastores.Dynamic_Hook_DataStore');
                 $datastore = new Dynamic_Hook_DataStore($name);
                 break;
             case 'function':
-                require_once "includes/datastores/Dynamic_Function_DataStore.php";
+                sys::import('datastores.Dynamic_Function_DataStore');
                 $datastore = new Dynamic_Function_DataStore($name);
                 break;
             case 'uservars':
-                require_once "includes/datastores/Dynamic_UserSettings_DataStore.php";
-            // TODO: integrate user variable handling with DD
+                sys::import('datastores.Dynamic_UserSettings_DataStore.php');
+                // TODO: integrate user variable handling with DD
                 $datastore = new Dynamic_UserSettings_DataStore($name);
                 break;
             case 'modulevars':
-                require_once "includes/datastores/Dynamic_ModuleVariables_DataStore.php";
-            // TODO: integrate module variable handling with DD
+                sys::import('datastores.Dynamic_ModuleVariables_DataStore');
+                // TODO: integrate module variable handling with DD
                 $datastore = new Dynamic_ModuleVariables_DataStore($name);
                 break;
 
-       // TODO: other data stores
+                // TODO: other data stores
             case 'ldap':
-                require_once "includes/datastores/Dynamic_LDAP_DataStore.php";
+                sys::import('datastores.Dynamic_LDAP_DataStore');
                 $datastore = new Dynamic_LDAP_DataStore($name);
                 break;
             case 'xml':
-                require_once "includes/datastores/Dynamic_XMLFile_DataStore.php";
+                sys::import('datastores.Dynamic_XMLFile_DataStore.php');
                 $datastore = new Dynamic_XMLFile_DataStore($name);
                 break;
             case 'csv':
-                require_once "includes/datastores/Dynamic_CSVFile_DataStore.php";
+                sys::import('datastores.Dynamic_CSVFile_DataStore');
                 $datastore = new Dynamic_CSVFile_DataStore($name);
                 break;
             case 'dummy':
             default:
-                require_once "includes/datastores/Dynamic_Dummy_DataStore.php";
+                sys::import('datastores.Dynamic_Dummy_DataStore');
                 $datastore = new Dynamic_Dummy_DataStore($name);
                 break;
         }

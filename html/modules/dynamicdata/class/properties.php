@@ -180,8 +180,9 @@ class Dynamic_Property_Master
             } else xarLogMessage("WARNING: Property translations for $propertyClass NOT loaded");
 
             if(!file_exists($propertyInfo['filepath'])) throw new FileNotFoundException($propertyInfo['filepath']);
-            require_once $propertyInfo['filepath'];
-
+            
+            $dp = str_replace('/','.',substr($propertyInfo['filepath'],0,-4)); // minus .php
+            sys::import($dp);
 
             if( isset($propertyInfo['args']) && ($propertyInfo['args'] != '') )
             {

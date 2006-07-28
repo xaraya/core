@@ -38,7 +38,7 @@ function xarDB_init(&$args, $whatElseIsGoingLoaded)
     if(!isset($args['doConnect'])) $args['doConnect'] = true;
     $GLOBALS['xarDB_systemArgs'] = $args;
     
-    include_once 'creole/xarCreole.php';
+    sys::import('xarCreole');
     // Register postgres driver, since Creole uses a slightly different alias
     // We do this here so we can remove customisation from creole lib.
     xarDB::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
@@ -152,20 +152,18 @@ function &xarDBGetTables()
  * @return true
  * @todo <johnny> change to protected or private?
  * @todo <mrb> Insane function name
- * @tod  <mrb> This needs to be replaced by datadict functionality
+ * @todo <mrb> This needs to be replaced by datadict functionality
+ * @todo <mrb> kinda useless now
  */
 function xarDBLoadTableMaintenanceAPI()
 {
-    // Include Table Maintainance API file
-    include_once 'includes/xarTableDDL.php';
-
-    return true;
+    return sys::import('xarTableDDL');
 }
 
 /**
  * Create a data dictionary object
  *
- * This function will include the appropriate classes and instantiate
+ * This function will load the appropriate classes and instantiate
  * a data dictionary object for the specified mode. The default mode
  * is 'READONLY', which just provides methods for reading the data
  * dictionary. Mode 'METADATA' will return the meta data object.
@@ -188,9 +186,9 @@ function xarDBLoadTableMaintenanceAPI()
  */
 function &xarDBNewDataDict(&$dbconn, $mode = 'READONLY')
 {
-    // Include the data dictionary source.
-    // Depending on the mode, there may be one or more files to include.
-    include_once 'includes/xarDataDict.php';
+    // Load the data dictionary source.
+    // Depending on the mode, there may be one or more files to load.
+    sys::import('xarDataDict');
 
     // Decide which class to use.
     if ($mode == 'METADATA') {

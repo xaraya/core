@@ -15,7 +15,7 @@
 */
 
 // We base it on the object property
-include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_Select_Property');
 
 /**
  * Handle the module itemtype property

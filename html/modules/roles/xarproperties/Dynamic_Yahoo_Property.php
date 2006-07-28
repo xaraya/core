@@ -17,7 +17,7 @@
  */
 
 /* Include the base class */
-include_once "modules/base/xarproperties/Dynamic_URLIcon_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_URLIcon_Property');
 
 class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
 {

@@ -5,7 +5,7 @@
  *
  *
  */
-include_once 'Creole.php';
+sys::import('creole.Creole');
 class xarDB extends Creole 
 {
     public static $count = 0;

@@ -26,7 +26,7 @@ function variable_validations_list (&$subject, $parameters, $supress_soft_exc, &
         $validation = implode(':', $parameters);
         foreach  ($subject as $key => $value) {
             $return = xarVarValidate($validation, $subject[$key], $supress_soft_exc);
-            //$return === NULL or $return === FALSE => return
+            //$return === null or $return === false => return
             if (!$return) {
                 return $return;
             }

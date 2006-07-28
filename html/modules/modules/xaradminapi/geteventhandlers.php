@@ -27,6 +27,7 @@ function modules_adminapi_geteventhandlers()
                              array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
 
     $todo = array();
+    // @todo: this looks familiar, xarEvt.php has the same?
     foreach ($modlist as $mod) {
         $modName = $mod['name'];
         $modDir = $mod['osdirectory'];
@@ -34,14 +35,13 @@ function modules_adminapi_geteventhandlers()
         $xarapifile = "modules/{$modDir}/xareventapi.php";
         // try to include the event API for this module
         try {
-            $loaded = xarInclude($xarapifile, XAR_INCLUDE_ONCE);
-            if (!$loaded) continue; // still needed if the file is there, but no exception raised yet
-        } catch(FileNotFoundException $e) {
-            continue;
+            // @todo does this need to be wrapped for multiple inclusion?
+            include $xarapifile;
+            $modName = strtolower($modName);
+            $todo[$modName] = $modDir;
+        } catch(PHPException $e) {
+            // No harm done, well
         }
-        // function names are all lower-case here
-        $modName = strtolower($modName);
-        $todo[$modName] = $modDir;
     }
 
     $handlers = array();

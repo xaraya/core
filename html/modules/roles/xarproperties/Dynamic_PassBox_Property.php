@@ -14,7 +14,7 @@
  * Dynamic Passbox property
  * @author mikespub <mikespub@xaraya.com>
  */
-include_once 'modules/base/xarproperties/Dynamic_TextBox_Property.php';
+sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
 class Dynamic_PassBox_Property extends Dynamic_TextBox_Property
 {
     public $size = 25;

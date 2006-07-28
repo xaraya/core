@@ -12,7 +12,7 @@
  */
 
 /** Marc: we *really* need to discuss this, wrt performance and bind variables */
-include_once dirname(__FILE__).'/xarincludes/xarQuery.php';
+if(!class_exists('xarQuery')) include dirname(__FILE__).'/xarincludes/xarQuery.php';
 
 define('ROLES_STATE_DELETED',0);
 define('ROLES_STATE_INACTIVE',1);
@@ -854,7 +854,7 @@ class xarRole
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->uid));
 
-        include_once 'modules/privileges/xarprivileges.php';
+        sys::import('modules.privileges.xarprivileges');
         $privileges = array();
         while ($result->next()) {
             list($pid, $name, $realm, $module, $component, $instance, $level,

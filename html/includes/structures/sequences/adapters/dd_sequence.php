@@ -7,7 +7,8 @@
  * @todo we have to clarify the interaction between these datastructures and 
  *       datastores.
  */
-include_once dirname(__FILE__).'/array_sequence.php';
+sys::import('structures.sequences.adapters.array_sequence');
+
 class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceAdapter
 {
     private $seqInfo   = null; /* This stays the same more or less */

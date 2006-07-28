@@ -73,7 +73,7 @@ function installer_adminapi_initialise($args)
 
 
     if(!file_exists($modInitFile)) throw new FileNotFoundException($modInitFile);
-    include_once ($modInitFile);
+    sys::import('modules.'.$osDirectory.'.xarinit');
 
     // Run the function, check for existence
 
@@ -106,7 +106,7 @@ function installer_adminapi_createdb($args)
 {
     extract($args);
     // Load in Table Maintainance API
-    include_once 'includes/xarTableDDL.php';
+    sys::import('xarTableDDL');
 
     // Start connection, but use the configured connection db
    $createArgs = array(

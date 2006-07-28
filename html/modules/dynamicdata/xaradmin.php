@@ -11,6 +11,7 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
-require_once 'modules/dynamicdata/class/objects.php';
+// FIXME: this is redundant
+sys::import('modules.dynamicdata.class.objects');
 
 ?>

@@ -125,6 +125,7 @@ class ExceptionHandlers implements IExceptionHandlers
         // This is just for convenience when giving support, as people will probably
         // not look in the CACHEKEYS file to mention the template.
         $key = basename(strval($file),'.php');
+        sys::import('caching.template');
         $sourceFile = xarTemplateCache::sourceFile($key);
         
         $msg .= "\n\n[".$sourceFile."]";
@@ -147,8 +148,8 @@ class ExceptionHandlers implements IExceptionHandlers
             $product = ''; $component = '';
             if ($module != '') {
                 // load relative to the current file (e.g. for shutdown functions)
-                include(dirname(__FILE__) . "/xarayacomponents.php");
-                foreach ($core as $corecomponent) {
+                sys::import('exceptions.xarayacomponents');
+                foreach (xarComponents::$core as $corecomponent) {
                     if ($corecomponent['name'] == $module) {
                         $component = $corecomponent['fullname'];
                         $product = "App - Core";
@@ -156,7 +157,7 @@ class ExceptionHandlers implements IExceptionHandlers
                     }
                 }
                 if ($component != '') {
-                    foreach ($apps as $appscomponent) {
+                    foreach (xarComponents::$apps as $appscomponent) {
                         if ($appscomponent['name'] == $module) {
                             $component = $appscomponent['fullname'];
                             $product = "App - Modules";

@@ -91,7 +91,9 @@ function xarConfigGetVar($name, $prep = NULL)
     }
 
     // Nice, but introduces dependency
-    return xarVar__GetVarByAlias($modname = NULL, $name, $uid = NULL, $prep, $type = 'configvar');
+    $t =xarVar__GetVarByAlias($modname = NULL, $name, $uid = NULL, $prep, $type = 'configvar');
+    
+    return $t;
 }
 
 /**

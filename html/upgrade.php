@@ -33,7 +33,8 @@ define ('XARUPGRADE_PHASE_COMPLETE',            '4');
 error_reporting(E_ALL);
 
 // initialize the Xaraya core
-include 'includes/xarCore.php';
+include 'includes/xarPreCore.php';
+sys::import('xarCore');
 xarCoreInit(XARCORE_SYSTEM_ALL);
 /**
  * Entry function for the installer

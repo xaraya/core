@@ -51,14 +51,14 @@ define('XAR_DATABASE_EXCEPTION', 12);
 define('XAR_TEMPLATE_EXCEPTION', 13);
 
 // We still need the old classes
-include "includes/exceptions/systemexception.class.php";
-include "includes/exceptions/defaultuserexception.class.php";
-include "includes/exceptions/systemmessage.class.php";
+sys::import('exceptions.legacy.systemexception');
+sys::import('exceptions.legacy.defaultuserexception');
+sys::import('exceptions.legacy.systemmessage');
 
-// Include the set of exception types
-include "includes/exceptions/types.php";
+// We also need the new classes
+sys::import('exceptions.types');
 // And the handlers to deal with them
-include "includes/exceptions/handlers.php";
+sys::import('exceptions.handlers');
 
 /**
  * Exceptions for the exception subsystem itself

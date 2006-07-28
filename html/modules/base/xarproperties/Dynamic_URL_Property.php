@@ -17,7 +17,7 @@
  * Include the base class
  *
  */
-include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
 
 /**
  * handle the URL property

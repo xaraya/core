@@ -7,10 +7,10 @@
  */
 
 /**
- * Include the File data store
+ * Parent class is the File data store
  *
  */
-include_once "includes/datastores/Dynamic_File_DataStore.php";
+sys::import('datastores.Dynamic_File_DataStore');
 
 /**
  * Handle CSV file

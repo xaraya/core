@@ -15,7 +15,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 
-include_once 'modules/roles/xarroles.php';
+sys::import('modules.roles.xarroles');
 
 class xarTreeRenderer
 {

@@ -19,7 +19,7 @@
 /**
  * Include the base class
  */
-include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
 
 class Dynamic_Email_Property extends Dynamic_TextBox_Property
 {

@@ -250,7 +250,7 @@ class xarBLCompiler implements IxarBLCompiler
     {
         // EXPERIMENTAL, USE AT OWN RISK, I DONT EVEN WANNA KNOW
         if(defined('XAR_BL_USE_XSLT')) {
-            include_once('includes/blocklayout/xsltransformer.php');
+            sys::import('blocklayout.xsltransformer');
             $xslFile = 'includes/transforms/xar2php.xsl';
             $xslProc = new BlockLayoutXSLTProcessor($templateSource,$xslFile);
             $xslProc->xmlFile = $this->parser->getFileName();
@@ -1170,10 +1170,10 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         
         // FIXME: sync the implementation of core / custom tags, handle them the same way
         if(file_exists($tagfile)) {
-            include_once($tagfile);
+            sys::import('blocklayout.nodes.tags.'.strtolower($tagName));
             $node = new $tagClass($parser, $tagName, $parentTagName, $attributes);
         } else {
-            include_once(XAR_NODES_LOCATION .'tags/other.php');
+            sys::import('blocklayout.nodes.tags.other');
             $node = new xarTpl__XarOtherNode($parser, $tagName, $parentTagName, $attributes);
             if(!isset($node->tagobject)) {
                 $parser->raiseError(XAR_BL_INVALID_TAG,"Cannot instantiate nonexistent tag '$tagName'");
@@ -1196,7 +1196,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
             if(!file_exists($entityFile)) {
                 $parser->raiseError(XAR_BL_INVALID_ENTITY,"Cannot instantiate nonexistent entity '$entityType'");
             }
-            include_once($entityFile);
+            sys::import('blocklayout.nodes.entities.'.strtolower($entityType));
         }
         $node = new $entityClass($parser,'EntityNode', $entityType, $parameters);
         return $node;
@@ -1206,15 +1206,17 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
     {
         $instructionClass = 'xarTpl__XarApiInstructionNode';
         $instructionFile = XAR_NODES_LOCATION . 'instructions/api.php';
+        $instructionType = 'api';
         if ($instruction[0] == XAR_TOKEN_VAR_START) {
             $instructionClass = 'xarTpl__XarVarInstructionNode';
             $instructionFile = XAR_NODES_LOCATION . 'instructions/var.php';
+            $instructionType = 'var';
         } 
         if(!xarTpl__NodesFactory::class_exists($instructionClass)) {
             if(!file_exists($instructionFile)) {
                 $parser->raiseError(XAR_BL_INVALID_INSTRUCTION,"Cannot instantiate nonexistent instruction '$instruction'");
             }
-            include_once($instructionFile);
+            sys::import('blocklayout.nodes.instructions.'.$instructionType);
         }
         $node = new $instructionClass($parser, 'InstructionNode', $instruction);
         return $node;

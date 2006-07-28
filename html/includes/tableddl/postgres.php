@@ -166,7 +166,7 @@ function xarDB__postgresqlAlterTable($tableName, $args)
             }
 
             // check to make sure we have an action to perform on the colunm
-            if (empty($args['null']) && $args['null']!=FALSE) {
+            if (empty($args['null']) && $args['null']!=false) {
                 throw new BadParameterException('args','Invalid parameter "#(1)" (type,size,default,null, unsigned, increment, or primary_key must be set)');
             }
 
@@ -174,10 +174,10 @@ function xarDB__postgresqlAlterTable($tableName, $args)
             $sql = 'ALTER TABLE '.$tableName.' ALTER COLUMN '.$args['field'].' ';
 
             // see if the want to add or remove null
-            if ($args['null']==FALSE){
+            if ($args['null']==false){
                 $sql.='DROP NOT NULL';
             }
-            if ($args['null']==TRUE){
+            if ($args['null']==true){
                 $sql.='SET NOT NULL';
             }
 

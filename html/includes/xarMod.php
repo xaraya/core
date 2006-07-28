@@ -581,7 +581,7 @@ function xarMod__URLaddParametersToPath($args, $path, $pini, $psep)
 
         // Join to the path with the appropriate character,
         // depending on whether there are already GET parameters.
-        $path .= (strpos($path, $pini) === FALSE ? $pini : $psep) . $params;
+        $path .= (strpos($path, $pini) === false ? $pini : $psep) . $params;
     }
 
     return $path;
@@ -1580,13 +1580,14 @@ class xarMod implements IxarMod
         default:
             // Spliffster, additional mod info from modules/$modDir/xarversion.php
             $fileName = 'modules/' . $modOsDir . '/xarversion.php';
-
+            $part = 'xarversion';
             // If the locale is already present, it means we can make the translations available
             if(!empty($GLOBALS['xarMLS_currentLocale']))
                 xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
             break;
         case 'theme':
             $fileName = xarConfigGetVar('Site.BL.ThemesDirectory'). '/' . $modOsDir . '/xartheme.php';
+            $part = 'xartheme';
             break;
         }
 
@@ -1596,9 +1597,12 @@ class xarMod implements IxarMod
             // throw new FileNotFoundException($fileName);
             return;
         }
-
-        include($fileName);
-
+        // We can NOT use sys::import here, since the xarversion/xartheme files contain variables only
+        // If they were loaded earlier, sys::import does nothing (as it should)
+        // since inclusion of variables can be done multiple times (they just get overwritten)
+        // the include is safe. Ergo: leave this in place.
+        include $fileName;
+        
         if (!isset($themeinfo))  $themeinfo = array();
         if (!isset($modversion)) $modversion = array();
 
@@ -1674,7 +1678,8 @@ class xarMod implements IxarMod
         // Load the database definition if required
         $osxartablefile = "modules/$modDir/xartables.php";
         if (!file_exists($osxartablefile)) return false;
-        include_once $osxartablefile;
+        // CHECKME: do we need to track this one?
+        sys::import('modules.'.$modDir.'.xartables');
 
         $tablefunc = $modName . '_' . 'xartables';
         if (function_exists($tablefunc)) xarDB::importTables($tablefunc());
@@ -1773,7 +1778,7 @@ class xarMod implements IxarMod
                     $found = false;
                 } else {
                     ob_start();
-                    $r = require_once $funcFile;
+                    sys::import('modules.'.$modName.'.xar'.$modType.$funcType.'.'.strtolower($funcName));
                     $error_msg = strip_tags(ob_get_contents());
                     ob_end_clean();
 
@@ -1879,9 +1884,8 @@ class xarMod implements IxarMod
         // <nuncanada> But now we wont know if something was loaded or not!
         // <nuncanada> We need some way to find it out.
         // Assume failure
-        $loadedModuleCache[$cacheKey] = false;
         if (file_exists($fileName)) {
-            xarInclude($fileName);
+            sys::import('modules.'.$modDir.'.xar'.$modType);
             $loadedModuleCache[$cacheKey] = true;
         } elseif (is_dir('modules/'.$modDir.'/xar'.$modType)) {
             // this is OK too - do nothing

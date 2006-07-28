@@ -41,7 +41,7 @@ function privileges_admin_viewroles()
     }
 
     // Load Template
-    include_once 'modules/privileges/xartreerenderer.php';
+    sys::import('modules.privileges.xartreerenderer');
     $renderer = new xarTreeRenderer();
 
 //Get the array of parents of this privilege

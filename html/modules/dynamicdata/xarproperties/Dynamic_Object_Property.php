@@ -14,7 +14,7 @@
  * Include the base class
  *
  */
-include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_Select_Property');
 
 /**
  * handle the object property

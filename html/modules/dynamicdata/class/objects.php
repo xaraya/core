@@ -10,8 +10,8 @@
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
-require_once 'modules/dynamicdata/class/properties.php';
-require_once 'modules/dynamicdata/class/datastores.php';
+sys::import('modules.dynamicdata.class.properties');
+sys::import('modules.dynamicdata.class.datastores');
 
 /**
  * Metaclass for Dynamic Objects
@@ -642,7 +642,7 @@ class Dynamic_Object_Master
      */
     static function &getObjectInterface($args)
     {
-        require_once 'modules/dynamicdata/class/interface.php';
+        sys::import('modules.dynamicdata.class.interface');
 
         $classname = 'Dynamic_Object_Interface';
         if (!empty($args['classname'])) {

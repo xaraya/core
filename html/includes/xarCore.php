@@ -17,7 +17,7 @@
  * should be upgraded on each release for
  * better control on config settings
  *
- * @todo seems that defines are hoggers, move them to class constants?
+ * @todo seems that defines are hoggers, move them to class constants!
  */
 
 // For migration purposes, cos we're lazy 
@@ -99,10 +99,7 @@ define('XARDBG_SQL'              , 2);
 define('XARDBG_EXCEPTIONS'       , 4);
 define('XARDBG_SHOW_PARAMS_IN_BT', 8);
 define('XARDBG_INACTIVE'         ,16);
-/*
- * xarInclude flags
- */
-define('XAR_INCLUDE_ONCE'         , 1);
+
 
 /*
  * Miscelaneous
@@ -114,9 +111,10 @@ define('XARCORE_RSS_CACHEDIR' , '/cache/rss');
 define('XARCORE_TPL_CACHEDIR' , '/cache/templates');
 
 /**
- * Load the Xaraya pre core early (in case we're not coming in via index.php)
+ * Load the Xaraya pre core early in case the entry point didn't do it (it should)
+ *
  */
-include_once(dirname(__FILE__).'/xarPreCore.php');
+if(!class_exists('sys')) include (dirname(__FILE__).'/xarPreCore.php');
 
 /**
  * Initializes the core engine
@@ -156,7 +154,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Load PHP Version Backwards Compatibility Library
      *
      */
-    //include 'includes/xarPHPCompat.php';
+    //sys::import('xarPHPCompat');
     //xarPHPCompat::loadAll('includes/phpcompat');
 
     /*
@@ -165,7 +163,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Before we do anything make sure we can except out of code in a predictable matter
      *
      */
-    include 'includes/xarException.php';
+    sys::import('xarException');
     $systemArgs = array();
     xarError_init($systemArgs, $whatToLoad);
 
@@ -189,7 +187,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     // {ML_dont_parse 'includes/xarLog.php'}
-    include 'includes/xarLog.php';
+    sys::import('xarLog');
     xarLog_init($systemArgs, $whatToLoad);
 
     /*
@@ -201,7 +199,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     if ($whatToLoad & XARCORE_SYSTEM_DATABASE) { // yeah right, as if this is optional
-        include 'includes/xarDB.php';
+        sys::import('xarDB');
 
         // Decode encoded DB parameters
         // These need to be there
@@ -244,7 +242,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     // {ML_dont_parse 'includes/xarEvt.php'}
-    include 'includes/xarEvt.php';
+    sys::import('xarEvt');
     $systemArgs = array('loadLevel' => $whatToLoad);
     xarEvt_init($systemArgs, $whatToLoad);
 
@@ -258,14 +256,14 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     if ($whatToLoad & XARCORE_SYSTEM_CONFIGURATION) {
-        include 'includes/xarConfig.php';
+        sys::import('xarConfig');
 
         // Start Configuration Unit
         $systemArgs = array();
         xarConfig_init($systemArgs, $whatToLoad);
 
         // Start Variables utilities
-        include 'includes/xarVar.php';
+        sys::import('xarVar');
         xarVar_init($systemArgs, $whatToLoad);
         $whatToLoad ^= XARCORE_BIT_CONFIGURATION;
     }
@@ -277,7 +275,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     if (xarConfigGetVar('Site.Core.LoadLegacy') == true) {
-        include 'includes/xarLegacy.php';
+        sys::import('xarLegacy');
     }
 
     /*
@@ -290,7 +288,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Bring HTTP Protocol Server/Request/Response utilities into the story
      *
      */
-    include 'includes/xarServer.php';
+    sys::import('xarServer');
     $systemArgs = array('enableShortURLsSupport' => xarConfigGetVar('Site.Core.EnableShortURLsSupport'),
                         'defaultModuleName'      => xarConfigGetVar('Site.Core.DefaultModuleName'),
                         'defaultModuleType'      => xarConfigGetVar('Site.Core.DefaultModuleType'),
@@ -303,7 +301,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Bring Multi Language System online
      *
      */
-    include 'includes/xarMLS.php';
+    sys::import('xarMLS');
     $systemArgs = array('MLSMode'             => xarConfigGetVar('Site.MLS.MLSMode'),
 //                        'translationsBackend' => xarConfigGetVar('Site.MLS.TranslationsBackend'),
                         'translationsBackend' => 'xml2php',
@@ -326,7 +324,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     define('_XAR_ID_UNREGISTERED', $anonuid);
 
     if ($whatToLoad & XARCORE_SYSTEM_SESSION) {
-        include 'includes/xarSession.php';
+        sys::import('xarSession');
 
         $systemArgs = array('securityLevel'     => xarConfigGetVar('Site.Session.SecurityLevel'),
                             'duration'          => xarConfigGetVar('Site.Session.Duration'),
@@ -348,7 +346,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     //        it's a legacy thought, we don't need it anymore
 
     if ($whatToLoad & XARCORE_SYSTEM_BLOCKS) {
-        include 'includes/xarBlocks.php';
+        sys::import('xarBlocks');
 
         // Start Blocks Support Sytem
         $systemArgs = array();
@@ -365,7 +363,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * @todo <mrb> i thought it was configurable
      */
     if ($whatToLoad & XARCORE_SYSTEM_MODULES) {
-        include 'includes/xarMod.php';
+        sys::import('xarMod');
         $systemArgs = array('enableShortURLsSupport' => xarConfigGetVar('Site.Core.EnableShortURLsSupport'),
                             'generateXMLURLs' => true);
         xarMod::init($systemArgs);
@@ -377,13 +375,15 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Start BlockLayout Template Engine
      *
      */
-    include 'includes/xarTemplate.php';
+    sys::import('xarTemplate');
+    
     $systemArgs = array(
         'enableTemplatesCaching' => xarConfigGetVar('Site.BL.CacheTemplates'),
         'themesBaseDirectory'    => xarConfigGetVar('Site.BL.ThemesDirectory'),
         'defaultThemeDir'        => xarModVars::get('themes','default'),
         'generateXMLURLs'      => true
     );
+
     xarTpl_init($systemArgs, $whatToLoad);
     $whatToLoad ^= XARCORE_BIT_TEMPLATE;
 
@@ -394,8 +394,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * @todo <marcinmilan> review what pasts of the old user system need to be retained
      */
     if ($whatToLoad & XARCORE_SYSTEM_USER) {
-        include 'includes/xarUser.php';
-        include 'includes/xarSecurity.php';
+        sys::import('xarUser');
+        sys::import('xarSecurity');
         xarSecurity_init();
         // Start User System
         $systemArgs = array('authenticationModules' => xarConfigGetVar('Site.User.AuthenticationModules'));
@@ -531,6 +531,8 @@ function xarCore_getSystemVar($name)
         if (!file_exists($fileName)) {
             throw new FileNotFoundException($fileName);
         }
+        // Make stuff from config.system.php available
+        // NOTE: we can not use sys::import since the variable scope would be wrong.
         include $fileName;
         $systemVars = $systemConfiguration;
     }
@@ -542,40 +544,6 @@ function xarCore_getSystemVar($name)
     xarCore::setCached('Core.getSystemVar', $name, $systemVars[$name]);
 
     return $systemVars[$name];
-}
-
-
-/**
- * Load a file and capture any php errors
- *
- * @access public
- * @param  string $fileName name of the file to load
- * @param  bool   $flags  can this file only be loaded once, or multiple times? XAR_INCLUDE_ONCE
- * @return bool   true if file was loaded successfully
- * @throws FileNotFoundException
- * @todo  remove the may not exist flag, raise FileNotFound
- */
-function xarInclude($fileName, $flags = XAR_INCLUDE_ONCE)
-{
-    // If the file isn't there return according to the flags
-    if (!file_exists($fileName)) throw new FileNotFoundException($fileName);
-
-    // Catch output, if any (more like suppressing it)
-    ob_start();
-    // <mrb> why not always include_once ?
-    if ($flags & XAR_INCLUDE_ONCE) {
-        $r = include_once($fileName);
-    } else {
-        $r = include($fileName);
-    }
-    ob_end_clean();
-
-    if (empty($r) || !$r) {
-        // TODO: we probably *should* raise an exception here, but which one?
-        return false;
-    }
-
-    return true;
 }
 
 /**

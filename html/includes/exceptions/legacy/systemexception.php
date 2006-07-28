@@ -9,9 +9,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 
-
-include_once dirname(__FILE__)."/exception.class.php";
-
+sys::import('exceptions.legacy.exception');
 class SystemException extends xarException
 {
     function SystemException($msg = '')
@@ -30,15 +28,15 @@ class SystemException extends xarException
             $this->module = '';
         }
         // load relative to the current file (e.g. for shutdown functions)
-        if (!isset($core)) include(dirname(__FILE__) . "/xarayacomponents.php");
-        foreach ($core as $corecomponent) {
+        if (!isset($core)) sys::import('exceptions.xarayacomponents');
+        foreach (xarComponents::$core as $corecomponent) {
             if ($corecomponent['name'] == $this->module) {
                 $this->component = $corecomponent['fullname'];
                 $this->product = "App - Core";
                 return;
             }
         }
-        foreach ($apps as $appscomponent) {
+        foreach (xarComponents::$apps as $appscomponent) {
             if ($appscomponent['name'] == $this->module) {
                 $this->component = $appscomponent['fullname'];
                 $this->product = "App - Modules";

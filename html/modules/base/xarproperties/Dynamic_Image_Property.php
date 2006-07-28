@@ -12,7 +12,7 @@
 /*
  * @author mikespub <mikespub@xaraya.com>
 */
-include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
 
 /**
  * handle the image property

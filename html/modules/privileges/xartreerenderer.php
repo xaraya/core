@@ -16,7 +16,7 @@
    * @author Marc Lutolf <marcinmilan@xaraya.com>
    */
 
-include_once 'modules/privileges/xarprivileges.php';
+sys::import('modules.privileges.xarprivileges');
 
 class xarTreeRenderer
 {

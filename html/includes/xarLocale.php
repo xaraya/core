@@ -31,6 +31,7 @@ class LocaleNotFoundException extends NotFoundExceptions
  */
 function &xarMLSLoadLocaleData($locale = NULL)
 {
+    static $loaded = array(); // keep track of files we have loaded
     if (!isset($locale)) {
         $locale = xarMLSGetCurrentLocale();
     }
@@ -63,11 +64,14 @@ function &xarMLSLoadLocaleData($locale = NULL)
     $siteCharset = $parsedLocale['charset'];
     $utf8locale = $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
     $utf8FileName = xarCoreGetVarDirPath() . '/locales/$utf8locale/locale.php';
-    if (file_exists($fileName)) {
-        include_once $fileName;
+    if (file_exists($fileName) && !(isset($loaded[$fileName]))) {
+        // @todo do we need to wrap this in a try/catch construct?
+        include $fileName;
+        $loaded[$fileName] = true;
         $GLOBALS['xarMLS_localeDataCache'][$locale] = $localeData;
-    } else if (file_exists($utf8FileName)) {
-        include_once $utf8FileName;
+    } else if (file_exists($utf8FileName) && !isset($loaded[$utf8FileName])) {
+        include $utf8FileName;
+        $loaded[$utf8FileName] = true;
         if ($siteCharset != 'utf-8') {
             foreach ( $localeData as $tempKey => $tempValue ) {
                 $tempValue = $GLOBALS['xarMLS_newEncoding']->convert($tempValue, 'utf-8', $siteCharset, 0);

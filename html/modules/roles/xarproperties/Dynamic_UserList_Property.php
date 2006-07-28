@@ -17,7 +17,7 @@
  */
 
 /* Include the base class */
-include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_Select_Property');
 
 class Dynamic_UserList_Property extends Dynamic_Select_Property
 {

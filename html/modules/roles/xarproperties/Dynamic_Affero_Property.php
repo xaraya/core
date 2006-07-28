@@ -19,7 +19,7 @@
 /**
  * include the base class
  */
-include_once "modules/base/xarproperties/Dynamic_URLIcon_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_URLIcon_Property');;
 
 class Dynamic_Affero_Property extends Dynamic_URLIcon_Property
 {
