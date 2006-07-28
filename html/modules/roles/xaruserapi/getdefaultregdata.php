@@ -13,7 +13,7 @@
 /**
  * getdefaultregdata  - get the default registration module data
  *
- * @return array  defaultregmodulename string, empty if no active registration module
+ * @return array  defaultregmodname string, empty if no active registration module
  *                defaultregmodactive boolean, regmodule is active or not
  *
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
@@ -21,26 +21,26 @@
 function roles_userapi_getdefaultregdata()
 {
     $defaultregdata=array();
-    $defaultregmodulename='';
+    $defaultregmodname='';
     $defaultregmodactive=false;
     //get the default reg module if it exits
-    $defaultregmoduleid =xarModGetVar('roles','defaultregmodule');
-    if (isset($defaultregmoduleid) && is_int($defaultregmoduleid) && ($defaultregmoduleid > 0)) {
-        $defaultregmodulename =xarModGetNameFromId($defaultregmoduleid);
+    $defaultregmodid =xarModGetVar('roles','defaultregmodule');
+
+    if (isset($defaultregmodid) && is_int($defaultregmodid) && ($defaultregmodid > 0)) {
+        $defaultregmodname =xarModGetNameFromId($defaultregmodid);
         //check the module is available
-        if (!xarModIsAvailable($defaultregmodulename) && xarModIsAvailable('registration')) {
+        if (xarModIsAvailable($defaultregmodname)) {
            //We can't really assume people will want this module as registration,
-           if (xarModGetVar($defaultregmodulename, 'allowregistration')==1) {
-              $defaultregmodactive=1;
+           if (xarModGetVar($defaultregmodname, 'allowregistration')==1) {
+              $defaultregmodactive=true;
            }
         }
     }
     //We can't assume any registration module is installed as it's optional, so go with what we have
 
-    $defaultregdata=array('defaultregmodulename' =>$defaultregmodulename,
-                         'defaultregmodactive'  => $defaultregmodactive);
+    $defaultregdata=array('defaultregmodname'   => $defaultregmodname,
+                          'defaultregmodactive' => $defaultregmodactive);
 
     return $defaultregdata;
 }
-
 ?>
