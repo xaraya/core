@@ -176,11 +176,9 @@ function roles_user_usermenu($args)
                    1) Validate the new email address for errors.
                    2) Check if validation is required and if so create confirmation code
                    3) Change user status to 2 (if validation is set as option)
-                   4) If validation is required for a change, if user is logged in (ie existing user), log user out.
-                   4b) Display appropriate message
-                   5) Registration process takes over from there. :
-                      we need to change this as registration is separate and should only take over if it's a new user
-                      The validation of emails for existing users is another function that shares some aspects of the process as registration
+                   4) If validation is required for a change, send the user an email about validation
+                   5) if user is logged in (ie existing user), log user out
+                   6) Display appropriate message
                 */
 
                 // Step 1
@@ -255,6 +253,9 @@ function roles_user_usermenu($args)
                     // Step 5
                     // Log the user out. This needs to happen last
                     xarUserLogOut();
+                    
+                    //Step 6
+                    //Show a nice message for the person about email validation
                     $data = xarTplModule('roles','user', 'waitingconfirm');
                     return $data;
                 }
