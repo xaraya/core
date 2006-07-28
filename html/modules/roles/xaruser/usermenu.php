@@ -161,16 +161,14 @@ function roles_user_usermenu($args)
 
                 $oldemail = xarUserGetVar('email');
                 // The API function is called.
-                if(!xarModAPIFunc('roles',
-                                  'admin',
-                                  'update',
-                                   array('uid' => $uid,
+                if(!xarModAPIFunc('roles', 'admin', 'update',
+                                   array('uid'   => $uid,
                                          'uname' => $uname,
-                                         'name' => $name,
-                                         'home' => $home,
+                                         'name'  => $name,
+                                         'home'  => $home,
                                          'email' => $oldemail,
                                          'state' => ROLES_STATE_ACTIVE,
-                                         'pass' => $pass,
+                                         'pass'  => $pass,
                                          'dopasswordupdate' => $dopasswordupdate))) return;
             }
             if (!empty($email)){
@@ -180,7 +178,7 @@ function roles_user_usermenu($args)
                    3) Change user status to 2 (if validation is set as option)
                    4) If validation is required for a change, if user is logged in (ie existing user), log user out.
                    4b) Display appropriate message
-                   5) Registration process takes over from there. : 
+                   5) Registration process takes over from there. :
                       we need to change this as registration is separate and should only take over if it's a new user
                       The validation of emails for existing users is another function that shares some aspects of the process as registration
                 */
@@ -220,13 +218,10 @@ function roles_user_usermenu($args)
                     }
                 }
                 // Step 2 Check for validation required or not
-
                 $requireValidation = xarModGetVar('roles', 'requirevalidation');
                 if ((!xarModGetVar('roles', 'requirevalidation')) || (xarUserGetVar('uname') == 'admin')){
                     // The API function is called.
-                    if(!xarModAPIFunc('roles',
-                                      'admin',
-                                      'update',
+                    if(!xarModAPIFunc('roles',  'admin', 'update',
                                        array('uid' => $uid,
                                              'uname' => $uname,
                                              'name' => $name,
@@ -236,7 +231,6 @@ function roles_user_usermenu($args)
                 } else { // if we need validation
                     // Step 2
                     // Create confirmation code and time registered
-                    //jojodee - can't create time registered here - this is used for existing users as well
                     $confcode = xarModAPIFunc('roles','user','makepass');
 
                     // Step 3
@@ -261,14 +255,14 @@ function roles_user_usermenu($args)
                     // Step 5
                     // Log the user out. This needs to happen last
                     xarUserLogOut();
+                    $data = xarTplModule('roles','user', 'waitingconfirm');
+                    return $data;
                 }
             } else {
                 $email = xarUserGetVar('email');
 
                 // The API function is called.
-                if(!xarModAPIFunc('roles',
-                                  'admin',
-                                  'update',
+                if(!xarModAPIFunc('roles', 'admin', 'update',
                                    array('uid' => $uid,
                                          'uname' => $uname,
                                          'name' => $name,
