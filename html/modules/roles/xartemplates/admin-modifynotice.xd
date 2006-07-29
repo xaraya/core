@@ -44,7 +44,8 @@
                 :
             </legend>
             <p class="xar-form-input-wrapper-before xar-padding-thick">
-                <xar:mlstring>Ask about sending a notification when an administrator changes the state of a user to:</xar:mlstring>
+                <xar:mlstring>Admin will be prompted to send an email to an existing user if the user status is changed to any of the following checked options.
+                    Admin will also be notified when status is changed automatically by the system (eg when an account is set to pending and requires approval):</xar:mlstring>
             </p>
             <div class="xar-form-input-wrapper-after">
                     <xar:if condition="xarModGetVar('roles', 'askpendingemail')">
