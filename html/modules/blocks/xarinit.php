@@ -221,6 +221,7 @@ function blocks_init()
          
          
          // Register BL tags
+         sys::import('blocklayout.template.tags');
          xarTplRegisterTag('blocks', 'blocks-stateicon',
          array(new xarTemplateAttribute('bid', XAR_TPL_STRING|XAR_TPL_REQUIRED)),
          'blocks_userapi_handleStateIconTag');
