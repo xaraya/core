@@ -40,7 +40,6 @@ function privileges_init()
     $tables['security_masks'] = $sitePrefix . '_security_masks';
     $tables['security_instances'] = $sitePrefix . '_security_instances';
     $tables['security_realms']      = $sitePrefix . '_security_realms';
-    $tables['security_levels']      = $sitePrefix . '_security_levels';
     $tables['security_privsets']      = $sitePrefix . '_security_privsets';
 
     // All or nothing
@@ -313,70 +312,6 @@ function privileges_init()
         xarDB::importTables(array('security_instances' => xarDBGetSiteTablePrefix() . '_security_instances'));
         
         /*********************************************************************
-         * CREATE TABLE xar_security_levels (
-         *   xar_lid int(11) NOT NULL auto_increment,
-         *   xar_level int(3) NOT NULL default '0',
-         *   xar_sdescription varchar(255) NOT NULL default '',
-         *   xar_ldescription varchar(255) NOT NULL default '',
-         *   PRIMARY KEY  (xar_lid)
-         * )
-         *********************************************************************/
-        
-        $leveltable = $tables['security_levels'];
-        $query = xarDBCreateTable($leveltable,
-                                  array('xar_lid'  => array('type'       => 'integer',
-                                                            'null'        => false,
-                                                            'default'     => '0',
-                                                            'increment'   => true,
-                                                            'primary_key' => true),
-                                        'xar_level' => array('type'      => 'integer',
-                                                             'null'        => false,
-                                                             'default'     => '0'),
-                                        'xar_leveltext' => array('type'=> 'varchar',
-                                                                 'size'        => 255,
-                                                                 'null'        => false,
-                                                                 'default'     => ''),
-                                        'xar_sdescription' => array('type'=> 'varchar',
-                                                                    'size'        => 255,
-                                                                    'null'        => false,
-                                                                    'default'     => ''),
-                                        'xar_ldescription' => array('type'=> 'varchar',
-                                                                    'size'        => 255,
-                                                                    'null'        => false,
-                                                                    'default'     => '')));
-        
-        $dbconn->Execute($query);
-        
-        $index = array('name'      => 'i_'.$sitePrefix.'_security_levels_level',
-                       'fields'    => array('xar_level'),
-                       'unique'    => FALSE);
-        $query = xarDBCreateIndex($leveltable,$index);
-        $dbconn->Execute($query);
-        
-        $sql = "INSERT INTO $leveltable (xar_lid, xar_level, xar_leveltext, xar_sdescription, xar_ldescription)
-                VALUES (?,?,?,?,?)";
-        $stmt = $dbconn->prepareStatement($sql);
-        
-        $levels = array(
-                        array(-1 , 'ACCESS_INVALID' , 'Access Invalid' , ''),
-                        array(0  , 'ACCESS_NONE'    , 'No Access'      , ''),
-                        array(100, 'ACCESS_OVERVIEW', 'Overview Access', ''),
-                        array(200, 'ACCESS_READ'    , 'Read Access'    , ''),
-                        array(300, 'ACCESS_COMMENT' , 'Comment Access' , ''),
-                        array(400, 'ACCESS_MODERATE', 'Moderate Access', ''),
-                        array(500, 'ACCESS_EDIT'    , 'Edit Access'    , ''),
-                        array(600, 'ACCESS_ADD'     , 'Add Access'     , ''),
-                        array(700, 'ACCESS_DELETE'  , 'Delete Access'  , ''),
-                        array(800, 'ACCESS_ADMIN'   , 'Admin Access'   , '')
-                        );
-        
-        foreach($levels as &$level) {
-            $id = $dbconn->GenId($leveltable);
-            array_unshift($level, $id);
-            $stmt->executeUpdate($level);
-        }
-    
-        /*********************************************************************
          * CREATE TABLE xar_security_privsets (
          *  xar_uid int(11) NOT NULL auto_increment,
          *  xar_set varchar(255) NOT NULL default '',
@@ -454,7 +389,7 @@ function privileges_delete()
     * Drop the tables
     *********************************************************************/
 
- // Get database information
+    // Get database information
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
     xarDBLoadTableMaintenanceAPI();

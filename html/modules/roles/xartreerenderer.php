@@ -10,10 +10,6 @@
  * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
-/**
- * Purpose of file:  Roles tree renderer
- * @author Marc Lutolf <marcinmilan@xaraya.com>
- */
 
 sys::import('modules.roles.xarroles');
 

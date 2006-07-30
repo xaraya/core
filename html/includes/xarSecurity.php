@@ -51,7 +51,6 @@ function xarSecurity_init()
                     'privmembers' => $prefix . '_privmembers',
                     'security_realms' => $prefix . '_security_realms',
                     'security_instances' => $prefix . '_security_instances',
-                    'security_levels' => $prefix . '_security_levels',
                     'modules' => $prefix . '_modules',
                     'security_privsets' => $prefix . '_security_privsets'
                     );

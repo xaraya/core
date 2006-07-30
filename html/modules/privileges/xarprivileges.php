@@ -5,16 +5,18 @@
  * @package core modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- *
  * @subpackage Privileges module
  * @link http://xaraya.com/index.php/release/1098.html
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 
-/*
- * Purpose of file:  Privileges administration API
- * @author Marc Lutolf <marcinmilan@xaraya.com>
-*/
+/**
+ * Debugging
+ * 
+ * Set to 1 to activate
+**/
+define('XARDBG_WINNOW', 0);
+define('XAR_ENABLE_WINNOW', 0);
 
 /**
  * xarMasks: class for the mask repository
@@ -26,13 +28,6 @@
  * @throws  none
  * @todo    evaluate scoping
 */
-
-
-//quick hack to show some of what the functions are doing
-//set to 1 to activate
-define('XARDBG_WINNOW', 0);
-define('XAR_ENABLE_WINNOW', 0);
-
 class xarMasks
 {
     public $dbconn;
@@ -50,19 +45,19 @@ class xarMasks
 
     public $privilegeset;
 
-/**
- * xarMasks: constructor for the class
- *
- * Just sets up the db connection and initializes some variables
- * This should really be a static class
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   none
- * @return  the masks object
- * @throws  none
- * @todo    none
-*/
+    /**
+     * xarMasks: constructor for the class
+     *
+     * Just sets up the db connection and initializes some variables
+     * This should really be a static class
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   none
+     * @return  the masks object
+     * @throws  none
+     * @todo    none
+    */
     function xarMasks()
     {
         $this->dbconn =& xarDBGetConn();
@@ -74,40 +69,28 @@ class xarMasks
         $this->realmstable = $xartable['security_realms'];
         $this->acltable = $xartable['security_acl'];
         $this->instancestable = $xartable['security_instances'];
-        $this->levelstable = $xartable['security_levels'];
-//        $this->privsetstable = $xartable['security_privsets'];
         $this->modulestable = $xartable['modules'];
 
-        // hack this for display purposes
-        // probably should be defined elsewhere
-        // TODO: how about a dd object or a table?
-        $this->levels = array(0=>'No Access (0)',
-                    100=>'Overview (100)',
-                    200=>'Read (200)',
-                    300=>'Comment (300)',
-                    400=>'Moderate (400)',
-                    500=>'Edit (500)',
-                    600=>'Add (600)',
-                    700=>'Delete (700)',
-                    800=>'Administer (800)');
+        // @todo refactor callers to do this directly
+        $this->levels = SecurityLevel::$displayMap;
     }
 
-/**
- * getmasks: returns all the current masks for a given module and component.
- *
- * Returns an array of all the masks in the masks repository for a given module and component
- * The repository contains an entry for each mask.
- * This function will initially load the masks from the db into an array and return it.
- * On subsequent calls it just returns the array .
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   string: module name
- * @param   string: component name
- * @return  array of mask objects
- * @throws  list of exception identifiers which can be thrown
- * @todo    list of things which must be done to comply to relevant RFC
-*/
+    /**
+     * getmasks: returns all the current masks for a given module and component.
+     *
+     * Returns an array of all the masks in the masks repository for a given module and component
+     * The repository contains an entry for each mask.
+     * This function will initially load the masks from the db into an array and return it.
+     * On subsequent calls it just returns the array .
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   string: module name
+     * @param   string: component name
+     * @return  array of mask objects
+     * @throws  list of exception identifiers which can be thrown
+     * @todo    list of things which must be done to comply to relevant RFC
+    */
     function getmasks($module = 'All',$component='All')
     {
         // TODO: try to do all this a bit more compact and without xarMod_GetBaseInfo
@@ -166,19 +149,19 @@ class xarMasks
         return $masks;
     }
 
-/**
- * register: register a mask
- *
- * Creates a mask entry in the masks table
- * This function should be invoked every time a new mask is created
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   array of mask values
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+    /**
+     * register: register a mask
+     *
+     * Creates a mask entry in the masks table
+     * This function should be invoked every time a new mask is created
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   array of mask values
+     * @return  boolean
+     * @throws  none
+     * @todo    none
+    */
     function register($name,$realm,$module,$component,$instance,$level,$description='')
     {
         // Check if the mask has already been registered, and update it if necessary.
@@ -222,19 +205,19 @@ class xarMasks
         return true;
     }
 
-/**
- * unregister: unregister a mask
- *
- * Removes a mask entry from the masks table
- * This function should be invoked every time a mask is removed
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   string representing a mask name
- * @return  boolean
- * @throws  none
- * @todo    none
- */
+    /**
+     * unregister: unregister a mask
+     *
+     * Removes a mask entry from the masks table
+     * This function should be invoked every time a mask is removed
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   string representing a mask name
+     * @return  boolean
+     * @throws  none
+     * @todo    none
+     */
     function unregister($name)
     {
         $query = "DELETE FROM $this->maskstable WHERE xar_name = ?";
@@ -242,15 +225,15 @@ class xarMasks
         return true;
     }
 
-/**
- * removeMasks: remove the masks registered by a module from the database
- * *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   module name
- * @return  boolean
- * @throws  none
-*/
+    /**
+     * removeMasks: remove the masks registered by a module from the database
+     * *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   module name
+     * @return  boolean
+     * @throws  none
+    */
     function removemasks($module)
     {
         if($module=='All') {
@@ -265,20 +248,20 @@ class xarMasks
         return true;
     }
 
-/**
- * winnow: merges two arrays of privileges to a single array of privileges
- *
- * The privileges are compared for implication and the less mighty are discarded
- * This is the way privileges hierarchies are contracted.
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   array of privileges objects
- * @param   array of privileges objects
- * @return  array of privileges objects
- * @throws  none
- * @todo    create exceptions for bad input
-*/
+    /**
+     * winnow: merges two arrays of privileges to a single array of privileges
+     *
+     * The privileges are compared for implication and the less mighty are discarded
+     * This is the way privileges hierarchies are contracted.
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   array of privileges objects
+     * @param   array of privileges objects
+     * @return  array of privileges objects
+     * @throws  none
+     * @todo    create exceptions for bad input
+    */
     function winnow($privs1, $privs2)
     {
         if (!is_array($privs1) || !is_array($privs2)) {
@@ -330,46 +313,34 @@ class xarMasks
         }
     }
 
-/**
- * xarSecLevel: Return an access level based on its name
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   access level description
- * @return  access level
- * @throws  none
- * @todo    does this need to be in a db table? will it ever get other rows than the initialized ones?
-*/
-
+    /**
+     * xarSecLevel: Return an access level based on its name
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   string $levelname the 
+     * @return  int access level
+     * @throws  none
+    */
     function xarSecLevel($levelname)
     {
-        if (xarVarIsCached('Security.xarSecLevel', $levelname)) {
-            return xarVarGetCached('Security.xarSecLevel', $levelname);
-        }
-        $query = "SELECT xar_level FROM $this->levelstable
-                    WHERE xar_leveltext = ?";
-        $result = $this->dbconn->Execute($query,array($levelname));
-
-        $level = -1;
-        if (!$result->EOF) list($level) = $result->fields;
-        xarVarSetCached('Security.xarSecLevel', $levelname, $level);
-        return $level;
+        // If we could somehow turn a string into the name of a class constant, that would be great.
+        return SecurityLevel::get($levelname);
     }
 
-/**
- * xarSecurityCheck: check a role's privileges against the masks of a component
- *
- * Checks the current group or user's privileges against a component
- * This function should be invoked every time a security check needs to be done
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   component string
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
-
+    /**
+     * xarSecurityCheck: check a role's privileges against the masks of a component
+     *
+     * Checks the current group or user's privileges against a component
+     * This function should be invoked every time a security check needs to be done
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   component string
+     * @return  boolean
+     * @throws  none
+     * @todo    none
+    */
     function xarSecurityCheck($mask,$catch=1,$component='',$instance='',$module='',$rolename='',$pnrealm=0,$pnlevel=0)
     {
         $userID = xarSessionGetVar('uid');
@@ -523,18 +494,18 @@ class xarMasks
     }
 
 
-/**
- * forgetprivsets: remove all irreducible set of privileges from the db
- *
- * used to lighten the cache
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   string
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+    /**
+     * forgetprivsets: remove all irreducible set of privileges from the db
+     *
+     * used to lighten the cache
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   string
+     * @return  boolean
+     * @throws  none
+     * @todo    none
+    */
     function forgetprivsets()
     {
         $query = "DELETE FROM $this->privsetstable";
@@ -542,16 +513,16 @@ class xarMasks
         return true;
     }
 
-/**
- * getprivset: get a role's irreducible set of privileges from the db
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   role object
- * @return  array containing the role's ancestors and privileges
- * @throws  none
- * @todo    none
-*/
+    /**
+     * getprivset: get a role's irreducible set of privileges from the db
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   role object
+     * @return  array containing the role's ancestors and privileges
+     * @throws  none
+     * @todo    none
+    */
     function getprivset($role)
     {
         if (xarVarIsCached('Security.getprivset', $role)) {
@@ -574,16 +545,16 @@ class xarMasks
         return unserialize($serprivs);
     }
 
-/**
- * irreducibleset: assemble a role's irreducible set of privileges
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   array representing the initial node to start from
- * @return  nested array containing the role's ancestors and privileges
- * @throws  none
- * @todo    none
-*/
+    /**
+     * irreducibleset: assemble a role's irreducible set of privileges
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   array representing the initial node to start from
+     * @return  nested array containing the role's ancestors and privileges
+     * @throws  none
+     * @todo    none
+    */
     function irreducibleset($coreset,$module='')
     {
         if (!empty($module)) {
@@ -625,16 +596,16 @@ class xarMasks
         return $coreset;
     }
 
-/**
- * normalizeprivset: apply the normalize() method on all privileges in a privilege set
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   array representing the privilege set
- * @return  none
- * @throws  none
- * @todo    none
-*/
+    /**
+     * normalizeprivset: apply the normalize() method on all privileges in a privilege set
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   array representing the privilege set
+     * @return  none
+     * @throws  none
+     * @todo    none
+    */
     function normalizeprivset(&$privset)
     {
         if (isset($privset['privileges']) && is_array($privset['privileges'])) {
@@ -647,18 +618,18 @@ class xarMasks
         }
     }
 
-/**
- * testprivileges: test an irreducible set of privileges against a mask
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   mask object
- * @param   nested array representing the irreducibles set of privileges
- * @param   boolean false (initial test value)
- * @return  boolean false if check fails, privilege object if check succeeds
- * @throws  none
- * @todo    none
-*/
+    /**
+     * testprivileges: test an irreducible set of privileges against a mask
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   mask object
+     * @param   nested array representing the irreducibles set of privileges
+     * @param   boolean false (initial test value)
+     * @return  boolean false if check fails, privilege object if check succeeds
+     * @throws  none
+     * @todo    none
+    */
     function testprivileges($mask,$privilegeset,$pass,$role='')
     {
         $candebug = (xarSessionGetVar('uid') == xarModGetVar('privileges','tester'));
@@ -782,18 +753,18 @@ class xarMasks
         return $pass;
     }
 
-/**
- * getMask: gets a single mask
- *
- * Retrieves a single mask from the Masks repository
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   string
- * @return  mask object
- * @throws  none
- * @todo    none
-*/
+    /**
+     * getMask: gets a single mask
+     *
+     * Retrieves a single mask from the Masks repository
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   string
+     * @return  mask object
+     * @throws  none
+     * @todo    none
+    */
     function getMask($name,$module="All",$component="All",$suppresscache=FALSE)
     {
         // check if we already have the definition of this mask
@@ -840,23 +811,22 @@ class xarMasks
  * @throws  none
  * @todo    none
 */
-
 class xarPrivileges extends xarMasks
 {
 
-/**
- * defineInstance: define how a module's instances are registered
- *
- * Creates an entry in the instances table
- * This function should be invoked at module initialisation time
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   array of values to register instance
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+    /**
+     * defineInstance: define how a module's instances are registered
+     *
+     * Creates an entry in the instances table
+     * This function should be invoked at module initialisation time
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   array of values to register instance
+     * @return  boolean
+     * @throws  none
+     * @todo    none
+    */
     function defineInstance($module,$type,$instances,$propagate=0,$table2='',$childID='',$parentID='',$description='')
     {
         foreach($instances as $instance) {
@@ -922,16 +892,16 @@ class xarPrivileges extends xarMasks
         return true;
     }
 
-/**
- * removeInstances: remove the instances registered by a module form the database
- * *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   module name
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+    /**
+     * removeInstances: remove the instances registered by a module form the database
+     * *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   module name
+     * @return  boolean
+     * @throws  none
+     * @todo    none
+    */
     function removeInstances($module)
     {
         try {
@@ -949,19 +919,19 @@ class xarPrivileges extends xarMasks
         return true;
     }
 
-/**
- * register: register a privilege
- *
- * Creates an entry in the privileges table
- * This function should be invoked every time a new instance is created
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   array of privilege values
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+    /**
+     * register: register a privilege
+     *
+     * Creates an entry in the privileges table
+     * This function should be invoked every time a new instance is created
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   array of privilege values
+     * @return  boolean
+     * @throws  none
+     * @todo    none
+    */
     function register($name,$realm,$module,$component,$instance,$level,$description='')
     {
         $query = "INSERT INTO $this->privilegestable (
@@ -976,61 +946,61 @@ class xarPrivileges extends xarMasks
         return true;
     }
 
-/**
- * assign: assign a privilege to a user/group
- *
- * Creates an entry in the acl table
- * This is a convenience function that can be used by module developers
- * Note the input params are strings to make it easier.
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   string
- * @param   string
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+    /**
+     * assign: assign a privilege to a user/group
+     *
+     * Creates an entry in the acl table
+     * This is a convenience function that can be used by module developers
+     * Note the input params are strings to make it easier.
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   string
+     * @param   string
+     * @return  boolean
+     * @throws  none
+     * @todo    none
+    */
     function assign($privilegename,$rolename)
     {
 
-// get the ID of the privilege to be assigned
+        // get the ID of the privilege to be assigned
         $privilege = $this->findPrivilege($privilegename);
         $privid = $privilege->getID();
 
-// get the Roles class
+        // get the Roles class
         $roles = new xarRoles();
 
-// find the role for the assignation and get its ID
+        // find the role for the assignation and get its ID
         $role = $roles->findRole($rolename);
         $roleid = $role->getID();
 
-// Add the assignation as an entry to the acl table
+        // Add the assignation as an entry to the acl table
         $query = "INSERT INTO $this->acltable VALUES (?,?)";
         $bindvars = array($roleid,$privid);
         $this->dbconn->Execute($query,$bindvars);
 
-// empty the privset cache
-//        $this->forgetprivsets();
+        // empty the privset cache
+        //        $this->forgetprivsets();
 
         return true;
     }
 
-/**
- * getprivileges: returns all the current privileges.
- *
- * Returns an array of all the privileges in the privileges repository
- * The repository contains an entry for each privilege.
- * This function will initially load the privileges from the db into an array and return it.
- * On subsequent calls it just returns the array .
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   none
- * @return  array of privileges
- * @throws  none
- * @todo    use associative fetching and one getrow statement.
-*/
+    /**
+     * getprivileges: returns all the current privileges.
+     *
+     * Returns an array of all the privileges in the privileges repository
+     * The repository contains an entry for each privilege.
+     * This function will initially load the privileges from the db into an array and return it.
+     * On subsequent calls it just returns the array .
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   none
+     * @return  array of privileges
+     * @throws  none
+     * @todo    use associative fetching and one getrow statement.
+    */
     function getprivileges()
     {
         static $allprivileges = array();
@@ -1065,25 +1035,25 @@ class xarPrivileges extends xarMasks
 
     }
 
-/**
- * gettoplevelprivileges: returns all the current privileges that have no parent.
- *
- * Returns an array of all the privileges in the privileges repository
- * that are top level entries, i.e. have no parent
- * This function will initially load the privileges from the db into an array and return it.
- * On subsequent calls it just returns the array .
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   string $arg indicates what types of elements to get
- * @return  array of privileges
- * @throws  none
- * @todo    use associative fetching and one getrow
- * @todo    cache with statics?
-*/
+    /**
+     * gettoplevelprivileges: returns all the current privileges that have no parent.
+     *
+     * Returns an array of all the privileges in the privileges repository
+     * that are top level entries, i.e. have no parent
+     * This function will initially load the privileges from the db into an array and return it.
+     * On subsequent calls it just returns the array .
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   string $arg indicates what types of elements to get
+     * @return  array of privileges
+     * @throws  none
+     * @todo    use associative fetching and one getrow
+     * @todo    cache with statics?
+    */
     function gettoplevelprivileges($arg)
     {
-//    if ((!isset($alltoplevelprivileges)) || count($alltoplevelprivileges)==0) {
+    //    if ((!isset($alltoplevelprivileges)) || count($alltoplevelprivileges)==0) {
         if($arg == "all") {
              $fromclause = "FROM $this->privilegestable p,$this->privmemberstable pm
                         WHERE p.xar_pid = pm.xar_pid
@@ -1137,19 +1107,19 @@ class xarPrivileges extends xarMasks
 //    }
     }
 
-/**
- * getrealms: returns all the current realms.
- *
- * Returns an array of all the realms in the realms table
- * They are used to populate dropdowns in displays
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   none
- * @return  array of realm ids and names
- * @throws  none
- * @todo    this isn't really the right place for this function
-*/
+    /**
+     * getrealms: returns all the current realms.
+     *
+     * Returns an array of all the realms in the realms table
+     * They are used to populate dropdowns in displays
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   none
+     * @return  array of realm ids and names
+     * @throws  none
+     * @todo    this isn't really the right place for this function
+    */
     function getrealms()
     {
         static $allreams = array(); // Get them once
@@ -1173,21 +1143,20 @@ class xarPrivileges extends xarMasks
         return $allrealms;
     }
 
-/**
- * getmodules: returns all the current modules.
- *
- * Returns an array of all the modules in the modules table
- * They are used to populate dropdowns in displays
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   none
- * @return  array of module ids and names
- * @throws  none
- * @todo    this isn't really the right place for this function
- * @todo    ucfirst is a presentation issue.
- */
-
+    /**
+     * getmodules: returns all the current modules.
+     *
+     * Returns an array of all the modules in the modules table
+     * They are used to populate dropdowns in displays
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   none
+     * @return  array of module ids and names
+     * @throws  none
+     * @todo    this isn't really the right place for this function
+     * @todo    ucfirst is a presentation issue.
+     */
     function getmodules()
     {
         static $allmodules = array();
@@ -1217,21 +1186,21 @@ class xarPrivileges extends xarMasks
         return $allmodules;
     }
 
-/**
- * getcomponents: returns all the current components of a module.
- *
- * Returns an array of all the components that have been registered for a given module.
- * The components correspond to masks in the masks table. Each one can be used to
- * construct a privilege's xarSecurityCheck.
- * They are used to populate dropdowns in displays
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   string with module name
- * @return  array of component ids and names
- * @throws  none
- * @todo    this isn't really the right place for this function
-*/
+    /**
+     * getcomponents: returns all the current components of a module.
+     *
+     * Returns an array of all the components that have been registered for a given module.
+     * The components correspond to masks in the masks table. Each one can be used to
+     * construct a privilege's xarSecurityCheck.
+     * They are used to populate dropdowns in displays
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   string with module name
+     * @return  array of component ids and names
+     * @throws  none
+     * @todo    this isn't really the right place for this function
+    */
     function getcomponents($module)
     {
         $modInfo = xarMod_GetBaseInfo($module);
@@ -1273,20 +1242,20 @@ class xarPrivileges extends xarMasks
         return $components;
     }
 
-/**
- * getinstances: returns all the current instances of a module.
- *
- * Returns an array of all the instances that have been defined for a given module.
- * The instances for each module are registered at initialization.
- * They are used to populate dropdowns in displays
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   string with module name
- * @return  array of instance ids and names for the module
- * @throws  none
- * @todo    this isn't really the right place for this function
-*/
+    /**
+     * getinstances: returns all the current instances of a module.
+     *
+     * Returns an array of all the instances that have been defined for a given module.
+     * The instances for each module are registered at initialization.
+     * They are used to populate dropdowns in displays
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   string with module name
+     * @return  array of instance ids and names for the module
+     * @throws  none
+     * @todo    this isn't really the right place for this function
+    */
     function getinstances($module, $component)
     {
         $modInfo = xarMod_GetBaseInfo($module);
@@ -1375,15 +1344,15 @@ class xarPrivileges extends xarMasks
         return $subprivileges;
     }
 
-/**
- * returnPrivilege: adds or modifies a privilege coming from an external wizard .
- *
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   strings with pid, name, realm, module, component, instances and level
- * @return  mixed pid if OK, void if not
-*/
+    /**
+     * returnPrivilege: adds or modifies a privilege coming from an external wizard .
+     *
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   strings with pid, name, realm, module, component, instances and level
+     * @return  mixed pid if OK, void if not
+    */
     function returnPrivilege($pid,$name,$realm,$module,$component,$instances,$level)
     {
 
@@ -1429,18 +1398,18 @@ class xarPrivileges extends xarMasks
         }
     }
 
-/**
- * getPrivilege: gets a single privilege
- *
- * Retrieves a single privilege object from the Privileges repository
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   integer
- * @return  privilege object
- * @throws  none
- * @todo    none
-*/
+    /**
+     * getPrivilege: gets a single privilege
+     *
+     * Retrieves a single privilege object from the Privileges repository
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   integer
+     * @return  privilege object
+     * @throws  none
+     * @todo    none
+    */
     function getPrivilege($pid)
     {
         static $stmt = null;  // Statement only needs to be prepared once.
@@ -1475,19 +1444,19 @@ class xarPrivileges extends xarMasks
         }
     }
 
-/**
- * findPrivilege: finds a single privilege based on its name
- *
- * Retrieves a single privilege object from the Privileges repository
- * This is a convenience class for module developers
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   string
- * @return  privilege object
- * @throws  none
- * @todo    none
-*/
+    /**
+     * findPrivilege: finds a single privilege based on its name
+     *
+     * Retrieves a single privilege object from the Privileges repository
+     * This is a convenience class for module developers
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   string
+     * @return  privilege object
+     * @throws  none
+     * @todo    none
+    */
     function findPrivilege($name)
     {
         $query = "SELECT * FROM $this->privilegestable WHERE xar_name = ?";
@@ -1510,19 +1479,19 @@ class xarPrivileges extends xarMasks
         return;
     }
 
-/**
- * findPrivilegesForModule: finds the privileges assigned to a module
- *
- * Retrieves an of privilege objects from the Privileges repository
- * This is a convenience class for module developers
- *
- * @author  Richard Cave<rcave@xaraya.com>
- * @access  public
- * @param   string
- * @return  privilege object
- * @throws  none
- * @todo    none
-*/
+    /**
+     * findPrivilegesForModule: finds the privileges assigned to a module
+     *
+     * Retrieves an of privilege objects from the Privileges repository
+     * This is a convenience class for module developers
+     *
+     * @author  Richard Cave<rcave@xaraya.com>
+     * @access  public
+     * @param   string
+     * @return  privilege object
+     * @throws  none
+     * @todo    none
+    */
     function findPrivilegesForModule($module)
     {
         $privileges = array();
@@ -1548,20 +1517,20 @@ class xarPrivileges extends xarMasks
         return $privileges;
     }
 
-/**
- * makeMember: makes a privilege a child of another privilege
- *
- * Creates an entry in the privmembers table
- * This is a convenience class for module developers
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   string
- * @param   string
- * @return  boolean
- * @throws  none
- * @todo    create exceptions for bad input
-*/
+    /**
+     * makeMember: makes a privilege a child of another privilege
+     *
+     * Creates an entry in the privmembers table
+     * This is a convenience class for module developers
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   string
+     * @param   string
+     * @return  boolean
+     * @throws  none
+     * @todo    create exceptions for bad input
+    */
     function makeMember($childname,$parentname)
     {
 // get the data for the parent object
@@ -1607,19 +1576,19 @@ class xarPrivileges extends xarMasks
         return $parent->addMember($child);
     }
 
-/**
- * makeEntry: defines a top level entry of the privileges hierarchy
- *
- * Creates an entry in the privmembers table
- * This is a convenience class for module developers
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   string
- * @return  boolean
- * @throws  none
- * @todo    create exceptions for bad input
-*/
+    /**
+     * makeEntry: defines a top level entry of the privileges hierarchy
+     *
+     * Creates an entry in the privmembers table
+     * This is a convenience class for module developers
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   string
+     * @return  boolean
+     * @throws  none
+     * @todo    create exceptions for bad input
+    */
     function makeEntry($rootname)
     {
         $priv = $this->findPrivilege($rootname);
@@ -1637,10 +1606,8 @@ class xarPrivileges extends xarMasks
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @throws  none
- * @todo    none
 */
-
-  class xarMask
+class xarMask
 {
     public $sid;           //the id of this privilege
     public $name;          //the name of this privilege
@@ -1656,19 +1623,18 @@ class xarPrivileges extends xarMasks
     public $privilegestable;
     public $privmemberstable;
 
-/**
- * xarMask: constructor for the class
- *
- * Creates a security mask
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   array of values
- * @return  mask
- * @throws  none
- * @todo    none
-*/
-
+    /**
+     * xarMask: constructor for the class
+     *
+     * Creates a security mask
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   array of values
+     * @return  mask
+     * @throws  none
+     * @todo    none
+    */
     function xarMask($pargs)
     {
         extract($pargs);
@@ -1701,20 +1667,20 @@ class xarPrivileges extends xarMasks
         return $display;
     }
 
-/**
- * normalize: creates a "normalized" array representing a mask
- *
- * Returns an array of strings representing a mask
- * The array can be used for comparisons with other masks
- * The function optionally adds "all"'s to the end of a normalized mask representation
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   integer   adds  Number of additional instance parts to add to the array
- * @return  array of strings
- * @throws  none
- * @todo    none
-*/
+    /**
+     * normalize: creates a "normalized" array representing a mask
+     *
+     * Returns an array of strings representing a mask
+     * The array can be used for comparisons with other masks
+     * The function optionally adds "all"'s to the end of a normalized mask representation
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   integer   adds  Number of additional instance parts to add to the array
+     * @return  array of strings
+     * @throws  none
+     * @todo    none
+    */
     function normalize($adds=0)
     {
         if (isset($this->normalform)) {
@@ -1739,16 +1705,16 @@ class xarPrivileges extends xarMasks
         return $normalform;
     }
 
-/**
- * canonical: returns 2 normalized privileges or masks as arrays for comparison
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   mask object
- * @return  array 2 normalized masks
- * @throws  none
- * @todo    none
-*/
+    /**
+     * canonical: returns 2 normalized privileges or masks as arrays for comparison
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   mask object
+     * @return  array 2 normalized masks
+     * @throws  none
+     * @todo    none
+    */
     function canonical($mask)
     {
         $p1 = $this->normalize();
@@ -1757,20 +1723,18 @@ class xarPrivileges extends xarMasks
         return array($p1,$p2);
     }
 
-/**
- * matches: checks the structure of one privilege against another
- *
- * Checks whether two privileges, or a privilege and a mask, are equal
- * in all respects except for the access level
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   mask object
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
-
+    /**
+     * matches: checks the structure of one privilege against another
+     *
+     * Checks whether two privileges, or a privilege and a mask, are equal
+     * in all respects except for the access level
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   mask object
+     * @return  boolean
+     * @throws  none
+    */
     function matches($mask)
     {
         list($p1,$p2) = $this->canonical($mask);
@@ -1785,40 +1749,36 @@ class xarPrivileges extends xarMasks
         return $match;
     }
 
-/**
- * matchesexactly: checks the structure of one privilege against another
- *
- * Checks whether two privileges, or a privilege and a mask, are equal
- * in all respects
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   mask object
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
-
+    /**
+     * matchesexactly: checks the structure of one privilege against another
+     *
+     * Checks whether two privileges, or a privilege and a mask, are equal
+     * in all respects
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   mask object
+     * @return  boolean
+     * @throws  none
+    */
     function matchesexactly($mask)
     {
         $match = $this->matches($mask);
         return $match && ($this->getLevel() == $mask->getLevel());
     }
 
-/**
- * includes: checks the structure of one privilege against another
- *
- * Checks a mask has the same or larger range than another mask
- *
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   mask object
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
-
+    /**
+     * includes: checks the structure of one privilege against another
+     *
+     * Checks a mask has the same or larger range than another mask
+     *
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   mask object
+     * @return  boolean
+     * @throws  none
+    */
     function includes($mask)
     {
         if (isset($this->normalform)) {
@@ -1874,20 +1834,18 @@ class xarPrivileges extends xarMasks
         return true;
     }
 
-/**
- * implies: checks the structure of one privilege against another
- *
- * Checks a mask has the same or larger range, and the same or higher access right,
- * than another mask
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   mask object
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
-
+    /**
+     * implies: checks the structure of one privilege against another
+     *
+     * Checks a mask has the same or larger range, and the same or higher access right,
+     * than another mask
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   mask object
+     * @return  boolean
+     * @throws  none
+    */
     function implies($mask)
     {
         $match = $this->includes($mask);
@@ -1982,7 +1940,6 @@ class xarPrivileges extends xarMasks
  * @throws  none
  * @todo    none
 */
-
 class xarPrivilege extends xarMask
 {
 
@@ -2000,18 +1957,17 @@ class xarPrivilege extends xarMask
     public $privilegestable;
     public $privmemberstable;
 
-/**
- * xarPrivilege: constructor for the class
- *
- * Just sets up the db connection and initializes some variables
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   array of values
- * @return  the privilege object
- * @throws  none
- * @todo    none
-*/
+    /**
+     * xarPrivilege: constructor for the class
+     *
+     * Just sets up the db connection and initializes some variables
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   array of values
+     * @return  the privilege object
+     * @throws  none
+    */
     function xarPrivilege($pargs)
     {
         extract($pargs);
@@ -2042,18 +1998,17 @@ class xarPrivilege extends xarMask
         $this->parentid     = (int) $parentid;
     }
 
-/**
- * add: add a new privileges object to the repository
- *
- * Creates an entry in the repository for a privileges object that has been created
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   none
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+    /**
+     * add: add a new privileges object to the repository
+     *
+     * Creates an entry in the repository for a privileges object that has been created
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   none
+     * @return  boolean
+     * @throws  none
+    */
    function add()
    {
 
@@ -2108,18 +2063,18 @@ class xarPrivilege extends xarMask
         return $this->makeEntry();
     }
 
-/**
- * makeEntry: sets up a privilege without parents
- *
- * Sets up a privilege as a root entry (no parent)
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   none
- * @return  boolean
- * @throws  none
- * @todo    check to make sure the child is not a parent of the parent
-*/
+    /**
+     * makeEntry: sets up a privilege without parents
+     *
+     * Sets up a privilege as a root entry (no parent)
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   none
+     * @return  boolean
+     * @throws  none
+     * @todo    check to make sure the child is not a parent of the parent
+    */
     function makeEntry()
     {
         if ($this->isRootPrivilege()) return true;
@@ -2128,19 +2083,19 @@ class xarPrivilege extends xarMask
         return true;
     }
 
-/**
- * addMember: adds a privilege to a privilege
- *
- * Make a privilege a member of another privilege.
- * A privilege can have any number of parents or children..
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   privilege object
- * @return  boolean
- * @throws  none
- * @todo    check to make sure the child is not a parent of the parent
-*/
+    /**
+     * addMember: adds a privilege to a privilege
+     *
+     * Make a privilege a member of another privilege.
+     * A privilege can have any number of parents or children..
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   privilege object
+     * @return  boolean
+     * @throws  none
+     * @todo    check to make sure the child is not a parent of the parent
+    */
     function addMember($member)
     {
         $query = "INSERT INTO $this->privmemberstable VALUES (?,?)";
@@ -2155,18 +2110,18 @@ class xarPrivilege extends xarMask
         return true;
     }
 
-/**
- * removeMember: removes a privilege from a privilege
- *
- * Removes a privilege as an entry of another privilege.
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   none
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+    /**
+     * removeMember: removes a privilege from a privilege
+     *
+     * Removes a privilege as an entry of another privilege.
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   none
+     * @return  boolean
+     * @throws  none
+     * @todo    none
+    */
     function removeMember($member)
     {
 
@@ -2194,18 +2149,17 @@ class xarPrivilege extends xarMask
         return true;
     }
 
-/**
- * update: updates a privilege in the repository
- *
- * Updates a privilege in the privileges repository
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   none
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+    /**
+     * update: updates a privilege in the repository
+     *
+     * Updates a privilege in the privileges repository
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   none
+     * @return  boolean
+     * @throws  none
+    */
     function update()
     {
         $query =    "UPDATE " . $this->privilegestable .
@@ -2221,18 +2175,18 @@ class xarPrivilege extends xarMask
         return true;
     }
 
-/**
- * remove: deletes a privilege in the repository
- *
- * Deletes a privilege's entry in the privileges repository
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   none
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+    /**
+     * remove: deletes a privilege in the repository
+     *
+     * Deletes a privilege's entry in the privileges repository
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   none
+     * @return  boolean
+     * @throws  none
+     * @todo    none
+    */
     function remove()
     {
 
@@ -2281,19 +2235,19 @@ class xarPrivilege extends xarMask
         return true;
     }
 
-/**
- * isassigned: check if the current privilege is assigned to a role
- *
- * This function looks at the acl table and returns true if the current privilege.
- * is assigned to a given role .
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   role object
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+    /**
+     * isassigned: check if the current privilege is assigned to a role
+     *
+     * This function looks at the acl table and returns true if the current privilege.
+     * is assigned to a given role .
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   role object
+     * @return  boolean
+     * @throws  none
+     * @todo    none
+    */
     function isassigned($role)
     {
         $query = "SELECT xar_partid FROM $this->acltable WHERE
@@ -2304,21 +2258,20 @@ class xarPrivilege extends xarMask
         return !$result->EOF;
     }
 
-/**
- * getRoles: returns an array of roles
- *
- * Returns an array of roles this privilege is assigned to
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   none
- * @return  boolean
- * @throws  none
- * @todo    seems to me this belong in roles module instead?
-*/
+    /**
+     * getRoles: returns an array of roles
+     *
+     * Returns an array of roles this privilege is assigned to
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   none
+     * @return  boolean
+     * @throws  none
+     * @todo    seems to me this belong in roles module instead?
+    */
     function getRoles()
     {
-
         // set up a query to select the roles this privilege
         // is linked to in the acl table
         $query = "SELECT r.xar_uid, r.xar_name, r.xar_type,
@@ -2356,51 +2309,47 @@ class xarPrivilege extends xarMask
         return $roles;
     }
 
-/**
- * removeRole: removes a role
- *
- * Removes a role this privilege is assigned to
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   role object
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+    /**
+     * removeRole: removes a role
+     *
+     * Removes a role this privilege is assigned to
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   role object
+     * @return  boolean
+     * @throws  none
+    */
     function removeRole($role)
     {
-
-// use the equivalent method from the roles object
+        // use the equivalent method from the roles object
         return $role->removePrivilege($this);
     }
 
-/**
- * getParents: returns the parent objects of a privilege
- *
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   none
- * @return  array of privilege objects
- * @throws  none
- * @todo    none
-*/
+    /**
+     * getParents: returns the parent objects of a privilege
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   none
+     * @return  array of privilege objects
+     * @throws  none
+    */
     function getParents()
     {
-// create an array to hold the objects to be returned
+        // create an array to hold the objects to be returned
         $parents = array();
 
-// perform a SELECT on the privmembers table
+        // perform a SELECT on the privmembers table
         $query = "SELECT p.*, pm.xar_parentid
                     FROM $this->privilegestable p, $this->privmemberstable pm
                     WHERE p.xar_pid = pm.xar_parentid
                       AND pm.xar_pid = ?";
         $result = $this->dbconn->Execute($query,array($this->getID()));
 
-// collect the table values and use them to create new role objects
+        // collect the table values and use them to create new role objects
         $ind = 0;
-            while(!$result->EOF) {
+        while(!$result->EOF) {
             list($pid,$name,$realm,$module,$component,$instance,$level,$description,$parentid) = $result->fields;
             $pargs = array('pid'=>$pid,
                             'name'=>$name,
@@ -2414,32 +2363,31 @@ class xarPrivilege extends xarMask
             $ind = $ind + 1;
             array_push($parents, new xarPrivilege($pargs));
             $result->MoveNext();
-            }
-// done
+        }
+        // done
         return $parents;
     }
 
-/**
- * getAncestors: returns all objects in the privileges hierarchy above a privilege
- *
- * The returned privileges are automatically winnowed
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   none
- * @return  array of privilege objects
- * @throws  none
- * @todo    none
-*/
+    /**
+     * getAncestors: returns all objects in the privileges hierarchy above a privilege
+     *
+     * The returned privileges are automatically winnowed
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   none
+     * @return  array of privilege objects
+     * @throws  none
+    */
     function getAncestors()
     {
-// if this is the root return an empty array
+        // if this is the root return an empty array
         if ($this->getID() == 1) return array();
 
-// start by getting an array of the parents
+        // start by getting an array of the parents
         $parents = $this->getParents();
 
-//Get the parent field for each parent
+        //Get the parent field for each parent
         $masks = new xarMasks();
         while (list($key, $parent) = each($parents)) {
             $ancestors = $parent->getParents();
@@ -2448,23 +2396,23 @@ class xarPrivilege extends xarMask
             }
         }
 
-//done
+        //done
         $ancestors = array();
         $parents = $masks->winnow($ancestors,$parents);
         return $ancestors;
     }
 
-/**
- * getChildren: returns the child objects of a privilege
- *
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   none
- * @return  array of privilege objects
- * @throws  none
- * @todo    none
-*/
+    /**
+     * getChildren: returns the child objects of a privilege
+     *
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   none
+     * @return  array of privilege objects
+     * @throws  none
+     * @todo    none
+    */
     function getChildren()
     {
         $cacheId = $this->getID();
@@ -2518,24 +2466,24 @@ class xarPrivilege extends xarMask
         }
     }
 
-/**
- * getDescendants: returns all objects in the privileges hierarchy below a privilege
- *
- * The returned privileges are automatically winnowed
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   none
- * @return  array of privilege objects
- * @throws  none
- * @todo    none
-*/
+    /**
+     * getDescendants: returns all objects in the privileges hierarchy below a privilege
+     *
+     * The returned privileges are automatically winnowed
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   none
+     * @return  array of privilege objects
+     * @throws  none
+     * @todo    none
+    */
     function getDescendants()
     {
-// start by getting an array of the parents
+        // start by getting an array of the parents
         $children = $this->getChildren();
 
-//Get the child field for each child
+        //Get the child field for each child
         $masks = new xarMasks();
         while (list($key, $child) = each($children)) {
             $descendants = $child->getChildren();
@@ -2544,75 +2492,75 @@ class xarPrivilege extends xarMask
             }
         }
 
-//done
+        //done
         $descendants = array();
         $descendants = $masks->winnow($descendants,$children);
         return $descendants;
     }
 
-/**
- * isEqual: checks whether two privileges are equal
- *
- * Two privilege objects are considered equal if they have the same pid.
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   none
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+    /**
+     * isEqual: checks whether two privileges are equal
+     *
+     * Two privilege objects are considered equal if they have the same pid.
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   none
+     * @return  boolean
+     * @throws  none
+     * @todo    none
+    */
     function isEqual($privilege)
     {
         return $this->getID() == $privilege->getID();
     }
 
-/**
- * getID: returns the ID of this privilege
- *
- * This overrides the method of the same name in the parent class
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   none
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+    /**
+     * getID: returns the ID of this privilege
+     *
+     * This overrides the method of the same name in the parent class
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   none
+     * @return  boolean
+     * @throws  none
+     * @todo    none
+    */
     function getID()
     {
         return $this->pid;
     }
 
-/**
- * isEmpty: returns the type of this privilege
- *
- * This methods returns true if the privilege is an empty container
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   none
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+    /**
+     * isEmpty: returns the type of this privilege
+     *
+     * This methods returns true if the privilege is an empty container
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   none
+     * @return  boolean
+     * @throws  none
+     * @todo    none
+    */
     function isEmpty()
     {
         return $this->module == 'empty';
     }
 
-/**
- * isParentPrivilege: checks whether a given privilege is a parent of this privilege
- *
- * This methods returns true if the privilege is a parent of this one
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   none
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+    /**
+     * isParentPrivilege: checks whether a given privilege is a parent of this privilege
+     *
+     * This methods returns true if the privilege is a parent of this one
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   none
+     * @return  boolean
+     * @throws  none
+     * @todo    none
+    */
     function isParentPrivilege($privilege)
     {
         $privs = $this->getParents();
@@ -2621,18 +2569,19 @@ class xarPrivilege extends xarMask
         }
         return false;
     }
-/**
- * isRootPrivilege: checks whether this privilege is root privilege
- *
- * This methods returns true if this privilege is a root privilege
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @access  public
- * @param   none
- * @return  boolean
- * @throws  none
- * @todo    none
-*/
+
+    /**
+     * isRootPrivilege: checks whether this privilege is root privilege
+     *
+     * This methods returns true if this privilege is a root privilege
+     *
+     * @author  Marc Lutolf <marcinmilan@xaraya.com>
+     * @access  public
+     * @param   none
+     * @return  boolean
+     * @throws  none
+     * @todo    none
+    */
     function isRootPrivilege()
     {
         $q = new xarQuery('SELECT');
@@ -2646,4 +2595,60 @@ class xarPrivilege extends xarMask
     }
 }
 
+/**
+ * Make security levels available
+ *
+ * @package default
+ * @author Marcel van der Boom <mrb@hsdev.com>
+ * @todo  this is here as replacement for what we used to have in a table
+ **/
+final class SecurityLevel
+{
+    const INVALID =   -1;
+    const NONE    =    0;
+    const OVERVIEW = 100;
+    const READ     = 200;
+    const COMMENT  = 300;
+    const MODERATE = 400;
+    const EDIT     = 500;
+    const ADD      = 600;
+    const DELETE   = 700;
+    const ADMIN    = 800;
+    
+    // This kinda sucks, but alas.
+    private static $nameMap  = array(
+        'ACCESS_INVALID'  => self::INVALID  ,  
+        'ACCESS_NONE'     => self::NONE     ,
+        'ACCESS_OVERVIEW' => self::OVERVIEW ,
+        'ACCESS_READ'     => self::READ     ,
+        'ACCESS_COMMENT'  => self::COMMENT  ,
+        'ACCESS_MODERATE' => self::MODERATE ,
+        'ACCESS_EDIT'     => self::EDIT     ,
+        'ACCESS_ADD'      => self::ADD      ,
+        'ACCESS_DELETE'   => self::DELETE   ,
+        'ACCESS_ADMIN'    => self::ADMIN);
+        
+    // @todo should we xarML these?, its perhaps better to move this to templates completely.
+    public static $displayMap = array(
+        self::INVALID  => 'Invalid (-1)',
+        self::NONE     => 'No Access (0)',
+        self::OVERVIEW => 'Overview (100)',
+        self::READ     => 'Read (200)',
+        self::COMMENT  => 'Comment (300)',
+        self::MODERATE => 'Moderate (400)',
+        self::EDIT     => 'Edit (500)',
+        self::ADD      => 'Add (600)',
+        self::DELETE   => 'Delete (700)',
+        self::ADMIN    => 'Administer (800)'
+        );
+
+    public static function get($name)
+    {
+        if(isset(self::$nameMap[$name])) {
+            return self::$nameMap[$name];
+        } else {
+            return self::INVALID;
+        }    
+    }
+}
 ?>

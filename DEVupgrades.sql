@@ -99,3 +99,5 @@ ALTER TABLE xar_rolemembers ADD PRIMARY KEY (xar_uid,xar_parentid);
 
 DROP INDEX i_xar_cache_blocks_1;
 ALTER TABLE xar_cache_blocks ADD PRIMARY KEY (xar_bid);
+
+DROP TABLE xar_security_levels;
