@@ -13,6 +13,7 @@
 
 sys::import('modules.roles.xarroles');
 
+// @ todo DOUBLE DEFINITION of same class (in privileges/xartreerenderer)
 class xarTreeRenderer
 {
     public $roles;
@@ -44,7 +45,7 @@ class xarTreeRenderer
     /**
      * Constructor
      */
-    function xarTreeRenderer($allowtoggle=0)
+    function __construct($allowtoggle=0)
     {
         $this->smallblank = xarTplObject('roles', 'spacer', 'small');
         $this->L = xarTplObject('roles', 'L', 'drawing');

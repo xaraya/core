@@ -18,6 +18,7 @@
 
 sys::import('modules.privileges.xarprivileges');
 
+// @ todo DOUBLE DEFINITION of same class (in roles/xartreerenderer)
 class xarTreeRenderer
 {
     
@@ -48,7 +49,7 @@ class xarTreeRenderer
      * Constructor
      *
      */
-    function xarTreeRenderer()
+    function __construct()
     {
         $this->privs = new xarPrivileges();
     }

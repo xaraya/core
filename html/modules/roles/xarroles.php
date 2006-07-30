@@ -44,7 +44,7 @@ class xarRoles
     public $rolestable;
     public $rolememberstable;
 
-    function xarRoles()
+    function __construct()
     {
         $this->dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
@@ -488,7 +488,7 @@ class xarRole
      * @throws none
      * @todo none
      */
-    function xarRole($pargs)
+    function __construct($pargs)
     {
         extract($pargs);
 

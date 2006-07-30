@@ -58,7 +58,7 @@ class xarMasks
      * @throws  none
      * @todo    none
     */
-    function xarMasks()
+    function __construct()
     {
         $this->dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
@@ -1635,7 +1635,7 @@ class xarMask
      * @throws  none
      * @todo    none
     */
-    function xarMask($pargs)
+    function __construct($pargs)
     {
         extract($pargs);
 
@@ -1968,7 +1968,7 @@ class xarPrivilege extends xarMask
      * @return  the privilege object
      * @throws  none
     */
-    function xarPrivilege($pargs)
+    function __construct($pargs)
     {
         extract($pargs);
 
@@ -2600,7 +2600,7 @@ class xarPrivilege extends xarMask
  *
  * @package default
  * @author Marcel van der Boom <mrb@hsdev.com>
- * @todo  this is here as replacement for what we used to have in a table
+ * @todo  this is here as replacement for what we used to have in a table, but wrapping levels are a bit high for getting to this info
  **/
 final class SecurityLevel
 {
@@ -2629,6 +2629,7 @@ final class SecurityLevel
         'ACCESS_ADMIN'    => self::ADMIN);
         
     // @todo should we xarML these?, its perhaps better to move this to templates completely.
+    // @todo this shouldn't be public if it is to stay here
     public static $displayMap = array(
         self::INVALID  => 'Invalid (-1)',
         self::NONE     => 'No Access (0)',
