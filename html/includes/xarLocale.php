@@ -608,14 +608,27 @@ function xarMLS_strftime($format=null,$timestamp=null)
                 // check to see if this is a negative or positive offset
                 $f_offset = strstr($user_offset,'-')  ? '-' : '+';
                 $user_offset = str_replace('-','',$user_offset); // replace the - if it exists
-                // check for 1/2 hour offsets
                 if(strpos($user_offset,'.')) {
                    $fragments = explode('.',$user_offset);
-                   $f_offset .= sprintf('%02d',$fragments[0]).'30';
+                   // extract hours - AZ
+                   if( (int) $fragments[0] < 10) {
+                      $f_offset_hours = "0{$fragments[0]}";
+                   } else {
+                      $f_offset_hours = "{$fragments[0]}";
+                   }
+                   // extract minutes- AZ
+                   $f_offset_minutes = ('.'.$fragments[1])*60;
+                   if( (int) $f_offset_minutes < 10) {
+                      $f_offset_minutes = "0{$f_offset_minutes}";
+                   } else {
+                      $f_offset_minutes = "{$f_offset_minutes}";
+                   }
+                   // Bug 5211, Code of AZ: beautify display with common ":" delimiter
+                   $f_offset .= sprintf('%02d',$f_offset_hours).':'.$f_offset_minutes;
                 } elseif( (int) $user_offset < 10) {
-                    $f_offset .= "0{$user_offset}00";
+                    $f_offset .= "0{$user_offset}:00";
                 } else {
-                    $f_offset .= "{$user_offset}00";
+                    $f_offset .= "{$user_offset}:00";
                 }
 
                 $format = str_replace($modifier,$f_offset,$format);
