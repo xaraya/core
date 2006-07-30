@@ -23,6 +23,8 @@
  */
 class xarTemplateTag
 {
+    const NAME_REGEX = '^[a-z][-_a-z0-9]*$';
+    
     // These need to stay public otherwise the (de)serialization from their storage into the database doesnt work!
     public $_name = NULL;          // Name of the tag
     public $_attributes = array(); // Array with the supported attributes
@@ -47,7 +49,7 @@ class xarTemplateTag
     function __construct($module, $name, $attributes = array(), $handler = NULL, $flags = XAR_TPL_TAG_ISPHPCODE)
     {
         // See defines at top of file
-        if (!eregi(XAR_TPL_TAGNAME_REGEX, $name)) {
+        if (!eregi(self::NAME_REGEX, $name)) {
             throw new BadParameterException($name,'Illegal tag definition: "#(1)" is an invalid tag name.');
         }
 
@@ -200,7 +202,7 @@ class xarTemplateTag
      **/
     public static function unregister($tag_name)
     {
-        if (!eregi(XAR_TPL_TAGNAME_REGEX, $tag_name)) {
+        if (!eregi(self::NAME_REGEX, $tag_name)) {
             // throw exception
             return false;
         }
@@ -321,19 +323,21 @@ function xarTplGetTagObjectFromName($tag_name)
  * Mainly uses for custom tags
  *
  * @package blocklayout
- * @access protected
+ * @access public
  * @throws BadParamterException
  * @todo see FIXME
  */
 class xarTemplateAttribute
 {
+    const  NAME_REGEX = '^[a-z][-_a-z0-9]*$';
+    
     public $_name;     // Attribute name
     public $_flags;    // Attribute flags (datatype, required/optional, etc.)
 
     function __construct($name, $flags = NULL)
     {
         // See defines at top of file
-        if (!eregi(XAR_TPL_ATTRIBUTE_REGEX, $name)) {
+        if (!eregi(self::NAME_REGEX, $name)) {
             // This should be a XML validation exception perhaps?
             throw new BadParamterException($name,'The attribute name "#(1)" is invalid. Attribute names contain letters, numbers, _ and -, and must start with a letter.');
         }

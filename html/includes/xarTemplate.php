@@ -49,13 +49,6 @@ define ('XAR_TPL_ANY', XAR_TPL_STRING|XAR_TPL_BOOLEAN|XAR_TPL_INTEGER|XAR_TPL_FL
 /// END OLD STUFF
 
 /**
- * Define for reg expressions for attributes and tags
- *
-**/
-define ('XAR_TPL_ATTRIBUTE_REGEX','^[a-z][-_a-z0-9]*$');
-define ('XAR_TPL_TAGNAME_REGEX',  '^[a-z][-_a-z0-9]*$');
-
-/**
  * Defines for tag properties
  *
 **/
