@@ -26,6 +26,7 @@ revisit later on before trusting the branch to be released or used.
   now in the modules table itself.
 * table config_vars has been dropped, now managed by module_vars where
   modid==0
+* table security_levels has been dropped, now managed by SecurityLevel class
 
 (see DEVupgrades.sql for the above)
 
@@ -72,11 +73,22 @@ revisit later on before trusting the branch to be released or used.
 List of things which need to be refactored before starting the actual
 design work can begin.
 
-* i really like some sort of import(name.of.some.sub.part) dot notation to
+* [DONE] i really like some sort of import(name.of.some.sub.part) dot notation to
   include major parts into the flow when doing stuff, instead of
   xarInclude or something
 * Finish up the planned db changes to normalizing the database.
-* OO-ify stuff in core where appropriate (including getting rid of
+  Open issues:
+        - does blocks really need 5 tables?
+        - dynamic relations table is floating in there for a long time
+        - xar_realm in xar_security masks uses 'All' which prevents it from being
+          a foreign key to the realm table (through id), likewise for xar_privileges 
+          table
+        - if we are going to store privilege levels in the database, then refer to 
+          them from other tables, we now store the level verbatim (perhaps drop the table?)
+      - similarly, in xar_privileges table the xar_module column. 
+        - is xar_auth_mod_id still needed?
+        - 
+* [STARTED] OO-ify stuff in core where appropriate (including getting rid of
   die()'s and modelling the classes where php4 could not) 
 * I really would like to do something with views wrt multisites et. al.
 * I really would like to do something with triggers, dunno for what
@@ -88,6 +100,8 @@ design work can begin.
 * the blocklayout tag could use attributes related to emitting a <?xml
   header or not (or use <?xar for this? since it is an instruction to
   process )
+* design a more solid concept for letting blocklayout emit http headers, attributes
+  in the blocklayout tag dont cut it. (disposition is one needed, as well as more granular cache s)
 * we keep a 'state' of some sort for different items:
   1. modules
   2. themes
@@ -101,17 +115,27 @@ design work can begin.
   the xar_modid field (which was previously xar_module). This will
   cause confusion. (unfinished?, experiment?, ask marc)
 * we need easy and global xmlhttp request support everywhere.
-* xaraya is an excellent backend, we need a equally excellent front-end companion (like dojo)
+* [DONE] Xaraya is an excellent backend, we need a equally excellent front-end companion (like dojo)
+   (implemented as dojo activator module)
 * i'd really like more native backend support, for query preparation
   that place is obviously creole, but for shielding and triggering we
   dont have an abstraction and the more complex modules go through a
   whole lot of hoops sometimes which the backend could do in a jiffy.
 * the installer tries to throw all database onto one pile, we need to split 
-	the database configuration screens into different ones for each backend
-	* sqlite has no user and password
-	* sqlite uses a directory for a host
-	* mysql can support different table drivers (myisam, innodb) transparently
-	
+    the database configuration screens into different ones for each backend
+    * sqlite has no user and password
+    * sqlite uses a directory for a host
+    * mysql can support different table drivers (myisam, innodb) transparently
+* xml constructs like PI, EL and ATT need their equivalent in BL, but the current
+  implementation lacks context.
+* [STARTED] finish design and implementation os schema based data definition 
+* design a less bloated concept for config/user/mod/theme/system vars etc
+* reorganize the old error/exception system to use much fewer files, consider
+  writing a talkback module to go along with a distro for facilitating the bug
+  reporting we can build into an install. (bugzilla can be remotely queried for
+  products and components easily, perhaps based on a server side map of regid-component
+  for modules at least)
+* 
 
 !!!KNOWN ISSUES
 * blocks do not end up in groups anymore during installation, need to
@@ -124,6 +148,7 @@ design work can begin.
   components to physical tables.
 * datadict is absent in 2.x since that lived in adodb, creole does not have it
 * there is no upgrade routine for upgrading 1.x to 2.x
+
 
 !!!MIN. REQUIRED VERSIONS DETERMINED SO FAR
 * PHP      5.0.5
