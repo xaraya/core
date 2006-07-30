@@ -1252,7 +1252,7 @@ class xarTemplateAttribute
     public $_name;     // Attribute name
     public $_flags;    // Attribute flags (datatype, required/optional, etc.)
 
-    function xarTemplateAttribute($name, $flags = NULL)
+    function __construct($name, $flags = NULL)
     {
         // See defines at top of file
         if (!eregi(XAR_TPL_ATTRIBUTE_REGEX, $name)) {
@@ -1458,6 +1458,46 @@ class xarTemplateTag
         $code = str_replace(array("\r\n","\r"),"\n",$code);
         return $code;
     }
+    
+    /**
+     * Register a tag 
+     *
+     * @return bool true on succes
+     * @throws SQLException
+     * @author Marcel van der Boom
+     **/
+    public function register()
+    {
+        $dbconn =& xarDBGetConn();
+        $xartable =& xarDBGetTables();
+
+        $systemPrefix = xarDBGetSystemTablePrefix();
+        $tag_table = $systemPrefix . '_template_tags';
+
+        // Get next ID in table
+        try {
+            $dbconn->begin();
+            $tag_id = $dbconn->GenId($tag_table);
+
+            $modInfo = xarMod::GetBaseInfo($this->getModule());
+             $query = "INSERT INTO $tag_table
+                      (xar_id, xar_name, xar_modid, xar_handler, xar_data)
+                      VALUES(?,?,?,?,?)";
+            $bindvars = array($tag_id,
+                              $this->getName(),
+                              $modInfo['systemid'],
+                              $this->getHandler(),
+                              serialize($this));
+
+            $stmt = $dbconn->prepareStatement($query);
+            $stmt->executeUpdate($bindvars);
+            $dbconn->commit();
+        } catch (SQLException $e) {
+            $dbconn->rollback();
+            throw $e;
+        }
+        return true;
+    }
 }
 
 /**
@@ -1485,38 +1525,8 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
 
     // Validity of tagname is checked in class.
     $tag = new xarTemplateTag($tag_module, $tag_name, $tag_attrs, $tag_handler, $flags);
-    if(!$tag->getName()) return; // tagname was not set, exception pending
+    return $tag->register();
 
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-
-    $systemPrefix = xarDBGetSystemTablePrefix();
-    $tag_table = $systemPrefix . '_template_tags';
-
-    // Get next ID in table
-    try {
-        $dbconn->begin();
-        $tag_id = $dbconn->GenId($tag_table);
-
-        $modInfo = xarMod::GetBaseInfo($tag->getModule());
-        $modId = $modInfo['systemid'];
-        $query = "INSERT INTO $tag_table
-                  (xar_id, xar_name, xar_modid, xar_handler, xar_data)
-                  VALUES(?,?,?,?,?)";
-        $bindvars = array($tag_id,
-                          $tag->getName(),
-                          $modId,
-                          $tag->getHandler(),
-                          serialize($tag));
-
-        $stmt = $dbconn->prepareStatement($query);
-        $stmt->executeUpdate($bindvars);
-        $dbconn->commit();
-    } catch (SQLException $e) {
-        $dbconn->rollback();
-        throw $e;
-    }
-    return true;
 }
 
 /**
