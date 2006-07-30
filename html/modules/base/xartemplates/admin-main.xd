@@ -19,7 +19,7 @@
 
     <h3><xar:mlstring>How to use it?</xar:mlstring></h3>
 
-    <p><xar:mlstring>The Administration menu  allows you to have control over various global aspects on your site and includes:</xar:mlstring></p>
+    <p><xar:mlstring>The Administration menu allows you to have control over various global aspects on your site and includes:</xar:mlstring></p>
         <ol>
             <li><xar:mlstring>System Information: Allows you to view your server and php set-up for trouble shooting.</xar:mlstring></li>
             <li><xar:mlstring>Extension Releases: View recently released extensions from the xaraya.com Extension and Release RSS feed.</xar:mlstring></li>
@@ -32,7 +32,20 @@
                  </ul>
             </li>
         </ol>
-
+        <h4><xar:mlstring>
+            The Others Tab
+            </xar:mlstring>
+        </h4>
+        <p>
+            <strong>
+                <xar:mlstring>
+                    Timezone setting:
+                </xar:mlstring>
+            </strong>
+            <xar:mlstring>
+                Xaraya stores date/times in UTC. This timezone is used to calculate the time shown to users of your site. Note that you can have users choose their own timezone when you allow them to.
+            </xar:mlstring>
+        </p>
     <h3><xar:mlstring>Included Blocks</xar:mlstring></h3>
 
     <ol>
@@ -71,7 +84,7 @@
     <p><xar:mlstring>The Base Module provides a number of Dynamic Data properties that you can use to extend existing Xaraya functionality by hooking Dynamic Data to your modules, or for developers, for use in your own module development.</xar:mlstring></p>
     <h3><xar:mlstring>Custom Templates and Static Pages</xar:mlstring></h3>
 
-    <p><xar:mlstring>As well as providing a means to provide a custom template for your front page by creating an override for the base user-main.xd template, 
+    <p><xar:mlstring>As well as providing a means to provide a custom template for your front page by creating an override for the base user-main.xd template,
     you can also create further custom 'static' pages using base module templates. See the documentation for further information.</xar:mlstring></p>
 
     <h3><xar:mlstring>System Wide CSS</xar:mlstring></h3>
