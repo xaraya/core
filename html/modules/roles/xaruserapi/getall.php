@@ -179,9 +179,7 @@ function roles_userapi_getall($args)
     $roles = array();
     for (; !$result->EOF; $result->MoveNext()) {
         list($uid, $uname, $name, $email, $pass, $state, $date_reg) = $result->fields;
-        // FIXME: for some reason, user could not see themselves, even with the 'Myself' instance
-        // present with sufficient privielegs on the component.
-        if (xarSecurityCheck('ReadRole', 0, 'Roles', "$uid") || $uid == xarUserGetVar('uid')) {
+        if (xarSecurityCheck('ReadRole', 0, 'Roles', "$uname")) {
             if (!empty($uidlist)) {
                 $roles[$uid] = array(
                     'uid'       => (int) $uid,
@@ -203,7 +201,7 @@ function roles_userapi_getall($args)
                     'date_reg'  => $date_reg
                 );
             }
-        } elseif (xarSecurityCheck('ViewRoles', 0, 'Roles', "$uid")) {
+        } elseif (xarSecurityCheck('ViewRoles', 0, 'Roles', "$uname")) {
             // If we only have overview privilege, then supply more restricted information.
             if (!empty($uidlist)) {
                 $roles[$uid] = array(
