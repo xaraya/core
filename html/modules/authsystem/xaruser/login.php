@@ -50,13 +50,13 @@ function authsystem_user_login()
     if (!xarVarFetch('uname','str:1:100',$uname)) {
         xarErrorFree();
         $msg = xarML('You must provide a username.');
-        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
         return;
     }
     if (!xarVarFetch('pass','str:1:100',$pass)) {
         xarErrorFree();
         $msg = xarML('You must provide a password.');
-        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+        xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
         return;
     }
     $redirect=xarServerGetBaseURL();
@@ -170,8 +170,8 @@ function authsystem_user_login()
         case ROLES_STATE_DELETED:
 
             // User is deleted by all means.  Return a message that says the same.
-            $msg = xarML('Your account has been terminated by your request or at the adminstrator\'s discression.');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            $msg = xarML('Your account has been terminated by your request or at the adminstrator\'s discretion.');
+            xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
             return;
 
             break;
@@ -179,8 +179,8 @@ function authsystem_user_login()
         case ROLES_STATE_INACTIVE:
 
             // User is inactive.  Return message stating.
-            $msg = xarML('Your account has been marked as inactive.  Contact the adminstrator with further questions.');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            $msg = xarML('Your account has been marked as inactive.  Contact the adminstrator if you have further questions.');
+            xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
             return;
 
             break;
@@ -329,8 +329,8 @@ function authsystem_user_login()
         case ROLES_STATE_PENDING:
 
             // User is pending activation
-        $msg = xarML('Your account has not yet been activated by the site administrator');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+            $msg = xarML('Your account has not yet been activated by the site administrator');
+            xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
             return;
 
             break;
@@ -339,5 +339,4 @@ function authsystem_user_login()
     return true;
 
 }
-
 ?>
