@@ -2,10 +2,12 @@
 /**
  * Multi Language System
  *
- * @package multilanguage
- * @copyright (C) 2002 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @package core
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
+ * @subpackage multilanguage
  * @author Marco Canini <marco@xaraya.com>
  * @todo Dynamic Translations
  *       Timezone and DST support (default offset is supported now)
@@ -371,6 +373,7 @@ function xarMLS_userOffset($timestamp = null)
     //          (see also 'locale' in xarUserGetNavigationLocale())
         // get the correct timezone offset for this user
         if (xarUserIsLoggedIn()) {
+            //jojodee - We should perhaps use something a little more reliable than this dd user var - see bug 5847
             $offset = xarUserGetVar('timezone');
             // get the actual timezone for the user (in addition to the timezone offset)
             if (isset($offset) && !is_numeric($offset)) {
@@ -381,7 +384,8 @@ function xarMLS_userOffset($timestamp = null)
                 }
             }
         }
-        if (!isset($offset)) {
+        //bug 5847 - $offset will be false if the user is logged in, rather than NULL. Cannot check for !isset.
+        if (!($offset)) {
             // use default time offset for this site
             $offset = $GLOBALS['xarMLS_defaultTimeOffset'];
             // use default timezone for this site
@@ -394,7 +398,7 @@ function xarMLS_userOffset($timestamp = null)
                                 array('timezone' => $timezone,
                                       // pass the timestamp *with* the offset
                                       'time'     => $timestamp + $offset * 3600));
-        //echo $adjust;
+
     } else {
         $adjust = 0;
     }
@@ -861,7 +865,7 @@ function xarMLS__mkdirr($path)
     if (is_dir($path) || empty($path)) {
         return true;
     }
-         
+
     // Crawl up the directory tree
     $next_path = substr($path, 0, strrpos($path, '/'));
     if (xarMLS__mkdirr($next_path)) {
@@ -912,5 +916,5 @@ function xarMLS__iswritable($directory=NULL)
         return $isWritable;
     }
 }
-                                                    
+
 ?>

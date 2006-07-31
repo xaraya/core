@@ -84,9 +84,9 @@ function roles_adminapi_update($args)
         $bindvars = array($name,$uname,$email,$valcode,$state,$uid);
     }
     if (xarModGetVar('roles','setuserhome')) {
-	    xarModSetUserVar('roles','userhome',$home, $uid);
+        xarModSetUserVar('roles','userhome',$home, $uid);
     }
-	if (isset($dopasswordupdate) && xarModGetVar('roles','setpasswordupdate')) {
+    if (isset($dopasswordupdate) && xarModGetVar('roles','setpasswordupdate')) {
         xarModSetUserVar('roles','passwordupdate',time(), $uid);
     }
     $result =& $dbconn->Execute($query,$bindvars);

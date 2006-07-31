@@ -2,12 +2,13 @@
 /**
  * Privileges administration API
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage Privileges module
+ * @link http://xaraya.com/index.php/release/1098.html 
  */
 
 /*
@@ -418,10 +419,14 @@ class xarMasks
             case "domain":
                 $host = xarServerGetHost();
                 $parts = explode('.',$host);
-                if (count($parts) < 3) {
+                if (count($parts) < 2) {
                     $mask->setRealm('All');
-                } else {
-                    $mask->setRealm($parts[0]);
+                } else { //doublecheck
+                    if ($parts[0]=='www') {
+                        $mask->setRealm($parts[1]);
+                    } else {
+                        $mask->setRealm($parts[0]);
+                    }
                 }
                 break;
             case "string":
@@ -655,7 +660,7 @@ class xarMasks
         $matched = false;
         $pass = false;
         // Note : DENY rules override all others here...
-		$thistest = $testdeny && ($testmask == $mask->getName() || $testmask == "All");
+        $thistest = $testdeny && ($testmask == $mask->getName() || $testmask == "All");
         foreach ($privilegeset['privileges'] as $privilege) {
             if($thistest) {
                 echo "Comparing <font color='blue'>[" . $privilege->present() . "]</font> against  <font color='green'>[". $mask->present() . "]</font> <b>for deny</b>. ";
@@ -674,33 +679,33 @@ class xarMasks
             }
             if ($privilege->level == 0 && $privilege->includes($mask)) {
                 if (!xarModGetVar('privileges','inheritdeny') && is_object($role)) {
-					if($thistest) {
-						echo "We don't inherit <strong>denys</strong>, ";
-					}
+                    if($thistest) {
+                        echo "We don't inherit <strong>denys</strong>, ";
+                    }
                     $privs = $role->getAssignedPrivileges();
                     $isassigned = false;
                     foreach ($privs as $priv) {
                         if ($privilege == $priv) {
-							if($thistest) {
-								echo "but <font color='blue'>[" . $privilege->present() . "] wins</font> because directly assigned. Continuing with other checks...<br />";
-							}
+                            if($thistest) {
+                                echo "but <font color='blue'>[" . $privilege->present() . "] wins</font> because directly assigned. Continuing with other checks...<br />";
+                            }
                             return false;
                             break;
                         }
                     }
-					if($thistest) {
-						echo "and <font color='blue'>[" . $privilege->present() . "] wins</font> is not directly assigned. Ignoring..<br/>";
-					}
+                    if($thistest) {
+                        echo "and <font color='blue'>[" . $privilege->present() . "] wins</font> is not directly assigned. Ignoring..<br/>";
+                    }
                 } else {
-					if($thistest) {
-						echo "<font color='blue'>[" . $privilege->present() . "] wins</font>. Continuing with other checks...<br />";
-					}
+                    if($thistest) {
+                        echo "<font color='blue'>[" . $privilege->present() . "] wins</font>. Continuing with other checks...<br />";
+                    }
                     return false;
                 }
             } else {
-	            if($thistest) {
-	            	echo "Continuing with other checks..<br />";
-	            }
+                if($thistest) {
+                    echo "Continuing with other checks..<br />";
+                }
             }
         }
 
@@ -870,9 +875,13 @@ class xarPrivileges extends xarMasks
                     $description, $iid
                 );
             } else {
-                // FIXME: be explicit with the table columns.
-            $query = "INSERT INTO $this->instancestable VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-                $bindvars = array(
+            $query = "INSERT INTO $this->instancestable
+                     ( xar_iid, xar_module, xar_component, xar_header,
+                       xar_query, xar_limit, xar_propagate,
+                       xar_instancetable2, xar_instancechildid,
+                       xar_instanceparentid, xar_description)
+                     VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+                    $bindvars = array(
                     $this->dbconn->genID($this->instancestable),
                               $module, $type, $instance['header'],
                               $instance['query'], $instance['limit'],
@@ -1258,7 +1267,6 @@ class xarPrivileges extends xarMasks
 */
     function getinstances($module, $component)
     {
-
 
         if ($component =="All") {
             $componentstring = "";

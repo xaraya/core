@@ -3,8 +3,8 @@
  * BlockLayout Template Engine
  *
  * @package blocklayout
- * @copyright (C) 2002 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Paul Rosania <paul@xaraya.com>
  * @author Marco Canini <marco@xaraya.com>
@@ -1129,29 +1129,13 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
     for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
     $ctxType = $tplpath[0].':'.implode("/", $stack);
     $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
+    /* This $dnType check is a workaround for non-standard templates like we need in workflows etc. */
     /* Temporary partial fix for Bug 5156. This is a temporary workaround and
        while here, themes cannot be translated. This should be fixed as soon as possible */
     if(isset($dnType)) {
         if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
     }
-    // Load translations for the template
-    $tplpath = explode("/", $sourceFileName);
-    $tplPathCount = count($tplpath);
-    switch ($tplpath[0]) {
-        case 'modules': $dnType = XARMLS_DNTYPE_MODULE; break;
-        case 'themes':  $dnType = XARMLS_DNTYPE_THEME; break;
-    }
-    $dnName = $tplpath[1];
-    $stack = array();
-    if ($tplpath[2] == 'xartemplates') $tplpath[2] = 'templates';
-    for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
-    $ctxType = $tplpath[0].':'.implode("/", $stack);
-    $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
-    /* This $dnType check is a workaround for non-standard templates like we need in workflows etc. */
-    if(isset($dnType)) {
-        if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
-    }
-
+ 
     $needCompilation = true;
     $cachedFileName = null;
     if ($GLOBALS['xarTpl_cacheTemplates']) {

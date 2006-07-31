@@ -1,5 +1,5 @@
 <xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
+    License: GPL http://www.gnu.org/copyleft/gpl.html
 </xar:comment>
 <xar:base-include-javascript module="base" filename="formcheck.js" />
 <script type="text/javascript">
@@ -9,12 +9,12 @@
     // Enter field description to appear in the dialog box
     var base_fieldDescription = Array("Default Module Function");
 //-->
-</script> 
+</script>
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:mlstring>
-            Base Administration 
+            Base Administration
         </xar:mlstring>
     </span>
 </div>
@@ -22,7 +22,7 @@
  <xar:template type="module" file="admin-menu" />
     <h2>
         <xar:mlstring>
-            Modify System Configuration 
+            Modify System Configuration
         </xar:mlstring>
     </h2>
     <dl class="xar-tabs">
@@ -35,7 +35,7 @@
             <dd class="active">
                 <a href="#xarServerGetCurrentURL()#">
                     <xar:mlstring>
-                        Site Display 
+                        Site Display
                     </xar:mlstring>
                 </a>
             </dd>
@@ -43,7 +43,7 @@
             <dd>
                 <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'display'))#">
                     <xar:mlstring>
-                        Site Display 
+                        Site Display
                     </xar:mlstring>
                 </a>
             </dd>
@@ -52,7 +52,7 @@
             <dd class="active">
                 <a href="#xarServerGetCurrentURL()#">
                     <xar:mlstring>
-                        Sessions/Security 
+                        Sessions/Security
                     </xar:mlstring>
                 </a>
             </dd>
@@ -60,7 +60,7 @@
             <dd>
                 <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'security'))#">
                     <xar:mlstring>
-                        Sessions and Security 
+                        Sessions and Security
                     </xar:mlstring>
                 </a>
             </dd>
@@ -69,7 +69,7 @@
             <dd class="active">
                 <a href="#xarServerGetCurrentURL()#">
                     <xar:mlstring>
-                        Languages and Locales 
+                        Languages and Locales
                     </xar:mlstring>
                 </a>
             </dd>
@@ -77,7 +77,7 @@
             <dd>
                 <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales'))#">
                     <xar:mlstring>
-                        Languages and Locales 
+                        Languages and Locales
                     </xar:mlstring>
                 </a>
             </dd>
@@ -86,7 +86,7 @@
             <dd class="active">
                 <a href="#xarServerGetCurrentURL()#">
                     <xar:mlstring>
-                        Other 
+                        Other
                     </xar:mlstring>
                 </a>
             </dd>
@@ -94,14 +94,14 @@
             <dd>
                 <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'other'))#">
                     <xar:mlstring>
-                        Other 
+                        Other
                     </xar:mlstring>
                 </a>
             </dd>
         </xar:if>
     </dl>
     <xar:comment>
-        ------------------- Begin Site Display Options --------------------- 
+        ------------------- Begin Site Display Options ---------------------
     </xar:comment>
     <xar:if condition="$tab eq 'display'">
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
@@ -141,18 +141,18 @@
                 <div class="xar-form-input-wrapper">
                     <label for="defaultmodule" title="#xarML('The default module to be loaded on your base url.')#" class="xar-form-label">
                         <xar:mlstring>
-                            Default Module: 
+                            Default Module:
                         </xar:mlstring>
                     </label>
                     <select name="defaultmodule" id="defaultmodule">
                         <xar:loop name="$mods">
                             <xar:if condition="xarConfigGetVar('Site.Core.DefaultModuleName') eq $loop:item['name']">
                                 <option value="#$loop:item['name']#" selected="selected">
-                                    #$loop:item['displayname']# 
+                                    #$loop:item['displayname']#
                                 </option>
                                 <xar:else />
                                 <option value="#$loop:item['name']#">
-                                    #$loop:item['displayname']# 
+                                    #$loop:item['displayname']#
                                 </option>
                             </xar:if>
                         </xar:loop>
@@ -168,14 +168,14 @@
                         </xar:if>
                         <label for="alternatepagetemplate" title="#xarML('Use an alternate default page template.')#">
                             <xar:mlstring>
-                                Use Alternate Page Template 
+                                Use Alternate Page Template
                             </xar:mlstring>
                         </label>
                     </div>
                     <div class="xar-form-input-wrapper">
                         <label for="alternatepagetemplatename" title="#xarML('The name of the alternate page template to use.')#" class="xar-form-label">
                             <xar:mlstring>
-                                Alternate Page Template Name: 
+                                Alternate Page Template Name:
                             </xar:mlstring>
                         </label>
                         <input type="text" id="alternatepagetemplatename" name="alternatepagetemplatename" value="#xarModGetVar('base', 'AlternatePageTemplateName')#" class="xar-form-textlong" />
@@ -184,30 +184,30 @@
                 <div class="xar-form-input-wrapper">
                     <label for="defaulttype" title="#xarML('The default type of module to be loaded.')#" class="xar-form-label">
                         <xar:mlstring>
-                            Default Module Type: 
+                            Default Module Type:
                         </xar:mlstring>
                     </label>
                     <select name="defaulttype" id="defaulttype" size="1">
                         <xar:if condition="xarConfigGetVar('Site.Core.DefaultModuleType') eq 'admin'">
                             <option value="admin" selected="selected">
                                 <xar:mlstring>
-                                    Admin 
+                                    Admin
                                 </xar:mlstring>
                             </option>
                             <option value="user">
                                 <xar:mlstring>
-                                    User 
+                                    User
                                 </xar:mlstring>
                             </option>
                             <xar:else />
                             <option value="admin">
                                 <xar:mlstring>
-                                    Admin 
+                                    Admin
                                 </xar:mlstring>
                             </option>
                             <option value="user" selected="selected">
                                 <xar:mlstring>
-                                    User 
+                                    User
                                 </xar:mlstring>
                             </option>
                         </xar:if>
@@ -216,7 +216,7 @@
                 <div class="xar-form-input-wrapper">
                     <label for="defaultfunction" title="#xarML('The default function of module to be loaded.')#" class="xar-form-label">
                         <xar:mlstring>
-                            Default Module Function: 
+                            Default Module Function:
                         </xar:mlstring>
                     </label>
                     <input type="text" id="defaultfunction" name="defaultfunction" value="#xarConfigGetVar('Site.Core.DefaultModuleFunction')#" maxlength="100" class="xar-form-textlong" />
@@ -231,7 +231,7 @@
                 <div class="xar-form-input-wrapper">
                     <label for="themedir" title="#xarML('The default directory for site themes - no trailing slash.')#" class="xar-form-label">
                         <xar:mlstring>
-                            Default Theme Directory: 
+                            Default Theme Directory:
                         </xar:mlstring>
                     </label>
                     <input type="text" id="themedir" name="themedir" value="#xarConfigGetVar('Site.BL.ThemesDirectory')#" maxlength="100" class="xar-form-textlong" />
@@ -244,7 +244,7 @@
                     </xar:if>
                     <label for="shorturl" title="#xarML('Enable short url support throughout Xaraya.')#">
                         <xar:mlstring>
-                            Enable Short URL Support 
+                            Enable Short URL Support
                         </xar:mlstring>
                     </label>
                 </div>
@@ -256,7 +256,7 @@
                     </xar:if>
                     <label for="baseshorturl" title="#xarML('Enable short URL support in the base module.')#">
                         <xar:mlstring>
-                            Enable Base Module Short URLs 
+                            Enable Base Module Short URLs
                         </xar:mlstring>
                     </label>
                 </div>
@@ -268,7 +268,7 @@
                     </xar:if>
                     <label for="htmlenitites" title="#xarML('Change HTML Entities to readible entities.')#">
                         <xar:mlstring>
-                            Fix HTML Entities 
+                            Fix HTML Entities
                         </xar:mlstring>
                     </label>
                 </div>
@@ -283,23 +283,23 @@
             </fieldset>
         </form>
         <xar:comment>
-            ----------------- Begin Security Options ------------------- 
+            ----------------- Begin Security Options -------------------
         </xar:comment>
         <xar:elseif condition="$tab eq 'security'" />
         <xar:set name="authmodules">
-            #xarConfigGetVar('Site.User.AuthenticationModules')# 
+            #xarConfigGetVar('Site.User.AuthenticationModules')#
         </xar:set>
         <xar:if condition="!empty($authmodules) and count($authmodules) gt 1">
             <xar:base-include-javascript module="base" filename="orderitem.js" position="head" />
 <script type="text/javascript">
                 xar_base_reorder_warn = '#xarML('You must select the authentication module you want to move.')#';
-            </script> 
+            </script>
         </xar:if>
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>
                     <xar:mlstring>
-                        Sessions and Security 
+                        Sessions and Security
                     </xar:mlstring>
                 </legend>
                 <div class="xar-form-input-wrapper-after">
@@ -310,46 +310,46 @@
                     </xar:if>
                     <label for="secureserver" title="#xarML('Configure to run on a secure server.')#">
                         <xar:mlstring>
-                            Configure to run on Secure Server 
+                            Configure to run on Secure Server
                         </xar:mlstring>
                     </label>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="securitylevel" title="#xarML('Security options for sessions')#" class="xar-form-label">
                         <xar:mlstring>
-                            Security Level: 
+                            Security Level:
                         </xar:mlstring>
                     </label>
                     <select name="securitylevel" id="securitylevel" size="1">
                         <xar:if condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'High'">
                             <option value="High" selected="selected">
-                                High 
+                                High
                             </option>
                             <option value="Medium">
-                                Medium 
+                                Medium
                             </option>
                             <option value="Low">
-                                Low 
+                                Low
                             </option>
                             <xar:elseif condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'Medium'" />
                             <option value="High">
-                                High 
+                                High
                             </option>
                             <option value="Medium" selected="selected">
-                                Medium 
+                                Medium
                             </option>
                             <option value="Low">
-                                Low 
+                                Low
                             </option>
                             <xar:elseif condition="xarConfigGetVar('Site.Session.SecurityLevel') eq 'Low'" />
                             <option value="High">
-                                High 
+                                High
                             </option>
                             <option value="Medium">
-                                Medium 
+                                Medium
                             </option>
                             <option value="Low" selected="selected">
-                                Low 
+                                Low
                             </option>
                         </xar:if>
                     </select>
@@ -358,7 +358,7 @@
                     <div class="xar-form-input-wrapper">
                         <label for="sessionduration" title="#xarML('How long to allow the session to last in days')#" class="xar-form-label">
                             <xar:mlstring>
-                                Session Duration (In Days): 
+                                Session Duration (In Days):
                             </xar:mlstring>
                         </label>
                         <input type="text" id="sessionduration" name="sessionduration" value="#xarConfigGetVar('Site.Session.Duration')#" maxlength="3" class="xar-form-textshort" />
@@ -367,7 +367,7 @@
                 <div class="xar-form-input-wrapper">
                     <label for="sessiontimeout" title="#xarML('Session times out in minutes')#" class="xar-form-label">
                         <xar:mlstring>
-                            Session Inactivity Time Out: 
+                            Session Inactivity Time Out:
                         </xar:mlstring>
                     </label>
                     <input type="text" id="sessiontimeout" name="sessiontimeout" value="#xarConfigGetVar('Site.Session.InactivityTimeout')#" maxlength="3" class="xar-form-textshort" />
@@ -375,7 +375,7 @@
                 <div class="xar-form-input-wrapper">
                     <label for="authmodules" title="#xarML('Change the order of authentication')#" class="xar-form-label">
                         <xar:mlstring>
-                            Authentication Modules: 
+                            Authentication Modules:
                         </xar:mlstring>
                     </label>
                     <xar:if condition="!empty($authmodules) and count($authmodules) gt 1">
@@ -390,12 +390,12 @@
                             </div>
                             <div class="xar-floatleft xar-margin-thickleft">
                                 <xar:set name="size">
-                                    count($authmodules) 
+                                    count($authmodules)
                                 </xar:set>
                                 <select name="authmodules" id="authmodules" size="#$size#">
                                     <xar:foreach in="$authmodules" value="$authmodule">
                                         <option value="#$authmodule#">
-                                            #$authmodule# 
+                                            #$authmodule#
                                         </option>
                                     </xar:foreach>
                                 </select>
@@ -403,43 +403,43 @@
                             </div>
                         </div>
                         <xar:else />
-                        #$authmodules[0]# 
+                        #$authmodules[0]#
                     </xar:if>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="cookiename" title="#xarML('Override the default cookie name')#" class="xar-form-label">
                         <xar:mlstring>
-                            Cookie Name: 
+                            Cookie Name:
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="cookiename" name="cookiename" value="#xarConfigGetVar('Site.Session.CookieName')#" maxlength="10" class="xar-form-textmedium" />
+                    <input type="text" id="cookiename" name="cookiename" value="#xarConfigGetVar('Site.Session.CookieName')#" maxlength="20" class="xar-form-textmedium" />
                     <xar:mlstring>Default: XARAYASID</xar:mlstring>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="cookiepath" title="#xarML('Override the default cookie path')#" class="xar-form-label">
                         <xar:mlstring>
-                            Cookie Path: 
+                            Cookie Path:
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="cookiepath" name="cookiepath" value="#xarConfigGetVar('Site.Session.CookiePath')#" maxlength="10" class="xar-form-textmedium" />
+                    <input type="text" id="cookiepath" name="cookiepath" value="#xarConfigGetVar('Site.Session.CookiePath')#" maxlength="20" class="xar-form-textmedium" />
                     <xar:ml><xar:mlstring>Default: #(1) (limited to the Xaraya directory)</xar:mlstring><xar:mlvar>#xarServerGetBaseURI()#</xar:mlvar></xar:ml>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="cookiedomain" title="#xarML('Override the default cookie domain')#" class="xar-form-label">
                         <xar:mlstring>
-                            Cookie Domain: 
+                            Cookie Domain:
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="cookiedomain" name="cookiedomain" value="#xarConfigGetVar('Site.Session.CookieDomain')#" maxlength="10" class="xar-form-textmedium" />
+                    <input type="text" id="cookiedomain" name="cookiedomain" value="#xarConfigGetVar('Site.Session.CookieDomain')#" maxlength="20" class="xar-form-textmedium" />
                     <xar:mlstring>Default: none (not shared across hosts)</xar:mlstring>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="referercheck" title="#xarML('Override the default referer check')#" class="xar-form-label">
                         <xar:mlstring>
-                            Referer Check: 
+                            Referer Check:
                         </xar:mlstring>
                     </label>
-                    <input type="text" id="referercheck" name="referercheck" value="#xarConfigGetVar('Site.Session.RefererCheck')#" maxlength="10" class="xar-form-textmedium" />
+                    <input type="text" id="referercheck" name="referercheck" value="#xarConfigGetVar('Site.Session.RefererCheck')#" maxlength="40" class="xar-form-textmedium" />
                     <xar:ml><xar:mlstring>Default: #(1) for security level 'High'</xar:mlstring><xar:mlvar>#xarServerGetVar('HTTP_HOST')#</xar:mlvar></xar:ml>
                 </div>
             </fieldset>
@@ -452,7 +452,7 @@
             </fieldset>
         </form>
         <xar:comment>
-            ----------------- Begin Locale Options ------------------- 
+            ----------------- Begin Locale Options -------------------
         </xar:comment>
         <xar:elseif condition="$tab eq 'locales'" />
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
@@ -466,7 +466,7 @@
             </fieldset>
         </form>
         <xar:comment>
-            ----------------- Begin Other Options ------------------- 
+            ----------------- Begin Other Options -------------------
         </xar:comment>
         <xar:elseif condition="$tab eq 'other'" />
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
@@ -479,18 +479,18 @@
                 <div class="xar-form-input-wrapper">
                     <label for="editor" title="#xarML('WYSIWYG Editors')#" class="xar-form-label">
                         <xar:mlstring>
-                            WYSIWYG Editors: 
+                            WYSIWYG Editors:
                         </xar:mlstring>
                     </label>
                     <select name="editor" id="editor" size="1">
                         <xar:loop name="$editors">
                             <xar:if condition="$editor eq $loop:item['displayname']">
                                 <option value="#$loop:item['displayname']#" selected="selected">
-                                    #$loop:item['displayname']# 
+                                    #$loop:item['displayname']#
                                 </option>
                                 <xar:else />
                                 <option value="#$loop:item['displayname']#">
-                                    #$loop:item['displayname']# 
+                                    #$loop:item['displayname']#
                                 </option>
                             </xar:if>
                         </xar:loop>
@@ -512,18 +512,18 @@
             <fieldset>
                 <legend>
                     <xar:mlstring>
-                        Proxy Configuration 
+                        Proxy Configuration
                     </xar:mlstring>
                 </legend>
                 <p>
                     <xar:mlstring>
-                        If your webserver only allows outgoing network connections (for retrieving headlines, checking links etc.) via a proxy server, specify its hostname and port number here. 
+                        If your webserver only allows outgoing network connections (for retrieving headlines, checking links etc.) via a proxy server, specify its hostname and port number here.
                     </xar:mlstring>
                 </p>
                 <div class="xar-form-input-wrapper">
                     <label for="proxyhost" title="#xarML('Proxy server hostname to use')#" class="xar-form-label">
                         <xar:mlstring>
-                            Proxy Server: 
+                            Proxy Server:
                         </xar:mlstring>
                     </label>
                     <input type="text" id="proxyhost" name="proxyhost" value="#xarModGetVar('base','proxyhost')#" maxlength="100" class="xar-form-inputlong" />
@@ -531,20 +531,20 @@
                 <div class="xar-form-input-wrapper">
                     <label for="proxyport" title="#xarML('Proxy server port to use')#" class="xar-form-label">
                         <xar:mlstring>
-                            Proxy Port: 
+                            Proxy Port:
                         </xar:mlstring>
                     </label>
                     <input type="text" id="proxyport" name="proxyport" value="#xarModGetVar('base','proxyport')#" maxlength="10" class="xar-form-textshort" />
                 </div>
             </fieldset>
-    
+
             <fieldset>
                 <legend>
                     <xar:mlstring>Timezone Configuration</xar:mlstring>
                 </legend>
-    
+
                 <div class="xar-form-input-wrapper">
-                    <label for="defaulttimezone" title="#xarML('Default Timezone')#" class="xar-form-label">
+                    <label for="defaulttimezone" title="#xarML('This will be the global timezone')#" class="xar-form-label">
                         <xar:mlstring>Default Timezone:</xar:mlstring>
                     </label>
                     <xar:set name="timezone">#xarConfigGetVar('Site.Core.TimeZone')#</xar:set>
@@ -555,9 +555,9 @@
                 <legend>
                     <xar:mlstring>Extension Release Feeds</xar:mlstring>
                 </legend>
-    
+
                 <div class="xar-form-input-wrapper">
-                    <label for="releasenumber" title="#xarML('Default number to display for release feed')#" class="xar-form-label">
+                    <label for="releasenumber" title="#xarML('Number of feeds for Xaraya release to display.')#" class="xar-form-label">
                         <xar:mlstring>Release Number to display:</xar:mlstring>
                     </label>
                     <input type="text" id="releasenumber" name="releasenumber" value="#$releasenumber#" maxlength="4" class="xar-form-textshort" />

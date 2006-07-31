@@ -51,6 +51,8 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
                             break;
                         }
                     }
+                    // Still not set, then make it use the currently active module (NOTE: pay attention to the quotes here)
+                    if(!isset($module)) $module = '".xarModGetName()."';
                 }
                 // Resolve the module attribute
                 $module = xarTpl__ExpressionTransformer::transformPHPExpression($module);

@@ -33,9 +33,10 @@ function roles_adminapi_deletegroup($args)
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
 
-// Prohibit removal of any groups the system needs
+   // Prohibit removal of any groups the system needs
+   $defaultgroup=xarModAPIFunc('roles', 'user', 'getdefaulgroup');
 
-    if($role->getName() == xarModGetVar(xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule')),'defaultgroup')) {
+    if($role->getName() == $defaultgroup) {
         $msg = xarML('The group #(1) is the default group for new users. If you want to remove it change the appropriate configuration setting first.', $role->getName());
         xarErrorSet(XAR_SYSTEM_EXCEPTION,
                     'BAD_PARAM',

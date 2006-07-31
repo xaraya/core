@@ -88,11 +88,8 @@ function blocks_adminapi_create_instance($args)
               xar_last_update
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
-    $result =& $dbconn->Execute(
-        $query, array(
-                      $nextId, $type, $name, $title, $content, $template, $state,0,0
-        )
-    );
+    $bindvars = array($nextId, $type, $name, $title, $content, $template, $state, 0, 0);
+    $result =& $dbconn->Execute($query, $bindvars);
     if (!$result) {return;}
 
     // Get ID of row inserted.
@@ -131,6 +128,13 @@ function blocks_adminapi_create_instance($args)
         } else {
             $cacheexpire = NULL;
         }
+        //check and see if there is an entry already before trying to add one - bug # 5815
+        $checkbid = xarModAPIFunc('blocks','user','getcacheblock',array('bid'=>$bid));
+        //we assume for now that it's left here due to bug # 5815 so delete it
+        if (is_array($checkbid)) {
+           $deletecacheblock = xarModAPIFunc('blocks','admin','delete_cacheinstance', array('bid' => $bid)); 
+        }
+        //now create the new block
         $cacheblocks = $xartable['cache_blocks'];
         $query = "INSERT INTO $cacheblocks (xar_bid,
                                             xar_nocache,
@@ -153,5 +157,4 @@ function blocks_adminapi_create_instance($args)
 
     return $bid;
 }
-
 ?>

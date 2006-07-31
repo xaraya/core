@@ -26,8 +26,7 @@
  *
  * @author Jason Judge
  * @param $args array containing the form field definition or the type, name, value, ...
- * @returns string
- * @return empty string
+ * @return string code to generate for this tag
  */ 
 function base_javascriptapi_handlemodulejavascript($args)
 {

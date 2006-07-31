@@ -279,48 +279,48 @@ function roles_activate()
  */
 function roles_upgrade($oldVersion)
 {
-	// Upgrade dependent on old version number
+    // Upgrade dependent on old version number
     switch ($oldVersion) {
         case '1.01':
             break;
       case '1.1.0':
 
-        	// is there an authentication module?
-			$regid = xarModGetIDFromName('authsystem');
+            // is there an authentication module?
+            $regid = xarModGetIDFromName('authsystem');
 
-			if (isset($regid)) {
+            if (isset($regid)) {
 
-				// upgrade and activate the authsystem module - should be done before roles upgrade
-				//if (!xarModAPIFunc('modules', 'admin', 'upgrade', array('regid' => $regid))) return;
-					// Activate the module
-				//if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
+                // upgrade and activate the authsystem module - should be done before roles upgrade
+                //if (!xarModAPIFunc('modules', 'admin', 'upgrade', array('regid' => $regid))) return;
+                    // Activate the module
+                //if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid))) return;
 
-				// remove the login block type and block from roles
-				$result = xarModAPIfunc('blocks', 'admin', 'delete_type', array('module' => 'roles', 'type' => 'login'));
-				// delete the old roles modvars
-				xarModDelVar('roles', 'allowregistration');
-				xarModDelVar('roles', 'rolesperpage');
-				xarModDelVar('roles', 'uniqueemail');
-				xarModDelVar('roles', 'askwelcomeemail');
-				xarModDelVar('roles', 'askvalidationemail');
-				xarModDelVar('roles', 'askdeactivationemail');
-				xarModDelVar('roles', 'askpendingemail');
-				xarModDelVar('roles', 'askpasswordemail');
-				xarModDelVar('roles', 'lockouttime');
-				xarModDelVar('roles', 'lockouttries');
-				xarModDelVar('roles', 'minage');
-				xarModDelVar('roles', 'disallowednames');
-				xarModDelVar('roles', 'disallowedemails');
-				xarModDelVar('roles', 'disallowedips');
+                // remove the login block type and block from roles
+                $result = xarModAPIfunc('blocks', 'admin', 'delete_type', array('module' => 'roles', 'type' => 'login'));
+                // delete the old roles modvars
+                xarModDelVar('roles', 'allowregistration');
+                xarModDelVar('roles', 'rolesperpage');
+                xarModDelVar('roles', 'uniqueemail');
+                xarModDelVar('roles', 'askwelcomeemail');
+                xarModDelVar('roles', 'askvalidationemail');
+                xarModDelVar('roles', 'askdeactivationemail');
+                xarModDelVar('roles', 'askpendingemail');
+                xarModDelVar('roles', 'askpasswordemail');
+                xarModDelVar('roles', 'lockouttime');
+                xarModDelVar('roles', 'lockouttries');
+                xarModDelVar('roles', 'minage');
+                xarModDelVar('roles', 'disallowednames');
+                xarModDelVar('roles', 'disallowedemails');
+                xarModDelVar('roles', 'disallowedips');
 
-				// create one new roles modvar
-				xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
- 			} else {
-//				$msg = xarML('I could not load the authentication module. Please make it available and try again');
-//				xarErrorSet(XAR_USER_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new DefaultUserException($msg));
-//				return;
-				die(xarML('I could not detect and load an authentication module (default is Authsystem). Please make an authentication module available and try again'));
-		    }
+                // create one new roles modvar
+                xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
+             } else {
+//                $msg = xarML('I could not load the authentication module. Please make it available and try again');
+//                xarErrorSet(XAR_USER_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new DefaultUserException($msg));
+//                return;
+                die(xarML('I could not detect and load an authentication module (default is Authsystem). Please make an authentication module available and try again'));
+            }
             xarModSetVar('roles', 'locale', '');
             xarModSetVar('roles', 'userhome', '');
             xarModSetVar('roles', 'userlastlogin', '');            

@@ -3,8 +3,8 @@
  * Variable utilities
  *
  * @package variables
- * @copyright (C) 2002 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marco Canini marco@xaraya.com
  */
@@ -145,7 +145,7 @@ function xarVarBatchFetch()
  * Fetches the $name variable from input variables and validates it by applying the $validation rules.
  *
  * 1st try to use the variable provided, if this is not set (Or the XARVAR_DONT_REUSE flag is used)
- * then it try to ge the variable from the input (POST/GET methods for now)
+ * then try to get the variable from the input (POST/GET methods for now)
  *
  * Then tries to validate the variable thru xarVarValidate.
  *
@@ -161,7 +161,7 @@ function xarVarBatchFetch()
  * XARVAR_GET_ONLY     - fetch from GET variables only
  * XARVAR_POST_ONLY    - fetch from POST variables only
  * XARVAR_NOT_REQUIRED - allow the variable to be empty/not set, dont raise exception if it is
- * XARVAR_DONT_REUSE   - if there is an existing value, do not reused it
+ * XARVAR_DONT_REUSE   - if there is an existing value, do not reuse it
  * XARVAR_DONT_SET     - if there is an existing value, use it
  *
  * You can force to get the variable only from GET parameters or POST parameters by setting the $flag parameter
@@ -190,78 +190,66 @@ function xarVarBatchFetch()
  * @param flags integer bitmask which modify the behaviour of function
  * @param prep will prep the value with xarVarPrepForDisplay, xarVarPrepHTMLDisplay, or dbconn->qstr()
  * @return mixed
+ * @todo  get rid of the explicit value of XARVAR_GET_OR_POST, use the bitmas (i.e. GET_OR_POST = GET + POST)
+ * @todo  make dont_set and dont_reuse are too similar (conceptually) which make the code below confusing [phpdoc above implies REUSE is the default]
+ * @todo  re-evaluate the prepping, prepforstore is deprecated for example, prep for display and prep for html are partially exclusive
  * @raise BAD_PARAM
  */
 function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags = XARVAR_GET_OR_POST, $prep = XARVAR_PREP_FOR_NOTHING)
 {
-    assert('is_int($flags)');
-    assert('empty($name) || preg_match("/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/", $name)');
+    assert('is_int($flags); /* Flags passed to xarVarFetch need to be numeric */');
+    assert('empty($name) || preg_match("/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/", $name); /* Variable name is invalid */');
 
-    $allowOnlyMethod = NULL;
+    $allowOnlyMethod = null;
     if ($flags & XARVAR_GET_ONLY) $allowOnlyMethod = 'GET';
     if ($flags & XARVAR_POST_ONLY) $allowOnlyMethod = 'POST';
 
-    if ($flags & XARVAR_DONT_SET) {
-        if (isset($value)) {
-            $oldValue = $value;
-        } else {
-            $oldValue = null;
-        }
-    }
+    // XARVAR_DONT_SET does not set $value, if there already is one
+    // This allows us to have a extract($args) before the xarVarFetch and still run
+    // the variables thru the tests here.
+    $oldValue = null;
+    if (isset($value) && $flags & XARVAR_DONT_SET) $oldValue = $value;
 
-    //This allows us to have a extract($args) before the xarVarFetch and still run
-    //the variables thru the tests here.
-
-// FIXME: this flag doesn't seem to work !?
-    //The FLAG here, stops xarVarFetch from reusing the variable if already present
+    // XARVAR_DONT_REUSE fetches the variable, regardless 
+    // FIXME: this flag doesn't seem to work !?
+    // mrb: what doesn't work then? seems ok within the given workings
+    // --------v  this is kinda confusing though, especially when dont_set is used as flag.
     if (!isset($value) || ($flags & XARVAR_DONT_REUSE)) {
         $value = xarRequestGetVar($name, $allowOnlyMethod);
     }
 
-    if (($flags & XARVAR_DONT_SET) || ($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue)) {
-        $supress = true;
-    } else {
-        $supress = false;
-    }
-
-    $result = xarVarValidate($validation, $value, $supress, $name);
-
+    // Suppress validation warnings when dont_set, not_required or a default value is specified
+    $supress = (($flags & XARVAR_DONT_SET) || ($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue)); 
+    // Validate the $value given
+    $validated = xarVarValidate($validation, $value, $supress, $name);
     if (xarCurrentErrorType()) {return;} //Throw back
 
-    if (!$result) {
-    // CHECKME:  even for the XARVAR_DONT_SET flag !?
-        // if you set a non-null default value, assume you want to use it here
+    if (!$validated) {
+        // The value does not validate
+        $value = null; // we first make sure that this is what we expect to return
+        
+        // Perhaps the default or old can be returned?
         if (($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue)) {
+            // CHECKME:  even for the XARVAR_DONT_SET flag !?
+            // if you set a non-null default value, assume you want to use it here
             $value = $defaultValue;
-
-        // with XARVAR_DONT_SET, make sure we don't pass invalid old values back either
         } elseif (($flags & XARVAR_DONT_SET) && isset($oldValue) && xarVarValidate($validation, $oldValue, $supress)) {
+            // with XARVAR_DONT_SET, make sure we don't pass invalid old values back either
             $value = $oldValue;
-
-        // make sure we don't pass any invalid values back
-        } else {
-            $value = null;
         }
     } else {
-        // Check prep of $value
-        if ($prep & XARVAR_PREP_FOR_DISPLAY) {
-            $value = xarVarPrepForDisplay($value);
-        }
-
-        if ($prep & XARVAR_PREP_FOR_HTML) {
-            $value = xarVarPrepHTMLDisplay($value);
-        }
-
+        // Value is ok, handle preparation of that value
+        if ($prep & XARVAR_PREP_FOR_DISPLAY) $value = xarVarPrepForDisplay($value);
+        if ($prep & XARVAR_PREP_FOR_HTML)    $value = xarVarPrepHTMLDisplay($value);
+        
+        // TODO: this is used nowhere, plus it introduces a db connection here which is of no use
         if ($prep & XARVAR_PREP_FOR_STORE) {
             $dbconn =& xarDBGetConn();
             $value = $dbconn->qstr($value);
         }
 
-        if ($prep & XARVAR_PREP_TRIM) {
-            $value = trim($value);
-        }
+        if ($prep & XARVAR_PREP_TRIM) $value = trim($value);
     }
-
     return true;
 }
 

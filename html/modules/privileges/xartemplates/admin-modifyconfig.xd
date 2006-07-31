@@ -389,7 +389,7 @@
                     <label for="tester" title="#xarML('Name of the administator that will see the messages')#" class="xar-form-label">
                         <xar:mlstring>Tester:</xar:mlstring>
                     </label>
-                    <select name="tester" id="tester" size="1"">
+                    <select name="tester" id="tester" size="1">
                     <xar:foreach in="$testusers" key="$k" value="$testers" >
                         <xar:if condition="$testusers[$k]['uid'] eq $tester">
                             <option value="#$testusers[$k]['uid']#" selected="selected">#$testusers[$k]['uname']#</option>

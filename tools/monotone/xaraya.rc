@@ -30,6 +30,14 @@
 --
 --
 
+--
+-- Configuration variables
+--
+-- Location of QA tests, allow it to be overridable earlier 
+-- Example for OSX or linux:
+qa_location=qa_location or "/var/mt/xar/com.xaraya.qa.tests/tests/"
+-- Example for Windows:
+-- qa_location=qa_location or "d:/var/mt/xar/com.xaraya.qa.tests/tests/"
 
 --
 -- Line endings, a never ending story. Anyways, we want both the internal
@@ -107,56 +115,73 @@ MT: removed]]
    return res
 end
 
+--
+-- Helper function to parse a status message (basic_io)
+-- 
+-- @todo use built-in parser now
 function parse_statusmsg(msg)
-   -- Go over the lines and massage it so it comes very close to what 
-   -- we want to enter as a comment anyway
-   local pattern = "([^\n]-)\n" -- shortest thing before the newline
-   local lines = {}
-   local rename_string = nil
-   local parsed = ""
+    -- Go over the lines and massage it so it comes very close to what 
+    -- we want to enter as a comment anyway
+    local pattern = "([^\n]-)\n" -- shortest thing before the newline
+    local lines = {}
+    local rename_string = nil
+    local attrfile = nil
+    local attr = nil
+    local parsed = ""
+    
+    -- We dont use parse-basic-io, because msg is NOT (contains things before and after it)
+    for line in string.gfind(msg, pattern) do 
+        -- Handle renames (stanza changed in mt.26)
+        _,_,file = string.find(line,'^rename "(.-)"') -- which file?
+        if(file~=nil) then 
+            rename_string = ": renamed ("..file..")" 
+        end
+        _,_,file = string.find(line,'^%s+to "(.-)"') -- to what?
+        if(file~=nil and rename_string~=nil) then
+            table.insert(lines,"\t* "..file..rename_string)
+            rename_string = nil
+        end
+        -- Handle new directories (mt.26)
+        _,_,file = string.find(line,'^add_dir "(.-)"')
+        if(file~=nil) then 
+            table.insert(lines,"\t* "..file..": new dir") 
+        end
+        -- Handle new files
+        _,_,file = string.find(line,'^add_file "(.-)"')
+        if(file~=nil) then 
+            table.insert(lines,"\t* "..file..": new file") 
+        end
+        -- Handle dropped files
+        _,_,file = string.find(line,'^delete "(.-)"')
+        if(file~=nil) then
+            table.insert(lines,"\t* "..file..": dropped")
+        end
+  
+        -- Handle changed files
+        _,_,file = string.find(line,'^patch "(.-)"')
+        if(file~=nil) then neworadded = file end
+  
+        -- Based on the from line, only add changed stuff
+        i,_,oldrev = string.find(line,"^%s+from %[([%a%d]+)%]")
+        if(oldrev~=nil and neworadded~=nil ) then
+            table.insert(lines,"\t* "..neworadded..": ...")
+            neworadded = nil
+        end
+  
+        -- Handle attribute setting, which is now a first class operation
+        _,_,file = string.find(line,'^  set "(.-)"')
+        if(file~=nil) then
+            attrfile = file
+        end
+        _,_,attr = string.find(line,'^ attr "(.-)"')
+        if(attr~=nil and attrfile ~=nil) then
+            table.insert(lines,"\t* "..attrfile..": set attribute ("..attr..")")
+            attrfile = nil
+        end
+    end
+    for index, line in pairs(lines) do  parsed = parsed .. line .. "\n" end
 
-   for line in string.gfind(msg, pattern) do 
-      -- Handle renames (stanza changed in mt.26)
-      _,_,file = string.find(line,'^rename "(.-)"') -- which file?
-      if(file~=nil) then 
-         rename_string = ": renamed ("..file..")" 
-      end
-      _,_,file = string.find(line,'^%s+to "(.-)"') -- to what?
-      if(file~=nil and rename_string~=nil) then
-         table.insert(lines,"\t* "..file..rename_string)
-         rename_string = nil
-      end
-      -- Handle new directories (mt.26)
-      _,_,file = string.find(line,'^add_dir "(.-)"')
-      if(file~=nil) then 
-         table.insert(lines,"\t* "..file..": new dir") 
-      end
-      -- Handle new files
-      _,_,file = string.find(line,'^add_file "(.-)"')
-      if(file~=nil) then 
-         table.insert(lines,"\t* "..file..": new file") 
-      end
-      -- Handle dropped files
-      _,_,file = string.find(line,'^delete "(.-)"')
-      if(file~=nil) then
-         table.insert(lines,"\t* "..file..": dropped")
-      end
-      
-      
-      -- Handle changed files
-      _,_,file = string.find(line,'^patch "(.-)"')
-      if(file~=nil) then neworadded = file end
-      
-      -- Based on the from line, only add changed stuff
-      i,_,oldrev = string.find(line,"^%s+from %[([%a%d]+)%]")
-      if(oldrev~=nil and neworadded~=nil ) then
-         table.insert(lines,"\t* "..neworadded..": ...")
-         neworadded = nil
-      end
-   end
-   for index, line in pairs(lines) do  parsed = parsed .. line .. "\n" end
-   
-   return parsed
+    return parsed
 end
 
 
@@ -243,12 +268,58 @@ end
 --
 -- List of branches which we consider closed
 --
+-- TODO: store this in .mtn-ignore-branches for example
 function ignore_branch(name)
-   if name=='com.xaraya.core.ddextend' then return true end
-   if name=='com.xaraya.core.ddprops' then return true end
+   if name=='com.xaraya.core.marcel'     then return true end
+   if name=='com.xaraya.core.ddextend'   then return true end
+   if name=='com.xaraya.core.ddprops'    then return true end
    if name=='com.xaraya.core.changesdue' then return true end
-   if name=='com.xaraya.core.creole' then return true end
-   if name=='com.xaraya.core.blimprovs' then return true end
-   if name=='com.xaraya.core.uitesting' then return true end
+   if name=='com.xaraya.core.creole'     then return true end
+   if name=='com.xaraya.core.blimprovs'  then return true end
+   if name=='com.xaraya.core.uitesting'  then return true end
    return false
+end
+
+--
+-- Validate a commit message and run pre-commit routines, if any
+--
+-- @param commit_msg   the text the user entered
+-- @param stanza       a basic_io stanza for the commit scope (like mtn status)
+-- @return bool,string pair of result, reason (bool,string) to signify routine result.
+function validate_commit_message (commit_msg, stanza)
+    cancommit=true -- assume all well
+    function passed(nr,desc)     
+        nr=nr or '0.00'; desc=desc or "ERR: no description for test given"
+        print("PASSED QA test "..nr..": "..desc) 
+    end
+    function failed(nr,desc,msg) 
+        nr=nr or '0.00'; desc=desc or "ERR: no description for test given"
+        msg=msg or 'ERR: no failure message given for test'
+        print("FAILED QA test "..nr..": "..desc.."\n"..msg); cancommit=false 
+    end
+    
+    -- Initialize what the trigger should have access to
+    status_table=parse_basic_io(stanza)
+    commit_files = {}
+    for index,io_line in status_table do
+        -- For changed files take the value on same line
+        if io_line.name=='patch'  then table.insert(commit_files,io_line.values[1]) end
+        -- For renamed files, take the new one
+        if io_line.name=='rename' then table.insert(commit_files,status_table[index+1].values[1]) end
+        -- For new files, take the value on the same line
+        if io_line.name=='add_file' then table.insert(commit_files,io_line.values[1]) end
+    end
+    
+    -- Run qa checks on the files contained in this revision
+    local pcloc=qa_location..'pre-commit/'
+    print("mtn: Running QA tests from: " .. pcloc)
+    -- TODO: opening the pcloc location on windows errors out, so we dont have
+    -- a graceful fallback at this time.
+    _sysres = includedir(pcloc)
+    if cancommit then
+        return cancommit,"All seems OK, committing this revision"
+    else
+        return cancommit,"One or more tests failed, NOT commiting"
+    end
+    return false, "ERR: xaraya.rc hook code error, hook reached end?"
 end

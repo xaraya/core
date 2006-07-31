@@ -3,8 +3,8 @@
  * Module handling subsystem
  *
  * @package modules
- * @copyright (C) 2002 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Jim McDonald
  * @author Marco Canini <marco@xaraya.com>
@@ -618,7 +618,8 @@ function xarModGetInfo($modRegId, $type = 'module')
     return $modInfo;
 }
 
-function xarModGetNameFromID($regid) {
+function xarModGetNameFromID($regid) 
+{
     $modinfo = xarModGetInfo($regid);
     return $modinfo['name'];
 }
@@ -1166,6 +1167,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
 
     // If we have an empty argument (ie null => null) then set a flag and
     // remove that element.
+    // FIXME: this is way too hacky, NULL as a key for an array sooner or later will fail. (php 4.2.2 ?)
     if (is_array($args) && @array_key_exists(NULL, $args) && $args[NULL] === NULL) {
         // This flag means that the GET part of the URL must be opened.
         $open_get_flag = true;
@@ -2295,6 +2297,7 @@ function xarModDelAlias($alias, $modName)
  * @access public
  * @param none
  * @return string the name of the current top-level module, false if not in a module
+ * @todo if we do this one, we also should do xarModGetFunc, xarModGetType
  */
 function xarModGetName()
 {

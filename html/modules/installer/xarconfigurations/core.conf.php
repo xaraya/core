@@ -80,6 +80,7 @@ function installer_core_casualaccess()
     xarMakePrivilegeRoot('ViewLogin');
     xarMakePrivilegeRoot('ViewBlocks');
     xarMakePrivilegeRoot('ViewLoginItems');
+    xarMakePrivilegeMember('ViewAuthsystem','CasualAccess');    
     xarMakePrivilegeMember('ViewLogin','CasualAccess');
     xarMakePrivilegeMember('ViewBlocks','CasualAccess');
     xarMakePrivilegeMember('ViewLoginItems','CasualAccess');
@@ -99,7 +100,7 @@ function installer_core_readnoncore()
     xarMakePrivilegeRoot('DenyMail');
     xarMakePrivilegeRoot('DenyModules');
     xarMakePrivilegeRoot('DenyThemes');
-    xarMakePrivilegeMember('ReadAccess','ReadNonCore');
+    xarMakePrivilegeMember('ReadAccess','ReadNonCore');   
     xarMakePrivilegeMember('DenyPrivileges','ReadNonCore');
     xarMakePrivilegeMember('DenyBlocks','ReadNonCore');
     xarMakePrivilegeMember('DenyMail','ReadNonCore');
