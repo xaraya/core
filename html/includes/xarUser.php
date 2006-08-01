@@ -420,9 +420,7 @@ function xarUserGetVar($name, $userId = NULL)
                 return xarML('No Information');
             }
             // retrieve the item from the roles module
-            $userRole = xarModAPIFunc('roles',
-                                      'user',
-                                      'get',
+            $userRole = xarModAPIFunc('roles',  'user',  'get',
                                        array('uid' => $userId));
 
             if (empty($userRole) || $userRole['uid'] != $userId) {
@@ -437,19 +435,21 @@ function xarUserGetVar($name, $userId = NULL)
             xarCore_SetCached('User.Variables.'.$userId, 'email', $userRole['email']);
 
         } elseif (!xarUser__isVarDefined($name)) {
-            if (xarModGetVar('roles',$name)) {
+            if (xarModGetVar('roles',$name) || xarModGetVar('roles','set'.$name)) { //acount for optionals that need to be activated
                 $value = xarModGetUserVar('roles',$name,$userId);
-                if ($value == null) {
+                 if ($value == null) {
                     xarCore_SetCached('User.Variables.'.$userId, $name, false);
                     // Here we can't raise an exception because they're all optional
-                    if ($name != 'locale' && $name != 'timezone') {
-                        // log unknown user variables to inform the site admin
+                    $optionalvars=array('locale','timezone','usertimezone','userlastlogin',
+                                        'userhome','primaryparent','passwordupdate');
+                    //if ($name != 'locale' && $name != 'timezone') {
+                    if (!in_array($name, $optionalvars)) {
+                    // log unknown user variables to inform the site admin
                         $msg = xarML('User variable #(1) was not correctly registered', $name);
                         xarLogMessage($msg, XARLOG_LEVEL_ERROR);
                     }
                     return;
-                }
-                else {
+                }  else {
                     xarCore_SetCached('User.Variables.'.$userId, $name, $value);
                 }
             }
