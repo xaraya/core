@@ -79,7 +79,20 @@ function roles_admin_displayrole()
     }
 
     $data['upasswordupdate'] = xarModGetUserVar('roles','passwordupdate');//now user mod var not 'duv'. $role->getPasswordUpdate();
-
+    //timezone
+    if (xarModGetVar('roles','setusertimezone')) {
+        $usertimezone= $role->getUserTimezone();
+        $usertimezone = unserialize($usertimezone);
+        $data['utimezone']=$usertimezone['timezone'];
+        $data['offset']=$usertimezone['offset'];
+        if (substr($data['offset'],0,1)<>'-') { //make offset look better with + or -
+            $data['offset']='+'.$usertimezone['offset'];
+        }
+    } else {
+        $data['utimezone']='';
+        $data['offset']='';
+    }   
+    
     $item = $data;
     $item['module'] = 'roles';
     $item['itemtype'] = $data['type']; // handle groups differently someday ?

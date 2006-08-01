@@ -45,56 +45,56 @@
     <fieldset>
       <legend><xar:mlstring>Role properties</xar:mlstring></legend>
       <div class="xar-form-input-wrapper">
-        <span class="xar-form-label">
+        <label class="xar-form-label">
           <xar:mlstring>Real Name:</xar:mlstring>
-        </span>
+        </label>
         #xarVarPrepForDisplay($name)#
       </div>
-      
+
     <xar:if condition="xarModGetVar('roles','setuserhome')">
         <div class="xar-form-input-wrapper">
-            <span class="xar-form-label">
+            <label class="xar-form-label">
                 <xar:mlstring>Home:</xar:mlstring>
-            </span>
+            </label>
             #xarVarPrepForDisplay($phome)#&nbsp;
         </div>
-    </xar:if>                        
+    </xar:if>
     <xar:if condition="xarModGetVar('roles','setprimaryparent')">
         <xar:if condition="empty($phome) and !empty($parenthome)">
           <div class="xar-form-input-wrapper">
-            <span class="xar-form-label">
+            <label class="xar-form-label">
                 <xar:mlstring>Primary Parent Home:</xar:mlstring>
-            </span>
+            </label>
             #xarVarPrepForDisplay($parenthome)#
         </div>
         </xar:if>
         <div class="xar-form-input-wrapper">
-            <span class="xar-form-label">
+            <label class="xar-form-label">
                 <xar:mlstring>Primary Parent Group:</xar:mlstring>
-            </span>
+            </label>
             #xarVarPrepForDisplay($primaryparent)#
         </div>
-    </xar:if>                        
+    </xar:if>
       <xar:if condition="$type eq 0">
         <div class="xar-form-input-wrapper">
-          <span class="xar-form-label">
+          <label class="xar-form-label">
             <xar:mlstring>Login:</xar:mlstring>
-          </span>
+          </label>
           #xarVarPrepForDisplay($uname)#
         </div>
         
         <div class="xar-form-input-wrapper">
-          <span class="xar-form-label">
+          <label class="xar-form-label">
             <xar:mlstring>Email:</xar:mlstring>
-          </span>
+          </label>
           #xarVarPrepForDisplay($email)#
         </div>
       </xar:if>
       <xar:if condition="$userlastlogin ne ''">
         <div class="xar-form-input-wrapper">
-            <span class="xar-form-label">
+            <label for="lastlogin" class="xar-form-label">
                 <xar:mlstring>Last Login:</xar:mlstring>
-            </span>
+            </label>
             #xarLocaleGetFormattedDate('medium', $userlastlogin)#  #xarLocaleGetFormattedTime('medium', $userlastlogin)#&nbsp;
         </div>
       </xar:if>
@@ -106,15 +106,22 @@
               #xarLocaleGetFormattedDate('medium', $upasswordupdate)# #xarLocaleGetFormattedTime('medium', $upasswordupdate)#
           </div>
       </xar:if>
-
+      <xar:if condition="xarModGetVar('roles','setusertimezone')">
+          <div class="xar-form-input-wrapper">
+              <label for="utimezone" class="xar-form-label">
+                  <xar:mlstring>User Timezone:</xar:mlstring>
+              </label>
+              #$utimezone# (GMT #$offset#)
+          </div>
+      </xar:if>
       <xar:if condition="xarModIsAvailable('dynamicdata')">
         <xar:data-getitem name="$properties" module="roles" itemtype="$type" itemid="$uid" />
         <xar:if condition="isset($properties) and count($properties) gt 0">
           <xar:foreach in="$properties" key="$name">
             <div class="xar-form-input-wrapper">
-              <span class="xar-form-label">
+              <label class="xar-form-label">
                 <xar:data-label property="$properties[$name]" />:
-              </span>
+              </label>
               <xar:data-output property="$properties[$name]" />
             </div>
           </xar:foreach>
