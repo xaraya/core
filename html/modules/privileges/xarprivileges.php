@@ -439,10 +439,10 @@ class xarMasks
                 $parent='Everybody'; //set a default
                 //We now have primary parent implemented
                 //Use primary parent if implemented else get first parent??
-                //TODO: this needs to be review
-                $useprimary = xarModAPIFunc('roles','admin','checkduv',array('name' => 'setprimaryparent', 'state' => 1));
+                //TODO: this needs to be reviewed
+                $useprimary = xarModGetVar('roles','setprimaryparent');
                 if ($useprimary) { //grab the primary parent
-                    $parent=$role->getPrimaryParent();
+                    $parent=$role->getPrimaryParent(); //string value
                 }else { //we don't have a primary parent so use the first parent?? ... hmm review
                     foreach ($role->getParents() as $parent) {
                       $parent = $parent->name;
