@@ -39,9 +39,7 @@ function roles_adminapi_update($args)
                        new SystemException($msg));
         return;
     }
-    $item = xarModAPIFunc('roles',
-            'user',
-            'get',
+    $item = xarModAPIFunc('roles', 'user', 'get',
             array('uid' => $uid));
 
     if ($item == false) {
@@ -83,12 +81,7 @@ function roles_adminapi_update($args)
                 WHERE xar_uid = ?";
         $bindvars = array($name,$uname,$email,$valcode,$state,$uid);
     }
-    if (xarModGetVar('roles','setuserhome')) {
-        xarModSetUserVar('roles','userhome',$home, $uid);
-    }
-    if (isset($dopasswordupdate) && xarModGetVar('roles','setpasswordupdate')) {
-        xarModSetUserVar('roles','passwordupdate',time(), $uid);
-    }
+  
     $result =& $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
