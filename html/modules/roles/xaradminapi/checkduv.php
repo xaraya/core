@@ -12,11 +12,12 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 /**
- * checkduv - perform an existence or active check on a DUV
+ * checkduv - perform an active check on a DUV
  * @author - Marc Lutolf
  * @param $args['name'] name of the duv
  * @param $args['check'] type of check to be performed
  * @return boolean
+ * @TODO Check the usefulness of this function. It seems redundant now that state is held in a separate modvar
  */
 function roles_adminapi_checkduv($args)
 {
@@ -33,7 +34,7 @@ function roles_adminapi_checkduv($args)
             }
             break;
         case 1 :
-        default: 
+        default:
             // TODO: investigate how this case would differ now or
             //   how the State has been handled since conversion to moduservars
             $result = false;
