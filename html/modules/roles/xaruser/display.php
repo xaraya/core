@@ -97,7 +97,7 @@ function roles_user_display($args)
     if (xarModGetVar('roles','setusertimezone')) {
       $usertimezone = unserialize(xarModGetUserVar('roles','usertimezone'));
       $data['utimezone']=$usertimezone['timezone'];
-      $data['offset']=$usertimezone['offset'];
+      $offset=$usertimezone['offset'];
       //make it pretty
       if (isset($offset)) {
           $hours = intval($offset);
@@ -107,15 +107,17 @@ function roles_user_display($args)
               $minutes = 0;
           }
           if ($hours > 0) {
-              $data['offset'] = sprintf("+%d:%02d",$hours,$minutes);
+              $data['offset'] = sprintf("%+d:%02d",$hours,$minutes);
           } else {
-              $data['offset'] = sprintf("%d:%02d",$hours,$minutes);
+              $data['offset'] = sprintf("%+d:%02d",$hours,$minutes);
           }
+
       }
     } else {
         $data['utimezone']='';
         $data['offset']='';
     }
+
     $hooks = array();
     $hooks = xarModCallHooks('item', 'display', $uid, $item);
     $data['hooks'] = $hooks;
