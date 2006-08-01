@@ -199,7 +199,7 @@ class xarRoles
         $row = $q->row();
         if (empty($row)) return;
 
-        $duvarray = array('userhome','primaryparent','passwordupdate','timezone','userlastlogin');
+        $duvarray = array('userhome','primaryparent','passwordupdate','userlastlogin','usertimezone');
         $duvs = array();
         foreach ($duvarray as $key) {
             $duv = xarModGetUserVar('roles',$key,$row['xar_uid']);
@@ -446,8 +446,8 @@ class xarRole
     var $val_code;     //the validation code of this user or group
     var $state;        //the state of this user or group
     var $auth_module;  //no idea what this is (not used by groups)
-//    var $userhome;     //home page for this role
-//    var $primaryparent;//primary group for this role
+    //var $userhome;     //home page for this role
+    //var $primaryparent;//primary group for this role
     var $duvs;         //property for holding dynamic user vars
     var $parentlevel;  //we use this just to store transient information
 
@@ -1014,7 +1014,7 @@ class xarRole
                 'val_code' => $val_code,
                 'state' => $state,
                 'auth_module' => $auth_module);
-            $duvarray = array('userhome','primaryparent','passwordupdate','timezone','userlastlogin');
+            $duvarray = array('userhome','primaryparent','passwordupdate','userlastlogin','usertimezone');
             $vars = array();
             foreach ($duvarray as $key) $vars[$key] = xarModGetUserVar('roles',$key,$pargs['uid']);
             $pargs = array_merge($pargs,$vars);
@@ -1116,7 +1116,7 @@ class xarRole
                 $date_reg, $val_code, $state, $auth_module) = $result->fields;
             $vars = array();
 
-            $duvarray = array('userhome','primaryparent','passwordupdate','timezone','userlastlogin');
+            $duvarray = array('userhome','primaryparent','passwordupdate','userlastlogin','usertimezone');
             $duvs = array();
             foreach ($duvarray as $key) {
                 $duv = xarModGetUserVar('roles',$key,$uid);
@@ -1420,6 +1420,11 @@ class xarRole
         $duv = isset($this->duvs['userlastlogin']) ? $this->duvs['userlastlogin'] : "";
          return $duv;
     }
+    function getUserTimezone()
+    {
+        $duv = isset($this->duvs['usertimezone']) ? $this->duvs['usertimezone'] : "";
+         return $duv;
+    }
     function getUname()
     {
         return $this->uname;
@@ -1476,6 +1481,10 @@ class xarRole
     function setUserLastLogin($var)
     {
         $this->userlastlogin= $var;
+    }
+    function setUserTimezone($var)
+    {
+        $this->usertimezone= $var;
     }
     function setPrimaryParent($var)
     {
