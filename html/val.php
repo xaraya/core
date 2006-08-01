@@ -21,14 +21,10 @@ xarCoreInit(XARCORE_SYSTEM_ALL);
 if (!xarVarFetch('v', 'str:1', $v)) return;
 if (!xarVarFetch('u', 'str:1', $u)) return;
 
-$user = xarModAPIFunc('roles',
-                      'user',
-                      'get',
+$user = xarModAPIFunc('roles', 'user', 'get',
                        array('uid' => $u));
 
-xarResponseRedirect(xarModURL('roles',
-                              'user',
-                              'getvalidation',
+xarResponseRedirect(xarModURL('roles', 'user', 'getvalidation',
                               array('stage'   => 'getvalidate',
                                     'valcode' => $v,
                                     'uname'   => $user['uname'],
