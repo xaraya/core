@@ -209,11 +209,12 @@ function roles_activate()
     xarModSetVar('roles', 'userhome', '');
     xarModSetVar('roles', 'userlastlogin', '');
     xarModSetVar('roles', 'primaryparent', '');
+    xarModSetVar('roles', 'usertimezone', '');
     xarModSetVar('roles', 'setuserhome',false);
     xarModSetVar('roles', 'setprimaryparent', false);
     xarModSetVar('roles', 'setpasswordupdate',false);
-    xarModSetVar('roles', 'setuserlastlogin',false);    
-    xarModSetVar('roles', 'settimezone',false);
+    xarModSetVar('roles', 'setuserlastlogin',false);
+    xarModSetVar('roles', 'setusertimezone',false);
     xarModSetVar('roles', 'defaultgroup', 'Users');
     xarModSetVar('roles', 'displayrolelist', false);  
     xarModSetVar('roles', 'usereditaccount', true);
@@ -325,11 +326,12 @@ function roles_upgrade($oldVersion)
             xarModSetVar('roles', 'userhome', '');
             xarModSetVar('roles', 'userlastlogin', '');            
             xarModSetVar('roles', 'primaryparent', '');
+            xarModSetVar('roles', 'usertimezone', '');
             xarModSetVar('roles', 'setuserhome',false);
             xarModSetVar('roles', 'setprimaryparent', false);
             xarModSetVar('roles', 'setpasswordupdate',false);
             xarModSetVar('roles', 'setuserlastlogin',false);
-            xarModSetVar('roles', 'settimezone',false);
+            xarModSetVar('roles', 'setusertimezone',false);
             xarModSetVar('roles', 'displayrolelist',false);
             xarModSetVar('roles', 'usereditaccount', true);
             xarModSetVar('roles', 'allowuserhomeedit', false);

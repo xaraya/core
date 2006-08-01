@@ -1699,6 +1699,12 @@ function installer_admin_upgrade2()
 /* Version 1.1.2 Release Upgrades */
    //Module Upgrades should take care of most
    //Need to convert privileges but only if we decide to update the current Blocks module functions' privilege checks
+
+   //We are allowing setting var that is reliably referenced for the xarMLS calculations (instead of using a variably named DD property which was the case)
+   // This var becomes one of the roles 'duv' modvars
+   xarModSetVar('roles', 'setusertimezone',false); //new modvar - let's make sure it's set
+   xarModDelVar('roles', 'settimezone');//this is no longer used, be more explicit and user setusertimezone
+   xarModSetVar('roles', 'usertimezone',''); //new modvar - initialize it
 /* End 1.1.2 Release Upgrades */
 
     $thisdata['content']=$content;
