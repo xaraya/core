@@ -371,10 +371,17 @@ function xarMLS_userOffset($timestamp = null)
     if (!isset($offset)) {
     // CHECKME: use dynamicdata for roles, module user variable and/or session variable
     //          (see also 'locale' in xarUserGetNavigationLocale())
+    //jojodee - do not use DD for roles 'variables' used in core functions. They can not be relied on - bug 5847
         // get the correct timezone offset for this user
         if (xarUserIsLoggedIn()) {
-            //jojodee - We should perhaps use something a little more reliable than this dd user var - see bug 5847
-            $offset = xarUserGetVar('timezone');
+            //User modvar 'duv' implemented at 1.1.2 for more reliably reference that free form DD 'timezone'
+            $offset = xarModGetUserVar('roles','usertimezone');
+
+            //Mark the following check for deprecation at next release. Now use usertimezone from 1.1.2
+            if (empty($offset) || !$offset) {
+              //see bug 5847 - now use this only if usertimezone is not set.
+              $offset = xarUserGetVar('timezone');
+            }
             // get the actual timezone for the user (in addition to the timezone offset)
             if (isset($offset) && !is_numeric($offset)) {
                 $info = @unserialize($offset);
@@ -384,6 +391,7 @@ function xarMLS_userOffset($timestamp = null)
                 }
             }
         }
+
         //bug 5847 - $offset will be false if the user is logged in, rather than NULL. Cannot check for !isset.
         if (!($offset)) {
             // use default time offset for this site
