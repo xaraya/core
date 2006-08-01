@@ -277,7 +277,7 @@
                             Dynamic Roles Variables
                         </xar:mlstring>
                     </legend>
-                    <p> <xar:mlstring>Optional in a user role. Once activated they can be retrieved as <strong>xarModGetUserVar('roles','varname')</strong></xar:mlstring>
+                    <p> <xar:mlstring>Optional in a user role. Once activated they can be retrieved as <strong>xarUserGetVar('varname')</strong></xar:mlstring>
                     </p>
 
                     <table style="width: 90%">
@@ -297,7 +297,7 @@
                                 userhome
                             </td>
                             <td style="width: 400px">
-                                      <xar:mlstring>The user's home page, which is initially displayed when the user logs in. The home page can be user specific or inherited from the direct parent group. The home page is specified in a similar manner to user menu item shortcuts in the modify or edit role page.</xar:mlstring>
+                                      <xar:mlstring>The role's home page, which is initially displayed when the user logs in. The home page can be role/user specific or inherited from the direct parent group. The home page is specified in a similar manner to user menu item shortcuts in the modify or edit role page.</xar:mlstring>
                             </td>
                             <td style="width: 50px; text-align: center;">
                                 <xar:if condition="xarModGetVar('roles','setuserhome')">
@@ -317,8 +317,8 @@
                                 primaryparent
                             </td>
                             <td style="width: 400px">
-                                <xar:mlstring>The user's primary parent group. 
-                                A primary parent take precendence over other parent groups for realm and user home settings.</xar:mlstring>
+                                <xar:mlstring>The role's primary parent group.
+                                A primary parent take precendence over other parent groups for realm and user role home settings.</xar:mlstring>
                             </td>
                             <td style="width: 50px; text-align: center;">
                                 <xar:if condition="xarModGetVar('roles','setprimaryparent')">
@@ -370,26 +370,25 @@
                                 </xar:if>
                             </td>
                         </tr>
-                        <xar:comment> jojodee : this seems redundant to me. We can create and use a timezone DD property for the role.
                         <tr>
                             <td style="width: 100px">
-                                timezone
+                                usertimezone
                             </td>
                             <td style="width: 400px">
                                 <xar:mlstring>This role's timezone.</xar:mlstring>
                             </td>
                             <td style="width: 50px; text-align: center;">
-                                <xar:if condition="xarModGetVar('roles','settimezone')">
-                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','settimezone' => 0))#">
+                                <xar:if condition="xarModGetVar('roles','setusertimezone')">
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setusertimezone' => 0))#">
                                         <xar:mlstring>Deactivate</xar:mlstring>
                                     </a>
-                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','settimezone' => 1))#">
+                                <xar:else />
+                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setusertimezone' => 1))#">
                                         <xar:mlstring>Activate</xar:mlstring>
                                     </a>
                                 </xar:if>
                             </td>
                         </tr>
-                        </xar:comment>
                     </table>
                 </fieldset>
                 <fieldset>
