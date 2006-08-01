@@ -26,17 +26,16 @@ function roles_admin_modifyrole()
     if (!xarVarFetch('state', 'str:1:', $state, '', XARVAR_DONT_SET)) return;
     if (!xarVarFetch('phome', 'str', $data['phome'], '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pprimaryparent', 'int', $data['primaryparent'], '', XARVAR_NOT_REQUIRED)) return;
-
+    if (!xarVarFetch('utimezone','str:1:',$utimezone,'',XARVAR_NOT_REQUIRED)) return;
     // Call the Roles class and get the role to modify
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
 
     // get the array of parents of this role
-    // need to display this in the template
-    // we also use this loop to fille the names array with groups that this group shouldn't be added to
     $parents = array();
     $names = array();
     foreach ($role->getParents() as $parent) {
+        //jojodee - This sec instance check works?
         if(xarSecurityCheck('RemoveRole',0,'Relation',$parent->getName() . ":" . $role->getName())) {
             $parents[] = array('parentid' => $parent->getID(),
                                'parentname' => $parent->getName(),
@@ -60,6 +59,7 @@ function roles_admin_modifyrole()
                 'dname' => $temp['name']);
         }
     }
+
     // Load Template
     if (empty($name)) $name = $role->getName();
     $data['pname'] = $name;
@@ -80,13 +80,13 @@ function roles_admin_modifyrole()
         $data['puname'] = $role->getUser();
     }
 
-    if (!empty($home)) {
-        $data['phome'] = $home;
+    if (!empty($phome)) {
+        $data['phome'] = $phome;
     } else {
         $data['phome'] = $role->getHome();
     }
-    //Primary parent is a name string (apparently looking at other code) but passed in here as an int
-    //we want to pass it to the template as an int as well
+    //jojodee - this code is confusing - sometimes primary parent is int and sometimes string, very inconsistent
+    //Let's decide - it is a string and just pass it's uid around for forms
     if (xarModGetVar('roles','setprimaryparent')) {
         if (!empty($primaryparent) && is_int($primaryparent)) { //we have a uid
             $data['pprimaryparent'] = $primaryparent;
@@ -98,6 +98,7 @@ function roles_admin_modifyrole()
     } else {
         $data['pprimaryparent'] ='';
     }
+
     if (!empty($email)) {
         $data['pemail'] = $email;
     } else {
@@ -114,6 +115,14 @@ function roles_admin_modifyrole()
     }else {
          $data['upasswordupdate'] ='';
     }
+    if (xarModGetVar('roles','setusertimezone')) {
+        $usertimezone= $role->getUserTimezone();
+        $usertimezonedata =unserialize($usertimezone);
+        $data['utimezone']=$usertimezonedata['timezone'];
+    } else {
+        $data['utimezone']='';
+    }
+
     if (xarModGetVar('roles','setuserlastlogin')) {
         //only display it for current user or admin
         if (xarUserIsLoggedIn() && xarUserGetVar('uid')==$uid) {

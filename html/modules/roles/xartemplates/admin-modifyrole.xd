@@ -125,23 +125,12 @@
                 </xar:if>
                 <xar:if condition="xarModGetVar('roles','setprimaryparent')">
                     <div class="xar-form-input-wrapper">
-                        <label for="phome" title="#xarML('Home URL')#" class="xar-form-label">
-                            <xar:mlstring>Primary Group:</xar:mlstring>
+                        <label for="pprimaryparent" title="#xarML('Primary parent group')#" class="xar-form-label">
+                            <xar:mlstring>Primary Parent Group:</xar:mlstring>
                         </label>
-                        <select name="pprimaryparent" id="pprimaryparent" size="1">
-                            <xar:foreach in="$parents" key="$k" value="$v">
-                                <xar:if condition="$v['parentid'] eq $pprimaryparent">
-                                    <option value="#$v['parentid']#" selected="selected">#$v['parentuname']#</option>
-                                <xar:else />
-                                    <option value="#$v['parentid']#">#$v['parentuname']#</option>
-                                </xar:if>
-                            </xar:foreach>
-                        </select>
-                        <!-- We only want to select from existing parents here
-                          <xar:data-input type="grouplist" name="pprimaryparent" id="pprimaryparent" value="$pprimaryparent" tabindex="8"/>
-                        -->
+                        <xar:data-input type="grouplist" name="pprimaryparent" id="pprimaryparent" value="$pprimaryparent" tabindex="8"/>
                     </div>
-                </xar:if>                        
+                </xar:if>
 
                 <xar:if condition="$ptype eq 0">
                     <p class="xar-clearboth">
@@ -223,6 +212,18 @@
                     </div>
                     </xar:if>
                 </xar:if>
+                
+                <xar:if condition="xarModGetVar('roles','setusertimezone')">
+                    <xar:if condition="!empty($utimezone)">
+                    <div class="xar-form-input-wrapper">
+                        <label for="utimezone" class="xar-form-label">
+                            <xar:mlstring>User Timezone:</xar:mlstring>
+                        </label>
+                        <xar:data-input type="timezone" name="utimezone" id="utimezone" value="$utimezone" />
+                    </div>
+                    </xar:if>
+                </xar:if>
+
                 <xar:if condition="!empty($hooks) and count($hooks) gt 0">
                     <xar:foreach in="$hooks" key="$hookmodule">
                         #$hooks[$hookmodule]#

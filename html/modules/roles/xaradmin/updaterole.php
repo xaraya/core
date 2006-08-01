@@ -26,10 +26,7 @@ function roles_admin_updaterole()
     if (!xarVarFetch('phome', 'str', $phome, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pprimaryparent', 'int', $pprimaryparent, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('returnurl', 'str', $returnurl, '', XARVAR_NOT_REQUIRED)) return;
-
-    //we want primary parent as a name string not int
-    //(apparently going from other code, and for consistency with other stored roles like default one)
-    //The default should also already be set
+    if (!xarVarFetch('utimezone','str:1:',$utimezone,'',XARVAR_NOT_REQUIRED)) return;
     //Grab it here if primary parent modvar is activated
     if (!empty($pprimaryparent) && is_integer($pprimaryparent) && xarModGetVar('roles','setprimaryparent')) {
         $primaryrole = new xarRoles();
@@ -37,6 +34,15 @@ function roles_admin_updaterole()
         $primaryparent = $primaryp->uname;
     } else {
         $primaryparent='';
+    }
+    if (!empty($utimezone) && is_string($utimezone) && xarModGetVar('roles','setusertimezone')) {
+        $timeinfo = xarModAPIFunc('base','user','timezones', array('timezone' => $utimezone));
+        list($hours,$minutes) = explode(':',$timeinfo[0]);
+        $offset = (float) $hours + (float) $minutes / 60;
+        $timeinfoarray= array('timezone' => $utimezone, 'offset' => $offset);
+        $usertimezone=serialize($timeinfoarray);
+    } else {
+        $usertimezone='';
     }
 
     //Save the old state and type
@@ -101,9 +107,17 @@ function roles_admin_updaterole()
     if ((!empty($ppass1))  && xarModGetVar('roles','setpasswordupdate')){
         //assume if it's not empty then it's already been matched with ppass2
         $duvs['passwordupdate']=time();
+    } elseif (xarModGetVar('roles','setpasswordupdate')) { //get existing
+        $duvs['passwordupdate'] = xarModGetUserVar('roles','passwordupdate',$uid);
+    }
+    if (xarModGetVar('roles','setuserlastlogin')) {
+        $duvs['userlastlogin']=xarModGetUserVar('roles','userlastlogin', $uid);
     }
     if (xarModGetVar('roles','setprimaryparent')) {
         $duvs['primaryparent']=$primaryparent;
+    }
+    if (xarModGetVar('roles','setusertimezone')) {
+        $duvs['usertimezone']=$usertimezone;
     }
     // assemble the args into an array for the role constructor
     $pargs = array('uid' => $uid,
@@ -112,6 +126,9 @@ function roles_admin_updaterole()
         'uname' => $puname,
         'userhome' => $phome,
         'primaryparent' => $primaryparent,
+        'usertimezone' => $usertimezone,
+        'lastlogin' => $duvs['userlastlogin'],
+        'passwordupdate'=>$duvs['passwordupdate'],
         'email' => $pemail,
         'pass' => $ppass1,
         'state' => $pstate,
@@ -133,8 +150,8 @@ function roles_admin_updaterole()
     if ($ptype == 1) {
         $defaultgroup = xarModGetVar('roles', 'defaultgroup');
         $defaultgroupuid = xarModAPIFunc('roles','user','get',
-                                                     array('uname'  => $defaultgroup,
-                                                           'type'   => 1));
+                                   array('uname'  => $defaultgroup,
+                                         'type'   => 1));
         if ($uid == $defaultgroupuid) xarModSetVar('roles', 'defaultgroup', $pname);
 
         // Adjust the user count if necessary
