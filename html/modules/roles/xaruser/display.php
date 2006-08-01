@@ -21,15 +21,12 @@ function roles_user_display($args)
     if (!xarVarFetch('uid','int:1:',$uid, xarUserGetVar('uid'))) return;
 
     // Get user information
-    $data = xarModAPIFunc('roles',
-                          'user',
-                          'get',
+    $data = xarModAPIFunc('roles', 'user', 'get',
                           array('uid' => $uid));
 
     if ($data == false) return;
     
     $data['email'] = xarVarPrepForDisplay($data['email']);
-
 
     $item = $data;
     $item['module'] = 'roles';
@@ -96,7 +93,29 @@ function roles_user_display($args)
         $data['userlastlogin']='';
         $data['usercurrentlogin']='';
     }
-
+    //timezone
+    if (xarModGetVar('roles','setusertimezone')) {
+      $usertimezone = unserialize(xarModGetUserVar('roles','usertimezone'));
+      $data['utimezone']=$usertimezone['timezone'];
+      $data['offset']=$usertimezone['offset'];
+      //make it pretty
+      if (isset($offset)) {
+          $hours = intval($offset);
+          if ($hours != $offset) {
+              $minutes = abs($offset - $hours) * 60;
+          } else {
+              $minutes = 0;
+          }
+          if ($hours > 0) {
+              $data['offset'] = sprintf("+%d:%02d",$hours,$minutes);
+          } else {
+              $data['offset'] = sprintf("%d:%02d",$hours,$minutes);
+          }
+      }
+    } else {
+        $data['utimezone']='';
+        $data['offset']='';
+    }
     $hooks = array();
     $hooks = xarModCallHooks('item', 'display', $uid, $item);
     $data['hooks'] = $hooks;

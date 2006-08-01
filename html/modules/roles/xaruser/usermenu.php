@@ -80,7 +80,8 @@ function roles_user_usermenu($args)
             $submitlabel = xarML('Submit');
             $item['module'] = 'roles';
             $upasswordupdate = xarModGetUserVar('roles','passwordupdate');//now user mod var not 'duv'. $role->getPasswordUpdate();
-
+            $usertimezonedata =unserialize(xarModGetUserVar('roles','usertimezone'));
+            $utimezone=$usertimezonedata['timezone'];
             $hooks = xarModCallHooks('item','modify',$uid,$item);
             if (isset($hooks['dynamicdata'])) {
                 unset($hooks['dynamicdata']);
@@ -97,8 +98,9 @@ function roles_user_usermenu($args)
                                   'submitlabel'  => $submitlabel,
                                   'uid'          => $uid,
                                   'upasswordupdate' => $upasswordupdate,
-                                  'usercurrentlogin'   => $usercurrentlogin,
-                                  'userlastlogin'   => $userlastlogin));
+                                  'usercurrentlogin'=> $usercurrentlogin,
+                                  'userlastlogin'   => $userlastlogin,
+                                  'utimezone'    => $utimezone));
                  break;
 
         case 'formenhanced':
@@ -120,12 +122,21 @@ function roles_user_usermenu($args)
             if(!xarVarFetch('home',  'isset', $home,    NULL, XARVAR_DONT_SET)) return;
             if(!xarVarFetch('pass1', 'isset', $pass1,   NULL, XARVAR_DONT_SET)) return;
             if(!xarVarFetch('pass2', 'isset', $pass2,   NULL, XARVAR_DONT_SET)) return;
+            if(!xarVarFetch('utimezone','str:1:',$utimezone, NULL,XARVAR_NOT_REQUIRED)) return;
             $uname = xarUserGetVar('uname');
             // Confirm authorisation code.
             if (!xarSecConfirmAuthKey()) return;
             $dopasswordupdate=false; //switch
-
-            /* Check if external urls are allowed in home page */
+            //adjust the timezone value for saving
+            if (xarModGetVar('roles','setusertimezone') && (isset($utimezone))) {
+               $timeinfo = xarModAPIFunc('base','user','timezones', array('timezone' => $utimezone));
+               list($hours,$minutes) = explode(':',$timeinfo[0]);
+               $offset = (float) $hours + (float) $minutes / 60;
+               $timeinfoarray= array('timezone' => $utimezone, 'offset' => $offset);
+                $usertimezone=serialize($timeinfoarray);
+                xarModSetUserVar('roles','usertimezone',$usertimezone);
+            }
+             /* Check if external urls are allowed in home page */
             $allowexternalurl=xarModGetVar('roles','allowexternalurl');
             $url_parts = parse_url($home);
             if (!$allowexternalurl) {
@@ -139,7 +150,6 @@ function roles_user_usermenu($args)
                     return;
                 }
             }
-
             if (!empty($pass1)){
                 $minpasslength = xarModGetVar('roles', 'minpasslength');
                 if (strlen($pass2) < $minpasslength) {
@@ -169,6 +179,7 @@ function roles_user_usermenu($args)
                                          'email' => $oldemail,
                                          'state' => ROLES_STATE_ACTIVE,
                                          'pass'  => $pass,
+                                         'usertimezone' => $usertimezone,
                                          'dopasswordupdate' => $dopasswordupdate))) return;
             }
             if (!empty($email)){
@@ -225,6 +236,7 @@ function roles_user_usermenu($args)
                                              'name' => $name,
                                              'home' => $home,
                                              'email' => $email,
+                                             'usertimezone' => $usertimezone,
                                              'state' => ROLES_STATE_ACTIVE))) return;
                 } else { // if we need validation
                     // Step 2
@@ -240,6 +252,7 @@ function roles_user_usermenu($args)
                                              'name'     => $name,
                                              'home'     => $home,
                                              'email'    => $email,
+                                             'usertimezone' => $usertimezone,
                                              'valcode'  => $confcode,
                                              'state'    => ROLES_STATE_NOTVALIDATED))) return;
                     // Step 4
@@ -253,7 +266,7 @@ function roles_user_usermenu($args)
                     // Step 5
                     // Log the user out. This needs to happen last
                     xarUserLogOut();
-                    
+
                     //Step 6
                     //Show a nice message for the person about email validation
                     $data = xarTplModule('roles','user', 'waitingconfirm');
@@ -269,6 +282,7 @@ function roles_user_usermenu($args)
                                          'name' => $name,
                                          'home' => $home,
                                          'email' => $email,
+                                         'usertimezone'=> $usertimezone,
                                          'state' => ROLES_STATE_ACTIVE))) return;
             }
 

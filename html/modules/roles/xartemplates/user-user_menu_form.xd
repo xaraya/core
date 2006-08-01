@@ -132,6 +132,17 @@
                 </xar:if>
             </xar:if>
 
+            <xar:if condition="xarModGetVar('roles','setusertimezone')">
+                <xar:if condition="!empty($utimezone)">
+                    <div class="xar-form-input-wrapper">
+                        <label for="utimezone" class="xar-form-label">
+                            <xar:mlstring>Your Timezone:</xar:mlstring>
+                        </label>
+                        <xar:data-input type="timezone" name="utimezone" id="utimezone" value="$utimezone" />
+                    </div>
+                </xar:if>
+            </xar:if>
+
             <div class="xar-form-input-wrapper">
                 <xar:data-getitem name="$properties" module="roles" itemid="$uid" />
             </div>
