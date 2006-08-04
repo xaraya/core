@@ -165,7 +165,6 @@ class Dynamic_Property_Master
         } else {
             $proptypes = Dynamic_Property_Master::getPropertyTypes();
         }
-
         if( isset($proptypes[$args['type']]) && is_array($proptypes[$args['type']]) )
         {
             $propertyInfo  = $proptypes[$args['type']];
