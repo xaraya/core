@@ -221,6 +221,7 @@ function roles_activate()
     xarModSetVar('roles', 'allowuserhomeedit', false);
     xarModSetVar('roles', 'loginredirect', true);
     xarModSetVar('roles', 'allowexternalurl', false);
+    xarModSetVar('roles', 'usersendemails', false);
     xarModSetVar('roles', 'requirevalidation', true);    
     $lockdata = array('roles' => array( array('uid' => 4,
                                               'name' => 'Administrators',

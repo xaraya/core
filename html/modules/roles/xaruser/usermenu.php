@@ -59,7 +59,7 @@ function roles_user_usermenu($args)
             $email = xarUserGetVar('email');
             $role = xarUFindRole($uname);
             $home = xarModGetUserVar('roles','userhome');// now user mod var not 'duv'. $role->getHome();
-
+            $allowemail = xarModGetUserVar('roles','usersendemails',$uid); //allow someone to send an email to the user via a form
             if (xarModGetVar('roles','setuserlastlogin')) {
             //only display it for current user or admin
                 if (xarUserIsLoggedIn() && xarUserGetVar('uid')==$uid) { //they should be but ..
@@ -100,7 +100,8 @@ function roles_user_usermenu($args)
                                   'upasswordupdate' => $upasswordupdate,
                                   'usercurrentlogin'=> $usercurrentlogin,
                                   'userlastlogin'   => $userlastlogin,
-                                  'utimezone'    => $utimezone));
+                                  'utimezone'    => $utimezone,
+                                  'allowemail'   => $allowemail));
                  break;
 
         case 'formenhanced':
@@ -122,8 +123,11 @@ function roles_user_usermenu($args)
             if(!xarVarFetch('home',  'isset', $home,    NULL, XARVAR_DONT_SET)) return;
             if(!xarVarFetch('pass1', 'isset', $pass1,   NULL, XARVAR_DONT_SET)) return;
             if(!xarVarFetch('pass2', 'isset', $pass2,   NULL, XARVAR_DONT_SET)) return;
+            if(!xarVarFetch('allowemail', 'checkbox', $allowemail,   false, XARVAR_DONT_SET)) return;
             if(!xarVarFetch('utimezone','str:1:',$utimezone, NULL,XARVAR_NOT_REQUIRED)) return;
             $uname = xarUserGetVar('uname');
+            //set emailing options for the user
+            xarModSetUserVar('roles','usersendemails',$allowemail,$uid);
             // Confirm authorisation code.
             if (!xarSecConfirmAuthKey()) return;
             $dopasswordupdate=false; //switch

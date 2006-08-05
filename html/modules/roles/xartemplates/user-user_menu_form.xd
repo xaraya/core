@@ -72,6 +72,21 @@
                     </label>
                 </div>
             </xar:if>
+            <xar:if condition="xarModGetVar('roles','usersendemails')">
+                <div class="xar-form-input-wrapper-after">
+                    <xar:if condition="xarModGetUserVar('roles', 'usersendemails',$uid)">
+                        <input type="checkbox" name="allowemail" id="allowemail" value="1" checked="checked" tabindex="2"/>
+                    <xar:else />
+                        <input type="checkbox" name="allowemail" id="allowemail" value="1" tabindex="2"/>
+                    </xar:if>
+                    <label for="allowemail" title="#xarML('Allow users to send emails?')#">
+                       <xar:mlstring>Allow other users to send you an email via a form?</xar:mlstring>
+                    </label>
+                </div>
+                <p class="xar-form-input-wrapper-after">
+                    <xar:mlstring>Note your email address is never disclosed or displayed in this process.</xar:mlstring>
+                </p>
+            </xar:if>
             <xar:if condition="xarModGetVar('roles','setuserhome') and xarModGetVar('roles','allowuserhomeedit')">
                 <div class="xar-form-input-wrapper">
                     <label for="home" class="xar-form-label">

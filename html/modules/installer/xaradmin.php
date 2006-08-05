@@ -1705,6 +1705,7 @@ function installer_admin_upgrade2()
    xarModSetVar('roles', 'setusertimezone',false); //new modvar - let's make sure it's set
    xarModDelVar('roles', 'settimezone');//this is no longer used, be more explicit and user setusertimezone
    xarModSetVar('roles', 'usertimezone',''); //new modvar - initialize it
+   xarModSetVar('roles','usersendemails', false); //old modvar returns. Let's make sure it's set false as it allows users to send emails   
 /* End 1.1.2 Release Upgrades */
 
     $thisdata['content']=$content;

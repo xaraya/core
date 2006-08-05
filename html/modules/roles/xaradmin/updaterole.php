@@ -27,6 +27,7 @@ function roles_admin_updaterole()
     if (!xarVarFetch('pprimaryparent', 'int', $pprimaryparent, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('returnurl', 'str', $returnurl, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('utimezone','str:1:',$utimezone,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('allowemail','checkbox',$allowemail,false,XARVAR_NOT_REQUIRED)) return;
     //Grab it here if primary parent modvar is activated
     if (!empty($pprimaryparent) && is_integer($pprimaryparent) && xarModGetVar('roles','setprimaryparent')) {
         $primaryrole = new xarRoles();
@@ -119,6 +120,9 @@ function roles_admin_updaterole()
     if (xarModGetVar('roles','setusertimezone')) {
         $duvs['usertimezone']=$usertimezone;
     }
+    
+    //the user cannot receive emails from other users until they allow it and admin allows this option
+    xarModSetUserVar('roles','usersendemails', $allowemail, $uid);
     // assemble the args into an array for the role constructor
     $pargs = array('uid' => $uid,
         'name' => $pname,

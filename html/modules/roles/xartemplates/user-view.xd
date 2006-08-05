@@ -156,7 +156,7 @@
                         </xar:if>
                     </td>
                 </xar:if>
-                <xar:if condition="xarModGetVar('roles', 'usersendemails')">
+                <xar:if condition="xarModGetVar('roles', 'usersendemails') and xarModGetUserVar('roles','usersendemails',$loop:item['uid'])">
                     <td class="xar-align-center">
                         <xar:if condition="empty($loop:item['emailurl']) || !xarUserIsLoggedIn()">
                             <img src="#$loop:item['emailicon']#" alt="#xarML('Email')#" title="#xarML('Email')#"/>

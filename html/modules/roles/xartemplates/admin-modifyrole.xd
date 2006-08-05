@@ -150,7 +150,7 @@
                         </label>
                         <input type="text" name="pemail" id="pemail" value="#xarVarPrepForDisplay($pemail)#" maxlength="255" class="xar-form-textxlong" />
                     </div>
-                    
+
                     <div class="xar-form-input-wrapper">
                         <label for="pstate" title="#xarML('Status of this user')#" class="xar-form-label">
                             <xar:mlstring>Status:</xar:mlstring>
@@ -223,7 +223,19 @@
                     </div>
                     </xar:if>
                 </xar:if>
-
+                <xar:if condition="xarModGetVar('roles','usersendemails')">
+                <div class="xar-form-input-wrapper-after">
+                    <xar:if condition="xarModGetUserVar('roles', 'usersendemails',$uid)">
+                        <input type="checkbox" name="allowemail" id="allowemail" value="1" checked="checked" tabindex="2"/>
+                    <xar:else />
+                        <input type="checkbox" name="allowemail" id="allowemail" value="1" tabindex="2"/>
+                    </xar:if>
+                    <label for="allowemail" title="#xarML('Allow users to send emails?')#">
+                       <xar:mlstring>User has allowed other users to send them an email?</xar:mlstring>
+                    </label>
+                </div>
+               </xar:if>
+               <p class="xar-clear"></p>
                 <xar:if condition="!empty($hooks) and count($hooks) gt 0">
                     <xar:foreach in="$hooks" key="$hookmodule">
                         #$hooks[$hookmodule]#
