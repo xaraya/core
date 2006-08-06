@@ -375,9 +375,9 @@ class xarRoles
         $q = new xarQuery('INSERT',$this->rolestable);
         $q->addfields($tablefields);
         if (!$q->run()) return;
-        foreach($duvs as $key => $value) xarModUserSetVar($key, $value, $nextId);
+        foreach($duvs as $key => $value) xarModSetUserVar($key, $value, $nextId);
         // set email option to false
-        xarModUserSetVar('roles','usersendemails', false, $nextId);
+        xarModSetUserVar('roles','usersendemails', false, $nextId);
         // done
         return true;
     }
