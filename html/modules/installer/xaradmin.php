@@ -1697,15 +1697,25 @@ function installer_admin_upgrade2()
     xarModSetVar('roles', 'requirevalidation', true); //reuse this older var for user email changes, this validation is separate to registration validation
 /* End of Version 1.1.1 Release Upgrades */
 /* Version 1.1.2 Release Upgrades */
-   //Module Upgrades should take care of most
-   //Need to convert privileges but only if we decide to update the current Blocks module functions' privilege checks
+    //Module Upgrades should take care of most
+    //Need to convert privileges but only if we decide to update the current Blocks module functions' privilege checks
 
-   //We are allowing setting var that is reliably referenced for the xarMLS calculations (instead of using a variably named DD property which was the case)
-   // This var becomes one of the roles 'duv' modvars
-   xarModSetVar('roles', 'setusertimezone',false); //new modvar - let's make sure it's set
-   xarModDelVar('roles', 'settimezone');//this is no longer used, be more explicit and user setusertimezone
-   xarModSetVar('roles', 'usertimezone',''); //new modvar - initialize it
-   xarModSetVar('roles','usersendemails', false); //old modvar returns. Let's make sure it's set false as it allows users to send emails   
+    //We are allowing setting var that is reliably referenced for the xarMLS calculations (instead of using a variably named DD property which was the case)
+    // This var becomes one of the roles 'duv' modvars
+    xarModSetVar('roles', 'setusertimezone',false); //new modvar - let's make sure it's set
+    xarModDelVar('roles', 'settimezone');//this is no longer used, be more explicit and user setusertimezone
+    xarModSetVar('roles', 'usertimezone',''); //new modvar - initialize it
+    xarModSetVar('roles','usersendemails', false); //old modvar returns. Let's make sure it's set false as it allows users to send emails
+
+  //Ensure that registration module is set as default if it is installed, 
+  // if it is active and the default is currently not set
+    $defaultregmodule= xarModGetVar('roles','defaultregmodule');
+    if (!isset($defaultregmodule)) {
+        if (xarModIsAvailable('registration')) {
+            xarModSetVar('roles','defaultregmodule',xarModGetIDFromName('registration'));
+        }
+    }
+
 /* End 1.1.2 Release Upgrades */
 
     $thisdata['content']=$content;
