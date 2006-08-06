@@ -494,11 +494,13 @@
                         <input type="checkbox" name="usersendemails" id="usersendemails" value="1" tabindex="2"/>
                     </xar:if>
                     <label for="usersendemails" title="#xarML('Allow users to send emails?')#">
-                       <xar:mlstring>Allow User Email Page?</xar:mlstring>
+                        <strong><xar:mlstring>
+                            Allow User Email Page?
+                        </xar:mlstring></strong>
                     </label>
                 </div>
                 <p class="xar-form-container-after">
-                    <xar:mlstring>Allows members to send an email via a form to other users. Users must allow this option in their own account.</xar:mlstring>
+                    <xar:mlstring>Allows members to send an email via a form to other users. Users must swithc this option on in their own account.</xar:mlstring>
                 </p>
 
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">

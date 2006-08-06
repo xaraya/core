@@ -56,8 +56,8 @@
             <ul>
                <li><xar:mlstring>designated site Administrator and default registration User group</xar:mlstring></li>
                <li><xar:mlstring>default Authentication and Registration module</xar:mlstring></li>
-               <li><xar:mlstring>activation of user variables and Dynamic Data for roles such as Last Login, User Home, Last Password Update</xar:mlstring></li>
-               <li><xar:mlstring>Role Member Account Options realted to User Home, editing of Member Account, and search by Email</xar:mlstring></li>
+               <li><xar:mlstring>activation of user variables and Dynamic Data for roles such as Last Login, User Home, Last Password Update, Timezone</xar:mlstring></li>
+               <li><xar:mlstring>Role Member Account Options related to User Home, editing of Member Account, and search by Email</xar:mlstring></li>
 
             </ul>
         </li>
