@@ -1,11 +1,11 @@
 <xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
+    License: GPL http://www.gnu.org/copyleft/gpl.html
 </xar:comment>
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:mlstring>
-            Roles Administration 
+            Roles Administration
         </xar:mlstring>
     </span>
 </div>
@@ -13,21 +13,21 @@
   <xar:template type="module" file="admin-menu" />
     <h2>
         <xar:mlstring>
-            Modify Configuration 
+            Modify Configuration
         </xar:mlstring>
     </h2>
     <div>
         <dl class="xar-tabs">
             <dt class="help">
                 <xar:mlstring>
-                    Configure: 
+                    Configure:
                 </xar:mlstring>
             </dt>
             <xar:if condition="$tab eq 'general'">
                 <dd class="active">
                     <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=general">
                         <xar:mlstring>
-                            General 
+                            General
                         </xar:mlstring>
                     </a>
                 </dd>
@@ -35,7 +35,7 @@
                 <dd>
                     <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=general">
                         <xar:mlstring>
-                            General 
+                            General
                         </xar:mlstring>
                     </a>
                 </dd>
@@ -44,7 +44,7 @@
                 <dd class="active">
                     <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=duvs">
                         <xar:mlstring>
-                            User Variables 
+                            User Variables
                         </xar:mlstring>
                     </a>
                 </dd>
@@ -52,7 +52,7 @@
                 <dd>
                     <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=duvs">
                         <xar:mlstring>
-                            User Variables 
+                            User Variables
                         </xar:mlstring>
                     </a>
                 </dd>
@@ -61,7 +61,7 @@
                 <dd class="active">
                     <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=hooks">
                         <xar:mlstring>
-                            User Hooks 
+                            User Hooks
                         </xar:mlstring>
                     </a>
                 </dd>
@@ -69,7 +69,7 @@
                 <dd>
                     <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=hooks">
                         <xar:mlstring>
-                            User Hooks 
+                            User Hooks
                         </xar:mlstring>
                     </a>
                 </dd>
@@ -79,7 +79,7 @@
                     <dd class="active">
                         <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks">
                             <xar:mlstring>
-                                Group Hooks 
+                                Group Hooks
                             </xar:mlstring>
                         </a>
                     </dd>
@@ -87,7 +87,7 @@
                     <dd>
                         <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks">
                             <xar:mlstring>
-                                Group Hooks 
+                                Group Hooks
                             </xar:mlstring>
                         </a>
                     </dd>
@@ -113,20 +113,20 @@
         </dl>
     </div>
     <xar:comment>
-        ------------------- Begin General Options --------------------- 
+        ------------------- Begin General Options ---------------------
     </xar:comment>
     <xar:if condition="$tab eq 'general'">
         <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>
                     <xar:mlstring>
-                        Page Layout 
+                        Page Layout
                     </xar:mlstring>
                 </legend>
                 <div class="xar-form-input-wrapper">
                     <label for="itemsperpage" title="#xarML('Number of users to show on each page.')#" class="xar-form-label">
                         <xar:mlstring>
-                            Users Per Page: 
+                            Users Per Page:
                         </xar:mlstring>
                     </label>
                     <input type="text" name="itemsperpage" id="itemsperpage" value="#xarModGetVar('roles', 'itemsperpage')#" maxlength="3" class="xar-form-textshort" />
@@ -139,7 +139,7 @@
                     </xar:if>
                     <label for="shorturls" title="#xarML('Enable short URLs for Roles module')#">
                         <xar:mlstring>
-                            Enable Short URLs 
+                            Enable Short URLs
                         </xar:mlstring>
                     </label>
                 </div>
@@ -147,24 +147,24 @@
             <fieldset>
                 <legend>
                     <xar:mlstring>
-                        Default Group and Site Administrator 
+                        Default Group and Site Administrator
                     </xar:mlstring>
                 </legend>
                 <div class="xar-form-input-wrapper">
                     <label for="siteadmin" title="#xarML('Select the admin user that cannot be deleted')#" class="xar-form-label">
                         <xar:mlstring>
-                            Designated Site Admin: 
+                            Designated Site Admin:
                         </xar:mlstring>
                     </label>
                     <select name="siteadmin" id="siteadmin">
                         <xar:loop name="$siteadmins">
                             <xar:if condition="$loop:item['id'] eq xarModGetVar('roles','admin')">
                                 <option name="#$loop:item['id']#" id="#$loop:item['id']#" value="#$loop:item['id']#" selected="selected">
-                                    #$loop:item['name']# 
+                                    #$loop:item['name']#
                                 </option>
                                 <xar:else />
                                 <option name="#$loop:item['id']#" id="#$loop:item['id']#" value="#$loop:item['id']#">
-                                    #$loop:item['name']# 
+                                    #$loop:item['name']#
                                 </option>
                             </xar:if>
                         </xar:loop>
@@ -173,18 +173,18 @@
                 <div class="xar-form-input-wrapper">
                     <label for="defaultgroup" title="#xarML('New Users automatically get assigned to this Group')#" class="xar-form-label">
                         <xar:mlstring>
-                            Default Group For New Users: 
+                            Default Group For New Users:
                         </xar:mlstring>
                     </label>
                     <select name="defaultgroup" id="defaultgroup">
                         <xar:loop name="$groups">
                             <xar:if condition="$loop:item['name'] eq $defaultgroup">
                                 <option name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['name']#" selected="selected">
-                                    #$loop:item['name']# 
+                                    #$loop:item['name']#
                                 </option>
                                 <xar:else />
                                 <option name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['name']#">
-                                    #$loop:item['name']# 
+                                    #$loop:item['name']#
                                 </option>
                             </xar:if>
                         </xar:loop>
@@ -224,7 +224,7 @@
             </fieldset>
         </form>
         <xar:comment>
-            - - - - - - - - - - - - - - - - - Begin User Variable Options - - - - - - - - - - - - - - - - - - - 
+            - - - - - - - - - - - - - - - - - Begin User Variable Options - - - - - - - - - - - - - - - - - - -
         </xar:comment>
         <xar:elseif condition="$tab eq 'duvs'" />
             <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
@@ -401,16 +401,16 @@
                 </fieldset>
             </form>
         <xar:comment>
-            - - - - - - - - - - - - - - - - - Begin User Hooks Options - - - - - - - - - - - - - - - - - - - 
+            - - - - - - - - - - - - - - - - - Begin User Hooks Options - - - - - - - - - - - - - - - - - - -
         </xar:comment>
         <xar:elseif condition="$tab eq 'hooks'" />
         <xar:if condition="!empty($hooks)">
           <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
               <fieldset>
                 <legend><xar:mlstring>Default Hooks For Users</xar:mlstring></legend>
-               
+
                 <xar:foreach in="$hooks" key="$hookmodule">
-                    #$hooks[$hookmodule]# 
+                    #$hooks[$hookmodule]#
                 </xar:foreach>
               </fieldset>
               <fieldset>
@@ -425,21 +425,21 @@
             <xar:else />
             <p>
                 <xar:mlstring>
-                    No hooks are enabled for Users. 
+                    No hooks are enabled for Users.
                 </xar:mlstring>
             </p>
         </xar:if>
         <xar:comment>
-            ----------------- Begin Group Hooks Options ------------------- 
+            ----------------- Begin Group Hooks Options -------------------
         </xar:comment>
         <xar:elseif condition="$tab eq 'grouphooks'" />
         <xar:if condition="!empty($hooks)">
             <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                   <legend><xar:mlstring>Default Hooks For Groups</xar:mlstring></legend>
-                  
+
                   <xar:foreach in="$hooks" key="$hookmodule">
-                    #$hooks[$hookmodule]# 
+                    #$hooks[$hookmodule]#
                   </xar:foreach>
                 </fieldset>
                 <fieldset>
@@ -454,12 +454,12 @@
             <xar:else />
             <p>
                 <xar:mlstring>
-                    No hooks are enabled for Groups. 
+                    No hooks are enabled for Groups.
                 </xar:mlstring>
             </p>
         </xar:if>
         <xar:comment>
-            ----------------- Begin Member List Options ------------------- 
+            ----------------- Begin Member List Options -------------------
         </xar:comment>
         <xar:elseif condition="$tab eq 'memberlist'" />
         <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
@@ -500,7 +500,7 @@
                     </label>
                 </div>
                 <p class="xar-form-container-after">
-                    <xar:mlstring>Allows members to send an email via a form to other users. Users must swithc this option on in their own account.</xar:mlstring>
+                    <xar:mlstring>Allows members to send an email via a form to other users. Users must switch this option on in their own account.</xar:mlstring>
                 </p>
 
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">
@@ -554,7 +554,7 @@
             <fieldset>
                 <legend><xar:mlstring>User Homepage Options</xar:mlstring></legend>
                 <xar:if condition="xarModGetVar('roles', 'setuserhome')">
-                
+
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">
                     <xar:if condition="xarModGetVar('roles', 'loginredirect')">
                         <input type="checkbox" name="loginredirect" id="loginredirect" value="1" checked="checked" />
@@ -576,7 +576,7 @@
                     </xar:if>
                     <label for="userhomeedit" title="#xarML('Allow users to edit their user home page in their account')#">
                         <strong><xar:mlstring>
-                            Allow users to set Home Page in their member account 
+                            Allow users to set Home Page in their member account
                         </xar:mlstring></strong>
                     </label>
                 </div>
