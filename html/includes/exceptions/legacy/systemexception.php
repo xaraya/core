@@ -27,6 +27,8 @@ class SystemException extends xarException
         } else {
             $this->module = '';
         }
+        // FIXME: see http://bugs.php.net/bug.php?id=35634
+        /*
         // load relative to the current file (e.g. for shutdown functions)
         if (!isset($core)) sys::import('exceptions.xarayacomponents');
         foreach (xarComponents::$core as $corecomponent) {
@@ -43,6 +45,10 @@ class SystemException extends xarException
                 return;
             }
         }
+        */
+                $this->component = "";
+                $this->product = "";
+                return;
     }
 }
 
