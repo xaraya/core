@@ -39,6 +39,7 @@ function modules_adminapi_installwithdependencies ($args)
             $initialised = false;
             break;
     }
+    if (!isset($args['phase'])) $args['phase'] = 0;
     switch ($args['phase']) {
 
         case 0:
@@ -157,7 +158,6 @@ function modules_adminapi_installwithdependencies ($args)
                 xarResponseRedirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
             } else {
                 // Do the next module
-            echo "DD";
                 if (!xarModAPIFunc('modules','admin','installwithdependencies',array('regid' => array_pop($modstack), 'phase' => 0))) return;
             }
             return true;

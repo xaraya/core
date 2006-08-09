@@ -17,13 +17,16 @@
  * @returns array
  * @return array of menulinks for a module
  */
-function base_adminapi_menuarray()
+function base_adminapi_menuarray($args)
 {
-    $urlinfo = xarRequestGetInfo();
-    $tabs = xarModAPIFunc($urlinfo[0],'data','adminmenu');
+    if (!isset($args['module'])) {
+    	$urlinfo = xarRequestGetInfo();
+    	$args['module'] = $urlinfo[0];
+    }
+    $tabs = xarModAPIFunc($args['module'],'data','adminmenu');
     $menulinks = array();
     foreach($tabs as $tab) {
-        $url = isset($tab['target']) ? xarModURL($urlinfo[0],'admin',$tab['target']) : xarServerGetBaseURL();
+        $url = isset($tab['target']) ? xarModURL($args['module'],'admin',$tab['target']) : xarServerGetBaseURL();
         $label = isset($tab['label']) ? $tab['label'] : xarML('Missing label');
         $title = isset($tab['title']) ? $tab['title'] : $label;
         $link = array('url'   => $url,

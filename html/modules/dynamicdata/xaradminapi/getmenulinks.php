@@ -38,6 +38,6 @@ function dynamicdata_adminapi_getmenulinks()
     */
 
     // No special menu. Just return a standard array
-    return xarModAPIFunc('base','admin','menuarray');
+    return xarModAPIFunc('base','admin','menuarray',array('module' => 'dynamicdata'));
 }
 ?>
