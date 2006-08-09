@@ -436,6 +436,9 @@ class Dynamic_Property
      */
     function showInput($data = array())
     {
+        if (($this->status & Dynamic_Property_Master::DD_DISPLAYMASK) == Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN)
+        	return $this->showHidden($data);
+
         // Our common items we need
         if(!isset($data['name']))     $data['name']     = 'dd_'.$this->id;
         if(!isset($data['id']))       $data['id']       = $data['name'];
@@ -461,6 +464,9 @@ class Dynamic_Property
      */
     function showOutput($data = array())
     {
+        if (($this->status & Dynamic_Property_Master::DD_DISPLAYMASK) == Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN)
+        	return $this->showHidden($data);
+
         $data['id']   = $this->id;
         $data['name'] = $this->name;
 
@@ -482,6 +488,9 @@ class Dynamic_Property
      */
     function showLabel($args = array())
     {
+        if (($this->status & Dynamic_Property_Master::DD_DISPLAYMASK) == Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN)
+        	return $this->showHidden($args);
+
         if (empty($args)) {
 
         // old syntax was showLabel($label = null)
