@@ -1,0 +1,54 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:comment>
+***********
+* WARNING
+* Modify this template at your own risk.
+* If the template contains errors, the exception system will not be able to process
+* it correctly, leading to unexpected results
+***********
+
+Please see the document at http://xaraya.com/index.php/documentation/617 
+for examples and instructions on overriding error message templates
+</xar:comment>
+
+<div class="xar-mod-body">
+    <div class="xar-bordermedium">
+    <img src="#xarTplGetImage('usererror.gif', 'base')#" alt="#xarML('User ErrorIcon')#" class="xar-module-icon" />
+
+    <!--<h2>#$type#</h2>-->
+
+    <h3>
+        <xar:mlstring>A login error has occurred</xar:mlstring>
+    </h3>
+
+    <p>#$short#</p>
+
+    <xar:if condition = "$long ne '' and $long ne 'No further information is available.'">
+        <h3>
+            <xar:mlstring>Problem:</xar:mlstring>
+        </h3>
+
+        <p>#$long#</p>
+    </xar:if>
+    <xar:if condition = "$hint ne ''">
+        <h3>
+            <xar:mlstring>Further Information:</xar:mlstring>
+        </h3>
+
+        <p>#$hint#</p>
+    </xar:if>
+</div>
+    <p>
+        <xar:set name="contactus">'mailto:'.xarModGetVar('mail', 'adminmail',1)</xar:set>
+        <xar:ml>
+        <xar:mlstring>Please review the information above and try logging in again.
+        If you continue to have difficulty with logging in and you believe your account
+        and password should be active, then please <a href="#(1)">contact us</a>.
+        </xar:mlstring>
+        <xar:mlvar>#$contactus#</xar:mlvar>
+        </xar:ml>
+    </p>
+    <div class="xar-thirdwidth">
+       <xar:block module="authsystem" type="login" />
+    </div>
+</div>
