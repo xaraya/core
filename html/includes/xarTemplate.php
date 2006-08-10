@@ -81,7 +81,7 @@ define('XAR_TPL_TAG_NEEDPARAMETER'             ,32);
 **/
 function xarTpl_init(&$args, $whatElseIsGoingLoaded)
 {
-    
+
     $GLOBALS['xarTpl_themesBaseDir']   = $args['themesBaseDirectory'];
     $GLOBALS['xarTpl_defaultThemeDir'] = $args['defaultThemeDir'];
     $GLOBALS['xarTpl_generateXMLURLs'] = $args['generateXMLURLs'];
@@ -459,7 +459,7 @@ function xarTplBlock($modName, $blockType, $tplData = array(), $tplName = NULL, 
  * @access private
  * @param  string $modName      the module name owning the object/property, with fall-back to dynamicdata
  * @param  string $ddName       the name of the object/property type, or some other name specified in BL tag or API call
- * @param  string $tplType      the template type to render 
+ * @param  string $tplType      the template type to render
  *                              properties: ( showoutput(default)|showinput|showhidden|validation|label )
  *                              objects   : ( showdisplay(default)|showview|showform|showlist )
  * @param  array  $tplData      arguments for the template
@@ -485,12 +485,12 @@ function xarTpl__DDElement($modName, $ddName, $tplType, $tplData, $tplBase,$elem
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 function xarTplProperty($modName, $propertyName, $tplType = 'showoutput', $tplData = array(), $tplBase = NULL)
-{    
+{
     return xarTpl__DDElement($modName,$propertyName,$tplType,$tplData,$tplBase,'properties');
 }
 function xarTplObject($modName, $objectName, $tplType = 'showdisplay', $tplData = array(), $tplBase = NULL)
-{    
-    return xarTpl__DDElement($modName,$objectName,$tplType,$tplData,$tplBase,'objects');     
+{
+    return xarTpl__DDElement($modName,$objectName,$tplType,$tplData,$tplBase,'objects');
 }
 
 /**
@@ -821,7 +821,7 @@ function xarTplString($templateCode, &$tplData)
 {
     // Pretend as if the cache is fully operational and we'll be fine
     xarTemplateCache::saveEntry('memory',$templateCode);
-    
+
     // Execute the cache file
     sys::import('blocklayout.template.compiled');
     $compiled = new xarCompiledTemplate(xarTemplateCache::cacheFile('memory'));
@@ -977,14 +977,14 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     // Load translations for the template
     xarMLSLoadTranslations($sourceFileName);
 
-    xarLogMessage("Using template : $sourceFileName"); 
+    xarLogMessage("Using template : $sourceFileName");
     $templateCode = null;
     // Determine if we need to compile this template
     if (xarTemplateCache::isDirty($sourceFileName)) {
         // Get an instance of xarSourceTemplate
         sys::import('blocklayout.template.source');
         $srcTemplate = new xarSourceTemplate($sourceFileName);
-        
+
         // Compile it
         // @todo return a xarCompiledTemplate object here?
         $templateCode = $srcTemplate->compile();
@@ -996,7 +996,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     // Execute either the compiled template, or the code determined
     // @todo get rid of the cachedFileName usage
     $cachedFileName = xarTemplateCache::cacheFile($sourceFileName);
-    
+
     // Execute the compiled template from the cache file
     // @todo the tplType should be irrelevant
     sys::import('blocklayout.template.compiled');

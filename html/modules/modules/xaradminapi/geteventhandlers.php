@@ -36,7 +36,7 @@ function modules_adminapi_geteventhandlers()
         // try to include the event API for this module
         try {
             // @todo does this need to be wrapped for multiple inclusion?
-            include $xarapifile;
+            @include $xarapifile;
             $modName = strtolower($modName);
             $todo[$modName] = $modDir;
         } catch(PHPException $e) {
