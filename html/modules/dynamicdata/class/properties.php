@@ -351,7 +351,6 @@ class Dynamic_Property
      */
     function checkInput($name = '', $value = null)
     {
-//        echo "here";exit;
         if (!isset($value)) {
             $isvalid = true;
             xarVarFetch('dd_'.$this->id, 'isset', $ddvalue,  NULL, XARVAR_NOT_REQUIRED);
