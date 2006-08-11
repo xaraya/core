@@ -351,6 +351,7 @@ class Dynamic_Property
      */
     function checkInput($name = '', $value = null)
     {
+//        echo "here";exit;
         if (!isset($value)) {
             $isvalid = true;
             xarVarFetch('dd_'.$this->id, 'isset', $ddvalue,  NULL, XARVAR_NOT_REQUIRED);
@@ -370,15 +371,13 @@ class Dynamic_Property
                 }
             }
             if (!$isvalid) {
-            /*
-                $msg = 'Field #(1) (dd_#(2)) is missing.';
+                $msg = 'Field "#(1)" (dd_#(2)) is missing.';
                 if (!empty($name)) {
                     $vars = array($name,$this->id);
                 } else {
                     $vars = array($this->name,$this->id);
                 }
                 throw new BadParameterException($vars,$msg);
-            */
                 return false;
             }
             // store the fieldname for validations who need them (e.g. file uploads)

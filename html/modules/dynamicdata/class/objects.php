@@ -934,8 +934,14 @@ class Dynamic_Object extends Dynamic_Object_Master
             $args['fieldprefix'] = $this->fieldprefix;
         }
         $isvalid = true;
-        foreach (array_keys($this->properties) as $name) {
-            // for hooks, use the values passed via $extrainfo if available
+        $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
+        foreach ($fields as $name) {
+        echo $name;
+		var_dump($this->properties[$name]);
+		echo "<br /><br />";
+		echo $this->properties[$name]->checkInput();
+		echo "<br /><br />";
+			// for hooks, use the values passed via $extrainfo if available
             $field = 'dd_' . $this->properties[$name]->id;
             if (isset($args[$name])) {
                 if (!$this->properties[$name]->checkInput($name,$args[$name])) {
