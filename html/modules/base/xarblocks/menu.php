@@ -112,10 +112,11 @@ function base_menublock_display($blockinfo)
     // Sort Order, Status, Common Labels and Links Display preparation
     //$menustyle = xarModGetVar('adminpanels','menustyle');
     $logoutlabel = xarVarPrepForDisplay(xarML('logout'));
-    //jojodee - only default authentication module, authsystem, provides logout
-    //may want to look at other options for authentication modules
-    $authmod=xarModGetIDFromName('authsystem');
-    $logouturl = xarModURL(xarModGetNameFromID($authmod) ,'user', 'logout', array());
+
+    $authmoduledata=xarModAPIFunc('roles','user','getdefaultauthdata');
+    $authmodlogout=$authmoduledata['defaultloginmodname'];
+
+    $logouturl = xarModURL($authmodlogout,'user', 'logout', array());
     $loggedin = xarUserIsLoggedIn();
 
     // Get current URL
@@ -244,15 +245,10 @@ function base_menublock_display($blockinfo)
                 $mods = $list;
                 if ($list == array()) $usermods = '';
             }
+            
             foreach($mods as $mod){
                 /* Check for active module alias */
-                /* jojodee - This is not good here - should move the whole alias management to central location 
-                 * or we should be using a general function  not specific to a possibly unreliable
-                 * existance of module var name such as aliasname and useModuleAlias
-                 * These are set in Example module - as examples, but no guarantee people use them
-                 * We need to review the module alias functions
-                 */
-                $useAliasName=xarModGetVar($mod['name'], 'useModuleAlias');
+                /* jojodee -  We need to review the module alias functions and, thereafter it's use here */                $useAliasName=xarModGetVar($mod['name'], 'useModuleAlias');
                 $aliasname= xarModGetVar($mod['name'],'aliasname');
                 /* use the alias name if it exists for the label */
                 if (isset($useAliasName) && $useAliasName==1 && isset($aliasname) && !empty($aliasname)) {
@@ -279,10 +275,7 @@ function base_menublock_display($blockinfo)
                     if (function_exists($label.'_userapi_getmenulinks') ||
                         file_exists("modules/$mod[osdirectory]/xaruserapi/getmenulinks.php")){
                         // The user API function is called.
-                        $menulinks = xarModAPIFunc($mod['name'],
-                                                   'user',
-                                                   'getmenulinks');
-
+                        $menulinks = xarModAPIFunc($mod['name'],  'user', 'getmenulinks');
                     } else {
                         $menulinks = '';
                     }
