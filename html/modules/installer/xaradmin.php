@@ -1707,14 +1707,18 @@ function installer_admin_upgrade2()
     xarModSetVar('roles', 'usertimezone',''); //new modvar - initialize it
     xarModSetVar('roles','usersendemails', false); //old modvar returns. Let's make sure it's set false as it allows users to send emails
 
-  //Ensure that registration module is set as default if it is installed, 
-  // if it is active and the default is currently not set
+    //Ensure that registration module is set as default if it is installed,
+    // if it is active and the default is currently not set
     $defaultregmodule= xarModGetVar('roles','defaultregmodule');
     if (!isset($defaultregmodule)) {
         if (xarModIsAvailable('registration')) {
             xarModSetVar('roles','defaultregmodule',xarModGetIDFromName('registration'));
         }
     }
+    
+    // Ensure base timesince tag handler is added
+    xarTplRegisterTag('base', 'base-timesince', array(),
+                      'base_userapi_handletimesincetag');
 
 /* End 1.1.2 Release Upgrades */
 

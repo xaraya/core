@@ -436,6 +436,9 @@ function base_init()
         'base', 'base-render-javascript', array(),
         'base_javascriptapi_handlerenderjavascript'
     );
+    // Render time since string
+    xarTplRegisterTag('base', 'base-timesince', array(),
+                      'base_userapi_handletimesincetag');
 
     // TODO: is this is correct place for a default value for a modvar?
     xarModSetVar('base', 'AlternatePageTemplate', 'homepage');
