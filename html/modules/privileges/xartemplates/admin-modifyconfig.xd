@@ -225,12 +225,12 @@
 
                     </div>
                     <div class="xar-form-input-wrapper">
-                    <label for="pname" title="#xarML('Text value for realm')#" class="xar-form-label">
+                    <label for="textvalue" title="#xarML('Text value for realm')#" class="xar-form-label">
                         <xar:mlstring>
                         Text Value:
                         </xar:mlstring>
                     </label>
-                    <input type="text" name="textvalue" id="name" value="#$textvalue#" size="20" maxlength="20" class="xar-form-textmedium" />
+                    <input type="text" name="textvalue" id="textvalue" value="#$textvalue#" size="50" maxlength="100" class="xar-form-textmedium" />
                     &nbsp;
                     <xar:mlstring>(only applies when Text Value option is chosen)</xar:mlstring>
                     </div>
