@@ -20,7 +20,7 @@
  * @author Simon Wunderlin <sw@telemedia.ch>
  */
 function themes_admin_updatetpltag()
-{ 
+{
     // Get parameters
     if (!xarVarFetch('tag_name', 'str:1:', $tagname)) return;
     if (!xarVarFetch('tag_module', 'str:1:', $module)) return;
@@ -31,17 +31,18 @@ function themes_admin_updatetpltag()
     if (!xarSecurityCheck('AdminTheme', 0, 'All', '::')) return;
 
     if (!xarSecConfirmAuthKey()) return;
-    
+    /* This is not implemented and will error - comment until fully implemented
     // find all attributes (if any)
     $aAttributes = array();
     for ($i=0; $i<10; $i++ ) {
         //xarVarFetch("tag_attrname[$i]", 'isset', $current_attrib);
         if (!xarVarFetch("tag_attrname[$i]", 'isset', $current_attrib,  NULL, XARVAR_DONT_SET)) {return;}
-        if (Trim($current_attrib) != '') {
-            $aAttributes[] = Trim($current_attrib);
+
+        if (trim($current_attrib) != '') {
+            $aAttributes[] = trim($current_attrib);
         }
     }
-
+   */
     // action update = delete and re-add
     // action insert = add
     if ($action == 'update') {
