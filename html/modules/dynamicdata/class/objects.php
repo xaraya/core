@@ -1762,8 +1762,8 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 
          if (!empty($this->status)) $state = $this->status;
          else $state = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
+		$args['properties'] = array();
         if (count($args['fieldlist']) > 0) {
-            $args['properties'] = array();
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
                     if ($this->properties[$name]->status & $state)
