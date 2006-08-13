@@ -77,6 +77,42 @@ class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
         return parent::showInput($data);
     }
 
+    function checkInput($name = '', $value = null)
+    {
+        if (empty($name)) {
+            $inputname = 'input_dd_'.$this->id;
+            $displayname = 'display_dd_'.$this->id;
+        } else {
+            $inputname = 'input_'.$name;
+            $displayname = 'display_'.$name;
+        }
+        // store the fieldname for validations who need them (e.g. file uploads)
+        $this->fieldname = $name;
+        if (!isset($value)) {
+			if(!xarVarFetch($displayname, 'isset', $display_dd_status, NULL, XARVAR_DONT_SET)) {return;}
+			if(!xarVarFetch($inputname,   'isset', $input_dd_status,   NULL, XARVAR_DONT_SET)) {return;}
+        }
+		$value = $display_dd_status + $input_dd_status;
+        return $this->validateValue($value);
+    }
+
+    function validateValue($value = null)
+    {
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (empty($value)) {
+            $value = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE + Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY;
+        }
+        $this->value = $value;
+        // Just really check whether we're in bounds. Don't think more is required
+        if (($value >= Dynamic_Property_Master::DD_DISPLAYSTATE_DISABLED) &&
+        	($value <= Dynamic_Property_Master::DD_INPUTSTATE_MODIFY)) {
+			return true;
+        }
+		return false;
+    }
+
     function getOption($check = false)
     {
         //TODO: get this working

@@ -11,6 +11,7 @@
  * @link http://xaraya.com/index.php/release/68.html
  */
 sys::import('modules.dynamicdata.class.properties');
+
 class Dynamic_Array_Property extends Dynamic_Property
 {
     public $fields = array();
