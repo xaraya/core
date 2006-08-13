@@ -550,6 +550,65 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
     }
 }
 
+/**
+ * Load relevant translations for a specified relatvive path (be it file or directory)
+ *
+ * @return bool true on success, false on failure   
+ * @author Marcel van der Boom <mrb@hsdev.com>
+ * @todo slowly add more intelligence for more scopes. (core, version, init?)
+ * @todo static hash on path to prevent double loading?
+ * @todo is directory support needed? i.e. modules/base/ load all for base module? or how does this work?
+ * @todo pnFile.php type files support needed?
+ * @todo xarversion.php type files support
+ * @todo xar(whatever)api.php type files support? (javascript for example)
+ **/
+function xarMLSLoadTranslations($path)
+{
+    assert('file_exists($path); /* Loading translations for something that doesnt exist */');
+    
+    // Get a structured representation of the path.
+    $pathElements = explode("/",$path);
+    
+    // Initialise some defaults
+    $dnType = XARMLS_DNTYPE_MODULE; $possibleOverride = false; $ctxType = 'modules';
+    
+    // Determine dnType
+    // modules have a fixed place, so if it's not 'modules/blah/blah' it's themes, period.
+    // NOTE: $pathElements changes here!
+    if(array_shift($pathElements) != 'modules') {
+        $dnType = XARMLS_DNTYPE_THEME;
+        $possibleOverride = true;
+        $ctxType= 'themes';
+    }
+    $ctxType .= ":";
+    
+    // Determine dnName
+    // The specifics within that Type are in the next element, overridden or not
+    // NOTE: $pathElements changes here!
+    $dnName = array_shift($pathElements);
+    
+    // Determine ctxName, which is just the basename of the file without extension it seems 
+    // CHECKME: there was a hardcoded substr(str,0,-3) here earlier
+    // NOTE: $pathElements changes here!
+    $ctxName = preg_replace('/(.+)\..*$/', '$1', array_pop($pathElements));
+    
+    // Determine ctxType
+    // Peek into the first element and unwind the rest of the path elements into $ctxType
+    // xartemplates -> templates, xarblocks -> blocks, xarproperties -> properties etc.
+    // NOTE: pnFile.php type files support needed?
+    $pathElements[0] = preg_replace('/^xar(.*)/','$1',$pathElements[0]);
+    $ctxType .= implode("/",$pathElements);
+  
+    // Ok, based on possible overrides, we load internal only, or interal plus overrides
+    $ok = false;
+    if($possibleOverride) {
+        $ok= xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE,$dnName,$ctxType,$ctxName);
+    }
+    // And load the determined stuff
+    // @todo: should we check for success on *both*, where is the exception here? further up the tree?
+    $ok = $ok and xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName);
+    return $ok;
+}
 
 function xarMLS_convertFromInput($var, $method)
 {

@@ -953,8 +953,6 @@ function xarTpl_renderPage($mainModuleOutput, $otherModulesOutput = NULL, $templ
         '_bl_mainModuleOutput'     => $mainModuleOutput,
     );
 
-    //if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:pages', $templateName) === NULL) return;
-
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
@@ -983,7 +981,6 @@ function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
         $templateName = 'default';
         $sourceFileName = "$themeDir/blocks/default.xt";
     }
-    //if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:blocks', $templateName) === NULL) return;
     return xarTpl__executeFromFile($sourceFileName, $blockInfo);
 }
 
@@ -1000,7 +997,6 @@ function xarTpl_includeThemeTemplate($templateName, $tplData)
     // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
     $templateName = xarVarPrepForOS($templateName);
     $sourceFileName = xarTplGetThemeDir() ."/includes/$templateName.xt";
-    // if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:includes', $templateName) === NULL) return;
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
@@ -1020,7 +1016,6 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
     $sourceFileName = xarTplGetThemeDir() . "/modules/$modName/includes/$templateName.xt";
     if (!file_exists($sourceFileName)) {
         $sourceFileName = "modules/$modName/xartemplates/includes/$templateName.xd";
-        //if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:templates/includes', $templateName) === NULL) return;
     }
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
@@ -1107,35 +1102,10 @@ function xarTpl__executeFromFile($sourceFileName, $tplData)
 {
     assert('is_array($tplData); /* Template data should always be passed in an array */');
 
-    // Process non-default themes base directory
-    $newFileName = $sourceFileName;
-    if ($GLOBALS['xarTpl_themesBaseDir'] != 'themes') {
-        $themePathLen = strlen($GLOBALS['xarTpl_themesBaseDir']);
-        if (!strncmp($sourceFileName, $GLOBALS['xarTpl_themesBaseDir'], $themePathLen)) {
-            $newFileName = 'themes' . substr($sourceFileName, $themePathLen);
-        }
-    }
-
-    // Load translations for the template
-    $tplpath = explode("/", $newFileName);
-    $tplPathCount = count($tplpath);
-    switch ($tplpath[0]) {
-        case 'modules': $dnType = XARMLS_DNTYPE_MODULE; break;
-        case 'themes':  $dnType = XARMLS_DNTYPE_THEME; break;
-    }
-    $dnName = $tplpath[1];
-    $stack = array();
-    if ($tplpath[2] == 'xartemplates') $tplpath[2] = 'templates';
-    for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
-    $ctxType = $tplpath[0].':'.implode("/", $stack);
-    $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
-    /* This $dnType check is a workaround for non-standard templates like we need in workflows etc. */
-    /* Temporary partial fix for Bug 5156. This is a temporary workaround and
-       while here, themes cannot be translated. This should be fixed as soon as possible */
-    if(isset($dnType)) {
-        if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
-    }
- 
+    // Load up translations for the files
+    xarMLSLoadTranslations($sourceFileName);
+    
+    // Do we need to compile?
     $needCompilation = true;
     $cachedFileName = null;
     if ($GLOBALS['xarTpl_cacheTemplates']) {
@@ -1274,7 +1244,6 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
         $domain = XARMLS_DNTYPE_THEME; $instance = $GLOBALS['xarTpl_themeName'];
         $context = rtrim("themes:modules/$modName/$tplSubPart",'/');
     }
-    //if (xarMLS_loadTranslations($domain, $instance, $context, $tplBase) === NULL) return;
 
     return $sourceFileName;
 }
