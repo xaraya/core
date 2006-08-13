@@ -1715,8 +1715,9 @@ function installer_admin_upgrade2()
             xarModSetVar('roles','defaultregmodule',xarModGetIDFromName('registration'));
         }
     }
-    
+
     // Ensure base timesince tag handler is added
+    xarTplUnregisterTag('base-timesince');
     xarTplRegisterTag('base', 'base-timesince', array(),
                       'base_userapi_handletimesincetag');
 
