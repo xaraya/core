@@ -85,7 +85,8 @@ function blocks_adminapi_load($args)
         $loaded[$module . ':' . $type] = 1;
 
         // Load the block language files
-        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $module, 'modules:blocks', $type) === NULL) { 
+        if(!xarMLSLoadTranslations($filePath)) {
+            // What to do here? return doesnt seem right
             return;
         }
     }

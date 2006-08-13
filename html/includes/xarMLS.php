@@ -561,6 +561,7 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
  * @todo pnFile.php type files support needed?
  * @todo xarversion.php type files support
  * @todo xar(whatever)api.php type files support? (javascript for example)
+ * @todo do we want core per file support?
  **/
 function xarMLSLoadTranslations($path)
 {
@@ -573,6 +574,9 @@ function xarMLSLoadTranslations($path)
     $dnType = XARMLS_DNTYPE_MODULE; $possibleOverride = false; $ctxType = 'modules';
     
     // Determine dnType
+    // Lets get core files out of the way
+    if($pathElements[0] == 'includes') return xarMLS_loadTranslations(XARMLS_DNTYPE_CORE, 'xaraya', 'core:', 'core');
+    
     // modules have a fixed place, so if it's not 'modules/blah/blah' it's themes, period.
     // NOTE: $pathElements changes here!
     if(array_shift($pathElements) != 'modules') {
@@ -591,6 +595,8 @@ function xarMLSLoadTranslations($path)
     // CHECKME: there was a hardcoded substr(str,0,-3) here earlier
     // NOTE: $pathElements changes here!
     $ctxName = preg_replace('/(.+)\..*$/', '$1', array_pop($pathElements));
+    // xarversion.php is special apparently.
+    if($ctxName == 'xarversion' and $ctxType == 'modules') $ctxName = 'version';
     
     // Determine ctxType
     // Peek into the first element and unwind the rest of the path elements into $ctxType
@@ -606,7 +612,7 @@ function xarMLSLoadTranslations($path)
     }
     // And load the determined stuff
     // @todo: should we check for success on *both*, where is the exception here? further up the tree?
-    $ok = $ok and xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName);
+    $ok = xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName);
     return $ok;
 }
 
