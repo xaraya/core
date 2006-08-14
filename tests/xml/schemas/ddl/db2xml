@@ -22,14 +22,21 @@ if(!xarUserLogin($user,$pass)) {
     return 1;
 }
 
-$dbconn = xarDbGetconn();               // Connection object
+// For now hardcoded, expose on the cmdline later
+$dsnArgs = array(
+    'databaseType'  =>  'mysql',
+    'databaseHost'  =>  'dbserver.hsdev.com',
+    'databaseName'  =>  'core2x',
+    'userName'      =>  'xardbconn',
+    'password'      =>  '<!internal>'
+    );
+$dbconn = xarDBNewConn($dsnArgs);
 $dbInfo = $dbconn->getDatabaseInfo();   // DatabaseInfo object
 $tplData = array(
     'dbname' => $dbInfo->getName(),     // string
     'tables' => $dbInfo->getTables());  // array of TableInfo objects
 
 // Produce the xml
-$blc = xarTpl__getCompilerInstance();   // xarBLCompiler object
-$out = xarTpl__execute($blc->compileFile($tpl),$tplData, $tpl);
+$out = xarTplFile($tpl,$tplData);
 echo $out;
 ?>

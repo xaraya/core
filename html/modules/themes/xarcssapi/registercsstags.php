@@ -18,15 +18,20 @@
  */
 function themes_cssapi_registercsstags($args)
 {
-
+    sys::import('blocklayout.template.tags');
     // just resetting default tags here, nothing else
-
+    
     // unregister all - just in case they got corrupted or fiddled with via gui
-    xarTplUnregisterTag('additional-styles');
-    xarTplUnregisterTag('style');
+    try {
+        xarTemplateTag::unregister('additional-styles');
+        xarTemplateTag::unregister('style');
+    } catch (BLException $e) {
+        // Apparently they werent registered, good :-)
+    }
 
     // use in theme to render all extra styles tags
-   xarTplRegisterTag( 'themes', 'additional-styles', array(), 'themes_cssapi_delivercss');
+   $tag = new xarTemplateTag( 'themes', 'additional-styles', array(), 'themes_cssapi_delivercss');
+   $tag->register();
 
     // Register the tag which is used to include style information
     $cssTagAttributes = array(  new xarTemplateAttribute('file' , XAR_TPL_OPTIONAL | XAR_TPL_STRING),
@@ -39,7 +44,8 @@ function themes_cssapi_registercsstags($args)
                                 new xarTemplateAttribute('title'    , XAR_TPL_OPTIONAL | XAR_TPL_STRING),
                                 new xarTemplateAttribute('source'   , XAR_TPL_OPTIONAL | XAR_TPL_STRING),
                                 new xarTemplateAttribute('condition', XAR_TPL_OPTIONAL | XAR_TPL_STRING));
-    xarTplRegisterTag( 'themes', 'style', $cssTagAttributes ,'themes_cssapi_registercss');
+    $tag = new xarTemplateTag('themes', 'style', $cssTagAttributes ,'themes_cssapi_registercss');
+    $tag->register();
    // return
     return true;
 }
