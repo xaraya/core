@@ -1,24 +1,24 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
 <xar:if condition="empty($style) or $style eq 'serialized'">
   <xar:if condition="!empty($object)">
     <xar:data-display object="$object" />
   <xar:else/>
-    #$value#
+    <xar:var name="value" prep="true"/>
   </xar:if>
 
 <xar:elseif condition="$style eq 'itemid'"/>
   <xar:if condition="!empty($object)">
     <xar:data-display object="$object" />
   <xar:else/>
-    #$value#
+    <xar:var name="value" prep="true"/>
   </xar:if>
 
 <xar:elseif condition="$style eq 'childlist' or $style eq 'parentid'"/>
   <xar:if condition="!empty($object)">
     <xar:data-view object="$object" layout="subform" />
   <xar:else/>
-    #$value#
+    <xar:var name="value" prep="true"/>
   </xar:if>
 
 </xar:if>

@@ -12,13 +12,14 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * (try to) get the "meta" properties of tables via PHP ADODB
+ * (try to) get the "meta" properties of tables via db abstraction layer
  *
  * @author the DynamicData module development team
  * @param $args['table']  optional table you're looking for
  * @returns mixed
  * @return array of field definitions, or null on failure
  * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
+ * @todo split off the common parts which are also in getstatic.php
  */
 function dynamicdata_utilapi_getmeta($args)
 {
@@ -33,41 +34,44 @@ function dynamicdata_utilapi_getmeta($args)
     }
 
     $dbconn =& xarDBGetConn();
+    // dbInfo holds the meta information about the database
+    $dbInfo = $dbconn->getDatabaseInfo();
 
     // Note: this only works if we use the same database connection
-    if (!empty($db) && $db != xarDBGetName()) {
+    if (!empty($db) && $db != $dbInfo->getName()) {
         $dbconn->SelectDB($db);
         $prefix = $db . '.';
     } else {
         $prefix = '';
     }
 
+    // Build an array of TableInfo objects
     if (!empty($table)) {
-        $tables = array($table);
+        $tables = array($dbInfo->getTable($table));
     } else {
-        $tables = $dbconn->MetaTables();
+        $tables = $dbInfo->getTables();
     }
-    if (!isset($tables)) {
-        return;
-    }
+    if (!isset($tables)) return;
 
+    // Based on this, loop over the table info object and fill the metadata
     $metadata = array();
-    foreach ($tables as $curtable) {
-        $curtable = $prefix . $curtable;
+    foreach ($tables as $tblInfo) {
+        $curtable = $prefix . $tblInfo->getName();
         if (isset($propertybag[$curtable])) {
              $metadata[$curtable] = $propertybag[$curtable];
              continue;
         }
 
-        $fields = $dbconn->MetaColumns($curtable);
-        $keys = $dbconn->MetaPrimaryKeys($curtable);
-
+        // Get the columns and the primary keys
+        $fields = $tblInfo->getColumns();
+        $keyInfo = $tblInfo->getPrimaryKey();
         $id = 1;
         $columns = array();
         foreach ($fields as $field) {
-            $fieldname = $field->name;
-            $datatype = $field->type;
-            $size = $field->max_length;
+            $fieldname = $field->getName();
+            $datatype = $field->getNativeType();
+            $size = $field->getSize();
+            $default = $field->getDefaultValue();
 
             // assign some default label for now, by removing the first part (xar_)
             $name = preg_replace('/^.+?_/','',$fieldname);
@@ -81,7 +85,7 @@ function dynamicdata_utilapi_getmeta($args)
                 $name = $name . '_' . $i;
                 $label = $label . '_' . $i;
             }
-            $status = 1;
+            $status = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
 
             // assign some default validation for now
             $validation = $datatype;
@@ -126,15 +130,15 @@ function dynamicdata_utilapi_getmeta($args)
                     break;
                 case 'text':
                     $proptype = 4; // Medium Text Area
-                    $status = 2;
+                    $status = Dynamic_Property_Master::DD_DISPLAYSTATE_DISPLAYONLY;
                     break;
                 case 'longtext':
                     $proptype = 5; // Large Text Area
-                    $status = 2;
+                    $status = Dynamic_Property_Master::DD_DISPLAYSTATE_DISPLAYONLY;
                     break;
                 case 'blob':       // caution, could be binary too !
                     $proptype = 4; // Medium Text Area
-                    $status = 2;
+                    $status = Dynamic_Property_Master::DD_DISPLAYSTATE_DISPLAYONLY;
                     break;
                 case 'enum':
                     $proptype = 6; // Dropdown
@@ -146,7 +150,10 @@ function dynamicdata_utilapi_getmeta($args)
             }
 
             // try to figure out if it's the item id
-            if (!empty($keys) && in_array($fieldname,$keys)) {
+            // FIXME: this only deals with primary keys which consist of 1 column
+            // The mod_uservars table as such will be wrongly identified
+            if(is_object($keyInfo) && $fieldname == $keyInfo->getName()) {
+                // CHECKME: how are multiple tuples handled here?
                 // not allowed to modify primary key !
                 $proptype = 21; // Item ID
             }
@@ -160,7 +167,7 @@ function dynamicdata_utilapi_getmeta($args)
                                    'label' => $label,
                                    'type' => $proptype,
                                    'id' => $id,
-                                   'default' => '', // unknown here
+                                   'default' => $default,
                                    'source' => $curtable . '.' . $fieldname,
                                    'status' => $status,
                                    'order' => $id,

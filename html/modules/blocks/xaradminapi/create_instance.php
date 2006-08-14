@@ -32,12 +32,7 @@ function blocks_adminapi_create_instance($args)
         // TODO: this type of error to be handled automatically
         // (i.e. no need to pass the position through the error message, as the
         // error handler should already know).
-        $msg = xarML('Invalid Parameter Count', 'admin', 'create', 'Blocks');
-        xarErrorSet(
-            XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-            new SystemException($msg)
-        );
-        return;
+        throw new BadParameterException(null,'Wrong number of arguments or wrong arguments in functions blocks_adminapi_create_instance');
     }
 
     // Security.
@@ -77,24 +72,13 @@ function blocks_adminapi_create_instance($args)
     // Insert instance details.
     $nextId = $dbconn->GenId($block_instances_table);
     $query = 'INSERT INTO ' . $block_instances_table . ' (
-              xar_id,
-              xar_type_id,
-              xar_name,
-              xar_title,
-              xar_content,
-              xar_template,
-              xar_state,
-              xar_refresh,
-              xar_last_update
+              xar_id, xar_type_id, xar_name,
+              xar_title, xar_content, xar_template,
+              xar_state, xar_refresh, xar_last_update
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
-    $result =& $dbconn->Execute(
-        $query, array(
-                      $nextId, $type, $name, $title, $content, $template, $state,0,0
-        )
-    );
-    if (!$result) {return;}
-
+    $dbconn->Execute($query, array($nextId, $type, $name, $title, $content, $template, $state,0,0));
+    
     // Get ID of row inserted.
     $bid = $dbconn->PO_Insert_ID($block_instances_table, 'xar_id');
 
@@ -102,9 +86,8 @@ function blocks_adminapi_create_instance($args)
     if (isset($groups) && is_array($groups)) {
         // Pass the group updated to the API if required.
         // TODO: error handling.
-        $result = xarModAPIfunc(
-            'blocks', 'admin', 'update_instance_groups',
-            array('bid' => $bid, 'groups' => $groups)
+        $result = xarModAPIfunc('blocks', 'admin', 'update_instance_groups',
+                                array('bid' => $bid, 'groups' => $groups)
         );
     }
 
@@ -131,6 +114,13 @@ function blocks_adminapi_create_instance($args)
         } else {
             $cacheexpire = NULL;
         }
+        //check and see if there is an entry already before trying to add one - bug # 5815
+        $checkbid = xarModAPIFunc('blocks','user','getcacheblock',array('bid'=>$bid));
+        //we assume for now that it's left here due to bug # 5815 so delete it
+        if (is_array($checkbid)) {
+           $deletecacheblock = xarModAPIFunc('blocks','admin','delete_cacheinstance', array('bid' => $bid)); 
+        }
+        //now create the new block
         $cacheblocks = $xartable['cache_blocks'];
         $query = "INSERT INTO $cacheblocks (xar_bid,
                                             xar_nocache,
@@ -139,8 +129,7 @@ function blocks_adminapi_create_instance($args)
                                             xar_expire)
                   VALUES (?,?,?,?,?)";
         $bindvars = array($bid, $nocache, $pageshared, $usershared, $cacheexpire);
-        $result =& $dbconn->Execute($query,$bindvars);
-        if (!$result) {return;}
+        $dbconn->Execute($query,$bindvars);
     }
 
     // Resequence the blocks.

@@ -1,7 +1,6 @@
 <?php
 /**
  * Dynamic data view items
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -19,8 +18,8 @@ function dynamicdata_admin_view($args)
     extract($args);
 
     if(!xarVarFetch('itemid',   'int',   $itemid,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',    'int',   $modid,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype', 'int',   $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('modid',    'int',   $modid,     xarModGetIDFromName('dynamicdata'), XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('itemtype', 'int',   $itemtype,  0, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('startnum', 'int',   $startnum,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('numitems', 'int',   $numitems,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('sort',     'isset', $sort,      NULL, XARVAR_DONT_SET)) {return;}
@@ -28,13 +27,6 @@ function dynamicdata_admin_view($args)
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('catid',    'isset', $catid,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('layout',   'str:1' , $layout,   'default', XARVAR_NOT_REQUIRED)) {return;}
-
-    if (empty($modid)) {
-        $modid = xarModGetIDFromName('dynamicdata');
-    }
-    if (!isset($itemtype)) {
-        $itemtype = 0;
-    }
 
     $object = xarModAPIFunc('dynamicdata','user','getobjectinfo',
                             array('objectid' => $itemid,
@@ -83,21 +75,20 @@ function dynamicdata_admin_view($args)
     $data['modlist'] = array();
     if ($objectid == 1 && empty($table)) {
         $objects = xarModAPIFunc('dynamicdata','user','getobjects');
+        xarLogMessage('AFTER getobjects');
         $seenmod = array();
         foreach ($objects as $object) {
             $seenmod[$object['moduleid']] = 1;
         }
 
-        $modList = xarModAPIFunc('modules',
-                          'admin',
-                          'getlist',
+        $modList = xarModAPIFunc('modules','admin','getlist',
                           array('orderBy'     => 'category/name'));
         $oldcat = '';
         for ($i = 0, $max = count($modList); $i < $max; $i++) {
             if (!empty($seenmod[$modList[$i]['regid']])) {
                 continue;
             }
-            if ($oldcat != $modList[$i]['category']) {
+            if (isset($modList[$i]['category']) && $oldcat != $modList[$i]['category']) {
                 $modList[$i]['header'] = xarVarPrepForDisplay($modList[$i]['category']);
                 $oldcat = $modList[$i]['category'];
             } else {

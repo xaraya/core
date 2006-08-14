@@ -1,0 +1,7 @@
+<!--
+    I've put this here because this makes integrating with other modules more
+    easy, if the header needs to be suppressed
+-->
+<div class="xar-mod-head">
+  <span class="xar-mod-title"><xar:mlstring>Mail Administration</xar:mlstring></span>
+</div>

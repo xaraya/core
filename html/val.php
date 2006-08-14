@@ -1,11 +1,10 @@
 <?php
 /**
- * File: $Id$
- *
  * Redirect for validating users
  *
  * @package server
- * @copyright (C) 2002 by the Xaraya Development Team.
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * 
  * @author John Cox
@@ -22,19 +21,12 @@ xarCoreInit(XARCORE_SYSTEM_ALL);
 if (!xarVarFetch('v', 'str:1', $v)) return;
 if (!xarVarFetch('u', 'str:1', $u)) return;
 
-$user = xarModAPIFunc('roles',
-                      'user',
-                      'get',
-                       array('uid' => $u));
+$user = xarModAPIFunc('roles','user','get', array('uid' => $u));
 
-xarResponseRedirect(xarModURL('roles',
-                              'user',
-                              'getvalidation',
+xarResponseRedirect(xarModURL('roles', 'user','getvalidation',
                               array('stage'   => 'getvalidate',
                                     'valcode' => $v,
                                     'uname'   => $user['uname'],
                                     'phase'   => 'getvalidate')));
 
-// done
-exit;
 ?>

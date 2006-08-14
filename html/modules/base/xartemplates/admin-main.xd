@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Base Administration</xar:mlstring></span>
 </div>
@@ -34,8 +34,6 @@
         </ol>
 
     <h3><xar:mlstring>Included Blocks</xar:mlstring></h3>
-
-    <ol>
    <ul>
         <li><p><strong><xar:mlstring>Admin menu - Adminpanels</xar:mlstring></strong>:
         <xar:mlstring>An Adminpanel block can be configured in a number of ways. After creating the Adminpanel Menu block instance you have the option of overriding the default sort order
@@ -43,7 +41,7 @@
            and add your Adminmenu block to it in the usual way (See the documentation on Blocks for more information).
            You can also display an Admin logout link in the menu by checking the relevant option.</xar:mlstring>
            </p>
-           <p><xar:mlstring>At the present time You can turn the <strong>HELP</strong> link on or off from this Adminpanel block configuration</xar:mlstring>
+           <p><xar:mlstring>At the present time You can turn the <strong>HELP</strong> link on or off from this Adminpanel block configuration</xar:mlstring></p>
         </li>
         <li><p><strong><xar:mlstring>Waiting content</xar:mlstring></strong>:
          <xar:mlstring>The block will display content waiting on approval for any modules that supply a hook for waiting content (eg Articles Module). To use it, create a Content Waiting block
@@ -56,8 +54,7 @@
         <li><p><xar:mlstring><strong>menu</strong>: Construct menus.</xar:mlstring></p></li>
         <li><p><xar:mlstring><strong>php</strong>: Execute PHP code in a block.</xar:mlstring></p></li>
         <li><p><xar:mlstring><strong>text</strong>: Include plain text in a block.</xar:mlstring></p></li>
-
-    </ol>
+    </ul>
     <p><xar:mlstring><strong>Expire a Block</strong></xar:mlstring></p>
 
     <p>

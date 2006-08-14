@@ -19,13 +19,7 @@ function roles_adminapi_deletegroup($args)
 {
     extract($args);
 
-    if(!isset($uid)) {
-        $msg = xarML('Wrong arguments to groups_adminapi_deletegroup');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
-    }
+    if(!isset($uid)) throw new EmptyParameterException('uid');
 
 // Security Check
     if(!xarSecurityCheck('EditRole')) return;
@@ -33,14 +27,11 @@ function roles_adminapi_deletegroup($args)
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
 
-// Prohibit removal of any groups the system needs
+   // Prohibit removal of any groups the system needs
+   $defaultgroup=xarModAPIFunc('roles', 'user', 'getdefaulgroup');
 
-    if($role->getName() == xarModGetVar(xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule')),'defaultgroup')) {
-        $msg = xarML('The group #(1) is the default group for new users. If you want to remove it change the appropriate configuration setting first.', $role->getName());
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
+    if($role->getName() == $defaultgroup) {
+        throw new ForbiddenOperationException($defaultgroup,'The group #(1) is the default group for new users. If you want to remove it change the appropriate configuration setting first.');
     }
 
 // OK, go ahead

@@ -3,13 +3,70 @@
  * Xaraya WebServices Interface
  * 
  * @package modules
- * @copyright (C) 2002 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @subpackage webservices
  * @author Miko 
 */
 
+
+
+include 'includes/xarCore.php';
+// TODO: don't load the whole core
+xarCoreInit(XARCORE_SYSTEM_ALL);
+
+/**
+ * Determine how we got called.
+ *
+ */
+if(isset($argc) && $argc > 0 && basename($argv[0]) == 'ws.php') {
+    // We got called from the command line
+    exit(xarLocalServicesMain($argc, $argv));
+} else {
+    // Through some web mechanism
+    xarWebservicesMain();
+}
+
+/**
+ * Entry point for local services
+ * 
+ * Also know as the command line entry point
+ *
+ * call sign: php ./ws.php <type> [args]
+ *
+ * @todo when this gets any more than this, use getOpt package from PEAR
+ */
+function xarLocalServicesMain($argc, $argv)
+{
+    // Main check
+    if(!isset($argv[1])) return usage();
+    $type = $argv[1];
+    switch($type) {
+    case 'mail':
+        // Expecting input on stdin for a mail msg
+        return xarModApiFunc('mail','cli','process',array('argc' => $argc, 'argv' => $argv));
+        break;
+    default:
+        return usage();
+    }
+}
+
+function usage() {
+    fwrite(STDERR,"Usage for local services entry point:
+    php5 ./ws.php <type> [-u <user>][-p <pass>] [args]
+
+    <type>   : required designator for request type
+               Supported:
+               - 'mail': a mail message is supplied at stdin
+    -u <user>: optional username to pass in
+    -p <pass>: optional cleartext password to pass in
+    [args]   : arguments specific to the supplied <type>
+    NOTES:
+       - make sure that PHP can determine your ip address (for example by setting REMOTE_ADDR in the environment) 
+");
+    return 1;
+}
 
 /**
  * Entry point for webservices 
@@ -28,24 +85,11 @@
  * TRACKBACK     : http://host.com/ws.php?type=trackback (Is this still right?)
  * WEBDAV        : http://host.com/ws.php?type=webdav
  * FLASHREMOTING : http://host.com/ws.php?type=flashremoting
- */
-
-
-/**
- * Main WebServices Function
  *
  * @access public
- * @todo make this a bit more structured, so all the services have roughly the same interface
- * @toco provide ws.php as a nice (templated) page instead of the dumb list of links
-*/
-include 'includes/xarCore.php';
-
+ */
 function xarWebservicesMain() 
 {
-
-    // TODO: don't load the whole core
-    xarCoreInit(XARCORE_SYSTEM_ALL);
-    
     /* 
      determine the server type, then
      create an instance of an that server and 
@@ -62,8 +106,8 @@ function xarWebservicesMain()
         }
         if (!$server) {
             xarLogMessage("Could not load XML-RPC server, giving up");
-            // Why do we need to die here?
-            die('Could not load XML-RPC server');
+            // TODO: we need a specific handler for this
+            throw new Exception('Could not load XML-RPC server');
         } else {
             xarLogMessage("Created XMLRPC server");
         }
@@ -101,8 +145,8 @@ function xarWebservicesMain()
         }
         if (!$server) {
             xarLogMessage("Could not load trackback server, giving up");
-            // Why do we need to die here?
-            die('Could not load trackback server');
+            // TODO: we need a specific handler for this
+            throw new Exception('Could not load trackback server');
         } else {
             xarLogMessage("Created trackback server");
         }
@@ -131,8 +175,8 @@ function xarWebservicesMain()
             $server = xarModAPIFunc('webdavserver','user','initwebdavserver');
             if(!$server) {
                 xarLogMessage('Could not load webdav server, giving up');
-                // FIXME: construct errors response manually? bah
-                die('Could not load webdav server');
+                // TODO: we need a specific handler for this
+                throw new Exception('Could not load webdav server');
             } else {
                 xarLogMessage("Created webdav server");
             }
@@ -169,5 +213,4 @@ function xarWebservicesMain()
         }
     }
 }
-xarWebservicesMain();
 ?>

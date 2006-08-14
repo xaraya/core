@@ -3,7 +3,7 @@
  * PHP Version Compatibility Loader
  * 
  * @package PHP Version Compatibility Library
- * @copyright (C) 2004 by the Xaraya Development Team.
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Paul Crovella
@@ -28,6 +28,7 @@ class xarPHPCompat
      * @access private
      * @param  string $directory The directory to loop over
      * @param  string $manipulator The xarPHPCompat loader to apply to each .php file
+     * @todo   use directory iterator?
      */
     function loopDir ($directory, $manipulator)
     {
@@ -51,7 +52,11 @@ class xarPHPCompat
     function loadFunction ($path, $function)
     {
         if (!function_exists($function)) {
-            include $path . $function . '.php';
+            // FIXME: i blindly did a sys::import here, 
+            // but PHPCompat isnt loaded by 2.x so no idea what consequences this will have if we do load it
+            $dp = str_replace('includes/','',$path);
+            $dp = str_replace('/','.',$dp);
+            sys::import($dp.'.'.$function);
         }
     }
 
@@ -65,7 +70,11 @@ class xarPHPCompat
     function loadConstant ($path, $constant)
     {
         if (!defined($constant)) {
-            include $path . $constant . '.php';
+            // FIXME: i blindly did a sys::import here, 
+            // but PHPCompat isnt loaded by 2.x so no idea what consequences this will have if we do load it
+            $dp = str_replace('includes/','',$path);
+            $dp = str_replace('/','.',$dp);
+            sys::import($dp.'.'.$constant);
         }
     }
 }

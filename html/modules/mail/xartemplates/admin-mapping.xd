@@ -1,0 +1,15 @@
+<xar:template file="mod-head"/>
+
+<xar:style scope="module" module="base" file="navtabs" />
+<div class="xar-mod-body">
+    <xar:set name="active_tab">'mapping'</xar:set>
+    <xar:template file="queue-tabs" />
+
+    <fieldset>
+        <legend><xar:mlstring>Map items to queues</xar:mlstring></legend>
+        <div class="xar-form-input-wrapper">
+            <label class="xar-form-label" for="qlist"><xar:mlstring>Show rules for queue:</xar:mlstring></label>
+            <xar:data-input type="checkboxmask" id="qlist" name="showq"  options="$qlist"/>
+        </div>
+    </fieldset>
+</div>

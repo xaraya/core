@@ -1,15 +1,15 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:if condition="!empty($value)">
     <xar:if condition="is_array($value)">
         <xar:foreach in="$value" key="$key" value="$val">
             <xar:if condition="!empty($key) and !is_numeric($key)">
                 #$key# : 
             </xar:if>
+            <!-- Checkme: where does this get prepped in case of array values? -->
             #$val#
             <br/>
         </xar:foreach>
     <xar:else/>
-        #$value#
+        <xar:var name="value" prep="true"/>
     </xar:if>
 </xar:if>

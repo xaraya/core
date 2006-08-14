@@ -4,7 +4,7 @@
 </div>
 <div class="xar-mod-body">
 
-        <img src="#xarTplGetImage('admin.gif','base')# alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
+        <img src="#xarTplGetImage('admin.gif','base')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon" />
 
     <h2>
         <xar:mlstring>Help File Not Found</xar:mlstring>
