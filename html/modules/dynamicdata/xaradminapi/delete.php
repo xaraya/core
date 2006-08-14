@@ -1,7 +1,6 @@
 <?php
 /**
  * Delete an item
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -34,10 +33,9 @@ function dynamicdata_adminapi_delete($args)
         $invalid[] = 'module id';
     }
     if (count($invalid) > 0) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    join(', ',$invalid), 'admin', 'delete', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array(join(', ',$invalid), 'admin', 'delete', 'DynamicData');
+        throw new BadParameterException($vars,$msg);
     }
 
     if (!isset($itemtype) || !is_numeric($itemtype)) {
@@ -49,13 +47,22 @@ function dynamicdata_adminapi_delete($args)
     if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
 
 // TODO: test this
-    $myobject = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
-                                         'itemtype' => $itemtype,
-                                         'itemid'   => $itemid));
-    if (empty($myobject)) return;
+    $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
+    foreach ($tree as $branch) {
+        if ($branch['objectid'] == 0) continue;
+        // TODO: this next line jumps over itemtypes that correspond to wrappers of native itemtypes
+        // TODO: make this more robust
+        if ($branch['itemtype'] < 1000) continue;
 
-    $myobject->getItem();
-    $itemid = $myobject->deleteItem();
+        $myobject = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
+                                             'itemtype' => $branch['itemtype'],
+                                             'itemid'   => $itemid));
+        if (empty($myobject)) return;
+
+        $myobject->getItem();
+        $itemid = $myobject->deleteItem();
+    }
+    unset($myobject);
     return $itemid;
 }
 ?>

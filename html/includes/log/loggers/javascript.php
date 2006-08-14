@@ -10,10 +10,10 @@
  */
 
 /**
- * Include the base file
+ * Make sure base class is available
  *
  */
-include_once ('./includes/log/loggers/xarLogger.php');
+sys::import('log.loggers.xarLogger');
 
 /**
  * Javascript logger

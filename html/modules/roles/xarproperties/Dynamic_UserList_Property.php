@@ -11,21 +11,21 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 
-/* 
+/*
  * Dynamic userlist property
  * @author mikespub <mikespub@xaraya.com>
  */
 
 /* Include the base class */
-include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_Select_Property');
 
 class Dynamic_UserList_Property extends Dynamic_Select_Property
 {
-    var $grouplist = array();
-    var $userstate = -1;
-    var $showlist = array();
-    var $orderlist = array();
-    var $showglue = '; ';
+    public $grouplist = array();
+    public $userstate = -1;
+    public $showlist = array();
+    public $orderlist = array();
+    public $showglue = '; ';
 
     /*
     * Options available to user selection
@@ -42,20 +42,53 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
     *   field - name|uname|email|uid
     */
 
-    function Dynamic_UserList_Property($args)
+    function __construct($args)
     {
-        // Don't initialise the parent class as it handles the
-        // validation in an inappropriate way for user lists.
-        // $this->Dynamic_Select_Property($args);
-        $this->Dynamic_Property($args);
+        parent::__construct($args);
+        $this->tplmodule = 'roles';
+        $this->template = 'userlist';
+        $this->filepath   = 'modules/roles/xarproperties';
 
-        // Initialise the select option list.
-        $this->options = array();
+        if (count($this->options) == 0) {
+            $select_options = array();
+            if ($this->userstate <> -1) {
+                $select_options['state'] = $this->userstate;
+            }
+            if (!empty($this->orderlist)) {
+                $select_options['order'] = implode(',', $this->orderlist);
+            }
+            if (!empty($this->grouplist)) {
+                $select_options['group'] = implode(',', $this->grouplist);
+            }
+            $users = xarModAPIFunc('roles', 'user', 'getall', $select_options);
 
-        // Handle user options if supplied.
-        if (!empty($this->validation)) {
-            $this->parseValidation($this->validation);
+            // Loop for each user retrived and populate the options array.
+            if (empty($this->showlist)) {
+                // Simple case (default) -
+                foreach ($users as $user) {
+                    $this->options[] = array('id' => $user['uid'], 'name' => $user['name']);
+                }
+            } else {
+                // Complex case: allow specific fields to be selected.
+                foreach ($users as $user) {
+                    $namevalue = array();
+                    foreach ($this->showlist as $showfield) {
+                        $namevalue[] = $user[$showfield];
+                    }
+                    $this->options[] = array('id' => $user['uid'], 'name' => implode($this->showglue, $namevalue));
+                }
+            }
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->id = 37;
+        $info->name = 'userlist';
+        $info->desc = 'User List';
+        $info->reqmodules = array('roles');
+        return $info;
     }
 
     // TODO: validate the selected user against the specified group(s).
@@ -66,12 +99,14 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         }
         if (!empty($value)) {
             // check if this is a valid user id
-            $uname = xarUserGetVar('uname', $value);
-            if (isset($uname)) {
-                $this->value = $value;
-                return true;
-            } else {
-                xarErrorHandled();
+            try {
+                $uname = xarUserGetVar('uname', $value);
+                if (isset($uname)) {
+                    $this->value = $value;
+                    return true;
+                }
+            } catch (NotFoundExceptions $e) {
+                // Nothing to do?
             }
         } elseif (empty($value)) {
             $this->value = $value;
@@ -82,101 +117,30 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         return false;
     }
 
-    function showInput($args = array())
-    {
-        $select_options = array();
-
-        extract($args);
-
-        $data= array();
-        //$users=array(0;
-        
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (!isset($options) || count($options) == 0) {
-            $options = $this->options;
-        }
-        if (count($options) == 0) {
-            if ($this->userstate <> -1) {
-                $select_options['state'] = $this->userstate;
-            }
-            if (!empty($this->orderlist)) {
-                $select_options['order'] = implode(',', $this->orderlist);
-            }
-            if (!empty($this->grouplist)) {
-                $select_options['group'] = implode(',', $this->grouplist);
-            }
-
-            $users = xarModAPIFunc('roles', 'user', 'getall', $select_options);
-
-            // Loop for each user retrived and populate the options array.
-            if (empty($this->showlist)) {
-                // Simple case (default) - 
-                foreach ($users as $user) {
-                    $options[] = array('id' => $user['uid'], 'name' => $user['name']);
-                }
-            } else {
-                // Complex case: allow specific fields to be selected.
-                foreach ($users as $user) {
-                    $namevalue = array();
-                    foreach ($this->showlist as $showfield) {
-                        $namevalue[] = $user[$showfield];
-                    }
-                    $options[] = array('id' => $user['uid'], 'name' => implode($this->showglue, $namevalue));
-                }
-            }
-        }
-
-        if (empty($name)) {
-            $data['name'] = 'dd_' . $this->id;
-        } else {
-            $data['name'] = $name;
-        }
-
-        if (empty($id)) {
-            // TODO: strip out characters that are not allowed in a name.
-            $data['id'] = xarVarPrepForDisplay($data['name']);
-        } else {
-            $data['id']= $id;
-        }
-       //$data['select_options']=$select_options;
-        $data['value']=$value;
-        $data['options']=$options;
-        $data['users']=$users;
-        $data['tabindex']=!empty($tabindex) ? $tabindex : 0;
-        $data['onchange'] = isset($onchange) ? $onchange : null; // let tpl decide what to do
-        $data['invalid']=!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
-
-        return xarTplProperty('roles', 'userlist', 'showinput', $data);
-    }
-
     // TODO: format the output according to the 'showlist'.
     // TODO: provide an option to allow admin to decide whether to wrap the user
     // in a link or not.
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        $data= array();
-
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        extract($data);
+        if (!isset($value)) $value = $this->value;
 
         if (empty($value)) {
             $user = '';
         } else {
-            $user = xarUserGetVar('name', $value);
-            if (empty($user)) {
-                if (!isset($user)) xarErrorHandled();
-                $user = xarUserGetVar('uname', $value);
-                if (!isset($user)) xarErrorHandled();
+            try {
+                $user = xarUserGetVar('name', $value);
+                if (empty($user)) {
+                    $user = xarUserGetVar('uname', $value);
+                }
+            } catch (NotFoundExceptions $e) {
+                // Nothing to do?
             }
         }
-        $data['value']=$value;
-        $data['user']=$user;
+        $data['value'] = $value;
+        $data['user'] = $user;
 
-        return xarTplProperty('roles', 'userlist', 'showoutput', $data);
+        return parent::showOutput($data);
     }
 
     function parseValidation($validation = '')
@@ -216,30 +180,6 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
     }
 
     /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-    function getBasePropertyInfo()
-    {
-        $baseInfo = array(
-                          'id'         => 37,
-                          'name'       => 'userlist',
-                          'label'      => 'User List',
-                          'format'     => '37',
-                          'validation' => '',
-                          'source'     => '',
-                          'dependancies' => '',
-                          'requiresmodule' => 'roles',
-                          'aliases' => '',
-                          'args'         => '',
-                          // ...
-                         );
-        return $baseInfo;
-    }
-
-    /**
      * Show the current validation rule in a specific form for this property type
      *
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
@@ -276,10 +216,14 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         $data['other']     = '';
 
         // allow template override by child classes
-        if (!isset($template)) {
-            $template = '';
+        if (empty($module)) {
+            $module = $this->getModule();
         }
-        return xarTplProperty('roles', 'userlist', 'validation', $data);
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'validation', $data);
     }
 
     /**
@@ -343,7 +287,5 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
         // tell the calling function that everything is OK
         return true;
     }
-
 }
-
 ?>

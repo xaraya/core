@@ -11,11 +11,8 @@
     </p>
 
     <div class="xar-align-center">
-        <xar:set name="authmodule">xarModGetVar('roles','defaultauthmodule')</xar:set>
-        <xar:if condition="!empty($authmodule)">
-            <xar:set name="authmodule">xarModGetNameFromID($authmodule)</xar:set>
-            [<a href="#xarModURL($authmodule,'user','logout')#"><xar:mlstring>Logout</xar:mlstring></a>]
-        </xar:if>
-        [<a href="javascript:top.history.go(-1)"><xar:mlstring>Cancel</xar:mlstring></a>] 
+        <xar:set name="authdata">xarModAPIFunc('roles','user','getdefaultauthdata')</xar:set>
+            [<a href="#xarModURL($authdata['defaultlogoutmodname'],'user','logout')#"><xar:mlstring>Logout</xar:mlstring></a>]
+        [<a href="javascript:top.history.go(-1)"><xar:mlstring>Cancel</xar:mlstring></a>]
     </div>
 </div>

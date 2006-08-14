@@ -7,10 +7,10 @@
  */
 
 /**
- * Include the base class
+ * Parent class is File datastore
  *
  */
-include_once "includes/datastores/Dynamic_File_DataStore.php";
+sys::import('datastores.Dynamic_File_DataStore');
 
 /**
  * Data store is an XML file

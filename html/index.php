@@ -2,9 +2,8 @@
 /**
  * Xaraya Web Interface Entry Point
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2002 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @subpackage Web Interface Entry Point
  * @author Marco Canini
@@ -13,7 +12,7 @@
  /**
  * Load the Xaraya pre core
  */
-include_once 'includes/xarPreCore.php';
+include 'includes/xarPreCore.php';
 
 /**
  * Set up output caching if enabled
@@ -21,7 +20,7 @@ include_once 'includes/xarPreCore.php';
  *       without loading the core
  */
 if (file_exists(xarPreCoreGetVarDirPath() . '/cache/output/cache.touch')) {
-    include_once('includes/xarCache.php');
+    sys::import('xarCache');
     // Note : we may already exit here if session-less page caching is enabled
     xarCache_init();
 }
@@ -29,14 +28,13 @@ if (file_exists(xarPreCoreGetVarDirPath() . '/cache/output/cache.touch')) {
 /**
  * Load the Xaraya core
  */
-include 'includes/xarCore.php';
+sys::import('xarCore');
 
 /**
  * Main Xaraya Entry
  *
  * @access public
  * @return bool
- * @todo <marco> #2 Do fallback if raised exception is coming from template engine
  */
 function xarMain()
 {
@@ -106,9 +104,7 @@ function xarMain()
         }
 
         // We're all done, one ServerRequest made
-        xarEvt_trigger('ServerRequest');
-
-        if (xarResponseIsRedirected()) return true;
+        xarEvents::trigger('ServerRequest');
 
         // Note : the page template may be set to something else in the module function
         if (xarTplGetPageTemplateName() == 'default' && $modType != 'admin') {
@@ -136,20 +132,13 @@ function xarMain()
             }
         }
 
-        // Here we check for exceptions even if $res isn't empty
-        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // we found a non-core error
-
         xarVarFetch('pageName','str:1:', $pageName, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
         if (!empty($pageName)){
             xarTplSetPageTemplateName($pageName);
         }
 
         // Render page
-        //$pageOutput = xarTpl_renderPage($mainModuleOutput, NULL, $template);
         $pageOutput = xarTpl_renderPage($mainModuleOutput);
-
-        // Handle exceptions (the bubble at the top handler
-        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // we found a non-core error
 
         if ($pageCaching == 1) {
             // save the output in cache *before* sending it to the client
@@ -162,47 +151,7 @@ function xarMain()
     return true;
 }
 
-if (!xarMain()) {
-
-    // If we're here there must be surely an uncaught exception
-    if (xarCoreIsDebuggerActive()) {
-        $text = xarErrorRender('template');
-    } else {
-        $text = xarML('An error occurred while processing your request. The details are:');
-        $text .= '<br />';
-        $value = xarCurrentError();
-        if (is_object($value) && method_exists($value, 'toHTML')) {
-            $text .= '<span style="color: #FF0000;">'.$value->toHTML().'</span>';
-        } else {
-            $text .= '<span style="color: #999900;">'.xarCurrentErrorID().'</span>';
-        }
-    }
-
-//    xarLogException(XARLOG_LEVEL_ERROR);
-
-    // TODO: #2
-    if (xarCurrentErrorID() == 'TEMPLATE_NOT_EXIST') {
-        echo "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head><title>Error</title></head><body>$text</body></html>";
-    } else {
-        // It's important here to free exception before calling xarTplPrintPage
-        // As we are in the exception handling phase, we can clear it without side effects.
-        xarErrorFree();
-        // Render page
-        $pageOutput = xarTpl_renderPage($text);
-        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-            // Fallback to raw html
-            $msg = '<span style="color: #FF0000;">The current page is shown because the Blocklayout Template Engine failed to render the page, however this could be due to a problem not in BL itself but in the template. BL has raised or has left uncaught the following exception:</span>';
-            $msg .= '<br /><br />';
-            $msg .= xarErrorRender('rawhtml');
-            $msg .= '<br />';
-            $msg .= '<span style="color: #FF0000;">The following exception is instead the exception caught from the main catch clause (Please note that they could be the same if they were raised inside BL or inside the template):</span>';
-            $msg .= '<br /><br />';
-            $msg .= $text;
-            echo "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head><title>Error</title></head><body>$msg</body></html>";
-        } else {
-            echo $pageOutput;
-        }
-    }
-}
+// The world is not enough...
+xarMain();
 // All done, the shutdown handlers take care of the rest
 ?>

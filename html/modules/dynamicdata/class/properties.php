@@ -20,6 +20,18 @@
  */
 class Dynamic_Property_Master
 {
+    const DD_DISPLAYSTATE_DISABLED = 0;
+    const DD_DISPLAYSTATE_HIDDEN = 3;
+    const DD_DISPLAYSTATE_DISPLAYONLY = 2;
+    const DD_DISPLAYSTATE_ACTIVE = 1;
+
+    const DD_INPUTSTATE_ADDMODIFY = 32;
+    const DD_INPUTSTATE_NOINPUT = 64;
+    const DD_INPUTSTATE_ADD = 96;
+    const DD_INPUTSTATE_MODIFY = 128;
+
+    const DD_DISPLAYMASK = 31;
+
     /**
      * Get the dynamic properties of an object
      *
@@ -29,7 +41,7 @@ class Dynamic_Property_Master
      * @param $args['objectref'] a reference to the object to add those properties to (optional)
      * @param $args['allprops'] skip disabled properties by default
      */
-    function getProperties($args)
+    static function getProperties($args)
     {
         // we can't use our own classes here, because we'd have an endless loop :-)
 
@@ -39,18 +51,10 @@ class Dynamic_Property_Master
         $dynamicprop = $xartable['dynamic_properties'];
 
         $bindvars = array();
-        $query = "SELECT xar_prop_name,
-                         xar_prop_label,
-                         xar_prop_type,
-                         xar_prop_id,
-                         xar_prop_default,
-                         xar_prop_source,
-                         xar_prop_status,
-                         xar_prop_order,
-                         xar_prop_validation,
-                         xar_prop_objectid,
-                         xar_prop_moduleid,
-                         xar_prop_itemtype
+        $query = "SELECT xar_prop_name, xar_prop_label, xar_prop_type,
+                         xar_prop_id, xar_prop_default, xar_prop_source,
+                         xar_prop_status, xar_prop_order, xar_prop_validation,
+                         xar_prop_objectid, xar_prop_moduleid, xar_prop_itemtype
                   FROM $dynamicprop ";
         if (isset($args['objectid'])) {
             $query .= " WHERE xar_prop_objectid = ?";
@@ -67,8 +71,6 @@ class Dynamic_Property_Master
         $query .= " ORDER BY xar_prop_order ASC, xar_prop_id ASC";
 
         $result =& $dbconn->Execute($query,$bindvars);
-
-        if (!$result) return;
 
         $properties = array();
         while (!$result->EOF) {
@@ -96,7 +98,6 @@ class Dynamic_Property_Master
             }
             $result->MoveNext();
         }
-
         $result->Close();
 
         return $properties;
@@ -111,13 +112,14 @@ class Dynamic_Property_Master
      * ...
      * @param $objectref a reference to the object to add this property to
      */
-    function addProperty($args, &$objectref)
+    static function addProperty($args, &$objectref)
     {
         if (!isset($objectref) || empty($args['name']) || empty($args['type'])) {
             return;
         }
 
         // "beautify" label based on name if not specified
+        // TODO: this is a presentation issue, doesnt belong here.
         if (!isset($args['label']) && !empty($args['name'])) {
             $args['label'] = strtr($args['name'], '_', ' ');
             $args['label'] = ucwords($args['label']);
@@ -146,7 +148,7 @@ class Dynamic_Property_Master
     /**
      * Class method to get a new dynamic property of the right type
      */
-    function &getProperty($args)
+    static function &getProperty($args)
     {
         if (!is_numeric($args['type']))
         {
@@ -163,12 +165,11 @@ class Dynamic_Property_Master
         } else {
             $proptypes = Dynamic_Property_Master::getPropertyTypes();
         }
-
         if( isset($proptypes[$args['type']]) && is_array($proptypes[$args['type']]) )
         {
             $propertyInfo  = $proptypes[$args['type']];
             $propertyClass = $propertyInfo['propertyClass'];
-            // Filepath is complete rel path to the php file, and decoupled from the class name
+            // Filepath is complete real path to the php file, and decoupled from the class name
             // We should load the MLS translations for the right context here, in case the property
             // PHP file contains xarML() statements
             // See bug 5097
@@ -176,8 +177,11 @@ class Dynamic_Property_Master
                 // The preg determines the module name (in a sloppy way, FIX this)
                 xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE,$matches[1],'modules:properties',$propertyClass);
             } else xarLogMessage("WARNING: Property translations for $propertyClass NOT loaded");
-            require_once $propertyInfo['filepath'];
 
+            if(!file_exists($propertyInfo['filepath'])) throw new FileNotFoundException($propertyInfo['filepath']);
+
+            $dp = str_replace('/','.',substr($propertyInfo['filepath'],0,-4)); // minus .php
+            sys::import($dp);
 
             if( isset($propertyInfo['args']) && ($propertyInfo['args'] != '') )
             {
@@ -193,19 +197,20 @@ class Dynamic_Property_Master
         return $property;
     }
 
-    function createProperty($args)
+    static function createProperty($args)
     {
         $object = new Dynamic_Object(array('objectid' => 2)); // the Dynamic Properties = 2
         $objectid = $object->createItem($args);
+        unset($object);
         return $objectid;
     }
 
-    function updateProperty($args)
+    static function updateProperty($args)
     {
         // TODO: what if the property type changes to something incompatible ?
     }
 
-    function deleteProperty($args)
+    static function deleteProperty($args)
     {
         if (empty($args['itemid'])) return;
 
@@ -218,90 +223,29 @@ class Dynamic_Property_Master
         if (empty($objectid)) return;
 
         $objectid = $object->deleteItem();
+        unset($object);
         return $objectid;
     }
 
     /**
      * Class method listing all defined property types
      */
-    function getPropertyTypes()
+    static function getPropertyTypes()
     {
-        if (xarVarIsCached('DynamicData','PropertyTypes')) {
-            return xarVarGetCached('DynamicData','PropertyTypes');
-        }
+        //if (xarVarIsCached('DynamicData','PropertyTypes')) {
+        //  return xarVarGetCached('DynamicData','PropertyTypes');
+        //}
 
         // Attempt to retreive properties from DB
-        $dbconn =& xarDBGetConn();
-        $xartable =& xarDBGetTables();
+        $property_types =& PropertyRegistration::Retrieve();
 
-        $dynamicproptypes = $xartable['dynamic_properties_def'];
-
-        // Sort by required module(s) and then by id
-        $query = "SELECT
-                    xar_prop_id
-                    , xar_prop_name
-                    , xar_prop_label
-                    , xar_prop_parent
-                    , xar_prop_filepath
-                    , xar_prop_class
-                    , xar_prop_format
-                    , xar_prop_validation
-                    , xar_prop_source
-                    , xar_prop_reqfiles
-                    , xar_prop_reqmodules
-                    , xar_prop_args
-                    , xar_prop_aliases
-
-                  FROM $dynamicproptypes
-                  ORDER BY xar_prop_reqmodules, xar_prop_id";
-
-        $result =& $dbconn->Execute($query);
-
-        if (!$result)
-        {
-            //TODO: Something interesting?  Probably an exception.
-            return;
-        }
-
-        // If no properties are found, import them in.
-        if( $result->EOF)
-        {
-            $property_types = xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush'=>false));
-        } else {
-            $property_types = array();
-            while (!$result->EOF)
-            {
-                list($id,$name,$label,$parent,$filepath,$class,$format,$validation,$source,$reqfiles,$reqmodules,$args,$aliases) = $result->fields;
-
-                $property['id']             = $id;
-                $property['name']           = $name;
-                $property['label']          = $label;
-                $property['format']         = $format;
-                $property['filepath']       = $filepath;
-                $property['validation']     = $validation;
-                $property['source']         = $source;
-                $property['dependancies']   = $reqfiles;
-                $property['requiresmodule'] = $reqmodules;
-                $property['args']           = $args;
-                $property['propertyClass']  = $class;
-                $property['aliases']        = $aliases;
-
-                $property_types[$id] = $property;
-
-                $result->MoveNext();
-            }
-        }
-        $result->Close();
-
-/*
-
-// Security Check
-        if (xarSecurityCheck('ViewDynamicData',0)) {
-                $proptypes[] = array(...);
-            }
-        }
-    */
-
+        /*
+         // Security Check
+         if (xarSecurityCheck('ViewDynamicData',0)) {
+             $proptypes[] = array(...);
+         }
+         }
+        */
         xarVarSetCached('DynamicData','PropertyTypes',$property_types);
         return $property_types;
     }
@@ -313,36 +257,51 @@ class Dynamic_Property_Master
  *
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
+ * @todo is this abstract?
+ * @todo the visibility of most of the attributes can probably be protected
  */
 class Dynamic_Property
 {
-    var $id = null;
-    var $name = null;
-    var $label = null;
-    var $type = 1;
-    var $default = '';
-    var $source = 'dynamic_data';
-    var $status = 1;
-    var $order = 0;
-    var $validation = null;
+    // Attributes for registration
+    public $id = 0;
+    public $name = 'propertyName';
+    public $label = 'Property Label';
+    public $type = 1;
+    public $default = '';
+    public $source = 'dynamic_data';
+    public $status = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
+    public $order = 0;
+    public $format = '0';
+    public $requiresmodule = ''; // this module must be available before this property is enabled (optional)
+    public $aliases = '';        // If the same property class is reused directly with just different base info, supply the alternate base properties here (optional)
+    public $filepath   = 'modules/dynamicdata/xarproperties';                     // where is our class for it?
 
-    var $datastore = '';   // name of the data store where this property comes from
+    // Attributes for runtime
+    public $template = '';
+    public $tplmodule = 'dynamicdata';
+    public $validation = '';
+    public $dependancies = '';    // semi-colon seperated list of files that must be present for this property to be available (optional)
+    public $args;
 
-    var $value = null;     // value of this property for a particular Dynamic_Object
-    var $invalid = '';     // result of the checkInput/validateValue methods
+    public $datastore = '';   // name of the data store where this property comes from
 
-    var $_objectid = null; // objectid this property belongs to
-    var $_moduleid = null; // moduleid this property belongs to
-    var $_itemtype = null; // itemtype this property belongs to
+    public $value = null;     // value of this property for a particular Dynamic_Object
+    public $invalid = '';     // result of the checkInput/validateValue methods
 
-    var $_itemid;          // reference to $itemid in Dynamic_Object, where the current itemid is kept
-    var $_items;           // reference to $items in Dynamic_Object_List, where the different item values are kept
+    public $_objectid = null; // objectid this property belongs to
+    public $_moduleid = null; // moduleid this property belongs to
+    public $_itemtype = null; // itemtype this property belongs to
+
+    public $_itemid;          // reference to $itemid in Dynamic_Object, where the current itemid is kept
+    public $_items;           // reference to $items in Dynamic_Object_List, where the different item values are kept
 
     /**
      * Default constructor setting the variables
      */
-    function Dynamic_Property($args)
+    function __construct($args)
     {
+        $this->args = serialize(array());
+
         if (!empty($args) && is_array($args) && count($args) > 0) {
             foreach ($args as $key => $val) {
                 $this->$key = $val;
@@ -411,14 +370,13 @@ class Dynamic_Property
                 }
             }
             if (!$isvalid) {
-            /*
+                $msg = 'Field "#(1)" (dd_#(2)) is missing.';
                 if (!empty($name)) {
-                    $msg = xarML('Field #(1) (#(2)) is missing.', $name, 'dd_'.$this->id);
+                    $vars = array($name,$this->id);
                 } else {
-                    $msg = xarML('Field #(1) (#(2)) is missing.', $this->name, 'dd_'.$this->id);
+                    $vars = array($this->name,$this->id);
                 }
-                xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-            */
+                throw new BadParameterException($vars,$msg);
                 return false;
             }
             // store the fieldname for validations who need them (e.g. file uploads)
@@ -468,12 +426,31 @@ class Dynamic_Property
      * @param $args['value'] value of the field (default is the current value)
      * @param $args['id'] id of the field
      * @param $args['tabindex'] tab index of the field
+     * @param $args['module'] which module is responsible for the templating
+     * @param $args['template'] what's the partial name of the showinput template.
+     * @param $args[*] rest of arguments is passed on to the templating method.
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        return xarML('This property is unknown...');
+        if (($this->status & Dynamic_Property_Master::DD_DISPLAYMASK) == Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN)
+        	return $this->showHidden($data);
+
+        // Our common items we need
+        if(!isset($data['name']))     $data['name']     = 'dd_'.$this->id;
+        if(!isset($data['id']))       $data['id']       = $data['name'];
+        // mod for the tpl and what tpl the prop wants.
+        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['template'])) $data['template'] = $this->template;
+
+        if(!isset($data['tabindex'])) $data['tabindex'] = 0;
+        if(!isset($data['value']))    $data['value']    = '';
+        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+
+        // debug($data);
+        // Render it
+        return xarTplProperty($data['module'], $data['template'], 'showinput', $data);
     }
 
     /**
@@ -483,23 +460,20 @@ class Dynamic_Property
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
+        if (($this->status & Dynamic_Property_Master::DD_DISPLAYMASK) == Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN)
+        	return $this->showHidden($data);
 
-        $data = array();
         $data['id']   = $this->id;
         $data['name'] = $this->name;
-        if (isset($value)) {
-            $data['value'] = xarVarPrepForDisplay($value);
-        } else {
-            $data['value'] = xarVarPrepForDisplay($this->value);
-        }
 
-        if (!isset($template)) {
-            $template = null;
-        }
-        return xarTplProperty('dynamicdata', $template, 'showoutput', $data);
+        if (!isset($data['value'])) $data['value'] = $this->value;
+        // TODO: does this hurt when it is an array?
+        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['template'])) $data['template'] = $this->template;
+        // Render it
+        return xarTplProperty($data['module'], $data['template'], 'showoutput', $data);
     }
 
     /**
@@ -512,6 +486,9 @@ class Dynamic_Property
      */
     function showLabel($args = array())
     {
+        if (($this->status & Dynamic_Property_Master::DD_DISPLAYMASK) == Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN)
+        	return $this->showHidden($args);
+
         if (empty($args)) {
 
         // old syntax was showLabel($label = null)
@@ -618,16 +595,18 @@ class Dynamic_Property
     function getBasePropertyInfo()
     {
         $baseInfo = array(
-                          'id'         => 0,
-                          'name'       => 'propertyName',
-                          'label'      => 'Property Label',
-                          'format'     => '0',
-                          'validation' => '',
-                          'source'     => '',
-                          'dependancies' => '',    // semi-colon seperated list of files that must be present for this property to be available (optional)
-                          'requiresmodule' => '', // this module must be available before this property is enabled (optional)
-                          'aliases' => '',        // If the same property class is reused directly with just different base info, supply the alternate base properties here (optional)
-                          'args' => serialize( array() ),
+                          'id'         => $this->id,
+                          'name'       => $this->name,
+                          'label'      => $this->label,
+                          'format'     => $this->format,
+                          'template'   => $this->template,
+                          'tplmodule'  => $this->tplmodule,
+                          'validation' => $this->validation,
+                          'source'     => $this->source,
+                          'dependancies' => $this->dependancies,
+                          'requiresmodule' => $this->requiresmodule,
+                          'aliases' => $this->aliases,
+                          'args' => $this->args
                           // ...
                          );
         return $baseInfo;
@@ -735,24 +714,153 @@ class Dynamic_Property
     function getModule()
     {
         $info = $this->getBasePropertyInfo();
-        $modulename = $info['requiresmodule'];
-
-	    if (empty($modulename)) {
-            //Do some funky error handling thing here
-            return;
-        }
-
+        $modulename = empty($this->tplmodule) ? $info['tplmodule'] : $this->tplmodule;
         return $modulename;
     }
-   /**
-    * Return the name this property uses in its templates
-    *
-    * @returns string template name
-    */
+    /**
+     * Return the name this property uses in its templates
+     *
+     * @returns string template name
+     */
     function getTemplate()
     {
-        $info = $this->getBasePropertyInfo();
-        return $info['name'];
+        // If not specified, default to the registered name of the prop
+        $info = $this->getRegistrationInfo();
+        $template = empty($this->template) ? $info->name : $this->template;
+        return $template;
+    }
+}
+/**
+ * Class to model registration information for a property
+ *
+ * This corresponds directly to the db info we register for a property.
+ *
+ */
+class PropertyRegistration
+{
+    public $id         = 0;                      // id of the property, hardcoded to make things easier
+    public $name       = 'propertyType';         // what type of property are we dealing with
+    public $desc       = 'Property Description'; // description of this type
+    public $type       = 1;
+    public $parent     = '';                     // this type is derived from?
+    public $class      = '';                     // what is the class?
+    public $validation = '';                     // what is its default validation?
+    public $source     = 'dynamic_data';         // what source is default for this type?
+    public $reqfiles   = array();                // do we require some files to be present?
+    public $reqmodules = array();                // do we require some modules to be present?
+    public $args       = '';                     // special args needed?
+    public $aliases    = array();                // aliases for this property
+    public $format     = 0;                      // what format type do we have here?
+                                                 // 0 = ? what?
+                                                 // 1 =
+
+    function __construct($args=array())
+    {
+        assert('is_array($args)');
+        if(!empty($args)) {
+            foreach($args as $key=>$value) {
+                $this->$key = $value;
+            }
+        }
+    }
+
+    static function clearCache()
+    {
+        $dbconn = &xarDBGetConn();
+        $tables = xarDBGetTables();
+        $sql = "DELETE FROM $tables[dynamic_properties_def]";
+        $res = $dbconn->ExecuteUpdate($sql);
+        return $res;
+    }
+
+    function Register()
+    {
+        static $stmt = null;
+
+        // Sanity checks (silent)
+        foreach($this->reqfiles as $required) {
+            if(!file_exists($required)) return false;
+        }
+        foreach($this->reqmodules as $required) {
+            if(!xarModIsAvailable($required)) return false;
+        }
+
+        $dbconn = &xarDBGetConn();
+        $tables = xarDBGetTables();
+        $propdefTable = $tables['dynamic_properties_def'];
+
+        // Make sure the db is the same as in the old days
+        $reqmods = join(';',$this->reqmodules);
+        if($this->format == 0) $this->format = $this->id;
+
+        $sql = "INSERT INTO $propdefTable
+                (xar_prop_id, xar_prop_name, xar_prop_label,
+                 xar_prop_parent, xar_prop_filepath, xar_prop_class,
+                 xar_prop_format, xar_prop_validation, xar_prop_source,
+                 xar_prop_reqfiles, xar_prop_reqmodules, xar_prop_args, xar_prop_aliases)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        if(!isset($stmt)) {
+            $stmt = $dbconn->prepareStatement($sql);
+        }
+        $bindvars = array(
+                          (int) $this->id, $this->name, $this->desc,
+                          $this->parent, $this->filepath, $this->class,
+                          $this->format, $this->validation, $this->source,
+                          $this->reqfiles, $reqmods, $this->args, $this->aliases);
+        $res = $stmt->executeUpdate($bindvars);
+
+        if(!empty($this->aliases)) {
+            foreach($this->aliases as $aliasInfo) {
+                $aliasInfo->filepath = $this->filepath; // Make sure
+                $aliasInfo->class = $this->class;
+                $aliasInfo->format = $this->format;
+                $aliasInfo->reqmodules = $this->reqmodules;
+                // Recursive!!
+                $res = $aliasInfo->Register();
+            }
+        }
+        return $res;
+    }
+
+    static function &Retrieve()
+    {
+        $dbconn =& xarDBGetConn();
+        $tables = xarDBGetTables();
+        // Sort by required module(s) and then by name
+        $query = "SELECT  xar_prop_id, xar_prop_name, xar_prop_label,
+                          xar_prop_parent, xar_prop_filepath, xar_prop_class,
+                          xar_prop_format, xar_prop_validation, xar_prop_source,
+                          xar_prop_reqfiles,xar_prop_reqmodules, xar_prop_args,
+                          xar_prop_aliases
+                  FROM    $tables[dynamic_properties_def]
+                  ORDER BY xar_prop_reqmodules, xar_prop_name";
+        $result = $dbconn->executeQuery($query);
+        $proptypes = array();
+        if($result->RecordCount() == 0 ) {
+            $proptypes = xarModAPIFunc('dynamicdata','admin','importpropertytypes',array('flush'=>false));
+        } else {
+            while($result->next()) {
+                list($id,$name,$label,$parent,$filepath,$class,$format,$validation,$source,$reqfiles,$reqmodules,$args,$aliases) = $result->fields;
+
+                $property['id']             = $id;
+                $property['name']           = $name;
+                $property['label']          = $label;
+                $property['format']         = $format;
+                $property['filepath']       = $filepath;
+                $property['validation']     = $validation;
+                $property['source']         = $source;
+                $property['dependancies']   = $reqfiles;
+                $property['requiresmodule'] = $reqmodules;
+                $property['args']           = $args;
+                $property['propertyClass']  = $class;
+                // TODO: this return a serialized array of objects, does that hurt?
+                $property['aliases']        = $aliases;
+
+                $proptypes[$id] = $property;
+            }
+        }
+        $result->close();
+        return $proptypes;
     }
 }
 ?>

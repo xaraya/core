@@ -23,53 +23,53 @@ class Dynamic_DataStore_Master
     /**
      * Class method to get a new dynamic data store (of the right type)
      */
-    function &getDataStore($name = '_dynamic_data_', $type = 'data')
+    static function &getDataStore($name = '_dynamic_data_', $type = 'data')
     {
         switch ($type)
         {
             case 'table':
-                require_once "includes/datastores/Dynamic_FlatTable_DataStore.php";
+                sys::import('datastores.Dynamic_FlatTable_DataStore');
                 $datastore = new Dynamic_FlatTable_DataStore($name);
                 break;
             case 'data':
-                require_once "includes/datastores/Dynamic_VariableTable_DataStore.php";
+                sys::import('datastores.Dynamic_VariableTable_DataStore');
                 $datastore = new Dynamic_VariableTable_DataStore($name);
                 break;
             case 'hook':
-                require_once "includes/datastores/Dynamic_Hook_DataStore.php";
+                sys::import('datastores.Dynamic_Hook_DataStore');
                 $datastore = new Dynamic_Hook_DataStore($name);
                 break;
             case 'function':
-                require_once "includes/datastores/Dynamic_Function_DataStore.php";
+                sys::import('datastores.Dynamic_Function_DataStore');
                 $datastore = new Dynamic_Function_DataStore($name);
                 break;
             case 'uservars':
-                require_once "includes/datastores/Dynamic_UserSettings_DataStore.php";
-            // TODO: integrate user variable handling with DD
+                sys::import('datastores.Dynamic_UserSettings_DataStore.php');
+                // TODO: integrate user variable handling with DD
                 $datastore = new Dynamic_UserSettings_DataStore($name);
                 break;
             case 'modulevars':
-                require_once "includes/datastores/Dynamic_ModuleVariables_DataStore.php";
-            // TODO: integrate module variable handling with DD
+                sys::import('datastores.Dynamic_ModuleVariables_DataStore');
+                // TODO: integrate module variable handling with DD
                 $datastore = new Dynamic_ModuleVariables_DataStore($name);
                 break;
 
-       // TODO: other data stores
+                // TODO: other data stores
             case 'ldap':
-                require_once "includes/datastores/Dynamic_LDAP_DataStore.php";
+                sys::import('datastores.Dynamic_LDAP_DataStore');
                 $datastore = new Dynamic_LDAP_DataStore($name);
                 break;
             case 'xml':
-                require_once "includes/datastores/Dynamic_XMLFile_DataStore.php";
+                sys::import('datastores.Dynamic_XMLFile_DataStore.php');
                 $datastore = new Dynamic_XMLFile_DataStore($name);
                 break;
             case 'csv':
-                require_once "includes/datastores/Dynamic_CSVFile_DataStore.php";
+                sys::import('datastores.Dynamic_CSVFile_DataStore');
                 $datastore = new Dynamic_CSVFile_DataStore($name);
                 break;
             case 'dummy':
             default:
-                require_once "includes/datastores/Dynamic_Dummy_DataStore.php";
+                sys::import('datastores.Dynamic_Dummy_DataStore');
                 $datastore = new Dynamic_Dummy_DataStore($name);
                 break;
         }
@@ -85,7 +85,7 @@ class Dynamic_DataStore_Master
      *
      * @param $args['table'] optional extra table whose fields you want to add as potential data source
      */
-    function &getDataSources($args = array())
+    static function &getDataSources($args = array())
     {
         $sources = array();
 
@@ -101,7 +101,7 @@ class Dynamic_DataStore_Master
         // session variables // TODO: perhaps someday, if this makes sense
         //$sources[] = 'session variables';
 
-    // TODO: re-evaluate this once we're further along
+        // TODO: re-evaluate this once we're further along
         // hook modules manage their own data
         $sources[] = 'hook module';
 
@@ -113,7 +113,11 @@ class Dynamic_DataStore_Master
 
         // try to get the meta table definition
         if (!empty($args['table'])) {
-            $meta = xarModAPIFunc('dynamicdata','util','getmeta',$args,0);
+            try {
+                $meta = xarModAPIFunc('dynamicdata','util','getmeta',$args);
+            } catch ( NotFoundExceptions $e ) {
+                // No worries
+            }
             if (!empty($meta) && !empty($meta[$args['table']])) {
                 foreach ($meta[$args['table']] as $column) {
                     if (!empty($column['source'])) {
@@ -123,14 +127,17 @@ class Dynamic_DataStore_Master
             }
         }
 
-        // Get table list from database, not xar_tables.
-        $tables = xarModAPIFunc('dynamicdata', 'util', 'getmeta', array('db' => '', 'table' => ''));
-        foreach($tables as $table) {
-           foreach($table as $column) {
-              $sources[] = $column['source'];
-           }
+        $dbconn =& xarDBGetConn();
+        $dbInfo = $dbconn->getDatabaseInfo();
+        $dbTables = $dbInfo->getTables();
+        foreach($dbTables as $tblInfo)
+        {
+            $tblColumns = $tblInfo->getColumns();
+            foreach($tblColumns as $colInfo)
+            {
+                $sources[] = $tblInfo->getName().".".$colInfo->getName();
+            }
         }
-
         return $sources;
     }
 }
@@ -143,21 +150,21 @@ class Dynamic_DataStore_Master
  */
 class Dynamic_DataStore
 {
-    var $name;     // some static name, or the table name, or the moduleid + itemtype, or ...
-    var $type;
-    var $fields;   // array of $name => reference to property in Dynamic_Object*
-    var $primary;
+    public $name;     // some static name, or the table name, or the moduleid + itemtype, or ...
+    public $type;
+    public $fields;   // array of $name => reference to property in Dynamic_Object*
+    public $primary;
 
-    var $sort;
-    var $where;
-    var $groupby;
-    var $join;
+    public $sort;
+    public $where;
+    public $groupby;
+    public $join;
 
-    var $_itemids;  // reference to itemids in Dynamic_Object_List
+    public $_itemids;  // reference to itemids in Dynamic_Object_List TODO: investigate public scope
 
-    var $cache = 0;
+    public $cache = 0;
 
-    function Dynamic_DataStore($name)
+    function __construct($name)
     {
         $this->name = $name;
         $this->fields = array();

@@ -21,23 +21,19 @@ function authsystem_user_logout()
 
     // Get input parameters
     if (!xarVarFetch('redirecturl','str:1:254',$redirecturl,$redirect,XARVAR_NOT_REQUIRED)) return;
-   
-    $defaultauthmodule=(int)xarModGetVar('roles','defaultauthmodule');
-    $authmodule=xarModGetNameFromID($defaultauthmodule);
-    if (!file_exists('modules/'.$authmodule.'/xaruser/logout.php')) {
-            $authmodule='authsystem'; // incase the authmodule doesn't provide a login
-    }
+    
+    $defaultauthdata=xarModAPIFunc('roles','user','getdefaultauthdata');
+    $defaultlogoutmodname=$defaultauthdata['defaultlogoutmodname'];
+    $authmodule=$defaultauthdata['defaultauthmodname'];
     // Defaults
     //if (preg_match('/$authmodule}/',$redirecturl)) {
-    if (strstr($redirecturl,$authmodule)) {
+    if (strstr($redirecturl, $defaultlogoutmodname)) {
         $redirecturl = $redirect;
     }
 
     // Log user out
     if (!xarUserLogOut()) {
-        $msg = xarML('Problem Logging Out.  Module #(1) Function #(2)', 'authsystem', 'logout');
-        xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
-        return;
+        throw new ForbiddenOperationException(array('authsystem', 'logout'),xarML('Problem Logging Out.  Module #(1) Function #(2)'));
     }
     xarResponseRedirect($redirecturl);
     return true;

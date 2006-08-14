@@ -31,10 +31,7 @@ function authsystem_user_login()
     global $xarUser_authenticationModules;
 
     if (!$_COOKIE) {
-        xarErrorFree();
-        $msg = xarML('You must enable cookies on your browser to run Xaraya. Check the browser configuration options to make sure cookies are enabled, click on  the "Back" button of the browser and try again.');
-        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-        return;
+        throw new BadParameterException(null,xarML('You must enable cookies on your browser to run Xaraya. Check the browser configuration options to make sure cookies are enabled, click on  the "Back" button of the browser and try again.'));
     }
 
     $unlockTime  = (int) xarSessionGetVar('authsystem.login.lockedout');
@@ -42,22 +39,14 @@ function authsystem_user_login()
     $lockouttries =xarModGetVar('authsystem','lockouttries') ? xarModGetVar('authsystem','lockouttries') : 3;
 
     if ((time() < $unlockTime) && (xarModGetVar('authsystem','uselockout')==true)) {
-        $msg = xarML('Your account has been locked for #(1) minutes.', $lockouttime);
-        xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
-        return;
+        throw new ForbiddenOperationException($lockouttime,xarML('Your account has been locked for #(1) minutes.'));
     }
 
     if (!xarVarFetch('uname','str:1:100',$uname)) {
-        xarErrorFree();
-        $msg = xarML('You must provide a username.');
-        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-        return;
+        throw new EmptyParameterException('username');
     }
     if (!xarVarFetch('pass','str:1:100',$pass)) {
-        xarErrorFree();
-        $msg = xarML('You must provide a password.');
-        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-        return;
+        throw new EmptyParameterException('password');
     }
     $redirect=xarServerGetBaseURL();
     if (!xarVarFetch('rememberme','checkbox',$rememberme,false,XARVAR_NOT_REQUIRED)) return;
@@ -117,26 +106,20 @@ function authsystem_user_login()
                         }
                     }
                 }
-
                 // check for user and grab uid if exists
                 $user = xarModAPIFunc('roles','user','get', array('uname' => $uname));
 
                 // Make sure we haven't already found authldap module
                 if (empty($user) && ($extAuthentication == false))
                 {
-                    $msg = xarML('Problem logging in: Invalid username or password.');
-                    xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
-                    return;
+                    throw new BadParameterException(null,xarML('Problem logging in: Invalid username or password.'));
                 } elseif (empty($user)) {
                     // Check if user has been deleted.
-                    $user = xarModAPIFunc('roles',
-                                          'user',
-                                          'getdeleteduser',
-                                          array('uname' => $uname));
-                    if (xarCurrentErrorType() == XAR_USER_EXCEPTION)
-                    {
+                    try {
+                        $user = xarModAPIFunc('roles','user','getdeleteduser',
+                                                array('uname' => $uname));
+                    } catch (xarExceptions $e) {
                         //getdeleteduser raised an exception
-                        xarErrorFree();
                     }
                 }
 
@@ -173,19 +156,13 @@ function authsystem_user_login()
         case ROLES_STATE_DELETED:
 
             // User is deleted by all means.  Return a message that says the same.
-            $msg = xarML('Your account has been terminated by your request or at the adminstrator\'s discression.');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
-
+            throw new ForbiddenOperationException(null,xarML('Your account has been terminated by your request or at the adminstrator\'s discretion.'));
             break;
 
         case ROLES_STATE_INACTIVE:
 
             // User is inactive.  Return message stating.
-            $msg = xarML('Your account has been marked as inactive.  Contact the adminstrator with further questions.');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
-
+                throw new ForbiddenOperationException(null,xarML('Your account has been marked as inactive.  Contact the adminstrator with further questions.'));
             break;
 
         case ROLES_STATE_NOTVALIDATED:
@@ -234,24 +211,18 @@ function authsystem_user_login()
                 }
 
                 if (!$letthru) {
-                    xarErrorSet(XAR_SYSTEM_MESSAGE,
-                    'SITE_LOCKED',
-                     new SystemMessage($lockvars['message']));
-                     return;
+                    // This is *not* an error condition, consider making a template
+                    throw new GeneralException(null,$lockvars['message']);
                 }
             }
 
-            // Log the user in
-            $defaultauthmodule=xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule'));
-            if (!isset($defaultauthmodule)) $defaultauthmodules='authsystem';
-            //jojodee - retain authsystem here for compatibility with current authentication modules
-            //they do not all supply their own login forms
-            if (!file_exists('modules/'.$defaultauthmodule.'/xaruser/login.php')) {
-               $defaultauthmodule='authsystem';
-            }
-           $res = xarModAPIFunc($defaultauthmodule,'user','login',array('uname' => $uname, 'pass' => $pass, 'rememberme' => $rememberme));
 
-           if ($res === NULL) return;
+            // Get the default authentication data - we need to check again as authsystem is always installed and users could get here direct
+            $defaultauthdata=xarModAPIFunc('roles','user','getdefaultauthdata');
+            $defaultloginmodname=$defaultauthdata['defaultloginmodname'];
+            $res = xarModAPIFunc($defaultloginmodname,'user','login',array('uname' => $uname, 'pass' => $pass, 'rememberme' => $rememberme));
+ 
+            if ($res === NULL) return;
             elseif ($res == false) {
                 // Problem logging in
                 // TODO - work out flow, put in appropriate HTML
@@ -263,14 +234,11 @@ function authsystem_user_login()
                     // set the time for fifteen minutes from now
                     xarSessionSetVar('authsystem.login.lockedout', time() + (60 * $lockouttime));
                     xarSessionSetVar('authsystem.login.attempts', 0);
-                    $msg = xarML('Problem logging in: Invalid username or password.  Your account has been locked for #(1) minutes.', $lockouttime);
-                    xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
-                    return;
+                    throw new ForbiddenOperationException($lockouttime,xarML('Problem logging in: Invalid username or password.  Your account has been locked for #(1) minutes.'));
                 } else{
                     $newattempts = $attempts + 1;
                     xarSessionSetVar('authsystem.login.attempts', $newattempts);
-                    $msg = xarML('Problem logging in: Invalid username or password.  You have tried to log in #(1) times.', $newattempts);
-                    xarErrorSet(XAR_USER_EXCEPTION, 'LOGIN_ERROR', new DefaultUserException($msg));
+                    throw new ForbiddenOperationException($newattempts,xarML('Problem logging in: Invalid username or password.  You have tried to log in #(1) times.'));
                     return;
                 }
             }
@@ -284,7 +252,7 @@ function authsystem_user_login()
 
             $externalurl=false; //used as a flag for userhome external url
             if (xarModGetVar('roles', 'loginredirect')) { //only redirect to home page if this option is set
-                if (xarModAPIFunc('roles','admin','checkduv',array('name' => 'setuserhome', 'state' => 1))) {
+              if (xarModGetVar('roles', 'setuserhome')) {
                     $truecurrenturl = xarServerGetCurrentURL(array(), false);
                     $role = xarUFindRole($uname);
                     $url = $lastresort ? '[base]' : $role->getHome();
@@ -337,10 +305,7 @@ function authsystem_user_login()
         case ROLES_STATE_PENDING:
 
             // User is pending activation
-        $msg = xarML('Your account has not yet been activated by the site administrator');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
-
+                    throw new ForbiddenOperationException(null,xarML('Your account has not yet been activated by the site administrator'));
             break;
     }
 

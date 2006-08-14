@@ -3,8 +3,8 @@
  * Multi Language System
  *
  * @package multilanguage
- * @copyright (C) 2002 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marco Canini <marco@xaraya.com>
  */
@@ -18,8 +18,8 @@
  * @package multilanguage
  */
 
-include_once dirname(__FILE__).'/xarMLS.php';
-class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
+sys::import('xarMLS');
+class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
     function xarMLS__PHPTranslationsBackend($locales)
     {
@@ -64,19 +64,19 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
     function bindDomain($dnType, $dnName='xaraya')
     {
         if (parent::bindDomain($dnType, $dnName)) return true;
-// FIXME: I should comment it because it creates infinite loop
-// MLS -> xarMod_getBaseInfo -> xarDisplayableName -> xarMod_getFileInfo -> MLS
-// We don't use and don't translate KEYS files now,
-// but I will recheck this code in the menus clone
-//        if ($dnType == XARMLS_DNTYPE_MODULE) {
-//            $this->loadKEYS($dnName);
-//        }
+        // FIXME: I should comment it because it creates infinite loop
+        // MLS -> xarMod::getBaseInfo -> xarDisplayableName -> xarMod::getFileInfo -> MLS
+        // We don't use and don't translate KEYS files now,
+        // but I will recheck this code in the menus clone
+        //        if ($dnType == XARMLS_DNTYPE_MODULE) {
+        //            $this->loadKEYS($dnName);
+        //        }
         return false;
     }
 /*
     function loadKEYS($dnName)
     {
-        $modBaseInfo = xarMod_getBaseInfo($dnName);
+        $modBaseInfo = xarMod::getBaseInfo($dnName);
         $fileName = "modules/$modBaseInfo[directory]/KEYS";
         if (file_exists($fileName)) {
 
@@ -95,10 +95,11 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend
     {
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
 //            $msg = xarML("Context type: #(1) and file name: #(2)", $ctxType, $ctxName);
-//            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($msg));
+//            throw new ContextNotFoundException?
 //            return;
             return true;
         }
+        // @todo do we need to wrap this into a try/catch construct?
         include $fileName;
 
         return true;

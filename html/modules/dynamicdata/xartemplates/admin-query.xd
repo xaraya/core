@@ -1,4 +1,4 @@
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:mlstring>Dynamic Data Administration</xar:mlstring>
@@ -360,7 +360,7 @@
             </xar:if>
             <tr>
                 <th class="xar-align-left">Submit</th>
-                <td colspan=3><input type="submit" value="#$submit#" /></td>
+                <td colspan="3"><input type="submit" value="#$submit#" /></td>
             </tr>
         </table>
         

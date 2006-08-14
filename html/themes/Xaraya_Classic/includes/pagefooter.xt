@@ -1,4 +1,4 @@
-<xar:comment>set local variables to hold the ML text that we intend to use in the titles and alt attributes</xar:comment>
+<!-- set local variables to hold the ML text that we intend to use in the titles and alt attributes -->
 <xar:set name="sitefooter"><xar:var scope="module" module="themes" name="SiteFooter" /></xar:set>
 <xar:set name="sitecopyright"><xar:var scope="module" module="themes" name="SiteCopyRight" /></xar:set>
 <xar:set name="validatexhtml"><xar:mlstring>Validate XHTML 1.0 Strict</xar:mlstring></xar:set>

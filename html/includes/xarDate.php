@@ -3,26 +3,27 @@
  *
  * Wrapper class for PHP date functions
  *
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marc Lutolf
  *
  * @todo bring back possibility of time authorized keys
  * @todo this needs another place
  * @todo this needs documentation
+ * @todo why do we need this?
  */
 
 class xarDate 
 {
 
-    var $year;
-    var $month;
-    var $day;
-    var $hour;
-    var $minute;
-    var $second;
-    var $timestamp;
+    public $year;
+    public $month;
+    public $day;
+    public $hour;
+    public $minute;
+    public $second;
+    public $timestamp;
 
     function xarDate($hour=0,$minute=0,$second=0,$month=0,$day=0,$year=0) 
     {
@@ -80,11 +81,23 @@ class xarDate
         }
     }
 
-    function display($format) 
+    function display($format='Y-m-d')
     {
         return date($format,$this->timestamp); 
     }
-    
+
+    function getTimearray()
+    {
+        return array(
+                    'year' => $this->year,
+                    'month' => $this->month,
+                    'day' => $this->day,
+                    'hour' => $this->hour,
+                    'minute' => $this->minute,
+                    'second' => $this->second,
+                );
+    }
+
     function getTimestamp() 
     { 
         return $this->timestamp; 
