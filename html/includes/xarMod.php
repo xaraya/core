@@ -702,7 +702,9 @@ function xarModPrivateLoad($modName, $modType, $flags = 0, $throwException=1)
     }
 
     // Load the module translations files (common functions, uncut functions etc.)
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modBaseInfo['name'], 'modules:', $modType) === NULL) return;
+    if(file_exists($fileName)) {
+        if(!xarMLSLoadTranslations($fileName)) return;
+    }
 
     // Try to load PN style translations -- Bridge mechanism -- Should disappear later on
     // How to find out what language is being used and what is the correspondent in pn style?
@@ -871,7 +873,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
 
         if ($found) {
             // Load the translations file - only if we have successfuly loaded the module function.
-            if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modBaseInfo['name'], 'modules:'.$modType, $funcName) === NULL) {return;}
+            if(!xarMLSLoadTranslations('modules/'.$modBaseInfo['name']."/xar${modType}/${funcName}.php")) return;
         }
     }
 
@@ -976,7 +978,7 @@ function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = 
         if ($found) {
             // Load the translations file.
             // Load only if we have loaded the API function for the first time here.
-            if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType.'api', $funcName) === NULL) {return;}
+            if(!xarMLSLoadTranslations("modules/${modName}/xar${modType}api/".strtolower($funcName).'.php')) return;
         }
     }
 
@@ -1703,8 +1705,8 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
             }
             // If the locale is already present, it means we can make the translations available
 
-            if(!empty($GLOBALS['xarMLS_currentLocale']))
-                xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
+            if(!empty($GLOBALS['xarMLS_currentLocale']) and file_exists($fileName))
+                xarMLSLoadTranslations($fileName);
             break;
         case 'theme':
             $fileName = xarConfigGetVar('Site.BL.ThemesDirectory'). '/' . $modOsDir . '/xartheme.php';

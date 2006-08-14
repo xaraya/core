@@ -565,7 +565,11 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
  **/
 function xarMLSLoadTranslations($path)
 {
-    assert('file_exists($path); /* Loading translations for something that doesnt exist */');
+    if(!file_exists($path)) {
+        xarLogMessage("MLS: Trying to load translations for a non-existing path ($path)",XARLOG_LEVEL_WARNING);
+        //die($path);
+        return true;
+    } 
     
     // Get a structured representation of the path.
     $pathElements = explode("/",$path);
@@ -594,16 +598,16 @@ function xarMLSLoadTranslations($path)
     // Determine ctxName, which is just the basename of the file without extension it seems 
     // CHECKME: there was a hardcoded substr(str,0,-3) here earlier
     // NOTE: $pathElements changes here!
-    $ctxName = preg_replace('/(.+)\..*$/', '$1', array_pop($pathElements));
-    // xarversion.php is special apparently.
-    if($ctxName == 'xarversion' and $ctxType == 'modules') $ctxName = 'version';
+    $ctxName = preg_replace('/^(xar)?(.+)\..*$/', '$2', array_pop($pathElements));
     
-    // Determine ctxType
+    // Determine ctxType further if needed (i.e. more path components are there)
     // Peek into the first element and unwind the rest of the path elements into $ctxType
     // xartemplates -> templates, xarblocks -> blocks, xarproperties -> properties etc.
     // NOTE: pnFile.php type files support needed?
-    $pathElements[0] = preg_replace('/^xar(.*)/','$1',$pathElements[0]);
-    $ctxType .= implode("/",$pathElements);
+    if(!empty($pathElements)) {
+        $pathElements[0] = preg_replace('/^xar(.+)/','$1',$pathElements[0]);
+        $ctxType .= implode("/",$pathElements);
+    }
   
     // Ok, based on possible overrides, we load internal only, or interal plus overrides
     $ok = false;
