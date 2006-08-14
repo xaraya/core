@@ -48,7 +48,8 @@ function xarInstallFunc($funcName = 'main', $args = array())
     }
 
     // Load the translations file
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType, $funcName) === NULL) return;
+    $file = 'modules/'.$modName.'/xar'.$modType.'/'.strtolower($funcName).'.php';
+    if (!xarMLSLoadTranslations($file)) return;
 
     $tplData = $modFunc($args);
     if (!is_array($tplData)) {
@@ -84,7 +85,8 @@ function xarInstallAPIFunc($funcName = 'main', $args = array())
     }
 
     // Load the translations file
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType.'api', $funcName) === NULL) return;
+    $file = 'modules/'.$modName.'/xar'.$modType.'api/'.strtolower($funcName).'.php';
+    if (!xarMLSLoadTranslations($file)) return;
 
     return $modAPIFunc($args);
 }
@@ -175,7 +177,7 @@ function xarInstallLoad()
     $loadedModuleCache[strtolower("$modName$modType")] = true;
 
     // Load the module translations files
-    $res = xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:', $modType);
+    $res = xarMLSLoadTranslations($osfile);
     if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // throw back exception
  
     return true;
