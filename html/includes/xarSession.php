@@ -84,10 +84,6 @@ function xarSession_init(&$args, $whatElseIsGoingLoaded)
  */
 function xarSession__shutdown_handler()
 {
-    // Close the session we started on init
-    // as this is a shutdown handler, we know it will only
-    // run if the subsystem was initialized as well
-    session_write_close(); // This writes 'dirty' session data at the end of the request
 }
 
 /**
@@ -118,6 +114,7 @@ function xarSessionDelVar($name)
 { return xarSession::delVar($name); }
 function xarSessionGetId()
 { return xarSession::getId(); }
+
 // PROTECTED FUNCTIONS
 /** mrb: if it's protected, how come roles uses it? */
 function xarSession_setUserInfo($userId, $rememberSession)
@@ -161,7 +158,6 @@ class xarSession implements IsessionHandler
      *
      * @return void
      * @throws SessionException
-     * @author Marcel van der Boom
      **/
     function __construct(&$args)
     {
@@ -190,6 +186,17 @@ class xarSession implements IsessionHandler
                 }
             }
         }
+    }
+    
+    /**
+     * Destructor for the session handler
+     *
+     * @return void
+     **/
+    function __destruct()
+    {
+        // Make sure we write dirty data before we lose this object
+        session_write_close();
     }
 
     /**
@@ -333,7 +340,7 @@ class xarSession implements IsessionHandler
     }
     
     /**
-     * Register a new session in our containser
+     * Register a new session in our container
      *
      * @throws SQLException
      */
@@ -348,6 +355,9 @@ class xarSession implements IsessionHandler
             $this->db->Execute($query,$bindvars);
             $this->db->commit();
         } catch (SQLException $e) {
+            // The rollback is useless, since there's only one statement (but the isolation level might be useful)
+            // so leave transaction in. What should we do here, the registering of the session failed, we need
+            // to handle that somehow a bit more friendly.
             $this->db->rollback();
             throw $e;
         }
@@ -371,7 +381,7 @@ class xarSession implements IsessionHandler
 
     /**
      * PHP function to open the session
-     * @private
+     * @access private
      */
     function open($path, $name)
     {   // Nothing to do - database opened elsewhere
@@ -380,7 +390,7 @@ class xarSession implements IsessionHandler
 
     /**
      * PHP function to close the session
-     * @private
+     * @access private
      */
     function close()
     {   // Nothing to do - database closed elsewhere
@@ -389,12 +399,10 @@ class xarSession implements IsessionHandler
 
     /**
      * PHP function to read a set of session variables
-     * @private
+     * @access private
      */
     function read($sessionId)
     {
-        // FIXME: in session2 the uid is not used anymore, can we safely migrate this 
-        //        out? At least the roles/privileges modules are using it actively
         $query = "SELECT xar_uid, xar_ipaddr, xar_lastused, xar_vars
               FROM $this->tbl WHERE xar_sessid = ?";
         $result =& $this->db->Execute($query,array($sessionId),ResultSet::FETCHMODE_NUM);
@@ -581,7 +589,7 @@ class xarSession implements IsessionHandler
      * Set user info
      *
      * @throws SQLException
-     * @todo this seems a strang duck (only used in roles by the looks of it)
+     * @todo this seems a strange duck (only used in roles by the looks of it)
      */
     static function setUserInfo($userId, $rememberSession)
     {
