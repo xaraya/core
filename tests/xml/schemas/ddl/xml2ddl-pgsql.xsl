@@ -62,7 +62,7 @@
     <xsl:when test="@type = 'LONGVARCHAR'">
       <xsl:text>TEXT</xsl:text>
     </xsl:when>
-    <xsl:when test="@autoIncrement = 'true'">
+    <xsl:when test="@autoincrement = 'true'">
       <xsl:text>SERIAL</xsl:text>
     </xsl:when>
     <xsl:otherwise>

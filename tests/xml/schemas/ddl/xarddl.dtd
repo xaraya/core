@@ -45,7 +45,8 @@
         * removed attribute 'primaryKey' from 'column' element
         * removed element 'index-column', replaced it with 'column' to sync it up with 'primary' definition
         * rename element 'database' to 'schema' as that is more accurate
-        * make attribute 'description' apply to schema, table and column
+        * made attribute 'description' apply to schema, table and column
+        * changed autoIncrement to autoincrement (all lower case)
 -->
 
 <!-- Root element is 'schema' -->
@@ -82,7 +83,7 @@
   size CDATA #IMPLIED
   default CDATA #IMPLIED
   scale CDATA #IMPLIED
-  autoIncrement (true|false) "false"
+  autoincrement (true|false) "false"
 >
 
 <!-- index element -->
@@ -112,7 +113,7 @@
     * think about constraints, both on column and table level, they fit in nicely as
     children of the 'column' or 'table' elements.
     
-    * the mixed case use of 'autoIncrement' is not needed, lead
+    * [DONE] the mixed case use of 'autoIncrement' is not needed, lead
     to confusion only
     
     * [DONE] the elements 'index' and 'unique' are the same, index type='unique' would

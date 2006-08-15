@@ -22,7 +22,7 @@
             <xar:set name="type">CreoleTypes::getCreoleName($prim_column->getType())</xar:set>
             <column name="#$prim_column:getName()#" description=""
                     type="#$type#" size="#$prim_column:getSize()#" scale="#$prim_column:getScale()#"
-                    default="#$prim_column:getDefaultValue()#" required="#$required#" autoIncrement="#$autoinc#" />
+                    default="#$prim_column:getDefaultValue()#" required="#$required#" autoincrement="#$autoinc#" />
             <xar:set name="elems">array_push($dealt_with,$prim_column->getName())</xar:set>
           </xar:foreach> 
         </primary>
@@ -42,7 +42,7 @@
         <xar:set name="type">CreoleTypes::getCreoleName($column->getType())</xar:set>
         <column name="#$column:getName()#" description=""
                 type="#$type#" size="#$column:getSize()#" scale="#$column:getScale()#"
-                default="#$column:getDefaultValue()#" required="#$required#" autoIncrement="#$autoinc#" />
+                default="#$column:getDefaultValue()#" required="#$required#" autoincrement="#$autoinc#" />
       </xar:foreach>
       <xar:set name="indexes">#$table:getIndexes()#</xar:set>
       <xar:foreach in="$indexes" value="$index">

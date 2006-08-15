@@ -63,7 +63,7 @@
   <xsl:if test="@size != ''">(<xsl:value-of select="@size"/>)<xsl:text> </xsl:text></xsl:if>
   <xsl:if test="@required ='true'"> NOT NULL</xsl:if>
   <xsl:if test="@default != ''"> DEFAULT '<xsl:value-of select="@default"/>'</xsl:if>
-  <xsl:if test="@autoIncrement ='true'"> AUTO_INCREMENT</xsl:if>
+  <xsl:if test="@autoincrement ='true'"> AUTO_INCREMENT</xsl:if>
   <xsl:if test="position() != last()"><xsl:text>,</xsl:text></xsl:if>
   <xsl:value-of select="$CR"/></xsl:template>
 </xsl:stylesheet>

@@ -7,7 +7,7 @@
 <schema name="devtest">
   <table name="first" description="A nice table with some sort of description">
     <column name="id" description="A unique id column" size="11" type="INTEGER"
-            autoIncrement="true" required="true" />
+            autoincrement="true" required="true" />
     <column name="ref_id" description="A reference to an id column" size="11" type="INTEGER"
             required="true"/>
     <primary>
