@@ -148,6 +148,12 @@ design work can begin.
   components to physical tables.
 * datadict is absent in 2.x since that lived in adodb, creole does not have it
 * there is no upgrade routine for upgrading 1.x to 2.x
+* when we're in excecption handling for one exception, it seems that no more
+  exceptions are thrown in subsequent code
+  Example: 
+        - dont define date.timezone in php (will raise exception in xarLogger.php early on)
+        - make sure CACHEKEYS file is NOT present (should raise exception in caching/template.php lines 168+)
+          The fopen() call in caching/template.php does NOT raise an exception then
 
 
 !!!MIN. REQUIRED VERSIONS DETERMINED SO FAR
