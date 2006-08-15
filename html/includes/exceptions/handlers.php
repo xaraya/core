@@ -12,7 +12,7 @@
 interface IExceptionHandlers
 {
     public static function defaulthandler(Exception $e);
-    public static function phperrors($errorType, $errorString, $file, $line);
+    public static function phperrors($errorType, $errorString, $file, $line, $errorContext=array());
 }
 
 class ExceptionHandlers implements IExceptionHandlers
@@ -88,7 +88,7 @@ class ExceptionHandlers implements IExceptionHandlers
      * @throws PHPException
      * @return void
      */
-    final public static function phperrors($errorRaised, $errorString, $file, $line)
+    final public static function phperrors($errorRaised, $errorString, $file, $line, $errorContext = array())
     {
         //Checks for a @ presence in the given line, should stop from setting Xaraya errors
         $oldLevel = error_reporting();
@@ -117,10 +117,6 @@ class ExceptionHandlers implements IExceptionHandlers
             return true; // no need to raise exception
         }
 
-        //Newer php versions have a 5th parameter that will give us back the context
-        //The variable values during the error...
-        $msg = "At: " . $file." (Line: " . $line.")\n". $errorString;
-
         // Make cached files also display their source file if it's a template
         // This is just for convenience when giving support, as people will probably
         // not look in the CACHEKEYS file to mention the template.
@@ -128,25 +124,37 @@ class ExceptionHandlers implements IExceptionHandlers
         sys::import('caching.template');
         $sourceFile = xarTemplateCache::sourceFile($key);
 
-        $msg .= "\n\n[".$sourceFile."]";
+        // Construct the msg in a table like way, so it's easily copy/pasteable
+        $spacer= str_repeat(' ',11);
+        $msg = "File     : $file\n";
+        if(isset($sourcefile)) {
+        $msg.= $spacer."[$sourceFile]\n";
+        }
+        $msg.= "Line     : $line\n";
+        $msg.= "Code     : $errorRaised\n";
+        $msg.= "Message  : ".str_replace("\n","\n$spacer",wordwrap($errorString,75,"\n"))."\n";
+        // @todo: it might not always be smart to show content of variables
+        $msg.= "Variables: ";
+        foreach($errorContext as $varName => $varValue) {
+            $msg .= "\$$varName:\n$spacer  ". str_replace("\n","\n$spacer  ",print_r($varValue,true))."\n$spacer";
+        }
+
         if (!function_exists('xarModURL')) {
             $rawmsg = "Normal Xaraya error processing has stopped because of an error encountered.\n\n";
             $rawmsg .= "The last registered error message is:\n\n";
-            $rawmsg .= "PHP Error code: " . $errorRaised . "\n\n";
             $rawmsg .= $msg;
             $msg = $rawmsg;
         } else {
+            $module = '';
             if (xarRequest::$allowShortURLs && isset(xarRequest::$shortURLVariables['module'])) {
                 $module = xarRequest::$shortURLVariables['module'];
-                // Then check in $_GET
             } elseif (isset($_GET['module'])) {
+                // Then check in $_GET
                 $module = $_GET['module'];
-                // Nothing found, return void
-            } else {
-                $module = '';
-            }
+            } 
+            
+            // @todo consider removing this, it doesnt add much and causes quite a maintenance task
             $product = ''; $component = '';
-                /*
             if ($module != '') {
                 // load relative to the current file (e.g. for shutdown functions)
                 sys::import('exceptions.xarayacomponents');
@@ -166,7 +174,7 @@ class ExceptionHandlers implements IExceptionHandlers
                     }
                 }
             }
-                */
+                
         }
         // Throw an exception to let the default handler handle the rest.
         throw new PHPException($msg,$errorRaised);
@@ -175,11 +183,11 @@ class ExceptionHandlers implements IExceptionHandlers
     // Private methods
     private static function RenderRaw(Exception $e)
     {
-        // TODO: how many assumptions can we make about the rendering capabilities of the client here?
+        // @todo how many assumptions can we make about the rendering capabilities of the client here?
         $out="<pre>";
         $out.= 'Error: '.$e->getCode().": ".get_class($e)."\n";
-        $out.= $e->getMessage()."\n\n";
-        $out.= $e->getTraceAsString();
+        $out.= $e->getMessage()."\n";
+        $out.= "Backtrace: ".str_replace("\n","\n           ",$e->getTraceAsString());
         $out.= "</pre>";
         return $out;
     }

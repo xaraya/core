@@ -164,8 +164,10 @@ class xarTemplateCache implements ixarTemplateCache
         $sourceFile = null;
         if(self::isActive()) {
             $fileName = $key . '.php';
-            // @todo replace with try/catch
-            if ($fd = fopen(self::$dir . '/CACHEKEYS', 'r')) {
+            // Dont use try/catch here, as this may be called directly from
+            // the exception handler (which we probably should avoid then?)
+            // 
+            if ($fd = @fopen(self::$dir . '/CACHEKEYS', 'r')) {
                 while($cache_entry = fscanf($fd, "%s\t%s\n")) {
                     list($hash, $template) = $cache_entry;
                     
