@@ -673,9 +673,9 @@ function installer_admin_create_administrator()
 
     $query = "SELECT    xar_id as id
               FROM      $blockGroupsTable
-              WHERE     xar_name = 'left'";
+              WHERE     xar_name = ?";
 
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query,array('left'));
     if (!$result) return;
 
     // Freak if we don't get one and only one result
@@ -992,9 +992,9 @@ function installer_admin_confirm_configuration()
 
         $query = "SELECT    xar_id as id
                   FROM      $blockGroupsTable
-                  WHERE     xar_name = 'left'";
+                  WHERE     xar_name = ?";
 
-        $result =& $dbconn->Execute($query);
+        $result =& $dbconn->Execute($query,array('left'));
         if (!$result) return;
 
         // Freak if we don't get one and only one result
@@ -1067,10 +1067,10 @@ function installer_admin_cleanup()
 
     $query = "SELECT    xar_id as id
               FROM      $blockGroupsTable
-              WHERE     xar_name = 'right'";
+              WHERE     xar_name = ?";
 
     // Check for db errors
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query,array('right'));
     if (!$result) return;
 
     // Freak if we don't get one and only one result
@@ -1110,10 +1110,10 @@ function installer_admin_cleanup()
 
     $query = "SELECT    xar_id as id
               FROM      $blockGroupsTable
-              WHERE     xar_name = 'header'";
+              WHERE     xar_name = ?";
 
     // Check for db errors
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->Execute($query,array('header'));
     if (!$result) return;
 
     // Freak if we don't get one and only one result
@@ -1494,8 +1494,8 @@ function installer_admin_upgrade2()
                          xar_type,
                          xar_module
                          FROM $blocktypeTable
-                 WHERE xar_type='login' and xar_module='roles'";
-        $result =& $dbconn->Execute($query);
+                 WHERE xar_type=? and xar_module=?";
+        $result =& $dbconn->Execute($query,array('login','roles'));
         list($blockid,$blocktype,$module)= $result->fields;
         $blocktype = array('id' => $blockid,
                            'blocktype' => $blocktype,
@@ -1506,9 +1506,9 @@ function installer_admin_upgrade2()
             $blockid=$blocktype['id'];
             //set the module to authsystem and it can be used for the existing block instance
             $query = "UPDATE $blocktypeTable
-                      SET xar_module = 'authsystem'
+                      SET xar_module = ?
                       WHERE xar_id=?";
-            $bindvars=array($blockid);
+            $bindvars=array('authsystem',$blockid);
             $result =& $dbconn->Execute($query,$bindvars);
 
         }
@@ -1593,8 +1593,8 @@ function installer_admin_upgrade2()
                          xar_type,
                          xar_module
                          FROM $blocktypeTable
-                 WHERE xar_type='".$newblock."' and xar_module='adminpanels'";
-        $result =& $dbconn->Execute($query);
+                 WHERE xar_type=? and xar_module=?";
+        $result =& $dbconn->Execute($query,array($newblock,'adminpanels'));
 
         if ($result) {
             list($blockid,$blocktype,$module)= $result->fields;
@@ -1607,18 +1607,20 @@ function installer_admin_upgrade2()
                $blockid=$blocktype['id'];
                //set the module to base
                $query = "UPDATE $blocktypeTable
-                         SET xar_module = 'base'
+                         SET xar_module = ?
                          WHERE xar_id=?";
-               $bindvars=array($blockid);
+               $bindvars=array('base',$blockid);
                $result =& $dbconn->Execute($query,$bindvars);
 
 
                if (($newblock='waitingcontent') && isset($blockid)) {
-               //We need to disable existing hooks and enable new ones - but which :)
-               $hookTable = $systemPrefix .'_hooks';
-               $query = "UPDATE $hookTable
-                         SET xar_smodule = 'base'
-                         WHERE xar_action='waitingcontent' AND xar_smodule='adminpanels'";
+                   //We need to disable existing hooks and enable new ones - but which :)
+                   $hookTable = $systemPrefix .'_hooks';
+                   $query = "UPDATE $hookTable
+                             SET xar_smodule = 'base'
+                             WHERE xar_action=? AND xar_smodule=?";
+                    $bindvars = array('base','waitingcontent','adminpanels');
+                    //? no execute here?
                }
             }
             //Remove the original block
