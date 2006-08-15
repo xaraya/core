@@ -1415,7 +1415,7 @@ class xarTpl__ExpressionTransformer
 abstract class xarTpl__Node extends xarTpl__PositionInfo
 {
     public $tagName;   // This is an internal name of the node, not the actual tag name
-    protected $isPHPCode = false;
+    protected $isPHPCode = true;
     protected $hasChildren = false;
     protected $hasText = false;
     protected $isAssignable = true;
@@ -1644,6 +1644,7 @@ class xarTpl__DocumentNode extends xarTpl__Node
         $this->hasChildren = true;
         $this->hasText = true;
         $this->isAssignable = false;
+        $this->isPHPCode = false;
     }
 
     // These 3 methods here are kinda weird.
@@ -1676,6 +1677,7 @@ class xarTpl__TextNode extends xarTpl__Node
         parent::__construct($parser, $tagName);
         $this->content = $content;
         $this->isAssignable = false;
+        $this->isPHPCode = false;
     }
     
     function render()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Dealing with xaraya template tags
+ * Dealing with xaraya template tags and attributes
  *
  * @package blocklayout
  * @subpackage template
@@ -9,6 +9,34 @@
  * @author Marcel van der Boom <mrb@hsdev.com>
  **/
 
+sys::import('exceptions.types');
+class DuplicateTagException extends DuplicationExceptions
+{
+    protected $message = 'The tag definition for the tag: "#(1)" already exists.';
+}
+
+/**
+ * Defines for template handling
+ *
+ */
+define ('XAR_TPL_REQUIRED', 0); // default for attributes
+define ('XAR_TPL_OPTIONAL', 2);
+define ('XAR_TPL_STRING', 64);
+define ('XAR_TPL_BOOLEAN', 128);
+define ('XAR_TPL_INTEGER', 256);
+define ('XAR_TPL_FLOAT', 512);
+define ('XAR_TPL_ANY', XAR_TPL_STRING|XAR_TPL_BOOLEAN|XAR_TPL_INTEGER|XAR_TPL_FLOAT);
+
+/**
+ * Defines for tag properties
+ *
+**/
+define('XAR_TPL_TAG_HASCHILDREN'               ,1);
+define('XAR_TPL_TAG_HASTEXT'                   ,2);
+define('XAR_TPL_TAG_ISASSIGNABLE'              ,4);
+define('XAR_TPL_TAG_ISPHPCODE'                 ,8);
+define('XAR_TPL_TAG_NEEDASSIGNMENT'            ,16);
+define('XAR_TPL_TAG_NEEDPARAMETER'             ,32); 
 /**
  * Model of a template tag
  *
@@ -153,9 +181,8 @@ class xarTemplateTag
     public function register()
     {
         try {
-            // Bit weird, logic is:
-            // 1. if getobject fails -> BLException (no tag)
-            // 2. if it succeeds (== no exception), we raise one ourselves which we do not catch
+            // 1. if getobject fails -> BLException (no tag, which is good, we catch and ignore this)
+            // 2. if it succeeds (== no exception), we raise one ourselves which we do not catch, so it bubbles
             $this->getObject($this->getName());
             throw new DuplicateTagException($tag_name,'<xar:#(1)> tag is already defined.');
         } catch (BLException $e) {
@@ -237,15 +264,15 @@ class xarTemplateTag
 
         $result = $dbconn->SelectLimit($query, 1,-1,array($tag_name),ResultSet::FETCHMODE_NUM);
 
-        if ($result->EOF) {
+        if (!$result->EOF) {
+            list($obj,$module) = $result->getRow();
+            $result->Close();
+        } else {
             $result->Close();
             // Throw a generic BL exception for now
             $msg = '<xar:#(1)> tag is not defined.';
             throw new BLException($tag_name,$msg);
         }
-
-        list($obj,$module) = $result->getRow();
-        $result->Close();
 
         // Module must be active for the tag to be active
         if(!xarMod::isAvailable($module)) return; //throw back
@@ -253,8 +280,8 @@ class xarTemplateTag
         // WATCH OUT!: unserializing an object doesnt unserialize its private parts
         $obj = unserialize($obj);
 
+        // Cache it
         $tag_objects[$tag_name] = $obj;
-
         return $obj;
     }
     
@@ -277,13 +304,13 @@ class xarTemplateTag
                 if ($attr_types & XAR_TPL_STRING) {
                     continue;
                 } elseif (($attr_types & XAR_TPL_BOOLEAN)
-                          && eregi ('^(true|false|1|0)$', $args[$attr_name])) {
+                          && eregi ('^(true|false|1|0)$', $attrs[$attr_name])) {
                     continue;
                 } elseif (($attr_types & XAR_TPL_INTEGER)
-                          && eregi('^\-?[0-9]+$', $args[$attr_name])) {
+                          && eregi('^\-?[0-9]+$', $attrs[$attr_name])) {
                     continue;
                 } elseif (($attr_types & XAR_TPL_FLOAT)
-                          && eregi('^\-?[0-9]*.[0-9]+$', $args[$attr_name])) {
+                          && eregi('^\-?[0-9]*.[0-9]+$', $attrs[$attr_name])) {
                     continue;
                 }
 
@@ -336,7 +363,6 @@ class xarTemplateAttribute
 
     function __construct($name, $flags = NULL)
     {
-        // See defines at top of file
         if (!eregi(self::NAME_REGEX, $name)) {
             // This should be a XML validation exception perhaps?
             throw new BadParamterException($name,'The attribute name "#(1)" is invalid. Attribute names contain letters, numbers, _ and -, and must start with a letter.');

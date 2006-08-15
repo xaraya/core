@@ -22,7 +22,6 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
         // Do we care? we're dealing with templates here, what content will be generated is of another parsers concern.
         // We do care, because the effects can be so confusing. Option?
         
-        $this->isPHPCode = true;
         $this->hasChildren = true;
         $this->hasText = true;
         $this->isAssignable = false;

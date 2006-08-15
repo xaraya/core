@@ -130,8 +130,9 @@ class xarLogger
         $microtime = explode(' ', $microtime);
 
         $secs = ((float)$microtime[0] + (float)$microtime[1]);
-        // FIXME: this floods the log when the system it runs on uses the C locale, which users
-        // might not be able to fix. (this is the system locale setting)
+        // NOTE: when using E_STRICT, and PHP has no 'own' timezone setting
+        // strftime() will issue notices on that. But that's what you get with
+        // E_STRICT ;-) so we will leave this.
         return strftime($this->_timeFormat) . ' ' . $microtime[0] . ' +' . number_format(round($secs - $this->_elapsed, 3),3);
     }
 }

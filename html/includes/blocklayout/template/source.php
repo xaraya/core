@@ -57,9 +57,10 @@ class xarSourceTemplate extends xarCompiledTemplate implements IxarSourceTemplat
         }
         // Replace useless php context switches.
         // This sometimes seems to improve rendering end speed, dunno, bytecacher dependent?
-        /* $templateCode = preg_replace(array('/\?>[\s\n]+<\?php/','/<\?php[\s\n]+\?>/'),
-                                     array(' ',' '),$templateCode);
-        */
+        // Typical improvement i bench is around 4-5%
+        $templateCode = preg_replace(array('/\?>[\s\n]+<\?php/','/<\?php[\s\n]+\?>/','/\?>[\s]+<\?php/','/<\?php[\s]+\?>/'),
+                                     array("\n","\n",' ',' '),$templateCode);
+        
         $out .= $templateCode;
         return $out;
     }

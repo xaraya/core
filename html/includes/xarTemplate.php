@@ -17,11 +17,6 @@
  * Exceptions for this subsystem
  *
 **/
-class DuplicateTagException extends DuplicationExceptions
-{
-    protected $message = 'The tag definition for the tag: "#(1)" already exists.';
-}
-
 class BLValidationException extends ValidationExceptions
 {
     protected $message = 'A blocklayout tag or attribute construct was invalid, see the tag documentation for the correct syntax';
@@ -32,32 +27,6 @@ class BLException extends xarExceptions
     protected $message = 'Unknown blocklayout exception (TODO)';
 }
 
-/**
- * Defines for template handling
- *
- */
-
-/// OLD STUFF //////////////////////////////////
-define ('XAR_TPL_OPTIONAL', 2);
-define ('XAR_TPL_REQUIRED', 0); // default for attributes
-
-define ('XAR_TPL_STRING', 64);
-define ('XAR_TPL_BOOLEAN', 128);
-define ('XAR_TPL_INTEGER', 256);
-define ('XAR_TPL_FLOAT', 512);
-define ('XAR_TPL_ANY', XAR_TPL_STRING|XAR_TPL_BOOLEAN|XAR_TPL_INTEGER|XAR_TPL_FLOAT);
-/// END OLD STUFF
-
-/**
- * Defines for tag properties
- *
-**/
-define('XAR_TPL_TAG_HASCHILDREN'               ,1);
-define('XAR_TPL_TAG_HASTEXT'                   ,2);
-define('XAR_TPL_TAG_ISASSIGNABLE'              ,4);
-define('XAR_TPL_TAG_ISPHPCODE'                 ,8);
-define('XAR_TPL_TAG_NEEDASSIGNMENT'            ,16);
-define('XAR_TPL_TAG_NEEDPARAMETER'             ,32);
 
 /**
  * Initializes the BlockLayout Template Engine

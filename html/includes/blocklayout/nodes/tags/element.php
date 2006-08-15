@@ -21,7 +21,6 @@ class xarTpl__XarElementNode extends xarTpl__TplTagNode
     {
         parent::__construct($parser, $tagName, $parentTagName, $attributes);
 
-        $this->isPHPCode = true;
         $this->hasChildren = true;
         $this->hasText = true;
         $this->isAssignable = false;
