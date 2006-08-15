@@ -1,10 +1,9 @@
 <?php
-
-/*
+/**
  * xaraya wrapper class for Creole
  *
- *
- */
+ * @author Marcel van der Boom <marcel@hsdev.com>
+**/
 sys::import('creole.Creole');
 class xarDB extends Creole 
 {

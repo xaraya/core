@@ -18,6 +18,8 @@ class xarCache_Storage
 
     /**
      * Constructor
+     * 
+     * @todo using an args array here is taking the easy way out, lets define a proper interface
      */
     public function __construct($args = array())
     {
