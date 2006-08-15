@@ -58,7 +58,7 @@
 </xsl:template>
 
 <!-- Default create database statement -->
-<xsl:template match="database">
+<xsl:template match="schema">
   <xsl:call-template name="dynheader"/>
   <xsl:text>CREATE DATABASE </xsl:text><xsl:value-of select="@name"/>;
 <xsl:apply-templates />

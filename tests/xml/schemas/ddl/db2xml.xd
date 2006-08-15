@@ -1,4 +1,4 @@
-<database name="#$dbname#">
+<schema name="#$dbname#">
   <xar:foreach in="$tables" value="$table">
     <table name="#$table:getName()#">
       <xar:set name="columns">#$table:getColumns()#</xar:set>
@@ -59,4 +59,4 @@
       </xar:foreach> 
     </table>
   </xar:foreach>
-</database>
+</schema>

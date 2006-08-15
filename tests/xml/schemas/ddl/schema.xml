@@ -4,7 +4,7 @@
   Schema which contains all the tricks in the trade, to which the implementation
   should react responsibly
 -->
-<database name="devtest">
+<schema name="devtest">
   <table name="first" description="A nice table with some sort of description">
     <column name="id" description="A unique id column" size="11" type="INTEGER"
             autoIncrement="true" required="true" />
@@ -17,4 +17,4 @@
       <column name="ref_id"/>
     </index>
  </table>
-</database>
+</schema>

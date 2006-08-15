@@ -13,7 +13,6 @@
 TRANG=trang
 PHP=php5
 XSLTPROC=xsltproc
-XARROOT=/var/mt/xar/core/core.2.x/html
 
 all: schemas xar-model.sql
 schemas: xarddl.rng xarddl.xsd xarddl.rnc
@@ -29,7 +28,7 @@ test: schema.sql
 
 # Getting an xml schema from a xar installation (see db2xml)
 xar-model.xml: db2xml db2xml.xd
-	cd $(XARROOT) && ./db2xml > $(PWD)/$@
+	./db2xml > $(PWD)/$@
 	
 %.sql: %.xml xar-model.xml
 	$(XSLTPROC) --stringparam vendor mysql  xml2ddl-mysql.xsl $< > $(*F).mysql.sql

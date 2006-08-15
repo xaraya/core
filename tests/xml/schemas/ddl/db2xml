@@ -1,16 +1,18 @@
 #!/usr/bin/php5
 <?php
 // Prototype to dump a database in XML format according to the schema
-// defined in this directory. This file needs to be run from the root
-// of a Xaraya directory
+// defined in this directory. 
 
 /* We need a (fake) ip address to run xar */
 putenv("REMOTE_ADDR=127.0.0.1");
 $user = 'Admin';
 $pass = '12345';
-$tpl  ='/var/mt/xar/core/core.2.x/tests/xml/schemas/ddl/db2xml.xd';
+$root = '/var/mt/xar/core/core.2.x';
+$tpl  = "$root/tests/xml/schemas/ddl/db2xml.xd";
 /* End configurable stuff */
 
+/* Make sure we're in the docroot */
+chdir("$root/html");
 include 'includes/xarCore.php';
 xarCoreInit(XARCORE_SYSTEM_ALL);
 

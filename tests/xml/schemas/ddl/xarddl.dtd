@@ -1,53 +1,54 @@
 <!--
-		DTD to define an XML variety to generate DDL for creating
-		storage objects (be it tables in an sql db or dd objects)
-		
-		The DTD is based on the propel XML database DTD which in turn was
-		based on the apache torque DTD. We keep a *very strict* log of
-		our changes. The propel framework has bits and pieces of code we
-		can reuse, and every deviation from their schema will induce a code
-		change.
-		
-		The initial goals are:
-		1. to create an absolute minimal DTD to replace xartableddl and xardatadict
-		2. stay compatible with the original DTD it was based on.
-		3. be able to generate more structured schema's from the DTD (like RNG)
-		4. be able to produce the xml from the database itself.
-		
-		Initial xarddl.dtd was based on:
-			Propel XML database schema DTD
-			$Id: database.dtd,v 1.7 2005/03/30 11:38:18 hlellelid Exp $
-		Changelog in applied order (meaning, if you make a change, at to the bottom):
-		* removed element 'reference'			- used in 'foreign-key' to specify references
-		* removed element 'foreign-key'	  - to define foreign key relationships
-		* removed element 'rule'					- to define validation rules
-		* removed element 'validator'     - grouped rule elements
-		* removed element 'vendor'        - used for vendor specific definitions in xml
-		* removed element 'inheritance'	  - used for linking code classes to the columns
-		* removed element 'parameter'     - used as child of the vendor element to define parameters
-		* removed element 'id-method-parameter' - used to customize id generation
-		* removed attribute defaultPHPNameingMethod from 'database' element (including referencing comments)
-		* removed attribute heavyIndexing from 'database'+'column' element
-		* removed attribute baseClass from 'database'+'column' element
-		* removed attribute basePeer from 'database'+'column' element
-		* removed attribute defaultIdMethod from 'database' element
-		* removed attribute defaultTranslateMethode (with e?) from 'database' element
-		* removed phpName, ideMethod, skipSql, readOnly, abstract, isTree, interface, phpNamingMethod attributes from 'table' element
-		* removed phpName, peerName, phpType, inheritance, inputValidator, phpNamingMethod, lazyload attributes from 'column' element 
-		* where no child definitions were left due to removals, declared elements EMPTY
-		* removed element 'external-schemal 
-		* removed 'alias' attribute from 'table' element
-		* removed 'package' attribute from 'database'+'table' elements
-		* removed PHP_OBJECT, DISTINCT, STRUCT, ARRAY, REF, NULL from values for 'type' attribute for 'column' element
-		* consolidated 'unique' and 'index' into 'index type="unique"'
-		* removed elements 'unique' and 'unique-column'
-		* added definition for 'primary' element.
-		* removed attribute 'primaryKey' from 'column' element
-		* removed element 'index-column', replaced it with 'column' to sync it up with 'primary' definition
+        DTD to define an XML variety to generate DDL for creating
+        storage objects (be it tables in an sql db or dd objects)
+        
+        The DTD is based on the propel XML database DTD which in turn was
+        based on the apache torque DTD. We keep a *very strict* log of
+        our changes. The propel framework has bits and pieces of code we
+        can reuse, and every deviation from their schema will induce a code
+        change.
+        
+        The initial goals are:
+        1. to create an absolute minimal DTD to replace xartableddl and xardatadict
+        2. stay compatible with the original DTD it was based on.
+        3. be able to generate more structured schema's from the DTD (like RNG)
+        4. be able to produce the xml from the database itself.
+        
+        Initial xarddl.dtd was based on:
+            Propel XML database schema DTD
+            $Id: database.dtd,v 1.7 2005/03/30 11:38:18 hlellelid Exp $
+        Changelog in applied order (meaning, if you make a change, at to the bottom):
+        * removed element 'reference'            - used in 'foreign-key' to specify references
+        * removed element 'foreign-key'      - to define foreign key relationships
+        * removed element 'rule'                    - to define validation rules
+        * removed element 'validator'     - grouped rule elements
+        * removed element 'vendor'        - used for vendor specific definitions in xml
+        * removed element 'inheritance'      - used for linking code classes to the columns
+        * removed element 'parameter'     - used as child of the vendor element to define parameters
+        * removed element 'id-method-parameter' - used to customize id generation
+        * removed attribute defaultPHPNameingMethod from 'database' element (including referencing comments)
+        * removed attribute heavyIndexing from 'database'+'column' element
+        * removed attribute baseClass from 'database'+'column' element
+        * removed attribute basePeer from 'database'+'column' element
+        * removed attribute defaultIdMethod from 'database' element
+        * removed attribute defaultTranslateMethode (with e?) from 'database' element
+        * removed phpName, ideMethod, skipSql, readOnly, abstract, isTree, interface, phpNamingMethod attributes from 'table' element
+        * removed phpName, peerName, phpType, inheritance, inputValidator, phpNamingMethod, lazyload attributes from 'column' element 
+        * where no child definitions were left due to removals, declared elements EMPTY
+        * removed element 'external-schemal 
+        * removed 'alias' attribute from 'table' element
+        * removed 'package' attribute from 'database'+'table' elements
+        * removed PHP_OBJECT, DISTINCT, STRUCT, ARRAY, REF, NULL from values for 'type' attribute for 'column' element
+        * consolidated 'unique' and 'index' into 'index type="unique"'
+        * removed elements 'unique' and 'unique-column'
+        * added definition for 'primary' element.
+        * removed attribute 'primaryKey' from 'column' element
+        * removed element 'index-column', replaced it with 'column' to sync it up with 'primary' definition
+        * rename element 'database' to 'schema' as that is more accurate
 -->
 
-<!ELEMENT database (table+)>
-<!ATTLIST database  name CDATA #IMPLIED>
+<!ELEMENT schema (table+)>
+<!ATTLIST schema name CDATA #IMPLIED>
 
 <!ELEMENT table (primary?,column+,index*)>
 <!ATTLIST table
@@ -77,72 +78,72 @@
 
 <!ELEMENT index (column+)>
 <!ATTLIST index  
-	name CDATA #IMPLIED
-	type (default|unique) "default"
+    name CDATA #IMPLIED
+    type (default|unique) "default"
 >
 
 <!--
-	Wishes:
-	* the 'type' attribute for the 'column' element should only designate an 
-	'abstract' type, not related	to the database types like TINYINT or something. 
-	The storage types used by different databases can be figured out by the 
-	generator in combination with other information supplied in the xml.
+    Wishes:
+    * the 'type' attribute for the 'column' element should only designate an 
+    'abstract' type, not related    to the database types like TINYINT or something. 
+    The storage types used by different databases can be figured out by the 
+    generator in combination with other information supplied in the xml.
   This is basically what creole does, but the mapping they use is a set of
-	types (JDBC types actually) which are still close to the actual type of the 
-	database. Since this code is in place, we might as well use it.
-	
-	Example set of more abstract types:
-	- char | binary | number | boolean | date | time
-	Ideally these would be children of the 'column' element so the attributes
-	can be defined on them specifically (e.g. 'precision' which only makes sense for numbers and perhaps time)
-	
-	* scale attribute is confusing, i'd rather use 'precision' or 'decimals' (also see previous point)
-	
-	* think about constraints, both on column and table level, they fit in nicely as
-	children of the 'column' or 'table' elements.
-	
-	* the mixed case use of 'autoIncrement' is not needed, lead
-	to confusion only
-	
-	* [DONE] the elements 'index' and 'unique' are the same, index type='unique' would
-	be better imo. Similarly, unique-column and index-column are then redundant, either
-	to be replaced by just a 'index-column' element, or <column name="colname"/> to reference
-	a column in the table definition.
-	
-	* [DONE] an element 'primary' as a grouper around the 'column' element would be nice
-	Example:
-	<table name="test">
-		<column name="normal" type="INTEGER" size="4"/>
-		<primary>
-			<column name="ref_id" type="INTEGER" size="10"/>
-			<column name="ref1_id" type="INTEGER" size="10"/>
-		</primary>
-	</table>
-	Primary keys are either automatically indexed, or should always be indexed, the
-	generator can take this into account. 
-	
-	* partial set of the tags removed from the original.
-	
-	* an 'id' attribute on all tags supported.
-	
-	* vendor parameters *are* useful, add them back at some point, but only if
-	we implement right away the support of those parameters (i.e. not only do the
-	familiar mysql table type stuff, but also other parameters)
-	
-	* xaraya doesnt use foreign keys yet, doesnt mean we cant have support in the
-	schema for it though.         
-	
-	* other than the precise size="14" it could be comfortable to specify 'qualitative' sizes.
-	For example:
-    	small      64K  'c64'       'amoebe'
-    	medium      1M  'pda'       'fly'
-    	large      16M  'notebook'  'dog'
-    	long      256M  'laptop'    'ape'
-    	huge        4G  'desktop'   'human'
-	where the generator translates
-	this into something for the backend that fits. The second column would be 
-	comfortable from a developer perspective without having to know what column
-	type it actually translates into, it guarantees to be capable of storing the
-	specified size (at minimum)
-	
+    types (JDBC types actually) which are still close to the actual type of the 
+    database. Since this code is in place, we might as well use it.
+    
+    Example set of more abstract types:
+    - char | binary | number | boolean | date | time
+    Ideally these would be children of the 'column' element so the attributes
+    can be defined on them specifically (e.g. 'precision' which only makes sense for numbers and perhaps time)
+    
+    * scale attribute is confusing, i'd rather use 'precision' or 'decimals' (also see previous point)
+    
+    * think about constraints, both on column and table level, they fit in nicely as
+    children of the 'column' or 'table' elements.
+    
+    * the mixed case use of 'autoIncrement' is not needed, lead
+    to confusion only
+    
+    * [DONE] the elements 'index' and 'unique' are the same, index type='unique' would
+    be better imo. Similarly, unique-column and index-column are then redundant, either
+    to be replaced by just a 'index-column' element, or <column name="colname"/> to reference
+    a column in the table definition.
+    
+    * [DONE] an element 'primary' as a grouper around the 'column' element would be nice
+    Example:
+    <table name="test">
+        <column name="normal" type="INTEGER" size="4"/>
+        <primary>
+            <column name="ref_id" type="INTEGER" size="10"/>
+            <column name="ref1_id" type="INTEGER" size="10"/>
+        </primary>
+    </table>
+    Primary keys are either automatically indexed, or should always be indexed, the
+    generator can take this into account. 
+    
+    * partial set of the tags removed from the original.
+    
+    * an 'id' attribute on all tags supported.
+    
+    * vendor parameters *are* useful, add them back at some point, but only if
+    we implement right away the support of those parameters (i.e. not only do the
+    familiar mysql table type stuff, but also other parameters)
+    
+    * xaraya doesnt use foreign keys yet, doesnt mean we cant have support in the
+    schema for it though.         
+    
+    * other than the precise size="14" it could be comfortable to specify 'qualitative' sizes.
+    For example:
+        small      64K  'c64'       'amoebe'
+        medium      1M  'pda'       'fly'
+        large      16M  'notebook'  'dog'
+        long      256M  'laptop'    'ape'
+        huge        4G  'desktop'   'human'
+    where the generator translates
+    this into something for the backend that fits. The second column would be 
+    comfortable from a developer perspective without having to know what column
+    type it actually translates into, it guarantees to be capable of storing the
+    specified size (at minimum)
+    
 -->
