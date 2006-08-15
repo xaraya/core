@@ -45,21 +45,31 @@
         * removed attribute 'primaryKey' from 'column' element
         * removed element 'index-column', replaced it with 'column' to sync it up with 'primary' definition
         * rename element 'database' to 'schema' as that is more accurate
+        * make attribute 'description' apply to schema, table and column
 -->
 
+<!-- Root element is 'schema' -->
 <!ELEMENT schema (table+)>
-<!ATTLIST schema name CDATA #IMPLIED>
+<!ATTLIST schema 
+  name CDATA #IMPLIED
+  description CDATA #IMPLIED
+>
 
+<!-- table element -->
 <!ELEMENT table (primary?,column+,index*)>
 <!ATTLIST table
   name CDATA #REQUIRED
   description CDATA #IMPLIED
 >
+
+<!-- primary element -->
 <!ELEMENT primary (column+)>
 
+<!-- column element -->
 <!ELEMENT column EMPTY>
 <!ATTLIST column
   name CDATA #REQUIRED
+  description CDATA #IMPLIED
   required (true|false) "false"
   type (TINYINT|SMALLINT|BIGINT|INTEGER|
         FLOAT|DECIMAL|NUMERIC|REAL|DOUBLE|
@@ -73,9 +83,9 @@
   default CDATA #IMPLIED
   scale CDATA #IMPLIED
   autoIncrement (true|false) "false"
-  description CDATA #IMPLIED
 >
 
+<!-- index element -->
 <!ELEMENT index (column+)>
 <!ATTLIST index  
     name CDATA #IMPLIED
@@ -85,10 +95,10 @@
 <!--
     Wishes:
     * the 'type' attribute for the 'column' element should only designate an 
-    'abstract' type, not related    to the database types like TINYINT or something. 
+    'abstract' type, not related  to the database types like TINYINT or something. 
     The storage types used by different databases can be figured out by the 
     generator in combination with other information supplied in the xml.
-  This is basically what creole does, but the mapping they use is a set of
+    This is basically what creole does, but the mapping they use is a set of
     types (JDBC types actually) which are still close to the actual type of the 
     database. Since this code is in place, we might as well use it.
     
@@ -145,5 +155,8 @@
     comfortable from a developer perspective without having to know what column
     type it actually translates into, it guarantees to be capable of storing the
     specified size (at minimum)
+    
+    * I dont like the capital attribute values for 'type'
+    * 
     
 -->
