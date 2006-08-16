@@ -52,7 +52,7 @@ define('XAR_TPL_TAG_NEEDPARAMETER'             ,32);
 class xarTemplateTag
 {
     const NAME_REGEX = '^[a-z][-_a-z0-9]*$';
-    
+
     // These need to stay public otherwise the (de)serialization from their storage into the database doesnt work!
     public $_name = NULL;          // Name of the tag
     public $_attributes = array(); // Array with the supported attributes
@@ -167,7 +167,7 @@ class xarTemplateTag
         $code = str_replace(array("\r\n","\r"),"\n",$code);
         return $code;
     }
-    
+
     /**
      * Registers a tag to the theme system
      *
@@ -188,7 +188,7 @@ class xarTemplateTag
         } catch (BLException $e) {
             // Good, not registered yet
         }
-        
+
         $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
 
@@ -219,7 +219,7 @@ class xarTemplateTag
         }
         return true;
     }
-    
+
     /**
      * Unregisters a tag to the theme system
      *
@@ -243,7 +243,7 @@ class xarTemplateTag
         $stmt->executeUpdate(array($tag_name));
         return true;
     }
-    
+
     public static function getObject($tag_name)
     {
         // cache tags for compile performance
@@ -284,7 +284,7 @@ class xarTemplateTag
         $tag_objects[$tag_name] = $obj;
         return $obj;
     }
-    
+
     /**
      * Check the attributes of a tag
      *
@@ -293,7 +293,7 @@ class xarTemplateTag
      * @return  bool
      * @throws  BLException, BLValidationException
     **/
-    public function checkAttributes($attrs) 
+    public function checkAttributes($attrs)
     {
         foreach ($this->getAttributes() as $attr) {
             $attr_name = $attr->getName();
@@ -334,14 +334,14 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
     return $tag->register();
 }
 function xarTplUnregisterTag($tag_name)
-{    return xarTemplateTag::unregister($tag_name); 
+{    return xarTemplateTag::unregister($tag_name);
 }
 function xarTplCheckTagAttributes($name, $attrs)
 {   $tag_ref = xarTemplateTag::getObject($name);
     return $tag_ref->checkAttributes($attrs);
 }
 function xarTplGetTagObjectFromName($tag_name)
-{    return xarTemplateTag::getObject($tag_name); 
+{    return xarTemplateTag::getObject($tag_name);
 }
 
 /**
@@ -357,7 +357,7 @@ function xarTplGetTagObjectFromName($tag_name)
 class xarTemplateAttribute
 {
     const  NAME_REGEX = '^[a-z][-_a-z0-9]*$';
-    
+
     public $_name;     // Attribute name
     public $_flags;    // Attribute flags (datatype, required/optional, etc.)
 

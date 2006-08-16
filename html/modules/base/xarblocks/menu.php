@@ -158,8 +158,8 @@ function base_menublock_display($blockinfo)
                     {
                         $url = explode(':', substr($url, 1,  - 1));
                         // Get current pubtype type (if any)
-                        if (xarVarIsCached('Blocks.articles', 'ptid')) {
-                            $ptid = xarVarGetCached('Blocks.articles', 'ptid');
+                        if (xarCore::isCached('Blocks.articles', 'ptid')) {
+                            $ptid = xarCore::getCached('Blocks.articles', 'ptid');
                         }
                         if (empty($ptid)) {
                             // try to get ptid from input
@@ -175,15 +175,15 @@ function base_menublock_display($blockinfo)
                     case '(': // category link
                     {
                         $url = explode(':', substr($url, 1,  - 1));
-                        if (xarVarIsCached('Blocks.categories','catid')) {
-                            $catid = xarVarGetCached('Blocks.categories','catid');
+                        if (xarCore::isCached('Blocks.categories','catid')) {
+                            $catid = xarCore::getCached('Blocks.categories','catid');
                         }
                         if (empty($catid)) {
                             // try to get catid from input
                             xarVarFetch('catid', 'isset', $catid, NULL, XARVAR_DONT_SET);
                         }
-                        if (empty($catid) && xarVarIsCached('Blocks.categories','cids')) {
-                            $cids = xarVarGetCached('Blocks.categories','cids');
+                        if (empty($catid) && xarCore::isCached('Blocks.categories','cids')) {
+                            $cids = xarCore::getCached('Blocks.categories','cids');
                         } else {
                             $cids = array();
                         }
