@@ -1,4 +1,4 @@
-<xar:set name="itemname">xarCore::getCached('XML','itemname')</xar:set>
+<xar:set name="itemname">xarVarGetCached('XML','itemname')</xar:set>
 <xar:foreach in="$items" key="$itemid" value="$fields">
     &lt;#$itemname#&gt;
     <xar:foreach in="$fields" key="$name" value="$value">

@@ -19,7 +19,7 @@
             <link rel="stylesheet" type="text/css" href="modules/base/xarstyles/xarcore-xhtml1-strict.css" />
         </head>
         <body>
-            <xar:set name="isupgrade">#xarCore::setCached('Upgrade', 'upgrading')#</xar:set>
+            <xar:set name="isupgrade">#xarVarGetCached('Upgrade', 'upgrading')#</xar:set>
             <div id="wrapper">
             <div id="footer">
                 <ul id="navlist">
