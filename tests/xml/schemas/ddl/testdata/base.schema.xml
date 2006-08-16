@@ -17,12 +17,12 @@
     <column name="xar_firstused" type="INTEGER" size="11" default="0" required="true"/>
     <column name="xar_lastused" type="INTEGER" size="11" default="0" required="true"/>
     <column name="xar_uid" type="INTEGER" size="11" default="0" required="true"/>
-    <column name="xar_vars" type="VARBINARY" />
-    <column name="xar_remembersess" type="TINYINT" size="4" default="0" />
-    <index type="default" name="i_xar_session_uid">
+    <column name="xar_vars" type="VARBINARY"/>
+    <column name="xar_remembersess" type="TINYINT" size="4" default="0"/>
+    <index name="i_xar_session_uid">
       <column name="xar_uid"/>
     </index>
-    <index type="default" name="i_xar_session_lastused">
+    <index name="i_xar_session_lastused">
       <column name="xar_lastused"/>
     </index>
   </table>
@@ -37,10 +37,10 @@
       <column name="xar_name"/>
       <column name="xar_modid"/>
     </index>
-    <index type="default" name="i_xar_module_vars_modid">
+    <index name="i_xar_module_vars_modid">
       <column name="xar_modid"/>
     </index>
-    <index type="default" name="i_xar_module_vars_name">
+    <index name="i_xar_module_vars_name">
       <column name="xar_name"/>
     </index>
   </table>

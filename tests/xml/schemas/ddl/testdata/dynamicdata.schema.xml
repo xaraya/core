@@ -7,10 +7,10 @@
     <column name="xar_dd_propid" type="INTEGER" size="11" default="0" required="true"/>
     <column name="xar_dd_itemid" type="INTEGER" size="11" default="0" required="true"/>
     <column name="xar_dd_value" type="LONGVARCHAR"/>
-    <index type="default" name="i_xar_dyndata_propid">
+    <index name="i_xar_dyndata_propid">
       <column name="xar_dd_propid"/>
     </index>
-    <index type="default" name="i_xar_dyndata_itemid">
+    <index name="i_xar_dyndata_itemid">
       <column name="xar_dd_itemid"/>
     </index>
   </table>
@@ -55,10 +55,10 @@
       <column name="xar_prop_itemtype"/>
       <column name="xar_prop_name"/>
     </index>
-    <index type="default" name="i_xar_dynprops_name">
+    <index name="i_xar_dynprops_name">
       <column name="xar_prop_name"/>
     </index>
-    <index type="default" name="i_xar_dynprops_objectid">
+    <index name="i_xar_dynprops_objectid">
       <column name="xar_prop_objectid"/>
     </index>
   </table>
@@ -78,7 +78,7 @@
     <column name="xar_prop_args" type="LONGVARCHAR"/>
     <column name="xar_prop_aliases" size="254"/>
     <column name="xar_prop_format" type="INTEGER" size="11" default="0"/>
-    <index type="default" name="i_xar_dynpropdef_mod">
+    <index name="i_xar_dynpropdef_mod">
       <column name="xar_prop_reqmodules"/>
     </index>
   </table>

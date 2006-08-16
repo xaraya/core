@@ -5,10 +5,10 @@
       <column name="xar_uid" type="INTEGER" size="11" default="0" required="true"/>
       <column name="xar_parentid" type="INTEGER" size="11" default="0" required="true"/>
     </primary>
-    <index type="default" name="i_xar_rolememb_uid">
+    <index name="i_xar_rolememb_uid">
       <column name="xar_uid"/>
     </index>
-    <index type="default" name="i_xar_rolememb_parentid">
+    <index name="i_xar_rolememb_parentid">
       <column name="xar_parentid"/>
     </index>
   </table>
@@ -29,16 +29,16 @@
     <index type="unique" name="i_xar_roles_uname">
       <column name="xar_uname"/>
     </index>
-    <index type="default" name="i_xar_roles_type">
+    <index name="i_xar_roles_type">
       <column name="xar_type"/>
     </index>
-    <index type="default" name="i_xar_roles_name">
+    <index name="i_xar_roles_name">
       <column name="xar_name"/>
     </index>
-    <index type="default" name="i_xar_roles_email">
+    <index name="i_xar_roles_email">
       <column name="xar_email"/>
     </index>
-    <index type="default" name="i_xar_roles_state">
+    <index name="i_xar_roles_state">
       <column name="xar_state"/>
     </index>
   </table>

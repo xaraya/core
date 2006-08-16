@@ -126,14 +126,14 @@
     <table name="test">
         <column name="normal" type="INTEGER" size="4"/>
         <primary>
-            <column name="ref_id" type="INTEGER" size="10"/>
-            <column name="ref1_id" type="INTEGER" size="10"/>
+            <column name="ref_name" type="INTEGER" size="10"/>
+            <column name="ref1_name" type="INTEGER" size="10"/>
         </primary>
     </table>
-    Primary keys are either automatically indexed, or should always be indexed, the
-    generator can take this into account. 
     
-    * partial set of the tags removed from the original.
+    * Primary keys are either automatically indexed, or should always be indexed, the
+    generator can take this into account. Some databases may do this automatically, either
+    explicit or implicit.
     
     * an 'id' attribute on all tags supported.
     

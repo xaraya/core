@@ -8,10 +8,10 @@
     <column name="xar_instance_id" type="INTEGER" size="11" default="0" required="true"/>
     <column name="xar_template" size="100"/>
     <column name="xar_position" type="INTEGER" size="11" default="0" required="true"/>
-    <index type="default" name="i_xar_block_group_instances">
+    <index name="i_xar_block_group_instances">
       <column name="xar_group_id"/>
     </index>
-    <index type="default" name="i_xar_block_group_instances_2">
+    <index name="i_xar_block_group_instances_2">
       <column name="xar_instance_id"/>
     </index>
   </table>
@@ -40,7 +40,7 @@
     <index type="unique" name="i_xar_block_instances_u2">
       <column name="xar_name"/>
     </index>
-    <index type="default" name="i_xar_block_instances">
+    <index name="i_xar_block_instances">
       <column name="xar_type_id"/>
     </index>
   </table>
