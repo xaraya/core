@@ -24,7 +24,7 @@
 class xarTemplateTag
 {
     const NAME_REGEX = '^[a-z][-_a-z0-9]*$';
-    
+
     // These need to stay public otherwise the (de)serialization from their storage into the database doesnt work!
     public $_name = NULL;          // Name of the tag
     public $_attributes = array(); // Array with the supported attributes
@@ -139,7 +139,7 @@ class xarTemplateTag
         $code = str_replace(array("\r\n","\r"),"\n",$code);
         return $code;
     }
-    
+
     /**
      * Registers a tag to the theme system
      *
@@ -161,7 +161,7 @@ class xarTemplateTag
         } catch (BLException $e) {
             // Good, not registered yet
         }
-        
+
         $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
 
@@ -192,7 +192,7 @@ class xarTemplateTag
         }
         return true;
     }
-    
+
     /**
      * Unregisters a tag to the theme system
      *
@@ -216,7 +216,7 @@ class xarTemplateTag
         $stmt->executeUpdate(array($tag_name));
         return true;
     }
-    
+
     public static function getObject($tag_name)
     {
         // cache tags for compile performance
@@ -257,7 +257,7 @@ class xarTemplateTag
 
         return $obj;
     }
-    
+
     /**
      * Check the attributes of a tag
      *
@@ -266,7 +266,7 @@ class xarTemplateTag
      * @return  bool
      * @throws  BLException, BLValidationException
     **/
-    public function checkAttributes($attrs) 
+    public function checkAttributes($attrs)
     {
         foreach ($this->getAttributes() as $attr) {
             $attr_name = $attr->getName();
@@ -277,13 +277,13 @@ class xarTemplateTag
                 if ($attr_types & XAR_TPL_STRING) {
                     continue;
                 } elseif (($attr_types & XAR_TPL_BOOLEAN)
-                          && eregi ('^(true|false|1|0)$', $args[$attr_name])) {
+                          && eregi ('^(true|false|1|0)$', $attrs[$attr_name])) {
                     continue;
                 } elseif (($attr_types & XAR_TPL_INTEGER)
-                          && eregi('^\-?[0-9]+$', $args[$attr_name])) {
+                          && eregi('^\-?[0-9]+$', $attrs[$attr_name])) {
                     continue;
                 } elseif (($attr_types & XAR_TPL_FLOAT)
-                          && eregi('^\-?[0-9]*.[0-9]+$', $args[$attr_name])) {
+                          && eregi('^\-?[0-9]*.[0-9]+$', $attrs[$attr_name])) {
                     continue;
                 }
 
@@ -307,14 +307,14 @@ function xarTplRegisterTag($tag_module, $tag_name, $tag_attrs = array(), $tag_ha
     return $tag->register();
 }
 function xarTplUnregisterTag($tag_name)
-{    return xarTemplateTag::unregister($tag_name); 
+{    return xarTemplateTag::unregister($tag_name);
 }
 function xarTplCheckTagAttributes($name, $attrs)
 {   $tag_ref = xarTemplateTag::getObject($name);
     return $tag_ref->checkAttributes($attrs);
 }
 function xarTplGetTagObjectFromName($tag_name)
-{    return xarTemplateTag::getObject($tag_name); 
+{    return xarTemplateTag::getObject($tag_name);
 }
 
 /**
@@ -330,7 +330,7 @@ function xarTplGetTagObjectFromName($tag_name)
 class xarTemplateAttribute
 {
     const  NAME_REGEX = '^[a-z][-_a-z0-9]*$';
-    
+
     public $_name;     // Attribute name
     public $_flags;    // Attribute flags (datatype, required/optional, etc.)
 

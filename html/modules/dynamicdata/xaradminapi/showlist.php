@@ -135,6 +135,10 @@ function dynamicdata_adminapi_showlist($args)
     if (empty($catid)) {
         $catid = '';
     }
+    // include parent fields?
+    if (empty($extend)) {
+        $extend = '';
+    }
 
     // check the URL parameter for the item id used by the module (e.g. exid, aid, ...)
     if (empty($param)) {
@@ -154,7 +158,7 @@ function dynamicdata_adminapi_showlist($args)
                                            'catid' => $catid,
                                            'groupby' => $groupby,
                                            'status' => $status,
-                                           'extend'  => !empty($extend)));
+                                           'extend'  => $extend));
     if (!isset($object)) return;
     // Count before numitems!
     $numthings = 0;
