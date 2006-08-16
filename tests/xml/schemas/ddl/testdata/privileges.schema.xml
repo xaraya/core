@@ -33,6 +33,7 @@
       <column name="xar_parentid"/>
     </index>
   </table>
+  <!-- As it stands, this wont validate, there is no primary key here -->
   <table name="security_acl">
     <column name="xar_partid" type="INTEGER" size="11" default="0" required="true"/>
     <column name="xar_permid" type="INTEGER" size="11" default="0" required="true"/>

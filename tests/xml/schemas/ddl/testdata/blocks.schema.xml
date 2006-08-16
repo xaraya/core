@@ -34,7 +34,7 @@
     <column name="xar_title" size="255"/>
     <column name="xar_content" type="LONGVARCHAR" required="true"/>
     <column name="xar_template" size="255"/>
-    <column name="xar_state" type="TINYINT" size="4" deffault="2" required="true"/>
+    <column name="xar_state" type="TINYINT" size="4" default="2" required="true"/>
     <column name="xar_refresh" type="INTEGER" size="11" default="0" required="true"/>
     <column name="xar_last_update" type="INTEGER" size="11" default="0" required="true"/>
     <index type="unique" name="i_xar_block_instances_u2">
