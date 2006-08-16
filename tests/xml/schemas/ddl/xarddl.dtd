@@ -49,6 +49,7 @@
         * changed autoIncrement to autoincrement (all lower case)
         * made 'name' attributes of type NMTOKEN
         * change 'name' attribute of 'table' element to ID
+        * made 'primary' a required sub of 'table', as a consequence, 'table' itself can have 0 or more 'column' tags
 -->
 
 <!-- Root element is 'schema' -->
@@ -59,7 +60,7 @@
 >
 
 <!-- table element -->
-<!ELEMENT table (primary?,column+,index*)>
+<!ELEMENT table (primary,column*,index*)>
 <!ATTLIST table
   name ID #REQUIRED
   description CDATA #IMPLIED
