@@ -17,7 +17,7 @@
         Initial xarddl.dtd was based on:
             Propel XML database schema DTD
             $Id: database.dtd,v 1.7 2005/03/30 11:38:18 hlellelid Exp $
-        Changelog in applied order (meaning, if you make a change, at to the bottom):
+        Changelog in applied order (meaning, if you make a change, add to the bottom):
         * removed element 'reference'            - used in 'foreign-key' to specify references
         * removed element 'foreign-key'      - to define foreign key relationships
         * removed element 'rule'                    - to define validation rules
@@ -146,6 +146,20 @@
     
     * xaraya doesnt use foreign keys yet, doesnt mean we cant have support in the
     schema for it though.         
+    Example of how this could look:
+      <table name="test">
+          <column name="normal" type="INTEGER" size="4"/>
+          <primary>
+              <column name="ref_name" type="INTEGER" size="10"/>
+              <column name="ref1_name" type="INTEGER" size="10"/>
+          </primary>
+          <foreign remote="other_table" ondelete="(cascade|restrict|setnull|none)" onupdate="(cascade|restrict|setnull|none)">
+              <reference local="ref_name" remote="other_columns_name"/>
+          </foreign>
+      </table>
+    ondelete means: what happens to the remote record if the local record gets deleted.
+    onupdate means: what happens to the remote columns if the local columns get updated.
+    If a foreign key is composite, add more <reference/> elements.
     
     * other than the precise size="14" it could be comfortable to specify 'qualitative' sizes.
     For example:
