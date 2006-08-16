@@ -2,11 +2,11 @@
 <items>
 <xar:if condition="!empty($object)">
     <xar:set name="objname">#$object:name#</xar:set>
-    <xar:set name="dummy">xarVarSetCached('XML','itemname',$objname)</xar:set>
+    <xar:set name="dummy">xarCore::setCached('XML','itemname',$objname)</xar:set>
     <xar:data-view object="$object" />
 <xar:elseif condition="!empty($modid)" />
     <xar:set name="modinfo">xarModGetInfo($modid)</xar:set>
-    <xar:set name="dummy">xarVarSetCached('XML','itemname',$modinfo['name'].'_'.$itemtype)</xar:set>
+    <xar:set name="dummy">xarCore::setCached('XML','itemname',$modinfo['name'].'_'.$itemtype)</xar:set>
     <xar:data-view module="$modid" itemtype="$itemtype" numitems="30" startnum="$startnum" />
 </xar:if>
 </items>
