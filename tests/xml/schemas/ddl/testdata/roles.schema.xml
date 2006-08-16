@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<schema>
+  <table name="rolemembers">
+    <primary>
+      <column name="xar_uid" type="INTEGER" size="11" default="0" required="true"/>
+      <column name="xar_parentid" type="INTEGER" size="11" default="0" required="true"/>
+    </primary>
+    <index type="default" name="i_xar_rolememb_uid">
+      <column name="xar_uid"/>
+    </index>
+    <index type="default" name="i_xar_rolememb_parentid">
+      <column name="xar_parentid"/>
+    </index>
+  </table>
+  <table name="roles">
+    <primary>
+      <column name="xar_uid" type="INTEGER" size="11" required="true" autoincrement="true"/>
+    </primary>
+    <column name="xar_name" size="255" required="true"/>
+    <column name="xar_type" type="INTEGER" size="11" default="0" required="true"/>
+    <column name="xar_users" type="INTEGER" size="11" default="0" required="true"/>
+    <column name="xar_uname" size="255" required="true"/>
+    <column name="xar_email" size="255" required="true"/>
+    <column name="xar_pass" size="100" required="true"/>
+    <column name="xar_date_reg" size="100" default="0000-00-00 00:00:00" required="true"/>
+    <column name="xar_valcode" size="35" required="true"/>
+    <column name="xar_state" type="INTEGER" size="11" default="3" required="true"/>
+    <column name="xar_auth_modid" type="INTEGER" size="11" default="0" required="true"/>
+    <index type="unique" name="i_xar_roles_uname">
+      <column name="xar_uname"/>
+    </index>
+    <index type="default" name="i_xar_roles_type">
+      <column name="xar_type"/>
+    </index>
+    <index type="default" name="i_xar_roles_name">
+      <column name="xar_name"/>
+    </index>
+    <index type="default" name="i_xar_roles_email">
+      <column name="xar_email"/>
+    </index>
+    <index type="default" name="i_xar_roles_state">
+      <column name="xar_state"/>
+    </index>
+  </table>
+</schema>
