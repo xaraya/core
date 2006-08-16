@@ -47,19 +47,21 @@
         * rename element 'database' to 'schema' as that is more accurate
         * made attribute 'description' apply to schema, table and column
         * changed autoIncrement to autoincrement (all lower case)
+        * made 'name' attributes of type NMTOKEN
+        * change 'name' attribute of 'table' element to ID
 -->
 
 <!-- Root element is 'schema' -->
 <!ELEMENT schema (table+)>
 <!ATTLIST schema 
-  name CDATA #IMPLIED
+  name NMTOKEN #IMPLIED
   description CDATA #IMPLIED
 >
 
 <!-- table element -->
 <!ELEMENT table (primary?,column+,index*)>
 <!ATTLIST table
-  name CDATA #REQUIRED
+  name ID #REQUIRED
   description CDATA #IMPLIED
 >
 
@@ -69,7 +71,7 @@
 <!-- column element -->
 <!ELEMENT column EMPTY>
 <!ATTLIST column
-  name CDATA #REQUIRED
+  name NMTOKEN #REQUIRED
   description CDATA #IMPLIED
   required (true|false) "false"
   type (TINYINT|SMALLINT|BIGINT|INTEGER|
@@ -89,7 +91,7 @@
 <!-- index element -->
 <!ELEMENT index (column+)>
 <!ATTLIST index  
-    name CDATA #IMPLIED
+    name NMTOKEN #IMPLIED
     type (default|unique) "default"
 >
 
