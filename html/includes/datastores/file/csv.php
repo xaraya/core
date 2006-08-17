@@ -10,7 +10,7 @@
  * Parent class is the File data store
  *
  */
-sys::import('datastores.Dynamic_File_DataStore');
+sys::import('datastores.file');
 
 /**
  * Handle CSV file

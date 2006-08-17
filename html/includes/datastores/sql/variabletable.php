@@ -10,7 +10,7 @@
  * Parent class is SQL datastore
  *
  */
-sys::import('datastores.Dynamic_SQL_DataStore');
+sys::import('datastores.sql');
 
 /**
  * Data store is a variable SQL table

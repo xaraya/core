@@ -30,48 +30,48 @@ class Dynamic_DataStore_Master
         switch ($type)
         {
             case 'table':
-                sys::import('datastores.Dynamic_FlatTable_DataStore');
+                sys::import('datastores.sql.flattable');
                 $datastore = new Dynamic_FlatTable_DataStore($name);
                 break;
             case 'data':
-                sys::import('datastores.Dynamic_VariableTable_DataStore');
+                sys::import('datastores.sql.variabletable');
                 $datastore = new Dynamic_VariableTable_DataStore($name);
                 break;
             case 'hook':
-                sys::import('datastores.Dynamic_Hook_DataStore');
+                sys::import('datastores.hook');
                 $datastore = new Dynamic_Hook_DataStore($name);
                 break;
             case 'function':
-                sys::import('datastores.Dynamic_Function_DataStore');
+                sys::import('datastores.function');
                 $datastore = new Dynamic_Function_DataStore($name);
                 break;
             case 'uservars':
-                sys::import('datastores.Dynamic_UserSettings_DataStore.php');
+                sys::import('datastores.usersettings');
                 // TODO: integrate user variable handling with DD
                 $datastore = new Dynamic_UserSettings_DataStore($name);
                 break;
             case 'modulevars':
-                sys::import('datastores.Dynamic_ModuleVariables_DataStore');
+                sys::import('datastores.modulevariables');
                 // TODO: integrate module variable handling with DD
                 $datastore = new Dynamic_ModuleVariables_DataStore($name);
                 break;
 
                 // TODO: other data stores
             case 'ldap':
-                sys::import('datastores.Dynamic_LDAP_DataStore');
+                sys::import('datastores.ldap');
                 $datastore = new Dynamic_LDAP_DataStore($name);
                 break;
             case 'xml':
-                sys::import('datastores.Dynamic_XMLFile_DataStore.php');
+                sys::import('datastores.file.xml');
                 $datastore = new Dynamic_XMLFile_DataStore($name);
                 break;
             case 'csv':
-                sys::import('datastores.Dynamic_CSVFile_DataStore');
+                sys::import('datastores.file.csv');
                 $datastore = new Dynamic_CSVFile_DataStore($name);
                 break;
             case 'dummy':
             default:
-                sys::import('datastores.Dynamic_Dummy_DataStore');
+                sys::import('datastores.dummy');
                 $datastore = new Dynamic_Dummy_DataStore($name);
                 break;
         }
@@ -233,7 +233,7 @@ class Dynamic_DataStore implements IDataStore
 
     function countItems($args = array())
     {
-        return null;
+        return null; // <-- make this numeric!!
     }
 
     /**

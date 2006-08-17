@@ -1,6 +1,6 @@
 <?php
 /**
- * Interface declaration for the datastores hierarchy
+ * Interface declarations for the datastores hierarchy
  *
  * @copyright The Digital Development Foundation, 2006
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -35,7 +35,8 @@
 /** 
  * Interfaces as observed in current code 
 **/
-interface IDataStore {
+interface IDataStore 
+{
     // Introduced by Dynamic_DataStore
     function __construct($name);
     
