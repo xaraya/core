@@ -27,6 +27,9 @@ revisit later on before trusting the branch to be released or used.
 * table config_vars has been dropped, now managed by module_vars where
   modid==0
 * table security_levels has been dropped, now managed by SecurityLevel class
+* tables privmembers, rolemembers and security_acl have their unique key on
+  2 columns replaced by a primary key.
+
 
 (see DEVupgrades.sql for the above)
 
