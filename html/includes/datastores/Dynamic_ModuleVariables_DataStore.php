@@ -32,7 +32,7 @@ class Dynamic_ModuleVariables_DataStore extends Dynamic_DataStore
         }
     }
 
-    function getItem($args)
+    function getItem($args = array())
     {
         if (empty($args['itemid'])) {
             // by default, there's only 1 item here, except if your module has several
@@ -60,13 +60,13 @@ class Dynamic_ModuleVariables_DataStore extends Dynamic_DataStore
         return $itemid;
     }
 
-    function createItem($args)
+    function createItem($args = array())
     {
         // There's no difference with updateItem() here, because xarModVars:set() handles that
         return $this->updateItem($args);
     }
 
-    function updateItem($args)
+    function updateItem($args = array())
     {
         if (empty($args['itemid'])) {
             // by default, there's only 1 item here, except if your module has several
@@ -93,7 +93,7 @@ class Dynamic_ModuleVariables_DataStore extends Dynamic_DataStore
         return $itemid;
     }
 
-    function deleteItem($args)
+    function deleteItem($args = array())
     {
         if (empty($args['itemid'])) {
             // by default, there's only 1 item here, except if your module has several

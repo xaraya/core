@@ -21,7 +21,7 @@ class Dynamic_UserSettings_DataStore extends Dynamic_DataStore // Consider inher
         parent::__construct($name);
 
         // keep track of the concerned module for user settings
-        // TODO: the concerned module is currently hiding in the third part of the name :)
+        // @todo: the concerned module is currently hiding in the third part of the name :)
         list($fixed1,$fixed2,$modid) = explode('_',$name);
         if (empty($modid)) {
             $modid = xarMod::getRegID(xarMod::getName());
@@ -32,7 +32,7 @@ class Dynamic_UserSettings_DataStore extends Dynamic_DataStore // Consider inher
         }
     }
 
-    function getItem($args)
+    function getItem($args = array())
     {
         if (empty($args['itemid'])) {
             // default is the current user (if any)
@@ -61,13 +61,13 @@ class Dynamic_UserSettings_DataStore extends Dynamic_DataStore // Consider inher
         return $itemid;
     }
 
-    function createItem($args)
+    function createItem($args = array())
     {
         // There's no difference with updateItem() here, because xarModUserVars:set() handles that
         return $this->updateItem($args);
     }
 
-    function updateItem($args)
+    function updateItem($args = array())
     {
         if (empty($args['itemid'])) {
             // default is the current user (if any)
@@ -93,7 +93,7 @@ class Dynamic_UserSettings_DataStore extends Dynamic_DataStore // Consider inher
         return $itemid;
     }
 
-    function deleteItem($args)
+    function deleteItem($args = array())
     {
         if (empty($args['itemid'])) {
             // default is the current user (if any)

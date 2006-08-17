@@ -86,11 +86,10 @@ design work can begin.
         - xar_realm in xar_security masks uses 'All' which prevents it from being
           a foreign key to the realm table (through id), likewise for xar_privileges 
           table
-        - if we are going to store privilege levels in the database, then refer to 
+        - [DONE] if we are going to store privilege levels in the database, then refer to 
           them from other tables, we now store the level verbatim (perhaps drop the table?)
-      - similarly, in xar_privileges table the xar_module column. 
-        - is xar_auth_mod_id still needed?
-        - 
+        - similarly, in xar_privileges table the xar_module column. 
+        - is xar_auth_mod_id still needed? 
 * [STARTED] OO-ify stuff in core where appropriate (including getting rid of
   die()'s and modelling the classes where php4 could not) 
 * I really would like to do something with views wrt multisites et. al.

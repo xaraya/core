@@ -17,6 +17,8 @@
  *
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
+ * @todo this factory should go into core once we use datastores in more broad ways.
+ * @todo the classnames could use a bit of a clean up (shorter, lowercasing)
  */
 class Dynamic_DataStore_Master
 {
@@ -142,23 +144,24 @@ class Dynamic_DataStore_Master
     }
 }
 
+sys::import('datastores.interface');
 /**
  * Base class for Dynamic Data Stores
  *
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
  */
-class Dynamic_DataStore
+class Dynamic_DataStore implements IDataStore
 {
-    public $name;     // some static name, or the table name, or the moduleid + itemtype, or ...
+    public $name   = '';     // some static name, or the table name, or the moduleid + itemtype, or ...
     public $type;
-    public $fields;   // array of $name => reference to property in Dynamic_Object*
-    public $primary;
+    public $fields = array();   // array of $name => reference to property in Dynamic_Object*
+    public $primary= null;
 
-    public $sort;
-    public $where;
-    public $groupby;
-    public $join;
+    public $sort   = array();
+    public $where  = array();
+    public $groupby= array();
+    public $join   = array();
 
     public $_itemids;  // reference to itemids in Dynamic_Object_List TODO: investigate public scope
 
@@ -167,12 +170,6 @@ class Dynamic_DataStore
     function __construct($name)
     {
         $this->name = $name;
-        $this->fields = array();
-        $this->primary = null;
-        $this->sort = array();
-        $this->where = array();
-        $this->groupby = array();
-        $this->join = array();
     }
 
     /**
@@ -209,28 +206,29 @@ class Dynamic_DataStore
         $this->primary = $name;
     }
 
-    function getItem($args)
+    function getItem($args = array())
     {
         return $args['itemid'];
     }
 
-    function createItem($args)
+    function createItem($args = array())
     {
         return $args['itemid'];
     }
 
-    function updateItem($args)
+    function updateItem($args = array())
     {
         return $args['itemid'];
     }
 
-    function deleteItem($args)
+    function deleteItem($args = array())
     {
         return $args['itemid'];
     }
 
     function getItems($args = array())
     {
+        // abstract?
     }
 
     function countItems($args = array())
