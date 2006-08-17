@@ -228,6 +228,9 @@ function roles_admin_modifyconfig()
                                     xarModSetVar('roles','primaryparent', $defaultrole);
                                 }elseif ($userduv =='usertimezone') {//set to the default site timezone
                                     $defaultzone= xarConfigGetVar('Site.Core.TimeZone');
+                                    if (!isset($defaultzone) || empty($defaultzone)) {
+                                        xarConfigSetVar('Site.Core.TimeZone','Europe/London');
+                                    }
                                     $timeinfo = xarModAPIFunc('base','user','timezones', array('timezone' => $defaultzone));
                                     list($hours,$minutes) = explode(':',$timeinfo[0]);
                                     $offset = (float) $hours + (float) $minutes / 60;
