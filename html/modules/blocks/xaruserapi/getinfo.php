@@ -42,8 +42,8 @@ function blocks_userapi_getinfo($args)
     if (!empty($instance)) {
         // Block instance - fetch it from the database.
         if (is_numeric($instance)) {
-            if (xarCore::isCached('Block.Infos2', $instance)) {
-                $blockinfo = xarCore::getCached('Block.Infos2', $instance);
+            if (xarVarIsCached('Block.Infos2', $instance)) {
+                $blockinfo = xarVarGetCached('Block.Infos2', $instance);
             } else {
                 $blockinfo = xarModAPIfunc('blocks', 'user', 'get', array('bid' => $instance));
             }
@@ -53,9 +53,9 @@ function blocks_userapi_getinfo($args)
                 return;
             }
 
-            if (!xarCore::isCached('Block.Infos2', $blockinfo['bid'])) {
+            if (!xarVarIsCached('Block.Infos2', $blockinfo['bid'])) {
                 // Cache the block details if available
-                xarCore::setCached('Block.Infos2', $blockinfo['bid'], $blockinfo);
+                xarVarSetCached('Block.Infos2', $blockinfo['bid'], $blockinfo);
             }
 
             // TODO: return here if the block name fails a security check.

@@ -29,8 +29,8 @@ function blocks_userapi_groupgetinfo($args)
         throw new EmptyParameterException('name or gid');
     }
 
-    if (xarCore::isCached('Block.Group.Infos', $gid)) {
-        return xarCore::getCached('Block.Group.Infos', $gid);
+    if (xarVarIsCached('Block.Group.Infos', $gid)) {
+        return xarVarGetCached('Block.Group.Infos', $gid);
     }
 
     $dbconn =& xarDBGetConn();
@@ -100,7 +100,7 @@ function blocks_userapi_groupgetinfo($args)
 
     $group['instances'] = $instances;
 
-    xarCore::setCached('Block.Group.Infos', $gid, $group);
+    xarVarSetCached('Block.Group.Infos', $gid, $group);
     return $group;
 }
 
