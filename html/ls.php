@@ -46,7 +46,7 @@ function xarLocalServicesMain($argc, $argv)
 function usage() 
 {
     fwrite(STDERR,"Usage for local services entry point:
-    php5 ./ws.php <type> [-u <user>][-p <pass>] [args]
+    php5 ./".basename(__FILE__)." <type> [-u <user>][-p <pass>] [args]
 
     <type>   : required designator for request type (module name)
                Currently Supported:
