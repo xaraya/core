@@ -156,12 +156,6 @@ function roles_init()
     $query = xarDBCreateIndex($tables['rolemembers'], $index);
     if (!$dbconn->Execute($query)) return;
 
-    $index = array('name' => 'i_' . $sitePrefix . '_rolememb_uid',
-        'fields' => array('xar_uid'),
-        'unique' => false);
-    $query = xarDBCreateIndex($tables['rolemembers'], $index);
-    if (!$dbconn->Execute($query)) return;
-
     $index = array('name' => 'i_' . $sitePrefix . '_rolememb_parentid',
         'fields' => array('xar_parentid'),
         'unique' => false);

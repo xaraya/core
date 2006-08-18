@@ -174,12 +174,6 @@ function privileges_init()
     $query = xarDBCreateIndex($tables['privmembers'],$index);
     if (!$dbconn->Execute($query)) return;
 
-    $index = array('name'      => 'i_'.$sitePrefix.'_privmembers_pid',
-                   'fields'    => array('xar_pid'),
-                   'unique'    => FALSE);
-    $query = xarDBCreateIndex($tables['privmembers'],$index);
-    if (!$dbconn->Execute($query)) return;
-
     $index = array('name'      => 'i_'.$sitePrefix.'_privmembers_parentid',
                    'fields'    => array('xar_parentid'),
                    'unique'    => FALSE);
@@ -209,12 +203,6 @@ function privileges_init()
     $index = array('name'      => 'i_'.$sitePrefix.'_security_acl_id',
                    'fields'    => array('xar_partid','xar_permid'),
                    'unique'    => TRUE);
-    $query = xarDBCreateIndex($tables['security_acl'],$index);
-    if (!$dbconn->Execute($query)) return;
-
-    $index = array('name'      => 'i_'.$sitePrefix.'_security_acl_partid',
-                   'fields'    => array('xar_partid'),
-                   'unique'    => FALSE);
     $query = xarDBCreateIndex($tables['security_acl'],$index);
     if (!$dbconn->Execute($query)) return;
 
