@@ -127,7 +127,7 @@ class xarCache_APC_Storage extends xarCache_Storage
         $this->numitems = count($cacheinfo['cache_list']);
         
         $size = 0;
-        foreach ($ci['cache_list'] as $k => $v) {
+        foreach ($cacheinfo['cache_list'] as $k => $v) {
             $size += $v['mem_size'];
         }
 
