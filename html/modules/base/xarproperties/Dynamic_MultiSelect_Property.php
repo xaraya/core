@@ -80,9 +80,6 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
         if (!isset($data['options']) || count($data['options']) == 0) {
             $data['options'] = $this->getOptions();
         }
-        if (count($data['options']) == 0) {
-            $data['options'] = array();
-        }
         if (empty($data['value'])) {
             $data['value'] = array();
         } elseif (!is_array($data['value'])) {
