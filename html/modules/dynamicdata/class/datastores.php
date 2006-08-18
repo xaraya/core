@@ -17,6 +17,8 @@
  *
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
+ * @todo this factory should go into core once we use datastores in more broad ways.
+ * @todo the classnames could use a bit of a clean up (shorter, lowercasing)
  */
 class Dynamic_DataStore_Master
 {
@@ -28,48 +30,48 @@ class Dynamic_DataStore_Master
         switch ($type)
         {
             case 'table':
-                sys::import('datastores.Dynamic_FlatTable_DataStore');
+                sys::import('datastores.sql.flattable');
                 $datastore = new Dynamic_FlatTable_DataStore($name);
                 break;
             case 'data':
-                sys::import('datastores.Dynamic_VariableTable_DataStore');
+                sys::import('datastores.sql.variabletable');
                 $datastore = new Dynamic_VariableTable_DataStore($name);
                 break;
             case 'hook':
-                sys::import('datastores.Dynamic_Hook_DataStore');
+                sys::import('datastores.hook');
                 $datastore = new Dynamic_Hook_DataStore($name);
                 break;
             case 'function':
-                sys::import('datastores.Dynamic_Function_DataStore');
+                sys::import('datastores.function');
                 $datastore = new Dynamic_Function_DataStore($name);
                 break;
             case 'uservars':
-                sys::import('datastores.Dynamic_UserSettings_DataStore.php');
+                sys::import('datastores.usersettings');
                 // TODO: integrate user variable handling with DD
                 $datastore = new Dynamic_UserSettings_DataStore($name);
                 break;
             case 'modulevars':
-                sys::import('datastores.Dynamic_ModuleVariables_DataStore');
+                sys::import('datastores.modulevariables');
                 // TODO: integrate module variable handling with DD
                 $datastore = new Dynamic_ModuleVariables_DataStore($name);
                 break;
 
                 // TODO: other data stores
             case 'ldap':
-                sys::import('datastores.Dynamic_LDAP_DataStore');
+                sys::import('datastores.ldap');
                 $datastore = new Dynamic_LDAP_DataStore($name);
                 break;
             case 'xml':
-                sys::import('datastores.Dynamic_XMLFile_DataStore.php');
+                sys::import('datastores.file.xml');
                 $datastore = new Dynamic_XMLFile_DataStore($name);
                 break;
             case 'csv':
-                sys::import('datastores.Dynamic_CSVFile_DataStore');
+                sys::import('datastores.file.csv');
                 $datastore = new Dynamic_CSVFile_DataStore($name);
                 break;
             case 'dummy':
             default:
-                sys::import('datastores.Dynamic_Dummy_DataStore');
+                sys::import('datastores.dummy');
                 $datastore = new Dynamic_Dummy_DataStore($name);
                 break;
         }
@@ -142,23 +144,24 @@ class Dynamic_DataStore_Master
     }
 }
 
+sys::import('datastores.interface');
 /**
  * Base class for Dynamic Data Stores
  *
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
  */
-class Dynamic_DataStore
+class Dynamic_DataStore implements IDataStore
 {
-    public $name;     // some static name, or the table name, or the moduleid + itemtype, or ...
+    public $name   = '';     // some static name, or the table name, or the moduleid + itemtype, or ...
     public $type;
-    public $fields;   // array of $name => reference to property in Dynamic_Object*
-    public $primary;
+    public $fields = array();   // array of $name => reference to property in Dynamic_Object*
+    public $primary= null;
 
-    public $sort;
-    public $where;
-    public $groupby;
-    public $join;
+    public $sort   = array();
+    public $where  = array();
+    public $groupby= array();
+    public $join   = array();
 
     public $_itemids;  // reference to itemids in Dynamic_Object_List TODO: investigate public scope
 
@@ -167,12 +170,6 @@ class Dynamic_DataStore
     function __construct($name)
     {
         $this->name = $name;
-        $this->fields = array();
-        $this->primary = null;
-        $this->sort = array();
-        $this->where = array();
-        $this->groupby = array();
-        $this->join = array();
     }
 
     /**
@@ -209,33 +206,34 @@ class Dynamic_DataStore
         $this->primary = $name;
     }
 
-    function getItem($args)
+    function getItem($args = array())
     {
         return $args['itemid'];
     }
 
-    function createItem($args)
+    function createItem($args = array())
     {
         return $args['itemid'];
     }
 
-    function updateItem($args)
+    function updateItem($args = array())
     {
         return $args['itemid'];
     }
 
-    function deleteItem($args)
+    function deleteItem($args = array())
     {
         return $args['itemid'];
     }
 
     function getItems($args = array())
     {
+        // abstract?
     }
 
     function countItems($args = array())
     {
-        return null;
+        return null; // <-- make this numeric!!
     }
 
     /**

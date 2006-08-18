@@ -29,10 +29,10 @@ class Dynamic_Hook_DataStore extends Dynamic_DataStore
 
     function setPrimary(&$property)
     {
-        // not applicable !?
+        // not applicable !? 
     }
 
-    function getItem($args)
+    function getItem($args = array())
     {
         $modid = $args['modid'];
         $itemtype = $args['itemtype'];

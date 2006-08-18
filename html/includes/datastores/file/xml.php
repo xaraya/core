@@ -10,7 +10,7 @@
  * Parent class is File datastore
  *
  */
-sys::import('datastores.Dynamic_File_DataStore');
+sys::import('datastores.file');
 
 /**
  * Data store is an XML file

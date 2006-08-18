@@ -165,19 +165,13 @@ function privileges_init()
                                   array('xar_partid'       => array('type'  => 'integer',
                                                                     'null'        => false,
                                                                     'default'     => '0',
-                                                                    'key'         => true),
+                                                                    'primary_key'         => true),
                                         'xar_permid'      => array('type'   => 'integer',
                                                                    'null'        => false,
                                                                    'default'     => '0',
-                                                                   'key'         => true)));
+                                                                   'primary_key'         => true)));
         $dbconn->Execute($query);
 
-        $index = array('name'      => 'i_'.$sitePrefix.'_security_acl_id',
-                       'fields'    => array('xar_partid','xar_permid'),
-                       'unique'    => TRUE);
-        $query = xarDBCreateIndex($tables['security_acl'],$index);
-        $dbconn->Execute($query);
-        
         $index = array('name'      => 'i_'.$sitePrefix.'_security_acl_partid',
                        'fields'    => array('xar_partid'),
                        'unique'    => FALSE);

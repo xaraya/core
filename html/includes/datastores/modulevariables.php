@@ -1,17 +1,17 @@
 <?php
 /**
- * Data Store is the user settings (user variables per module) // TODO: integrate user variable handling with DD
+ * Data Store is the module variables // TODO: integrate module variable handling with DD
  *
  * @package dynamicdata
  * @subpackage datastores
  */
 
 /**
- * User settings datastore
+ * Class to handle module variables datastores
  *
  * @package dynamicdata
  */
-class Dynamic_UserSettings_DataStore extends Dynamic_DataStore // Consider inheriting from ModuleVar Datastore
+class Dynamic_ModuleVariables_DataStore extends Dynamic_DataStore
 {
     public $modname;
 
@@ -20,8 +20,8 @@ class Dynamic_UserSettings_DataStore extends Dynamic_DataStore // Consider inher
         // invoke the default constructor from our parent class
         parent::__construct($name);
 
-        // keep track of the concerned module for user settings
-        // TODO: the concerned module is currently hiding in the third part of the name :)
+        // keep track of the concerned module for module settings
+        // TODO: the concerned module is currently hiding in the third part of the data store name :)
         list($fixed1,$fixed2,$modid) = explode('_',$name);
         if (empty($modid)) {
             $modid = xarMod::getRegID(xarMod::getName());
@@ -32,11 +32,12 @@ class Dynamic_UserSettings_DataStore extends Dynamic_DataStore // Consider inher
         }
     }
 
-    function getItem($args)
+    function getItem($args = array())
     {
         if (empty($args['itemid'])) {
-            // default is the current user (if any)
-            $itemid = xarUserGetVar('uid');
+            // by default, there's only 1 item here, except if your module has several
+            // itemtypes with different values for the same bunch of settings [like articles :)]
+            $itemid = 0;
         } else {
             $itemid = $args['itemid'];
         }
@@ -46,32 +47,31 @@ class Dynamic_UserSettings_DataStore extends Dynamic_DataStore // Consider inher
             return;
         }
 
-        foreach ($fieldlist as $field) {
-            // get the value from the user variables
-            $value = xarModUserVars::get($this->modname,$field,$itemid);
+        // let's cheat a little bit here, and preload everything :-)
+        xarModVars::load($this->modname);
 
+        foreach ($fieldlist as $field) {
+            // get the value from the module variables
+            // TODO: use $field.$itemid for modules with several itemtypes ? [like articles :)]
+            $value = xarModVars::get($this->modname,$field);
             // set the value for this property
-            if (isset($value)) {
-                $this->fields[$field]->setValue($value);
-            //} else {
-                // use the equivalent module variable as default
-            //    $this->fields[$field]->setValue(xarModVars::get($this->modname,$field));
-            }
+            $this->fields[$field]->setValue($value);
         }
         return $itemid;
     }
 
-    function createItem($args)
+    function createItem($args = array())
     {
-        // There's no difference with updateItem() here, because xarModUserVars:set() handles that
+        // There's no difference with updateItem() here, because xarModVars:set() handles that
         return $this->updateItem($args);
     }
 
-    function updateItem($args)
+    function updateItem($args = array())
     {
         if (empty($args['itemid'])) {
-            // default is the current user (if any)
-            $itemid = xarUserGetVar('uid');
+            // by default, there's only 1 item here, except if your module has several
+            // itemtypes with different values for the same bunch of settings [like articles :)]
+            $itemid = 0;
         } else {
             $itemid = $args['itemid'];
         }
@@ -88,16 +88,17 @@ class Dynamic_UserSettings_DataStore extends Dynamic_DataStore // Consider inher
             if (!isset($value)) {
                 continue;
             }
-            xarModUserVars::set($this->modname,$field,$value,$itemid);
+            xarModVars::set($this->modname,$field,$value);
         }
         return $itemid;
     }
 
-    function deleteItem($args)
+    function deleteItem($args = array())
     {
         if (empty($args['itemid'])) {
-            // default is the current user (if any)
-            $itemid = xarUserGetVar('uid');
+            // by default, there's only 1 item here, except if your module has several
+            // itemtypes with different values for the same bunch of settings [like articles :)]
+            $itemid = 0;
         } else {
             $itemid = $args['itemid'];
         }
@@ -108,7 +109,7 @@ class Dynamic_UserSettings_DataStore extends Dynamic_DataStore // Consider inher
         }
 
         foreach ($fieldlist as $field) {
-            xarModUserVars::delete($this->modname,$field,$itemid);
+            xarModVars::delete($this->modname,$field);
         }
 
         return $itemid;
@@ -116,12 +117,12 @@ class Dynamic_UserSettings_DataStore extends Dynamic_DataStore // Consider inher
 
     function getItems($args = array())
     {
-        // TODO: not supported by xarMod*UserVar
+        // TODO: not supported by xarMod*Var
     }
 
     function countItems($args = array())
     {
-        // TODO: not supported by xarMod*UserVar
+        // TODO: not supported by xarMod*Var
         return 0;
     }
 
