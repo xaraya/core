@@ -10,7 +10,7 @@
                 <xar:mlstring>
                     Sort
                 </xar:mlstring>
-                : 
+                :
             </dt>
                 <xar:if condition="$letter eq ''">
                     <dd class="active">
@@ -60,7 +60,7 @@
                     <xar:mlstring>
                         Show
                     </xar:mlstring>
-                    : 
+                    :
                 </dt>
                 <xar:if condition="$phase ne 'active'">
                     <dd class="active">
@@ -137,9 +137,9 @@
                 <xar:else/>
                     <xar:set name="item_class">'xar-accent'</xar:set>
                 </xar:if>
-                
+
                 <tr class="#$item_class#">
-                <xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
+                <xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminRole',0)">
                     <td>
                         <a href="&xar-modurl-roles-user-display;&amp;uid=#$loop:item.uid#">#xarVarPrepForDisplay($loop:item['name'])#</a>
                     </td>
