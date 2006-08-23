@@ -95,6 +95,11 @@ function dynamicdata_utilapi_import($args)
                     $vars = array('object',xarVarPrepForDisplay($key),$count);
                     throw new DuplicateException($vars,$msg);
                 }
+                // Treat parents where the module is DD differently
+                if ($key == 'parent' && ($object['moduleid'] == 182)) {
+                	$info = xarModAPIFunc('dynamicdata','user','getobjectinfo',array('name' => $value));
+                	$value = $info['itemtype'];
+				}
                 $object[$key] = strtr($value,$specialchars);
             } elseif (preg_match('#<config>#',$line)) {
                 if (isset($object['config'])) {
@@ -141,6 +146,7 @@ function dynamicdata_utilapi_import($args)
             }
 
         } elseif ($what == 'config') {
+                echo $what;exit;
             if (preg_match('#<([^>]+)>(.*)</\1>#',$line,$matches)) {
                 $key = $matches[1];
                 $value = $matches[2];
