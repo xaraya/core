@@ -18,7 +18,7 @@
 function dynamicdata_admin_delete($args)
 {
    extract($args);
- 
+
     if(!xarVarFetch('objectid', 'isset', $objectid, NULL,                               XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('modid',    'id',    $modid,    xarModGetIDFromName('dynamicdata'), XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('itemtype', 'int',   $itemtype, 0,                                  XARVAR_NOT_REQUIRED)) {return;}
@@ -34,7 +34,8 @@ function dynamicdata_admin_delete($args)
                                          'itemtype' => $itemtype,
                                          'join'     => $join,
                                          'table'    => $table,
-                                         'itemid'   => $itemid));
+                                         'itemid'   => $itemid,
+                                         'extend'   => false));
     if (empty($myobject)) return;
 
     if (!empty($noconfirm)) {
@@ -58,7 +59,7 @@ function dynamicdata_admin_delete($args)
         $data = xarModAPIFunc('dynamicdata','admin','menu');
         $data['object'] = & $myobject;
         if ($myobject->objectid == 1) {
-            $mylist = & Dynamic_Object_Master::getObjectList(array('objectid' => $itemid));
+            $mylist = & Dynamic_Object_Master::getObjectList(array('objectid' => $itemid, 'extend' => false));
             if (count($mylist->properties) > 0) {
                 $data['related'] = xarML('Warning : there are #(1) properties and #(2) items associated with this object !', count($mylist->properties), $mylist->countItems());
             }
@@ -78,7 +79,7 @@ function dynamicdata_admin_delete($args)
     // special case for a dynamic object : delete its properties too // TODO: and items
 // TODO: extend to any parent-child relation ?
     if ($myobject->objectid == 1) {
-        $mylist = & Dynamic_Object_Master::getObjectList(array('objectid' => $itemid));
+        $mylist = & Dynamic_Object_Master::getObjectList(array('objectid' => $itemid, 'extend' => false));
         foreach (array_keys($mylist->properties) as $name) {
             $propid = $mylist->properties[$name]->id;
             $propid = Dynamic_Property_Master::deleteProperty(array('itemid' => $propid));
