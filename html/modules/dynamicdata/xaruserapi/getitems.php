@@ -139,7 +139,7 @@ function &dynamicdata_userapi_getitems($args)
                                            'status' => $status));
     if (!isset($object) || empty($object->objectid)) return $nullreturn;
 
-	if (!isset($object)) return $nullreturn;
+    if (!isset($object)) return $nullreturn;
     // $items[$itemid]['fields'][$name]['value'] --> $items[$itemid][$name] now
 
     if (!empty($getobject)) {

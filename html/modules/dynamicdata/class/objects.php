@@ -181,7 +181,7 @@ class Dynamic_Object_Master
 
         // add ancestors' properties to this object if required
         // the default is to add the fields
-        if ((!isset($args['extend']) || ($args['extend'] != 'false'))) {
+        if ((!isset($args['extend']) || ($args['extend'] != false))) {
             if (!empty($this->objectid)) {
                 $ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $this->objectid, 'top' => false));
             } else {
@@ -744,7 +744,8 @@ class Dynamic_Object_Master
         $mylist =& Dynamic_Object_Master::getObjectList(array('objectid' => $args['objectid'],
                                                               'moduleid' => $args['moduleid'],
                                                               'itemtype' => $args['itemtype'],
-                                                              'classname' => $args['classname']));
+                                                              'classname' => $args['classname'],
+                                                              'extend' => false));
         if (empty($mylist)) return;
 
         // TODO: delete all the (dynamic ?) data for this object

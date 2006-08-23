@@ -90,6 +90,7 @@ function &dynamicdata_userapi_getitem($args)
                                        'join'      => $join,
                                        'table'     => $table,
                                        'status'    => $status));
+    if (!isset($object) || empty($object->objectid)) return $nullreturn;
 
     // Get the item
     if (!empty($itemid)) $object->getItem();
