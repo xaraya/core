@@ -83,8 +83,6 @@ function &dynamicdata_userapi_getitem($args)
     // make some database table available via DD
     if (empty($table)) $table = '';
 
-    $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
-//    $objectarray = $itemsarray = array();
     $object =& Dynamic_Object_Master::getObject(array('moduleid'  => $modid,
                                        'itemtype'  => $itemtype,
                                        'itemid'    => $itemid,
@@ -92,12 +90,6 @@ function &dynamicdata_userapi_getitem($args)
                                        'join'      => $join,
                                        'table'     => $table,
                                        'status'    => $status));
-    if (!isset($object) || empty($object->objectid)) return $nullreturn;
-    foreach ($tree as $branch) {
-        $newobject = & Dynamic_Object_Master::getObjectList(array('moduleid'  => $modid,
-                                               'itemtype'  => $branch['itemtype']));
-        $object->add($newobject);
-    }
 
     // Get the item
     if (!empty($itemid)) $object->getItem();

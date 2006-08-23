@@ -181,7 +181,7 @@ class Dynamic_Object_Master
 
         // add ancestors' properties to this object if required
         // the default is to add the fields
-        if ((empty($args['extend']) || ($args['extend'] != 'false'))) {
+        if ((!isset($args['extend']) || ($args['extend'] != 'false'))) {
             if (!empty($this->objectid)) {
                 $ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $this->objectid, 'top' => false));
             } else {
