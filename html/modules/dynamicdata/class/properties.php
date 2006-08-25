@@ -109,6 +109,8 @@ class Dynamic_Property_Master
      * @param $args['name'] the name for the dynamic property
      * @param $args['type'] the type of dynamic property
      * @param $args['label'] the label for the dynamic property
+     * @param $args['source'] the source for the dynamic property
+     * @param $args['datastore'] the datastore for the dynamic property
      * ...
      * @param $objectref a reference to the object to add this property to
      */
