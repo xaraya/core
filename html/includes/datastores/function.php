@@ -30,7 +30,7 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
 // TODO: support different functions for the different methods,
 //       and/or pass an 'action' argument to the function, and/or...
 
-    function getItem($args)
+    function getItem($args = array())
     {
         $modid = $args['modid'];
         $itemtype = $args['itemtype'];
@@ -84,7 +84,7 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
     }
 
     /* fetch a list of the values for all items in the datastore */
-    function getItems($args)
+    function getItems($args = array())
     {   
         /* don't bother if there are no item ids set */
         if (empty($this->_itemids)) {

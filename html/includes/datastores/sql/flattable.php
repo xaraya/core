@@ -10,7 +10,7 @@
  * Parent class is SQL datastore
  *
  */
-sys::import('datastores.Dynamic_SQL_DataStore');
+sys::import('datastores.sql');
 
 /**
  * Class for flat table
@@ -19,13 +19,12 @@ sys::import('datastores.Dynamic_SQL_DataStore');
  */
 class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 {
-
     /**
      * Get the field name used to identify this property (we use the name of the table field here)
      */
     function getFieldName(&$property)
     {
-        if (!is_object($property)) die($property);
+        if (!is_object($property)) debug($property); // <-- this throws an exception
         // support [database.]table.field syntax
         if (preg_match('/^(.+)\.(\w+)$/', $property->source, $matches)) {
             $table = $matches[1];
@@ -34,7 +33,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         }
     }
 
-    function getItem($args)
+    function getItem($args = array())
     {
         $itemid = $args['itemid'];
         $table = $this->name;
@@ -79,8 +78,6 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             return;
         }
 
-        $dbconn =& xarDBGetConn();
-
         $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
                     FROM " . join(', ', $tables) . $more . "
                    WHERE $itemidfield = ?";
@@ -94,7 +91,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             }
         }
 
-        $result =& $dbconn->Execute($query,array((int)$itemid),ResultSet::FETCHMODE_NUM);
+        $result =& $this->db->Execute($query,array((int)$itemid),ResultSet::FETCHMODE_NUM);
 
         if ($result->EOF) {
             return;
@@ -121,7 +118,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
      * @return bool true on success, false on failure
      * @throws BadParameterException
      **/
-    function createItem($args)
+    function createItem($args = array())
     {
         $itemid = $args['itemid'];
         $table = $this->name;
@@ -137,12 +134,10 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             return;
         }
 
-        $dbconn =& xarDBGetConn();
-
         // TODO: this won't work for objects with several static tables !
         if (empty($itemid)) {
             // get the next id (or dummy)
-            $itemid = $dbconn->GenId($table);
+            $itemid = $this->db->GenId($table);
             $checkid = true;
         } else {
             $checkid = false;
@@ -177,11 +172,11 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             $join = ', ';
         }
         $query .= " )";
-        $result = & $dbconn->Execute($query,$bindvars);
+        $result = & $this->db->Execute($query,$bindvars);
 
         // get the last inserted id
         if ($checkid) {
-            $itemid = $dbconn->PO_Insert_ID($table, $itemidfield);
+            $itemid = $this->db->PO_Insert_ID($table, $itemidfield);
         }
 
         if (empty($itemid)) {
@@ -192,7 +187,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         return $itemid;
     }
 
-    function updateItem($args)
+    function updateItem($args = array())
     {
         $itemid = $args['itemid'];
         $table = $this->name;
@@ -207,8 +202,6 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         if (count($fieldlist) < 1) {
             return;
         }
-
-        $dbconn =& xarDBGetConn();
 
         $query = "UPDATE $table ";
         $join = 'SET ';
@@ -228,12 +221,12 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         }
         $query .= " WHERE $itemidfield=?";
         $bindvars[] = (int)$itemid;
-        $dbconn->Execute($query,$bindvars);
+        $this->db->Execute($query,$bindvars);
 
         return $itemid;
     }
 
-    function deleteItem($args)
+    function deleteItem($args = array())
     {
         $itemid = $args['itemid'];
         $table = $this->name;
@@ -244,10 +237,8 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             return;
         }
 
-        $dbconn =& xarDBGetConn();
-
         $query = "DELETE FROM $table WHERE $itemidfield = ?";
-        $dbconn->Execute($query,array((int)$itemid));
+        $this->db->Execute($query,array((int)$itemid));
 
         return $itemid;
     }
@@ -341,8 +332,6 @@ if (empty($itemidfield)) {
     $isgrouped = 1;
 }
 */
-        $dbconn =& xarDBGetConn();
-
         if ($isgrouped) {
             $query = "SELECT " . join(', ', $newfields) . "
                         FROM " . join(', ', $tables) . $more . " ";
@@ -406,15 +395,15 @@ if (empty($itemidfield)) {
 
         if ($numitems > 0) {
             if (!empty($this->cache)) {
-                $result =& $dbconn->CacheSelectLimit($this->cache, $query, $numitems, $startnum-1, $bindvars);
+                $result =& $this->db->CacheSelectLimit($this->cache, $query, $numitems, $startnum-1, $bindvars);
             } else {
-                $result = $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
+                $result = $this->db->SelectLimit($query, $numitems, $startnum-1,$bindvars);
             }
         } else {
             if (!empty($this->cache)) {
-                $result =& $dbconn->CacheExecute($this->cache, $query, $bindvars);
+                $result =& $this->db->CacheExecute($this->cache, $query, $bindvars);
             } else {
-                $result =& $dbconn->Execute($query,$bindvars);
+                $result =& $this->db->Execute($query,$bindvars);
             }
         }
 
@@ -474,9 +463,7 @@ if (empty($itemidfield)) {
             return;
         }
 
-        $dbconn =& xarDBGetConn();
-
-        if($dbconn->databaseType == 'sqlite') {
+        if($this->db->databaseType == 'sqlite') {
             $query = "SELECT COUNT(*)
                       FROM (SELECT DISTINCT $itemidfield FROM $table "; // WATCH OUT, STILL UNBALANCED
         } else {
@@ -502,11 +489,11 @@ if (empty($itemidfield)) {
         }
 
         // TODO: GROUP BY, LEFT JOIN, ... ? -> cfr. relationships
-        if($dbconn->databaseType == 'sqlite') $query.=")";
+        if($this->db->databaseType == 'sqlite') $query.=")";
         if (!empty($this->cache)) {
-            $result =& $dbconn->CacheExecute($this->cache,$query,$bindvars);
+            $result =& $this->db->CacheExecute($this->cache,$query,$bindvars);
         } else {
-            $result =& $dbconn->Execute($query,$bindvars);
+            $result =& $this->db->Execute($query,$bindvars);
         }
         if ($result->EOF) return;
 
@@ -529,8 +516,7 @@ if (empty($itemidfield)) {
             return $this->primary;
         }
 
-        $dbconn =& xarDBGetConn();
-        $dbInfo =& $dbconn->getDatabaseInfo();
+        $dbInfo =& $this->db->getDatabaseInfo();
         $tblInfo=& $dbInfo->getTable($this->name);
         $keyInfo=& $tblInfo->getPrimaryKey();
 
@@ -579,8 +565,6 @@ if (empty($itemidfield)) {
                 $itemids = array();
             }
 
-            $dbconn =& xarDBGetConn();
-
             $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
                         FROM $table ";
 
@@ -615,9 +599,9 @@ if (empty($itemidfield)) {
             }
 
             if ($numitems > 0) {
-                $result =& $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars,ResultSet::FETCHMODE_NUM);
+                $result =& $this->db->SelectLimit($query, $numitems, $startnum-1,$bindvars,ResultSet::FETCHMODE_NUM);
             } else {
-                $result =& $dbconn->Execute($query,$bindvars,ResultSet::FETCHMODE_NUM);
+                $result =& $this->db->Execute($query,$bindvars,ResultSet::FETCHMODE_NUM);
             }
             $temp['result'] =& $result;
         }

@@ -18,6 +18,11 @@ function mail_cliapi_process($args)
     // TODO: Guess ;-)
     if(isset($argv[2]) && $argv[2]=='-u') $user = $argv[3];
     if(isset($argv[4]) && $argv[4]=='-p') $pass = $argv[5];
+    if(!isset($user) or !isset($pass)) 
+    {
+        echo "Usage: mail -u <user> -p<pass> [mailcontent]\n";
+        return 1;
+    }
     if(!xarUserLogin($user,$pass)) {
         echo "Authentication failed\n";
         return 1;

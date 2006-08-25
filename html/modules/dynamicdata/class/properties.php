@@ -259,22 +259,22 @@ class Dynamic_Property_Master
  * @subpackage dynamicdata module
  * @todo is this abstract?
  * @todo the visibility of most of the attributes can probably be protected
- */
+**/
 class Dynamic_Property
 {
     // Attributes for registration
-    public $id = 0;
-    public $name = 'propertyName';
-    public $label = 'Property Label';
-    public $type = 1;
-    public $default = '';
-    public $source = 'dynamic_data';
-    public $status = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
-    public $order = 0;
-    public $format = '0';
-    public $requiresmodule = ''; // this module must be available before this property is enabled (optional)
-    public $aliases = '';        // If the same property class is reused directly with just different base info, supply the alternate base properties here (optional)
-    public $filepath   = 'modules/dynamicdata/xarproperties';                     // where is our class for it?
+    public $id             = 0;
+    public $name           = 'propertyName';
+    public $label          = 'Property Label';
+    public $type           = 1;
+    public $default        = '';
+    public $source         = 'dynamic_data';
+    public $status         = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
+    public $order          = 0;
+    public $format         = '0'; //<-- eh?
+    public $requiresmodule = '';  // this module must be available before this property is enabled (optional)
+    public $aliases        = '';  // If the same property class is reused directly with just different base info, supply the alternate base properties here (optional)
+    public $filepath       = 'modules/dynamicdata/xarproperties';         // where is our class for it?
 
     // Attributes for runtime
     public $template = '';
@@ -435,7 +435,7 @@ class Dynamic_Property
     function showInput($data = array())
     {
         if (($this->status & Dynamic_Property_Master::DD_DISPLAYMASK) == Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN)
-        	return $this->showHidden($data);
+            return $this->showHidden($data);
 
         // Our common items we need
         if(!isset($data['name']))     $data['name']     = 'dd_'.$this->id;
@@ -463,7 +463,7 @@ class Dynamic_Property
     function showOutput($data = array())
     {
         if (($this->status & Dynamic_Property_Master::DD_DISPLAYMASK) == Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN)
-        	return $this->showHidden($data);
+            return $this->showHidden($data);
 
         $data['id']   = $this->id;
         $data['name'] = $this->name;
@@ -487,7 +487,7 @@ class Dynamic_Property
     function showLabel($args = array())
     {
         if (($this->status & Dynamic_Property_Master::DD_DISPLAYMASK) == Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN)
-        	return $this->showHidden($args);
+            return $this->showHidden($args);
 
         if (empty($args)) {
 

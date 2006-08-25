@@ -441,8 +441,8 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
         break;
     }
 
-    if (xarVarIsCached($cacheCollection, $cacheName)) {
-        $value = xarVarGetCached($cacheCollection, $cacheName);
+    if (xarCore::isCached($cacheCollection, $cacheName)) {
+        $value = xarCore::getCached($cacheCollection, $cacheName);
         if (!isset($value)) {
             return;
         } else {
@@ -453,7 +453,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
             }
             return $value;
         }
-    } elseif (xarVarIsCached($cacheCollection, 0)) {
+    } elseif (xarCore::isCached($cacheCollection, 0)) {
         //variable missing.
         return;
     }
@@ -462,8 +462,8 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
     // TODO: caching for the other types
     switch($type) {
     case 'modvar':
-        if (xarVarIsCached('Mod.GetVarsByModule', $modName)) return;
-        if (xarVarIsCached('Mod.GetVarsByName', $cacheName)) return;
+        if (xarCore::isCached('Mod.GetVarsByModule', $modName)) return;
+        if (xarCore::isCached('Mod.GetVarsByName', $cacheName)) return;
         break;
     default:
         break;
@@ -519,14 +519,14 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
             while ($result->next()) {
                 $value = $result->get(2); // Unlike creole->set this does *not* unserialize/escape automatically
                 if($type == 'configvar') $value = unserialize($value);
-                xarVarSetCached($cacheCollection, $result->getString(1), $value);
+                xarCore::setCached($cacheCollection, $result->getString(1), $value);
             }
             //Special value to tell this select has already been run, any
             //variable not found now on is missing
-             xarVarSetCached($cacheCollection, 0, true);
+             xarCore::setCached($cacheCollection, 0, true);
             //It should be here!
-            if (xarVarIsCached($cacheCollection, $cacheName)) {
-                $value = xarVarGetCached($cacheCollection, $cacheName);
+            if (xarCore::isCached($cacheCollection, $cacheName)) {
+                $value = xarCore::getCached($cacheCollection, $cacheName);
             } else {
                 return;
             }
@@ -535,7 +535,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $itemid = NULL, $prep = N
             // We finally found it, update the appropriate cache
             $result->next();
             list($value) = $result->getRow();
-            xarVarSetCached($cacheCollection, $cacheName, $value);
+            xarCore::setCached($cacheCollection, $cacheName, $value);
         break;
     }
     $result->Close();
@@ -661,14 +661,14 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
     switch($type) {
         case 'modvar':
             default:
-            xarVarSetCached('Mod.Variables.' . $modName, $name, $value);
+            xarCore::setCached('Mod.Variables.' . $modName, $name, $value);
             break;
         case 'moditemvar':
             $cachename = $itemid . $name;
-            xarVarSetCached('ModItem.Variables.' . $modName, $cachename, $value);
+            xarCore::setCached('ModItem.Variables.' . $modName, $cachename, $value);
             break;
         case 'configvar':
-            xarVarSetCached('Config.Variables', $name, $value);
+            xarCore::setCached('Config.Variables', $name, $value);
             break;
     }
 
@@ -739,14 +739,14 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $itemid = NULL, $type = '
     switch($type) {
         case 'modvar':
             default:
-                xarVarDelCached('Mod.Variables.' . $modName, $name);
+                xarCore::delCached('Mod.Variables.' . $modName, $name);
             break;
         case 'moditemvar':
                 $cachename = $itemid . $name;
-                xarVarDelCached('ModItem.Variables.' . $modName, $cachename);
+                xarCore::delCached('ModItem.Variables.' . $modName, $cachename);
             break;
         case 'configvar':
-                xarVarDelCached('Config.Variables.', $name);
+                xarCore::delCached('Config.Variables.', $name);
             break;
     }
     return true;

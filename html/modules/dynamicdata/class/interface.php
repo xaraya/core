@@ -28,7 +28,7 @@ class Dynamic_Object_Interface
     // main function handling all object method calls (to be handled by the core someday ?)
     public $func = 'main';
 
-    function Dynamic_Object_Interface($args = array())
+    function __construct($args = array())
     {
         // set a specific GUI module for now
         if (!empty($args['urlmodule'])) {
