@@ -181,26 +181,37 @@ class Dynamic_Object_Master
 
         // add ancestors' properties to this object if required
         // the default is to add the fields
-        if ((!isset($args['extend']) || ($args['extend'] != false))) {
-            if (!empty($this->objectid)) {
-                $ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $this->objectid, 'top' => false));
-            } else {
-                $ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('moduleid' => $this->moduleid, 'itemtype' => $this->itemtype, 'top' => true));
-            }
-            // If this is an extended object add the ancestor properties for display purposes
-            if (!empty($ancestors)) {
-                foreach ($ancestors as $ancestor) {
-                    if ($ancestor['objectid']) $this->add($ancestor['objectid']);
-                }
-            }
-        }
+        if ((!isset($args['extend']) || ($args['extend'] != false))) $this->addancestors();
+    }
+
+    /**
+     * Add the ancestors to this object
+     * This is adding the properties and datastores of all the ancestors to this object
+     */
+    private function addancestors($object=null)
+    {
+		if (!empty($this->objectid)) {
+			$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('objectid' => $this->objectid, 'top' => false));
+		} else {
+			$ancestors = xarModAPIFunc('dynamicdata','user','getancestors',array('moduleid' => $this->moduleid, 'itemtype' => $this->itemtype, 'top' => true));
+		}
+		// If this is an extended object add the ancestor properties for display purposes
+		if (!empty($ancestors)) {
+			foreach ($ancestors as $ancestor) {
+				if ($ancestor['objectid']) $this->addobject($ancestor['objectid']);
+			}
+			// Make the primary index its datastore that of the base ancestor
+			$baseancestor = array_shift($ancestors);
+			$baseancestor = Dynamic_Object_Master::getObject(array('objectid' => $baseancestor['objectid']));
+			$this->primary = $baseancestor->primary;
+		}
     }
 
     /**
      * Add one object to another
-     * This is basically adding the properties
+     * This is basically adding the properties and datastores from one object to another
      */
-    function add($object=null)
+    private function addobject($object=null)
     {
         if (is_numeric($object)) {
             $object =& Dynamic_Object_Master::getObject(array('objectid' => $object));
@@ -213,14 +224,17 @@ class Dynamic_Object_Master
             if (isset($this->properties[$newproperty->name])) continue;
             $args = array('name'  => $newproperty->name,
                           'type'  => $newproperty->type,
-                          'label' => $newproperty->label);
+                          'label' => $newproperty->label,
+                          'source' => $newproperty->source,
+                          'datastore' => $newproperty->datastore);
+            $this->addProperty($args);
             if (!isset($this->datastores[$newproperty->datastore])) {
                 $newstore = $this->property2datastore($newproperty);
                 $this->addDatastore($newstore[0],$newstore[1]);
             }
-            $newproperty->_items =& $this->items;
-            $this->datastores[$newproperty->datastore]->addField($newproperty);
-            $this->addProperty($args);
+            $this->datastores[$newproperty->datastore]->addField($this->properties[$args['name']]);
+// Is this stuff needed?
+//            $newproperty->_items =& $this->items;
 //                  $this->fieldlist[] = $newproperty->name;
         }
     }
@@ -406,6 +420,8 @@ class Dynamic_Object_Master
      * @param $args['name'] the name for the dynamic property (required)
      * @param $args['type'] the type of dynamic property (required)
      * @param $args['label'] the label for the dynamic property
+     * @param $args['datastore'] the datastore for the dynamic property
+     * @param $args['source'] the source for the dynamic property
      * @param $args['id'] the id for the dynamic property
      * ...
      */
@@ -1179,6 +1195,8 @@ class Dynamic_Object extends Dynamic_Object_Master
             } else {
                 $value = $this->properties[$this->primary]->getValue();
 
+            	if ($this->primary == 'cid') {
+            	}
                 // we already have an itemid value in the properties
                 if (!empty($value)) {
                     $this->itemid = $value;
