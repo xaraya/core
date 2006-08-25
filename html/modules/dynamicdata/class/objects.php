@@ -420,6 +420,8 @@ class Dynamic_Object_Master
      * @param $args['name'] the name for the dynamic property (required)
      * @param $args['type'] the type of dynamic property (required)
      * @param $args['label'] the label for the dynamic property
+     * @param $args['datastore'] the datastore for the dynamic property
+     * @param $args['source'] the source for the dynamic property
      * @param $args['id'] the id for the dynamic property
      * ...
      */

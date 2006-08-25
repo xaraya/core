@@ -178,7 +178,7 @@ class Dynamic_DataStore
     /**
      * Get the field name used to identify this property (by default, the property name itself)
      */
-    function getFieldName(&$property)
+    function getFieldName($property)
     {
         return $property->name;
     }
@@ -186,7 +186,7 @@ class Dynamic_DataStore
     /**
      * Add a field to get/set in this data store, and its corresponding property
      */
-    function addField(&$property)
+    function addField($property)
     {
         $name = $this->getFieldName(&$property);
         if (!isset($name)) return;
