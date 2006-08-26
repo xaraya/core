@@ -175,9 +175,9 @@ function installer_admin_phase3()
     $data['mysqlextension']           = extension_loaded('mysql');
     $data['pgsqlextension']           = extension_loaded ('pgsql');
     // This is called xsl in PHP5.x Should check for that when php version is 5 or higher
-    $data['xsltextension']            = extension_loaded ('xsl');
-    $data['ldapextension']            = extension_loaded ('ldap');
-    $data['gdextension']              = extension_loaded ('gd');
+   //$data['xsltextension']            = extension_loaded ('xslt');
+   // $data['ldapextension']            = extension_loaded ('ldap');
+   // $data['gdextension']              = extension_loaded ('gd');
 
     $data['metRequiredPHPVersion']    = $metRequiredPHPVersion;
     $data['phpVersion']               = PHP_VERSION;
@@ -1442,107 +1442,6 @@ function installer_admin_upgrade2()
     } else {
         $content .= "<p>CSS tags registered successfully, css subsystem is ready to be deployed.</p>";
     }
-
-    // Bug 3164, store locale in ModUSerVar
-    xarModSetVar('roles', 'locale', '');
-
-  $content .= "<p><strong>Checking <strong>include/properties</strong> directory for moved DD properties</strong></p>";
-    //From 1.0.0rc2 propsinplace was merged and dd propertie began to move to respective modules
-    //Check they don't still exisit in the includes directory  bug 4371
-    // set the array of properties that have moved
-    $ddmoved=array(
-        array('Dynamic_AIM_Property.php',1,'Roles'),
-        array('Dynamic_Affero_Property.php',1,'Roles'),
-        array('Dynamic_Array_Property.php',1,'Base'),
-        array('Dynamic_Categories_Property.php',0,'Categories'),
-        array('Dynamic_CheckboxList_Property.php',1,'Base'),
-        array('Dynamic_CheckboxMask_Property.php',1,'Base'),
-        array('Dynamic_Checkbox_Property.php',1,'Base'),
-        array('Dynamic_Combo_Property.php',1,'Base'),
-        array('Dynamic_CommentsNumberOf_Property.php',0,'Comments'),
-        array('Dynamic_Comments_Property.php',0,'Comments'),
-        array('Dynamic_CountryList_Property.php',1,'Base'),
-        array('Dynamic_DateFormat_Property.php',1,'Base'),
-        array('Dynamic_Email_Property.php',1,'Roles'),
-        array('Dynamic_ExtendedDate_Property.php',1,'Base'),
-        array('Dynamic_FileUpload_Property.php',1,'Roles'),
-        array('Dynamic_FloatBox_Property.php',1,'Roles'),
-        array('Dynamic_HTMLArea_Property.php',0,'HTMLArea'),
-        array('Dynamic_HTMLPage_Property.php',1,'Base'),
-        array('Dynamic_HitCount_Property.php',0,'HitCount'),
-        array('Dynamic_ICQ_Property.php',1,'Roles'),
-        array('Dynamic_ImageList_Property.php',1,'Roles'),
-        array('Dynamic_Image_Property.php',1,'Roles'),
-        array('Dynamic_LanguageList_Property.php',1,'Base'),
-        array('Dynamic_LogLevel_Property.php',0,'Logconfig'),
-        array('Dynamic_MSN_Property.php',1,'Roles'),
-        array('Dynamic_MultiSelect_Property.php',1,'Base'),
-        array('Dynamic_NumberBox_Property.php',1,'Base'),
-        array('Dynamic_NumberList_Property.php',1,'Base'),
-        array('Dynamic_PassBox_Property.php',1,'Base'),
-        array('Dynamic_PayPalCart_Property.php',0,'Paypalsetup'),
-        array('Dynamic_PayPalDonate_Property.php',0,'Paypalsetup'),
-        array('Dynamic_PayPalNow_Property.php',0,'Paypalsetup'),
-        array('Dynamic_PayPalSubscription_Property.php',0,'Paypalsetup'),
-        array('Dynamic_RadioButtons_Property.php',1,'Base'),
-        array('Dynamic_Rating_Property.php',0,'Ratings'),
-        array('Dynamic_Select_Property.php',0,'Base'),
-        array('Dynamic_SendToFriend_Property.php',0,'Recommend'),
-        array('Dynamic_StateList_Property.php',1,'Base'),
-        array('Dynamic_StaticText_Property.php',1,'Base'),
-        array('Dynamic_Status_Property.php',0,'Articles'),
-        array('Dynamic_TextArea_Property.php',1,'Base'),
-        array('Dynamic_TextBox_Property.php',1,'Base'),
-        array('Dynamic_TextUpload_Property.php',1,'Base'),
-        array('Dynamic_TinyMCE_Property.php',0,'TinyMCE'),
-        array('Dynamic_URLIcon_Property.php',1,'Base'),
-        array('Dynamic_URLTitle_Property.php',1,'Base'),
-        array('Dynamic_URL_Property.php',1,'Roles'),
-        array('Dynamic_Upload_Property.php',0,'Uploads'),
-        array('Dynamic_Yahoo_Property.php',1,'Roles'),
-        array('Dynamic_Calendar_Property.php',1,'Base'),
-        array('Dynamic_TColorPicker_Property.php',1,'Base'),
-        array('Dynamic_TimeZone_Property.php',1,'Base'),
-        array('Dynamic_Module_Property.php',1,'Modules'),
-        array('Dynamic_GroupList_Property.php',1,'Roles'),
-        array('Dynamic_UserList_Property.php',1,'Roles'),
-        array('Dynamic_Username_Property.php',1,'Roles'),
-        array('Dynamic_DataSource_Property.php',1,'DynamicData'),
-        array('Dynamic_FieldStatus_Property.php',1,'DynamicData'),
-        array('Dynamic_FieldType_Property.php',1,'DynamicData'),
-        array('Dynamic_Hidden_Property.php',1,'Base'),
-        array('Dynamic_ItemID_Property.php',1,'DynamicData'),
-        array('Dynamic_ItemType_Property.php',1,'DynamicData'),
-        array('Dynamic_Object_Property.php',1,'DynamicData'),
-        array('Dynamic_SubForm_Property.php',1,'DynamicData'),
-        array('Dynamic_Validation_Property.php',1,'DynamicData')
-    );
-    //set the array to hold properties that have not moved and should do!
-    $ddtomove=array();
-
-    //Check the files in the includes/properties dir against the initial array
-    $oldpropdir='includes/properties';
-    $var = is_dir($oldpropdir);
-    $handle=opendir($oldpropdir);
-    $skip_array = array('.','..','SCCS','index.htm','index.html');
-
-    if ($var) {
-             while (false !== ($file = readdir($handle))) {
-                  // check the  dd file array and add to the ddtomove array if the file exists
-                  if (!in_array($file,$skip_array))  {
-
-                     foreach ($ddmoved as $key=>$propname) {
-                          if ($file == $ddmoved[$key][0]){
-                            $ddtomove[]=$ddmoved[$key];
-                           }
-                    }
-                  }
-            }
-            closedir($handle);
-    }
-
-
-
 
     $content .= "<p><strong>Updating Roles and Authsystem for changes in User Login and Authentication</strong></p>";
 

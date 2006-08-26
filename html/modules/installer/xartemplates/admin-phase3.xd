@@ -1,6 +1,18 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="active_step">3</xar:set>
-
+<xar:set name="successtitle">
+    <xar:mlstring>SUCCESS</xar:mlstring>
+</xar:set>
+<xar:set name="failuretitle">
+    <xar:mlstring>
+        FAILURE
+    </xar:mlstring>
+</xar:set>
+<xar:set name="warningtitle">
+    <xar:mlstring>
+        CAUTION
+    </xar:mlstring>
+</xar:set>
 <div id="install">
     <xar:template file="status" />
     <h2><xar:mlstring>Capabilities inventory</xar:mlstring></h2>
@@ -19,7 +31,7 @@
     </p>
 
     <h3><xar:mlstring>PHP Settings Check</xar:mlstring></h3>
-    
+
     <form action="install.php" method="post">
         <div>
             <input type="hidden" name="install_language" value="#$language#" />
@@ -113,9 +125,9 @@
                         <xar:ml>
                             <xar:mlstring>
                                 WARNING: Your max_execution_time for a php script is set to #(1) seconds. 30 seconds is
-                                usually sufficient but you may want to increase it for a full distribution install. How much time 
-                                you need will depend on your system and number of modules you choose during this installation. 
-                                If in doubt about your maximum (script) execution time, <strong>do a core only install</strong> 
+                                usually sufficient but you may want to increase it for a full distribution install. How much time
+                                you need will depend on your system and number of modules you choose during this installation.
+                                If in doubt about your maximum (script) execution time, <strong>do a core only install</strong>
                                 and install modules manually later.
                             </xar:mlstring>
                             <xar:mlvar>
@@ -128,9 +140,9 @@
                         <xar:ml>
                             <xar:mlstring>
                                 SUCCESS: Your max_execution_time for a php script is set to #(1) seconds. 30 seconds is
-                                usually sufficient but you may want to increase it for a full distribution install. How much time 
-                                you need will depend on your system and number of modules you choose during this installation. 
-                                If in doubt about your maximum (script) execution time, <strong>do a core only install</strong> 
+                                usually sufficient but you may want to increase it for a full distribution install. How much time
+                                you need will depend on your system and number of modules you choose during this installation.
+                                If in doubt about your maximum (script) execution time, <strong>do a core only install</strong>
                                 and install modules manually later.
                             </xar:mlstring>
                             <xar:mlvar>
@@ -170,13 +182,13 @@
                         </xar:ml>
                     </li>
                 </xar:if>
-            
+
                 <xar:if condition="$cacheIsWritable">
                     <li class="success">
                         <xar:ml>
                             <xar:mlstring>
                                 SUCCESS: The installer can write to the directory #(1)
-                            </xar:mlstring> 
+                            </xar:mlstring>
                             <xar:mlvar>
                                 #$cacheDir#
                             </xar:mlvar>
@@ -188,7 +200,7 @@
                             <xar:mlstring>
                                 ERROR: The installer cannot write to the directory #(1).
                                 Please verify that your webserver has write access to the directory #(2)
-                            </xar:mlstring> 
+                            </xar:mlstring>
                             <xar:mlvar>
                                 #$cacheDir#
                             </xar:mlvar>
@@ -204,7 +216,7 @@
                         <xar:ml>
                             <xar:mlstring>
                                 SUCCESS: The installer can write to the directory #(1)
-                            </xar:mlstring> 
+                            </xar:mlstring>
                             <xar:mlvar>
                                 #$cacheTemplatesDir#
                             </xar:mlvar>
@@ -216,7 +228,7 @@
                             <xar:mlstring>
                                 ERROR: The installer cannot write to the directory #(1).
                                 Please verify that your webserver has write access to the directory #(2)
-                            </xar:mlstring> 
+                            </xar:mlstring>
                             <xar:mlvar>
                                 #$cacheTemplatesDir#
                             </xar:mlvar>
@@ -226,7 +238,7 @@
                         </xar:ml>
                     </li>
                 </xar:if>
-                
+
                 <xar:if condition="$rssTemplatesIsWritable">
                     <li class="success">
                         <xar:ml>
@@ -244,7 +256,7 @@
                             <xar:mlstring>
                                 ERROR: The installer cannot write to the #(1).
                                 Please verify that your webserver has write access to the directory #(2)
-                            </xar:mlstring> 
+                            </xar:mlstring>
                             <xar:mlvar>
                                 #$rssTemplatesDir#
                             </xar:mlvar>
@@ -323,7 +335,7 @@
                                 Please verify that your webserver has write access to the files under the directory: #(1)
                             </xar:mlstring>
                             <xar:mlvar>
-                                #$xmlLanguageDir# 
+                                #$xmlLanguageDir#
                             </xar:mlvar>
                         </xar:ml>
                         <xar:mlstring>
@@ -377,6 +389,7 @@
                        <xar:mlstring>WARNING: PostgreSQL as database will not be available</xar:mlstring>
                    </li>
                 </xar:if>
+                <xar:comment>
                 <xar:if condition="$xsltextension">
                     <li class="success">
                         <xar:mlstring>SUCCESS: The PHP4 XSLT Extension is loaded.</xar:mlstring>
@@ -413,6 +426,7 @@
                         </xar:mlstring>
                     </li>
                 </xar:if>
+                </xar:comment>
             </ul>
             <xar:if condition="$systemConfigIsWritable AND $cacheTemplatesIsWritable AND $cacheIsWritable AND $rssTemplatesIsWritable AND $metMinMemRequirement">
                 <input type="hidden" name="install_phase" id="install_phase" value="4" />
