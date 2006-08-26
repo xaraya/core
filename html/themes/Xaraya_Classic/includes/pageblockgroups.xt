@@ -1,22 +1,14 @@
-<xar:comment>Compose the layout structure based on the available blockgroups</xar:comment>
+<!-- Compose the layout structure based on the available blockgroups -->
 <xar:if condition="!empty($leftblocksgroup) and !empty($rightblocksgroup)">
-    <xar:comment>
-        All three columns layout 
-    </xar:comment>
+    <!-- All three columns layout  -->
     <xar:template file="content_3col" type="theme" />
     <xar:elseif condition="!empty($leftblocksgroup) and empty($rightblocksgroup)" />
-    <xar:comment>
-        Two columns layout - left and center blocksgroups 
-    </xar:comment>
-    <xar:template file="content_2col_lc" type="theme" />
+        <!-- Two columns layout - left and center blocksgroups -->
+        <xar:template file="content_2col_lc" type="theme" />
     <xar:elseif condition="empty($leftblocksgroup) and !empty($rightblocksgroup)" />
-    <xar:comment>
-        Two columns layout - center and right blocksgroups 
-    </xar:comment>
+        <!-- Two columns layout - center and right blocksgroups -->
     <xar:template file="content_2col_cr" type="theme" />
     <xar:else />
-    <xar:comment>
-        One column layout - just center blocksgroup 
-    </xar:comment>
+        <!-- One column layout - just center blocksgroup -->
     <xar:template file="content_1col" type="theme" />
 </xar:if>

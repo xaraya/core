@@ -1,0 +1,29 @@
+<!--
+    Tabs for the Queue section, takes one parameter to decide 
+    which tab should be active.
+    Variables:
+    $active_tab - name of tab which should be active
+-->
+
+<xar:style scope="module" module="base" file="navtabs" />
+<xar:set name="activeclass">''</xar:set>
+<dl class="xar-tabs">
+    <dt class="help" title="#xarML('Queue management areas')#">
+        <xar:mlstring>Queue</xar:mlstring>
+    </dt>
+    <xar:if condition="$active_tab eq 'registration'"><xar:set name="activeclass">'active'</xar:set></xar:if>
+    <dd class="#$activeclass#">
+        <a href="&xar-modurl-mail-admin-view;"><xar:mlstring>Registration</xar:mlstring></a>
+    </dd>
+    <xar:set name="activeclass">''</xar:set>
+    <xar:if condition="$active_tab eq 'status'"><xar:set name="activeclass">'active'</xar:set></xar:if>
+    <dd class="#$activeclass#">
+        <a href="&xar-modurl-mail-admin-qstatus;"><xar:mlstring>Status</xar:mlstring></a>
+    </dd>
+    <xar:set name="activeclass">''</xar:set>
+    <xar:if condition="$active_tab eq 'mapping'"><xar:set name="activeclass">'active'</xar:set></xar:if>
+    <dd class="#$activeclass#">
+        <a href="&xar-modurl-mail-admin-mapping;"><xar:mlstring>Mapping</xar:mlstring></a>
+    </dd>
+
+</dl>

@@ -1,7 +1,5 @@
 <?php
 /**
- * Get the list of active event handlers
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -29,17 +27,21 @@ function modules_adminapi_geteventhandlers()
                              array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
 
     $todo = array();
+    // @todo: this looks familiar, xarEvt.php has the same?
     foreach ($modlist as $mod) {
         $modName = $mod['name'];
         $modDir = $mod['osdirectory'];
         // use the directory here, not the name
         $xarapifile = "modules/{$modDir}/xareventapi.php";
         // try to include the event API for this module
-        $loaded = xarInclude($xarapifile, XAR_INCLUDE_MAY_NOT_EXIST + XAR_INCLUDE_ONCE);
-        if (!$loaded) continue;
-        // function names are all lower-case here
-        $modName = strtolower($modName);
-        $todo[$modName] = $modDir;
+        try {
+            // @todo does this need to be wrapped for multiple inclusion?
+            @include $xarapifile;
+            $modName = strtolower($modName);
+            $todo[$modName] = $modDir;
+        } catch(PHPException $e) {
+            // No harm done, well
+        }
     }
 
     $handlers = array();

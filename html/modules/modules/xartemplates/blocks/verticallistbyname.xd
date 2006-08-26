@@ -1,0 +1,38 @@
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!--
+    this is a simplified version of vertical list template
+    for full comments and examples see file verticallistbycats.xd
+-->
+<ul class="xar-menu-section">
+  <li class="xar-menu-section">
+    <ul class="xar-menu-item">
+      <xar:foreach in="$adminmods" value="$mod" key="$modname">
+        <xar:set name="menuitemclass">'xar-menu-item'</xar:set>
+        <xar:if condition="$mod['features']['modactive']">
+          <xar:set name="menuitemclass">'xar-menu-item-current'</xar:set>
+        </xar:if>
+        <li class="#$menuitemclass#">
+          <xar:if condition="$mod['features']['modactive'] and !$mod['features']['overview']">
+            <a name="activeitem" title="#$mod['features']['label']#">#$mod['features']['label']#</a>
+          <xar:elseif condition="$mod['features']['modactive'] and $mod['features']['overview']" />
+            <a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">#$mod['features']['label']#</a>
+          <xar:else />
+            <a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">#$mod['features']['label']#</a>
+          </xar:if>
+          <!-- Render the menu part -->
+          <xar:template file="menu-part"  subdata="array('mod' =&gt; $mod)"/>
+        </li>
+      </xar:foreach>
+    </ul>
+  </li>
+</ul>
+
+<xar:if condition="$showlogout">
+  <ul class="xar-menu-section">
+    <li class="xar-menu-item">
+      <a title="#xarML('Logout as administrator')#" href="&xar-modurl-modules-admin-confirmlogout;">
+        <xar:mlstring>Admin logout</xar:mlstring>
+      </a> 
+    </li>
+  </ul>
+</xar:if>

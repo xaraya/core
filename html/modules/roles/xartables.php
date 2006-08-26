@@ -10,18 +10,18 @@
  * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
- 
+
 /* Purpose of file:  Table information for roles module
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @access public 
- * @param none $ 
+ * @access public
+ * @param none $
  * @return $xartable array
  * @throws no exceptions
  * @todo nothing
  */
 function roles_xartables()
-{ 
+{
     // Initialise table array
     $xartable = array();
 
@@ -42,10 +42,10 @@ function roles_xartables()
         'date_reg' => $roles . '.xar_date_reg',
         'valcode' => $roles . '.xar_valcode',
         'state' => $roles . '.xar_state',
-        'auth_module' => $roles . '.xar_auth_module'
-        ); 
+        'auth_modid' => $roles . '.xar_auth_modid'
+        );
     // Get the name for the autolinks item table
-    $user_status = xarDBGetSiteTablePrefix() . '_user_status'; 
+    $user_status = xarDBGetSiteTablePrefix() . '_user_status';
     // Set the table name
     $xartable['roles'] = $roles;
     $xartable['rolemembers'] = $rolemembers;
@@ -54,9 +54,9 @@ function roles_xartables()
     $xartable['security_acl'] = $acl;
     $xartable['security_masks'] = $masks;
     $xartable['instances'] = $instances;
-    $xartable['user_status'] = $user_status; 
+    $xartable['user_status'] = $user_status;
     // Return the table information
     return $xartable;
-} 
+}
 
 ?>

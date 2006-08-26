@@ -7,14 +7,14 @@
 
 class xarCache_MemCached_Storage extends xarCache_Storage
 {
-    var $host = 'localhost';
-    var $port = 11211;
-    var $memcache = null;
-    var $persistent = false;
+    public $host = 'localhost';
+    public $port = 11211;
+    public $memcache = null;
+    public $persistent = false;
 
-    function xarCache_MemCached_Storage($args = array())
+    public function __construct($args = array())
     {
-        $this->xarCache_Storage($args);
+        parent::__construct($args);
 
         if (!empty($args['host'])) {
             $this->host = $args['host'];
@@ -34,7 +34,7 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         $this->storage = 'memcached';
     }
 
-    function isCached($key = '', $expire = 0, $log = 1)
+    public function isCached($key = '', $expire = 0, $log = 1)
     {
         if (empty($this->memcache)) return false;
 
@@ -48,7 +48,7 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         // we actually retrieve the value here too
         $value = $this->memcache->get($key);
         if ($value) {
-// FIXME: memcached doesn't keep track of modification times !
+            // FIXME: memcached doesn't keep track of modification times !
             //$this->modtime = 0;
             if ($log) $this->logStatus('HIT', $oldkey);
             return true;
@@ -58,7 +58,7 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         }
     }
 
-    function getCached($key = '', $output = 0, $expire = 0)
+    public function getCached($key = '', $output = 0, $expire = 0)
     {
         if (empty($this->memcache)) return;
 
@@ -78,7 +78,7 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         }
     }
 
-    function setCached($key = '', $value = '', $expire = 0)
+    public function setCached($key = '', $value = '', $expire = 0)
     {
         if (empty($this->memcache)) return;
 
@@ -100,7 +100,7 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         }
     }
 
-    function delCached($key = '')
+    public function delCached($key = '')
     {
         if (empty($this->memcache)) return;
 
@@ -110,10 +110,10 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         $this->memcache->delete($key);
     }
 
-    function flushCached($key = '')
+    public function flushCached($key = '')
     {
-    // CHECKME: we can't really flush part of the cache here, unless we
-    //          keep track of all cache entries, perhaps ?
+        // CHECKME: we can't really flush part of the cache here, unless we
+        //          keep track of all cache entries, perhaps ?
 
         // check the cache size and clear the lockfile set by sizeLimitReached()
         $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
@@ -122,7 +122,7 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         }
     }
 
-    function cleanCached($expire = 0)
+    public function cleanCached($expire = 0)
     {
         // we rely on the expire value here
 
@@ -133,7 +133,7 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         }
     }
 
-    function getCacheSize($countitems = false)
+    public function getCacheSize($countitems = false)
     {
         if (empty($this->memcache)) return;
 
@@ -147,7 +147,7 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         return $stats['bytes'];
     }
 
-    function saveFile($key = '', $filename = '')
+    public function saveFile($key = '', $filename = '')
     {
         if (empty($this->memcache)) return;
 
@@ -156,7 +156,7 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         if (!empty($this->code)) {
             $key .= '-' . $this->code;
         }
-    // FIXME: avoid getting the value for the 2nd/3rd time here
+        // FIXME: avoid getting the value for the 2nd/3rd time here
         $value = $this->memcache->get($key);
         if (empty($value)) return;
 
@@ -176,7 +176,7 @@ class xarCache_MemCached_Storage extends xarCache_Storage
         }
     }
 
-    function getCachedList()
+    public function getCachedList()
     {
         return array();
     }

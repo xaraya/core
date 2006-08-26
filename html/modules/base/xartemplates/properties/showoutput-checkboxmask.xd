@@ -1,13 +1,14 @@
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:if condition="$numOptionsSelected eq 0">
-    <em>None Specified</em>
+  <em><xar:mlstring>None Specified</xar:mlstring></em>
+<xar:else />
+  <xar:foreach in="$options" value="$option">
+    <xar:if condition="$option['checked']">
+      <strong>#$option['id']#</strong>- #$option['name']#
+      <br />
     <xar:else />
-    <xar:foreach in="$options" value="$option">
-        <xar:if condition="$option['checked']">
-        <strong>#$option['id']#</strong>- #$option['name']#
-        <br />
-        <xar:else />
-        <xar:comment>#$option['id']# - #$option['name']#
-        <br /></xar:comment></xar:if>
-    </xar:foreach>
+      <!-- #$option['id']# - #$option['name']#
+      <br /> --> 
+    </xar:if>
+  </xar:foreach>
 </xar:if>

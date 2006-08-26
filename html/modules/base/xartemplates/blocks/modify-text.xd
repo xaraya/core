@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
 <div class="xar-form-input-wrapper">
     <label for="expire#$blockid#" title="#xarML('Select when the block will expire, if at all.')#" class="xar-form-label">

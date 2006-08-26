@@ -63,7 +63,7 @@ function roles_userapi_getall($args)
                 'roles', 'user', 'get',
                 array(
                     (is_numeric($group) ? 'uid' : 'name') => $group,
-                    'type' => 1
+                    'type' => ROLES_GROUPTYPE
                 )
             );
             if (isset($group['uid']) && is_numeric($group['uid'])) {
@@ -139,7 +139,7 @@ function roles_userapi_getall($args)
     }
 
     // Return only users (not groups).
-    $where_clause[] = 'roletab.xar_type = 0';
+    $where_clause[] = 'roletab.xar_type = ' . ROLES_USERTYPE;
 
     // Add the where-clause to the query.
     $query .= ' WHERE ' . implode(' AND ', $where_clause);
@@ -173,13 +173,12 @@ function roles_userapi_getall($args)
             $result = $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
         }
     }
-    if (!$result) {return;}
 
     // Put users into result array
     $roles = array();
     for (; !$result->EOF; $result->MoveNext()) {
         list($uid, $uname, $name, $email, $pass, $state, $date_reg) = $result->fields;
-        if (xarSecurityCheck('ReadRole', 0, 'All', "$uname:All:$uid")) {
+        if (xarSecurityCheck('ReadRole', 0, 'Roles', "$uname")) {
             if (!empty($uidlist)) {
                 $roles[$uid] = array(
                     'uid'       => (int) $uid,
@@ -201,7 +200,7 @@ function roles_userapi_getall($args)
                     'date_reg'  => $date_reg
                 );
             }
-        } elseif (xarSecurityCheck('ViewRoles', 0, 'All', "$uname:All:$uid")) {
+        } elseif (xarSecurityCheck('ViewRoles', 0, 'Roles', "$uname")) {
             // If we only have overview privilege, then supply more restricted information.
             if (!empty($uidlist)) {
                 $roles[$uid] = array(

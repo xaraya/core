@@ -1,0 +1,44 @@
+#!/usr/bin/php5
+<?php
+// Prototype to dump a database in XML format according to the schema
+// defined in this directory. 
+
+/* We need a (fake) ip address to run xar */
+putenv("REMOTE_ADDR=127.0.0.1");
+$user = 'Admin';
+$pass = '12345';
+$root = '/var/mt/xar/core/core.2.x';
+$tpl  = "$root/tests/xml/schemas/ddl/db2xml.xd";
+/* End configurable stuff */
+
+/* Make sure we're in the docroot */
+chdir("$root/html");
+include 'includes/xarCore.php';
+xarCoreInit(XARCORE_SYSTEM_ALL);
+
+/* Make sure we handle boney instead of fancy */
+set_exception_handler(array('ExceptionHandlers','bone'));
+/* Authenticate */
+if(!xarUserLogin($user,$pass)) {
+    echo "Authentication failed\n";
+    return 1;
+}
+
+// For now hardcoded, expose on the cmdline later
+$dsnArgs = array(
+    'databaseType'  =>  'mysql',
+    'databaseHost'  =>  'dbserver.hsdev.com',
+    'databaseName'  =>  'core2x',
+    'userName'      =>  'xardbconn',
+    'password'      =>  '<!internal>'
+    );
+$dbconn = xarDBNewConn($dsnArgs);
+$dbInfo = $dbconn->getDatabaseInfo();   // DatabaseInfo object
+$tplData = array(
+    'dbname' => $dbInfo->getName(),     // string
+    'tables' => $dbInfo->getTables());  // array of TableInfo objects
+
+// Produce the xml
+$out = xarTplFile($tpl,$tplData);
+echo $out;
+?>

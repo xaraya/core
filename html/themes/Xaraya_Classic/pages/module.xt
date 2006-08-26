@@ -2,6 +2,16 @@
 <!DOCTYPE blocklayout PUBLIC "-//XAR//DTD BL 1.0 Strict//EN" "http://xaraya.com/bl1/DTD/bl1-strict.dtd">
 <?xar type="page" ?>
 <xar:blocklayout version="1.0" content="text/xml" xmlns:xar="http://xaraya.com/2004/blocklayout">
-<!-- Delivers the main module in XML contenttype for DOM manipulation and remote module content (note the contenttype above) -->
-<xar:module main="true" />
+<div>
+  <!-- 
+    Delivers the main module in XML contenttype for DOM manipulation and remote 
+    module content (note the contenttype above). We make sure we have a root
+    element by surround ourselves with a div to cate for modules which dont 
+    deliver the xar:module space as a valid xml snippet. We really shouldnt, but
+    atm it is unfair to expect this from subparts (entities will also issue a
+    warning or error, since xml has no entities defined by default)
+  -->
+  <xar:module main="true" />
+  <pre id="dojoDebug" style="font-size: small; color: black; border: thin solid; background-color: white;"> </pre>
+</div>
 </xar:blocklayout>
