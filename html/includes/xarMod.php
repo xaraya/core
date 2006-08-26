@@ -149,7 +149,7 @@ function xarMod__shutdown_handler()
  * @param modName The name of the module
  * @param name The name of the variable
  * @return mixed The value of the variable or void if variable doesn't exist
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function xarModGetVar($modName, $name, $prep = NULL)
 {
@@ -169,7 +169,7 @@ function xarModGetVar($modName, $name, $prep = NULL)
  * @param name The name of the variable
  * @param value The value of the variable
  * @return bool true on success
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  * @todo  We could delete the user vars for the module with the new value to save space?
  */
 function xarModSetVar($modName, $name, $value)
@@ -190,7 +190,7 @@ function xarModSetVar($modName, $name, $value)
  * @param modName The name of the module
  * @param name The name of the variable
  * @return bool true on success
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  * @todo Add caching for user variables?
  */
 function xarModDelVar($modName, $name)
@@ -208,7 +208,7 @@ function xarModDelVar($modName, $name)
  * @access public
  * @param modName The name of the module
  * @return bool true on success
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  * @todo Add caching for user variables?
  */
 function xarModDelAllVars($modName)
@@ -278,7 +278,7 @@ function xarModDelAllVars($modName)
  * @param name    The name of the variable to get
  * @param uid     User id for which value is to be retrieved
  * @return mixed Teh value of the variable or void if variable doesn't exist.
- * @raise  DATABASE_ERROR, BAD_PARAM (indirect)
+ * @throws  DATABASE_ERROR, BAD_PARAM (indirect)
  * @see  xarModGetVar
  * @todo Mrb : Add caching?
  */
@@ -316,7 +316,7 @@ function xarModGetUserVar($modName, $name, $uid = NULL, $prep = NULL)
  * @param value   Value to set the variable to.
  * @param uid     User id for which value needs to be set
  * @return bool true on success false on failure
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  * @see xarModSetVar
  * @todo Add caching?
  */
@@ -350,7 +350,7 @@ function xarModSetUserVar($modName, $name, $value, $uid=NULL)
  * @param name    The name of the variable to set
  * @param uid     User id of the user to delete the variable for.
  * @return bool true on success
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  * @see xarModDelVar
  * @todo Add caching?
  */
@@ -384,7 +384,7 @@ function xarModDelUserVar($modName, $name, $uid=NULL)
  * @param modName The name of the module
  * @param name    The name of the variable
  * @return int id identifier for the variable
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  * @see xarModSetUserVar, xarModGetUserVar, xarModDelUserVar
 */
 function xarModGetVarId($modName, $name)
@@ -442,7 +442,7 @@ function xarModGetVarId($modName, $name)
  * @param modName string The name of the module
  * @param type determines theme or module
  * @return string The module registry ID.
- * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
+ * @throws DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
  */
 function xarModGetIDFromName($modName, $type = 'module')
 {
@@ -474,7 +474,7 @@ function xarModGetIDFromName($modName, $type = 'module')
  * @param modRegId string module id
  * @param type determines theme or module
  * @return array of module information
- * @raise DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
+ * @throws DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
  */
 function xarModGetInfo($modRegId, $type = 'module')
 {
@@ -633,7 +633,7 @@ function xarModGetNameFromID($regid)
  * @param modType string - type of functions to load
  * @param flags number - flags to modify function behaviour
  * @return mixed
- * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_NOT_ACTIVE
+ * @throws DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_NOT_ACTIVE
  */
 function xarModPrivateLoad($modName, $modType, $flags = 0, $throwException=1)
 {
@@ -729,7 +729,7 @@ function xarModPrivateLoad($modName, $modType, $flags = 0, $throwException=1)
  * @param modName string - name of module to load
  * @param modType string - type of functions to load
  * @return mixed
- * @raise XAR_SYSTEM_EXCEPTION
+ * @throws XAR_SYSTEM_EXCEPTION
  */
 function xarModLoad($modName, $modType = 'user')
 {
@@ -747,7 +747,7 @@ function xarModLoad($modName, $modType = 'user')
  * @param modName string registered name of the module
  * @param modType string type of functions to load
  * @return mixed true on success
- * @raise XAR_SYSTEM_EXCEPTION
+ * @throws XAR_SYSTEM_EXCEPTION
  */
 function xarModAPILoad($modName, $modType = 'user', $throwException = 1)
 {
@@ -768,7 +768,7 @@ function xarModAPILoad($modName, $modType = 'user', $throwException = 1)
  * @param modDir directory that module is in (if known)
  * @param type determines theme or module
  * @return bool true on success
- * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
+ * @throws DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
  */
 function xarModDBInfoLoad($modName, $modDir = NULL, $type = 'module')
 {
@@ -814,7 +814,7 @@ function xarModDBInfoLoad($modName, $modDir = NULL, $type = 'module')
  * @param funcName string specific function to run
  * @param args array
  * @return mixed The output of the function, or raise an exception
- * @raise BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
+ * @throws BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
  */
 function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
 {
@@ -921,7 +921,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
  * @param args array arguments to pass to the function
  * @param throwException boolean optional flag to throw an exception if the function doesn't exist or not (default = 1)
  * @return mixed The output of the function, or false on failure
- * @raise BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
+ * @throws BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
  */
 function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = array(), $throwException = 1)
 {
@@ -1330,7 +1330,7 @@ function xarModGetDisplayableDescription($modName = NULL, $type = 'module')
  * @param modName string registered name of module
  * @param type determines theme or module
  * @return mixed true if the module is available
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function xarModIsAvailable($modName, $type = 'module')
 {
@@ -1393,7 +1393,7 @@ function xarModIsAvailable($modName, $type = 'module')
  * @param callerItemType string optional item type for the calling module (default = none)
  *        Note : better pass the item type via $extrainfo['itemtype'] if necessary, so that hook functions receive it too
  * @return mixed output from hooks, or null if there are no hooks
- * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
+ * @throws DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
  * @todo <marco> #1 add BAD_PARAM exception
  * @todo <marco> #2 check way of hanlding exception
  * @todo <marco> <mikespub> re-evaluate how GUI / API hooks are handled
@@ -1498,7 +1498,7 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo, $callerM
  * @param action string the hook action
  * @param callerItemType string optional item type for the calling module (default = none)
  * @return array of hook information arrays, or null if database error
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItemType = '')
 {
@@ -1579,7 +1579,7 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
  * @param callerModName string name of the calling module (default = current)
  * @param callerItemType string optional item type for the calling module (default = none)
  * @return mixed true if the module is hooked
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '')
 {
@@ -1662,7 +1662,7 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
  * @param modOSdir the module's directory
  * @param type determines theme or module
  * @return array an array of module file information
- * @raise MODULE_FILE_NOT_EXIST
+ * @throws MODULE_FILE_NOT_EXIST
  * @todo <marco> #1 FIXME: admin or admin capable?
  */
 function xarMod_getFileInfo($modOsDir, $type = 'module')
@@ -1789,7 +1789,7 @@ function xarMod_getFileInfo($modOsDir, $type = 'module')
  * @param modName string the module's name
  * @param type determines theme or module
  * @return mixed an array of base module info on success
- * @raise DATABASE_ERROR, MODULE_NOT_EXIST
+ * @throws DATABASE_ERROR, MODULE_NOT_EXIST
  */
 function xarMod_getBaseInfo($modName, $type = 'module')
 {
@@ -1898,7 +1898,7 @@ function xarMod_getBaseInfo($modName, $type = 'module')
  * @access protected
  * @param modName string
  * @return mixed true on success
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function xarMod_getVarsByModule($modName, $type = 'module')
 {
@@ -1987,7 +1987,7 @@ function xarMod_getVarsByModule($modName, $type = 'module')
  * @access protected
  * @param name string
  * @return mixed true on success
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  * @todo <marco> #1 fetch from site table too ?
  * @todo <mrb> #2 fetch from site table too? (yes i know it's the same, just making you thing twice before changing this)
  */
@@ -2059,7 +2059,7 @@ function xarMod_getVarsByName($varName, $type = 'module')
  * @param modName string name of module to load database definition for
  * @param modOsDir string directory that module is in
  * @return mixed true on success
- * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
+ * @throws DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
  */
 function xarMod__loadDbInfo($modName, $modDir)
 {
@@ -2112,7 +2112,7 @@ function xarMod__loadDbInfo($modName, $modDir)
  * @param modMode integer the module's site mode
  * @param type determines theme or module
  * @return mixed the module's current state
- * @raise DATABASE_ERROR, MODULE_NOT_EXIST
+ * @throws DATABASE_ERROR, MODULE_NOT_EXIST
  * @todo implement the xarMod__setState reciproke
  */
 function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'module')
@@ -2182,7 +2182,7 @@ function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'mo
  * @param hookModType name of the hook type
  * @param hookFuncName name of the hook function
  * @return bool true on success
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function xarModRegisterHook($hookObject,
                            $hookAction,

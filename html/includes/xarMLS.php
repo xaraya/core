@@ -170,7 +170,7 @@ function xarMLSGetCurrentLocale()
  * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string the charset name
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  */
 function xarMLSGetCharsetFromLocale($locale)
 {

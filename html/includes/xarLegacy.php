@@ -275,7 +275,7 @@ function pnModGetName()
  * @access public
  * @param modName registered name of module
  * @return bool true if the module is available, false if not
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function pnModAvailable($modName)
 {
@@ -294,7 +294,7 @@ function pnModAvailable($modName)
  * @param hookModType name of the hook type
  * @param hookFuncName name of the hook function
  * @return bool true on success
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function pnModRegisterHook($hookObject,
                            $hookAction,
@@ -406,7 +406,7 @@ function xarGetStatusMsg()
  * @access private
  * @param block information parameters
  * @return output the block to show
- * @raise BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
+ * @throws BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
 function pnBlock_show($blockInfo)
 {
@@ -418,7 +418,7 @@ function pnBlock_show($blockInfo)
  * @deprec
  * @access private
  * @param group_name the name of the block group
- * @raise BAD_PARAM, DATABASE_ERROR
+ * @throws BAD_PARAM, DATABASE_ERROR
  */
 function pnBlock_groupShow($groupName)
 {
@@ -536,7 +536,7 @@ function pnVarValidate($var, $type, $args = NULL)
  * Gets a list of active modules that have a user interface.
  *
  * @return array array of module information arrays
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function pnModGetUserMods()
 {
@@ -550,7 +550,7 @@ function pnModGetUserMods()
  * Gets a list of active modules that have an administrative interface.
  *
  * @return array array of module information arrays
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function pnModGetAdminMods()
 {
@@ -565,7 +565,7 @@ function pnModGetAdminMods()
  *
  * @access public
  * @param name the name of the variable
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  * @return bool
  */
 function pnConfigDelVar($name)
@@ -852,7 +852,7 @@ function pnUserSetVar($name, $value)
  * @access public
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function pnVarCensor()
 {
@@ -985,7 +985,7 @@ function xarBlockTypeExists($modName, $blockType)
  * get the user's language
  *
  * @return string the name of the user's language
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function xarUserGetLang()
 {

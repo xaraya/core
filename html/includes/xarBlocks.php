@@ -68,7 +68,7 @@ function xarBlocks__shutdown_handler()
  * @access protected
  * @param  array blockinfo block information parameters
  * @return string output the block to show
- * @raise  BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
+ * @throws  BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
  * @todo   this function calls a module function, keep an eye on it
  */
 function xarBlock_render($blockinfo)
@@ -152,7 +152,7 @@ function xarBlock_render($blockinfo)
  * @param string groupname the name of the block group
  * @param string template optional template to apply to all blocks in the group
  * @return string
- * @raise BAD_PARAM, DATABASE_ERROR
+ * @throws BAD_PARAM, DATABASE_ERROR
  */
 function xarBlock_renderGroup($groupname, $template = NULL)
 {
@@ -288,7 +288,7 @@ function xarBlock_renderGroup($groupname, $template = NULL)
  * @param  string args[module] module that owns the block
  * @param  string args[type] module that owns the block
  * @return string
- * @raise  EMPTY_PARAM
+ * @throws  EMPTY_PARAM
  * @todo   this function calls a module function, keep an eye on it.
  */
 function xarBlock_renderBlock($args)

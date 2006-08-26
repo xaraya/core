@@ -38,7 +38,7 @@
  * @param databaseName
  * @param databaseType
  * @return string sql statement for database creation
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
 function xarDBCreateDatabase($databaseName, $databaseType = NULL)
@@ -435,7 +435,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
  * @param name a db index name
  * @param databaseType
  * @return string|false generated sql to drop an index
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
 function xarDBDropIndex($tableName, $index, $databaseType = NULL)

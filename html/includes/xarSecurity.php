@@ -595,7 +595,7 @@ function xarRemoveMasks($module)
  * @param  integer level the level of access required
  * @param  integer userId  user id to check for authorisation
  * @return bool
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId = NULL)
 {
