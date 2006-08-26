@@ -1,0 +1,8 @@
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<xar:if condition="!empty($message)">
+    #$message#
+<xar:else />
+        <xar:foreach in="$output" key="$module" value="$hookoutput">
+            #$hookoutput#
+        </xar:foreach>
+</xar:if>

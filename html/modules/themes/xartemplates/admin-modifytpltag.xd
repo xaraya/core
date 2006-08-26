@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Themes Administration</xar:mlstring></span>
 </div>
@@ -33,7 +33,7 @@
             <input type="text" name="tag_handler" id="tag_handler" value="#$handler#" class="xar-form-textxlong" />
         </div>
 
-        <xar:comment>TODO
+        <!-- TODO
             <div class="xar-form-input-wrapper">
                 <label for="FOR" title="#xarML('Attributes of this tag')#" class="xar-form-label">
                     <xar:mlstring>Attributes:</xar:mlstring>
@@ -47,7 +47,7 @@
                     <input type="text" name="tag_attrname[#$i#]" id="tag_attrname_#$i#" value="#$current_name#" />
                 </xar:for>
             </div>
-        </xar:comment>
+        -->
       </fieldset>
       <fieldset>
 

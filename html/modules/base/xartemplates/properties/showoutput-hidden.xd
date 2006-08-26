@@ -1,3 +1,5 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-
-
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!-- TODO: what does hidden mean? not visible in source or not visible in rendering?
+     Since this template is empty now, we treat hidden as hidden from both rendering and source
+     which can be confusing, given the normal meaning of input type="hidden"
+-->

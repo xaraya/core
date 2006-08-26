@@ -34,14 +34,12 @@ function base_admin_release()
     // allow fopen
     if (!xarFuncIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
     if (!ini_get('allow_url_fopen')) {
-        $msg = xarML('Unable to use fopen to get RSS feeds.');
-        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-        return;
+        throw new ForbiddenOperationException('fopen to get RSS feeds','The current PHP configuration does not allow to use #(1) with an url');
     }
     // Require the xmlParser class
-    require_once('modules/base/xarclass/xmlParser.php');
+    sys::import('modules.base.xarclass.xmlParser');
     // Require the feedParser class
-    require_once('modules/base/xarclass/feedParser.php');
+    sys::import('modules.base.xarclass.feedParser');
     // Check and see if a feed has been supplied to us.
     // Need to change the url once release module is moved to
     $feedfile = "http://www.xaraya.com/index.php?module=release&func=rssviewnotes&theme=rss&releaseno=$releasenumber";
@@ -86,9 +84,7 @@ function base_admin_release()
       $data['chanlink']   =   $info['channel']['link'];
       $data['chandesc']   =   $info['channel']['description'];
     } else {
-        $msg = xarML('There is a problem with a feed.');
-        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-        return;
+        throw new DataNotFoundException(null,'There is a problem with a feed.');
     }
     $data['releasenumber']=$releasenumber;
     $data['feedcontent'] = $feedcontent;

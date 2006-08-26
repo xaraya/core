@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<schema>
+  <table name="privileges">
+    <primary>
+      <column name="xar_pid" type="INTEGER" size="11" required="true" autoincrement="true"/>
+    </primary>
+    <column name="xar_name" size="100" required="true"/>
+    <column name="xar_realm" size="100" required="true"/>
+    <column name="xar_module" size="100" required="true"/>
+    <column name="xar_component" size="100" required="true"/>
+    <column name="xar_instance" size="100" required="true"/>
+    <column name="xar_level" type="INTEGER" size="11" default="0" required="true"/>
+    <column name="xar_description" size="255" required="true"/>
+    <index name="i_xar_privileges_realm">
+      <column name="xar_realm"/>
+    </index>
+    <index name="i_xar_privileges_module">
+      <column name="xar_module"/>
+    </index>
+    <index name="i_xar_privileges_level">
+      <column name="xar_level"/>
+    </index>
+  </table>
+  <table name="privmembers">
+    <primary>
+      <column name="xar_pid" type="INTEGER" size="11" default="0" required="true"/>
+      <column name="xar_parentid" type="INTEGER" size="11" default="0" required="true"/>
+    </primary>
+    <index name="i_xar_privmembers_pid">
+      <column name="xar_pid"/>
+    </index>
+    <index name="i_xar_privmembers_parentid">
+      <column name="xar_parentid"/>
+    </index>
+  </table>
+  <!-- As it stands, this wont validate, there is no primary key here -->
+  <table name="security_acl">
+    <column name="xar_partid" type="INTEGER" size="11" default="0" required="true"/>
+    <column name="xar_permid" type="INTEGER" size="11" default="0" required="true"/>
+    <index type="unique" name="i_xar_security_acl_id">
+      <column name="xar_partid"/>
+      <column name="xar_permid"/>
+    </index>
+    <index name="i_xar_security_acl_partid">
+      <column name="xar_partid"/>
+    </index>
+    <index name="i_xar_security_acl_permid">
+      <column name="xar_permid"/>
+    </index>
+  </table>
+  <table name="security_instances">
+    <primary>
+      <column name="xar_iid" type="INTEGER" size="11" required="true" autoincrement="true"/>
+    </primary>
+    <column name="xar_modid" type="INTEGER" size="11" default="0" required="true"/>
+    <column name="xar_component" size="100" required="true"/>
+    <column name="xar_header" size="255" required="true"/>
+    <column name="xar_query" size="255" required="true"/>
+    <column name="xar_limit" type="INTEGER" size="11" default="0" required="true"/>
+    <column name="xar_propagate" type="INTEGER" size="11" default="0" required="true"/>
+    <column name="xar_instancetable2" size="100" required="true"/>
+    <column name="xar_instancechildid" size="100" required="true"/>
+    <column name="xar_instanceparentid" size="100" required="true"/>
+    <column name="xar_description" size="255" required="true"/>
+  </table>
+  <table name="security_masks">
+    <primary>
+      <column name="xar_sid" type="INTEGER" size="11" required="true" autoincrement="true"/>
+    </primary>
+    <column name="xar_name" size="100" required="true"/>
+    <column name="xar_realm" size="100" required="true"/>
+    <column name="xar_modid" type="INTEGER" size="10" default="0" required="true"/>
+    <column name="xar_component" size="100" required="true"/>
+    <column name="xar_instance" size="100" required="true"/>
+    <column name="xar_level" type="INTEGER" size="11" default="0" required="true"/>
+    <column name="xar_description" size="255" required="true"/>
+    <index name="i_xar_security_masks_realm">
+      <column name="xar_realm"/>
+    </index>
+    <index name="i_xar_security_masks_module">
+      <column name="xar_modid"/>
+    </index>
+    <index name="i_xar_security_masks_level">
+      <column name="xar_level"/>
+    </index>
+  </table>
+  <table name="security_realms">
+    <primary>
+      <column name="xar_rid" type="INTEGER" size="11" required="true" autoincrement="true"/>
+    </primary>
+    <column name="xar_name" size="255" required="true"/>
+  </table>
+</schema>

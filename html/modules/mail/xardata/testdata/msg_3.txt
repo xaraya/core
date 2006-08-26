@@ -1,0 +1,30 @@
+Return-Path: <marcel@hsdev.com>
+X-Sieve: cmu-sieve 2.0
+Received: from powerbook.local (router2.hsdev.com [212.61.102.6])
+	by knuth.hsdev.com (8.12.3/8.12.3) with ESMTP id j9OERQsQ018724;
+	Mon, 24 Oct 2005 16:27:26 +0200
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	by powerbook.local (Postfix) with ESMTP id E9305DA2003;
+	Mon, 24 Oct 2005 16:28:12 +0200 (CEST)
+Mime-Version: 1.0 (Apple Message framework v734)
+Content-Type: text/plain; charset=US-ASCII; delsp=yes; format=flowed
+Message-Id: <165EED14-4C0A-471B-AF64-B288A708A8FD@hsdev.com>
+Cc: mrb@hsdev.com
+Reply-To: mrb@hsdev.com
+Content-Transfer-Encoding: 7bit
+From: Marcel van der Boom <marcel@hsdev.com>
+Subject: mail-in scenario test #3 : simple, not signed, not encrypted
+Date: Mon, 24 Oct 2005 16:28:11 +0200
+To: Marcel van der Boom <marcel@hsdev.com>
+X-Mailer: Apple Mail (2.734)
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-1.4 (knuth.hsdev.com [212.61.102.5]); Mon, 24 Oct 2005 16:27:26 +0200 (CEST)
+
+This is the contents of a test mail for the mail-in scenario, this  
+mail test situation #3:
+
+<simple message, not signed, not encrypted>
+
+-- 
+Marcel van der Boom
+HS-Development BV               --   http://www.hsdev.com
+So! webapplicatie framework  --   http://make-it-so.info

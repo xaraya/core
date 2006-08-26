@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <p>
      <xar:mlstring>When adding to the PHP Block do not use opening or closing PHP tags.</xar:mlstring>
 </p>

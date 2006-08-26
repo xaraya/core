@@ -1,7 +1,6 @@
 <?php
 /**
  * Import the dynamic properties 
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -24,13 +23,7 @@ function dynamicdata_util_importprops()
     if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
 
-    if (empty($modid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module id', 'util', 'importprop', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
-    }
+    if (empty($modid)) throw new EmptyParameterException('modid');
 
     // Confirm authorisation code.  This checks that the form had a valid
     // authorisation code attached to it.  If it did not then the function will

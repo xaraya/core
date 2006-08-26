@@ -23,7 +23,6 @@
  */
 function mail_init()
 {
-// TODO: create separate xar_mail_queue table here someday
     xarModSetVar('mail', 'server', 'mail');
     xarModSetVar('mail', 'replyto', '0');
     xarModSetVar('mail', 'wordwrap', '78');
@@ -32,10 +31,7 @@ function mail_init()
     xarModSetVar('mail', 'smtpHost', 'Your SMTP Host');
     xarModSetVar('mail', 'encoding', '8bit');
     xarModSetVar('mail', 'html', false);  
-    xarModSetVar('mail', 'ShowTemplates', false);
-    xarModSetVar('mail', 'suppresssending', false);
-    xarModSetVar('mail', 'redirectsending', false);
-    xarModSetVar('mail', 'redirectaddress', '');
+
     // when a module item is created
     if (!xarModRegisterHook('item', 'create', 'API',
             'mail', 'admin', 'hookmailcreate')) {
@@ -52,7 +48,13 @@ function mail_init()
         return false;
     }
 
-    return true;
+    xarRegisterMask('EditMail','All','mail','All','All','ACCESS_EDIT');
+    xarRegisterMask('AddMail','All','mail','All','All','ACCESS_ADD');
+    xarRegisterMask('DeleteMail', 'All','mail','All','All','ACCESS_DELETE');
+    xarRegisterMask('AdminMail','All','mail','All','All','ACCESS_ADMIN');
+
+    /* This init function brings authsystem to version 0.01 run the upgrades for the rest of the initialisation */
+    return mail_upgrade('0.1');
 }
 
 /**
@@ -82,10 +84,7 @@ function mail_activate()
 function mail_upgrade($oldVersion)
 {
     switch($oldVersion) {
-    case '0.01':
-        // Compatability upgrade nothing to be done
-        break;
-
+    case '0.1':
     case '0.1.0':
         // clean up double hook registrations
         xarModUnregisterHook('item', 'update', 'API', 'mail', 'admin', 'hookmailchange');
@@ -109,6 +108,19 @@ function mail_upgrade($oldVersion)
         xarModSetVar('mail', 'redirectsending', false);
         xarModSetVar('mail', 'redirectaddress', '');
 
+
+        // From 0.1.1 -> 2.0.0 we added a mod var which holds the admin id for mail, the adminname is obsolete (no free email choice anymore)
+        // Try to find a reasonable admin (the designated one, for example ;-) )
+        $desigAdmin = xarModGetVar('roles','admin');
+        // In current xar this always fails as mail is installed before roles gets initialized
+        // in the off chance someone is actually ugrading, we leave it in. 
+        if(!empty($desigAdmin)) {
+            xarModSetVar('mail','admin_outgoing', $desigAdmin);
+        }
+        xarModDelVar('mail','adminname');
+        xarModDelVar('mail','adminmail');
+    case'2.0.0':
+        // current version
     }
     return true;
 }
