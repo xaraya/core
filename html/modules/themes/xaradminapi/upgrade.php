@@ -1,7 +1,5 @@
 <?php
 /**
- * Upgrade a theme
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -24,12 +22,7 @@ function themes_adminapi_upgrade($args)
     extract($args);
 
     // Argument check
-    if (!isset($regid)) {
-        $msg = xarML('Empty regid (#(1)).', $regid);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    if (!isset($regid)) throw new EmptyParameterException('regid');
 
     // Get theme information
     $themeInfo = xarThemeGetInfo($regid);
@@ -59,8 +52,7 @@ function themes_adminapi_upgrade($args)
                       $themeFileInfo['class'],
                       $regid);
             
-    $result = $dbconn->Execute($sql,$bindvars);
-    if (!$result) return;
+    $dbconn->Execute($sql,$bindvars);
 
     // Message
     xarSessionSetVar('statusmsg', xarML('Theme has been upgraded, now inactive'));

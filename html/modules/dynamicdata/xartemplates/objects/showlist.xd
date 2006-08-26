@@ -1,10 +1,10 @@
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
-<xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!--
     This is a generic admin list template for any DD object. You can use a specific template
     for one particular object in this directory as showlist-[objectname].xd, and/or
     use templates in your own [module]/xartemplates/objects directory by specifying the
     tplmodule="..." argument in the xar:data-list BL tag or showList() method call.
-</xar:comment>
+-->
 <xar:style scope="module" module="dynamicdata" file="dd" />
 <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
     <xar:template file="catnavigation" />

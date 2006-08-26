@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <table class="xar-norm">
   <tr>
     <td>
@@ -42,7 +42,7 @@
       <xar:mlstring>Title Field</xar:mlstring>
     </td>
     <td>
-      <xar:comment> the title property needs to be selected </xar:comment>
+      <!-- the title property needs to be selected -->
       <select name="#$name#[title]" id="#$id#_title">
         <option value="">[ <xar:mlstring>no dropdown list</xar:mlstring> ]</option>
       <xar:foreach in="$properties" key="$propname" value="$propinfo">
@@ -66,7 +66,7 @@
     </td>
     <td>
       <xar:if condition="$style eq 'itemid'">
-        <xar:comment> the property of type 'itemid' is the link</xar:comment>
+        <!-- the property of type 'itemid' is the link -->
         <xar:foreach in="$properties" key="$propname" value="$propinfo">
           <xar:if condition="!empty($propinfo['type']) and $propinfo['type'] eq 21">
             #$propinfo.label#
@@ -75,7 +75,7 @@
         </xar:foreach>
 
       <xar:elseif condition="$style eq 'childlist' or $style eq 'parentid'"/>
-        <xar:comment> the parent property needs to be selected </xar:comment>
+        <!-- the parent property needs to be selected -->
         <select name="#$name#[link]" id="#$id#_link">
         <xar:foreach in="$properties" key="$propname" value="$propinfo">
           <xar:if condition="!empty($link) and $link eq $propname">
@@ -98,7 +98,7 @@
       <xar:mlstring>Parent Id</xar:mlstring>
     </td>
     <td>
-      <xar:comment> equal to itemid or selectable </xar:comment>
+      <!-- equal to itemid or selectable -->
       <xar:if condition="empty($title)">
         <label for="#$id#_title_0">
           <input type="radio" name="#$name#[title]" id="#$id#_title_0" value="0" checked="checked" />
@@ -124,7 +124,7 @@
     </td>
   </tr>
 </xar:if>
-<xar:comment> TODO: check this
+<!--  TODO: check this
   <tr>
     <td>
       <xar:mlstring>Where</xar:mlstring>
@@ -136,7 +136,7 @@
       <xar:mlstring>Additional WHERE clause for the link to item or list of children</xar:mlstring>
     </td>
   </tr>
-</xar:comment>
+-->
 <xar:if condition="!empty($objectid)">
   <tr>
     <td>

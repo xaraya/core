@@ -1,7 +1,6 @@
 <?php
 /**
  * Float box property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -13,7 +12,7 @@
 /*
  * @author mikespub <mikespub@xaraya.com>
  */
-include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
 
 /**
  * Class to handle floatbox property
@@ -22,8 +21,23 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
 {
-    var $size = 10;
-    var $maxlength = 30;
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->size      = 10;
+        $this->maxlength = 30;
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 17;
+        $info->name = 'floatbox';
+        $info->desc = 'Number Box (float)';
+
+        return $info;
+    }
 
     function validateValue($value = null)
     {
@@ -61,69 +75,17 @@ class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
         return true;
     }
 
-    // default showInput() from Dynamic_TextBox_Property
-
-    function showOutput($args = array())
-    {
-        extract($args);
-        $data = array();
-
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (!empty($value) && !empty($field->validation)) {
-        // TODO: extract precision from field validation too ?
-            //if (is_numeric($field->validation)) {
-            //    $precision = $field->validation;
-            //    return sprintf("%.".$precision."f",$value);
-            //}
-        }
-        $data['value']= xarVarPrepForDisplay($value);
-        
-        $template="";
-        return xarTplProperty('base', 'floatbox', 'showoutput', $data);
-
-    }
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-    function getBasePropertyInfo()
-    {
-        $args = array();
-        $baseInfo = array(
-                          'id'         => 17,
-                          'name'       => 'floatbox',
-                          'label'      => 'Number Box (float)',
-                          'format'     => '17',
-                          'validation' => '',
-                          'source'         => '',
-                          'dependancies'   => '',
-                          'requiresmodule' => '',
-                          'aliases'        => '',
-                          'args'           => serialize($args),
-                          // ...
-                         );
-        return $baseInfo;
-    }
-
     // Trick: use the parent method with a different template :-)
+    // No trick: that how it should have been from the start :-)
     function showValidation($args = array())
     {
         // allow template override by child classes
         if (!isset($args['template'])) {
-            $args['template'] = 'floatbox';
+            $args['template'] = $this->getTemplate();
         }
 
         return parent::showValidation($args);
     }
-
-    // default updateValidation() from Dynamic_TextBox_Property
-
 }
 
 ?>

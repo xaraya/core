@@ -9,16 +9,16 @@
 
 /**
  * Lists Validation Function
- */
+ *
+ * @throws VariableValidationException 
+ **/
 function variable_validations_list (&$subject, $parameters, $supress_soft_exc, &$name)
 {
-
+    if ($name == '') $name = '<unknown>';
     if (!is_array($subject)) {
-        if ($name != '')
-            $msg = xarML('Variable #(1) is not an array: "#(2)"', $name, $subject);
-        else
-            $msg = xarML('Not an array: "#(1)"', $subject);
-        if (!$supress_soft_exc) xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+        $msg = 'Not an array';
+        if (!$supress_soft_exc) 
+            throw new VariableValidationException(array($name,$subject,$msg));
         return false;
     }
 
@@ -26,7 +26,7 @@ function variable_validations_list (&$subject, $parameters, $supress_soft_exc, &
         $validation = implode(':', $parameters);
         foreach  ($subject as $key => $value) {
             $return = xarVarValidate($validation, $subject[$key], $supress_soft_exc);
-            //$return === NULL or $return === FALSE => return
+            //$return === null or $return === false => return
             if (!$return) {
                 return $return;
             }

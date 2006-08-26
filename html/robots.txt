@@ -2,5 +2,5 @@ User-agent: *
 Disallow: /includes
 Disallow: /themes
 Disallow: /modules
-Disallow: /xaradodb
+Disallow: /creole
 Disallow: /var
