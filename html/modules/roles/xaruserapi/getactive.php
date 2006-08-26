@@ -22,11 +22,7 @@ function roles_userapi_getactive($args)
     extract($args);
 
     if (!empty($uid) && !is_numeric($uid)) {
-        $msg = xarML('Wrong arguments to roles_userapi_get.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
+        throw new VariableValidationException(array('uid',$uid,'numeric'));
     }
 
     if (empty($filter)){
@@ -49,7 +45,6 @@ function roles_userapi_getactive($args)
               WHERE xar_lastused > ? AND xar_uid = ?";
     $bindvars = array((int)$filter,(int)$uid);
     $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
 
     // Put users into result array
     for (; !$result->EOF; $result->MoveNext()) {

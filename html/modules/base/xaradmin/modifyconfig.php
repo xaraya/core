@@ -1,7 +1,6 @@
 <?php
 /**
  * Modify site configuration 
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -37,7 +36,7 @@ function base_admin_modifyconfig()
 
     $localehome = xarCoreGetVarDirPath() . "/locales";
     if (!file_exists($localehome)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'LOCALE_NOT_AVAILABLE', new SystemException('The locale directory was not found.'));
+        throw new DirectoryNotFoundException($localehome);
     }
     $dd = opendir($localehome);
     $locales = array();

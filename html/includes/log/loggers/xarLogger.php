@@ -34,7 +34,7 @@ class xarLogger
     *
     * The level of the messages which will be logged.
     */
-    var $_logLevel;
+    private $_logLevel;
 
     /**
     * Identity of the logger.
@@ -43,16 +43,17 @@ class xarLogger
     * in highly frequented sites, the time of the logged message isnt as good to diferenciate
     * different pageviews
     */
-    var $_ident;
+    private $_ident;
 
     /**
     * String containing the format to use when generating timestamps.
     * @var string
     */
-    var $_timeFormat = '%b %d %H:%M:%S';
+    // Note: before changing this, check windows support for the specifiers
+    private $_timeFormat = '%b %d %H:%M:%S';
 
     // Elapsed time.
-    var $_elapsed = 0;
+    private $_elapsed = 0;
 
     /**
      * Sets up the configuration specific parameters for each driver
@@ -129,7 +130,9 @@ class xarLogger
         $microtime = explode(' ', $microtime);
 
         $secs = ((float)$microtime[0] + (float)$microtime[1]);
-
+        // NOTE: when using E_STRICT, and PHP has no 'own' timezone setting
+        // strftime() will issue notices on that. But that's what you get with
+        // E_STRICT ;-) so we will leave this.
         return strftime($this->_timeFormat) . ' ' . $microtime[0] . ' +' . number_format(round($secs - $this->_elapsed, 3),3);
     }
 }

@@ -1,7 +1,6 @@
 <?php
 /**
  * Utility function to pass individual menu items
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -19,50 +18,26 @@
  */
 function blocks_adminapi_getmenulinks()
 {
-    $menulinks = array();
-    if (xarSecurityCheck('EditBlock', 0)) {
+    /*
+    This menu gets its data from the adminmenu.php file in the module's xardataapi folder.
+    You can add or change menu items by changing the data there.
+    Or you can create your own menu items here. They should have the form of this example:
 
-        $menulinks[] = array(
-            'url'   => xarModURL('blocks', 'admin', 'view_instances'),
-            'title' => xarML('View or edit all block instances'),
-            'label' => xarML('View Instances')
-        );
+    $menulinks = array();
+    .....
+    if (xarSecurityCheck('EditRole',0)) {
+        $menulinks[] = array('url'   => xarModURL('roles',
+                                                  'admin',
+                                                  'viewroles'),
+                              'title' => xarML('View and edit the groups on the system'),
+                              'label' => xarML('View All Groups'));
     }
-    if (xarSecurityCheck('AddBlock', 0)) {
-        $menulinks[] = array(
-            'url'   => xarModURL('blocks', 'admin', 'new_instance'),
-            'title' => xarML('Add a new block instance'),
-            'label' => xarML('Add Instance')
-        );
-        $menulinks[] = array(
-            'url'   => xarModURL('blocks', 'admin', 'view_groups'),
-            'title' => xarML('View the defined block groups'),
-            'label' => xarML('View Groups')
-        );
-        $menulinks[] = array(
-            'url'   => xarModURL('blocks', 'admin', 'new_group'),
-            'title' => xarML('Add a new group of blocks'),
-            'label' => xarML('Add Group')
-        );
-    }
-    if (xarSecurityCheck('AdminBlock', 0)) {
-        $menulinks[] = array(
-            'url'   => xarModURL('blocks', 'admin', 'view_types'),
-            'title' => xarML('View block types'),
-            'label' => xarML('View Block Types')
-        );
-        $menulinks[] = array(
-            'url'   => xarModURL('blocks', 'admin', 'new_type'),
-            'title' => xarML('Add a new block type into the system'),
-            'label' => xarML('Add Block Type')
-        );
-        $menulinks[] = array(
-            'url'   => xarModURL('blocks','admin','modifyconfig'),
-            'title' => xarML('Modify Blocks configuration values'),
-            'label' => xarML('Modify Config')
-        );
-    }
+    .....
     return $menulinks;
+    */
+
+    // No special menu. Just return a standard array
+    return xarModAPIFunc('base','admin','menuarray',array('module' => 'blocks'));
 }
 
 ?>

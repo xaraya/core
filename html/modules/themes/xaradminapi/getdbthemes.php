@@ -1,7 +1,5 @@
 <?php
 /**
- * Get all themes in the database
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -28,12 +26,6 @@ function themes_adminapi_getdbthemes()
     $sql = "SELECT xar_regid
               FROM $xartable[themes]";
     $result = $dbconn->Execute($sql);
-    if (!$result) return;
-    if (!$result) {
-        $msg = 'Could not get any themes';
-        xarSessionSetVar('errormsg',xarML($msg));
-        return false;
-    }
 
     while(!$result->EOF) {
         list($themeRegId) = $result->fields;

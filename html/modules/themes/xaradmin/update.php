@@ -1,7 +1,5 @@
 <?php
 /**
- * Update a theme
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -82,16 +80,14 @@ function themes_admin_update()
                 'updatevars' => $updatevars));
         if (!isset($updated)) {
             $msg = xarML('Unable to update theme variable #(1)', $themevar['name']);
-            xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-            return;
+            throw new Exception($msg);
         } 
     } 
     foreach($delvars as $d) {
         $deleted = xarThemeDelVar($themename, $d);
         if (!isset($deleted)) {
             $msg = xarML('Unable to delete theme variable #(1)', $d);
-            xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-            return;
+            throw new Exception($msg);
         } 
     } 
 

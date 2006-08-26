@@ -74,7 +74,7 @@ function roles_admin_createmail()
                                 'r.xar_email AS email',
                                 'r.xar_state AS state',
                                 'r.xar_date_reg AS date_reg'));
-            $q->eq('xar_type',0);
+            $q->eq('xar_type',ROLES_USERTYPE);
         }
         // Set the paging and order stuff for this particular page
         $numitems = xarModGetVar('roles', 'itemsperpage');
@@ -141,9 +141,7 @@ function roles_admin_createmail()
 
     // Get the list of available templates
     $messaginghome = xarCoreGetVarDirPath() . "/messaging/roles";
-    if (!file_exists($messaginghome)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The messaging directory was not found.'));
-    }
+    if (!file_exists($messaginghome)) throw new DirectoryNotFoundException($messaginghome);
 
     $dd = opendir($messaginghome);
     $templates = array(array('key' => 'blank', 'value' => xarML('Empty')));
