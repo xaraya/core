@@ -8,10 +8,10 @@
 */
 
 /**
- * Include the base class
+ * Make sure the base class is available
  *
  */
-include_once ('./includes/log/loggers/xarLogger.php');
+sys::import('log.loggers.xarLogger');
 
 /**
  * Class to handle winsys logggin

@@ -39,7 +39,7 @@
                         Name:
                     </xar:mlstring>
                 </label>
-                <input type="text" name="pname" id="pname" value="#$pname#" maxlength="20" class="xar-form-textmedium" />
+                <input type="text" name="pname" id="pname" value="#$pname#" maxlength="40" class="xar-form-textlong" />
             </div>
             <xar:if condition="$ptype eq 'empty'">
                 <div class="xar-form-input-wrapper-after">

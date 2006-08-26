@@ -1,7 +1,6 @@
 <?php
 /**
  * Update the group details for a block instance
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -96,8 +95,7 @@ function blocks_adminapi_update_instance_groups($args)
         if (!isset($newgroups[$gid]) && isset($current[$gid])) {
             $query = "DELETE FROM $block_group_instances_table WHERE xar_id = ?";
             $bindvars = array((int) $current[$gid]['id']);
-            $result =& $dbconn->Execute($query,$bindvars);
-            if(!$result) return;
+            $result = $dbconn->Execute($query,$bindvars);
             //echo " delete:$gid ";
         }
 
@@ -107,9 +105,8 @@ function blocks_adminapi_update_instance_groups($args)
             $query = "INSERT INTO $block_group_instances_table
                         (xar_id, xar_group_id, xar_instance_id, xar_position, xar_template)
                       VALUES (?,?,?,?,?)";
-            $bindvars = array($nextId, $gid, $bid, 0, $newgroups[$gid]['template']);
-            $result =& $dbconn->Execute($query,$bindvars);
-            if(!$result) return;
+            $bindvars = array($nextId, $gid, $bid, 0,$newgroups[$gid]['template']);
+            $dbconn->Execute($query,$bindvars);
             //echo " create:$gid with " . $newgroups[$gid]['template'];
         }
 
@@ -117,20 +114,13 @@ function blocks_adminapi_update_instance_groups($args)
         if (isset($newgroups[$gid]) && isset($current[$gid])
             && $newgroups[$gid]['template'] != $current[$gid]['template']) {
             $query = "UPDATE $block_group_instances_table
-                            SET xar_template = ?
-                            WHERE xar_id = ?";
+                      SET xar_template = ?
+                      WHERE xar_id = ?";
             $bindvars = array($newgroups[$gid]['template'],$current[$gid]['id']);
-            $result =& $dbconn->Execute($query,$bindvars);
-            if(!$result) return;
+            $dbconn->Execute($query,$bindvars);
             //echo " update:$gid with " . $newgroups[$gid]['template'];
         }
     }
-
-    // TODO: use ADODB array query function?
-    // TODO: error handling?
-//    foreach ($query_arr as $query) {
-//        $result =& $dbconn->Execute($query);
-//    }
 
     // Resequence the position values, since we may have changed the existing values.
     // Span the resequence across all groups, since any number of groups could have

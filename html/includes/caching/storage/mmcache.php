@@ -6,14 +6,13 @@
 
 class xarCache_MMCache_Storage extends xarCache_Storage
 {
-    function xarCache_MMCache_Storage($args = array())
+    public function __construct($args = array())
     {
-        $this->xarCache_Storage($args);
-
+        parent::__construct($args);
         $this->storage = 'mmcache';
     }
 
-    function isCached($key = '', $expire = 0, $log = 1)
+    public function isCached($key = '', $expire = 0, $log = 1)
     {
         if (empty($expire)) {
             $expire = $this->expire;
@@ -25,7 +24,7 @@ class xarCache_MMCache_Storage extends xarCache_Storage
         // we actually retrieve the value here too
         $value = mmcache_get($key);
         if ($value) {
-// FIXME: mmcache doesn't keep track of modification times !
+            // FIXME: mmcache doesn't keep track of modification times !
             //$this->modtime = 0;
             if ($log) $this->logStatus('HIT', $oldkey);
             return true;
@@ -35,7 +34,7 @@ class xarCache_MMCache_Storage extends xarCache_Storage
         }
     }
 
-    function getCached($key = '', $output = 0, $expire = 0)
+    public function getCached($key = '', $output = 0, $expire = 0)
     {
         if (empty($expire)) {
             $expire = $this->expire;
@@ -53,7 +52,7 @@ class xarCache_MMCache_Storage extends xarCache_Storage
         }
     }
 
-    function setCached($key = '', $value = '', $expire = 0)
+    public function setCached($key = '', $value = '', $expire = 0)
     {
         if (empty($expire)) {
             $expire = $this->expire;
@@ -68,7 +67,7 @@ class xarCache_MMCache_Storage extends xarCache_Storage
         }
     }
 
-    function delCached($key = '')
+    public function delCached($key = '')
     {
         if (!empty($this->code)) {
             $key .= '-' . $this->code;
@@ -76,7 +75,7 @@ class xarCache_MMCache_Storage extends xarCache_Storage
         mmcache_rm($key);
     }
 
-    function flushCached($key = '')
+    public function flushCached($key = '')
     {
     // CHECKME: we can't really flush part of the cache here, unless we
     //          keep track of all cache entries, perhaps ?
@@ -88,7 +87,7 @@ class xarCache_MMCache_Storage extends xarCache_Storage
         }
     }
 
-    function cleanCached($expire = 0)
+    public function cleanCached($expire = 0)
     {
         if (empty($expire)) {
             $expire = $this->expire;
@@ -122,7 +121,7 @@ class xarCache_MMCache_Storage extends xarCache_Storage
         }
     }
 
-    function getCacheSize($countitems = false)
+    public function getCacheSize($countitems = false)
     {
         // this is the size of the whole cache
         ob_start();
@@ -138,14 +137,14 @@ class xarCache_MMCache_Storage extends xarCache_Storage
         return $this->size;
     }
 
-    function saveFile($key = '', $filename = '')
+    public function saveFile($key = '', $filename = '')
     {
         if (empty($filename)) return;
 
         if (!empty($this->code)) {
             $key .= '-' . $this->code;
         }
-    // FIXME: avoid getting the value for the 2nd/3rd time here
+        // FIXME: avoid getting the value for the 2nd/3rd time here
         $value = mmcache_get($key);
         if (empty($value)) return;
 
@@ -165,7 +164,7 @@ class xarCache_MMCache_Storage extends xarCache_Storage
         }
     }
 
-    function getCachedList()
+    public function getCachedList()
     {
         return array();
     }

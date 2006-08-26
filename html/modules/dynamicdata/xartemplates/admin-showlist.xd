@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:if condition="empty($layout) or $layout eq 'default'">
     <table width="100%" border="1" cellspacing="0" cellpadding="4">
     <tr>

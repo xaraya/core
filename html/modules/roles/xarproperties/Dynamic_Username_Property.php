@@ -11,24 +11,30 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 
-/*
+/**
  * Handle Username Property
  * @author mikespub <mikespub@xaraya.com>
  */
 
 class Dynamic_Username_Property extends Dynamic_Property
 {
-    function checkInput($name='', $value = null)
+    function __construct($args)
     {
-        if (empty($name)) {
-            $name = 'dd_'.$this->id;
-        }
-        // store the fieldname for validations who need them (e.g. file uploads)
-        $this->fieldname = $name;
-        if (!isset($value)) {
-            if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
-        }
-        return $this->validateValue($value);
+        parent::__construct($args);
+        $this->tplmodule = 'roles';
+        $this->template = 'username';
+        $this->filepath   = 'modules/roles/xarproperties';
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('roles');
+        $info->id   = 7;
+        $info->name = 'username';
+        $info->desc = 'Username';
+
+        return $info;
     }
 
     function validateValue($value = null)
@@ -39,10 +45,13 @@ class Dynamic_Username_Property extends Dynamic_Property
         if (empty($value)) {
             $value = xarUserGetVar('uid');
         }
-        // check that the user exists
+        // check that the user exists, but dont except
         if (is_numeric($value)) {
-            $user = xarUserGetVar('uname', $value);
-            if (!isset($user)) xarErrorHandled();
+            try {
+                $user = xarUserGetVar('uname', $value);
+            } catch (NotFoundExceptions $e) {
+                // Nothing to do?
+            }
         }
         if (!is_numeric($value) || empty($user)) {
             $this->invalid = xarML('user');
@@ -54,106 +63,48 @@ class Dynamic_Username_Property extends Dynamic_Property
         }
     }
 
-//    function showInput($name = '', $value = null, $id = '', $tabindex = '')
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (empty($value)) {
-            $value = xarUserGetVar('uid');
-        }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        $data=array();
+        extract($data);
+        if (!isset($value)) $value = $this->value;
+        if (empty($value))  $value = xarUserGetVar('uid');
 
-        $user = xarUserGetVar('name', $value);
-
-        if (empty($user)) {
-            if (!isset($user)) xarErrorHandled();
-            $user = xarUserGetVar('uname', $value);
-            if (!isset($user)) xarErrorHandled();
+        try {
+            $user = xarUserGetVar('name', $value);
+            if (empty($user)) $user = xarUserGetVar('uname', $value);
+        } catch (NotFoundExceptions $e) {
+            // Nothing to do?
         }
 
-        if ($value > 1) {
-/*            $output .= ' [ <a href="'.xarModURL('roles','user','display',
-                                         array('uid' => $value))
-                    . '" target="preview">'.xarML('profile').'</a> ]';
-*/
+        if ($value > 1) { // Why the 1 here?
             $data['linkurl'] = xarModURL('roles','user','display', array('uid' => $value));
         }
         $data['user'] = xarVarprepForDisplay($user);
         $data['value']= $value;
-        $data['name'] = $name;
-        $data['id']   = $id;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-
-        return xarTplProperty('roles', 'username', 'showinput', $data);
+        return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-         extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (empty($value)) {
-            $value = xarUserGetVar('uid');
-        }
-        $data=array();
-        $user = xarUserGetVar('name', $value);
-        if (empty($user)) {
-            if (!isset($user)) xarErrorHandled();
-            $user = xarUserGetVar('uname', $value);
-            if (!isset($user)) xarErrorHandled();
+        extract($data);
+        if (!isset($value)) $value = $this->value;
+        if (empty($value))  $value = xarUserGetVar('uid');
+
+        try {
+            $user = xarUserGetVar('name', $value);
+            if (empty($user))
+                $user = xarUserGetVar('uname', $value);
+        } catch(NotFoundExceptions $e) {
+            // Nothing to do?
         }
 
         $data['value'] = $value;
         $data['user']  = xarVarPrepForDisplay($user);
-        $data['name']  = $this->name;
-        $data['id']    = $this->id;
 
-        if ($value > 1) {
-            $data['linkurl']=xarModURL('roles','user','display',array('uid' => $value));
-/*          return '<a href="'.xarModURL('roles','user','display',
-                                         array('uid' => $value))
-                    . '">'.xarVarPrepForDisplay($user).'</a>';
-*/
+        if ($value > 1) { // Why the 1 here?
+            $data['linkurl'] = xarModURL('roles','user','display',array('uid' => $value));
         }
-
-        return xarTplProperty('roles', 'username', 'showoutput', $data);
+        return parent::showOutput($data);
     }
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $baseInfo = array(
-                              'id'         => 7,
-                              'name'       => 'username',
-                              'label'      => 'Username',
-                              'format'     => '7',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => 'roles',
-                            'aliases' => '',
-                            'args'         => '',
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
-
 ?>

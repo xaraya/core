@@ -1,7 +1,6 @@
 <?php
 /**
  * Send mail
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -48,23 +47,9 @@ function mail_adminapi__sendmail($args)
     extract($args);
 
     // Check for required arguments
-    $invalid = array();
-    if (!isset($info) && !isset($recipients)) {
-        $invalid[] = 'info/recipients';
-    }
-    if (!isset($subject)) {
-        $invalid[] = 'subject';
-    }
-    if (!isset($message)) {
-        $invalid[] = 'message';
-    }
-
-    if (count($invalid) > 0) {
-        $msg = xarML('Wrong arguments to mail_adminapi', join(', ', $invalid), 'admin', '_sendmail', 'Mail');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
-    }
-
+    if (!isset($info) && !isset($recipients)) throw new EmptyParameterException('info or recipients');
+    if (!isset($subject)) throw new EmptyParameterException('subject');
+    if (!isset($message)) throw new EmptyParameterException('message');
 
     if (!empty($when) && $when > time() && xarModIsAvailable('scheduler')) {
         if (xarModAPIFunc('mail','admin','_queuemail', $args)) {
@@ -90,7 +75,7 @@ function mail_adminapi__sendmail($args)
     // so it be commented out for the time being.
     //ini_set("sendmail_from", $from);
 
-    include_once 'modules/mail/xarclass/class.phpmailer.php';
+    sys::import('modules.mail.xarclass.phpmailer');
 
     $mail = new phpmailer();
     $mail->PluginDir = 'modules/mail/xarclass/';
@@ -317,12 +302,12 @@ function mail_adminapi__sendmail($args)
 
     // Send the mail, or send an exception.
     $result = true;
+    // CHECKME: does this hurt when a batch of emails is going out?
     if (!$mail->Send()) {
         $msg = xarML('The message was not sent. Mailer Error: #(1)',$mail->ErrorInfo);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', new SystemException($msg));
-        $result = false;
+        throw new Exception($msg);
     }
-
+    
     // Clear all recipients for next email
     $mail->ClearAddresses();
 

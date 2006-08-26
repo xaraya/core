@@ -16,8 +16,7 @@
  */
 function base_userapi_newcurl($args)
 {
-    include_once 'modules/base/xarclass/xarCurl.php';
-
+    sys::import('modules.base.xarclass.xarCurl');
     return new xarCurl($args);
 }
 

@@ -1,7 +1,5 @@
 <?php
 /**
- * Export an object definition or an object item to XML
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -10,6 +8,7 @@
  * @subpackage Dynamic Data module
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
+ * @todo move the xml generate code into a template based system.
  */
 /**
  * Export an object definition or an object item to XML
@@ -74,7 +73,14 @@ function dynamicdata_utilapi_export($args)
                 }
                 $xml .= "  </$name>\n";
             } else {
-                $xml .= "  <$name>" . xarVarPrepForDisplay($myobject->$name) . "</$name>\n";
+            	// Treat parent fields where module is DD differently
+            	if (($name == 'parent') && ($myobject->moduleid == 182)) {
+                	$info = xarModAPIFunc('dynamicdata','user','getobjectinfo',array('modid' => 182, 'itemtype' => $myobject->$name));
+					$value = $info['name'];
+				} else {
+					$value = $myobject->$name;
+				}
+                $xml .= "  <$name>" . xarVarPrepForDisplay($value) . "</$name>\n";
             }
         }
     }

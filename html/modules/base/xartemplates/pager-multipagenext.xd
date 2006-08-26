@@ -1,13 +1,13 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:comment> Pager for displaying legacy next-page links on multi-page documents </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!-- Pager for displaying legacy next-page links on multi-page documents -->
 
-<xar:comment> Display next-page link if we are not on the last page </xar:comment>
+<!-- Display next-page link if we are not on the last page -->
 <div class="xar-pager">
     <xar:if condition="$currentpagenum ne $lastpagenum">
         <a title="#xarML('Next page')#" href="#$nextpageurl#">#xarML('next')# (#$nextpage#/#$totalpages#)</a>
     </xar:if>
 
-    <xar:comment> Display last-page link if we are not on the last page </xar:comment>
+    <!-- Display last-page link if we are not on the last page -->
     <xar:if condition="$currentpagenum ne $lastpagenum">
         &nbsp;<a title="#xarML('Last page')#" href="#$lasturl#">&gt;&gt;</a>
     <xar:else/>

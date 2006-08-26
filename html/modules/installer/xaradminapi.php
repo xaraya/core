@@ -1,7 +1,6 @@
 <?php
 /**
  * Modify the system configuration File
- *
  * @package Installer
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -36,9 +35,6 @@ function installer_adminapi_modifyconfig($args)
     //$dbUname = base64_encode($dbUname);
     //$dbPass = base64_encode($dbPass);
 
-    // Get exception error handler setting
-    $enablePHPErrorHandler = xarCore_getSystemVar('Exception.EnablePHPErrorHandler');
-
     $config_php = preg_replace('/\[\'DB.Type\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Type'] = '$dbType';", $config_php);
     $config_php = preg_replace('/\[\'DB.Host\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Host'] = '$dbHost';", $config_php);
     $config_php = preg_replace('/\[\'DB.UserName\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.UserName'] = '$dbUname';", $config_php);
@@ -46,8 +42,6 @@ function installer_adminapi_modifyconfig($args)
     $config_php = preg_replace('/\[\'DB.Name\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Name'] = '$dbName';", $config_php);
     $config_php = preg_replace('/\[\'DB.TablePrefix\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.TablePrefix'] = '$dbPrefix';", $config_php);
     //$config_php = preg_replace('/\[\'DB.Encoded\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Encoded'] = '1';", $config_php);
-    $config_php = preg_replace('/\[\'Exception.EnablePHPErrorHandler\'\]\s*=\s*(\'|\")(.*)\\1;/', "['Exception.EnablePHPErrorHandler'] = $enablePHPErrorHandler;", $config_php);
-
 
     $fp = fopen ($systemConfigFile, 'wb');
     fwrite ($fp, $config_php);
@@ -71,23 +65,15 @@ function installer_adminapi_initialise($args)
 
 
     if (empty($directory) || empty($initfunc)) {
-        $msg = xarML('Empty modName (#(1)) or name (#(2)).', $directory, $initFunc);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
+        throw new EmptyParameterException('directory or initfunc');
     }
 
     $osDirectory = xarVarPrepForOS($directory);
     $modInitFile = 'modules/'. $osDirectory. '/xarinit.php';
 
-    if (file_exists($modInitFile)) {
-        include_once ($modInitFile);
-    } else {
-        // modules/modulename/xarinit.php not found?!
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
-                       new SystemException(__FILE__."(".__LINE__."): Module file $modInitFile doesn't exist."));
-                       return;
-    }
+
+    if(!file_exists($modInitFile)) throw new FileNotFoundException($modInitFile);
+    sys::import('modules.'.$osDirectory.'.xarinit');
 
     // Run the function, check for existence
 
@@ -95,20 +81,13 @@ function installer_adminapi_initialise($args)
     if (function_exists($initFunc)) {
         $res = $initFunc();
 
-        // Handle exceptions
-        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
-
         if ($res == false) {
             // exception
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'UNKNOWN',
-                           new SystemException(__FILE__.'('.__LINE__.'): core initialization failed!'));
-                           return;
+            throw new Exception('Core initialization failed!');
         }
     } else {
         // modulename_init() not found?!
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
-                       new SystemException(__FILE__."(".__LINE__."): Module API function $initFunc doesn't exist."));
-                       return;
+        throw new FunctionNotFoundException($initFunc);
     }
 
     return true;
@@ -126,64 +105,23 @@ function installer_adminapi_initialise($args)
 function installer_adminapi_createdb($args)
 {
     extract($args);
-
-    //All variables are comming thru $args right now.
-/*
-    if (!isset($dbName)) {
-        $dbName = xarCore_getSystemVar('DB.Name');
-    }
-
-    if (!isset($dbType)) {
-        $dbType = xarCore_getSystemVar('DB.Type');
-    }
-
-    // Get connection parameters from config.system.php
-    $dbHost  = xarCore_getSystemVar('DB.Host');
-    $dbUname = xarCore_getSystemVar('DB.UserName');
-    $dbPass  = xarCore_getSystemVar('DB.Password');
-    $dbType  = xarCore_getSystemVar('DB.Type');
-*/
-    // {ML_dont_parse 'includes/xarDB.php'}
-    include_once 'includes/xarDB.php';
-
     // Load in Table Maintainance API
-    include_once 'includes/xarTableDDL.php';
+    sys::import('xarTableDDL');
 
-    // Load in ADODB
-    // FIXME: This is also in xarDB init, does it need to be here?
-    if (!defined('XAR_ADODB_DIR')) {
-        define('XAR_ADODB_DIR','xaradodb');
-    }
-    include_once XAR_ADODB_DIR . '/adodb.inc.php';
-    $ADODB_CACHE_DIR = xarCoreGetVarDirPath() . "/cache/adodb";
-
-    // Check if there is a xar- version of the driver, and use it.
-    // Note the driver we load does not affect the database type.
-    if (xarDBdriverExists('xar' . $dbType, 'adodb')) {
-        $dbDriver = 'xar' . $dbType;
-    } else {
-        $dbDriver = $dbType;
-    }
-
-    // Start connection
-    $dbconn = ADONewConnection($dbDriver);
-    if ($dbType == 'postgres') {
-        // quick hack to enable Postgres DB creation
-        $dbh = $dbconn->Connect($dbHost, $dbUname, $dbPass, 'template1');
-    } else {
-        $dbh = $dbconn->Connect($dbHost, $dbUname, $dbPass);
-    }
-    if (!$dbh) {
-        $dbpass = '';
-        die("Failed to connect to $dbType://$dbUname:$dbPass@$dbHost/, error message: " . $dbconn->ErrorMsg());
-    }
-
-    $query = xarDBCreateDatabase($dbName,$dbType);
-
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
-
-    return true;
+    // Start connection, but use the configured connection db
+   $createArgs = array(
+                       'userName' => $dbUname,
+                       'password' => $dbPass,
+                       'databaseHost' => $dbHost,
+                       'databaseType' => $dbType,
+                       'databaseName' => $dbName, 
+                       'systemTablePrefix' => $dbPrefix,
+                       'siteTablePrefix' => $dbPrefix);
+   $dbconn =& xarDBNewConn($createArgs);
+   
+   $query = xarDBCreateDatabase($dbName,$dbType);
+   $result =& $dbconn->Execute($query);
+   return true;
 }
 
 
@@ -202,17 +140,14 @@ function installer_adminapi_CheckForField($args)
 
     // Argument check - make sure that all required arguments are present,
     // if not then set an appropriate error message and return
-    if ((!isset($field_name)) ||
-        (!isset($table_name))) {
-        $msg = xarML('Invalid Parameter Count');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
+    if ((!isset($field_name)) || (!isset($table_name))) {
+        throw new EmptyParameterException('field_name or table_name');
     }
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
+    // CHECKME: Is this portable? In any case, use the meta classes
     $query = "desc $table_name";
     $result =& $dbconn->Execute($query);
 
@@ -240,16 +175,13 @@ function installer_adminapi_GetFieldType($args)
 
     // Argument check - make sure that all required arguments are present,
     // if not then set an appropriate error message and return
-    if ((!isset($field_name)) ||
-        (!isset($table_name))) {
-        $msg = xarML('Invalid Parameter Count');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
+    if ((!isset($field_name)) || (!isset($table_name))) {
+        throw new EmptyParameterException('field_name or table_name');
     }
 
     $dbconn =& xarDBGetConn();
 
+    // CHECKME: Is this portable? In any case, use the meta classes
     $query = "desc $table_name";
     $result =& $dbconn->Execute($query);
 
@@ -275,20 +207,11 @@ function installer_adminapi_CheckTableExists($args)
 
     // Argument check - make sure that all required arguments are present,
     // if not then set an appropriate error message and return
-    if (!isset($table_name)) {
-        $msg = xarML('Invalid Parameter Count');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    if (!isset($table_name)) throw new EmptyParameterException('table_name');
 
     $dbconn =& xarDBGetConn();
-    $result = $dbconn->MetaTables();
-    if (in_array($table_name, $result)){
-        return true;
-    } else {
-        return false;
-    }
+    $dbInfo = $dbconn->getDatabaseInfo();
+    return $dbInfo->hasTable($table_name);
 }
 
 ?>

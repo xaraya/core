@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:set name="compare">xarServerGetCurrentURL()</xar:set>
 <xar:set name="tabclass">'inactive'</xar:set>
 <xar:if condition="$compare eq $current">
