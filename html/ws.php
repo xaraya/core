@@ -2,13 +2,17 @@
 /**
  * Xaraya WebServices Interface
  * 
- * @package modules
+ * @package services
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage webservices
  * @author Miko 
 */
+
+include 'includes/xarPreCore.php';
+sys::import('xarCore');
+xarCoreInit(XARCORE_SYSTEM_ALL);
+xarWebservicesMain();
 
 /**
  * Entry point for webservices 
@@ -27,23 +31,11 @@
  * TRACKBACK     : http://host.com/ws.php?type=trackback (Is this still right?)
  * WEBDAV        : http://host.com/ws.php?type=webdav
  * FLASHREMOTING : http://host.com/ws.php?type=flashremoting
- */
-
-/**
- * Main WebServices Function
  *
  * @access public
- * @todo make this a bit more structured, so all the services have roughly the same interface
- * @toco provide ws.php as a nice (templated) page instead of the dumb list of links
-*/
-include 'includes/xarCore.php';
-
+ */
 function xarWebservicesMain() 
 {
-
-    // TODO: don't load the whole core
-    xarCoreInit(XARCORE_SYSTEM_ALL);
-    
     /* 
      determine the server type, then
      create an instance of an that server and 
@@ -60,8 +52,8 @@ function xarWebservicesMain()
         }
         if (!$server) {
             xarLogMessage("Could not load XML-RPC server, giving up");
-            // Why do we need to die here?
-            die('Could not load XML-RPC server');
+            // TODO: we need a specific handler for this
+            throw new Exception('Could not load XML-RPC server');
         } else {
             xarLogMessage("Created XMLRPC server");
         }
@@ -99,8 +91,8 @@ function xarWebservicesMain()
         }
         if (!$server) {
             xarLogMessage("Could not load trackback server, giving up");
-            // Why do we need to die here?
-            die('Could not load trackback server');
+            // TODO: we need a specific handler for this
+            throw new Exception('Could not load trackback server');
         } else {
             xarLogMessage("Created trackback server");
         }
@@ -129,8 +121,8 @@ function xarWebservicesMain()
             $server = xarModAPIFunc('webdavserver','user','initwebdavserver');
             if(!$server) {
                 xarLogMessage('Could not load webdav server, giving up');
-                // FIXME: construct errors response manually? bah
-                die('Could not load webdav server');
+                // TODO: we need a specific handler for this
+                throw new Exception('Could not load webdav server');
             } else {
                 xarLogMessage("Created webdav server");
             }
@@ -167,5 +159,4 @@ function xarWebservicesMain()
         }
     }
 }
-xarWebservicesMain();
 ?>

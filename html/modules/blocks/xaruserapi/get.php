@@ -21,9 +21,7 @@ function blocks_userapi_get($args)
     
     if (empty($bid) && empty($name)) {
         // No identifier provided.
-        $msg = xarML('Invalid parameter: missing bid or name');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
+        throw new EmptyParameterException('name or bid');
     }
 
     // The getall function does the main work.

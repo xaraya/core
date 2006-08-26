@@ -1,7 +1,6 @@
 <?php
 /**
  * Get list of modules and itemtypes with dynamic properties
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -33,10 +32,8 @@ function dynamicdata_userapi_getmodules($args)
               ORDER BY xar_prop_moduleid ASC, xar_prop_itemtype ASC";
 
     $result =& $dbconn->Execute($query);
-    if (!$result) return;
 
     $modules = array();
-
     while (!$result->EOF) {
         list($modid, $itemtype, $count) = $result->fields;
         if(xarSecurityCheck('ViewDynamicDataItems',0,'Item',"$modid:$itemtype:All")) {

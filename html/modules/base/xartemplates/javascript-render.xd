@@ -1,9 +1,9 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:comment> Process only if there is JavaScript present </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!--  Process only if there is JavaScript present -->
 <xar:if condition="is_array($javascript)">
-    <xar:comment> Loop for each item (could be an array of positions, or an array of items for a position) </xar:comment>
+    <!-- Loop for each item (could be an array of positions, or an array of items for a position) -->
     <xar:loop name="$javascript" id="top">
-        <xar:comment> Array of items for a given position </xar:comment>
+        <!-- Array of items for a given position -->
         <xar:if condition="!empty($position) and is_array($loop:top:item)">
             <xar:if condition="$loop:top:item.type == 'code' and (empty($type) or $type == 'code')">
                 <script type="text/javascript">
@@ -14,7 +14,7 @@
                 <script type="text/javascript" src="#$loop:top:item.data#"></script>
             </xar:if>
         </xar:if>
-        <xar:comment> Array of positions (all positions) so a sub-loop is needed </xar:comment>
+        <!-- Array of positions (all positions) so a sub-loop is needed -->
         <xar:if condition="empty($position) and is_array($loop:top:item)">
             <xar:loop name="$loop:top:item" id="detail">
                 <xar:if condition="$loop:detail:item.type == 'code' and (empty($type) or $type == 'code')">
