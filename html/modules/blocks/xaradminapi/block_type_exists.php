@@ -1,7 +1,5 @@
 <?php
 /**
- * Check for existance of a block type
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -26,15 +24,8 @@ function blocks_adminapi_block_type_exists($args)
 {
     extract($args);
 
-    if (empty($modName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'modName');
-        return;
-    }
-
-    if (empty($blockType)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'blockType');
-        return;
-    }
+    if (empty($modName))   throw new EmptyParameterException('modName');
+    if (empty($blockType)) throw new EmptyParameterException('blockType');
 
     $count = xarModAPIfunc('blocks', 'user', 'countblocktypes', array('module'=>$modName, 'type'=>$blockType));
 

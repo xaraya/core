@@ -15,40 +15,28 @@ function blocks_userapi_getcacheblock($args)
 {
     extract($args);
 
-    if (!isset($bid) || !is_numeric($bid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-            'item ID', 'user', 'getcacheblock', 'Blocks');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-            new SystemException($msg));
-        return;
-    }
+    // Argument check
+    if(!isset($bid)) throw new EmptyParameterException('bid');
+    if(!is_numeric($bid)) throw new BadParameterException($bid);
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $cacheBlockTable = $xartable['cache_blocks'];
+    $instance = array();
 
     $query = "SELECT xar_bid, xar_nocache, xar_page, xar_user, xar_expire
               FROM $cacheBlockTable
               WHERE xar_bid = ?";
-    
-    $result = &$dbconn->Execute($query,array($bid));
-    if (!$result) return;
-    // make sure there is a result
-    if ($result->EOF) {
-        $result->Close();
-        return;
+    $result = $dbconn->Execute($query,array($bid));
+    if($result->next()) {
+        // and if there is one (assuming only one here but there is a constraint on the table) grab it
+        list($bid, $nocache, $page, $user, $expire) = $result->fields;
+        $instance = array('bid'    => $bid, 'nocache' => $nocache,
+                          'page'   => $page,'user'    => $user,
+                          'expire' => $expire);
     }
-    //and if there is one (assuming only one here but there is a constraint on the table) grab it
-    list($bid, $nocache, $page, $user, $expire) = $result->fields;
+    $result->close();
     
-    //close the connection neow
-    $result->Close();
-    $instance = array('bid'     => $bid,
-                      'nocache' => $nocache,
-                      'page'    => $page,
-                      'user'    => $user,
-                      'expire'  => $expire);
-
     /* Return the instance array */
     return $instance;
 }

@@ -21,11 +21,10 @@ function privileges_admin_main()
     if(!xarSecurityCheck('ViewPrivileges')) return;
 
     xarResponseRedirect(xarModURL('privileges', 'admin', 'viewprivileges'));
-    
+
     // success
     return true;
 
 }
-
 
 ?>

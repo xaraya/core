@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <table class="xar-norm">
   <tr>
     <td>
@@ -9,9 +9,9 @@
         <xar:set name="timestamp">#xarMLS_userTime()#</xar:set>
         <xar:set name="datetime">#xarLocaleFormatDate('%Y-%m-%d %H:%M:%S')#</xar:set>
         <xar:set name="date">#xarLocaleFormatDate('%Y-%m-%d')#</xar:set>
-        <xar:comment>
+        <!--
           Note : timestamp is not an option for ExtendedDate
-        </xar:comment>
+        -->
         <xar:if condition="empty($class) or $class ne 'dynamic_extendeddate_property'">
           <option value="">
             <xar:ml>

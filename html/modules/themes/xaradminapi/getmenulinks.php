@@ -18,36 +18,26 @@
 */
 function themes_adminapi_getmenulinks()
 {
+    /*
+    This menu gets its data from the adminmenu.php file in the module's xardataapi folder.
+    You can add or change menu items by changing the data there.
+    Or you can create your own menu items here. They should have the form of this example:
+
     $menulinks = array();
-    // Security Check
-    if (!xarSecurityCheck('AdminTheme',0)) return;
-
-    $menulinks[] = array(   'url'   => xarModURL('themes', 'admin', 'list'),
-    'title' => xarML('View installed themes on the system'),
-    'label' => xarML('View Themes'));
-
-    // addition by sw@telemedia.ch (Simon Wunderlin)
-    // as per http://bugs.xaraya.com/show_bug.cgi?id=1162
-    // added and commited by <andyv>
-    // TODO: add credits in changelist.. John?
-    $menulinks[] = array(   'url'   => xarModURL('themes', 'admin', 'listtpltags'),
-    'title' => xarML('View the registered template tags.'),
-    'label' => xarML('Template Tags'));
-
-    // css configurations, viewer and editor (AndyV - corecss scenario)
-    // lets make these links only available when css class lib is loaded
-    //if(class_exists("xarCSS")){
-    //    $menulinks[] = array(   'url'   => xarModURL('themes', 'admin', 'cssconfig'),
-    //   'title' => xarML('View and configure Xaraya Cascading Style Sheets'),
-    //    'label' => xarML('Manage CSS'));
-    //}
-
-    $menulinks[] = array(   'url'   => xarModURL('themes', 'admin', 'modifyconfig'),
-    'title' => xarML('Modify the configuration of the themes module'),
-    'label' => xarML('Modify Config'));
-
-
+    .....
+    if (xarSecurityCheck('EditRole',0)) {
+        $menulinks[] = array('url'   => xarModURL('roles',
+                                                  'admin',
+                                                  'viewroles'),
+                              'title' => xarML('View and edit the groups on the system'),
+                              'label' => xarML('View All Groups'));
+    }
+    .....
     return $menulinks;
+    */
+
+    // No special menu. Just return a standard array
+    return xarModAPIFunc('base','admin','menuarray',array('module' => 'themes'));
 }
 
 ?>

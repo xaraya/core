@@ -1,7 +1,5 @@
 <?php
 /**
- * Import property fields from a static table
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -29,11 +27,9 @@ function dynamicdata_utilapi_importproperties($args)
     // Required arguments
     $invalid = array();
     if (empty($modid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module id', 'util', 'importproperties', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('module id', 'util', 'importproperties', 'DynamicData');
+        throw new BadParameterException($vars,$msg);
     }
 
     // Security check - important to do this as early on as possible to

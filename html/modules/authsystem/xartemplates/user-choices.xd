@@ -1,4 +1,4 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Authentication</xar:mlstring></span></div>
 <div class="xar-mod-body">
   <form action="#$loginurl#" method="post" enctype="application/x-www-form-urlencoded">
