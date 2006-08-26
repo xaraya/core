@@ -1,7 +1,6 @@
 <?php
 /**
  * Dynamic Data User Interface
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -12,6 +11,6 @@
  * @author mikespub <mikespub@xaraya.com>
 */
 
-require_once 'modules/dynamicdata/class/objects.php';
+sys::import('modules.dynamicdata.class.objects');
 
 ?>

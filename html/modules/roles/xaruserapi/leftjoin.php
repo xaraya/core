@@ -41,16 +41,11 @@ function roles_userapi_leftjoin($args)
     }
 
     // Security check
-    if (!xarSecurityCheck('ViewRoles',0)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-        return;
-    }
+    if (!xarSecurityCheck('ViewRoles',0)) return;
+
 // TODO: check this !
     foreach ($uids as $uid) {
-        if (!xarSecurityCheck('ReadRole',0,'All',"All:All:$uid")) {
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION');
-            return;
-        }
+        if (!xarSecurityCheck('ReadRole',0,'All',"All:All:$uid")) return;
     }
 
     // Table definition
@@ -77,7 +72,7 @@ function roles_userapi_leftjoin($args)
     }
 
     // Add available columns in the roles table
-    // note : we forget about pass and auth_module for now :-)
+    // note : we forget about pass and auth module for now :-)
     $columns = array('uid','uname','name','email');
     foreach ($columns as $column) {
         $leftjoin[$column] = $rolestable . '.xar_' . $column;

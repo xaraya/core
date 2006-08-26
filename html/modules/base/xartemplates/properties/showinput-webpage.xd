@@ -1,8 +1,8 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html-->
 
-<xar:comment>
+<!--
     Don't display the select box unless there are options to be displayed, as per xhtml
-</xar:comment>
+-->
 <xar:if condition="count($options) gt 0">    
     <select name="#$name#" id="#$id#" tabindex="#$tabindex#" >
         <xar:foreach in="$options" value="$option" >

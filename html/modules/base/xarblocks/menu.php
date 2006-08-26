@@ -110,7 +110,6 @@ function base_menublock_display($blockinfo)
     list($thismodname, $thismodtype, $thisfuncname) = xarRequestGetInfo();
 
     // Sort Order, Status, Common Labels and Links Display preparation
-    //$menustyle = xarModGetVar('adminpanels','menustyle');
     $logoutlabel = xarVarPrepForDisplay(xarML('logout'));
     //jojodee - only default authentication module, authsystem, provides logout
     //may want to look at other options for authentication modules
@@ -203,9 +202,9 @@ function base_menublock_display($blockinfo)
                         $url = xarModUrl('articles', 'user', 'view', array('catid' => $url[0]));
                         break;
                     }
-                    default : // standard URL
+                    default: // standard URL
                         // BUG 2023: Make sure manual URLs are prepped for XML, consistent with xarModURL()
-                        if (!empty($GLOBALS['xarMod_generateXMLURLs'])) {
+                        if (xarMod::$genXmlUrls) {
                             $url = xarVarPrepForDisplay($url);
                         }
                 }
