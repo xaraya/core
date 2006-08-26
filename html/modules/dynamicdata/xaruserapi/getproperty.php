@@ -1,7 +1,5 @@
 <?php
 /**
- * Get a dynamic property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -27,7 +25,8 @@
 function &dynamicdata_userapi_getproperty($args)
 {
     if (empty($args['type'])) {
-        return;
+    	$result = null;
+        return $result;
     }
     $result =  Dynamic_Property_Master::getProperty($args);
     return $result;

@@ -1,7 +1,5 @@
 <?php
 /**
- * Migrate module items
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -57,10 +55,9 @@ function dynamicdata_utilapi_migrate($args)
         $invalid[] = 'fieldmap';
     }
     if (count($invalid) > 0) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    join(', ',$invalid), 'admin', 'migrate', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array(join(', ',$invalid), 'admin', 'migrate', 'DynamicData');
+        throw new BadParameterException($vars,$msg);
     }
 
     // Security check - important to do this as early on as possible to
@@ -75,19 +72,17 @@ function dynamicdata_utilapi_migrate($args)
 
     $modinfo = xarModGetInfo($from['module']);
     if (empty($modinfo)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                     'from module', 'admin', 'migrate', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('from module', 'admin', 'migrate', 'DynamicData');
+        throw new BadParameterException($vars,$msg);
     }
     $modulefrom = $modinfo['name'];
 
     $modinfo = xarModGetInfo($to['module']);
     if (empty($modinfo)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                     'to module', 'admin', 'migrate', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('to module', 'admin', 'migrate', 'DynamicData');
+        throw new BadParameterException($vars,$msg);
     }
     $moduleto = $modinfo['name'];
 

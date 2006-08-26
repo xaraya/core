@@ -33,9 +33,9 @@
                 <xar:set name="shownew">0</xar:set>
                 <input type="checkbox" name="#$fieldprefix#dd_create[#$objectid#]" id="#$fieldprefix#dd_create_#$objectid#" value="1" checked="checked" /><label for="#$fieldprefix#dd_create_#$objectid#"><xar:mlstring>Add</xar:mlstring></label>
             <xar:else/>
-            <xar:comment>
+            <!--
                 <input type="checkbox" name="#$fieldprefix#dd_delete[#$objectid#]" id="#$fieldprefix#dd_delete_#$objectid#_#$itemid#" value="#$itemid#" /><label for="#$fieldprefix#dd_delete_#$objectid#_#$itemid#"><xar:mlstring>Delete</xar:mlstring></label>
-            </xar:comment>
+            -->
             </xar:if>
             </td>
         </tr>

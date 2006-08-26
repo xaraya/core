@@ -20,13 +20,7 @@ function roles_userapi_checkprivilege($args)
 {
     extract($args);
 
-    if(!isset($privilege)) {
-        $msg = xarML('roles_userapi_checkprivilege');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION,
-                    'BAD_PARAM',
-                     new SystemException($msg));
-        return false;
-    }
+    if(!isset($privilege)) throw new EmptyParameterException('privilege');
 
     if (empty($uid)) $uid = xarSessionGetVar('uid');
     $roles = new xarRoles();

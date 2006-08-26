@@ -10,6 +10,8 @@
 
 /**
  * Full Email Check -- Checks first thru the regexp and then by mx records
+ *
+ * @todo Why doesnt this throw an exception?
  */
 function variable_validations_fullemail (&$subject, $parameters=null, $supress_soft_exc)
 {
