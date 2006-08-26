@@ -1,7 +1,5 @@
 <?php
 /**
- * Update current item
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -13,36 +11,33 @@
  */
 /**
  * Update current item
+ *
  * This is a standard function that is called with the results of the
  * form supplied by xarModFunc('dynamicdata','admin','modify') to update a current item
- * @param 'exid' the id of the item to be updated
- * @param 'name' the name of the item to be updated
- * @param 'number' the number of the item to be updated
+ *
+ * @param int    objectid
+ * @param int    modid
+ * @param int    itemtype
+ * @param int    itemid
+ * @param string return_url
+ * @param bool   preview
+ * @param string join
+ * @param string table
  */
 function dynamicdata_admin_update($args)
 {
     extract($args);
 
     if(!xarVarFetch('objectid',   'isset', $objectid,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',      'isset', $modid,       NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype',   'isset', $itemtype,    NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('modid',      'int', $modid,       xarModGetIDFromName('dynamicdata'), XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemtype',   'int',   $itemtype,    0, XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('itemid',     'isset', $itemid,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('return_url', 'isset', $return_url,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('preview',    'isset', $preview,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('preview',    'isset', $preview,     0, XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('join',       'isset', $join,        NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',      'isset', $table,       NULL, XARVAR_DONT_SET)) {return;}
 
     if (!xarSecConfirmAuthKey()) return;
-
-    if (empty($modid)) {
-        $modid = xarModGetIDFromName('dynamicdata');
-    }
-    if (empty($itemtype)) {
-        $itemtype = 0;
-    }
-    if (empty($preview)) {
-        $preview = 0;
-    }
 
     $myobject = & Dynamic_Object_Master::getObject(array('objectid' => $objectid,
                                          'moduleid' => $modid,
@@ -81,14 +76,13 @@ function dynamicdata_admin_update($args)
         $item['itemtype'] = $myobject->itemtype;
         $item['itemid'] = $myobject->itemid;
         $hooks = array();
-        $hooks = xarModCallHooks('item', 'modify', $myobject->itemid, $item, $modinfo['name']); 
+        $hooks = xarModCallHooks('item', 'modify', $myobject->itemid, $item, $modinfo['name']);
         $data['hooks'] = $hooks;
- 
+
         return xarTplModule('dynamicdata','admin','modify', $data);
     }
-
+    // Valid and not previewing, update the object
     $itemid = $myobject->updateItem();
-
     if (!isset($itemid)) return; // throw back
 
     // special case for dynamic objects themselves

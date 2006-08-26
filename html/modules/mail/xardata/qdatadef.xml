@@ -1,0 +1,38 @@
+<object name="mailqdata">
+  <label>datastorage for mailqueue</label>
+  <moduleid>771</moduleid>
+  <itemtype>-1</itemtype>
+  <urlparam>itemid</urlparam>
+  <maxid>0</maxid>
+  <config></config>
+  <isalias>0</isalias>
+  <properties>
+    <property name="id">
+      <label>id</label>
+      <type>itemid</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>1</order>
+      <validation></validation>
+    </property>
+    <property name="data">
+      <label>data</label>
+      <type>textarea_large</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>2</status>
+      <order>2</order>
+      <validation></validation>
+    </property>
+    <property name="nextid">
+      <label>nextid</label>
+      <type>integerbox</type>
+      <default></default>
+      <source>dynamic_data</source>
+      <status>1</status>
+      <order>3</order>
+      <validation></validation>
+    </property>
+  </properties>
+</object>

@@ -1,7 +1,6 @@
 <?php
 /**
  * List items in a template
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -23,6 +22,8 @@ function dynamicdata_adminapi_showlist($args)
 {
     extract($args);
 
+//    $current = xarModAPIFunc('dynamicdata','user','setcontext',$args);
+
     // optional layout for the template
     if (empty($layout)) {
         $layout = 'default';
@@ -31,6 +32,14 @@ function dynamicdata_adminapi_showlist($args)
     // differently for a specific module / item type
     if (empty($template)) {
         $template = '';
+    }
+    if (empty($tplmodule)) {
+        $tplmodule = 'dynamicdata';
+    }
+
+    // do we want to count?
+    if(empty($count)) {
+        $count=false;
     }
 
     // we got everything via template parameters
@@ -58,10 +67,9 @@ function dynamicdata_adminapi_showlist($args)
         $modid = xarModGetIDFromName($modname);
     }
     if (empty($modid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'admin', 'showlist', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return $msg;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('module name', 'admin', 'showlist', 'dynamicdata');
+        throw new BadParameterException($vars,$msg);
     }
 
     if (empty($itemtype) || !is_numeric($itemtype)) {
@@ -113,9 +121,8 @@ function dynamicdata_adminapi_showlist($args)
     } else {
         $myfieldlist = null;
         // get active properties only (+ not the display only ones)
-        $status = 1;
+        $status = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
     }
-
     // join a module table to a dynamic object
     if (empty($join)) {
         $join = '';
@@ -127,6 +134,10 @@ function dynamicdata_adminapi_showlist($args)
     // select in some category
     if (empty($catid)) {
         $catid = '';
+    }
+    // include parent fields?
+    if (empty($extend)) {
+        $extend = '';
     }
 
     // check the URL parameter for the item id used by the module (e.g. exid, aid, ...)
@@ -146,10 +157,45 @@ function dynamicdata_adminapi_showlist($args)
                                            'table' => $table,
                                            'catid' => $catid,
                                            'groupby' => $groupby,
-                                           'status' => $status));
+                                           'status' => $status,
+                                           'extend'  => $extend));
+    if (!isset($object)) return;
+    // Count before numitems!
+    $numthings = 0;
+    if($count) {
+        $numthings = $object->countItems();
+    }
     $object->getItems();
 
-    return $object->showList(array('layout'   => $layout,
-                                   'template' => $template));
+    // label to use for the display link (if you don't use linkfield)
+    if (empty($linklabel)) {
+        $linklabel = '';
+    }
+    // function to use in the display link
+    if (empty($linkfunc)) {
+        $linkfunc = '';
+    }
+    // URL parameter for the item id in the display link (e.g. exid, aid, uid, ...)
+    if (empty($param)) {
+        $param = '';
+    }
+    // field to add the display link to (otherwise it'll be in a separate column)
+    if (empty($linkfield)) {
+        $linkfield = '';
+    }
+    // current URL for the pager (defaults to current URL)
+    if (empty($pagerurl)) {
+        $pagerurl = '';
+    }
+
+    return $object->showList(array('layout'    => $layout,
+                                   'template'  => $template,
+                                   'linklabel' => $linklabel,
+                                   'linkfunc'  => $linkfunc,
+                                   'param'     => $param,
+                                   'pagerurl'  => $pagerurl,
+                                   'linkfield' => $linkfield,
+                                   'count'     => $numthings,
+                                   'tplmodule' => $tplmodule));
 }
 ?>

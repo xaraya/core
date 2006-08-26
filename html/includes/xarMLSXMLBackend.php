@@ -18,9 +18,9 @@
  * All xml files are encoded in UTF-8. This backend is useful only when
  * running Xaraya in the multi-language mode (UTF-8).
  * @package multilanguage
+ * @throws Exception, XMLParseException
  */
-include_once dirname(__FILE__).'/xarMLS.php';
-class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
+class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
     var $curEntry;
     var $curData;
@@ -41,6 +41,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         $this->backendtype = "xml";
     }
 
+    // Implement the ITranslationsBackendInterface
     function translate($string, $type = 0)
     {
         if (!isset($this->transEntries[$string])) {
@@ -97,7 +98,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         }
         
         if ($xmlExtensionLoaded === false) {
-            xarCore_die('Using the "xml" backend for translations, but the php-xml extension is not loaded. Please modify your php.ini to load the extension or choose the "php" backend.');
+            throw new Exception('Using the "xml" backend for translations, but the php-xml extension is not loaded. Please modify your php.ini to load the extension or choose the "php" backend.');
         }
         
         $this->curData = '';
@@ -121,9 +122,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         xml_set_character_data_handler($this->parser, "characterData");
 
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
-//            die("Could not load context:" . $ctxName . " in " . $this->locale);
-//            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'CONTEXT_NOT_EXIST', new SystemException($ctxType.': '.$ctxName));
-//            return;
+            //  throw new ContextNotFounException(array($ctxName,$this->locale),'Could not load context:"#(1)" in "#(2)"');
             return true;
         }
 
@@ -139,9 +138,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
                 // NOTE: <marco> Of course don't use xarML here!
                 $errstr = xml_error_string(xml_get_error_code($this->parser));
                 $line = xml_get_current_line_number($this->parser);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'XML_PARSER_ERROR',
-                                new SystemException("XML parser error in $fileName: $errstr at line $line."));
-                return;
+                throw new XMLParseException(array($fileName,$line,$errstr));
             }
         }
 
@@ -168,6 +165,8 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend
         closedir($dd);
         return $ctxNames;
     }
+    // End ItranslationsBackend interface
+
 
     function getEntry($string)
     {

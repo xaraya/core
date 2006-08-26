@@ -1,7 +1,5 @@
 <?php
 /**
- * Modify privilege details
- *
  * @package core modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -116,10 +114,12 @@ function privileges_admin_modifyprivilege()
     if(isset($show)) {$data['show'] = $show;}
     else {$data['show'] = 'assigned';}
 
-    include_once 'modules/privileges/xartreerenderer.php';
+    sys::import('modules.privileges.xartreerenderer');
     $renderer = new xarTreeRenderer();
 
-    $data['tree'] = $renderer->drawtree($renderer->maketree($priv));
+    // $data['tree'] = $renderer->drawtree($renderer->maketree($priv));
+    $data['trees'] = array($renderer->maketree($priv));
+    //debug($data['trees']);
     $data['oldcomponent'] = $component;
     $data['authid'] = xarSecGenAuthKey();
     $data['parents'] = $parents;

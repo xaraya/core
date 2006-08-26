@@ -1,7 +1,5 @@
 <?php
 /**
- * Display the roles this privilege is assigned to
- *
  * @package core modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -43,7 +41,7 @@ function privileges_admin_viewroles()
     }
 
     // Load Template
-    include_once 'modules/privileges/xartreerenderer.php';
+    sys::import('modules.privileges.xartreerenderer');
     $renderer = new xarTreeRenderer();
 
 //Get the array of parents of this privilege
@@ -61,7 +59,8 @@ function privileges_admin_viewroles()
                              'admin',
                              'removerole',
                              array('pid'=>$pid));
-    $data['trees'] = $renderer->drawtrees($data['show']);
+    //    $data['trees'] = $renderer->drawtrees($data['show']);
+    $data['trees'] = $renderer->maketrees($data['show']);
     $data['parents'] = $parents;
     $data['groups'] = xarModAPIFunc('roles','user','getallgroups');
     return $data;

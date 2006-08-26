@@ -1,14 +1,14 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
 
-    <xar:comment>This section deals with dependancies.</xar:comment>
+    <!-- This section deals with dependancies. -->
     <xar:if condition="!empty($dependencies)">
     </xar:if>
 
-    <xar:comment>This section deals with upgrade errors.</xar:comment>
+    <!-- This section deals with upgrade errors. -->
     <h2>
         <xar:mlstring>Module Upgrade Failed</xar:mlstring>
     </h2>

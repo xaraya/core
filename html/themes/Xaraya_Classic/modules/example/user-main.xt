@@ -4,7 +4,7 @@
     <xar:mlvar>#xarTplGetThemeDir()#</xar:mlvar>
   </xar:ml>
 </p>
-<xar:comment> common user menu for this module - remove link to the current function </xar:comment>
+<!--  common user menu for this module - remove link to the current function -->
 <table border="0" width="100%">
   <!-- the variables used in this menu come from example_user_menu() -->
   <tr>
