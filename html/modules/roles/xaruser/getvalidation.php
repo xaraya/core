@@ -20,7 +20,7 @@
  * @param   valcode is the validation code sent to user on registration
  * @param   phase is the point in the function to return
  * @return  true if valcode matches valcode in user status table
- * @raise   exceptions raised valcode does not match
+ * @throws   exceptions raised valcode does not match
  * @TODO jojodee - validation process, duplication of functions and call to registration module needs to be rethought
  *         Rethink to provide cleaner separation between roles, authentication and registration
  */

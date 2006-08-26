@@ -20,7 +20,7 @@ xarDBLoadTableMaintenanceAPI();
  * @author Marty Vance
  * @param none $
  * @returns bool
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function themes_init()
 {

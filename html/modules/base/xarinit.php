@@ -21,7 +21,7 @@ xarDBLoadTableMaintenanceAPI();
  * Initialise the base module
  *
  * @return bool
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function base_init()
 {

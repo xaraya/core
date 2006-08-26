@@ -26,7 +26,7 @@
  * @param args argument array
  * @returns mixed
  * @return The output of the function, or false on failure
- * @raise BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
+ * @throws BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
  */
 function xarInstallFunc($funcName = 'main', $args = array())
 {
@@ -88,7 +88,7 @@ function xarInstallAPIFunc($funcName = 'main', $args = array())
  * @param modType type of functions to load
  * @returns bool
  * @return true on success
- * @raise BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
+ * @throws BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
 function xarInstallAPILoad()
 {
@@ -122,7 +122,7 @@ function xarInstallAPILoad()
  * @access public
  * @returns string
  * @return true
- * @raise BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
+ * @throws BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
 function xarInstallLoad()
 {

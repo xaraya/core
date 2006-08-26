@@ -14,7 +14,7 @@
  * @param $args['modName'] optional module we're looking for
  * @returns array
  * @return array of known hooks
- * @raise NO_PERMISSION
+ * @throws NO_PERMISSION
  */
 function modules_adminapi_gethooklist($args)
 {

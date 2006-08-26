@@ -18,7 +18,7 @@
  * @access public
  * @param none $
  * @returns bool
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function roles_init()
 {
@@ -225,7 +225,7 @@ function roles_activate()
  * @access public
  * @param oldVersion $
  * @returns bool
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function roles_upgrade($oldVersion)
 {
@@ -313,7 +313,7 @@ function roles_upgrade($oldVersion)
  * @access public
  * @param none $
  * @returns bool
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function roles_delete()
 {

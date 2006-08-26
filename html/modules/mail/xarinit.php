@@ -63,7 +63,7 @@ function mail_init()
  * @access public
  * @param none $
  * @returns bool
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function mail_activate()
 {

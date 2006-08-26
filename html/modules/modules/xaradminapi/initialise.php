@@ -14,7 +14,7 @@
  * @param regid registered module id
  * @returns bool
  * @return
- * @raise BAD_PARAM, MODULE_NOT_EXIST
+ * @throws BAD_PARAM, MODULE_NOT_EXIST
  */
 function modules_adminapi_initialise($args)
 {

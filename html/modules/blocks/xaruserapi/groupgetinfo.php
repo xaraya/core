@@ -15,7 +15,7 @@
  * @access public
  * @param integer blockGroupId the block group id
  * @return array lock information
- * @raise DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
+ * @throws DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
  */
 function blocks_userapi_groupgetinfo($args)
 {
