@@ -128,7 +128,7 @@
     
 <input type="hidden" name="translationsbackend" id="translationsbackend" value="xml2php" />
 
-<xar:comment>    
+<!--    
 <fieldset>
     <legend>
         <xar:mlstring>Translations backend</xar:mlstring>
@@ -160,4 +160,4 @@
     </div>
 
 </fieldset>
-</xar:comment>
+-->

@@ -1,11 +1,11 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!--
     Note: display hooks are currently disabled by default in DD - you should use
     the corresponding xar:data-* BL tags directly in your templates instead
-</xar:comment>
-<xar:comment>
+-->
+<!--
     You can use different user-displayhook-[objectname].xd templates for different objects
-</xar:comment>
+-->
 <table width="100%" border="0" cellspacing="0" cellpadding="4">
 <xar:foreach in="$properties" key="$name" value="$property">
     <tr class="xar-align-left">

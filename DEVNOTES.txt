@@ -1,0 +1,182 @@
+A log of important changes made to the 2.x branch which we need to
+revisit later on before trusting the branch to be released or used.
+
+!!!DB-CHANGES:
+* module_uservars is now module_itemvars where item is an item in a
+  module, not only roles. The columns are adapted accordingly.
+* hooks table now registers the mod id in the columns smodid and
+  tmodid instead of the name of the module.
+* adminpanels as module is completely gone, which also means its table
+  was deleted. The complete functionality of adminpanels is now in the
+  modules module.
+* template_tags column xar_module replaced by a column xar_modid
+* security_instances column xar_module replaced by column xar_modid
+* security_masks column xar_module replaced by column xar_modid
+* xar_roles column xar_auth_module replaced by column
+  xar_auth_modid. The interface WAS NOT ADAPTED but nothing uses the
+  auth_module directly and the columns is probably going to move away
+  to somewhere else anyway. 
+* xar_block_types column xar_module replaced by column xar_modid. This
+  was far out the most intrusive one since that table is used in the
+  privilege instance queries. I adapted as best as I could, no doubt
+  they wont work anymore in some cases. We'll see.
+* table theme_states has been dropped, where the xar_state column is
+  now in the themes table itself.
+* table module_states has been dropped, where the xar_state column is
+  now in the modules table itself.
+* table config_vars has been dropped, now managed by module_vars where
+  modid==0
+* table security_levels has been dropped, now managed by SecurityLevel class
+* tables privmembers, rolemembers and security_acl have their unique key on
+  2 columns replaced by a primary key.
+
+
+(see DEVupgrades.sql for the above)
+
+!!!OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
+* when encountered, upgrade code to upgrade modules from older
+  versions than in 1.0 is removed, assuming we will only support 
+  upgrading from 1.0 to 2.x and not versions before 1.0 
+* the whole exception subsystem was rewritten from scratch and the
+  whole of core was adapted to use it. (see new RFC-0054)
+* adodb has been replaced with the creole database abstraction layer.
+* the meaning of xar:comment and <!-- has been reversed as observed as
+  a design error. xar:comment now produces a comment in the output while things
+  between <!-- and --> get ignored by the BL parser. If you're previous xar:comment
+  content was sensitive you might wanna reverse it in your templates
+  too.
+* where applicable all pn compatibility has been removed.
+* The distinction between system and site table mapping have been
+  removed from core. A fullblown alternative has not yet been
+  provided, but we know that just doing system/site mapping is not
+  enough
+  (that said: the table sharing, which is by far the prominent use can
+  be solved very easily by defining views in the backend, we can/should
+  certainly consider adapting the installer to create additional sites
+  into an existing installation.
+* the xar:template tag behaviour has been extended to allow an open
+  form. This is a preparation, so the tag can function as the root tag
+  for a template. The current behaviour is just to accept the tag, but
+  no functional behaviour is attached to it yet. In a way the
+  xar:template tag and the xar:blocklayout tag are moving closer to
+  eachother.
+* DROPPED API: xarMod_getVarsByName, xarTheme_getVarsByName (were
+  protected and never used)
+* DROPPED API: $throwException parameter in xarModAPIFunc
+
+!!DIFFERENCES BETWEEN PHP 5.0 and 5.1
+* do not agree on what function_exists() / is_callable() /
+  method_exists() should return
+* In PHP 5.0.4 (and earlier versions I believe) the shutdown function is called *after* the output buffering callback.
+* In PHP 5.1.2 (not sure when the change occurred) the shutdown function is called *before* the output buffering callback.
+* apparently PHP 5.1 allows headers to be sent in a shutdown function  (arguably wrong)
+
+
+!!!REFACTORING LIST:
+List of things which need to be refactored before starting the actual
+design work can begin.
+
+* [DONE] i really like some sort of import(name.of.some.sub.part) dot notation to
+  include major parts into the flow when doing stuff, instead of
+  xarInclude or something
+* Finish up the planned db changes to normalizing the database.
+  Open issues:
+        - does blocks really need 5 tables?
+        - dynamic relations table is floating in there for a long time
+        - xar_realm in xar_security masks uses 'All' which prevents it from being
+          a foreign key to the realm table (through id), likewise for xar_privileges 
+          table
+        - [DONE] if we are going to store privilege levels in the database, then refer to 
+          them from other tables, we now store the level verbatim (perhaps drop the table?)
+        - similarly, in xar_privileges table the xar_module column. 
+        - is xar_auth_mod_id still needed? 
+* [STARTED] OO-ify stuff in core where appropriate (including getting rid of
+  die()'s and modelling the classes where php4 could not) 
+* I really would like to do something with views wrt multisites et. al.
+* I really would like to do something with triggers, dunno for what
+* I really would like to do something with stored procedures, dunno
+  for what
+* the need for a Request mapper is evident. Apart from the gained
+  dimension for navigation design this also centralizes the short url
+  functionality instead of distributing it all over. 
+* the blocklayout tag could use attributes related to emitting a <?xml
+  header or not (or use <?xar for this? since it is an instruction to
+  process )
+* design a more solid concept for letting blocklayout emit http headers, attributes
+  in the blocklayout tag dont cut it. (disposition is one needed, as well as more granular cache s)
+* we keep a 'state' of some sort for different items:
+  1. modules
+  2. themes
+  3. roles
+  4. blocks
+  5. dd_properties
+  Would it make sense to centralise state management of a generic
+  'item' level? Also the use of a workflow component in core comes to mind.
+* simplify installer/xaradmin.php before rewriting it
+* privileges creates objects now where some number like '1098' enters
+  the xar_modid field (which was previously xar_module). This will
+  cause confusion. (unfinished?, experiment?, ask marc)
+* we need easy and global xmlhttp request support everywhere.
+* [DONE] Xaraya is an excellent backend, we need a equally excellent front-end companion (like dojo)
+   (implemented as dojo activator module)
+* i'd really like more native backend support, for query preparation
+  that place is obviously creole, but for shielding and triggering we
+  dont have an abstraction and the more complex modules go through a
+  whole lot of hoops sometimes which the backend could do in a jiffy.
+* the installer tries to throw all database onto one pile, we need to split 
+    the database configuration screens into different ones for each backend
+    * sqlite has no user and password
+    * sqlite uses a directory for a host
+    * mysql can support different table drivers (myisam, innodb) transparently
+* xml constructs like PI, EL and ATT need their equivalent in BL, but the current
+  implementation lacks context.
+* [STARTED] finish design and implementation os schema based data definition 
+* design a less bloated concept for config/user/mod/theme/system vars etc
+* reorganize the old error/exception system to use much fewer files, consider
+  writing a talkback module to go along with a distro for facilitating the bug
+  reporting we can build into an install. (bugzilla can be remotely queried for
+  products and components easily, perhaps based on a server side map of regid-component
+  for modules at least)
+* 
+
+!!!KNOWN ISSUES
+* blocks do not end up in groups anymore during installation, need to
+  investigate why that is. Most likely a missed spot when doing the
+  schema migration. 
+* since we now use the meta info classes, some functions in DD which
+  depend on the linkage info from tables to modules (which was
+  unreliable) is lost, so expect surprising results in 'meta' areas in
+  DD for now until we figure our *if* and *how* we want to link
+  components to physical tables.
+* datadict is absent in 2.x since that lived in adodb, creole does not have it
+* there is no upgrade routine for upgrading 1.x to 2.x
+* when we're in excecption handling for one exception, it seems that no more
+  exceptions are thrown in subsequent code
+  Example: 
+        - dont define date.timezone in php (will raise exception in xarLogger.php early on)
+        - make sure CACHEKEYS file is NOT present (should raise exception in caching/template.php lines 168+)
+          The fopen() call in caching/template.php does NOT raise an exception then
+
+
+!!!MIN. REQUIRED VERSIONS DETERMINED SO FAR
+* PHP      5.0.5
+* Mysql    5.0.18
+* Postgres 8.0.6
+* Sqlite   N/A (embedded in PHP, i think it's 2.8.x for non PDO and 3.x for PDO)
+           There seems to be a sqlite3 extension floating around for php5
+* Oracle   ?
+* MsSql    ? (server 2003?)
+
+!!!Requirements for a front end (js) library
+- widget (or controls) is our immediate direct need to lighten the
+  burden on template/theme maintenance
+- having events on the controls to asynchronously load other data is
+  the second need (master detail relations, repopulation combo's etc.)
+- specifying the controls should be a 3 step process maximal:
+  1. include on js entry point for the request
+  2. write the controls inside a xar-template 
+  3. (optional) customize the default behaviour to the applications
+need.
+Whether the tags used are compiled/transformed on the server or
+through a js callback is irrelevant for us.
+ 

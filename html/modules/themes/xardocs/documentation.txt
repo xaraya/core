@@ -178,7 +178,4 @@ no parameters and returns no important data.
 Removed core functions: none
 Deprecated: none
 
-NOTE - xarTplAddStyleLink may be a good candidate for deprecation, due to 
-its limited usefulness (only allows to link external css, no other methods)
-
 END OF DOCUMENT

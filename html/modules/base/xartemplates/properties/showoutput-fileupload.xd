@@ -1,8 +1,8 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:if condition="!empty($basedir)">
-    <xar:comment>TODO: convert basedir to base URL when necessary ?</xar:comment>
+    <!-- TODO: convert basedir to base URL when necessary ? -->
     <a href="#$basedir#/#$value#" title="#xarML('Download')#">#$value#</a>
 <xar:else/> 
-    <xar:comment>something went wrong here - the file doesn't exist</xar:comment>
-    #$value#
+    <!-- something went wrong here - the file doesn't exist -->
+    <xar:var name="value" prep="true"/>
 </xar:if>

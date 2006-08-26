@@ -1,7 +1,6 @@
 <?php
 /**
  * Number Box Property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -13,7 +12,7 @@
 /*
  * @author mikespub <mikespub@xaraya.com>
 */
-include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
 
 /**
  * handle a numberbox property
@@ -22,8 +21,24 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
 {
-    var $size = 10;
-    var $maxlength = 30;
+    function __construct($args)
+    {
+        parent::__construct($args);
+
+        $this->size      = 10;
+        $this->maxlength = 30;
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 15;
+        $info->name = 'integerbox';
+        $info->desc = 'Number Box';
+
+        return $info;
+    }
 
     function validateValue($value = null)
     {
@@ -62,49 +77,17 @@ class Dynamic_NumberBox_Property extends Dynamic_TextBox_Property
         return true;
     }
 
-    // default showInput() from Dynamic_TextBox_Property
-
-    // default showOutput() from Dynamic_TextBox_Property
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-    function getBasePropertyInfo()
-    {
-        $args = array();
-        $baseInfo = array(
-                          'id'         => 15,
-                          'name'       => 'integerbox',
-                          'label'      => 'Number Box',
-                          'format'     => '15',
-                          'validation' => '',
-                          'source'     => '',
-                          'dependancies' => '',
-                          'requiresmodule' => '',
-                          'aliases'        => '',
-                          'args'           => serialize($args)
-                          // ...
-                         );
-        return $baseInfo;
-    }
-
     // Trick: use the parent method with a different template :-)
     function showValidation($args = array())
     {
         // allow template override by child classes
         if (!isset($args['template'])) {
-            $args['template'] = 'floatbox';
+            // can't use this yet, need to decide on a name
+            //$args['template'] = $this->getTemplate();
+            $args['template'] = 'numberbox';
         }
 
         return parent::showValidation($args);
     }
-
-    // default updateValidation() from Dynamic_TextBox_Property
-
 }
-
 ?>
