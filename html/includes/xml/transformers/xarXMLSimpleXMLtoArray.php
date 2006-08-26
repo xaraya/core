@@ -1,6 +1,6 @@
 <?php
 
-include_once('./includes/xarXML.php');
+sys::import('xarXML');
 
 /**
  * This handler was made to handle ONLY Simple XML (+attributes), creating

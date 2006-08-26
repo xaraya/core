@@ -15,7 +15,7 @@
                 </div>
                 <div id="xc-clear">
                     &nbsp;
-                    <xar:comment>this is the height clearing empty element</xar:comment>
+                    <!-- this is the height clearing empty element -->
                 </div>
             </div>
         </div>

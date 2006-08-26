@@ -17,21 +17,26 @@
  */
 function roles_admin_modifyrole()
 {
-    if (!xarVarFetch('uid', 'int:1:', $uid)) return;
+    if (!xarVarFetch('uid', 'int:1:', $uid, 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pname', 'str:1:', $name, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('ptype', 'str:1', $type, NULL, XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('itemid', 'int', $itemid, NULL, XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('itemtype', 'int', $itemtype, NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('puname', 'str:1:35:', $uname, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pemail', 'str:1:', $email, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('ppass', 'str:1:', $pass, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('state', 'str:1:', $state, '', XARVAR_DONT_SET)) return;
     if (!xarVarFetch('phome', 'str', $data['phome'], '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pprimaryparent', 'int', $data['primaryparent'], '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('utimezone','str:1:',$utimezone,'',XARVAR_NOT_REQUIRED)) return;
+
+    $uid = isset($itemid) ? $itemid : $uid;
+
     // Call the Roles class and get the role to modify
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
 
     // get the array of parents of this role
+    // need to display this in the template
+    // we also use this loop to fill the names array with groups that this group shouldn't be added to
     $parents = array();
     $names = array();
     foreach ($role->getParents() as $parent) {
@@ -65,14 +70,18 @@ function roles_admin_modifyrole()
     $data['pname'] = $name;
 
 // Security Check
-    if (!xarSecurityCheck('EditRole',1,'Roles',$name)) return;
+    if (!xarSecurityCheck('EditRole',0,'Roles',$name))
+        if (!xarSecurityCheck('ReadRole',1,'Roles',$name)) return;
     $data['frozen'] = !xarSecurityCheck('EditRole',0,'Roles',$name);
 
-    if (isset($type)) {
-        $data['ptype'] = $type;
+    if (isset($itemtype)) {
+        $data['itemtype'] = $itemtype;
     } else {
-        $data['ptype'] = $role->getType();
+        $data['itemtype'] = $role->getType();
     }
+    $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
+    $types = xarModAPIFunc('roles','user','getitemtypes');
+    $data['itemtypename'] = $types[$data['itemtype']]['label'];
 
     if (!empty($uname)) {
         $data['puname'] = $uname;
@@ -138,7 +147,7 @@ function roles_admin_modifyrole()
     // call item modify hooks (for DD etc.)
     $item = $data;
     $item['module']= 'roles';
-    $item['itemtype'] = $data['ptype']; // we might have something separate for groups later on
+    $item['itemtype'] = $data['itemtype'];
     $item['itemid']= $uid;
     $data['hooks'] = xarModCallHooks('item', 'modify', $uid, $item);
 

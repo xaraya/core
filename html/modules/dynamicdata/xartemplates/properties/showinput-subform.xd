@@ -1,12 +1,12 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
 <xar:if condition="empty($style) or $style eq 'serialized'">
   <xar:if condition="!empty($object)">
     <table class="xar-norm">
-      <xar:comment>
+      <!--
         Use a field prefix for all input fields of the object, so that
         you can have several identical objects in the same input form
-      </xar:comment>
+      -->
       <xar:data-form object="$object" layout="prefix" fieldprefix="$fieldprefix" />
     </table>
   </xar:if>
@@ -44,7 +44,7 @@
           <xar:if condition="!empty($input)">
             <xar:data-form object="$object" layout="prefix" fieldprefix="$fieldprefix" />
           <xar:elseif condition="empty($fieldlist) or empty($title) or count($fieldlist) gt 1"/>
-            <xar:comment> don't bother showing this if we only display the title field </xar:comment>
+            <!-- don't bother showing this if we only display the title field -->
             <xar:data-display object="$object" />
           </xar:if>
         </td>
@@ -62,7 +62,7 @@
           <xar:mlstring>Select link</xar:mlstring>
         </td>
         <td>
-          <xar:comment> use the link property to show the values in a nicer way </xar:comment>
+          <!--  use the link property to show the values in a nicer way -->
           <xar:set name="linkprop">#$object:properties[$link]#</xar:set>
 
           <input type="hidden" name="#$name#_old" id="#$id#_old" value="#$value#" />

@@ -1,7 +1,6 @@
 <?php
 /**
  * Call an installer function
- *
  * @package Installer
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -39,12 +38,7 @@ function xarInstallFunc($funcName = 'main', $args = array())
     if (!function_exists($modFunc)) {
         // try to load it
         xarInstallLoad();
-        if(!function_exists($modFunc)) {
-            $msg = xarML('Module function #(1) does not exist.', $modFunc);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
-                            new SystemException($msg));
-            return;
-        }
+        if(!function_exists($modFunc)) throw new FunctionNotFoundException($modFunc);
     }
 
     // Load the translations file
@@ -76,12 +70,7 @@ function xarInstallAPIFunc($funcName = 'main', $args = array())
         // attempt to load the install api
         xarInstallAPILoad();
         // let's check for the function again to be sure
-        if (!function_exists($modAPIFunc)) {
-            $msg = xarML('Module API function #(1) does not exist.', $modAPIFunc);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
-                            new SystemException($msg));
-            return;
-        }
+        if (!function_exists($modAPIFunc)) throw new FunctionNotFoundException($modAPIFunc);
     }
 
     // Load the translations file
@@ -117,13 +106,8 @@ function xarInstallAPILoad()
     $modOsType = xarVarPrepForOS($modType);
 
     $osfile = "modules/$modOsDir/xar{$modOsType}api.php";
-    if (!file_exists($osfile)) {
-        // File does not exist
-        $msg = xarML('Module file #(1) does not exist.', $osfile);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
-                       new SystemException($msg));
-        return;
-    }
+    if (!file_exists($osfile)) throw new FileNotFoundException($osfile);
+
 
     // Load the file
     include $osfile;
@@ -147,12 +131,7 @@ function xarInstallLoad()
     $modName = 'installer';
     $modType = 'admin';
 
-    if (empty($modName)) {
-        $msg = xarML('Empty modname.');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return;
-    }
+    if (empty($modName)) throw new EmptyParameterException('modName');
 
     if (isset($loadedModuleCache[strtolower("$modName$modType")])) {
         // Already loaded from somewhere else
@@ -164,13 +143,7 @@ function xarInstallLoad()
     $modOsDir = 'installer';
 
     $osfile = "modules/$modOsDir/xar$modOsType.php";
-    if (!file_exists($osfile)) {
-        // File does not exist
-        $msg = xarML('Module file #(1) does not exist.', $osfile);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST',
-                       new SystemException($msg));
-        return;
-    }
+    if (!file_exists($osfile)) throw new FileNotFoundException($osfile);
 
     // Load file
     include $osfile;
@@ -178,8 +151,6 @@ function xarInstallLoad()
 
     // Load the module translations files
     $res = xarMLSLoadTranslations($osfile);
-    if (!isset($res) && xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // throw back exception
- 
     return true;
 }
 

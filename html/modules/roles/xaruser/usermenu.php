@@ -82,6 +82,8 @@ function roles_user_usermenu($args)
             $upasswordupdate = xarModGetUserVar('roles','passwordupdate');//now user mod var not 'duv'. $role->getPasswordUpdate();
             $usertimezonedata =unserialize(xarModGetUserVar('roles','usertimezone'));
             $utimezone=$usertimezonedata['timezone'];
+            $item['itemtype'] = ROLES_USERTYPE;
+
             $hooks = xarModCallHooks('item','modify',$uid,$item);
             if (isset($hooks['dynamicdata'])) {
                 unset($hooks['dynamicdata']);
@@ -157,22 +159,14 @@ function roles_user_usermenu($args)
             if (!empty($pass1)){
                 $minpasslength = xarModGetVar('roles', 'minpasslength');
                 if (strlen($pass2) < $minpasslength) {
-                    $msg = xarML('Your password must be #(1) characters long.', $minpasslength);
-                    xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-                    return;
+                    throw new VariableValidationException(array('password','*password value hidden*','minimum length: '.$minpasslength));
                 }
                 // Check to make sure passwords match
                 if ($pass1 == $pass2){
                     $pass = $pass1;
-                    if (xarModGetVar('roles','setpasswordupdate')){
-                        $dopasswordupdate=true;
-                    }
                 } else {
-                    $msg = xarML('The passwords do not match');
-                    xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-                    return;
+                    throw new VariableValidationException(array('passwords','*password values hidden*','must be equal'));
                 }
-
                 $oldemail = xarUserGetVar('email');
                 // The API function is called.
                 if(!xarModAPIFunc('roles', 'admin', 'update',
@@ -202,9 +196,7 @@ function roles_user_usermenu($args)
                                                   'type' => 'email'));
 
                 if ($emailcheck == false) {
-                        $msg = xarML('There is an error in the supplied email address');
-                        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-                        return;
+                    throw new VariableValidationException(array('email',$email,'valid address'));
                 }
 
                 if(xarModGetVar('roles','uniqueemail')) {
@@ -213,9 +205,7 @@ function roles_user_usermenu($args)
                                            array('email' => $email));
                     if ($user != false) {
                         unset($user);
-                        $msg = xarML('That email address is already registered.');
-                        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-                        return;
+                        throw new DuplicateException(array('email address',$email));
                     }
                 }
 
@@ -225,9 +215,8 @@ function roles_user_usermenu($args)
                     $disallowedemails = unserialize($disallowedemails);
                     $disallowedemails = explode("\r\n", $disallowedemails);
                     if (in_array ($email, $disallowedemails)) {
-                        $msg = xarML('That email address is either reserved or not allowed on this website');
-                        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-                        return;
+                        $msg = 'That email address is either reserved or not allowed on this website';
+                        throw new ForbiddenOperationException(null,$msg);
                     }
                 }
                 // Step 2 Check for validation required or not
@@ -265,7 +254,7 @@ function roles_user_usermenu($args)
                                   array('uid' => array($uid => '1'), 'mailtype' => 'validation'))) {
 
                         $msg = xarML('Problem sending confirmation email');
-                        xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
+                        throw new Exception($msg);
                     }
                     // Step 5
                     // Log the user out. This needs to happen last

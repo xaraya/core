@@ -1,11 +1,10 @@
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
-</xar:comment>
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <div class="xar-mod-head">
     <span class="xar-mod-title">
-        <xar:mlstring>
-            User Information 
-        </xar:mlstring>
+        <xar:ml>
+            <xar:mlstring>#(1) Information</xar:mlstring>
+            <xar:mlvar>#$itemtypename#</xar:mlvar>
+        </xar:ml>
     </span>
 </div>
 <div class="xar-mod-body">

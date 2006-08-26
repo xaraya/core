@@ -1,6 +1,5 @@
 <?php
 /**
- * Activate a module
  *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation

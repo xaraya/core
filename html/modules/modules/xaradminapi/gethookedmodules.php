@@ -1,7 +1,6 @@
 <?php
 /**
  * Get list of modules calling a particular hook module
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -30,29 +29,27 @@ function modules_adminapi_gethookedmodules($args)
     extract($args);
 
     // Argument check
-    if (empty($hookModName)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'hookModName');
-        return;
-    }
+    if (empty($hookModName)) throw new EmptyParameterException('hookModName');
 
     $dbconn =& xarDBGetConn();
     $xartable      =& xarDBGetTables();
 
     $bindvars = array();
-    $query = "SELECT DISTINCT xar_smodule, xar_stype
-              FROM $xartable[hooks] 
-              WHERE xar_tmodule= ?";
+    // TODO: This looks awfally similar to gethooklist in xarMod.php, investigate later
+    $query = "SELECT DISTINCT smods.xar_name, hooks.xar_stype
+              FROM $xartable[hooks] hooks, $xartable[modules] smods
+              WHERE hooks.xar_smodid = smods.xar_id AND smods.xar_name = ?";
     $bindvars[] = $hookModName;
     if (!empty($hookObject)) {
-        $query .= " AND xar_object = ?";
+        $query .= " AND hooks.xar_object = ?";
         $bindvars[] = $hookObject;
     }
     if (!empty($hookAction)) {
-        $query .= " AND xar_action = ?";
+        $query .= " AND hooks.xar_action = ?";
         $bindvars[] = $hookAction;
     }
     if (!empty($hookArea)) {
-        $query .= " AND xar_tarea = ?";
+        $query .= " AND hooks.xar_tarea = ?";
         $bindvars[] = $hookArea;
     }
 
