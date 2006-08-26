@@ -46,7 +46,7 @@
  * @param numItems integer the length of the list
  * @param orderBy string the order type of the list
  * @return array array of module information arrays
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function modules_adminapi_getlist($args)
 {

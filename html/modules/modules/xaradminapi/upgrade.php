@@ -16,7 +16,7 @@
  * @param regid registered module id
  * @returns bool
  * @return
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  */
 function modules_adminapi_upgrade($args)
 {

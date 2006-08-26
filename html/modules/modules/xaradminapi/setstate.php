@@ -15,7 +15,7 @@
  * @author Xaraya Development Team
  * @param $args['regid'] the module id
  * @param $args['state'] the state
- * @raise BAD_PARAM,NO_PERMISSION
+ * @throws BAD_PARAM,NO_PERMISSION
  */
 function modules_adminapi_setstate($args)
 {

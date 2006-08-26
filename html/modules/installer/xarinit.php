@@ -16,7 +16,7 @@
  * @author Johnny Robeson
  * @param none
  * @returns bool
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function installer_init()
 {

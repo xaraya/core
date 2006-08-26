@@ -17,7 +17,7 @@
  * @param $maindId int ID of the module to look dependents for
  * @returns array
  * @return array with dependents
- * @raise NO_PERMISSION
+ * @throws NO_PERMISSION
  */
 function modules_adminapi_deactivatewithdependents ($args)
 {

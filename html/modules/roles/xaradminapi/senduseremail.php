@@ -25,7 +25,7 @@
  * @param $args['ip'] ip adress of the user (optionnal)
  * @returns bool
  * @return true on success, false on failures
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  */
 function roles_adminapi_senduseremail($args)
 {

@@ -19,7 +19,7 @@
  * @param blockType the block type
  * @returns bool
  * @return true on success, false on failure
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function blocks_adminapi_unregister_block_type($args)
 {

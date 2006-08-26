@@ -16,7 +16,7 @@
  * @param $args['regid'] the id of the theme
  * @returns bool
  * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION
+ * @throws BAD_PARAM, NO_PERMISSION
  */
 function themes_adminapi_remove($args)
 {

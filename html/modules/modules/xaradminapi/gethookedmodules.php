@@ -19,7 +19,7 @@
  * @param $args['hookArea'] the area we're dealing with (GUI, API) (optional)
  * @returns array
  * @return array of modules calling this hook module
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  */
 function modules_adminapi_gethookedmodules($args)
 {

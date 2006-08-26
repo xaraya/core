@@ -23,7 +23,7 @@
  * @param   rememberme session set to expire
  * @param   redirecturl page to return user if possible
  * @return  true if status is 3
- * @raise   exceptions raised if status is 0, 1, or 2
+ * @throws   exceptions raised if status is 0, 1, or 2
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  */
 function authsystem_user_login()

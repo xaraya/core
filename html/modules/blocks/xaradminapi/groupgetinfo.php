@@ -17,7 +17,7 @@
  * @access public
  * @param integer blockGroupId the block group id
  * @return array lock information
- * @raise DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
+ * @throws DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
  * @deprec 31-JAN-04 - moved to user API
  */
 function blocks_adminapi_groupgetinfo($args)

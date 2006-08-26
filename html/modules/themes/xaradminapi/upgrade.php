@@ -16,7 +16,7 @@
  * @param regid registered theme id
  * @returns bool
  * @return
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  */
 function themes_adminapi_upgrade($args)
 {
