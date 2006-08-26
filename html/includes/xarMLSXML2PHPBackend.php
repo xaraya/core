@@ -16,12 +16,13 @@
  *
  * @package multilanguage
  */
-include_once dirname(__FILE__). '/xarMLS.php';
-class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend
+sys::import('xarMLS');
+
+class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
-    var $gen;
-    var $basePHPDir;
-    var $baseXMLDir;
+    public $gen;
+    public $basePHPDir;
+    public $baseXMLDir;
 
     function xarMLS__XML2PHPTranslationsBackend($locales)
     {
@@ -66,7 +67,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend
         $GLOBALS['xarML_PHPBackend_keyEntries'] = array();
     }
 
-    function bindDomain($dnType, $dnName='xaraya')
+    function bindDomain($dnType, $dnName)
     {
         $bindResult = parent::bindDomain($dnType, $dnName);
 
@@ -96,10 +97,10 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend
 
         if ($bindResult) {
             if (!isset($this->gen)) return false;
-//            if (!isset($this->gen)) {
-//                $this->gen = new PHPBackendGenerator(xarMLSGetCurrentLocale());
-//                if (!isset($this->gen)) return false;
-//            }
+            //            if (!isset($this->gen)) {
+            //                $this->gen = new PHPBackendGenerator(xarMLSGetCurrentLocale());
+            //                if (!isset($this->gen)) return false;
+            //            }
 
             if (!$this->gen->bindDomain($dnType, $dnName)) return false;
             if (parent::bindDomain($dnType, $dnName)) return true;
@@ -107,7 +108,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend
         }
 
         // FIXME: I should comment it because it creates infinite loop
-        // MLS -> xarMod_getBaseInfo -> xarDisplayableName -> xarMod_getFileInfo -> MLS
+        // MLS -> xarMod::getBaseInfo -> xarDisplayableName -> xarMod::getFileInfo -> MLS
         // We don't use and don't translate KEYS files now,
         // but I will recheck this code in the menus clone
         // if ($dnType == XARMLS_DNTYPE_MODULE) {
@@ -122,7 +123,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend
 /*
     function loadKEYS($dnName)
     {
-        $modBaseInfo = xarMod_getBaseInfo($dnName);
+        $modBaseInfo = xarMod::getBaseInfo($dnName);
         $fileName = "modules/$modBaseInfo[directory]/KEYS";
         if (file_exists($fileName)) {
 
@@ -185,6 +186,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
             return true;
         }
+        // @todo do we need to guard this?
         include $fileName;
 
         return true;
@@ -213,11 +215,11 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend
 class PHPBackendGenerator 
 {
 
-    var $locale;
-    var $outCharset;
-    var $fp;
-    var $baseDir;
-    var $baseXMLDir;
+    public $locale;
+    public $outCharset;
+    public $fp;
+    public $baseDir;
+    public $baseXMLDir;
 
     function PHPBackendGenerator($locale)
     {
@@ -324,8 +326,8 @@ class PHPBackendGenerator
             fputs($fp2, 'global $xarML_PHPBackend_entries;'."\n");
             fputs($fp2, 'global $xarML_PHPBackend_keyEntries;'."\n");
             foreach ($vals as $node) {
-                if (!array_key_exists('tag',$node)) continue;
-                if (!array_key_exists('value',$node)) $node['value'] = '';
+                if (!isset($node['tag'])) continue;
+                if (!isset($node['value'])) $node['value'] = '';
                 if ($node['tag'] == 'STRING') {
                     $node['value'] = str_replace('\'', '\\\'', $node['value']);
                     $start = '$xarML_PHPBackend_entries[\''.$node['value']."']";
@@ -349,8 +351,8 @@ class PHPBackendGenerator
             global $xarML_PHPBackend_entries;
             global $xarML_PHPBackend_keyEntries;
             foreach ($vals as $node) {
-                if (!array_key_exists('tag',$node)) continue;
-                if (!array_key_exists('value',$node)) $node['value'] = '';
+                if (!isset($node['tag'])) continue;
+                if (!isset($node['value'])) $node['value'] = '';
                 if ($node['tag'] == 'STRING') {
                     $node['value'] = str_replace('\'', '\\\'', $node['value']);
                     $entryIndex = $node['value'];

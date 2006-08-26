@@ -1,7 +1,6 @@
 <?php
 /**
  * Block management - create a new block instance
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -33,9 +32,7 @@ function blocks_admin_create_instance()
     // Check if block name has already been used.
     $checkname = xarModAPIFunc('blocks', 'user', 'get', array('name' => $name));
     if (!empty($checkname)) {
-        $msg = xarML('Block name "#(1)" already exists', $name);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return;
+        throw new DuplicateException(array('block',$name));
     }
 
     // Pass to API

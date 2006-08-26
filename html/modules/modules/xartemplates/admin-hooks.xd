@@ -1,10 +1,10 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:base-include-javascript module="base" filename="toggle.js" />
 <xar:if condition="empty($return_url)">
-    <xar:comment>
-    When this template is not included somewhere else, build some header
-    stuff
-    </xar:comment>
+    <!--
+        When this template is not included somewhere else, build some header
+        stuff
+    -->
     <div class="xar-mod-head">
         <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
     </div>
@@ -27,9 +27,9 @@
 
     </div>
 <xar:else/>
-    <xar:comment>
-    Just show the list
-    </xar:comment>
+    <!--
+        Just show the list
+    -->
 
     <xar:template file="hooks-mainpart" module="modules" />
 </xar:if>

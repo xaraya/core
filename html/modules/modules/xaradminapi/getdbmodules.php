@@ -1,7 +1,6 @@
 <?php
 /**
  * Get all modules in the database
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -19,7 +18,6 @@
  */
 function modules_adminapi_getdbmodules($args)
 {
-    $dbconn =& xarDBGetConn();
     // Get arguments
     extract($args);
 
@@ -29,20 +27,19 @@ function modules_adminapi_getdbmodules($args)
         $modregid = $regId;
     }
 
+    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
     $dbModules = array();
 
     // Get all modules in DB
-    $sql = "SELECT $xartable[modules].xar_regid, xar_name, xar_directory, xar_class, xar_version, xar_mode, xar_state
-              FROM $xartable[modules] LEFT JOIN $xartable[module_states] ON $xartable[modules].xar_regid = $xartable[module_states].xar_regid";
+    $sql = "SELECT xar_regid, xar_name, xar_directory, xar_class, xar_version, xar_mode, xar_state
+            FROM $xartable[modules] ";
 
     if ($modregid) {
-        $sql .= " WHERE $xartable[modules].xar_regid = $modregid";
+        $sql .= " WHERE $xartable[modules].xar_regid = ?";
     }
-
-    $result = $dbconn->Execute($sql);
-    if (!$result) return;
+    $result = $dbconn->Execute($sql,array($modregid));
 
     while(!$result->EOF) {
         list($regid, $name, $directory, $class, $version, $mode, $state) = $result->fields;

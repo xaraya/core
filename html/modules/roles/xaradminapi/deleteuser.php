@@ -21,28 +21,18 @@ function roles_adminapi_deleteuser($args)
 {
     extract($args);
 
-    if((!isset($gid)) && (!isset($uid))) {
-        $msg = xarML('roles_adminapi_deleteuser');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return false;
-    }
+    if((!isset($gid)) && (!isset($uid))) throw new EmptyParameterException('gid or uid');
 
     if(!xarSecurityCheck('DeleteRole')) return;
 
     $roles = new xarRoles();
     $group = $roles->getRole($gid);
-    if($group->isUser()) {
-        $msg = xarML('Did not find a group');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return false;
-    }
+    if($group->isUser()) throw new IDNotFoundException($gid,'The group with id "#(1)" was not found');
 
     $user = $roles->getRole($uid);
     // Fix to bug 2889 credit to Ben Page
     if(count($user->getParents()) == 1) {
-        $msg = xarML('The user only has one parent group - cannot remove');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException($msg));
-        return false;
+        throw new ForbiddenOperationException(null,'The user has one parent group, removal is not allowed');
     }
 
     return $group->removeMember($user);

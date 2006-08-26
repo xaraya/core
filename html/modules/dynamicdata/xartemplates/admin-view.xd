@@ -1,4 +1,4 @@
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span>
 </div>
@@ -11,9 +11,9 @@
         </xar:ml>
     </h2>
    <xar:template type="module" file="manage-menu" />
-    <xar:comment>
+    <!--
         this does all the hard work
-    </xar:comment>
+    -->
     <xar:if condition="empty($numitems)">
         <xar:set name="numitems">30</xar:set>
     </xar:if>
@@ -31,9 +31,9 @@
     </xar:if>
 
     <xar:if condition="!empty($modlist) and count($modlist) gt 0">
-        <xar:comment>
+        <!--
         when we're viewing the Dynamic Objects themselves, show other modules
-        </xar:comment>
+        -->
         <fieldset>
           <legend>
             <xar:mlstring>Other Modules</xar:mlstring>

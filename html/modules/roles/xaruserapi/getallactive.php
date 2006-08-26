@@ -98,7 +98,6 @@ function roles_userapi_getallactive($args)
             $result = $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
         }
     }
-    if (!$result) return;
 
     // Put users into result array
     for (; !$result->EOF; $result->MoveNext()) {

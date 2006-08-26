@@ -338,7 +338,7 @@ class xarXmlParser
     function __activateHandlers()
     {
         $par = $this->parser;
-        xml_set_object($par,$this->handler);
+        xml_set_object($par, $this->handler);
         xml_set_default_handler($par,               'default_handler');
         xml_set_character_data_handler($par,        'character_data');
         xml_set_element_handler($par,               'open_tag',
@@ -525,7 +525,7 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
     {
         // this handler can be called multiple times, so make sure we're not
         // overwriting ourselves, trust the depth to put things in the right place
-        if(array_key_exists(XARXML_ATTR_CONTENT,$this->_tree[$this->_depth-1])) {
+        if(isset($this->_tree[$this->_depth-1][XARXML_ATTR_CONTENT])) {
             $this->_tree[$this->_depth-1][XARXML_ATTR_CONTENT] .= trim($data);
         } else {
             $this->_tree[$this->_depth-1][XARXML_ATTR_CONTENT] = trim($data);
@@ -591,7 +591,7 @@ class xarXmlDefaultHandler extends xarAbstractXmlHandler
      * as content for the tag. This is not entirely right, but enough for now
      *
      * @param object $parser the parser to which this handler is attached
-     * @param string $target the part after the <? in the document
+     * @param string $target the part after the '<?' in the document
      * @param string $data   the contents of the processing instruction
      */
     function process_instruction($parser, $target , $data)
@@ -773,7 +773,7 @@ function queryTree($subtree, $query, $nodetype,$returnsubtree=false)
     $results = array();
 
     // If the node has children inspect them first, so we have simpler code in the second part (the unset)
-    if(array_key_exists(XARXML_ATTR_CHILDREN, $subtree)) {
+    if(isset($subtree[XARXML_ATTR_CHILDREN])) {
         foreach($subtree[XARXML_ATTR_CHILDREN] as $child) {
             $results = array_merge($results, queryTree($child,$query,$nodetype,$returnsubtree));
         }

@@ -1,12 +1,12 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!--
 ***********
 * WARNING
 * Modify this template at your own risk.
 * If the template contains errors, the exception system will not be able to process
 * it correctly, leading to unexpected results
 ***********
-</xar:comment>
+-->
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Error Message</xar:mlstring></span>
 </div>
@@ -40,7 +40,7 @@
             <xar:mlstring>Stack:</xar:mlstring>
         </h3>
 
-        <p>#$stack#</p>
+        <pre>#$stack#</pre>
     </xar:if>
 
     <xar:if condition = "$product ne ''">
