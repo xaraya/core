@@ -83,6 +83,7 @@ function installer_admin_phase1()
 function installer_admin_phase2()
 {
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
+    xarVarFetch('retry','int:1',$data['retry'],NULL, XARVAR_NOT_REQUIRED);
 
     $data['language'] = $install_language;
     $data['phase'] = 2;
@@ -126,12 +127,13 @@ function check_dir($dirname)
 function installer_admin_phase3()
 {
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
-
     if (!xarVarFetch('agree','regexp:(agree|disagree)',$agree)) return;
+
+    $retry=1;
 
     if ($agree != 'agree') {
         // didn't agree to license, don't install
-        xarResponseRedirect('install.php?install_phase=2&install_language='.$install_language);
+        xarResponseRedirect('install.php?install_phase=2&install_language='.$install_language.'&retry=1');
     }
 
     //Defaults
@@ -374,7 +376,7 @@ function installer_admin_phase5()
     xarDB_init($systemArgs, $whatToLoad);
 
     // drop all the tables that have this prefix
-    // TODO: in the future need to replace this with a check further down the road
+    //TODO: in the future need to replace this with a check further down the road
     // for which modules are already installed
 
     if (isset($removetables) && $removetables) {
