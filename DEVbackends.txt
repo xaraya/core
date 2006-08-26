@@ -96,32 +96,35 @@ sqlite:
         // This trigger runs instead of the supplied statement to
         // workaround the read-only limitation of a view
         CREATE TRIGGER someTriggerName INSTEAD OF INSERT ON SomeView
-        FOR EACH ROW
+        [FOR EACH ROW]
         BEGIN
-            INSERT INTO RealTable VALUES( new.fieldName1, new.FieldName2,...,new.FieldNameN)
+            INSERT INTO RealTable 
+            VALUES( NEW.fieldName1, NEW.FieldName2,...,NEW.FieldNameN);
         END;
 
         // This trigger runs when an update occurs on sometable.somefield
         CREATE TRIGGER someTriggerName AFTER UPDATE OF somefield ON  sometable
-        FOR EACH ROW
+        [FOR EACH ROW]
         BEGIN
-            UPDATE someOtherTable SET someOtherField = new.somefield WHERE someOtherTable.YetAnotherField = old.AgainSomethingElse;
+            UPDATE someOtherTable SET someOtherField = NEW.somefield 
+            WHERE someOtherTable.YetAnotherField = OLD.AgainSomethingElse;
         END;
 
         The trick is the new an old designators obviously
-        -> on update new and old are valid
-        -> on insert new is valid
-        -> on delete old is valid
+        -> on update NEW and OLD are valid
+        -> on insert NEW is valid
+        -> on delete OLD is valid
+        -> only FOR EACH ROW triggers (the default also)
 
 Native query preparation support
 ================================
 - sqlite    : no
-- mysql        : yes, since 4.1.3 at SQL level (no api)
-                PREPARE <stmtname> FROM <query>
-                    SET @bindvar_1 = value_1
-                    ...
-                    SET @bindvar_n = value_n
-                EXECUTE <stmtname> USING @bindvar_1,...,@bindvar_n
+- mysql     : yes, since 4.1.3 at SQL level (no api)
+              PREPARE <stmtname> FROM <query>
+              SET @bindvar_1 = value_1
+              ...
+              SET @bindvar_n = value_n
+              EXECUTE <stmtname> USING @bindvar_1,...,@bindvar_n
 
 - mysqli    : php >= 5 has api
                 $mysqli = new mysqli('localhost', 'my_user', 'my_password', 'world');
@@ -132,7 +135,7 @@ Native query preparation support
 
                 Seems that the resultset returned with this new interface is not compatible
                 with the old resultset!!!!!
-- pgsql        :    yes, both at SQL and PHP level
+- pgsql    :    yes, both at SQL and PHP level
                 SQL level:
                     PREPARE <plan-name> AS <query without bindvars>
                     EXECUTE <plan-name> 
@@ -146,7 +149,7 @@ Native query preparation support
                     $result = pg_prepare($dbconn, "my_query", 'SELECT * FROM shops WHERE name = $1');
                     $result = pg_execute($dbconn, "my_query", array("Joe's Widgets"));
                     $result = pg_execute($dbconn, "my_query", array("Clothes Clothes Clothes"));
-- mssql        :    Unknown, it's possible in embedded SQL, no idea if transact SQL does support it.
+- mssql     :    Unknown, it's possible in embedded SQL, no idea if transact SQL does support it.
 - oracle    :     most likely
 
 
