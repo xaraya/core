@@ -413,44 +413,6 @@
                        <xar:mlstring>WARNING: SQLITE as database will not be available</xar:mlstring>
                    </li>
                 </xar:if>
-                <xar:comment>
-                <xar:if condition="$xsltextension">
-                    <li class="success">
-                        <xar:mlstring>SUCCESS: The PHP4 XSLT Extension is loaded.</xar:mlstring>
-                    </li>
-                <xar:else />
-                    <li class="warning">
-                    <xar:mlstring>
-                        WARNING: The PHP4 XSLT Extension is not loaded.
-                        This PHP4 extension is only needed for the PHP4 XSLT transform module at this time.
-                    </xar:mlstring>
-                    </li>
-                </xar:if>
-                <xar:if condition="$ldapextension">
-                    <li class="success">
-                        <xar:mlstring>SUCCESS: The LDAP Extension is loaded.</xar:mlstring>
-                    </li>
-                <xar:else />
-                    <li class="warning">
-                        <xar:mlstring>
-                            WARNING: The LDAP Extension is not loaded.
-                            This extension is only needed if you intend on using LDAP authentication with the Xaraya LDAP Modules.
-                        </xar:mlstring>
-                    </li>
-                </xar:if>
-                <xar:if condition="$gdextension">
-                    <li class="success">
-                        <xar:mlstring>SUCCESS: The GD Extension is loaded.</xar:mlstring>
-                    </li>
-                <xar:else />
-                    <li class="warning">
-                        <xar:mlstring>
-                            WARNING: The GD Extension is not loaded.
-                            This extension is only needed for the images module at this time for resizing of thumbnails.
-                        </xar:mlstring>
-                    </li>
-                </xar:if>
-                </xar:comment>
             </ul>
             <xar:if condition="$systemConfigIsWritable AND $cacheTemplatesIsWritable AND $cacheIsWritable AND $rssTemplatesIsWritable AND $metMinMemRequirement">
                 <input type="hidden" name="install_phase" id="install_phase" value="4" />

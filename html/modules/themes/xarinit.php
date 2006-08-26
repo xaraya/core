@@ -116,26 +116,12 @@ function themes_init()
     xarModSetVar('themes', 'usedashboard', 0);
     xarModSetVar('themes', 'dashtemplate', 'dashboard');
     xarModSetVar('themes', 'adminpagemenu', 1);
-    // Register theme tags.
 
-    // register complete set of css tags is now encapsulated in the module's api function
-    if(!xarModAPIFunc('themes', 'css', 'registercsstags', array())) {
-        return false;
-    }
-
-
-    // Set up usermenu hook
-    if (!xarModRegisterHook('item', 'usermenu', 'GUI', 'themes', 'user', 'usermenu')) {
-        return false;
-    }
-
-    // Register the meta blocktype
-    if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
-                        array('modName' => 'themes',
-                              'blockType' => 'meta'))) return;
-
+    xarRegisterMask('ViewThemes','All','themes','All','All','ACCESS_OVERVIEW');
+    xarRegisterMask('AdminTheme','All','themes','All','All','ACCESS_ADMIN');
+    
     // Initialisation successful
-    return true;
+    return themes_upgrade('1.0');
 }
 
 /**

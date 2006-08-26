@@ -46,6 +46,32 @@ FOREIGN KEY support
 - mssql   : yes, no idea version wise
 - oracle  : ?
 
+HASH index support
+==================
+- mysql   : yes, memory tables only, only used for equality tests (obviously) 
+- sqlite  : no
+- postgres: 
+- mssql   : 
+- oracle  : 
+
+IN MEMORY TABLE support
+=======================
+- mysql   : yes 
+- sqlite  : yes, in memory databases only
+- postgres: 
+- mssql   : 
+- oracle  : 
+
+IN MEMORY DATABASE support
+==========================
+- mysql   :  
+- sqlite  : yes
+- postgres: 
+- mssql   : 
+- oracle  : 
+
+
+
 TRIGGER support
 ===============
 - mysql   : yes, since 5.0.2
@@ -89,39 +115,39 @@ sqlite:
 
 Native query preparation support
 ================================
-- sqlite	: no
-- mysql		: yes, since 4.1.3 at SQL level (no api)
-				PREPARE <stmtname> FROM <query>
-					SET @bindvar_1 = value_1
-					...
-					SET @bindvar_n = value_n
-				EXECUTE <stmtname> USING @bindvar_1,...,@bindvar_n
+- sqlite    : no
+- mysql        : yes, since 4.1.3 at SQL level (no api)
+                PREPARE <stmtname> FROM <query>
+                    SET @bindvar_1 = value_1
+                    ...
+                    SET @bindvar_n = value_n
+                EXECUTE <stmtname> USING @bindvar_1,...,@bindvar_n
 
-- mysqli	: php >= 5 has api
-				$mysqli = new mysqli('localhost', 'my_user', 'my_password', 'world');
-				$stmt   = $mysqli->prepare("INSERT INTO CountryLanguage VALUES (?, ?, ?, ?)");
-				$stmt->bind_param('sssd', $code, $language, $official, $percent);
-				$stmt->execute();
-				$stmt->close();
+- mysqli    : php >= 5 has api
+                $mysqli = new mysqli('localhost', 'my_user', 'my_password', 'world');
+                $stmt   = $mysqli->prepare("INSERT INTO CountryLanguage VALUES (?, ?, ?, ?)");
+                $stmt->bind_param('sssd', $code, $language, $official, $percent);
+                $stmt->execute();
+                $stmt->close();
 
-				Seems that the resultset returned with this new interface is not compatible
-				with the old resultset!!!!!
-- pgsql		:	yes, both at SQL and PHP level
-				SQL level:
-					PREPARE <plan-name> AS <query without bindvars>
-					EXECUTE <plan-name> 
+                Seems that the resultset returned with this new interface is not compatible
+                with the old resultset!!!!!
+- pgsql        :    yes, both at SQL and PHP level
+                SQL level:
+                    PREPARE <plan-name> AS <query without bindvars>
+                    EXECUTE <plan-name> 
 
-					PREPARE <plan-name> (datatype_1,...,datatyp_n) AS <query with bindvars>
-					EXECUTE <plan-name> value_1,...,value_n
+                    PREPARE <plan-name> (datatype_1,...,datatyp_n) AS <query with bindvars>
+                    EXECUTE <plan-name> value_1,...,value_n
 
-				PHP level:
-					$conn = pg_connect("dbname=mary");
+                PHP level:
+                    $conn = pg_connect("dbname=mary");
 
-					$result = pg_prepare($dbconn, "my_query", 'SELECT * FROM shops WHERE name = $1');
-					$result = pg_execute($dbconn, "my_query", array("Joe's Widgets"));
-					$result = pg_execute($dbconn, "my_query", array("Clothes Clothes Clothes"));
-- mssql		:	Unknown, it's possible in embedded SQL, no idea if transact SQL does support it.
-- oracle	: 	most likely
+                    $result = pg_prepare($dbconn, "my_query", 'SELECT * FROM shops WHERE name = $1');
+                    $result = pg_execute($dbconn, "my_query", array("Joe's Widgets"));
+                    $result = pg_execute($dbconn, "my_query", array("Clothes Clothes Clothes"));
+- mssql        :    Unknown, it's possible in embedded SQL, no idea if transact SQL does support it.
+- oracle    :     most likely
 
 
 Syntax support for SQL:

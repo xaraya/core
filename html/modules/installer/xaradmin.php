@@ -687,11 +687,11 @@ function installer_admin_create_administrator()
     list ($leftBlockGroup) = $result->fields;
 
     $adminBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
-                                    array('module'  => 'modules',
+                                    array('module'  => 'base',
                                           'type'    => 'adminmenu'));
 
     $adminBlockTypeId = $adminBlockType['tid'];
-
+    assert('is_numeric($adminBlockTypeId);');
     if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'adminpanel'))) {
         if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
                            array('title'    => 'Admin',
@@ -1072,9 +1072,6 @@ function installer_admin_cleanup()
     if (empty($loginBlockTypeId)) {
         return;
     }
-
-    // Forget the registration module. Registration login block can be installed later if needed
-    $loginBlockTypeId = $loginBlockType['tid'];
 
     if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'login'))) {
         if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
