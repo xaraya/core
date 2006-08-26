@@ -1,10 +1,10 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!--
     Open-ended pager where you don't know the number of pages in total.
     Set the total pages to current_page + 1 for correct display.
-</xar:comment>
+-->
 <div class="xar-pager">
-    <xar:comment> Display first-page link or text if there is more than one page </xar:comment>
+    <!-- Display first-page link or text if there is more than one page -->
     <xar:if condition="$totalpages gt 1">
         <xar:if condition="$currentpagenum ne $firstpagenum">
             &nbsp;&nbsp;<a title="#xarML('First page')#" href="#$firsturl#">|&lt;</a>
@@ -13,7 +13,7 @@
         </xar:if>
     </xar:if>
 
-    <xar:comment> Display previous-block link if there is more than one block </xar:comment>
+    <!-- Display previous-block link if there is more than one block -->
     <xar:if condition="$totalblocks gt 1 and $pagesperblock gt 1">
         <xar:if condition="$currentblock ne $firstblock">
             <xar:set name="prevblocklabel"><xar:ml>
@@ -26,7 +26,7 @@
         </xar:if>
     </xar:if>
 
-    <xar:comment> Display previous-page link if there is just one block </xar:comment>
+    <!-- Display previous-page link if there is just one block -->
     <xar:if condition="$totalblocks eq 1 or $pagesperblock eq 1">
         <xar:if condition="$prevpageitems gt 0">
             &nbsp;&nbsp;<a title="#xarML('Previous page')#" href="#$prevpageurl#">&lt;</a>
@@ -51,7 +51,7 @@
         </xar:if>
     </xar:foreach>
 
-    <xar:comment> Display next-page link if there is just one block </xar:comment>
+    <!-- Display next-page link if there is just one block -->
     <xar:if condition="$currentpagenum ne $lastpagenum">
         <xar:if condition="$nextpageitems gt 0">
             &nbsp;&nbsp;<a title="#xarML('Next page')#" href="#$nextpageurl#">&gt;</a>

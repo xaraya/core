@@ -13,27 +13,39 @@
  */
 class Dynamic_SubForm_Property extends Dynamic_Property
 {
-    var $objectid  = 0;
-    var $style     = 'serialized';
-    var $title     = '';
-    var $link      = '';
-    var $where     = ''; // TODO
-    var $input     = 1;
-    var $display   = 1; // TODO
-    var $fieldlist = null;
-    var $objectref = null;
-    var $oldvalue  = null;
-    var $arguments = array('objectid','style','title','link','where','input','display','fieldlist');
-    var $warnings  = '';
+    public $objectid  = 0;
+    public $style     = 'serialized';
+    public $title     = '';
+    public $link      = '';
+    public $where     = ''; // TODO
+    public $input     = 1;
+    public $display   = 1; // TODO
+    public $fieldlist = null;
+    public $objectref = null;
+    public $oldvalue  = null;
+    public $arguments = array('objectid','style','title','link','where','input','display','fieldlist');
+    public $warnings  = '';
 
-    function Dynamic_SubForm_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Property($args);
+        parent::__construct($args);
+        $this->template = 'subform';
 
         // check validation for object, style etc.
         if (!empty($this->validation)) {
             $this->parseValidation($this->validation);
         }
+    }
+
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('dynamicdata');
+        $info->id   = 997;
+        $info->name = 'subform';
+        $info->desc = 'Sub Form';
+
+        return $info;
     }
 
     function checkInput($name='', $value = null)
@@ -385,18 +397,13 @@ class Dynamic_SubForm_Property extends Dynamic_Property
         return true;
     }
 
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+        extract($data);
+
+        if (!isset($value)) $value = $this->value;
+        if (!isset($name)) $name = 'dd_'.$this->id;
+
         foreach ($this->arguments as $item) {
             if (isset($$item)) {
                 $this->$item = $$item;
@@ -409,10 +416,6 @@ class Dynamic_SubForm_Property extends Dynamic_Property
             $value = $this->_itemid;
         }
 
-        $data = array();
-        $data['name']      = $name;
-        $data['id']        = $id;
-        $data['tabindex']  = !empty($tabindex) ? $tabindex : 0;
         // invalid messages for fields will be shown in the object form by default, so
         // only show explicit warnings for the fields that aren't in the fieldlist here
         $data['invalid']   = !empty($this->warnings) ? xarML('Invalid #(1)', $this->warnings) :'';
@@ -460,10 +463,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
             }
         }
 
-        if (!isset($template)) {
-            $template = 'subform';
-        }
-        return xarTplProperty('dynamicdata', $template, 'showinput', $data);
+        return parent::showInput($data);
     }
 
     function showOutput($args = array())
@@ -492,11 +492,14 @@ class Dynamic_SubForm_Property extends Dynamic_Property
             $data['object'] =& $this->getObject($value);
         }
 
-        if (!isset($template)) {
-            $template = 'subform';
+        if (empty($module)) {
+            $module = $this->getModule();
+        }
+        if (empty($template)) {
+            $template = $this->getTemplate();
         }
 
-        return xarTplProperty('dynamicdata', $template, 'showoutput', $data);
+        return xarTplProperty($module, $template, 'showoutput', $data);
     }
 
     function parseValidation($validation = '')
@@ -533,7 +536,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
             case 'parentid':
                 if (!isset($myobject)) {
                     if (empty($this->fieldlist)) {
-                        $status = 1; // skip the display-only properties
+                        $status = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE; // skip the display-only properties
                     } else {
                         $status = null;
                     }
@@ -561,7 +564,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
             case 'childlist':
                 if (!isset($myobject)) {
                     if (empty($this->fieldlist)) {
-                        $status = 1; // skip the display-only properties
+                        $status = DD_DISPLAYSTATE_ACTIVE; // skip the display-only properties
                     } else {
                         $status = null;
                     }
@@ -572,8 +575,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                     // reset the list of item ids
                     $myobject->itemids = array();
                 }
-                if (!empty($this->link) && !empty($value))
-                {
+                if (!empty($this->link) && !empty($value)) {
                     if (is_numeric($value)) {
                         $where = $this->link . ' eq ' . $value;
                     } else {
@@ -590,8 +592,7 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                             }
                         }
                     }
-                    if( isset($where) )
-                    {
+                    if(isset($where)) {
                         $myobject->getItems(array('where' => $where));
                     } else {
                         // re-initialize the items array
@@ -648,30 +649,6 @@ class Dynamic_SubForm_Property extends Dynamic_Property
     }
 
     /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-    function getBasePropertyInfo()
-    {
-        $baseInfo = array(
-                          'id'         => 997,
-                          'name'       => 'subform',
-                          'label'      => 'Sub Form',
-                          'format'     => '997',
-                          'validation' => '',
-                          'source'     => '',
-                          'dependancies' => '',
-                          'requiresmodule' => 'dynamicdata',
-                          'aliases' => '',
-                          'args'         => '',
-                          // ...
-                         );
-        return $baseInfo;
-    }
-
-    /**
      * Show the current validation rule in a specific form for this property type
      *
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
@@ -713,10 +690,14 @@ class Dynamic_SubForm_Property extends Dynamic_Property
                                    'parentid'   => xarML('List of children (parent id)'));
 
         // allow template override by child classes
-        if (!isset($template)) {
-            $template = 'subform';
+        if (empty($module)) {
+            $module = $this->getModule();
         }
-        return xarTplProperty('dynamicdata', $template, 'validation', $data);
+        if (empty($template)) {
+            $template = $this->getTemplate();
+        }
+
+        return xarTplProperty($module, $template, 'validation', $data);
     }
 
     /**

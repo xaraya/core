@@ -42,9 +42,9 @@
 /* elements display directives */
 .xar-displayinline { display: inline; }
 .xar-displayblock { display: block; }
-.xar-displayinline-block { display: inline-block; }
+/* .xar-displayinline-block { display: inline-block; } */
 .xar-displaytable { display: table; }
-.xar-displayinline-table { display: inline-table; }
+/* .xar-displayinline-table { display: inline-table; } */
 .xar-displaytable-row { display: table-row; }
 .xar-displaytable-rowgroup { display: table-row-group; }
 .xar-displaytable-column { display: table-column; }
