@@ -1,5 +1,5 @@
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
-<xar:comment>You can use different admin-modifyconfighook-[objectname].xd templates for different objects</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!-- You can use different admin-modifyconfighook-[objectname].xd templates for different objects -->
 <table class="xar-fullwidth">
     <tr>
       <th class="xar-align-center" colspan="7">

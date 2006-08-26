@@ -34,14 +34,14 @@ function xarBlock_init(&$args, $whatElseIsGoingLoaded)
         'block_types'           => $systemPrefix . '_block_types'
     );
 
-    xarDB_importTables($tables);
+    xarDB::importTables($tables);
 
     // Decide if we will be using the output caching system
     $outputCachePath = xarCoreGetVarDirPath() . '/cache/output/';
     if (defined('XARCACHE_BLOCK_IS_ENABLED')) {
-        xarCore_SetCached('xarcache', 'blockCaching', true);
+        xarCore::setCached('xarcache', 'blockCaching', true);
     } else {
-        xarCore_SetCached('xarcache', 'blockCaching', false);
+        xarCore::setCached('xarcache', 'blockCaching', false);
     }
 
     // Subsystem initialized, register a handler to run when the request is over
@@ -81,8 +81,8 @@ function xarBlock_render($blockinfo)
 
     // This lets the security system know what module we're in
     // no need to update / select in database for each block here
-    // xarModSetVar('blocks','currentmodule',$modName);
-    xarCore_SetCached('Security.Variables', 'currentmodule', $modName);
+    // TODO: this looks weird
+    xarCore::setCached('Security.Variables', 'currentmodule', $modName);
 
     // Load the block.
     if (!xarModAPIFunc(
@@ -100,7 +100,6 @@ function xarBlock_render($blockinfo)
         $blockinfo = $displayFuncName($blockinfo);
 
         if (!isset($blockinfo)) {
-            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {return;} // throw back
             return '';
         }
 
@@ -152,15 +151,13 @@ function xarBlock_render($blockinfo)
  * @param string groupname the name of the block group
  * @param string template optional template to apply to all blocks in the group
  * @return string
- * @throws BAD_PARAM, DATABASE_ERROR
+ * @throws EmptyParameterException
  */
 function xarBlock_renderGroup($groupname, $template = NULL)
 {
-    if (empty($groupname)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'EMPTY_PARAM', 'groupname');
-        return;
-    }
-    $blockCaching = xarCore_GetCached('xarcache', 'blockCaching');
+    if (empty($groupname)) throw new EmptyParameterException('groupname');
+
+    $blockCaching = xarCore::getCached('xarcache', 'blockCaching');
 
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
@@ -169,11 +166,13 @@ function xarBlock_renderGroup($groupname, $template = NULL)
     $blockInstancesTable      = $tables['block_instances'];
     $blockGroupsTable         = $tables['block_groups'];
     $blockTypesTable          = $tables['block_types'];
+    $modulesTable             = $tables['modules'];
 
     // Fetch details of all blocks in the group.
+    // CHECKME: Does this really have to be a quadruple left join, i cant imagine
     $query = "SELECT    inst.xar_id as bid,
                         btypes.xar_type as type,
-                        btypes.xar_module as module,
+                        mods.xar_name as module,
                         inst.xar_name as name,
                         inst.xar_title as title,
                         inst.xar_content as content,
@@ -186,22 +185,19 @@ function xarBlock_renderGroup($groupname, $template = NULL)
                         inst.xar_template           AS inst_bl_template,
                         group_inst.xar_template     AS group_inst_bl_template
               FROM      $blockGroupInstancesTable group_inst
-              LEFT JOIN $blockGroupsTable bgroups
-              ON        group_inst.xar_group_id = bgroups.xar_id
-              LEFT JOIN $blockInstancesTable inst
-              ON        inst.xar_id = group_inst.xar_instance_id
-              LEFT JOIN $blockTypesTable btypes
-              ON        btypes.xar_id = inst.xar_type_id
-              WHERE     bgroups.xar_name = ?
-              AND       inst.xar_state > 0
+              LEFT JOIN $blockGroupsTable bgroups ON group_inst.xar_group_id = bgroups.xar_id
+              LEFT JOIN $blockInstancesTable inst ON inst.xar_id = group_inst.xar_instance_id
+              LEFT JOIN $blockTypesTable btypes   ON btypes.xar_id = inst.xar_type_id
+              LEFT JOIN $modulesTable mods        ON btypes.xar_modid = mods.xar_id
+              WHERE     bgroups.xar_name = ? AND
+                        inst.xar_state > ?
               ORDER BY  group_inst.xar_position ASC";
-
-    $result =& $dbconn->Execute($query, array($groupname));
-    if (!$result) {return;}
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery(array($groupname,0), ResultSet::FETCHMODE_ASSOC);
 
     $output = '';
-    while(!$result->EOF) {
-        $blockinfo = $result->GetRowAssoc(false);
+    while($result->next()) {
+        $blockinfo = $result->getRow();
 
         if ($blockCaching) {
             $cacheKey = $blockinfo['module'] . "-blockid" . $blockinfo['bid'] . "-" . $groupname;
@@ -213,7 +209,7 @@ function xarBlock_renderGroup($groupname, $template = NULL)
             $output .= xarBlockGetCached($cacheKey,'block');
 
         } else {
-            $blockinfo['last_update'] = $result->UnixTimeStamp($blockinfo['last_update']);
+            $blockinfo['last_update'] = $blockinfo['last_update'];
 
             // Get the overriding template name.
             // Levels, in order (most significant first): group instance, instance, group
@@ -261,17 +257,8 @@ function xarBlock_renderGroup($groupname, $template = NULL)
             }
             $output .= $blockoutput;
 
-            // don't throw back exception for broken blocks
-            //if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // throw back
-            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                $output .= xarErrorRender('template');
-                // We handled the exception(s) so we can clear it
-                xarErrorFree();
-            }
-        }
 
-        // Next block in the group.
-        $result->MoveNext();
+        }
     }
 
     $result->Close();
@@ -296,7 +283,7 @@ function xarBlock_renderBlock($args)
     // All the hard work is done in this function.
     // It keeps the core code lighter when standalone blocks are not used.
     $blockinfo = xarModAPIFunc('blocks', 'user', 'getinfo', $args);
-    $blockCaching = xarCore_GetCached('xarcache', 'blockCaching');
+    $blockCaching = xarCore::getCached('xarcache', 'blockCaching');
 
     if (!empty($blockinfo) && $blockinfo['state'] <> 0) {
         if ($blockCaching) {
@@ -318,14 +305,6 @@ function xarBlock_renderBlock($args)
                 xarBlockSetCached($cacheKey, 'block', $blockoutput);
             }
             $output = $blockoutput;
-
-            // don't throw back exception for broken blocks
-            //if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return; // throw back
-            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                $output .= xarErrorRender('template');
-                // We handled the exception(s) so we can clear it
-                xarErrorFree();
-            }
         }
     } else {
         // TODO: return NULL to indicate no block found?

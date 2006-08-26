@@ -1,0 +1,221 @@
+Notes on different backends and their capabilities.
+
+VIEWS support
+=============
+- mysql   : yes, since 5.0
+- sqlite  : yes, since forever, but read only (which is a good thing,  but a pain when you're migrating )
+- postgres: yes, since 7.3 (at least)
+- mssql   : yes, no idea version wise
+- oracle  : ?
+==> SUPPPORTED BY ALL, WORTH CONSIDERING
+
+TRANSACTION support
+===================
+- mysql   : yes, innodb engine only ( gracefull fallback provided by middleware?)
+- sqlite  : yes, since forever
+- postgres: yes
+- mssql   : yes
+- oracle  : ?
+==> SUPPORTED BY ALL, BEING USED RIGHT NOW.
+
+NESTED TRANSACTION support:
+===========================
+- mysql   : NO (see http://dev.mysql.com/doc/refman/5.1/en/commit.html )
+- sqlite  : NO
+- postgres: NOT BEFORE 7.5 at least
+- mssal   : YES ( see http://www.codeproject.com/database/sqlservertransactions.asp )
+- oracle  : YES 
+==> We have to make sure we have only one transaction active at any given time
+Having multiple transactions active is hidden by creole by just not committing
+until the transactioncount reached zero again. This will not work in cases where the 
+sequence of code doing database operations has a functional dependency, unless these
+dependencies are all in the same transaction. This can lead to very confusing errors
+while running the code. Seemingly random/ad-hoc errors start to appear. The exact logic is
+hard to describe and can differ between backends. (mysql does an auto commit for an 
+active transaction when a new one is started for example, while others do not)
+We could consider:
+-> raising an exception during development phase when 2 transactions are active
+-> keep current creole behaviour and watch logs (there are clearly greppable log statements issued)
+
+
+FOREIGN KEY support
+===================
+- mysql   : yes, innodb engine only
+- sqlite  : no, accepts syntax, but doesnt act (triggers is the proposed alternative)
+- postgres: yes
+- mssql   : yes, no idea version wise
+- oracle  : ?
+
+HASH index support
+==================
+- mysql   : yes, memory tables only, only used for equality tests (obviously) 
+- sqlite  : no
+- postgres: 
+- mssql   : 
+- oracle  : 
+
+IN MEMORY TABLE support
+=======================
+- mysql   : yes 
+- sqlite  : yes, in memory databases only
+- postgres: 
+- mssql   : 
+- oracle  : 
+
+IN MEMORY DATABASE support
+==========================
+- mysql   :  
+- sqlite  : yes
+- postgres: 
+- mssql   : 
+- oracle  : 
+
+
+
+TRIGGER support
+===============
+- mysql   : yes, since 5.0.2
+- sqlite  : yes, since forever
+- postgres: yes, at least since 7.3
+- mssql   : yes, at least since mssql server 2000
+- oracle  : ?
+==> SUPPORTED BY ALL, WORTH CONSIDERING
+
+TRIGGER SYNTAX
+--------------
+mysql:
+        CREATE TRIGGER someTriggerName BEFORE INSERT ON sometable
+        FOR EACH ROW
+        BEGIN
+            SET NEW.guid = UUID();
+        END
+        --> no instead of trigger (no need)
+        --> only before insert, not after insert
+
+sqlite:
+        // This trigger runs instead of the supplied statement to
+        // workaround the read-only limitation of a view
+        CREATE TRIGGER someTriggerName INSTEAD OF INSERT ON SomeView
+        FOR EACH ROW
+        BEGIN
+            INSERT INTO RealTable VALUES( new.fieldName1, new.FieldName2,...,new.FieldNameN)
+        END;
+
+        // This trigger runs when an update occurs on sometable.somefield
+        CREATE TRIGGER someTriggerName AFTER UPDATE OF somefield ON  sometable
+        FOR EACH ROW
+        BEGIN
+            UPDATE someOtherTable SET someOtherField = new.somefield WHERE someOtherTable.YetAnotherField = old.AgainSomethingElse;
+        END;
+
+        The trick is the new an old designators obviously
+        -> on update new and old are valid
+        -> on insert new is valid
+        -> on delete old is valid
+
+Native query preparation support
+================================
+- sqlite    : no
+- mysql        : yes, since 4.1.3 at SQL level (no api)
+                PREPARE <stmtname> FROM <query>
+                    SET @bindvar_1 = value_1
+                    ...
+                    SET @bindvar_n = value_n
+                EXECUTE <stmtname> USING @bindvar_1,...,@bindvar_n
+
+- mysqli    : php >= 5 has api
+                $mysqli = new mysqli('localhost', 'my_user', 'my_password', 'world');
+                $stmt   = $mysqli->prepare("INSERT INTO CountryLanguage VALUES (?, ?, ?, ?)");
+                $stmt->bind_param('sssd', $code, $language, $official, $percent);
+                $stmt->execute();
+                $stmt->close();
+
+                Seems that the resultset returned with this new interface is not compatible
+                with the old resultset!!!!!
+- pgsql        :    yes, both at SQL and PHP level
+                SQL level:
+                    PREPARE <plan-name> AS <query without bindvars>
+                    EXECUTE <plan-name> 
+
+                    PREPARE <plan-name> (datatype_1,...,datatyp_n) AS <query with bindvars>
+                    EXECUTE <plan-name> value_1,...,value_n
+
+                PHP level:
+                    $conn = pg_connect("dbname=mary");
+
+                    $result = pg_prepare($dbconn, "my_query", 'SELECT * FROM shops WHERE name = $1');
+                    $result = pg_execute($dbconn, "my_query", array("Joe's Widgets"));
+                    $result = pg_execute($dbconn, "my_query", array("Clothes Clothes Clothes"));
+- mssql        :    Unknown, it's possible in embedded SQL, no idea if transact SQL does support it.
+- oracle    :     most likely
+
+
+Syntax support for SQL:
+          | comment       |
+----------|---------------|
+mysql     | --, #, /*..*/ |
+pgsql     | --, /*..*/    |
+sqlite    | --, /*..*/    |
+oracle    | /*..*/        |
+mssql     | /*..*/        |
+----------|---------------|
+Recommend:| /* ... */     |
+
+Datatype notes:
+
+Acceptance in SQL: 
+(NOTE: means nothing about actual storage and how it behaves, just means SQL doesnt produce an error)
+
+                                      mysql   pgsql   sqlite    oracle   mssql
+tinyint                                X       -        X         X        X
+smallint                               X       X        X         X        X
+mediumint                              X       -        X         -        -
+bigint                                 X       X        X         X        X
+int                                    X       X        X         -        X
+integer                                X       X        X         X        -
+       
+bit                                    X       X        X         X        X
+bool                                   X       -        X         -        -
+boolean                                X       X        X         -        -
+
+float                                  X       -        X         X        X
+double [precision]                     X       X        X         X        X
+real                                   -       X        X         X        X
+
+decimal                                X       X        X         X        X
+numeric                                X       X        X         X        X
+dec                                    X       -        X         -        -
+fixed                                  X       -        X         -        -
+
+char                                   X       X        X         X        X
+varchar                                X       X        X         X        X   
+longvarchar                            -       -        X         X        -
+text                                   X       X        X         -        X
+tinytext                               X       -        X         -        -
+mediumtext                             X       -        X         -        -
+longtext                               X       -        X         -        -
+
+money                                  -       X        X         -        X
+smallmoney                             -       -        X         -        X
+
+date                                   X       X        X         X        -
+datetime                               X       X        X         -        X
+smalldatetime                          -       -        X         -        X 
+timestamp                              X       X        X         X        X
+interval                               -       X        X         -        -
+time                                   X       X        X         X        -
+year                                   X       -        X         -        -
+
+binary                                 X       -        X         X        X
+bytea                                  -       X        X         -        -
+varbinary                              X       -        X         X        X
+long varbinary                         X       -        X         X        -
+image                                  -       -        X         -        X
+blob                                   X       -        X         -        -
+tinyblob                               X       -        X         -        -
+mediumblob                             X       -        X         -        -
+longblob                               X       -        X         -        -
+
+rowid                                  -       -        X         X        -
+serial                                 -       X        X         -        -
+bigserial                              -       X        X         -        -

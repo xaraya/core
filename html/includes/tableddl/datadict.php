@@ -68,7 +68,7 @@ function xarDB__datadictCreateTable($tableName, $fields)
  * @param args['after_field']
  * @param args['new_name'] new name of table
  * @return string|false datadict specific sql to alter a table
- * @throws BAD_PARAM
+ * @throws BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
 function xarDB__datadictAlterTable($tableName, $args)
@@ -76,17 +76,11 @@ function xarDB__datadictAlterTable($tableName, $args)
     switch ($args['command']) {
         case 'add':
             if (empty($args['field'])) {
-                $msg = xarML('Invalid args (field key must be set).');
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                               new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-                return;
+                throw new BadParameterException('args','Invalid parameter "#(1)", the "fields" key must be set');
             }
             $coldef = xarDB__datadictColumnDefinition($args['field'],$args);
             if (empty($coldef)) {
-                $msg = xarML('Invalid args (type,size,default,null, unsigned, increment, or primary_key must be set)');
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                               new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-                return;
+                throw new BadParameterException('args','Invalid parameter "#(1)" (type,size,default,null, unsigned, increment, or primary_key must be set)');
             }
             $fields = $args['field'] .' '
                 . $coldef['type'] . ' '
@@ -104,10 +98,7 @@ function xarDB__datadictAlterTable($tableName, $args)
 
         case 'rename':
             if (empty($args['new_name'])) {
-                $msg = xarML('Invalid args (new_name key must be set.)');
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                               new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-                return;
+                throw new BadParameterException('args','Invalid parameter "#(1)" (new_name key must be set.)');
             }
 
             // Generate SQL to rename the table
@@ -118,17 +109,11 @@ function xarDB__datadictAlterTable($tableName, $args)
 
         case 'modify':
             if (empty($args['field'])) {
-                $msg = xarML('Invalid args (field key must be set).');
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                               new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-                return;
+                throw new BadParameterException('args','Invalid parameter "#(1)" (field key must be set).');
             }
             $coldef = xarDB__datadictColumnDefinition($args['field'],$args);
             if (empty($coldef)) {
-                $msg = xarML('Invalid args (type,size,default,null, unsigned, increment, or primary_key must be set)');
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                               new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-                return;
+                throw new BadParameterException('args','Invalid parameter "#(1)" (type,size,default,null, unsigned, increment, or primary_key must be set)');
             }
             $fields = $args['field'] .' '
                 . $coldef['type'] . ' '
@@ -145,10 +130,7 @@ function xarDB__datadictAlterTable($tableName, $args)
             break;
 
         default:
-            $msg = xarML('Unknown command: \'#(1)\'.', $args['command']);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                           new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return;
+            throw new BadParameterException($args['command'],'Unknown command: "#(1)"');
     }
 
     if (isset($sql) && is_array($sql)) {
@@ -160,7 +142,7 @@ function xarDB__datadictAlterTable($tableName, $args)
 }
 
 /**
- * DataDict specific column type generation - adapted from adodb-mysql.inc.php mapping
+ * DataDict specific column type generation - adapted from a d o d b-mysql.inc.php mapping
  *
  * @access private
  * @param field_name

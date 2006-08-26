@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<!--
+  Schema which contains all the tricks in the trade, to which the implementation
+  should react responsibly
+-->
+<schema name="devtest">
+  <table name="first" description="A nice table with some sort of description">
+    <column name="id" description="A unique id column" size="11" type="INTEGER"
+            autoincrement="true" required="true" />
+    <column name="ref_id" description="A reference to an id column" size="11" type="INTEGER"
+            required="true"/>
+    <primary>
+      <column name="id"/>
+    </primary>
+    <index type="default" name="i_xar_block_group_instances">
+      <column name="ref_id"/>
+    </index>
+ </table>
+</schema>

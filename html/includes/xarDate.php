@@ -11,18 +11,19 @@
  * @todo bring back possibility of time authorized keys
  * @todo this needs another place
  * @todo this needs documentation
+ * @todo why do we need this?
  */
 
 class xarDate
 {
 
-    var $year;
-    var $month;
-    var $day;
-    var $hour;
-    var $minute;
-    var $second;
-    var $timestamp;
+    public $year;
+    public $month;
+    public $day;
+    public $hour;
+    public $minute;
+    public $second;
+    public $timestamp;
 
     function xarDate($hour=0,$minute=0,$second=0,$month=0,$day=0,$year=0)
     {
@@ -80,121 +81,133 @@ class xarDate
         }
     }
 
-    function display($format)
+    function display($format='Y-m-d')
     {
         return date($format,$this->timestamp);
     }
 
-    function getTimestamp()
+    function getTimearray()
     {
-        return $this->timestamp;
+        return array(
+                    'year' => $this->year,
+                    'month' => $this->month,
+                    'day' => $this->day,
+                    'hour' => $this->hour,
+                    'minute' => $this->minute,
+                    'second' => $this->second,
+                );
     }
 
-    function getDate($x)
-    {
-        return strtotime($x);
+    function getTimestamp() 
+    { 
+        return $this->timestamp; 
     }
-
-    function getYear()
-    {
-        return $this->year;
+    
+    function getDate($x)    
+    { 
+        return strtotime($x); 
     }
-
-    function getYDay()
-    {
-        $datearray = getdate($this->timestamp); return $datearray['yday'];
+    
+    function getYear()      
+    { 
+        return $this->year; 
     }
-
+    
+    function getYDay()      
+    { 
+        $datearray = getdate($this->timestamp); return $datearray['yday']; 
+    }
+    
     //TODO: add gets for weekdays etc.
-
-    function getMonth()
-    {
-        return $this->month;
+    
+    function getMonth()     
+    { 
+        return $this->month; 
     }
-
-    function getDay()
-    {
-        return $this->day;
+    
+    function getDay()       
+    { 
+        return $this->day; 
     }
-
-    function getHour()
-    {
-        return $this->hour;
+    
+    function getHour()      
+    { 
+        return $this->hour; 
     }
-
-    function getMinute()
-    {
-        return $this->minute;
+    
+    function getMinute()    
+    { 
+        return $this->minute; 
     }
-
-    function getSecond()
-    {
-        return $this->second;
+    
+    function getSecond()    
+    { 
+        return $this->second; 
     }
-
-    function setTimestamp($x)
-    {
-        $this->timestamp = $x; $this->extract();
+    
+    function setTimestamp($x) 
+    { 
+        $this->timestamp = $x; $this->extract(); 
     }
-
-    function setYear($x)
-    {
-        $this->year = $x; $this->regenerate();
+    
+    function setYear($x)    
+    { 
+        $this->year = $x; $this->regenerate(); 
     }
-
-    function setMonth($x)
-    {
-        $this->month = $x; $this->regenerate();
+    
+    function setMonth($x)   
+    { 
+        $this->month = $x; $this->regenerate(); 
     }
-
-    function setDay($x)
-    {
-        $this->day = $x; $this->regenerate();
+    
+    function setDay($x)     
+    { 
+        $this->day = $x; $this->regenerate(); 
     }
-
-    function setHour($x)
-    {
-        $this->hour = $x; $this->regenerate();
+    
+    function setHour($x)    
+    { 
+        $this->hour = $x; $this->regenerate(); 
     }
-
-    function setMinute($x)
-    {
-        $this->minute = $x; $this->regenerate();
+    
+    function setMinute($x)  
+    { 
+        $this->minute = $x; $this->regenerate(); 
     }
-
-    function setSecond($x)
-    {
-        $this->second = $x; $this->regenerate();
+    
+    function setSecond($x)  
+    { 
+        $this->second = $x; $this->regenerate(); 
     }
-
-    function addYears($x)
-    {
-        $this->year = $this->year + $x; $this->regenerate();
+    
+    function addYears($x)   
+    { 
+        $this->year = $this->year + $x; $this->regenerate(); 
     }
-
-    function addMonths($x)
-    {
-        $this->month = $this->month + $x; $this->regenerate();
+    
+    function addMonths($x)  
+    { 
+        $this->month = $this->month + $x; $this->regenerate(); 
     }
-
-    function addDays($x)
-    {
-        $this->day = $this->day + $x; $this->regenerate();
+    
+    function addDays($x)    
+    { 
+        $this->day = $this->day + $x; $this->regenerate(); 
     }
-
-    function addHours($x)
-    {
-        $this->hour = $this->hour + $x; $this->regenerate();
+    
+    function addHours($x)   
+    { 
+        $this->hour = $this->hour + $x; $this->regenerate(); 
     }
-
-    function addMinutes($x)
-    {
-        $this->minute = $this->minute + $x; $this->regenerate();
+    
+    function addMinutes($x) 
+    { 
+        $this->minute = $this->minute + $x; $this->regenerate(); 
     }
-
-    function addSeconds($x)
-    {
-        $this->second = $this->second + $x; $this->regenerate();
+    
+    function addSeconds($x) 
+    { 
+        $this->second = $this->second + $x; $this->regenerate(); 
     }
 }
 

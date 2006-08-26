@@ -66,14 +66,14 @@ function roles_onlineblock_display($blockinfo)
     if($dbconn->databaseType == 'sqlite') {
         $sql = "SELECT COUNT(*) 
                 FROM (SELECT DISTINCT xar_uid FROM $sessioninfotable
-                      WHERE xar_lastused > ? AND xar_uid > 2)";
+                      WHERE xar_lastused > ? AND xar_uid > ?)";
     } else {
         $sql = "SELECT COUNT(DISTINCT xar_uid)
             FROM $sessioninfotable
-            WHERE xar_lastused > ? AND xar_uid > 2";
+            WHERE xar_lastused > ? AND xar_uid > ?";
     }
-    $result = $dbconn->Execute($sql, array($activetime));
-    if (!$result) {return false;}
+    $result = $dbconn->Execute($sql, array($activetime,2));
+    // CHECKME: do we catch the exception here?
     list($args['numusers']) = $result->fields;
     $result->Close();
     if (empty($args['numusers'])) {
@@ -129,14 +129,14 @@ function roles_onlineblock_display($blockinfo)
     if($dbconn->databaseType == 'sqlite') {
         $query2 = "SELECT COUNT(*) 
                    FROM (SELECT DISTINCT xar_ipaddr FROM $sessioninfotable
-                         WHERE xar_lastused > ? AND xar_uid = 2)";
+                         WHERE xar_lastused > ? AND xar_uid = ?)";
     } else {
         $query2 = "SELECT COUNT(DISTINCT xar_ipaddr)
                FROM $sessioninfotable
-               WHERE xar_lastused > ? AND xar_uid = 2";
+               WHERE xar_lastused > ? AND xar_uid = ?";
     }
-    $result2 = $dbconn->Execute($query2, array($activetime));
-    if (!$result2) {return false;}
+    $result2 = $dbconn->Execute($query2, array($activetime,2));
+    // CHECKME: do we catch the exception here?
     list($args['numguests']) = $result2->fields;
     $result2->Close();
     if (empty($args['numguests'])) {

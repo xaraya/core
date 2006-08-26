@@ -1,7 +1,6 @@
 <?php
 /**
  * Register a block type
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -19,7 +18,7 @@
  * @param blockType the block type (deprecated)
  * @param args['module'] the module name
  * @param args['type'] the block type
- * @returns ID of block type registered (even if already registered)
+ * @return ID of block type registered (even if already registered)
  * @return true on success, false on failure
  * @raise DATABASE_ERROR, BAD_PARAM
  */

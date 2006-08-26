@@ -113,7 +113,7 @@
         </dl>
     </div>
     <xar:comment>
-        ------------------- Begin General Options ---------------------
+        - - - - - - - - - - - - - - - - - - - Begin General Options - - - - - - - - - - - - - - - - - - - - - 
     </xar:comment>
     <xar:if condition="$tab eq 'general'">
         <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
@@ -277,7 +277,7 @@
                             Dynamic Roles Variables
                         </xar:mlstring>
                     </legend>
-                    <p> <xar:mlstring>Optional in a user role. Once activated they can be retrieved as <strong>xarUserGetVar('varname')</strong></xar:mlstring>
+                    <p> <xar:mlstring>Optional in a user role. Once activated they can be retrieved as <strong>xarModGetUserVar('roles','varname')</strong></xar:mlstring>
                     </p>
 
                     <table style="width: 90%">
@@ -389,6 +389,7 @@
                                 </xar:if>
                             </td>
                         </tr>
+                        </xar:comment>
                     </table>
                 </fieldset>
                 <fieldset>
@@ -430,7 +431,7 @@
             </p>
         </xar:if>
         <xar:comment>
-            ----------------- Begin Group Hooks Options -------------------
+            - - - - - - - - - - - - - - - - - Begin Group Hooks Options - - - - - - - - - - - - - - - - - - - 
         </xar:comment>
         <xar:elseif condition="$tab eq 'grouphooks'" />
         <xar:if condition="!empty($hooks)">
@@ -459,7 +460,7 @@
             </p>
         </xar:if>
         <xar:comment>
-            ----------------- Begin Member List Options -------------------
+            - - - - - - - - - - - - - - - - - Begin Member List Options - - - - - - - - - - - - - - - - - - - 
         </xar:comment>
         <xar:elseif condition="$tab eq 'memberlist'" />
         <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">

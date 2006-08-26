@@ -1,0 +1,64 @@
+Functionality description
+-------------------------
+This directory contains files which aim to implement a schema based piece of functionality which does the following:
+
+1. Define a DTD for describing database schema's (schema.xml) with sufficient
+information to describe a certain state to allow for creating the schema as
+well as updating an existing schema to reflect that state. [xarddl.dtd]
+
+2. A xml2ddl utility (or API) which takes a schema.xml and produces valid DDL
+statements for supported database to create the schema in that database
+
+-> xsltproc xml2ddl-dbvendor.xsl schema.xml > dbvendor.ddl
+
+3. A db2xml utility (or API) which takes a database schema and creates a valid
+XML schema file which reflects the same information contained in that database
+schema.
+
+-> xar + bl db2xml.xd -> schema.xml
+
+4. A utility which takes an existing database schema plus a schema.xml and
+determines valid ddl to update the existing database schema to the one
+described in the schema.xml
+
+-> db2xml [dbspec] > dbschema.xml
+-> xmldiff2ddl schema.xml dbschema.xml > diffschema.ddl
+  
+
+Analysis
+--------
+The critical part in code of the above is determining the differences between an existing (empty) schema in the db and generating the correct ddl statement to upgrade that existing schema to the reference schema.xml. The type of situations which may occur are potentially complex, similar to a revision control system. We do not need the full plethora of options, but should provide an escape clause, so the user/developer can react on 'impossible' situations.
+
+
+Testdata
+--------
+To be able to develop this, we need testdata:
+
+1. baseschema.xml     - the base schema which is used to create an initial db.
+2. targetschema.xml   - contains all sorts of updates to base schema to test
+                        those updates. This targetschema should run from any
+                        state the current db is in. (including empty)
+3a. empty.xml         - special case (no db schema yet) to use as a
+                        baseschema.xml
+3b. others....        - created along the way.
+
+4   core1xschema.xml  - schema representation of core.1.x
+    core2xschema.xml  - schema representation of core.2.x
+                        The goal is obviously to create a db having
+                        core1xschema.xml as input and then use the created 
+                        solution to upgrade it to a core2x schema using
+                        nothing but the xml file.
+
+
+Design notes
+------------
+
+* Creating a new schema could be viewed upon as an upgrade operation on an
+  empty schema, thus making the two operations equivalent
+
+* the dtd design needs a good review, any mistake there will severely limit
+  the options further on in the process.
+
+* the xml should not contain any explicit information for updates. (like
+  oldname="whatever") if something has been renamed. The system should be
+  smart enough to figure that out itself.

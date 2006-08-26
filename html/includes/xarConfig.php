@@ -9,6 +9,16 @@
  * @author Marco Canini
 */
 
+/**
+ * Exceptions for this subsystem
+ *
+ */
+// Generic
+// FIXME: too weak
+class ConfigurationException extends ConfigurationExceptions
+{ 
+    protected $message = 'There is an unknown configuration error detected.';
+}
 
 /**
  * Initialize config system
@@ -24,9 +34,10 @@ function xarConfig_init(&$args, $whatElseIsGoingLoaded)
     // Configuration Unit Tables
     $sitePrefix = xarDBGetSiteTablePrefix();
 
-    $tables = array('config_vars' => $sitePrefix . '_config_vars');
+    // TODO: revisit nameing, this was minimal change when migrating
+    $tables = array('config_vars' => $sitePrefix . '_module_vars');
 
-    xarDB_importTables($tables);
+    xarDB::importTables($tables);
     
     // Pre-load site config variables
     // CHECKME: see if this doesn't hurt install before activating :-)
@@ -53,7 +64,6 @@ function xarConfig__shutdown_handler()
  * @access public
  * @param string name the name of the variable
  * @return mixed value of the variable(string), or void if variable doesn't exist
- * @throws DATABASE_ERROR, BAD_PARAM
  * @todo do we need these aliases anymore ?
  * @todo return proper site prefix when we can store site vars
  */
@@ -81,7 +91,9 @@ function xarConfigGetVar($name, $prep = NULL)
     }
 
     // Nice, but introduces dependency
-    return xarVar__GetVarByAlias($modname = NULL, $name, $uid = NULL, $prep, $type = 'configvar');
+    $t =xarVar__GetVarByAlias($modname = NULL, $name, $uid = NULL, $prep, $type = 'configvar');
+    
+    return $t;
 }
 
 /**
@@ -93,7 +105,6 @@ function xarConfigGetVar($name, $prep = NULL)
  * @return bool true on success, or false if you're trying to set unallowed variables
  * @todo return states that it should return false if we're setting
  *       unallowed variables.. there is no such code to do that in the function
- * @throws DATABASE_ERROR, BAD_PARAM
  */
 function xarConfigSetVar($name, $value)
 {
@@ -106,10 +117,9 @@ function xarConfigSetVar($name, $value)
  *
  * @access private
  * @return bool true on success, or void on database error
- * @throws DATABASE_ERROR
+ * @todo We need some way to delete configuration (useless without a certain module) variables from the table!!!
+ * @todo look into removing the serialisation, creole does this when needed, automatically (well, almost)
  */
-//FIXME: We need someway to delete configuration (useless without a certain module) 
-//variables from the table!!!
 function xarConfig_loadVars()
 {
     $cacheCollection = 'Config.Variables';
@@ -117,17 +127,13 @@ function xarConfig_loadVars()
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
-    $query = "SELECT xar_name,
-                     xar_value
-                FROM $tables[config_vars]";
-    $result =& $dbconn->Execute($query);
-    if (!$result) return;
+    $query = "SELECT xar_name, xar_value FROM $tables[config_vars] WHERE xar_modid=?";
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery(array(0),ResultSet::FETCHMODE_ASSOC);
 
-    while (!$result->EOF) {
-        list($name,$value) = $result->fields;
-        $newval = unserialize($value);
-        xarCore_SetCached($cacheCollection, $name, $newval);
-        $result->MoveNext();
+    while ($result->next()) {
+        $newval = unserialize($result->getString('xar_value'));
+        xarCore::setCached($cacheCollection, $result->getString('xar_name'), $newval);
     }
     $result->Close();
 
@@ -135,7 +141,7 @@ function xarConfig_loadVars()
     //(It's a escape when you are caching at a higher level than that of the
     //individual variables)
     //This whole cache systems must be remade to a central one.    
-    xarCore_SetCached($cacheCollection, 0, true);
+    xarCore::setCached($cacheCollection, 0, true);
 
     return true;
 }

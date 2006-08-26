@@ -66,39 +66,44 @@ function xarBlockIsCached($args)
 
     extract($args);
 
-    if (xarCore_IsCached('Blocks.Caching', 'settings')) {
-        $blocks = xarCore_GetCached('Blocks.Caching', 'settings');
+    if (xarCore::isCached('Blocks.Caching', 'settings')) {
+        $blocks = xarCore::getCached('Blocks.Caching', 'settings');
     } else {
         $systemPrefix = xarDBGetSystemTablePrefix();
         $blocksettings = $systemPrefix . '_cache_blocks';
         $dbconn =& xarDBGetConn();
-        $query = "SELECT xar_bid,
-                         xar_nocache,
-                         xar_page,
-                         xar_user,
-                         xar_expire
-                 FROM $blocksettings";
-        $result =& $dbconn->Execute($query);
-        if ($result) {
-            $blocks = array();
-            while (!$result->EOF) {
-                list ($bid,
-                      $noCache,
-                      $pageShared,
-                      $userShared,
-                      $blockCacheExpireTime) = $result->fields;
-                $blocks[$bid] = array('bid'         => $bid,
-                                      'nocache'     => $noCache,
-                                      'pageshared'  => $pageShared,
-                                      'usershared'  => $userShared,
-                                      'cacheexpire' => $blockCacheExpireTime);
-                $result->MoveNext();
+        $tables = $dbconn->MetaTables();
+        if (in_array($blocksettings, $tables)) {
+            $query = "SELECT xar_bid,
+                             xar_nocache,
+                             xar_page,
+                             xar_user,
+                             xar_expire
+                     FROM $blocksettings";
+            $result =& $dbconn->Execute($query,array(), ResultSet::FETCHMODE_NUM);
+            if ($result) {
+                $blocks = array();
+                while (!$result->EOF) {
+                    list ($bid,
+                          $noCache,
+                          $pageShared,
+                          $userShared,
+                          $blockCacheExpireTime) = $result->getRow();
+                    $blocks[$bid] = array('bid'         => $bid,
+                                          'nocache'     => $noCache,
+                                          'pageshared'  => $pageShared,
+                                          'usershared'  => $userShared,
+                                          'cacheexpire' => $blockCacheExpireTime);
+                    $result->next();
+                }
+                $result->Close();
+            } else {
+                $blocks = 'noSettings';
             }
-            $result->Close();
         } else {
             $blocks = 'noSettings';
         }
-        xarCore_SetCached('Blocks.Caching', 'settings', $blocks);
+        xarCore::setCached('Blocks.Caching', 'settings', $blocks);
     }
     if (isset($blocks[$blockid])) {
         $noCache = $blocks[$blockid]['nocache'];
@@ -136,12 +141,12 @@ function xarBlockIsCached($args)
         $blockCacheExpireTime = $xarBlock_cacheTime;
     }
 
-    $factors = xarServerGetVar('HTTP_HOST') . $xarTpl_themeDir .
+    $factors = xarServer::getVar('HTTP_HOST') . $xarTpl_themeDir .
                xarUserGetNavigationLocale();
 
     if ($pageShared == 0) {
-        $factors .= xarServerGetVar('REQUEST_URI');
-        $param = xarServerGetVar('QUERY_STRING');
+        $factors .= xarServer::getVar('REQUEST_URI');
+        $param = xarServer::getVar('QUERY_STRING');
         if (!empty($param)) {
             $factors .= '?' . $param;
         }
@@ -202,7 +207,7 @@ function xarBlockSetCached($cacheKey, $name, $value)
     }
 
     if (// the http request is a GET AND
-        xarServerGetVar('REQUEST_METHOD') == 'GET' &&
+        xarServer::getVar('REQUEST_METHOD') == 'GET' &&
     // CHECKME: do we really want to check this again, or do we ignore it ?
         // the cache entry doesn't exist or has expired (no log here) AND
         !($GLOBALS['xarBlock_cacheStorage']->isCached($cacheKey, $blockCacheExpireTime, 0)) &&

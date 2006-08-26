@@ -1,0 +1,32 @@
+<xar:if condition="!empty($trees)">
+    <ul class="tree">
+        <xar:foreach in="$trees" key="$index" value="$node">
+            <div class="preamble">
+                <xar:sec mask="DeletePrivilege" catch="false" component="Privileges" instance="#$node[parent][name]#">
+                    <xar:set name="dellink">xarModUrl('privileges','admin','deleteprivilege',array('pid'=> $node['parent']['pid']))</xar:set>
+                    <a href="#$dellink#" title="#xarML('Delete this privilege')#"><img src="#xarTplGetImage('delete.gif')#"/></a>
+                </xar:sec>
+                <xar:set name="userslink">xarModUrl('privileges','admin','viewroles',array('pid'=> $node['parent']['pid']))</xar:set>
+                <a href="#$userslink#" title="xarML('Show the Groups/Users this Privilege is assigned to')#">
+                    <img src="#xarTplGetImage('usersgroups.gif')#"/>
+                </a>
+                <xar:if condition="$node.parent.parentid ne 0">
+                    <xar:set name="removelink">xarModUrl('privileges','admin','removebranch',array('pid'=> $node['parent']['pid']))</xar:set>
+                    <a href="#$removelink#" title="#xarML('Remove this privilege from its parent')#">
+                        <img src="#xarTplGetImage('remove.gif')#"/>
+                    </a>
+                </xar:if>
+            </div>                
+
+            <li class="leaf">
+                <xar:set name="modlink">xarModUrl('privileges','admin','modifyprivilege',array('pid'=> $node['parent']['pid']))</xar:set>
+                <a href="#$modlink#" title="#$node.parent.description#">#$node.parent.name#</a>
+                <xar:if condition="!empty($node.children)">
+                    <xar:set name="comps">count($node['children'])</xar:set>
+                    <xar:ml><xar:mlstring>: #(1) components</xar:mlstring><xar:mlvar>#$comps#</xar:mlvar></xar:ml>
+                    <xar:template file="tree" subdata="array('trees'=&gt;$node['children'])"/>
+                </xar:if>
+            </li>
+        </xar:foreach>
+    </ul>
+</xar:if>
