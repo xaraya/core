@@ -2,23 +2,23 @@
 /**
  * Find all the modules dependents recursively
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Modules module
+ * @subpackage Module System
+ * @link http://xaraya.com/index.php/release/1.html
  */
 /**
  * Find all the modules dependents recursively
  *
  * @author Xaraya Development Team
  * @param $maindId int ID of the module to look dependents for
- * @returns bool
- * @return true on dependencies activated, false for not
+ * @return array
  * @throws NO_PERMISSION
  */
-function modules_adminapi_getalldependents ($args) 
+function modules_adminapi_getalldependents ($args)
 {
     static $dependent_ids = array();
 
@@ -66,7 +66,7 @@ function modules_adminapi_getalldependents ($args)
 
         // If the module is not in the database, than its not initialised or activated
         if (!isset($dbModules[$name])) continue;
-        
+
         // If the module is not INITIALISED dont bother...
         // Later on better have a full range of possibilities (adding missing and
         // unitialised). For that a good cleanup in the constant logic and
@@ -79,7 +79,7 @@ function modules_adminapi_getalldependents ($args)
         } else {
             $dependency = array();
         }
-        
+
         foreach ($dependency as $module_id => $conditions) {
             if (is_array($conditions)) {
                 //The module id is in $modId
@@ -88,27 +88,27 @@ function modules_adminapi_getalldependents ($args)
                 //The module id is in $conditions
                 $modId = $conditions;
             }
-            
+
             //Not dependent, then go to the next dependency!!!
             if ($modId != $mainId) continue;
-            
+
             //If we are here, then it is dependent
             // RECURSIVE CALL
-            $output = xarModAPIFunc('modules', 'admin', 'getalldependents', array('regid' => $modinfo['regid'])); 
+            $output = xarModAPIFunc('modules', 'admin', 'getalldependents', array('regid' => $modinfo['regid']));
             if (!$output) {
                 $msg = xarML('Unable to get dependencies for module with ID (#(1)).', $modinfo['regid']);
                 xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
                 return;
             }
-    
+
             //This is giving : recursing detected.... ohh well
             //$dependency_array = array_merge_recursive($dependency_array, $output);
-    
+
             $dependents_array['active'] = array_merge(
-                $dependents_array['active'], 
+                $dependents_array['active'],
                 $output['active']);
             $dependents_array['initialised'] = array_merge(
-                $dependents_array['initialised'], 
+                $dependents_array['initialised'],
                 $output['initialised']);
         }
     }
@@ -119,7 +119,7 @@ function modules_adminapi_getalldependents ($args)
     //TODO: Add version checks later on
     switch ($modInfo['state']) {
         case XARMOD_STATE_ACTIVE:
-        case XARMOD_STATE_UPGRADED: 
+        case XARMOD_STATE_UPGRADED:
             //It is satisfied if already initialized
             $dependents_array['active'][] = $modInfo;
         break;

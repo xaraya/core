@@ -6,8 +6,12 @@
     <xar:comment>This section deals with dependancies.</xar:comment>
     <xar:if condition="!empty($dependencies)">
         <h2><xar:mlstring>Module Installation: Unsatisfied Dependencies</xar:mlstring></h2>
-        <xar:comment> The form for editting the module settings and hooks </xar:comment>
-        <p><xar:mlstring>The module you are trying to install depends on additional installs. Please review the listing below:</xar:mlstring></p>
+        <p>
+            <xar:ml>
+                <xar:mlstring>The module #(1) you are trying to install depends on additional components. Please review the listing below:</xar:mlstring>
+                <xar:mlvar>#$displayname#</xar:mlvar>
+            </xar:ml>
+        </p>
         <form action="&xar-modurl-modules-admin-install;" method="post" enctype="application/x-www-form-urlencoded">
            <div>
             <input type="hidden" name="id" id="id" value="#$id#" />
@@ -32,7 +36,18 @@
 
                 <ul>
                     <xar:foreach in="$dependencies['satisfiable']" value="$modInfo">
-                        <li>#xarML($modInfo['displayname'])#</li>
+                        <li>
+
+                            <xar:if condition="$modInfo['regid'] ne $id">
+                                #$modInfo['displayname']#
+                            <xar:else />
+                                <xar:ml>
+                                    <xar:mlstring>#(1) (id #(2)), the module you are trying to install</xar:mlstring>
+                                    <xar:mlvar>#$modInfo['displayname']#</xar:mlvar>
+                                    <xar:mlvar>#$id#</xar:mlvar>
+                                </xar:ml>
+                            </xar:if>
+                        </li>
                     </xar:foreach>
                 </ul>
             </xar:if>
@@ -45,8 +60,16 @@
                 <ul>
                     <xar:foreach in="$dependencies['unsatisfiable']" value="$modInfo">
                         <li>
-                            <xar:if condition="is_array($modInfo) and $modInfo['displayname'] ne xarML('Unknown')">
-                                #$modInfo['displayname']#
+                            <xar:if condition="is_array($modInfo) AND ($modInfo['displayname'] ne xarML('Unknown')) ">
+                                <xar:if condition="$modInfo['regid'] ne $id">
+                                    #$modInfo['displayname']#
+                                <xar:else />
+                                    <xar:ml>
+                                        <xar:mlstring>#(1) (id #(2)), the module you are trying to install</xar:mlstring>
+                                        <xar:mlvar>#$modInfo['displayname']#</xar:mlvar>
+                                        <xar:mlvar>#$id#</xar:mlvar>
+                                    </xar:ml>
+                                </xar:if>
                             <xar:elseif condition="is_array($modInfo) and $modInfo['displayname'] eq xarML('Unknown')" />
                                 <a href="http://www.xaraya.com/index.php/release/#$modInfo['regid']#.html">
                                     <xar:ml>

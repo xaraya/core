@@ -468,7 +468,7 @@ function xarModGetIDFromName($modName, $type = 'module')
 }
 
 /**
- * Get information on module
+ * Get information on a module
  *
  * @access public
  * @param modRegId string module id
@@ -618,7 +618,7 @@ function xarModGetInfo($modRegId, $type = 'module')
     return $modInfo;
 }
 
-function xarModGetNameFromID($regid) 
+function xarModGetNameFromID($regid)
 {
     $modinfo = xarModGetInfo($regid);
     return $modinfo['name'];

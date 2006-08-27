@@ -13,12 +13,13 @@
 /**
  * Installs a module
  *
- * @author Xaraya Development Team
+
  * Loads module admin API and calls the initialise
  * function to actually perform the initialisation,
  * then redirects to the list function with a
  * status message and returns true.
  * <andyv implementation of JC's request> attempt to activate module immediately after it's inited
+ * @author Xaraya Development Team
  *
  * @param int id the module id to initialise
  * @return bool true on success
@@ -46,19 +47,25 @@ function modules_admin_install()
     if (!$command) {
         //Let's make a nice GUI to show the user the options
         $data = array();
-        $data['id'] = $id;
+        $data['id'] = (int) $id;
         //They come in 3 arrays: satisfied, satisfiable and unsatisfiable
         //First 2 have $modInfo under them foreach module,
         //3rd has only 'regid' key with the ID of the module
 
         // get any dependency info on this module for a better message if something is missing
         $thisinfo = xarModGetInfo($id);
-        if (!isset($thisinfo)) xarErrorHandled();
-        if (isset($thisinfo['dependencyinfo'])) $data['dependencyinfo'] = $thisinfo['dependencyinfo'];
-        else $data['dependencyinfo'] = array();
+        if (!isset($thisinfo)) {
+            xarErrorHandled();
+        }
+        if (isset($thisinfo['dependencyinfo'])) {
+            $data['dependencyinfo'] = $thisinfo['dependencyinfo'];
+        } else {
+            $data['dependencyinfo'] = array();
+        }
 
         $data['authid']       = xarSecGenAuthKey();
         $data['dependencies'] = xarModAPIFunc('modules','admin','getalldependencies',array('regid'=>$id));
+        $data['displayname'] = $thisinfo['displayname'];
         return $data;
     }
 
