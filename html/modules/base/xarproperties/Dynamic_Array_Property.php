@@ -65,6 +65,7 @@ class Dynamic_Array_Property extends Dynamic_Property
     function showInput($data = array())
     {
         if (!isset($data['value'])) $value = $this->value;
+        else $value = $data['value'];
         if (isset($data['fields'])) $this->fields = $data['fields'];
 
         if (empty($value)) {
