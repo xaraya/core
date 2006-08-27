@@ -287,7 +287,7 @@ function roles_upgrade($oldVersion)
                 // create one new roles modvar
                 xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authentication'));
             } else {
-                throw Exception('I could not load the authentication module. Please make it available and try again');
+                throw new Exception('I could not load the authentication module. Please make it available and try again');
             }
             break;
         case '1.1.1':
