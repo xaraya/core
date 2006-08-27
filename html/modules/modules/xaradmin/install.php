@@ -20,9 +20,8 @@
  * status message and returns true.
  * <andyv implementation of JC's request> attempt to activate module immediately after it's inited
  *
- * @param id the module id to initialise
- * @returns
- * @return
+ * @param int id the module id to initialise
+ * @return bool true on success
  */
 function modules_admin_install()
 {
@@ -92,14 +91,14 @@ function modules_admin_install()
 
     // set the target location (anchor) to go to within the page
     $target = $minfo['name'];
-    
+
     if (function_exists('xarOutputFlushCached')) {
         xarOutputFlushCached('base');
         xarOutputFlushCached('base-block');
     }
 
     // The module might have properties, after installing, flush the property cache otherwise you will
-    // get errors on displaying the property. 
+    // get errors on displaying the property.
     if(!xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush' => true))) {
         return false; //FIXME: Do we want an exception here if flushing fails?
     }
