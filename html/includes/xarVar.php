@@ -210,7 +210,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     $oldValue = null;
     if (isset($value) && $flags & XARVAR_DONT_SET) $oldValue = $value;
 
-    // XARVAR_DONT_REUSE fetches the variable, regardless 
+    // XARVAR_DONT_REUSE fetches the variable, regardless
     // FIXME: this flag doesn't seem to work !?
     // mrb: what doesn't work then? seems ok within the given workings
     // --------v  this is kinda confusing though, especially when dont_set is used as flag.
@@ -219,7 +219,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     }
 
     // Suppress validation warnings when dont_set, not_required or a default value is specified
-    $supress = (($flags & XARVAR_DONT_SET) || ($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue)); 
+    $supress = (($flags & XARVAR_DONT_SET) || ($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue));
     // Validate the $value given
     $validated = xarVarValidate($validation, $value, $supress, $name);
     if (xarCurrentErrorType()) {return;} //Throw back
@@ -227,7 +227,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     if (!$validated) {
         // The value does not validate
         $value = null; // we first make sure that this is what we expect to return
-        
+
         // Perhaps the default or old can be returned?
         if (($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue)) {
             // CHECKME:  even for the XARVAR_DONT_SET flag !?
@@ -241,7 +241,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
         // Value is ok, handle preparation of that value
         if ($prep & XARVAR_PREP_FOR_DISPLAY) $value = xarVarPrepForDisplay($value);
         if ($prep & XARVAR_PREP_FOR_HTML)    $value = xarVarPrepHTMLDisplay($value);
-        
+
         // TODO: this is used nowhere, plus it introduces a db connection here which is of no use
         if ($prep & XARVAR_PREP_FOR_STORE) {
             $dbconn =& xarDBGetConn();
@@ -1173,7 +1173,8 @@ function xarVarCleanFromInput()
  * Ready user output
  *
  * Gets a variable, cleaning it up such that the text is
- * shown exactly as expected. Can have as many parameters as desired.
+ * shown exactly as entered. This function uses the PHP function htmlspecialchars.
+ * Can have as many parameters as desired.
  *
  * @access public
  * @return mixed prepared variable if only one variable passed
@@ -1353,9 +1354,9 @@ function xarVarPrepForOS()
     static $special_characters = array(':'  => ' ',   // for things like c:/file.txt?
                                        //'/'  => ' ', // this makes vars with relative paths unusable (cfr. bug 5559 )
                                        '\\' => ' ',   // for unc paths?
-                                       '..' => ' ',   
+                                       '..' => ' ',
                                        '?'  => ' ',   // why?
-                                       '*'  => ' ');  
+                                       '*'  => ' ');
 
     $args = func_get_args();
 
