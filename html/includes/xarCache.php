@@ -2,7 +2,7 @@
 /**
  * Xaraya Web Interface Entry Point
  *
- * package cache
+ * @package core
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -20,7 +20,7 @@
 function xarCache_init($args = false)
 {
     $cachingConfiguration = array();
-    
+
     if (!empty($args)) {
         extract($args);
     }
@@ -274,8 +274,7 @@ function xarCache_getParents()
  * @param string $cachedir the cache directory
  * @param string $code the cache code (for URL factors et al.) if it's fixed
  * @param string $expire the expiration time for this data
- * @returns object
- * @return storage class
+ * @return object storage class
  */
 function xarCache_getStorage($args)
 {

@@ -176,8 +176,9 @@ class Dynamic_Property_Master
             // PHP file contains xarML() statements
             // See bug 5097
             if(preg_match('/modules\/(.*)\/xarproperties/',$propertyInfo['filepath'],$matches) == 1) {
-                // The preg determines the module name (in a sloppy way, FIX this)
-                xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE,$matches[1],'modules:properties',$propertyClass);
+                // @todo: The preg determines the module name (in a sloppy way, FIX this)
+                // @todo: do we still do properties from includes/properties?
+                xarMLSLoadTranslations($propertyInfo['filepath']);
             } else xarLogMessage("WARNING: Property translations for $propertyClass NOT loaded");
 
             if(!file_exists($propertyInfo['filepath'])) throw new FileNotFoundException($propertyInfo['filepath']);

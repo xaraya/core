@@ -2,10 +2,12 @@
 /**
  * Logging Facilities
  *
- * @package logging
+ * @package core
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
+ * @subpackage logging
  * @author Marco Canini <marco@xaraya.com>
  * @author Flavio Botelho <nuncanada@ig.com.br>
  * @todo  Document functions
@@ -52,7 +54,7 @@ function xarLog_init(&$args, &$whatElseIsGoingLoaded)
     $GLOBALS['xarLog_loggers'] = array();
     $xarLogConfig = array();
 
-    if (xarLogConfigReadable()) 
+    if (xarLogConfigReadable())
     {
         // CHECKME: do we need to wrap this?
         if (!include (xarLogConfigFile())) {
@@ -66,17 +68,17 @@ function xarLog_init(&$args, &$whatElseIsGoingLoaded)
         $logFile = xarLogFallbackFile();
         if ($logFile) {
             $xarLogConfig[] = array(
-                                    'type'      => 'simple',
-                                    'config'    => array(
-                                                         'fileName' => $logFile,
-                                                         'logLevel'  => XARLOG_LEVEL_ALL)
-                                    );
+                'type'      => 'simple',
+                'config'    => array(
+                    'fileName' => $logFile,
+                    'logLevel'  => XARLOG_LEVEL_ALL));
         }
     }
 
     // If none of these => do nothing.
-    foreach ($xarLogConfig as $logger) {
-         $config = array_merge(array('loadLevel' => &$whatElseIsGoingLoaded), $logger['config']);
+     foreach ($xarLogConfig as $logger) {
+        $config = array_merge(array(
+            'loadLevel' => &$whatElseIsGoingLoaded), $logger['config']);
          xarLog__add_logger($logger['type'], $config);
      }
 
@@ -92,15 +94,15 @@ function xarLog_init(&$args, &$whatElseIsGoingLoaded)
 function xarLogConfigFile()
 {
     static $logConfigFile;
-    
+
     if (isset($logConfigFile)) return $logConfigFile;
-    
+
     $logConfigFile = xarCoreGetVarDirPath() . '/logs/config.log.php';
 
     if (file_exists($logConfigFile)) {
         $logConfigFile = realpath($logConfigFile);
     }
-    
+
     return $logConfigFile;
 }
 
@@ -110,11 +112,11 @@ function xarLogConfigFile()
 function xarLogConfigReadable()
 {
     $logConfigFile = xarLogConfigFile();
-    
+
     if (file_exists($logConfigFile) && is_readable($logConfigFile)) {
         return true;
     }
-    
+
     return false;
 }
 
@@ -124,20 +126,21 @@ function xarLogConfigReadable()
 function xarLogFallbackFile ()
 {
     static $logFile;
-    
+
     if (isset($logFile)) return $logFile;
-    
+
     $logFile = xarCoreGetVarDirPath() . '/logs/log.txt';
 
     if (file_exists($logFile)) {
         $logFile = realpath($logFile);
     }
-    
+
     return $logFile;
 }
 
 /**
  * Will check if the fallback mechanism can be used
+ * @return bool
  */
 function xarLogFallbackPossible ()
 {
@@ -204,7 +207,7 @@ function xarLog__add_logger($type, $config_args)
       $GLOBALS['xarLog_loggers'][] = &$observer;
 }
 
-function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG) 
+function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG)
 {
 
     if (($level == XARLOG_LEVEL_DEBUG) && !xarCoreIsDebuggerActive()) return;

@@ -16,7 +16,6 @@
  */
 function roles_user_usermenu($args)
 {
-
     // Security check
     if (!xarSecurityCheck('ViewRoles')) return;
     extract($args);
@@ -60,7 +59,7 @@ function roles_user_usermenu($args)
             $email = xarUserGetVar('email');
             $role = xarUFindRole($uname);
             $home = xarModGetUserVar('roles','userhome');// now user mod var not 'duv'. $role->getHome();
-
+            $allowemail = xarModGetUserVar('roles','usersendemails',$uid); //allow someone to send an email to the user via a form
             if (xarModGetVar('roles','setuserlastlogin')) {
             //only display it for current user or admin
                 if (xarUserIsLoggedIn() && xarUserGetVar('uid')==$uid) { //they should be but ..
@@ -80,6 +79,9 @@ function roles_user_usermenu($args)
             $authid = xarSecGenAuthKey();
             $submitlabel = xarML('Submit');
             $item['module'] = 'roles';
+            $upasswordupdate = xarModGetUserVar('roles','passwordupdate');//now user mod var not 'duv'. $role->getPasswordUpdate();
+            $usertimezonedata =unserialize(xarModGetUserVar('roles','usertimezone'));
+            $utimezone=$usertimezonedata['timezone'];
             $item['itemtype'] = ROLES_USERTYPE;
 
             $hooks = xarModCallHooks('item','modify',$uid,$item);
@@ -97,9 +99,11 @@ function roles_user_usermenu($args)
                                   'emailaddress' => $email,
                                   'submitlabel'  => $submitlabel,
                                   'uid'          => $uid,
-                                    //'upasswordupdate' => $upasswordupdate,
-                                  'usercurrentlogin'   => $usercurrentlogin,
-                                  'userlastlogin'   => $userlastlogin));
+                                  'upasswordupdate' => $upasswordupdate,
+                                  'usercurrentlogin'=> $usercurrentlogin,
+                                  'userlastlogin'   => $userlastlogin,
+                                  'utimezone'    => $utimezone,
+                                  'allowemail'   => $allowemail));
                  break;
 
         case 'formenhanced':
@@ -121,9 +125,37 @@ function roles_user_usermenu($args)
             if(!xarVarFetch('home',  'isset', $home,    NULL, XARVAR_DONT_SET)) return;
             if(!xarVarFetch('pass1', 'isset', $pass1,   NULL, XARVAR_DONT_SET)) return;
             if(!xarVarFetch('pass2', 'isset', $pass2,   NULL, XARVAR_DONT_SET)) return;
+            if(!xarVarFetch('allowemail', 'checkbox', $allowemail,   false, XARVAR_DONT_SET)) return;
+            if(!xarVarFetch('utimezone','str:1:',$utimezone, NULL,XARVAR_NOT_REQUIRED)) return;
             $uname = xarUserGetVar('uname');
+            //set emailing options for the user
+            xarModSetUserVar('roles','usersendemails',$allowemail,$uid);
             // Confirm authorisation code.
             if (!xarSecConfirmAuthKey()) return;
+            $dopasswordupdate=false; //switch
+            //adjust the timezone value for saving
+            if (xarModGetVar('roles','setusertimezone') && (isset($utimezone))) {
+               $timeinfo = xarModAPIFunc('base','user','timezones', array('timezone' => $utimezone));
+               list($hours,$minutes) = explode(':',$timeinfo[0]);
+               $offset = (float) $hours + (float) $minutes / 60;
+               $timeinfoarray= array('timezone' => $utimezone, 'offset' => $offset);
+                $usertimezone=serialize($timeinfoarray);
+                xarModSetUserVar('roles','usertimezone',$usertimezone);
+            }
+             /* Check if external urls are allowed in home page */
+            $allowexternalurl=xarModGetVar('roles','allowexternalurl');
+            $url_parts = parse_url($home);
+            if (!$allowexternalurl) {
+                if ((preg_match("%^http://%", $home, $matches)) &&
+                ($url_parts['host'] != $_SERVER["SERVER_NAME"]) &&
+                ($url_parts['host'] != $_SERVER["HTTP_HOST"])) {
+
+                  $msg = xarML('External URLs such as #(1) are not permitted in your User Account.', $home);
+                  xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
+                  $home=''; //reset and return with error
+                    return;
+                }
+            }
             if (!empty($pass1)){
                 $minpasslength = xarModGetVar('roles', 'minpasslength');
                 if (strlen($pass2) < $minpasslength) {
@@ -137,28 +169,29 @@ function roles_user_usermenu($args)
                 }
                 $oldemail = xarUserGetVar('email');
                 // The API function is called.
-                if(!xarModAPIFunc('roles',
-                                  'admin',
-                                  'update',
-                                   array('uid' => $uid,
+                if(!xarModAPIFunc('roles', 'admin', 'update',
+                                   array('uid'   => $uid,
                                          'uname' => $uname,
-                                         'name' => $name,
-                                         'home' => $home,
+                                         'name'  => $name,
+                                         'home'  => $home,
                                          'email' => $oldemail,
                                          'state' => ROLES_STATE_ACTIVE,
-                                         'pass' => $pass))) return;
+                                         'pass'  => $pass,
+                                         'usertimezone' => $usertimezone,
+                                         'dopasswordupdate' => $dopasswordupdate))) return;
             }
             if (!empty($email)){
-                // Steps for changing email address.
-                // 1) Validate the new email address for errors.
-                // 2) Log user out.
-                // 3) Change user status to 2 (if validation is set as option)
-                // 4) Registration process takes over from there.
+                /* updated steps for changing email address
+                   1) Validate the new email address for errors.
+                   2) Check if validation is required and if so create confirmation code
+                   3) Change user status to 2 (if validation is set as option)
+                   4) If validation is required for a change, send the user an email about validation
+                   5) if user is logged in (ie existing user), log user out
+                   6) Display appropriate message
+                */
 
                 // Step 1
-                $emailcheck = xarModAPIFunc('roles',
-                                            'user',
-                                            'validatevar',
+                $emailcheck = xarModAPIFunc('roles','user','validatevar',
                                             array('var' => $email,
                                                   'type' => 'email'));
 
@@ -168,9 +201,7 @@ function roles_user_usermenu($args)
 
                 if(xarModGetVar('roles','uniqueemail')) {
                     // check for duplicate email address
-                    $user = xarModAPIFunc('roles',
-                                          'user',
-                                          'get',
+                    $user = xarModAPIFunc('roles', 'user','get',
                                            array('email' => $email));
                     if ($user != false) {
                         unset($user);
@@ -188,62 +219,63 @@ function roles_user_usermenu($args)
                         throw new ForbiddenOperationException(null,$msg);
                     }
                 }
-                // Step 3
+                // Step 2 Check for validation required or not
                 $requireValidation = xarModGetVar('roles', 'requirevalidation');
                 if ((!xarModGetVar('roles', 'requirevalidation')) || (xarUserGetVar('uname') == 'admin')){
                     // The API function is called.
-                    if(!xarModAPIFunc('roles',
-                                      'admin',
-                                      'update',
+                    if(!xarModAPIFunc('roles',  'admin', 'update',
                                        array('uid' => $uid,
                                              'uname' => $uname,
                                              'name' => $name,
                                              'home' => $home,
                                              'email' => $email,
+                                             'usertimezone' => $usertimezone,
                                              'state' => ROLES_STATE_ACTIVE))) return;
-                } else {
-
+                } else { // if we need validation
                     // Step 2
                     // Create confirmation code and time registered
-                    $confcode = xarModAPIFunc('roles',
-                                              'user',
-                                              'makepass');
+                    $confcode = xarModAPIFunc('roles','user','makepass');
 
                     // Step 3
                     // Set the user to not validated
                     // The API function is called.
-                    if(!xarModAPIFunc('roles',
-                                      'admin',
-                                      'update',
+                    if(!xarModAPIFunc('roles', 'admin', 'update',
                                        array('uid'      => $uid,
                                              'uname'    => $uname,
                                              'name'     => $name,
                                              'home'     => $home,
                                              'email'    => $email,
+                                             'usertimezone' => $usertimezone,
                                              'valcode'  => $confcode,
                                              'state'    => ROLES_STATE_NOTVALIDATED))) return;
                     // Step 4
                     //Send validation email
-                    if (!xarModAPIFunc( 'roles', 'admin', 'senduseremail',
-                                        array('uid' => array($uid => '1'), 'mailtype' => 'validation'))) {
+                    if (!xarModAPIFunc( 'roles',  'admin', 'senduseremail',
+                                  array('uid' => array($uid => '1'), 'mailtype' => 'validation'))) {
+
                         $msg = xarML('Problem sending confirmation email');
                         throw new Exception($msg);
                     }
                     // Step 5
                     // Log the user out. This needs to happen last
                     xarUserLogOut();
+
+                    //Step 6
+                    //Show a nice message for the person about email validation
+                    $data = xarTplModule('roles','user', 'waitingconfirm');
+                    return $data;
                 }
             } else {
                 $email = xarUserGetVar('email');
+
                 // The API function is called.
-                if(!xarModAPIFunc('roles',
-                                  'admin',
-                                  'update',
+                if(!xarModAPIFunc('roles', 'admin', 'update',
                                    array('uid' => $uid,
                                          'uname' => $uname,
                                          'name' => $name,
                                          'home' => $home,
                                          'email' => $email,
+                                         'usertimezone'=> $usertimezone,
                                          'state' => ROLES_STATE_ACTIVE))) return;
             }
 

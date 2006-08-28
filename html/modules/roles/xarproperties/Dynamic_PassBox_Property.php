@@ -101,7 +101,7 @@ class Dynamic_PassBox_Property extends Dynamic_TextBox_Property
         }
 
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['confirm']  = !empty($confirm) ? true : false;
+        $data['confirm']  = isset($confirm) ? $confirm : true;
 
         return parent::showInput($data);
     }

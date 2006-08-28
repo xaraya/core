@@ -18,7 +18,7 @@ xarDBLoadTableMaintenanceAPI();
  *
  * @param none $
  * @returns bool
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function modules_init()
 {
@@ -225,17 +225,8 @@ function modules_activate()
 
 
 
-
-
-    // Register the blocks here, since this is the earlies point we can do it
-    // Register blocks
-    if (!xarModAPIFunc('blocks','admin','register_block_type',
-                       array('modName'  => 'modules',
-                             'blockType'=> 'adminmenu'))) return;
-
-    if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
-                       array('modName'  => 'modules',
-                             'blockType'=> 'waitingcontent'))) return;
+    // New in 1.1.x series but not used
+    xarModSetVar('modules', 'disableoverview',0);
 
     return true;
 }

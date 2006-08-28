@@ -481,7 +481,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                 
                 // Copy the header to the output
                 if(!$this->tagRootSeen) {
-                    if(ini_get('short_open_tag')) $output = "<?php echo '$output'; ?>";
+                    if(ini_get('short_open_tag')) $output = "<?php echo '$output';?>";
                     $result .= $output."\n";
                 }
                 break;

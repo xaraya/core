@@ -1,4 +1,8 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:set name="relateddocurl">'http://www.xaraya.com/index.php/keywords/blocks/'</xar:set>
+<xar:set name="relateddocurltext"><xar:mlstring>Related documentation on Blocks</xar:mlstring></xar:set>
+<xar:set name="moduledocurl">'http://www.xaraya.com/index.php/release/13.html'</xar:set>
+<xar:set name="moduledocurltext"><xar:mlstring>Blocks Module - Xaraya Extension 13</xar:mlstring></xar:set>
 <xar:style scope="common" />
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Blocks Administration</xar:mlstring></span>
@@ -12,8 +16,8 @@
     <h3><xar:mlstring>What is it?</xar:mlstring></h3>
 
     <p>
-    <xar:mlstring>The Blocks Module controls the configuration, display position and grouping of 'blocks' 
-    of content or functionality on your website. The Blocks module is a core module within Xaraya and cannot be removed.</xar:mlstring>
+    <xar:mlstring>The Blocks Module controls the configuration, display position and grouping of 'blocks'
+    of content or functionality on your website.  From version 1.1.2, the Blocks module also can control access and levels of accessto blocks. The Blocks module is a core module within Xaraya and cannot be removed.</xar:mlstring>
     </p>
 
     <h2><xar:mlstring>How to use it?</xar:mlstring></h2>
@@ -142,13 +146,23 @@
           <xar:mlstring>Further information on the Blocks module can be found at</xar:mlstring>
       </p>
       <ul>
-          <li><xar:mlstring>Blocks Module Extension page at</xar:mlstring> <a title="#xarML('Blocks Module - Xaraya Extension 13')#" href="http://www.xaraya.com/index.php/release/13.html">Xaraya Extension and Releases</a>.
-          <xar:mlstring> Click on Version History tab at the bottom to get the latest release information.</xar:mlstring>
+          <li>
+              <xar:ml>
+                 <xar:mlstring>Blocks Module Extension page at <a href="#(1)" title="#(2)" >Xaraya Extension and Releases</a>. 
+                     Click on Version History tab at the bottom to get the latest release information.</xar:mlstring>
+                  <xar:mlvar>#$moduledocurl#</xar:mlvar>
+                  <xar:mlvar>#$moduledocurltext#</xar:mlvar>
+              </xar:ml>
           </li>
-          <li><xar:mlstring>Related tutorials and documentation on Blocks found at</xar:mlstring> <a href="http://www.xaraya.com/index.php/keywords/blocks/" title="#xarML('Related documentation on Blocks')#"><xar:mlstring>Xaraya Documentation.</xar:mlstring></a>
+          <li>
+              <xar:ml>
+                  <xar:mlstring>Related tutorials and documentation on Blocks found at <a href="#(1)" title="#(2)">Xaraya Documentation.</a></xar:mlstring>
+                  <xar:mlvar>#$relateddocurl#</xar:mlvar>
+                  <xar:mlvar>#$relateddocurltext#</xar:mlvar>
+              </xar:ml>
           </li>
       </ul>
       <p class="xar-sub">
-         <strong>&nbsp;<xar:mlstring>Blocks Module Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.1.0&nbsp; 2006-06-09
+         <strong>&nbsp;<xar:mlstring>Blocks Module Overview</xar:mlstring></strong><br />&nbsp;<xar:mlstring>Version</xar:mlstring> 1.1.1&nbsp; 2006-07-20
       </p>
 </div>

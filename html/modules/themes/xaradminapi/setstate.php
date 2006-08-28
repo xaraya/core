@@ -13,7 +13,7 @@
  * @author Marty Vance
  * @param $args['regid'] the theme id
  * @param $args['state'] the state
- * @raise BAD_PARAM,NO_PERMISSION
+ * @throws BAD_PARAM,NO_PERMISSION
  */
 function themes_adminapi_setstate($args)
 {

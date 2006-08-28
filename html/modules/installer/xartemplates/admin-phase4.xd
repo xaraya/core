@@ -16,12 +16,13 @@
                 <li><xar:mlstring>If you plan to use a SQLite or PostgreSQL database please ensure your database already exists before your proceed.</xar:mlstring></li>
                 <li><xar:mlstring>If you plan on <strong>upgrading</strong> an existing Xaraya then please run the <strong>upgrade.php</strong> script, not this install script.</xar:mlstring></li>
                 <li><xar:mlstring>If you plan to convert from another Weblog/CMS to Xaraya, first install Xaraya as normal and then run the appropriate import script to import your prior Weblog/CMS data.</xar:mlstring></li>
+                <li><xar:mlstring>Make sure you only use valid characters in the username and password for the database
+            (eg no spaces, '$' or others which not supported by your database type.</xar:mlstring></li>
             </ul>
         </p>
         <h3>
             <xar:mlstring>Database Information</xar:mlstring>
         </h3>
-
         <div class="simpleform">
             <p>
                 <label for="install_database_type">
@@ -60,7 +61,9 @@
                     <xar:mlstring>Password</xar:mlstring>
                 </label>
                 <input type="password" name="install_database_password" id="install_database_password" maxlength="80" value="#$database_password#" />
-                <br class="clear" />
+                <span class="xar-sub">
+                    <xar:mlstring>(Only valid characters)</xar:mlstring>
+                </span>
             </p>
             <p>
                 <label for="install_database_name">

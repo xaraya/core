@@ -2,10 +2,12 @@
 /**
  * Multi Language System
  *
- * @package multilanguage
+ * @package core
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
+ * @subpackage multilanguage
  * @author Marco Canini <marco@xaraya.com>
  * @todo Dynamic Translations
  *       Timezone and DST support (default offset is supported now)
@@ -179,7 +181,7 @@ function xarMLSGetCurrentLocale()
  * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string the charset name
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  */
 function xarMLSGetCharsetFromLocale($locale)
 {
@@ -376,9 +378,17 @@ function xarMLS_userOffset($timestamp = null)
     if (!isset($offset)) {
     // CHECKME: use dynamicdata for roles, module user variable and/or session variable
     //          (see also 'locale' in xarUserGetNavigationLocale())
+    //jojodee - do not use DD for roles 'variables' used in core functions. They can not be relied on - bug 5847
         // get the correct timezone offset for this user
         if (xarUserIsLoggedIn()) {
-            $offset = xarUserGetVar('timezone');
+            //User modvar 'duv' implemented at 1.1.2 for more reliably reference that free form DD 'timezone'
+            $offset = xarModGetUserVar('roles','usertimezone');
+
+            //Mark the following check for deprecation at next release. Now use usertimezone from 1.1.2
+            if (empty($offset) || !$offset) {
+              //see bug 5847 - now use this only if usertimezone is not set.
+              $offset = xarUserGetVar('timezone');
+            }
             // get the actual timezone for the user (in addition to the timezone offset)
             if (isset($offset) && !is_numeric($offset)) {
                 $info = @unserialize($offset);
@@ -388,7 +398,9 @@ function xarMLS_userOffset($timestamp = null)
                 }
             }
         }
-        if (!isset($offset)) {
+
+        //bug 5847 - $offset will be false if the user is logged in, rather than NULL. Cannot check for !isset.
+        if (!($offset)) {
             // use default time offset for this site
             $offset = $GLOBALS['xarMLS_defaultTimeOffset'];
             // use default timezone for this site
@@ -401,7 +413,7 @@ function xarMLS_userOffset($timestamp = null)
                                 array('timezone' => $timezone,
                                       // pass the timestamp *with* the offset
                                       'time'     => $timestamp + $offset * 3600));
-        //echo $adjust;
+
     } else {
         $adjust = 0;
     }
@@ -489,45 +501,6 @@ function xarMLS_setCurrentLocale($locale)
     //xarMLSLoadLocaleData($locale);
 }
 
-function xarMLSLoadTranslations($sourceFileName)
-{
-    // Process non-default themes base directory
-    // @todo dont do file munging here, it should be determined 
-    // in getsourcefilename or xarTplGetThemeDir before this function ever runs.
-    $newFileName = $sourceFileName;
-    if ($GLOBALS['xarTpl_themesBaseDir'] != 'themes') {
-        $themePathLen = strlen($GLOBALS['xarTpl_themesBaseDir']);
-        if (!strncmp($sourceFileName, $GLOBALS['xarTpl_themesBaseDir'], $themePathLen)) {
-            $newFileName = 'themes' . substr($sourceFileName, $themePathLen);
-        }
-    }
-
-    // Load translations for the template
-    // @todo this is too specific for mls, it should just receive a filename
-    // and solve its own problems :-)
-    $tplpath = explode("/", $newFileName);
-    $tplPathCount = count($tplpath);
-    if($tplPathCount > 1) {
-        switch ($tplpath[0]) {
-        case 'modules': $dnType = XARMLS_DNTYPE_MODULE; break;
-        case 'themes':  $dnType = XARMLS_DNTYPE_THEME; break;
-        }
-
-        $dnName = $tplpath[1];
-
-        $stack = array();
-        if ($tplpath[2] == 'xartemplates') $tplpath[2] = 'templates';
-        for ($i = 2; $i<($tplPathCount-1); $i++) array_push($stack, $tplpath[$i]);
-        $ctxType = $tplpath[0].':'.implode("/", $stack);
-        $ctxName = substr($tplpath[$tplPathCount - 1], 0, -3);
-        /* Temporary partial fix for Bug 5156. This is a temporary workaround and
-         while here, themes cannot be translated. This should be fixed as soon as possible */
-        if(isset($dnType)) {
-            if (xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName) === NULL) return;
-        }
-    }
-}
-
 /**
  * Loads translations for the specified context
  *
@@ -584,6 +557,75 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
     }
 }
 
+/**
+ * Load relevant translations for a specified relatvive path (be it file or directory)
+ *
+ * @return bool true on success, false on failure   
+ * @author Marcel van der Boom <mrb@hsdev.com>
+ * @todo slowly add more intelligence for more scopes. (core, version, init?)
+ * @todo static hash on path to prevent double loading?
+ * @todo is directory support needed? i.e. modules/base/ load all for base module? or how does this work?
+ * @todo pnFile.php type files support needed?
+ * @todo xarversion.php type files support
+ * @todo xar(whatever)api.php type files support? (javascript for example)
+ * @todo do we want core per file support?
+ **/
+function xarMLSLoadTranslations($path)
+{
+    if(!file_exists($path)) {
+        xarLogMessage("MLS: Trying to load translations for a non-existing path ($path)",XARLOG_LEVEL_WARNING);
+        //die($path);
+        return true;
+    } 
+    
+    // Get a structured representation of the path.
+    $pathElements = explode("/",$path);
+    
+    // Initialise some defaults
+    $dnType = XARMLS_DNTYPE_MODULE; $possibleOverride = false; $ctxType = 'modules';
+    
+    // Determine dnType
+    // Lets get core files out of the way
+    if($pathElements[0] == 'includes') return xarMLS_loadTranslations(XARMLS_DNTYPE_CORE, 'xaraya', 'core:', 'core');
+    
+    // modules have a fixed place, so if it's not 'modules/blah/blah' it's themes, period.
+    // NOTE: $pathElements changes here!
+    if(array_shift($pathElements) != 'modules') {
+        $dnType = XARMLS_DNTYPE_THEME;
+        $possibleOverride = true;
+        $ctxType= 'themes';
+    }
+    $ctxType .= ":";
+    
+    // Determine dnName
+    // The specifics within that Type are in the next element, overridden or not
+    // NOTE: $pathElements changes here!
+    $dnName = array_shift($pathElements);
+    
+    // Determine ctxName, which is just the basename of the file without extension it seems 
+    // CHECKME: there was a hardcoded substr(str,0,-3) here earlier
+    // NOTE: $pathElements changes here!
+    $ctxName = preg_replace('/^(xar)?(.+)\..*$/', '$2', array_pop($pathElements));
+    
+    // Determine ctxType further if needed (i.e. more path components are there)
+    // Peek into the first element and unwind the rest of the path elements into $ctxType
+    // xartemplates -> templates, xarblocks -> blocks, xarproperties -> properties etc.
+    // NOTE: pnFile.php type files support needed?
+    if(!empty($pathElements)) {
+        $pathElements[0] = preg_replace('/^xar(.+)/','$1',$pathElements[0]);
+        $ctxType .= implode("/",$pathElements);
+    }
+  
+    // Ok, based on possible overrides, we load internal only, or interal plus overrides
+    $ok = false;
+    if($possibleOverride) {
+        $ok= xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE,$dnName,$ctxType,$ctxName);
+    }
+    // And load the determined stuff
+    // @todo: should we check for success on *both*, where is the exception here? further up the tree?
+    $ok = xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName);
+    return $ok;
+}
 
 function xarMLS_convertFromInput($var, $method)
 {

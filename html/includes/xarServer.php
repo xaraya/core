@@ -2,10 +2,12 @@
 /**
  * HTTP Protocol Server/Request/Response utilities
  *
- * @package server
- * @copyright (C) 2002-2006 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @package core
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
+ * @subpackage server
  * @author Marco Canini <marco@xaraya.com>
  */
 
@@ -14,12 +16,14 @@
  *
  * @author Marco Canini <marco@xaraya.com>
  * @access protected
- * @global xarRequest_defaultModule array
- * @param args['generateShortURLs'] bool
- * @param args['defaultModuleName'] string
- * @param args['defaultModuleName'] string
- * @param args['defaultModuleName'] string
- * @param whatElseIsGoingLoaded integer
+ * @global bool xarRequest_allowShortURLs
+ * @global array xarRequest_defaultModule
+ * @global array xarRequest_shortURLVariables
+ * @param bool args['generateShortURLs']
+ * @param string args['defaultModuleName']
+ * @param string args['defaultModuleName']
+ * @param string args['defaultModuleName']
+ * @param integer whatElseIsGoingLoaded
  * @return bool true
  */
 function xarSerReqRes_init(&$args, $whatElseIsGoingLoaded)

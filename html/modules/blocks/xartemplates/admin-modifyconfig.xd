@@ -66,7 +66,7 @@
                     <input type="hidden" name="update" id="update" value="update" />
                     <input type="hidden" name="tab" id="tab" value="#$tab#" />
                     <input type="submit" value="#xarML('Update Blocks Configuration')#" class="xar-margin-thickright" />
-                    <input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft" />
+                    <!--<input type="reset" value="#xarML('Reset Form')#" class="xar-margin-thickleft" />-->
                 </div>
             </fieldset>
         </form>

@@ -185,7 +185,7 @@ class Dynamic_DataStore implements IDataStore
      */
     function addField(&$property)
     {
-        $name = $this->getFieldName(&$property);
+        $name = $this->getFieldName($property);
         if (!isset($name)) return;
 
         $this->fields[$name] = &$property; // use reference to original property

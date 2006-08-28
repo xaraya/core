@@ -15,7 +15,7 @@
  * @param $maindId int ID of the module to look dependents for
  * @returns bool
  * @return true on dependencies activated, false for not
- * @raise NO_PERMISSION
+ * @throws NO_PERMISSION
  */
 function modules_adminapi_installwithdependencies ($args)
 {

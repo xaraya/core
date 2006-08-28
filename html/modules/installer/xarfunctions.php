@@ -26,7 +26,7 @@
  * @param args argument array
  * @returns mixed
  * @return The output of the function, or false on failure
- * @raise BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
+ * @throws BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
  */
 function xarInstallFunc($funcName = 'main', $args = array())
 {
@@ -42,7 +42,8 @@ function xarInstallFunc($funcName = 'main', $args = array())
     }
 
     // Load the translations file
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType, $funcName) === NULL) return;
+    $file = 'modules/'.$modName.'/xar'.$modType.'/'.strtolower($funcName).'.php';
+    if (!xarMLSLoadTranslations($file)) return;
 
     $tplData = $modFunc($args);
     if (!is_array($tplData)) {
@@ -73,7 +74,8 @@ function xarInstallAPIFunc($funcName = 'main', $args = array())
     }
 
     // Load the translations file
-    if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType.'api', $funcName) === NULL) return;
+    $file = 'modules/'.$modName.'/xar'.$modType.'api/'.strtolower($funcName).'.php';
+    if (!xarMLSLoadTranslations($file)) return;
 
     return $modAPIFunc($args);
 }
@@ -86,7 +88,7 @@ function xarInstallAPIFunc($funcName = 'main', $args = array())
  * @param modType type of functions to load
  * @returns bool
  * @return true on success
- * @raise BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
+ * @throws BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
 function xarInstallAPILoad()
 {
@@ -120,7 +122,7 @@ function xarInstallAPILoad()
  * @access public
  * @returns string
  * @return true
- * @raise BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
+ * @throws BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
 function xarInstallLoad()
 {
@@ -148,7 +150,7 @@ function xarInstallLoad()
     $loadedModuleCache[strtolower("$modName$modType")] = true;
 
     // Load the module translations files
-    $res = xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:', $modType);
+    $res = xarMLSLoadTranslations($osfile);
     return true;
 }
 

@@ -23,7 +23,7 @@
  * @param   rememberme session set to expire
  * @param   redirecturl page to return user if possible
  * @return  true if status is 3
- * @raise   exceptions raised if status is 0, 1, or 2
+ * @throws   exceptions raised if status is 0, 1, or 2
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  */
 function authsystem_user_login()
@@ -123,7 +123,6 @@ function authsystem_user_login()
                     }
                 }
 
-
                 if (!empty($user)) {
                     $rolestate = $user['state'];
                     // If external authentication has already been set but
@@ -166,9 +165,8 @@ function authsystem_user_login()
             break;
 
         case ROLES_STATE_NOTVALIDATED:
-
-            // User has not validated.
-            xarResponseRedirect(xarModURL('roles', 'user', 'getvalidation')); //send to validation and check there
+            //User still must validate
+            xarResponseRedirect(xarModURL('roles', 'user', 'getvalidation'));
 
             break;
 
@@ -252,7 +250,7 @@ function authsystem_user_login()
 
             $externalurl=false; //used as a flag for userhome external url
             if (xarModGetVar('roles', 'loginredirect')) { //only redirect to home page if this option is set
-              if (xarModGetVar('roles', 'setuserhome')) {
+                if (xarModAPIFunc('roles','admin','checkduv',array('name' => 'setuserhome', 'state' => 1))) {
                     $truecurrenturl = xarServerGetCurrentURL(array(), false);
                     $role = xarUFindRole($uname);
                     $url = $lastresort ? '[base]' : $role->getHome();
@@ -312,5 +310,4 @@ function authsystem_user_login()
     return true;
 
 }
-
 ?>

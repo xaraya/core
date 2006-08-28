@@ -2,10 +2,12 @@
 /**
  * Locales (Multi Language System)
  *
- * @package multilanguage
+ * @package core
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
+ * @subpackage multilanguage
  * @author Marco Canini <marco@xaraya.com>
  */
 
@@ -177,7 +179,7 @@ function xarLocaleFormatCurrency($currency, $localeData = NULL)
  * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string formatted number
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  */
 function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
 {
@@ -330,12 +332,13 @@ function xarLocaleGetFormattedUTCTime($length = 'short',$timestamp = null, $addo
 }
 
 /**
- *  Grab the formated time by the user's current locale settings
+ * Grab the formated time by the user's current locale settings
  *
- *  @access public
- *  @param string $length what time locale we want (short|medium|long)
- *  @param int $timestamp optional unix timestamp in UTC to format
- *  @param bool $addoffset add user timezone offset (default true)
+ * @access public
+ * @param string $length what time locale we want (short|medium|long)
+ * @param int $timestamp optional unix timestamp in UTC to format
+ * @param bool $addoffset add user timezone offset (default true)
+ * @todo MichelV: why are the formatting rules not the same as PHP rules for strftime?
  */
 function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffset = true)
 {
@@ -373,15 +376,17 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffs
     // grab the right set of locale data
     $locale_format = $localeData["/timeFormats/$length"];
     // replace the locale formatting style with valid strftime() style
+
     $locale_format = str_replace('HH','%H',$locale_format);
+    $locale_format = str_replace('H','%H',$locale_format); // Bug 5806
+    $locale_format = str_replace('%%H','%H',$locale_format); // Now put back the double replaced ones.
     $locale_format = str_replace('hh','%I',$locale_format);
-    $locale_format = str_replace('h', '%h',$locale_format);
     $locale_format = str_replace('mm','%M',$locale_format);
     $locale_format = str_replace('ss','%S',$locale_format);
     $locale_format = str_replace('a','%p',$locale_format);
     $locale_format = str_replace('z','%Z',$locale_format);
     // format the single digit flags
-// FIXME: there's an overlap between H and HH (replaced to %H) here !
+
     if (strpos($locale_format,'H') !== false)
         $locale_format = str_replace('%H',sprintf('%1d',gmstrftime('%H',$timestamp)),$locale_format);
     if (strpos($locale_format,'h') !== false)
@@ -610,14 +615,27 @@ function xarMLS_strftime($format=null,$timestamp=null)
                 // check to see if this is a negative or positive offset
                 $f_offset = strstr($user_offset,'-')  ? '-' : '+';
                 $user_offset = str_replace('-','',$user_offset); // replace the - if it exists
-                // check for 1/2 hour offsets
                 if(strpos($user_offset,'.')) {
                    $fragments = explode('.',$user_offset);
-                   $f_offset .= sprintf('%02d',$fragments[0]).'30';
+                   // extract hours - AZ
+                   if( (int) $fragments[0] < 10) {
+                      $f_offset_hours = "0{$fragments[0]}";
+                   } else {
+                      $f_offset_hours = "{$fragments[0]}";
+                   }
+                   // extract minutes- AZ
+                   $f_offset_minutes = ('.'.$fragments[1])*60;
+                   if( (int) $f_offset_minutes < 10) {
+                      $f_offset_minutes = "0{$f_offset_minutes}";
+                   } else {
+                      $f_offset_minutes = "{$f_offset_minutes}";
+                   }
+                   // Bug 5211, Code of AZ: beautify display with common ":" delimiter
+                   $f_offset .= sprintf('%02d',$f_offset_hours).':'.$f_offset_minutes;
                 } elseif( (int) $user_offset < 10) {
-                    $f_offset .= "0{$user_offset}00";
+                    $f_offset .= "0{$user_offset}:00";
                 } else {
-                    $f_offset .= "{$user_offset}00";
+                    $f_offset .= "{$user_offset}:00";
                 }
 
                 $format = str_replace($modifier,$f_offset,$format);
@@ -646,7 +664,7 @@ function xarMLS_strftime($format=null,$timestamp=null)
  * This class loads a valid locale descriptor XML file and returns its content
  * in the form of a locale data array
  *
- * @package multilanguage
+ * @subpackage multilanguage
  * @throws  XMLParseException
  */
 class xarMLS__LocaleDataLoader
@@ -769,7 +787,9 @@ class xarMLS__LocaleDataLoader
     {
         return array($path, (int) $content);
     }
-
+    /**
+     * @return array
+     */
     function groupingSizeTagHandler($path, $attribs, $content)
     {
         return array($path, (int) $content);
@@ -784,7 +804,9 @@ class xarMLS__LocaleDataLoader
         }
         return array($path, $value);
     }
-
+    /**
+     * @return array
+     */
     function monthTagHandler($path, $attribs, $content)
     {
         if (isset($this->tmpVars['monthNum'])) {
@@ -798,7 +820,9 @@ class xarMLS__LocaleDataLoader
                        $monthNum.'/short' => $attribs['short']);
         return array($path, $value);
     }
-
+    /**
+     * @return array
+     */
     function weekdayTagHandler($path, $attribs, $content)
     {
         if (isset($this->tmpVars['weekdayNum'])) {

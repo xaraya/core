@@ -13,7 +13,7 @@
  * @author Marty Vance
  * @param none
  * @return bool null on exceptions, true on sucess to update
- * @raise NO_PERMISSION
+ * @throws NO_PERMISSION
  */
 function themes_adminapi_checkmissing()
 {

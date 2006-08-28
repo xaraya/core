@@ -15,11 +15,12 @@
  * if their status is set to two.
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @author  Jo Dalle Nogare <jojodee@xaraya.com>
  * @param   uname users name
  * @param   valcode is the validation code sent to user on registration
  * @param   phase is the point in the function to return
  * @return  true if valcode matches valcode in user status table
- * @raise   exceptions raised valcode does not match
+ * @throws   exceptions raised valcode does not match
  * @TODO jojodee - validation process, duplication of functions and call to registration module needs to be rethought
  *         Rethink to provide cleaner separation between roles, authentication and registration
  */
@@ -124,9 +125,7 @@ function roles_user_getvalidation()
 
             } else {
                 // Update the user status table to reflect a validated account.
-                if (!xarModAPIFunc('roles',
-                                   'user',
-                                   'updatestatus',
+                if (!xarModAPIFunc('roles', 'user', 'updatestatus',
                                     array('uname' => $uname,
                                           'state' => ROLES_STATE_ACTIVE))) return;
                 //send welcome email (option)
@@ -182,15 +181,13 @@ function roles_user_getvalidation()
 
                 $adminname = xarModGetVar('mail', 'adminname');
                 $adminemail = xarModGetVar('mail', 'adminmail');
-                $message = "".xarML('A new user has registered or changed their email address.  Here are the details')." \n\n";
+                $message = "".xarML('A user has revalidated their changed email address.  Here are the details')." \n\n";
                 $message .= "".xarML('Username')." = $status[name]\n";
                 $message .= "".xarML('Email Address')." = $status[email]";
 
-                $messagetitle = "".xarML('A user has registered or updated information')."";
+                $messagetitle = "".xarML('A user has updated information')."";
 
-                if (!xarModAPIFunc('mail',
-                                   'admin',
-                                   'sendmail',
+                if (!xarModAPIFunc('mail', 'admin', 'sendmail',
                                    array('info' => $adminemail,
                                          'name' => $adminname,
                                          'subject' => $messagetitle,
@@ -220,7 +217,8 @@ function roles_user_getvalidation()
             // Redirect
             xarResponseRedirect(xarModURL('roles', 'user', 'getvalidation',array('sent' => 1)));
 
-    }
+        }
+
     return $data;
 }
 ?>

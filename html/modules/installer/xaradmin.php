@@ -83,6 +83,7 @@ function installer_admin_phase1()
 function installer_admin_phase2()
 {
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
+    xarVarFetch('retry','int:1',$data['retry'],NULL, XARVAR_NOT_REQUIRED);
 
     $data['language'] = $install_language;
     $data['phase'] = 2;
@@ -126,12 +127,13 @@ function check_dir($dirname)
 function installer_admin_phase3()
 {
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
-
     if (!xarVarFetch('agree','regexp:(agree|disagree)',$agree)) return;
+
+    $retry=1;
 
     if ($agree != 'agree') {
         // didn't agree to license, don't install
-        xarResponseRedirect('install.php?install_phase=2&install_language='.$install_language);
+        xarResponseRedirect('install.php?install_phase=2&install_language='.$install_language.'&retry=1');
     }
 
     //Defaults
@@ -171,11 +173,12 @@ function installer_admin_phase3()
     // Extension Check
     $data['xmlextension']             = extension_loaded('xml');
     $data['mysqlextension']           = extension_loaded('mysql');
-    $data['pgsqlextension']           = extension_loaded ('pgsql');
+    $data['pgsqlextension']           = extension_loaded('pgsql');
+    $data['sqliteextension']          = extension_loaded('sqlite');
     // This is called xsl in PHP5.x Should check for that when php version is 5 or higher
-    $data['xsltextension']            = extension_loaded ('xsl');
-    $data['ldapextension']            = extension_loaded ('ldap');
-    $data['gdextension']              = extension_loaded ('gd');
+   //$data['xsltextension']            = extension_loaded ('xslt');
+   // $data['ldapextension']            = extension_loaded ('ldap');
+   // $data['gdextension']              = extension_loaded ('gd');
 
     $data['metRequiredPHPVersion']    = $metRequiredPHPVersion;
     $data['phpVersion']               = PHP_VERSION;
@@ -272,8 +275,9 @@ function installer_admin_phase5()
 
     // allow only a-z 0-9 and _ in table prefix
     if (!preg_match('/^\w*$/',$dbPrefix)) {
-        $msg = xarML('Invalid character in table prefix');
-        throw new Exception($msg);
+        $msg = xarML('Invalid character in table prefix. Only use a-z, a _ and/or 0-9 in the prefix.');
+        xarCore_die($msg);
+        return;
     }
     // Save config data
     $config_args = array('dbHost'    => $dbHost,
@@ -374,7 +378,7 @@ function installer_admin_phase5()
     xarDB_init($systemArgs, $whatToLoad);
 
     // drop all the tables that have this prefix
-    // TODO: in the future need to replace this with a check further down the road
+    //TODO: in the future need to replace this with a check further down the road
     // for which modules are already installed
 
     if (isset($removetables) && $removetables) {
@@ -472,10 +476,23 @@ function installer_admin_bootstrap()
     include 'modules/privileges/xarsetup.php';
     initializeSetup();
 
+    // Set up default user properties, etc.
+
+    // load modules into *_modules table
+    if (!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
+
+
+    $regid=xarModGetIDFromName('authsystem');
+    if (empty($regid)) {
+        die(xarML('I cannot load the Authsystem module. Please make it available and reinstall'));
+    }
+
     // Set the state and activate the following modules
-    $modlist=array('roles','privileges','blocks','themes','modules');
+    // jojodee - Modules, authsystem, base, installer, blocks and themes are already activated in base init
+    // We run them through roles and privileges as special cases that need an 'activate' phase. Others don't.
+   $modlist=array('roles','privileges');
     foreach ($modlist as $mod) {
-        // Set state to inactive
+        // Set state to inactive first
         $regid=xarModGetIDFromName($mod);
         if (!xarModAPIFunc('modules','admin','setstate',
                            array('regid'=> $regid, 'state'=> XARMOD_STATE_INACTIVE)))
@@ -624,7 +641,7 @@ function installer_admin_create_administrator()
     $modifiedrole = $role->update();
     if (!$modifiedrole) {return;}
 
-    // Register Block types
+    // Register Block types from modules installed before block apis (base)
     $blocks = array('adminmenu','waitingcontent','finclude','html','menu','php','text','content');
 
     foreach ($blocks as $block) {
@@ -670,11 +687,11 @@ function installer_admin_create_administrator()
     list ($leftBlockGroup) = $result->fields;
 
     $adminBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
-                                    array('module'  => 'modules',
+                                    array('module'  => 'base',
                                           'type'    => 'adminmenu'));
 
     $adminBlockTypeId = $adminBlockType['tid'];
-
+    assert('is_numeric($adminBlockTypeId);');
     if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'adminpanel'))) {
         if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
                            array('title'    => 'Admin',
@@ -687,7 +704,6 @@ function installer_admin_create_administrator()
             return;
         }
     }
-
 
     $now = time();
 
@@ -714,7 +730,6 @@ function installer_admin_create_administrator()
             return;
         }
     }
-
     xarResponseRedirect(xarModURL('installer', 'admin', 'choose_configuration',array('install_language' => $install_language)));
 }
 
@@ -751,7 +766,7 @@ function installer_admin_choose_configuration()
     }
 
     if (count($awol) != 0) {
-        $msg = xarML("Xaraya cannot install bcause the following core modules are missing or corrupted: #(1)",implode(', ', $awol));
+        $msg = xarML("Xaraya cannot install because the following core modules are missing or corrupted: #(1)",implode(', ', $awol));
         throw new Exception($msg);
     }
 
@@ -1004,7 +1019,7 @@ function installer_admin_confirm_configuration()
             }
         }
      //TODO: Check why this var is being reset to null in sqlite install - reset here for now to be sure
-    xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
+     //xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
 
         xarResponseRedirect(xarModURL('installer', 'admin', 'cleanup'));
     }
@@ -1018,8 +1033,7 @@ function installer_admin_cleanup()
     xarTplSetPageTemplateName('installer');
 
     xarUserLogOut();
-
-    // log in admin user
+// log in admin user
     $uname = xarModGetVar('roles','lastuser');
     $pass = xarModGetVar('roles','adminpass');
 
@@ -1058,24 +1072,14 @@ function installer_admin_cleanup()
     if (empty($loginBlockTypeId)) {
         return;
     }
-   //Check for any sign of the Registration module (may have been installed in the configurations)
-    $regloginBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
-                                    array('module' => 'registration',
-                                          'type'   => 'rlogin'));
 
-    if (empty($regloginBlockType)) {
-        //return; no don't return, it may not have been loaded
-    }
-
-    //We only want to create the login block if one doesn't already exist - with registration module or authsystem
-    //Registration module might be selected in the config options
-    if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'login')) && !isset($regloginBlockType['tid'])) {
+    if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'login'))) {
         if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
                            array('title'    => 'Login',
                                  'name'     => 'login',
                                  'type'     => $loginBlockTypeId,
-                                 'groups'    => array(array('gid'      => $rightBlockGroup,
-                                                            'template' => '')),
+                                 'groups'    => array(array('gid'     => $rightBlockGroup,
+                                                           'template' => '')),
                                  'template' => '',
                                  'state'    => 2))) {
         }
@@ -1438,109 +1442,8 @@ function installer_admin_upgrade2()
         xarRegisterMask('AddPrivilege','All','privileges','Realm','All','ACCESS_ADD');
         xarRegisterMask('DeletePrivilege','All','privileges','Realm','All','ACCESS_DELETE');
     } else {
-        $content .= "<p>CSS tags registered successfully, css subsystem is ready to be deployed.</p>";
+        $content .= "<p>Privileges realm masks have been created previously, moving to next check. </p>";
     }
-
-    // Bug 3164, store locale in ModUSerVar
-    xarModSetVar('roles', 'locale', '');
-
-  $content .= "<p><strong>Checking <strong>include/properties</strong> directory for moved DD properties</strong></p>";
-    //From 1.0.0rc2 propsinplace was merged and dd propertie began to move to respective modules
-    //Check they don't still exisit in the includes directory  bug 4371
-    // set the array of properties that have moved
-    $ddmoved=array(
-        array('Dynamic_AIM_Property.php',1,'Roles'),
-        array('Dynamic_Affero_Property.php',1,'Roles'),
-        array('Dynamic_Array_Property.php',1,'Base'),
-        array('Dynamic_Categories_Property.php',0,'Categories'),
-        array('Dynamic_CheckboxList_Property.php',1,'Base'),
-        array('Dynamic_CheckboxMask_Property.php',1,'Base'),
-        array('Dynamic_Checkbox_Property.php',1,'Base'),
-        array('Dynamic_Combo_Property.php',1,'Base'),
-        array('Dynamic_CommentsNumberOf_Property.php',0,'Comments'),
-        array('Dynamic_Comments_Property.php',0,'Comments'),
-        array('Dynamic_CountryList_Property.php',1,'Base'),
-        array('Dynamic_DateFormat_Property.php',1,'Base'),
-        array('Dynamic_Email_Property.php',1,'Roles'),
-        array('Dynamic_ExtendedDate_Property.php',1,'Base'),
-        array('Dynamic_FileUpload_Property.php',1,'Roles'),
-        array('Dynamic_FloatBox_Property.php',1,'Roles'),
-        array('Dynamic_HTMLArea_Property.php',0,'HTMLArea'),
-        array('Dynamic_HTMLPage_Property.php',1,'Base'),
-        array('Dynamic_HitCount_Property.php',0,'HitCount'),
-        array('Dynamic_ICQ_Property.php',1,'Roles'),
-        array('Dynamic_ImageList_Property.php',1,'Roles'),
-        array('Dynamic_Image_Property.php',1,'Roles'),
-        array('Dynamic_LanguageList_Property.php',1,'Base'),
-        array('Dynamic_LogLevel_Property.php',0,'Logconfig'),
-        array('Dynamic_MSN_Property.php',1,'Roles'),
-        array('Dynamic_MultiSelect_Property.php',1,'Base'),
-        array('Dynamic_NumberBox_Property.php',1,'Base'),
-        array('Dynamic_NumberList_Property.php',1,'Base'),
-        array('Dynamic_PassBox_Property.php',1,'Base'),
-        array('Dynamic_PayPalCart_Property.php',0,'Paypalsetup'),
-        array('Dynamic_PayPalDonate_Property.php',0,'Paypalsetup'),
-        array('Dynamic_PayPalNow_Property.php',0,'Paypalsetup'),
-        array('Dynamic_PayPalSubscription_Property.php',0,'Paypalsetup'),
-        array('Dynamic_RadioButtons_Property.php',1,'Base'),
-        array('Dynamic_Rating_Property.php',0,'Ratings'),
-        array('Dynamic_Select_Property.php',0,'Base'),
-        array('Dynamic_SendToFriend_Property.php',0,'Recommend'),
-        array('Dynamic_StateList_Property.php',1,'Base'),
-        array('Dynamic_StaticText_Property.php',1,'Base'),
-        array('Dynamic_Status_Property.php',0,'Articles'),
-        array('Dynamic_TextArea_Property.php',1,'Base'),
-        array('Dynamic_TextBox_Property.php',1,'Base'),
-        array('Dynamic_TextUpload_Property.php',1,'Base'),
-        array('Dynamic_TinyMCE_Property.php',0,'TinyMCE'),
-        array('Dynamic_URLIcon_Property.php',1,'Base'),
-        array('Dynamic_URLTitle_Property.php',1,'Base'),
-        array('Dynamic_URL_Property.php',1,'Roles'),
-        array('Dynamic_Upload_Property.php',0,'Uploads'),
-        array('Dynamic_Yahoo_Property.php',1,'Roles'),
-        array('Dynamic_Calendar_Property.php',1,'Base'),
-        array('Dynamic_TColorPicker_Property.php',1,'Base'),
-        array('Dynamic_TimeZone_Property.php',1,'Base'),
-        array('Dynamic_Module_Property.php',1,'Modules'),
-        array('Dynamic_GroupList_Property.php',1,'Roles'),
-        array('Dynamic_UserList_Property.php',1,'Roles'),
-        array('Dynamic_Username_Property.php',1,'Roles'),
-        array('Dynamic_DataSource_Property.php',1,'DynamicData'),
-        array('Dynamic_FieldStatus_Property.php',1,'DynamicData'),
-        array('Dynamic_FieldType_Property.php',1,'DynamicData'),
-        array('Dynamic_Hidden_Property.php',1,'Base'),
-        array('Dynamic_ItemID_Property.php',1,'DynamicData'),
-        array('Dynamic_ItemType_Property.php',1,'DynamicData'),
-        array('Dynamic_Object_Property.php',1,'DynamicData'),
-        array('Dynamic_SubForm_Property.php',1,'DynamicData'),
-        array('Dynamic_Validation_Property.php',1,'DynamicData')
-    );
-    //set the array to hold properties that have not moved and should do!
-    $ddtomove=array();
-
-    //Check the files in the includes/properties dir against the initial array
-    $oldpropdir='includes/properties';
-    $var = is_dir($oldpropdir);
-    $handle=opendir($oldpropdir);
-    $skip_array = array('.','..','SCCS','index.htm','index.html');
-
-    if ($var) {
-             while (false !== ($file = readdir($handle))) {
-                  // check the  dd file array and add to the ddtomove array if the file exists
-                  if (!in_array($file,$skip_array))  {
-
-                     foreach ($ddmoved as $key=>$propname) {
-                          if ($file == $ddmoved[$key][0]){
-                            $ddtomove[]=$ddmoved[$key];
-                           }
-                    }
-                  }
-            }
-            closedir($handle);
-    }
-
-
-
 
     $content .= "<p><strong>Updating Roles and Authsystem for changes in User Login and Authentication</strong></p>";
 
@@ -1565,8 +1468,8 @@ function installer_admin_upgrade2()
                          xar_type,
                          xar_module
                          FROM $blocktypeTable
-                 WHERE xar_type='login' and xar_module='roles'";
-        $result =& $dbconn->Execute($query);
+                 WHERE xar_type=? and xar_module=?";
+        $result =& $dbconn->Execute($query,array('login','roles'));
         list($blockid,$blocktype,$module)= $result->fields;
         $blocktype = array('id' => $blockid,
                            'blocktype' => $blocktype,
@@ -1577,9 +1480,9 @@ function installer_admin_upgrade2()
             $blockid=$blocktype['id'];
             //set the module to authsystem and it can be used for the existing block instance
             $query = "UPDATE $blocktypeTable
-                      SET xar_module = 'authsystem'
+                      SET xar_module = ?
                       WHERE xar_id=?";
-            $bindvars=array($blockid);
+            $bindvars=array('authsystem',$blockid);
             $result =& $dbconn->Execute($query,$bindvars);
 
         }
@@ -1664,8 +1567,8 @@ function installer_admin_upgrade2()
                          xar_type,
                          xar_module
                          FROM $blocktypeTable
-                 WHERE xar_type='".$newblock."' and xar_module='adminpanels'";
-        $result =& $dbconn->Execute($query);
+                 WHERE xar_type=? and xar_module=?";
+        $result =& $dbconn->Execute($query,array($newblock,'adminpanels'));
 
         if ($result) {
             list($blockid,$blocktype,$module)= $result->fields;
@@ -1678,18 +1581,20 @@ function installer_admin_upgrade2()
                $blockid=$blocktype['id'];
                //set the module to base
                $query = "UPDATE $blocktypeTable
-                         SET xar_module = 'base'
+                         SET xar_module = ?
                          WHERE xar_id=?";
-               $bindvars=array($blockid);
+               $bindvars=array('base',$blockid);
                $result =& $dbconn->Execute($query,$bindvars);
 
 
                if (($newblock='waitingcontent') && isset($blockid)) {
-               //We need to disable existing hooks and enable new ones - but which :)
-               $hookTable = $systemPrefix .'_hooks';
-               $query = "UPDATE $hookTable
-                         SET xar_smodule = 'base'
-                         WHERE xar_action='waitingcontent' AND xar_smodule='adminpanels'";
+                   //We need to disable existing hooks and enable new ones - but which :)
+                   $hookTable = $systemPrefix .'_hooks';
+                   $query = "UPDATE $hookTable
+                             SET xar_smodule = 'base'
+                             WHERE xar_action=? AND xar_smodule=?";
+                    $bindvars = array('base','waitingcontent','adminpanels');
+                    //? no execute here?
                }
             }
             //Remove the original block
@@ -1766,7 +1671,33 @@ function installer_admin_upgrade2()
     xarModSetVar('themes', 'adminpagemenu', 1); //New variables to switch admin in page menus (tabs) on and off
     xarModSetVar('privileges', 'inheritdeny', true); //Was not set in privileges activation in 1.1, isrequired, maybe missing in new installs
     xarModSetVar('roles', 'requirevalidation', true); //reuse this older var for user email changes, this validation is separate to registration validation
-/* End of Version 1.1.x Release Upgrades */
+/* End of Version 1.1.1 Release Upgrades */
+/* Version 1.1.2 Release Upgrades */
+    //Module Upgrades should take care of most
+    //Need to convert privileges but only if we decide to update the current Blocks module functions' privilege checks
+
+    //We are allowing setting var that is reliably referenced for the xarMLS calculations (instead of using a variably named DD property which was the case)
+    // This var becomes one of the roles 'duv' modvars
+    xarModSetVar('roles', 'setusertimezone',false); //new modvar - let's make sure it's set
+    xarModDelVar('roles', 'settimezone');//this is no longer used, be more explicit and user setusertimezone
+    xarModSetVar('roles', 'usertimezone',''); //new modvar - initialize it
+    xarModSetVar('roles','usersendemails', false); //old modvar returns. Let's make sure it's set false as it allows users to send emails
+
+    //Ensure that registration module is set as default if it is installed,
+    // if it is active and the default is currently not set
+    $defaultregmodule= xarModGetVar('roles','defaultregmodule');
+    if (!isset($defaultregmodule)) {
+        if (xarModIsAvailable('registration')) {
+            xarModSetVar('roles','defaultregmodule',xarModGetIDFromName('registration'));
+        }
+    }
+
+    // Ensure base timesince tag handler is added
+    xarTplUnregisterTag('base-timesince');
+    xarTplRegisterTag('base', 'base-timesince', array(),
+                      'base_userapi_handletimesincetag');
+
+/* End 1.1.2 Release Upgrades */
 
     $thisdata['content']=$content;
     $thisdata['phase'] = 2;

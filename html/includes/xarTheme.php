@@ -96,7 +96,7 @@ function xarThemeGetIDFromName($themeName,$id='regid')
  * @access public
  * @param themeRegId theme id
  * @return array array of theme information
- * @raise DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
+ * @throws DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
  */
 function xarThemeGetInfo($regId)
 {
@@ -140,7 +140,7 @@ function xarThemeGetDisplayableName($themeName)
  * @access public
  * @param themeName registered name of theme
  * @return bool true if the theme is available, false if not
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function xarThemeIsAvailable($themeName)
 {
@@ -180,7 +180,7 @@ function xarTheme_getBaseInfo($themeName)
  *
  * @access protected
  * @return array an array of theme variables
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function xarTheme_getVarsByTheme($themeName)
 {

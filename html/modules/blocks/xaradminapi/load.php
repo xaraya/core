@@ -20,7 +20,7 @@
  * @param string blockFunc the block function to load (deprec)
  * @param string func the block function to load ('modify', 'display', 'info', 'help')
  * @return boolean success or failure
- * @raise BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
+ * @throws BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
 function blocks_adminapi_load($args)
 {
@@ -74,7 +74,8 @@ function blocks_adminapi_load($args)
         $loaded[$module . ':' . $type] = 1;
 
         // Load the block language files
-        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $module, 'modules:blocks', $type) === NULL) { 
+        if(!xarMLSLoadTranslations($filePath)) {
+            // What to do here? return doesnt seem right
             return;
         }
     }

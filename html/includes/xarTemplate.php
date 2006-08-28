@@ -848,10 +848,8 @@ function xarTpl_renderPage($mainModuleOutput, $pageTemplate = NULL)
         '_bl_mainModuleOutput'     => $mainModuleOutput,
     );
 
-    //if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:pages', $templateName) === NULL) return;
-    return xarTpl__executeFromFile($sourceFileName, $tplData, 'page');
+    return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
-
 
 /**
  * Render a block box
@@ -878,7 +876,6 @@ function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
         $templateName = 'default';
         $sourceFileName = "$themeDir/blocks/default.xt";
     }
-    //if (xarMLS_loadTranslations(XARMLS_DNTYPE_THEME, xarTplGetThemeName(), 'themes:blocks', $templateName) === NULL) return;
     return xarTpl__executeFromFile($sourceFileName, $blockInfo);
 }
 
@@ -1055,7 +1052,6 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
         $domain = XARMLS_DNTYPE_THEME; $instance = $GLOBALS['xarTpl_themeName'];
         $context = rtrim("themes:modules/$modName/$tplSubPart",'/');
     }
-    //if (xarMLS_loadTranslations($domain, $instance, $context, $tplBase) === NULL) return;
 
     return $sourceFileName;
 }
