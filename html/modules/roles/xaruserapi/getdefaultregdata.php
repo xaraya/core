@@ -20,19 +20,22 @@
  */
 function roles_userapi_getdefaultregdata()
 {
-    $defaultregdata=array();
-    $defaultregmodname='';
-    $defaultregmodactive=false;
+    $defaultregdata      = array();
+    $defaultregmodname   = '';
+    $defaultregmodactive = false;
     //get the default reg module if it exits
-    $defaultregmodid =(int)xarModGetVar('roles','defaultregmodule');
+    $defaultregmodid     =(int)xarModGetVar('roles','defaultregmodule');
 
     if (isset($defaultregmodid) && is_int($defaultregmodid) && ($defaultregmodid > 0)) {
         $defaultregmodname = xarModGetNameFromId($defaultregmodid);
         //check the module is available
         if (xarModIsAvailable($defaultregmodname)) {
-           //We can't really assume people will want this module as registration,
+           //We can't really assume people will want this module as registration
+           //Rethink - what we need to avert this problem
            if (xarModGetVar($defaultregmodname, 'allowregistration')==1) {
               $defaultregmodactive=true;
+           } else {
+              $defaultregmodactive=false;
            }
         }
     }
