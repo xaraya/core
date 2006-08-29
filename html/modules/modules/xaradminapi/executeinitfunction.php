@@ -15,7 +15,7 @@
  * @param $args['function'] name of the function to be called
  * @returns bool
  * @return true on success, false on failure in the called function
- * @raise BAD_PARAM, NO_PERMISSION
+ * @throws BAD_PARAM, NO_PERMISSION
  */
 function modules_adminapi_executeinitfunction ($args)
 {

@@ -11,9 +11,7 @@
  * @author Marcel van der Boom <marcel@hsdev.com>
  */
 
-/**
- * @todo can this global be eliminated?
- */
+// TODO: can this global be eliminated?
 var req;
 var tagToGo; // Apparently at least safari needs this
 var debug = 0;
@@ -33,7 +31,7 @@ var debug = 0;
 * @return  boolean local_debug (Optional) Whether to include debug output (default=false)
 * @throws  no exceptions
 */
-function loadContent(url, tagid, method, formobj, local_debug)
+function loadContent(url, tagid, method, form_obj, local_debug)
 {
     // validate inputs and set defaults
     if (local_debug != null) var debug = local_debug
@@ -43,6 +41,7 @@ function loadContent(url, tagid, method, formobj, local_debug)
     var join = '';
     var pagepat = /\&pageName\=module/;
     var postfix ='&pageName=module';
+    
     /**
      * @todo the url handling needs to be documented, a bit strange to do this here
      */
@@ -50,6 +49,7 @@ function loadContent(url, tagid, method, formobj, local_debug)
 
     // prepare strings according to method
     if (method == 'POST') {
+        if (form_obj != null) formobj = document.getElementById(form_obj);
         try {
             for ( i = 0; i < formobj.elements.length; i++ ) {
                 if (formobj.elements[i].name.length > 0) {
@@ -58,7 +58,7 @@ function loadContent(url, tagid, method, formobj, local_debug)
                 }
             }
         } catch(e) {
-            if(debug) alert(e);
+            if (debug) alert(e);
             return false;
         }
         if (argstr.search(pagepat) == -1) argstr = argstr + postfix;
@@ -85,9 +85,10 @@ function loadContent(url, tagid, method, formobj, local_debug)
                 req.setRequestHeader("Content-length", argstr.length);
                 req.setRequestHeader("Connection", "close");
             }
-            req.send(argstr)
+            req.send(argstr);
+            if(method != 'POST')
+                return false;
         }
-        return false;
     } catch(e) {
         if(debug) alert(e);
         return false
@@ -125,7 +126,6 @@ function processReqChange()
                 
                 if(newtag == null) {
                     if (debug) alert('cant find the new tag [' + tagToGo + ']');
-                    // put back the original id
                     tag.id = tagToGo;
                 } else {
                     copyofnew = newtag.cloneNode(true);

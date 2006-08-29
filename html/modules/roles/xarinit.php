@@ -18,7 +18,7 @@
  * @access public
  * @param none $
  * @returns bool
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function roles_init()
 {
@@ -164,17 +164,19 @@ function roles_activate()
     xarModSetVar('roles', 'userhome', '');
     xarModSetVar('roles', 'userlastlogin', '');
     xarModSetVar('roles', 'primaryparent', '');
+    xarModSetVar('roles', 'usertimezone', '');
     xarModSetVar('roles', 'setuserhome',false);
     xarModSetVar('roles', 'setprimaryparent', false);
     xarModSetVar('roles', 'setpasswordupdate',false);
-    xarModSetVar('roles', 'setuserlastlogin',false);    
-    xarModSetVar('roles', 'settimezone',false);
+    xarModSetVar('roles', 'setuserlastlogin',false);
+    xarModSetVar('roles', 'setusertimezone',false);
     xarModSetVar('roles', 'defaultgroup', 'Users');
     xarModSetVar('roles', 'displayrolelist', false);  
     xarModSetVar('roles', 'usereditaccount', true);
     xarModSetVar('roles', 'allowuserhomeedit', false);
     xarModSetVar('roles', 'loginredirect', true);
     xarModSetVar('roles', 'allowexternalurl', false);
+    xarModSetVar('roles', 'usersendemails', false);
     xarModSetVar('roles', 'requirevalidation', true);    
     $lockdata = array('roles' => array( array('uid' => 4,
                                               'name' => 'Administrators',
@@ -223,7 +225,7 @@ function roles_activate()
  * @access public
  * @param oldVersion $
  * @returns bool
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function roles_upgrade($oldVersion)
 {
@@ -285,7 +287,7 @@ function roles_upgrade($oldVersion)
                 // create one new roles modvar
                 xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authentication'));
             } else {
-                throw Exception('I could not load the authentication module. Please make it available and try again');
+                throw new Exception('I could not load the authentication module. Please make it available and try again');
             }
             break;
         case '1.1.1':
@@ -311,7 +313,7 @@ function roles_upgrade($oldVersion)
  * @access public
  * @param none $
  * @returns bool
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function roles_delete()
 {

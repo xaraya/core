@@ -15,7 +15,7 @@
  * @param none
  * @returns bool
  * @return true on success, false on failure
- * @raise NO_PERMISSION
+ * @throws NO_PERMISSION
  */
 function themes_adminapi_regenerate()
 {

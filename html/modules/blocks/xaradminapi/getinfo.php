@@ -17,7 +17,7 @@
  * @param see blocks/userapi/getinfo
  * @return see blocks/userapi/getinfo
  * @deprec Jan 2004
- * @raise DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
+ * @throws DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
  */
 function blocks_adminapi_getinfo($args)
 {

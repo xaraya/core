@@ -1,5 +1,7 @@
 <?php
 /**
+ * Set the state of a module
+ *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -13,12 +15,13 @@
  * @author Xaraya Development Team
  * @param $args['regid'] the module id
  * @param $args['state'] the state
- * @raise BAD_PARAM,NO_PERMISSION
+ * @throws BAD_PARAM,NO_PERMISSION
  * @todo Do the db changes in a transaction to completely fail or succeed?
  */
 function modules_adminapi_setstate($args)
 {
     // Get arguments from argument array
+
     extract($args);
 
     // Argument check

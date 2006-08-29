@@ -16,7 +16,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @returns integer
  * @return number of items held by this module
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function roles_userapi_countgroups()
 {

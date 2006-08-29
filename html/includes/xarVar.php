@@ -187,12 +187,12 @@ function xarVarBatchFetch()
  * @todo  get rid of the explicit value of XARVAR_GET_OR_POST, use the bitmas (i.e. GET_OR_POST = GET + POST)
  * @todo  make dont_set and dont_reuse are too similar (conceptually) which make the code below confusing [phpdoc above implies REUSE is the default]
  * @todo  re-evaluate the prepping, prepforstore is deprecated for example, prep for display and prep for html are partially exclusive
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  */
 function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags = XARVAR_GET_OR_POST, $prep = XARVAR_PREP_FOR_NOTHING)
 {
     assert('is_int($flags); /* Flags passed to xarVarFetch need to be numeric */');
-    assert('empty($name) || preg_match("/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/", $name); /* Variable name is invalid */');
+    assert('empty($name) || preg_match("/^[a-zA-Z0-9_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/", $name); /* Variable name is invalid */');
 
     $allowOnlyMethod = null;
     if ($flags & XARVAR_GET_ONLY) $allowOnlyMethod = 'GET';
@@ -892,7 +892,7 @@ function xarVarPrepForDisplay()
  * @access public
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function xarVarPrepHTMLDisplay()
 {

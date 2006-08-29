@@ -850,7 +850,7 @@ function xarModCallHooks($hookObject, $hookAction, $hookId, $extraInfo = NULL, $
  * @param action string the hook action
  * @param callerItemType string optional item type for the calling module (default = none)
  * @return array of hook information arrays, or null if database error
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItemType = '')
 {
@@ -930,7 +930,7 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
  * @param callerModName string name of the calling module (default = current)
  * @param callerItemType string optional item type for the calling module (default = none)
  * @return mixed true if the module is hooked
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '')
 {

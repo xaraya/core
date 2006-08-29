@@ -18,9 +18,9 @@
  * @param blockType the block type (deprecated)
  * @param args['module'] the module name
  * @param args['type'] the block type
- * @returns ID of block type registered (even if already registered)
+ * @return ID of block type registered (even if already registered)
  * @return true on success, false on failure
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function blocks_adminapi_register_block_type($args)
 {

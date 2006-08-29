@@ -31,26 +31,30 @@ function mail_init()
     xarModSetVar('mail', 'smtpHost', 'Your SMTP Host');
     xarModSetVar('mail', 'encoding', '8bit');
     xarModSetVar('mail', 'html', false);  
-    xarModSetVar('mail', 'ShowTemplates', false);
-    xarModSetVar('mail', 'suppresssending', false);
-    xarModSetVar('mail', 'redirectsending', false);
-    xarModSetVar('mail', 'redirectaddress', '');
+
     // when a module item is created
     if (!xarModRegisterHook('item', 'create', 'API',
             'mail', 'admin', 'hookmailcreate')) {
         return false;
     }
     // when a module item is deleted
-    if (!xarModRegisterHook('item', 'delete', 'API', 'mail', 'admin', 'hookmaildelete')) {
+    if (!xarModRegisterHook('item', 'delete', 'API',
+            'mail', 'admin', 'hookmaildelete')) {
         return false;
     }
     // when a module item is changed
-    if (!xarModRegisterHook('item', 'update', 'API','mail', 'admin', 'hookmailchange')) {
+    if (!xarModRegisterHook('item', 'update', 'API',
+            'mail', 'admin', 'hookmailchange')) {
         return false;
     }
 
-    // Run the upgrades after this initial version
-    return mail_upgrade('0.1.0');
+    xarRegisterMask('EditMail','All','mail','All','All','ACCESS_EDIT');
+    xarRegisterMask('AddMail','All','mail','All','All','ACCESS_ADD');
+    xarRegisterMask('DeleteMail', 'All','mail','All','All','ACCESS_DELETE');
+    xarRegisterMask('AdminMail','All','mail','All','All','ACCESS_ADMIN');
+
+    /* This init function brings authsystem to version 0.01 run the upgrades for the rest of the initialisation */
+    return mail_upgrade('0.1');
 }
 
 /**
@@ -59,7 +63,7 @@ function mail_init()
  * @access public
  * @param none $
  * @returns bool
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function mail_activate()
 {
@@ -80,10 +84,7 @@ function mail_activate()
 function mail_upgrade($oldVersion)
 {
     switch($oldVersion) {
-    case '0.01':
-        // Compatability upgrade nothing to be done
-        break;
-
+    case '0.1':
     case '0.1.0':
         // clean up double hook registrations
         xarModUnregisterHook('item', 'update', 'API', 'mail', 'admin', 'hookmailchange');

@@ -2,10 +2,12 @@
 /**
  * User System
  *
- * @package user
+ * @package core
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
+ * @subpackage user
  * @author Jim McDonald
  * @todo <marco> user status field
  * @todo <johnny> look over xarUserComparePasswords
@@ -208,7 +210,7 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
  *
  * @access public
  * @return bool true if the user successfully logged out
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function xarUserLogOut()
 {
@@ -374,7 +376,7 @@ $GLOBALS['xarUser_objectRef'] = null;
  * @param name string the name of the variable
  * @param uid integer the user to get the variable for
  * @return mixed the value of the user variable if the variable exists, void if the variable doesn't exist
- * @raise BAD_PARAM, NOT_LOGGED_IN, ID_NOT_EXIST, NO_PERMISSION
+ * @throws BAD_PARAM, NOT_LOGGED_IN, ID_NOT_EXIST, NO_PERMISSION
  * @todo <marco> #1 figure out why this check failsall the time now: if ($userId != xarSessionGetVar('uid')) {
  * @todo <marco FIXME: ignoring unknown user variables for now...
  */
@@ -414,9 +416,7 @@ function xarUserGetVar($name, $userId = NULL)
                 return xarML('No Information');
             }
             // retrieve the item from the roles module
-            $userRole = xarModAPIFunc('roles',
-                                      'user',
-                                      'get',
+            $userRole = xarModAPIFunc('roles',  'user',  'get',
                                        array('uid' => $userId));
 
             if (empty($userRole) || $userRole['uid'] != $userId) {
@@ -428,13 +428,16 @@ function xarUserGetVar($name, $userId = NULL)
             xarCore::setCached('User.Variables.'.$userId, 'email', $userRole['email']);
 
         } elseif (!xarUser__isVarDefined($name)) {
-            if (xarModVars::get('roles',$name)) {
+            if (xarModVars::get('roles',$name) || xarModVars::get('roles','set'.$name)) { //acount for optionals that need to be activated) 
                 $value = xarModUserVars::get('roles',$name,$userId);
                 if ($value == null) {
                     xarCore::setCached('User.Variables.'.$userId, $name, false);
                     // Here we can't raise an exception because they're all optional
-                    if ($name != 'locale' && $name != 'timezone') {
-                        // log unknown user variables to inform the site admin
+                    $optionalvars=array('locale','timezone','usertimezone','userlastlogin',
+                                        'userhome','primaryparent','passwordupdate');
+                    //if ($name != 'locale' && $name != 'timezone') {
+                    if (!in_array($name, $optionalvars)) {
+                    // log unknown user variables to inform the site admin
                         $msg = xarML('User variable #(1) was not correctly registered', $name);
                         xarLogMessage($msg, XARLOG_LEVEL_ERROR);
                     }
@@ -542,7 +545,7 @@ function xarUserGetVar($name, $userId = NULL)
  * @param value ??? the value of the variable
  * @param userId integer user's ID
  * @return bool true if the set was successful, false if validation fails
- * @raise BAD_PARAM, NOT_LOGGED_IN, ID_NOT_EXIST, NO_PERMISSION
+ * @throws BAD_PARAM, NOT_LOGGED_IN, ID_NOT_EXIST, NO_PERMISSION
  */
 function xarUserSetVar($name, $value, $userId = NULL)
 {
@@ -677,7 +680,7 @@ function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryp
  *
  * @access private
  * @param userId string
- * @raise UNKNOWN, DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
+ * @throws UNKNOWN, DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
  * @todo FIXME: what happens for anonymous users ???
  * @todo check coherence 1 vs. 0 for Anonymous users !!!
  */
@@ -725,7 +728,8 @@ function xarUser__getAuthModule($userId)
     return $authModName;
 }
 
-/*
+/**
+ * See if a Variable has been defined
  * @access private
  * @return bool true if the variable is defined
  */
@@ -748,10 +752,10 @@ function xarUser__isVarDefined($name)
     return true;
 }
 
-/*
+/**
  * @access private
  * @return bool
- * @raise NOT_LOGGED_IN, UNKNOWN, DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
+ * @throws NOT_LOGGED_IN, UNKNOWN, DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
 function xarUser__syncUsersTableFields()
 {
@@ -787,10 +791,10 @@ function xarUser__syncUsersTableFields()
     return true;
 }
 
-/*
+/**
  * @access private
  * @return bool
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function xarUser__setUsersTableUserVar($name, $value, $userId)
 {

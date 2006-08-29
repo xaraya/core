@@ -46,7 +46,7 @@
  * @param orderBy the order type of the list
  * @returns array
  * @return array of theme information arrays
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems = NULL, $orderBy = 'name')
 {

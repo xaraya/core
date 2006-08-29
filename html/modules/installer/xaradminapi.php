@@ -57,7 +57,7 @@ function installer_adminapi_modifyconfig($args)
  * @param args['directory'] the directory to include
  * @param args['initfunc'] init|upgrade|remove
  * @returns bool
- * @raise BAD_PARAM, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
+ * @throws BAD_PARAM, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
  */
 function installer_adminapi_initialise($args)
 {
@@ -100,7 +100,7 @@ function installer_adminapi_initialise($args)
  * @param args['dbName']
  * @param args['dbType']
  * @returns bool
- * @raise BAD_PARAM, DATABASE_ERROR
+ * @throws BAD_PARAM, DATABASE_ERROR
  */
 function installer_adminapi_createdb($args)
 {

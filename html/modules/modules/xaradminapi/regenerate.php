@@ -14,7 +14,7 @@
  * @param none
  * @returns bool
  * @return true on success, false on failure
- * @raise NO_PERMISSION
+ * @throws NO_PERMISSION
  */
 function modules_adminapi_regenerate()
 {

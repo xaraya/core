@@ -21,7 +21,7 @@ xarDBLoadTableMaintenanceAPI();
  * Initialise the base module
  *
  * @return bool
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function base_init()
 {
@@ -343,7 +343,7 @@ function base_upgrade($oldVersion)
  * Delete the base module
  *
  * @param none
- * @returns bool
+ * @return bool false, as this module cannot be removed
  */
 function base_delete()
 {

@@ -20,7 +20,7 @@ xarDBLoadTableMaintenanceAPI();
  * @author Marty Vance
  * @param none $
  * @returns bool
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  */
 function themes_init()
 {
@@ -96,49 +96,32 @@ function themes_init()
     // TODO: this is themes, not mods
     if (empty($selfilter)) $selfilter = XARMOD_STATE_ANY;
     if (empty($hidecore)) $hidecore = 0;
-    if (empty($selclass)) $selclass = 'all';
-    if (empty($useicons)) $useicons = false;
 
     xarModSetVar('themes', 'hidecore', $hidecore);
     xarModSetVar('themes', 'selstyle', $selstyle);
     xarModSetVar('themes', 'selfilter', $selfilter);
-    xarModSetVar('themes', 'selclass', $selclass);
-    xarModSetVar('themes', 'useicons', $useicons);
+    // Not sure when these following 2 vars were introduced. Need to keep them here and in upgrade.
+    xarModSetVar('themes', 'selclass', 'all');
+    xarModSetVar('themes', 'useicons', false);
 
     xarModSetVar('themes', 'SiteName', 'Your Site Name');
     xarModSetVar('themes', 'SiteSlogan', 'Your Site Slogan');
-    xarModSetVar('themes', 'SiteCopyRight', '&copy; Copyright 2003 ');
+    xarModSetVar('themes', 'SiteCopyRight', '&copy; Copyright 2006 ');
     xarModSetVar('themes', 'SiteTitleSeparator', ' :: ');
     xarModSetVar('themes', 'SiteTitleOrder', 'default');
     xarModSetVar('themes', 'SiteFooter', '<a href="http://www.xaraya.com"><img src="modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" class="xar-noborder" /></a>');
     xarModSetVar('themes', 'ShowPHPCommentBlockInTemplates', 0);
     xarModSetVar('themes', 'ShowTemplates', 0);
-
     //Moved here in 1.1.x series
     xarModSetVar('themes', 'usedashboard', 0);
     xarModSetVar('themes', 'dashtemplate', 'dashboard');
-    xarModSetVar('themes', 'adminpagemenu', 0);
+    xarModSetVar('themes', 'adminpagemenu', 1);
 
-    // Register theme tags.
-
-    // register complete set of css tags is now encapsulated in the module's api function
-    if(!xarModAPIFunc('themes', 'css', 'registercsstags', array())) {
-        return false;
-    }
-
-
-    // Set up usermenu hook
-    if (!xarModRegisterHook('item', 'usermenu', 'GUI', 'themes', 'user', 'usermenu')) {
-        return false;
-    }
-
-    // Register the meta blocktype
-    if (!xarModAPIFunc('blocks', 'admin', 'register_block_type',
-                        array('modName' => 'themes',
-                              'blockType' => 'meta'))) return;
-
+    xarRegisterMask('ViewThemes','All','themes','All','All','ACCESS_OVERVIEW');
+    xarRegisterMask('AdminTheme','All','themes','All','All','ACCESS_ADMIN');
+    
     // Initialisation successful
-    return true;
+    return themes_upgrade('1.0');
 }
 
 /**
@@ -178,14 +161,13 @@ function themes_upgrade($oldversion)
                                           'blockType' => 'meta'))) return;
             }
       case '1.7.0':
-        /* TODO: update when we up the version number */
-        /* These done in the upgrade.php file
-           xarModSetVar('themes', 'usedashboard', 0);
-        */
 
-      case '1.8.0' :
-        xarModSetVar('themes', 'selclass', 'all');
-        xarModSetVar('themes', 'useicons', false);
+       xarModSetVar('themes', 'selclass', 'all');
+       xarModSetVar('themes', 'useicons', false);
+      
+      case '1.8.0' : //current version
+
+      break;
     }
     // Update successful
     return true;

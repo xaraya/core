@@ -7,17 +7,7 @@
     <input class="xar-form-textlong" type="text" name="#$name#" id="#$id#_input" value="#xarLocaleFormatDate($dateformat,$value)#" size="20" maxlength="19" tabindex="#$tabindex#" />
 </xar:if>
 
-<a href="javascript:#$jsID#_cal.popup()"><img src="modules/base/xarimages/calendar.gif" width="16" height="16" border="0" alt="#$alttext#" /></a>
-
-<script language="JavaScript">
-var #$jsID#_cal = new xar_base_calendar(document.getElementById("#$id#_input"), "#$baseuri#");
-#$jsID#_cal.year_scroll = true;
-<xar:if condition="!empty($dateformat) and $dateformat eq '%Y-%m-%d'">
-#$jsID#_cal.time_comp = false;
-<xar:else/>
-#$jsID#_cal.time_comp = true;
-</xar:if>
-</script>
+<a href="javascript:xar_base_calendar_init('#$id#','#$baseuri#')"><img src="modules/base/xarimages/calendar.gif" width="16" height="16" border="0" alt="#$alttext#" /></a>
 
 <xar:if condition="!empty($invalid)">
     <span class="xar-error">#$invalid#</span>

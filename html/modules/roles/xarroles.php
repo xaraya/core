@@ -226,13 +226,11 @@ class xarRoles
         $row = $q->row();
         if (empty($row)) return;
 
-        $duvarray = array('userhome','primaryparent','passwordupdate','timezone');
+        $duvarray = array('userhome','primaryparent','passwordupdate','userlastlogin','usertimezone');
         $duvs = array();
         foreach ($duvarray as $key) {
-            if (xarModGetVar('roles',$key)) {
-                $duvs[$key] = xarModGetUserVar('roles',$key,$row['xar_uid']);
-                $duvs[$key] = ($duvs[$key] == 1) ? '' : $duv;
-            }
+            $duv = xarModGetUserVar('roles',$key,$row['xar_uid']);
+            if (!empty($duv)) $duvs[$key] = $duv;
         }
         $pargs = array(
             'uid' =>         $row['xar_uid'],
@@ -397,7 +395,9 @@ class xarRoles
         $q = new xarQuery('INSERT',$this->rolestable);
         $q->addfields($tablefields);
         if (!$q->run()) return;
-        foreach($duvs as $key => $value) xarModUserSetVar($key,$nextId,$value);
+        foreach($duvs as $key => $value) xarModSetUserVar($key, $value, $nextId);
+        // set email option to false
+        xarModSetUserVar('roles','usersendemails', false, $nextId);
         // done
         return true;
     }
@@ -542,7 +542,6 @@ class xarRole
      * @throws none
      * @todo none
      */
-
     function add()
     {
         if (empty($this->name))
@@ -596,7 +595,8 @@ class xarRole
         if (!$this->uid) return;
 
         foreach ($this->duvs as $key => $value) xarModSetUserVar('roles',$key,$value,$this->uid);
-
+        //set the email useage for this user to false
+        xarModSetUserVar('roles','usersendemails', false, $this->uid);
         $parts = new xarRoles();
         $parentpart = $parts->getRole($this->parentid);
         return $parentpart->addMember($this);
@@ -1130,7 +1130,7 @@ class xarRole
                            'val_code' => $val_code,
                            'state' => $state,
                            'auth_module' => $auth_module);
-            $duvarray = array('userhome','primaryparent','passwordupdate','timezone');
+            $duvarray = array('userhome','primaryparent','passwordupdate','userlastlogin','usertimezone');
             $vars = array();
             foreach ($duvarray as $key) {
                 if (xarModGetVar('roles',$key)) {
@@ -1159,7 +1159,6 @@ class xarRole
     {
         // if this is the root return an empty array
         if ($this->getID() == 1) return array();
-
         // start by getting an array of the parents
         $parents = $this->getParents();
         $parents1 = array();
@@ -1416,6 +1415,21 @@ class xarRole
         $duv = isset($this->duvs['primaryparent']) ? $this->duvs['primaryparent'] : "";
         return $duv;
     }
+    function getPasswordUpdate()
+    {
+        $duv = isset($this->duvs['passwordupdate']) ? $this->duvs['passwordupdate'] : "";
+         return $duv;
+    }
+    function getUserLastLogin()
+    {
+        $duv = isset($this->duvs['userlastlogin']) ? $this->duvs['userlastlogin'] : "";
+         return $duv;
+    }
+    function getUserTimezone()
+    {
+        $duv = isset($this->duvs['usertimezone']) ? $this->duvs['usertimezone'] : "";
+         return $duv;
+    }
     function getUname()
     {
         return $this->uname;
@@ -1464,6 +1478,18 @@ class xarRole
     function setHome($var)
     {
         $this->userhome = $var;
+    }
+    function setPasswordUpdate($var)
+    {
+        $this->passwordupdate= $var;
+    }
+    function setUserLastLogin($var)
+    {
+        $this->userlastlogin= $var;
+    }
+    function setUserTimezone($var)
+    {
+        $this->usertimezone= $var;
     }
     function setPrimaryParent($var)
     {

@@ -214,7 +214,7 @@ function roles_admin_modifyconfig()
                                       'setprimaryparent'=>'primaryparent',
                                       'setpasswordupdate'=>'passwordupdate',
                                       'setuserlastlogin' =>'userlastlogin',
-                                      'settimezone'=>'timezone');
+                                      'setusertimezone'=>'usertimezone');
                     foreach ($duvarray as $duv=>$userduv) {
                         if (!xarVarFetch($duv, 'int', $$duv, null, XARVAR_DONT_SET)) return;
                         if (isset($$duv)) {
@@ -223,6 +223,17 @@ function roles_admin_modifyconfig()
                                 if ($userduv =='primaryparent') { // let us set it to the default Role
                                     $defaultrole=xarModGetVar('roles','defaultgroup');
                                     xarModSetVar('roles','primaryparent', $defaultrole);
+                                }elseif ($userduv =='usertimezone') {//set to the default site timezone
+                                    $defaultzone= xarConfigGetVar('Site.Core.TimeZone');
+                                    if (!isset($defaultzone) || empty($defaultzone)) {
+                                        xarConfigSetVar('Site.Core.TimeZone','Europe/London');
+                                    }
+                                    $timeinfo = xarModAPIFunc('base','user','timezones', array('timezone' => $defaultzone));
+                                    list($hours,$minutes) = explode(':',$timeinfo[0]);
+                                    $offset = (float) $hours + (float) $minutes / 60;
+                                    $timeinfoarray= array('timezone' => $defaultzone, 'offset' => $offset);
+                                    $defaultusertime=serialize($timeinfoarray);
+                                    xarModSetVar('roles','usertimezone',$defaultusertime);
                                 }else {
                                    xarModSetVar('roles',$userduv,'');
                                 }

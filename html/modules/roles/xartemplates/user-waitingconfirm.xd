@@ -1,5 +1,21 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Create User Account</xar:mlstring></span></div>
-<div class="xar-mod-body"><h2><xar:mlstring>Instructions Sent</xar:mlstring></h2>
-<p><xar:mlstring>Further instructions for registering have been sent to the email you provided.  Please take a moment and read the instructions.  If you have a question, or didn't receive your instructions please contact the</xar:mlstring><a href="mailto:#xarModGetVar('mail','adminmail')#"><xar:mlstring>  &nbsp;website administrator</xar:mlstring></a>.</p>
+<xar:comment>Roles module confirmation for existing users revalidating their email</xar:comment>
+<xar:set name="adminemail">xarModGetVar('mail','adminmail')</xar:set>
+<div class="xar-mod-head">
+    <span class="xar-mod-title"><xar:mlstring>Change of Email</xar:mlstring></span>
+</div>
+
+<div class="xar-mod-body">
+    <h2><xar:mlstring>Instructions Sent</xar:mlstring></h2>
+    <p>
+        <xar:mlstring>You have changed your email address and your account now requires re-validation before you can log in.
+        Information on how to re-validate your account have been sent to the email address you provided. Please take a moment 
+        to read these instructions.</xar:mlstring>
+    </p>
+    <p>
+        <xar:ml>
+            <xar:mlstring>If you have a question or didn't receive your instructions please contact the <a href="mailto:#(1)">website administrator</a>.</xar:mlstring>
+            <xar:mlvar>#$adminemail#</xar:mlvar>
+        </xar:ml>
+    </p>
 </div>

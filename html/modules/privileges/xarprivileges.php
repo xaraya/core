@@ -2,9 +2,11 @@
 /**
  * Privileges administration API
  *
- * @package core modules
+ * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
  * @subpackage Privileges module
  * @link http://xaraya.com/index.php/release/1098.html
  * @author Marc Lutolf <marcinmilan@xaraya.com>
@@ -404,10 +406,14 @@ class xarMasks
             case "domain":
                 $host = xarServerGetHost();
                 $parts = explode('.',$host);
-                if (count($parts) < 3) {
+                if (count($parts) < 2) {
                     $mask->setRealm('All');
-                } else {
-                    $mask->setRealm($parts[0]);
+                } else { //doublecheck
+                    if ($parts[0]=='www') {
+                        $mask->setRealm($parts[1]);
+                    } else {
+                        $mask->setRealm($parts[0]);
+                    }
                 }
                 break;
             case "string":
@@ -420,10 +426,10 @@ class xarMasks
                 $parent='Everybody'; //set a default
                 //We now have primary parent implemented
                 //Use primary parent if implemented else get first parent??
-                //TODO: this needs to be review
-                $useprimary = xarModAPIFunc('roles','admin','checkduv',array('name' => 'setprimaryparent', 'state' => 1));
+                //TODO: this needs to be reviewed
+                $useprimary = xarModGetVar('roles','setprimaryparent');
                 if ($useprimary) { //grab the primary parent
-                    $parent=$role->getPrimaryParent();
+                    $parent=$role->getPrimaryParent(); //string value
                 }else { //we don't have a primary parent so use the first parent?? ... hmm review
                     foreach ($role->getParents() as $parent) {
                       $parent = $parent->name;
@@ -441,9 +447,11 @@ class xarMasks
         // normalize the mask now - its properties won't change below
         $mask->normalize();
 
+
         // get the Roles class
         sys::import('modules.roles.xarroles');
         $roles = new xarRoles();
+
         // get the uid of the role we will check against
         // an empty role means take the current user
         if ($rolename == '') {
@@ -457,10 +465,12 @@ class xarMasks
         else {
             $role = $roles->findRole($rolename);
         }
+
         // check if we already have the irreducible set of privileges for the current user
         if (!xarVarIsCached('Security.Variables','privilegeset.'.$mask->module) || !empty($rolename)) {
             // get the privileges and test against them
             $privileges = $this->irreducibleset(array('roles' => array($role)),$mask->module);
+
             // leave this as same-page caching, even if the db cache is finished
             // if this is the current user, save the irreducible set of privileges to cache
             if ($rolename == '') {
@@ -472,6 +482,7 @@ class xarMasks
             // get the irreducible set of privileges for the current user from cache
             $privileges = xarVarGetCached('Security.Variables','privilegeset.'.$mask->module);
         }
+
         $pass = $this->testprivileges($mask,$privileges,false,$role);
 
         // $pass = $this->testprivileges($mask,$this->getprivset($role),false);
@@ -567,7 +578,6 @@ class xarMasks
         if (count($roles) == 0) return $coreset;
 
         $parents = array();
-
         foreach ($roles as $role) {
             // FIXME: evaluate why role is empty
             // Below (hack) fix added by Rabbitt (suggested by mikespub on the devel mailing list)
@@ -579,7 +589,6 @@ class xarMasks
                 $privileges = $this->winnow(array($priv),$privileges);
                 $privileges = $this->winnow($priv->getDescendants(),$privileges);
             }
-
             $privs = array();
             foreach ($privileges as $priv) {
                 $privModule = strtolower($priv->getModule());
@@ -587,7 +596,6 @@ class xarMasks
                     $privs[] = $priv;
                 }
             }
-
             $coreset['privileges'] = $this->winnow($coreset['privileges'],$privs);
             $parents = array_merge($parents,$role->getParents());
         }
@@ -638,7 +646,6 @@ class xarMasks
         $testmask = xarModGetVar('privileges','testmask') ;
         $matched = false;
         $pass = false;
-
         // Note : DENY rules override all others here...
         $thistest = $testdeny && ($testmask == $mask->getName() || $testmask == "All");
         foreach ($privilegeset['privileges'] as $privilege) {

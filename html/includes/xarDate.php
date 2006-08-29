@@ -14,7 +14,7 @@
  * @todo why do we need this?
  */
 
-class xarDate 
+class xarDate
 {
 
     public $year;
@@ -25,7 +25,7 @@ class xarDate
     public $second;
     public $timestamp;
 
-    function xarDate($hour=0,$minute=0,$second=0,$month=0,$day=0,$year=0) 
+    function xarDate($hour=0,$minute=0,$second=0,$month=0,$day=0,$year=0)
     {
         $this->timestamp = mktime($hour,$minute,$second,$month,$day,$year);
         $this->year = $year;
@@ -36,19 +36,19 @@ class xarDate
         $this->second = $second;
     }
 
-    function setnow() 
+    function setnow()
     {
-        $this->timestamp = time();
+        $this->timestamp = mktime();
         $this->extract();
     }
 
-    function regenerate() 
+    function regenerate()
     {
         $this->timestamp = mktime($this->hour,$this->minute,$this->second,$this->month,$this->day,$this->year);
         $this->extract();
     }
 
-    function extract() 
+    function extract()
     {
         $datearray = getdate($this->timestamp);
         $this->year =   $datearray['year'];
@@ -59,7 +59,7 @@ class xarDate
         $this->second = $datearray['seconds'];
     }
 
-    function DBtoTS($dbts) 
+    function DBtoTS($dbts)
     {
         if (preg_match('/^\d{4}/',$dbts)) {
             $this->year =   substr($dbts,1,4);
@@ -83,7 +83,7 @@ class xarDate
 
     function display($format='Y-m-d')
     {
-        return date($format,$this->timestamp); 
+        return date($format,$this->timestamp);
     }
 
     function getTimearray()

@@ -104,7 +104,7 @@ class ExceptionHandlers implements IExceptionHandlers
         // Only continue rendering if:
         // 1. the level was not 0 (either explicitly set or due to an @ on the line causing the error)
         // 2. the raised Errorlevel is included in the threshold bitmask
-        if ( $oldLevel == 0 or ($errorRaised & $errThreshold != $errorRaised )) {
+        if ( ($oldLevel == 0) or ($errorRaised & $errThreshold != $errorRaised )) {
             // Log the message so it is not lost.
             // TODO: make this message available to calling functions that suppress errors through '@'.
             $msg = "PHP error code $errorRaised at line $line of $file: $errorString";

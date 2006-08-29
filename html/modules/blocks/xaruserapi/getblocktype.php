@@ -13,7 +13,7 @@
  * @param args['tid'] block type ID (optional)
  * @param args['module'] module name (optional, but requires 'type')
  * @param args['type'] block type name (optional, but requires 'module')
- * @returns array of block types, keyed on block type ID
+ * @return array of block types, keyed on block type ID
  * @author Jason Judge
 */
 
@@ -27,7 +27,12 @@ function blocks_userapi_getblocktype($args)
     $types = xarModAPIfunc('blocks', 'user', 'getallblocktypes', $args);
 
     // We should have exactly one block type: throw back if not.
-    if (count($types) <> 1) {return;}
+    // @todo: Is this an error? If so, throw exception, if not return array()
+    if (count($types) <> 1) 
+    {
+        //debug($types);
+        return;
+    }
 
     return(array_pop($types));
 }

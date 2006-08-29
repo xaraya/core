@@ -18,7 +18,7 @@
  * @param numItems the length of the list
  * @param orderBy the order type of the list
  * @return array array of theme information arrays
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function themes_adminapi_getthemelist($args)
 {

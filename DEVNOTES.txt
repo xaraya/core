@@ -34,9 +34,15 @@ revisit later on before trusting the branch to be released or used.
 (see DEVupgrades.sql for the above)
 
 !!!OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
-* when encountered, upgrade code to upgrade modules from older
+* [N/A anymore] when encountered, upgrade code to upgrade modules from older
   versions than in 1.0 is removed, assuming we will only support 
   upgrading from 1.0 to 2.x and not versions before 1.0 
+  NOTE: 
+    when changing modules to return upgrade_themodule('1.0') instead of
+    return true, the original upgrade from init need to be placed in the 
+    upgrade routine again. (luckily i replaced this only for one or two)
+    modules, which have now been propagate from c.x.c to c.x.c.2.x so DO NOT
+    remove old upgrade code anymore now! 
 * the whole exception subsystem was rewritten from scratch and the
   whole of core was adapted to use it. (see new RFC-0054)
 * adodb has been replaced with the creole database abstraction layer.
@@ -93,7 +99,10 @@ design work can begin.
 * [STARTED] OO-ify stuff in core where appropriate (including getting rid of
   die()'s and modelling the classes where php4 could not) 
 * I really would like to do something with views wrt multisites et. al.
+    - the query storage for privilege instances is one application of views 
 * I really would like to do something with triggers, dunno for what
+    - all backends support triggers, while not all of them support foreign
+      keys, so for both triggers and foreign keys we could use triggers.
 * I really would like to do something with stored procedures, dunno
   for what
 * the need for a Request mapper is evident. Apart from the gained
@@ -113,9 +122,6 @@ design work can begin.
   Would it make sense to centralise state management of a generic
   'item' level? Also the use of a workflow component in core comes to mind.
 * simplify installer/xaradmin.php before rewriting it
-* privileges creates objects now where some number like '1098' enters
-  the xar_modid field (which was previously xar_module). This will
-  cause confusion. (unfinished?, experiment?, ask marc)
 * we need easy and global xmlhttp request support everywhere.
 * [DONE] Xaraya is an excellent backend, we need a equally excellent front-end companion (like dojo)
    (implemented as dojo activator module)
@@ -123,12 +129,13 @@ design work can begin.
   that place is obviously creole, but for shielding and triggering we
   dont have an abstraction and the more complex modules go through a
   whole lot of hoops sometimes which the backend could do in a jiffy.
-* the installer tries to throw all database onto one pile, we need to split 
+* the installer screens try to throw all databases onto one pile, we need to split 
     the database configuration screens into different ones for each backend
     * sqlite has no user and password
     * sqlite uses a directory for a host
     * mysql can support different table drivers (myisam, innodb) transparently
-* xml constructs like PI, EL and ATT need their equivalent in BL, but the current
+    * postgres may require schema support
+* xml constructs like PI, ELEM and ATTR need their equivalent in BL, but the current
   implementation lacks context.
 * [STARTED] finish design and implementation os schema based data definition 
 * design a less bloated concept for config/user/mod/theme/system vars etc
@@ -137,7 +144,6 @@ design work can begin.
   reporting we can build into an install. (bugzilla can be remotely queried for
   products and components easily, perhaps based on a server side map of regid-component
   for modules at least)
-* 
 
 !!!KNOWN ISSUES
 * blocks do not end up in groups anymore during installation, need to
@@ -149,6 +155,7 @@ design work can begin.
   DD for now until we figure our *if* and *how* we want to link
   components to physical tables.
 * datadict is absent in 2.x since that lived in adodb, creole does not have it
+  - we are going for schema support (see tests/xml/schemas/ddl/*.*)
 * there is no upgrade routine for upgrading 1.x to 2.x
 * when we're in excecption handling for one exception, it seems that no more
   exceptions are thrown in subsequent code
@@ -159,7 +166,7 @@ design work can begin.
 
 
 !!!MIN. REQUIRED VERSIONS DETERMINED SO FAR
-* PHP      5.0.5
+* PHP      5.0.5 (probably 5.1.x even)
 * Mysql    5.0.18
 * Postgres 8.0.6
 * Sqlite   N/A (embedded in PHP, i think it's 2.8.x for non PDO and 3.x for PDO)
@@ -175,8 +182,7 @@ design work can begin.
 - specifying the controls should be a 3 step process maximal:
   1. include on js entry point for the request
   2. write the controls inside a xar-template 
-  3. (optional) customize the default behaviour to the applications
-need.
+  3. (optional) customize the default behaviour to the applications need.
 Whether the tags used are compiled/transformed on the server or
 through a js callback is irrelevant for us.
  
