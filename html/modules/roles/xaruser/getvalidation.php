@@ -138,23 +138,19 @@ function roles_user_getvalidation()
                               array('uname' => $uname,
                                    'state' => ROLES_STATE_ACTIVE))) return;
 
-                //The user has validated their account and now is redirected to login
-                
-                $url = xarModUrl('roles', 'user', 'main');
 
-                $time = '5';
-                xarVarSetCached('Meta.refresh','url', $url);
-                xarVarSetCached('Meta.refresh','time', $time);
-                $data = xarTplModule('roles','user', 'getvalidation', $tplvars);
             }
 
             //If we have registration of new user and the admin wants notificaton, let's send an email
             //and also one to the user if that is set in the registration module
-            if ($regmoduleactive  && $newuser){
+            if ($newuser){
+                //Set the last newly registered user
+                xarModSetVar('roles', 'lastuser', $status['uid']);
+
                 // first to the user
                 //Send welcome email to the user
                 //This could be templated specifically for a 'new' user now
-                if (xarModGetVar($regmodule, 'sendwelcomeemail')) {
+                if ($regmoduleactive  && xarModGetVar($regmodule, 'sendwelcomeemail')) {
                     if (!xarModAPIFunc('roles','admin','senduseremail',
                                     array('uid' => array($status['uid'] => '1'),
                                                          'mailtype'     => 'welcome'))) {
@@ -163,7 +159,7 @@ function roles_user_getvalidation()
                         xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
                     }
                 }
-                if (xarModGetVar($regmodule, 'sendnotice')==1) {
+                if ($regmoduleactive  && xarModGetVar($regmodule, 'sendnotice')==1) {
                     //now to the admin
                     $terms= '';
                     if (xarModGetVar($regmodule, 'showterms') == 1) {
@@ -217,10 +213,15 @@ function roles_user_getvalidation()
                                              'message' => $message))) return;
                 }
 
-            } 
+            }
+            
+            //The user has validated their account and can be redirected to login
+            $url = xarModUrl('roles', 'user', 'main');
 
-            xarModSetVar('roles', 'lastuser', $status['uid']);
-
+            $time = '5';
+            xarVarSetCached('Meta.refresh','url', $url);
+            xarVarSetCached('Meta.refresh','time', $time);
+            
             $data = xarTplModule('roles','user', 'getvalidation', $tplvars);
 
             break;
