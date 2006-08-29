@@ -16,34 +16,36 @@ function roles_admin_createmail()
     // Security check
     if (!xarSecurityCheck('MailRoles')) return;
 
-    if (!xarVarFetch('uid', 'int:0:', $uid, -1, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('uids', 'isset', $uids, NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('state', 'int:0:', $state, -1, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('startnum', 'int:1:', $startnum, 1, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('order', 'str:0:', $data['order'], 'xar_name', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('uid',      'int:0:', $uid,        -1, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('uids',     'isset',  $uids,     NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('state',    'int:0:', $state,      -1, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('startnum', 'int:1:', $startnum,    1, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('order',    'str:0:', $data['order'], 'xar_name', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('includesubgroups', 'int:0:', $data['includesubgroups'],0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('mailtype', 'str:0:', $data['mailtype'], 'blank', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('selstyle', 'isset', $selstyle, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('selstyle', 'isset',  $selstyle,    0, XARVAR_NOT_REQUIRED)) return;
 
    // what type of email: a selection or a single email?
     if ($uid < 1) {
         $type = 'selection';
     } else {
         $roles = new xarRoles();
-        $role = $roles->getRole($uid);
-        $type = $role->getType() ? 'selection' : 'single';
+        $role  = $roles->getRole($uid);
+        $type  = $role->getType() ? 'selection' : 'single';
     }
 
     $xartable =& xarDBGetTables();
     if ($type == 'single') {
         $uid = $role->getID();
-        $data['users'][$role->getID()] = array('uid' => $uid,
-            'name' => $role->getName(),
-            'uname' => $role->getUser(),
-            'email' => $role->getEmail(),
-            'status' => $role->getState(),
-            'date_reg' => $role->getDateReg()
-        );
+        $data['users'][$role->getID()] = 
+            array('uid'      => $uid,
+                  'name'     => $role->getName(),
+                  'uname'    => $role->getUser(),
+                  'email'    => $role->getEmail(),
+                  'status'   => $role->getState(),
+                  'date_reg' => $role->getDateReg()
+                 );
+
         if ($selstyle == 0) $selstyle =2;
         // Create a query to send to sendmail
         $q = new xarQuery('SELECT');
@@ -109,14 +111,15 @@ function roles_admin_createmail()
         foreach($q->output() as $role) {
                 // Remove the next line eventually. It comes from a special situation upgrading from 0.9.10 to 0.9.11
                 if (empty($role)) continue;
-                $data['users'][$role['uid']] = array('uid' => $role['uid'],
-                'name' => $role['name'],
-                'uname' => $role['uname'],
-                'email' => $role['email'],
-                'status' => $role['state'],
-                'date_reg' => $role['date_reg'],
-                'frozen' => !xarSecurityCheck('EditRole',0,'Roles',$role['name'])
-                );
+                $data['users'][$role['uid']] = 
+                    array('uid'      => $role['uid'],
+                          'name'     => $role['name'],
+                          'uname'    => $role['uname'],
+                          'email'    => $role['email'],
+                          'status'   => $role['state'],
+                          'date_reg' => $role['date_reg'],
+                          'frozen'   => !xarSecurityCheck('EditRole',0,'Roles',$role['name'])
+                         );
         }
 
         // Check if we also want to send to subgroups
@@ -127,13 +130,14 @@ function roles_admin_createmail()
 
             while (list($key, $user) = each($descendants)) {
                 if (xarSecurityCheck('EditRole',0,'Roles',$user->getName())) {
-                    $data['users'][$user->getID()] = array('uid' => $user->getID(),
-                        'name' => $user->getName(),
-                        'uname' => $user->getUser(),
-                        'email' => $user->getEmail(),
-                        'status' => $user->getState(),
-                        'date_reg' => $user->getDateReg()
-                        );
+                    $data['users'][$user->getID()] = 
+                        array('uid'      => $user->getID(),
+                              'name'     => $user->getName(),
+                              'uname'    => $user->getUser(),
+                              'email'    => $user->getEmail(),
+                              'status'   => $user->getState(),
+                              'date_reg' => $user->getDateReg()
+                             );
                 }
             }
         }
@@ -161,18 +165,16 @@ function roles_admin_createmail()
 
 // Assemble the data for the template
     $data['templates'] = $templates;
-    $data['type'] = $type;
-    $data['selstyle'] = $selstyle;
-    $data['uid'] = $uid;
-    $data['state'] = $state;
-    $data['authid'] = xarSecGenAuthKey();
-    $data['groups'] = xarModAPIFunc('roles',
-                                    'user',
-                                    'getallgroups');
+    $data['type']      = $type;
+    $data['selstyle']  = $selstyle;
+    $data['uid']       = $uid;
+    $data['state']     = $state;
+    $data['authid']    = xarSecGenAuthKey();
+    $data['groups']    = xarModAPIFunc('roles', 'user', 'getallgroups');
     //selstyle
     $data['style'] = array('1' => xarML('No'),
-                                       '2' => xarML('Yes')
-                                       );
+                           '2' => xarML('Yes')
+                           );
     if (isset($data['users'])) $data['totalselected'] = count($data['users']);
     //templates select
     if ($data['mailtype'] == 'blank') {

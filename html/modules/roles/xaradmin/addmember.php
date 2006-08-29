@@ -28,7 +28,7 @@ function roles_admin_addmember()
     // Check for authorization code
     if (!xarSecConfirmAuthKey()) return;
     // get parameters
-    if (!xarVarFetch('uid', 'int:1:', $uid)) return;
+    if (!xarVarFetch('uid',    'int:1:', $uid)) return;
     if (!xarVarFetch('roleid', 'int:1:', $roleid)) return;
     // call the Roles class and get the parent and child objects
     $roles  = new xarRoles();
@@ -60,9 +60,7 @@ function roles_admin_addmember()
     if (!xarModAPIFUnc('roles','user','addmember', array('uid' => $uid, 'gid' => $roleid))) return;
 
     // redirect to the next page
-    xarResponseRedirect(xarModURL('roles',
-            'admin',
-            'modifyrole',
+    xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole',
             array('uid' => $uid)));
 }
 

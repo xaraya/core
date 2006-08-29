@@ -17,7 +17,7 @@
 function roles_admin_deleterole()
 {
     // get parameters
-    if (!xarVarFetch('uid', 'int:1:', $uid)) return;
+    if (!xarVarFetch('uid',          'int:1:', $uid)) return;
     if (!xarVarFetch('confirmation', 'str:1:', $confirmation, '', XARVAR_NOT_REQUIRED)) return;
 
     // Call the Roles class
@@ -30,8 +30,8 @@ function roles_admin_deleterole()
     // need to display this in the template
     $parents = array();
     foreach ($role->getParents() as $parent) {
-        $parents[] = array('parentid' => $parent->getID(),
-            'parentname' => $parent->getName());
+        $parents[] = array('parentid'   => $parent->getID(),
+                           'parentname' => $parent->getName());
     }
     $data['parents'] = $parents;
 
@@ -67,19 +67,17 @@ function roles_admin_deleterole()
 
     if (empty($confirmation)) {
         // Load Template
-        $data['authid'] = xarSecGenAuthKey();
-        $data['uid'] = $uid;
-        $data['ptype'] = $role->getType();
+        $data['authid']  = xarSecGenAuthKey();
+        $data['uid']     = $uid;
+        $data['ptype']   = $role->getType();
         $data['deletelabel'] = xarML('Delete');
-        $data['name'] = $name;
+        $data['name']    = $name;
         return $data;
     } else {
         // Check for authorization code
         if (!xarSecConfirmAuthKey()) return;
         // Check to make sure the user is not active on the site.
-        $check = xarModAPIFunc('roles',
-                              'user',
-                              'getactive',
+        $check = xarModAPIFunc('roles', 'user', 'getactive',
                               array('uid' => $uid));
 
 if (empty($check)) {
@@ -88,9 +86,9 @@ if (empty($check)) {
 
             // call item delete hooks (for DD etc.)
 // TODO: move to remove() function
-            $pargs['module'] = 'roles';
+            $pargs['module']   = 'roles';
             $pargs['itemtype'] = $type; // we might have something separate for groups later on
-            $pargs['itemid'] = $uid;
+            $pargs['itemid']   = $uid;
             xarModCallHooks('item', 'delete', $uid, $pargs);
         } else {
             $msg = xarML('That user has a current active session', 'roles');

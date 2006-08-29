@@ -36,10 +36,10 @@ function roles_admin_sitelock($args)
         if (!xarVarFetch('serialroles', 'str', $serialroles, NULL, XARVAR_NOT_REQUIRED)) return;
         $roles = unserialize($serialroles);
         $rolesCount = count($roles);
-        if (!xarVarFetch('lockedoutmsg', 'str', $lockedoutmsg, NULL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
-        if (!xarVarFetch('notifymsg', 'str', $notifymsg, NULL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
-        if (!xarVarFetch('toggle', 'str', $toggle, NULL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
-        if (!xarVarFetch('notify', 'isset', $notify, NULL, XARVAR_DONT_SET)) return;
+        if (!xarVarFetch('lockedoutmsg', 'str',   $lockedoutmsg, NULL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
+        if (!xarVarFetch('notifymsg',    'str',   $notifymsg,    NULL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
+        if (!xarVarFetch('toggle',       'str',   $toggle,       NULL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
+        if (!xarVarFetch('notify',       'isset', $notify,       NULL, XARVAR_DONT_SET)) return;
         if(!isset($notify)) $notify = array();
         for($i=0; $i<$rolesCount; $i++) $roles[$i]['notify'] = in_array($roles[$i]['uid'],$notify);
 
@@ -53,9 +53,9 @@ function roles_admin_sitelock($args)
                     }
                 }
             // Write the configuration to disk
-            $lockdata = array('roles' => $roles,
-                              'message' => $lockedoutmsg,
-                              'locked' => $toggle,
+            $lockdata = array('roles'     => $roles,
+                              'message'   => $lockedoutmsg,
+                              'locked'    => $toggle,
                               'notifymsg' => $notifymsg);
             xarModSetVar('roles', 'lockdata', serialize($lockdata));
             }
@@ -67,7 +67,7 @@ function roles_admin_sitelock($args)
                 $r = xaruFindRole($newname);
                 if (!$r) $r = xarFindRole($newname);
                 if($r) {
-                    $newuid = $r->getID();
+                    $newuid  = $r->getID();
                     $newname = $r->isUser() ? $r->getUser() : $r->getName();
                 }
                 else $newuid = 0;
@@ -77,18 +77,18 @@ function roles_admin_sitelock($args)
                     $roles[] = $newelement;
 
             // Write the configuration to disk
-            $lockdata = array('roles' => $roles,
-                              'message' => $lockedoutmsg,
-                              'locked' => $toggle,
+            $lockdata = array('roles'     => $roles,
+                              'message'   => $lockedoutmsg,
+                              'locked'    => $toggle,
                               'notifymsg' => $notifymsg);
             xarModSetVar('roles', 'lockdata', serialize($lockdata));
             }
         }
 
         elseif ($cmd == 'save') {
-            $lockdata = array('roles' => $roles,
-                              'message' => $lockedoutmsg,
-                              'locked' => $toggle,
+            $lockdata = array('roles'     => $roles,
+                              'message'   => $lockedoutmsg,
+                              'locked'    => $toggle,
                               'notifymsg' => $notifymsg);
             xarModSetVar('roles', 'lockdata', serialize($lockdata));
             xarResponseRedirect(xarModURL('roles', 'admin', 'sitelock'));
@@ -148,31 +148,31 @@ function roles_admin_sitelock($args)
             }
 
             // Write the configuration to disk
-            $lockdata = array('roles' => $roles,
-                              'message' => $lockedoutmsg,
-                              'locked' => $toggle,
+            $lockdata = array('roles'     => $roles,
+                              'message'   => $lockedoutmsg,
+                              'locked'    => $toggle,
                               'notifymsg' => $notifymsg);
             xarModSetVar('roles', 'lockdata', serialize($lockdata));
         }
     }
 
 
-    $data['roles'] = $roles;
-    $data['serialroles'] = xarVarPrepForDisplay(serialize($roles));
+    $data['roles']        = $roles;
+    $data['serialroles']  = xarVarPrepForDisplay(serialize($roles));
     $data['lockedoutmsg'] = $lockedoutmsg;
-    $data['notifymsg'] = $notifymsg;
-    $data['toggle'] = $toggle;
+    $data['notifymsg']    = $notifymsg;
+    $data['toggle']       = $toggle;
     if ($toggle == 1) {
-        $data['togglelabel']    = xarML('Unlock the Site');
-        $data['statusmessage']    = xarML('The site is locked');
+        $data['togglelabel']   = xarML('Unlock the Site');
+        $data['statusmessage'] = xarML('The site is locked');
     }
     else {
-        $data['togglelabel']    = xarML('Lock the Site');
-        $data['statusmessage']    = xarML('The site is unlocked');
+        $data['togglelabel']   = xarML('Lock the Site');
+        $data['statusmessage'] = xarML('The site is unlocked');
     }
     $data['addlabel']    = xarML('Add a role');
-    $data['deletelabel']    = xarML('Remove');
-    $data['savelabel']    = xarML('Save the configuration');
+    $data['deletelabel'] = xarML('Remove');
+    $data['savelabel']   = xarML('Save the configuration');
 
     return $data;
 }

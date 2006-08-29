@@ -21,8 +21,8 @@ function roles_admin_purge($args)
     if(!xarSecurityCheck('DeleteRole')) return;
 
     // Get parameters from whatever input we need
-    if (!xarVarFetch('operation', 'str', $data['operation'], 'recall', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('confirmation', 'str', $confirmation, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('operation',    'str', $data['operation'], 'recall', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('confirmation', 'str', $confirmation,       0,       XARVAR_NOT_REQUIRED)) return;
 
     extract($args);
 
@@ -38,12 +38,12 @@ function roles_admin_purge($args)
 
     if ($data['operation'] == 'recall')
     {
-        if (!xarVarFetch('recallstate', 'int:1:', $data['recallstate'], NULL, XARVAR_DONT_SET)) return;
-        if (!xarVarFetch('recallsubmit', 'str', $recallsubmit, NULL, XARVAR_DONT_SET)) return;
-        if (!xarVarFetch('recallsearch', 'str', $data['recallsearch'], NULL, XARVAR_DONT_SET)) return;
-        if (!xarVarFetch('recallstartnum', 'int:1:', $recallstartnum, 1, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('recalluids', 'isset', $recalluids, array(), XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('groupuid', 'int:1', $data['groupuid'], 0, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('recallstate',    'int:1:', $data['recallstate'],  NULL, XARVAR_DONT_SET)) return;
+        if (!xarVarFetch('recallsubmit',   'str',    $recallsubmit,         NULL, XARVAR_DONT_SET)) return;
+        if (!xarVarFetch('recallsearch',   'str',    $data['recallsearch'], NULL, XARVAR_DONT_SET)) return;
+        if (!xarVarFetch('recallstartnum', 'int:1:', $recallstartnum,       1,    XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('recalluids',     'isset',  $recalluids,           array(), XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('groupuid',       'int:1',  $data['groupuid'],     0,    XARVAR_NOT_REQUIRED)) return;
 
         if ($confirmation == xarML("Recall"))
         {
@@ -137,28 +137,25 @@ function roles_admin_purge($args)
             }
         }
 // --- send to template
-        $data['groups'] = xarModAPIFunc('roles',
-                                        'user',
-                                        'getallgroups');
+        $data['groups'] = xarModAPIFunc('roles', 'user', 'getallgroups');
         $recallfilter['recallstartnum'] = '%%';
-        $filter['state'] = $data['recallstate'];
-        $recallfilter['recallsearch'] = $data['recallsearch'];
+        $filter['state']         = $data['recallstate'];
+        $recallfilter['recallsearch']   = $data['recallsearch'];
         $data['submitRecall']    = xarML('Recall');
-        $data['recallroles'] = $recallroles;
-        $data['recallpager'] = xarTplGetPager($recallstartnum,
-            $data['totalselect'],
-            xarModURL('roles', 'admin', 'purge',
-                $recallfilter),
-            $numitems);
+        $data['recallroles']     = $recallroles;
+        $data['recallpager']     = xarTplGetPager($recallstartnum,
+                                                  $data['totalselect'],
+                                                  xarModURL('roles', 'admin', 'purge', $recallfilter),
+                                                  $numitems);
     }
 //--------------------------------------------------------
     elseif ($data['operation'] == 'purge')
     {
-        if (!xarVarFetch('purgestate', 'int', $data['purgestate'], -1, XARVAR_DONT_SET)) return;
-        if (!xarVarFetch('purgesearch', 'str', $data['purgesearch'], NULL, XARVAR_DONT_SET)) return;
-        if (!xarVarFetch('purgesubmit', 'str', $purgesubmit, NULL, XARVAR_DONT_SET)) return;
-        if (!xarVarFetch('purgestartnum', 'int:1:', $purgestartnum, 1, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('purgeuids', 'isset', $purgeuids, array(), XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('purgestate',    'int',    $data['purgestate'], -1,      XARVAR_DONT_SET)) return;
+        if (!xarVarFetch('purgesearch',   'str',    $data['purgesearch'], NULL,   XARVAR_DONT_SET)) return;
+        if (!xarVarFetch('purgesubmit',   'str',    $purgesubmit,         NULL,   XARVAR_DONT_SET)) return;
+        if (!xarVarFetch('purgestartnum', 'int:1:', $purgestartnum,       1,      XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('purgeuids',     'isset',  $purgeuids,           array(), XARVAR_NOT_REQUIRED)) return;
 
         // Check for confirmation.
         if ($confirmation == xarML("Purge"))
@@ -297,13 +294,12 @@ function roles_admin_purge($args)
         $purgefilter['purgestartnum'] = '%%';
         $purgefilter['purgesearch'] = $data['purgesearch'];
 
-        $data['submitPurge']    = xarML('Purge');
-        $data['purgeusers'] = $purgeusers;
-        $data['purgepager'] = xarTplGetPager($purgestartnum,
-            $data['totalselect'],
-            xarModURL('roles', 'admin', 'purge',
-                $purgefilter),
-            $numitems);
+        $data['submitPurge'] = xarML('Purge');
+        $data['purgeusers']  = $purgeusers;
+        $data['purgepager']  = xarTplGetPager($purgestartnum,
+                                              $data['totalselect'],
+                                              xarModURL('roles', 'admin', 'purge', $purgefilter),
+                                              $numitems);
     }
     else {}
 

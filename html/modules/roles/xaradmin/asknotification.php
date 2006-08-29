@@ -19,15 +19,15 @@ function roles_admin_asknotification($args)
     // Security Check
     if (!xarSecurityCheck('EditRole')) return;
     // Get parameters
-    if (!xarVarFetch('phase', 'str:0:', $data['phase'], 'display', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('phase',    'str:0:', $data['phase'],    'display', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('mailtype', 'str:0:', $data['mailtype'], 'blank', XARVAR_NOT_REQUIRED)) return;
-    if(!xarVarFetch('uid', 'isset', $uid, NULL, XARVAR_NOT_REQUIRED)) return;
+    if(!xarVarFetch('uid',       'isset',  $uid,              NULL,    XARVAR_NOT_REQUIRED)) return;
     //Maybe some kind of return url will make this function available for other modules
-    if (!xarVarFetch('state', 'int:0:', $data['state'], ROLES_STATE_CURRENT, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('groupuid', 'int:0:', $data['groupuid'], 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('state',    'int:0:', $data['state'],  ROLES_STATE_CURRENT, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('groupuid', 'int:0:', $data['groupuid'], 0,    XARVAR_NOT_REQUIRED)) return;
     //optional value
-    if (!xarVarFetch('pass', 'str:0:', $data['pass'], NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('ip', 'str:0:', $data['ip'], NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('pass',     'str:0:', $data['pass'],     NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('ip',       'str:0:', $data['ip'],       NULL, XARVAR_NOT_REQUIRED)) return;
     switch ($data['phase']) {
         case 'display' :
                 $data['pass'] = xarSessionGetVar('tmppass');

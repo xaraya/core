@@ -18,11 +18,12 @@ function roles_admin_updatestate()
     // Security Check
     if (!xarSecurityCheck('EditRole')) return;
     // Get parameters
-    if(!xarVarFetch('status', 'int:0:', $data['status'],  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('state', 'int:0:', $data['state'], 0, XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('groupuid', 'int:0:', $data['groupuid'], 1, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('updatephase', 'str:1:', $updatephase, 'update', XARVAR_NOT_REQUIRED)) return;
-    if(!xarVarFetch('uids', 'isset', $uids, NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('status',      'int:0:', $data['status'],   NULL,    XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('state',       'int:0:', $data['state'],    0,       XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('groupuid',    'int:0:', $data['groupuid'], 1,       XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('updatephase', 'str:1:', $updatephase,      'update',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('uids',        'isset',  $uids,             NULL,    XARVAR_NOT_REQUIRED)) return;
+    
     $data['authid'] = xarSecGenAuthKey();
     // invalid fields (we'll check this below)
     // check if the username is empty
@@ -33,10 +34,11 @@ function roles_admin_updatestate()
     }
      if (isset($invalid)) {
         // if so, return to the previous template
-        return xarResponseRedirect(xarModURL('roles','admin', 'showusers', array('authid' => $data['authid'],
-                                                                  'state'     => $data['state'],
-                                                                  'invalid'    => $invalid,
-                                                                  'uid' => $data['groupuid'])));
+        return xarResponseRedirect(xarModURL('roles','admin', 'showusers', 
+                             array('authid'  => $data['authid'],
+                                   'state'   => $data['state'],
+                                   'invalid' => $invalid,
+                                   'uid'     => $data['groupuid'])));
     }
     //Get the notice message
     switch ($data['status']) {
@@ -58,12 +60,15 @@ function roles_admin_updatestate()
     }
 
     if ( (!isset($uids)) || (!isset($data['status']))
-    || (!is_numeric($data['status'])) || ($data['status'] < 1) || ($data['status'] > 4) ) {
+                         || (!is_numeric($data['status']))
+                         || ($data['status'] < 1)
+                         || ($data['status'] > 4) )       {
+
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)','parameters', 'admin', 'updatestate', 'Roles');
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',new SystemException($msg." -- ".$uids." -- ".$data['status']));
         return;
     }
-    $roles = new xarRoles();
+    $roles     = new xarRoles();
     $uidnotify = array();
     foreach ($uids as $uid => $val) {
         //check if the user must be updated :
@@ -72,10 +77,10 @@ function roles_admin_updatestate()
             if ($data['status'] == ROLES_STATE_NOTVALIDATED) $valcode = xarModAPIFunc('roles','user','makepass');
             else $valcode = null;
             //Update the user
-            if (!xarModAPIFunc('roles',
-                              'admin',
-                              'stateupdate',
-                              array('uid' => $uid, 'state' => $data['status'],  'valcode' => $valcode))) return;
+            if (!xarModAPIFunc('roles', 'admin', 'stateupdate',
+                              array('uid'     => $uid,
+                                    'state'   => $data['status'],
+                                    'valcode' => $valcode))) return;
             $uidnotify[$uid] = 1;
         }
     }
