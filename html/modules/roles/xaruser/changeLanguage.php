@@ -18,7 +18,7 @@
  */
 function roles_user_changelanguage()
 {
-    if (!xarVarFetch('locale', 'str:1:', $locale, NULL, XARVAR_POST_ONLY, XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('locale',     'str:1:', $locale,     NULL, XARVAR_POST_ONLY, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('return_url', 'str:1:', $return_url, NULL, XARVAR_POST_ONLY, XARVAR_PREP_FOR_DISPLAY)) return;
 
     $locales = xarMLSListSiteLocales();

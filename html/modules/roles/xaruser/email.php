@@ -31,7 +31,7 @@ function roles_user_email($args)
 
     extract($args);
 
-    if (!xarVarFetch('uid', 'id', $uid)) return;
+    if (!xarVarFetch('uid',   'id', $uid)) return;
     if (!xarVarFetch('phase', 'enum:modify:confirm', $phase, 'modify', XARVAR_NOT_REQUIRED)) return;
 
     // If this validation fails, then do NOT send an e-mail, but

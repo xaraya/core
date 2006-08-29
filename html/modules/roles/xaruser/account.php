@@ -22,20 +22,20 @@ function roles_user_account()
     if(!xarVarFetch('moduleload','str', $data['moduleload'], '', XARVAR_NOT_REQUIRED)) {return;}
 
     //let's make sure other modules that refer here get to a default and existing login or logout form
-    $defaultauthdata=xarModAPIFunc('roles','user','getdefaultauthdata');
-    $defaultauthmodname=$defaultauthdata['defaultauthmodname'];
-    $defaultloginmodname=$defaultauthdata['defaultloginmodname'];
-    $defaultlogoutmodname=$defaultauthdata['defaultlogoutmodname'];
+    $defaultauthdata      = xarModAPIFunc('roles','user','getdefaultauthdata');
+    $defaultauthmodname   = $defaultauthdata['defaultauthmodname'];
+    $defaultloginmodname  = $defaultauthdata['defaultloginmodname'];
+    $defaultlogoutmodname = $defaultauthdata['defaultlogoutmodname'];
 
     if (!xarUserIsLoggedIn()){
         xarResponseRedirect(xarModURL($defaultloginmodname,'user','showloginform'));
     }
 
-    $data['uid'] = xarUserGetVar('uid');
-    $data['name'] = xarUserGetVar('name');
-    $data['logoutmodule']=$defaultlogoutmodname;
-    $data['loginmodule']=$defaultloginmodname;
-    $data['authmodule']=$defaultauthmodname;
+    $data['uid']          = xarUserGetVar('uid');
+    $data['name']         = xarUserGetVar('name');
+    $data['logoutmodule'] = $defaultlogoutmodname;
+    $data['loginmodule']  = $defaultloginmodname;
+    $data['authmodule']   = $defaultauthmodname;
     if ($data['uid'] == XARUSER_LAST_RESORT) {
         $data['message'] = xarML('You are logged in as the last resort administrator.');
     } else  {

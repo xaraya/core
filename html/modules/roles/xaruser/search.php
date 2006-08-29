@@ -17,14 +17,14 @@
  */
 function roles_user_search()
 {
-    if(!xarVarFetch('startnum', 'isset', $startnum,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('email',    'isset', $email,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('uname',    'isset', $uname,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('q',        'isset', $q,         NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('bool',     'isset', $bool,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('sort',     'isset', $sort,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('author',   'isset', $author,    NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('startnum', 'isset', $startnum,  NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('email',    'isset', $email,     NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('uname',    'isset', $uname,     NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('q',        'isset', $q,         NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('bool',     'isset', $bool,      NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('sort',     'isset', $sort,      NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('author',   'isset', $author,    NULL, XARVAR_DONT_SET)) {return;}
     $data = array();
     $data['users'] = array();
     // show the search form
@@ -105,10 +105,8 @@ function roles_user_search()
                             continue;
                         }
                         // Get user information
-                        $data['users'][$uid] = xarModAPIFunc('roles',
-                                                             'user',
-                                                             'get',
-                                                             array('uid' => $uid));
+                        $data['users'][$uid] = xarModAPIFunc('roles', 'user', 'get',
+                                                       array('uid' => $uid));
                     }
                 }
             }
@@ -128,12 +126,10 @@ function roles_user_search()
 
     $selection .= ")";
 
-    $data['total'] = xarModAPIFunc('roles',
-                                   'user',
-                                   'countall',
-                                   array('selection'   => $selection,
-                                         'include_anonymous' => false,
-                                         'include_myself' => false));
+    $data['total'] = xarModAPIFunc('roles', 'user', 'countall',
+                             array('selection'         => $selection,
+                                   'include_anonymous' => false,
+                                   'include_myself'    => false));
 
     if (!$data['total']){
         if (count($data['users']) == 0){
@@ -146,12 +142,11 @@ function roles_user_search()
     $users = xarModAPIFunc('roles',
                            'user',
                            'getall',
-                            array('startnum' => $startnum,
-                                  'selection'   => $selection,
+                            array('startnum'          => $startnum,
+                                  'selection'         => $selection,
                                   'include_anonymous' => false,
-                                  'include_myself' => false,
-                                  'numitems' => xarModGetVar('roles',
-                                                             'itemsperpage')));
+                                  'include_myself'    => false,
+                                  'numitems'          => xarModGetVar('roles', 'itemsperpage')));
 
     // combine search results with DD
     if (!empty($users) && count($data['users']) > 0) {
