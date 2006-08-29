@@ -355,15 +355,15 @@ class Dynamic_Property
     {
         if (!isset($value)) {
             $isvalid = true;
-            xarVarFetch('dd_'.$this->id, 'isset', $ddvalue,  NULL, XARVAR_NOT_REQUIRED);
+            xarVarFetch('dd_'.$this->id, 'isset', $ddvalue,  NULL, XARVAR_DONT_SET);
             if (isset($ddvalue)) {
                 $value = $ddvalue;
             } else {
-                xarVarFetch($this->name, 'isset', $fieldvalue,  NULL, XARVAR_NOT_REQUIRED);
+                xarVarFetch($this->name, 'isset', $fieldvalue,  NULL, XARVAR_DONT_SET);
                 if (isset($fieldvalue)) {
                     $value = $fieldvalue;
                 } else {
-                    xarVarFetch($name, 'isset', $namevalue,  NULL, XARVAR_NOT_REQUIRED);
+                    xarVarFetch($name, 'isset', $namevalue,  NULL, XARVAR_DONT_SET);
                     if (isset($namevalue)) {
                         $value = $namevalue;
                     } else {
@@ -371,6 +371,9 @@ class Dynamic_Property
                     }
                 }
             }
+            /*
+            // TODO: review this. The thinking is that an exception cannot be reliably thrown
+            // from within this method.
             if (!$isvalid) {
                 $msg = 'Field "#(1)" (dd_#(2)) is missing.';
                 if (!empty($name)) {
@@ -381,11 +384,12 @@ class Dynamic_Property
                 throw new BadParameterException($vars,$msg);
                 return false;
             }
+            */
             // store the fieldname for validations who need them (e.g. file uploads)
             $name = empty($name) ? 'dd_'.$this->id : $name;
             $this->fieldname = $name;
         }
-        return $this->validateValue($value);
+       return $this->validateValue($value);
     }
 
     /**

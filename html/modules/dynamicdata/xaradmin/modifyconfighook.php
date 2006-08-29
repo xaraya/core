@@ -76,7 +76,8 @@ function dynamicdata_admin_modifyconfighook($args)
     $data['fieldtypeprop'] = & Dynamic_Property_Master::getProperty(array('type' => 'fieldtype'));
 
     $object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
-                                                       'itemtype' => $itemtype));
+                                                       'itemtype' => $itemtype,
+                                                       'extend' => false));
     if (!isset($object)) return;
 
     if (!empty($object->template)) {

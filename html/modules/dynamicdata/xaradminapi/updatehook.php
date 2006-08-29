@@ -91,16 +91,10 @@ function dynamicdata_adminapi_updatehook($args)
         //return $extrainfo;
     }
 
-    $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
-    foreach ($tree as $branch) {
-        if ($branch['objectid'] == 0) continue;
-        // TODO: this next line jumps over itemtypes that correspond to wrappers of native itemtypes
-        // TODO: make this more robust
-        if ($branch['itemtype'] < 1000) continue;
-
         $myobject = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
-                                             'itemtype' => $branch['itemtype'],
-                                             'itemid'   => $itemid));
+                                             'itemtype' => $itemtype,
+                                             'itemid'   => $itemid,
+                                             'extend' => false));
         if (!isset($myobject)) {
             $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
             $vars = array('object', 'admin', $dd_function, 'dynamicdata');
@@ -156,7 +150,6 @@ function dynamicdata_adminapi_updatehook($args)
             // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
             //return $extrainfo;
         }
-    }
     // Return the extra info
     return $extrainfo;
 }
