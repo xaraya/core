@@ -18,7 +18,7 @@
  * @access public
  * @param none $
  * @returns bool
- * @throws DATABASE_ERROR
+ * @raise DATABASE_ERROR
  */
 function roles_init()
 {
@@ -143,7 +143,7 @@ function roles_init()
 
     $query = xarDBCreateTable($tables['rolemembers'],
         array('xar_uid' => array('type' => 'integer',
-                'null' => false,
+                'null'  => false,
                 'default' => '0'),
             'xar_parentid' => array('type' => 'integer',
                 'null' => false,
@@ -271,7 +271,7 @@ function roles_activate()
  * @access public
  * @param oldVersion $
  * @returns bool
- * @throws DATABASE_ERROR
+ * @raise DATABASE_ERROR
  */
 function roles_upgrade($oldVersion)
 {
@@ -345,7 +345,7 @@ function roles_upgrade($oldVersion)
  * @access public
  * @param none $
  * @returns bool
- * @throws DATABASE_ERROR
+ * @raise DATABASE_ERROR
  */
 function roles_delete()
 {
