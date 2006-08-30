@@ -193,7 +193,6 @@
                         </label>
                             #xarLocaleGetFormattedDate('medium', $userlastlogin)#  #xarLocaleGetFormattedTime('medium', $userlastlogin)#
                     </div>
-                    </xar:if>
                 </xar:if>
                 
                 <xar:if condition="xarModGetVar('roles','setusertimezone')">
