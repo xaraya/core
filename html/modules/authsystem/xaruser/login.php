@@ -219,7 +219,7 @@ function authsystem_user_login()
             $defaultauthdata=xarModAPIFunc('roles','user','getdefaultauthdata');
             $defaultloginmodname=$defaultauthdata['defaultloginmodname'];
             $res = xarModAPIFunc($defaultloginmodname,'user','login',array('uname' => $uname, 'pass' => $pass, 'rememberme' => $rememberme));
- 
+
             if ($res === NULL) return;
             elseif ($res == false) {
                 // Problem logging in
@@ -250,7 +250,7 @@ function authsystem_user_login()
 
             $externalurl=false; //used as a flag for userhome external url
             if (xarModGetVar('roles', 'loginredirect')) { //only redirect to home page if this option is set
-                if (xarModAPIFunc('roles','admin','checkduv',array('name' => 'setuserhome', 'state' => 1))) {
+				if (xarModGetVar('roles', 'setuserhome')) {
                     $truecurrenturl = xarServerGetCurrentURL(array(), false);
                     $role = xarUFindRole($uname);
                     $url = $lastresort ? '[base]' : $role->getHome();
