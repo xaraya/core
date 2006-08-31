@@ -451,7 +451,7 @@ function xarException__assertErrorHandler($script,$line,$code)
  * @param  string errMsg
  * @param  bool param1
  * @param  bool param2
- * @raise  DATABASE_ERROR
+ * @throws  DATABASE_ERROR
  * @return void
  * @todo   <marco> complete it
  */

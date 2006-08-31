@@ -35,16 +35,16 @@ function roles_user_viewtree()
     // This is just shorthand to include the necessary files and create a new tree renderer
     $tree = xarTree();
     // We need to extend the renderer class because we need to add some stuff
-    class orgChart extends xarTreeRenderer 
+    class orgChart extends xarTreeRenderer
     {
         // This defines an item for displaying the name of each group and the number of users
         // it contains
         function descriptionitem()
         {
-            $html = '<span style="padding-left: 1em">';
-            $html .= $this->treenode['name'];
+            $html    = '<span style="padding-left: 1em">';
+            $html   .= $this->treenode['name'];
             $members = $this->treenode['users'] == 1 ? xarML('member') : xarML('members');
-            $html .= ' (' . $this->treenode['users'] . " " . $members .')</span>';
+            $html   .= ' (' . $this->treenode['users'] . " " . $members .')</span>';
             return $html;
         }
     }

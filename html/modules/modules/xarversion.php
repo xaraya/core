@@ -1,6 +1,6 @@
 <?php
 /**
- * Module initialization 
+ * Module initialization
  *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
@@ -32,7 +32,6 @@ $modversion['author']             = 'Jim McDonald';
 $modversion['contact']            = '';
 $modversion['admin']              = 1;
 $modversion['user']               = 0;
-$modversion['securityschema']     = array('Modules::' => '::');
 $modversion['class']              = 'Core Admin';
 $modversion['category']           = 'Global';
 ?>

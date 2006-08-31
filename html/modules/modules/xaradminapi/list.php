@@ -16,7 +16,7 @@
  * @param none
  * @returns array
  * @return array of known modules
- * @raise NO_PERMISSION
+ * @throws NO_PERMISSION
  */
 function modules_adminapi_list($args)
 {

@@ -17,7 +17,7 @@
  * @param none
  * @returns bool
  * @return true on success, false on failure
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  */
 function modules_adminapi_set_pref_defaults()
 {

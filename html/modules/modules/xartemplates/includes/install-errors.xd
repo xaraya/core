@@ -1,3 +1,4 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:if condition="!empty($errorstack)">
     <xar:loop name="$errorstack">
         <xar:if condition="$loop:item.major gt 0">

@@ -68,7 +68,7 @@ function xarDB__datadictCreateTable($tableName, $fields)
  * @param args['after_field']
  * @param args['new_name'] new name of table
  * @return string|false datadict specific sql to alter a table
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
 function xarDB__datadictAlterTable($tableName, $args)
@@ -397,7 +397,7 @@ function xarDB__datadictColumnDefinition($field_name, $parameters)
  * @access private
  * @param databaseName
  * @return string sql statement for database creation
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
 function xarDB__datadictCreateDatabase($databaseName)
@@ -462,7 +462,7 @@ function xarDB__datadictCreateIndex($tableName, $index)
  * @param tableName
  * @param name a db index name
  * @return string|false generated sql to drop an index
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
 function xarDB__datadictDropIndex($tableName, $index)

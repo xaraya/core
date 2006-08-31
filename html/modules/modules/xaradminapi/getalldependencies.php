@@ -1,23 +1,23 @@
 <?php
 /**
- * Find all the module's dependencies 
+ * Find all the module's dependencies
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Modules module
+ * @subpackage Module System
+ * @link http://xaraya.com/index.php/release/1.html
  */
 /**
  * Find all the module's dependencies with all the dependencies of its
  * siblings
  *
  * @author Xaraya Development Team
- * @param $maindId int ID of the module to look dependents for
- * @returns bool
- * @return true on dependencies activated, false for not
- * @raise NO_PERMISSION
+ * @param $mainId int ID of the module to look dependents for, from $args['regid']
+ * @return array Array with dependency information
+ * @throws NO_PERMISSION
  */
 function modules_adminapi_getalldependencies($args)
 {
@@ -123,7 +123,7 @@ function modules_adminapi_getalldependencies($args)
         $dependency_array['unsatisfiable'][] = $modInfo;
     } elseif (count($dependency_array['satisfiable'])) {
         //Then this module is satisfiable too
-        //As if it were initialized, then all depdencies would have
+        //As if it were initialized, then all dependencies would have
         //to be already satisfied
         $dependency_array['satisfiable'][] = $modInfo;
     } else {
@@ -151,7 +151,7 @@ function modules_adminapi_getalldependencies($args)
             break;
         }
     }
-    
+
     return $dependency_array;
 }
 

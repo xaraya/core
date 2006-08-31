@@ -29,10 +29,10 @@ function roles_admin_removemember()
     if (!xarSecConfirmAuthKey()) return;
     // get input from any view of this page
     if (!xarVarFetch('parentid', 'int', $parentid, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('childid', 'int', $childid, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('childid',  'int', $childid, XARVAR_NOT_REQUIRED)) return;
     // call the Roles class and get the parent and child objects
-    $roles = new xarRoles();
-    $role = $roles->getRole($parentid);
+    $roles  = new xarRoles();
+    $role   = $roles->getRole($parentid);
     $member = $roles->getRole($childid);
 
     // Security Check
@@ -42,15 +42,12 @@ function roles_admin_removemember()
     if (!xarModAPIFUnc('roles','user','removemember', array('uid' => $childid, 'gid' => $parentid))) return;
 
     // call item create hooks (for DD etc.)
-    $pargs['module'] = 'roles';
+    $pargs['module']   = 'roles';
     $pargs['itemtype'] = $role->getType(); // we might have something separate for groups later on
-    $pargs['itemid'] = $parentid;
+    $pargs['itemid']   = $parentid;
     xarModCallHooks('item', 'unlink', $parentid, $pargs);
 
     // redirect to the next page
-    xarResponseRedirect(xarModURL('roles',
-            'admin',
-            'modifyrole',
-            array('uid' => $childid)));
+    xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole',  array('uid' => $childid)));
 }
 ?>

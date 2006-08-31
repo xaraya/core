@@ -16,7 +16,7 @@
  * @access public
  * @param regid theme's registered id
  * @returns bool
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  */
 function themes_adminapi_activate($args)
 {

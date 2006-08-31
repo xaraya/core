@@ -20,7 +20,7 @@
  * @param $args['module'] name of the module (optional)
  * @returns integer
  * @return count of block types that meet the required criteria
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function blocks_userapi_countblocktypes($args)
 {

@@ -16,7 +16,7 @@
  * @param regid registered theme id
  * @returns bool
  * @return
- * @raise BAD_PARAM, THEME_NOT_EXIST
+ * @throws BAD_PARAM, THEME_NOT_EXIST
  */
 function themes_adminapi_initialise($args)
 {

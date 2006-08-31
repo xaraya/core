@@ -16,7 +16,7 @@
  * @param $args['regid'] the id of the module
  * @returns bool
  * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION
+ * @throws BAD_PARAM, NO_PERMISSION
  */
 function modules_adminapi_removemissing($args)
 {

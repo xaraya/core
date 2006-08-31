@@ -17,8 +17,8 @@ function roles_admin_modifyconfig()
 {
     // Security Check
     if (!xarSecurityCheck('AdminRole')) return;
-    if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-    if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('phase', 'str:1:100', $phase,       'modify',  XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('tab',   'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
     switch (strtolower($phase)) {
         case 'modify':
         default:
@@ -26,7 +26,7 @@ function roles_admin_modifyconfig()
             // TODO: find a more elegant way to do this
             // first find the id of the admin privilege
             $roles = new xarRoles();
-            $role = $roles->getRole(xarModGetVar('roles','admin'));
+            $role  = $roles->getRole(xarModGetVar('roles','admin'));
             $privs = array_merge($role->getInheritedPrivileges(),$role->getAssignedPrivileges());
             foreach ($privs as $priv)
             {
@@ -37,12 +37,12 @@ function roles_admin_modifyconfig()
                 }
             }
 
-            $dbconn =& xarDBGetConn();
+            $dbconn   =& xarDBGetConn();
             $xartable =& xarDBGetTables();
             $acltable = xarDBGetSiteTablePrefix() . '_security_acl';
-            $query = "SELECT xar_partid FROM $acltable
-                    WHERE xar_permid   = ?";
-            $result =& $dbconn->Execute($query, array((int) $adminpriv));
+            $query    = "SELECT xar_partid FROM $acltable
+                         WHERE xar_permid   = ?";
+            $result   =& $dbconn->Execute($query, array((int) $adminpriv));
             if (!$result) return;
 
 
@@ -54,9 +54,9 @@ function roles_admin_modifyconfig()
             while (!$result->EOF)
             {
                 list($id) = $result->fields;
-                $role = $roles->getRole($id);
+                $role     = $roles->getRole($id);
                 $admins[] = $role;
-                $admins = array_merge($admins,$role->getDescendants());
+                $admins   = array_merge($admins,$role->getDescendants());
                 $result->MoveNext();
             }
 
@@ -75,12 +75,12 @@ function roles_admin_modifyconfig()
             // get the array of all groups
             // remove duplicate entries from the list of groups
             $groups = array();
-            $names = array();
+            $names  = array();
             foreach($roles->getgroups() as $temp) {
                 $nam = $temp['name'];
                 if (!in_array($nam, $names)) {
-                    array_push($names, $nam);
-                    array_push($groups, $temp);
+                   array_push($names, $nam);
+                   array_push($groups, $temp);
                 }
             }
 
@@ -89,12 +89,12 @@ function roles_admin_modifyconfig()
                 $ip = serialize('10.0.0.1');
                 xarModSetVar('roles', 'disallowedips', $ip);
             }
-            $data['siteadmins'] = $siteadmins;
+            $data['siteadmins']   = $siteadmins;
             $data['defaultgroup'] = xarModGetVar('roles', 'defaultgroup');
-            $data['groups'] = $groups;
+            $data['groups']       = $groups;
 
-            $data['authid'] = xarSecGenAuthKey();
-            $data['updatelabel'] = xarML('Update Roles Configuration');
+            $data['authid']       = xarSecGenAuthKey();
+            $data['updatelabel']  = xarML('Update Roles Configuration');
             $hooks = array();
 
             switch ($data['tab']) {
@@ -116,8 +116,8 @@ function roles_admin_modifyconfig()
             }
 
             $data['hooks'] = $hooks;
-            $data['defaultauthmod'] = xarModGetVar('roles', 'defaultauthmodule');
-            $data['defaultregmod'] = xarModGetVar('roles', 'defaultregmodule');
+            $data['defaultauthmod']    = xarModGetVar('roles', 'defaultauthmodule');
+            $data['defaultregmod']     = xarModGetVar('roles', 'defaultregmodule');
             $data['allowuserhomeedit'] = xarModGetVar('roles', 'allowuserhomeedit');
             $data['requirevalidation'] = xarModGetVar('roles', 'requirevalidation');
             //check for roles hook in case it's set independently elsewhere
@@ -134,12 +134,12 @@ function roles_admin_modifyconfig()
             if (!xarSecConfirmAuthKey()) return;
             switch ($data['tab']) {
                 case 'general':
-                    if (!xarVarFetch('itemsperpage', 'str:1:4:', $itemsperpage, '20', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-                    if (!xarVarFetch('defaultauthmodule', 'str:1:', $defaultauthmodule, xarModGetIDFromName('authsystem'), XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-                    if (!xarVarFetch('defaultregmodule', 'str:1:', $defaultregmodule, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-                    if (!xarVarFetch('shorturls', 'checkbox', $shorturls, false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('siteadmin', 'int:1', $siteadmin, xarModGetVar('roles','admin'), XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('defaultgroup', 'str:1', $defaultgroup, 'Users', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+                    if (!xarVarFetch('itemsperpage',      'str:1:4:', $itemsperpage,     '20', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+                    if (!xarVarFetch('defaultauthmodule', 'str:1:',   $defaultauthmodule, xarModGetIDFromName('authsystem'), XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+                    if (!xarVarFetch('defaultregmodule',  'str:1:',   $defaultregmodule, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+                    if (!xarVarFetch('shorturls',         'checkbox', $shorturls,        false, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('siteadmin',         'int:1',    $siteadmin,        xarModGetVar('roles','admin'), XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('defaultgroup',      'str:1',    $defaultgroup,     'Users', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
                     xarModSetVar('roles', 'itemsperpage', $itemsperpage);
                     xarModSetVar('roles', 'defaultauthmodule', $defaultauthmodule);
@@ -161,14 +161,14 @@ function roles_admin_modifyconfig()
                                           'itemtype' => 1));
                     break;
                 case 'memberlist':
-                    if (!xarVarFetch('searchbyemail', 'checkbox', $searchbyemail, false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('displayrolelist', 'checkbox', $displayrolelist, false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('usersendemails', 'checkbox', $usersendemails, false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('usereditaccount', 'checkbox', $usereditaccount, true, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('userhomeedit', 'checkbox', $userhomeedit, false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('allowexternalurl', 'checkbox', $allowexternalurl, false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('loginredirect', 'checkbox', $loginredirect, true, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('requirevalidation', 'checkbox', $requirevalidation, true, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('searchbyemail',    'checkbox', $searchbyemail,     false, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('displayrolelist',  'checkbox', $displayrolelist,   false, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('usersendemails',   'checkbox', $usersendemails,    false, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('usereditaccount',  'checkbox', $usereditaccount,   true,  XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('userhomeedit',     'checkbox', $userhomeedit,      false, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('allowexternalurl', 'checkbox', $allowexternalurl,  false, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('loginredirect',    'checkbox', $loginredirect,     true,  XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('requirevalidation','checkbox', $requirevalidation, true,  XARVAR_NOT_REQUIRED)) return;
                    
                     xarModSetVar('roles', 'searchbyemail', $searchbyemail); //search by email
                     xarModSetVar('roles', 'usersendemails', $usersendemails);
@@ -188,14 +188,14 @@ function roles_admin_modifyconfig()
                          if (!xarModIsHooked('roles', 'roles')) {
                          xarModAPIFunc('modules','admin','enablehooks',
                                  array('callerModName' => 'roles',
-                                       'hookModName' => 'roles'));
+                                       'hookModName'   => 'roles'));
                          }
                     } else {
                          //unhook roles from roles
                          if (xarModIsHooked('roles', 'roles')) {
                          xarModAPIFunc('modules','admin','disablehooks',
                                  array('callerModName' => 'roles',
-                                       'hookModName' => 'roles'));
+                                       'hookModName'   => 'roles'));
                          }
                    }
                     break;
@@ -213,11 +213,11 @@ function roles_admin_modifyconfig()
         case 'links':
             switch ($data['tab']) {
                 case 'duvs':
-                    $duvarray = array('setuserhome'=>'userhome',
-                                      'setprimaryparent'=>'primaryparent',
-                                      'setpasswordupdate'=>'passwordupdate',
-                                      'setuserlastlogin' =>'userlastlogin',
-                                      'setusertimezone'=>'usertimezone');
+                    $duvarray = array('setuserhome'       => 'userhome',
+                                      'setprimaryparent'  => 'primaryparent',
+                                      'setpasswordupdate' => 'passwordupdate',
+                                      'setuserlastlogin'  => 'userlastlogin',
+                                      'setusertimezone'   => 'usertimezone');
                     foreach ($duvarray as $duv=>$userduv) {
                         if (!xarVarFetch($duv, 'int', $$duv, null, XARVAR_DONT_SET)) return;
                         if (isset($$duv)) {
@@ -227,21 +227,29 @@ function roles_admin_modifyconfig()
                                     $defaultrole=xarModGetVar('roles','defaultgroup');
                                     xarModSetVar('roles','primaryparent', $defaultrole);
                                 }elseif ($userduv =='usertimezone') {//set to the default site timezone
-                                    $defaultzone= xarConfigGetVar('Site.Core.TimeZone');
+                                    $defaultzone = xarConfigGetVar('Site.Core.TimeZone');
                                     if (!isset($defaultzone) || empty($defaultzone)) {
                                         xarConfigSetVar('Site.Core.TimeZone','Europe/London');
+                                        $defaultzone = xarConfigGetVar('Site.Core.TimeZone');
                                     }
                                     $timeinfo = xarModAPIFunc('base','user','timezones', array('timezone' => $defaultzone));
+                                    if (!is_array($timeinfo)){ //we still need to set this to something
+                                        xarConfigSetVar('Site.Core.TimeZone','Europe/London');
+                                        $defaultzone = xarConfigGetVar('Site.Core.TimeZone');
+                                    }
+                                    //And try again
+                                    $timeinfo = xarModAPIFunc('base','user','timezones', array('timezone' => $defaultzone));
+
                                     list($hours,$minutes) = explode(':',$timeinfo[0]);
-                                    $offset = (float) $hours + (float) $minutes / 60;
-                                    $timeinfoarray= array('timezone' => $defaultzone, 'offset' => $offset);
-                                    $defaultusertime=serialize($timeinfoarray);
-                                    xarModSetVar('roles','usertimezone',$defaultusertime);
+                                    $offset               = (float) $hours + (float) $minutes / 60;
+                                    $timeinfoarray        = array('timezone' => $defaultzone, 'offset' => $offset);
+                                    $defaultusertime      = serialize($timeinfoarray);
+                                    xarModSetVar('roles','usertimezone', $defaultusertime);
                                 }else {
-                                   xarModSetVar('roles',$userduv,'');
+                                   xarModSetVar('roles', $userduv, '');
                                 }
                             } else {
-                                xarModSetVar('roles',$duv,false);
+                                xarModSetVar('roles',$duv, false);
                             }
                         }
                     }

@@ -40,7 +40,7 @@ function roles_user_display($args)
     if (xarModAPIFunc('roles','admin','checkduv',array('name' => 'setuserhome', 'state' => 1))) {
 
         $role = xarUFindRole(xarUserGetVar('uname',$uid));
-        $url=$role->getHome(); //what about last resort here?
+        $url  = $role->getHome(); //what about last resort here?
         if (!isset($url) || empty($url)) {
             //we now have primary parent implemented so can use this if activated
             if (xarModGetVar('roles','setprimaryparent')) { //primary parent is activated
@@ -64,40 +64,40 @@ function roles_user_display($args)
         //We have a home url - let us see if it is a shortcut, or internal, or external URL
         $homeurldata =xarModAPIFunc('roles','user','userhome',array('url'=>$url,'truecurrenturl'=>$item['returnurl']));
         if (!is_array($homeurldata) || !$homeurldata) {
-            $externalurl=false;
-            $homeurl=xarServerGetBaseURL(array(),false);
+            $externalurl = false;
+            $homeurl = xarServerGetBaseURL(array(),false);
         } else{
-           $externalurl=$homeurldata['externalurl'];
-           $homeurl=$homeurldata['redirecturl'];
+           $externalurl = $homeurldata['externalurl'];
+           $homeurl     = $homeurldata['redirecturl'];
         }
 
-        $data['externalurl']=$externalurl;
-        $data['homelink']=$homeurl;
+        $data['externalurl'] = $externalurl;
+        $data['homelink']    = $homeurl;
     } else {
-        $data['externalurl']=false;
-        $data['homelink']='';
+        $data['externalurl'] = false;
+        $data['homelink']    = '';
     }
     if (xarModGetVar('roles','setuserlastlogin')) {
         //only display it for current user or admin
         if (xarUserIsLoggedIn() && xarUserGetVar('uid')==$uid) {
-            $data['userlastlogin']=xarSessionGetVar('roles_thislastlogin');
-            $data['usercurrentlogin']=xarModGetUserVar('roles','userlastlogin',$uid);
+            $data['userlastlogin']    = xarSessionGetVar('roles_thislastlogin');
+            $data['usercurrentlogin'] = xarModGetUserVar('roles','userlastlogin',$uid);
         }elseif (xarSecurityCheck('AdminRole',0)){
-            $data['usercurrentlogin']='';
-            $data['userlastlogin']= xarModGetUserVar('roles','userlastlogin',$uid);
+            $data['usercurrentlogin'] = '';
+            $data['userlastlogin']    = xarModGetUserVar('roles','userlastlogin',$uid);
         }else{
-            $data['userlastlogin']='';
-            $data['usercurrentlogin']='';
+            $data['userlastlogin']    = '';
+            $data['usercurrentlogin'] = '';
         }
     }else{
-        $data['userlastlogin']='';
-        $data['usercurrentlogin']='';
+        $data['userlastlogin']    = '';
+        $data['usercurrentlogin'] = '';
     }
     //timezone
     if (xarModGetVar('roles','setusertimezone')) {
-      $usertimezone = unserialize(xarModGetUserVar('roles','usertimezone'));
-      $data['utimezone']=$usertimezone['timezone'];
-      $offset=$usertimezone['offset'];
+      $usertimezone      =  unserialize(xarModGetUserVar('roles','usertimezone'));
+      $data['utimezone'] = $usertimezone['timezone'];
+      $offset            = $usertimezone['offset'];
       //make it pretty
       if (isset($offset)) {
           $hours = intval($offset);
@@ -114,8 +114,8 @@ function roles_user_display($args)
 
       }
     } else {
-        $data['utimezone']='';
-        $data['offset']='';
+        $data['utimezone'] = '';
+        $data['offset']    = '';
     }
 
     $hooks = array();

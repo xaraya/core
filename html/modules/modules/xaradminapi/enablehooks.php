@@ -19,7 +19,7 @@
  * @param $args['hookModName'] hook module
  * @returns bool
  * @return true if successfull
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  */
 function modules_adminapi_enablehooks($args)
 {

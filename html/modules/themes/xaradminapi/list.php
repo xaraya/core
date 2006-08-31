@@ -16,7 +16,7 @@
  * @param none
  * @returns array
  * @return array of known themes
- * @raise NO_PERMISSION
+ * @throws NO_PERMISSION
  */
 function themes_adminapi_list()
 {

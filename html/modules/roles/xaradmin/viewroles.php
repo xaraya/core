@@ -27,7 +27,7 @@ function roles_admin_viewroles()
     $renderer = new xarTreeRenderer();
     // Load Template
     $data['authid'] = xarSecGenAuthKey();
-    $data['tree'] = $renderer->drawtree($renderer->maketree());
+    $data['tree']   = $renderer->drawtree($renderer->maketree());
     return $data;
 }
 

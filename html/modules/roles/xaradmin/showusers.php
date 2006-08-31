@@ -28,14 +28,14 @@ function roles_admin_showusers()
     }
     xarVarSetCached('roles', 'defaultgroupuid', $defaultgroupuid);
 
-    if (!xarVarFetch('uid', 'int:0:', $uid, $defaultgroupuid['uid'], XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('startnum', 'int:1:', $startnum, 1, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('state', 'int:0:', $data['state'], ROLES_STATE_CURRENT, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('selstyle', 'isset', $data['selstyle'], xarSessionGetVar('rolesdisplay'), XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('invalid', 'str:0:', $data['invalid'], NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('order', 'str:0:', $data['order'], 'xar_name', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('search', 'str:0:', $data['search'], NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('reload', 'str:0:', $reload, NULL, XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('uid',      'int:0:', $uid,              $defaultgroupuid['uid'], XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('startnum', 'int:1:', $startnum,         1,   XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('state',    'int:0:', $data['state'],    ROLES_STATE_CURRENT, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('selstyle', 'isset',  $data['selstyle'], xarSessionGetVar('rolesdisplay'), XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('invalid',  'str:0:', $data['invalid'],  NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('order',    'str:0:', $data['order'],    'xar_name', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('search',   'str:0:', $data['search'],   NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('reload',   'str:0:', $reload,           NULL,    XARVAR_DONT_SET)) return;
 
     if (empty($data['selstyle'])) $data['selstyle'] = 0;
     xarSessionSetVar('rolesdisplay', $data['selstyle']);
@@ -46,27 +46,24 @@ function roles_admin_showusers()
         $renderer = new xarTreeRenderer();
         $data['roletree'] = $renderer->drawtree($renderer->maketree());
         $data['treenode'] = array($renderer->maketree());
-//        echo var_dump($data['treenode']);exit;
     }
 
-// Get information on the group we're at
-    $data['groups'] = xarModAPIFunc('roles',
-                                    'user',
-                                    'getallgroups');
-    $data['groupuid'] = $uid;
+    // Get information on the group we're at
+    $data['groups']     = xarModAPIFunc('roles', 'user', 'getallgroups');
+    $data['groupuid']   = $uid;
     $data['totalusers'] = xarModAPIFunc('roles','user','countall');
 
     if ($uid != 0) {
         // Call the Roles class and get the role
-        $roles = new xarRoles();
-        $role = $roles->getRole($uid);
+        $roles     = new xarRoles();
+        $role      = $roles->getRole($uid);
         $ancestors = $role->getAncestors();
         $data['groupname'] = $role->getName();
         $data['title'] = "";
         $data['ancestors'] = array();
         foreach ($ancestors as $ancestor) {
             $data['ancestors'][] = array('name' => $ancestor->getName(),
-                                        'uid' => $ancestor->getID());
+                                          'uid' => $ancestor->getID());
         }
         //$subgroups = $roles->getsubgroups($uid);
     }
@@ -159,29 +156,26 @@ function roles_admin_showusers()
 
     //selstyle
     $data['style'] = array('0' => xarML('Simple'),
-                                       '1' => xarML('Tree'),
-                                       '2' => xarML('Tabbed')
-                                       );
+                           '1' => xarML('Tree'),
+                           '2' => xarML('Tabbed')
+                           );
 
     // Load Template
-    $data['uid'] = $uid;
-    $data['users'] = $users;
+    $data['uid']        = $uid;
+    $data['users']      = $users;
     $data['changestatuslabel'] = xarML('Change Status');
-    $data['authid'] = xarSecGenAuthKey();
-    $data['removeurl'] = xarModURL('roles',
-        'admin',
-        'deleterole',
-        array('roleid' => $uid));
+    $data['authid']     = xarSecGenAuthKey();
+    $data['removeurl']  = xarModURL('roles', 'admin','deleterole', array('roleid' => $uid));
     $filter['startnum'] = '%%';
-    $filter['uid'] = $uid;
-    $filter['state'] = $data['state'];
-    $filter['search'] = $data['search'];
-    $filter['order'] = $data['order'];
-    $data['pager'] = xarTplGetPager($startnum,
-        $data['totalselect'],
-        xarModURL('roles', 'admin', 'showusers',
-            $filter),
-        $numitems);
+    $filter['uid']      = $uid;
+    $filter['state']    = $data['state'];
+    $filter['search']   = $data['search'];
+    $filter['order']    = $data['order'];
+
+    $data['pager']      = xarTplGetPager($startnum,
+                                         $data['totalselect'],
+                                         xarModURL('roles', 'admin', 'showusers',$filter),
+                                         $numitems);
     return $data;
     // redirect to the next page
     xarResponseRedirect(xarModURL('roles', 'admin', 'newrole'));

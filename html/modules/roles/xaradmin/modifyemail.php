@@ -23,23 +23,23 @@ function roles_admin_modifyemail($args)
     if (!isset($mailtype)) xarVarFetch('mailtype', 'str:1:100', $data['mailtype'], 'welcome', XARVAR_NOT_REQUIRED);
     else $data['mailtype'] = $mailtype;
 
-// Get the list of available templates
+    // Get the list of available templates
     $messaginghome = xarCoreGetVarDirPath() . "/messaging/roles";
     if (!file_exists($messaginghome)) {
         xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The messaging directory was not found.'));
         return;
     }
     $dd = opendir($messaginghome);
-// FIXME: what's the blank template supposed to do ?
+    // FIXME: what's the blank template supposed to do ?
     //$templates = array(array('key' => 'blank', 'value' => xarML('Empty')));
     $templates = array();
     while (($filename = readdir($dd)) !== false) {
         if (!is_dir($messaginghome . "/" . $filename)) {
             $pos = strpos($filename,'-message.xd');
             if (!($pos === false)) {
-                $templatename = substr($filename,0,$pos);
+                $templatename  = substr($filename,0,$pos);
                 $templatelabel = ucfirst($templatename);
-                $templates[] = array('key' => $templatename, 'value' => $templatelabel);
+                $templates[]   = array('key' => $templatename, 'value' => $templatelabel);
             }
         }
    }
@@ -52,7 +52,7 @@ function roles_admin_modifyemail($args)
             $strings = xarModAPIFunc('roles','admin','getmessagestrings', array('template' => $data['mailtype']));
             $data['subject'] = $strings['subject'];
             $data['message'] = $strings['message'];
-            $data['authid'] = xarSecGenAuthKey();
+            $data['authid']  = xarSecGenAuthKey();
 
 
             // dynamic properties (if any)

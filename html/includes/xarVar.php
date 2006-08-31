@@ -108,7 +108,7 @@ function xarVar__shutdown_handler()
  * @access public
  * @param arrays The arrays storing information equivalent to the xarVarFetch interface
  * @return array With the respective exceptions in case of failure
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  */
 function xarVarBatchFetch()
 {
@@ -193,7 +193,7 @@ function xarVarBatchFetch()
  * @todo  get rid of the explicit value of XARVAR_GET_OR_POST, use the bitmas (i.e. GET_OR_POST = GET + POST)
  * @todo  make dont_set and dont_reuse are too similar (conceptually) which make the code below confusing [phpdoc above implies REUSE is the default]
  * @todo  re-evaluate the prepping, prepforstore is deprecated for example, prep for display and prep for html are partially exclusive
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  */
 function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags = XARVAR_GET_OR_POST, $prep = XARVAR_PREP_FOR_NOTHING)
 {
@@ -210,7 +210,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     $oldValue = null;
     if (isset($value) && $flags & XARVAR_DONT_SET) $oldValue = $value;
 
-    // XARVAR_DONT_REUSE fetches the variable, regardless 
+    // XARVAR_DONT_REUSE fetches the variable, regardless
     // FIXME: this flag doesn't seem to work !?
     // mrb: what doesn't work then? seems ok within the given workings
     // --------v  this is kinda confusing though, especially when dont_set is used as flag.
@@ -219,7 +219,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     }
 
     // Suppress validation warnings when dont_set, not_required or a default value is specified
-    $supress = (($flags & XARVAR_DONT_SET) || ($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue)); 
+    $supress = (($flags & XARVAR_DONT_SET) || ($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue));
     // Validate the $value given
     $validated = xarVarValidate($validation, $value, $supress, $name);
     if (xarCurrentErrorType()) {return;} //Throw back
@@ -227,7 +227,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     if (!$validated) {
         // The value does not validate
         $value = null; // we first make sure that this is what we expect to return
-        
+
         // Perhaps the default or old can be returned?
         if (($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue)) {
             // CHECKME:  even for the XARVAR_DONT_SET flag !?
@@ -241,7 +241,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
         // Value is ok, handle preparation of that value
         if ($prep & XARVAR_PREP_FOR_DISPLAY) $value = xarVarPrepForDisplay($value);
         if ($prep & XARVAR_PREP_FOR_HTML)    $value = xarVarPrepHTMLDisplay($value);
-        
+
         // TODO: this is used nowhere, plus it introduces a db connection here which is of no use
         if ($prep & XARVAR_PREP_FOR_STORE) {
             $dbconn =& xarDBGetConn();
@@ -471,7 +471,7 @@ function xarVar__getAllowedTags($level)
  * @param prep determines the prepping for the variable
  * @param type determines type of variable to process
  * @return mixed The value of the variable or void if variable doesn't exist
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
  //FIXME: Theme vars seems to be useless, get rid of it.
 function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL, $type = 'modvar')
@@ -706,7 +706,7 @@ function xarVar__GetVarByAlias($modName = NULL, $name, $uid = NULL, $prep = NULL
  * @param name The name of the variable
  * @param value The value of the variable
  * @return bool true on success
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  * @todo  We could delete the user vars for the module with the new value to save space?
  */
 function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $description = NULL, $uid = NULL, $type = 'modvar')
@@ -869,7 +869,7 @@ function xarVar__SetVarByAlias($modName = NULL, $name, $value, $prime = NULL, $d
  * @param modName The name of the module
  * @param name The name of the variable
  * @return bool true on success
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  * @todo Add caching for user variables?
  */
 function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'modvar')
@@ -990,7 +990,7 @@ function xarVar__DelVarByAlias($modName = NULL, $name, $uid = NULL, $type = 'mod
  * @param sourceContext The name of the module
  * @param targetContext The name of the module
  * @return string the string in the new context
- * @raise EMPTY_PARAM
+ * @throws EMPTY_PARAM
  */
 function xarVarTransform ($string, $sourceContext, $targetContext)
 {
@@ -1017,7 +1017,7 @@ function xarVarTransform ($string, $sourceContext, $targetContext)
  * @param string The drivers directory
  * @param filename The name file to be used
  * @return string the function anme
- * @raise BAD_PARAM
+ * @throws BAD_PARAM
  */
 function xarVarLoad ($includes_type, $filename)
 {
@@ -1050,7 +1050,7 @@ function xarVarLoad ($includes_type, $filename)
  * @param string The string to be Converted
  * @param targetContext The name of the context to escape for
  * @return string the string escape for the context
- * @raise EMPTY_PARAM
+ * @throws EMPTY_PARAM
  */
 function xarVarEscape ($string, $targetContext, $extras = array())
 {
@@ -1173,7 +1173,8 @@ function xarVarCleanFromInput()
  * Ready user output
  *
  * Gets a variable, cleaning it up such that the text is
- * shown exactly as expected. Can have as many parameters as desired.
+ * shown exactly as entered. This function uses the PHP function htmlspecialchars.
+ * Can have as many parameters as desired.
  *
  * @access public
  * @return mixed prepared variable if only one variable passed
@@ -1207,7 +1208,7 @@ function xarVarPrepForDisplay()
  * @access public
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function xarVarPrepHTMLDisplay()
 {
@@ -1353,9 +1354,9 @@ function xarVarPrepForOS()
     static $special_characters = array(':'  => ' ',   // for things like c:/file.txt?
                                        //'/'  => ' ', // this makes vars with relative paths unusable (cfr. bug 5559 )
                                        '\\' => ' ',   // for unc paths?
-                                       '..' => ' ',   
+                                       '..' => ' ',
                                        '?'  => ' ',   // why?
-                                       '*'  => ' ');  
+                                       '*'  => ' ');
 
     $args = func_get_args();
 

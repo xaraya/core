@@ -2,22 +2,22 @@
 /**
  * Verifies if all dependencies of a module are satisfied.
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Modules module
+ * @subpackage Module System
+ * @link http://xaraya.com/index.php/release/1.html
  */
 /**
  * Verifies if all dependencies of a module are satisfied.
  * To be used before initializing a module.
  *
  * @author Xaraya Development Team
- * @param $maindId int ID of the module to look dependents for
- * @returns bool
- * @return true on dependencies verified and ok, false for not
- * @raise NO_PERMISSION
+ * @param $mainId int ID of the module to look up the dependents for; in $args
+ * @return bool true on dependencies verified and ok, false for not
+ * @throws NO_PERMISSION
  */
 function modules_adminapi_verifydependency($args)
 {
@@ -62,8 +62,7 @@ function modules_adminapi_verifydependency($args)
 
     //Find the modules which are active (should upgraded be added too?)
     foreach ($dbModules as $name => $dbInfo) {
-        if ($dbInfo['state'] == XARMOD_STATE_ACTIVE) 
-        {
+        if ($dbInfo['state'] == XARMOD_STATE_ACTIVE) {
             $dbMods[$dbInfo['regid']] = $dbInfo;
         }
     }
@@ -82,13 +81,13 @@ function modules_adminapi_verifydependency($args)
     }
 
     $dependency = $modInfo['dependency'];
-    
+
     if (empty($dependency)) {
         $dependency = array();
     }
 
     foreach ($dependency as $module_id => $conditions) {
-    
+
         if (is_array($conditions)) {
 
             //Required module inexistent

@@ -14,10 +14,10 @@
 function roles_admin_sendmail()
 {
     // Get parameters from whatever input we need
-    if (!xarVarFetch('uid', 'int:0:', $uid, 0)) return;
-    if (!xarVarFetch('state', 'int:0:', $state, ROLES_STATE_CURRENT)) return;
+    if (!xarVarFetch('uid',     'int:0:', $uid, 0)) return;
+    if (!xarVarFetch('state',   'int:0:', $state, ROLES_STATE_CURRENT)) return;
     if (!xarVarFetch('message', 'str:1:', $message)) return;
-    if (!xarVarFetch('subject', 'str:1', $subject)) return;
+    if (!xarVarFetch('subject', 'str:1',  $subject)) return;
     if (!xarVarFetch('includesubgroups','int:0:',$includesubgroups,0,XARVAR_NOT_REQUIRED));
 
     // Confirm authorisation code.
@@ -38,10 +38,10 @@ function roles_admin_sendmail()
     $q->run();
 
     foreach ($q->output() as $user) {
-        $users[$user['r.xar_uid']] = array('uid' => $user['r.xar_uid'],
-                                            'name' => $user['r.xar_name'],
-                                            'email' => $user['r.xar_email'],
-                                            'username' => $user['r.xar_uname']
+        $users[$user['r.xar_uid']] = array('uid'      => $user['r.xar_uid'],
+                                           'name'     => $user['r.xar_name'],
+                                           'email'    => $user['r.xar_email'],
+                                           'username' => $user['r.xar_uname']
         );
     }
 
@@ -55,8 +55,8 @@ function roles_admin_sendmail()
 
         while (list($key, $user) = each($descendants)) {
             $users[$user->getID()] = array('uid' => $user->getID(),
-                'name' => $user->getName(),
-                'email' => $user->getEmail(),
+                'name'     => $user->getName(),
+                'email'    => $user->getEmail(),
                 'username' => $user->getUser()
                 );
         }
@@ -84,21 +84,19 @@ function roles_admin_sendmail()
 // now send the mails
     foreach ($users as $user) {
         //Get the common search and replace values
-        $data['recipientuid'] = $user['uid'];
-        $data['recipientname'] = $user['name'];
+        $data['recipientuid']      = $user['uid'];
+        $data['recipientname']     = $user['name'];
         $data['recipientusername'] = $user['username'];
-        $data['recipientemail'] = $user['email'];
+        $data['recipientemail']    = $user['email'];
 
         $mailsubject = xarTplString($subject, $data);
         $mailmessage = xarTplString($message, $data);
 
-        if (!xarModAPIFunc('mail',
-            'admin',
-            'sendmail',
-            array('info' => $user['email'],
-                'name' => $user['name'],
-                'subject' => $mailsubject,
-                'message' => $mailmessage))) return;
+        if (!xarModAPIFunc('mail', 'admin', 'sendmail',
+            array('info'    => $user['email'],
+                  'name'    => $user['name'],
+                  'subject' => $mailsubject,
+                  'message' => $mailmessage))) return;
     }
     // If it was on, turn it back on
     xarModSetVar('themes','ShowTemplates',$themecomments);

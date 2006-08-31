@@ -33,7 +33,7 @@ function authsystem_user_showloginform($args = array())
       // 1. augment (i.e. hack it in) to force the check to go?
       // 2. why is this security check here in the first place (a usecase would be nice)
       
-      if (!xarSecurityCheck('ViewAuthsystem')) return;
+      //if (!xarSecurityCheck('ViewAuthsystem')) return; //jojodee - review this
       $data['loginlabel'] = xarML('Log In');
       $data['loginurl']=xarModURL($defaultloginmodname,'user','login');
 

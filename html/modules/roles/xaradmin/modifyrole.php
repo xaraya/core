@@ -17,16 +17,16 @@
  */
 function roles_admin_modifyrole()
 {
-    if (!xarVarFetch('uid', 'int:1:', $uid)) return;
-    if (!xarVarFetch('pname', 'str:1:', $name, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('ptype', 'str:1', $type, NULL, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('puname', 'str:1:35:', $uname, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('pemail', 'str:1:', $email, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('ppass', 'str:1:', $pass, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('state', 'str:1:', $state, '', XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('phome', 'str', $data['phome'], '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('uid',      'int:1:',    $uid)) return;
+    if (!xarVarFetch('pname',    'str:1:',    $name, '',     XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('ptype',    'str:1',     $type,  NULL,  XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('puname',   'str:1:35:', $uname, '',    XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('pemail',   'str:1:',    $email, '',    XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('ppass',    'str:1:',    $pass,  '',    XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('state',    'str:1:',    $state, '',    XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('phome',    'str',       $data['phome'], '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pprimaryparent', 'int', $data['primaryparent'], '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('utimezone','str:1:',$utimezone,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('utimezone','str:1:',    $utimezone,'', XARVAR_NOT_REQUIRED)) return;
     // Call the Roles class and get the role to modify
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
@@ -37,9 +37,9 @@ function roles_admin_modifyrole()
     foreach ($role->getParents() as $parent) {
         //jojodee - This sec instance check works?
         if(xarSecurityCheck('RemoveRole',0,'Relation',$parent->getName() . ":" . $role->getName())) {
-            $parents[] = array('parentid' => $parent->getID(),
-                               'parentname' => $parent->getName(),
-                               'parentuname'=> $parent->getUname());
+            $parents[] = array('parentid'    => $parent->getID(),
+                               'parentname'  => $parent->getName(),
+                               'parentuname' => $parent->getUname());
             $names[] = $parent->getName();
         }
     }
@@ -55,8 +55,8 @@ function roles_admin_modifyrole()
         if(!xarSecurityCheck('AttachRole',0,'Relation',$nam . ":" . $role->getName())) continue;
         if (!in_array($nam, $names) && $temp['uid'] != $uid) {
             $names[] = $nam;
-            $groups[] = array('duid' => $temp['uid'],
-                'dname' => $temp['name']);
+            $groups[] = array('duid'  => $temp['uid'],
+                              'dname' => $temp['name']);
         }
     }
 
@@ -137,18 +137,18 @@ function roles_admin_modifyrole()
     }
     // call item modify hooks (for DD etc.)
     $item = $data;
-    $item['module']= 'roles';
+    $item['module']   = 'roles';
     $item['itemtype'] = $data['ptype']; // we might have something separate for groups later on
-    $item['itemid']= $uid;
-    $data['hooks'] = xarModCallHooks('item', 'modify', $uid, $item);
+    $item['itemid']   = $uid;
+    $data['hooks']    = xarModCallHooks('item', 'modify', $uid, $item);
 
-    $data['uid'] = $uid;
-    $data['groups'] = $groups;
-    $data['parents'] = $parents;
+    $data['uid']      = $uid;
+    $data['groups']   = $groups;
+    $data['parents']  = $parents;
     $data['haschildren'] = $role->countChildren();
     $data['updatelabel'] = xarML('Update');
     $data['addlabel'] = xarML('Add');
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid']   = xarSecGenAuthKey();
     return $data;
 }
 

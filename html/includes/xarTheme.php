@@ -21,7 +21,7 @@
  * @param themeName The name of the theme
  * @param name The name of the variable
  * @return mixed The value of the variable or void if variable doesn't exist
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function xarThemeGetVar($themeName, $name, $prep = NULL)
 {
@@ -42,7 +42,7 @@ function xarThemeGetVar($themeName, $name, $prep = NULL)
  * @param name The name of the variable
  * @param value The value of the variable
  * @return bool true on success
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function xarThemeSetVar($themeName, $name, $prime = NULL, $value, $description='')
 {
@@ -63,7 +63,7 @@ function xarThemeSetVar($themeName, $name, $prime = NULL, $value, $description='
  * @param themeName The name of the theme
  * @param name The name of the variable
  * @return bool true on success
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function xarThemeDelVar($themeName, $name)
 {
@@ -81,7 +81,7 @@ function xarThemeDelVar($themeName, $name)
  * @access public
  * @param themeName The name of the theme
  * @return xarModGetIDFromName for processing
- * @raise DATABASE_ERROR, BAD_PARAM, THEME_NOT_EXIST
+ * @throws DATABASE_ERROR, BAD_PARAM, THEME_NOT_EXIST
  */
 function xarThemeGetIDFromName($themeName)
 {
@@ -94,7 +94,7 @@ function xarThemeGetIDFromName($themeName)
  * @access public
  * @param themeRegId theme id
  * @return array array of theme information
- * @raise DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
+ * @throws DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
  */
 function xarThemeGetInfo($regId)
 {
@@ -137,7 +137,7 @@ function xarThemeGetDisplayableName($themeName)
  * @access public
  * @param themeName registered name of theme
  * @return bool true if the theme is available, false if not
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function xarThemeIsAvailable($themeName)
 {
@@ -176,7 +176,7 @@ function xarTheme_getBaseInfo($themeName)
  *
  * @access protected
  * @return array an array of theme variables
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function xarTheme_getVarsByTheme($themeName)
 {
@@ -188,7 +188,7 @@ function xarTheme_getVarsByTheme($themeName)
  *
  * @access protected
  * @return bool true on success
- * @raise DATABASE_ERROR, BAD_PARAM
+ * @throws DATABASE_ERROR, BAD_PARAM
  */
 function xarTheme_getVarsByName($name)
 {
