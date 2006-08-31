@@ -41,9 +41,9 @@
     </xarlocale:integerDigits>
   </xarlocale:numeric>
   <xarlocale:decimalSymbols>
-    <xarlocale:infinity>8</xarlocale:infinity>
+    <xarlocale:infinity>∞</xarlocale:infinity>
     <xarlocale:minusSign>-</xarlocale:minusSign>
-    <xarlocale:notANumber>?</xarlocale:notANumber>
+    <xarlocale:notANumber>�</xarlocale:notANumber>
     <xarlocale:percent>%</xarlocale:percent>
     <xarlocale:perMill>‰</xarlocale:perMill>
     <xarlocale:zeroDigit>0</xarlocale:zeroDigit>
