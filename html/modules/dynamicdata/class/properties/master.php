@@ -33,7 +33,7 @@ class Dynamic_Property_Master
      * @param $args['objectref'] a reference to the object to add those properties to (optional)
      * @param $args['allprops'] skip disabled properties by default
      */
-    static function getProperties($args)
+    static function getProperties(array $args)
     {
         // we can't use our own classes here, because we'd have an endless loop :-)
 
@@ -48,7 +48,7 @@ class Dynamic_Property_Master
                          xar_prop_status, xar_prop_order, xar_prop_validation,
                          xar_prop_objectid, xar_prop_moduleid, xar_prop_itemtype
                   FROM $dynamicprop ";
-        if (isset($args['objectid'])) 
+        if(isset($args['objectid'])) 
         {
             $query .= " WHERE xar_prop_objectid = ?";
             $bindvars[] = (int) $args['objectid'];
@@ -60,7 +60,7 @@ class Dynamic_Property_Master
             $bindvars[] = (int) $args['moduleid'];
             $bindvars[] = (int) $args['itemtype'];
         }
-        if (empty($args['allprops'])) 
+        if(empty($args['allprops'])) 
             $query .= " AND xar_prop_status > 0 ";
 
         $query .= " ORDER BY xar_prop_order ASC, xar_prop_id ASC";
@@ -91,7 +91,7 @@ class Dynamic_Property_Master
                     '_moduleid'     => $_moduleid,
                     '_itemtype'     => $_itemtype
                 );
-                if (isset($args['objectref'])) 
+                if(isset($args['objectref'])) 
                     self::addProperty($property,$args['objectref']);
                 else 
                     $properties[$name] = $property;
@@ -113,15 +113,17 @@ class Dynamic_Property_Master
      * @param $args['datastore'] the datastore for the dynamic property
      * ...
      * @param $objectref a reference to the object to add this property to
+     * @todo  this look like it needs to be in object class
+     * @todo  if not, we should define an interface for D_Obj and D_Obj_List so we can type hint on it
      */
-    static function addProperty($args, &$objectref)
+    static function addProperty(array $args, &$objectref)
     {
-        if (!isset($objectref) || empty($args['name']) || empty($args['type'])) 
+        if(!isset($objectref) || empty($args['name']) || empty($args['type'])) 
             return;
 
         // "beautify" label based on name if not specified
         // TODO: this is a presentation issue, doesnt belong here.
-        if (!isset($args['label']) && !empty($args['name'])) 
+        if(!isset($args['label']) && !empty($args['name'])) 
         {
             $args['label'] = strtr($args['name'], '_', ' ');
             $args['label'] = ucwords($args['label']);
@@ -131,47 +133,43 @@ class Dynamic_Property_Master
         $property =& self::getProperty($args);
 
         // for dynamic object lists, put a reference to the $items array in the property
-        if (method_exists($objectref, 'getItems')) 
-        {
+        if(method_exists($objectref, 'getItems')) 
             $property->_items =& $objectref->items;
-        } elseif (method_exists($objectref, 'getItem')) 
-        {
+        elseif(method_exists($objectref, 'getItem')) 
             // for dynamic objects, put a reference to the $itemid value in the property
             $property->_itemid =& $objectref->itemid;
-        }
 
         // add it to the list of properties
         $objectref->properties[$property->name] =& $property;
 
-        if (isset($property->upload)) 
-        {
+        if(isset($property->upload)) 
             $objectref->upload = true;
-        }
     }
 
     /**
      * Class method to get a new dynamic property of the right type
      */
-    static function &getProperty($args)
+    static function &getProperty(array $args)
     {
-        if (!is_numeric($args['type']))
+        if(!is_numeric($args['type']))
         {
             $proptypes = self::getPropertyTypes();
-            if (!isset($proptypes)) 
+            if(!isset($proptypes)) 
                 $proptypes = array();
 
             foreach ($proptypes as $typeid => $proptype) 
             {
-                if ($proptype['name'] == $args['type']) 
+                if($proptype['name'] == $args['type']) 
                 {
                     $args['type'] = $typeid;
                     break;
                 }
             }
-        } else 
-        {
+        } 
+        else 
             $proptypes = self::getPropertyTypes();
-        }
+
+        $clazz = 'Dynamic_Property';
         if( isset($proptypes[$args['type']]) && is_array($proptypes[$args['type']]) )
         {
             $propertyInfo  = $proptypes[$args['type']];
@@ -180,11 +178,14 @@ class Dynamic_Property_Master
             // We should load the MLS translations for the right context here, in case the property
             // PHP file contains xarML() statements
             // See bug 5097
-            if(preg_match('/modules\/(.*)\/xarproperties/',$propertyInfo['filepath'],$matches) == 1) {
+            if(preg_match('/modules\/(.*)\/xarproperties/',$propertyInfo['filepath'],$matches) == 1) 
+            {
                 // @todo: The preg determines the module name (in a sloppy way, FIX this)
                 // @todo: do we still do properties from includes/properties?
                 xarMLSLoadTranslations($propertyInfo['filepath']);
-            } else xarLogMessage("WARNING: Property translations for $propertyClass NOT loaded");
+            } 
+            else 
+                xarLogMessage("WARNING: Property translations for $propertyClass NOT loaded");
 
             if(!file_exists($propertyInfo['filepath'])) 
                 throw new FileNotFoundException($propertyInfo['filepath']);
@@ -197,16 +198,15 @@ class Dynamic_Property_Master
                 $baseArgs = unserialize($propertyInfo['args']);
                 $args = array_merge($baseArgs, $args);
             }
-
-            $property = new $propertyClass($args);
-        } else {
-            $property = new Dynamic_Property($args);
+            $clazz = $propertyClass;
         }
+        // Dynamic_Property or the determined one
+        $property = new $clazz($args);
 
         return $property;
     }
 
-    static function createProperty($args)
+    static function createProperty(array $args)
     {
         $object = new Dynamic_Object(array('objectid' => 2)); // the Dynamic Properties = 2
         $objectid = $object->createItem($args);
@@ -214,22 +214,29 @@ class Dynamic_Property_Master
         return $objectid;
     }
 
-    static function updateProperty($args)
+    static function updateProperty(array $args)
     {
         // TODO: what if the property type changes to something incompatible ?
     }
 
-    static function deleteProperty($args)
+    static function deleteProperty(array $args)
     {
-        if (empty($args['itemid'])) return;
+        if(empty($args['itemid'])) 
+            return;
 
         // TODO: delete all the (dynamic ?) data for this property as well
-        $object = new Dynamic_Object(array('objectid' => 2, // the Dynamic Properties = 2
-                                           'itemid'   => $args['itemid']));
-        if (empty($object)) return;
+        $object = new Dynamic_Object(
+            array(
+                'objectid' => 2, // the Dynamic Properties = 2
+                'itemid'   => $args['itemid']
+            )
+        );
+        if(empty($object)) 
+            return;
 
         $objectid = $object->getItem();
-        if (empty($objectid)) return;
+        if(empty($objectid)) 
+            return;
 
         $objectid = $object->deleteItem();
         unset($object);
@@ -241,7 +248,7 @@ class Dynamic_Property_Master
      */
     static function getPropertyTypes()
     {
-        //if (xarVarIsCached('DynamicData','PropertyTypes')) {
+        //if(xarVarIsCached('DynamicData','PropertyTypes')) {
         //  return xarVarGetCached('DynamicData','PropertyTypes');
         //}
 
@@ -250,7 +257,7 @@ class Dynamic_Property_Master
 
         /*
          // Security Check
-         if (xarSecurityCheck('ViewDynamicData',0)) {
+         if(xarSecurityCheck('ViewDynamicData',0)) {
              $proptypes[] = array(...);
          }
          }

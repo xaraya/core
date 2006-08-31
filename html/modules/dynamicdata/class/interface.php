@@ -31,10 +31,8 @@ class Dynamic_Object_Interface
     function __construct($args = array())
     {
         // set a specific GUI module for now
-        if (!empty($args['urlmodule'])) 
-        {
+        if(!empty($args['urlmodule'])) 
             $this->urlmodule = $args['urlmodule'];
-        }
 
         // get some common URL parameters
         if(!xarVarFetch('object',   'isset', $args['object'],   NULL, XARVAR_DONT_SET)) {return;}
@@ -45,11 +43,11 @@ class Dynamic_Object_Interface
         if(!xarVarFetch('template', 'isset', $args['template'], NULL, XARVAR_DONT_SET)) {return;}
 
         // do not allow the table interface unless the user is an admin
-        if (!empty($args['table']) && !xarSecurityCheck('AdminDynamicData')) 
+        if(!empty($args['table']) && !xarSecurityCheck('AdminDynamicData')) 
             return;
 
         // retrieve the object information for this object
-        if (!empty($args['object'])) 
+        if(!empty($args['object'])) 
         {
             $info = xarModAPIFunc(
                 'dynamicdata','user','getobjectinfo',
@@ -57,7 +55,7 @@ class Dynamic_Object_Interface
             );
             $args = array_merge($args, $info);
         } 
-        elseif (!empty($args['module']) && empty($args['moduleid'])) 
+        elseif(!empty($args['module']) && empty($args['moduleid'])) 
             $args['moduleid'] = xarModGetIDFromName($args['module']);
 
         // fill in the default object variables
@@ -72,9 +70,9 @@ class Dynamic_Object_Interface
         if(!xarVarFetch('itemid', 'isset', $args['itemid'], NULL, XARVAR_DONT_SET)) 
             return;
             
-        if (empty($args['method'])) 
+        if(empty($args['method'])) 
         {
-            if (empty($args['itemid'])) 
+            if(empty($args['itemid'])) 
                 $args['method'] = 'view';
             else 
                 $args['method'] = 'display';
@@ -110,44 +108,44 @@ class Dynamic_Object_Interface
         if(!xarVarFetch('confirm', 'isset', $args['confirm'], NULL, XARVAR_DONT_SET)) 
             return;
 
-        if (!empty($args) && is_array($args) && count($args) > 0) 
+        if(!empty($args) && is_array($args) && count($args) > 0) 
             $this->args = array_merge($this->args, $args);
 
-        if (!isset($this->object)) 
+        if(!isset($this->object)) 
         {
             $this->object =& Dynamic_Object_Master::getObject($this->args);
-            if (empty($this->object)) 
+            if(empty($this->object)) 
                 return;
-            if (empty($this->urlmodule)) 
+            if(empty($this->urlmodule)) 
             {
                 $modinfo = xarModGetInfo($this->object->moduleid);
                 $this->urlmodule = $modinfo['name'];
             }
         }
-        if (!xarSecurityCheck(
+        if(!xarSecurityCheck(
             'AddDynamicDataItem',1,'Item',
             $this->object->moduleid.':'.$this->object->itemtype.':All')
         )   return;
 
         //$this->object->getItem();
 
-        if (!empty($args['preview']) || !empty($args['confirm'])) 
+        if(!empty($args['preview']) || !empty($args['confirm'])) 
         {
-            if (!xarSecConfirmAuthKey()) 
+            if(!xarSecConfirmAuthKey()) 
                 return;
 
             $isvalid = $this->object->checkInput();
 
-            if ($isvalid && !empty($args['confirm'])) 
+            if($isvalid && !empty($args['confirm'])) 
             {
                 $itemid = $this->object->createItem();
 
-                if (empty($itemid)) 
+                if(empty($itemid)) 
                     return; // throw back
 
-                if (!xarVarFetch('return_url',  'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
+                if(!xarVarFetch('return_url',  'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
                     return;
-                if (!empty($args['return_url'])) 
+                if(!empty($args['return_url'])) 
                 {
                     xarResponseRedirect($args['return_url']);
                 } 
@@ -168,10 +166,10 @@ class Dynamic_Object_Interface
 
         // call item new hooks for this item
         $item = array();
-        foreach (array_keys($this->object->properties) as $name) 
+        foreach(array_keys($this->object->properties) as $name) 
             $item[$name] = $this->object->properties[$name]->value;
 
-        if (!isset($modinfo)) 
+        if(!isset($modinfo)) 
             $modinfo = xarModGetInfo($this->object->moduleid);
 
         $item['module'] = $modinfo['name'];
@@ -198,15 +196,15 @@ class Dynamic_Object_Interface
         if(!xarVarFetch('confirm', 'isset', $args['confirm'], NULL, XARVAR_DONT_SET)) 
             return;
 
-        if (!empty($args) && is_array($args) && count($args) > 0) 
+        if(!empty($args) && is_array($args) && count($args) > 0) 
             $this->args = array_merge($this->args, $args);
 
-        if (!isset($this->object)) 
+        if(!isset($this->object)) 
         {
             $this->object =& Dynamic_Object_Master::getObject($this->args);
-            if (empty($this->object)) 
+            if(empty($this->object)) 
                 return;
-            if (empty($this->urlmodule)) 
+            if(empty($this->urlmodule)) 
             {
                 $modinfo = xarModGetInfo($this->object->moduleid);
                 $this->urlmodule = $modinfo['name'];
@@ -218,27 +216,27 @@ class Dynamic_Object_Interface
         ) return;
 
         $itemid = $this->object->getItem();
-        if (empty($itemid) || $itemid != $this->object->itemid) 
+        if(empty($itemid) || $itemid != $this->object->itemid) 
             throw new BadParameterException(null,'The itemid updating the object was found to be invalid');
 
-        if (!empty($args['preview']) || !empty($args['confirm'])) 
+        if(!empty($args['preview']) || !empty($args['confirm'])) 
         {
-            if (!xarSecConfirmAuthKey()) 
+            if(!xarSecConfirmAuthKey()) 
                 return;
 
             $isvalid = $this->object->checkInput();
 
-            if ($isvalid && !empty($args['confirm'])) 
+            if($isvalid && !empty($args['confirm'])) 
             {
                 $itemid = $this->object->updateItem();
 
-                if (empty($itemid)) 
+                if(empty($itemid)) 
                     return; // throw back
 
-                if (!xarVarFetch('return_url',  'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
+                if(!xarVarFetch('return_url',  'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
                     return;
                     
-                if (!empty($args['return_url'])) 
+                if(!empty($args['return_url'])) 
                     xarResponseRedirect($args['return_url']);
                 else 
                     xarResponseRedirect(xarModURL(
@@ -255,10 +253,10 @@ class Dynamic_Object_Interface
 
         // call item new hooks for this item
         $item = array();
-        foreach (array_keys($this->object->properties) as $name) 
+        foreach(array_keys($this->object->properties) as $name) 
             $item[$name] = $this->object->properties[$name]->value;
 
-        if (!isset($modinfo)) 
+        if(!isset($modinfo)) 
             $modinfo = xarModGetInfo($this->object->moduleid);
 
         $item['module'] = $modinfo['name'];
@@ -287,27 +285,27 @@ class Dynamic_Object_Interface
         if(!xarVarFetch('confirm', 'isset', $args['confirm'], NULL, XARVAR_DONT_SET)) 
             return;
 
-        if (!empty($args) && is_array($args) && count($args) > 0) 
+        if(!empty($args) && is_array($args) && count($args) > 0) 
             $this->args = array_merge($this->args, $args);
 
-        if (!isset($this->object)) 
+        if(!isset($this->object)) 
         {
             $this->object =& Dynamic_Object_Master::getObject($this->args);
-            if (empty($this->object)) 
+            if(empty($this->object)) 
                 return;
 
-            if (empty($this->urlmodule)) 
+            if(empty($this->urlmodule)) 
             {
                 $modinfo = xarModGetInfo($this->object->moduleid);
                 $this->urlmodule = $modinfo['name'];
             }
         }
-        if (!empty($args['cancel'])) 
+        if(!empty($args['cancel'])) 
         {
-            if (!xarVarFetch('return_url',  'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
+            if(!xarVarFetch('return_url',  'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
                 return;
                 
-            if (!empty($args['return_url'])) 
+            if(!empty($args['return_url'])) 
                 xarResponseRedirect($args['return_url']);
             else 
                 xarResponseRedirect(xarModURL(
@@ -324,27 +322,29 @@ class Dynamic_Object_Interface
         ) return;
 
         $itemid = $this->object->getItem();
-        if (empty($itemid) || $itemid != $this->object->itemid) 
+        if(empty($itemid) || $itemid != $this->object->itemid) 
             throw new BadParameterException(null,'The itemid when deleting the object was found to be invalid');
 
-        if (!empty($args['confirm'])) 
+        if(!empty($args['confirm'])) 
         {
-            if (!xarSecConfirmAuthKey()) 
+            if(!xarSecConfirmAuthKey()) 
                 return;
 
             $itemid = $this->object->deleteItem();
 
-            if (empty($itemid)) 
+            if(empty($itemid)) 
                 return; // throw back
 
-            if (!xarVarFetch('return_url',  'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
+            if(!xarVarFetch('return_url',  'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
                 return;
                 
-            if (!empty($args['return_url'])) 
+            if(!empty($args['return_url'])) 
                 xarResponseRedirect($args['return_url']);
             else 
-                xarResponseRedirect(xarModURL($this->urlmodule, 'user', $this->func,
-                                              array('object' => $this->object->name)));
+                xarResponseRedirect(xarModURL(
+                    $this->urlmodule, 'user', $this->func,
+                    array('object' => $this->object->name))
+                );
             // Return
             return true;
         }
@@ -365,16 +365,16 @@ class Dynamic_Object_Interface
         if(!xarVarFetch('preview', 'isset', $args['preview'], NULL, XARVAR_DONT_SET)) 
             return;
 
-        if (!empty($args) && is_array($args) && count($args) > 0) 
+        if(!empty($args) && is_array($args) && count($args) > 0) 
             $this->args = array_merge($this->args, $args);
 
-        if (!isset($this->object)) 
+        if(!isset($this->object)) 
         {
             $this->object =& Dynamic_Object_Master::getObject($this->args);
-            if (empty($this->object)) 
+            if(empty($this->object)) 
                 return;
 
-            if (empty($this->urlmodule)) 
+            if(empty($this->urlmodule)) 
             {
                 $modinfo = xarModGetInfo($this->object->moduleid);
                 $this->urlmodule = $modinfo['name'];
@@ -384,7 +384,7 @@ class Dynamic_Object_Interface
         xarTplSetPageTitle(xarVarPrepForDisplay($title));
 
         $itemid = $this->object->getItem();
-        if (empty($itemid) || $itemid != $this->object->itemid) 
+        if(empty($itemid) || $itemid != $this->object->itemid) 
             throw new BadParameterException(
                 null,
                 'The itemid when displaying the object was found to be invalid'
@@ -392,10 +392,10 @@ class Dynamic_Object_Interface
 
         // call item display hooks for this item
         $item = array();
-        foreach (array_keys($this->object->properties) as $name) 
+        foreach(array_keys($this->object->properties) as $name) 
             $item[$name] = $this->object->properties[$name]->value;
 
-        if (!isset($modinfo)) 
+        if(!isset($modinfo)) 
             $modinfo = xarModGetInfo($this->object->moduleid);
 
         $item['module'] = $modinfo['name'];
@@ -433,16 +433,16 @@ class Dynamic_Object_Interface
         if(!xarVarFetch('startnum', 'isset', $args['startnum'], NULL, XARVAR_DONT_SET)) 
             return;
 
-        if (!empty($args) && is_array($args) && count($args) > 0) 
+        if(!empty($args) && is_array($args) && count($args) > 0) 
             $this->args = array_merge($this->args, $args);
 
-        if (!isset($this->list)) 
+        if(!isset($this->list)) 
         {
             $this->list =& Dynamic_Object_Master::getObjectList($this->args);
-            if (empty($this->list)) 
+            if(empty($this->list)) 
                 return;
             
-            if (empty($this->urlmodule)) 
+            if(empty($this->urlmodule)) 
             {
                 $modinfo = xarModGetInfo($this->list->moduleid);
                 $this->urlmodule = $modinfo['name'];
@@ -471,16 +471,16 @@ class Dynamic_Object_Interface
         if(!xarVarFetch('startnum', 'isset', $args['startnum'], NULL, XARVAR_DONT_SET)) 
             return;
 
-        if (!empty($args) && is_array($args) && count($args) > 0) 
+        if(!empty($args) && is_array($args) && count($args) > 0) 
             $this->args = array_merge($this->args, $args);
 
-        if (!isset($this->list)) 
+        if(!isset($this->list)) 
         {
             $this->list =& Dynamic_Object_Master::getObjectList($this->args);
-            if (empty($this->list)) 
+            if(empty($this->list)) 
                 return;
 
-            if (empty($this->urlmodule)) 
+            if(empty($this->urlmodule)) 
             {
                 $modinfo = xarModGetInfo($this->list->moduleid);
                 $this->urlmodule = $modinfo['name'];

@@ -18,7 +18,7 @@ class Dynamic_Object extends Dynamic_Object_Master
      *
      * @param $args['itemid'] item id of the object to get
     **/
-    function __construct($args)
+    function __construct(array $args)
     {
         // get the object type information from our parent class
         parent::__construct($args);

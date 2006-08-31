@@ -26,11 +26,9 @@ class PropertyRegistration
     function __construct($args=array())
     {
         assert('is_array($args)');
-        if(!empty($args)) {
-            foreach($args as $key=>$value) {
+        if(!empty($args)) 
+            foreach($args as $key=>$value) 
                 $this->$key = $value;
-            }
-        }
     }
 
     static function clearCache()
@@ -69,14 +67,14 @@ class PropertyRegistration
                  xar_prop_format, xar_prop_validation, xar_prop_source,
                  xar_prop_reqfiles, xar_prop_reqmodules, xar_prop_args, xar_prop_aliases)
                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        if(!isset($stmt)) {
+        if(!isset($stmt)) 
             $stmt = $dbconn->prepareStatement($sql);
-        }
+
         $bindvars = array(
             (int) $this->id, $this->name, $this->desc,
-             $this->parent, $this->filepath, $this->class,
-             $this->format, $this->validation, $this->source,
-             $this->reqfiles, $reqmods, $this->args, $this->aliases
+            $this->parent, $this->filepath, $this->class,
+            $this->format, $this->validation, $this->source,
+            $this->reqfiles, $reqmods, $this->args, $this->aliases
         );
         $res = $stmt->executeUpdate($bindvars);
 
@@ -110,9 +108,11 @@ class PropertyRegistration
         $result = $dbconn->executeQuery($query);
         $proptypes = array();
         if($result->RecordCount() == 0 ) 
-        {
-            $proptypes = xarModAPIFunc('dynamicdata','admin','importpropertytypes',array('flush'=>false));
-        } else 
+            $proptypes = xarModAPIFunc(
+                'dynamicdata','admin','importpropertytypes',
+                array('flush'=>false)
+            );
+        else 
         {
             while($result->next()) 
             {

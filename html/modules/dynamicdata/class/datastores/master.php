@@ -126,9 +126,7 @@ class Dynamic_DataStore_Master
         {
             $tblColumns = $tblInfo->getColumns();
             foreach($tblColumns as $colInfo)
-            {
                 $sources[] = $tblInfo->getName().".".$colInfo->getName();
-            }
         }
         return $sources;
     }

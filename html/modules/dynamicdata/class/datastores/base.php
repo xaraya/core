@@ -28,6 +28,9 @@ class Dynamic_DataStore implements IDataStore
 
     /**
      * Get the field name used to identify this property (by default, the property name itself)
+     * 
+     * @todo seems odd, dunno
+     * @todo type hinting
      */
     function getFieldName(&$property)
     {
@@ -40,12 +43,12 @@ class Dynamic_DataStore implements IDataStore
     function addField(&$property)
     {
         $name = $this->getFieldName($property);
-        if (!isset($name)) 
+        if(!isset($name)) 
             return;
 
         $this->fields[$name] = &$property; // use reference to original property
 
-        if (!isset($this->primary) && $property->type == 21) 
+        if(!isset($this->primary) && $property->type == 21) 
             // Item ID
             $this->setPrimary($property);
     }
@@ -56,7 +59,7 @@ class Dynamic_DataStore implements IDataStore
     function setPrimary(&$property)
     {
         $name = $this->getFieldName($property);
-        if (!isset($name)) 
+        if(!isset($name)) 
             return;
 
         $this->primary = $name;
@@ -98,7 +101,7 @@ class Dynamic_DataStore implements IDataStore
     function addSort(&$property, $sortorder = 'ASC')
     {
         $name = $this->getFieldName($property);
-        if (!isset($name)) 
+        if(!isset($name)) 
             return;
 
         $this->sort[] = array('field'     => $name,
@@ -119,7 +122,7 @@ class Dynamic_DataStore implements IDataStore
     function addWhere(&$property, $clause, $join, $pre = '', $post = '')
     {
         $name = $this->getFieldName($property);
-        if (!isset($name)) 
+        if(!isset($name)) 
             return;
 
         $this->where[] = array('field'  => $name,
@@ -143,7 +146,7 @@ class Dynamic_DataStore implements IDataStore
     function addGroupBy(&$property)
     {
         $name = $this->getFieldName($property);
-        if (!isset($name)) 
+        if(!isset($name)) 
             return;
 
         $this->groupby[] = $name;
@@ -162,11 +165,11 @@ class Dynamic_DataStore implements IDataStore
      */
     function addJoin($table, $key, $fields, $where = array(), $andor = 'and', $more = '', $sort = array())
     {
-        if (!isset($this->extra)) 
+        if(!isset($this->extra)) 
             $this->extra = array();
 
         $fieldlist = array();
-        foreach (array_keys($fields) as $field) 
+        foreach(array_keys($fields) as $field) 
         {
             $source = $fields[$field]->source;
             // save the source for the query fieldlist
@@ -176,15 +179,15 @@ class Dynamic_DataStore implements IDataStore
         }
         
         $whereclause = '';
-        if (is_array($where) && count($where) > 0) 
+        if(is_array($where) && count($where) > 0) 
         {
-            foreach ($where as $part) 
+            foreach($where as $part) 
             {
                 // TODO: support pre- and post-parts here too ? (cfr. bug 3090)
                 $whereclause .= $part['join'] . ' ' . $part['property']->source . ' ' . $part['clause'] . ' ';
             }
         } 
-        elseif (is_string($where)) 
+        elseif(is_string($where)) 
             $whereclause = $where;
 
         $this->join[] = array(

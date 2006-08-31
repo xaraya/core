@@ -95,7 +95,7 @@ class Dynamic_Object_Master
 
         if(empty($this->name)) 
         {
-            $info = Dynamic_Object_Master::getObjectInfo($args);
+            $info = self::getObjectInfo($args);
             if(isset($info) && count($info) > 0) 
                 foreach($info as $key => $val) 
                     $this->$key = $val; // bleh, this is not very nice.
@@ -210,7 +210,7 @@ class Dynamic_Object_Master
             // right fix.
             if($baseancestor['objectid'])
             {
-                $baseancestor = Dynamic_Object_Master::getObject(
+                $baseancestor = self::getObject(
                     array('objectid' => $baseancestor['objectid'])
                 );
                 $this->primary = $baseancestor->primary;
@@ -229,7 +229,7 @@ class Dynamic_Object_Master
     private function addobject($object=null)
     {
         if(is_numeric($object)) 
-            $object =& Dynamic_Object_Master::getObject(
+            $object =& self::getObject(
                 array('objectid' => $object)
             );
 
@@ -783,7 +783,7 @@ class Dynamic_Object_Master
             return;
 
         // Get an object list for the object itself, so we can delete its items
-        $mylist =& Dynamic_Object_Master::getObjectList(
+        $mylist =& self::getObjectList(
             array(
                 'objectid' => $args['objectid'],
                 'moduleid' => $args['moduleid'],
@@ -827,7 +827,7 @@ class Dynamic_Object_Master
         $args['classname'] = isset($args['classname']) ? $args['classname'] : null;        
 
         // get the Dynamic Objects item corresponding to these args
-        $object = Dynamic_Object_Master::getObject(
+        $object = self::getObject(
             array(
                 'objectid'  => 1, // the Dynamic Objects = 1
                 'moduleid'  => $args['moduleid'],
