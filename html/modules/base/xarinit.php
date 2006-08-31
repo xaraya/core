@@ -265,7 +265,7 @@ function base_init()
     $newStmt     = $dbconn->prepareStatement($newModSql);
 
 
-    $modules = array('authsystem','base','installer','blocks','themes');
+    $modules = array('authsystem','roles','privileges','base','installer','blocks','themes');
     // Series of updates, begin transaction
     try {
         $dbconn->begin();
@@ -301,6 +301,11 @@ function base_init()
     // FIXME: the installation of the blocks module depends on the modules module
     // to be present, doh !
     xarInstallAPIFunc('initialise', array('directory'=>'blocks', 'initfunc'=>'init'));
+
+    /**************************************************************
+    * Install the authsystem module
+    **************************************************************/
+    xarInstallAPIFunc('initialise', array('directory'=>'authsystem', 'initfunc'=>'init'));
 
     /**************************************************************
      * Install the themes module
