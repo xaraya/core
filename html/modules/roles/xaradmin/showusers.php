@@ -78,7 +78,7 @@ function roles_admin_showusers()
     // Check if we already have a selection
         $q = new xarQuery();
         $q = $q->sessiongetvar('rolesquery');
-    if (empty($q) || isset($reload)) {
+    if (true || isset($reload)) {
         $types = xarModAPIFunc('roles','user','getitemtypes');
         $basetypes = array();
         foreach ($types as $key => $value) {
@@ -193,6 +193,7 @@ function roles_admin_showusers()
         xarModURL('roles', 'admin', 'showusers',
             $filter),
         $numitems);
+//    echo "SSS1";exit;
     return $data;
     // redirect to the next page
     xarResponseRedirect(xarModURL('roles', 'admin', 'newrole'));

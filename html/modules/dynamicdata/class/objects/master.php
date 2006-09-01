@@ -14,8 +14,8 @@ class Dynamic_Object_Master
 {
     public $objectid    = null;         // system id of the object in this installation
     public $name        = null;         // name of the object
-    public $label       = null;         // label as shown on screen 
-    
+    public $label       = null;         // label as shown on screen
+
     public $moduleid    = null;
     public $itemtype    = 0;
     public $parent      = 1;
@@ -27,7 +27,7 @@ class Dynamic_Object_Master
 
     public $properties  = array();      // list of properties for the DD object
     public $datastores  = array();      // similarly the list of datastores (arguably in the wrong place here)
-    public $fieldlist   = array();      
+    public $fieldlist   = array();
     public $status      = null;
 
     public $layout = 'default';         // optional layout inside the templates
@@ -60,48 +60,48 @@ class Dynamic_Object_Master
     function __construct(array $args)
     {
         // fill in the default object variables
-        if(!empty($args) && count($args) > 0) 
-            foreach($args as $key => $val) 
+        if(!empty($args) && count($args) > 0)
+            foreach($args as $key => $val)
                 $this->$key = $val; // bleh, this is not very nice.
 
         // Get the info on the db table if that was passed in.
         // meaning the object is based on a db table.
-        if(!empty($this->table)) 
+        if(!empty($this->table))
         {
             $meta = xarModAPIFunc(
                 'dynamicdata','util','getmeta',
                 array('table' => $this->table)
             );
             // we throw an exception here because we assume a table should always exist (for now)
-            if(!isset($meta) || !isset($meta[$this->table])) 
+            if(!isset($meta) || !isset($meta[$this->table]))
             {
                 $msg = 'Invalid #(1) #(2) for dynamic object #(3)';
                 $vars = array('table',$this->table,$this->table);
                 throw new BadParameterException($vars,$msg);
             }
             // Add all the info we got from the table as properties to the object
-            foreach($meta[$this->table] as $name => $propinfo) 
+            foreach($meta[$this->table] as $name => $propinfo)
                 $this->addProperty($propinfo);
         }
 
-        if(empty($this->moduleid)) 
+        if(empty($this->moduleid))
         {
-            if(empty($this->objectid)) 
+            if(empty($this->objectid))
                 $this->moduleid = xarModGetIDFromName(xarModGetName());
         }
         else
-            if(!is_numeric($this->moduleid) && is_string($this->moduleid)) 
+            if(!is_numeric($this->moduleid) && is_string($this->moduleid))
                 $this->moduleid = xarModGetIDFromName($this->moduleid);
 
-        if(empty($this->name)) 
+        if(empty($this->name))
         {
             $info = self::getObjectInfo($args);
-            if(isset($info) && count($info) > 0) 
-                foreach($info as $key => $val) 
+            if(isset($info) && count($info) > 0)
+                foreach($info as $key => $val)
                     $this->$key = $val; // bleh, this is not very nice.
         }
         // use the object name as default template override (*-*-[template].x*)
-        if(empty($this->template) && !empty($this->name)) 
+        if(empty($this->template) && !empty($this->name))
             $this->template = $this->name;
 
         // get the properties defined for this object
@@ -111,11 +111,11 @@ class Dynamic_Object_Master
                     isset($this->moduleid) && isset($this->itemtype)
                 )
             )
-        ) 
+        )
         {
-            if(!isset($args['allprops'])) 
+            if(!isset($args['allprops']))
                 $args['allprops'] = null;
-           
+
             Dynamic_Property_Master::getProperties(
                 array(
                     'objectid'  => $this->objectid,
@@ -126,26 +126,26 @@ class Dynamic_Object_Master
                 )
             ); // we pass this object along
         }
-        
+
         // Do we have a join?
-        if(!empty($this->join)) 
+        if(!empty($this->join))
         {
             $meta = xarModAPIFunc(
                 'dynamicdata','util','getmeta',
                 array('table' => $this->join)
             );
             // we throw an exception here because we assume a table should always exist (for now)
-            if(!isset($meta) || !isset($meta[$this->join])) 
+            if(!isset($meta) || !isset($meta[$this->join]))
             {
                 $msg = 'Invalid #(1) #(2) for dynamic object #(3)';
                 $vars = array('join',$this->join,$this->name);
                 throw new BadParameterException($vars,$msg);
             }
             $count = count($this->properties);
-            foreach($meta[$this->join] as $name => $propinfo) 
+            foreach($meta[$this->join] as $name => $propinfo)
                 $this->addProperty($propinfo);
 
-            if(count($this->properties) > $count) 
+            if(count($this->properties) > $count)
             {
                 // put join properties in front
                 $joinprops = array_splice($this->properties,$count);
@@ -154,20 +154,20 @@ class Dynamic_Object_Master
         }
 
         // filter on property status if necessary
-        if(isset($this->status) && count($this->fieldlist) == 0) 
+        if(isset($this->status) && count($this->fieldlist) == 0)
         {
             $this->fieldlist = array(); // why?
-            foreach($this->properties as $name => $property) 
-                if($property->status & $this->status) 
+            foreach($this->properties as $name => $property)
+                if($property->status & $this->status)
                     $this->fieldlist[] = $name;
         }
         // build the list of relevant data stores where we'll get/set our data
-        if(count($this->datastores) == 0 && count($this->properties) > 0) 
+        if(count($this->datastores) == 0 && count($this->properties) > 0)
            $this->getDataStores();
 
         // add ancestors' properties to this object if required
         // the default is to add the fields
-        if((!isset($args['extend']) || ($args['extend'] != false))) 
+        if((!isset($args['extend']) || ($args['extend'] != false)))
             $this->addancestors();
     }
 
@@ -179,13 +179,13 @@ class Dynamic_Object_Master
     {
         // Determine how we are going to get the ancestors
         $params = array();
-        if(!empty($this->objectid)) 
+        if(!empty($this->objectid))
         {
             // We already have an object, so it can't be native
             $params['objectid'] = $this->objectid;
             $params['top']      = false;
-        } 
-        else 
+        }
+        else
         {
             $params['moduleid'] = $this->moduleid;
             $params['itemtype'] = $this->itemtype;
@@ -193,27 +193,15 @@ class Dynamic_Object_Master
         }
         // Retrieve the ancestors
         $ancestors = xarModAPIFunc('dynamicdata','user','getancestors',$params);
-        
+
         // If this is an extended object add the ancestor properties for display purposes
-        if(!empty($ancestors)) 
+        if(!empty($ancestors))
         {
             // If the ancestors are objects, add them in
-            foreach($ancestors as $ancestor) 
+            foreach($ancestors as $ancestor)
             {
-                if($ancestor['objectid']) 
+                if($ancestor['objectid'])
                     $this->addobject($ancestor['objectid']);
-            }
-            // Make the primary index its datastore that of the base ancestor
-            $baseancestor = array_shift($ancestors);
-            // CHECKME: <mrb> put this is for an endless loop problem with 
-            // account page, but i have not a very good clue if this is the
-            // right fix.
-            if($baseancestor['objectid'])
-            {
-                $baseancestor = self::getObject(
-                    array('objectid' => $baseancestor['objectid'])
-                );
-                $this->primary = $baseancestor->primary;
             }
         }
     }
@@ -221,14 +209,14 @@ class Dynamic_Object_Master
     /**
      * Add one object to another
      * This is basically adding the properties and datastores from one object to another
-     * 
+     *
      * @todo can we use the type hinting for the parameter?
      * @todo pass $object by ref?
      * @todo stricten the interface, either an object or an id, not both.
      */
     private function addobject($object=null)
     {
-        if(is_numeric($object)) 
+        if(is_numeric($object))
             $object =& self::getObject(
                 array('objectid' => $object)
             );
@@ -238,10 +226,10 @@ class Dynamic_Object_Master
 
         $properties = $object->getProperties();
         // mrb: why the ref?
-        foreach($properties as &$newproperty) 
+        foreach($properties as &$newproperty)
         {
             // ignore if this property already belongs to the object
-            if(isset($this->properties[$newproperty->name])) 
+            if(isset($this->properties[$newproperty->name]))
                 continue;
             $args = array(
                 'name'      => $newproperty->name,
@@ -251,7 +239,7 @@ class Dynamic_Object_Master
                 'datastore' => $newproperty->datastore
             );
             $this->addProperty($args);
-            if(!isset($this->datastores[$newproperty->datastore])) 
+            if(!isset($this->datastores[$newproperty->datastore]))
             {
                 $newstore = $this->property2datastore($newproperty);
                 $this->addDatastore($newstore[0],$newstore[1]);
@@ -269,42 +257,42 @@ class Dynamic_Object_Master
     function &getDataStores($reset = false)
     {
         // if we already have the datastores
-        if(!$reset && isset($this->datastores) && count($this->datastores) > 0) 
+        if(!$reset && isset($this->datastores) && count($this->datastores) > 0)
         {
             return $this->datastores;
         }
 
         // if we're filtering on property status and there are no properties matching this status
-        if(!$reset && !empty($this->status) && count($this->fieldlist) == 0) 
+        if(!$reset && !empty($this->status) && count($this->fieldlist) == 0)
         {
             return $this->datastores;
         }
 
         // reset field list of datastores if necessary
-        if($reset && count($this->datastores) > 0) 
+        if($reset && count($this->datastores) > 0)
         {
-            foreach(array_keys($this->datastores) as $storename) 
+            foreach(array_keys($this->datastores) as $storename)
             {
                 $this->datastores[$storename]->fields = array();
             }
         }
 
         // check the fieldlist for valid property names and for operations like COUNT, SUM etc.
-        if(!empty($this->fieldlist) && count($this->fieldlist) > 0) 
+        if(!empty($this->fieldlist) && count($this->fieldlist) > 0)
         {
             $cleanlist = array();
-            foreach($this->fieldlist as $name) 
+            foreach($this->fieldlist as $name)
             {
-                if(!strstr($name,'(')) 
+                if(!strstr($name,'('))
                 {
-//                    if(isset($this->properties[$name])) 
+//                    if(isset($this->properties[$name]))
                         $cleanlist[] = $name;
-                } 
-                elseif(preg_match('/^(.+)\((.+)\)/',$name,$matches)) 
+                }
+                elseif(preg_match('/^(.+)\((.+)\)/',$name,$matches))
                 {
                     $operation = $matches[1];
                     $field = $matches[2];
-                    if(isset($this->properties[$field])) 
+                    if(isset($this->properties[$field]))
                     {
                         $this->properties[$field]->operation = $operation;
                         $cleanlist[] = $field;
@@ -315,9 +303,9 @@ class Dynamic_Object_Master
             $this->fieldlist = $cleanlist;
         }
 
-        foreach($this->properties as $name => $property) 
+        foreach($this->properties as $name => $property)
         {
-            if( 
+            if(
                 !empty($this->fieldlist) and          // if there is a fieldlist
                 !in_array($name,$this->fieldlist) and // but the field is not in it,
                 $property->type != 21                 // and we're not on an Item ID property
@@ -329,24 +317,24 @@ class Dynamic_Object_Master
             }
 
             list($storename, $storetype) = $this->property2datastore($property);
-            if(!isset($this->datastores[$storename])) 
+            if(!isset($this->datastores[$storename]))
                 $this->addDataStore($storename, $storetype);
 
             $this->properties[$name]->datastore = $storename;
 
-            if(empty($this->fieldlist) || in_array($name,$this->fieldlist)) 
+            if(empty($this->fieldlist) || in_array($name,$this->fieldlist))
                 // we add this to the data store fields
                 $this->datastores[$storename]->addField($this->properties[$name]); // use reference to original property
-            else 
+            else
                 // we only pass this along as being the primary field
                 $this->datastores[$storename]->setPrimary($this->properties[$name]);
 
             // keep track of what property holds the primary key (item id)
-            if(!isset($this->primary) && $property->type == 21) 
+            if(!isset($this->primary) && $property->type == 21)
                 $this->primary = $name;
 
             // keep track of what property holds the secondary key (item type)
-            if(empty($this->secondary) && $property->type == 20 && !empty($this->filter)) 
+            if(empty($this->secondary) && $property->type == 20 && !empty($this->filter))
                 $this->secondary = $name;
         }
         return $this->datastores;
@@ -354,7 +342,7 @@ class Dynamic_Object_Master
 
     /**
      * Find the datastore name and type corresponding to the data source of a property
-     * 
+     *
      * @todo this belongs in the property class, not here
      */
     function property2datastore(&$property)
@@ -429,7 +417,7 @@ class Dynamic_Object_Master
         $this->datastores[$datastore->name] =& $datastore;
 
         // for dynamic object lists, put a reference to the $itemids array in the data store
-        if(method_exists($this, 'getItems')) 
+        if(method_exists($this, 'getItems'))
             $this->datastores[$datastore->name]->_itemids =& $this->itemids;
     }
 
@@ -438,18 +426,18 @@ class Dynamic_Object_Master
     **/
     function &getProperties($args = array())
     {
-        if(empty($args['fieldlist'])) 
+        if(empty($args['fieldlist']))
             $args['fieldlist'] = $this->fieldlist;
 
         // return only the properties we're interested in (might be none)
-        if(count($args['fieldlist']) > 0 || !empty($this->status)) 
+        if(count($args['fieldlist']) > 0 || !empty($this->status))
         {
             $properties = array();
-            foreach($args['fieldlist'] as $name) 
-                if(isset($this->properties[$name])) 
+            foreach($args['fieldlist'] as $name)
+                if(isset($this->properties[$name]))
                     $properties[$name] =& $this->properties[$name];
-        } 
-        else 
+        }
+        else
             $properties =& $this->properties;
         return $properties;
     }
@@ -463,14 +451,14 @@ class Dynamic_Object_Master
      * @param $args['datastore'] the datastore for the dynamic property
      * @param $args['source'] the source for the dynamic property
      * @param $args['id'] the id for the dynamic property
-     * 
+     *
      * @todo why not keep the scope here and do this:
      *       $this->properties[$args['id']] = new Property($args); (with a reference probably)
     **/
     function addProperty($args)
     {
         // TODO: find some way to have unique IDs across all objects if necessary
-        if(!isset($args['id'])) 
+        if(!isset($args['id']))
             $args['id'] = count($this->properties) + 1;
         Dynamic_Property_Master::addProperty($args,$this);
     }
@@ -502,7 +490,7 @@ class Dynamic_Object_Master
                          xar_object_config,
                          xar_object_isalias
                   FROM $dynamicobjects ";
-        if(isset($modid)) 
+        if(isset($modid))
         {
             $query .= "WHERE xar_object_moduleid = ?";
             $bindvars[] = $modid;
@@ -511,7 +499,7 @@ class Dynamic_Object_Master
         $result = $stmt->executeQuery($bindvars);
 
         $objects = array();
-        while ($result->next()) 
+        while ($result->next())
         {
             $info = array();
             // @todo this depends on fetchmode being numeric
@@ -543,7 +531,7 @@ class Dynamic_Object_Master
     **/
     static function getObjectInfo(array $args)
     {
-        if(!empty($args['table'])) 
+        if(!empty($args['table']))
         {
             $info = array();
             $info['objectid'] = 0;
@@ -577,23 +565,23 @@ class Dynamic_Object_Master
                          xar_object_config,
                          xar_object_isalias
                   FROM $dynamicobjects ";
-        if(!empty($args['objectid'])) 
+        if(!empty($args['objectid']))
         {
             $query .= " WHERE xar_object_id = ? ";
             $bindvars[] = (int) $args['objectid'];
-        } 
-        elseif(!empty($args['name'])) 
+        }
+        elseif(!empty($args['name']))
         {
             $query .= " WHERE xar_object_name = ? ";
             $bindvars[] = (string) $args['name'];
-        } 
-        else 
+        }
+        else
         {
-            if(empty($args['moduleid'])) 
+            if(empty($args['moduleid']))
             {
                 $args['moduleid'] = xarModGetIDFromName(xarModGetName());
             }
-            if(empty($args['itemtype'])) 
+            if(empty($args['itemtype']))
             {
                 $args['itemtype'] = 0;
             }
@@ -603,7 +591,7 @@ class Dynamic_Object_Master
             $bindvars[] = (int) $args['itemtype'];
         }
         $result =& $dbconn->Execute($query,$bindvars);
-        if($result->EOF) 
+        if($result->EOF)
         {
             //debug($bindvars);
             return;
@@ -617,7 +605,7 @@ class Dynamic_Object_Master
             $info['isalias']
         ) = $result->fields;
         $result->Close();
-        if(!empty($args['join'])) 
+        if(!empty($args['join']))
         {
             $info['label'] .= ' + ' . $args['join'];
         }
@@ -637,13 +625,13 @@ class Dynamic_Object_Master
     **/
     static function &getObject(array $args)
     {
-        if(!isset($args['itemid'])) 
+        if(!isset($args['itemid']))
             $args['itemid'] = null;
-        
+
         $classname = 'Dynamic_Object';
-        if(!empty($args['classname']) && class_exists($args['classname'])) 
+        if(!empty($args['classname']) && class_exists($args['classname']))
             $classname = $args['classname'];
-        
+
         // here we can use our own classes to retrieve this
         $object = new $classname($args);
         return $object;
@@ -664,14 +652,14 @@ class Dynamic_Object_Master
     static function &getObjectList(array $args)
     {
         $classname = 'Dynamic_Object_List';
-        if(!empty($args['classname'])) 
+        if(!empty($args['classname']))
         {
-            if(class_exists($args['classname'] . '_List')) 
+            if(class_exists($args['classname'] . '_List'))
             {
                 // this is a generic classname for the object, list and interface
                 $classname = $args['classname'] . '_List';
-            } 
-            elseif(class_exists($args['classname'])) 
+            }
+            elseif(class_exists($args['classname']))
             {
                 // this is a specific classname for the list
                 $classname = $args['classname'];
@@ -699,14 +687,14 @@ class Dynamic_Object_Master
         sys::import('modules.dynamicdata.class.interface');
 
         $classname = 'Dynamic_Object_Interface';
-        if(!empty($args['classname'])) 
+        if(!empty($args['classname']))
         {
-            if(class_exists($args['classname'] . '_Interface')) 
+            if(class_exists($args['classname'] . '_Interface'))
             {
                 // this is a generic classname for the object, list and interface
                 $classname = $args['classname'] . '_Interface';
-            } 
-            elseif(class_exists($args['classname'])) 
+            }
+            elseif(class_exists($args['classname']))
             {
                 // this is a specific classname for the interface
                 $classname = $args['classname'];
@@ -736,7 +724,7 @@ class Dynamic_Object_Master
     {
         // Generic getter
         $object = self::getObjectTemp($args);
-        
+
         // Create specific part
         $objectid = $object->createItem($args);
         xarLogMessage("Class: " . get_class() . ". Creating an object of class " . $args['classname'] . ". Objectid: " . $objectid . ", module: " . $args['moduleid'] . ", itemtype: " . $args['itemtype']);
@@ -748,15 +736,15 @@ class Dynamic_Object_Master
     {
         // For updating, we need the object id
         // @todo raise exception here?
-        if(empty($args['objectid'])) 
+        if(empty($args['objectid']))
             return;
-            
+
         // Generic getter
         $object = self::getObjectTemp($args);
-        
+
         // Update specific part
         $itemid = $object->getItem(array('itemid' => $args['objectid']));
-        if(empty($itemid)) 
+        if(empty($itemid))
             return;
         $itemid = $object->updateItem($args);
         unset($object);
@@ -765,21 +753,21 @@ class Dynamic_Object_Master
 
     static function deleteObject($args)
     {
-        // For delete we need the object id. 
+        // For delete we need the object id.
         // @todo raise exception here?
-        if(empty($args['objectid'])) 
+        if(empty($args['objectid']))
             return;
-            
+
         // Generic getter
         $object = self::getObjectTemp($args);
-        if(empty($object)) 
+        if(empty($object))
             return;
 
         // Delete specific part
         $itemid = $object->getItem(
             array('itemid' => $args['objectid'])
         );
-        if(empty($itemid)) 
+        if(empty($itemid))
             return;
 
         // Get an object list for the object itself, so we can delete its items
@@ -792,13 +780,13 @@ class Dynamic_Object_Master
                 'extend' => false
             )
         );
-        if(empty($mylist)) 
+        if(empty($mylist))
             return;
 
         // TODO: delete all the (dynamic ?) data for this object
 
         // delete all the properties for this object
-        foreach(array_keys($mylist->properties) as $name) 
+        foreach(array_keys($mylist->properties) as $name)
         {
             $propid = $mylist->properties[$name]->id;
             $propid = Dynamic_Property_Master::deleteProperty(
@@ -814,17 +802,17 @@ class Dynamic_Object_Master
     }
 
     /*
-        Temporary private helper method for getting an object, as the 
+        Temporary private helper method for getting an object, as the
         create/update/delete all use this. Until we figure out where the
         master class will fit in we make it private and with a weird name
         so we dont use this too much yet.
     */
     private static function &getObjectTemp(array &$args)
     {
-        // Generic check 
+        // Generic check
         $args['moduleid']  = isset($args['moduleid'])  ? $args['moduleid']  : null;
         $args['itemtype']  = isset($args['itemtype'])  ? $args['itemtype']  : null;
-        $args['classname'] = isset($args['classname']) ? $args['classname'] : null;        
+        $args['classname'] = isset($args['classname']) ? $args['classname'] : null;
 
         // get the Dynamic Objects item corresponding to these args
         $object = self::getObject(
@@ -835,11 +823,11 @@ class Dynamic_Object_Master
                 'classname' => $args['classname']
             )
         );
-        if(empty($object)) 
+        if(empty($object))
             return null;
         return $object;
     }
-    
+
     /**
      * Join another database table to this object (unfinished)
      * The difference with the 'join' argument above is that we don't create a new datastore for it here,
@@ -851,51 +839,51 @@ class Dynamic_Object_Master
      * @param $args['where'] optional where clauses for those table fields
      * @param $args['andor'] optional combination of those clauses with the ones from the object
      * @param $args['sort'] optional sort order in that table (TODO)
-     * 
+     *
     **/
     function joinTable($args)
     {
-        if(empty($args['table'])) 
+        if(empty($args['table']))
             return;
-     
+
         $meta = xarModAPIFunc(
             'dynamicdata','util','getmeta',
             array('table' => $args['table'])
         );
-     
+
         // we throw an exception here because we assume a table should always exist (for now)
-        if(!isset($meta) || !isset($meta[$args['table']])) 
+        if(!isset($meta) || !isset($meta[$args['table']]))
         {
             $msg = 'Invalid #(1) #(2) for dynamic object #(3)';
             $vars = array('join',$args['table'],$this->name);
             throw new BadParameterException($vars, $msg);
         }
-     
+
         $count = count($this->properties);
-        foreach($meta[$args['table']] as $name => $propinfo) 
+        foreach($meta[$args['table']] as $name => $propinfo)
             $this->addProperty($propinfo);
-     
+
         $table = $args['table'];
         $key = null;
-        if(!empty($args['key']) && isset($this->properties[$args['key']])) 
+        if(!empty($args['key']) && isset($this->properties[$args['key']]))
             $key = $this->properties[$args['key']]->source;
-     
+
         $fields = array();
-        if(!empty($args['fields'])) 
+        if(!empty($args['fields']))
         {
-            foreach($args['fields'] as $field) 
+            foreach($args['fields'] as $field)
             {
-                if(isset($this->properties[$field])) 
+                if(isset($this->properties[$field]))
                 {
                     $fields[$field] =& $this->properties[$field];
-                    if(count($this->fieldlist) > 0 && !in_array($field,$this->fieldlist)) 
+                    if(count($this->fieldlist) > 0 && !in_array($field,$this->fieldlist))
                         $this->fieldlist[] = $field;
                 }
             }
         }
 
         $where = array();
-        if(!empty($args['where'])) 
+        if(!empty($args['where']))
         {
             // cfr. BL compiler - adapt as needed (I don't think == and === are accepted in SQL)
             $findLogic      = array(' eq ', ' ne ', ' lt ', ' gt ', ' id ', ' nd ', ' le ', ' ge ');
@@ -905,9 +893,9 @@ class Dynamic_Object_Master
 
             $parts = preg_split('/\s+(and|or)\s+/',$args['where'],-1,PREG_SPLIT_DELIM_CAPTURE);
             $join = '';
-            foreach($parts as $part) 
+            foreach($parts as $part)
             {
-                if($part == 'and' || $part == 'or') 
+                if($part == 'and' || $part == 'or')
                 {
                     $join = $part;
                     continue;
@@ -915,7 +903,7 @@ class Dynamic_Object_Master
                 $pieces = preg_split('/\s+/',$part);
                 $name = array_shift($pieces);
                 // sanity check on SQL
-                if(count($pieces) < 2) 
+                if(count($pieces) < 2)
                 {
                     $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
                     $vars = array('query ' . $args['where'], 'Dynamic_Object_Master', 'joinTable', 'DynamicData');
@@ -924,12 +912,12 @@ class Dynamic_Object_Master
                 // for many-to-1 relationships where you specify the foreign key in the original table here
                 // (e.g. properties joined to xar_dynamic_objects -> where object_id eq objectid)
                 if(
-                    !empty($pieces[1]) && 
-                    is_string($pieces[1]) && 
+                    !empty($pieces[1]) &&
+                    is_string($pieces[1]) &&
                     isset($this->properties[$pieces[1]])
                 )  $pieces[1] = $this->properties[$pieces[1]]->source;
 
-                if(isset($this->properties[$name])) 
+                if(isset($this->properties[$name]))
                 {
                     $where[] = array(
                         'property' => &$this->properties[$name],
@@ -939,10 +927,10 @@ class Dynamic_Object_Master
                 }
             }
         }
-        
+
         $andor = !empty($args['andor']) ? $args['andor'] : 'and';
-        
-        foreach(array_keys($this->datastores) as $name) 
+
+        foreach(array_keys($this->datastores) as $name)
              $this->datastores[$name]->addJoin($table, $key, $fields, $where, $andor);
     }
 

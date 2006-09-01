@@ -136,13 +136,11 @@ function dynamicdata_adminapi_updatehook($args)
 		//return $extrainfo;
 	}
 
-    echo "SSS<br />";
 	if ($dd_function == 'createhook') {
 		$itemid = $myobject->createItem();
 	} else {
 		$itemid = $myobject->updateItem();
 	}
-    echo "SSS1<br />";
 
 	if (empty($itemid)) {
 		$msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
@@ -153,7 +151,6 @@ function dynamicdata_adminapi_updatehook($args)
 		//return $extrainfo;
 	}
     // Return the extra info
-    echo "SSS2<br />";
     return $extrainfo;
 }
 ?>

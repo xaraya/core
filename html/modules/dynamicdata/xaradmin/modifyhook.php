@@ -54,36 +54,28 @@ function dynamicdata_admin_modifyhook($args)
         $itemid = $objectid;
     }
 
-    $data = "";
-    $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));
-    foreach ($tree as $branch) {
-        if ($branch['objectid'] == 0) continue;
-        // TODO: this next line jumps over itemtypes that correspond to wrappers of native itemtypes
-        // TODO: make this more robust
+	$object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
+									   'itemtype' => $itemtype,
+									   'itemid'   => $itemid,
+									   'extend'   => false));
+	if (!isset($object)) return;
 
-        $object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
-                                           'itemtype' => $branch['itemtype'],
-                                           'itemid'   => $itemid));
-        if (!isset($object)) return;
+	$object->getItem();
 
-        $object->getItem();
+	// if we are in preview mode, we need to check for any preview values
+	if (!xarVarFetch('preview', 'isset', $preview,  NULL, XARVAR_DONT_SET)) {return;}
+	if (!empty($preview)) {
+		$object->checkInput();
+	}
 
-        // if we are in preview mode, we need to check for any preview values
-        if (!xarVarFetch('preview', 'isset', $preview,  NULL, XARVAR_DONT_SET)) {return;}
-        if (!empty($preview)) {
-            $object->checkInput();
-        }
-
-        if (!empty($object->template)) {
-            $template = $object->template;
-        } else {
-            $template = $object->name;
-        }
-        $data .= xarTplModule('dynamicdata','admin','modifyhook',
-                            array('properties' => & $object->properties),
-                            $template);
-    }
-    return $data;
+	if (!empty($object->template)) {
+		$template = $object->template;
+	} else {
+		$template = $object->name;
+	}
+	return xarTplModule('dynamicdata','admin','modifyhook',
+						array('properties' => & $object->properties),
+						$template);
 }
 
 ?>

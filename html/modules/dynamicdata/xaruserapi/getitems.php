@@ -137,6 +137,7 @@ function &dynamicdata_userapi_getitems($args)
                                            'catid' => $catid,
                                            'groupby' => $groupby,
                                            'status' => $status));
+
     if (!isset($object) || empty($object->objectid)) return $nullreturn;
 
     if (!isset($object)) return $nullreturn;

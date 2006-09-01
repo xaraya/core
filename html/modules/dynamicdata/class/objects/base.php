@@ -4,11 +4,11 @@
  *
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
- * 
+ *
 **/
 sys::import('modules.dynamicdata.class.properties');
-
 sys::import('modules.dynamicdata.class.objects.master');
+
 class Dynamic_Object extends Dynamic_Object_Master
 {
     public $itemid = 0;
@@ -24,7 +24,7 @@ class Dynamic_Object extends Dynamic_Object_Master
         parent::__construct($args);
 
         // set the specific item id (or 0)
-        if(isset($args['itemid'])) 
+        if(isset($args['itemid']))
             $this->itemid = $args['itemid'];
 
         // see if we can access this object, at least in overview
@@ -42,27 +42,27 @@ class Dynamic_Object extends Dynamic_Object_Master
     **/
     function getItem($args = array())
     {
-        if(!empty($args['itemid'])) 
+        if(!empty($args['itemid']))
         {
-            if($args['itemid'] != $this->itemid) 
+            if($args['itemid'] != $this->itemid)
                 // initialise the properties again
-                foreach(array_keys($this->properties) as $name) 
+                foreach(array_keys($this->properties) as $name)
                     $this->properties[$name]->value = $this->properties[$name]->default;
 
             $this->itemid = $args['itemid'];
         }
-        if(empty($this->itemid)) 
+        if(empty($this->itemid))
         {
             $msg = 'Invalid item id in method #(1)() for dynamic object [#(2)] #(3)';
             $vars = array('getItem',$this->objectid,$this->name);
             throw new BadParameterException($vars,$msg);
         }
 
-        if(!empty($this->primary) && !empty($this->properties[$this->primary])) 
+        if(!empty($this->primary) && !empty($this->properties[$this->primary]))
             $primarystore = $this->properties[$this->primary]->datastore;
 
         $modinfo = xarModGetInfo($this->moduleid);
-        foreach($this->datastores as $name => $datastore) 
+        foreach($this->datastores as $name => $datastore)
         {
             $itemid = $datastore->getItem(
                 array(
@@ -73,12 +73,12 @@ class Dynamic_Object extends Dynamic_Object_Master
                 )
             );
             // only worry about finding something in primary datastore (if any)
-            if(empty($itemid) && !empty($primarystore) && $primarystore == $name) 
+            if(empty($itemid) && !empty($primarystore) && $primarystore == $name)
                 return;
         }
 
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
-        if(!empty($args['preview'])) 
+        if(!empty($args['preview']))
             $this->checkInput();
         return $this->itemid;
     }
@@ -88,37 +88,37 @@ class Dynamic_Object extends Dynamic_Object_Master
      */
     function checkInput($args = array())
     {
-        if(!empty($args['itemid']) && $args['itemid'] != $this->itemid) 
+        if(!empty($args['itemid']) && $args['itemid'] != $this->itemid)
         {
             $this->itemid = $args['itemid'];
             $this->getItem($args);
         }
 
-        if(empty($args['fieldprefix'])) 
+        if(empty($args['fieldprefix']))
             $args['fieldprefix'] = $this->fieldprefix;
 
         $isvalid = true;
         $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
-        foreach($fields as $name) 
+        foreach($fields as $name)
         {
             // for hooks, use the values passed via $extrainfo if available
             $field = 'dd_' . $this->properties[$name]->id;
-            if(isset($args[$name])) 
-                // Name based check 
+            if(isset($args[$name]))
+                // Name based check
                 $isvalid = $this->properties[$name]->checkInput($name,$args[$name]);
-            elseif(isset($args[$field])) 
-                // No name, check based on field 
+            elseif(isset($args[$field]))
+                // No name, check based on field
                 $isvalid = $this->properties[$name]->checkInput($field,$args[$field]);
-            elseif(!empty($args['fieldprefix'])) 
+            elseif(!empty($args['fieldprefix']))
             {
                 // No field, but prefix given, use that
                 // cfr. prefix layout in objects/showform template
                 $field = $args['fieldprefix'] . '_' . $field;
                 $isvalid = $this->properties[$name]->checkInput($field);
-            } 
+            }
             else
                 // Ok, try without anything
-                $isvalid = $this->properties[$name]->checkInput(); 
+                $isvalid = $this->properties[$name]->checkInput();
         }
         return $isvalid;
     }
@@ -136,18 +136,18 @@ class Dynamic_Object extends Dynamic_Object_Master
         if(empty($args['fieldprefix'])) $args['fieldprefix'] = $this->fieldprefix;
 
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
-        if(!empty($args['preview'])) 
+        if(!empty($args['preview']))
             $this->checkInput();
 
         // Set all properties based on what is passed in.
         $args['properties'] = array();
-        if(count($args['fieldlist']) > 0 || !empty($this->status)) 
+        if(count($args['fieldlist']) > 0 || !empty($this->status))
         {
-            foreach($args['fieldlist'] as $name) 
-                if(isset($this->properties[$name])) 
+            foreach($args['fieldlist'] as $name)
+                if(isset($this->properties[$name]))
                     $args['properties'][$name] =& $this->properties[$name];
-        } 
-        else 
+        }
+        else
             $args['properties'] =& $this->properties;
 
         // pass some extra template variables for use in BL tags, API calls etc.
@@ -175,34 +175,34 @@ class Dynamic_Object extends Dynamic_Object_Master
         if(empty($args['fieldlist'])) $args['fieldlist'] = $this->fieldlist;
 
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
-        if(!empty($args['preview'])) 
+        if(!empty($args['preview']))
             $this->checkInput();
 
-        if(count($args['fieldlist']) > 0 || !empty($this->status)) 
+        if(count($args['fieldlist']) > 0 || !empty($this->status))
         {
             // Explicit fieldlist or status has value
             $args['properties'] = array();
-            foreach($args['fieldlist'] as $name) 
+            foreach($args['fieldlist'] as $name)
             {
-                if(isset($this->properties[$name])) 
+                if(isset($this->properties[$name]))
                 {
                     $thisprop = $this->properties[$name];
                     if(($thisprop->status & Dynamic_Property_Master::DD_DISPLAYMASK) != Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN)
                         $args['properties'][$name] =& $this->properties[$name];
                 }
             }
-        } 
-        else 
+        }
+        else
         {
             $args['properties'] =& $this->properties;
             // Do them all, except for status = Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN
             // TODO: this is exactly the same as in the display function, consolidate it.
             $totransform = array(); $totransform['transform'] = array();
-            foreach($this->properties as $pname => $pobj) 
+            foreach($this->properties as $pname => $pobj)
             {
                 // *never* transform an ID
                 // TODO: there is probably lots more to skip here.
-                if($pobj->type == '21') 
+                if($pobj->type == '21')
                     continue;
                 $totransform['transform'][] = $pname;
                 $totransform[$pname] = $pobj->value;
@@ -210,17 +210,17 @@ class Dynamic_Object extends Dynamic_Object_Master
 
             // CHECKME: is $this->tplmodule safe here?
             $transformed = xarModCallHooks(
-                'item','transform',$this->itemid, 
+                'item','transform',$this->itemid,
                 $totransform, $this->tplmodule,$this->itemtype
             );
 
-            foreach($this->properties as $property) 
+            foreach($this->properties as $property)
             {
                 if(
-                    (($property->status & Dynamic_Property_Master::DD_DISPLAYMASK) != Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN) && 
-                    ($property->type != 21) && 
+                    (($property->status & Dynamic_Property_Master::DD_DISPLAYMASK) != Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN) &&
+                    ($property->type != 21) &&
                     isset($transformed[$property->name])
-                )    
+                )
                 {
                     // sigh, 5 letters, but so many hours to discover them
                     // anyways, clone the property, so we can safely change it, PHP 5 specific!!
@@ -230,7 +230,7 @@ class Dynamic_Object extends Dynamic_Object_Master
             }
 
         }
-    
+
         // pass some extra template variables for use in BL tags, API calls etc.
         $args['objectname'] = !empty($this->name) ? $this->name : null;
         $args['moduleid'] = $this->moduleid;
@@ -248,24 +248,24 @@ class Dynamic_Object extends Dynamic_Object_Master
      */
     function getFieldValues($args = array())
     {
-        if(empty($args['fieldlist'])) 
+        if(empty($args['fieldlist']))
         {
-            if(count($this->fieldlist) > 0) 
+            if(count($this->fieldlist) > 0)
                 $fieldlist = $this->fieldlist;
-            else 
+            else
                 $fieldlist = array_keys($this->properties);
-        } 
+        }
         else
             $fieldlist = $args['fieldlist'];
 
         $fields = array();
-        foreach($fieldlist as $name) 
+        foreach($fieldlist as $name)
         {
             $property = $this->properties[$name];
             if(xarSecurityCheck(
                 'ReadDynamicDataField',0,'Field',
                 $property->name.':'.$property->type.':'.$property->id)
-            ) 
+            )
             {
                 $fields[$name] = $property->value;
             }
@@ -279,22 +279,22 @@ class Dynamic_Object extends Dynamic_Object_Master
     **/
     function getDisplayValues($args = array())
     {
-        if(empty($args['fieldlist'])) 
+        if(empty($args['fieldlist']))
             $args['fieldlist'] = $this->fieldlist;
 
         $displayvalues = array();
-        if(count($args['fieldlist']) > 0 || !empty($this->status)) 
+        if(count($args['fieldlist']) > 0 || !empty($this->status))
         {
-            foreach($args['fieldlist'] as $name) 
-                if(isset($this->properties[$name])) 
+            foreach($args['fieldlist'] as $name)
+                if(isset($this->properties[$name]))
                 {
                     $label = xarVarPrepForDisplay($this->properties[$name]->label);
                     $displayvalues[$label] = $this->properties[$name]->showOutput();
                 }
-        } 
-        else 
+        }
+        else
         {
-            foreach(array_keys($this->properties) as $name) 
+            foreach(array_keys($this->properties) as $name)
             {
                 $label = xarVarPrepForDisplay($this->properties[$name]->label);
                 $displayvalues[$label] = $this->properties[$name]->showOutput();
@@ -305,13 +305,13 @@ class Dynamic_Object extends Dynamic_Object_Master
 
     function createItem($args = array())
     {
-        if(count($args) > 0) 
+        if(count($args) > 0)
         {
-            if(isset($args['itemid'])) 
+            if(isset($args['itemid']))
                 $this->itemid = $args['itemid'];
 
-            foreach($args as $name => $value) 
-                if(isset($this->properties[$name])) 
+            foreach($args as $name => $value)
+                if(isset($this->properties[$name]))
                     $this->properties[$name]->setValue($value);
         }
 
@@ -322,38 +322,38 @@ class Dynamic_Object extends Dynamic_Object_Master
             $this->objectid == 1 &&
             $this->properties['moduleid']->value == xarModGetIDFromName('dynamicdata') &&
             $this->properties['itemtype']->value < 2
-        ) 
+        )
         {
             $this->properties['itemtype']->setValue($this->getNextItemtype($args));
         }
 
         // check that we have a valid item id, or that we can create one if it's set to 0
-        if(empty($this->itemid)) 
+        if(empty($this->itemid))
         {
             // no primary key identified for this object, so we're stuck
-            if(!isset($this->primary)) 
+            if(!isset($this->primary))
             {
                 $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
                 $vars = array('primary key', 'Dynamic_Object', 'createItem', 'DynamicData');
                 throw new BadParameterException($vars,$msg);
-            } 
-            else 
+            }
+            else
             {
                 $value = $this->properties[$this->primary]->getValue();
 
                 // we already have an itemid value in the properties
-                if(!empty($value)) 
+                if(!empty($value))
                 {
                     $this->itemid = $value;
-                } 
-                elseif(!empty($this->properties[$this->primary]->datastore)) 
+                }
+                elseif(!empty($this->properties[$this->primary]->datastore))
                 {
                     // we'll let the primary datastore create an itemid for us
                     $primarystore = $this->properties[$this->primary]->datastore;
                     // add the primary to the data store fields if necessary
-                    if(!empty($this->fieldlist) && !in_array($this->primary,$this->fieldlist)) 
+                    if(!empty($this->fieldlist) && !in_array($this->primary,$this->fieldlist))
                         $this->datastores[$primarystore]->addField($this->properties[$this->primary]); // use reference to original property
-                
+
                     $this->itemid = $this->datastores[$primarystore]->createItem(
                         array(
                             'objectid' => $this->objectid,
@@ -364,8 +364,8 @@ class Dynamic_Object extends Dynamic_Object_Master
                         )
                     );
 
-                } 
-                else 
+                }
+                else
                 {
                     $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
                     $vars = array('primary key datastore', 'Dynamic Object', 'createItem', 'DynamicData');
@@ -373,15 +373,15 @@ class Dynamic_Object extends Dynamic_Object_Master
                 }
             }
         }
-        if(empty($this->itemid)) 
+        if(empty($this->itemid))
             return;
 
         // TODO: this won't work for objects with several static tables !
         // now let's try to create items in the other data stores
-        foreach(array_keys($this->datastores) as $store) 
+        foreach(array_keys($this->datastores) as $store)
         {
             // skip the primary store
-            if(isset($primarystore) && $store == $primarystore) 
+            if(isset($primarystore) && $store == $primarystore)
                 continue;
 
             $itemid = $this->datastores[$store]->createItem(
@@ -393,7 +393,7 @@ class Dynamic_Object extends Dynamic_Object_Master
                     'modname'  => $modinfo['name']
                 )
             );
-            if(empty($itemid)) 
+            if(empty($itemid))
                 return;
         }
 
@@ -402,12 +402,12 @@ class Dynamic_Object extends Dynamic_Object_Master
         // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
         // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles / roles
         if(
-            !empty($this->primary) && 
+            !empty($this->primary) &&
             ($modinfo['name'] != 'articles') && ($modinfo['name'] != 'roles')
-        ) 
+        )
         {
             $item = array();
-            foreach(array_keys($this->properties) as $name) 
+            foreach(array_keys($this->properties) as $name)
                 $item[$name] = $this->properties[$name]->value;
 
             $item['module'] = $modinfo['name'];
@@ -420,17 +420,17 @@ class Dynamic_Object extends Dynamic_Object_Master
 
     function updateItem($args = array())
     {
-        if(count($args) > 0) 
+        if(count($args) > 0)
         {
-            if(!empty($args['itemid'])) 
+            if(!empty($args['itemid']))
                 $this->itemid = $args['itemid'];
 
-            foreach($args as $name => $value) 
-                if(isset($this->properties[$name])) 
+            foreach($args as $name => $value)
+                if(isset($this->properties[$name]))
                     $this->properties[$name]->setValue($value);
         }
 
-        if(empty($this->itemid)) 
+        if(empty($this->itemid))
         {
             $msg = 'Invalid item id in method #(1)() for dynamic object [#(2)] #(3)';
             $vars = array('updateItem',$this->objectid,$this->name);
@@ -440,7 +440,7 @@ class Dynamic_Object extends Dynamic_Object_Master
         $modinfo = xarModGetInfo($this->moduleid);
         // TODO: this won't work for objects with several static tables !
         // update all the data stores
-        foreach(array_keys($this->datastores) as $store) 
+        foreach(array_keys($this->datastores) as $store)
         {
             $itemid = $this->datastores[$store]->updateItem(
                 array(
@@ -451,7 +451,7 @@ class Dynamic_Object extends Dynamic_Object_Master
                     'modname'  => $modinfo['name']
                 )
             );
-            if(empty($itemid)) 
+            if(empty($itemid))
                 return;
         }
 
@@ -459,12 +459,12 @@ class Dynamic_Object extends Dynamic_Object_Master
         // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
         // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles / roles
         if(
-            !empty($this->primary) && 
+            !empty($this->primary) &&
             ($modinfo['name'] != 'articles') && ($modinfo['name'] != 'roles')
-        ) 
+        )
         {
             $item = array();
-            foreach(array_keys($this->properties) as $name) 
+            foreach(array_keys($this->properties) as $name)
                 $item[$name] = $this->properties[$name]->value;
 
             $item['module'] = $modinfo['name'];
@@ -477,10 +477,10 @@ class Dynamic_Object extends Dynamic_Object_Master
 
     function deleteItem($args = array())
     {
-        if(!empty($args['itemid'])) 
+        if(!empty($args['itemid']))
             $this->itemid = $args['itemid'];
 
-        if(empty($this->itemid)) 
+        if(empty($this->itemid))
         {
             $msg = 'Invalid item id in method #(1)() for dynamic object [#(2)] #(3)';
             $vars = array('deleteItem',$this->objectid,$this->name);
@@ -492,7 +492,7 @@ class Dynamic_Object extends Dynamic_Object_Master
 
         // TODO: this won't work for objects with several static tables !
         // delete the item in all the data stores
-        foreach(array_keys($this->datastores) as $store) 
+        foreach(array_keys($this->datastores) as $store)
         {
             $itemid = $this->datastores[$store]->deleteItem(
                 array(
@@ -503,7 +503,7 @@ class Dynamic_Object extends Dynamic_Object_Master
                     'modname'  => $modinfo['name']
                 )
             );
-            if(empty($itemid)) 
+            if(empty($itemid))
                 return;
         }
 
@@ -511,12 +511,12 @@ class Dynamic_Object extends Dynamic_Object_Master
         // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
         // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles / roles
         if(
-            !empty($this->primary) && 
+            !empty($this->primary) &&
             ($modinfo['name'] != 'articles') && ($modinfo['name'] != 'roles')
-        ) 
+        )
         {
             $item = array();
-            foreach(array_keys($this->properties) as $name) 
+            foreach(array_keys($this->properties) as $name)
                 $item[$name] = $this->properties[$name]->value;
 
             $item['module'] = $modinfo['name'];
@@ -532,12 +532,12 @@ class Dynamic_Object extends Dynamic_Object_Master
      *
      * @param $args['moduleid'] module id for the object
      * @return integer value of the next item type
-     * 
+     *
      * @todo this needs to change into something more safe.
      */
     function getNextItemtype($args = array())
     {
-        if(empty($args['moduleid'])) 
+        if(empty($args['moduleid']))
             $args['moduleid'] = $this->moduleid;
 
         $dbconn =& xarDBGetConn();
@@ -548,7 +548,7 @@ class Dynamic_Object extends Dynamic_Object_Master
         $query = "SELECT MAX(xar_object_itemtype) FROM $dynamicobjects  WHERE xar_object_moduleid = ?";
 
         $result =& $dbconn->Execute($query,array((int)$args['moduleid']));
-        if($result->EOF) 
+        if($result->EOF)
             return;
 
         $nexttype = $result->fields[0];
