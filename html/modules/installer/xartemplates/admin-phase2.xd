@@ -19,7 +19,7 @@
                     I have read and agree to abide by the Terms and Conditions as stated above 
                 </xar:mlstring>
             </label>
-            
+            <br />
             <label class="block" for="disagree"><input type="radio" name="agree" id="disagree" value="disagree" checked="checked" />
                 <xar:mlstring>
                     I have read and do NOT agree to abide by the Terms and Conditions as stated above
