@@ -53,7 +53,7 @@ function dynamicdata_adminapi_delete($args)
 	if (empty($myobject)) return;
 
 	$myobject->getItem();
-//	$itemid = $myobject->deleteItem();
+	$itemid = $myobject->deleteItem();
 
     unset($myobject);
     return $itemid;
