@@ -263,6 +263,7 @@ function dynamicdata_utilapi_import($args)
                         }
                     }
                 }
+                var_dump($item);echo "<br /><br />";
                 if (!empty($item['itemid'])) {
                     // check if the item already exists
                     $olditemid = $objectcache[$objectid]->getItem(array('itemid' => $item['itemid']));

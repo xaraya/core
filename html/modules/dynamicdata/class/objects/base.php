@@ -328,8 +328,9 @@ class Dynamic_Object extends Dynamic_Object_Master
         }
 
         // check that we have a valid item id, or that we can create one if it's set to 0
-        if(empty($this->itemid))
+		if(empty($this->itemid))
         {
+var_dump($this);
             // no primary key identified for this object, so we're stuck
             if(!isset($this->primary))
             {
