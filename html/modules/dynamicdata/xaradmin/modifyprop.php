@@ -112,7 +112,7 @@ function dynamicdata_admin_modifyprop()
     } else {
         $data['table'] = null;
     }
-    $data['sources'] = Dynamic_DataStore_Master::getDataSources($params);
+    $data['sources'] = DataStoreFactory::getDataSources($params);
     if (empty($data['sources'])) {
         $data['sources'] = array();
     }

@@ -23,7 +23,7 @@
  */
 function dynamicdata_userapi_getsources($args)
 {
-    return Dynamic_DataStore_Master::getDataSources();
+    return DataStoreFactory::getDataSources();
 }
 
 ?>

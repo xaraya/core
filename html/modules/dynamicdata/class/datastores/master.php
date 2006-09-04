@@ -1,13 +1,57 @@
 <?php
 /**
- * Utility Class to manage Dynamic Data Stores
+ * Base class for Xaraya objects
+ * Needed as a common base for the extensions
+ * This class is kept generic enough to serve as a base for a wider collection of Xaraya objects
+ *
+ * @package Xaraya eXtensible Management System
+ * @subpackage dynamicdata module
+**/
+	class XarayaObject {
+
+		function toString() {
+			return get_class($this) . ":" . $this->hash();
+		}
+		function equals($object) {
+			return $this === $object;
+		}
+		function getClass() {
+			return get_class($this);
+		}
+		function hash() {
+			return sha1(serialize($this));
+		}
+	}
+
+/**
+ * Base class for DD objects
+ *
+ * @package Xaraya eXtensible Management System
+ * @subpackage dynamicdata module
+**/
+	class XarayaDDObject extends XarayaObject {
+
+		public $name;
+
+		function __construct($name)
+		{
+			$this->name = isset($name) ? $name : parent::toString();
+		}
+
+		function toString() {
+			return $this->name;
+		}
+	}
+
+/**
+ * Factory Class to creazte Dynamic Data Stores
  *
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
  * @todo this factory should go into core once we use datastores in more broad ways.
  * @todo the classnames could use a bit of a clean up (shorter, lowercasing)
  */
-class Dynamic_DataStore_Master
+class DataStoreFactory extends XarayaObject
 {
     /**
      * Class method to get a new dynamic data store (of the right type)
@@ -101,20 +145,20 @@ class Dynamic_DataStore_Master
         $sources[] = 'dummy';
 
         // try to get the meta table definition
-        if (!empty($args['table'])) 
+        if (!empty($args['table']))
         {
-            try 
+            try
             {
                 $meta = xarModAPIFunc('dynamicdata','util','getmeta',$args);
-            } 
-            catch ( NotFoundExceptions $e ) 
+            }
+            catch ( NotFoundExceptions $e )
             {
                 // No worries
             }
-            if (!empty($meta) && !empty($meta[$args['table']])) 
+            if (!empty($meta) && !empty($meta[$args['table']]))
             {
-                foreach ($meta[$args['table']] as $column) 
-                    if (!empty($column['source'])) 
+                foreach ($meta[$args['table']] as $column)
+                    if (!empty($column['source']))
                         $sources[] = $column['source'];
             }
         }

@@ -12,7 +12,7 @@
  * @package dynamicdata
  *
  */
-class Dynamic_Function_DataStore extends Dynamic_DataStore
+class Dynamic_Function_DataStore extends BasicDataStore
 {
     /**
      * Get the field name used to identify this property (the property validation holds the function name here - for now...)
@@ -59,7 +59,7 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
                 // see if we got something interesting in return
                 if (isset($value)) {
                     $this->fields[$function]->setValue($value);
-                } 
+                }
             } else {
             // TODO: don't we want auto-loading for xarModFunc too ???
                 // try to load the module GUI
@@ -77,7 +77,7 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
                 // see if we got something interesting in return
                 if (isset($value)) {
                     $this->fields[$function]->setValue($value);
-                } 
+                }
             }
         }
         return $itemid;
@@ -85,7 +85,7 @@ class Dynamic_Function_DataStore extends Dynamic_DataStore
 
     /* fetch a list of the values for all items in the datastore */
     function getItems($args = array())
-    {   
+    {
         /* don't bother if there are no item ids set */
         if (empty($this->_itemids)) {
             return array();

@@ -12,7 +12,7 @@
  * @package dynamicdata
  *
  */
-class Dynamic_Hook_DataStore extends Dynamic_DataStore
+class Dynamic_Hook_DataStore extends BasicDataStore
 {
     /**
      * Get the field name used to identify this property (we use the hook name here)
@@ -29,7 +29,7 @@ class Dynamic_Hook_DataStore extends Dynamic_DataStore
 
     function setPrimary(&$property)
     {
-        // not applicable !? 
+        // not applicable !?
     }
 
     function getItem($args = array())
@@ -51,7 +51,7 @@ class Dynamic_Hook_DataStore extends Dynamic_DataStore
                 // see if we got something interesting in return
                 if (isset($value)) {
                     $this->fields[$hook]->setValue($value);
-                } 
+                }
             }
         }
         return $itemid;

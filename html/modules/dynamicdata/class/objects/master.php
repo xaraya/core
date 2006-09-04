@@ -411,7 +411,7 @@ class Dynamic_Object_Master
     function addDataStore($name = '_dynamic_data_', $type='data')
     {
         // get a new data store
-        $datastore =& Dynamic_DataStore_Master::getDataStore($name, $type);
+        $datastore =& DataStoreFactory::getDataStore($name, $type);
 
         // add it to the list of data stores
         $this->datastores[$datastore->name] =& $datastore;
