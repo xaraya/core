@@ -10,6 +10,8 @@
 /*
     Current inheritance (leaving out Dynamic_ prefix and _Datastore suffix)
 
+    XarayaDDObject
+     |
     BasicDataStore
      |---SQL
      |    |---FlatTable
@@ -35,10 +37,19 @@
 /**
  * Interfaces as observed in current code
 **/
-interface IBasicDataStore
+interface IXarayaDDObject
 {
     function __construct($name);
 
+    // @note routines for dealing with XML files
+    function readSchema($args = array());
+    function loadSchema($args = array());
+    function toArray(SimpleXMLElement $schemaobject=null);
+    function toXML(SimpleXMLElement $schemaobject=null);
+}
+
+interface IBasicDataStore
+{
     // @note this looks pretty generic, but we dont know what's in $args
     function    getItem($args = array()); // would typ. need some sort of ID value
     function createItem($args = array()); // would typ. need some sort of Item object
@@ -46,7 +57,6 @@ interface IBasicDataStore
     function deleteItem($args = array()); // would typ. need some sort of ID value
     function   getItems($args = array()); // would typ. need some sort of Criteria object
     function countItems($args = array()); // would typ. need some sort of Criteria object
-    function readSchema($args = array());
 }
 
 interface IOrderedDataStore

@@ -7,6 +7,8 @@
 **/
 class BasicDataStore extends XarayaDDObject implements IBasicDataStore
 {
+    protected $schemaobject;	// The object representing this datastore as codified by its schema
+
     public $_itemids;  // reference to itemids in Dynamic_Object_List TODO: investigate public scope
 
     public $cache = 0;
@@ -42,14 +44,10 @@ class BasicDataStore extends XarayaDDObject implements IBasicDataStore
     {
         return null; // <-- make this numeric!!
     }
-    function readSchema($args = array())
-    {
-        return null; // <-- make this numeric!!
-    }
 }
 
 /**
- * Base class for Dynamic Data Stores with a concept of order
+ * Base class for Dynamic Data Stores with a concept of ordering
  *
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module

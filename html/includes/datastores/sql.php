@@ -11,6 +11,8 @@
  *
  * @package dynamicdata
 **/
+sys::import('modules.dynamicdata.class.datastores.base');
+
 class Dynamic_SQL_DataStore extends OrderedDataStore implements ISQLDataStore
 {
     protected $db     = null;
@@ -20,7 +22,7 @@ class Dynamic_SQL_DataStore extends OrderedDataStore implements ISQLDataStore
     public $groupby= array();
     public $join   = array();
 
-    function __construct($name)
+    function __construct($name=null)
     {
         parent::__construct($name);
         $this->db     = xarDBGetConn();
