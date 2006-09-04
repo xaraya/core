@@ -22,6 +22,7 @@
  * @param $args['filename'] file name
  * @returns the virtual pathname for the JS file; an empty value if not found
  * @return sring
+ * @checkme: the default module should be the current *template* module, not the *request* module?
  */
 function base_javascriptapi__findfile($args)
 {
@@ -30,6 +31,14 @@ function base_javascriptapi__findfile($args)
     // File must be supplied and may include a path.
     if (empty($filename) || $filename != strval($filename)) {
         return;
+    }
+
+    // Bug 5910: If the path has GET parameters, then move them aside for now.
+    if (strpos($filename, '?') > 0) {
+        list($filename, $params) = explode('?', $filename, 2);
+        $params = '?' . $params;
+    } else {
+        $params = '';
     }
 
     // Use the current module if none supplied.
@@ -70,11 +79,12 @@ function base_javascriptapi__findfile($args)
         if (file_exists($filePath)) {break;}
         $filePath = '';
     }
+
     if (empty($filePath)) {
         return;
     }
 
-    return $filePath;
+    return $filePath . $params;
 }
 
 ?>
