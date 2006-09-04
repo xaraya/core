@@ -7,6 +7,8 @@
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
 **/
+	sys::import('datastores.interface');
+
 	class XarayaObject {
 
 		function toString() {

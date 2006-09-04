@@ -5,6 +5,9 @@
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
 **/
+sys::import('modules.dynamicdata.class.datastores.master');
+sys::import('datastores.interface');
+
 class BasicDataStore extends XarayaDDObject implements IBasicDataStore
 {
     protected $schemaobject;	// The object representing this datastore as codified by its schema
