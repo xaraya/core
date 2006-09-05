@@ -500,6 +500,7 @@ class xarRole
         $this->acltable = $xartable['security_acl'];
 
         if (!isset($uid)) $uid = 0;
+        if (isset($itemtype)) $type = $itemtype;
         if (!isset($type)) $type = ROLES_USERTYPE;
         if (!isset($parentid)) $parentid = 1;
         if (!isset($uname)) $uname = xarSessionGetVar('uid') . microtime();

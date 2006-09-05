@@ -40,7 +40,6 @@ function roles_admin_modifyrole()
     $parents = array();
     $names = array();
     foreach ($role->getParents() as $parent) {
-        //jojodee - This sec instance check works?
         if(xarSecurityCheck('RemoveRole',0,'Relation',$parent->getName() . ":" . $role->getName())) {
             $parents[] = array('parentid' => $parent->getID(),
                                'parentname' => $parent->getName(),

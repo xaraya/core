@@ -87,6 +87,7 @@ function roles_admin_updaterole()
         if (strcmp($ppass1, $ppass2) != 0) throw new DuplicateException(null,'The entered passwords are not the same');
     }
 
+    $duvs = array();
     if ((!empty($ppass1))  && xarModGetVar('roles','setpasswordupdate')){
         //assume if it's not empty then it's already been matched with ppass2
         $duvs['passwordupdate']=time();
@@ -102,7 +103,7 @@ function roles_admin_updaterole()
     if (xarModGetVar('roles','setusertimezone')) {
         $duvs['usertimezone']=$usertimezone;
     }
-    
+
     //the user cannot receive emails from other users until they allow it and admin allows this option
     xarModSetUserVar('roles','usersendemails', $allowemail, $uid);
     // assemble the args into an array for the role constructor
@@ -113,8 +114,8 @@ function roles_admin_updaterole()
         'userhome' => $phome,
         'primaryparent' => $primaryparent,
         'usertimezone' => $usertimezone,
-        'lastlogin' => $duvs['userlastlogin'],
-        'passwordupdate'=>$duvs['passwordupdate'],
+        'lastlogin' => time(),  // $duvs['userlastlogin'],
+        'passwordupdate'=> time(),  //$duvs['passwordupdate'],
         'email' => $pemail,
         'pass' => $ppass1,
         'state' => $pstate,
