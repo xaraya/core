@@ -62,7 +62,7 @@ function blocks_admin_modify_instance()
 
     if (empty($block_info)) {
         // Function does not exist so throw error
-        throw FunctionNotFoundException(array($instance['module'],$instance['type']),
+        throw new FunctionNotFoundException(array($instance['module'],$instance['type']),
                                         'Block info function for module "#(1)" and type "#(2)" was not found or could not be loaded');
     }
 
