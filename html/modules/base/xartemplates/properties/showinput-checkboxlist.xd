@@ -17,8 +17,6 @@
 
             <label for="#$theID#">#$option['name']# </label>        
         </xar:foreach>
-    <xar:else />
-        <xar:mlstring>No options specified for CheckBox List in validation field.</xar:mlstring>
     </xar:if>
 <xar:elseif condition="$layout eq 'vertical'" />
     <xar:if condition="count($options) gt 0">
@@ -38,8 +36,6 @@
             <label for="#$theID#">#$option['name']# </label>  
             <br />
         </xar:foreach>
-    <xar:else />
-        <xar:mlstring>No options specified for CheckBox List in validation field.</xar:mlstring>
     </xar:if>
 <xar:else />
 <p>
