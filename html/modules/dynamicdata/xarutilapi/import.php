@@ -35,6 +35,14 @@ function dynamicdata_utilapi_import($args)
         throw new BadParameterException($file,'Invalid importfile "#(1)"');
     }
 
+	$objectcache = array();
+	$objectmaxid = array();
+    $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
+    $name2id = array();
+    foreach ($proptypes as $propid => $proptype) {
+        $name2id[$proptype['name']] = $propid;
+    }
+
     $testing = false;
     if ($testing) {
 		if (!empty($file)) {
@@ -92,11 +100,11 @@ function dynamicdata_utilapi_import($args)
 		    $propertyproperties = array_keys($property->properties);
 		    $propertieshead = $xmlobject->properties;
 		    foreach($propertieshead->children() as $property) {
-		    	$propertyname = (string)$property->attributes()->name;
-		    	$args[$propertyname]['name'] = $propertyname;
+		    	$propertyname = $property->attributes()->name;
+		    	$args[$propertyname]['name'] = (string)$propertyname;
 				foreach($propertyproperties as $prop) {
 					if (isset($property->{$prop}[0]))
-						$args[$propertyname][$prop] = (string)$property->{$prop}[0];
+						$args[(string)$propertyname][$prop] = (string)$property->{$prop}[0];
 				}
 
 		    	// Add some args needed to define the property
@@ -111,7 +119,7 @@ function dynamicdata_utilapi_import($args)
                 }
                 // convert property type to numeric if necessary
                 if (!is_numeric($args[$propertyname]['type'])) {
-                    if (isset($name2id[$property['type']])) {
+                    if (isset($name2id[$args[$propertyname]['type']])) {
                         $args[$propertyname]['type'] = $name2id[$args[$propertyname]['type']];
                     } else {
                         $args[$propertyname]['type'] = 1;
@@ -124,16 +132,73 @@ function dynamicdata_utilapi_import($args)
                 // Create this property
                 $prop_id = xarModAPIFunc('dynamicdata','admin','createproperty',
                                          $args[$propertyname]);
-                // make sure we drop the property, because it might already exist here
-                //TODO: Necessary?
-                unset($args[$propertyname]);
-
 		    }
-
-			var_dump($args); exit;
-
 		} elseif ($roottag == 'items') {
-			echo $roottag; exit;
+
+			foreach($xmlobject->children() as $child) {
+				$item = array();
+				$item['name'] = $child->getName();
+				$item['itemid'] = (!empty($keepitemid)) ? (string)$child->attributes()->itemid : 0;
+
+                if (empty($objectname2objectid[$item['name']])) {
+                    $objectinfo = Dynamic_Object_Master::getObjectInfo(array('name' => $item['name']));
+                    if (isset($objectinfo) && !empty($objectinfo['objectid'])) {
+                        $objectname2objectid[$item['name']] = $objectinfo['objectid'];
+                    } else {
+                        $msg = 'Unknown #(1) "#(2)"';
+                        $vars = array('object',xarVarPrepForDisplay($item['name']));
+                        throw new BadParameterException($vars,$msg);
+                    }
+                }
+                $objectid = $objectname2objectid[$item['name']];
+
+				// Get the properties for this object
+			    $object = xarModAPIFunc('dynamicdata','user','getobject',array('objectid' => $objectid));
+				$objectproperties = array_keys($object->properties);
+				foreach($objectproperties as $property) {
+					if (isset($child->{$property}))
+						$item[$property] = (string)$child->{$property};
+				}
+
+				// Create the item
+                if (!isset($objectcache[$objectid])) {
+                    $objectcache[$objectid] = & Dynamic_Object_Master::getObject(array('objectid' => $objectid));
+                }
+                if (empty($keepitemid)) {
+                    // for dynamic objects, set the primary field to 0 too
+                    if (isset($objectcache[$objectid]->primary)) {
+                        $primary = $objectcache[$objectid]->primary;
+                        if (!empty($item[$primary])) {
+                            $item[$primary] = 0;
+                        }
+                    }
+                }
+                if (!empty($item['itemid'])) {
+                    // check if the item already exists
+                    $olditemid = $objectcache[$objectid]->getItem(array('itemid' => $item['itemid']));
+                    if (!empty($olditemid) && $olditemid == $item['itemid']) {
+                        // update the item
+                        $itemid = $objectcache[$objectid]->updateItem($item);
+                    } else {
+                        // create the item
+                        $itemid = $objectcache[$objectid]->createItem($item);
+                    }
+                } else {
+//                    var_dump($objectcache[$objectid]);exit;
+                    // create the item
+                    $itemid = $objectcache[$objectid]->createItem($item);
+                }
+                if (empty($itemid)) return;
+
+                // keep track of the highest item id
+                if (empty($objectmaxid[$objectid]) || $objectmaxid[$objectid] < $itemid) {
+                    $objectmaxid[$objectid] = $itemid;
+                }
+
+//			var_dump($args);
+//				exit;
+			}
+//			echo $roottag; exit;
 		}
 	} else {
     $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');

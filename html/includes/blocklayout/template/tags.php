@@ -36,7 +36,7 @@ define('XAR_TPL_TAG_HASTEXT'                   ,2);
 define('XAR_TPL_TAG_ISASSIGNABLE'              ,4);
 define('XAR_TPL_TAG_ISPHPCODE'                 ,8);
 define('XAR_TPL_TAG_NEEDASSIGNMENT'            ,16);
-define('XAR_TPL_TAG_NEEDPARAMETER'             ,32); 
+define('XAR_TPL_TAG_NEEDPARAMETER'             ,32);
 /**
  * Model of a template tag
  *
@@ -241,6 +241,31 @@ class xarTemplateTag
         $query = "DELETE FROM $tag_table WHERE xar_name = ?";
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate(array($tag_name));
+        return true;
+    }
+
+    /**
+     * Unregisters all tags of a specific module to the theme system
+     *
+     * @access public
+     * @param  string $module namde of tags to remove
+     * @return bool
+     **/
+    public static function unregisterall($module)
+    {
+        if (!eregi(self::NAME_REGEX, $module)) {
+            // throw exception
+            return false;
+        }
+
+        $dbconn =& xarDBGetConn();
+        $xartable =& xarDBGetTables();
+
+        $tag_table = $xartable['template_tags'];
+        $query = "DELETE FROM $tag_table WHERE xar_modid = ?";
+        $stmt = $dbconn->prepareStatement($query);
+        $info = xarMod::getInfo(xarModGetIDFromName($module));
+        $stmt->executeUpdate(array($info['systemid']));
         return true;
     }
 
