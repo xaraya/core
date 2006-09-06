@@ -38,7 +38,7 @@ class xarDate
 
     function setnow()
     {
-        $this->timestamp = mktime();
+        $this->timestamp = time();
         $this->extract();
     }
 
@@ -98,116 +98,116 @@ class xarDate
                 );
     }
 
-    function getTimestamp() 
-    { 
-        return $this->timestamp; 
+    function getTimestamp()
+    {
+        return $this->timestamp;
     }
-    
-    function getDate($x)    
-    { 
-        return strtotime($x); 
+
+    function getDate($x)
+    {
+        return strtotime($x);
     }
-    
-    function getYear()      
-    { 
-        return $this->year; 
+
+    function getYear()
+    {
+        return $this->year;
     }
-    
-    function getYDay()      
-    { 
-        $datearray = getdate($this->timestamp); return $datearray['yday']; 
+
+    function getYDay()
+    {
+        $datearray = getdate($this->timestamp); return $datearray['yday'];
     }
-    
+
     //TODO: add gets for weekdays etc.
-    
-    function getMonth()     
-    { 
-        return $this->month; 
+
+    function getMonth()
+    {
+        return $this->month;
     }
-    
-    function getDay()       
-    { 
-        return $this->day; 
+
+    function getDay()
+    {
+        return $this->day;
     }
-    
-    function getHour()      
-    { 
-        return $this->hour; 
+
+    function getHour()
+    {
+        return $this->hour;
     }
-    
-    function getMinute()    
-    { 
-        return $this->minute; 
+
+    function getMinute()
+    {
+        return $this->minute;
     }
-    
-    function getSecond()    
-    { 
-        return $this->second; 
+
+    function getSecond()
+    {
+        return $this->second;
     }
-    
-    function setTimestamp($x) 
-    { 
-        $this->timestamp = $x; $this->extract(); 
+
+    function setTimestamp($x)
+    {
+        $this->timestamp = $x; $this->extract();
     }
-    
-    function setYear($x)    
-    { 
-        $this->year = $x; $this->regenerate(); 
+
+    function setYear($x)
+    {
+        $this->year = $x; $this->regenerate();
     }
-    
-    function setMonth($x)   
-    { 
-        $this->month = $x; $this->regenerate(); 
+
+    function setMonth($x)
+    {
+        $this->month = $x; $this->regenerate();
     }
-    
-    function setDay($x)     
-    { 
-        $this->day = $x; $this->regenerate(); 
+
+    function setDay($x)
+    {
+        $this->day = $x; $this->regenerate();
     }
-    
-    function setHour($x)    
-    { 
-        $this->hour = $x; $this->regenerate(); 
+
+    function setHour($x)
+    {
+        $this->hour = $x; $this->regenerate();
     }
-    
-    function setMinute($x)  
-    { 
-        $this->minute = $x; $this->regenerate(); 
+
+    function setMinute($x)
+    {
+        $this->minute = $x; $this->regenerate();
     }
-    
-    function setSecond($x)  
-    { 
-        $this->second = $x; $this->regenerate(); 
+
+    function setSecond($x)
+    {
+        $this->second = $x; $this->regenerate();
     }
-    
-    function addYears($x)   
-    { 
-        $this->year = $this->year + $x; $this->regenerate(); 
+
+    function addYears($x)
+    {
+        $this->year = $this->year + $x; $this->regenerate();
     }
-    
-    function addMonths($x)  
-    { 
-        $this->month = $this->month + $x; $this->regenerate(); 
+
+    function addMonths($x)
+    {
+        $this->month = $this->month + $x; $this->regenerate();
     }
-    
-    function addDays($x)    
-    { 
-        $this->day = $this->day + $x; $this->regenerate(); 
+
+    function addDays($x)
+    {
+        $this->day = $this->day + $x; $this->regenerate();
     }
-    
-    function addHours($x)   
-    { 
-        $this->hour = $this->hour + $x; $this->regenerate(); 
+
+    function addHours($x)
+    {
+        $this->hour = $this->hour + $x; $this->regenerate();
     }
-    
-    function addMinutes($x) 
-    { 
-        $this->minute = $this->minute + $x; $this->regenerate(); 
+
+    function addMinutes($x)
+    {
+        $this->minute = $this->minute + $x; $this->regenerate();
     }
-    
-    function addSeconds($x) 
-    { 
-        $this->second = $this->second + $x; $this->regenerate(); 
+
+    function addSeconds($x)
+    {
+        $this->second = $this->second + $x; $this->regenerate();
     }
 }
 
