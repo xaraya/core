@@ -23,7 +23,6 @@
  */
 function dynamicdata_utilapi_import($args)
 {
-    // restricted to DD Admins
 // Security Check
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
@@ -43,7 +42,7 @@ function dynamicdata_utilapi_import($args)
         $name2id[$proptype['name']] = $propid;
     }
 
-    $testing = false;
+    $testing = true;
     if ($testing) {
 		if (!empty($file)) {
 			$xmlobject = simplexml_load_file($file);
@@ -60,7 +59,7 @@ function dynamicdata_utilapi_import($args)
 
 		    $args = array();
 			// Get the object's name
-			$args['name'] = $dom->getAttribute ('name');
+			$args['name'] = (string)($xmlobject->attributes()->name);
 
 		    $object = xarModAPIFunc('dynamicdata','user','getobject',array('objectid' => 1));
 		    $objectproperties = array_keys($object->properties);
@@ -100,38 +99,38 @@ function dynamicdata_utilapi_import($args)
 		    $propertyproperties = array_keys($property->properties);
 		    $propertieshead = $xmlobject->properties;
 		    foreach($propertieshead->children() as $property) {
-		    	$propertyname = $property->attributes()->name;
-		    	$args[$propertyname]['name'] = (string)$propertyname;
+		    	$propertyname = (string)($property->attributes()->name);
+		    	$propertyargs['name'] = $propertyname;
 				foreach($propertyproperties as $prop) {
 					if (isset($property->{$prop}[0]))
-						$args[(string)$propertyname][$prop] = (string)$property->{$prop}[0];
+						$propertyargs[$prop] = (string)$property->{$prop}[0];
 				}
 
 		    	// Add some args needed to define the property
-                unset($args[$propertyname]['id']);
-                $args[$propertyname]['objectid'] = $objectid;
-                $args[$propertyname]['moduleid'] = $args['moduleid'];
-                $args[$propertyname]['itemtype'] = $args['itemtype'];
+                unset($propertyargs['id']);
+                $propertyargs['objectid'] = $objectid;
+                $propertyargs['moduleid'] = $args['moduleid'];
+                $propertyargs['itemtype'] = $args['itemtype'];
 
 		    	// Now do some checking
-                if (empty($args[$propertyname]['name']) || empty($args[$propertyname]['type'])) {
+                if (empty($propertyargs['name']) || empty($propertyargs['type'])) {
                     throw new BadParameterException(null,'Missing keys in property definition');
                 }
                 // convert property type to numeric if necessary
-                if (!is_numeric($args[$propertyname]['type'])) {
-                    if (isset($name2id[$args[$propertyname]['type']])) {
-                        $args[$propertyname]['type'] = $name2id[$args[$propertyname]['type']];
+                if (!is_numeric($propertyargs['type'])) {
+                    if (isset($name2id[$propertyargs['type']])) {
+                        $propertyargs['type'] = $name2id[$propertyargs['type']];
                     } else {
-                        $args[$propertyname]['type'] = 1;
+                        $propertyargs['type'] = 1;
                     }
                 }
 	            // TODO: watch out for multi-sites
                 // replace default xar_* table prefix with local one
-                $args[$propertyname]['source'] = preg_replace("/^xar_/",$prefix,$args[$propertyname]['source']);
+                $propertyargs['source'] = preg_replace("/^xar_/",$prefix,$propertyargs['source']);
 
                 // Create this property
                 $prop_id = xarModAPIFunc('dynamicdata','admin','createproperty',
-                                         $args[$propertyname]);
+                                         $propertyargs);
 		    }
 		} elseif ($roottag == 'items') {
 
@@ -184,7 +183,6 @@ function dynamicdata_utilapi_import($args)
                         $itemid = $objectcache[$objectid]->createItem($item);
                     }
                 } else {
-//                    var_dump($objectcache[$objectid]);exit;
                     // create the item
                     $itemid = $objectcache[$objectid]->createItem($item);
                 }
@@ -195,10 +193,7 @@ function dynamicdata_utilapi_import($args)
                     $objectmaxid[$objectid] = $itemid;
                 }
 
-//			var_dump($args);
-//				exit;
 			}
-//			echo $roottag; exit;
 		}
 	} else {
     $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
