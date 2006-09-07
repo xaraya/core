@@ -6,7 +6,7 @@
 
     <xar:set name="urlinfo">xarRequestGetInfo()</xar:set>
     <xar:comment>TODO: replace this with a call to a function that gets the array from XML data</xar:comment>
-    <xar:set name="tabs">xarModAPIFunc($urlinfo[0],'data','adminmenu')</xar:set>
+    <xar:set name="tabs">xarModAPIFunc('base','admin','loadadminmenuarray',array('module' => $urlinfo[0]))</xar:set>
     <xar:set name="activetab">$urlinfo[2]</xar:set>
     <div>
         <dl class="xar-tabs">

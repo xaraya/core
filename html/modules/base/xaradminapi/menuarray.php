@@ -23,24 +23,42 @@ function base_adminapi_menuarray($args)
     	$urlinfo = xarRequestGetInfo();
     	$args['module'] = $urlinfo[0];
     }
-    $tabs = xarModAPIFunc($args['module'],'data','adminmenu');
-    $menulinks = array();
-    foreach($tabs as $tab) {
-        $url = isset($tab['target']) ? xarModURL($args['module'],'admin',$tab['target']) : xarServerGetBaseURL();
-        $label = isset($tab['label']) ? $tab['label'] : xarML('Missing label');
-        $title = isset($tab['title']) ? $tab['title'] : $label;
-        $link = array('url'   => $url,
-                              'title' => $title,
-                              'label' => $label
-                       );
-        if(isset($tab['mask'])) {
-            if (xarSecurityCheck($tab['mask'],0)) {
-                $menulinks[] = $link;
-            }
-        } else {
-            $menulinks[] = $link;
-        }
-    }
+	$menulinks = array();
+	$menuarray = xarModAPIFunc('base','admin','loadadminmenuarray',array('module' => $args['module']));
+	if (!empty($menuarray)) {
+		foreach ($menuarray as $menuitem) {
+			$url = isset($menuitem['target']) ? xarModURL($args['module'],'admin',$menuitem['target']) : xarServerGetBaseURL();
+			$link = array('url'   => $url,
+						  'title' => $menuitem['title'],
+						  'label' => $menuitem['label']
+						   );
+			if(isset($menuitem['mask'])) {
+				if (xarSecurityCheck($menuitem['mask'])) {
+					$menulinks[] = $link;
+				}
+			} else {
+				$menulinks[] = $link;
+			}
+		}
+	} elseif (xarModAPIFunc($args['module'],'data','adminmenu',0)) {
+	    $tabs = xarModAPIFunc($args['module'],'data','adminmenu');
+		foreach($tabs as $tab) {
+			$url = isset($tab['target']) ? xarModURL($args['module'],'admin',$tab['target']) : xarServerGetBaseURL();
+			$label = isset($tab['label']) ? $tab['label'] : xarML('Missing label');
+			$title = isset($tab['title']) ? $tab['title'] : $label;
+			$link = array('url'   => $url,
+						  'title' => $title,
+						  'label' => $label
+						   );
+			if(isset($tab['mask'])) {
+				if (xarSecurityCheck($tab['mask'],0)) {
+					$menulinks[] = $link;
+				}
+			} else {
+				$menulinks[] = $link;
+			}
+		}
+	}
     return $menulinks;
 }
 
