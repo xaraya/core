@@ -190,7 +190,8 @@ through a js callback is irrelevant for us.
 Columns affected by modid/regid/modname decision:
  - dynamic_objects.object_moduleid (stores regid)
  - dynamic_properties.prop_moduleid (stores regid)
- - dynamic_properties_def.prop_req_modules (stores modulename)
+ - dynamic_properties_def.prop_req_modules 
+    - stores a semicolon separated list of modulenames (does it ever contain more than one?)
  - hooks.smodid (stores 0 now meaning ?)
  - hooks.tmodid ?
  - module_vars.modid (stores 0 now for config vars)
