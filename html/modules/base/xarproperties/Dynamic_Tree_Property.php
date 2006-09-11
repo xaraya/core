@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Property menu
+ * Tree Property
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2006 by to be added
@@ -14,6 +14,8 @@
 
 class Dynamic_Tree_Property extends Dynamic_Property
 {
+    public $tree;
+
     protected $options;
 
     function __construct($args)
@@ -32,6 +34,10 @@ class Dynamic_Tree_Property extends Dynamic_Property
         $info->name = 'tree';
         $info->desc = 'Dynamic Tree';
         return $info;
+    }
+
+    function toArray() {
+    	return $this->tree;
     }
 
     function showInput($data = array())

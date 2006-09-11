@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Property menu
+ * RolesTree Property
  *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2006 by to be added
@@ -13,17 +13,15 @@
  */
 
 sys::import('modules.base.xarproperties.Dynamic_Tree_Property');
-sys::import('modules.roles.xartreerenderer');
 
 class Dynamic_RolesTree_Property extends Dynamic_Tree_Property
 {
     protected $options;
 
     public $roles;
-    public $tree;
     public $treenode;
     public $treeitems;
-    public $levels;
+    public $levels = 0;
 
     // some variables we'll need to hold drawing info
     public $html;
@@ -91,29 +89,24 @@ class Dynamic_RolesTree_Property extends Dynamic_Tree_Property
     {
         if (isset($data['options'])) $this->options = $data['options'];
 
-        $data['roletree'] = $this->drawtree($this->maketree());
-        $data['treenode'] = array($this->maketree());
+        $this->maketree();
+        $data['roletree'] = $this->drawtree($this->tree);
+        $data['treenode'] = array($this->tree);
 
         return parent::showInput($data);
     }
 
-    function showOutput($data = array())
-    {
-        if (isset($data['options'])) $this->options = $data['options'];
-        return parent::showOutput($data);
-    }
-
 // ---------------------------------------------------------------
-    private function maketree($topuid='',$levels=0)
+    private function maketree($args=array())
     {
-        $this->levels = $levels;
-        if ($topuid == '') $topuid = xarModGetVar('roles', 'everybody');
+        extract($args);
+        if (!isset($levels)) $levels = $this->levels;
+        if (!isset($topuid)) $topuid = xarModGetVar('roles', 'everybody');
         $initialnode = array(
                     'parent' => $this->roles->getgroup($topuid),
                     'level' => 1
                     );
-//        $this->tree = $this->addbranches($initialnode);
-        return $this->addbranches($initialnode);
+        $this->tree = $this->addbranches($initialnode);
     }
 
     private function addbranches($node)
