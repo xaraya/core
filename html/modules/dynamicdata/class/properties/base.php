@@ -50,9 +50,6 @@ class Dynamic_Property
      */
     function __construct(array $args)
     {
-        $info = $this->getRegistrationInfo();
-        $this->template = $info->name;
-
         $this->args = serialize(array());
 
         if(!empty($args) && count($args) > 0)

@@ -23,6 +23,7 @@ class Dynamic_Tree_Property extends Dynamic_Property
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->filepath   = 'modules/base/xarproperties';
+        $this->template = $this->getTemplate();
         $this->options = array();
     }
 
@@ -51,5 +52,20 @@ class Dynamic_Tree_Property extends Dynamic_Property
         if (isset($data['options'])) $this->options = $data['options'];
         return parent::showOutput($data);
     }
+
+    protected function maketree($args=array())
+    {
+        extract($args);
+        if (isset($levels)) $this->levels = $levels;
+        $this->tree = $this->addbranches($initialnode);
+        /*
+        $newtree = new ArrayObject($this->tree);
+        $iterator = $newtree->getiterator();
+        foreach ( $iterator as $current ) {
+            var_dump(1);
+        }
+        */
+    }
+
 }
 ?>

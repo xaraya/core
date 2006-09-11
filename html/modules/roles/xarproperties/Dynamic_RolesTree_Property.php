@@ -13,11 +13,10 @@
  */
 
 sys::import('modules.base.xarproperties.Dynamic_Tree_Property');
+sys::import('modules.roles.xarroles');
 
 class Dynamic_RolesTree_Property extends Dynamic_Tree_Property
 {
-    protected $options;
-
     public $roles;
     public $treenode;
     public $treeitems;
@@ -81,7 +80,7 @@ class Dynamic_RolesTree_Property extends Dynamic_Tree_Property
         $info->reqmodules = array('roles');
         $info->id   = 30045;
         $info->name = 'rolestree';
-        $info->desc = 'Dynamic RolesTree';
+        $info->desc = 'Dynamic Roles Tree';
         return $info;
     }
 
@@ -97,19 +96,17 @@ class Dynamic_RolesTree_Property extends Dynamic_Tree_Property
     }
 
 // ---------------------------------------------------------------
-    private function maketree($args=array())
+    protected function maketree($args=array())
     {
-        extract($args);
-        if (!isset($levels)) $levels = $this->levels;
         if (!isset($topuid)) $topuid = xarModGetVar('roles', 'everybody');
-        $initialnode = array(
+        $args['initialnode'] = array(
                     'parent' => $this->roles->getgroup($topuid),
                     'level' => 1
                     );
-        $this->tree = $this->addbranches($initialnode);
+        parent::maketree($args);
     }
 
-    private function addbranches($node)
+    protected function addbranches($node)
     {
         $object = $node['parent'];
         $level = $node['level'];
