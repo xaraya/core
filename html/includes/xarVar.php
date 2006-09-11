@@ -57,7 +57,7 @@ function xarVar_init(&$args, $whatElseIsGoingLoaded)
 {
     /*
      * Initialise the variable cache
-     */
+    */
     $GLOBALS['xarVar_allowableHTML'] = xarConfigGetVar('Site.Core.AllowableHTML');
     $GLOBALS['xarVar_fixHTMLEntities'] = xarConfigGetVar('Site.Core.FixHTMLEntities');
 
