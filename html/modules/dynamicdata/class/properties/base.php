@@ -50,22 +50,25 @@ class Dynamic_Property
      */
     function __construct(array $args)
     {
+        $info = $this->getRegistrationInfo();
+        $this->template = $info->name;
+
         $this->args = serialize(array());
 
-        if(!empty($args) && count($args) > 0) 
-            foreach($args as $key => $val) 
+        if(!empty($args) && count($args) > 0)
+            foreach($args as $key => $val)
                 $this->$key = $val;
-        
-        if(!isset($args['value'])) 
+
+        if(!isset($args['value']))
         {
             // if the default field looks like xar<something>(...), we'll assume that this is
             // a function call that returns some dynamic default value
-            if(!empty($this->default) && preg_match('/^xar\w+\(.*\)$/',$this->default)) 
+            if(!empty($this->default) && preg_match('/^xar\w+\(.*\)$/',$this->default))
             {
                 eval('$value = ' . $this->default .';');
-                if(isset($value)) 
+                if(isset($value))
                     $this->default = $value;
-                else 
+                else
                     $this->default = null;
             }
             $this->value = $this->default;
@@ -101,23 +104,23 @@ class Dynamic_Property
      */
     function checkInput($name = '', $value = null)
     {
-        if(!isset($value)) 
+        if(!isset($value))
         {
             $isvalid = true;
             xarVarFetch('dd_'.$this->id, 'isset', $ddvalue,  NULL, XARVAR_DONT_SET);
-            if(isset($ddvalue)) 
+            if(isset($ddvalue))
                 $value = $ddvalue;
-            else 
+            else
             {
                 xarVarFetch($this->name, 'isset', $fieldvalue,  NULL, XARVAR_DONT_SET);
-                if(isset($fieldvalue)) 
+                if(isset($fieldvalue))
                     $value = $fieldvalue;
-                else 
+                else
                 {
                     xarVarFetch($name, 'isset', $namevalue,  NULL, XARVAR_DONT_SET);
-                    if(isset($namevalue)) 
+                    if(isset($namevalue))
                         $value = $namevalue;
-                    else 
+                    else
                         $isvalid = false;
                 }
             }
@@ -149,7 +152,7 @@ class Dynamic_Property
      */
     function validateValue($value = null)
     {
-        if(!isset($value)) 
+        if(!isset($value))
             $value = $this->value;
 
         $this->value = null;
@@ -245,13 +248,13 @@ class Dynamic_Property
         if(($this->status & Dynamic_Property_Master::DD_DISPLAYMASK) == Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN)
             return $this->showHidden($args);
 
-        if(empty($args)) 
+        if(empty($args))
         {
             // old syntax was showLabel($label = null)
-        } 
-        elseif(is_string($args)) 
+        }
+        elseif(is_string($args))
             $label = $args;
-        elseif(is_array($args)) 
+        elseif(is_array($args))
             extract($args);
 
         $data = array();
@@ -260,7 +263,7 @@ class Dynamic_Property
         $data['label'] = isset($label) ? xarVarPrepForDisplay($label) : xarVarPrepForDisplay($this->label);
         $data['for']   = isset($for) ? $for : null;
 
-        if(!isset($template)) 
+        if(!isset($template))
             $template = null;
 
         return xarTplProperty('dynamicdata', $template, 'label', $data);
@@ -285,7 +288,7 @@ class Dynamic_Property
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
 
-        if(!isset($template)) 
+        if(!isset($template))
             $template = null;
         return xarTplProperty('dynamicdata', $template, 'showhidden', $data);
     }
@@ -308,24 +311,24 @@ class Dynamic_Property
     function _showPreset($args = array())
     {
         // Check for empty here instead of isset, e.g. for <xar:data-input ... value="" />
-        if(empty($args['value'])) 
+        if(empty($args['value']))
         {
-            if(empty($args['name'])) 
+            if(empty($args['name']))
                 $isvalid = $this->checkInput();
-            else 
+            else
                 $isvalid = $this->checkInput($args['name']);
 
-            if($isvalid) 
+            if($isvalid)
                 // remove the original input value from the arguments
                 unset($args['value']);
-            else 
+            else
                 // clear the invalid message for preset
                 $this->invalid = '';
         }
 
-        if(!empty($args['hidden'])) 
+        if(!empty($args['hidden']))
             return $this->showHidden($args);
-        else 
+        else
             return $this->showInput($args);
     }
 
@@ -403,7 +406,7 @@ class Dynamic_Property
         $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
         $data['size']       = !empty($size) ? $size : 50;
 
-        if(isset($validation)) 
+        if(isset($validation))
         {
             $this->validation = $validation;
             $this->parseValidation($validation);
@@ -418,7 +421,7 @@ class Dynamic_Property
         // }
 
         // allow template override by child classes
-        if(!isset($template)) 
+        if(!isset($template))
             $template = null;
 
         return xarTplProperty('dynamicdata', $template, 'validation', $data);
@@ -437,21 +440,21 @@ class Dynamic_Property
         extract($args);
 
         // in case we need to process additional input fields based on the name
-        if(empty($name)) 
+        if(empty($name))
             $name = 'dd_'.$this->id;
 
         // do something with the validation and save it in $this->validation
-        if(isset($validation)) 
+        if(isset($validation))
         {
-            if(is_array($validation)) 
+            if(is_array($validation))
             {
                 // handle arrays as you like in your property type
                 // $this->validation = serialize($validation);
                 $this->validation = '';
                 $this->invalid = 'array';
                 return false;
-            } 
-            else 
+            }
+            else
                 $this->validation = $validation;
         }
 

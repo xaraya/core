@@ -39,13 +39,13 @@
                 <xar:data-input type="rolestree" />
           </div>
         </fieldset>
+        <!--
         <fieldset>
           <legend><xar:mlstring>Role hierarchy</xar:mlstring></legend>
             <div name="tree" id="tree" class="tree">
                 <xar:template file="tree" />
           </div>
         </fieldset>
-        <!--
         <fieldset>
           <legend><xar:mlstring>Role hierarchy</xar:mlstring></legend>
           <div>
