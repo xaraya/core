@@ -188,6 +188,9 @@ through a js callback is irrelevant for us.
  
  
 Columns affected by modid/regid/modname decision:
+ - modules.regid
+    - is now not null default 0
+    - becomes default null
  - dynamic_objects.object_moduleid (stores regid)
  - dynamic_properties.prop_moduleid (stores regid)
  - dynamic_properties_def.prop_req_modules 

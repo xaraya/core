@@ -522,7 +522,6 @@ class Dynamic_Object_Master
      * @param $args['name'] name of the object you're looking for, or
      * @param $args['moduleid'] module id of the object you're looking for +
      * @param $args['itemtype'] item type of the object you're looking for
-     * @returns array
      * @return array containing the name => value pairs for the object
      * @todo cache on id/name/modid ?
      * @todo when we had a constructor which was more passive, this could be non-static. (cheap construction is a good rule of thumb)

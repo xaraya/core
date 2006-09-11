@@ -549,7 +549,7 @@ class xarRequest
      * @access private
      * @param var string name of the module
      * @return string containing the module name
-     * @raise BAD_PARAM
+     * @throws BAD_PARAM
      */
     private static function resolveModuleAlias($var)
     {

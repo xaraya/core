@@ -767,7 +767,7 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
  * @param callerItemType string optional item type for the calling module (default = none)
  *        Note : better pass the item type via $extrainfo['itemtype'] if necessary, so that hook functions receive it too
  * @return mixed output from hooks, or null if there are no hooks
- * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
+ * @throws DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
  * @todo <marco> add BAD_PARAM exception
  * @todo <marco> <mikespub> re-evaluate how GUI / API hooks are handled
  * @todo add itemtype (in extrainfo or as additional parameter)
@@ -1021,7 +1021,7 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
  * @param hookModType name of the hook type
  * @param hookFuncName name of the hook function
  * @return bool true on success
- * @raise DATABASE_ERROR
+ * @throws DATABASE_ERROR
  * @todo check for params?
  */
 function xarModRegisterHook($hookObject, $hookAction, $hookArea, $hookModName, $hookModType, $hookFuncName)
@@ -1252,7 +1252,7 @@ class xarMod implements IxarMod
      * @param modName string The name of the module
      * @param type determines theme or module
      * @return string The module registry ID.
-     * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
+     * @throws DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
      */
     static function getRegID($modName, $type = 'module')
     {
@@ -1273,7 +1273,7 @@ class xarMod implements IxarMod
      * @param modMode integer the module's site mode
      * @param type determines theme or module
      * @return mixed the module's current state
-     * @raise DATABASE_ERROR, MODULE_NOT_EXIST
+     * @throws DATABASE_ERROR, MODULE_NOT_EXIST
      * @todo implement the xarMod__setState reciproke
      * @todo We dont need this, used nowhere
      */
@@ -1291,7 +1291,7 @@ class xarMod implements IxarMod
      * @param modName string registered name of module
      * @param type determines theme or module
      * @return mixed true if the module is available
-     * @raise DATABASE_ERROR, BAD_PARAM
+     * @throws DATABASE_ERROR, BAD_PARAM
      */
     static function isAvailable($modName, $type = 'module')
     {
@@ -1330,7 +1330,7 @@ class xarMod implements IxarMod
      * @param modRegId string module id
      * @param type determines theme or module
      * @return array of module information
-     * @raise DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
+     * @throws DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
      */
     static function getInfo($modRegId, $type = 'module')
     {
@@ -1482,7 +1482,7 @@ class xarMod implements IxarMod
      * @param modName string the module's name
      * @param type determines theme or module
      * @return mixed an array of base module info on success
-     * @raise DATABASE_ERROR, MODULE_NOT_EXIST
+     * @throws DATABASE_ERROR, MODULE_NOT_EXIST
      */
     static function getBaseInfo($modName, $type = 'module')
     {
@@ -1560,7 +1560,7 @@ class xarMod implements IxarMod
      * @param modOSdir the module's directory
      * @param type determines theme or module
      * @return array an array of module file information
-     * @raise MODULE_FILE_NOT_EXIST
+     * @throws MODULE_FILE_NOT_EXIST
      * @todo <marco> #1 FIXME: admin or admin capable?
      */
     static function getFileInfo($modOsDir, $type = 'module')
@@ -1652,7 +1652,7 @@ class xarMod implements IxarMod
      * @param modName string name of module to load database definition for
      * @param modOsDir string directory that module is in
      * @return mixed true on success
-     * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
+     * @throws DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
      *
      * @todo make this private again
      */
@@ -1697,7 +1697,7 @@ class xarMod implements IxarMod
      * @param funcName string specific function to run
      * @param args array
      * @return mixed The output of the function, or raise an exception
-     * @raise BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
+     * @throws BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
      */
     static function guiFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
     {
@@ -1730,7 +1730,7 @@ class xarMod implements IxarMod
      * @param funcName string specific function to run
      * @param args array arguments to pass to the function
      * @return mixed The output of the function, or false on failure
-     * @raise BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
+     * @throws BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
      */
     static function apiFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
     {
@@ -1817,7 +1817,7 @@ class xarMod implements IxarMod
      * @param modName string - name of module to load
      * @param modType string - type of functions to load
      * @return mixed
-     * @raise XAR_SYSTEM_EXCEPTION
+     * @throws XAR_SYSTEM_EXCEPTION
      */
     static function load($modName, $modType = 'user')
     {
@@ -1835,7 +1835,7 @@ class xarMod implements IxarMod
      * @param modName string registered name of the module
      * @param modType string type of functions to load
      * @return mixed true on success
-     * @raise XAR_SYSTEM_EXCEPTION
+     * @throws XAR_SYSTEM_EXCEPTION
      */
     static function apiLoad($modName, $modType = 'user')
     {
@@ -1855,7 +1855,7 @@ class xarMod implements IxarMod
      * @param modType string - type of functions to load
      * @param flags number - flags to modify function behaviour
      * @return mixed
-     * @raise DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_NOT_ACTIVE
+     * @throws DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_NOT_ACTIVE
      */
     static private function privateLoad($modName, $modType, $flags = 0)
     {
