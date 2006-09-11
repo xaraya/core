@@ -27,7 +27,7 @@ class xarModUserVars implements IxarModUserVars
      * @param modName The name of the module
      * @param name    The name of the variable to get
      * @param uid     User id for which value is to be retrieved
-     * @return mixed Teh value of the variable or void if variable doesn't exist.
+     * @return mixed The value of the variable or void if variable doesn't exist.
      * @throws EmptyParameterException
      * @see  xarModVars::get()
      * @todo Mrb : Add caching?
