@@ -69,21 +69,7 @@ function xarSession_init(&$args, $whatElseIsGoingLoaded)
         // so we don't test for the IP-address session var
         $session->current();
     }
-    
-    // Subsystem initialized, register a handler to run when the request is over
-    register_shutdown_function ('xarSession__shutdown_handler');
     return true;
-}
-
-/**
- * Shutdown handler for the session subsystem
- *
- * This function is the shutdown handler for the 
- * sessions subsystem. It runs on the end of a request
- *
- */
-function xarSession__shutdown_handler()
-{
 }
 
 /**

@@ -82,19 +82,7 @@ function xarUser_init(&$args, $whatElseIsGoingLoaded)
     // Register the UserLogout event
     xarEvents::register('UserLogout');
 
-    // Subsystem initialized, register a handler to run when the request is over
-    //register_shutdown_function ('xarUser__shutdown_handler');
     return true;
-}
-
-/**
- * Shutdown handler for user subsystem
- *
- * @access private
- */
-function xarUser__shutdown_handler()
-{
-    //xarLogMessage("xarUser shutdown handler");
 }
 
 /**

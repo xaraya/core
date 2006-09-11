@@ -37,20 +37,7 @@ function xarConfig_init(&$args, $whatElseIsGoingLoaded)
     $tables = array('config_vars' => $sitePrefix . '_module_vars');
 
     xarDB::importTables($tables);
-    
-    // Subsystem initialized, register a handler to run when the request is over
-    //register_shutdown_function ('xarConfig__shutdown_handler');
     return true;
-}
-
-/**
- * Shutdown handler for xarConfig subsystem
- *
- * @access private
- */
-function xarConfig__shutdown_handler()
-{
-    //xarLogMessage('xarConfig shutdown handler');
 }
 
 sys::import('variables.config');

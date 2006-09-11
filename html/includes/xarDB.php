@@ -55,24 +55,7 @@ function xarDB_init(&$args, $whatElseIsGoingLoaded)
     // Not trivial to move out though
     $table['template_tags'] = $systemPrefix . '_template_tags';
     xarDB::importTables($table);
-    // All initialized register the shutdown function
-    //register_shutdown_function('xarDB__shutdown_handler');
-
     return true;
-}
-
-/**
- * Shutdown handler for the DB subsystem
- *
- * This function is the shutdown handler for the 
- * DB subsystem. It runs on the end of a request
- *
- */
-function xarDB__shutdown_handler()
-{
-    // Shutdown handler for the DB subsystem
-    // Once the by reference handling of the dbconn is in, we can do 
-    // a central close for the db connection here.
 }
 
 /**

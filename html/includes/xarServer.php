@@ -38,19 +38,7 @@ function xarSerReqRes_init(&$args, $whatElseIsGoingLoaded)
     // Register the ServerRequest event
     xarEvents::register('ServerRequest');
 
-    // Subsystem initialized, register a handler to run when the request is over
-    //register_shutdown_function ('xarServer__shutdown_handler');
     return true;
-}
-
-/**
- * Shutdown handler for the xarServer subsystem
- *
- * @access private
- */
-function xarServer__shutdown_handler()
-{
-    //xarLogMessage("xarServer shutdown handler");
 }
 
 /**
