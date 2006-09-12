@@ -1426,12 +1426,7 @@ class xarMod implements IxarMod
     {
         assert('($funcType == "api" or $funcType==""); /* Wrong funcType argument in private callFunc method */');
         if (empty($modName)) throw new EmptyParameterException('modName');
-
-        if (!xarCoreIsApiAllowed($modType)) {
-            // InputValidationException is more clear here, even though it's not user input.
-            throw new BadParameterException(array($modType,$modName), 'The API named: "#(1)" is not allowed for module "#(2)"');
-        }
-        if (empty($funcName)) throw new EmptyParameterException('modName');
+        if (empty($funcName)) throw new EmptyParameterException('funcName');
 
         // good thing this information is cached :)
         $modBaseInfo = self::getBaseInfo($modName);
