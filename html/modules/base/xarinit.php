@@ -159,7 +159,6 @@ function base_init()
     xarConfigSetVar('System.Core.VersionId', XARCORE_VERSION_ID);
     xarConfigSetVar('System.Core.VersionSub', XARCORE_VERSION_SUB);
     $allowedAPITypes = array();
-    xarConfigSetVar('System.Core.AllowedAPITypes',$allowedAPITypes);
     /*****************************************************************
      * Set site configuration variables
      ******************************************************************/

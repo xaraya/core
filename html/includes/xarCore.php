@@ -490,36 +490,6 @@ function xarCore_getSystemVar($name)
 }
 
 /**
- * Check whether a certain API type is allowed
- *
- * Check whether an API type is allowed to load
- * normally the api types are 'user' and 'admin' but modules
- * may define other API types which do not fall in either of
- * those categories. (for example: visual or soap)
- * The list of API types is read from the Core configuration variable
- * Core.AllowedAPITypes.
- *
- * @author Marcel van der Boom marcel@hsdev.com
- * @access protected
- * @param  string apiType type of API to check whether allowed to load
- * @todo   See if we can get rid of this, nobody is using this
- * @return bool
- */
-function xarCoreIsApiAllowed($apiType)
-{
-    // Testing for an empty API type just returns false
-    if (empty($apiType)) return false;
-    if (preg_match ("/api$/i", $apiType)) return false;
-
-    // Dependency
-    $allowed = xarConfigGetVar('System.Core.AllowedAPITypes');
-
-    // If no API type restrictions are given, return true
-    if (empty($allowed) || count($allowed) == 0) return true;
-    return in_array($apiType,$allowed);
-}
-
-/**
 * Checks if a certain function was disabled in php.ini
  *
  * xarCore.php function
