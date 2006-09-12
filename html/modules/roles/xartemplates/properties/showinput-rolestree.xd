@@ -1,0 +1,95 @@
+<xar:if condition="!empty($treenode)">
+    <xar:set name="roles">new xarRoles()</xar:set>
+    <ul>
+        <xar:set name="lastnode">max(0,count($treenode)-1)</xar:set>
+        <xar:for start="$i = 0" test="$i le $lastnode" iter="$i++">
+            <xar:set name="childrennode">$treenode[$i]['children']</xar:set>
+            <xar:set name="node">$treenode[$i]['parent']</xar:set>
+            <xar:set name="drawchildren">true</xar:set>
+            
+            <xar:if condition="$i eq $lastnode">
+                <xar:set name="islast">"lastnode"</xar:set>
+            <xar:else />
+                <xar:set name="islast">""</xar:set>
+            </xar:if>
+            <xar:if condition="!empty($childrennode)">
+                <xar:set name="children">"children"</xar:set>
+            <xar:else />
+                <xar:set name="children">""</xar:set>
+            </xar:if>
+            <li class="leaf #$islast# #$children#">
+                <xar:comment> Placeholder spans
+                </xar:comment>
+                <span class="a #$islast# #$children#"><span class="b"><span class="c">
+                <xar:comment> Tree branch and description
+                </xar:comment>
+                    <span class="treeattributes">
+                        <xar:if condition="$drawchildren eq false">
+                            <span style="padding-left: 1em">
+                                <b>#$node['name']#</b> <xar:mlstring>see the entry above</xar:mlstring>
+                            </span>
+                        <xar:else />
+                            <xar:set name="numofsubgroups">count($roles->getsubgroups($node['uid']))</xar:set>
+                            <xar:set name="numofsubgroups">1</xar:set>
+                            <xar:set name="subgroups">$numofsubgroups == 1 ? xarML('subgroup') : xarML('subgroups')</xar:set>
+                            <xar:set name="users">$node['users'] == 1 ? xarML('user') : xarML('users')</xar:set>
+                            <xar:set name="description">$numofsubgroups . " " . $subgroups . ' | ' . $node['users'] . " " . $users</xar:set>
+                            <a href="#xarModURL('roles', 'admin', 'modifyrole', array('uid' => $node['uid']))#" title="#xarML('Modify this Group')#" style="margin: 0 0.25em 0 0.25em;">
+                                #$node['name']#
+                            </a> #$description#
+                        </xar:if>
+
+                    <xar:comment> Delete item
+                    </xar:comment>
+                        <xar:set name="seccheck">xarSecurityCheck('DeleteRole',0,'Roles',$node['name'])</xar:set>
+                        <xar:if condition="($seccheck eq false) or ($node['users'] gt 0) or ($drawchildren eq false)">
+                        <xar:else />
+                            <a href="#xarModURL('roles', 'admin', 'deleterole', array('uid' => $node['uid']))#" title="#xarML('Delete this Group')#" style="margin: 0 0.25em 0 0.25em;">
+                                <img src="#xarTplGetImage('delete.png')#" alt="" />
+                            </a>
+                        </xar:if>
+
+                    <xar:comment> Users item
+                    </xar:comment>
+                        <xar:if condition="($node['users'] gt 0) and ($drawchildren)">
+                            <a href="#xarModURL('roles', 'admin', 'showusers', array('uid' => $node['uid'], 'reload' => 1))#" title="#xarML('Show the Users in this Group')#" style="margin: 0 0.25em 0 0.25em;">
+                                <img src="#xarTplGetImage('users.png')#" alt="" />
+                            </a>
+                        </xar:if>
+
+                    <xar:comment> Email item
+                    </xar:comment>
+                        <xar:if condition="($node['users'] gt 0) and ($drawchildren)">
+                        <xar:else />
+                            <a href="#xarModURL('roles', 'admin', 'createmail', array('uid' => $node['uid']))#" title="#xarML('Email the Users in this Group')#" style="margin: 0 0.25em 0 0.25em;">
+                                <img src="#xarTplGetImage('email.png')#" alt="" />
+                            </a>
+                        </xar:if>
+
+                    <xar:comment> Show privileges item
+                    </xar:comment>
+                        <xar:if condition="$drawchildren">
+                            <a href="#xarModURL('roles', 'admin', 'showprivileges', array('uid' => $node['uid']))#" title="#xarML('Show the Privileges assigned to this Group')#" style="margin: 0 0.25em 0 0.25em;">
+                                <img src="#xarTplGetImage('privileges.png')#" alt="" />
+                            </a>
+                        </xar:if>
+
+                    <xar:comment> Test privileges item
+                    </xar:comment>
+                        <xar:if condition="$drawchildren">
+                            <a href="#xarModURL('roles', 'admin', 'testprivileges', array('uid' => $node['uid']))#" title="#xarML('Test this Groups\'s Privileges')#" style="margin: 0 0.25em 0 0.25em;">
+                                <img src="#xarTplGetImage('test.png')#" alt="" />
+                            </a>
+                        </xar:if>
+                    </span>
+                </span></span></span>
+
+                <xar:comment> Now do the children
+                </xar:comment>
+                <xar:if condition="!empty($childrennode)">
+                    <xar:template file="tree" subdata="array('treenode'=&gt;$childrennode)"/>
+                </xar:if>
+            </li>
+        </xar:for>
+    </ul>    
+</xar:if>

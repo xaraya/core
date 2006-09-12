@@ -42,10 +42,10 @@ function roles_admin_showusers()
 
     //Create the role tree
     if ($data['selstyle'] == '1') {
-        sys::import('modules.roles.xartreerenderer');
-        $renderer = new xarTreeRenderer();
-        $data['roletree'] = $renderer->drawtree($renderer->maketree());
-        $data['treenode'] = array($renderer->maketree());
+//        sys::import('modules.roles.xartreerenderer');
+//        $renderer = new xarTreeRenderer();
+//        $data['roletree'] = $renderer->drawtree($renderer->maketree());
+//        $data['treenode'] = array($renderer->maketree());
 //        echo var_dump($data['treenode']);exit;
     }
 
