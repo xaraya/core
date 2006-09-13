@@ -26,15 +26,15 @@ function privileges_admin_viewprivileges()
     xarSessionDelVar('privileges_statusmsg');
 
     // call the Privileges class
-    $privs = new xarPrivileges();
+//    $privs = new xarPrivileges();
 
     //Load Template
-    sys::import('modules.privileges.xartreerenderer');
-    $renderer = new xarTreeRenderer();
+//    sys::import('modules.privileges.xartreerenderer');
+//    $renderer = new xarTreeRenderer();
 
     $data['authid'] = xarSecGenAuthKey();
     //$data['trees'] = $renderer->drawtrees($data['show']);
-    $data['trees'] = $renderer->maketrees($data['show']);
+//    $data['trees'] = $renderer->maketrees($data['show']);
     //set_exception_handler(array('ExceptionHandlers','bone'));
        //    debug($data['newtrees']);
     $data['refreshlabel'] = xarML('Refresh');
