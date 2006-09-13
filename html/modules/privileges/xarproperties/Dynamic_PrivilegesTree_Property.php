@@ -33,7 +33,7 @@ class Dynamic_PrivilegesTree_Property extends Dynamic_Property
     {
         $info = new PropertyRegistration();
         $info->reqmodules = array('privileges');
-        $info->id   = 30046;
+        $info->id   = 30045;
         $info->name = 'privilegestree';
         $info->desc = 'Dynamic PrivilegesTree';
         return $info;
