@@ -12,10 +12,10 @@
  *
  */
 
-sys::import('modules.base.xarproperties.Dynamic_Tree_Property');
+sys::import('structures.tree');
 sys::import('modules.privileges.xarprivileges');
 
-class Dynamic_PrivilegesTree_Property extends Dynamic_Tree_Property
+class Dynamic_PrivilegesTree_Property extends Dynamic_Property
 {
     public $privs;
 
@@ -42,7 +42,7 @@ class Dynamic_PrivilegesTree_Property extends Dynamic_Tree_Property
         if (!isset($allowtoggle)) $allowtoggle = 0;
         $this->tplmodule = 'privileges';
         $this->filepath   = 'modules/privileges/xarproperties';
-        $this->options = array();
+        $this->template = $this->getTemplate();
         $this->privs = new xarPrivileges();
     }
 
@@ -58,10 +58,14 @@ class Dynamic_PrivilegesTree_Property extends Dynamic_Tree_Property
 
     function showInput($data = array())
     {
-        if (isset($data['options'])) $this->options = $data['options'];
-
         if (!isset($data['show'])) $data['show'] = 'assigned';
-	    $data['trees'] = $this->maketrees($data);
+        $trees = array();
+        foreach ($this->privs->gettoplevelprivileges($data['show']) as $entry) {
+			$node = new TreeNode($entry['pid']);
+			$tree = new PrivilegesTree($node);
+            $trees[] = $node->depthfirstenumeration();
+        }
+	    $data['trees'] = $trees;
 
         return parent::showInput($data);
     }
@@ -256,6 +260,30 @@ class Dynamic_PrivilegesTree_Property extends Dynamic_Tree_Property
         $this->html .= "</div>\n";
 
     }
+}
+// ---------------------------------------------------------------
+class PrivilegesTree extends Tree
+{
+	function createnodes(TreeNode $node)
+	{
+        $r = new xarPrivileges();
+        $data = $r->getprivileges();
+         foreach ($data as $row) {
+        	$nodedata = array(
+        		'id' => $row['pid'],
+        		'parent' => $row['parentid'],
+        		'name' => $row['name'],
+        		'realm' => $row['realm'],
+        		'module' => $row['module'],
+        		'component' => $row['component'],
+        		'instance' => $row['instance'],
+        		'level' => $row['level'],
+        		'description' => $row['description'],
+        	);
+			$this->treedata[] = $nodedata;
+        }
+        parent::createnodes($node);
+	}
 }
 
 ?>

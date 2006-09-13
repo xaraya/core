@@ -3,14 +3,12 @@
         <xar:set name="nodecount">count($nodes)</xar:set>
         <xar:foreach in="$nodes" value="$node">
             <xar:set name="children">$node->children</xar:set>
-            <xar:set name="level">$node->level</xar:set>
+            <xar:set name="level">$node->getLevel()</xar:set>
             <xar:set name="users">$node->users</xar:set>
             <xar:set name="uid">$node->id</xar:set>
             <xar:set name="drawchildren">true</xar:set>
 
             <li>
-                <xar:comment> Placeholder spans
-                </xar:comment>
                 <xar:for start="$i = 1" test="$i le $level" iter="$i++">
                     <img src="#xarTplGetImage('blank.png')#" />
                 </xar:for>

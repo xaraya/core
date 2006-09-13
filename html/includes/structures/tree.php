@@ -44,7 +44,7 @@
 			foreach ($data as $key => $value) {
 				$children = array();
 				foreach ($value['children'] as $child) {
-					$children[] = array($data1[$child]);
+					if (isset($data1[$child])) $children[] = array($data1[$child]);
 				}
 				$data1[$key] = array('id' => $key, 'children' => $children);
 			}
@@ -66,11 +66,12 @@
 		}
 		function getLevel()
 		{
+			return $this->nodelevel;
 		}
 
 		private function comparelevels($a, $b)
 		{
-		   return ($a['level'] > $b['level']);
+		   return ($a['nodelevel'] > $b['nodelevel']);
 		}
 	}
 
@@ -106,7 +107,7 @@
 				$thiskey = $iterator->key();
 				$thisvalue = $iterator->current();
 				if ($thisvalue['id'] == $node->id) {
-					$thisvalue['level'] = 0;
+					$thisvalue['nodelevel'] = 0;
 					$thisvalue['children'] = array();
 					$this->treedata[$node->id] = $thisvalue;
 					$lastidsdone[] = $thisvalue['id'];
@@ -116,16 +117,16 @@
 
 			// Now do the other elements
 			$lastcount = count($tempdata);
-			$level = 0;
+			$nodelevel = 0;
 			while (true) {
 				$thisidsdone = array();
-				$level += 1;
+				$nodelevel += 1;
 				$inputdata = new ArrayObject($tempdata);
 				for($iterator = $inputdata->getIterator();$iterator->valid();$iterator->next()) {           ;
 					$thiskey = $iterator->key();
 					$thisvalue = $iterator->current();
 					if (in_array($thisvalue['parent'],$lastidsdone)) {
-						$thisvalue['level'] = $level;
+						$thisvalue['nodelevel'] = $nodelevel;
 						$thisvalue['children'] = array();
 						$this->treedata[$thisvalue['id']] = $thisvalue;
 						$this->treedata[$thisvalue['parent']]['children'][] = $thisvalue['id'];

@@ -39,10 +39,9 @@ class Dynamic_RolesTree_Property extends Dynamic_Property
     function showInput($data = array())
     {
         if (!isset($topuid)) $topuid = xarModGetVar('roles', 'everybody');
-        $r = new TreeNode($topuid);
-        $t = new RolesTree($r);
-        $data['nodes'] = $r->depthfirstenumeration();
-
+        $node = new TreeNode($topuid);
+        $tree = new RolesTree($node);
+        $data['nodes'] = $node->depthfirstenumeration();
         return parent::showInput($data);
     }
 }
