@@ -12,7 +12,7 @@
  *
  */
 
-sys::import('modules.base.xarproperties.Dynamic_Tree_Property');
+sys::import('structures.tree');
 sys::import('modules.roles.xarroles');
 
 class Dynamic_RolesTree_Property extends Dynamic_Property
@@ -30,7 +30,7 @@ class Dynamic_RolesTree_Property extends Dynamic_Property
     {
         $info = new PropertyRegistration();
         $info->reqmodules = array('roles');
-        $info->id   = 30045;
+        $info->id   = 30044;
         $info->name = 'rolestree';
         $info->desc = 'Dynamic Roles Tree';
         return $info;
