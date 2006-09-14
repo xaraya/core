@@ -7,70 +7,20 @@
  * @link http://www.xaraya.com
  * 
  * @subpackage themes
- * @author mrb <marcel@xaraya.com> (this tag means responsible person)
+ * @author mrb <marcel@xaraya.com> 
  * @todo Most of this doesnt belong here, but in the themes module, move it away
 */
 
-/**
- * get a theme variable
- *
- * @access public
- * @param themeName The name of the theme
- * @param name The name of the variable
- * @return mixed The value of the variable or void if variable doesn't exist
- * @throws EmptyParameterException
- */
+sys::import('variables.theme');
 function xarThemeGetVar($themeName, $name, $prep = NULL)
-{
-    if (empty($themeName)) throw new EmptyParameterException('themename');
+{   return xarThemeVars::get($themeName, $name); }
 
-    $itemid = xarThemeGetIDFromName($themeName,'systemid');
-    $modVarName = $themeName . '_' . $name;
-    return xarVar__GetVarByAlias('themes', $modVarName, $itemid, $prep, $type = 'moditemvar');
-}
-
-/**
- * set a theme variable
- *
- * @access public
- * @param themeName The name of the theme
- * @param name The name of the variable
- * @param value The value of the variable
- * @return bool true on success
- * @throws EmptyParameterException
- */
 function xarThemeSetVar($themeName, $name, $prime = NULL, $value, $description='')
-{
-    if (empty($themeName)) throw new EmptyParameterException('themename');
+{   return xarThemeVars::set($themeName, $name, $value); }
 
-    $itemid = xarThemeGetIDFromName($themeName,'systemid');
-    $modVarName = $themeName . '_' . $name;
-    // Make sure we set it as modvar first
-    // TODO: this sucks
-    if(!xarModVars::get('themes',$modVarName)) {
-        xarModVars::set('themes',$modVarName,$value);
-    }
-    return xarVar__SetVarByAlias('themes', $modVarName, $value, $prime, $description, $itemid, $type = 'moditemvar');
-}
-
-
-/**
- * delete a theme variable
- *
- * @access public
- * @param themeName The name of the theme
- * @param name The name of the variable
- * @return bool true on success
- * @throws EmptyParameterException
- */
 function xarThemeDelVar($themeName, $name)
-{
-    if (empty($themeName)) throw new EmptyParameterException('themename');
+{   return xarThemeVars::delete($themeName, $name); }
 
-    $itemid = xarThemeGetIDFromName($themeName,'systemid');
-    $modVarName = $themeName . '_' . $name;
-    return xarVar__DelVarByAlias('themes', $modVarName, $itemid, $type = 'moditemvar');
-}
 
 /**
  * Gets theme registry ID given its name
