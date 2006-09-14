@@ -65,20 +65,7 @@ function xarTpl_init(&$args, $whatElseIsGoingLoaded)
 
     // This is wrong here as well, but it's better at least than in xarMod
     sys::import('xarTheme');
-
-    // Subsystem initialized, register a handler to run when the request is over
-    //register_shutdown_function ('xarTemplate__shutdown_handler');
     return true;
-}
-
-/**
- * Shutdown handler for the template subsystem
- *
- * @access private
- */
-function xarTemplate__shutdown_handler()
-{
-    //xarLogMessage("xarTemplate shutdown handler");
 }
 
 /**

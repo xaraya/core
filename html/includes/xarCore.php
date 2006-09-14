@@ -405,33 +405,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
     // Make the current load level == the new load level
     $current_load_level = $new_load_level;
-
-    // Core initialized register the shutdown function
-    //register_shutdown_function('xarCore__shutdown_handler');
     return true;
-}
-
-/**
- * Default shutdown handler
- *
- *
- */
-function xarCore__shutdown_handler()
-{
-    // Default shutdownhandler, nothing here yet,
-    // but i think we could do something here with the
-    // connection_aborted() function, signalling that
-    // the user prematurely aborted. (by hitting stop or closing browser)
-    // Also, the other subsystems can use a similar handler, for example to clean up
-    // session tables or removing online status flags etc.
-    // A carefully constructed combo with ignore_user_abort() and
-    // a check afterward will get all requests atomic which might save
-    // some headaches.
-
-    // This handler is guaranteed to be registered as the last one, which
-    // means that is also guaranteed to run last in the sequence of shutdown
-    // handlers, the last statement in this function
-    // is guaranteed to be the last statement of Xaraya ;-)
 }
 
 /**
@@ -507,73 +481,12 @@ function xarCoreIsDebugFlagSet($flag)
 }
 
 /**
- * Gets a core system variable
- *
- * System variables are REQUIRED to be set, if they cannot be found
- * the system cannot continue. Only use variables for this which are
- * absolutely necessary to be set. Otherwise use other types of variables
- *
- * @access protected
- * @static systemVars array
- * @param string name name of core system variable to get
- * @throws FileNotFoundException, VariableNotFoundException
- * @todo check if we need both the isCached and static
+ * Wrapper functions to support Xaraya 1 API for modvars
  */
+sys::import('variables.system');
 function xarCore_getSystemVar($name)
 {
-    static $systemVars = NULL;
-
-    if (xarCore::isCached('Core.getSystemVar', $name)) {
-        return xarCore::getCached('Core.getSystemVar', $name);
-    }
-    if (!isset($systemVars)) {
-        $fileName = xarCoreGetVarDirPath() . '/' . XARCORE_CONFIG_FILE;
-        if (!file_exists($fileName)) {
-            throw new FileNotFoundException($fileName);
-        }
-        // Make stuff from config.system.php available
-        // NOTE: we can not use sys::import since the variable scope would be wrong.
-        include $fileName;
-        $systemVars = $systemConfiguration;
-    }
-
-    if (!isset($systemVars[$name])) {
-        throw new VariableNotFoundException($name,"xarCore_getSystemVar: Unknown system variable: '#(1)'.");
-    }
-
-    xarCore::setCached('Core.getSystemVar', $name, $systemVars[$name]);
-
-    return $systemVars[$name];
-}
-
-/**
- * Check whether a certain API type is allowed
- *
- * Check whether an API type is allowed to load
- * normally the api types are 'user' and 'admin' but modules
- * may define other API types which do not fall in either of
- * those categories. (for example: visual or soap)
- * The list of API types is read from the Core configuration variable
- * Core.AllowedAPITypes.
- *
- * @author Marcel van der Boom marcel@hsdev.com
- * @access protected
- * @param  string apiType type of API to check whether allowed to load
- * @todo   See if we can get rid of this, nobody is using this
- * @return bool
- */
-function xarCoreIsApiAllowed($apiType)
-{
-    // Testing for an empty API type just returns false
-    if (empty($apiType)) return false;
-    if (preg_match ("/api$/i", $apiType)) return false;
-
-    // Dependency
-    $allowed = xarConfigGetVar('System.Core.AllowedAPITypes');
-
-    // If no API type restrictions are given, return true
-    if (empty($allowed) || count($allowed) == 0) return true;
-    return in_array($apiType,$allowed);
+    return xarSystemVars::get(null, $name);
 }
 
 /**

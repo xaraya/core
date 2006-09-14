@@ -100,8 +100,6 @@ function xarError_init(&$systemArgs, $whatToLoad)
     // Send all error the the default error handler (which basically just throws a specific exception)
     set_error_handler(array('ExceptionHandlers','phperrors'));
 
-    // Subsystem initialized, register a handler to run when the request is over
-    //register_shutdown_function ('xarError__shutdown_handler');
     return true;
 }
 
@@ -115,15 +113,6 @@ function xarError_init(&$systemArgs, $whatToLoad)
 function debug($anything)
 {
     throw new DebugException('DEBUGGING',var_export($anything,true));
-}
-/**
- * Shutdown handler for error subsystem
- *
- * @access private
- */
-function xarError__shutdown_handler()
-{
-    //xarLogMessage("xarError shutdown handler");
 }
 
 /**

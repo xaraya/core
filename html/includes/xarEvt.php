@@ -71,19 +71,7 @@ class EventRegistrationException extends RegistrationExceptions
  */
 function xarEvt_init(&$args, $whatElseIsGoingLoaded)
 {
-    // Subsystem initialized, register a handler to run when the request is over
-    //register_shutdown_function ('xarEvt__shutdown_handler');
     return true;
-}
-
-/**
- * Shutdown handler for events subsystem
- *
- * @access private
- */
-function xarEvt__shutdown_handler()
-{
-    //xarLogMessage("xarEvt shutdown handler");
 }
 
 interface IxarEvents

@@ -57,23 +57,10 @@ function xarVar_init(&$args, $whatElseIsGoingLoaded)
 {
     /*
      * Initialise the variable cache
-     */
+    */
     $GLOBALS['xarVar_allowableHTML'] = xarConfigGetVar('Site.Core.AllowableHTML');
     $GLOBALS['xarVar_fixHTMLEntities'] = xarConfigGetVar('Site.Core.FixHTMLEntities');
-
-    // Subsystem initialized, register a handler to run when the request is over
-    //register_shutdown_function ('xarVar__shutdown_handler');
     return true;
-}
-
-/**
- * Shutdown handler for xarVar subsystem
- *
- * @access private
- */
-function xarVar__shutdown_handler()
-{
-    //xarLogMessage("xarVar shutdown handler");
 }
 
 /**

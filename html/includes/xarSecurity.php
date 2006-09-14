@@ -55,18 +55,7 @@ function xarSecurity_init()
                     'security_privsets' => $prefix . '_security_privsets'
                     );
     xarDB::importTables($tables);
-    //register_shutdown_function ('xarSecurity__shutdown_handler');
     return true;
-}
-
-/**
- * Shutdown handler for xarSecurity
- *
- * @access private
- */
-function xarSecurity__shutdown_handler()
-{
-    //xarLogMessage("xarSecurity shutdown handler");
 }
 
 /*

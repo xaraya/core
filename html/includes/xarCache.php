@@ -25,8 +25,7 @@ function xarCache_init($args = false)
         extract($args);
     }
 
-// TODO: clean up all these globals and put them e.g. into a single array
-
+    // TODO: clean up all these globals and put them e.g. into a single array
     global $xarOutput_cacheCollection;
     global $xarOutput_cacheTheme;
     global $xarOutput_cacheSizeLimit;
@@ -64,21 +63,8 @@ function xarCache_init($args = false)
         xarBlockCache_init($cachingConfiguration);
     }
 
-    // Subsystem initialized, register a handler to run when the request is over
-    //register_shutdown_function ('xarCache__shutdown_handler');
     define('XARCACHE_IS_ENABLED',1);
     return true;
-}
-
-/**
- * Shutdown handler for xarCache subsystem
- *
- * @access private
- *
- */
-function xarCache__shutdown_handler()
-{
-    //xarLogMessage("xarCache shutdown handler");
 }
 
 /**

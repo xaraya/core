@@ -99,20 +99,7 @@ function xarMLS_init(&$args, $whatElseIsGoingLoaded)
         // MLS will use the default locale
         xarMLS_setCurrentLocale($args['defaultLocale']);
     }
-
-    // Subsystem initialized, register a handler to run when the request is over
-    //register_shutdown_function ('xarMLS__shutdown_handler');
     return true;
-}
-
-/**
- * Shutdown handler for the MLS subsystem
- *
- * @access private
- */
-function xarMLS__shutdown_handler()
-{
-    //xarLogMessage("xarMLS shutdown handler");
 }
 
 /**
