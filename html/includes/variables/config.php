@@ -22,8 +22,33 @@ class xarConfigVars implements IxarConfigVars
      */
     public static function set($scope, $name, $value)
     {
-        // Nice, but introduces dependency
-        return xarVar__SetVarByAlias(null, $name, $value, $prime = null, $description = null, $uid = null, $type = 'configvar');
+        // FIXME: do we really want that ?
+        // This way, worst case: 3 queries:
+        // 1. deleting it
+        // 2. Getting a new id (for some backends)
+        // 3. inserting it.
+        // Question is wether we want to invent new configvars on the fly or not
+        self::delete(null,$name);
+
+        $dbconn =& xarDBGetConn();
+        $tables =& xarDBGetTables();
+        $config_varsTable = $tables['config_vars'];
+
+        //Here we serialize the configuration variables
+        //so they can effectively contain more than one value
+        $serialvalue = serialize($value);
+
+        //Insert
+        $seqId = $dbconn->GenId($config_varsTable);
+        $query = "INSERT INTO $config_varsTable
+                  (xar_id, xar_modid, xar_name, xar_value)
+                  VALUES (?,?,?,?)";
+        $bindvars = array($seqId, 0, $name, $serialvalue);
+        $stmt = $dbconn->prepareStatement($query);
+        $stmt->executeUpdate($bindvars);
+        xarCore::setCached('Config.Variables', $name, $value);
+        
+        return true;
     }
     
     /**
@@ -34,24 +59,19 @@ class xarConfigVars implements IxarConfigVars
      * @return mixed value of the variable(string), or void if variable doesn't exist
      * @todo do we need these aliases anymore ?
      * @todo return proper site prefix when we can store site vars
+     * @todo this is still too long and windy
      */
     public static function get($scope, $name)
     {
         static $cached = false;
-        static $aliases = array('Version_Num' => 'System.Core.VersionNumber',
-                                'Version_ID' => 'System.Core.VersionId',
-                                'Version_Sub' => 'System.Core.VersionSub');
-        
-        if (isset($aliases[$name])) {
-            $name = $aliases[$name];
-        }
         
         if(!$cached)
         {
             self::load();
             $cached = true;
         }
-
+        
+        // Configvars which are not in the database (why not?)
         if ($name == 'Site.DB.TablePrefix') {
             return xarCore_getSystemVar('DB.TablePrefix');
         } elseif ($name == 'System.Core.VersionNumber') {
@@ -66,15 +86,66 @@ class xarConfigVars implements IxarConfigVars
         }
 
         // Nice, but introduces dependency
-        $t =xarVar__GetVarByAlias($modname = null, $name, $uid = null, null, $type = 'configvar');
+        $cacheName = $name;
+        $cacheCollection = 'Config.Variables';
+        if (xarCore::isCached($cacheCollection, $cacheName)) {
+            $value = xarCore::getCached($cacheCollection, $cacheName);
+            if (!isset($value)) {
+                return;
+            } else {
+                return $value;
+            }
+        } elseif (xarCore::isCached($cacheCollection, 0)) {
+            // variable missing.
+            // we should really throw an exception here
+            return;
+        }
+        
+        $dbconn =& xarDBGetConn();
+        $tables =& xarDBGetTables();
+        $varstable = $tables['config_vars'];
+        $query = "SELECT xar_name, xar_value FROM $varstable WHERE xar_modid = ?";
 
-        return $t;
+        // TODO : Here used to be a resultset cache option, reconsider it
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery(array(0),ResultSet::FETCHMODE_NUM);
+
+        if ($result->getRecordCount() == 0) {
+            $result->close(); unset($result);
+            return;
+        }
+
+        while ($result->next()) { // while? we expect one value, no?
+            $value = $result->get(2); // Unlike creole->set this does *not* unserialize/escape automatically
+            $value = unserialize($value);
+            xarCore::setCached($cacheCollection, $result->getString(1), $value);
+        }
+        
+        // CHECKME: What's all this about then?
+        // Special value to tell this select has already been run, any
+        // variable not found now on is missing
+        xarCore::setCached($cacheCollection, 0, true);
+        //It should be here!
+        if (xarCore::isCached($cacheCollection, $cacheName)) {
+            $value = xarCore::getCached($cacheCollection, $cacheName);
+        } else {
+            return;
+        }
+        return $value;
     }
     
     public static function delete($scope, $name)
     {
-        // Not supported
-        return false;
+        $dbconn =& xarDBGetConn();
+        $tables =& xarDBGetTables();
+        $config_varsTable = $tables['config_vars'];
+        $query = "DELETE FROM $config_varsTable WHERE xar_name = ? AND xar_modid=?";
+        
+        // We want to make the next two statements atomic
+        $dbconn->execute($query,array($name,0));
+        xarCore::delCached('Config.Variables.', $name);
+        
+        return true;
     }
     
     /**

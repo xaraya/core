@@ -58,16 +58,13 @@ function xarMLS_init(&$args, $whatElseIsGoingLoaded)
         throw new Exception('xarMLS_init: Unknown MLS mode: '.$args['MLSMode']);
     }
     $GLOBALS['xarMLS_backendName'] = $args['translationsBackend'];
-/* TODO: delete after new backend testing
-    if ($GLOBALS['xarMLS_backendName'] != 'php' && $GLOBALS['xarMLS_backendName'] != 'xml' && $GLOBALS['xarMLS_backendName'] != 'xml2php') {
-        throw new Exception('xarML_init: Unknown translations backend: '.$GLOBALS['xarMLS_backendName']);
-    }
-*/
+
     // USERLOCALE FIXME Delete after new backend testing
     $GLOBALS['xarMLS_localeDataLoader'] = new xarMLS__LocaleDataLoader();
     $GLOBALS['xarMLS_localeDataCache'] = array();
 
-    $GLOBALS['xarMLS_currentLocale'] = '';
+    $GLOBALS['xarMLS_currentLocale'] = ''; // <-- FIXME: this causes problems
+
     $GLOBALS['xarMLS_defaultLocale'] = $args['defaultLocale'];
     $GLOBALS['xarMLS_allowedLocales'] = $args['allowedLocales'];
 
@@ -94,11 +91,11 @@ function xarMLS_init(&$args, $whatElseIsGoingLoaded)
     xarEvents::register('MLSMissingTranslationKey');
     xarEvents::register('MLSMissingTranslationDomain');
 
-    if (!($whatElseIsGoingLoaded & XARCORE_SYSTEM_USER)) {
-        // The User System won't be started
-        // MLS will use the default locale
-        xarMLS_setCurrentLocale($args['defaultLocale']);
-    }
+    // FIXME: this was previously conditional on User subsystem initialisation,
+    // but in the 2.x flow we need it earlier apparently, so made this unconditional
+    // *AND* commented out the assertion on running this once per request lower
+    // in this file. We need to investigate this better after the MLS refactoring
+    xarMLS_setCurrentLocale($args['defaultLocale']);
     return true;
 }
 
@@ -420,7 +417,11 @@ function xarMLS_setCurrentLocale($locale)
 {
     static $called = 0;
 
-    assert('$called == 0; // Can only be called once during a page request');
+    // FIXME: during initialisation, the current locale was set, and it gets called
+    // again during user subsystem initialisation, we have to provide better defaults
+    // if we really want this to run only once.
+    
+    //assert('$called == 0; // Can only be called once during a page request');
     $called++;
 
     $mode = xarMLSGetMode();

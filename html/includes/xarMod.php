@@ -1495,10 +1495,6 @@ class xarMod implements IxarMod
      */
     static function load($modName, $modType = 'user')
     {
-        if (!xarCoreIsApiAllowed($modType)) {
-            // InputValidationException is more clear here, even though it's not user input.
-            throw new BadParameterException(array($modType,$modName), 'The API named: "#(1)" is not allowed for module "#(2)"');
-        }
         return self::privateLoad($modName, $modType);
     }
 

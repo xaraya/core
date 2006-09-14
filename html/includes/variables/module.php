@@ -29,7 +29,84 @@ class xarModVars implements IxarModVars
     static function get($modName, $name, $prep = NULL)
     {
         if (empty($modName)) throw new EmptyParameterException('modName');
-        return xarVar__GetVarByAlias($modName, $name, $uid = NULL, $prep, 'modvar');
+        if (empty($name)) throw new EmptyParameterException('name');
+        if (empty($prep)) $prep = XARVAR_PREP_FOR_NOTHING;
+
+        // Lets first check to see if any of our type vars are alread set in the cache.
+        $cacheName = $name;
+        $cacheCollection = 'Mod.Variables.' . $modName;
+
+        if (xarCore::isCached($cacheCollection, $cacheName)) {
+            $value = xarCore::getCached($cacheCollection, $cacheName);
+            if (!isset($value)) {
+                return;
+            } else {
+                if ($prep == XARVAR_PREP_FOR_DISPLAY){
+                    $value = xarVarPrepForDisplay($value);
+                } elseif ($prep == XARVAR_PREP_FOR_HTML){
+                    $value = xarVarPrepHTMLDisplay($value);
+                }
+                return $value;
+            }
+        } elseif (xarCore::isCached($cacheCollection, 0)) {
+            //variable missing.
+            return;
+        }
+
+        // We didn't find it in the single var cache, let's check the cached collection by whole/name
+        if (xarCore::isCached('Mod.GetVarsByModule', $modName)) 
+            return;
+        if (xarCore::isCached('Mod.GetVarsByName', $cacheName)) 
+            return;
+
+        // Still no luck, let's do the hard work then
+        $baseinfotype = 'module';
+
+        $modBaseInfo = xarMod::getBaseInfo($modName, $baseinfotype);
+        if (!isset($modBaseInfo)) return; // throw back
+
+        $dbconn =& xarDBGetConn();
+        $tables =& xarDBGetTables();
+        $bindvars = array();
+
+        $module_varstable = $tables['module_vars'];
+        $query = "SELECT xar_name, xar_value FROM $module_varstable WHERE xar_modid = ?";
+        $bindvars = array((int)$modBaseInfo['systemid']);
+
+        // TODO : Here used to be a resultset cache option, reconsider it
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
+
+        if ($result->getRecordCount() == 0) {
+            $result->close(); unset($result);
+            return;
+        }
+
+        while ($result->next()) {
+            $value = $result->get(2); // Unlike creole->set this does *not* unserialize/escape automatically
+            xarCore::setCached($cacheCollection, $result->getString(1), $value);
+        }
+        //Special value to tell this select has already been run, any
+        //variable not found now on is missing
+         xarCore::setCached($cacheCollection, 0, true);
+        //It should be here!
+        if (xarCore::isCached($cacheCollection, $cacheName)) {
+            $value = xarCore::getCached($cacheCollection, $cacheName);
+        } else {
+            return;
+        }
+        $result->Close();
+
+        // Optionally prepare it
+        // FIXME: This may sound convenient now, feels wrong though, prepping introduces
+        //        an unnecessary dependency here.
+        if ($prep == XARVAR_PREP_FOR_DISPLAY){
+            $value = xarVarPrepForDisplay($value);
+        } elseif ($prep == XARVAR_PREP_FOR_HTML){
+            $value = xarVarPrepHTMLDisplay($value);
+        }
+
+        return $value;
     }
 
     /**
@@ -82,7 +159,38 @@ class xarModVars implements IxarModVars
     static function set($modName, $name, $value)
     {
         if (empty($modName)) throw new EmptyParameterException('modName');
-        return xarVar__SetVarByAlias($modName, $name, $value, $prime = NULL, $description = NULL, $uid = NULL, $type = 'modvar');
+        if (empty($name)) throw new EmptyParameterException('name');
+        assert('!is_null($value); /* Not allowed to set a variable to NULL value */');
+
+        $dbconn =& xarDBGetConn();
+        $tables =& xarDBGetTables();
+        $modBaseInfo = xarMod::getBaseInfo($modName);
+        $module_varstable = $tables['module_vars'];
+        // We need the variable id
+        unset($modvarid);
+        $modvarid = self::getId($modName, $name);
+
+        if($value === false) $value = 0;
+        if($value === true)  $value = 1;
+        
+        if(!$modvarid) {
+            // Not there yet
+            $seqId = $dbconn->GenId($module_varstable);
+            $query = "INSERT INTO $module_varstable
+                         (xar_id, xar_modid, xar_name, xar_value)
+                      VALUES (?,?,?,?)";
+            $bindvars = array($seqId, $modBaseInfo['systemid'],$name,(string)$value);
+        } else {
+            // Existing one
+            $query = "UPDATE $module_varstable SET xar_value = ? WHERE xar_id = ?";
+            $bindvars = array((string)$value,$modvarid);
+        }
+        $stmt = $dbconn->prepareStatement($query);
+        $stmt->executeUpdate($bindvars);
+
+        // Update cache for the variable
+        xarCore::setCached('Mod.Variables.' . $modName, $name, $value);
+        return true;
     }
 
     /**
@@ -98,7 +206,31 @@ class xarModVars implements IxarModVars
     static function delete($modName, $name)
     {
         if (empty($modName)) throw new EmptyParameterException('modName');
-        return xarVar__DelVarByAlias($modName, $name, $uid = NULL, $type = 'modvar');
+        
+        $dbconn =& xarDBGetConn();
+        $tables =& xarDBGetTables();
+        $modBaseInfo = xarMod::getBaseInfo($modName);
+        
+        // Delete all the itemvars derived from this var first
+        $modvarid = self::getId($modName, $name);
+        // TODO: we should delegate this to moditemvars class somehow
+        if($modvarid) {
+            $module_itemvarstable = $tables['module_itemvars'];
+            $query = "DELETE FROM $module_itemvarstable WHERE xar_mvid = ?";
+            $dbconn->execute($query,array((int)$modvarid));
+        }
+        
+        // Now delete the modvar itself
+        $module_varstable = $tables['module_vars'];
+        // Now delete the module var itself
+        $query = "DELETE FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
+        $bindvars = array($modBaseInfo['systemid'],$name);
+        $dbconn->execute($query,$bindvars);
+        
+        // Removed it from the cache
+        xarCore::delCached('Mod.Variables.' . $modName, $name);
+        
+        return true;
     }
 
     /**

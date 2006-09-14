@@ -5,28 +5,28 @@
  *
  */
 sys::import('variables');
-interface IxarThemeVars extends IxarVars
-{}
-
 sys::import('variables.module');
-class xarThemeVars implements IxarThemeVars
+sys::import('variables.moditem');
+
+class xarThemeVars extends xarModItemVars implements IxarModItemVars
 {
     /**
      * get a theme variable
      *
      * @access public
      * @param  string $scope The name of the theme
-     * @param  sting  $name  The name of the variable
+     * @param  string $name  The name of the variable
      * @return mixed The value of the variable or void if variable doesn't exist
      * @throws EmptyParameterException
+     * @todo the silent spec of itemid is a bit hacky
      */
-    public static function get($scope, $name)
+    public static function get($scope, $name, $itemid = null)
     {
         if (empty($scope)) throw new EmptyParameterException('themename');
 
         $itemid = xarThemeGetIDFromName($scope,'systemid');
-        $modVarName = $scope . '_' . $name;
-        return xarVar__GetVarByAlias('themes', $modVarName, $itemid, null, $type = 'moditemvar');
+        $varname = $scope . '_' . $name; // bah
+        return parent::get($scope, $varname, $itemid);
     }
     
     /**
@@ -43,18 +43,18 @@ class xarThemeVars implements IxarThemeVars
      * @throws EmptyParameterException
      *
      */
-    public static function set($scope, $name, $value)
+    public static function set($scope, $name, $value, $itemid = null)
     {
         if (empty($scope)) throw new EmptyParameterException('themename');
 
         $itemid = xarThemeGetIDFromName($scope,'systemid');
-        $modVarName = $scope . '_' . $name;
+        $varName = $scope . '_' . $name; // bah
         // Make sure we set it as modvar first
         // TODO: this sucks
         if(!xarModVars::get('themes',$modVarName)) {
             xarModVars::set('themes',$modVarName,$value);
         }
-        return xarVar__SetVarByAlias('themes', $modVarName, $value, null, '', $itemid, $type = 'moditemvar');
+        return parent::set($scope, $varname, $value, $itemid);
     }
 
     /**
@@ -66,14 +66,13 @@ class xarThemeVars implements IxarThemeVars
      * @return bool true on success
      * @throws EmptyParameterException
      */
-    public static function delete($scope, $name)
+    public static function delete($scope, $name, $itemid = null)
     {
         if (empty($scope)) throw new EmptyParameterException('themename');
 
         $itemid = xarThemeGetIDFromName($scope,'systemid');
-        $modVarName = $scope . '_' . $name;
-        return xarVar__DelVarByAlias('themes', $modVarName, $itemid, $type = 'moditemvar');
+        $varname = $scope . '_' . $name;
+        return parent::delete($scope, $name, $itemid);
     }
-
 }
 ?>
