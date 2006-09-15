@@ -15,7 +15,7 @@ interface IxarModVars extends IxarVars
  * Class to model interface to module variables
  *
  */
-class xarModVars implements IxarModVars
+class xarModVars extends xarVars implements IxarModVars
 {
     /**
      * Get a module variable

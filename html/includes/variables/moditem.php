@@ -14,30 +14,23 @@ interface IxarModItemVars
     static function delete($scope, $name, $itemid = null);
 }
 
-class xarModItemVars implements IxarModItemVars
+class xarModItemVars extends xarVars implements IxarModItemVars
 {
     static function get($scope, $name, $itemid = null)
     {
-        if (empty($name)) throw new EmptyParameterException('name');
-        if (empty($prep)) $prep = XARVAR_PREP_FOR_NOTHING;
+        if(empty($name)) 
+            throw new EmptyParameterException('name');
 
         // Lets first check to see if any of our type vars are alread set in the cache.
-        $cacheName = $name;
         $cacheCollection = 'ModItem.Variables.' . $scope;
         $cacheName = $itemid . $name;
 
         if (xarCore::isCached($cacheCollection, $cacheName)) {
             $value = xarCore::getCached($cacheCollection, $cacheName);
-            if (!isset($value)) {
+            if (!isset($value)) 
                 return;
-            } else {
-                if ($prep == XARVAR_PREP_FOR_DISPLAY){
-                    $value = xarVarPrepForDisplay($value);
-                } elseif ($prep == XARVAR_PREP_FOR_HTML){
-                    $value = xarVarPrepHTMLDisplay($value);
-                }
+            else 
                 return $value;
-            }
         } elseif (xarCore::isCached($cacheCollection, 0)) {
             //variable missing.
             return;
@@ -56,7 +49,8 @@ class xarModItemVars implements IxarModItemVars
          $module_itemvarstable = $tables['module_itemvars'];
          unset($modvarid);
          $modvarid = xarModVars::getId($scope, $name);
-         if (!$modvarid) return;
+         if(!$modvarid) 
+            return;
 
          $query = "SELECT xar_value FROM $module_itemvarstable WHERE xar_mvid = ? AND xar_itemid = ?";
          $bindvars = array((int)$modvarid, (int)$itemid);
@@ -65,7 +59,8 @@ class xarModItemVars implements IxarModItemVars
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
 
-        if ($result->getRecordCount() == 0) {
+        if ($result->getRecordCount() == 0) 
+        {
             $result->close(); unset($result);
 
             // If there is no such thing, return the global setting for moditemvars
@@ -76,21 +71,12 @@ class xarModItemVars implements IxarModItemVars
         $result->next();
         list($value) = $result->getRow();
         xarCore::setCached($cacheCollection, $cacheName, $value);
-        $result->Close();
-
-        // Optionally prepare it
-        // FIXME: This may sound convenient now, feels wrong though, prepping introduces
-        //        an unnecessary dependency here.
-        if ($prep == XARVAR_PREP_FOR_DISPLAY){
-            $value = xarVarPrepForDisplay($value);
-        } elseif ($prep == XARVAR_PREP_FOR_HTML){
-            $value = xarVarPrepHTMLDisplay($value);
-        }
+        $result->close();
 
         return $value;
     }
     
-    static function set($scope, $name, $value, $itemid=NULL)
+    static function set($scope, $name, $value, $itemid = null)
     {
         assert('!is_null($value); /* Not allowed to set a variable to NULL value */');
         if (empty($name)) throw new EmptyParameterException('name');

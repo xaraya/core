@@ -5,17 +5,17 @@
  */
 sys::import('variables');
 
-interface IxarConfigVars extends IxarVars
-{}
-
-class xarConfigVars implements IxarConfigVars
+class xarConfigVars extends xarVars implements IxarVars
 {
+    private static $KEY = 'Config.Variables'; // const cannot be private :-(
+    private static $preloaded = false;
+      
     /**
      * Sets a configuration variable.
      *
      * @access public
-     * @param string name the name of the variable
-     * @param mixed value (array,integer or string) the value of the variable
+     * @param  string $name the name of the variable
+     * @param  mixed  $value (array,integer or string) the value of the variable
      * @return bool true on success, or false if you're trying to set unallowed variables
      * @todo return states that it should return false if we're setting
      *       unallowed variables.. there is no such code to do that in the function
@@ -46,7 +46,7 @@ class xarConfigVars implements IxarConfigVars
         $bindvars = array($seqId, 0, $name, $serialvalue);
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
-        xarCore::setCached('Config.Variables', $name, $value);
+        xarCore::setCached(self::$KEY, $name, $value);
         
         return true;
     }
@@ -54,48 +54,47 @@ class xarConfigVars implements IxarConfigVars
     /**
      * Gets a configuration variable.
      *
-     * @access public
-     * @param string name the name of the variable
+     * @param string $scope not used
+     * @param string $name  the name of the variable
      * @return mixed value of the variable(string), or void if variable doesn't exist
      * @todo do we need these aliases anymore ?
      * @todo return proper site prefix when we can store site vars
-     * @todo this is still too long and windy
+     * @todo the vars which are not in the database should probably be systemvars, not configvars
      */
     public static function get($scope, $name)
     {
-        static $cached = false;
+        if(!self::$preloaded)
+            self::preload();
         
-        if(!$cached)
+        // Configvars which are not in the database (either in config file or in code defines)
+        switch($name)
         {
-            self::load();
-            $cached = true;
-        }
-        
-        // Configvars which are not in the database (why not?)
-        if ($name == 'Site.DB.TablePrefix') {
-            return xarCore_getSystemVar('DB.TablePrefix');
-        } elseif ($name == 'System.Core.VersionNumber') {
-            return XARCORE_VERSION_NUM;
-        } elseif ($name == 'System.Core.VersionId') {
-            return XARCORE_VERSION_ID;
-        } elseif ($name == 'System.Core.VersionSub') {
-            return XARCORE_VERSION_SUB;
-        } elseif ($name == 'prefix') {
-            // Can we do this another way (dependency)
-            return xarDBGetSiteTablePrefix();
+            case 'Site.DB.TablePrefix':
+                return xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix');
+                break;
+            case 'System.Core.VersionNumber':
+                return XARCORE_VERION_NUM;
+                break;
+            case 'System.Core.VersionId':
+                return XARCORE_VERSION_ID;
+                break;
+            case 'System.Core.VersionSub':
+                return XARCORE_VERSION_SUB;
+                break;
+            case 'prefix':
+                // FIXME: Can we do this another way (dependency)
+                return xarDBGetSiteTablePrefix();
+                break;
         }
 
-        // Nice, but introduces dependency
-        $cacheName = $name;
-        $cacheCollection = 'Config.Variables';
-        if (xarCore::isCached($cacheCollection, $cacheName)) {
-            $value = xarCore::getCached($cacheCollection, $cacheName);
-            if (!isset($value)) {
+        if(xarCore::isCached(self::$KEY, $name)) 
+        {
+            $value = xarCore::getCached(self::$KEY, $name);
+            if (!isset($value)) 
                 return;
-            } else {
+            else 
                 return $value;
-            }
-        } elseif (xarCore::isCached($cacheCollection, 0)) {
+        } elseif(xarCore::isCached(self::$KEY, 0)) {
             // variable missing.
             // we should really throw an exception here
             return;
@@ -110,27 +109,29 @@ class xarConfigVars implements IxarConfigVars
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array(0),ResultSet::FETCHMODE_NUM);
 
-        if ($result->getRecordCount() == 0) {
+        if ($result->getRecordCount() == 0) 
+        {
             $result->close(); unset($result);
             return;
         }
 
-        while ($result->next()) { // while? we expect one value, no?
+        while ($result->next()) 
+        {   // while? we expect one value, no?
             $value = $result->get(2); // Unlike creole->set this does *not* unserialize/escape automatically
             $value = unserialize($value);
-            xarCore::setCached($cacheCollection, $result->getString(1), $value);
+            xarCore::setCached(self::$KEY, $result->getString(1), $value);
         }
         
         // CHECKME: What's all this about then?
         // Special value to tell this select has already been run, any
         // variable not found now on is missing
-        xarCore::setCached($cacheCollection, 0, true);
+        xarCore::setCached(self::$KEY, 0, true);
         //It should be here!
-        if (xarCore::isCached($cacheCollection, $cacheName)) {
-            $value = xarCore::getCached($cacheCollection, $cacheName);
-        } else {
+        if (xarCore::isCached(self::$KEY, $name)) 
+            $value = xarCore::getCached(self::$KEY, $name);
+        else 
             return;
-        }
+        
         return $value;
     }
     
@@ -143,7 +144,7 @@ class xarConfigVars implements IxarConfigVars
         
         // We want to make the next two statements atomic
         $dbconn->execute($query,array($name,0));
-        xarCore::delCached('Config.Variables.', $name);
+        xarCore::delCached(self::$KEY, $name);
         
         return true;
     }
@@ -156,10 +157,8 @@ class xarConfigVars implements IxarConfigVars
      * @todo We need some way to delete configuration (useless without a certain module) variables from the table!!!
      * @todo look into removing the serialisation, creole does this when needed, automatically (well, almost)
      */
-    private static function load()
+    private static function preload()
     {
-        $cacheCollection = 'Config.Variables';
-
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
 
@@ -167,18 +166,19 @@ class xarConfigVars implements IxarConfigVars
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array(0),ResultSet::FETCHMODE_ASSOC);
 
-        while ($result->next()) {
+        while ($result->next()) 
+        {
             $newval = unserialize($result->getString('xar_value'));
-            xarCore::setCached($cacheCollection, $result->getString('xar_name'), $newval);
+            xarCore::setCached(self::$KEY, $result->getString('xar_name'), $newval);
         }
-        $result->Close();
+        $result->close();
 
         //Tells the cache system it has already checked this particular table
         //(It's a escape when you are caching at a higher level than that of the
         //individual variables)
         //This whole cache systems must be remade to a central one.    
-        xarCore::setCached($cacheCollection, 0, true);
-
+        xarCore::setCached(self::$KEY, 0, true);
+        self::$preloaded = true;
         return true;
     }
 }

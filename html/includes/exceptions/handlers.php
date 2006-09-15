@@ -94,7 +94,7 @@ class ExceptionHandlers implements IExceptionHandlers
         $oldLevel = error_reporting();
         try {
             // We'll try to get the configured threshold
-            $errThreshold = xarCore_getSystemVar('Exception.ErrorLevel');
+            $errThreshold = xarSystemVars::get(sys::CONFIG,'Exception.ErrorLevel');
         } catch(Exception $e) {
             // Oh well, show everything so construct the maximum bitmask
             // Note that E_ALL is already a summed bitmask value (2047) while E_STRICT is *NOT* (2048)

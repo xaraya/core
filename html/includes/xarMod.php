@@ -294,8 +294,8 @@ function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args
     // it can be used to configure Xaraya for mod_rewrite by
     // setting BaseModURL = '' in config.system.php
     try {
-        $BaseModURL = xarCore_getSystemVar('BaseModURL');
-    } catch(VariableNotFoundException $e) {
+        $BaseModURL = xarSystemVars::get(sys::CONFIG, 'BaseModURL');
+    } catch(Exception $e) {
         $BaseModURL = 'index.php';
     }
 

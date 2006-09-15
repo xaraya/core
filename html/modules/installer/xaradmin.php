@@ -146,7 +146,7 @@ function installer_admin_phase3()
     $cacheDir                 = $systemVarDir . XARCORE_CACHEDIR;
     $cacheTemplatesDir        = $systemVarDir . XARCORE_TPL_CACHEDIR;
     $rssTemplatesDir          = $systemVarDir . XARCORE_RSS_CACHEDIR;
-    $systemConfigFile         = $systemVarDir . '/' . XARCORE_CONFIG_FILE;
+    $systemConfigFile         = $systemVarDir . '/' . sys::CONFIG;
     $phpLanguageDir           = $systemVarDir . '/locales/' . $install_language . '/php';
     $xmlLanguageDir           = $systemVarDir . '/locales/' . $install_language . '/xml';
 
@@ -218,12 +218,12 @@ function installer_admin_phase4()
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     // Get default values from config files
-    $data['database_host']       = xarCore_getSystemVar('DB.Host');
-    $data['database_username']   = xarCore_getSystemVar('DB.UserName');
-    $data['database_password']   = '';//xarCore_getSystemvar('DB.Password');
-    $data['database_name']       = xarCore_getSystemvar('DB.Name');
-    $data['database_prefix']     = xarCore_getSystemvar('DB.TablePrefix');
-    $data['database_type']       = xarCore_getSystemvar('DB.Type');
+    $data['database_host']       = xarSystemVars::get(sys::CONFIG, 'DB.Host');
+    $data['database_username']   = xarSystemVars::get(sys::CONFIG, 'DB.UserName');
+    $data['database_password']   = '';
+    $data['database_name']       = xarSystemVars::get(sys::CONFIG, 'DB.Name');
+    $data['database_prefix']     = xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix');
+    $data['database_type']       = xarSystemVars::get(sys::CONFIG, 'DB.Type');
     // Supported  Databases:
     $data['database_types']      = array('mysql'    => array('name' => 'MySQL'   , 'available' => extension_loaded('mysql')),
                                          'postgres' => array('name' => 'Postgres', 'available' => extension_loaded('pgsql')),
@@ -350,7 +350,7 @@ function installer_admin_phase5()
         //Let's pass all input variables thru the function argument or none, as all are stored in the system.config.php
         //Now we are passing all, let's see if we gain consistency by loading config.php already in this phase?
         //Probably there is already a core function that can make that for us...
-        //the config.system.php is lazy loaded in xarCore_getSystemVar($name), which means we cant reload the values
+        //the config.system.php is lazy loaded in xarSystemVars::get(sys::CONFIG, $name), which means we cant reload the values
         // in this phase... Not a big deal 'though.
         if ($dbExists) {
             if (!$dbconn->Execute('DROP DATABASE ' . $dbName)) return;

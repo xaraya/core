@@ -28,6 +28,8 @@
  **/
 final class sys
 {
+    const CONFIG = 'config.system.php';     // Default system configuration file
+    
     private static $has = array();
     private static $var = null;
     

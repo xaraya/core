@@ -134,9 +134,9 @@ class xarServer
         // it can be used to configure Xaraya for mod_rewrite by
         // setting BaseURI = '' in config.php
         try {
-            $BaseURI =  xarCore_getSystemVar('BaseURI');
+            $BaseURI =  xarSystemVars::get(sys::CONFIG, 'BaseURI');
             return $BaseURI;
-        } catch(VariableNotFoundException $e) {
+        } catch(Exception $e) {
             // We need to build it
         }
         

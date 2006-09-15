@@ -12,4 +12,14 @@ interface IxarVars
     static function delete    ($scope, $name);
 }
 
+/**
+ * Base class for variable handling in core
+ *
+ * @package variables
+ * @author Marcel van der Boom <mrb@hsdev.com>
+ **/
+class xarVars
+{
+    
+}
 ?>

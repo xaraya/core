@@ -1,61 +1,63 @@
 <?php
-
 sys::import('variables');
-interface IxarSystemVars extends IxarVars
-{}
-
-class xarSystemVars implements IxarSystemVars
+/**
+ * Class to handle system variables
+ * 
+ * These variables come from a config file, typically config.system.php
+ * in the var dir. Most, if not all are REQUIRED. This file should not depend
+ * on anything else but that file and xarCore.php.
+ *
+ * @package variables
+ * @author Marcel van der Boom <mrb@hsdev.com>
+**/
+class xarSystemVars extends xarVars implements IxarVars
 {
+    private static $KEY = 'System.Variables'; // const cannot be private :-(
+    private static $systemVars = null;
+        
     /**
      * Gets a core system variable
      *
-     * System variables are REQUIRED to be set, if they cannot be found
-     * the system cannot continue. Only use variables for this which are
-     * absolutely necessary to be set. Otherwise use other types of variables
-     *
-     * @access protected
-     * @static systemVars array
-     * @param string name name of core system variable to get
-     * @throws FileNotFoundException, VariableNotFoundException
-     * @todo check if we need both the isCached and static
+     * @param  string $scope base filename which holds the system variables
+     * @param  string $name name of core system variable to get
+     * @throws Exception
      */
     public static function get($scope, $name)
     {
-        static $systemVars = null;
+        if(!isset($scope))
+            $scope = sys::CONFIG;
+            
+        if (!isset(self::$systemVars)) 
+            self::preload($scope);
 
-        if (xarCore::isCached('Core.getSystemVar', $name)) {
-            return xarCore::getCached('Core.getSystemVar', $name);
-        }
-        if (!isset($systemVars)) {
-            $fileName = xarCoreGetVarDirPath() . '/' . XARCORE_CONFIG_FILE;
-            if (!file_exists($fileName)) {
-                throw new FileNotFoundException($fileName);
-            }
-            // Make stuff from config.system.php available
-            // NOTE: we can not use sys::import since the variable scope would be wrong.
-            include $fileName;
-            $systemVars = $systemConfiguration;
-        }
+        if (!isset(self::$systemVars[$name])) 
+            throw new Exception("xarSystemVars: Unknown system variable: '$name'.");
 
-        if (!isset($systemVars[$name])) {
-            throw new VariableNotFoundException($name,"xarCore_getSystemVar: Unknown system variable: '#(1)'.");
-        }
-
-        xarCore::setCached('Core.getSystemVar', $name, $systemVars[$name]);
-
-        return $systemVars[$name];
+        return self::$systemVars[$name];
     }
     
     public static function set($scope, $name, $value)
     {
-        // Not supported
+        // Not supported ?
         return false;
     }
     
     public static function delete($scope, $name)
     {
-        // Not supported
+        // Not supported ?
         return false;
+    }
+    
+    private static function preload($scope)
+    {
+        $fileName = sys::varpath() . '/' . $scope;
+        if (!file_exists($fileName)) 
+            throw new Exception("The system config file '$fileName' could not be found.");
+
+        // Make stuff from config.system.php available
+        // NOTE: we can not use sys::import since the variable scope would be wrong.
+        include $fileName;
+        self::$systemVars = $systemConfiguration;
     }
 }
 ?>

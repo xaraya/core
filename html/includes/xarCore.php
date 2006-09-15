@@ -104,7 +104,6 @@ define('XARDBG_INACTIVE'         ,16);
 /*
  * Miscelaneous
  */
-define('XARCORE_CONFIG_FILE'  , 'config.system.php');
 define('XARCORE_CACHEDIR'     , '/cache');
 define('XARCORE_DB_CACHEDIR'  , '/cache/database');
 define('XARCORE_RSS_CACHEDIR' , '/cache/rss');
@@ -203,16 +202,16 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
         // Decode encoded DB parameters
         // These need to be there
-        $userName = xarCore_getSystemVar('DB.UserName');
-        $password = xarCore_getSystemVar('DB.Password');
+        $userName = xarSystemVars::get(sys::CONFIG, 'DB.UserName');
+        $password = xarSystemVars::get(sys::CONFIG, 'DB.Password');
         $persistent = null;
         try {
-            $persistent = xarCore_getSystemVar('DB.Persistent');
+            $persistent = xarSystemVars::get(sys::CONFIG, 'DB.Persistent');
         } catch(VariableNotFoundException $e) {
             $persistent = null;
         }
         try {
-            if (xarCore_getSystemVar('DB.Encoded') == '1') {
+            if (xarSystemVars::get(sys::CONFIG, 'DB.Encoded') == '1') {
                 $userName = base64_decode($userName);
                 $password  = base64_decode($password);
             }
@@ -223,12 +222,12 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         // Optionals dealt with, do the rest inline
         $systemArgs = array('userName' => $userName,
                             'password' => $password,
-                            'databaseHost' => xarCore_getSystemVar('DB.Host'),
-                            'databaseType' => xarCore_getSystemVar('DB.Type'),
-                            'databaseName' => xarCore_getSystemVar('DB.Name'),
+                            'databaseHost' => xarSystemVars::get(sys::CONFIG, 'DB.Host'),
+                            'databaseType' => xarSystemVars::get(sys::CONFIG, 'DB.Type'),
+                            'databaseName' => xarSystemVars::get(sys::CONFIG, 'DB.Name'),
                             'persistent' => $persistent,
-                            'systemTablePrefix' => xarCore_getSystemVar('DB.TablePrefix'),
-                            'siteTablePrefix' => xarCore_getSystemVar('DB.TablePrefix'));
+                            'systemTablePrefix' => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'),
+                            'siteTablePrefix' => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'));
         // Connect to database
         xarDB_init($systemArgs, $whatToLoad);
         $whatToLoad ^= XARCORE_BIT_DATABASE;
@@ -440,7 +439,7 @@ function xarCoreActivateDebugger($flags)
     } elseif ($flags & XARDBG_ACTIVE) {
         // See if config.system.php has info for us on the errorlevel, but dont break if it has not
         try {
-            $errLevel = xarCore_getSystemVar('Exception.ErrorLevel');
+            $errLevel = xarSystemVars::get(sys::CONFIG, 'Exception.ErrorLevel');
         } catch(Exception $e) {
             $errLevel = E_ALL;
         }
@@ -481,7 +480,9 @@ function xarCoreIsDebugFlagSet($flag)
 }
 
 /**
- * Wrapper functions to support Xaraya 1 API for modvars
+ * Wrapper functions to support Xaraya 1 API for systemvars
+ *
+ * @todo this is a protected function by mistake i think
  */
 sys::import('variables.system');
 function xarCore_getSystemVar($name)
@@ -623,8 +624,8 @@ class xarCore
      * Flush a particular cache (e.g. for session initialization)
      *
      * @access protected
-     * @param cacheKey the key identifying the particular cache you want to wipe out
-     * @returns null
+     * @param  cacheKey the key identifying the particular cache you want to wipe out
+     * @return null
      * @todo make sure we can make this protected
      */
     public static function flushCached($cacheKey)

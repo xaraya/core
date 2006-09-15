@@ -48,25 +48,25 @@ class testPrivilegesBugs extends xarTestCase
 
         /* initialize logging *|
         $systemArgs = 
-                array('loggerName' => xarCore_getSystemVar('Log.LoggerName'),
-                      'loggerArgs' => xarCore_getSystemVar('Log.LoggerArgs'),
-                      'level' => xarCore_getSystemVar('Log.LogLevel'));
+                array('loggerName' => xarSystemVars::get(sys::CONFIG, 'Log.LoggerName'),
+                      'loggerArgs' => xarSystemVars::get(sys::CONFIG, 'Log.LoggerArgs'),
+                      'level' => xarSystemVars::get(sys::CONFIG, 'Log.LogLevel'));
         xarLog_init($systemArgs, 0);
 
         /* initialize database *|
-        $userName = xarCore_getSystemVar('DB.UserName');
-        $password = xarCore_getSystemVar('DB.Password');
-        if (xarCore_getSystemVar('DB.Encoded') == '1') {
+        $userName = xarSystemVars::get(sys::CONFIG, 'DB.UserName');
+        $password = xarSystemVars::get(sys::CONFIG, 'DB.Password');
+        if (xarSystemVars::get(sys::CONFIG, 'DB.Encoded') == '1') {
             $userName = base64_decode($userName);
             $password  = base64_decode($password);
         }
         $systemArgs = array('userName' => $userName,
                             'password' => $password,
-                            'databaseHost' => xarCore_getSystemVar('DB.Host'),
-                            'databaseType' => xarCore_getSystemVar('DB.Type'),
-                            'databaseName' => xarCore_getSystemVar('DB.Name'),
-                            'systemTablePrefix' => xarCore_getSystemVar('DB.TablePrefix'),
-                            'siteTablePrefix' => xarCore_getSystemVar('DB.TablePrefix'));
+                            'databaseHost' => xarSystemVars::get(sys::CONFIG, 'DB.Host'),
+                            'databaseType' => xarSystemVars::get(sys::CONFIG, 'DB.Type'),
+                            'databaseName' => xarSystemVars::get(sys::CONFIG, 'DB.Name'),
+                            'systemTablePrefix' => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'),
+                            'siteTablePrefix' => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'));
         // Connect to database
         xarDB_init($systemArgs, 0);
         xarErrorFree();
