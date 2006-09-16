@@ -10,7 +10,7 @@ sys::import('modules.dynamicdata.class.properties.registration');
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
  */
-class Dynamic_Property_Master
+class Dynamic_Property_Master extends Object
 {
     const DD_DISPLAYSTATE_DISABLED = 0;
     const DD_DISPLAYSTATE_HIDDEN = 3;
@@ -48,19 +48,19 @@ class Dynamic_Property_Master
                          xar_prop_status, xar_prop_order, xar_prop_validation,
                          xar_prop_objectid, xar_prop_moduleid, xar_prop_itemtype
                   FROM $dynamicprop ";
-        if(isset($args['objectid'])) 
+        if(isset($args['objectid']))
         {
             $query .= " WHERE xar_prop_objectid = ?";
             $bindvars[] = (int) $args['objectid'];
-        } 
-        else 
+        }
+        else
         {
             $query .= " WHERE xar_prop_moduleid = ?
                           AND xar_prop_itemtype = ?";
             $bindvars[] = (int) $args['moduleid'];
             $bindvars[] = (int) $args['itemtype'];
         }
-        if(empty($args['allprops'])) 
+        if(empty($args['allprops']))
             $query .= " AND xar_prop_status > 0 ";
 
         $query .= " ORDER BY xar_prop_order ASC, xar_prop_id ASC";
@@ -68,13 +68,13 @@ class Dynamic_Property_Master
         $result =& $dbconn->Execute($query,$bindvars);
 
         $properties = array();
-        while (!$result->EOF) 
+        while (!$result->EOF)
         {
             list(
-                $name, $label, $type, $id, $default, $source, $fieldstatus, 
+                $name, $label, $type, $id, $default, $source, $fieldstatus,
                 $order, $validation, $_objectid, $_moduleid, $_itemtype
             ) = $result->fields;
-            if(xarSecurityCheck('ReadDynamicDataField',0,'Field',"$name:$type:$id")) 
+            if(xarSecurityCheck('ReadDynamicDataField',0,'Field',"$name:$type:$id"))
             {
                 $property = array(
                     'name'          => $name,
@@ -91,9 +91,9 @@ class Dynamic_Property_Master
                     '_moduleid'     => $_moduleid,
                     '_itemtype'     => $_itemtype
                 );
-                if(isset($args['objectref'])) 
+                if(isset($args['objectref']))
                     self::addProperty($property,$args['objectref']);
-                else 
+                else
                     $properties[$name] = $property;
             }
             $result->MoveNext();
@@ -118,12 +118,12 @@ class Dynamic_Property_Master
      */
     static function addProperty(array $args, &$objectref)
     {
-        if(!isset($objectref) || empty($args['name']) || empty($args['type'])) 
+        if(!isset($objectref) || empty($args['name']) || empty($args['type']))
             return;
 
         // "beautify" label based on name if not specified
         // TODO: this is a presentation issue, doesnt belong here.
-        if(!isset($args['label']) && !empty($args['name'])) 
+        if(!isset($args['label']) && !empty($args['name']))
         {
             $args['label'] = strtr($args['name'], '_', ' ');
             $args['label'] = ucwords($args['label']);
@@ -133,16 +133,16 @@ class Dynamic_Property_Master
         $property =& self::getProperty($args);
 
         // for dynamic object lists, put a reference to the $items array in the property
-        if(method_exists($objectref, 'getItems')) 
+        if(method_exists($objectref, 'getItems'))
             $property->_items =& $objectref->items;
-        elseif(method_exists($objectref, 'getItem')) 
+        elseif(method_exists($objectref, 'getItem'))
             // for dynamic objects, put a reference to the $itemid value in the property
             $property->_itemid =& $objectref->itemid;
 
         // add it to the list of properties
         $objectref->properties[$property->name] =& $property;
 
-        if(isset($property->upload)) 
+        if(isset($property->upload))
             $objectref->upload = true;
     }
 
@@ -154,19 +154,19 @@ class Dynamic_Property_Master
         if(!is_numeric($args['type']))
         {
             $proptypes = self::getPropertyTypes();
-            if(!isset($proptypes)) 
+            if(!isset($proptypes))
                 $proptypes = array();
 
-            foreach ($proptypes as $typeid => $proptype) 
+            foreach ($proptypes as $typeid => $proptype)
             {
-                if($proptype['name'] == $args['type']) 
+                if($proptype['name'] == $args['type'])
                 {
                     $args['type'] = $typeid;
                     break;
                 }
             }
-        } 
-        else 
+        }
+        else
             $proptypes = self::getPropertyTypes();
 
         $clazz = 'Dynamic_Property';
@@ -178,16 +178,16 @@ class Dynamic_Property_Master
             // We should load the MLS translations for the right context here, in case the property
             // PHP file contains xarML() statements
             // See bug 5097
-            if(preg_match('/modules\/(.*)\/xarproperties/',$propertyInfo['filepath'],$matches) == 1) 
+            if(preg_match('/modules\/(.*)\/xarproperties/',$propertyInfo['filepath'],$matches) == 1)
             {
                 // @todo: The preg determines the module name (in a sloppy way, FIX this)
                 // @todo: do we still do properties from includes/properties?
                 xarMLSLoadTranslations($propertyInfo['filepath']);
-            } 
-            else 
+            }
+            else
                 xarLogMessage("WARNING: Property translations for $propertyClass NOT loaded");
 
-            if(!file_exists($propertyInfo['filepath'])) 
+            if(!file_exists($propertyInfo['filepath']))
                 throw new FileNotFoundException($propertyInfo['filepath']);
 
             $dp = str_replace('/','.',substr($propertyInfo['filepath'],0,-4)); // minus .php
@@ -221,7 +221,7 @@ class Dynamic_Property_Master
 
     static function deleteProperty(array $args)
     {
-        if(empty($args['itemid'])) 
+        if(empty($args['itemid']))
             return;
 
         // TODO: delete all the (dynamic ?) data for this property as well
@@ -231,11 +231,11 @@ class Dynamic_Property_Master
                 'itemid'   => $args['itemid']
             )
         );
-        if(empty($object)) 
+        if(empty($object))
             return;
 
         $objectid = $object->getItem();
-        if(empty($objectid)) 
+        if(empty($objectid))
             return;
 
         $objectid = $object->deleteItem();

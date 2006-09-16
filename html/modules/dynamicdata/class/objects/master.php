@@ -10,7 +10,8 @@
 **/
 sys::import('modules.dynamicdata.class.datastores');
 sys::import('modules.dynamicdata.class.properties');
-class Dynamic_Object_Master
+
+class Dynamic_Object_Master extends Object
 {
     public $objectid    = null;         // system id of the object in this installation
     public $name        = null;         // name of the object

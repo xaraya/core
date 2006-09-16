@@ -10,7 +10,7 @@ sys::import('modules.dynamicdata.class.properties.master');
  * @todo is this abstract?
  * @todo the visibility of most of the attributes can probably be protected
 **/
-class Dynamic_Property
+class Dynamic_Property extends Object
 {
     // Attributes for registration
     public $id             = 0;

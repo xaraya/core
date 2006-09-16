@@ -5,7 +5,7 @@
  * This corresponds directly to the db info we register for a property.
  *
  */
-class PropertyRegistration
+class PropertyRegistration extends Object
 {
     public $id         = 0;                      // id of the property, hardcoded to make things easier
     public $name       = 'propertyType';         // what type of property are we dealing with
@@ -26,8 +26,8 @@ class PropertyRegistration
     function __construct($args=array())
     {
         assert('is_array($args)');
-        if(!empty($args)) 
-            foreach($args as $key=>$value) 
+        if(!empty($args))
+            foreach($args as $key=>$value)
                 $this->$key = $value;
     }
 
@@ -45,12 +45,12 @@ class PropertyRegistration
         static $stmt = null;
 
         // Sanity checks (silent)
-        foreach($this->reqfiles as $required) 
-            if(!file_exists($required)) 
+        foreach($this->reqfiles as $required)
+            if(!file_exists($required))
                 return false;
 
-        foreach($this->reqmodules as $required) 
-            if(!xarModIsAvailable($required)) 
+        foreach($this->reqmodules as $required)
+            if(!xarModIsAvailable($required))
                 return false;
 
         $dbconn = &xarDBGetConn();
@@ -67,7 +67,7 @@ class PropertyRegistration
                  xar_prop_format, xar_prop_validation, xar_prop_source,
                  xar_prop_reqfiles, xar_prop_reqmodules, xar_prop_args, xar_prop_aliases)
                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        if(!isset($stmt)) 
+        if(!isset($stmt))
             $stmt = $dbconn->prepareStatement($sql);
 
         $bindvars = array(
@@ -78,9 +78,9 @@ class PropertyRegistration
         );
         $res = $stmt->executeUpdate($bindvars);
 
-        if(!empty($this->aliases)) 
+        if(!empty($this->aliases))
         {
-            foreach($this->aliases as $aliasInfo) 
+            foreach($this->aliases as $aliasInfo)
             {
                 $aliasInfo->filepath = $this->filepath; // Make sure
                 $aliasInfo->class = $this->class;
@@ -107,14 +107,14 @@ class PropertyRegistration
                   ORDER BY xar_prop_reqmodules, xar_prop_name";
         $result = $dbconn->executeQuery($query);
         $proptypes = array();
-        if($result->RecordCount() == 0 ) 
+        if($result->RecordCount() == 0 )
             $proptypes = xarModAPIFunc(
                 'dynamicdata','admin','importpropertytypes',
                 array('flush'=>false)
             );
-        else 
+        else
         {
-            while($result->next()) 
+            while($result->next())
             {
                 list(
                     $id,$name,$label,$parent,$filepath,$class,$format,
