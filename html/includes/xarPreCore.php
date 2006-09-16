@@ -1,8 +1,15 @@
 <?php
 /**
- * Bootstrap (sys class) - longer term, the *only* required file to get going
- *                         with Xaraya. Until then, we collect our minimal 
- *                         methods in the 'sys' class below.
+ * Bootstrap file
+ *
+ * This file is the only one (longer term) which get always included when
+ * running Xaraya. Everything else is lazy loaded. This file contains the
+ * things which *absolutely* need to be available, which should be very little.
+ * 
+ * So far:
+ *  - Declaration of the root Object class of which all other classes are derived
+ *  - Definition of the sys class which contains methods to steer php in the right direction
+ *    for getting the right files (now: inclusion and the var path)
  *
  * If anything, make absolutely sure you get the fastest implementation
  * of what you want to do here.
@@ -15,8 +22,28 @@
  * @author Marco Canini <marco@xaraya.com>
  * @author Marcel van der Boom <mrb@hsdev.com>
  * @todo   rename this file to bootstrap.php or something
- * @todo   place the root Object class in this file.
-*/
+**/
+
+/**
+ * The Object class from which all other classes are derived.
+ *
+ * This is basically a placeholder extending from stdClass so we have a 
+ * place to put things in our root class. There are severe limitations to what
+ * can and can not be placed into this class. For example, it can not have a 
+ * constructor because it would prevent descendents to have a private 
+ * constructor, which is rather common in the SingleTon pattern.
+ *
+ * @package core
+ * @author  Marcel van der Boom <mrb@hsdev.com>
+ * @todo    we would like some std. methods in here but i have no clue how to 
+ *          do that, now we really cant count on having an instance or not, so
+ *          we would at least have to do checks wether $this exists or not. 
+ *          Some methods which come to mind are 'equals', 'toString' or 'hashCode'
+ *          ( for those familiar with java, yes :-) )
+**/
+class Object extends stdClass
+{
+}
 
 /**
  * The sys class contains routines guaranteed to be available to do small
@@ -27,7 +54,7 @@
  * - as superfast as possible.
  * - depend on nothing
 **/
-final class sys
+final class sys extends Object
 {
     const CONFIG = 'config.system.php';     // Default system configuration file
     
@@ -38,7 +65,7 @@ final class sys
     {} // no objects can be made out of this.
     
     /**
-     * Import a xaraya core component once, in the fastest way possible 
+     * Import a xaraya component once, in the fastest way possible 
      *
      * Little utility function which allows easy inclusion of xaraya core 
      * components in the fastest (and safe) way
