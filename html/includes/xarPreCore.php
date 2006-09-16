@@ -34,7 +34,6 @@
  * constructor, which is rather common in the SingleTon pattern.
  *
  * @package core
- * @author  Marcel van der Boom <mrb@hsdev.com>
  * @todo    we would like some std. methods in here but i have no clue how to 
  *          do that, now we really cant count on having an instance or not, so
  *          we would at least have to do checks wether $this exists or not. 
@@ -43,6 +42,24 @@
 **/
 class Object extends stdClass
 {
+    /**
+     * Convert an object to a string representation
+     *
+     * As PHP has its own __toString() magic method, we want to use that, but
+     * that method can not be called explicitly. So we declare toString() in 
+     * the interface so every object has it, but still reacts properly to __toString() 
+     * method invocations by the engine itself (when converting internally to a string)
+     * If customized behaviour is needed, override __toString() in your class.
+     *
+     * @return string
+     * @todo php version 5.2 is ok for sure, 5.1.4 works, but manual says it 
+     *       shouldnt work with sprintf(), keep an eye on it.
+    **/
+    final public function toString()
+    {
+        // Reuse __toString magic by internal conversion.
+        return sprintf('%s',$this);
+    }
 }
 
 /**
@@ -95,7 +112,7 @@ final class sys extends Object
      *
      * @return mixed if file is actually included the return value determined by the included file, otherwise true
      * @param  string $dp 'dot path' a dot separated string describing which component to include
-     **/
+    **/
     private static function once($dp)
     {
         if(!isset(self::$has[$dp])) {
