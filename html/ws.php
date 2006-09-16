@@ -9,7 +9,7 @@
  * @author Miko 
 */
 
-include 'includes/xarPreCore.php';
+include 'includes/bootstrap.php';
 sys::import('xarCore');
 xarCoreInit(XARCORE_SYSTEM_ALL);
 xarWebservicesMain();

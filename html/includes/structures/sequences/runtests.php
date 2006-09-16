@@ -5,7 +5,7 @@
 $savedir = getcwd();
 chdir('/var/mt/xar/core/core.2.x/html');
 
-include('includes/xarPreCore.php');
+include('includes/bootstrap.php');
 sys::import('xarCore');
 
 // TODO: don't load the whole core

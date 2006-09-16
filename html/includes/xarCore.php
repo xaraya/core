@@ -113,7 +113,7 @@ define('XARCORE_TPL_CACHEDIR' , '/cache/templates');
  * Load the Xaraya pre core early in case the entry point didn't do it (it should)
  *
  */
-if(!class_exists('sys')) include (dirname(__FILE__).'/xarPreCore.php');
+if(!class_exists('sys')) include (dirname(__FILE__).'/bootstrap.php');
 
 /**
  * Initializes the core engine

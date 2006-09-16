@@ -42,7 +42,7 @@ define ('XARINSTALL_PHASE_SETTINGS_COLLECTION', '5');
 define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
 
 // Include the core
-include 'includes/xarPreCore.php';
+include 'includes/bootstrap.php';
 sys::import('xarCore');
 // Besides what we explicitly load, we dont want to load
 // anything extra for maximum control
