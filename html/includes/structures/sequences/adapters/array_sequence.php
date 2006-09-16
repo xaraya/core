@@ -5,7 +5,7 @@
  * If the abstraction is proper, every method should have some
  * array specific part for the implementation. ;-)
  */ 
-class ArraySequence implements iSequence, iSequenceAdapter
+class ArraySequence extends Object implements iSequence, iSequenceAdapter
 {
     // An array holds our sequence items
     protected $items = array();

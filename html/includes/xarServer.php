@@ -84,7 +84,7 @@ function xarResponseRedirect($redirectURL)
  * Convenience classes
  *
  */
-class xarServer
+class xarServer extends Object
 {
     public static $generateXMLURLs = true;
 
@@ -321,7 +321,7 @@ class xarServer
     }
 }
 
-class xarRequest
+class xarRequest extends Object
 {
     public static $allowShortURLs = true;
     public static $defaultRequestInfo = array();
@@ -546,7 +546,7 @@ class xarRequest
     }
 }
 
-class xarResponse
+class xarResponse extends Object
 {
     public static $closeSession = true;    // we usually will have sessions
 

@@ -49,7 +49,7 @@ define('XAR_TPL_TAG_NEEDPARAMETER'             ,32);
  * @todo pass handler check at template registration someday (<mrb>what does this mean?)
  * @todo abstract the storing of the tag registration in a cache like interface (TagTemplateCache)
  */
-class xarTemplateTag
+class xarTemplateTag extends Object
 {
     const NAME_REGEX = '^[a-z][-_a-z0-9]*$';
 
@@ -379,7 +379,7 @@ function xarTplGetTagObjectFromName($tag_name)
  * @throws BadParamterException
  * @todo see FIXME
  */
-class xarTemplateAttribute
+class xarTemplateAttribute extends Object
 {
     const  NAME_REGEX = '^[a-z][-_a-z0-9]*$';
 

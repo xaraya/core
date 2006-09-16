@@ -10,7 +10,7 @@
  * @author Marcel van der Boom <marcel@xaraya.com>
 */
 
-class BlocklayoutXSLTProcessor
+class BlocklayoutXSLTProcessor extends Object
 {
     private $xslProc = NULL;
     private $xmlDoc  = NULL;

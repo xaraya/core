@@ -7,7 +7,7 @@
  * implement their interface in terms of the sequence
  * interface. (exposed protected in this class)
  */ 
-class SequenceAdapter implements iAdapter, iSequenceAdapter 
+class SequenceAdapter extends Object implements iAdapter, iSequenceAdapter 
 {
     // Who does the actual work?
     private $implementor;

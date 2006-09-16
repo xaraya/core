@@ -14,7 +14,7 @@
  * @todo why do we need this?
  */
 
-class xarDate
+class xarDate extends Object
 {
 
     public $year;

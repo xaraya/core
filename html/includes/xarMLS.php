@@ -775,7 +775,7 @@ interface ITranslationsBackend {
  * @package multilanguage
  * @throws Exception, BadParameterException
  */
-abstract class xarMLS__ReferencesBackend implements ITranslationsBackend
+abstract class xarMLS__ReferencesBackend  extends Object implements ITranslationsBackend
 {
     public $locales;
     public $locale;

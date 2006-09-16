@@ -15,7 +15,7 @@
  * @todo    decorate this with a Stream object so we can compile anything that is a stream? 
  * @todo    use a xarTemplate base class?
 **/
-class xarCompiledTemplate 
+class xarCompiledTemplate extends Object
 {
     protected $fileName = null;   // where is it stored? 
     private   $source   = null;   // source file

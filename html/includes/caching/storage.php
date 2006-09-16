@@ -1,6 +1,6 @@
 <?php
 
-class xarCache_Storage
+class xarCache_Storage extends Object
 {
     public $storage = ''; // filesystem, database, memcached, ...
     public $cachedir = 'var/cache/output';

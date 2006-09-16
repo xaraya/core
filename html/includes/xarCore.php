@@ -524,7 +524,7 @@ function xarFuncIsDisabled($funcName)
  *
  * @todo this is close to exceptions or logging than core, see also notes earlier
  */
-class xarDebug
+class xarDebug extends Object
 {
     public static $flags     = 0; // default off?
     public static $sqlCalls  = 0; // Should be in flags imo
@@ -539,7 +539,7 @@ class xarDebug
  * @todo separate file
  * @todo this is not xarCore, this is xarCoreCache
  */
-class xarCore
+class xarCore extends Object
 {
     private static $cacheCollection = array();
 

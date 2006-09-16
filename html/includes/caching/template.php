@@ -33,7 +33,7 @@
  * @todo this is still poorly abstracted, i would like to make a difference between the cache and its entries
  * @todo yes, i know this is similar to caching/storage/filesystem, but that one isnt ready yet :-) getting to that later.
  **/
-class xarTemplateCache implements ixarTemplateCache
+class xarTemplateCache  extends Object implements ixarTemplateCache
 {
     // Inactive means that we reuse one file in the cache all the time.
     private static $inactiveKeySeed    = 'youreallyreallyneedtocachetemplates';

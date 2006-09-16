@@ -666,7 +666,7 @@ function xarMLS_strftime($format=null,$timestamp=null)
  * @subpackage multilanguage
  * @throws  XMLParseException
  */
-class xarMLS__LocaleDataLoader
+class xarMLS__LocaleDataLoader extends Object
 {
     public $curData;
     public $curPath;

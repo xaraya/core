@@ -26,7 +26,7 @@ As a special exception to the GNU General Public License Xaraya is distributed u
  *
  * @package logging
  */
-class xarLogger
+class xarLogger extends Object
 {
 
     /**

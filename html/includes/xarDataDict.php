@@ -19,7 +19,7 @@
  * @author Richard Cave <rcave@xaraya.com>
  * @access public
  */
-class xarDataDict 
+class xarDataDict extends Object
 {
     var $dict;
 
@@ -653,7 +653,7 @@ class xarDataDict
  * @author Richard Cave <rcave@xaraya.com>
  * @access public
  */
-class xarMetaData 
+class xarMetaData extends Object
 {
     var $dbconn;
 

@@ -85,7 +85,7 @@ define('XAR_BL_DEPRECATED_ATTRIBUTE','DEPRECATED_ATTRIBUTE');
  * @todo in php5 make this class constants
  * @todo move this to somewhere editable
  */
-class DTDIdentifiers
+class DTDIdentifiers extends Object
 {
     // List taken from : http://www.w3.org/QA/2002/04/valid-dtd-list.html
     static function get($key) 
@@ -173,7 +173,7 @@ interface IxarBLCompiler
  * @package blocklayout
  * @access public
  */
-class xarBLCompiler implements IxarBLCompiler
+class xarBLCompiler extends Object implements IxarBLCompiler
 {
     private static $instance = null;
     public $parser;
@@ -1246,7 +1246,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
  * @todo is the encoding fixed?
  *
  */
-class xarTpl__TemplateVariables
+class xarTpl__TemplateVariables extends Object
 {
     public $tplVars = array();
 
@@ -1280,7 +1280,7 @@ class xarTpl__TemplateVariables
  * @package blocklayout
  * @access private
  */
-class xarTpl__ExpressionTransformer
+class xarTpl__ExpressionTransformer extends Object
 {
     /*
      * Replace the array and object notation.

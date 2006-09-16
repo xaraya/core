@@ -15,7 +15,7 @@ interface IExceptionHandlers
     public static function phperrors($errorType, $errorString, $file, $line, $errorContext=array());
 }
 
-class ExceptionHandlers implements IExceptionHandlers
+class ExceptionHandlers extends Object implements IExceptionHandlers
 {
     /**
      * Default Exception handler for unhandled exceptions

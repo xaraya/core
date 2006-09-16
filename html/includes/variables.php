@@ -18,7 +18,7 @@ interface IxarVars
  * @package variables
  * @author Marcel van der Boom <mrb@hsdev.com>
  **/
-class xarVars
+class xarVars extends Object
 {
     
 }

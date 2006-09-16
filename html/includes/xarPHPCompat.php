@@ -8,7 +8,7 @@
  * @link http://www.xaraya.com
  * @author Paul Crovella
  */
-class xarPHPCompat
+class xarPHPCompat extends Object
 {
     /**
      * Loads given constants and functions not in the current PHP version

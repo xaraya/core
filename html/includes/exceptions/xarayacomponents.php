@@ -1,6 +1,6 @@
 <?php
 // FIXME: this is unmaintainable, dont hardcode it, determine once what is available, then store somewhere
-class xarComponents
+class xarComponents extends Object
 {
 public static $core = array(
               array('name' => '', 'fullname' => 'BlockLayout', 'description' => 'Templating engine'),

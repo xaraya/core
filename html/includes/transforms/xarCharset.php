@@ -13,7 +13,7 @@
 
 define ("CONVERT_TABLES_DIR", 'includes/transforms/convtables/');
 
-class xarCharset
+class xarCharset extends Object
 {
     public $lastConversion = ''; // Last used conversion
     public $conversionTable;     // Last conversion table

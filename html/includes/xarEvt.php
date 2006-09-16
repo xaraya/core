@@ -83,7 +83,7 @@ interface IxarEvents
  * Class to model the interface to core events management
  *
  */
-class xarEvents implements IxarEvents
+class xarEvents extends Object implements IxarEvents
 {
     private static $knownEvents = array();
 

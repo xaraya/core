@@ -1,5 +1,5 @@
 <?php
-class xarObject 
+class xarObject
 {
 
     function toString() 

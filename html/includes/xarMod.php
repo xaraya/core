@@ -837,7 +837,7 @@ interface IxarMod
  * Preliminary class to model xarMod interface
  *
  */
-class xarMod implements IxarMod
+class xarMod  extends Object implements IxarMod
 {
     static $genShortUrls = false;
     static $genXmlUrls   = true;
@@ -1598,7 +1598,7 @@ interface IxarModAlias
  * @todo evaluate dependency consequences
  * @todo evaluate usage in modules, it's not very common, as in, perhaps worth to scrap and bolt onto a request mapper
  */
-class xarModAlias implements IxarModAlias
+class xarModAlias extends Object implements IxarModAlias
 {
     /**
      * Resolve an alias for a module
