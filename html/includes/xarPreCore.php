@@ -55,13 +55,59 @@ class Object extends stdClass
      * @todo php version 5.2 is ok for sure, 5.1.4 works, but manual says it 
      *       shouldnt work with sprintf(), keep an eye on it.
     **/
-    final public function toString()
+    public final function toString()
     {
         // Reuse __toString magic by internal conversion.
         return sprintf('%s',$this);
     }
+
+    /**
+     * Return the class for an object
+     *
+     * We want to be consistent with objects, so we need a class to model a class
+     * PHP allows directly only get_class() or something like that, which 
+     * returns a string. 
+     * By defining a class called Class_ (note the underscore to prevent an name conflict)
+     * we can get the class from each object and maintain the 'richness' of 
+     * an object versus the 'flatness' of a string.
+     *
+     * @return void
+     * @author Marcel van der Boom
+    **/
+    public final function getClass()
+    {
+        return new Class_($this);
+    }
 }
 
+/**
+ * A class to model a class in PHP
+ *
+ * The purpose of this class is mainly to support the getClass() method 
+ * of the Object class above, but i can see it grow a bit further later on.
+ * The class is final, there's only one definition of a class, it can not be
+ * specialized in any way. Furthermore the constructor is made protected. 
+ * In combination with the final keyword, this makes this class only instantiable
+ * by its ancestors, which only is the Object class and is exactly what we want.
+ *
+ * @todo is the pass by reference needed?
+ * @todo can we come up with a better name without the underscore?
+**/
+final class Class_ extends Object
+{
+    private $reflect = null;
+    
+    protected function __construct(Object &$object)
+    {
+        $this->reflect = new ReflectionClass($object);
+    }
+    
+    public function getName()
+    {
+        return $this->reflect->getName();
+    }
+
+}
 /**
  * The sys class contains routines guaranteed to be available to do small
  * things which we do a lot as fast as possible.
