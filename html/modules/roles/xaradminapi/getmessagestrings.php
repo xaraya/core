@@ -26,7 +26,7 @@ function roles_adminapi_getmessagestrings($args)
         list($module) = xarRequestGetInfo();
     }
 
-    $messaginghome = xarCoreGetVarDirPath() . "/messaging/" . $module;
+    $messaginghome = sys::varpath() . "/messaging/" . $module;
     $subjtemplate = $messaginghome . "/" . $template . "-subject.xd";
     if (!file_exists($subjtemplate)) throw new FileNotFoundException($subjtemplate);
 

@@ -19,7 +19,7 @@ include 'includes/xarPreCore.php';
  * Note: this happens first so we can serve cached pages to first-time visitors
  *       without loading the core
  */
-if (file_exists(xarPreCoreGetVarDirPath() . '/cache/output/cache.touch')) {
+if (file_exists(sys::varpath() . '/cache/output/cache.touch')) {
     sys::import('xarCache');
     // Note : we may already exit here if session-less page caching is enabled
     xarCache_init();

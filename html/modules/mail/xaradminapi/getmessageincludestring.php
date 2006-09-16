@@ -26,7 +26,7 @@ function mail_adminapi_getmessageincludestring($args)
     }
 
     // Get the template that defines the substitution vars
-    $messaginghome = xarCoreGetVarDirPath() . "/messaging/" . $module;
+    $messaginghome = sys::varpath() . "/messaging/" . $module;
     $vartemplate = $messaginghome . "/includes/" . $template . ".xd";
     if (!file_exists($vartemplate)) throw new FileNotFoundException($vartemplate);
    

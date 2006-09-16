@@ -119,7 +119,7 @@ function dynamicdata_util_export($args)
             $xml .= "</items>\n";
 
         } else {
-            $varDir = xarCoreGetVarDirPath();
+            $varDir = sys::varpath();
             $outfile = $varDir . '/uploads/' . xarVarPrepForOS($mylist->name) . '.data.' . xarLocaleFormatDate('%Y%m%d%H%M%S',time()) . '.xml';
             $fp = @fopen($outfile,'w');
             if (!$fp) {

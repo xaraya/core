@@ -97,7 +97,7 @@ function xarLogConfigFile()
 
     if (isset($logConfigFile)) return $logConfigFile;
 
-    $logConfigFile = xarCoreGetVarDirPath() . '/logs/config.log.php';
+    $logConfigFile = sys::varpath() . '/logs/config.log.php';
 
     if (file_exists($logConfigFile)) {
         $logConfigFile = realpath($logConfigFile);
@@ -129,7 +129,7 @@ function xarLogFallbackFile ()
 
     if (isset($logFile)) return $logFile;
 
-    $logFile = xarCoreGetVarDirPath() . '/logs/log.txt';
+    $logFile = sys::varpath() . '/logs/log.txt';
 
     if (file_exists($logFile)) {
         $logFile = realpath($logFile);

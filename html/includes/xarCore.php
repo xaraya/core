@@ -417,7 +417,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
  */
 function xarCoreGetVarDirPath()
 {
-    return xarPreCoreGetVarDirPath();
+    return sys::varpath();
 }
 
 /**

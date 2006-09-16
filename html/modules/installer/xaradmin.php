@@ -58,7 +58,7 @@ function installer_admin_phase1()
 
             // <marco> This check is really not necessary since available locales are
             // already determined from existing files. The relative code is in install.php
-            //$fileName = xarCoreGetVarDirPath() . "/locales/$locale/locale.xml";
+            //$fileName = sys::varpath() . "/locales/$locale/locale.xml";
             //if(file_exists($fileName)) {
             $locale_data =& xarMLSLoadLocaleData($locale);
             $languages[$locale] = $locale_data['/language/display'];
@@ -142,7 +142,7 @@ function installer_admin_phase3()
     $rssTemplatesIsWritable   = false;
     $metRequiredPHPVersion    = false;
 
-    $systemVarDir             = xarCoreGetVarDirPath();
+    $systemVarDir             = sys::varpath();
     $cacheDir                 = $systemVarDir . XARCORE_CACHEDIR;
     $cacheTemplatesDir        = $systemVarDir . XARCORE_TPL_CACHEDIR;
     $rssTemplatesDir          = $systemVarDir . XARCORE_RSS_CACHEDIR;

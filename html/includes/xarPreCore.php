@@ -11,10 +11,11 @@
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @author jsb
+ * @author Jonn Beames
  * @author Marco Canini <marco@xaraya.com>
  * @author Marcel van der Boom <mrb@hsdev.com>
- * @todo  rename this file to bootstrap.php or something
+ * @todo   rename this file to bootstrap.php or something
+ * @todo   place the root Object class in this file.
 */
 
 /**
@@ -25,7 +26,7 @@
  * - very well documented, since they may be unreadable for performance reasons
  * - as superfast as possible.
  * - depend on nothing
- **/
+**/
 final class sys
 {
     const CONFIG = 'config.system.php';     // Default system configuration file
@@ -93,7 +94,8 @@ final class sys
      *
      * @see    sys::once()
      * @todo   do we want to support sys::import('blocklayout.*') ?
-     **/
+     * @todo   we should probably change our directory structure so we dont have to do specials for creole and modules.
+    **/
     public static function import($dp)
     {
         if((0===strpos($dp,'modules.'))||(0===strpos($dp,'creole.'))) return self::once($dp);
@@ -111,7 +113,7 @@ final class sys
      * obviously the .key.php file must be a valid php file.
      *
      * @return string the var directory path name
-     */
+     **/
      public static function varpath()
      {
          if (isset(self::$var)) return self::$var;
@@ -124,10 +126,4 @@ final class sys
          return self::$var;
      }
 }
-// Legacy wrapper
-function xarPreCoreGetVarDirPath()
-{
-    return sys::varpath();
-}
-
 ?>

@@ -71,10 +71,10 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
     {
         $bindResult = parent::bindDomain($dnType, $dnName);
 
-        $php_locale_dir = xarCoreGetVarDirPath()."/locales/{$this->locale}";
+        $php_locale_dir = sys::varpath()."/locales/{$this->locale}";
 
         if (!$parsedLocale = xarMLS__parseLocaleString("{$this->locale}")) return false;
-        $xml_locale_dir = xarCoreGetVarDirPath().'/locales/';
+        $xml_locale_dir = sys::varpath().'/locales/';
         $xml_locale_dir .= $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
 
         $php_dir = "$php_locale_dir/php";
@@ -228,7 +228,7 @@ class PHPBackendGenerator
         $this->outCharset = $l['charset'];
         $this->isUTF8 = ($l['charset'] == 'utf-8');
 
-        $varDir = xarCoreGetVarDirPath();
+        $varDir = sys::varpath();
         $locales_dir = "$varDir/locales";
 
         $php_locale_dir = "$locales_dir/{$this->locale}";
@@ -246,7 +246,7 @@ class PHPBackendGenerator
 
     function bindDomain($dnType='core', $dnName='xaraya')
     {
-        $varDir = xarCoreGetVarDirPath();
+        $varDir = sys::varpath();
         $locales_dir = "$varDir/locales";
 
         $php_locale_dir = "$locales_dir/{$this->locale}";

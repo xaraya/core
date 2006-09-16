@@ -79,7 +79,7 @@ function base_userapi_getfile($args)
 
     // check if this file is already cached
     if ($cached) {
-        $vardir = xarCoreGetVarDirPath();
+        $vardir = sys::varpath();
         if (!$archive) {
             $file = $vardir . '/' . $cachedir . '/' . md5($url) . $extension;
         } else {

@@ -30,7 +30,7 @@ function xarCache_init($args = false)
     global $xarOutput_cacheTheme;
     global $xarOutput_cacheSizeLimit;
 
-    $xarVarDir = xarPreCoreGetVarDirPath();
+    $xarVarDir = sys::varpath();
 
     if (!isset($cacheDir)) {
         $cacheDir = $xarVarDir . '/cache/output';

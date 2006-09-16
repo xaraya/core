@@ -34,7 +34,7 @@ function mail_adminapi_updatemessagestrings($args)
         $message = '';
     }
 
-    $messaginghome = xarCoreGetVarDirPath() . '/messaging/' . $module;
+    $messaginghome = sys::varpath() . '/messaging/' . $module;
     if (!file_exists($messaginghome)) {
         throw new DirectoryNotFoundException($messaginghome);
     }

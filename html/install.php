@@ -113,7 +113,7 @@ $GLOBALS['xarMLS_mode'] = 'SINGLE';
 xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
 // Construct an array of the available locale folders
-$locale_dir = xarCoreGetVarDirPath() . '/locales/';
+$locale_dir = sys::varpath() . '/locales/';
 $allowedLocales = array();
 if(is_dir($locale_dir)) {
     if ($dh = opendir($locale_dir)) {

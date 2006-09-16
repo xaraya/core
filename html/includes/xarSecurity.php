@@ -24,7 +24,7 @@
 //Maybe changing this touch to a centralized API would be a good idea?
 //Even if in the end it would use touched files too...
 sys::import('xarCore'); // Why is this?
-if (file_exists(xarCoreGetVarDirPath() . '/security/on.touch')) {
+if (file_exists(sys::varpath() . '/security/on.touch')) {
     sys::import('xarCacheSecurity');
 }
 

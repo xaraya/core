@@ -333,7 +333,7 @@ function xarPage_autoCacheLogStatus($status = 'MISS')
             filemtime($xarOutput_cacheCollection.'/autocache.start') < time() - $xarPage_autoCachePeriod) {
             @touch($xarOutput_cacheCollection.'/autocache.start');
 
-            $xarVarDir = xarPreCoreGetVarDirPath();
+            $xarVarDir = sys::varpath();
 
             // re-calculate Page.SessionLess based on autocache.log and save in config.caching.php
             $cachingConfigFile = $xarVarDir.'/cache/config.caching.php';

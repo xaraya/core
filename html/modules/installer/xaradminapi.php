@@ -29,7 +29,7 @@ function installer_adminapi_modifyconfig($args)
     // fixes instances where passwords contains --> '
     $dbPass = addslashes($dbPass);
 
-    $systemConfigFile = xarCoreGetVarDirPath() . '/config.system.php';
+    $systemConfigFile = sys::varpath() . '/config.system.php';
     $config_php = join('', file($systemConfigFile));
 
     //$dbUname = base64_encode($dbUname);

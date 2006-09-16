@@ -63,7 +63,7 @@ function roles_admin_sendmail()
     }
 
     // Get the template that defines the substitution vars
-    $messaginghome = xarCoreGetVarDirPath() . "/messaging/roles";
+    $messaginghome = sys::varpath() . "/messaging/roles";
     $msgvarstemplate = $messaginghome . "/includes/message-vars.xd";
     if (!file_exists($msgvarstemplate)) throw new FileNotFoundException($msgvarstemplate);
     $string = '';

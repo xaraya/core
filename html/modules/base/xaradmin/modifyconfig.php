@@ -34,7 +34,7 @@ function base_admin_modifyconfig()
                           array('filter'     => array('UserCapable' => 1)));
     }
 
-    $localehome = xarCoreGetVarDirPath() . "/locales";
+    $localehome = sys::varpath() . "/locales";
     if (!file_exists($localehome)) {
         throw new DirectoryNotFoundException($localehome);
     }

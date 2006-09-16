@@ -61,7 +61,7 @@ function xarTpl_init(&$args, $whatElseIsGoingLoaded)
 
     // @todo is the core define still needed now?
     sys::import('caching.template');
-    xarTemplateCache::init(xarCoreGetVarDirPath() . XARCORE_TPL_CACHEDIR, $args['enableTemplatesCaching']);
+    xarTemplateCache::init(sys::varpath() . XARCORE_TPL_CACHEDIR, $args['enableTemplatesCaching']);
 
     // This is wrong here as well, but it's better at least than in xarMod
     sys::import('xarTheme');

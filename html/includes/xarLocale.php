@@ -60,12 +60,11 @@ function &xarMLSLoadLocaleData($locale = NULL)
         }
     }
 
-    $fileName = xarCoreGetVarDirPath() . '/locales/$locale/locale.php';
-    //xarCoreGetVarDirPath()
+    $fileName = sys::varpath() . '/locales/$locale/locale.php';
     if (!$parsedLocale = xarMLS__parseLocaleString($locale)) return false;
     $siteCharset = $parsedLocale['charset'];
     $utf8locale = $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
-    $utf8FileName = xarCoreGetVarDirPath() . '/locales/$utf8locale/locale.php';
+    $utf8FileName = sys::varpath() . '/locales/$utf8locale/locale.php';
     if (file_exists($fileName) && !(isset($loaded[$fileName]))) {
         // @todo do we need to wrap this in a try/catch construct?
         include $fileName;
@@ -682,7 +681,7 @@ class xarMLS__LocaleDataLoader
 
     function load($locale)
     {
-        $fileName = xarCoreGetVarDirPath() . "/locales/$locale/locale.xml";
+        $fileName = sys::varpath() . "/locales/$locale/locale.xml";
         if (!file_exists($fileName)) {
             return false;
         }

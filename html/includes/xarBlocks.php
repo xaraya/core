@@ -37,7 +37,7 @@ function xarBlock_init(&$args, $whatElseIsGoingLoaded)
     xarDB::importTables($tables);
 
     // Decide if we will be using the output caching system
-    $outputCachePath = xarCoreGetVarDirPath() . '/cache/output/';
+    $outputCachePath = sys::varpath() . '/cache/output/';
     if (defined('XARCACHE_BLOCK_IS_ENABLED')) {
         xarCore::setCached('xarcache', 'blockCaching', true);
     } else {

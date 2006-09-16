@@ -857,10 +857,10 @@ abstract class xarMLS__ReferencesBackend implements ITranslationsBackend
 
         foreach ($this->locales as $locale) {
             if($this->spacedir == "core" || $this->spacedir == "xaraya") {
-                $this->domainlocation  = xarCoreGetVarDirPath() . "/locales/"
+                $this->domainlocation  = sys::varpath() . "/locales/"
                 . $locale . "/" . $this->backendtype . "/" . $this->spacedir;
             } else {
-                $this->domainlocation  = xarCoreGetVarDirPath() . "/locales/"
+                $this->domainlocation  = sys::varpath() . "/locales/"
                 . $locale . "/" . $this->backendtype . "/" . $this->spacedir . "/" . $dnName;
             }
 
