@@ -28,7 +28,7 @@
  * @throws  no exceptions
  * @todo    nice handling of protocols other than http.
  */
-class xarCurl
+class xarCurl extends Object
 {
     // The curl object.
     // Extra methods and properties can be accessed through this property.

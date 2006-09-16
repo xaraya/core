@@ -34,8 +34,8 @@ function dynamicdata_utilapi_import($args)
         throw new BadParameterException($file,'Invalid importfile "#(1)"');
     }
 
-	$objectcache = array();
-	$objectmaxid = array();
+    $objectcache = array();
+    $objectmaxid = array();
     $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
     $name2id = array();
     foreach ($proptypes as $propid => $proptype) {
@@ -44,75 +44,75 @@ function dynamicdata_utilapi_import($args)
 
     $testing = true;
     if ($testing) {
-		if (!empty($file)) {
-			$xmlobject = simplexml_load_file($file);
-		} elseif (!empty($xml)) {
-			$xmlobject = new SimpleXMLElement($xml);
-		}
-		// No better way of doing this?
-		$dom = dom_import_simplexml ($xmlobject);
-		$roottag = $dom->tagName;
+        if (!empty($file)) {
+            $xmlobject = simplexml_load_file($file);
+        } elseif (!empty($xml)) {
+            $xmlobject = new SimpleXMLElement($xml);
+        }
+        // No better way of doing this?
+        $dom = dom_import_simplexml ($xmlobject);
+        $roottag = $dom->tagName;
 
-		if ($roottag == 'object') {
-			$prefix = xarDBGetSystemTablePrefix();
-			$prefix .= '_';
+        if ($roottag == 'object') {
+            $prefix = xarDBGetSystemTablePrefix();
+            $prefix .= '_';
 
-		    $args = array();
-			// Get the object's name
-			$args['name'] = (string)($xmlobject->attributes()->name);
+            $args = array();
+            // Get the object's name
+            $args['name'] = (string)($xmlobject->attributes()->name);
 
-		    $object = xarModAPIFunc('dynamicdata','user','getobject',array('objectid' => 1));
-		    $objectproperties = array_keys($object->properties);
-		    foreach($objectproperties as $property) {
-		    	if (isset($xmlobject->{$property}[0]))
-		    		$args[$property] = (string)$xmlobject->{$property}[0];
-		    }
+            $object = xarModAPIFunc('dynamicdata','user','getobject',array('objectid' => 1));
+            $objectproperties = array_keys($object->properties);
+            foreach($objectproperties as $property) {
+                if (isset($xmlobject->{$property}[0]))
+                    $args[$property] = (string)$xmlobject->{$property}[0];
+            }
 
-		    // Now do some checking
-		    /*
-			if (isset($object[$key])) {
-				fclose($fp);
-				$msg = 'Duplicate definition for #(1) key #(2) on line #(3)';
-				$vars = array('object',xarVarPrepForDisplay($key),$count);
-				throw new DuplicateException($vars,$msg);
-			}
-			*/
-			// Treat parents where the module is DD differently. Put in numeric itemtype
-			if ($args['moduleid'] == 182) {
-				$info = xarModAPIFunc('dynamicdata','user','getobjectinfo',array('name' => $args['parent']));
-				$args['parent'] = $info['itemtype'];
-			}
-			if (empty($args['name']) || empty($args['moduleid'])) {
-				throw new BadParameterException(null,'Missing keys in object definition');
-			}
-			// Make sure we drop the object id, because it might already exist here
-			//TODO: don't define it in the first place?
-			unset($args['objectid']);
-			$args['itemtype'] = xarModAPIFunc('dynamicdata','admin','getnextitemtype',
-										   array('modid' => $args['moduleid']));
-			// Create the DD object
-			$objectid = xarModAPIFunc('dynamicdata','admin','createobject',
-									  $args);
+            // Now do some checking
+            /*
+            if (isset($object[$key])) {
+                fclose($fp);
+                $msg = 'Duplicate definition for #(1) key #(2) on line #(3)';
+                $vars = array('object',xarVarPrepForDisplay($key),$count);
+                throw new DuplicateException($vars,$msg);
+            }
+            */
+            // Treat parents where the module is DD differently. Put in numeric itemtype
+            if ($args['moduleid'] == 182) {
+                $info = xarModAPIFunc('dynamicdata','user','getobjectinfo',array('name' => $args['parent']));
+                $args['parent'] = $info['itemtype'];
+            }
+            if (empty($args['name']) || empty($args['moduleid'])) {
+                throw new BadParameterException(null,'Missing keys in object definition');
+            }
+            // Make sure we drop the object id, because it might already exist here
+            //TODO: don't define it in the first place?
+            unset($args['objectid']);
+            $args['itemtype'] = xarModAPIFunc('dynamicdata','admin','getnextitemtype',
+                                           array('modid' => $args['moduleid']));
+            // Create the DD object
+            $objectid = xarModAPIFunc('dynamicdata','admin','createobject',
+                                      $args);
 
-		    // Now do the object's properties
-		    $property = xarModAPIFunc('dynamicdata','user','getobject',array('objectid' => 2));
-		    $propertyproperties = array_keys($property->properties);
-		    $propertieshead = $xmlobject->properties;
-		    foreach($propertieshead->children() as $property) {
-		    	$propertyname = (string)($property->attributes()->name);
-		    	$propertyargs['name'] = $propertyname;
-				foreach($propertyproperties as $prop) {
-					if (isset($property->{$prop}[0]))
-						$propertyargs[$prop] = (string)$property->{$prop}[0];
-				}
+            // Now do the object's properties
+            $property = xarModAPIFunc('dynamicdata','user','getobject',array('objectid' => 2));
+            $propertyproperties = array_keys($property->properties);
+            $propertieshead = $xmlobject->properties;
+            foreach($propertieshead->children() as $property) {
+                $propertyname = (string)($property->attributes()->name);
+                $propertyargs['name'] = $propertyname;
+                foreach($propertyproperties as $prop) {
+                    if (isset($property->{$prop}[0]))
+                        $propertyargs[$prop] = (string)$property->{$prop}[0];
+                }
 
-		    	// Add some args needed to define the property
+                // Add some args needed to define the property
                 unset($propertyargs['id']);
                 $propertyargs['objectid'] = $objectid;
                 $propertyargs['moduleid'] = $args['moduleid'];
                 $propertyargs['itemtype'] = $args['itemtype'];
 
-		    	// Now do some checking
+                // Now do some checking
                 if (empty($propertyargs['name']) || empty($propertyargs['type'])) {
                     throw new BadParameterException(null,'Missing keys in property definition');
                 }
@@ -124,20 +124,20 @@ function dynamicdata_utilapi_import($args)
                         $propertyargs['type'] = 1;
                     }
                 }
-	            // TODO: watch out for multi-sites
+                // TODO: watch out for multi-sites
                 // replace default xar_* table prefix with local one
                 $propertyargs['source'] = preg_replace("/^xar_/",$prefix,$propertyargs['source']);
 
                 // Create this property
                 $prop_id = xarModAPIFunc('dynamicdata','admin','createproperty',
                                          $propertyargs);
-		    }
-		} elseif ($roottag == 'items') {
+            }
+        } elseif ($roottag == 'items') {
 
-			foreach($xmlobject->children() as $child) {
-				$item = array();
-				$item['name'] = $child->getName();
-				$item['itemid'] = (!empty($keepitemid)) ? (string)$child->attributes()->itemid : 0;
+            foreach($xmlobject->children() as $child) {
+                $item = array();
+                $item['name'] = $child->getName();
+                $item['itemid'] = (!empty($keepitemid)) ? (string)$child->attributes()->itemid : 0;
 
                 if (empty($objectname2objectid[$item['name']])) {
                     $objectinfo = Dynamic_Object_Master::getObjectInfo(array('name' => $item['name']));
@@ -151,15 +151,15 @@ function dynamicdata_utilapi_import($args)
                 }
                 $objectid = $objectname2objectid[$item['name']];
 
-				// Get the properties for this object
-			    $object = xarModAPIFunc('dynamicdata','user','getobject',array('objectid' => $objectid));
-				$objectproperties = array_keys($object->properties);
-				foreach($objectproperties as $property) {
-					if (isset($child->{$property}))
-						$item[$property] = (string)$child->{$property};
-				}
+                // Get the properties for this object
+                $object = xarModAPIFunc('dynamicdata','user','getobject',array('objectid' => $objectid));
+                $objectproperties = array_keys($object->properties);
+                foreach($objectproperties as $property) {
+                    if (isset($child->{$property}))
+                        $item[$property] = (string)$child->{$property};
+                }
 
-				// Create the item
+                // Create the item
                 if (!isset($objectcache[$objectid])) {
                     $objectcache[$objectid] = & Dynamic_Object_Master::getObject(array('objectid' => $objectid));
                 }
@@ -193,9 +193,9 @@ function dynamicdata_utilapi_import($args)
                     $objectmaxid[$objectid] = $itemid;
                 }
 
-			}
-		}
-	} else {
+            }
+        }
+    } else {
     $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
     $name2id = array();
     foreach ($proptypes as $propid => $proptype) {
@@ -258,9 +258,9 @@ function dynamicdata_utilapi_import($args)
                 }
                 // Treat parents where the module is DD differently
                 if ($key == 'parent' && ($object['moduleid'] == 182)) {
-                	$info = xarModAPIFunc('dynamicdata','user','getobjectinfo',array('name' => $value));
-                	$value = $info['itemtype'];
-				}
+                    $info = xarModAPIFunc('dynamicdata','user','getobjectinfo',array('name' => $value));
+                    $value = $info['itemtype'];
+                }
                 $object[$key] = strtr($value,$specialchars);
             } elseif (preg_match('#<config>#',$line)) {
                 if (isset($object['config'])) {

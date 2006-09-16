@@ -54,28 +54,28 @@ function dynamicdata_admin_modifyhook($args)
         $itemid = $objectid;
     }
 
-	$object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
-									   'itemtype' => $itemtype,
-									   'itemid'   => $itemid,
-									   'extend'   => false));
-	if (!isset($object)) return;
+    $object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
+                                       'itemtype' => $itemtype,
+                                       'itemid'   => $itemid,
+                                       'extend'   => false));
+    if (!isset($object)) return;
 
-	$object->getItem();
+    $object->getItem();
 
-	// if we are in preview mode, we need to check for any preview values
-	if (!xarVarFetch('preview', 'isset', $preview,  NULL, XARVAR_DONT_SET)) {return;}
-	if (!empty($preview)) {
-		$object->checkInput();
-	}
+    // if we are in preview mode, we need to check for any preview values
+    if (!xarVarFetch('preview', 'isset', $preview,  NULL, XARVAR_DONT_SET)) {return;}
+    if (!empty($preview)) {
+        $object->checkInput();
+    }
 
-	if (!empty($object->template)) {
-		$template = $object->template;
-	} else {
-		$template = $object->name;
-	}
-	return xarTplModule('dynamicdata','admin','modifyhook',
-						array('properties' => & $object->properties),
-						$template);
+    if (!empty($object->template)) {
+        $template = $object->template;
+    } else {
+        $template = $object->name;
+    }
+    return xarTplModule('dynamicdata','admin','modifyhook',
+                        array('properties' => & $object->properties),
+                        $template);
 }
 
 ?>

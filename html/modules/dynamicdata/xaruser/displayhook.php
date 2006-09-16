@@ -58,22 +58,22 @@ function dynamicdata_user_displayhook($args)
         $itemid = $objectid;
     }
 
-	$object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
-									   'itemtype' => $itemtype,
-									   'itemid'   => $itemid,
-									   'extend' => false));
-	if (!isset($object)) return;
+    $object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
+                                       'itemtype' => $itemtype,
+                                       'itemid'   => $itemid,
+                                       'extend' => false));
+    if (!isset($object)) return;
 
-	$object->getItem();
+    $object->getItem();
 
-	if (!empty($object->template)) {
-		$template = $object->template;
-	} else {
-		$template = $object->name;
-	}
-	return xarTplModule('dynamicdata','user','displayhook',
-						array('properties' => & $object->properties),
-						$template);
+    if (!empty($object->template)) {
+        $template = $object->template;
+    } else {
+        $template = $object->name;
+    }
+    return xarTplModule('dynamicdata','user','displayhook',
+                        array('properties' => & $object->properties),
+                        $template);
 }
 
 ?>

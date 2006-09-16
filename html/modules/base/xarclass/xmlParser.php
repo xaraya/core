@@ -21,7 +21,7 @@
 *  http://revjim.net/code/xmlParser/
 */
 
-class XMLParser 
+class XMLParser extends Object
 {
     public $ns2uri = array();
     public $uri2ns = array();

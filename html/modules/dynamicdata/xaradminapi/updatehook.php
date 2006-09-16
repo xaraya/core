@@ -91,65 +91,65 @@ function dynamicdata_adminapi_updatehook($args)
         //return $extrainfo;
     }
 
-	$myobject = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
-										 'itemtype' => $itemtype,
-										 'itemid'   => $itemid,
-										 'extend' => false));
-	if (!isset($myobject)) {
-		$msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-		$vars = array('object', 'admin', $dd_function, 'dynamicdata');
-		throw new BadParameterException($vars,$msg);
-		// we *must* return $extrainfo for now, or the next hook will fail
-		// CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
-		//return $extrainfo;
-	}
+    $myobject = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
+                                         'itemtype' => $itemtype,
+                                         'itemid'   => $itemid,
+                                         'extend' => false));
+    if (!isset($myobject)) {
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('object', 'admin', $dd_function, 'dynamicdata');
+        throw new BadParameterException($vars,$msg);
+        // we *must* return $extrainfo for now, or the next hook will fail
+        // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
+        //return $extrainfo;
+    }
 
-	$myobject->getItem();
-	// use the values passed via $extrainfo if available
-	$isvalid = $myobject->checkInput($extrainfo);
-	if (!$isvalid) {
-		$vars = array();
-		if ($verbose) {
-			$msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-			$vars = array('input', 'admin', $dd_function, 'dynamicdata');
-			// Note : we can't use templating here
-			$msg .= ' : ';
-			$i=5;
-			foreach ($myobject->properties as $property) {
-				if (!empty($property->invalid)) {
-					$msg .= "#(".$i++.") = invalid #(".$i++.") - ";
-					$vars[]=$property->label;
-					$vars[]=$property->invalid;
-				}
-			}
-		} else {
-			$msg = '';
-			foreach ($myobject->properties as $property) {
-				if (!empty($property->invalid)) {
-					$msg .= $property->invalid . ' ';
-				}
-			}
-		}
-		throw new BadParameterException($vars, $msg);
-		// we *must* return $extrainfo for now, or the next hook will fail
-		// CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
-		//return $extrainfo;
-	}
+    $myobject->getItem();
+    // use the values passed via $extrainfo if available
+    $isvalid = $myobject->checkInput($extrainfo);
+    if (!$isvalid) {
+        $vars = array();
+        if ($verbose) {
+            $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+            $vars = array('input', 'admin', $dd_function, 'dynamicdata');
+            // Note : we can't use templating here
+            $msg .= ' : ';
+            $i=5;
+            foreach ($myobject->properties as $property) {
+                if (!empty($property->invalid)) {
+                    $msg .= "#(".$i++.") = invalid #(".$i++.") - ";
+                    $vars[]=$property->label;
+                    $vars[]=$property->invalid;
+                }
+            }
+        } else {
+            $msg = '';
+            foreach ($myobject->properties as $property) {
+                if (!empty($property->invalid)) {
+                    $msg .= $property->invalid . ' ';
+                }
+            }
+        }
+        throw new BadParameterException($vars, $msg);
+        // we *must* return $extrainfo for now, or the next hook will fail
+        // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
+        //return $extrainfo;
+    }
 
-	if ($dd_function == 'createhook') {
-		$itemid = $myobject->createItem();
-	} else {
-		$itemid = $myobject->updateItem();
-	}
+    if ($dd_function == 'createhook') {
+        $itemid = $myobject->createItem();
+    } else {
+        $itemid = $myobject->updateItem();
+    }
 
-	if (empty($itemid)) {
-		$msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-		$vars = array('create/update', 'admin', $dd_function, 'dynamicdata');
-		throw new BadParameterException($vars,$msg);
-		// we *must* return $extrainfo for now, or the next hook will fail
-		// CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
-		//return $extrainfo;
-	}
+    if (empty($itemid)) {
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('create/update', 'admin', $dd_function, 'dynamicdata');
+        throw new BadParameterException($vars,$msg);
+        // we *must* return $extrainfo for now, or the next hook will fail
+        // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
+        //return $extrainfo;
+    }
     // Return the extra info
     return $extrainfo;
 }

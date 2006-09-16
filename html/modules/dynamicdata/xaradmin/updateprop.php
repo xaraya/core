@@ -144,7 +144,7 @@ function dynamicdata_admin_updateprop()
         if (!isset($input_dd_status[0])) {
             $input_dd_status[0] = Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY;
         }
-		$dd_status[0] = $display_dd_status[0] + $input_dd_status[0];
+        $dd_status[0] = $display_dd_status[0] + $input_dd_status[0];
         $prop_id = xarModAPIFunc('dynamicdata','admin','createproperty',
                                 array('name' => $name,
                                       'label' => $dd_label[0],

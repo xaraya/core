@@ -25,7 +25,7 @@
 function &dynamicdata_userapi_getproperty($args)
 {
     if (empty($args['type'])) {
-    	$result = null;
+        $result = null;
         return $result;
     }
     $result =  Dynamic_Property_Master::getProperty($args);

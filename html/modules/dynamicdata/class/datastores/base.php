@@ -10,7 +10,7 @@ sys::import('datastores.interface');
 
 class BasicDataStore extends XarayaDDObject implements IBasicDataStore
 {
-    protected $schemaobject;	// The object representing this datastore as codified by its schema
+    protected $schemaobject;    // The object representing this datastore as codified by its schema
 
     public $_itemids;  // reference to itemids in Dynamic_Object_List TODO: investigate public scope
 

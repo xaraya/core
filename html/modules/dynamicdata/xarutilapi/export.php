@@ -73,13 +73,13 @@ function dynamicdata_utilapi_export($args)
                 }
                 $xml .= "  </$name>\n";
             } else {
-            	// Treat parent fields where module is DD differently
-            	if (($name == 'parent') && ($myobject->moduleid == 182)) {
-                	$info = xarModAPIFunc('dynamicdata','user','getobjectinfo',array('modid' => 182, 'itemtype' => $myobject->$name));
-					$value = $info['name'];
-				} else {
-					$value = $myobject->$name;
-				}
+                // Treat parent fields where module is DD differently
+                if (($name == 'parent') && ($myobject->moduleid == 182)) {
+                    $info = xarModAPIFunc('dynamicdata','user','getobjectinfo',array('modid' => 182, 'itemtype' => $myobject->$name));
+                    $value = $info['name'];
+                } else {
+                    $value = $myobject->$name;
+                }
                 $xml .= "  <$name>" . xarVarPrepForDisplay($value) . "</$name>\n";
             }
         }

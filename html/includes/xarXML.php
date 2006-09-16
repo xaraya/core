@@ -123,7 +123,7 @@ function xarXml_init($args, $whatElseIsGoingLoaded)
  * @package xml
  * @todo do not assume the result will be a parse tree, it's non-sax-like
  */
-class xarXmlParser
+class xarXmlParser extends Object
 {
     var $encoding;      // Which input encoding are we gonna use for parsing?
     var $handler;       // Which handler object is attached to this parser?

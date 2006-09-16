@@ -7,23 +7,28 @@
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
 **/
-	sys::import('datastores.interface');
+    sys::import('datastores.interface');
 
-	class XarayaObject {
+    class XarayaObject 
+    {
 
-		function toString() {
-			return get_class($this) . ":" . $this->hash();
-		}
-		function equals($object) {
-			return $this === $object;
-		}
-		function getClass() {
-			return get_class($this);
-		}
-		function hash() {
-			return sha1(serialize($this));
-		}
-	}
+        function toString() 
+        {
+            return get_class($this) . ":" . $this->hash();
+        }
+        function equals($object) 
+        {
+            return $this === $object;
+        }
+        function getClass() 
+        {
+            return get_class($this);
+        }
+        function hash() 
+        {
+            return sha1(serialize($this));
+        }
+    }
 
 /**
  * Base class for DD objects
@@ -31,82 +36,84 @@
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
 **/
-	class XarayaDDObject extends XarayaObject {
+    class XarayaDDObject extends XarayaObject 
+    {
 
-		public $name;
+        public $name;
 
-		function __construct($name=null)
-		{
-			$this->name = isset($name) ? $name : parent::toString();
-		}
+        function __construct($name=null)
+        {
+            $this->name = isset($name) ? $name : parent::toString();
+        }
 
-		function loadSchema($args = array())
-		{
-			$this->schemaobject = $this->readSchema($args);
-		}
+        function loadSchema($args = array())
+        {
+            $this->schemaobject = $this->readSchema($args);
+        }
 
-		function readSchema($args = array())
-		{
-			extract($args);
-			$module = isset($module) ? $module : '';
-			$type = isset($type) ? $type : '';
-			$func = isset($func) ? $func : '';
-			if (!empty($module)) {
-				$file = 'modules/' . $module . '/xar' . $type . '/' . $func . '.xml';
-			}
-			try {
-				return simplexml_load_file($file);
-			} catch (Exception $e) {
-				throw new BadParameterException(array($file),'Bad or no xml file encountered: #(1)');
-			}
-		}
+        function readSchema($args = array())
+        {
+            extract($args);
+            $module = isset($module) ? $module : '';
+            $type = isset($type) ? $type : '';
+            $func = isset($func) ? $func : '';
+            if (!empty($module)) {
+                $file = 'modules/' . $module . '/xar' . $type . '/' . $func . '.xml';
+            }
+            try {
+                return simplexml_load_file($file);
+            } catch (Exception $e) {
+                throw new BadParameterException(array($file),'Bad or no xml file encountered: #(1)');
+            }
+        }
 
-		//Stolen off http://it2.php.net/manual/en/ref.simplexml.php
-		function toArray(SimpleXMLElement $schemaobject=null)
-		{
-			$schemaobject = isset($schemaobject) ? $schemaobject : $this->schemaobject;
-			if (empty($schemaobject)) return array();
-			$children = $schemaobject->children();
-			$return = null;
+        //Stolen off http://it2.php.net/manual/en/ref.simplexml.php
+        function toArray(SimpleXMLElement $schemaobject=null)
+        {
+            $schemaobject = isset($schemaobject) ? $schemaobject : $this->schemaobject;
+            if (empty($schemaobject)) return array();
+            $children = $schemaobject->children();
+            $return = null;
 
-			foreach ($children as $element => $value) {
-				if ($value instanceof SimpleXMLElement) {
-					$values = (array)$value->children();
+            foreach ($children as $element => $value) {
+                if ($value instanceof SimpleXMLElement) {
+                    $values = (array)$value->children();
 
-					if (count($values) > 0) {
-						$return[$element] = $this->toArray($value);
-					} else {
-						if (!isset($return[$element])) {
-							$return[$element] = (string)$value;
-						} else {
-							if (!is_array($return[$element])) {
-								$return[$element] = array($return[$element], (string)$value);
-							} else {
-								$return[$element][] = (string)$value;
-							}
-						}
-					}
-				}
-			}
+                    if (count($values) > 0) {
+                        $return[$element] = $this->toArray($value);
+                    } else {
+                        if (!isset($return[$element])) {
+                            $return[$element] = (string)$value;
+                        } else {
+                            if (!is_array($return[$element])) {
+                                $return[$element] = array($return[$element], (string)$value);
+                            } else {
+                                $return[$element][] = (string)$value;
+                            }
+                        }
+                    }
+                }
+            }
 
-			if (is_array($return)) {
-				return $return;
-			} else {
-				return $false;
-			}
-		}
+            if (is_array($return)) {
+                return $return;
+            } else {
+                return $false;
+            }
+        }
 
-		function toString() {
-			return $this->name;
-		}
+        function toString() 
+        {
+            return $this->name;
+        }
 
-		function toXML(SimpleXMLElement $schemaobject=null)
-		{
-			$schemaobject = isset($schemaobject) ? $schemaobject : $this->schemaobject;
-			if (empty($schemaobject)) return array();
-			return $schemaobject->asXML();
-		}
-	}
+        function toXML(SimpleXMLElement $schemaobject=null)
+        {
+            $schemaobject = isset($schemaobject) ? $schemaobject : $this->schemaobject;
+            if (empty($schemaobject)) return array();
+            return $schemaobject->asXML();
+        }
+    }
 
 /**
  * Factory Class to creazte Dynamic Data Stores

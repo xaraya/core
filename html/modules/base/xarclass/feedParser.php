@@ -21,7 +21,7 @@
  */
 
 
-class feedParser 
+class feedParser extends Object
 {
 
     public $version = "0.5";
