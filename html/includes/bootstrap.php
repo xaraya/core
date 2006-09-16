@@ -21,7 +21,6 @@
  * @author Jonn Beames
  * @author Marco Canini <marco@xaraya.com>
  * @author Marcel van der Boom <mrb@hsdev.com>
- * @todo   rename this file to bootstrap.php or something
 **/
 
 /**

@@ -9,7 +9,7 @@
  * @author Marcel van der Boom
 **/
 
-include 'includes/xarPreCore.php';
+include 'includes/bootstrap.php';
 sys::import('xarCore');
 
 // We need a (fake) ip address to run xar.

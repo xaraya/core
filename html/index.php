@@ -10,9 +10,9 @@
  */
 
  /**
- * Load the Xaraya pre core
+ * Load the Xaraya bootstrap so we can get started
  */
-include 'includes/xarPreCore.php';
+include 'includes/bootstrap.php';
 
 /**
  * Set up output caching if enabled
