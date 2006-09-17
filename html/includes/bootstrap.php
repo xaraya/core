@@ -33,11 +33,6 @@
  * constructor, which is rather common in the SingleTon pattern.
  *
  * @package core
- * @todo    we would like some std. methods in here but i have no clue how to 
- *          do that, now we really cant count on having an instance or not, so
- *          we would at least have to do checks wether $this exists or not. 
- *          Some methods which come to mind are 'equals', 'toString' or 'hashCode'
- *          ( for those familiar with java, yes :-) )
 **/
 class Object extends stdClass
 {
@@ -71,7 +66,6 @@ class Object extends stdClass
      * an object versus the 'flatness' of a string.
      *
      * @return Class_
-     * @author Marcel van der Boom
     **/
     public final function getClass()
     {
@@ -89,6 +83,7 @@ class Object extends stdClass
  * In combination with the final keyword, this makes this class only instantiable
  * by its ancestors, which only is the Object class and is exactly what we want.
  *
+ * @package core
  * @todo is the pass by reference needed?
  * @todo can we come up with a better name without the underscore?
 **/
@@ -115,6 +110,7 @@ final class Class_ extends Object
  * - very well documented, since they may be unreadable for performance reasons
  * - as superfast as possible.
  * - depend on nothing
+ * @package core
 **/
 final class sys extends Object
 {

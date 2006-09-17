@@ -16,7 +16,7 @@
  */
 interface IxarExceptions {
     /* Why can't i specify final here? */
-    public function __construct($vars = NULL, $msg = NULL);
+    public function __construct($vars = null, $msg = null);
     public function getHint();
 }
 
@@ -45,7 +45,7 @@ abstract class xarExceptions extends Exception implements IxarExceptions
      The message is normally not overridden but possible., example:
          throw new FileNotFoundException(array($file,$dir),'Go place the file #(1) in the #(2) location, i can not find it');
     */
-    final public function __construct($vars = NULL, $msg = NULL) 
+    final public function __construct($vars = null, $msg = null) 
     {
         // Make sure the construction creates the right values first
         if(!is_null($msg)) $this->message = $msg;
