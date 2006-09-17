@@ -20,7 +20,7 @@ class Dynamic_Object_Master extends Object
     public $moduleid    = null;
     public $itemtype    = 0;
     public $parent      = 1;
-	public $baseancestor= null;
+    public $baseancestor= null;
 
     public $urlparam    = 'itemid';
     public $maxid       = 0;
@@ -200,7 +200,7 @@ class Dynamic_Object_Master extends Object
         // If this is an extended object add the ancestor properties for display purposes
         if(!empty($ancestors))
         {
-		    $this->baseancestor = $ancestors[0]['objectid'];
+            $this->baseancestor = $ancestors[0]['objectid'];
             // If the ancestors are objects, add them in
             foreach($ancestors as $ancestor)
             {
