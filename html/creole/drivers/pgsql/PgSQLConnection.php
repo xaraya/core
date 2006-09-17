@@ -21,6 +21,8 @@
  
 require_once 'creole/Connection.php';
 require_once 'creole/common/ConnectionCommon.php';
+require_once 'creole/drivers/pgsql/PgSQLPreparedStatement.php';
+require_once 'creole/drivers/pgsql/PgSQLStatement.php';
 include_once 'creole/drivers/pgsql/PgSQLResultSet.php';
 
 /**
@@ -237,7 +239,6 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
      */
     public function prepareStatement($sql) 
     {
-        require_once 'creole/drivers/pgsql/PgSQLPreparedStatement.php';
         return new PgSQLPreparedStatement($this, $sql);
     }
     
@@ -253,7 +254,6 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
      */
     public function createStatement()
     {
-        require_once 'creole/drivers/pgsql/PgSQLStatement.php';
         return new PgSQLStatement($this);
     }
     
