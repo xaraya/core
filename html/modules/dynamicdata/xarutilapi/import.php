@@ -153,12 +153,28 @@ function dynamicdata_utilapi_import($args)
 
                 // Get the properties for this object
                 $object = xarModAPIFunc('dynamicdata','user','getobject',array('objectid' => $objectid));
-                $objectproperties = array_keys($object->properties);
-                foreach($objectproperties as $property) {
-                    if (isset($child->{$property}))
-                        $item[$property] = (string)$child->{$property};
+                $primaryobject = Dynamic_Object_Master::getObject(array('objectid' => $object->baseancestor));
+                $objectproperties = $object->properties;
+                $indices = array();
+                $oldindex = 0;
+                foreach($objectproperties as $propertyname => $property) {
+                    if (isset($child->$propertyname)) {
+                        $value = (string)$child->$propertyname;
+                        if ($property->type == 30049) {
+                            if (in_array($value,array_keys($indices))) $item[$propertyname] = $indices[$value];
+                            /*
+                            try {
+                                $value = xarModAPIFunc($object->name,'user','getindex',array('value' => (string)$child->$propertyname,'type' => 'relative'));
+                                $item[$propertyname] = $value;
+                            } catch(Exception $e) {
+                                $item[$propertyname] = $value;
+                            } */
+                        } else {
+                            $item[$propertyname] = $value;
+                        }
+                    }
+                    if($propertyname == $primaryobject->primary) $oldindex = $item[$propertyname];
                 }
-
                 // Create the item
                 if (!isset($objectcache[$objectid])) {
                     $objectcache[$objectid] = & Dynamic_Object_Master::getObject(array('objectid' => $objectid));
@@ -185,6 +201,8 @@ function dynamicdata_utilapi_import($args)
                 } else {
                     // create the item
                     $itemid = $objectcache[$objectid]->createItem($item);
+                    // add the new index to the array of indices for reference
+                    $indices[$oldindex] = $itemid; 
                 }
                 if (empty($itemid)) return;
 

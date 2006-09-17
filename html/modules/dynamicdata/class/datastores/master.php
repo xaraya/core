@@ -1,34 +1,6 @@
 <?php
-/**
- * Base class for Xaraya objects
- * Needed as a common base for the extensions
- * This class is kept generic enough to serve as a base for a wider collection of Xaraya objects
- *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
-**/
     sys::import('datastores.interface');
 
-    class XarayaObject 
-    {
-
-        function toString() 
-        {
-            return get_class($this) . ":" . $this->hash();
-        }
-        function equals($object) 
-        {
-            return $this === $object;
-        }
-        function getClass() 
-        {
-            return get_class($this);
-        }
-        function hash() 
-        {
-            return sha1(serialize($this));
-        }
-    }
 
 /**
  * Base class for DD objects
@@ -36,14 +8,14 @@
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
 **/
-    class XarayaDDObject extends XarayaObject 
+    class DDObject extends Object
     {
 
         public $name;
 
         function __construct($name=null)
         {
-            $this->name = isset($name) ? $name : parent::toString();
+            $this->name = isset($name) ? $name : self::toString();
         }
 
         function loadSchema($args = array())
@@ -102,11 +74,6 @@
             }
         }
 
-        function toString() 
-        {
-            return $this->name;
-        }
-
         function toXML(SimpleXMLElement $schemaobject=null)
         {
             $schemaobject = isset($schemaobject) ? $schemaobject : $this->schemaobject;
@@ -123,7 +90,7 @@
  * @todo this factory should go into core once we use datastores in more broad ways.
  * @todo the classnames could use a bit of a clean up (shorter, lowercasing)
  */
-class DataStoreFactory extends XarayaObject
+class DataStoreFactory extends Object
 {
     /**
      * Class method to get a new dynamic data store (of the right type)
