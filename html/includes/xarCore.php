@@ -6,10 +6,10 @@
  * @copyright (C) 2002-2006 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
- * @author Marco Canini
- * @author Marcel van der Boom
+ * @author Marco Canini <marco@xaraya.com>
+ * @author Marcel van der Boom <marcel@xaraya.com>
  * @todo dependencies and runlevels!
-*/
+**/
 
 /**
  * Core version informations
@@ -18,8 +18,7 @@
  * better control on config settings
  *
  * @todo seems that defines are hoggers, move them to class constants!
- */
-
+**/
 // For migration purposes, cos we're lazy 
 define('XARCORE_GENERATION',2);
 
@@ -29,10 +28,11 @@ define('XARCORE_VERSION_ID',  'Xaraya 2 series');
 define('XARCORE_VERSION_SUB', 'etiam infractus');
 
 // Handy if we're running from a mt working copy, prolly comment out on distributing
-if(file_exists('../_MTN/revision')) {
+if(file_exists('../_MTN/revision')) 
+{
     $rev = file_get_contents('../_MTN/revision');
     define('XARCORE_VERSION_REV', $rev);
- }
+}
 
 /*
  * System dependencies for (optional) systems
@@ -64,66 +64,84 @@ if(file_exists('../_MTN/revision')) {
  *
  */
 
-/*
+/**#@+
  * Optional systems defines that can be used as parameter for xarCoreInit
  * System dependancies are yet present in the define, so you don't
  * have to care of what for example the SESSION system depends on, if you
  * need it you just pass XARCORE_SYSTEM_SESSION to xarCoreInit and its
  * dependancies will be automatically resolved
- */
-
-define('XARCORE_SYSTEM_NONE', 0);
-define('XARCORE_SYSTEM_DATABASE', 1);
-define('XARCORE_SYSTEM_SESSION', 2 | XARCORE_SYSTEM_DATABASE);
-define('XARCORE_SYSTEM_USER', 4 | XARCORE_SYSTEM_SESSION);
+ *
+ * @access public
+ * @todo   bring these under a class as constant
+**/
+define('XARCORE_SYSTEM_NONE'         , 0);
+define('XARCORE_SYSTEM_DATABASE'     , 1);
+define('XARCORE_SYSTEM_SESSION'      , 2 | XARCORE_SYSTEM_DATABASE);
+define('XARCORE_SYSTEM_USER'         , 4 | XARCORE_SYSTEM_SESSION);
 define('XARCORE_SYSTEM_CONFIGURATION', 8 | XARCORE_SYSTEM_DATABASE);
-define('XARCORE_SYSTEM_BLOCKS', 16 | XARCORE_SYSTEM_CONFIGURATION);
-define('XARCORE_SYSTEM_MODULES', 32 | XARCORE_SYSTEM_CONFIGURATION);
-define('XARCORE_SYSTEM_ALL', 127); // bit OR of all optional systems (includes templates now)
+define('XARCORE_SYSTEM_BLOCKS'       , 16 | XARCORE_SYSTEM_CONFIGURATION);
+define('XARCORE_SYSTEM_MODULES'      , 32 | XARCORE_SYSTEM_CONFIGURATION);
+define('XARCORE_SYSTEM_ALL'          , 127); // bit OR of all optional systems (includes templates now)
+/**#@-*/
 
-define('XARCORE_BIT_DATABASE', 1);
-define('XARCORE_BIT_SESSION', 2);
-define('XARCORE_BIT_USER', 4 );
-define('XARCORE_BIT_CONFIGURATION', 8);
-define('XARCORE_BIT_BLOCKS', 16);
-define('XARCORE_BIT_MODULES', 32);
+/**#@+
+ * Bit defines to keep track of the loading based on the defines which
+ * are passed in as arguments
+ *
+ * @access private
+ * @todo we should probably get rid of these
+**/
+define('XARCORE_BIT_DATABASE'     ,  1);
+define('XARCORE_BIT_SESSION'      ,  2);
+define('XARCORE_BIT_USER'         ,  4);
+define('XARCORE_BIT_CONFIGURATION',  8);
+define('XARCORE_BIT_BLOCKS'       , 16);
+define('XARCORE_BIT_MODULES'      , 32);
+define('XARCORE_BIT_TEMPLATE'     , 64);
+/**#@-*/
 
-// Extra needed bit to figure out if this sub system was already loaded or not
-define('XARCORE_BIT_TEMPLATE', 64);
-
-/*
+/**#@+
  * Debug flags
- */
+ *
+ * @access private
+ * @todo   encapsulate in class
+**/
 define('XARDBG_ACTIVE'           , 1);
 define('XARDBG_SQL'              , 2);
 define('XARDBG_EXCEPTIONS'       , 4);
 define('XARDBG_SHOW_PARAMS_IN_BT', 8);
 define('XARDBG_INACTIVE'         ,16);
+/**#@-*/
 
-
-/*
- * Miscelaneous
- */
+/**#@+
+ * Miscelaneous defines
+ *
+ * @access public
+ * @todo encapsulate in class
+**/
 define('XARCORE_CACHEDIR'     , '/cache');
 define('XARCORE_DB_CACHEDIR'  , '/cache/database');
 define('XARCORE_RSS_CACHEDIR' , '/cache/rss');
 define('XARCORE_TPL_CACHEDIR' , '/cache/templates');
+/**#@-*/
 
-/**
+/*
  * Load the Xaraya pre core early in case the entry point didn't do it (it should)
  *
  */
-if(!class_exists('sys')) include (dirname(__FILE__).'/bootstrap.php');
+if(!class_exists('sys')) 
+{
+    include (dirname(__FILE__).'/bootstrap.php');
+}
 
 /**
  * Initializes the core engine
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @param integer whatToLoad What optional systems to load.
  * @return bool true
  * @todo <johnny> fix up sitetable prefix when we have a place to store it
- */
+**/
 function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 {
     static $current_load_level = XARCORE_SYSTEM_NONE;
@@ -159,8 +177,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     $systemArgs = array();
     xarError_init($systemArgs, $whatToLoad);
 
-    /**
-        * At this point we should be able to catch all low level errors, so we can start the debugger
+    /*
+     * At this point we should be able to catch all low level errors, so we can start the debugger
      *
      * FLAGS:
      *
@@ -315,29 +333,32 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     $anonuid = !empty($anonuid) ? $anonuid : 2;
     define('_XAR_ID_UNREGISTERED', $anonuid);
 
-    if ($whatToLoad & XARCORE_SYSTEM_SESSION) {
+    if ($whatToLoad & XARCORE_SYSTEM_SESSION) 
+    {
         sys::import('xarSession');
 
-        $systemArgs = array('securityLevel'     => xarConfigGetVar('Site.Session.SecurityLevel'),
-                            'duration'          => xarConfigGetVar('Site.Session.Duration'),
-                            'inactivityTimeout' => xarConfigGetVar('Site.Session.InactivityTimeout'),
-                            'cookieName'        => xarConfigGetVar('Site.Session.CookieName'),
-                            'cookiePath'        => xarConfigGetVar('Site.Session.CookiePath'),
-                            'cookieDomain'      => xarConfigGetVar('Site.Session.CookieDomain'),
-                            'refererCheck'      => xarConfigGetVar('Site.Session.RefererCheck'));
+        $systemArgs = array(
+            'securityLevel'     => xarConfigGetVar('Site.Session.SecurityLevel'),
+            'duration'          => xarConfigGetVar('Site.Session.Duration'),
+            'inactivityTimeout' => xarConfigGetVar('Site.Session.InactivityTimeout'),
+            'cookieName'        => xarConfigGetVar('Site.Session.CookieName'),
+            'cookiePath'        => xarConfigGetVar('Site.Session.CookiePath'),
+            'cookieDomain'      => xarConfigGetVar('Site.Session.CookieDomain'),
+            'refererCheck'      => xarConfigGetVar('Site.Session.RefererCheck'));
         xarSession_init($systemArgs, $whatToLoad);
 
         $whatToLoad ^= XARCORE_BIT_SESSION;
     }
 
-    /**
+    /*
      * Block subsystem
      *
      */
     // FIXME: This is wrong, should be part of templating
     //        it's a legacy thought, we don't need it anymore
 
-    if ($whatToLoad & XARCORE_SYSTEM_BLOCKS) {
+    if ($whatToLoad & XARCORE_SYSTEM_BLOCKS) 
+    {
         sys::import('xarBlocks');
 
         // Start Blocks Support Sytem
@@ -353,7 +374,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * @todo <mrb> why is this optional?
      * @todo <marco> Figure out how to dynamically compute generateXMLURLs argument based on browser request or XHTML site compliance. For now just pass true.
      * @todo <mrb> i thought it was configurable
-     */
+    **/
     if ($whatToLoad & XARCORE_SYSTEM_MODULES) {
         sys::import('xarMod');
         $systemArgs = array('enableShortURLsSupport' => xarConfigGetVar('Site.Core.EnableShortURLsSupport'),
@@ -362,7 +383,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         $whatToLoad ^= XARCORE_BIT_MODULES;
     }
 
-    /**
+    /*
      * We've got basically all we want, start the interface
      * Start BlockLayout Template Engine
      *
@@ -373,7 +394,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         'enableTemplatesCaching' => xarConfigGetVar('Site.BL.CacheTemplates'),
         'themesBaseDirectory'    => xarConfigGetVar('Site.BL.ThemesDirectory'),
         'defaultThemeDir'        => xarModVars::get('themes','default'),
-        'generateXMLURLs'      => true
+        'generateXMLURLs'        => true
     );
 
     xarTpl_init($systemArgs, $whatToLoad);
@@ -384,8 +405,9 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * At last, we can give people access to the system.
      *
      * @todo <marcinmilan> review what pasts of the old user system need to be retained
-     */
-    if ($whatToLoad & XARCORE_SYSTEM_USER) {
+    **/
+    if ($whatToLoad & XARCORE_SYSTEM_USER) 
+    {
         sys::import('xarUser');
         sys::import('xarSecurity');
         xarSecurity_init();
@@ -403,11 +425,11 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 /**
  * Returns the relative path name for the var directory
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string the var directory path name
- * @todo   move the hardcoded stuff to something configurable
- */
+ * @deprec replaced by sys::varpath()
+ * @see    sys
+**/
 function xarCoreGetVarDirPath()
 {
     return sys::varpath();
@@ -417,10 +439,10 @@ function xarCoreGetVarDirPath()
  * Activates the debugger.
  *
  * @access public
- * @param integer flags bit mask for the debugger flags
+ * @param integer $flags bit mask for the debugger flags
  * @todo  a big part of this should be in the exception (error handling) subsystem.
  * @return void
- */
+**/
 function xarCoreActivateDebugger($flags)
 {
     xarDebug::$flags = $flags;
@@ -432,6 +454,7 @@ function xarCoreActivateDebugger($flags)
     } elseif ($flags & XARDBG_ACTIVE) {
         // See if config.system.php has info for us on the errorlevel, but dont break if it has not
         try {
+            sys::import('variables.system');
             $errLevel = xarSystemVars::get(sys::CONFIG, 'Exception.ErrorLevel');
         } catch(Exception $e) {
             $errLevel = E_ALL;
@@ -454,7 +477,7 @@ function xarCoreActivateDebugger($flags)
  *
  * @access public
  * @return bool true if the debugger is active, false otherwise
- */
+**/
 function xarCoreIsDebuggerActive()
 {
     return xarDebug::$flags & XARDBG_ACTIVE;
@@ -466,7 +489,7 @@ function xarCoreIsDebuggerActive()
  * @access public
  * @param integer flag the debugger flag to check for activity
  * @return bool true if the flag is active, false otherwise
- */
+**/
 function xarCoreIsDebugFlagSet($flag)
 {
     return (xarDebug::$flags & XARDBG_ACTIVE) && (xarDebug::$flags & $flag);
@@ -475,32 +498,36 @@ function xarCoreIsDebugFlagSet($flag)
 /**
  * Wrapper functions to support Xaraya 1 API for systemvars
  *
- * @todo this is a protected function by mistake i think
- */
-sys::import('variables.system');
+ * @todo this was a protected function by mistake i think
+ * @deprec replaced by xarSystemVars
+ * @see    xarSystemVars
+**/
 function xarCore_getSystemVar($name)
 {
+    sys::import('variables.system');
     return xarSystemVars::get(null, $name);
 }
 
 /**
-* Checks if a certain function was disabled in php.ini
+ * Checks if a certain function was disabled in php.ini
  *
- * xarCore.php function
+ * 
  * @access public
- * @param string The function name; case-sensitive
+ * @param string $funcName The function name; case-sensitive
  * @todo this seems out of place here.
- */
+**/
 function xarFuncIsDisabled($funcName)
 {
     static $disabled;
 
-    if (!isset($disabled)) {
+    if (!isset($disabled)) 
+    {
         // Fetch the disabled functions as an array.
         // White space is trimmed here too.
         $functions = preg_split('/[\s,]+/', trim(ini_get('disable_functions')));
 
-        if ($functions[0] != '') {
+        if ($functions[0] != '') 
+        {
             // Make the function names the keys.
             // Values will be 0, 1, 2 etc.
             $disabled = array_flip($functions);
@@ -516,7 +543,7 @@ function xarFuncIsDisabled($funcName)
  * Convenience class for keeping track of debugger operation
  *
  * @todo this is close to exceptions or logging than core, see also notes earlier
- */
+**/
 class xarDebug extends Object
 {
     public static $flags     = 0; // default off?
@@ -531,7 +558,7 @@ class xarDebug extends Object
  * @todo i dont like the array shuffling
  * @todo separate file
  * @todo this is not xarCore, this is xarCoreCache
- */
+**/
 class xarCore extends Object
 {
     private static $cacheCollection = array();
@@ -543,7 +570,7 @@ class xarCore extends Object
      * @param name string the name of the variable in that particular cache
      * @return mixed value of the variable, or false if variable isn't cached
      * @todo make sure we can make this protected
-     */
+    **/
     public static function isCached($cacheKey, $name)
     {
         if (!isset(self::$cacheCollection[$cacheKey])) {
@@ -556,11 +583,11 @@ class xarCore extends Object
     /**
      * Get the value of a cached variable
      *
-     * @param key string the key identifying the particular cache you want to access
-     * @param name string the name of the variable in that particular cache
+     * @param string $key  the key identifying the particular cache you want to access
+     * @param string $name the name of the variable in that particular cache
      * @return mixed value of the variable, or null if variable isn't cached
      * @todo make sure we can make this protected
-     */
+    **/
     public static function getCached($cacheKey, $name)
     {
         if (!isset(self::$cacheCollection[$cacheKey][$name])) {
@@ -575,9 +602,9 @@ class xarCore extends Object
      * @param key string the key identifying the particular cache you want to access
      * @param name string the name of the variable in that particular cache
      * @param value string the new value for that variable
-     * @return null
+     * @return void
      * @todo make sure we can make this protected
-     */
+    **/
     public static function setCached($cacheKey, $name, $value)
     {
         if (!isset(self::$cacheCollection[$cacheKey])) {
@@ -594,7 +621,7 @@ class xarCore extends Object
      * @return null
      * @todo remove the double whammy
      * @todo make sure we can make this protected
-     */
+    **/
     public static function delCached($cacheKey, $name)
     {
         if (isset(self::$cacheCollection[$cacheKey][$name])) {
@@ -615,7 +642,7 @@ class xarCore extends Object
      * @param  cacheKey the key identifying the particular cache you want to wipe out
      * @return null
      * @todo make sure we can make this protected
-     */
+    **/
     public static function flushCached($cacheKey)
     {
         if(isset(self::$cacheCollection[$cacheKey])) {

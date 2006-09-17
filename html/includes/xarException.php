@@ -26,31 +26,40 @@
 
 */
 
-/*
+/**#@+
  * Error constants for exception throwing
  *
  * @todo probably move this to core loader or get rid of it completely, doesnt do something sane.
  */
 define('E_XAR_ASSERT', 1);
 define('E_XAR_PHPERR', 2);
+/**#@-*/
 
-/**
+/**#@+
  * Public error types
- */
+ *
+ * @access public
+ * @deprec not needed anymore with the new exception system
+**/
 define('XAR_NO_EXCEPTION', 0);
 define('XAR_USER_EXCEPTION', 1);
 define('XAR_SYSTEM_EXCEPTION', 2);
 define('XAR_SYSTEM_MESSAGE', 3);
+/**#@-*/
 
-/**
+/**#@+
  * Private core exceptions
+ *
+ * @access private
+ * @deprec not needed anymore with the new exception system
  */
 define('XAR_PHP_EXCEPTION', 10);
 define('XAR_CORE_EXCEPTION', 11);
 define('XAR_DATABASE_EXCEPTION', 12);
 define('XAR_TEMPLATE_EXCEPTION', 13);
+/**#@-*/
 
-// We still need the old classes
+/* We still need the old classes */
 sys::import('exceptions.legacy.systemexception');
 sys::import('exceptions.legacy.defaultuserexception');
 sys::import('exceptions.legacy.systemmessage');
@@ -61,10 +70,9 @@ sys::import('exceptions.types');
 sys::import('exceptions.handlers');
 
 /**
- * Exceptions for the exception subsystem itself
+ * Special exception signalling the old ErrorSet was used
  *
- */
-// Special exception signalling the old ErrorSet was used
+**/
 class ErrorDeprecationException extends DeprecationExceptions
 {
     protected $message ="This exception was called through a deprecated API (usually xarErrorSet).\n Original error: #(1)";
@@ -72,12 +80,13 @@ class ErrorDeprecationException extends DeprecationExceptions
 }
 
 /**
- * General exception to cater for situation where the called function should really raise one
- * and the callee should catch it, instead of the callee raising the exception. To prevent hub-hopping
- * all over the code
+ * General exception to cater for situation where the called function should 
+ * really raise one and the callee should catch it, instead of the callee 
+ * raising the exception. To prevent hub-hopping* all over the code
  * 
- * @todo we need a way to determine the usage of this, because each use signals a 'code out of place' error
- */
+ * @todo we need a way to determine the usage of this, because each use 
+ *       signals a 'code out of place' error
+**/
 class GeneralException extends xarExceptions
 {
     protected $message = "An unknown error occurred.";
@@ -85,7 +94,8 @@ class GeneralException extends xarExceptions
 }
 
 /**
- * Initializes the Error Handling System
+ * Initializes the Error Handling System, basically all it does it register
+ * the handler for exceptions and the handler for errors.
  *
  * @access protected
  * @return bool true
@@ -103,8 +113,9 @@ function xarError_init(&$systemArgs, $whatToLoad)
 }
 
 /**
- * Debug function
+ * Debug function, artificially throws an exception
  *
+ * @access public
  * @return void
  * @throws DebugException
 **/
@@ -119,12 +130,13 @@ function debug($anything)
  * Valid value for $major parameter are: XAR_NO_EXCEPTION, XAR_USER_EXCEPTION, XAR_SYSTEM_EXCEPTION, XAR_SYSTEM_MESSAGE.
  *
  * @access public
- * @param major integer error major number
- * @param errorID string error identifier
- * @param value error object
+ * @param  integer $major   error major number
+ * @param  string  $errorID string error identifier
+ * @param  Object  $value   error object
+ * @deprec replaced by native throw functionality
  * @throws ErrorDeprecationException
  * @return void
- */
+**/
 function xarErrorSet($major, $errorID, $value = NULL)
 {
     // MINIMAL backward compatability
@@ -151,7 +163,7 @@ function xarErrorSet($major, $errorID, $value = NULL)
  * @access public
  * @deprec 2006-01-12
  * @return integer the major value of raised error
- */
+**/
 function xarCurrentErrorType()
 {
     // return NO exception for code which tests for this, if there was an exception
@@ -168,7 +180,7 @@ function xarCurrentErrorType()
  * @access public
  * @deprec 2006-01-12
  * @return string the error identifier
- */
+**/
 function xarCurrentErrorID()
 {
     return;
@@ -183,7 +195,7 @@ function xarCurrentErrorID()
  * @access public
  * @deprec 2006-01-12
  * @return mixed error value object
- */
+**/
 function xarCurrentError()
 {
     return;
@@ -195,7 +207,7 @@ function xarCurrentError()
  * @access public
  * @deprec 2006-01-12
  * @return void
- */
+**/
 function xarErrorFree()
 {
     return;
@@ -207,8 +219,9 @@ function xarErrorFree()
  * You must always call this function when you handle a caught error.
  *
  * @access public
- * @return voidx
- */
+ * @deprec 2006-01-12
+ * @return void
+**/
 function xarErrorHandled()
 {
     return;
@@ -222,11 +235,11 @@ function xarErrorHandled()
  * If there is no error currently raised an empty string is returned.
  *
  * @access public
- * @param format string one of template or plain
- * @param stacktype string one of CORE or ERROR
- * @deprec 20060113
+ * @param  string $format    one of 'template' or 'plain'
+ * @param  string $stacktype one of 'CORE' or 'ERROR'
+ * @deprec 2006-01-13
  * @return string the string representing the raised error
- */
+**/
 function xarErrorRender($format,$stacktype = "ERROR", $data=array())
 {
     return;
@@ -235,9 +248,11 @@ function xarErrorRender($format,$stacktype = "ERROR", $data=array())
 /**
  * Gets a formatted array of errors
  *
+ * @param string $stackType
+ * @param string $format 
  * @deprec 2006-01-13
  * @return void
- */
+**/
 function xarErrorGet($stacktype = "ERROR",$format='data')
 {
     return;
