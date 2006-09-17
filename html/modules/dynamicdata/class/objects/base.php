@@ -340,7 +340,7 @@ class Dynamic_Object extends Dynamic_Object_Master
             else
             {
                 $value = $this->properties[$this->primary]->getValue();
-echo $value;exit;
+
                 // we already have an itemid value in the properties
                 if(!empty($value))
                 {
