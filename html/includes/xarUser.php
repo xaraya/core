@@ -362,6 +362,7 @@ $GLOBALS['xarUser_objectRef'] = null;
  * @todo <marco FIXME: ignoring unknown user variables for now...
  * @todo redesign the delegation to auth* modules for handling user variables
  * @todo add some security for getting to user variables (at least from another uid)
+ * @todo define clearly what the difference or similarity is with dd here 
  */
 function xarUserGetVar($name, $userId = NULL)
 {
@@ -376,6 +377,7 @@ function xarUserGetVar($name, $userId = NULL)
     if ($userId == _XAR_ID_UNREGISTERED) {
         // Anonymous user => only uid, name and uname allowed, for other variable names
         // an exception of type NOT_LOGGED_IN is raised
+        // CHECKME: if we're going the route of moditemvars, this doesn need to be the case
         if ($name == 'name' || $name == 'uname') {
             return xarML('Anonymous');
         }
@@ -389,7 +391,7 @@ function xarUserGetVar($name, $userId = NULL)
 
         if ($name == 'name' || $name == 'uname' || $name == 'email') {
             if ($userId == XARUSER_LAST_RESORT) {
-                return xarML('No Information');
+                return xarML('No Information'); // better return null here
             }
             // retrieve the item from the roles module
             $userRole = xarModAPIFunc('roles',  'user',  'get',
