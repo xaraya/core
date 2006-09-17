@@ -1,34 +1,6 @@
 <?php
-/**
- * Base class for Xaraya objects
- * Needed as a common base for the extensions
- * This class is kept generic enough to serve as a base for a wider collection of Xaraya objects
- *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
-**/
-    sys::import('datastores.interface');
 
-    class XarayaObject 
-    {
-
-        function toString() 
-        {
-            return get_class($this) . ":" . $this->hash();
-        }
-        function equals($object) 
-        {
-            return $this === $object;
-        }
-        function getClass() 
-        {
-            return get_class($this);
-        }
-        function hash() 
-        {
-            return sha1(serialize($this));
-        }
-    }
+sys::import('datastores.interface');
 
 /**
  * Base class for DD objects
@@ -36,7 +8,7 @@
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
 **/
-    class XarayaDDObject extends XarayaObject 
+    class XarayaDDObject extends Object
     {
 
         public $name;
@@ -102,7 +74,7 @@
             }
         }
 
-        function toString() 
+        function toString()
         {
             return $this->name;
         }

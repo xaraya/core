@@ -1,8 +1,6 @@
 <?php
 
-    sys::import('structures.sets.collection');
-
-    class TreeNode extends xarObject implements ITreeNode
+    class TreeNode extends Object implements ITreeNode
     {
         public $id;
         public $tree;

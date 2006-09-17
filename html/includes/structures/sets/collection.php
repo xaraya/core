@@ -1,26 +1,6 @@
 <?php
-class xarObject
-{
 
-    function toString() 
-    {
-        return get_class($this) . ":" . $this->hash();
-    }
-    function equals($object) 
-    {
-        return $this === $object;
-    }
-    function getClass() 
-    {
-        return get_class($this);
-    }
-    function hash() 
-    {
-        return sha1(serialize($this));
-    }
-}
-
-class BasicCollection extends xarObject implements Collection
+class BasicCollection extends Object implements Collection
 {
     protected $elements;
 
@@ -28,7 +8,23 @@ class BasicCollection extends xarObject implements Collection
     {
         $this->elements = array();
     }
-    public function add(xarObject $element)
+    function toString()
+    {
+        return get_class($this) . ":" . $this->hash();
+    }
+    function equals($object)
+    {
+        return $this === $object;
+    }
+    function getClass()
+    {
+        return get_class($this);
+    }
+    function hash()
+    {
+        return sha1(serialize($this));
+    }
+        public function add(Object $element)
     {
         $this->elements[$element->hash()] = $element;
     }
@@ -44,7 +40,7 @@ class BasicCollection extends xarObject implements Collection
     {
         return count($this->elements) == 0;
     }
-    public function remove(xarObject $element)
+    public function remove(Object $element)
     {
         unset($this->elements[$element->hash()]);
     }
@@ -64,13 +60,13 @@ class BasicCollection extends xarObject implements Collection
 }
 class BasicSet extends BasicCollection implements IteratorAggregate
 {
-    public function hash() 
+    public function hash()
     {
         $code = 0;
         foreach(array_keys($this->elements) as $hash) $code += $hash;
         return $code;
     }
-    public function getIterator() 
+    public function getIterator()
     {
         $arrayobj = new ArrayObject($this->elements);
         return $arrayobj->getIterator();
@@ -79,13 +75,17 @@ class BasicSet extends BasicCollection implements IteratorAggregate
 
 interface Collection
 {
-    public function add(xarObject $element);
+    public function add(Object $element);
     public function addAll(BasicCollection $collection);
     public function clear();
+    public function equals();
+    public function getClass();
+    public function hash();
     public function isEmpty();
-    public function remove(xarObject $element);
+    public function remove(Object $element);
     public function removeAll(BasicCollection $collection);
     public function size();
     public function toArray();
+    public function toString();
 }
 ?>
