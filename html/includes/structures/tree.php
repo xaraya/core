@@ -1,4 +1,5 @@
 <?php
+    sys::import('structures.sets.collection');
 
     class TreeNode extends Object implements ITreeNode
     {
@@ -66,6 +67,10 @@
         {
             return $this->nodelevel;
         }
+		function hash()
+		{
+			return sha1(serialize($this));
+		}
 
         private function comparelevels($a, $b)
         {
