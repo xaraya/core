@@ -16,7 +16,7 @@ class BasicCollection extends Object implements Collection
     {
         return sha1(serialize($this));
     }
-        public function add(Object $element)
+    public function add(Object $element)
     {
         $this->elements[$element->hash()] = $element;
     }

@@ -109,7 +109,7 @@ function dynamicdata_util_export($args)
                 $xml .= '  <'.$mylist->name.' itemid="'.$itemid.'">'."\n";
                 foreach (array_keys($mylist->properties) as $name) {
                     if (isset($item[$name])) {
-                        $xml .= "    <$name>" . xarVarPrepForDisplay($item[$name])";
+                        $xml .= "    <$name>" . xarVarPrepForDisplay($item[$name]);
                     } else {
                         $xml .= "    <$name>";
                     }
