@@ -48,20 +48,20 @@ class Dynamic_RolesTree_Property extends Dynamic_Property
 // ---------------------------------------------------------------
 class RolesTree extends Tree
 {
-	function createnodes(TreeNode $node)
-	{
+    function createnodes(TreeNode $node)
+    {
         $r = new xarRoles();
         $data = $r->getgroups();
          foreach ($data as $row) {
-        	$nodedata = array(
-        		'id' => $row['uid'],
-        		'parent' => $row['parentid'],
-        		'name' => $row['name'],
-        		'users' => $row['users'],
-        	);
-			$this->treedata[] = $nodedata;
+            $nodedata = array(
+                'id' => $row['uid'],
+                'parent' => $row['parentid'],
+                'name' => $row['name'],
+                'users' => $row['users'],
+            );
+            $this->treedata[] = $nodedata;
         }
         parent::createnodes($node);
-	}
+    }
 }
 ?>

@@ -20,29 +20,29 @@
 function base_adminapi_loadadminmenuarray($args)
 {
     if (!isset($args['module'])) {
-    	$urlinfo = xarRequestGetInfo();
-    	$args['module'] = $urlinfo[0];
+        $urlinfo = xarRequestGetInfo();
+        $args['module'] = $urlinfo[0];
     }
-	$menuarray = array();
-	try {
-		$menufile = 'modules/' . $args['module'] . '/xardata/adminmenu-dat.xml';
-		$xmlobject = simplexml_load_file($menufile);
-		foreach ($xmlobject->children() as $menuitem) {
-			$target = isset($menuitem->target) ? trim((string)$menuitem->target) : null;
-			$label = isset($menuitem->label) ? trim((string)$menuitem->label) : xarML('Missing label');
-			$title = isset($menuitem->title) ? trim((string)$menuitem->title) : $label;
-			$mask = isset($menuitem->mask) ? trim((string)$menuitem->mask) : null;
-			$includes = isset($menuitem->includes) ? trim((string)$menuitem->includes->children()) : array();
-			$menuarray[] = array(
-						'target' => $target,
-						'title' => $title,
-						'label' => $label,
-						'mask' => $mask,
-						'includes' => $includes,
-						);
-		}
-	} catch(Exception $e) {
-	}
+    $menuarray = array();
+    try {
+        $menufile = 'modules/' . $args['module'] . '/xardata/adminmenu-dat.xml';
+        $xmlobject = simplexml_load_file($menufile);
+        foreach ($xmlobject->children() as $menuitem) {
+            $target = isset($menuitem->target) ? trim((string)$menuitem->target) : null;
+            $label = isset($menuitem->label) ? trim((string)$menuitem->label) : xarML('Missing label');
+            $title = isset($menuitem->title) ? trim((string)$menuitem->title) : $label;
+            $mask = isset($menuitem->mask) ? trim((string)$menuitem->mask) : null;
+            $includes = isset($menuitem->includes) ? trim((string)$menuitem->includes->children()) : array();
+            $menuarray[] = array(
+                        'target' => $target,
+                        'title' => $title,
+                        'label' => $label,
+                        'mask' => $mask,
+                        'includes' => $includes,
+                        );
+        }
+    } catch(Exception $e) {
+    }
     return $menuarray;
 }
 
