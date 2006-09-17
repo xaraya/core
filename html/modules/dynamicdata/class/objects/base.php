@@ -330,8 +330,13 @@ class Dynamic_Object extends Dynamic_Object_Master
         // check that we have a valid item id, or that we can create one if it's set to 0
         if(empty($this->itemid))
         {
+			if ($this->baseancestor == $this->objectid) {
+				$primaryobject = $this;;
+			} else {
+				$primaryobject = Dynamic_Object_Master::getObject(array('objectid' => $this->baseancestor));
+			}
             // no primary key identified for this object, so we're stuck
-            if(!isset($this->primary))
+            if(!isset($primaryobject->primary))
             {
                 $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
                 $vars = array('primary key', 'Dynamic_Object', 'createItem', 'DynamicData');
@@ -339,19 +344,19 @@ class Dynamic_Object extends Dynamic_Object_Master
             }
             else
             {
-                $value = $this->properties[$this->primary]->getValue();
+                $value = $primaryobject->properties[$primaryobject->primary]->getValue();
 
                 // we already have an itemid value in the properties
                 if(!empty($value))
                 {
                     $this->itemid = $value;
                 }
-                elseif(!empty($this->properties[$this->primary]->datastore))
+                elseif(!empty($primaryobject->properties[$primaryobject->primary]->datastore))
                 {
                     // we'll let the primary datastore create an itemid for us
-                    $primarystore = $this->properties[$this->primary]->datastore;
+                    $primarystore = $primaryobject->properties[$primaryobject->primary]->datastore;
                     // add the primary to the data store fields if necessary
-                    if(!empty($this->fieldlist) && !in_array($this->primary,$this->fieldlist))
+                    if(!empty($this->fieldlist) && !in_array($primaryobject->primary,$this->fieldlist))
                         $this->datastores[$primarystore]->addField($this->properties[$this->primary]); // use reference to original property
 
                     $this->itemid = $this->datastores[$primarystore]->createItem(
@@ -363,7 +368,6 @@ class Dynamic_Object extends Dynamic_Object_Master
                             'modname'  => $modinfo['name']
                         )
                     );
-
                 }
                 else
                 {
