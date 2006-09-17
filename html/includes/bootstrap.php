@@ -70,7 +70,7 @@ class Object extends stdClass
      * we can get the class from each object and maintain the 'richness' of 
      * an object versus the 'flatness' of a string.
      *
-     * @return void
+     * @return Class_
      * @author Marcel van der Boom
     **/
     public final function getClass()
