@@ -501,12 +501,12 @@ function xarQueryMask($mask, $showException=1, $component='', $instance='', $mod
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
- * @param  string mask
- * @param  integer showException
- * @param  string component
- * @param  string instance
- * @param  string module
- * @param  string role
+ * @param  string  $mask
+ * @param  integer $showException
+ * @param  string  $component
+ * @param  string  $instance
+ * @param  string  $module
+ * @param  string  $role
  * @return bool
  */
 function xarSecurityCheck($mask, $showException=1, $component='', $instance='', $module='', $role='',$pnrealm=0,$pnlevel=0)
@@ -529,13 +529,13 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
- * @param  string name
- * @param  integer realm
- * @param  string module
- * @param  string component
- * @param  string instance
- * @param  integer level
- * @param  string description
+ * @param  string  $name
+ * @param  integer $realm
+ * @param  string  $module
+ * @param  string  $component
+ * @param  string  $instance
+ * @param  integer $level
+ * @param  string  $description
  * @return bool
  */
 function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$description='')
