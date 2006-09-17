@@ -44,11 +44,11 @@ class Dynamic_PrivilegesTree_Property extends Dynamic_Property
         if (!isset($data['show'])) $data['show'] = 'assigned';
         $trees = array();
         foreach ($this->privs->gettoplevelprivileges($data['show']) as $entry) {
-			$node = new TreeNode($entry['pid']);
-			$tree = new PrivilegesTree($node);
+            $node = new TreeNode($entry['pid']);
+            $tree = new PrivilegesTree($node);
             $trees[] = $node->depthfirstenumeration();
         }
-	    $data['trees'] = $trees;
+        $data['trees'] = $trees;
         return parent::showInput($data);
     }
 
@@ -56,26 +56,26 @@ class Dynamic_PrivilegesTree_Property extends Dynamic_Property
 // ---------------------------------------------------------------
 class PrivilegesTree extends Tree
 {
-	function createnodes(TreeNode $node)
-	{
+    function createnodes(TreeNode $node)
+    {
         $r = new xarPrivileges();
         $data = $r->getprivileges();
          foreach ($data as $row) {
-        	$nodedata = array(
-        		'id' => $row['pid'],
-        		'parent' => $row['parentid'],
-        		'name' => $row['name'],
-        		'realm' => $row['realm'],
-        		'module' => $row['module'],
-        		'component' => $row['component'],
-        		'instance' => $row['instance'],
-        		'level' => $row['level'],
-        		'description' => $row['description'],
-        	);
-			$this->treedata[] = $nodedata;
+            $nodedata = array(
+                'id' => $row['pid'],
+                'parent' => $row['parentid'],
+                'name' => $row['name'],
+                'realm' => $row['realm'],
+                'module' => $row['module'],
+                'component' => $row['component'],
+                'instance' => $row['instance'],
+                'level' => $row['level'],
+                'description' => $row['description'],
+            );
+            $this->treedata[] = $nodedata;
         }
         parent::createnodes($node);
-	}
+    }
 }
 
 ?>

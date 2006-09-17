@@ -44,16 +44,16 @@ class Dynamic_TextBox_Property extends Dynamic_Property
         }
     }
 
-	static function getRegistrationInfo()
-	{
-		$info = new PropertyRegistration();
-		$info->reqmodules = array('base');
-		$info->id   = 2;
-		$info->name = 'textbox';
-		$info->desc = 'Text Box';
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = array('base');
+        $info->id   = 2;
+        $info->name = 'textbox';
+        $info->desc = 'Text Box';
 
-		 return $info;
-	}
+         return $info;
+    }
 
     function validateValue($value = null)
     {
