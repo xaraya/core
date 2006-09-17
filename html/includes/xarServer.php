@@ -9,12 +9,12 @@
  *
  * @subpackage server
  * @author Marco Canini <marco@xaraya.com>
- */
+ * @author Michel Dalle <mikespub@xaraya.com>
+**/
 
 /**
  * Initializes the HTTP Protocol Server/Request/Response utilities
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access protected
  * @global bool xarRequest_allowShortURLs
  * @global array xarRequest_defaultModule
@@ -104,8 +104,6 @@ class xarServer extends Object
      * {@link http://www.php.net/manual/en/reserved.variables.html PHP manual}.
      * If the server variable doesn't exist void is returned.
      *
-     * @author Marco Canini <marco@xaraya.com>
-     * @author Michel Dalle
      * @access public
      * @param name string the name of the variable
      * @return mixed value of the variable
@@ -179,7 +177,6 @@ class xarServer extends Object
      * Returns the server host name fetched from HTTP headers when possible.
      * The host name is in the canonical form (host + : + port) when the port is different than 80.
      *
-     * @author Marco Canini <marco@xaraya.com>
      * @access public
      * @return string HTTP host name
      */
@@ -200,7 +197,6 @@ class xarServer extends Object
      *
      * Returns the HTTP protocol used by current connection, it could be 'http' or 'https'.
      *
-     * @author Marco Canini <marco@xaraya.com>
      * @access public
      * @return string current HTTP protocol
      */
@@ -418,7 +414,6 @@ class xarRequest extends Object
      * TODO: evaluate and improve this, obviously :-)
      * + check security impact of people combining PATH_INFO with func/type param
      *
-     * @author Marco Canini, Michel Dalle
      * @access public
      * @global xarRequest_defaultModule array
      * @return array requested module, type and func

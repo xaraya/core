@@ -6,24 +6,24 @@
  * @copyright The Digital Development Foundation, 2006
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @author Marcel van der Boom <mrb@hsdev.com>
- **/
+**/
 
- /**
+/**
   * Declare an interface for the xarTemplateCache class so we dont shoot
   * ourselves in the foot.
   *
   * @todo make caches all have the same interface
- **/
- interface IxarTemplateCache
- {
-     static function init($dir, $active);
-     static function getKey($fileName);
-     static function saveKey($fileName);
-     static function saveEntry($fileName, $data);
-     static function isDirty($fileName);
-     static function cacheFile($fileName);   // wrong for sure
-     static function sourceFile($key);       // arguably wrong
- }
+**/
+interface IxarTemplateCache
+{
+    static function init($dir, $active);
+    static function getKey($fileName);
+    static function saveKey($fileName);
+    static function saveEntry($fileName, $data);
+    static function isDirty($fileName);
+    static function cacheFile($fileName);   // wrong for sure
+    static function sourceFile($key);       // arguably wrong
+}
  
 /**
  * Class to model the xar compiled template cache
@@ -32,8 +32,8 @@
  * @todo bring this into the cache hierarchy in general so it can inherit from xarCache or something like that.
  * @todo this is still poorly abstracted, i would like to make a difference between the cache and its entries
  * @todo yes, i know this is similar to caching/storage/filesystem, but that one isnt ready yet :-) getting to that later.
- **/
-class xarTemplateCache  extends Object implements ixarTemplateCache
+**/
+class xarTemplateCache extends Object implements ixarTemplateCache
 {
     // Inactive means that we reuse one file in the cache all the time.
     private static $inactiveKeySeed    = 'youreallyreallyneedtocachetemplates';
@@ -67,7 +67,6 @@ class xarTemplateCache  extends Object implements ixarTemplateCache
     /** 
      * Get the cache key for a sourcefile
      *
-     * @access public
      * @param  string $fileName  For which file do we need the key?
      * @return string            The cache key for this sourcefilename
      * @todo what if cache is not active? still return the md5 key?
@@ -82,7 +81,6 @@ class xarTemplateCache  extends Object implements ixarTemplateCache
     /**
      * Save the cache key for a sourcefile
      *
-     * @access public
      * @param  string $sourceFileName  For which file are we entering the key?
      * @return bool true on success, false on failure
      * @todo   exceptions?
@@ -100,15 +98,13 @@ class xarTemplateCache  extends Object implements ixarTemplateCache
         return false;
     }
     
-    /**
-     * Private methods
-    **/
+    /* Private methods */
     private static function isActive()
     {
         return self::$active;
     }
-    
-    // Things really belonging somewhere else
+
+    /* Things really belonging somewhere else */
     
     /**
      * Save an entry into the template cache

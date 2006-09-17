@@ -1,7 +1,6 @@
 <?php
-
 /**
-* xarTpl__XarSecNode: <xar:sec> tag class
+ * xarTpl__XarSecNode: <xar:sec> tag class
  *
  * @package blocklayout
  */

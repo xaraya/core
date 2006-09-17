@@ -54,7 +54,7 @@ class xarLogger_javascript extends xarLogger
      * @access public
      * @return boolean
      */
-    function setConfig(&$conf) 
+    function setConfig(array &$conf) 
     {
         parent::setConfig($conf);
         $this->_loadLevel = & $conf['loadLevel'];

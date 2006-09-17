@@ -18,32 +18,32 @@ class BasicDataStore extends XarayaDDObject implements IBasicDataStore
 
     public $type;
 
-    function getItem($args = array())
+    function getItem(array $args = array())
     {
         return $args['itemid'];
     }
 
-    function createItem($args = array())
+    function createItem(array $args = array())
     {
         return $args['itemid'];
     }
 
-    function updateItem($args = array())
+    function updateItem(array $args = array())
     {
         return $args['itemid'];
     }
 
-    function deleteItem($args = array())
+    function deleteItem(array $args = array())
     {
         return $args['itemid'];
     }
 
-    function getItems($args = array())
+    function getItems(array $args = array())
     {
         // abstract?
     }
 
-    function countItems($args = array())
+    function countItems(array $args = array())
     {
         return null; // <-- make this numeric!!
     }
@@ -69,7 +69,7 @@ class OrderedDataStore extends BasicDataStore implements IOrderedDataStore
      * @todo seems odd, dunno
      * @todo type hinting
      */
-    function getFieldName(&$property)
+    function getFieldName(Dynamic_Property &$property)
     {
         return $property->name;
     }
@@ -77,7 +77,7 @@ class OrderedDataStore extends BasicDataStore implements IOrderedDataStore
     /**
      * Add a field to get/set in this data store, and its corresponding property
      */
-    function addField(&$property)
+    function addField(Dynamic_Property &$property)
     {
         $name = $this->getFieldName($property);
         if(!isset($name))
@@ -93,7 +93,7 @@ class OrderedDataStore extends BasicDataStore implements IOrderedDataStore
     /**
      * Set the primary key for this data store (only 1 allowed for now)
      */
-    function setPrimary(&$property)
+    function setPrimary(Dynamic_Property &$property)
     {
         $name = $this->getFieldName($property);
         if(!isset($name))
@@ -105,7 +105,7 @@ class OrderedDataStore extends BasicDataStore implements IOrderedDataStore
     /**
      * Add a sort criteria for this data store (for getItems)
      */
-    function addSort(&$property, $sortorder = 'ASC')
+    function addSort(Dynamic_Property &$property, $sortorder = 'ASC')
     {
         $name = $this->getFieldName($property);
         if(!isset($name))

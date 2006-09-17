@@ -7,12 +7,12 @@
 
 class xarCache_MemCached_Storage extends xarCache_Storage
 {
-    public $host = 'localhost';
-    public $port = 11211;
-    public $memcache = null;
+    public $host       = 'localhost';
+    public $port       = 11211;
+    public $memcache   = null;
     public $persistent = false;
 
-    public function __construct($args = array())
+    public function __construct(array $args = array())
     {
         parent::__construct($args);
 

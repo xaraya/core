@@ -1,7 +1,6 @@
 <?php
-
 /**
-* xarTpl__XarMlNode: <xar:ml> tag class
+ * xarTpl__XarMlNode: <xar:ml> tag class
  *
  * @package blocklayout
  * @todo this needs to be redone completely.

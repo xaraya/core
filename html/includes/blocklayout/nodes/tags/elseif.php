@@ -1,13 +1,12 @@
 <?php
-
 /**
-* xarTpl__XarElseIfNode: <xar:elseif> tag class
+ * xarTpl__XarElseIfNode: <xar:elseif> tag class
  *
  * Takes care of ean } elseif(condition) { construct
-     *
-     * @package blocklayout
-     * @access private
-     */
+ *
+ * @package blocklayout
+ * @access private
+**/
 class xarTpl__XarElseifNode extends xarTpl__TplTagNode
 {
     function __construct(&$parser, $tagName, $parentTagName='', $attributes=array())

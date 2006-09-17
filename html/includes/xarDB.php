@@ -33,7 +33,7 @@
  * @return bool true on success, false on failure
  * @todo <marco> move template tag table definition somewhere else?
  */
-function xarDB_init(&$args, $whatElseIsGoingLoaded)
+function xarDB_init(array &$args, $whatElseIsGoingLoaded)
 {
     if(!isset($args['doConnect'])) $args['doConnect'] = true;
     $GLOBALS['xarDB_systemArgs'] = $args;
@@ -43,10 +43,8 @@ function xarDB_init(&$args, $whatElseIsGoingLoaded)
     // We do this here so we can remove customisation from creole lib.
     xarDB::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
     
-    if($args['doConnect']) {
-    }
-    
-    if($args['doConnect']) $dbconn =& xarDBNewConn();
+    if($args['doConnect']) 
+        $dbconn =& xarDBNewConn();
     $systemPrefix = $args['systemTablePrefix'];
     $sitePrefix   = $args['siteTablePrefix'];
 
@@ -80,7 +78,7 @@ function &xarDBGetConn($index=0)
  * @access public
  * @todo   do we need the global?
  */
-function &xarDBNewConn($args = NULL)
+function &xarDBNewConn(array $args = null)
 {
     if (!isset($args)) {
         $args =  $GLOBALS['xarDB_systemArgs'];
@@ -159,15 +157,15 @@ function xarDBLoadTableMaintenanceAPI()
  * all modes except METADATA will return the ALTERDATABASE object.
  *
  * @access public
- * @return data   dictionary object (specifics depend on mode)
- * @param  object $dbconn database connection object
- * @param  string $mode the mode in which the data dictionary will be used; default READONLY
+ * @return Object     dictionary object (specifics depend on mode)
+ * @param  Connection $dbconn database connection object
+ * @param  string     $mode the mode in which the data dictionary will be used; default READONLY
  * @todo   fully implement the mode, by layering the classes into separate files of readonly and amend methods
  * @todo   xarMetaData class needs to accept the database connection object
  * @todo   make xarMetaData the base class for the data dictionary
  * @todo   move these comments off to some proper document
  */
-function &xarDBNewDataDict(&$dbconn, $mode = 'READONLY')
+function &xarDBNewDataDict(Connection &$dbconn, $mode = 'READONLY')
 {
     // Load the data dictionary source.
     // Depending on the mode, there may be one or more files to load.
@@ -244,16 +242,4 @@ function xarDBGetSiteTablePrefix()
     //return $GLOBALS['xarDB_systemArgs']['siteTablePrefix'];
     return xarDBGetSystemTablePrefix();
 }
-
-/**
- * Import module tables in the array of known tables
- *
- * @access protected
- */
-function xarDB_importTables($tables)
-{
-    xarDB::importTables($tables);
-}
-
-
 ?>

@@ -42,8 +42,8 @@ interface IXarayaDDObject
     function __construct($name);
 
     // @note routines for dealing with XML files
-    function readSchema($args = array());
-    function loadSchema($args = array());
+    function readSchema(array $args = array());
+    function loadSchema(array $args = array());
     function toArray(SimpleXMLElement $schemaobject=null);
     function toXML(SimpleXMLElement $schemaobject=null);
 }
@@ -51,21 +51,21 @@ interface IXarayaDDObject
 interface IBasicDataStore
 {
     // @note this looks pretty generic, but we dont know what's in $args
-    function    getItem($args = array()); // would typ. need some sort of ID value
-    function createItem($args = array()); // would typ. need some sort of Item object
-    function updateItem($args = array()); // would typ. need some sort of Item object
-    function deleteItem($args = array()); // would typ. need some sort of ID value
-    function   getItems($args = array()); // would typ. need some sort of Criteria object
-    function countItems($args = array()); // would typ. need some sort of Criteria object
+    function    getItem(array $args = array()); // would typ. need some sort of ID value
+    function createItem(array $args = array()); // would typ. need some sort of Item object
+    function updateItem(array $args = array()); // would typ. need some sort of Item object
+    function deleteItem(array $args = array()); // would typ. need some sort of ID value
+    function   getItems(array $args = array()); // would typ. need some sort of Criteria object
+    function countItems(array $args = array()); // would typ. need some sort of Criteria object
 }
 
 interface IOrderedDataStore
 {
     // @note tied to properties, as used by dd
-    function getFieldName(&$property);
-    function     addField(&$property);
-    function   setPrimary(&$property);
-    function      addSort(&$property, $sortorder = 'ASC');
+    function getFieldName(Dynamic_Property &$property);
+    function     addField(Dynamic_Property &$property);
+    function   setPrimary(Dynamic_Property &$property);
+    function      addSort(Dynamic_Property &$property, $sortorder = 'ASC');
 
     // @note tied to db table
 
@@ -76,9 +76,9 @@ interface IOrderedDataStore
 interface ISQLDataStore
 {
     // @note tied to properties, as used by dd
-    function     addWhere(&$property, $clause, $join, $pre = '', $post = '');
-    function   addGroupBy(&$property);
-    function      addJoin($table, $key, $fields, $where = array(), $andor = 'and', $more = '', $sort = array());
+    function     addWhere(Dynamic_Property &$property, $clause, $join, $pre = '', $post = '');
+    function   addGroupBy(Dynamic_Property &$property);
+    function      addJoin($table, $key, $fields, array $where = array(), $andor = 'and', $more = '', $sort = array());
 
     // @note this looks pretty generic
     function cleanWhere();

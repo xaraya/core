@@ -19,7 +19,7 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
      * @param $args['name'] string name of the object containing the sequence
      *
      */ 
-    public function __construct($args)
+    public function __construct(array $args)
     {
         // TODO: check the object definition, it needs id, data and nextid
         assert('isset($args["name"]); /* To construct a dd sequence, an objectname must be passed in */');

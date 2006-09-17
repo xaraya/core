@@ -10,7 +10,7 @@ class xarCache_FileSystem_Storage extends xarCache_Storage
     public $blksize = 0;
     public $bsknown = false;
 
-    public function __construct($args = array())
+    public function __construct(array $args = array())
     {
         parent::__construct($args);
 

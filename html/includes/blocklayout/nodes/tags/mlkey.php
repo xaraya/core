@@ -1,7 +1,6 @@
 <?php
-
 /**
-* xarTpl__XarMlKeyNode: <xar:mlkey> tag class
+ * xarTpl__XarMlKeyNode: <xar:mlkey> tag class
  *
  * @package blocklayout
  * @access private

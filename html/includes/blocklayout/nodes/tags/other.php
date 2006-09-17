@@ -1,7 +1,6 @@
 <?php
-
 /**
-* xarTpl__XarOtherNode: handle module registered tags
+ * xarTpl__XarOtherNode: handle module registered tags
  *
  * @package blocklayout
  * @access private

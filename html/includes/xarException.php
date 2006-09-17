@@ -87,7 +87,6 @@ class GeneralException extends xarExceptions
 /**
  * Initializes the Error Handling System
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access protected
  * @return bool true
  * @todo   can we move the stacks above into the init?
@@ -108,8 +107,7 @@ function xarError_init(&$systemArgs, $whatToLoad)
  *
  * @return void
  * @throws DebugException
- * @author Marcel van der Boom
- **/
+**/
 function debug($anything)
 {
     throw new DebugException('DEBUGGING',var_export($anything,true));
@@ -120,7 +118,6 @@ function debug($anything)
  *
  * Valid value for $major parameter are: XAR_NO_EXCEPTION, XAR_USER_EXCEPTION, XAR_SYSTEM_EXCEPTION, XAR_SYSTEM_MESSAGE.
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @param major integer error major number
  * @param errorID string error identifier
@@ -151,7 +148,6 @@ function xarErrorSet($major, $errorID, $value = NULL)
  * Allows the caller to establish whether an error was raised, and to get the major number of raised error.
  * The major number XAR_NO_EXCEPTION identifies the state in which no error was raised.
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @deprec 2006-01-12
  * @return integer the major value of raised error
@@ -169,7 +165,6 @@ function xarCurrentErrorType()
  * Returns the error identifier corresponding to the current error.
  * If invoked when no error was raised, a void value is returned.
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @deprec 2006-01-12
  * @return string the error identifier
@@ -185,7 +180,6 @@ function xarCurrentErrorID()
  * Returns the value corresponding to the current error.
  * If invoked when no error or an error for which there is no associated information was raised, a void value is returned.
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @deprec 2006-01-12
  * @return mixed error value object
@@ -198,7 +192,6 @@ function xarCurrentError()
 /**
  * Resets current error status
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @deprec 2006-01-12
  * @return void
@@ -213,7 +206,6 @@ function xarErrorFree()
  *
  * You must always call this function when you handle a caught error.
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return voidx
  */
@@ -229,7 +221,6 @@ function xarErrorHandled()
  * available on current error.
  * If there is no error currently raised an empty string is returned.
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @param format string one of template or plain
  * @param stacktype string one of CORE or ERROR
@@ -244,7 +235,6 @@ function xarErrorRender($format,$stacktype = "ERROR", $data=array())
 /**
  * Gets a formatted array of errors
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @deprec 2006-01-13
  * @return void
  */

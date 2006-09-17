@@ -4,42 +4,42 @@
  *
  * @package dynamicdata
  * @subpackage datastores
- */
+**/
 
 /**
  * Handly function data store
  *
  * @package dynamicdata
  *
- */
+**/
 class Dynamic_Function_DataStore extends BasicDataStore
 {
     /**
      * Get the field name used to identify this property (the property validation holds the function name here - for now...)
      */
-    function getFieldName(&$property)
+    function getFieldName(Dynamic_Property &$property)
     {
         return $property->validation;
     }
 
-    function setPrimary(&$property)
+    function setPrimary(Dynamic_Property &$property)
     {
         // not applicable !?
     }
 
-// TODO: support different functions for the different methods,
-//       and/or pass an 'action' argument to the function, and/or...
+    // TODO: support different functions for the different methods,
+    //       and/or pass an 'action' argument to the function, and/or...
 
-    function getItem($args = array())
+    function getItem(array $args = array())
     {
-        $modid = $args['modid'];
+        $modid    = $args['modid'];
         $itemtype = $args['itemtype'];
-        $itemid = $args['itemid'];
-        $modname = $args['modname'];
+        $itemid   = $args['itemid'];
+        $modname  = $args['modname'];
 
         foreach (array_keys($this->fields) as $function) {
             // split into module, type and function
-    // TODO: improve this ?
+            // TODO: improve this ?
             list($fmod,$ftype,$ffunc) = explode('_',$function);
             // see if the module is available
             if (!xarMod::isAvailable($fmod)) {
@@ -84,7 +84,7 @@ class Dynamic_Function_DataStore extends BasicDataStore
     }
 
     /* fetch a list of the values for all items in the datastore */
-    function getItems($args = array())
+    function getItems(array $args = array())
     {
         /* don't bother if there are no item ids set */
         if (empty($this->_itemids)) {

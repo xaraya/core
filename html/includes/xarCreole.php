@@ -19,9 +19,8 @@ class xarDB extends Creole
         return self::$tables;
     }
 
-    public static function importTables($tables = array())
+    public static function importTables(Array $tables = array())
     {
-        assert('is_array($tables)');
         self::$tables = array_merge(self::$tables,$tables);
     }
 

@@ -13,7 +13,7 @@
  */
 class Dynamic_Dummy_DataStore extends BasicDataStore
 {
-    function getItem($args = array())
+    function getItem(array $args = array())
     {
         $itemid = $args['itemid'];
         foreach (array_keys($this->fields) as $field) {
@@ -21,7 +21,7 @@ class Dynamic_Dummy_DataStore extends BasicDataStore
         }
     }
 
-    function getItems($args = array())
+    function getItems(array $args = array())
     {
         if (!empty($args['itemids'])) {
             $itemids = $args['itemids'];
@@ -38,7 +38,7 @@ class Dynamic_Dummy_DataStore extends BasicDataStore
     }
 
 /*
-    function createItem($args = array())
+    function createItem(array $args = array())
     {
         $itemid = $args['itemid'];
         foreach (array_keys($this->fields) as $field) {
@@ -48,7 +48,7 @@ class Dynamic_Dummy_DataStore extends BasicDataStore
         }
     }
 
-    function updateItem($args = array())
+    function updateItem(array $args = array())
     {
         $itemid = $args['itemid'];
         foreach (array_keys($this->fields) as $field) {
@@ -58,7 +58,7 @@ class Dynamic_Dummy_DataStore extends BasicDataStore
         }
     }
 
-    function deleteItem($args = array())
+    function deleteItem(array $args = array())
     {
         $itemid = $args['itemid'];
         foreach (array_keys($this->fields) as $field) {

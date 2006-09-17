@@ -4,20 +4,19 @@
  *
  * @package dynamicdata
  * @subpackage datastores
- */
+**/
 
 /**
  * Class to handle hook datastore
  *
  * @package dynamicdata
- *
- */
+**/
 class Dynamic_Hook_DataStore extends BasicDataStore
 {
     /**
      * Get the field name used to identify this property (we use the hook name here)
      */
-    function getFieldName(&$property)
+    function getFieldName(Dynamic_Property &$property)
     {
         // check if this is a known module, based on the name of the property type
         $proptypes = Dynamic_Property_Master::getPropertyTypes();
@@ -27,12 +26,12 @@ class Dynamic_Hook_DataStore extends BasicDataStore
         }
     }
 
-    function setPrimary(&$property)
+    function setPrimary(Dynamic_Property &$property)
     {
         // not applicable !?
     }
 
-    function getItem($args = array())
+    function getItem(array $args = array())
     {
         $modid = $args['modid'];
         $itemtype = $args['itemtype'];

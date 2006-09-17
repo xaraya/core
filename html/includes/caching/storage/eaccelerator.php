@@ -6,7 +6,7 @@
 
 class xarCache_eAccelerator_Storage extends xarCache_Storage
 {
-    public function __construct($args = array())
+    public function __construct(array $args = array())
     {
         parent::__construct($args);
         $this->storage = 'eaccelerator';

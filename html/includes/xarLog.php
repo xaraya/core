@@ -10,12 +10,12 @@
  * @subpackage logging
  * @author Marco Canini <marco@xaraya.com>
  * @author Flavio Botelho <nuncanada@ig.com.br>
+ * @author Marcel van der Boom
  * @todo  Document functions
- *        Add options to simple & html logger
- *        When calendar & xarLocaleFormatDate is done complete simple logger
- *        and html logger
- *        When xarMail is done do email logger
- */
+ * @todo  Add options to simple & html logger
+ * @todo  When calendar & xarLocaleFormatDate is done complete simple logger and html logger
+ * @todo  When xarMail is done do email logger
+**/
 
 /**
  * Logging package defines
@@ -46,8 +46,7 @@ class LoggerException extends Exception
  *
  * @return void
  * @throws LoggerException
- * @author Marcel van der Boom
- **/
+**/
 function xarLog_init(&$args, &$whatElseIsGoingLoaded) 
 {
 
@@ -191,8 +190,7 @@ function xarLog__shutdown_handler()
  *
  * @return void
  * @throws LoggerException
- * @author Marcel van der Boom
- **/
+**/
 function xarLog__add_logger($type, $config_args)
 {
     sys::import('log.loggers.'.$type);

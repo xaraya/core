@@ -1,14 +1,14 @@
 <?php
-  /**
-   * xarTpl__XarLoopNode: <xar:loop> tag class
-   *
-   * @package blocklayout
-   *
-   * @author Marco Canini <marco@xaraya.com>
-   * @author Marcel van der Boom <marcel@hsdev.com>
-   * @author Dan Wells 
-   * @todo why do we need both loop:number and loop:index? i think loop:number should refer to the loop number
-   */
+/**
+ * xarTpl__XarLoopNode: <xar:loop> tag class
+ *
+ * @package blocklayout
+ *
+ * @author Marco Canini <marco@xaraya.com>
+ * @author Marcel van der Boom <marcel@hsdev.com>
+ * @author Dan Wells 
+ * @todo why do we need both loop:number and loop:index? i think loop:number should refer to the loop number
+**/
 class xarTpl__XarLoopNode extends xarTpl__TplTagNode
 {
     function __construct(&$parser, $tagName, $parentTagName='', $parameters=array())

@@ -2,7 +2,7 @@
 class xarObject
 {
 
-    function toString() 
+    function __toString() 
     {
         return get_class($this) . ":" . $this->hash();
     }

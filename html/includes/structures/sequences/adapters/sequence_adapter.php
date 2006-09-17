@@ -6,7 +6,7 @@
  * specialized sequence behaviour by letting them
  * implement their interface in terms of the sequence
  * interface. (exposed protected in this class)
- */ 
+**/ 
 class SequenceAdapter extends Object implements iAdapter, iSequenceAdapter 
 {
     // Who does the actual work?
@@ -20,8 +20,8 @@ class SequenceAdapter extends Object implements iAdapter, iSequenceAdapter
      * @return void
      * @throws Exception
      * @author Marcel van der Boom
-     **/
-    final public function __construct($type = 'array', $args = array())
+    **/
+    final public function __construct($type = 'array', array $args = array())
     {
         switch($type) {
         case 'array':
@@ -49,8 +49,7 @@ class SequenceAdapter extends Object implements iAdapter, iSequenceAdapter
      *
      * @return mixed
      * @throws Exception
-     * @author Marcel van der Boom
-     **/
+    **/
     public function __get($property) 
     {
         switch($property) {

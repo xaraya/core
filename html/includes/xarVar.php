@@ -7,6 +7,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marco Canini marco@xaraya.com
+ * @author Flavio Botelho
  */
 
 /**
@@ -89,7 +90,6 @@ function xarVar_init(&$args, $whatElseIsGoingLoaded)
  *  }
  *
  *
- * @author Flavio Botelho
  * @access public
  * @param arrays The arrays storing information equivalent to the xarVarFetch interface
  * @return array With the respective exceptions in case of failure
@@ -162,7 +162,6 @@ function xarVarBatchFetch()
  *   XARVAR_PREP_FOR_STORE:      dbconn->qstr($value)
  *   XARVAR_PREP_TRIM:           trim($value)
  *
- * @author Marco Canini
  * @access public
  * @param name string the variable name
  * @param validation string the validation to be performed
@@ -275,7 +274,6 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  *
  * The $validation parameter can be any of the implemented functions in html/modules/variable/validations/
  *
- * @author Marco Canini
  * @access public
  * @param validation mixed the validation to be performed
  * @param subject string the subject on which the validation must be performed, will be where the validated value will be returned

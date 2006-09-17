@@ -8,7 +8,7 @@
  * 
  * @subpackage xsl
  * @author Marcel van der Boom <marcel@xaraya.com>
-*/
+**/
 
 class BlocklayoutXSLTProcessor extends Object
 {

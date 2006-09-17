@@ -6,7 +6,8 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Jim McDonald
- *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @author  Richard Cave <rcave@xaraya.com>
  * @todo bring back possibility of time authorized keys
  */
 
@@ -73,7 +74,6 @@ $schemas = array();
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   string name
  * @return  bool
@@ -89,7 +89,6 @@ function xarMakeGroup($name,$uname='')
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string name
  * @return bool
@@ -105,7 +104,6 @@ function xarMakeUser($name,$uname,$email,$pass='',$dateReg='',$valCode='',$state
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string name
  * @return bool
@@ -121,7 +119,6 @@ function xarMakeRoleRoot($name)
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string child name
  * @param  string parent name
@@ -138,7 +135,6 @@ function xarMakeRoleMemberByName($childName, $parentName)
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string child uname
  * @param  string parent uname
@@ -158,7 +154,6 @@ function xarMakeRoleMemberByUname($childName, $parentName)
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string child ID
  * @param  string parent ID
@@ -178,7 +173,6 @@ function xarMakeRoleMemberByID($childId, $parentId)
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string child ID
  * @param  string parent ID
@@ -198,7 +192,6 @@ function xarRemoveRoleMemberByID($childId, $parentId)
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string name
  * @param  integer realm
@@ -226,7 +219,6 @@ function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   string name
  * @return  bool
@@ -242,7 +234,6 @@ function xarMakePrivilegeRoot($name)
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string childName
  * @param  string  parentName
@@ -259,7 +250,6 @@ function xarMakePrivilegeMember($childName, $parentName)
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string  privilege name
  * @param  string role name
@@ -276,7 +266,6 @@ function xarAssignPrivilege($privilege,$role)
  *
  * This is a wrapper function
  *
- * @author  Richard Cave <rcave@xaraya.com>
  * @access  public
  * @param   string module
  * @return  bool
@@ -297,7 +286,6 @@ function xarRemovePrivileges($module)
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string module
  * @param  string type
@@ -321,7 +309,6 @@ function xarDefineInstance($module,$type,$query,$propagate=0,$table2='',$childId
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   string module
  * @return  bool
@@ -337,7 +324,6 @@ function xarRemoveInstances($module)
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @return array of strings
  */
@@ -351,7 +337,6 @@ function xarGetGroups()
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   string name
  * @return  object role
@@ -400,7 +385,6 @@ function xarIsAncestor($name1, $name2)
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   string name
  * @return  object role
@@ -417,7 +401,6 @@ function xarTree()
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   integer pid,level
  * @param   strings pid,name,realm,module,component
@@ -434,7 +417,6 @@ function xarReturnPrivilege($pid,$name,$realm,$module,$component,$instance,$leve
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   integer levelname
  * @return  security level
@@ -448,7 +430,6 @@ function xarSecurityLevel($levelname)
 /* xarPrivExists: checks whether a privilege exists.
  *
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   string name of privilege
  * @return  boolean
@@ -464,7 +445,6 @@ function xarPrivExists($name)
 /* xarMaskExists: checks whether a mask exists.
  *
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   string name of mask
  * @param   string module of mask
@@ -481,7 +461,6 @@ function xarMaskExists($name,$module="All",$component="All")
 /* xarQueryMask: returns a mask suitable for inclusion in a structured query
  *
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   string name of mask
  * @param   string module of mask
@@ -499,7 +478,6 @@ function xarQueryMask($mask, $showException=1, $component='', $instance='', $mod
  * Checks the current group or user's privileges against a component
  * This function should be invoked every time a security check needs to be done
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string  $mask
  * @param  integer $showException
@@ -527,7 +505,6 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
 /**
  * xarRegisterMask: wrapper function for registering a mask
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string  $name
  * @param  integer $realm
@@ -547,7 +524,6 @@ function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$descr
 /**
  * xarUnregisterMask: wrapper function for unregistering a mask
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string name
  * @return bool
@@ -563,7 +539,6 @@ function xarUnregisterMask($name)
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   string module
  * @return  bool

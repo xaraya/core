@@ -18,7 +18,7 @@
  *
  * @return bool true on success, false on failure
  */
-function xarBlockCache_init($args = array())
+function xarBlockCache_init(array $args = array())
 {
 // TODO: clean up all these globals and put them e.g. into a single array
     global $xarBlock_cacheTime;
@@ -34,12 +34,16 @@ function xarBlockCache_init($args = array())
         $args['Block.CacheStorage'] : 'filesystem';
     $logfile = !empty($args['Block.LogFile']) ?
         $args['Block.LogFile'] : null;
-    $GLOBALS['xarBlock_cacheStorage'] = xarCache_getStorage(array('storage'   => $storage,
-                                                                  'type'      => 'block',
-                                                                  'cachedir'  => $xarOutput_cacheCollection,
-                                                                  'expire'    => $xarBlock_cacheTime,
-                                                                  'sizelimit' => $xarBlock_cacheSizeLimit,
-                                                                  'logfile'   => $logfile));
+    $GLOBALS['xarBlock_cacheStorage'] = xarCache_getStorage(
+        array(
+            'storage'   => $storage,
+            'type'      => 'block',
+            'cachedir'  => $xarOutput_cacheCollection,
+            'expire'    => $xarBlock_cacheTime,
+            'sizelimit' => $xarBlock_cacheSizeLimit,
+            'logfile'   => $logfile
+        )
+    );
     if (empty($GLOBALS['xarBlock_cacheStorage'])) {
         return false;
     }
@@ -54,7 +58,7 @@ function xarBlockCache_init($args = array())
  * @param  array $args($cacheKey,$blockDynamics, $blockPermissions, $name = '')
  * @return bool
  */
-function xarBlockIsCached($args)
+function xarBlockIsCached(array $args)
 {
     global $xarOutput_cacheCollection,
            $xarBlock_cacheCode,

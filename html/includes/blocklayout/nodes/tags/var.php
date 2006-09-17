@@ -1,7 +1,6 @@
 <?php
-
 /**
-* xarTpl__XarVarNode: <xar:var> tag class
+ * xarTpl__XarVarNode: <xar:var> tag class
  *
  *
  * @package blocklayout
