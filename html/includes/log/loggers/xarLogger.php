@@ -1,17 +1,25 @@
 <?php
-
 /*
-Copyright (C) 2004 the Digital Development Corporation
+    Copyright (C) 2004 the Digital Development Corporation
 
-The exception detailed below is granted for the following files in this directory:
+    The exception detailed below is granted for the following files in this 
+    directory:
 
-- simple.php
-- error_log.php
-- mail.php
-- sql.php
-- syslog.php
+    - simple.php
+    - error_log.php
+    - mail.php
+    - sql.php
+    - syslog.php
 
-As a special exception to the GNU General Public License Xaraya is distributed under, the Digital Development Corporation gives permission to link the code of this program with each of the files listed above (or with modified versions of each file that use the same license as the file), and distribute linked combinations including the two. You must obey the GNU General Public License in all respects for all of the code used other than each of the files listed above. If you modify this file, you may extend this exception to your version of the file, but you are not obligated to do so. If you do not wish to do so, delete this exception statement from your version.
+    As a special exception to the GNU General Public License Xaraya is distributed 
+    under, the Digital Development Corporation gives permission to link the code of 
+    this program with each of the files listed above (or with modified versions of 
+    each file that use the same license as the file), and distribute linked 
+    combinations including the two. You must obey the GNU General Public License 
+    in all respects for all of the code used other than each of the files listed 
+    above. If you modify this file, you may extend this exception to your version 
+    of the file, but you are not obligated to do so. If you do not wish to do so, 
+    delete this exception statement from your version.
 */
 
 /**
@@ -63,7 +71,7 @@ class xarLogger extends Object
      * @access public
      * @return boolean
      */
-    function setConfig(&$conf)
+    function setConfig(array &$conf)
     {
         $this->_logLevel = $conf['logLevel'];
 

@@ -32,7 +32,7 @@ class Dynamic_UserSettings_DataStore extends BasicDataStore // Consider inheriti
         }
     }
 
-    function getItem($args = array())
+    function getItem(array $args = array())
     {
         if (empty($args['itemid'])) {
             // default is the current user (if any)
@@ -61,13 +61,13 @@ class Dynamic_UserSettings_DataStore extends BasicDataStore // Consider inheriti
         return $itemid;
     }
 
-    function createItem($args = array())
+    function createItem(array $args = array())
     {
         // There's no difference with updateItem() here, because xarModUserVars:set() handles that
         return $this->updateItem($args);
     }
 
-    function updateItem($args = array())
+    function updateItem(array $args = array())
     {
         if (empty($args['itemid'])) {
             // default is the current user (if any)
@@ -93,7 +93,7 @@ class Dynamic_UserSettings_DataStore extends BasicDataStore // Consider inheriti
         return $itemid;
     }
 
-    function deleteItem($args = array())
+    function deleteItem(array $args = array())
     {
         if (empty($args['itemid'])) {
             // default is the current user (if any)
@@ -114,12 +114,12 @@ class Dynamic_UserSettings_DataStore extends BasicDataStore // Consider inheriti
         return $itemid;
     }
 
-    function getItems($args = array())
+    function getItems(array $args = array())
     {
         // TODO: not supported by xarMod*UserVar
     }
 
-    function countItems($args = array())
+    function countItems(array $args = array())
     {
         // TODO: not supported by xarMod*UserVar
         return 0;

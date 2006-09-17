@@ -1,7 +1,6 @@
 <?php
-
 /**
-* xarTpl__XarWhileNode: <xar:while> tag class
+ * xarTpl__XarWhileNode: <xar:while> tag class
  *
  * takes care of the "while(condition) {" construct
  *

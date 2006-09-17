@@ -1329,7 +1329,6 @@ class xarTpl__ExpressionTransformer extends Object
      * Transform a PHP expression from a template to a valid piece of PHP code
      *
      * @return string Valid PHP expression
-     * @author Marcel van der Boom
      * @todo if expressions were always between #...# this would be easier
      * @todo if the key / objectmember is a variable, make sure it fits the regex for a valid variable name
      * @todo the convenience operators may conflict in some situations with the MLS ( like 'le' for french)
@@ -1491,7 +1490,6 @@ abstract class xarTpl__TplTagNode extends xarTpl__Node
      * We (try to) treat this like <xar:tag></xar:tag> which is effectively the same.
      *
      * @return void
-     * @author Marcel van der Boom
      * @todo   refactor the classes so this method cannot be called directly (i.e. protected)
      **/
     public function render()
@@ -1507,7 +1505,6 @@ abstract class xarTpl__TplTagNode extends xarTpl__Node
      * In both cases, we should error out with an explanatory message
      * @return void
      * @throws BLParserException
-     * @author Marcel van der Boom
      **/
     function renderBeginTag()
     {
@@ -1522,8 +1519,7 @@ abstract class xarTpl__TplTagNode extends xarTpl__Node
      * We probably never reach this, but it balances out nicely. (hint for refactoring there though)
      * @return void
      * @throws BLParserException
-     * @author Marcel van der Boom
-     **/
+    **/
     function renderEndTag()
     {
         $msg = "The tag 'xar:#(1)' implementation is incomplete (render or renderEndtag is missing), or the tag does not support the open form.";
@@ -1555,7 +1551,6 @@ abstract class xarTpl__EntityNode extends xarTpl__Node
      * Constructor for entity nodes
      *
      * @return void
-     * @author Marcel van der Boom
      * @todo   centralize the hasExtras in xarModUrl, i.e. dont hack it in here (see bug 3603)
      **/
     function __construct(&$parser, $tagName, $entityType, $parameters) 
@@ -1573,7 +1568,6 @@ abstract class xarTpl__EntityNode extends xarTpl__Node
      *
      * @return void
      * @throws BLParserException
-     * @author Marcel van der Boom
      **/
     function render()
     {
@@ -1612,7 +1606,6 @@ class xarTpl__InstructionNode extends xarTpl__Node
      *
      * @return void
      * @throws BLParserException
-     * @author Marcel van der Boom
      **/
     function render()
     {

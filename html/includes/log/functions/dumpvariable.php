@@ -4,7 +4,7 @@
  *  Helper function for variable logging
  *
  */
-function xarLog__dumpVariable ($array)
+function xarLog__dumpVariable (array $array)
 {
 
     static $depth = 0;

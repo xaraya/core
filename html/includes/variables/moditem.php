@@ -21,58 +21,43 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         if(empty($name)) 
             throw new EmptyParameterException('name');
 
-        // Lets first check to see if any of our type vars are alread set in the cache.
+        // Initialize
+        $value = null;
+
+        // Try to get it from the cache
         $cacheCollection = 'ModItem.Variables.' . $scope;
         $cacheName = $itemid . $name;
 
         if (xarCore::isCached($cacheCollection, $cacheName)) {
             $value = xarCore::getCached($cacheCollection, $cacheName);
-            if (!isset($value)) 
-                return;
-            else 
-                return $value;
-        } elseif (xarCore::isCached($cacheCollection, 0)) {
-            //variable missing.
-            return;
+            return $value;
         }
-
-        // Still no luck, let's do the hard work then
-        $baseinfotype = 'module';
-
-        $modBaseInfo = xarMod::getBaseInfo($scope, $baseinfotype);
-        if (!isset($modBaseInfo)) return; // throw back
-
+        
+        // Not in cache, need to retrieve it
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
-        $bindvars = array();
 
-         $module_itemvarstable = $tables['module_itemvars'];
-         unset($modvarid);
-         $modvarid = xarModVars::getId($scope, $name);
-         if(!$modvarid) 
+        $module_itemvarstable = $tables['module_itemvars'];
+        unset($modvarid);
+        $modvarid = xarModVars::getId($scope, $name);
+        if(!$modvarid) 
             return;
 
-         $query = "SELECT xar_value FROM $module_itemvarstable WHERE xar_mvid = ? AND xar_itemid = ?";
-         $bindvars = array((int)$modvarid, (int)$itemid);
+        $query = "SELECT xar_value FROM $module_itemvarstable WHERE xar_mvid = ? AND xar_itemid = ?";
+        $bindvars = array((int)$modvarid, (int)$itemid);
 
-        // TODO : Here used to be a resultset cache option, reconsider it
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
-
-        if ($result->getRecordCount() == 0) 
-        {
-            $result->close(); unset($result);
-
-            // If there is no such thing, return the global setting for moditemvars
-            return xarModVars::get($scope, $name);
+        
+        if(!$result->next()) {
+            // No value, return the modvar default
+            $value = xarModVars::get($scope, $name);
+        } else {
+            // We finally found it, update the appropriate cache
+            list($value) = $result->getRow();
+            xarCore::setCached($cacheCollection, $cacheName, $value);
         }
-
-        // We finally found it, update the appropriate cache
-        $result->next();
-        list($value) = $result->getRow();
-        xarCore::setCached($cacheCollection, $cacheName, $value);
         $result->close();
-
         return $value;
     }
     
@@ -80,9 +65,6 @@ class xarModItemVars extends xarVars implements IxarModItemVars
     {
         assert('!is_null($value); /* Not allowed to set a variable to NULL value */');
         if (empty($name)) throw new EmptyParameterException('name');
-
-        $modBaseInfo = xarMod::getBaseInfo($scope);
-        if(!isset($modBaseInfo)) throw new ModuleNotFoundException($scope);
 
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
@@ -125,8 +107,6 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
 
-        $modBaseInfo = xarMod::getBaseInfo($scope);
-        if (!isset($modBaseInfo)) return; // throw back
         $module_itemvarstable = $tables['module_itemvars'];
         // We need the variable id
         $modvarid = xarModVars::getId($scope, $name);

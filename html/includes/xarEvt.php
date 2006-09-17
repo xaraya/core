@@ -20,6 +20,7 @@
  * @author Marco Canini <marco@xaraya.com>
  * @author Marcel van der Boom <marcel@xaraya.com>
  * @author Frank Besler <besfred@xaraya.com>
+ * @author Michel Dalle <mikespub@xaraya.com>
  * @todo Document EMS
  * @todo Document functions
  */
@@ -64,7 +65,6 @@ class EventRegistrationException extends RegistrationExceptions
 /**
  * Intializes Event Messaging System
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access protected
  * @param $args['loadLevel']
  * @return bool true
@@ -92,7 +92,6 @@ class xarEvents extends Object implements IxarEvents
      *
      * The event 'eventName' is registered as a supported event
      *
-     * @author  Marco Canini
      * @access  public
      * @param   $eventName string Which event are we registering?
      * @return  bool  true on success
@@ -109,8 +108,6 @@ class xarEvents extends Object implements IxarEvents
     /**
      * Check whether an event is registered
      *
-     * @author  Marco Canini
-     * @author  Marcel van der Boom
      * @access  private
      * @param   $eventName Name of the event to check
      * @return  bool 
@@ -129,8 +126,6 @@ class xarEvents extends Object implements IxarEvents
      * has defined a specific handler for that event, that function is
      * executed.
      * 
-     * @author  Marco Canini
-     * @author  Marcel van der Boom <marcel@xaraya.com>
      * @access  protected
      * @param   string $eventName The name of the event
      * @param   mixed  $value Passed as parameter to the even handler function in the module
@@ -185,8 +180,6 @@ class xarEvents extends Object implements IxarEvents
      * Notifies a module that a certain event has occurred
      * the event handler in the module is called
      *
-     * @author  Marco Canini
-     * @author  Marcel van der Boom <marcel@xaraya.com>
      * @access  private
      * @param   $modName   string The name of the module
      * @param   $eventName string The name of the event to send
@@ -263,7 +256,6 @@ class xarEvents extends Object implements IxarEvents
     /**
      * Get the list of known event handlers
      *
-     * @author  mikespub
      * @access  private
      * @return array of event handlers
      * @todo make return a reference

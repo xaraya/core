@@ -9,7 +9,7 @@
  * @subpackage Page/Block Caching
  * @author mikespub
  * @author jsb
- */
+**/
 
 /**
  * Initialise the page caching options
@@ -17,7 +17,7 @@
  * @returns mixed
  * @return true on success, exit if session-less page caching finds a hit
  */
-function xarPageCache_init($args = array())
+function xarPageCache_init(array $args = array())
 {
 // TODO: clean up all these globals and put them e.g. into a single array
     global $xarPage_cacheTime;
@@ -154,10 +154,9 @@ function xarPageIsCached($cacheKey, $name = '')
  * get the content of a cached page
  *
  * @access public
- * @param key the key identifying the particular cache you want to access
- * @param name the name of the page in that particular cache
- * @returns bool
- * @return true if succeeded, false otherwise
+ * @param  string $cacheKey the key identifying the particular cache you want to access
+ * @param  string $name     the name of the page in that particular cache
+ * @return bool   true if succeeded, false otherwise
  */
 function xarPageGetCached($cacheKey, $name = '')
 {
@@ -180,7 +179,7 @@ function xarPageGetCached($cacheKey, $name = '')
  *                         access
  * @param string $name     the name of the page in that particular cache
  * @param string $value    value the new content for that page
- * @returns void
+ * @return void
  */
 function xarPageSetCached($cacheKey, $name, $value)
 {

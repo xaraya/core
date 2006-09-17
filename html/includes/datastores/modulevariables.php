@@ -47,9 +47,6 @@ class Dynamic_ModuleVariables_DataStore extends BasicDataStore
             return;
         }
 
-        // let's cheat a little bit here, and preload everything :-)
-        xarModVars::load($this->modname);
-
         foreach ($fieldlist as $field) {
             // get the value from the module variables
             // TODO: use $field.$itemid for modules with several itemtypes ? [like articles :)]

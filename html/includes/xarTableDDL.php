@@ -15,9 +15,9 @@
  * @subpackage table_api
  * @author Gary Mitchell
  * @todo Check functions!
- *       Check FIXMEs
- *       Document functions
- */
+ * @todo Check FIXMEs
+ * @todo Document functions
+**/
 
 /**
  * Public Functions:

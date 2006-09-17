@@ -1,10 +1,19 @@
 <?php
 /**
- * Interface declaration for config vars
+ * Configuration variable handling
  *
- */
+ * @package variables
+ * @copyright The Digital Development Foundation, 2006
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @author Marcel van der Boom <mrb@hsdev.com>
+**/
 sys::import('variables');
-
+/**
+ * ConfigVars class
+ *
+ * @package variables
+ * @todo if core was module 0 this could be a whole lot simpler by derivation
+ **/
 class xarConfigVars extends xarVars implements IxarVars
 {
     private static $KEY = 'Config.Variables'; // const cannot be private :-(
@@ -60,9 +69,13 @@ class xarConfigVars extends xarVars implements IxarVars
      * @todo do we need these aliases anymore ?
      * @todo return proper site prefix when we can store site vars
      * @todo the vars which are not in the database should probably be systemvars, not configvars
+     * @todo bench the preloading
      */
     public static function get($scope, $name)
     {
+        $value = null;
+        
+        // Preload the config vars once 
         if(!self::$preloaded)
             self::preload();
         
@@ -87,51 +100,31 @@ class xarConfigVars extends xarVars implements IxarVars
                 break;
         }
 
+        // From the cache
         if(xarCore::isCached(self::$KEY, $name)) 
         {
             $value = xarCore::getCached(self::$KEY, $name);
-            if (!isset($value)) 
-                return;
-            else 
-                return $value;
-        } elseif(xarCore::isCached(self::$KEY, 0)) {
-            // variable missing.
-            // we should really throw an exception here
-            return;
+            return $value;
         }
         
+        // Need to retrieve it 
+        // @todo checkme What should we do here? preload again, or just fetch the one?
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
         $varstable = $tables['config_vars'];
-        $query = "SELECT xar_name, xar_value FROM $varstable WHERE xar_modid = ?";
+        $query = "SELECT xar_name, xar_value FROM $varstable WHERE xar_modid = ? AND xar_name = ?";
 
-        // TODO : Here used to be a resultset cache option, reconsider it
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array(0),ResultSet::FETCHMODE_NUM);
-
-        if ($result->getRecordCount() == 0) 
-        {
-            $result->close(); unset($result);
-            return;
-        }
-
-        while ($result->next()) 
-        {   // while? we expect one value, no?
-            $value = $result->get(2); // Unlike creole->set this does *not* unserialize/escape automatically
+        $result = $stmt->executeQuery(array(0,$name),ResultSet::FETCHMODE_NUM);
+        
+        if($result->next()) {
+            // Found it, retrieve and cache it
+            $value = $result->get(2);
             $value = unserialize($value);
             xarCore::setCached(self::$KEY, $result->getString(1), $value);
         }
-        
-        // CHECKME: What's all this about then?
-        // Special value to tell this select has already been run, any
-        // variable not found now on is missing
-        xarCore::setCached(self::$KEY, 0, true);
-        //It should be here!
-        if (xarCore::isCached(self::$KEY, $name)) 
-            $value = xarCore::getCached(self::$KEY, $name);
-        else 
-            return;
-        
+        $result->close();
+        // @todo we really should except here.
         return $value;
     }
     
@@ -173,11 +166,6 @@ class xarConfigVars extends xarVars implements IxarVars
         }
         $result->close();
 
-        //Tells the cache system it has already checked this particular table
-        //(It's a escape when you are caching at a higher level than that of the
-        //individual variables)
-        //This whole cache systems must be remade to a central one.    
-        xarCore::setCached(self::$KEY, 0, true);
         self::$preloaded = true;
         return true;
     }

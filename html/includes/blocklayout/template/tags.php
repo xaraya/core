@@ -7,7 +7,7 @@
  * @copyright The Digital Development Foundataion, 2006
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @author Marcel van der Boom <mrb@hsdev.com>
- **/
+**/
 
 sys::import('exceptions.types');
 class DuplicateTagException extends DuplicationExceptions
@@ -48,7 +48,7 @@ define('XAR_TPL_TAG_NEEDPARAMETER'             ,32);
  * @todo _module, _type and _func and _handler introduce unneeded redundancy
  * @todo pass handler check at template registration someday (<mrb>what does this mean?)
  * @todo abstract the storing of the tag registration in a cache like interface (TagTemplateCache)
- */
+**/
 class xarTemplateTag extends Object
 {
     const NAME_REGEX = '^[a-z][-_a-z0-9]*$';
@@ -73,7 +73,7 @@ class xarTemplateTag extends Object
      *
      * @return void
      * @throws BadParameterException
-     **/
+    **/
     function __construct($module, $name, $attributes = array(), $handler = NULL, $flags = XAR_TPL_TAG_ISPHPCODE)
     {
         // See defines at top of file
@@ -142,8 +142,7 @@ class xarTemplateTag extends Object
      *
      * @return string code produced by the handler
      * @throws BadParameterException
-     * @author Marcel van der Boom
-     **/
+    **/
     public function callHandler($args, $handler_type='render')
     {
         // FIXME: get rid of this once installation includes the right serialized info
@@ -171,7 +170,6 @@ class xarTemplateTag extends Object
     /**
      * Registers a tag to the theme system
      *
-     * @access public
      * @return bool
      * @throws DuplicateTagException, SQLException
      * @todo Make this more generic, now only 'childless' tags are supported (only one handler)
@@ -223,10 +221,9 @@ class xarTemplateTag extends Object
     /**
      * Unregisters a tag to the theme system
      *
-     * @access public
      * @param  string $tag_name tag to remove
      * @return bool
-     **/
+    **/
     public static function unregister($tag_name)
     {
         if (!eregi(self::NAME_REGEX, $tag_name)) {
@@ -247,10 +244,9 @@ class xarTemplateTag extends Object
     /**
      * Unregisters all tags of a specific module to the theme system
      *
-     * @access public
      * @param  string $module namde of tags to remove
      * @return bool
-     **/
+    **/
     public static function unregisterall($module)
     {
         if (!eregi(self::NAME_REGEX, $module)) {
@@ -378,7 +374,7 @@ function xarTplGetTagObjectFromName($tag_name)
  * @access public
  * @throws BadParamterException
  * @todo see FIXME
- */
+**/
 class xarTemplateAttribute extends Object
 {
     const  NAME_REGEX = '^[a-z][-_a-z0-9]*$';

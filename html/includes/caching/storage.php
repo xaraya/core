@@ -1,27 +1,34 @@
 <?php
-
+/**
+ * Base factory for the cache storage types
+ *
+ * @package core
+ * @subpackage caching
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @todo get the var directory from the configured sys:varpath(), dont hardcode
+**/
 class xarCache_Storage extends Object
 {
-    public $storage = ''; // filesystem, database, memcached, ...
-    public $cachedir = 'var/cache/output';
-    public $type = ''; // page, block, template, ...
-    public $code = ''; // URL factors et al.
-    public $size = null;
-    public $numitems = 0;
+    public $storage    = '';        // filesystem, database, memcached, ...
+    public $cachedir   = 'var/cache/output';
+    public $type       = '';        // page, block, template, ...
+    public $code       = '';        // URL factors et al.
+    public $size       = null;
+    public $numitems   = 0;
     public $compressed = false;
-    public $sizelimit = 10000000;
-    public $reached = null;
-    public $expire = 0;
-    public $logfile = null;
-    public $logsize = 2000000; // for each logfile
-    public $modtime = 0; // last modification time
+    public $sizelimit  = 10000000;
+    public $reached    = null;
+    public $expire     = 0;
+    public $logfile    = null;
+    public $logsize    = 2000000;   // for each logfile
+    public $modtime    = 0;         // last modification time
 
     /**
      * Constructor
      * 
      * @todo using an args array here is taking the easy way out, lets define a proper interface
      */
-    public function __construct($args = array())
+    public function __construct(array $args = array())
     {
         if (!empty($args['type'])) {
             $this->type = strtolower($args['type']);

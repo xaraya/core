@@ -12,7 +12,7 @@
 interface IExceptionHandlers
 {
     public static function defaulthandler(Exception $e);
-    public static function phperrors($errorType, $errorString, $file, $line, $errorContext=array());
+    public static function phperrors($errorType, $errorString, $file, $line, array $errorContext=array());
 }
 
 class ExceptionHandlers extends Object implements IExceptionHandlers
@@ -83,12 +83,13 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
      * @param  string  $errorString errormessage issued
      * @param  string  $file file is which the error occurred
      * @param  integer $line linenumber on which the error occurred
+     * @param  array   $errorContext information on the context of the error
      * @author Marco Canini <marco@xaraya.com>
      * @access private
      * @throws PHPException
      * @return void
      */
-    final public static function phperrors($errorRaised, $errorString, $file, $line, $errorContext = array())
+    final public static function phperrors($errorRaised, $errorString, $file, $line, array $errorContext = array())
     {
         //Checks for a @ presence in the given line, should stop from setting Xaraya errors
         $oldLevel = error_reporting();

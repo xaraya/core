@@ -21,7 +21,7 @@
  */
 class xarDataDict extends Object
 {
-    var $dict;
+    public $dict;
 
     /**
      * xarDataDict: constructor for the class
@@ -52,10 +52,9 @@ class xarDataDict extends Object
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   $table name of the table
-     * @param   $fields string or array containing column info
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
+     * @param   string $table name of the table
+     * @param   mixed  $fields string or array containing column info
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
      * @throws  EmptyParameterException
     */
     function addColumn($table, $fields)
@@ -84,8 +83,7 @@ class xarDataDict extends Object
      * @access  public
      * @param   $table name of the table
      * @param   $fields string or array containing column info
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
      * @throws  EmptyParameterException
     */
     function alterColumn($table, $fields)
@@ -118,8 +116,7 @@ class xarDataDict extends Object
      * @access  public
      * @param   $table name of the table
      * @param   $fields string or array containing field info
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
     */
     function alterTable($table, $fields)
     {
@@ -139,9 +136,8 @@ class xarDataDict extends Object
      * @access  public
      * @param   $table name of the table
      * @param   $fields string or array containing field info
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
      * @throws EmptyParameterException
-     * @return  integer
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
     */
     function changeTable($table, $fields)
     {
@@ -170,8 +166,7 @@ class xarDataDict extends Object
      * @access  public
      * @param   $database database name to create
      * @param   $options array containing database options
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
      * @throws  EmptyParameterException
     */
     function createDatabase($database, $options = false)
@@ -202,8 +197,7 @@ class xarDataDict extends Object
      * @param   $table name of the table
      * @param   $fields string or array containing field info
      * @param   $options array containing index creation options
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
      * @throws  EmptyParameterException
     */
     function createIndex($index, $table, $fields, $options = false)
@@ -234,8 +228,7 @@ class xarDataDict extends Object
      * @access  public
      * @param   $index name of the index
      * @param   $table name of the table
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
      * @throws  EmptyParameterException
     */
     function dropIndex($index, $table)
@@ -273,11 +266,10 @@ class xarDataDict extends Object
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   $table name of the table
-     * @param   $fields string or array containing field info
-     * @param   $options array containing table creationg options
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
+     * @param   string $table name of the table
+     * @param   mixed  $fields string or array containing field info
+     * @param   array  $options array containing table creationg options
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
      * @throws  EmptyParameterException
     */
     function createTable($table, $fields, $options = false)
@@ -304,10 +296,9 @@ class xarDataDict extends Object
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   $table name of the table
-     * @param   $fields string or array containing column info
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
+     * @param   string $table name of the table
+     * @param   mixed  $fields string or array containing column info
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
      * @throws  EmptyParameterException
     */
     function dropColumn($table, $fields)
@@ -335,8 +326,7 @@ class xarDataDict extends Object
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
      * @param   $table name of the table
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
      * @throws  EmptyParameterException
     */
     function dropTable($table)
@@ -362,10 +352,9 @@ class xarDataDict extends Object
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   $sql an array of SQL strings 
-     * @param   $contOnError continue on error, default is true
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
+     * @param   array $sql an array of SQL strings 
+     * @param   bool  $contOnError continue on error, default is true
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
     */
     function executeSQLArray($sql, $contOnError = true)
     {
@@ -403,8 +392,7 @@ class xarDataDict extends Object
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   none
-     * @returns array on success, false on failure
+     * @param   string $table table for which to return the primary keys
      * @return  array of primary keys for the table, false otherwise
      * @throws  EmptyParameterException
     */
@@ -442,8 +430,7 @@ class xarDataDict extends Object
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   xartables true if only Xaraya tables, false for all tables
-     * @returns array on success, false on failure
+     * @param   bool $xartables true if only Xaraya tables, false for all tables
      * @return  array of tables available in the database, false otherwise
      * @todo    flag for Xaraya system vs site tables
     */
@@ -475,8 +462,6 @@ class xarDataDict extends Object
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   none
-     * @returns array on success, false on failure
      * @return  array of tables available in the database, false otherwise
     */
     function getSystemTables()
@@ -516,8 +501,6 @@ class xarDataDict extends Object
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   none
-     * @returns array on success, false on failure
      * @return  array of tables available in the database, false otherwise
     */
     function getSiteTables()
@@ -560,8 +543,7 @@ class xarDataDict extends Object
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   xartables true if only Xaraya tables, false for all tables
-     * @returns array on success, false on failure
+     * @param   bool xartables true if only Xaraya tables, false for all tables
      * @return  array of columns names for the table, false otherwise
      * @todo    flag for Xaraya system vs site tables
     */
@@ -655,7 +637,7 @@ class xarDataDict extends Object
  */
 class xarMetaData extends Object
 {
-    var $dbconn;
+    public $dbconn;
 
     /**
      * xarMetaData: constructor for the class
@@ -687,8 +669,6 @@ class xarMetaData extends Object
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   none
-     * @returns array on success, false on failure
      * @return  array of databases available on the server, false otherwise
      * @todo    make this work for all database types
     */
@@ -710,8 +690,7 @@ class xarMetaData extends Object
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   none
-     * @returns array on success, false on failure
+     * @param   string $type type of tables to return (presumably preparing for views)
      * @return  array of tables available in the database, false otherwise
     */
     function getTables($type='TABLES')
@@ -734,8 +713,7 @@ class xarMetaData extends Object
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   none
-     * @returns array on success, false on failure
+     * @param   string $table name of the table for which to return the columns
      * @return  returns an array of ADOFieldObject's, one field
      *          object for every column of $table, false otherwise
     */
@@ -757,8 +735,7 @@ class xarMetaData extends Object
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   none
-     * @returns array on success, false on failure
+     * @param   string $table name of the table for which to return column names
      * @return  array of columns names for the table, false otherwise
     */
     function getColumnNames($table)
@@ -777,8 +754,7 @@ class xarMetaData extends Object
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   none
-     * @returns array on success, false on failure
+     * @param   string $table name of the table for which to return primary keys
      * @return  array of primary keys for the table, false otherwise
      * @todo    The method name suggests that multiple keys are retrieved, which is not true, multiple attribs maybe, but only 1 key.
     */
@@ -792,6 +768,4 @@ class xarMetaData extends Object
     }
 
 }
-
-
 ?>

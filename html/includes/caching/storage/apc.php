@@ -1,9 +1,7 @@
 <?php
-
 /**
  * Cache data using APC [http://pecl.php.net/apc/]
- */
-
+**/
 class xarCache_APC_Storage extends xarCache_Storage
 {
     public function __construct($args = array())

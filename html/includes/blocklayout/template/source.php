@@ -6,7 +6,7 @@
  * @copyright The Digital Development Foundation, 2006-07-26
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @author Marcel van der Boom <mrb@hsdev.com>
- **/
+**/
 
 sys::import('blocklayout.template.compiled');
 
@@ -24,7 +24,7 @@ interface IxarSourceTemplate
  *
  * @package blocklayout
  * @todo    decorate this with a Stream object so we can compile anything that is a stream.
- **/
+**/
 class xarSourceTemplate extends xarCompiledTemplate implements IxarSourceTemplate
 {
     public function __construct($fileName) 
@@ -36,7 +36,7 @@ class xarSourceTemplate extends xarCompiledTemplate implements IxarSourceTemplat
      * compile a source template into templatecode
      *
      * @return string the compiled template code.
-     **/
+    **/
     public function &compile() 
     {
         assert('isset($this->fileName); /* No source to compile from */');

@@ -22,7 +22,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
     /**
      * Get the field name used to identify this property (we use the property id here)
      */
-    function getFieldName(&$property)
+    function getFieldName(Dynamic_Property &$property)
     {
         return (int)$property->id;
     }
@@ -30,7 +30,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
      * Get the item
      * @param id $args['itemid']
      */
-    function getItem($args = array())
+    function getItem(array $args = array())
     {
         $itemid = $args['itemid'];
 
@@ -70,7 +70,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
      * Create an item
      * @param array $args with $itemid,
      */
-    function createItem($args = array())
+    function createItem(array $args = array())
     {
         extract($args);
 
@@ -115,7 +115,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
      * @param id $itemid in array $args
      * @return id $itemid
      */
-    function updateItem($args = array())
+    function updateItem(array $args = array())
     {
         $itemid = $args['itemid'];
 
@@ -172,7 +172,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         return $itemid;
     }
 
-    function deleteItem($args = array())
+    function deleteItem(array $args = array())
     {
         $itemid = $args['itemid'];
 
@@ -195,7 +195,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         return $itemid;
     }
 
-    function getItems($args = array())
+    function getItems(array $args = array())
     {
         if (!empty($args['numitems'])) {
             $numitems = $args['numitems'];
@@ -638,7 +638,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         }
     }
 
-    function countItems($args = array())
+    function countItems(array $args = array())
     {
         if (!empty($args['itemids'])) {
             $itemids = $args['itemids'];
@@ -770,7 +770,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
      * @return integer value of the next id
      * @throws BadParameterException
      */
-    function getNextId($args)
+    function getNextId(array $args)
     {
         extract($args);
 

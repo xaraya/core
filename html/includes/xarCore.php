@@ -150,13 +150,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      */
 
     /*
-     * Load PHP Version Backwards Compatibility Library
-     *
-     */
-    //sys::import('xarPHPCompat');
-    //xarPHPCompat::loadAll('includes/phpcompat');
-
-    /*
      * Start Exception Handling System
      *
      * Before we do anything make sure we can except out of code in a predictable matter
@@ -546,7 +539,6 @@ class xarCore extends Object
     /**
      * Check if a variable value is cached
      *
-     * @access protected
      * @param key string the key identifying the particular cache you want to access
      * @param name string the name of the variable in that particular cache
      * @return mixed value of the variable, or false if variable isn't cached
@@ -564,7 +556,6 @@ class xarCore extends Object
     /**
      * Get the value of a cached variable
      *
-     * @access protected
      * @param key string the key identifying the particular cache you want to access
      * @param name string the name of the variable in that particular cache
      * @return mixed value of the variable, or null if variable isn't cached
@@ -581,7 +572,6 @@ class xarCore extends Object
     /**
      * Set the value of a cached variable
      *
-     * @access protected
      * @param key string the key identifying the particular cache you want to access
      * @param name string the name of the variable in that particular cache
      * @param value string the new value for that variable
@@ -599,7 +589,6 @@ class xarCore extends Object
     /**
      * Delete a cached variable
      *
-     * @access protected
      * @param key the key identifying the particular cache you want to access
      * @param name the name of the variable in that particular cache
      * @return null
@@ -623,7 +612,6 @@ class xarCore extends Object
     /**
      * Flush a particular cache (e.g. for session initialization)
      *
-     * @access protected
      * @param  cacheKey the key identifying the particular cache you want to wipe out
      * @return null
      * @todo make sure we can make this protected

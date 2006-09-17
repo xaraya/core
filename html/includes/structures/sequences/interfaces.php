@@ -48,7 +48,7 @@ interface iSequence
  * This interface is the base Adapter.
  */
 interface iAdapter {
-    /* (mixed) object */public function __construct($type = 'array', $args = array());
+    /* (mixed) object */public function __construct($type = 'array', array $args = array());
 }
 
 /**

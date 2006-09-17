@@ -1,7 +1,6 @@
 <?php
-
 /**
-* xarTpl__XarTemplateNode: <xar:template> tag class
+ * xarTpl__XarTemplateNode: <xar:template> tag class
  *
  * @package blocklayout
  * @access private

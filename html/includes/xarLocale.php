@@ -9,7 +9,9 @@
  *
  * @subpackage multilanguage
  * @author Marco Canini <marco@xaraya.com>
- */
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @author Roger Raymond <roger@asphyxia.com>
+**/
 
 /**
  * Exceptions defined for this subsystem
@@ -25,7 +27,6 @@ class LocaleNotFoundException extends NotFoundExceptions
  * Locale data is an associative array, its keys are described at the top
  * of this file
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return array locale data
  * @throws LocaleNotFoundException
@@ -120,7 +121,6 @@ function &xarMLSLoadLocaleData($locale = NULL)
 /**
  * Parses a string as a currency amount according to specified locale data
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @return string representing a currency amount
  */
@@ -139,7 +139,6 @@ function xarLocaleParseCurrency($currency, $localeData = NULL)
 /**
  * Parses a string as a number according to specified locale data
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @return string representing a number
  */
@@ -159,7 +158,6 @@ function xarLocaleParseNumber($number, $localeData = NULL, $isCurrency = false)
 /**
  * Formats a currency according to specified locale data
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string formatted currency
  */
@@ -175,7 +173,6 @@ function xarLocaleFormatCurrency($currency, $localeData = NULL)
 /**
  * Formats a number according to specified locale data
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string formatted number
  * @throws BAD_PARAM
@@ -453,7 +450,6 @@ function xarLocaleFormatDate($format = null, $timestamp = null, $addoffset = tru
  *  a timestamp that has been modified for the user's current
  *  timezone setting.
  *
- *  @author Roger Raymond <roger@asphyxia.com>
  *  @access protected
  *  @param string $format valid format params from strftime() function\
  *  @param int $timestamp optional unix timestamp to translate

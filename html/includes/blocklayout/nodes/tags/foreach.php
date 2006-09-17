@@ -1,7 +1,6 @@
 <?php
-
 /**
-* xarTpl__XarForEachNode: <xar:foreach> tag class
+ * xarTpl__XarForEachNode: <xar:foreach> tag class
  *
  * Takes care of the "foreach($array as $key=>$value) { " construct
  *

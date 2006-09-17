@@ -1,7 +1,6 @@
 <?php
-
 /**
-* xarTpl__XarForNode: <xar:for> tag class
+ * xarTpl__XarForNode: <xar:for> tag class
  *
  * Takes care of the "for(start, test, iteration) {"  construct
  *

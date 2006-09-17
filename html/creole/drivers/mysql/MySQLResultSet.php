@@ -67,6 +67,8 @@ class MySQLResultSet extends ResultSetCommon implements ResultSet {
             }
         }
         
+        $this->parseFields();
+        
         if ($this->fetchmode === ResultSet::FETCHMODE_ASSOC && $this->lowerAssocCase) {
             $this->fields = array_change_key_case($this->fields, CASE_LOWER);
         }
@@ -105,10 +107,10 @@ class MySQLResultSet extends ResultSetCommon implements ResultSet {
      */
     public function getString($column) 
     {
-        $idx = (is_int($column) ? $column - 1 : $column);
-        if (!array_key_exists($idx, $this->fields)) { throw new SQLException("Invalid resultset column: " . $column); }
-        if ($this->fields[$idx] === null) { return null; }
-        return (string) $this->fields[$idx];
+        if ($this->fetchmode == ResultSet::FETCHMODE_NUM) $column--;
+        if (!isset($this->fieldsInResultSet[$column])) { throw new SQLException("Invalid resultset column: " . $column); }
+        if ($this->fields[$column] === null) { return null; }
+        return (string) $this->fields[$column];
     }
     
     /**
@@ -119,8 +121,8 @@ class MySQLResultSet extends ResultSetCommon implements ResultSet {
      */
     function getTimestamp($column, $format='Y-m-d H:i:s') 
     {
-        if (is_int($column)) { $column--; } // because Java convention is to start at 1 
-        if (!array_key_exists($column, $this->fields)) { throw new SQLException("Invalid resultset column: " . (is_int($column) ? $column + 1 : $column)); }
+        if ($this->fetchmode == ResultSet::FETCHMODE_NUM) $column--;
+        if (!isset($this->fieldsInResultSet[$column])) { throw new SQLException("Invalid resultset column: " . $column); }
         if ($this->fields[$column] === null) { return null; }
         
         $ts = strtotime($this->fields[$column]);

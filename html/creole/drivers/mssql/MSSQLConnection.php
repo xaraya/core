@@ -216,7 +216,6 @@ class MSSQLConnection extends ConnectionCommon implements Connection {
         if (!$result) {
             throw new SQLException('Could not execute update', mssql_get_last_message(), $sql);
         }
-        $updated = $this->getUpdateCount();
         
         if($tablename != '') {
             $res = mssql_query("SET IDENTITY_INSERT $tablename OFF", $this->dblink);
@@ -224,8 +223,8 @@ class MSSQLConnection extends ConnectionCommon implements Connection {
                 throw new SQLException('Could not unlock table for identity insert', mssql_get_last_message(), $sql);
             }
         }
-        return $updated;
         // END XARAYA modification
+        return $this->getUpdateCount();
     }
 
     /**

@@ -22,7 +22,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
     /**
      * Get the field name used to identify this property (we use the name of the table field here)
      */
-    function getFieldName(&$property)
+    function getFieldName(Dynamic_Property &$property)
     {
         if (!is_object($property)) debug($property); // <-- this throws an exception
         // support [database.]table.field syntax
@@ -33,7 +33,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         }
     }
 
-    function getItem($args = array())
+    function getItem(array $args = array())
     {
         $itemid = $args['itemid'];
         $table = $this->name;
@@ -118,7 +118,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
      * @return bool true on success, false on failure
      * @throws BadParameterException
      **/
-    function createItem($args = array())
+    function createItem(array $args = array())
     {
         $itemid = $args['itemid'];
         $table = $this->name;
@@ -187,7 +187,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         return $itemid;
     }
 
-    function updateItem($args = array())
+    function updateItem(array $args = array())
     {
         $itemid = $args['itemid'];
         $table = $this->name;
@@ -226,7 +226,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         return $itemid;
     }
 
-    function deleteItem($args = array())
+    function deleteItem(array $args = array())
     {
         $itemid = $args['itemid'];
         $table = $this->name;
@@ -243,7 +243,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         return $itemid;
     }
 
-    function getItems($args = array())
+    function getItems(array $args = array())
     {
         if (!empty($args['numitems'])) {
             $numitems = $args['numitems'];
@@ -441,7 +441,7 @@ if (empty($itemidfield)) {
         $result->Close();
     }
 
-    function countItems($args = array())
+    function countItems(array $args = array())
     {
         if (!empty($args['itemids'])) {
             $itemids = $args['itemids'];
@@ -529,7 +529,7 @@ if (empty($itemidfield)) {
         return $this->primary;
     }
 
-    function getNext($args = array())
+    function getNext(array $args = array())
     {
         static $temp = array();
 

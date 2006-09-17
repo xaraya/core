@@ -9,41 +9,32 @@
  *
  * @subpackage user
  * @author Jim McDonald
+ * @author Marco Canini <marco@xaraya.com>
  * @todo <marco> user status field
- * @todo <johnny> look over xarUserComparePasswords
  */
+ 
+// IS THIS STILL USED? 
+global $installing;
 
 /**
  * Exceptions defined by this subsystem
  *
  */
-// User (kinda)
 class NotLoggedInException extends xarExceptions
 {
     protected $message = 'An operation was encountered that requires the user to be logged in. If you are currently logged in please report this as a bug.';
 }
 
 /**
- * Dynamic User Data types for User Properties
- */
-/* (currently unused)
-define('XARUSER_DUD_TYPE_CORE', 0); // indicates a core field
-define('XARUSER_DUD_TYPE_STRING', 1);
-define('XARUSER_DUD_TYPE_TEXT', 2);
-define('XARUSER_DUD_TYPE_DOUBLE', 4);
-define('XARUSER_DUD_TYPE_INTEGER', 8);
-*/
-
-/**
  * Authentication modules capabilities
  * (to be revised e.g. to differentiate read & update capability for core & dynamic)
  */
-define('XARUSER_AUTH_AUTHENTICATION', 1);
-define('XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER', 2);
-define('XARUSER_AUTH_PERMISSIONS_OVERRIDER', 16);
-define('XARUSER_AUTH_USER_CREATEABLE', 32);
-define('XARUSER_AUTH_USER_DELETEABLE', 64);
-define('XARUSER_AUTH_USER_ENUMERABLE', 128);
+define('XARUSER_AUTH_AUTHENTICATION'           ,   1);
+define('XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER',   2);
+define('XARUSER_AUTH_PERMISSIONS_OVERRIDER'    ,  16);
+define('XARUSER_AUTH_USER_CREATEABLE'          ,  32);
+define('XARUSER_AUTH_USER_DELETEABLE'          ,  64);
+define('XARUSER_AUTH_USER_ENUMERABLE'          , 128);
 
 /*
  * Error codes
@@ -60,15 +51,17 @@ define('XARUSER_LAST_RESORT', -3);
  * @param args[authenticationModules] array
  * @return bool true on success
  */
-function xarUser_init(&$args, $whatElseIsGoingLoaded)
+function xarUser_init(Array &$args, $whatElseIsGoingLoaded)
 {
     // User System and Security Service Tables
     $systemPrefix = xarDBGetSystemTablePrefix();
 
     // CHECK: is this needed?
-    $tables = array('roles'            => $systemPrefix . '_roles',
-                    'realms'           => $systemPrefix . '_security_realms',
-                    'rolemembers' => $systemPrefix . '_rolemembers');
+    $tables = array(
+        'roles'       => $systemPrefix . '_roles',
+        'realms'      => $systemPrefix . '_security_realms',
+        'rolemembers' => $systemPrefix . '_rolemembers'
+    );
 
     xarDB::importTables($tables);
 
@@ -88,16 +81,15 @@ function xarUser_init(&$args, $whatElseIsGoingLoaded)
 /**
  * Log the user in
  *
- * @author Marco Canini
  * @access public
- * @param userName string the name of the user logging in
- * @param password string the password of the user logging in
- * @param rememberMe bool whether or not to remember this login
+ * @param  string  $userName the name of the user logging in
+ * @param  string  $password the password of the user logging in
+ * @param  integer $rememberMe whether or not to remember this login
  * @return bool true if the user successfully logged in
  * @throws EmptyParameterException, SQLException
  * @todo <marco> #1 here we could also set a last_logon timestamp
  */
-function xarUserLogIn($userName, $password, $rememberMe=0)
+function xarUserLogIn($userName, $password, $rememberMe = 0)
 {
     if (xarUserIsLoggedIn()) {
         return true;
@@ -108,18 +100,20 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
 
     $userId = XARUSER_AUTH_FAILED;
     $args = array('uname' => $userName, 'pass' => $password);
-    // FIXME: <rabbitt> Do we want to actually put this here or do this
-    //        another way? Maybe record the exception stack before we go
-    //        into the foreach loop below (which can kill any exceptions
-    //        that are set prior to entering this function)....
-    foreach($GLOBALS['xarUser_authenticationModules'] as $authModName) {
+
+    foreach($GLOBALS['xarUser_authenticationModules'] as $authModName) 
+    {
         // Bug #918 - If the module has been deactivated, then continue
         // checking with the next available authentication module
-        if (!xarMod::isAvailable($authModName)) continue;
+        if (!xarMod::isAvailable($authModName)) 
+            continue;
+            
         // Every authentication module must at least implement the
         // authentication interface so there's at least the authenticate_user
         // user api function
-        if (!xarMod::apiLoad($authModName, 'user')) continue;
+        if (!xarMod::apiLoad($authModName, 'user')) 
+            continue;
+            
         $modInfo = xarMod::getBaseInfo($authModName);
         $modId = $modInfo['systemid'];
 
@@ -133,10 +127,13 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
             break;
         }
     }
-    if ($userId == XARUSER_AUTH_FAILED || $userId == XARUSER_AUTH_DENIED) {
-        if (xarModVars::get('privileges','lastresort')) {
+    if ($userId == XARUSER_AUTH_FAILED || $userId == XARUSER_AUTH_DENIED) 
+    {
+        if (xarModVars::get('privileges','lastresort')) 
+        {
             $secret = unserialize(xarModVars::get('privileges','lastresort'));
-            if ($secret['name'] == MD5($userName) && $secret['password'] == MD5($password)) {
+            if ($secret['name'] == md5($userName) && $secret['password'] == md5($password)) 
+            {
                 $userId = XARUSER_LAST_RESORT;
                 $rememberMe = 0;
             }
@@ -147,12 +144,15 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
     }
 
     // Catch common variations (0, false, '', ...)
-    if (empty($rememberMe)) $rememberMe = 0;
-    else $rememberMe = 1;
+    if (empty($rememberMe)) 
+        $rememberMe = 0;
+    else 
+        $rememberMe = 1;
 
     // Set user session information
     // TODO: make this a class static in xarSession.php
-    if (!xarSession_setUserInfo($userId, $rememberMe)) return; // throw back
+    if (!xarSession_setUserInfo($userId, $rememberMe)) 
+        return; // throw back
 
     // Set user auth module information
     $dbconn =& xarDBGetConn();
@@ -177,13 +177,6 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
     // Keep a reference to auth module that authenticates successfully
     xarSessionSetVar('authenticationModule', $authModName);
 
-// TODO: re-think dynamic user capabilities of auth* modules for read/update,
-//       and see how they should fit in for different scenarios (master/slave, ...)
-/*
-    // Sync core fields that're duplicates in users table
-    if (!xarUser__syncUsersTableFields()) return;
-*/
-
     // FIXME: <marco> here we could also set a last_logon timestamp
     //<jojodee> currently set in individual authsystem when success on login returned to it
 
@@ -198,7 +191,6 @@ function xarUserLogIn($userName, $password, $rememberMe=0)
  *
  * @access public
  * @return bool true if the user successfully logged out
- * @throws DATABASE_ERROR
  */
 function xarUserLogOut()
 {
@@ -228,9 +220,6 @@ function xarUserLogOut()
  * @access public
  * @return bool true if the user is logged in, false if they are not
  */
-
-global $installing;
-
 function xarUserIsLoggedIn()
 {
     // FIXME: restore "clean" code once uid+session issues are resolved
@@ -242,7 +231,8 @@ function xarUserIsLoggedIn()
 /**
  * Gets the user navigation theme name
  *
- * @author Marco Canini <marco@xaraya.com>
+ * @access public
+ * @return string name of the users navigation theme
  */
 function xarUserGetNavigationThemeName()
 {
@@ -261,7 +251,8 @@ function xarUserGetNavigationThemeName()
  * Set the user navigation theme name
  *
  * @access public
- * @param themeName string
+ * @param  string $themeName name of the theme to set as navigation theme
+ * @return void
  */
 function xarUserSetNavigationThemeName($themeName)
 {
@@ -274,11 +265,12 @@ function xarUserSetNavigationThemeName($themeName)
  * Get the user navigation locale
  *
  * @access public
- * @return locale string
+ * @return string $locale users navigation locale name
  */
 function xarUserGetNavigationLocale()
 {
-    if (xarUserIsLoggedIn()) {
+    if (xarUserIsLoggedIn()) 
+    {
         $uid = xarUserGetVar('uid');
           //last resort user is falling over on this uservar by setting multiple times
          //return true for last resort user - use default locale
@@ -324,7 +316,7 @@ function xarUserGetNavigationLocale()
  * Set the user navigation locale
  *
  * @access public
- * @param locale string
+ * @param  string $locale
  * @return bool true if the navigation locale is set, false if not
  */
 function xarUserSetNavigationLocale($locale)
@@ -351,22 +343,26 @@ function xarUserSetNavigationLocale($locale)
  * User variables API functions
  */
 
-/*
+/**
  * Initialise the user object
+ *
+ * @todo get rid of this global here
  */
 $GLOBALS['xarUser_objectRef'] = null;
 
 /**
  * Get a user variable
  *
- * @author Marco Canini
  * @access public
- * @param name string the name of the variable
- * @param uid integer the user to get the variable for
+ * @param  string  $name the name of the variable
+ * @param  integer $userId integer the user to get the variable for
  * @return mixed the value of the user variable if the variable exists, void if the variable doesn't exist
- * @throws BAD_PARAM, NOT_LOGGED_IN, ID_NOT_EXIST, NO_PERMISSION
+ * @throws EmptyParameterException, NotLoggedInException, BadParameterException, IDNotFoundException
  * @todo <marco> #1 figure out why this check failsall the time now: if ($userId != xarSessionGetVar('uid')) {
  * @todo <marco FIXME: ignoring unknown user variables for now...
+ * @todo redesign the delegation to auth* modules for handling user variables
+ * @todo add some security for getting to user variables (at least from another uid)
+ * @todo define clearly what the difference or similarity is with dd here 
  */
 function xarUserGetVar($name, $userId = NULL)
 {
@@ -381,6 +377,7 @@ function xarUserGetVar($name, $userId = NULL)
     if ($userId == _XAR_ID_UNREGISTERED) {
         // Anonymous user => only uid, name and uname allowed, for other variable names
         // an exception of type NOT_LOGGED_IN is raised
+        // CHECKME: if we're going the route of moditemvars, this doesn need to be the case
         if ($name == 'name' || $name == 'uname') {
             return xarML('Anonymous');
         }
@@ -390,18 +387,11 @@ function xarUserGetVar($name, $userId = NULL)
     // Don't allow any module to retrieve passwords in this way
     if ($name == 'pass') throw new BadParameterException('name');
 
-
-/* TODO: #1 - some security check from the roles module needed here
-    if ($userId != xarSessionGetVar('uid')) {
-        // Security check
-    }
-*/
-
     if (!xarCore::isCached('User.Variables.'.$userId, $name)) {
 
         if ($name == 'name' || $name == 'uname' || $name == 'email') {
             if ($userId == XARUSER_LAST_RESORT) {
-                return xarML('No Information');
+                return xarML('No Information'); // better return null here
             }
             // retrieve the item from the roles module
             $userRole = xarModAPIFunc('roles',  'user',  'get',
@@ -451,63 +441,6 @@ function xarUserGetVar($name, $userId = NULL)
                 }
             }
         }
-
-/*
-    // TODO: re-think dynamic user capabilities of auth* modules for read/update,
-    //       and see how they should fit in for different scenarios (master/slave, ...)
-
-        $authModName = xarUser__getAuthModule($userId);
-        if (!isset($authModName)) return; // throw back
-        //$useAuthSystem = false; // Used for debug
-        $useAuthSystem = ($authModName == 'authsystem') ? true : false;
-
-        if (!$useAuthSystem) {
-            $res = xarModAPIFunc($authModName, 'user', 'has_capability',
-                                 array('capability' => XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER));
-            if (!isset($res)) return; // throw back
-            if ($res) {
-                // $authModName supports the UserDataHandler interface
-                $res = xarModAPIFunc($authModName, 'user', 'is_valid_variable',
-                                     array('name' => $name));
-                if (!isset($res)) return; // throw back
-                if ($res == false) $useAuthSystem = true; // $name variable is retrieved from authsystem module
-            } else {
-                // $name variable is retrieved from authsystem module
-                $useAuthSystem = true;
-            }
-        }
-
-        if ($useAuthSystem == true) {
-            $authModName = 'authsystem';
-            if (!xarMod::apiLoad($authModName, 'user')) return; // throw back
-        }
-
-        $value = xarModAPIFunc($authModName, 'user', 'get_user_variable',
-                               array('uid' => $userId,
-                                     'name' => $name,
-                                     'prop_id' => $prop_id,
-                                     'prop_dtype' => $prop_dtype));
-        if (!isset($value)) return; // throw back
-        if ($value === false) {
-            if (isset($prop_default)) $value = $prop_default; // Use the metainfo default value if any
-            // else
-            // Variable doesn't exist
-            // false is here a special value to denote that variable was searched
-            // but wasn't found so xarUserGetVar'll return void
-            // will be called: xarCore::setCached('User.Variables.'.$userId, $name, false)
-        } else {
-            switch ($prop_dtype) {
-                case XARUSER_DUD_TYPE_DOUBLE:
-                    $value = (float) $value;
-                    break;
-                case XARUSER_DUD_TYPE_INTEGER:
-                    $value = (int) $value;
-                    break;
-            }
-        }
-
-        xarCore::setCached('User.Variables.'.$userId, $name, $value);
-*/
     }
 
     if (!xarCore::isCached('User.Variables.'.$userId, $name)) {
@@ -526,16 +459,17 @@ function xarUserGetVar($name, $userId = NULL)
 /**
  * Set a user variable
  *
- * @author Marco Canini
  * @since 1.23 - 2002/02/01
  * @access public
- * @param name string the name of the variable
- * @param value ??? the value of the variable
- * @param userId integer user's ID
+ * @param  string  $name  the name of the variable
+ * @param  mixed   $value the value of the variable
+ * @param  integer $userId integer user's ID
  * @return bool true if the set was successful, false if validation fails
- * @throws BAD_PARAM, NOT_LOGGED_IN, ID_NOT_EXIST, NO_PERMISSION
+ * @throws EmptyParameterException, BadParameterException, NotLoggedInException, xarException, IDNotFoundException
+ * @todo redesign the delegation to auth* modules for handling user variables
+ * @todo some securitycheck for retrieving at least other users variables ?
  */
-function xarUserSetVar($name, $value, $userId = NULL)
+function xarUserSetVar($name, $value, $userId = null)
 {
     // check that $name is valid
     if (empty($name)) throw new EmptyParameterException('name');
@@ -551,15 +485,9 @@ function xarUserSetVar($name, $value, $userId = NULL)
         throw new NotLoggedInException();
     }
 
-/* TODO: #1 - some security check from the roles module needed here
-    if ($userId != xarSessionGetVar('uid')) {
-        // Security check
-    }
-*/
-
     if ($name == 'name' || $name == 'uname' || $name == 'email') {
-    // TODO: replace with some roles API
-    // TODO: not -^ but get rid of this entirely here.
+        // TODO: replace with some roles API
+        // TODO: not -^ but get rid of this entirely here.
         xarUser__setUsersTableUserVar($name, $value, $userId);
 
     } elseif (!xarUser__isVarDefined($name)) {
@@ -589,53 +517,6 @@ function xarUserSetVar($name, $value, $userId = NULL)
 
     }
 
-/*
-    // TODO: re-think dynamic user capabilities of auth* modules for read/update,
-    //       and see how they should fit in for different scenarios (master/slave, ...)
-
-    if ($prop_dtype == XARUSER_DUD_TYPE_CORE) {
-        // Keep in sync core fields
-        if (!xarUser__setUsersTableUserVar($name, $value, $userId)) return;
-    }
-
-    $authModName = xarUser__getAuthModule($userId);
-    if (!isset($authModName)) return; // throw back
-
-    //$useAuthSystem = false; // Used for debug
-    $useAuthSystem = ($authModName == 'authsystem') ? true : false;
-
-    if (!$useAuthSystem) {
-        $res = xarModAPIFunc($authModName, 'user', 'has_capability',
-                             array('capability' => XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER));
-        if (!isset($res)) return; // throw back
-        if ($res) {
-            // $authModName supports the UserDataHandler interface
-            $res = xarModAPIFunc($authModName, 'user', 'is_valid_variable', array('name' => $name));
-            if (!isset($res)) return; // throw back
-            if ($res == false) $useAuthSystem = true; // $name variable is handled by authsystem module
-        } else {
-            // $name variable is retrieved from authsystem module
-            $useAuthSystem = true;
-        }
-    }
-
-    if ($useAuthSystem == true) {
-        if ($prop_dtype == XARUSER_DUD_TYPE_CORE) return true; // Already updated
-        $authModName = 'authsystem';
-        if (!xarMod::apiLoad($authModName, 'user')) return; // throw back
-    }
-
-    if (!xarModAPIFunc($authModName, 'user', 'set_user_variable',
-                       array('uid' => $userId,
-                             'name' => $name,
-                             'value' => $value,
-                             'prop_id' => $prop_id,
-                             'prop_dtype' => $prop_dtype))) {
-        return;
-    }
-
-*/
-
     // Keep in sync the UserVariables cache
     xarCore::setCached('User.Variables.'.$userId, $name, $value);
 
@@ -646,14 +527,20 @@ function xarUserSetVar($name, $value, $userId = NULL)
  * Compare Passwords
  *
  * @access public
- * @param givenPassword string
+ * @param  string $givenPassword  the password given for comparison
+ * @param  string $realPassword   the reference password to compare to
+ * @param  string $userName       name of the corresponding user?
+ * @param  string $cryptSalt      ?
  * @return bool true if the passwords match, false otherwise
+ * @todo   weird duckling here
+ * @todo   consider something strong than md5 here (not trivial wrt upgrading though)
  */
 function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryptSalt = '')
 {
     // TODO: consider moving to something stronger like sha1
     $md5pass = md5($givenPassword);
     if (strcmp($md5pass, $realPassword) == 0)
+        // Huh? shouldn't this be true instead of the md5 ?
         return $md5pass;
 
     return false;
@@ -667,10 +554,11 @@ function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryp
  * Get user's authentication module
  *
  * @access private
- * @param userId string
- * @throws UNKNOWN, DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
- * @todo FIXME: what happens for anonymous users ???
- * @todo check coherence 1 vs. 0 for Anonymous users !!!
+ * @param  userId string
+ * @todo   what happens for anonymous users ???
+ * @todo   check coherence 1 vs. 0 for Anonymous users !!!
+ * @todo   this should be somewhere else probably (base class of auth* or roles mebbe)
+ * @todo   is $userId a string? looks like an ID
  */
 function xarUser__getAuthModule($userId)
 {
@@ -680,8 +568,6 @@ function xarUser__getAuthModule($userId)
             return $authModName;
         }
     }
-
-    // TODO: replace with some roles API
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
@@ -718,8 +604,11 @@ function xarUser__getAuthModule($userId)
 
 /**
  * See if a Variable has been defined
+ * 
  * @access private
+ * @param  string $name name of the variable to check
  * @return bool true if the variable is defined
+ * @todo   rething this.
  */
 function xarUser__isVarDefined($name)
 {
@@ -743,46 +632,7 @@ function xarUser__isVarDefined($name)
 /**
  * @access private
  * @return bool
- * @throws NOT_LOGGED_IN, UNKNOWN, DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
- */
-function xarUser__syncUsersTableFields()
-{
-    $userId = xarSessionGetVar('uid');
-    assert('$userId != _XAR_ID_UNREGISTERED');
-
-// TODO: configurable one- or two-way re-synchronisation of core + dynamic fields ?
-
-    $authModName = xarUser__getAuthModule($userId);
-    if (!isset($authModName)) return; // throw back
-    if ($authModName == 'authsystem') return true; // Already synced
-
-    $res = xarModAPIFunc($authModName, 'user', 'has_capability',
-                         array('capability' => XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER));
-    if (!isset($res)) return; // throw back
-    if ($res == false) return true; // Impossible to go out of sync
-
-// TODO: improve multi-update operations
-
-    $name = xarUserGetVar('name');
-    if (!isset($name)) return; // throw back
-    $res = xarUser__setUsersTableUserVar('name', $name, $userId);
-    if (!isset($res)) return; // throw back
-    $uname = xarUserGetVar('uname');
-    if (!isset($uname)) return; // throw back
-    $res = xarUser__setUsersTableUserVar('uname', $uname, $userId);
-    if (!isset($res)) return; // throw back
-    $email = xarUserGetVar('email');
-    if (!isset($email)) return; // throw back
-    $res = xarUser__setUsersTableUserVar('email', $email, $userId);
-    if (!isset($res)) return; // throw back
-
-    return true;
-}
-
-/**
- * @access private
- * @return bool
- * @throws DATABASE_ERROR
+ * @throws SQLException
  */
 function xarUser__setUsersTableUserVar($name, $value, $userId)
 {

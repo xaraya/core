@@ -11,7 +11,7 @@
  * @author Michel Dalle
  * @author Marcel van der Boom <marcel@xaraya.com>
  * @todo We have to define a public interface so NOWHERE ever anyone else touches anything related to the session implementation
- */
+**/
 
 /**
  * Session exception class
@@ -23,7 +23,6 @@ class SessionException extends Exception
 /**
  * Initialise the Session Support
  * 
- * @author Jim McDonald, Marco Canini <marco@xaraya.com>
  * @return bool true
  */
 function xarSession_init(&$args, $whatElseIsGoingLoaded)

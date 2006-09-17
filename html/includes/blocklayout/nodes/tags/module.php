@@ -1,7 +1,6 @@
 <?php
-
 /**
-* xarTpl__XarModuleNode: <xar:module> tag class
+ * xarTpl__XarModuleNode: <xar:module> tag class
  *
  * This is used in <xar:module main="true" /> as placeholder for the main module output,
  * or in <xar:module main="false" module="mymodule" type="mytype" func="myfunc" args="$args" />
