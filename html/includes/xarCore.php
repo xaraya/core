@@ -150,13 +150,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      */
 
     /*
-     * Load PHP Version Backwards Compatibility Library
-     *
-     */
-    //sys::import('xarPHPCompat');
-    //xarPHPCompat::loadAll('includes/phpcompat');
-
-    /*
      * Start Exception Handling System
      *
      * Before we do anything make sure we can except out of code in a predictable matter
