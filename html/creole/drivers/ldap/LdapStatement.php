@@ -31,6 +31,6 @@ require_once 'creole/common/StatementCommon.php';
  * @version   $Revision: 69 $
  * @package   creole.drivers.mysql
  */ 
-class MySQLStatement extends StatementCommon implements Statement {   
+class LdapStatement extends StatementCommon implements Statement {   
     
 }

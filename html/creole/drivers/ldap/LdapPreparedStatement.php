@@ -29,7 +29,7 @@ require_once 'creole/common/PreparedStatementCommon.php';
  * @version   $Revision: 69 $
  * @package   creole.drivers.mysql
  */
-class MySQLPreparedStatement extends PreparedStatementCommon implements PreparedStatement {        
+class LdapPreparedStatement extends PreparedStatementCommon implements PreparedStatement {        
     
     /**
      * Quotes string using native mysql function (mysql_real_escape_string()).

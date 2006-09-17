@@ -29,7 +29,7 @@ require_once 'creole/CreoleTypes.php';
  * @version   $Revision: 69 $
  * @package   creole.drivers.mysql
  */
-class MySQLTypes extends CreoleTypes {
+class LdapTypes extends CreoleTypes {
 
     /** Map MySQL native types to Creole (JDBC) types. */
     private static $typeMap = array(
