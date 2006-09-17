@@ -1,10 +1,19 @@
 <?php
 /**
- * Interface declaration for config vars
+ * Configuration variable handling
  *
- */
+ * @package variables
+ * @copyright The Digital Development Foundation, 2006
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @author Marcel van der Boom <mrb@hsdev.com>
+**/
 sys::import('variables');
-
+/**
+ * ConfigVars class
+ *
+ * @package variables
+ * @todo if core was module 0 this could be a whole lot simpler by derivation
+ **/
 class xarConfigVars extends xarVars implements IxarVars
 {
     private static $KEY = 'Config.Variables'; // const cannot be private :-(

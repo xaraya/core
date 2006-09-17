@@ -124,9 +124,6 @@ sys::import('variables.module');
 function xarModGetVar($modName, $name, $prep = NULL)
 {   return xarModVars::get($modName, $name, $prep); }
 
-function xarMod_getVarsByModule($modName)
-{   return xarModVars::load($modName);}
-
 function xarModSetVar($modName, $name, $value)
 {   return xarModVars::set($modName, $name, $value); }
 
@@ -1161,7 +1158,7 @@ class xarMod  extends Object implements IxarMod
      * @param modName string the module's name
      * @param type determines theme or module
      * @return mixed an array of base module info on success
-     * @throws DATABASE_ERROR, MODULE_NOT_EXIST
+     * @throws EmptyParameterException, BadParameterException
      */
     static function getBaseInfo($modName, $type = 'module')
     {
