@@ -1,6 +1,6 @@
 <?php
+    sys::import('datastores.interface');
 
-sys::import('datastores.interface');
 
 /**
  * Base class for DD objects
@@ -8,14 +8,14 @@ sys::import('datastores.interface');
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
 **/
-    class XarayaDDObject extends Object
+    class DDObject extends Object
     {
 
         public $name;
 
         function __construct($name=null)
         {
-            $this->name = isset($name) ? $name : parent::toString();
+            $this->name = isset($name) ? $name : self::toString();
         }
 
         function loadSchema($args = array())
@@ -74,11 +74,6 @@ sys::import('datastores.interface');
             }
         }
 
-        function toString()
-        {
-            return $this->name;
-        }
-
         function toXML(SimpleXMLElement $schemaobject=null)
         {
             $schemaobject = isset($schemaobject) ? $schemaobject : $this->schemaobject;
@@ -95,7 +90,7 @@ sys::import('datastores.interface');
  * @todo this factory should go into core once we use datastores in more broad ways.
  * @todo the classnames could use a bit of a clean up (shorter, lowercasing)
  */
-class DataStoreFactory extends XarayaObject
+class DataStoreFactory extends Object
 {
     /**
      * Class method to get a new dynamic data store (of the right type)

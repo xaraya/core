@@ -8,7 +8,7 @@
 sys::import('modules.dynamicdata.class.datastores.master');
 sys::import('datastores.interface');
 
-class BasicDataStore extends XarayaDDObject implements IBasicDataStore
+class BasicDataStore extends DDObject implements IBasicDataStore
 {
     protected $schemaobject;    // The object representing this datastore as codified by its schema
 
