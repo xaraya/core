@@ -8,17 +8,9 @@ class BasicCollection extends Object implements Collection
     {
         $this->elements = array();
     }
-    function toString()
-    {
-        return get_class($this) . ":" . $this->hash();
-    }
-    function equals($object)
+    function equals(Object $object)
     {
         return $this === $object;
-    }
-    function getClass()
-    {
-        return get_class($this);
     }
     function hash()
     {
@@ -78,7 +70,7 @@ interface Collection
     public function add(Object $element);
     public function addAll(BasicCollection $collection);
     public function clear();
-    public function equals();
+    public function equals(Object $object);
     public function getClass();
     public function hash();
     public function isEmpty();
