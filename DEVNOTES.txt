@@ -210,5 +210,6 @@ Possible new QA checks for 2.x code branch
 - no 'var $varname' like declarations
 - no php4 style constructors, always __construct() if any
 - classes start with Capitals (?) (sys class doesnt now, that bad?)
--  
+- add new deprecation info 
+- 
 

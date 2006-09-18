@@ -139,7 +139,7 @@
                                 array('id' => ROLES_STATE_PENDING, 'name' => 'Pending'),
                             )
                         </xar:set>
-                        <xar:data-input type="dropdown" name="pstate" name="pstate" value="$pstate" options="$options" />
+                        <xar:data-input type="dropdown" name="pstate" value="$pstate" options="$options" />
                     </div>
 
                     <div class="xar-form-input-wrapper">
