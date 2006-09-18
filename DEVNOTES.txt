@@ -203,6 +203,12 @@ Columns affected by modid/regid/modname decision:
  - privileges.xar_module (stores 'All', 'empty' besides module name.)
 All other tables refer to the primary key of the xar_modules table (id)
 
- 
- 
+Possible new QA checks for 2.x code branch
+------------------------------------------
+- every class declaration should have an 'extends' clause (we all derive from Object)
+- every method implementation should have 'public' 'protected' or 'private'
+- no 'var $varname' like declarations
+- no php4 style constructors, always __construct() if any
+- classes start with Capitals (?) (sys class doesnt now, that bad?)
+-  
 
