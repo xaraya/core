@@ -12,11 +12,35 @@ class BasicDataStore extends DDObject implements IBasicDataStore
 {
     protected $schemaobject;    // The object representing this datastore as codified by its schema
 
+    public $fields = array();   // array of $name => reference to property in Dynamic_Object*
     public $_itemids;  // reference to itemids in Dynamic_Object_List TODO: investigate public scope
 
     public $cache = 0;
 
     public $type;
+
+    /**
+     * Add a field to get/set in this data store, and its corresponding property
+     */
+    function addField(Dynamic_Property &$property)
+    {
+        $name = $this->getFieldName($property);
+        if(!isset($name))
+            return;
+
+        $this->fields[$name] = &$property; // use reference to original property
+    }
+    
+    /**
+     * Get the field name used to identify this property (by default, the property name itself)
+     *
+     * @todo seems odd, dunno
+     * @todo type hinting
+     */
+    function getFieldName(Dynamic_Property &$property)
+    {
+        return $property->name;
+    }
 
     function getItem(array $args = array())
     {
@@ -58,33 +82,16 @@ class BasicDataStore extends DDObject implements IBasicDataStore
 
 class OrderedDataStore extends BasicDataStore implements IOrderedDataStore
 {
-    public $fields = array();   // array of $name => reference to property in Dynamic_Object*
     public $primary= null;
 
     public $sort   = array();
-
-    /**
-     * Get the field name used to identify this property (by default, the property name itself)
-     *
-     * @todo seems odd, dunno
-     * @todo type hinting
-     */
-    function getFieldName(Dynamic_Property &$property)
-    {
-        return $property->name;
-    }
 
     /**
      * Add a field to get/set in this data store, and its corresponding property
      */
     function addField(Dynamic_Property &$property)
     {
-        $name = $this->getFieldName($property);
-        if(!isset($name))
-            return;
-
-        $this->fields[$name] = &$property; // use reference to original property
-
+        parent::addField(&$property);
         if(!isset($this->primary) && $property->type == 21)
             // Item ID
             $this->setPrimary($property);

@@ -37,13 +37,13 @@
 /**
  * Interfaces as observed in current code
 **/
-interface IXarayaDDObject
+interface IDDObject
 {
     function __construct($name);
 
     // @note routines for dealing with XML files
-    function readSchema(array $args = array());
-    function loadSchema(array $args = array());
+    function readSchema(Array $args = array());
+    function loadSchema(Array $args = array());
     function toArray(SimpleXMLElement $schemaobject=null);
     function toXML(SimpleXMLElement $schemaobject=null);
 }

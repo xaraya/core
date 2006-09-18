@@ -8,7 +8,7 @@
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
 **/
-    class DDObject extends Object
+    class DDObject extends Object implements IDDObject
     {
 
         public $name;
@@ -18,12 +18,12 @@
             $this->name = isset($name) ? $name : self::toString();
         }
 
-        function loadSchema($args = array())
+        function loadSchema(Array $args = array())
         {
             $this->schemaobject = $this->readSchema($args);
         }
 
-        function readSchema($args = array())
+        function readSchema(Array $args = array())
         {
             extract($args);
             $module = isset($module) ? $module : '';
