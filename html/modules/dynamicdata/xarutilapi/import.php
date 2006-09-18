@@ -136,7 +136,7 @@ function dynamicdata_utilapi_import($args)
             }
         } elseif ($roottag == 'items') {
 
-            var_dump($entry);exit;
+            $indices = array();
             foreach($xmlobject->children() as $child) {
                 $item = array();
                 $item['name'] = $child->getName();
@@ -158,19 +158,24 @@ function dynamicdata_utilapi_import($args)
                 $object = xarModAPIFunc('dynamicdata','user','getobject',array('objectid' => $objectid));
                 $primaryobject = Dynamic_Object_Master::getObject(array('objectid' => $object->baseancestor));
                 $objectproperties = $object->properties;
-                $indices = array();
                 $oldindex = 0;
                 foreach($objectproperties as $propertyname => $property) {
                     if (isset($child->$propertyname)) {
                         $value = (string)$child->$propertyname;
                         if ($property->type == 30049) {
+                                     var_dump($indices);
+                           echo "arrived<br/>";
                             if (in_array($value,array_keys($indices))) {
                                 $item[$propertyname] = $indices[$value];
+                            echo $indices[$value]. "in array<br/>";
                             } else {
                                 if (count($entry > 0)) {
                                     $entryvalue = array_shift($entry);
+                                    $item[$propertyname] = $entryvalue;
                                     $indices[$value] = $entryvalue;
+                           echo $entryvalue . "not in array<br/>";
                                 } else {
+                           echo "0 not in array<br/>";
                                     $item[$propertyname] = 0;
                                 }
                                 $item[$propertyname] = $indices[$value];
@@ -214,11 +219,11 @@ function dynamicdata_utilapi_import($args)
                 } else {
                     // create the item
                     $itemid = $objectcache[$objectid]->createItem($item);
-                    // add the new index to the array of indices for reference
-                    $indices[$oldindex] = $itemid; 
                 }
                 if (empty($itemid)) return;
 
+                // add the new index to the array of indices for reference
+                $indices[$oldindex] = $itemid; 
                 // keep track of the highest item id
                 if (empty($objectmaxid[$objectid]) || $objectmaxid[$objectid] < $itemid) {
                     $objectmaxid[$objectid] = $itemid;
