@@ -84,16 +84,16 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         self::delete($scope,$name,$itemid);
 
         // Only store setting if different from global setting
-        if ($value != $modsetting) {
+        if ($value != $modsetting) 
+        {
             $query = "INSERT INTO $module_itemvarstable
                         (xar_mvid, xar_itemid, xar_value)
-                    VALUES (?,?,?)";
+                      VALUES (?,?,?)";
             $bindvars = array($modvarid, $itemid, (string)$value);
+            $stmt = $dbconn->prepareStatement($query);
+            $stmt->executeUpdate($bindvars);
         }
-
-        $stmt = $dbconn->prepareStatement($query);
-        $stmt->executeUpdate($bindvars);
-
+        
         $cachename = $itemid . $name;
         xarCore::setCached('ModItem.Variables.' . $scope, $cachename, $value);
 
