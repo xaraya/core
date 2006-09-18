@@ -16,6 +16,7 @@
  * @param $args['xml'] XML string containing the object definition
  * @param $args['keepitemid'] (try to) keep the item id of the different items (default false)
  * @param $args['objectname'] optional name to override object name we're importing.
+ * @param $args['entry'] optional array of external references.
  * @return array object id on success, null on failure
  * @todo MichelV <1> add a check for already present definitions
                      so the errors get more gracious
@@ -33,7 +34,8 @@ function dynamicdata_utilapi_import($args)
     } elseif (!empty($file) && (!file_exists($file) || !preg_match('/\.xml$/',$file)) ) {
         throw new BadParameterException($file,'Invalid importfile "#(1)"');
     }
-
+    if (!isset($entry) || empty($entry) || !is_array($entry)) $entry = array();
+        
     $objectcache = array();
     $objectmaxid = array();
     $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
@@ -134,6 +136,7 @@ function dynamicdata_utilapi_import($args)
             }
         } elseif ($roottag == 'items') {
 
+            var_dump($entry);exit;
             foreach($xmlobject->children() as $child) {
                 $item = array();
                 $item['name'] = $child->getName();
@@ -161,7 +164,17 @@ function dynamicdata_utilapi_import($args)
                     if (isset($child->$propertyname)) {
                         $value = (string)$child->$propertyname;
                         if ($property->type == 30049) {
-                            if (in_array($value,array_keys($indices))) $item[$propertyname] = $indices[$value];
+                            if (in_array($value,array_keys($indices))) {
+                                $item[$propertyname] = $indices[$value];
+                            } else {
+                                if (count($entry > 0)) {
+                                    $entryvalue = array_shift($entry);
+                                    $indices[$value] = $entryvalue;
+                                } else {
+                                    $item[$propertyname] = 0;
+                                }
+                                $item[$propertyname] = $indices[$value];
+                            }
                             /*
                             try {
                                 $value = xarModAPIFunc($object->name,'user','getindex',array('value' => (string)$child->$propertyname,'type' => 'relative'));
