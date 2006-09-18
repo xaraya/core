@@ -182,7 +182,7 @@ class xarTemplateTag extends Object
             // 1. if getobject fails -> BLException (no tag, which is good, we catch and ignore this)
             // 2. if it succeeds (== no exception), we raise one ourselves which we do not catch, so it bubbles
             $this->getObject($this->getName());
-            throw new DuplicateTagException($tag_name,'<xar:#(1)> tag is already defined.');
+            throw new DuplicateTagException($this->getName(),'<xar:#(1)> tag is already defined.');
         } catch (BLException $e) {
             // Good, not registered yet
         }
