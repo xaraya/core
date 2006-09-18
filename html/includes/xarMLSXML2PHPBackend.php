@@ -212,7 +212,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
     }
 }
 
-class PHPBackendGenerator 
+class PHPBackendGenerator extends Object
 {
 
     public $locale;

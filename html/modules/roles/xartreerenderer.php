@@ -14,7 +14,7 @@
 sys::import('modules.roles.xarroles');
 
 // @ todo DOUBLE DEFINITION of same class (in privileges/xartreerenderer)
-class xarTreeRenderer
+class xarTreeRenderer extends Object
 {
     public $roles;
     public $tree;

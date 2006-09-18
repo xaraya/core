@@ -6,7 +6,7 @@
  *
  */
 if(!class_exists('PEAR')) {
-    class PEAR
+    class PEAR extends Object
     {
         /**
          * Re-implement raiseError method which normally would be in PEAR

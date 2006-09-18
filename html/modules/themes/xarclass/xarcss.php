@@ -39,7 +39,7 @@ define("CSSCOMMONBASE", "base");
  *
  * @package themes
 **/
-class xarCSS
+class xarCSS extends Object
 {
     // class vars and their defaults
     public $language   = 'html';       // only (x)html compliant css inclusion is supported out of the box
@@ -86,7 +86,7 @@ class xarCSS
     public $suppress   = false;        // true == this css is suppressed
 
     // constructor
-    function xarCSS($args)
+    function __construct($args)
     {
         extract($args);
         if (isset($method)) $this->method               = $method;
@@ -220,9 +220,9 @@ class xarCSS
  * @package themes
  */
 
-class tagqueue
+class tagqueue extends Object
 {
-    function tagqueue()
+    function __construct()
     {
     }
 

@@ -363,7 +363,7 @@ class xarXmlParser extends Object
  * @todo test,test,test
  * @todo document the strange xml_set_object thingie
  */
-class xarAbstractXmlHandler
+class xarAbstractXmlHandler extends Object
 {
     // Abstract functions
     function default_handler()

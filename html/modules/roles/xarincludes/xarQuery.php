@@ -21,7 +21,7 @@
   *  option) any later version.                                              *
   \**************************************************************************/
 
-class xarQuery
+class xarQuery extends Object
 {
     // Two unrelated conditions will be inserted into the query as AND or OR
     const implicitconjunction = "AND";
@@ -910,7 +910,7 @@ class xarQuery
     }
 
     /** These last three can probably be removed **/
-    function tostring()
+    function __toString()
     {
         $this->setstatement();
         $this->bindstatement();

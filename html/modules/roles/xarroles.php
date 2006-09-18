@@ -36,7 +36,7 @@ define('ROLES_GROUPTYPE',3);
  * @throws none
  * @todo none
  */
-class xarRoles
+class xarRoles extends Object
 {
     public $allgroups = array();
     public $users = array();
@@ -451,7 +451,7 @@ class xarRoles
  * @throws none
  * @todo none
  */
-class xarRole
+class xarRole extends Object
 {
     public $uid;          //the id of this user or group
     public $name;         //the name of this user or group

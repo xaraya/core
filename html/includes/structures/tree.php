@@ -78,7 +78,7 @@ class TreeNode extends Object implements ITreeNode
     }
 }
 
-class Tree implements ITree
+class Tree extends Object implements ITree
 {
     public $root;
     public $asksallowschildren;

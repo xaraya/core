@@ -21,7 +21,7 @@
  * @package PHPMailer
  * @author Chris Ryan
  */
-class SMTP
+class SMTP extends Object
 {
     /**
      *  SMTP server port

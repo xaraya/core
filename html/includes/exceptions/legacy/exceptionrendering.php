@@ -10,7 +10,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 
-class ExceptionRendering
+class ExceptionRendering extends Object
 {
     public $exception;
     public $id;

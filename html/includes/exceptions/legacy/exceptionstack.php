@@ -9,7 +9,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 
-class xarExceptionStack
+class xarExceptionStack extends Object
 {
     public $stack;
 

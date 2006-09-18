@@ -45,8 +45,8 @@ class Object extends stdClass
      * method invocations by the engine itself (when converting internally to a string)
      * If customized behaviour is needed, override __toString() in your class.
      *
-     * @return string
-     * @todo php version 5.2 is ok for sure, 5.1.4 works, but manual says it 
+     * @return string string representation of the object.
+     * @todo php version 5.2 is ok for sure, 5.1.4/5.1.6 works, but manual says it 
      *       shouldnt work with sprintf(), keep an eye on it.
     **/
     public final function toString()
@@ -61,11 +61,11 @@ class Object extends stdClass
      * We want to be consistent with objects, so we need a class to model a class
      * PHP allows directly only get_class() or something like that, which 
      * returns a string. 
-     * By defining a class called Class_ (note the underscore to prevent an name conflict)
+     * By defining a class called Class_ (note the underscore to prevent a name conflict)
      * we can get the class from each object and maintain the 'richness' of 
      * an object versus the 'flatness' of a string.
      *
-     * @return Class_
+     * @return Class_ the class of the object
     **/
     public final function getClass()
     {
@@ -100,8 +100,8 @@ final class Class_ extends Object
     {
         return $this->reflect->getName();
     }
-
 }
+
 /**
  * The sys class contains routines guaranteed to be available to do small
  * things which we do a lot as fast as possible.
@@ -110,6 +110,7 @@ final class Class_ extends Object
  * - very well documented, since they may be unreadable for performance reasons
  * - as superfast as possible.
  * - depend on nothing
+ *
  * @package core
 **/
 final class sys extends Object
@@ -198,17 +199,18 @@ final class sys extends Object
      * obviously the .key.php file must be a valid php file.
      *
      * @return string the var directory path name
-     **/
-     public static function varpath()
-     {
-         if (isset(self::$var)) return self::$var;
-         if (file_exists('./var/.key.php')) { // I/O (prolly cheap, but we could eliminate this one with a try/catch)
-             include './var/.key.php';        // I/O (doesnt use include_path, only looks in ./var/ so not that expensive either) 
-             self::$var = $protectedVarPath;
-         } else {
-             self::$var = './var';
-         }
-         return self::$var;
-     }
+     * @todo the .key.php construct seems odd
+    **/
+    public static function varpath()
+    {
+        if (isset(self::$var)) return self::$var;
+        if (file_exists('./var/.key.php')) { // I/O (prolly cheap, but we could eliminate this one with a try/catch)
+            include './var/.key.php';        // I/O (doesnt use include_path, only looks in ./var/ so not that expensive either) 
+            self::$var = $protectedVarPath;
+        } else {
+            self::$var = './var';
+        }
+        return self::$var;
+    }
 }
 ?>

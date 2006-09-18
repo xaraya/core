@@ -17,7 +17,7 @@
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
  */
-class Dynamic_Object_Interface
+class Dynamic_Object_Interface extends Object
 {
     public $args = array();
     public $object = null;

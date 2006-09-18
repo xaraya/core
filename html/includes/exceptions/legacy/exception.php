@@ -14,7 +14,7 @@
  *
  * @package exceptions
  */
-class xarException
+class xarException extends Object
 {
     public $msg = '';
     public $id = 0;
@@ -34,7 +34,7 @@ class xarException
         $this->stack = array();
     }
 
-    function toString()
+    function __toString()
     {
         return "code: " . $this->major . " " . $this->id . " | " . $this->msg;
     }

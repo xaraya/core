@@ -30,7 +30,7 @@ define('XAR_ENABLE_WINNOW', 0);
  * @throws  none
  * @todo    evaluate scoping
 */
-class xarMasks
+class xarMasks extends Object
 {
     public $dbconn;
     public $privilegestable;
@@ -1614,7 +1614,7 @@ class xarPrivileges extends xarMasks
  * @access  public
  * @throws  none
 */
-class xarMask
+class xarMask extends Object
 {
     public $sid;           //the id of this privilege
     public $name;          //the name of this privilege
@@ -2609,7 +2609,7 @@ class xarPrivilege extends xarMask
  * @author Marcel van der Boom <mrb@hsdev.com>
  * @todo  this is here as replacement for what we used to have in a table, but wrapping levels are a bit high for getting to this info
  **/
-final class SecurityLevel
+final class SecurityLevel extends Object
 {
     const INVALID =   -1;
     const NONE    =    0;
