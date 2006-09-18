@@ -163,30 +163,18 @@ function dynamicdata_utilapi_import($args)
                     if (isset($child->$propertyname)) {
                         $value = (string)$child->$propertyname;
                         if ($property->type == 30049) {
-                                     var_dump($indices);
-                           echo "arrived<br/>";
                             if (in_array($value,array_keys($indices))) {
                                 $item[$propertyname] = $indices[$value];
-                            echo $indices[$value]. "in array<br/>";
                             } else {
                                 if (count($entry > 0)) {
                                     $entryvalue = array_shift($entry);
                                     $item[$propertyname] = $entryvalue;
                                     $indices[$value] = $entryvalue;
-                           echo $entryvalue . "not in array<br/>";
                                 } else {
-                           echo "0 not in array<br/>";
                                     $item[$propertyname] = 0;
                                 }
                                 $item[$propertyname] = $indices[$value];
                             }
-                            /*
-                            try {
-                                $value = xarModAPIFunc($object->name,'user','getindex',array('value' => (string)$child->$propertyname,'type' => 'relative'));
-                                $item[$propertyname] = $value;
-                            } catch(Exception $e) {
-                                $item[$propertyname] = $value;
-                            } */
                         } else {
                             $item[$propertyname] = $value;
                         }
