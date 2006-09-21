@@ -21,6 +21,11 @@ sys::import('modules.base.xarproperties.Dynamic_Select_Property');
 
 class Dynamic_UserList_Property extends Dynamic_Select_Property
 {
+    public $id         = 37;
+    public $name       = 'userlist';
+    public $desc       = 'User List';
+    public $reqmodules = array('roles');
+
     public $grouplist = array();
     public $userstate = -1;
     public $showlist = array();
@@ -79,16 +84,6 @@ class Dynamic_UserList_Property extends Dynamic_Select_Property
                 }
             }
         }
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->id = 37;
-        $info->name = 'userlist';
-        $info->desc = 'User List';
-        $info->reqmodules = array('roles');
-        return $info;
     }
 
     // TODO: validate the selected user against the specified group(s).

@@ -18,23 +18,17 @@
 
 class Dynamic_Username_Property extends Dynamic_Property
 {
+    public $id         = 7;
+    public $name       = 'username';
+    public $desc       = 'Username';
+    public $reqmodules = array('roles');
+
     function __construct($args)
     {
         parent::__construct($args);
         $this->tplmodule = 'roles';
         $this->template = 'username';
         $this->filepath   = 'modules/roles/xarproperties';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('roles');
-        $info->id   = 7;
-        $info->name = 'username';
-        $info->desc = 'Username';
-
-        return $info;
     }
 
     function validateValue($value = null)

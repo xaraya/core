@@ -17,26 +17,19 @@ sys::import('modules.privileges.xarprivileges');
 
 class Dynamic_PrivilegesTree_Property extends Dynamic_Property
 {
+    public $id         = 30045;
+    public $name       = 'privilegestree';
+    public $desc       = 'PrivilegesTree';
+    public $reqmodules = array('privileges');
+
     function __construct($args)
     {
         parent::__construct($args);
 
-        extract($args);
         if (!isset($allowtoggle)) $allowtoggle = 0;
         $this->tplmodule = 'privileges';
         $this->filepath   = 'modules/privileges/xarproperties';
-        $this->template = $this->getTemplate();
         $this->privs = new xarPrivileges();
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('privileges');
-        $info->id   = 30045;
-        $info->name = 'privilegestree';
-        $info->desc = 'Dynamic PrivilegesTree';
-        return $info;
     }
 
     function showInput($data = array())

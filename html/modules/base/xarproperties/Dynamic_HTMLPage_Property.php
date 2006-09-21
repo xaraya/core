@@ -22,6 +22,10 @@ sys::import('modules.base.xarproperties.Dynamic_Select_Property');
  */
 class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
 {
+    public $id         = 13;
+    public $name       = 'webpage';
+    public $desc       = 'HTML Page';
+
     public $basedir  = '';
     public $filetype = '((xml)|(html))?';
 
@@ -42,17 +46,6 @@ class Dynamic_HTMLPage_Property extends Dynamic_Select_Property
             }
             $this->basedir = $basedir;
         }
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 13;
-        $info->name = 'webpage';
-        $info->desc = 'HTML Page';
-
-        return $info;
     }
 
     function validateValue($value = null)

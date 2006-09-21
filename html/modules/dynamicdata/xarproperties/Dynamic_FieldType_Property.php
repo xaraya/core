@@ -24,6 +24,11 @@ sys::import('modules.base.xarproperties.Dynamic_Select_Property');
  */
 class Dynamic_FieldType_Property extends Dynamic_Select_Property
 {
+    public $id         = 22;
+    public $name       = 'fieldtype';
+    public $desc       = 'Field Type';
+    public $reqmodules = array('dynamicdata');
+
     function __construct($args)
     {
         parent::__construct($args);
@@ -40,17 +45,6 @@ class Dynamic_FieldType_Property extends Dynamic_Select_Property
         }
         // sort em by name
         ksort($this->options);
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('dynamicdata');
-        $info->id   = 22;
-        $info->name = 'fieldtype';
-        $info->desc = 'Field Type';
-
-        return $info;
     }
 }
 ?>

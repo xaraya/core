@@ -24,6 +24,11 @@ sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
  */
 class Dynamic_Validation_Property extends Dynamic_TextBox_Property
 {
+    public $id         = 998;
+    public $name       = 'validation';
+    public $desc       = 'Validation';
+    public $reqmodules = array('dynamicdata');
+
     public $size      = 50;
     public $maxlength = 254;
 
@@ -33,17 +38,6 @@ class Dynamic_Validation_Property extends Dynamic_TextBox_Property
     {
         parent::__construct($args);
         $this->filepath   = 'modules/dynamicdata/xarproperties';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('dynamicdata');
-        $info->id   = 998;
-        $info->name = 'validation';
-        $info->desc = 'Validation';
-
-        return $info;
     }
 
     function validateValue($value = null)

@@ -14,6 +14,11 @@ sys::import('modules.dynamicdata.class.properties');
 
 class Dynamic_Array_Property extends Dynamic_Property
 {
+    public $id         = 999;
+    public $name       = 'array';
+    public $desc       = 'Array';
+    public $reqmodules = array('base');
+
     public $fields = array();
     public $size = 40;
 
@@ -28,16 +33,6 @@ class Dynamic_Array_Property extends Dynamic_Property
         if (!empty($this->validation) && strchr($this->validation,';')) {
             $this->fields = explode(';',$this->validation);
         }
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->id = 999;
-        $info->name = 'array';
-        $info->desc = 'Array';
-        $info->reqmodules = array('base');
-        return $info;
     }
 
     function validateValue($value = null)

@@ -24,16 +24,10 @@ sys::import('modules.dynamicdata.xarproperties.Dynamic_ItemID_Property');
  */
 class Dynamic_RelativeLink_Property extends Dynamic_ItemID_Property
 {
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('dynamicdata');
-        $info->id   = 30049;
-        $info->name = 'relativelink';
-        $info->desc = 'Relative Link';
-
-        return $info;
-    }
+    public $id         = 30049;
+    public $name       = 'relativelink';
+    public $desc       = 'Relative Link';
+    public $reqmodules = array('dynamicdata');
 }
 
 ?>

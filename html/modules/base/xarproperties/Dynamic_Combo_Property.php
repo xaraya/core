@@ -23,22 +23,15 @@ sys::import('modules.base.xarproperties.Dynamic_Select_Property');
  */
 class Dynamic_Combo_Property extends Dynamic_Select_Property
 {
+    public $id         = 506;
+    public $name       = 'combobox';
+    public $desc       = 'Combo Dropdown Box';
+
     function __construct($args)
     {
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template  = 'combobox';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 506;
-        $info->name = 'combobox';
-        $info->desc = 'Combo Dropdown Textbox';
-
-        return $info;
     }
 
     function checkInput($name = '', $value = null)

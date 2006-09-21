@@ -23,6 +23,12 @@ sys::import('modules.dynamicdata.class.properties');
  */
 class Dynamic_TextUpload_Property extends Dynamic_Property
 {
+    public $id         = 38;
+    public $name       = 'textupload';
+    public $desc       = 'Text Upload';
+    public $reqmodules = array('base');
+    public $args = array('rows' => 20);
+
     public $rows = 8;
     public $cols = 50;
 
@@ -69,18 +75,6 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
             $udir = $uname . '_' . $uid;
             $this->importdir = preg_replace('/\{user\}/',$udir,$this->importdir);
         }
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 38;
-        $info->name = 'textupload';
-        $info->desc = 'Text Upload';
-        $info->args = array('rows' => 20);
-
-        return $info;
     }
 
     function validateValue($value = null)

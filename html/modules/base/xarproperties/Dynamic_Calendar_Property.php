@@ -18,23 +18,16 @@
  */
 class Dynamic_Calendar_Property extends Dynamic_Property
 {
+    public $id         = 8;
+    public $name       = 'calendar';
+    public $desc       = 'Calendar';
+    public $reqmodules = array('base');
+
     function __construct($args)
     {
         parent::__construct($args);
         $this->tplmodule = 'base';
-        $this->template = 'calendar';
         $this->filepath   = 'modules/base/xarproperties';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 8;
-        $info->name = 'calendar';
-        $info->desc = 'Calendar';
-
-        return $info;
     }
 
     function validateValue($value = null)
@@ -85,8 +78,9 @@ class Dynamic_Calendar_Property extends Dynamic_Property
 
     function showInput($data = array())
     {
-        if (!isset($data['value'])) $value = $this->value;
-        if (!isset($data['id'])) $data['id'] = $this->id;
+        extract($data);
+        if (!isset($value)) $value = $this->value;
+        if (!isset($id)) $id = $this->id;
 
         // default time is unspecified
         if (empty($value)) {
@@ -102,7 +96,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
             // starting with PHP 5.1.0, strtotime returns false instead of -1
             if ($value === false) $value = -1;
         }
-        if (!isset($date['dateformat'])) {
+        if (!isset($dateformat)) {
             $dateformat = '%Y-%m-%d %H:%M:%S';
             if ($this->validation == 'date') {
                 $dateformat = '%Y-%m-%d';
@@ -119,8 +113,9 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         // $timeval = xarLocaleFormatDate($dateformat, $value);
         $data['baseuri']    = xarServerGetBaseURI();
         $data['dateformat'] = $dateformat;
-        $data['jsID']       = str_replace(array('[', ']'), '_', $data['id']);
+        $data['jsID']       = str_replace(array('[', ']'), '_', $id);
         // $data['timeval']    = $timeval;
+        $data['id'] = $id;
         $data['value']      = $value;
         return parent::showInput($data);
     }

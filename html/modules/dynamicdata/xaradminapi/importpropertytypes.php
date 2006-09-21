@@ -108,26 +108,35 @@ function dynamicdata_adminapi_importpropertytypes( $args )
             // Main part
             // Call the class method on each property to get the registration info
             if (!is_callable(array($propertyClass,'getRegistrationInfo'))) continue;
+            $baseInfo = new PropertyRegistration(array());
             $property = new $propertyClass(array());
-            $baseInfo = $property->getRegistrationInfo();
+            if (empty($property->id)) continue;   // Don't register the base property
+            $baseInfo->getRegistrationInfo($property);
             // Fill in the info we dont have in the registration class yet
             // TODO: see if we can have it in the registration class
             $baseInfo->class = $propertyClass;
             $baseInfo->filepath = $property->filepath . "/$propertyClass.php";
+            $currentproptypes[$baseInfo->id] = $baseInfo;
+            $proptypes[$baseInfo->id] = $baseInfo;
 
              // Check for aliases
-            if(!empty($baseInfo->aliases)) {
+             $aliases = $property->aliases();
+            if(!empty($aliases)) {
                 // Each alias is also a propertyRegistration object
-                foreach($baseInfo->aliases as $aliasInfo) {
+                foreach($aliases as $alias) {
+                    $aliasInfo = new PropertyRegistration($alias);
+                    $aliasInfo->class = $propertyClass;
+                    $aliasInfo->filepath = $property->filepath . "/$propertyClass.php";
+                    $currentproptypes[$aliasInfo->id] = $aliasInfo;
                     $proptypes[$aliasInfo->id] = $aliasInfo;
                 }
             }
-            $proptypes[$baseInfo->id] = $baseInfo;
 
             // Update database entry for this property
             // This will also do the aliases
             // TODO: check the result, now silent failure
-            $registered = $baseInfo->Register();
+            foreach ($currentproptypes as $proptype) $registered = $proptype->Register();
+            unset($currentproptypes);
         } // next property class in the same file
         $dbconn->commit();
     } catch(Exception $e) {

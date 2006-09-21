@@ -26,16 +26,9 @@ sys::import('modules.base.xarproperties.Dynamic_Select_Property');
  */
 class Dynamic_DateFormat_Property extends Dynamic_Select_Property
 {
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 33;
-        $info->name = 'dateformat';
-        $info->desc = 'Date Format';
-
-        return $info;
-    }
+    public $id         = 33;
+    public $name       = 'dateformat';
+    public $desc       = 'Date Format';
 
     /**
      * Get Options

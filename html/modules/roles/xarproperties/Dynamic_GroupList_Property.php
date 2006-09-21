@@ -21,6 +21,11 @@ sys::import('modules.base.xarproperties.Dynamic_Select_Property');
 
 class Dynamic_GroupList_Property extends Dynamic_Select_Property
 {
+    public $id         = 45;
+    public $name       = 'grouplist';
+    public $desc       = 'Group List';
+    public $reqmodules = array('roles');
+
     public $ancestorlist = array();
     public $parentlist   = array();
     public $grouplist    = array();
@@ -61,17 +66,6 @@ class Dynamic_GroupList_Property extends Dynamic_Select_Property
             $this->options = $options;
         }
 
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('roles');
-        $info->id = 45;
-        $info->name = 'grouplist';
-        $info->desc = 'Group List';
-        $info->reqmodules = array('roles');
-        return $info;
     }
 
     function validateValue($value = null)

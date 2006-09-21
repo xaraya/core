@@ -33,9 +33,6 @@ class BasicDataStore extends DDObject implements IBasicDataStore
     
     /**
      * Get the field name used to identify this property (by default, the property name itself)
-     *
-     * @todo seems odd, dunno
-     * @todo type hinting
      */
     function getFieldName(Dynamic_Property &$property)
     {

@@ -15,6 +15,12 @@
 */
 class Dynamic_TextArea_Property extends Dynamic_Property
 {
+    public $id         = 3;
+    public $name       = 'textarea_small';
+    public $desc       = 'Small Text Area';
+    public $reqmodules = array('base');
+    public $args       = array('rows' => 2);
+
     public $rows = 8;
     public $cols = 35;
 
@@ -35,31 +41,21 @@ class Dynamic_TextArea_Property extends Dynamic_Property
         }
     }
 
-    static function getRegistrationInfo()
+    function aliases()
     {
-        // Aliases
-        $a1 = new PropertyRegistration();
-        $a1->id   = 4;
-        $a1->name = 'textarea_medium';
-        $a1->desc = 'Medium Text Area';
-        $a1->args = array('rows' => 8);
+        $a1['id']   = 4;
+        $a1['name'] = 'textarea_medium';
+        $a1['desc'] = 'Medium Text Area';
+        $a1['args'] = array('rows' => 8);
+        $a1['reqmodules'] = array('base');
 
-        $a2 = new PropertyRegistration();
-        $a2->id   = 5;
-        $a2->name = 'textarea_large';
-        $a2->desc = 'Large Text Area';
-        $a2->args = array('rows' => 20);
+        $a2['id']   = 5;
+        $a2['name'] = 'textarea_large';
+        $a2['desc'] = 'Large Text Area';
+        $a2['args'] = array('rows' => 20);
+        $a2['reqmodules'] = array('base');
 
-        // Composite property registration.
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id      = 3;
-        $info->name    = 'textarea_small';
-        $info->desc    = 'Small Text Area';
-        $info->args    = array('rows' => 2);
-        $info->aliases = array($a1, $a2);
-
-        return $info;
+        return array($a1, $a2);
     }
 
     function validateValue($value = null)

@@ -21,6 +21,10 @@ sys::import('modules.base.xarproperties.Dynamic_Select_Property');
  */
 class Dynamic_ImageList_Property extends Dynamic_Select_Property
 {
+    public $id         = 35;
+    public $name       = 'imagelist';
+    public $desc       = 'Image List';
+
     public $basedir = '';
     public $baseurl = null;
     public $filetype = '(gif|jpg|jpeg|png|bmp)';
@@ -42,17 +46,6 @@ class Dynamic_ImageList_Property extends Dynamic_Select_Property
                 $this->baseurl = preg_replace('/\{theme\}/',$curtheme,$this->baseurl);
             }
         }
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 35;
-        $info->name = 'imagelist';
-        $info->desc = 'Image List';
-
-        return $info;
     }
 
     function validateValue($value = null)

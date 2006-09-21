@@ -24,22 +24,15 @@ sys::import('modules.base.xarproperties.Dynamic_Select_Property');
  */
 class Dynamic_CountryList_Property extends Dynamic_Select_Property
 {
+    public $id         = 42;
+    public $name       = 'countrylisting';
+    public $desc       = 'Country Dropdown';
+
     function __construct($args)
     {
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template  = 'countrylist';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 42;
-        $info->name = 'countrylisting';
-        $info->desc = 'Country Dropdown';
-
-        return $info;
     }
 
     function validateValue($value = null)

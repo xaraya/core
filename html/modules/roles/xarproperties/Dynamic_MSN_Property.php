@@ -21,22 +21,17 @@ sys::import('modules.base.xarproperties.Dynamic_URLIcon_Property');
 
 class Dynamic_MSN_Property extends Dynamic_URLIcon_Property
 {
+    public $id         = 30;
+    public $name       = 'msn';
+    public $desc       = 'MSN Messenger';
+    public $reqmodules = array('roles');
+
     function __construct($args)
     {
         parent::__construct($args);
         $this->tplmodule = 'roles';
         $this->template = 'msn';
         $this->filepath   = 'modules/roles/xarproperties';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->id     = 30;
-        $info->name   = 'msn';
-        $info->desc  = 'MSN Messenger';
-        $info->reqmodules = array('roles');
-        return $info;
     }
 
     function validateValue($value = null)

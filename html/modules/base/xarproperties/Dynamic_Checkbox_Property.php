@@ -22,23 +22,17 @@ sys::import('modules.dynamicdata.class.properties');
  */
 class Dynamic_Checkbox_Property extends Dynamic_Property
 {
+    public $id         = 14;
+    public $name       = 'checkbox';
+    public $desc       = 'Checkbox';
+    public $reqmodules = array('base');
+
     function __construct($args)
     {
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template  = 'checkbox';
         $this->filepath   = 'modules/base/xarproperties';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 14;
-        $info->name = 'checkbox';
-        $info->desc = 'Checkbox';
-
-        return $info;
     }
 
     function checkInput($name='', $value = null)

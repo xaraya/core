@@ -24,6 +24,11 @@ sys::import('modules.dynamicdata.class.properties');
 
 class Dynamic_FileUpload_Property extends Dynamic_Property
 {
+    public $id         = 9;
+    public $name       = 'fileupdload';
+    public $desc       = 'File Upload';
+    public $reqmodules = array('base');
+
     public $size = 40;
     public $maxsize = 1000000;
     public $basedir = '';
@@ -109,17 +114,6 @@ class Dynamic_FileUpload_Property extends Dynamic_Property
             $udir = $uname . '_' . $uid;
             $this->importdir = preg_replace('/\{user\}/',$udir,$this->importdir);
         }
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 9;
-        $info->name = 'fileupload';
-        $info->desc = 'File Upload';
-
-        return $info;
     }
 
     function checkInput($name='', $value = null)

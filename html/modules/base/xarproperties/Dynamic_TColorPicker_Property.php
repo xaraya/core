@@ -15,6 +15,11 @@
 */
 class Dynamic_TColorPicker_Property extends Dynamic_Property
 {
+    public $id         = 44;
+    public $name       = 'tcolorpicker';
+    public $desc       = 'Tigra Color Picker';
+    public $reqmodules = array('base');
+
     public $size      = 10;
     public $maxlength = 7;
     public $min       = 7;
@@ -25,17 +30,6 @@ class Dynamic_TColorPicker_Property extends Dynamic_Property
         $this->tplmodule = 'base';
         $this->template = 'tcolorpicker';
         $this->filepath = 'modules/base/xarproperties';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 44;
-        $info->name = 'tcolorpicker';
-        $info->desc = 'Tigra Color Picker';
-
-        return $info;
     }
 
     function validateValue($value = NULL)

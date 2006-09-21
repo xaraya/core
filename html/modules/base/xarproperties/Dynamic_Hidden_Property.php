@@ -18,23 +18,17 @@
  */
 class Dynamic_Hidden_Property extends Dynamic_Property
 {
+    public $id         = 18;
+    public $name       = 'hidden';
+    public $desc       = 'Hidden';
+    public $reqmodules = array('base');
+
     function __construct($args)
     {
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template = 'hidden';
         $this->filepath   = 'modules/base/xarproperties';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 18;
-        $info->name = 'hidden';
-        $info->desc = 'Hidden';
-
-        return $info;
     }
 
     function validateValue($value = null)

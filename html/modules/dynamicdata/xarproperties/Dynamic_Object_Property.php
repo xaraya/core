@@ -32,6 +32,11 @@ sys::import('modules.base.xarproperties.Dynamic_Select_Property');
 
 class Dynamic_Object_Property extends Dynamic_Select_Property
 {
+    public $id         = 24;
+    public $name       = 'object';
+    public $desc       = 'Object';
+    public $reqmodules = array('dynamicdata');
+
     function __construct($args)
     {
         parent::__construct($args);
@@ -72,17 +77,6 @@ class Dynamic_Object_Property extends Dynamic_Select_Property
                 }
             }
 //        }
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('dynamicdata');
-        $info->id   = 24;
-        $info->name = 'object';
-        $info->desc = 'Object';
-
-        return $info;
     }
 }
 

@@ -20,22 +20,15 @@ sys::import('modules.base.xarproperties.Dynamic_Select_Property');
  */
 class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
 {
+    public $id         = 39;
+    public $name       = 'multiselect';
+    public $desc       = 'Multiselect';
+
     function __construct($args)
     {
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template =  'multiselect';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 39;
-        $info->name = 'multiselect';
-        $info->desc = 'multiselect';
-
-        return $info;
     }
 
     function validateValue($value = null)

@@ -13,6 +13,11 @@
  */
 class Dynamic_SubForm_Property extends Dynamic_Property
 {
+    public $id         = 997;
+    public $name       = 'subform';
+    public $desc       = 'Sub Form';
+    public $reqmodules = array('dynamicdata');
+
     public $objectid  = 0;
     public $style     = 'serialized';
     public $title     = '';
@@ -35,17 +40,6 @@ class Dynamic_SubForm_Property extends Dynamic_Property
         if (!empty($this->validation)) {
             $this->parseValidation($this->validation);
         }
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('dynamicdata');
-        $info->id   = 997;
-        $info->name = 'subform';
-        $info->desc = 'Sub Form';
-
-        return $info;
     }
 
     function checkInput($name='', $value = null)

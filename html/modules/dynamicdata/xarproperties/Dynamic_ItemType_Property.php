@@ -24,6 +24,11 @@ sys::import('modules.base.xarproperties.Dynamic_NumberBox_Property');
  */
 class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
 {
+    public $id         = 20;
+    public $name       = 'itemtype';
+    public $desc       = 'Item Type';
+    public $reqmodules = array('dynamicdata');
+
     public $module   = ''; // get itemtypes for this module with getitemtypes()
     public $itemtype = null; // get items for this module+itemtype with getitemlinks()
     public $func     = null; // specific API call to retrieve a list of items
@@ -39,17 +44,6 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
         if (count($this->options) == 0 && !empty($this->validation)) {
             $this->parseValidation($this->validation);
         }
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('dynamicdata');
-        $info->id   = 20;
-        $info->name = 'itemtype';
-        $info->desc = 'Item Type';
-
-        return $info;
     }
 
     function validateValue($value = null)

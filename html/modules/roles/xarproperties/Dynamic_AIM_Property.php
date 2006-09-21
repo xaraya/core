@@ -27,23 +27,17 @@ sys::import('modules.base.xarproperties.Dynamic_URLIcon_Property');
  */
 class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
 {
+    public $id         = 29;
+    public $name       = 'aim';
+    public $desc       = 'AIM Screen Name';
+    public $reqmodules = array('roles');
+
     function __construct($args)
     {
         parent::__construct($args);
         $this->tplmodule = 'roles';
         $this->template = 'aim';
         $this->filepath   = 'modules/roles/xarproperties';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('roles');
-        $info->id   = 29;
-        $info->name = 'aim';
-        $info->desc = 'AIM Screen Name';
-
-        return $info;
     }
 
     function validateValue($value = null)

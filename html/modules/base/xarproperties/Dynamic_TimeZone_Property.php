@@ -26,22 +26,15 @@ sys::import('modules.base.xarproperties.Dynamic_Select_Property');
  */
 class Dynamic_TimeZone_Property extends Dynamic_Select_Property
 {
+    public $id         = 32;
+    public $name       = 'timezone';
+    public $desc       = 'Time Zone';
+
     function __construct($args)
     {
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template  = 'timezone';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id    = 32;
-        $info->name  = 'timezone';
-        $info->desc  = 'Time Zone';
-
-        return $info;
     }
 
     function validateValue($value = null)

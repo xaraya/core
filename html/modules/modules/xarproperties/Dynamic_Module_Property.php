@@ -25,21 +25,15 @@ sys::import('modules.base.xarproperties.Dynamic_Select_Property');
  */
 class Dynamic_Module_Property extends Dynamic_Select_Property
 {
+    public $id         = 19;
+    public $name       = 'module';
+    public $desc       = 'Module';
+    public $reqmodules = array('modules');
+
     function __construct($args)
     {
         parent::__construct($args);
         $this->filepath   = 'modules/modules/xarproperties';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('modules');
-        $info->id   = 19;
-        $info->name = 'module';
-        $info->desc = 'Module';
-
-        return $info;
     }
 
     function getOptions()

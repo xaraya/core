@@ -21,6 +21,10 @@ sys::import('modules.base.xarproperties.Dynamic_Select_Property');
  */
 class Dynamic_NumberList_Property extends Dynamic_Select_Property
 {
+    public $id         = 16;
+    public $name       = 'integerlist';
+    public $desc       = 'Number List';
+
     function __construct($args)
     {
         parent::__construct($args);
@@ -42,17 +46,6 @@ class Dynamic_NumberList_Property extends Dynamic_Select_Property
                 // you're in trouble :)
             }
         }
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 16;
-        $info->name = 'integerlist';
-        $info->desc = 'Number List';
-
-        return $info;
     }
 
     function validateValue($value = null)

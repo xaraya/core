@@ -28,22 +28,15 @@ sys::import('modules.base.xarproperties.Dynamic_Calendar_Property');
  */
 class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
 {
+    public $id         = 47;
+    public $name       = 'extendeddate';
+    public $desc       = 'Extended Date';
+
     function __construct($args)
     {
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template  = 'extendeddate';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 47;
-        $info->name = 'extendeddate';
-        $info->desc = 'Extended Date';
-
-        return $info;
     }
 
     /**

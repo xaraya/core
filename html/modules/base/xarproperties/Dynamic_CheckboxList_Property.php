@@ -22,22 +22,15 @@ sys::import('modules.base.xarproperties.Dynamic_Select_Property');
  */
 class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
 {
+    public $id         = 1115;
+    public $name       = 'checkboxlist';
+    public $desc       = 'Checkbox List';
+
     function __construct($args)
     {
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template  = 'checkboxlist';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 1115;
-        $info->name = 'checkboxlist';
-        $info->desc = 'Checkbox List';
-
-        return $info;
     }
 
     function checkInput($name='', $value = null)

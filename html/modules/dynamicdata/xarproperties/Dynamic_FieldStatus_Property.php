@@ -21,6 +21,11 @@ sys::import('modules.base.xarproperties.Dynamic_Select_Property');
  */
 class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
 {
+    public $id         = 25;
+    public $name       = 'fieldstatus';
+    public $desc       = 'Field Status';
+    public $reqmodules = array('categories');
+
     function __construct($args)
     {
         parent::__construct($args);
@@ -42,17 +47,6 @@ class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
                                  array('id' => Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY, 'name' => xarML('Can be added/changed')),
                              );
         }
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('dynamicdata');
-        $info->id   = 25;
-        $info->name = 'fieldstatus';
-        $info->desc = 'Field Status';
-
-        return $info;
     }
 
     function showInput($data = array())

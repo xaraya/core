@@ -21,16 +21,9 @@ sys::import('modules.base.xarproperties.Dynamic_Select_Property');
  */
 class Dynamic_LanguageList_Property extends Dynamic_Select_Property
 {
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 36;
-        $info->name = 'language';
-        $info->desc = 'Language List';
-
-        return $info;
-    }
+    public $id         = 36;
+    public $name       = 'language';
+    public $desc       = 'Language List';
 
     function getOptions()
     {

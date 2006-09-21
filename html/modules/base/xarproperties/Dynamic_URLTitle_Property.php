@@ -22,22 +22,15 @@ sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
  */
 class Dynamic_URLTitle_Property extends Dynamic_TextBox_Property
 {
+    public $id         = 41;
+    public $name       = 'urtitle';
+    public $desc       = 'URL + Title';
+
     function __construct($args)
     {
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template  = 'urltitle';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id    = 41;
-        $info->name  = 'urtitle';
-        $info->desc  = 'URL + Title';
-
-        return $info;
     }
 
     function validateValue($value = null)

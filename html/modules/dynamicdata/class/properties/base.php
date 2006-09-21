@@ -15,6 +15,7 @@ class Dynamic_Property extends Object
     // Attributes for registration
     public $id             = 0;
     public $name           = 'propertyName';
+    public $desc           = 'propertyDescription';
     public $label          = 'Property Label';
     public $type           = 1;
     public $default        = '';
@@ -22,7 +23,7 @@ class Dynamic_Property extends Object
     public $status         = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
     public $order          = 0;
     public $format         = '0'; //<-- eh?
-    public $requiresmodule = '';  // this module must be available before this property is enabled (optional)
+    public $reqmodules     = array();  // these modules must be available before this property is enabled (optional)
     public $aliases        = '';  // If the same property class is reused directly with just different base info, supply the alternate base properties here (optional)
     public $filepath       = 'modules/dynamicdata/xarproperties';         // where is our class for it?
 
@@ -31,7 +32,7 @@ class Dynamic_Property extends Object
     public $tplmodule = 'dynamicdata';
     public $validation = '';
     public $dependancies = '';    // semi-colon seperated list of files that must be present for this property to be available (optional)
-    public $args;
+    public $args           = array();
 
     public $datastore = '';   // name of the data store where this property comes from
 
@@ -50,6 +51,7 @@ class Dynamic_Property extends Object
      */
     function __construct(array $args)
     {
+        $this->template = $this->getTemplate();
         $this->args = serialize(array());
 
         if(!empty($args) && count($args) > 0)
@@ -197,13 +199,13 @@ class Dynamic_Property extends Object
         if(!isset($data['name']))     $data['name']     = 'dd_'.$this->id;
         if(!isset($data['id']))       $data['id']       = $data['name'];
         // mod for the tpl and what tpl the prop wants.
+
         if(!isset($data['module']))   $data['module']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
 
         if(!isset($data['tabindex'])) $data['tabindex'] = 0;
         if(!isset($data['value']))    $data['value']    = '';
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-
         // debug($data);
         // Render it
         return xarTplProperty($data['module'], $data['template'], 'showinput', $data);
@@ -466,7 +468,6 @@ class Dynamic_Property extends Object
      */
     function getModule()
     {
-        $info = $this->getBasePropertyInfo();
         $modulename = empty($this->tplmodule) ? $info['tplmodule'] : $this->tplmodule;
         return $modulename;
     }
@@ -478,9 +479,22 @@ class Dynamic_Property extends Object
     function getTemplate()
     {
         // If not specified, default to the registered name of the prop
-        $info = $this->getRegistrationInfo();
-        $template = empty($this->template) ? $info->name : $this->template;
+        $template = empty($this->template) ? $this->name : $this->template;
         return $template;
+    }
+    static function getRegistrationInfo()
+    {
+        $info = new PropertyRegistration();
+        $info->reqmodules = $this->reqmodules;
+        $info->id   = $this->id;
+        $info->name = $this->name;
+        $info->desc = $this->desc;
+
+        return $info;
+    }
+    function aliases()
+    {
+        return array();
     }
 }
 ?>

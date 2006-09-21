@@ -17,23 +17,17 @@ sys::import('modules.roles.xarroles');
 
 class Dynamic_RolesTree_Property extends Dynamic_Property
 {
+    public $id         = 30044;
+    public $name       = 'rolestree';
+    public $desc       = 'Roles Tree';
+    public $reqmodules = array('roles');
+
      function __construct($args)
     {
         parent::__construct($args);
 
-        $this->template = $this->getTemplate();
         $this->tplmodule = 'roles';
         $this->filepath   = 'modules/roles/xarproperties';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('roles');
-        $info->id   = 30044;
-        $info->name = 'rolestree';
-        $info->desc = 'Dynamic Roles Tree';
-        return $info;
     }
 
     function showInput($data = array())

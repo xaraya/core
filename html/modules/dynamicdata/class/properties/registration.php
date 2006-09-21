@@ -40,6 +40,16 @@ class PropertyRegistration extends Object
         return $res;
     }
 
+    function getRegistrationInfo(Object $class)
+    {
+        $this->id   = $class->id;
+        $this->name = $class->name;
+        $this->desc = $class->desc;
+        $this->reqmodules = $class->reqmodules;
+        $this->args = $class->args;
+        return $this;
+    }
+
     function Register()
     {
         static $stmt = null;

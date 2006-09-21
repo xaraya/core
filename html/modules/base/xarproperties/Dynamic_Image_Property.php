@@ -21,22 +21,15 @@ sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
  */
 class Dynamic_Image_Property extends Dynamic_TextBox_Property
 {
+    public $id         = 12;
+    public $name       = 'image';
+    public $desc       = 'Image';
+
     function __construct($args)
     {
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template  = 'image';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 12;
-        $info->name = 'image';
-        $info->desc = 'Image';
-
-        return $info;
     }
 
     function validateValue($value = null)

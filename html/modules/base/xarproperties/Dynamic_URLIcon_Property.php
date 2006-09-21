@@ -26,6 +26,10 @@ sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
  */
 class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
 {
+    public $id         = 27;
+    public $name       = 'urlicon';
+    public $desc       = 'URL Icon';
+
     public $icon;
 
     function __construct($args)
@@ -41,17 +45,6 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
            $this->icon='';
         }
         $this->template = 'urlicon';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id    = 27;
-        $info->name  = 'urlicon';
-        $info->desc  = 'URL Icon';
-
-        return $info;
     }
 
     function validateValue($value = null)

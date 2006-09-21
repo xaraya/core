@@ -24,6 +24,10 @@ sys::import('modules.base.xarproperties.Dynamic_Select_Property');
  */
 class Dynamic_DataSource_Property extends Dynamic_Select_Property
 {
+    public $id         = 23;
+    public $name       = 'datasource';
+    public $desc       = 'Data Source';
+
     function __construct($args)
     {
         parent::__construct($args);
@@ -40,17 +44,6 @@ class Dynamic_DataSource_Property extends Dynamic_Select_Property
         }
         // allow values other than those in the options
         $this->override = true;
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('dynamicdata');
-        $info->id   = 23;
-        $info->name = 'datasource';
-        $info->desc = 'Data Source';
-
-        return $info;
     }
 }
 ?>

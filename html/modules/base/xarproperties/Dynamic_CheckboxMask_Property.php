@@ -23,22 +23,15 @@ sys::import('modules.base.xarproperties.Dynamic_Select_Property');
  */
 class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
 {
+    public $id         = 1114;
+    public $name       = 'checkboxmask';
+    public $desc       = 'Checkbox Mask';
+
     function __construct($args)
     {
         parent::__construct($args);
         $this->tplmodule = 'base';
         $this->template =  'checkboxmask';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 1114;
-        $info->name = 'checkboxmask';
-        $info->desc = 'Checkbox Mask';
-
-        return $info;
     }
 
     function validateValue($value = null)

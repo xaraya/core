@@ -15,6 +15,11 @@
 */
 class Dynamic_Select_Property extends Dynamic_Property
 {
+    public $id   = 6;
+    public $name = 'dropdown';
+    public $desc = 'Dropdown List';
+    public $reqmodules = array('base');
+
     public $options;
     public $func;
     public $itemfunc;
@@ -37,16 +42,6 @@ class Dynamic_Select_Property extends Dynamic_Property
         }
     }
 
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 6;
-        $info->name = 'dropdown';
-        $info->desc = 'Dropdown List';
-
-        return $info;
-    }
     function validateValue($value = null)
     {
         if (isset($value)) {

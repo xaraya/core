@@ -22,6 +22,11 @@ sys::import('modules.dynamicdata.class.properties');
  */
 class Dynamic_TextBox_Property extends Dynamic_Property
 {
+    public $id         = 2;
+    public $name       = 'textbox';
+    public $desc       = 'Text Box';
+    public $reqmodules = array('base');
+
     public $size      = 50;
     public $maxlength = 254;
 
@@ -42,17 +47,6 @@ class Dynamic_TextBox_Property extends Dynamic_Property
         if (!empty($this->validation)) {
             $this->parseValidation($this->validation);
         }
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 2;
-        $info->name = 'textbox';
-        $info->desc = 'Text Box';
-
-         return $info;
     }
 
     function validateValue($value = null)

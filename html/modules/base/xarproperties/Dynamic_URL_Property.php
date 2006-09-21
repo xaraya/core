@@ -27,21 +27,14 @@ sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
  */
 class Dynamic_URL_Property extends Dynamic_TextBox_Property
 {
+    public $id         = 11;
+    public $name       = 'url';
+    public $desc       = 'URL';
+
     function __construct($args)
     {
         parent::__construct($args);
         $this->template = 'url';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id    = 11;
-        $info->name  = 'url';
-        $info->desc  = 'URL';
-
-        return $info;
     }
 
     function validateValue($value = null)

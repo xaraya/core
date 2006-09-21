@@ -21,23 +21,17 @@ sys::import('modules.base.xarproperties.Dynamic_URLIcon_Property');
 
 class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
 {
+    public $id         = 31;
+    public $name       = 'yahoo';
+    public $desc       = 'Yahoo Messenger';
+    public $reqmodules = array('roles');
+
     function __construct($args)
     {
         parent::__construct($args);
         $this->tplmodule = 'roles';
         $this->template = 'yahoo';
         $this->filepath   = 'modules/roles/xarproperties';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('roles');
-        $info->id     = 31;
-        $info->name   = 'yahoo';
-        $info->desc   = 'Yahoo Messenger';
-        $info->reqmodules = array('roles');
-        return $info;
     }
 
     function validateValue($value = null)

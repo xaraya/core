@@ -17,6 +17,12 @@
 sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
 class Dynamic_PassBox_Property extends Dynamic_TextBox_Property
 {
+    public $id         = 46;
+    public $name       = 'password';
+    public $desc       = 'Password';
+    public $reqmodules = array('roles');
+    public $aliases    = array('id' => 461);
+
     public $size = 25;
     public $maxlength = 254;
 
@@ -42,23 +48,13 @@ class Dynamic_PassBox_Property extends Dynamic_TextBox_Property
         }
     }
 
-    static function getRegistrationInfo()
+    function aliases()
     {
-        // make type password an alias, since it's a very common mistake
-        $a1 = new PropertyRegistration();
-        $a1->id = 461;
-        $a1->name = 'password';
-        $a1->desc = 'Password Text Box';
-
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('roles');
-        $info->id   = 46;
-        $info->name = 'passbox';
-        $info->desc = 'Password Text Box';
-        $info->aliases = array($a1);
-        $info->aliases = array($a1);
-
-        return $info;
+        $a1['id']   = 461;
+        $a1['name'] = 'password';
+        $a1['desc'] = 'Password Text Box';
+        $a1['reqmodules'] = array('roles');
+        return array($a1);
     }
 
     function validateValue($value = null)

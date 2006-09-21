@@ -21,22 +21,15 @@ sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
  */
 class Dynamic_FloatBox_Property extends Dynamic_TextBox_Property
 {
+    public $id         = 17;
+    public $name       = 'floatbox';
+    public $desc       = 'Number Box (float)';
+
     function __construct($args)
     {
         parent::__construct($args);
         $this->size      = 10;
         $this->maxlength = 30;
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('base');
-        $info->id   = 17;
-        $info->name = 'floatbox';
-        $info->desc = 'Number Box (float)';
-
-        return $info;
     }
 
     function validateValue($value = null)

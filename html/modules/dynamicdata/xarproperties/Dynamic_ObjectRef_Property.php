@@ -29,6 +29,11 @@ sys::import('modules.base.xarproperties.Dynamic_Select_Property');
  */
 class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
 {
+    public $id         = 507;
+    public $name       = 'objectref';
+    public $desc       = 'Select value from other object';
+    public $reqmodules = array('dynamicdata');
+
     // We explicitly use names here instead of id's, so we are independent of
     // how dd assigns them at a given time. Otherwise the validation is not
     // exportable to other sites.
@@ -42,17 +47,6 @@ class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
         $this->template = 'objectref';
         $this->tplmodule = 'dynamicdata';
         $this->filepath   = 'modules/dynamicdata/xarproperties';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('dynamicdata');
-        $info->id   = 507;
-        $info->name = 'objectref';
-        $info->desc = 'Select value from other object';
-
-        return $info;
     }
 
     // Return a list of array(id => value) for the possible options

@@ -24,6 +24,10 @@ sys::import('modules.base.xarproperties.Dynamic_Select_Property');
  */
 class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
 {
+    public $id         = 600;
+    public $name       = 'moduleitemtype';
+    public $desc       = 'Parent';
+    public $reqmodules = array('dynamicdata');
 
     public $referencemoduleid = 182;
 
@@ -32,17 +36,6 @@ class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
         parent::__construct($args);
         $this->filepath   = 'modules/dynamicdata/xarproperties';
         if (isset($args['modid'])) $this->referencemoduleid = $args['modid'];
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('dynamicdata');
-        $info->id   = 600;
-        $info->name = 'moduleitemtype';
-        $info->desc = 'Parent';
-
-        return $info;
     }
 
     function validateValue($value = null)

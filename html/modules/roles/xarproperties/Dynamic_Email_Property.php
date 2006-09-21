@@ -23,23 +23,17 @@ sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
 
 class Dynamic_Email_Property extends Dynamic_TextBox_Property
 {
+    public $id         = 26;
+    public $name       = 'email';
+    public $desc       = 'E-Mail';
+    public $reqmodules = array('roles');
+
     function __construct($args)
     {
         parent::__construct($args);
         $this->tplmodule = 'roles';
         $this->template = 'email';
         $this->filepath   = 'modules/roles/xarproperties';
-    }
-
-    static function getRegistrationInfo()
-    {
-        $info = new PropertyRegistration();
-        $info->reqmodules = array('roles');
-        $info->id     = 26;
-        $info->name   = 'email';
-        $info->desc  = 'E-Mail';
-        $info->reqmodules = array('roles');
-        return $info;
     }
 
     function validateValue($value = null)
