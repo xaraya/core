@@ -27,6 +27,7 @@ function roles_admin_sendmail()
     // Get user information
 
     // Get the current query
+    sys::import('modules.roles.class.xarQuery');
     $q = new xarQuery();
     $q = $q->sessiongetvar('rolesquery');
 

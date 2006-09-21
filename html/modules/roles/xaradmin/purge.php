@@ -62,6 +62,7 @@ function roles_admin_purge($args)
         }
 // --- display roles that can be recalled
         //Create the selection
+        sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery('SELECT',$rolestable);
         $q->addfields(array('xar_uid AS uid',
                     'xar_uname AS uname',

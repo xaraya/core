@@ -46,6 +46,7 @@ function roles_admin_createmail()
         );
         if ($selstyle == 0) $selstyle =2;
         // Create a query to send to sendmail
+        sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery('SELECT');
         $q->addtable($xartable['roles'],'r');
         $q->addfields(array('r.xar_uid AS uid',

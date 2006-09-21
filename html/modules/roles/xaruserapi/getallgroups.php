@@ -20,12 +20,12 @@
 function roles_userapi_getallgroups($args)
 {
     extract($args);
-    $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
 
 // Security Check
     if(!xarSecurityCheck('ViewRoles')) return;
 
+    sys::import('modules.roles.class.xarQuery');
     $q = new xarQuery('SELECT');
     $q->addtable($xartable['roles'],'r');
     $q->addtable($xartable['rolemembers'], 'rm');

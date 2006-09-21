@@ -17,6 +17,7 @@ function roles_admin_displayrole()
 {
     if (!xarVarFetch('uid','int:1:',$uid)) return;
 
+    sys::import('modules.roles.class.roles');
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
 
@@ -42,7 +43,7 @@ function roles_admin_displayrole()
     $data['itemtypename'] = $types[$data['itemtype']]['label'];
     $data['name'] = $name;
     $data['phome'] = $role->getHome();
-    
+
     if (xarModGetVar('roles','setprimaryparent')) { //we have activated primary parent
         $primaryparent = $role->getPrimaryParent();
         $prole = xarUFindRole($primaryparent);

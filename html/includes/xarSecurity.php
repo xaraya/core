@@ -22,6 +22,18 @@
  *
  */
 
+    define('ROLES_STATE_DELETED',0);
+    define('ROLES_STATE_INACTIVE',1);
+    define('ROLES_STATE_NOTVALIDATED',2);
+    define('ROLES_STATE_ACTIVE',3);
+    define('ROLES_STATE_PENDING',4);
+    define('ROLES_STATE_CURRENT',98);
+    define('ROLES_STATE_ALL',99);
+
+    define('ROLES_ROLETYPE',1);
+    define('ROLES_USERTYPE',2);
+    define('ROLES_GROUPTYPE',3);
+
 //Maybe changing this touch to a centralized API would be a good idea?
 //Even if in the end it would use touched files too...
 sys::import('xarCore'); // Why is this?
@@ -32,7 +44,7 @@ if (file_exists(sys::varpath() . '/security/on.touch')) {
 // FIXME: Can we reverse this? (i.e. the module loading the files from here?)
 //        said another way, can we move the two files to /includes (partially preferably)
 sys::import('modules.privileges.class.privilege');
-sys::import('modules.roles.xarroles');
+sys::import('modules.roles.class.role');
 
 
 /**

@@ -13,7 +13,7 @@
  */
 
 sys::import('structures.tree');
-sys::import('modules.roles.xarroles');
+sys::import('modules.roles.class.roles');
 
 class Dynamic_RolesTree_Property extends Dynamic_Property
 {

@@ -43,6 +43,7 @@
         if ($extensions) {
             // Get all the objects at once
             $xartable =& xarDBGetTables();
+            sys::import('modules.roles.class.xarQuery');
             $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
             $q->addfields(array('xar_object_id AS objectid','xar_object_label AS objectlabel','xar_object_moduleid AS moduleid','xar_object_itemtype AS itemtype','xar_object_parent AS parent'));
             $q->eq('xar_object_moduleid',$moduleid);

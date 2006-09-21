@@ -76,6 +76,7 @@ function roles_admin_showusers()
     }
 
     // Check if we already have a selection
+        sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery();
         $q = $q->sessiongetvar('rolesquery');
     if (empty($q) || isset($reload)) {

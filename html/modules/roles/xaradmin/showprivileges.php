@@ -35,6 +35,7 @@ function roles_admin_showprivileges()
     $data['parents'] = $parents;
 
     // Call the Privileges class
+    sys::import('modules.privileges.class.privileges');
     $privileges = new xarPrivileges();
 
 // -------------------------------------------------------------------

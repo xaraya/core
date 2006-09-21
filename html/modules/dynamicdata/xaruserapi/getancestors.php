@@ -45,6 +45,7 @@ function &dynamicdata_userapi_getancestors($args)
     }
 
 // -------------- Get all the dynamic objects at once
+    sys::import('modules.roles.class.xarQuery');
     $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
     $q->addfields(array('xar_object_id AS objectid','xar_object_name AS objectname','xar_object_moduleid AS moduleid','xar_object_itemtype AS itemtype','xar_object_parent AS parent'));
     $q->eq('xar_object_moduleid',$moduleid);

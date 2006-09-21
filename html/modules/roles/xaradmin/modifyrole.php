@@ -31,6 +31,7 @@ function roles_admin_modifyrole()
     $uid = isset($itemid) ? $itemid : $uid;
 
     // Call the Roles class and get the role to modify
+    sys::import('modules.roles.class.roles');
     $roles = new xarRoles();
     $role = $roles->getRole($uid);
 

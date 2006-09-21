@@ -39,6 +39,7 @@ function roles_userapi_get($args)
     $rolestable = $xartable['roles'];
 
     // Get user
+    sys::import('modules.roles.class.xarQuery');
     $q = new xarQuery('SELECT',$rolestable);
     $q->addfields(array(
                   'xar_uid', // UID is a reserved word in Oracle (cannot be redefined)
