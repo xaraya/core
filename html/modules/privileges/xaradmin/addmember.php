@@ -42,6 +42,7 @@ function privileges_admin_addmember()
     }
 
 // call the Privileges class and get the parent and child objects
+    sys::import('modules.privileges.class.privileges');
     $privs = new xarPrivileges();
     $priv = $privs->getPrivilege($pid);
     $member = $privs->getPrivilege($privid);

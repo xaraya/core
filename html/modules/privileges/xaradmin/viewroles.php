@@ -26,6 +26,7 @@ function privileges_admin_viewroles()
     xarSessionDelVar('privileges_statusmsg');
 
     //Call the Privileges class and get the privilege
+    sys::import('modules.privileges.class.privileges');
     $privs = new xarPrivileges();
     $priv = $privs->getPrivilege($pid);
 
@@ -40,10 +41,6 @@ function privileges_admin_viewroles()
                                     'auth_module'=>$role->getAuthModule()));
     }
 
-    // Load Template
-    sys::import('modules.privileges.xartreerenderer');
-    $renderer = new xarTreeRenderer();
-
 //Get the array of parents of this privilege
     $parents = array();
     foreach ($priv->getParents() as $parent) {
@@ -54,13 +51,11 @@ function privileges_admin_viewroles()
     $data['pname'] = $priv->getName();
     $data['pid'] = $pid;
     $data['roles'] = $curroles;
-    //    $data['allgroups'] = $roles->getAllPrivileges();
     $data['removeurl'] = xarModURL('privileges',
                              'admin',
                              'removerole',
                              array('pid'=>$pid));
-    //    $data['trees'] = $renderer->drawtrees($data['show']);
-    $data['trees'] = $renderer->maketrees($data['show']);
+
     $data['parents'] = $parents;
     $data['groups'] = xarModAPIFunc('roles','user','getallgroups');
     return $data;

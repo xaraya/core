@@ -43,6 +43,7 @@ function privileges_admin_updateprivilege()
 
 // call the Privileges class and update the values
 
+    sys::import('modules.privileges.class.privileges');
     if ($type =="empty") {
 
 // this is just a container for other privileges

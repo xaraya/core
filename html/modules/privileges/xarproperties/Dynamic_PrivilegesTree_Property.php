@@ -13,7 +13,7 @@
  */
 
 sys::import('structures.tree');
-sys::import('modules.privileges.xarprivileges');
+sys::import('modules.privileges.class.privileges');
 
 class Dynamic_PrivilegesTree_Property extends Dynamic_Property
 {

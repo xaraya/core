@@ -25,6 +25,7 @@ function privileges_admin_removerole()
     $role = $roles->getRole($roleid);
 
 //Call the Privileges class and get the privilege to be de-assigned
+    sys::import('modules.privileges.class.privileges');
     $privs = new xarPrivileges();
     $priv = $privs->getPrivilege($pid);
 

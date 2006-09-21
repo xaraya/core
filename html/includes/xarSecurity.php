@@ -31,7 +31,7 @@ if (file_exists(sys::varpath() . '/security/on.touch')) {
 
 // FIXME: Can we reverse this? (i.e. the module loading the files from here?)
 //        said another way, can we move the two files to /includes (partially preferably)
-sys::import('modules.privileges.xarprivileges');
+sys::import('modules.privileges.class.privilege');
 sys::import('modules.roles.xarroles');
 
 
@@ -497,6 +497,7 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
        return true;
     }
     else {
+        sys::import('modules.privileges.class.masks');
        $masks = new xarMasks();
        return $masks->xarSecurityCheck($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
     }

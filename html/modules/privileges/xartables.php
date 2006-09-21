@@ -33,6 +33,8 @@ function privileges_xartables()
     $instances   = xarDBGetSiteTablePrefix() . '_instances';
     $modules     = xarDBGetSiteTablePrefix() . '_modules';
     $privsets    = xarDBGetSiteTablePrefix() . '_security_privsets';
+    $realms      = xarDBGetSiteTablePrefix() . '_security_realms';
+    $instances   = xarDBGetSiteTablePrefix() . '_security_instances';
 
     // Set the table names
     $tables['privileges']     = $privileges;
@@ -44,6 +46,8 @@ function privileges_xartables()
     $tables['instances']      = $instances;
     $tables['modules']        = $modules;
     $tables['security_privsets']      = $privsets;
+    $tables['security_realms']= $realms;
+    $tables['security_instances']= $instances;
 
     // Return the table information
     return $tables;

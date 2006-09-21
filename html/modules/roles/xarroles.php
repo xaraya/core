@@ -855,7 +855,7 @@ class xarRole extends Object
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->uid));
 
-        sys::import('modules.privileges.xarprivileges');
+        sys::import('modules.privileges.class.privilege');
         $privileges = array();
         while ($result->next()) {
             list($pid, $name, $realm, $module, $component, $instance, $level,

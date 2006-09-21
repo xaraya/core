@@ -22,6 +22,7 @@ function privileges_admin_displayprivilege()
     if(!xarVarFetch('pinstance',     'array', $instance,   array(), XARVAR_NOT_REQUIRED)) {return;}
 
 //Call the Privileges class and get the privilege to be modified
+    sys::import('modules.privileges.class.privileges');
     $privs = new xarPrivileges();
     $priv = $privs->getPrivilege($pid);
 
@@ -36,10 +37,7 @@ function privileges_admin_displayprivilege()
     if(isset($pid)) {$data['ppid'] = $pid;}
     else {$data['ppid'] = $priv->getID();}
 
-    sys::import('modules.privileges.xartreerenderer');
-    $renderer = new xarTreeRenderer();
-
-    $data['tree'] = $renderer->drawtree($renderer->maketree($priv));
+    $data['priv'] = $priv;
     $data['pname'] = $priv->getName();
     $data['prealm'] = $priv->getRealm();
     $data['pmodule'] = $priv->getModule();
