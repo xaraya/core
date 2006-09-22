@@ -55,11 +55,11 @@ class xarQuery extends Object
         // Check if we're called ok
         if (!in_array($type,array("SELECT","INSERT","UPDATE","DELETE")))
             throw new ForbiddenOperationException($type,'This operation is not supported yet. "#(1)"');
-        
+
         // Set the defaults
         $this->type = $type;             // querytype
         $this->key = time();             // ?
-        $this->_addtables($tables);      
+        $this->_addtables($tables);
         $this->_addfields($fields);
         $this->dbconn =& xarDBGetConn();
     }
@@ -79,9 +79,9 @@ class xarQuery extends Object
         if ($this->type != 'SELECT') {
             $this->rows = $stmt->executeUpdate($this->bindvars);
             $this->bindvars = array(); //?
-            // TODO: it would be nice to return the nr of rows here, we get that for free 
+            // TODO: it would be nice to return the nr of rows here, we get that for free
             //       in the callee then, and it's consistent with creole interface.
-            return true; 
+            return true;
         }
 
         // If there is a limit, configure the statement as such
@@ -90,7 +90,7 @@ class xarQuery extends Object
             $stmt->setLimit($this->rowstodo);
             $stmt->setOffset($begin);
             $this->statement .= " LIMIT " . $begin . "," . $this->rowstodo;
-        } 
+        }
 
         // Execute the configured statement.
         $result = $stmt->executeQuery($this->bindvars,ResultSet::FETCHMODE_ASSOC);
@@ -131,8 +131,8 @@ class xarQuery extends Object
 
     function row($row=0)
     {
-        // CHECKME: this has a functional dependency with display=1 
-        // the middleware could solve this, see seek() method, 
+        // CHECKME: this has a functional dependency with display=1
+        // the middleware could solve this, see seek() method,
         // so it can also work without fetching the whole resultset)
         if (empty($this->output)) return $this->output;
         return $this->output[$row];
@@ -534,7 +534,7 @@ class xarQuery extends Object
         }
 
         if (eregi('IN', $condition['op'])) {
-            // IN (a[,b,c,d]) 
+            // IN (a[,b,c,d])
             $condit = is_array($condition['field2']) ? $condition['field2'] : array($condition['field2']);
 
             $elements = array();
@@ -552,7 +552,7 @@ class xarQuery extends Object
             $sqlfield = $condition['field2'];
         }
         $condition['op'] = eregi('JOIN', $condition['op']) ? '=' : $condition['op'];
-        
+
         return $condition['field1'] . " " . $condition['op'] . " " . $sqlfield;
     }
 
@@ -717,7 +717,7 @@ class xarQuery extends Object
                 else {
                 }
             }
-            if ($bindstring != "") $bindstring = substr($bindstring,0,-2); // ', ' strip 
+            if ($bindstring != "") $bindstring = substr($bindstring,0,-2); // ', ' strip
             break;
         case "DELETE" :
             break;
@@ -907,6 +907,11 @@ class xarQuery extends Object
             $this->israwstatement = 1;
             $this->statement = $this->_statement();
         }
+    }
+    function nextid($table="", $id="")
+    {
+        if (!isset($this->dbconn)) $this->dbconn =& xarDBGetConn();
+        return $this->dbconn->PO_Insert_ID($table,$id);
     }
 
     /** These last three can probably be removed **/

@@ -43,8 +43,8 @@ if (file_exists(sys::varpath() . '/security/on.touch')) {
 
 // FIXME: Can we reverse this? (i.e. the module loading the files from here?)
 //        said another way, can we move the two files to /includes (partially preferably)
-sys::import('modules.privileges.class.privilege');
-sys::import('modules.roles.class.role');
+sys::import('modules.privileges.class.privileges');
+sys::import('modules.roles.class.roles');
 
 
 /**

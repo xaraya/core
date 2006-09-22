@@ -10,7 +10,7 @@
             </xar:if>
 
             <xar:if condition="isset($option['checked']) and !empty($option['checked']) and ($option['checked']==true)">
-                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="true" />
+                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked" />
             <xar:else />
                 <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" />
             </xar:if>
@@ -28,7 +28,7 @@
             </xar:if>
 
             <xar:if condition="isset($option['checked']) and !empty($option['checked']) and ($option['checked']==true)">
-                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="true" />
+                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked" />
             <xar:else />
                 <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" />
             </xar:if>
