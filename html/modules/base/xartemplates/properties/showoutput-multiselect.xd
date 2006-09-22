@@ -1,4 +1,5 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+
 <xar:set name="join">""</xar:set>
 <xar:foreach in="$options" value="$option">
         <xar:if condition="in_array($option['id'],$value)" >
@@ -6,3 +7,4 @@
               <xar:set name="join">"|"</xar:set>
         </xar:if>
 </xar:foreach>
+
