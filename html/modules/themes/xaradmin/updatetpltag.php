@@ -31,9 +31,9 @@ function themes_admin_updatetpltag()
     if (!xarSecurityCheck('AdminTheme', 0, 'All', '::')) return;
 
     if (!xarSecConfirmAuthKey()) return;
-    /* This is not implemented and will error - comment until fully implemented
     // find all attributes (if any)
     $aAttributes = array();
+    /* This is not implemented and will error - comment until fully implemented
     for ($i=0; $i<10; $i++ ) {
         //xarVarFetch("tag_attrname[$i]", 'isset', $current_attrib);
         if (!xarVarFetch("tag_attrname[$i]", 'isset', $current_attrib,  NULL, XARVAR_DONT_SET)) {return;}
