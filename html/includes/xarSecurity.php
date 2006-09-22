@@ -435,8 +435,7 @@ function xarReturnPrivilege($pid,$name,$realm,$module,$component,$instance,$leve
  */
 function xarSecurityLevel($levelname)
 {
-    $masks = new xarMasks();
-    return $masks->xarSecLevel($levelname);
+    return xarMasks::xarSecLevel($levelname);
 }
 
 /* xarPrivExists: checks whether a privilege exists.
@@ -464,8 +463,7 @@ function xarPrivExists($name)
  */
 function xarMaskExists($name,$module="All",$component="All")
 {
-    $masks = new xarMasks();
-    $mask = $masks->getMask($name,$module,$component,true);
+    $mask = xarMasks::getMask($name,$module,$component,true);
     if ($mask) return true;
     else return false;
 }
@@ -480,8 +478,7 @@ function xarMaskExists($name,$module="All",$component="All")
  */
 function xarQueryMask($mask, $showException=1, $component='', $instance='', $module='', $role='')
 {
-   $masks = new xarMasks();
-   return $masks->querymask($mask, $component, $instance, $module, $role,$pnrealm,$pnlevel);
+   return xarMasks::querymask($mask, $component, $instance, $module, $role,$pnrealm,$pnlevel);
 }
 
 /**
@@ -510,8 +507,7 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
     }
     else {
         sys::import('modules.privileges.class.masks');
-       $masks = new xarMasks();
-       return $masks->xarSecurityCheck($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
+       return xarMasks::xarSecurityCheck($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
     }
 }
 
@@ -530,8 +526,7 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
  */
 function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$description='')
 {
-        $masks = new xarMasks();
-        return $masks->register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
+        return xarMasks::register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
 }
 
 /**
@@ -543,8 +538,7 @@ function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$descr
  */
 function xarUnregisterMask($name)
 {
-    $masks = new xarMasks();
-    return $masks->unregister($name);
+    return xarMasks::unregister($name);
 }
 
 /**
