@@ -1,16 +1,16 @@
 <?php
 // Database Configuration
 // Database Username: the username that will be used to connect to the database.
-$systemConfiguration['DB.UserName'] = '';
+$systemConfiguration['DB.UserName'] = 'xaruser';
 // Database Password: the password that will be used to connect to the database.
-$systemConfiguration['DB.Password'] = '';
+$systemConfiguration['DB.Password'] = 'Woezel';
 // Database Host: the host name where the database server is located.
 // A different port can also be specified, e.g. 'localhost:12345'
 $systemConfiguration['DB.Host'] = 'localhost';
 // Database Name: the name of the database to connect to.
-$systemConfiguration['DB.Name'] = 'Xaraya';
+$systemConfiguration['DB.Name'] = 'xarcore';
 // Database Type: the type of the database server.
-$systemConfiguration['DB.Type'] = 'mysql';
+$systemConfiguration['DB.Type'] = 'postgres';
 // Database TablePrefix: a string that will be prefixed to every database tables that are part of the core.
 //                       Those tables are shared across multi-sites.
 $systemConfiguration['DB.TablePrefix'] = 'xar';
