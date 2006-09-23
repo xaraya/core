@@ -23,8 +23,17 @@
     </h2>
     <xar:if condition="!empty($settings)">
        <p>
-           <a href="&xar-modurl-modules-admin-hooks;&amp;hook=mail" title="Configure mail hooks"><xar:mlstring>Hook the mail module to content types</xar:mlstring></a><xar:mlstring> to receive notifications on add, edit or delete.
-            </xar:mlstring>
+            <xar:set name="hookurl">xarModURL('modules','admin','hooks', array('hook' => 'mail'))</xar:set>
+            <xar:set name="hooktitle"><xar:mlstring>Configure mail hooks</xar:mlstring></xar:set>
+            <xar:set name="hooklinktext"><xar:mlstring>Hook the mail module to content types</xar:mlstring></xar:set>
+            <xar:ml>
+                <xar:mlstring>
+                    <a href="#(1)" title="#(2)">#(3)</a>to receive notifications on add, edit or delete.
+                </xar:mlstring>
+                <xar:mlvar>#$hookurl#</xar:mlvar>
+                <xar:mlvar>#$hooktitle#</xar:mlvar>
+                <xar:mlvar>#$hooklinktext#</xar:mlvar>
+            </xar:ml>
         </p>
         <p>
             <xar:mlstring>

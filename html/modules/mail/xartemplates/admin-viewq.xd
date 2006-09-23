@@ -130,12 +130,19 @@
     </xar:if>
     </table>
     <xar:else />
-        <p>
-            <xar:mlstring>
-            You can schedule mail for sending later by installing and using the Scheduler module.
-            Install Scheduler first. Mail supplies the hooks so you must also </xar:mlstring>
-            <a href="&xar-modurl-modules-admin-hooks;&amp;hook=mail" title="Hook mail to scheduler to activate queue processing">hook Mail module to Scheduler</a>
-            <xar:mlstring> to use this option.</xar:mlstring>
+        <p> <xar:set name="hookmailurl">xarModURL('modules','admin','hooks', array('hook' => 'mail'))</xar:set>
+            <xar:set name="hookmailtitle"><xar:mlstring>Hook mail to scheduler to activate queue processing</xar:mlstring></xar:set>
+            <xar:set name="hookmaillinktext"><xar:mlstring>hook mail to scheduler</xar:mlstring></xar:set>
+            <xar:ml>
+                <xar:mlstring>
+                You can schedule mail for sending later by installing and using the Scheduler module.
+                Install Scheduler first. Mail supplies the hooks so you must also
+                <a href="#(1)" title="#(2)">#(3)</a> to use this option.
+                </xar:mlstring>
+                <xar:mlvar>#$hookmailurl#</xar:mlvar>
+                <xar:mlvar>#$hookmailtitle#</xar:mlvar>
+                <xar:mlvar>#$hookmaillinktext#</xar:mlvar>
+            </xar:ml>
         </p>
     </xar:if>
 </div>
