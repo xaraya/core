@@ -651,7 +651,6 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
         }
         $result->Close();
     }
-
     if (empty($callerItemType)) {
         if (isset($modHookedCache[$callerModName][''][$hookModName])) {
             // generic hook is enabled
@@ -1278,7 +1277,7 @@ class xarMod  extends Object implements IxarMod
         // since inclusion of variables can be done multiple times (they just get overwritten)
         // the include is safe. Ergo: leave this in place.
         include $fileName;
-        
+
         if (!isset($themeinfo))  $themeinfo = array();
         if (!isset($modversion)) $modversion = array();
 
@@ -1571,11 +1570,11 @@ class xarMod  extends Object implements IxarMod
  * Wrapper functions to support Xaraya 1 API for module aliases
  *
  */
-function xarModGetAlias($alias) 
+function xarModGetAlias($alias)
 { return xarModAlias::resolve($alias);}
-function xarModSetAlias($alias, $modName) 
+function xarModSetAlias($alias, $modName)
 { return xarModAlias::set($alias,$modName);}
-function xarModDelAlias($alias, $modName) 
+function xarModDelAlias($alias, $modName)
 { return xarModAlias::delete($alias,$modName);}
 
 /**

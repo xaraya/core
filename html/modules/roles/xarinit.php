@@ -171,13 +171,13 @@ function roles_activate()
     xarModSetVar('roles', 'setuserlastlogin',false);
     xarModSetVar('roles', 'setusertimezone',false);
     xarModSetVar('roles', 'defaultgroup', 'Users');
-    xarModSetVar('roles', 'displayrolelist', false);  
+    xarModSetVar('roles', 'displayrolelist', false);
     xarModSetVar('roles', 'usereditaccount', true);
     xarModSetVar('roles', 'allowuserhomeedit', false);
     xarModSetVar('roles', 'loginredirect', true);
     xarModSetVar('roles', 'allowexternalurl', false);
     xarModSetVar('roles', 'usersendemails', false);
-    xarModSetVar('roles', 'requirevalidation', true);    
+    xarModSetVar('roles', 'requirevalidation', true);
     $lockdata = array('roles' => array( array('uid' => 4,
                                               'name' => 'Administrators',
                                               'notify' => TRUE)),
@@ -213,8 +213,8 @@ function roles_activate()
     xarModRegisterHook('item', 'search', 'GUI','roles', 'user', 'search');
     xarModRegisterHook('item', 'usermenu', 'GUI','roles', 'user', 'usermenu');
 
-    xarModAPIFunc('modules', 'admin', 'enablehooks', array('callerModName' => 'roles', 'hookModName' => 'roles'));
-    xarModAPIFunc('modules','admin','enablehooks',array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
+//    xarModAPIFunc('modules', 'admin', 'enablehooks', array('callerModName' => 'roles', 'hookModName' => 'roles'));
+//    xarModAPIFunc('modules','admin','enablehooks',array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
 
     return true;
 }
