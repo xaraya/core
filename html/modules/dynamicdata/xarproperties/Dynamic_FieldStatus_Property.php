@@ -24,7 +24,7 @@ class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
     public $id         = 25;
     public $name       = 'fieldstatus';
     public $desc       = 'Field Status';
-    public $reqmodules = array('categories');
+    public $reqmodules = array('dynamicdata');
 
     function __construct($args)
     {

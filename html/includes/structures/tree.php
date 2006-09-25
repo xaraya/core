@@ -29,9 +29,6 @@ class TreeNode extends Object implements ITreeNode
             $nodeset->add($node);
         }
         $it = $nodeset->getIterator();
-        foreach($it as $val){
-            echo $val->name ." ";
-        }
         return $nodeset;
     }
     function depthfirstenumeration()
