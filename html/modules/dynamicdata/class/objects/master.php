@@ -61,6 +61,8 @@ class Dynamic_Object_Master extends Object
     **/
     function __construct(array $args)
     {
+        xarMod::loadDbInfo('dynamicdata','dynamicdata');
+
         // fill in the default object variables
         if(!empty($args) && count($args) > 0)
             foreach($args as $key => $val)
