@@ -30,7 +30,7 @@ define('XARCORE_VERSION_SUB', 'etiam infractus');
 // Handy if we're running from a mt working copy, prolly comment out on distributing
 if(file_exists('../_MTN/revision')) 
 {
-    $rev = file_get_contents('../_MTN/revision');
+    $rev = str_replace(array('old_revision [',']'),'',array_pop(file('../_MTN/revision')));
     define('XARCORE_VERSION_REV', $rev);
 }
 
