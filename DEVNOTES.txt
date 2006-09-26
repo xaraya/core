@@ -225,13 +225,14 @@ All other tables refer to the primary key of the xar_modules table (id)
 
 Possible new QA checks for 2.x code branch
 ------------------------------------------
-- every class declaration should have an 'extends' clause (we all derive from Object)
+- every class declaration should have an 'extends' clause? (we all derive from Object, (sort of ))
 - every method implementation should have 'public' 'protected' or 'private'
-- no 'var $varname' like declarations
-- no php4 style constructors, always __construct() if any
-- classes start with Capitals (?) (sys class doesnt now, that bad?)
-- add new deprecation info 
-- 
+  (related: the phpdoc @private etc. never made sense to me in php5 context, what's that about?)
+- no 'var $varname' like declarations (easy, produces an error anyways)
+- no php4 style constructors, always __construct() if any (hard, since have 2 is valid too, sigh.)
+- classes start with Capitals (?) (sys class doesnt now, is that bad?)
+- add new deprecation info on wrapped API methods (a lot!)
+
 
 Framework directory layout (outwebroot scenario)
 ------------------------------------------------
@@ -246,32 +247,35 @@ outside of it.
         .htaccess                         [or equivalent for other http server]
         index.php                         [entry point]
         ws.php                            [do we need this?, assuming we have a 'Controller' class somehow]
-        /themes
+        /themes                           [probably right in this place, maybe more like skin (presentation) than theme (structure)]
             ...
-        /modules
+        /modules                          [problematic, should be able to be moved out, but most, if not all modules depend on the webroot]
             ...
-    /core                                 [this places core outside lib, which means we view it as an application]
-        bootstrap.php
+    /core                                 [this places core outside lib, which means we view it as an application (not entirely right i think)]
+        bootstrap.php                     [this file probably needs a fixed location as the one reference we base other stuff on]
         ...(?)
     /lib                                  [contains libraries which are in use]
-        /Xaraya                           [we are a lib too? (mainly to get a classpath entry and be consistent with the other entries.)]
+        /xaraya                           [we are a lib too? (mainly to get a classpath entry and be consistent with the other entries.)]
             ... (?)
-        /Blocklayout                      [this makes more sense than 'Xaraya' in the previous line, if we make it a self contained lib]
+        /blocklayout                      [this makes more sense than 'xaraya' in the previous line, if we make it a self contained lib]
             ...(blocklayout files)
-        /Creole
+        /creole
             ...(creole files)
-        /Zend
-            ...(zend framework)
-        /Propel
+        /zend                             [ironically Zend is the only one in these examples which would need adaptation to fit in :-)]
+            ...(zend framework)           
+        /propel
             ...(propel)
+        /PEAR (?)                         [probably needs some glue, PEAR assumes it will be top level controlling to some extent]
+            ...
         etc...
     /var                                  [contains generated files like logs, caches etc.]
-        /locales                          [top level for locale related information]
         /cache                            [top level for caches]
-            /templates
-            /output
             /database
+            /templates                    [there's probably a need for separate configuration of these]
+            /output
             ...
+        /locales                          [top level for locale related information]
+        /log                              [top level for logs]
         /modules                          [top level for filebased module data]
             /roles
                 /messaging
@@ -279,7 +283,9 @@ outside of it.
                 /processes
             ...
     /etc                                  [contains static information regarding to configuration of components]
-        xaraya.conf
+        default.conf
+        site1.conf?                       [per site/app config?]
+        app2.conf?                        
         /modules                          [top level for module specific configuration files]
             /workflow
                 galaxia.conf
@@ -307,6 +313,13 @@ Issues/Questions/Todo:
     - how often can the include_path on servers *not* be changed?
     - using absolute paths based on a config seems the safest. just as we base 
     everything on the current (==webroot) directory now.
-
+    - there have been numerous requests for providing a very easy place to put
+    snippets (php snippets i guess then). How, if at all, do we want to cater for those?
+    - how does multisite affect the above in the doc_root piece? (1 or many? both?)
+    - what impact does  1 codebase multisite/multiapp on this layout? (db or storage is following 
+    the application config, so multi-db is less of an issue in this area)
+    - what is a good way to assess the magnitude of work on this? That it is a lot we know, but a metric would be nice.
+    - somehow modules seem painful in this layout, 'too big' comes to mind, 'too loose' too. 
+    Meant in the way that modules do so much in our system, it's hard to give them a proper place.
 
 
