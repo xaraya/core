@@ -46,7 +46,6 @@ function xarThemeGetIDFromName($themeName,$id='regid')
  * @access public
  * @param themeRegId theme id
  * @return array array of theme information
- * @throws DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
  */
 function xarThemeGetInfo($regId)
 {
@@ -130,7 +129,6 @@ function xarTheme_getBaseInfo($themeName)
  *
  * @access protected
  * @return array an array of theme variables
- * @throws DATABASE_ERROR, BAD_PARAM
  */
 function xarTheme_getVarsByTheme($themeName)
 {

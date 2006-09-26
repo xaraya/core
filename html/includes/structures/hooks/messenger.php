@@ -19,10 +19,19 @@ class HookMessenger extends Object
         $this->hookObject = $hookObject;
         $this->hookAction = $hookAction;
     }
-    function getmodule() { return $this->module; }
-    function getitemtype() { return $this->itemtype; }
-    function getitemid() { return $this->itemid; }
-    function gethookObject() { return $this->hookObject; }
-    function gethookAction() { return $this->hookAction; }
+    function getmodule() 
+    { return $this->module; }
+    
+    function getitemtype() 
+    { return $this->itemtype; }
+    
+    function getitemid() 
+    { return $this->itemid; }
+    
+    function gethookObject() 
+    { return $this->hookObject; }
+    
+    function gethookAction() 
+    { return $this->hookAction; }
 }
 ?>

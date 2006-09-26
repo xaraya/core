@@ -32,6 +32,7 @@
  * @param integer whatElseIsGoingLoaded
  * @return bool true on success, false on failure
  * @todo <marco> move template tag table definition somewhere else?
+ * @todo get rid of GLOBALS
  */
 function xarDB_init(array &$args, $whatElseIsGoingLoaded)
 {
@@ -120,6 +121,7 @@ function &xarDBNewConn(array $args = null)
  *
  * @access public
  * @return array array of database tables
+ * @todo we should figure something out so we dont have to do the getTables stuff, it should be transparent
  */
 function &xarDBGetTables()
 {
@@ -190,6 +192,7 @@ function &xarDBNewDataDict(Connection &$dbconn, $mode = 'READONLY')
  *
  * @access public
  * @return string
+ * @todo no added value
  */
 function xarDBGetHost()
 {
@@ -201,6 +204,7 @@ function xarDBGetHost()
  *
  * @access public
  * @return string
+ * @todo no added value
  */
 function xarDBGetType()
 {
@@ -212,6 +216,7 @@ function xarDBGetType()
  *
  * @access public
  * @return string
+ * @todo no added value
  */
 function xarDBGetName()
 {
@@ -223,6 +228,7 @@ function xarDBGetName()
  *
  * @access public
  * @return string
+ * @todo no added value
  */
 function xarDBGetSystemTablePrefix()
 {

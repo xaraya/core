@@ -13,10 +13,18 @@ class RequestObject extends Object
         $this->function = $function;
         $this->itemtype = $itemtype;
     }
-    function getmodule() { return $this->module; }
-    function getitemtype() { return $this->itemtype; }
-    function gettype() { return $this->type; }
-    function getfunction() { return $this->function; }
+    
+    function getmodule() 
+    { return $this->module; }
+    
+    function getitemtype() 
+    { return $this->itemtype; }
+    
+    function gettype() 
+    { return $this->type; }
+    
+    function getfunction() 
+    { return $this->function; }
 
     function register($hookObject='module', $hookAction='', $hookArea='API')
     {
