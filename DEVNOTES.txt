@@ -213,3 +213,72 @@ Possible new QA checks for 2.x code branch
 - add new deprecation info 
 - 
 
+Framework directory layout (outwebroot scenario)
+------------------------------------------------
+
+Having literally everything below the webroot is limiting deployment choices.
+Below are some thoughts on how we could organize the files and directories in 
+a way where things which do not need to be below the webroot, can be placed 
+outside of it. 
+
+/root
+    /html                                        [anything which needs to be accessible by the web front goes here]
+        .htaccess                            [or equivalent for other http server]
+        index.php                         [entry point]
+        ws.php                                 [do we need this?, assuming we have a 'Controller' class somehow]
+        /themes
+            ...
+        /modules
+            ...
+    /core                                        [this places core outside lib, which means we view it as an application]
+        bootstrap.php
+        ...(?)
+    /lib                                        [contains libraries which are in use]
+        /Xaraya                                [we are a lib too? (mainly to get a classpath entry and be consistent with the other entries.)]
+            ... (?)
+        /Blocklayout                    [this makes more sense than 'Xaraya' in the previous line, if we make it a self contained lib]
+            ...(blocklayout files)
+        /Creole
+            ...(creole files)
+        /Zend
+            ...(zend framework)
+        /Propel
+            ...(propel)
+        etc...
+    /var                                        [contains generated files like logs, caches etc.]
+        /locales                            [top level for locale related information]
+        /cache                                [top level for caches]
+            /templates
+            /output
+            /database
+            ...
+        /modules                            [top level for filebased module data]
+            /roles
+                /messaging
+            /workflow
+                /processes
+            ...
+    /etc                                        [contains static information regarding to configuration of components]
+        xaraya.conf
+        /modules                            [top level for module specific configuration files]
+            /workflow
+                galaxia.conf
+            ...
+            
+Issues/Questions/Todo:
+    - how do we deal with themes and modules? themes typically want to have access to
+    file based stuff like styles and images, modules too, but they shouldn't :-) i have
+    a tendency to place modules outside the webroot, but that may be really uncomfortable.
+    - how do we define module data which is file based? (in terms of what is data and how, for example
+    does it relate to things inside xardata like directories) Self contained modules are quite comfortable.
+    - where do client libraries like js frameworks go?
+    - why are locales needed on fs? 
+    - how much webserver specific configuration like aliases etc. would we need for this
+    - describe in detail why this is better than all below webroot.
+    - do we want (parts of) in lib or have (core) as the main 'Application' (pro/con?)
+    - if there is such a thing needed as cgi-bin, where does it go in this picture? if at all
+    - we probably want an easy-access taglib location, so it's easy to create custom tag definitions (where would that go?)
+    - 
+
+
+
