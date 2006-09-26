@@ -31,35 +31,6 @@ $systemConfiguration['DB.Persistent'] = false;
 
 /*
  * Global error level, optional
- *
- * If set it is passed directly into the error_reporting() function of PHP
- * Normally you want this to be set to E_ALL during development and something a bit lower
- * for a production system.
- * NOTE: Also set this option if you suffer from the changes wrt references 
- *       in php4.4 and php5.x versions or the bug in the zend optimizer
- */
- $systemConfiguration['Exception.ErrorLevel'] = E_ALL;
-
-/*
- * Global error level, optional
- *
- * If set it is passed directly into the error_reporting() function of PHP
- * Normally you want this to be set to E_STRICT during development and something a bit lower
- * for a production system.
- * NOTE: Also set this option if you suffer from the changes wrt references
- *       in php4.4 and php5.x versions or the bug in the zend optimizer
- */
- $systemConfiguration['Exception.ErrorLevel'] = E_ALL;
-
-/*
- * Global error level, optional
- *
- * NOTE: Also set this option if you suffer from the changes wrt references 
- *       in php4.4 and php5.x versions or the bug in the zend optimizer
- */
- $systemConfiguration['Exception.ErrorLevel'] = E_ALL;
-/*
- * Global error level, optional
  * If set it is passed directly into the error_reporting() function of PHP
  * Normally you want this to be set to E_ALL during development and something a bit lower
  * for a production system.
