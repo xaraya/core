@@ -64,7 +64,7 @@ class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
             $this->value = $value;
         }
         if ($this->value < 1000) {
-            $types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes', array('moduleid' => $this->referencemoduleid));
+            $types = Dynamic_Object_Master::getModuleItemTypes(array('moduleid' => $this->referencemoduleid));
             // we may still have a loose end in the module: no appropriate parent
             $name = isset($types[$this->value]) ? $types[$this->value]['label'] : xarML('base itemtype');
             $data['option'] = array('id' => $this->referencemoduleid,
@@ -82,7 +82,7 @@ class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
     function getOptions()
     {
         $this->options = array();
-        $types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes', array('moduleid' => $this->referencemoduleid));
+        $types = Dynamic_Object_Master::getModuleItemTypes(array('moduleid' => $this->referencemoduleid));
         if ($types != array()) {
             foreach ($types as $key => $value) $this->options[] = array('id' => $key, 'name' => $value['label']);
         } else {

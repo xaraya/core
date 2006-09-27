@@ -939,5 +939,177 @@ class Dynamic_Object_Master extends Object
              $this->datastores[$name]->addJoin($table, $key, $fields, $where, $andor);
     }
 
+    /**
+      * Get Object's Ancestors
+      *
+      * @param int    args[moduleid]
+      * @param int    args[itemtype]
+      * @param int    args[objectid]
+      * @param bool args[top]
+      * @param bool  args[base]
+      */
+    static function &getAncestors(array $args)
+    {
+        if(!xarSecurityCheck('ViewDynamicDataItems')) return;
+
+        extract($args);
+
+        if (!(isset($moduleid) && isset($itemtype)) && !isset($objectid)) {
+            $msg = xarML('Wrong arguments to dynamicdata_userapi_getancestors.');
+            throw new BadParameterException(array(),$msg);
+        }
+
+        $top = isset($top) ? $top : true;
+        $base = isset($base) ? $base : true;
+        $ancestors = array();
+
+        // Get the info of this object
+        $xartable =& xarDBGetTables();
+        if (isset($objectid)) {
+            // We have an objectid - get the moduleid and itemtype
+            $topobject = self::getObjectInfo(array('objectid' => $objectid));
+            $moduleid = $topobject['moduleid'];
+            $itemtype = $topobject['itemtype'];
+        } else {
+            // We have a moduleid and itemtype - get the objectid
+            $topobject = self::getObjectInfo(array('moduleid' => $moduleid, 'itemtype' => $itemtype));
+            if (empty($topobject)) {
+                if ($base) {
+                    $types = self::getModuleItemTypes(array('moduleid' => $moduleid));
+                    $info = array('objectid' => 0, 'itemtype' => $itemtype, 'name' => xarModGetNameFromID($moduleid));
+                    $ancestors[] = $info;
+                    return $ancestors;
+                }
+                return $ancestors;
+            }
+            $objectid = $topobject['objectid'];
+       }
+
+        // Include the last descendant (this object) or not
+        if ($top) {
+            $ancestors[] = self::getObjectInfo(array('objectid' => $objectid));
+        }
+
+        // Get all the dynamic objects at once
+        sys::import('modules.roles.class.xarQuery');
+        $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
+        $q->addfields(array('xar_object_id AS objectid','xar_object_name AS objectname','xar_object_moduleid AS moduleid','xar_object_itemtype AS itemtype','xar_object_parent AS parent'));
+        $q->eq('xar_object_moduleid',$moduleid);
+        if (!$q->run()) return;
+
+        // Put in itemtype as key for easier manipulation
+        foreach($q->output() as $row) $objects [$row['itemtype']] = array('objectid' => $row['objectid'],'objectname' => $row['objectname'], 'moduleid' => $row['moduleid'], 'itemtype' => $row['itemtype'], 'parent' => $row['parent']);
+
+        // Cycle through each ancestor
+        $parentitemtype = $topobject['parent'];
+        for(;;) {
+            $done = false;
+
+            if ($parentitemtype >= 1000) {
+                // This is a DD descendent object. add it to the ancestor array
+                $thisobject     = $objects[$parentitemtype];
+                $moduleid       = $thisobject['moduleid'];
+                $objectid       = $thisobject['objectid'];
+                $itemtype       = $thisobject['itemtype'];
+                $name           = $thisobject['objectname'];
+                $parentitemtype = $thisobject['parent'];
+                $ancestors[] = array('objectid' => $objectid, 'itemtype' => $itemtype, 'name' => $name, 'moduleid' => $moduleid);
+            } else {
+
+                // This is a native itemtype. get ready to quit
+                $done = true;
+                $itemtype = $parentitemtype;
+                if ($itemtype) {
+                    if ($info=self::getObjectInfo(array('moduleid' => $moduleid, 'itemtype' => $itemtype))) {
+
+                        // A DD wrapper object exists, add it to the ancestor array
+                        if ($base) $ancestors[] = array('objectid' => $info['objectid'], 'itemtype' => $itemtype, 'name' => $info['name'], 'moduleid' => $moduleid);
+                    } else {
+
+                        // No DD wrapper object
+                        // This must be a native itemtype of some module - add it to the ancestor array if requested
+                        $types = self::getModuleItemTypes(array('moduleid' => $moduleid));
+                        $name = strtolower($types[$itemtype]['label']);
+                        if ($base) {$ancestors[] = array('objectid' => 0, 'itemtype' => $itemtype, 'name' => $name, 'moduleid' => $moduleid);}
+                    }
+                } else {
+                    // Itemtype = 0. We're already at the bottom - do nothing
+                }
+            }
+            if ($done) break;
+        }
+        $ancestors = array_reverse($ancestors, true);
+        return $ancestors;
+
+    }
+    
+    /**
+     * Get the base ancestor for the object
+     *
+     * see getAncestors for parameters
+     * @see self::getAncestors
+     */
+    static function &getBaseAncestor(array $args)
+    {
+        $ancestors = self::getAncestors($args);
+        $ancestors = array_shift($ancestors);
+        return $ancestors;
+    }
+
+    /**
+     * Get a module's itemtypes
+     * 
+     * @param int     args[moduleid]
+     * @param string args[module]
+     * @param bool   args[native]
+     * @param bool   args[extensions]
+     * @todo don't use args
+     * @todo pick moduleid or module
+     * @todo move this into a utils class?
+     */
+    static function getModuleItemTypes(array $args)
+    {
+        extract($args);
+        // Argument checks
+        if (empty($moduleid) && empty($module)) {
+            throw new BadParameterException('moduleid or module');
+        }
+        if (empty($module)) {
+            $info = xarModGetInfo($moduleid);
+            $module = $info['name'];
+        }
+
+        $native = isset($native) ? $native : true;
+        $extensions = isset($extensions) ? $extensions : true;
+
+        $types = array();
+        if ($native) {
+            // Try to get the itemtypes
+            try {
+                // @todo create an adaptor class for procedural getitemtypes in modules
+                $types = xarModAPIFunc($module,'user','getitemtypes',array());
+            } catch ( FunctionNotFoundException $e) {
+                // No worries
+            }
+        }
+        if ($extensions) {
+            // Get all the objects at once
+            $xartable =& xarDBGetTables();
+            sys::import('modules.roles.class.xarQuery');
+            $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
+            $q->addfields(array('xar_object_id AS objectid','xar_object_label AS objectlabel','xar_object_moduleid AS moduleid','xar_object_itemtype AS itemtype','xar_object_parent AS parent'));
+            $q->eq('xar_object_moduleid',$moduleid);
+            if (!$q->run()) return;
+
+            // put in itemtype as key for easier manipulation
+            foreach($q->output() as $row)
+                $types [$row['itemtype']] = array(
+                                            'label' => $row['objectlabel'],
+                                            'title' => xarML('View #(1)',$row['objectlabel']),
+                                            'url' => xarModURL('dynamicdata','user','view',array('itemtype' => $row['itemtype'])));
+        }
+
+        return $types;  
+    }
 }
 ?>

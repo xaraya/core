@@ -17,17 +17,17 @@
  * @returns array
  * @return array of object definitions
  * @raise DATABASE_ERROR, NO_PERMISSION
+ * @todo should we wrap this?
  */
 function dynamicdata_adminapi_getnextitemtype($args = array())
 {
     extract($args);
     if (empty($modid)) throw new EmptyParameterException('modid');
-    $types = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes', array('moduleid' => $modid));
+    $types = Dynamic_Object_Master::getModuleItemTypes(array('moduleid' => $modid));
     $ids = array_keys($types);
     sort($ids);
     $lastid = array_pop($ids);
     if ($modid == 182) return $lastid + 1;
     else return max(1000,$lastid + 1);
 }
-
 ?>
