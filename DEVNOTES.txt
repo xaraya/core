@@ -163,7 +163,7 @@ design work can begin.
   reporting we can build into an install. (bugzilla can be remotely queried for
   products and components easily, perhaps based on a server side map of 
   regid-component for modules at least)
-
+* [STARTED] move code from dd procedural functions to classes where feasible
 !!!KNOWN ISSUES
 * blocks do not end up in groups anymore during installation, need to
   investigate why that is. Most likely a missed spot when doing the
