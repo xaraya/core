@@ -9,8 +9,11 @@
  * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
+ * @todo <mikespub> move all object_* methods to other object classes ... or not ?
+ * @todo try to replace xarTplModule with xarTplObject
  */
 
+ sys::import('modules.dynamicdata.class.objects');
 /**
  * Dynamic Object Interface (experimental - cfr. 'object' module)
  *
@@ -28,7 +31,7 @@ class Dynamic_Object_Interface extends Object
     // main function handling all object method calls (to be handled by the core someday ?)
     public $func = 'main';
 
-    function __construct($args = array())
+    function __construct(array $args = array())
     {
         // set a specific GUI module for now
         if(!empty($args['urlmodule'])) 
@@ -62,7 +65,7 @@ class Dynamic_Object_Interface extends Object
     }
 
 
-    function handle($args = array())
+    function handle(array $args = array())
     {
         if(!xarVarFetch('method', 'isset', $args['method'], NULL, XARVAR_DONT_SET)) 
             return;
@@ -98,9 +101,7 @@ class Dynamic_Object_Interface extends Object
         }
     }
 
-    // TODO: move all object_* methods to Dynamic_Object ... or not ?
-
-    function object_create($args = array())
+    function object_create(array $args = array())
     {
         if(!xarVarFetch('preview', 'isset', $args['preview'], NULL, XARVAR_DONT_SET)) 
             return;
@@ -188,7 +189,7 @@ class Dynamic_Object_Interface extends Object
         );
     }
 
-    function object_update($args = array())
+    function object_update(array $args = array())
     {
         if(!xarVarFetch('preview', 'isset', $args['preview'], NULL, XARVAR_DONT_SET)) 
             return;
@@ -277,7 +278,7 @@ class Dynamic_Object_Interface extends Object
         );
     }
 
-    function object_delete($args = array())
+    function object_delete(array $args = array())
     {
         if(!xarVarFetch('cancel',  'isset', $args['cancel'],  NULL, XARVAR_DONT_SET)) 
             return;
@@ -359,7 +360,7 @@ class Dynamic_Object_Interface extends Object
         );
     }
 
-    function object_display($args = array())
+    function object_display(array $args = array())
     {
         if(!xarVarFetch('preview', 'isset', $args['preview'], NULL, XARVAR_DONT_SET)) 
             return;
@@ -423,7 +424,7 @@ class Dynamic_Object_Interface extends Object
     }
 
     // no longer needed
-    function object_list($args = array())
+    function object_list(array $args = array())
     {
         if(!xarVarFetch('catid',    'isset', $args['catid'],    NULL, XARVAR_DONT_SET)) 
             return;
@@ -461,7 +462,7 @@ class Dynamic_Object_Interface extends Object
         );
     }
 
-    function object_view($args = array())
+    function object_view(array $args = array())
     {
         if(!xarVarFetch('catid',    'isset', $args['catid'],    NULL, XARVAR_DONT_SET)) 
             return;
