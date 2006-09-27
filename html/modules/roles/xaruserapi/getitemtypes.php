@@ -34,7 +34,7 @@ function roles_userapi_getitemtypes($args)
                           'title' => xarML('View Group'),
                           'url'   => xarModURL('roles','user','viewtree')
                          );
-
+    // @todo let's use Dynamic_Object_Master::getModuleItemType here, but not until roles brings in dd automatically
     $extensionitemtypes = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27, 'native' =>false));
 
     /* TODO: activate this code when we move to php5
