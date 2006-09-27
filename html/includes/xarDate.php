@@ -12,11 +12,11 @@
  * @todo this needs another place
  * @todo this needs documentation
  * @todo why do we need this?
+ * @todo this has an awful lot of methods
  */
 
 class xarDate extends Object
 {
-
     public $year;
     public $month;
     public $day;
@@ -25,7 +25,7 @@ class xarDate extends Object
     public $second;
     public $timestamp;
 
-    function xarDate($hour=0,$minute=0,$second=0,$month=0,$day=0,$year=0)
+    function __construct($hour=0,$minute=0,$second=0,$month=0,$day=0,$year=0)
     {
         $this->timestamp = mktime($hour,$minute,$second,$month,$day,$year);
         $this->year = $year;

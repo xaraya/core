@@ -88,7 +88,7 @@ class OrderedDataStore extends BasicDataStore implements IOrderedDataStore
      */
     function addField(Dynamic_Property &$property)
     {
-        parent::addField(&$property);
+        parent::addField($property);
         if(!isset($this->primary) && $property->type == 21)
             // Item ID
             $this->setPrimary($property);

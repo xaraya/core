@@ -68,6 +68,7 @@ class EventRegistrationException extends RegistrationExceptions
  * @access protected
  * @param $args['loadLevel']
  * @return bool true
+ * @todo no added value
  */
 function xarEvt_init(&$args, $whatElseIsGoingLoaded)
 {
@@ -98,7 +99,7 @@ class xarEvents extends Object implements IxarEvents
      * @throws  EmptyParameterException
      * @todo    make this protected in the real sense again, only core should call it
      */
-    static function register($eventName)
+    public static function register($eventName)
     {
         if (empty($eventName)) throw new EmptyParameterException('eventName');
         self::$knownEvents[$eventName] = true;
@@ -126,7 +127,7 @@ class xarEvents extends Object implements IxarEvents
      * has defined a specific handler for that event, that function is
      * executed.
      * 
-     * @access  protected
+     * @access  protected (huh? it is publicly coded)
      * @param   string $eventName The name of the event
      * @param   mixed  $value Passed as parameter to the even handler function in the module
      * @return  void
@@ -188,6 +189,7 @@ class xarEvents extends Object implements IxarEvents
      * @return  void
      * @throws  EmptyParameterException
      * @todo    Analyze thoroughly for performance issues.
+     * @todo    Base this off the SplObserver/SplSubject classes
      */
     private static function notify($modName, $eventName, $value, $modDir = NULL)
     {

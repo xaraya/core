@@ -69,15 +69,20 @@ revisit later on before trusting the branch to be released or used.
 * DROPPED API: xarMod_getVarsByName, xarTheme_getVarsByName (were
   protected and never used)
 * DROPPED API: $throwException parameter in xarModAPIFunc
-* the Variable getting/setting in core does NOT support direct prepping anymore, as to eliminate dependencies on other subsystems. If the parameter was used, it will be ignored now.
+* the Variable getting/setting in core does NOT support direct prepping 
+  anymore, as to eliminate dependencies on other subsystems. If the parameter 
+  was used, it will be ignored now.
 * DROPPED API: xarPreCoreGetVarDirPath (now sys::varpath()) 
 
 !!DIFFERENCES BETWEEN PHP 5.0 and 5.1
 * do not agree on what function_exists() / is_callable() /
   method_exists() should return
-* In PHP 5.0.4 (and earlier versions I believe) the shutdown function is called *after* the output buffering callback.
-* In PHP 5.1.2 (not sure when the change occurred) the shutdown function is called *before* the output buffering callback.
-* apparently PHP 5.1 allows headers to be sent in a shutdown function  (arguably wrong)
+* In PHP 5.0.4 (and earlier versions I believe) the shutdown function is 
+  called *after* the output buffering callback.
+* In PHP 5.1.2 (not sure when the change occurred) the shutdown function is 
+  called *before* the output buffering callback.
+* apparently PHP 5.1 allows headers to be sent in a shutdown function  
+  (arguably wrong)
 
 
 !!!REFACTORING LIST:
@@ -94,19 +99,30 @@ design work can begin.
         - xar_realm in xar_security masks uses 'All' which prevents it from being
           a foreign key to the realm table (through id), likewise for xar_privileges 
           table
-        - [DONE] if we are going to store privilege levels in the database, then refer to 
-          them from other tables, we now store the level verbatim (perhaps drop the table?)
+        - [DONE] if we are going to store privilege levels in the database, 
+          then refer to them from other tables, we now store the level verbatim 
+          (perhaps drop the table?)
         - similarly, in xar_privileges table the xar_module column. 
         - is xar_auth_mod_id still needed? 
+        - the xar_ prefix on columns is redundant
 * [STARTED] OO-ify stuff in core where appropriate (including getting rid of
   die()'s and modelling the classes where php4 could not) 
 * I really would like to do something with views wrt multisites et. al.
     - the query storage for privilege instances is one application of views 
+    (in testing, views are *much* slower than dedicated tables, which doesnt 
+    make sense to me; i expect them to be _somewhat_ slower, but not a factor 
+    of 4-8)
 * I really would like to do something with triggers, dunno for what
     - all backends support triggers, while not all of them support foreign
       keys, so for both triggers and foreign keys we could use triggers.
 * I really would like to do something with stored procedures, dunno
   for what
+    - the main use would be to save round trips (to the db server in this case,
+    *not* the webserver) and building more on the server side based on logic, 
+    e.g. instead of looping over 1 resultset in php and reacting based on that, 
+    that logic could be done directly at the db server, letting the stored 
+    procedure do the looping, if at all needed  and only return the combined 
+    result to the php code
 * the need for a Request mapper is evident. Apart from the gained
   dimension for navigation design this also centralizes the short url
   functionality instead of distributing it all over. 
@@ -114,7 +130,8 @@ design work can begin.
   header or not (or use <?xar for this? since it is an instruction to
   process )
 * design a more solid concept for letting blocklayout emit http headers, attributes
-  in the blocklayout tag dont cut it. (disposition is one needed, as well as more granular cache s)
+  in the blocklayout tag dont cut it. (disposition is one needed, as well as 
+  more granular caches)
 * we keep a 'state' of some sort for different items:
   1. modules
   2. themes
@@ -125,8 +142,8 @@ design work can begin.
   'item' level? Also the use of a workflow component in core comes to mind.
 * simplify installer/xaradmin.php before rewriting it
 * we need easy and global xmlhttp request support everywhere.
-* [DONE] Xaraya is an excellent backend, we need a equally excellent front-end companion (like dojo)
-   (implemented as dojo activator module)
+* [DONE] Xaraya is an excellent backend, we need a equally excellent front-end 
+  companion (like dojo) (implemented as dojo activator module)
 * i'd really like more native backend support, for query preparation
   that place is obviously creole, but for shielding and triggering we
   dont have an abstraction and the more complex modules go through a
@@ -144,8 +161,8 @@ design work can begin.
 * reorganize the old error/exception system to use much fewer files, consider
   writing a talkback module to go along with a distro for facilitating the bug
   reporting we can build into an install. (bugzilla can be remotely queried for
-  products and components easily, perhaps based on a server side map of regid-component
-  for modules at least)
+  products and components easily, perhaps based on a server side map of 
+  regid-component for modules at least)
 
 !!!KNOWN ISSUES
 * blocks do not end up in groups anymore during installation, need to
@@ -162,9 +179,11 @@ design work can begin.
 * when we're in excecption handling for one exception, it seems that no more
   exceptions are thrown in subsequent code
   Example: 
-        - dont define date.timezone in php (will raise exception in xarLogger.php early on)
-        - make sure CACHEKEYS file is NOT present (should raise exception in caching/template.php lines 168+)
-          The fopen() call in caching/template.php does NOT raise an exception then
+        - dont define date.timezone in php (will raise exception in 
+        xarLogger.php early on)
+        - make sure CACHEKEYS file is NOT present (should raise exception in 
+        caching/template.php lines 168+)
+        The fopen() call in caching/template.php does NOT raise an exception then
 
 
 !!!MIN. REQUIRED VERSIONS DETERMINED SO FAR
@@ -196,7 +215,8 @@ Columns affected by modid/regid/modname decision:
  - dynamic_objects.object_moduleid (stores regid)
  - dynamic_properties.prop_moduleid (stores regid)
  - dynamic_properties_def.prop_req_modules 
-    - stores a semicolon separated list of modulenames (does it ever contain more than one?)
+    - stores a semicolon separated list of modulenames (does it ever contain 
+    more than one?)
  - hooks.smodid (stores 0 now meaning ?)
  - hooks.tmodid ?
  - module_vars.modid (stores 0 now for config vars)
@@ -205,13 +225,14 @@ All other tables refer to the primary key of the xar_modules table (id)
 
 Possible new QA checks for 2.x code branch
 ------------------------------------------
-- every class declaration should have an 'extends' clause (we all derive from Object)
+- every class declaration should have an 'extends' clause? (we all derive from Object, (sort of ))
 - every method implementation should have 'public' 'protected' or 'private'
-- no 'var $varname' like declarations
-- no php4 style constructors, always __construct() if any
-- classes start with Capitals (?) (sys class doesnt now, that bad?)
-- add new deprecation info 
-- 
+  (related: the phpdoc @private etc. never made sense to me in php5 context, what's that about?)
+- no 'var $varname' like declarations (easy, produces an error anyways)
+- no php4 style constructors, always __construct() if any (hard, since have 2 is valid too, sigh.)
+- classes start with Capitals (?) (sys class doesnt now, is that bad?)
+- add new deprecation info on wrapped API methods (a lot!)
+
 
 Framework directory layout (outwebroot scenario)
 ------------------------------------------------
@@ -222,63 +243,83 @@ a way where things which do not need to be below the webroot, can be placed
 outside of it. 
 
 /root
-    /html                                        [anything which needs to be accessible by the web front goes here]
-        .htaccess                            [or equivalent for other http server]
+    /html                                 [anything which needs to be accessible by the web front goes here]
+        .htaccess                         [or equivalent for other http server]
         index.php                         [entry point]
-        ws.php                                 [do we need this?, assuming we have a 'Controller' class somehow]
-        /themes
+        ws.php                            [do we need this?, assuming we have a 'Controller' class somehow]
+        /themes                           [probably right in this place, maybe more like skin (presentation) than theme (structure)]
             ...
-        /modules
+        /modules                          [problematic, should be able to be moved out, but most, if not all modules depend on the webroot]
             ...
-    /core                                        [this places core outside lib, which means we view it as an application]
-        bootstrap.php
+    /core                                 [this places core outside lib, which means we view it as an application (not entirely right i think)]
+        bootstrap.php                     [this file probably needs a fixed location as the one reference we base other stuff on]
         ...(?)
-    /lib                                        [contains libraries which are in use]
-        /Xaraya                                [we are a lib too? (mainly to get a classpath entry and be consistent with the other entries.)]
+    /lib                                  [contains libraries which are in use]
+        /xaraya                           [we are a lib too? (mainly to get a classpath entry and be consistent with the other entries.)]
             ... (?)
-        /Blocklayout                    [this makes more sense than 'Xaraya' in the previous line, if we make it a self contained lib]
+        /blocklayout                      [this makes more sense than 'xaraya' in the previous line, if we make it a self contained lib]
             ...(blocklayout files)
-        /Creole
+        /creole
             ...(creole files)
-        /Zend
-            ...(zend framework)
-        /Propel
+        /zend                             [ironically Zend is the only one in these examples which would need adaptation to fit in :-)]
+            ...(zend framework)           
+        /propel
             ...(propel)
-        etc...
-    /var                                        [contains generated files like logs, caches etc.]
-        /locales                            [top level for locale related information]
-        /cache                                [top level for caches]
-            /templates
-            /output
-            /database
+        /PEAR (?)                         [probably needs some glue, PEAR assumes it will be top level controlling to some extent]
             ...
-        /modules                            [top level for filebased module data]
+        etc...
+    /var                                  [contains generated files like logs, caches etc.]
+        /cache                            [top level for caches]
+            /database
+            /templates                    [there's probably a need for separate configuration of these]
+            /output
+            ...
+        /locales                          [top level for locale related information]
+        /log                              [top level for logs]
+        /modules                          [top level for filebased module data]
             /roles
                 /messaging
             /workflow
                 /processes
             ...
-    /etc                                        [contains static information regarding to configuration of components]
-        xaraya.conf
-        /modules                            [top level for module specific configuration files]
+    /etc                                  [contains static information regarding to configuration of components]
+        default.conf
+        site1.conf?                       [per site/app config?]
+        app2.conf?                        
+        /modules                          [top level for module specific configuration files]
             /workflow
                 galaxia.conf
             ...
             
 Issues/Questions/Todo:
-    - how do we deal with themes and modules? themes typically want to have access to
-    file based stuff like styles and images, modules too, but they shouldn't :-) i have
-    a tendency to place modules outside the webroot, but that may be really uncomfortable.
-    - how do we define module data which is file based? (in terms of what is data and how, for example
-    does it relate to things inside xardata like directories) Self contained modules are quite comfortable.
+    - how do we deal with themes and modules? themes typically want to have 
+    access to file based stuff like styles and images, modules too, but they 
+    shouldn't :-) i have a tendency to place modules outside the webroot, 
+    but that may be really uncomfortable.
+    - how do we define module data which is file based? (in terms of what is 
+    data and how, for example does it relate to things inside xardata like 
+    directories) Self contained modules are quite comfortable.
     - where do client libraries like js frameworks go?
     - why are locales needed on fs? 
-    - how much webserver specific configuration like aliases etc. would we need for this
+    - how much webserver specific configuration like aliases etc. would we 
+    need for this
     - describe in detail why this is better than all below webroot.
-    - do we want (parts of) in lib or have (core) as the main 'Application' (pro/con?)
-    - if there is such a thing needed as cgi-bin, where does it go in this picture? if at all
-    - we probably want an easy-access taglib location, so it's easy to create custom tag definitions (where would that go?)
-    - 
-
+    - do we want (parts of) in lib or have (core) as the main 'Application' 
+    (pro/con?)
+    - if there is such a thing needed as cgi-bin, where does it go in this 
+    picture? if at all
+    - we probably want an easy-access taglib location, so it's easy to create 
+    custom tag definitions (where would that go?)
+    - how often can the include_path on servers *not* be changed?
+    - using absolute paths based on a config seems the safest. just as we base 
+    everything on the current (==webroot) directory now.
+    - there have been numerous requests for providing a very easy place to put
+    snippets (php snippets i guess then). How, if at all, do we want to cater for those?
+    - how does multisite affect the above in the doc_root piece? (1 or many? both?)
+    - what impact does  1 codebase multisite/multiapp on this layout? (db or storage is following 
+    the application config, so multi-db is less of an issue in this area)
+    - what is a good way to assess the magnitude of work on this? That it is a lot we know, but a metric would be nice.
+    - somehow modules seem painful in this layout, 'too big' comes to mind, 'too loose' too. 
+    Meant in the way that modules do so much in our system, it's hard to give them a proper place.
 
 

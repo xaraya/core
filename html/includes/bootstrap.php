@@ -109,7 +109,7 @@ final class Class_ extends Object
  * The routines in this class should be:
  * - very well documented, since they may be unreadable for performance reasons
  * - as superfast as possible.
- * - depend on nothing
+ * - depend on nothing but itself and assumptions we make for the whole framework
  *
  * @package core
 **/
@@ -117,8 +117,9 @@ final class sys extends Object
 {
     const CONFIG = 'config.system.php';     // Default system configuration file
     
-    private static $has = array();
-    private static $var = null;
+    private static $has  = array();         // Keep a list of what we already have
+    private static $var  = null;            // Save the var location
+    private static $root = null;            // Save our root location
     
     private function __construct() 
     {} // no objects can be made out of this.
@@ -154,15 +155,23 @@ final class sys extends Object
      *
      * @return mixed if file is actually included the return value determined by the included file, otherwise true
      * @param  string $dp 'dot path' a dot separated string describing which component to include
+     * @todo   the absolute path fixes the location to one dir below the webroot
     **/
     private static function once($dp)
     {
-        if(!isset(self::$has[$dp])) {
+        // If we already have it get out of here asap
+        if(!isset(self::$has[$dp])) 
+        {
+            // Get the absolute location of our webroot so include_path isnt 
+            // searched when importing (note: there will be no slash at the end!)
+            if(!isset(self::$root)) 
+                self::$root = dirname(dirname(realpath(__FILE__))); 
+            
             // set this *before* the include below
             self::$has[$dp] = true; 
             // tiny bit faster would be to use include, but this is quite a bit safer
             // and it will be executed only once anyway. (i.e. if everything uses this class)
-            return include_once(str_replace('.','/',$dp).'.php'); // I/O
+            return include_once(self::$root . '/' . str_replace('.','/',$dp).'.php');
         }
         return true;
     }

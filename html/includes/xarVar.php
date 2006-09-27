@@ -626,6 +626,7 @@ function xarVarPrepHTMLDisplay__callback($matches)
  * @access public
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
+ * @todo this looks like something for the mail module or an EmailAddress class somewhere
  */
 function xarVarPrepEmailDisplay()
 {
@@ -675,6 +676,7 @@ function xarVarPrepEmailDisplay()
  *
  * @todo the / also prevents relative access in some cases (template tag for example)
  * @todo this puts responsibility on callee to know how things work, and gets a mangled name back, not very nice
+ * @todo make it have 1 return type
  */
 function xarVarPrepForOS()
 {
@@ -694,7 +696,6 @@ function xarVarPrepForOS()
 
 
     // Return vars
-    // <nuncanada> I really dont like this kind of behaviour... It's not consistent.
     if (func_num_args() == 1) {
         return $args[0];
     } else {
