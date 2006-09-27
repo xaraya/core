@@ -1,13 +1,11 @@
 <?php
 /**
- * Utility function to retrieve the list of item types of this module (if any)
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -37,16 +35,8 @@ function roles_userapi_getitemtypes($args)
     // @todo let's use Dynamic_Object_Master::getModuleItemType here, but not until roles brings in dd automatically
     $extensionitemtypes = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27, 'native' =>false));
 
-    /* TODO: activate this code when we move to php5
     $keys = array_merge(array_keys($itemtypes),array_keys($extensionitemtypes));
     $values = array_merge(array_values($itemtypes),array_values($extensionitemtypes));
     return array_combine($keys,$values);
-    */
-
-    $types = array();
-    foreach ($itemtypes as $key => $value) $types[$key] = $value;
-    foreach ($extensionitemtypes as $key => $value) $types[$key] = $value;
-    return $types;
 }
-
 ?>
