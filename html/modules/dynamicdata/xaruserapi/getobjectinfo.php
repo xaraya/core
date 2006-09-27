@@ -10,15 +10,9 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * get information about a defined dynamic object
- *
- * @author the DynamicData module development team
- * @param $args['objectid'] id of the object you're looking for, or
- * @param $args['moduleid'] module id of the item field to get
- * @param $args['itemtype'] item type of the item field to get
- * @returns array
- * @return array of object definitions
- * @throws DATABASE_ERROR, NO_PERMISSION
+ * Wrapper for Dynamic_Object_Master::getObjectInfo
+ * 
+ * @see  Dynamic_Object_Master::getObjectInfo
  */
 function dynamicdata_userapi_getobjectinfo($args)
 {
@@ -27,5 +21,4 @@ function dynamicdata_userapi_getobjectinfo($args)
     }
     return Dynamic_Object_Master::getObjectInfo($args);
 }
-
 ?>
