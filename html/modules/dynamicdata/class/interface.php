@@ -6,7 +6,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -15,7 +15,7 @@
  * Dynamic Object Interface (experimental - cfr. 'object' module)
  *
  * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @subpackage dynamicdata
  */
 class Dynamic_Object_Interface extends Object
 {
@@ -49,8 +49,7 @@ class Dynamic_Object_Interface extends Object
         // retrieve the object information for this object
         if(!empty($args['object'])) 
         {
-            $info = xarModAPIFunc(
-                'dynamicdata','user','getobjectinfo',
+            $info = Dynamic_Object_Master::getObjectInfo(
                 array('name' => $args['object'])
             );
             $args = array_merge($args, $info);

@@ -509,8 +509,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             } 
             else 
             {
-                $info = xarModAPIFunc(
-                    'dynamicdata','user','getobjectinfo',
+                $info = Dynamic_Object_Master::getObjectInfo(
                     array(
                         'moduleid' => $args['moduleid'], 
                         'itemtype' => $args['itemtype']

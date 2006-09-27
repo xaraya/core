@@ -42,8 +42,8 @@ function dynamicdata_user_view($args)
     if (empty($itemtype)) {
         $itemtype = 0;
     }
-    if (!xarModAPILoad('dynamicdata','user')) return;
-    $object = xarModAPIFunc('dynamicdata','user','getobjectinfo',
+
+    $object = Dynamic_Object_Master::getObjectInfo(
                             array('objectid' => $objectid,
                                   'moduleid' => $modid,
                                   'itemtype' => $itemtype,
