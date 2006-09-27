@@ -173,14 +173,14 @@ class Dynamic_Object_Master extends Object
         // the default is to add the fields
         $this->baseancestor = $this->objectid;
         if((!isset($args['extend']) || ($args['extend'] != false)))
-            $this->addancestors();
+            $this->addAncestors();
     }
 
     /**
      * Add the ancestors to this object
      * This is adding the properties and datastores of all the ancestors to this object
      */
-    private function addancestors($object=null)
+    private function addAncestors($object=null)
     {
         // Determine how we are going to get the ancestors
         $params = array();
@@ -197,7 +197,7 @@ class Dynamic_Object_Master extends Object
             $params['top']      = true;
         }
         // Retrieve the ancestors
-        $ancestors = xarModAPIFunc('dynamicdata','user','getancestors',$params);
+        $ancestors = self::getAncestors($params);
 
         // If this is an extended object add the ancestor properties for display purposes
         if(!empty($ancestors))
@@ -207,7 +207,7 @@ class Dynamic_Object_Master extends Object
             foreach($ancestors as $ancestor)
             {
                 if($ancestor['objectid'])
-                    $this->addobject($ancestor['objectid']);
+                    $this->addObject($ancestor['objectid']);
             }
         }
     }
@@ -220,7 +220,7 @@ class Dynamic_Object_Master extends Object
      * @todo pass $object by ref?
      * @todo stricten the interface, either an object or an id, not both.
      */
-    private function addobject($object=null)
+    private function addObject($object=null)
     {
         if(is_numeric($object))
             $object =& self::getObject(
