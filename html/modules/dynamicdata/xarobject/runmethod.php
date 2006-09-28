@@ -16,15 +16,7 @@
 sys::import('modules.dynamicdata.class.simpleinterface');
 function dynamicdata_object_runmethod($args)
 {
-    if (empty($args['moduleid']) && !empty($args['module'])) {
-       $args['moduleid'] = xarModGetIDFromName($args['module']);
-    }
-    if (empty($args['moduleid']) && !empty($args['modid'])) {
-       $args['moduleid'] = $args['modid'];
-    }
     $interface = new Simple_Object_Interface($args);
-
-    // let the interface handle the rest
     return $interface->handle($args);
 }
 ?>

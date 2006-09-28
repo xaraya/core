@@ -34,31 +34,35 @@ class Dynamic_Object_Interface extends Object
     function __construct(array $args = array())
     {
         // set a specific GUI module for now
-        if(!empty($args['urlmodule'])) 
+        if (!empty($args['urlmodule'])) {
             $this->urlmodule = $args['urlmodule'];
+        }
 
         // get some common URL parameters
-        if(!xarVarFetch('object',   'isset', $args['object'],   NULL, XARVAR_DONT_SET)) {return;}
-        if(!xarVarFetch('module',   'isset', $args['module'],   NULL, XARVAR_DONT_SET)) {return;}
-        if(!xarVarFetch('itemtype', 'isset', $args['itemtype'], NULL, XARVAR_DONT_SET)) {return;}
-        if(!xarVarFetch('table',    'isset', $args['table'],    NULL, XARVAR_DONT_SET)) {return;}
-        if(!xarVarFetch('layout',   'isset', $args['layout'],   NULL, XARVAR_DONT_SET)) {return;}
-        if(!xarVarFetch('template', 'isset', $args['template'], NULL, XARVAR_DONT_SET)) {return;}
+        if (!xarVarFetch('object',   'isset', $args['object'],   NULL, XARVAR_DONT_SET)) {return;}
+        if (!xarVarFetch('module',   'isset', $args['module'],   NULL, XARVAR_DONT_SET)) {return;}
+        if (!xarVarFetch('itemtype', 'isset', $args['itemtype'], NULL, XARVAR_DONT_SET)) {return;}
+        if (!xarVarFetch('layout',   'isset', $args['layout'],   NULL, XARVAR_DONT_SET)) {return;}
+        if (!xarVarFetch('template', 'isset', $args['template'], NULL, XARVAR_DONT_SET)) {return;}
+        if (!xarVarFetch('startnum', 'isset', $args['startnum'], NULL, XARVAR_DONT_SET)) {return;}
+        if (!xarVarFetch('numitems', 'isset', $args['numitems'], NULL, XARVAR_DONT_SET)) {return;}
 
-        // do not allow the table interface unless the user is an admin
-        if(!empty($args['table']) && !xarSecurityCheck('AdminDynamicData')) 
-            return;
+         if (!xarVarFetch('fieldlist', 'isset', $fieldlist, NULL, XARVAR_DONT_SET)) {return;}
+        // make fieldlist an array, 
+        // @todo should the object class do it?
+        if (!empty($fieldlist)) {
+            $args['fieldlist'] = explode(',',$fieldlist);
+        }
 
         // retrieve the object information for this object
-        if(!empty($args['object'])) 
-        {
+        if(!empty($args['object']))  {
             $info = Dynamic_Object_Master::getObjectInfo(
                 array('name' => $args['object'])
             );
             $args = array_merge($args, $info);
-        } 
-        elseif(!empty($args['module']) && empty($args['moduleid'])) 
+        } elseif (!empty($args['module']) && empty($args['moduleid'])) { 
             $args['moduleid'] = xarModGetIDFromName($args['module']);
+        }
 
         // fill in the default object variables
         $this->args = $args;
