@@ -56,6 +56,7 @@ function dynamicdata_user_search($args)
             $itemtype = 0;
         }
     }
+    // TODO: move this to the varFetch?
     if (!isset($startnum)) {
         $startnum = 1;
     }

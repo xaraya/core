@@ -145,6 +145,8 @@ class Dynamic_Property_Master
 
     /**
      * Class method to get a new dynamic property of the right type
+     * @param $args
+     * @return object $property
      */
     function &getProperty($args)
     {
@@ -205,7 +207,10 @@ class Dynamic_Property_Master
     {
         // TODO: what if the property type changes to something incompatible ?
     }
-
+    /**
+     * @param array $args
+     * @return id objectid
+     */
     function deleteProperty($args)
     {
         if (empty($args['itemid'])) return;
@@ -224,6 +229,7 @@ class Dynamic_Property_Master
 
     /**
      * Class method listing all defined property types
+     * @return array Array with property_types
      */
     function getPropertyTypes()
     {
