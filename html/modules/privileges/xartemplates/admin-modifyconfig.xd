@@ -97,7 +97,7 @@
         </dl>
     </div>
     <xar:comment>
-        ------------------- Begin General Options --------------------- 
+        - - - - - - Begin General Options - - - - - -
     </xar:comment>
     <xar:if condition="$tab eq 'general'">
         <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded" >
@@ -133,7 +133,9 @@
                     <xar:mlstring>Warning: This setting affects the way privileges work on your site. If changed you should retest all the privileges on your site.</xar:mlstring>
                 </div>
                 </xar:comment>
-                <legend>
+             </fieldset>
+            <fieldset>
+               <legend>
                     <xar:mlstring>
                         Last Resort
                     </xar:mlstring>
@@ -161,7 +163,7 @@
         </form>
     </xar:if>
     <xar:comment>
-        ------------------- Begin Realms Options --------------------- 
+        - - - - - Begin Realms Options - - - - - 
     </xar:comment>
     <xar:if condition="$tab eq 'realms'">
         <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
@@ -203,24 +205,16 @@
                             </xar:mlstring>
                         </label>
                         <xar:set name="realmoptions">array(
-                                                array('id' => 'none', 'name' => 'No Value'),
-                                                array('id' => 'domain', 'name' => 'Current Domain'),
-                                                array('id' => 'theme', 'name' => 'Current Theme'),
-                                                array('id' => 'group', 'name' => 'Primary Parent Group'),
-                                                array('id' => 'string', 'name' => 'Text Value')
+                                                array('id' => 'none', 'name' => xarML('No Value')),
+                                                array('id' => 'domain', 'name' => xarML('Current Domain')),
+                                                array('id' => 'theme', 'name' => xarML('Current Theme')),
+                                                array('id' => 'group', 'name' => xarML('Primary Parent Group')),
+                                                array('id' => 'string', 'name' => xarML('Text Value'))
                                                 )
                                                 </xar:set>
 
                        <div class="xar-form-container-after">
-                        <xar:foreach in="$realmoptions" key="$key" value="$value">
-                            <p>
-                            <xar:if condition="$realmvalue eq $value['id']">
-                                <input type="radio" value="#$value['id']#" name="realmvalue" id="realmvalue" checked="checked" /> #xarML($value['name'])#
-                            <xar:else />
-                                <input type="radio" value="#$value['id']#" name="realmvalue" id="realmvalue" /> #xarML($value['name'])#
-                            </xar:if>
-                            </p>
-                        </xar:foreach>
+                            <xar:data-input type="radio" name="realmvalue" options="$realmoptions" value="$realmvalue" layout="vertical" />
                         </div>
 
                     </div>
@@ -246,15 +240,7 @@
                                                 </xar:set>
                         <xar:set name="realmcomparison">xarModGetVar('privileges', 'realmcomparison')</xar:set>
                          <div class="xar-form-container-after">
-                        <xar:foreach in="$options" key="$key" value="$value">
-                            <p>
-                            <xar:if condition="$realmcomparison eq $value['id']">
-                                <input type="radio" value="#$value['id']#" name="realmcomparison" id="realmvalue" checked="checked" /> #xarML($value['name'])#
-                            <xar:else />
-                                <input type="radio" value="#$value['id']#" name="realmcomparison" id="realmvalue" /> #xarML($value['name'])#
-                            </xar:if>
-                            </p>
-                        </xar:foreach>
+                            <xar:data-input type="radio" name="realmcomparison" id="realmvalue" options="$options" value="$realmcomparison" layout="vertical" />
                         </div>                      
                         <p class="xar-form-input-wrapper-after">
                             <xar:mlstring>A realm is accepted if the user's privilege contains its name</xar:mlstring>
@@ -273,7 +259,7 @@
         </form>
     </xar:if>
     <xar:comment>
-        ------------------- Begin Last Resort --------------------- 
+        - - - - - Begin Last Resort - - - - -  
     </xar:comment>
     <xar:if condition="$tab eq 'lastresort' AND xarModGetVar('privileges','lastresort')">
         <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded" >
@@ -325,7 +311,7 @@
         </form>
     </xar:if>
     <xar:comment>
-        ------------------- Begin Masks --------------------- 
+        - - - - - Begin Masks - - - - - 
     </xar:comment>
     <xar:if condition="$tab eq 'masks'">
         <fieldset>
@@ -353,7 +339,7 @@
         </fieldset>
     </xar:if>
     <xar:comment>
-        ------------------- Begin Testing --------------------- 
+        - - - - - - Begin Testing - - - - - 
     </xar:comment>
     <xar:if condition="$tab eq 'testing'">
         <form method="post" id="testerform" name="testerform" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded" >

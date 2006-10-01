@@ -1,7 +1,6 @@
 <?php
 /**
  * Dynamic Item Type property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -16,7 +15,7 @@
  * Include the base class
  *
  */
-include_once "modules/base/xarproperties/Dynamic_NumberBox_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_NumberBox_Property');
 
 /**
  * Handle the item type property
@@ -25,14 +24,21 @@ include_once "modules/base/xarproperties/Dynamic_NumberBox_Property.php";
  */
 class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
 {
-    var $module   = ''; // get itemtypes for this module with getitemtypes()
-    var $itemtype = null; // get items for this module+itemtype with getitemlinks()
-    var $func     = null; // specific API call to retrieve a list of items
-    var $options  = array();
+    public $id         = 20;
+    public $name       = 'itemtype';
+    public $desc       = 'Item Type';
+    public $reqmodules = array('dynamicdata');
 
-    function Dynamic_ItemType_Property($args)
+    public $module   = ''; // get itemtypes for this module with getitemtypes()
+    public $itemtype = null; // get items for this module+itemtype with getitemlinks()
+    public $func     = null; // specific API call to retrieve a list of items
+    public $options  = array();
+
+    function __construct($args)
     {
-        $this->Dynamic_NumberBox_Property($args);
+        parent::__construct($args);
+        // Tplmodule and template are by default those of the numberbox (whatever they may be)
+        $this->filepath   = 'modules/dynamicdata/xarproperties';
 
         // options may be set in one of the child classes
         if (count($this->options) == 0 && !empty($this->validation)) {
@@ -60,53 +66,49 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
         }
     }
 
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        if (!empty($args)) {
-            $this->setArguments($args);
+        if (!empty($data)) {
+            $this->setArguments($data);
         }
         if (empty($this->module)) {
             // let Dynamic_NumberBox_Property handle the rest
-            return parent::showInput($args);
+            return parent::showInput($data);
         }
 
-        $data = array();
         $data['options']  = $this->getOptions();
         if (empty($data['options'])) {
             // let Dynamic_NumberBox_Property handle the rest
-            return parent::showInput($args);
+            return parent::showInput($data);
         }
         $data['value']    = $this->value; // cfr. setArguments()
         $data['name']     = !empty($this->fieldname) ? $this->fieldname : 'dd_' . $this->id;
-        $data['id']       = !empty($args['id']) ? $args['id'] : $data['name'];
-        $data['tabindex'] = !empty($args['tabindex']) ? $args['tabindex'] : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
+        if(!isset($data['onchange'])) $data['onchange'] = null; // let tpl decide what to do
 
-        if (empty($args['template'])) {
-            $args['template'] = 'itemtype';
-        }
-        return xarTplProperty('dynamicdata', $args['template'], 'showinput', $data);
+        // Once we get here, we dont let our parent dictate what we need anymore for rendering
+        $this->tplmodule = 'dynamic_data';
+        $this->template = 'itemtype';
+        return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        if (!empty($args)) {
-            $this->setArguments($args);
+        if (!empty($data)) {
+            $this->setArguments($data);
         }
         if (empty($this->module)) {
             // let Dynamic_NumberBox_Property handle the rest
-            return parent::showOutput($args);
+            return parent::showOutput($data);
         }
 
-        $data = array();
         $data['value'] = $this->value;
         $data['option'] = array('id' => $this->value,
                                 'name' => $this->getOption());
 
-        if (empty($args['template'])) {
-            $args['template'] = 'itemtype';
-        }
-        return xarTplProperty('dynamicdata', $args['template'], 'showoutput', $data);
+        // Once we get here, we dont let our parent dictate what we need anymore for rendering
+        $this->tplmodule = 'dynamic_data';
+        $this->template = 'itemtype';
+        return parent::showOutput($data);
     }
 
     function setArguments($args = array())
@@ -288,31 +290,6 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
     }
 
     /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 20,
-                              'name'       => 'itemtype',
-                              'label'      => 'Item Type',
-                              'format'     => '20',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'dynamicdata',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
-    /**
      * Show the current validation rule in a specific form for this property type
      *
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
@@ -355,10 +332,14 @@ class Dynamic_ItemType_Property extends Dynamic_NumberBox_Property
         $data['other']     = '';
 
         // allow template override by child classes
-        if (!isset($template)) {
+        if (empty($module)) {
+            $module = 'dynamicadata';
+        }
+        if (empty($template)) {
             $template = 'itemtype';
         }
-        return xarTplProperty('dynamicdata', $template, 'validation', $data);
+
+        return xarTplProperty($module, $template, 'validation', $data);
     }
 
     /**

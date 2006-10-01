@@ -1,22 +1,21 @@
 <?php
 /**
- * Find all the module's dependencies
- *
- * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * Find all the module's dependencies 
+ * @package Xaraya eXtensible Management System
+ * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Module System
- * @link http://xaraya.com/index.php/release/1.html
+ * @subpackage Modules module
  */
 /**
  * Find all the module's dependencies with all the dependencies of its
  * siblings
  *
  * @author Xaraya Development Team
- * @param $mainId int ID of the module to look dependents for, from $args['regid']
- * @return array Array with dependency information
+ * @param $maindId int ID of the module to look dependents for
+ * @returns bool
+ * @return true on dependencies activated, false for not
  * @throws NO_PERMISSION
  */
 function modules_adminapi_getalldependencies($args)
@@ -31,11 +30,7 @@ function modules_adminapi_getalldependencies($args)
         return;
 
     // Argument check
-    if (!isset($mainId)) {
-        $msg = xarML('Missing module regid (#(1)).', $mainId);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    if (!isset($mainId)) throw new EmptyParameterException('regid');
 
     // See if we have lost any modules since last generation
     if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {
@@ -55,14 +50,11 @@ function modules_adminapi_getalldependencies($args)
     $checked_ids[] = $mainId;
 
     // Get module information
-    $modInfo = xarModGetInfo($mainId);
-    if (!isset($modInfo)) {
-        //Handle the Exception Thrown
-        xarErrorHandled();
-
+    try {
+        $modInfo = xarModGetInfo($mainId);
+    } catch (NotFoundExceptions $e) {
         //Add this module to the unsatisfiable list
         $dependency_array['unsatisfiable'][] = $mainId;
-
         //Return now, we cant find more info about this module
         return $dependency_array;
     }
@@ -97,8 +89,7 @@ function modules_adminapi_getalldependencies($args)
         $output = xarModAPIFunc('modules', 'admin', 'getalldependencies', array('regid'=>$modId));
         if (!$output) {
             $msg = xarML('Unable to get dependencies for module with ID (#(1)).', $modId);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
-            return;
+            throw new Exception($msg);
         }
         //This is giving : recursing detected.... ohh well
 //        $dependency_array = array_merge_recursive($dependency_array, $output);
@@ -123,7 +114,7 @@ function modules_adminapi_getalldependencies($args)
         $dependency_array['unsatisfiable'][] = $modInfo;
     } elseif (count($dependency_array['satisfiable'])) {
         //Then this module is satisfiable too
-        //As if it were initialized, then all dependencies would have
+        //As if it were initialized, then all depdencies would have
         //to be already satisfied
         $dependency_array['satisfiable'][] = $modInfo;
     } else {

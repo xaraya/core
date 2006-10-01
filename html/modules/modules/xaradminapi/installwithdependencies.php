@@ -1,7 +1,6 @@
 <?php
 /**
  * Install a module with all its dependencies.
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -21,43 +20,11 @@
 function modules_adminapi_installwithdependencies ($args)
 {
     //    static $installed_ids = array();
-    $mainId = $args['regid'];
-
-
-    // FIXME: check if this is necessary, it shouldn't, we should have checked it earlier
-    //     if(in_array($mainId, $installed_ids)) {
-    //         xarLogMessage("Already installed $mainId in this request, skipping");
-    //         return true;
-    //     }
-    //     $installed_ids[] = $mainId;
-
-    // Security Check
-    // need to specify the module because this function is called by the installer module
-    if (!xarSecurityCheck('AdminModules', 1, 'All', 'All', 'modules'))
-        return;
-
-    // Argument check
-    if (!isset($mainId)) {
-        $msg = xarML('Missing module regid (#(1)).', $mainId);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
-
-    // See if we have lost any modules since last generation
-    if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {
-        return;
-    }
-
-    // Make xarModGetInfo not cache anything...
-    //We should make a funcion to handle this or maybe whenever we
-    //have a central caching solution...
-    $GLOBALS['xarMod_noCacheState'] = true;
-
     // Get module information
+    $mainId = $args['regid'];
     $modInfo = xarModGetInfo($mainId);
     if (!isset($modInfo)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST', new SystemException(__FILE__."(".__LINE__."): Module (regid: $regid) does not exist."));
-        return;
+        throw new ModuleNotFoundException($regid,'Module (regid: #(1)) does not exist.');
     }
 
     switch ($modInfo['state']) {
@@ -72,73 +39,132 @@ function modules_adminapi_installwithdependencies ($args)
             $initialised = false;
             break;
     }
+    if (!isset($args['phase'])) $args['phase'] = 0;
+    switch ($args['phase']) {
 
-    if (!empty($modInfo['extensions'])) {
-        foreach ($modInfo['extensions'] as $extension) {
-            if (!empty($extension) && !extension_loaded($extension)) {
-                xarErrorSet(
-                    XAR_SYSTEM_EXCEPTION, 'MODULE_NOT_EXIST',
-                    new SystemException(xarML("Required PHP extension '#(1)' is missing for module '#(2)'", $extension, $modInfo['displayname']))
-                );
+        case 0:
+
+
+            // FIXME: check if this is necessary, it shouldn't, we should have checked it earlier
+            //     if(in_array($mainId, $installed_ids)) {
+            //         xarLogMessage("Already installed $mainId in this request, skipping");
+            //         return true;
+            //     }
+            //     $installed_ids[] = $mainId;
+
+            // Security Check
+            // need to specify the module because this function is called by the installer module
+            if (!xarSecurityCheck('AdminModules', 1, 'All', 'All', 'modules'))
+                return;
+
+            // Argument check
+            if (!isset($mainId)) throw new EmptyParameterException('regid');
+
+            // See if we have lost any modules since last generation
+            if (!xarModAPIFunc('modules', 'admin', 'checkmissing')) {
                 return;
             }
-        }
-    }
 
-    $dependency = $modInfo['dependency'];
+            // Make xarModGetInfo not cache anything...
+            //We should make a funcion to handle this or maybe whenever we
+            //have a central caching solution...
+            $GLOBALS['xarMod_noCacheState'] = true;
 
-    if (empty($dependency)) {
-        $dependency = array();
-    }
+            if (!empty($modInfo['extensions'])) {
+                foreach ($modInfo['extensions'] as $extension) {
+                    if (!empty($extension) && !extension_loaded($extension)) {
+                        throw new ModuleNotFoundException(array($extension,$modInfo['displayname']),
+                                                          "Required PHP extension '#(1)' is missing for module '#(2)'");
+                    }
+                }
+            }
 
-    //The dependencies are ok, assuming they shouldnt change in the middle of the
-    //script execution.
-    foreach ($dependency as $module_id => $conditions) {
-        if (is_array($conditions)) {
-            //The module id is in $modId
-            $modId = $module_id;
-        } else {
-            //The module id is in $conditions
-            $modId = $conditions;
-        }
+            $dependency = $modInfo['dependency'];
 
-        if (!xarModAPIFunc('modules', 'admin', 'installwithdependencies', array('regid'=>$modId))) {
-            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                return;
+            if (empty($dependency)) {
+                $dependency = array();
+            }
+
+            $modstack = unserialize(xarSessionGetVar('modulestoinstall'));
+            $teststack = $modstack;
+            if ($mainId != array_pop($teststack)) {
+                array_push($modstack,$mainId);
+                xarSessionSetVar('modulestoinstall',serialize($modstack));
+            }
+
+            //The dependencies are ok, assuming they shouldnt change in the middle of the
+            //script execution.
+            foreach ($dependency as $module_id => $conditions) {
+                if (is_array($conditions)) {
+                    //The module id is in $modId
+                    $modId = $module_id;
+                } else {
+                    //The module id is in $conditions
+                    $modId = $conditions;
+                }
+
+                if (!xarModAPIFunc('modules', 'admin', 'installwithdependencies', array('regid'=>$modId, 'phase' => 0))) {
+                    $msg = xarML('Unable to initialize dependency module with ID (#(1)).', $modId);
+                    throw new Exception($msg);
+                }
+            }
+
+            // Is there an install page?
+            if (file_exists('modules/' . $modInfo['osdirectory'] . '/xartemplates/includes/installoptions.xd')) {
+                xarResponseRedirect(xarModURL('modules','admin','modifyinstalloptions',array('regid' => $mainId)));
+                return true;
             } else {
-                $msg = xarML('Unable to initialize dependency module with ID (#(1)).', $modId);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
-                return;
+                //No install page; move to install the module now
+                $args['phase'] =1;
             }
-        }
-    }
 
-    //Checks if the module is already initialised
-    if (!$initialised) {
-        // Finally, now that dependencies are dealt with, initialize the module
-        if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $mainId))) {
-            if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-                return;
+        case 1:
+            $modstack = unserialize(xarSessionGetVar('modulestoinstall'));
+            $mainId = array_pop($modstack);
+            xarSessionSetVar('modulestoinstall',serialize($modstack));
+
+            //Checks if the module is already initialised
+            if (!$initialised) {
+                // Finally, now that dependencies are dealt with, initialize the module
+                if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $mainId))) {
+                    $msg = xarML('Unable to initialize module "#(1)".', $modInfo['displayname']);
+                    throw new Exception($msg);
+                }
+            }
+
+            // And activate it!
+            if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $mainId))) {
+                $msg = xarML('Unable to activate module "#(1)".', $modInfo['displayname']);
+                throw new Exception($msg);
+            }
+
+            if (empty($modstack)) {
+                // Looks like we're done
+                xarSessionDelVar('modulestoinstall');
+                // set the target location (anchor) to go to within the page
+                $target = $modInfo['name'];
+
+                if (function_exists('xarOutputFlushCached')) {
+                    xarOutputFlushCached('base');
+                    xarOutputFlushCached('modules');
+                    xarOutputFlushCached('base-block');
+                }
+
+                // The module might have properties, after installing, flush the property cache otherwise you will
+                // get errors on displaying the property.
+                if(!xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush' => true))) {
+                    return false; //FIXME: Do we want an exception here if flushing fails?
+                }
+                xarResponseRedirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
             } else {
-                $msg = xarML('Unable to initialize module "#(1)".', $modInfo['displayname']);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
-                return;
+                // Do the next module
+                if (!xarModAPIFunc('modules','admin','installwithdependencies',array('regid' => array_pop($modstack), 'phase' => 0))) return;
             }
-        }
-    }
+            return true;
 
-    // And activate it!
-    if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $mainId))) {
-        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-            return;
-        } else {
-            $msg = xarML('Unable to activate module "#(1)".', $modInfo['displayname']);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'FUNCTION_FAILED', $msg);
-            return;
-        }
+        default:
+            throw new Exception('Unknown install phase...aborting');
     }
-
-    return true;
 }
 
 ?>

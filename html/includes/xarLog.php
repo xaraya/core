@@ -10,12 +10,12 @@
  * @subpackage logging
  * @author Marco Canini <marco@xaraya.com>
  * @author Flavio Botelho <nuncanada@ig.com.br>
+ * @author Marcel van der Boom
  * @todo  Document functions
- *        Add options to simple & html logger
- *        When calendar & xarLocaleFormatDate is done complete simple logger
- *        and html logger
- *        When xarMail is done do email logger
- */
+ * @todo  Add options to simple & html logger
+ * @todo  When calendar & xarLocaleFormatDate is done complete simple logger and html logger
+ * @todo  When xarMail is done do email logger
+**/
 
 /**
  * Logging package defines
@@ -32,7 +32,22 @@ define('XARLOG_LEVEL_DEBUG',     128);
 // This is a special define that includes all the levels defined above
 define('XARLOG_LEVEL_ALL',       255);
 
-function xarLog_init(&$args, &$whatElseIsGoingLoaded)
+/**
+ * Exceptions raised within the loggers
+ *
+ */
+class LoggerException extends Exception
+{
+    // Fill in later.
+}
+
+/**
+ * Initialize the logging subsystem
+ *
+ * @return void
+ * @throws LoggerException
+**/
+function xarLog_init(&$args, &$whatElseIsGoingLoaded) 
 {
 
     $GLOBALS['xarLog_loggers'] = array();
@@ -40,9 +55,9 @@ function xarLog_init(&$args, &$whatElseIsGoingLoaded)
 
     if (xarLogConfigReadable())
     {
-        //We can't use xarInclude here.
-        if (!include_once (xarLogConfigFile())) {
-            xarCore_die('xarLog_init: Log configuration file is invalid!');
+        // CHECKME: do we need to wrap this?
+        if (!include (xarLogConfigFile())) {
+            throw new LoggerException('xarLog_init: Log configuration file is invalid!');
         }
 
     } elseif (xarLogFallbackPossible()) {
@@ -81,7 +96,7 @@ function xarLogConfigFile()
 
     if (isset($logConfigFile)) return $logConfigFile;
 
-    $logConfigFile = xarCoreGetVarDirPath() . '/logs/config.log.php';
+    $logConfigFile = sys::varpath() . '/logs/config.log.php';
 
     if (file_exists($logConfigFile)) {
         $logConfigFile = realpath($logConfigFile);
@@ -113,7 +128,7 @@ function xarLogFallbackFile ()
 
     if (isset($logFile)) return $logFile;
 
-    $logFile = xarCoreGetVarDirPath() . '/logs/log.txt';
+    $logFile = sys::varpath() . '/logs/log.txt';
 
     if (file_exists($logFile)) {
         $logFile = realpath($logFile);
@@ -144,18 +159,18 @@ function xarLogFallbackPossible ()
 function xarLog__shutdown_handler()
 {
      xarLogMessage("xarLog shutdown handler.");
+    
+     // If the debugger was active, we can dispose it now.
+     if(xarDebug::$flags & XARDBG_SQL) {
+         xarLogMessage("Total SQL queries: $GLOBALS[xarDebug_sqlCalls].");
+     }
 
-    // If the debugger was active, we can dispose it now.
-    if($GLOBALS['xarDebug'] & XARDBG_SQL) {
-        xarLogMessage("Total SQL queries: $GLOBALS[xarDebug_sqlCalls].");
-    }
-
-    if ($GLOBALS['xarDebug'] & XARDBG_ACTIVE) {
-        $lmtime = explode(' ', microtime());
-        $endTime = $lmtime[1] + $lmtime[0];
-        $totalTime = ($endTime - $GLOBALS['xarDebug_startTime']);
-        xarLogMessage("Response was served in $totalTime seconds.");
-    }
+     if (xarDebug::$flags & XARDBG_ACTIVE) {
+         $lmtime = explode(' ', microtime());
+         $endTime = $lmtime[1] + $lmtime[0];
+         $totalTime = ($endTime - xarDebug::$startTime);
+         xarLogMessage("Response was served in $totalTime seconds.");
+     }
 
 //During register_shutdown, it's already too late.
 //fwrite presents problems during it.
@@ -170,16 +185,19 @@ function xarLog__shutdown_handler()
  */
 }
 
+/**
+ * Add a logger to active loggers
+ *
+ * @return void
+ * @throws LoggerException
+**/
 function xarLog__add_logger($type, $config_args)
 {
-    if (!xarInclude ('includes/log/loggers/'.$type.'.php')) {
-        xarCore_die('xarLog_init: Unable to load driver for logging: '.$type);
-    }
-
+    sys::import('log.loggers.'.$type);
     $type = 'xarLogger_'.$type;
 
      if (!$observer = new $type()) {
-        xarCore_die('xarLog_init: Unable to instanciate class for logging: '.$type);
+         throw new LoggerException('xarLog_init: Unable to instantiate class for logging: '.$type);
      }
 
       $observer->setConfig($config_args);
@@ -202,9 +220,8 @@ function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
 {
     $args = array('name'=>$name, 'var'=>$var, 'format'=>'text');
 
-    //Lazy load these functions... With php5 this will be easier.
     //Encapsulate core libraries in classes and let __call work lazy loading
-    xarInclude('includes/log/functions/dumpvariable.php');
+    sys::import('log.functions.dumpvariable');
     xarLogMessage(xarLog__dumpVariable($args),$level);
 }
 

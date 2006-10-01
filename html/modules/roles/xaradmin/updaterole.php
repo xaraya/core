@@ -20,149 +20,124 @@ function roles_admin_updaterole()
 {
     // Check for authorization code
 //    if (!xarSecConfirmAuthKey()) return;
-    if (!xarVarFetch('uid',            'int:1:',    $uid)) return;
-    if (!xarVarFetch('pname',          'str:1:35:', $pname)) return;
-    if (!xarVarFetch('ptype',          'int',       $ptype)) return;
-    if (!xarVarFetch('phome',          'str',       $phome, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('pprimaryparent', 'int',       $pprimaryparent, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('returnurl',      'str',       $returnurl, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('utimezone',      'str:1:',    $utimezone,'',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('allowemail',     'checkbox',  $allowemail,false,XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('uid', 'int:1:', $uid)) return;
+    if (!xarVarFetch('pname', 'str:1:35:', $pname)) return;
+    if (!xarVarFetch('itemtype', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('phome', 'str', $phome, '', XARVAR_NOT_REQUIRED)) return;
+    $basetype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
+    if (!xarVarFetch('pprimaryparent', 'int', $pprimaryparent, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('returnurl', 'str', $returnurl, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('utimezone','str:1:',$utimezone,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('allowemail','checkbox',$allowemail,false,XARVAR_NOT_REQUIRED)) return;
     //Grab it here if primary parent modvar is activated
     if (!empty($pprimaryparent) && is_integer($pprimaryparent) && xarModGetVar('roles','setprimaryparent')) {
-        $primaryrole   = new xarRoles();
-        $primaryp      = $primaryrole->getRole($pprimaryparent);
+        $primaryrole = new xarRoles();
+        $primaryp = $primaryrole->getRole($pprimaryparent);
         $primaryparent = $primaryp->uname;
     } else {
         $primaryparent='';
     }
     if (!empty($utimezone) && is_string($utimezone) && xarModGetVar('roles','setusertimezone')) {
         $timeinfo = xarModAPIFunc('base','user','timezones', array('timezone' => $utimezone));
-
         list($hours,$minutes) = explode(':',$timeinfo[0]);
-        $offset        = (float) $hours + (float) $minutes / 60;
-        $timeinfoarray = array('timezone' => $utimezone, 'offset' => $offset);
-        $usertimezone  = serialize($timeinfoarray);
+        $offset = (float) $hours + (float) $minutes / 60;
+        $timeinfoarray= array('timezone' => $utimezone, 'offset' => $offset);
+        $usertimezone=serialize($timeinfoarray);
     } else {
         $usertimezone='';
     }
 
     //Save the old state and type
-    $roles    = new xarRoles();
-    $oldrole  = $roles->getRole($uid);
+    $roles = new xarRoles();
+    $oldrole = $roles->getRole($uid);
     $oldstate = $oldrole->getState();
-    $oldtype  = $oldrole->getType();
+    $oldtype = $oldrole->getType();
 
     // groups dont have pw etc., and can only be active
-    if ($ptype == 1) {
+    // TODO: what about the role itemtype?
+    if ($basetype != ROLES_USERTYPE) {
         $puname = $oldrole->getUser();
         $pemail = "";
         $ppass1 = "";
-        $pstate = 3;
-    }
-    else {
+        $pstate = ROLES_STATE_ACTIVE;
+    } else {
         if (!xarVarFetch('puname', 'str:1:35:', $puname)) return;
-        if (!xarVarFetch('pemail', 'str:1:',    $pemail)) return;
-        if (!xarVarFetch('ppass1', 'str:1:',    $ppass1,'')) return;
-        if (!xarVarFetch('ppass2', 'str:1:',    $ppass2,'')) return;
-        if (!xarVarFetch('pstate', 'int:1:',    $pstate)) return;
+        if (!xarVarFetch('pemail', 'str:1:', $pemail)) return;
+        if (!xarVarFetch('ppass1', 'str:1:', $ppass1,'')) return;
+        if (!xarVarFetch('ppass2', 'str:1:', $ppass2,'')) return;
+        if (!xarVarFetch('pstate', 'int:1:', $pstate)) return;
 
         // check for duplicate username
-        $user = xarModAPIFunc('roles','user','get', array('uname' => $puname));
+        $user = xarModAPIFunc('roles','user','get',array('uname' => $puname));
 
         if (($user != false) && ($user['uid'] != $uid)) {
-            $msg = xarML('That username is already taken.');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
+            throw new DuplicateException(array('user',$puname));
         }
         // check for valid username
         if ((!$puname) || !(!preg_match("/[[:space:]]/", $puname))) {
-            $msg = xarML('There is an error in the username');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
+            throw new BadParameterException($puname,'The username "#(1)" contains spacing characters, this is not allowed');
         }
 
-        if (strrpos($puname, ' ') > 0) {
-            $msg = xarML('There is a space in the username');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
-        }
         // TODO: Replace with DD property type check.
         // check for valid email address
         $res = preg_match('/.*@.*/', $pemail);
-        if ($res == false) {
-            $msg = xarML('There is an error in the email address');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
-        }
-        // check for valid password
-        if (strcmp($ppass1, $ppass2) != 0) {
-            $msg = xarML('The two password entries are not the same');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
-        }
-    }
-    $duvs = array();
-    if (isset($phome) && xarModGetVar('roles','setuserhome'))
-            $duvs['userhome'] = $phome;
+        if ($res == false) throw new BadParameterException($email,'The email adress "#(1)" is invalid');
 
-    if ((!empty($ppass1)) && xarModGetVar('roles','setpasswordupdate')){
+        // check for valid password
+        if (strcmp($ppass1, $ppass2) != 0) throw new DuplicateException(null,'The entered passwords are not the same');
+    }
+
+    $duvs = array();
+    if ((!empty($ppass1))  && xarModGetVar('roles','setpasswordupdate')){
         //assume if it's not empty then it's already been matched with ppass2
-        $duvs['passwordupdate'] = time();
+        $duvs['passwordupdate']=time();
     } elseif (xarModGetVar('roles','setpasswordupdate')) { //get existing
         $duvs['passwordupdate'] = xarModGetUserVar('roles','passwordupdate',$uid);
     }
     if (xarModGetVar('roles','setuserlastlogin')) {
-        $duvs['userlastlogin'] = xarModGetUserVar('roles','userlastlogin', $uid);
+        $duvs['userlastlogin']=xarModGetUserVar('roles','userlastlogin', $uid);
     }
-
     if (xarModGetVar('roles','setprimaryparent')) {
-        $duvs['primaryparent'] = $primaryparent;
+        $duvs['primaryparent']=$primaryparent;
     }
     if (xarModGetVar('roles','setusertimezone')) {
-        $duvs['usertimezone'] = $usertimezone;
+        $duvs['usertimezone']=$usertimezone;
     }
-    
+
     //the user cannot receive emails from other users until they allow it and admin allows this option
     xarModSetUserVar('roles','usersendemails', $allowemail, $uid);
     // assemble the args into an array for the role constructor
-    $pargs = array('uid'      => $uid,
-                   'name'     => $pname,
-                   'type'     => $ptype,
-                   'uname'    => $puname,
-                   'userhome' => $phome,
-                   'primaryparent' => $primaryparent,
-                   'usertimezone' => $usertimezone,
-                   'email'    => $pemail,
-                   'pass'     => $ppass1,
-                   'state'    => $pstate,
-                   'duvs'     =>$duvs);
-    // create a role from the data
-    $role = new xarRole($pargs);
+    $pargs = array('uid' => $uid,
+        'name' => $pname,
+        'itemtype' => $itemtype,
+        'uname' => $puname,
+        'userhome' => $phome,
+        'primaryparent' => $primaryparent,
+        'usertimezone' => $usertimezone,
+        'lastlogin' => time(),  // $duvs['userlastlogin'],
+        'passwordupdate'=> time(),  //$duvs['passwordupdate'],
+        'email' => $pemail,
+        'pass' => $ppass1,
+        'state' => $pstate,
+        'duvs' => $duvs,
+        'basetype' => $basetype,
+        );
 
-   // Try to update the role to the repository and bail if an error was thrown
-    if (!$role->update()) return;
-
-    // call item update hooks (for DD etc.)
-    // TODO: move to update() function
-    $pargs['module']   = 'roles';
-    $pargs['itemtype'] = $ptype; // we might have something separate for groups later on
-    $pargs['itemid']   = $uid;
-    xarModCallHooks('item', 'update', $uid, $pargs);
+    if (!xarModAPIFunc('roles','admin','update',$pargs)) return;
 
     //Change the defaultgroup var values if the name is changed
-    if ($ptype == 1) {
-        $defaultgroup = xarModGetVar('roles', 'defaultgroup');
+    if ($basetype == ROLES_GROUPTYPE) {
+        $defaultgroup = xarModAPIFunc('roles','user','getdefaultgroup');
         $defaultgroupuid = xarModAPIFunc('roles','user','get',
-                                   array('uname'  => $defaultgroup,
-                                         'type'   => 1));
-        if ($uid == $defaultgroupuid) xarModSetVar('roles', 'defaultgroup', $pname);
+                                                     array('uname'  => $defaultgroup,
+                                                           'type'   => ROLES_GROUPTYPE));
+        if ($uid == $defaultgroupuid) xarModSetVar(xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule')), 'defaultgroup', $pname);
 
         // Adjust the user count if necessary
-        if ($oldtype == 0) $oldrole->adjustParentUsers(-1);
+        if ($oldtype == ROLES_USERTYPE) $oldrole->adjustParentUsers(-1);
     }else {
         // Adjust the user count if necessary
-        if ($oldtype == 1) $oldrole->adjustParentUsers(1);
+        if ($oldtype == ROLES_GROUPTYPE) $oldrole->adjustParentUsers(1);
         //TODO : Be able to send 2 email if both password and type has changed... (or an single email with a overall msg...)
         //Ask to send email if the password has changed
         if ($ppass1 != '') {

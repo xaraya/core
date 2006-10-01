@@ -48,6 +48,7 @@ function roles_admin_createmail()
 
         if ($selstyle == 0) $selstyle =2;
         // Create a query to send to sendmail
+        sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery('SELECT');
         $q->addtable($xartable['roles'],'r');
         $q->addfields(array('r.xar_uid AS uid',
@@ -76,7 +77,7 @@ function roles_admin_createmail()
                                 'r.xar_email AS email',
                                 'r.xar_state AS state',
                                 'r.xar_date_reg AS date_reg'));
-            $q->eq('xar_type',0);
+            $q->eq('xar_type',ROLES_USERTYPE);
         }
         // Set the paging and order stuff for this particular page
         $numitems = xarModGetVar('roles', 'itemsperpage');
@@ -144,10 +145,8 @@ function roles_admin_createmail()
     }
 
     // Get the list of available templates
-    $messaginghome = xarCoreGetVarDirPath() . "/messaging/roles";
-    if (!file_exists($messaginghome)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'MODULE_FILE_NOT_EXIST', new SystemException('The messaging directory was not found.'));
-    }
+    $messaginghome = sys::varpath() . "/messaging/roles";
+    if (!file_exists($messaginghome)) throw new DirectoryNotFoundException($messaginghome);
 
     $dd = opendir($messaginghome);
     $templates = array(array('key' => 'blank', 'value' => xarML('Empty')));

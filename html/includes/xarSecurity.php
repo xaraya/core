@@ -6,7 +6,8 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Jim McDonald
- *
+ * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @author  Richard Cave <rcave@xaraya.com>
  * @todo bring back possibility of time authorized keys
  */
 
@@ -21,18 +22,29 @@
  *
  */
 
-    //Maybe changing this touch to a centralized API would be a good idea?
-    //Even if in the end it would use touched files too...
-$here = dirname(__FILE__);
-include_once "$here/xarCore.php";
-if (file_exists(xarCoreGetVarDirPath() . '/security/on.touch')) {
-    include_once "$here/xarCacheSecurity.php";
- }
+    define('ROLES_STATE_DELETED',0);
+    define('ROLES_STATE_INACTIVE',1);
+    define('ROLES_STATE_NOTVALIDATED',2);
+    define('ROLES_STATE_ACTIVE',3);
+    define('ROLES_STATE_PENDING',4);
+    define('ROLES_STATE_CURRENT',98);
+    define('ROLES_STATE_ALL',99);
+
+    define('ROLES_ROLETYPE',1);
+    define('ROLES_USERTYPE',2);
+    define('ROLES_GROUPTYPE',3);
+
+//Maybe changing this touch to a centralized API would be a good idea?
+//Even if in the end it would use touched files too...
+sys::import('xarCore'); // Why is this?
+if (file_exists(sys::varpath() . '/security/on.touch')) {
+    sys::import('xarCacheSecurity');
+}
 
 // FIXME: Can we reverse this? (i.e. the module loading the files from here?)
 //        said another way, can we move the two files to /includes (partially preferably)
-include_once "$here/../modules/privileges/xarprivileges.php";
-include_once "$here/../modules/roles/xarroles.php";
+sys::import('modules.privileges.class.privileges');
+sys::import('modules.roles.class.roles');
 
 
 /**
@@ -52,24 +64,11 @@ function xarSecurity_init()
                     'privmembers' => $prefix . '_privmembers',
                     'security_realms' => $prefix . '_security_realms',
                     'security_instances' => $prefix . '_security_instances',
-                    'security_levels' => $prefix . '_security_levels',
                     'modules' => $prefix . '_modules',
-                    'module_states' => $prefix . '_module_states',
                     'security_privsets' => $prefix . '_security_privsets'
                     );
-    xarDB_importTables($tables);
-    //register_shutdown_function ('xarSecurity__shutdown_handler');
+    xarDB::importTables($tables);
     return true;
-}
-
-/**
- * Shutdown handler for xarSecurity
- *
- * @access private
- */
-function xarSecurity__shutdown_handler()
-{
-    //xarLogMessage("xarSecurity shutdown handler");
 }
 
 /*
@@ -77,6 +76,7 @@ function xarSecurity__shutdown_handler()
  * Should wrap this in a static one day, but the information
  * isn't critical so we'll do it later
  */
+// FIXME: lonely vars go out of scope (same note as above, more important now with sys::import())
 $schemas = array();
 
 
@@ -86,7 +86,6 @@ $schemas = array();
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   string name
  * @return  bool
@@ -102,7 +101,6 @@ function xarMakeGroup($name,$uname='')
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string name
  * @return bool
@@ -118,7 +116,6 @@ function xarMakeUser($name,$uname,$email,$pass='',$dateReg='',$valCode='',$state
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string name
  * @return bool
@@ -134,7 +131,6 @@ function xarMakeRoleRoot($name)
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string child name
  * @param  string parent name
@@ -151,7 +147,6 @@ function xarMakeRoleMemberByName($childName, $parentName)
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string child uname
  * @param  string parent uname
@@ -171,7 +166,6 @@ function xarMakeRoleMemberByUname($childName, $parentName)
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string child ID
  * @param  string parent ID
@@ -191,7 +185,6 @@ function xarMakeRoleMemberByID($childId, $parentId)
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string child ID
  * @param  string parent ID
@@ -211,7 +204,6 @@ function xarRemoveRoleMemberByID($childId, $parentId)
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string name
  * @param  integer realm
@@ -239,7 +231,6 @@ function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   string name
  * @return  bool
@@ -255,7 +246,6 @@ function xarMakePrivilegeRoot($name)
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string childName
  * @param  string  parentName
@@ -272,7 +262,6 @@ function xarMakePrivilegeMember($childName, $parentName)
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string  privilege name
  * @param  string role name
@@ -289,7 +278,6 @@ function xarAssignPrivilege($privilege,$role)
  *
  * This is a wrapper function
  *
- * @author  Richard Cave <rcave@xaraya.com>
  * @access  public
  * @param   string module
  * @return  bool
@@ -310,7 +298,6 @@ function xarRemovePrivileges($module)
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string module
  * @param  string type
@@ -334,7 +321,6 @@ function xarDefineInstance($module,$type,$query,$propagate=0,$table2='',$childId
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   string module
  * @return  bool
@@ -350,7 +336,6 @@ function xarRemoveInstances($module)
  *
  * This is a wrapper function
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @return array of strings
  */
@@ -364,7 +349,6 @@ function xarGetGroups()
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   string name
  * @return  object role
@@ -413,14 +397,14 @@ function xarIsAncestor($name1, $name2)
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   string name
  * @return  object role
  */
 function xarTree()
 {
-    include_once 'modules/roles/xartreerenderer.php';
+    // Since the class xarTreeRenderer exists in both roles and privileges this can lead to errors.
+    sys::import('modules.roles.xartreerenderer');
     $tree = new xarTreeRenderer();
     return $tree;
 }
@@ -429,7 +413,6 @@ function xarTree()
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   integer pid,level
  * @param   strings pid,name,realm,module,component
@@ -446,21 +429,18 @@ function xarReturnPrivilege($pid,$name,$realm,$module,$component,$instance,$leve
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   integer levelname
  * @return  security level
  */
 function xarSecurityLevel($levelname)
 {
-    $masks = new xarMasks();
-    return $masks->xarSecLevel($levelname);
+    return xarMasks::xarSecLevel($levelname);
 }
 
 /* xarPrivExists: checks whether a privilege exists.
  *
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   string name of privilege
  * @return  boolean
@@ -469,14 +449,13 @@ function xarPrivExists($name)
 {
     $privileges = new xarPrivileges();
     $priv = $privileges->findPrivilege($name);
-    if ($priv) return TRUE;
-    else return FALSE;
+    if ($priv) return true;
+    else return false;
 }
 
 /* xarMaskExists: checks whether a mask exists.
  *
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   string name of mask
  * @param   string module of mask
@@ -484,16 +463,14 @@ function xarPrivExists($name)
  */
 function xarMaskExists($name,$module="All",$component="All")
 {
-    $masks = new xarMasks();
-    $mask = $masks->getMask($name,$module,$component,TRUE);
-    if ($mask) return TRUE;
-    else return FALSE;
+    $mask = xarMasks::getMask($name,$module,$component,true);
+    if ($mask) return true;
+    else return false;
 }
 
 /* xarQueryMask: returns a mask suitable for inclusion in a structured query
  *
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   string name of mask
  * @param   string module of mask
@@ -501,8 +478,7 @@ function xarMaskExists($name,$module="All",$component="All")
  */
 function xarQueryMask($mask, $showException=1, $component='', $instance='', $module='', $role='')
 {
-   $masks = new xarMasks();
-   return $masks->querymask($mask, $component, $instance, $module, $role,$pnrealm,$pnlevel);
+   return xarMasks::querymask($mask, $component, $instance, $module, $role,$pnrealm,$pnlevel);
 }
 
 /**
@@ -511,61 +487,58 @@ function xarQueryMask($mask, $showException=1, $component='', $instance='', $mod
  * Checks the current group or user's privileges against a component
  * This function should be invoked every time a security check needs to be done
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
- * @param  string mask
- * @param  integer showException
- * @param  string component
- * @param  string instance
- * @param  string module
- * @param  string role
+ * @param  string  $mask
+ * @param  integer $showException
+ * @param  string  $component
+ * @param  string  $instance
+ * @param  string  $module
+ * @param  string  $role
  * @return bool
  */
 function xarSecurityCheck($mask, $showException=1, $component='', $instance='', $module='', $role='',$pnrealm=0,$pnlevel=0)
 {
-    $installing = xarCore_GetCached('installer','installing');
+    // Obviously, do NOT uncomment the next line :-)
+    //return true;
+    $installing = xarCore::getCached('installer','installing');
 
     if(isset($installing) && ($installing == true)) {
        return true;
     }
     else {
-       $masks = new xarMasks();
-       return $masks->xarSecurityCheck($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
+        sys::import('modules.privileges.class.masks');
+       return xarMasks::xarSecurityCheck($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
     }
 }
 
 /**
  * xarRegisterMask: wrapper function for registering a mask
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
- * @param  string name
- * @param  integer realm
- * @param  string module
- * @param  string component
- * @param  string instance
- * @param  integer level
- * @param  string description
+ * @param  string  $name
+ * @param  integer $realm
+ * @param  string  $module
+ * @param  string  $component
+ * @param  string  $instance
+ * @param  integer $level
+ * @param  string  $description
  * @return bool
  */
 function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$description='')
 {
-        $masks = new xarMasks();
-        return $masks->register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
+        return xarMasks::register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
 }
 
 /**
  * xarUnregisterMask: wrapper function for unregistering a mask
  *
- * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @param  string name
  * @return bool
  */
 function xarUnregisterMask($name)
 {
-    $masks = new xarMasks();
-    return $masks->unregister($name);
+    return xarMasks::unregister($name);
 }
 
 /**
@@ -573,7 +546,6 @@ function xarUnregisterMask($name)
  *
  * This is a wrapper function
  *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   string module
  * @return  bool
@@ -582,29 +554,6 @@ function xarRemoveMasks($module)
 {
     $privileges = new xarPrivileges();
     return $privileges->removeMasks($module);
-}
-
-/**
-
- * see if a user is authorised to carry out a particular task
- *
- * @access public
- * @param  integer realm the realm to authorize
- * @param  string component the component to authorize
- * @param  string instance the instance to authorize
- * @param  integer level the level of access required
- * @param  integer userId  user id to check for authorisation
- * @return bool
- * @throws DATABASE_ERROR
- */
-function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId = NULL)
-{
-    return pnSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel, $userId);
-    $msg = xarML('Security Realm #(1) - Component #(2) - Instance #(3) - Level #(4) : This call needs to be converted to the Xaraya security system',
-                 $testRealm, $testComponent, $testInstance, $testLevel);
-    xarErrorSet(XAR_SYSTEM_EXCEPTION, 'DEPRECATED_API',
-                    new SystemException($msg));
-    return true;
 }
 
 /**
@@ -626,7 +575,7 @@ function xarSecAuthAction($testRealm, $testComponent, $testInstance, $testLevel,
 function xarSecGenAuthKey($modName = NULL)
 {
     if (empty($modName)) {
-        list($modName) = xarRequestGetInfo();
+        list($modName) = xarRequest::getInfo();
     }
 
     // Date gives extra security but leave it out for now
@@ -637,7 +586,7 @@ function xarSecGenAuthKey($modName = NULL)
     $authid = md5($key);
 
     // Tell xarCache not to cache this page
-    xarCore_SetCached('Page.Caching', 'nocache', TRUE);
+    xarCore::setCached('Page.Caching', 'nocache', true);
 
     // Return encrypted key
     return $authid;
@@ -652,12 +601,13 @@ function xarSecGenAuthKey($modName = NULL)
  * @access public
  * @param string authIdVarName
  * @return bool true if the key is valid, false if it is not
+ * @throws ForbiddenOperationException
  * @todo bring back possibility of time authorized keys
  */
 function xarSecConfirmAuthKey($modName = NULL, $authIdVarName = 'authid')
 {
-    if(!isset($modName)) list($modName) = xarRequestGetInfo();
-    $authid = xarRequestGetVar($authIdVarName);
+    if(!isset($modName)) list($modName) = xarRequest::getInfo();
+    $authid = xarRequest::getVar($authIdVarName);
 
     // Regenerate static part of key
     $partkey = xarSessionGetVar('rand') . strtolower($modName);
@@ -688,9 +638,7 @@ function xarSecConfirmAuthKey($modName = NULL, $authIdVarName = 'authid')
         return true;
     }
     // Not found, assume invalid
-        xarErrorSet(XAR_USER_EXCEPTION, 'FORBIDDEN_OPERATION',
-                       new DefaultUserException());
-        return;
+    throw new ForbiddenOperationException();
 }
 
 ?>

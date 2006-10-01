@@ -16,6 +16,7 @@
  * @param $args['regid'] the module id
  * @param $args['state'] the state
  * @throws BAD_PARAM,NO_PERMISSION
+ * @todo Do the db changes in a transaction to completely fail or succeed?
  */
 function modules_adminapi_setstate($args)
 {
@@ -24,13 +25,8 @@ function modules_adminapi_setstate($args)
     extract($args);
 
     // Argument check
-    if ((!isset($regid)) ||
-        (!isset($state))) {
-        $msg = xarML('Empty regid (#(1)) or state (#(2)).', $regid, $state);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    if (!isset($regid)) throw new EmptyParameterException('regid');
+    if (!isset($state)) throw new EmptyParameterException('state');
 
     // Security Check
     if(!xarSecurityCheck('AdminModules')) return;
@@ -48,37 +44,18 @@ function modules_adminapi_setstate($args)
     $xartable =& xarDBGetTables();
 
     $oldState = $modInfo['state'];
-//    echo $oldState.$state;exit;
+
     // Check valid state transition
     switch ($state) {
         case XARMOD_STATE_UNINITIALISED:
-
+            // So, we're basically good all the time here?
             if (($oldState == XARMOD_STATE_MISSING_FROM_UNINITIALISED) ||
                 ($oldState == XARMOD_STATE_ERROR_UNINITIALISED)) break;
 
             if ($oldState != XARMOD_STATE_INACTIVE) {
                 // New Module
-                $module_statesTable = $xartable['system/module_states'];
-                $query = "SELECT * FROM $module_statesTable WHERE xar_regid = ?";
-                $result =& $dbconn->Execute($query,array($regid));
-                if (!$result) return;
-                if ($result->EOF) {
-                    // Bug #1813 - Have to use GenId to get or create the sequence 
-                    // for xar_id or the sequence for xar_id will not be available
-                    // in PostgreSQL
-                    $seqId = $dbconn->GenId($module_statesTable);
-
-                    $query = "INSERT INTO $module_statesTable
-                                (xar_id, xar_regid, xar_state)
-                        VALUES  (?,?,?)";
-                    $bindvars = array($seqId,$regid,$state);
-
-                    $result =& $dbconn->Execute($query,$bindvars);
-                    if (!$result) return;
-                }
-                return true;
+                break;
             }
-
             break;
         case XARMOD_STATE_INACTIVE:
             if (($oldState != XARMOD_STATE_UNINITIALISED) &&
@@ -95,6 +72,7 @@ function modules_adminapi_setstate($args)
                 ($oldState != XARMOD_STATE_ERROR_ACTIVE) &&
                 ($oldState != XARMOD_STATE_MISSING_FROM_ACTIVE)) {
                 xarSessionSetVar('errormsg', xarML('Invalid module state transition'));
+                throw new Exception("Setting from $oldState to $state for module $regid failed");
                 return false;
             }
             break;
@@ -110,25 +88,18 @@ function modules_adminapi_setstate($args)
     }
     //Get current module mode to update the proper table
     $modMode  = $modInfo['mode'];
-
-    if ($modMode == XARMOD_MODE_SHARED) {
-        $module_statesTable = $xartable['system/module_states'];
-    } elseif ($modMode == XARMOD_MODE_PER_SITE) {
-        $module_statesTable = $xartable['site/module_states'];
-    }
-
-    $query = "UPDATE $module_statesTable
-              SET xar_state = ? WHERE xar_regid = ?";
+    $modulesTable = $xartable['modules'];
+    $query = "UPDATE $modulesTable SET xar_state = ? WHERE xar_regid = ?";
     $bindvars = array($state,$regid);
-    $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) {return;}
+    $dbconn->Execute($query,$bindvars);
+
     // We're update module state here we must update at least
     // the base info in the cache.
     $modInfo['state']=$state;
     xarVarSetCached('Mod.Infos',$regid,$modInfo);
-    //xarVarSetCached('Mod.BaseInfos',$modInfo['name'],$modInfo);
+    xarVarSetCached('Mod.BaseInfos',$modInfo['name'],$modInfo);
 
-    return true;
+    return $state;
 }
 
 ?>

@@ -1,7 +1,5 @@
 <?php
 /**
- * Remove a privilege from a privilege
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -30,6 +28,7 @@ function privileges_adminapi_removemember($args)
     if(!isset($childid) || !isset($parentid)) return true;
 
 // call the Privileges class and get the parent and child objects
+    sys::import('modules.privileges.class.privileges');
     $privs = new xarPrivileges();
     $priv = $privs->getPrivilege($parentid);
     $member = $privs->getPrivilege($childid);

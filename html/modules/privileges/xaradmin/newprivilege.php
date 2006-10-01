@@ -1,6 +1,5 @@
 <?php
 /**
- * Create a new privilege
  *
  * @package core modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
@@ -41,6 +40,7 @@ function privileges_admin_newprivilege()
     if(!xarSecurityCheck('AddPrivilege')) return;
 
 // call the Privileges class
+    sys::import('modules.privileges.class.privileges');
     $privs = new xarPrivileges();
 
 // remove duplicate entries from the list of privileges

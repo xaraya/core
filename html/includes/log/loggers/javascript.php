@@ -10,10 +10,10 @@
  */
 
 /**
- * Include the base file
+ * Make sure base class is available
  *
  */
-include_once ('./includes/log/loggers/xarLogger.php');
+sys::import('log.loggers.xarLogger');
 
 /**
  * Javascript logger
@@ -54,7 +54,7 @@ class xarLogger_javascript extends xarLogger
      * @access public
      * @return boolean
      */
-    function setConfig(&$conf) 
+    function setConfig(array &$conf) 
     {
         parent::setConfig($conf);
         $this->_loadLevel = & $conf['loadLevel'];

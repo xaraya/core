@@ -30,41 +30,14 @@ $systemConfiguration['DB.Persistent'] = false;
  */
 
 /*
- * if you set this to true the core will be able to
- * trap every message that comes from PHP and if
- * possible to show a gracefully error page.
- * This is an advanced option, leave it to false if unsure.
- * TODO: move this out of here
- * TODO: review this in code, it is known to hide some errors
- * TODO: it also is known to break a PHP5 installation due to the introduction
- *       of E_STRICT error level (see xarException phpErrorHandler function)
- *       If so set this to false
- */
-$systemConfiguration['Exception.EnablePHPErrorHandler'] = true;
-
-/*
  * Global error level, optional
- *
  * If set it is passed directly into the error_reporting() function of PHP
  * Normally you want this to be set to E_ALL during development and something a bit lower
  * for a production system.
- * NOTE: Also set this option if you suffer from the changes wrt references
- *       in php4.4 and php5.x versions or the bug in the zend optimizer eg: E_ALL ^ E_NOTICE
+ * NOTE: Also set this option if you suffer from the changes wrt references 
+ *       in php4.4 and php5.x versions or the bug in the zend optimizer
  */
  $systemConfiguration['Exception.ErrorLevel'] = E_ALL;
-
-/*
- * This value determines to use the ADODB cache for SQL queries
- * In some cases performance will be reduced by setting this value to
- * true (on).
- *
- * Rule of thumb: If your db server is slower than your webserver and/or
- *                your db does no query caching (mysql 3.x for example)
- *                this might speed things up a little
- * TODO: Move this out of here
- */
-$systemConfiguration['DB.UseADODBCache'] = false;
-
 /*
  * This value is used to change the default behavior of the
  * xarServerGetBaseURL() and xarModURL() functions to allow you

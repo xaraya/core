@@ -1,7 +1,5 @@
 <?php
 /**
- * Modify a block instance
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -45,11 +43,6 @@ function blocks_admin_modify_instance()
     if (function_exists($modfunc)) {
         $extra = $modfunc($instance);
 
-        // if there was an error here, return...
-        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-            return;
-        }
-
         if (is_array($extra)) {
             // Render the extra settings if necessary.
             $extra = xarTplBlock($instance['module'], 'modify-' . $instance['type'], $extra);
@@ -69,15 +62,8 @@ function blocks_admin_modify_instance()
 
     if (empty($block_info)) {
         // Function does not exist so throw error
-        $msg = xarML(
-            'Block info function for module "#(1)" and type "#(2)"',
-            $instance['module'], $instance['type']
-        );
-        xarErrorSet(
-            XAR_SYSTEM_EXCEPTION, 'MODULE_FUNCTION_NOT_EXIST',
-            new SystemException(__FILE__.'('.__LINE__.'): '.$msg)
-        );
-        return NULL;
+        throw new FunctionNotFoundException(array($instance['module'],$instance['type']),
+                                        'Block info function for module "#(1)" and type "#(2)" was not found or could not be loaded');
     }
 
     // Build refresh times array.

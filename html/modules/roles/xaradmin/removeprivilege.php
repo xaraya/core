@@ -39,13 +39,12 @@ function roles_admin_removeprivilege()
     $priv = $privs->getPrivilege($privid);
     // some assignments can't be removed, for your own good
     if ((($roleid == 1) && ($privid == 1)) ||
-            (($roleid == 2) && ($privid == 6)) ||
-            (($roleid == 4) && ($privid == 2))) {
-        $msg = xarML('This privilege cannot be removed');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-            new DefaultUserException($msg));
-        return;
-    }
+        (($roleid == 2) && ($privid == 6)) ||
+        (($roleid == 4) && ($privid == 2))) 
+        {
+            throw new ForbiddenOperationException(null,'This privilege cannot be removed');
+        }
+    
     // Security Check
     if (!xarSecurityCheck('EditRole')) return;
     // some info for the template display

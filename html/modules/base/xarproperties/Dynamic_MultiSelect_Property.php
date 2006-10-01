@@ -1,7 +1,6 @@
 <?php
 /**
  * Multiselect Property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -10,14 +9,28 @@
  * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
-include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
+/*
+ * @author mikespub <mikespub@xaraya.com>
+*/
+sys::import('modules.base.xarproperties.Dynamic_Select_Property');
 /**
  * handle the multiselect property
- * @author mikespub <mikespub@xaraya.com>
+ *
  * @package dynamicdata
  */
 class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
 {
+    public $id         = 39;
+    public $name       = 'multiselect';
+    public $desc       = 'Multiselect';
+
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->tplmodule = 'base';
+        $this->template =  'multiselect';
+    }
+
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -49,57 +62,39 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
         return true;
     }
 
-//    function showInput($name = '', $value = null, $options = array(), $id = '', $tabindex = '')
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        $data = array();
-
-        if (!isset($value)) {
-            $value = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
         }
-        if (!isset($options) || count($options) == 0) {
-            $options = $this->getOptions();
+        if (!isset($data['allowempty'])) {
+            $data['allowempty'] = true;
         }
-        if (empty($value)) {
-            $value = array();
-        } elseif (!is_array($value)) {
-            $tmp = @unserialize($value);
+        if (!isset($data['options']) || count($data['options']) == 0) {
+            $data['options'] = $this->getOptions();
+        }
+        if (empty($data['value'])) {
+            $data['value'] = array();
+        } elseif (!is_array($data['value'])) {
+            $tmp = @unserialize($data['value']);
             if ($tmp === false) {
-                $value = array($value);
+                $data['value'] = array($data['value']);
             } else {
-                $value = $tmp;
+                $data['value'] = $tmp;
             }
         }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        $data['value']  = $value;
-        $data['name']   = $name;
-        $data['id']     = $id;
-        $data['options']= $options;
-        $data['single']= isset($args['single']) ? true : false;
 
-        $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
+        $data['single'] = isset($data['single']) ? true : false;
 
-        $template="";
-        return xarTplProperty('base', 'multiselect', 'showinput', $data);
+        return parent::showInput($data);
     }
-    /**
-     * Show the multiselect output
-     */
-    function showOutput($args = array())
-    {
-        extract($args);
-        $data = array();
 
-        if (!isset($value)) {
-            $value = $this->value;
-        }
+    function showOutput($data = array())
+    {
+        extract($data);
+
+        if (!isset($value)) $value = $this->value;
+
         if (empty($value)) {
             $value = array();
         } elseif (!is_array($value)) {
@@ -110,42 +105,12 @@ class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
                 $value = $tmp;
             }
         }
-        if (!isset($options)) {
-            $options = $this->getOptions();
-        }
+        if (!isset($options)) $options = $this->getOptions();
+
         $data['value']= $value;
         $data['options']= $options;
 
-        $template="";
-        return xarTplProperty('base', 'multiselect', 'showoutput', $data);
+        return parent::showOutput($data);
     }
-
-
-    /**
-     * Get the base information for this property.
-     *
-     *
-     * @return array Base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 39,
-                              'name'       => 'multiselect',
-                              'label'      => 'Multi Select',
-                              'format'     => '39',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => '',
-                            'aliases'        => '',
-                            'args'           => serialize($args)
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
-
 }
 ?>

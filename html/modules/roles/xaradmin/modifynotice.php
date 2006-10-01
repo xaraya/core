@@ -22,8 +22,9 @@ function roles_admin_modifynotice()
     switch (strtolower($phase)) {
         case 'modify':
         default: 
-            $data['ips']         = unserialize(xarModGetVar('roles', 'disallowedips'));
-            $data['authid']      = xarSecGenAuthKey();
+            $ips = xarModGetVar('roles','disallowedips');
+            $data['ips'] = empty($ips) ? '' : unserialize($ips);
+            $data['authid'] = xarSecGenAuthKey();
             $data['updatelabel'] = xarML('Update Notification Configuration');
 
             $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
@@ -33,11 +34,11 @@ function roles_admin_modifynotice()
             break;
 
         case 'update':
-            if (!xarVarFetch('askwelcomeemail',      'checkbox', $askwelcomeemail,      false, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('askwelcomeemail', 'checkbox', $askwelcomeemail, false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('askdeactivationemail', 'checkbox', $askdeactivationemail, false, XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('askvalidationemail',   'checkbox', $askvalidationemail,   false, XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('askpendingemail',      'checkbox', $askpendingemail,      false, XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('askpasswordemail',     'checkbox', $askpasswordemail,     false, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('askvalidationemail', 'checkbox', $askvalidationemail, false, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('askpendingemail', 'checkbox', $askpendingemail, false, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('askpasswordemail', 'checkbox', $askpasswordemail, false, XARVAR_NOT_REQUIRED)) return;
             // Confirm authorisation code
             if (!xarSecConfirmAuthKey()) return; 
             // Update module variables
@@ -57,5 +58,5 @@ function roles_admin_modifynotice()
             break;
     } 
     return $data;
-}
+} 
 ?>

@@ -1,7 +1,6 @@
 <?php
 /**
  * Regenerate theme list
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -58,17 +57,15 @@ function themes_adminapi_regenerate()
         foreach ($dbThemes as $dbtheme) {
             // Bail if 2 themes have the same regid but not the same name
             if(($themeinfo['regid'] == $dbtheme['regid']) && ($themeinfo['name'] != $dbtheme['name'])) {
-                $msg = xarML('The same registered ID (#(1)) was found belonging to a #(2) theme in the file system and a registered #(3) theme in the database. Please correct this and regenerate the list.', $dbtheme['regid'], $themeinfo['name'], $dbtheme['name']);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                               new SystemException($msg));
-                return;
+                $msg = 'The same registered ID (#(1)) was found belonging to a #(2) theme in the file system and a registered #(3) theme in the database. Please correct this and regenerate the list.';
+                $vars = array($dbtheme['regid'], $themeinfo['name'], $dbtheme['name']);
+                throw new DuplicateException($vars,$msg);
             }
             // Bail if 2 themes have the same name but not the same regid
             if(($themeinfo['name'] == $dbtheme['name']) && ($themeinfo['regid'] != $dbtheme['regid'])) {
-                $msg = xarML('The theme #(1) is found with two different registered IDs, #(2)  in the file system and #(3) in the database. Please correct this and regenerate the list.', $themeinfo['name'], $themeinfo['regid'], $dbtheme['regid']);
-                xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                               new SystemException($msg));
-                return;
+                $msg = 'The theme #(1) is found with two different registered IDs, #(2)  in the file system and #(3) in the database. Please correct this and regenerate the list.';
+                $vars = array($themeinfo['name'], $themeinfo['regid'], $dbtheme['regid']);
+                throw new DuplicateException($vars, $msg);
             }
         }
     }
@@ -102,7 +99,7 @@ function themes_adminapi_regenerate()
                               $themeInfo['version'],$themeInfo['xar_version'],
                               $themeInfo['bl_version'],$themeInfo['class']);
             $result = $dbconn->Execute($sql,$bindvars);
-            if (!$result) return;
+
 
             $set = xarModAPIFunc('themes',
                                 'admin',
@@ -115,7 +112,7 @@ function themes_adminapi_regenerate()
             if ($dbThemes[$name]['version'] != $themeInfo['version'] && $dbThemes[$name]['state'] != XARTHEME_STATE_UNINITIALISED) {
                     $set = xarModAPIFunc('themes','admin','setstate',
                                         array('regid' => $dbThemes[$name]['regid'], 'state' => XARTHEME_STATE_UPGRADED));
-                    if (!isset($set)) die('upgrade');
+                    assert('isset($set)); /* Setting the state of theme failed */');
                 }
         }
     }

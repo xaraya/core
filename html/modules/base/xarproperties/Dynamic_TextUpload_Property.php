@@ -1,7 +1,6 @@
 <?php
 /**
  * Dynamic Textupload Property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -14,7 +13,7 @@
  * @author mikespub <mikespub@xaraya.com>
 */
 /* Include parent class */
-include_once "modules/dynamicdata/class/properties.php";
+sys::import('modules.dynamicdata.class.properties');
 
 /**
  * Handle text upload property
@@ -24,28 +23,34 @@ include_once "modules/dynamicdata/class/properties.php";
  */
 class Dynamic_TextUpload_Property extends Dynamic_Property
 {
-    var $rows = 8;
-    var $cols = 50;
+    public $id         = 38;
+    public $name       = 'textupload';
+    public $desc       = 'Text Upload';
+    public $reqmodules = array('base');
+    public $args = array('rows' => 20);
 
-    var $size = 40;
-    var $maxsize = 1000000;
-    var $methods = array('trusted'  => false,
-                         'external' => false,
-                         'upload'   => false,
-                         'stored'   => false);
-    var $basedir = null;
-    var $importdir = null;
+    public $rows = 8;
+    public $cols = 50;
+
+    public $size = 40;
+    public $maxsize = 1000000;
+    public $methods = array('trusted'  => false,
+                            'external' => false,
+                            'upload'   => false,
+                            'stored'   => false);
+    public $basedir = null;
+    public $importdir = null;
 
     // this is used by Dynamic_Property_Master::addProperty() to set the $object->upload flag
-    var $upload = true;
+    public $upload = true;
 
-    function Dynamic_TextUpload_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Property($args);
+        parent::__construct($args);
+        $this->tplmodule = 'base';
+        $this->template  = 'textupload';
+        $this->filepath   = 'modules/base/xarproperties';
 
-        if (!isset($this->validation)) {
-            $this->validation = '';
-        }
         // always parse validation to preset methods here
         $this->parseValidation($this->validation);
 
@@ -71,18 +76,7 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
             $this->importdir = preg_replace('/\{user\}/',$udir,$this->importdir);
         }
     }
-    function checkInput($name='', $value = null)
-    {
-        if (empty($name)) {
-            $name = 'dd_'.$this->id;
-        }
-        // store the fieldname for validations who need them (e.g. file uploads)
-        $this->fieldname = $name;
-        if (!isset($value)) {
-            if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
-        }
-        return $this->validateValue($value);
-    }
+
     function validateValue($value = null)
     {
         // the variable corresponding to the file upload field is no longer set in PHP 4.2.1+
@@ -130,14 +124,11 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
                                           'override' => $override,
                                           'format' => 'textupload',
                                           'maxsize' => $this->maxsize));
+            // TODO: This raises exception now, we dont want it allways
+            // TODO: insert try/catch clause here once we know what uploads raises for exceptions
+            // TODO:
             if (!isset($return) || !is_array($return) || count($return) < 2) {
                 $this->value = null;
-            // CHECKME: copied from autolinks :)
-                // 'text' rendering will return an array
-                $errorstack = xarErrorGet();
-                $errorstack = array_shift($errorstack);
-                $this->invalid = $errorstack['short'];
-                xarErrorHandled();
                 return false;
             }
             if (empty($return[0])) {
@@ -174,8 +165,8 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
 
             // this doesn't work on some configurations
             //$this->value = join('', @file($_FILES[$upname]['tmp_name']));
-            $tmpdir = xarCoreGetVarDirPath();
-            $tmpdir .= '/cache/templates';
+            $tmpdir = sys::varpath();
+            $tmpdir .= XARCORE_TPL_CACHEDIR;
             $tmpfile = tempnam($tmpdir, 'dd');
         // no verification of file types here
             if (move_uploaded_file($_FILES[$upname]['tmp_name'], $tmpfile) && file_exists($tmpfile)) {
@@ -258,37 +249,11 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
         $data['rows']     = !empty($rows) ? $rows : $this->rows;
         $data['cols']     = !empty($cols) ? $cols : $this->cols;
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         $data['maxsize']  = !empty($maxsize) ? $maxsize: $this->maxsize;
         $data['size']     = !empty($size) ? $size : $this->size;
 
-        $template="";
-        return xarTplProperty('base', 'textupload', 'showinput', $data);
-
+        parent::showInput($data);
     }
-
-    function showOutput($args = array())
-    {
-        extract($args);
-        $data = array();
-
-        // no uploads-specific code here - cfr. transform hook in uploads module
-
-        if (!isset($value)) {
-            $data['value'] = $this->value;
-        }
-        if (!empty($value)) {
-            $data['value'] = xarVarPrepHTMLDisplay($value);
-        } else {
-            $data['value'] ='';
-        }
-
-        $template="";
-        return xarTplProperty('base', 'textupload', 'showoutput', $data);
-
-    }
-
 
     function parseValidation($validation = '')
     {
@@ -307,33 +272,6 @@ class Dynamic_TextUpload_Property extends Dynamic_Property
             // nothing interesting here
         }
     }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-        $args['rows'] = 20;
-     
-         $baseInfo = array(
-                              'id'         => 38,
-                              'name'       => 'textupload',
-                              'label'      => 'Text Upload',
-                              'format'     => '38',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => '',
-                            'aliases' => '',
-                            'args' => serialize( $args ),
-                            'args'         => '',
-                            // ...
-                           );
-        return $baseInfo;
-     }
 
     function showValidation($args = array())
     {

@@ -1,7 +1,6 @@
 <?php
 /**
  * Install a theme.
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -23,24 +22,12 @@ function themes_adminapi_install($args)
     //    static $installed_ids = array();
     $mainId = $args['regid'];
 
-
-    // FIXME: check if this is necessary, it shouldn't, we should have checked it earlier
-    //     if(in_array($mainId, $installed_ids)) {
-    //         xarLogMessage("Already installed $mainId in this request, skipping");
-    //         return true;
-    //     }
-    //     $installed_ids[] = $mainId;
-
     // Security Check
     // need to specify the module because this function is called by the installer module
     if (!xarSecurityCheck('AdminTheme', 1, 'All', 'All', 'themes')) return;
 
     // Argument check
-    if (!isset($mainId)) {
-        $msg = xarML('Missing theme regid (#(1)).', $mainId);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-        return;
-    }
+    if (!isset($mainId)) throw new EmptyParameterException('regid');
 
     // See if we have lost any modules since last generation
     if (!xarModAPIFunc('themes', 'admin', 'checkmissing')) return;
@@ -53,8 +40,7 @@ function themes_adminapi_install($args)
     // Get module information
     $modInfo = xarThemeGetInfo($mainId);
     if (!isset($modInfo)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'THEME_NOT_EXIST', new SystemException(__FILE__."(".__LINE__."): Module (regid: $regid) does not exist."));
-        return;
+        throw new ThemeNotFoundException($regid,'Theme (regid: #(1)) does not exist.');
     }
 
     switch ($modInfo['state']) {
@@ -72,19 +58,16 @@ function themes_adminapi_install($args)
 
     //Checks if the theme is already initialised
     if (!$initialised) {
-        // Finally, now that dependencies are dealt with, initialize the module
         if (!xarModAPIFunc('themes', 'admin', 'initialise', array('regid' => $mainId))) {
             $msg = xarML('Unable to initialize theme "#(1)".', $modInfo['displayname']);
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
-            return;
+            throw new Exception($msg);
         }
     }
 
     // And activate it!
     if (!xarModAPIFunc('themes', 'admin', 'activate', array('regid' => $mainId))) {
-        $msg = xarML('Unable to activate module "#(1)".', $modInfo['displayname']);
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', $msg);
-        return;
+        $msg = xarML('Unable to activate theme "#(1)".', $modInfo['displayname']);
+        throw new Exception($msg);
     }
     return true;
 }

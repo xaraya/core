@@ -1,7 +1,5 @@
 <?php
 /**
- * Export an object definition or an object item to XML
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -10,6 +8,7 @@
  * @subpackage Dynamic Data module
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
+ * @todo move the xml generate code to a template based system.
  */
 /**
  * Export an object definition or an object item to XML
@@ -110,17 +109,18 @@ function dynamicdata_util_export($args)
                 $xml .= '  <'.$mylist->name.' itemid="'.$itemid.'">'."\n";
                 foreach (array_keys($mylist->properties) as $name) {
                     if (isset($item[$name])) {
-                        $xml .= "    <$name>" . xarVarPrepForDisplay($item[$name]) . "</$name>\n";
+                        $xml .= "    <$name>" . xarVarPrepForDisplay($item[$name]);
                     } else {
-                        $xml .= "    <$name></$name>\n";
+                        $xml .= "    <$name>";
                     }
+                    $xml .= "</$name>\n";
                 }
                 $xml .= '  </'.$mylist->name.">\n";
             }
             $xml .= "</items>\n";
 
         } else {
-            $varDir = xarCoreGetVarDirPath();
+            $varDir = sys::varpath();
             $outfile = $varDir . '/uploads/' . xarVarPrepForOS($mylist->name) . '.data.' . xarLocaleFormatDate('%Y%m%d%H%M%S',time()) . '.xml';
             $fp = @fopen($outfile,'w');
             if (!$fp) {
@@ -160,6 +160,5 @@ function dynamicdata_util_export($args)
 
     return $data;
 }
-
 
 ?>

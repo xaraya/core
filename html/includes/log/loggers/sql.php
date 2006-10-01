@@ -8,10 +8,10 @@
 */
 
 /**
- * Include the base class
+ * Make sure the base class is available
  *
  */
-include_once ('./includes/log/loggers/xarLogger.php');
+sys::import('log.loggers.xarLogger');
 // Modified from the original by the Xaraya Team
 
 /**
@@ -57,7 +57,7 @@ class xarLogger_sql extends xarLogger
     *               'table  '     => string      The name of the logger table.
     * @access public
     */
-    function setConfig($conf)
+    function setConfig(array $conf)
     {
         parent::setConfig($conf);
 
@@ -88,20 +88,12 @@ class xarLogger_sql extends xarLogger
 
         /* Build the SQL query for this log entry insertion. */
         $id = $this->_dbconn->GenId('log_id');
-        $q = sprintf('insert into %s (id, ident, logtime, priority, message)' .
-                     'values(%d, CURRENT_TIMESTAMP, %s, %d, %s)',
-                     $this->_table,
-                     $id,
-                     $this->_dbconn->qstr($this->_ident),
-                     $this->getTime(),
-                     $priority,
-                     $this->_dbconn->qstr($message));
-
-        $result = $this->_dbconn->Execute($q);
-
-        if (!$result) {
-            return false;
-        }
+        $q = sprintf('INSERT INTO %s (id, ident, logtime, priority, message)' .
+                     'VALUES(?, ?, ?, ?, ?)',
+                     $this->_table);
+        $bindvars = array($id, $thid->_ident, $this->getTime(), $priority, $message);
+        $stmt =& $this->_dbconn->prepareStatement($q);
+        $stmt->executeUpdate($bindvars);
 
         return true;
     }

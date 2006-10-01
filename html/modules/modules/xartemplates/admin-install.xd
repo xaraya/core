@@ -1,9 +1,9 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
 </div>
 <div class="xar-mod-body">
-    <xar:comment>This section deals with dependancies.</xar:comment>
+    <!-- This section deals with dependancies. -->
     <xar:if condition="!empty($dependencies)">
         <h2><xar:mlstring>Module Installation: Unsatisfied Dependencies</xar:mlstring></h2>
         <p>
@@ -114,7 +114,7 @@
         </form>
     </xar:if>
 
-    <xar:comment>This section deals with install errors.</xar:comment>
+    <!-- This section deals with install errors. -->
 
     <xar:template file="install-errors" type="module" />
 

@@ -33,7 +33,8 @@ define ('XARUPGRADE_PHASE_COMPLETE',            '4');
 error_reporting(E_ALL);
 
 // initialize the Xaraya core
-include 'includes/xarCore.php';
+include 'includes/bootstrap.php';
+sys::import('xarCore');
 xarCoreInit(XARCORE_SYSTEM_ALL);
 /**
  * Entry function for the installer
@@ -79,41 +80,11 @@ function xarUpgradeMain()
         ob_end_clean();
     }
 
-    $pageOutput = xarTpl_renderPage($mainModuleOutput,NULL,'installer');
-
-    // Handle exceptions
-    if (xarCurrentErrorType() != XAR_NO_EXCEPTION) return;
-
+    $pageOutput = xarTpl_renderPage($mainModuleOutput,'installer');
     echo $pageOutput;
     return true;
 }
-if (!xarUpgradeMain()) {
-
-    // If we're here there must be surely an uncaught exception
-    $text = xarErrorRender('template');
-
-    // TODO: #2
-    if (xarCurrentErrorID() == 'TEMPLATE_NOT_EXIST') {
-        echo "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head><title>Error</title><body>$text</body></html>";
-    } else {
-        // It's important here to free exception before calling xarTplPrintPage
-        // As we are in the exception handling phase, we can clear it without side effects.
-        xarErrorFree();
-        // Render page
-        $pageOutput = xarTpl_renderPage($text,NULL,'installer');
-        if (xarCurrentErrorType() != XAR_NO_EXCEPTION) {
-            // Fallback to raw html
-            $msg = '<span style="color: #FF0000;">The current page is shown because the Blocklayout Template Engine failed to render the page, however this could be due to a problem not in BL itself but in the template. BL has raised or has left uncaught the following exception:</span>';
-            $msg .= '<br /><br />';
-            $msg .= xarErrorRender('rawhtml');
-            $msg .= '<br />';
-            $msg .= '<span style="color: #FF0000;">The following exception is instead the exception caught from the main catch clause (Please note that they could be the same if they were raised inside BL or inside the template):</span>';
-            $msg .= '<br /><br />';
-            $msg .= $text;
-            echo "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head><title>Error</title><body>$msg</body></html>";
-        } else {
-            echo $pageOutput;
-        }
-    }
-}
+// Start
+// We can do this now, since we dont bubble the exceptions anymore
+xarUpgradeMain();
 ?>

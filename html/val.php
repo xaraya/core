@@ -21,19 +21,12 @@ xarCoreInit(XARCORE_SYSTEM_ALL);
 if (!xarVarFetch('v', 'str:1', $v)) return;
 if (!xarVarFetch('u', 'str:1', $u)) return;
 
-$user = xarModAPIFunc('roles', 'user', 'get',
-                       array('uid' => $u));
+$user = xarModAPIFunc('roles','user','get', array('uid' => $u));
 
-//check no-one is already logged into a xaraya session and log out just in case
-if (xarUserIsLoggedIn()) {
-    xarUserLogOut();
-}
-xarResponseRedirect(xarModURL('roles', 'user', 'getvalidation',
+xarResponseRedirect(xarModURL('roles', 'user','getvalidation',
                               array('stage'   => 'getvalidate',
                                     'valcode' => $v,
                                     'uname'   => $user['uname'],
                                     'phase'   => 'getvalidate')));
 
-// done
-exit;
 ?>

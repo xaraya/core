@@ -27,24 +27,26 @@
 function roles_admin_testprivileges()
 {
     // Get Parameters
-    if (!xarVarFetch('uid',     'int:1:',    $uid)) return;
-    if (!xarVarFetch('pmodule', 'str:1:',    $module,  '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
-    if (!xarVarFetch('name',    'str:1',     $name,    '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
-    if (!xarVarFetch('test',    'str:1:35:', $test,    '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('uid', 'int:1:', $uid)) return;
+    if (!xarVarFetch('pmodule', 'str:1:', $module, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('name', 'str:1', $name, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('test', 'str:1:35:', $test, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
 
     // Security Check
     if (!xarSecurityCheck('EditRole')) return;
 
     // Call the Roles class and get the role
     $roles = new xarRoles();
-    $role  = $roles->getRole($uid);
+    $role = $roles->getRole($uid);
 
+    $types = xarModAPIFunc('roles','user','getitemtypes');
+    $data['itemtypename'] = $types[$role->getType()]['label'];
     // get the array of parents of this role
     // need to display this in the template
     $parents = array();
     foreach ($role->getParents() as $parent) {
-        $parents[] = array('parentid'   => $parent->getID(),
-                           'parentname' => $parent->getName());
+        $parents[] = array('parentid' => $parent->getID(),
+            'parentname' => $parent->getName());
     }
     $data['parents'] = $parents;
 
@@ -68,12 +70,12 @@ function roles_admin_testprivileges()
         // test returned an object
         else {
             $resultdisplay = "";
-            $data['rname']      = $testresult->getName();
-            $data['rrealm']     = $testresult->getRealm();
-            $data['rmodule']    = $testresult->getModule();
+            $data['rname'] = $testresult->getName();
+            $data['rrealm'] = $testresult->getRealm();
+            $data['rmodule'] = $testresult->getModule();
             $data['rcomponent'] = $testresult->getComponent();
-            $data['rinstance']  = $testresult->getInstance();
-            $data['rlevel']     = $masks->levels[$testresult->getLevel()];
+            $data['rinstance'] = $testresult->getInstance();
+            $data['rlevel'] = $masks->levels[$testresult->getLevel()];
         }
         // rest of the data for template display
         $data['testresult'] = $testresult;
@@ -81,13 +83,13 @@ function roles_admin_testprivileges()
         $testmasks = array($mask);
         $testmaskarray = array();
         foreach ($testmasks as $testmask) {
-            $thismask = array('sname'      => $testmask->getName(),
-                              'srealm'     => $testmask->getRealm(),
-                              'smodule'    => $testmask->getModule(),
-                              'scomponent' => $testmask->getComponent(),
-                              'sinstance'  => $testmask->getInstance(),
-                              'slevel'     => $masks->levels[$testmask->getLevel()]
-                              );
+            $thismask = array('sname' => $testmask->getName(),
+                'srealm' => $testmask->getRealm(),
+                'smodule' => $testmask->getModule(),
+                'scomponent' => $testmask->getComponent(),
+                'sinstance' => $testmask->getInstance(),
+                'slevel' => $masks->levels[$testmask->getLevel()]
+                );
             $testmaskarray[] = $thismask;
         }
         $data['testmasks'] = $testmaskarray;
@@ -95,14 +97,16 @@ function roles_admin_testprivileges()
     }
     // no test yet
     // Load Template
-    $data['test']       = $test;
-    $data['pname']      = $role->getName();
-    $data['ptype']      = $role->getType();
-    $data['pmodule']    = $module;
-    $data['uid']        = $uid;
+    $data['test'] = $test;
+    $data['pname'] = $role->getName();
+    $data['itemtype'] = $role->getType();
+    $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
+    $types = xarModAPIFunc('roles','user','getitemtypes');
+    $data['itemtypename'] = $types[$data['itemtype']]['label'];
+    $data['pmodule'] = $module;
+    $data['uid'] = $uid;
     $data['allmodules'] = $allmodules;
-    $data['testlabel']  = xarML('Test');
-
+    $data['testlabel'] = xarML('Test');
     if (empty($module)) $data['masks'] = array();
     else $data['masks'] = $masks->getmasks(strtolower($module));
     $data['authid'] = xarSecGenAuthKey();

@@ -29,21 +29,19 @@ function privileges_admin_newrealm()
         if (!xarSecConfirmAuthKey()) return;
 
         $xartable =& xarDBGetTables();
+        sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery('SELECT',$xartable['security_realms'],'xar_name');
         $q->eq('xar_name', $name);
         if(!$q->run()) return;
 
         if ($q->getrows() > 0) {
-            $msg = xarML('There is already a realm with the name #(1)', $name);
-            xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA',
-                           new DefaultUserException($msg));
-            return;
+            throw new DuplicateException(array('realm',$name));
         }
 
         $q = new xarQuery('INSERT',$xartable['security_realms']);
         $q->addfield('xar_name', $name);
         if(!$q->run()) return;
-        
+
         //Redirect to view page
         xarResponseRedirect(xarModURL('privileges', 'admin', 'viewrealms'));
     }

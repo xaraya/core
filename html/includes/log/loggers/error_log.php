@@ -13,10 +13,10 @@
 */
 
 /**
- * Include the base file
+ * Make sure the base class is available
  *
  */
-include_once ('./includes/log/loggers/xarLogger.php');
+sys::import('log.loggers.xarLogger');
 
 /**
  * The error_log class is an implementation of the xarLoggger
@@ -55,7 +55,7 @@ class xarLogger_error_log extends xarLogger
      * @access public
      * @return boolean
      */
-    function setConfig(&$conf)
+    function setConfig(array &$conf)
     {
         parent::setConfig($conf);
 

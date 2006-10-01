@@ -1,7 +1,5 @@
 <?php
 /**
- * View a list of items
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -44,8 +42,8 @@ function dynamicdata_user_view($args)
     if (empty($itemtype)) {
         $itemtype = 0;
     }
-    if (!xarModAPILoad('dynamicdata','user')) return;
-    $object = xarModAPIFunc('dynamicdata','user','getobjectinfo',
+
+    $object = Dynamic_Object_Master::getObjectInfo(
                             array('objectid' => $objectid,
                                   'moduleid' => $modid,
                                   'itemtype' => $itemtype,

@@ -17,26 +17,23 @@ function authsystem_admin_createpassword()
 {
     // Security Check
     if (!xarSecurityCheck('EditAuthsystem')) return;
-
     // Get parameters
-    if (!xarVarFetch('state',    'isset',  $state,    NULL, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('groupuid', 'int:0:', $groupuid, 0,    XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('uid',      'isset',  $uid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)','parameters', 'admin', 'createpassword', 'roles');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',new SystemException($msg." -- ".$uid));
-        return;
+    if(!xarVarFetch('state', 'isset', $state, NULL, XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('groupuid', 'int:0:', $groupuid, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('uid', 'isset', $uid)) {
+        throw new BadParameterException(array('parameters','admin','createpassword','roles'), xarML('Invalid #(1) for #(2) function #(3)() in module #(4)'));
     }
 
-    $pass = xarModAPIFunc('roles', 'user', 'makepass');
-    if (empty($pass)) {
-            $msg = xarML('Problem generating new password');
-            xarErrorSet(XAR_USER_EXCEPTION, 'MISSING_DATA', new DefaultUserException($msg));
-            return;
+    $pass = xarModAPIFunc('roles',
+                          'user',
+                          'makepass');
+     if (empty($pass)) {
+            throw new BadParameterException(null,xarML('Problem generating new password'));
      }
-     $roles          = new xarRoles();
-     $role           = $roles->getRole($uid);
+     $roles = new xarRoles();
+     $role = $roles->getRole($uid);
      $modifiedstatus = $role->setPass($pass);
-     $modifiedrole   = $role->update();
+     $modifiedrole = $role->update();
      if (!$modifiedrole) {
         return;
      }

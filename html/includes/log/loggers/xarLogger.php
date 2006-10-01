@@ -1,17 +1,25 @@
 <?php
-
 /*
-Copyright (C) 2004 the Digital Development Corporation
+    Copyright (C) 2004 the Digital Development Corporation
 
-The exception detailed below is granted for the following files in this directory:
+    The exception detailed below is granted for the following files in this 
+    directory:
 
-- simple.php
-- error_log.php
-- mail.php
-- sql.php
-- syslog.php
+    - simple.php
+    - error_log.php
+    - mail.php
+    - sql.php
+    - syslog.php
 
-As a special exception to the GNU General Public License Xaraya is distributed under, the Digital Development Corporation gives permission to link the code of this program with each of the files listed above (or with modified versions of each file that use the same license as the file), and distribute linked combinations including the two. You must obey the GNU General Public License in all respects for all of the code used other than each of the files listed above. If you modify this file, you may extend this exception to your version of the file, but you are not obligated to do so. If you do not wish to do so, delete this exception statement from your version.
+    As a special exception to the GNU General Public License Xaraya is distributed 
+    under, the Digital Development Corporation gives permission to link the code of 
+    this program with each of the files listed above (or with modified versions of 
+    each file that use the same license as the file), and distribute linked 
+    combinations including the two. You must obey the GNU General Public License 
+    in all respects for all of the code used other than each of the files listed 
+    above. If you modify this file, you may extend this exception to your version 
+    of the file, but you are not obligated to do so. If you do not wish to do so, 
+    delete this exception statement from your version.
 */
 
 /**
@@ -26,7 +34,7 @@ As a special exception to the GNU General Public License Xaraya is distributed u
  *
  * @package logging
  */
-class xarLogger
+class xarLogger extends Object
 {
 
     /**
@@ -34,7 +42,7 @@ class xarLogger
     *
     * The level of the messages which will be logged.
     */
-    var $_logLevel;
+    private $_logLevel;
 
     /**
     * Identity of the logger.
@@ -43,16 +51,17 @@ class xarLogger
     * in highly frequented sites, the time of the logged message isnt as good to diferenciate
     * different pageviews
     */
-    var $_ident;
+    private $_ident;
 
     /**
     * String containing the format to use when generating timestamps.
     * @var string
     */
-    var $_timeFormat = '%b %d %H:%M:%S';
+    // Note: before changing this, check windows support for the specifiers
+    private $_timeFormat = '%b %d %H:%M:%S';
 
     // Elapsed time.
-    var $_elapsed = 0;
+    private $_elapsed = 0;
 
     /**
      * Sets up the configuration specific parameters for each driver
@@ -62,7 +71,7 @@ class xarLogger
      * @access public
      * @return boolean
      */
-    function setConfig(&$conf)
+    function setConfig(array &$conf)
     {
         $this->_logLevel = $conf['logLevel'];
 
@@ -129,7 +138,9 @@ class xarLogger
         $microtime = explode(' ', $microtime);
 
         $secs = ((float)$microtime[0] + (float)$microtime[1]);
-
+        // NOTE: when using E_STRICT, and PHP has no 'own' timezone setting
+        // strftime() will issue notices on that. But that's what you get with
+        // E_STRICT ;-) so we will leave this.
         return strftime($this->_timeFormat) . ' ' . $microtime[0] . ' +' . number_format(round($secs - $this->_elapsed, 3),3);
     }
 }

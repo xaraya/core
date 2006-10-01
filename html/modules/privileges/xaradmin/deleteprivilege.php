@@ -1,7 +1,6 @@
 <?php
 /**
  * DeletePrivilege - delete a privilege
- *
  * @package core modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -24,6 +23,7 @@ function privileges_admin_deleteprivilege()
     xarSessionDelVar('privileges_statusmsg');
 
 //Call the Privileges class and get the privilege to be deleted
+    sys::import('modules.privileges.class.privileges');
     $privs = new xarPrivileges();
     $priv = $privs->getprivilege($pid);
     $name = $priv->getName();

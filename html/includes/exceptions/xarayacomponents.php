@@ -1,9 +1,11 @@
 <?php
 // FIXME: this is unmaintainable, dont hardcode it, determine once what is available, then store somewhere
-$core = array(
+class xarComponents extends Object
+{
+public static $core = array(
               array('name' => '', 'fullname' => 'BlockLayout', 'description' => 'Templating engine'),
               array('name' => 'XMLS', 'fullname' => 'Multi-Language', 'description' => 'The multi-language system and translation engine'),
-              array('name' => 'adodb', 'fullname' => 'ADODB', 'description' => 'Database abstraction layer'),
+              array('name' => 'creole', 'fullname' => 'CREOLE', 'description' => 'Database abstraction layer'),
               array('name' => 'installer', 'fullname' => 'Installer', 'description' => 'Product installer'),
               array('name' => 'privileges', 'fullname' => 'Privileges', 'description' => 'Privileges core modules'),
               array('name' => 'roles', 'fullname' => 'Roles', 'description' => 'Roles core module, manages users and groups'),
@@ -18,7 +20,7 @@ $core = array(
               array('name' => 'base', 'fullname' => 'Base', 'description' => 'Base core module'),
               array('name' => 'modules', 'fullname' => 'Modules', 'description' => 'Modules core module')
               );
-$apps = array(
+public static $apps = array(
               array('name' => 'addressbook', 'fullname' => 'Addressbook', 'description' => 'Addressbook Module'),
               array('name' => 'articles', 'fullname' => 'Articles', 'description' => 'Articles Module'),
               array('name' => 'authinvision', 'fullname' => 'AuthInvision', 'description' => 'Invision Authentication Module'),
@@ -119,4 +121,5 @@ module'),
               array('name' => 'xmlrpcvalidatorapi', 'fullname' => 'XmlRpcValidatorAPI', 'description' => 'Implementation of a XML-RPC validation API to test conformance of XML-RPC server to specifications Testable at http://validator.xmlrpc.com'),
               array('name' => 'xslt', 'fullname' => 'Xslt', 'description' => 'Xslt module')
               );
+}
 ?>

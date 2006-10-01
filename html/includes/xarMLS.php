@@ -9,12 +9,15 @@
  *
  * @subpackage multilanguage
  * @author Marco Canini <marco@xaraya.com>
+ * @author Roger Raymond <roger@asphyxia.com>
+ * @author Marcel van der Boom <mrb@hsdev.com>
+ * @author Volodymyr Metenchuk <voll@xaraya.com>
  * @todo Dynamic Translations
- *       Timezone and DST support (default offset is supported now)
- *       Write standard core translations
- *       Complete changes as described in version 0.9 of MLS RFC
- *       Implements the request(ed) locale APIs for backend interactions
- *       See how utf-8 works for xml backend
+ * @todo Timezone and DST support (default offset is supported now)
+ * @todo Write standard core translations
+ * @todo Complete changes as described in version 0.9 of MLS RFC
+ * @todo Implements the request(ed) locale APIs for backend interactions
+ * @todo See how utf-8 works for xml backend
  */
 
 /**
@@ -29,14 +32,14 @@ define('XARMLS_DNTYPE_CORE', 1);
 define('XARMLS_DNTYPE_THEME', 2);
 define('XARMLS_DNTYPE_MODULE', 3);
 
-require_once dirname(__FILE__)."/xarLocale.php";
-require_once dirname(__FILE__)."/transforms/xarCharset.php";
+sys::import('xarLocale');
+sys::import('transforms.xarCharset');
 
 /**
  * Initializes the Multi Language System
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access protected
+ * @throws Exception
  * @return bool true
  */
 function xarMLS_init(&$args, $whatElseIsGoingLoaded)
@@ -50,65 +53,58 @@ function xarMLS_init(&$args, $whatElseIsGoingLoaded)
         $GLOBALS['xarMLS_mode'] = $args['MLSMode'];
         if (!function_exists('mb_http_input')) {
             // mbstring required
-            xarCore_die('xarMLS_init: Mbstring PHP extension is required for UNBOXED MULTI language mode.');
+            throw new Exception('xarMLS_init: Mbstring PHP extension is required for UNBOXED MULTI language mode.');
         }
         break;
     default:
-        xarCore_die('xarMLS_init: Unknown MLS mode: '.$args['MLSMode']);
+        throw new Exception('xarMLS_init: Unknown MLS mode: '.$args['MLSMode']);
     }
     $GLOBALS['xarMLS_backendName'] = $args['translationsBackend'];
-/* TODO: delete after new backend testing
-    if ($GLOBALS['xarMLS_backendName'] != 'php' && $GLOBALS['xarMLS_backendName'] != 'xml' && $GLOBALS['xarMLS_backendName'] != 'xml2php') {
-        xarCore_die('xarML_init: Unknown translations backend: '.$GLOBALS['xarMLS_backendName']);
-    }
-*/
+
     // USERLOCALE FIXME Delete after new backend testing
     $GLOBALS['xarMLS_localeDataLoader'] = new xarMLS__LocaleDataLoader();
     $GLOBALS['xarMLS_localeDataCache'] = array();
 
-    $GLOBALS['xarMLS_currentLocale'] = '';
+    $GLOBALS['xarMLS_currentLocale'] = ''; // <-- FIXME: this causes problems
+
     $GLOBALS['xarMLS_defaultLocale'] = $args['defaultLocale'];
     $GLOBALS['xarMLS_allowedLocales'] = $args['allowedLocales'];
 
     $GLOBALS['xarMLS_newEncoding'] = new xarCharset;
 
-    $GLOBALS['xarMLS_defaultTimeZone'] = isset($args['defaultTimeZone']) ?
-                                         $args['defaultTimeZone'] : '';
+    $GLOBALS['xarMLS_defaultTimeZone'] = !empty($args['defaultTimeZone']) ?
+                                         $args['defaultTimeZone'] : 'Etc/UTC';
     $GLOBALS['xarMLS_defaultTimeOffset'] = isset($args['defaultTimeOffset']) ?
                                            $args['defaultTimeOffset'] : 0;
 
-    // Register MLS events
-    // These should be done before the xarMLS_setCurrentLocale function
-    xarEvt_registerEvent('MLSMissingTranslationString');
-    xarEvt_registerEvent('MLSMissingTranslationKey');
-    xarEvt_registerEvent('MLSMissingTranslationDomain');
-
-    if (!($whatElseIsGoingLoaded & XARCORE_SYSTEM_USER)) {
-        // The User System won't be started
-        // MLS will use the default locale
-        xarMLS_setCurrentLocale($args['defaultLocale']);
+    // Set the timezone
+    if(function_exists('date_default_timezone_set')) {
+        // PHP 5.1 only
+        date_default_timezone_set ($GLOBALS['xarMLS_defaultTimeZone']);
+    } else {
+        // TODO: find alternative for the above, what is it for anyway? shouldn't the server already have one?
+        // TODO: if so, how to get it?
+        // Now what?
     }
 
-    // Subsystem initialized, register a handler to run when the request is over
-    //register_shutdown_function ('xarMLS__shutdown_handler');
-    return true;
-}
+    // Register MLS events
+    // These should be done before the xarMLS_setCurrentLocale function
+    xarEvents::register('MLSMissingTranslationString');
+    xarEvents::register('MLSMissingTranslationKey');
+    xarEvents::register('MLSMissingTranslationDomain');
 
-/**
- * Shutdown handler for the MLS subsystem
- *
- * @access private
- */
-function xarMLS__shutdown_handler()
-{
-    //xarLogMessage("xarMLS shutdown handler");
+    // FIXME: this was previously conditional on User subsystem initialisation,
+    // but in the 2.x flow we need it earlier apparently, so made this unconditional
+    // *AND* commented out the assertion on running this once per request lower
+    // in this file. We need to investigate this better after the MLS refactoring
+    xarMLS_setCurrentLocale($args['defaultLocale']);
+    return true;
 }
 
 /**
  * Gets the current MLS mode
  *
  * @access public
- * @author Marco Canini <marco@xaraya.com>
  * @return integer MLS Mode
  */
 function xarMLSGetMode()
@@ -124,7 +120,6 @@ function xarMLSGetMode()
  * Returns the site locale if running in SINGLE mode,
  * returns the site default locale if running in BOXED or UNBOXED mode
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string the site locale
  * @todo   check
@@ -137,7 +132,6 @@ function xarMLSGetSiteLocale()
 /**
  * Returns an array of locales available in the site
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return array of locales
  * @todo   check
@@ -155,7 +149,6 @@ function xarMLSListSiteLocales()
 /**
  * Gets the current locale
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string current locale
  */
@@ -167,7 +160,6 @@ function xarMLSGetCurrentLocale()
 /**
  * Gets the charset component from a locale
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string the charset name
  * @throws BAD_PARAM
@@ -183,7 +175,6 @@ function xarMLSGetCharsetFromLocale($locale)
 /**
  * Translates a string
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string the translated string, or the original string if no translation is available
  */
@@ -225,18 +216,14 @@ function xarML($string/*, ...*/)
 /**
  * Return the translation associated to passed key
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access public
+ * @throws BadParameterException
  * @return string the translation string, or the key if no translation is available
  */
 function xarMLByKey($key/*, ...*/)
 {
     // Key must have a value and not contain spaces
-    if(empty($key) || strpos($key," ")) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM');
-        return;
-    }
-
+    if(empty($key) || strpos($key," ")) throw new BadParameterException('key');
 
     if (isset($GLOBALS['xarMLS_backend'])) {
         $trans = $GLOBALS['xarMLS_backend']->translateByKey($key);
@@ -265,7 +252,6 @@ function xarMLByKey($key/*, ...*/)
  * Gets the locale info for the specified locale string.
  * Info is an array composed by the 'lang', 'country', 'specializer' and 'charset' items.
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return array locale info
  */
@@ -278,26 +264,24 @@ function xarLocaleGetInfo($locale)
  * Gets the locale string for the specified locale info.
  * Info is an array composed by the 'lang', 'country', 'specializer' and 'charset' items.
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access public
+ * @throws BadParameterException
  * @return string locale string
  */
 function xarLocaleGetString($localeInfo)
 {
-    if (!isset($localeInfo['lang']) || !isset($localeInfo['country']) || !isset($localeInfo['specializer']) || !isset($localeInfo['charset'])) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'localeInfo');
-        return;
+    if (!isset($localeInfo['lang']) ||
+        !isset($localeInfo['country']) ||
+        !isset($localeInfo['specializer']) ||
+        !isset($localeInfo['charset'])) {
+        throw new BadParameterException('localeInfo');
     }
-    if (strlen($localeInfo['lang']) != 2) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'localeInfo');
-        return;
-    }
+    if (strlen($localeInfo['lang']) != 2) throw new BadParameterException('localeInfo');
+
     $locale = strtolower($localeInfo['lang']);
     if (!empty($localeInfo['country'])) {
-        if (strlen($localeInfo['country']) != 2) {
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'localeInfo');
-            return;
-        }
+        if (strlen($localeInfo['country']) != 2) throw new BadParameterException('localeInfo');
+
         $locale .= '_'.strtoupper($localeInfo['country']);
     }
     if (!empty($localeInfo['charset'])) {
@@ -316,7 +300,6 @@ function xarLocaleGetString($localeInfo)
  * Filter criteria are set as item of $filter parameter, they can be one or more of the following:
  * lang, country, specializer, charset.
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return array locale list
  */
@@ -340,7 +323,6 @@ function xarLocaleGetList($filter=array())
  *  make adjustments for timezone and should be used in gmstrftime
  *  or gmdate functions only.
  *
- *  @author Roger Raymond <roger@asphyxia.com>
  *  @access protected
  *  @return int unix timestamp.
  */
@@ -358,7 +340,6 @@ function xarMLS_userTime($time=null)
 /**
  *  Returns the user's current tz offset (+ daylight saving) in hours
  *
- *  @author Roger Raymond <roger@asphyxia.com>
  *  @access protected
  *  @param int $timestamp optional unix timestamp that we want to get the offset for
  *  @return float tz offset + possible daylight saving adjustment
@@ -418,7 +399,6 @@ function xarMLS_userOffset($timestamp = null)
 /**
  * Sets current locale
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access protected
  * @param locale site locale
  */
@@ -426,7 +406,11 @@ function xarMLS_setCurrentLocale($locale)
 {
     static $called = 0;
 
-    assert('$called == 0; // Can only be called once during a page request');
+    // FIXME: during initialisation, the current locale was set, and it gets called
+    // again during user subsystem initialisation, we have to provide better defaults
+    // if we really want this to run only once.
+    
+    //assert('$called == 0; // Can only be called once during a page request');
     $called++;
 
     $mode = xarMLSGetMode();
@@ -472,16 +456,16 @@ function xarMLS_setCurrentLocale($locale)
 /* TODO: delete after new backend testing
     switch ($GLOBALS['xarMLS_backendName']) {
     case 'xml':
-        include_once 'includes/xarMLSXMLBackend.php';
+        sys::import('xarMLSXMLBackend');
         $GLOBALS['xarMLS_backend'] = new xarMLS__XMLTranslationsBackend($alternatives);
         break;
     case 'php':
-        include_once 'includes/xarMLSPHPBackend.php';
+        sys::import('xarMLSPHPBackend');
         $GLOBALS['xarMLS_backend'] = new xarMLS__PHPTranslationsBackend($alternatives);
         break;
     case 'xml2php':
 */
-        include_once 'includes/xarMLSXML2PHPBackend.php';
+        sys::import('xarMLSXML2PHPBackend');
         $GLOBALS['xarMLS_backend'] = new xarMLS__XML2PHPTranslationsBackend($alternatives);
 
 /*
@@ -497,7 +481,6 @@ function xarMLS_setCurrentLocale($locale)
 /**
  * Loads translations for the specified context
  *
- * @author Marco Canini <marco@xaraya.com>
  * @access protected
  * @return bool
  */
@@ -554,7 +537,6 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
  * Load relevant translations for a specified relatvive path (be it file or directory)
  *
  * @return bool true on success, false on failure   
- * @author Marcel van der Boom <mrb@hsdev.com>
  * @todo slowly add more intelligence for more scopes. (core, version, init?)
  * @todo static hash on path to prevent double loading?
  * @todo is directory support needed? i.e. modules/base/ load all for base module? or how does this work?
@@ -666,7 +648,6 @@ function xarMLS__bindVariables($string, $args)
  * Gets a list of alternatives for a certain locale.
  * The first alternative is the locale itself
  *
- * @author Marco Canini <marco@xaraya.com>
  * @return array alternative locales
  */
 function xarMLS__getLocaleAlternatives($locale)
@@ -685,7 +666,6 @@ function xarMLS__getLocaleAlternatives($locale)
  * Parses a locale string into an associative array composed of
  * lang, country, specializer and charset keys
  *
- * @author Marco Canini <marco@xaraya.com>
  * @return array parsed locale
  */
 function xarMLS__parseLocaleString($locale)
@@ -694,8 +674,7 @@ function xarMLS__parseLocaleString($locale)
     // Match the locales standard format  : en_US.iso-8859-1
     // Thus: language code lowercase(2), country code uppercase(2), encoding lowercase(1+)
     if (!preg_match('/([a-z][a-z])(_([A-Z][A-Z]))?(\.([0-9a-z\-]+))?(@([0-9a-zA-Z]+))?/', $locale, $matches)) {
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM', 'locale');
-        return;
+        throw new BadParameterException('locale');
     }
 
     $res['lang'] = $matches[1];
@@ -710,7 +689,6 @@ function xarMLS__parseLocaleString($locale)
  * Gets the single byte charset most typically used in the Web for the
  * requested language
  *
- * @author Marco Canini <marco@xaraya.com>
  * @return string the charset
  * @todo   Dont hardcode this
  */
@@ -740,74 +718,57 @@ function xarMLS__getSingleByteCharset($langISO2Code)
 // MLS CLASSES
 
 /**
- * This is the abstract base class from which every concrete translations backend
- * must inherit.
+ * Translations backend interface
+ *.
  * It defines a simple interface used by the Multi Language System to fetch both
- * string and key based translations.
+ * string and key based translations. Each MLS backend must implement this interface.
  *
  * @package multilanguage
  * @todo    interface once php5 is there
  */
-class xarMLS__TranslationsBackend
-{
-    /**
-     * Gets the string based translation associated to the string param.
-     */
-    function translate($string)
-    { die('abstract'); }
-    /**
-     * Gets the key based translation associated to the key param.
-     */
-    function translateByKey($key)
-    { die('abstract'); }
-    /**
-     * Unloads loaded translations.
-     */
-    function clear()
-    { die('abstract'); }
-    /**
-     * Binds the backend to the specified domain.
-     */
-    function bindDomain($dnType, $dnName)
-    { die('abstract'); }
-    /**
-     * Checks if this backend supports a scpecified translation context.
-     */
-    function hasContext($ctxType, $ctxName)
-    { die('abstract'); }
-    /**
-     * Loads a set of translations into the backend.
-     */
-    function loadContext($ctxType, $ctxName)
-    { die('abstract'); }
-    /**
-     * Gets available context names for the specified context type
-     */
-    function getContextNames($ctxType)
-    { die('abstract'); }
+interface ITranslationsBackend {
+    // Get the string based translation associated to the string param.
+    function translate($string);
 
+    // Get the key based translation associated to the key param.
+    function translateByKey($key);
 
+    // Unload loaded translations.
+    function clear();
+
+    // Bind the backend to the specified domain.
+    function bindDomain($dnType, $dnName);
+
+    // Check if this backend supports a scpecified translation context.
+    function hasContext($ctxType, $ctxName);
+
+    // Load a set of translations into the backend.
+    function loadContext($ctxType, $ctxName);
+
+    // Get available context names for the specified context type
+    function getContextNames($ctxType);
 }
 
 /**
- * This abstract class inherits from xarMLS__TranslationsBackend and provides
- * a powerful access to metadata associated to every translation entry.
+ * Base class for the translation backends
+ *
  * A translation entry is an array that contains not only the translation,
  * but also the a list of references where it appears in the source by
  * reporting the file name and the line number.
  *
  * @package multilanguage
+ * @throws Exception, BadParameterException
  */
-class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
+abstract class xarMLS__ReferencesBackend  extends Object implements ITranslationsBackend
 {
-    var $locales;
-    var $locale;
-    var $domainlocation;
-    var $contextlocation;
-    var $backendtype;
-    var $space;
-    var $spacedir;
-    var $domaincache;
+    public $locales;
+    public $locale;
+    public $domainlocation;
+    public $contextlocation;
+    public $backendtype;
+    public $space;
+    public $spacedir;
+    public $domaincache;
 
     function xarMLS__ReferencesBackend($locales)
     {
@@ -818,33 +779,42 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
      * Gets a translation entry for a string based translation.
      */
     function getEntry($string)
-    { die('abstract'); }
+    { throw new Exception('method is abstract? (todo)'); }
+
     /**
      * Gets a translation entry for a key based translation.
      */
     function getEntryByKey($key)
-    { die('abstract'); }
+    { throw new Exception('method is abstract? (todo)'); }
     /**
      * Gets a transient identifier (integer) that is guaranteed to identify
      * the translation entry for the string based translation in the next HTTP request.
      */
     function getTransientId($string)
-    { die('abstract'); }
+    { throw new Exception('method is abstract? (todo)'); }
     /**
      * Gets the translation entry identified by the passed transient identifier.
      */
     function lookupTransientId($transientId)
-    { die('abstract'); }
+    { throw new Exception('method is abstract? (todo)'); }
     /**
      * Enumerates every string based translation, use the reset param to restart the enumeration.
      */
     function enumTranslations($reset = false)
-    { die('abstract'); }
+    { throw new Exception('method is abstract? (todo)'); }
     /**
      * Enumerates every key based translation, use the reset param to restart the enumeration.
      */
     function enumKeyTranslations($reset = false)
-    { die('abstract'); }
+    { throw new Exception('method is abstract? (todo)'); }
+
+    // ITranslationsBackend Interface
+    // These have no common part:
+    //abstract function translate($string);
+    //abstract function translateByKey($key);
+    //abstract function clear();
+    //abstract function loadContext($ctxType, $ctxName);
+    //abstract function getContextNames($ctxType);
 
     function bindDomain($dnType, $dnName)
     {
@@ -871,10 +841,10 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
 
         foreach ($this->locales as $locale) {
             if($this->spacedir == "core" || $this->spacedir == "xaraya") {
-                $this->domainlocation  = xarCoreGetVarDirPath() . "/locales/"
+                $this->domainlocation  = sys::varpath() . "/locales/"
                 . $locale . "/" . $this->backendtype . "/" . $this->spacedir;
             } else {
-                $this->domainlocation  = xarCoreGetVarDirPath() . "/locales/"
+                $this->domainlocation  = sys::varpath() . "/locales/"
                 . $locale . "/" . $this->backendtype . "/" . $this->spacedir . "/" . $dnName;
             }
 
@@ -917,11 +887,11 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
         } elseif (strpos($ctxType, 'core:') !== false) {
             $fileName = $this->getDomainLocation() . "/". $ctxName . "." . $this->backendtype;
         } else {
-            die("Bad Context: " . $ctxType);
+            throw new BadParameterException(array('context',$ctxType));
         }
         $fileName = str_replace('//','/',$fileName);
         if (!file_exists($fileName)) {
-//            die("File does not exist: " . $fileName);
+//            throw new FileNotFoundException($fileName);
             return false;
         }
         return $fileName;
@@ -932,7 +902,6 @@ class xarMLS__ReferencesBackend extends xarMLS__TranslationsBackend
 /**
  * Create directories tree
  *
- * @author Volodymyr Metenchuk <voll@xaraya.com>
  * @access protected
  * @return bool true
  */
@@ -947,13 +916,13 @@ function xarMLS__mkdirr($path)
     $next_path = substr($path, 0, strrpos($path, '/'));
     if (xarMLS__mkdirr($next_path)) {
         if (!file_exists($path)) {
-            $result = @mkdir($path, 0700);
-            if (!$result) {
+            $madeDir = @mkdir($path, 0700);
+            if (!$madeDir) {
                 $msg = xarML("The directories under #(1) must be writeable by PHP.", $next_path);
                 xarLogMessage($msg);
-                // xarErrorSet(XAR_USER_EXCEPTION, 'WrongPermissions', new DefaultUserException($msg));
+                // throw new PermissionException?
             }
-            return $result;
+            return $madeDir;
         }
     }
     return false;
@@ -962,7 +931,6 @@ function xarMLS__mkdirr($path)
 /**
  * Check directory writability and create directory if it doesn't exist
  *
- * @author Volodymyr Metenchuk <voll@xaraya.com>
  * @access protected
  * @return bool true
  */

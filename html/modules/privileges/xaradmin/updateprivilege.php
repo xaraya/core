@@ -1,7 +1,5 @@
 <?php
 /**
- * Update a privilege
- *
  * @package core modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -45,6 +43,7 @@ function privileges_admin_updateprivilege()
 
 // call the Privileges class and update the values
 
+    sys::import('modules.privileges.class.privileges');
     if ($type =="empty") {
 
 // this is just a container for other privileges

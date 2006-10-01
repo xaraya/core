@@ -1,7 +1,6 @@
 <?php
 /**
  * Language List Property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -13,7 +12,7 @@
 /*
  * @author mikespub <mikespub@xaraya.com>
 */
-include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_Select_Property');
 
 /**
  * handle the language list property
@@ -22,54 +21,24 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_LanguageList_Property extends Dynamic_Select_Property
 {
-    function Dynamic_LanguageList_Property($args)
+    public $id         = 36;
+    public $name       = 'language';
+    public $desc       = 'Language List';
+
+    function getOptions()
     {
-        $this->Dynamic_Select_Property($args);
-        if (count($this->options) == 0) {
+        $list = xarMLSListSiteLocales();
 
-            $list = xarMLSListSiteLocales();
+        asort($list);
 
-            asort($list);
-
-            foreach ($list as $locale) {
-                $locale_data =& xarMLSLoadLocaleData($locale);
-                $name = $locale_data['/language/display'] . " (" . $locale_data['/country/display'] . ")";
-                $this->options[] = array(
-                    'id'   => $locale,
-                    'name' => $name,
-                );
-            }
+        foreach ($list as $locale) {
+            $locale_data =& xarMLSLoadLocaleData($locale);
+            $name = $locale_data['/language/display'] . " (" . $locale_data['/country/display'] . ")";
+            $this->options[] = array('id'   => $locale,
+                                     'name' => $name,
+                                    );
         }
+        return $this->options;
     }
-
-    // default methods from Dynamic_Select_Property
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 36,
-                              'name'       => 'language',
-                              'label'      => 'Language List',
-                              'format'     => '36',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => '',
-                            'aliases'        => '',
-                            'args'           => serialize($args)
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
-
 ?>

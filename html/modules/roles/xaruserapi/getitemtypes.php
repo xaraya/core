@@ -1,13 +1,11 @@
 <?php
 /**
- * Utility function to retrieve the list of item types of this module (if any)
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -21,19 +19,24 @@ function roles_userapi_getitemtypes($args)
 {
     $itemtypes = array();
 
-// TODO: use 1 and 2 instead of 0 and 1 for itemtypes - cfr. bug 3439
-
-/* this is the default for roles at the moment - select ALL in hooks if you want this
-    $itemtypes[0] = array('label' => xarML('Users'),
-                          'title' => xarML('View Users'),
+/* this is the default for roles at the moment - select ALL in hooks if you want this*/
+    $itemtypes[ROLES_ROLETYPE] = array('label' => xarML('Role'),
+                          'title' => xarML('View Role'),
                           'url'   => xarModURL('roles','user','view')
                          );
-*/
-    $itemtypes[1] = array('label' => xarML('Groups'),
-                          'title' => xarML('View Groups'),
+    $itemtypes[ROLES_USERTYPE] = array('label' => xarML('User'),
+                          'title' => xarML('View User'),
+                          'url'   => xarModURL('roles','user','view')
+                         );
+    $itemtypes[ROLES_GROUPTYPE] = array('label' => xarML('Group'),
+                          'title' => xarML('View Group'),
                           'url'   => xarModURL('roles','user','viewtree')
                          );
-    return $itemtypes;
-}
+    // @todo let's use Dynamic_Object_Master::getModuleItemType here, but not until roles brings in dd automatically
+    $extensionitemtypes = xarModAPIFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27, 'native' =>false));
 
+    $keys = array_merge(array_keys($itemtypes),array_keys($extensionitemtypes));
+    $values = array_merge(array_values($itemtypes),array_values($extensionitemtypes));
+    return array_combine($keys,$values);
+}
 ?>

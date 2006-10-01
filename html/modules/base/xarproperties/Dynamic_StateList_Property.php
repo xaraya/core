@@ -15,7 +15,7 @@
  *
  * @author John Cox
  */
-include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_Select_Property');
 
 /**
  * handle the StateList property
@@ -25,9 +25,14 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_StateList_Property extends Dynamic_Select_Property
 {
-    function Dynamic_StateList_Property($args)
+    public $id         = 43;
+    public $name       = 'statelisting';
+    public $desc       = 'State Dropdown';
+
+    function __construct($args)
     {
-        $this->Dynamic_Select_Property($args);
+        parent::__construct($args);
+        $this->template = 'statelist';
     }
 
     function validateValue($value = null)
@@ -49,24 +54,8 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
         return true;
     }
 
-    function showInput($args = array())
-    {
-        extract($args);
-        $data = array();
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        $data['value'] = $value;
-        $data['name']  = $name;
-        $data['id']    = $id;
-
-       //todo - this should be fixed with id as an abbreviation and update template accordingly
+   function getOptions()
+   {
         $soptions = array();
         $soptions[] = array('id' =>'Please select', 'name' =>'Please select' );
         $soptions[] = array('id' =>'Alabama', 'name' =>'Alabama');
@@ -142,61 +131,9 @@ class Dynamic_StateList_Property extends Dynamic_Select_Property
         $soptions[] = array('id' =>'Victoria', 'name' =>'Victoria');
         $soptions[] = array('id' =>'Western Australia', 'name' =>'Western Australia');
         $soptions[] = array('id' =>'Other', 'name' =>'Other');
-
-        $data['soptions'] = $soptions;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
-        $data['tabindex'] =! empty($tabindex) ? $tabindex : 0;
-
-
-        $template="";
-        return xarTplProperty('base', 'statelist', 'showinput', $data);
-
-        //return $out;
+        $this->options = $soptions;
+       return $this->options;
     }
-
-    function showOutput($args = array())
-    {
-         extract($args);
-         $data = array();
-
-        if (isset($value)) {
-             $data['value']=xarVarPrepHTMLDisplay($value);
-         } else {
-             $data['value']=xarVarPrepHTMLDisplay($this->value);
-         }
-         if (isset($name)) {
-           $data['name']=$name;
-         }
-         if (isset($id)) {
-             $data['id']=$id;
-         }
-         $template="";
-         return xarTplProperty('base', 'statelist', 'showoutput', $data);
-
-    }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @return array Base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 43,
-                              'name'       => 'statelisting',
-                              'label'      => 'State Dropdown',
-                              'format'     => '43',
-                              'validation' => '',
-                              'source'     => '',
-                              'dependancies' => '',
-                              'requiresmodule' => '',
-                              'aliases'        => '',
-                              'args'           => serialize($args)
-                            // ...
-                           );
-        return $baseInfo;
-     }
 }
+
 ?>

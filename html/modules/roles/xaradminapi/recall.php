@@ -21,16 +21,8 @@ function roles_adminapi_recall($args)
     // Get arguments
     extract($args);
 
-    if (!isset($uid) || $uid == 0) {
-        $msg = xarML('The user to be recalled does not exist or is not deleted');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION', new SystemException($msg));
-        return;
-    }
-    if (!isset($state) || $state == 0) {
-        $msg = xarML('The state to be recalled to is missing or 0');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION', new SystemException($msg));
-        return;
-    }
+    if (!isset($uid) || $uid == 0) throw new EmptyParameterException('uid');
+    if (!isset($state) || $state == 0) throw new EmptyParameterException('state');
 
     // Get database setup
     $dbconn =& xarDBGetConn();
@@ -48,8 +40,7 @@ function roles_adminapi_recall($args)
               SET xar_uname = ?, xar_email = ?, xar_state = ?
               WHERE xar_uid = ?";
     $bindvars = array($uname[0],$email[0],$state,$uid);
-    $result =& $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
+    $dbconn->Execute($query,$bindvars);
 
     // Let any hooks know that we have recalled this user.
     $item['module'] = 'roles';

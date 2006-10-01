@@ -1,15 +1,14 @@
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html
-</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!-- TODO: split this file up in parts -->
 <xar:base-include-javascript module="base" filename="formcheck.js" />
 <script type="text/javascript">
-<!--
+<xar:comment>
     // Enter name of mandatory fields
     var base_fieldRequired = Array("defaultfunction");
     // Enter field description to appear in the dialog box
     var base_fieldDescription = Array("Default Module Function");
-//-->
-</script>
+//</xar:comment>
+</script> 
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
@@ -100,9 +99,7 @@
             </dd>
         </xar:if>
     </dl>
-    <xar:comment>
-        ------------------- Begin Site Display Options ---------------------
-    </xar:comment>
+    <!-- Begin Site Display Options -->
     <xar:if condition="$tab eq 'display'">
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                <fieldset>
@@ -135,7 +132,7 @@
                 <p class="xar-form-input-wrapper-after">
                     <xar:mlstring>The Default Module supplies the main entry (front) page to your site. The
                         Default Module Function below provides the template for this frontpage. You can customize and
-                        override this template in your theme.
+                        override this template in your theme. [TODO: belongs in modules (the var)]
                     </xar:mlstring>
                 </p>
                 <div class="xar-form-input-wrapper">
@@ -168,7 +165,7 @@
                         </xar:if>
                         <label for="alternatepagetemplate" title="#xarML('Use an alternate default page template.')#">
                             <xar:mlstring>
-                                Use Alternate Page Template
+                                Use Alternate Page Template [TODO: belongs in themes module (the var)]
                             </xar:mlstring>
                         </label>
                     </div>
@@ -184,7 +181,7 @@
                 <div class="xar-form-input-wrapper">
                     <label for="defaulttype" title="#xarML('The default type of module to be loaded.')#" class="xar-form-label">
                         <xar:mlstring>
-                            Default Module Type:
+                            Default Module Type: [TODO: belongs in modules module (the var)]
                         </xar:mlstring>
                     </label>
                     <select name="defaulttype" id="defaulttype" size="1">
@@ -216,7 +213,7 @@
                 <div class="xar-form-input-wrapper">
                     <label for="defaultfunction" title="#xarML('The default function of module to be loaded.')#" class="xar-form-label">
                         <xar:mlstring>
-                            Default Module Function:
+                            Default Module Function: [TODO: belongs in modules module (the var)]
                         </xar:mlstring>
                     </label>
                     <input type="text" id="defaultfunction" name="defaultfunction" value="#xarConfigGetVar('Site.Core.DefaultModuleFunction')#" maxlength="100" class="xar-form-textlong" />
@@ -231,7 +228,7 @@
                 <div class="xar-form-input-wrapper">
                     <label for="themedir" title="#xarML('The default directory for site themes - no trailing slash.')#" class="xar-form-label">
                         <xar:mlstring>
-                            Default Theme Directory:
+                            Default Theme Directory: [TODO: belongs in themes module (the var)]
                         </xar:mlstring>
                     </label>
                     <input type="text" id="themedir" name="themedir" value="#xarConfigGetVar('Site.BL.ThemesDirectory')#" maxlength="100" class="xar-form-textlong" />
@@ -282,9 +279,7 @@
                 </div>
             </fieldset>
         </form>
-        <xar:comment>
-            ----------------- Begin Security Options -------------------
-        </xar:comment>
+        <!-- Begin Security Options -->
         <xar:elseif condition="$tab eq 'security'" />
         <xar:set name="authmodules">
             #xarConfigGetVar('Site.User.AuthenticationModules')#
@@ -451,9 +446,7 @@
                 </div>
             </fieldset>
         </form>
-        <xar:comment>
-            ----------------- Begin Locale Options -------------------
-        </xar:comment>
+        <!-- Begin Locale Options -->
         <xar:elseif condition="$tab eq 'locales'" />
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
             <xar:template file="modifyconfig-locales" module="base" type="module" />
@@ -465,9 +458,7 @@
                 </div>
             </fieldset>
         </form>
-        <xar:comment>
-            ----------------- Begin Other Options -------------------
-        </xar:comment>
+        <!-- Begin Other Options -->
         <xar:elseif condition="$tab eq 'other'" />
         <form action="#xarModUrl('base', 'admin', 'updateconfig')#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
             <fieldset>

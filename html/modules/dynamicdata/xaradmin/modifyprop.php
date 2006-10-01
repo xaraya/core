@@ -1,7 +1,6 @@
 <?php
 /**
  * Modify the dynamic properties for a module and itemtype
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -69,11 +68,9 @@ function dynamicdata_admin_modifyprop()
         $label =  $object['label'];
     }
     if (empty($modid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module id', 'admin', 'modifyprop', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('module id', 'admin', 'modifyprop', 'dynamicdata');
+        throw new BadParameterException($vars, $msg);
     }
     $data['modid'] = $modid;
     $data['itemtype'] = $itemtype;
@@ -115,7 +112,7 @@ function dynamicdata_admin_modifyprop()
     } else {
         $data['table'] = null;
     }
-    $data['sources'] = Dynamic_DataStore_Master::getDataSources($params);
+    $data['sources'] = DataStoreFactory::getDataSources($params);
     if (empty($data['sources'])) {
         $data['sources'] = array();
     }

@@ -1,7 +1,6 @@
 <?php
 /**
  * Get possible data sources
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -24,7 +23,7 @@
  */
 function dynamicdata_userapi_getsources($args)
 {
-    return Dynamic_DataStore_Master::getDataSources();
+    return DataStoreFactory::getDataSources();
 }
 
 ?>

@@ -1,7 +1,6 @@
 <?php
 /**
  * Dynamic Select Property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -16,7 +15,7 @@
  * Include the base class
  *
  */
-include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_Select_Property');
 
 /**
  * Class to handle field type property
@@ -25,49 +24,27 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_FieldType_Property extends Dynamic_Select_Property
 {
-    function Dynamic_FieldType_Property($args)
+    public $id         = 22;
+    public $name       = 'fieldtype';
+    public $desc       = 'Field Type';
+    public $reqmodules = array('dynamicdata');
+
+    function __construct($args)
     {
-        if( !isset($args['skipInit']) || ($args['skipInit'] != true) )
-        {
-            $this->Dynamic_Select_Property($args);
-            if (count($this->options) == 0) {
-                $proptypes = Dynamic_Property_Master::getPropertyTypes();
-                if (!isset($proptypes)) {
-                    $proptypes = array();
-                }
-                foreach ($proptypes as $propid => $proptype) {
-                    $this->options[] = array('id' => $propid, 'name' => $proptype['label']);
-                }
+        parent::__construct($args);
+        $this->filepath   = 'modules/dynamicdata/xarproperties';
+
+        if (count($this->options) == 0) {
+            $proptypes = Dynamic_Property_Master::getPropertyTypes();
+            if (!isset($proptypes)) $proptypes = array();
+
+            foreach ($proptypes as $propid => $proptype) {
+                // TODO: label isnt guaranteed to be unique, if not, leads to some surprises.
+                $this->options[$proptype['label']] = array('id' => $propid, 'name' => $proptype['label']);
             }
         }
+        // sort em by name
+        ksort($this->options);
     }
-
-    // default methods from Dynamic_Select_Property
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 22,
-                              'name'       => 'fieldtype',
-                              'label'      => 'Field Type',
-                              'format'     => '22',
-                            'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'dynamicdata',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
 }
-
 ?>

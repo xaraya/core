@@ -1,7 +1,6 @@
 <?php
 /**
  * Get all dynamic data fields for a list of items
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -66,11 +65,9 @@ function &dynamicdata_userapi_getitems($args)
         $invalid[] = 'item type';
     }
     if (count($invalid) > 0) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    join(', ',$invalid), 'user', 'getitems', 'DynamicData');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $nullreturn;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array(join(', ',$invalid), 'user', 'getitems', 'DynamicData');
+        throw new BadParameterException($vars,$msg);
     }
 
     if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:All")) return $nullreturn;
@@ -140,6 +137,9 @@ function &dynamicdata_userapi_getitems($args)
                                            'catid' => $catid,
                                            'groupby' => $groupby,
                                            'status' => $status));
+
+    if (!isset($object) || empty($object->objectid)) return $nullreturn;
+
     if (!isset($object)) return $nullreturn;
     // $items[$itemid]['fields'][$name]['value'] --> $items[$itemid][$name] now
 

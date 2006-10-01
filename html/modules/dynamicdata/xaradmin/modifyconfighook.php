@@ -1,7 +1,6 @@
 <?php
 /**
  * Modify configuration for a module
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -23,13 +22,7 @@ function dynamicdata_admin_modifyconfighook($args)
 {
     extract($args);
 
-    if (!isset($extrainfo)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'extrainfo', 'admin', 'modifyconfighook', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
-    }
+    if (!isset($extrainfo)) throw new EmptyParameterException('extrainfo');
 
     // When called via hooks, the module name may be empty, so we get it from
     // the current module
@@ -41,11 +34,9 @@ function dynamicdata_admin_modifyconfighook($args)
 
     $modid = xarModGetIDFromName($modname);
     if (empty($modid)) {
-        $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                    'module name', 'admin', 'modifyconfighook', 'dynamicdata');
-        xarErrorSet(XAR_USER_EXCEPTION, 'BAD_PARAM',
-                       new SystemException($msg));
-        return $msg;
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = array('module name', 'admin', 'modifyconfighook', 'dynamicdata');
+        throw new BadParameterException($vars,$msg);
     }
 
     if (!empty($extrainfo['itemtype'])) {
@@ -85,7 +76,8 @@ function dynamicdata_admin_modifyconfighook($args)
     $data['fieldtypeprop'] = & Dynamic_Property_Master::getProperty(array('type' => 'fieldtype'));
 
     $object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
-                                                       'itemtype' => $itemtype));
+                                                       'itemtype' => $itemtype,
+                                                       'extend' => false));
     if (!isset($object)) return;
 
     if (!empty($object->template)) {

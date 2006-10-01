@@ -13,11 +13,11 @@
 
 define ("CONVERT_TABLES_DIR", 'includes/transforms/convtables/');
 
-class xarCharset
+class xarCharset extends Object
 {
-    var $lastConversion = ''; // Last used conversion
-    var $conversionTable;     // Last conversion table
-    var $noCharByteVal = 63;  // ASCII value for chars with no equivalent
+    public $lastConversion = ''; // Last used conversion
+    public $conversionTable;     // Last conversion table
+    public $noCharByteVal = 63;  // ASCII value for chars with no equivalent
 
     /**
      * Converts unicode number to UTF-8 multibyte character
@@ -243,7 +243,7 @@ class xarCharset
                 if (in_array($hexChar, $CharsetTable[$fromCharset])) {
                     $unicodeHexChar = array_search($hexChar, $CharsetTable[$fromCharset]);
                     if ($toCharset != "utf-8") {
-                        if (array_key_exists($unicodeHexChar, $CharsetTable[$toCharset])) {
+                        if (isset($CharsetTable[$toCharset][$unicodeHexChar])) {
                             if ($turnOnEntities == true) {
                                 $outString .= $this->utf8ToEntities($this->unicodeNumberToUtf8Char($unicodeHexChar));
                             } else {

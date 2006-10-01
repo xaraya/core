@@ -1,6 +1,7 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:base-include-javascript module="privileges" filename="xarTree.js" />
 <xar:style scope="module" module="base" file="navtabs" />
+<xar:style scope="module" file="privtree" />
+<xar:base-include-javascript module="privileges" filename="xarTree.js" />
 <script type="javascript">
 <!--
     var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
@@ -137,8 +138,6 @@
           <xar:mlvar>#$pname#</xar:mlvar>
         </xar:ml>
       </legend>
-      <div>
-        #$tree#
-      </div>
+<!--      <xar:data-input type="privilegestree" show="All" /> -->
     </fieldset>
 </div>

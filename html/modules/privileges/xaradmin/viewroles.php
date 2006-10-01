@@ -1,7 +1,5 @@
 <?php
 /**
- * Display the roles this privilege is assigned to
- *
  * @package core modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -28,6 +26,7 @@ function privileges_admin_viewroles()
     xarSessionDelVar('privileges_statusmsg');
 
     //Call the Privileges class and get the privilege
+    sys::import('modules.privileges.class.privileges');
     $privs = new xarPrivileges();
     $priv = $privs->getPrivilege($pid);
 
@@ -42,10 +41,6 @@ function privileges_admin_viewroles()
                                     'auth_module'=>$role->getAuthModule()));
     }
 
-    // Load Template
-    include_once 'modules/privileges/xartreerenderer.php';
-    $renderer = new xarTreeRenderer();
-
 //Get the array of parents of this privilege
     $parents = array();
     foreach ($priv->getParents() as $parent) {
@@ -56,12 +51,11 @@ function privileges_admin_viewroles()
     $data['pname'] = $priv->getName();
     $data['pid'] = $pid;
     $data['roles'] = $curroles;
-    //    $data['allgroups'] = $roles->getAllPrivileges();
     $data['removeurl'] = xarModURL('privileges',
                              'admin',
                              'removerole',
                              array('pid'=>$pid));
-    $data['trees'] = $renderer->drawtrees($data['show']);
+
     $data['parents'] = $parents;
     $data['groups'] = xarModAPIFunc('roles','user','getallgroups');
     return $data;

@@ -1,7 +1,6 @@
 <?php
 /**
  * Curl Class
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -29,28 +28,28 @@
  * @throws  no exceptions
  * @todo    nice handling of protocols other than http.
  */
-class xarCurl
+class xarCurl extends Object
 {
     // The curl object.
     // Extra methods and properties can be accessed through this property.
-    var $curl;
+    public $curl;
 
     // The URL to go visit.
-    var $url;
+    public $url;
 
     // The GET and POST data.
-    var $post = array();
-    var $get = array();
+    public $post = array();
+    public $get = array();
 
     // Default method of sending data.
-    var $sendmethod = 'POST';
+    public $sendmethod = 'POST';
 
     // Default GET and POST parameter separators.
     // TODO: these can be fetched from the PHP settings when the object is
     // initialised.
-    var $get_start = '?';
-    var $get_join = '&';
-    var $post_join = '&';
+    public $get_start = '?';
+    public $get_join = '&';
+    public $post_join = '&';
 
     // Error code, in the event of failure.
     // No proprietory (i.e. Xaraya-specific) error handling here - the caller
@@ -59,24 +58,24 @@ class xarCurl
     //  0:  success
     //  -1: class error (see $error for textual code, e.g. NO_SESSION, NO_URL)
     //  >0: curl error (see $error for message)
-    var $errno = 0;
-    var $error = '';
-    var $http_code = 0;
-    var $http_desc = '';
+    public $errno = 0;
+    public $error = '';
+    public $http_code = 0;
+    public $http_desc = '';
 
     // Result of a curl_getinfo() - cached so it is available even after the
     // session is closed.
-    var $info = NULL;
+    public $info = NULL;
 
     // Header information from the return message.
-    var $header100 = array();
-    var $header = array();
+    public $header100 = array();
+    public $header = array();
 
     // Curl info types: the information flags that getinfo() can accept.
     // The basic constants.
     // There are enough subtleties in the names that we can't
     // generalise them. Shame.
-    var $info_types = array(
+    public $info_types = array(
         CURLINFO_EFFECTIVE_URL => 'url',
         CURLINFO_HTTP_CODE => 'http_code',
         CURLINFO_HEADER_SIZE => 'header_size',
@@ -99,7 +98,7 @@ class xarCurl
     // TODO: Some of these codes have related header records, such as
     // redirection URLs. We should collect those headers automatically
     // to make handling the exceptions easier.
-    var $http_codes = array(
+    public $http_codes = array(
         // Success 2xx
         200 => 'OK',
         201 => 'CREATED',

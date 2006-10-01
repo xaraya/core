@@ -1,7 +1,5 @@
 <?php
 /**
- * View the current privileges
- *
  * @package core modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -27,15 +25,7 @@ function privileges_admin_viewprivileges()
     // Clear Session Vars
     xarSessionDelVar('privileges_statusmsg');
 
-    // call the Privileges class
-    $privs = new xarPrivileges();
-
-    //Load Template
-    include_once 'modules/privileges/xartreerenderer.php';
-    $renderer = new xarTreeRenderer();
-
     $data['authid'] = xarSecGenAuthKey();
-    $data['trees'] = $renderer->drawtrees($data['show']);
     $data['refreshlabel'] = xarML('Refresh');
     return $data;
 }

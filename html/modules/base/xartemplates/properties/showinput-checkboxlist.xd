@@ -1,23 +1,49 @@
-<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<!--  License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-<xar:if condition="count($options) gt 0">
-    <xar:foreach in="$options" value="$option" key="$key">
-        <xar:if condition="$key == 0">
-            <xar:set name="theID">$id</xar:set>
-        <xar:else />
-            <xar:set name="theID">$id.'_'.$key</xar:set>
-        </xar:if>
-    
-        <xar:if condition="isset($option['checked']) and !empty($option['checked']) and ($option['checked']==true)">
-            <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="true" />
-        <xar:else />
-            <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" />
-        </xar:if>
-        
-        <label for="#$theID#">#$option['name']# </label>        
-    </xar:foreach>
+<xar:if condition="empty($layout) or $layout eq 'default'">
+    <xar:if condition="count($options) gt 0">
+        <xar:foreach in="$options" value="$option" key="$key">
+            <xar:if condition="$key == 0">
+                <xar:set name="theID">$id</xar:set>
+            <xar:else />
+                <xar:set name="theID">$id.'_'.$key</xar:set>
+            </xar:if>
+
+            <xar:if condition="isset($option['checked']) and !empty($option['checked']) and ($option['checked']==true)">
+                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked" />
+            <xar:else />
+                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" />
+            </xar:if>
+
+            <label for="#$theID#">#$option['name']# </label>        
+        </xar:foreach>
+    </xar:if>
+<xar:elseif condition="$layout eq 'vertical'" />
+    <xar:if condition="count($options) gt 0">
+        <xar:foreach in="$options" value="$option" key="$key">
+            <xar:if condition="$key == 0">
+                <xar:set name="theID">$id</xar:set>
+            <xar:else />
+                <xar:set name="theID">$id.'_'.$key</xar:set>
+            </xar:if>
+
+            <xar:if condition="isset($option['checked']) and !empty($option['checked']) and ($option['checked']==true)">
+                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked" />
+            <xar:else />
+                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" />
+            </xar:if>
+
+            <label for="#$theID#">#$option['name']# </label>  
+            <br />
+        </xar:foreach>
+    </xar:if>
 <xar:else />
-    <xar:mlstring>No options specified for CheckBox List in validation field.</xar:mlstring>
+<p>
+  <xar:mlstring>Specify your own layout here...</xar:mlstring>
+</p>
+<p>
+  <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
+</p>
 </xar:if>
 
 <xar:if condition="!empty($invalid)">

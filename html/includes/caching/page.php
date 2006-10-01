@@ -9,7 +9,7 @@
  * @subpackage Page/Block Caching
  * @author mikespub
  * @author jsb
- */
+**/
 
 /**
  * Initialise the page caching options
@@ -17,7 +17,7 @@
  * @returns mixed
  * @return true on success, exit if session-less page caching finds a hit
  */
-function xarPageCache_init($args = array())
+function xarPageCache_init(array $args = array())
 {
 // TODO: clean up all these globals and put them e.g. into a single array
     global $xarPage_cacheTime;
@@ -95,7 +95,7 @@ function xarPageIsCached($cacheKey, $name = '')
 
     $xarTpl_themeDir = xarTplGetThemeDir();
 
-    $page = xarServerGetVar('HTTP_HOST') . $xarTpl_themeDir .
+    $page = xarServer::getVar('HTTP_HOST') . $xarTpl_themeDir .
             xarUserGetNavigationLocale();
 
     // add user groups as a factor if necessary
@@ -105,8 +105,8 @@ function xarPageIsCached($cacheKey, $name = '')
         $page .= join(';',$gidlist);
     }
 
-    $page .= xarServerGetVar('REQUEST_URI');
-    $param = xarServerGetVar('QUERY_STRING');
+    $page .= xarServer::getVar('REQUEST_URI');
+    $param = xarServer::getVar('QUERY_STRING');
     if (!empty($param)) {
         $page .= '?' . $param;
     }
@@ -121,7 +121,7 @@ function xarPageIsCached($cacheKey, $name = '')
         // (display views can be cached OR it is not a display view) AND
         (($xarPage_cacheDisplay == 1) || (!strpos($cacheKey, '-display'))) &&
         // the http request is a GET OR a HEAD AND
-        (xarServerGetVar('REQUEST_METHOD') == 'GET' || xarServerGetVar('REQUEST_METHOD') == 'HEAD') &&
+        (xarServer::getVar('REQUEST_METHOD') == 'GET' || xarServer::getVar('REQUEST_METHOD') == 'HEAD') &&
         // (we're caching the output of all themes OR this is the theme we're caching) AND
         (empty($xarOutput_cacheTheme) ||
          strpos($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
@@ -154,10 +154,9 @@ function xarPageIsCached($cacheKey, $name = '')
  * get the content of a cached page
  *
  * @access public
- * @param key the key identifying the particular cache you want to access
- * @param name the name of the page in that particular cache
- * @returns bool
- * @return true if succeeded, false otherwise
+ * @param  string $cacheKey the key identifying the particular cache you want to access
+ * @param  string $name     the name of the page in that particular cache
+ * @return bool   true if succeeded, false otherwise
  */
 function xarPageGetCached($cacheKey, $name = '')
 {
@@ -180,7 +179,7 @@ function xarPageGetCached($cacheKey, $name = '')
  *                         access
  * @param string $name     the name of the page in that particular cache
  * @param string $value    value the new content for that page
- * @returns void
+ * @return void
  */
 function xarPageSetCached($cacheKey, $name, $value)
 {
@@ -194,7 +193,7 @@ function xarPageSetCached($cacheKey, $name, $value)
 
     $xarTpl_themeDir = xarTplGetThemeDir();
     
-    if (xarCore_IsCached('Page.Caching', 'nocache')) { return; }
+    if (xarCore::isCached('Page.Caching', 'nocache')) { return; }
     
     if ($xarPage_cacheHookedOnly) {
         $modName = substr($cacheKey, 0, strpos($cacheKey, '-'));
@@ -210,7 +209,7 @@ function xarPageSetCached($cacheKey, $name, $value)
         // (display views can be cached OR it is not a display view) AND
         (($xarPage_cacheDisplay == 1) || (!strpos($cacheKey, '-display'))) &&
         // the http request is a GET OR a HEAD AND
-        (xarServerGetVar('REQUEST_METHOD') == 'GET' || xarServerGetVar('REQUEST_METHOD') == 'HEAD') &&
+        (xarServer::getVar('REQUEST_METHOD') == 'GET' || xarServer::getVar('REQUEST_METHOD') == 'HEAD') &&
         // (we're caching the output of all themes OR this is the theme we're caching) AND
         (empty($xarOutput_cacheTheme) ||
          strpos($xarTpl_themeDir, $xarOutput_cacheTheme)) &&
@@ -333,7 +332,7 @@ function xarPage_autoCacheLogStatus($status = 'MISS')
             filemtime($xarOutput_cacheCollection.'/autocache.start') < time() - $xarPage_autoCachePeriod) {
             @touch($xarOutput_cacheCollection.'/autocache.start');
 
-            $xarVarDir = xarPreCoreGetVarDirPath();
+            $xarVarDir = sys::varpath();
 
             // re-calculate Page.SessionLess based on autocache.log and save in config.caching.php
             $cachingConfigFile = $xarVarDir.'/cache/config.caching.php';

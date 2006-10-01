@@ -23,7 +23,6 @@
  */
 function mail_init()
 {
-// TODO: create separate xar_mail_queue table here someday
     xarModSetVar('mail', 'server', 'mail');
     xarModSetVar('mail', 'replyto', '0');
     xarModSetVar('mail', 'wordwrap', '78');
@@ -109,8 +108,19 @@ function mail_upgrade($oldVersion)
         xarModSetVar('mail', 'redirectsending', false);
         xarModSetVar('mail', 'redirectaddress', '');
 
-    case '0.1.2': //current version
-        break;
+
+        // From 0.1.1 -> 2.0.0 we added a mod var which holds the admin id for mail, the adminname is obsolete (no free email choice anymore)
+        // Try to find a reasonable admin (the designated one, for example ;-) )
+        $desigAdmin = xarModGetVar('roles','admin');
+        // In current xar this always fails as mail is installed before roles gets initialized
+        // in the off chance someone is actually ugrading, we leave it in. 
+        if(!empty($desigAdmin)) {
+            xarModSetVar('mail','admin_outgoing', $desigAdmin);
+        }
+        xarModDelVar('mail','adminname');
+        xarModDelVar('mail','adminmail');
+    case'2.0.0':
+        // current version
     }
     return true;
 }

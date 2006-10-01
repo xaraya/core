@@ -1,25 +1,34 @@
 <?php
-
-class xarCache_Storage
+/**
+ * Base factory for the cache storage types
+ *
+ * @package core
+ * @subpackage caching
+ * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @todo get the var directory from the configured sys:varpath(), dont hardcode
+**/
+class xarCache_Storage extends Object
 {
-    var $storage = ''; // filesystem, database, memcached, ...
-    var $cachedir = 'var/cache/output';
-    var $type = ''; // page, block, template, ...
-    var $code = ''; // URL factors et al.
-    var $size = null;
-    var $numitems = 0;
-    var $compressed = false;
-    var $sizelimit = 10000000;
-    var $reached = null;
-    var $expire = 0;
-    var $logfile = null;
-    var $logsize = 2000000; // for each logfile
-    var $modtime = 0; // last modification time
+    public $storage    = '';        // filesystem, database, memcached, ...
+    public $cachedir   = 'var/cache/output';
+    public $type       = '';        // page, block, template, ...
+    public $code       = '';        // URL factors et al.
+    public $size       = null;
+    public $numitems   = 0;
+    public $compressed = false;
+    public $sizelimit  = 10000000;
+    public $reached    = null;
+    public $expire     = 0;
+    public $logfile    = null;
+    public $logsize    = 2000000;   // for each logfile
+    public $modtime    = 0;         // last modification time
 
     /**
      * Constructor
+     * 
+     * @todo using an args array here is taking the easy way out, lets define a proper interface
      */
-    function xarCache_Storage($args = array())
+    public function __construct(array $args = array())
     {
         if (!empty($args['type'])) {
             $this->type = strtolower($args['type']);
@@ -45,58 +54,58 @@ class xarCache_Storage
         $this->cachedir = realpath($this->cachedir);
     }
 
-    function setCode($code = '')
+    public function setCode($code = '')
     {
         $this->code = $code;
     }
 
-    function setExpire($expire = 0)
+    public function setExpire($expire = 0)
     {
         $this->expire = $expire;
     }
 
-    function getLastModTime()
+    public function getLastModTime()
     {
         return $this->modtime;
     }
 
-    function isCached($key = '', $expire = 0, $log = 1)
+    public function isCached($key = '', $expire = 0, $log = 1)
     {
         return false;
     }
 
-    function getCached($key = '', $output = 0, $expire = 0)
+    public function getCached($key = '', $output = 0, $expire = 0)
     {
         return '';
     }
 
-    function setCached($key = '', $value = '', $expire = 0)
+    public function setCached($key = '', $value = '', $expire = 0)
     {
     }
 
-    function delCached($key = '')
+    public function delCached($key = '')
     {
     }
 
-    function flushCached($key = '')
+    public function flushCached($key = '')
     {
     }
 
-    function cleanCached($expire = 0)
+    public function cleanCached($expire = 0)
     {
     }
 
-    function getCacheSize($countitems = false)
+    public function getCacheSize($countitems = false)
     {
         return $this->size;
     }
 
-    function getCacheItems()
+    public function getCacheItems()
     {
         return $this->numitems;
     }
 
-    function sizeLimitReached()
+    public function sizeLimitReached()
     {
         if (isset($this->reached)) {
             return $this->reached;
@@ -104,30 +113,30 @@ class xarCache_Storage
 
         $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
         if (file_exists($lockfile)) {
-            $value = TRUE;
+            $value = true;
         } elseif (mt_rand(1,5) > 1) {
             // on average, 4 out of 5 pages go by without checking
-            $value = FALSE;
+            $value = false;
         } else {
             $size = $this->getCacheSize();
             if ($size >= $this->sizelimit) {
-                $value = TRUE;
+                $value = true;
                 @touch($lockfile);
             } else {
-                $value = FALSE;
+                $value = false;
             }
         }
         $this->reached = $value;
 
     // CHECKME: we don't need this cached variable anymore, do we ?
-        if ($value && !xarCore_IsCached($this->type . '.Caching', 'cleaned')) {
+        if ($value && !xarCore::isCached($this->type . '.Caching', 'cleaned')) {
             $this->cleanCached();
-            xarCore_SetCached($this->type . '.Caching', 'cleaned', TRUE);
+            xarCore::setCached($this->type . '.Caching', 'cleaned', true);
         }
         return $value;
     }
 
-    function logStatus($status = 'MISS', $key = '')
+    public function logStatus($status = 'MISS', $key = '')
     {
         if (empty($this->logfile) || empty($_SERVER['HTTP_HOST']) ||
             empty($_SERVER['REQUEST_URI']) || empty($_SERVER['REMOTE_ADDR'])) {
@@ -152,16 +161,16 @@ class xarCache_Storage
         }
     }
 
-    function saveFile($key = '', $filename = '')
+    public function saveFile($key = '', $filename = '')
     {
     }
 
-    function getCachedList()
+    public function getCachedList()
     {
         return array();
     }
 
-    function getCachedKeys()
+    public function getCachedKeys()
     {
         $list = $this->getCachedList();
         $keys = array();

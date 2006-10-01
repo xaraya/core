@@ -17,7 +17,7 @@
  * Include the base class
  *
  */
-include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
 
 /**
  * Handle the URLIcon property
@@ -26,11 +26,15 @@ include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
  */
 class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
 {
-    var $icon;
+    public $id         = 27;
+    public $name       = 'urlicon';
+    public $desc       = 'URL Icon';
 
-    function Dynamic_URLIcon_Property($args)
+    public $icon;
+
+    function __construct($args)
     {
-        $this->Dynamic_Property($args);
+        parent::__construct($args);
         // check validation field for icon to use !
         if (!empty($this->validation)) {
            $this->icon = $this->validation;
@@ -40,18 +44,7 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
            */
            $this->icon='';
         }
-    }
-    function checkInput($name='', $value = null)
-    {
-        if (empty($name)) {
-            $name = 'dd_'.$this->id;
-        }
-        // store the fieldname for validations who need them (e.g. file uploads)
-        $this->fieldname = $name;
-        if (!isset($value)) {
-            if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
-        }
-        return $this->validateValue($value);
+        $this->template = 'urlicon';
     }
 
     function validateValue($value = null)
@@ -67,61 +60,17 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
         return true;
     }
 
-    function showInput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (empty($value)) {
-            $value = 'http://';
-        }
-
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        $data=array();
-/*        return '<input type="text"'.
-               ' name="' . $name . '"' .
-               ' value="'. xarVarPrepForDisplay($value) . '"' .
-               ' size="'. (!empty($size) ? $size : $this->size) . '"' .
-               ' maxlength="'. (!empty($maxlength) ? $maxlength : $this->maxlength) . '"' .
-               ' id="'. $id . '"' .
-               (!empty($tabindex) ? ' tabindex="'.$tabindex.'"' : '') .
-               ' />' .
-               (!empty($value) && $value != 'http://' ? ' [ <a href="'.xarVarPrepForDisplay($value).'" target="preview">'.xarML('check').'</a> ]' : '') .
-               (!empty($this->invalid) ? ' <span class="xar-error">'.xarML('Invalid #(1)', $this->invalid) .'</span>' : '');
-*/
-        $data['name']     = $name;
-        $data['id']       = $id;
-        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
-        $data['size']     = !empty($size) ? $size : $this->size;
-
-
-        $template="";
-        return xarTplProperty('base', 'urlicon', 'showinput', $data);
-    }
-
-    function showOutput($args = array())
-    {
-         extract($args);
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        $data=array();
+        extract($data);
+        if (!isset($value))  $value = $this->value;
 
         if (!empty($value) && $value != 'http://') {
             $link = $value;
             $data['link']=xarVarPrepForDisplay($link);
-           // FIXME: $this->icon is supposed to contain the URL already
+            // FIXME: $this->icon is supposed to contain the URL already
             if (isset($this->icon))  {
-               $data['icon']=trim($this->icon);
+                $data['icon']=trim($this->icon);
                 if ($data['icon']<>'') {
                     $data['value']= $value;
                     $data['icon']= $this->icon;
@@ -133,41 +82,16 @@ class Dynamic_URLIcon_Property extends Dynamic_TextBox_Property
                     $data['icon'] = xarModAPIFunc('base',
                                                   'user',
                                                   'getfavicon',
-                                array('url' => $data['value']));
+                                                  array('url' => $data['value']));
                     if (!($data['icon'])) {
                         /* we'll have to use the default system icon */
                         $data['icon'] = xarTplGetImage('urlicon.gif','base');
                     }
                 }
-                $template="";
-                return xarTplProperty('base', 'urlicon', 'showoutput', $data);
+                return parent::showOutput($data);
             }
         }
-        return '';
-    }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-    function getBasePropertyInfo()
-    {
-        $baseInfo = array(
-                          'id'         => 27,
-                          'name'       => 'urlicon',
-                          'label'      => 'URL Icon',
-                          'format'     => '27',
-                          'validation' => '',
-                          'source'     => '',
-                          'dependancies' => '',
-                          'requiresmodule' => '',
-                          'aliases' => '',
-                          'args'         => '',
-                          // ...
-                         );
-        return $baseInfo;
+        return ''; // Why?
     }
 
     /**

@@ -21,11 +21,11 @@
  */
 
 
-class feedParser 
+class feedParser extends Object
 {
 
-    var $version = "0.5";
-    var $entities = array(
+    public $version = "0.5";
+    public $entities = array(
         'nbsp' =>   "&#160;",
         'iexcl' =>  "&#161;",
         'cent' =>   "&#162;",
@@ -124,7 +124,7 @@ class feedParser
         'yuml' =>   "&#255;"
     );
 
-    var $namespaces = array(
+    public $namespaces = array(
         'DC' => 'http://purl.org/dc/elements/1.1/',
         'RDF' => 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
         'RSS' => 'http://purl.org/rss/1.0/',

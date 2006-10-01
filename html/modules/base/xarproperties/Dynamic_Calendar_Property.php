@@ -14,33 +14,22 @@
 /**
  * Class for dynamic calendar property
  *
- * This property shows an input text field, and a clickable calendar next to it.
- * The calendar is a js popup in which users can choose a date
- * The date will get converted into a datetime or timestamp value, depending on the validation chosen.
- *
- * @author
- * @param
+ * @package dynamicdata
  */
 class Dynamic_Calendar_Property extends Dynamic_Property
 {
-    /**
-     * Check the input for the calendar
-     */
-    function checkInput($name='', $value = null)
+    public $id         = 8;
+    public $name       = 'calendar';
+    public $desc       = 'Calendar';
+    public $reqmodules = array('base');
+
+    function __construct($args)
     {
-        if (empty($name)) {
-            $name = 'dd_'.$this->id;
-        }
-        // store the fieldname for validations who need them (e.g. file uploads)
-        $this->fieldname = $name;
-        if (!isset($value)) {
-            if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
-        }
-        return $this->validateValue($value);
+        parent::__construct($args);
+        $this->tplmodule = 'base';
+        $this->filepath   = 'modules/base/xarproperties';
     }
-    /**
-     * See if the value put into the property is valid
-     */
+
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -87,26 +76,12 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         return true;
     }
 
-//    function showInput($name = '', $value = null, $id = '', $tabindex = '')
-    /**
-     * Show an input form for the property
-     * This shows a text input and a clickable js item next to it
-     * The popup will show a js calendar, with or without a timeselector
-     */
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        $data = array();
+        extract($data);
+        if (!isset($value)) $value = $this->value;
+        if (!isset($id)) $id = $this->id;
 
-        if (empty($name)) {
-            $name = 'dd_'.$this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-        if (!isset($value)) {
-            $value = $this->value;
-        }
         // default time is unspecified
         if (empty($value)) {
             $value = -1;
@@ -140,25 +115,17 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         $data['dateformat'] = $dateformat;
         $data['jsID']       = str_replace(array('[', ']'), '_', $id);
         // $data['timeval']    = $timeval;
-        $data['name']       = $name;
-        $data['id']         = $id;
+        $data['id'] = $id;
         $data['value']      = $value;
-        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-
-        return xarTplProperty('base', 'calendar', 'showinput', $data);
+        return parent::showInput($data);
     }
-    /**
-     * Show the date formatted according to the validation type
-     */
-    function showOutput($args = array())
+
+    function showOutput($data = array())
     {
-        extract($args);
+        extract($data);
 
-        $data=array();
+        if (!isset($value)) $value = $this->value;
 
-        if (!isset($value)) {
-            $value = $this->value;
-        }
         // default time is unspecified
         if (empty($value)) {
             $value = -1;
@@ -180,37 +147,9 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         $data['dateformat'] = $dateformat;
         $data['value'] = $value;
         // $data['returnvalue']= xarLocaleFormatDate($dateformat, $value);
-
-        return xarTplProperty('base', 'calendar', 'showoutput', $data);
+        return parent::showOutput($data);
     }
 
-    /**
-     * Get the base information for this property.
-     *
-     *
-     * @return array Base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 8,
-                              'name'       => 'calendar',
-                              'label'      => 'Calendar',
-                              'format'     => '8',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => '',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
-     /**
-      * Show a validation input form. The user can choose a valid validation for this property
-      */
     function showValidation($args = array())
     {
         extract($args);
@@ -240,9 +179,7 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         }
         return xarTplProperty('base', $template, 'validation', $data);
     }
-    /**
-     * Update the validation for this property
-     */
+
     function updateValidation($args = array())
     {
         extract($args);
@@ -271,7 +208,5 @@ class Dynamic_Calendar_Property extends Dynamic_Property
         // tell the calling function that everything is OK
         return true;
     }
-
 }
-
 ?>

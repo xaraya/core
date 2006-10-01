@@ -1,0 +1,326 @@
+A log of important changes made to the 2.x branch which we need to
+revisit later on before trusting the branch to be released or used.
+
+!!!DB-CHANGES:
+* module_uservars is now module_itemvars where item is an item in a
+  module, not only roles. The columns are adapted accordingly.
+* hooks table now registers the mod id in the columns smodid and
+  tmodid instead of the name of the module.
+* adminpanels as module is completely gone, which also means its table
+  was deleted. The complete functionality of adminpanels is now in the
+  modules module.
+* template_tags column xar_module replaced by a column xar_modid
+* security_instances column xar_module replaced by column xar_modid
+* security_masks column xar_module replaced by column xar_modid
+* xar_roles column xar_auth_module replaced by column
+  xar_auth_modid. The interface WAS NOT ADAPTED but nothing uses the
+  auth_module directly and the columns is probably going to move away
+  to somewhere else anyway. 
+* xar_block_types column xar_module replaced by column xar_modid. This
+  was far out the most intrusive one since that table is used in the
+  privilege instance queries. I adapted as best as I could, no doubt
+  they wont work anymore in some cases. We'll see.
+* table theme_states has been dropped, where the xar_state column is
+  now in the themes table itself.
+* table module_states has been dropped, where the xar_state column is
+  now in the modules table itself.
+* table config_vars has been dropped, now managed by module_vars where
+  modid==0
+* table security_levels has been dropped, now managed by SecurityLevel class
+* tables privmembers, rolemembers and security_acl have their unique key on
+  2 columns replaced by a primary key.
+
+
+(see DEVupgrades.sql for the above)
+
+!!!OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
+* [N/A anymore] when encountered, upgrade code to upgrade modules from older
+  versions than in 1.0 is removed, assuming we will only support 
+  upgrading from 1.0 to 2.x and not versions before 1.0 
+  NOTE: 
+    when changing modules to return upgrade_themodule('1.0') instead of
+    return true, the original upgrade from init need to be placed in the 
+    upgrade routine again. (luckily i replaced this only for one or two)
+    modules, which have now been propagate from c.x.c to c.x.c.2.x so DO NOT
+    remove old upgrade code anymore now! 
+* the whole exception subsystem was rewritten from scratch and the
+  whole of core was adapted to use it. (see new RFC-0054)
+* adodb has been replaced with the creole database abstraction layer.
+* the meaning of xar:comment and <!-- has been reversed as observed as
+  a design error. xar:comment now produces a comment in the output while things
+  between <!-- and --> get ignored by the BL parser. If you're previous xar:comment
+  content was sensitive you might wanna reverse it in your templates
+  too.
+* where applicable all pn compatibility has been removed.
+* The distinction between system and site table mapping have been
+  removed from core. A fullblown alternative has not yet been
+  provided, but we know that just doing system/site mapping is not
+  enough
+  (that said: the table sharing, which is by far the prominent use can
+  be solved very easily by defining views in the backend, we can/should
+  certainly consider adapting the installer to create additional sites
+  into an existing installation.
+* the xar:template tag behaviour has been extended to allow an open
+  form. This is a preparation, so the tag can function as the root tag
+  for a template. The current behaviour is just to accept the tag, but
+  no functional behaviour is attached to it yet. In a way the
+  xar:template tag and the xar:blocklayout tag are moving closer to
+  eachother.
+* DROPPED API: xarMod_getVarsByName, xarTheme_getVarsByName (were
+  protected and never used)
+* DROPPED API: $throwException parameter in xarModAPIFunc
+* the Variable getting/setting in core does NOT support direct prepping 
+  anymore, as to eliminate dependencies on other subsystems. If the parameter 
+  was used, it will be ignored now.
+* DROPPED API: xarPreCoreGetVarDirPath (now sys::varpath()) 
+
+!!DIFFERENCES BETWEEN PHP 5.0 and 5.1
+* do not agree on what function_exists() / is_callable() /
+  method_exists() should return
+* In PHP 5.0.4 (and earlier versions I believe) the shutdown function is 
+  called *after* the output buffering callback.
+* In PHP 5.1.2 (not sure when the change occurred) the shutdown function is 
+  called *before* the output buffering callback.
+* apparently PHP 5.1 allows headers to be sent in a shutdown function  
+  (arguably wrong)
+
+
+!!!REFACTORING LIST:
+List of things which need to be refactored before starting the actual
+design work can begin.
+
+* [DONE] i really like some sort of import(name.of.some.sub.part) dot notation to
+  include major parts into the flow when doing stuff, instead of
+  xarInclude or something
+* Finish up the planned db changes to normalizing the database.
+  Open issues:
+        - does blocks really need 5 tables?
+        - dynamic relations table is floating in there for a long time
+        - xar_realm in xar_security masks uses 'All' which prevents it from being
+          a foreign key to the realm table (through id), likewise for xar_privileges 
+          table
+        - [DONE] if we are going to store privilege levels in the database, 
+          then refer to them from other tables, we now store the level verbatim 
+          (perhaps drop the table?)
+        - similarly, in xar_privileges table the xar_module column. 
+        - is xar_auth_mod_id still needed? 
+        - the xar_ prefix on columns is redundant
+* [STARTED] OO-ify stuff in core where appropriate (including getting rid of
+  die()'s and modelling the classes where php4 could not) 
+* I really would like to do something with views wrt multisites et. al.
+    - the query storage for privilege instances is one application of views 
+    (in testing, views are *much* slower than dedicated tables, which doesnt 
+    make sense to me; i expect them to be _somewhat_ slower, but not a factor 
+    of 4-8)
+* I really would like to do something with triggers, dunno for what
+    - all backends support triggers, while not all of them support foreign
+      keys, so for both triggers and foreign keys we could use triggers.
+* I really would like to do something with stored procedures, dunno
+  for what
+    - the main use would be to save round trips (to the db server in this case,
+    *not* the webserver) and building more on the server side based on logic, 
+    e.g. instead of looping over 1 resultset in php and reacting based on that, 
+    that logic could be done directly at the db server, letting the stored 
+    procedure do the looping, if at all needed  and only return the combined 
+    result to the php code
+* the need for a Request mapper is evident. Apart from the gained
+  dimension for navigation design this also centralizes the short url
+  functionality instead of distributing it all over. 
+* the blocklayout tag could use attributes related to emitting a <?xml
+  header or not (or use <?xar for this? since it is an instruction to
+  process )
+* design a more solid concept for letting blocklayout emit http headers, attributes
+  in the blocklayout tag dont cut it. (disposition is one needed, as well as 
+  more granular caches)
+* we keep a 'state' of some sort for different items:
+  1. modules
+  2. themes
+  3. roles
+  4. blocks
+  5. dd_properties
+  Would it make sense to centralise state management of a generic
+  'item' level? Also the use of a workflow component in core comes to mind.
+* simplify installer/xaradmin.php before rewriting it
+* we need easy and global xmlhttp request support everywhere.
+* [DONE] Xaraya is an excellent backend, we need a equally excellent front-end 
+  companion (like dojo) (implemented as dojo activator module)
+* i'd really like more native backend support, for query preparation
+  that place is obviously creole, but for shielding and triggering we
+  dont have an abstraction and the more complex modules go through a
+  whole lot of hoops sometimes which the backend could do in a jiffy.
+* the installer screens try to throw all databases onto one pile, we need to split 
+    the database configuration screens into different ones for each backend
+    * sqlite has no user and password
+    * sqlite uses a directory for a host
+    * mysql can support different table drivers (myisam, innodb) transparently
+    * postgres may require schema support
+* xml constructs like PI, ELEM and ATTR need their equivalent in BL, but the current
+  implementation lacks context.
+* [STARTED] finish design and implementation os schema based data definition 
+* design a less bloated concept for config/user/mod/theme/system vars etc
+* reorganize the old error/exception system to use much fewer files, consider
+  writing a talkback module to go along with a distro for facilitating the bug
+  reporting we can build into an install. (bugzilla can be remotely queried for
+  products and components easily, perhaps based on a server side map of 
+  regid-component for modules at least)
+* [STARTED] move code from dd procedural functions to classes where feasible
+* integrate Object showView and showList
+!!!KNOWN ISSUES
+* blocks do not end up in groups anymore during installation, need to
+  investigate why that is. Most likely a missed spot when doing the
+  schema migration. 
+* since we now use the meta info classes, some functions in DD which
+  depend on the linkage info from tables to modules (which was
+  unreliable) is lost, so expect surprising results in 'meta' areas in
+  DD for now until we figure our *if* and *how* we want to link
+  components to physical tables.
+* datadict is absent in 2.x since that lived in adodb, creole does not have it
+  - we are going for schema support (see tests/xml/schemas/ddl/*.*)
+* there is no upgrade routine for upgrading 1.x to 2.x
+* when we're in excecption handling for one exception, it seems that no more
+  exceptions are thrown in subsequent code
+  Example: 
+        - dont define date.timezone in php (will raise exception in 
+        xarLogger.php early on)
+        - make sure CACHEKEYS file is NOT present (should raise exception in 
+        caching/template.php lines 168+)
+        The fopen() call in caching/template.php does NOT raise an exception then
+
+
+!!!MIN. REQUIRED VERSIONS DETERMINED SO FAR
+* PHP      5.0.5 (probably 5.1.x even)
+* Mysql    5.0.18
+* Postgres 8.0.6
+* Sqlite   N/A (embedded in PHP, i think it's 2.8.x for non PDO and 3.x for PDO)
+           There seems to be a sqlite3 extension floating around for php5
+* Oracle   ?
+* MsSql    ? (server 2003?)
+
+!!!Requirements for a front end (js) library
+- widget (or controls) is our immediate direct need to lighten the
+  burden on template/theme maintenance
+- having events on the controls to asynchronously load other data is
+  the second need (master detail relations, repopulation combo's etc.)
+- specifying the controls should be a 3 step process maximal:
+  1. include on js entry point for the request
+  2. write the controls inside a xar-template 
+  3. (optional) customize the default behaviour to the applications need.
+Whether the tags used are compiled/transformed on the server or
+through a js callback is irrelevant for us.
+ 
+ 
+Columns affected by modid/regid/modname decision:
+ - modules.regid
+    - is now not null default 0
+    - becomes default null
+ - dynamic_objects.object_moduleid (stores regid)
+ - dynamic_properties.prop_moduleid (stores regid)
+ - dynamic_properties_def.prop_req_modules 
+    - stores a semicolon separated list of modulenames (does it ever contain 
+    more than one?)
+ - hooks.smodid (stores 0 now meaning ?)
+ - hooks.tmodid ?
+ - module_vars.modid (stores 0 now for config vars)
+ - privileges.xar_module (stores 'All', 'empty' besides module name.)
+All other tables refer to the primary key of the xar_modules table (id)
+
+Possible new QA checks for 2.x code branch
+------------------------------------------
+- every class declaration should have an 'extends' clause? (we all derive from Object, (sort of ))
+- every method implementation should have 'public' 'protected' or 'private'
+  (related: the phpdoc @private etc. never made sense to me in php5 context, what's that about?)
+- no 'var $varname' like declarations (easy, produces an error anyways)
+- no php4 style constructors, always __construct() if any (hard, since have 2 is valid too, sigh.)
+- classes start with Capitals (?) (sys class doesnt now, is that bad?)
+- add new deprecation info on wrapped API methods (a lot!)
+
+
+Framework directory layout (outwebroot scenario)
+------------------------------------------------
+
+Having literally everything below the webroot is limiting deployment choices.
+Below are some thoughts on how we could organize the files and directories in 
+a way where things which do not need to be below the webroot, can be placed 
+outside of it. 
+
+/root
+    /html                                 [anything which needs to be accessible by the web front goes here]
+        .htaccess                         [or equivalent for other http server]
+        index.php                         [entry point]
+        ws.php                            [do we need this?, assuming we have a 'Controller' class somehow]
+        /themes                           [probably right in this place, maybe more like skin (presentation) than theme (structure)]
+            ...
+        /modules                          [problematic, should be able to be moved out, but most, if not all modules depend on the webroot]
+            ...
+    /core                                 [this places core outside lib, which means we view it as an application (not entirely right i think)]
+        bootstrap.php                     [this file probably needs a fixed location as the one reference we base other stuff on]
+        ...(?)
+    /lib                                  [contains libraries which are in use]
+        /xaraya                           [we are a lib too? (mainly to get a classpath entry and be consistent with the other entries.)]
+            ... (?)
+        /blocklayout                      [this makes more sense than 'xaraya' in the previous line, if we make it a self contained lib]
+            ...(blocklayout files)
+        /creole
+            ...(creole files)
+        /zend                             [ironically Zend is the only one in these examples which would need adaptation to fit in :-)]
+            ...(zend framework)           
+        /propel
+            ...(propel)
+        /PEAR (?)                         [probably needs some glue, PEAR assumes it will be top level controlling to some extent]
+            ...
+        etc...
+    /var                                  [contains generated files like logs, caches etc.]
+        /cache                            [top level for caches]
+            /database
+            /templates                    [there's probably a need for separate configuration of these]
+            /output
+            ...
+        /locales                          [top level for locale related information]
+        /log                              [top level for logs]
+        /modules                          [top level for filebased module data]
+            /roles
+                /messaging
+            /workflow
+                /processes
+            ...
+    /etc                                  [contains static information regarding to configuration of components]
+        default.conf
+        site1.conf?                       [per site/app config?]
+        app2.conf?                        
+        /modules                          [top level for module specific configuration files]
+            /workflow
+                galaxia.conf
+            ...
+            
+Issues/Questions/Todo:
+    - how do we deal with themes and modules? themes typically want to have 
+    access to file based stuff like styles and images, modules too, but they 
+    shouldn't :-) i have a tendency to place modules outside the webroot, 
+    but that may be really uncomfortable.
+    - how do we define module data which is file based? (in terms of what is 
+    data and how, for example does it relate to things inside xardata like 
+    directories) Self contained modules are quite comfortable.
+    - where do client libraries like js frameworks go?
+    - why are locales needed on fs? 
+    - how much webserver specific configuration like aliases etc. would we 
+    need for this
+    - describe in detail why this is better than all below webroot.
+    - do we want (parts of) in lib or have (core) as the main 'Application' 
+    (pro/con?)
+    - if there is such a thing needed as cgi-bin, where does it go in this 
+    picture? if at all
+    - we probably want an easy-access taglib location, so it's easy to create 
+    custom tag definitions (where would that go?)
+    - how often can the include_path on servers *not* be changed?
+    - using absolute paths based on a config seems the safest. just as we base 
+    everything on the current (==webroot) directory now.
+    - there have been numerous requests for providing a very easy place to put
+    snippets (php snippets i guess then). How, if at all, do we want to cater for those?
+    - how does multisite affect the above in the doc_root piece? (1 or many? both?)
+    - what impact does  1 codebase multisite/multiapp on this layout? (db or storage is following 
+    the application config, so multi-db is less of an issue in this area)
+    - what is a good way to assess the magnitude of work on this? That it is a lot we know, but a metric would be nice.
+    - somehow modules seem painful in this layout, 'too big' comes to mind, 'too loose' too. 
+    Meant in the way that modules do so much in our system, it's hard to give them a proper place.
+
+

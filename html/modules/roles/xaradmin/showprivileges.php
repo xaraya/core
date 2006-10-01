@@ -29,12 +29,13 @@ function roles_admin_showprivileges()
     // need to display this in the template
     $parents = array();
     foreach ($role->getParents() as $parent) {
-        $parents[] = array('parentid'   => $parent->getID(),
-                           'parentname' => $parent->getName());
+        $parents[] = array('parentid' => $parent->getID(),
+            'parentname' => $parent->getName());
     }
     $data['parents'] = $parents;
 
     // Call the Privileges class
+    sys::import('modules.privileges.class.privileges');
     $privileges = new xarPrivileges();
 
 // -------------------------------------------------------------------
@@ -57,30 +58,30 @@ function roles_admin_showprivileges()
         foreach($allprivileges as $priv) {
             if ($priv->getModule() == "empty") {
                 $inherited[] = array('privid' => $priv->getID(),
-                        'name'      => $priv->getName(),
-                        'realm'     => "",
-                        'module'    => "",
+                        'name' => $priv->getName(),
+                        'realm' => "",
+                        'module' => "",
                         'component' => "",
-                        'instance'  => "",
-                        'level'     => "",
-                        'groupid'   => $groupid,
+                        'instance' => "",
+                        'level' => "",
+                        'groupid' => $groupid,
                         'groupname' => $groupname,
-                        'relation'  => $ancestor->getLevel(),
-                        'status'    => 1,
-                        'object'    => $priv);
+                        'relation' => $ancestor->getLevel(),
+                        'status' => 1,
+                        'object' => $priv);
             } else {
-                $inherited[]        = array('privid' => $priv->getID(),
-                        'name'      => $priv->getName(),
-                        'realm'     => $priv->getRealm(),
-                        'module'    => $priv->getModule(),
+                $inherited[] = array('privid' => $priv->getID(),
+                        'name' => $priv->getName(),
+                        'realm' => $priv->getRealm(),
+                        'module' => $priv->getModule(),
                         'component' => $priv->getComponent(),
-                        'instance'  => $priv->getInstance(),
-                        'level'     => $privileges->levels[$priv->getLevel()],
-                        'groupid'   => $groupid,
+                        'instance' => $priv->getInstance(),
+                        'level' => $privileges->levels[$priv->getLevel()],
+                        'groupid' => $groupid,
                         'groupname' => $groupname,
-                        'relation'  => $ancestor->getLevel(),
-                        'status'    => 3,
-                        'object'    => $priv);
+                        'relation' => $ancestor->getLevel(),
+                        'status' => 3,
+                        'object' => $priv);
             }
         }
     }
@@ -104,28 +105,28 @@ function roles_admin_showprivileges()
         $frozen = !xarSecurityCheck('DeassignPrivilege',0,'Privileges',$priv->getName());
         if ($priv->getModule() == "empty") {
             $currentprivileges[] = array('privid' => $priv->getID(),
-                'name'      => $priv->getName(),
-                'realm'     => "",
-                'module'    => "",
+                'name' => $priv->getName(),
+                'realm' => "",
+                'module' => "",
                 'component' => "",
-                'instance'  => "",
-                'level'     => "",
-                'frozen'    => $frozen,
-                'relation'  => 0,
-                'status'    => 1,
-                'object'    => $priv);
+                'instance' => "",
+                'level' => "",
+                'frozen' => $frozen,
+                'relation' => 0,
+                'status' => 1,
+                'object' => $priv);
         } else {
             $currentprivileges[] = array('privid' => $priv->getID(),
-                'name'      => $priv->getName(),
-                'realm'     => $priv->getRealm(),
-                'module'    => $priv->getModule(),
+                'name' => $priv->getName(),
+                'realm' => $priv->getRealm(),
+                'module' => $priv->getModule(),
                 'component' => $priv->getComponent(),
-                'instance'  => $priv->getInstance(),
-                'level'     => $privileges->levels[$priv->getLevel()],
-                'frozen'    => $frozen,
-                'relation'  => 0,
-                'status'    => 3,
-                'object'    => $priv);
+                'instance' => $priv->getInstance(),
+                'level' => $privileges->levels[$priv->getLevel()],
+                'frozen' => $frozen,
+                'relation' => 0,
+                'status' => 3,
+                'object' => $priv);
         }
     }
     $currentprivileges = array_reverse($currentprivileges);
@@ -152,14 +153,14 @@ function roles_admin_showprivileges()
                 }
             }
             $privilegesdone[] = $todo;
-            //unset($todo['object']);
+//            unset($todo['object']);
             $inherited[$i][] = $todo;
-            //$inherited[] = $todo;
+//            $inherited[] = $todo;
         }
     }
-    //    $inherited = array_reverse($inherited);
-    // -------------------------------------------------------------------
-    // Finally we have to compare the privileges of a given level among each other
+//    $inherited = array_reverse($inherited);
+// -------------------------------------------------------------------
+// Finally we have to compare the privileges of a given level among each other
 
     for ($i=0;$i<$maxlevel+1;$i++) {
         $xs = $inherited[$i];
@@ -188,24 +189,30 @@ function roles_admin_showprivileges()
     }
     $currentprivileges = $inherited[0];
     $inherited = array_reverse($xs);
-    //echo var_dump($inherited);exit;
+//    echo var_dump($inherited);exit;
 
-    // -------------------------------------------------------------------
-    // Load Template
-    $data['pname']          = $role->getName();
-    $data['ptype']          = $role->getType();
-    $data['roleid']         = $uid;
-    $data['inherited']      = $inherited;
-    $data['privileges']     = $currentprivileges;
+// -------------------------------------------------------------------
+// Load Template
+    $data['pname'] = $role->getName();
+    $data['itemtype'] = $role->getType();
+    $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
+    $types = xarModAPIFunc('roles','user','getitemtypes');
+    $data['itemtypename'] = $types[$data['itemtype']]['label'];
+    $data['roleid'] = $uid;
+    $data['inherited'] = $inherited;
+    $data['privileges'] = $currentprivileges;
     $data['directassigned'] = $directassigned;
-    $data['allprivileges']  = $role->getAllPrivileges();
-    $data['authid']         = xarSecGenAuthKey();
-    $data['groups']         = $roles->getgroups();
-    $data['removeurl']      = xarModURL('roles', 'admin', 'removeprivilege',
-                                   array('roleid' => $uid));
-
-    $data['groupurl']       = xarModURL('roles', 'admin', 'showprivileges');
-    $data['addlabel']       = xarML('Add');
+    $data['allprivileges'] = $role->getAllPrivileges();
+    $data['authid'] = xarSecGenAuthKey();
+    $data['groups'] = $roles->getgroups();
+    $data['removeurl'] = xarModURL('roles',
+        'admin',
+        'removeprivilege',
+        array('roleid' => $uid));
+    $data['groupurl'] = xarModURL('roles',
+        'admin',
+        'showprivileges');
+    $data['addlabel'] = xarML('Add');
     return $data;
     // redirect to the next page
     xarResponseRedirect(xarModURL('roles', 'admin', 'newrole'));

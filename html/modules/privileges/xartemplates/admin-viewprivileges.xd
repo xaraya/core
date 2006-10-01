@@ -1,20 +1,4 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
-<xar:style scope="module" file="privtree" />
-<xar:base-include-javascript module="privileges" filename="xarTree.js" />
-<script type="text/javascript">
-<!--
-    var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
-    function doOnLoad(){
-        oldOnLoadFunction();      
-        xarTree_init();
-    }
-    var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); 
-    function doOnUnload(){
-        oldOnUnloadFunction();      
-        xarTree_init();
-    }
-// -->
-</script>
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
 </div>
@@ -25,7 +9,20 @@
     </h2>
     <xar:template file="tablist" />
     <br />
+    <!--
     <xar:loop name="$trees">
         #$loop:item['tree']#
     </xar:loop>
+    -->
+    <fieldset>
+        <legend><xar:mlstring>Privilege hierarchy</xar:mlstring></legend>
+        <style type="text/css">
+            ul.tree { margin-left: 4em;}
+            ul.tree div.preamble { position: absolute; left: 3em; }
+        </style>
+        <xar:data-input type="privilegestree" show="$show" />
+        <!--
+        <xar:template file="tree" />
+        -->
+    </fieldset>
 </div>

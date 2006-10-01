@@ -51,7 +51,7 @@
                     <li class="success">
                         <xar:ml>
                             <xar:mlstring>
-                            SUCCESS: PHP Version is greater than or equal to 4.1.2. Your PHP Version is #(1)
+                                PHP Version is greater than or equal to 5.0. Your PHP Version is #(1)
                             </xar:mlstring>
                             <xar:mlvar>
                                 #$phpVersion#
@@ -62,7 +62,7 @@
                     <li class="failure">
                         <xar:ml>
                             <xar:mlstring>
-                            ERROR: PHP Version is less than 4.1.2. Your PHP Version is #(1) please upgrade PHP.
+                                PHP Version is less than 5.0. Your PHP Version is #(1) please upgrade PHP.
                             </xar:mlstring>
                             <xar:mlvar>
                                 #$phpVersion#
@@ -266,36 +266,6 @@
                         </xar:ml>
                     </li>
                 </xar:if>
-
-
-
-            <xar:if condition="$adodbTemplatesIsWritable">
-                <li class="success">
-                     <xar:ml>
-                        <xar:mlstring>
-                            SUCCESS: The installer can write to the directory #(1)
-                        </xar:mlstring>
-                        <xar:mlvar>
-                            #$adodbTemplatesDir#
-                        </xar:mlvar>
-                    </xar:ml>
-                </li>
-            <xar:else />
-                   <li class="failure">
-                        <xar:ml>
-                        <xar:mlstring>
-                            ERROR: The installer cannot write to the directory #(1).
-                            Please verify that your webserver has write access to the directory #(2)
-                        </xar:mlstring>
-                        <xar:mlvar>
-                            #$adodbTemplatesDir#
-                        </xar:mlvar>
-                        <xar:mlvar>
-                            #$adodbTemplatesDir#
-                        </xar:mlvar>
-                    </xar:ml>
-                    </li>
-            </xar:if>
             </ul>
             <h3><xar:mlstring>Locales Settings Check</xar:mlstring></h3>
             <p>
@@ -443,46 +413,8 @@
                        <xar:mlstring>WARNING: SQLITE as database will not be available</xar:mlstring>
                    </li>
                 </xar:if>
-                <xar:comment>
-                <xar:if condition="$xsltextension">
-                    <li class="success">
-                        <xar:mlstring>SUCCESS: The PHP4 XSLT Extension is loaded.</xar:mlstring>
-                    </li>
-                <xar:else />
-                    <li class="warning">
-                    <xar:mlstring>
-                        WARNING: The PHP4 XSLT Extension is not loaded.
-                        This PHP4 extension is only needed for the PHP4 XSLT transform module at this time.
-                    </xar:mlstring>
-                    </li>
-                </xar:if>
-                <xar:if condition="$ldapextension">
-                    <li class="success">
-                        <xar:mlstring>SUCCESS: The LDAP Extension is loaded.</xar:mlstring>
-                    </li>
-                <xar:else />
-                    <li class="warning">
-                        <xar:mlstring>
-                            WARNING: The LDAP Extension is not loaded.
-                            This extension is only needed if you intend on using LDAP authentication with the Xaraya LDAP Modules.
-                        </xar:mlstring>
-                    </li>
-                </xar:if>
-                <xar:if condition="$gdextension">
-                    <li class="success">
-                        <xar:mlstring>SUCCESS: The GD Extension is loaded.</xar:mlstring>
-                    </li>
-                <xar:else />
-                    <li class="warning">
-                        <xar:mlstring>
-                            WARNING: The GD Extension is not loaded.
-                            This extension is only needed for the images module at this time for resizing of thumbnails.
-                        </xar:mlstring>
-                    </li>
-                </xar:if>
-                </xar:comment>
             </ul>
-            <xar:if condition="$systemConfigIsWritable AND $cacheTemplatesIsWritable AND $cacheIsWritable AND $rssTemplatesIsWritable AND $adodbTemplatesIsWritable AND $metMinMemRequirement">
+            <xar:if condition="$systemConfigIsWritable AND $cacheTemplatesIsWritable AND $cacheIsWritable AND $rssTemplatesIsWritable AND $metMinMemRequirement">
                 <input type="hidden" name="install_phase" id="install_phase" value="4" />
                 <xar:set name="buttonnext">
                     <xar:mlstring>Continue</xar:mlstring>

@@ -1,6 +1,5 @@
 <?php
 /**
- * Remove a role from a privilege assignment
  *
  * @package core modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
@@ -26,6 +25,7 @@ function privileges_admin_removerole()
     $role = $roles->getRole($roleid);
 
 //Call the Privileges class and get the privilege to be de-assigned
+    sys::import('modules.privileges.class.privileges');
     $privs = new xarPrivileges();
     $priv = $privs->getPrivilege($pid);
 
@@ -35,11 +35,8 @@ function privileges_admin_removerole()
         (($roleid == 2) && ($pid == 6)) ||
         (($roleid == 4) && ($pid == 2)))
         {
-        $msg = xarML('This privilege cannot be removed');
-        xarErrorSet(XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION',
-                       new SystemException($msg));
-        return;
-    }
+            throw new ForbiddenOperationException(null,'This privilege cannot be removed');
+        }
 
 // Clear Session Vars
     xarSessionDelVar('privileges_statusmsg');

@@ -19,17 +19,22 @@
 function roles_admin_newrole()
 {
     $defaultRole = xarModAPIFunc('roles', 'user', 'get', array('name'  => xarModAPIFunc('roles','user','getdefaultgroup'), 'type'   => 1));
-    $defaultuid  = $defaultRole['uid'];
-    if (!xarVarFetch('return_url',     'isset',    $return_url, NULL,       XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('pparentid',      'int:',     $pparentid, $defaultuid, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('pname',          'str:1:',   $name,      '',          XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('ptype',          'str:1:',   $type,      '',          XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('puname',         'str:1:35:',$uname,     '',          XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('pemail',         'str:1:',   $email,     '',          XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('ppass1',         'str:1:',   $pass,      '',          XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('state',          'str:1:',   $state,     '',          XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('phome',          'str',      $home,      '',          XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('pprimaryparent', 'int',      $primaryparent, '',      XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('return_url',  'isset',  $return_url, NULL, XARVAR_DONT_SET)) {return;}
+    $defaultuid = $defaultRole['uid'];
+    if (!xarVarFetch('return_url',  'isset', $return_url, NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('pparentid', 'int:', $pparentid, $defaultuid, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('pname',       'str:1:', $name, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemtype',    'int',    $itemtype, ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('puname',      'str:1:35:', $uname, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('pemail',      'str:1:', $email, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('ppass1',      'str:1:', $pass, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('state',       'str:1:', $state, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('phome', 'str', $home, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('pprimaryparent', 'int', $primaryparent, '', XARVAR_NOT_REQUIRED)) return;
+
+    $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
+    $types = xarModAPIFunc('roles','user','getitemtypes');
+    $data['itemtypename'] = $types[$itemtype]['label'];
 
     // Security Check
     if (!xarSecurityCheck('AddRole')) return;
@@ -42,7 +47,7 @@ function roles_admin_newrole()
     foreach($roles->getgroups() as $temp) {
         $nam = $temp['name'];
         if (!in_array($nam, $names)) {
-            $names[]  = $nam;
+            $names[] = $nam;
             $groups[] = $temp;
         }
     }
@@ -53,10 +58,10 @@ function roles_admin_newrole()
         $data['pname'] = '';
     }
 
-    if (isset($type)) {
-        $data['ptype'] = $type;
+    if (isset($itemtype)) {
+        $data['itemtype'] = $itemtype;
     } else {
-        $data['ptype'] = 1;
+        $data['itemtype'] = ROLES_GROUPTYPE;
     }
 
     if (isset($uname)) {
@@ -95,7 +100,7 @@ function roles_admin_newrole()
         $data['pprimaryparent'] = $primaryparent;
     } else {
         //this is a new role. Let's set it at the current default roles group
-        $data['primaryparent']  = xarModGetVar('roles','defaultgroup');
+        $data['primaryparent'] =     xarModGetVar('roles','defaultgroup');
         $data['pprimaryparent'] = $defaultRole['uid'];;//pass in the uid
     }
 
@@ -108,13 +113,12 @@ function roles_admin_newrole()
 
     // call item new hooks (for DD etc.)
     $item = $data;
-    $item['module']   = 'roles';
-    $item['itemtype'] = $data['ptype']; // we might have something separate for groups later on
-    $data['hooks']    = xarModCallHooks('item', 'new', '', $item);
+    $item['module'] = 'roles';
+    $data['hooks'] = xarModCallHooks('item', 'new', '', $item);
 
-    $data['authid']     = xarSecGenAuthKey();
-    $data['addlabel']   = xarML('Add');
-    $data['groups']     = $groups;
+    $data['authid'] = xarSecGenAuthKey();
+    $data['addlabel'] = xarML('Add');
+    $data['groups'] = $groups;
     $data['return_url'] = $return_url;
     return $data;
 } 

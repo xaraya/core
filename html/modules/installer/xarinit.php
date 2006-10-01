@@ -1,7 +1,6 @@
 <?php
 /**
  * Install and Upgarde Xaraya
- *
  * @package Installer
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -26,12 +25,7 @@ function installer_init()
     * register(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
-    if (!xarInstallAPIFunc('initialise',
-                           array('directory' => 'base',
-                                 'initfunc'  => 'init'))) {
-        return NULL;
-    }
-
+    xarInstallAPIFunc('initialise', array('directory' => 'base','initfunc'  => 'init'));
     // Initialisation successful
     return true;
 }

@@ -1,7 +1,6 @@
 <?php
 /**
  * Dynamic Data source Property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -16,7 +15,7 @@
  * Include the base class
  *
  */
-include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_Select_Property');
 
 /**
  * Class for data source property
@@ -25,11 +24,17 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_DataSource_Property extends Dynamic_Select_Property
 {
-    function Dynamic_DataSource_Property($args)
+    public $id         = 23;
+    public $name       = 'datasource';
+    public $desc       = 'Data Source';
+
+    function __construct($args)
     {
-        $this->Dynamic_Select_Property($args);
+        parent::__construct($args);
+        $this->filepath   = 'modules/dynamicdata/xarproperties';
+
         if (count($this->options) == 0) {
-            $sources = Dynamic_DataStore_Master::getDataSources();
+            $sources = DataStoreFactory::getDataSources();
             if (!isset($sources)) {
                 $sources = array();
             }
@@ -40,32 +45,5 @@ class Dynamic_DataSource_Property extends Dynamic_Select_Property
         // allow values other than those in the options
         $this->override = true;
     }
-
-    // default methods from Dynamic_Select_Property
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 23,
-                              'name'       => 'datasource',
-                              'label'      => 'Data Source',
-                              'format'     => '23',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'dynamicdata',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
 }
-
 ?>

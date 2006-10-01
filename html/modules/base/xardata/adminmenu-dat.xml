@@ -1,0 +1,78 @@
+<adminmenu>
+    <menuitem>
+        <includes>
+            <includeitem>
+                main
+            </includeitem>
+            <includeitem>
+                overview
+            </includeitem>
+        </includes>
+        <target>
+            overview
+        </target>
+        <label>
+            Base Overview
+        </label>
+    </menuitem>
+    <menuitem>
+        <mask>
+            AdminBase
+        </mask>
+        <includes>
+            <includeitem>
+                new
+            </includeitem>
+            <includeitem>
+                sysinfo
+            </includeitem>
+        </includes>
+        <target>
+            sysinfo
+        </target>
+        <title>
+            View your PHP configuration
+        </title>
+        <label>
+            System Information
+        </label>
+    </menuitem>
+    <menuitem>
+        <mask>
+            AdminBase
+        </mask>
+        <includes>
+            <includeitem>
+                release
+            </includeitem>
+        </includes>
+        <target>
+            release
+        </target>
+        <title>
+            View recent released extensions
+        </title>
+        <label>
+            Latest Xaraya Releases
+        </label>
+    </menuitem>
+    <menuitem>
+        <mask>
+            AdminBase
+        </mask>
+        <includes>
+            <includeitem>
+                modifyconfig
+            </includeitem>
+        </includes>
+        <target>
+            modifyconfig
+        </target>
+        <title>
+            Modify Base configuration values
+        </title>
+        <label>
+            Modify Config
+        </label>
+    </menuitem>
+</adminmenu>

@@ -11,20 +11,21 @@
  * @todo bring back possibility of time authorized keys
  * @todo this needs another place
  * @todo this needs documentation
+ * @todo why do we need this?
+ * @todo this has an awful lot of methods
  */
 
-class xarDate
+class xarDate extends Object
 {
+    public $year;
+    public $month;
+    public $day;
+    public $hour;
+    public $minute;
+    public $second;
+    public $timestamp;
 
-    var $year;
-    var $month;
-    var $day;
-    var $hour;
-    var $minute;
-    var $second;
-    var $timestamp;
-
-    function xarDate($hour=0,$minute=0,$second=0,$month=0,$day=0,$year=0)
+    function __construct($hour=0,$minute=0,$second=0,$month=0,$day=0,$year=0)
     {
         $this->timestamp = mktime($hour,$minute,$second,$month,$day,$year);
         $this->year = $year;
@@ -37,7 +38,7 @@ class xarDate
 
     function setnow()
     {
-        $this->timestamp = mktime();
+        $this->timestamp = time();
         $this->extract();
     }
 
@@ -80,9 +81,21 @@ class xarDate
         }
     }
 
-    function display($format)
+    function display($format='Y-m-d')
     {
         return date($format,$this->timestamp);
+    }
+
+    function getTimearray()
+    {
+        return array(
+                    'year' => $this->year,
+                    'month' => $this->month,
+                    'day' => $this->day,
+                    'hour' => $this->hour,
+                    'minute' => $this->minute,
+                    'second' => $this->second,
+                );
     }
 
     function getTimestamp()

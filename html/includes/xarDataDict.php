@@ -18,11 +18,10 @@
  *
  * @author Richard Cave <rcave@xaraya.com>
  * @access public
- * @throws none
  */
-class xarDataDict 
+class xarDataDict extends Object
 {
-    var $dict;
+    public $dict;
 
     /**
      * xarDataDict: constructor for the class
@@ -33,7 +32,6 @@ class xarDataDict
      * @access  public
      * @param   object $dbconn Database connection
      * @return  none
-     * @throws  none
     */
     function xarDataDict(&$dbconn) 
     {
@@ -54,29 +52,16 @@ class xarDataDict
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   $table name of the table
-     * @param   $fields string or array containing column info
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
-     * @throws  none
+     * @param   string $table name of the table
+     * @param   mixed  $fields string or array containing column info
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
+     * @throws  EmptyParameterException
     */
     function addColumn($table, $fields)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (empty($fields)) {
-            $invalid[] = 'fields';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
-                    join(', ',$invalid), 'addColumn', 'xarDataDict');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return false;
-        }
+        if (empty($table)) throw new EmptyParameterException('table');
+        if (empty($fields)) throw new EmptyParameterException('fields');
 
         // Generate SQL to add a column to the table
         $sql = $this->dict->AddColumnSQL($table, $fields);
@@ -98,27 +83,14 @@ class xarDataDict
      * @access  public
      * @param   $table name of the table
      * @param   $fields string or array containing column info
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
-     * @throws  none
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
+     * @throws  EmptyParameterException
     */
     function alterColumn($table, $fields)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (empty($fields)) {
-            $invalid[] = 'fields';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
-                    join(', ',$invalid), 'alterColumn', 'xarDataDict');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return false;
-        }
+        if (empty($table)) throw new EmptyParameterException('table');
+        if (empty($fields)) throw new EmptyParameterException('empty');
 
         // Generate SQL to change the column in the table
         $sql = $this->dict->AlterColumnSQL($table, $fields);
@@ -144,9 +116,7 @@ class xarDataDict
      * @access  public
      * @param   $table name of the table
      * @param   $fields string or array containing field info
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
-     * @throws  none
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
     */
     function alterTable($table, $fields)
     {
@@ -166,31 +136,14 @@ class xarDataDict
      * @access  public
      * @param   $table name of the table
      * @param   $fields string or array containing field info
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
-     * @throws  none
+     * @throws EmptyParameterException
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
     */
     function changeTable($table, $fields)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (empty($fields)) {
-            $invalid[] = 'fields';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML(
-                'Invalid #(1) for function #(2)() in #(3)',
-                join(', ',$invalid), 'changeTable', 'xarDataDict'
-            );
-            xarErrorSet(
-                XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                new SystemException(__FILE__.'('.__LINE__.'): ' . $msg)
-            );
-            return false;
-        }
+        if (empty($table)) throw new EmptyParameterException('table');
+        if (empty($fields)) throw new EmptyParameterException('fields');
 
         // Generate SQL to change the table
         $sql = $this->dict->ChangeTableSQL($table, $fields);
@@ -213,24 +166,13 @@ class xarDataDict
      * @access  public
      * @param   $database database name to create
      * @param   $options array containing database options
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
-     * @throws  none
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
+     * @throws  EmptyParameterException
     */
     function createDatabase($database, $options = false)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($database)) {
-            $invalid[] = 'database';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
-                    join(', ',$invalid), 'createDatabase', 'xarDataDict');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return false;
-        }
+        if (empty($database)) throw new EmptyParameterException('database');
 
         // Generate SQL to create the database
         $sql = $this->dict->CreateDatabase($database, $options);
@@ -255,34 +197,15 @@ class xarDataDict
      * @param   $table name of the table
      * @param   $fields string or array containing field info
      * @param   $options array containing index creation options
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
-     * @throws  none
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
+     * @throws  EmptyParameterException
     */
     function createIndex($index, $table, $fields, $options = false)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($index)) {
-            $invalid[] = 'index name';
-        }
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (empty($fields)) {
-            $invalid[] = 'fields';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML(
-                'Invalid #(1) for function #(2)() in #(3)',
-                join(', ',$invalid), 'createIndex', 'xarDataDict'
-            );
-            xarErrorSet(
-                XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                new SystemException(__FILE__.'('.__LINE__.'): '.$msg)
-            );
-            return false;
-        }
+        if (empty($index)) throw new EmptyParameterException('index');
+        if (empty($table)) throw new EmptyParameterException('table');
+        if (empty($fields)) throw new EmptyParameterException('fields');
 
         // Generate SQL to create the index
         $sql = $this->dict->CreateIndexSQL($index, $table, $fields, $options);
@@ -305,30 +228,15 @@ class xarDataDict
      * @access  public
      * @param   $index name of the index
      * @param   $table name of the table
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
-     * @throws  none
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
+     * @throws  EmptyParameterException
     */
     function dropIndex($index, $table)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($index)) {
-            $invalid[] = 'index name';
-        }
+        if (empty($index)) throw new EmptyParameterException('index');
         if (empty($table)) {
             $table = NULL;
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML(
-                'Invalid #(1) for function #(2)() in #(3)',
-                join(', ',$invalid), 'dropIndex', 'xarDataDict'
-            );
-            xarErrorSet(
-                XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                new SystemException(__FILE__.'('.__LINE__.'): '.$msg)
-            );
-            return false;
         }
 
         // Generate SQL to drop the index
@@ -358,30 +266,17 @@ class xarDataDict
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   $table name of the table
-     * @param   $fields string or array containing field info
-     * @param   $options array containing table creationg options
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
-     * @throws  none
+     * @param   string $table name of the table
+     * @param   mixed  $fields string or array containing field info
+     * @param   array  $options array containing table creationg options
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
+     * @throws  EmptyParameterException
     */
     function createTable($table, $fields, $options = false)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (empty($fields)) {
-            $invalid[] = 'fields';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
-                    join(', ',$invalid), 'createTable', 'xarDataDict');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return false;
-        }
+        if (empty($table)) throw new EmptyParameterException('table');
+        if (empty($fields)) throw new EmptyParameterException('fields');
 
         // Generate SQL to create the table
         $sql = $this->dict->CreateTableSQL($table, $fields, $options);
@@ -401,29 +296,16 @@ class xarDataDict
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   $table name of the table
-     * @param   $fields string or array containing column info
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
-     * @throws  none
+     * @param   string $table name of the table
+     * @param   mixed  $fields string or array containing column info
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
+     * @throws  EmptyParameterException
     */
     function dropColumn($table, $fields)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (empty($fields)) {
-            $invalid[] = 'fields';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
-                    join(', ',$invalid), 'dropColumn', 'xarDataDict');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return false;
-        }
+        if (empty($table)) throw new EmptyParameterException('table');
+        if (empty($fields)) throw new EmptyParameterException('fields');
 
         // Generate SQL to drop the column
         $sql = $this->dict->DropColumnSQL($table, $fields);
@@ -444,24 +326,13 @@ class xarDataDict
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
      * @param   $table name of the table
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
-     * @throws  none
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
+     * @throws  EmptyParameterException
     */
     function dropTable($table)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
-                    join(', ',$invalid), 'dropTable', 'xarDataDict');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return false;
-        }
+        if (empty($table)) throw new EmptyParameterException('table');
 
         // Generate SQL to drop the table
         $sql = $this->dict->DropTableSQL($table);
@@ -481,11 +352,9 @@ class xarDataDict
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   $sql an array of SQL strings 
-     * @param   $contOnError continue on error, default is true
-     * @returns 0 if failed, 1 if executed with errors, 2 if successful
-     * @return  integer
-     * @throws  none
+     * @param   array $sql an array of SQL strings 
+     * @param   bool  $contOnError continue on error, default is true
+     * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
     */
     function executeSQLArray($sql, $contOnError = true)
     {
@@ -506,23 +375,12 @@ class xarDataDict
      * @returns array on success, false on failure
      * @return  returns an array of ADOFieldObject's, one field
      *          object for every column of $table, false otherwise
-     * @throws  none
+     * @throws  EmptyParameterException
     */
     function getColumns($table)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
-                    join(', ',$invalid), 'getColumns', 'xarDataDict');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return false;
-        }
-
+        if (empty($table)) throw new EmptyParameterException('table');
         $columns = $this->dict->MetaColumns($table);
         return $columns;
     }
@@ -534,26 +392,14 @@ class xarDataDict
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   none
-     * @returns array on success, false on failure
+     * @param   string $table table for which to return the primary keys
      * @return  array of primary keys for the table, false otherwise
-     * @throws  none
+     * @throws  EmptyParameterException
     */
     function getPrimaryKeys($table)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML('Invalid #(1) for function #(2)() in #(3)',
-                    join(', ',$invalid), 'getPrimaryKeys', 'xarDataDict');
-            xarErrorSet(XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                            new SystemException(__FILE__.'('.__LINE__.'): '.$msg));
-            return false;
-        }
-
+        if (empty($table)) throw new EmptyParameterException('table');
         $keys = $this->dict->MetaPrimaryKeys($table);
         return $keys;
     }
@@ -566,30 +412,14 @@ class xarDataDict
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
      * @param   table name of table
-     * @param   primary boolean include primary keys (default false)
-     * @returns array on success, false on failure
-     * @return  returns an array of ADODB index arrays or false if none
-     * @throws  none
+     * @param   bool $primary also get primary keys (default false)
+     * @return  array  returns an array of ADODB index arrays or false if none
+     * @throws  EmptyParameterException
     */
     function getIndexes($table, $primary = false)
     {
         // Perform validation on input arguments
-        $invalid = array();
-        if (empty($table)) {
-            $invalid[] = 'table name';
-        }
-        if (count($invalid) > 0) {
-            $msg = xarML(
-                'Invalid #(1) for function #(2)() in #(3)',
-                join(', ',$invalid), 'getIndexes', 'xarDataDict'
-            );
-            xarErrorSet(
-                XAR_SYSTEM_EXCEPTION, 'BAD_PARAM',
-                new SystemException(__FILE__.'('.__LINE__.'): ' . $msg)
-            );
-            return false;
-        }
-
+        if (empty($table)) throw new EmptyParameterException('table');
         return $this->dict->MetaIndexes($table, $primary);
     }
 
@@ -600,10 +430,8 @@ class xarDataDict
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   xartables true if only Xaraya tables, false for all tables
-     * @returns array on success, false on failure
+     * @param   bool $xartables true if only Xaraya tables, false for all tables
      * @return  array of tables available in the database, false otherwise
-     * @throws  none
      * @todo    flag for Xaraya system vs site tables
     */
     function getTables($xartables = true)
@@ -634,10 +462,7 @@ class xarDataDict
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   none
-     * @returns array on success, false on failure
      * @return  array of tables available in the database, false otherwise
-     * @throws  none
     */
     function getSystemTables()
     {
@@ -676,10 +501,7 @@ class xarDataDict
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   none
-     * @returns array on success, false on failure
      * @return  array of tables available in the database, false otherwise
-     * @throws  none
     */
     function getSiteTables()
     {
@@ -721,10 +543,8 @@ class xarDataDict
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   xartables true if only Xaraya tables, false for all tables
-     * @returns array on success, false on failure
+     * @param   bool xartables true if only Xaraya tables, false for all tables
      * @return  array of columns names for the table, false otherwise
-     * @throws  none
      * @todo    flag for Xaraya system vs site tables
     */
     function getTableDefinitions($xartables = true)
@@ -814,11 +634,10 @@ class xarDataDict
  *
  * @author Richard Cave <rcave@xaraya.com>
  * @access public
- * @throws none
  */
-class xarMetaData 
+class xarMetaData extends Object
 {
-    var $dbconn;
+    public $dbconn;
 
     /**
      * xarMetaData: constructor for the class
@@ -829,7 +648,6 @@ class xarMetaData
      * @access  public
      * @param   object $dbconn database connection (optional)
      * @return  none
-     * @throws  none
     */
     function xarMetaData($dbconn = false) 
     {
@@ -851,10 +669,7 @@ class xarMetaData
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   none
-     * @returns array on success, false on failure
      * @return  array of databases available on the server, false otherwise
-     * @throws  none
      * @todo    make this work for all database types
     */
     function getDatabases()
@@ -875,10 +690,8 @@ class xarMetaData
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   none
-     * @returns array on success, false on failure
+     * @param   string $type type of tables to return (presumably preparing for views)
      * @return  array of tables available in the database, false otherwise
-     * @throws  none
     */
     function getTables($type='TABLES')
     {
@@ -900,15 +713,15 @@ class xarMetaData
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   none
-     * @returns array on success, false on failure
+     * @param   string $table name of the table for which to return the columns
      * @return  returns an array of ADOFieldObject's, one field
      *          object for every column of $table, false otherwise
-     * @throws  none
     */
     function getColumns($table)
     {
-        $columns = $this->dbconn->MetaColumns($table);
+        $dbInfo = $this->dbconn->getDatabaseInfo();
+        $tblInfo = $dbInfo->getTable($table);
+        $columns = $tblInfo->getColumns();
         if (!isset($columns)) {
             return;
         }
@@ -922,10 +735,8 @@ class xarMetaData
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   none
-     * @returns array on success, false on failure
+     * @param   string $table name of the table for which to return column names
      * @return  array of columns names for the table, false otherwise
-     * @throws  none
     */
     function getColumnNames($table)
     {
@@ -943,10 +754,9 @@ class xarMetaData
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   none
-     * @returns array on success, false on failure
+     * @param   string $table name of the table for which to return primary keys
      * @return  array of primary keys for the table, false otherwise
-     * @throws  none
+     * @todo    The method name suggests that multiple keys are retrieved, which is not true, multiple attribs maybe, but only 1 key.
     */
     function getPrimaryKeys($table)
     {
@@ -958,6 +768,4 @@ class xarMetaData
     }
 
 }
-
-
 ?>

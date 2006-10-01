@@ -1,7 +1,6 @@
 <?php
 /**
  * Numberlist property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -13,7 +12,7 @@
 /*
  * @author mikespub <mikespub@xaraya.com>
 */
-include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_Select_Property');
 
 /**
  * handle the numberlist property
@@ -22,12 +21,14 @@ include_once "modules/base/xarproperties/Dynamic_Select_Property.php";
  */
 class Dynamic_NumberList_Property extends Dynamic_Select_Property
 {
-    var $min = null;
-    var $max = null;
+    public $id         = 16;
+    public $name       = 'integerlist';
+    public $desc       = 'Number List';
 
-    function Dynamic_NumberList_Property($args)
+    function __construct($args)
     {
-        $this->Dynamic_Select_Property($args);
+        parent::__construct($args);
+
         // check validation for allowed min/max values
         if (count($this->options) == 0 && !empty($this->validation) && strchr($this->validation,':')) {
             list($min,$max) = explode(':',$this->validation);
@@ -89,37 +90,6 @@ class Dynamic_NumberList_Property extends Dynamic_Select_Property
             return false;
         }
     }
-
-    // default showInput() from Dynamic_Select_Property
-
-    // default showOutput() from Dynamic_Select_Property
-
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 16,
-                              'name'       => 'integerlist',
-                              'label'      => 'Number List',
-                              'format'     => '16',
-                              'validation' => '',
-                            'source'     => '',
-                            'dependancies' => '',
-                            'requiresmodule' => '',
-                            'aliases'        => '',
-                            'args'           => serialize($args)
-                            // ...
-                           );
-        return $baseInfo;
-     }
-
 }
 
 ?>

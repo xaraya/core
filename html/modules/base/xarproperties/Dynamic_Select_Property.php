@@ -15,15 +15,24 @@
 */
 class Dynamic_Select_Property extends Dynamic_Property
 {
-    var $options;
-    var $func;
-    var $itemfunc;
-    var $file;
-    var $override = false; // allow values other than those in the options
+    public $id   = 6;
+    public $name = 'dropdown';
+    public $desc = 'Dropdown List';
+    public $reqmodules = array('base');
 
-    function Dynamic_Select_Property($args)
+    public $options;
+    public $func;
+    public $itemfunc;
+    public $file;
+    public $override = false; // allow values other than those in the options
+
+    function __construct($args)
     {
-        $this->Dynamic_Property($args);
+        parent::__construct($args);
+        $this->template  = 'dropdown';
+        $this->tplmodule = 'base';
+        $this->filepath   = 'modules/base/xarproperties';
+
         if (!isset($this->options)) {
             $this->options = array();
         }
@@ -31,18 +40,6 @@ class Dynamic_Select_Property extends Dynamic_Property
         if (count($this->options) == 0 && !empty($this->validation)) {
             $this->parseValidation($this->validation);
         }
-    }
-    function checkInput($name='', $value = null)
-    {
-        if (empty($name)) {
-            $name = 'dd_'.$this->id;
-        }
-        // store the fieldname for validations who need them (e.g. file uploads)
-        $this->fieldname = $name;
-        if (!isset($value)) {
-            if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
-        }
-        return $this->validateValue($value);
     }
 
     function validateValue($value = null)
@@ -64,22 +61,16 @@ class Dynamic_Select_Property extends Dynamic_Property
         return false;
     }
 
-//    function showInput($name = '', $value = null, $options = array(), $id = '', $tabindex = '')
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
-        $data=array();
-
-        if (!isset($value)) {
+        if (!isset($data['value'])) {
             $data['value'] = $this->value;
-        } else {
-            $data['value'] = $value;
         }
-        if (!isset($options) || count($options) == 0) {
+
+        if (!isset($data['options']) || count($data['options']) == 0) {
             $data['options'] = $this->getOptions();
-        } else {
-            $data['options'] = $options;
         }
+
         // check if we need to add the current value to the options
         if (!empty($data['value']) && $this->override) {
             $found = false;
@@ -93,53 +84,25 @@ class Dynamic_Select_Property extends Dynamic_Property
                 $data['options'][] = array('id' => $data['value'], 'name' => $data['value']);
             }
         }
-        if (empty($name)) {
-            $data['name'] = 'dd_' . $this->id;
-        } else {
-            $data['name'] = $name;
-        }
-        if (empty($id)) {
-            $data['id'] = $data['name'];
-        } else {
-            $data['id']= $id;
-        }
-        $data['onchange'] = isset($onchange) ? $onchange : null; // let tpl decide what to do
-
-        $data['tabindex'] =!empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  =!empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
-
-    // FIXME: this won't work when called by a property from a different module
-        // allow template override by child classes (or in BL tags/API calls)
-        if (empty($template)) {
-            $template = 'dropdown';
-        }
-        return xarTplProperty('base', $template, 'showinput', $data);
-        //return $out;
+        if(!isset($data['onchange'])) $data['onchange'] = null; // let tpl decide what to do
+        $data['extraparams'] =!empty($extraparams) ? $extraparams : "";
+        return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
-        if (isset($value)) {
-            $this->value = $value;
-        }
-        $data=array();
-        $data['value'] = $this->value;
+        extract($data);
+        if (isset($data['value'])) $this->value = $data['value'];
+
         // get the option corresponding to this value
         $result = $this->getOption();
         // only apply xarVarPrepForDisplay on strings, not arrays et al.
         if (!empty($result) && is_string($result)) {
             $result = xarVarPrepForDisplay($result);
         }
-        $data['option'] = array('id' => $this->value,
-                                'name' => $result);
+        $data['option'] = array('id' => $this->value, 'name' => $result);
 
-    // FIXME: this won't work when called by a property from a different module
-        // allow template override by child classes (or in BL tags/API calls)
-        if (empty($template)) {
-            $template = 'dropdown';
-        }
-        return xarTplProperty('base', $template, 'showoutput', $data);
+        return parent::showOutput($data);
     }
 
     function parseValidation($validation = '')
@@ -228,7 +191,7 @@ class Dynamic_Select_Property extends Dynamic_Property
             }
 
         } else {
-          //  return array(); Do we need this return?
+
         }
 
         return $this->options;
@@ -269,30 +232,6 @@ class Dynamic_Select_Property extends Dynamic_Property
         }
         if ($check) return false;
         return $this->value;
-    }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @return array Base information for this property
-     **/
-    function getBasePropertyInfo()
-    {
-        $args = array();
-        $baseInfo = array(
-                          'id'         => 6,
-                          'name'       => 'dropdown',
-                          'label'      => 'Dropdown List',
-                          'format'     => '6',
-                          'validation' => '',
-                          'source'     => '',
-                          'dependancies' => '',
-                          'requiresmodule' => '',
-                          'aliases'        => '',
-                          'args'           => serialize($args)
-                          // ...
-                         );
-        return $baseInfo;
     }
 
     /**
@@ -359,6 +298,7 @@ class Dynamic_Select_Property extends Dynamic_Property
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
      * @param $args['validation'] validation rule (default is the current validation)
      * @param $args['id'] id of the field
+     * @returns bool
      * @return bool true if the validation rule could be processed, false otherwise
      */
     function updateValidation($args = array())

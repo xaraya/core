@@ -25,6 +25,7 @@ function privileges_admin_modifyrealm()
     if (!xarVarFetch('name',      'str:1.20', $name,      '',      XARVAR_NOT_REQUIRED)) {return;}
     $xartable =& xarDBGetTables();
 
+    sys::import('modules.roles.class.xarQuery');
     if (empty($confirmed)) {
         $q = new xarQuery('SELECT',$xartable['security_realms']);
         $q->addfields(array('xar_rid AS rid','xar_name AS name'));
@@ -41,16 +42,11 @@ function privileges_admin_modifyrealm()
         $q->eq('xar_name', $newname);
         if(!$q->run()) return;
 
-        if ($q->getrows() > 0 && (strtolower($newname) !=strtolower($name))) {
-            $msg = xarML('There is already a realm with the name #(1)', $newname);
-            xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA',
-                           new DefaultUserException($msg));
-            return;
-        }
+        if ($q->getrows() > 0) throw new DuplicateException(array('realm',$newname));
 
         $q = new xarQuery('UPDATE',$xartable['security_realms']);
         $q->addfield('xar_name', $newname);
-        $q->eq('xar_rid', $rid);        
+        $q->eq('xar_rid', $rid);
         if(!$q->run()) return;
         xarResponseRedirect(xarModURL('privileges', 'admin', 'viewrealms'));
     }

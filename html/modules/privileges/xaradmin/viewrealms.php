@@ -25,6 +25,7 @@ function privileges_admin_viewrealms()
     if(!xarSecurityCheck('ViewPrivileges',0,'Realm')) return;
 
     $xartable =& xarDBGetTables();
+    sys::import('modules.roles.class.xarQuery');
     $q = new xarQuery('SELECT',$xartable['security_realms']);
     $q->addfields(array('xar_rid AS rid', 'xar_name AS name'));
     $q->setorder('xar_name');

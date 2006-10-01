@@ -1,4 +1,4 @@
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
@@ -81,10 +81,10 @@
             </a>
         </dd>
     </dl>
-    <xar:comment>
+    <!--
         the standard phpinfo layout is table based and uses its own embedded styling,
         lets see if we can restore the look and feel of it with the help of our own wrapper and a simple embedded css call
-    </xar:comment>
+    -->
     <xar:set name="localstyles">'<!--
 div.xar-base-phpinfo-wrapper {background-color: #ffffff; color: #000000;}
 div.xar-base-phpinfo-wrapper td,

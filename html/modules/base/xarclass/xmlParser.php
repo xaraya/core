@@ -21,14 +21,14 @@
 *  http://revjim.net/code/xmlParser/
 */
 
-class XMLParser 
+class XMLParser extends Object
 {
-    var $ns2uri = array();
-    var $uri2ns = array();
-    var $unkcnt = 0;
-    var $data; // Holds the XML structure
-    var $xmldata; // Holds XML data
-    var $version = "0.3";
+    public $ns2uri = array();
+    public $uri2ns = array();
+    public $unkcnt = 0;
+    public $data; // Holds the XML structure
+    public $xmldata; // Holds XML data
+    public $version = "0.3";
 
 
     function defineNs($ident, $uri = "") 

@@ -23,7 +23,7 @@ function roles_admin_viewroles()
     // Call the Roles class
     $roles = new xarRoles();
 
-    include_once 'modules/roles/xartreerenderer.php';
+    sys::import('modules.roles.xartreerenderer');
     $renderer = new xarTreeRenderer();
     // Load Template
     $data['authid'] = xarSecGenAuthKey();

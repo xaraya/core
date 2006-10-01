@@ -17,15 +17,16 @@ function roles_admin_displayrole()
 {
     if (!xarVarFetch('uid','int:1:',$uid)) return;
 
+    sys::import('modules.roles.class.roles');
     $roles = new xarRoles();
-    $role  = $roles->getRole($uid);
+    $role = $roles->getRole($uid);
 
     // get the array of parents of this role
     // need to display this in the template
     $parents = array();
     foreach ($role->getParents() as $parent) {
-        $parents[] = array('parentid'    => $parent->getID(),
-                           'parentname'  => $parent->getName(),
+        $parents[] = array('parentid' => $parent->getID(),
+                           'parentname' => $parent->getName(),
                            'parentuname' => $parent->getUname());
     }
     $data['parents'] = $parents;
@@ -35,31 +36,33 @@ function roles_admin_displayrole()
     if (!xarSecurityCheck('EditRole',1,'Roles',$name)) return;
     $data['frozen'] = xarSecurityCheck('ViewRoles',0,'Roles',$name);
 
-    $data['uid']   = $role->getID();
-    $data['type']  = $role->getType();
-    $data['name']  = $name;
+    $data['uid'] = $role->getID();
+    $data['itemtype'] = $role->getType();
+    $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
+    $types = xarModAPIFunc('roles','user','getitemtypes');
+    $data['itemtypename'] = $types[$data['itemtype']]['label'];
+    $data['name'] = $name;
     $data['phome'] = $role->getHome();
-    
+
     if (xarModGetVar('roles','setprimaryparent')) { //we have activated primary parent
         $primaryparent = $role->getPrimaryParent();
         $prole = xarUFindRole($primaryparent);
-        $data['primaryparent']  = $primaryparent;
+        $data['primaryparent'] = $primaryparent;
         $data['pprimaryparent'] = $prole->getID();//pass in the uid
         if (!isset($data['phome']) || empty ($data['phome'])) {
-            $parenthome         = $prole->getHome(); //get the primary parent home
-            $data['parenthome'] = $parenthome;
+            $parenthome = $prole->getHome(); //get the primary parent home
+            $data['parenthome']=$parenthome;
         }
     } else {
-        $data['parenthome']     = '';
-        $data['pprimaryparent'] = '';
-        $data['primaryparent']  = '';
+        $data['parenthome']='';
+        $data['pprimaryparent'] ='';
+        $data['primaryparent'] ='';
     }
     //get the data for a user
-    if ($data['type'] == 0) {
-        $data['uname']   = $role->getUser();
-        $data['type']    = $role->getType();
-        $data['email']   = $role->getEmail();
-        $data['state']   = $role->getState();
+    if ($data['basetype'] == ROLES_USERTYPE) {
+        $data['uname'] = $role->getUser();
+        $data['email'] = $role->getEmail();
+        $data['state'] = $role->getState();
         $data['valcode'] = $role->getValCode();
     } else {
         //get the data for a group
@@ -68,9 +71,9 @@ function roles_admin_displayrole()
     if (xarModGetVar('roles','setuserlastlogin')) {
         //only display it for current user or admin
         if (xarUserIsLoggedIn() && xarUserGetVar('uid')==$uid) {
-            $data['userlastlogin'] = xarSessionGetVar('roles_thislastlogin');
+            $data['userlastlogin']=xarSessionGetVar('roles_thislastlogin');
         }elseif (xarSecurityCheck('AdminRole',0,'Roles',$name) && xarModGetUserVar('roles','userlastlogin',$uid)<>''){
-            $data['userlastlogin'] = xarModGetUserVar('roles','userlastlogin',$uid);
+            $data['userlastlogin']=xarModGetUserVar('roles','userlastlogin',$uid);
         }else{
             $data['userlastlogin']='';
         }
@@ -81,10 +84,10 @@ function roles_admin_displayrole()
     $data['upasswordupdate'] = xarModGetUserVar('roles','passwordupdate');//now user mod var not 'duv'. $role->getPasswordUpdate();
     //timezone
     if (xarModGetVar('roles','setusertimezone')) {
-        $usertimezone      = $role->getUserTimezone();
-        $usertimezone      = unserialize($usertimezone);
-        $data['utimezone'] = $usertimezone['timezone'];
-        $offset            = $usertimezone['offset'];
+        $usertimezone= $role->getUserTimezone();
+        $usertimezone = unserialize($usertimezone);
+        $data['utimezone']=$usertimezone['timezone'];
+        $offset=$usertimezone['offset'];
         if (isset($offset)) {
             $hours = intval($offset);
             if ($hours != $offset) {
@@ -99,13 +102,13 @@ function roles_admin_displayrole()
             }
         }
     } else {
-        $data['utimezone'] = '';
-        $data['offset']    = '';
+        $data['utimezone']='';
+        $data['offset']='';
     }
 
     $item = $data;
-    $item['module']    = 'roles';
-    $item['itemtype']  = $data['type']; // handle groups differently someday ?
+    $item['module'] = 'roles';
+    $item['itemtype'] = $data['itemtype']; // handle groups differently someday ?
     $item['returnurl'] = xarModURL('roles', 'user', 'display',
                                    array('uid' => $uid));
     $hooks = array();

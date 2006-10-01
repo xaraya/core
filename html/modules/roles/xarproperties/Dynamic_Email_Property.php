@@ -11,7 +11,7 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 
-/* 
+/*
  * Handle E-mail property
  * @author mikespub <mikespub@xaraya.com>
 */
@@ -19,10 +19,23 @@
 /**
  * Include the base class
  */
-include_once "modules/base/xarproperties/Dynamic_TextBox_Property.php";
+sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
 
 class Dynamic_Email_Property extends Dynamic_TextBox_Property
 {
+    public $id         = 26;
+    public $name       = 'email';
+    public $desc       = 'E-Mail';
+    public $reqmodules = array('roles');
+
+    function __construct($args)
+    {
+        parent::__construct($args);
+        $this->tplmodule = 'roles';
+        $this->template = 'email';
+        $this->filepath   = 'modules/roles/xarproperties';
+    }
+
     function validateValue($value = null)
     {
         if (!isset($value)) {
@@ -53,88 +66,6 @@ class Dynamic_Email_Property extends Dynamic_TextBox_Property
         }
         return true;
     }
-
-    function showInput($args = array())
-    {
-        extract($args);
-        $data = array();
-
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (empty($value)) {
-            $value = '';
-        }
-        if (empty($name)) {
-            $name = 'dd_' . $this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
-
-        $data['name']     = $name;
-        $data['id']       = $id;
-        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
-        $data['tabindex'] = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
-        $data['maxlength']= !empty($maxlength) ? $maxlength : $this->maxlength;
-        $data['size']     = !empty($size) ? $size : $this->size;
-
-
-        $template="";
-        return xarTplProperty('roles', 'email', 'showinput', $data );
-
-    }
-
-    function showOutput($args = array())
-    {
-        extract($args);
-        $data=array();
-
-        if (!isset($value)) {
-            $value = xarVarPrepHTMLDisplay($this->value);
-        }
-        if (!empty($value)) {
-            $value=xarVarPrepHTMLDisplay($value);
-        }
-        // TODO: use redirect function here ?
-        /*if (!empty($value)) {
-            $value = xarVarPrepForDisplay($value);
-            return '<a href="mailto:'.$value.'">'.$value.'</a>';
-        }
-        */
-        $data['value'] = $value;
-        $data['name'] = $this->name;
-        $data['id']   = $this->id;
-
-        $template="";
-        return xarTplProperty('roles', 'email', 'showoutput', $data);
-    }
-
-    /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-     function getBasePropertyInfo()
-     {
-         $args = array();
-         $baseInfo = array(
-                              'id'         => 26,
-                              'name'       => 'email',
-                              'label'      => 'E-Mail',
-                              'format'     => '26',
-                              'validation' => '',
-                              'source'         => '',
-                              'dependancies'   => '',
-                              'requiresmodule' => 'roles',
-                              'aliases'        => '',
-                              'args'           => serialize($args),
-                            // ...
-                           );
-        return $baseInfo;
-     }
 }
 
 ?>
