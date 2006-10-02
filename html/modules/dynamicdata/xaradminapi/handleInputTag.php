@@ -31,22 +31,34 @@ function dynamicdata_adminapi_handleInputTag($args)
     if (isset($args['handler_type'])) {
         unset($args['handler_type']);
     }
+    $out = '';
     if (isset($args['property'])) {
         $property  = $args['property'];
         unset($args['property']);
     }
-    $out = '';
+    
+    if (isset($args['hidden'])) {
+        $hidden = $args['hidden'];
+        unset($args['hidden']);
+    } else {
+        $hidden = 0;
+    }
+     if (isset($args['preset'])) {
+        $hidden = $args['hidden'];
+        unset($args['hidden']);
+     } else {
+         $preset = 0;
+     }
 /* cfr. bug 4017
     // fix id containing [] in forms
     if (!empty($args['name']) && empty($args['id']) && strpos($args['name'],'[')) {
          $args['id'] = strtr($args['name'], array('[' => '_', ']' => ''));
     }
 */
-    if (count($args) > 1) {
+    if (!empty($args)) {
         if (!isset($args['field'])) {
             $parts = array();
             foreach ($args as $key => $val) {
-                if ($key == 'hidden' || $key == 'preset') continue;
                 if (is_numeric($val) || substr($val,0,1) == '$') {
                     $parts[] = "'$key' => ".$val;
                 } else {
@@ -63,9 +75,9 @@ function dynamicdata_adminapi_handleInputTag($args)
             $out .=  '$property = & Dynamic_Property_Master::getProperty('.$pargs.'); ';
             $property = '$property';
         }
-        if (!empty($args['preset']) && empty($args['value'])) {
+        if (!empty($preset) && empty($args['value'])) {
             $out .= 'echo '.$property.'->_showPreset(); ';
-        } elseif (!empty($args['hidden'])) {
+        } elseif (!empty($hidden)) {
             $out .= 'echo '.$property.'->showHidden('.$pargs.'); ';
         } else {
             $out .= 'echo '.$property.'->showInput('.$pargs.'); ';

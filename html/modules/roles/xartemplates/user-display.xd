@@ -74,8 +74,7 @@
                 #$utimezone# (GMT #$offset#)
             </p>
             </xar:if>
-        <xar:if condition="xarModIsAvailable('dynamicdata')">
-            <xar:data-getitem name="$properties" module="roles" itemid="$uid" />
+            <xar:data-getitem name="$properties" module="roles" itemtype="$itemtype" itemid="$uid" />
             <xar:if condition="isset($properties) and count($properties) gt 0">
                 <xar:foreach in="$properties" key="$name">
                     <p>
@@ -87,7 +86,6 @@
                     </p>
                 </xar:foreach>
             </xar:if>
-        </xar:if>
     </xar:if>
     <p>
     <xar:if condition="!empty($hooks)">

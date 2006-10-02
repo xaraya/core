@@ -28,7 +28,7 @@ function dynamicdata_userapi_handleOutputTag($args)
     }
     $out = '';
     
-    if (count($args) > 1) {
+    if (!empty($args)) {
         if (!isset($args['field'])) {
             $parts = array();
             foreach ($args as $key => $val) {
