@@ -1,12 +1,11 @@
 <?php
 /**
- * Handle form tags
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -24,8 +23,7 @@
  * See also preview="yes", which can be used on the object level to preview the whole object
  *
  * @param $args array containing the input field definition or the type, name, value, ...
- * @returns string
- * @return the PHP code needed to invoke showinput() in the BL template
+ * @return string the PHP code needed to invoke showinput() in the BL template
  */
 function dynamicdata_adminapi_handleInputTag($args)
 {
@@ -33,52 +31,47 @@ function dynamicdata_adminapi_handleInputTag($args)
     if (isset($args['handler_type'])) {
         unset($args['handler_type']);
     }
+    if (isset($args['property'])) {
+        $property  = $args['property'];
+        unset($args['property']);
+    }
+    $out = '';
 /* cfr. bug 4017
     // fix id containing [] in forms
     if (!empty($args['name']) && empty($args['id']) && strpos($args['name'],'[')) {
          $args['id'] = strtr($args['name'], array('[' => '_', ']' => ''));
     }
 */
-    // we just invoke the showInput() method of the Dynamic Property here
-    if (!empty($args['property'])) {
-        if (count($args) > 1) {
+    if (count($args) > 1) {
+        if (!isset($args['field'])) {
             $parts = array();
             foreach ($args as $key => $val) {
-                if ($key == 'property' || $key == 'hidden' || $key == 'preset') continue;
+                if ($key == 'hidden' || $key == 'preset') continue;
                 if (is_numeric($val) || substr($val,0,1) == '$') {
                     $parts[] = "'$key' => ".$val;
                 } else {
                     $parts[] = "'$key' => '".$val."'";
                 }
             }
-            if (!empty($args['preset']) && empty($args['value'])) {
-                return 'echo '.$args['property'].'->_showPreset(array('.join(', ',$parts).')); ';
-            } elseif (!empty($args['hidden'])) {
-                return 'echo '.$args['property'].'->showHidden(array('.join(', ',$parts).')); ';
-            } else {
-                return 'echo '.$args['property'].'->showInput(array('.join(', ',$parts).')); ';
-            }
+            $pargs = 'array('.join(', ',$parts).')';
         } else {
-            return 'echo '.$args['property'].'->showInput(); ';
+            $pargs = $args['field'];
+            unset ($args['field']);
         }
-    }
-    // we'll call a function to do it for us
-    $out = "echo xarModAPIFunc('dynamicdata',
-                   'admin',
-                   'showinput',\n";
-    if (isset($args['field'])) {
-        $out .= '                   '.$args['field']."\n";
-        $out .= '                  );';
+        if (!isset($property)) {
+            $out .= "sys::import('modules.dynamicdata.class.properties');";
+            $out .=  '$property = & Dynamic_Property_Master::getProperty('.$pargs.'); ';
+            $property = '$property';
+        }
+        if (!empty($args['preset']) && empty($args['value'])) {
+            $out .= 'echo '.$property.'->_showPreset(); ';
+        } elseif (!empty($args['hidden'])) {
+            $out .= 'echo '.$property.'->showHidden('.$pargs.'); ';
+        } else {
+            $out .= 'echo '.$property.'->showInput('.$pargs.'); ';
+        }
     } else {
-        $out .= "                   array(\n";
-        foreach ($args as $key => $val) {
-            if (is_numeric($val) || substr($val,0,1) == '$') {
-                $out .= "                         '$key' => $val,\n";
-            } else {
-                $out .= "                         '$key' => '$val',\n";
-            }
-        }
-        $out .= "                         ));";
+        $out = 'echo '.$property.'->showInput(); ';
     }
     return $out;
 }
