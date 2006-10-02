@@ -54,6 +54,7 @@ function modules_admin_install()
         // get any dependency info on this module for a better message if something is missing
         try {
             $thisinfo = xarModGetInfo($id);
+            $data['displayname'] = $thisinfo['displayname'];
             $data['dependencyinfo'] = $thisinfo['dependencyinfo'];
         } catch (NotFoundExceptions $e) {
             $data['dependencyinfo'] = array();
