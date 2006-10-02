@@ -66,13 +66,22 @@ revisit later on before trusting the branch to be released or used.
   no functional behaviour is attached to it yet. In a way the
   xar:template tag and the xar:blocklayout tag are moving closer to
   eachother.
-* DROPPED API: xarMod_getVarsByName, xarTheme_getVarsByName (were
-  protected and never used)
-* DROPPED API: $throwException parameter in xarModAPIFunc
+
+
+!!CHANGED API
+* $throwException parameter in xarModAPIFunc
 * the Variable getting/setting in core does NOT support direct prepping 
   anymore, as to eliminate dependencies on other subsystems. If the parameter 
   was used, it will be ignored now.
-* DROPPED API: xarPreCoreGetVarDirPath (now sys::varpath()) 
+
+!!DROPPED API
+
+* xarMod_getVarsByName, xarTheme_getVarsByName : protected and never used
+* xarPreCoreGetVarDirPath (now sys::varpath())
+* xarModAPIFunc('dynamicdata','admin','checkinput') : never 
+* xarModAPIFunc('dynamicdata','user','interface') : never used
+* xarModAPIFunc('dynamicdata','user','getsources') : never used
+
 
 !!DIFFERENCES BETWEEN PHP 5.0 and 5.1
 * do not agree on what function_exists() / is_callable() /
