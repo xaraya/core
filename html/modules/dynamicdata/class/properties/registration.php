@@ -1,5 +1,16 @@
 <?php
 /**
+ * @package modules
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata
+ * @link http://xaraya.com/index.php/release/182.html
+ * @author mrb <marcel@xaraya.com>
+ */
+xarMod::loadDbInfo('dynamicdata','dynamicdata');
+/**
  * Class to model registration information for a property
  *
  * This corresponds directly to the db info we register for a property.
