@@ -1,0 +1,131 @@
+#!/usr/bin/env php
+<?php
+/* 
+    Run this inside a directory and it will produce simple
+    xml representing the known class hierchy in all php files in and 
+    below that directory
+*/
+
+/* 
+    Derive a recursive filter iterator, where the accept() returns true 
+    on files ending in .php, assuming those are php files.
+*/
+class PhpFiles extends RecursiveFilterIterator
+{
+    // Poor mans determination for php file
+    public function accept()
+    {
+        $file =& $this->current();
+        if ($file->isFile())
+            return (substr($file->GetFileName(),-3) == 'php');
+        return true;
+    }
+}
+
+/* Make an instance of this iterator for the current directory */
+$phps = new PhpFiles(new RecursiveDirectoryIterator('.')); 
+
+$cp = array();
+// Go over each php file, tokenize it and create a simple datastructure of the
+// classes it contains
+fwrite(STDERR, "Reading files...\n");
+foreach(new RecursiveIteratorIterator($phps) as $file => $info) 
+{
+    $el = 0;
+    foreach(token_get_all(file_get_contents($file)) as $c) {
+        if(is_array($c)) {
+            // |-0-----1-----2-------3------0-|
+            // T_CLASS T_STRING T_EXTENDS T_STRING T_IMPLEMENTS T_STRING
+            //     class Child extends Parent implements Interface
+            switch ($c[0]) {
+                case T_CLASS: // 'class'
+                    if($el) $cp[$child] = '';
+                    $el=1;
+                    break;
+                case T_EXTENDS:
+                    if($el == 1) $el=3;   // only when seen classes, not interfaces.
+                    break;
+                case T_STRING:
+                    if($el == 1)          // We have seen the class, but not extends, so must be the child
+                        $child = $c[1];
+                    if($el == 3) {        // We have seen extends, so must be the parent
+                        $cp[$child] = $c[1];
+                        $el = 0;
+                    }
+                    break;
+                default:
+                    //print(token_name($c[0]) . ": '" . htmlentities($c[1]) . "'\n");
+            }
+        }
+    }
+}
+//var_export($cp);exit;
+
+// We are going to cheat a little, and use the DOM to give us a tree 
+// functionality, so we dont have to write such a thing ourselves.
+// First, create such a tree
+$tree = new DOMDocument();
+// We are going to add a virtual root node, so we're sure we have one
+$root = $tree->createElement('root');
+$tree->appendChild($root);
+
+// Now we traverse our child->parent array, see if parent is in the tree, if
+// so, we append the child to it, if not, we add it as a child to the root node
+// we use the classname as an ID attribute, since we know that will/should be
+// unique in the hierarchy
+fwrite(STDERR,"Generating class hierarchy...\n");
+foreach($cp as $child => $parent)
+{
+    if($child=="" or $parent =="") {
+        fwrite(STDERR,"Found a weird combo '$child' => '$parent' (child => parent)... skipping\n");
+        continue;
+    }
+    // See if these tags are already in the document
+    $parentNode = $tree->getElementById($parent);
+    $childNode  = $tree->getElementById($child);
+    // Situations:
+    // 1. Neither are there:
+    //  - add parent below root and fall through 
+    if(!$parentNode and !$childNode) {
+        $parentNode = $tree->createElement('class');
+        $parentNode->setAttribute('xml:id',$parent);
+        $root->appendChild($parentNode);
+    }
+    
+    // 2. Parent there, child is not
+    //  - add child below parent
+    if($parentNode and !$childNode) {
+        $childNode = $tree->createElement('class');
+        $childNode->setAttribute('xml:id',$child);
+        $parentNode->appendChild($childNode);
+        continue; // we're done
+    }
+    
+    // 3. Child is there, parent is not.
+    //  - check if child is below root, if not -> FAIL
+    //  - get a copy of child
+    //  - add parent below root
+    //  - add child below parent
+    if($childNode and !$parentNode)
+    {
+        $parentNode = $tree->createElement('class');
+        $parentNode->setAttribute('xml:id',$parent);
+        $root->appendChild($parentNode);
+        $root->removeChild($childNode);
+        $parentNode->appendChild($childNode);
+        continue; // we're done
+    }
+    
+    // 4. Both are there, this means we added a relation earlier, now what.
+    // - move childnode below parentnode
+    if($parentNode and $childNode)
+    {
+        $root->removeChild($childNode);        
+        $parentNode->appendChild($childNode);
+        //fwrite(STDERR,"both $parent (parent) and $child (child) are already in the tree???\n");
+    }
+}
+
+// Et Voilá, c'est l'arbre de classes
+fwrite(STDOUT,$tree->saveXML());
+?>
