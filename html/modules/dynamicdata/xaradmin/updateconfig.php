@@ -49,7 +49,7 @@ function dynamicdata_admin_updateconfig($args)
         return true;
     }
 
-    $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
+    $proptypes = Dynamic_Property_Master::getPropertyTypes();
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();

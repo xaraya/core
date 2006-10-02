@@ -191,7 +191,7 @@ function dynamicdata_util_migrate($args)
                     $props = xarModAPIFunc('dynamicdata','user','getprop',
                                            array('modid'    => $data['from']['module'],
                                                  'itemtype' => $data['from']['itemtype']));
-                    $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
+                    $proptypes = Dynamic_Property_Master::getPropertyTypes();
                     foreach ($props as $name => $info) {
                         if (empty($info['label'])) continue;
                         if (!empty($proptypes[$info['type']])) {
@@ -278,7 +278,7 @@ function dynamicdata_util_migrate($args)
                     $props = xarModAPIFunc('dynamicdata','user','getprop',
                                            array('modid'    => $data['to']['module'],
                                                  'itemtype' => $data['to']['itemtype']));
-                    $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
+                    $proptypes = Dynamic_Property_Master::getPropertyTypes();
                     foreach ($props as $name => $info) {
                         if (empty($info['label'])) continue;
                         if (!empty($proptypes[$info['type']])) {

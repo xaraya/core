@@ -25,7 +25,7 @@ function dynamicdata_userapi_getitemfields($args)
     $itemfields = array();
     if (empty($itemtype)) return $itemfields;
 
-    $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
+    $proptypes = Dynamic_Property_Master::getPropertyTypes();
     if (empty($modid)) $modid = xarModGetIDFromName('dynamicdata');
 
     $tree = xarModAPIFunc('dynamicdata','user', 'getancestors', array('moduleid' => $modid, 'itemtype' => $itemtype, 'base' => false));

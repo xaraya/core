@@ -32,7 +32,7 @@ function dynamicdata_admin_modifyconfig()
     if (!xarModAPILoad('dynamicdata', 'user')) return;
 
     // Get the defined property types from somewhere...
-    $data['fields'] = xarModAPIFunc('dynamicdata','user','getproptypes');
+    $data['fields'] = Dynamic_Property_Master::getPropertyTypes();
     if (!isset($data['fields']) || $data['fields'] == false) {
         $data['fields'] = array();
     }

@@ -49,7 +49,7 @@ function dynamicdata_util_export($args)
         return $data;
     }
 
-    $proptypes = xarModAPIFunc('dynamicdata','user','getproptypes');
+    $proptypes = Dynamic_Property_Master::getPropertyTypes();
 
     $prefix = xarDBGetSystemTablePrefix();
     $prefix .= '_';
