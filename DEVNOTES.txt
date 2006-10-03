@@ -30,7 +30,6 @@ revisit later on before trusting the branch to be released or used.
 * tables privmembers, rolemembers and security_acl have their unique key on
   2 columns replaced by a primary key.
 
-
 (see DEVupgrades.sql for the above)
 
 !!!OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
@@ -51,7 +50,7 @@ revisit later on before trusting the branch to be released or used.
   between <!-- and --> get ignored by the BL parser. If you're previous xar:comment
   content was sensitive you might wanna reverse it in your templates
   too.
-* where applicable all pn compatibility has been removed.
+* where applicable all postnuke compatibility has been removed.
 * The distinction between system and site table mapping have been
   removed from core. A fullblown alternative has not yet been
   provided, but we know that just doing system/site mapping is not
@@ -70,7 +69,7 @@ revisit later on before trusting the branch to be released or used.
 
 !!CHANGED API
 * $throwException parameter in xarModAPIFunc
-* the Variable getting/setting in core does NOT support direct prepping 
+* DROPPED API: the Variable getting/setting in core does NOT support direct prepping 
   anymore, as to eliminate dependencies on other subsystems. If the parameter 
   was used, it will be ignored now.
 
@@ -83,7 +82,7 @@ revisit later on before trusting the branch to be released or used.
 * xarModAPIFunc('dynamicdata','user','getsources') : never used
 
 
-!!DIFFERENCES BETWEEN PHP 5.0 and 5.1
+!!DIFFERENCES BETWEEN PHP 5.0/5.1/5.2
 * do not agree on what function_exists() / is_callable() /
   method_exists() should return
 * In PHP 5.0.4 (and earlier versions I believe) the shutdown function is 
@@ -93,18 +92,20 @@ revisit later on before trusting the branch to be released or used.
 * apparently PHP 5.1 allows headers to be sent in a shutdown function  
   (arguably wrong)
 
-
 !!!REFACTORING LIST:
 List of things which need to be refactored before starting the actual
 design work can begin.
 
+* At some point we need to get our act together wrt xar:set, setting variables,
+  notably arrays is flaky at best. The munging with PHP code (like the '1;' trick) 
+  needs to stop or be reliable
 * [DONE] i really like some sort of import(name.of.some.sub.part) dot notation to
   include major parts into the flow when doing stuff, instead of
   xarInclude or something
 * Finish up the planned db changes to normalizing the database.
   Open issues:
         - does blocks really need 5 tables?
-        - dynamic relations table is floating in there for a long time
+        - [DONE] dynamic relations table is floating in there for a long time (removed)
         - xar_realm in xar_security masks uses 'All' which prevents it from being
           a foreign key to the realm table (through id), likewise for xar_privileges 
           table
@@ -112,7 +113,10 @@ design work can begin.
           then refer to them from other tables, we now store the level verbatim 
           (perhaps drop the table?)
         - similarly, in xar_privileges table the xar_module column. 
-        - is xar_auth_mod_id still needed? 
+        - is xar_auth_mod_id still needed? A: yes, but it's confusing:
+            1. it doesnt need to be there really, but might be a moditemvar (it applies to the few)
+            2. it is referred to as default authmodule in the code sometimes, which it is not, it
+            is the auth module which successfully logged this user on latest.
         - the xar_ prefix on columns is redundant
 * [STARTED] OO-ify stuff in core where appropriate (including getting rid of
   die()'s and modelling the classes where php4 could not) 
@@ -134,7 +138,8 @@ design work can begin.
     result to the php code
 * the need for a Request mapper is evident. Apart from the gained
   dimension for navigation design this also centralizes the short url
-  functionality instead of distributing it all over. 
+  functionality instead of distributing it all over. The Zend framework Controller
+  class (and its friends) comes very close to what we need.
 * the blocklayout tag could use attributes related to emitting a <?xml
   header or not (or use <?xar for this? since it is an instruction to
   process )
@@ -151,8 +156,10 @@ design work can begin.
   'item' level? Also the use of a workflow component in core comes to mind.
 * simplify installer/xaradmin.php before rewriting it
 * we need easy and global xmlhttp request support everywhere.
-* [DONE] Xaraya is an excellent backend, we need a equally excellent front-end 
-  companion (like dojo) (implemented as dojo activator module)
+* Xaraya is an excellent backend, we need a equally excellent front-end 
+  companion (like dojo) integrated into core, NOT as a module. But lightweight
+  and seemlessly integrated with BL, as an extension tag lib for example. 
+  (plextk has something like that)
 * i'd really like more native backend support, for query preparation
   that place is obviously creole, but for shielding and triggering we
   dont have an abstraction and the more complex modules go through a
@@ -294,7 +301,7 @@ outside of it.
             ...
     /etc                                  [contains static information regarding to configuration of components]
         default.conf
-        site1.conf?                       [per site/app config?]
+        site1.conf?                       [per site/app config? i'd rather not but for totally unrelated sites it migh be comfy (i.e. creating a new default site)]
         app2.conf?                        
         /modules                          [top level for module specific configuration files]
             /workflow
@@ -303,7 +310,7 @@ outside of it.
             
 Issues/Questions/Todo:
     - how do we deal with themes and modules? themes typically want to have 
-    access to file based stuff like styles and images, modules too, but they 
+    access to webroot accessible stuff like styles and images, modules too, but they 
     shouldn't :-) i have a tendency to place modules outside the webroot, 
     but that may be really uncomfortable.
     - how do we define module data which is file based? (in terms of what is 
@@ -318,6 +325,9 @@ Issues/Questions/Todo:
     (pro/con?)
     - if there is such a thing needed as cgi-bin, where does it go in this 
     picture? if at all
+    - this assume a one tree deployment, what if we want to repeat this for some
+    reason. Should we take an 'order' into account, i.e. first look in the site 
+    tree, then look in the global tree? (cfr. trac organisation)
     - we probably want an easy-access taglib location, so it's easy to create 
     custom tag definitions (where would that go?)
     - how often can the include_path on servers *not* be changed?
@@ -331,5 +341,26 @@ Issues/Questions/Todo:
     - what is a good way to assess the magnitude of work on this? That it is a lot we know, but a metric would be nice.
     - somehow modules seem painful in this layout, 'too big' comes to mind, 'too loose' too. 
     Meant in the way that modules do so much in our system, it's hard to give them a proper place.
+    - where would we put framework wide shared stuff (the equiv of /usr/share/some_app/ in unices) things like a 
+    standardized iconset (which themes can override obviously) Stuff like that.
 
 
+Naming conventions and stuff:
+-----------------------------
+    - ClassNames are UpperCamelCase
+    (TODO: if we dont use a prefix like 'xar', how do we prevent name clashes? )
+    - InterfaceNames are UpperCamelCase 
+    (TODO: prefix? Only *able names? like Countable, Serializable etc. How to distinguish from classes?)
+    (TODO: interface inheritance is unclear to me)
+    - methodNames are lowerCamelCase
+    - prevent underscores
+    - scope identifiers *always* even if public (clarity, reflection and phpdoc)
+    - phpdoc @access only needed for things which dont have access specifiers in php:
+        - functions
+        - classes 
+    (TODO: document their meaning, since it is different from the access specifiers in php)
+    - filenames are lowercase.php
+    - use typehinting as much as possible, prefer interfaces over classes when possible for this
+    - order of vars and methods in declaration and implementation: public,protected, private
+    - group interface satisfaction methods together
+    
