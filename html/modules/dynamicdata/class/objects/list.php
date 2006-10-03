@@ -660,7 +660,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                     $args['urlmodule'],'user',$args['linkfunc'],
                     array(
                         'itemtype'     => $itemtype,
-                        'table'        => $table,
+                        'table'        => $args['table'],
                         $args['param'] => $itemid,
                         'template'     => $args['template']
                     )
