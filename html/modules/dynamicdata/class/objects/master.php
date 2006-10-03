@@ -656,6 +656,7 @@ class Dynamic_Object_Master extends Object
     **/
     static function &getObjectList(array $args)
     {
+        sys::import('modules.dynamicdata.class.objects.list');
         $classname = 'Dynamic_Object_List';
         if(!empty($args['classname']))
         {
@@ -1042,7 +1043,7 @@ class Dynamic_Object_Master extends Object
         return $ancestors;
 
     }
-    
+
     /**
      * Get the base ancestor for the object
      *
@@ -1058,7 +1059,7 @@ class Dynamic_Object_Master extends Object
 
     /**
      * Get a module's itemtypes
-     * 
+     *
      * @param int     args[moduleid]
      * @param string args[module]
      * @param bool   args[native]
@@ -1109,7 +1110,7 @@ class Dynamic_Object_Master extends Object
                                             'url' => xarModURL('dynamicdata','user','view',array('itemtype' => $row['itemtype'])));
         }
 
-        return $types;  
+        return $types;
     }
 }
 ?>
