@@ -94,8 +94,8 @@ function roles_admin_showprivileges()
     // for each one winnow the assigned privileges and then the inherited
     foreach ($curprivs as $priv) {
         $directassigned[] = $priv->getID();
-        $curprivileges = $privileges->winnow(array($priv), $curprivileges);
-        $curprivileges = $privileges->winnow($priv->getDescendants(), $curprivileges);
+        $curprivileges = array_merge(array($priv), $curprivileges);
+        $curprivileges = array_merge($priv->getDescendants(), $curprivileges);
     }
     // extract the info for display by the template
     $currentprivileges = array();
