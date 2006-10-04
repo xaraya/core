@@ -648,6 +648,7 @@ class xarPrivileges extends xarMasks
                            'description'=>$description,
                            'parentid'=>0);
 
+            sys::import('modules.privileges.class.privilege');
             $priv = new xarPrivilege($pargs);
             xarVarSetCached($cacheKey,$pid,$priv);
             return $priv;
