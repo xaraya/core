@@ -24,6 +24,7 @@
 */
 class xarMasks extends Object
 {
+    public    static $levels;
     protected static $dbconn;
     protected static $privilegestable;
     protected static $privmemberstable;
@@ -32,7 +33,6 @@ class xarMasks extends Object
     protected static $realmstable;
     protected static $acltable;
     protected static $allmasks;
-    protected static $levels;
     protected static $instancestable;
     protected static $levelstable;
     protected static $privsetstable;
