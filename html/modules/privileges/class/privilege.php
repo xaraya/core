@@ -126,6 +126,7 @@ class xarPrivilege extends xarMask
 
 // make this privilege a child of its parent
         If($this->parentid !=0) {
+            sys::import('modules.privileges.class.privileges');
             $perms = new xarPrivileges();
             $parentperm = $perms->getprivilege($this->parentid);
             $parentperm->addMember($this);
