@@ -489,6 +489,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             $linkfunc = $args['linkfunc'];
         }
         $args['linktype'] = $linktype;
+        $args['linkfunc'] = $linkfunc;
         // pass some extra template variables for use in BL tags, API calls etc.
         $args['moduleid'] = $this->moduleid;
 
@@ -711,7 +712,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                'ojoin'  => ''
             );
         }
-       
+
         $urlargs = array();
         $urlargs['itemtype'] =$itemtype;
         $urlargs['table'] = $table;
