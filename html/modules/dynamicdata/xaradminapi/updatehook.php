@@ -91,7 +91,7 @@ function dynamicdata_adminapi_updatehook($args)
         //return $extrainfo;
     }
 
-    $myobject = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
+    $myobject = & DataObjectMaster::getObject(array('moduleid' => $modid,
                                          'itemtype' => $itemtype,
                                          'itemid'   => $itemid,
                                          'extend' => false));

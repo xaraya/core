@@ -22,7 +22,7 @@
 function &dynamicdata_userapi_getobject($args)
 {
     if (empty($args['itemtype']) && !empty($args['name'])) {
-        $info = Dynamic_Object_Master::getObjectInfo($args);
+        $info = DataObjectMaster::getObjectInfo($args);
         $args['moduleid'] = $info['moduleid'];
         $args['itemtype'] = $info['itemtype'];
     }
@@ -32,7 +32,7 @@ function &dynamicdata_userapi_getobject($args)
     if (empty($args['moduleid']) && !empty($args['modid'])) {
        $args['moduleid'] = $args['modid'];
     }
-    $result = Dynamic_Object_Master::getObject($args);
+    $result = DataObjectMaster::getObject($args);
     return $result;
 }
 

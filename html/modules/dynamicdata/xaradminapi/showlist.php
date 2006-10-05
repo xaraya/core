@@ -145,7 +145,7 @@ function dynamicdata_adminapi_showlist($args)
         $param = '';
     }
 
-    $object = & Dynamic_Object_Master::getObjectList(array('moduleid'  => $modid,
+    $object = & DataObjectMaster::getObjectList(array('moduleid'  => $modid,
                                            'itemtype'  => $itemtype,
                                            'itemids' => $itemids,
                                            'sort' => $sort,

@@ -41,7 +41,7 @@ function mail_admin_createqdef($args)
         if($newItemtype==0) $newItemtype++; // prevent the 0 value
 
         $params = array('objectid' => $qdefObjectId, 'itemtype' => $newItemtype);
-        $itemid = Dynamic_Object_Master::updateObject($params);
+        $itemid = DataObjectMaster::updateObject($params);
 
         // Itemtype changed, resync the props
         $params['moduleid'] = 771; // mail module

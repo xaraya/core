@@ -98,7 +98,7 @@ function dynamicdata_adminapi_showform($args)
         if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
     }
 
-    $object = & Dynamic_Object_Master::getObject(array('moduleid'  => $modid,
+    $object = & DataObjectMaster::getObject(array('moduleid'  => $modid,
                                        'itemtype'  => $itemtype,
                                        'itemid'    => $itemid,
                                        'join'      => $join,

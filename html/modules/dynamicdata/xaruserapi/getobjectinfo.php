@@ -10,15 +10,15 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * Wrapper for Dynamic_Object_Master::getObjectInfo
+ * Wrapper for DataObjectMaster::getObjectInfo
  * 
- * @see  Dynamic_Object_Master::getObjectInfo
+ * @see  DataObjectMaster::getObjectInfo
  */
 function dynamicdata_userapi_getobjectinfo($args)
 {
     if (empty($args['moduleid']) && !empty($args['modid'])) {
        $args['moduleid'] = $args['modid'];
     }
-    return Dynamic_Object_Master::getObjectInfo($args);
+    return DataObjectMaster::getObjectInfo($args);
 }
 ?>

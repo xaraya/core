@@ -58,7 +58,7 @@ function dynamicdata_user_displayhook($args)
         $itemid = $objectid;
     }
 
-    $object = & Dynamic_Object_Master::getObject(array('moduleid' => $modid,
+    $object = & DataObjectMaster::getObject(array('moduleid' => $modid,
                                        'itemtype' => $itemtype,
                                        'itemid'   => $itemid,
                                        'extend' => false));

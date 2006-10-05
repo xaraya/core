@@ -56,7 +56,7 @@ function dynamicdata_admin_modify($args)
     }
     $itemtype = $ancestor['itemtype'];
 
-    $myobject = & Dynamic_Object_Master::getObject(array('objectid' => $objectid,
+    $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'moduleid' => $modid,
                                          'itemtype' => $itemtype,
                                          'join'     => $join,

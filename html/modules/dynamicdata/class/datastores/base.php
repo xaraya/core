@@ -12,8 +12,8 @@ class BasicDataStore extends DDObject implements IBasicDataStore
 {
     protected $schemaobject;    // The object representing this datastore as codified by its schema
 
-    public $fields = array();   // array of $name => reference to property in Dynamic_Object*
-    public $_itemids;  // reference to itemids in Dynamic_Object_List TODO: investigate public scope
+    public $fields = array();   // array of $name => reference to property in DataObject*
+    public $_itemids;  // reference to itemids in DataObjectList TODO: investigate public scope
 
     public $cache = 0;
 

@@ -29,7 +29,7 @@ function dynamicdata_admin_showpropval($args)
     if (!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
 
     // get the object corresponding to this dynamic property
-    $myobject = & Dynamic_Object_Master::getObject(array('objectid' => 2,
+    $myobject = & DataObjectMaster::getObject(array('objectid' => 2,
                                                          'itemid'   => $itemid));
     if (empty($myobject)) return;
 

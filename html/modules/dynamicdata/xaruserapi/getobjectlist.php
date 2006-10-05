@@ -27,7 +27,7 @@ function &dynamicdata_userapi_getobjectlist($args)
     if (empty($args['moduleid']) && !empty($args['modid'])) {
        $args['moduleid'] = $args['modid'];
     }
-    $result = Dynamic_Object_Master::getObjectList($args);
+    $result = DataObjectMaster::getObjectList($args);
     return $result;
 }
 

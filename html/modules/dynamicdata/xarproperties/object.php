@@ -57,7 +57,7 @@ class ObjectProperty extends SelectProperty
             }
         }
 //        if (count($this->options) == 0) {
-            $objects =& Dynamic_Object_Master::getObjects();
+            $objects =& DataObjectMaster::getObjects();
             if (!isset($objects)) {
                 $objects = array();
             }

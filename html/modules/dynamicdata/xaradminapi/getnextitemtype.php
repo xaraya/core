@@ -23,7 +23,7 @@ function dynamicdata_adminapi_getnextitemtype($args = array())
 {
     extract($args);
     if (empty($modid)) throw new EmptyParameterException('modid');
-    $types = Dynamic_Object_Master::getModuleItemTypes(array('moduleid' => $modid));
+    $types = DataObjectMaster::getModuleItemTypes(array('moduleid' => $modid));
     $ids = array_keys($types);
     sort($ids);
     $lastid = array_pop($ids);

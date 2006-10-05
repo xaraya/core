@@ -11,7 +11,7 @@
 sys::import('modules.dynamicdata.class.datastores');
 sys::import('modules.dynamicdata.class.properties');
 
-class Dynamic_Object_Master extends Object
+class DataObjectMaster extends Object
 {
     public $objectid    = null;         // system id of the object in this installation
     public $name        = null;         // name of the object
@@ -624,7 +624,7 @@ class Dynamic_Object_Master extends Object
      * @param $args['objectid'] id of the object you're looking for, or
      * @param $args['moduleid'] module id of the object to retrieve +
      * @param $args['itemtype'] item type of the object to retrieve
-     * @param $args['classname'] optional classname (e.g. <module>_Dynamic_Object)
+     * @param $args['classname'] optional classname (e.g. <module>_DataObject)
      * @return object the requested object definition
      * @todo  automatic sub-classing per module (and itemtype) ?
     **/
@@ -633,7 +633,7 @@ class Dynamic_Object_Master extends Object
         if(!isset($args['itemid']))
             $args['itemid'] = null;
 
-        $classname = 'Dynamic_Object';
+        $classname = 'DataObject';
         if(!empty($args['classname']) && class_exists($args['classname']))
             $classname = $args['classname'];
 
@@ -649,7 +649,7 @@ class Dynamic_Object_Master extends Object
      * @param $args['objectid'] id of the object you're looking for, or
      * @param $args['moduleid'] module id of the object to retrieve +
      * @param $args['itemtype'] item type of the object to retrieve
-     * @param $args['classname'] optional classname (e.g. <module>_Dynamic_Object[_List])
+     * @param $args['classname'] optional classname (e.g. <module>_DataObject[_List])
      * @return object the requested object definition
      * @todo   automatic sub-classing per module (and itemtype) ?
      * @todo   get rid of the classname munging, use typing
@@ -657,13 +657,13 @@ class Dynamic_Object_Master extends Object
     static function &getObjectList(array $args)
     {
         sys::import('modules.dynamicdata.class.objects.list');
-        $classname = 'Dynamic_Object_List';
+        $classname = 'DataObjectList';
         if(!empty($args['classname']))
         {
-            if(class_exists($args['classname'] . '_List'))
+            if(class_exists($args['classname'] . 'List'))
             {
                 // this is a generic classname for the object, list and interface
-                $classname = $args['classname'] . '_List';
+                $classname = $args['classname'] . 'List';
             }
             elseif(class_exists($args['classname']))
             {
@@ -683,7 +683,7 @@ class Dynamic_Object_Master extends Object
      * @param $args['objectid'] id of the object you're looking for, or
      * @param $args['moduleid'] module id of the object to retrieve +
      * @param $args['itemtype'] item type of the object to retrieve
-     * @param $args['classname'] optional classname (e.g. <module>_Dynamic_Object[_Interface])
+     * @param $args['classname'] optional classname (e.g. <module>_DataObject[_Interface])
      * @return object the requested object definition
      * @todo  get rid of the classname munging
      * @todo  automatic sub-classing per module (and itemtype) ?
@@ -692,13 +692,13 @@ class Dynamic_Object_Master extends Object
     {
         sys::import('modules.dynamicdata.class.interface');
 
-        $classname = 'Dynamic_Object_Interface';
+        $classname = 'DataObjectInterface';
         if(!empty($args['classname']))
         {
-            if(class_exists($args['classname'] . '_Interface'))
+            if(class_exists($args['classname'] . 'Interface'))
             {
                 // this is a generic classname for the object, list and interface
-                $classname = $args['classname'] . '_Interface';
+                $classname = $args['classname'] . 'Interface';
             }
             elseif(class_exists($args['classname']))
             {
@@ -723,7 +723,7 @@ class Dynamic_Object_Master extends Object
      * @param $args['maxid'] for purely dynamic objects, the current max. itemid (for import only)
      * @param $args['config'] some configuration for the object (free to define and use)
      * @param $args['isalias'] flag to indicate whether the object name is used as alias for short URLs
-     * @param $args['classname'] optional classname (e.g. <module>_Dynamic_Object)
+     * @param $args['classname'] optional classname (e.g. <module>_DataObject)
      * @return integer object id of the created item
     **/
     static function createObject(array $args)
@@ -912,7 +912,7 @@ class Dynamic_Object_Master extends Object
                 if(count($pieces) < 2)
                 {
                     $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-                    $vars = array('query ' . $args['where'], 'Dynamic_Object_Master', 'joinTable', 'DynamicData');
+                    $vars = array('query ' . $args['where'], 'DataObjectMaster', 'joinTable', 'DynamicData');
                     throw new BadParameterException($vars,$msg);
                 }
                 // for many-to-1 relationships where you specify the foreign key in the original table here
@@ -999,7 +999,8 @@ class Dynamic_Object_Master extends Object
         if (!$q->run()) return;
 
         // Put in itemtype as key for easier manipulation
-        foreach($q->output() as $row) $objects [$row['itemtype']] = array('objectid' => $row['objectid'],'objectname' => $row['objectname'], 'moduleid' => $row['moduleid'], 'itemtype' => $row['itemtype'], 'parent' => $row['parent']);
+        foreach($q->output() as $row) $objects 
+[$row['itemtype']] = array('objectid' => $row['objectid'],'objectname' => $row['objectname'], 'moduleid' => $row['moduleid'], 'itemtype' => $row['itemtype'], 'parent' => $row['parent']);
 
         // Cycle through each ancestor
         $parentitemtype = $topobject['parent'];

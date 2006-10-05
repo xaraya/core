@@ -11,7 +11,7 @@
 sys::import('modules.dynamicdata.class.properties');
 
 sys::import('modules.dynamicdata.class.objects.master');
-class Dynamic_Object_List extends Dynamic_Object_Master
+class DataObjectList extends DataObjectMaster
 {
     public $itemids  = array();           // the list of item ids used in data stores
     public $where;
@@ -30,7 +30,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
     public $linkfunc = 'display';
 
     /**
-     * Inherits from Dynamic_Object_Master and sets the requested item ids, sort, where, ...
+     * Inherits from DataObjectMaster and sets the requested item ids, sort, where, ...
      *
      * @param $args['itemids'] array of item ids to return
      * @param $args['sort'] sort field(s)
@@ -252,7 +252,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             if(count($pieces) < 2)
             {
                 $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-                $vars = array('query ' . $where, 'Dynamic_Object_List', 'getWhere', 'DynamicData');
+                $vars = array('query ' . $where, 'DataObjectList', 'getWhere', 'DynamicData');
                 throw new BadParameterException($vars,$msg);
             }
 
@@ -510,13 +510,13 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             }
             else
             {
-                $info = Dynamic_Object_Master::getObjectInfo(
+                $info = DataObjectMaster::getObjectInfo(
                     array(
                         'moduleid' => $args['moduleid'],
                         'itemtype' => $args['itemtype']
                     )
                 );
-                $base = Dynamic_Object_Master::getBaseAncestor(
+                $base = DataObjectMaster::getBaseAncestor(
                     array('objectid' => $info['objectid'])
                 );
                 $args['urlmodule'] = $modname;
