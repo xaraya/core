@@ -347,20 +347,32 @@ Issues/Questions/Todo:
 
 Naming conventions and stuff:
 -----------------------------
-    - ClassNames are UpperCamelCase
-    (TODO: if we dont use a prefix like 'xar', how do we prevent name clashes? )
-    - InterfaceNames are UpperCamelCase 
-    (TODO: prefix? Only *able names? like Countable, Serializable etc. How to distinguish from classes?)
-    (TODO: interface inheritance is unclear to me)
+Hammered: (as in, at least 2 people agreed to this)
+    - order of vars and methods in declaration and implementation: public, protected, private
+    - class constants go first in the class
+    - constructors are always the first method, regardless of scope.
+    - ClassNames are UpperCamelCase ¹
+    - InterfaceNames are UpperCamelCase ² 
     - methodNames are lowerCamelCase
-    - prevent underscores
-    - scope identifiers *always* even if public (clarity, reflection and phpdoc)
+    - prevent underscores as much as possible (goes for all)
+    - use typehinting as much as possible, prefer interfaces over classes when possible for this
+    - filenames are lowercase.php
+    - use scope identifiers *always* even if public (for clarity, reflection and phpdoc)
     - phpdoc @access only needed for things which dont have access specifiers in php:
         - functions
         - classes 
-    (TODO: document their meaning, since it is different from the access specifiers in php)
-    - filenames are lowercase.php
-    - use typehinting as much as possible, prefer interfaces over classes when possible for this
-    - order of vars and methods in declaration and implementation: public,protected, private
-    - group interface satisfaction methods together
+ 
+Remarks:
+    ¹ we wil NOT use a xar specific prefix for our classes, but instead gamble on namespace
+    support to be added in the future. So, everyone, sign the petition here: http://www.PetitionOnline.com/phpns/
+    to increase chances :-). Until then we'll cope with the occassional name conflict and dealt with them as they come.
+    If namespace support is NOT going to happen (which is getting more unlikely) we can implement the prefix
+    once that is certain or do a runkit (see pecl site) layer which allows to spawn environments in their own 
+    threads, which would be awesome to have in general, but is less suited for us mere mortals.
+    ² for interfaces it's even more important to think thrice about their names. 
+    Serializable, Countable are *good* examples, InterfaceForMyClass is *bad*. But what is _enough_ we dont know yet.
+    
+List of things to hammer (or not):
+    - interface inheritance is unclear to me, so its hard to come up with some rules for that
+    - [WONT] group interface satisfaction methods together
     

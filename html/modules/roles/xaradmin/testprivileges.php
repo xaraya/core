@@ -52,6 +52,7 @@ function roles_admin_testprivileges()
 
     // Call the Privileges class and
     // get a list of all modules for dropdown display
+    sys::import('modules.privileges.class.privileges');
     $privileges = new xarPrivileges();
     $allmodules = $privileges->getmodules();
     // Call the Masks class
@@ -75,7 +76,7 @@ function roles_admin_testprivileges()
             $data['rmodule'] = $testresult->getModule();
             $data['rcomponent'] = $testresult->getComponent();
             $data['rinstance'] = $testresult->getInstance();
-            $data['rlevel'] = $masks->levels[$testresult->getLevel()];
+            $data['rlevel'] = xarMasks::$levels[$testresult->getLevel()];
         }
         // rest of the data for template display
         $data['testresult'] = $testresult;
@@ -88,7 +89,7 @@ function roles_admin_testprivileges()
                 'smodule' => $testmask->getModule(),
                 'scomponent' => $testmask->getComponent(),
                 'sinstance' => $testmask->getInstance(),
-                'slevel' => $masks->levels[$testmask->getLevel()]
+                'slevel' => xarMasks::$levels[$testmask->getLevel()]
                 );
             $testmaskarray[] = $thismask;
         }

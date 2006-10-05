@@ -34,9 +34,7 @@ function roles_admin_showprivileges()
     }
     $data['parents'] = $parents;
 
-    // Call the Privileges class
     sys::import('modules.privileges.class.privileges');
-    $privileges = new xarPrivileges();
 
 // -------------------------------------------------------------------
     // Get the inherited privileges
@@ -76,7 +74,7 @@ function roles_admin_showprivileges()
                         'module' => $priv->getModule(),
                         'component' => $priv->getComponent(),
                         'instance' => $priv->getInstance(),
-                        'level' => $privileges->levels[$priv->getLevel()],
+                        'level' => xarPrivileges::$levels[$priv->getLevel()],
                         'groupid' => $groupid,
                         'groupname' => $groupname,
                         'relation' => $ancestor->getLevel(),
@@ -96,8 +94,8 @@ function roles_admin_showprivileges()
     // for each one winnow the assigned privileges and then the inherited
     foreach ($curprivs as $priv) {
         $directassigned[] = $priv->getID();
-        $curprivileges = $privileges->winnow(array($priv), $curprivileges);
-        $curprivileges = $privileges->winnow($priv->getDescendants(), $curprivileges);
+        $curprivileges = array_merge(array($priv), $curprivileges);
+        $curprivileges = array_merge($priv->getDescendants(), $curprivileges);
     }
     // extract the info for display by the template
     $currentprivileges = array();
@@ -122,7 +120,7 @@ function roles_admin_showprivileges()
                 'module' => $priv->getModule(),
                 'component' => $priv->getComponent(),
                 'instance' => $priv->getInstance(),
-                'level' => $privileges->levels[$priv->getLevel()],
+                'level' => xarPrivileges::$levels[$priv->getLevel()],
                 'frozen' => $frozen,
                 'relation' => 0,
                 'status' => 3,

@@ -30,8 +30,8 @@ function roles_admin_addprivilege()
     $role = $roles->getRole($roleid);
 
     // Call the Privileges class and get the privilege
-    $privs = new xarPrivileges();
-    $priv = $privs->getPrivilege($privid);
+    sys::import('modules.privileges.class.privileges');
+    $priv = xarPrivileges::getPrivilege($privid);
 
     //Security Check
     if (!xarSecurityCheck('AssignPrivilege',0,'Privileges',$priv->getName())) return;

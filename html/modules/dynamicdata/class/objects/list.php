@@ -6,7 +6,7 @@
  *
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
- * 
+ *
 **/
 sys::import('modules.dynamicdata.class.properties');
 
@@ -53,46 +53,46 @@ class Dynamic_Object_List extends Dynamic_Object_Master
     function setArguments($args)
     {
         // set the number of items to retrieve
-        if(!empty($args['numitems'])) 
+        if(!empty($args['numitems']))
             $this->numitems = $args['numitems'];
 
         // set the start number to retrieve
-        if(!empty($args['startnum'])) 
+        if(!empty($args['startnum']))
             $this->startnum = $args['startnum'];
 
         // set the list of requested item ids
-        if(!empty($args['itemids'])) 
+        if(!empty($args['itemids']))
         {
-            if(is_numeric($args['itemids'])) 
+            if(is_numeric($args['itemids']))
                 $this->itemids = array($args['itemids']);
-            elseif(is_string($args['itemids'])) 
+            elseif(is_string($args['itemids']))
                 $this->itemids = explode(',',$args['itemids']);
-            elseif(is_array($args['itemids'])) 
+            elseif(is_array($args['itemids']))
                 $this->itemids = $args['itemids'];
         }
-        if (!isset($this->itemids)) 
+        if (!isset($this->itemids))
             $this->itemids = array();
 
         // reset fieldlist and datastores if necessary
         if(
-            isset($args['fieldlist']) && 
+            isset($args['fieldlist']) &&
             (!isset($this->fieldlist) || $args['fieldlist'] != $this->fieldlist)
-        ) 
+        )
         {
             $this->fieldlist = $args['fieldlist'];
             $this->getDataStores(true);
-        } 
+        }
         else
         {
             if(
-                isset($args['status']) && 
+                isset($args['status']) &&
                 (!isset($this->status) || $args['status'] != $this->status)
-            ) 
+            )
             {
                 $this->status = $args['status'];
                 $this->fieldlist = array();
-                foreach($this->properties as $name => $property) 
-                    if($property->status == $this->status) 
+                foreach($this->properties as $name => $property)
+                    if($property->status == $this->status)
                         $this->fieldlist[] = $name;
 
                 $this->getDataStores(true);
@@ -100,91 +100,91 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         }
 
         // add where clause if itemtype is one of the properties (e.g. articles)
-        if(isset($this->secondary) && !empty($this->itemtype) && $this->objectid > 2) 
+        if(isset($this->secondary) && !empty($this->itemtype) && $this->objectid > 2)
         {
-            if(empty($args['where'])) 
+            if(empty($args['where']))
                 $args['where'] = $this->secondary . ' eq ' . $this->itemtype;
-            else 
+            else
                 $args['where'] .= ' and ' . $this->secondary . ' eq ' . $this->itemtype;
         }
 
         // Note: they can be empty here, which means overriding any previous criteria
-        if(isset($args['sort']) || isset($args['where']) || isset($args['groupby']) || isset($args['cache'])) 
+        if(isset($args['sort']) || isset($args['where']) || isset($args['groupby']) || isset($args['cache']))
         {
-            foreach(array_keys($this->datastores) as $name) 
+            foreach(array_keys($this->datastores) as $name)
             {
-                if(isset($args['sort'])) 
+                if(isset($args['sort']))
                     // make sure we don't have some left-over sort criteria
                     $this->datastores[$name]->cleanSort();
-                if(isset($args['where'])) 
+                if(isset($args['where']))
                     // make sure we don't have some left-over where clauses
                     $this->datastores[$name]->cleanWhere();
-                if(isset($args['groupby'])) 
+                if(isset($args['groupby']))
                     // make sure we don't have some left-over group by fields
                     $this->datastores[$name]->cleanGroupBy();
-                if(isset($args['cache'])) 
+                if(isset($args['cache']))
                     // pass the cache value to the datastores
                     $this->datastores[$name]->cache = $args['cache'];
             }
         }
 
         // set the sort criteria
-        if(!empty($args['sort'])) 
+        if(!empty($args['sort']))
             $this->setSort($args['sort']);
 
         // set the where clauses
-        if(!empty($args['where'])) 
+        if(!empty($args['where']))
             $this->setWhere($args['where']);
 
         // set the group by fields
-        if(!empty($args['groupby'])) 
+        if(!empty($args['groupby']))
             $this->setGroupBy($args['groupby']);
 
         // set the categories
-        if(!empty($args['catid'])) 
+        if(!empty($args['catid']))
             $this->setCategories($args['catid']);
     }
 
     function setSort($sort)
     {
-        if(is_array($sort)) 
+        if(is_array($sort))
             $this->sort = $sort;
-        else 
+        else
             $this->sort = explode(',',$sort);
 
-        foreach($this->sort as $criteria) 
+        foreach($this->sort as $criteria)
         {
             // split off trailing ASC or DESC
-            if(preg_match('/^(.+)\s+(ASC|DESC)\s*$/',$criteria,$matches)) 
+            if(preg_match('/^(.+)\s+(ASC|DESC)\s*$/',$criteria,$matches))
             {
                 $criteria = trim($matches[1]);
                 $sortorder = $matches[2];
-            } 
-            else 
+            }
+            else
                 $sortorder = 'ASC';
 
-            if(isset($this->properties[$criteria])) 
+            if(isset($this->properties[$criteria]))
             {
                 // pass the sort criteria to the right data store
                 $datastore = $this->properties[$criteria]->datastore;
                 // assign property to datastore if necessary
-                if(empty($datastore)) 
+                if(empty($datastore))
                 {
                     list($storename, $storetype) = $this->property2datastore($this->properties[$criteria]);
-                    if(!isset($this->datastores[$storename])) 
+                    if(!isset($this->datastores[$storename]))
                         $this->addDataStore($storename, $storetype);
 
                     $this->properties[$criteria]->datastore = $storename;
                     $this->datastores[$storename]->addField($this->properties[$criteria]); // use reference to original property
                     $datastore = $storename;
-                } 
-                elseif($this->properties[$criteria]->type == 21) 
+                }
+                elseif($this->properties[$criteria]->type == 21)
                     $this->datastores[$datastore]->addField($this->properties[$criteria]); // use reference to original property
 
                 $this->datastores[$datastore]->addSort($this->properties[$criteria],$sortorder);
 
                 // if we're sorting on some field, we should start querying by the data store that holds it
-                if (!isset($this->startstore)) 
+                if (!isset($this->startstore))
                    $this->startstore = $datastore;
             }
         }
@@ -196,12 +196,12 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         // allow where clauses like : title eq 'this and that' and body eq 'here or there'
         $idx = 0;
         $found = array();
-        if(preg_match_all("/'(.*?)'/",$where,$matches)) 
+        if(preg_match_all("/'(.*?)'/",$where,$matches))
         {
-            foreach($matches[1] as $match) 
+            foreach($matches[1] as $match)
             {
                 // skip if it doesn't contain and/or
-                if(!preg_match('/\s+(and|or)\s+/',$match)) 
+                if(!preg_match('/\s+(and|or)\s+/',$match))
                     continue;
 
                 $found[$idx] = $match;
@@ -223,9 +223,9 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         // TODO: reject multi-source WHERE clauses :-)
         $parts = preg_split('/\s+(and|or)\s+/',$where,-1,PREG_SPLIT_DELIM_CAPTURE);
         $join = '';
-        foreach($parts as $part) 
+        foreach($parts as $part)
         {
-            if($part == 'and' || $part == 'or') 
+            if($part == 'and' || $part == 'or')
             {
                 $join = $part;
                 continue;
@@ -235,54 +235,54 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             $pre = '';
             $post = '';
             $name = array_shift($pieces);
-            if($name == '(') 
+            if($name == '(')
             {
                 $pre = '(';
                 $name = array_shift($pieces);
             }
 
             $last = count($pieces) - 1;
-            if($pieces[$last] == ')') 
+            if($pieces[$last] == ')')
             {
                 $post = ')';
                 array_pop($pieces);
             }
 
             // sanity check on SQL
-            if(count($pieces) < 2) 
+            if(count($pieces) < 2)
             {
                 $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
                 $vars = array('query ' . $where, 'Dynamic_Object_List', 'getWhere', 'DynamicData');
                 throw new BadParameterException($vars,$msg);
             }
 
-            if(isset($this->properties[$name])) 
+            if(isset($this->properties[$name]))
             {
                 // pass the where clause to the right data store
                 $datastore = $this->properties[$name]->datastore;
                 // assign property to datastore if necessary
-                if(empty($datastore)) 
+                if(empty($datastore))
                 {
                     list($storename, $storetype) = $this->property2datastore($this->properties[$name]);
-                    if(!isset($this->datastores[$storename])) 
+                    if(!isset($this->datastores[$storename]))
                         $this->addDataStore($storename, $storetype);
 
                     $this->properties[$name]->datastore = $storename;
                     $this->datastores[$storename]->addField($this->properties[$name]); // use reference to original property
                     $datastore = $storename;
-                } 
-                elseif($this->properties[$name]->type == 21) 
+                }
+                elseif($this->properties[$name]->type == 21)
                     $this->datastores[$datastore]->addField($this->properties[$name]); // use reference to original property
 
-                if(empty($idx)) 
+                if(empty($idx))
                     $mywhere = join(' ',$pieces);
-                else 
+                else
                 {
                     $mywhere = '';
-                    foreach($pieces as $piece) 
+                    foreach($pieces as $piece)
                     {
                         // replace the pieces again if necessary
-                        if(preg_match("#'~(\d+)~'#",$piece,$matches) && isset($found[$matches[1]])) 
+                        if(preg_match("#'~(\d+)~'#",$piece,$matches) && isset($found[$matches[1]]))
                         {
                             $original = $found[$matches[1]];
                             $piece = preg_replace("#'~(\d+)~'#","'$original'",$piece);
@@ -303,36 +303,36 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 
     function setGroupBy($groupby)
     {
-        if(is_array($groupby)) 
+        if(is_array($groupby))
             $this->groupby = $groupby;
-        else 
+        else
             $this->groupby = explode(',',$groupby);
 
         $this->isgrouped = 1;
 
-        foreach($this->groupby as $name) 
+        foreach($this->groupby as $name)
         {
-            if(isset($this->properties[$name])) 
+            if(isset($this->properties[$name]))
             {
                 // pass the sort criteria to the right data store
                 $datastore = $this->properties[$name]->datastore;
                 // assign property to datastore if necessary
-                if(empty($datastore)) 
+                if(empty($datastore))
                 {
                     list($storename, $storetype) = $this->property2datastore($this->properties[$name]);
-                    if(!isset($this->datastores[$storename])) 
+                    if(!isset($this->datastores[$storename]))
                         $this->addDataStore($storename, $storetype);
 
                     $this->properties[$name]->datastore = $storename;
                     $this->datastores[$storename]->addField($this->properties[$name]); // use reference to original property
                     $datastore = $storename;
-                } 
-                elseif($this->properties[$name]->type == 21) 
+                }
+                elseif($this->properties[$name]->type == 21)
                     $this->datastores[$datastore]->addField($this->properties[$name]); // use reference to original property
 
                 $this->datastores[$datastore]->addGroupBy($this->properties[$name]);
                 // if we're grouping by some field, we should start querying by the data store that holds it
-                if(!isset($this->startstore)) 
+                if(!isset($this->startstore))
                    $this->startstore = $datastore;
             }
         }
@@ -340,7 +340,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 
     function setCategories($catid)
     {
-        if(!xarModIsAvailable('categories')) 
+        if(!xarModIsAvailable('categories'))
             return;
 
         $categoriesdef = xarModAPIFunc(
@@ -352,14 +352,14 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             )
         );
 
-        foreach(array_keys($this->datastores) as $name) 
+        foreach(array_keys($this->datastores) as $name)
         {
             $this->datastores[$name]->addJoin(
-                $categoriesdef['table'], 
-                $categoriesdef['field'], 
-                array(), 
-                $categoriesdef['where'], 
-                'and', 
+                $categoriesdef['table'],
+                $categoriesdef['field'],
+                array(),
+                $categoriesdef['where'],
+                'and',
                 $categoriesdef['more']
             );
         }
@@ -373,29 +373,29 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         // set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
         $this->setArguments($args);
 
-        if(empty($args['numitems'])) 
+        if(empty($args['numitems']))
             $args['numitems'] = $this->numitems;
 
-        if(empty($args['startnum'])) 
+        if(empty($args['startnum']))
             $args['startnum'] = $this->startnum;
 
         // if we don't have a start store yet, but we do have a primary datastore, we'll start there
-        if(empty($this->startstore) && !empty($this->primary)) 
+        if(empty($this->startstore) && !empty($this->primary))
             $this->startstore = $this->properties[$this->primary]->datastore;
 
         // first get the items from the start store (if any)
-        if(!empty($this->startstore)) 
+        if(!empty($this->startstore))
         {
             $this->datastores[$this->startstore]->getItems($args);
 
             // check if we found something - if not, no sense looking further
-            if(count($this->itemids) == 0) 
+            if(count($this->itemids) == 0)
                 return $this->items;
         }
         // then retrieve the other info about those items
-        foreach(array_keys($this->datastores) as $name) 
+        foreach(array_keys($this->datastores) as $name)
         {
-            if(!empty($this->startstore) && $name == $this->startstore) 
+            if(!empty($this->startstore) && $name == $this->startstore)
                 continue;
 
             $this->datastores[$name]->getItems($args);
@@ -413,18 +413,18 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         $this->setArguments($args);
 
         // if we don't have a start store yet, but we do have a primary datastore, we'll count there
-        if(empty($this->startstore) && !empty($this->primary)) 
+        if(empty($this->startstore) && !empty($this->primary))
             $this->startstore = $this->properties[$this->primary]->datastore;
 
         // try to count the items in the start store (if any)
-        if(!empty($this->startstore)) 
+        if(!empty($this->startstore))
             return $this->datastores[$this->startstore]->countItems($args);
-        else 
+        else
         {
-            // If we don't have a start store, we're probably stuck, 
+            // If we don't have a start store, we're probably stuck,
             // but we'll try the first one anyway :)
             // TODO: find some better way to determine which data store to count in
-            foreach(array_keys($this->datastores) as $name) 
+            foreach(array_keys($this->datastores) as $name)
             {
                 // this looks like a loop but it isnt :-) (yet)
                 return $this->datastores[$name]->countItems($args);
@@ -437,7 +437,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if(empty($args['layout']))    $args['layout'] = $this->layout;
         if(empty($args['template']))  $args['template'] = $this->template;
         if(empty($args['tplmodule'])) $args['tplmodule'] = $this->tplmodule;
-            
+
         // Are we extending here?
         if(!empty($args['extend']))   $this->extend();
 
@@ -445,22 +445,22 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if(empty($args['fieldprefix'])) $args['fieldprefix'] = $this->fieldprefix;
         if(empty($args['fieldlist']))   $args['fieldlist'] = $this->fieldlist;
 
-        if(!empty($this->status)) 
+        if(!empty($this->status))
             $state = $this->status;
-        else 
+        else
             $state = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
-            
+
         $args['properties'] = array();
-        if(count($args['fieldlist']) > 0) 
+        if(count($args['fieldlist']) > 0)
         {
-            foreach($args['fieldlist'] as $name) 
-                if(isset($this->properties[$name])) 
+            foreach($args['fieldlist'] as $name)
+                if(isset($this->properties[$name]))
                     if($this->properties[$name]->status & $state)
                         $args['properties'][$name] =& $this->properties[$name];
-        } 
-        else 
+        }
+        else
         {
-            foreach($this->properties as $property) 
+            foreach($this->properties as $property)
                 if(($property->status & Dynamic_Property_Master::DD_DISPLAYMASK) == ($state & Dynamic_Property_Master::DD_DISPLAYMASK))
                     $args['properties'][$property->name] = $property;
         }
@@ -477,13 +477,13 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 
         // override for viewing dynamic objects
         $args['dummymode'] = 0; // Set to 0 when interested in viewing them anyway...
-        if($modname == 'dynamicdata' && $this->itemtype == 0 && empty($this->table)) 
+        if($modname == 'dynamicdata' && $this->itemtype == 0 && empty($this->table))
         {
-            $linktype = 'admin';
+            $linktype = 'user';
             $linkfunc = 'view';
             // Don't show link to view items that don't belong to the DD module
-        } 
-        else 
+        }
+        else
         {
             $linktype = 'user';
             $linkfunc = $args['linkfunc'];
@@ -494,7 +494,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         $args['moduleid'] = $this->moduleid;
 
         $itemtype = $this->itemtype;
-        if(empty($itemtype)) 
+        if(empty($itemtype))
             $itemtype = null; // don't add to URL
         $args['table'] = (empty($this->table)) ? null: $this->table;
         $args['objectname'] = empty($this->name) ? null : $this->name;
@@ -502,17 +502,17 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         $args['modname'] = $modname;
         $args['itemtype'] = $itemtype;
         $args['links'] = array();
-        if(empty($args['urlmodule'])) 
+        if(empty($args['urlmodule']))
         {
-            if(!empty($this->urlmodule)) 
+            if(!empty($this->urlmodule))
             {
                 $args['urlmodule'] = $this->urlmodule;
-            } 
-            else 
+            }
+            else
             {
                 $info = Dynamic_Object_Master::getObjectInfo(
                     array(
-                        'moduleid' => $args['moduleid'], 
+                        'moduleid' => $args['moduleid'],
                         'itemtype' => $args['itemtype']
                     )
                 );
@@ -535,11 +535,11 @@ class Dynamic_Object_List extends Dynamic_Object_Master
             // @todo let's be a lil more explicit in handling these options
             $args['links'][$itemid] = $this->getViewOptions($args);
         }
-        if(!empty($this->isgrouped)) 
+        if(!empty($this->isgrouped))
         {
-            foreach(array_keys($args['properties']) as $name) 
+            foreach(array_keys($args['properties']) as $name)
             {
-                if(!empty($this->properties[$name]->operation)) 
+                if(!empty($this->properties[$name]->operation))
                     $this->properties[$name]->label = $this->properties[$name]->operation . '(' . $this->properties[$name]->label . ')';
             }
         }
@@ -547,11 +547,11 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
 
-        if(isset($args['newlink'])) 
+        if(isset($args['newlink']))
         {
             // TODO: improve this + SECURITY !!!
-        } 
-        elseif(xarSecurityCheck('AddDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':All')) 
+        }
+        elseif(xarSecurityCheck('AddDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':All'))
         {
             $args['newlink'] = xarModURL(
                 $args['urlmodule'],'admin','new',
@@ -560,11 +560,11 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                     'table'    => $args['table']
                 )
             );
-        } 
-        else 
+        }
+        else
             $args['newlink'] = '';
 
-        if(empty($args['pagerurl'])) 
+        if(empty($args['pagerurl']))
             $args['pagerurl'] = '';
 
         list(
@@ -592,27 +592,27 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if(empty($args['fieldlist'])) $args['fieldlist'] = $this->fieldlist;
         if(!empty($args['extend']))   $this->extend();
 
-        if(!empty($this->status)) 
+        if(!empty($this->status))
             $state = $this->status;
-        else 
+        else
             $state = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
-            
-        if(count($args['fieldlist']) > 0) 
+
+        if(count($args['fieldlist']) > 0)
         {
             $args['properties'] = array();
-            foreach($args['fieldlist'] as $name) 
+            foreach($args['fieldlist'] as $name)
             {
-                if(isset($this->properties[$name])) 
+                if(isset($this->properties[$name]))
                 {
                     $thisprop = $this->properties[$name];
                     if(($thisprop->status & Dynamic_Property_Master::DD_DISPLAYMASK) == ($state & Dynamic_Property_Master::DD_DISPLAYMASK))
                         $args['properties'][$name] =& $this->properties[$name];
                 }
             }
-        } 
-        else 
+        }
+        else
         {
-            foreach($this->properties as $property) 
+            foreach($this->properties as $property)
                 if($property->status & $state)
                     $args['properties'][$property->name] = $property;
         }
@@ -632,7 +632,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         $modname = $modinfo['name'];
         $itemtype = $this->itemtype;
 
-        if(empty($itemtype)) 
+        if(empty($itemtype))
             $itemtype = null; // don't add to URL
         $args['table'] = !empty($this->table) ? $this->table : null;
         $args['objectname'] = !empty($this->name) ? $this->name : null;
@@ -640,17 +640,17 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         $args['itemtype'] = $itemtype;
         $args['objectid'] = $this->objectid;
         $args['links'] = array();
-        if(empty($args['urlmodule'])) 
+        if(empty($args['urlmodule']))
         {
-            if(!empty($this->urlmodule)) 
+            if(!empty($this->urlmodule))
                 $args['urlmodule'] = $this->urlmodule;
-            else 
+            else
                 $args['urlmodule'] = $modname;
         }
-        foreach(array_keys($this->items) as $itemid) 
+        foreach(array_keys($this->items) as $itemid)
         {
             $options = array();
-            if(!empty($this->isgrouped)) 
+            if(!empty($this->isgrouped))
             {
                 $args['links'][$itemid] = $options;
                 continue;
@@ -669,11 +669,11 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                 'ojoin'  => ''
             );
         }
-        if(!empty($this->isgrouped)) 
+        if(!empty($this->isgrouped))
         {
-            foreach(array_keys($args['properties']) as $name) 
+            foreach(array_keys($args['properties']) as $name)
             {
-                if(!empty($this->properties[$name]->operation)) 
+                if(!empty($this->properties[$name]->operation))
                     $this->properties[$name]->label = $this->properties[$name]->operation . '(' . $this->properties[$name]->label . ')';
             }
             $args['linkfield'] = 'N/A';
@@ -681,8 +681,8 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
-        
-        if(empty($args['pagerurl'])) 
+
+        if(empty($args['pagerurl']))
             $args['pagerurl'] = '';
         list(
             $args['prevurl'],
@@ -703,8 +703,8 @@ class Dynamic_Object_List extends Dynamic_Object_Master
       */
     function getViewOptions($args)
     {
-        extract($args); 
-        
+        extract($args);
+
         if ($dummymode && $this->items[$itemid]['moduleid'] != 182) {
             $dummyoption = array(
                'otitle' => xarML('View'),
@@ -718,11 +718,11 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         $urlargs['table'] = $table;
         $urlargs[$args['param']] = $itemid;
         $urlargs['template'] = $args['template'];
-        
+
         $options = array();
         if (xarSecurityCheck('DeleteDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid))  {
             if( isset($dummyoption))  {
-                    $options[] = $dummyoption;         
+                    $options[] = $dummyoption;
             } else {
                 $options[] = array('otitle' => xarML('View'),
                                        'olink'  => xarModURL($args['urlmodule'],$linktype,$linkfunc,
@@ -772,7 +772,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                     );
             }
         }
-        return $options;        
+        return $options;
     }
 
     /**
@@ -780,23 +780,23 @@ class Dynamic_Object_List extends Dynamic_Object_Master
      */
     function &getViewValues($args = array())
     {
-        if(empty($args['fieldlist'])) 
+        if(empty($args['fieldlist']))
             $args['fieldlist'] = $this->fieldlist;
-        if(count($args['fieldlist']) == 0 && empty($this->status)) 
+        if(count($args['fieldlist']) == 0 && empty($this->status))
             $args['fieldlist'] = array_keys($this->properties);
 
         $viewvalues = array();
-        foreach($this->itemids as $itemid) 
+        foreach($this->itemids as $itemid)
         {
             $viewvalues[$itemid] = array();
-            foreach($args['fieldlist'] as $name) 
+            foreach($args['fieldlist'] as $name)
             {
-                if(isset($this->properties[$name])) 
+                if(isset($this->properties[$name]))
                 {
                     $label = xarVarPrepForDisplay($this->properties[$name]->label);
-                    if(isset($this->items[$itemid][$name])) 
+                    if(isset($this->items[$itemid][$name]))
                         $value = $this->properties[$name]->showOutput(array('value' => $this->items[$itemid][$name]));
-                    else 
+                    else
                         $value = '';
                     $viewvalues[$itemid][$label] = $value;
                 }
@@ -811,13 +811,13 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         $nexturl = '';
         $sorturl = '';
 
-        if(empty($this->startnum)) 
+        if(empty($this->startnum))
             $this->startnum = 1;
 
         // TODO: count items before calling getItems() if we want some better pager
 
         // Get current URL (this uses &amp; by default now)
-        if(empty($currenturl)) 
+        if(empty($currenturl))
             $currenturl = xarServerGetCurrentURL();
 
         // TODO: clean up generation of sort URL
@@ -831,50 +831,50 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         $sorturl = preg_replace('/\?sort=\w+&amp;/','?',$sorturl);
         $sorturl = preg_replace('/\?sort=\w+$/','',$sorturl);
         // add sort param at the end of the URL
-        if(preg_match('/\?/',$sorturl)) 
+        if(preg_match('/\?/',$sorturl))
             $sorturl = $sorturl . '&amp;sort';
-        else 
+        else
             $sorturl = $sorturl . '?sort';
 
-        if(empty($this->numitems) || ( (count($this->items) < $this->numitems) && $this->startnum == 1 )) 
+        if(empty($this->numitems) || ( (count($this->items) < $this->numitems) && $this->startnum == 1 ))
         {
             return array($prevurl,$nexturl,$sorturl);
         }
 
-        if(preg_match('/startnum=\d+/',$currenturl)) 
+        if(preg_match('/startnum=\d+/',$currenturl))
         {
-            if(count($this->items) == $this->numitems) 
+            if(count($this->items) == $this->numitems)
             {
                 $next = $this->startnum + $this->numitems;
                 $nexturl = preg_replace('/startnum=\d+/',"startnum=$next",$currenturl);
             }
-            if($this->startnum > 1) 
+            if($this->startnum > 1)
             {
                 $prev = $this->startnum - $this->numitems;
                 $prevurl = preg_replace('/startnum=\d+/',"startnum=$prev",$currenturl);
             }
-        } 
-        elseif(preg_match('/\?/',$currenturl)) 
+        }
+        elseif(preg_match('/\?/',$currenturl))
         {
-            if(count($this->items) == $this->numitems) 
+            if(count($this->items) == $this->numitems)
             {
                 $next = $this->startnum + $this->numitems;
                 $nexturl = $currenturl . '&amp;startnum=' . $next;
             }
-            if($this->startnum > 1) 
+            if($this->startnum > 1)
             {
                 $prev = $this->startnum - $this->numitems;
                 $prevurl = $currenturl . '&amp;startnum=' . $prev;
             }
-        } 
-        else 
+        }
+        else
         {
-            if(count($this->items) == $this->numitems) 
+            if(count($this->items) == $this->numitems)
             {
                 $next = $this->startnum + $this->numitems;
                 $nexturl = $currenturl . '?startnum=' . $next;
             }
-            if($this->startnum > 1) 
+            if($this->startnum > 1)
             {
                 $prev = $this->startnum - $this->numitems;
                 $prevurl = $currenturl . '?startnum=' . $prev;
@@ -890,18 +890,18 @@ class Dynamic_Object_List extends Dynamic_Object_Master
     {
         static $start = true;
 
-        if($start) 
+        if($start)
         {
             // set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
             $this->setArguments($args);
 
-            if(empty($args['numitems'])) 
+            if(empty($args['numitems']))
                 $args['numitems'] = $this->numitems;
-            if(empty($args['startnum'])) 
+            if(empty($args['startnum']))
                 $args['startnum'] = $this->startnum;
 
             // if we don't have a start store yet, but we do have a primary datastore, we'll start there
-            if(empty($this->startstore) && !empty($this->primary)) 
+            if(empty($this->startstore) && !empty($this->primary))
                 $this->startstore = $this->properties[$this->primary]->datastore;
 
             $start = false;
@@ -909,12 +909,12 @@ class Dynamic_Object_List extends Dynamic_Object_Master
 
         $itemid = null;
         // first get the items from the start store (if any)
-        if(!empty($this->startstore)) 
+        if(!empty($this->startstore))
         {
             $itemid = $this->datastores[$this->startstore]->getNext($args);
 
             // check if we found something - if not, no sense looking further
-            if(empty($itemid)) 
+            if(empty($itemid))
                 return;
         }
         return $itemid;

@@ -110,7 +110,7 @@ function modules_adminapi_installwithdependencies ($args)
             }
 
             // Is there an install page?
-            if (file_exists('modules/' . $modInfo['osdirectory'] . '/xartemplates/includes/installoptions.xd')) {
+            if (!$initialised && file_exists('modules/' . $modInfo['osdirectory'] . '/xartemplates/includes/installoptions.xd')) {
                 xarResponseRedirect(xarModURL('modules','admin','modifyinstalloptions',array('regid' => $mainId)));
                 return true;
             } else {

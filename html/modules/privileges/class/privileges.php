@@ -585,6 +585,7 @@ class xarPrivileges extends xarMasks
                            'level' => $level,
                            'parentid' => 0
                            );
+            sys::import('modules.privileges.class.privilege');
             $priv = new xarPrivilege($pargs);
             if ($priv->add()) {
                 return $priv->getID();
@@ -592,6 +593,7 @@ class xarPrivileges extends xarMasks
             return;
         }
         else {
+            sys::import('modules.privileges.class.privileges');
             $privs = new xarPrivileges();
             $priv = $privs->getPrivilege($pid);
             $priv->setName($name);
@@ -646,6 +648,7 @@ class xarPrivileges extends xarMasks
                            'description'=>$description,
                            'parentid'=>0);
 
+            sys::import('modules.privileges.class.privilege');
             $priv = new xarPrivilege($pargs);
             xarVarSetCached($cacheKey,$pid,$priv);
             return $priv;
