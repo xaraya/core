@@ -187,7 +187,7 @@ class Dynamic_Object extends Dynamic_Object_Master
                 if(isset($this->properties[$name]))
                 {
                     $thisprop = $this->properties[$name];
-                    if(($thisprop->status & Dynamic_Property_Master::DD_DISPLAYMASK) != Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN)
+                    if(($thisprop->status & DataPropertyMaster::DD_DISPLAYMASK) != DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
                         $args['properties'][$name] =& $this->properties[$name];
                 }
             }
@@ -195,7 +195,7 @@ class Dynamic_Object extends Dynamic_Object_Master
         else
         {
             $args['properties'] =& $this->properties;
-            // Do them all, except for status = Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN
+            // Do them all, except for status = DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN
             // TODO: this is exactly the same as in the display function, consolidate it.
             $totransform = array(); $totransform['transform'] = array();
             foreach($this->properties as $pname => $pobj)
@@ -217,7 +217,7 @@ class Dynamic_Object extends Dynamic_Object_Master
             foreach($this->properties as $property)
             {
                 if(
-                    (($property->status & Dynamic_Property_Master::DD_DISPLAYMASK) != Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN) &&
+                    (($property->status & DataPropertyMaster::DD_DISPLAYMASK) != DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) &&
                     ($property->type != 21) &&
                     isset($transformed[$property->name])
                 )

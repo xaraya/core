@@ -1,13 +1,11 @@
 <?php
 /**
- * Check for properties and import to properties table
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -15,10 +13,8 @@
 /**
  * Check the properties directory for properties and import them into the Property Type table.
  *
- * @author the DynamicData module development team
  * @param $args['flush'] flush the property type table before import true/false (optional)
- * @returns array
- * @return an array of the property types currently available
+ * @return array an array of the property types currently available
  * @throws BAD_PARAM, NO_PERMISSION
  */
 class PropertyDirectoryIterator extends DirectoryIterator
@@ -102,7 +98,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
         foreach($newClasses as $index => $propertyClass) {
             // If it doesnt exist something weird is goin on
 
-            if(!is_subclass_of ($propertyClass, 'Dynamic_Property')) {;continue;}
+            if(!is_subclass_of ($propertyClass, 'DataProperty')) {;continue;}
             $processedClasses[] = $propertyClass;
 
             // Main part
@@ -115,7 +111,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
             // Fill in the info we dont have in the registration class yet
             // TODO: see if we can have it in the registration class
             $baseInfo->class = $propertyClass;
-            $baseInfo->filepath = $property->filepath . "/$propertyClass.php";
+            $baseInfo->filepath = $property->filepath . '/' . $baseInfo->name . '.php';
             $currentproptypes[$baseInfo->id] = $baseInfo;
             $proptypes[$baseInfo->id] = $baseInfo;
 
@@ -126,7 +122,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                 foreach($aliases as $alias) {
                     $aliasInfo = new PropertyRegistration($alias);
                     $aliasInfo->class = $propertyClass;
-                    $aliasInfo->filepath = $property->filepath . "/$propertyClass.php";
+                    $aliasInfo->filepath = $property->filepath .'/'. $property->name . '.php';
                     $currentproptypes[$aliasInfo->id] = $aliasInfo;
                     $proptypes[$aliasInfo->id] = $aliasInfo;
                 }

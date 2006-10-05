@@ -10,7 +10,7 @@ sys::import('modules.dynamicdata.class.properties.registration');
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module
  */
-class Dynamic_Property_Master extends Object
+class DataPropertyMaster extends Object
 {
     const DD_DISPLAYSTATE_DISABLED = 0;
     const DD_DISPLAYSTATE_HIDDEN = 3;
@@ -169,7 +169,7 @@ class Dynamic_Property_Master extends Object
         else
             $proptypes = self::getPropertyTypes();
 
-        $clazz = 'Dynamic_Property';
+        $clazz = 'DataProperty';
         if( isset($proptypes[$args['type']]) && is_array($proptypes[$args['type']]) )
         {
             $propertyInfo  = $proptypes[$args['type']];
@@ -200,7 +200,7 @@ class Dynamic_Property_Master extends Object
             }
             $clazz = $propertyClass;
         }
-        // Dynamic_Property or the determined one
+        // DataProperty or the determined one
         $property = new $clazz($args);
 
         return $property;

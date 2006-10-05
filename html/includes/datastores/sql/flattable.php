@@ -22,7 +22,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
     /**
      * Get the field name used to identify this property (we use the name of the table field here)
      */
-    function getFieldName(Dynamic_Property &$property)
+    function getFieldName(DataProperty &$property)
     {
         if (!is_object($property)) debug($property); // <-- this throws an exception
         // support [database.]table.field syntax
@@ -181,7 +181,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         if (empty($itemid)) {
             $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-            throw new BadParameterException(array('item id from table '.$table, 'Dynamic_FlatTable_DataStore', 'createItem', 'DynamicData'),$msg);
+            throw new BadParameterException(array('item id from table '.$table, 'DataFlatTable_DataStore', 'createItem', 'DynamicData'),$msg);
         }
         $this->fields[$itemidfield]->setValue($itemid);
         return $itemid;

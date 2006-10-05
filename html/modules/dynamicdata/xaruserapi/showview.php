@@ -115,7 +115,7 @@ function dynamicdata_userapi_showview($args)
         $status = null;
     } else {
         $myfieldlist = null;
-        $status = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
+        $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
     }
 
     // join a module table to a dynamic object

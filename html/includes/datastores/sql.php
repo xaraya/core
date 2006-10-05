@@ -32,7 +32,7 @@ class Dynamic_SQL_DataStore extends OrderedDataStore implements ISQLDataStore
     /**
      * Add a where clause for this data store (for getItems)
      */
-    function addWhere(Dynamic_Property &$property, $clause, $join, $pre = '', $post = '')
+    function addWhere(DataProperty &$property, $clause, $join, $pre = '', $post = '')
     {
         $name = $this->getFieldName($property);
         if(!isset($name))
@@ -56,7 +56,7 @@ class Dynamic_SQL_DataStore extends OrderedDataStore implements ISQLDataStore
     /**
      * Add a group by field for this data store (for getItems)
      */
-    function addGroupBy(Dynamic_Property &$property)
+    function addGroupBy(DataProperty &$property)
     {
         $name = $this->getFieldName($property);
         if(!isset($name))

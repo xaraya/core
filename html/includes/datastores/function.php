@@ -17,12 +17,12 @@ class Dynamic_Function_DataStore extends BasicDataStore
     /**
      * Get the field name used to identify this property (the property validation holds the function name here - for now...)
      */
-    function getFieldName(Dynamic_Property &$property)
+    function getFieldName(DataProperty &$property)
     {
         return $property->validation;
     }
 
-    function setPrimary(Dynamic_Property &$property)
+    function setPrimary(DataProperty &$property)
     {
         // not applicable !?
     }

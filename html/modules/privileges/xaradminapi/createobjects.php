@@ -1,19 +1,17 @@
 <?php
 /**
- * Utility function to create the native objects of this module
- *
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Privileges module
+ * @subpackage privileges
  */
 /**
  * utility function to create the native objects of this module
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @returns boolean
+ * @return bool
  */
 function privileges_adminapi_createobjects($args)
 {
@@ -33,8 +31,8 @@ function privileges_adminapi_createobjects($args)
                                     'parent'    => 0,
                                     ));
     if (!$objectid) return;
-    $status1 = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY;
-    $status2 = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_NOINPUT;
+    $status1 = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
+    $status2 = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_NOINPUT;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
                                     'name'     => 'id',
                                     'label'    => 'ID',

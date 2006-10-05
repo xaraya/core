@@ -22,7 +22,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
     /**
      * Get the field name used to identify this property (we use the property id here)
      */
-    function getFieldName(Dynamic_Property &$property)
+    function getFieldName(DataProperty &$property)
     {
         return (int)$property->id;
     }
@@ -785,7 +785,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
         if (!empty($invalid)) {
             $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-            throw new BadParameterException(array($invalid, 'Dynamic_VariableTable_DataStore', 'getNextId', 'DynamicData'),$msg);
+            throw new BadParameterException(array($invalid, 'DataVariableTable_DataStore', 'getNextId', 'DynamicData'),$msg);
         }
 
         $dynamicobjects = $this->tables['dynamic_objects'];

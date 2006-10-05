@@ -10,7 +10,7 @@ sys::import('modules.dynamicdata.class.properties.master');
  * @todo is this abstract?
  * @todo the visibility of most of the attributes can probably be protected
 **/
-class Dynamic_Property extends Object
+class DataProperty extends Object
 {
     // Attributes for registration
     public $id             = 0;
@@ -20,7 +20,7 @@ class Dynamic_Property extends Object
     public $type           = 1;
     public $default        = '';
     public $source         = 'dynamic_data';
-    public $status         = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
+    public $status         = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
     public $order          = 0;
     public $format         = '0'; //<-- eh?
     public $reqmodules     = array();  // these modules must be available before this property is enabled (optional)
@@ -192,7 +192,7 @@ class Dynamic_Property extends Object
      */
     function showInput($data = array())
     {
-        if(($this->status & Dynamic_Property_Master::DD_DISPLAYMASK) == Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN)
+        if(($this->status & DataPropertyMaster::DD_DISPLAYMASK) == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
             return $this->showHidden($data);
 
         // Our common items we need
@@ -220,7 +220,7 @@ class Dynamic_Property extends Object
      */
     function showOutput($data = array())
     {
-        if(($this->status & Dynamic_Property_Master::DD_DISPLAYMASK) == Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN)
+        if(($this->status & DataPropertyMaster::DD_DISPLAYMASK) == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
             return $this->showHidden($data);
 
         $data['id']   = $this->id;
@@ -244,7 +244,7 @@ class Dynamic_Property extends Object
      */
     function showLabel($args = array())
     {
-        if(($this->status & Dynamic_Property_Master::DD_DISPLAYMASK) == Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN)
+        if(($this->status & DataPropertyMaster::DD_DISPLAYMASK) == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
             return $this->showHidden($args);
 
         if(empty($args))
@@ -379,7 +379,7 @@ class Dynamic_Property extends Object
      * corresponding methods from its parent class will be used.
      *
      * Note: the methods can be called by DD's showpropval() function, or if you set the
-     *       type of the 'validation' property (21) to Dynamic_Validation_Property also
+     *       type of the 'validation' property (21) to ValidationProperty also
      *       via DD's modify() and update() functions if you edit some dynamic property.
      */
 

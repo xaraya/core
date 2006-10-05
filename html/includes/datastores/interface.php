@@ -8,7 +8,7 @@
 **/
 
 /*
-    Current inheritance (leaving out Dynamic_ prefix and _Datastore suffix)
+    Current inheritance (leaving out Data prefix and _Datastore suffix)
 
     XarayaDDObject
      |
@@ -62,10 +62,10 @@ interface IBasicDataStore
 interface IOrderedDataStore
 {
     // @note tied to properties, as used by dd
-    function getFieldName(Dynamic_Property &$property);
-    function     addField(Dynamic_Property &$property);
-    function   setPrimary(Dynamic_Property &$property);
-    function      addSort(Dynamic_Property &$property, $sortorder = 'ASC');
+    function getFieldName(DataProperty &$property);
+    function     addField(DataProperty &$property);
+    function   setPrimary(DataProperty &$property);
+    function      addSort(DataProperty &$property, $sortorder = 'ASC');
 
     // @note tied to db table
 
@@ -76,8 +76,8 @@ interface IOrderedDataStore
 interface ISQLDataStore
 {
     // @note tied to properties, as used by dd
-    function     addWhere(Dynamic_Property &$property, $clause, $join, $pre = '', $post = '');
-    function   addGroupBy(Dynamic_Property &$property);
+    function     addWhere(DataProperty &$property, $clause, $join, $pre = '', $post = '');
+    function   addGroupBy(DataProperty &$property);
     function      addJoin($table, $key, $fields, array $where = array(), $andor = 'and', $more = '', $sort = array());
 
     // @note this looks pretty generic

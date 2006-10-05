@@ -28,7 +28,7 @@ function &dynamicdata_userapi_getproperty($args)
         $result = null;
         return $result;
     }
-    $result =  Dynamic_Property_Master::getProperty($args);
+    $result =  DataPropertyMaster::getProperty($args);
     return $result;
 }
 

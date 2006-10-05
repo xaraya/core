@@ -105,7 +105,7 @@ function dynamicdata_userapi_getprop($args)
         }
     }
 
-    $fields = Dynamic_Property_Master::getProperties(array('objectid' => $objectid,
+    $fields = DataPropertyMaster::getProperties(array('objectid' => $objectid,
                                                            'moduleid' => $modid,
                                                            'itemtype' => $itemtype,
                                                            'allprops' => $allprops));

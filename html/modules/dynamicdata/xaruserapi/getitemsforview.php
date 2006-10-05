@@ -20,7 +20,7 @@ function dynamicdata_userapi_getitemsforview($args)
 {
     if (empty($args['fieldlist']) && empty($args['status'])) {
         // get the Active properties only (not those for Display Only)
-        $args['status'] = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
+        $args['status'] = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
     }
     $args['getobject'] = 1;
     $object =  xarModAPIFunc('dynamicdata','user','getitems',$args);

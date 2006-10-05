@@ -32,16 +32,16 @@ function dynamicdata_admin_modifyconfig()
     if (!xarModAPILoad('dynamicdata', 'user')) return;
 
     // Get the defined property types from somewhere...
-    $data['fields'] = Dynamic_Property_Master::getPropertyTypes();
+    $data['fields'] = DataPropertyMaster::getPropertyTypes();
     if (!isset($data['fields']) || $data['fields'] == false) {
         $data['fields'] = array();
     }
 
     // FIXME: This may not work when moving property classes around manually !
-    //$data['fieldtypeprop'] =& Dynamic_Property_Master::getProperty(array('type' => 'fieldtype'));
-    sys::import('modules.dynamicdata.xarproperties.Dynamic_FieldType_Property');
+    //$data['fieldtypeprop'] =& DataPropertyMaster::getProperty(array('type' => 'fieldtype'));
+    sys::import('modules.dynamicdata.xarproperties.fieldtype');
 
-    $data['fieldtypeprop'] = new Dynamic_FieldType_Property(array('type' => 'fieldtype'));
+    $data['fieldtypeprop'] = new FieldTypeProperty(array('type' => 'fieldtype'));
 
     $data['labels'] = array(
                             'id' => xarML('ID'),

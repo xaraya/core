@@ -82,7 +82,7 @@ function dynamicdata_admin_delete($args)
         $mylist = & Dynamic_Object_Master::getObjectList(array('objectid' => $itemid, 'extend' => false));
         foreach (array_keys($mylist->properties) as $name) {
             $propid = $mylist->properties[$name]->id;
-            $propid = Dynamic_Property_Master::deleteProperty(array('itemid' => $propid));
+            $propid = DataPropertyMaster::deleteProperty(array('itemid' => $propid));
         }
     }
 
