@@ -1,13 +1,13 @@
 <?php
 /**
- * xarTpl__XarElseIfNode: <xar:elseif> tag class
+ * ElseIfTagNode: <xar:elseif> tag class
  *
  * Takes care of ean } elseif(condition) { construct
  *
  * @package blocklayout
  * @access private
 **/
-class xarTpl__XarElseifNode extends xarTpl__TplTagNode
+class ElseIfTagNode extends TagNode implements EmptyElementTag
 {
     function __construct(&$parser, $tagName, $parentTagName='', $attributes=array())
     {
@@ -24,7 +24,7 @@ class xarTpl__XarElseifNode extends xarTpl__TplTagNode
             return;
         }
         
-        $condition = xarTpl__ExpressionTransformer::transformPHPExpression($condition);
+        $condition = ExpressionTransformer::transformPHPExpression($condition);
         if (!isset($condition)) return; // throw back
         
         return "} elseif ($condition) { ";

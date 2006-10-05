@@ -1,7 +1,7 @@
 <?php
 
 /**
- * xarTpl__XarBlockNode: <xar:block> tag class
+ * BlockTagNode: <xar:block> tag class
  *
  * Tag summary:
  *   Mandatory attributes: either 'instance' or ('module' and 'type')
@@ -13,7 +13,7 @@
  * @todo try to get rid of the dependency with xarVar.php (xarVar_addslashes)
  * @todo there is a return in the middle of this handler (effectively ignoring children) CORRECT THIS!
  */
-class xarTpl__XarBlockNode extends xarTpl__TplTagNode
+class BlockTagNode extends TagNode implements ElementTag
 {
     public $blockgrouptemplate = NULL; // is written to by blockgroup node 
     

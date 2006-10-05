@@ -1,14 +1,13 @@
 <?php
-
 /**
-* xarTpl__XarVarEntityNode
+ * VarEntityNode
  *
  * Variable entities, treated as BL expression
  *
  * @package blocklayout
  * @access private
  */
-class xarTpl__XarVarEntityNode extends xarTpl__EntityNode
+class VarEntityNode extends EntityNode
 {
     function render()
     {
@@ -16,7 +15,7 @@ class xarTpl__XarVarEntityNode extends xarTpl__EntityNode
             $this->raiseError(XAR_BL_MISSING_PARAMETER,'Parameters mismatch in &xar-var entity.');
             return;
         }
-        $name = xarTpl__ExpressionTransformer::transformBLExpression($this->parameters[0]);
+        $name = ExpressionTransformer::transformBLExpression($this->parameters[0]);
         if (!isset($name)) return; // throw back
         
         return XAR_TOKEN_VAR_START . $name;

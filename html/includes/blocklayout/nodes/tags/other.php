@@ -1,6 +1,6 @@
 <?php
 /**
- * xarTpl__XarOtherNode: handle module registered tags
+ * OtherTagNode: handle module registered tags
  *
  * @package blocklayout
  * @access private
@@ -9,7 +9,7 @@
  * @todo find a way to add renderbegin and renderend methods so custom tags can have open form
  * @todo should expression resolving for attributes be done here or in the handler?
  */
-class xarTpl__XarOtherNode extends xarTpl__TplTagNode
+class OtherTagNode extends TagNode implements ElementTag, EmptyElementTag
 {
     public $tagobject;
     

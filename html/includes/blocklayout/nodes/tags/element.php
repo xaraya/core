@@ -13,7 +13,7 @@
  * Class for the xar:element tag
  *
  **/
-class xarTpl__XarElementNode extends xarTpl__TplTagNode
+class ElementTagNode extends TagNode implements ElementTag, EmptyElementTag
 {
     private $name = ''; // Name of the element to generate
     
@@ -75,7 +75,7 @@ class xarTpl__XarElementNode extends xarTpl__TplTagNode
         if(empty($name)) {
             $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,"The <xar:element/> tag requires a 'name' attribute.");
         }
-        $this->name = xarTpl__ExpressionTransformer::transformPHPExpression($name);
+        $this->name = ExpressionTransformer::transformPHPExpression($name);
     }
  }
  ?>

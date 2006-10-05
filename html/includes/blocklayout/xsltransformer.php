@@ -59,7 +59,7 @@ class BlocklayoutXSLTProcessor extends Object
         
     static function phpexpression($expr)
     {
-        return xarTpl__ExpressionTransformer::transformPHPExpression($expr);
+        return ExpressionTransformer::transformPHPExpression($expr);
     }
 }
 ?>

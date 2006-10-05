@@ -1,12 +1,12 @@
 <?php
 /**
- * xarTpl__XarSetNode: <xar:set> tag class
+ * SetTagNode: <xar:set> tag class
  *
  * @package blocklayout
  * @access private
  * @todo look at supporting xar:set name="$myarray['key']" again
  */
-class xarTpl__XarSetNode extends xarTpl__TplTagNode
+class SetTagNode extends TagNode implements ElementTag, EmptyElementTag
 {
     private $_name;             // What are we setting?
     private $_nonmarkup = true; // Do we accept non markup?

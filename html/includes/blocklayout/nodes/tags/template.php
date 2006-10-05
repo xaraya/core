@@ -1,11 +1,11 @@
 <?php
 /**
- * xarTpl__XarTemplateNode: <xar:template> tag class
+ * TemplateTagNode: <xar:template> tag class
  *
  * @package blocklayout
  * @access private
  */
-class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
+class TemplateTagNode extends TagNode implements ElementTag, EmptyElementTag
 {
     function __construct(&$parser, $tagName, $parentTagName='', $parameters=array())
     {
@@ -27,13 +27,13 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
         }
         
         // Resolve the file attribute
-        $file = xarTpl__ExpressionTransformer::transformPHPExpression($file);
+        $file = ExpressionTransformer::transformPHPExpression($file);
         if (!isset($file)) {
             return;
         }
         
         // Resolve subdata attribute
-        $subdata = xarTpl__ExpressionTransformer::transformPHPExpression($subdata);
+        $subdata = ExpressionTransformer::transformPHPExpression($subdata);
         
         switch($type) {
             case 'theme':
@@ -61,7 +61,7 @@ class xarTpl__XarTemplateNode extends xarTpl__TplTagNode
                     if(!isset($module)) $module = '".xarModGetName()."';
                 }
                 // Resolve the module attribute
-                $module = xarTpl__ExpressionTransformer::transformPHPExpression($module);
+                $module = ExpressionTransformer::transformPHPExpression($module);
                 
                 return "xarTpl_includeModuleTemplate(\"$module\", \"$file\", $subdata)";
                 break;

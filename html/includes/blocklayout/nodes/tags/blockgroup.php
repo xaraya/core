@@ -1,12 +1,12 @@
 <?php
 /**
- * xarTpl__XarBlockGroupNode: <xar:blockgroup> tag class
+ * BlockGroupTagNode: <xar:blockgroup> tag class
  *
  * @package blocklayout
  * @access private
  * @todo the renderbegintag use of semicolons looks weird, why is that?
  */
-class xarTpl__XarBlockGroupNode extends xarTpl__TplTagNode
+class BlockGroupTagNode extends TagNode implements ElementTag, EmptyElementTag
 {
     public $template = NULL;
     

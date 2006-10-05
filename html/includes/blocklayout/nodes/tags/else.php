@@ -1,14 +1,13 @@
 <?php
-
 /**
-* xarTpl__XarElseNode: <xar:else/> tag class
+ * ElseTagNode: <xar:else/> tag class
  *
  * Takes care of the "} else {" construct for both if and else tags
  *
  * @package blocklayout
  * @access private
  */
-class xarTpl__XarElseNode extends xarTpl__TplTagNode
+class ElseTagNode extends TagNode implements EmptyElementTag
 {
     function __construct(&$parser, $tagName, $parentTagName='', $parameters=array())
     {

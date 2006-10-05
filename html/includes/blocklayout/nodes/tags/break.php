@@ -1,12 +1,12 @@
 <?php
 
 /**
-* xarTpl__XarBreakNode: <xar:break/> tag class
+ * BreakTagNode: <xar:break/> tag class
  *
  * @package blocklayout
  * @access private
  */
-class xarTpl__XarBreakNode extends xarTpl__TplTagNode
+class BreakTagNode extends TagNode implements EmptyElementTag
 {
     function __construct(&$parser, $tagName, $parentTagName='', $attributes=array())
     {

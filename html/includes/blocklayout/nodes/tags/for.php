@@ -1,13 +1,13 @@
 <?php
 /**
- * xarTpl__XarForNode: <xar:for> tag class
+ * ForTagNode: <xar:for> tag class
  *
  * Takes care of the "for(start, test, iteration) {"  construct
  *
  * @package blocklayout
  * @access private
  */
-class xarTpl__XarForNode extends xarTpl__TplTagNode
+class ForTagNode extends TagNode implements ElementTag
 {
     function __construct(&$parser, $tagName, $parentTagName='', $parameters=array()) 
     {
@@ -36,13 +36,13 @@ class xarTpl__XarForNode extends xarTpl__TplTagNode
             return;
         }
         
-        $start = xarTpl__ExpressionTransformer::transformPHPExpression($start);
+        $start = ExpressionTransformer::transformPHPExpression($start);
         if (!isset($start)) return; // throw back
         
-        $test = xarTpl__ExpressionTransformer::transformPHPExpression($test);
+        $test = ExpressionTransformer::transformPHPExpression($test);
         if (!isset($test)) return; // throw back
         
-        $iter = xarTpl__ExpressionTransformer::transformPHPExpression($iter);
+        $iter = ExpressionTransformer::transformPHPExpression($iter);
         if (!isset($iter)) return; // throw back
         
         return "for ($start; $test; $iter) { ";

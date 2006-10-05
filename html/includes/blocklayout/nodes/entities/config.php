@@ -1,7 +1,6 @@
 <?php
-
 /**
-* xarTpl__XarConfigEntityNode
+ * ConfigEntityNode
  *
  * Configuration entities, treated as BL expression, basically
  * a wrapping to xarConfigGetVar()
@@ -9,7 +8,7 @@
  * @package blocklayout
  * @access private
  */
-class xarTpl__XarConfigEntityNode extends xarTpl__EntityNode
+class ConfigEntityNode extends EntityNode
 {
     function render()
     {

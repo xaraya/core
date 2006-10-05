@@ -1,10 +1,10 @@
 <?php
 /**
- * xarTpl__XarSecNode: <xar:sec> tag class
+ * SecTagNode: <xar:sec> tag class
  *
  * @package blocklayout
  */
-class xarTpl__XarSecNode extends xarTpl__TplTagNode
+class SecTagNode extends TagNode implements ElementTag
 {
     function __construct(&$parser, $tagName, $parentTagName='', $parameters=array())
     {
@@ -36,8 +36,8 @@ class xarTpl__XarSecNode extends xarTpl__TplTagNode
             return;
         }
         
-        $component = xarTpl__ExpressionTransformer::transformPHPExpression($component);
-        $instance = xarTpl__ExpressionTransformer::transformPHPExpression($instance);
+        $component = ExpressionTransformer::transformPHPExpression($component);
+        $instance = ExpressionTransformer::transformPHPExpression($instance);
         
         return "if (xarSecurityCheck(\"$mask\", $catch, \"$component\", \"$instance\")) { ";
     }

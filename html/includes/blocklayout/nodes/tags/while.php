@@ -1,13 +1,13 @@
 <?php
 /**
- * xarTpl__XarWhileNode: <xar:while> tag class
+ * WhileTagNode: <xar:while> tag class
  *
  * takes care of the "while(condition) {" construct
  *
  * @package blocklayout
  * @access private
  */
-class xarTpl__XarWhileNode extends xarTpl__TplTagNode
+class WhileTagNode extends TagNode implements ElementTag
 {
     function __construct(&$parser, $tagName, $parentTagName='', $parameters=array())
     {
@@ -26,7 +26,7 @@ class xarTpl__XarWhileNode extends xarTpl__TplTagNode
             return;
         }
         
-        $condition = xarTpl__ExpressionTransformer::transformPHPExpression($condition);
+        $condition = ExpressionTransformer::transformPHPExpression($condition);
         if (!isset($condition)) return; // throw back
         
         return "while ($condition) { ";

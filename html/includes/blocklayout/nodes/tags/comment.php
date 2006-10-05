@@ -1,7 +1,6 @@
 <?php
-
 /**
-* xarTpl__XarCommentNode: <xar:comment> tag class
+ * CommentTagNode: <xar:comment> tag class
  *
  * Produce a comment in the output.
  * @package blocklayout
@@ -10,7 +9,7 @@
  * @todo Do we want to make sure the content validates as valid xml?
  * @todo Now it only goes for xml like content.
  */
-class xarTpl__XarCommentNode extends xarTpl__TplTagNode
+class CommentTagNode extends TagNode implements ElementTag
 {
     private $iecondition = '';
 
@@ -35,7 +34,7 @@ class xarTpl__XarCommentNode extends xarTpl__TplTagNode
         extract($this->attributes);
 
         // Resolve it.
-        $this->iecondition = xarTpl__ExpressionTransformer::transformPHPExpression($iecondition);
+        $this->iecondition = ExpressionTransformer::transformPHPExpression($iecondition);
         
         if($this->iecondition!='') {
             $code = "'<!--[if '.".$this->iecondition.".']>'";

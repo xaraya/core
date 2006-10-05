@@ -1,11 +1,11 @@
 <?php
 /**
- * xarTpl__XarVarNode: <xar:var> tag class
+ * VarTagNode: <xar:var> tag class
  *
  *
  * @package blocklayout
  */
-class xarTpl__XarVarNode extends xarTpl__TplTagNode
+class VarTagNode extends TagNode implements EmptyElementTag
 {
     function render()
     {
@@ -37,7 +37,7 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
                 $value = "xarSessionGetVar('".$name."')";
                 break;
             case 'user':
-                $user = xarTpl__ExpressionTransformer::transformPHPExpression($user);
+                $user = ExpressionTransformer::transformPHPExpression($user);
                 $value = "xarUserGetVar('".$name."',".$user.")";
                 break;
             case 'module':
@@ -58,7 +58,7 @@ class xarTpl__XarVarNode extends xarTpl__TplTagNode
                 break;
             case 'local':
                 // Resolve the name, note that this works for both name="test" and name="$test"
-                $value = xarTpl__ExpressionTransformer::transformPHPExpression(XAR_TOKEN_VAR_START . $name);
+                $value = ExpressionTransformer::transformPHPExpression(XAR_TOKEN_VAR_START . $name);
                 if (!isset($value)) return; // throw back
                     break;
             default:
