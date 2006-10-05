@@ -14,11 +14,11 @@
  */
 class TextAreaProperty extends DataProperty
 {
-    public $id         = 3;
-    public $name       = 'textarea_small';
-    public $desc       = 'Small Text Area';
+    public $id         = 33345;
+    public $name       = 'textarea';
+    public $desc       = 'Text Area';
     public $reqmodules = array('base');
-    public $args       = array('rows' => 2);
+    public $args       = array('rows' => 6);
 
     public $rows = 8;
     public $cols = 35;
@@ -42,6 +42,12 @@ class TextAreaProperty extends DataProperty
 
     function aliases()
     {
+        $a1['id']   = 3;
+        $a1['name'] = 'textarea_small';
+        $a1['desc'] = 'Small Text Area';
+        $a1['args'] = array('rows' => 2);
+        $a1['reqmodules'] = array('base');
+
         $a1['id']   = 4;
         $a1['name'] = 'textarea_medium';
         $a1['desc'] = 'Medium Text Area';
