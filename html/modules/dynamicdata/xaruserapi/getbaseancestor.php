@@ -8,13 +8,13 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
- * Wrapper for Dynamic_Object_Master::getBaseAncestor
+ * Wrapper for DataObjectMaster::getBaseAncestor
  *
- * @see  Dynamic_Object_Master::getBaseAncestor
+ * @see  DataObjectMaster::getBaseAncestor
  * @todo remove this wrapper
  */
 function &dynamicdata_userapi_getbaseancestor($args)
 {
-    return Dynamic_Object_Master::getBaseAncestor($args);
+    return DataObjectMaster::getBaseAncestor($args);
 }
 ?>

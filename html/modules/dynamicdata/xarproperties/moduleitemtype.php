@@ -59,7 +59,7 @@ class ModuleItemtypeProperty extends SelectProperty
             $this->value = $value;
         }
         if ($this->value < 1000) {
-            $types = Dynamic_Object_Master::getModuleItemTypes(array('moduleid' => $this->referencemoduleid));
+            $types = DataObjectMaster::getModuleItemTypes(array('moduleid' => $this->referencemoduleid));
             // we may still have a loose end in the module: no appropriate parent
             $name = isset($types[$this->value]) ? $types[$this->value]['label'] : xarML('base itemtype');
             $data['option'] = array('id' => $this->referencemoduleid,
@@ -77,7 +77,7 @@ class ModuleItemtypeProperty extends SelectProperty
     function getOptions()
     {
         $this->options = array();
-        $types = Dynamic_Object_Master::getModuleItemTypes(array('moduleid' => $this->referencemoduleid));
+        $types = DataObjectMaster::getModuleItemTypes(array('moduleid' => $this->referencemoduleid));
         if ($types != array()) {
             foreach ($types as $key => $value) $this->options[] = array('id' => $key, 'name' => $value['label']);
         } else {

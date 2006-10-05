@@ -13,7 +13,7 @@ sys::import('modules.dynamicdata.class.interface');
 /**
   * Simple Object Interface
   */
-class Simple_Object_Interface extends Dynamic_Object_Interface
+class Simple_Object_Interface extends DataObjectInterface
 {
     function __construct(array $args = array())
     {
@@ -44,7 +44,7 @@ class Simple_Object_Interface extends Dynamic_Object_Interface
         if (!empty($args) && is_array($args) && count($args) > 0) { 
             $this->args = array_merge($this->args, $args);
         }
-        $this->object =& Dynamic_Object_Master::getObjectList($this->args);
+        $this->object =& DataObjectMaster::getObjectList($this->args);
         $this->object->getItems();
 
         if (empty($this->object)) return;

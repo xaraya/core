@@ -1294,7 +1294,7 @@ function installer_admin_upgrade2()
         array('Dynamic_Hidden_Property.php',1,'Base'),
         array('Dynamic_ItemID_Property.php',1,'DynamicData'),
         array('Dynamic_ItemType_Property.php',1,'DynamicData'),
-        array('Dynamic_Object_Property.php',1,'DynamicData'),
+        array('DataObject_Property.php',1,'DynamicData'),
         array('Dynamic_SubForm_Property.php',1,'DynamicData'),
         array('Dynamic_Validation_Property.php',1,'DynamicData')
     );

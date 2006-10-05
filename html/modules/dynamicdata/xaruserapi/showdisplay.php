@@ -98,7 +98,7 @@ function dynamicdata_userapi_showdisplay($args)
         $table = '';
     }
 
-    $object = & Dynamic_Object_Master::getObject(array('moduleid'  => $modid,
+    $object = & DataObjectMaster::getObject(array('moduleid'  => $modid,
                                        'itemtype'  => $itemtype,
                                        'itemid'    => $itemid,
                                        'join'      => $join,

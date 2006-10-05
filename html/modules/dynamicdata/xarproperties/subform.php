@@ -219,7 +219,7 @@ class SubFormProperty extends DataProperty
                 array_push($this->fieldlist,$this->link);
             }
             // check user input for the object item
-            $myobject =& Dynamic_Object_Master::getObject(array('objectid'  => $this->objectid,
+            $myobject =& DataObjectMaster::getObject(array('objectid'  => $this->objectid,
                                                                 'fieldlist' => $this->fieldlist));
             $keylist = array_keys($myobject->properties);
             // report all invalid values here, even the ones we don't see because of the fieldlist
@@ -315,7 +315,7 @@ class SubFormProperty extends DataProperty
                 array_push($this->fieldlist,$this->link);
             }
             // check user input for the object item
-            $myobject =& Dynamic_Object_Master::getObject(array('objectid'  => $this->objectid,
+            $myobject =& DataObjectMaster::getObject(array('objectid'  => $this->objectid,
                                                                 'fieldlist' => $this->fieldlist));
             $keylist = array_keys($myobject->properties);
             // report all invalid values here, even the ones we don't see because of the fieldlist
@@ -429,7 +429,7 @@ class SubFormProperty extends DataProperty
 
             // get the list of available items if requested
             if ($this->style == 'itemid' && !empty($this->title)) {
-                $mylist =& Dynamic_Object_Master::getObjectList(array('objectid'  => $this->objectid,
+                $mylist =& DataObjectMaster::getObjectList(array('objectid'  => $this->objectid,
                                                                       'fieldlist' => array($this->title),
                                                                       'where'     => $this->where));
                 $data['dropdown'] = $mylist->getItems();
@@ -450,7 +450,7 @@ class SubFormProperty extends DataProperty
                     }
                 }
                 // get the number of items per link field value
-                $mylist =& Dynamic_Object_Master::getObjectList(array('objectid'  => $this->objectid,
+                $mylist =& DataObjectMaster::getObjectList(array('objectid'  => $this->objectid,
                                                                       'fieldlist' => array($this->link,'COUNT('.$data['count'].')'),
                                                                       'groupby'   => array($this->link)));
                 $data['dropdown'] = $mylist->getItems();
@@ -536,7 +536,7 @@ class SubFormProperty extends DataProperty
                     } else {
                         $status = null;
                     }
-                    $myobject =& Dynamic_Object_Master::getObjectList(array('objectid'  => $this->objectid,
+                    $myobject =& DataObjectMaster::getObjectList(array('objectid'  => $this->objectid,
                                                                             'fieldlist' => $this->fieldlist,
                                                                             'status'    => $status));
                 } else {
@@ -564,7 +564,7 @@ class SubFormProperty extends DataProperty
                     } else {
                         $status = null;
                     }
-                    $myobject =& Dynamic_Object_Master::getObjectList(array('objectid'  => $this->objectid,
+                    $myobject =& DataObjectMaster::getObjectList(array('objectid'  => $this->objectid,
                                                                             'fieldlist' => $this->fieldlist,
                                                                             'status'    => $status));
                 } else {
@@ -602,7 +602,7 @@ class SubFormProperty extends DataProperty
 
             case 'itemid':
                 if (!isset($myobject)) {
-                    $myobject =& Dynamic_Object_Master::getObject(array('objectid'  => $this->objectid,
+                    $myobject =& DataObjectMaster::getObject(array('objectid'  => $this->objectid,
                                                                         'fieldlist' => $this->fieldlist));
                 }
                 if (!empty($value)) {
@@ -613,7 +613,7 @@ class SubFormProperty extends DataProperty
             case 'serialized':
             default:
                 if (!isset($myobject)) {
-                    $myobject =& Dynamic_Object_Master::getObject(array('objectid'  => $this->objectid,
+                    $myobject =& DataObjectMaster::getObject(array('objectid'  => $this->objectid,
                                                                         'fieldlist' => $this->fieldlist));
                 } else {
                     // initialise the properties again

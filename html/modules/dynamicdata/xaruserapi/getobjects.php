@@ -19,7 +19,7 @@
  */
 function dynamicdata_userapi_getobjects($args = array())
 {
-    return Dynamic_Object_Master::getObjects($args);
+    return DataObjectMaster::getObjects($args);
 }
 
 ?>

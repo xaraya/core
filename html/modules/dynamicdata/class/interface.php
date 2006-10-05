@@ -20,7 +20,7 @@
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata
  */
-class Dynamic_Object_Interface extends Object
+class DataObjectInterface extends Object
 {
     public $args = array();
     public $object = null;
@@ -56,7 +56,7 @@ class Dynamic_Object_Interface extends Object
 
         // retrieve the object information for this object
         if(!empty($args['object']))  {
-            $info = Dynamic_Object_Master::getObjectInfo(
+            $info = DataObjectMaster::getObjectInfo(
                 array('name' => $args['object'])
             );
             $args = array_merge($args, $info);
@@ -117,7 +117,7 @@ class Dynamic_Object_Interface extends Object
 
         if(!isset($this->object)) 
         {
-            $this->object =& Dynamic_Object_Master::getObject($this->args);
+            $this->object =& DataObjectMaster::getObject($this->args);
             if(empty($this->object)) 
                 return;
             if(empty($this->urlmodule)) 
@@ -205,7 +205,7 @@ class Dynamic_Object_Interface extends Object
 
         if(!isset($this->object)) 
         {
-            $this->object =& Dynamic_Object_Master::getObject($this->args);
+            $this->object =& DataObjectMaster::getObject($this->args);
             if(empty($this->object)) 
                 return;
             if(empty($this->urlmodule)) 
@@ -294,7 +294,7 @@ class Dynamic_Object_Interface extends Object
 
         if(!isset($this->object)) 
         {
-            $this->object =& Dynamic_Object_Master::getObject($this->args);
+            $this->object =& DataObjectMaster::getObject($this->args);
             if(empty($this->object)) 
                 return;
 
@@ -374,7 +374,7 @@ class Dynamic_Object_Interface extends Object
 
         if(!isset($this->object)) 
         {
-            $this->object =& Dynamic_Object_Master::getObject($this->args);
+            $this->object =& DataObjectMaster::getObject($this->args);
             if(empty($this->object)) 
                 return;
 
@@ -442,7 +442,7 @@ class Dynamic_Object_Interface extends Object
 
         if(!isset($this->list)) 
         {
-            $this->list =& Dynamic_Object_Master::getObjectList($this->args);
+            $this->list =& DataObjectMaster::getObjectList($this->args);
             if(empty($this->list)) 
                 return;
             
@@ -480,7 +480,7 @@ class Dynamic_Object_Interface extends Object
 
         if(!isset($this->list)) 
         {
-            $this->list =& Dynamic_Object_Master::getObjectList($this->args);
+            $this->list =& DataObjectMaster::getObjectList($this->args);
             if(empty($this->list)) 
                 return;
 

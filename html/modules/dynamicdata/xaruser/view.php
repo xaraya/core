@@ -43,7 +43,7 @@ function dynamicdata_user_view($args)
         $itemtype = 0;
     }
 
-    $object = Dynamic_Object_Master::getObjectInfo(
+    $object = DataObjectMaster::getObjectInfo(
                             array('objectid' => $objectid,
                                   'moduleid' => $modid,
                                   'itemtype' => $itemtype,
@@ -77,7 +77,7 @@ function dynamicdata_user_view($args)
 
 /*  // we could also retrieve the object list here, and pass that along to the template
     $numitems = 30;
-    $mylist = & Dynamic_Object_Master::getObjectList(array('objectid' => $objectid,
+    $mylist = & DataObjectMaster::getObjectList(array('objectid' => $objectid,
                                             'moduleid' => $modid,
                                             'itemtype' => $itemtype,
                                             'status'   => 1));

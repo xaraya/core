@@ -11,13 +11,13 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
- * Wrapper for Dynamic_Object_Master::getAncestors
+ * Wrapper for DataObjectMaster::getAncestors
  *
- * @see  Dynamic_Object_Master::getAncestors
+ * @see  DataObjectMaster::getAncestors
  * @todo remove this wrapper
  */
 function &dynamicdata_userapi_getancestors($args)
 {
-    return Dynamic_Object_Master::getAncestors($args);
+    return DataObjectMaster::getAncestors($args);
 }
 ?>

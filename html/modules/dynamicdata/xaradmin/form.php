@@ -43,7 +43,7 @@ function dynamicdata_admin_form($args)
 
     $data = xarModAPIFunc('dynamicdata','admin','menu');
 
-    $myobject = & Dynamic_Object_Master::getObject(array('objectid' => $objectid,
+    $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'moduleid' => $modid,
                                          'itemtype' => $itemtype,
                                          'join'     => $join,

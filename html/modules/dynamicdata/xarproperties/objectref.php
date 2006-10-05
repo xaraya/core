@@ -51,7 +51,7 @@ class ObjectRefProperty extends SelectProperty
     {
         // The object we need to query is in $this->refobject, we display the value of
         // the property in $this->display_prop and the id comes from $this->store_prop
-        $objInfo  = Dynamic_Object_Master::getObjectInfo(array('name' => $this->refobject));
+        $objInfo  = DataObjectMaster::getObjectInfo(array('name' => $this->refobject));
 
         // TODO: do we need to check whether the properties are actually in the object?
         $items =  xarModApiFunc('dynamicdata', 'user', 'getitems', array (
@@ -97,7 +97,7 @@ class ObjectRefProperty extends SelectProperty
         }
 
         // Determine the objectid, so we can produce the combobox automatically.
-        $object = Dynamic_Object_Master::getObjectInfo(array('name' => $this->refobject));
+        $object = DataObjectMaster::getObjectInfo(array('name' => $this->refobject));
         $data['objectid'] = $object['objectid'];
         $data['name']     = !empty($name) ? $name : 'dd_'.$this->id;
 
@@ -145,7 +145,7 @@ class ObjectRefProperty extends SelectProperty
         extract($args['validation']);
 
         if(isset($objectid))  {
-            $object = Dynamic_Object_Master::getObjectInfo(array('objectid' => $objectid));
+            $object = DataObjectMaster::getObjectInfo(array('objectid' => $objectid));
             $this->refobject = $object['name'];
 
             // This gets a name index array of the props

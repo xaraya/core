@@ -9,12 +9,12 @@
 sys::import('modules.dynamicdata.class.properties');
 sys::import('modules.dynamicdata.class.objects.master');
 
-class Dynamic_Object extends Dynamic_Object_Master
+class DataObject extends DataObjectMaster
 {
     public $itemid = 0;
 
     /**
-     * Inherits from Dynamic_Object_Master and sets the requested item id
+     * Inherits from DataObjectMaster and sets the requested item id
      *
      * @param $args['itemid'] item id of the object to get
     **/
@@ -333,13 +333,13 @@ class Dynamic_Object extends Dynamic_Object_Master
             if ($this->baseancestor == $this->objectid) {
                 $primaryobject = $this;;
             } else {
-                $primaryobject = Dynamic_Object_Master::getObject(array('objectid' => $this->baseancestor));
+                $primaryobject = DataObjectMaster::getObject(array('objectid' => $this->baseancestor));
             }
             // no primary key identified for this object, so we're stuck
             if(!isset($primaryobject->primary))
             {
                 $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-                $vars = array('primary key', 'Dynamic_Object', 'createItem', 'DynamicData');
+                $vars = array('primary key', 'DataObject', 'createItem', 'DynamicData');
                 throw new BadParameterException($vars,$msg);
             }
             else

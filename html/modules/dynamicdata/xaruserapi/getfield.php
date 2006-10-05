@@ -52,7 +52,7 @@ function dynamicdata_userapi_getfield($args)
         throw new BadParameterException($vars,$msg);
     }
 
-    $object = & Dynamic_Object_Master::getObject(array('moduleid'  => $modid,
+    $object = & DataObjectMaster::getObject(array('moduleid'  => $modid,
                                        'itemtype'  => $itemtype,
                                        'itemid'    => $itemid,
                                        'fieldlist' => array($name)));

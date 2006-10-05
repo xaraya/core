@@ -208,7 +208,7 @@ class DataPropertyMaster extends Object
 
     static function createProperty(array $args)
     {
-        $object = new Dynamic_Object(array('objectid' => 2)); // the Dynamic Properties = 2
+        $object = new DataObject(array('objectid' => 2)); // the Dynamic Properties = 2
         $objectid = $object->createItem($args);
         unset($object);
         return $objectid;
@@ -225,7 +225,7 @@ class DataPropertyMaster extends Object
             return;
 
         // TODO: delete all the (dynamic ?) data for this property as well
-        $object = new Dynamic_Object(
+        $object = new DataObject(
             array(
                 'objectid' => 2, // the Dynamic Properties = 2
                 'itemid'   => $args['itemid']

@@ -3,10 +3,10 @@
  * Classes for handling Dynamic Data Objects
  *
  * Hierarchy in here:
- *      Dynamic_Object_Master - the factory class for producing DD objects
+ *      DataObjectMaster - the factory class for producing DD objects
  *       |
- *       |-- Dynamic_Object        - base class for all dynamic objects.
- *       |-- Dynamic_Object_List   - creates an object with a list of values for a DD object. (weird duckling in here)
+ *       |-- DataObject        - base class for all dynamic objects.
+ *       |-- DataObjectList   - creates an object with a list of values for a DD object. (weird duckling in here)
  * 
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation

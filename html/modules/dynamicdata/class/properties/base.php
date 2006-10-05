@@ -36,15 +36,15 @@ class DataProperty extends Object
 
     public $datastore = '';   // name of the data store where this property comes from
 
-    public $value = null;     // value of this property for a particular Dynamic_Object
+    public $value = null;     // value of this property for a particular DataObject
     public $invalid = '';     // result of the checkInput/validateValue methods
 
     public $_objectid = null; // objectid this property belongs to
     public $_moduleid = null; // moduleid this property belongs to
     public $_itemtype = null; // itemtype this property belongs to
 
-    public $_itemid;          // reference to $itemid in Dynamic_Object, where the current itemid is kept
-    public $_items;           // reference to $items in Dynamic_Object_List, where the different item values are kept
+    public $_itemid;          // reference to $itemid in DataObject, where the current itemid is kept
+    public $_items;           // reference to $items in DataObjectList, where the different item values are kept
 
     /**
      * Default constructor setting the variables

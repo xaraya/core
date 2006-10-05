@@ -143,7 +143,7 @@ function dynamicdata_utilapi_import($args)
                 $item['itemid'] = (!empty($keepitemid)) ? (string)$child->attributes()->itemid : 0;
 
                 if (empty($objectname2objectid[$item['name']])) {
-                    $objectinfo = Dynamic_Object_Master::getObjectInfo(array('name' => $item['name']));
+                    $objectinfo = DataObjectMaster::getObjectInfo(array('name' => $item['name']));
                     if (isset($objectinfo) && !empty($objectinfo['objectid'])) {
                         $objectname2objectid[$item['name']] = $objectinfo['objectid'];
                     } else {
@@ -156,7 +156,7 @@ function dynamicdata_utilapi_import($args)
 
                 // Get the properties for this object
                 $object = xarModAPIFunc('dynamicdata','user','getobject',array('objectid' => $objectid));
-                $primaryobject = Dynamic_Object_Master::getObject(array('objectid' => $object->baseancestor));
+                $primaryobject = DataObjectMaster::getObject(array('objectid' => $object->baseancestor));
                 $objectproperties = $object->properties;
                 $oldindex = 0;
                 foreach($objectproperties as $propertyname => $property) {
@@ -183,7 +183,7 @@ function dynamicdata_utilapi_import($args)
                 }
                 // Create the item
                 if (!isset($objectcache[$objectid])) {
-                    $objectcache[$objectid] = & Dynamic_Object_Master::getObject(array('objectid' => $objectid));
+                    $objectcache[$objectid] = & DataObjectMaster::getObject(array('objectid' => $objectid));
                 }
                 if (empty($keepitemid)) {
                     // for dynamic objects, set the primary field to 0 too
@@ -415,7 +415,7 @@ function dynamicdata_utilapi_import($args)
                 $objectname = $matches[1];
                 $itemid = $matches[2];
                 if (empty($objectname2objectid[$objectname])) {
-                    $objectinfo = Dynamic_Object_Master::getObjectInfo(array('name' => $objectname));
+                    $objectinfo = DataObjectMaster::getObjectInfo(array('name' => $objectname));
                     if (isset($objectinfo) && !empty($objectinfo['objectid'])) {
                         $objectname2objectid[$objectname] = $objectinfo['objectid'];
                     } else {
@@ -435,7 +435,7 @@ function dynamicdata_utilapi_import($args)
             } elseif (preg_match("#</$closeitem>#",$line)) {
                 // let's create the item now...
                 if (!isset($objectcache[$objectid])) {
-                    $objectcache[$objectid] = & Dynamic_Object_Master::getObject(array('objectid' => $objectid));
+                    $objectcache[$objectid] = & DataObjectMaster::getObject(array('objectid' => $objectid));
                 }
                 if (empty($keepitemid)) {
                     // set the item id to 0
@@ -532,7 +532,7 @@ function dynamicdata_utilapi_import($args)
     if (count($objectcache) > 0 && count($objectmaxid) > 0) {
         foreach (array_keys($objectcache) as $objectid) {
             if (!empty($objectmaxid[$objectid]) && $objectcache[$objectid]->maxid < $objectmaxid[$objectid]) {
-                $itemid = Dynamic_Object_Master::updateObject(array('objectid' => $objectid,
+                $itemid = DataObjectMaster::updateObject(array('objectid' => $objectid,
                                                                     'maxid'    => $objectmaxid[$objectid]));
                 if (empty($itemid)) return;
             }
