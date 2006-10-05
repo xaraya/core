@@ -1,7 +1,5 @@
 <?php
 /**
- * Simple Object Interface
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundatio
  * @subpackage dynamicdata
@@ -13,7 +11,7 @@ sys::import('modules.dynamicdata.class.interface');
 /**
   * Simple Object Interface
   */
-class Simple_Object_Interface extends DataObjectInterface
+class SimpleObjectInterface extends DataObjectInterface
 {
     function __construct(array $args = array())
     {
