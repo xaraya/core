@@ -9,14 +9,12 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 
+/* Include the base class */
+sys::import('modules.base.xarproperties.urlicon');
 /**
  * Handle ICQ property
  * @author mikespub <mikespub@xaraya.com>
  */
-
-/* Include the base class */
-sys::import('modules.base.xarproperties.Dynamic_URLIcon_Property');
-
 class ICQProperty extends URLIconProperty
 {
     public $id         = 28;

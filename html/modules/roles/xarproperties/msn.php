@@ -8,26 +8,25 @@
  * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
-/**
- * Include the base class
- */
-sys::import('modules.base.xarproperties.Dynamic_URLIcon_Property');
 
+/* Include the base class */
+sys::import('modules.base.xarproperties.urlicon');
 /**
- * Handle AIM property
+ * Handle MSN property
+ * @author mikespub <mikespub@xaraya.com>
  */
-class AIMProperty extends URLIconProperty
+class MSNProperty extends URLIconProperty
 {
-    public $id         = 29;
-    public $name       = 'aim';
-    public $desc       = 'AIM Screen Name';
+    public $id         = 30;
+    public $name       = 'msn';
+    public $desc       = 'MSN Messenger';
     public $reqmodules = array('roles');
 
     function __construct($args)
     {
         parent::__construct($args);
         $this->tplmodule = 'roles';
-        $this->template = 'aim';
+        $this->template = 'msn';
         $this->filepath   = 'modules/roles/xarproperties';
     }
 
@@ -37,10 +36,12 @@ class AIMProperty extends URLIconProperty
             $value = $this->value;
         }
         if (!empty($value)) {
-            if (is_string($value)) {
+            // cfr. pnVarValidate in pnLegacy.php
+            $regexp = '/^(?:[^\s\000-\037\177\(\)<>@,;:\\"\[\]]\.?)+@(?:[^\s\000-\037\177\(\)<>@,;:\\\"\[\]]\.?)+\.[a-z]{2,6}$/Ui'; // TODO: verify this !
+            if (preg_match($regexp,$value)) {
                 $this->value = $value;
             } else {
-                $this->invalid = xarML('AIM Address');
+                $this->invalid = xarML('MSN Messenger');
                 $this->value = null;
                 return false;
             }
@@ -56,7 +57,7 @@ class AIMProperty extends URLIconProperty
 
         $data['link'] ='';
         if(!empty($data['value'])) {
-            $data['link'] = 'aim:goim?screenname='.$data['value'].'&message='.xarML('Hello+Are+you+there?');
+            $data['link'] = xarVarPrepForDisplay("TODO: what's the link for MSN ?" .$data['value']);
         }
         return parent::showInput($data);
     }
@@ -67,8 +68,7 @@ class AIMProperty extends URLIconProperty
 
         $data['link'] = '';
         if (!empty($data['value'])) {
-            $data['link'] = 'aim:goim?screenname='.$data['value'].'&message='.xarML('Hello+Are+you+there?');
-
+            $data['link'] = "TODO: what's the link for MSN ?".$data['value'];
         }
         return parent::showOutput($data);
     }

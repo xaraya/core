@@ -1,15 +1,11 @@
 <?php
 /**
- * Dynamic Data Object Reference Property (foreign key like dropdown)
- * You can specify the to be referenced object and what property values
- * to use for displayinig and to store in the (foreign key) field
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author Marcel van der Boom <marcel@xaraya.com>
  * @todo match the type of the local field to the store property type (must be the same)
@@ -17,17 +13,18 @@
  * @todo rules for when the referenced object prop value gets deleted etc.
  * @todo foreign keys which consist of multiple attributes (bad design, but in practice it might come in handy)
  * @todo make the different loops a bit more efficient.
-*/
+ */
 
-// We base it on the select property
-sys::import('modules.base.xarproperties.Dynamic_Select_Property');
+sys::import('modules.base.xarproperties.dropdown');
 
 /**
  * Handle the objectreference property
  *
- * @package dynamicdata
+ * Dynamic Data Object Reference Property (foreign key like dropdown)
+ * You can specify the to be referenced object and what property values
+ * to use for displayinig and to store in the (foreign key) field
  */
-class Dynamic_ObjectRef_Property extends Dynamic_Select_Property
+class ObjectRefProperty extends SelectProperty
 {
     public $id         = 507;
     public $name       = 'objectref';

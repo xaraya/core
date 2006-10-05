@@ -11,7 +11,7 @@
 /**
  * Include the base class
  */
-sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
+sys::import('modules.base.xarproperties.textbox');
 /**
  * Handle E-mail property
  * @author mikespub <mikespub@xaraya.com>

@@ -5,32 +5,27 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
 
 /**
  * Include the base class
- *
  */
-sys::import('modules.base.xarproperties.Dynamic_Select_Property');
+sys::import('modules.base.xarproperties.dropdown');
 
 /**
- * handle the object property
+ * Handle the object property
  *
- * @package dynamicdata
+ * Options available to user selection
+ * ===================================
+ * Options take the form:
+ *   option-type:option-value;
+ * option-types:
+ *   static:true - add modules to the list
  */
-/*
-* Options available to user selection
-* ===================================
-* Options take the form:
-*   option-type:option-value;
-* option-types:
-*   static:true - add modules to the list
-*/
-
-class Dynamic_Object_Property extends Dynamic_Select_Property
+class ObjectProperty extends SelectProperty
 {
     public $id         = 24;
     public $name       = 'object';

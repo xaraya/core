@@ -8,16 +8,15 @@
  * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
-
+sys::import('modules.base.xarproperties.textbox');
 /**
- * Dynamic Passbox property
+ * Handle Passwordbox property
  * @author mikespub <mikespub@xaraya.com>
  */
-sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
 class PassBoxProperty extends TextBoxProperty
 {
     public $id         = 46;
-    public $name       = 'password';
+    public $name       = 'passwordbox';
     public $desc       = 'Password';
     public $reqmodules = array('roles');
     public $aliases    = array('id' => 461);

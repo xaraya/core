@@ -16,7 +16,7 @@ sys::import('modules.dynamicdata.class.properties');
 class FileUploadProperty extends DataProperty
 {
     public $id         = 9;
-    public $name       = 'fileupdload';
+    public $name       = 'fileupload';
     public $desc       = 'File Upload';
     public $reqmodules = array('base');
 

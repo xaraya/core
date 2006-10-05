@@ -9,7 +9,7 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 /* Include the base class */
-sys::import('modules.base.xarproperties.Dynamic_Select_Property');
+sys::import('modules.base.xarproperties.dropdown');
 /**
  * Handle Userlist property
  * @author mikespub <mikespub@xaraya.com>

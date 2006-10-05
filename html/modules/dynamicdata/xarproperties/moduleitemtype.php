@@ -1,10 +1,5 @@
 <?php
 /**
- * Dynamic Data Module Itemtype Property
- *
- * A dropdown giving the extensions based on a given module
- * to use for displaying possible parents of an extension
- *
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2003 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -12,17 +7,17 @@
  *
  * @subpackage dynamicdata properties
  * @author Marc Lutolf <random@xaraya.com>
-*/
+ */
 
-// We base it on the object property
-sys::import('modules.base.xarproperties.Dynamic_Select_Property');
+sys::import('modules.base.xarproperties.dropdown');
 
 /**
  * Handle the module itemtype property
  *
- * @package dynamicdata
+ * A dropdown giving the extensions based on a given module
+ * to use for displaying possible parents of an extension
  */
-class Dynamic_ModuleItemtype_Property extends Dynamic_Select_Property
+class ModuleItemtypeProperty extends SelectProperty
 {
     public $id         = 600;
     public $name       = 'moduleitemtype';

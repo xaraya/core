@@ -8,24 +8,26 @@
  * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
-/* Include the base class */
-sys::import('modules.base.xarproperties.Dynamic_URLIcon_Property');
 /**
- * Handle Yahoo property
+ * include the base class
+ */
+sys::import('modules.base.xarproperties.urlicon');;
+/**
+ * Handle Affero property
  * @author mikespub <mikespub@xaraya.com>
  */
-class YahooProperty extends URLIconProperty
+class AfferoProperty extends URLIconProperty
 {
-    public $id         = 31;
-    public $name       = 'yahoo';
-    public $desc       = 'Yahoo Messenger';
+    public $id         = 40;
+    public $name       = 'affero';
+    public $desc       = 'Affero Username';
     public $reqmodules = array('roles');
 
     function __construct($args)
     {
         parent::__construct($args);
         $this->tplmodule = 'roles';
-        $this->template = 'yahoo';
+        $this->template = 'affero';
         $this->filepath   = 'modules/roles/xarproperties';
     }
 
@@ -35,10 +37,10 @@ class YahooProperty extends URLIconProperty
             $value = $this->value;
         }
         if (!empty($value)) {
-            if (preg_match('/^[a-z0-9_-]+$/i',$value)) { // TODO: refine this !?
+            if (is_string($value)) {
                 $this->value = $value;
             } else {
-                $this->invalid = xarML('Yahoo Messenger');
+                $this->invalid = xarML('Affero Name');
                 $this->value = null;
                 return false;
             }
@@ -55,11 +57,10 @@ class YahooProperty extends URLIconProperty
 
         $link = '';
         if (!empty($value)) {
-            $link = 'http://edit.yahoo.com/config/send_webmesg?.target='.$value.'&.src=pg';
+            $link = 'http://svcs.affero.net/user-history.php?ll=lq_members&u='.$value;
         }
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
         $data['link']     = xarVarPrepForDisplay($link);
-
         return parent::showInput($data);
     }
 
@@ -67,9 +68,10 @@ class YahooProperty extends URLIconProperty
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
 
+        $data['link'] = '';
         if (!empty($data['value'])) {
-            $data['link'] = 'http://edit.yahoo.com/config/send_webmesg?.target='.$data['value'].'&.src=pg';
-            $data['link']=xarVarPrepForDisplay($data['link']);
+            $data['link'] = 'http://svcs.affero.net/user-history.php?ll=lq_members&u='.$data['value'];
+
         }
         return parent::showOutput($data);
     }

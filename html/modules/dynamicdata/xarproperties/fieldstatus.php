@@ -5,21 +5,16 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
- */
-/**
- * Dynamic Data Field Status Property
  * @author mikespub <mikespub@xaraya.com>
 */
-sys::import('modules.base.xarproperties.Dynamic_Select_Property');
+sys::import('modules.base.xarproperties.dropdown');
 
 /**
- * Class to handle field status
- *
- * @package dynamicdata
+ * Handle field status property
  */
-class Dynamic_FieldStatus_Property extends Dynamic_Select_Property
+class FieldStatusProperty extends SelectProperty
 {
     public $id         = 25;
     public $name       = 'fieldstatus';

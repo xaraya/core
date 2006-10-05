@@ -1,28 +1,24 @@
 <?php
 /**
- * Dynamic Item Id property Property
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
 
 /**
  * Include the base class
- *
  */
-sys::import('modules.base.xarproperties.Dynamic_NumberBox_Property');
+sys::import('modules.base.xarproperties.integerbox');
 
 /**
- * handle item id property
- *
- * @package dynamicdata
+ * Handle item id property
  */
-class Dynamic_ItemID_Property extends Dynamic_NumberBox_Property
+class ItemIDProperty extends NumberBoxProperty
 {
     public $id         = 21;
     public $name       = 'itemid';

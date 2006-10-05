@@ -1,28 +1,24 @@
 <?php
 /**
- * Dynamic Select Property
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
 
 /**
  * Include the base class
- *
  */
-sys::import('modules.base.xarproperties.Dynamic_Select_Property');
+sys::import('modules.base.xarproperties.dropdown');
 
 /**
- * Class to handle field type property
- *
- * @package dynamicdata
+ * Handle field type property
  */
-class Dynamic_FieldType_Property extends Dynamic_Select_Property
+class FieldTypeProperty extends SelectProperty
 {
     public $id         = 22;
     public $name       = 'fieldtype';

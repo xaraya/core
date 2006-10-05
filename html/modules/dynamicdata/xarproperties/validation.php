@@ -1,28 +1,24 @@
 <?php
 /**
- * Dynamic Validation property
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
 
 /**
  * Include the base class
- *
  */
-sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
+sys::import('modules.base.xarproperties.textbox');
 
 /**
- * handle the validation property
- *
- * @package dynamicdata
+ * Handle the validation property
  */
-class Dynamic_Validation_Property extends Dynamic_TextBox_Property
+class ValidationProperty extends TextBoxProperty
 {
     public $id         = 998;
     public $name       = 'validation';
