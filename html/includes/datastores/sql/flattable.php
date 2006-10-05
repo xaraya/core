@@ -338,7 +338,7 @@ if (empty($itemidfield)) {
         } else {
             // Note: Oracle doesn't like having the same field in a sub-query twice,
             //       so we use an alias for the primary field here
-            $query = "SELECT $itemidfield AS ddprimaryid, " . join(', ', $fieldlist) . "
+            $query = "SELECT DISTINCT $itemidfield AS ddprimaryid, " . join(', ', $fieldlist)
                         FROM " . join(', ', $tables) . $more . " ";
         }
 
