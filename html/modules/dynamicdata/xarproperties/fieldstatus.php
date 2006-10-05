@@ -30,16 +30,16 @@ class FieldStatusProperty extends SelectProperty
 
         if (count($this->options) == 0) {
             $this->options['display'] = array(
-                                 array('id' => Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE, 'name' => xarML('Active')),
-                                 array('id' => Dynamic_Property_Master::DD_DISPLAYSTATE_DISABLED, 'name' => xarML('Disabled')),
-                                 array('id' => Dynamic_Property_Master::DD_DISPLAYSTATE_DISPLAYONLY, 'name' => xarML('Display Only')),
-                                 array('id' => Dynamic_Property_Master::DD_DISPLAYSTATE_HIDDEN, 'name' => xarML('Hidden')),
+                                 array('id' => DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE, 'name' => xarML('Active')),
+                                 array('id' => DataPropertyMaster::DD_DISPLAYSTATE_DISABLED, 'name' => xarML('Disabled')),
+                                 array('id' => DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY, 'name' => xarML('Display Only')),
+                                 array('id' => DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN, 'name' => xarML('Hidden')),
                              );
             $this->options['input'] = array(
-                                 array('id' => Dynamic_Property_Master::DD_INPUTSTATE_NOINPUT, 'name' => xarML('No Input Allowed')),
-                                 array('id' => Dynamic_Property_Master::DD_INPUTSTATE_ADD, 'name' => xarML('Can be added')),
-                                 array('id' => Dynamic_Property_Master::DD_INPUTSTATE_MODIFY, 'name' => xarML('Can be changed')),
-                                 array('id' => Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY, 'name' => xarML('Can be added/changed')),
+                                 array('id' => DataPropertyMaster::DD_INPUTSTATE_NOINPUT, 'name' => xarML('No Input Allowed')),
+                                 array('id' => DataPropertyMaster::DD_INPUTSTATE_ADD, 'name' => xarML('Can be added')),
+                                 array('id' => DataPropertyMaster::DD_INPUTSTATE_MODIFY, 'name' => xarML('Can be changed')),
+                                 array('id' => DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY, 'name' => xarML('Can be added/changed')),
                              );
         }
     }
@@ -91,12 +91,12 @@ class FieldStatusProperty extends SelectProperty
             $value = $this->value;
         }
         if (empty($value)) {
-            $value = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE + Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY;
+            $value = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE + DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
         }
         $this->value = $value;
         // Just really check whether we're in bounds. Don't think more is required
-        if (($value >= Dynamic_Property_Master::DD_DISPLAYSTATE_DISABLED) &&
-            ($value <= Dynamic_Property_Master::DD_INPUTSTATE_MODIFY)) {
+        if (($value >= DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) &&
+            ($value <= DataPropertyMaster::DD_INPUTSTATE_MODIFY)) {
             return true;
         }
         return false;

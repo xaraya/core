@@ -39,7 +39,7 @@ function dynamicdata_admin_modifyconfig()
 
     // FIXME: This may not work when moving property classes around manually !
     //$data['fieldtypeprop'] =& DataPropertyMaster::getProperty(array('type' => 'fieldtype'));
-    sys::import('modules.dynamicdata.xarproperties.Dynamic_FieldType_Property');
+    sys::import('modules.dynamicdata.xarproperties.fieldtype');
 
     $data['fieldtypeprop'] = new FieldTypeProperty(array('type' => 'fieldtype'));
 

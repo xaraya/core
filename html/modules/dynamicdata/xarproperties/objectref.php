@@ -102,7 +102,7 @@ class ObjectRefProperty extends SelectProperty
         $data['name']     = !empty($name) ? $name : 'dd_'.$this->id;
 
         // Get the properties which belong to this object to display in the second dropdown
-        $props = Dynamic_Property_Master::getProperties(array('objectid' => $object['objectid']));
+        $props = DataPropertyMaster::getProperties(array('objectid' => $object['objectid']));
         $data['properties'] = $props;
 
         if(isset($props[$this->display_prop])) {
@@ -149,7 +149,7 @@ class ObjectRefProperty extends SelectProperty
             $this->refobject = $object['name'];
 
             // This gets a name index array of the props
-            $props =  Dynamic_Property_Master::getProperties(array('objectid' => $objectid));
+            $props =  DataPropertyMaster::getProperties(array('objectid' => $objectid));
             // Traverse them in reverse order, so we end up with the first if object and proplist dont match up
             $props = array_reverse($props,true);
 

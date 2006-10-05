@@ -12,7 +12,7 @@
 /**
  * Include the base class
  */
-sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
+sys::import('modules.base.xarproperties.textbox');
 
 /**
  * Handle the URL property

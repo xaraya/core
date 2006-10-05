@@ -11,7 +11,7 @@
  *
  * @package dynamicdata
 **/
-class DataHook_DataStore extends BasicDataStore
+class Dynamic_Hook_DataStore extends BasicDataStore
 {
     /**
      * Get the field name used to identify this property (we use the hook name here)

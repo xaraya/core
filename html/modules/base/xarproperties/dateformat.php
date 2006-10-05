@@ -12,7 +12,7 @@
 /**
  * Include the base class
  */
-sys::import('modules.base.xarproperties.Dynamic_Select_Property');
+sys::import('modules.base.xarproperties.dropdown');
 /**
  * Handle the date format property
  */

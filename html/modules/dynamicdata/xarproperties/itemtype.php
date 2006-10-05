@@ -13,7 +13,7 @@
 /**
  * Include the base class
  */
-sys::import('modules.base.xarproperties.Dynamic_NumberBox_Property');
+sys::import('modules.base.xarproperties.integerbox');
 
 /**
  * Handle the item type property
@@ -33,7 +33,6 @@ class ItemTypeProperty extends NumberBoxProperty
     function __construct($args)
     {
         parent::__construct($args);
-        // Tplmodule and template are by default those of the numberbox (whatever they may be)
         $this->filepath   = 'modules/dynamicdata/xarproperties';
 
         // options may be set in one of the child classes
@@ -45,7 +44,6 @@ class ItemTypeProperty extends NumberBoxProperty
     function validateValue($value = null)
     {
         if (empty($this->module)) {
-            // let Dynamic_NumberBox_Property handle the rest
             return parent::validateValue($value);
         }
         if (isset($value)) {
@@ -68,13 +66,11 @@ class ItemTypeProperty extends NumberBoxProperty
             $this->setArguments($data);
         }
         if (empty($this->module)) {
-            // let Dynamic_NumberBox_Property handle the rest
             return parent::showInput($data);
         }
 
         $data['options']  = $this->getOptions();
         if (empty($data['options'])) {
-            // let Dynamic_NumberBox_Property handle the rest
             return parent::showInput($data);
         }
         $data['value']    = $this->value; // cfr. setArguments()
@@ -93,7 +89,6 @@ class ItemTypeProperty extends NumberBoxProperty
             $this->setArguments($data);
         }
         if (empty($this->module)) {
-            // let Dynamic_NumberBox_Property handle the rest
             return parent::showOutput($data);
         }
 

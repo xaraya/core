@@ -17,7 +17,7 @@ sys::import('datastores.sql');
  *
  * @package dynamicdata
  */
-class DataFlatTable_DataStore extends DataSQL_DataStore
+class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 {
     /**
      * Get the field name used to identify this property (we use the name of the table field here)

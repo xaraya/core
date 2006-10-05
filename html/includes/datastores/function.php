@@ -12,7 +12,7 @@
  * @package dynamicdata
  *
 **/
-class DataFunction_DataStore extends BasicDataStore
+class Dynamic_Function_DataStore extends BasicDataStore
 {
     /**
      * Get the field name used to identify this property (the property validation holds the function name here - for now...)

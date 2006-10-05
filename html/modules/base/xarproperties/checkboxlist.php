@@ -10,7 +10,7 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /* include the base class */
-sys::import('modules.base.xarproperties.Dynamic_Select_Property');
+sys::import('modules.base.xarproperties.dropdown');
 /**
  * Handle check box list property
  */

@@ -31,7 +31,7 @@ class FieldTypeProperty extends SelectProperty
         $this->filepath   = 'modules/dynamicdata/xarproperties';
 
         if (count($this->options) == 0) {
-            $proptypes = Dynamic_Property_Master::getPropertyTypes();
+            $proptypes = DataPropertyMaster::getPropertyTypes();
             if (!isset($proptypes)) $proptypes = array();
 
             foreach ($proptypes as $propid => $proptype) {

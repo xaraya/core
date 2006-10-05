@@ -66,7 +66,7 @@ class ValidationProperty extends TextBoxProperty
         $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
         // pass the actual id for the property here
         $data['id']         = $this->id;
-        $property =& Dynamic_Property_Master::getProperty($data);
+        $property =& DataPropertyMaster::getProperty($data);
 
         // pass the current value as validation rule
         $data['validation'] = isset($value) ? $value : $this->value;
@@ -107,14 +107,14 @@ class ValidationProperty extends TextBoxProperty
         } elseif (!empty($proptype->value)) {
             $data['type'] = $proptype->value;
         } else {
-            $data['type'] = 0; // default Dynamic_Property class
+            $data['type'] = 0; // default DataProperty class
         }
         $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
         // pass the actual id for the property here
         $data['id']         = $this->id;
         // pass the original invalid value here
         $data['invalid']    = !empty($this->invalid) ? $this->invalid :'';
-        $property =& Dynamic_Property_Master::getProperty($data);
+        $property =& DataPropertyMaster::getProperty($data);
 
         // pass the id for the input field here
         $data['id']         = !empty($id)   ? $id   : 'dd_'.$this->id;

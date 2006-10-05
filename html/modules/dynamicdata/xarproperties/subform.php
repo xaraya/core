@@ -532,7 +532,7 @@ class SubFormProperty extends DataProperty
             case 'parentid':
                 if (!isset($myobject)) {
                     if (empty($this->fieldlist)) {
-                        $status = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE; // skip the display-only properties
+                        $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE; // skip the display-only properties
                     } else {
                         $status = null;
                     }
@@ -674,7 +674,7 @@ class SubFormProperty extends DataProperty
             $data[$item] = $this->$item;
         }
         if (!empty($this->objectid)) {
-            $data['properties'] = Dynamic_Property_Master::getProperties(array('objectid' => $this->objectid));
+            $data['properties'] = DataPropertyMaster::getProperties(array('objectid' => $this->objectid));
         } else {
             $data['properties'] = array();
         }

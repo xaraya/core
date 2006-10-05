@@ -12,7 +12,7 @@
  * @package dynamicdata
  *
  */
-class DataJoin_DataStore extends BasicDataStore
+class Dynamic_Join_DataStore extends BasicDataStore
 {
 }
 

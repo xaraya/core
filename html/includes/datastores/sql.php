@@ -13,7 +13,7 @@
 **/
 sys::import('modules.dynamicdata.class.datastores.base');
 
-class DataSQL_DataStore extends OrderedDataStore implements ISQLDataStore
+class Dynamic_SQL_DataStore extends OrderedDataStore implements ISQLDataStore
 {
     protected $db     = null;
     protected $tables = null;

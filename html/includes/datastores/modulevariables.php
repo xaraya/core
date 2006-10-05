@@ -11,7 +11,7 @@
  *
  * @package dynamicdata
  */
-class DataModuleVariables_DataStore extends BasicDataStore
+class Dynamic_ModuleVariables_DataStore extends BasicDataStore
 {
     public $modname;
 

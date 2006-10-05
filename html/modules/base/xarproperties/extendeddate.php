@@ -10,7 +10,7 @@
  * @author Roger Keays <roger.keays@ninthave.net>
  */
 
-sys::import('modules.base.xarproperties.Dynamic_Calendar_Property');
+sys::import('modules.base.xarproperties.calendar');
 
 /**
  * Handle the extended date property

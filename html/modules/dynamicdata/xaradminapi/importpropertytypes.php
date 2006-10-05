@@ -122,7 +122,7 @@ function dynamicdata_adminapi_importpropertytypes( $args )
                 foreach($aliases as $alias) {
                     $aliasInfo = new PropertyRegistration($alias);
                     $aliasInfo->class = $propertyClass;
-                    $aliasInfo->filepath = $property->filepath . "/$propertyClass.php";
+                    $aliasInfo->filepath = $property->filepath .'/'. $property->name . '.php';
                     $currentproptypes[$aliasInfo->id] = $aliasInfo;
                     $proptypes[$aliasInfo->id] = $aliasInfo;
                 }

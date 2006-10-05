@@ -11,7 +11,7 @@
  *
  * @package dynamicdata
  */
-class DataDummy_DataStore extends BasicDataStore
+class Dynamic_Dummy_DataStore extends BasicDataStore
 {
     function getItem(array $args = array())
     {

@@ -9,7 +9,7 @@
  * @link http://xaraya.com/index.php/release/68.html
  * @author mikespub <mikespub@xaraya.com>
  */
-sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
+sys::import('modules.base.xarproperties.textbox');
 
 /**
  * Handle floatbox property
