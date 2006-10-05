@@ -51,12 +51,12 @@ function dynamicdata_utilapi_export($args)
     }
 
     // get the list of properties for a Dynamic Object
-    $object_properties = Dynamic_Property_Master::getProperties(array('objectid' => 1));
+    $object_properties = DataPropertyMaster::getProperties(array('objectid' => 1));
 
     // get the list of properties for a Dynamic Property
-    $property_properties = Dynamic_Property_Master::getProperties(array('objectid' => 2));
+    $property_properties = DataPropertyMaster::getProperties(array('objectid' => 2));
 
-    $proptypes = Dynamic_Property_Master::getPropertyTypes();
+    $proptypes = DataPropertyMaster::getPropertyTypes();
 
     $prefix = xarDBGetSystemTablePrefix();
     $prefix .= '_';
@@ -87,7 +87,7 @@ function dynamicdata_utilapi_export($args)
     $xml .= "  <properties>\n";
     if (!empty($myobject->objectid)) {
         // get the property info directly from the database again to avoid default eval()
-        $properties = Dynamic_Property_Master::getProperties(array('objectid' => $myobject->objectid));
+        $properties = DataPropertyMaster::getProperties(array('objectid' => $myobject->objectid));
     } else {
         $properties = array();
         foreach (array_keys($myobject->properties) as $name) {

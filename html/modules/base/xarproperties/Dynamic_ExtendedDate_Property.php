@@ -1,22 +1,20 @@
 <?php
 /**
- * Extended Date property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Base module
+ * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
- */
-/*
  * @author Roger Keays <roger.keays@ninthave.net>
  */
 
 sys::import('modules.base.xarproperties.Dynamic_Calendar_Property');
 
 /**
+ * Handle the extended date property
+ *
  * The extended date property converts the value provided by the javascript
  * calendar into a universal YYYY-MM-DD format for storage in most databases
  * supporting the 'date' type.
@@ -26,7 +24,7 @@ sys::import('modules.base.xarproperties.Dynamic_Calendar_Property');
  * include dates before 1970. (see Xaraya bugs 2013 and 1428)
  * TODO: get rid of this one and merge into one calendar property.
  */
-class Dynamic_ExtendedDate_Property extends Dynamic_Calendar_Property
+class ExtendedDateProperty extends CalendarProperty
 {
     public $id         = 47;
     public $name       = 'extendeddate';

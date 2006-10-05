@@ -1,27 +1,20 @@
 <?php
 /**
- * Checkbox Mask Property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Base module
+ * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
- */
-/*
  * @author mikespub <mikespub@xaraya.com>
  */
-
+/* include the base class */
 sys::import('modules.base.xarproperties.Dynamic_Select_Property');
-
 /**
- * Class to handle check box property
- *
- * @package dynamicdata
+ * Handle checkbox mask property
  */
-class Dynamic_CheckboxMask_Property extends Dynamic_Select_Property
+class CheckboxMaskProperty extends SelectProperty
 {
     public $id         = 1114;
     public $name       = 'checkboxmask';

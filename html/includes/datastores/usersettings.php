@@ -11,7 +11,7 @@
  *
  * @package dynamicdata
  */
-class Dynamic_UserSettings_DataStore extends BasicDataStore // Consider inheriting from ModuleVar Datastore
+class DataUserSettings_DataStore extends BasicDataStore // Consider inheriting from ModuleVar Datastore
 {
     public $modname;
 

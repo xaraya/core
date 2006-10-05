@@ -1,13 +1,11 @@
 <?php
 /**
- * Dynamic Country List Property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Base module
+ * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
  * @author John Cox
  */
@@ -15,14 +13,10 @@
  * Include the base class
  */
 sys::import('modules.base.xarproperties.Dynamic_Select_Property');
-
 /**
- * handle the userlist property
- *
- * @package dynamicdata
- *
+ * Handle the country list property
  */
-class Dynamic_CountryList_Property extends Dynamic_Select_Property
+class CountryListProperty extends SelectProperty
 {
     public $id         = 42;
     public $name       = 'countrylisting';

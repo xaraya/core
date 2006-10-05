@@ -1,25 +1,23 @@
 <?php
 /**
- * Handle Group list property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 
-/*
- * Handle Group list property
+/**
+ * Handle ICQ property
  * @author mikespub <mikespub@xaraya.com>
  */
 
 /* Include the base class */
 sys::import('modules.base.xarproperties.Dynamic_URLIcon_Property');
 
-class Dynamic_ICQ_Property extends Dynamic_URLIcon_Property
+class ICQProperty extends URLIconProperty
 {
     public $id         = 28;
     public $name       = 'icq';

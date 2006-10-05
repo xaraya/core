@@ -1,26 +1,20 @@
 <?php
 /**
- * Checkbox Property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Base module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/68.html
- */
-/*
  * @author mikespub <mikespub@xaraya.com>
  */
-/* Include parent class  */
+/* Include the parent class  */
 sys::import('modules.dynamicdata.class.properties');
 /**
- * Class to handle check box property
- *
- * @package dynamicdata
+ * Handle check box property
  */
-class Dynamic_Checkbox_Property extends Dynamic_Property
+class CheckboxProperty extends DataProperty
 {
     public $id         = 14;
     public $name       = 'checkbox';

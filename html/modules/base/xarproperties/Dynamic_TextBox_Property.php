@@ -1,26 +1,20 @@
 <?php
 /**
- * Dynamic Textbox Property
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Base module
+ * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
- */
-/*
  * @author mikespub <mikespub@xaraya.com>
-*/
+ */
 /* Include parent class */
 sys::import('modules.dynamicdata.class.properties');
-
 /**
- * handle the textbox property
- *
- * @package dynamicdata
+ * Handle the textbox property
  */
-class Dynamic_TextBox_Property extends Dynamic_Property
+class TextBoxProperty extends DataProperty
 {
     public $id         = 2;
     public $name       = 'textbox';

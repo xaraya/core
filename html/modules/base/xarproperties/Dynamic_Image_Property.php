@@ -1,25 +1,19 @@
 <?php
 /**
- * Image Property
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Base module
+ * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
- */
-/*
  * @author mikespub <mikespub@xaraya.com>
-*/
-sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
-
-/**
- * handle the image property
- *
- * @package dynamicdata
  */
-class Dynamic_Image_Property extends Dynamic_TextBox_Property
+sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
+/**
+ * Handle the image property
+ */
+class ImageProperty extends TextBoxProperty
 {
     public $id         = 12;
     public $name       = 'image';

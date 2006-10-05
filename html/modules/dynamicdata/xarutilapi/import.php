@@ -38,7 +38,7 @@ function dynamicdata_utilapi_import($args)
         
     $objectcache = array();
     $objectmaxid = array();
-    $proptypes = Dynamic_Property_Master::getPropertyTypes();
+    $proptypes = DataPropertyMaster::getPropertyTypes();
     $name2id = array();
     foreach ($proptypes as $propid => $proptype) {
         $name2id[$proptype['name']] = $propid;
@@ -220,7 +220,7 @@ function dynamicdata_utilapi_import($args)
             }
         }
     } else {
-    $proptypes = Dynamic_Property_Master::getPropertyTypes();
+    $proptypes = DataPropertyMaster::getPropertyTypes();
     $name2id = array();
     foreach ($proptypes as $propid => $proptype) {
         $name2id[$proptype['name']] = $propid;

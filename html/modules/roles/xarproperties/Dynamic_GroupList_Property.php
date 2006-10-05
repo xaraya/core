@@ -1,25 +1,20 @@
 <?php
 /**
- * Handle Group list property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
-
-/*
+/* Include the base class */
+sys::import('modules.base.xarproperties.Dynamic_Select_Property');
+/**
  * Handle Group list property
  * @author mikespub <mikespub@xaraya.com>
  */
-
-/* Include the base class */
-sys::import('modules.base.xarproperties.Dynamic_Select_Property');
-
-class Dynamic_GroupList_Property extends Dynamic_Select_Property
+class GroupListProperty extends SelectProperty
 {
     public $id         = 45;
     public $name       = 'grouplist';

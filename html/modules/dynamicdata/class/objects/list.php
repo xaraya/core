@@ -448,7 +448,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if(!empty($this->status))
             $state = $this->status;
         else
-            $state = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
+            $state = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
 
         $args['properties'] = array();
         if(count($args['fieldlist']) > 0)
@@ -461,7 +461,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         else
         {
             foreach($this->properties as $property)
-                if(($property->status & Dynamic_Property_Master::DD_DISPLAYMASK) == ($state & Dynamic_Property_Master::DD_DISPLAYMASK))
+                if(($property->status & DataPropertyMaster::DD_DISPLAYMASK) == ($state & DataPropertyMaster::DD_DISPLAYMASK))
                     $args['properties'][$property->name] = $property;
         }
        $args['items'] =& $this->items;
@@ -595,7 +595,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
         if(!empty($this->status))
             $state = $this->status;
         else
-            $state = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE;
+            $state = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
 
         if(count($args['fieldlist']) > 0)
         {
@@ -605,7 +605,7 @@ class Dynamic_Object_List extends Dynamic_Object_Master
                 if(isset($this->properties[$name]))
                 {
                     $thisprop = $this->properties[$name];
-                    if(($thisprop->status & Dynamic_Property_Master::DD_DISPLAYMASK) == ($state & Dynamic_Property_Master::DD_DISPLAYMASK))
+                    if(($thisprop->status & DataPropertyMaster::DD_DISPLAYMASK) == ($state & DataPropertyMaster::DD_DISPLAYMASK))
                         $args['properties'][$name] =& $this->properties[$name];
                 }
             }

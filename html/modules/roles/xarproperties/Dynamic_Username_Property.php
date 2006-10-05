@@ -1,13 +1,11 @@
 <?php
 /**
- * Handle Username Property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 
@@ -15,8 +13,7 @@
  * Handle Username Property
  * @author mikespub <mikespub@xaraya.com>
  */
-
-class Dynamic_Username_Property extends Dynamic_Property
+class UsernameProperty extends DataProperty
 {
     public $id         = 7;
     public $name       = 'username';

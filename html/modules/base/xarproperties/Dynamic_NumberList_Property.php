@@ -1,25 +1,19 @@
 <?php
 /**
- * Numberlist property
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Base module
+ * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
- */
-/*
  * @author mikespub <mikespub@xaraya.com>
 */
 sys::import('modules.base.xarproperties.Dynamic_Select_Property');
-
 /**
- * handle the numberlist property
- *
- * @package dynamicdata
+ * Handle the numberlist property
  */
-class Dynamic_NumberList_Property extends Dynamic_Select_Property
+class NumberListProperty extends SelectProperty
 {
     public $id         = 16;
     public $name       = 'integerlist';

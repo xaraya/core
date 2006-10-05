@@ -1,19 +1,18 @@
 <?php
 /**
- * Dynamic Textarea Property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Base module
+ * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
+ * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * @author mikespub <mikespub@xaraya.com>
-*/
-class Dynamic_TextArea_Property extends Dynamic_Property
+ * Handle text area property
+ */
+class TextAreaProperty extends DataProperty
 {
     public $id         = 3;
     public $name       = 'textarea_small';

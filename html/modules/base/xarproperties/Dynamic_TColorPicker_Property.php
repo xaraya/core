@@ -1,19 +1,19 @@
 <?php
 /**
- * Dynamic Color Picker property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Base module
+ * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
- */
-/*
  * @author mikespub <mikespub@xaraya.com>
-*/
-class Dynamic_TColorPicker_Property extends Dynamic_Property
+ */
+
+/**
+ * Handle Tigra color picker property
+ */
+class TColorPickerProperty extends DataProperty
 {
     public $id         = 44;
     public $name       = 'tcolorpicker';

@@ -1,29 +1,22 @@
 <?php
 /**
- * Dynamic State List Property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Base module
+ * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
- */
-/**
- * Show a dropdown of US states
- *
  * @author John Cox
  */
 sys::import('modules.base.xarproperties.Dynamic_Select_Property');
 
 /**
- * handle the StateList property
+ * Handle the StateList property
  *
- * @package dynamicdata
- *
+ * Show a dropdown of US states
  */
-class Dynamic_StateList_Property extends Dynamic_Select_Property
+class StateListProperty extends SelectProperty
 {
     public $id         = 43;
     public $name       = 'statelisting';

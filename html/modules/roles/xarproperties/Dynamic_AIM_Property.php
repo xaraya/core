@@ -1,31 +1,22 @@
 <?php
 /**
- * Handle AIM property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
-
-/*
- * Handle AIM property
- * @author mikespub <mikespub@xaraya.com>
-*/
 /**
  * Include the base class
  */
 sys::import('modules.base.xarproperties.Dynamic_URLIcon_Property');
 
 /**
- * Class to handle the AIM property
- *
- * @package dynamicdata
+ * Handle AIM property
  */
-class Dynamic_AIM_Property extends Dynamic_URLIcon_Property
+class AIMProperty extends URLIconProperty
 {
     public $id         = 29;
     public $name       = 'aim';

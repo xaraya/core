@@ -11,7 +11,7 @@
  *
  * @package dynamicdata
 **/
-class Dynamic_File_DataStore extends BasicDataStore
+class DataFile_DataStore extends BasicDataStore
 {
     // some common methods/properties for files here, like opening a file of some sort.
 }

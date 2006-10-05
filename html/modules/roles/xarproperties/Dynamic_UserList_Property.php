@@ -1,25 +1,20 @@
 <?php
 /**
- * Dynamic userlist property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
-
-/*
- * Dynamic userlist property
- * @author mikespub <mikespub@xaraya.com>
- */
-
 /* Include the base class */
 sys::import('modules.base.xarproperties.Dynamic_Select_Property');
-
-class Dynamic_UserList_Property extends Dynamic_Select_Property
+/**
+ * Handle Userlist property
+ * @author mikespub <mikespub@xaraya.com>
+ */
+class UserListProperty extends SelectProperty
 {
     public $id         = 37;
     public $name       = 'userlist';

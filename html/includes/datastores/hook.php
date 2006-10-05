@@ -11,22 +11,22 @@
  *
  * @package dynamicdata
 **/
-class Dynamic_Hook_DataStore extends BasicDataStore
+class DataHook_DataStore extends BasicDataStore
 {
     /**
      * Get the field name used to identify this property (we use the hook name here)
      */
-    function getFieldName(Dynamic_Property &$property)
+    function getFieldName(DataProperty &$property)
     {
         // check if this is a known module, based on the name of the property type
-        $proptypes = Dynamic_Property_Master::getPropertyTypes();
+        $proptypes = DataPropertyMaster::getPropertyTypes();
         $curtype = $property->type;
         if (!empty($proptypes[$curtype]['name'])) {
             return $proptypes[$curtype]['name'];
         }
     }
 
-    function setPrimary(Dynamic_Property &$property)
+    function setPrimary(DataProperty &$property)
     {
         // not applicable !?
     }

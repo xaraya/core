@@ -1,27 +1,22 @@
 <?php
 /**
- * Handle E-mail property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
-
-/*
- * Handle E-mail property
- * @author mikespub <mikespub@xaraya.com>
-*/
-
 /**
  * Include the base class
  */
 sys::import('modules.base.xarproperties.Dynamic_TextBox_Property');
-
-class Dynamic_Email_Property extends Dynamic_TextBox_Property
+/**
+ * Handle E-mail property
+ * @author mikespub <mikespub@xaraya.com>
+*/
+class EmailProperty extends TextBoxProperty
 {
     public $id         = 26;
     public $name       = 'email';

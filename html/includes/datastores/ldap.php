@@ -11,7 +11,7 @@
  *
  * @package dynamicdata
  */
-class Dynamic_LDAP_DataStore extends BasicDataStore
+class DataLDAP_DataStore extends BasicDataStore
 {
 }
 

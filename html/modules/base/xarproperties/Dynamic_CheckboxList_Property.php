@@ -1,26 +1,20 @@
 <?php
 /**
- * Checkbox List Property
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Base module
+ * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
- */
-/*
  * @author mikespub <mikespub@xaraya.com>
  */
-
+/* include the base class */
 sys::import('modules.base.xarproperties.Dynamic_Select_Property');
-
 /**
- * Class to handle check box list property
- *
- * @package dynamicdata
+ * Handle check box list property
  */
-class Dynamic_CheckboxList_Property extends Dynamic_Select_Property
+class CheckboxListProperty extends SelectProperty
 {
     public $id         = 1115;
     public $name       = 'checkboxlist';

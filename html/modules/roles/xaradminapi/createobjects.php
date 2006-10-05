@@ -33,8 +33,8 @@ function roles_adminapi_createobjects($args)
                                     'parent'    => 0,
                                     ));
     if (!$objectid) return;
-    $status1 = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_ADDMODIFY;
-    $status2 = Dynamic_Property_Master::DD_DISPLAYSTATE_ACTIVE | Dynamic_Property_Master::DD_INPUTSTATE_NOINPUT;
+    $status1 = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
+    $status2 = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_NOINPUT;
     if (!xarModAPIFunc('dynamicdata','admin','createproperty',array(
                                     'name'     => 'id',
                                     'label'    => 'ID',

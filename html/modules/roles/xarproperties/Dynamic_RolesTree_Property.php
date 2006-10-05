@@ -1,21 +1,22 @@
 <?php
 /**
+ * @package modules
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
  *
- * RolesTree Property
- *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2006 by to be added
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link to be added
- * @subpackage Roles Module
+ * @subpackage roles
+ * @link http://xaraya.com/index.php/release/27.html
  * @author Marc Lutolf <mfl@netspan.ch>
- *
  */
 
 sys::import('structures.tree');
 sys::import('modules.roles.class.roles');
 
-class Dynamic_RolesTree_Property extends Dynamic_Property
+/**
+ * Handle Roles Tree Property
+ */
+class RolesTreeProperty extends DataProperty
 {
     public $id         = 30044;
     public $name       = 'rolestree';

@@ -120,7 +120,7 @@ class Dynamic_Object_Master extends Object
             if(!isset($args['allprops']))
                 $args['allprops'] = null;
 
-            Dynamic_Property_Master::getProperties(
+            DataPropertyMaster::getProperties(
                 array(
                     'objectid'  => $this->objectid,
                     'moduleid'  => $this->moduleid,
@@ -466,7 +466,7 @@ class Dynamic_Object_Master extends Object
         // TODO: find some way to have unique IDs across all objects if necessary
         if(!isset($args['id']))
             $args['id'] = count($this->properties) + 1;
-        Dynamic_Property_Master::addProperty($args,$this);
+        DataPropertyMaster::addProperty($args,$this);
     }
 
     /**
@@ -795,7 +795,7 @@ class Dynamic_Object_Master extends Object
         foreach(array_keys($mylist->properties) as $name)
         {
             $propid = $mylist->properties[$name]->id;
-            $propid = Dynamic_Property_Master::deleteProperty(
+            $propid = DataPropertyMaster::deleteProperty(
                 array('itemid' => $propid)
             );
         }

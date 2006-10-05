@@ -1,25 +1,20 @@
 <?php
 /**
- * Handle Yahoo property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
-
-/*
+/* Include the base class */
+sys::import('modules.base.xarproperties.Dynamic_URLIcon_Property');
+/**
  * Handle Yahoo property
  * @author mikespub <mikespub@xaraya.com>
  */
-
-/* Include the base class */
-sys::import('modules.base.xarproperties.Dynamic_URLIcon_Property');
-
-class Dynamic_Yahoo_Property extends Dynamic_URLIcon_Property
+class YahooProperty extends URLIconProperty
 {
     public $id         = 31;
     public $name       = 'yahoo';

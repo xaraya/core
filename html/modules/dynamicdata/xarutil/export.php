@@ -49,7 +49,7 @@ function dynamicdata_util_export($args)
         return $data;
     }
 
-    $proptypes = Dynamic_Property_Master::getPropertyTypes();
+    $proptypes = DataPropertyMaster::getPropertyTypes();
 
     $prefix = xarDBGetSystemTablePrefix();
     $prefix .= '_';

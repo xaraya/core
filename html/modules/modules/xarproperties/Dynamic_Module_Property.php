@@ -1,29 +1,20 @@
 <?php
 /**
- * Dynamic Data Module Property
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Module System
+ * @subpackage modules
  * @link http://xaraya.com/index.php/release/1.html
  */
-
-/**
- * Dynamic Data Module Property
- * @author mikespub
- * Include the base class
- */
+/* include the base class */
 sys::import('modules.base.xarproperties.Dynamic_Select_Property');
-
 /**
- * Handle the module property
- *
- * @package dynamicdata
+ * Handle module property
+ * @author mikespub
  */
-class Dynamic_Module_Property extends Dynamic_Select_Property
+class ModuleProperty extends SelectProperty
 {
     public $id         = 19;
     public $name       = 'module';

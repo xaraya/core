@@ -72,7 +72,7 @@ function dynamicdata_adminapi_handleInputTag($args)
         }
         if (!isset($property)) {
             $out .= "sys::import('modules.dynamicdata.class.properties');";
-            $out .=  '$property = & Dynamic_Property_Master::getProperty('.$pargs.'); ';
+            $out .=  '$property = & DataPropertyMaster::getProperty('.$pargs.'); ';
             $property = '$property';
         }
         if (!empty($preset) && empty($args['value'])) {

@@ -1,21 +1,21 @@
 <?php
 /**
+ * @package modules
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
  *
- * PrivilegesTree Property
- *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2006 by to be added
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link to be added
- * @subpackage Privileges Module
+ * @subpackage privileges
+ * @link http://xaraya.com/index.php/release/.html
  * @author Marc Lutolf <mfl@netspan.ch>
- *
  */
 
 sys::import('structures.tree');
 sys::import('modules.privileges.class.privileges');
-
-class Dynamic_PrivilegesTree_Property extends Dynamic_Property
+/**
+ * Handle Privileges Tree property
+ */
+class PrivilegesTreeProperty extends DataProperty
 {
     public $id         = 30045;
     public $name       = 'privilegestree';

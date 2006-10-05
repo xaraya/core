@@ -71,7 +71,7 @@ function dynamicdata_admin_modify($args)
     $data['object'] = & $myobject;
 
     // if we're editing a dynamic property, save its property type to cache
-    // for correct processing of the validation rule (Dynamic_Validation_Property)
+    // for correct processing of the validation rule (ValidationProperty)
     if ($myobject->objectid == 2) {
         xarVarSetCached('dynamicdata','currentproptype', $myobject->properties['type']);
     }

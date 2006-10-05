@@ -1,24 +1,19 @@
 <?php
 /**
- * Multiselect Property
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Base module
+ * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
- */
-/*
  * @author mikespub <mikespub@xaraya.com>
-*/
+ */
 sys::import('modules.base.xarproperties.Dynamic_Select_Property');
 /**
- * handle the multiselect property
- *
- * @package dynamicdata
+ * Handle the multiselect property
  */
-class Dynamic_MultiSelect_Property extends Dynamic_Select_Property
+class MultiSelectProperty extends SelectProperty
 {
     public $id         = 39;
     public $name       = 'multiselect';

@@ -22,7 +22,7 @@ class BasicDataStore extends DDObject implements IBasicDataStore
     /**
      * Add a field to get/set in this data store, and its corresponding property
      */
-    function addField(Dynamic_Property &$property)
+    function addField(DataProperty &$property)
     {
         $name = $this->getFieldName($property);
         if(!isset($name))
@@ -34,7 +34,7 @@ class BasicDataStore extends DDObject implements IBasicDataStore
     /**
      * Get the field name used to identify this property (by default, the property name itself)
      */
-    function getFieldName(Dynamic_Property &$property)
+    function getFieldName(DataProperty &$property)
     {
         return $property->name;
     }
@@ -86,7 +86,7 @@ class OrderedDataStore extends BasicDataStore implements IOrderedDataStore
     /**
      * Add a field to get/set in this data store, and its corresponding property
      */
-    function addField(Dynamic_Property &$property)
+    function addField(DataProperty &$property)
     {
         parent::addField($property);
         if(!isset($this->primary) && $property->type == 21)
@@ -97,7 +97,7 @@ class OrderedDataStore extends BasicDataStore implements IOrderedDataStore
     /**
      * Set the primary key for this data store (only 1 allowed for now)
      */
-    function setPrimary(Dynamic_Property &$property)
+    function setPrimary(DataProperty &$property)
     {
         $name = $this->getFieldName($property);
         if(!isset($name))
@@ -109,7 +109,7 @@ class OrderedDataStore extends BasicDataStore implements IOrderedDataStore
     /**
      * Add a sort criteria for this data store (for getItems)
      */
-    function addSort(Dynamic_Property &$property, $sortorder = 'ASC')
+    function addSort(DataProperty &$property, $sortorder = 'ASC')
     {
         $name = $this->getFieldName($property);
         if(!isset($name))

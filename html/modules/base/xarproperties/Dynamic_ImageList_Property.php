@@ -1,25 +1,20 @@
 <?php
 /**
- * Imagelist property
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Base module
+ * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
- */
-/*
  * @author mikespub <mikespub@xaraya.com>
 */
 sys::import('modules.base.xarproperties.Dynamic_Select_Property');
-
 /**
  * Handle the imagelist property
- *
  * @package dynamicdata
  */
-class Dynamic_ImageList_Property extends Dynamic_Select_Property
+class ImageListProperty extends SelectProperty
 {
     public $id         = 35;
     public $name       = 'imagelist';

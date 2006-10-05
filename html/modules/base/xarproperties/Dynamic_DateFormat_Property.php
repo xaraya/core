@@ -1,30 +1,22 @@
 <?php
 /**
- * Date Format Property
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Base module
+ * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
- */
-/*
  * @author mikespub <mikespub@xaraya.com>
  */
-
 /**
  * Include the base class
- *
  */
 sys::import('modules.base.xarproperties.Dynamic_Select_Property');
-
 /**
- * Class for the date format property
- *
- * @package dynamicdata
+ * Handle the date format property
  */
-class Dynamic_DateFormat_Property extends Dynamic_Select_Property
+class DateFormatProperty extends SelectProperty
 {
     public $id         = 33;
     public $name       = 'dateformat';
