@@ -1,14 +1,13 @@
 <?php
-
 /**
-* xarTpl__XarCurrentUrlEntityNode
+ * CurrentUrlEntityNode
  *
  * wraps xarServer::getCurrentUrl()
  *
  * @package blocklayout
  * @access private
  */
-class xarTpl__XarCurrenturlEntityNode extends xarTpl__EntityNode
+class CurrenturlEntityNode extends EntityNode
 {
     function render()
    {

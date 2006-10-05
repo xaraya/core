@@ -1,11 +1,11 @@
 <?php
 /**
- * xarTpl__XarMlNode: <xar:ml> tag class
+ * MlTagNode: <xar:ml> tag class
  *
  * @package blocklayout
  * @todo this needs to be redone completely.
  */
-class xarTpl__XarMlNode extends xarTpl__TplTagNode
+class MlTagNode extends TagNode implements ElementTag
 {
     function __construct(&$parser, $tagName, $parentTagName='', $parameters=array())
     {

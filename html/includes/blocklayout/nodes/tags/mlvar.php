@@ -1,11 +1,11 @@
 <?php
 /**
- * xarTpl__XarMlVarNode: <xar:mlvar> tag class
+ * MlVarTagNode: <xar:mlvar> tag class
  *
  * @package blocklayout
  * @access private
  */
-class xarTpl__XarMlvarNode extends xarTpl__TplTagNode
+class MlvarTagNode extends TagNode implements ElementTag, EmptyElementTag
 {
     function __construct(&$parser, $tagName, $parentTagName='', $parameters=array())
     {
@@ -40,7 +40,7 @@ class xarTpl__XarMlvarNode extends xarTpl__TplTagNode
             return;
         }
         
-        $codeGenerator = new xarTpl__CodeGenerator();
+        $codeGenerator = new TemplateCodeGenerator();
         $codeGenerator->setPHPBlock(true);
         
         $output = ', ';

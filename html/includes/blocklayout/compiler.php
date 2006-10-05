@@ -128,18 +128,16 @@ class BLParserException extends BLCompilerException
 }
 
 /**
- * xarTpl__ParserError
+ * ParserError
  *
  * class to hold parser errors
  *
  * @package blocklayout
  * @access private
  * @throws BLParserException
- * @todo evaluate whether the exception needs to be a system exception
  * @todo ML for the error message?
- * @todo Does the exception need to be a system exception?
  */
-class xarTpl__ParserError extends Exception
+class ParserError extends Exception
 {
     function raiseError($type, $msg)
     {
@@ -184,8 +182,8 @@ class xarBLCompiler extends Object implements IxarBLCompiler
      */
     private function __construct()
     {
-        $this->parser = new xarTpl__Parser();
-        $this->codeGenerator = new xarTpl__CodeGenerator();
+        $this->parser = new TemplateParser();
+        $this->codeGenerator = new TemplateCodeGenerator();
     }
 
     /**
@@ -274,7 +272,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
  * @package blocklayout
  * @access private
  */
-class xarTpl__PositionInfo extends xarTpl__ParserError
+class TemplatePositionInfo extends ParserError
 {
     public $fileName = '';
     public $line = 1;
@@ -292,14 +290,14 @@ class xarTpl__PositionInfo extends xarTpl__ParserError
 }
 
 /**
- * xarTpl__CodeGenerator
+ * TemplateCodeGenerator
  *
  * part of the compiler, this generates the code for each tag found
  *
  * @package blocklayout
  * @access private
  */
-class xarTpl__CodeGenerator extends xarTpl__PositionInfo
+class TemplateCodeGenerator extends TemplatePositionInfo
 {
     public $isPHPBlock = false;
     public $code;
@@ -404,7 +402,7 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
 }
 
 /**
- * xarTpl__Parser - the BL parser
+ * TemplateParser - the BL parser
  *
  * modelled as extension to the position info class,
  * parses a template source file and constructs a document tree
@@ -413,7 +411,7 @@ class xarTpl__CodeGenerator extends xarTpl__PositionInfo
  * @access private
  * @todo this is an xml parser type functionality, can't we use an xml parser for this?
  */
-class xarTpl__Parser extends xarTpl__PositionInfo
+class TemplateParser extends TemplatePositionInfo
 {
     public $tagNamesStack;
     public $tagIds;
@@ -430,8 +428,8 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $this->tagNamesStack = array();  $this->tagIds = array(); $this->tagRootSeen=false;
 
         // Initializing the containers for template variables and the doctree
-        $this->tplVars = new xarTpl__TemplateVariables();
-        $documentTree = xarTpl__NodesFactory::createDocumentNode($this);
+        $this->tplVars = new TemplateVariables();
+        $documentTree = TemplateNodeFactory::createDocumentNode($this);
 
         // Parse the document tree
         $res = $this->parseNode($documentTree);
@@ -566,7 +564,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 if ($trimmer($text) != '') {
                                     if(!$this->canHaveText($parent)) return;
                                     // CHECKME: & removed here for php 4.4 
-                                    $children[] = xarTpl__NodesFactory::createTextNode($trimmer($text), $this);
+                                    $children[] = TemplateNodeFactory::createTextNode($trimmer($text), $this);
                                     $text = '';
                                 }
 
@@ -598,7 +596,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 }
 
                                 // Create the node we parsed.
-                                $node = xarTpl__NodesFactory::createTplTagNode($tagName, $attributes, $parent->tagName, $this);
+                                $node = TemplateNodeFactory::createTplTagNode($tagName, $attributes, $parent->tagName, $this);
                                 if (!isset($node)) return; // throw back
 
                                 if (!$closed) {
@@ -626,7 +624,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                                 if ($trimmer($text) != '') {
                                     if(!$this->canHaveText($parent)) return;
                                     // CHECKME: & removed here for php 4.4
-                                    $children[] = xarTpl__NodesFactory::createTextNode($trimmer($text), $this);
+                                    $children[] = TemplateNodeFactory::createTextNode($trimmer($text), $this);
                                     $text = '';
                                 }
                                 // Handle End Tag
@@ -754,7 +752,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         // Situation: [...text...]&xar-...
                         if (trim($text) != '') {
                             if(!$this->canHaveText($parent)) return;
-                            $children[] = xarTpl__NodesFactory::createTextNode(xmltrim($text), $this);
+                            $children[] = TemplateNodeFactory::createTextNode(xmltrim($text), $this);
                             $text = '';
                         }
                         // Handle Entity
@@ -762,7 +760,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         if (!isset($res)) return; // throw back
 
                         list($entityType, $parameters) = $res;
-                        $node = xarTpl__NodesFactory::createTplEntityNode($entityType, $parameters, $this);
+                        $node = TemplateNodeFactory::createTplEntityNode($entityType, $parameters, $this);
                         if (!isset($node)) return; // throw back
 
                         $children[] = $node;
@@ -809,7 +807,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         if(in_array($parent->tagName,$natives,true)) $trimmer='trim';
                         if ($trimmer($text) != '') {
                             if(!$this->canHaveText($parent) && trim($text) != '') return;
-                            $children[] = xarTpl__NodesFactory::createTextNode($trimmer($text), $this);
+                            $children[] = TemplateNodeFactory::createTextNode($trimmer($text), $this);
                             $text = '';
                         }
 
@@ -824,7 +822,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
                         }
                     
                         // Instruction is now set to $varname or xarFunction(.....)
-                        $node = xarTpl__NodesFactory::createTplInstructionNode($instruction, $this);
+                        $node = TemplateNodeFactory::createTplInstructionNode($instruction, $this);
                         if (!isset($node)) return; // throw back
 
                         $children[] = $node;
@@ -842,7 +840,7 @@ class xarTpl__Parser extends xarTpl__PositionInfo
         $trimmer = 'xmltrim';
         if ($trimmer($text) != '') {
             if(!$this->canHaveText($parent)) return;
-            $children[] = xarTpl__NodesFactory::createTextNode($trimmer($text),$this);
+            $children[] = TemplateNodeFactory::createTextNode($trimmer($text),$this);
         }
         // Check if there is something left at the stack
         $stackTagName = array_pop($this->tagNamesStack);
@@ -1149,12 +1147,12 @@ class xarTpl__Parser extends xarTpl__PositionInfo
 }
 
 /**
- * xarTpl__NodesFactory - class which constructs nodes in the document tree
+ * TemplateNodeFactory - class which constructs nodes in the document tree
  *
  * @package blocklayout
  * @access private
  */
-class xarTpl__NodesFactory extends xarTpl__ParserError
+class TemplateNodeFactory extends ParserError
 {
 
     static function createTplTagNode($tagName, $attributes, $parentTagName, &$parser)
@@ -1165,7 +1163,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
         }
 
         // Otherwise we instantiate the right class
-        $tagClass ='xarTpl__Xar' .$tagName.'Node';
+        $tagClass = $tagName.'TagNode';
         $tagfile = XAR_NODES_LOCATION . 'tags/' .strtolower($tagName) .'.php';
         
         // FIXME: sync the implementation of core / custom tags, handle them the same way
@@ -1174,7 +1172,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
             $node = new $tagClass($parser, $tagName, $parentTagName, $attributes);
         } else {
             sys::import('blocklayout.nodes.tags.other');
-            $node = new xarTpl__XarOtherNode($parser, $tagName, $parentTagName, $attributes);
+            $node = new OtherTagNode($parser, $tagName, $parentTagName, $attributes);
             if(!isset($node->tagobject)) {
                 $parser->raiseError(XAR_BL_INVALID_TAG,"Cannot instantiate nonexistent tag '$tagName'");
             }
@@ -1190,9 +1188,9 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
 
     static function createTplEntityNode($entityType, $parameters, &$parser)
     {
-        $entityClass = 'xarTpl__Xar'.$entityType.'EntityNode';
+        $entityClass = $entityType.'EntityNode';
         $entityFile = XAR_NODES_LOCATION . 'entities/' .strtolower($entityType) . '.php';
-        if(!xarTpl__NodesFactory::class_exists($entityClass)) { 
+        if(!self::class_exists($entityClass)) { 
             if(!file_exists($entityFile)) {
                 $parser->raiseError(XAR_BL_INVALID_ENTITY,"Cannot instantiate nonexistent entity '$entityType'");
             }
@@ -1204,15 +1202,15 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
 
     static function createTplInstructionNode($instruction, &$parser)
     {
-        $instructionClass = 'xarTpl__XarApiInstructionNode';
+        $instructionClass = 'ApiInstructionNode';
         $instructionFile = XAR_NODES_LOCATION . 'instructions/api.php';
         $instructionType = 'api';
         if ($instruction[0] == XAR_TOKEN_VAR_START) {
-            $instructionClass = 'xarTpl__XarVarInstructionNode';
+            $instructionClass = 'VarInstructionNode';
             $instructionFile = XAR_NODES_LOCATION . 'instructions/var.php';
             $instructionType = 'var';
         } 
-        if(!xarTpl__NodesFactory::class_exists($instructionClass)) {
+        if(!self::class_exists($instructionClass)) {
             if(!file_exists($instructionFile)) {
                 $parser->raiseError(XAR_BL_INVALID_INSTRUCTION,"Cannot instantiate nonexistent instruction '$instruction'");
             }
@@ -1224,19 +1222,19 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
 
     static function createTextNode($content, &$parser)
     {
-        $node = new xarTpl__TextNode($parser, 'TextNode', $content);
+        $node = new TextNode($parser, 'TextNode', $content);
         return $node;
     }
 
     static function createDocumentNode(&$parser)
     {
-        $node = new xarTpl__DocumentNode($parser,'DocumentNode');
+        $node = new DocumentNode($parser,'DocumentNode');
         return $node;
     }
 }
 
 /**
- * xarTpl__TemplateVariables
+ * TemplateVariables
  *
  * Handle template variables
  *
@@ -1246,7 +1244,7 @@ class xarTpl__NodesFactory extends xarTpl__ParserError
  * @todo is the encoding fixed?
  *
  */
-class xarTpl__TemplateVariables extends Object
+class TemplateVariables extends Object
 {
     public $tplVars = array();
 
@@ -1273,14 +1271,16 @@ class xarTpl__TemplateVariables extends Object
 }
 
 /**
- * xarTpl__ExpressionTransformer
+ * ExpressionTransformer
  *
  * Transforms BL and php expressions from templates.
  *
  * @package blocklayout
- * @access private
+ * @access private <-- Not true, public as hell
+ * @todo   make protected, should only be called from tag handler no?
+ * @todo   split up in PHP and BL parts with one interface method (transform)
  */
-class xarTpl__ExpressionTransformer extends Object
+class ExpressionTransformer extends Object
 {
     /*
      * Replace the array and object notation.
@@ -1293,14 +1293,14 @@ class xarTpl__ExpressionTransformer extends Object
      */
     static function transformBLExpression($blExpression)
     {
-        $blExpression = xarTpl__ExpressionTransformer::normalize($blExpression);
+        $blExpression = self::normalize($blExpression);
 
         // 'resolve' the dot and colon notation
         $subparts = preg_split('/[\[|\]]/', $blExpression);
         if(count($subparts) > 1) {
             foreach($subparts as $subpart) {
                 // Resolve the subpart
-                $blExpression = str_replace($subpart, xarTpl__ExpressionTransformer::transformBLExpression($subpart), $blExpression);
+                $blExpression = str_replace($subpart, self::transformBLExpression($subpart), $blExpression);
             }
             return $blExpression;
         }
@@ -1335,7 +1335,7 @@ class xarTpl__ExpressionTransformer extends Object
      **/
     static function transformPHPExpression($phpExpression)
     {
-        $phpExpression =xarTpl__ExpressionTransformer::normalize($phpExpression);
+        $phpExpression =self::normalize($phpExpression);
         // This regular expression matches variables in their notation as 
         // supported by php  and according to the dot/colon grammar in the
         // method above. These expressions are matched and passed on to the BL 
@@ -1363,11 +1363,11 @@ class xarTpl__ExpressionTransformer extends Object
             // Resolve BL expressions inside the php Expressions
             
             // To prevent overlap as much as we can we sort descending by length
-            usort($matches[0], array('xarTpl__ExpressionTransformer','rlensort')); 
+            usort($matches[0], array('ExpressionTransformer','rlensort')); 
             $numMatches = count($matches[0]);
             for ($i = 0; $i < $numMatches; $i++) {
                 // CHECKME: & removed here for php 4.4
-                $resolvedName = xarTpl__ExpressionTransformer::transformBLExpression($matches[0][$i]);
+                $resolvedName = self::transformBLExpression($matches[0][$i]);
                 if (!isset($resolvedName)) return; // throw back
                       
                 // CHECK: Does it matter if there is overlap in the matches? 
@@ -1404,14 +1404,14 @@ class xarTpl__ExpressionTransformer extends Object
 }
 
 /**
- * xarTpl__Node
+ * TemplateNode
  *
  * Base class for all nodes, sets the base properties, methods are
  * abstract and should be overridden by each specific node class
  *
  * @package blocklayout
  */
-abstract class xarTpl__Node extends xarTpl__PositionInfo
+abstract class TemplateNode extends TemplatePositionInfo
 {
     public $tagName;   // This is an internal name of the node, not the actual tag name
     protected $isPHPCode = true;
@@ -1452,10 +1452,23 @@ abstract class xarTpl__Node extends xarTpl__PositionInfo
     { return $this->needParameter; }
 }
 
+/* 
+    Interfaces to distinguish tags which implement open/closed forms
+    of tags. Taking the w3 terminology, not really happy with it though.
+*/   
+interface ElementTag
+{
+    function renderBeginTag();
+    function renderEndTag();
+}
+
+interface EmptyElementTag
+{
+    function render();
+}
+
 /**
-* xarTpl__TplTagNode
- *
- * Base class for tag nodes
+ * TagNode is the base class for all nodes representing a (xar) tag in the input
  *
  * hasChildren -> false
  * hasText -> false
@@ -1467,7 +1480,7 @@ abstract class xarTpl__Node extends xarTpl__PositionInfo
  * @todo look at the signature, it's redundant.
  * @todo attributes can be dealt with more centrally, to make it easier for the nodes. (like id, class or other common attributes )
  */
-abstract class xarTpl__TplTagNode extends xarTpl__Node
+abstract class TagNode extends TemplateNode
 {
     protected $attributes;
     protected $parentTagName;
@@ -1529,7 +1542,7 @@ abstract class xarTpl__TplTagNode extends xarTpl__Node
 }
 
 /**
- * xarTpl__EntityNode
+ * EntityNode
  * 
  * Base class for entity nodes
  * 
@@ -1541,7 +1554,7 @@ abstract class xarTpl__TplTagNode extends xarTpl__Node
  * needParameter -> false
  * @package blocklayout
  */
-abstract class xarTpl__EntityNode extends xarTpl__Node
+abstract class EntityNode extends TemplateNode
 {
     private   $entityType;
     protected $parameters;
@@ -1577,7 +1590,7 @@ abstract class xarTpl__EntityNode extends xarTpl__Node
 }
 
 /**
- * xarTpl__InstructionNode
+ * InstructionNode
  *
  * Base class for instruction nodes
  * 
@@ -1589,7 +1602,7 @@ abstract class xarTpl__EntityNode extends xarTpl__Node
  * needParameter -> false
  * @package blocklayout
  */
-class xarTpl__InstructionNode extends xarTpl__Node
+class InstructionNode extends TemplateNode
 {
     protected $instruction;
     
@@ -1615,7 +1628,7 @@ class xarTpl__InstructionNode extends xarTpl__Node
 }
 
 /**
- * xarTpl__DocumentNode
+ * DocumentNode
  *
  *
  * @package blocklayout
@@ -1626,7 +1639,7 @@ class xarTpl__InstructionNode extends xarTpl__Node
  * needAssignment -> false
  * needParameter -> false
  */
-class xarTpl__DocumentNode extends xarTpl__Node
+class DocumentNode extends TemplateNode
 {
     public $children;
     public $variables;
@@ -1652,7 +1665,7 @@ class xarTpl__DocumentNode extends xarTpl__Node
 }
 
 /**
- * xarTpl__TextNode
+ * TextNode
  * hasChildren -> false
  * hasText -> false
  * isAssignable -> false
@@ -1661,7 +1674,7 @@ class xarTpl__DocumentNode extends xarTpl__Node
  * needParameter -> false
  * @package blocklayout
  */
-class xarTpl__TextNode extends xarTpl__Node
+class TextNode extends TemplateNode
 {
     private $content;
 

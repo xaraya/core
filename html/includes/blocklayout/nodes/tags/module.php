@@ -1,6 +1,6 @@
 <?php
 /**
- * xarTpl__XarModuleNode: <xar:module> tag class
+ * ModuleTagNode: <xar:module> tag class
  *
  * This is used in <xar:module main="true" /> as placeholder for the main module output,
  * or in <xar:module main="false" module="mymodule" type="mytype" func="myfunc" args="$args" />
@@ -10,7 +10,7 @@
  * @package blocklayout
  * @access private
  */
-class xarTpl__XarModuleNode extends xarTpl__TplTagNode
+class ModuleTagNode extends TagNode implements EmptyElementTag
 {
     function render()
     {
@@ -28,15 +28,15 @@ class xarTpl__XarModuleNode extends xarTpl__TplTagNode
             $args = $this->attributes;
             unset($args['main']);
             unset($args['module']);
-            $module = xarTpl__ExpressionTransformer::transformPHPExpression($module);
+            $module = ExpressionTransformer::transformPHPExpression($module);
             if (!empty($type)) {
-                $type = xarTpl__ExpressionTransformer::transformPHPExpression($type);
+                $type = ExpressionTransformer::transformPHPExpression($type);
                 unset($args['type']);
             } else {
                 $type = 'user';
             }
             if (!empty($func)) {
-                $func = xarTpl__ExpressionTransformer::transformPHPExpression($func);
+                $func = ExpressionTransformer::transformPHPExpression($func);
                 unset($args['func']);
             } else {
                 $func = 'main';

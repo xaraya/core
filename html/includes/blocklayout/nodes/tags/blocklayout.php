@@ -1,7 +1,7 @@
 <?php
 
 /**
-* xarTpl__XarBlocklayoutNode : blocklayouts root tag
+ * BlocklayoutTagNode : blocklayouts root tag
  *
  * xar:blocklayout is the root tage for the blocklayout xml dialect
  *
@@ -9,7 +9,7 @@
  * @access  private
  * @todo check if we are in a page template, and whether we already have the root tag
  */
-class xarTpl__XarBlocklayoutNode extends xarTpl__TplTagNode
+class BlocklayoutTagNode extends TagNode implements ElementTag
 {
     function __construct(&$parser,$tagName, $parentTagName='', $attributes=array())
     {

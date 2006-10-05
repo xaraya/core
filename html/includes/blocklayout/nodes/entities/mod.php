@@ -1,14 +1,13 @@
 <?php
-
 /**
-* xarTpl__XarModEntityNode
+ * ModEntityNode
  *
  * Module variables entities, basically wraps xarModVars::get($module,$varname)
  *
  * @package blocklayout
  * @access private
  */
-class xarTpl__XarModEntityNode extends xarTpl__EntityNode
+class ModEntityNode extends EntityNode
 {
     function render()
     {

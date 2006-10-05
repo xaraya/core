@@ -1,14 +1,13 @@
 <?php
-
 /**
-* xarTpl__XarModUrlEntityNode
+ * ModUrlEntityNode
  *
  * Module url entities, wraps xarModUrl(module, type, func)
  *
  * @package blocklayout
  * @access private
  */
-class xarTpl__XarModurlEntityNode extends xarTpl__EntityNode
+class ModUrlEntityNode extends EntityNode
 {
     function render()
     {

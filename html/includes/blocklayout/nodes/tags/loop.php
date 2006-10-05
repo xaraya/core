@@ -1,6 +1,6 @@
 <?php
 /**
- * xarTpl__XarLoopNode: <xar:loop> tag class
+ * LoopTagNode: <xar:loop> tag class
  *
  * @package blocklayout
  *
@@ -9,7 +9,7 @@
  * @author Dan Wells 
  * @todo why do we need both loop:number and loop:index? i think loop:number should refer to the loop number
 **/
-class xarTpl__XarLoopNode extends xarTpl__TplTagNode
+class LoopTagNode extends TagNode implements ElementTag
 {
     function __construct(&$parser, $tagName, $parentTagName='', $parameters=array())
     {
@@ -47,12 +47,12 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
             return;
         }
         
-        $name = xarTpl__ExpressionTransformer::transformPHPExpression($name);
+        $name = ExpressionTransformer::transformPHPExpression($name);
         if (!isset($name)) return; // throw back
         
         // Increment the loopCounter and retrieve its new value
         // NOTE: class method!
-        $loopCounter = xarTpl__XarLoopNode::loopCounter('++');
+        $loopCounter = self::loopCounter('++');
         
         $loopName ='$loop_'.$loopCounter;
         $idpart ='';
@@ -88,7 +88,7 @@ class xarTpl__XarLoopNode extends xarTpl__TplTagNode
         function renderEndTag()
        {
            // Decrement the loopCounter and retrieve its new value
-           $previousLoop = xarTpl__XarLoopNode::loopCounter('--');
+           $previousLoop = self::loopCounter('--');
            $output = '} ';
            if($previousLoop >= 1 ) {
                $output .= '$loop = unserialize($loop_'.$previousLoop.'_save);

@@ -1,12 +1,12 @@
 <?php
 /**
- * xarTpl__XarMlKeyNode: <xar:mlkey> tag class
+ * MlKeyTagNode: <xar:mlkey> tag class
  *
  * @package blocklayout
  * @access private
  * @todo deprecate this or at least make key an attribute, it's not content.
  */
-class xarTpl__XarMlkeyNode extends xarTpl__TplTagNode
+class MlkeyTagNode extends TagNode implements ElementTag
 {
     function __construct(&$parser, $tagName, $parentTagName='', $parameters=array())
     {

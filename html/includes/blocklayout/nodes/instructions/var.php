@@ -1,14 +1,13 @@
 <?php
-
 /**
-* xarTpl__XarVarInstructionNode
+ * VarInstructionNode
  *
  * models variables in the template, treats them as php expressions
  *
  * @package blocklayout
  * @access private
  */
-class xarTpl__XarVarInstructionNode extends xarTpl__InstructionNode
+class VarInstructionNode extends InstructionNode
 {
     function render()
     {
@@ -17,7 +16,7 @@ class xarTpl__XarVarInstructionNode extends xarTpl__InstructionNode
             return;
         }
         // FIXME: Can we pre-determine here whether a variable exist?
-        $instruction = xarTpl__ExpressionTransformer::transformPHPExpression($this->instruction);
+        $instruction = ExpressionTransformer::transformPHPExpression($this->instruction);
         if (!isset($instruction)) return; // throw back
         
         return $instruction;

@@ -1,11 +1,11 @@
 <?php
 /**
- * xarTpl__XarMlStringNode: <xar:mlstring> tag class
+ * MlStringTagNode: <xar:mlstring> tag class
  *
  * @package blocklayout
  * @access private
  */
-class xarTpl__XarMlstringNode extends xarTpl__TplTagNode
+class MlstringTagNode extends TagNode implements ElementTag
 {
     private $_rightspace;
 

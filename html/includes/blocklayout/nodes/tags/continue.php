@@ -1,12 +1,12 @@
 <?php
 
 /**
-* xarTpl__XarContinueNode: <xar:continue/> tag class
+ * ContinueTagNode: <xar:continue/> tag class
  *
  * @package blocklayout
  * @access private
  */
-class xarTpl__XarContinueNode extends xarTpl__TplTagNode
+class ContinueTagNode extends TagNode implements EmptyElementTag
 {
     function __construct(&$parser, $tagName, $parentTagName='', $attributes=array())
     {

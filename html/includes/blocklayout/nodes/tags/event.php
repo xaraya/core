@@ -1,13 +1,13 @@
 <?php
 /**
- * xarTpl__XarEventNode: <xar:event> tag class
+ * EventTagNode: <xar:event> tag class
  *
  * @package blocklayout
  * @access private
  * @todo Events are triggered by core only, how does this tag fit in?
 **/
-class xarTpl__XarEventNode extends xarTpl__TplTagNode
-{
+class EventTagNode extends TagNode implements EmptyElement
+{ 
     function __construct(&$parser, $tagName, $parentTagName='', $attributes=array())
     {
         parent::__construct($parser, $tagName, $parentTagName, $attributes);

@@ -1,13 +1,13 @@
 <?php
 /**
- * xarTpl__XarForEachNode: <xar:foreach> tag class
+ * ForEachTagNode: <xar:foreach> tag class
  *
  * Takes care of the "foreach($array as $key=>$value) { " construct
  *
  * @package blocklayout
  * @access private
  */
-class xarTpl__XarForEachNode extends xarTpl__TplTagNode
+class ForEachTagNode extends TagNode implements ElementTag
 {
     public $attr_value = null; // properties to hold the values of any values which might have the same name in
     public $attr_key = null;   // the scope of the foreach loop.
@@ -36,7 +36,7 @@ class xarTpl__XarForEachNode extends xarTpl__TplTagNode
             return;
         }
         
-        $in = xarTpl__ExpressionTransformer::transformPHPExpression($in);
+        $in = ExpressionTransformer::transformPHPExpression($in);
         // Create a save scope for the attributes using line and column as semi unique identifiers.
         // Note that this is only applicable on merged templates (as in: non existent in current code)
         // it's merely preparation for the one xar compile scenario

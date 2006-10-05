@@ -1,16 +1,15 @@
 <?php
-
 /**
-* xarTpl_XarUrlEntityNode
+ * UrlEntityNode
  *
  * More generic than ModUrlEntityNode, supports args
  * this wraps xarModURL('$module', '$type', '$func'$args)
  *
  * @package blocklayout
  * @access private
- * @todo model this class and the xarTpl__XarModUrlEntityNode as parent/derived pair.
+ * @todo model this class and the ModUrlEntityNode as parent/derived pair.
  */
-class xarTpl__XarUrlEntityNode extends xarTpl__EntityNode
+class UrlEntityNode extends EntityNode
 {
     function render()
     {

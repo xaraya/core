@@ -1,14 +1,14 @@
 <?php
 
 /**
-* xarTpl__XarBaseUrlEntityNode
+ * BaseUrlEntityNode
  *
  * wraps xarServer::getBaseURL()
  *
  * @package blocklayout
  * @access private
  */
-class xarTpl__XarBaseurlEntityNode extends xarTpl__EntityNode
+class BaseUrlEntityNode extends EntityNode
 {
     function render()
     {

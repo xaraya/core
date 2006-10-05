@@ -1,14 +1,13 @@
 <?php
-
 /**
-* xarTpl__XarApiInstructionNode
+ * ApiInstructionNode
  *
  * API function node, treated as php expression
  *
  * @package blocklayout
  * @access private
  */
-class xarTpl__XarApiInstructionNode extends xarTpl__InstructionNode
+class ApiInstructionNode extends InstructionNode
 {
     function render()
     {
@@ -21,7 +20,7 @@ class xarTpl__XarApiInstructionNode extends xarTpl__InstructionNode
         if(strtolower($funcName) != 'xarml') {
             // This is "reasonably" save here because xarML($somevarorphpexpression) wont work anyway, so we
             // can reasonably count on it being a string only.
-            $instruction = xarTpl__ExpressionTransformer::transformPHPExpression($this->instruction);
+            $instruction = ExpressionTransformer::transformPHPExpression($this->instruction);
             if (!isset($instruction)) return; // throw back
         } else {
             $instruction = $this->instruction;

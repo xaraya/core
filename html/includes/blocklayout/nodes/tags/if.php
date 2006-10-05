@@ -1,10 +1,10 @@
 <?php
 /**
- * xarTpl__XarIfNode : <xar:if> tag class
+ * IfTagNode : <xar:if> tag class
  *
  * @package blocklayout
  */
-class xarTpl__XarIfNode extends xarTpl__TplTagNode
+class IfTagNode extends TagNode implements ElementTag
 {
     function __construct(&$parser, $tagName, $parentTagName='', $parameters=array())
     {
@@ -23,7 +23,7 @@ class xarTpl__XarIfNode extends xarTpl__TplTagNode
             return;
         }
         
-        $condition = xarTpl__ExpressionTransformer::transformPHPExpression($condition);
+        $condition = ExpressionTransformer::transformPHPExpression($condition);
         if (!isset($condition)) return; // throw back
         
         return "if ($condition) { ";

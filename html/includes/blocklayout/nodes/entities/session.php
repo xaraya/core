@@ -1,14 +1,13 @@
 <?php
-
 /**
-* xarTpl__XarSessionEntityNode
+ * SessionEntityNode
  *
  * Session variables entities, wrapps xarSessionGetVar()
  *
  * @package blocklayout
  * @access private
  */
-class xarTpl__XarSessionEntityNode extends xarTpl__EntityNode
+class SessionEntityNode extends EntityNode
 {
     function render()
     {
