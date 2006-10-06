@@ -1,0 +1,25 @@
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<xar:foreach in="$items" key="$itemid" value="$fields">
+    <xar:foreach in="$properties" key="$name">
+      <div class="xar-form-input-wrapper">
+        <xar:data-label property="$properties[$name]" label="$name" />:
+        <xar:if condition="empty($fields[$name])">
+          &#160;
+        <xar:elseif condition="!empty($linkfield) and $linkfield eq $name" />
+          <a href="#$links[$itemid]['display']['olink']#">
+            <xar:data-output property="$properties[$name]" value="$fields[$name]" />
+          </a>
+        <xar:else />
+          <xar:data-output property="$properties[$name]" value="$fields[$name]" />
+        </xar:if>
+      </div>
+    </xar:foreach>
+    <xar:if condition="empty($linkfield) and !empty($links[$itemid]) and count($links[$itemid]) gt 0">
+      &#160;
+      <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
+         #$option['ojoin']# 
+        <a href="#$option['olink']#">#$option['otitle']#</a>
+      </xar:foreach>
+    </xar:if>
+    &#160;
+  </xar:foreach>

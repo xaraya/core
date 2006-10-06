@@ -432,18 +432,15 @@ class DataObjectList extends DataObjectMaster
         }
     }
 
-    function showList($args = array())
+    function showView($args = array())
     {
-        if(empty($args['layout']))    $args['layout'] = $this->layout;
-        if(empty($args['template']))  $args['template'] = $this->template;
-        if(empty($args['tplmodule'])) $args['tplmodule'] = $this->tplmodule;
-
-        // Are we extending here?
-        if(!empty($args['extend']))   $this->extend();
-
-        if(empty($args['viewfunc']))    $args['viewfunc'] = $this->viewfunc;
+        if(empty($args['layout']))      $args['layout']         = $this->layout;
+        if(empty($args['template']))   $args['template']   = $this->template;
+        if(empty($args['tplmodule'])) $args['tplmodule']  = $this->tplmodule;
+        if(empty($args['viewfunc']))   $args['viewfunc']    = $this->viewfunc;
         if(empty($args['fieldprefix'])) $args['fieldprefix'] = $this->fieldprefix;
-        if(empty($args['fieldlist']))   $args['fieldlist'] = $this->fieldlist;
+        if(empty($args['fieldlist']))     $args['fieldlist']      = $this->fieldlist;
+        if(!empty($args['extend']))    $this->extend();
 
         if(!empty($this->status))
             $state = $this->status;
@@ -452,11 +449,13 @@ class DataObjectList extends DataObjectMaster
 
         $args['properties'] = array();
         if(count($args['fieldlist']) > 0)
-        {
-            foreach($args['fieldlist'] as $name)
-                if(isset($this->properties[$name]))
-                    if($this->properties[$name]->status & $state)
+        {   
+            foreach($args['fieldlist'] as $name) {
+                if(isset($this->properties[$name])) {
+                    if(($this->properties[$name]->status & DataPropertyMaster::DD_DISPLAYMASK) == ($state & DataPropertyMaster::DD_DISPLAYMASK))
                         $args['properties'][$name] =& $this->properties[$name];
+                }
+            }
         }
         else
         {
@@ -464,7 +463,8 @@ class DataObjectList extends DataObjectMaster
                 if(($property->status & DataPropertyMaster::DD_DISPLAYMASK) == ($state & DataPropertyMaster::DD_DISPLAYMASK))
                     $args['properties'][$property->name] = $property;
         }
-       $args['items'] =& $this->items;
+
+        $args['items'] =& $this->items;
 
         // add link to display the item
         if(empty($args['linkfunc']))  $args['linkfunc'] = $this->linkfunc;
@@ -472,8 +472,12 @@ class DataObjectList extends DataObjectMaster
         if(empty($args['param']))     $args['param'] = $this->urlparam;
         if(empty($args['linkfield'])) $args['linkfield'] = '';
 
+        // pass some extra template variables for use in BL tags, API calls etc.
+        $args['moduleid'] = $this->moduleid;
+
         $modinfo = xarModGetInfo($this->moduleid);
         $modname = $modinfo['name'];
+        $itemtype = $this->itemtype;
 
         // override for viewing dynamic objects
         $args['dummymode'] = 0; // Set to 0 when interested in viewing them anyway...
@@ -489,27 +493,19 @@ class DataObjectList extends DataObjectMaster
             $linkfunc = $args['linkfunc'];
         }
         $args['linktype'] = $linktype;
-        $args['linkfunc'] = $linkfunc;
-        // pass some extra template variables for use in BL tags, API calls etc.
-        $args['moduleid'] = $this->moduleid;
 
-        $itemtype = $this->itemtype;
         if(empty($itemtype))
             $itemtype = null; // don't add to URL
-        $args['table'] = (empty($this->table)) ? null: $this->table;
-        $args['objectname'] = empty($this->name) ? null : $this->name;
-
+        $args['table'] = !empty($this->table) ? $this->table : null;
+        $args['objectname'] = !empty($this->name) ? $this->name : null;
         $args['modname'] = $modname;
         $args['itemtype'] = $itemtype;
+        $args['objectid'] = $this->objectid;
         $args['links'] = array();
-        if(empty($args['urlmodule']))
-        {
-            if(!empty($this->urlmodule))
-            {
+        if(empty($args['urlmodule'])) {
+            if(!empty($this->urlmodule)) {
                 $args['urlmodule'] = $this->urlmodule;
-            }
-            else
-            {
+            } else {
                 $info = DataObjectMaster::getObjectInfo(
                     array(
                         'moduleid' => $args['moduleid'],
@@ -522,18 +518,30 @@ class DataObjectList extends DataObjectMaster
                 $args['urlmodule'] = $modname;
             }
         }
-
         foreach(array_keys($this->items) as $itemid) {
             // TODO: improve this + SECURITY !!!
             $options = array();
-            if (!empty($this->isgrouped)) {
+            if(!empty($this->isgrouped)) {
                 $args['links'][$itemid] = $options;
                 continue;
             }
-
-            $args['itemid'] = $itemid;
+             $args['itemid'] = $itemid;
             // @todo let's be a lil more explicit in handling these options
             $args['links'][$itemid] = $this->getViewOptions($args);
+
+            /*$args['links'][$itemid]['display'] =  array(
+                'otitle' => $args['linklabel'],
+                'olink'  => xarModURL(
+                    $args['urlmodule'],'user',$args['linkfunc'],
+                    array(
+                        'itemtype'     => $itemtype,
+                        'table'        => $args['table'],
+                        $args['param'] => $itemid,
+                        'template'     => $args['template']
+                    )
+                ),
+                'ojoin'  => ''
+            );*/
         }
         if(!empty($this->isgrouped))
         {
@@ -542,11 +550,11 @@ class DataObjectList extends DataObjectMaster
                 if(!empty($this->properties[$name]->operation))
                     $this->properties[$name]->label = $this->properties[$name]->operation . '(' . $this->properties[$name]->label . ')';
             }
+            $args['linkfield'] = 'N/A';
         }
 
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
-
         if(isset($args['newlink']))
         {
             // TODO: improve this + SECURITY !!!
@@ -570,125 +578,9 @@ class DataObjectList extends DataObjectMaster
         list(
             $args['prevurl'],
             $args['nexturl'],
-            $args['sorturl']) = $this->getPager($args['pagerurl']
-        );
-
-        // Pass the objectid too, comfy for customizing the templates
-        // with custom tags.
-        $args['objectid'] = $this->objectid;
+            $args['sorturl']) = $this->getPager($args['pagerurl']);
 
         // $current = xarModAPIFunc('dynamicdata','user','setcontext',$args);
-
-        return xarTplObject($args['tplmodule'],$args['template'],'showlist',$args);
-    }
-
-    function showView($args = array())
-    {
-        if(empty($args['layout']))    $args['layout']    = $this->layout;
-        if(empty($args['template']))  $args['template']  = $this->template;
-        if(empty($args['tplmodule'])) $args['tplmodule'] = $this->tplmodule;
-        if(empty($args['viewfunc']))  $args['viewfunc']  = $this->viewfunc;
-         if(empty($args['fieldprefix'])) $args['fieldprefix'] = $this->fieldprefix;
-        if(empty($args['fieldlist'])) $args['fieldlist'] = $this->fieldlist;
-        if(!empty($args['extend']))   $this->extend();
-
-        if(!empty($this->status))
-            $state = $this->status;
-        else
-            $state = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
-
-        if(count($args['fieldlist']) > 0)
-        {
-            $args['properties'] = array();
-            foreach($args['fieldlist'] as $name)
-            {
-                if(isset($this->properties[$name]))
-                {
-                    $thisprop = $this->properties[$name];
-                    if(($thisprop->status & DataPropertyMaster::DD_DISPLAYMASK) == ($state & DataPropertyMaster::DD_DISPLAYMASK))
-                        $args['properties'][$name] =& $this->properties[$name];
-                }
-            }
-        }
-        else
-        {
-            foreach($this->properties as $property)
-                if($property->status & $state)
-                    $args['properties'][$property->name] = $property;
-        }
-
-        $args['items'] =& $this->items;
-
-        // add link to display the item
-        if(empty($args['linkfunc']))  $args['linkfunc'] = $this->linkfunc;
-        if(empty($args['linklabel'])) $args['linklabel'] = xarML('Display');
-        if(empty($args['param']))     $args['param'] = $this->urlparam;
-        if(empty($args['linkfield'])) $args['linkfield'] = '';
-
-        // pass some extra template variables for use in BL tags, API calls etc.
-        $args['moduleid'] = $this->moduleid;
-
-        $modinfo = xarModGetInfo($this->moduleid);
-        $modname = $modinfo['name'];
-        $itemtype = $this->itemtype;
-
-        if(empty($itemtype))
-            $itemtype = null; // don't add to URL
-        $args['table'] = !empty($this->table) ? $this->table : null;
-        $args['objectname'] = !empty($this->name) ? $this->name : null;
-        $args['modname'] = $modname;
-        $args['itemtype'] = $itemtype;
-        $args['objectid'] = $this->objectid;
-        $args['links'] = array();
-        if(empty($args['urlmodule']))
-        {
-            if(!empty($this->urlmodule))
-                $args['urlmodule'] = $this->urlmodule;
-            else
-                $args['urlmodule'] = $modname;
-        }
-        foreach(array_keys($this->items) as $itemid)
-        {
-            $options = array();
-            if(!empty($this->isgrouped))
-            {
-                $args['links'][$itemid] = $options;
-                continue;
-            }
-            $args['links'][$itemid]['display'] =  array(
-                'otitle' => $args['linklabel'],
-                'olink'  => xarModURL(
-                    $args['urlmodule'],'user',$args['linkfunc'],
-                    array(
-                        'itemtype'     => $itemtype,
-                        'table'        => $args['table'],
-                        $args['param'] => $itemid,
-                        'template'     => $args['template']
-                    )
-                ),
-                'ojoin'  => ''
-            );
-        }
-        if(!empty($this->isgrouped))
-        {
-            foreach(array_keys($args['properties']) as $name)
-            {
-                if(!empty($this->properties[$name]->operation))
-                    $this->properties[$name]->label = $this->properties[$name]->operation . '(' . $this->properties[$name]->label . ')';
-            }
-            $args['linkfield'] = 'N/A';
-        }
-
-        $args['isprimary'] = !empty($this->primary);
-        $args['catid'] = !empty($this->catid) ? $this->catid : null;
-
-        if(empty($args['pagerurl']))
-            $args['pagerurl'] = '';
-        list(
-            $args['prevurl'],
-            $args['nexturl'],
-            $args['sorturl']
-        ) = $this->getPager($args['pagerurl']);
 
         return xarTplObject($args['tplmodule'],$args['template'],'showview',$args);
     }
@@ -722,26 +614,26 @@ class DataObjectList extends DataObjectMaster
         $options = array();
         if (xarSecurityCheck('DeleteDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid))  {
             if( isset($dummyoption))  {
-                    $options[] = $dummyoption;
+                    $options['dummy'] = $dummyoption;
             } else {
-                $options[] = array('otitle' => xarML('View'),
+                $options['view'] = array('otitle' => xarML('View'),
                                        'olink'  => xarModURL($args['urlmodule'],$linktype,$linkfunc,
                                                    $urlargs),
                                        'ojoin'  => '');
             }
-            $options[] = array('otitle' => xarML('Edit'),
+            $options['modify'] = array('otitle' => xarML('Edit'),
                                    'olink'  => xarModURL($args['urlmodule'],'admin','modify',
                                                $urlargs),
                                    'ojoin'  => '|');
-            $options[] = array('otitle' => xarML('Delete'),
+            $options['delete'] = array('otitle' => xarML('Delete'),
                                    'olink'  => xarModURL($args['urlmodule'],'admin','delete',
                                                $urlargs),
                                    'ojoin'  => '|');
         } elseif(xarSecurityCheck('EditDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
             if (isset($dummyoption)) {
-                $options[] = $dummyoption;
+                $options['dummy'] = $dummyoption;
             } else {
-                $options[] = array(
+                $options['view'] = array(
                         'otitle' => xarML('View'),
                         'olink'  => xarModURL(
                             $args['urlmodule'],$linktype,$linkfunc,
@@ -750,7 +642,7 @@ class DataObjectList extends DataObjectMaster
                         'ojoin'  => ''
                     );
             }
-            $options[] = array(
+            $options['edit'] = array(
                     'otitle' => xarML('Edit'),
                     'olink'  => xarModURL(
                         $args['urlmodule'],'admin','modify',
@@ -760,9 +652,9 @@ class DataObjectList extends DataObjectMaster
                 );
         } elseif(xarSecurityCheck('ReadDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
             if (isset($dummyoption)) {
-                $options[] = $dummyoption;
+                $options['dummy'] = $dummyoption;
             } else {
-                $options[] = array(
+                $options['view'] = array(
                         'otitle' => xarML('View'),
                         'olink'  => xarModURL(
                             $args['urlmodule'],$linktype,$linkfunc,

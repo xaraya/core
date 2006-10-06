@@ -35,9 +35,9 @@ function dynamicdata_adminapi_handleListTag($args)
                     $parts[] = "'$key' => '".$val."'";
                 }
             }
-            return 'echo '.$args['object'].'->showList(array('.join(', ',$parts).')); ';
+            return 'echo '.$args['object'].'->showView(array('.join(', ',$parts).')); ';
         } else {
-            return 'echo '.$args['object'].'->showList(); ';
+            return 'echo '.$args['object'].'->showView(); ';
         }
     }
 

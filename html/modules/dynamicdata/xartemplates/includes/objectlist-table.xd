@@ -53,7 +53,7 @@
             <tr  class="#$rowclass#">
                 <xar:set name="colspan">count($properties)+2</xar:set>
                 <td style="border-bottom: 1pt solid;" class="xar-align-right" colspan="#$colspan#">
-                        <xar:foreach in="$links[$itemid]" value="$option">
+                        <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
                         <xar:if condition="!empty($option['olink'])">
                             #$option['ojoin']# 
                             <a href="#$option['olink']#">

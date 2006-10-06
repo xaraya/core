@@ -188,7 +188,7 @@ function dynamicdata_adminapi_showlist($args)
         $pagerurl = '';
     }
 
-    return $object->showList(array('layout'    => $layout,
+    return $object->showView(array('layout'    => $layout,
                                    'template'  => $template,
                                    'linklabel' => $linklabel,
                                    'linkfunc'  => $linkfunc,
