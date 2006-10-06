@@ -773,7 +773,7 @@ function xarTplString($templateCode, &$tplData)
 
     // Execute the cache file
     sys::import('blocklayout.template.compiled');
-    $compiled = new xarCompiledTemplate(xarTemplateCache::cacheFile('memory'));
+    $compiled = new CompiledTemplate(xarTemplateCache::cacheFile('memory'));
     $out = $compiled->execute($tplData);
     return $out;
 }
@@ -927,12 +927,12 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     $templateCode = null;
     // Determine if we need to compile this template
     if (xarTemplateCache::isDirty($sourceFileName)) {
-        // Get an instance of xarSourceTemplate
+        // Get an instance of SourceTemplate
         sys::import('blocklayout.template.source');
-        $srcTemplate = new xarSourceTemplate($sourceFileName);
+        $srcTemplate = new SourceTemplate($sourceFileName);
 
         // Compile it
-        // @todo return a xarCompiledTemplate object here?
+        // @todo return a CompiledTemplate object here?
         $templateCode = $srcTemplate->compile();
 
         // Save the entry in templatecache (if active)
@@ -946,7 +946,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     // Execute the compiled template from the cache file
     // @todo the tplType should be irrelevant
     sys::import('blocklayout.template.compiled');
-    $compiled = new xarCompiledTemplate($cachedFileName,$sourceFileName,$tplType);
+    $compiled = new CompiledTemplate($cachedFileName,$sourceFileName,$tplType);
     $output = $compiled->execute($tplData);
     return $output;
 }

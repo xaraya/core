@@ -53,7 +53,7 @@ class xarTemplateTag extends Object
 {
     const NAME_REGEX = '^[a-z][-_a-z0-9]*$';
 
-    // These need to stay public otherwise the (de)serialization from their storage into the database doesnt work!
+    // These need to stay public otherwise the (de)serialization from their storage in the database doesnt work!
     public $_name = NULL;          // Name of the tag
     public $_attributes = array(); // Array with the supported attributes
     public $_handler = NULL;       // Name of the handler function
@@ -372,7 +372,7 @@ function xarTplGetTagObjectFromName($tag_name)
  *
  * @package blocklayout
  * @access public
- * @throws BadParamterException
+ * @throws BadParameterException
  * @todo see FIXME
 **/
 class xarTemplateAttribute extends Object
@@ -386,7 +386,7 @@ class xarTemplateAttribute extends Object
     {
         if (!eregi(self::NAME_REGEX, $name)) {
             // This should be a XML validation exception perhaps?
-            throw new BadParamterException($name,'The attribute name "#(1)" is invalid. Attribute names contain letters, numbers, _ and -, and must start with a letter.');
+            throw new BadParameterException($name,'The attribute name "#(1)" is invalid. Attribute names contain letters, numbers, _ and -, and must start with a letter.');
         }
 
         if (!is_integer($flags) && $flags != NULL) {

@@ -265,7 +265,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
 }
 
 /**
-* xarTpl_PositionInfo
+ * TemplatePositionInfo
  *
  * Instance of this class record where we are doing what in the templates
  *

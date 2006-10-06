@@ -11,9 +11,9 @@
 sys::import('blocklayout.template.compiled');
 
 /**
- * Define an interface for the xarSourceTemplate class so we obey our own stuff.
+ * Define an interface for the SourceTemplate class so we obey our own stuff.
 **/
-interface IxarSourceTemplate
+interface ISourceTemplate
 {
     function &compile();
     function &execute();
@@ -25,13 +25,8 @@ interface IxarSourceTemplate
  * @package blocklayout
  * @todo    decorate this with a Stream object so we can compile anything that is a stream.
 **/
-class xarSourceTemplate extends xarCompiledTemplate implements IxarSourceTemplate
+class SourceTemplate extends CompiledTemplate implements ISourceTemplate
 {
-    public function __construct($fileName) 
-    {
-        parent::__construct($fileName);
-    }
-
     /**
      * compile a source template into templatecode
      *
