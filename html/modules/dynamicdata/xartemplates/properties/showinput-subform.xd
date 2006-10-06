@@ -93,7 +93,7 @@
       <tr>
         <td colspan="2">
           <xar:if condition="!empty($input)">
-            <xar:data-list object="$object" layout="subform" fieldprefix="$fieldprefix" />
+            <xar:data-view object="$object" layout="subform" fieldprefix="$fieldprefix" />
             <strong>TODO: allow removal/deleting of child items</strong>
           <xar:else/>
             <xar:data-view object="$object" layout="subform" />

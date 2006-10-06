@@ -379,7 +379,7 @@
         <xar:if condition="!empty($groupby)">
             <xar:data-view object="$mylist" layout="list" />
             <xar:else />
-            <xar:data-list object="$mylist" />
+            <xar:data-view object="$mylist" />
         </xar:if>
     </xar:if>
     <xar:if condition="!empty($sample)">

@@ -327,7 +327,7 @@
                   understanding of how they function can result in access problems to content on your site.
                 </xar:mlstring>
             </p>
-            <xar:data-list module="1098" itemtype="3" tplmodule="privileges" />
+            <xar:data-view module="1098" itemtype="3" tplmodule="privileges" />
         </fieldset>
         <fieldset>
             <div class="xar-form-input-wrapper-after">

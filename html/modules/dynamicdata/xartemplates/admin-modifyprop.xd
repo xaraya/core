@@ -79,7 +79,7 @@
         <xar:mlstring>Hint: after you create a property, the label and name are independent from each other. You can adapt the property name by clicking on the ID link above.</xar:mlstring>
     </p>
 
-    <!-- <xar:data-list object="$myobject" layout="$layout"  /> -->
+    <!-- <xar:data-view object="$myobject" layout="$layout"  /> -->
     <p>
         [ 
         <xar:if condition="empty($details)">
@@ -149,7 +149,7 @@
         </table>
       </fieldset>
       <fieldset>
-        <!-- xar:data-list module="dynamicdata" itemtype="1" where="$where" param="itemid" layout="cells" / -->
+        <!-- xar:data-view module="dynamicdata" itemtype="1" where="$where" param="itemid" layout="cells" / -->
         <xar:if condition="count($tables) gt 0">
             <xar:foreach in="$tables" value="$table">
                 <form method="post" action="&xar-modurl-dynamicdata-util-importprops;">
