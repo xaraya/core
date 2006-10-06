@@ -55,41 +55,135 @@ outside of it.
                 galaxia.conf
             ...
             
-Issues/Questions/Todo:
-    - how do we deal with themes and modules? themes typically want to have 
-    access to webroot accessible stuff like styles and images, modules too, but they 
-    shouldn't :-) i have a tendency to place modules outside the webroot, 
-    but that may be really uncomfortable.
-    - how do we define module data which is file based? (in terms of what is 
-    data and how, for example does it relate to things inside xardata like 
-    directories) Self contained modules are quite comfortable.
-    - where do client libraries like js frameworks go?
-    - why are locales needed on fs? 
-    - how much webserver specific configuration like aliases etc. would we 
-    need for this
-    - describe in detail why this is better than all below webroot.
-    - do we want (parts of) in lib or have (core) as the main 'Application' 
-    (pro/con?)
-    - if there is such a thing needed as cgi-bin, where does it go in this 
-    picture? if at all
-    - this assume a one tree deployment, what if we want to repeat this for some
-    reason. Should we take an 'order' into account, i.e. first look in the site 
-    tree, then look in the global tree? (cfr. trac organisation)
-    - we probably want an easy-access taglib location, so it's easy to create 
-    custom tag definitions (where would that go?)
-    - how often can the include_path on servers *not* be changed?
-    - using absolute paths based on a config seems the safest. just as we base 
-    everything on the current (==webroot) directory now.
-    - there have been numerous requests for providing a very easy place to put
-    snippets (php snippets i guess then). How, if at all, do we want to cater for those?
-    - how does multisite affect the above in the doc_root piece? (1 or many? both?)
-    - what impact does  1 codebase multisite/multiapp on this layout? (db or storage is following 
-    the application config, so multi-db is less of an issue in this area)
-    - what is a good way to assess the magnitude of work on this? That it is a lot we know, but a metric would be nice.
-    - somehow modules seem painful in this layout, 'too big' comes to mind, 'too loose' too. 
-    Meant in the way that modules do so much in our system, it's hard to give them a proper place.
-    - where would we put framework wide shared stuff (the equiv of /usr/share/some_app/ in unices) things like a 
-    standardized iconset (which themes can override obviously) Stuff like that.
-    - concerns heard in the trenches:
-        - where do i put my custom content, isnt that going to be scattered all over?
-        - this will scare more users away as it becomes more complex.
+Question and Ansers
+-------------------
+
+Q:    how do we deal with themes and modules? themes typically want to have 
+access to webroot accessible stuff like styles and images, modules too, but they 
+shouldn't :-) i have a tendency to place modules outside the webroot, 
+but that may be really uncomfortable.
+A: 
+
+Q: how do we define module data which is file based? (in terms of what is 
+data and how, for example does it relate to things inside xardata like 
+directories) Self contained modules are quite comfortable.
+A:
+
+Q: where do client libraries like js frameworks go?
+A: 
+
+Q: why are locales needed on fs? 
+A:
+
+Q: how much webserver specific configuration like aliases etc. would we 
+need for this
+A:
+
+Q: is there a description why all this is better than just put stuff below the
+webroot?
+A: yes, see section below
+
+Q: do we want (parts of) in lib or have (core) as the main 'Application' 
+(pro/con?)
+A:
+
+Q: if there is such a thing needed as cgi-bin, where does it go in this 
+picture? if at all
+A:
+
+Q: this assume a one tree deployment, what if we want to repeat this for some
+reason. Should we take an 'order' into account, i.e. first look in the site 
+tree, then look in the global tree? (cfr. trac organisation)
+(aka: where do i put my custom code/content/data?)
+(aka: where do i put my php snippets?)
+A:
+
+Q: we probably want an easy-access taglib location, so it's easy to create 
+custom tag definitions (where would that go?)
+A:
+
+Q: how often can the include_path on servers *not* be changed? That is, how
+common is it to disallow calls to call ini_set()?
+A:
+
+Q: how does multisites affect the above in the doc_root piece? (1 or many? both?)
+A:
+
+Q: what impact does  1 codebase multisite/multiapp on this layout? (db or storage 
+is following the application config, so multi-db is less of an issue in this area)
+A:
+
+Q: what is a good way to assess the magnitude of work on this? That it is a 
+lot we know, but a metric would be nice.
+A:
+
+Q: somehow modules seem painful in this layout, 'too big' comes to mind, 
+'too loose' too. Meant in the way that modules do so much in our system, it's 
+hard to give them a proper place. Where do we put them?
+A:
+
+Q: where would we put framework wide shared stuff (the equiv of 
+/usr/share/some_app/ in unices) things like a standardized iconset (which 
+themes can override obviously) Stuff like that. (data, i guess)
+A:
+
+Q: wont this scare more users away as it becomes more complex?
+A: There is the option of distributing with the new configuration
+parameters set to those values which would lead to the exact same setup we
+have now, thus having the same complexity on an initial install. We can discuss 
+this when the time comes to distribute the package and see what is desired. As
+the proposed extension to have locations configurable can be made backwards
+compatible, the current directory layout is _one_ possible configuration.
+However, it is my expectation we would want at least some things to change, but
+we can deal with those when the time comes.
+
+Why is the above better than all below webroot?
+===============================================
+
+Reorganizing the directory layout is intrusive, very intrusive. Why is it 
+that we are even considering to do this? This section hopes to clarify some
+of the reasons.
+
+Security argument
+-----------------
+
+This is a simple argument. Anything below the webroot is in theory accessible 
+by the webserver. There are special actions needed to prevent certain access. 
+Putting in a special config directive in the webserver configuration, putting 
+empty index.html files in folders, checking wether files are accessed directly, 
+where they should not have been etc. etc.
+
+By putting files outside the webroot of which we know upfront the webserver 
+doesnt need direct/URL based access to (a php program running on that server may 
+have/need access to them however) we make that access impossible, so the amount
+of measures needed is less, and if files contain code which would be risky to
+put in an URL accessible file it is protected from such access by default.
+In short, this makes the people who admin a server sleep better.
+
+Deployment argument
+-------------------
+
+Xaraya is often used as a hub to manage more than one, of even a lot of sites.
+Currently, if not using special deployment tricks like symlinks or bind mounting,
+the code has to be put into each Xaraya install. Typically, the code used in
+all those installs is for the most part identical except for the app/site specific
+parts the site has to have.
+Allowing to put common parts in a shared location can save a considerable amount
+of diskspace (esp. in php, since all php files are usually bincached too) and 
+provide extra flexibility to run different core versions.
+Specifically for 'xaraya hosting' this is interesting since the shared install 
+can be pre-made for the clients, where they only have to worry about their specifics.
+
+Integration argument
+--------------------
+
+Being a framework, xaraya often integrates other libraries and is integrated 
+often in larger scope setups _as_ a library. Other packages all have their own
+rules and peculiarities on how they deal with files and where to put them. 
+Taking a library approach provides more options and can make integration 
+activities a lot easier when there are configuration settings provided on how
+to deal with file locations, include paths etc. 
+
+
+
+

@@ -109,6 +109,7 @@ ALTER TABLE xar_cache_blocks ADD PRIMARY KEY (xar_bid);
 
 DROP TABLE xar_security_levels;
 
-/* Replace the data-list handler
-UPDATE `xar_template_tags` SET `xar_handler` = 'dynamicdata_userapi_handleViewTag',
-`xar_data` = 'O:14:"xarTemplateTag":12:{s:5:"_name";s:9:"data-list";s:11:"_attributes";a:0:{}s:8:"_handler";s:34:"dynamicdata_adminapi_handleListTag";s:7:"_module";s:11:"dynamicdata";s:5:"_type";s:4:"user";s:5:"_func";s:13:"handleViewTag";s:12:"_hasChildren";b:0;s:8:"_hasText";b:0;s:13:"_isAssignable";b:0;s:10:"_isPHPCode";b:1;s:15:"_needAssignment";b:0;s:14:"_needParameter";b:0;}' WHERE `xar_template_tags`.`xar_handler` = 'dynamicdata_adminapi_handleListTag';
+/* Replace the data-list handler */
+UPDATE xar_template_tags 
+SET xar_handler = 'dynamicdata_userapi_handleViewTag',
+    xar_data    = 'O:14:"xarTemplateTag":12:{s:5:"_name";s:9:"data-list";s:11:"_attributes";a:0:{}s:8:"_handler";s:34:"dynamicdata_adminapi_handleListTag";s:7:"_module";s:11:"dynamicdata";s:5:"_type";s:4:"user";s:5:"_func";s:13:"handleViewTag";s:12:"_hasChildren";b:0;s:8:"_hasText";b:0;s:13:"_isAssignable";b:0;s:10:"_isPHPCode";b:1;s:15:"_needAssignment";b:0;s:14:"_needParameter";b:0;}' WHERE `xar_template_tags`.`xar_handler` = 'dynamicdata_adminapi_handleListTag';
