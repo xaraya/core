@@ -1296,7 +1296,7 @@ function installer_admin_upgrade2()
         array('Dynamic_ItemType_Property.php',1,'DynamicData'),
         array('Dynamic_DataObject_Property.php',1,'DynamicData'),
         array('Dynamic_SubForm_Property.php',1,'DynamicData'),
-        array('Dynamic_Validation__Property.php',1,'DynamicData')
+        array('Dynamic_Validation_Property.php',1,'DynamicData')
     );
     //set the array to hold properties that have not moved and should do!
     $ddtomove=array();
