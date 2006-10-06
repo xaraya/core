@@ -153,7 +153,7 @@
         <xar:mlstring>Idem for</xar:mlstring>
     </p>
 
-<pre>&lt;xar:data-list ... /&gt;
+<pre>&lt;xar:data-view ... /&gt;
 </pre>
         <p>
             <xar:mlstring>(Todo : group, join ?)</xar:mlstring>

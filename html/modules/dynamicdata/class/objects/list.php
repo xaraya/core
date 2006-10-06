@@ -528,20 +528,6 @@ class DataObjectList extends DataObjectMaster
              $args['itemid'] = $itemid;
             // @todo let's be a lil more explicit in handling these options
             $args['links'][$itemid] = $this->getViewOptions($args);
-
-            /*$args['links'][$itemid]['display'] =  array(
-                'otitle' => $args['linklabel'],
-                'olink'  => xarModURL(
-                    $args['urlmodule'],'user',$args['linkfunc'],
-                    array(
-                        'itemtype'     => $itemtype,
-                        'table'        => $args['table'],
-                        $args['param'] => $itemid,
-                        'template'     => $args['template']
-                    )
-                ),
-                'ojoin'  => ''
-            );*/
         }
         if(!empty($this->isgrouped))
         {
