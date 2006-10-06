@@ -214,7 +214,7 @@ design work can begin.
   renamed *view*
  
 !!!MIN. REQUIRED VERSIONS DETERMINED SO FAR
-* PHP      5.0.5 (probably 5.1.x even)
+* PHP      5.1.4 (probably 5.1.x even)
 * Mysql    5.0.18
 * Postgres 8.0.6
 * Sqlite   N/A (embedded in PHP, i think it's 2.8.x for non PDO and 3.x for PDO)

@@ -6,6 +6,9 @@
     <xar:else/>
       <xar:set name="evt_change">'return true;'</xar:set>
     </xar:if>
+    <xar:if condition="!isset($class)">
+      <xar:set name="class">''</xar:set>
+    </xar:if>
 
     <xar:foreach in="$options" value="$option" key="$key">
         <xar:if condition="$key == 0">
@@ -15,9 +18,9 @@
         </xar:if>
 
         <xar:if condition="$option['id'] eq $value" >
-            <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" checked="checked" />
+            <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" class="$class" checked="checked" />
         <xar:else />
-            <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" />
+            <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" class="$class" />
         </xar:if>
 
         <label for="#$theID#">#$option['name']# </label>
@@ -30,6 +33,10 @@
       <xar:set name="evt_change">'return true;'</xar:set>
     </xar:if>
 
+    <xar:if condition="!isset($class)">
+      <xar:set name="class">''</xar:set>
+    </xar:if>
+
     <xar:foreach in="$options" value="$option" key="$key">
         <xar:if condition="$key == 0">
             <xar:set name="theID">$id</xar:set>
@@ -38,9 +45,9 @@
         </xar:if>
 
         <xar:if condition="$option['id'] eq $value" >
-            <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" checked="checked" />
+            <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" class="$class" checked="checked" />
         <xar:else />
-            <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" />
+            <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" class="$class" />
         </xar:if>
 
         <label for="#$theID#">#$option['name']# </label>
