@@ -1,0 +1,18 @@
+Remarks on what changes to modules are needed to make sure they can behave
+in the 2.x source tree:
+
+Exceptions
+----------
+- xarModApiFunc had a parameter to suppress exceptions. This parameter has
+  been removed and an exception is always raised:
+  Example:
+  // don't throw an exception if this function doesn't exist (the zero at the end)
+  $mytypes = xarModAPIFunc($modname,'user','getitemtypes', array(), 0);
+  
+  new code:
+  try {
+    $mytypes = xarModAPIFunc($modname,'user','getitemtypes');
+  } catch (Exception $e) {
+    $mtypes = array();
+  }
+
