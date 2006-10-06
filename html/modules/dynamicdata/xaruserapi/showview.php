@@ -5,7 +5,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -19,6 +19,8 @@
 function dynamicdata_userapi_showview($args)
 {
     extract($args);
+
+    //    $current = xarModAPIFunc('dynamicdata','user','setcontext',$args);
 
     // optional layout for the template
     if (empty($layout)) {
@@ -35,10 +37,7 @@ function dynamicdata_userapi_showview($args)
 
     // do we want to count?
     if(empty($count)) $count=false;
-    
-    if (empty($tplmodule)) {
-        $tplmodule = 'dynamicdata';
-    }
+
     // we got everything via template parameters
     if (isset($items) && is_array($items)) {
         return xarTplModule('dynamicdata','user','showview',

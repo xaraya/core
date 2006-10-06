@@ -209,7 +209,8 @@ design work can begin.
   stored in the database
 * showList method in the DataObjectList class has been removed in favor of showView
   due to it's redundancy in code. The data-list tag will continue to operate as normal
-  (for now), but any $modname/objects/*list* templates will need to be renamed *view*
+  (for now), but any $modname/xartemplates/objects/*list* templates will need to be 
+  renamed *view*
  
 !!!MIN. REQUIRED VERSIONS DETERMINED SO FAR
 * PHP      5.0.5 (probably 5.1.x even)
