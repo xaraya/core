@@ -20,7 +20,7 @@ sys::import('modules.base.xarproperties.dropdown');
 /**
  * Handle the objectreference property
  *
- * Dynamic Data Object Reference Property (foreign key like dropdown)
+ * DataObject Reference Property (foreign key like dropdown)
  * You can specify the to be referenced object and what property values
  * to use for displayinig and to store in the (foreign key) field
  */

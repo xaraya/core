@@ -20,7 +20,7 @@
  * @param $args['source'] data source for the property (optional)
  * @param $args['validation'] validation for the property (optional)
  * @returns object
- * @return a particular Dynamic Property
+ * @return a particular DataProperty
  */
 function &dynamicdata_userapi_getproperty($args)
 {

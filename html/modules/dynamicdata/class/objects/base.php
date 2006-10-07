@@ -1,6 +1,6 @@
 <?php
 /**
- * Dynamic Object
+ * DataObject
  *
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module

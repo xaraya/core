@@ -13,7 +13,7 @@
  * Handle <xar:data-input ...> form field tags
  * Format : <xar:data-input name="thisname" type="thattype" value="$val" ... />
  *       or <xar:data-input field="$field" /> with $field an array containing the type, name, value, ...
- *       or <xar:data-input property="$property" /> with $property a Dynamic Property object
+ *       or <xar:data-input property="$property" /> with $property a DataProperty object
  *
  * Special attributes :
  *     hidden="yes" to show a hidden field regardless of the original property type
@@ -36,7 +36,7 @@ function dynamicdata_adminapi_handleInputTag($args)
         $property  = $args['property'];
         unset($args['property']);
     }
-    
+
     if (isset($args['hidden'])) {
         $hidden = $args['hidden'];
         unset($args['hidden']);

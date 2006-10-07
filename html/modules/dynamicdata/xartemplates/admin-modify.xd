@@ -25,7 +25,7 @@
                   </a>
                 </dd>
                 <dd>
-                    <a href="&xar-modurl-dynamicdata-admin-modifyprop;&amp;itemid=#$itemid#"><xar:mlstring>Modify Dynamic Properties</xar:mlstring></a>
+                    <a href="&xar-modurl-dynamicdata-admin-modifyprop;&amp;itemid=#$itemid#"><xar:mlstring>Modify DataProperties</xar:mlstring></a>
                 </dd>
                 <dd>
                     <a href="&xar-modurl-dynamicdata-util-export;&amp;objectid=#$itemid#"><xar:mlstring>Export Object Definition to XML</xar:mlstring></a>

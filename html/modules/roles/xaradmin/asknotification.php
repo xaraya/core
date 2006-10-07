@@ -51,7 +51,7 @@ function roles_admin_asknotification($args)
                 // dynamic properties (if any)
                 $data['properties'] = null;
                 if (xarModIsAvailable('dynamicdata')) {
-                    // get the Dynamic Object defined for this module (and itemtype, if relevant)
+                    // get the DataObject defined for this module (and itemtype, if relevant)
                     // Bug 4785: removed a & on next line
                     $object = xarModAPIFunc('dynamicdata', 'user', 'getobject',
                         array('module' => 'roles'));
@@ -84,7 +84,7 @@ function roles_admin_asknotification($args)
             $data['subject'] = xarTplCompileString($vars . $data['subject']);
 
             // Restore whitespace
-            $data['message'] = str_replace('&nbsp;',' ', $data['message']);            
+            $data['message'] = str_replace('&nbsp;',' ', $data['message']);
             $data['message'] = str_replace('<br />',' ', $data['message']);
 
             //Send notification

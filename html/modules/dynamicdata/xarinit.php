@@ -38,7 +38,7 @@ function dynamicdata_init()
     try {
         $dbconn->begin();
         /**
-         * Dynamic Objects table
+         * DataObjects table
          */
         $objectfields = array('xar_object_id' => array('type'        => 'integer',
                                                        'null'        => false,
@@ -381,14 +381,14 @@ function dynamicdata_init()
 
         // Add Dynamic Data Properties Definition Table
         dynamicdata_createPropDefTable();
-        
+
         $dbconn->commit();
     } catch (Exception $e) {
         // nice try
         $dbconn->rollback();
         throw $e;
     }
-        
+
     /**
      * Set module variables
      */

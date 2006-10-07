@@ -1,6 +1,6 @@
 <div class="xar-form-input-wrapper">
     <label class="help xar-form-label" title="#xarML('Select the dynamic object for which you want to create a form.')#" for="objectid#$blockid#">
-        <xar:mlstring>Dynamic Object</xar:mlstring>
+        <xar:mlstring>DataObject</xar:mlstring>
     </label>
     <xar:set name="id">'objectid'.$blockid</xar:set>
     <xar:data-input type="object" name="objectid" id="$id" value="$objectid" />

@@ -12,7 +12,7 @@
     <ul>
         <li>
             <a href="&xar-modurl-dynamicdata-admin-query;">
-                <xar:mlstring>Query Dynamic Objects or Database Tables</xar:mlstring>
+                <xar:mlstring>Query DataObjects or Database Tables</xar:mlstring>
             </a>
         </li>
         <li>

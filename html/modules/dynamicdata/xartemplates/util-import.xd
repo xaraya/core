@@ -10,7 +10,7 @@
 
 <div class="xar-mod-body">
    <xar:template type="module" file="admin-menu" />
-   <h2><xar:mlstring>Utilities - Import Dynamic Data Object Definition </xar:mlstring></h2>
+   <h2><xar:mlstring>Utilities - Import DataObject Definition </xar:mlstring></h2>
    <xar:template type="module" file="utility-menu" />
 
     <xar:if condition="!empty($warning)">

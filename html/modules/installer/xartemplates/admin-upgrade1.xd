@@ -47,7 +47,7 @@
               </xar:mlstring>
            </li>
            <li>
-               <xar:mlstring>The Country Listing Dynamic Data property has changed templates in Version 1.1 to refer to ID as value
+               <xar:mlstring>The CountryListing property has changed templates in Version 1.1 to refer to ID as value
                 instead of Name. If you have been using this DD property, you will have to override the template to
                 continue to use Name as the value.
                </xar:mlstring>

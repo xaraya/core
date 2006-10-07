@@ -12,8 +12,8 @@
  */
 /**
  * Handle <xar:data-label ...> label tag
- * Format : <xar:data-label object="$object" /> with $object some Dynamic Object
- *       or <xar:data-label property="$property" /> with $property some Dynamic Property
+ * Format : <xar:data-label object="$object" /> with $object some DataObject
+ *       or <xar:data-label property="$property" /> with $property some DataProperty
  *       <xar:data-label property="$property" label="id" /> will use <label for="dd_$property->id">...</label>
  *       <xar:data-label property="$property" label="name" /> will use <label for="$property->name">...</label>
  *       <xar:data-label property="$property" label="something" /> will use <label for="something">...</label>

@@ -7,7 +7,7 @@
 <div class="xar-mod-body">
     <h2>
         <xar:ml>
-            <xar:mlstring>Validation for Dynamic Property #(1)</xar:mlstring>
+            <xar:mlstring>Validation for DataProperty #(1)</xar:mlstring>
             <xar:mlvar>#$itemid#</xar:mlvar>
         </xar:ml>
     </h2>

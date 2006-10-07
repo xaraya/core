@@ -1,6 +1,6 @@
 <?php
 /**
- * Dynamic Object List
+ * DataObject List
  * Note : for performance reasons, we won't use an array of objects here,
  *        but a single object with an array of item values
  *
@@ -449,7 +449,7 @@ class DataObjectList extends DataObjectMaster
 
         $args['properties'] = array();
         if(count($args['fieldlist']) > 0)
-        {   
+        {
             foreach($args['fieldlist'] as $name) {
                 if(isset($this->properties[$name])) {
                     if(($this->properties[$name]->status & DataPropertyMaster::DD_DISPLAYMASK) == ($state & DataPropertyMaster::DD_DISPLAYMASK))

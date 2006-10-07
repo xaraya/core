@@ -470,7 +470,7 @@ class DataObjectMaster extends Object
     }
 
     /**
-     * Class method to retrieve information about all Dynamic Objects
+     * Class method to retrieve information about all DataObjects
      *
      * @return array of object definitions
     **/
@@ -999,7 +999,7 @@ class DataObjectMaster extends Object
         if (!$q->run()) return;
 
         // Put in itemtype as key for easier manipulation
-        foreach($q->output() as $row) $objects 
+        foreach($q->output() as $row) $objects
 [$row['itemtype']] = array('objectid' => $row['objectid'],'objectname' => $row['objectname'], 'moduleid' => $row['moduleid'], 'itemtype' => $row['itemtype'], 'parent' => $row['parent']);
 
         // Cycle through each ancestor

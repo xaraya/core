@@ -32,7 +32,7 @@
 
     <xar:if condition="!empty($modlist) and count($modlist) gt 0">
         <!--
-        when we're viewing the Dynamic Objects themselves, show other modules
+        when we're viewing the DataObjects themselves, show other modules
         -->
         <fieldset>
           <legend>

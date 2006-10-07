@@ -9,7 +9,7 @@
    <xar:template type="module" file="admin-menu" />
     <h2>
         <xar:ml>
-            <xar:mlstring>Modify Dynamic Properties #(1)</xar:mlstring>
+            <xar:mlstring>Modify DataProperties #(1)</xar:mlstring>
             <xar:mlvar>#$label#</xar:mlvar>
         </xar:ml>
     </h2>
@@ -29,7 +29,7 @@
                     </a>
                 </dd>
                 <dd class="active">
-                  <a href="#xarServerGetCurrentUrl()#"><xar:mlstring>Modify Dynamic Properties</xar:mlstring></a>
+                  <a href="#xarServerGetCurrentUrl()#"><xar:mlstring>Modify DataProperties</xar:mlstring></a>
                 </dd>
                 <dd>
                     <a href="&xar-modurl-dynamicdata-util-export;&amp;modid=#$modid#&amp;itemtype=#$itemtype#">

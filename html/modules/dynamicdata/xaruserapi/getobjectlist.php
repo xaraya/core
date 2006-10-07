@@ -17,7 +17,7 @@
  * @param $args['moduleid'] module id of the item field to get
  * @param $args['itemtype'] item type of the item field to get
  * @returns object
- * @return a particular Dynamic Object
+ * @return a particular DataObject
  */
 function &dynamicdata_userapi_getobjectlist($args)
 {
