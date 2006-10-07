@@ -150,10 +150,10 @@ function roles_user_usermenu($args)
                 ($url_parts['host'] != $_SERVER["SERVER_NAME"]) &&
                 ($url_parts['host'] != $_SERVER["HTTP_HOST"])) {
 
-                  $msg = xarML('External URLs such as #(1) are not permitted in your User Account.', $home);
-                  xarErrorSet(XAR_USER_EXCEPTION, 'BAD_DATA', new DefaultUserException($msg));
-                  $home=''; //reset and return with error
-                    return;
+                  $msg  = xarML('External URLs such as #(1) are not permitted in your User Account.', $home);
+                  $var  = array($home);
+                  $home = '';
+                  throw new BadParameterException(array($home), $msg);
                 }
             }
             if (!empty($pass1)){
