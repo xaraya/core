@@ -188,13 +188,13 @@ class DataObjectMaster extends Object
         {
             // We already have an object, so it can't be native
             $params['objectid'] = $this->objectid;
-            $params['top']      = false;
+            $params['top']        = false;
         }
         else
         {
             $params['moduleid'] = $this->moduleid;
-            $params['itemtype'] = $this->itemtype;
-            $params['top']      = true;
+            $params['itemtype']  = $this->itemtype;
+            $params['top']          = true;
         }
         // Retrieve the ancestors
         $ancestors = self::getAncestors($params);
@@ -956,7 +956,7 @@ class DataObjectMaster extends Object
         extract($args);
 
         if (!(isset($moduleid) && isset($itemtype)) && !isset($objectid)) {
-            $msg = xarML('Wrong arguments to dynamicdata_userapi_getancestors.');
+            $msg = xarML('Wrong arguments to DataObjectMaster::getAncestors.');
             throw new BadParameterException(array(),$msg);
         }
 
