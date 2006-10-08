@@ -6,6 +6,37 @@ Below are some thoughts on how we could organize the files and directories in
 a way where things which do not need to be below the webroot, can be placed 
 outside of it. 
 
+Before we outline the directory layout, lets list some definitions and assumptions 
+so we can make informed decision on the directory layout.
+
+Definitions
+===========
+  'install':
+        An 'install' is one copy of the framework code, identified by a
+        version (number, hash or otherwise) at a certain location.
+  'instance':
+        An 'instance' is the result of using one install to create one or more sites.
+  'database': 
+        A 'database' is a storage container which holds the data for exactly one instance. 
+  'site':
+        A 'site' is a collection of data within an instance belonging to 
+        one website.
+
+Assumptions
+===========
+    1.  Each 'install' can have one or more 'instances'.
+    2.  Each 'instance' has a default 'site', in absence of extra information, data belongs to the default 'site'
+    3.  Each 'instance' can have many 'sites', but always has at least one. (master-site?)
+    4.  Each 'site' belongs to exactly one 'instance'.
+    5.  One server can support many 'installs', possibly differing in version.
+    
+Consequences
+============
+    - the changed directory layout satisfying the above assumptions (that was the aim)
+    - introduction of a 'site' concept/object
+    - introduction of a 'instance' concept/object
+
+
 /root
     /html                                 [anything which needs to be accessible by the web front goes here]
         .htaccess                         [or equivalent for other http server]
