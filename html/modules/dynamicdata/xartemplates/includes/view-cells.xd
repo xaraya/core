@@ -12,7 +12,7 @@
                  <xar:foreach in="$properties" key="$name">
                      <td>
                          <xar:if condition="!empty($fields[$name])">
-                             <-- @todo do we have a better way of doing this name attribute?  perhaps fieldprefix ? -->
+                             <!-- @todo do we have a better way of doing this name attribute?  perhaps fieldprefix ? -->
                              <xar:data-input property="$properties[$name]" name="dd_'.$name.'['.$itemid.']" size="10" value="$fields[$name]" />
                          <xar:else />
                              <xar:data-input property="$properties[$name]" name="dd_'.$name.'['.$itemid.']" size="10" />
