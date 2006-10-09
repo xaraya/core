@@ -1,5 +1,5 @@
 Framework directory layout (outwebroot scenario)
-------------------------------------------------
+================================================
 
 Having literally everything below the webroot is limiting deployment choices.
 Below are some thoughts on how we could organize the files and directories in 
@@ -10,7 +10,7 @@ Before we outline the directory layout, lets list some definitions and assumptio
 so we can make informed decision on the directory layout.
 
 Definitions
-===========
+-----------
   'install':
         An 'install' is one copy of the framework code, identified by a
         version (number, hash or otherwise) at a certain location.
@@ -19,11 +19,12 @@ Definitions
   'database': 
         A 'database' is a storage container which holds the data for exactly one instance. 
   'site':
-        A 'site' is a collection of data within an instance belonging to 
+        A 'site' is a collection of data within one instance belonging to 
         one website.
 
 Assumptions
-===========
+-----------
+
     1.  Each 'install' can have one or more 'instances'.
     2.  Each 'instance' has a default 'site', in absence of extra information, data belongs to the default 'site'
     3.  Each 'instance' can have many 'sites', but always has at least one. (master-site?)
@@ -31,60 +32,181 @@ Assumptions
     5.  One server can support many 'installs', possibly differing in version.
     
 Consequences
-============
+------------
+
     - the changed directory layout satisfying the above assumptions (that was the aim)
     - introduction of a 'site' concept/object
     - introduction of a 'instance' concept/object
 
 
-/root
-    /html                                 [anything which needs to be accessible by the web front goes here]
-        .htaccess                         [or equivalent for other http server]
-        index.php                         [entry point]
-        ws.php                            [do we need this?, assuming we have a 'Controller' class somehow]
-        /themes                           [probably right in this place, maybe more like skin (presentation) than theme (structure)]
+Directory layout
+----------------
+The above suggests:
+    - 2 main locations, one for the install and one for (each) instance
+    - we need at least one webroot per instance, it makes sense to leave it at
+    that too and let sites within one instance share their webroot. This effectively
+    links one webroot to one database, which is easy to remember.
+    - the default site is implicit and sites can be managed from within the instance
+    so we dont need to explicitly create directories for it. This makes a multi site instance
+    look the same as a single site instance from a files/dirs perspective.
+    - its obvious that the 'install' area needs a place to hold code and libraries => lib
+    This areay will be the main include area for the program. At the same time
+    we want to have the option to transparently include and use code specific
+    to one instance, so we mirror that lib directory in the instance location.
+    - to distinguish libraries from us and third parties below lib there is the
+    'namespace' xaraya which can hold our libraries. Third party libraries also
+    get their own namespace (directory)
+    - to bootstrap an instance and tie it to its database, a file containing
+    the configuration for that is needed (current config.system.php i guess)
+    To hold this and possible other configurations => conf (xml/txt/php tbd) 
+    The global environment also has a conf location to provide sensible defaults
+    - each instance may/will generate variable data related only to its specific
+    configuration => var. This has no global equivalent in the install.
+    - locale information is typically global (note: this is not the same as 
+    translations!) so we designate a global location for that => locales
+    We can look up the most convenient way to store locale information, i.e.
+    one file per locale or a directory with multiple, doesnt matter much.
+    - modules will definitely have to go outside the webroot, as we want to
+    have them both globally installed (for all instances) and at the specific
+    instance levels. 
+    
+
+Global environment:
+-------------------
+
+The global install environment should be viewed upon as something like 'xar.exe'
+it's an immutable collection of things which are used to generate new instances
+(i.e. a new 'default site'), and provide defaults for the sites using this particular install.
+"Running xar.exe" could be done through a webinterface or a cmdline, whatever
+we have time to create. (ideally both).
+Translation from our current situation, it could be viewed upon as a 'consolidated installer'
+or 'server admin part'; one level higher than what our current UI exposes. 
+The 'global environment' needs to be configured in the webserver specifically.
+
+/path/to/install
+    /bin                            [cmd line interface for the managing of instances]
+        ...                         
+    /conf
+        xaraya.conf                 [global configuration defaults]
+        /skeleton                   [entry point for instance skeletons, used during creation of new instances]
+            ?
+    /html                           [web interface of the install]
+        .htaccess
+        default.php                 [named it default.php to indicate its different than index.php in the instance]
+        /themes                     [themes globally available for instances]
+            /default
+                package.xml         [theme meta information]
+                /style              [styling files]
+                /scripts            [client scripts]
+                /images
+                /pages              [page structure templates]
+                    default.xt      (why do we use .xt vs .xd again?)
+            ...    
+    /lib
+        /xaraya                     [ xaraya library, 'core']
             ...
-        /modules                          [problematic, should be able to be moved out, but most, if not all modules depend on the webroot]
-            ...
-    /core                                 [this places core outside lib, which means we view it as an application (not entirely right i think)]
-        bootstrap.php                     [this file probably needs a fixed location as the one reference we base other stuff on]
-        ...(?)
-    /lib                                  [contains libraries which are in use]
-        /xaraya                           [we are a lib too? (mainly to get a classpath entry and be consistent with the other entries.)]
-            ... (?)
-        /blocklayout                      [this makes more sense than 'xaraya' in the previous line, if we make it a self contained lib]
-            ...(blocklayout files)
-        /creole
-            ...(creole files)
-        /zend                             [ironically Zend is the only one in these examples which would need adaptation to fit in :-)]
-            ...(zend framework)           
-        /propel
-            ...(propel)
-        /PEAR (?)                         [probably needs some glue, PEAR assumes it will be top level controlling to some extent]
-            ...
-        etc...
-    /var                                  [contains generated files like logs, caches etc.]
-        /cache                            [top level for caches]
-            /database
-            /templates                    [there's probably a need for separate configuration of these]
-            /output
-            ...
-        /locales                          [top level for locale related information]
-        /log                              [top level for logs]
-        /modules                          [top level for filebased module data]
-            /roles
-                /messaging
-            /workflow
-                /processes
-            ...
-    /etc                                  [contains static information regarding to configuration of components]
-        default.conf
-        site1.conf?                       [per site/app config? i'd rather not but for totally unrelated sites it migh be comfy (i.e. creating a new default site)]
-        app2.conf?                        
-        /modules                          [top level for module specific configuration files]
-            /workflow
-                galaxia.conf
-            ...
+        /zend                       [ 
+            ...                       third party libraries like Zend, propel,
+        ...                           binarycloud, PEAR, etc.                             
+        /greatlib                   ]    
+    /modules                        [modules globally available for instances]
+        /globalmodname
+            package.xml             [module meta information]
+            /api                    [offering]
+                ?
+            /gui                    [presentation]
+                ?
+            /lib                    [implementation]
+                ...
+            /data
+                schema.xml          [storage container definitions]
+                data.xml            [default data for initial populate]
+            /templates
+                ?
+        ...
+    /locales
+        /en_US
+            locale.xml              [ locale specification ]
+        /nl_NL
+            locale.xml
+
+Instance environment:
+---------------------
+The instance environment is created through the 'xar instance manager'. The effect of
+using the instance manager is the 'generate' the necessary structure for starting a 
+(collection of) websites. The necessary directories are created, the proper config is
+put into place etc.
+
+A minimal instance might look something like this:
+
+/path/to/instance
+    /conf
+        default.conf                
+    /html
+        .htaccess
+        index.php
+    /var
+        /default
+            /cache
+                /output
+                /templates
+            /logs
+            
+
+An instance structure showing all possible options might look something like
+this:
+
+/path/to/instance
+    /conf
+        default.conf                [default site config, plus defaults for all sites]
+        siteX.conf                  [siteX specific config]
+        siteY.conf
+    /html                           [webroot for all sites in the instance]
+        .htaccess                   [webserver specific config file]
+        index.php                   [entry point]
+        /themes
+            /themename
+                package.xml         [theme meta information]
+                /style              [styling files]
+                /scripts            [client scripts]
+                /images
+                /pages              [page structure templates]
+                    default.xt      (why do we use .xt vs .xd again?)
+    /lib
+        /specialstuff
+        ...   
+    /modules
+        /localmodname
+            package.xml             [module meta information]
+            /api                    [offering]
+            /conf                   [additional configuration]
+            /gui                    [presentation]
+            /lib                    [implementation]
+            /data
+                schema.xml          [storage container definitions]
+                data.xml            [default data for initial populate]
+            /templates
+        ...
+    /var
+        /default
+            /cache
+                /output
+                /templates
+            /logs
+        /siteX
+            /cache
+                /output
+                /templates
+            /logs
+        /siteY
+            /cache
+                /output
+                /templates
+            /logs
+        /modules
+            /modname                [module modname's data area]
+                ...
+        
             
 Question and Ansers
 -------------------
@@ -93,7 +215,9 @@ Q:    how do we deal with themes and modules? themes typically want to have
 access to webroot accessible stuff like styles and images, modules too, but they 
 shouldn't :-) i have a tendency to place modules outside the webroot, 
 but that may be really uncomfortable.
-A: 
+A: Themes go below the webroot of an instance. Modules go outside the webroot which
+means that modules need to be offered strong tools to access files in their own
+parts. 
 
 Q: how do we define module data which is file based? (in terms of what is 
 data and how, for example does it relate to things inside xardata like 
@@ -101,14 +225,18 @@ directories) Self contained modules are quite comfortable.
 A:
 
 Q: where do client libraries like js frameworks go?
-A: 
+A: either they go directly below the 'scripts' directory in the theme or are
+made available in the lib section globally or in an instance. 
 
 Q: why are locales needed on fs? 
-A:
+A: 
 
 Q: how much webserver specific configuration like aliases etc. would we 
 need for this
-A:
+A: - the install needs to have a configuration in the webserver probably, the
+instances are generated from that install, so we can make sure things are properly
+generated for each instance without having a need for a specific configuration
+in the webserver.
 
 Q: is there a description why all this is better than just put stuff below the
 webroot?
@@ -116,18 +244,20 @@ A: yes, see section below
 
 Q: do we want (parts of) in lib or have (core) as the main 'Application' 
 (pro/con?)
-A:
+A: lib/xaraya would be the old 'core' in the proposal.
 
 Q: if there is such a thing needed as cgi-bin, where does it go in this 
 picture? if at all
-A:
+A: nowhere by default.
 
 Q: this assume a one tree deployment, what if we want to repeat this for some
 reason. Should we take an 'order' into account, i.e. first look in the site 
 tree, then look in the global tree? (cfr. trac organisation)
 (aka: where do i put my custom code/content/data?)
 (aka: where do i put my php snippets?)
-A:
+A: This question was from an earlier proposal, the formulation of the definitions
+and the assumption led to a split into a global environment and an instance
+environment which more than caters for the problem outlined in the question.
 
 Q: we probably want an easy-access taglib location, so it's easy to create 
 custom tag definitions (where would that go?)
@@ -138,11 +268,11 @@ common is it to disallow calls to call ini_set()?
 A:
 
 Q: how does multisites affect the above in the doc_root piece? (1 or many? both?)
-A:
+A: one instance serves a multisite setup from one doc root.
 
 Q: what impact does  1 codebase multisite/multiapp on this layout? (db or storage 
 is following the application config, so multi-db is less of an issue in this area)
-A:
+A: see the description at the top of this file.
 
 Q: what is a good way to assess the magnitude of work on this? That it is a 
 lot we know, but a metric would be nice.
@@ -151,15 +281,15 @@ A:
 Q: somehow modules seem painful in this layout, 'too big' comes to mind, 
 'too loose' too. Meant in the way that modules do so much in our system, it's 
 hard to give them a proper place. Where do we put them?
-A:
+A: see above, outside the webroot at the instance level.
 
 Q: where would we put framework wide shared stuff (the equiv of 
 /usr/share/some_app/ in unices) things like a standardized iconset (which 
 themes can override obviously) Stuff like that. (data, i guess)
-A:
+A: in the install global env at least.
 
 Q: wont this scare more users away as it becomes more complex?
-A: There is the option of distributing with the new configuration
+A1: There is the option of distributing with the new configuration
 parameters set to those values which would lead to the exact same setup we
 have now, thus having the same complexity on an initial install. We can discuss 
 this when the time comes to distribute the package and see what is desired. As
@@ -167,6 +297,8 @@ the proposed extension to have locations configurable can be made backwards
 compatible, the current directory layout is _one_ possible configuration.
 However, it is my expectation we would want at least some things to change, but
 we can deal with those when the time comes.
+A2: with the above description, A1 is not true anymore, its impossible to mimick
+the exact same setup, as currently we have no split between global and instance. 
 
 Why is the above better than all below webroot?
 ===============================================
