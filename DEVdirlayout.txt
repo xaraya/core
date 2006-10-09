@@ -348,5 +348,12 @@ activities a lot easier when there are configuration settings provided on how
 to deal with file locations, include paths etc. 
 
 
-
+Deployment 'before and after' stories
+=====================================
+[
+    here's where we would list known deployment scenarios in the current 
+    situation and compare it with how the new situation would look.
+    We can then compare it in terms of disk size, backup strategy, site mgmt.
+    coding efficiency and other metric we deem important.
+]
 
