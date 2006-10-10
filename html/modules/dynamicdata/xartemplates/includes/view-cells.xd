@@ -1,30 +1,33 @@
-<table class="xar-fullwidth">
-    <tr>
-        <th>| 
-            <xar:foreach in="$properties" key="$name">
-              <xar:data-label property="$properties[$name]" /> |
-            </xar:foreach>
-        </th>
-    </tr>
-    <!-- for this layout, we'll use xar:data-input here -->
-    <xar:foreach in="$items" key="$itemid" value="$fields">
+<div class="xar-fullwidth">
+    <table class="xar-fullwidth">
+         <tr>
+             <xar:foreach in="$properties" key="$name">
+                 <th class="xar-form-textlong">
+                     <xar:data-label property="$properties[$name]" />
+                 </th>
+             </xar:foreach>
+         </tr>
+         <xar:foreach in="$items" key="$itemid" value="$fields">
+             <tr class="xar-norm">
+                 <xar:foreach in="$properties" key="$name">
+                     <td>
+                         <xar:if condition="!empty($fields[$name])">
+                             <!-- @todo do we have a better way of doing this name attribute?  perhaps fieldprefix ? -->
+                             <xar:data-input property="$properties[$name]" name="dd_'.$name.'['.$itemid.']" size="10" value="$fields[$name]" />
+                         <xar:else />
+                             <xar:data-input property="$properties[$name]" name="dd_'.$name.'['.$itemid.']" size="10" />
+                         </xar:if>
+                     </td>
+                 </xar:foreach> 
+             </tr>
+         </xar:foreach>
         <tr>
-            <td>
-                <xar:foreach in="$properties" key="$name">
-                    <xar:if condition="!empty($fields[$name])">
-                        <xar:data-input property="$properties[$name]" name="dd_'.$name.'['.$itemid.']" size="10" value="$fields[$name]" />
-                        <xar:else />
-                        <xar:data-input property="$properties[$name]" name="dd_'.$name.'['.$itemid.']" size="10" />
-                    </xar:if>
-                </xar:foreach>
-            </td>
-        </tr>
-    </xar:foreach>
-    <tr>
-        <td>
             <xar:foreach in="$properties" key="$name">
-                <xar:data-input property="$properties[$name]" size="10" name="dd_'.$name.'[0]" />
+                <td>
+                    <xar:data-input property="$properties[$name]" size="10" name="dd_'.$name.'[0]" />
+                </td>
             </xar:foreach>
-        </td>
-    </tr>
-</table>
+        
+        </tr>
+    </table>
+</div>
