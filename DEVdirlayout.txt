@@ -332,9 +332,9 @@ the code has to be put into each Xaraya install. Typically, the code used in
 all those installs is for the most part identical except for the app/site specific
 parts the site has to have.
 Allowing to put common parts in a shared location can save a considerable amount
-of diskspace (esp. in php, since all php files are usually bincached too) and 
+of diskspace (esp. in php, since all php files are usually bincached too) and
 provide extra flexibility to run different core versions.
-Specifically for 'xaraya hosting' this is interesting since the shared install 
+Specifically for 'xaraya hosting' this is interesting since the shared install
 can be pre-made for the clients, where they only have to worry about their specifics.
 
 Integration argument
@@ -343,7 +343,7 @@ Integration argument
 Being a framework, xaraya often integrates other libraries and is integrated 
 often in larger scope setups _as_ a library. Other packages all have their own
 rules and peculiarities on how they deal with files and where to put them. 
-Taking a library approach provides more options and can make integration 
+Taking a library approach provides more options and can make integration
 activities a lot easier when there are configuration settings provided on how
 to deal with file locations, include paths etc. 
 
@@ -351,9 +351,64 @@ to deal with file locations, include paths etc.
 Deployment 'before and after' stories
 =====================================
 [
-    here's where we would list known deployment scenarios in the current 
+    here's where we would list known deployment scenarios in the current
     situation and compare it with how the new situation would look.
     We can then compare it in terms of disk size, backup strategy, site mgmt.
     coding efficiency and other metric we deem important.
 ]
+
+CURRENT 1.x Xaraya SETUPS
+-------------------------
+A. One Install, One (or more) Instances, Multiple Sites
+...............................................
+Generalized actual example, draft, needs tidying yet.
+
+/path/to/instance
+    /html
+        .htaccess
+        index.php
+        /modules
+        /db middleware (adodb/creole)
+        /var
+             config.system.php           [may be used sometimes for 'default' site]
+             .key.php
+            /cache
+            /locales
+            /logs
+            /messaging
+            /otherglobal module dir usage [eg config dirs, dirs requiring write access or global access]
+        /themes
+        /mythemes        [have to keep theme dirs in webroot atm, so this places some restrictions
+                         I keep a separate global theme dir for easier upgrade/maintenance]
+        /shared func/mod/library stuff [sometimes used, keeps custom code etc together]
+          /shared custom modules  -symlinked to main mod dir
+
+/path/to/sites
+     /site1
+        config.system.php
+        /var
+            /locales
+            /cache
+            /otherlocal module dir usage
+       /themes [only possible atm if the path/to/sites is in webroot. Required if sites need own theme dir]
+
+     /site2
+        config.system.php
+        /var
+            /locales
+            /cache
+            /otherlocal module dir usage
+ 
+        /site library files  [keep them in specific site dir for easy maintenance backup -
+                             symlinked where/if necessary to main install or theme dir]
+           /functions
+           /modules
+           /themes [would be good to be able to point to this but can't unless path/to/dir is under web root]
+           /whatever
+
+Path to the sites are, if possible, kept ouf of the webroot.
+However in some 'instances' if theme directories per site are required, and need to be isolated, 
+this path-to-site needs to be moved into a path in the web root (eg each site has their own 
+isolated theme dir in their site config). 
+
 
