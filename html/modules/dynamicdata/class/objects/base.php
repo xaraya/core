@@ -330,8 +330,9 @@ class DataObject extends DataObjectMaster
         // check that we have a valid item id, or that we can create one if it's set to 0
         if(empty($this->itemid))
         {
+//            echo $this->baseancestor." " .$this->objectid;exit;
             if ($this->baseancestor == $this->objectid) {
-                $primaryobject = $this;;
+                $primaryobject = $this;
             } else {
                 $primaryobject = DataObjectMaster::getObject(array('objectid' => $this->baseancestor));
             }

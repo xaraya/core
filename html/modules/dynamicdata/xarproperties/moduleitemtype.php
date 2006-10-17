@@ -41,18 +41,18 @@ class ModuleItemtypeProperty extends SelectProperty
         return true;
     }
 
-    function showInput($args = array())
+    function showInput($data = array())
     {
-        extract($args);
+        extract($data);
         $args['module'] = 'base';
         $args['template'] = 'dropdown';
         if (isset($modid)) $this->referencemoduleid = $modid;
-        return parent::showInput($args);
+        return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    function showOutput($data = array())
     {
-        extract($args);
+        extract($data);
         if (!empty($modid)) $this->referencemoduleid = $modid;
         $this->options = $this->getOptions();
         if (isset($value)) {
@@ -67,10 +67,10 @@ class ModuleItemtypeProperty extends SelectProperty
             if (empty($template)) {
                 $template = 'dropdown';
             }
-            return xarTplProperty('base', $template, 'showoutput', $data);
+//            return xarTplProperty('base', $template, 'showoutput', $data);
         } else {
-            return parent::showOutput($args);
         }
+        return parent::showOutput($data);
     }
 
     // Return a list of array(id => value) for the possible options

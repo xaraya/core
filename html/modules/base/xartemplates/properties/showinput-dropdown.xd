@@ -6,15 +6,13 @@
   <xar:set name="evt_change">'return true;'</xar:set>
 </xar:if>
 
-<!-- 
-    The style attribute doesnt belong here, 
-    use semantic stylers like id and classes or context selectors
-    if there is anything predictable in context, it's property outputters
--->
 <xar:if condition="!isset($style)">
     <xar:set name="style">''</xar:set>
 </xar:if>
 <select name="#$name#" id="#$id#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#" >
+    <xar:if condition="isset($firstline)">
+        <option value="">#$firstline#</option>
+    </xar:if>
     <xar:foreach in="$options" value="$option" >
         <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
             <xar:if condition="$option['id'] eq $value" >

@@ -29,6 +29,7 @@ class DataProperty extends Object
 
     // Attributes for runtime
     public $template = '';
+    public $layout = '';
     public $tplmodule = 'dynamicdata';
     public $validation = '';
     public $dependancies = '';    // semi-colon seperated list of files that must be present for this property to be available (optional)
@@ -202,6 +203,7 @@ class DataProperty extends Object
 
         if(!isset($data['module']))   $data['module']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
+        if(!isset($data['layout']))   $data['layout']   = $this->layout;
 
         if(!isset($data['tabindex'])) $data['tabindex'] = 0;
         if(!isset($data['value']))    $data['value']    = '';
@@ -230,6 +232,7 @@ class DataProperty extends Object
         // TODO: does this hurt when it is an array?
         if(!isset($data['module']))   $data['module']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
+        if(!isset($data['layout']))   $data['layout']   = $this->layout;
         // Render it
         return xarTplProperty($data['module'], $data['template'], 'showoutput', $data);
     }

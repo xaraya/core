@@ -362,7 +362,7 @@ class xarRoles extends Object
      * @throws none
      * @todo create exception handling for bad input
      */
-    function makeUser($name, $uname, $email, $pass = 'xaraya', $datereg = '', $valcode = '', $state = ROLES_STATE_ACTIVE, $authmodule = '', $duvs=array())
+    function makeUser($name, $uname, $email, $pass = 'xaraya', $datereg = '', $valcode = '', $state = ROLES_STATE_ACTIVE, $authmodule = 0, $duvs=array())
     {
         // TODO: validate the email address
         if (empty($name) && empty($uname) || empty($email)) {
@@ -391,7 +391,7 @@ class xarRoles extends Object
             array('name' => 'xar_date_reg',    'value' => time()),
             array('name' => 'xar_valcode',     'value' => $valcode),
             array('name' => 'xar_state',       'value' => $state),
-            array('name' => 'xar_auth_modid', 'value' => $authmodule),
+            array('name' => 'xar_auth_modid',  'value' => $authmodule),
         );
         $q = new xarQuery('INSERT',$this->rolestable);
         $q->addfields($tablefields);
