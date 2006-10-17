@@ -68,15 +68,21 @@ revisit later on before trusting the branch to be released or used.
 
 
 !!CHANGED API
-* $throwException parameter in xarModAPIFunc
+
+* $throwException parameter in xarModAPIFunc, the api function will now raise
+  an excpeption always. The occurances of these were not found. If there are
+  such usages (i.e. calls explicitly suppressing the exception) they can do so
+  again by using a try/catch block around the call. (occurances found have
+  been adapted)
+
 * the Variable getting/setting in core does NOT support direct prepping 
   anymore, as to eliminate dependencies on other subsystems. If the parameter 
-  was used, it will be ignored now.
+  was used, it will be ignored now. USAGE UNKNOWN.
 
 !!DROPPED API
 
-* xarMod_getVarsByName, xarTheme_getVarsByName : protected and never used
-* xarPreCoreGetVarDirPath (now sys::varpath())
+* xarMod_getVarsByName, xarTheme_getVarsByName : protected API and never used
+* xarPreCoreGetVarDirPath (now sys::varpath()) 
 * xarModAPIFunc('dynamicdata','admin','checkinput') : never 
 * xarModAPIFunc('dynamicdata','user','interface') : never used
 * xarModAPIFunc('dynamicdata','user','getsources') : never used
@@ -113,7 +119,8 @@ design work can begin.
           then refer to them from other tables, we now store the level verbatim 
           (perhaps drop the table?)
         - similarly, in xar_privileges table the xar_module column. 
-        - is xar_auth_mod_id still needed? A: yes, but it's confusing:
+        - is xar_auth_mod_id still needed? 
+            Answer: yes, but it's confusing:
             1. it doesnt need to be there really, but might be a moditemvar (it applies to the few)
             2. it is referred to as default authmodule in the code sometimes, which it is not, it
             is the auth module which successfully logged this user on latest.
@@ -166,12 +173,15 @@ design work can begin.
   whole lot of hoops sometimes which the backend could do in a jiffy.
 * the installer screens try to throw all databases onto one pile, we need to split 
     the database configuration screens into different ones for each backend
-    * sqlite has no user and password
-    * sqlite uses a directory for a host
+    * sqlite has no user and password (uses os file based privs)
+    * sqlite uses a directory for a host (in creole and even that is a patch from us)
     * mysql can support different table drivers (myisam, innodb) transparently
     * postgres may require schema support
 * xml constructs like PI, ELEM and ATTR need their equivalent in BL, but the current
   implementation lacks context.
+  - [STARTED] element tag
+  - attribute tag
+  - pi tag? or pi support? (answer: both, they are 2 different things)
 * [STARTED] finish design and implementation os schema based data definition 
 * design a less bloated concept for config/user/mod/theme/system vars etc
 * reorganize the old error/exception system to use much fewer files, consider
@@ -194,7 +204,7 @@ design work can begin.
 * datadict is absent in 2.x since that lived in adodb, creole does not have it
   - we are going for schema support (see tests/xml/schemas/ddl/*.*)
 * there is no upgrade routine for upgrading 1.x to 2.x
-* when we're in excecption handling for one exception, it seems that no more
+* when we're in exception handling for one exception, it seems that no more
   exceptions are thrown in subsequent code
   Example: 
         - dont define date.timezone in php (will raise exception in 
@@ -202,7 +212,7 @@ design work can begin.
         - make sure CACHEKEYS file is NOT present (should raise exception in 
         caching/template.php lines 168+)
         The fopen() call in caching/template.php does NOT raise an exception then
-* property file names are now based upon $property->name instead of their class name 
+* [DONE?] property file names are now based upon $property->name instead of their class name 
   as before, this means that Dynamic_Select_Property becomes included via
   sys::import('modules.base.xarproperties.dropdown') instead of 
   sys::import('modules.base.xarproperties.Dynamic_Select_Property')

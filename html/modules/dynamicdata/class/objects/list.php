@@ -497,7 +497,7 @@ class DataObjectList extends DataObjectMaster
         if(empty($itemtype))
             $itemtype = null; // don't add to URL
         $args['table'] = !empty($this->table) ? $this->table : null;
-        $args['objectname'] = !empty($this->name) ? $this->name : null;
+        $args['name'] = !empty($this->name) ? $this->name : null;
         $args['modname'] = $modname;
         $args['itemtype'] = $itemtype;
         $args['objectid'] = $this->objectid;

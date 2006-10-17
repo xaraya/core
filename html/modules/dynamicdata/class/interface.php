@@ -96,9 +96,6 @@ class DataObjectInterface extends Object
                 return $this->object_delete($args);
             case 'display':
                 return $this->object_display($args);
-            case 'list':
-                // no distinction between admin & user view here (for now ?)
-                //    return $this->object_list($args);
             case 'view':
             default:
                 return $this->object_view($args);

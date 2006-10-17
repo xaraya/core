@@ -1,18 +1,57 @@
 Remarks on what changes to modules are needed to make sure they can behave
 in the 2.x source tree:
 
-Exceptions
-----------
-- xarModApiFunc had a parameter to suppress exceptions. This parameter has
+* there is no specific API anymore for xarError* functions. All of core has been
+  rewritten to throwing Exceptions where needed. The old functions are still
+  there, wrapped around the exceptions or 'no-ops' as applicable. In your module:
+  
+  Generating an error:
+    throw new SomeException($vars, 'String with #(1) like replacements here #(2) and there');
+
+* If your module used *direct* ADO functions and or methods, they will not
+  work anymore, the AdoDb middleware was replaced by Creole. If your code used
+  the xaraya API, no code changes should be necessary, except in a few less
+  common constructs.
+
+* xarModApiFunc had a parameter to suppress exceptions. This parameter has
   been removed and an exception is always raised:
   Example:
-  // don't throw an exception if this function doesn't exist (the zero at the end)
-  $mytypes = xarModAPIFunc($modname,'user','getitemtypes', array(), 0);
+      // don't throw an exception if this function doesn't exist (the zero at the end)
+      $mytypes = xarModAPIFunc($modname,'user','getitemtypes', array(), 0);
   
-  new code:
-  try {
-    $mytypes = xarModAPIFunc($modname,'user','getitemtypes');
-  } catch (Exception $e) {
-    $mtypes = array();
-  }
+  New code:
+      try {
+        $mytypes = xarModAPIFunc($modname,'user','getitemtypes');
+      } catch (Exception $e) {
+        $mtypes = array();
+      }
+      
+* if your module depended on $modname/xartemplates/objects/*list* templates,
+  they will have to be renamed to $modname/xartemplates/objects/*view* as the
+  2 GUI methods for 'list' and 'view' have been consolidated into one.
 
+* if your module creates or uses properties, their naming scheme has changed
+  considerably. the 'Dynamic_' prefix was removed from most and some names
+  have changed to reflect their contents better. There is no direct need to
+  change your filenames, but it is recommended to follow this practice. See
+  base/xarproperties for examples.
+
+* functions which were deprecated (i.e. only working when Legacy support was
+  set to 'On' will NOT work anymore in 2.x.) The functions have been removed
+  completely.
+
+* where 1.x contained 'some' postnuke compatibility, this has been
+  completely removed from 2.x.
+
+* if your module used one of the following functions:
+    * xarPreCoreGetVarDirPath           - REPLACED by sys::varpath()
+    * dynamicdata/adminapi/checkinput   - DROPPED 
+    * dynamicdata/userapi/interface     - DROPPED 
+    * dynamicdata/userapi/getsource     - DROPPED
+
+  your code will not work anymore, as all of the above function have been
+  removed.
+
+* if your module used the $prep parameter in any of the *get*Var functions
+  in core, you will have to change your code to add prepping explicitly if you
+  need it.
