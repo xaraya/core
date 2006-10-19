@@ -34,6 +34,7 @@ class xarRole extends Object
     public $rolememberstable;
     public $privilegestable;
     public $acltable;
+    public $realmstable;
 
     public $allprivileges;
 
@@ -59,6 +60,7 @@ class xarRole extends Object
         $this->rolememberstable = $xartable['rolemembers'];
         $this->privilegestable = $xartable['privileges'];
         $this->acltable = $xartable['security_acl'];
+        $this->realmstable = $xartable['security_realms'];
 
         if (!isset($uid)) $uid = 0;
         if (isset($itemtype)) $type = $itemtype;
@@ -403,10 +405,13 @@ class xarRole extends Object
         }
         // We'll have to get it.
         xarLogMessage("ROLE: getting privileges for uid: $this->uid");
-        $query = "SELECT  xar_pid, xar_name, xar_realm, xar_module,
+        // TODO: propagate the use of 'All'=null for realms through the API instead of the flip-flopping
+        $query = "SELECT  xar_pid, p.xar_name, r.xar_name, xar_module,
                           xar_component, xar_instance, xar_level, xar_description
-                  FROM    $this->privilegestable p, $this->acltable acl
-                  WHERE   p.xar_pid = acl.xar_permid AND acl.xar_partid = ?";
+                  FROM    $this->acltable acl, 
+                          $this->privilegestable p LEFT JOIN $this->realmstable r ON p.xar_realmid = r.xar_rid
+                  WHERE   p.xar_pid = acl.xar_permid AND
+                          acl.xar_partid = ?";
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->uid));
 
@@ -417,7 +422,7 @@ class xarRole extends Object
                 $description) = $result->fields;
             $perm = new xarPrivilege(array('pid' => $pid,
                     'name' => $name,
-                    'realm' => $realm,
+                    'realm' => is_null($realm) ? 'All' : $realm,
                     'module' => $module,
                     'component' => $component,
                     'instance' => $instance,

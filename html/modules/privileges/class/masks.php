@@ -19,7 +19,6 @@
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @throws  none
  * @todo    evaluate scoping
 */
 class xarMasks extends Object
@@ -156,8 +155,6 @@ class xarMasks extends Object
      * @access  public
      * @param   array of mask values
      * @return  boolean
-     * @throws  none
-     * @todo    none
     */
     static function register($name,$realm,$module,$component,$instance,$level,$description='')
     {
@@ -213,8 +210,6 @@ class xarMasks extends Object
      * @access  public
      * @param   string representing a mask name
      * @return  boolean
-     * @throws  none
-     * @todo    none
      */
     static function unregister($name)
     {
@@ -231,7 +226,6 @@ class xarMasks extends Object
      * @access  public
      * @param   module name
      * @return  boolean
-     * @throws  none
     */
     static function removemasks($module)
     {
@@ -256,7 +250,6 @@ class xarMasks extends Object
      * @access  public
      * @param   string $levelname the
      * @return  int access level
-     * @throws  none
     */
     static function xarSecLevel($levelname)
     {
@@ -275,8 +268,6 @@ class xarMasks extends Object
      * @access  public
      * @param   component string
      * @return  boolean
-     * @throws  none
-     * @todo    none
     */
     static function xarSecurityCheck($mask,$catch=1,$component='',$instance='',$module='',$rolename='',$pnrealm=0,$pnlevel=0)
     {
@@ -451,8 +442,6 @@ class xarMasks extends Object
      * @access  public
      * @param   string
      * @return  boolean
-     * @throws  none
-     * @todo    none
     */
     static function forgetprivsets()
     {
@@ -468,8 +457,6 @@ class xarMasks extends Object
      * @access  public
      * @param   role object
      * @return  array containing the role's ancestors and privileges
-     * @throws  none
-     * @todo    none
     */
     static function getprivset($role)
     {
@@ -500,8 +487,6 @@ class xarMasks extends Object
      * @access  public
      * @param   array representing the initial node to start from
      * @return  nested array containing the role's ancestors and privileges
-     * @throws  none
-     * @todo    none
     */
     static function irreducibleset($coreset,$module='')
     {
@@ -548,8 +533,6 @@ class xarMasks extends Object
      * @access  public
      * @param   array representing the privilege set
      * @return  none
-     * @throws  none
-     * @todo    none
     */
     static function normalizeprivset(&$privset)
     {
@@ -572,8 +555,6 @@ class xarMasks extends Object
      * @param   nested array representing the irreducibles set of privileges
      * @param   boolean false (initial test value)
      * @return  boolean false if check fails, privilege object if check succeeds
-     * @throws  none
-     * @todo    none
     */
     static function testprivileges($mask,$privilegeset,$pass,$role='')
     {
@@ -706,8 +687,6 @@ class xarMasks extends Object
      * @access  public
      * @param   string
      * @return  mask object
-     * @throws  none
-     * @todo    none
     */
     static function getMask($name,$module="All",$component="All",$suppresscache=FALSE)
     {

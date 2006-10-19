@@ -17,7 +17,7 @@
 
     <h3>#$title#</h3>
 
-    <p>#$short#</p>
+    <pre>#$short#</pre>
 
     <xar:if condition = "$long ne ''">
         <h3>

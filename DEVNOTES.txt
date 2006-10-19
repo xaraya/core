@@ -130,6 +130,13 @@ design work can begin.
             2. it is referred to as default authmodule in the code sometimes, which it is not, it
             is the auth module which successfully logged this user on latest.
         - the xar_ prefix on columns is redundant
+        - [DONE] priviliges.xar_realm (stores 'All' by default, one( or more ?) realm name(s) when defined for a realm )
+            (store xar_rid id from realms table or NULL for 'All')
+        - privmembers parent column stores 0 now for 'no parent', change to null, so a foreign key constraint
+        can be added on the column
+        - rolemembers parent column stores 0 now for 'no parent', change to null, so a foreign key constraint
+        can be added on the column
+        - there is no unique index on privileges.xar_name 
 * [STARTED] OO-ify stuff in core where appropriate (including getting rid of
   die()'s and modelling the classes where php4 could not) 
 * I really would like to do something with views wrt multisites et. al.
@@ -260,7 +267,7 @@ Columns affected by modid/regid/modname decision:
  - hooks.tmodid ?
  - [DONE] module_vars.modid (<id> == real modvar, null == configvar )
  - privileges.xar_module (stores 'All', 'empty' besides module name.)
- - priviliges.xar_realm (stores 'All' by default, one( or more ?) realm name(s) when defined for a realm )
+
 All other tables refer to the primary key of the xar_modules table (id)
 
 Encoding of pseudo values:

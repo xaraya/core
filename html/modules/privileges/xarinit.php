@@ -90,7 +90,7 @@ function privileges_init()
         
         $fields = array('xar_pid'   => array('type' => 'integer', 'null' => false, 'default' => '0','increment' => true, 'primary_key' => true),
                         'xar_name'  => array('type' => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
-                        'xar_realm' => array('type' => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
+                        'xar_realmid'=>array('type' => 'integer', 'null' => true, 'default' => null),
                         // TODO: use modid here
                         'xar_module' => array('type'=> 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
                         'xar_component' => array('type'  => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
@@ -100,21 +100,21 @@ function privileges_init()
         $query = xarDBCreateTable($tables['privileges'],$fields);
         $dbconn->Execute($query);
 
-        $index = array('name'      => 'i_'.$sitePrefix.'_privileges_realm',
-                       'fields'    => array('xar_realm'),
-                       'unique'    => FALSE);
+        $index = array('name'      => 'i_'.$sitePrefix.'_privileges_realmid',
+                       'fields'    => array('xar_realmid'),
+                       'unique'    => false);
         $query = xarDBCreateIndex($tables['privileges'],$index);
         $dbconn->Execute($query);
 
         $index = array('name'      => 'i_'.$sitePrefix.'_privileges_module',
                        'fields'    => array('xar_module'),
-                       'unique'    => FALSE);
+                       'unique'    => false);
         $query = xarDBCreateIndex($tables['privileges'],$index);
         $dbconn->Execute($query);
 
         $index = array('name'      => 'i_'.$sitePrefix.'_privileges_level',
                        'fields'    => array('xar_level'),
-                       'unique'    => FALSE);
+                       'unique'    => false);
         $query = xarDBCreateIndex($tables['privileges'],$index);
         $dbconn->Execute($query);
 
@@ -143,13 +143,13 @@ function privileges_init()
         
         $index = array('name'      => 'i_'.$sitePrefix.'_privmembers_pid',
                        'fields'    => array('xar_pid'),
-                       'unique'    => FALSE);
+                       'unique'    => false);
         $query = xarDBCreateIndex($tables['privmembers'],$index);
         $dbconn->Execute($query);
                 
         $index = array('name'      => 'i_'.$sitePrefix.'_privmembers_parentid',
                        'fields'    => array('xar_parentid'),
-                       'unique'    => FALSE);
+                       'unique'    => false);
         $query = xarDBCreateIndex($tables['privmembers'],$index);
         $dbconn->Execute($query);
 
@@ -174,13 +174,13 @@ function privileges_init()
 
         $index = array('name'      => 'i_'.$sitePrefix.'_security_acl_partid',
                        'fields'    => array('xar_partid'),
-                       'unique'    => FALSE);
+                       'unique'    => false);
         $query = xarDBCreateIndex($tables['security_acl'],$index);
         $dbconn->Execute($query);
 
         $index = array('name'      => 'i_'.$sitePrefix.'_security_acl_permid',
                        'fields'    => array('xar_permid'),
-                       'unique'    => FALSE);
+                       'unique'    => false);
         $query = xarDBCreateIndex($tables['security_acl'],$index);
         $dbconn->Execute($query);
 
@@ -221,19 +221,19 @@ function privileges_init()
 
         $index = array('name'      => 'i_'.$sitePrefix.'_security_masks_realm',
                        'fields'    => array('xar_realm'),
-                       'unique'    => FALSE);
+                       'unique'    => false);
         $query = xarDBCreateIndex($tables['security_masks'],$index);
         $dbconn->Execute($query);
 
         $index = array('name'      => 'i_'.$sitePrefix.'_security_masks_module',
                        'fields'    => array('xar_modid'),
-                       'unique'    => FALSE);
+                       'unique'    => false);
         $query = xarDBCreateIndex($tables['security_masks'],$index);
         $dbconn->Execute($query);
         
         $index = array('name'      => 'i_'.$sitePrefix.'_security_masks_level',
                        'fields'    => array('xar_level'),
-                       'unique'    => FALSE);
+                       'unique'    => false);
         $query = xarDBCreateIndex($tables['security_masks'],$index);
         $dbconn->Execute($query);
 
