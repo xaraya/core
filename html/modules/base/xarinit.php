@@ -101,7 +101,7 @@ function base_init()
 
         $fields = array(
                         'xar_id'    => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
-                        'xar_modid' => array('type'=>'integer','null'=>false,'increment'=>false),
+                        'xar_modid' => array('type'=>'integer','null'=>true,'increment'=>false),
                         'xar_name'  => array('type'=>'varchar','size'=>64,'null'=>false),
                         'xar_value' => array('type'=>'text','size'=>'long')
                         );
