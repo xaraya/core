@@ -65,7 +65,10 @@ revisit later on before trusting the branch to be released or used.
   no functional behaviour is attached to it yet. In a way the
   xar:template tag and the xar:blocklayout tag are moving closer to
   eachother.
-
+* showList method in the DataObjectList class has been removed in favor of
+  showView due to it's redundancy in code. The data-list tag will continue to
+  operate as normal (for now), but any $modname/xartemplates/objects/*list*
+  templates will need to be renamed *view*
 
 !!CHANGED API
 
@@ -218,13 +221,10 @@ design work can begin.
   sys::import('modules.base.xarproperties.Dynamic_Select_Property')
   this exposes an issue in how we name the property classes themselves and the name
   stored in the database
-* showList method in the DataObjectList class has been removed in favor of showView
-  due to it's redundancy in code. The data-list tag will continue to operate as normal
-  (for now), but any $modname/xartemplates/objects/*list* templates will need to be 
-  renamed *view*
+
  
 !!!MIN. REQUIRED VERSIONS DETERMINED SO FAR
-* PHP      5.1.4 (probably 5.1.x even)
+* PHP      5.1.4 
 * Mysql    5.0.18
 * Postgres 8.0.6
 * Sqlite   N/A (embedded in PHP, i think it's 2.8.x for non PDO and 3.x for PDO)
@@ -258,7 +258,32 @@ Columns affected by modid/regid/modname decision:
  - hooks.tmodid ?
  - module_vars.modid (stores 0 now for config vars)
  - privileges.xar_module (stores 'All', 'empty' besides module name.)
+ - priviliges.xar_realm (stores 'All' by default, one( or more ?) realm name(s) when defined for a realm )
 All other tables refer to the primary key of the xar_modules table (id)
+
+Encoding of pseudo values:
+--------------------------
+Based on the premise we want to use foreign key constraints, the above creates 
+a bit of a problem. If we encode 'All' by 0 its not possible to create a foreign
+key constraint on those columns to the auto increment type ids they usually 
+refer to. Only a value > 0 or the non-value NULL can be inserted into the referencing
+column. Initially we wanted to have a generic agreement to encode All~0 and None~NULL. 
+The preliminary solution is to look at each individual case in its context and
+decide how the relationships will be made for that case.
+Referencing the xar_id column in the modules table is the most frequently used
+case, but the problem is more generic.
+In theory there are the following strategies:
+1. do nothing, forget about the foreign key constraint
+2. use 'null' for all as an assumption and document 'exceptions' to the rule and
+the specifics for the case at hand
+3. use a link table to record the relationship (absence of row==none, for each applicable reference a row is present)
+4. change the column type which imposed the foreign key constraint to gain freedom
+in the 'constrained' columns (for example: change auto increment to signed integer)
+
+Other than remodelling completely for a usecase i think the above 4 are the possible
+generic routes to travel.
+
+
 
 Possible new QA checks for 2.x code branch
 ------------------------------------------
@@ -281,7 +306,9 @@ Hammered: (as in, at least 2 people agreed to this)
     - ClassNames are UpperCamelCase ¹
     - InterfaceNames are UpperCamelCase ² 
     - methodNames are lowerCamelCase
-    - prevent underscores as much as possible (goes for all)
+    - $variableNames are $lowerCamelCase
+    - CONSTANTS and DEFINES are UPPERCASE (prefer Class::CONSTANT over CONSTANT)
+    - prevent underscores as much as possible (goes for classes, interfaces, methods and variables)
     - use typehinting as much as possible, prefer interfaces over classes when possible for this
     - filenames are lowercase.php
     - use scope identifiers *always* even if public (for clarity, reflection and phpdoc)
