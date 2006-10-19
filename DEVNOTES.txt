@@ -26,6 +26,8 @@ revisit later on before trusting the branch to be released or used.
   now in the modules table itself.
 * table config_vars has been dropped, now managed by module_vars where
   modid==0
+  UPDATE: now, where modid is null otherwise the future foreign key wish cant
+  be honoured to begin with.
 * table security_levels has been dropped, now managed by SecurityLevel class
 * tables privmembers, rolemembers and security_acl have their unique key on
   2 columns replaced by a primary key.
@@ -256,7 +258,7 @@ Columns affected by modid/regid/modname decision:
     more than one?)
  - hooks.smodid (stores 0 now meaning ?)
  - hooks.tmodid ?
- - module_vars.modid (stores 0 now for config vars)
+ - [DONE] module_vars.modid (<id> == real modvar, null == configvar )
  - privileges.xar_module (stores 'All', 'empty' besides module name.)
  - priviliges.xar_realm (stores 'All' by default, one( or more ?) realm name(s) when defined for a realm )
 All other tables refer to the primary key of the xar_modules table (id)
