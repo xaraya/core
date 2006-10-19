@@ -50,6 +50,18 @@ FOREIGN KEY support
 - mssql   : yes, no idea version wise
 - oracle  : ?
 
+Foreign key constrained columns can be NULL?
+--------------------------------------------
+- mysql   : yes 
+- sqlite  : yes (n/a, needs to be handled by trigger)
+- postgres: yes
+- mssql   : ?
+- oracle  : ?
+[Note: this is important to know because we encode 'none' and 'empty' with null, so
+if that meaning is not correct, the on update/delete etc. trigger either need to
+prevent it or take another appropriate action to make sure if the action is valid the
+constraints are met]
+
 HASH index support
 ------------------
 - mysql   : yes, memory tables only, only used for equality tests (obviously) 
