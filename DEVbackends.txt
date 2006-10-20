@@ -1,5 +1,13 @@
 Notes on different backends and their capabilities.
 
+Documentation references:
+-------------------------
+- mysql   : http://dev.mysql.com/doc/refman/5.1/en
+- sqlite  : http://sqlite.org/lang.html
+- postgres: http://developer.postgresql.org/pgdocs/postgres/
+- mssql   : http://msdn2.microsoft.com/en-us/library/ms189826.aspx
+- oracle  : http://download-uk.oracle.com/docs/cd/B19306_01/server.102/b14200/toc.htm
+
 VIEWS support
 -------------
 - mysql   : yes, since 5.0
@@ -238,3 +246,123 @@ Acceptance in SQL:
     rowid                                  -       -        X         X        -
     serial                                 -       X        X         -        -
     bigserial                              -       X        X         -        -
+
+
+
+
+ID generation revisited
+-----------------------
+I've never understood our current solution for dealing with IDs and why it 
+evolved into what it is now. What follows is how I think it should be done. We
+can revisit this at an appropriate time.
+
+The main problem:
+    Some databases have a native type to generate auto incrementing values
+    transparently, while others use triggers or sequences to make it somewhat
+    less transparent. The main problem lies in the question on how to abstract
+    both in the same way.
+    
+Current concept:
+    - call genID before and insert, that delivers something back (no matter what it is)
+    - call a SQL insert statement, putting whatever genID delivered back in the place
+    of the column which should hold the ID
+    - when needed call PO_Insert_ID to retrieve the actual value (and pray it 
+    is the right one) of the ID used.
+    
+Problems with this concept:
+    - the genID call is useless, it generates nothing for auto increment type 
+    systems and advances the sequence for sequence based systems too early, 
+    thus creating a dependency  (i.e. you really cant call genID, wait for some 
+    user input for example and then go on, you  basically need to do the insert 
+    right away and hope you do it fast enough)
+    - the insert touches an ID column, allowed of course, and needed in our 
+    concept but it doesnt serve any purpose, as you cant influence it anyways
+    - the PO_Insert_ID implementation is a hack and unreliable, especially in 
+    high concurrency environments. (it uses select max(id) which may have been 
+    advanced to 10 ids further on by the time you're calling it.)
+    
+
+Alternative concept:
+    The distinction between the two types of backends is nothing we can do 
+    about, it's a given.
+    
+    My ideal concept would be:
+    - call a SQL insert statement
+    - retrieve reliably the last inserted ID value if you need it.
+    
+    For this to work a number of things need to be taken care of:
+    
+    Let's use this example table [pseudo-ddl]:
+    create table test {
+        id the_autoinc_type,
+        name string
+        primary key(id)
+    }
+    which is roughly how we use it everywhere.
+    
+    1. the insert SQL should omit the ID column and responsibility of creating 
+    values for it transferred to the backend, 
+    Thus this:
+        insert into test(id,name) values(genID(),'thename')
+    becomes:
+        insert into test('thename')
+       
+    For this to work in both type of backends, both should be able to generate
+    their id's automatically and transparently. For the auto increment types
+    this is easy, because that type was invented to do just that if you omit
+    the column or put a 0 or NULL into it. 
+    
+    2. For the sequence based backends you explicitly have to tell the database 
+    to do it (same concept, but explicitly needed)
+    Say, for postgres, which is sequence based, this translates to:
+        create sequence test_id_seq;
+        create table test {
+            id integer NOT NULL DEFAULT nextval('test_id_seq'),
+            name string
+            primary key(id)
+        }
+        [in recent versions: use the serial native type, which is almost equivalent]
+
+    3. the last insert id retrieval needs to be reliable.
+    Again, for the auto increment type backend, there is usually an SQL construct
+    or API function which does exactly that. Similarly, for the sequence based
+    system, there are either SQL or API constructs to get the same information
+    from the sequence.
+        Examples:
+            mysql: SELECT LAST_INSERT_ID() 
+            (not completely safe, because it is global on the session)
+            
+            postgres: SELECT curval('test_id_seq')
+    
+    For the sequence based systems this is safe, as it only considers the 
+    current session.
+    
+As we use the genID like a million times all over this saves a whole lot of 
+code and makes everything simpler and more reliable in my opinion.
+
+Does this work for all databases? Here's an overview 
+
+- mysql :   no changes required to the db model in use now
+- sqlite:   no changes required to the db model in use now
+- postgres: either use the serial datatype where an autoincrement is needed (recommended)
+            or define the sequence explicitly and the column too
+- oracle:   define the sequence and either use a before insert trigger or 
+            the definition of the default value on the sequence (not sure if that is supported)
+- mssql   : not sure, mssql has both sequences and autoincrement type, in theory
+            no changes are needed
+Inventory:
+----------
+Usage of PO_Insert_ID in core:
+
+$ grep -ril PO_insert_ID *
+creole/common/ConnectionCommon.php
+includes/datastores/sql/flattable.php
+includes/tmtags
+modules/base/xarinit.php
+modules/dynamicdata/xarinit.php
+modules/blocks/xaradminapi/create_group.php
+modules/blocks/xaradminapi/create_instance.php
+modules/blocks/xaradminapi/create_type.php
+modules/roles/class/xarQuery.php
+modules/modules/xarinit.php
+
