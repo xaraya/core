@@ -31,8 +31,46 @@ revisit later on before trusting the branch to be released or used.
 * table security_levels has been dropped, now managed by SecurityLevel class
 * tables privmembers, rolemembers and security_acl have their unique key on
   2 columns replaced by a primary key.
-
+* table privileges, column xar_realm dropped, replaced by xar_realmid. 
+* placed unique index on privilege.xar_name and dropped code which checked for
+  uniqueness
 (see DEVupgrades.sql for the above)
+
+!!!PENDING DB_CHANGES
+* does blocks really need 5 tables?
+* dynamic relations table is floating in there for a long time (removed)
+* xar_realm in xar_security masks uses 'All' which prevents it from being a
+  foreign key to the realm table (through id)
+* xar_module column in privileges table uses a string for modulename and 'All' 
+  and 'empty' which prevents it from being a foreign key to the modules table
+* is column auth_modid still needed? 
+    Answer: yes, but it's confusing:
+    1. it doesnt need to be there really, but might be a moditemvar (it applies to the few)
+    2. it is referred to as default authmodule in the code sometimes, which it is not, it
+    is the auth module which successfully logged this user on latest.
+* the xar_ prefix on columns is redundant, not a lightly task though, kinda obvious why.
+* privmembers parent column stores 0 now for 'no parent', change to null, so a
+  foreign key constraint can be added on the column
+* rolemembers parent column stores 0 now for 'no parent', change to null, so a
+  foreign key constraint can be added on the column
+* Columns affected by modid/regid/modname decision:
+    The decision was:
+        regid is only stored in the modules table for the db model. All other
+        tables get their module db info through the primary key of the modules
+        table.
+    Consequences:
+        - modules.regid
+            - is now not null default 0
+            - becomes default null
+        - dynamic_objects.object_moduleid (stores regid)
+        - dynamic_properties.prop_moduleid (stores regid)
+        - dynamic_properties_def.prop_req_modules 
+            - stores a semicolon separated list of modulenames (does it ever contain 
+            more than one?)
+        - hooks.smodid (stores 0 now meaning ?)
+        - hooks.tmodid ?
+        - [DONE] module_vars.modid (<id> == real modvar, null == configvar )
+        - privileges.xar_module (stores 'All', 'empty' besides module name.)
 
 !!!OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
 * [N/A anymore] when encountered, upgrade code to upgrade modules from older
@@ -113,30 +151,6 @@ design work can begin.
 * [DONE] i really like some sort of import(name.of.some.sub.part) dot notation to
   include major parts into the flow when doing stuff, instead of
   xarInclude or something
-* Finish up the planned db changes to normalizing the database.
-  Open issues:
-        - does blocks really need 5 tables?
-        - [DONE] dynamic relations table is floating in there for a long time (removed)
-        - xar_realm in xar_security masks uses 'All' which prevents it from being
-          a foreign key to the realm table (through id), likewise for xar_privileges 
-          table
-        - [DONE] if we are going to store privilege levels in the database, 
-          then refer to them from other tables, we now store the level verbatim 
-          (perhaps drop the table?)
-        - similarly, in xar_privileges table the xar_module column. 
-        - is xar_auth_mod_id still needed? 
-            Answer: yes, but it's confusing:
-            1. it doesnt need to be there really, but might be a moditemvar (it applies to the few)
-            2. it is referred to as default authmodule in the code sometimes, which it is not, it
-            is the auth module which successfully logged this user on latest.
-        - the xar_ prefix on columns is redundant
-        - [DONE] priviliges.xar_realm (stores 'All' by default, one( or more ?) realm name(s) when defined for a realm )
-            (store xar_rid id from realms table or NULL for 'All')
-        - privmembers parent column stores 0 now for 'no parent', change to null, so a foreign key constraint
-        can be added on the column
-        - rolemembers parent column stores 0 now for 'no parent', change to null, so a foreign key constraint
-        can be added on the column
-        - there is no unique index on privileges.xar_name 
 * [STARTED] OO-ify stuff in core where appropriate (including getting rid of
   die()'s and modelling the classes where php4 could not) 
 * I really would like to do something with views wrt multisites et. al.
@@ -253,22 +267,6 @@ design work can begin.
 Wether the tags used are compiled/transformed on the server or
 through a js callback is irrelevant for us.
  
- 
-Columns affected by modid/regid/modname decision:
- - modules.regid
-    - is now not null default 0
-    - becomes default null
- - dynamic_objects.object_moduleid (stores regid)
- - dynamic_properties.prop_moduleid (stores regid)
- - dynamic_properties_def.prop_req_modules 
-    - stores a semicolon separated list of modulenames (does it ever contain 
-    more than one?)
- - hooks.smodid (stores 0 now meaning ?)
- - hooks.tmodid ?
- - [DONE] module_vars.modid (<id> == real modvar, null == configvar )
- - privileges.xar_module (stores 'All', 'empty' besides module name.)
-
-All other tables refer to the primary key of the xar_modules table (id)
 
 Encoding of pseudo values:
 --------------------------
@@ -339,3 +337,28 @@ List of things to hammer (or not):
     - interface inheritance is unclear to me, so its hard to come up with some rules for that
     - [WONT] group interface satisfaction methods together
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
