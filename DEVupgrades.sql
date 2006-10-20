@@ -126,3 +126,5 @@ ALTER TABLE xar_privileges ADD COLUMN `xar_realmid` INTEGER DEFAULT NULL;
 UPDATE xar_privileges INNER JOIN xar_security_realms ON xar_privileges.xar_realm = xar_security_realms.xar_name
 SET    xar_privileges.xar_realmid = xar_security_realms.xar_rid;
 CREATE INDEX i_xar_privileges_realmid ON xar_privileges (xar_realmid);
+
+CREATE UNIQUE INDEX i_xar_privileges_name ON xar_privileges (xar_name);

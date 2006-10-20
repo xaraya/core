@@ -7,7 +7,6 @@
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @throws  none
- * @todo    none
 */
 sys::import('modules.privileges.class.mask');
 
@@ -92,20 +91,6 @@ class xarPrivilege extends xarMask
             return false;
         }
 
-
-        // Confirm that this privilege name does not already exist
-        // FIXME: if this aint allowed, why is the column in the database not marked unique?
-        $query = "SELECT COUNT(*) FROM $this->privilegestable
-              WHERE xar_name = ?";
-
-        $result = $this->dbconn->Execute($query,array($this->name));
-
-        list($count) = $result->fields;
-
-        // FIXME: If somehow something else made a duplicate name, this will never fire anymore
-        if ($count == 1) throw new DuplicateException(array('privilege',$this->name));
-
-
         // create the insert query
         $realmid = null;
         if($this->realm != 'All') {
@@ -122,27 +107,27 @@ class xarPrivilege extends xarMask
         //Execute the query, bail if an exception was thrown
         $this->dbconn->Execute($query,$bindvars);
 
-// the insert created a new index value
-// retrieve the value
+        // the insert created a new index value
+        // retrieve the value
         // FIXME: use creole here
+        
         $query = "SELECT MAX(xar_pid) FROM $this->privilegestable";
         //Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query);
 
-// use the index to get the privileges object created from the repository
+        // use the index to get the privileges object created from the repository
         list($pid) = $result->fields;
         $this->pid = $pid;
 
-// make this privilege a child of its parent
-        If($this->parentid !=0) {
+        // make this privilege a child of its parent
+        if($this->parentid !=0) {
             sys::import('modules.privileges.class.privileges');
             $perms = new xarPrivileges();
             $parentperm = $perms->getprivilege($this->parentid);
             $parentperm->addMember($this);
         }
-// create this privilege as an entry in the repository
-        $t = $this->makeEntry();
-        return $t;
+        // create this privilege as an entry in the repository
+        return $this->makeEntry();
     }
 
     /**

@@ -100,6 +100,12 @@ function privileges_init()
         $query = xarDBCreateTable($tables['privileges'],$fields);
         $dbconn->Execute($query);
 
+        $index = array('name'      => 'i_'.$sitePrefix.'_privileges_name',
+                       'fields'    => array('xar_name'),
+                       'unique'    => true);
+        $query = xarDBCreateIndex($tables['privileges'],$index);
+        $dbconn->Execute($query);
+        
         $index = array('name'      => 'i_'.$sitePrefix.'_privileges_realmid',
                        'fields'    => array('xar_realmid'),
                        'unique'    => false);
