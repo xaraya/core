@@ -266,9 +266,10 @@ abstract class ConnectionCommon {
         if($stmt) {
             if($this->isSelect($sql)) {
                 $res = $stmt->executeQuery($bindvars,$fetchmode);
-                if($res) 
-                // ADODB used to set the resultset on the first, doh!
-                 $res->first();
+                if($res) {
+                    // ADODB used to set the resultset on the first, doh!
+                    $res->first();
+                }
             } else {
                 $res = $stmt->executeUpdate($bindvars);
                 // Save it, for adodb compat for the the method Affected_Rows
@@ -302,44 +303,18 @@ abstract class ConnectionCommon {
         return (stripos($sql, 'select') === 0 && stripos($sql, 'select into ') !== 0);
     }
 
-    public function genID($tblOrSequenceName) 
+    /* Create convenience wrappers, so the id's can be had on the connection directly */
+    public function getNextId($tableName)
     {
         $idgen = $this->getIdGenerator();
-        if($idgen->isBeforeInsert()) {
-            return $idgen->getId($tblOrSequenceName);
-        } else {
-            // The id is generated after the insert db dependent
-            // return NULL for now
-            // For mssql we need to return the actual value
-            if(get_class($this) == 'MSSQLConnection') {
-                return $idgen->getId($tblOrSequenceName) + 1;
-            }
-            return NULL;
-        }
+        return $idgen->getNextId($tableName);
+    }
 
-    }
-    
-    // Get the last inserted id
-    public function PO_Insert_ID($tablename, $fieldname)
+    public function getLastId($tableName)
     {
         $idgen = $this->getIdGenerator();
-        if($idgen->isAfterInsert()) {
-            // Id is returned by something like last_inserted thingie
-            return $idgen->getId($tablename);
-        } else {
-            // The id is known upfront and in the db, use same as 
-            // adodb hack now, which is wrong, but alas
-            $sql = "SELECT MAX($fieldname) AS maxid FROM $tablename";
-            $stmt = $this->prepareStatement($sql);
-            $stmt->SetLimit(1);
-            $result = $stmt->executeQuery(array());
-            if($result->first()) {
-                return $result->getInt(1);
-            }
-            return false;
-        }
+        return $idgen->getLastId($tableName);
     }
-    
     
     function __get($propname)
     {
@@ -377,6 +352,13 @@ abstract class ConnectionCommon {
                 break;
             case 'Affected_Rows':
                 return $this->affected_rows;
+                break;
+            case 'GenId':
+            case 'genID':
+                return $this->getNextId($args);
+                break;
+            case 'PO_Insert_ID':
+                return $this->getLastId($args);
                 break;
             default:
                 // We do want to leave this in, so the migration erros show up nicely

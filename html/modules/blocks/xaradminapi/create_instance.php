@@ -80,7 +80,7 @@ function blocks_adminapi_create_instance($args)
     $dbconn->Execute($query, array($nextId, $type, $name, $title, $content, $template, $state,0,0));
     
     // Get ID of row inserted.
-    $bid = $dbconn->PO_Insert_ID($block_instances_table, 'xar_id');
+    $bid = $dbconn->getLastId($block_instances_table);
 
     // Update the group instances.
     if (isset($groups) && is_array($groups)) {

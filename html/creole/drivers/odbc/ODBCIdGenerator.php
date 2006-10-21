@@ -94,6 +94,25 @@ class ODBCIdGenerator implements IdGenerator {
         return $rs->getInt(1);
     }
 
+    // XARAYA MODIFICATION
+    public function getLastId($tableName)
+    {
+        // Lets assume we went to the create already
+        // FIXME: the seq prefix is ad-hoc
+        $seqName = 'seq_'.$tableName;
+        $rs = $this->conn->executeQuery("SELECT id FROM $seqName");
+        $rs->next();
+        return $rs->getInt(1);
+    }
+    
+    public function getNextId($tableName)
+    {
+        // FIXME: the seq prefix is ad-hoc
+        $seqName = 'seq_'.$tableName;
+        return $this->getId($seqName);
+    }
+    // END XARAYA MODIFICATION
+    
     /**
      * Creates the sequence emulation table.
      */

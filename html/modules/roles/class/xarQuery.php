@@ -908,10 +908,11 @@ class xarQuery extends Object
             $this->statement = $this->_statement();
         }
     }
+    // Next id???? 
     function nextid($table="", $id="")
     {
         if (!isset($this->dbconn)) $this->dbconn =& xarDBGetConn();
-        return $this->dbconn->PO_Insert_ID($table,$id);
+        return $this->dbconn->getLastId($table);
     }
 
     /** These last three can probably be removed **/

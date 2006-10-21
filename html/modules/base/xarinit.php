@@ -286,7 +286,7 @@ function base_init()
                               isset($modversion['user'])?$modversion['user']:0,
                               3);
             $result = $newStmt->executeUpdate($bindvars);
-            $newModId = $dbconn->PO_Insert_ID($tables['modules'], 'xar_id');
+            $newModId = $dbconn->getLastId($tables['modules']);
         }
         $dbconn->commit();
     } catch (Exception $e) {

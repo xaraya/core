@@ -50,6 +50,7 @@ class OCI8IdGenerator implements IdGenerator {
     
     /**
      * @see IdGenerator::getId()
+     * @todo xaraya uses tablename, perhaps make the same change here as in postgres? (/me no have oracle to test)
      */
     public function getId($name = null)
     {
@@ -60,6 +61,20 @@ class OCI8IdGenerator implements IdGenerator {
         $rs->next();
         return $rs->getInt(1);
     }
+    
+    // XARAYA MODIFICATION
+    function getNextId($tableName)
+    {
+        return $this->getId($tableName);
+    }
+    
+    function getLastId($tableName)
+    {
+        $rs = $this->conn-executeQuery('select ' . $name . '.curval from dual', ResultSet::FETCHMOD_NUM);
+        $rs->next();
+        return $rs->getInt(1);
+    }
+    // END XARAYA MODIFICATION
     
 }
 

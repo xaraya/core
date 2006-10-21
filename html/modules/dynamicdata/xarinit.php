@@ -134,7 +134,7 @@ function dynamicdata_init()
             array_unshift($object,$nextId);
             $stmt->executeUpdate($object);
             $idx++;
-            $objectid[$idx] = $dbconn->PO_Insert_ID($dynamic_objects,'xar_object_id');
+            $objectid[$idx] = $dbconn->getLastId($dynamic_objects);
         }
 
 
@@ -276,7 +276,7 @@ function dynamicdata_init()
             array_unshift($property, $nextId);
             $stmt->executeUpdate($property);
             $idx++;
-            $propid[$idx] = $dbconn->PO_Insert_ID($dynamic_properties,'xar_prop_id');
+            $propid[$idx] = $dbconn->getLastId($dynamic_properties);
         }
 
 

@@ -82,5 +82,18 @@ class PgSQLIdGenerator implements IdGenerator {
         return $rs->getInt(1);
     }
     
+    // XARAYA MODIFICATION
+    public function getLastId($name)
+    {
+        $res = $this->conn->executeQuery("select curval('seq" . $name . "')", ResultSet::FETCHMOD_NUM);
+        $rs->next();
+        return $rs->getInt(1);
+    }
+    
+    public function getNextId($name)
+    {
+        return $this->getId($name);
+    }
+    // END XARAYA MODIFICATION
 }
 

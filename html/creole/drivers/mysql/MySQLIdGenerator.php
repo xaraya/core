@@ -71,5 +71,17 @@ class MySQLIdGenerator implements IdGenerator {
         return $insert_id;
     }
     
+    public function getNextId($tableName)
+    {
+        // We dont know the next Id, return null
+        return null;
+    }
+    
+    public function getLastId($tableName)
+    {
+        // Same as getId
+        return $this->getId();
+    }
+    
 }
 
