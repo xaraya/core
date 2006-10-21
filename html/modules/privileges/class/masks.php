@@ -122,10 +122,11 @@ class xarMasks extends Object
         }
         $query .= "ORDER BY masks.xar_modid, masks.xar_component, masks.xar_name";
 
-        $result = self::$dbconn->Execute($query,$bindvars);
+        $stmt = self::$dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars);
 
         $masks = array();
-        while(!$result->EOF) {
+        while($result->next()) {
             list($sid, $name, $realm, $modid, $component, $instance, $level,
                     $description) = $result->fields;
             $pargs = array('sid' => $sid,
@@ -137,7 +138,6 @@ class xarMasks extends Object
                                'level' => $level,
                                'description' => $description);
             array_push($masks, new xarMask($pargs));
-            $result->MoveNext();
         }
         return $masks;
     }
@@ -160,6 +160,8 @@ class xarMasks extends Object
         // Check if the mask has already been registered, and update it if necessary.
         // FIXME: make mask names unique across modules (+ across realms) ?
         // FIXME: is module/name enough? Perhaps revisit this with realms in mind.
+        // FIXME: we use 0 for modId for now, as we would have to make two separate queries otherwise 
+        //        one for xar_modid=<value>, another for xar_modid is null.
         if($module == 'All') {
             $modId = 0;
         } else {
