@@ -27,7 +27,7 @@ revisit later on before trusting the branch to be released or used.
 * table config_vars has been dropped, now managed by module_vars where
   modid==0
   UPDATE: now, where modid is null otherwise the future foreign key wish cant
-  be honoured to begin with.
+  be honoured to begin with. (<id> == real modvar, null == configvar )
 * table security_levels has been dropped, now managed by SecurityLevel class
 * tables privmembers, rolemembers and security_acl have their unique key on
   2 columns replaced by a primary key.
@@ -75,12 +75,14 @@ Choices:
         - dynamic_properties_def.prop_req_modules 
             - stores a semicolon separated list of modulenames (does it ever contain 
             more than one?)
+          PROPOSAL: make it modid of the owning module, if the property as such
+          requires another module, this means that the owning module should depend
+          on that other module.
         - hooks.smodid (stores 0 now meaning ?)
         - hooks.tmodid ?
-        - [DONE] module_vars.modid (<id> == real modvar, null == configvar )
         - privileges.xar_module (stores 'All', 'empty' besides module name.)
 * it might be attractive to consolidate the tables privileges and security masks, adding
-  an extra column (type) to distiniguish masks from privileges. before that can happen
+  an extra column (type) to distinguish masks from privileges. before that can happen
   syncing the definition of security_masks to privileges is needed (modid column, realmid)
 
 !!!OTHER CHANGES POSSIBLY AFFECTING UPGRADES:

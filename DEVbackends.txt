@@ -268,6 +268,7 @@ Current concept:
     of the column which should hold the ID
     - when needed call PO_Insert_ID to retrieve the actual value (and pray it 
     is the right one) of the ID used.
+    [UPDATE: with a current Creole patch, the behaviour is now safe]
     
 Problems with this concept:
     - the genID call is useless, it generates nothing for auto increment type 
@@ -280,6 +281,8 @@ Problems with this concept:
     - the PO_Insert_ID implementation is a hack and unreliable, especially in 
     high concurrency environments. (it uses select max(id) which may have been 
     advanced to 10 ids further on by the time you're calling it.)
+    [UPDATE: this has now been adapted in Creole to do a better thing, so 
+    this argument is basically void now]
     
 
 Alternative concept:
@@ -347,22 +350,66 @@ Does this work for all databases? Here's an overview
 - postgres: either use the serial datatype where an autoincrement is needed (recommended)
             or define the sequence explicitly and the column too
 - oracle:   define the sequence and either use a before insert trigger or 
-            the definition of the default value on the sequence (not sure if that is supported)
+            the definition of the default value on the sequence (not sure if that is supported
+            [UPDATE: it is NOT, damn])
 - mssql   : not sure, mssql has both sequences and autoincrement type, in theory
             no changes are needed
-Inventory:
-----------
-Usage of PO_Insert_ID in core:
 
-$ grep -ril PO_insert_ID *
-creole/common/ConnectionCommon.php
-includes/datastores/sql/flattable.php
-includes/tmtags
-modules/base/xarinit.php
-modules/dynamicdata/xarinit.php
-modules/blocks/xaradminapi/create_group.php
-modules/blocks/xaradminapi/create_instance.php
-modules/blocks/xaradminapi/create_type.php
-modules/roles/class/xarQuery.php
-modules/modules/xarinit.php
+SQL Change Details:
 
+Mysql:
+------
+    CREATE TABLE tablename (
+        colname INTEGER AUTO_INCREMENT PRIMARY KEY;
+    );
+    
+Postgres:
+---------
+
+    CREATE TABLE tablename (
+        colname SERIAL
+    );
+    
+    OR
+
+    CREATE SEQUENCE tablename_colname_seq;
+    CREATE TABLE tablename (
+        colname integer NOT NULL DEFAULT nextval('tablename_colname_seq')
+    );
+    ALTER SEQUENCE tablename_colname_seq OWNED BY tablename.colname;
+    
+    obviously the first is preferred.
+
+Sqlite:
+-------
+    CREATE TABLE tablename (
+        colname UNSIGNED INTEGER PRIMARY KEY  
+    );
+    
+
+Oracle:
+-------
+    CREATE SEQUENCE tablename_colname_seq START WITH 1;
+    CREATE TABLE tablename (
+        colname NUMBER
+    )
+    CREATE TRIGGER tablename_insert BEFORE INSERT ON tablename
+    FOR EACH ROW
+    WHEN (NEW.colname IS NULL)
+    BEGIN
+     SELECT x.NEXTVAL INTO :new.colname FROM DUAL;
+    END;
+    
+MS SQL:
+-------
+    CREATE TABLE tablename (
+        colname IDENTITY
+    )
+    
+    [
+        Note: the middleware will have to execute 
+        'SET IDENTITY INSERT tablename ON';
+        before every insert if you want to touch the colname explicitly
+        i.e. the column colname is normally protected and should not be 
+        included in INSERT statements.
+    ]
