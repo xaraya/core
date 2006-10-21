@@ -34,11 +34,12 @@ revisit later on before trusting the branch to be released or used.
 * table privileges, column xar_realm dropped, replaced by xar_realmid. 
 * placed unique index on privilege.xar_name and dropped code which checked for
   uniqueness
+* table dynamic_relations table has been dropped
+
 (see DEVupgrades.sql for the above)
 
 !!!PENDING DB_CHANGES
 * does blocks really need 5 tables?
-* dynamic relations table is floating in there for a long time (removed)
 * xar_realm in xar_security masks uses 'All' which prevents it from being a
   foreign key to the realm table (through id)
 * xar_module column in privileges table uses a string for modulename and 'All' 
@@ -71,6 +72,9 @@ revisit later on before trusting the branch to be released or used.
         - hooks.tmodid ?
         - [DONE] module_vars.modid (<id> == real modvar, null == configvar )
         - privileges.xar_module (stores 'All', 'empty' besides module name.)
+* it might be attractive to consolidate the tables privileges and security masks, adding
+  an extra column (type) to distiniguish masks from privileges. before that can happen
+  syncing the definition of security_masks to privileges is needed (modid column, realmid)
 
 !!!OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
 * [N/A anymore] when encountered, upgrade code to upgrade modules from older
@@ -337,28 +341,3 @@ List of things to hammer (or not):
     - interface inheritance is unclear to me, so its hard to come up with some rules for that
     - [WONT] group interface satisfaction methods together
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

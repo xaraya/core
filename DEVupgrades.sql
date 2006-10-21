@@ -128,3 +128,6 @@ SET    xar_privileges.xar_realmid = xar_security_realms.xar_rid;
 CREATE INDEX i_xar_privileges_realmid ON xar_privileges (xar_realmid);
 
 CREATE UNIQUE INDEX i_xar_privileges_name ON xar_privileges (xar_name);
+
+/* Relations is still todo after N years */
+DROP TABLE xar_dynamic_relations;

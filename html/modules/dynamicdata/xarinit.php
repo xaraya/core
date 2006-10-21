@@ -360,25 +360,6 @@ function dynamicdata_init()
             $stmt->executeUpdate($dataentry);
         }
 
-        /**
-         * Dynamic Relations table (= to keep track of relationships between objects)
-         */
-        $relationfields = array('xar_relation_id'    => array('type'        => 'integer',
-                                                              'null'        => false,
-                                                              'default'     => '0',
-                                                              'increment'   => true,
-                                                              'primary_key' => true),
-                                // TODO:                /* more fields we need to add :) */
-                                'xar_relation_todo'  => array('type'        => 'integer',
-                                                              'null'        => false,
-                                                              'default'     => '0'),
-                                );
-
-        // Create the Table - the function will return the SQL is successful or
-        // raise an exception if it fails, in this case $query is empty
-        $query = xarDBCreateTable($dynamic_relations,$relationfields);
-        $dbconn->Execute($query);
-
         // Add Dynamic Data Properties Definition Table
         dynamicdata_createPropDefTable();
 
