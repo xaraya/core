@@ -53,6 +53,14 @@ revisit later on before trusting the branch to be released or used.
   foreign key constraint can be added on the column
 * rolemembers parent column stores 0 now for 'no parent', change to null, so a
   foreign key constraint can be added on the column
+NOTE: the above 2 are probably problematic since the parent column is part of 
+the primary key and as such can probably not contain the non-value NULL. 
+no idea what the solution is there, except revert back to a unique key only.
+Choices: 
+    1. table without a primary key but consistent with the foreign keys
+    2. table with a primary key but no foreign key possible
+    3. use a derived constraint like a trigger to enforce consistency (this is the same as 2, but extended)
+
 * Columns affected by modid/regid/modname decision:
     The decision was:
         regid is only stored in the modules table for the db model. All other
