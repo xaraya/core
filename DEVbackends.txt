@@ -33,7 +33,7 @@ NESTED TRANSACTION support:
 - mysql   : NO (see http://dev.mysql.com/doc/refman/5.1/en/commit.html )
 - sqlite  : NO
 - postgres: NOT BEFORE 7.5 at least
-- mssal   : YES ( see http://www.codeproject.com/database/sqlservertransactions.asp )
+- mssql   : YES ( see http://www.codeproject.com/database/sqlservertransactions.asp )
 - oracle  : YES 
 
 ==> We have to make sure we have only one transaction active at any given time
@@ -263,7 +263,7 @@ The main problem:
     both in the same way.
     
 Current concept:
-    - call genID before and insert, that delivers something back (no matter what it is)
+    - call genID before an insert, that delivers something back (no matter what it is)
     - call a SQL insert statement, putting whatever genID delivered back in the place
     of the column which should hold the ID
     - when needed call PO_Insert_ID to retrieve the actual value (and pray it 
@@ -305,7 +305,7 @@ Alternative concept:
     Thus this:
         insert into test(id,name) values(genID(),'thename')
     becomes:
-        insert into test('thename')
+        insert into test(name) values ('thename')
        
     For this to work in both type of backends, both should be able to generate
     their id's automatically and transparently. For the auto increment types
