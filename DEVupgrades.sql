@@ -122,10 +122,17 @@ UPDATE xar_module_vars SET xar_modid=NULL WHERE xar_modid=0;
  - add the new column (default is nul ~~ All
  - update the others with the rids in xar_security_realms
 */
-ALTER TABLE xar_privileges ADD COLUMN `xar_realmid` INTEGER DEFAULT NULL;
+ALTER TABLE xar_privileges ADD COLUMN xar_realmid INTEGER DEFAULT NULL;
 UPDATE xar_privileges INNER JOIN xar_security_realms ON xar_privileges.xar_realm = xar_security_realms.xar_name
 SET    xar_privileges.xar_realmid = xar_security_realms.xar_rid;
 CREATE INDEX i_xar_privileges_realmid ON xar_privileges (xar_realmid);
+ALTER TABLE xar_privileges DROP COLUMN xar_realm;
+
+ALTER TABLE xar_security_masks ADD COLUMN xar_realmid INTEGER DEFAULT NULL;
+UPDATE xar_security_masks INNER JOIN xar_security_realms ON xar_security_masks.xar_realm = xar_security_realms.xar_name
+SET    xar_security_masks.xar_realmid = xar_security_realms.xar_rid;
+CREATE INDEX i_xar_security_masks_realmid ON xar_privileges (xar_realmid);
+ALTER TABLE xar_security_masks DROP COLUMN xar_realm;
 
 CREATE UNIQUE INDEX i_xar_privileges_name ON xar_privileges (xar_name);
 

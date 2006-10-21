@@ -216,7 +216,7 @@ function privileges_init()
         $fields = array(
                         'xar_sid'  => array('type'=> 'integer','null'=> false,'default'=>'0','increment'=>true,'primary_key' => true),
                         'xar_name' => array('type'=>'varchar','size'=>100,'null'=>false,'default'=>''),
-                        'xar_realm'=> array('type'=>'varchar','size'=>100,'null'=> false,'default'=>''),
+                        'xar_realmid'=> array('type'=>'integer','null'=>true,'default'=> null),
                         'xar_modid'=> array('type'=>'integer','unsigned'=>true,'null'=>false,'default'=>'0'),
                         'xar_component'=>array('type'=>'varchar','size'=>100,'null'=>false,'default'=>''),
                         'xar_instance' => array('type'=>'varchar','size'=> 100,'null'=>false,'default'=>''),
@@ -225,8 +225,8 @@ function privileges_init()
         $query = xarDBCreateTable($tables['security_masks'],$fields);
         $dbconn->Execute($query);
 
-        $index = array('name'      => 'i_'.$sitePrefix.'_security_masks_realm',
-                       'fields'    => array('xar_realm'),
+        $index = array('name'      => 'i_'.$sitePrefix.'_security_masks_realmid',
+                       'fields'    => array('xar_realmid'),
                        'unique'    => false);
         $query = xarDBCreateIndex($tables['security_masks'],$index);
         $dbconn->Execute($query);

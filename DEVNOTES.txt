@@ -32,6 +32,7 @@ revisit later on before trusting the branch to be released or used.
 * tables privmembers, rolemembers and security_acl have their unique key on
   2 columns replaced by a primary key.
 * table privileges, column xar_realm dropped, replaced by xar_realmid. 
+* table security_masks, colum xar_realm dropped, replaced by xar_realmid
 * placed unique index on privilege.xar_name and dropped code which checked for
   uniqueness
 * table dynamic_relations table has been dropped
@@ -40,8 +41,6 @@ revisit later on before trusting the branch to be released or used.
 
 !!!PENDING DB_CHANGES
 * does blocks really need 5 tables?
-* xar_realm in xar_security masks uses 'All' which prevents it from being a
-  foreign key to the realm table (through id)
 * xar_module column in privileges table uses a string for modulename and 'All' 
   and 'empty' which prevents it from being a foreign key to the modules table
 * is column auth_modid still needed? 
