@@ -343,8 +343,8 @@ class xarPrivileges extends xarMasks
             // add the realms from the database
             while($result->next()) {
                 $allrealms[] = array(
-                    'rid' => $result->getInt(0),
-                    'name' => $result->getString(1)
+                    'rid' => $result->getInt(1),
+                    'name' => $result->getString(2)
                 );
             }
         }
@@ -386,10 +386,10 @@ class xarPrivileges extends xarMasks
             // TODO: maybe remove the key, don't really need it
             while($result->next()) {
                 $allmodules[] = array(
-                    'id'   => $result->getInt(0),
-                    'name' => $result->getString(1),
+                    'id'   => $result->getInt(1),
+                    'name' => $result->getString(2),
                      //'display' => xarModGetDisplayableName($name),
-                    'display' => ucfirst($result->getString(1))
+                    'display' => ucfirst($result->getString(2))
                 );
             }
         }
@@ -444,8 +444,8 @@ class xarPrivileges extends xarMasks
                 if (($name != 'All') && ($name != 'None')) {
                     $ind = $ind + 1;
                     $components[] = array(
-                        'id'   => $result->getString(0),
-                        'name' => $result->getString(0)
+                        'id'   => $result->getString(1),
+                        'name' => $result->getString(1)
                     );
                 }
             }
