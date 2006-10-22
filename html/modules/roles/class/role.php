@@ -139,7 +139,7 @@ class xarRole extends Object
         $q->addfield('xar_type', $this->type);
         if ($this->basetype == ROLES_USERTYPE) {
             $q->addfield('xar_email', $this->email);
-            $q->addfield('xar_pass', $this->pass);
+            $q->addfield('xar_pass', md5($this->pass));
             $q->addfield('xar_state', $this->state);
             $q->addfield('xar_auth_modid', $this->auth_module);
         }
