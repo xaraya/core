@@ -352,9 +352,15 @@ Does this work for all databases? Here's an overview
 - oracle:   define the sequence and either use a before insert trigger or 
             the definition of the default value on the sequence (not sure if that is supported
             [UPDATE: it is NOT, damn])
-- mssql   : not sure, mssql has both sequences and autoincrement type, in theory
-            no changes are needed
-
+- mssql   : mssql uses the IDENTITY column, which does exactly what it says, i.e.
+            provide an identifier. The catch is that that column can NOT be used explicitly
+            unless the backend is explicitly told so with 
+                SET IDENTIY INSERT tablename ON;
+            which is what we do now. If the GenID construct we use now is migrated out, we
+            theoretically can move that construct out. mssql is inflexible, but it just happens
+            to fit the alternative concept ;-)
+             
+            
 SQL Change Details:
 
 Mysql:
@@ -413,3 +419,15 @@ MS SQL:
         i.e. the column colname is normally protected and should not be 
         included in INSERT statements.
     ]
+
+
+Relevant postgres changelog entries:
+
+8.0
+    - windows native server
+    - alter table can change column type
+8.1
+    - multi machine prepares (two phase commit)
+8.1.4
+    - unsafe usage of \' in string literals is rejected now
+    

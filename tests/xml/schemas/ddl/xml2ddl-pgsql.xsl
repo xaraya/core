@@ -53,6 +53,9 @@
   </xsl:for-each>
   <xsl:apply-templates select="primary"/>
   <xsl:apply-templates select="index"/>
+  <!-- TODO: we use different sequence name for auto inc columns:
+    not: tablename_colname_seq, but tablename_seq
+  -->
 </xsl:template>
 
 <xsl:template match="column">
