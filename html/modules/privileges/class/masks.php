@@ -246,7 +246,7 @@ class xarMasks extends Object
         }
         $query = "DELETE FROM " . self::$maskstable . " WHERE xar_modid = ?";
         //Execute the query, bail if an exception was thrown
-        self::$dbconn->Execute($query,array($module));
+        self::$dbconn->Execute($query,array($modId));
         return true;
     }
 

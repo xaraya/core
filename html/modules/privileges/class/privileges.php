@@ -113,7 +113,7 @@ class xarPrivileges extends xarMasks
             $modId = $modInfo['systemid'];
             $query = "DELETE FROM " . parent::$instancestable . " WHERE xar_modid = ?";
             //Execute the query, bail if an exception was thrown
-            parent::$dbconn->Execute($query,array($module));
+            parent::$dbconn->Execute($query,array($modId));
             parent::$dbconn->commit();
         } catch (SQLException $e) {
             parent::$dbconn->rollback(); // redundant? we need to investigate concurency and locking
