@@ -154,10 +154,9 @@ class xarCache_Database_Storage extends xarCache_Storage
             $dbconn->Execute($query, $bindvars);
         } else {
             try {
-                $nextid = $dbconn->GenId($table);
-                $query = "INSERT INTO $table (xar_id, xar_type, xar_key, xar_code, xar_time, xar_size, xar_check, xar_data)
-                           VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-                $bindvars = array((int) $nextid, $this->type, $key, $this->code, $time, $size, $check, $value);
+                $query = "INSERT INTO $table (xar_type, xar_key, xar_code, xar_time, xar_size, xar_check, xar_data)
+                           VALUES (?, ?, ?, ?, ?, ?, ?)";
+                $bindvars = array($this->type, $key, $this->code, $time, $size, $check, $value);
                 $dbconn->Execute($query, $bindvars);
             } catch (SQLException $e) {
                 // someone else beat us to it - ignore error

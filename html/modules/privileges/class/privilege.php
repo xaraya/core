@@ -99,25 +99,16 @@ class xarPrivilege extends xarMask
             if($result->next()) $realmid = $result->getInt('xar_rid');
         }
         $query = "INSERT INTO $this->privilegestable
-                    (xar_pid, xar_name, xar_realmid, xar_module, xar_component, xar_instance, xar_level)
-                  VALUES (?,?,?,?,?,?,?)";
-        $bindvars = array($this->dbconn->genID($this->privilegestable),
-                          $this->name, $realmid, $this->module,
+                    (xar_name, xar_realmid, xar_module, xar_component, xar_instance, xar_level)
+                  VALUES (?,?,?,?,?,?)";
+        $bindvars = array($this->name, $realmid, $this->module,
                           $this->component, $this->instance, $this->level);
         //Execute the query, bail if an exception was thrown
         $this->dbconn->Execute($query,$bindvars);
 
         // the insert created a new index value
         // retrieve the value
-        // FIXME: use creole here
-        
-        $query = "SELECT MAX(xar_pid) FROM $this->privilegestable";
-        //Execute the query, bail if an exception was thrown
-        $result = $this->dbconn->Execute($query);
-
-        // use the index to get the privileges object created from the repository
-        list($pid) = $result->fields;
-        $this->pid = $pid;
+        $this->pid = $this->dbconn->getLastId($this->privilegestable);
 
         // make this privilege a child of its parent
         if($this->parentid !=0) {

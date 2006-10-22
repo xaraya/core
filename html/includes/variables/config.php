@@ -48,11 +48,10 @@ class xarConfigVars extends xarVars implements IxarVars
         $serialvalue = serialize($value);
 
         //Insert
-        $seqId = $dbconn->GenId($config_varsTable);
         $query = "INSERT INTO $config_varsTable
-                  (xar_id, xar_modid, xar_name, xar_value)
-                  VALUES (?,?,?,?)";
-        $bindvars = array($seqId, null, $name, $serialvalue);
+                  (xar_modid, xar_name, xar_value)
+                  VALUES (?,?,?)";
+        $bindvars = array(null, $name, $serialvalue);
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
         xarCore::setCached(self::$KEY, $name, $value);

@@ -713,10 +713,9 @@ function xarModRegisterHook($hookObject, $hookAction, $hookArea, $hookModName, $
         $tmodInfo = xarMod::getBaseInfo($hookModName);
         $tmodId = $tmodInfo['systemid'];
         $query = "INSERT INTO $hookstable
-                  (xar_id, xar_object, xar_action, xar_tarea, xar_tmodid, xar_ttype, xar_tfunc)
-                  VALUES (?,?,?,?,?,?,?)";
-        $seqId = $dbconn->GenId($hookstable);
-        $bindvars = array($seqId,$hookObject,$hookAction,$hookArea,$tmodId,$hookModType,$hookFuncName);
+                  (xar_object, xar_action, xar_tarea, xar_tmodid, xar_ttype, xar_tfunc)
+                  VALUES (?,?,?,?,?,?)";
+        $bindvars = array($hookObject,$hookAction,$hookArea,$tmodId,$hookModType,$hookFuncName);
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeUpdate($bindvars);
         $dbconn->commit();

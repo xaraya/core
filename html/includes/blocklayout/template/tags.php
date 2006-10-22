@@ -196,18 +196,19 @@ class xarTemplateTag extends Object
 
         // Get next ID in table
         try {
+            
             $dbconn->begin();
-            $tag_id = $dbconn->GenId($tag_table);
 
             $modInfo = xarMod::GetBaseInfo($this->getModule());
-             $query = "INSERT INTO $tag_table
-                      (xar_id, xar_name, xar_modid, xar_handler, xar_data)
-                      VALUES(?,?,?,?,?)";
-            $bindvars = array($tag_id,
-                              $this->getName(),
-                              $modInfo['systemid'],
-                              $this->getHandler(),
-                              serialize($this));
+            $query = "INSERT INTO $tag_table
+                      (xar_name, xar_modid, xar_handler, xar_data)
+                      VALUES(?,?,?,?)";
+            $bindvars = array(
+                $this->getName(),
+                $modInfo['systemid'],
+                $this->getHandler(),
+                serialize($this)
+            );
 
             $stmt = $dbconn->prepareStatement($query);
             $stmt->executeUpdate($bindvars);

@@ -69,15 +69,14 @@ class xarPrivileges extends xarMasks
                                       );
                 } else {
                     $query = "INSERT INTO $iTable
-                          ( xar_iid, xar_modid, xar_component, xar_header,
+                          ( xar_modid, xar_component, xar_header,
                             xar_query, xar_limit, xar_propagate,
                             xar_instancetable2, xar_instancechildid,
                             xar_instanceparentid, xar_description)
-                          VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+                          VALUES (?,?,?,?,?,?,?,?,?,?)";
                     $modInfo = xarMod_GetBaseInfo($module);
                     $modId = $modInfo['systemid'];
                     $bindvars = array(
-                                      parent::$dbconn->genID(parent::$instancestable),
                                       $modId, $type, $instance['header'],
                                       $instance['query'], $instance['limit'],
                                       $propagate, $table2, $childID, $parentID,
@@ -146,11 +145,10 @@ class xarPrivileges extends xarMasks
             if($result->next()) $realmid = $result->getInt('xar_rid');
         }
         $query = "INSERT INTO " . parent::$privilegestable . " (
-                    xar_pid, xar_name, xar_realmid, xar_module, xar_component,
+                    xar_name, xar_realmid, xar_module, xar_component,
                     xar_instance, xar_level, xar_description)
-                  VALUES (?,?,?,?,?,?,?,?)";
-        $bindvars = array(parent::$dbconn->genID(parent::$privilegestable),
-                          $name, $realmid, $module, $component,
+                  VALUES (?,?,?,?,?,?,?)";
+        $bindvars = array($name, $realmid, $module, $component,
                           $instance, $level, $description);
 
         parent::$dbconn->Execute($query,$bindvars);

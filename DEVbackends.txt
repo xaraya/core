@@ -431,3 +431,33 @@ Relevant postgres changelog entries:
 8.1.4
     - unsafe usage of \' in string literals is rejected now
     
+    
+Other backends
+==============
+There are some other backends which have an API in PHP. 
+
+Firebird/Interbase:
+    The old borland product which went open source a while ago. The server exists
+    in 2 varieties if i recall correctly, something like a standard version and a
+    superserver. No idea what the differences are. The database (from what i remember)
+    is a bit weird to connect to, as the path on the server needs to be known, but other
+    than that its a pretty standard database. It runs on linux and windows in any 
+    case. For this backend to be supported a driver section in Creole would have to be
+    developed. There will also be an PDO driver for this database.
+    (speaking of which, a PDO driver for Creole would be a good long term investment
+    if you're doing creole work. It consolidates the driver interface and the innovative
+    frameworks are moving towards it.)
+    
+IBM DB2 universal database:
+    Free as in beer. Available for many platforms but mostly a *nix bases product if
+    the types of platforms are a good criterium for it. I know next to nothing about this
+    database
+    
+Informix
+    No known information
+    
+Frontbase
+    No known information
+    
+SAP DB / MaxDB
+    No known information

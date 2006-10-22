@@ -115,10 +115,10 @@ function dynamicdata_init()
 
         // create default objects for dynamic data
         $sql = "INSERT INTO $dynamic_objects (
-                xar_object_id, xar_object_name, xar_object_label,
+                xar_object_name, xar_object_label,
                 xar_object_moduleid, xar_object_itemtype, xar_object_urlparam,
                 xar_object_maxid, xar_object_config, xar_object_isalias)
-                VALUES (?,?,?,?,?,?,?,?,?)";
+                VALUES (?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
         $objects = array(
@@ -130,8 +130,6 @@ function dynamicdata_init()
         $objectid = array();
         $idx = 0;
         foreach ($objects as &$object) {
-            $nextId = $dbconn->GenId($dynamic_objects);
-            array_unshift($object,$nextId);
             $stmt->executeUpdate($object);
             $idx++;
             $objectid[$idx] = $dbconn->getLastId($dynamic_objects);
@@ -227,11 +225,11 @@ function dynamicdata_init()
 
         // create default properties for dynamic data objects
         $sql = "INSERT INTO $dynamic_properties (
-                xar_prop_id, xar_prop_name, xar_prop_label, xar_prop_objectid,
+                xar_prop_name, xar_prop_label, xar_prop_objectid,
                 xar_prop_moduleid, xar_prop_itemtype, xar_prop_type,
                 xar_prop_default, xar_prop_source, xar_prop_status,
                 xar_prop_order, xar_prop_validation)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+            VALUES (?,?,?,?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
         // TEMP FIX for the constants, rewrite this
@@ -272,8 +270,6 @@ function dynamicdata_init()
         $propid = array();
         $idx = 0;
         foreach ($properties as &$property) {
-            $nextId = $dbconn->GenId($dynamic_properties);
-            array_unshift($property, $nextId);
             $stmt->executeUpdate($property);
             $idx++;
             $propid[$idx] = $dbconn->getLastId($dynamic_properties);
@@ -333,8 +329,8 @@ function dynamicdata_init()
         // we don't really need to create an object and properties for the dynamic data table
 
         // create some sample data for the sample object
-        $sql = "INSERT INTO $dynamic_data (xar_dd_id, xar_dd_propid, xar_dd_itemid, xar_dd_value)
-            VALUES (?,?,?,?)";
+        $sql = "INSERT INTO $dynamic_data (xar_dd_propid, xar_dd_itemid, xar_dd_value)
+            VALUES (?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
         $dataentries = array(
@@ -355,8 +351,6 @@ function dynamicdata_init()
                              );
 
         foreach ($dataentries as &$dataentry) {
-            $nextId = $dbconn->GenId($dynamic_data);
-            array_unshift($dataentry, $nextId);
             $stmt->executeUpdate($dataentry);
         }
 

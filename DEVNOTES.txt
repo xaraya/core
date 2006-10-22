@@ -291,7 +291,8 @@ design work can begin.
 !!!MIN. REQUIRED VERSIONS DETERMINED SO FAR
 * PHP      5.1.4 
 * Mysql    5.0.18
-* Postgres 7.4 (first version which has information schema, which we (almost) depend upon)
+* Postgres 8.1 (this introduced secquences (bug 1883) as tracked objects, meaning
+            they can be reliably referenced in table definitions )
 * Sqlite   N/A (embedded in PHP, i think it's 2.8.x for non PDO and 3.x for PDO)
            There seems to be a sqlite3 extension floating around for php5 too
            [Requiring sqlite3 wouldnt be bad IMO]

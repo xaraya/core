@@ -192,10 +192,9 @@ class xarMasks extends Object
                                   $description, $sid);
             } else {
                 $query = "INSERT INTO " . self::$maskstable .
-                          " (xar_sid, xar_name, xar_realmid, xar_modid, xar_component, xar_instance, xar_level, xar_description)
-                          VALUES (?,?,?,?,?,?,?,?)";
+                          " (xar_name, xar_realmid, xar_modid, xar_component, xar_instance, xar_level, xar_description)
+                          VALUES (?,?,?,?,?,?,?)";
                 $bindvars = array(
-                                  self::$dbconn->genID(self::$maskstable),
                                   $name, $realmid, $modId, $component, $instance, $level,
                                   $description);
             }

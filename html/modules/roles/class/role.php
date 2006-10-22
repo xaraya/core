@@ -129,10 +129,7 @@ class xarRole extends Object
             throw new DuplicateException(array('role',($this->type==1)?$this->name:$this->uname));
         }
 
-        $nextId = $this->dbconn->genID($this->rolestable);
-
         $q = new xarQuery('INSERT',$this->rolestable);
-        $q->addfield('xar_uid', $nextId);
         $q->addfield('xar_uname', $this->uname);
         $q->addfield('xar_name', $this->name);
         $q->addfield('xar_date_reg', time());

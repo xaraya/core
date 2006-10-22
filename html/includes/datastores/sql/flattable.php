@@ -137,7 +137,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         // TODO: this won't work for objects with several static tables !
         if (empty($itemid)) {
             // get the next id (or dummy)
-            $itemid = $this->db->GenId($table);
+            $itemid = null;
             $checkid = true;
         } else {
             $checkid = false;

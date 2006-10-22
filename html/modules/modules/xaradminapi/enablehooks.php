@@ -61,16 +61,15 @@ function modules_adminapi_enablehooks($args)
 
         // Prepare the statement outside the loop
         $sql = "INSERT INTO $xartable[hooks]
-                (xar_id,xar_object,xar_action,xar_smodid,xar_stype,xar_tarea,xar_tmodid,xar_ttype,xar_tfunc)
-                VALUES (?,?,?,?,?,?,?,?,?)";
+                (xar_object,xar_action,xar_smodid,xar_stype,xar_tarea,xar_tmodid,xar_ttype,xar_tfunc)
+                VALUES (?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
         while($result->next()) {
             list($hookid,$hooksmodId,$hookstype,$hookobject,$hookaction,
                  $hooktarea,$tmodId,$hookttype,$hooktfunc) = $result->fields;
 
-            $bindvars = array($dbconn->GenId($xartable['hooks']),
-                              $hookobject, $hookaction, $smodId,
+            $bindvars = array($hookobject, $hookaction, $smodId,
                               $callerItemType, $hooktarea, $tmodId,
                               $hookttype, $hooktfunc);
             $stmt->executeUpdate($bindvars);

@@ -99,11 +99,9 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 continue;
             }
 
-            $nextId = $this->db->GenId($dynamicdata);
-
-            $query = "INSERT INTO $dynamicdata (xar_dd_id,xar_dd_propid,xar_dd_itemid,xar_dd_value)
-                      VALUES (?,?,?,?)";
-            $bindvars = array($nextId,$propid,$itemid, (string) $value);
+            $query = "INSERT INTO $dynamicdata (xar_dd_propid,xar_dd_itemid,xar_dd_value)
+                      VALUES (?,?,?)";
+            $bindvars = array($propid,$itemid, (string) $value);
             $this->db->Execute($query,$bindvars);
 
         }
@@ -160,11 +158,9 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $bindvars = array((string) $value, $datafields[$propid]);
             // or create it if necessary (e.g. when you add properties afterwards etc.)
             } else {
-                $nextId = $this->db->GenId($dynamicdata);
-
                 $query = "INSERT INTO $dynamicdata
-                            (xar_dd_id, xar_dd_propid, xar_dd_itemid, xar_dd_value)
-                          VALUES (?,?,?,?)";
+                            (xar_dd_propid, xar_dd_itemid, xar_dd_value)
+                          VALUES (?,?,?)";
                 $bindvars = array($nextId,$propid,$itemid, (string) $value);
             }
             $this->db->Execute($query,$bindvars);

@@ -70,14 +70,13 @@ function blocks_adminapi_create_instance($args)
     $block_instances_table = $xartable['block_instances'];
 
     // Insert instance details.
-    $nextId = $dbconn->GenId($block_instances_table);
     $query = 'INSERT INTO ' . $block_instances_table . ' (
-              xar_id, xar_type_id, xar_name,
+              xar_type_id, xar_name,
               xar_title, xar_content, xar_template,
               xar_state, xar_refresh, xar_last_update
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
 
-    $dbconn->Execute($query, array($nextId, $type, $name, $title, $content, $template, $state,0,0));
+    $dbconn->Execute($query, array($type, $name, $title, $content, $template, $state,0,0));
     
     // Get ID of row inserted.
     $bid = $dbconn->getLastId($block_instances_table);

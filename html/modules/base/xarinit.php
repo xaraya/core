@@ -258,9 +258,9 @@ function base_init()
     $modulesTable = $systemPrefix .'_modules';
 
     $newModSql   = "INSERT INTO $modulesTable
-                    (xar_id, xar_name, xar_regid, xar_directory,
+                    (xar_name, xar_regid, xar_directory,
                      xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable, xar_state)
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+                    VALUES (?,?,?,?,?,?,?,?,?,?)";
     $newStmt     = $dbconn->prepareStatement($newModSql);
 
 
@@ -270,12 +270,10 @@ function base_init()
         $dbconn->begin();
         foreach($modules as $index => $modName) {
             // Insert module
-            $id = $dbconn->GenId($modulesTable);
             $modversion=array();$bindvars = array();
             // NOTE: We can not use the sys::import here, since the variable scope is important.
             include_once "modules/$modName/xarversion.php";
-            $bindvars = array($id,                     // system id, generated
-                              $modName,
+            $bindvars = array($modName,
                               $modversion['id'],       // regid, from xarversion
                               $modName,
                               $modversion['version'],

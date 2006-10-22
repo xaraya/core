@@ -66,14 +66,13 @@ function modules_adminapi_update($args)
                 // Insert hook if required
                 // Prepare statement outside the loop
                 $sql = "INSERT INTO $xartable[hooks]
-                    (xar_id,xar_object,xar_action,xar_smodid,xar_stype,xar_tarea,xar_tmodid,xar_ttype,xar_tfunc)
-                    VALUES (?,?,?,?,?,?,?,?,?)";
+                    (xar_object,xar_action,xar_smodid,xar_stype,xar_tarea,xar_tmodid,xar_ttype,xar_tfunc)
+                    VALUES (?,?,?,?,?,?,?,?)";
                 $stmt2 = $dbconn->prepareStatement($sql);
 
                 foreach (array_keys($hookvalue) as $itemtype) {
                     if ($itemtype == 0) $itemtype = '';
-                    $bindvars = array($dbconn->GenId($xartable['hooks']),
-                                      $hookobject,$hookaction,$modinfo['systemid'],
+                    $bindvars = array($hookobject,$hookaction,$modinfo['systemid'],
                                       $itemtype,$hooktarea,$hooktmodid,
                                       $hookttype,$hooktfunc);
                     $stmt2->executeUpdate($bindvars);

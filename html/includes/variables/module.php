@@ -139,11 +139,10 @@ class xarModVars extends xarVars implements IxarModVars
         
         if(!$modvarid) {
             // Not there yet
-            $seqId = $dbconn->GenId($module_varstable);
             $query = "INSERT INTO $module_varstable
-                         (xar_id, xar_modid, xar_name, xar_value)
-                      VALUES (?,?,?,?)";
-            $bindvars = array($seqId, $modBaseInfo['systemid'],$name,(string)$value);
+                         (xar_modid, xar_name, xar_value)
+                      VALUES (?,?,?)";
+            $bindvars = array($modBaseInfo['systemid'],$name,(string)$value);
         } else {
             // Existing one
             $query = "UPDATE $module_varstable SET xar_value = ? WHERE xar_id = ?";

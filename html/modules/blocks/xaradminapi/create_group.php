@@ -36,10 +36,9 @@ function blocks_adminapi_create_group($args)
     $block_groups_table =& $xartable['block_groups'];
 
     // Insert group into table
-    $nextId = $dbconn->GenId($block_groups_table);
     $query = 'INSERT INTO ' . $block_groups_table
-        . ' (xar_id, xar_name, xar_template) VALUES (?, ?, ?)';
-    $dbconn->Execute($query , array($nextId, $name, $template));
+        . ' (xar_name, xar_template) VALUES (?, ?)';
+    $dbconn->Execute($query , array($name, $template));
 
     // Get group ID as index of groups table
     $group_id = $dbconn->getLastId($block_groups_table);

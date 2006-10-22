@@ -370,12 +370,8 @@ class xarRoles extends Object
             throw new EmptyParameterException(null,$msg);
         }
 
-        // create an ID for the user
-        $nextId = $this->dbconn->genID($this->rolestable);
-
         // set up the query and create the entry
         $tablefields = array(
-            array('name' => 'xar_uid',         'value' => $nextId),
             array('name' => 'xar_name',        'value' => $name),
             array('name' => 'xar_type',        'value' => ROLES_USERTYPE),
             array('name' => 'xar_uname',       'value' => $uname),
@@ -389,6 +385,7 @@ class xarRoles extends Object
         $q = new xarQuery('INSERT',$this->rolestable);
         $q->addfields($tablefields);
         if (!$q->run()) return;
+        $nextId = $this->dbconn->getLastId($this->rolestable);
         foreach($duvs as $key => $value) xarModSetUserVar($key, $value, $nextId);
         // set email option to false
         // FIXME: this fails during installation, as the modvar isnt known yet.
@@ -426,10 +423,9 @@ class xarRoles extends Object
 
         $createdate = time();
         $query = "INSERT INTO $this->rolestable
-                    (xar_uid, xar_name, xar_type, xar_uname,xar_date_reg)
-                  VALUES (?,?,?,?,?)";
-        $bindvars = array($this->dbconn->genID($this->rolestable),
-                          $name, ROLES_GROUPTYPE, $uname, $createdate);
+                    (xar_name, xar_type, xar_uname,xar_date_reg)
+                  VALUES (?,?,?,?)";
+        $bindvars = array($name, ROLES_GROUPTYPE, $uname, $createdate);
         $this->dbconn->Execute($query,$bindvars);
         // done
         return true;

@@ -54,17 +54,12 @@ function blocks_adminapi_create_type($args)
     assert('$modId != 0;');
     try {
         $dbconn->begin();
-        $nextID = $dbconn->GenId($block_types_table);
         $query = "INSERT INTO $block_types_table
-                  (xar_id, xar_modid, xar_type, xar_info) VALUES (?, ?, ?, ?)";
-        $bindvars = array($nextID, $modId, $type, $info);
+                  (xar_modid, xar_type, xar_info) VALUES (?, ?, ?)";
+        $bindvars = array($modId, $type, $info);
         $dbconn->Execute($query, $bindvars);
-        // FIXME: This is now a problem, since we have now of knowing whether that ID
-        // is already known, since we might have statements pending in a transaction.
-        // MySQL[Innodb] test: as long as it is inside the same transaction, it works
-        if (empty($nextID)) {
-            $nextID = $dbconn->getLastId($block_types_table);
-        }
+        // We need the id which was generated
+        $nextID = $dbconn->getLastId($block_types_table);
         assert('$nextID >0');
         // Update the block info details.
         xarModAPIfunc('blocks', 'admin', 'update_type_info', array('tid' => $nextID));
