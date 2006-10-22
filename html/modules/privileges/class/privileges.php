@@ -272,10 +272,10 @@ class xarPrivileges extends xarMasks
                          p.xar_module,  p.xar_component, p.xar_instance,
                          p.xar_level, p.xar_description, pm.xar_parentid 
                   FROM " . parent::$privmemberstable . " pm, " . 
-                           parent::$privilegestable  . " p LEFT JOIN " . parent::$realmstable . " r ON p.xar_realmid = r.xar_rid";
+                           parent::$privilegestable  . " p LEFT JOIN " . parent::$realmstable . " r ON p.xar_realmid = r.xar_rid ";
     
         if($arg == "all") {
-             $query .= "WHERE p.xar_pid = pm.xar_pid AND
+             $query .= " WHERE p.xar_pid = pm.xar_pid AND
                               pm.xar_parentid = ? ";
         } elseif ($arg == "assigned") {
             $query .= ", " . self::$acltable . " acl
