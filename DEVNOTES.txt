@@ -84,6 +84,11 @@ Choices:
 * it might be attractive to consolidate the tables privileges and security masks, adding
   an extra column (type) to distinguish masks from privileges. before that can happen
   syncing the definition of security_masks to privileges is needed (modid column, realmid)
+* we need a consolidated solution for database encoding, mysql takes this swedish latin
+  thing by default, postgres ascii, dont know about the others. How about we make 
+  them all UTF-8? (i have no idea about the consequences though, nor how to do it,
+  seems, that on 'create database' there should be an option or changing an option of
+  some kind when using an existing database.)
 
 !!!OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
 * [N/A anymore] when encountered, upgrade code to upgrade modules from older
