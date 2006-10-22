@@ -28,15 +28,14 @@ class PropertyRegistration extends Object
     public $source     = 'dynamic_data';         // what source is default for this type?
     public $reqfiles   = array();                // do we require some files to be present?
     public $reqmodules = array();                // do we require some modules to be present?
-    public $args       = '';                     // special args needed?
+    public $args       = array();                     // special args needed?
     public $aliases    = array();                // aliases for this property
     public $format     = 0;                      // what format type do we have here?
                                                  // 0 = ? what?
                                                  // 1 =
 
-    function __construct($args=array())
+    function __construct(Array $args=array())
     {
-        assert('is_array($args)');
         if(!empty($args))
             foreach($args as $key=>$value)
                 $this->$key = $value;
@@ -95,7 +94,7 @@ class PropertyRegistration extends Object
             (int) $this->id, $this->name, $this->desc,
             $this->parent, $this->filepath, $this->class,
             $this->format, $this->validation, $this->source,
-            $this->reqfiles, $reqmods, $this->args, $this->aliases
+            serialize($this->reqfiles), $reqmods, is_array($this->args) ? serialize($this->args) : $this->args, serialize($this->aliases)
         );
         $res = $stmt->executeUpdate($bindvars);
 
@@ -149,12 +148,12 @@ class PropertyRegistration extends Object
                 $property['filepath']       = $filepath;
                 $property['validation']     = $validation;
                 $property['source']         = $source;
-                $property['dependancies']   = $reqfiles;
+                $property['dependancies']   = unserialize($reqfiles);
                 $property['requiresmodule'] = $reqmodules;
                 $property['args']           = $args;
                 $property['propertyClass']  = $class;
                 // TODO: this return a serialized array of objects, does that hurt?
-                $property['aliases']        = $aliases;
+                $property['aliases']        = unserialize($aliases);
 
                 $proptypes[$id] = $property;
             }

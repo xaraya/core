@@ -113,3 +113,28 @@ DROP TABLE xar_security_levels;
 UPDATE xar_template_tags 
 SET xar_handler = 'dynamicdata_userapi_handleViewTag',
     xar_data    = 'O:14:"xarTemplateTag":12:{s:5:"_name";s:9:"data-list";s:11:"_attributes";a:0:{}s:8:"_handler";s:34:"dynamicdata_adminapi_handleListTag";s:7:"_module";s:11:"dynamicdata";s:5:"_type";s:4:"user";s:5:"_func";s:13:"handleViewTag";s:12:"_hasChildren";b:0;s:8:"_hasText";b:0;s:13:"_isAssignable";b:0;s:10:"_isPHPCode";b:1;s:15:"_needAssignment";b:0;s:14:"_needParameter";b:0;}' WHERE `xar_template_tags`.`xar_handler` = 'dynamicdata_adminapi_handleListTag';
+
+/* Revisiting configvars reference in module_vars table */
+ALTER TABLE xar_module_vars MODIFY COLUMN `xar_modid` INTEGER DEFAULT NULL;
+UPDATE xar_module_vars SET xar_modid=NULL WHERE xar_modid=0;
+
+/* Let the xar_realmid column reference the realms table 
+ - add the new column (default is nul ~~ All
+ - update the others with the rids in xar_security_realms
+*/
+ALTER TABLE xar_privileges ADD COLUMN xar_realmid INTEGER DEFAULT NULL;
+UPDATE xar_privileges INNER JOIN xar_security_realms ON xar_privileges.xar_realm = xar_security_realms.xar_name
+SET    xar_privileges.xar_realmid = xar_security_realms.xar_rid;
+CREATE INDEX i_xar_privileges_realmid ON xar_privileges (xar_realmid);
+ALTER TABLE xar_privileges DROP COLUMN xar_realm;
+
+ALTER TABLE xar_security_masks ADD COLUMN xar_realmid INTEGER DEFAULT NULL;
+UPDATE xar_security_masks INNER JOIN xar_security_realms ON xar_security_masks.xar_realm = xar_security_realms.xar_name
+SET    xar_security_masks.xar_realmid = xar_security_realms.xar_rid;
+CREATE INDEX i_xar_security_masks_realmid ON xar_privileges (xar_realmid);
+ALTER TABLE xar_security_masks DROP COLUMN xar_realm;
+
+CREATE UNIQUE INDEX i_xar_privileges_name ON xar_privileges (xar_name);
+
+/* Relations is still todo after N years */
+DROP TABLE xar_dynamic_relations;

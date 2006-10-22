@@ -105,7 +105,7 @@ function xarMakeGroup($name,$uname='')
  * @param  string name
  * @return bool
  */
-function xarMakeUser($name,$uname,$email,$pass='',$dateReg='',$valCode='',$state=3,$authModule='')
+function xarMakeUser($name,$uname,$email,$pass='',$dateReg='',$valCode='',$state=3,$authModule= 0)
 {
     $roles = new xarRoles();
     return $roles->makeUser($name,$uname,$email,$pass,$dateReg,$valCode,$state,$authModule);

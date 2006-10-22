@@ -134,7 +134,7 @@ function dynamicdata_init()
             array_unshift($object,$nextId);
             $stmt->executeUpdate($object);
             $idx++;
-            $objectid[$idx] = $dbconn->PO_Insert_ID($dynamic_objects,'xar_object_id');
+            $objectid[$idx] = $dbconn->getLastId($dynamic_objects);
         }
 
 
@@ -276,7 +276,7 @@ function dynamicdata_init()
             array_unshift($property, $nextId);
             $stmt->executeUpdate($property);
             $idx++;
-            $propid[$idx] = $dbconn->PO_Insert_ID($dynamic_properties,'xar_prop_id');
+            $propid[$idx] = $dbconn->getLastId($dynamic_properties);
         }
 
 
@@ -359,25 +359,6 @@ function dynamicdata_init()
             array_unshift($dataentry, $nextId);
             $stmt->executeUpdate($dataentry);
         }
-
-        /**
-         * Dynamic Relations table (= to keep track of relationships between objects)
-         */
-        $relationfields = array('xar_relation_id'    => array('type'        => 'integer',
-                                                              'null'        => false,
-                                                              'default'     => '0',
-                                                              'increment'   => true,
-                                                              'primary_key' => true),
-                                // TODO:                /* more fields we need to add :) */
-                                'xar_relation_todo'  => array('type'        => 'integer',
-                                                              'null'        => false,
-                                                              'default'     => '0'),
-                                );
-
-        // Create the Table - the function will return the SQL is successful or
-        // raise an exception if it fails, in this case $query is empty
-        $query = xarDBCreateTable($dynamic_relations,$relationfields);
-        $dbconn->Execute($query);
 
         // Add Dynamic Data Properties Definition Table
         dynamicdata_createPropDefTable();

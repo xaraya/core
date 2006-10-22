@@ -93,7 +93,7 @@ function modules_init()
         $dbconn->Execute($query,$bindvars);
 
         // Save the actual insert id
-        $savedmodid = $dbconn->PO_Insert_ID($tables['modules'], 'xar_id');
+        $savedmodid = $dbconn->getLastId($tables['modules']);
 
 
         /** Module vars table is created earlier now (base mod, where config_vars table was created */

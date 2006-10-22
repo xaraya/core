@@ -53,5 +53,22 @@ interface IdGenerator {
      */
     public function getId($keyInfo = null);
     
+    // XARAYA MODIFICATION
+    /**
+     * Get the last ID generated for a certain table. We implement this 
+     * because the getId method is ambiguous. It returns the next ID for 
+     * sequence based system and the last ID for auto increment based backends.
+     * As there is controversy on what the proper method is for dealing with
+     * id generating columns we just provide two explicit method and leave developer
+     * a choice on how to deal with them.
+     * 
+     * The two methods will do at least an unambiguous thing, deliver the next/last ID
+     * if it can be determined, and NULL otherwise. Note that calling getNextID advances
+     * the sequence. 
+     */
+     public function getLastId($tableName);
+     public function getNextId($tableName); 
+     // END XARAYA MODIFICATION
+    
 }
 

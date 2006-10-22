@@ -56,5 +56,18 @@ class SQLiteIdGenerator implements IdGenerator {
         return sqlite_last_insert_rowid($this->conn->getResource());
     }
     
+    // XARAYA MODIFICATION
+    public function getNextId($tableName)
+    {
+        // We dont know it, return null
+        return null;
+    }
+    
+    public function getLastId($tableName)
+    {
+        // Same as getId
+        return $this->getId();
+    }
+    // END XARAYA MODIFICATION
 }
 

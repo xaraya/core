@@ -369,13 +369,6 @@ class xarRoles extends Object
             $msg = 'You must enter a user name and a valid email address.';
             throw new EmptyParameterException(null,$msg);
         }
-        // Confirm that this group or user does not already exist
-        $q = new xarQuery('SELECT',$this->rolestable);
-        $q->eq('xar_uname',$uname);
-
-        if (!$q->run()) return;
-        if ($q->getrows() > 0)
-            throw new DuplicateException(array('user',$uname));
 
         // create an ID for the user
         $nextId = $this->dbconn->genID($this->rolestable);
@@ -398,7 +391,8 @@ class xarRoles extends Object
         if (!$q->run()) return;
         foreach($duvs as $key => $value) xarModSetUserVar($key, $value, $nextId);
         // set email option to false
-        xarModSetUserVar('roles','usersendemails', false, $nextId);
+        // FIXME: this fails during installation, as the modvar isnt known yet.
+        // xarModSetUserVar('roles','usersendemails', false, $nextId);
         // done
         return true;
     }
@@ -419,13 +413,13 @@ class xarRoles extends Object
         if ($uname == '') $uname = $name;
 
         // Confirm that this group or user does not already exist
-        $q = new xarQuery('SELECT',$this->rolestable,'COUNT(*)');
+        $q = new xarQuery('SELECT',$this->rolestable,'COUNT(*) AS groupcount');
         $q->eq('xar_name',$name);
         $q->ne('xar_state',ROLES_STATE_DELETED);
         if (!$q->run()) return;
 
         $row = $q->row();
-        if ($row['COUNT(*)'] > 0) {
+        if ($row['groupcount'] > 0) {
             throw new DuplicateException(array('group',$name));
             return false;
         }

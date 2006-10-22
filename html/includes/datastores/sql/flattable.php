@@ -176,7 +176,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         // get the last inserted id
         if ($checkid) {
-            $itemid = $this->db->PO_Insert_ID($table, $itemidfield);
+            $itemid = $this->db->getLastId($table);
         }
 
         if (empty($itemid)) {

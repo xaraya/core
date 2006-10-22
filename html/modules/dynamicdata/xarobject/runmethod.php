@@ -16,7 +16,7 @@
 sys::import('modules.dynamicdata.class.simpleinterface');
 function dynamicdata_object_runmethod($args)
 {
-    $interface = new Simple_Object_Interface($args);
+    $interface = new SimpleObjectInterface($args);
     return $interface->handle($args);
 }
 ?>

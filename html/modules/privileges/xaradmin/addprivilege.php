@@ -55,7 +55,7 @@ function privileges_admin_addprivilege()
 
 // this is privilege has its own rights assigned
         $pargs = array('name' => $pname,
-                    'realm' => $prealm,
+                    'realm' => $prealm, // now has realm id in it!!!
                     'module' => $pmodule,
                     'component' => $pcomponent,
                     'instance' => $instance,

@@ -61,5 +61,17 @@ class MSSQLIdGenerator implements IdGenerator {
         return $rs->getInt(1);        
     }
     
+    // XARAYA MODIFICATION
+    public function getNextId($tableName)
+    {
+        // We dont know it, but we need it
+        return $this->getLastId($tableName) +1;
+    }
+    
+    public function getLastId($tableName)
+    {
+        return $this->getId($tableName);
+    }
+    // END XARAYA MODIFICATION
 }
 

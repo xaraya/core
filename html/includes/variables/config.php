@@ -52,7 +52,7 @@ class xarConfigVars extends xarVars implements IxarVars
         $query = "INSERT INTO $config_varsTable
                   (xar_id, xar_modid, xar_name, xar_value)
                   VALUES (?,?,?,?)";
-        $bindvars = array($seqId, 0, $name, $serialvalue);
+        $bindvars = array($seqId, null, $name, $serialvalue);
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
         xarCore::setCached(self::$KEY, $name, $value);
@@ -112,10 +112,10 @@ class xarConfigVars extends xarVars implements IxarVars
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
         $varstable = $tables['config_vars'];
-        $query = "SELECT xar_name, xar_value FROM $varstable WHERE xar_modid = ? AND xar_name = ?";
+        $query = "SELECT xar_name, xar_value FROM $varstable WHERE xar_modid is null AND xar_name = ?";
 
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array(0,$name),ResultSet::FETCHMODE_NUM);
+        $result = $stmt->executeQuery(array($name),ResultSet::FETCHMODE_NUM);
         
         if($result->next()) {
             // Found it, retrieve and cache it
@@ -133,10 +133,10 @@ class xarConfigVars extends xarVars implements IxarVars
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
         $config_varsTable = $tables['config_vars'];
-        $query = "DELETE FROM $config_varsTable WHERE xar_name = ? AND xar_modid=?";
+        $query = "DELETE FROM $config_varsTable WHERE xar_name = ? AND xar_modid is null";
         
         // We want to make the next two statements atomic
-        $dbconn->execute($query,array($name,0));
+        $dbconn->execute($query,array($name));
         xarCore::delCached(self::$KEY, $name);
         
         return true;
@@ -155,9 +155,9 @@ class xarConfigVars extends xarVars implements IxarVars
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
 
-        $query = "SELECT xar_name, xar_value FROM $tables[config_vars] WHERE xar_modid=?";
+        $query = "SELECT xar_name, xar_value FROM $tables[config_vars] WHERE xar_modid is null";
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array(0),ResultSet::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery(array(),ResultSet::FETCHMODE_ASSOC);
 
         while ($result->next()) 
         {

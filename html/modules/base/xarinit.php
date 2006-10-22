@@ -101,7 +101,7 @@ function base_init()
 
         $fields = array(
                         'xar_id'    => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
-                        'xar_modid' => array('type'=>'integer','null'=>false,'increment'=>false),
+                        'xar_modid' => array('type'=>'integer','null'=>true,'increment'=>false),
                         'xar_name'  => array('type'=>'varchar','size'=>64,'null'=>false),
                         'xar_value' => array('type'=>'text','size'=>'long')
                         );
@@ -286,7 +286,7 @@ function base_init()
                               isset($modversion['user'])?$modversion['user']:0,
                               3);
             $result = $newStmt->executeUpdate($bindvars);
-            $newModId = $dbconn->PO_Insert_ID($tables['modules'], 'xar_id');
+            $newModId = $dbconn->getLastId($tables['modules']);
         }
         $dbconn->commit();
     } catch (Exception $e) {

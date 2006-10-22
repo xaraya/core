@@ -42,7 +42,7 @@ function blocks_adminapi_create_group($args)
     $dbconn->Execute($query , array($nextId, $name, $template));
 
     // Get group ID as index of groups table
-    $group_id = $dbconn->PO_Insert_ID($block_groups_table, 'xar_id');
+    $group_id = $dbconn->getLastId($block_groups_table);
 
     return $group_id;
 }

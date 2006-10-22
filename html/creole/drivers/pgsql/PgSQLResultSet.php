@@ -114,7 +114,8 @@ class PgSQLResultSet extends ResultSetCommon implements ResultSet {
 	{
 		$this->fields = array();
 		$this->fieldsInResultSet = NULL;
-		@pg_free_result($this->result);
+		if(is_resource($this->result))
+		    @pg_free_result($this->result);
 	}
 		
 	/**

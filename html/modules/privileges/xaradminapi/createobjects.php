@@ -89,7 +89,8 @@ function privileges_adminapi_createobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 2,
                                     'default'  => '',
-                                    'source'   =>  $prefix . '_privileges.xar_realm',
+                                    //@todo use objectref or similiar here?
+                                    'source'   =>  $prefix . '_privileges.xar_realmid',
                                     'status'   => $status1,
                                     'order'    => 3,
                                     ))) return;
@@ -198,7 +199,8 @@ function privileges_adminapi_createobjects($args)
                                     'itemtype' => $itemtype,
                                     'type'     => 2,
                                     'default'  => '',
-                                    'source'   =>  $prefix . '_security_masks.xar_realm',
+                                    //@todo use objectref or similiar here?
+                                    'source'   =>  $prefix . '_security_masks.xar_realmid',
                                     'status'   => $status1,
                                     'order'    => 3,
                                     ))) return;

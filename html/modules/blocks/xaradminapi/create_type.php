@@ -63,7 +63,7 @@ function blocks_adminapi_create_type($args)
         // is already known, since we might have statements pending in a transaction.
         // MySQL[Innodb] test: as long as it is inside the same transaction, it works
         if (empty($nextID)) {
-            $nextID = $dbconn->PO_Insert_ID($block_types_table, 'xar_id');
+            $nextID = $dbconn->getLastId($block_types_table);
         }
         assert('$nextID >0');
         // Update the block info details.

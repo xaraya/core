@@ -7,7 +7,6 @@
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @throws  none
- * @todo    none
 */
 sys::import('modules.privileges.class.mask');
 
@@ -27,6 +26,7 @@ class xarPrivilege extends xarMask
     public $dbconn;
     public $privilegestable;
     public $privmemberstable;
+    public $realmstable;
 
     /**
      * xarPrivilege: constructor for the class
@@ -49,6 +49,7 @@ class xarPrivilege extends xarMask
         $this->privmemberstable = $xartable['privmembers'];
         $this->rolestable = $xartable['roles'];
         $this->acltable = $xartable['security_acl'];
+        $this->realmstable = $xartable['security_realms'];
 
 // CHECKME: pid and description are undefined when adding a new privilege
         if (empty($pid)) {
@@ -84,54 +85,48 @@ class xarPrivilege extends xarMask
    {
 
         if(empty($this->name)) {
-            $msg = xarML('You must enter a name.',
-                        'privileges');
+            $msg = xarML('You must enter a name.','privileges');
             throw new DuplicateException(null,$msg);
             xarSessionSetVar('errormsg', _MODARGSERROR);
             return false;
         }
 
-
-// Confirm that this privilege name does not already exist
-        $query = "SELECT COUNT(*) FROM $this->privilegestable
-              WHERE xar_name = ?";
-
-        $result = $this->dbconn->Execute($query,array($this->name));
-
-        list($count) = $result->fields;
-
-        if ($count == 1) throw new DuplicateException(array('privilege',$this->name));
-
-
-// create the insert query
+        // create the insert query
+        $realmid = null;
+        if($this->realm != 'All') {
+            $stmt = $this->dbconn->prepareStatement('SELECT xar_rid FROM '. $this->realmstable .' WHERE xar_name=?');
+            $result = $stmt->executeQuery(array($this->realm),ResultSet::FETCHMODE_ASSOC);
+            if($result->next()) $realmid = $result->getInt('xar_rid');
+        }
         $query = "INSERT INTO $this->privilegestable
-                    (xar_pid, xar_name, xar_realm, xar_module, xar_component, xar_instance, xar_level)
+                    (xar_pid, xar_name, xar_realmid, xar_module, xar_component, xar_instance, xar_level)
                   VALUES (?,?,?,?,?,?,?)";
         $bindvars = array($this->dbconn->genID($this->privilegestable),
-                          $this->name, $this->realm, $this->module,
+                          $this->name, $realmid, $this->module,
                           $this->component, $this->instance, $this->level);
         //Execute the query, bail if an exception was thrown
         $this->dbconn->Execute($query,$bindvars);
 
-// the insert created a new index value
-// retrieve the value
+        // the insert created a new index value
+        // retrieve the value
         // FIXME: use creole here
+        
         $query = "SELECT MAX(xar_pid) FROM $this->privilegestable";
         //Execute the query, bail if an exception was thrown
         $result = $this->dbconn->Execute($query);
 
-// use the index to get the privileges object created from the repository
+        // use the index to get the privileges object created from the repository
         list($pid) = $result->fields;
         $this->pid = $pid;
 
-// make this privilege a child of its parent
-        If($this->parentid !=0) {
+        // make this privilege a child of its parent
+        if($this->parentid !=0) {
             sys::import('modules.privileges.class.privileges');
             $perms = new xarPrivileges();
             $parentperm = $perms->getprivilege($this->parentid);
             $parentperm->addMember($this);
         }
-// create this privilege as an entry in the repository
+        // create this privilege as an entry in the repository
         return $this->makeEntry();
     }
 
@@ -234,12 +229,20 @@ class xarPrivilege extends xarMask
     */
     function update()
     {
+        $realmid = null;
+        if($this->realm != 'All') {
+            $stmt = $this->dbconn->prepareStatement('SELECT xar_rid FROM '. $this->realmstable .' WHERE xar_name=?');
+            $result = $stmt->executeQuery(array($this->realm),ResultSet::FETCHMODE_ASSOC);
+            if($result->next()) $realmid = $result->getInt('xar_rid');
+        }
+
         $query =    "UPDATE " . $this->privilegestable .
-                    " SET xar_name = ?, xar_realm = ?,
-                          xar_module = ?, xar_component = ?,
+                    ' SET xar_name = ?,     xar_realmid = ?,
+                          xar_module = ?,   xar_component = ?,
                           xar_instance = ?, xar_level = ?
-                      WHERE xar_pid = ?";
-        $bindvars = array($this->name, $this->realm, $this->module,
+                      WHERE xar_pid = ?';
+        
+        $bindvars = array($this->name, $realmid, $this->module,
                           $this->component, $this->instance, $this->level,
                           $this->getID());
         //Execute the query, bail if an exception was thrown
@@ -257,7 +260,8 @@ class xarPrivilege extends xarMask
      * @param   none
      * @return  boolean
      * @throws  none
-     * @todo    none
+     * @todo    reverse the order of deletion, i.e. first delete the related parts then the master (foreign key compat)
+     * @todo    even better, do it in a transaction.
     */
     function remove()
     {

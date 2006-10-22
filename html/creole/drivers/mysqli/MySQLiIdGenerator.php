@@ -93,4 +93,15 @@ class MySQLiIdGenerator implements IdGenerator {
 
         return $insert_id;
     }
+    
+    // XARAYA MODIFICATION
+    public function getNextId($tableName)
+    {
+        return null;
+    }
+    public function getLastId($tableName)
+    {
+        return $this->getId($tableName);
+    }
+    // END XARAYA MODIFICATION
 }

@@ -32,32 +32,9 @@
  */
 function xarDB__postgresqlCreateTable($tableName, $fields)
 {
-// old code. need to review the sequence thingy
-/*
-    $sql_fields = array();
-    $seq_sql = '';
-
-    while (list($field_name, $parameters) = each($fields)) {
-        $parameters['command'] = 'create';
-        $this_field = xarDB__postgresColumnDefinition($field_name, $parameters);
-        $sql_fields[] = implode(' ', $this_field);
-
-        // Test for increment field
-        if (isset($parameters['increment']) && $parameters['increment'] == true) {
-            // TODO GM - Temporarily removed
-            // $seq_sql = 'CREATE SEQUENCE seq'.$tableName;
-        }
-    }
-    $sql = 'CREATE TABLE '.$tableName.' ('.implode(',', $sql_fields).')';
-    if ($seq_sql != '') {
-        $sql .= '; '.$seq_sql;
-    }
-    return $sql;
-*/
-// new code
     $sql_fields = array();
     $primary_key = array();
-
+    $epilogue ='';
 
     while (list($field_name, $parameters) = each($fields)) {
         $parameters['command'] = 'create';
@@ -70,19 +47,17 @@ function xarDB__postgresqlCreateTable($tableName, $fields)
         if (isset($this_field['type']))
             $sqlDDL = $sqlDDL . ' ' . $this_field['type'];
 
-        // PosgreSQL doesn't handle unsigned
-        //if (isset($this_field['unsigned']))
-        //    $sqlDDL = $sqlDDL . ' ' . $this_field['unsigned'];
-
         if (isset($this_field['null']))
             $sqlDDL = $sqlDDL . ' ' . $this_field['null'];
 
         if (isset($this_field['default']))
             $sqlDDL = $sqlDDL . ' ' . $this_field['default'];
-
-        // PosgreSQL doesn't handle auto_increment - this should be a sequence
-        //if (isset($this_field['auto_increment']))
-        //    $sqlDDL = $sqlDDL . ' ' . $this_field['auto_increment'];
+            
+        if (isset($parameters['increment']) && $parameters['increment'] == true) {
+            // we only support one such field per table, so we simplify the
+            // sequence name to apply on the table without the specific column name.
+            $epilogue .= 'ALTER TABLE '.$tableName.'_'.$field_name.'_seq RENAME TO '.$tableName.'_seq;';
+        }
 
         $sql_fields[] = $sqlDDL;
 
@@ -98,7 +73,8 @@ function xarDB__postgresqlCreateTable($tableName, $fields)
     if (!empty($primary_key)) {
         $sql .= ', PRIMARY KEY ('.implode(',',$primary_key).')';
     }
-    $sql .= ')';
+    $sql .= ');';
+    $sql .= $epilogue;
 
     return $sql;
 }
@@ -204,6 +180,13 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
 
     switch($parameters['type']) {
         case 'integer':
+            if (isset($parameters['increment']) && $parameters['increment']) {
+                // serial autocreates a sequence tablename_colname_seq
+                $this_field['type'] = 'SERIAL';
+                unset($parameters['default']); // taken care of
+                unset($parameters['null']); // taken care of
+                break;
+            }
             if (isset($parameters['size'])) {
                 switch ($parameters['size']) {
                     case 'tiny':
