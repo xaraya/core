@@ -39,7 +39,7 @@
 **/
 interface IDDObject
 {
-    function __construct($name);
+    function __construct($name = null);
 
     // @note routines for dealing with XML files
     function readSchema(Array $args = array());
