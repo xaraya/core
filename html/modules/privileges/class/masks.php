@@ -95,10 +95,10 @@ class xarMasks extends Object
         //       or get *all* masks.
         $bindvars = array();
         // base query, only the where clauses differ
-        $query = "SELECT masks.xar_sid, masks.xar_name, realms.xar_name, 
-                  modules.xar_name, masks.xar_component, masks.xar_instance, 
+        $query = "SELECT masks.xar_sid, masks.xar_name, realms.xar_name,
+                  modules.xar_name, masks.xar_component, masks.xar_instance,
                   masks.xar_level, masks.xar_description
-                  FROM " . self::$maskstable . "masks 
+                  FROM " . self::$maskstable . "masks
                   LEFT JOIN " . self::$realmstable. "realms ON masks.xar_realmid = realms.xar_rid ";
         if ($module == '' || $module == 'All') {
             $modId = 0;
@@ -160,7 +160,7 @@ class xarMasks extends Object
         // Check if the mask has already been registered, and update it if necessary.
         // FIXME: make mask names unique across modules (+ across realms) ?
         // FIXME: is module/name enough? Perhaps revisit this with realms in mind.
-        // FIXME: we use 0 for modId for now, as we would have to make two separate queries otherwise 
+        // FIXME: we use 0 for modId for now, as we would have to make two separate queries otherwise
         //        one for xar_modid=<value>, another for xar_modid is null.
         if($module == 'All') {
             $modId = 0;
@@ -168,14 +168,14 @@ class xarMasks extends Object
             $modInfo = xarMod_GetBaseInfo($module);
             $modId= $modInfo['systemid'];
         }
-        
+
         $realmid = null;
         if($realm != 'All') {
             $stmt = self::$dbconn->prepareStatement('SELECT xar_rid FROM '.self::$realmstable .' WHERE xar_name=?');
             $result = $stmt->executeQuery(array($realm),ResultSet::FETCHMODE_ASSOC);
             if($result->next()) $realmid = $result->getInt('xar_rid');
         }
-        
+
         $query = "SELECT xar_sid FROM " . self::$maskstable  . " WHERE xar_modid = ? AND xar_name = ?";
         $result = self::$dbconn->Execute($query, array($modId, $name));
 
@@ -414,11 +414,11 @@ class xarMasks extends Object
             $privileges = xarVarGetCached('Security.Variables','privilegeset.'.$mask->module);
         }
         $pass = self::testprivileges($mask,$privileges,false,$role);
-        
+
         //$pass = self::testprivileges($mask,self::getprivset($role),false);
 
         // check if the exception needs to be caught here or not
-    
+
         if ($catch && !$pass) {
             if (xarModGetVar('privileges','exceptionredirect') && !xarUserIsLoggedIn()) {
                 //authsystem will handle the authentication

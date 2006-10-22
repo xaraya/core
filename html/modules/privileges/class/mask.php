@@ -266,7 +266,7 @@ class xarMask extends Object
 
     function getRealm()
     {
-        return $this->realm;
+        return ($this->realm == null) ? "All" : $this->realm;
     }
 
     function getModule()
