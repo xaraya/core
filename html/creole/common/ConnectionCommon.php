@@ -355,10 +355,10 @@ abstract class ConnectionCommon {
                 break;
             case 'GenId':
             case 'genID':
-                return $this->getNextId($args);
+                return $this->getNextId($args[0]);
                 break;
             case 'PO_Insert_ID':
-                return $this->getLastId($args);
+                return $this->getLastId($args[0]);
                 break;
             default:
                 // We do want to leave this in, so the migration erros show up nicely

@@ -262,7 +262,7 @@ design work can begin.
 !!!MIN. REQUIRED VERSIONS DETERMINED SO FAR
 * PHP      5.1.4 
 * Mysql    5.0.18
-* Postgres 8.0.6
+* Postgres 7.4 (first version which has information schema)
 * Sqlite   N/A (embedded in PHP, i think it's 2.8.x for non PDO and 3.x for PDO)
            There seems to be a sqlite3 extension floating around for php5
 * Oracle   ?

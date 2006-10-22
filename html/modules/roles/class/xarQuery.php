@@ -690,7 +690,9 @@ class xarQuery extends Object
             $bindvalues = '';
             foreach ($this->fields as $field) {
                 if (is_array($field)) {
-                    if(isset($field['name']) && isset($field['value'])) {
+                    // CHECKME: Doesn't the second isset check break if the value is NULL? 
+                    //          i.e. when the (non-)value we want to insert *is* actually NULL
+                    if(isset($field['name']) && isset($field['value'])) { 
                         $names .= $field['name'] . ", ";
                         $bindvalues .= "?, ";
                         $this->bindvars[] = $field['value'];

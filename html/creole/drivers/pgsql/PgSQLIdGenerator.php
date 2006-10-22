@@ -75,25 +75,39 @@ class PgSQLIdGenerator implements IdGenerator {
         if ($name === null) {
             throw new SQLException("You must specify the sequence name when calling getId() method.");
         }
-        // XARAYA MODIFICATION
-        $rs = $this->conn->executeQuery("select nextval('seq" . $name . "')", ResultSet::FETCHMODE_NUM);
-        // END XARAYA MODIFICATION
+        $rs = $this->conn->executeQuery("select nextval('" . $name . "')", ResultSet::FETCHMODE_NUM);
         $rs->next();
         return $rs->getInt(1);
     }
     
     // XARAYA MODIFICATION
-    public function getLastId($name)
+    // FIXME: Hmm, this is gettring rather specific, perhaps not do it in Creole but in our extension object?
+    public function getLastId($tableName)
     {
-        $res = $this->conn->executeQuery("select curval('seq" . $name . "')", ResultSet::FETCHMOD_NUM);
+        $seqName = $this->getSequenceName($tableName);
+        $rs = $this->conn->executeQuery("select currval('" . $seqName . "')", ResultSet::FETCHMODE_NUM);
         $rs->next();
         return $rs->getInt(1);
     }
     
-    public function getNextId($name)
+    public function getNextId($tableName)
     {
-        return $this->getId($name);
+        $seqName = $this->getSequenceName($tableName);
+        return $this->getId($seqName);
+    }
+    
+    private function getSequenceName($tableName)
+    {
+        // TODO: this makes too much of an assumption that we have:
+        // 1. one sequence per table (not necessarily true)
+        // 2. that it has this particular name (almost guaranteed to be untrue outside xaraya)
+        // The proper way would be to either explicitly pass the seq name to the get*Id methods
+        // or use the system catalog to determine what sequences are owned by columns
+        // in $tableName (which in most cases will be one)
+        // ? make optional parameter for fieldname ?
+        return $tableName.'_seq';
     }
     // END XARAYA MODIFICATION
+    
 }
 

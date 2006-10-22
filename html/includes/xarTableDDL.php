@@ -215,12 +215,6 @@ function xarDBDropTable($tableName, $databaseType = NULL)
 
     switch($databaseType) {
         case 'postgres':
-            // Also drop the related sequence 
-            // TODO: please can we use something else? pwetty please?
-            $seqSQL = "DROP SEQUENCE seq".$tableName;
-            $dbconn =& xarDBGetConn();
-            $result = $dbconn->Execute($seqSQL);
-            // ignore exception for now
         case 'mysql':
         case 'oci8':
         case 'oci8po':
