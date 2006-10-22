@@ -286,10 +286,6 @@ class xarMasks extends Object
 
         $maskname = $mask;
         $mask =  self::getMask($mask);
-        //        if($mask->getName() == "pnLegacyMask") {
-        //            echo "realm: " . $pnrealm . "\n" . "level: " . $pnlevel;exit;
-        //        }
-        //        else return 1;
         if (!$mask) {
             // <mikespub> moved this whole $module thing where it's actually used, i.e. for
             // error reporting only. If you want to override masks with this someday, move
@@ -417,13 +413,12 @@ class xarMasks extends Object
             // get the irreducible set of privileges for the current user from cache
             $privileges = xarVarGetCached('Security.Variables','privilegeset.'.$mask->module);
         }
-
         $pass = self::testprivileges($mask,$privileges,false,$role);
-
-        // $pass = self::testprivileges($mask,self::getprivset($role),false);
+        
+        //$pass = self::testprivileges($mask,self::getprivset($role),false);
 
         // check if the exception needs to be caught here or not
-
+    
         if ($catch && !$pass) {
             if (xarModGetVar('privileges','exceptionredirect') && !xarUserIsLoggedIn()) {
                 //authsystem will handle the authentication
