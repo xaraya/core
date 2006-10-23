@@ -148,7 +148,6 @@ Choices:
   such usages (i.e. calls explicitly suppressing the exception) they can do so
   again by using a try/catch block around the call. (occurances found have
   been adapted)
-
 * the Variable getting/setting in core does NOT support direct prepping 
   anymore, as to eliminate dependencies on other subsystems. If the parameter 
   was used, it will be ignored now. USAGE UNKNOWN.
@@ -261,7 +260,7 @@ design work can begin.
 * integrate Object showView and showList (johnny: isnt this DONE?)
 
 !!!KNOWN ISSUES
-* blocks do not end up in groups anymore during installation, need to
+* [DONE] blocks do not end up in groups anymore during installation, need to
   investigate why that is. Most likely a missed spot when doing the
   schema migration. 
 * since we now use the meta info classes, some functions in DD which
@@ -355,6 +354,7 @@ Possible new QA checks for 2.x code branch
   is valid too, sigh.)
 - classes start with Capitals (?) (sys class doesnt now, is that bad?)
 - add new deprecation info on wrapped API methods (a lot!)
+- no use of GenID method (no need, leave id columns alone as much as possible)
 
 
 

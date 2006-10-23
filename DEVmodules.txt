@@ -55,3 +55,14 @@ in the 2.x source tree:
 * if your module used the $prep parameter in any of the *get*Var functions
   in core, you will have to change your code to add prepping explicitly if you
   need it.
+
+* the GenID() method for generating IDs when inserting new data is now obsolete
+  it is recommended to not use that method anymore and leave out the ID columns
+  from your SQL statement alltogether
+  
+* The proper way to get the last inserted ID for a table is now: 
+    $dbconn->getLastId('tablename')
+  The method PO_insert_ID(tablename,fieldname) is still there for compatibility
+  purposes but it is unsafe in high concurrency environments.
+  
+  

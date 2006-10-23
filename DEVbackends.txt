@@ -14,7 +14,7 @@ VIEWS support
 - sqlite  : yes, since forever, but read only (which is a good thing,  but a pain when you're migrating )
 - postgres: yes, since 7.3 (at least)
 - mssql   : yes, no idea version wise
-- oracle  : ?
+- oracle  : yes, no idea version wise
   
 ==> SUPPPORTED BY ALL, WORTH CONSIDERING
 
@@ -24,7 +24,7 @@ TRANSACTION support
 - sqlite  : yes, since forever
 - postgres: yes
 - mssql   : yes
-- oracle  : ?
+- oracle  : yes
 
 ==> SUPPORTED BY ALL, BEING USED RIGHT NOW.
 
@@ -56,7 +56,7 @@ FOREIGN KEY support
 - sqlite  : no, accepts syntax, but doesnt act (triggers is the proposed alternative)
 - postgres: yes
 - mssql   : yes, no idea version wise
-- oracle  : ?
+- oracle  : yes, no idea version wise
 
 Foreign key constrained columns can be NULL?
 --------------------------------------------
@@ -100,7 +100,7 @@ TRIGGER support
 - sqlite  : yes, since forever
 - postgres: yes, at least since 7.3
 - mssql   : yes, at least since mssql server 2000
-- oracle  : ?
+- oracle  : yes, no idea version wise
 
 ==> SUPPORTED BY ALL, WORTH CONSIDERING
 
@@ -175,7 +175,7 @@ Native query preparation support
                     $result = pg_execute($dbconn, "my_query", array("Joe's Widgets"));
                     $result = pg_execute($dbconn, "my_query", array("Clothes Clothes Clothes"));
 - mssql     :    Unknown, it's possible in embedded SQL, no idea if transact SQL does support it.
-- oracle    :     most likely
+- oracle    :    most likely
 
 
 Comments Syntax support for SQL:

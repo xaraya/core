@@ -1,0 +1,74 @@
+Notes on making Xaraya use MS-SQL server:
+=========================================
+
+Assumptions:
+- php 5 (well, creole requires that, so that's a no brainer)
+- sql server 2000
+
+Connection notes:
+-----------------
+
+Note: In Windows, the DBLIB from Microsoft is used. Functions that
+return a column name are based on the dbcolname() function in
+DBLIB. DBLIB was developed for SQL Server 6.x where the max identifier
+length is 30. For this reason, the maximum column length is 30
+characters. On platforms where FreeTDS is used (Linux), this is not a
+problem.
+
+A note for all who may be struggling...  Microsoft did away with the
+ct-lib support in SQL Server 2000, so we can't use that anymore (is
+more common to be compiled into php, if mssql is compiled in)
+
+Using MSSQL 2000 and Windows Server 2003 Enterprise running on a
+separate machine from the web server, I was unable to get PHP to
+connect to MSSQL with default Windows Server 2003 settings.  I got it
+working the following way:
+
+From the Windows Server 2003 machine: Control Panel -> Local Security
+Settings -> Security Settings -> Local Policies -> Security Options
+Set "Network access: Let 'Everyone' permissions apply to anonymous
+users" to Enabled
+
+
+Server (obviously a windows machine of some sort):
+--------------------------------------------------
+
+- Create a login *in* the ms sql server which has 'create databases' server
+  role and optionally bulk inserts
+- Set the default database to 'master' (it probably already is)
+- Make sure (with server network utility) that server listens for TCP/IP
+  connections and jot down the port on which it does that
+
+
+Xaraya Implementation Notes
+---------------------------
+- the connection has to include the port number in the xaraya install (like:
+  10.0.0.29:1433)
+- Using the 'auto increment' logic. 
+  Xaraya used the genID method for generating unique ID's in columns which
+  impose the following restrictions:
+
+  1. column must allow an 'explicit value' to be inserted to cater for this
+  common construct in Xaraya:
+     $nextid = $dbconn->getNextId('xar_table');
+     $sql = "insert into xar_table (id, name) values($nextid,'name')";
+     $dbconn->Execute($sql)
+
+  2. if column is not specified in the insert statement an id must be
+  generated automatically
+     $sql = "insert into xar_table(name) values ('name')
+     $dbconn->Execute($sql);
+
+  (the latter is the preferred method, if we all used that the following trick
+  would not be necessary)
+  
+  MS SQL has, in theory, an IDENTITY property which will automatically
+  generate identifiers when inserting columns. For inserting explicit values
+  (null or not) a 'SET IDENTITY_INSERT xar_table ON;' has to be given befor the
+  insert and ONLY ONE table can have that at one give time (in your session)
+  
+   MS SQL has no notion of a SEQUENCE like Postgres has.
+
+  I solved this by issuing exactly that before each INSERT/UPDATE statement
+  (not sure if the latter is needed though)
+

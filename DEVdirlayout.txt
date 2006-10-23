@@ -360,52 +360,53 @@ Deployment 'before and after' stories
 
 CURRENT 1.x Xaraya SETUPS
 -------------------------
+
 A. One Install, One (or more) Instances, Multiple Sites
-...............................................
+
 Generalized actual example, draft, needs tidying yet.
 
-/path/to/instance
-    /html
-        .htaccess
-        index.php
-        /modules
-        /db middleware (adodb/creole)
-        /var
-             config.system.php           [may be used sometimes for 'default' site]
-             .key.php
-            /cache
-            /locales
-            /logs
-            /messaging
-            /otherglobal module dir usage [eg config dirs, dirs requiring write access or global access]
-        /themes
-        /mythemes        [have to keep theme dirs in webroot atm, so this places some restrictions
-                         I keep a separate global theme dir for easier upgrade/maintenance]
-        /shared func/mod/library stuff [sometimes used, keeps custom code etc together]
-          /shared custom modules  -symlinked to main mod dir
+    /path/to/instance
+        /html
+            .htaccess
+            index.php
+            /modules
+            /db middleware (adodb/creole)
+            /var
+                 config.system.php           [may be used sometimes for 'default' site]
+                 .key.php
+                /cache
+                /locales
+                /logs
+                /messaging
+                /otherglobal module dir usage [eg config dirs, dirs requiring write access or global access]
+            /themes
+            /mythemes        [have to keep theme dirs in webroot atm, so this places some restrictions
+                             I keep a separate global theme dir for easier upgrade/maintenance]
+            /shared func/mod/library stuff [sometimes used, keeps custom code etc together]
+              /shared custom modules  -symlinked to main mod dir
 
-/path/to/sites
-     /site1
-        config.system.php
-        /var
-            /locales
-            /cache
-            /otherlocal module dir usage
-       /themes [only possible atm if the path/to/sites is in webroot. Required if sites need own theme dir]
+    /path/to/sites
+         /site1
+            config.system.php
+            /var
+                /locales
+                /cache
+                /otherlocal module dir usage
+           /themes [only possible atm if the path/to/sites is in webroot. Required if sites need own theme dir]
 
-     /site2
-        config.system.php
-        /var
-            /locales
-            /cache
-            /otherlocal module dir usage
+         /site2
+            config.system.php
+            /var
+                /locales
+                /cache
+                /otherlocal module dir usage
  
-        /site library files  [keep them in specific site dir for easy maintenance backup -
-                             symlinked where/if necessary to main install or theme dir]
-           /functions
-           /modules
-           /themes [would be good to be able to point to this but can't unless path/to/dir is under web root]
-           /whatever
+            /site library files  [keep them in specific site dir for easy maintenance backup -
+                                 symlinked where/if necessary to main install or theme dir]
+               /functions
+               /modules
+               /themes [would be good to be able to point to this but can't unless path/to/dir is under web root]
+               /whatever
 
 Path to the sites are, if possible, kept ouf of the webroot.
 However in some 'instances' if theme directories per site are required, and need to be isolated, 
