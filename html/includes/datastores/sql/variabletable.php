@@ -43,27 +43,23 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
         $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
         $query = "SELECT xar_dd_propid, xar_dd_value
-                    FROM $dynamicdata
-                   WHERE xar_dd_propid IN ($bindmarkers)
-                     AND xar_dd_itemid = ?";
+                  FROM $dynamicdata
+                  WHERE xar_dd_propid IN ($bindmarkers) AND 
+                        xar_dd_itemid = ?";
         $bindvars = $propids;
         $bindvars[] = (int)$itemid;
+        $stmt = $this->db->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars);
+        if(!$result->getRecordCount()) return;
 
-        $result =& $this->db->Execute($query,$bindvars,ResultSet::FETCHMODE_NUM);
-
-        if ($result->EOF) {
-            return;
-        }
-        while (!$result->EOF) {
+        while ($result->next()) {
             list($propid, $value) = $result->getRow();
             if (isset($value)) {
                 // set the value for this property
                 $this->fields[$propid]->setValue($value);
             }
-            $result->next();
         }
-
-        $result->Close();
+        $result->close();
         return $itemid;
     }
     /**
@@ -102,12 +98,12 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             $query = "INSERT INTO $dynamicdata (xar_dd_propid,xar_dd_itemid,xar_dd_value)
                       VALUES (?,?,?)";
             $bindvars = array($propid,$itemid, (string) $value);
-            $this->db->Execute($query,$bindvars);
-
+            $stmt = $this->db->prepareStatement($query);
+            $stmt->executeUpdate($bindvars);
         }
-
         return $itemid;
     }
+
     /**
      * Update the item
      * @param id $itemid in array $args
@@ -127,21 +123,21 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         // get the current dynamic data fields for all properties of this item
         $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
         $query = "SELECT xar_dd_id, xar_dd_propid
-                    FROM $dynamicdata
-                   WHERE xar_dd_propid IN ($bindmarkers)
-                     AND xar_dd_itemid = ?";
+                  FROM $dynamicdata
+                  WHERE xar_dd_propid IN ($bindmarkers) AND 
+                        xar_dd_itemid = ?";
         $bindvars = $propids;
         $bindvars[] = (int)$itemid;
 
-        $result =& $this->db->Execute($query,$bindvars,ResultSet::FETCHMODE_NUM);
+        $stmt = $this->db->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars);
 
         $datafields = array();
-        while (!$result->EOF) {
+        while ($result->next()) {
             list($dd_id,$propid) = $result->getRow();
             $datafields[$propid] = $dd_id;
-            $result->next();
         }
-        $result->Close();
+        $result->close();
 
         foreach ($propids as $propid) {
             // get the value from the corresponding property
@@ -163,7 +159,8 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                           VALUES (?,?,?)";
                 $bindvars = array($nextId,$propid,$itemid, (string) $value);
             }
-            $this->db->Execute($query,$bindvars);
+            $stmt = $this->db->prepareStatement($query);
+            $stmt->executeUpdate($bindvars);
         }
         return $itemid;
     }
@@ -182,12 +179,12 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         // get the current dynamic data fields for all properties of this item
         $bindmarkers = '?' . str_repeat(',?', count($propids) -1);
         $query = "DELETE FROM $dynamicdata
-                   WHERE xar_dd_propid IN ($bindmarkers)
-                     AND xar_dd_itemid = ?";
+                  WHERE xar_dd_propid IN ($bindmarkers) AND 
+                        xar_dd_itemid = ?";
         $bindvars = $propids;
         $bindvars[] = (int)$itemid;
-        $this->db->Execute($query,$bindvars);
-
+        $stmt = $this->db->prepareStatement($query);
+        $stmt->executeUpdate($bindvars);
         return $itemid;
     }
 
@@ -226,8 +223,8 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         if (count($itemids) > 0) {
             $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
             $query = "SELECT xar_dd_itemid, xar_dd_propid, xar_dd_value
-                        FROM $dynamicdata
-                       WHERE xar_dd_propid IN ($bindmarkers) ";
+                      FROM $dynamicdata
+                      WHERE xar_dd_propid IN ($bindmarkers) ";
             $bindvars = $propids;
 
             if (count($itemids) > 1) {
@@ -240,13 +237,11 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $query .= " AND xar_dd_itemid = ?";
                 $bindvars[] = (int)$itemids[0];
             }
-            if (!empty($this->cache)) {
-                $result =& $this->db->CacheExecute($this->cache,$query,$bindvars);
-            } else {
-                $result =& $this->db->Execute($query,$bindvars);
-            }
-
-
+            
+            // CHECKME: there was a cache execute here, it N/A anymore now, as the method is non-existent.
+            $stmt = $this->db->prepareStatement($query);
+            $result = $stmt->executeQuery($bindvars);
+            
             if (count($this->sort) > 0) {
                 $items = array();
                 $dosort = 1;
@@ -254,7 +249,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $dosort = 0;
             }
 
-            while (!$result->EOF) {
+            while ($result->next()) {
                 list($itemid,$propid, $value) = $result->getRow();
                 if (isset($value)) {
                     if ($dosort) {
@@ -264,10 +259,8 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                         $this->fields[$propid]->setItemValue($itemid,$value);
                     }
                 }
-                $result->next();
             }
-
-            $result->Close();
+            $result->close();
 
             if ($dosort) {
                 $code = '';
@@ -339,7 +332,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             if (count($this->where) > 0) {
                 $query .= " $andor ( ";
                 // we're looking for combinations (propid + where clause) here - only OR is supported !
-// TODO: support pre- and post-parts here too ? (cfr. bug 3090)
+                // TODO: support pre- and post-parts here too ? (cfr. bug 3090)
                 foreach ($this->where as $whereitem) {
                     $query .= $whereitem['join'] . " (xar_dd_propid = " . $whereitem['field'] . ' AND xar_dd_value ' . $whereitem['clause'] . ') ';
                 }
@@ -351,7 +344,10 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
             // TODO: combine with sort someday ? Not sure if that's possible in this way...
             if ($numitems > 0) {
+                // <mrb> Why is this only here?
                 $query .= ' ORDER BY xar_dd_itemid, xar_dd_propid';
+                $stmt = $this->db->prepareStatement($query);
+                
                 // Note : this assumes that every property of the items is stored in the table
                 $numrows = $numitems * count($propids);
                 if ($startnum > 1) {
@@ -359,22 +355,16 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 } else {
                     $startrow = 1;
                 }
-                if (!empty($this->cache)) {
-                    $result =& $this->db->CacheSelectLimit($this->cache, $query, $numrows, $startrow-1);
-                } else {
-                    $result =& $this->db->SelectLimit($query, $numrows, $startrow-1);
-                }
+                $stmt->setLimit($numrows);
+                $stmt->setOffset($startrow-1);
             } else {
-                if (!empty($this->cache)) {
-                    $result =& $this->db->CacheExecute($this->cache, $query);
-                } else {
-                    $result =& $this->db->Execute($query);
-                }
+                $stmt = $this->db->prepareStatement($query);
             }
-
+            // All prepared, lets go
+            $result = $stmt->executeQuery();
 
             $itemidlist = array();
-            while (!$result->EOF) {
+            while ($result->next()) {
                 $values = $result->getRow();
                 $itemid = array_shift($values);
                 $itemidlist[$itemid] = 1;
@@ -391,12 +381,10 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                         $this->extra[$field]->setItemValue($itemid,$value);
                     }
                 }
-                $result->next();
             }
             // add the itemids to the list
             $this->_itemids = array_keys($itemidlist);
-
-            $result->Close();
+            $result->close();
 
         // TODO: make sure this is portable !
         // more difficult case where we need to create a pivot table, basically
@@ -458,20 +446,16 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                     $join = ', ';
                 }
             }
-
+            
+            // we got the query
+            $stmt = $this->db->prepareStatement($query);
+            
             if ($numitems > 0) {
-                if (!empty($this->cache)) {
-                    $result =& $this->db->CacheSelectLimit($this->cache, $query, $numitems, $startnum-1);
-                } else {
-                    $result = $this->db->SelectLimit($query, $numitems, $startnum-1);
-                }
-            } else {
-                if (!empty($this->cache)) {
-                    $result =& $this->db->CacheExecute($this->cache, $query);
-                } else {
-                    $result =& $this->db->Execute($query);
-                }
+                $stmt->setLimit($numitems);
+                $stmt->setOffset($startnum - 1);
             }
+            // All prepared, run it
+            $result = $stmt->executeQuery();
 
 
             $isgrouped = 0;
@@ -490,12 +474,11 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                     array_push($process, $propid);
                 }
             }
-            while (!$result->EOF) {
+            while ($result->next()) {
                 $values = $result->getRow();
                 $itemid = array_shift($values);
                 // oops, something went seriously wrong here...
                 if (empty($itemid) || count($values) != count($propids)) {
-                    $result->MoveNext();
                     continue;
                 }
                 if (!$isgrouped) {
@@ -506,7 +489,6 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                         // add the item to the value list for this property
                         $this->fields[$propid]->setItemValue($itemid,array_shift($values));
                     }
-
                 } else {
                     // TODO: use sub-query to do this in the database for MySQL 4.1+ and others ?
                     $propval = array();
@@ -577,9 +559,8 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                         $this->fields[$propid]->setItemValue($curid,$curval);
                     }
                 }
-                $result->next();
             }
-            $result->Close();
+            $result->close();
 
             // divide total by count afterwards
             if ($isgrouped) {
@@ -610,27 +591,22 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                              xar_dd_value
                         FROM $dynamicdata
                        WHERE xar_dd_propid IN ($bindmarkers)";
-
-            if (!empty($this->cache)) {
-                $result =& $this->db->CacheExecute($this->cache,$query,$propids);
-            } else {
-                $result =& $this->db->Execute($query,$propids);
-            }
-
+                      
+            $stmt = $this->db->prepareStatement($query);
+            $result = $stmt->executeQuery($propids);
+            
             $itemidlist = array();
-            while (!$result->EOF) {
+            while ($result->next()) {
                 list($propid,$itemid,$value) = $result->getRow();
                 $itemidlist[$itemid] = 1;
                 if (isset($value)) {
                     // add the item to the value list for this property
                     $this->fields[$propid]->setItemValue($itemid,$value);
                 }
-                $result->next();
             }
             // add the itemids to the list
             $this->_itemids = array_keys($itemidlist);
-
-            $result->Close();
+            $result->close();
         }
     }
 
@@ -679,25 +655,20 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
             // Balance parentheses.
             if($this->db->databaseType == 'sqlite') $query .= ")";
-            if (!empty($this->cache)) {
-                $result =& $this->db->CacheExecute($this->cache,$query,$bindvars);
-            } else {
-                $result =& $this->db->Execute($query,$bindvars);
-            }
-
-            if ($result->EOF) return;
-
+            
+            $stmt = $this->db->prepareStatement($query);
+            $result = $stmt->executeQuery($bindvars);
+            
+            if ($result->first()) return;
             $numitems = $result->getInt(1);
-
-            $result->Close();
+            $result->close();
 
             return $numitems;
 
             // TODO: make sure this is portable !
-        // more difficult case where we need to create a pivot table, basically
         } elseif (count($this->where) > 0) {
-
-        // TODO: this only works for OR conditions !!!
+            // more difficult case where we need to create a pivot table, basically
+            // TODO: this only works for OR conditions !!!
             if($this->db->databaseType == 'sqlite') {
                 $query = "SELECT COUNT(*)
                           FROM ( SELECT DISTINCT xar_dd_itemid FROM $dynamicdata WHERE "; // WATCH OUT, STILL UNBALANCED
@@ -707,24 +678,20 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                        WHERE ";
             }
             // only grab the fields we're interested in here...
-// TODO: support pre- and post-parts here too ? (cfr. bug 3090)
+            // TODO: support pre- and post-parts here too ? (cfr. bug 3090)
             foreach ($this->where as $whereitem) {
                 $query .= $whereitem['join'] . ' (xar_dd_propid = ' . $whereitem['field'] . ' AND xar_dd_value ' . $whereitem['clause'] . ') ';
             }
 
             // Balance parentheses.
             if($this->db->databaseType == 'sqlite') $query .= ")";
-            if (!empty($this->cache)) {
-                $result =& $this->db->CacheExecute($this->cache, $query);
-            } else {
-                $result =& $this->db->Execute($query);
-            }
-
-            if ($result->EOF) return;
+            
+            $stmt = $this->db->prepareStatement($query);
+            $result = $stmt->executeQuery();
+            if (!$result->first()) return;
 
             $numitems = $result->getInt(1);
-
-            $result->Close();
+            $result->close();
 
             return $numitems;
 
@@ -737,21 +704,16 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                           WHERE xar_dd_propid IN ($bindmarkers)) ";
             } else {
                 $query = "SELECT COUNT(DISTINCT xar_dd_itemid)
-                        FROM $dynamicdata
-                       WHERE xar_dd_propid IN ($bindmarkers) ";
+                          FROM $dynamicdata
+                          WHERE xar_dd_propid IN ($bindmarkers) ";
             }
 
-            if (!empty($this->cache)) {
-                $result =& $this->db->CacheExecute($this->cache,$query,$propids);
-            } else {
-                $result =& $this->db->Execute($query,$propids);
-            }
-
-            if ($result->EOF) return;
+            $stmt = $this->db->prepareStatement($query);
+            $result = $stmt->executeQuery($propids);
+            if (!$result->first()) return;
 
             $numitems = $result->getInt(1);
-
-            $result->Close();
+            $result->close();
 
             return $numitems;
         }
@@ -786,7 +748,9 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
         $dynamicobjects = $this->tables['dynamic_objects'];
 
-        // increase the max id for this object
+        // increase the max id for this object 
+        // TODO: figure out a way to do this more reliable.
+        // - does a transaction help here? (esp. considering they are mostly emulated)
         $bindvars = array();
         $query = "UPDATE $dynamicobjects
                      SET xar_object_maxid = xar_object_maxid + 1 ";
@@ -799,7 +763,8 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             $bindvars[] = (int)$modid;
             $bindvars[] = (int)$itemtype;
         }
-        $this->db->Execute($query,$bindvars);
+        $stmt = $this->db->prepareStatement($query);
+        $stmt->executeUpdate($bindvars);
 
         // get it back (WARNING : this is *not* guaranteed to be unique on heavy-usage sites !)
         $bindvars = array();
@@ -814,14 +779,12 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
             $bindvars[] = (int)$modid;
             $bindvars[] = (int)$itemtype;
         }
-
-        $result = $this->db->Execute($query,$bindvars,ResultSet::FETCHMODE_NUM);
-        if ($result->EOF) return;
+        $stmt = $this->db->prepareStatement($query);
+        $result= $stmt->executeQuery($bindvars);
+        if (!$result->first()) return; // this should not happen
 
         $nextid = $result->getInt(1);
-
-        $result->Close();
-
+        $result->close();
         return $nextid;
     }
 

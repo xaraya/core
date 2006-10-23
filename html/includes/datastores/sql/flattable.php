@@ -90,10 +90,10 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
                 $query .= " AND " . join(' AND ', $where);
             }
         }
+        $stmt = $this->db->prepareStatement($query);
+        $result = $stmt->executeQuery(array((int)$itemid),ResultSet::FETCHMODE_NUM);
 
-        $result =& $this->db->Execute($query,array((int)$itemid),ResultSet::FETCHMODE_NUM);
-
-        if ($result->EOF) {
+        if (!$result->first()) {
             return;
         }
         $values = $result->getRow();
@@ -172,7 +172,8 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             $join = ', ';
         }
         $query .= " )";
-        $result = & $this->db->Execute($query,$bindvars);
+        $stmt = $this->db->prepareStatement($query);
+        $result = $stmt->executeUpdate($bindvars);
 
         // get the last inserted id
         if ($checkid) {
@@ -221,7 +222,8 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         }
         $query .= " WHERE $itemidfield=?";
         $bindvars[] = (int)$itemid;
-        $this->db->Execute($query,$bindvars);
+        $stmt = $this->db->prepareStatement($query);
+        $stmt->executeUpdate($bindvars);
 
         return $itemid;
     }
@@ -238,8 +240,8 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
         }
 
         $query = "DELETE FROM $table WHERE $itemidfield = ?";
-        $this->db->Execute($query,array((int)$itemid));
-
+        $stmt = $this->db->prepareStatement($query);
+        $stmt->executeUpdate(array((int)$itemid));
         return $itemid;
     }
 
@@ -273,7 +275,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         // can't really do much without the item id field at the moment
         if (empty($itemidfield)) {
-// CHECKME: test working without the item id field
+            // CHECKME: test working without the item id field
             return;
         }
 
@@ -326,12 +328,12 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             }
         }
 
-/*
-// CHECKME: test working without the item id field
-if (empty($itemidfield)) {
-    $isgrouped = 1;
-}
-*/
+        /*
+        // CHECKME: test working without the item id field
+        if (empty($itemidfield)) {
+            $isgrouped = 1;
+        }
+        */
         if ($isgrouped) {
             $query = "SELECT " . join(', ', $newfields) . "
                         FROM " . join(', ', $tables) . $more . " ";
@@ -529,7 +531,7 @@ if (empty($itemidfield)) {
         return $this->primary;
     }
 
-    function getNext(array $args = array())
+    function getNext(Array $args = array())
     {
         static $temp = array();
 
@@ -537,14 +539,11 @@ if (empty($itemidfield)) {
         $itemidfield = $this->primary;
 
         // can't really do much without the item id field at the moment
-        if (empty($itemidfield)) {
-            return;
-        }
+        if (empty($itemidfield)) return;
 
         $fieldlist = array_keys($this->fields);
-        if (count($fieldlist) < 1) {
-            return;
-        }
+        // Something to do for us?
+        if (count($fieldlist) < 1) return;
 
         if (!isset($temp['result'])) {
             if (!empty($args['numitems'])) {
@@ -566,7 +565,7 @@ if (empty($itemidfield)) {
             }
 
             $query = "SELECT $itemidfield, " . join(', ', $fieldlist) . "
-                        FROM $table ";
+                      FROM $table ";
 
             $bindvars = array();
             if (count($itemids) > 1) {
@@ -597,19 +596,24 @@ if (empty($itemidfield)) {
             } else {
                 $query .= " ORDER BY $itemidfield";
             }
-
+            // We got the query, prepare it
+            $stmt = $this->db->prepareStatement($query);
+            
+            // Now set additional parameters if we need to
             if ($numitems > 0) {
-                $result =& $this->db->SelectLimit($query, $numitems, $startnum-1,$bindvars,ResultSet::FETCHMODE_NUM);
-            } else {
-                $result =& $this->db->Execute($query,$bindvars,ResultSet::FETCHMODE_NUM);
+                $stmt->setLimit($numitems);
+                $stmt->setOffset($startnum-1);
             }
+            // Execute it
+            $result = $stmt->executeQuery($bindvars);
             $temp['result'] =& $result;
         }
 
         $result =& $temp['result'];
 
-        if ($result->EOF) {
-            $result->Close();
+        // Try to fetch the next row
+        if (!$result->next()) {
+            $result->close();
 
             $temp['result'] = null;
             return;
@@ -619,7 +623,7 @@ if (empty($itemidfield)) {
         $itemid = array_shift($values);
         // oops, something went seriously wrong here...
         if (empty($itemid) || count($values) != count($this->fields)) {
-            $result->Close();
+            $result->close();
 
             $temp['result'] = null;
             return;
@@ -630,8 +634,6 @@ if (empty($itemidfield)) {
             // set the value for this property
             $this->fields[$field]->setValue(array_shift($values));
         }
-
-        $result->next();
         return $itemid;
     }
 

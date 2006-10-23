@@ -135,7 +135,8 @@ class xarConfigVars extends xarVars implements IxarVars
         $query = "DELETE FROM $config_varsTable WHERE xar_name = ? AND xar_modid is null";
         
         // We want to make the next two statements atomic
-        $dbconn->execute($query,array($name));
+        $stmt = $dbconn->prepareStatement($query);
+        $stmt->executeUpdate(array($name));
         xarCore::delCached(self::$KEY, $name);
         
         return true;

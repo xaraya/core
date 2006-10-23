@@ -180,7 +180,8 @@ class xarModVars extends xarVars implements IxarModVars
         if($modvarid) {
             $module_itemvarstable = $tables['module_itemvars'];
             $query = "DELETE FROM $module_itemvarstable WHERE xar_mvid = ?";
-            $dbconn->execute($query,array((int)$modvarid));
+            $stmt = $dbconn->prepareStatement($query);
+            $stmt->executeUpdate(array((int)$modvarid));
         }
         
         // Now delete the modvar itself
@@ -188,7 +189,8 @@ class xarModVars extends xarVars implements IxarModVars
         // Now delete the module var itself
         $query = "DELETE FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
         $bindvars = array($modBaseInfo['systemid'], $name);
-        $dbconn->execute($query,$bindvars);
+        $stmt = $dbconn->prepareStatement($query);
+        $stmt->executeUpdate($bindvars);
         
         // Removed it from the cache
         xarCore::delCached('Mod.Variables.' . $scope, $name);

@@ -337,7 +337,8 @@ class xarSession  extends Object implements IsessionHandler
                   (xar_sessid, xar_ipaddr, xar_uid, xar_firstused, xar_lastused)
                   VALUES (?,?,?,?,?)";
             $bindvars = array($this->sessionId, $ipAddress, _XAR_ID_UNREGISTERED, time(), time());
-            $this->db->Execute($query,$bindvars);
+            $stmt = $this->db->prepareStatement($query);
+            $stmt->executeUpdate($bindvars);
             $this->db->commit();
         } catch (SQLException $e) {
             // The rollback is useless, since there's only one statement (but the isolation level might be useful)
@@ -390,9 +391,10 @@ class xarSession  extends Object implements IsessionHandler
     {
         $query = "SELECT xar_uid, xar_ipaddr, xar_lastused, xar_vars
               FROM $this->tbl WHERE xar_sessid = ?";
-        $result =& $this->db->Execute($query,array($sessionId),ResultSet::FETCHMODE_NUM);
+        $stmt = $this->db->prepareStatement($query);
+        $result = $stmt->executeQuery(array($sessionId),ResultSet::FETCHMODE_NUM);
         
-        if (!$result->EOF) {
+        if ($result->first()) {
             // Already have this session
             $this->isNew = false;
             list($XARSVuid, $this->ipAddress, $lastused, $vars) = $result->getRow();
@@ -413,7 +415,7 @@ class xarSession  extends Object implements IsessionHandler
             $this->ipAddress = '';
             $vars = '';
         }
-        $result->Close();
+        $result->close();
 
         // We *have to* make sure this returns a string!! 
         return (string) $vars;
@@ -505,7 +507,8 @@ class xarSession  extends Object implements IsessionHandler
         try {
             $this->db->begin();
             $query = "DELETE FROM $this->tbl WHERE $where";
-            $this->db->Execute($query,$bindvars);
+            $stmt = $this->db->prepareStatement($query);
+            $stmt->executeUpdate($bindvars);
             $this->db->commit();
         } catch (SQLException $e) {
             $this->db->rollback();
@@ -588,7 +591,8 @@ class xarSession  extends Object implements IsessionHandler
                       SET xar_uid = ? ,xar_remembersess = ?
                       WHERE xar_sessid = ?";
             $bindvars = array($userId, $rememberSession, self::getId());
-            $dbconn->Execute($query,$bindvars);
+            $stmt = $dbconn->prepareStatement($query);
+            $stmt->executeUpdate($bindvars);
             $dbconn->commit();
         } catch (SQLException $e) {
             $dbconn->rollback();
@@ -596,7 +600,7 @@ class xarSession  extends Object implements IsessionHandler
         }
 
         $_SESSION[self::PREFIX.'uid'] = $userId;
-    return true;
+        return true;
     }
 
 }

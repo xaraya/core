@@ -634,11 +634,11 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
                         hooks.xar_tmodid = tmods.xar_id AND
                         smods.xar_name = ?";
         $bindvars = array($callerModName);
-
-        $result =& $dbconn->Execute($query,$bindvars);
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars);
 
         $modHookedCache[$callerModName] = array();
-        while(!$result->EOF) {
+        while($result->next()) {
             list($modname,$itemtype) = $result->fields;
             if (!empty($itemtype)) {
                 $itemtype = trim($itemtype);
@@ -647,9 +647,8 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
                 $modHookedCache[$callerModName][$itemtype] = array();
             }
             $modHookedCache[$callerModName][$itemtype][$modname] = 1;
-            $result->MoveNext();
         }
-        $result->Close();
+        $result->close();
     }
     if (empty($callerItemType)) {
         if (isset($modHookedCache[$callerModName][''][$hookModName])) {
