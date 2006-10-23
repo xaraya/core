@@ -73,21 +73,20 @@ function xarBlockIsCached(array $args)
     if (xarCore::isCached('Blocks.Caching', 'settings')) {
         $blocks = xarCore::getCached('Blocks.Caching', 'settings');
     } else {
+        // We need to get it.
         $systemPrefix = xarDBGetSystemTablePrefix();
         $blocksettings = $systemPrefix . '_cache_blocks';
         $dbconn =& xarDBGetConn();
         $tables = $dbconn->MetaTables();
         if (in_array($blocksettings, $tables)) {
-            $query = "SELECT xar_bid,
-                             xar_nocache,
-                             xar_page,
-                             xar_user,
-                             xar_expire
+            $query = "SELECT xar_bid, xar_nocache,
+                             xar_page, xar_user, xar_expire
                      FROM $blocksettings";
-            $result =& $dbconn->Execute($query,array(), ResultSet::FETCHMODE_NUM);
+            $stmt = $dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery($query);
             if ($result) {
                 $blocks = array();
-                while (!$result->EOF) {
+                while ($result->next()) {
                     list ($bid,
                           $noCache,
                           $pageShared,
@@ -98,9 +97,8 @@ function xarBlockIsCached(array $args)
                                           'pageshared'  => $pageShared,
                                           'usershared'  => $userShared,
                                           'cacheexpire' => $blockCacheExpireTime);
-                    $result->next();
                 }
-                $result->Close();
+                $result->close();
             } else {
                 $blocks = 'noSettings';
             }

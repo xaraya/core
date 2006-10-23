@@ -8,11 +8,13 @@ class xarCache_Database_Storage extends xarCache_Storage
     public $lastkey = null;
     public $lastid = null;
     public $value = null;
+    private $dbconn = null;
 
     public function __construct($args = array())
     {
         parent::__construct($args);
         $this->storage = 'database';
+        $this->dbconn = xarDBGetConn();
     }
 
     public function getTable()
@@ -31,31 +33,34 @@ class xarCache_Database_Storage extends xarCache_Storage
 
     public function isCached($key = '', $expire = 0, $log = 1)
     {
+        static $stmt = null;
+        
         if (empty($expire)) {
             $expire = $this->expire;
         }
         $table = $this->getTable();
         if (empty($table)) return false;
 
-        $dbconn =& xarDBGetConn();
         // we actually retrieve the value here too
         $query = "SELECT xar_id, xar_time, xar_size, xar_check, xar_data
                   FROM $table
                   WHERE xar_type = ? AND xar_key = ? AND xar_code = ?";
         $bindvars = array($this->type, $key, $this->code);
-        $result =& $dbconn->Execute($query, $bindvars);
+        // Prepare it once.
+        if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars);
 
         $this->lastkey = $key;
 
-        if ($result->EOF) {
-            $result->Close();
+        if (!$result->first()) {
+            $result->close();
             $this->lastid = null;
             $this->value = null;
             if ($log) $this->logStatus('MISS', $key);
             return false;
         }
         list($id,$time,$size,$check,$data) = $result->fields;
-        $result->Close();
+        $result->close();
 
         // TODO: process $size and $check if compressed ?
 
@@ -74,6 +79,8 @@ class xarCache_Database_Storage extends xarCache_Storage
 
     public function getCached($key = '', $output = 0, $expire = 0)
     {
+        static $stmt;
+        
         if (empty($expire)) {
             $expire = $this->expire;
         }
@@ -90,23 +97,24 @@ class xarCache_Database_Storage extends xarCache_Storage
         $table = $this->getTable();
         if (empty($table)) return;
 
-        $dbconn =& xarDBGetConn();
         $query = "SELECT xar_id, xar_time, xar_size, xar_check, xar_data
                   FROM $table
                   WHERE xar_type = ? AND xar_key = ? AND xar_code = ?";
         $bindvars = array($this->type, $key, $this->code);
-        $result =& $dbconn->Execute($query, $bindvars);
+        // Prepare it once
+        if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars);
 
         $this->lastkey = $key;
 
-        if ($result->EOF) {
-            $result->Close();
+        if (!$result->first()) {
+            $result->close();
             $this->lastid = null;
             $this->value = null;
             return;
         }
         list($id,$time,$size,$check,$data) = $result->fields;
-        $result->Close();
+        $result->close();
 
         // TODO: process $size and $check if compressed ?
 
@@ -138,8 +146,6 @@ class xarCache_Database_Storage extends xarCache_Storage
         $table = $this->getTable();
         if (empty($table)) return;
 
-        $dbconn =& xarDBGetConn();
-
         // TODO: is a transaction warranted here?
         // Since we catch the exception if someone beat us to it, a transaction could
         // cause a deadlock here? 
@@ -151,17 +157,18 @@ class xarCache_Database_Storage extends xarCache_Storage
                              xar_data = ?
                        WHERE xar_id = ?";
             $bindvars = array($time, $size, $check, $value, (int) $this->lastid);
-            $dbconn->Execute($query, $bindvars);
+            $stmt = $this->dbconn->prepareStatement($query);
+            $stmt->executeUpdate($bindvars);
         } else {
             try {
                 $query = "INSERT INTO $table (xar_type, xar_key, xar_code, xar_time, xar_size, xar_check, xar_data)
                            VALUES (?, ?, ?, ?, ?, ?, ?)";
                 $bindvars = array($this->type, $key, $this->code, $time, $size, $check, $value);
-                $dbconn->Execute($query, $bindvars);
+                $stmt = $this->dbconn->prepareStatement($query);
+                $stmt->executeUpdate($bindvars);
             } catch (SQLException $e) {
                 // someone else beat us to it - ignore error
             }
-
         }
         $this->lastkey = null;
     }
@@ -171,19 +178,16 @@ class xarCache_Database_Storage extends xarCache_Storage
         $table = $this->getTable();
         if (empty($table)) return;
 
-        $dbconn =& xarDBGetConn();
-
         if ($key == $this->lastkey && !empty($this->lastid)) {
-            $query = "DELETE FROM $table
-                            WHERE xar_id = ?";
+            $query = "DELETE FROM $table    WHERE xar_id = ?";
             $bindvars = array((int) $this->lastid);
-            $dbconn->Execute($query, $bindvars);
         } else {
             $query = "DELETE FROM $table
                             WHERE xar_type = ? AND xar_key = ? AND xar_code = ?";
             $bindvars = array($this->type, $key, $this->code);
-            $dbconn->Execute($query, $bindvars);
         }
+        $stmt = $this->dbconn->prepareStatement($query);
+        $stmt->executeUpdate($bindvars);
         $this->lastkey = null;
     }
 
@@ -192,18 +196,16 @@ class xarCache_Database_Storage extends xarCache_Storage
         $table = $this->getTable();
         if (empty($table)) return;
 
-        $dbconn =& xarDBGetConn();
-
         if (empty($key)) {
-            $query = "DELETE FROM $table
-                            WHERE xar_type = ?";
+            $query = "DELETE FROM $table WHERE xar_type = ?";
             $bindvars = array($this->type);
         } else {
             $key = '%'.$key.'%';
             $query = "DELETE FROM $table  WHERE xar_type = ? AND xar_key LIKE ?";
             $bindvars = array($this->type,$key);
         }
-        $dbconn->Execute($query, $bindvars);
+        $stmt = $this->dbconn->prepareStatement($query);
+        $stmt->executeUpdate($bindvars);
 
         // check the cache size and clear the lockfile set by sizeLimitReached()
         $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
@@ -239,14 +241,13 @@ class xarCache_Database_Storage extends xarCache_Storage
                       - web process can not touch ' . $touch_file);
         }
 
-        $dbconn =& xarDBGetConn();
-
         $time = time() - ($expire + 60); // take some margin here
 
         $query = "DELETE FROM $table
                         WHERE xar_type = ? AND xar_time < ?";
         $bindvars = array($this->type, $time);
-        $dbconn->Execute($query, $bindvars);
+        $stmt = $this->dbconn->prepareStatement($query);
+        $stmt->executeUpdate($bindvars);
 
         // check the cache size and clear the lockfile set by sizeLimitReached()
         $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
@@ -261,30 +262,27 @@ class xarCache_Database_Storage extends xarCache_Storage
         $table = $this->getTable();
         if (empty($table)) return;
 
-        $dbconn =& xarDBGetConn();
-
         if ($countitems) {
             $query = "SELECT SUM(xar_size), COUNT(xar_id)
                         FROM $table
                        WHERE xar_type = ?";
             $bindvars = array($this->type);
-            $result =& $dbconn->Execute($query, $bindvars);
+            $stmt = $this->dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery($bindvars);
 
             list($size,$count) = $result->fields;
-            $result->Close();
-
             $this->numitems = $count;
         } else {
             $query = "SELECT SUM(xar_size)
                         FROM $table
                        WHERE xar_type = ?";
             $bindvars = array($this->type);
-            $result =& $dbconn->Execute($query, $bindvars);
+            $stmt = $this->dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery($bindvars);
 
             list($size) = $result->fields;
-            $result->Close();
         }
-
+        $result->close();
         $this->size = $size;
         return $size;
     }
@@ -321,25 +319,24 @@ class xarCache_Database_Storage extends xarCache_Storage
         $table = $this->getTable();
         if (empty($table)) return false;
 
-        $dbconn =& xarDBGetConn();
         // we actually retrieve the value here too
         $query = "SELECT xar_id, xar_time, xar_key, xar_code, xar_size, xar_check
                   FROM $table
                   WHERE xar_type = ?";
         $bindvars = array($this->type);
-        $result =& $dbconn->Execute($query, $bindvars);
+        $stmt = $this->dbconn->prepareStatement($query);
+        $result = $stmt->executeUpdate($bindvars);
 
         $list = array();
-        while (!$result->EOF) {
+        while ($result->next()) {
             list($id,$time,$key,$code,$size,$check) = $result->fields;
             $list[$id] = array('key'   => $key,
                                'code'  => $code,
                                'time'  => $time,
                                'size'  => $size,
                                'check' => $check);
-            $result->MoveNext();
         }
-        $result->Close();
+        $result->close();
         return $list;
     }
 
