@@ -45,7 +45,6 @@ function initializeSetup()
     *********************************************************************/
     $systemPrefix = xarDBGetSystemTablePrefix();
 
-    $blockGroupsTable    = $systemPrefix . '_block_groups';
     $blockTypesTable     = $systemPrefix . '_block_types';
     $blockInstancesTable = $systemPrefix . '_block_instances';
     $modulesTable        = $systemPrefix . '_modules';
