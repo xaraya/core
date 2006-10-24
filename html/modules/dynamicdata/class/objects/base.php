@@ -330,6 +330,7 @@ class DataObject extends DataObjectMaster
         // check that we have a valid item id, or that we can create one if it's set to 0
         if(empty($this->itemid))
         {
+//            echo $this->baseancestor." " .$this->objectid;exit;
             if ($this->baseancestor == $this->objectid) {
                 $primaryobject = $this;
             } else {
@@ -444,7 +445,6 @@ class DataObject extends DataObjectMaster
         $modinfo = xarModGetInfo($this->moduleid);
         // TODO: this won't work for objects with several static tables !
         // update all the data stores
-//var_dump(array_keys($this->datastores));exit;
         foreach(array_keys($this->datastores) as $store)
         {
             $itemid = $this->datastores[$store]->updateItem(
