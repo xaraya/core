@@ -43,7 +43,7 @@ revisit later on before trusting the branch to be released or used.
   mysql and sqlite) [TODO: this is install-wide, how are we going to do 
   upgrades for this? not trivial.]
 
-(see DEVupgrades.sql for the above)
+(see DEVupgrades.sql for details on all of the above)
 
 !!!PENDING DB_CHANGES
 * does blocks really need 5 tables?
@@ -58,7 +58,6 @@ revisit later on before trusting the branch to be released or used.
     latest.
 * the xar_ prefix on columns is redundant, not a lightly task though, kinda
   obvious why.
-
 * privmembers parent column stores 0 now for 'no parent', change to null, so a
   foreign key constraint can be added on the column
 * rolemembers parent column stores 0 now for 'no parent', change to null, so a
@@ -71,6 +70,11 @@ Choices:
     2. table with a primary key but no foreign key possible
     3. use a derived constraint like a trigger to enforce consistency 
     (this is the same as 2, but extended)
+    A question related to this:
+        Does the combination of say, privparent, privchild need extra attributes
+        i.e. if the fact of a privilege 'membership' would lead to a need of
+        extra fields in the table, we could introduce an ID in that table and
+        treat the 'membership' record as an item in its own right.
 
 * Columns affected by modid/regid/modname decision:
     The decision was:
@@ -81,6 +85,7 @@ Choices:
         - modules.regid
             - is now not null default 0
             - becomes default null
+        ( this has probably quite a few consequences )
         - dynamic_objects.object_moduleid (stores regid)
         - dynamic_properties.prop_moduleid (stores regid)
         - dynamic_properties_def.prop_req_modules 
@@ -258,6 +263,12 @@ design work can begin.
   regid-component for modules at least)
 * [STARTED] move code from dd procedural functions to classes where feasible
 * integrate Object showView and showList (johnny: isnt this DONE?)
+* go over the 'if error return;' type lines in the code. Most, if not all will
+  be not needed anymore now, as an exception will already be raised so the statement
+  will never be reached. Also look at cases where an exception is not raised
+  where it probably should (i.e. adapt caller with try/catch)
+* take a decision on query abstraction, xarQuery we have, marc is a fan of it it
+  can help (mostly) in the modules arena. Should we offer it from core?
 
 !!!KNOWN ISSUES
 * [DONE] blocks do not end up in groups anymore during installation, need to
