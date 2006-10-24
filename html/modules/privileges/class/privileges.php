@@ -422,7 +422,7 @@ class xarPrivileges extends xarMasks
                   ORDER BY xar_component";
         $stmt = parent::$dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($modId));
-        $result->next();
+        $iter = $result->next();
 
         $components = array();
         if ($module ==''){
@@ -441,7 +441,7 @@ class xarPrivileges extends xarMasks
 //          $components[] = array('id' => 0,
 //                             'name' => 'None');
             $ind = 2;
-            while(true) {
+            while($iter) {
                 $name = $result->getString(1);
                 if (($name != 'All') && ($name != 'None')) {
                     $ind = $ind + 1;
@@ -450,7 +450,7 @@ class xarPrivileges extends xarMasks
                         'name' => $name
                     );
                 }
-                if (!$result->next()) break;
+                $iter = $result->next();
             }
         }
         return $components;
