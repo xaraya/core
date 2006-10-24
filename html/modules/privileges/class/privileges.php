@@ -138,7 +138,7 @@ class xarPrivileges extends xarMasks
     static function register($name,$realm,$module,$component,$instance,$level,$description='')
     {
         parent::initialize();
-        
+
         $realmid = null;
         if($realm != 'All') {
             $stmt = parent::$dbconn->prepareStatement('SELECT xar_rid FROM '.parent::$realmstable .' WHERE xar_name=?');
@@ -222,8 +222,8 @@ class xarPrivileges extends xarMasks
             $query = "SELECT p.xar_pid, p.xar_name, r.xar_name,
                              p.xar_module, p.xar_component, p.xar_instance,
                              p.xar_level,  p.xar_description, pm.xar_parentid
-                      FROM " . parent::$privmemberstable . " pm, ". 
-                      parent::$privilegestable . " p LEFT JOIN ". parent::$realmstable . " r ON p.xar_realmid = r.xar_rid 
+                      FROM " . parent::$privmemberstable . " pm, ".
+                      parent::$privilegestable . " p LEFT JOIN ". parent::$realmstable . " r ON p.xar_realmid = r.xar_rid
                       WHERE p.xar_pid = pm.xar_pid
                       ORDER BY p.xar_name";
             $stmt = parent::$dbconn->prepareStatement($query);
@@ -270,10 +270,10 @@ class xarPrivileges extends xarMasks
         // Base query
         $query = "SELECT p.xar_pid, p.xar_name,  r.xar_name,
                          p.xar_module,  p.xar_component, p.xar_instance,
-                         p.xar_level, p.xar_description, pm.xar_parentid 
-                  FROM " . parent::$privmemberstable . " pm, " . 
+                         p.xar_level, p.xar_description, pm.xar_parentid
+                  FROM " . parent::$privmemberstable . " pm, " .
                            parent::$privilegestable  . " p LEFT JOIN " . parent::$realmstable . " r ON p.xar_realmid = r.xar_rid ";
-    
+
         if($arg == "all") {
              $query .= " WHERE p.xar_pid = pm.xar_pid AND
                               pm.xar_parentid = ? ";
@@ -422,6 +422,7 @@ class xarPrivileges extends xarMasks
                   ORDER BY xar_component";
         $stmt = parent::$dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($modId));
+        $result->next();
 
         $components = array();
         if ($module ==''){
@@ -440,14 +441,16 @@ class xarPrivileges extends xarMasks
 //          $components[] = array('id' => 0,
 //                             'name' => 'None');
             $ind = 2;
-            while($result->next()) {
+            while(true) {
+                $name = $result->getString(1);
                 if (($name != 'All') && ($name != 'None')) {
                     $ind = $ind + 1;
                     $components[] = array(
-                        'id'   => $result->getString(1),
-                        'name' => $result->getString(1)
+                        'id'   => $name,
+                        'name' => $name
                     );
                 }
+                if (!$result->next()) break;
             }
         }
         return $components;
@@ -633,8 +636,8 @@ class xarPrivileges extends xarMasks
             return xarVarGetCached($cacheKey,$pid);
         }
         // Need to get it
-        $query = "SELECT p.xar_pid, p.xar_name, r.xar_name, p.xar_module, p.xar_component, p.xar_instance, p.xar_level, p.xar_description 
-                  FROM " . parent::$privilegestable . " p LEFT JOIN ". parent::$realmstable ." r ON p.xar_realmid = r.xar_rid 
+        $query = "SELECT p.xar_pid, p.xar_name, r.xar_name, p.xar_module, p.xar_component, p.xar_instance, p.xar_level, p.xar_description
+                  FROM " . parent::$privilegestable . " p LEFT JOIN ". parent::$realmstable ." r ON p.xar_realmid = r.xar_rid
                   WHERE xar_pid = ?";
         if(!isset($stmt)) $stmt = parent::$dbconn->prepareStatement($query);
         //Execute the query, bail if an exception was thrown
@@ -714,7 +717,7 @@ class xarPrivileges extends xarMasks
     static function findPrivilegesForModule($module)
     {
         static $stmt = null; // only prepare it once
-        
+
         parent::initialize();
         $privileges = array();
         $query = "SELECT * FROM " . parent::$privilegestable . " WHERE xar_module = ?";
