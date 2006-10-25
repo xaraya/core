@@ -61,6 +61,8 @@ Xaraya Implementation Notes
 
   (the latter is the preferred method, if we all used that the following trick
   would not be necessary)
+  UPDATE: in core 2.x the first method is now NOT used anymore, so for core
+  the set identity insert below is not needed anymore.
   
   MS SQL has, in theory, an IDENTITY property which will automatically
   generate identifiers when inserting columns. For inserting explicit values
