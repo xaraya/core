@@ -1,7 +1,9 @@
 A log of important changes made to the 2.x branch which we need to
 revisit later on before trusting the branch to be released or used.
 
-!!!DB-CHANGES:
+DB-CHANGES:
+===========
+
 * module_uservars is now module_itemvars where item is an item in a
   module, not only roles. The columns are adapted accordingly.
 * hooks table now registers the mod id in the columns smodid and
@@ -45,7 +47,9 @@ revisit later on before trusting the branch to be released or used.
 
 (see DEVupgrades.sql for details on all of the above)
 
-!!!PENDING DB_CHANGES
+PENDING DB-CHANGES
+==================
+
 * does blocks really need 5 tables?
 * xar_module column in privileges table uses a string for modulename and 'All' 
   and 'empty' which prevents it from being a foreign key to the modules table
@@ -91,9 +95,10 @@ Choices:
         - dynamic_properties_def.prop_req_modules 
             - stores a semicolon separated list of modulenames (does it ever
               contain more than one?)
-              PROPOSAL: make it modid of the owning module, if the property as
-              such requires another module, this means that the owning module
-              should depend on that other module.
+              Decision:
+                We make it modid of the owning module, if the property as
+                such requires another module, this means that the owning module
+                should depend on that other module.
         - hooks.smodid (stores 0 now meaning ?)
         - hooks.tmodid ?
         - privileges.xar_module (stores 'All', 'empty' besides module name.)
@@ -102,13 +107,15 @@ Choices:
   privileges. before that can happen syncing the definition of security_masks
   to privileges is needed (modid column, realmid)
 * we need a consolidated solution for database encoding, mysql takes this
-  swedish latin thing by default, postgres ascii, dont know about the others.
+  swedish latin thing by default, postgres us ascii, dont know about the others.
   How about we make them all UTF-8? (i have no idea about the consequences
   though, nor how to do it, seems, that on 'create database' there should be
   an option or changing an option of some kind when using an existing
   database.)
 
-!!!OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
+OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
+------------------------------------------
+
 * [N/A anymore] when encountered, upgrade code to upgrade modules from older
   versions than in 1.0 is removed, assuming we will only support 
   upgrading from 1.0 to 2.x and not versions before 1.0 
@@ -146,7 +153,8 @@ Choices:
   operate as normal (for now), but any $modname/xartemplates/objects/*list*
   templates will need to be renamed *view*
 
-!!CHANGED API
+CHANGED API
+===========
 
 * $throwException parameter in xarModAPIFunc, the api function will now raise
   an excpeption always. The occurances of these were not found. If there are
@@ -157,16 +165,27 @@ Choices:
   anymore, as to eliminate dependencies on other subsystems. If the parameter 
   was used, it will be ignored now. USAGE UNKNOWN.
 
-!!DROPPED API
+DROPPED API
+===========
+
+Private (should not affect anyone):
+-----------------------------------
 
 * xarMod_getVarsByName, xarTheme_getVarsByName : protected API and never used
+
+
+Public (this MAY affect someone)
+--------------------------------
+
 * xarPreCoreGetVarDirPath (now sys::varpath()) 
 * xarModAPIFunc('dynamicdata','admin','checkinput') : never used
 * xarModAPIFunc('dynamicdata','user','interface') : never used
 * xarModAPIFunc('dynamicdata','user','getsources') : never used
 
 
-!!DIFFERENCES BETWEEN PHP 5.0/5.1/5.2
+DIFFERENCES BETWEEN PHP 5.0/5.1/5.2
+===================================
+
 * do not agree on what function_exists() / is_callable() /
   method_exists() should return
 * In PHP 5.0.4 (and earlier versions I believe) the shutdown function is 
@@ -176,7 +195,9 @@ Choices:
 * apparently PHP 5.1 allows headers to be sent in a shutdown function  
   (arguably wrong)
 
-!!!REFACTORING LIST:
+REFACTORING LIST:
+-----------------
+
 List of things which need to be refactored before starting the actual
 design work can begin.
 
@@ -270,7 +291,9 @@ design work can begin.
 * take a decision on query abstraction, xarQuery we have, marc is a fan of it it
   can help (mostly) in the modules arena. Should we offer it from core?
 
-!!!KNOWN ISSUES
+KNOWN ISSUES
+------------
+
 * [DONE] blocks do not end up in groups anymore during installation, need to
   investigate why that is. Most likely a missed spot when doing the
   schema migration. 
@@ -298,7 +321,9 @@ design work can begin.
   stored in the database
 
  
-!!!MIN. REQUIRED VERSIONS DETERMINED SO FAR
+MIN. REQUIRED VERSIONS DETERMINED SO FAR
+----------------------------------------
+
 * PHP      5.1.4 
 * Mysql    5.0.18
 * Postgres 8.1 (this introduced secquences (bug 1883) as tracked objects, meaning
@@ -310,7 +335,9 @@ design work can begin.
 * MsSql    ? (server 2003?)
 
 
-!!!Requirements for a front end (js) library
+Requirements for a front end (js) library
+-----------------------------------------
+
 - widget (or controls) is our immediate direct need to lighten the
   burden on template/theme maintenance
 - having events on the controls to asynchronously load other data is
@@ -338,6 +365,7 @@ case. Referencing the xar_id column in the modules table is the most
 frequently used case, but the problem is more generic.
 
 In theory there are the following strategies:
+
 1. do nothing, forget about the foreign key constraint
 2. use 'null' for all as an assumption and document 'exceptions' to the rule
 and the specifics for the case at hand
@@ -371,42 +399,48 @@ Possible new QA checks for 2.x code branch
 
 Naming conventions and stuff:
 -----------------------------
+
 Hammered: (as in, at least 2 people agreed to this)
-    - order of vars and methods in declaration and implementation: public,
-      protected, private
-    - class constants go first in the class
-    - constructors are always the first method, regardless of scope.
-    - ClassNames are UpperCamelCase ¹
-    - InterfaceNames are UpperCamelCase ² 
-    - methodNames are lowerCamelCase
-    - $variableNames are $lowerCamelCase
-    - CONSTANTS and DEFINES are UPPERCASE (prefer Class::CONSTANT over CONSTANT)
-    - prevent underscores as much as possible (goes for classes, interfaces,
-      methods and variables)
-    - use typehinting as much as possible, prefer interfaces over classes when
-      possible for this
-    - filenames are lowercase.php
-    - use scope identifiers *always* even if public (for clarity, reflection
-      and phpdoc)
-    - phpdoc @access only needed for things which dont have access specifiers
-      in php:
-        - functions
-        - classes 
+
+* order of vars and methods in declaration and implementation: public,
+* protected, private
+* class constants go first in the class
+* constructors are always the first method, regardless of scope.
+* ClassNames are UpperCamelCase ¹
+* InterfaceNames are UpperCamelCase ² 
+* methodNames are lowerCamelCase
+* $variableNames are $lowerCamelCase
+* CONSTANTS and DEFINES are UPPERCASE (prefer Class::CONSTANT over CONSTANT)
+* prevent underscores as much as possible (goes for classes, interfaces,
+* methods and variables)
+* use typehinting as much as possible, prefer interfaces over classes when
+* possible for this
+* filenames are lowercase.php
+* use scope identifiers *always* even if public (for clarity, reflection
+* and phpdoc)
+* phpdoc @access only needed for things which dont have access specifiers
+  in php:
+    - functions
+    - classes 
  
 Remarks:
-    ¹ we wil NOT use a xar specific prefix for our classes, but instead gamble
-    on namespace support to be added in the future. So, everyone, sign the
-    petition here: http://www.PetitionOnline.com/phpns/ to increase chances
-    :-). Until then we'll cope with the occassional name conflict and dealt
-    with them as they come. If namespace support is NOT going to happen (which
-    is getting more unlikely) we can implement the prefix once that is certain
-    or do a runkit (see pecl site) layer which allows to spawn environments in
-    their own threads, which would be awesome to have in general, but is less
-    suited for us mere mortals.
-    ² for interfaces it's even more important to think thrice about their
-    names. Serializable, Countable are *good* examples, InterfaceForMyClass is
-    *bad*. But what is _enough_ we dont know yet.
+
+¹ we wil NOT use a xar specific prefix for our classes, but instead gamble
+on namespace support to be added in the future. So, everyone, sign the
+petition here: http://www.PetitionOnline.com/phpns/ to increase chances
+:-). Until then we'll cope with the occassional name conflict and dealt
+with them as they come. If namespace support is NOT going to happen (which
+is getting more unlikely) we can implement the prefix once that is certain
+or do a runkit (see pecl site) layer which allows to spawn environments in
+their own threads, which would be awesome to have in general, but is less
+suited for us mere mortals.
+
+² for interfaces it's even more important to think thrice about their
+names. Serializable, Countable are *good* examples, InterfaceForMyClass is
+*bad*. But what is _enough_ we dont know yet.
     
-    List of things to hammer (or not): - interface inheritance is unclear to
-    me, so its hard to come up with some rules for that - [WONT] group
-    interface satisfaction methods together
+List of things to hammer (or not): 
+
+* interface inheritance is unclear to me, so its hard to come up with some 
+  rules for that 
+* [WONT] group interface satisfaction methods together
