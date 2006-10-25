@@ -428,6 +428,10 @@ Relevant postgres changelog entries:
     - alter table can change column type
 8.1
     - multi machine prepares (two phase commit)
+    - default values of columns as ::regclass not ::text, this means that if
+    an expression in a default value uses a named object, the default value 
+    expression follows suite if that object gets renamed (we use this feature
+    for sequences, hence the 8.1 min. required version)
 8.1.4
     - unsafe usage of \' in string literals is rejected now
     
