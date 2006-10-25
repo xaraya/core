@@ -1,20 +1,14 @@
 <xar:comment>
     License: GPL http://www.gnu.org/copyleft/gpl.html
 </xar:comment>
-<xar:set name="statecurrent">
-    ROLES_STATE_CURRENT
-</xar:set>
-<xar:set name="stateinactive">
-    ROLES_STATE_INACTIVE
-</xar:set>
-<xar:set name="statenotvalidated">
-    ROLES_STATE_NOTVALIDATED
-</xar:set>
-<xar:set name="stateactive">
-    ROLES_STATE_ACTIVE
-</xar:set>
-<xar:set name="statepending">
-    ROLES_STATE_PENDING
+<xar:set name="stateoptions">
+    array(
+        array('id' => ROLES_STATE_CURRENT, 'name' => xarML('All')),
+        array('id' => ROLES_STATE_INACTIVE, 'name' => xarML('Inactive')),
+        array('id' => ROLES_STATE_NOTVALIDATED, 'name' => xarML('Not Validated')),
+        array('id' => ROLES_STATE_ACTIVE, 'name' => xarML('Active')),
+        array('id' => ROLES_STATE_PENDING, 'name' => xarML('Pending')),
+    )
 </xar:set>
 <xar:set name="modstatus">
     xarSessionGetVar('statusmsg')
@@ -191,84 +185,8 @@
                     </select>
                 </td>
                 <td class="xar-align-center">
-                    <select name="state" id="state" size="1" tabindex="5" onchange="this.form.submit()">
-                        <xar:if condition="$uid eq -1">
-                            <option value="#$state#" selected="selected">
-                                    &nbsp;
-                            </option>
-                            <xar:elseif condition="$state eq -1" />
-                            <option value="#$state#" selected="selected">
-                                <xar:mlstring>
-                                    -- choose --
-                                </xar:mlstring>
-                            </option>
-                        </xar:if>
-                        <xar:if condition="$state eq $statecurrent">
-                            <option value="#$statecurrent#" selected="selected">
-                                <xar:mlstring>
-                                    All
-                                </xar:mlstring>
-                            </option>
-                            <xar:else />
-                            <option value="#$statecurrent#">
-                                <xar:mlstring>
-                                    All
-                                </xar:mlstring>
-                            </option>
-                        </xar:if>
-                        <xar:if condition="$state eq $stateinactive">
-                            <option value="#$stateinactive#" selected="selected">
-                                <xar:mlstring>
-                                    Inactive
-                                </xar:mlstring>
-                            </option>
-                            <xar:else />
-                            <option value="#$stateinactive#">
-                                <xar:mlstring>
-                                    Inactive
-                                </xar:mlstring>
-                            </option>
-                        </xar:if>
-                        <xar:if condition="$state eq $statenotvalidated">
-                            <option value="#$statenotvalidated#" selected="selected">
-                                <xar:mlstring>
-                                    Not Validated
-                                </xar:mlstring>
-                            </option>
-                            <xar:else />
-                            <option value="#$statenotvalidated#">
-                                <xar:mlstring>
-                                    Not Validated
-                                </xar:mlstring>
-                            </option>
-                        </xar:if>
-                        <xar:if condition="$state eq $stateactive">
-                            <option value="#$stateactive#" selected="selected">
-                                <xar:mlstring>
-                                    Active
-                                </xar:mlstring>
-                            </option>
-                            <xar:else />
-                            <option value="#$stateactive#">
-                                <xar:mlstring>
-                                    Active
-                                </xar:mlstring>
-                            </option>
-                        </xar:if>
-                        <xar:if condition="$state eq $statepending">
-                            <option value="#$statepending#" selected="selected">
-                                <xar:mlstring>
-                                    Pending
-                                </xar:mlstring>
-                            </option>
-                            <xar:else />
-                            <option value="#$statepending#">
-                                <xar:mlstring>
-                                    Pending
-                                </xar:mlstring>
-                            </option>
-                        </xar:if>
-                    </select>
+                    <xar:set name="$firstline">xarML('-- choose --')</xar:set>
+                    <xar:data-input type="dropdown" name="state" tabindex="5" onchange="this.form.submit()" firstline="$firstline" options="$stateoptions" value="$state" />
                 </td>
                 <xar:if condition="$uid gt 0">
                     <td  class="xar-align-center xar-valign-middle">

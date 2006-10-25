@@ -79,7 +79,7 @@ class DataObjectList extends DataObjectMaster
             (!isset($this->fieldlist) || $args['fieldlist'] != $this->fieldlist)
         )
         {
-            
+
             $this->fieldlist = $args['fieldlist'];
             $this->getDataStores(true);
         }
