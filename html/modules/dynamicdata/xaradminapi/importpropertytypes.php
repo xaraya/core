@@ -17,23 +17,8 @@
  * @return array an array of the property types currently available
  * @throws BAD_PARAM, NO_PERMISSION
  */
-class PropertyDirectoryIterator extends DirectoryIterator
-{
-    public function __construct($file)
-    {
-        parent::__construct(realpath($file));
-    }
 
-    public function getExtension()
-    {
-        $filename = $this->GetFilename();
-        $extension = strrpos($filename, ".", 1) + 1;
-        if ($extension != false)
-            return strtolower(substr($filename, $extension, strlen($filename) - $extension));
-        else
-            return "";
-    }
-}
+sys::import('structures.relativedirectoryiterator');
 
 function dynamicdata_adminapi_importpropertytypes( $args )
 {
@@ -71,8 +56,8 @@ function dynamicdata_adminapi_importpropertytypes( $args )
         $proptypes = array(); $numLoaded = 0;
         foreach($propDirs as $PropertiesDir) {
             if (!file_exists($PropertiesDir)) continue;
-            // The iterator takes an absolute directory, so we use a slightly extended class
-            $dir = new PropertyDirectoryIterator($PropertiesDir);
+
+            $dir = new RelativeDirectoryIterator($PropertiesDir);
             // Loop through properties directory
             for($dir->rewind();$dir->valid();$dir->next()) {
                 if($dir->isDir()) continue; // no dirs
