@@ -44,6 +44,11 @@ DB-CHANGES:
   (effectively making genID obsolete for postgres too, as it already was for 
   mysql and sqlite) [TODO: this is install-wide, how are we going to do 
   upgrades for this? not trivial.]
+* table 'dynamic_properties_def', column prop_req_modules replaced by
+  prop_modid meaning the modid of the owning module, if the property as such
+  requires another module, this means that the owning module should depend on
+  that other module.
+
 
 (see DEVupgrades.sql for details on all of the above)
 
@@ -92,13 +97,6 @@ Choices:
         ( this has probably quite a few consequences )
         - dynamic_objects.object_moduleid (stores regid)
         - dynamic_properties.prop_moduleid (stores regid)
-        - dynamic_properties_def.prop_req_modules 
-            - stores a semicolon separated list of modulenames (does it ever
-              contain more than one?)
-              Decision:
-                We make it modid of the owning module, if the property as
-                such requires another module, this means that the owning module
-                should depend on that other module.
         - hooks.smodid (stores 0 now meaning ?)
         - hooks.tmodid ?
         - privileges.xar_module (stores 'All', 'empty' besides module name.)
