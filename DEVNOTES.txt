@@ -84,7 +84,6 @@ Choices:
         i.e. if the fact of a privilege 'membership' would lead to a need of
         extra fields in the table, we could introduce an ID in that table and
         treat the 'membership' record as an item in its own right.
-
 * Columns affected by modid/regid/modname decision:
     The decision was:
         "regid is only stored in the modules table for the db model. All other
@@ -288,6 +287,9 @@ design work can begin.
   where it probably should (i.e. adapt caller with try/catch)
 * take a decision on query abstraction, xarQuery we have, marc is a fan of it it
   can help (mostly) in the modules arena. Should we offer it from core?
+* reqmodules in the registration class is now a bit moot, can only contain one
+  module and its always the owning module. Didnt feel like going over all the props
+  again, so made current code work as is.
 
 KNOWN ISSUES
 ------------
