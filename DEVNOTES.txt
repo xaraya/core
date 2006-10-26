@@ -48,6 +48,8 @@ DB-CHANGES:
   prop_modid meaning the modid of the owning module, if the property as such
   requires another module, this means that the owning module should depend on
   that other module.
+* hooks table colum xar_smodid now INTEGER DEFAULT NULL
+* hooks table column xar_tmodid now INTEGER NOT NULL
 
 
 (see DEVupgrades.sql for details on all of the above)
@@ -96,8 +98,6 @@ Choices:
         ( this has probably quite a few consequences )
         - dynamic_objects.object_moduleid (stores regid)
         - dynamic_properties.prop_moduleid (stores regid)
-        - hooks.smodid (stores 0 now meaning ?)
-        - hooks.tmodid ?
         - privileges.xar_module (stores 'All', 'empty' besides module name.)
 * it might be attractive to consolidate the tables privileges and security
   masks, adding an extra column ('type'?) to distinguish masks from

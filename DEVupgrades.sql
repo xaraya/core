@@ -145,3 +145,7 @@ UPDATE xar_dynamic_properties_def INNER JOIN xar_modules ON xar_dynamic_properti
 SET xar_dynamic_properties_def.xar_prop_modid = xar_modules.xar_id
 ALTER TABLE xar_dynamic_properties_def DROP column xar_prop_reqmodules;
 CREATE INDEX i_xar_dynpropdef_modid ON xar_properties_def.xar_prop_modid;
+
+/* Making the hooks table modid columns 'foreign keyable' */
+ALTER TABLE xar_hooks MODIFY COLUMN xar_smodid INTEGER DEFAULT NULL;
+ALTER TABLE xar_hooks MOIDFY COLUMN xar_tmodid INTEGER NOT NULL;
