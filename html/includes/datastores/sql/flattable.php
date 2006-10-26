@@ -395,19 +395,14 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             $query .= " ORDER BY ddprimaryid";
         }
 
+        // We got the query, prepare it
+        $stmt = $this->db->prepareStatement($query);
+        
         if ($numitems > 0) {
-            if (!empty($this->cache)) {
-                $result =& $this->db->CacheSelectLimit($this->cache, $query, $numitems, $startnum-1, $bindvars);
-            } else {
-                $result = $this->db->SelectLimit($query, $numitems, $startnum-1,$bindvars);
-            }
-        } else {
-            if (!empty($this->cache)) {
-                $result =& $this->db->CacheExecute($this->cache, $query, $bindvars);
-            } else {
-                $result =& $this->db->Execute($query,$bindvars);
-            }
+            $stmt->setLimit($numitems);
+            $stmt->setOffset($startnum - 1);
         }
+        $result = $stmt->executeQuery($bindvars);
 
         if (count($itemids) == 0 && !$isgrouped) {
             $saveids = 1;
@@ -415,7 +410,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             $saveids = 0;
         }
         $itemid = 0;
-        while (!$result->EOF) {
+        while ($result->next()) {
             $values = $result->getRow();
             if ($isgrouped) {
                 $itemid++;
@@ -424,7 +419,6 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             }
             // oops, something went seriously wrong here...
             if (empty($itemid) || count($values) != count($fieldlist)) {
-                $result->next();
                 continue;
             }
 
@@ -437,10 +431,8 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
                 // add the item to the value list for this property
                 $this->fields[$field]->setItemValue($itemid,array_shift($values));
             }
-
-            $result->next();
         }
-        $result->Close();
+        $result->close();
     }
 
     function countItems(array $args = array())
@@ -492,16 +484,13 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         // TODO: GROUP BY, LEFT JOIN, ... ? -> cfr. relationships
         if($this->db->databaseType == 'sqlite') $query.=")";
-        if (!empty($this->cache)) {
-            $result =& $this->db->CacheExecute($this->cache,$query,$bindvars);
-        } else {
-            $result =& $this->db->Execute($query,$bindvars);
-        }
-        if ($result->EOF) return;
+        
+        $stmt = $this->db->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars);
+        if (!$result->first()) return;
 
-        $numitems = $result->fields[0];
-
-        $result->Close();
+        $numitems = $result->getInt(1);
+        $result->close();
 
         return $numitems;
     }

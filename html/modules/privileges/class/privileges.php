@@ -26,8 +26,6 @@ class xarPrivileges extends xarMasks
      * @access  public
      * @param   array of values to register instance
      * @return  boolean
-     * @throws  none
-     * @todo    none
     */
     static function defineInstance($module,$type,$instances,$propagate=0,$table2='',$childID='',$parentID='',$description='')
     {
@@ -50,11 +48,12 @@ class xarPrivileges extends xarMasks
                              mods.xar_name = ? AND
                              instances.xar_component = ? AND
                              instances.xar_header = ?";
-            $result = parent::$dbconn->execute($query, array($module, $type, $instance['header']));
+            $stmt = parent::$dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery(array($module, $type, $instance['header']));
 
             try {
                 parent::$dbconn->begin();
-                if (!$result->EOF) {
+                if ($result->first()) {
                     // Instance exists: update it.
                     list($iid) = $result->fields;
                     $query = "UPDATE $iTable
@@ -83,7 +82,8 @@ class xarPrivileges extends xarMasks
                                       $description
                                       );
                 }
-                parent::$dbconn->Execute($query,$bindvars);
+                $stmt = parent::$dbconn->prepareStatement($query);
+                $stmt->executeUpdate($bindvars);
                 parent::$dbconn->commit();
             } catch (SQLException $e) {
                 parent::$dbconn->rollback();
@@ -506,13 +506,14 @@ class xarPrivileges extends xarMasks
                 throw new Exception($msg);
             }
 
+            // We cant prepare this outside the loop as we have no idea what it is.
             $stmt1 = parent::$dbconn->prepareStatement($selection);
             $result1 = $stmt1->executeQuery();
 
             $dropdown = array();
             if ($module ==''){
                 $dropdown[] = array('id' => -2,'name' => '');
-            }  elseif($result->EOF) {
+            }  elseif($result->EOF) { // FIXME: this never gets executed it think? it's outside the while condition.
                 $dropdown[] = array('id' => -1,'name' => 'All');
     //          $dropdown[] = array('id' => 0, 'name' => 'None');
             }  else {
@@ -677,12 +678,16 @@ class xarPrivileges extends xarMasks
     */
     static function findPrivilege($name)
     {
+        static $stmt = null;
+        
         parent::initialize();
         $query = "SELECT * FROM " . parent::$privilegestable . " WHERE xar_name = ?";
+        if(!isset($stmt)) $stmt = parent::$dbconn->prepareStatement($query);
+        
         //Execute the query, bail if an exception was thrown
-        $result = parent::$dbconn->Execute($query,array($name));
+        $result = $stmt->executeQuery(array($name));
 
-        if (!$result->EOF) {
+        if ($result->first()) {
             list($pid,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
             $pargs = array('pid'=>$pid,
                            'name'=>$name,

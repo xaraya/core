@@ -51,17 +51,18 @@ function blocks_adminapi_update_instance_groups($args)
     $query = 'SELECT xar_id, xar_group_id, xar_template'
         . ' FROM ' . $block_group_instances_table
         . ' WHERE xar_instance_id = ?';
-
-    $result =& $dbconn->Execute($query, array($bid));
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery(array($bid));
 
     $current = array();
-    while (!$result->EOF) {
-        $current[$result->fields[1]] = array (
-            'id' => $result->fields[0],
-            'gid' => $result->fields[1],
-            'template' => $result->fields[2]
+    while ($result->next()) {
+        $id = $result->getInt(1);
+        
+        $current[$id] = array (
+            'id'        => $id,
+            'gid'       => $result->getInt(2),
+            'template'  => $result->getString(3)
         );
-        $result->MoveNext();
     }
 
     // Get all groups for the main update loop.
@@ -87,37 +88,38 @@ function blocks_adminapi_update_instance_groups($args)
     // and then insert new ones. In this case we don't want to do that
     // as an error anywhere in this code or data could result in all existing
     // block group associations being lost.
+    
+    // Prepare the queries we need in the loop
+    $delQuery = "DELETE FROM $block_group_instances_table WHERE xar_id = ?";
+    $delStmt  = $dbconn->prepareStatement($delQuery);
+    $insQuery = "INSERT INTO $block_group_instances_table
+                (xar_group_id, xar_instance_id, xar_position, xar_template)
+                VALUES (?,?,?,?)";
+    $insStmt  = $dbconn->prepareStatement($insQuery);
+    $updQuery = "UPDATE $block_group_instances_table
+                 SET xar_template = ?
+                 WHERE xar_id = ?";
+    $updStmt  = $dbconn->prepareStatement($updQuery);
+    
     // Loop for each group.
     foreach ($allgroups as $group) {
         $gid = $group['gid'];
         // If the group is not in the $groups array, and is in the 
         // current instance groups, then it should be deleted.
         if (!isset($newgroups[$gid]) && isset($current[$gid])) {
-            $query = "DELETE FROM $block_group_instances_table WHERE xar_id = ?";
-            $bindvars = array((int) $current[$gid]['id']);
-            $result = $dbconn->Execute($query,$bindvars);
-            //echo " delete:$gid ";
+            $delStmt->executeUpdate(array((int) $current[$gid]['id']));
         }
 
         // If the new group does not exist, then create it.
         if (isset($newgroups[$gid]) && !isset($current[$gid])) {
-            $query = "INSERT INTO $block_group_instances_table
-                        (xar_group_id, xar_instance_id, xar_position, xar_template)
-                      VALUES (?,?,?,?)";
-            $bindvars = array($gid, $bid, 0,$newgroups[$gid]['template']);
-            $dbconn->Execute($query,$bindvars);
-            //echo " create:$gid with " . $newgroups[$gid]['template'];
+            $insStmt->executeUpdate(array($gid, $bid, 0,$newgroups[$gid]['template']));
         }
 
         // If the new group already exists, then update it.
         if (isset($newgroups[$gid]) && isset($current[$gid])
-            && $newgroups[$gid]['template'] != $current[$gid]['template']) {
-            $query = "UPDATE $block_group_instances_table
-                      SET xar_template = ?
-                      WHERE xar_id = ?";
-            $bindvars = array($newgroups[$gid]['template'],$current[$gid]['id']);
-            $dbconn->Execute($query,$bindvars);
-            //echo " update:$gid with " . $newgroups[$gid]['template'];
+            && $newgroups[$gid]['template'] != $current[$gid]['template']) 
+        {
+            $updStmt->executeUpdate(array($newgroups[$gid]['template'],$current[$gid]['id']));
         }
     }
 

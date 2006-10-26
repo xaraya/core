@@ -117,9 +117,13 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
 
     $whereClause = join(' AND ', $whereClauses);
     $query .= " WHERE $whereClause ORDER BY $orderByClause";
-    $result = $dbconn->SelectLimit($query, $numItems, $startNum - 1,$bindvars);
+    
+    $stmt = $dbconn->prepareStatement($query);
+    $stmt->setLimit($numItems);
+    $stmt->setOffset($startNum - 1);
+    $result = $stmt->executeQuery($bindvars);
 
-    while(!$result->EOF) {
+    while($result->next()) {
         list($themeInfo['regid'],
              $themeInfo['name'],
              $themeInfo['directory'],
@@ -150,9 +154,8 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
             }
         }
         $themeInfo = array();
-        $result->MoveNext();
     }
-    $result->Close();
+    $result->close();
     return $themeList;
 }
 

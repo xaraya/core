@@ -595,12 +595,9 @@ class DataObjectMaster extends Object
             $bindvars[] = (int) $args['moduleid'];
             $bindvars[] = (int) $args['itemtype'];
         }
-        $result =& $dbconn->Execute($query,$bindvars);
-        if($result->EOF)
-        {
-            //debug($bindvars);
-            return;
-        }
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars);
+        if(!$result->first()) return;
 
         $info = array();
         list(
@@ -609,7 +606,7 @@ class DataObjectMaster extends Object
             $info['urlparam'], $info['maxid'],    $info['config'],
             $info['isalias']
         ) = $result->fields;
-        $result->Close();
+        $result->close();
         if(!empty($args['join']))
         {
             $info['label'] .= ' + ' . $args['join'];

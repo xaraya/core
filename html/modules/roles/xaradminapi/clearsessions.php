@@ -28,14 +28,14 @@ function roles_adminapi_clearsessions($spared)
     $roles = new xarRoles();
 
     $query = "SELECT xar_sessid, xar_uid FROM $sessionstable";
-    $result = $dbconn->Execute($query);
+    $result = $dbconn->executeQuery($query);
 
     // Prepare query outside the loop
     $sql = "DELETE FROM $sessionstable WHERE xar_sessid = ?";
     $stmt = $dbconn->prepareStatement($sql);
     try {
         $dbconn->begin();
-        while (!$result->EOF) {
+        while ($result->next()) {
             list($thissession, $thisuid) = $result->fields;
             foreach ($spared as $uid) {
                 $thisrole = $roles->getRole($thisuid);
@@ -45,7 +45,6 @@ function roles_adminapi_clearsessions($spared)
                     break;
                 }
             }
-            $result->MoveNext();
         }
         $dbconn->commit();
     } catch(SQLException $e) {
@@ -53,7 +52,7 @@ function roles_adminapi_clearsessions($spared)
         throw $e;
     }
 
-// Security Check
+    // Security Check
     if(!xarSecurityCheck('EditRole')) return;
 
 

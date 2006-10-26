@@ -105,9 +105,12 @@ function themes_adminapi_getthemelist($args)
     }
     $query .= " ORDER BY $orderByClause";
         
-    $result = $dbconn->SelectLimit($query, $numItems, $startNum - 1,$bindvars);
+    $stmt = $dbconn->prepareStatement($query);
+    $stmt->setLimit($numItems);
+    $stmt->setOffset($startNum - 1);
+    $result = $stmt->executeQuery($bindvars);
 
-    while(!$result->EOF) {
+    while($result->next()) {
         list($themeInfo['regid'],
              $themeInfo['name'],
              $themeInfo['directory'],
@@ -157,9 +160,8 @@ function themes_adminapi_getthemelist($args)
             $themeList[] = $themeInfo;
         }
         $themeInfo = array();
-        $result->MoveNext();
     }
-    $result->Close();
+    $result->close();
     return $themeList;
 }
 

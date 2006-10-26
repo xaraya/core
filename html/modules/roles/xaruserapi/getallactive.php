@@ -83,24 +83,19 @@ function roles_userapi_getallactive($args)
 
     $query .= " AND xar_type = 0 ORDER BY xar_" . $order;
 
-// cfr. xarcachemanager - this approach might change later
+    $stmt = $dbconn->prepareStatement($query);
+    
+    // cfr. xarcachemanager - this approach might change later
     $expire = xarModGetVar('roles','cache.userapi.getallactive');
-    if ($startnum == 0) { // deprecated - use countallactive() instead
-        if (!empty($expire)){
-            $result = $dbconn->CacheExecute($expire,$query,$bindvars);
-        } else {
-            $result = $dbconn->Execute($query,$bindvars);
-        }
-    } else {
-        if (!empty($expire)){
-            $result = $dbconn->CacheSelectLimit($expire, $query, $numitems, $startnum-1,$bindvars);
-        } else {
-            $result = $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
-        }
+    
+    if($startnum > 0) {
+        $stmt->setLimit($numitems);
+        $stmt->setOffset($startnum - 1);
     }
-
+    $result = $stmt->executeQuery($bindvars);
+    
     // Put users into result array
-    for (; !$result->EOF; $result->MoveNext()) {
+    while($result->next()) {
         list($uid, $uname, $name, $email, $date_reg, $ipaddr) = $result->fields;
         if (xarSecurityCheck('ViewRoles', 0, 'All', "$uname:All:$uid")) {
             $sessions[] = array('uid'       => (int) $uid,
@@ -113,7 +108,6 @@ function roles_userapi_getallactive($args)
     }
 
     // Return the users
-
     if (empty($sessions)){
         $sessions = '';
     }

@@ -42,20 +42,20 @@ function roles_admin_modifyconfig()
             $acltable = xarDBGetSiteTablePrefix() . '_security_acl';
             $query    = "SELECT xar_partid FROM $acltable
                          WHERE xar_permid   = ?";
-            $result   =& $dbconn->Execute($query, array((int) $adminpriv));
+            $stmt = $dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery(array((int) $adminpriv));
 
             // so now we have the list of all roles with *assigned* admin privileges
             // now we have to find which ones ar candidates for admin:
             // 1. They are users, not groups
             // 2. They inherit the admin privilege
             $admins = array();
-            while (!$result->EOF)
+            while ($result->next())
             {
                 list($id) = $result->fields;
                 $role     = $roles->getRole($id);
                 $admins[] = $role;
                 $admins   = array_merge($admins,$role->getDescendants());
-                $result->MoveNext();
             }
 
             $siteadmins = array();
@@ -84,7 +84,7 @@ function roles_admin_modifyconfig()
 
             $checkip = xarModGetVar('roles', 'disallowedips');
             if (empty($checkip)) {
-                $ip = serialize('10.0.0.1');
+                $ip = serialize('10.0.0.1'); // <mrb> why 10.0.0.1 ?
                 xarModSetVar('roles', 'disallowedips', $ip);
             }
             $data['siteadmins']   = $siteadmins;

@@ -60,78 +60,76 @@ function blocks_userapi_getall($args)
     }
     $query .= ' ' . $orderby;
 
+    // Prepare it
+    $stmt = $dbconn->prepareStatement($query);
+    
     // Return if no details retrieved.
     if (isset($startat) && isset($rowstodo)) {
-        $result =& $dbconn->SelectLimit($query,$rowstodo,$startat-1,$bindvars);
-    } else {
-        $result =& $dbconn->Execute($query,$bindvars);
+        $stmt->setLimit($rowstodo);
+        $stmt->setOffset($startat - 1);
     }
-
+    $result = $stmt->executeQuery($bindvars);
+    
+    // Group query
+    $querygroup = "SELECT bgroup_inst.xar_id,
+                          bgroup_inst.xar_group_id,
+                          bgroup_inst.xar_position,
+                          bgroup_inst.xar_template as xar_group_inst_template,
+                          bgroups.xar_name,
+                          bgroups.xar_template as xar_group_template
+                   FROM   $block_group_instances_table bgroup_inst
+                   LEFT JOIN $block_groups_table bgroups ON bgroups.xar_id = bgroup_inst.xar_group_id
+                   WHERE  bgroup_inst.xar_instance_id = ?";
+    $grpStmt = $dbconn->prepareStatement($querygroup);
+    
     // The main result array.
     $instances = array();
 
-    while (!$result->EOF) {
+    while ($result->next()) {
         // Fetch instance data
         list($bid, $name, $title, $template, $content, $refresh, $state, $tid, $module, $type) = $result->fields;
 
-        $instance = array();
-        $instance['bid'] = $bid;
-        $instance['name'] = $name;
-        $instance['title'] = $title;
-        $instance['template'] = $template;
-        $instance['content'] = $content;
-        $instance['refresh'] = $refresh;
-        $instance['state'] = $state;
-        $instance['tid'] = $tid;
-        $instance['module'] = $module;
-        $instance['type'] = $type;
+        // TODO: is we use assoc fetching we get this for free
+        $instance = array(
+            'bid'       => $bid,
+            'name'      => $name,
+            'title'     => $title,
+            'template'  => $template,
+            'content'   => $content,
+            'refresh'   => $refresh,
+            'state'     => $state,
+            'tid'       => $tid,
+            'module'    => $module,
+            'type'      => $type
+            );
 
         // Fetch group details - there may be none, one or many groups.
-        $querygroup = "SELECT bgroup_inst.xar_id,
-                              bgroup_inst.xar_group_id,
-                              bgroup_inst.xar_position,
-                              bgroup_inst.xar_template as xar_group_inst_template,
-                              bgroups.xar_name,
-                              bgroups.xar_template as xar_group_template
-                       FROM   $block_group_instances_table bgroup_inst
-                       LEFT JOIN $block_groups_table bgroups ON bgroups.xar_id = bgroup_inst.xar_group_id
-                       WHERE  bgroup_inst.xar_instance_id = ?";
-        $resultgroup =& $dbconn->Execute($querygroup,array($bid));
-        if ($resultgroup) {
-            while (!$resultgroup->EOF) {
-                list($giid, $gid, $position, $group_inst_template, $name, $group_template) = $resultgroup->fields;
+        $resultgroup = $grpStmt->executeQuery(array($bid));
+        while ($resultgroup->next()) {
+            list($giid, $gid, $position, $group_inst_template, $name, $group_template) = $resultgroup->fields;
 
-                $group_instance = array();
-
-                $group_instance['giid'] = $giid;
-                $group_instance['gid'] = $gid;
-                $group_instance['position'] = $position;
-                $group_instance['name'] = $name;
-
+            // TODO: if we use assoc fetching we get this for free
+            $group_instance = array(
+                'giid'      => $giid,
+                'gid'       => $gid,
+                'position'  => $position,
+                'name'      => $name,
                 // Return the original templates values as well as the over-riding templates.
-                $group_instance['group_template'] = $group_template;
-                $group_instance['group_inst_template'] = $group_inst_template;
-
-                $instance['groups'][$gid] = $group_instance;
-
-                // Next group instance row.
-                $resultgroup->MoveNext();
-            }
-            // Close group query.
-            $resultgroup->Close();
+                'group_template'      => $group_template,
+                'group_inst_template' => $group_inst_template
+            );
+            $instance['groups'][$gid] = $group_instance;
         }
+        // Close group query.
+        $resultgroup->close();
 
         // Put the instance into the result array.
         // Using references helps prevent copying data structures around.
         $instances[$bid] =& $instance;
         unset($instance);
-
-        // Next block instance row.
-        $result->MoveNext();
     }
-
     // Close main query.
-    $result->Close();
+    $result->close();
 
     return $instances;
 }

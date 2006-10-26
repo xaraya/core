@@ -177,11 +177,12 @@ class xarMasks extends Object
         }
 
         $query = "SELECT xar_sid FROM " . self::$maskstable  . " WHERE xar_modid = ? AND xar_name = ?";
-        $result = self::$dbconn->Execute($query, array($modId, $name));
+        $stmt = self::$dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery(array($modId, $name));
 
         try {
             self::$dbconn->begin();
-            if (!$result->EOF) {
+            if ($result->first()) {
                 list($sid) = $result->fields;
                 $query = "UPDATE " . self::$maskstable .
                           " SET xar_realmid = ?, xar_component = ?,
@@ -198,7 +199,8 @@ class xarMasks extends Object
                                   $name, $realmid, $modId, $component, $instance, $level,
                                   $description);
             }
-            self::$dbconn->Execute($query,$bindvars);
+            $stmt = self::$dbconn->prepareStatement($query);
+            $stmt->executeUpdate($bindvars);
             self::$dbconn->commit();
         } catch (SQLException $e) {
             self::$dbconn->rollback();
@@ -448,7 +450,7 @@ class xarMasks extends Object
     static function forgetprivsets()
     {
         $query = "DELETE FROM " . self::$privsetstable;
-        self::$dbconn->Execute($query);
+        self::$dbconn->executeUpdate($query);
         return true;
     }
 
@@ -462,17 +464,23 @@ class xarMasks extends Object
     */
     static function getprivset($role)
     {
+        static $selStmt = null;
+        static $insStmt = null;
+        
         if (xarVarIsCached('Security.getprivset', $role)) {
             return xarVarGetCached('Security.getprivset', $role);
         }
         $query = "SELECT xar_set FROM " . self::$privsetstable . " WHERE xar_uid =?";
-        $result = self::$dbconn->Execute($query,array($role->getID()));
+        if(!isset($selStmt)) $selStmt = self::$dbconn->prepareStatement($query);
+        
+        $result = $selStmt->executeQuery(array($role->getID()));
 
-        if ($result->EOF) {
+        if (!$result->first()) {
             $privileges = self::$irreducibleset(array('roles' => array($role)));
             $query = "INSERT INTO " . self::$privsetstable . " VALUES (?,?)";
             $bindvars = array($role->getID(), serialize($privileges));
-            self::$dbconn->Execute($query,$bindvars);
+            if(!isset($insStmt)) $insStmt = self::$dbconn->prepareStatement($query);
+            $insStmt->executeUpdate($bindvars);
             return $privileges;
         } else {
             list($serprivs) = $result->fields;

@@ -11,7 +11,7 @@
 /**
  * resequence a blocks table
  * @author Jim McDonald, Paul Rosania
- * @returns void
+ * @return bool
  */
 function blocks_adminapi_resequence($args)
 {
@@ -31,17 +31,22 @@ function blocks_adminapi_resequence($args)
     $block_group_instances_table =& $xartable['block_group_instances'];
 
     // Get the information
-    $query = 'SELECT xar_id, xar_group_id, xar_position'
-        . ' FROM ' . $block_group_instances_table
-        . $where_clause
-        .' ORDER BY xar_group_id, xar_position, xar_id';
-    $qresult =& $dbconn->Execute($query, $bind);
+    $query = "SELECT xar_id, xar_group_id, xar_position
+              FROM $block_group_instances_table
+              $where_clause
+              ORDER BY xar_group_id, xar_position, xar_id";
+    $stmt = $dbconn->prepareStatement($query);
+    $qresult = $stmt->executeQuery($bind);
 
+    // Prepare the update query to be used in the loop outside of it.
+    $upquery = "UPDATE $block_group_instances_table
+                SET xar_position = ? WHERE xar_id = ? AND xar_position <> ?";
+    $upstmt  = $dbconn->prepareStatement($upquery);
+    
+    $last_gid = null;
     // Fix sequence numbers
-    $last_gid = NULL;
-    while (!$qresult->EOF) {
+    while ($qresult->next()) {
         list($link_id, $gid, $old_position) = $qresult->fields;
-        $qresult->MoveNext();
 
         // Reset sequence number if we've changed the group we're sorting
         if ($last_gid != $gid) {
@@ -49,16 +54,12 @@ function blocks_adminapi_resequence($args)
             $position = 1;
         }
         if ($position != $old_position) {
-            $query = 'UPDATE ' . $block_group_instances_table
-                . ' SET xar_position = ? WHERE xar_id = ? AND xar_position <> ?';
             $bind = array($position, $link_id, $position);
-            $dbconn->Execute($query, $bind);
+            $upstmt->executeUpdate($bind);
         }
-
         $position++;
     }
-
-    $qresult->Close();
+    $qresult->close();
 
     return true;
 }
