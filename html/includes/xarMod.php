@@ -919,23 +919,46 @@ class xarMod  extends Object implements IxarMod
     }
 
     /**
-     * Get module registry ID by name
+     * Temporary helper function during regid->systemid migration
      *
-     * @access public
-     * @param modName string The name of the module
-     * @param type determines theme or module
-     * @return string The module registry ID.
-     * @throws DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
+     * @todo once the migration is done, migrate this out.
      */
-    static function getRegID($modName, $type = 'module')
+    private static function getIds($modName, $type = 'module')
     {
         if (empty($modName)) throw new EmptyParameterException('modName');
 
         // For themes, kinda weird
         $modBaseInfo = self::getBaseInfo($modName,$type);
         if (!isset($modBaseInfo)) return; // throw back
-        // MrB: this is confusing
-        return $modBaseInfo['regid'];
+        return array('systemid' => $modBaseInfo['systemid'], 'regid' => $modBaseInfo['regid']);
+    }
+    
+    /**
+     * Get module registry ID by name
+     *
+     * @access public
+     * @param modName string The name of the module
+     * @param type determines theme or module
+     * @return string The module registry ID.
+     */
+    static function getRegId($modName, $type = 'module')
+    {
+        $ids = self::getIds($modName);
+        return $ids['regid'];
+    }
+    
+    /**
+     * Get module system ID by name
+     *
+     * @access public
+     * @param modName string The name of the module
+     * @param type determines theme or module
+     * @return string The module registry ID.
+     */
+    static function getId($modName)
+    {
+        $ids = self::getIds($modName);
+        return $ids['systemid'];
     }
 
     /**
