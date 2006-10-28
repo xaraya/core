@@ -101,10 +101,6 @@ final class Class_ extends Object
     {
         return $this->reflect->getName();
     }
-    public function get()
-    {
-        return $this->reflect;
-    }
 }
 
 /**
