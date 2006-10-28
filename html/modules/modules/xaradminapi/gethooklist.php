@@ -26,7 +26,7 @@ function modules_adminapi_gethooklist($args)
 
     // Argument check
     if (empty($modName)) {
-        $smodId = 0;
+        $smodId = null;
         $modName = '';
     } else {
         $smodInfo = xarMod_GetBaseInfo($modName);
@@ -47,9 +47,9 @@ function modules_adminapi_gethooklist($args)
 
     if ($smodId != 0) {
         // Only get the hooks for $modName
-        $query .= " AND ( h.xar_smodid = ? OR  h.xar_smodid = ? ) ";
+        $query .= " AND ( h.xar_smodid IS NULL OR  h.xar_smodid = ? ) ";
         //   ORDER BY tmods.xar_name,smods.xar_name DESC";
-        $bindvars[] = 0;  $bindvars[] = $smodId;
+        $bindvars[] = $smodId;
     } else {
         //$query .= " ORDER BY smods.xar_name";
     }

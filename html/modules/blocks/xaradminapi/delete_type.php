@@ -18,9 +18,7 @@
  * @param module the module name
  * @param blockType the block type (deprec)
  * @param type the block type
- * @returns bool
- * @return true on success, false on failure
- * @throws DATABASE_ERROR, BAD_PARAM
+ * @return bool true on success, false on failure
  */
 function blocks_adminapi_delete_type($args)
 {
@@ -57,19 +55,14 @@ function blocks_adminapi_delete_type($args)
               WHERE     btypes.xar_id = inst.xar_type_id
               AND       btypes.xar_modid = ?
               AND       btypes.xar_type = ?";
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery(array($module, $type));
 
-    $result = $dbconn->Execute($query, array($module, $type));
-
-    while (!$result->EOF) {
-        list($bid) = $result->fields;
-
+    while ($result->next()) {
         // Pass ids to API
-        xarModAPIFunc('blocks', 'admin', 'delete_instance', array('bid' => $bid));
-
-        $result->MoveNext();
+        xarModAPIFunc('blocks', 'admin', 'delete_instance', array('bid' => $result->getInt(1)));
     }
-
-    $result->Close();
+    $result->close();
 
     // Delete the block type
     $query = "DELETE FROM $block_types_table WHERE xar_modid = ? AND xar_type = ?";

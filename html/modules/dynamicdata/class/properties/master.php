@@ -65,10 +65,11 @@ class DataPropertyMaster extends Object
 
         $query .= " ORDER BY xar_prop_order ASC, xar_prop_id ASC";
 
-        $result =& $dbconn->Execute($query,$bindvars);
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars);
 
         $properties = array();
-        while (!$result->EOF)
+        while ($result->next())
         {
             list(
                 $name, $label, $type, $id, $default, $source, $fieldstatus,
@@ -96,9 +97,8 @@ class DataPropertyMaster extends Object
                 else
                     $properties[$name] = $property;
             }
-            $result->MoveNext();
         }
-        $result->Close();
+        $result->close();
 
         return $properties;
     }

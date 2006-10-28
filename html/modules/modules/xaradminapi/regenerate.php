@@ -63,10 +63,8 @@ function modules_adminapi_regenerate()
         assert('$modinfo["regid"] != 0; /* Reg id for the module is 0, something seriously wrong, probably corruption of files */');
         if (empty($dbModules[$name])) {
             // New module
-            $modId = $dbconn->GenId($modules_table);
             $sql = "INSERT INTO $modules_table
-                      (xar_id,
-                       xar_name,
+                      (xar_name,
                        xar_regid,
                        xar_directory,
                        xar_version,
@@ -75,9 +73,8 @@ function modules_adminapi_regenerate()
                        xar_category,
                        xar_admin_capable,
                        xar_user_capable)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $params = array(
-                $modId,
                 $modinfo['name'],
                 $modinfo['regid'],
                 $modinfo['directory'],

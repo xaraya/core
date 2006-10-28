@@ -196,18 +196,19 @@ class xarTemplateTag extends Object
 
         // Get next ID in table
         try {
+            
             $dbconn->begin();
-            $tag_id = $dbconn->GenId($tag_table);
 
             $modInfo = xarMod::GetBaseInfo($this->getModule());
-             $query = "INSERT INTO $tag_table
-                      (xar_id, xar_name, xar_modid, xar_handler, xar_data)
-                      VALUES(?,?,?,?,?)";
-            $bindvars = array($tag_id,
-                              $this->getName(),
-                              $modInfo['systemid'],
-                              $this->getHandler(),
-                              serialize($this));
+            $query = "INSERT INTO $tag_table
+                      (xar_name, xar_modid, xar_handler, xar_data)
+                      VALUES(?,?,?,?)";
+            $bindvars = array(
+                $this->getName(),
+                $modInfo['systemid'],
+                $this->getHandler(),
+                serialize($this)
+            );
 
             $stmt = $dbconn->prepareStatement($query);
             $stmt->executeUpdate($bindvars);
@@ -270,6 +271,8 @@ class xarTemplateTag extends Object
     {
         // cache tags for compile performance
         static $tag_objects = array();
+        static $stmt = null;
+        
         if (isset($tag_objects[$tag_name])) {
             return $tag_objects[$tag_name];
         }
@@ -283,14 +286,16 @@ class xarTemplateTag extends Object
         $query = "SELECT tags.xar_data, mods.xar_name
                   FROM $tag_table tags, $mod_table mods
                   WHERE tags.xar_modid = mods.xar_id AND tags.xar_name=?";
+        if(!isset($stmt)) $stmt = $dbconn->prepareStatement($query);
+        
+        $stmt->setLimit(1);
+        $result = $stmt->executeQuery(array($tag_name),ResultSet::FETCHMODE_NUM);
 
-        $result = $dbconn->SelectLimit($query, 1,-1,array($tag_name),ResultSet::FETCHMODE_NUM);
-
-        if (!$result->EOF) {
+        if ($result->first()) {
             list($obj,$module) = $result->getRow();
-            $result->Close();
+            $result->close();
         } else {
-            $result->Close();
+            $result->close();
             // Throw a generic BL exception for now
             $msg = '<xar:#(1)> tag is not defined.';
             throw new BLException($tag_name,$msg);

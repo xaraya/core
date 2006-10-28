@@ -6,7 +6,6 @@
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @throws  none
 */
 sys::import('modules.privileges.class.mask');
 
@@ -37,7 +36,6 @@ class xarPrivilege extends xarMask
      * @access  public
      * @param   array of values
      * @return  the privilege object
-     * @throws  none
     */
     function __construct($pargs)
     {
@@ -77,9 +75,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   none
      * @return  boolean
-     * @throws  none
     */
    function add()
    {
@@ -99,25 +95,16 @@ class xarPrivilege extends xarMask
             if($result->next()) $realmid = $result->getInt('xar_rid');
         }
         $query = "INSERT INTO $this->privilegestable
-                    (xar_pid, xar_name, xar_realmid, xar_module, xar_component, xar_instance, xar_level)
-                  VALUES (?,?,?,?,?,?,?)";
-        $bindvars = array($this->dbconn->genID($this->privilegestable),
-                          $this->name, $realmid, $this->module,
+                    (xar_name, xar_realmid, xar_module, xar_component, xar_instance, xar_level)
+                  VALUES (?,?,?,?,?,?)";
+        $bindvars = array($this->name, $realmid, $this->module,
                           $this->component, $this->instance, $this->level);
         //Execute the query, bail if an exception was thrown
         $this->dbconn->Execute($query,$bindvars);
 
         // the insert created a new index value
         // retrieve the value
-        // FIXME: use creole here
-        
-        $query = "SELECT MAX(xar_pid) FROM $this->privilegestable";
-        //Execute the query, bail if an exception was thrown
-        $result = $this->dbconn->Execute($query);
-
-        // use the index to get the privileges object created from the repository
-        list($pid) = $result->fields;
-        $this->pid = $pid;
+        $this->pid = $this->dbconn->getLastId($this->privilegestable);
 
         // make this privilege a child of its parent
         if($this->parentid !=0) {
@@ -137,9 +124,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   none
      * @return  boolean
-     * @throws  none
      * @todo    check to make sure the child is not a parent of the parent
     */
     function makeEntry()
@@ -160,7 +145,6 @@ class xarPrivilege extends xarMask
      * @access  public
      * @param   privilege object
      * @return  boolean
-     * @throws  none
      * @todo    check to make sure the child is not a parent of the parent
     */
     function addMember($member)
@@ -184,10 +168,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   none
      * @return  boolean
-     * @throws  none
-     * @todo    none
     */
     function removeMember($member)
     {
@@ -223,9 +204,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   none
      * @return  boolean
-     * @throws  none
     */
     function update()
     {
@@ -257,56 +236,55 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   none
      * @return  boolean
-     * @throws  none
      * @todo    reverse the order of deletion, i.e. first delete the related parts then the master (foreign key compat)
      * @todo    even better, do it in a transaction.
     */
     function remove()
     {
 
-// set up the DELETE query
+        // set up the DELETE query
         $query = "DELETE FROM $this->privilegestable WHERE xar_pid=?";
-//Execute the query, bail if an exception was thrown
+        //Execute the query, bail if an exception was thrown
         $this->dbconn->Execute($query,array($this->pid));
 
-// set up a query to get all the parents of this child
+        // set up a query to get all the parents of this child
         $query = "SELECT xar_parentid FROM $this->privmemberstable
               WHERE xar_pid=?";
         //Execute the query, bail if an exception was thrown
-        $result = $this->dbconn->Execute($query,array($this->getID()));
+        $stmt = $this->dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery(array($this->getID()));
 
-// remove this child from all the parents
+        // remove this child from all the parents
         $perms = new xarPrivileges();
-        while(!$result->EOF) {
+        while($result->next()) {
             list($parentid) = $result->fields;
             if ($parentid != 0) {
                 $parentperm = $perms->getPrivilege($parentid);
                 $parentperm->removeMember($this);
             }
-            $result->MoveNext();
         }
 
-// remove this child from the root privilege too
+        // remove this child from the root privilege too
         $query = "DELETE FROM $this->privmemberstable WHERE xar_pid=? AND xar_parentid=?";
-        $this->dbconn->Execute($query,array($this->pid,0));
+        $stmt = $this->dbconn->prepareStatement($query);
+        $stmt->executeUpdate(array($this->pid,0));
 
-// get all the roles this privilege was assigned to
+        // get all the roles this privilege was assigned to
         $roles = $this->getRoles();
-// remove the role assignments for this privilege
+        // remove the role assignments for this privilege
         foreach ($roles as $role) {
             $this->removeRole($role);
         }
 
-// get all the child privileges
+        // get all the child privileges
         $children = $this->getChildren();
-// remove the child privileges from this parent
+        // remove the child privileges from this parent
         foreach ($children as $childperm) {
             $this->removeMember($childperm);
         }
 
-// CHECKME: re-assign all child privileges to the roles that the parent was assigned to ?
+        // CHECKME: re-assign all child privileges to the roles that the parent was assigned to ?
 
         return true;
     }
@@ -321,17 +299,17 @@ class xarPrivilege extends xarMask
      * @access  public
      * @param   role object
      * @return  boolean
-     * @throws  none
-     * @todo    none
     */
     function isassigned($role)
     {
+        static $stmt = null;
+        
         $query = "SELECT xar_partid FROM $this->acltable WHERE
                 xar_partid = ? AND xar_permid = ?";
         $bindvars = array($role->getID(), $this->getID());
-        $result = $this->dbconn->Execute($query,$bindvars);
-
-        return !$result->EOF;
+        if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars);
+        return $result->first();
     }
 
     /**
@@ -341,9 +319,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   none
      * @return  boolean
-     * @throws  none
      * @todo    seems to me this belong in roles module instead?
     */
     function getRoles()
@@ -356,14 +332,14 @@ class xarPrivilege extends xarMask
                   FROM $this->rolestable r, $this->acltable acl
                   WHERE r.xar_uid = acl.xar_partid AND
                         acl.xar_permid = ?";
-        //Execute the query, bail if an exception was thrown
-        $result = $this->dbconn->Execute($query,array($this->pid));
+        $stmt = $this->dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery(array($this->pid));
 
         // make objects from the db entries retrieved
         sys::import('modules.roles.class.roles');
         $roles = array();
         //      $ind = 0;
-        while(!$result->EOF) {
+        while($result->next()) {
             list($uid,$name,$type,$uname,$email,$pass,$auth_modid) = $result->fields;
             //          $ind = $ind + 1;
 
@@ -378,7 +354,6 @@ class xarPrivilege extends xarMask
                                       // be phased out of this table completely
                                       'auth_module' => $auth_modid,
                                       'parentid' => 0));
-            $result->MoveNext();
             $roles[] = $role;
         }
         // done
@@ -394,7 +369,6 @@ class xarPrivilege extends xarMask
      * @access  public
      * @param   role object
      * @return  boolean
-     * @throws  none
     */
     function removeRole($role)
     {
@@ -407,25 +381,25 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   none
      * @return  array of privilege objects
-     * @throws  none
     */
     function getParents()
     {
+        static $stmt = null;
+        
         // create an array to hold the objects to be returned
         $parents = array();
 
         // perform a SELECT on the privmembers table
         $query = "SELECT p.*, pm.xar_parentid
-                    FROM $this->privilegestable p, $this->privmemberstable pm
-                    WHERE p.xar_pid = pm.xar_parentid
-                      AND pm.xar_pid = ?";
-        $result = $this->dbconn->Execute($query,array($this->getID()));
+                  FROM $this->privilegestable p, $this->privmemberstable pm
+                  WHERE p.xar_pid = pm.xar_parentid
+                    AND pm.xar_pid = ?";
+        if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery(array($this->getID()));
 
         // collect the table values and use them to create new role objects
-        $ind = 0;
-        while(!$result->EOF) {
+        while($result->next()) {
             list($pid,$name,$realm,$module,$component,$instance,$level,$description,$parentid) = $result->fields;
             $pargs = array('pid'=>$pid,
                             'name'=>$name,
@@ -436,9 +410,7 @@ class xarPrivilege extends xarMask
                             'level'=>$level,
                             'description'=>$description,
                             'parentid' => $parentid);
-            $ind = $ind + 1;
             array_push($parents, new xarPrivilege($pargs));
-            $result->MoveNext();
         }
         // done
         return $parents;
@@ -449,9 +421,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   none
      * @return  array of privilege objects
-     * @throws  none
     */
     function getAncestors()
     {
@@ -482,10 +452,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   none
      * @return  array of privilege objects
-     * @throws  none
-     * @todo    none
     */
     function getChildren()
     {
@@ -510,10 +477,10 @@ class xarPrivilege extends xarMask
         // retrieve all children of everyone at once
         //              AND pm.xar_parentid = " . $cacheId;
         // Can't use caching here. The privs have changed
-        $result = $this->dbconn->Execute($query);
+        $result = $this->dbconn->executeQuery($query);
 
         // collect the table values and use them to create new role objects
-        while(!$result->EOF) {
+        while($result->next()) {
             list($pid,$name,$realm,$module,$component,$instance,$level,$description,$parentid) = $result->fields;
             if (!isset($children[$parentid])) $children[$parentid] = array();
             $pargs = array('pid'=>$pid,
@@ -526,7 +493,6 @@ class xarPrivilege extends xarMask
                             'description'=>$description,
                             'parentid' => $parentid);
             array_push($children[$parentid], new xarPrivilege($pargs));
-            $result->MoveNext();
         }
         // done
         foreach (array_keys($children) as $parentid) {
@@ -545,10 +511,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   none
      * @return  array of privilege objects
-     * @throws  none
-     * @todo    none
     */
     function getDescendants()
     {
@@ -577,10 +540,8 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   none
+     * @param   Object $privilege ???
      * @return  boolean
-     * @throws  none
-     * @todo    none
     */
     function isEqual($privilege)
     {
@@ -594,10 +555,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   none
      * @return  boolean
-     * @throws  none
-     * @todo    none
     */
     function getID()
     {
@@ -611,10 +569,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   none
      * @return  boolean
-     * @throws  none
-     * @todo    none
     */
     function isEmpty()
     {
@@ -628,10 +583,8 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   none
+     * @param   Object $privileg ???
      * @return  boolean
-     * @throws  none
-     * @todo    none
     */
     function isParentPrivilege($privilege)
     {
@@ -649,10 +602,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   none
      * @return  boolean
-     * @throws  none
-     * @todo    none
     */
     function isRootPrivilege()
     {
@@ -660,7 +610,7 @@ class xarPrivilege extends xarMask
         $q = new xarQuery('SELECT');
         $q->addtable($this->privilegestable,'p');
         $q->addtable($this->privmemberstable,'pm');
-        $q->join('p.xar_pid','pm.xar_pid');
+        $q->join('p.xar_pid','pm.xar_pid'); // inner join i presume?
         $q->eq('pm.xar_pid',$this->getID());
         $q->eq('pm.xar_parentid',0);
         if(!$q->run()) return;

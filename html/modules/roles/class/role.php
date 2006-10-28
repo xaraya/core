@@ -129,10 +129,7 @@ class xarRole extends Object
             throw new DuplicateException(array('role',($this->type==1)?$this->name:$this->uname));
         }
 
-        $nextId = $this->dbconn->genID($this->rolestable);
-
         $q = new xarQuery('INSERT',$this->rolestable);
-        $q->addfield('xar_uid', $nextId);
         $q->addfield('xar_uname', $this->uname);
         $q->addfield('xar_name', $this->name);
         $q->addfield('xar_date_reg', time());
@@ -286,28 +283,28 @@ class xarRole extends Object
         // where this role is the child
         $query = "SELECT xar_parentid FROM $this->rolememberstable WHERE xar_uid= ?";
         // Execute the query, bail if an exception was thrown
-        $result = $this->dbconn->Execute($query,array($this->getID()));
+        $stmt = $this->dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery(array($this->getID()));
 
         // get the Roles class so we can use its methods
         $parts = new xarRoles();
         // go through the list, retrieving the roles and detaching each one
         // we need to do it this way because the method removeMember is more than just
         // a simple SQL DELETE
-        while (!$result->EOF) {
+        while ($result->next()) {
             list($parentid) = $result->fields;
             $parentpart = $parts->getRole($parentid);
             // Check that a parent was returned
             if ($parentpart) {
                 $parentpart->removeMember($this);
             }
-            $result->MoveNext();
         }
         // delete the relevant entry in the roles table
         //$query = "DELETE FROM $this->rolestable
         //      WHERE xar_uid=" . $this->getID();
 
         //Let's not remove the role yet.  Instead, we want to deactivate it
-
+        // <mrb> i'm not a fan of the name munging
         $deleted = xarML('deleted');
         $q = new xarQuery('UPDATE',$this->rolestable);
         $q->addfield('xar_uname',$this->getUser() . "[" . $deleted . "]" . time());
@@ -319,15 +316,14 @@ class xarRole extends Object
         if (!$q->run()) return;
         // done
 
-// get all the privileges that were assigned to this role
+        // get all the privileges that were assigned to this role
         $privileges = $this->getAssignedPrivileges();
-// remove the privilege assignments for this role
+        // remove the privilege assignments for this role
         foreach ($privileges as $priv) {
             $this->removePrivilege($priv);
         }
 
-// CHECKME: re-assign all privileges to the child roles ? (probably not)
-
+        // CHECKME: re-assign all privileges to the child roles ? (probably not)
         return true;
     }
 
@@ -375,13 +371,11 @@ class xarRole extends Object
         static $allprivileges = array();
         if (empty($allprivileges)) {
             $query = "SELECT xar_pid, xar_name FROM $this->privilegestable ORDER BY xar_name";
-            $result = $this->dbconn->Execute($query);
+            $result = $stmt->executeQuery($query);
 
-            $ind = 0;
-            while (!$result->EOF) {
+            while ($result->next()) {
                 list($pid, $name) = $result->fields;
                 $allprivileges[$ind++] = array('pid' => $pid, 'name' => $name);
-                $result->MoveNext();
             }
         }
         return $allprivileges;
@@ -551,19 +545,24 @@ class xarRole extends Object
         }
         if (isset($selection)) $query .= $selection;
         $query .= " ORDER BY xar_" . $order;
+        
+        // Prepare the query
+        $stmt = $this->dbconn->prepareStatement($query);
+        
         if ($startnum != 0) {
-            $result = $this->dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
-        } else {
-            $result = $this->dbconn->Execute($query,$bindvars);
+            $stmt->setLimit($numitems);
+            $stmt->setOffset($startnum - 1);
         }
+        $result = $stmt->executeQuery($bindvars);
 
         // CHECKME: I suppose this is what you meant here ?
         $parentid = $this->uid;
         // arrange the data in an array of role objects
         $users = array();
-        while (!$result->EOF) {
+        while ($result->next()) {
             list($uid, $name, $type, $uname, $email, $pass,
                 $date_reg, $val_code, $state, $auth_module) = $result->fields;
+            // FIXME: if we do assoc fetching we get this for free
             $pargs = array('uid' => $uid,
                            'name' => $name,
                            'type' => $type,
@@ -585,7 +584,6 @@ class xarRole extends Object
             }
             $pargs = array_merge($pargs,$vars);
             $users[] = new xarRole($pargs);
-            $result->MoveNext();
         }
         // done
         return $users;
@@ -908,15 +906,15 @@ class xarRole extends Object
      */
     function getPrivileges()
     {
-        /*  // start by getting an array of all the privileges
-            $query = "SELECT * FROM $this->privilegestable";
-            $result = $this->dbconn->Execute($query);
+        /*  
+        // start by getting an array of all the privileges
+        $query = "SELECT * FROM $this->privilegestable";
+        $result = $this->dbconn->executeQuery($query);
 
-
-            $privileges = array();
-            while(!$result->EOF) {
-                list($pid,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
-                $pargs = array('pid' => $pid,
+        $privileges = array();
+        while($result->next()) {
+            list($pid,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
+            $pargs = array('pid' => $pid,
                             'name' => $name,
                             'realm'=>$realm,
                             'module'=>$module,
@@ -924,27 +922,27 @@ class xarRole extends Object
                             'instance'=>$instance,
                             'level'=>$level,
                             'description'=>$description);
-                array_push($privileges,new xarPrivilege($pargs))
-                $result->MoveNext();
-            }
+            array_push($privileges,new xarPrivilege($pargs))
+        }
 
-    // start by getting an array of the parents
-            $parents = $part->getParents();
+        // start by getting an array of the parents
+        $parents = $part->getParents();
 
-    //Get the parent field for each parent
-            while (list($key, $parent) = each($parents)) {
-                $ancestors = $parent->getParents();
-                foreach ($ancestors as $ancestor) {
-
-    //If this is a new ancestor add to the end of the array
-                    $iscontained = false;
-                    foreach ($parents as $parent){
-                        if ($parent->isEqual($ancestor)) $iscontained = true;
-                    }
-                    if (!$iscontained) array_push($parents, $ancestor);
+        //Get the parent field for each parent
+        while (list($key, $parent) = each($parents)) {
+            $ancestors = $parent->getParents();
+            foreach ($ancestors as $ancestor) {
+                //If this is a new ancestor add to the end of the array
+                $iscontained = false;
+                foreach ($parents as $parent){
+                    if ($parent->isEqual($ancestor)) $iscontained = true;
                 }
+                if (!$iscontained) array_push($parents, $ancestor);
             }
-*/ }
+        }
+    */
+    }
+
 
     /**
      * Gets and Sets

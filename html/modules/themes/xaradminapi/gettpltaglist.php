@@ -22,7 +22,7 @@ function themes_adminapi_gettpltaglist($args)
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
         
-        extract($args);
+    extract($args);
 
     $aTplTags = array();
 
@@ -39,18 +39,17 @@ function themes_adminapi_gettpltaglist($args)
         $sSql .= " AND tags.xar_id = ? ";
         $bindvars[] = $id;
     }
-    $oResult = $dbconn->Execute($sSql,$bindvars);
+    $stmt = $dbconn->prepareStatement($sSql);
+    $oResult = $stmt->executeQuery($bindvars);
 
-    while(!$oResult->EOF) {
+    while($oResult->next()) {
             $aTplTags[] = array(
                     'id'      => $oResult->fields[0], 
                     'name'    => $oResult->fields[1], 
                     'module'  => $oResult->fields[2]
                 );
-        
-        $oResult->MoveNext();
     }
-    $oResult->Close();
+    $oResult->close();
 
     return $aTplTags;
 }

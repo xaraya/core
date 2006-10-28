@@ -43,22 +43,22 @@ function blocks_adminapi_unregister_block_type($args)
                         btypes.xar_id = inst.xar_type_id AND
                         mods.xar_name = ? AND
                         btypes.xar_type = ?";
-    $result =& $dbconn->Execute($query,array($modName,$blockType));
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery(array($modName,$blockType));
 
     try {
         $dbconn->begin();
         $modInfo = xarMod_GetBaseInfo($modName); 
         $modId = $modInfo['systemid'];
 
-        while (!$result->EOF) {
-            list($bid) = $result->fields;
+        while ($result->next()) {
             // Pass ids to API
-            xarModAPIFunc('blocks','admin','delete_instance', array('bid' => $bid));
-            $result->MoveNext();
+            xarModAPIFunc('blocks','admin','delete_instance', array('bid' => $result->getInt(1)));
         }
         // Delete the block type itself
         $query = "DELETE FROM $block_types_table WHERE xar_modid = ? AND xar_type = ?";
-        $dbconn->Execute($query,array($modId,$blockType));
+        $stmt = $dbconn->prepareStatement($query);
+        $stmt->executeUpdate(array($modId,$blockType));
 
         $dbconn->commit();
     } catch(Exception $e) { // catch any exception for now

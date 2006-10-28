@@ -113,7 +113,8 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         if(!$modvarid) return;
         $query = "DELETE FROM $module_itemvarstable WHERE xar_mvid = ? AND xar_itemid = ?";
         $bindvars = array((int)$modvarid, (int)$itemid);
-        $dbconn->execute($query,$bindvars);
+        $stmt = $dbconn->prepareStatement($query);
+        $stmt->executeUpdate($bindvars);
         $cachename = $itemid . $name;
         xarCore::delCached('ModItem.Variables.' . $scope, $cachename);
         return true;

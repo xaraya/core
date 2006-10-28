@@ -87,11 +87,10 @@ class xarLogger_sql extends xarLogger
         if (!$this->doLogLevel($level)) return false;
 
         /* Build the SQL query for this log entry insertion. */
-        $id = $this->_dbconn->GenId('log_id');
-        $q = sprintf('INSERT INTO %s (id, ident, logtime, priority, message)' .
-                     'VALUES(?, ?, ?, ?, ?)',
+        $q = sprintf('INSERT INTO %s (ident, logtime, priority, message)' .
+                     'VALUES(?, ?, ?, ?)',
                      $this->_table);
-        $bindvars = array($id, $thid->_ident, $this->getTime(), $priority, $message);
+        $bindvars = array($thid->_ident, $this->getTime(), $priority, $message);
         $stmt =& $this->_dbconn->prepareStatement($q);
         $stmt->executeUpdate($bindvars);
 

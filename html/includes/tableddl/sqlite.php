@@ -133,7 +133,7 @@ function xarDB__sqliteColumnDefinition($field_name, $parameters)
     switch($parameters['type']) {
         case 'integer':
             if (empty($parameters['size']))  $parameters['size'] = 'int';
-            // Let's always use integer instead of int, so when it gets set as primary key, we get the GenId behaviour for free
+            // Let's always use integer instead of int, so when it gets set as primary key, we get the autoinc behaviour for free
             $this_field['type'] = 'INTEGER'; 
             break;
         case 'char':

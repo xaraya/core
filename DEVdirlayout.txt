@@ -51,14 +51,14 @@ links one webroot to one database, which is easy to remember.
 so we dont need to explicitly create directories for it. This makes a multi site instance
 look the same as a single site instance from a files/dirs perspective.
 * its obvious that the 'install' area needs a place to hold code and libraries => lib
-This areay will be the main include area for the program. At the same time
+This area will be the main include area for the program. At the same time
 we want to have the option to transparently include and use code specific
 to one instance, so we mirror that lib directory in the instance location.
 * to distinguish libraries from us and third parties below lib there is the
 'namespace' xaraya which can hold our libraries. Third party libraries also
 get their own namespace (directory)
 * to bootstrap an instance and tie it to its database, a file containing
-the configuration for that is needed (current config.system.php i guess)
+the configuration for that is needed (current config.system.php I guess)
 To hold this and possible other configurations => conf (xml/txt/php tbd) 
 The global environment also has a conf location to provide sensible defaults
 * each instance may/will generate variable data related only to its specific
@@ -78,7 +78,7 @@ Global environment:
 The global install environment should be viewed upon as something like 'xar.exe'
 it's an immutable collection of things which are used to generate new instances
 (i.e. a new 'default site'), and provide defaults for the sites using this particular install.
-"Running xar.exe" could be done through a webinterface or a cmdline, whatever
+"Running xar.exe" could be done through a web interface or a cmdline, whatever
 we have time to create. (ideally both).
 Translation from our current situation, it could be viewed upon as a 'consolidated installer'
 or 'server admin part'; one level higher than what our current UI exposes. 
@@ -134,7 +134,7 @@ The 'global environment' needs to be configured in the webserver specifically.
 Instance environment:
 ---------------------
 The instance environment is created through the 'xar instance manager'. The effect of
-using the instance manager is the 'generate' the necessary structure for starting a 
+using the instance manager is to 'generate' the necessary structure for starting a 
 (collection of) websites. The necessary directories are created, the proper config is
 put into place etc.
 
@@ -286,7 +286,7 @@ Question and Ansers
 
     Q: where would we put framework wide shared stuff (the equiv of 
     /usr/share/some_app/ in unices) things like a standardized iconset (which 
-    themes can override obviously) Stuff like that. (data, i guess)
+    themes can override obviously) Stuff like that. (data, I guess)
     A: in the install global env at least.
 
     Q: wont this scare more users away as it becomes more complex?
@@ -360,52 +360,53 @@ Deployment 'before and after' stories
 
 CURRENT 1.x Xaraya SETUPS
 -------------------------
+
 A. One Install, One (or more) Instances, Multiple Sites
-...............................................
+
 Generalized actual example, draft, needs tidying yet.
 
-/path/to/instance
-    /html
-        .htaccess
-        index.php
-        /modules
-        /db middleware (adodb/creole)
-        /var
-             config.system.php           [may be used sometimes for 'default' site]
-             .key.php
-            /cache
-            /locales
-            /logs
-            /messaging
-            /otherglobal module dir usage [eg config dirs, dirs requiring write access or global access]
-        /themes
-        /mythemes        [have to keep theme dirs in webroot atm, so this places some restrictions
-                         I keep a separate global theme dir for easier upgrade/maintenance]
-        /shared func/mod/library stuff [sometimes used, keeps custom code etc together]
-          /shared custom modules  -symlinked to main mod dir
+    /path/to/instance
+        /html
+            .htaccess
+            index.php
+            /modules
+            /db middleware (adodb/creole)
+            /var
+                 config.system.php           [may be used sometimes for 'default' site]
+                 .key.php
+                /cache
+                /locales
+                /logs
+                /messaging
+                /otherglobal module dir usage [eg config dirs, dirs requiring write access or global access]
+            /themes
+            /mythemes        [have to keep theme dirs in webroot atm, so this places some restrictions
+                             I keep a separate global theme dir for easier upgrade/maintenance]
+            /shared func/mod/library stuff [sometimes used, keeps custom code etc together]
+              /shared custom modules  -symlinked to main mod dir
 
-/path/to/sites
-     /site1
-        config.system.php
-        /var
-            /locales
-            /cache
-            /otherlocal module dir usage
-       /themes [only possible atm if the path/to/sites is in webroot. Required if sites need own theme dir]
+    /path/to/sites
+         /site1
+            config.system.php
+            /var
+                /locales
+                /cache
+                /otherlocal module dir usage
+           /themes [only possible atm if the path/to/sites is in webroot. Required if sites need own theme dir]
 
-     /site2
-        config.system.php
-        /var
-            /locales
-            /cache
-            /otherlocal module dir usage
+         /site2
+            config.system.php
+            /var
+                /locales
+                /cache
+                /otherlocal module dir usage
  
-        /site library files  [keep them in specific site dir for easy maintenance backup -
-                             symlinked where/if necessary to main install or theme dir]
-           /functions
-           /modules
-           /themes [would be good to be able to point to this but can't unless path/to/dir is under web root]
-           /whatever
+            /site library files  [keep them in specific site dir for easy maintenance backup -
+                                 symlinked where/if necessary to main install or theme dir]
+               /functions
+               /modules
+               /themes [would be good to be able to point to this but can't unless path/to/dir is under web root]
+               /whatever
 
 Path to the sites are, if possible, kept ouf of the webroot.
 However in some 'instances' if theme directories per site are required, and need to be isolated, 

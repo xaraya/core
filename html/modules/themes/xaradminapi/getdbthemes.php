@@ -23,11 +23,10 @@ function themes_adminapi_getdbthemes()
     $dbThemes = array();
 
     // Get all themes in DB
-    $sql = "SELECT xar_regid
-              FROM $xartable[themes]";
-    $result = $dbconn->Execute($sql);
+    $sql = "SELECT xar_regid  FROM $xartable[themes]";
+    $result = $dbconn->executeQuery($sql);
 
-    while(!$result->EOF) {
+    while($result->next()) {
         list($themeRegId) = $result->fields;
         //Get Theme Info
         $themeInfo = xarThemeGetInfo($themeRegId);
@@ -40,9 +39,8 @@ function themes_adminapi_getdbthemes()
                                   'version' => $themeInfo['version'],
                                   'mode'    => $themeInfo['mode'],
                                   'state'   => $themeInfo['state']);
-        $result->MoveNext();
     }
-    $result->Close();
+    $result->close();
 
     return $dbThemes;
 }

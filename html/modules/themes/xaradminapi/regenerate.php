@@ -83,15 +83,14 @@ function themes_adminapi_regenerate()
                 $themeInfo['xar_version'] = '1.0.0';
             }
 
-            $themeId = $dbconn->GenId($xartable['themes']);
             $sql = "INSERT INTO $xartable[themes]
-                      (xar_id, xar_name, xar_regid, xar_directory,
+                      (xar_name, xar_regid, xar_directory,
                        xar_author, xar_homepage, xar_email, xar_description,
                        xar_contactinfo, xar_publishdate, xar_license,
                        xar_version, xar_xaraya_version, xar_bl_version,
                        xar_class)
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-            $bindvars = array($themeId,$themeInfo['name'],$themeInfo['regid'],
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $bindvars = array($themeInfo['name'],$themeInfo['regid'],
                               $themeInfo['directory'],$themeInfo['author'],
                               $themeInfo['homepage'],$themeInfo['email'],
                               $themeInfo['description'],$themeInfo['contact_info'],

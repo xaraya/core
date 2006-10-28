@@ -115,10 +115,10 @@ function dynamicdata_init()
 
         // create default objects for dynamic data
         $sql = "INSERT INTO $dynamic_objects (
-                xar_object_id, xar_object_name, xar_object_label,
+                xar_object_name, xar_object_label,
                 xar_object_moduleid, xar_object_itemtype, xar_object_urlparam,
                 xar_object_maxid, xar_object_config, xar_object_isalias)
-                VALUES (?,?,?,?,?,?,?,?,?)";
+                VALUES (?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
         $objects = array(
@@ -130,8 +130,6 @@ function dynamicdata_init()
         $objectid = array();
         $idx = 0;
         foreach ($objects as &$object) {
-            $nextId = $dbconn->GenId($dynamic_objects);
-            array_unshift($object,$nextId);
             $stmt->executeUpdate($object);
             $idx++;
             $objectid[$idx] = $dbconn->getLastId($dynamic_objects);
@@ -172,11 +170,11 @@ function dynamicdata_init()
                             /* the property type of this property */
                             'xar_prop_type'       => array('type'        => 'integer',
                                                            'null'        => false,
-                                                           'default'     => NULL),
+                                                           'default'     => null),
                             /* the default value for this property */
                             'xar_prop_default'    => array('type'        => 'varchar',
                                                            'size'        => 254,
-                                                           'default'     => NULL),
+                                                           'default'     => null),
                             /* the data source for this property (dynamic data, static table, hook, user function, LDAP (?), file, ... */
                             'xar_prop_source'     => array('type'        => 'varchar',
                                                            'size'        => 254,
@@ -227,11 +225,11 @@ function dynamicdata_init()
 
         // create default properties for dynamic data objects
         $sql = "INSERT INTO $dynamic_properties (
-                xar_prop_id, xar_prop_name, xar_prop_label, xar_prop_objectid,
+                xar_prop_name, xar_prop_label, xar_prop_objectid,
                 xar_prop_moduleid, xar_prop_itemtype, xar_prop_type,
                 xar_prop_default, xar_prop_source, xar_prop_status,
                 xar_prop_order, xar_prop_validation)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+            VALUES (?,?,?,?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
         // TEMP FIX for the constants, rewrite this
@@ -272,8 +270,6 @@ function dynamicdata_init()
         $propid = array();
         $idx = 0;
         foreach ($properties as &$property) {
-            $nextId = $dbconn->GenId($dynamic_properties);
-            array_unshift($property, $nextId);
             $stmt->executeUpdate($property);
             $idx++;
             $propid[$idx] = $dbconn->getLastId($dynamic_properties);
@@ -333,8 +329,8 @@ function dynamicdata_init()
         // we don't really need to create an object and properties for the dynamic data table
 
         // create some sample data for the sample object
-        $sql = "INSERT INTO $dynamic_data (xar_dd_id, xar_dd_propid, xar_dd_itemid, xar_dd_value)
-            VALUES (?,?,?,?)";
+        $sql = "INSERT INTO $dynamic_data (xar_dd_propid, xar_dd_itemid, xar_dd_value)
+            VALUES (?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
         $dataentries = array(
@@ -355,8 +351,6 @@ function dynamicdata_init()
                              );
 
         foreach ($dataentries as &$dataentry) {
-            $nextId = $dbconn->GenId($dynamic_data);
-            array_unshift($dataentry, $nextId);
             $stmt->executeUpdate($dataentry);
         }
 
@@ -723,61 +717,86 @@ function dynamicdata_createPropDefTable()
     xarDBLoadTableMaintenanceAPI();
 
 
-    $propdefs = array('xar_prop_id'   => array('type'        => 'integer',
-                                               'null'        => false,
-                                               'default'     => '0',
-                                               'increment'   => true,
-                                               'primary_key' => true),
-                      /* the name of this property */
-                      'xar_prop_name'   => array('type'        => 'varchar',
-                                                 'size'        => 254,
-                                                 'default'     => NULL),
-                      /* the label of this property */
-                      'xar_prop_label'   => array('type'        => 'varchar',
-                                                  'size'        => 254,
-                                                  'default'     => NULL),
-                      /* this property's parent */
-                      'xar_prop_parent'   => array('type'        => 'varchar',
-                                                   'size'        => 254,
-                                                   'default'     => NULL),
-                      /* path to the file defining this property */
-                      'xar_prop_filepath'   => array('type'        => 'varchar',
-                                                     'size'        => 254,
-                                                     'default'     => NULL),
-                      /* name of the Class to be instantiated for this property */
-                      'xar_prop_class'   => array('type'        => 'varchar',
-                                                  'size'        => 254,
-                                                  'default'     => NULL),
-
-                      /* the default validation string for this property - no need to use text here... */
-                      'xar_prop_validation'   => array('type'        => 'varchar',
-                                                       'size'        => 254,
-                                                       'default'     => NULL),
-                      /* the source of this property */
-                      'xar_prop_source'   => array('type'        => 'varchar',
-                                                   'size'        => 254,
-                                                   'default'     => NULL),
-                      /* the semi-colon seperated list of file required to be present before this property is active */
-                      'xar_prop_reqfiles'   => array('type'        => 'varchar',
-                                                     'size'        => 254,
-                                                     'default'     => NULL),
-                      /* the semi-colon seperated list of modules required to be active before this property is active */
-                      'xar_prop_reqmodules'   => array('type'        => 'varchar',
-                                                       'size'        => 254,
-                                                       'default'     => NULL),
-                      /* the default args for this property -- serialized array */
-                      'xar_prop_args'    => array('type'        => 'text',
-                                                  'size'        => 'medium',
-                                                  'null'        => 'false'),
-
-                      /*  */
-                      'xar_prop_aliases'   => array('type'        => 'varchar',
-                                                    'size'        => 254,
-                                                    'default'     => NULL),
-                      /*  */
-                      'xar_prop_format'   => array('type'        => 'integer',
-                                                   'default'     => '0'),
-                      );
+    $propdefs = array(
+        'xar_prop_id'     => array(
+            'type'        => 'integer',
+            'null'        => false,
+            'default'     => '0',
+            'increment'   => true,
+            'primary_key' => true
+        ),
+        /* the name of this property */
+        'xar_prop_name'   => array(
+            'type'        => 'varchar',
+            'size'        => 254,
+            'default'     => null
+        ),
+        /* the label of this property */
+        'xar_prop_label'  => array(
+            'type'        => 'varchar',
+            'size'        => 254,
+            'default'     => null
+        ),
+        /* this property's parent */
+        'xar_prop_parent' => array(
+            'type'        => 'varchar',
+            'size'        => 254,
+            'default'     => null
+        ),
+        /* path to the file defining this property */
+        'xar_prop_filepath' => array(
+            'type'          => 'varchar',
+            'size'          => 254,
+            'default'       => null
+        ),
+        /* name of the Class to be instantiated for this property */
+        'xar_prop_class'  => array(
+            'type'        => 'varchar',
+            'size'        => 254,
+            'default'     => null
+        ),
+        /* the default validation string for this property - no need to use text here... */
+        'xar_prop_validation'   => array(
+            'type'              => 'varchar',
+            'size'              => 254,
+            'default'           => null
+        ),
+        /* the source of this property */
+        'xar_prop_source'   => array(
+            'type'        => 'varchar',
+            'size'        => 254,
+            'default'     => null
+        ),
+        /* the semi-colon seperated list of file required to be present before this property is active */
+        'xar_prop_reqfiles'   => array(
+            'type'        => 'varchar',
+            'size'        => 254,
+            'default'     => null
+        ),
+        /* the ID of the module owning this property */
+        'xar_prop_modid'  => array(
+            'type'        => 'integer',
+            'null'        => true,
+            'default'     => null
+        ),
+        /* the default args for this property -- serialized array */
+        'xar_prop_args'    => array(
+            'type'        => 'text',
+            'size'        => 'medium',
+            'null'        => false
+        ),
+        /*  */
+        'xar_prop_aliases'   => array(
+            'type'        => 'varchar',
+            'size'        => 254,
+            'default'     => null
+        ),
+        /*  */
+        'xar_prop_format'   => array(
+            'type'        => 'integer',
+            'default'     => '0'
+        ),
+    );
 
     // Create the Table - the function will return the SQL is successful or
     // raise an exception if it fails, in this case $query is empty
@@ -786,8 +805,8 @@ function dynamicdata_createPropDefTable()
     $dbconn->Execute($query);
 
     $query = xarDBCreateIndex($dynamic_properties_def,
-                              array('name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dynpropdef_mod',
-                                    'fields' => array('xar_prop_reqmodules')));
+                              array('name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dynpropdef_modid',
+                                    'fields' => array('xar_prop_modid')));
     $dbconn->Execute($query);
     return true;
 }

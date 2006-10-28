@@ -61,17 +61,17 @@ function dynamicdata_adminapi_removehook($args)
     $dynamicprop = $xartable['dynamic_properties'];
 
     $sql = "SELECT xar_prop_id FROM $dynamicprop WHERE xar_prop_moduleid = ?";
-    $result =& $dbconn->Execute($sql,array($modid));
+    $stmt = $dbconn->prepareStatement($sql);
+    $result = $stmt->executeQuery(array($modid));
+    
     // TODO: do we want to catch the exception here? or in the callee?
-
-        //return $extrainfo;
+    //return $extrainfo;
     $ids = array();
-    while (!$result->EOF) {
+    while ($result->next()) {
         list($id) = $result->fields;
-        $result->MoveNext();
         $ids[] = $id;
     }
-    $result->Close();
+    $result->close();
 
     if (count($ids) == 0) {
         return $extrainfo;
@@ -86,11 +86,13 @@ function dynamicdata_adminapi_removehook($args)
         // Delete the item fields
         $bindmarkers = '?' . str_repeat(',?',count($ids)-1);
         $sql = "DELETE FROM $dynamicdata WHERE xar_dd_propid IN ($bindmarkers)";
-        $dbconn->Execute($sql,$ids);
+        $stmt = $dbconn->prepareStatement($sql);
+        $stmt->executeUpdate($ids);
         
         // Delete the properties
         $sql = "DELETE FROM $dynamicprop WHERE xar_prop_id IN ($bindmarkers)";
-        $dbconn->Execute($sql,$ids);
+        $stmt = $dbconn->prepareStatement($sql);
+        $stmt->executeUpdate($ids);
         $dbconn->commit();
     } catch(SQLException $e) {
         $dbconn->rollback();

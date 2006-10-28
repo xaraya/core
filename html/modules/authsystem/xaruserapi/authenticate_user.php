@@ -30,15 +30,17 @@ function authsystem_userapi_authenticate_user($args)
     // Get user information
     $rolestable = $xartable['roles'];
     $query = "SELECT xar_uid, xar_pass FROM $rolestable WHERE xar_uname = ?";
-    $result =& $dbconn->Execute($query,array($uname));
+    $stmt = $dbconn->prepareStatement($query);
+    
+    $result = $stmt->executeQuery(array($uname));
 
-    if ($result->EOF) {
-        $result->Close();
+    if (!$result->first()) {
+        $result->close();
         return XARUSER_AUTH_FAILED;
     }
 
     list($uid, $realpass) = $result->fields;
-    $result->Close();
+    $result->close();
 
     // Confirm that passwords match
     if (!xarUserComparePasswords($pass, $realpass, $uname, substr($realpass, 0, 2))) {

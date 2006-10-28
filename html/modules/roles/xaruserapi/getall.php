@@ -158,25 +158,22 @@ function roles_userapi_getall($args)
         $query .= ' ORDER BY ' . implode(', ', $order_clause);
     }
 
+    // We got the complete query, prepare it
+    $stmt = $dbconn->prepareStatement($query);
+    
     // cfr. xarcachemanager - this approach might change later
     $expire = xarModGetVar('roles', 'cache.userapi.getall');
-    if ($startnum == 0) { // deprecated - use countall() instead
-        if (!empty($expire)){
-            $result = $dbconn->CacheExecute($expire,$query,$bindvars);
-        } else {
-            $result = $dbconn->Execute($query,$bindvars);
-        }
-    } else {
-        if (!empty($expire)){
-            $result = $dbconn->CacheSelectLimit($expire, $query, $numitems, $startnum-1,$bindvars);
-        } else {
-            $result = $dbconn->SelectLimit($query, $numitems, $startnum-1,$bindvars);
-        }
+    
+    if($startnum > 0) {
+        $stmt->setLimit($numitems);
+        $stmt->setOffset($startnum - 1 );
     }
+    // Statement constructed, create a resultset out of it
+    $result = $stmt->executeQuery($bindvars);
 
     // Put users into result array
     $roles = array();
-    for (; !$result->EOF; $result->MoveNext()) {
+    while($result->next()) {
         list($uid, $uname, $name, $email, $pass, $state, $date_reg) = $result->fields;
         if (xarSecurityCheck('ReadRole', 0, 'Roles', "$uname")) {
             if (!empty($uidlist)) {
@@ -217,7 +214,6 @@ function roles_userapi_getall($args)
             }
         }
     }
-
     // Return the users
     return $roles;
 }
