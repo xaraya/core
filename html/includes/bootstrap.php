@@ -67,10 +67,9 @@ class Object extends stdClass
      *
      * @return Class_ the class of the object
     **/
-    public final function getClass(Object $object=null)
+    public final function getClass()
     {
-        if (empty($object)) $object = $this;
-        return new Class_($object);
+        return new Class_($this);
     }
 }
 

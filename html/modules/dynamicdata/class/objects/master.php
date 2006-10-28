@@ -27,10 +27,8 @@ class DataObjectDescriptor extends Object
 
     public function getPublicProperties(Object $object)
     {
-//        the future?
-        $o = Object::getClass($object);
+        $o = $object->getClass();
         $objectname = $o->getName();
-//        $objectname = get_class($object);
         $reflection = new ReflectionClass($objectname);
         $properties = array();
         foreach($reflection->getProperties() as $p) {
