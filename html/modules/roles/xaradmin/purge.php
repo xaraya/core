@@ -14,6 +14,7 @@
  * purge users by status
  * @param 'status' the status we are purging
  * @param 'confirmation' confirmation that this item can be purge
+ * @todo kinda long, no?
  */
 function roles_admin_purge($args)
 {
@@ -247,11 +248,15 @@ function roles_admin_purge($args)
                     $selection .
                     ' ORDER BY xar_name';
 
-        $result = $dbconn->Execute($query,$bindvars);
+        $stmt = $dbconn->prepareStatement($query);
+        
+        $result = $stmt->executeQuery($bindvars);
         $data['totalselect'] = $result->getRecordCount();
 
         if ($purgestartnum != 0) {
-            $result = $dbconn->SelectLimit($query, $numitems, $purgestartnum-1,$bindvars);
+            $stmt->setLimit($numitems);
+            $stmt->setOffset($purgestartnum-1);
+            $result = $stmt->executeQuery($bindvars);
         }
 
         if ($data['totalselect'] == 0) {
@@ -262,9 +267,9 @@ function roles_admin_purge($args)
         }
 
         $purgeusers = array();
-        for (; !$result->EOF; $result->MoveNext()) {
+        while($result->next()) {
             list($uid, $uname, $name, $email, $state, $date_reg) = $result->fields;
-// check each role's name and user name
+            // check each role's name and user name
             if (empty($name) || empty($uname)) {
                 $msg = xarML('Execution halted: the role with uid #(1) has an empty name or user name. This needs to be corrected manually in the database.', $uid);
                 throw new Exception($msg);
@@ -295,7 +300,7 @@ function roles_admin_purge($args)
                 'date_reg'  => $date_reg
             );
         }
-// --- send to template
+        // --- send to template
         $purgefilter['purgestartnum'] = '%%';
         $purgefilter['purgesearch'] = $data['purgesearch'];
 
@@ -305,10 +310,9 @@ function roles_admin_purge($args)
                                               $data['totalselect'],
                                               xarModURL('roles', 'admin', 'purge', $purgefilter),
                                               $numitems);
-    }
-    else {}
+    } // end elseif
 
-// --- finish up
+    // --- finish up
     $data['authid']         = xarSecGenAuthKey();
     // Return
     return $data;

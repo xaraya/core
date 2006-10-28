@@ -634,11 +634,11 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
                         hooks.xar_tmodid = tmods.xar_id AND
                         smods.xar_name = ?";
         $bindvars = array($callerModName);
-
-        $result =& $dbconn->Execute($query,$bindvars);
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars);
 
         $modHookedCache[$callerModName] = array();
-        while(!$result->EOF) {
+        while($result->next()) {
             list($modname,$itemtype) = $result->fields;
             if (!empty($itemtype)) {
                 $itemtype = trim($itemtype);
@@ -647,9 +647,8 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
                 $modHookedCache[$callerModName][$itemtype] = array();
             }
             $modHookedCache[$callerModName][$itemtype][$modname] = 1;
-            $result->MoveNext();
         }
-        $result->Close();
+        $result->close();
     }
     if (empty($callerItemType)) {
         if (isset($modHookedCache[$callerModName][''][$hookModName])) {
@@ -713,10 +712,9 @@ function xarModRegisterHook($hookObject, $hookAction, $hookArea, $hookModName, $
         $tmodInfo = xarMod::getBaseInfo($hookModName);
         $tmodId = $tmodInfo['systemid'];
         $query = "INSERT INTO $hookstable
-                  (xar_id, xar_object, xar_action, xar_tarea, xar_tmodid, xar_ttype, xar_tfunc)
-                  VALUES (?,?,?,?,?,?,?)";
-        $seqId = $dbconn->GenId($hookstable);
-        $bindvars = array($seqId,$hookObject,$hookAction,$hookArea,$tmodId,$hookModType,$hookFuncName);
+                  (xar_object, xar_action, xar_tarea, xar_tmodid, xar_ttype, xar_tfunc)
+                  VALUES (?,?,?,?,?,?)";
+        $bindvars = array($hookObject,$hookAction,$hookArea,$tmodId,$hookModType,$hookFuncName);
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeUpdate($bindvars);
         $dbconn->commit();
@@ -921,23 +919,46 @@ class xarMod  extends Object implements IxarMod
     }
 
     /**
-     * Get module registry ID by name
+     * Temporary helper function during regid->systemid migration
      *
-     * @access public
-     * @param modName string The name of the module
-     * @param type determines theme or module
-     * @return string The module registry ID.
-     * @throws DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
+     * @todo once the migration is done, migrate this out.
      */
-    static function getRegID($modName, $type = 'module')
+    private static function getIds($modName, $type = 'module')
     {
         if (empty($modName)) throw new EmptyParameterException('modName');
 
         // For themes, kinda weird
         $modBaseInfo = self::getBaseInfo($modName,$type);
         if (!isset($modBaseInfo)) return; // throw back
-        // MrB: this is confusing
-        return $modBaseInfo['regid'];
+        return array('systemid' => $modBaseInfo['systemid'], 'regid' => $modBaseInfo['regid']);
+    }
+    
+    /**
+     * Get module registry ID by name
+     *
+     * @access public
+     * @param modName string The name of the module
+     * @param type determines theme or module
+     * @return string The module registry ID.
+     */
+    static function getRegId($modName, $type = 'module')
+    {
+        $ids = self::getIds($modName);
+        return $ids['regid'];
+    }
+    
+    /**
+     * Get module system ID by name
+     *
+     * @access public
+     * @param modName string The name of the module
+     * @param type determines theme or module
+     * @return string The module registry ID.
+     */
+    static function getId($modName)
+    {
+        $ids = self::getIds($modName);
+        return $ids['systemid'];
     }
 
     /**

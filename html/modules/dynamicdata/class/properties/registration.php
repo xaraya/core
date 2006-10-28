@@ -78,14 +78,17 @@ class PropertyRegistration extends Object
         $propdefTable = $tables['dynamic_properties_def'];
 
         // Make sure the db is the same as in the old days
-        $reqmods = join(';',$this->reqmodules);
+        assert('count($this->reqmodules)==1; /* The reqmodules registration should only contain the name of the owning module */');
+        $modInfo = xarMod::getBaseInfo($this->reqmodules[0]);
+        $modId = $modInfo['systemid'];
+        
         if($this->format == 0) $this->format = $this->id;
 
         $sql = "INSERT INTO $propdefTable
                 (xar_prop_id, xar_prop_name, xar_prop_label,
                  xar_prop_parent, xar_prop_filepath, xar_prop_class,
                  xar_prop_format, xar_prop_validation, xar_prop_source,
-                 xar_prop_reqfiles, xar_prop_reqmodules, xar_prop_args, xar_prop_aliases)
+                 xar_prop_reqfiles, xar_prop_modid, xar_prop_args, xar_prop_aliases)
                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
         if(!isset($stmt))
             $stmt = $dbconn->prepareStatement($sql);
@@ -94,7 +97,7 @@ class PropertyRegistration extends Object
             (int) $this->id, $this->name, $this->desc,
             $this->parent, $this->filepath, $this->class,
             $this->format, $this->validation, $this->source,
-            serialize($this->reqfiles), $reqmods, is_array($this->args) ? serialize($this->args) : $this->args, serialize($this->aliases)
+            serialize($this->reqfiles), $modId, is_array($this->args) ? serialize($this->args) : $this->args, serialize($this->aliases)
         );
         $res = $stmt->executeUpdate($bindvars);
 
@@ -118,13 +121,14 @@ class PropertyRegistration extends Object
         $dbconn =& xarDBGetConn();
         $tables = xarDBGetTables();
         // Sort by required module(s) and then by name
-        $query = "SELECT  xar_prop_id, xar_prop_name, xar_prop_label,
-                          xar_prop_parent, xar_prop_filepath, xar_prop_class,
-                          xar_prop_format, xar_prop_validation, xar_prop_source,
-                          xar_prop_reqfiles,xar_prop_reqmodules, xar_prop_args,
-                          xar_prop_aliases
-                  FROM    $tables[dynamic_properties_def]
-                  ORDER BY xar_prop_reqmodules, xar_prop_name";
+        $query = "SELECT  p.xar_prop_id, p.xar_prop_name, p.xar_prop_label,
+                          p.xar_prop_parent, p.xar_prop_filepath, p.xar_prop_class,
+                          p.xar_prop_format, p.xar_prop_validation, p.xar_prop_source,
+                          p.xar_prop_reqfiles, m.xar_name, p.xar_prop_args,
+                          p.xar_prop_aliases
+                  FROM    $tables[dynamic_properties_def] p INNER JOIN $tables[modules] m 
+                  ON      p.xar_prop_modid = m.xar_id
+                  ORDER BY m.xar_name, xar_prop_name";
         $result = $dbconn->executeQuery($query);
         $proptypes = array();
         if($result->RecordCount() == 0 )
@@ -138,7 +142,7 @@ class PropertyRegistration extends Object
             {
                 list(
                     $id,$name,$label,$parent,$filepath,$class,$format,
-                    $validation,$source,$reqfiles,$reqmodules,$args,$aliases
+                    $validation,$source,$reqfiles,$modname,$args,$aliases
                 ) = $result->fields;
 
                 $property['id']             = $id;
@@ -149,7 +153,7 @@ class PropertyRegistration extends Object
                 $property['validation']     = $validation;
                 $property['source']         = $source;
                 $property['dependancies']   = unserialize($reqfiles);
-                $property['requiresmodule'] = $reqmodules;
+                $property['requiresmodule'] = $modname;
                 $property['args']           = $args;
                 $property['propertyClass']  = $class;
                 // TODO: this return a serialized array of objects, does that hurt?

@@ -1,7 +1,9 @@
 A log of important changes made to the 2.x branch which we need to
 revisit later on before trusting the branch to be released or used.
 
-!!!DB-CHANGES:
+DB-CHANGES:
+===========
+
 * module_uservars is now module_itemvars where item is an item in a
   module, not only roles. The columns are adapted accordingly.
 * hooks table now registers the mod id in the columns smodid and
@@ -36,19 +38,37 @@ revisit later on before trusting the branch to be released or used.
 * placed unique index on privilege.xar_name and dropped code which checked for
   uniqueness
 * table dynamic_relations table has been dropped
+* table DDL for postgres now uses the SERIAL type for auto-increment columns
+  and autogenerates a sequence 'tablename_seq' for it.This means that it now 
+  behaves  _as if_ an autoinc column like in mysql was there. 
+  (effectively making genID obsolete for postgres too, as it already was for 
+  mysql and sqlite) [TODO: this is install-wide, how are we going to do 
+  upgrades for this? not trivial.]
+* table 'dynamic_properties_def', column prop_req_modules replaced by
+  prop_modid meaning the modid of the owning module, if the property as such
+  requires another module, this means that the owning module should depend on
+  that other module.
+* hooks table colum xar_smodid now INTEGER DEFAULT NULL
+* hooks table column xar_tmodid now INTEGER NOT NULL
 
-(see DEVupgrades.sql for the above)
 
-!!!PENDING DB_CHANGES
+(see DEVupgrades.sql for details on all of the above)
+
+PENDING DB-CHANGES
+==================
+
 * does blocks really need 5 tables?
 * xar_module column in privileges table uses a string for modulename and 'All' 
   and 'empty' which prevents it from being a foreign key to the modules table
 * is column auth_modid still needed? 
     Answer: yes, but it's confusing:
-    1. it doesnt need to be there really, but might be a moditemvar (it applies to the few)
-    2. it is referred to as default authmodule in the code sometimes, which it is not, it
-    is the auth module which successfully logged this user on latest.
-* the xar_ prefix on columns is redundant, not a lightly task though, kinda obvious why.
+    1. it doesnt need to be there really, but might be a moditemvar (it
+    applies to the few)
+    2. it is referred to as default authmodule in the code sometimes, which it
+    is not, it is the auth module which successfully logged this user on
+    latest.
+* the xar_ prefix on columns is redundant, not a lightly task though, kinda
+  obvious why.
 * privmembers parent column stores 0 now for 'no parent', change to null, so a
   foreign key constraint can be added on the column
 * rolemembers parent column stores 0 now for 'no parent', change to null, so a
@@ -59,38 +79,40 @@ no idea what the solution is there, except revert back to a unique key only.
 Choices: 
     1. table without a primary key but consistent with the foreign keys
     2. table with a primary key but no foreign key possible
-    3. use a derived constraint like a trigger to enforce consistency (this is the same as 2, but extended)
-
+    3. use a derived constraint like a trigger to enforce consistency 
+    (this is the same as 2, but extended)
+    A question related to this:
+        Does the combination of say, privparent, privchild need extra attributes
+        i.e. if the fact of a privilege 'membership' would lead to a need of
+        extra fields in the table, we could introduce an ID in that table and
+        treat the 'membership' record as an item in its own right.
 * Columns affected by modid/regid/modname decision:
     The decision was:
-        regid is only stored in the modules table for the db model. All other
+        "regid is only stored in the modules table for the db model. All other
         tables get their module db info through the primary key of the modules
-        table.
+        table."
     Consequences:
         - modules.regid
             - is now not null default 0
             - becomes default null
+        ( this has probably quite a few consequences )
         - dynamic_objects.object_moduleid (stores regid)
         - dynamic_properties.prop_moduleid (stores regid)
-        - dynamic_properties_def.prop_req_modules 
-            - stores a semicolon separated list of modulenames (does it ever contain 
-            more than one?)
-          PROPOSAL: make it modid of the owning module, if the property as such
-          requires another module, this means that the owning module should depend
-          on that other module.
-        - hooks.smodid (stores 0 now meaning ?)
-        - hooks.tmodid ?
         - privileges.xar_module (stores 'All', 'empty' besides module name.)
-* it might be attractive to consolidate the tables privileges and security masks, adding
-  an extra column (type) to distinguish masks from privileges. before that can happen
-  syncing the definition of security_masks to privileges is needed (modid column, realmid)
-* we need a consolidated solution for database encoding, mysql takes this swedish latin
-  thing by default, postgres ascii, dont know about the others. How about we make 
-  them all UTF-8? (i have no idea about the consequences though, nor how to do it,
-  seems, that on 'create database' there should be an option or changing an option of
-  some kind when using an existing database.)
+* it might be attractive to consolidate the tables privileges and security
+  masks, adding an extra column ('type'?) to distinguish masks from
+  privileges. before that can happen syncing the definition of security_masks
+  to privileges is needed (modid column, realmid)
+* we need a consolidated solution for database encoding, mysql takes this
+  swedish latin thing by default, postgres us ascii, dont know about the others.
+  How about we make them all UTF-8? (i have no idea about the consequences
+  though, nor how to do it, seems, that on 'create database' there should be
+  an option or changing an option of some kind when using an existing
+  database.)
 
-!!!OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
+OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
+------------------------------------------
+
 * [N/A anymore] when encountered, upgrade code to upgrade modules from older
   versions than in 1.0 is removed, assuming we will only support 
   upgrading from 1.0 to 2.x and not versions before 1.0 
@@ -103,11 +125,11 @@ Choices:
 * the whole exception subsystem was rewritten from scratch and the
   whole of core was adapted to use it. (see new RFC-0054)
 * adodb has been replaced with the creole database abstraction layer.
-* the meaning of xar:comment and <!-- has been reversed as observed as
-  a design error. xar:comment now produces a comment in the output while things
-  between <!-- and --> get ignored by the BL parser. If you're previous xar:comment
-  content was sensitive you might wanna reverse it in your templates
-  too.
+* the meaning of xar:comment and <!-- has been reversed as observed as a
+  design error. xar:comment now produces a comment in the output while things
+  between <!-- and --> get ignored by the BL parser. If you're previous
+  xar:comment content was sensitive you might wanna reverse it in your
+  templates too.
 * where applicable all postnuke compatibility has been removed.
 * The distinction between system and site table mapping have been
   removed from core. A fullblown alternative has not yet been
@@ -128,28 +150,39 @@ Choices:
   operate as normal (for now), but any $modname/xartemplates/objects/*list*
   templates will need to be renamed *view*
 
-!!CHANGED API
+CHANGED API
+===========
 
 * $throwException parameter in xarModAPIFunc, the api function will now raise
   an excpeption always. The occurances of these were not found. If there are
   such usages (i.e. calls explicitly suppressing the exception) they can do so
   again by using a try/catch block around the call. (occurances found have
   been adapted)
-
 * the Variable getting/setting in core does NOT support direct prepping 
   anymore, as to eliminate dependencies on other subsystems. If the parameter 
   was used, it will be ignored now. USAGE UNKNOWN.
 
-!!DROPPED API
+DROPPED API
+===========
+
+Private (should not affect anyone):
+-----------------------------------
 
 * xarMod_getVarsByName, xarTheme_getVarsByName : protected API and never used
+
+
+Public (this MAY affect someone)
+--------------------------------
+
 * xarPreCoreGetVarDirPath (now sys::varpath()) 
-* xarModAPIFunc('dynamicdata','admin','checkinput') : never 
+* xarModAPIFunc('dynamicdata','admin','checkinput') : never used
 * xarModAPIFunc('dynamicdata','user','interface') : never used
 * xarModAPIFunc('dynamicdata','user','getsources') : never used
 
 
-!!DIFFERENCES BETWEEN PHP 5.0/5.1/5.2
+DIFFERENCES BETWEEN PHP 5.0/5.1/5.2
+===================================
+
 * do not agree on what function_exists() / is_callable() /
   method_exists() should return
 * In PHP 5.0.4 (and earlier versions I believe) the shutdown function is 
@@ -159,44 +192,49 @@ Choices:
 * apparently PHP 5.1 allows headers to be sent in a shutdown function  
   (arguably wrong)
 
-!!!REFACTORING LIST:
+REFACTORING LIST:
+-----------------
+
 List of things which need to be refactored before starting the actual
 design work can begin.
 
-* At some point we need to get our act together wrt xar:set, setting variables,
-  notably arrays is flaky at best. The munging with PHP code (like the '1;' trick) 
-  needs to stop or be reliable
-* [DONE] i really like some sort of import(name.of.some.sub.part) dot notation to
-  include major parts into the flow when doing stuff, instead of
-  xarInclude or something
+* At some point we need to get our act together wrt xar:set, setting
+  variables, notably arrays is flaky at best. The munging with PHP code (like
+  the '1;' trick) needs to stop or be reliable
+* [DONE] i really like some sort of import(name.of.some.sub.part) dot notation
+  to include major parts into the flow when doing stuff, instead of xarInclude
+  or something
 * [STARTED] OO-ify stuff in core where appropriate (including getting rid of
-  die()'s and modelling the classes where php4 could not) 
-* I really would like to do something with views wrt multisites et. al.
-    - the query storage for privilege instances is one application of views 
-    (in testing, views are *much* slower than dedicated tables, which doesnt 
-    make sense to me; i expect them to be _somewhat_ slower, but not a factor 
-    of 4-8)
+  die()'s and modelling the classes where php4 could not)
+* I really would like to do something with views wrt multisites et. al. 
+    - the query storage for privilege instances is one application of views
+      (in testing, views are *much* slower than dedicated tables (mysql),
+      which doesnt make sense to me; i expect them to be _somewhat_ slower,
+      but not a factor of 4-8)
 * I really would like to do something with triggers, dunno for what
     - all backends support triggers, while not all of them support foreign
       keys, so for both triggers and foreign keys we could use triggers.
-* I really would like to do something with stored procedures, dunno
-  for what
-    - the main use would be to save round trips (to the db server in this case,
-    *not* the webserver) and building more on the server side based on logic, 
-    e.g. instead of looping over 1 resultset in php and reacting based on that, 
-    that logic could be done directly at the db server, letting the stored 
-    procedure do the looping, if at all needed  and only return the combined 
-    result to the php code
-* the need for a Request mapper is evident. Apart from the gained
-  dimension for navigation design this also centralizes the short url
-  functionality instead of distributing it all over. The Zend framework Controller
-  class (and its friends) comes very close to what we need.
-* the blocklayout tag could use attributes related to emitting a <?xml
-  header or not (or use <?xar for this? since it is an instruction to
-  process )
-* design a more solid concept for letting blocklayout emit http headers, attributes
-  in the blocklayout tag dont cut it. (disposition is one needed, as well as 
-  more granular caches)
+      [throws us back to the schema stuff, to be able to define them
+      transparently]
+* I really would like to do something with stored procedures, dunno for what
+    - the main use would be to save round trips (to the db server in this
+      case, *not* the webserver) and building more on the server side based on
+      logic, e.g. instead of looping over 1 resultset in php and reacting
+      based on that, that logic could be done directly at the db server,
+      letting the stored procedure do the looping, if at all needed and only
+      return the combined result to the php code [ditto on the schema thing,
+      also, this mean a second (third?) programming environment for the
+      application, the first and second being the php (server) and
+      (java)script (client) environments.]
+* the need for a Request mapper is evident. Apart from the gained dimension
+  for navigation design this also centralizes the short url functionality
+  instead of distributing it all over. The Zend framework Controller class
+  (and its friends) comes very close to what we need.
+* the blocklayout tag could use attributes related to emitting a <?xml header
+  or not (or use <?xar for this? since it is an instruction to process )
+* design a more solid concept for letting blocklayout emit http headers,
+  attributes in the blocklayout tag dont cut it. (disposition is one needed,
+  as well as more granular caches)
 * we keep a 'state' of some sort for different items:
   1. modules
   2. themes
@@ -207,25 +245,33 @@ design work can begin.
   'item' level? Also the use of a workflow component in core comes to mind.
 * simplify installer/xaradmin.php before rewriting it
 * we need easy and global xmlhttp request support everywhere.
-* Xaraya is an excellent backend, we need a equally excellent front-end 
+* Xaraya is an excellent backend, we need a equally excellent front-end
   companion (like dojo) integrated into core, NOT as a module. But lightweight
-  and seemlessly integrated with BL, as an extension tag lib for example. 
+  and seemlessly integrated with BL, as an extension tag lib for example.
   (plextk has something like that)
-* i'd really like more native backend support, for query preparation
-  that place is obviously creole, but for shielding and triggering we
-  dont have an abstraction and the more complex modules go through a
-  whole lot of hoops sometimes which the backend could do in a jiffy.
-* the installer screens try to throw all databases onto one pile, we need to split 
-    the database configuration screens into different ones for each backend
+* i'd really like more native backend support, for query preparation that
+  place is obviously creole, but for shielding and triggering we dont have an
+  abstraction and the more complex modules go through a whole lot of hoops
+  sometimes which the backend could do in a jiffy. [See DEVbackends.txt]
+* the installer screens try to throw all databases onto one pile, we need to
+  split the database configuration screens into different ones for each
+  backend
     * sqlite has no user and password (uses os file based privs)
-    * sqlite uses a directory for a host (in creole and even that is a patch from us)
+    * sqlite uses a directory for a host (in creole and even that is a patch
+      from us)
     * mysql can support different table drivers (myisam, innodb) transparently
     * postgres may require schema support
-* xml constructs like PI, ELEM and ATTR need their equivalent in BL, but the current
-  implementation lacks context.
-  - [STARTED] element tag
-  - attribute tag
+    * ms sql *requires* a port in the connection
+    * database encoding may be chosen on some backends. (and be dictated on
+      others depending on language choice for example)
+* xml constructs like PI, ELEM and ATTR need their equivalent in BL, but the
+  current implementation lacks context.
+  - [STARTED] element tag; generating an xml element in the output stream
+  - attribute tag; generating an attribute on an existing node in the output
   - pi tag? or pi support? (answer: both, they are 2 different things)
+    * pi tag -> generating a processing instruction in the _output_
+    * pi support -> being able to parse/handle processing instructions in the
+    _input_
 * [STARTED] finish design and implementation os schema based data definition 
 * design a less bloated concept for config/user/mod/theme/system vars etc
 * reorganize the old error/exception system to use much fewer files, consider
@@ -234,10 +280,21 @@ design work can begin.
   products and components easily, perhaps based on a server side map of 
   regid-component for modules at least)
 * [STARTED] move code from dd procedural functions to classes where feasible
-* integrate Object showView and showList
+* integrate Object showView and showList (johnny: isnt this DONE?)
+* go over the 'if error return;' type lines in the code. Most, if not all will
+  be not needed anymore now, as an exception will already be raised so the statement
+  will never be reached. Also look at cases where an exception is not raised
+  where it probably should (i.e. adapt caller with try/catch)
+* take a decision on query abstraction, xarQuery we have, marc is a fan of it it
+  can help (mostly) in the modules arena. Should we offer it from core?
+* reqmodules in the registration class is now a bit moot, can only contain one
+  module and its always the owning module. Didnt feel like going over all the props
+  again, so made current code work as is.
 
-!!!KNOWN ISSUES
-* blocks do not end up in groups anymore during installation, need to
+KNOWN ISSUES
+------------
+
+* [DONE] blocks do not end up in groups anymore during installation, need to
   investigate why that is. Most likely a missed spot when doing the
   schema migration. 
 * since we now use the meta info classes, some functions in DD which
@@ -248,32 +305,39 @@ design work can begin.
 * datadict is absent in 2.x since that lived in adodb, creole does not have it
   - we are going for schema support (see tests/xml/schemas/ddl/*.*)
 * there is no upgrade routine for upgrading 1.x to 2.x
-* when we're in exception handling for one exception, it seems that no more
+* when we're in exception handling for a *php* exception, it seems that no more
   exceptions are thrown in subsequent code
-  Example: 
+  Example for reproducing: 
         - dont define date.timezone in php (will raise exception in 
         xarLogger.php early on)
         - make sure CACHEKEYS file is NOT present (should raise exception in 
         caching/template.php lines 168+)
         The fopen() call in caching/template.php does NOT raise an exception then
-* [DONE?] property file names are now based upon $property->name instead of their class name 
-  as before, this means that Dynamic_Select_Property becomes included via
-  sys::import('modules.base.xarproperties.dropdown') instead of 
-  sys::import('modules.base.xarproperties.Dynamic_Select_Property')
-  this exposes an issue in how we name the property classes themselves and the name
+* [DONE?] property file names are now based upon $property->name instead of
+  their class name as before, this means that Dynamic_Select_Property becomes
+  included via sys::import('modules.base.xarproperties.dropdown') instead of
+  sys::import('modules.base.xarproperties.Dynamic_Select_Property') this
+  exposes an issue in how we name the property classes themselves and the name
   stored in the database
 
  
-!!!MIN. REQUIRED VERSIONS DETERMINED SO FAR
+MIN. REQUIRED VERSIONS DETERMINED SO FAR
+----------------------------------------
+
 * PHP      5.1.4 
 * Mysql    5.0.18
-* Postgres 7.4 (first version which has information schema)
+* Postgres 8.1 (this introduced secquences (bug 1883) as tracked objects, meaning
+            they can be reliably referenced in table definitions )
 * Sqlite   N/A (embedded in PHP, i think it's 2.8.x for non PDO and 3.x for PDO)
-           There seems to be a sqlite3 extension floating around for php5
+           There seems to be a sqlite3 extension floating around for php5 too
+           [Requiring sqlite3 wouldnt be bad IMO]
 * Oracle   ?
 * MsSql    ? (server 2003?)
 
-!!!Requirements for a front end (js) library
+
+Requirements for a front end (js) library
+-----------------------------------------
+
 - widget (or controls) is our immediate direct need to lighten the
   burden on template/theme maintenance
 - having events on the controls to asynchronously load other data is
@@ -282,76 +346,101 @@ design work can begin.
   1. include on js entry point for the request
   2. write the controls inside a xar-template 
   3. (optional) customize the default behaviour to the applications need.
-Wether the tags used are compiled/transformed on the server or
+Whether the tags used are compiled/transformed on the server or
 through a js callback is irrelevant for us.
  
 
 Encoding of pseudo values:
 --------------------------
-Based on the premise we want to use foreign key constraints, the above creates 
-a bit of a problem. If we encode 'All' by 0 its not possible to create a foreign
-key constraint on those columns to the auto increment type ids they usually 
-refer to. Only a value > 0 or the non-value NULL can be inserted into the referencing
-column. Initially we wanted to have a generic agreement to encode All~0 and None~NULL. 
-The preliminary solution is to look at each individual case in its context and
-decide how the relationships will be made for that case.
-Referencing the xar_id column in the modules table is the most frequently used
-case, but the problem is more generic.
-In theory there are the following strategies:
-1. do nothing, forget about the foreign key constraint
-2. use 'null' for all as an assumption and document 'exceptions' to the rule and
-the specifics for the case at hand
-3. use a link table to record the relationship (absence of row==none, for each applicable reference a row is present)
-4. change the column type which imposed the foreign key constraint to gain freedom
-in the 'constrained' columns (for example: change auto increment to signed integer)
 
-Other than remodelling completely for a usecase i think the above 4 are the possible
-generic routes to travel.
+Based on the premise we want to use foreign key constraints, the use of string
+representation of things like 'All', 'empty', 'None', 'N/A' etc. create a bit
+of a problem. If we encode 'All' by 0 its not possible to create a foreign key
+constraint on those columns to the auto increment type ids they usually refer
+to. Only a value > 0 or the non-value NULL can be inserted into the
+referencing column. Initially we wanted to have a generic agreement to encode
+All~0 and None~NULL. The preliminary solution is to look at each individual
+case in its context and decide how the relationships will be made for that
+case. Referencing the xar_id column in the modules table is the most
+frequently used case, but the problem is more generic.
+
+In theory there are the following strategies:
+
+1. do nothing, forget about the foreign key constraint
+2. use 'null' for all as an assumption and document 'exceptions' to the rule
+and the specifics for the case at hand
+3. use a link table to record the relationship (absence of row==none, for each
+applicable reference a row is present)
+4. change the column type which imposed the foreign key constraint to gain
+freedom in the 'constrained' columns (for example: change auto increment to
+signed integer)
+
+Other than remodelling completely for a usecase i think the above 4 are the
+possible generic routes to travel.
 
 
 
 Possible new QA checks for 2.x code branch
 ------------------------------------------
-- every class declaration should have an 'extends' clause? (we all derive from Object, (sort of ))
+
+- every class declaration should have an 'extends' clause? (we all derive from
+  Object, (sort of ))
 - every method implementation should have 'public' 'protected' or 'private'
-  (related: the phpdoc @private etc. never made sense to me in php5 context, what's that about?)
+  (related: the phpdoc @private etc. never made sense to me in php5 context,
+  what's that about?)
 - no 'var $varname' like declarations (easy, produces an error anyways)
-- no php4 style constructors, always __construct() if any (hard, since have 2 is valid too, sigh.)
+- no php4 style constructors, always __construct() if any (hard, since have 2
+  is valid too, sigh.)
 - classes start with Capitals (?) (sys class doesnt now, is that bad?)
 - add new deprecation info on wrapped API methods (a lot!)
+- no use of GenID method (no need, leave id columns alone as much as possible)
 
 
 
 Naming conventions and stuff:
 -----------------------------
+
 Hammered: (as in, at least 2 people agreed to this)
-    - order of vars and methods in declaration and implementation: public, protected, private
-    - class constants go first in the class
-    - constructors are always the first method, regardless of scope.
-    - ClassNames are UpperCamelCase ¹
-    - InterfaceNames are UpperCamelCase ² 
-    - methodNames are lowerCamelCase
-    - $variableNames are $lowerCamelCase
-    - CONSTANTS and DEFINES are UPPERCASE (prefer Class::CONSTANT over CONSTANT)
-    - prevent underscores as much as possible (goes for classes, interfaces, methods and variables)
-    - use typehinting as much as possible, prefer interfaces over classes when possible for this
-    - filenames are lowercase.php
-    - use scope identifiers *always* even if public (for clarity, reflection and phpdoc)
-    - phpdoc @access only needed for things which dont have access specifiers in php:
-        - functions
-        - classes 
+
+* order of vars and methods in declaration and implementation: public,
+* protected, private
+* class constants go first in the class
+* constructors are always the first method, regardless of scope.
+* ClassNames are UpperCamelCase ¹
+* InterfaceNames are UpperCamelCase ² 
+* methodNames are lowerCamelCase
+* $variableNames are $lowerCamelCase
+* CONSTANTS and DEFINES are UPPERCASE (prefer Class::CONSTANT over CONSTANT)
+* prevent underscores as much as possible (goes for classes, interfaces,
+* methods and variables)
+* use typehinting as much as possible, prefer interfaces over classes when
+* possible for this
+* filenames are lowercase.php
+* use scope identifiers *always* even if public (for clarity, reflection
+* and phpdoc)
+* phpdoc @access only needed for things which dont have access specifiers
+  in php:
+    - functions
+    - classes 
  
 Remarks:
-    ¹ we wil NOT use a xar specific prefix for our classes, but instead gamble on namespace
-    support to be added in the future. So, everyone, sign the petition here: http://www.PetitionOnline.com/phpns/
-    to increase chances :-). Until then we'll cope with the occassional name conflict and dealt with them as they come.
-    If namespace support is NOT going to happen (which is getting more unlikely) we can implement the prefix
-    once that is certain or do a runkit (see pecl site) layer which allows to spawn environments in their own 
-    threads, which would be awesome to have in general, but is less suited for us mere mortals.
-    ² for interfaces it's even more important to think thrice about their names. 
-    Serializable, Countable are *good* examples, InterfaceForMyClass is *bad*. But what is _enough_ we dont know yet.
+
+¹ we wil NOT use a xar specific prefix for our classes, but instead gamble
+on namespace support to be added in the future. So, everyone, sign the
+petition here: http://www.PetitionOnline.com/phpns/ to increase chances
+:-). Until then we'll cope with the occassional name conflict and dealt
+with them as they come. If namespace support is NOT going to happen (which
+is getting more unlikely) we can implement the prefix once that is certain
+or do a runkit (see pecl site) layer which allows to spawn environments in
+their own threads, which would be awesome to have in general, but is less
+suited for us mere mortals.
+
+² for interfaces it's even more important to think thrice about their
+names. Serializable, Countable are *good* examples, InterfaceForMyClass is
+*bad*. But what is _enough_ we dont know yet.
     
-List of things to hammer (or not):
-    - interface inheritance is unclear to me, so its hard to come up with some rules for that
-    - [WONT] group interface satisfaction methods together
-    
+List of things to hammer (or not): 
+
+* interface inheritance is unclear to me, so its hard to come up with some 
+  rules for that 
+* [WONT] group interface satisfaction methods together

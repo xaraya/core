@@ -53,12 +53,12 @@ function modules_adminapi_gethookedmodules($args)
         $bindvars[] = $hookArea;
     }
 
-    $result =& $dbconn->Execute($query,$bindvars);
-    if(!$result) return;
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery($bindvars);
 
     // modlist will hold the hooked modules
     $modlist = array();
-    for (; !$result->EOF; $result->MoveNext()) {
+    while($result->next()) {
         list($callerModName,$callerItemType) = $result->fields;
         if (empty($callerModName)) continue;
         if (empty($callerItemType)) {
@@ -66,7 +66,7 @@ function modules_adminapi_gethookedmodules($args)
         }
         $modlist[$callerModName][$callerItemType] = 1;
     }
-    $result->Close();
+    $result->close();
 
     return $modlist;
 }

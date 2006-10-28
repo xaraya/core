@@ -78,8 +78,8 @@ function modules_adminapi_updatehooks($args)
         
         // Prepare the insert statement outside the loops
         $sql = "INSERT INTO $xartable[hooks] 
-            (xar_id,xar_object,xar_action,xar_smodid,xar_stype,xar_tarea,xar_tmodid,xar_ttype,xar_tfunc)
-            VALUES (?,?,?,?,?,?,?,?,?)";
+            (xar_object,xar_action,xar_smodid,xar_stype,xar_tarea,xar_tmodid,xar_ttype,xar_tfunc)
+            VALUES (?,?,?,?,?,?,?,?)";
         $stmt2 = $dbconn->prepareStatement($sql);
         while($result->next()) {
             list($hookid, $hooksmodid, $hookstype, $hookobject, $hookaction,
@@ -94,8 +94,7 @@ function modules_adminapi_updatehooks($args)
                     // If user specified ALL specifically, set itemtype hard to empty
                     if ($hookvalue[0] == 1) {
                         $itemtype = ''; // Make this 0 later on
-                        $bindvars = array($dbconn->GenId($xartable['hooks']),
-                                          $hookobject, $hookaction, $modId,
+                        $bindvars = array($hookobject, $hookaction, $modId,
                                           $itemtype, $hooktarea, $hooktmodid,
                                           $hookttype,$hooktfunc);
                         $stmt2->executeUpdate($bindvars);
@@ -107,8 +106,7 @@ function modules_adminapi_updatehooks($args)
                         // If user specified SOME specifically, skip itemtype 0
                         if ($hookvalue[0] == 2 && $itemtype == 0) continue;
                         
-                        $bindvars = array($dbconn->GenId($xartable['hooks']),
-                                          $hookobject, $hookaction, $modId,
+                        $bindvars = array($hookobject, $hookaction, $modId,
                                           $itemtype, $hooktarea, $hooktmodid,
                                           $hookttype,$hooktfunc);
                         $stmt2->executeUpdate($bindvars);

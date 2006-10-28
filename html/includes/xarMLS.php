@@ -770,7 +770,7 @@ abstract class xarMLS__ReferencesBackend  extends Object implements ITranslation
     public $spacedir;
     public $domaincache;
 
-    function xarMLS__ReferencesBackend($locales)
+    function __construct($locales)
     {
         $this->locales = $locales;
         $this->domaincache = array();

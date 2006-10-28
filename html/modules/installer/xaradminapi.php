@@ -149,9 +149,10 @@ function installer_adminapi_CheckForField($args)
 
     // CHECKME: Is this portable? In any case, use the meta classes
     $query = "desc $table_name";
-    $result =& $dbconn->Execute($query);
+    $result =& $dbconn->executeQuery($query);
 
-    for(;!$result->EOF;$result->MoveNext()) {
+    
+    while($result->next()) {
         if ($result[Field] == $field_name) {
             return true;
         }
@@ -183,9 +184,9 @@ function installer_adminapi_GetFieldType($args)
 
     // CHECKME: Is this portable? In any case, use the meta classes
     $query = "desc $table_name";
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->executeQuery($query);
 
-    for(;!$result->EOF;$result->MoveNext()) {
+    while($result->next()) {
         if ($result[Field] == $field_name) {
             return ($row[Type]);
         }

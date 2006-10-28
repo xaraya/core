@@ -60,12 +60,12 @@ function blocks_userapi_getallblocktypes($args)
     $query .= $orderby;
 
     // Return if no details retrieved.
-    $result =& $dbconn->Execute($query, $bind);
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery($bind);
 
     // The main result array.
     $types = array();
-
-    while (!$result->EOF) {
+    while ($result->next()) {
         // Fetch instance data
         list($tid, $module, $type, $info) = $result->fields;
 
@@ -81,13 +81,9 @@ function blocks_userapi_getallblocktypes($args)
             'type' => $type,
             'info' => $info
         );
-
-        // Next block type.
-        $result->MoveNext();
     }
-
     // Close the query.
-    $result->Close();
+    $result->close();
 
     return $types;
 }

@@ -21,9 +21,9 @@
 sys::import('xarMLS');
 class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
-    function xarMLS__PHPTranslationsBackend($locales)
+    function __construct($locales)
     {
-        parent::xarMLS__ReferencesBackend($locales);
+        parent::__construct($locales);
         $this->backendtype = "php";
     }
 

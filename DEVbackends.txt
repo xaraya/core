@@ -14,7 +14,7 @@ VIEWS support
 - sqlite  : yes, since forever, but read only (which is a good thing,  but a pain when you're migrating )
 - postgres: yes, since 7.3 (at least)
 - mssql   : yes, no idea version wise
-- oracle  : ?
+- oracle  : yes, no idea version wise
   
 ==> SUPPPORTED BY ALL, WORTH CONSIDERING
 
@@ -24,7 +24,7 @@ TRANSACTION support
 - sqlite  : yes, since forever
 - postgres: yes
 - mssql   : yes
-- oracle  : ?
+- oracle  : yes
 
 ==> SUPPORTED BY ALL, BEING USED RIGHT NOW.
 
@@ -56,7 +56,7 @@ FOREIGN KEY support
 - sqlite  : no, accepts syntax, but doesnt act (triggers is the proposed alternative)
 - postgres: yes
 - mssql   : yes, no idea version wise
-- oracle  : ?
+- oracle  : yes, no idea version wise
 
 Foreign key constrained columns can be NULL?
 --------------------------------------------
@@ -100,7 +100,7 @@ TRIGGER support
 - sqlite  : yes, since forever
 - postgres: yes, at least since 7.3
 - mssql   : yes, at least since mssql server 2000
-- oracle  : ?
+- oracle  : yes, no idea version wise
 
 ==> SUPPORTED BY ALL, WORTH CONSIDERING
 
@@ -175,7 +175,7 @@ Native query preparation support
                     $result = pg_execute($dbconn, "my_query", array("Joe's Widgets"));
                     $result = pg_execute($dbconn, "my_query", array("Clothes Clothes Clothes"));
 - mssql     :    Unknown, it's possible in embedded SQL, no idea if transact SQL does support it.
-- oracle    :     most likely
+- oracle    :    most likely
 
 
 Comments Syntax support for SQL:
@@ -352,9 +352,15 @@ Does this work for all databases? Here's an overview
 - oracle:   define the sequence and either use a before insert trigger or 
             the definition of the default value on the sequence (not sure if that is supported
             [UPDATE: it is NOT, damn])
-- mssql   : not sure, mssql has both sequences and autoincrement type, in theory
-            no changes are needed
-
+- mssql   : mssql uses the IDENTITY column, which does exactly what it says, i.e.
+            provide an identifier. The catch is that that column can NOT be used explicitly
+            unless the backend is explicitly told so with 
+                SET IDENTIY INSERT tablename ON;
+            which is what we do now. If the GenID construct we use now is migrated out, we
+            theoretically can move that construct out. mssql is inflexible, but it just happens
+            to fit the alternative concept ;-)
+             
+            
 SQL Change Details:
 
 Mysql:
@@ -413,3 +419,49 @@ MS SQL:
         i.e. the column colname is normally protected and should not be 
         included in INSERT statements.
     ]
+
+
+Relevant postgres changelog entries:
+
+8.0
+    - windows native server
+    - alter table can change column type
+8.1
+    - multi machine prepares (two phase commit)
+    - default values of columns as ::regclass not ::text, this means that if
+    an expression in a default value uses a named object, the default value 
+    expression follows suite if that object gets renamed (we use this feature
+    for sequences, hence the 8.1 min. required version)
+8.1.4
+    - unsafe usage of \' in string literals is rejected now
+    
+    
+Other backends
+==============
+There are some other backends which have an API in PHP. 
+
+Firebird/Interbase:
+    The old borland product which went open source a while ago. The server exists
+    in 2 varieties if i recall correctly, something like a standard version and a
+    superserver. No idea what the differences are. The database (from what i remember)
+    is a bit weird to connect to, as the path on the server needs to be known, but other
+    than that its a pretty standard database. It runs on linux and windows in any 
+    case. For this backend to be supported a driver section in Creole would have to be
+    developed. There will also be an PDO driver for this database.
+    (speaking of which, a PDO driver for Creole would be a good long term investment
+    if you're doing creole work. It consolidates the driver interface and the innovative
+    frameworks are moving towards it.)
+    
+IBM DB2 universal database:
+    Free as in beer. Available for many platforms but mostly a *nix bases product if
+    the types of platforms are a good criterium for it. I know next to nothing about this
+    database
+    
+Informix
+    No known information
+    
+Frontbase
+    No known information
+    
+SAP DB / MaxDB
+    No known information

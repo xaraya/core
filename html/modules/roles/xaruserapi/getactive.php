@@ -43,19 +43,19 @@ function roles_userapi_getactive($args)
     $query = "SELECT xar_uid
               FROM $sessioninfoTable
               WHERE xar_lastused > ? AND xar_uid = ?";
+    $stmt = $dbconn->prepareStatement($query);
     $bindvars = array((int)$filter,(int)$uid);
-    $result =& $dbconn->Execute($query,$bindvars);
+    $result = $stmt->executeQuery($bindvars);
 
     // Put users into result array
-    for (; !$result->EOF; $result->MoveNext()) {
+    while($result->next()) {
         $uid = $result->fields;
-    // FIXME: add some instances here
+        // FIXME: add some instances here
         if (xarSecurityCheck('ReadRole',0)) {
             $sessions[] = array('uid'       => $uid);
         }
     }
-
-    $result->Close();
+    $result->close();
 
     // Return the users
     if (empty($sessions)){

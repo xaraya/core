@@ -39,9 +39,10 @@ function modules_adminapi_getdbmodules($args)
     if ($modregid) {
         $sql .= " WHERE $xartable[modules].xar_regid = ?";
     }
-    $result = $dbconn->Execute($sql,array($modregid));
+    $stmt = $dbconn->prepareStatement($sql);
+    $result = $stmt->executeQuery(array($modregid));
 
-    while(!$result->EOF) {
+    while($result->next()) {
         list($regid, $name, $directory, $class, $version, $mode, $state) = $result->fields;
 
         // If returning one module, then push array without name index
@@ -61,9 +62,8 @@ function modules_adminapi_getdbmodules($args)
                                       'mode'    => $mode,
                                       'state'   => $state);
         }
-        $result->MoveNext();
     }
-    $result->Close();
+    $result->close();
 
     return $dbModules;
 }

@@ -56,13 +56,13 @@ function blocks_userapi_groupgetinfo($args)
         $bindvars=array($name);
     }
 
-    $result = $dbconn->Execute($query,$bindvars,ResultSet::FETCHMODE_ASSOC);
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_ASSOC);
 
     // Return if we don't get exactly one result.
     if ($result->getRecordCount() != 1) {
         return;
     }
-
     $group = $result->fields;
     $result->close();
 
@@ -86,17 +86,15 @@ function blocks_userapi_groupgetinfo($args)
               LEFT JOIN $modulesTable as mods        ON btypes.xar_modid = mods.xar_id
               WHERE     bgroups.xar_id = ? 
               ORDER BY  group_inst.xar_position ASC";
-
-    $result = $dbconn->Execute($query,array($gid),ResultSet::FETCHMODE_ASSOC);
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery(array($gid),ResultSet::FETCHMODE_ASSOC);
 
     // Load up list of group's instances
     $instances = array();
-    while(!$result->EOF) {
+    while($result->next()) {
         $instances[] = $result->fields;
-        $result->MoveNext();
     }
-
-    $result->Close();
+    $result->close();
 
     $group['instances'] = $instances;
 

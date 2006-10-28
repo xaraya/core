@@ -400,6 +400,7 @@ function xarIsAncestor($name1, $name2)
  * @access  public
  * @param   string name
  * @return  object role
+ * @todo    what is this doing here?
  */
 function xarTree()
 {

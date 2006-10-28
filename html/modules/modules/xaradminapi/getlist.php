@@ -136,10 +136,15 @@ function modules_adminapi_getlist($args)
     array_unshift($bindvars,$mode);
     $whereClause = join(' AND ', $whereClauses);
     $query .= " WHERE $whereClause ORDER BY $orderByClause";
+    
+    // Got it
+    $stmt = $dbconn->prepareStatement($query);
+    $stmt->setLimit($numItems);
+    $stmt->setOffset($startNum - 1);
+    
+    $result = $stmt->executeQuery($bindvars);
 
-    $result = $dbconn->SelectLimit($query, $numItems, $startNum - 1,$bindvars);
-
-    while(!$result->EOF) {
+    while($result->next()) {
         list($modInfo['regid'],
              $modInfo['name'],
              $modInfo['directory'],
@@ -186,10 +191,8 @@ function modules_adminapi_getlist($args)
             $modList[] = $modInfo;
         }
         $modInfo = array();
-        $result->MoveNext();
     }
-
-    $result->Close();
+    $result->close();
     return $modList;
 }
 ?>

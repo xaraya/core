@@ -84,12 +84,11 @@ function modules_init()
         // Use version, since that's the only info likely to change
         $modVersion = $modInfo['version'];
         // Manually Insert Modules module into modules table
-        $seqId = $dbconn->GenId($tables['modules']);
         $query = "INSERT INTO " . $tables['modules'] . "
-              (xar_id, xar_name, xar_regid, xar_directory, xar_version, xar_mode,
+              (xar_name, xar_regid, xar_directory, xar_version, xar_mode,
                xar_class, xar_category, xar_admin_capable, xar_user_capable, xar_state )
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $bindvars = array($seqId,'modules',1,'modules',(string) $modVersion,1,'Core Admin','Global',1,0,3);
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $bindvars = array('modules',1,'modules',(string) $modVersion,1,'Core Admin','Global',1,0,3);
         $dbconn->Execute($query,$bindvars);
 
         // Save the actual insert id
@@ -116,22 +115,15 @@ function modules_init()
         $query = xarDBCreateTable($tables['module_itemvars'], $fields);
         $dbconn->Execute($query);
 
-        // MrB: do we want an index on xar_value, on large sites, lots of records may exist
-        // <mikespub> the only reason why you might want to use an index on value is when you're doing
-        // simple queries or stats based on it. But since all values of all kinds of stuff
-        // are mixed together here, and we're not querying by value anyway, this wouldn't help at all...
-        // Pro: searching for values will speed up (is that used somewhere)
-        // Con: setting a user mod var will become slower and slower (relatively tho)
-        // prefix_hooks
         /**
          * CREATE TABLE xar_hooks (
          *   xar_id int(10) unsigned NOT NULL auto_increment,
          *   xar_object varchar(64) NOT NULL default '',
          *   xar_action varchar(64) NOT NULL default '',
-         *   xar_smodule varchar(64) NOT NULL default '',
+         *   xar_smodid integer default null,
          *   xar_stype varchar(64) NOT NULL default '',
          *   xar_tarea varchar(64) NOT NULL default '',
-         *   xar_tmodule varchar(64) NOT NULL default '',
+         *   xar_tmodid integer not null,
          *   xar_ttype varchar(64) NOT NULL default '',
          *   xar_tfunc varchar(64) NOT NULL default '',
          *   PRIMARY KEY  (xar_id)
@@ -141,11 +133,11 @@ function modules_init()
                         'xar_id'      => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
                         'xar_object'  => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'xar_action'  => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        'xar_smodid'  => array('type' => 'integer', 'null' => false, 'default' => '0'),
+                        'xar_smodid'  => array('type' => 'integer', 'null' => true, 'default' => null),
                         // TODO: switch to integer for itemtype (see also xarMod.php)
                         'xar_stype'   => array('type' => 'varchar', 'size' => 64, 'null' => false, 'default' => ''),
                         'xar_tarea'   => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        'xar_tmodid'  => array('type' => 'integer', 'null' => false, 'default' => '0'),
+                        'xar_tmodid'  => array('type' => 'integer', 'null' => false),
                         'xar_ttype'   => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'xar_tfunc'   => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'xar_order'   => array('type' => 'integer', 'null' => false, 'default' => '0')
@@ -162,8 +154,8 @@ function modules_init()
          * prolly need to move this closer to installer, not sure yet
          */
 
-        $sql = "INSERT INTO " . $tables['module_vars'] . " (xar_id, xar_modid, xar_name, xar_value)
-                VALUES (?,?,?,?)";
+        $sql = "INSERT INTO " . $tables['module_vars'] . " (xar_modid, xar_name, xar_value)
+                VALUES (?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
         $modvars = array(
@@ -189,8 +181,6 @@ function modules_init()
                          array($savedmodid,'expertlist','0'));
 
         foreach($modvars as &$modvar) {
-            $id = $dbconn->GenId($tables['module_vars']);
-            array_unshift($modvar,$id);
             $stmt->executeUpdate($modvar);
         }
 

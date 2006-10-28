@@ -35,9 +35,9 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
     var $transKeyInd = 0;
 
 
-    function xarMLS__XMLTranslationsBackend($locales)
+    function __construct($locales)
     {
-        parent::xarMLS__ReferencesBackend($locales);
+        parent::__construct($locales);
         $this->backendtype = "xml";
     }
 

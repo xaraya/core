@@ -76,19 +76,16 @@ function roles_userapi_getdeleteduser($args)
         $query .= " AND xar_email = ?";
         $bindvars[] = $email;
     }
-
-    $result =& $dbconn->Execute($query,$bindvars);
+    $stmt = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuuery($bindvars);
 
 
     // Check for no rows found, and if so return
-    if ($result->EOF) {
-        return false;
-    }
+    if (!$result->first()) return false;
 
     // Obtain the item information from the result set
     list($uid, $uname, $name, $email, $pass, $date, $valcode, $state) = $result->fields;
-
-    $result->Close();
+    $result->close();
 
     // Create the user array
     $user = array('uid'         => $uid,

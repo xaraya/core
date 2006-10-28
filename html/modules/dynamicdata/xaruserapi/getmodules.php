@@ -31,20 +31,20 @@ function dynamicdata_userapi_getmodules($args)
               GROUP BY xar_prop_moduleid, xar_prop_itemtype
               ORDER BY xar_prop_moduleid ASC, xar_prop_itemtype ASC";
 
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->executeQuery($query);
 
     $modules = array();
-    while (!$result->EOF) {
+    while ($result->next()) {
         list($modid, $itemtype, $count) = $result->fields;
         if(xarSecurityCheck('ViewDynamicDataItems',0,'Item',"$modid:$itemtype:All")) {
-            $modules[] = array('modid' => $modid,
-                               'itemtype' => $itemtype,
-                               'numitems' => $count);
+            $modules[] = array(
+                'modid' => $modid,
+                'itemtype' => $itemtype,
+                'numitems' => $count
+            );
         }
-        $result->MoveNext();
     }
-
-    $result->Close();
+    $result->close();
 
     return $modules;
 }
