@@ -38,11 +38,11 @@ class DataObjectList extends DataObjectMaster
      * @param $args['numitems'] number of items to retrieve
      * @param $args['startnum'] start number
      */
-    function __construct($args)
+    function __construct(DataObjectDescriptor $descriptor)
     {
         // get the object type information from our parent class
-        $descriptor = new DataObjectDescriptor($args);
         parent::__construct($descriptor);
+        $args = $descriptor->getArgs();
 
         // see if we can access these objects, at least in overview
         if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->moduleid.':'.$this->itemtype.':All')) return;

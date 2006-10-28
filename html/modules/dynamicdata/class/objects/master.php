@@ -679,8 +679,9 @@ class DataObjectMaster extends Object
         if(!empty($args['classname']) && class_exists($args['classname']))
             $classname = $args['classname'];
 
+        $descriptor = new DataObjectDescriptor($args);
         // here we can use our own classes to retrieve this
-        $object = new $classname($args);
+        $object = new $classname($descriptor);
         return $object;
     }
 
@@ -713,8 +714,9 @@ class DataObjectMaster extends Object
                 $classname = $args['classname'];
             }
         }
+        $descriptor = new DataObjectDescriptor($args);
         // here we can use our own classes to retrieve this
-        $object = new $classname($args);
+        $object = new $classname($descriptor);
         return $object;
     }
 
