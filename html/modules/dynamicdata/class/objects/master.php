@@ -47,7 +47,6 @@ class DataObjectDescriptor extends Object
     public function setArgs(array $args)
     {
         $this->args = $args;
-        var_dump($this->args);
     }
 
 }
