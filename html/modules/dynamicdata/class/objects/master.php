@@ -11,6 +11,48 @@
 sys::import('modules.dynamicdata.class.datastores');
 sys::import('modules.dynamicdata.class.properties');
 
+class DataObjectDescriptor extends Object
+{
+    private $args;
+
+    function __construct(array $args)
+    {
+        $this->setArgs($args);
+    }
+
+    public function getArgs()
+    {
+        return $this->args;
+    }
+
+    public function getPublicProperties(Object $object)
+    {
+//        the future?
+        $o = Object::getClass($object);
+        $objectname = $o->getName();
+//        $objectname = get_class($object);
+        $reflection = new ReflectionClass($objectname);
+        $properties = array();
+        foreach($reflection->getProperties() as $p) {
+            $prop = new ReflectionProperty($objectname,$p->name);
+            if ($prop->isPublic()) $properties[$p->name] = $prop->getValue($object);
+        }
+        return $properties;
+    }
+
+    public function refresh(Object $object)
+    {
+        $publicproperties = $this->getPublicProperties($object);
+        foreach ($this->args as $key => $value) if (isset($publicproperties[$key])) $object->$key = $value;
+    }
+
+    public function setArgs(array $args)
+    {
+        $this->args = $args;
+    }
+
+}
+
 class DataObjectMaster extends Object
 {
     public $objectid    = null;         // system id of the object in this installation
@@ -26,6 +68,8 @@ class DataObjectMaster extends Object
     public $maxid       = 0;
     public $config      = '';
     public $isalias     = 0;
+    public $join;
+    public $table;
 
     public $properties  = array();      // list of properties for the DD object
     public $datastores  = array();      // similarly the list of datastores (arguably in the wrong place here)
@@ -59,14 +103,13 @@ class DataObjectMaster extends Object
      * @param $args['allprops'] skip disabled properties by default
      * @todo  This does too much, split it up
     **/
-    function __construct(array $args)
-    {
-        xarMod::loadDbInfo('dynamicdata','dynamicdata');
 
-        // fill in the default object variables
-        if(!empty($args) && count($args) > 0)
-            foreach($args as $key => $val)
-                $this->$key = $val; // bleh, this is not very nice.
+    function __construct(DataObjectDescriptor $descriptor)
+    {
+        $this->descriptor = $descriptor;
+        $this->load();
+
+        xarMod::loadDbInfo('dynamicdata','dynamicdata');
 
         // Get the info on the db table if that was passed in.
         // meaning the object is based on a db table.
@@ -99,7 +142,7 @@ class DataObjectMaster extends Object
 
         if(empty($this->name))
         {
-            $info = self::getObjectInfo($args);
+            $info = self::getObjectInfo($this->descriptor->getArgs());
             if(isset($info) && count($info) > 0)
                 foreach($info as $key => $val)
                     $this->$key = $val; // bleh, this is not very nice.
@@ -172,6 +215,7 @@ class DataObjectMaster extends Object
         // add ancestors' properties to this object if required
         // the default is to add the fields
         $this->baseancestor = $this->objectid;
+//var_dump($this->descriptor->getPublicProperties($this));exit;
         if((!isset($args['extend']) || ($args['extend'] != false)))
             $this->addAncestors();
     }
@@ -1113,5 +1157,11 @@ class DataObjectMaster extends Object
 
         return $types;
     }
+
+    function load()
+    {
+        $this->descriptor->refresh($this);
+    }
+
 }
 ?>

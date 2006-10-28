@@ -11,7 +11,7 @@
  */
 /**
  * Wrapper for DataObjectMaster::getObjectInfo
- * 
+ *
  * @see  DataObjectMaster::getObjectInfo
  */
 function dynamicdata_userapi_getobjectinfo($args)

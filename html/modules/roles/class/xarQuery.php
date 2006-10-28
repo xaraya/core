@@ -690,9 +690,9 @@ class xarQuery extends Object
             $bindvalues = '';
             foreach ($this->fields as $field) {
                 if (is_array($field)) {
-                    // CHECKME: Doesn't the second isset check break if the value is NULL? 
+                    // CHECKME: Doesn't the second isset check break if the value is NULL?
                     //          i.e. when the (non-)value we want to insert *is* actually NULL
-                    if(isset($field['name']) && isset($field['value'])) { 
+                    if(isset($field['name']) && isset($field['value'])) {
                         $names .= $field['name'] . ", ";
                         $bindvalues .= "?, ";
                         $this->bindvars[] = $field['value'];
@@ -910,7 +910,7 @@ class xarQuery extends Object
             $this->statement = $this->_statement();
         }
     }
-    // Next id???? 
+    // Next id????
     function nextid($table="", $id="")
     {
         if (!isset($this->dbconn)) $this->dbconn =& xarDBGetConn();
@@ -926,7 +926,7 @@ class xarQuery extends Object
     }
     function qecho()
     {
-        echo $this->tostring();
+        echo $this->__toString();
     }
     function bindstatement()
     {
