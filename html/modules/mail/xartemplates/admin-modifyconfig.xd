@@ -107,6 +107,12 @@
                     </label>
                 </div>
             </fieldset>
+            <fieldset>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
+                </div>
+            </fieldset>
        <xar:elseif condition="$tab eq 'outgoing'"/>
             <!-- Outgoing tab -->
             <fieldset>
@@ -312,48 +318,48 @@
                     </label>
                     <xar:data-input type="textarea_large" id="searchstrings" name="searchstrings" value="$searchstrings"/>
                 </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>
+                    <xar:mlstring>Debugging</xar:mlstring>
+                </legend>
+
+                <div class="xar-form-input-wrapper-after">
+                    <xar:if condition="xarModGetVar('mail', 'redirectsending')">
+                        <input type="checkbox" name="redirectsending" id="redirectsending" value="1" checked="checked" />
+                        <xar:else />
+                        <input type="checkbox" name="redirectsending" id="redirectsending" value="1" />
+                    </xar:if>
+                    <label for="html" title="#xarML('Check this box if you want to send all emails to a fixed address.')#">
+                        <xar:mlstring>Redirect Emails to the email address below</xar:mlstring>
+                    </label>
+                </div>
+
+                <div class="xar-form-input-wrapper">
+                    <label for="redirectaddress" title="#xarML('Redirect Address is the email address that all emails are sent to in debugging mode.')#" class="xar-form-label">
+                        <xar:mlstring>Redirect Address:</xar:mlstring>
+                    </label>
+                    <input type="text" name="redirectaddress" id="redirectaddress" value="#xarModGetVar('mail', 'redirectaddress', 1)#" maxlength="100" class="xar-form-textxlong" />
+                </div>
+
+                <div class="xar-form-input-wrapper-after">
+                    <xar:if condition="xarModGetVar('mail', 'suppresssending')">
+                        <input type="checkbox" name="suppresssending" id="suppresssending" value="1" checked="checked" />
+                        <xar:else />
+                        <input type="checkbox" name="suppresssending" id="suppresssending" value="1" />
+                    </xar:if>
+                    <label for="html" title="#xarML('Check this box if you want to suppress email sending for testing purposes.')#">
+                        <xar:mlstring>Suppress Emails</xar:mlstring>
+                    </label>
+                </div>
+            </fieldset>
                 
-                <fieldset>
-                    <legend>
-                        <xar:mlstring>Debugging</xar:mlstring>
-                    </legend>
-                    
-                    <div class="xar-form-input-wrapper-after">
-                        <xar:if condition="xarModGetVar('mail', 'redirectsending')">
-                            <input type="checkbox" name="redirectsending" id="redirectsending" value="1" checked="checked" />
-                            <xar:else />
-                            <input type="checkbox" name="redirectsending" id="redirectsending" value="1" />
-                        </xar:if>
-                        <label for="html" title="#xarML('Check this box if you want to send all emails to a fixed address.')#">
-                            <xar:mlstring>Redirect Emails to the email address below</xar:mlstring>
-                        </label>
-                    </div>
-                    
-                    <div class="xar-form-input-wrapper">
-                        <label for="redirectaddress" title="#xarML('Redirect Address is the email address that all emails are sent to in debugging mode.')#" class="xar-form-label">
-                            <xar:mlstring>Redirect Address:</xar:mlstring>
-                        </label>
-                        <input type="text" name="redirectaddress" id="redirectaddress" value="#xarModGetVar('mail', 'redirectaddress', 1)#" maxlength="100" class="xar-form-textxlong" />
-                    </div>
-                    
-                    <div class="xar-form-input-wrapper-after">
-                        <xar:if condition="xarModGetVar('mail', 'suppresssending')">
-                            <input type="checkbox" name="suppresssending" id="suppresssending" value="1" checked="checked" />
-                            <xar:else />
-                            <input type="checkbox" name="suppresssending" id="suppresssending" value="1" />
-                        </xar:if>
-                        <label for="html" title="#xarML('Check this box if you want to suppress email sending for testing purposes.')#">
-                            <xar:mlstring>Suppress Emails</xar:mlstring>
-                        </label>
-                    </div>
-                </fieldset>
-                
-                <fieldset>
-                    <div class="xar-form-input-wrapper-after">
-                        <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                        <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
-                    </div>
-                </fieldset>
+            <fieldset>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
+                </div>
             </fieldset>
         </xar:if> 
     </form>
