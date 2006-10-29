@@ -27,10 +27,8 @@ class DataObjectDescriptor extends Object
 
     public function getPublicProperties(Object $object)
     {
-//        the future?
-        $o = Object::getClass($object);
+        $o = $object->getClass();
         $objectname = $o->getName();
-//        $objectname = get_class($object);
         $reflection = new ReflectionClass($objectname);
         $properties = array();
         foreach($reflection->getProperties() as $p) {
@@ -70,6 +68,7 @@ class DataObjectMaster extends Object
     public $isalias     = 0;
     public $join;
     public $table;
+    public $extend      = true;
 
     public $properties  = array();      // list of properties for the DD object
     public $datastores  = array();      // similarly the list of datastores (arguably in the wrong place here)
@@ -143,6 +142,8 @@ class DataObjectMaster extends Object
         if(empty($this->name))
         {
             $info = self::getObjectInfo($this->descriptor->getArgs());
+//            $this->descriptor->setArgs($info);
+//            $this->load();
             if(isset($info) && count($info) > 0)
                 foreach($info as $key => $val)
                     $this->$key = $val; // bleh, this is not very nice.
@@ -216,7 +217,7 @@ class DataObjectMaster extends Object
         // the default is to add the fields
         $this->baseancestor = $this->objectid;
 //var_dump($this->descriptor->getPublicProperties($this));exit;
-        if((!isset($args['extend']) || ($args['extend'] != false)))
+        if($this->extend)
             $this->addAncestors();
     }
 
@@ -678,8 +679,9 @@ class DataObjectMaster extends Object
         if(!empty($args['classname']) && class_exists($args['classname']))
             $classname = $args['classname'];
 
+        $descriptor = new DataObjectDescriptor($args);
         // here we can use our own classes to retrieve this
-        $object = new $classname($args);
+        $object = new $classname($descriptor);
         return $object;
     }
 
@@ -712,8 +714,9 @@ class DataObjectMaster extends Object
                 $classname = $args['classname'];
             }
         }
+        $descriptor = new DataObjectDescriptor($args);
         // here we can use our own classes to retrieve this
-        $object = new $classname($args);
+        $object = new $classname($descriptor);
         return $object;
     }
 

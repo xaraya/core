@@ -18,13 +18,13 @@ class DataObject extends DataObjectMaster
      *
      * @param $args['itemid'] item id of the object to get
     **/
-    function __construct(array $args)
+    function __construct(DataObjectDescriptor $descriptor)
     {
         // get the object type information from our parent class
-        $descriptor = new DataObjectDescriptor($args);
         parent::__construct($descriptor);
 
         // set the specific item id (or 0)
+        $args = $descriptor->getArgs();
         if(isset($args['itemid']))
             $this->itemid = $args['itemid'];
 
