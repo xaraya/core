@@ -157,8 +157,8 @@
               <reference local="ref_name" remote="other_columns_name"/>
           </foreign>
       </table>
-    ondelete means: what happens to the remote record if the local record gets deleted.
-    onupdate means: what happens to the remote columns if the local columns get updated.
+    ondelete means: what happens to the local record if the remote record gets deleted.
+    onupdate means: what happens to the local columns if the remote columns get updated.
     If a foreign key is composite, add more <reference/> elements.
     
     * other than the precise size="14" it could be comfortable to specify 'qualitative' sizes.
