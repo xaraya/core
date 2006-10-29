@@ -164,13 +164,20 @@ class SelectProperty extends DataProperty
         if (!empty($this->func)) {
             // we have some specific function to retrieve the options here
             eval('$items = ' . $this->func .';');
-            if (isset($items) && count($items) > 0) {
+            if (isset($items) && is_object($items)){
+                sys::import('structures.sets.collection');
+                $iter = $items->getIterator();
+                while($iter->valid()) {
+                    $obj = $iter->current();
+                    $this->options[] = $obj->toArray();
+                    $iter->next();
+                }
+            } elseif (isset($items) && is_array($items) && count($items) > 0) {
                 foreach ($items as $id => $name) {
                     array_push($this->options, array('id' => $id, 'name' => $name));
                 }
                 unset($items);
             }
-
         } elseif (!empty($this->file) && file_exists($this->file)) {
             $fileLines = file($this->file);
             foreach ($fileLines as $option)
