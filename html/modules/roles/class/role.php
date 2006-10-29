@@ -371,11 +371,13 @@ class xarRole extends Object
         static $allprivileges = array();
         if (empty($allprivileges)) {
             $query = "SELECT xar_pid, xar_name FROM $this->privilegestable ORDER BY xar_name";
-            $result = $stmt->executeQuery($query);
+            $stmt = $this->dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery();
 
+            $i=0;
             while ($result->next()) {
                 list($pid, $name) = $result->fields;
-                $allprivileges[$ind++] = array('pid' => $pid, 'name' => $name);
+                $allprivileges[$i++] = array('pid' => $pid, 'name' => $name);
             }
         }
         return $allprivileges;
@@ -402,7 +404,7 @@ class xarRole extends Object
         // TODO: propagate the use of 'All'=null for realms through the API instead of the flip-flopping
         $query = "SELECT  xar_pid, p.xar_name, r.xar_name, xar_module,
                           xar_component, xar_instance, xar_level, xar_description
-                  FROM    $this->acltable acl, 
+                  FROM    $this->acltable acl,
                           $this->privilegestable p LEFT JOIN $this->realmstable r ON p.xar_realmid = r.xar_rid
                   WHERE   p.xar_pid = acl.xar_permid AND
                           acl.xar_partid = ?";
@@ -545,10 +547,10 @@ class xarRole extends Object
         }
         if (isset($selection)) $query .= $selection;
         $query .= " ORDER BY xar_" . $order;
-        
+
         // Prepare the query
         $stmt = $this->dbconn->prepareStatement($query);
-        
+
         if ($startnum != 0) {
             $stmt->setLimit($numitems);
             $stmt->setOffset($startnum - 1);
@@ -906,7 +908,7 @@ class xarRole extends Object
      */
     function getPrivileges()
     {
-        /*  
+        /*
         // start by getting an array of all the privileges
         $query = "SELECT * FROM $this->privilegestable";
         $result = $this->dbconn->executeQuery($query);
