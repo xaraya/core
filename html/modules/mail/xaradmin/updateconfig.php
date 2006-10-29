@@ -67,6 +67,10 @@ function mail_admin_updateconfig()
         if (!xarVarFetch('sendmailpath', 'str:1:', $sendmailpath, '/usr/sbin/sendmail', XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('searchstrings', 'str:1', $searchstrings, '', XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('replacestrings', 'str:1', $replacestrings, '', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('suppresssending', 'checkbox', $suppresssending, false, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('redirectsending', 'checkbox', $redirectsending, false, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('redirectaddress', 'str:1', $redirectaddress, '', XARVAR_NOT_REQUIRED)) return;
+
         // update the data
         xarModSetVar('mail', 'html', $html);
         xarModSetVar('mail', 'htmluseheadfoot', $htmluseheadfoot);
@@ -84,13 +88,16 @@ function mail_admin_updateconfig()
         xarModSetVar('mail', 'smtpAuth', $smtpAuth);
         xarModSetVar('mail', 'smtpUserName', $smtpUserName);
         if (!empty($smtpPassword)) xarModSetVar('mail', 'smtpPassword', $smtpPassword);
-        
+
         xarModSetVar('mail', 'sendmailpath', $sendmailpath);
         $searchstrings = serialize($searchstrings);
         xarModSetVar('mail', 'searchstrings', $searchstrings);
         $replacestrings = serialize($replacestrings);
         xarModSetVar('mail', 'replacestrings', $replacestrings);
-        
+        xarModSetVar('mail', 'suppresssending', $suppresssending);
+        xarModSetVar('mail', 'redirectsending', $redirectsending);
+        xarModSetVar('mail', 'redirectaddress', $redirectaddress);
+
         if (xarModIsAvailable('scheduler')) {
             if (!xarVarFetch('interval', 'str:1', $interval, '', XARVAR_NOT_REQUIRED)) return;
             // see if we have a scheduler job running to send queued mail
