@@ -30,11 +30,12 @@ class BlocklayoutXSLTProcessor extends Object
         // Set up the stylesheet
         $domDoc = new DOMDocument();
         $domDoc->load($xslFile);
+        set_exception_handler(array('ExceptionHandlers','bone'));
         $this->xslProc->importStyleSheet($domDoc);
         
         // Preprocess the xml, so we dont get unresolved entities and stuff.
         // &xar-entity; -> [whatever php code it needs];
-        $entityPattern = '/(&xar-[a-z\-]+?;)/';
+        $entityPattern = '/(&xar-[a-z\-_]+?;)/';
         $callBack      = array('XsltCallbacks','entities');
         $this->prepXml = preg_replace_callback($entityPattern,$callBack,$this->origXml);
 
@@ -54,7 +55,9 @@ class BlocklayoutXSLTProcessor extends Object
         }
         
         // Transform it
+        set_exception_handler(array('ExceptionHandlers','bone'));
         $result = $this->xslProc->transformToXML($this->xmlDoc);
+        //set_exception_handler(array('ExceptionHandlers','default'));
         
         // Expressions in attributes are not handled by the transform because
         // XSLT can not generate anything other than valid XML (well, it can but 
