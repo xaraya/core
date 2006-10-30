@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <div id="xc-clear">
-                    &nbsp; 
+                    &#160; 
                     <!-- this is the height clearing empty element -->
                 </div>
             </div>
