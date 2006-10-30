@@ -33,7 +33,7 @@
 
 <xar:if condition="xarModGetVar('roles', 'showterms')">
     <xar:set name="curnum">++$curnum</xar:set>
-    <h3 id="accept">#$curnum#.&nbsp;<xar:mlstring>Acceptance of Terms of Use and Amendments</xar:mlstring></h3>
+    <h3 id="accept">#$curnum#.&#160;<xar:mlstring>Acceptance of Terms of Use and Amendments</xar:mlstring></h3>
     <p> <xar:mlstring>Each time you use or cause access to this web site, you agree to be bound by these</xar:mlstring> <a href="&xar-modurl-roles-user-terms;">
         <xar:mlstring>Terms of Use</xar:mlstring></a>, <xar:mlstring>and as amended from time to time with or without notice to you.
         In addition, if you are using a particular service on or through this web site, you will be subject to any rules or guidelines applicable to those services and they shall be incorporated by reference into these</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a>.
@@ -42,14 +42,14 @@
         </xar:if>
         </p>
     <xar:set name="curnum">++$curnum</xar:set>
-    <h3 id="service">#$curnum#.&nbsp;<xar:mlstring>Our Service</xar:mlstring></h3>
+    <h3 id="service">#$curnum#.&#160;<xar:mlstring>Our Service</xar:mlstring></h3>
         <!-- **NOTE: Feel free to add in a general description of your web site. -->
          <p><xar:mlstring>Our web site and services provided to you </xar:mlstring>
         <!-- **NOTE: you may wish to soften the disclaimer -->
         <xar:mlstring>on and through our web site on an "AS IS" basis.You agree that the owners of this web site exclusively reserve the right and may, at any time and without notice and any liability to you, modify or discontinue this web site and its services or delete the data you provide, whether temporarily or permanently. We shall have no responsibilty or liability for the timeliness, deletion, failure to store, inaccuracy, or improper delivery of any data or information.</xar:mlstring></p>
 
     <xar:set name="curnum">++$curnum</xar:set>
-    <h3 id="responsible">#$curnum#.&nbsp;<xar:mlstring>Your Responsibilities and Registration Obligations</xar:mlstring></h3>
+    <h3 id="responsible">#$curnum#.&#160;<xar:mlstring>Your Responsibilities and Registration Obligations</xar:mlstring></h3>
         <p><xar:mlstring>In order to use this web site, you must</xar:mlstring> 
         <a href="&xar-modurl-roles-user-main;"><xar:mlstring>register</xar:mlstring></a> <xar:mlstring>on our site, and agree to provide truthful information when requested.</xar:mlstring>
         <xar:if condition="xarModGetVar('roles', 'minage') gt '0'" >
@@ -63,16 +63,16 @@
 
 <xar:if condition="xarModGetVar('roles', 'showprivacy')">
     <xar:set name="curnum">++$curnum</xar:set>        
-    <h3 id="privacy">#$curnum#.&nbsp;<xar:mlstring>Privacy Policy</xar:mlstring></h3>
+    <h3 id="privacy">#$curnum#.&#160;<xar:mlstring>Privacy Policy</xar:mlstring></h3>
     <p><xar:mlstring>Registration data and other personally identifiable information that we may collect is subject to the terms of our</xar:mlstring> <a href="&xar-modurl-roles-user-privacy;"><xar:mlstring>Privacy Policy</xar:mlstring></a>.</p>
 </xar:if>
 
     <xar:set name="curnum">++$curnum</xar:set>
-    <h3 id="rego">#$curnum#.&nbsp;<xar:mlstring>Registration and Password</xar:mlstring></h3>
+    <h3 id="rego">#$curnum#.&#160;<xar:mlstring>Registration and Password</xar:mlstring></h3>
         <p><xar:mlstring>You are responsible to maintain the confidentiality of your password and shall be responsible for all uses via your registration and/or login, whether authorized or unauthorized by you. You agree to immediately notify us of any unauthorized use or your registration, user account or password.</xar:mlstring></p>
 
     <xar:set name="curnum">++$curnum</xar:set>
-    <h3 id="conduct">#$curnum#.&nbsp;<xar:mlstring>Your Conduct</xar:mlstring></h3>
+    <h3 id="conduct">#$curnum#.&#160;<xar:mlstring>Your Conduct</xar:mlstring></h3>
         <p><xar:mlstring>You agree that all information or data of any kind, whether text, software,  code, music or sound, photographs or graphics, video or other materials ("Content"),   publicly or privately provided, shall be the sole responsibility of the person providing the Content or the person whose user account is used. You agree that our web site may expose you to Content that may be objectionable or offensive.   We shall not be responsible to you in any way for the Content that appears on this web site nor for any error or omission.</xar:mlstring></p>
 
         <p><xar:mlstring>You explicitly agree, in using this web site or any service provided, that you shall not:</xar:mlstring></p>
@@ -86,7 +86,7 @@
         </ul>
     
     <xar:set name="curnum">++$curnum</xar:set>
-    <h3 id="submission">#$curnum#.&nbsp;<xar:mlstring>Submission of Content on this Web Site</xar:mlstring></h3>
+    <h3 id="submission">#$curnum#.&#160;<xar:mlstring>Submission of Content on this Web Site</xar:mlstring></h3>
         <p><xar:mlstring>By providing any Content to our web site:</xar:mlstring></p>
         <ul>
             <li><xar:mlstring>you agree to grant to us a worldwide, royalty-free, perpetual, non-exclusive right and license (including any moral rights or other necessary rights) to use, display, reproduce, modify, adapt, publish, distribute, perform, promote, archive, translate, and to create derivative works and compilations, in whole or in part. Such license will apply with respect to any form, media, technology known or later developed;</xar:mlstring></li>
@@ -95,15 +95,15 @@
         </ul>
     
     <xar:set name="curnum">++$curnum</xar:set>
-    <h3 id="thirdparty">#$curnum#.&nbsp;<xar:mlstring>Third Party Services.</xar:mlstring></h3>
+    <h3 id="thirdparty">#$curnum#.&#160;<xar:mlstring>Third Party Services.</xar:mlstring></h3>
         <p><xar:mlstring>Goods and services of third parties may be advertised and/or made available on or through this web site. Representations made regarding products and services provided by third parties are governed by the policies and representations made by these third parties. We shall not be liable for or responsible in any manner for any of your dealings or interaction with third parties.</xar:mlstring></p>
 
     <xar:set name="curnum">++$curnum</xar:set>
-    <h3 id="indemnify">#$curnum#.&nbsp;<xar:mlstring>Indemnification</xar:mlstring></h3>
+    <h3 id="indemnify">#$curnum#.&#160;<xar:mlstring>Indemnification</xar:mlstring></h3>
         <p><xar:mlstring>You agree to indemnify and hold us harmless, our subsidiaries, affiliates, related parties, officers, directors, employees, agents, independent contractors, advertisers,   partners, and co-branders from any claim or demand, including reasonable attorney's fees, that may be made by any third party, that is due to or arising out of your conduct or connection with this web site or service, your provision of Content, your violation of this</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>or any other violation of the rights of another person or party.</xar:mlstring></p>
 
     <xar:set name="curnum">++$curnum</xar:set>
-        <h3 id="disclaimer">#$curnum#.&nbsp;<xar:mlstring>DISCLAIMER OF WARRANTIES</xar:mlstring></h3>
+        <h3 id="disclaimer">#$curnum#.&#160;<xar:mlstring>DISCLAIMER OF WARRANTIES</xar:mlstring></h3>
         <p><xar:mlstring>YOU UNDERSTAND AND AGREE THAT YOUR USE OF THIS WEB SITE AND ANY SERVICES OR CONTENT PROVIDED (THE "SERVICE") IS MADE AVAILABLE AND PROVIDED TO YOU AT YOUR OWN RISK. IT IS PROVIDED TO YOU "AS IS" AND WE EXPRESSLY DISCLAIM ALL WARRANTIES OF ANY KIND, IMPLIED OR EXPRESS, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.</xar:mlstring></p>
 
         <p><xar:mlstring>WE MAKE NO WARRANTY, IMPLIED OR EXPRESS, THAT ANY PART OF THE SERVICE WILL BE UNINTERRUPTED, ERROR-FREE, VIRUS-FREE, TIMELY, SECURE, ACCURATE, RELIABLE,   OF ANY QUALITY, NOR THAT ANY CONTENT IS SAFE IN ANY MANNER FOR DOWNLOAD. YOU UNDERSTAND AND AGREE THAT NEITHER US NOR ANY PARTICIPANT IN THE SERVICE PROVIDES PROFESSIONAL ADVICE OF ANY KIND AND THAT USE OF SUCH ADVICE OR ANY OTHER INFORMATION IS SOLELY AT YOUR OWN RISK AND WITHOUT OUR LIABILITY OF ANY KIND.</xar:mlstring></p>
@@ -111,25 +111,25 @@
         <p><xar:mlstring>Some jurisdictions may not allow disclaimers of implied warranties and the above disclaimer may not apply to you only as it relates to implied warranties.</xar:mlstring></p>
 
     <xar:set name="curnum">++$curnum</xar:set>
-    <h3 id="limits">#$curnum#.&nbsp;<xar:mlstring>LIMITATION OF LIABILITY</xar:mlstring></h3>
+    <h3 id="limits">#$curnum#.&#160;<xar:mlstring>LIMITATION OF LIABILITY</xar:mlstring></h3>
         <p><xar:mlstring>YOU EXPRESSLY UNDERSTAND AND AGREE THAT WE SHALL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INDICENTAL, CONSEQUENTIAL OR EXEMPLARY DAMAGES, INCLUDING BUT NOT LIMITED TO, DAMAGES FOR LOSS OF PROFITS, GOODWILL, USE, DATA OR OTHER INTANGIBLE LOSS (EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES),   RESULTING FROM OR ARISING OUT OF (I) THE USE OF OR THE INABILITY TO USE THE SERVICE, (II) THE COST TO OBTAIN SUBSTITUTE GOODS AND/OR SERVICES RESULTING FROM ANY TRANSACTION ENTERED INTO ON THROUGH THE SERVICE, (III) UNAUTHORIZED ACCESS TO OR ALTERATION OF YOUR DATA TRANSMISSIONS, (IV) STATEMENTS OR CONDUCT OF ANY THIRD PARTY ON THE SERVICE, OR (V) ANY OTHER MATTER RELATING TO THE SERVICE.</xar:mlstring></p>
 
         <p><xar:mlstring>In some jurisdictions, it is not permitted to limit liability and therefore such limitations may not apply to you.</xar:mlstring></p>
 
     <xar:set name="curnum">++$curnum</xar:set>
-    <h3 id="rights">#$curnum#.&nbsp;<xar:mlstring>Reservation of Rights</xar:mlstring></h3>
+    <h3 id="rights">#$curnum#.&#160;<xar:mlstring>Reservation of Rights</xar:mlstring></h3>
         <p><xar:mlstring> We reserve all of our rights, including but not limited to any and all copyrights, trademarks, patents, trade secrets, and any other proprietary right that we may have in our web site, its content, and the goods and services that may be provided. The use of our rights and property requires our prior written consent.   We are not providing you with any implied or express licenses or rights by making services available to you and you will have no rights to make any commercial uses of our web site or service without our prior written consent.</xar:mlstring></p>
 
     <xar:set name="curnum">++$curnum</xar:set>
-    <h3 id="copyrights">#$curnum#.&nbsp;<xar:mlstring>Notification of Copyright Infringement</xar:mlstring></h3>
-        <p><xar:mlstring>If you believe that your property has been used in any way that would be considered copyright infringement or a violation of your intellectual property rights, our copyright agent may be contacted at the following address:&nbsp;</xar:mlstring><a href="mailto:#$contmail#">#$contmail#</a>.</p>
+    <h3 id="copyrights">#$curnum#.&#160;<xar:mlstring>Notification of Copyright Infringement</xar:mlstring></h3>
+        <p><xar:mlstring>If you believe that your property has been used in any way that would be considered copyright infringement or a violation of your intellectual property rights, our copyright agent may be contacted at the following address:&#160;</xar:mlstring><a href="mailto:#$contmail#">#$contmail#</a>.</p>
 
     <xar:set name="curnum">++$curnum</xar:set>
-    <h3 id="law">#$curnum#.&nbsp;<xar:mlstring>Applicable Law</xar:mlstring></h3>
+    <h3 id="law">#$curnum#.&#160;<xar:mlstring>Applicable Law</xar:mlstring></h3>
         <p><xar:mlstring>You agree that this</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>and any dispute arising out of your use of this web site or our products or services shall be governed by and construed in accordance with local laws where the headquarters of the owner of this web site is located, without regard to its conflict of law provisions. By registering or using this web site and service you consent and submit to the exclusive jurisdiction and venue of the county or city where the headquarters of the owner of this web site is located.</xar:mlstring></p>
 
     <xar:set name="curnum">++$curnum</xar:set>
-    <h3 id="misc">#$curnum#.&nbsp;<xar:mlstring>Miscellaneous Information</xar:mlstring></h3>
+    <h3 id="misc">#$curnum#.&#160;<xar:mlstring>Miscellaneous Information</xar:mlstring></h3>
         <p><xar:mlstring>In the event that this</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>conflicts with any law under which any provision may be held invalid by a court with jurisdiction over the parties, such provision will be interpreted to reflect the original intentions of the parties in accordance with applicable law, and the remainder of this</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>will remain valid and intact; (ii) The failure of either party to assert any right under this</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>shall not be considered a waiver of any that party's right and that right will remain in full force and effect; (iii) You agree that without regard to any statue or contrary law that any claim or cause arising out of this web site or its services must be filed within one (1) year after such claim or cause arose or the claim shall be forever barred; (iv) We may assign our rights and obligations under this</xar:mlstring> <a href="&xar-modurl-roles-user-terms;"><xar:mlstring>Terms of Use</xar:mlstring></a> <xar:mlstring>and we shall be relieved of any further obligation.</xar:mlstring></p>
 
 <xar:else />

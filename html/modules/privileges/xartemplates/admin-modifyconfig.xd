@@ -225,7 +225,7 @@
                         </xar:mlstring>
                     </label>
                     <input type="text" name="textvalue" id="textvalue" value="#$textvalue#" size="50" maxlength="100" class="xar-form-textmedium" />
-                    &nbsp;
+                    &#160;
                     <xar:mlstring>(only applies when Text Value option is chosen)</xar:mlstring>
                     </div>
                     <div class="xar-form-input-wrapper">

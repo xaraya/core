@@ -6,12 +6,12 @@
     <h2>
         <a href="&xar-modurl-roles-user-viewlist;">
             <xar:mlstring>Member List</xar:mlstring>
-        </a>&nbsp;&gt;&nbsp;
+        </a>&#160;&gt;&#160;
         <a href="&xar-modurl-roles-user-display;&amp;uid=#$uid#">
             #xarVarPrepForDisplay($name)#
-        </a>&nbsp;&gt;&nbsp;
+        </a>&#160;&gt;&#160;
         <xar:mlstring>Send an Email to</xar:mlstring>
-        &nbsp;#xarVarPrepForDisplay($name)#
+        &#160;#xarVarPrepForDisplay($name)#
     </h2>
     <form method="post" action="&xar-modurl-roles-user-email;&amp;phase=confirm#" enctype="application/x-www-form-urlencoded">
         <div>

@@ -248,7 +248,7 @@
                         <xar:data-label property="$properties[$name]" /> <xar:mlstring>(Dynamic property)</xar:mlstring>
                     </span>
                 </div>
-                <xar:mlstring>URL of the site</xar:mlstring>&nbsp;(#xarServerGetBaseURL()#)
+                <xar:mlstring>URL of the site</xar:mlstring>&#160;(#xarServerGetBaseURL()#)
             </xar:foreach>
         </xar:if>
         <br class="xar-clearboth" />

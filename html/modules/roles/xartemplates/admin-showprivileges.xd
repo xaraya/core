@@ -133,7 +133,7 @@
             <th><xar:mlstring>Instance</xar:mlstring></th>
             <th><xar:mlstring>Level</xar:mlstring></th>
             <th><xar:mlstring>Override</xar:mlstring></th>
-            <th>&nbsp;</th>
+            <th>&#160;</th>
           </tr>
           <xar:loop name="$privileges">
             <tr>
