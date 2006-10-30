@@ -19,7 +19,7 @@
  * DONT EVEN THINK ABOUT UNCOMMENTING THIS
  *
  */
- //define('XAR_BL_USE_XSLT',true);
+ define('XAR_BL_USE_XSLT',true);
 
 /**
  * Defines for token handling
@@ -231,7 +231,6 @@ class xarBLCompiler extends Object implements IxarBLCompiler
                 //if(!(basename($fileName) == 'default.xt' || basename($fileName) =='admin.xt')) {
                 xarLogMessage('NOT a page template, adding dummy root tag');
                 $templateSource ="
-<!DOCTYPE template SYSTEM \"http://xartest.hsdev.com:81/includes/transforms/xar_entities.dtd\">
 <xar:template xmlns:xar=\"http://xaraya.com/2004/blocklayout\">\n".$templateSource .'</xar:template>';
             }
         }
@@ -249,7 +248,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         // EXPERIMENTAL, USE AT OWN RISK, I DONT EVEN WANNA KNOW
         if(defined('XAR_BL_USE_XSLT')) {
             sys::import('blocklayout.xsltransformer');
-            $xslFile = 'includes/transforms/xar2php.xsl';
+            $xslFile = 'includes/transforms/xslt/xar2php.xsl';
             $xslProc = new BlockLayoutXSLTProcessor($templateSource,$xslFile);
             $xslProc->xmlFile = $this->parser->getFileName();
             // This generates php code, the documentree is not visible here anymore

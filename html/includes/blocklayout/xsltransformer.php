@@ -12,14 +12,17 @@
 
 class BlocklayoutXSLTProcessor extends Object
 {
-    private $xslProc = NULL;
-    private $xmlDoc  = NULL;
-    private $xml ='';
-    public  $xmlFile = NULL;
+    private $xslProc = null;
+    private $xmlDoc  = null;
+    private $origXml = '';
+    private $prepXml = '';
+    public  $xmlFile = null;
         
-    function __construct($xml = '', $xslFile='') 
+    function __construct(&$xml = '', $xslFile='') 
     {
-        //  debug(htmlspecialchars($xml));
+        // Save the original XML
+        $this->origXml = $xml;
+        
         // Set up the xsl processor
         $this->xslProc = new XSLTProcessor();
         $this->xslProc->registerPHPFunctions();
@@ -29,11 +32,16 @@ class BlocklayoutXSLTProcessor extends Object
         $domDoc->load($xslFile);
         $this->xslProc->importStyleSheet($domDoc);
         
+        // Preprocess the xml, so we dont get unresolved entities and stuff.
+        // &xar-entity; -> [whatever php code it needs];
+        $entityPattern = '/(&xar-[a-z\-]+?;)/';
+        $callBack      = array('XsltCallbacks','entities');
+        $this->prepXml = preg_replace_callback($entityPattern,$callBack,$this->origXml);
+
         // Set up the document to transform
         $this->xmlDoc = new DOMDocument();
         $this->xmlDoc->resolveExternals = true;
-        $this->xmlDoc->loadXML($xml);
-        $this->xml = $xml;
+        $this->xmlDoc->loadXML($this->prepXml);
     }
 
     function transform()
@@ -48,6 +56,13 @@ class BlocklayoutXSLTProcessor extends Object
         // Transform it
         $result = $this->xslProc->transformToXML($this->xmlDoc);
         
+        // Expressions in attributes are not handled by the transform because
+        // XSLT can not generate anything other than valid XML (well, it can but 
+        // definitely not inside attributes), which exclude php PI's
+        // in attrbiutes
+        $exprPattern = '/(#[^"#]+?#)/';
+        $callBack    = array('XsltCallbacks','attributes');
+        $result = preg_replace_callback($exprPattern,$callBack,$result);
         //debug(htmlspecialchars($result));
         return $result;
     }
@@ -59,7 +74,62 @@ class BlocklayoutXSLTProcessor extends Object
         
     static function phpexpression($expr)
     {
-        return ExpressionTransformer::transformPHPExpression($expr);
+        $res = ExpressionTransformer::transformPHPExpression($expr);
+        xarLogMessage("BL: '$expr' resolved to '$res'");
+        return $res;
+    }
+}
+
+class XsltCallbacks extends Object
+{
+    static function attributes($matches)
+    {
+        $raw = ExpressionTransformer::transformPHPExpression(substr($matches[1],1,-1));
+        $raw = self::reverseXMLEntities($raw);
+        $res = '<?php echo ' . $raw .';?>';
+        xarLogMessage('ATT: processed'.$matches[1]);
+        return $res;
+    }
+    
+    static function entities($matches)
+    {
+        // Strip the & and the ; off.
+        $entityName  = substr($matches[0],1,-1);
+        $entityParts = explode('-',$entityName);
+
+        // The first part will always be xar, if not, return the whole entity back
+        if($entityParts[0] != 'xar' or !isset($entityParts[1])) 
+            return $matches[0];
+
+        // The second part signals what we need to do
+        switch($entityParts[1])
+        {
+            case 'baseurl':
+                return '#xarServer::getBaseURL()#';
+                break;
+            case 'modurl':
+                //   1       2     3    4
+                // modurl-modname-type-func
+                if( isset($entityParts[2]) and 
+                    isset($entityParts[3]) and
+                    isset($entityParts[4])
+                ) return "#xarModUrl('$entityParts[2]','$entityParts[3]','$entityParts[4]')#";
+                break;
+            default:
+                return $matches[0];
+        }
+        
+        xarLogMessage('ENT: found in xml source:'.$entityName);
+        return $matches[0];
+    }
+    
+    private static function reverseXMLEntities($content)
+    {
+        return str_replace(
+            array('&amp;', '&gt;', '&lt;', '&quot;'),
+            array('&', '>', '<', '"'),
+            $content
+        );
     }
 }
 ?>
