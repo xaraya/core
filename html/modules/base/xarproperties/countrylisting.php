@@ -58,7 +58,6 @@ class CountryListProperty extends SelectProperty
    function getOptions()
    {
         $coptions = array();
-        $coptions[] = array('id' =>'--', 'name' =>xarML('Please select'));
         $coptions[] = array('id' =>'af', 'name'=>xarML('Afghanistan'));
         $coptions[] = array('id' =>'ax', 'name'=>xarML('&#197;land Islands'));
         $coptions[] = array('id' =>'al', 'name'=>xarML('Albania'));

@@ -50,7 +50,6 @@ class StateListProperty extends SelectProperty
    function getOptions()
    {
         $soptions = array();
-        $soptions[] = array('id' =>'Please select', 'name' =>'Please select' );
         $soptions[] = array('id' =>'Alabama', 'name' =>'Alabama');
         $soptions[] = array('id' =>'Alaska', 'name' =>'Alaska');
         $soptions[] = array('id' =>'Arizona', 'name' =>'Arizona');
