@@ -9,8 +9,8 @@
 
     <!-- Display last-page link if we are not on the last page -->
     <xar:if condition="$currentpagenum ne $lastpagenum">
-        &nbsp;<a title="#xarML('Last page')#" href="#$lasturl#">&gt;&gt;</a>
+        &#160;<a title="#xarML('Last page')#" href="#$lasturl#">&gt;&gt;</a>
     <xar:else/>
-        &nbsp;
+        &#160;
     </xar:if>
 </div>

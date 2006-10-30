@@ -303,7 +303,7 @@
                             </label>
                             <xar:if condition="$loop:item['type'] eq 'manual'">
                                 <input type="text" name="pinstance[]" id="pinstance#$loop:index#" value="All" class="xar-form-textmedium" />
-                                &nbsp;
+                                &#160;
                                 <xar:mlstring>
                                     This field must contain a value
                                 </xar:mlstring>

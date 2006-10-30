@@ -289,7 +289,7 @@
                                 <xar:mlstring>Description</xar:mlstring>
                             </th>
                             <th style="width: 50px">
-                                &nbsp;
+                                &#160;
                             </th>
                         </tr>
                         <tr>
@@ -596,7 +596,7 @@
 
                 <xar:else />
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">
-                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &#160;&#160;&#160;&#160;
                     <label for="allowuserhomeedit" title="#xarML('Allow users to edit their user home page in their account')#">
                         <strong><xar:mlstring>Allow users to set Home Page in their member account</xar:mlstring></strong>
                             <br /><xar:mlstring> (options for Home Page are only available if the dynamic roles user variable 'userhome' is activated)</xar:mlstring>

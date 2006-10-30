@@ -14,7 +14,7 @@
     <xar:elseif condition="!empty($modid)" />
         <!-- here we only retrieve the parameters in the function, and we let the data-view tag retrieve the complete object list -->
         <h2>
-            <xar:mlstring>View</xar:mlstring>&nbsp;  #$label#
+            <xar:mlstring>View</xar:mlstring>&#160;  #$label#
         </h2>
         <xar:if condition="empty($numitems)">
            <xar:set name="numitems">30</xar:set>

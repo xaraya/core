@@ -90,7 +90,7 @@
                 </xar:if>
             </dl>
         </div>
-        <div class="xar-clearboth">&nbsp;</div>
+        <div class="xar-clearboth">&#160;</div>
     <xar:if condition="!empty($message)">
         <p>#xarVarPrepForDisplay($message)#</p>
     <xar:else />
@@ -172,7 +172,7 @@
                             <xar:if condition="isset($values[$uid][$key])">
                                 <xar:data-output property="$properties[$key]" value="$values[$uid][$key]" />
                             <xar:else />
-                                &nbsp;&nbsp;
+                                &#160;&#160;
                             </xar:if>
                         </td>
                     </xar:foreach>

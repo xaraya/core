@@ -11,7 +11,7 @@
             </th>
         </xar:foreach>
         <th>
-            &nbsp;
+            &#160;
         </th>
     </tr>
     <xar:set name="shownew">1</xar:set>
