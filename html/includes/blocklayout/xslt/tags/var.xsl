@@ -35,9 +35,11 @@
       <xsl:when test="@scope = 'user'">
         <xsl:text>xarUserGetVar('</xsl:text>
         <xsl:value-of select="@name"/>
-        <xsl:text>','</xsl:text>
-        <xsl:value-of select="@user"/>
-        <xsl:text>')</xsl:text>
+        <xsl:text>',</xsl:text>
+        <xsl:call-template name="resolvePHP">
+          <xsl:with-param name="expr" select="@user"/>
+        </xsl:call-template>
+        <xsl:text>)</xsl:text>
       </xsl:when>
     </xsl:choose>
 </xsl:template>
