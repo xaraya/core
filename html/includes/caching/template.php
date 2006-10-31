@@ -117,6 +117,7 @@ class xarTemplateCache extends Object implements ixarTemplateCache
     public static function saveEntry($fileName, $data)
     {
         // write data into the cache file
+        $data = str_replace('?><?php','',$data);
         if($fd = fopen(self::cacheFile($fileName), 'w')) {
             fwrite($fd, $data); fclose($fd);
         }
