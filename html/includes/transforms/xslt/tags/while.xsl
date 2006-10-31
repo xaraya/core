@@ -14,7 +14,7 @@
     <xsl:call-template name="resolvePHP">
       <xsl:with-param name="expr" select="@condition"/>
     </xsl:call-template>
-    <xsl:text>) {&nl;</xslt:text>
+    <xsl:text>) {&nl;</xsl:text>
   </xsl:processing-instruction>
   
   <xsl:apply-templates />

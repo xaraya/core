@@ -71,7 +71,8 @@
     We view php as one large processing instruction of xml without the xml 
     declaration 
   -->
-  <xsl:output method="xml" omit-xml-declaration="yes" indent="yes" />
+  <xsl:output 
+      method="xml" omit-xml-declaration="yes" indent="yes" />
     
   <!--
     Spacing
@@ -143,7 +144,7 @@
   <!-- xar:mlvar -->
   <xsl:include href="tags/mlvar.xsl"/>
   <!-- xar:module -->
-  <xsl:include href="tags/modules.xsl"/>
+  <xsl:include href="tags/module.xsl"/>
   <!-- xar:sec -->
   <xsl:include href="tags/sec.xsl"/>
   <!-- xar:set -->
@@ -226,6 +227,25 @@
   <xsl:value-of 
         select="php:functionString('BlockLayoutXSLTProcessor::phpexpression',string($expr))"
         disable-output-escaping="yes"/>
+</xsl:template>
+
+<!-- Any xar tag we dont match, we highlight in the output, i.e. turn it into a text node -->
+<xsl:template match="xar:*">
+  <pre class="xsltdebug">
+    <xsl:text>MISSING TAG IMPLEMENTATION: 
+&lt;</xsl:text>
+    <xsl:value-of select="name()"/>
+    <xsl:text> </xsl:text>
+    <xsl:for-each select="@*">
+      <xsl:value-of select="name()"/>
+      <xsl:text>="</xsl:text>
+      <xsl:value-of select="."/>
+      <xsl:text>" </xsl:text>
+    </xsl:for-each>
+    <xsl:text>/&gt;</xsl:text>
+    <xsl:apply-imports />
+  </pre>
+  
 </xsl:template>
 
 </xsl:stylesheet>
