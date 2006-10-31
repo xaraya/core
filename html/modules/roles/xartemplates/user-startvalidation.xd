@@ -60,7 +60,7 @@
             <div class="xar-form-input-wrapper">
                 <label for="unameresend" class="xar-form-label" title="#xarML('Please enter your username')#">
                     <xar:mlstring>Username</xar:mlstring>:
-                </label>&nbsp;
+                </label>&#160;
                 <input type="text" name="uname" id="unameresend" value="#$uname#" />
             </div>
             <div class="xar-form-input-wrapper-after">

@@ -138,7 +138,7 @@
                             <td name="#$modinfo['name']#" id="#$modinfo['name']#">
                                 <!-- if module is active and configurable (admin type) make its name a link to module main admin function -->
                                 <xar:if condition="$modinfo['modconfigurl'] ne ''">
-                                    <a href="#$modinfo['modconfigurl']#" title="#$modinfo['adminurltitle']#&nbsp;#$modinfo['displayname']#">#$modinfo['name']#</a>
+                                    <a href="#$modinfo['modconfigurl']#" title="#$modinfo['adminurltitle']#&#160;#$modinfo['displayname']#">#$modinfo['name']#</a>
                                 <xar:else />
                                     #$modinfo['name']#
                                 </xar:if>
@@ -224,7 +224,7 @@
                                         <a href="#$modinfo['propurl']#">#$modinfo['prop']#</a>
                                     </xar:if>
                                 <xar:else />
-                                    &nbsp;
+                                    &#160;
                                 </xar:if>                                    
                             </td>
                             <td class="xar-align-center">
