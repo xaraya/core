@@ -34,7 +34,10 @@
     - the xarBLCompiler.php does some processing here and there, which of these need to stay in php, which
       of them can be done by xsl? We can take them on a case by case basis, since php functions can be called reasonably
       easy from within the transform, but each case is a weakness in portability
-      
+    - it really doesnt make sense anymore now to go through the hoops of registering custom tags etc. One
+    xsl snippet for a custom tag, generating the right code is a lot easier. Note: this would also invalidate the whole
+    GUI where tags are shown on screen and can be manually entered into the database, which is of questionable use anyway, apart
+    from a debugging perspective.
   -->
 
   <!-- 
@@ -118,6 +121,8 @@
   <xsl:include href="tags/else.xsl"/>
   <!-- xar:elseif -->
   <xsl:include href="tags/elseif.xsl"/>
+  <!-- xar:for -->
+  <xsl:include href="tags/for.xsl"/>
   <!-- xar:foreach -->
   <xsl:include href="tags/foreach.xsl"/>
   <!-- xar:if -->
