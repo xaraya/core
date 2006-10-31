@@ -142,8 +142,12 @@ class DataObjectMaster extends Object
         if(empty($this->name))
         {
             $info = self::getObjectInfo($this->descriptor->getArgs());
-//            $this->descriptor->setArgs($info);
-//            $this->load();
+//            var_dump($this->descriptor->getArgs());
+//            var_dump($info);
+            if (!empty($info)) {
+            $this->descriptor->setArgs($info);
+            $this->load();
+            }
             if(isset($info) && count($info) > 0)
                 foreach($info as $key => $val)
                     $this->$key = $val; // bleh, this is not very nice.
