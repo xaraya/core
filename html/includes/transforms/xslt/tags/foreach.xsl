@@ -13,11 +13,17 @@
     <xsl:text>foreach(</xsl:text>
     <xsl:choose>
       <xsl:when test="@key!='' and @value!='' ">
-        <xsl:value-of select="@in"/><xsl:text> as </xsl:text><xsl:value-of select="@key"/>
+        <xsl:call-template name="resolvePHP">
+          <xsl:with-param name="expr" select="@in"/>
+        </xsl:call-template>
+        <xsl:text> as </xsl:text><xsl:value-of select="@key"/>
         <xsl:text disable-output-escaping="yes"> =&gt; </xsl:text><xsl:value-of select="@value"/>
       </xsl:when>
       <xsl:when test="@value!=''">
-        <xsl:value-of select="@in"/><xsl:text> as </xsl:text><xsl:value-of select="@value"/>
+        <xsl:call-template name="resolvePHP">
+          <xsl:with-param name="expr" select="@in"/>
+        </xsl:call-template>
+        <xsl:text> as </xsl:text><xsl:value-of select="@value"/>
       </xsl:when>
       <xsl:when test="@key!=''">
         <xsl:text>array_keys(</xsl:text>
