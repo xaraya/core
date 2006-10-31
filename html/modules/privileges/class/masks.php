@@ -98,8 +98,9 @@ class xarMasks extends Object
         $query = "SELECT masks.xar_sid, masks.xar_name, realms.xar_name,
                   modules.xar_name, masks.xar_component, masks.xar_instance,
                   masks.xar_level, masks.xar_description
-                  FROM " . self::$maskstable . "masks
-                  LEFT JOIN " . self::$realmstable. "realms ON masks.xar_realmid = realms.xar_rid ";
+                  FROM " . self::$maskstable . " AS masks
+                  LEFT JOIN " . self::$realmstable. " AS realms ON masks.xar_realmid = realms.xar_rid
+                  LEFT JOIN " . self::$modulestable. " AS modules ON masks.xar_modid = modules.xar_id ";
         if ($module == '' || $module == 'All') {
             $modId = 0;
             if ($component == '' || $component == 'All') {
@@ -112,10 +113,10 @@ class xarMasks extends Object
             $modInfo = xarMod_GetBaseInfo($module);
             $modId = $modInfo['systemid'];
             if ($component == '' || $component == 'All') {
-                $query = "WHERE xar_modid = ? ";
+                $query .= "WHERE xar_modid = ? ";
                 $bindvars = array($modId);
             } else {
-                $query = "WHERE  xar_modid = ? AND
+                $query .= "WHERE  xar_modid = ? AND
                                  xar_component IN (?,?,?) ";
                 $bindvars = array($modId,$component,'All','None');
             }
@@ -466,13 +467,13 @@ class xarMasks extends Object
     {
         static $selStmt = null;
         static $insStmt = null;
-        
+
         if (xarVarIsCached('Security.getprivset', $role)) {
             return xarVarGetCached('Security.getprivset', $role);
         }
         $query = "SELECT xar_set FROM " . self::$privsetstable . " WHERE xar_uid =?";
         if(!isset($selStmt)) $selStmt = self::$dbconn->prepareStatement($query);
-        
+
         $result = $selStmt->executeQuery(array($role->getID()));
 
         if (!$result->first()) {
