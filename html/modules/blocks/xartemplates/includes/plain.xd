@@ -55,7 +55,7 @@
             </td>
             <td>
                 <xar:if condition="$loop:item['template'] ne NULL">
-                    #$loop:item['template']# &nbsp; 
+                    #$loop:item['template']# &#160; 
                     <xar:else />
                     <xar:if condition="empty($loop:item['group_template'])">
                         [ 
@@ -64,7 +64,7 @@
                         </xar:mlstring>
                         ] 
                     <xar:else />
-                        #$loop:item['group_template']# &nbsp; 
+                        #$loop:item['group_template']# &#160; 
                     </xar:if>
                 </xar:if>
             </td>

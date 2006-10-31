@@ -1,6 +1,8 @@
 Functionality description
 -------------------------
-This directory contains files which aim to implement a schema based piece of functionality which does the following:
+
+This directory contains files which aim to implement a schema based piece of
+functionality which does the following:
 
 1. Define a DTD for describing database schema's (schema.xml) with sufficient
 information to describe a certain state to allow for creating the schema as
@@ -27,7 +29,14 @@ described in the schema.xml
 
 Analysis
 --------
-The critical part in code of the above is determining the differences between an existing (empty) schema in the db and generating the correct ddl statement to upgrade that existing schema to the reference schema.xml. The type of situations which may occur are potentially complex, similar to a revision control system. We do not need the full plethora of options, but should provide an escape clause, so the user/developer can react on 'impossible' situations.
+
+The critical part in code of the above is determining the differences between
+an existing (empty) schema in the db and generating the correct ddl statement
+to upgrade that existing schema to the reference schema.xml. The type of
+situations which may occur are potentially complex, similar to a revision
+control system. We do not need the full plethora of options, but should
+provide an escape clause, so the user/developer can react on 'impossible'
+situations.
 
 
 Testdata

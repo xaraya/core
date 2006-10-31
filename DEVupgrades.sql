@@ -142,10 +142,10 @@ DROP TABLE xar_dynamic_relations;
 /* properties_def.reqmodules -> modid int not null */
 ALTER TABLE xar_dynamic_properties_def ADD COLUMN xar_prop_modid INTEGER DEFAULT NULL;
 UPDATE xar_dynamic_properties_def INNER JOIN xar_modules ON xar_dynamic_properties_def.xar_prop_reqmodules = xar_modules.xar_name
-SET xar_dynamic_properties_def.xar_prop_modid = xar_modules.xar_id
+SET xar_dynamic_properties_def.xar_prop_modid = xar_modules.xar_id;
 ALTER TABLE xar_dynamic_properties_def DROP column xar_prop_reqmodules;
-CREATE INDEX i_xar_dynpropdef_modid ON xar_properties_def.xar_prop_modid;
+CREATE INDEX i_xar_dynpropdef_modid ON xar_dynamic_properties_def (xar_prop_modid);
 
 /* Making the hooks table modid columns 'foreign keyable' */
 ALTER TABLE xar_hooks MODIFY COLUMN xar_smodid INTEGER DEFAULT NULL;
-ALTER TABLE xar_hooks MOIDFY COLUMN xar_tmodid INTEGER NOT NULL;
+ALTER TABLE xar_hooks MODIFY COLUMN xar_tmodid INTEGER NOT NULL;

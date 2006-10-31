@@ -14,14 +14,14 @@
                 <xar:mlstring>Actions:</xar:mlstring>
             </dt>
             <xar:foreach in="$tabs" value="$tab">
-                <xar:set name="$functions">isset($tab['includes']) ? $tab['includes'] : array()</xar:set>
+                <xar:set name="functions">isset($tab['includes']) ? $tab['includes'] : array()</xar:set>
                 <xar:if condition="is_array($functions)">
-                    <xar:set name="$condition">false</xar:set>
+                    <xar:set name="condition">false</xar:set>
                     <xar:foreach in="$tab['includes']" value="$function">
-                        <xar:set name="$condition">$condition || ($activetab == $function)</xar:set>
+                        <xar:set name="condition">$condition || ($activetab == $function)</xar:set>
                     </xar:foreach>
                 <xar:else />
-                    <xar:set name="$condition">$activetab == $tab['includes']</xar:set>
+                    <xar:set name="condition">$activetab == $tab['includes']</xar:set>
                 </xar:if>
 
                 <xar:if condition="isset($tab['mask'])">

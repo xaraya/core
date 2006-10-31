@@ -70,7 +70,7 @@
     <input type="hidden" name="privid" id="privid" value="#$privid#" />
     <input type="hidden" name="confirmation" id="confirmation" value="1" />
 
-    <p><span class="xar-title"><xar:mlstring>Confirm the removal of</xar:mlstring> '#$privname#' <xar:mlstring>from</xar:mlstring>&nbsp;
+    <p><span class="xar-title"><xar:mlstring>Confirm the removal of</xar:mlstring> '#$privname#' <xar:mlstring>from</xar:mlstring>&#160;
     <xar:if condition="$ptype eq 1"><xar:mlstring>Group</xar:mlstring>
     <xar:else /><xar:mlstring>User</xar:mlstring>
     </xar:if>

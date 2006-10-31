@@ -13,23 +13,23 @@
                  <xar:mlstring>Users</xar:mlstring>
              </td>
              <td>
-                 &nbsp;
+                 &#160;
              </td>
              <td colspan="2">
                  <xar:if condition="xarModIsAvailable('messages')">
                      <xar:mlstring>Messages</xar:mlstring>
                      <xar:else />
-                     &nbsp;
+                     &#160;
                  </xar:if>
              </td>
          </tr>
          <xar:if condition="xarModIsAvailable('messages')">
              <tr>
                  <td>
-                     &nbsp;
+                     &#160;
                  </td>
                  <td>
-                     &nbsp;
+                     &#160;
                  </td>
                  <td class="xar-align-center">
                      <img src="#xarTplGetImage('ob_mail_unreaded.gif','roles')#" alt="#xarML('Unread messages')#" />
@@ -52,7 +52,7 @@
                      </a>
                  </td>
                  <td>
-                     &nbsp;
+                     &#160;
                  </td>
                  <td class="xar-align-center">
                      <a href="#$dd['messagesurl']#">
@@ -69,7 +69,7 @@
      </xar:if>
      <tr>
          <td colspan="4">
-             &nbsp;
+             &#160;
          </td>
      </tr>
      <tr>

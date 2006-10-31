@@ -117,6 +117,7 @@ class xarTemplateCache extends Object implements ixarTemplateCache
     public static function saveEntry($fileName, $data)
     {
         // write data into the cache file
+        $data = str_replace('?><?php','',$data);
         if($fd = fopen(self::cacheFile($fileName), 'w')) {
             fwrite($fd, $data); fclose($fd);
         }
@@ -144,7 +145,9 @@ class xarTemplateCache extends Object implements ixarTemplateCache
         if ( file_exists($cacheFile) &&
              ( !file_exists($fileName) ||
                ( filemtime($fileName) < filemtime($cacheFile)
-                 && filemtime('includes/transforms/xar2php.xsl') < filemtime($cacheFile)
+                // TODO: this is obviously just to make my life easier during xslt compiler development
+                // it needs to be moved somewhere else (for one, because it is going to be configurable)
+                 && filemtime('includes/transforms/xslt/xar2php.xsl') < filemtime($cacheFile)
                ) ) ) return false; // not dirty
             
         return true; // either cache not active of entry needs recompilation

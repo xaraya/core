@@ -1,5 +1,0 @@
-<!ENTITY xar-modurl-themes-admin-updateconfig "index.php?module=themes&amp;type=admin&amp;func=updateconfig">
-<!ENTITY copy "&#xA9;">
-<!ENTITY xar-modurl-modules-admin-confirmlogout "xar-modurl-modules-admin-confirmlogout">
-<!ENTITY xar-baseurl "/">
-<!ENTITY nbsp "&#160;">

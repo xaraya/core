@@ -60,7 +60,7 @@
             <label class="xar-form-label">
                 <xar:mlstring>Home:</xar:mlstring>
             </label>
-            #xarVarPrepForDisplay($phome)#&nbsp;
+            #xarVarPrepForDisplay($phome)#&#160;
         </div>
     </xar:if>
     <xar:if condition="xarModGetVar('roles','setprimaryparent')">
@@ -100,7 +100,7 @@
             <label for="lastlogin" class="xar-form-label">
                 <xar:mlstring>Last Login:</xar:mlstring>
             </label>
-            #xarLocaleGetFormattedDate('medium', $userlastlogin)#  #xarLocaleGetFormattedTime('medium', $userlastlogin)#&nbsp;
+            #xarLocaleGetFormattedDate('medium', $userlastlogin)#  #xarLocaleGetFormattedTime('medium', $userlastlogin)#&#160;
         </div>
       </xar:if>
       <xar:if condition="xarModGetVar('roles','setpasswordupdate')">
