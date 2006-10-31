@@ -152,7 +152,8 @@
   <xsl:include href="tags/template.xsl"/>
   <!-- xar:var -->
   <xsl:include href="tags/var.xsl" />
-
+  <!-- xar:while -->
+  <xsl:include href="tags/while.xsl"/>
 
 <!-- text nodes in php mode -->
 <xsl:template match="xar:set/text()">
