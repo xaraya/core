@@ -21,7 +21,7 @@ class DataObject extends DataObjectMaster
     function __construct(DataObjectDescriptor $descriptor)
     {
         // get the object type information from our parent class
-        parent::__construct($descriptor);
+        $this->loader($descriptor);
 
         // set the specific item id (or 0)
         $args = $descriptor->getArgs();
