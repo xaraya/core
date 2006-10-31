@@ -38,6 +38,7 @@
     xsl snippet for a custom tag, generating the right code is a lot easier. Note: this would also invalidate the whole
     GUI where tags are shown on screen and can be manually entered into the database, which is of questionable use anyway, apart
     from a debugging perspective.
+    - go over all xar: tags attributes and decide how resolving should be handled
   -->
 
   <!-- 
@@ -115,6 +116,8 @@
   <xsl:include href="tags/blockgroup.xsl"/>
   <!-- xar:blocklayout -->
   <xsl:include href="tags/blocklayout.xsl"/>
+  <!-- xar:break -->
+  <xsl:include href="tags/break.xsl"/>
   <!-- xar:comment -->
   <xsl:include href="tags/comment.xsl"/>
   <!-- xar:else -->
