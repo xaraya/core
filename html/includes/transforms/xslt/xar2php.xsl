@@ -126,6 +126,8 @@
   <xsl:include href="tags/else.xsl"/>
   <!-- xar:elseif -->
   <xsl:include href="tags/elseif.xsl"/>
+  <!-- xar:event -->
+  <xsl:include href="tags/event.xsl"/>
   <!-- xar:for -->
   <xsl:include href="tags/for.xsl"/>
   <!-- xar:foreach -->
