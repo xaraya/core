@@ -215,6 +215,9 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- 
+  For all text nodes, resolve expressions within
+-->
 <xsl:template match="text()">
   <xsl:call-template name="resolveText">
     <xsl:with-param name="expr" select="."/>
@@ -229,10 +232,12 @@
         disable-output-escaping="yes"/>
 </xsl:template>
 
-<!-- Any xar tag we dont match, we highlight in the output, i.e. turn it into a text node -->
+<!-- 
+  Any xar tag we dont match, we highlight in the output, i.e. turn it into a text node 
+-->
 <xsl:template match="xar:*">
   <pre class="xsltdebug">
-    <xsl:text>MISSING TAG IMPLEMENTATION: 
+    <xsl:text>MISSING TAG IMPLEMENTATION:
 &lt;</xsl:text>
     <xsl:value-of select="name()"/>
     <xsl:text> </xsl:text>
