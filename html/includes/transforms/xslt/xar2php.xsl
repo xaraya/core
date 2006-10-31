@@ -120,6 +120,8 @@
   <xsl:include href="tags/break.xsl"/>
   <!-- xar:comment -->
   <xsl:include href="tags/comment.xsl"/>
+  <!-- xar:continue -->
+  <xsl:include href="tags/continue.xsl"/>
   <!-- xar:else -->
   <xsl:include href="tags/else.xsl"/>
   <!-- xar:elseif -->
