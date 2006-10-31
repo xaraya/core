@@ -142,6 +142,8 @@
   <xsl:include href="tags/mlstring.xsl"/>
   <!-- xar:mlvar -->
   <xsl:include href="tags/mlvar.xsl"/>
+  <!-- xar:sec -->
+  <xsl:include href="tags/sec.xsl"/>
   <!-- xar:set -->
   <xsl:include href="tags/set.xsl"/>
   <!-- xar:style -->
