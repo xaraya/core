@@ -41,14 +41,13 @@ class DataObjectList extends DataObjectMaster
     function __construct(DataObjectDescriptor $descriptor)
     {
         // get the object type information from our parent class
-        parent::__construct($descriptor);
-        $args = $descriptor->getArgs();
+        $this->loader($descriptor);
 
         // see if we can access these objects, at least in overview
         if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->moduleid.':'.$this->itemtype.':All')) return;
 
         // set the different arguments (item ids, sort, where, numitems, startnum, ...)
-        $this->setArguments($args);
+        $this->setArguments($descriptor->getArgs());
     }
 
     function setArguments($args)

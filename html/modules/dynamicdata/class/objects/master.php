@@ -41,7 +41,8 @@ class DataObjectDescriptor extends Object
     public function refresh(Object $object)
     {
         $publicproperties = $this->getPublicProperties($object);
-        foreach ($this->args as $key => $value) if (isset($publicproperties[$key])) $object->$key = $value;
+        foreach ($this->args as $key => $value) if (in_array($key,$publicproperties)) $object->$key = $value;
+        else echo $key ."<br />";
     }
 
     public function setArgs(array $args)
@@ -59,7 +60,7 @@ class DataObjectMaster extends Object
 
     public $moduleid    = null;
     public $itemtype    = 0;
-    public $parent      = 1;
+    public $parent      = 0;
     public $baseancestor= null;
 
     public $urlparam    = 'itemid';
@@ -103,7 +104,7 @@ class DataObjectMaster extends Object
      * @todo  This does too much, split it up
     **/
 
-    function __construct(DataObjectDescriptor $descriptor)
+    function loader(DataObjectDescriptor $descriptor)
     {
         $this->descriptor = $descriptor;
         $this->load();
@@ -142,15 +143,10 @@ class DataObjectMaster extends Object
         if(empty($this->name))
         {
             $info = self::getObjectInfo($this->descriptor->getArgs());
-//            var_dump($this->descriptor->getArgs());
-//            var_dump($info);
             if (!empty($info)) {
             $this->descriptor->setArgs($info);
             $this->load();
             }
-            if(isset($info) && count($info) > 0)
-                foreach($info as $key => $val)
-                    $this->$key = $val; // bleh, this is not very nice.
         }
         // use the object name as default template override (*-*-[template].x*)
         if(empty($this->template) && !empty($this->name))
@@ -220,7 +216,6 @@ class DataObjectMaster extends Object
         // add ancestors' properties to this object if required
         // the default is to add the fields
         $this->baseancestor = $this->objectid;
-//var_dump($this->descriptor->getPublicProperties($this));exit;
         if($this->extend)
             $this->addAncestors();
     }
