@@ -142,6 +142,8 @@
   <xsl:include href="tags/mlstring.xsl"/>
   <!-- xar:mlvar -->
   <xsl:include href="tags/mlvar.xsl"/>
+  <!-- xar:module -->
+  <xsl:include href="tags/modules.xsl"/>
   <!-- xar:sec -->
   <xsl:include href="tags/sec.xsl"/>
   <!-- xar:set -->
@@ -216,48 +218,6 @@
   <xsl:call-template name="resolveText">
     <xsl:with-param name="expr" select="."/>
   </xsl:call-template>
-</xsl:template>
-
-<!-- xar:module -->
-<xsl:template match="xar:module">
-  <xsl:processing-instruction name="php">
-    <xsl:choose>
-      <xsl:when test="string-length(@module) = 0">
-        <!-- Obviously this sucks -->
-        <xsl:text>echo $_bl_mainModuleOutput;</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <!-- module attribute has a value -->
-        <xsl:text>echo xarModFunc('</xsl:text>
-        <xsl:value-of select="@module"/><xsl:text>','</xsl:text>
-        <xsl:choose>
-          <xsl:when test="string-length(@type) = 0">
-            <xsl:text>user</xsl:text>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="@type"/>
-          </xsl:otherwise>
-        </xsl:choose>
-        <xsl:text>','</xsl:text>
-        <xsl:choose>
-          <xsl:when test="string-length(@func) = 0">
-            <xsl:text>main</xsl:text>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="@func"/>
-          </xsl:otherwise>
-        </xsl:choose>
-        <!-- Add all other attributes -->
-        <xsl:text>',array(</xsl:text>
-        <xsl:for-each select="@*">
-          <xsl:text>'</xsl:text><xsl:value-of select="name()"/><xsl:text>'</xsl:text>
-          <xsl:text disable-output-escaping="yes">=&gt;'</xsl:text>
-          <xsl:value-of select="."/><xsl:text>',</xsl:text>
-        </xsl:for-each>
-        <xsl:text>));</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:processing-instruction>
 </xsl:template>
 
 <!-- Expression resolving in nodes-->
