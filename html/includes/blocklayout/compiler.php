@@ -248,7 +248,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         // EXPERIMENTAL, USE AT OWN RISK, I DONT EVEN WANNA KNOW
         if(defined('XAR_BL_USE_XSLT')) {
             sys::import('blocklayout.xsltransformer');
-            $xslFile = 'includes/transforms/xslt/xar2php.xsl';
+            $xslFile = 'includes/blocklayout/xslt/xar2php.xsl';
             $xslProc = new BlockLayoutXSLTProcessor($templateSource,$xslFile);
             $xslProc->xmlFile = $this->parser->getFileName();
             // This generates php code, the documentree is not visible here anymore
