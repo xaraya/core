@@ -5,7 +5,7 @@
  * @package core
  * @copyright (C) 2006 by the Xaraya Development Team.
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage xsl
  * @author Marcel van der Boom <marcel@xaraya.com>
 **/
@@ -17,12 +17,12 @@ class BlocklayoutXSLTProcessor extends Object
     private $origXml = '';
     private $prepXml = '';
     public  $xmlFile = null;
-        
-    function __construct(&$xml = '', $xslFile='') 
+
+    function __construct(&$xml = '', $xslFile='')
     {
         // Save the original XML
         $this->origXml = $xml;
-        
+
         // Set up the xsl processor
         $this->xslProc = new XSLTProcessor();
         $this->xslProc->registerPHPFunctions();
@@ -32,7 +32,7 @@ class BlocklayoutXSLTProcessor extends Object
         $domDoc->load($xslFile);
         set_exception_handler(array('ExceptionHandlers','bone'));
         $this->xslProc->importStyleSheet($domDoc);
-        
+
         // Preprocess the xml, so we dont get unresolved entities and stuff.
         // &xar-entity; -> [whatever php code it needs];
         $entityPattern = '/(&xar-[a-z\-_]+?;)/';
@@ -53,14 +53,14 @@ class BlocklayoutXSLTProcessor extends Object
             $this->xslProc->setParameter('','bl_filename',basename($this->xmlFile));
             $this->xslProc->setParameter('','bl_dirname',dirname($this->xmlFile));
         }
-        
+
         // Transform it
         set_exception_handler(array('ExceptionHandlers','bone'));
         $result = $this->xslProc->transformToXML($this->xmlDoc);
         //set_exception_handler(array('ExceptionHandlers','default'));
-        
+
         // Expressions in attributes are not handled by the transform because
-        // XSLT can not generate anything other than valid XML (well, it can but 
+        // XSLT can not generate anything other than valid XML (well, it can but
         // definitely not inside attributes), which exclude php PI's
         // in attrbiutes
         $exprPattern = '/(#[^"#]+?#)/';
@@ -74,7 +74,7 @@ class BlocklayoutXSLTProcessor extends Object
     {
         return str_replace("'","\'",$var);
     }
-        
+
     static function phpexpression($expr)
     {
         $res = ExpressionTransformer::transformPHPExpression($expr);
@@ -93,7 +93,7 @@ class XsltCallbacks extends Object
         xarLogMessage('ATT: processed'.$matches[1]);
         return $res;
     }
-    
+
     static function entities($matches)
     {
         // Strip the & and the ; off.
@@ -101,7 +101,7 @@ class XsltCallbacks extends Object
         $entityParts = explode('-',$entityName);
 
         // The first part will always be xar, if not, return the whole entity back
-        if($entityParts[0] != 'xar' or !isset($entityParts[1])) 
+        if($entityParts[0] != 'xar' or !isset($entityParts[1]))
             return $matches[0];
 
         // The second part signals what we need to do
@@ -113,7 +113,7 @@ class XsltCallbacks extends Object
             case 'modurl':
                 //   1       2     3    4
                 // modurl-modname-type-func
-                if( isset($entityParts[2]) and 
+                if( isset($entityParts[2]) and
                     isset($entityParts[3]) and
                     isset($entityParts[4])
                 ) return "#xarModUrl('$entityParts[2]','$entityParts[3]','$entityParts[4]')#";
@@ -121,11 +121,11 @@ class XsltCallbacks extends Object
             default:
                 return $matches[0];
         }
-        
+
         xarLogMessage('ENT: found in xml source:'.$entityName);
         return $matches[0];
     }
-    
+
     private static function reverseXMLEntities($content)
     {
         return str_replace(

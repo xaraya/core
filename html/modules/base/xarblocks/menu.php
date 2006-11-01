@@ -217,7 +217,7 @@ function base_menublock_display($blockinfo)
             // Security Check
             //FIX: Should contain a check for the particular menu item
             //     Like "menu:$blockinfo[title]:$blockinfo[bid]:$title"?
-            if (xarSecurityCheck('ReadBaseBlock',0,'Block',"menu:$blockinfo[title]:$blockinfo[bid]")) {
+            if (xarSecurityCheck('ViewBaseBlocks',0,'Block',"menu:$blockinfo[title]:$blockinfo[bid]")) {
                 $title = xarVarPrepForDisplay($title);
                 $comment = xarVarPrepForDisplay($comment);
                 $child = xarVarPrepForDisplay($child);
@@ -230,7 +230,7 @@ function base_menublock_display($blockinfo)
 
     // Added list of modules if selected.
     if ($vars['displaymodules'] != 'None') {
-        if (xarSecurityCheck('ReadBaseBlock',0,'Block',"menu:$blockinfo[title]:$blockinfo[bid]")) {
+        if (xarSecurityCheck('ViewBaseBlocks',0,'Block',"menu:$blockinfo[title]:$blockinfo[bid]")) {
            $useAliasName=0;
            $aliasname='';
             if ($vars['displaymodules'] == 'List' && !empty($vars['modulelist'])) {
@@ -244,7 +244,7 @@ function base_menublock_display($blockinfo)
                 $mods = $list;
                 if ($list == array()) $usermods = '';
             }
-            
+
             foreach($mods as $mod){
                 /* Check for active module alias */
                 /* jojodee -  We need to review the module alias functions and, thereafter it's use here */                $useAliasName=xarModGetVar($mod['name'], 'useModuleAlias');
@@ -291,7 +291,7 @@ function base_menublock_display($blockinfo)
                             }
 
                 // Security Check
-//                                        if (xarSecurityCheck('ReadBaseBlock',0,'Block',"$blockinfo[title]:$menulink[title]:All")) {
+//                                        if (xarSecurityCheck('ViewBaseBlocks',0,'Block',"$blockinfo[title]:$menulink[title]:All")) {
                                 $indlinks[] = array('userlink'      => $menulink['url'],
                                                     'userlabel'     => $menulink['label'],
                                                     'usertitle'     => $menulink['title'],
