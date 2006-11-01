@@ -50,7 +50,16 @@
                 <xsl:text>'</xsl:text>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:text>$_bl_module_name</xsl:text>
+                <xsl:choose>
+                  <xsl:when test="string-length(substring-before(substring-after($bl_dirname,'modules/'),'/')) &gt; 0">
+                    <xsl:text>'</xsl:text>
+                    <xsl:value-of select="substring-before(substring-after($bl_dirname,'modules/'),'/')"/>
+                    <xsl:text>'</xsl:text>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:text>xarModGetName()</xsl:text>
+                  </xsl:otherwise>
+                </xsl:choose>
               </xsl:otherwise>
             </xsl:choose>
             <xsl:text>, "</xsl:text>
