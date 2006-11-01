@@ -185,7 +185,7 @@
                     </select>
                 </td>
                 <td class="xar-align-center">
-                    <xar:set name="$firstline">xarML('-- choose --')</xar:set>
+                    <xar:set name="firstline">xarML('-- choose --')</xar:set>
                     <xar:data-input type="dropdown" name="state" tabindex="5" onchange="this.form.submit()" firstline="$firstline" options="$stateoptions" value="$state" />
                 </td>
                 <xar:if condition="$uid gt 0">
