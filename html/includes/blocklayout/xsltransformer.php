@@ -41,7 +41,9 @@ class BlocklayoutXSLTProcessor extends Object
 
         // Set up the document to transform
         $this->xmlDoc = new DOMDocument();
-        $this->xmlDoc->resolveExternals = true;
+        // Setting this to false makes it 2 times faster, what do we loose?
+        $this->xmlDoc->resolveExternals = false;
+        $this->validateOnParse = true;
         $this->xmlDoc->loadXML($this->prepXml);
     }
 
@@ -59,11 +61,25 @@ class BlocklayoutXSLTProcessor extends Object
         $result = $this->xslProc->transformToXML($this->xmlDoc);
         //set_exception_handler(array('ExceptionHandlers','default'));
         
-        // Expressions in attributes are not handled by the transform because
-        // XSLT can not generate anything other than valid XML (well, it can but 
-        // definitely not inside attributes), which exclude php PI's
-        // in attrbiutes
-        $exprPattern = '/(#[^"#]+?#)/';
+        /*
+            Expressions in attributes are not handled by the transform because
+            XSLT can not generate anything other than valid XML (well, it can but 
+            definitely not inside attributes), which exclude php PI's
+            in attrbiutes
+        
+            This pattern should not greedy match the dots in #...# constructs
+            We exclude:
+                " == delimiter of attributes (text nodes are xslt transformed)
+                # == our own delimiter
+                ; == php delimiter
+            TODO:
+                This just shifts the problem to where an expression contains a 
+                literal string
+                title="#SomeFunc('I dont like this; it is problem #5')#"
+                Both the ; and the # will create a problem currently.
+                
+        */ 
+        $exprPattern = '/(#[^"#;]+?#)/';
         $callBack    = array('XsltCallbacks','attributes');
         $result = preg_replace_callback($exprPattern,$callBack,$result);
         //debug(htmlspecialchars($result));
