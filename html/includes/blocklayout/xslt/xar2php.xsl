@@ -39,6 +39,12 @@
     GUI where tags are shown on screen and can be manually entered into the database, which is of questionable use anyway, apart
     from a debugging perspective.
     - go over all xar: tags attributes and decide how resolving should be handled
+    - our # delimiter conflicts with the use of generic entities in rare cases.
+      Example:
+        #$modinfo['adminurltitle']#&#160;#$modinfo['displayname']#
+         |_______first expr______| ^ |__| |_________text________|\- lonely #
+                                   |   \- second expr
+                                   |- single & 'text'
   -->
 
   <!-- 

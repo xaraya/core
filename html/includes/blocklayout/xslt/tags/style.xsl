@@ -12,28 +12,31 @@
   <xsl:processing-instruction name="php">
     <xsl:text>xarModAPIFunc('themes','user','register',array(</xsl:text>
     <xsl:if test="@file != ''">
-      <xsl:text disable-output-escaping="yes">'file' =&gt;'</xsl:text><xsl:value-of select="@file"/><xsl:text>',</xsl:text>
+      <xsl:text>'file' =&gt;'</xsl:text><xsl:value-of select="@file"/><xsl:text>',</xsl:text>
     </xsl:if>
     <xsl:if test="@scope != ''">
-      <xsl:text disable-output-escaping="yes">'scope' =&gt;'</xsl:text><xsl:value-of select="@scope"/><xsl:text>',</xsl:text>
+      <xsl:text>'scope' =&gt;'</xsl:text><xsl:value-of select="@scope"/><xsl:text>',</xsl:text>
     </xsl:if>
     <xsl:if test="@type != ''">
-      <xsl:text disable-output-escaping="yes">'type' =&gt;'</xsl:text><xsl:value-of select="@type"/><xsl:text>',</xsl:text>
+      <xsl:text>'type' =&gt;'</xsl:text><xsl:value-of select="@type"/><xsl:text>',</xsl:text>
     </xsl:if>
     <xsl:if test="@media != ''">
-      <xsl:text disable-output-escaping="yes">'media' =&gt;'</xsl:text><xsl:value-of select="@media"/><xsl:text>',</xsl:text>
+      <xsl:text>'media' =&gt;'</xsl:text><xsl:value-of select="@media"/><xsl:text>',</xsl:text>
     </xsl:if>
     <xsl:if test="@alternate != ''">
-      <xsl:text disable-output-escaping="yes">'alternate' =&gt;'</xsl:text><xsl:value-of select="@alternate"/><xsl:text>',</xsl:text>
+      <xsl:text>'alternate' =&gt;'</xsl:text><xsl:value-of select="@alternate"/><xsl:text>',</xsl:text>
     </xsl:if>
     <xsl:if test="@title != ''">
-      <xsl:text disable-output-escaping="yes">'title' =&gt;'</xsl:text><xsl:value-of select="@title"/><xsl:text>',</xsl:text>
+      <xsl:text>'title' =&gt;'</xsl:text><xsl:value-of select="@title"/><xsl:text>',</xsl:text>
     </xsl:if>
     <xsl:if test="@method != ''">
-      <xsl:text disable-output-escaping="yes">'method' =&gt;'</xsl:text><xsl:value-of select="@method"/><xsl:text>',</xsl:text>
+      <xsl:text>'method' =&gt;'</xsl:text><xsl:value-of select="@method"/><xsl:text>',</xsl:text>
     </xsl:if>
     <xsl:if test="@condition != ''">
-      <xsl:text disable-output-escaping="yes">'condition' =&gt;'</xsl:text><xsl:value-of select="@condition"/><xsl:text>',</xsl:text>
+      <xsl:text>'condition' =&gt;'</xsl:text><xsl:value-of select="@condition"/><xsl:text>',</xsl:text>
+    </xsl:if>
+    <xsl:if test="@module != ''">
+      <xsl:text>'module' =&gt;'</xsl:text><xsl:value-of select="@module"/><xsl:text>',</xsl:text>
     </xsl:if>
     <xsl:text>));</xsl:text>
   </xsl:processing-instruction>

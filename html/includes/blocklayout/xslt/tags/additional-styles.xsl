@@ -10,7 +10,7 @@
 
 <xsl:template match="xar:additional-styles">
   <xsl:processing-instruction name="php">
-    <xsl:text disable-output-escaping="yes">echo xarModAPIFunc('themes','user','deliver',array('method' =&gt; 'render','base' =&gt; 'theme'));</xsl:text>
+    <xsl:text>echo xarModAPIFunc('themes','user','deliver',array('method' =&gt; 'render','base' =&gt; 'theme'));</xsl:text>
   </xsl:processing-instruction>
 </xsl:template>
 
