@@ -8,12 +8,10 @@
     xmlns:php="http://php.net/xsl" 
     exclude-result-prefixes="php xar">
 
-<xsl:template match="xar:comment">
-  <xsl:comment>
-    <xsl:call-template name="resolveText">
-      <xsl:with-param name="expr" select="."/>
-    </xsl:call-template>
-  </xsl:comment>
+<xsl:template match="xar:additional-styles">
+  <xsl:processing-instruction name="php">
+    <xsl:text>echo xarModAPIFunc('themes','user','deliver',array('method' =&gt; 'render','base' =&gt; 'theme'));</xsl:text>
+  </xsl:processing-instruction>
 </xsl:template>
 
 </xsl:stylesheet>

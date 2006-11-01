@@ -39,6 +39,12 @@
     GUI where tags are shown on screen and can be manually entered into the database, which is of questionable use anyway, apart
     from a debugging perspective.
     - go over all xar: tags attributes and decide how resolving should be handled
+    - our # delimiter conflicts with the use of generic entities in rare cases.
+      Example:
+        #$modinfo['adminurltitle']#&#160;#$modinfo['displayname']#
+         |_______first expr______| ^ |__| |_________text________|\- lonely #
+                                   |   \- second expr
+                                   |- single & 'text'
   -->
 
   <!-- 
@@ -113,6 +119,10 @@
   -->
   <!-- xar:additional-styles -->
   <xsl:include href="tags/additional-styles.xsl"/>
+  <!-- xar:base-include-javascript -->
+  <xsl:include href="tags/base-include-javascript.xsl"/>
+  <!-- xar:base-render-javascript -->
+  <xsl:include href="tags/base-render-javascript.xsl"/>
   <!-- xar:blockgroup -->
   <xsl:include href="tags/blockgroup.xsl"/>
   <!-- xar:blocklayout -->
@@ -215,6 +225,9 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- 
+  For all text nodes, resolve expressions within
+-->
 <xsl:template match="text()">
   <xsl:call-template name="resolveText">
     <xsl:with-param name="expr" select="."/>
@@ -229,10 +242,12 @@
         disable-output-escaping="yes"/>
 </xsl:template>
 
-<!-- Any xar tag we dont match, we highlight in the output, i.e. turn it into a text node -->
+<!-- 
+  Any xar tag we dont match, we highlight in the output, i.e. turn it into a text node 
+-->
 <xsl:template match="xar:*">
   <pre class="xsltdebug">
-    <xsl:text>MISSING TAG IMPLEMENTATION: 
+    <xsl:text>MISSING TAG IMPLEMENTATION:
 &lt;</xsl:text>
     <xsl:value-of select="name()"/>
     <xsl:text> </xsl:text>
