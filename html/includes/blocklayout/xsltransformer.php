@@ -109,7 +109,25 @@ class XsltCallbacks extends Object
         xarLogMessage('ATT: processed'.$matches[1]);
         return $res;
     }
-    
+
+    private static function reverseXMLEntities($content)
+    {
+        /* 
+            XML predefines 5 entities and as we resolve our attribute
+            expressions to php code, we need a way to make php happy bout 
+            them too. This touches obviously on the problem of expressions
+            in attributes in general.
+        */
+        return str_replace(
+            array('&amp;', '&gt;', '&lt;', '&quot;','&apos;'),
+            array('&', '>', '<', '"',"'"),
+            $content
+        );
+    }    
+
+    /* 
+        Entity resolvement callback for xar- entities.
+    */
     static function entities($matches)
     {
         // Strip the & and the ; off.
@@ -123,9 +141,11 @@ class XsltCallbacks extends Object
         // The second part signals what we need to do
         switch($entityParts[1])
         {
+            // &xar-baseurl;
             case 'baseurl':
                 return '#xarServer::getBaseURL()#';
                 break;
+            // &xar-modurl-modname-type-func;
             case 'modurl':
                 //   1       2     3    4
                 // modurl-modname-type-func
@@ -134,6 +154,7 @@ class XsltCallbacks extends Object
                     isset($entityParts[4])
                 ) return "#xarModUrl('$entityParts[2]','$entityParts[3]','$entityParts[4]')#";
                 break;
+            // &xar-var;
             case 'var':
                 return "#\$$entityParts[2]#";
                 break;
@@ -145,13 +166,6 @@ class XsltCallbacks extends Object
         return $matches[0];
     }
     
-    private static function reverseXMLEntities($content)
-    {
-        return str_replace(
-            array('&amp;', '&gt;', '&lt;', '&quot;'),
-            array('&', '>', '<', '"'),
-            $content
-        );
-    }
+
 }
 ?>
