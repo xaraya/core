@@ -9,8 +9,19 @@
     exclude-result-prefixes="php xar">
 
 <xsl:template name="xar-template" match="xar:template">
+  <xsl:variable name="subdata">
+    <xsl:choose>
+      <xsl:when test="not(@subdata)">
+        <xsl:text>$_bl_data</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="@subdata"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  
   <xsl:choose>
-    <!-- If the template tag does not contain anything, treate as in 1.x -->
+    <!-- If the template tag does not contain anything, treat it as in 1.x -->
     <xsl:when test="not(node())">
       <xsl:processing-instruction name="php">
         <xsl:text>echo </xsl:text>
@@ -18,13 +29,17 @@
           <xsl:when test="@type='theme'">
             <xsl:text>xarTpl_includeThemeTemplate('</xsl:text>
             <xsl:value-of select="@file"/>
-            <xsl:text>',$_bl_data);</xsl:text>
+            <xsl:text>',</xsl:text>
+            <xsl:value-of select="$subdata"/>
+            <xsl:text>);</xsl:text>
           </xsl:when>
           <xsl:when test="@type='system'">
             <!-- The name is to be interpreted relative to the file we're parsing now -->
             <xsl:text>xarTplFile('</xsl:text>
             <xsl:value-of select="$bl_dirname"/><xsl:text>/</xsl:text><xsl:value-of select="@file"/>
-            <xsl:text>',$_bl_data );</xsl:text>
+            <xsl:text>',</xsl:text>
+            <xsl:value-of select="$subdata"/>
+            <xsl:text>);</xsl:text>
           </xsl:when>
           <xsl:otherwise>
             <xsl:text>xarTpl_includeModuleTemplate(</xsl:text>
@@ -38,9 +53,13 @@
                 <xsl:text>$_bl_module_name</xsl:text>
               </xsl:otherwise>
             </xsl:choose>
-            <xsl:text>, '</xsl:text>
-            <xsl:value-of select="@file"/>
-            <xsl:text>',$_bl_data);</xsl:text>
+            <xsl:text>, "</xsl:text>
+            <xsl:call-template name="resolvePHP">
+              <xsl:with-param name="expr" select="@file"/>
+            </xsl:call-template>
+            <xsl:text>",</xsl:text>
+            <xsl:value-of select="$subdata"/>
+            <xsl:text>);</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:processing-instruction>
