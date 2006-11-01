@@ -8,43 +8,68 @@
                 xmlns:php="http://php.net/xsl" 
                 exclude-result-prefixes="php xar">
   <!--
-    Issues to be researched:
+      Issues to be researched: (this should probably go into a DEVnote)
     
-    - [DONE] how to cross the border? i.e. how do parameters from the module get
-         passed into the xslt processor (see parameter section below and xsltransformer.php )
-    - how do we create a suiteable test suite (make a compilation of the core templates?)
-    - can we make a stub inserting some random values for the template vars, so we can compare somehow
-    - is merging with other output namespaces just a question of copying output (xhtml in our case)
+    - [DONE] how to cross the border? i.e. how do parameters from the module 
+      get passed into the xslt processor (see parameter section below and 
+      xsltransformer.php )
+    - how do we create a suiteable test suite (make a compilation of the core
+      templates?) [STARTED in theme XClassic
+      modules/base/user-main-compilertest.xt]
+    - can we make a stub inserting some random values for the template vars,
+      so we can compare somehow
+    - is merging with other output namespaces just a question of copying
+      output (xhtml in our case)
     - how do we handle #$var# constructs?
-      * ideally i want to handle it through separation of the template in two sections, data and presentation, 
-        both in the xml domain: 
-      * one way of doing that is to make #$var# ~ &var; but this is a pain to handle for XSLT, 
-        since it assumes entities to be known/declared at transform time, which is clearly not the case
-      * another separation mechanism is to create a "data" section (xml fragment) to go with the template: like
+      * ideally i want to handle it through separation of the template in two
+        sections, data and presentation, both in the xml domain:
+      * one way of doing that is to make #$var# ~ &var; but this is a pain to
+        handle for XSLT, since it assumes entities to be known/declared at
+        transform time, which is clearly not the case
+      * another separation mechanism is to create a "data" section (xml
+        fragment) to go with the template: like
         <tpldata>
           <vars>
             <var name="var">value</var>
               ...
           </vars>
         </tpldata>
-        or something like that, generated dynamically, From then on we can reach each var by using XPath expressions like
-        /tpldata/vars/var[@name='varname']
-        which sounds sort of attractive because it is almost exactly like the array stuff, but then XML compliant. It also
-        means that we need to translate each and every template to this syntax.
-    - the xarBLCompiler.php does some processing here and there, which of these need to stay in php, which
-      of them can be done by xsl? We can take them on a case by case basis, since php functions can be called reasonably
-      easy from within the transform, but each case is a weakness in portability
-    - it really doesnt make sense anymore now to go through the hoops of registering custom tags etc. One
-    xsl snippet for a custom tag, generating the right code is a lot easier. Note: this would also invalidate the whole
-    GUI where tags are shown on screen and can be manually entered into the database, which is of questionable use anyway, apart
-    from a debugging perspective.
-    - go over all xar: tags attributes and decide how resolving should be handled
-    - our # delimiter conflicts with the use of generic entities in rare cases.
-      Example:
+
+        or something like that, generated dynamically, From then on we can
+        reach each var by using XPath expressions like
+
+          /tpldata/vars/var[@name='varname']
+
+        which sounds sort of attractive because it is almost exactly like the
+        array stuff, but then XML compliant. It also means that we would need 
+        to translate each and every template to this syntax.
+    - the xarBLCompiler.php does some processing here and there, which of
+      these need to stay in php, which of them can be done by xsl? We can take
+      them on a case by case basis, since php functions can be called
+      reasonably easy from within the transform, but each case is a weakness
+      in portability so we try to avoid it.
+    - it really doesnt make sense anymore now to go through the hoops of
+      registering custom tags etc. One xsl snippet for a custom tag,
+      generating the right code is a lot easier. Note: this would also
+      invalidate the whole GUI where tags are shown on screen and can be
+      manually entered into the database, which is of questionable use anyway,
+      apart from a debugging perspective.
+    - go over all xar: tags attributes and decide how resolving should be
+      handled, dont add a resolvement unless you have a usecase.
+    - our # delimiter conflicts with the use of generic entities in rare
+      cases.
+
+      Example 1:
         #$modinfo['adminurltitle']#&#160;#$modinfo['displayname']#
          |_______first expr______| ^ |__| |_________text________|\- lonely #
                                    |   \- second expr
                                    |- single & 'text'
+      Example 2:
+        ##$variable##
+        
+        Could be: [empty expression][text: $variable][empty expression]  OR
+                  [text: #][content of $variable][text: #] 
+        depending on how it's looked upon.
   -->
 
   <!-- 
@@ -77,8 +102,7 @@
     We view php as one large processing instruction of xml without the xml 
     declaration 
   -->
-  <xsl:output 
-      method="xml" omit-xml-declaration="yes" indent="yes" />
+  <xsl:output method="xml" omit-xml-declaration="yes" indent="yes" />
     
   <!--
     Spacing
@@ -180,6 +204,7 @@
       <xsl:otherwise>
         <!-- This is the point where we can do automatic translation 
              of textnodes without requiring xar:mlstring 
+             Erm, no its not, the xsl changed, need to re-arrange this.
         -->
         <xsl:copy/>
       </xsl:otherwise>
@@ -187,14 +212,16 @@
 </xsl:template>
 
 <!--
-    Text nodes
-    - if it contains a #, it  might need resolving
-    - if not, just output it.
+    Utility template, taks a parameter 'expr' which contains the 
+    value of a text node. It recursively resvolves #-pairs from left 
+    to right. Pre- and Post- hash content are treated as text.
 -->
 <xsl:template name="resolveText" >
   <xsl:param name="expr"/>
-  <xsl:param name="nrOfHashes"
+  
+  <xsl:variable name="nrOfHashes"
       select="string-length($expr) - string-length(translate($expr, '#', ''))"/>
+      
   <xsl:choose>
     <!-- If we have zero or one hash, just output the text node -->
     <xsl:when test="$nrOfHashes &lt; 2">
@@ -209,13 +236,15 @@
       
       <!-- Resolve the part in between -->
       <!-- Left at this point: ....#[....]#.... -->
-      <xsl:processing-instruction name="php">
-        <xsl:text>echo </xsl:text>
-        <xsl:call-template name="resolvePHP">
-            <xsl:with-param name="expr" select="substring-before(substring-after($expr,'#'),'#')"/>
-        </xsl:call-template>
-        <xsl:text>;</xsl:text>
-      </xsl:processing-instruction>
+      <xsl:if test="substring-before(substring-after($expr,'#'),'#') !=''">
+        <xsl:processing-instruction name="php">
+          <xsl:text>echo </xsl:text>
+          <xsl:call-template name="resolvePHP">
+              <xsl:with-param name="expr" select="substring-before(substring-after($expr,'#'),'#')"/>
+          </xsl:call-template>
+          <xsl:text>;</xsl:text>
+        </xsl:processing-instruction>
+      </xsl:if>
       
       <!-- ....#....#[....#....#....etc.] -->
       <xsl:call-template name="resolveText">
