@@ -134,6 +134,9 @@ class XsltCallbacks extends Object
                     isset($entityParts[4])
                 ) return "#xarModUrl('$entityParts[2]','$entityParts[3]','$entityParts[4]')#";
                 break;
+            case 'var':
+                return "#\$$entityParts[2]#";
+                break;
             default:
                 return $matches[0];
         }
