@@ -65,6 +65,39 @@
   </xsl:processing-instruction>
 </xsl:template>
 
+<xsl:template match="xar:data-getitem">
+  <xsl:processing-instruction name="php">
+    <xsl:choose>
+      <xsl:when test="not(@object)">
+        <!-- No object, gotta make one -->
+        <xsl:text>$object = xarModAPIFunc('dynamicdata','user','getitem',</xsl:text>
+        <xsl:text>array_merge(array('getobject'=&gt;1),</xsl:text>
+        <xsl:call-template name="atts2args">
+          <xsl:with-param name="nodeset" select="@*[name() != 'name']"/>
+        </xsl:call-template>
+        <xsl:text>));</xsl:text>
+        <xsl:text>$object-&gt;getItem(</xsl:text>
+        <xsl:call-template name="atts2args">
+          <xsl:with-param name="nodeset" selec="@*[name() != 'name']"/>
+        </xsl:call-template>
+        <xsl:text>);</xsl:text>
+        <!-- the name attribute holds a variable name, not good, but it is like that -->
+        <xsl:value-of select="@name"/><xsl:text>=&amp; $object-&gt;getProperties();</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- We do have one, invoke the getItem method on it -->
+        <xsl:value-of select="@object"/><xsl:text>-&gt;getItem(</xsl:text>
+        <xsl:call-template name="atts2args">
+          <xsl:with-param name="nodeset" select="@*[name() != 'name']"/>
+        </xsl:call-template>
+        <xsl:text>);</xsl:text>
+        <xsl:value-of select="@name"/><xsl:text>=&gt;</xsl:text>
+        <xsl:value-of select="@object"/><xsl:text>->getProperties();</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:processing-instruction>
+</xsl:template>
+
 <xsl:template match="xar:data-output">
   <xsl:processing-instruction name="php">
     <xsl:choose>

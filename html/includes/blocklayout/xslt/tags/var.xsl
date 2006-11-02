@@ -30,7 +30,9 @@
         <xsl:text>')</xsl:text>
       </xsl:when>
       <xsl:when test="@scope = 'local' or not(@scope)">
-        <xsl:text>$</xsl:text><xsl:value-of select="@name"/>
+        <xsl:call-template name="resolvePHP">
+          <xsl:with-param name="expr" select="concat('$',@name)"/>
+        </xsl:call-template>
       </xsl:when>
       <xsl:when test="@scope = 'user'">
         <xsl:text>xarUserGetVar('</xsl:text>
