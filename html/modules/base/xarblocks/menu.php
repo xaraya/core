@@ -246,10 +246,11 @@ function base_menublock_display($blockinfo)
             }
 
             foreach($mods as $mod){
-                if (!xarSecurityCheck('ViewBlock',0,'BlockItem',$blockinfo['name']. ":" . $mod['name'])) continue
+                if (!xarSecurityCheck('ViewBlock',0,'BlockItem',$blockinfo['name']. ":" . $mod['name'])) continue;
                 /* Check for active module alias */
-                /* jojodee -  We need to review the module alias functions and, thereafter it's use here */                $useAliasName=xarModGetVar($mod['name'], 'useModuleAlias');
-                $aliasname= xarModGetVar($mod['name'],'aliasname');
+                /* jojodee -  We need to review the module alias functions and, thereafter it's use here */
+                $useAliasName = xarModGetVar($mod['name'], 'useModuleAlias');
+                $aliasname = xarModGetVar($mod['name'],'aliasname');
                 /* use the alias name if it exists for the label */
                 if (isset($useAliasName) && $useAliasName==1 && isset($aliasname) && !empty($aliasname)) {
                     $label = $aliasname;
