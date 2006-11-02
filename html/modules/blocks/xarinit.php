@@ -25,7 +25,7 @@ function blocks_init()
     // Create tables inside a transaction
     try {
         $dbconn->begin();
-            
+
         // *_block_groups
         $query = xarDBCreateTable($prefix . '_block_groups',
                                   array('xar_id'         => array('type'        => 'integer',
@@ -47,7 +47,7 @@ function blocks_init()
                                         'fields' => array('xar_name'),
                                         'unique' => 'true'));
         $dbconn->Execute($query);
-        
+
         // *_block_instances
         $query = xarDBCreateTable($prefix . '_block_instances',
                                   array('xar_id'          => array('type'        => 'integer',
@@ -81,7 +81,7 @@ function blocks_init()
                                         'xar_last_update' => array('type'        => 'integer',
                                                                    'null'        => false,
                                                                    'default'     => '0')));
-        
+
         $dbconn->Execute($query);
 
         $query = xarDBCreateIndex($prefix . '_block_instances',
@@ -95,7 +95,7 @@ function blocks_init()
                                         'fields' => array('xar_name'),
                                         'unique' => true));
         $dbconn->Execute($query);
-        
+
         // *_block_types
         $query = xarDBCreateTable($prefix . '_block_types',
                                   array(
@@ -123,7 +123,7 @@ function blocks_init()
                                                             )
                                         )
                                   );
-        
+
         $dbconn->Execute($query);
 
         $query = xarDBCreateIndex($prefix . '_block_types',
@@ -158,24 +158,24 @@ function blocks_init()
                                         'xar_position'    => array('type'        => 'integer',
                                                                    'null'        => false,
                                                                    'default'     => '0')));
-        
+
         $dbconn->Execute($query);
-        
+
         $query = xarDBCreateIndex($prefix . '_block_group_instances',
                                   array('name' => 'i_' . $prefix . '_block_group_instances',
                                         'fields' => array('xar_group_id'),
                                         'unique' => false));
         $dbconn->Execute($query);
-        
+
         $query = xarDBCreateIndex($prefix . '_block_group_instances',
                                   array('name' => 'i_' . $prefix . '_block_group_instances_2',
                                         'fields' => array('xar_instance_id'),
                                         'unique' => false));
         $dbconn->Execute($query);
-        
+
         // Cache blocks table is not in xartables
         $cacheblockstable =  xarDBGetSystemTablePrefix() . '_cache_blocks';
-        
+
         $query = xarDBCreateTable($prefix . '_cache_blocks',
                                   array('xar_bid'          => array('type'        => 'integer',
                                                                     'null'        => false,
@@ -193,7 +193,7 @@ function blocks_init()
                                         'xar_expire'    => array('type'        => 'integer',
                                                                  'null'        => true)));
         $dbconn->Execute($query);
-        
+
         // *_userblocks
         /* Removed Collapsing blocks to see if there is a better solution.
          $query = xarDBCreateTable($prefix . '_userblocks',
@@ -210,17 +210,17 @@ function blocks_init()
          'default' => '1'),
          'xar_last_update' => array('type'    => 'timestamp',
          'null'    => false)));
-         
+
          $result = $dbconn->Execute($query);
-         
+
          $query = xarDBCreateIndex($prefix . '_userblocks',
          array('name'   => 'i_' . $prefix . '_userblocks',
          'fields' => array('xar_uid', 'xar_bid'),
          'unique' => true));
          $result = $dbconn->Execute($query);
 
-         
-         
+
+
          // Register BL tags
          sys::import('blocklayout.template.tags');
          xarTplRegisterTag('blocks', 'blocks-stateicon',
@@ -231,7 +231,7 @@ function blocks_init()
          and when the core is installed, blocks is installed
          before the modules module is so, the module_vars table
          isn't even created at this point.
-         
+
          xarModSetVar('blocks','collapseable',1);
          xarModSetVar('blocks','blocksuparrow','upb.gif');
          xarModSetVar('blocks','blocksdownarrow','downb.gif');
@@ -241,11 +241,11 @@ function blocks_init()
         $dbconn->rollback();
         throw $e;
     }
-        
+
     // Initialisation successful
     xarModSetVar('blocks', 'selstyle', 'plain');
     xarModSetVar('blocks', 'itemsperpage', 20);
-        
+
     return blocks_upgrade('1.0');
 }
 
@@ -259,7 +259,7 @@ function blocks_upgrade($oldVersion)
     case '1.0.0':
         /* There are old block instances defined previously in privs xarsetup.php file and used in the Block module.
            From this version we are adding management of security for blocks to Blocks module
-           Old functionality in modules still exists. 
+           Old functionality in modules still exists.
            Note that the old instances and masks and code in the files was not 'matched' so don't think they worked properly in any case.
         */
         xarRemoveInstances('blocks');
@@ -300,8 +300,20 @@ function blocks_upgrade($oldVersion)
                                  'limit' => 20));
         xarDefineInstance('blocks','Block',$instances);
 
+        //Define an instance that refers to items that a block contains
+        $query1 = "SELECT DISTINCT instances.xar_name FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id";
+        $modulesTable = $systemPrefix . '_modules';
+        $query2 = "SELECT DISTINCT xar_name FROM $modulesTable ";
+        $instances = array(array('header' => 'Block Name:',
+                                 'query' => $query1,
+                                 'limit' => 20),
+                           array('header' => 'Module Name:',
+                                 'query' => $query2,
+                                 'limit' => 20));
+        xarDefineInstance('blocks','BlockItem',$instances);
+
         //Set up the security masks
-         xarRemoveMasks('blocks'); 
+         xarRemoveMasks('blocks');
          /* remove and redefine new ones. The old ones do not seem to be working in any case in installs */
 
         //Unsure if this  Comment is used at all but left for compatiblity with prior setup

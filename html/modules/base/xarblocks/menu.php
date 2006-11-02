@@ -246,6 +246,7 @@ function base_menublock_display($blockinfo)
             }
 
             foreach($mods as $mod){
+                if (!xarSecurityCheck('ViewBlock',0,'BlockItem',$blockinfo['name']. ":" . $mod['name'])) continue
                 /* Check for active module alias */
                 /* jojodee -  We need to review the module alias functions and, thereafter it's use here */                $useAliasName=xarModGetVar($mod['name'], 'useModuleAlias');
                 $aliasname= xarModGetVar($mod['name'],'aliasname');
@@ -319,6 +320,7 @@ function base_menublock_display($blockinfo)
                                         'modactive' => 0);
                 }
             }
+            if (empty($usermods)) $usermods = '';
         } else {
             $modid = xarModGetIDFromName('roles');
             $modinfo = xarModGetInfo($modid);
