@@ -2,10 +2,10 @@
 <!DOCTYPE xsl:stylesheet [
 <!ENTITY nl "&#xd;&#xa;">
 ]>
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xar="http://xaraya.com/2004/blocklayout"   
-    xmlns:php="http://php.net/xsl" 
+    xmlns:xar="http://xaraya.com/2004/blocklayout"
+    xmlns:php="http://php.net/xsl"
     exclude-result-prefixes="php xar">
 
 <xsl:template name="xar-template" match="xar:template">
@@ -19,7 +19,7 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  
+
   <xsl:choose>
     <!-- If the template tag does not contain anything, treat it as in 1.x -->
     <xsl:when test="not(node())">
@@ -38,7 +38,9 @@
             <xsl:text>xarTplFile('</xsl:text>
             <xsl:value-of select="$bl_dirname"/><xsl:text>/</xsl:text><xsl:value-of select="@file"/>
             <xsl:text>',</xsl:text>
-            <xsl:value-of select="$subdata"/>
+            <xsl:call-template name="resolvePHP">
+              <xsl:with-param name="expr" select="$subdata"/>
+            </xsl:call-template>
             <xsl:text>);</xsl:text>
           </xsl:when>
           <xsl:otherwise>
@@ -67,7 +69,9 @@
               <xsl:with-param name="expr" select="@file"/>
             </xsl:call-template>
             <xsl:text>",</xsl:text>
-            <xsl:value-of select="$subdata"/>
+            <xsl:call-template name="resolvePHP">
+              <xsl:with-param name="expr" select="$subdata"/>
+            </xsl:call-template>
             <xsl:text>);</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
