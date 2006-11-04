@@ -1,29 +1,29 @@
 <h1 class="xar-mod-head">
     <xar:mlstring>
-        XSLT Blocklayout compiler testpage 
+        XSLT Blocklayout compiler testpage
     </xar:mlstring>
 </h1>
 <div>
   <h2>Using the compiler test page</h2>
   <p>
-    This page collects test for the new xslt based Blocklayout Compiler. It's 
+    This page collects test for the new xslt based Blocklayout Compiler. It's
     aim is to have one reference place to visit in an install, to quickly check
     if the compiler is sane, as to eliminate needless hunting for a bug when
     the problem is really the compiler. For this page to work, you obviously
-    have to make sure the compiler is actually compiling this page; either 
+    have to make sure the compiler is actually compiling this page; either
     disable the template cache (temporarily) or clear it before loading this
     page.
   </p>
   <p>
-    The tests rely for a big part on <strong>viewing the output source</strong> 
-    of the page you're generating because not every test produces a visible 
+    The tests rely for a big part on <strong>viewing the output source</strong>
+    of the page you're generating because not every test produces a visible
     result. The global functionality of the XSLT BL compiler is not checked here,
     as it obviously works, since you're reading this! The tests should only cover
     border cases and non-standard constructs to validate the more exotic corner
     of the compile process.
   </p>
   <xar:comment>Beginning of the tests</xar:comment>
-  
+
   <div class="testcase" style="padding: 3pt; margin: 5pt; border: thin solid black;">
     <h3>xar:comment with IE conditional</h3>
     <p>
@@ -40,6 +40,33 @@
       <![CDATA[ <!--[lt IE 7]>This would apply to ID with version less than 7<![endif]--> ]]>
     </pre>
   </div>
-  
+  <div class="testcase" style="padding: 3pt; margin: 5pt; border: thin solid black;">
+    <h3>xar:set containing xar:ml</h3>
+    <p>
+      Adding the xar:ml tag and its constructs inside a xar:set tag results in an exception
+    </p>
+    <h4>Source</h4>
+    <pre>
+    <xar:set name="nextpagelabel"><xar:ml>
+        <xar:mlstring>Next page; #(1) items</xar:mlstring>
+        <xar:mlvar>#$nextpageitems#</xar:mlvar>
+    </xar:ml></xar:set>
+    </pre>
+  </div>
+  <div class="testcase" style="padding: 3pt; margin: 5pt; border: thin solid black;">
+    <h3>xar:else tag in xar:sec</h3>
+    <p>
+      Inserting a xar:else clause inside a xar:sec tag results in an exception
+    </p>
+    <h4>Source</h4>
+    <pre>
+    <xar:sec mask="AddItem" component="Entry" instance="$instance" catch="false">
+      <xar:set name="onclick">"window.location='#$location#';"</xar:set>
+    <xar:else/>
+      <xar:set name="onclick">'return true;'</xar:set>
+    </xar:sec>
+    </pre>
+  </div>
+
   <xar:comment>End of the tests</xar:comment>
 </div>
