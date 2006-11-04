@@ -1,10 +1,10 @@
 <xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
+    License: GPL http://www.gnu.org/copyleft/gpl.html
 </xar:comment>
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:mlstring>
-            Blocks Administration 
+            Blocks Administration
         </xar:mlstring>
     </span>
 </div>
@@ -12,51 +12,51 @@
  <xar:template type="module" file="admin-menu" />
     <h2>
         <xar:mlstring>
-            Delete Instance 
+            Delete Instance
         </xar:mlstring>
     </h2>
     <form method="post" action="&xar-modurl-blocks-admin-delete_instance;">
         <fieldset>
             <legend>
                 <xar:mlstring>
-                    Confirm deleting this block? 
+                    Confirm deleting this block?
                 </xar:mlstring>
             </legend>
             <p>
                 <xar:mlstring>
-                    Name: 
+                    Name:
                 </xar:mlstring>
-                #xarVarPrepForDisplay($instance['name'])# 
+                #xarVarPrepForDisplay($instance['name'])#
             </p>
             <xar:if condition="!empty($instance['title'])">
                 <p>
                     <xar:mlstring>
-                        Title: 
+                        Title:
                     </xar:mlstring>
-                    #xarVarPrepForDisplay($instance['title'])# 
+                    #xarVarPrepForDisplay($instance['title'])#
                 </p>
             </xar:if>
             <p>
                 <xar:mlstring>
-                    Groups: 
+                    Groups:
                 </xar:mlstring>
                 <xar:if condition="!empty($instance['groups'])">
                     <xar:loop name="$instance['groups']">
-                        #xarVarPrepForDisplay($loop:item.name)# 
+                        #xarVarPrepForDisplay($loop:item.name)#
                     </xar:loop>
                     <xar:else />
-                    [ 
+                    [
                     <xar:mlstring>
-                        none 
+                        none
                     </xar:mlstring>
-                    ] 
+                    ]
                 </xar:if>
             </p>
             <p>
                 <xar:mlstring>
-                    Type: 
+                    Type:
                 </xar:mlstring>
-                #xarVarPrepForDisplay($instance['module'])# / #xarVarPrepForDisplay($instance['type'])# 
+                #xarVarPrepForDisplay($instance['module'])# / #xarVarPrepForDisplay($instance['type'])#
             </p>
         </fieldset>
         <fieldset>
@@ -65,8 +65,8 @@
                 <input type="hidden" name="confirm" id="confirm" value="true" />
                 <input type="hidden" name="bid" id="bid" value="#$instance['bid']#" />
                 <input type="submit" value="#xarML('Delete Block')#" class="xar-margin-thick" />
-                <xar:set name="$returnurl">
-                    #xarModURL('blocks', 'admin', 'view_instances')# 
+                <xar:set name="returnurl">
+                    #xarModURL('blocks', 'admin', 'view_instances')#
                 </xar:set>
                 <input type="button" value="#xarML('Cancel')#" class="xar-margin-thick" onclick="window.location='#$returnurl#';" />
             </div>

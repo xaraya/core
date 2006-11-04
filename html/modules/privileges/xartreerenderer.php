@@ -21,15 +21,15 @@ sys::import('modules.privileges.xarprivileges');
 // @ todo DOUBLE DEFINITION of same class (in roles/xartreerenderer)
 class xarTreeRenderer
 {
-    
+
     public $privs;
-    
+
     // some variables we'll need to hold drawing info
     public $html;
     public $nodeindex;
     public $indent;
     public $level;
-    
+
     // convenience variables to hold strings referring to pictures
     public $el = '<img src="modules/privileges/xarimages/el.gif" alt="" style="vertical-align: middle" />';
     public $tee = '<img src="modules/privileges/xarimages/T.gif" alt="" style="vertical-align: middle" />';
@@ -41,10 +41,10 @@ class xarTreeRenderer
     public $collapsedbox = '<img class="xar-privtree-box" src="modules/privileges/xarimages/k3.gif" alt="" style="padding-left: 0.1em; vertical-align: middle" onclick="toggleBranch(this, this.parentNode.lastChild);" />';
     public $bigblank ='<span style="padding-left: 0.25em; padding-right: 0.25em;"><img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
     public $biggerblank ='<span style="padding-left: 0.25em; padding-right: 0.5em;"><img src="modules/privileges/xarimages/blank.gif" alt="" style="vertical-align: middle; width: 16px; height: 16px;" /></span>';
-    
+
     // we'll use this to check whether a group has already been processed
     public $alreadydone;
-    
+
     /**
      * Constructor
      *
@@ -53,7 +53,7 @@ class xarTreeRenderer
     {
         $this->privs = new xarPrivileges();
     }
-    
+
     /**
      * maketrees: create an array of all the privilege trees
      *
@@ -75,7 +75,7 @@ class xarTreeRenderer
         }
         return $trees;
     }
-    
+
     /**
      * maketree: make a tree of privileges
      *
@@ -92,7 +92,7 @@ class xarTreeRenderer
     {
         return $this->addbranches(array('parent'=>$this->privs->getprivilegefast($privilege->getID())));
     }
-    
+
     /**
      * addbranches: given an initial tree node, add on the branches
      *
@@ -116,7 +116,7 @@ class xarTreeRenderer
         }
         return $node;
     }
-    
+
     /**
      * drawtrees: create an array of tree drawings
      *
@@ -135,7 +135,7 @@ class xarTreeRenderer
         }
         return $drawntrees;
     }
-    
+
     /**
      * drawtree: create a crude html drawing of the privileges tree
      *
@@ -149,21 +149,21 @@ class xarTreeRenderer
      * @throws  none
      * @todo    none
      */
-    
+
     function drawtree($node)
     {
-        
+
         $this->html = "\n".'<div name="PrivilegesTree_'.$node['parent']['pid'].'" id="PrivilegesTree_'.$node['parent']['pid'].'" style="position: relative;">';
         $this->nodeindex = 0;
         $this->indent = array();
         $this->level = 0;
         $this->alreadydone = array();
-        
+
         $this->drawbranch($node);
         $this->html .= "\n".'</div>'."\n";
         return $this->html;
     }
-    
+
     /**
      * drawbranch: draw a branch of the privileges tree
      *
@@ -177,14 +177,14 @@ class xarTreeRenderer
      * @throws  none
      * @todo    none
      */
-    
+
     function drawbranch($node)
     {
         $this->level = $this->level + 1;
         /*if($this->level > 1){ var_dump($node);exit;}*/
         $this->nodeindex = $this->nodeindex + 1;
         $object = $node['parent'];
-        
+
         // check if we've aleady processed this entry
         if (in_array($object['pid'],$this->alreadydone)) {
             $drawchildren = false;
@@ -194,15 +194,15 @@ class xarTreeRenderer
             $drawchildren = true;
             array_push($this->alreadydone,$object['pid']);
         }
-        
+
         // is this a branch?
         $isbranch = count($node['children'])>0 ? true : false;
-        
+
         // now begin adding rows to the string
         $this->html .= "\n\t".'<div class="xar-privtree-branch" id="branch' . $this->nodeindex . '">'."\n\t\t";
-        
+
         // this table holds the index, the tree drawing gifs and the info about the privilege
-        
+
         // this next part holds the icon links
         // toggle the tree
         /*        if(count($this->privs->getChildren($object['pid'])) == 0) {
@@ -226,7 +226,7 @@ class xarTreeRenderer
                         </span>
                     </a>';
         }
-        
+
         // offer to show the users/groups this privilege is assigned to
         $this->html .= '<a href="' .
             xarModURL('privileges','admin','viewroles',
@@ -236,7 +236,7 @@ class xarTreeRenderer
                             <img src="modules/privileges/xarimages/usersgroups.gif" style="vertical-align: middle;" />
                         </span>
                      </a>';
-        
+
         // offer to remove this privilege from its parent
         if($object['parentid'] == 0) {
             $this->html .= $this->biggerblank;
@@ -251,7 +251,7 @@ class xarTreeRenderer
                              </span>
                          </a>'."\n\t\t";
         }
-        
+
         $this->html .= $this->drawindent();
         if (count($node['children']) > 0) {
             if ($this->nodeindex != 1){
@@ -272,13 +272,13 @@ class xarTreeRenderer
             }
             $this->html .= $this->emptybox;
         }
-        
+
         // draw the name of the object and make a link
         $this->html .= '<a style="padding-left: 1em" href="' .
             xarModURL('privileges', 'admin', 'modifyprivilege',
                       array('pid'=>$object['pid'])) .'" title="'.$object['description'].'">' .$object['name'] . '</a>';
         $componentcount = count($this->privs->getChildren($object['pid']));
-        $this->html .= $componentcount > 0 ? "&nbsp;:&nbsp;" .$componentcount . '&nbsp;'.xarML('components') : "";
+        $this->html .= $componentcount > 0 ? "&#160;:&#160;" .$componentcount . '&#160;'.xarML('components') : "";
         $this->html .= "\n\t\t";
         /*        $this->html .= '<span style="position:absolute;left:35em;border: 1px dashed #f0f;">';
          $this->html .= $object['description'];
@@ -289,7 +289,7 @@ class xarTreeRenderer
         $ind=0;
         foreach($node['children'] as $subnode){
             $ind = $ind + 1;
-            
+
             // if this is the last child, get ready to draw an "L", otherwise a sideways "T"
             if ($ind == count($node['children'])) {
                 array_push($this->indent,$this->el);
@@ -297,22 +297,22 @@ class xarTreeRenderer
             else {
                 array_push($this->indent,$this->tee);
             }
-            
+
             // draw this child
             $this->drawbranch($subnode);
-            
+
             // we're done; remove the indent string
             array_pop($this->indent);
         }
         $this->level = $this->level - 1;
-        
+
         // write the closing tags
         $this->html .= $isbranch ? '</div>' : '';
         // close the html row
         $this->html .= "</div>\n";
-        
+
     }
-    
+
     /**
      * drawindent: draws the graphic part of the tree
      *
@@ -326,7 +326,7 @@ class xarTreeRenderer
      * @throws  none
      * @todo    none
      */
-    
+
     function drawindent()
     {
         $html = '';

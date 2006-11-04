@@ -1,10 +1,10 @@
 <xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
+    License: GPL http://www.gnu.org/copyleft/gpl.html
 </xar:comment>
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:mlstring>
-            Blocks Administration 
+            Blocks Administration
         </xar:mlstring>
     </span>
 </div>
@@ -12,41 +12,41 @@
  <xar:template type="module" file="admin-menu" />
     <h2>
         <xar:mlstring>
-            Delete Group 
+            Delete Group
         </xar:mlstring>
     </h2>
     <form method="post" action="&xar-modurl-blocks-admin-delete_group;">
         <fieldset>
             <legend>
                 <xar:mlstring>
-                    Confirm deleting this group? 
+                    Confirm deleting this group?
                 </xar:mlstring>
             </legend>
             <p>
                 <xar:mlstring>
-                    Name: 
+                    Name:
                 </xar:mlstring>
                 <xar:var name="$group['name']" />
             </p>
             <p>
                 <xar:mlstring>
-                    Members: 
+                    Members:
                 </xar:mlstring>
                 <xar:if condition="!empty($group['instances'])">
                     <xar:loop name="$group['instances']">
-                        #$loop:item['title']# 
+                        #$loop:item['title']#
                     </xar:loop>
                     <xar:else />
-                    [ 
+                    [
                     <xar:mlstring>
-                        none 
+                        none
                     </xar:mlstring>
-                    ] 
+                    ]
                 </xar:if>
             </p>
             <p>
                 <xar:mlstring>
-                    Template: 
+                    Template:
                 </xar:mlstring>
                 <xar:var name="$group['template']" />
             </p>
@@ -57,8 +57,8 @@
                 <input type="hidden" name="confirm" id="confirm" value="true" />
                 <input type="hidden" name="gid" id="gid" value="#$group['id']#" />
                 <input type="submit" value="#xarML('Delete Group')#" class="xar-margin-thick" />
-                <xar:set name="$returnurl">
-                    #xarModURL('blocks', 'admin', 'view_groups')# 
+                <xar:set name="returnurl">
+                    #xarModURL('blocks', 'admin', 'view_groups')#
                 </xar:set>
                 <input type="button" value="#xarML('Cancel')#" class="xar-margin-thick" onclick="window.location='#$returnurl#';" />
             </div>

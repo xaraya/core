@@ -1,8 +1,8 @@
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:set name="modstatus">xarSessionGetVar('statusmsg')</xar:set>
 <xar:style scope="module" file="modules" />
-<xar:set name="$modstatus">
-    xarSessionGetVar('statusmsg') 
+<xar:set name="modstatus">
+    xarSessionGetVar('statusmsg')
 </xar:set>
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
@@ -117,7 +117,7 @@
                         </th>
                         <th>
                             <xar:mlstring>Status</xar:mlstring>
-                        </th>    
+                        </th>
                         <th>
                             <xar:mlstring>Actions</xar:mlstring>
                         </th>
@@ -131,8 +131,8 @@
                     <xar:foreach in="$listrowsitems" value="$modinfo">
                         <tr>
                             <!--
-                            please note any element can be a named anchor as long as 
-                            it has id (and name for some browsers) so we shouldnt waste 
+                            please note any element can be a named anchor as long as
+                            it has id (and name for some browsers) so we shouldnt waste
                             space with empty anchors here
                             -->
                             <td name="#$modinfo['name']#" id="#$modinfo['name']#">
@@ -225,7 +225,7 @@
                                     </xar:if>
                                 <xar:else />
                                     &#160;
-                                </xar:if>                                    
+                                </xar:if>
                             </td>
                             <td class="xar-align-center">
                                 <xar:if condition="$selstyle eq 'pro'">

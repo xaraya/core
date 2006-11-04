@@ -74,7 +74,7 @@ function roles_admin_asknotification($args)
 
             // Preserve whitespace by encoding to html (block layout compiler seems to eat whitespace for lunch)
             $data['message'] = nl2br($data['message']);
-            $data['message'] = str_replace(" ","&nbsp;", $data['message']);
+            $data['message'] = str_replace(" ","&#160;", $data['message']);
 
             // Get System/Site vars
             $vars  = xarModAPIFunc('roles','admin','getmessageincludestring', array('template' => 'message-vars'));
@@ -84,7 +84,7 @@ function roles_admin_asknotification($args)
             $data['subject'] = xarTplCompileString($vars . $data['subject']);
 
             // Restore whitespace
-            $data['message'] = str_replace('&nbsp;',' ', $data['message']);
+            $data['message'] = str_replace('&#160;',' ', $data['message']);
             $data['message'] = str_replace('<br />',' ', $data['message']);
 
             //Send notification

@@ -43,7 +43,7 @@ if (obj_caller && obj_caller.year_scroll) {
     dt_prev_year.setFullYear(dt_prev_year.getFullYear() - 1);
     if (dt_prev_year.getDate() != dt_current.getDate())
         dt_prev_year.setDate(0);
-    
+
     // get same date in the next year
     var dt_next_year = new Date(dt_current);
     dt_next_year.setFullYear(dt_next_year.getFullYear() + 1);
@@ -98,9 +98,9 @@ function set_datetime(n_datetime, b_close) {
 <tr>
 <script language="JavaScript">
 document.write(
-'<td>'+(obj_caller&&obj_caller.year_scroll?'<a href="javascript:set_datetime('+dt_prev_year.valueOf()+')"><img src="'+STR_ICONPATH+'prev_year.gif" width="16" height="16" border="0" alt="previous year"></a>&nbsp;':'')+'<a href="javascript:set_datetime('+dt_prev_month.valueOf()+')"><img src="'+STR_ICONPATH+'prev.gif" width="16" height="16" border="0" alt="previous month"></a></td>'+
+'<td>'+(obj_caller&&obj_caller.year_scroll?'<a href="javascript:set_datetime('+dt_prev_year.valueOf()+')"><img src="'+STR_ICONPATH+'prev_year.gif" width="16" height="16" border="0" alt="previous year"></a>&#160;':'')+'<a href="javascript:set_datetime('+dt_prev_month.valueOf()+')"><img src="'+STR_ICONPATH+'prev.gif" width="16" height="16" border="0" alt="previous month"></a></td>'+
 '<td align="center" width="100%"><font color="#ffffff">'+ARR_MONTHS[dt_current.getMonth()]+' '+dt_current.getFullYear() + '</font></td>'+
-'<td><a href="javascript:set_datetime('+dt_next_month.valueOf()+')"><img src="'+STR_ICONPATH+'next.gif" width="16" height="16" border="0" alt="next month"></a>'+(obj_caller && obj_caller.year_scroll?'&nbsp;<a href="javascript:set_datetime('+dt_next_year.valueOf()+')"><img src="'+STR_ICONPATH+'next_year.gif" width="16" height="16" border="0" alt="next year"></a>':'')+'</td>'
+'<td><a href="javascript:set_datetime('+dt_next_month.valueOf()+')"><img src="'+STR_ICONPATH+'next.gif" width="16" height="16" border="0" alt="next month"></a>'+(obj_caller && obj_caller.year_scroll?'&#160;<a href="javascript:set_datetime('+dt_next_year.valueOf()+')"><img src="'+STR_ICONPATH+'next_year.gif" width="16" height="16" border="0" alt="next year"></a>':'')+'</td>'
 );
 </script>
 </tr>
@@ -136,10 +136,10 @@ while (dt_current_day.getMonth() == dt_current.getMonth() ||
         if (dt_current_day.getMonth() == this.dt_current.getMonth())
             // print days of current month
             document.write('<font color="#000000">');
-        else 
+        else
             // print days of other months
             document.write('<font color="#606060">');
-            
+
         document.write(dt_current_day.getDate()+'</font></a></td>');
         dt_current_day.setDate(dt_current_day.getDate()+1);
     }

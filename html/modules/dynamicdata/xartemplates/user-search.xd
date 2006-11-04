@@ -41,7 +41,7 @@
                       <xar:if condition="!empty($field['checked'])">
                         <input type="checkbox" name="dd_check[#$field['id']#]" id="dd_check_#$field['id']#" value="1" checked="checked" />
                       <xar:else />
-                        <input type="checkbox" name="dd_check[#$field['id']#]" id="dd_check_#$field['id']#" value="1" /> 
+                        <input type="checkbox" name="dd_check[#$field['id']#]" id="dd_check_#$field['id']#" value="1" />
                       </xar:if>
                       <label for="dd_check_#$field['id']#">#$field['label']#</label><br/>
                     </xar:foreach>
@@ -50,7 +50,7 @@
               </tr>
               <tr>
                 <td colspan="2">
-                  <xar:set name="$search"><xar:mlstring>Search</xar:mlstring></xar:set>
+                  <xar:set name="search"><xar:mlstring>Search</xar:mlstring></xar:set>
                   <input type="submit" value="#$search#" />
                 </td>
               </tr>
@@ -81,7 +81,7 @@
               <xar:if condition="!empty($field['checked'])">
                 <input type="checkbox" name="dd_check[#$field['id']#]" id="dd_check_#$field['id']#" value="1" checked="checked" />
               <xar:else />
-                <input type="checkbox" name="dd_check[#$field['id']#]" id="dd_check_#$field['id']#" value="1" /> 
+                <input type="checkbox" name="dd_check[#$field['id']#]" id="dd_check_#$field['id']#" value="1" />
               </xar:if>
               <label for="dd_check_#$field['id']#">#$field['label']#</label><br/>
             </xar:foreach>

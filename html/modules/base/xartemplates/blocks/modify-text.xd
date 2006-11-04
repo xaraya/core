@@ -4,7 +4,7 @@
     <label for="expire#$blockid#" title="#xarML('Select when the block will expire, if at all.')#" class="xar-form-label">
         <xar:mlstring>Block Expiration:</xar:mlstring>
     </label>
-    <xar:set name="$expireseconds">$expirein * 3600</xar:set>
+    <xar:set name="expireseconds">$expirein * 3600</xar:set>
     <select name="expire" id="expire#$blockid#">
         <xar:if condition="$expireseconds eq 86400">
             <option value="86400" selected="selected"><xar:mlstring>1 Day</xar:mlstring></option>

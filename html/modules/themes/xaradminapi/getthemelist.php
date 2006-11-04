@@ -1,6 +1,6 @@
 <?php
 /**
- * Gets a list of themes 
+ * Gets a list of themes
  * @package Xaraya eXtensible Management System
  * @copyright (C) 2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -11,7 +11,7 @@
 /**
  * Gets a list of themes that matches required criteria.
  * Supported criteria are Mode, UserCapable, AdminCapable, Class, Category, State.
- * @author original - Marco Canini <marco@xaraya.com>, 
+ * @author original - Marco Canini <marco@xaraya.com>,
  * @author andyv - modified
  * @param filter array of criteria used to filter the entire list of installed themes.
  * @param startNum the start offset in the list
@@ -50,7 +50,7 @@ function themes_adminapi_getthemelist($args)
         }
     }
     $orderByClause = join(', ', $orderByClauses);
-    
+
     // Determine the tables we are going to use
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
@@ -95,7 +95,7 @@ function themes_adminapi_getthemelist($args)
                      themes.xar_class,
                      themes.xar_state
               FROM $themestable AS themes ";
-              
+
     array_unshift($whereClauses, 'themes.xar_mode = ?');
     array_unshift($bindvars,$mode);
 
@@ -104,7 +104,7 @@ function themes_adminapi_getthemelist($args)
         $query .= " WHERE $whereClause";
     }
     $query .= " ORDER BY $orderByClause";
-        
+
     $stmt = $dbconn->prepareStatement($query);
     $stmt->setLimit($numItems);
     $stmt->setOffset($startNum - 1);
@@ -125,11 +125,11 @@ function themes_adminapi_getthemelist($args)
             $themeInfo['displayname'] = xarThemeGetDisplayableName($themeInfo['name']);
             // Shortcut for os prepared directory
             $themeInfo['osdirectory'] = xarVarPrepForOS($themeInfo['directory']);
-            
+
             $themeInfo['state'] = (int) $themeState;
-            
+
             xarVarSetCached('Theme.BaseInfos', $themeInfo['name'], $themeInfo);
-            
+
             $themeFileInfo = xarTheme_getFileInfo($themeInfo['osdirectory']);
             if (!isset($themeFileInfo)) {
                 // Following changes were applied by <andyv> on 21st May 2003
@@ -150,13 +150,13 @@ function themes_adminapi_getthemelist($args)
                     break;
                 }
                 //$themeInfo['class'] = "";
-                $themeInfo['version'] = "&nbsp;";
+                $themeInfo['version'] = "&#160;";
                 // end patch
             }
             $themeInfo = array_merge($themeInfo, $themeFileInfo);
-            
+
             xarVarSetCached('Theme.Infos', $themeInfo['regid'], $themeInfo);
-            
+
             $themeList[] = $themeInfo;
         }
         $themeInfo = array();
