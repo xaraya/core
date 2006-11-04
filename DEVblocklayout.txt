@@ -79,3 +79,7 @@ Issues
     Could be: [empty expression][text: $variable][empty expression]  OR
               [text: #][content of $variable][text: #] 
     depending on how it's looked upon.ok
+- the construct <div style="clear: left|right|both"><div> appears to render improperly.
+- javascript construct:
+    <script type="text/javascript">Calendar.setup({#$js_options#});</script>
+  (from the dhtml calendar at dynarch.com) appears to render improperly.
