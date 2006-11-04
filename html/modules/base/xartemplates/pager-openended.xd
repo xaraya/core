@@ -16,10 +16,9 @@
     <!-- Display previous-block link if there is more than one block -->
     <xar:if condition="$totalblocks gt 1 and $pagesperblock gt 1">
         <xar:if condition="$currentblock ne $firstblock">
-            <xar:set name="prevblocklabel"><xar:ml>
-                <xar:mlstring>Previous #(1) pages</xar:mlstring>
-                <xar:mlvar>#$prevblockpages#</xar:mlvar>
-            </xar:ml></xar:set>
+            <xar:set name="prevblocklabel">
+                xarML('Previous #(1) pages',$prevblockpages)
+            </xar:set>
             &#160;&#160;<a title="#$prevblocklabel#" href="#$prevblockurl#">&lt;&lt;</a>
         <xar:else />
             &#160;&#160;&lt;&lt;
@@ -37,10 +36,9 @@
 
     <xar:foreach in="$middleurls" key="$pagenumber" value="$pageurl">
         <xar:if condition="$pagenumber ne $currentpage">
-            <xar:set name="pageurllabel"><xar:ml>
-                <xar:mlstring>Page #(1)</xar:mlstring>
-                <xar:mlvar>#$pagenumber#</xar:mlvar>
-            </xar:ml></xar:set>
+            <xar:set name="pageurllabel">
+                xarML('Page #(1)',$pagenumber)
+            </xar:set>
             <xar:if condition="$pagenumber eq $lastpagenum">
                 &#160;&#160;<a href="#$pageurl#" title="#$pageurllabel#">#$pagenumber#...</a>
             <xar:else/>

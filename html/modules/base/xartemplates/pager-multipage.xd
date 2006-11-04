@@ -10,10 +10,9 @@
     </xar:if>
 
     <!--  Display previous-block link if there is more than one block -->
-    <xar:set name="prevblocklabel"><xar:ml>
-        <xar:mlstring>Previous #(1) pages</xar:mlstring>
-        <xar:mlvar>#$prevblockpages#</xar:mlvar>
-    </xar:ml></xar:set>
+    <xar:set name="prevblocklabel">
+        xarML('Previous #(1) pages',$prevblockpages)
+    </xar:set>
     <xar:if condition="$currentblock ne $firstblock">
         &#160;&#160;<a title="#$prevblocklabel#" href="#$prevblockurl#">&lt;&lt;</a>
     <xar:else />
@@ -28,10 +27,9 @@
     </xar:if>
 
     <xar:foreach in="$middleurls" key="$pagenumber" value="$pageurl">
-        <xar:set name="pageurllabel"><xar:ml>
-            <xar:mlstring>Page #(1)</xar:mlstring>
-            <xar:mlvar>#$pagenumber#</xar:mlvar>
-        </xar:ml></xar:set>
+        <xar:set name="pageurllabel">
+            xarML('Page #(1)',$pagenumber)
+        </xar:set>
         <xar:if condition="$pagenumber ne $currentpagenum">
             &#160;&#160;<a href="#$pageurl#" title="#$pageurllabel#">#$pagenumber#</a>
         <xar:else />
@@ -47,10 +45,9 @@
     </xar:if>
 
     <!-- Display next-block link if there is more than one block -->
-    <xar:set name="nextblocklabel"><xar:ml>
-        <xar:mlstring>Next #(1) pages</xar:mlstring>
-        <xar:mlvar>#$nextblockpages#</xar:mlvar>
-    </xar:ml></xar:set>
+    <xar:set name="nextblocklabel">
+        xarML('Next #(1) pages',$nextblockpages)
+    </xar:set>
     <xar:if condition="$currentblock ne $lastblock">
         &#160;&#160;<a title="#$nextblocklabel#" href="#$nextblockurl#">&gt;&gt;</a>
     <xar:else />
