@@ -6,7 +6,7 @@
 <div>
   <h2>Using the compiler test page</h2>
   <p>
-    This page collects test for the new xslt based Blocklayout Compiler. It's
+    This page collects test for the new xslt based Blocklayout Compiler. Its
     aim is to have one reference place to visit in an install, to quickly check
     if the compiler is sane, as to eliminate needless hunting for a bug when
     the problem is really the compiler. For this page to work, you obviously
@@ -37,23 +37,38 @@
     </pre>
     <h4>Expected</h4>
     <pre>
-      <![CDATA[ <!--[lt IE 7]>This would apply to ID with version less than 7<![endif]--> ]]>
+      <![CDATA[ <!--[lt IE 7]>This would apply to IE with version less than 7<![endif]--> ]]>
     </pre>
   </div>
   <div class="testcase" style="padding: 3pt; margin: 5pt; border: thin solid black;">
     <h3>xar:set containing xar:ml</h3>
     <p>
-      Adding the xar:ml tag and its constructs inside a xar:set tag results in an exception
+      Adding the xar:ml tag and its constructs inside a xar:set
     </p>
     <h4>Source</h4>
     <pre>
+      <xar:set name="next">4</xar:set>
       <![CDATA[
-    <xar:set name="nextpagelabel"><xar:ml>
-        <xar:mlstring>Next page; (1) items</xar:mlstring>
-        <xar:mlvar>$nextpageitems</xar:mlvar>
-    </xar:ml></xar:set>
+      <xar:set name="next">4</xar:set>
+      <xar:set name="nextpagelabel">
+        <xar:ml>
+          <xar:mlstring>Next page; #(1) items</xar:mlstring>
+          <xar:mlvar>$next</xar:mlvar>
+        </xar:ml>
+      </xar:set>
+      <xar:var name="nextpagelabel"/>
     ]]>
     </pre>
+    <h4>Expected</h4>
+    <pre>Next page; 4 items</pre>
+    <h4>Real output</h4>
+    <xar:set name="nextpagelabel">
+      <xar:ml>
+        <xar:mlstring>Next page; #(1) items</xar:mlstring>
+        <xar:mlvar>$next</xar:mlvar>
+      </xar:ml>
+    </xar:set>
+    <pre><xar:var name="nextpagelabel"/></pre>
   </div>
   <div class="testcase" style="padding: 3pt; margin: 5pt; border: thin solid black;">
     <h3>xar:else tag in xar:sec</h3>
