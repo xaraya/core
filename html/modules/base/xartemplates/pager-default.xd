@@ -11,9 +11,10 @@
 
     <!-- Display previous-block link if there is more than one block -->
         <xar:if condition="$totalblocks gt 1">
-            <xar:set name="prevblocklabel">
-                xarML('Previous #(1) pages',$prevblockpages)
-            </xar:set>
+            <xar:set name="prevblocklabel"><xar:ml>
+                <xar:mlstring>Previous #(1) pages</xar:mlstring>
+                <xar:mlvar>#$prevblockpages#</xar:mlvar>
+            </xar:ml></xar:set>
             <xar:if condition="$currentblock ne $firstblock">
                 &#160;&#160;<a title="#$prevblocklabel#" href="#$prevblockurl#">&lt;&lt;</a>
             <xar:else />
