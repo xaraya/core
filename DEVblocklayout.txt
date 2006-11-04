@@ -8,12 +8,14 @@ Other places of information:
 Concept change:
 ---------------
 
-Instead of grabbing each character in the input and parsing out the templates we implement a 'pass through, unless' type XSL transformation. This
-means that each tag we want to do something special to the output has one or
-more XSL templates which match it in context and transform the input to the 
-desired output. The specifics of the transformation are determined by context
-and the value signature of the attributes. This whole process is XML based, from beginning to (just before) the end. All rules XML implies, apply to this process too.
-    
+Instead of grabbing each character in the input and parsing out the templates
+we implement a 'pass through, unless' type XSL transformation. This means that
+each tag we want to do something special to the output has one or more XSL
+templates which match it in context and transform the input to the desired
+output. The specifics of the transformation are determined by context and the
+value signature of the attributes. This whole process is XML based, from
+beginning to (just before) the end. All rules XML implies, apply to this
+process too.
 
 
 Issues
@@ -22,13 +24,13 @@ Issues
 - [DONE] how to cross the border? i.e. how do parameters from the module 
   get passed into the xslt processor (see parameter section below and 
   xsltransformer.php )
-- how do we create a suiteable test suite (make a compilation of the core
-  templates?) [STARTED in theme XClassic
-  modules/base/user-main-compilertest.xt]
+- [STARTED] how do we create a suiteable test suite (make a compilation of the core
+  templates?) 
+  Testsuite in theme XClassic  modules/base/user-main-compilertest.xt]
 - can we make a stub inserting some random values for the template vars,
   so we can compare somehow
-- is merging with other output namespaces just a question of copying
-  output (xhtml in our case)
+- [DONE] is merging with other output namespaces just a question of copying
+  output (xhtml in our case) (A: yes)
 - how do we handle #$var# constructs?
   * ideally i want to handle it through separation of the template in two
     sections, data and presentation, both in the xml domain:
@@ -83,3 +85,4 @@ Issues
 - javascript construct:
     <script type="text/javascript">Calendar.setup({#$js_options#});</script>
   (from the dhtml calendar at dynarch.com) appears to render improperly.
+- we are now in a postion to create a DTD, let's do so.
