@@ -47,25 +47,41 @@
     </p>
     <h4>Source</h4>
     <pre>
+      <![CDATA[
     <xar:set name="nextpagelabel"><xar:ml>
-        <xar:mlstring>Next page; #(1) items</xar:mlstring>
-        <xar:mlvar>#$nextpageitems#</xar:mlvar>
+        <xar:mlstring>Next page; (1) items</xar:mlstring>
+        <xar:mlvar>$nextpageitems</xar:mlvar>
     </xar:ml></xar:set>
+    ]]>
     </pre>
   </div>
   <div class="testcase" style="padding: 3pt; margin: 5pt; border: thin solid black;">
     <h3>xar:else tag in xar:sec</h3>
     <p>
-      Inserting a xar:else clause inside a xar:sec tag results in an exception
+      Inserting a xar:else clause inside a xar:sec tag should work the same as inside xar:if
     </p>
     <h4>Source</h4>
     <pre>
-    <xar:sec mask="AddItem" component="Entry" instance="$instance" catch="false">
-      <xar:set name="onclick">"window.location='#$location#';"</xar:set>
-    <xar:else/>
-      <xar:set name="onclick">'return true;'</xar:set>
-    </xar:sec>
+      <xar:set name="location">'test'</xar:set>
+      <xar:set name="instance">'test'</xar:set>
+      <![CDATA[
+      <xar:set name="location">'test'</xar:set>
+      <xar:set name="instance">'test'</xar:set>
+      <xar:sec mask="ViewBase" component="Entry" instance="$instance" catch="false">
+        <pre>xar:sec returned true</pre>
+      <xar:else/>
+        <pre>xar:sec returned false</pre>
+      </xar:sec>
+      ]]>
     </pre>
+    <h4>Expected</h4>
+    <pre>xar:sec returned true</pre>
+    <h4>Real output</h4>
+    <xar:sec mask="ViewBase" component="Entry" instance="$instance" catch="false">
+      <pre>xar:sec returned true</pre>
+    <xar:else/>
+      <pre>xar:sec returned false</pre>
+    </xar:sec>
   </div>
 
   <xar:comment>End of the tests</xar:comment>
