@@ -45,7 +45,6 @@ class BlocklayoutXSLTProcessor extends Object
         $this->xmlDoc->resolveExternals = false;
         // We're still a long way from validating
         // $this->xmlDoc->validateOnParse = true;
-        $this->xmlDoc->loadXML($this->prepXml);
     }
 
     function transform()
@@ -58,9 +57,11 @@ class BlocklayoutXSLTProcessor extends Object
         }
 
         // Transform it
-        set_exception_handler(array('ExceptionHandlers','bone'));
+        set_exception_handler(array('ExceptionHandlers','defaulthandler'));
+        // What should we initialize $result to?
+        $result = '';
+        $this->xmlDoc->loadXML($this->prepXml);
         $result = $this->xslProc->transformToXML($this->xmlDoc);
-        //set_exception_handler(array('ExceptionHandlers','default'));
 
         /*
             Expressions in attributes are not handled by the transform because
