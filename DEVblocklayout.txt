@@ -67,7 +67,7 @@ Issues
   apart from a debugging perspective.
 - go over all xar: tags attributes and decide how resolving should be
   handled, dont add a resolvement unless you have a usecase.
-- our # delimiter conflicts with the use of generic entities in rare
+- our # delimiter conflicts with the use of generic entities in not-so-rare
   cases.
 
   Example 1:
@@ -81,8 +81,18 @@ Issues
     Could be: [empty expression][text: $variable][empty expression]  OR
               [text: #][content of $variable][text: #] 
     depending on how it's looked upon.ok
+    
+  Example 3:
+    Inline CSS:
+<style>
+#someID  { color: red; }
+#someID2 { color: blue;}
+</style>
+        As seen through compiler eyes: [expression: 'someID { color: ref; }\n'][text: 'someID2 { color: blue;}']
 - the construct <div style="clear: left|right|both"><div> appears to render improperly.
+    where? how?
 - javascript construct:
     <script type="text/javascript">Calendar.setup({#$js_options#});</script>
   (from the dhtml calendar at dynarch.com) appears to render improperly.
+    how?
 - we are now in a postion to create a DTD, let's do so.
