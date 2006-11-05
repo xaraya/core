@@ -63,22 +63,22 @@ class BlocklayoutXSLTProcessor extends Object
 
         /*
             Expressions in attributes are not handled by the transform because
-            XSLT can not generate anything other than valid XML (well, it can but 
+            XSLT can not generate anything other than valid XML (well, it can but
             definitely not inside attributes), which exclude php PI's
             in attrbiutes
-        
+
             This pattern should not greedy match the dots in #...# constructs
             We exclude:
                 " == delimiter of attributes (text nodes are xslt transformed)
                 # == our own delimiter
                 ; == php delimiter
             TODO:
-                This just shifts the problem to where an expression contains a 
+                This just shifts the problem to where an expression contains a
                 literal string
                 title="#SomeFunc('I dont like this; it is problem #5')#"
                 Both the ; and the # will create a problem currently.
-                
-        */ 
+
+        */
         $exprPattern = '/(#[^"#;]+?#)/';
         $callBack    = array('XsltCallbacks','attributes');
         $result = preg_replace_callback($exprPattern,$callBack,$result);
@@ -112,9 +112,9 @@ class XsltCallbacks extends Object
 
     private static function reverseXMLEntities($content)
     {
-        /* 
+        /*
             XML predefines 5 entities and as we resolve our attribute
-            expressions to php code, we need a way to make php happy bout 
+            expressions to php code, we need a way to make php happy bout
             them too. This touches obviously on the problem of expressions
             in attributes in general.
         */
@@ -123,9 +123,9 @@ class XsltCallbacks extends Object
             array('&', '>', '<', '"',"'"),
             $content
         );
-    }    
+    }
 
-    /* 
+    /*
         Entity resolvement callback for xar- entities.
     */
     static function entities($matches)
@@ -157,6 +157,9 @@ class XsltCallbacks extends Object
             // &xar-var;
             case 'var':
                 return "#\$$entityParts[2]#";
+                break;
+            case 'currenturl':
+                return '#xarServer::getCurrentURL()#';
                 break;
             default:
                 return $matches[0];
