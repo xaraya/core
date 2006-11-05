@@ -43,7 +43,8 @@ class BlocklayoutXSLTProcessor extends Object
         $this->xmlDoc = new DOMDocument();
         // Setting this to false makes it 2 times faster, what do we loose?
         $this->xmlDoc->resolveExternals = false;
-        $this->validateOnParse = true;
+        // We're still a long way from validating
+        // $this->xmlDoc->validateOnParse = true;
         $this->xmlDoc->loadXML($this->prepXml);
     }
 
@@ -69,6 +70,8 @@ class BlocklayoutXSLTProcessor extends Object
 
             This pattern should not greedy match the dots in #...# constructs
             We exclude:
+                matching #( at the beginning (MLS placeholders.)
+            We exclude between the #s:
                 " == delimiter of attributes (text nodes are xslt transformed)
                 # == our own delimiter
                 ; == php delimiter
@@ -79,7 +82,7 @@ class BlocklayoutXSLTProcessor extends Object
                 Both the ; and the # will create a problem currently.
 
         */
-        $exprPattern = '/(#[^"#;]+?#)/';
+        $exprPattern = '/(#[^\(][^"#;]+?#)/';
         $callBack    = array('XsltCallbacks','attributes');
         $result = preg_replace_callback($exprPattern,$callBack,$result);
         //debug(htmlspecialchars($result));
