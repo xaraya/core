@@ -9,7 +9,7 @@
     exclude-result-prefixes="php xar">
 
 
-<xsl:template match="xar:if/xar:elseif">
+<xsl:template match="xar:if/xar:elseif|xar:sec/xar:elseif">
   <xsl:processing-instruction name="php">
     <xsl:text>} elseif(</xsl:text>
     <xsl:call-template name="resolvePHP">
