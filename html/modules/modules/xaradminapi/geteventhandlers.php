@@ -32,11 +32,11 @@ function modules_adminapi_geteventhandlers()
         $modName = $mod['name'];
         $modDir = $mod['osdirectory'];
         // use the directory here, not the name
-        $xarapifile = "modules/{$modDir}/xareventapi.php";
+        $xarapifile = "modules.{$modDir}.xareventapi";
         // try to include the event API for this module
         try {
             // @todo does this need to be wrapped for multiple inclusion?
-            @include $xarapifile;
+            sys::import($xarapifile);
             $modName = strtolower($modName);
             $todo[$modName] = $modDir;
         } catch(PHPException $e) {

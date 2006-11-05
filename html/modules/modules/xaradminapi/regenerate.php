@@ -149,10 +149,10 @@ function modules_adminapi_regenerate()
                         if(substr($modinfo['class'], 0, 4)  == 'Core')
                         {
                             // Yup, this module either belongs to Core or maskarading as such..
-                            
+
                             // our main objective here, however, is to catch core modules that have been upgraded
                             // then we must try hard to upgrade and activate it transparently
-                    
+
                             // Get module ID
                             $regId = $modinfo['regid'];
 
@@ -160,20 +160,20 @@ function modules_adminapi_regenerate()
                             xarModAPIFunc('modules','admin','upgrade',
                                             array(    'regid'    => $regId,
                                                     'state'    => $newstate));
-                            
+
                             $newstate = XARMOD_STATE_ACTIVE;
                             xarModAPIFunc('modules','admin','activate',
                                             array(    'regid'    => $regId,
                                                     'state'    => $newstate));
                         }
-                        
+
                         // Update the module version number
                         $sql = "UPDATE $modules_table SET xar_version = ? WHERE xar_regid = ?";
                         $dbconn->Execute($sql, array($modinfo['version'], $modinfo['regid']));
                     } else {
                         // Else set the module state to upgraded
                         $set = xarModAPIFunc(
-                            'modules', 'admin', 'setstate', 
+                            'modules', 'admin', 'setstate',
                             array(
                                 'regid' => $modinfo['regid'],
                                 'state' => XARMOD_STATE_UPGRADED
@@ -184,7 +184,7 @@ function modules_adminapi_regenerate()
                     }
                 } else {
                     // The database version is greater than the file version.
-                    // We can't deactivate or remove the module as the user will 
+                    // We can't deactivate or remove the module as the user will
                     // lose all of their data, so the module should be placed into
                     // a holding state until the user has updated the files for
                     // the module and the module version is the same or greater

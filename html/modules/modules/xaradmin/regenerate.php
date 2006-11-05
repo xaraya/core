@@ -28,9 +28,9 @@ function modules_admin_regenerate()
 
     // Regenerate modules
     $regenerated = xarModAPIFunc('modules', 'admin', 'regenerate');
-    
+
     if (!isset($regenerated)) return;
-    
+
     // Redirect
     xarResponseRedirect(xarModURL('modules', 'admin', 'list'));
 
