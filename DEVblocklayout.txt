@@ -3,7 +3,7 @@ Blocklayout version 2
 
 Other places of information:
     * http://wiki.xaraya.com/index.php?title=Blocklayout_Version_2
-    * RFC-0054
+    * RFC-0054 (which should receive most of the specs written here)
 
 Concept change:
 ---------------
@@ -24,9 +24,9 @@ Issues
 - [DONE] how to cross the border? i.e. how do parameters from the module
   get passed into the xslt processor (see parameter section below and
   xsltransformer.php )
-- [STARTED] how do we create a suiteable test suite (make a compilation of the core
-  templates?)
-  Testsuite in theme XClassic  modules/base/user-main-compilertest.xt]
+- [STARTED] how do we create a suiteable test suite (make a compilation of the
+  core templates?) Testsuite in theme XClassic
+  modules/base/user-main-compilertest.xt]
 - can we make a stub inserting some random values for the template vars,
   so we can compare somehow
 - [DONE] is merging with other output namespaces just a question of copying
@@ -96,7 +96,22 @@ Issues
   (from the dhtml calendar at dynarch.com) appears to render improperly.
     how?
 - we are now in a postion to create a DTD, let's do so.
-
+- instead of organising by tag, it seems to make more sense to organize by
+  'group' (flow, comment, blocks etc.) as those tags often interrelate and use
+  similar constructs in their handlers.
+- 'Friendliness' options:
+    * if a variable is not set, boom! Why not wrap it with an isset() for
+      example?
+    * can we separate the parse and render stages? during parse errors,
+      the rendering bombs out in ugliness, where it possibly doesnt need to
+      do that.
+    *
+- put the new tags locations into the dirlayout proposal
+- we now add a root tag to module templates artificially. This leads to a
+  number of things we can not do now:
+    * as we 'pre-read' the templatefile to add this tag, the filename of the
+    template gets lost when an exception is raised. We really should add the
+    root tag to the templates themselves. (this can be automated)
 
 Language change proposals:
 ==========================
@@ -134,7 +149,7 @@ xar:mlvar deprecation
             placeholder #(1)"
         What the code says:
             "place the text '$plain' at the location of #(1)"
-        --> <xar:var name="plain"/> == [5]
+        --> <xar:var name="plain"/>  [5]
     [2][3] The writer presumably means:
             "Resolve '$expression', and use its result value for the placeholder #(2)"
         This could be interpreted as:
