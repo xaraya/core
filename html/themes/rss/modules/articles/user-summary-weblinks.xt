@@ -1,1 +1,2 @@
-<xar:template type="theme" file="rsssummary-common"/>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<xar:template type="theme" file="rsssummary-common"/></xar:template>

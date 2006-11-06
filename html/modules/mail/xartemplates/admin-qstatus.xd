@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:template file="mod-head"/>
 
 <div class="xar-mod-body">
@@ -75,3 +76,4 @@
     </fieldset>
 
 </div>
+</xar:template>

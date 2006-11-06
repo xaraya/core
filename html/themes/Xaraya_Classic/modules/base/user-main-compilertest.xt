@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <h1 class="xar-mod-head">
     <xar:mlstring>
         XSLT Blocklayout compiler testpage
@@ -101,4 +102,4 @@
   </div>
 
   <xar:comment>End of the tests</xar:comment>
-</div>
+</div></xar:template>

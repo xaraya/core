@@ -306,17 +306,19 @@
 <xsl:template name="atts2args">
   <xsl:param name="nodeset"/>
   <xsl:text>array(</xsl:text>
-  <xsl:for-each select="$nodeset">
-    <xsl:text>'</xsl:text><xsl:value-of select="name()"/><xsl:text>' =&gt;</xsl:text>
-    <xsl:choose>
-      <xsl:when test="starts-with(normalize-space(.),'$') or not(string(number(.))='NaN')">
-        <xsl:value-of select="."/><xsl:text>,</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>'</xsl:text><xsl:value-of select="."/><xsl:text>',</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:for-each>
+  <xsl:if test="$nodeset">
+    <xsl:for-each select="$nodeset">
+      <xsl:text>'</xsl:text><xsl:value-of select="name()"/><xsl:text>' =&gt;</xsl:text>
+      <xsl:choose>
+        <xsl:when test="starts-with(normalize-space(.),'$') or not(string(number(.))='NaN')">
+          <xsl:value-of select="."/><xsl:text>,</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>'</xsl:text><xsl:value-of select="."/><xsl:text>',</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+  </xsl:if>
   <xsl:text>)</xsl:text>
 </xsl:template>
 </xsl:stylesheet>

@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <h4>Component - #$component#</h4>
 <p>
     <xar:mlstring>The Core CSS is a new feature/concept in Xaraya. It allows all CSS-aware themes to automatically link the common css rulesets used throughout the user interface (UI) layouts.</xar:mlstring>
@@ -106,3 +107,4 @@
     <xar:else />
     <h4>#$unmanagednote#</h4>
 </xar:if>
+</xar:template>

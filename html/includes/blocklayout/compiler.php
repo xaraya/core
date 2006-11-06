@@ -220,21 +220,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         }
 
         fclose($fp);
-
-        // XSLT-SECTION
-        if(defined('XAR_BL_USE_XSLT')) {
-            // If the filename contains 'modules' add a root tag
-            xarLogMessage("Compiling : $fileName");
-            $location = dirname($fileName);
-            $pathelements = explode('/',$location);
-            $lastdir = array_pop($pathelements);
-            if($lastdir != 'pages') {
-                //if(!(basename($fileName) == 'default.xt' || basename($fileName) =='admin.xt')) {
-                xarLogMessage('NOT a page template, adding dummy root tag');
-                $templateSource ="
-<xar:template xmlns:xar=\"http://xaraya.com/2004/blocklayout\">\n".$templateSource .'</xar:template>';
-            }
-        }
+        xarLogMessage("BL: compiling $fileName");
 
         $this->parser->setFileName($fileName);
         $res = $this->compile($templateSource);

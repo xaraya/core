@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
 <div class="xar-form-input-wrapper">
@@ -64,3 +65,4 @@
     </label>
     <xar:data-input id="end_date_block_content" type="calendar" name="end_date" value="$end_date" validation="" />
 </div>
+</xar:template>

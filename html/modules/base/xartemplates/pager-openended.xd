@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <!--
     Open-ended pager where you don't know the number of pages in total.
@@ -58,3 +59,4 @@
         </xar:if>
     </xar:if>
 </div>
+</xar:template>

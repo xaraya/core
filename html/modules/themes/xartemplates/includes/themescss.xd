@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <h4>Component - #$component#</h4> 
 <p>
     <xar:mlstring>
@@ -8,4 +9,4 @@
 
 <xar:else />
     <h4>#$unmanagednote#</h4>
-</xar:if>
+</xar:if></xar:template>
