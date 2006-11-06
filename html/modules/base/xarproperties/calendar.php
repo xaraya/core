@@ -76,7 +76,7 @@ class CalendarProperty extends DataProperty
     {
         extract($data);
         if (!isset($value)) $value = $this->value;
-        if (!isset($id)) $id = $this->id;
+        if (!isset($id)) $id = 'dd_'.$this->id;
 
         // default time is unspecified
         if (empty($value)) {

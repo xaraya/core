@@ -59,6 +59,7 @@
   -->
   <xsl:preserve-space elements="div"/>
 
+
   <!--
     Start of the transform usually starts with matching the root, so do we
   -->
@@ -206,6 +207,12 @@
     <xsl:with-param name="expr" select="."/>
   </xsl:call-template>
 </xsl:template>
+
+<!-- For now, dont resolve inline CSS -->
+<xsl:template match="style/text()">
+  <xsl:apply-imports />
+</xsl:template>
+
 
 <!-- Expression resolving in nodes-->
 <xsl:template name="resolvePHP">

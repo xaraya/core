@@ -13,10 +13,11 @@
  * @author Marcel van der Boom <marcel@xaraya.com>
  * @author Marty Vance <dracos@xaraya.com>
  * @author Garrett Hunter <garrett@blacktower.com>
+ * @todo   Most of this is now deprecated, with the birth of the XSL based compiler
  */
 
 /**
- * DONT EVEN THINK ABOUT UNCOMMENTING THIS
+ * This define allows switching back to BL1 if needed (comment the line)
  *
  */
  define('XAR_BL_USE_XSLT',true);
@@ -250,6 +251,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
             sys::import('blocklayout.xsltransformer');
             $xslFile = 'includes/blocklayout/xslt/xar2php.xsl';
             $xslProc = new BlockLayoutXSLTProcessor($templateSource,$xslFile);
+            // This is confusing, dont do this here.
             $xslProc->xmlFile = $this->parser->getFileName();
             // This generates php code, the documentree is not visible here anymore
             $outDoc = $xslProc->transform();
