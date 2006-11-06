@@ -75,15 +75,15 @@ class BlocklayoutXSLTProcessor extends Object
             We exclude between the #s:
                 " == delimiter of attributes (text nodes are xslt transformed)
                 # == our own delimiter
-                ; == php delimiter
+
             TODO:
                 This just shifts the problem to where an expression contains a
                 literal string
-                title="#SomeFunc('I dont like this; it is problem #5')#"
-                Both the ; and the # will create a problem currently.
+                title="#SomeFunc('I dont like this, it is problem #5')#"
+                The # will create a problem currently.
 
         */
-        $exprPattern = '/(#[^\(][^"#;]+?#)/';
+        $exprPattern = '/(#[^\(][^"#]+?#)/';
         $callBack    = array('XsltCallbacks','attributes');
         $result = preg_replace_callback($exprPattern,$callBack,$result);
         //debug(htmlspecialchars($result));
