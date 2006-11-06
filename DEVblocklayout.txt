@@ -110,17 +110,17 @@ Issues
   similar constructs in their handlers.
 - 'Friendliness' options:
     * if a variable is not set, boom! Why not wrap it with an isset() for
-      example?
+      example? Or give it a predefined !!UNKOWN!! value?
     * can we separate the parse and render stages? during parse errors,
       the rendering bombs out in ugliness, where it possibly doesnt need to
       do that.
-    *
 - put the new tags locations into the dirlayout proposal
 - we now add a root tag to module templates artificially. This leads to a
   number of things we can not do now:
     * as we 'pre-read' the templatefile to add this tag, the filename of the
     template gets lost when an exception is raised. We really should add the
     root tag to the templates themselves. (this can be automated)
+    * individual templates are not well-formed (interoperability)
 
 Language change proposals:
 ==========================
