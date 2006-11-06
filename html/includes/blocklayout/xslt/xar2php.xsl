@@ -41,7 +41,8 @@
     We view php as one large processing instruction of xml without the xml
     declaration
   -->
-  <xsl:output method="xml" omit-xml-declaration="yes" indent="yes" />
+  <xsl:output  method="xml" omit-xml-declaration="yes" indent="yes" encoding="UTF-8"/>
+
 
   <!--
     Spacing
@@ -52,11 +53,13 @@
     there shouldnt be any, but alas.
   -->
   <xsl:strip-space elements="*" />
+
   <!--
     Problematic elements
 
-    - empty div/ elements bork everything, so first, leave their spacing alone
+    - empty div elements bork everything, so first, leave their spacing alone
     which doesnt influence correctness, but saves a whole lot of trouble.
+    - empty script element work in safari, but not in FF
 -->
   <xsl:preserve-space elements="div script"/>
 <!--
@@ -70,11 +73,13 @@
     <xsl:copy>
       <xsl:apply-templates select="@*|node()"/>
       <xsl:if test="not(node()[not(self::comment())])">
-        <xsl:comment>empty div workaround</xsl:comment>
+        <xsl:comment>empty <xsl:value-of select="name()"/> tag workaround</xsl:comment>
       </xsl:if>
     </xsl:copy>
   </xsl:template>
 -->
+
+
   <!--
     Start of the transform usually starts with matching the root, so do we
   -->
@@ -114,7 +119,7 @@
   <xsl:include href="tags/continue.xsl"/>
 
   <!-- TODO: organize this -->
-  <!-- xar:data-view/output/label -->
+  <!-- xar:data-view/output/label etc. -->
   <xsl:include href="tags/data.xsl"/>
 
   <!-- xar:else -->
@@ -162,19 +167,19 @@
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <!-- This is the point where we can do automatic translation
-             of textnodes without requiring xar:mlstring
-             Erm, no its not, the xsl changed, need to re-arrange this.
-        -->
+        <!-- No start with #, just copy it -->
         <xsl:copy/>
       </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
 <!--
-    Utility template, taks a parameter 'expr' which contains the
-    value of a text node. It recursively resvolves #-pairs from left
-    to right. Pre- and Post- hash content are treated as text.
+    Utility template for resolving text nodes. It recursively resolves
+    #-pairs from left to right. Pre- and Post- hash content are treated
+    as text.
+
+    The param $expr contains the  value of a text node holding the expression
+    to resolve.
 -->
 <xsl:template name="resolveText" >
   <xsl:param name="expr"/>
@@ -238,12 +243,21 @@
 </xsl:template>
 
 <!--
-  Any xar tag we dont match, we highlight in the output, i.e. turn it into a text node
+  Utility template to be able to generate output when something is wrong, but
+  not terribly:
+  - Any xar tag we dont match, we highlight in the output
+  - When a typo was made for example in attributes or something like that
+  @todo: best way i could come up with to do this doctype agnostic, anything better?
 -->
-<xsl:template match="xar:*">
-  <pre class="xsltdebug">
-    <xsl:text>MISSING TAG IMPLEMENTATION:
-&lt;</xsl:text>
+<xsl:template  name="oops" match="xar:*">
+  <xsl:param name="label" select="'MISSING TAG IMPLEMENTATION'"/>
+  <!-- Insert a CDATA section preceded by a 'weird' symbol -->
+  <!-- x2707 is the 'radiation symbol' if it displays, you're config is good,
+  otherwise you'll have to settle for a ? or an empty square or something like that -->
+  <xsl:text>&#x2707;
+&lt;![CDATA[</xsl:text>
+    <xsl:value-of select="$label"/>
+    <xsl:text>: --- </xsl:text>
     <xsl:value-of select="name()"/>
     <xsl:text> </xsl:text>
     <xsl:for-each select="@*">
@@ -252,10 +266,9 @@
       <xsl:value-of select="."/>
       <xsl:text>" </xsl:text>
     </xsl:for-each>
-    <xsl:text>/&gt;</xsl:text>
+    <xsl:text>---</xsl:text>
     <xsl:apply-imports />
-  </pre>
-
+  <xsl:text> ]]&gt; </xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>
