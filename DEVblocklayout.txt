@@ -98,8 +98,10 @@ Issues
         </style>
 
     As seen through compiler eyes: [expression: 'someID { color: ref; }\n'][text: 'someID2 { color: blue;}']
-- the construct <div style="clear: left|right|both"><div> appears to render improperly.
-    where? how?
+- [DONE]the construct <div style="clear: left|right|both"><div> appears to render improperly.
+    See:
+        - http://www.stylusstudio.com/xsllist/200209/post10350.html
+        - mtn rev: 6143d31238f3aaa6309a390f16fca034b9d1cda2
 - javascript construct:
     <script type="text/javascript">Calendar.setup({#$js_options#});</script>
   (from the dhtml calendar at dynarch.com) appears to render improperly.
