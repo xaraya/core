@@ -57,7 +57,7 @@
 
     - empty div/ elements bork everything
   -->
-  <xsl:preserve-space elements="div"/>
+  <xsl:preserve-space elements="div script"/>
 
   <!--
     Start of the transform usually starts with matching the root, so do we
