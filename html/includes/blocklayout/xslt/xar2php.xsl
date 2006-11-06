@@ -55,11 +55,26 @@
   <!--
     Problematic elements
 
-    - empty div/ elements bork everything
+    - empty div/ elements bork everything, so first, leave their spacing alone
+    which doesnt influence correctness, but saves a whole lot of trouble.
+-->
+    <xsl:preserve-space elements="div"/>
+<!--
+    - second: if there is no child content (of whatever type), we should not
+    have to do anything, but (X)HTML doesn't like an element which is empty,
+    so if we wanted to be friendly we could do this:
+    (if there is *just* a PI as child it will still break though)
   -->
-  <xsl:preserve-space elements="div"/>
-
-
+<!--
+    <xsl:template match="div">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|node()"/>
+      <xsl:if test="not(node()[not(self::comment())])">
+        <xsl:comment>empty div workaround</xsl:comment>
+      </xsl:if>
+    </xsl:copy>
+  </xsl:template>
+-->
   <!--
     Start of the transform usually starts with matching the root, so do we
   -->
