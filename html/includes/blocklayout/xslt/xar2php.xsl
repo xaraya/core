@@ -249,12 +249,12 @@
   - When a typo was made for example in attributes or something like that
   @todo: best way i could come up with to do this doctype agnostic, anything better?
 -->
-<xsl:template  name="oops" match="xar:*">
-  <xsl:param name="label" select="'MISSING TAG IMPLEMENTATION'"/>
+<xsl:template name="oops">
+  <xsl:param name="label" select="'UNKNOWN ERROR'"/>
   <!-- Insert a CDATA section preceded by a 'weird' symbol -->
   <!-- x2707 is the 'radiation symbol' if it displays, you're config is good,
   otherwise you'll have to settle for a ? or an empty square or something like that -->
-  <xsl:text>&#x2707;
+  <xsl:text disable-output-escaping="yes">&#x2707;
 &lt;![CDATA[</xsl:text>
     <xsl:value-of select="$label"/>
     <xsl:text>: --- </xsl:text>
@@ -267,8 +267,19 @@
       <xsl:text>" </xsl:text>
     </xsl:for-each>
     <xsl:text>---</xsl:text>
-    <xsl:apply-imports />
-  <xsl:text> ]]&gt; </xsl:text>
+  <xsl:text disable-output-escaping="yes"> ]]&gt; </xsl:text>
 </xsl:template>
 
+<xsl:template match="xar:*">
+  <xsl:param name="label" select="'MISSING TAG IMPLEMENTATION'"/>
+  <!-- Insert a CDATA section preceded by a 'weird' symbol -->
+  <!-- x2707 is the 'radiation symbol' if it displays, you're config is good,
+  otherwise you'll have to settle for a ? or an empty square or something like that -->
+  <xsl:text disable-output-escaping="yes">&#x2707;
+&lt;![CDATA[</xsl:text>
+    <xsl:value-of select="$label"/>
+    <xsl:text>: </xsl:text>
+    <xsl:apply-imports />
+  <xsl:text disable-output-escaping="yes"> ]]&gt; </xsl:text>
+</xsl:template>
 </xsl:stylesheet>
