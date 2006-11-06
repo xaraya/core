@@ -4,9 +4,6 @@
         XSLT Blocklayout compiler testpage
     </xar:mlstring>
 </h1>
-<script type="text/javascript">
-document.write("Hello World!")
-</script>
 <div>
   <h2>Using the compiler test page</h2>
   <p>

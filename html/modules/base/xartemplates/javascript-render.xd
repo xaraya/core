@@ -12,7 +12,7 @@
                 </script>
             </xar:if>
             <xar:if condition="$loop:top:item.type == 'src' and (empty($type) or $type == 'src')">
-                <script type="text/javascript" src="#$loop:top:item.data#"></script>
+                <script type="text/javascript" src="#$loop:top:item.data#">&#160;</script>
             </xar:if>
         </xar:if>
         <!-- Array of positions (all positions) so a sub-loop is needed -->
@@ -24,7 +24,7 @@
                     </script>
                 </xar:if>
                 <xar:if condition="$loop:detail:item.type == 'src' and (empty($type) or $type == 'src')">
-                    <script type="text/javascript" src="#$loop:detail:item.data#"></script>
+                    <script type="text/javascript" src="#$loop:detail:item.data#">&#160;</script>
                 </xar:if>
             </xar:loop>
         </xar:if>
