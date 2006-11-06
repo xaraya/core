@@ -8,13 +8,13 @@
 </div>
 <div class="xar-mod-body">
     <form action="#xarModURL('modules', 'admin', 'updateinstalloptions', array('regid' => $regid))#" method="post" enctype="application/x-www-form-urlencoded" >
-        <xar:template module="#$modname#" file="installoptions" />
+        <xar:template module="$modname" file="installoptions" />
 <!--        <xar:module main="false" module="#$modname#" type="admin" func="installoptions" /> -->
         <fieldset>
             <div class="xar-form-input-wrapper-after">
                 <input type="submit" name="update" value="#xarML('Save Configuration')#" />
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
             </div>
-        </fieldset>    
+        </fieldset>
     </form>
 </div>

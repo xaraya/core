@@ -1,12 +1,12 @@
-<!-- 
-     In 2.x each x[d|t] file *can* have a root tag in the form 
+<!--
+     In 2.x each x[d|t] file *can* have a root tag in the form
      of an open xar:template tag. It is very likely that the optional
      character of this might change to a requirement in the 2.x line.
 -->
 <xar:template>
     <h1 class="xar-mod-head">
     <xar:mlstring>
-        Thank you for installing and trying Xaraya! 
+        Thank you for installing and trying Xaraya!
     </xar:mlstring>
 </h1>
 <div class="xar-mod-body xar-overflow-auto">
@@ -58,7 +58,7 @@
     <p>
         <xar:mlstring>
           Explore Xaraya by starting with the modules in your Admin Menu and reading the Overviews.
-          Some of the core modules such as Base, Themes, Blocks, and Roles are good places to start. For example, 
+          Some of the core modules such as Base, Themes, Blocks, and Roles are good places to start. For example,
           the Base module is set as the default module in this installation, and provides the site frontpage. You can change this 'default' module in, coincidentally, the Base module.
         </xar:mlstring>
     </p>
