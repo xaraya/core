@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <!--  Process only if there is JavaScript present -->
 <xar:if condition="is_array($javascript)">
@@ -29,3 +30,4 @@
         </xar:if>
     </xar:loop>
 </xar:if>
+</xar:template>

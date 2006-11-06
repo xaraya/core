@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <h1 class="xar-mod-head">
     <xar:mlstring>
         XSLT Blocklayout compiler testpage
@@ -25,8 +26,34 @@ document.write("Hello World!")
     border cases and non-standard constructs to validate the more exotic corner
     of the compile process.
   </p>
+
   <xar:comment>Beginning of the tests</xar:comment>
 
+  <div class="testcase" style="padding: 3pt; margin: 5pt; border: thin solid black;">
+    <h3>Empty tags, in particular divs</h3>
+    <p>
+      Generating empty div for (X)HTML is problematic. As we are still not going
+      to be friendly for a while, the construct which can handle this is disabled
+      in the compiler, so these types will currently break:
+    </p>
+    <pre>
+    <![CDATA[
+    <!--Open, but nothing- ->
+    <div attribute="value"></div>
+    <!--Closed- ->
+    <div attribute="value"/>
+    <!--Open, nothing but comment- ->
+    <div attribute="value"><!--nothing - -></div>
+
+    The types which dont break (not special from the XML view, but people might think so):
+    <!--Just whitespace --><div attribute="value"> </div>
+    <!--Just an Entity --><div attribute="value">&#160;</div>
+    ]]>
+    </pre>
+    <!-- Empty div test cases -->
+    <!--Just whitespace --><div attribute="value"> </div>
+    <!--Just an Entity --><div attribute="value">&#160;</div>
+  </div>
   <div class="testcase" style="padding: 3pt; margin: 5pt; border: thin solid black;">
     <h3>xar:comment with IE conditional</h3>
     <p>
@@ -103,4 +130,5 @@ document.write("Hello World!")
   </div>
 
   <xar:comment>End of the tests</xar:comment>
-</div>
+
+</div></xar:template>

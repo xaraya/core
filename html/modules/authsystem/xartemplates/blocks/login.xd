@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <form action="&xar-modurl-authsystem-user-login;" method="post" class="xar-margin-none">
     <p>
@@ -31,3 +32,4 @@
         </a>
     </p>
 </form>
+</xar:template>

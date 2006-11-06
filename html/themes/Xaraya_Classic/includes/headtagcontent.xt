@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <title>#$tpl:pageTitle#</title>
 <xar:blockgroup name="header" id="header" />
 <base href="&xar-baseurl;index.php" />
@@ -42,3 +43,4 @@
 </xar:if>
 <!-- Head JavaScript - required for all themes -->
 <xar:base-render-javascript position="head" />
+</xar:template>

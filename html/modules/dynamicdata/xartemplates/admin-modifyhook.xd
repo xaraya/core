@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <!-- You can use different admin-modifyhook-[objectname].xd templates for different objects -->
 <!-- Contrary to admin-newhook.xd, it is not recommended to use preset="yes" here -->
@@ -7,3 +8,4 @@
         <xar:data-input property="$properties[$name]" />
     </div>
 </xar:foreach>
+</xar:template>

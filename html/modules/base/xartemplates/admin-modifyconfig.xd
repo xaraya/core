@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <!-- TODO: split this file up in parts -->
 <xar:base-include-javascript module="base" filename="formcheck.js" />
@@ -564,3 +565,4 @@
         </form>
     </xar:if>
 </div>
+</xar:template>

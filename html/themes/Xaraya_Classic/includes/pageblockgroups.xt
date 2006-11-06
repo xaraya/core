@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- Compose the layout structure based on the available blockgroups -->
 <xar:if condition="!empty($leftblocksgroup) and !empty($rightblocksgroup)">
     <!-- All three columns layout  -->
@@ -12,3 +13,4 @@
         <!-- One column layout - just center blocksgroup -->
     <xar:template file="content_1col" type="theme" />
 </xar:if>
+</xar:template>

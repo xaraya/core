@@ -1,5 +1,7 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:set name="iconalt"><xar:mlstring>Icon</xar:mlstring></xar:set>
 <a href="#$link#">
   <img src="#$icon#" alt="#$iconalt#" width="16" height="16" />
 </a>
+</xar:template>
