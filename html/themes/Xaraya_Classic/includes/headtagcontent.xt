@@ -12,34 +12,34 @@
     This method is recommended by MS - look up the details at http://msdn.microsoft.com/workshop/author/dhtml/overview/ccomment_ovw.asp
     In our case the stylesheet is to be served to any MSIE version which is less than IE7 (we assume IE7 will fix present bugs and deficiency)
     OTHER EXAMPLES:
-    
+
     A) Adding embedded style:
-    
+
     <xar:set name="casual_css_source">'
     div { border:1px solid red }
-    p { 
+    p {
         background-color:yellow;
         border: 1px dotted blue;
     }
     ul { border:1px solid green }
     '</xar:set>
     <xar:style scope="theme" method="embed" source="'.$casual_css_source.'" />
-    
+
     B) Adding external stylesheet file via import method:
-    
+
     <xar:style scope="theme" file="no_old_browsers" method="import" />
 -->
 <xar:style scope="theme" file="ie_win" condition="lt IE 7" />
 <!--
-    Additional CSS rules from Xaraya components (and from this theme via xar:style tag) 
-    Now required for all css-aware themes. 
-    OLD WAY: #$tpl:additionalStyles# 
+    Additional CSS rules from Xaraya components (and from this theme via xar:style tag)
+    Now required for all css-aware themes.
+    OLD WAY: #$tpl:additionalStyles#
     NEW WAY: (starting from core RC3+) with the following attribute-less tag
 -->
 <xar:additional-styles />
 <xar:if condition="$styleswitchertype eq 'javascript'">
     <!-- Styleswitcher JavaScript -->
-    <script type="text/javascript" src="#$classicthemedir#/scripts/switch_styles.js"></script>
+    <script type="text/javascript" src="#$classicthemedir#/scripts/switch_styles.js">&#160;</script>
 </xar:if>
 <!-- Head JavaScript - required for all themes -->
 <xar:base-render-javascript position="head" />

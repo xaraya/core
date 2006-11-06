@@ -58,7 +58,7 @@
     - empty div/ elements bork everything, so first, leave their spacing alone
     which doesnt influence correctness, but saves a whole lot of trouble.
 -->
-    <xsl:preserve-space elements="div"/>
+  <xsl:preserve-space elements="div script"/>
 <!--
     - second: if there is no child content (of whatever type), we should not
     have to do anything, but (X)HTML doesn't like an element which is empty,
