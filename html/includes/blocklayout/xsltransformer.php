@@ -12,28 +12,42 @@
 
 class BlocklayoutXSLTProcessor extends Object
 {
-    private $xslProc = null;
+    private $xslProc = null;    // Object representing the processor.
+    private $xslDoc  = null;    // Object representing the stylesheet.
+
     private $xmlDoc  = null;
     private $origXml = '';
     private $prepXml = '';
     public  $xmlFile = null;
 
-    function __construct(&$xml = '', $xslFile='')
+    public function __construct($xslFile='')
     {
-        // Save the original XML
-        $this->origXml = $xml;
-
         // Set up the xsl processor
         $this->xslProc = new XSLTProcessor();
         $this->xslProc->registerPHPFunctions();
 
         // Set up the stylesheet
-        $domDoc = new DOMDocument();
-        $domDoc->load($xslFile);
         set_exception_handler(array('ExceptionHandlers','bone'));
-        $this->xslProc->importStyleSheet($domDoc);
+        $this->setStyleSheet($xslFile);
 
-        // Make sure out entities look like expressions
+        // Set up the document to transform
+        $this->xmlDoc = new DOMDocument();
+        // Setting this to false makes it 2 times faster, what do we loose?
+        $this->xmlDoc->resolveExternals = false;
+        // We're still a long way from validating
+        // $this->xmlDoc->validateOnParse = true;
+    }
+
+    private function setStyleSheet($xslFile)
+    {
+        $this->xslDoc = new DOMDocument();
+        $this->xslDoc->load($xslFile);
+        $this->xslProc->importStyleSheet($this->xslDoc);
+    }
+
+    private function preProcessXML()
+    {
+        // Make sure our entities look like expressions
         // &xar-entity; -> #[whatever expression it needs]#
         $this->prepXml = $this->origXml;
         $entityPattern = '/(&xar-[a-z\-_]+?;)/';
@@ -45,23 +59,22 @@ class BlocklayoutXSLTProcessor extends Object
         $mlsPattern     = '/(#\([0-9]+\))([^#])/';
         $callBack       = array('XsltCallbacks','mlsplaceholders');
         $this->prepXml  = preg_replace_callback($mlsPattern, $callBack, $this->prepXml);
-
-        // Set up the document to transform
-        $this->xmlDoc = new DOMDocument();
-        // Setting this to false makes it 2 times faster, what do we loose?
-        $this->xmlDoc->resolveExternals = false;
-        // We're still a long way from validating
-        // $this->xmlDoc->validateOnParse = true;
     }
 
-    function transform()
+    public function transform(&$xml)
     {
+        // Save the original XML
+        $this->origXml = $xml;
+
         // Set up the parameters
         if(isset($this->xmlFile)) {
             // Set up the parameters
             $this->xslProc->setParameter('','bl_filename',basename($this->xmlFile));
             $this->xslProc->setParameter('','bl_dirname',dirname($this->xmlFile));
         }
+
+        // Preprocess the XML
+        $this->preProcessXML();
 
         // Transform it
         set_exception_handler(array('ExceptionHandlers','defaulthandler'));
@@ -162,7 +175,6 @@ class XsltCallbacks extends Object
             // &xar-baseurl;
             case 'baseurl':
                 return '#xarServer::getBaseURL()#';
-                break;
             // &xar-modurl-modname-type-func;
             case 'modurl':
                 //   1       2     3    4
@@ -175,20 +187,15 @@ class XsltCallbacks extends Object
             // &xar-var;
             case 'var':
                 return "#\$$entityParts[2]#";
-                break;
             // &xar-currenturl;
             case 'currenturl':
                 return '#xarServer::getCurrentURL()#';
-                break;
             // Not implemented:
             // &xar-config-varname;
             // &xar-mod-modname-varname;
             // &xar-session-varname;
             // &xar-url-modname-type-func-args;
-            default:
-                return $matches[0];
         }
-
         xarLogMessage('ENT: found in xml source:'.$entityName);
         return $matches[0];
     }
