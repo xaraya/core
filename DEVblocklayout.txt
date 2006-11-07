@@ -102,10 +102,11 @@ Issues
     See:
         - http://www.stylusstudio.com/xsllist/200209/post10350.html
         - mtn rev: 6143d31238f3aaa6309a390f16fca034b9d1cda2
-- javascript construct:
+- [DONE]javascript construct:
     <script type="text/javascript">Calendar.setup({#$js_options#});</script>
   (from the dhtml calendar at dynarch.com) appears to render improperly.
-    how?
+    This turned out to be a <script/> empty tag issue, as above with the div.
+
 - we are now in a postion to create a DTD, let's do so.
 - instead of organising by tag, it seems to make more sense to organize by
   'group' (flow, comment, blocks etc.) as those tags often interrelate and use
@@ -123,6 +124,31 @@ Issues
     template gets lost when an exception is raised. We really should add the
     root tag to the templates themselves. (this can be automated)
     * individual templates are not well-formed (interoperability)
+- we omit the xml declaration now, because it doesnt work, but i dont remember
+  why anymore. Either make it work (preferably) or document why it can't.
+-
+
+Refactoring needs
+=================
+
+While fixing the errors along the way, some redesign issues have surfaced.
+
+* generating XML can confusing HTML renderers. The empty div and script issues
+  are not really compiler/blocklayout issues, but many browsers just dont
+  deal well with empty tags. There is a solution (see xar2php.xsl) but it really
+  should only be deployed when the output type *is* actually (X)HTML. We can
+  deploy the fix for all XML varieties, as it doesnt change semantics, but its
+  not very nice. We plan to separate the *format* in the process anyway, so lets
+  keep this in mind when we actually will.
+* We generated a xml + php document from (now well formed) xml, thus losing
+  some of our power (the compiled templates are not necessarily well formed)
+  This means we get into trouble with the DOCTYPE generation, and using the
+  xsl:output attributes for this, which would be the correct way, will lead to
+  some changes in the xar: language, as we can not set the dtd in the blocklayout
+  tag anymore then. (which makes sense, it was an emergency exit anyway). Nevertheless,
+  that means we have to go to the drawing board on how to do this.
+* language changes (see section further on)
+*
 
 Language change proposals:
 ==========================
@@ -139,20 +165,20 @@ Language change proposals:
 
         Current general constructs:
             <xar:ml>
-                <xar:mlstring>Some text with #(1) and #(2) or #(3) and #(4)</xar:mlstring>
-    [1]            <xar:mlvar>$plain</xar:mlvar>
-    [2]            <xar:mlvar>#$expression#</xar:mlvar>
-    [3]            <xar:mlvar>#$expression#</xar:mlvar>
-    [4]            <xar:mlvar><xar:var name="varname" /></xar:mlvar>
+              <xar:mlstring>Some text with #(1) and #(2) or #(3) and #(4)</xar:mlstring>
+    [1]       <xar:mlvar>$plain</xar:mlvar>
+    [2]       <xar:mlvar>#$expression#</xar:mlvar>
+    [3]       <xar:mlvar>#$expression#</xar:mlvar>
+    [4]       <xar:mlvar><xar:var name="varname" /></xar:mlvar>
             </xar:ml>
 
         Possible replacement:
             <xar:ml>
-                <xar:mlstring>Some text with #(1) and #(2) or #(3) and #(4)</xar:mlstring>
-    [5]            <xar:var name="plain"/>
-    [6]            <xar:var name="newname">#$expression#</xar:var>
-    [7]            <xar:var>#$expression</xar:var>
-    [8]            <xar:var name="varname" />
+              <xar:mlstring>Some text with #(1) and #(2) or #(3) and #(4)</xar:mlstring>
+    [5]       <xar:var name="plain"/>
+    [6]       <xar:var name="newname">#$expression#</xar:var>
+    [7]       <xar:var>#$expression</xar:var>
+    [8]       <xar:var name="varname" />
             </xar:ml>
 
         [1] The writer presumably means:
