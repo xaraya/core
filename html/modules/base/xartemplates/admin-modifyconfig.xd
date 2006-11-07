@@ -9,7 +9,7 @@
     // Enter field description to appear in the dialog box
     var base_fieldDescription = Array("Default Module Function");
 //</xar:comment>
-</script> 
+</script>
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
@@ -58,7 +58,7 @@
             </dd>
             <xar:else />
             <dd>
-                <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'security'))#">
+                <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'security'))#">
                     <xar:mlstring>
                         Sessions and Security
                     </xar:mlstring>
@@ -75,7 +75,7 @@
             </dd>
             <xar:else />
             <dd>
-                <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales'))#">
+                <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'locales'))#">
                     <xar:mlstring>
                         Languages and Locales
                     </xar:mlstring>
@@ -92,7 +92,7 @@
             </dd>
             <xar:else />
             <dd>
-                <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'other'))#">
+                <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'other'))#">
                     <xar:mlstring>
                         Other
                     </xar:mlstring>
