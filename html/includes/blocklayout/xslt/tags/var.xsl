@@ -9,15 +9,19 @@
     exclude-result-prefixes="php xar">
 
 <xsl:template match="xar:set/xar:var">
+  <xsl:if test="@name !=''">
     <xsl:call-template name="xarvar_code"/>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="xar-var" match="xar:var">
-  <xsl:processing-instruction name="php">
-    <xsl:text>echo </xsl:text>
-    <xsl:call-template name="xarvar_code"/>
-    <xsl:text>;</xsl:text>
-  </xsl:processing-instruction>
+  <xsl:if test="@name != ''">
+    <xsl:processing-instruction name="php">
+      <xsl:text>echo </xsl:text>
+      <xsl:call-template name="xarvar_code"/>
+      <xsl:text>;</xsl:text>
+    </xsl:processing-instruction>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="xarvar_code">

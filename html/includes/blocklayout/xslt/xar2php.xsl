@@ -180,10 +180,14 @@
 
     The param $expr contains the  value of a text node holding the expression
     to resolve.
+    @todo leave #(1) constructs alone?
 -->
 <xsl:template name="resolveText" >
   <xsl:param name="expr"/>
 
+  <!--
+    <xsl:text>[EXPR]</xsl:text><xsl:value-of select="$expr"/><xsl:text>[END EXPR]</xsl:text>
+  -->
   <xsl:variable name="nrOfHashes"
       select="string-length($expr) - string-length(translate($expr, '#', ''))"/>
 
@@ -232,7 +236,6 @@
 <xsl:template match="style/text()">
   <xsl:apply-imports />
 </xsl:template>
-
 
 <!-- Expression resolving in nodes-->
 <xsl:template name="resolvePHP">
