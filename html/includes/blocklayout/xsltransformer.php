@@ -89,7 +89,7 @@ class BlocklayoutXSLTProcessor extends Object
                 The # will create a problem currently.
 
         */
-        $exprPattern = '/(=")(#[^"]+?#)/';
+        $exprPattern = '/(="[^"]*?)(#[^"]+?#)/';
         $callBack    = array('XsltCallbacks','attributes');
         $result = preg_replace_callback($exprPattern,$callBack,$result);
         //debug(htmlspecialchars($result));
