@@ -11,9 +11,9 @@
 sys::import('modules.dynamicdata.class.datastores');
 sys::import('modules.dynamicdata.class.properties');
 
-class DataObjectDescriptor extends Object
+class ObjectDescriptor extends Object
 {
-    private $args;
+    protected $args;
 
     function __construct(array $args)
     {
@@ -42,14 +42,87 @@ class DataObjectDescriptor extends Object
     {
         $publicproperties = $this->getPublicProperties($object);
         foreach ($this->args as $key => $value) if (in_array($key,$publicproperties)) $object->$key = $value;
-        else echo $key ."<br />";
+        else echo $key ."<br />";  // temporary for debugging
     }
 
     public function setArgs(array $args)
     {
         $this->args = $args;
     }
+}
 
+class DataObjectDescriptor extends ObjectDescriptor
+{
+    function __construct(array $args)
+    {
+//        var_dump($args);
+        if (!isset($args['itemtype'])) $args['itemtype'] = 0;
+        $args = $this->getObjectID($args);
+//        echo "<br />";var_dump($args);
+        parent::__construct($args);
+    }
+
+    function getModID(array $args=array())
+    {
+        foreach ($args as $key => &$value) {
+            if (in_array($key, array('module','modid','module','moduleid'))) {
+                if (empty($key)) $id = xarModGetIDFromName(xarModGetName());
+                if (is_numeric((int)$key) || is_integer((int)$key)) {
+                    $args['modid'] = $value;
+                } else {
+                    $info = xarMod::getInfo(xarMod::getRegID($key));
+                    $args['modid'] =  $info['systemid'];
+                }
+                break;
+            }
+        }
+        if (!isset($args['modid'])) {
+            $info = xarMod::getInfo(182);
+            $args['modid'] =  $info['systemid'];
+        }
+        return $args;
+    }
+
+    function getObjectID(array $args=array())
+    {
+            $dbconn =& xarDBGetConn();
+            $xartable =& xarDBGetTables();
+
+        if (isset($args['objectid'])) {
+            $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
+            $q->addfield('xar_object_moduleid AS modid');
+            $q->addfield('xar_object_itemtype AS itemtype');
+            $q->eq('xar_object_id',(int)$args['objectid']);
+    //        $q->qecho();exit;
+            if (!$q->run()) return;
+            $row = $q->row();
+            $args['modid'] = isset($row['modid']) ? $row['modid'] : 182;
+            $args['itemtype'] = isset($row['itemtype']) ? $row['itemtype'] : 0;
+        } else {
+            $args = $this->getModID($args);
+
+            /*
+            $query = "SELECT xar_object_id FROM " . $xartable['dynamic_objects'];
+            $query .= " WHERE xar_object_moduleid = ?
+                          AND xar_object_itemtype = ? ";
+            $bindvars[] = (int) $modid;
+            $bindvars[] = (int) $itemtype;
+            $result =& $dbconn->Execute($query,$bindvars);
+            list($objectid) = $result->fields;
+            $result->Close();
+            $args['objectid'] = isset($objectid) ? $objectid : 0;
+            */
+            $q = new xarQuery('SELECT',$xartable['dynamic_objects'],'xar_object_id');
+            $q->eq('xar_object_moduleid',(int)$args['modid']);
+            $q->eq('xar_object_itemtype',(int)$args['itemtype']);
+    //        $q->qecho();exit;
+            if (!$q->run()) return;
+            $row = $q->row();
+            $args['objectid'] = isset($row['xar_object_id']) ? $row['xar_object_id'] : 0;
+        }
+        return $args;
+
+    }
 }
 
 class DataObjectMaster extends Object
@@ -131,6 +204,7 @@ class DataObjectMaster extends Object
                 $this->addProperty($propinfo);
         }
 
+/*
         if(empty($this->moduleid))
         {
             if(empty($this->objectid))
@@ -139,7 +213,7 @@ class DataObjectMaster extends Object
         else
             if(!is_numeric($this->moduleid) && is_string($this->moduleid))
                 $this->moduleid = xarModGetIDFromName($this->moduleid);
-
+*/
         if(empty($this->name))
         {
             $info = self::getObjectInfo($this->descriptor->getArgs());
