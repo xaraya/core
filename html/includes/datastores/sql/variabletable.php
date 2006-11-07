@@ -722,9 +722,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
     /**
      * get next item id (for objects stored only in dynamic data table)
      *
-     * @param $args['objectid'] dynamic object id for the item, or
-     * @param $args['moduleid'] module id for the item +
-     * @param $args['itemtype'] item type of the item
+     * @param $args['objectid'] dynamic object id for the item
      * @return integer value of the next id
      * @throws BadParameterException
      */
@@ -733,13 +731,8 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         extract($args);
 
         $invalid = '';
-        var_dump($args);exit;
         if (isset($objectid) && !is_numeric($objectid)) {
             $invalid = 'object id';
-        } elseif (!isset($moduleid) || !is_numeric($moduleid)) {
-            $invalid = 'module id';
-        } elseif (!isset($itemtype) || !is_numeric($itemtype)) {
-            $invalid = 'item type';
         }
 
         if (!empty($invalid)) {
@@ -755,15 +748,8 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         $bindvars = array();
         $query = "UPDATE $dynamicobjects
                      SET xar_object_maxid = xar_object_maxid + 1 ";
-        if (!empty($objectid)) {
             $query .= "WHERE xar_object_id = ? ";
             $bindvars[] = (int)$objectid;
-        } else {
-            $query .= "WHERE xar_object_moduleid = ?
-                         AND xar_object_itemtype = ?";
-            $bindvars[] = (int)$moduleid;
-            $bindvars[] = (int)$itemtype;
-        }
         $stmt = $this->db->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
 
@@ -771,15 +757,8 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         $bindvars = array();
         $query = "SELECT xar_object_maxid
                     FROM $dynamicobjects ";
-        if (!empty($objectid)) {
             $query .= "WHERE xar_object_id = ? ";
             $bindvars[] = (int)$objectid;
-        } else {
-            $query .= "WHERE xar_object_moduleid = ?
-                         AND xar_object_itemtype = ? ";
-            $bindvars[] = (int)$moduleid;
-            $bindvars[] = (int)$itemtype;
-        }
         $stmt = $this->db->prepareStatement($query);
         $result= $stmt->executeQuery($bindvars);
         if (!$result->first()) return; // this should not happen
