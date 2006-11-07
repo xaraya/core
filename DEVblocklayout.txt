@@ -211,3 +211,155 @@ Language change proposals:
         NOTES:
             - if xar:var gets the open form, xar:set behaves very similar, the two
             could become aliases of eachother.
+
+Expression resolving
+====================
+
+Before going into the issues at hand, a couple of general statements on
+templating engines, or templating languages.
+
+There are a lot of them! By far, the most are sloppy, ill designed, slow or
+just grew out of a hack. A few of them are real gems to use though and well
+thought out. Without exception, they all have some sort of mechanism to
+control flow, set and use variables etc. in an extension to their 'hosting
+language' Sometime built as 'escape mechanisms' into the programming language
+in which the template engine was written, sometimes defining its own
+mini-language.
+
+To further narrow the templating languages we consider interesting; the XML
+native ones. By this, I mean templating languages which, considered as such,
+are a valid XML document. There are other means to construct XML 'based'
+templating engines, meaning they look like XML, but dont use much more than
+some tags to describe the templating constructs and escape to other mechanisms
+for defining structures or operations. We wont consider those here.
+
+So, what techniques do we have to make up a native XML templating language
+with sufficient power?
+
+Technique 1. namespaced taglib to define operations. : <xar:sometag />
+----------------------------------------------------------------------
+
+The obvious one, is to define a tag lib in a namespace specifically for the
+templating domain. Blocklayout is no exception. We define the xar: namespace
+as ours and all tags in that namespace are handled by BL.
+
+What you can do with a tag is pretty limited. It has a name, is empty or open,
+and may define attributes which have values. Combining all of those leads to
+lots of different options, but it's all still static, so that is why most TPLs
+come up with an expression language to bring variables into the picture. More
+on that later on. Xaraya uses this techniques extensively, but often in inconsistent
+ways, or even invalid ways.
+
+Technique 2: namespace attribute lib to extend sibling taglibs. : <div xar:extra="test"/>
+-----------------------------------------------------------------------------------------
+
+What only a handful template engines use is the namespaced attribute
+technique. Similarly to the namespaced tags, you can employ namespaced attributes
+to be handled by your engine. BL doesnt  use this technique yet either. The
+key addition this brings to the table is that you can hook your namespace into
+others. Say you combine html and blocklayout in a template a div tag, belonging
+to the html (default) namespace can be (legally) extended by;
+
+    <div style="border:thin" xar:extra="somevalue">
+        <img src="myPicture.png" />
+    </div>
+
+Assuming the namespace are properly tagged on the document, this is perfectly
+valid XML. This allows a template engine to extend another namespace with
+extended behaviour. Still, the same XML rules apply and all information is
+still static.
+
+The above is really what XML has to offer. Through clever combinations of both
+techniques it may seem there is more, but there really isn't :-)
+Defining multiple namespace (one for structure, one for data) and defining ways
+in which they should interoperate.
+
+Technique 3: define dynamic behaviour through an expression language
+--------------------------------------------------------------------
+
+Here's where the problem starts. XML, as such, unless implemented explicitly
+in one of the two previous techniques doesnt define dynamic behaviour in itself.
+There is however a staggering amount of ways to give it one:
+
+    1. XPath expression language to point to XML things and execute some functions on them
+    2. XQuery to search into XML
+    3. An event model layered into what is known as a DOM (into 3 levels)
+    4. Choose a specific doctype like XHTML and you get another set of dynamics, specific to what
+    the dialect was designed for (xul+javascript for example)
+    5. Databinding specification like XForms and RDF
+
+and last but not least the custom expression languages which every template engine i ever
+came across has.
+
+Looking at the feature for Blocklayout, technique 1 will continue to dominate
+how people perceive the language. One thing which sets apart BL from many
+other template languages, is that most of its operations are encoded in the
+tag namespace and not as a specific expression language. The possibilities of
+using namespaced attributes we havent begun to explore yet.
+A weakness which BL has had from the beginning, perhaps due to the intial focus
+to encode the operations as XML tags, is the definition of its expression language,
+or the lack thereof.
+
+In short, we escape to PHP through a # character and try to evaluate and pass
+back whatever the PHP delivers in the expression. This has worked reasonably well
+because we compile the BL tags to PHP and it makes perfect sense to inject the
+expressions in PHP too.
+
+We allow expressions in pretty much an ad-hoc set of places. They are almost always
+allowed in XML text nodes, sometimes allowed in attributes, but not everywhere and
+there are also two ways. Some tags require a direct-PHP like syntax, others adhere
+to the #..# enclosed syntax while quite a few of them dont support expressions at
+all. All of these grew on us over time.
+
+Currently, as we are redefining/reviewing blocklayout for version 2 we see the
+at least following problems (top 10):
+
+    1. the absence of a strong definition of what an expression is makes it
+    hard (this is perhaps an open door, its the cause of all the other
+    problems obviously) to write a good component which handles them
+    consistently.
+
+    2. because they are used in at least 3 different ways, its hard to stay
+    compatible AND consistent
+
+    3. We have a tendency to solve things 'the PHP way' with xar:set as our
+    hammer.
+
+    4. Specifying and resolving expressions in attributes is problematic, we
+    mix and match the semantics of 'referencing' something and 'using the
+    value' of something. The 'name' type attributes being the most prominent
+    example.
+
+    5. Within the engine there is more than one need for 'expression like'
+    constructs. Assigning things, Multilanguage placeholders and Value
+    expressions are 3 examples of different things we try to push into one
+    syntax. (not necessarily bad, but harder)
+
+    6. The binding with our host language PHP causes some trouble, because php
+    is somewhat similar, but not quite like an XML processing instruction. <?
+    <?php <script type="application/php" are 3 possible ways to signal a php
+    block, all of which are invalid in an attribute in XML, and can never be
+    used directly. Also <? conflicts with <?xml in some situations.
+
+    7. Over time we have defined a number of mechanism to specify expressions,
+    implicitly assuming some wished for operation. Example: #$varname# in
+    textnodes is automatically assuming 'echo $varname', i.e. outputting it
+    where as attribute="#$varname#" does not. (again, not necessarily bad, but
+    more an accident than design)
+
+    8. #(1) is a placeholder for translations in a very specific situation to
+    be replaced by a variable when there are more of those, it becomes
+    unclear, or at least more complicated to separate placeholders from
+    expressions and they can not be used together in most cases.
+
+    9. The choice of the # character as our delimiter may be unfortunate,
+    because the one escape mechanism XML has for specifiying characters in an
+    indirect, but portable way is numeric entities which also happens to use
+    the # character, further complicating the matter. ( &#160; is an example)
+
+    10. The combination of these points leads to the necessity of pre and
+    postprocessing the templates in less than elegant ways to ensure we can
+    process the templates properly. The mere fact of pre- and postprocessing is
+    pretty normal, but we often cant handle an issue on one side (that is, either
+    in the transform stage or in pre or post handling) but have to do it on
+    both sides. Above all, this creates complexity and maintenance problems.
