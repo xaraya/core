@@ -43,8 +43,8 @@ class BlocklayoutXSLTProcessor extends Object
         $this->xmlDoc = new DOMDocument();
         // Setting this to false makes it 2 times faster, what do we loose?
         $this->xmlDoc->resolveExternals = false;
-        $this->validateOnParse = true;
-        $this->xmlDoc->loadXML($this->prepXml);
+        // We're still a long way from validating
+        // $this->xmlDoc->validateOnParse = true;
     }
 
     function transform()
@@ -57,29 +57,33 @@ class BlocklayoutXSLTProcessor extends Object
         }
 
         // Transform it
-        set_exception_handler(array('ExceptionHandlers','bone'));
+        set_exception_handler(array('ExceptionHandlers','defaulthandler'));
+        // What should we initialize $result to?
+        $result = '';
+        $this->xmlDoc->loadXML($this->prepXml);
         $result = $this->xslProc->transformToXML($this->xmlDoc);
-        //set_exception_handler(array('ExceptionHandlers','default'));
 
         /*
             Expressions in attributes are not handled by the transform because
-            XSLT can not generate anything other than valid XML (well, it can but 
+            XSLT can not generate anything other than valid XML (well, it can but
             definitely not inside attributes), which exclude php PI's
             in attrbiutes
-        
+
             This pattern should not greedy match the dots in #...# constructs
             We exclude:
+                matching #( at the beginning (MLS placeholders.)
+            We exclude between the #s:
                 " == delimiter of attributes (text nodes are xslt transformed)
                 # == our own delimiter
-                ; == php delimiter
+
             TODO:
-                This just shifts the problem to where an expression contains a 
+                This just shifts the problem to where an expression contains a
                 literal string
-                title="#SomeFunc('I dont like this; it is problem #5')#"
-                Both the ; and the # will create a problem currently.
-                
-        */ 
-        $exprPattern = '/(#[^"#;]+?#)/';
+                title="#SomeFunc('I dont like this, it is problem #5')#"
+                The # will create a problem currently.
+
+        */
+        $exprPattern = '/(#[^\(][^"#]+?#)/';
         $callBack    = array('XsltCallbacks','attributes');
         $result = preg_replace_callback($exprPattern,$callBack,$result);
         //debug(htmlspecialchars($result));
@@ -112,9 +116,9 @@ class XsltCallbacks extends Object
 
     private static function reverseXMLEntities($content)
     {
-        /* 
+        /*
             XML predefines 5 entities and as we resolve our attribute
-            expressions to php code, we need a way to make php happy bout 
+            expressions to php code, we need a way to make php happy bout
             them too. This touches obviously on the problem of expressions
             in attributes in general.
         */
@@ -123,9 +127,9 @@ class XsltCallbacks extends Object
             array('&', '>', '<', '"',"'"),
             $content
         );
-    }    
+    }
 
-    /* 
+    /*
         Entity resolvement callback for xar- entities.
     */
     static function entities($matches)
@@ -157,6 +161,9 @@ class XsltCallbacks extends Object
             // &xar-var;
             case 'var':
                 return "#\$$entityParts[2]#";
+                break;
+            case 'currenturl':
+                return '#xarServer::getCurrentURL()#';
                 break;
             default:
                 return $matches[0];

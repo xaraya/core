@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
@@ -151,3 +152,4 @@
     <strong>&#160;<xar:mlstring>Privileges  Module Overview</xar:mlstring></strong><br />&#160;<xar:mlstring>Version</xar:mlstring> 1.0.0&#160; 2006-05-03
   </p>
 </div>
+</xar:template>

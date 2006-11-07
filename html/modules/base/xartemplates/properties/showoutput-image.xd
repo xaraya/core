@@ -1,6 +1,8 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:set name="imagealt"><xar:mlstring>Image</xar:mlstring></xar:set>
 
 <xar:if condition="!empty($value)">
     <img src="#$value#" alt="#$imagealt#"/>
 </xar:if>
+</xar:template>

@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:if condition="!empty($treenode)">
     <xar:set name="roles">new xarRoles()</xar:set>
     <ul>
@@ -93,3 +94,4 @@
         </xar:for>
     </ul>    
 </xar:if>
+</xar:template>
