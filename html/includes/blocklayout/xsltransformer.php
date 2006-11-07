@@ -16,9 +16,9 @@ class BlocklayoutXSLTProcessor extends Object
     private $xslDoc  = null;    // Object representing the stylesheet.
     private $xmlDoc  = null;    // Object representing the input XML.
 
-    private $origXml = '';
-    private $prepXml = '';
-    private $postXml = '';
+    private $origXml = '';      // The original XML
+    private $prepXml = '';      // The preprocessed XML
+    private $postXml = '';      // The transformed result XML
 
     public  $xmlFile = null;
 
@@ -109,9 +109,8 @@ class BlocklayoutXSLTProcessor extends Object
     {
         /*
             Expressions in attributes are not handled by the transform because
-            XSLT can not generate anything other than valid XML (well, it can but
-            definitely not inside attributes), which exclude php PI's
-            in attrbiutes
+            XSLT can not generate anything other than valid XML which means
+            processing instruction inside attribute values are impossible.
 
             This pattern should not greedy match the dots in #...# constructs
             *only* in attributes.
@@ -126,7 +125,7 @@ class BlocklayoutXSLTProcessor extends Object
                 The # will create a problem currently.
 
         */
-        $exprPattern = '/(="[^"]*?)(#[^"]+?#)/';
+        $exprPattern = '/(#[^"#]+?#)/';
         $callBack    = array('XsltCallbacks','attributes');
         $this->postXML = preg_replace_callback($exprPattern,$callBack,$this->postXML);
     }
@@ -152,14 +151,16 @@ class XsltCallbacks extends Object
         //xarLogMessage('MLS: ' . $matches[0] . ' => '.$res);
         return $res;
     }
+
     static function attributes($matches)
     {
-        // Resolve the parts between the #-es
-        $raw = ExpressionTransformer::transformPHPExpression($matches[2]);
+        // Resolve the parts between the #-es, but leave MLS stuff alone.
+        if(preg_match('/#\([0-9]+\)#/',$matches[0])) return $matches[0];
+        $raw = ExpressionTransformer::transformPHPExpression($matches[1]);
         $raw = self::reverseXMLEntities($raw);
         // Return the first match too, to ensure not changing the input
-        $res = $matches[1].'<?php echo ' . $raw .';?>';
-        //xarLogMessage('ATT: '. $matches[0] . ' => ' . $res);
+        $res = '<?php echo ' . $raw .';?>';
+        xarLogMessage('ATT: '. $matches[0] . ' => ' . $res);
         return $res;
     }
 
