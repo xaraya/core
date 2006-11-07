@@ -14,13 +14,15 @@ class BlocklayoutXSLTProcessor extends Object
 {
     private $xslProc = null;    // Object representing the processor.
     private $xslDoc  = null;    // Object representing the stylesheet.
+    private $xmlDoc  = null;    // Object representing the input XML.
 
-    private $xmlDoc  = null;
     private $origXml = '';
     private $prepXml = '';
+    private $postXml = '';
+
     public  $xmlFile = null;
 
-    public function __construct($xslFile='')
+    public function __construct($xslFile)
     {
         // Set up the xsl processor
         $this->xslProc = new XSLTProcessor();
@@ -38,14 +40,35 @@ class BlocklayoutXSLTProcessor extends Object
         // $this->xmlDoc->validateOnParse = true;
     }
 
+    // This will become public once we have more pipes
     private function setStyleSheet($xslFile)
     {
         $this->xslDoc = new DOMDocument();
         $this->xslDoc->load($xslFile);
         $this->xslProc->importStyleSheet($this->xslDoc);
+
     }
 
-    private function preProcessXML()
+    private function setSourceDocument(&$xml)
+    {
+        $this->xmlDoc = new DOMDocument();
+        // Setting this to false makes it 2 times faster, what do we loose?
+        $this->xmlDoc->resolveExternals = false;
+        // We're still a long way from validating
+        // $this->xmlDoc->validateOnParse = true;
+        $this->xmlDoc->loadXML($xml);
+
+        // Set up additional parameters related to the input
+        // @todo wrong here.
+        if(isset($this->xmlFile)) {
+            // Set up the parameters
+            $this->xslProc->setParameter('','bl_filename',basename($this->xmlFile));
+            $this->xslProc->setParameter('','bl_dirname',dirname($this->xmlFile));
+        }
+
+    }
+
+    private function preProcess()
     {
         // Make sure our entities look like expressions
         // &xar-entity; -> #[whatever expression it needs]#
@@ -66,23 +89,24 @@ class BlocklayoutXSLTProcessor extends Object
         // Save the original XML
         $this->origXml = $xml;
 
-        // Set up the parameters
-        if(isset($this->xmlFile)) {
-            // Set up the parameters
-            $this->xslProc->setParameter('','bl_filename',basename($this->xmlFile));
-            $this->xslProc->setParameter('','bl_dirname',dirname($this->xmlFile));
-        }
+        // Preprocess it.
+        $this->preProcess();
 
-        // Preprocess the XML
-        $this->preProcessXML();
+        // Set the source document to what we prepped
+        $this->setSourceDocument($this->prepXml);
 
         // Transform it
         set_exception_handler(array('ExceptionHandlers','defaulthandler'));
         // What should we initialize $result to?
-        $result = '';
-        $this->xmlDoc->loadXML($this->prepXml);
-        $result = $this->xslProc->transformToXML($this->xmlDoc);
+        $this->postXML = $this->xslProc->transformToXML($this->xmlDoc);
 
+        // Postprocess it
+        $this->postProcess();
+        return $this->postXML;
+    }
+
+    private function postProcess()
+    {
         /*
             Expressions in attributes are not handled by the transform because
             XSLT can not generate anything other than valid XML (well, it can but
@@ -104,9 +128,7 @@ class BlocklayoutXSLTProcessor extends Object
         */
         $exprPattern = '/(="[^"]*?)(#[^"]+?#)/';
         $callBack    = array('XsltCallbacks','attributes');
-        $result = preg_replace_callback($exprPattern,$callBack,$result);
-        //debug(htmlspecialchars($result));
-        return $result;
+        $this->postXML = preg_replace_callback($exprPattern,$callBack,$this->postXML);
     }
 
     static function escape($var)
