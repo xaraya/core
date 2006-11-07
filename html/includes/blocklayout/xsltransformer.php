@@ -33,11 +33,18 @@ class BlocklayoutXSLTProcessor extends Object
         set_exception_handler(array('ExceptionHandlers','bone'));
         $this->xslProc->importStyleSheet($domDoc);
 
-        // Preprocess the xml, so we dont get unresolved entities and stuff.
-        // &xar-entity; -> [whatever php code it needs];
+        // Make sure out entities look like expressions
+        // &xar-entity; -> #[whatever expression it needs]#
+        $this->prepXml = $this->origXml;
         $entityPattern = '/(&xar-[a-z\-_]+?;)/';
         $callBack      = array('XsltCallbacks','entities');
-        $this->prepXml = preg_replace_callback($entityPattern,$callBack,$this->origXml);
+        $this->prepXml = preg_replace_callback($entityPattern,$callBack,$this->prepXml);
+
+        // Make sure ML placeholders look like expressions
+        // #(1)... -> #(1)#...
+        $mlsPattern     = '/(#\([0-9]+\))([^#])/';
+        $callBack       = array('XsltCallbacks','mlsplaceholders');
+        $this->prepXml  = preg_replace_callback($mlsPattern, $callBack, $this->prepXml);
 
         // Set up the document to transform
         $this->xmlDoc = new DOMDocument();
@@ -70,11 +77,10 @@ class BlocklayoutXSLTProcessor extends Object
             in attrbiutes
 
             This pattern should not greedy match the dots in #...# constructs
-            We exclude:
-                matching #( at the beginning (MLS placeholders.)
+            *only* in attributes.
             We exclude between the #s:
                 " == delimiter of attributes (text nodes are xslt transformed)
-                # == our own delimiter
+                # == our own delimiter (the ? takes care of this)
 
             TODO:
                 This just shifts the problem to where an expression contains a
@@ -83,7 +89,7 @@ class BlocklayoutXSLTProcessor extends Object
                 The # will create a problem currently.
 
         */
-        $exprPattern = '/(#[^\(][^"#]+?#)/';
+        $exprPattern = '/(=")(#[^"]+?#)/';
         $callBack    = array('XsltCallbacks','attributes');
         $result = preg_replace_callback($exprPattern,$callBack,$result);
         //debug(htmlspecialchars($result));
@@ -105,12 +111,20 @@ class BlocklayoutXSLTProcessor extends Object
 
 class XsltCallbacks extends Object
 {
+    static function mlsplaceholders($matches)
+    {
+        $res = $matches[1].'#'.$matches[2];
+        //xarLogMessage('MLS: ' . $matches[0] . ' => '.$res);
+        return $res;
+    }
     static function attributes($matches)
     {
-        $raw = ExpressionTransformer::transformPHPExpression(substr($matches[1],1,-1));
+        // Resolve the parts between the #-es
+        $raw = ExpressionTransformer::transformPHPExpression($matches[2]);
         $raw = self::reverseXMLEntities($raw);
-        $res = '<?php echo ' . $raw .';?>';
-        xarLogMessage('ATT: processed'.$matches[1]);
+        // Return the first match too, to ensure not changing the input
+        $res = $matches[1].'<?php echo ' . $raw .';?>';
+        //xarLogMessage('ATT: '. $matches[0] . ' => ' . $res);
         return $res;
     }
 
@@ -162,9 +176,15 @@ class XsltCallbacks extends Object
             case 'var':
                 return "#\$$entityParts[2]#";
                 break;
+            // &xar-currenturl;
             case 'currenturl':
                 return '#xarServer::getCurrentURL()#';
                 break;
+            // Not implemented:
+            // &xar-config-varname;
+            // &xar-mod-modname-varname;
+            // &xar-session-varname;
+            // &xar-url-modname-type-func-args;
             default:
                 return $matches[0];
         }
