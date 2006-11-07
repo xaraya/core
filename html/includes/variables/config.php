@@ -18,7 +18,7 @@ class xarConfigVars extends xarVars implements IxarVars
 {
     private static $KEY = 'Config.Variables'; // const cannot be private :-(
     private static $preloaded = false;
-      
+
     /**
      * Sets a configuration variable.
      *
@@ -55,10 +55,10 @@ class xarConfigVars extends xarVars implements IxarVars
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
         xarCore::setCached(self::$KEY, $name, $value);
-        
+
         return true;
     }
-    
+
     /**
      * Gets a configuration variable.
      *
@@ -73,11 +73,11 @@ class xarConfigVars extends xarVars implements IxarVars
     public static function get($scope, $name)
     {
         $value = null;
-        
-        // Preload the config vars once 
+
+        // Preload the config vars once
         if(!self::$preloaded)
             self::preload();
-        
+
         // Configvars which are not in the database (either in config file or in code defines)
         switch($name)
         {
@@ -85,7 +85,7 @@ class xarConfigVars extends xarVars implements IxarVars
                 return xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix');
                 break;
             case 'System.Core.VersionNumber':
-                return XARCORE_VERION_NUM;
+                return XARCORE_VERSION_NUM;
                 break;
             case 'System.Core.VersionId':
                 return XARCORE_VERSION_ID;
@@ -100,13 +100,13 @@ class xarConfigVars extends xarVars implements IxarVars
         }
 
         // From the cache
-        if(xarCore::isCached(self::$KEY, $name)) 
+        if(xarCore::isCached(self::$KEY, $name))
         {
             $value = xarCore::getCached(self::$KEY, $name);
             return $value;
         }
-        
-        // Need to retrieve it 
+
+        // Need to retrieve it
         // @todo checkme What should we do here? preload again, or just fetch the one?
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
@@ -115,7 +115,7 @@ class xarConfigVars extends xarVars implements IxarVars
 
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($name),ResultSet::FETCHMODE_NUM);
-        
+
         if($result->next()) {
             // Found it, retrieve and cache it
             $value = $result->get(2);
@@ -126,22 +126,22 @@ class xarConfigVars extends xarVars implements IxarVars
         // @todo we really should except here.
         return $value;
     }
-    
+
     public static function delete($scope, $name)
     {
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
         $config_varsTable = $tables['config_vars'];
         $query = "DELETE FROM $config_varsTable WHERE xar_name = ? AND xar_modid is null";
-        
+
         // We want to make the next two statements atomic
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate(array($name));
         xarCore::delCached(self::$KEY, $name);
-        
+
         return true;
     }
-    
+
     /**
      * Pre-load site configuration variables
      *
@@ -159,7 +159,7 @@ class xarConfigVars extends xarVars implements IxarVars
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array(),ResultSet::FETCHMODE_ASSOC);
 
-        while ($result->next()) 
+        while ($result->next())
         {
             $newval = unserialize($result->getString('xar_value'));
             xarCore::setCached(self::$KEY, $result->getString('xar_name'), $newval);

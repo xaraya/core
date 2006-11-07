@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <xar:base-include-javascript module="base" filename="formcheck.js" />
 <script type="text/javascript">
@@ -68,3 +69,4 @@
         </fieldset>
     </form>
 </div>
+</xar:template>

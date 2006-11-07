@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:if condition="!empty($value)">
     <xar:if condition="is_array($value)">
@@ -13,3 +14,4 @@
         <xar:var name="value" prep="true"/>
     </xar:if>
 </xar:if>
+</xar:template>

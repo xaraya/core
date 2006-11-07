@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:set name="check"><xar:mlstring>check</xar:mlstring></xar:set>
 <xar:set name="preview"><xar:mlstring>preview</xar:mlstring></xar:set>
@@ -11,3 +12,4 @@
 <xar:if condition="!empty($invalid)">
     <span class="xar-error">#$invalid#</span>
 </xar:if>
+</xar:template>
