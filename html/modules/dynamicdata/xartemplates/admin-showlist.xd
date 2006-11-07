@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:if condition="empty($layout) or $layout eq 'default'">
     <table width="100%" border="1" cellspacing="0" cellpadding="4">
@@ -95,3 +96,4 @@
     <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
 </xar:if>
 
+</xar:template>
