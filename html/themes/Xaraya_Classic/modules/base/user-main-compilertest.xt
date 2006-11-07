@@ -155,6 +155,38 @@
       <xar:var scope="invalid" name="nonexistent"/>
     </pre>
   </div>
+
+  <div class="testcase">
+    <h3>xar:mlvar deprecation</h3>
+    <p>
+      xar:mlvar is a redundant tag, and implemented the wrong way, we are
+      replacing it with the behaviour of xar:var
+    </p>
+    <h4>Source</h4>
+    <pre>
+      <xar:set name="plain">'plain'</xar:set>
+      <xar:set name="expression">'expression'</xar:set>
+      <xar:set name="newname">'newname'</xar:set>
+    <![CDATA[
+      <xar:ml>
+        <xar:mlstring>Some text with #(1) and #(2) or #(3)# and #(4)</xar:mlstring>
+        <xar:var name="plain"/>
+        <xar:var name="newname">#$expression#</xar:var>
+        <xar:var>#$expression#</xar:var>
+      </xar:ml>
+    ]]>
+    </pre>
+    <h4>Real output</h4>
+    <pre>
+      <xar:ml>
+        <xar:mlstring>Some text with #(1) and #(2) or #(3) and #(4)</xar:mlstring>
+        <xar:var name="plain"/>
+        <xar:var name="newname">#$expression#</xar:var>
+        <xar:var>#$expression#</xar:var>
+      </xar:ml>
+    </pre>
+
+  </div>
   <xar:comment>End of the tests</xar:comment>
 
 </div></xar:template>
