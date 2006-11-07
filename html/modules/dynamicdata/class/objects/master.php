@@ -58,7 +58,7 @@ class DataObjectDescriptor extends ObjectDescriptor
 //        var_dump($args);
         if (!isset($args['itemtype'])) $args['itemtype'] = 0;
         $args = $this->getObjectID($args);
-//        echo "<br />";var_dump($args);
+//        echo "<br />";var_dump($args);exit;
         parent::__construct($args);
     }
 
@@ -68,17 +68,17 @@ class DataObjectDescriptor extends ObjectDescriptor
             if (in_array($key, array('module','modid','module','moduleid'))) {
                 if (empty($key)) $id = xarModGetIDFromName(xarModGetName());
                 if (is_numeric((int)$key) || is_integer((int)$key)) {
-                    $args['modid'] = $value;
+                    $args['moduleid'] = $value;
                 } else {
                     $info = xarMod::getInfo(xarMod::getRegID($key));
-                    $args['modid'] =  $info['systemid'];
+                    $args['moduleid'] = xarMod::getRegID($key); //$info['systemid']; FIXME
                 }
                 break;
             }
         }
-        if (!isset($args['modid'])) {
+        if (!isset($args['moduleid'])) {
             $info = xarMod::getInfo(182);
-            $args['modid'] =  $info['systemid'];
+            $args['moduleid'] = 182; // $info['systemid'];  FIXME
         }
         return $args;
     }
@@ -90,13 +90,13 @@ class DataObjectDescriptor extends ObjectDescriptor
 
         if (isset($args['objectid'])) {
             $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
-            $q->addfield('xar_object_moduleid AS modid');
+            $q->addfield('xar_object_moduleid AS moduleid');
             $q->addfield('xar_object_itemtype AS itemtype');
             $q->eq('xar_object_id',(int)$args['objectid']);
     //        $q->qecho();exit;
             if (!$q->run()) return;
             $row = $q->row();
-            $args['modid'] = isset($row['modid']) ? $row['modid'] : 182;
+            $args['moduleid'] = isset($row['moduleid']) ? $row['moduleid'] : 182;  //will need to change this
             $args['itemtype'] = isset($row['itemtype']) ? $row['itemtype'] : 0;
         } else {
             $args = $this->getModID($args);
@@ -113,7 +113,7 @@ class DataObjectDescriptor extends ObjectDescriptor
             $args['objectid'] = isset($objectid) ? $objectid : 0;
             */
             $q = new xarQuery('SELECT',$xartable['dynamic_objects'],'xar_object_id');
-            $q->eq('xar_object_moduleid',(int)$args['modid']);
+            $q->eq('xar_object_moduleid',(int)$args['moduleid']);
             $q->eq('xar_object_itemtype',(int)$args['itemtype']);
     //        $q->qecho();exit;
             if (!$q->run()) return;
@@ -177,6 +177,16 @@ class DataObjectMaster extends Object
      * @todo  This does too much, split it up
     **/
 
+    function toArray($args=array())
+    {
+        $properties = $this->descriptor->getPublicProperties($this);
+        $args = array();
+        foreach ($properties as $key => $value) if (!isset($args[$key])) $args[$key] = $value;
+        //FIXME where do we need to define the modname best?
+        $args['modname'] = xarModGetNameFromID($args['moduleid']); //FIXME change to systemid
+        return $args;
+    }
+
     function loader(DataObjectDescriptor $descriptor)
     {
         $this->descriptor = $descriptor;
@@ -204,16 +214,6 @@ class DataObjectMaster extends Object
                 $this->addProperty($propinfo);
         }
 
-/*
-        if(empty($this->moduleid))
-        {
-            if(empty($this->objectid))
-                $this->moduleid = xarModGetIDFromName(xarModGetName());
-        }
-        else
-            if(!is_numeric($this->moduleid) && is_string($this->moduleid))
-                $this->moduleid = xarModGetIDFromName($this->moduleid);
-*/
         if(empty($this->name))
         {
             $info = self::getObjectInfo($this->descriptor->getArgs());
@@ -235,18 +235,12 @@ class DataObjectMaster extends Object
             )
         )
         {
-            if(!isset($args['allprops']))
+            $args = $this->toArray();
+            $args['objectref'] = $this;
+            if(!isset($args['allprops']))   //FIXME is this needed??
                 $args['allprops'] = null;
 
-            DataPropertyMaster::getProperties(
-                array(
-                    'objectid'  => $this->objectid,
-                    'moduleid'  => $this->moduleid,
-                    'itemtype'  => $this->itemtype,
-                    'allprops'  => $args['allprops'],
-                    'objectref' => & $this
-                )
-            ); // we pass this object along
+            DataPropertyMaster::getProperties($args); // we pass this object along
         }
 
         // Do we have a join?

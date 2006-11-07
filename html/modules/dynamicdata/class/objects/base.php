@@ -33,9 +33,6 @@ class DataObject extends DataObjectMaster
             'ViewDynamicDataItems',1,'Item',
             $this->moduleid.':'.$this->itemtype.':'.$this->itemid)
         ) return;
-
-        // don't retrieve the item here yet !
-        //$this->getItem();
     }
 
     /**
@@ -62,17 +59,10 @@ class DataObject extends DataObjectMaster
         if(!empty($this->primary) && !empty($this->properties[$this->primary]))
             $primarystore = $this->properties[$this->primary]->datastore;
 
-        $modinfo = xarModGetInfo($this->moduleid);
+//        $modinfo = xarModGetInfo($this->moduleid);
         foreach($this->datastores as $name => $datastore)
         {
-            $itemid = $datastore->getItem(
-                array(
-                    'modid'    => $this->moduleid,
-                    'itemtype' => $this->itemtype,
-                    'itemid'   => $this->itemid,
-                    'modname'  => $modinfo['name']
-                )
-            );
+            $itemid = $datastore->getItem($this->toArray());
             // only worry about finding something in primary datastore (if any)
             if(empty($itemid) && !empty($primarystore) && $primarystore == $name)
                 return;
@@ -129,13 +119,15 @@ class DataObject extends DataObjectMaster
      */
     function showForm($args = array())
     {
+        $args = $this->toArray($args);
+        /*
         if(empty($args['layout']))      $args['layout'] = $this->layout;
         if(empty($args['template']))    $args['template'] = $this->template;
         if(empty($args['tplmodule']))   $args['tplmodule'] = $this->tplmodule;
         if(empty($args['viewfunc']))    $args['viewfunc'] = $this->viewfunc;
         if(empty($args['fieldlist']))   $args['fieldlist'] = $this->fieldlist;
         if(empty($args['fieldprefix'])) $args['fieldprefix'] = $this->fieldprefix;
-
+*/
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
         if(!empty($args['preview']))
             $this->checkInput();
@@ -152,12 +144,14 @@ class DataObject extends DataObjectMaster
             $args['properties'] =& $this->properties;
 
         // pass some extra template variables for use in BL tags, API calls etc.
+        /*
         $args['objectname'] = !empty($this->name) ? $this->name : null;
         $args['moduleid'] = $this->moduleid;
         $modinfo = xarModGetInfo($this->moduleid);
         $args['modname'] = $modinfo['name'];
         $args['itemtype'] = !empty($this->itemtype) ? $this->itemtype : null;
         $args['itemid'] = $this->itemid;
+        */
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
 
@@ -169,12 +163,14 @@ class DataObject extends DataObjectMaster
      */
     function showDisplay($args = array())
     {
+        $args = $this->toArray($args);
+        /*
         if(empty($args['layout']))    $args['layout'] = $this->layout;
         if(empty($args['template']))  $args['template'] = $this->template;
         if(empty($args['tplmodule'])) $args['tplmodule'] = $this->tplmodule;
         if(empty($args['viewfunc']))  $args['viewfunc'] = $this->viewfunc;
         if(empty($args['fieldlist'])) $args['fieldlist'] = $this->fieldlist;
-
+    */
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
         if(!empty($args['preview']))
             $this->checkInput();
@@ -233,12 +229,14 @@ class DataObject extends DataObjectMaster
         }
 
         // pass some extra template variables for use in BL tags, API calls etc.
+        /*
         $args['objectname'] = !empty($this->name) ? $this->name : null;
         $args['moduleid'] = $this->moduleid;
         $modinfo = xarModGetInfo($this->moduleid);
         $args['modname'] = $modinfo['name'];
         $args['itemtype'] = !empty($this->itemtype) ? $this->itemtype : null;
         $args['itemid'] = $this->itemid;
+        */
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
         return xarTplObject($args['tplmodule'],$args['template'],'showdisplay',$args);
@@ -316,7 +314,7 @@ class DataObject extends DataObjectMaster
                     $this->properties[$name]->setValue($value);
         }
 
-        $modinfo = xarModGetInfo($this->moduleid);
+//        $modinfo = xarModGetInfo($this->moduleid);
 
         // special case when we try to create a new object handled by dynamicdata
         if(
@@ -361,15 +359,7 @@ class DataObject extends DataObjectMaster
                     if(!empty($this->fieldlist) && !in_array($primaryobject->primary,$this->fieldlist))
                         $this->datastores[$primarystore]->addField($this->properties[$this->primary]); // use reference to original property
 
-                    $this->itemid = $this->datastores[$primarystore]->createItem(
-                        array(
-                            'objectid' => $this->objectid,
-                            'modid'    => $this->moduleid,
-                            'itemtype' => $this->itemtype,
-                            'itemid'   => $this->itemid,
-                            'modname'  => $modinfo['name']
-                        )
-                    );
+                    $this->itemid = $this->datastores[$primarystore]->createItem($this->toArray());
                 }
                 else
                 {
@@ -390,23 +380,16 @@ class DataObject extends DataObjectMaster
             if(isset($primarystore) && $store == $primarystore)
                 continue;
 
-            $itemid = $this->datastores[$store]->createItem(
-                array(
-                    'objectid' => $this->objectid,
-                    'modid'    => $this->moduleid,
-                    'itemtype' => $this->itemtype,
-                    'itemid'   => $this->itemid,
-                    'modname'  => $modinfo['name']
-                )
-            );
+            $itemid = $this->datastores[$store]->createItem($this->toAray());
             if(empty($itemid))
                 return;
         }
 
-        xarLogMessage("Class: " . get_class() . ". Creating an item. Itemid: " . $this->itemid . ", module: " . $modinfo['name'] . ", itemtype: " . $this->itemtype);
+//        xarLogMessage("Class: " . get_class() . ". Creating an item. Itemid: " . $this->itemid . ", module: " . $modinfo['name'] . ", itemtype: " . $this->itemtype);
         // call create hooks for this item
         // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
         // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles / roles
+        $modinfo = xarModGetInfo($this->moduleid);
         if(
             !empty($this->primary) &&
             ($modinfo['name'] != 'articles') && ($modinfo['name'] != 'roles')
@@ -443,20 +426,12 @@ class DataObject extends DataObjectMaster
             throw new BadParameterException($vars,$msg);
         }
 
-        $modinfo = xarModGetInfo($this->moduleid);
+//        $modinfo = xarModGetInfo($this->moduleid);
         // TODO: this won't work for objects with several static tables !
         // update all the data stores
         foreach(array_keys($this->datastores) as $store)
         {
-            $itemid = $this->datastores[$store]->updateItem(
-                array(
-                    'objectid' => $this->objectid,
-                    'modid'    => $this->moduleid,
-                    'itemtype' => $this->itemtype,
-                    'itemid'   => $this->itemid,
-                    'modname'  => $modinfo['name']
-                )
-            );
+            $itemid = $this->datastores[$store]->updateItem($this->toArray());
             if(empty($itemid))
                 return;
         }
@@ -464,6 +439,7 @@ class DataObject extends DataObjectMaster
         // call update hooks for this item
         // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
         // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles / roles
+        $modinfo = xarModGetInfo($this->moduleid);
         if(
             !empty($this->primary) &&
             ($modinfo['name'] != 'articles') && ($modinfo['name'] != 'roles')
@@ -493,22 +469,14 @@ class DataObject extends DataObjectMaster
             throw new BadParameterException($vars, $msg);
         }
 
-        $modinfo = xarModGetInfo($this->moduleid);
-        xarLogMessage("Class: " . get_class() . ". Deleting an item. Itemid: " . $this->itemid . ", module: " . $modinfo['name'] . ", itemtype: " . $this->itemtype);
+//        $modinfo = xarModGetInfo($this->moduleid);
+//        xarLogMessage("Class: " . get_class() . ". Deleting an item. Itemid: " . $this->itemid . ", module: " . $modinfo['name'] . ", itemtype: " . $this->itemtype);
 
         // TODO: this won't work for objects with several static tables !
         // delete the item in all the data stores
         foreach(array_keys($this->datastores) as $store)
         {
-            $itemid = $this->datastores[$store]->deleteItem(
-                array(
-                    'objectid' => $this->objectid,
-                    'modid'    => $this->moduleid,
-                    'itemtype' => $this->itemtype,
-                    'itemid'   => $this->itemid,
-                    'modname'  => $modinfo['name']
-                )
-            );
+            $itemid = $this->datastores[$store]->deleteItem($this->toArray());
             if(empty($itemid))
                 return;
         }
@@ -516,6 +484,7 @@ class DataObject extends DataObjectMaster
         // call delete hooks for this item
         // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
         // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles / roles
+        $modinfo = xarModGetInfo($this->moduleid);
         if(
             !empty($this->primary) &&
             ($modinfo['name'] != 'articles') && ($modinfo['name'] != 'roles')

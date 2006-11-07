@@ -33,7 +33,7 @@ class Dynamic_Hook_DataStore extends BasicDataStore
 
     function getItem(array $args = array())
     {
-        $modid = $args['modid'];
+        $modid = $args['moduleid'];
         $itemtype = $args['itemtype'];
         $itemid = $args['itemid'];
         $modname = $args['modname'];

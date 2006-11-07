@@ -44,7 +44,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
         $query = "SELECT xar_dd_propid, xar_dd_value
                   FROM $dynamicdata
-                  WHERE xar_dd_propid IN ($bindmarkers) AND 
+                  WHERE xar_dd_propid IN ($bindmarkers) AND
                         xar_dd_itemid = ?";
         $bindvars = $propids;
         $bindvars[] = (int)$itemid;
@@ -124,7 +124,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
         $query = "SELECT xar_dd_id, xar_dd_propid
                   FROM $dynamicdata
-                  WHERE xar_dd_propid IN ($bindmarkers) AND 
+                  WHERE xar_dd_propid IN ($bindmarkers) AND
                         xar_dd_itemid = ?";
         $bindvars = $propids;
         $bindvars[] = (int)$itemid;
@@ -179,7 +179,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         // get the current dynamic data fields for all properties of this item
         $bindmarkers = '?' . str_repeat(',?', count($propids) -1);
         $query = "DELETE FROM $dynamicdata
-                  WHERE xar_dd_propid IN ($bindmarkers) AND 
+                  WHERE xar_dd_propid IN ($bindmarkers) AND
                         xar_dd_itemid = ?";
         $bindvars = $propids;
         $bindvars[] = (int)$itemid;
@@ -237,11 +237,11 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $query .= " AND xar_dd_itemid = ?";
                 $bindvars[] = (int)$itemids[0];
             }
-            
+
             // CHECKME: there was a cache execute here, it N/A anymore now, as the method is non-existent.
             $stmt = $this->db->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars);
-            
+
             if (count($this->sort) > 0) {
                 $items = array();
                 $dosort = 1;
@@ -347,7 +347,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 // <mrb> Why is this only here?
                 $query .= ' ORDER BY xar_dd_itemid, xar_dd_propid';
                 $stmt = $this->db->prepareStatement($query);
-                
+
                 // Note : this assumes that every property of the items is stored in the table
                 $numrows = $numitems * count($propids);
                 if ($startnum > 1) {
@@ -446,10 +446,10 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                     $join = ', ';
                 }
             }
-            
+
             // we got the query
             $stmt = $this->db->prepareStatement($query);
-            
+
             if ($numitems > 0) {
                 $stmt->setLimit($numitems);
                 $stmt->setOffset($startnum - 1);
@@ -591,10 +591,10 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                              xar_dd_value
                         FROM $dynamicdata
                        WHERE xar_dd_propid IN ($bindmarkers)";
-                      
+
             $stmt = $this->db->prepareStatement($query);
             $result = $stmt->executeQuery($propids);
-            
+
             $itemidlist = array();
             while ($result->next()) {
                 list($propid,$itemid,$value) = $result->getRow();
@@ -655,10 +655,10 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
             // Balance parentheses.
             if($this->db->databaseType == 'sqlite') $query .= ")";
-            
+
             $stmt = $this->db->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars);
-            
+
             if ($result->first()) return;
             $numitems = $result->getInt(1);
             $result->close();
@@ -685,7 +685,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
             // Balance parentheses.
             if($this->db->databaseType == 'sqlite') $query .= ")";
-            
+
             $stmt = $this->db->prepareStatement($query);
             $result = $stmt->executeQuery();
             if (!$result->first()) return;
@@ -723,7 +723,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
      * get next item id (for objects stored only in dynamic data table)
      *
      * @param $args['objectid'] dynamic object id for the item, or
-     * @param $args['modid'] module id for the item +
+     * @param $args['moduleid'] module id for the item +
      * @param $args['itemtype'] item type of the item
      * @return integer value of the next id
      * @throws BadParameterException
@@ -733,9 +733,10 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         extract($args);
 
         $invalid = '';
+        var_dump($args);exit;
         if (isset($objectid) && !is_numeric($objectid)) {
             $invalid = 'object id';
-        } elseif (!isset($modid) || !is_numeric($modid)) {
+        } elseif (!isset($moduleid) || !is_numeric($moduleid)) {
             $invalid = 'module id';
         } elseif (!isset($itemtype) || !is_numeric($itemtype)) {
             $invalid = 'item type';
@@ -748,7 +749,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
 
         $dynamicobjects = $this->tables['dynamic_objects'];
 
-        // increase the max id for this object 
+        // increase the max id for this object
         // TODO: figure out a way to do this more reliable.
         // - does a transaction help here? (esp. considering they are mostly emulated)
         $bindvars = array();
@@ -760,7 +761,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         } else {
             $query .= "WHERE xar_object_moduleid = ?
                          AND xar_object_itemtype = ?";
-            $bindvars[] = (int)$modid;
+            $bindvars[] = (int)$moduleid;
             $bindvars[] = (int)$itemtype;
         }
         $stmt = $this->db->prepareStatement($query);
@@ -776,7 +777,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
         } else {
             $query .= "WHERE xar_object_moduleid = ?
                          AND xar_object_itemtype = ? ";
-            $bindvars[] = (int)$modid;
+            $bindvars[] = (int)$moduleid;
             $bindvars[] = (int)$itemtype;
         }
         $stmt = $this->db->prepareStatement($query);
