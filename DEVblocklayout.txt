@@ -152,7 +152,7 @@ While fixing the errors along the way, some redesign issues have surfaced.
   tag anymore then. (which makes sense, it was an emergency exit anyway). Nevertheless,
   that means we have to go to the drawing board on how to do this.
 * language changes (see section further on)
-*
+
 
 Language change proposals:
 ==========================
@@ -274,7 +274,7 @@ is the same as:
     <p>
         <xar:ml>Some </xar:ml>
         <a href="http://example.org">Linked <xar:var name="first"/> text</a>  <!-- 3 units of translation -->
-        <xsl:ml> with <xar:var name="first"/></xar:ml>
+        <xar:ml> with <xar:var name="first"/></xar:ml>
     </p>
 THROUGH THE EYES OF TRANSLATION!
 
