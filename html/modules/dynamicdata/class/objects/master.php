@@ -520,7 +520,7 @@ class DataObjectMaster extends Object
     /**
      * Get the selected dynamic properties for this object
     **/
-    function &getProperties($args = array())
+/*    function &getProperties($args = array())
     {
         if(empty($args['fieldlist']))
             $args['fieldlist'] = $this->fieldlist;
@@ -535,6 +535,24 @@ class DataObjectMaster extends Object
         }
         else
             $properties =& $this->properties;
+        return $properties;
+    }
+*/
+    protected function getProperties($args = array())
+    {
+        if(empty($args['fieldlist']) && empty($this->status))
+        {
+            if(count($this->fieldlist) > 0)
+                $fieldlist = $this->fieldlist;
+            else
+                $fieldlist = array_keys($this->properties);
+        }
+        else
+            $fieldlist = $args['fieldlist'];
+
+        $properties = array();
+        foreach($fieldlist as $name)
+            if (isset($this->properties[$name])) $properties[$name] = $this->properties[$name];
         return $properties;
     }
 
@@ -1181,7 +1199,7 @@ class DataObjectMaster extends Object
         return $types;
     }
 
-    function load()
+    protected function load()
     {
         $this->descriptor->refresh($this);
     }
