@@ -152,7 +152,7 @@ class DataObject extends DataObjectMaster
             $args['properties'] = array();
             foreach ($properties as $property) {
                 if(($property->status & DataPropertyMaster::DD_DISPLAYMASK) != DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
-                    $args['properties'][$property->name] =& $property;
+                    $args['properties'][$property->name] = $property;
             }
         }
         else
@@ -217,24 +217,6 @@ class DataObject extends DataObjectMaster
                 $fields[$property->name] = $property->value;
             }
         }
-        return $fields;
-    }
-
-    function getProperties($args = array())
-    {
-        if(empty($args['fieldlist']))
-        {
-            if(count($this->fieldlist) > 0)
-                $fieldlist = $this->fieldlist;
-            else
-                $fieldlist = array_keys($this->properties);
-        }
-        else
-            $fieldlist = $args['fieldlist'];
-
-        $fields = array();
-        foreach($fieldlist as $name)
-            if (isset($this->properties[$name])) $fields[$name] = $this->properties[$name];
         return $fields;
     }
 
