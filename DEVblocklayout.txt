@@ -126,7 +126,11 @@ Issues
     * individual templates are not well-formed (interoperability)
 - we omit the xml declaration now, because it doesnt work, but i dont remember
   why anymore. Either make it work (preferably) or document why it can't.
--
+- declare xml specials somewhere:
+    - <!ATTLIST element xml:space (default|preserve) 'preserve'>
+        for elements which may choose
+    - <!ATTLIST element xml:space (preserve) #FIXED 'preserve'>
+        for elements which should have space preserving.
 
 Refactoring needs
 =================
@@ -153,64 +157,127 @@ While fixing the errors along the way, some redesign issues have surfaced.
 Language change proposals:
 ==========================
 
-    xar:mlvar deprecation
-    ---------------------
-        Problems with the current implementation:
-            - the added value of xar:mlvar versus xar:var is questionable.
-            - xar:mlvar uses a textnode, which implies setting a value of a
-            'mlvar thing'. This is not the case, where mlvar applies. The only
-            semantics is 'referencing' an already existing var by name.
-            - there really isnt something special about mlvar, or shouldnt be. The
-            context in which the var is placed makes it so, no need for another tag.
+This section lists 'almost RFC ready' parts on language changes which are a
+bit bigger.
 
-        Current general constructs:
-            <xar:ml>
-              <xar:mlstring>Some text with #(1) and #(2) or #(3) and #(4)</xar:mlstring>
-    [1]       <xar:mlvar>$plain</xar:mlvar>
-    [2]       <xar:mlvar>#$expression#</xar:mlvar>
-    [3]       <xar:mlvar>#$expression#</xar:mlvar>
-    [4]       <xar:mlvar><xar:var name="varname" /></xar:mlvar>
-            </xar:ml>
+Multilanguage constructs in Blocklayout
+---------------------------------------
 
-        Possible replacement:
-            <xar:ml>
-              <xar:mlstring>Some text with #(1) and #(2) or #(3) and #(4)</xar:mlstring>
-    [5]       <xar:var name="plain"/>
-    [6]       <xar:var name="newname">#$expression#</xar:var>
-    [7]       <xar:var>#$expression</xar:var>
-    [8]       <xar:var name="varname" />
-            </xar:ml>
+This change proposal consists of the following parts:
+    1. xar:mlvar deprecation (removal)
+    2. xar:mlstring deprecation (possibly removal)
+    3. change of MLS notion in general in templates 'translate, unless'
+    4. removal of the special MLS placeholders from the template space
 
-        [1] The writer presumably means:
-                "take the contents of the variable named 'plain' and use that for the
-                placeholder #(1)"
-            What the code says:
-                "place the text '$plain' at the location of #(1)"
-            --> <xar:var name="plain"/>  [5]
-        [2][3] The writer presumably means:
-                "Resolve '$expression', and use its result value for the placeholder #(2)"
-            This could be interpreted as:
-                "Set 'anonymous' variable with the value of '$expression' and use
-                $anonymous as the variable for the placeholder #(2)"
-            We have a choice whether to *require* a name of not in this construct
-            --> <xar:var name="newname">#$expression#</xar:var>  [6]
-            --> <xar:var>#$expression#</xar:var> [7]
-        [4] Side-effect of having both xar:mlvar and xar:var
-            --> <xar:var name="varname"/> [8]
+The concept of translating textnodes upto now has been:
 
+    "mark specific snippets of text by surrounding them with xar:mlstring tag
+    to signal translateable text. If the text contained variable part, mark
+    these with #(1) placeholders, one for each variable piece of content."
 
-        [6] implies a language change to allow an open form of xar:var which acts
-        not unlike xar:set name="newname"
+The problems this creates are:
+    1. verbosity, xar:mlstring around every piece of text.
+    2. when variable parts are needed, the xar:ml/xar:mlvar construct creates
+    more verbosity, while ruining the context.
+    3. nightmare to translate a chunk which contains, say, links without
+    reverting to chopping everything up into little pieces
 
-        [7] implies a language change to allow nameless xar:var usage. This is a bit
-        weird, as this is only useful when something else knows how to get to it
-        (only within xar:ml constructs, i suppose) Requiring a name is better i think.
-        The open form is then free to be interpreted in other ways:
-            - for example: use variable newname if set, otherwise use my textnode.
+To address these problems I propose the following:
 
-        NOTES:
-            - if xar:var gets the open form, xar:set behaves very similar, the two
-            could become aliases of eachother.
+    1. The translation concept becomes:
+        "translation is enabled by default on all textnodes unless a (global or
+         local) setting is set to not translate a node."
+    2. On a per-node (which can be whole tree of nodes) basis, nodes can be
+    'pinned' to a certain language through the use of the 'xml:lang' attribute
+    value as per:
+    [Tags for the Identification of Languages](http://www.ietf.org/rfc/rfc3066.txt)
+    meaning the content of those tags is not translated into other languages
+    than the signalled one.
+    3. A mechanism will be provided to signal the MLS system to treat a node(-set)
+    as a unit with respect to translation.
+
+The easiest way to show the consequences of the above changes is to list
+the 'old vs new' for as many examples we can think of:
+
+Plain translation:
+------------------
+
+Old:
+    <p><xar:mlstring>A paragraph which should be translated</xar:mlstring></p>
+New:
+    <p>A paragraph which should be translated</p>
+
+Pinning content:
+----------------
+
+Old:
+    <p>This to stay in English</p>
+    <p>This color is red</p>
+    <p>This colour is yellow</p>
+    <p>Deze paragraaf is in het Nederlands en moet zo blijven</p>
+New:
+    <p xml:lang="en">This to stay in English</p>
+    <p xml:lang="en-US">This color is red</p>
+    <p xml:lang="en-GB">This colour is yellow</p>
+    <p xml:lang="nl">Deze paragraaf is in het Nederlands en moet zo blijven</p>
+NOTE:
+    An interesting template will be the template of the Language dropdown
+    property, which may contain localized textnodes of every country listed
+    in its own language. Use this property as a testcase!!!
+
+Content with variable substitutions, single level, single namespace
+-------------------------------------------------------------------
+
+Old:
+    <p>
+      <xar:ml>
+        <xar:mlstring>Some text with #(1) and #(2) and #(3).</xar:mlstring>
+        <xar:mlvar>$first</xar:mlvar>
+        <xar:mlvar>#$second#</xar:mlvar>
+        <xar:mlvar><xar:var name="third" /></xar:mlvar>
+      </xar:ml>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit....
+      ...
+      ...
+      ... est laborum.
+    </p>
+New:
+    <p>
+      <xar:ml>
+        Some text with <xar:var name="first"/> and <xar:var name="second"/> or <xar:var name="third"/>.
+      </xar:ml>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit....
+      ...
+      ...
+      ... est laborum.
+    </p>
+NOTE: Interpret xar:ml as "register this specifically for translation". The
+ending </xar:ml> can be placed anywhere in the <p/>, depending on what
+should be registered. If it were to be omitted, the whole <p> textnode would
+be registered as the unit to translate.
+
+Examples:
+    <p>
+      <xar:ml>
+        Some <a href="http://example.org">Linked <xar:var name="first"/> text</a> with <xar:var name="second"/>
+      </xar:ml>
+    </p>
+is the same as:
+    <p>
+        Some Linked <xar:var name="first"/> text with <xar:var name="first"/> <!-- One unit of translation -->
+    </p>
+THROUGH THE EYES OF TRANSLATION!, while:
+    <p>
+        Some <a href="http://example.org">Linked <xar:var name="first"/> text</a> with <xar:var name="second"/>
+    </p>
+is the same as:
+    <p>
+        <xar:ml>Some </xar:ml>
+        <a href="http://example.org">Linked <xar:var name="first"/> text</a>  <!-- 3 units of translation -->
+        <xsl:ml> with <xar:var name="first"/></xar:ml>
+    </p>
+THROUGH THE EYES OF TRANSLATION!
+
 
 Expression resolving
 ====================
@@ -250,8 +317,8 @@ come up with an expression language to bring variables into the picture. More
 on that later on. Xaraya uses this techniques extensively, but often in inconsistent
 ways, or even invalid ways.
 
-Technique 2: namespace attribute lib to extend sibling taglibs. : <div xar:extra="test"/>
------------------------------------------------------------------------------------------
+Technique 2: namespaced attribute lib to extend sibling taglibs. : <div xar:extra="test"/>
+------------------------------------------------------------------------------------------
 
 What only a handful template engines use is the namespaced attribute
 technique. Similarly to the namespaced tags, you can employ namespaced attributes
@@ -264,15 +331,16 @@ to the html (default) namespace can be (legally) extended by;
         <img src="myPicture.png" />
     </div>
 
-Assuming the namespace are properly tagged on the document, this is perfectly
+Assuming the namespaces are properly tagged onto the document, this is perfectly
 valid XML. This allows a template engine to extend another namespace with
 extended behaviour. Still, the same XML rules apply and all information is
 still static.
 
 The above is really what XML has to offer. Through clever combinations of both
 techniques it may seem there is more, but there really isn't :-)
-Defining multiple namespace (one for structure, one for data) and defining ways
-in which they should interoperate.
+Defining multiple namespaces (one for structure, one for data for example) and
+defining ways in which they should interoperate is one such method which seems
+to add additional things.
 
 Technique 3: define dynamic behaviour through an expression language
 --------------------------------------------------------------------
@@ -282,34 +350,39 @@ in one of the two previous techniques doesnt define dynamic behaviour in itself.
 There is however a staggering amount of ways to give it one:
 
     1. XPath expression language to point to XML things and execute some functions on them
-    2. XQuery to search into XML
-    3. An event model layered into what is known as a DOM (into 3 levels)
-    4. Choose a specific doctype like XHTML and you get another set of dynamics, specific to what
+    2. Extensions of XPath like XPointer and XLink for example
+    3. XQuery to search into XML
+    4. An event model layered into what is known as a DOM (into 3 levels) which
+    introduces an indirect way to manipulate XML documents by modelling them as
+    an hierarchical object. It's not entirely clear where the OnEvent like
+    attributes come into play. (that is, to which doctype they actually belong)
+    5. Choose a specific doctype like XHTML and you get another set of dynamics, specific to what
     the dialect was designed for (xul+javascript for example)
-    5. Databinding specification like XForms and RDF
+    6. Databinding specifications like XForms and RDF
 
-and last but not least the custom expression languages which every template engine i ever
-came across has.
+and last but not least the custom expression languages which every template
+engine i ever came across has.
 
-Looking at the feature for Blocklayout, technique 1 will continue to dominate
+Looking at the future for Blocklayout, technique 1 will continue to dominate
 how people perceive the language. One thing which sets apart BL from many
 other template languages, is that most of its operations are encoded in the
 tag namespace and not as a specific expression language. The possibilities of
-using namespaced attributes we havent begun to explore yet.
-A weakness which BL has had from the beginning, perhaps due to the intial focus
-to encode the operations as XML tags, is the definition of its expression language,
-or the lack thereof.
+using namespaced attributes we havent begun to explore yet. A weakness which
+BL has had from the beginning, perhaps due to the intial focus to encode the
+operations as XML tags, is the definition of its expression language, or the
+lack thereof.
 
 In short, we escape to PHP through a # character and try to evaluate and pass
-back whatever the PHP delivers in the expression. This has worked reasonably well
-because we compile the BL tags to PHP and it makes perfect sense to inject the
-expressions in PHP too.
+back whatever the PHP delivers in the expression. This has worked reasonably
+well because we compile the BL tags to PHP and it makes perfect sense to
+inject the expressions in PHP too.
 
-We allow expressions in pretty much an ad-hoc set of places. They are almost always
-allowed in XML text nodes, sometimes allowed in attributes, but not everywhere and
-there are also two ways. Some tags require a direct-PHP like syntax, others adhere
-to the #..# enclosed syntax while quite a few of them dont support expressions at
-all. All of these grew on us over time.
+We allow expressions in pretty much an ad-hoc set of places. They are almost
+always allowed in XML text nodes, sometimes allowed in attributes, but not
+everywhere and there are also two ways of interpreting them. Some tags require
+a direct-PHP like syntax (like the xar:data* tags), others adhere to the #..#
+enclosed syntax while quite a few of them dont support expressions at all. All
+of these grew on us over time.
 
 Currently, as we are redefining/reviewing blocklayout for version 2 we see the
 at least following problems (top 10):
@@ -341,25 +414,29 @@ at least following problems (top 10):
     block, all of which are invalid in an attribute in XML, and can never be
     used directly. Also <? conflicts with <?xml in some situations.
 
-    7. Over time we have defined a number of mechanism to specify expressions,
+    7. Over time we have defined a number of mechanisms to specify expressions,
     implicitly assuming some wished for operation. Example: #$varname# in
     textnodes is automatically assuming 'echo $varname', i.e. outputting it
     where as attribute="#$varname#" does not. (again, not necessarily bad, but
     more an accident than design)
 
     8. #(1) is a placeholder for translations in a very specific situation to
-    be replaced by a variable when there are more of those, it becomes
-    unclear, or at least more complicated to separate placeholders from
-    expressions and they can not be used together in most cases.
+    be replaced by a variable. When there are more of those placeholders, it
+    becomes unclear, or at least more complicated to separate the placeholders
+    from expressions and they can not be used together in most cases.
+    (example: "For #(1),&#160; there are ##$count# elements" is ambiguous in
+    what this should mean, a mix of #(1), &#160;, # and #$count# in one textnode)
 
-    9. The choice of the # character as our delimiter may be unfortunate,
-    because the one escape mechanism XML has for specifiying characters in an
-    indirect, but portable way is numeric entities which also happens to use
-    the # character, further complicating the matter. ( &#160; is an example)
+    9. Related to 8. The choice of the # character as our delimiter may be
+    unfortunate, because the one escape mechanism XML has for specifiying
+    characters in an indirect, but portable, way are numeric entities which also
+    happen to use the # character, further complicating the matter. ( &#160;
+    is an example)
 
     10. The combination of these points leads to the necessity of pre and
     postprocessing the templates in less than elegant ways to ensure we can
-    process the templates properly. The mere fact of pre- and postprocessing is
-    pretty normal, but we often cant handle an issue on one side (that is, either
-    in the transform stage or in pre or post handling) but have to do it on
-    both sides. Above all, this creates complexity and maintenance problems.
+    process the templates properly. The mere fact of pre- and postprocessing
+    is pretty normal, but we often cant handle an issue on one side (that is,
+    either in the transform stage or in pre or post handling) but have to do
+    it on both sides. Above all, this creates complexity and maintenance
+    problems.
