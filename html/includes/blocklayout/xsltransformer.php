@@ -117,6 +117,8 @@ class BlocklayoutXSLTProcessor extends Object
             We exclude between the #s:
                 " == delimiter of attributes (text nodes are xslt transformed)
                 # == our own delimiter (the ? takes care of this)
+                < == tag delimiter (expression has to stay within a text node)
+                > == tag delimiter (expression has to stay within a start tag (attribute))
 
             TODO:
                 This just shifts the problem to where an expression contains a
@@ -125,14 +127,15 @@ class BlocklayoutXSLTProcessor extends Object
                 The # will create a problem currently.
 
         */
-        $exprPattern = '/(#[^"#]+?#)/';
+        $exprPattern = '/(#[^"><]*?#)/';
         $callBack    = array('XsltCallbacks','attributes');
         $this->postXML = preg_replace_callback($exprPattern,$callBack,$this->postXML);
     }
 
     static function escape($var)
     {
-        return str_replace("'","\'",$var);
+        $res = str_replace("'","\'",$var);
+        return $res;
     }
 
     static function phpexpression($expr)
@@ -156,6 +159,7 @@ class XsltCallbacks extends Object
     {
         // Resolve the parts between the #-es, but leave MLS stuff alone.
         if(preg_match('/#\([0-9]+\)#/',$matches[0])) return $matches[0];
+        if($matches[0] == '##') return '#';
         $raw = ExpressionTransformer::transformPHPExpression($matches[1]);
         $raw = self::reverseXMLEntities($raw);
         // Return the first match too, to ensure not changing the input

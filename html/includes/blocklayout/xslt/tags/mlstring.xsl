@@ -9,25 +9,20 @@
     exclude-result-prefixes="php xar">
 
 <!--
-  TODO: handle mlvar siblings
+  xar:mlstring is deprecated, we just pass on what's insided it.
+  if it is below a xar:set we add single quotes around what it produced.
+  These will disappear, as text nodes will be passed onto MLS by default
+  later on
 -->
 
 <xsl:template match="xar:mlstring|xar:ml/xar:mlstring">
-  <xsl:processing-instruction name="php">
-    <xsl:text>echo xarML('</xsl:text>
-    <xsl:value-of
-        select="php:functionString('BlockLayoutXSLTProcessor::escape',string(.))"
-        disable-output-escaping="yes" />
-    <xsl:text>');</xsl:text>
-  </xsl:processing-instruction>
+  <xsl:apply-templates />
 </xsl:template>
 
 <xsl:template match="xar:set/xar:mlstring|xar:set/xar:ml/xar:mlstring">
-    <xsl:text>xarML('</xsl:text>
-    <xsl:value-of
-        select="php:functionString('BlockLayoutXSLTProcessor::escape',string(.))"
-        disable-output-escaping="yes" />
-    <xsl:text>');</xsl:text>
+  <xsl:text>'</xsl:text>
+  <xsl:apply-templates />
+  <xsl:text>'</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>

@@ -38,8 +38,9 @@
 
 
   <!--
-    We view php as one large processing instruction of xml without the xml
-    declaration
+    We produce an UTF-8 encoded XML document as output. As we compile the
+    each document to a (hopefully valid) php script ultimately. We leave out
+    the xml declaration, as PHP interprets that as the start of a PHP block.
   -->
   <xsl:output  method="xml" omit-xml-declaration="yes" indent="yes" encoding="UTF-8"/>
 
@@ -60,6 +61,7 @@
     - empty div elements bork everything, so first, leave their spacing alone
     which doesnt influence correctness, but saves a whole lot of trouble.
     - empty script element work in safari, but not in FF
+    @todo this is specific for XHTML output, isolate it.
 -->
   <xsl:preserve-space elements="div script"/>
 <!--
@@ -78,7 +80,6 @@
     </xsl:copy>
   </xsl:template>
 -->
-
 
   <!--
     Start of the transform usually starts with matching the root, so do we
@@ -173,6 +174,24 @@
     </xsl:choose>
 </xsl:template>
 
+<xsl:template match="xar:var/text()">
+    <xsl:choose>
+      <xsl:when test="substring(normalize-space(.),1,1) = '#'">
+        <!-- The string starts with # so, let's resolve it -->
+        <xsl:call-template name="resolvePHP">
+          <xsl:with-param name="expr" select="normalize-space(.)"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- No start with #, just copy it -->
+        <xsl:text>'</xsl:text>
+        <xsl:value-of
+          select="php:functionString('BlockLayoutXSLTProcessor::escape',string(.))"
+          disable-output-escaping="yes" />
+        <xsl:text>'</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 <!--
     Utility template for resolving text nodes. It recursively resolves
     #-pairs from left to right. Pre- and Post- hash content are treated
@@ -226,12 +245,13 @@
 <!--
   For all text nodes, resolve expressions within
 -->
-<xsl:template match="text()">
+<!--
+  <xsl:template match="text()">
   <xsl:call-template name="resolveText">
     <xsl:with-param name="expr" select="."/>
   </xsl:call-template>
 </xsl:template>
-
+-->
 <!-- For now, dont resolve inline CSS -->
 <xsl:template match="style/text()">
   <xsl:apply-imports />

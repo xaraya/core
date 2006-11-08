@@ -160,33 +160,50 @@
     <h3>xar:mlvar deprecation</h3>
     <p>
       xar:mlvar is a redundant tag, and implemented the wrong way, we are
-      replacing it with the behaviour of xar:var
+      replacing it with the behaviour of xar:var, without paying attention
+      to actual ML constructs yet. This means xar:var has to get the 'anonymous'
+      set syntax so we can 'set' a var if the name attribute is not present.
+      We do this, so we can mass replace xar:mlvar with xar:var.
     </p>
     <h4>Source</h4>
     <pre>
-      <xar:set name="plain">'plain'</xar:set>
-      <xar:set name="expression">'expression'</xar:set>
-      <xar:set name="newname">'newname'</xar:set>
+      <xar:set name="first">'first'</xar:set>
+      <xar:set name="second">'second'</xar:set>
+      <xar:set name="third">'##$third#'</xar:set>
+      <xar:set name="extra">#$first#</xar:set>
     <![CDATA[
-      <xar:ml>
-        <xar:mlstring>Some text with #(1) and #(2) or #(3)# and #(4)</xar:mlstring>
-        <xar:var name="plain"/>
-        <xar:var name="newname">#$expression#</xar:var>
-        <xar:var>#$expression#</xar:var>
-      </xar:ml>
+        <xar:var>first</xar:var>         <!-- anon var gets value 'first' -->
+        <xar:mlvar>first</xar:var>
+        <xar:var>'first'</xar:var>       <!-- anon var gets value '\'first\'' -->
+        <xar:mlvar>'first'</xar:var>
+        <xar:var>$second</xar:var>       <!-- anon var gets value '$second' -->
+        <xar:mlvar>$second</xar:var>
+        <xar:var>#$third#</xar:var>      <!-- anon var gets value of variable $third -->
+        <xar:mlvar>#$third#</xar:mlvar>
     ]]>
+    </pre>
+    <h4>Expected</h4>
+    <pre>
     </pre>
     <h4>Real output</h4>
     <pre>
-      <xar:ml>
-        <xar:mlstring>Some text with #(1) and #(2) or #(3) and #(4)</xar:mlstring>
-        <xar:var name="plain"/>
-        <xar:var name="newname">#$expression#</xar:var>
-        <xar:var>#$expression#</xar:var>
-      </xar:ml>
+      <xar:var>first</xar:var>         <!-- anon var gets value 'first' -->
+      <xar:mlvar>first</xar:mlvar>
+      <xar:var>'first'</xar:var>       <!-- anon var gets value '\'first\'' -->
+      <xar:mlvar>'first'</xar:mlvar>
+      <xar:var>$second</xar:var>       <!-- anon var gets value '$second' -->
+      <xar:mlvar>$second</xar:mlvar>
+      <xar:var>#$third#</xar:var>      <!-- anon var gets value of variable $third -->
+      <xar:mlvar>#$third#</xar:mlvar>
     </pre>
 
   </div>
+  <p>This
+    is
+    a normal paragraph</p>
+  <p xml:space="preserve">This
+      is
+      a normal paragraph</p>
   <xar:comment>End of the tests</xar:comment>
 
 </div></xar:template>
