@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- Initialization of some information -->
 <xar:set name="mlsmode">#xarConfigGetVar('Site.MLS.MLSMode')#</xar:set>
 <xar:set name="single_checked">false</xar:set>
@@ -161,3 +162,4 @@
 
 </fieldset>
 -->
+</xar:template>

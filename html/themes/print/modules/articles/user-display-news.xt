@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <h3><xar:var name="title"/></h3>
 <span class="xar-sub">
 <xar:mlstring>Posted by</xar:mlstring>: 
@@ -20,4 +21,4 @@
 <span class="xar-quote">
     <xar:mlstring>Note </xar:mlstring>:<i><xar:var name="notes"/></i>
 </span>
-</xar:if>
+</xar:if></xar:template>

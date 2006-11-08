@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <!-- TODO: what is the expected behaviour of this? -->
 <div class="xar-fullwidth">
@@ -34,3 +35,4 @@
     </xar:foreach>
   </ul>
 </div>
+</xar:template>

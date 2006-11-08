@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <script type="text/javascript" src="modules/privileges/xartemplates/xarTree.js"></script>
 <script language="JavaScript">var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); function doOnLoad() { oldOnLoadFunction(); xarTree_init('PrivilegesTree'); } var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); function doOnUnload() { oldOnUnloadFunction(); xarTree_init('PrivilegesTree'); } window.onload = doOnLoad; window.onunload = doOnUnload;</script>
@@ -68,4 +69,4 @@
         </tr>
     </table>
     <xar:loop name="$trees">#$loop:item['tree']#</xar:loop>
-</div>
+</div></xar:template>

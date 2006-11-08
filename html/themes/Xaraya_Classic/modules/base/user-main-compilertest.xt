@@ -1,3 +1,8 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+  <style type="text/css">
+    .testcase { padding: 3pt; margin: 5pt; border: thin solid black;
+    }
+  </style>
 <h1 class="xar-mod-head">
     <xar:mlstring>
         XSLT Blocklayout compiler testpage
@@ -22,9 +27,37 @@
     border cases and non-standard constructs to validate the more exotic corner
     of the compile process.
   </p>
+
   <xar:comment>Beginning of the tests</xar:comment>
 
-  <div class="testcase" style="padding: 3pt; margin: 5pt; border: thin solid black;">
+  <div class="testcase">
+    <h3>Empty tags, in particular divs</h3>
+    <p>
+      Generating empty div for (X)HTML is problematic. As we are still not going
+      to be friendly for a while, the construct which can handle this is disabled
+      in the compiler, so these types will currently break:
+    </p>
+    <pre>
+    <![CDATA[
+    <!--Open, but nothing- ->
+    <div attribute="value"></div>
+    <!--Closed- ->
+    <div attribute="value"/>
+    <!--Open, nothing but comment- ->
+    <div attribute="value"><!--nothing - -></div>
+
+    The types which dont break (not special from the XML view, but people might think so):
+    <!--Just whitespace --><div attribute="value"> </div>
+    <!--Just an Entity --><div attribute="value">&#160;</div>
+
+    All of the above also applies for <script/>
+    ]]>
+    </pre>
+    <!-- Empty div test cases -->
+    <!--Just whitespace --><div attribute="value"> </div>
+    <!--Just an Entity --><div attribute="value">&#160;</div>
+  </div>
+  <div class="testcase">
     <h3>xar:comment with IE conditional</h3>
     <p>
       Using the <code>iecondition</code> attribute, the xar:comment tag should produce
@@ -40,7 +73,7 @@
       <![CDATA[ <!--[lt IE 7]>This would apply to IE with version less than 7<![endif]--> ]]>
     </pre>
   </div>
-  <div class="testcase" style="padding: 3pt; margin: 5pt; border: thin solid black;">
+  <div class="testcase">
     <h3>xar:set containing xar:ml</h3>
     <p>
       Adding the xar:ml tag and its constructs inside a xar:set
@@ -70,7 +103,7 @@
     </xar:set>
     <pre><xar:var name="nextpagelabel"/></pre>
   </div>
-  <div class="testcase" style="padding: 3pt; margin: 5pt; border: thin solid black;">
+  <div class="testcase">
     <h3>xar:else tag in xar:sec</h3>
     <p>
       Inserting a xar:else clause inside a xar:sec tag should work the same as inside xar:if
@@ -99,5 +132,29 @@
     </xar:sec>
   </div>
 
+  <div class="testcase">
+    <h3>xar:var instances not explicitly used in core</h3>
+    <h4>Source</h4>
+    <pre>
+    <![CDATA[
+      <xar:var scope="config" name="System.Core.VersionNumber"/>
+      <xar:var scope="request" name="page" />
+      <xar:var scope="session" name="navigationLocale"/>
+      <xar:var scope="invalid" name="nonexistent"/>
+    ]]>
+    </pre>
+    <h4>Expected</h4>
+    <pre>
+[ongoing development version]compilertesten_US.utf-8&#x2707;
+    </pre>
+    <h4>Real output</h4>
+    <pre>
+      <xar:var scope="config" name="System.Core.VersionNumber"/>
+      <xar:var scope="request" name="page" />
+      <xar:var scope="session" name="navigationLocale"/>
+      <xar:var scope="invalid" name="nonexistent"/>
+    </pre>
+  </div>
   <xar:comment>End of the tests</xar:comment>
-</div>
+
+</div></xar:template>

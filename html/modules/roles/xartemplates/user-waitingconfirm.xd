@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:comment>Roles module confirmation for existing users revalidating their email</xar:comment>
 <xar:set name="adminemail">xarModGetVar('mail','adminmail')</xar:set>
@@ -18,4 +19,4 @@
             <xar:mlvar>#$adminemail#</xar:mlvar>
         </xar:ml>
     </p>
-</div>
+</div></xar:template>

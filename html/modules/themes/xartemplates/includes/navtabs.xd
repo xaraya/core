@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:style scope="module" module="base" file="navtabs" />
 <xar:set name="generalcss">
     <xar:mlstring>
@@ -84,4 +85,4 @@
             <a href="#$corecssurl#" title="#$corecss#"> #$corecss# </a> 
         </dd>
     </xar:if>
-</dl>
+</dl></xar:template>

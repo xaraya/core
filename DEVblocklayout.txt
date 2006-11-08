@@ -3,7 +3,7 @@ Blocklayout version 2
 
 Other places of information:
     * http://wiki.xaraya.com/index.php?title=Blocklayout_Version_2
-    * RFC-0054
+    * RFC-0054 (which should receive most of the specs written here)
 
 Concept change:
 ---------------
@@ -21,12 +21,12 @@ process too.
 Issues
 ------
 
-- [DONE] how to cross the border? i.e. how do parameters from the module 
-  get passed into the xslt processor (see parameter section below and 
+- [DONE] how to cross the border? i.e. how do parameters from the module
+  get passed into the xslt processor (see parameter section below and
   xsltransformer.php )
-- [STARTED] how do we create a suiteable test suite (make a compilation of the core
-  templates?) 
-  Testsuite in theme XClassic  modules/base/user-main-compilertest.xt]
+- [STARTED] how do we create a suiteable test suite (make a compilation of the
+  core templates?) Testsuite in theme XClassic
+  modules/base/user-main-compilertest.xt]
 - can we make a stub inserting some random values for the template vars,
   so we can compare somehow
 - [DONE] is merging with other output namespaces just a question of copying
@@ -52,7 +52,7 @@ Issues
       /tpldata/vars/var[@name='varname']
 
     which sounds sort of attractive because it is almost exactly like the
-    array stuff, but then XML compliant. It also means that we would need 
+    array stuff, but then XML compliant. It also means that we would need
     to translate each and every template to this syntax.
 - the xarBLCompiler.php does some processing here and there, which of
   these need to stay in php, which of them can be done by xsl? We can take
@@ -67,22 +67,121 @@ Issues
   apart from a debugging perspective.
 - go over all xar: tags attributes and decide how resolving should be
   handled, dont add a resolvement unless you have a usecase.
-- our # delimiter conflicts with the use of generic entities in rare
+- our # delimiter conflicts with the use of generic entities in not-so-rare
   cases.
 
   Example 1:
-    #$modinfo['adminurltitle']#&#160;#$modinfo['displayname']#
+
+   `#$modinfo['adminurltitle']#&#160;#$modinfo['displayname']#
      |_______first expr______| ^ |__| |_________text________|\- lonely #
                                |   \- second expr
-                               |- single & 'text'
+                               |- single & 'text'`
+
   Example 2:
-    ##$variable##
-    
-    Could be: [empty expression][text: $variable][empty expression]  OR
-              [text: #][content of $variable][text: #] 
-    depending on how it's looked upon.ok
-- the construct <div style="clear: left|right|both"><div> appears to render improperly.
+
+    `##$variable##`
+
+    Could be:
+
+        [empty expression][text: $variable][empty expression]  OR
+        [text: #][content of $variable][text: #]
+
+    depending on how it's looked upon
+
+  Example 3:
+
+    Inline CSS:
+
+        <style>
+        #someID  { color: red; }
+        #someID2 { color: blue;}
+        </style>
+
+    As seen through compiler eyes: [expression: 'someID { color: ref; }\n'][text: 'someID2 { color: blue;}']
+- [DONE]the construct <div style="clear: left|right|both"><div> appears to render improperly.
+    See:
+        - http://www.stylusstudio.com/xsllist/200209/post10350.html
+        - mtn rev: 6143d31238f3aaa6309a390f16fca034b9d1cda2
 - javascript construct:
     <script type="text/javascript">Calendar.setup({#$js_options#});</script>
   (from the dhtml calendar at dynarch.com) appears to render improperly.
+    how?
 - we are now in a postion to create a DTD, let's do so.
+- instead of organising by tag, it seems to make more sense to organize by
+  'group' (flow, comment, blocks etc.) as those tags often interrelate and use
+  similar constructs in their handlers.
+- 'Friendliness' options:
+    * if a variable is not set, boom! Why not wrap it with an isset() for
+      example? Or give it a predefined !!UNKOWN!! value?
+    * can we separate the parse and render stages? during parse errors,
+      the rendering bombs out in ugliness, where it possibly doesnt need to
+      do that.
+- put the new tags locations into the dirlayout proposal
+- we now add a root tag to module templates artificially. This leads to a
+  number of things we can not do now:
+    * as we 'pre-read' the templatefile to add this tag, the filename of the
+    template gets lost when an exception is raised. We really should add the
+    root tag to the templates themselves. (this can be automated)
+    * individual templates are not well-formed (interoperability)
+
+Language change proposals:
+==========================
+
+    xar:mlvar deprecation
+    ---------------------
+        Problems with the current implementation:
+            - the added value of xar:mlvar versus xar:var is questionable.
+            - xar:mlvar uses a textnode, which implies setting a value of a
+            'mlvar thing'. This is not the case, where mlvar applies. The only
+            semantics is 'referencing' an already existing var by name.
+            - there really isnt something special about mlvar, or shouldnt be. The
+            context in which the var is placed makes it so, no need for another tag.
+
+        Current general constructs:
+            <xar:ml>
+                <xar:mlstring>Some text with #(1) and #(2) or #(3) and #(4)</xar:mlstring>
+    [1]            <xar:mlvar>$plain</xar:mlvar>
+    [2]            <xar:mlvar>#$expression#</xar:mlvar>
+    [3]            <xar:mlvar>#$expression#</xar:mlvar>
+    [4]            <xar:mlvar><xar:var name="varname" /></xar:mlvar>
+            </xar:ml>
+
+        Possible replacement:
+            <xar:ml>
+                <xar:mlstring>Some text with #(1) and #(2) or #(3) and #(4)</xar:mlstring>
+    [5]            <xar:var name="plain"/>
+    [6]            <xar:var name="newname">#$expression#</xar:var>
+    [7]            <xar:var>#$expression</xar:var>
+    [8]            <xar:var name="varname" />
+            </xar:ml>
+
+        [1] The writer presumably means:
+                "take the contents of the variable named 'plain' and use that for the
+                placeholder #(1)"
+            What the code says:
+                "place the text '$plain' at the location of #(1)"
+            --> <xar:var name="plain"/>  [5]
+        [2][3] The writer presumably means:
+                "Resolve '$expression', and use its result value for the placeholder #(2)"
+            This could be interpreted as:
+                "Set 'anonymous' variable with the value of '$expression' and use
+                $anonymous as the variable for the placeholder #(2)"
+            We have a choice whether to *require* a name of not in this construct
+            --> <xar:var name="newname">#$expression#</xar:var>  [6]
+            --> <xar:var>#$expression#</xar:var> [7]
+        [4] Side-effect of having both xar:mlvar and xar:var
+            --> <xar:var name="varname"/> [8]
+
+
+        [6] implies a language change to allow an open form of xar:var which acts
+        not unlike xar:set name="newname"
+
+        [7] implies a language change to allow nameless xar:var usage. This is a bit
+        weird, as this is only useful when something else knows how to get to it
+        (only within xar:ml constructs, i suppose) Requiring a name is better i think.
+        The open form is then free to be interpreted in other ways:
+            - for example: use variable newname if set, otherwise use my textnode.
+
+        NOTES:
+            - if xar:var gets the open form, xar:set behaves very similar, the two
+            could become aliases of eachother.

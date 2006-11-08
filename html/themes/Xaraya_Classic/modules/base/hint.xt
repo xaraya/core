@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <h4><xar:mlstring>Which template do I edit?</xar:mlstring></h4>
 <p>
     <xar:mlstring>
@@ -8,3 +9,4 @@
         <xar:mlstring> with an Articles module example.</xar:mlstring>
 </p>
 
+</xar:template>
