@@ -120,38 +120,16 @@ class DataObject extends DataObjectMaster
     function showForm($args = array())
     {
         $args = $this->toArray($args);
-        /*
-        if(empty($args['layout']))      $args['layout'] = $this->layout;
-        if(empty($args['template']))    $args['template'] = $this->template;
-        if(empty($args['tplmodule']))   $args['tplmodule'] = $this->tplmodule;
-        if(empty($args['viewfunc']))    $args['viewfunc'] = $this->viewfunc;
-        if(empty($args['fieldlist']))   $args['fieldlist'] = $this->fieldlist;
-        if(empty($args['fieldprefix'])) $args['fieldprefix'] = $this->fieldprefix;
-*/
+
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
         if(!empty($args['preview']))
             $this->checkInput();
 
         // Set all properties based on what is passed in.
-        $args['properties'] = array();
-        if(count($args['fieldlist']) > 0 || !empty($this->status))
-        {
-            foreach($args['fieldlist'] as $name)
-                if(isset($this->properties[$name]))
-                    $args['properties'][$name] =& $this->properties[$name];
-        }
-        else
-            $args['properties'] =& $this->properties;
+        $args['properties'] = $this->getProperties($args);
 
         // pass some extra template variables for use in BL tags, API calls etc.
-        /*
-        $args['objectname'] = !empty($this->name) ? $this->name : null;
-        $args['moduleid'] = $this->moduleid;
-        $modinfo = xarModGetInfo($this->moduleid);
-        $args['modname'] = $modinfo['name'];
-        $args['itemtype'] = !empty($this->itemtype) ? $this->itemtype : null;
-        $args['itemid'] = $this->itemid;
-        */
+        //FIXME: check these
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
 
@@ -164,29 +142,17 @@ class DataObject extends DataObjectMaster
     function showDisplay($args = array())
     {
         $args = $this->toArray($args);
-        /*
-        if(empty($args['layout']))    $args['layout'] = $this->layout;
-        if(empty($args['template']))  $args['template'] = $this->template;
-        if(empty($args['tplmodule'])) $args['tplmodule'] = $this->tplmodule;
-        if(empty($args['viewfunc']))  $args['viewfunc'] = $this->viewfunc;
-        if(empty($args['fieldlist'])) $args['fieldlist'] = $this->fieldlist;
-    */
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
         if(!empty($args['preview']))
             $this->checkInput();
 
         if(count($args['fieldlist']) > 0 || !empty($this->status))
         {
-            // Explicit fieldlist or status has value
+            $properties = $this->getProperties($args);
             $args['properties'] = array();
-            foreach($args['fieldlist'] as $name)
-            {
-                if(isset($this->properties[$name]))
-                {
-                    $thisprop = $this->properties[$name];
-                    if(($thisprop->status & DataPropertyMaster::DD_DISPLAYMASK) != DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
-                        $args['properties'][$name] =& $this->properties[$name];
-                }
+            foreach ($properties as $property) {
+                if(($property->status & DataPropertyMaster::DD_DISPLAYMASK) != DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
+                    $args['properties'][$property->name] =& $property;
             }
         }
         else
@@ -229,14 +195,7 @@ class DataObject extends DataObjectMaster
         }
 
         // pass some extra template variables for use in BL tags, API calls etc.
-        /*
-        $args['objectname'] = !empty($this->name) ? $this->name : null;
-        $args['moduleid'] = $this->moduleid;
-        $modinfo = xarModGetInfo($this->moduleid);
-        $args['modname'] = $modinfo['name'];
-        $args['itemtype'] = !empty($this->itemtype) ? $this->itemtype : null;
-        $args['itemid'] = $this->itemid;
-        */
+        //FIXME: check these
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
         return xarTplObject($args['tplmodule'],$args['template'],'showdisplay',$args);
@@ -246,6 +205,22 @@ class DataObject extends DataObjectMaster
      * Get the names and values of
      */
     function getFieldValues($args = array())
+    {
+        $fields = array();
+        $properties = $this->getProperties($args);
+        foreach ($properties as $property) {
+            if(xarSecurityCheck(
+                'ReadDynamicDataField',0,'Field',
+                $property->name.':'.$property->type.':'.$property->id)
+            )
+            {
+                $fields[$property->name] = $property->value;
+            }
+        }
+        return $fields;
+    }
+
+    function getProperties($args = array())
     {
         if(empty($args['fieldlist']))
         {
@@ -259,19 +234,9 @@ class DataObject extends DataObjectMaster
 
         $fields = array();
         foreach($fieldlist as $name)
-        {
-            $property = $this->properties[$name];
-            if(xarSecurityCheck(
-                'ReadDynamicDataField',0,'Field',
-                $property->name.':'.$property->type.':'.$property->id)
-            )
-            {
-                $fields[$name] = $property->value;
-            }
-        }
+            if (isset($this->properties[$name])) $fields[$name] = $this->properties[$name];
         return $fields;
     }
-
 
     /**
      * Get the labels and values to include in some output display for this item
@@ -282,6 +247,14 @@ class DataObject extends DataObjectMaster
             $args['fieldlist'] = $this->fieldlist;
 
         $displayvalues = array();
+        $properties = $this->getProperties($args);
+        foreach($properties as $property) {
+            $label = xarVarPrepForDisplay($property->label);
+            $displayvalues[$label] = $property->showOutput();
+        }
+        return $displayvalues;
+
+        /* FIXME: the status value isn't being used correctly I think
         if(count($args['fieldlist']) > 0 || !empty($this->status))
         {
             foreach($args['fieldlist'] as $name)
@@ -300,6 +273,7 @@ class DataObject extends DataObjectMaster
             }
         }
         return $displayvalues;
+        */
     }
 
     function createItem($args = array())
@@ -380,7 +354,7 @@ class DataObject extends DataObjectMaster
             if(isset($primarystore) && $store == $primarystore)
                 continue;
 
-            $itemid = $this->datastores[$store]->createItem($this->toAray());
+            $itemid = $this->datastores[$store]->createItem($this->toArray());
             if(empty($itemid))
                 return;
         }
