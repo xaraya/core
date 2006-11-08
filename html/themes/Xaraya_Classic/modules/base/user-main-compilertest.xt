@@ -195,6 +195,7 @@
       <xar:mlvar>$second</xar:mlvar>
       <xar:var>#$third#</xar:var>      <!-- anon var gets value of variable $third -->
       <xar:mlvar>#$third#</xar:mlvar>
+      <xar:var>#xarServerGetVar('HTTP_HOST')#</xar:var>
     </pre>
 
   </div>
