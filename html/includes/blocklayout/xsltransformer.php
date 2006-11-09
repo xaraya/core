@@ -12,32 +12,25 @@
 
 class BlocklayoutXSLTProcessor extends Object
 {
-    private $xslProc = null;
-    private $xmlDoc  = null;
-    private $origXml = '';
-    private $prepXml = '';
+    private $xslProc = null;    // Object representing the processor.
+    private $xslDoc  = null;    // Object representing the stylesheet.
+    private $xmlDoc  = null;    // Object representing the input XML.
+
+    private $origXml = '';      // The original XML
+    private $prepXml = '';      // The preprocessed XML
+    private $postXml = '';      // The transformed result XML
+
     public  $xmlFile = null;
 
-    function __construct(&$xml = '', $xslFile='')
+    public function __construct($xslFile)
     {
-        // Save the original XML
-        $this->origXml = $xml;
-
         // Set up the xsl processor
         $this->xslProc = new XSLTProcessor();
         $this->xslProc->registerPHPFunctions();
 
         // Set up the stylesheet
-        $domDoc = new DOMDocument();
-        $domDoc->load($xslFile);
         set_exception_handler(array('ExceptionHandlers','bone'));
-        $this->xslProc->importStyleSheet($domDoc);
-
-        // Preprocess the xml, so we dont get unresolved entities and stuff.
-        // &xar-entity; -> [whatever php code it needs];
-        $entityPattern = '/(&xar-[a-z\-_]+?;)/';
-        $callBack      = array('XsltCallbacks','entities');
-        $this->prepXml = preg_replace_callback($entityPattern,$callBack,$this->origXml);
+        $this->setStyleSheet($xslFile);
 
         // Set up the document to transform
         $this->xmlDoc = new DOMDocument();
@@ -47,34 +40,85 @@ class BlocklayoutXSLTProcessor extends Object
         // $this->xmlDoc->validateOnParse = true;
     }
 
-    function transform()
+    // This will become public once we have more pipes
+    private function setStyleSheet($xslFile)
     {
-        // Set up the parameters
+        $this->xslDoc = new DOMDocument();
+        $this->xslDoc->load($xslFile);
+        $this->xslProc->importStyleSheet($this->xslDoc);
+
+    }
+
+    private function setSourceDocument(&$xml)
+    {
+        $this->xmlDoc = new DOMDocument();
+        // Setting this to false makes it 2 times faster, what do we loose?
+        $this->xmlDoc->resolveExternals = false;
+        // We're still a long way from validating
+        // $this->xmlDoc->validateOnParse = true;
+        $this->xmlDoc->loadXML($xml);
+
+        // Set up additional parameters related to the input
+        // @todo wrong here.
         if(isset($this->xmlFile)) {
             // Set up the parameters
             $this->xslProc->setParameter('','bl_filename',basename($this->xmlFile));
             $this->xslProc->setParameter('','bl_dirname',dirname($this->xmlFile));
         }
 
+    }
+
+    private function preProcess()
+    {
+        // Make sure our entities look like expressions
+        // &xar-entity; -> #[whatever expression it needs]#
+        $this->prepXml = $this->origXml;
+        $entityPattern = '/(&xar-[a-z\-_]+?;)/';
+        $callBack      = array('XsltCallbacks','entities');
+        $this->prepXml = preg_replace_callback($entityPattern,$callBack,$this->prepXml);
+
+        // Make sure ML placeholders look like expressions
+        // #(1)... -> #(1)#...
+        $mlsPattern     = '/(#\([0-9]+\))([^#])/';
+        $callBack       = array('XsltCallbacks','mlsplaceholders');
+        $this->prepXml  = preg_replace_callback($mlsPattern, $callBack, $this->prepXml);
+    }
+
+    public function transform(&$xml)
+    {
+        // Save the original XML
+        $this->origXml = $xml;
+
+        // Preprocess it.
+        $this->preProcess();
+
+        // Set the source document to what we prepped
+        $this->setSourceDocument($this->prepXml);
+
         // Transform it
         set_exception_handler(array('ExceptionHandlers','defaulthandler'));
         // What should we initialize $result to?
-        $result = '';
-        $this->xmlDoc->loadXML($this->prepXml);
-        $result = $this->xslProc->transformToXML($this->xmlDoc);
+        $this->postXML = $this->xslProc->transformToXML($this->xmlDoc);
 
+        // Postprocess it
+        $this->postProcess();
+        return $this->postXML;
+    }
+
+    private function postProcess()
+    {
         /*
             Expressions in attributes are not handled by the transform because
-            XSLT can not generate anything other than valid XML (well, it can but
-            definitely not inside attributes), which exclude php PI's
-            in attrbiutes
+            XSLT can not generate anything other than valid XML which means
+            processing instruction inside attribute values are impossible.
 
             This pattern should not greedy match the dots in #...# constructs
-            We exclude:
-                matching #( at the beginning (MLS placeholders.)
+            *only* in attributes.
             We exclude between the #s:
                 " == delimiter of attributes (text nodes are xslt transformed)
-                # == our own delimiter
+                # == our own delimiter (the ? takes care of this)
+                < == tag delimiter (expression has to stay within a text node)
+                > == tag delimiter (expression has to stay within a start tag (attribute))
 
             TODO:
                 This just shifts the problem to where an expression contains a
@@ -83,16 +127,9 @@ class BlocklayoutXSLTProcessor extends Object
                 The # will create a problem currently.
 
         */
-        $exprPattern = '/(#[^\(][^"#]+?#)/';
+        $exprPattern = '/(#[^"><]*?#)/';
         $callBack    = array('XsltCallbacks','attributes');
-        $result = preg_replace_callback($exprPattern,$callBack,$result);
-        //debug(htmlspecialchars($result));
-        return $result;
-    }
-
-    static function escape($var)
-    {
-        return str_replace("'","\'",$var);
+        $this->postXML = preg_replace_callback($exprPattern,$callBack,$this->postXML);
     }
 
     static function phpexpression($expr)
@@ -105,12 +142,23 @@ class BlocklayoutXSLTProcessor extends Object
 
 class XsltCallbacks extends Object
 {
+    static function mlsplaceholders($matches)
+    {
+        $res = $matches[1].'#'.$matches[2];
+        //xarLogMessage('MLS: ' . $matches[0] . ' => '.$res);
+        return $res;
+    }
+
     static function attributes($matches)
     {
-        $raw = ExpressionTransformer::transformPHPExpression(substr($matches[1],1,-1));
+        // Resolve the parts between the #-es, but leave MLS stuff alone.
+        if(preg_match('/#\([0-9]+(\))#?/',$matches[0])) return $matches[0];
+        if($matches[0] == '##') return '#';
+        $raw = ExpressionTransformer::transformPHPExpression($matches[1]);
         $raw = self::reverseXMLEntities($raw);
+        // Return the first match too, to ensure not changing the input
         $res = '<?php echo ' . $raw .';?>';
-        xarLogMessage('ATT: processed'.$matches[1]);
+        xarLogMessage('ATT: '. $matches[0] . ' => ' . $res);
         return $res;
     }
 
@@ -148,7 +196,6 @@ class XsltCallbacks extends Object
             // &xar-baseurl;
             case 'baseurl':
                 return '#xarServer::getBaseURL()#';
-                break;
             // &xar-modurl-modname-type-func;
             case 'modurl':
                 //   1       2     3    4
@@ -161,14 +208,15 @@ class XsltCallbacks extends Object
             // &xar-var;
             case 'var':
                 return "#\$$entityParts[2]#";
-                break;
+            // &xar-currenturl;
             case 'currenturl':
                 return '#xarServer::getCurrentURL()#';
-                break;
-            default:
-                return $matches[0];
+            // Not implemented:
+            // &xar-config-varname;
+            // &xar-mod-modname-varname;
+            // &xar-session-varname;
+            // &xar-url-modname-type-func-args;
         }
-
         xarLogMessage('ENT: found in xml source:'.$entityName);
         return $matches[0];
     }

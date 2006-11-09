@@ -38,8 +38,9 @@
 
 
   <!--
-    We view php as one large processing instruction of xml without the xml
-    declaration
+    We produce an UTF-8 encoded XML document as output. As we compile the
+    each document to a (hopefully valid) php script ultimately. We leave out
+    the xml declaration, as PHP interprets that as the start of a PHP block.
   -->
   <xsl:output  method="xml" omit-xml-declaration="yes" indent="yes" encoding="UTF-8"/>
 
@@ -60,6 +61,7 @@
     - empty div elements bork everything, so first, leave their spacing alone
     which doesnt influence correctness, but saves a whole lot of trouble.
     - empty script element work in safari, but not in FF
+    @todo this is specific for XHTML output, isolate it.
 -->
   <xsl:preserve-space elements="div script"/>
 <!--
@@ -78,7 +80,6 @@
     </xsl:copy>
   </xsl:template>
 -->
-
 
   <!--
     Start of the transform usually starts with matching the root, so do we
@@ -136,12 +137,10 @@
   <xsl:include href="tags/if.xsl"/>
   <!-- xar:loop -->
   <xsl:include href="tags/loop.xsl"/>
-  <!-- xar:ml -->
-  <xsl:include href="tags/ml.xsl"/>
-  <!-- xar:mlstring -->
-  <xsl:include href="tags/mlstring.xsl"/>
-  <!-- xar:mlvar -->
-  <xsl:include href="tags/mlvar.xsl"/>
+
+  <!-- MLS functionality -->
+  <xsl:include href="tags/mls.xsl"/>
+
   <!-- xar:module -->
   <xsl:include href="tags/module.xsl"/>
   <!-- xar:sec -->
@@ -173,6 +172,7 @@
     </xsl:choose>
 </xsl:template>
 
+
 <!--
     Utility template for resolving text nodes. It recursively resolves
     #-pairs from left to right. Pre- and Post- hash content are treated
@@ -180,10 +180,14 @@
 
     The param $expr contains the  value of a text node holding the expression
     to resolve.
+    @todo leave #(1) constructs alone?
 -->
 <xsl:template name="resolveText" >
   <xsl:param name="expr"/>
 
+  <!--
+    <xsl:text>[EXPR]</xsl:text><xsl:value-of select="$expr"/><xsl:text>[END EXPR]</xsl:text>
+  -->
   <xsl:variable name="nrOfHashes"
       select="string-length($expr) - string-length(translate($expr, '#', ''))"/>
 
@@ -222,17 +226,17 @@
 <!--
   For all text nodes, resolve expressions within
 -->
-<xsl:template match="text()">
+<!--
+  <xsl:template match="text()">
   <xsl:call-template name="resolveText">
     <xsl:with-param name="expr" select="."/>
   </xsl:call-template>
 </xsl:template>
-
+-->
 <!-- For now, dont resolve inline CSS -->
 <xsl:template match="style/text()">
   <xsl:apply-imports />
 </xsl:template>
-
 
 <!-- Expression resolving in nodes-->
 <xsl:template name="resolvePHP">
@@ -282,4 +286,40 @@
     <xsl:apply-imports />
   <xsl:text disable-output-escaping="yes"> ]]&gt; </xsl:text>
 </xsl:template>
+
+<!--
+  Utility template to replace a string with another.
+
+  The default is to replace ' with \', but
+  by specifying the parameters, other replacements can be performed
+  as well
+
+  @param string source contains the source string in which replacements are needed
+  @param string from   contains what needs to be replaced
+  @param string to     contains what will be the replacement.
+-->
+<xsl:template name="replace" >
+  <!-- Specifiy the parameters -->
+  <xsl:param name="source"/>
+  <xsl:param name="from" select="&quot;'&quot;"/>
+  <xsl:param name="to"   select="&quot;\'&quot;"/>
+
+  <!-- Make it safe when there is no such character -->
+  <xsl:choose>
+    <xsl:when test="contains($source,$from)">
+      <xsl:value-of select="substring-before($source,$from)"/>
+      <xsl:value-of select="$to"/>
+      <!-- Recurse -->
+      <xsl:call-template name="replace">
+        <xsl:with-param name="source" select="substring-after($source,$from)"/>
+        <xsl:with-param name="from"   select="$from"/>
+        <xsl:with-param name="to"     select="$to"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$source"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 </xsl:stylesheet>
