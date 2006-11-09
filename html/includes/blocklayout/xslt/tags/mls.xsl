@@ -8,9 +8,6 @@
     xmlns:php="http://php.net/xsl"
     exclude-result-prefixes="php xar">
 
-<!--
-  We just pass on the buck, ml is handled in mlstring
--->
 <xsl:template match="xar:ml">
   <xsl:processing-instruction name="php">
     <xsl:text>xarML('</xsl:text>
@@ -19,6 +16,11 @@
   </xsl:processing-instruction>
 </xsl:template>
 
+<xsl:template match="xar:set/xar:ml">
+  <xsl:text>xarML('</xsl:text>
+  <xsl:apply-templates/>
+  <xsl:text>');</xsl:text>
+</xsl:template>
 
 <!--
   xar:mlstring is deprecated, we just pass on what's inside it.
@@ -27,11 +29,21 @@
   later on
 -->
 
-<xsl:template match="xar:mlstring|xar:ml/xar:mlstring">
+<xsl:template match="xar:mlstring">
   <xsl:apply-templates />
 </xsl:template>
 
-<xsl:template match="xar:set/xar:mlstring|xar:set/xar:ml/xar:mlstring">
+<!--
+<xsl:template match="xar:ml/xar:mlstring">
+  <xsl:apply-templates />
+</xsl:template>
+-->
+
+<xsl:template match="xar:set/xar:ml/xar:mlstring">
+  <xsl:apply-templates />
+</xsl:template>
+
+<xsl:template match="xar:set/xar:mlstring">
   <xsl:text>'</xsl:text>
   <xsl:apply-templates />
   <xsl:text>'</xsl:text>

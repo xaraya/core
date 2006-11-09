@@ -132,12 +132,6 @@ class BlocklayoutXSLTProcessor extends Object
         $this->postXML = preg_replace_callback($exprPattern,$callBack,$this->postXML);
     }
 
-    static function escape($var)
-    {
-        $res = str_replace("'","\'",$var);
-        return $res;
-    }
-
     static function phpexpression($expr)
     {
         $res = ExpressionTransformer::transformPHPExpression($expr);

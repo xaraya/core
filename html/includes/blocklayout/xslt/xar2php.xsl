@@ -183,10 +183,9 @@
       <xsl:otherwise>
         <!-- No start with #, just copy it -->
         <xsl:text>'</xsl:text>
-        <xsl:value-of
-          select="php:functionString('BlockLayoutXSLTProcessor::escape',string(.))"
-          disable-output-escaping="yes" />
-        <xsl:text>'</xsl:text>
+        <xsl:call-template name="replace">
+          <xsl:with-param name="source" select="."/>
+        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -303,4 +302,41 @@
     <xsl:apply-imports />
   <xsl:text disable-output-escaping="yes"> ]]&gt; </xsl:text>
 </xsl:template>
+
+<!--
+  Utility template to replace a string with another.
+
+  The default is to replace ' with \', but
+  by specifying the parameters, other replacements can be performed
+  as well
+
+  @param string source contains the source string in which replacements are needed
+  @param string from   contains what needs to be replaced
+  @param string to     contains what will be the replacement.
+-->
+<xsl:template name="replace" >
+  <!-- Specifiy the parameters -->
+  <xsl:param name="source"/>
+  <xsl:param name="from" select="&quot;'&quot;"/>
+  <xsl:param name="to"   select="&quot;\'&quot;"/>
+
+  <!-- Make it safe when there is no such character -->
+  <xsl:choose>
+    <xsl:when test="contains($source,$from)">
+      <xsl:value-of select="substring-before($string,$from)"/>
+      <xsl:value-of select="$to"/>
+      <!-- Recurse -->
+      <xsl:call-template name="string-replace">
+      <xsl:with-param name="string"
+         select="substring-after($string,$from)"/>
+      <xsl:with-param name="from" select="$from"/>
+      <xsl:with-param name="to" select="$to"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$string"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 </xsl:stylesheet>
