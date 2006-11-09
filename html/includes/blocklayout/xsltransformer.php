@@ -152,7 +152,7 @@ class XsltCallbacks extends Object
     static function attributes($matches)
     {
         // Resolve the parts between the #-es, but leave MLS stuff alone.
-        if(preg_match('/#\([0-9]+\)#/',$matches[0])) return $matches[0];
+        if(preg_match('/#\([0-9]+(\))#?/',$matches[0])) return $matches[0];
         if($matches[0] == '##') return '#';
         $raw = ExpressionTransformer::transformPHPExpression($matches[1]);
         $raw = self::reverseXMLEntities($raw);
