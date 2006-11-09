@@ -88,7 +88,7 @@
         <!-- No start with #, just copy it -->
         <xsl:text>'</xsl:text>
         <xsl:call-template name="replace">
-          <xsl:with-param name="source" select="."/>
+          <xsl:with-param name="source" select="normalize-space(.)"/>
         </xsl:call-template>
         <xsl:text>'</xsl:text>
       </xsl:otherwise>
