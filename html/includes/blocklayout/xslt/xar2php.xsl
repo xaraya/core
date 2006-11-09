@@ -137,12 +137,10 @@
   <xsl:include href="tags/if.xsl"/>
   <!-- xar:loop -->
   <xsl:include href="tags/loop.xsl"/>
-  <!-- xar:ml -->
-  <xsl:include href="tags/ml.xsl"/>
-  <!-- xar:mlstring -->
-  <xsl:include href="tags/mlstring.xsl"/>
-  <!-- xar:mlvar -->
-  <xsl:include href="tags/mlvar.xsl"/>
+
+  <!-- MLS functionality -->
+  <xsl:include href="tags/mls.xsl"/>
+
   <!-- xar:module -->
   <xsl:include href="tags/module.xsl"/>
   <!-- xar:sec -->
