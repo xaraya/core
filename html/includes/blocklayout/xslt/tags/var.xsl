@@ -72,6 +72,29 @@
   </xsl:choose>
 </xsl:template>
 
+<!--
+  if xar:var contains a textnode, we're setting a var, hack the special
+  treatment in for now until we have other things in place
+-->
+<xsl:template match="xar:var/text()">
+    <xsl:choose>
+      <xsl:when test="substring(normalize-space(.),1,1) = '#'">
+        <!-- The string starts with # so, let's resolve it -->
+        <xsl:call-template name="resolvePHP">
+          <xsl:with-param name="expr" select="normalize-space(.)"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- No start with #, just copy it -->
+        <xsl:text>'</xsl:text>
+        <xsl:call-template name="replace">
+          <xsl:with-param name="source" select="."/>
+        </xsl:call-template>
+        <xsl:text>'</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <xsl:template name="xarvar_setcode">
   <xsl:choose>
     <xsl:when test="@scope = 'local' or not(@scope)">

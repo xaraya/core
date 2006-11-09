@@ -172,24 +172,7 @@
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="xar:var/text()">
-    <xsl:choose>
-      <xsl:when test="substring(normalize-space(.),1,1) = '#'">
-        <!-- The string starts with # so, let's resolve it -->
-        <xsl:call-template name="resolvePHP">
-          <xsl:with-param name="expr" select="normalize-space(.)"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <!-- No start with #, just copy it -->
-        <xsl:text>'</xsl:text>
-        <xsl:call-template name="replace">
-          <xsl:with-param name="source" select="."/>
-        </xsl:call-template>
-        <xsl:text>'</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
+
 <!--
     Utility template for resolving text nodes. It recursively resolves
     #-pairs from left to right. Pre- and Post- hash content are treated
