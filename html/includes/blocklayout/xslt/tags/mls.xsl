@@ -10,7 +10,7 @@
 
 <xsl:template match="xar:ml">
   <xsl:processing-instruction name="php">
-    <xsl:text>xarML('</xsl:text>
+    <xsl:text>echo xarML('</xsl:text>
     <xsl:apply-templates/>
     <xsl:text>');</xsl:text>
   </xsl:processing-instruction>
@@ -28,7 +28,6 @@
   These will disappear, as text nodes will be passed onto MLS by default
   later on
 -->
-
 <xsl:template match="xar:mlstring">
   <xsl:apply-templates />
 </xsl:template>

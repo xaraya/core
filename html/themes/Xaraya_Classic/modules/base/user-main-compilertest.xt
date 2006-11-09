@@ -106,6 +106,35 @@
       R: <xar:var name="nextpagelabel"/>
     </pre>
   </div>
+    <div class="testcase">
+      <h3>New xar:ml construct translates</h3>
+      <p>
+        Same testcase as above, but now with the new xar:ml construct</p>
+      <h4>Source</h4>
+      <pre>
+        <xar:set name="next">4</xar:set>
+        <![CDATA[
+        <xar:set name="next">4</xar:set>
+        <xar:set name="nextpagelabel">
+          <xar:ml>
+            Next page; <xar:var name="next"/> items
+          </xar:ml>
+        </xar:set>
+        <xar:var name="nextpagelabel"/>
+      ]]>
+      </pre>
+      <h4>Results</h4>
+      <pre>
+        E: Next page; 4 items
+        <xar:set name="next">4</xar:set>
+        <xar:set name="nextpagelabel">
+          <xar:ml>
+            Next page; <xar:var name="next"/> items
+          </xar:ml>
+        </xar:set>
+        <xar:var name="nextpagelabel"/>
+      </pre>
+    </div>
   <div class="testcase">
     <h3>xar:else tag in xar:sec</h3>
     <p>

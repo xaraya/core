@@ -137,7 +137,7 @@ Refactoring needs
 
 While fixing the errors along the way, some redesign issues have surfaced.
 
-* generating XML can confusing HTML renderers. The empty div and script issues
+* generating XML can confuse HTML renderers. The empty div and script issues
   are not really compiler/blocklayout issues, but many browsers just dont
   deal well with empty tags. There is a solution (see xar2php.xsl) but it really
   should only be deployed when the output type *is* actually (X)HTML. We can
@@ -195,6 +195,9 @@ To address these problems I propose the following:
     than the signalled one.
     3. A mechanism will be provided to signal the MLS system to treat a node(-set)
     as a unit with respect to translation.
+    4. the mls should be a 'module' which can be disabled entirely from the compile
+    phase, meaning that if the taglib for MLS is not loaded into the compiler
+    everything should function normally, except for the translateability.
 
 The easiest way to show the consequences of the above changes is to list
 the 'old vs new' for as many examples we can think of:

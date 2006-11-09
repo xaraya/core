@@ -186,6 +186,7 @@
         <xsl:call-template name="replace">
           <xsl:with-param name="source" select="."/>
         </xsl:call-template>
+        <xsl:text>'</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -323,18 +324,17 @@
   <!-- Make it safe when there is no such character -->
   <xsl:choose>
     <xsl:when test="contains($source,$from)">
-      <xsl:value-of select="substring-before($string,$from)"/>
+      <xsl:value-of select="substring-before($source,$from)"/>
       <xsl:value-of select="$to"/>
       <!-- Recurse -->
-      <xsl:call-template name="string-replace">
-      <xsl:with-param name="string"
-         select="substring-after($string,$from)"/>
-      <xsl:with-param name="from" select="$from"/>
-      <xsl:with-param name="to" select="$to"/>
+      <xsl:call-template name="replace">
+        <xsl:with-param name="string" select="substring-after($source,$from)"/>
+        <xsl:with-param name="from" select="$from"/>
+        <xsl:with-param name="to" select="$to"/>
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:value-of select="$string"/>
+      <xsl:value-of select="$source"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
