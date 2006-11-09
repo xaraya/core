@@ -117,22 +117,29 @@
         <xar:set name="next">4</xar:set>
         <xar:set name="nextpagelabel">
           <xar:ml>
-            Next page; <xar:var name="next"/> items
+            Next page; <xar:var name="next"/> items, yes really <xar:var name="next"/>.
           </xar:ml>
         </xar:set>
         <xar:var name="nextpagelabel"/>
+        <xar:ml>
+          Next page; <a href="blah"> Test <xar:var name="next"/> items</a>, yes really <xar:var name="next"/>.
+        </xar:ml>
       ]]>
       </pre>
       <h4>Results</h4>
+      <xar:set name="next">4</xar:set>
       <pre>
-        E: Next page; 4 items
-        <xar:set name="next">4</xar:set>
+E: Next page; #(1) items, yes really #(2)
+E: Next page; Test #(1) items, yes really #(2)
         <xar:set name="nextpagelabel">
           <xar:ml>
-            Next page; <xar:var name="next"/> items
+            R: Next page; <xar:var name="next"/> items, yes really <xar:var name="next"/>.
           </xar:ml>
         </xar:set>
         <xar:var name="nextpagelabel"/>
+        <xar:ml>
+          R: Next page; <a href="blah"> Test <xar:var name="next"/> items</a>, yes really <xar:var name="next"/>.
+        </xar:ml>
       </pre>
     </div>
   <div class="testcase">
