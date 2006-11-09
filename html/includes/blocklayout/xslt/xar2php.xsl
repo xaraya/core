@@ -328,9 +328,9 @@
       <xsl:value-of select="$to"/>
       <!-- Recurse -->
       <xsl:call-template name="replace">
-        <xsl:with-param name="string" select="substring-after($source,$from)"/>
-        <xsl:with-param name="from" select="$from"/>
-        <xsl:with-param name="to" select="$to"/>
+        <xsl:with-param name="source" select="substring-after($source,$from)"/>
+        <xsl:with-param name="from"   select="$from"/>
+        <xsl:with-param name="to"     select="$to"/>
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
