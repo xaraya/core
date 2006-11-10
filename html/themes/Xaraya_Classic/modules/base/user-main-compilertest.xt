@@ -39,12 +39,12 @@
     </p>
     <pre>
     <![CDATA[
-    <!--Open, but nothing- ->
+    <!--Open, but nothing-->
     <div attribute="value"></div>
-    <!--Closed- ->
+    <!--Closed-->
     <div attribute="value"/>
-    <!--Open, nothing but comment- ->
-    <div attribute="value"><!--nothing - -></div>
+    <!--Open, nothing but comment-->
+    <div attribute="value"><!--nothing--></div>
 
     The types which dont break (not special from the XML view, but people might think so):
     <!--Just whitespace --><div attribute="value"> </div>
@@ -74,9 +74,11 @@
     </pre>
   </div>
   <div class="testcase">
-    <h3>xar:set containing xar:ml</h3>
+    <h3>Old xar:ml construct does nothing special</h3>
     <p>
-      Adding the xar:ml tag and its constructs inside a xar:set
+      Adding the xar:ml tag and its constructs inside a xar:set, so we test 2
+      cases at once. The old xar:ml/xar:mlstring construct should do nothing
+      special now.
     </p>
     <h4>Source</h4>
     <pre>
@@ -86,23 +88,60 @@
       <xar:set name="nextpagelabel">
         <xar:ml>
           <xar:mlstring>Next page; #(1) items</xar:mlstring>
-          <xar:mlvar>$next</xar:mlvar>
+          <xar:mlvar>##$next#</xar:mlvar>
         </xar:ml>
       </xar:set>
       <xar:var name="nextpagelabel"/>
     ]]>
     </pre>
-    <h4>Expected</h4>
-    <pre>Next page; 4 items</pre>
-    <h4>Real output</h4>
-    <xar:set name="nextpagelabel">
+    <h4>Results</h4>
+    <pre>
+      E: Next page; #(1)# items
+<xar:set name="nextpagelabel">
       <xar:ml>
         <xar:mlstring>Next page; #(1) items</xar:mlstring>
         <xar:mlvar>$next</xar:mlvar>
       </xar:ml>
     </xar:set>
-    <pre><xar:var name="nextpagelabel"/></pre>
+      R: <xar:var name="nextpagelabel"/>
+    </pre>
   </div>
+    <div class="testcase">
+      <h3>New xar:ml construct translates</h3>
+      <p>
+        Same testcase as above, but now with the new xar:ml construct</p>
+      <h4>Source</h4>
+      <pre>
+        <xar:set name="next">4</xar:set>
+        <![CDATA[
+        <xar:set name="next">4</xar:set>
+        <xar:set name="nextpagelabel">
+          <xar:ml>
+            Next page; <xar:var name="next"/> items, yes really <xar:var name="next"/>.
+          </xar:ml>
+        </xar:set>
+        <xar:var name="nextpagelabel"/>
+        <xar:ml>
+          Next page; <a href="blah"> Test <xar:var name="next"/> items</a>, yes really <xar:var name="next"/>.
+        </xar:ml>
+      ]]>
+      </pre>
+      <h4>Results</h4>
+      <xar:set name="next">4</xar:set>
+      <pre>
+E: Next page; #(1) items, yes really #(2)
+E: Next page; Test #(1) items, yes really #(2)
+        <xar:set name="nextpagelabel">
+          <xar:ml>
+            R: Next page; <xar:var name="next"/> items, yes really <xar:var name="next"/>.
+          </xar:ml>
+        </xar:set>
+        <xar:var name="nextpagelabel"/>
+        <xar:ml>
+          R: Next page; <a href="blah"> Test <xar:var name="next"/> items</a>, yes really <xar:var name="next"/>.
+        </xar:ml>
+      </pre>
+    </div>
   <div class="testcase">
     <h3>xar:else tag in xar:sec</h3>
     <p>
@@ -122,14 +161,15 @@
       </xar:sec>
       ]]>
     </pre>
-    <h4>Expected</h4>
-    <pre>xar:sec returned true</pre>
-    <h4>Real output</h4>
-    <xar:sec mask="ViewBase" component="Entry" instance="$instance" catch="false">
-      <pre>xar:sec returned true</pre>
-    <xar:else/>
-      <pre>xar:sec returned false</pre>
-    </xar:sec>
+    <h4>Results</h4>
+    <pre>
+      E: xar:sec returned true
+<xar:sec mask="ViewBase" component="Entry" instance="$instance" catch="false">
+      R: xar:sec returned true
+<xar:else/>
+      R: xar:sec returned false
+</xar:sec>
+  </pre>
   </div>
 
   <div class="testcase">
@@ -143,17 +183,52 @@
       <xar:var scope="invalid" name="nonexistent"/>
     ]]>
     </pre>
-    <h4>Expected</h4>
+    <h4>Results</h4>
     <pre>
-[ongoing development version]compilertesten_US.utf-8&#x2707;
-    </pre>
-    <h4>Real output</h4>
-    <pre>
-      <xar:var scope="config" name="System.Core.VersionNumber"/>
+      E: [ongoing development version]compilertesten_US.utf-8&#x2707;
+      R: <xar:var scope="config" name="System.Core.VersionNumber"/>
       <xar:var scope="request" name="page" />
       <xar:var scope="session" name="navigationLocale"/>
       <xar:var scope="invalid" name="nonexistent"/>
     </pre>
+  </div>
+
+  <div class="testcase">
+    <h3>xar:mlvar deprecation</h3>
+    <p>
+      xar:mlvar is a redundant tag, and implemented the wrong way, we are
+      replacing it with the behaviour of xar:var, without paying attention
+      to actual ML constructs yet. This means xar:var has to get the 'anonymous'
+      set syntax so we can 'set' a var if the name attribute is not present.
+      We do this, so we can mass replace xar:mlvar with xar:var.
+    </p>
+    <h4>Source</h4>
+    <pre>
+      <xar:set name="first">'first'</xar:set>
+      <xar:set name="second">'second'</xar:set>
+      <xar:set name="third">'##$third#'</xar:set>
+      <xar:set name="extra">#$first#</xar:set>
+    <![CDATA[
+        <xar:var>first</xar:var>         <!-- anon var gets value 'first' -->
+        <xar:mlvar>first</xar:var>
+        <xar:var>'first'</xar:var>       <!-- anon var gets value '\'first\'' -->
+        <xar:mlvar>'first'</xar:var>
+        <xar:var>$second</xar:var>       <!-- anon var gets value '$second' -->
+        <xar:mlvar>$second</xar:var>
+        <xar:var>#$third#</xar:var>      <!-- anon var gets value of variable $third -->
+        <xar:mlvar>#$third#</xar:mlvar>
+    ]]>
+    </pre>
+      <xar:var>first</xar:var>         <!-- anon var gets value 'first' -->
+      <xar:mlvar>first</xar:mlvar>
+      <xar:var>'first'</xar:var>       <!-- anon var gets value '\'first\'' -->
+      <xar:mlvar>'first'</xar:mlvar>
+      <xar:var>$second</xar:var>       <!-- anon var gets value '$second' -->
+      <xar:mlvar>$second</xar:mlvar>
+      <xar:var>#$third#</xar:var>      <!-- anon var gets value of variable $third -->
+      <xar:mlvar>#$third#</xar:mlvar>
+      <xar:var>#xarServerGetVar('HTTP_HOST')#</xar:var>
+
   </div>
   <xar:comment>End of the tests</xar:comment>
 
