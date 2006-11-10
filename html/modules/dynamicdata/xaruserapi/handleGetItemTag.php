@@ -27,12 +27,12 @@ function dynamicdata_userapi_handleGetItemTag($args)
     } else {
         $args['getobject']  = 1;
     }
-    
+
     if (isset($args['name'])) {
         $name = $args['name'];
         unset($args['name']);
     }
-         
+
     $out = '';
     // if we already have an object, we simply invoke its showView() method
     if (!empty($args)) {
