@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:if condition="!empty($value)">
     <!-- we're using a hidden field to keep track of any previously uploaded file here -->
@@ -13,3 +14,4 @@
 <xar:if condition="!empty($invalid)">
     <span class="xar-error">#$invalid#</span>
 </xar:if>
+</xar:template>

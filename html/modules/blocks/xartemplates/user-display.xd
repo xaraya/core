@@ -1,6 +1,7 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <div>
   <!-- The div is there to ensure that this template in itself has a root tag
        and the block is erm... blocklevel :-)
   -->
   <xar:block instance="$name"/>
-</div>
+</div></xar:template>

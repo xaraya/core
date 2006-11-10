@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Create User Account</xar:mlstring></span></div>
 <div class="xar-mod-body"><h2><xar:mlstring>Age Check</xar:mlstring></h2>
@@ -8,4 +9,4 @@
 <p><a href="&xar-modurl-roles-user-register;&amp;phase=registerform"><xar:ml><xar:mlstring>I am #(1) or older</xar:mlstring><xar:mlvar>#$minage#</xar:mlvar></xar:ml></a></p>
 <p><xar:ml><xar:mlstring>By clicking on the above link you certify that you are either #(1) or over, or that you have parental consent to register here.</xar:mlstring><xar:mlvar>#$minage#</xar:mlvar></xar:ml></p>
 <p><a href="&xar-baseurl;"><xar:ml><xar:mlstring>I am not #(1) or older</xar:mlstring><xar:mlvar>#$minage#</xar:mlvar></xar:ml></a></p>
-</div>
+</div></xar:template>

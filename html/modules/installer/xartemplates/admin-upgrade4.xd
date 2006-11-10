@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 
 <xar:set name="active_step">4</xar:set>
@@ -19,4 +20,4 @@
 
         <p><xar:mlstring>It is recommended you go to the </xar:mlstring><a href="&xar-modurl-modules-admin-list;"><xar:mlstring>Admin section of the modules module</xar:mlstring></a><xar:mlstring> to upgrade the modules which have a new version.</xar:mlstring></p>
 
-</div>
+</div></xar:template>

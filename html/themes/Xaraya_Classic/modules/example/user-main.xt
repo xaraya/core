@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <p class="xar-error">
   <xar:ml>
     <xar:mlstring>This is an over-ridden template. See #(1)/modules/example/user-main.xt for the example</xar:mlstring>
@@ -33,3 +34,4 @@
 <div class="xar-align-center">
   <strong><xar:var name="welcome"/></strong>
 </div>
+</xar:template>

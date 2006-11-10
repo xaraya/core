@@ -1,1 +1,2 @@
-<xar:var name="content"/>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<xar:var name="content"/></xar:template>
