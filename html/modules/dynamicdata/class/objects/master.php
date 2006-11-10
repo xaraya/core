@@ -132,7 +132,7 @@ class DataObjectMaster extends Object
     public $properties  = array();      // list of properties for the DD object
     public $datastores  = array();      // similarly the list of datastores (arguably in the wrong place here)
     public $fieldlist   = array();
-    public $status      = null;
+    public $status      = 0;
 
     public $layout = 'default';         // optional layout inside the templates
     public $template = '';              // optional sub-template, e.g. user-objectview-[template].xd (defaults to the object name)
@@ -528,6 +528,7 @@ class DataObjectMaster extends Object
         // return only the properties we're interested in (might be none)
         if(count($args['fieldlist']) > 0 || !empty($this->status))
         {
+            var_dump($fieldlist) ."here";exit;
             $properties = array();
             foreach($args['fieldlist'] as $name)
                 if(isset($this->properties[$name]))
@@ -538,7 +539,7 @@ class DataObjectMaster extends Object
         return $properties;
     }
 */
-    protected function getProperties($args = array())
+    function &getProperties($args = array())
     {
         if(empty($args['fieldlist']) && empty($this->status))
         {
@@ -552,9 +553,10 @@ class DataObjectMaster extends Object
 
         $properties = array();
         foreach($fieldlist as $name)
-            if (isset($this->properties[$name])) $properties[$name] = $this->properties[$name];
+            if (isset($this->properties[$name])) $properties[$name] = &$this->properties[$name];
         return $properties;
     }
+
 
     /**
      * Add a property for this object
