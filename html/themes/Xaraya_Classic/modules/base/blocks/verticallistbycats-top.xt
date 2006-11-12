@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <div id="hmenu">
     <ul id="hmenuroot">
         <li id="hmenulabel">
@@ -130,4 +131,4 @@
         </li>
         </xar:if>
     </ul>
-</div>
+</div></xar:template>

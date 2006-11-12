@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:if id="title_condition" condition="!empty($title)">
     <div class="xar-block-head">
         <div class="xar-block-title">
@@ -9,4 +10,4 @@
     <xar:var name="content"/>
 </div>
 <div class="xar-block-foot">
-</div>
+</div></xar:template>

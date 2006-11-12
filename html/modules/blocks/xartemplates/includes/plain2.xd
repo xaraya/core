@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <xar:if condition="$pager ne ''">
     <table class="xar-fullwidth" border="0" cellspacing="2" cellpadding="2">
@@ -106,3 +107,4 @@
     </table>
 </xar:if>
 
+</xar:template>
