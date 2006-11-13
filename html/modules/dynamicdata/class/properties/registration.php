@@ -81,7 +81,7 @@ class PropertyRegistration extends Object
         assert('count($this->reqmodules)==1; /* The reqmodules registration should only contain the name of the owning module */');
         $modInfo = xarMod::getBaseInfo($this->reqmodules[0]);
         $modId = $modInfo['systemid'];
-        
+
         if($this->format == 0) $this->format = $this->id;
 
         $sql = "INSERT INTO $propdefTable
@@ -116,7 +116,7 @@ class PropertyRegistration extends Object
         return $res;
     }
 
-    static function &Retrieve()
+    static function Retrieve()
     {
         $dbconn =& xarDBGetConn();
         $tables = xarDBGetTables();
@@ -126,7 +126,7 @@ class PropertyRegistration extends Object
                           p.xar_prop_format, p.xar_prop_validation, p.xar_prop_source,
                           p.xar_prop_reqfiles, m.xar_name, p.xar_prop_args,
                           p.xar_prop_aliases
-                  FROM    $tables[dynamic_properties_def] p INNER JOIN $tables[modules] m 
+                  FROM    $tables[dynamic_properties_def] p INNER JOIN $tables[modules] m
                   ON      p.xar_prop_modid = m.xar_id
                   ORDER BY m.xar_name, xar_prop_name";
         $result = $dbconn->executeQuery($query);

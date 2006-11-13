@@ -254,8 +254,8 @@ class DataPropertyMaster extends Object
         //  return xarVarGetCached('DynamicData','PropertyTypes');
         //}
 
-        // Attempt to retreive properties from DB
-        $property_types =& PropertyRegistration::Retrieve();
+        // Attempt to retrieve properties from DB
+        $property_types = PropertyRegistration::Retrieve();
 
         /*
          // Security Check
