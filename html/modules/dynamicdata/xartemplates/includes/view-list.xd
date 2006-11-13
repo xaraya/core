@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <!-- Default layout for a list of objects -->
 <div class="xar-fullwidth">
@@ -51,3 +52,4 @@
         </table>
     </xar:foreach>
 </div>
+</xar:template>

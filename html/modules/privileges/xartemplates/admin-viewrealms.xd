@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Privileges Administration</xar:mlstring></span>
@@ -39,4 +40,4 @@
             You must </xar:mlstring><a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=realms" title="#xarML('Enable the Realms options')#"><xar:mlstring>enable Realms on your site</xar:mlstring></a>
             <xar:mlstring> in the Privileges config options. The realms create and modify options will then display here.</xar:mlstring></p>
     </xar:if>
-</div> <!-- mod body -->
+</div> <!-- mod body --></xar:template>

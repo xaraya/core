@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:template file="mod-head"/>
 
 <xar:style scope="module" module="base" file="navtabs" />
@@ -13,3 +14,4 @@
         </div>
     </fieldset>
 </div>
+</xar:template>

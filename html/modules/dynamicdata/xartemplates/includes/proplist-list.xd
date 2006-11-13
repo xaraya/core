@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <p>
   <xar:mlstring>Hint: empty the Label to delete a property for all items</xar:mlstring>
 </p>
@@ -50,3 +51,4 @@
   <input type="submit" value="#xarML('Update Properties')#" />
 </div>
 </fieldset>
+</xar:template>
