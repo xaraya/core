@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <xar:if condition="$stage eq 1">
     <div class="xar-align-center">
@@ -124,3 +125,4 @@
         </p>
     </xar:if>
 </xar:if>
+</xar:template>

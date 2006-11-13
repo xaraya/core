@@ -38,10 +38,12 @@
 
 
   <!--
-    We view php as one large processing instruction of xml without the xml
-    declaration
+    We produce an UTF-8 encoded XML document as output. As we compile the
+    each document to a (hopefully valid) php script ultimately. We leave out
+    the xml declaration, as PHP interprets that as the start of a PHP block.
   -->
-  <xsl:output method="xml" omit-xml-declaration="yes" indent="yes" />
+  <xsl:output  method="xml" omit-xml-declaration="yes" indent="yes" encoding="UTF-8"/>
+
 
   <!--
     Spacing
@@ -52,12 +54,32 @@
     there shouldnt be any, but alas.
   -->
   <xsl:strip-space elements="*" />
+
   <!--
     Problematic elements
 
-    - empty div/ elements bork everything
-  -->
+    - empty div elements bork everything, so first, leave their spacing alone
+    which doesnt influence correctness, but saves a whole lot of trouble.
+    - empty script element work in safari, but not in FF
+    @todo this is specific for XHTML output, isolate it.
+-->
   <xsl:preserve-space elements="div script"/>
+<!--
+    - second: if there is no child content (of whatever type), we should not
+    have to do anything, but (X)HTML doesn't like an element which is empty,
+    so if we wanted to be friendly we could do this:
+    (if there is *just* a PI as child it will still break though)
+  -->
+<!--
+    <xsl:template match="div">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|node()"/>
+      <xsl:if test="not(node()[not(self::comment())])">
+        <xsl:comment>empty <xsl:value-of select="name()"/> tag workaround</xsl:comment>
+      </xsl:if>
+    </xsl:copy>
+  </xsl:template>
+-->
 
   <!--
     Start of the transform usually starts with matching the root, so do we
@@ -98,7 +120,7 @@
   <xsl:include href="tags/continue.xsl"/>
 
   <!-- TODO: organize this -->
-  <!-- xar:data-view/output/label -->
+  <!-- xar:data-view/output/label etc. -->
   <xsl:include href="tags/data.xsl"/>
 
   <!-- xar:else -->
@@ -115,12 +137,10 @@
   <xsl:include href="tags/if.xsl"/>
   <!-- xar:loop -->
   <xsl:include href="tags/loop.xsl"/>
-  <!-- xar:ml -->
-  <xsl:include href="tags/ml.xsl"/>
-  <!-- xar:mlstring -->
-  <xsl:include href="tags/mlstring.xsl"/>
-  <!-- xar:mlvar -->
-  <xsl:include href="tags/mlvar.xsl"/>
+
+  <!-- MLS functionality -->
+  <xsl:include href="tags/mls.xsl"/>
+
   <!-- xar:module -->
   <xsl:include href="tags/module.xsl"/>
   <!-- xar:sec -->
@@ -146,23 +166,28 @@
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <!-- This is the point where we can do automatic translation
-             of textnodes without requiring xar:mlstring
-             Erm, no its not, the xsl changed, need to re-arrange this.
-        -->
+        <!-- No start with #, just copy it -->
         <xsl:copy/>
       </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
+
 <!--
-    Utility template, taks a parameter 'expr' which contains the
-    value of a text node. It recursively resvolves #-pairs from left
-    to right. Pre- and Post- hash content are treated as text.
+    Utility template for resolving text nodes. It recursively resolves
+    #-pairs from left to right. Pre- and Post- hash content are treated
+    as text.
+
+    The param $expr contains the  value of a text node holding the expression
+    to resolve.
+    @todo leave #(1) constructs alone?
 -->
 <xsl:template name="resolveText" >
   <xsl:param name="expr"/>
 
+  <!--
+    <xsl:text>[EXPR]</xsl:text><xsl:value-of select="$expr"/><xsl:text>[END EXPR]</xsl:text>
+  -->
   <xsl:variable name="nrOfHashes"
       select="string-length($expr) - string-length(translate($expr, '#', ''))"/>
 
@@ -201,10 +226,16 @@
 <!--
   For all text nodes, resolve expressions within
 -->
-<xsl:template match="text()">
+<!--
+  <xsl:template match="text()">
   <xsl:call-template name="resolveText">
     <xsl:with-param name="expr" select="."/>
   </xsl:call-template>
+</xsl:template>
+-->
+<!-- For now, dont resolve inline CSS -->
+<xsl:template match="style/text()">
+  <xsl:apply-imports />
 </xsl:template>
 
 <!-- Expression resolving in nodes-->
@@ -216,12 +247,21 @@
 </xsl:template>
 
 <!--
-  Any xar tag we dont match, we highlight in the output, i.e. turn it into a text node
+  Utility template to be able to generate output when something is wrong, but
+  not terribly:
+  - Any xar tag we dont match, we highlight in the output
+  - When a typo was made for example in attributes or something like that
+  @todo: best way i could come up with to do this doctype agnostic, anything better?
 -->
-<xsl:template match="xar:*">
-  <pre class="xsltdebug">
-    <xsl:text>MISSING TAG IMPLEMENTATION:
-&lt;</xsl:text>
+<xsl:template name="oops">
+  <xsl:param name="label" select="'UNKNOWN ERROR'"/>
+  <!-- Insert a CDATA section preceded by a 'weird' symbol -->
+  <!-- x2707 is the 'radiation symbol' if it displays, you're config is good,
+  otherwise you'll have to settle for a ? or an empty square or something like that -->
+  <xsl:text disable-output-escaping="yes">&#x2707;
+&lt;![CDATA[</xsl:text>
+    <xsl:value-of select="$label"/>
+    <xsl:text>: --- </xsl:text>
     <xsl:value-of select="name()"/>
     <xsl:text> </xsl:text>
     <xsl:for-each select="@*">
@@ -230,10 +270,56 @@
       <xsl:value-of select="."/>
       <xsl:text>" </xsl:text>
     </xsl:for-each>
-    <xsl:text>/&gt;</xsl:text>
-    <xsl:apply-imports />
-  </pre>
+    <xsl:text>---</xsl:text>
+  <xsl:text disable-output-escaping="yes"> ]]&gt; </xsl:text>
+</xsl:template>
 
+<xsl:template match="xar:*">
+  <xsl:param name="label" select="'MISSING TAG IMPLEMENTATION'"/>
+  <!-- Insert a CDATA section preceded by a 'weird' symbol -->
+  <!-- x2707 is the 'radiation symbol' if it displays, you're config is good,
+  otherwise you'll have to settle for a ? or an empty square or something like that -->
+  <xsl:text disable-output-escaping="yes">&#x2707;
+&lt;![CDATA[</xsl:text>
+    <xsl:value-of select="$label"/>
+    <xsl:text>: </xsl:text>
+    <xsl:apply-imports />
+  <xsl:text disable-output-escaping="yes"> ]]&gt; </xsl:text>
+</xsl:template>
+
+<!--
+  Utility template to replace a string with another.
+
+  The default is to replace ' with \', but
+  by specifying the parameters, other replacements can be performed
+  as well
+
+  @param string source contains the source string in which replacements are needed
+  @param string from   contains what needs to be replaced
+  @param string to     contains what will be the replacement.
+-->
+<xsl:template name="replace" >
+  <!-- Specifiy the parameters -->
+  <xsl:param name="source"/>
+  <xsl:param name="from" select="&quot;'&quot;"/>
+  <xsl:param name="to"   select="&quot;\'&quot;"/>
+
+  <!-- Make it safe when there is no such character -->
+  <xsl:choose>
+    <xsl:when test="contains($source,$from)">
+      <xsl:value-of select="substring-before($source,$from)"/>
+      <xsl:value-of select="$to"/>
+      <!-- Recurse -->
+      <xsl:call-template name="replace">
+        <xsl:with-param name="source" select="substring-after($source,$from)"/>
+        <xsl:with-param name="from"   select="$from"/>
+        <xsl:with-param name="to"     select="$to"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$source"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>

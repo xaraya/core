@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:if condition="!empty($errorstack)">
     <xar:loop name="$errorstack">
@@ -13,4 +14,4 @@
             </xar:if>
         </xar:if>
     </xar:loop>
-</xar:if>
+</xar:if></xar:template>

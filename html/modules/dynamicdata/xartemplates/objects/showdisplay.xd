@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <!-- This is a generic display template for any DD object. You can use a specific template for one particular object in this directory as showdisplay-[objectname].xd, and/or use templates in your own [module]/xartemplates/objects directory by specifying the tplmodule="..." argument in the xar:data-display BL tag or showDisplay() method call. -->
 <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
@@ -24,3 +25,4 @@
   <xar:mlstring>You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype</xar:mlstring>
 </p>
 </xar:if>
+</xar:template>

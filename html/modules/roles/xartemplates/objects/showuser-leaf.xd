@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <a href="#$leafitemurl#" title="#$leafitemtitle#" style="text-decoration: none; margin: 0 0.25em 0 0.25em;">
     <img src="#$leafitemimage#" style="vertical-align: middle;" alt="" />
-</a>
+</a></xar:template>

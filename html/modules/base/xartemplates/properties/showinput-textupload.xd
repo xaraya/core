@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-form-container-after">
     <textarea class="xar-form-textarealarge" name="#$name#" rows="#$rows#" cols="#$cols#" id="#$id#" tabindex="#$tabindex#">#$value#</textarea>
@@ -9,3 +10,4 @@
         <span class="xar-error">#$invalid#</span>
     </xar:if>
 </div>
+</xar:template>
