@@ -430,7 +430,7 @@ function dynamicdata_init()
     // input form for this item
     xarTplRegisterTag('dynamicdata', 'data-form', array(), 'dynamicdata_adminapi_handleFormTag');
     // admin list for these items
-    xarTplRegisterTag('dynamicdata', 'data-list', array(), 'dynamicdata_adminapi_handleViewTag');
+    xarTplRegisterTag('dynamicdata', 'data-list', array(), 'dynamicdata_userapi_handleViewTag');
 
     // Register BL item tags to get properties and values directly in the template
     // get properties for this item
