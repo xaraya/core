@@ -162,7 +162,7 @@ class PropertyRegistration extends Object
                 $proptypes[$id] = $property;
             }
         }
-        $result->close();
+//        $result->close();
         return $proptypes;
     }
 }

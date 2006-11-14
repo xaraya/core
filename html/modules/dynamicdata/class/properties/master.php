@@ -98,7 +98,7 @@ class DataPropertyMaster extends Object
                     $properties[$name] = $property;
             }
         }
-        $result->close();
+//        $result->close();
 
         return $properties;
     }
@@ -250,9 +250,9 @@ class DataPropertyMaster extends Object
      */
     static function getPropertyTypes()
     {
-        //if(xarVarIsCached('DynamicData','PropertyTypes')) {
-        //  return xarVarGetCached('DynamicData','PropertyTypes');
-        //}
+        if(xarVarIsCached('DynamicData','PropertyTypes')) {
+            return xarVarGetCached('DynamicData','PropertyTypes');
+        }
 
         // Attempt to retrieve properties from DB
         $property_types = PropertyRegistration::Retrieve();

@@ -481,7 +481,7 @@ class DataObject extends DataObjectMaster
         $result = $stmt->executeQuery(array((int)$args['moduleid']));
         if(!$result->first()) return; // shouldnt we raise?
         $nexttype = $result->getInt(1);
-        $result->close();
+//        $result->close();
 
         // Note: this is *not* reliable in "multi-creator" environments
         $nexttype++;
