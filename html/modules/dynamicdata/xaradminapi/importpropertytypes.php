@@ -23,7 +23,7 @@ sys::import('structures.relativedirectoryiterator');
 function dynamicdata_adminapi_importpropertytypes( $args )
 {
     extract( $args );
-    $dbconn =& xarDBGetConn(); // Need this for the transaction
+    $dbconn = xarDBGetConn(); // Need this for the transaction
     $propDirs = array();
 
     // We do the whole thing, or not at all (given proper db support)

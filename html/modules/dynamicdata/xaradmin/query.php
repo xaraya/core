@@ -148,7 +148,7 @@ function dynamicdata_admin_query($args)
     $data['olditemid'] = $itemid;
     $data['objects'] = xarModAPIFunc('dynamicdata','user','getobjects');
 
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDBGetConn();
     $data['table'] = $table;
     $data['oldtable'] = $table;
     $data['tables'] = $dbconn->MetaTables();
@@ -272,7 +272,7 @@ function dynamicdata_admin_query($args)
         $grouplist = null;
     }
 
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDBGetConn();
 
 // TODO: clean up passing of where clauses
     $whereclause = '';
@@ -281,7 +281,7 @@ function dynamicdata_admin_query($args)
         foreach ($where as $name => $what) {
             if (empty($what)) continue;
             if (!isset($value[$name])) continue;
-            
+
             $whereclause .= $and . $name;
             switch($what) {
                 case 'like':
@@ -366,7 +366,7 @@ function dynamicdata_admin_query($args)
             $newquery = xarML('Last Query');
         }
         if (!empty($table)) {
-            $data['sample'] = '&lt;xar:data-view table="' . $table . '" '; 
+            $data['sample'] = '&lt;xar:data-view table="' . $table . '" ';
         } else {
             $modinfo = xarModGetInfo($data['object']->moduleid);
             $modname = $modinfo['name'];

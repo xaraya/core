@@ -55,15 +55,15 @@ function dynamicdata_adminapi_removehook($args)
     }
 
     // Get database setup
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
     $dynamicprop = $xartable['dynamic_properties'];
 
     $sql = "SELECT xar_prop_id FROM $dynamicprop WHERE xar_prop_moduleid = ?";
     $stmt = $dbconn->prepareStatement($sql);
     $result = $stmt->executeQuery(array($modid));
-    
+
     // TODO: do we want to catch the exception here? or in the callee?
     //return $extrainfo;
     $ids = array();
@@ -71,7 +71,7 @@ function dynamicdata_adminapi_removehook($args)
         list($id) = $result->fields;
         $ids[] = $id;
     }
-    $result->close();
+//    $result->close();
 
     if (count($ids) == 0) {
         return $extrainfo;
@@ -82,13 +82,13 @@ function dynamicdata_adminapi_removehook($args)
     // TODO: don't delete if the data source is not in dynamic_data
     try {
         $dbconn->begin();
-        
+
         // Delete the item fields
         $bindmarkers = '?' . str_repeat(',?',count($ids)-1);
         $sql = "DELETE FROM $dynamicdata WHERE xar_dd_propid IN ($bindmarkers)";
         $stmt = $dbconn->prepareStatement($sql);
         $stmt->executeUpdate($ids);
-        
+
         // Delete the properties
         $sql = "DELETE FROM $dynamicprop WHERE xar_prop_id IN ($bindmarkers)";
         $stmt = $dbconn->prepareStatement($sql);

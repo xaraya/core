@@ -37,8 +37,8 @@ class DataPropertyMaster extends Object
     {
         // we can't use our own classes here, because we'd have an endless loop :-)
 
-        $dbconn =& xarDBGetConn();
-        $xartable =& xarDBGetTables();
+        $dbconn = xarDBGetConn();
+        $xartable = xarDBGetTables();
 
         $dynamicprop = $xartable['dynamic_properties'];
 
@@ -98,7 +98,7 @@ class DataPropertyMaster extends Object
                     $properties[$name] = $property;
             }
         }
-        $result->close();
+//        $result->close();
 
         return $properties;
     }
@@ -250,12 +250,12 @@ class DataPropertyMaster extends Object
      */
     static function getPropertyTypes()
     {
-        //if(xarVarIsCached('DynamicData','PropertyTypes')) {
-        //  return xarVarGetCached('DynamicData','PropertyTypes');
-        //}
+        if(xarVarIsCached('DynamicData','PropertyTypes')) {
+            return xarVarGetCached('DynamicData','PropertyTypes');
+        }
 
-        // Attempt to retreive properties from DB
-        $property_types =& PropertyRegistration::Retrieve();
+        // Attempt to retrieve properties from DB
+        $property_types = PropertyRegistration::Retrieve();
 
         /*
          // Security Check
