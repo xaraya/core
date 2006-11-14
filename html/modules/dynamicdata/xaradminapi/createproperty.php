@@ -89,6 +89,8 @@ function dynamicdata_adminapi_createproperty($args)
                                   'itemtype' => 1, //$itemtype,
                                   'itemid'   => $itemid,
                                   'values'   => $values));
+            var_dump($values);exit;
+
     if (!isset($propid)) return;
     return $propid;
 }

@@ -65,6 +65,7 @@ function dynamicdata_adminapi_create($args)
             }
         }
     }
+    var_dump($values);exit;
     $itemid = $myobject->createItem($values);
     return $itemid;
 }

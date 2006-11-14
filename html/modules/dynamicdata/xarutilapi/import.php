@@ -129,8 +129,11 @@ function dynamicdata_utilapi_import($args)
             $propertyargs['source'] = preg_replace("/^xar_/",$prefix,$propertyargs['source']);
 
             // Create this property
-            $prop_id = xarModAPIFunc('dynamicdata','admin','createproperty',
-                                     $propertyargs);
+            $myobject = & DataObjectMaster::getObject(array(
+                                                 'itemtype'   => 1,
+                                                 'itemid'   => 0));
+            if (empty($myobject)) return;
+            $prop_id = $myobject->createItem($propertyargs);
         }
     } elseif ($roottag == 'items') {
 
