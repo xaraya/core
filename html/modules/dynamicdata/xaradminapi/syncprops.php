@@ -40,8 +40,8 @@ function dynamicdata_adminapi_syncprops($args)
         throw new BadParameterException($vars,$msg);
     }
 
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
     $dynamicprop = $xartable['dynamic_properties'];
 

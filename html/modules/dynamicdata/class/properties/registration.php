@@ -43,7 +43,7 @@ class PropertyRegistration extends Object
 
     static function clearCache()
     {
-        $dbconn = &xarDBGetConn();
+        $dbconn = xarDBGetConn();
         $tables = xarDBGetTables();
         $sql = "DELETE FROM $tables[dynamic_properties_def]";
         $res = $dbconn->ExecuteUpdate($sql);
@@ -73,7 +73,7 @@ class PropertyRegistration extends Object
             if(!xarModIsAvailable($required))
                 return false;
 
-        $dbconn = &xarDBGetConn();
+        $dbconn = xarDBGetConn();
         $tables = xarDBGetTables();
         $propdefTable = $tables['dynamic_properties_def'];
 
@@ -118,7 +118,7 @@ class PropertyRegistration extends Object
 
     static function Retrieve()
     {
-        $dbconn =& xarDBGetConn();
+        $dbconn = xarDBGetConn();
         $tables = xarDBGetTables();
         // Sort by required module(s) and then by name
         $query = "SELECT  p.xar_prop_id, p.xar_prop_name, p.xar_prop_label,

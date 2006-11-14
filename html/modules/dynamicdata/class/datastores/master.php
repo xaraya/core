@@ -202,7 +202,7 @@ class DataStoreFactory extends Object
             }
         }
 
-        $dbconn =& xarDBGetConn();
+        $dbconn = xarDBGetConn();
         $dbInfo = $dbconn->getDatabaseInfo();
         $dbTables = $dbInfo->getTables();
         foreach($dbTables as $tblInfo)

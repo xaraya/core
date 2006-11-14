@@ -21,8 +21,8 @@ function dynamicdata_init()
     /**
      * Create tables
      */
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
     $dynamic_objects = $xartable['dynamic_objects'];
     $dynamic_properties = $xartable['dynamic_properties'];
@@ -568,8 +568,8 @@ function dynamicdata_delete()
     /**
      * Drop tables
      */
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn = xarDBGetConn();
+    $xartable = xarDBGetTables();
 
     //Load Table Maintenance API
     xarDBLoadTableMaintenanceAPI();
@@ -707,8 +707,8 @@ function dynamicdata_createPropDefTable()
       */
 
     // Get existing DB info
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn = xarDBGetConn();
+    $xartable = xarDBGetTables();
     $dynamic_properties_def = $xartable['dynamic_properties_def'];
 
     //Load Table Maintenance API

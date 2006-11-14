@@ -73,7 +73,7 @@ function dynamicdata_utilapi_maketable($args)
     $prefix = xarDBGetSystemTablePrefix();
     $prefix .= '_';
 
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDBGetConn();
 
     //Load Table Maintenance API
     xarDBLoadTableMaintenanceAPI();

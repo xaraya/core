@@ -33,7 +33,7 @@ function dynamicdata_utilapi_getmeta($args)
         return array($table => $propertybag[$table]);
     }
 
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDBGetConn();
     // dbInfo holds the meta information about the database
     $dbInfo = $dbconn->getDatabaseInfo();
 

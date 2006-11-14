@@ -1,6 +1,6 @@
 <?php
 /**
- * Return relationship information 
+ * Return relationship information
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -45,10 +45,10 @@ function dynamicdata_util_relations($args)
                   'withtable' => $withtable,
                   'withfield' => $withfield,
                   'withvalue' => $withvalue);
-    
+
     $data['prop'] = xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 'fieldtype', 'name' => 'dummy'));
 
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDBGetConn();
     $dbInfo = $dbconn->getDatabaseInfo();
     // Pass the full info object to the template, let them figure out how and what
     $data['tables'] = $dbInfo->getTables();

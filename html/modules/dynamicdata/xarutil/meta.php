@@ -1,6 +1,6 @@
 <?php
 /**
- * Return meta data 
+ * Return meta data
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -30,7 +30,7 @@ function dynamicdata_util_meta($args)
     if (!empty($showdb)) {
         $data['tables'] = array();
 
-        $dbconn =& xarDBGetConn();
+        $dbconn = xarDBGetConn();
         // Note: this only works if we use the same database connection
         $data['databases'] = $dbconn->MetaDatabases();
         if (empty($db)) {

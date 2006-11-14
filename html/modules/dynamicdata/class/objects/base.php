@@ -471,8 +471,8 @@ class DataObject extends DataObjectMaster
         if(empty($args['moduleid']))
             $args['moduleid'] = $this->moduleid;
 
-        $dbconn =& xarDBGetConn();
-        $xartable =& xarDBGetTables();
+        $dbconn = xarDBGetConn();
+        $xartable = xarDBGetTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];
 
