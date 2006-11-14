@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <fieldset>
   <legend>
     <xar:mlstring>New Property</xar:mlstring>
@@ -50,3 +51,4 @@
   </div>
   
 </fieldset>
+</xar:template>

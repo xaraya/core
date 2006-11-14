@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
   <ul class="xar-menu-subitem">
     <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
@@ -13,4 +14,4 @@
       </xar:if>                                        
     </xar:foreach>
   </ul>
-</xar:if>
+</xar:if></xar:template>

@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:if condition="isset($error_message)">
 <xar:else />
     <xar:loop name="$items">
@@ -10,3 +11,4 @@
     </item>
     </xar:loop>
 </xar:if>
+</xar:template>

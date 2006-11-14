@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <form method="post" action="&xar-modurl-dynamicdata-admin-create;">
 <table>
     <xar:data-form module="$moduleid" itemtype="$itemtype" itemid="0" />
@@ -8,4 +9,4 @@
 <input type="hidden" name="itemid" id="itemid" value="0" />
 <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('dynamicdata')#" />
 <input type="hidden" name="return_url" id="return_url" value="#xarServerGetCurrentURL()#" />
-</form>
+</form></xar:template>

@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <xar:set name="statecurrent">ROLES_STATE_CURRENT</xar:set>
 <xar:set name="stateinactive">ROLES_STATE_INACTIVE</xar:set>
@@ -371,3 +372,4 @@
       </a>
     </p>
 </div>
+</xar:template>

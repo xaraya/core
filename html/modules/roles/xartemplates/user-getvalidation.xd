@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 
 <div class="xar-mod-head">
@@ -18,4 +19,4 @@
             </xar:ml>
         </p>
     </xar:if>
-</div>
+</div></xar:template>

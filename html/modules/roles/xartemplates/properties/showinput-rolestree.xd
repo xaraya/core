@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:if condition="!empty($nodes)">
     <ul>
         <xar:set name="nodecount">count($nodes)</xar:set>
@@ -58,4 +59,4 @@
             </li>               
         </xar:foreach>
     </ul>    
-</xar:if>
+</xar:if></xar:template>
