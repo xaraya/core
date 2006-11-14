@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <!-- Pager for displaying legacy next-page links on multi-page documents -->
 
@@ -14,3 +15,4 @@
         &#160;
     </xar:if>
 </div>
+</xar:template>

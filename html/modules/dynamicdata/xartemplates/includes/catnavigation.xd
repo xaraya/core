@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!--  we need to see if type is admin or user here, since we don't know who called us anymore -->
 <xar:set name="tmpreq">#xarRequestGetInfo()#</xar:set>
 <xar:if condition="empty($viewfunc)">
@@ -16,3 +17,4 @@
 <!-- from user-objectview.xd -->
 <xar:categories-navigation layout="trails" showchildren="1" module="$modname" func="$viewfunc" itemtype="$itemtype" catid="$catid" showcatcount="1" />
 </xar:if>
+</xar:template>

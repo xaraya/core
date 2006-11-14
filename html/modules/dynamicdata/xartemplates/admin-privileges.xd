@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:mlstring>Dynamic Data Administration</xar:mlstring>
@@ -211,3 +212,4 @@
     </p>
     <input type="submit" name="apply" value="#$applylabel#" /></form>
 </div>
+</xar:template>

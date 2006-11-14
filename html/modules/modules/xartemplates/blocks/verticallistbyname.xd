@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <!--
     this is a simplified version of vertical list template
@@ -36,3 +37,4 @@
     </li>
   </ul>
 </xar:if>
+</xar:template>

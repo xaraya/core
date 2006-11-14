@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:if condition="xarModGetVar('base','editor') eq 'htmlarea'">
     <xar:template file="htmlarea_insert" module="htmlarea" type="module" />
@@ -234,3 +235,4 @@
         </fieldset>
     </form>
 </div>
+</xar:template>
