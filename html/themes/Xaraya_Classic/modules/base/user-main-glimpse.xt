@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <h4><xar:mlstring>A glimpse into Xaraya's Theme System</xar:mlstring></h4>
 
 <p>
@@ -26,3 +27,4 @@ system in far more detail, but a good start is to have a look at the contents of
 the file mentioned above.
     </xar:mlstring>
 </p>
+</xar:template>

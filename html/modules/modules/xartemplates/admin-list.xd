@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:set name="modstatus">xarSessionGetVar('statusmsg')</xar:set>
 <xar:style scope="module" file="modules" />
@@ -258,3 +259,4 @@
         </div>
     </xar:if>
 </div>
+</xar:template>
