@@ -1,1 +1,3 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <img src="#xarTplGetImage('k1.gif')#" alt="" style="vertical-align: middle; width: 9px; height: 21px" />
+</xar:template>
