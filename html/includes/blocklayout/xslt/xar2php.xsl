@@ -287,6 +287,20 @@
   <xsl:text disable-output-escaping="yes"> ]]&gt; </xsl:text>
 </xsl:template>
 
+<xsl:template match="xar:set/xar:*">
+  <xsl:param name="label" select="'MISSING TAG IMPLEMENTATION'"/>
+  <!-- Insert a CDATA section preceded by a 'weird' symbol -->
+  <!-- x2707 is the 'radiation symbol' if it displays, you're config is good,
+  otherwise you'll have to settle for a ? or an empty square or something like that -->
+  <xsl:text disable-output-escaping="yes">'&#x2707;</xsl:text>
+  <xsl:call-template name="replace">
+    <xsl:with-param name="source" select="$label"/>
+  </xsl:call-template>
+  <xsl:text>: </xsl:text><xsl:value-of select="name()"/>
+  <xsl:apply-imports />
+  <xsl:text>'</xsl:text>
+</xsl:template>
+
 <!--
   Utility template to replace a string with another.
 
