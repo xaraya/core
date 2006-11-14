@@ -44,8 +44,20 @@
 
 <!-- Not handled anymore, ignore closed mlvar, pass on content of mlstring -->
 <xsl:template match="xar:mlvar"/>
-<xsl:template match="xar:mlstring"><xsl:apply-templates /></xsl:template>
-<xsl:template match="xar:set/xar:ml/xar:mlstring"><xsl:apply-templates /></xsl:template>
+<xsl:template match="xar:mlstring">
+  <xsl:call-template name="replace">
+    <xsl:with-param name="source">
+      <xsl:value-of select="."/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+<xsl:template match="xar:set/xar:ml/xar:mlstring">
+  <xsl:call-template name="replace">
+    <xsl:with-param name="source">
+      <xsl:value-of select="."/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
 <xsl:template match="xar:set/xar:mlstring"><xsl:text>'</xsl:text><xsl:apply-templates /><xsl:text>'</xsl:text></xsl:template>
 
 </xsl:stylesheet>
