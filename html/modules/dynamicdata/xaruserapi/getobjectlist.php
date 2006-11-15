@@ -21,14 +21,7 @@
  */
 function &dynamicdata_userapi_getobjectlist($args)
 {
-    if (empty($args['moduleid']) && !empty($args['module'])) {
-       $args['moduleid'] = xarModGetIDFromName($args['module']);
-    }
-    if (empty($args['moduleid']) && !empty($args['modid'])) {
-       $args['moduleid'] = $args['modid'];
-    }
-    $result = DataObjectMaster::getObjectList($args);
-    return $result;
+    return DataObjectMaster::getObjectList($args);
 }
 
 ?>
