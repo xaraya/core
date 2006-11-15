@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="relateddocurl">'http://www.xaraya.com/index.php/keywords/blocks/'</xar:set>
 <xar:set name="relateddocurltext"><xar:mlstring>Related documentation on Blocks</xar:mlstring></xar:set>
@@ -166,3 +167,4 @@
          <strong>&#160;<xar:mlstring>Blocks Module Overview</xar:mlstring></strong><br />&#160;<xar:mlstring>Version</xar:mlstring> 1.1.1&#160; 2006-07-20
       </p>
 </div>
+</xar:template>

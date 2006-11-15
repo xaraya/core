@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:if condition="$numOptionsSelected eq 0">
   <em><xar:mlstring>None Specified</xar:mlstring></em>
@@ -12,3 +13,4 @@
     </xar:if>
   </xar:foreach>
 </xar:if>
+</xar:template>

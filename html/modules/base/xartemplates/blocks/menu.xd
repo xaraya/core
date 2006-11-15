@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <!-- FIXME: use proper nesting in the data, not the elseif constructs -->
 <xar:if condition="!empty($usercontent)">
@@ -133,3 +134,4 @@
         </p>
     </xar:if>
 </xar:if>
+</xar:template>

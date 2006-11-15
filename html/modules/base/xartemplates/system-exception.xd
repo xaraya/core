@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <!--
 ***********
@@ -48,3 +49,4 @@
     <p><a href="javascript:history.back(-1)"><xar:mlstring>Click here to go back</xar:mlstring></a></p>
 
 </div>
+</xar:template>

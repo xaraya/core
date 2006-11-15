@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:if condition="isset($menustyle)">
     #$menustyle# 
@@ -46,3 +47,4 @@
 </xar:if>
 <!-- Logout -->
 [<a href="&xar-modurl-base-admin-confirmlogout;"><xar:mlstring>Admin logout</xar:mlstring></a>] 
+</xar:template>

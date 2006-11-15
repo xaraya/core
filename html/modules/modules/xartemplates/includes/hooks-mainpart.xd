@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:foreach in="$hookmodules" value="$hookmod">
     <xar:if condition="empty($return_url)">
         <p class="xar-alt xar-block-title xar-norm-outline xar-padding-thick xar-margin-thickbottom" >
@@ -184,3 +185,4 @@
         </form>
     </xar:if>
 </xar:foreach>
+</xar:template>

@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:style scope="block" file="onlineblock" />
 <xar:comment>
     the above stylesheet has been included more like example
@@ -102,4 +103,4 @@
              #xarVarPrepForDisplay($lastuser['name'])#
          </a>
      </p>
-</xar:if>
+</xar:if></xar:template>
