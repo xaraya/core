@@ -105,7 +105,7 @@ Issues
 - [DONE]javascript construct:
     <script type="text/javascript">Calendar.setup({#$js_options#});</script>
   (from the dhtml calendar at dynarch.com) appears to render improperly.
-    This turned out to be a <script/> empty tag issue, as above with the div.
+    This turned out to be a `<script />` empty tag issue, as above with the div.
 
 - we are now in a postion to create a DTD, let's do so.
 - instead of organising by tag, it seems to make more sense to organize by
@@ -285,24 +285,63 @@ THROUGH THE EYES OF TRANSLATION!
 
 Implementation:
 ---------------
+
+Instead of making things hard with the #(1)# constructs, why not stay closer
+to 'home', i.e. eliminate the extra concept and stay with the expressions we
+already know.
+
 In template:
-  <p>
-    Some <a href="http://example.org">Linked <xar:var name="first"/> text</a> with <xar:var name="second"/>
-  </p>
-Should pass to MLS for translation:
-  1. '␣Some␣'             -- should both front and end have 1 spacer?
-  2. 'Linked␣#(1)␣text'
-  3. '␣with␣#(1)␣'        -- should the end have the spacer?
-In template:
-  <p>
-    <xar:ml>
+    <p>
       Some <a href="http://example.org">Linked <xar:var name="first"/> text</a> with <xar:var name="second"/>
-    </xar:ml>
-  </p>
-Should pass to MLS for translation:
-  '␣Some␣Linked␣#(1)␣text␣with␣#(2)␣'       -- same questions as above
+    </p>
+    <p>
+      Some <a href="http://example.org">Linked #$first# text</a> with #$second#
+    </p>
+    Should pass to MLS for translation:
+      1. '␣Some␣'              -- should both front and end have 1 spacer?
+      2. 'Linked␣#$first#␣text'
+      3. '␣with␣#$second#␣'        -- should the end have the spacer?
 
+In template:
+      <p>
+        <xar:ml>
+          Some <a href="http://example.org">Linked <xar:var name="first"/> text</a> with <xar:var name="second"/>
+        </xar:ml>
+      </p>
+      <p>
+        <xar:ml>
+          Some <a href="http://example.org">Linked #$first# text</a> with #$second#
+        </xar:ml>
+      </p>
+    Should pass to MLS for translation:
+      '␣Some␣Linked␣#$first#␣text␣with␣#$second#␣' -- we *can* determine this as xar:var always has a name attribute. :-)
 
+This makes us use one expression syntax. The #...# constructs are not to be
+changeable in translation, only 'moveable' within the textnode they are in.
+
+- "passed" should be interpreted as: "this is what the user sees when translating".
+- Q: should we 'xarML it' at all? That is, why not reproduce the whole
+    template in the locale (translated) ?
+  A: ?
+  [The advantage of not xarML-ing it would be runtime performance.]
+- Q: as we're going XSLT during compile time, would it make sense to use
+    runtime XSL for MLS?
+  A: in theory, yes. Problem is when compiling, we're moving out of the
+    XML domain, so the compiled stuff cant be XSL-ed again.
+- Q: most requested feature of MLS: when a string is already translated,
+    dont ask for it again, or at least provide default for other scopes.
+- Q: suppose that
+        'text <a>linked #$first#</a> text #$second#'
+     is translated as
+        'text #$first# <a>Linked text</a> #$second#' , how would we know?
+  A: we dont, we will forbid that, the #$first# has to stay within the <a> textnode.
+     How MLS will know that, i have no idea.
+     THIS IS A BIG ISSUE
+- Q: Aren't we painting ourselves into a corner here? The 'per textnode'
+    translation is a good thing, but the grouping with variables is killing.
+    Could we not delegate the specific functionality to the MLS parser?
+  A:
+-
 Expression resolving
 ====================
 
@@ -433,16 +472,16 @@ at least following problems (top 10):
     syntax. (not necessarily bad, but harder)
 
     6. The binding with our host language PHP causes some trouble, because php
-    is somewhat similar, but not quite like an XML processing instruction. <?
-    <?php <script type="application/php" are 3 possible ways to signal a php
+    is somewhat similar, but not quite like an XML processing instruction. <?,
+    <?php and <script type="application/php" are 3 possible ways to signal a php
     block, all of which are invalid in an attribute in XML, and can never be
     used directly. Also <? conflicts with <?xml in some situations.
 
     7. Over time we have defined a number of mechanisms to specify expressions,
     implicitly assuming some wished for operation. Example: #$varname# in
     textnodes is automatically assuming 'echo $varname', i.e. outputting it
-    where as attribute="#$varname#" does not. (again, not necessarily bad, but
-    more an accident than design)
+    where as attribute="#$varname#" may not (see also the ref vs. value in 4.).
+    (again, not necessarily bad, but more an accident than design)
 
     8. #(1) is a placeholder for translations in a very specific situation to
     be replaced by a variable. When there are more of those placeholders, it
