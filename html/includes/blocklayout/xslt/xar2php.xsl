@@ -108,6 +108,8 @@
   <xsl:include href="tags/base-include-javascript.xsl"/>
   <!-- xar:base-render-javascript -->
   <xsl:include href="tags/base-render-javascript.xsl"/>
+  <!-- xar:block -->
+  <xsl:include href="tags/block.xsl"/>
   <!-- xar:blockgroup -->
   <xsl:include href="tags/blockgroup.xsl"/>
   <!-- xar:blocklayout -->
@@ -287,6 +289,20 @@
   <xsl:text disable-output-escaping="yes"> ]]&gt; </xsl:text>
 </xsl:template>
 
+<xsl:template match="xar:set/xar:*">
+  <xsl:param name="label" select="'MISSING TAG IMPLEMENTATION'"/>
+  <!-- Insert a CDATA section preceded by a 'weird' symbol -->
+  <!-- x2707 is the 'radiation symbol' if it displays, you're config is good,
+  otherwise you'll have to settle for a ? or an empty square or something like that -->
+  <xsl:text disable-output-escaping="yes">'&#x2707;</xsl:text>
+  <xsl:call-template name="replace">
+    <xsl:with-param name="source" select="$label"/>
+  </xsl:call-template>
+  <xsl:text>: </xsl:text><xsl:value-of select="name()"/>
+  <xsl:apply-imports />
+  <xsl:text>'</xsl:text>
+</xsl:template>
+
 <!--
   Utility template to replace a string with another.
 
@@ -320,6 +336,29 @@
       <xsl:value-of select="$source"/>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<!--
+  Utility template which takes a set of attribute nodes and creates a dd
+  common array $key / $value style out of it.
+-->
+<xsl:template name="atts2args">
+  <xsl:param name="nodeset"/>
+  <xsl:text>array(</xsl:text>
+  <xsl:if test="$nodeset">
+    <xsl:for-each select="$nodeset">
+      <xsl:text>'</xsl:text><xsl:value-of select="name()"/><xsl:text>' =&gt;</xsl:text>
+      <xsl:choose>
+        <xsl:when test="starts-with(normalize-space(.),'$') or not(string(number(.))='NaN')">
+          <xsl:value-of select="."/><xsl:text>,</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>'</xsl:text><xsl:value-of select="."/><xsl:text>',</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+  </xsl:if>
+  <xsl:text>)</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>
