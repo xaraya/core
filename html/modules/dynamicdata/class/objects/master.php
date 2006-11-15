@@ -66,12 +66,12 @@ class DataObjectDescriptor extends ObjectDescriptor
     {
         foreach ($args as $key => &$value) {
             if (in_array($key, array('module','modid','module','moduleid'))) {
-                if (empty($key)) $id = xarModGetIDFromName(xarModGetName());
-                if (is_numeric((int)$key) || is_integer((int)$key)) {
+                if (empty($value)) $value = xarModGetIDFromName(xarModGetName());
+                if (is_numeric($value) || is_integer($value)) {
                     $args['moduleid'] = $value;
                 } else {
-                    $info = xarMod::getInfo(xarMod::getRegID($key));
-                    $args['moduleid'] = xarMod::getRegID($key); //$info['systemid']; FIXME
+                    $info = xarMod::getInfo(xarMod::getRegID($value));
+                    $args['moduleid'] = xarMod::getRegID($value); //$info['systemid']; FIXME
                 }
                 break;
             }
