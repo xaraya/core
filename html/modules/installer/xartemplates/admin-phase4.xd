@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:set name="active_step">4</xar:set>
 <div id="install">
     <xar:template file="status" />
@@ -101,3 +102,4 @@
     </div>
     </form>
 </div>
+</xar:template>

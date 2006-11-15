@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <div class="xar-mod-body">
     <div class="xar-mod-head">
@@ -16,3 +17,4 @@
         [<a href="javascript:top.history.go(-1)"><xar:mlstring>Cancel</xar:mlstring></a>]
     </div>
 </div>
+</xar:template>

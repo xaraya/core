@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:set name="yes"><xar:mlstring>Yes</xar:mlstring></xar:set>
 <xar:set name="no"><xar:mlstring>No</xar:mlstring></xar:set>
@@ -7,3 +8,4 @@
 <xar:else />
 #$no#
 </xar:if>
+</xar:template>

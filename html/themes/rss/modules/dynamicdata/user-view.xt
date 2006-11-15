@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:set name="dummy">xarTplSetPageTemplateName('header')</xar:set>
 <items>
 <xar:if condition="!empty($object)">
@@ -11,3 +12,4 @@
 </xar:if>
 </items>
 
+</xar:template>

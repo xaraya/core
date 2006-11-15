@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:base-include-javascript module="base" filename="toggle.js" />
 <xar:if condition="empty($return_url)">
@@ -33,3 +34,4 @@
 
     <xar:template file="hooks-mainpart" module="modules" />
 </xar:if>
+</xar:template>
