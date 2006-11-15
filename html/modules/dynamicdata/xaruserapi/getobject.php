@@ -21,19 +21,7 @@
  */
 function &dynamicdata_userapi_getobject($args)
 {
-    if (empty($args['itemtype']) && !empty($args['name'])) {
-        $info = DataObjectMaster::getObjectInfo($args);
-        $args['moduleid'] = $info['moduleid'];
-        $args['itemtype'] = $info['itemtype'];
-    }
-    if (empty($args['moduleid']) && !empty($args['module'])) {
-       $args['moduleid'] = xarModGetIDFromName($args['module']);
-    }
-    if (empty($args['moduleid']) && !empty($args['modid'])) {
-       $args['moduleid'] = $args['modid'];
-    }
-    $result = DataObjectMaster::getObject($args);
-    return $result;
+    return DataObjectMaster::getObject($args);
 }
 
 ?>
