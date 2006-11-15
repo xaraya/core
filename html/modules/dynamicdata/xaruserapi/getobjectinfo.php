@@ -16,9 +16,6 @@
  */
 function dynamicdata_userapi_getobjectinfo($args)
 {
-    if (empty($args['moduleid']) && !empty($args['modid'])) {
-       $args['moduleid'] = $args['modid'];
-    }
     return DataObjectMaster::getObjectInfo($args);
 }
 ?>
