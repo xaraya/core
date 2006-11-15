@@ -70,7 +70,7 @@
       <xsl:choose>
         <xsl:when test="not(@object)">
           <!-- No object passed in -->
-          <xsl:text>echo xarModAPIFunc('dynamicdata','admin','showdisplay',</xsl:text>
+          <xsl:text>echo xarModAPIFunc('dynamicdata','user','showdisplay',</xsl:text>
           <xsl:choose>
             <xsl:when test="not(@definition)">
               <!-- No direct definition, use the attributes -->
