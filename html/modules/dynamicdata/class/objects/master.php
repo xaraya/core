@@ -66,12 +66,12 @@ class DataObjectDescriptor extends ObjectDescriptor
     {
         foreach ($args as $key => &$value) {
             if (in_array($key, array('module','modid','module','moduleid'))) {
-                if (empty($key)) $id = xarModGetIDFromName(xarModGetName());
-                if (is_numeric((int)$key) || is_integer((int)$key)) {
+                if (empty($value)) $value = xarModGetIDFromName(xarModGetName());
+                if (is_numeric((int)$value) || is_integer((int)$value)) {
                     $args['moduleid'] = $value;
                 } else {
-                    $info = xarMod::getInfo(xarMod::getRegID($key));
-                    $args['moduleid'] = xarMod::getRegID($key); //$info['systemid']; FIXME
+                    $info = xarMod::getInfo(xarMod::getRegID($value));
+                    $args['moduleid'] = xarMod::getRegID($value); //$info['systemid']; FIXME
                 }
                 break;
             }
@@ -199,7 +199,9 @@ class DataObjectMaster extends Object
                 $this->addProperty($propinfo);
         }
 
-        if(empty($this->name))
+        // FIXME: we need to go to the database if the object exists but we don't have all the data
+        //        whyt would be the correct condition for that?
+        if(empty($this->label))
         {
             $info = self::getObjectInfo($this->descriptor->getArgs());
             if (!empty($info)) {

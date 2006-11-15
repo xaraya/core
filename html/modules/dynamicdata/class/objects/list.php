@@ -435,14 +435,15 @@ class DataObjectList extends DataObjectMaster
 
     function showView($args = array())
     {
-        if(empty($args['layout']))      $args['layout']         = $this->layout;
+        $args = $this->toArray($args);
+/*        if(empty($args['layout']))      $args['layout']         = $this->layout;
         if(empty($args['template']))   $args['template']   = $this->template;
         if(empty($args['tplmodule'])) $args['tplmodule']  = $this->tplmodule;
         if(empty($args['viewfunc']))   $args['viewfunc']    = $this->viewfunc;
         if(empty($args['fieldprefix'])) $args['fieldprefix'] = $this->fieldprefix;
         if(empty($args['fieldlist']))     $args['fieldlist']      = $this->fieldlist;
         if(!empty($args['extend']))    $this->extend();
-
+*/
         if(!empty($this->status))
             $state = $this->status;
         else
