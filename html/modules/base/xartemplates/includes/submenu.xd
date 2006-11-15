@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:if condition="!empty($submenu)">
     <ul class="xar-menu-subitem">
         <xar:foreach in="$submenu" value="$sublinks" key="$sublink">
@@ -17,3 +18,4 @@
         </xar:foreach>
     </ul>
 </xar:if>
+</xar:template>
