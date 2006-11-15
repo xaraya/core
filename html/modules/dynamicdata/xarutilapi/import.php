@@ -61,7 +61,7 @@ function dynamicdata_utilapi_import($args)
         // Get the object's name
         $args['name'] = (string)($xmlobject->attributes()->name);
 
-        $object = xarModAPIFunc('dynamicdata','user','getobject',array('objectid' => 1));
+        $object = DataObjectMaster::getObject(array('objectid' => 1));
         $objectproperties = array_keys($object->properties);
         foreach($objectproperties as $property) {
             if (isset($xmlobject->{$property}[0]))
@@ -79,7 +79,7 @@ function dynamicdata_utilapi_import($args)
         */
         // Treat parents where the module is DD differently. Put in numeric itemtype
         if ($args['moduleid'] == 182) {
-            $info = xarModAPIFunc('dynamicdata','user','getobjectinfo',array('name' => $args['parent']));
+            $info = DataObjectMaster::getObjectInfo(array('name' => $args['parent']));
             $args['parent'] = $info['itemtype'];
         }
         if (empty($args['name']) || empty($args['moduleid'])) {
@@ -91,11 +91,14 @@ function dynamicdata_utilapi_import($args)
         $args['itemtype'] = xarModAPIFunc('dynamicdata','admin','getnextitemtype',
                                        array('modid' => $args['moduleid']));
         // Create the DD object
-        $objectid = xarModAPIFunc('dynamicdata','admin','createobject',
-                                  $args);
+            $myobject = DataObjectMaster::getObject(array(
+                                                 'itemtype'   => $args['itemtype'],
+                                                 'itemid'   => 0));
+            if (empty($myobject)) return;
+            $objectid = $myobject->createItem($args);
 
         // Now do the object's properties
-        $property = xarModAPIFunc('dynamicdata','user','getobject',array('objectid' => 2));
+        $property = DataObjectMaster::getObject(array('objectid'   => 2));
         $propertyproperties = array_keys($property->properties);
         $propertieshead = $xmlobject->properties;
         foreach($propertieshead->children() as $property) {
@@ -129,7 +132,7 @@ function dynamicdata_utilapi_import($args)
             $propertyargs['source'] = preg_replace("/^xar_/",$prefix,$propertyargs['source']);
 
             // Create this property
-            $myobject = & DataObjectMaster::getObject(array(
+            $myobject = DataObjectMaster::getObject(array(
                                                  'itemtype'   => 1,
                                                  'itemid'   => 0));
             if (empty($myobject)) return;
@@ -156,7 +159,7 @@ function dynamicdata_utilapi_import($args)
             $objectid = $objectname2objectid[$item['name']];
 
             // Get the properties for this object
-            $object = xarModAPIFunc('dynamicdata','user','getobject',array('objectid' => $objectid));
+            $object = DataObjectMaster::getObject(array('objectid'   => $objectid));
             $primaryobject = DataObjectMaster::getObject(array('objectid' => $object->baseancestor));
             $objectproperties = $object->properties;
             $oldindex = 0;
@@ -184,7 +187,7 @@ function dynamicdata_utilapi_import($args)
             }
             // Create the item
             if (!isset($objectcache[$objectid])) {
-                $objectcache[$objectid] = & DataObjectMaster::getObject(array('objectid' => $objectid));
+                $objectcache[$objectid] = DataObjectMaster::getObject(array('objectid' => $objectid));
             }
             if (empty($keepitemid)) {
                 // for dynamic objects, set the primary field to 0 too
