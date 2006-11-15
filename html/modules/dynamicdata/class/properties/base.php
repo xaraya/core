@@ -124,7 +124,6 @@ class DataProperty extends Object
                         $isvalid = false;
                 }
             }
-            var_dump($value);
             /*
             // TODO: review this. The thinking is that an exception cannot be reliably thrown
             // from within this method.
