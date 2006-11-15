@@ -118,14 +118,16 @@ Issues
       the rendering bombs out in ugliness, where it possibly doesnt need to
       do that.
 - put the new tags locations into the dirlayout proposal
-- we now add a root tag to module templates artificially. This leads to a
+- [DONE] we now add a root tag to module templates artificially. This leads to a
   number of things we can not do now:
     * as we 'pre-read' the templatefile to add this tag, the filename of the
     template gets lost when an exception is raised. We really should add the
     root tag to the templates themselves. (this can be automated)
     * individual templates are not well-formed (interoperability)
+  (all core templates have had their root tags added in)
 - we omit the xml declaration now, because it doesnt work, but i dont remember
   why anymore. Either make it work (preferably) or document why it can't.
+  This has to do with <?xml conflicting with <?php when producing code.
 - declare xml specials somewhere:
     - <!ATTLIST element xml:space (default|preserve) 'preserve'>
         for elements which may choose
@@ -144,7 +146,7 @@ While fixing the errors along the way, some redesign issues have surfaced.
   deploy the fix for all XML varieties, as it doesnt change semantics, but its
   not very nice. We plan to separate the *format* in the process anyway, so lets
   keep this in mind when we actually will.
-* We generated a xml + php document from (now well formed) xml, thus losing
+* We generate a xml + php document from (now well formed) xml, thus losing
   some of our power (the compiled templates are not necessarily well formed)
   This means we get into trouble with the DOCTYPE generation, and using the
   xsl:output attributes for this, which would be the correct way, will lead to
@@ -280,6 +282,25 @@ is the same as:
         <xar:ml> with <xar:var name="first"/></xar:ml>
     </p>
 THROUGH THE EYES OF TRANSLATION!
+
+Implementation:
+---------------
+In template:
+  <p>
+    Some <a href="http://example.org">Linked <xar:var name="first"/> text</a> with <xar:var name="second"/>
+  </p>
+Should pass to MLS for translation:
+  1. '␣Some␣'             -- should both front and end have 1 spacer?
+  2. 'Linked␣#(1)␣text'
+  3. '␣with␣#(1)␣'        -- should the end have the spacer?
+In template:
+  <p>
+    <xar:ml>
+      Some <a href="http://example.org">Linked <xar:var name="first"/> text</a> with <xar:var name="second"/>
+    </xar:ml>
+  </p>
+Should pass to MLS for translation:
+  '␣Some␣Linked␣#(1)␣text␣with␣#(2)␣'       -- same questions as above
 
 
 Expression resolving
