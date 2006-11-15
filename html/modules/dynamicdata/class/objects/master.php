@@ -199,7 +199,9 @@ class DataObjectMaster extends Object
                 $this->addProperty($propinfo);
         }
 
-        if(empty($this->name))
+        // FIXME: we need to go to the database if the object exists but we don't have all the data
+        //        whyt would be the correct condition for that?
+        if(empty($this->label))
         {
             $info = self::getObjectInfo($this->descriptor->getArgs());
             if (!empty($info)) {
