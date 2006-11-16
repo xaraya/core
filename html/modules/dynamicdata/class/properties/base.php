@@ -40,9 +40,10 @@ class DataProperty extends Object
     public $value = null;     // value of this property for a particular DataObject
     public $invalid = '';     // result of the checkInput/validateValue methods
 
-    public $_objectid = null; // objectid this property belongs to
-    public $_moduleid = null; // moduleid this property belongs to
-    public $_itemtype = null; // itemtype this property belongs to
+//    public $objectref = null; // object this property belongs to
+//    public $_objectid = null; // objectid this property belongs to
+//    public $_moduleid = null; // moduleid this property belongs to
+//    public $_itemtype = null; // itemtype this property belongs to
 
     public $_itemid;          // reference to $itemid in DataObject, where the current itemid is kept
     public $_items;           // reference to $items in DataObjectList, where the different item values are kept
@@ -97,6 +98,36 @@ class DataProperty extends Object
     }
 
     /**
+     * Fetch the input value of this property
+     *
+     * @param $name name of the input field
+     * @return an array containing a flag whether the value was found and the found value itself
+     */
+    function fetchValue($name = '')
+    {
+        $isvalid = true;
+        $value = null;
+        xarVarFetch('dd_'.$this->id, 'isset', $ddvalue,  NULL, XARVAR_DONT_SET);
+        if(isset($ddvalue))
+            $value = $ddvalue;
+        else
+        {
+            xarVarFetch($this->name, 'isset', $fieldvalue,  NULL, XARVAR_DONT_SET);
+            if(isset($fieldvalue))
+                $value = $fieldvalue;
+            else
+            {
+                xarVarFetch($name, 'isset', $namevalue,  NULL, XARVAR_DONT_SET);
+                if(isset($namevalue))
+                    $value = $namevalue;
+                else
+                    $isvalid = false;
+            }
+        }
+        return array($isvalid,$value);
+    }
+
+    /**
      * Check the input value of this property
      *
      * @param $name name of the input field (default is 'dd_NN' with NN the property id)
@@ -106,38 +137,9 @@ class DataProperty extends Object
     {
         if(!isset($value))
         {
-            $isvalid = true;
-            xarVarFetch('dd_'.$this->id, 'isset', $ddvalue,  NULL, XARVAR_DONT_SET);
-            if(isset($ddvalue))
-                $value = $ddvalue;
-            else
-            {
-                xarVarFetch($this->name, 'isset', $fieldvalue,  NULL, XARVAR_DONT_SET);
-                if(isset($fieldvalue))
-                    $value = $fieldvalue;
-                else
-                {
-                    xarVarFetch($name, 'isset', $namevalue,  NULL, XARVAR_DONT_SET);
-                    if(isset($namevalue))
-                        $value = $namevalue;
-                    else
-                        $isvalid = false;
-                }
-            }
-            /*
-            // TODO: review this. The thinking is that an exception cannot be reliably thrown
-            // from within this method.
-            if(!$isvalid) {
-                $msg = 'Field "#(1)" (dd_#(2)) is missing.';
-                if(!empty($name)) {
-                    $vars = array($name,$this->id);
-                } else {
-                    $vars = array($this->name,$this->id);
-                }
-                throw new BadParameterException($vars,$msg);
-                return false;
-            }
-            */
+            list($isvalid,$value) = $this->fetchValue($name);
+            if (!$isvalid) return $isvalid;
+
             // store the fieldname for validations who need them (e.g. file uploads)
             $name = empty($name) ? 'dd_'.$this->id : $name;
             $this->fieldname = $name;
@@ -197,8 +199,9 @@ class DataProperty extends Object
             return $this->showHidden($data);
 
         // Our common items we need
-        if(!isset($data['name']))     $data['name']     = 'dd_'.$this->id;
-        if(!isset($data['id']))       $data['id']       = $data['name'];
+        if(!isset($data['name']))        $data['name'] = 'dd_'.$this->id;
+        if(isset($data['fieldprefix']))  $data['name'] = $data['fieldprefix'] . '_' . $data['name'];
+        if(!isset($data['id']))          $data['id']   = $data['name'];
         // mod for the tpl and what tpl the prop wants.
 
         if(!isset($data['module']))   $data['module']   = $this->tplmodule;

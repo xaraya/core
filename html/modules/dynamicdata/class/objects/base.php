@@ -92,21 +92,25 @@ class DataObject extends DataObjectMaster
         $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
         foreach($fields as $name)
         {
-            // for hooks, use the values passed via $extrainfo if available
             $field = 'dd_' . $this->properties[$name]->id;
-            if(isset($args[$name]))
+            if(!empty($args['fieldprefix']))
+            {
+                // No field, but prefix given, use that
+                // cfr. prefix layout in objects/showform template
+                    $field = $args['fieldprefix'] . '_' . $field;
+                    $isvalid = $this->properties[$name]->checkInput($field);
+                    if (!$isvalid) {
+                        $field = $args['fieldprefix'] . '_' . $name;
+                        $isvalid = $this->properties[$name]->checkInput($field);
+                    }
+            }
+            // for hooks, use the values passed via $extrainfo if available
+            elseif(isset($args[$name]))
                 // Name based check
                 $isvalid = $this->properties[$name]->checkInput($name,$args[$name]);
             elseif(isset($args[$field]))
                 // No name, check based on field
                 $isvalid = $this->properties[$name]->checkInput($field,$args[$field]);
-            elseif(!empty($args['fieldprefix']))
-            {
-                // No field, but prefix given, use that
-                // cfr. prefix layout in objects/showform template
-                $field = $args['fieldprefix'] . '_' . $field;
-                $isvalid = $this->properties[$name]->checkInput($field);
-            }
             else
                 // Ok, try without anything
                 $isvalid = $this->properties[$name]->checkInput();

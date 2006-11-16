@@ -55,10 +55,8 @@ class DataObjectDescriptor extends ObjectDescriptor
 {
     function __construct(array $args)
     {
-//        var_dump($args);
         if (!isset($args['itemtype'])) $args['itemtype'] = 0;
         $args = $this->getObjectID($args);
-//        echo "<br />";var_dump($args);exit;
         parent::__construct($args);
     }
 
@@ -165,7 +163,6 @@ class DataObjectMaster extends Object
     function toArray($args=array())
     {
         $properties = $this->descriptor->getPublicProperties($this);
-        $args = array();
         foreach ($properties as $key => $value) if (!isset($args[$key])) $args[$key] = $value;
         //FIXME where do we need to define the modname best?
         $args['modname'] = xarModGetNameFromID($args['moduleid']); //FIXME change to systemid
@@ -530,7 +527,6 @@ class DataObjectMaster extends Object
         // return only the properties we're interested in (might be none)
         if(count($args['fieldlist']) > 0 || !empty($this->status))
         {
-            var_dump($fieldlist) ."here";exit;
             $properties = array();
             foreach($args['fieldlist'] as $name)
                 if(isset($this->properties[$name]))
@@ -554,8 +550,9 @@ class DataObjectMaster extends Object
             $fieldlist = $args['fieldlist'];
 
         $properties = array();
-        foreach($fieldlist as $name)
+        foreach($fieldlist as $name) {
             if (isset($this->properties[$name])) $properties[$name] = &$this->properties[$name];
+        }
         return $properties;
     }
 
