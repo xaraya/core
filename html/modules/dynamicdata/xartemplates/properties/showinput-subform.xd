@@ -40,7 +40,7 @@
         <input type="hidden" name="#$name#" id="#$id#" value="#$value#" />
       </xar:if>
       <xar:if condition="!empty($input) or empty($fieldlist) or empty($title) or count($fieldlist) gt 1">
-      <tr>  
+      <tr>
         <td colspan="2">
           <xar:if condition="!empty($input)">
             <xar:data-form object="$object" layout="prefix" fieldprefix="$fieldprefix" />

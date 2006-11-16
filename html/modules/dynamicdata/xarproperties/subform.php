@@ -36,7 +36,6 @@ class SubFormProperty extends DataProperty
     function __construct($args)
     {
         parent::__construct($args);
-        $this->template = 'subform';
 
         // check validation for object, style etc.
         if (!empty($this->validation)) {
@@ -54,6 +53,7 @@ class SubFormProperty extends DataProperty
         if (!isset($value)) {
             if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
         }
+        if (!xarVarFetch('fieldprefix', 'isset', $this->fieldprefix,  NULL, XARVAR_DONT_SET)) {return;}
         return $this->validateValue($value);
     }
 
@@ -102,8 +102,9 @@ class SubFormProperty extends DataProperty
         $object =& $this->getObject($value);
 
         if ($this->style == 'serialized') {
-            // check user input for the object item - using the current name as field prefix
-            $isvalid = $object->checkInput(array('fieldprefix' => $name));
+            // check user input for the object item - using the current name as field prefix if non is given
+            $prefix = empty($this->fieldprefix) ? $name : $this->fieldprefix;
+            $isvalid = $object->checkInput(array('fieldprefix' => $prefix));
 
             $keylist = array_keys($object->properties);
 
@@ -421,8 +422,8 @@ class SubFormProperty extends DataProperty
         }
         $data['value']     = $value;
 
-        // use the current property name/dd_[id] as prefix for the input fields in the sub-object
-        $data['fieldprefix'] = $name;
+        // use the current property name/dd_[id] as default prefix for the input fields in the sub-object
+        if (!isset($data['fieldprefix'])) $data['fieldprefix'] = $name;
 
         if (!empty($this->objectid)) {
             $data['object'] =& $this->getObject($value);
