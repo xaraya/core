@@ -445,8 +445,7 @@ class DataProperty extends Object
         extract($args);
 
         // in case we need to process additional input fields based on the name
-        if(empty($name))
-            $name = 'dd_'.$this->id;
+        $name = empty($name) ? 'dd_'.$this->id : $name;
 
         // do something with the validation and save it in $this->validation
         if(isset($validation))

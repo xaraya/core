@@ -29,9 +29,7 @@ class ComboProperty extends SelectProperty
 
     function checkInput($name = '', $value = null)
     {
-        if (empty($name)) {
-            $name = 'dd_'.$this->id;
-        }
+        $name = empty($name) ? 'dd_'.$this->id : $name;
 
         // First check for text in the text box
         $tbname  = $name.'_tb';

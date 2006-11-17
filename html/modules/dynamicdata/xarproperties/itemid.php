@@ -35,9 +35,7 @@ class ItemIDProperty extends NumberBoxProperty
 
     function checkInput($name = '', $value = null)
     {
-        if (empty($name)) {
-            $name = 'dd_'.$this->id;
-        }
+        $name = empty($name) ? 'dd_'.$this->id : $name;
         // store the fieldname for validations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {

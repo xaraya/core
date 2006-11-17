@@ -109,9 +109,7 @@ class FileUploadProperty extends DataProperty
 
     function checkInput($name='', $value = null)
     {
-        if (empty($name)) {
-            $name = 'dd_'.$this->id;
-        }
+        $name = empty($name) ? 'dd_'.$this->id : $name;
         // store the fieldname for validations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
@@ -244,12 +242,8 @@ class FileUploadProperty extends DataProperty
     function showInput($data = array())
     {
         extract($data);
-        if (empty($name)) {
-            $name = 'dd_'.$this->id;
-        }
-        if (empty($id)) {
-            $id = $name;
-        }
+        $name = empty($name) ? 'dd_'.$this->id : $name;
+        $id = empty($id) ? $name : $id;
         if (!isset($value)) {
             $value = $this->value;
         }
@@ -435,9 +429,7 @@ class FileUploadProperty extends DataProperty
         extract($args);
 
         // in case we need to process additional input fields based on the name
-        if (empty($name)) {
-            $name = 'dd_'.$this->id;
-        }
+        $name = empty($name) ? 'dd_'.$this->id : $name;
         // do something with the validation and save it in $this->validation
         if (isset($validation)) {
             if (is_array($validation)) {
