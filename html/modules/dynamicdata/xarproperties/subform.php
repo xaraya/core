@@ -683,12 +683,6 @@ class SubFormProperty extends DataProperty
         // allow template override by child classes
         $module    = empty($module)   ? $this->getModule()   : $module;
         $template  = empty($template) ? $this->getTemplate() : $template;
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
 
         return xarTplProperty($module, $template, 'validation', $data);
     }
