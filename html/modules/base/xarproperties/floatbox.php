@@ -63,14 +63,11 @@ class FloatBoxProperty extends TextBoxProperty
         return true;
     }
 
-    // Trick: use the parent method with a different template :-)
-    // No trick: that how it should have been from the start :-)
     function showValidation($args = array())
     {
+        extract($args);
         // allow template override by child classes
-        if (!isset($args['template'])) {
-            $args['template'] = $this->getTemplate();
-        }
+        $template  = empty($template) ? $this->getTemplate() : $template;
 
         return parent::showValidation($args);
     }

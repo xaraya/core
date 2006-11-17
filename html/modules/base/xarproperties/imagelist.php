@@ -176,9 +176,8 @@ class ImageListProperty extends SelectProperty
         $data['other'] = '';
 
         // allow template override by child classes
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
+        $template  = empty($template) ? $this->getTemplate() : $template;
+
         return xarTplProperty('base', $template, 'validation', $data);
     }
 

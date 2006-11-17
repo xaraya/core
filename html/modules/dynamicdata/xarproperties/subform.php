@@ -487,12 +487,8 @@ class SubFormProperty extends DataProperty
             $data['object'] =& $this->getObject($value);
         }
 
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
+        $module    = empty($module)   ? $this->getModule()   : $module;
+        $template  = empty($template) ? $this->getTemplate() : $template;
 
         return xarTplProperty($module, $template, 'showoutput', $data);
     }
@@ -685,6 +681,8 @@ class SubFormProperty extends DataProperty
                                    'parentid'   => xarML('List of children (parent id)'));
 
         // allow template override by child classes
+        $module    = empty($module)   ? $this->getModule()   : $module;
+        $template  = empty($template) ? $this->getTemplate() : $template;
         if (empty($module)) {
             $module = $this->getModule();
         }

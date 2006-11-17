@@ -206,12 +206,8 @@ class UserListProperty extends SelectProperty
         $data['other']     = '';
 
         // allow template override by child classes
-        if (empty($module)) {
-            $module = $this->getModule();
-        }
-        if (empty($template)) {
-            $template = $this->getTemplate();
-        }
+        $module    = empty($module)   ? $this->getModule()   : $module;
+        $template  = empty($template) ? $this->getTemplate() : $template;
 
         return xarTplProperty($module, $template, 'validation', $data);
     }
