@@ -130,6 +130,7 @@ class DataObjectMaster extends Object
     public $properties  = array();      // list of properties for the DD object
     public $datastores  = array();      // similarly the list of datastores (arguably in the wrong place here)
     public $fieldlist   = array();
+    public $fieldprefix = '';           // prefix to use in field names etc.
     public $status      = 0;
 
     public $layout = 'default';         // optional layout inside the templates
@@ -142,7 +143,6 @@ class DataObjectMaster extends Object
     public $secondary = null;           // secondary key could be item type (e.g. for articles)
     public $filter = true;              // set this true to automatically filter by current itemtype on secondary key
     public $upload = false;             // flag indicating if this object has some property that provides file upload
-    public $fieldprefix = '';           // prefix to use in field names etc.
 
     /**
      * Default constructor to set the object variables, retrieve the dynamic properties

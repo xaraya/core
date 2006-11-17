@@ -7,7 +7,7 @@
         Use a field prefix for all input fields of the object, so that
         you can have several identical objects in the same input form
       -->
-      <xar:data-form object="$object" layout="prefix" fieldprefix="$fieldprefix" />
+      <xar:data-form object="$object" layout="prefix" fieldprefix="$fieldprefix" fieldlist="$fieldlist" />
     </table>
   </xar:if>
 
@@ -42,7 +42,7 @@
       <tr>
         <td colspan="2">
           <xar:if condition="!empty($input)">
-            <xar:data-form object="$object" layout="prefix" fieldprefix="$fieldprefix" />
+            <xar:data-form object="$object" layout="prefix" fieldprefix="$fieldprefix" fieldlist="$fieldlist" />
           <xar:elseif condition="empty($fieldlist) or empty($title) or count($fieldlist) gt 1"/>
             <!-- don't bother showing this if we only display the title field -->
             <xar:data-display object="$object" />
@@ -93,10 +93,10 @@
       <tr>
         <td colspan="2">
           <xar:if condition="!empty($input)">
-            <xar:data-view object="$object" layout="subform" fieldprefix="$fieldprefix" />
+            <xar:data-view object="$object" layout="subform" fieldprefix="$fieldprefix" fieldlist="$fieldlist" />
             <strong>TODO: allow removal/deleting of child items</strong>
           <xar:else/>
-            <xar:data-view object="$object" layout="subform" />
+            <xar:data-view object="$object" layout="subform" fieldprefix="$fieldprefix" fieldlist="$fieldlist" />
           </xar:if>
         </td>
       </tr>
