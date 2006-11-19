@@ -260,7 +260,6 @@ function xarBlock_renderGroup($groupname, $template = NULL)
  * @param  string args[module] module that owns the block
  * @param  string args[type] module that owns the block
  * @return string
- * @throws  EMPTY_PARAM
  * @todo   this function calls a module function, keep an eye on it.
  */
 function xarBlock_renderBlock($args)
@@ -270,7 +269,7 @@ function xarBlock_renderBlock($args)
     $blockinfo = xarModAPIFunc('blocks', 'user', 'getinfo', $args);
     $blockCaching = xarCore::getCached('xarcache', 'blockCaching');
 
-    if (!empty($blockinfo) && $blockinfo['state'] <> 0) {
+    if (!empty($blockinfo) && $blockinfo['state'] !== 0) {
         if ($blockCaching) {
             $cacheKey = $blockinfo['module'] . '-blockid' . $blockinfo['bid'] . '-noGroup';
             $args = array('cacheKey' => $cacheKey,
@@ -278,7 +277,6 @@ function xarBlock_renderBlock($args)
                           'blockid' => $blockinfo['bid'],
                           'blockinfo' => $blockinfo);
         }
-
         if ($blockCaching && xarBlockIsCached($args)) {
             // output the cached block
             $output = xarBlockGetCached($cacheKey,'block');
@@ -295,7 +293,6 @@ function xarBlock_renderBlock($args)
         // TODO: return NULL to indicate no block found?
         $output = '';
     }
-
     return $output;
 }
 

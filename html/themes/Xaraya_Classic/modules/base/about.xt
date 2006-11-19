@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <h4>
     <xar:mlstring>
         About the Xaraya Classic theme
@@ -20,3 +21,4 @@ your Xaraya theme directory where it will be used for future upgrades of your Xa
 
 
 
+</xar:template>

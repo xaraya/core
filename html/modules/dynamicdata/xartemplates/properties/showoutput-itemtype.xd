@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
 <xar:if condition="!empty($option['name']) and $option['name'] ne $option['id']" >
@@ -5,3 +6,4 @@
 <xar:elseif condition="isset($value)"/>
   [#$value#]
 </xar:if>
+</xar:template>

@@ -20,7 +20,7 @@ function roles_user_view($args)
 //    extract($args);
 
     if(!xarVarFetch('startnum', 'int:1', $args['startnum'], NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('itemtype', 'int', $args['itemtype'], 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemtype', 'int', $args['itemtype'], ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
     if(!xarVarFetch('search', 'str:1:100', $args['search'], NULL, XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('order', 'str', $args['order'], NULL, XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('include', 'str', $args['include'], NULL, XARVAR_NOT_REQUIRED)) {return;}
@@ -47,7 +47,7 @@ function roles_user_view($args)
     $types = xarModAPIFunc('roles','user','getitemtypes');
     $data['itemtypename'] = $types[$data['itemtype']]['label'];
     $data['items'] = $items;
-    $data['objectlists'] = $objectlists;
+    $data['objectlists'] = array($objectlists);
     $data['itemlabels'] = $itemlabels;
     if (!isset($order)) $data['order'] = 'xar_name';
     if (!isset($search)) $data['search'] = '';

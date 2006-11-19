@@ -11,7 +11,7 @@ class TemplateTagNode extends TagNode implements ElementTag, EmptyElementTag
     {
         parent::__construct($parser, $tagName, $parentTagName, $parameters);
         $this->hasChildren = true;
-        $this->hasText = true; // TODO: see below 
+        $this->hasText = true; // TODO: see below
     }
 
     function render()
@@ -19,22 +19,22 @@ class TemplateTagNode extends TagNode implements ElementTag, EmptyElementTag
         $subdata = '$_bl_data';  // Subdata defaults to the data of the current template
         $type = 'module';        // Default type is module included template.
         extract($this->attributes);
-        
+
         // File attribute is mandatory
         if (!isset($file)) {
             $this->raiseError(XAR_BL_MISSING_ATTRIBUTE,'Missing \'file\' attribute in <xar:template> tag.');
             return;
         }
-        
+
         // Resolve the file attribute
         $file = ExpressionTransformer::transformPHPExpression($file);
         if (!isset($file)) {
             return;
         }
-        
+
         // Resolve subdata attribute
         $subdata = ExpressionTransformer::transformPHPExpression($subdata);
-        
+
         switch($type) {
             case 'theme':
                 return "xarTpl_includeThemeTemplate(\"$file\", $subdata)";
@@ -62,7 +62,7 @@ class TemplateTagNode extends TagNode implements ElementTag, EmptyElementTag
                 }
                 // Resolve the module attribute
                 $module = ExpressionTransformer::transformPHPExpression($module);
-                
+
                 return "xarTpl_includeModuleTemplate(\"$module\", \"$file\", $subdata)";
                 break;
             case 'system':
@@ -80,7 +80,7 @@ class TemplateTagNode extends TagNode implements ElementTag, EmptyElementTag
     // Bit weird now, cos we have hasText = true, correct later, so TODO here
     function renderBeginTag()
     {
-        return "''";
+        return "'';";
     }
 
     /* Similarly for the end tag of the open form */

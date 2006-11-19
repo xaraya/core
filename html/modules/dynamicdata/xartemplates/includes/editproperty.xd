@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:set name="editvalidation">xarML('Edit validation for property "#(1)"',$field['name'])</xar:set>
 <xar:set name="otherfields">xarML('Edit property "#(1)"',$field['name'])</xar:set>
 <fieldset>
@@ -76,3 +77,4 @@
         </div>
     </div>
 </fieldset>
+</xar:template>

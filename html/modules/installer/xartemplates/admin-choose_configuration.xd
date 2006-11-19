@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="active_step">7</xar:set>
 <div id="install">
@@ -39,4 +40,4 @@
             <input type="submit" name="create" id="create" value="#$buttonnext#" />
         </div>
     </form>
-</div>
+</div></xar:template>

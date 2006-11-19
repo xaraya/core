@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Dynamic Data Administration</xar:mlstring></span>
@@ -317,3 +318,4 @@
          <strong>&#160;<xar:mlstring>DynamicData Module - Overview</xar:mlstring></strong><br />&#160;<xar:mlstring>Version</xar:mlstring> 1.2.1&#160; 2005-11-03
        </p>
 </div>
+</xar:template>

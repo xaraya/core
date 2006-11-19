@@ -1,5 +1,6 @@
-<!--
-     In 2.x each x[d|t] file *can* have a root tag in the form
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<!-- 
+     In 2.x each x[d|t] file *can* have a root tag in the form 
      of an open xar:template tag. It is very likely that the optional
      character of this might change to a requirement in the 2.x line.
 -->
@@ -102,4 +103,5 @@
 
     </p>
 </div>
+</xar:template>
 </xar:template>

@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
 <!--
@@ -46,3 +47,4 @@
         <xar:if condition="$loop:index gt 0"><br /></xar:if>#xarVarPrepForDisplay($loop:item)#
     </xar:loop></div>
 </xar:if>
+</xar:template>
