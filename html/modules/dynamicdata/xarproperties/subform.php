@@ -27,10 +27,11 @@ class SubFormProperty extends DataProperty
     public $where     = ''; // TODO
     public $input     = 1;
     public $display   = 1; // TODO
+    public $repeat    = 1;
     public $fieldlist = null;
     public $objectref = null;
     public $oldvalue  = null;
-    public $arguments = array('objectid','style','title','link','where','input','display','fieldlist');
+    public $arguments = array('objectid','style','title','link','where','input','display','fieldlist','repeat');
     public $warnings  = '';
 
     function __construct($args)
@@ -100,40 +101,61 @@ class SubFormProperty extends DataProperty
         $object =& $this->getObject($value);
 
         if ($this->style == 'serialized') {
-            // check user input for the object item - using the current name as field prefix if non is given
+
+            $object =& DataObjectMaster::getObject(array('objectid'  => $this->objectid,
+                                                                'fieldlist' => $this->fieldlist));
+            $i=0;
+            $values = array();
             $prefix = empty($this->fieldprefix) ? $name : $this->fieldprefix;
-            $isvalid = $object->checkInput(array('fieldprefix' => $prefix));
 
-            $keylist = array_keys($object->properties);
+            // We need to figure out how many items we need to process
+            // FIXME: is there a better way to do this?
+            $postarray = array_keys($_POST);
+            $items = array();
+            foreach ($postarray as $key) {
+                preg_match("/Item_[0-9]+_/", $key, $matches);
+                if (isset($matches[0])) {
+                    $str = explode("_",$matches[0]);
+                    $items[$str[1]] = (int)$str[1];
+                }
+            }
 
-            if (!$isvalid) {
-                // check if all values we're interested in are valid
-                $this->invalid = '';
+            foreach ($items as $i) {
+                // check user input for the object item - using the current name as field prefix if non is given
+
+                $isvalid = $object->checkInput(array('fieldprefix' => "Item_" . $i . "_" . $prefix));
+
+                $keylist = array_keys($object->properties);
+
+                if (!$isvalid) {
+                    // check if all values we're interested in are valid
+                    $this->invalid = '';
+                    foreach ($keylist as $key) {
+                        // we ignore errors in any other properties here
+                        if ((empty($this->fieldlist) || in_array($key,$this->fieldlist)) &&
+                            !empty($object->properties[$key]->invalid)) {
+                            // pass along the invalid message for this property
+                            $this->invalid .= ' [' . $object->properties[$key]->label . '] ' . $object->properties[$key]->invalid;
+                        }
+                    }
+                    if (!empty($this->invalid)) {
+                        $this->value = null;
+                        return false;
+                    }
+                    $this->invalid = null;
+                }
+
+                // save the values we're interested in
+                $value = array();
                 foreach ($keylist as $key) {
-                    // we ignore errors in any other properties here
                     if ((empty($this->fieldlist) || in_array($key,$this->fieldlist)) &&
-                        !empty($object->properties[$key]->invalid)) {
-                        // pass along the invalid message for this property
-                        $this->invalid .= ' [' . $object->properties[$key]->label . '] ' . $object->properties[$key]->invalid;
+                        isset($object->properties[$key]->value)) {
+                        $value[$key] = $object->properties[$key]->value;
                     }
                 }
-                if (!empty($this->invalid)) {
-                    $this->value = null;
-                    return false;
-                }
-                $this->invalid = null;
+                $values[] = $value;
             }
-
-            // save the values we're interested in
-            $value = array();
-            foreach ($keylist as $key) {
-                if ((empty($this->fieldlist) || in_array($key,$this->fieldlist)) &&
-                    isset($object->properties[$key]->value)) {
-                    $value[$key] = $object->properties[$key]->value;
-                }
-            }
-            $this->value = serialize($value);
-
+            $this->value = serialize($values);
         } elseif ($this->style == 'itemid' && (empty($value) || $value == $oldvalue) && !empty($this->input)) {
             // check user input for the object item - using the current name as field prefix
             $isvalid = $object->checkInput(array('fieldprefix' => $name));
@@ -425,6 +447,8 @@ class SubFormProperty extends DataProperty
 
         if (!empty($this->objectid)) {
             $data['object'] =& $this->getObject($value);
+            $data['emptyobject'] = $myobject = DataObjectMaster::getObject(array('objectid'  => $this->objectid,
+                                                                            'fieldlist' => $this->fieldlist));
 
             // get the list of available items if requested
             if ($this->style == 'itemid' && !empty($this->title)) {
@@ -502,7 +526,7 @@ class SubFormProperty extends DataProperty
         }
         if (!empty($fields) && is_array($fields)) {
             foreach ($this->arguments as $item) {
-                if (!empty($fields[$item])) {
+                if (isset($fields[$item])) {
                     $this->$item = $fields[$item];
                 } elseif ($item == 'input' && isset($fields[$item])) {
                     $this->$item = $fields[$item];
@@ -607,15 +631,6 @@ class SubFormProperty extends DataProperty
 
             case 'serialized':
             default:
-                if (!isset($myobject)) {
-                    $myobject =& DataObjectMaster::getObject(array('objectid'  => $this->objectid,
-                                                                        'fieldlist' => $this->fieldlist));
-                } else {
-                    // initialise the properties again
-                    foreach (array_keys($myobject->properties) as $propname) {
-                        $myobject->properties[$propname]->value = $myobject->properties[$propname]->default;
-                    }
-                }
                 if (empty($value)) {
                     $value = array();
                 } elseif (!is_array($value)) {
@@ -626,11 +641,34 @@ class SubFormProperty extends DataProperty
                         $value = array(); // can't do anything with this
                     }
                 }
-                foreach ($value as $key => $val) {
-                    if (isset($myobject->properties[$key])) {
-                        $myobject->properties[$key]->setValue($val);
+                $objects = array();
+                if (empty($value)) {
+                    if (!isset($myobject)) {
+                        $myobject = DataObjectMaster::getObject(array('objectid'  => $this->objectid,
+                                                                            'fieldlist' => $this->fieldlist));
+                    } else {
+                        // initialise the properties again
+                        foreach (array_keys($myobject->properties) as $propname) {
+                            $myobject->properties[$propname]->value = $myobject->properties[$propname]->default;
+                        }
+                    }
+                    $repeats = $this->repeat ? $this->repeat : 1;
+                    for ($i=0;$i<$repeats;$i++) {
+                        $objects[] = $myobject;
+                    }
+                } else {
+                    foreach ($value as $vals) {
+                        $myobject = DataObjectMaster::getObject(array('objectid'  => $this->objectid,
+                                                                        'fieldlist' => $this->fieldlist));
+                        foreach ($vals as $key => $val) {
+                            if (isset($myobject->properties[$key])) {
+                                $myobject->properties[$key]->setValue($val);
+                            }
+                        }
+                        $objects[] = $myobject;
                     }
                 }
+                return $objects;
                 break;
         }
         if (!isset($this->objectref)) {
@@ -646,6 +684,7 @@ class SubFormProperty extends DataProperty
      * @param $args['validation'] validation rule (default is the current validation)
      * @param $args['id'] id of the field
      * @param $args['tabindex'] tab index of the field
+     * @param $args['repetitions'] number of repetitions of this subform to be displayed on forms
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
@@ -708,7 +747,7 @@ class SubFormProperty extends DataProperty
             if (is_array($validation)) {
                 $data = array();
                 foreach ($this->arguments as $item) {
-                    if (!empty($validation[$item])) {
+                    if (isset($validation[$item])) {
                         $data[$item] = $validation[$item];
                     } elseif ($item == 'input' && isset($validation[$item])) {
                         $data[$item] = $validation[$item];

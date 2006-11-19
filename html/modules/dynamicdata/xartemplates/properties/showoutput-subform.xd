@@ -2,7 +2,10 @@
 
 <xar:if condition="empty($style) or $style eq 'serialized'">
   <xar:if condition="!empty($object)">
-    <xar:data-display object="$object" />
+      <div style="clear:both">&#160;</div>
+      <xar:foreach in="$object" value="$item">
+        <xar:data-display object="$item" />
+      </xar:foreach>
   <xar:else/>
     <xar:var name="value" prep="true"/>
   </xar:if>

@@ -1,16 +1,77 @@
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-
+<xar:base-include-javascript position="head" module="dynamicdata" filename="subform.js" />
+<input type="hidden" id="fieldprefix" value="#$fieldprefix#" />
 <xar:if condition="empty($style) or $style eq 'serialized'">
   <xar:if condition="!empty($object)">
-    <table class="xar-norm">
-      <!--
-        Use a field prefix for all input fields of the object, so that
-        you can have several identical objects in the same input form
-      -->
-      <xar:data-form object="$object" layout="prefix" fieldprefix="$fieldprefix" fieldlist="$fieldlist" />
-    </table>
+        <xar:set name="numitems">count($object)</xar:set>
+        <input type="hidden" id="items" value="#$numitems#" />
+        <div style="clear:both">&#160;</div>
+        <xar:if condition="$repeat">
+            <!--
+                Use a field prefix for all input fields of the object, so that
+                you can have several identical objects in the same input form
+            -->
+            <xar:set name="i">0</xar:set>
+            <xar:foreach in="$object" value="$item">
+                <xar:set name="i">$i+1</xar:set>
+                <xar:set name="prefix">"Item_" . $i . "_" . $fieldprefix</xar:set>
+                <xar:data-form object="$item" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" />
+            </xar:foreach>
+        <xar:else />
+          <!--
+            Use a field prefix for all input fields of the object, so that
+            you can have several identical objects in the same input form
+          -->
+            <xar:set name="i">0</xar:set>
+            <div id="item">
+            <xar:foreach in="$object" value="$item">
+                <xar:set name="i">$i+1</xar:set>
+                <xar:set name="prefix">"Item_" . $i . "_" . $fieldprefix</xar:set>
+                <div id="#$prefix#">
+                    <xar:data-form object="$item" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" />
+                    <xar:if condition="$i gt 1">
+                        <div class="xar-form-input-wrapper-after">
+                            <input type="button" title="Remove" value="Remove" style="height: 23px; font-size: small;" onclick="javascript:removeItem('#$prefix#')">
+                        </div>
+                    </xar:if>
+                </div>
+            </xar:foreach>
+            </div>
+            <div class="xar-form-input-wrapper-after">
+                <input type="button" title="#xarML('Add Item')#" value="#xarML('Add')#" onclick="addItem();" style="height: 23px; font-size: small;" />
+            </div>
+            <div id="itemtemplate" style="display:none;">
+                <xar:data-form object="$emptyobject" layout="prefix" fieldprefix="Item_dummyfieldprefix" fieldlist="$fieldlist" />
+            </div>
+        </xar:if>
+        <br />
   </xar:if>
-
+<!--
+  <xar:if condition="!empty($object)">
+    <table class="xar-norm">
+        <xar:if condition="$repeat">
+            <xar:set name="i">0</xar:set>
+            <xar:foreach in="$object" value="$item">
+                <xar:set name="i">$i+1</xar:set>
+                <xar:set name="prefix">$i . "_" . $fieldprefix</xar:set>
+                <xar:data-form object="$item" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" />
+            </xar:foreach>
+            <br />
+        <xar:else />
+            <xar:set name="i">0</xar:set>
+            <xar:set name="i">$i+1</xar:set>
+            <xar:set name="prefix">$i . "_" . $fieldprefix</xar:set>
+            <xar:data-form object="$object[0]" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" />
+            <br />
+            <div id="item"></div>
+            <input type="button" title="#xarML('Add Item')#" value="#xarML('Add')#" onclick="addItem();" style="height: 23px; font-size: small;" />
+        </xar:if>
+    </table>
+    <div id="itemtemplate" style="display:none;">
+        <xar:data-form object="$item" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" />
+    </div>
+  </xar:if>
+-->
 <xar:elseif condition="$style eq 'itemid'"/>
   <xar:if condition="!empty($object)">
     <table class="xar-norm">

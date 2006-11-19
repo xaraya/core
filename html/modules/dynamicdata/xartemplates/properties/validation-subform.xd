@@ -23,7 +23,7 @@
           <option value="#$sname#" selected="selected">#$slabel#</option>
         <xar:else/>
           <option value="#$sname#">#$slabel#</option>
-        </xar:if>    
+        </xar:if>
       </xar:foreach>
       </select>
     </td>
@@ -195,6 +195,19 @@
     </td>
     <td colspan="2">
       <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="#$size#" tabindex="#$tabindex#" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <xar:mlstring>Number of repetitions</xar:mlstring>
+    </td>
+    <td>
+      <input type="text" name="#$name#[repeat]" id="#$id#_repeat" value="#$repeat#" size="#$size#" tabindex="#$tabindex#" class="xar-form-textshort" />
+    </td>
+    <td>
+      <ul>
+        <li><xar:mlstring>The number of times the subform appears on displays and forms. Zero means repetitions are added dynamically, i.e. one appears initially on the form and more are added or removed with buttons.</xar:mlstring></li>
+      </ul>
     </td>
   </tr>
 </table>
