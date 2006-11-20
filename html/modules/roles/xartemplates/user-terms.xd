@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="mina">xarModGetVar('roles','minage')</xar:set>
 <xar:set name="a0"><xar:mlstring>zero</xar:mlstring></xar:set>
@@ -136,3 +137,4 @@
     <p><xar:mlstring>Terms of Service not active</xar:mlstring></p>
 </xar:if>
 </div>
+</xar:template>

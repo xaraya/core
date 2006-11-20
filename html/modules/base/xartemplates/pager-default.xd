@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <!-- Display first-page link or text if there is more than one page -->
 <div class="xar-pager">
@@ -89,3 +90,4 @@
         </xar:if>
     </xar:if>
 </div>
+</xar:template>

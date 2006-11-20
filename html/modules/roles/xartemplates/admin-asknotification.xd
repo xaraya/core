@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <xar:set name="messagetitle">#xarML('Write this string in the message body or subject to display the corresponding information')#</xar:set>
 <div class="xar-mod-head">
@@ -201,3 +202,4 @@
         <br class="xar-clearboth" />
     </form>
 </div>
+</xar:template>

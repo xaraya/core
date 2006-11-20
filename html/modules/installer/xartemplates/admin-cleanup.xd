@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div id="install">
     <h1>
@@ -42,3 +43,4 @@
         <xar:mlstring>Thank you for using Xaraya.</xar:mlstring>
     </h2>
 </div>
+</xar:template>
