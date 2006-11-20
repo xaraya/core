@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:loop name="$csets">
 <item>
     <title>ChangeSet #$loop:item['rev']#</title>
@@ -6,4 +7,4 @@
     <author>#$loop:item['author']#</author>
     <pubDate>#xarLocaleFormatUTCDate("%a, %d %b %Y %H:%M:%S GMT",$loop:item['utc'])#</pubDate>
 </item>
-</xar:loop>
+</xar:loop></xar:template>

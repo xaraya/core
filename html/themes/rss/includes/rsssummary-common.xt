@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <item>
 <title>#xarVarTransform($rsstitle, 'HTML', 'XML')#</title>
 <link>#xarVarTransform($link, 'HTML', 'XML')#</link>
@@ -7,3 +8,4 @@
 <description>#xarVarTransform($rsssummary, 'HTML', 'XML')#</description>
 <guid isPermaLink="true">#xarVarTransform($link, 'HTML', 'XML')#</guid>
 </item>
+</xar:template>

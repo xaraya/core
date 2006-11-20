@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <div class="xar-mod-head">
   <h2><xar:mlstring>Create mail queue definition</xar:mlstring></h2>
 </div>
@@ -54,3 +55,4 @@
     <input type="submit" name="create" value="#xarML('Create')#"/>
   </form>
 </div>
+</xar:template>

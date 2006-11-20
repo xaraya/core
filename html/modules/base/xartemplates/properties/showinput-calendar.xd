@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:set name="alttext"><xar:mlstring>Click Here to Pick up the date</xar:mlstring></xar:set>
 
@@ -13,3 +14,4 @@
     <span class="xar-error">#$invalid#</span>
 </xar:if>
 
+</xar:template>

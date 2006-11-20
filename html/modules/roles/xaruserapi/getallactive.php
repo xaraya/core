@@ -19,33 +19,19 @@
  */
 function roles_userapi_getallactive($args)
 {
+    // Security Check
+    if(!xarSecurityCheck('ViewRoles')) return;
+
+    // Set some defaults
+    $include_anonymous = true;
+    $startnum = 1; $numitems = -1;
+    $order = "name";
+    $filter = time() - (xarConfigGetVar('Site.Session.Duration') * 60);
+
+    // See if the arguments said otherwise
     extract($args);
 
-    if (!isset($include_anonymous)) {
-        $include_anonymous = true;
-    } else {
-        $include_anonymous = (bool) $include_anonymous;
-    }
-
-    // Optional arguments.
-    if (!isset($startnum)) {
-        $startnum = 1;
-    }
-    if (!isset($numitems)) {
-        $numitems = -1;
-    }
-    if (!isset($order)) {
-        $order = "name";
-    }
-
-    if (empty($filter)){
-        $filter = time() - (xarConfigGetVar('Site.Session.Duration') * 60);
-    }
-
-    $roles = array();
-
-// Security Check
-    if(!xarSecurityCheck('ViewRoles')) return;
+    $include_anonymous = (bool) $include_anonymous;
 
     // Get database setup
     $dbconn =& xarDBGetConn();
@@ -62,9 +48,9 @@ function roles_userapi_getallactive($args)
                      a.xar_date_reg,
                      b.xar_ipaddr
               FROM $rolestable a, $sessioninfoTable b
-              WHERE a.xar_uid = b.xar_uid AND b.xar_lastused > ? AND a.xar_uid > 1";
+              WHERE a.xar_uid = b.xar_uid AND b.xar_lastused > ? AND a.xar_uid > ?";
     $bindvars[] = $filter;
-
+    $bindvars[] = 1;
     if (isset($selection)) $query .= $selection;
 
     // if we aren't including anonymous in the query,
@@ -81,20 +67,22 @@ function roles_userapi_getallactive($args)
         $bindvars[] = (int) $thisrole['uid'];
     }
 
-    $query .= " AND xar_type = 0 ORDER BY xar_" . $order;
-
+    $query .= " AND xar_type = ? ORDER BY xar_" . $order;
+    $bindvars[] = 0;
     $stmt = $dbconn->prepareStatement($query);
-    
+
     // cfr. xarcachemanager - this approach might change later
     $expire = xarModGetVar('roles','cache.userapi.getallactive');
-    
+
     if($startnum > 0) {
         $stmt->setLimit($numitems);
         $stmt->setOffset($startnum - 1);
     }
     $result = $stmt->executeQuery($bindvars);
-    
+
     // Put users into result array
+    $sessions = array();
+
     while($result->next()) {
         list($uid, $uname, $name, $email, $date_reg, $ipaddr) = $result->fields;
         if (xarSecurityCheck('ViewRoles', 0, 'All', "$uname:All:$uid")) {
@@ -106,15 +94,6 @@ function roles_userapi_getallactive($args)
                                 'ipaddr'    => $ipaddr);
         }
     }
-
-    // Return the users
-    if (empty($sessions)){
-        $sessions = '';
-    }
-
     return $sessions;
 }
-
-
-
 ?>

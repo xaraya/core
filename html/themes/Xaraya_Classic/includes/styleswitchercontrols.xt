@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:set name="changetexttosmall"><xar:mlstring>Small text (default)</xar:mlstring></xar:set>
 <xar:set name="changetexttomedium"><xar:mlstring>Medium text</xar:mlstring></xar:set>
 <xar:set name="changetexttolarge"><xar:mlstring>Large text</xar:mlstring></xar:set>
@@ -27,4 +28,4 @@
     <a id="xc-switch-large" href="#" onclick="setActiveStyleSheetTxt('Large classictext'); createCookie('xarayaclassic_textsize','Large classictext',365); return false;" title="#$changetexttolarge#">
         <span>#$changetexttolarge#</span>
     </a>
-</div>
+</div></xar:template>

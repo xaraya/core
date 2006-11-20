@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Roles</xar:mlstring></span>
@@ -197,3 +198,4 @@
         </p>
     </xar:if>
 </div>
+</xar:template>

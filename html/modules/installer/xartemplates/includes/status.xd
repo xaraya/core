@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:set name="steptext[1]">
     <xar:mlstring>Selecting Language</xar:mlstring>
 </xar:set>
@@ -37,3 +38,4 @@
         </p>
     </xar:for>
 </div>
+</xar:template>

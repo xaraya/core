@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Account Validation</xar:mlstring></span></div>
 <div class="xar-mod-body">
@@ -70,4 +71,4 @@
         </fieldset>
     </form>
 </xar:if>
-</div>
+</div></xar:template>
