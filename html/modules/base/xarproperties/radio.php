@@ -27,7 +27,7 @@ class RadioButtonsProperty extends SelectProperty
 
     }
 
-    function showOutput($data = array())
+    public function showOutput(Array $data = array())
     {
         $this->template  = 'dropdown';
         return parent::showOutput($data);

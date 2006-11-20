@@ -27,7 +27,7 @@ class ComboProperty extends SelectProperty
         $this->template  = 'combobox';
     }
 
-    function checkInput($name = '', $value = null)
+    public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? 'dd_'.$this->id : $name;
 
@@ -52,7 +52,7 @@ class ComboProperty extends SelectProperty
         return $this->validateValue($value);
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (!isset($value))
         {

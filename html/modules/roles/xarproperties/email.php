@@ -31,7 +31,7 @@ class EmailProperty extends TextBoxProperty
         $this->filepath   = 'modules/roles/xarproperties';
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;

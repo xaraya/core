@@ -29,7 +29,7 @@ class CheckboxProperty extends DataProperty
         $this->filepath   = 'modules/base/xarproperties';
     }
 
-    function checkInput($name='', $value = null)
+    public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? 'dd_'.$this->id : $name;
         // store the fieldname for validations who need them (e.g. file uploads)
@@ -40,7 +40,7 @@ class CheckboxProperty extends DataProperty
         return $this->validateValue($value);
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         // this won't do for check boxes !
         //if (!isset($value)) {
@@ -55,7 +55,7 @@ class CheckboxProperty extends DataProperty
         return true;
     }
 
-    function showInput($data = array())
+    public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) {
             $data['value'] = $this->value;

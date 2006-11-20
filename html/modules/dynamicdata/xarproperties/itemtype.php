@@ -41,7 +41,7 @@ class ItemTypeProperty extends NumberBoxProperty
         }
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (empty($this->module)) {
             return parent::validateValue($value);
@@ -60,7 +60,7 @@ class ItemTypeProperty extends NumberBoxProperty
         }
     }
 
-    function showInput($data = array())
+    public function showInput(Array $data = array())
     {
         if (!empty($data)) {
             $this->setArguments($data);
@@ -83,7 +83,7 @@ class ItemTypeProperty extends NumberBoxProperty
         return parent::showInput($data);
     }
 
-    function showOutput($data = array())
+    public function showOutput(Array $data = array())
     {
         if (!empty($data)) {
             $this->setArguments($data);
@@ -147,7 +147,7 @@ class ItemTypeProperty extends NumberBoxProperty
      *
      *   TODO: support 2nd API call to retrieve the item in case getitemlinks() isn't supported
      */
-    function parseValidation($validation = '')
+    public function parseValidation($validation = '')
     {
         // see if the validation field contains a valid module name
         if (preg_match('/^\w+$/',$validation) &&
@@ -290,7 +290,7 @@ class ItemTypeProperty extends NumberBoxProperty
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showValidation($args = array())
+    public function showValidation(Array $args = array())
     {
         extract($args);
 
@@ -342,7 +342,7 @@ class ItemTypeProperty extends NumberBoxProperty
      * @returns bool
      * @return bool true if the validation rule could be processed, false otherwise
      */
-    function updateValidation($args = array())
+    public function updateValidation(Array $args = array())
     {
         extract($args);
 

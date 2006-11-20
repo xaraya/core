@@ -33,7 +33,7 @@ class ModuleItemtypeProperty extends SelectProperty
         if (isset($args['modid'])) $this->referencemoduleid = $args['modid'];
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (isset($value)) {
             $this->value = $value;
@@ -41,7 +41,7 @@ class ModuleItemtypeProperty extends SelectProperty
         return true;
     }
 
-    function showInput($data = array())
+    public function showInput(Array $data = array())
     {
         extract($data);
         $args['module'] = 'base';
@@ -50,7 +50,7 @@ class ModuleItemtypeProperty extends SelectProperty
         return parent::showInput($data);
     }
 
-    function showOutput($data = array())
+    public function showOutput(Array $data = array())
     {
         extract($data);
         if (!empty($modid)) $this->referencemoduleid = $modid;

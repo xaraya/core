@@ -40,7 +40,7 @@ class URLIconProperty extends TextBoxProperty
         $this->template = 'urlicon';
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;
@@ -53,7 +53,7 @@ class URLIconProperty extends TextBoxProperty
         return true;
     }
 
-    function showOutput($data = array())
+    public function showOutput(Array $data = array())
     {
         extract($data);
         if (!isset($value))  $value = $this->value;
@@ -97,7 +97,7 @@ class URLIconProperty extends TextBoxProperty
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showValidation($args = array())
+    public function showValidation(Array $args = array())
     {
         extract($args);
 
@@ -139,7 +139,7 @@ class URLIconProperty extends TextBoxProperty
      * @returns bool
      * @return bool true if the validation rule could be processed, false otherwise
      */
-    function updateValidation($args = array())
+    public function updateValidation(Array $args = array())
     {
         extract($args);
 

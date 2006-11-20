@@ -1,6 +1,7 @@
 <?php
 
 sys::import('modules.dynamicdata.class.properties.master');
+sys::import('modules.dynamicdata.class.properties.interfaces');
 
 /**
  * Base Class for Dynamic Properties
@@ -10,7 +11,7 @@ sys::import('modules.dynamicdata.class.properties.master');
  * @todo is this abstract?
  * @todo the visibility of most of the attributes can probably be protected
 **/
-class DataProperty extends Object
+class DataProperty extends Object implements iDataProperty
 {
     // Attributes for registration
     public $id             = 0;
@@ -82,7 +83,7 @@ class DataProperty extends Object
      * @returns mixed
      * @return the value for the property
      */
-    function getValue()
+    public function getValue()
     {
         return $this->value;
     }
@@ -92,7 +93,7 @@ class DataProperty extends Object
      *
      * @param $value the new value for the property
      */
-    function setValue($value)
+    public function setValue($value)
     {
         $this->value = $value;
     }
@@ -103,7 +104,7 @@ class DataProperty extends Object
      * @param $name name of the input field
      * @return an array containing a flag whether the value was found and the found value itself
      */
-    function fetchValue($name = '')
+    public function fetchValue($name = '')
     {
         $isvalid = true;
         $value = null;
@@ -133,7 +134,7 @@ class DataProperty extends Object
      * @param $name name of the input field (default is 'dd_NN' with NN the property id)
      * @param $value value of the input field (default is retrieved via xarVarFetch())
      */
-    function checkInput($name = '', $value = null)
+    public function checkInput($name = '', $value = null)
     {
         if(!isset($value))
         {
@@ -152,7 +153,7 @@ class DataProperty extends Object
      *
      * @param $value value of the property (default is the current value)
      */
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if(!isset($value))
             $value = $this->value;
@@ -193,7 +194,7 @@ class DataProperty extends Object
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showInput($data = array())
+    public function showInput(Array $data = array())
     {
         if(($this->status & DataPropertyMaster::DD_DISPLAYMASK) == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
             return $this->showHidden($data);
@@ -223,7 +224,7 @@ class DataProperty extends Object
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showOutput($data = array())
+    public function showOutput(Array $data = array())
     {
         if(($this->status & DataPropertyMaster::DD_DISPLAYMASK) == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
             return $this->showHidden($data);
@@ -340,7 +341,7 @@ class DataProperty extends Object
     /**
      * Parse the validation rule
      */
-    function parseValidation($validation = '')
+    public function parseValidation($validation = '')
     {
         // if(... $validation ...) {
         //     $this->whatever = ...;
@@ -399,7 +400,7 @@ class DataProperty extends Object
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showValidation($args = array())
+    public function showValidation(Array $args = array())
     {
         extract($args);
 
@@ -440,7 +441,7 @@ class DataProperty extends Object
      * @param $args['id'] id of the field
      * @return bool true if the validation rule could be processed, false otherwise
      */
-    function updateValidation($args = array())
+    public function updateValidation(Array $args = array())
     {
         extract($args);
 
@@ -471,7 +472,7 @@ class DataProperty extends Object
      *
      * @returns string module name
      */
-    function getModule()
+    public function getModule()
     {
         $modulename = empty($this->tplmodule) ? $info['tplmodule'] : $this->tplmodule;
         return $modulename;
@@ -481,13 +482,13 @@ class DataProperty extends Object
      *
      * @returns string template name
      */
-    function getTemplate()
+    public function getTemplate()
     {
         // If not specified, default to the registered name of the prop
         $template = empty($this->template) ? $this->name : $this->template;
         return $template;
     }
-    static function getRegistrationInfo()
+    public static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();
         $info->reqmodules = $this->reqmodules;

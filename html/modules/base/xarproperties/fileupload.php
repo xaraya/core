@@ -107,7 +107,7 @@ class FileUploadProperty extends DataProperty
         }
     }
 
-    function checkInput($name='', $value = null)
+    public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? 'dd_'.$this->id : $name;
         // store the fieldname for validations who need them (e.g. file uploads)
@@ -118,7 +118,7 @@ class FileUploadProperty extends DataProperty
         return $this->validateValue($value);
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         // the variable corresponding to the file upload field is no longer set in PHP 4.2.1+
         // but we're using a hidden field to keep track of any previously uploaded file here
@@ -239,7 +239,7 @@ class FileUploadProperty extends DataProperty
     }
 
 //    function showInput($name = '', $value = null, $size = 0, $maxsize = 0, $id = '', $tabindex = '')
-    function showInput($data = array())
+    public function showInput(Array $data = array())
     {
         extract($data);
         $name = empty($name) ? 'dd_'.$this->id : $name;
@@ -309,7 +309,7 @@ class FileUploadProperty extends DataProperty
         return parent::showInput($data);
     }
 
-    function showOutput($data = array())
+    public function showOutput(Array $data = array())
     {
         extract($data);
 
@@ -342,7 +342,7 @@ class FileUploadProperty extends DataProperty
         }
     }
 
-    function parseValidation($validation = '')
+    public function parseValidation($validation = '')
     {
         if ($this->UploadsModule_isHooked == TRUE) {
             list($multiple, $methods, $basedir, $importdir) = xarModAPIFunc('uploads', 'admin', 'dd_configure', $validation);
@@ -371,7 +371,7 @@ class FileUploadProperty extends DataProperty
         }
     }
 
-    function showValidation($args = array())
+    public function showValidation(Array $args = array())
     {
         extract($args);
 
@@ -424,7 +424,7 @@ class FileUploadProperty extends DataProperty
         return xarTplProperty('base', $template, 'validation', $data);
     }
 
-    function updateValidation($args = array())
+    public function updateValidation(Array $args = array())
     {
         extract($args);
 

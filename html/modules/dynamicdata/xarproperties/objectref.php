@@ -71,7 +71,7 @@ class ObjectRefProperty extends SelectProperty
 
     // Produce option(id,value) and value to pass to template
     // We cant trust the parent right now because that is using xarTplModule and not xarTplProperty
-    function showOutput($data = array())
+    public function showOutput(Array $data = array())
     {
         if (isset($data['value'])) $this->value = $data['value'];
 
@@ -85,7 +85,7 @@ class ObjectRefProperty extends SelectProperty
     }
 
     // Show the validation output.
-    function showValidation($args = array())
+    public function showValidation(Array $args = array())
     {
         $data = array(); $template = null;  $data['properties'] = array();
         extract($args);
@@ -125,7 +125,7 @@ class ObjectRefProperty extends SelectProperty
     }
 
     // Parse the validation string and set the appropriate values to the variables of this class
-    function parseValidation($validation = '')
+    public function parseValidation($validation = '')
     {
         // Validation is supposed to be objectname:display_propname:store_propname
         // See class variables on top for description
@@ -139,7 +139,7 @@ class ObjectRefProperty extends SelectProperty
     }
 
     // Get the modified values and update the validation
-    function updateValidation($args = array())
+    public function updateValidation(Array $args = array())
     {
         $sep = ':';
         extract($args['validation']);

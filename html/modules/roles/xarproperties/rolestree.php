@@ -31,7 +31,7 @@ class RolesTreeProperty extends DataProperty
         $this->filepath   = 'modules/roles/xarproperties';
     }
 
-    function showInput($data = array())
+    public function showInput(Array $data = array())
     {
         if (!isset($topuid)) $topuid = xarModGetVar('roles', 'everybody');
         $node = new TreeNode($topuid);

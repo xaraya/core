@@ -42,7 +42,7 @@ class NumberListProperty extends SelectProperty
         }
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;

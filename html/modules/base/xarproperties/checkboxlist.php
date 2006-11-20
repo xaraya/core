@@ -27,7 +27,7 @@ class CheckboxListProperty extends SelectProperty
         $this->template  = 'checkboxlist';
     }
 
-    function checkInput($name='', $value = null)
+    public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? 'dd_'.$this->id : $name;
         // store the fieldname for validations who need them (e.g. file uploads)
@@ -39,7 +39,7 @@ class CheckboxListProperty extends SelectProperty
     }
 
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         // this won't do for check boxes !
         //if (!isset($value)) {
@@ -57,7 +57,7 @@ class CheckboxListProperty extends SelectProperty
         return true;
     }
 
-    function showInput($data = array())
+    public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
 
@@ -79,7 +79,7 @@ class CheckboxListProperty extends SelectProperty
         return parent::showInput($data);
     }
 
-    function showOutput($data = array())
+    public function showOutput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
         if (is_array($data['value']) ) $data['value'] = implode(',',$data['value']);

@@ -55,7 +55,7 @@ class PassBoxProperty extends TextBoxProperty
         return array($a1);
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;
@@ -83,7 +83,7 @@ class PassBoxProperty extends TextBoxProperty
         }
     }
 
-    function showInput($data = array())
+    public function showInput(Array $data = array())
     {
         extract($data);
 
@@ -100,7 +100,7 @@ class PassBoxProperty extends TextBoxProperty
         return parent::showInput($data);
     }
 
-    function showOutput($data = array())
+    public function showOutput(Array $data = array())
     {
         //we don't really want to show the password, do we?
         $data['value'] = '';

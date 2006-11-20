@@ -36,7 +36,7 @@ class ArrayProperty extends DataProperty
         }
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;
@@ -58,7 +58,7 @@ class ArrayProperty extends DataProperty
         return true;
     }
 
-    function showInput($data = array())
+    public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) $value = $this->value;
         else $value = $data['value'];
@@ -94,7 +94,7 @@ class ArrayProperty extends DataProperty
         return parent::showInput($data);
     }
 
-    function showOutput($data = array())
+    public function showOutput(Array $data = array())
     {
         extract($data);
         if (!isset($value)) $value = $this->value;

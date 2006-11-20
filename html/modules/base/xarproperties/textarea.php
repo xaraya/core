@@ -63,7 +63,7 @@ class TextAreaProperty extends DataProperty
         return array($a1, $a2);
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;
@@ -73,7 +73,7 @@ class TextAreaProperty extends DataProperty
         return true;
     }
 
-    function showInput($data = array())
+    public function showInput(Array $data = array())
     {
         // Make the variables easier to access
         extract($data);
@@ -89,7 +89,7 @@ class TextAreaProperty extends DataProperty
     }
 
     // check validation for allowed rows/cols (or values)
-    function parseValidation($validation = '')
+    public function parseValidation($validation = '')
     {
         if (is_string($validation) && strchr($validation,':')) {
             list($rows,$cols) = explode(':',$validation);
@@ -112,7 +112,7 @@ class TextAreaProperty extends DataProperty
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showValidation($args = array())
+    public function showValidation(Array $args = array())
     {
         extract($args);
 
@@ -155,7 +155,7 @@ class TextAreaProperty extends DataProperty
      * @returns bool
      * @return bool true if the validation rule could be processed, false otherwise
      */
-     function updateValidation($args = array())
+    public function updateValidation(Array $args = array())
      {
          extract($args);
 

@@ -29,7 +29,7 @@ class CountryListProperty extends SelectProperty
         $this->template  = 'countrylist';
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;

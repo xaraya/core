@@ -26,7 +26,7 @@ class CalendarProperty extends DataProperty
         $this->filepath   = 'modules/base/xarproperties';
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;
@@ -72,7 +72,7 @@ class CalendarProperty extends DataProperty
         return true;
     }
 
-    function showInput($data = array())
+    public function showInput(Array $data = array())
     {
         extract($data);
         if (!isset($value)) $value = $this->value;
@@ -116,7 +116,7 @@ class CalendarProperty extends DataProperty
         return parent::showInput($data);
     }
 
-    function showOutput($data = array())
+    public function showOutput(Array $data = array())
     {
         extract($data);
 
@@ -146,7 +146,7 @@ class CalendarProperty extends DataProperty
         return parent::showOutput($data);
     }
 
-    function showValidation($args = array())
+    public function showValidation(Array $args = array())
     {
         extract($args);
 
@@ -176,7 +176,7 @@ class CalendarProperty extends DataProperty
         return xarTplProperty('base', $template, 'validation', $data);
     }
 
-    function updateValidation($args = array())
+    public function updateValidation(Array $args = array())
     {
         extract($args);
 

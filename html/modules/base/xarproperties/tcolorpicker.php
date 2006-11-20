@@ -32,7 +32,7 @@ class TColorPickerProperty extends DataProperty
         $this->filepath = 'modules/base/xarproperties';
     }
 
-    function validateValue($value = NULL)
+    public function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;
@@ -49,7 +49,7 @@ class TColorPickerProperty extends DataProperty
         return true;
     }
 
-    function showInput($data = array())
+    public function showInput(Array $data = array())
     {
         if (empty($maxlength) && isset($this->max)) {
             $this->maxlength = $this->max;

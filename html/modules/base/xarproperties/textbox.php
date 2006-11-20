@@ -43,7 +43,7 @@ class TextBoxProperty extends DataProperty
         }
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;
@@ -69,7 +69,7 @@ class TextBoxProperty extends DataProperty
         }
     }
 
-    function showInput($data = array())
+    public function showInput(Array $data = array())
     {
         // Process the parameters
         if (!isset($data['maxlength']) && isset($this->max)) {
@@ -90,7 +90,7 @@ class TextBoxProperty extends DataProperty
     }
 
     // check validation for allowed min/max length (or values)
-    function parseValidation($validation = '')
+    public function parseValidation($validation = '')
     {
         if (is_string($validation) && strchr($validation,':')) {
             $fields = explode(':',$validation);
@@ -117,7 +117,7 @@ class TextBoxProperty extends DataProperty
      * @param $args['tabindex'] tab index of the field
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showValidation($args = array())
+    public function showValidation(Array $args = array())
     {
         extract($args);
 
@@ -158,7 +158,7 @@ class TextBoxProperty extends DataProperty
      * @returns bool
      * @return bool true if the validation rule could be processed, false otherwise
      */
-     function updateValidation($args = array())
+    public function updateValidation(Array $args = array())
      {
          extract($args);
 

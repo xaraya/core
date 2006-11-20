@@ -63,7 +63,7 @@ class GroupListProperty extends SelectProperty
 
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;
@@ -86,7 +86,7 @@ class GroupListProperty extends SelectProperty
         return false;
     }
 
-    function parseValidation($validation = '')
+    public function parseValidation($validation = '')
     {
         foreach(preg_split('/(?<!\\\);/', $this->validation) as $option) {
             // Semi-colons can be escaped with a '\' prefix.
@@ -107,7 +107,7 @@ class GroupListProperty extends SelectProperty
         }
     }
 
-    function showOutput($data = array())
+    public function showOutput(Array $data = array())
     {
         extract($data);
 

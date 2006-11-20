@@ -70,7 +70,7 @@ class TextUploadProperty extends DataProperty
         }
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         // the variable corresponding to the file upload field is no longer set in PHP 4.2.1+
         // but we're using a textarea field to keep track of any previously uploaded file here
@@ -180,7 +180,7 @@ class TextUploadProperty extends DataProperty
     }
 
 //    function showInput($name = '', $value = null, $size = 0, $maxsize = 0, $id = '', $tabindex = '')
-    function showInput($args = array())
+    public function showInput(Array $data = array())
     {
         extract($args);
 
@@ -246,7 +246,7 @@ class TextUploadProperty extends DataProperty
         parent::showInput($data);
     }
 
-    function parseValidation($validation = '')
+    public function parseValidation($validation = '')
     {
         // Determine if the uploads module is hooked to the calling module
         // if so, we will use the uploads modules functionality
@@ -264,7 +264,7 @@ class TextUploadProperty extends DataProperty
         }
     }
 
-    function showValidation($args = array())
+    public function showValidation(Array $args = array())
     {
         extract($args);
 
@@ -303,7 +303,7 @@ class TextUploadProperty extends DataProperty
         return xarTplProperty('base', $template, 'validation', $data);
     }
 
-    function updateValidation($args = array())
+    public function updateValidation(Array $args = array())
     {
         extract($args);
 

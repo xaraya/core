@@ -82,7 +82,7 @@ class UserListProperty extends SelectProperty
     }
 
     // TODO: validate the selected user against the specified group(s).
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;
@@ -110,7 +110,7 @@ class UserListProperty extends SelectProperty
     // TODO: format the output according to the 'showlist'.
     // TODO: provide an option to allow admin to decide whether to wrap the user
     // in a link or not.
-    function showOutput($data = array())
+    public function showOutput(Array $data = array())
     {
         extract($data);
         if (!isset($value)) $value = $this->value;
@@ -133,7 +133,7 @@ class UserListProperty extends SelectProperty
         return parent::showOutput($data);
     }
 
-    function parseValidation($validation = '')
+    public function parseValidation($validation = '')
     {
         if (preg_match('/^xarModAPIFunc/i',$validation)) {
             return parent::parseValidation($validation);
@@ -179,7 +179,7 @@ class UserListProperty extends SelectProperty
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showValidation($args = array())
+    public function showValidation(Array $args = array())
     {
         extract($args);
 
@@ -221,7 +221,7 @@ class UserListProperty extends SelectProperty
      * @returns bool
      * @return bool true if the validation rule could be processed, false otherwise
      */
-    function updateValidation($args = array())
+    public function updateValidation(Array $args = array())
     {
         extract($args);
 

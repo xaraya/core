@@ -36,7 +36,7 @@ class ValidationProperty extends TextBoxProperty
         $this->filepath   = 'modules/dynamicdata/xarproperties';
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         // get the property type we're currently dealing with
         if (!xarVarIsCached('dynamicdata','currentproptype')) {
@@ -84,7 +84,7 @@ class ValidationProperty extends TextBoxProperty
         return false;
     }
 
-    function showInput($args = array())
+    public function showInput(Array $args = array())
     {
         extract($args);
         // get the property type we're currently dealing with
@@ -128,7 +128,7 @@ class ValidationProperty extends TextBoxProperty
         return $property->showValidation($data);
     }
 
-    function showOutput($args = array())
+    public function showOutput(Array $args = array())
     {
         extract($args);
 

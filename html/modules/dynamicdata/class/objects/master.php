@@ -71,6 +71,8 @@ class DataObjectDescriptor extends ObjectDescriptor
 
 class DataObjectMaster extends Object
 {
+    protected $descriptor  = null;      // descriptor object of this class
+
     public $objectid    = null;         // system id of the object in this installation
     public $name        = null;         // name of the object
     public $label       = null;         // label as shown on screen

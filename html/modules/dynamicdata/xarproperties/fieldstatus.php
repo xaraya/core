@@ -44,7 +44,7 @@ class FieldStatusProperty extends SelectProperty
         }
     }
 
-    function showInput($data = array())
+    public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) {
             $value = $this->value;
@@ -66,7 +66,7 @@ class FieldStatusProperty extends SelectProperty
         return parent::showInput($data);
     }
 
-    function checkInput($name = '', $value = null)
+    public function checkInput($name = '', $value = null)
     {
         if (empty($name)) {
             $inputname = 'input_dd_'.$this->id;
@@ -85,7 +85,7 @@ class FieldStatusProperty extends SelectProperty
         return $this->validateValue($value);
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;

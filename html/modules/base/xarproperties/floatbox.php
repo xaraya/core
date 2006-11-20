@@ -27,7 +27,7 @@ class FloatBoxProperty extends TextBoxProperty
         $this->maxlength = 30;
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;
@@ -63,7 +63,7 @@ class FloatBoxProperty extends TextBoxProperty
         return true;
     }
 
-    function showValidation($args = array())
+    public function showValidation(Array $args = array())
     {
         extract($args);
         // allow template override by child classes

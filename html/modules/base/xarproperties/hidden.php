@@ -28,7 +28,7 @@ class HiddenProperty extends DataProperty
         $this->filepath   = 'modules/base/xarproperties';
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (isset($value) && $value != $this->value) {
             $this->invalid = xarML('hidden field');

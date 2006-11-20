@@ -28,7 +28,7 @@ class StateListProperty extends SelectProperty
         $this->template = 'statelist';
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;

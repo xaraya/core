@@ -41,7 +41,7 @@ class SelectProperty extends DataProperty
         }
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (isset($value)) {
             $this->value = $value;
@@ -60,7 +60,7 @@ class SelectProperty extends DataProperty
         return false;
     }
 
-    function showInput($data = array())
+    public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) {
             $data['value'] = $this->value;
@@ -88,7 +88,7 @@ class SelectProperty extends DataProperty
         return parent::showInput($data);
     }
 
-    function showOutput($data = array())
+    public function showOutput(Array $data = array())
     {
         extract($data);
         if (isset($data['value'])) $this->value = $data['value'];
@@ -104,7 +104,7 @@ class SelectProperty extends DataProperty
         return parent::showOutput($data);
     }
 
-    function parseValidation($validation = '')
+    public function parseValidation($validation = '')
     {
         // if the validation field is an array, we'll assume that this is an array of id => name
         if (is_array($validation)) {
@@ -249,7 +249,7 @@ class SelectProperty extends DataProperty
      * @param $args['tabindex'] tab index of the field
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showValidation($args = array())
+    public function showValidation(Array $args = array())
     {
         extract($args);
 
@@ -307,7 +307,7 @@ class SelectProperty extends DataProperty
      * @returns bool
      * @return bool true if the validation rule could be processed, false otherwise
      */
-    function updateValidation($args = array())
+    public function updateValidation(Array $args = array())
     {
         extract($args);
 

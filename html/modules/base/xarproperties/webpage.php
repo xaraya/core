@@ -41,7 +41,7 @@ class HTMLPageProperty extends SelectProperty
         }
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;
@@ -64,7 +64,7 @@ class HTMLPageProperty extends SelectProperty
         return false;
     }
 
-    function showInput($data = array())
+    public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) {
             $data['value'] = $this->value;
@@ -91,7 +91,7 @@ class HTMLPageProperty extends SelectProperty
         return parent::showInput($data);
     }
 
-    function showOutput($data = array())
+    public function showOutput(Array $data = array())
     {
         extract($data);
 

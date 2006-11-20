@@ -26,7 +26,7 @@ class ImageProperty extends TextBoxProperty
         $this->template  = 'image';
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (!isset($value)) $value = $this->value;
         // /me thinks the default of http:// is lame. (because the default isnt a valid value)

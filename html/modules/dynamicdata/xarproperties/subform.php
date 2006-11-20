@@ -44,7 +44,7 @@ class SubFormProperty extends DataProperty
         }
     }
 
-    function checkInput($name='', $value = null)
+    public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? 'dd_'.$this->id : $name;
         // store the fieldname for validations who need them (e.g. file uploads)
@@ -56,7 +56,7 @@ class SubFormProperty extends DataProperty
         return $this->validateValue($value);
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (empty($this->objectid)) {
             // nothing to do here
@@ -414,7 +414,7 @@ class SubFormProperty extends DataProperty
         return true;
     }
 
-    function showInput($data = array())
+    public function showInput(Array $data = array())
     {
         extract($data);
 
@@ -485,7 +485,7 @@ class SubFormProperty extends DataProperty
         return parent::showInput($data);
     }
 
-    function showOutput($args = array())
+    public function showOutput(Array $args = array())
     {
         extract($args);
 
@@ -517,7 +517,7 @@ class SubFormProperty extends DataProperty
         return xarTplProperty($module, $template, 'showoutput', $data);
     }
 
-    function parseValidation($validation = '')
+    public function parseValidation($validation = '')
     {
         if (is_array($validation)) {
             $fields = $validation;
@@ -688,7 +688,7 @@ class SubFormProperty extends DataProperty
      * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showValidation($args = array())
+    public function showValidation(Array $args = array())
     {
         extract($args);
 
@@ -735,7 +735,7 @@ class SubFormProperty extends DataProperty
      * @returns bool
      * @return bool true if the validation rule could be processed, false otherwise
      */
-    function updateValidation($args = array())
+    public function updateValidation(Array $args = array())
     {
         extract($args);
 

@@ -32,7 +32,7 @@ class PrivilegesTreeProperty extends DataProperty
         $this->privs = new xarPrivileges();
     }
 
-    function showInput($data = array())
+    public function showInput(Array $data = array())
     {
         if (!isset($data['show'])) $data['show'] = 'assigned';
         $trees = array();

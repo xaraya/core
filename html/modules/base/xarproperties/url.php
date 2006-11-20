@@ -29,7 +29,7 @@ class URLProperty extends TextBoxProperty
         $this->template = 'url';
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;

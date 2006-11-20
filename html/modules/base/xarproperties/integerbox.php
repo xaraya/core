@@ -27,7 +27,7 @@ class NumberBoxProperty extends TextBoxProperty
         $this->maxlength = 30;
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;
@@ -65,7 +65,7 @@ class NumberBoxProperty extends TextBoxProperty
     }
 
     // Trick: use the parent method with a different template :-)
-    function showValidation($args = array())
+    public function showValidation(Array $args = array())
     {
         // allow template override by child classes
         if (!isset($args['template'])) {

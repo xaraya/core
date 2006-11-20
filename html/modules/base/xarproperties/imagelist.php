@@ -43,7 +43,7 @@ class ImageListProperty extends SelectProperty
         }
     }
 
-    function validateValue($value = null)
+    public function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;
@@ -66,7 +66,7 @@ class ImageListProperty extends SelectProperty
         return false;
     }
 
-    function showInput($data = array())
+    public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) {
             $data['value'] = $this->value;
@@ -96,7 +96,7 @@ class ImageListProperty extends SelectProperty
         return parent::showInput($data);
     }
 
-    function showOutput($data = array())
+    public function showOutput(Array $data = array())
     {
         extract($data);
 
@@ -124,7 +124,7 @@ class ImageListProperty extends SelectProperty
         return parent::showOutput($data);
     }
 
-    function parseValidation($validation = '')
+    public function parseValidation($validation = '')
     {
         if (empty($validation)) return;
         // specify base directory in validation field, or basedir|baseurl (not ; to avoid conflicts with old behaviour)
@@ -141,7 +141,7 @@ class ImageListProperty extends SelectProperty
         }
     }
 
-    function showValidation($args = array())
+    public function showValidation(Array $args = array())
     {
         extract($args);
 
@@ -181,7 +181,7 @@ class ImageListProperty extends SelectProperty
         return xarTplProperty('base', $template, 'validation', $data);
     }
 
-    function updateValidation($args = array())
+    public function updateValidation(Array $args = array())
     {
         extract($args);
 
