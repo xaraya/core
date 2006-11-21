@@ -20,12 +20,16 @@
     <!-- Generate the doctype
       @todo: xsl:output has mechanisms to do this, but dont know how
              to do that (as the result true generation has already started)
+      @todo: how should the dtd attribute really behave if unset or should 
+                  that even be possible
     -->
+    <xsl:if test="@dtd != 'none'">
     <xsl:text disable-output-escaping="yes">&lt;!DOCTYPE </xsl:text>
     <xsl:call-template name="dtdlist">
       <xsl:with-param name="dtd" select="@dtd"/>
     </xsl:call-template>
     <xsl:text>&nl;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates />
   </xsl:template>
 
