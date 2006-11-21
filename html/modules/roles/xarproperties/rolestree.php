@@ -23,9 +23,9 @@ class RolesTreeProperty extends DataProperty
     public $desc       = 'Roles Tree';
     public $reqmodules = array('roles');
 
-     function __construct($args)
+     function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
 
         $this->tplmodule = 'roles';
         $this->filepath   = 'modules/roles/xarproperties';

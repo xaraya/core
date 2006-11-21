@@ -25,9 +25,9 @@ class SelectProperty extends DataProperty
     public $file;
     public $override = false; // allow values other than those in the options
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->template  = 'dropdown';
         $this->tplmodule = 'base';
         $this->filepath   = 'modules/base/xarproperties';

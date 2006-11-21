@@ -22,9 +22,9 @@ class StateListProperty extends SelectProperty
     public $name       = 'statelisting';
     public $desc       = 'State Dropdown';
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->template = 'statelist';
     }
 

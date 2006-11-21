@@ -22,9 +22,9 @@ class CountryListProperty extends SelectProperty
     public $name       = 'countrylisting';
     public $desc       = 'Country Dropdown';
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template  = 'countrylist';
     }

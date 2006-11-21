@@ -27,9 +27,9 @@ class PassBoxProperty extends TextBoxProperty
     public $min = 5;
     public $max = null;
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'roles';
         $this->template ='password';
         $this->filepath   = 'modules/roles/xarproperties';

@@ -23,9 +23,9 @@ class AIMProperty extends URLIconProperty
     public $desc       = 'AIM Screen Name';
     public $reqmodules = array('roles');
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'roles';
         $this->template = 'aim';
         $this->filepath   = 'modules/roles/xarproperties';

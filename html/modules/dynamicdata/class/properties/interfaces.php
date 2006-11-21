@@ -6,6 +6,7 @@
 
 interface iDataProperty
 {
+    public function __construct(ObjectDescriptor $descriptor);
     public function checkInput($name = '', $value = null);
     public function fetchValue($name = '');
     public function getModule();

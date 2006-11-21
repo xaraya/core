@@ -34,9 +34,9 @@ class SubFormProperty extends DataProperty
     public $arguments = array('objectid','style','title','link','where','input','display','fieldlist','repeat');
     public $warnings  = '';
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
 
         // check validation for object, style etc.
         if (!empty($this->validation)) {

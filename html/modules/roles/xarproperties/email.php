@@ -23,9 +23,9 @@ class EmailProperty extends TextBoxProperty
     public $desc       = 'E-Mail';
     public $reqmodules = array('roles');
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'roles';
         $this->template = 'email';
         $this->filepath   = 'modules/roles/xarproperties';

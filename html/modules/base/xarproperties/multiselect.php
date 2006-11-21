@@ -19,9 +19,9 @@ class MultiSelectProperty extends SelectProperty
     public $name       = 'multiselect';
     public $desc       = 'Multiselect';
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template =  'multiselect';
     }

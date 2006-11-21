@@ -20,9 +20,9 @@ class UsernameProperty extends DataProperty
     public $desc       = 'Username';
     public $reqmodules = array('roles');
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'roles';
         $this->template = 'username';
         $this->filepath   = 'modules/roles/xarproperties';

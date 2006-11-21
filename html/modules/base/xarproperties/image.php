@@ -19,9 +19,9 @@ class ImageProperty extends TextBoxProperty
     public $name       = 'image';
     public $desc       = 'Image';
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template  = 'image';
     }

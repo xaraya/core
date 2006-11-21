@@ -21,9 +21,9 @@ class ModuleProperty extends SelectProperty
     public $desc       = 'Module';
     public $reqmodules = array('modules');
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->filepath   = 'modules/modules/xarproperties';
     }
 

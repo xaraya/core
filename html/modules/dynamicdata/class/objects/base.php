@@ -6,11 +6,14 @@
  * @subpackage dynamicdata module
  *
 **/
+sys::import('structures.descriptor');
 sys::import('modules.dynamicdata.class.properties');
 sys::import('modules.dynamicdata.class.objects.master');
 
 class DataObject extends DataObjectMaster
 {
+    protected $descriptor  = null;      // descriptor object of this class
+
     public $itemid = 0;
 
     /**

@@ -22,9 +22,9 @@ class PrivilegesTreeProperty extends DataProperty
     public $desc       = 'PrivilegesTree';
     public $reqmodules = array('privileges');
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
 
         if (!isset($allowtoggle)) $allowtoggle = 0;
         $this->tplmodule = 'privileges';

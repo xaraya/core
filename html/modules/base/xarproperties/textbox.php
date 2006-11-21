@@ -28,9 +28,9 @@ class TextBoxProperty extends DataProperty
     public $max       = null;
     public $regex     = null;
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
 
         // Set for runtime
         $this->tplmodule = 'base';

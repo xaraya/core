@@ -201,7 +201,8 @@ class DataPropertyMaster extends Object
             $clazz = $propertyClass;
         }
         // DataProperty or the determined one
-        $property = new $clazz($args);
+        $descriptor = new ObjectDescriptor($args);
+        $property = new $clazz($descriptor);
 
         return $property;
     }

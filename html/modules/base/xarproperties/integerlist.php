@@ -19,9 +19,9 @@ class NumberListProperty extends SelectProperty
     public $name       = 'integerlist';
     public $desc       = 'Number List';
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
 
         // check validation for allowed min/max values
         if (count($this->options) == 0 && !empty($this->validation) && strchr($this->validation,':')) {

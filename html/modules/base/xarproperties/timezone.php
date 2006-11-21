@@ -23,9 +23,9 @@ class TimeZoneProperty extends SelectProperty
     public $name       = 'timezone';
     public $desc       = 'Time Zone';
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template  = 'timezone';
     }

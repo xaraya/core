@@ -41,7 +41,8 @@ function dynamicdata_admin_modifyconfig()
     //$data['fieldtypeprop'] =& DataPropertyMaster::getProperty(array('type' => 'fieldtype'));
     sys::import('modules.dynamicdata.xarproperties.fieldtype');
 
-    $data['fieldtypeprop'] = new FieldTypeProperty(array('type' => 'fieldtype'));
+    $descriptor = new DataObjectDescriptor(array('type' => 'fieldtype'));
+    $data['fieldtypeprop'] = new FieldTypeProperty($descriptor);
 
     $data['labels'] = array(
                             'id' => xarML('ID'),

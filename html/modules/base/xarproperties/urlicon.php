@@ -25,9 +25,9 @@ class URLIconProperty extends TextBoxProperty
 
     public $icon;
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         // check validation field for icon to use !
         if (!empty($this->validation)) {
            $this->icon = $this->validation;

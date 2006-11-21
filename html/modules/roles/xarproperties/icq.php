@@ -22,9 +22,9 @@ class ICQProperty extends URLIconProperty
     public $desc       = 'ICQ Number';
     public $reqmodules = array('roles');
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'roles';
         $this->template = 'icq';
         $this->filepath   = 'modules/roles/xarproperties';

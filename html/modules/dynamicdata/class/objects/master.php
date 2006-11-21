@@ -63,7 +63,6 @@ class DataObjectDescriptor extends ObjectDescriptor
         $args['itemtype'] = isset($row['xar_object_itemtype']) ? $row['xar_object_itemtype'] : 0;
         $args['objectid'] = isset($row['xar_object_id']) ? $row['xar_object_id'] : 1;
         $args['name'] = isset($row['xar_object_name']) ? $row['xar_object_name'] : 'objects';
-//        $q->qecho();
         return $args;
 
     }

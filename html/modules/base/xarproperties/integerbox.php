@@ -19,9 +19,9 @@ class NumberBoxProperty extends TextBoxProperty
     public $name       = 'integerbox';
     public $desc       = 'Number Box';
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
 
         $this->size      = 10;
         $this->maxlength = 30;

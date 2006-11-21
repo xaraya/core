@@ -23,9 +23,9 @@ class URLProperty extends TextBoxProperty
     public $name       = 'url';
     public $desc       = 'URL';
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->template = 'url';
     }
 

@@ -21,9 +21,9 @@ class FieldStatusProperty extends SelectProperty
     public $desc       = 'Field Status';
     public $reqmodules = array('dynamicdata');
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->filepath   = 'modules/dynamicdata/xarproperties';
         $this->tplmodule =  'dynamicdata';
         $this->template =  'status';

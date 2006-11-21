@@ -37,9 +37,9 @@ class TextUploadProperty extends DataProperty
     // this is used by DataPropertyMaster::addProperty() to set the $object->upload flag
     public $upload = true;
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template  = 'textupload';
         $this->filepath   = 'modules/base/xarproperties';

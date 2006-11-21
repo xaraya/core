@@ -42,9 +42,9 @@ class UserListProperty extends SelectProperty
     *   field - name|uname|email|uid
     */
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'roles';
         $this->template = 'userlist';
         $this->filepath   = 'modules/roles/xarproperties';
