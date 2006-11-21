@@ -20,9 +20,9 @@ class CheckboxListProperty extends SelectProperty
     public $name       = 'checkboxlist';
     public $desc       = 'Checkbox List';
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template  = 'checkboxlist';
     }

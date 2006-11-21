@@ -90,7 +90,8 @@ function dynamicdata_adminapi_importpropertytypes( $args )
             // Call the class method on each property to get the registration info
             if (!is_callable(array($propertyClass,'getRegistrationInfo'))) continue;
             $baseInfo = new PropertyRegistration(array());
-            $property = new $propertyClass(array());
+            $descriptor = new ObjectDescriptor(array());
+            $property = new $propertyClass($descriptor);
             if (empty($property->id)) continue;   // Don't register the base property
             $baseInfo->getRegistrationInfo($property);
             // Fill in the info we dont have in the registration class yet

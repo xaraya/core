@@ -19,9 +19,9 @@ class RadioButtonsProperty extends SelectProperty
     public $name       = 'radio';
     public $desc       = 'Radio Buttons';
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template  = 'radio';
 

@@ -22,9 +22,9 @@ class MSNProperty extends URLIconProperty
     public $desc       = 'MSN Messenger';
     public $reqmodules = array('roles');
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'roles';
         $this->template = 'msn';
         $this->filepath   = 'modules/roles/xarproperties';

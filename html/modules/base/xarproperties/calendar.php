@@ -19,9 +19,9 @@ class CalendarProperty extends DataProperty
     public $desc       = 'Calendar';
     public $reqmodules = array('base');
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->filepath   = 'modules/base/xarproperties';
     }

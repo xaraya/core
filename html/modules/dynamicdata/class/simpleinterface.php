@@ -15,31 +15,31 @@ class SimpleObjectInterface extends DataObjectInterface
 {
     function __construct(array $args = array())
     {
-        parent::__construct($args);
-        if (!xarVarFetch('tplmodule',   'isset', $args['tplmodule'], 'dynamicdata', XARVAR_NOT_REQUIRED)) 
+        parent::__construct($descriptor);
+        if (!xarVarFetch('tplmodule',   'isset', $args['tplmodule'], 'dynamicdata', XARVAR_NOT_REQUIRED))
             return;
-            
-        if (!empty($args) && is_array($args) && count($args) > 0) { 
+
+        if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
         }
     }
 
     function handle(array $args = array())
-    {                                
-        if (!xarVarFetch('method', 'str', $args['method'], 'showDisplay', XARVAR_NOT_REQUIRED)) 
+    {
+        if (!xarVarFetch('method', 'str', $args['method'], 'showDisplay', XARVAR_NOT_REQUIRED))
             return;
-        if (!xarVarFetch('itemid', 'id', $args['itemid'], NULL, XARVAR_DONT_SET)) 
+        if (!xarVarFetch('itemid', 'id', $args['itemid'], NULL, XARVAR_DONT_SET))
             return;
         // @todo maybe this should be done somewhere else ?
-        if (!xarVarFetch('qparam', 'str', $qparam, NULL, XARVAR_DONT_SET)) 
+        if (!xarVarFetch('qparam', 'str', $qparam, NULL, XARVAR_DONT_SET))
            return;
-        if (!xarVarFetch('qstring', 'str', $qstring, NULL, XARVAR_DONT_SET)) 
+        if (!xarVarFetch('qstring', 'str', $qstring, NULL, XARVAR_DONT_SET))
            return;
 
         if (!empty($qparam) && !empty ($qstring)) {
             $args['where'] = "$qparam LIKE '$qstring%'";
         }
-        if (!empty($args) && is_array($args) && count($args) > 0) { 
+        if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
         }
         $this->object =& DataObjectMaster::getObjectList($this->args);

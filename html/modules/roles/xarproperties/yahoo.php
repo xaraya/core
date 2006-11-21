@@ -21,9 +21,9 @@ class YahooProperty extends URLIconProperty
     public $desc       = 'Yahoo Messenger';
     public $reqmodules = array('roles');
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'roles';
         $this->template = 'yahoo';
         $this->filepath   = 'modules/roles/xarproperties';

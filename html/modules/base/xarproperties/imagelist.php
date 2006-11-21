@@ -24,9 +24,9 @@ class ImageListProperty extends SelectProperty
     public $baseurl = null;
     public $filetype = '(gif|jpg|jpeg|png|bmp)';
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template  = 'imagelist';
 

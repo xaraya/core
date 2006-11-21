@@ -23,9 +23,9 @@ class ArrayProperty extends DataProperty
     public $fields = array();
     public $size = 40;
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template = 'array';
         $this->filepath   = 'modules/base/xarproperties';

@@ -38,9 +38,9 @@ class ObjectRefProperty extends SelectProperty
     public $store_prop   = 'objectid';   // Name of the property we want to use for storage
     public $display_prop = 'name';       // Name of the property we want to use for displaying.
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->template = 'objectref';
         $this->tplmodule = 'dynamicdata';
         $this->filepath   = 'modules/dynamicdata/xarproperties';

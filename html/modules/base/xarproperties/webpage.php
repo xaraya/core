@@ -22,9 +22,9 @@ class HTMLPageProperty extends SelectProperty
     public $basedir  = '';
     public $filetype = '((xml)|(html))?';
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template = 'webpage';
         // specify base directory in validation field

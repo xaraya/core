@@ -26,9 +26,9 @@ class ModuleItemtypeProperty extends SelectProperty
 
     public $referencemoduleid = 182;
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->filepath   = 'modules/dynamicdata/xarproperties';
         if (isset($args['modid'])) $this->referencemoduleid = $args['modid'];
     }

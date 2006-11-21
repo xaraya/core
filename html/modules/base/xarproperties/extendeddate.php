@@ -30,9 +30,9 @@ class ExtendedDateProperty extends CalendarProperty
     public $name       = 'extendeddate';
     public $desc       = 'Extended Date';
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template  = 'extendeddate';
     }

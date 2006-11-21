@@ -25,9 +25,9 @@ class FieldTypeProperty extends SelectProperty
     public $desc       = 'Field Type';
     public $reqmodules = array('dynamicdata');
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->filepath   = 'modules/dynamicdata/xarproperties';
 
         if (count($this->options) == 0) {

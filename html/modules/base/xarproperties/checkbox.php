@@ -21,9 +21,9 @@ class CheckboxProperty extends DataProperty
     public $desc       = 'Checkbox';
     public $reqmodules = array('base');
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template  = 'checkbox';
         $this->filepath   = 'modules/base/xarproperties';

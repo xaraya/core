@@ -30,9 +30,9 @@ class ItemTypeProperty extends NumberBoxProperty
     public $func     = null; // specific API call to retrieve a list of items
     public $options  = array();
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
         $this->filepath   = 'modules/dynamicdata/xarproperties';
 
         // options may be set in one of the child classes

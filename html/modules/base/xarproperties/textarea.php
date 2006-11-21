@@ -23,9 +23,9 @@ class TextAreaProperty extends DataProperty
     public $rows = 8;
     public $cols = 35;
 
-    function __construct($args)
+    function __construct(ObjectDescriptor $descriptor)
     {
-        parent::__construct($args);
+        parent::__construct($descriptor);
 
         $this->tplmodule = 'base';
         $this->template = 'textarea';

@@ -42,9 +42,9 @@ class DataProperty extends Object implements iDataProperty
     public $invalid = '';     // result of the checkInput/validateValue methods
 
 //    public $objectref = null; // object this property belongs to
-//    public $_objectid = null; // objectid this property belongs to
-//    public $_moduleid = null; // moduleid this property belongs to
-//    public $_itemtype = null; // itemtype this property belongs to
+    public $_objectid = null; // objectid this property belongs to
+    public $_moduleid = null; // moduleid this property belongs to
+    public $_itemtype = null; // itemtype this property belongs to
 
     public $_itemid;          // reference to $itemid in DataObject, where the current itemid is kept
     public $_items;           // reference to $items in DataObjectList, where the different item values are kept
@@ -52,14 +52,14 @@ class DataProperty extends Object implements iDataProperty
     /**
      * Default constructor setting the variables
      */
-    function __construct(array $args)
+    public function __construct(ObjectDescriptor $descriptor)
     {
+        $this->descriptor = $descriptor;
+        $args = $descriptor->getArgs();
         $this->template = $this->getTemplate();
         $this->args = serialize(array());
 
-        if(!empty($args) && count($args) > 0)
-            foreach($args as $key => $val)
-                $this->$key = $val;
+        $descriptor->refresh($this);
 
         if(!isset($args['value']))
         {
