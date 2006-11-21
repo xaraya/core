@@ -17,7 +17,7 @@ DB-CHANGES:
 * xar_roles column xar_auth_module replaced by column
   xar_auth_modid. The interface WAS NOT ADAPTED but nothing uses the
   auth_module directly and the columns is probably going to move away
-  to somewhere else anyway. 
+  to somewhere else anyway.
 * xar_block_types column xar_module replaced by column xar_modid. This
   was far out the most intrusive one since that table is used in the
   privilege instance queries. I adapted as best as I could, no doubt
@@ -33,16 +33,16 @@ DB-CHANGES:
 * table security_levels has been dropped, now managed by SecurityLevel class
 * tables privmembers, rolemembers and security_acl have their unique key on
   2 columns replaced by a primary key.
-* table privileges, column xar_realm dropped, replaced by xar_realmid. 
+* table privileges, column xar_realm dropped, replaced by xar_realmid.
 * table security_masks, colum xar_realm dropped, replaced by xar_realmid
 * placed unique index on privilege.xar_name and dropped code which checked for
   uniqueness
 * table dynamic_relations table has been dropped
 * table DDL for postgres now uses the SERIAL type for auto-increment columns
-  and autogenerates a sequence 'tablename_seq' for it.This means that it now 
-  behaves  _as if_ an autoinc column like in mysql was there. 
-  (effectively making genID obsolete for postgres too, as it already was for 
-  mysql and sqlite) [TODO: this is install-wide, how are we going to do 
+  and autogenerates a sequence 'tablename_seq' for it.This means that it now
+  behaves  _as if_ an autoinc column like in mysql was there.
+  (effectively making genID obsolete for postgres too, as it already was for
+  mysql and sqlite) [TODO: this is install-wide, how are we going to do
   upgrades for this? not trivial.]
 * table 'dynamic_properties_def', column prop_req_modules replaced by
   prop_modid meaning the modid of the owning module, if the property as such
@@ -58,9 +58,9 @@ PENDING DB-CHANGES
 ==================
 
 * does blocks really need 5 tables?
-* xar_module column in privileges table uses a string for modulename and 'All' 
+* xar_module column in privileges table uses a string for modulename and 'All'
   and 'empty' which prevents it from being a foreign key to the modules table
-* is column auth_modid still needed? 
+* is column auth_modid still needed?
     Answer: yes, but it's confusing:
     1. it doesnt need to be there really, but might be a moditemvar (it
     applies to the few)
@@ -73,13 +73,13 @@ PENDING DB-CHANGES
   foreign key constraint can be added on the column
 * rolemembers parent column stores 0 now for 'no parent', change to null, so a
   foreign key constraint can be added on the column
-NOTE: the above 2 are probably problematic since the parent column is part of 
-the primary key and as such can probably not contain the non-value NULL. 
+NOTE: the above 2 are probably problematic since the parent column is part of
+the primary key and as such can probably not contain the non-value NULL.
 no idea what the solution is there, except revert back to a unique key only.
-Choices: 
+Choices:
     1. table without a primary key but consistent with the foreign keys
     2. table with a primary key but no foreign key possible
-    3. use a derived constraint like a trigger to enforce consistency 
+    3. use a derived constraint like a trigger to enforce consistency
     (this is the same as 2, but extended)
     A question related to this:
         Does the combination of say, privparent, privchild need extra attributes
@@ -114,14 +114,14 @@ OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
 ------------------------------------------
 
 * [N/A anymore] when encountered, upgrade code to upgrade modules from older
-  versions than in 1.0 is removed, assuming we will only support 
-  upgrading from 1.0 to 2.x and not versions before 1.0 
-  NOTE: 
+  versions than in 1.0 is removed, assuming we will only support
+  upgrading from 1.0 to 2.x and not versions before 1.0
+  NOTE:
     when changing modules to return upgrade_themodule('1.0') instead of
-    return true, the original upgrade from init need to be placed in the 
+    return true, the original upgrade from init need to be placed in the
     upgrade routine again. (luckily i replaced this only for one or two)
     modules, which have now been propagate from c.x.c to c.x.c.2.x so DO NOT
-    remove old upgrade code anymore now! 
+    remove old upgrade code anymore now!
 * the whole exception subsystem was rewritten from scratch and the
   whole of core was adapted to use it. (see new RFC-0054)
 * adodb has been replaced with the creole database abstraction layer.
@@ -158,8 +158,8 @@ CHANGED API
   such usages (i.e. calls explicitly suppressing the exception) they can do so
   again by using a try/catch block around the call. (occurances found have
   been adapted)
-* the Variable getting/setting in core does NOT support direct prepping 
-  anymore, as to eliminate dependencies on other subsystems. If the parameter 
+* the Variable getting/setting in core does NOT support direct prepping
+  anymore, as to eliminate dependencies on other subsystems. If the parameter
   was used, it will be ignored now. USAGE UNKNOWN.
 
 DROPPED API
@@ -174,7 +174,7 @@ Private (should not affect anyone):
 Public (this MAY affect someone)
 --------------------------------
 
-* xarPreCoreGetVarDirPath (now sys::varpath()) 
+* xarPreCoreGetVarDirPath (now sys::varpath())
 * xarModAPIFunc('dynamicdata','admin','checkinput') : never used
 * xarModAPIFunc('dynamicdata','user','interface') : never used
 * xarModAPIFunc('dynamicdata','user','getsources') : never used
@@ -185,11 +185,11 @@ DIFFERENCES BETWEEN PHP 5.0/5.1/5.2
 
 * do not agree on what function_exists() / is_callable() /
   method_exists() should return
-* In PHP 5.0.4 (and earlier versions I believe) the shutdown function is 
+* In PHP 5.0.4 (and earlier versions I believe) the shutdown function is
   called *after* the output buffering callback.
-* In PHP 5.1.2 (not sure when the change occurred) the shutdown function is 
+* In PHP 5.1.2 (not sure when the change occurred) the shutdown function is
   called *before* the output buffering callback.
-* apparently PHP 5.1 allows headers to be sent in a shutdown function  
+* apparently PHP 5.1 allows headers to be sent in a shutdown function
   (arguably wrong)
 
 REFACTORING LIST:
@@ -206,7 +206,7 @@ design work can begin.
   or something
 * [STARTED] OO-ify stuff in core where appropriate (including getting rid of
   die()'s and modelling the classes where php4 could not)
-* I really would like to do something with views wrt multisites et. al. 
+* I really would like to do something with views wrt multisites et. al.
     - the query storage for privilege instances is one application of views
       (in testing, views are *much* slower than dedicated tables (mysql),
       which doesnt make sense to me; i expect them to be _somewhat_ slower,
@@ -272,12 +272,12 @@ design work can begin.
     * pi tag -> generating a processing instruction in the _output_
     * pi support -> being able to parse/handle processing instructions in the
     _input_
-* [STARTED] finish design and implementation os schema based data definition 
+* [STARTED] finish design and implementation os schema based data definition
 * design a less bloated concept for config/user/mod/theme/system vars etc
 * reorganize the old error/exception system to use much fewer files, consider
   writing a talkback module to go along with a distro for facilitating the bug
   reporting we can build into an install. (bugzilla can be remotely queried for
-  products and components easily, perhaps based on a server side map of 
+  products and components easily, perhaps based on a server side map of
   regid-component for modules at least)
 * [STARTED] move code from dd procedural functions to classes where feasible
 * integrate Object showView and showList (johnny: isnt this DONE?)
@@ -296,7 +296,7 @@ KNOWN ISSUES
 
 * [DONE] blocks do not end up in groups anymore during installation, need to
   investigate why that is. Most likely a missed spot when doing the
-  schema migration. 
+  schema migration.
 * since we now use the meta info classes, some functions in DD which
   depend on the linkage info from tables to modules (which was
   unreliable) is lost, so expect surprising results in 'meta' areas in
@@ -307,10 +307,10 @@ KNOWN ISSUES
 * there is no upgrade routine for upgrading 1.x to 2.x
 * when we're in exception handling for a *php* exception, it seems that no more
   exceptions are thrown in subsequent code
-  Example for reproducing: 
-        - dont define date.timezone in php (will raise exception in 
+  Example for reproducing:
+        - dont define date.timezone in php (will raise exception in
         xarLogger.php early on)
-        - make sure CACHEKEYS file is NOT present (should raise exception in 
+        - make sure CACHEKEYS file is NOT present (should raise exception in
         caching/template.php lines 168+)
         The fopen() call in caching/template.php does NOT raise an exception then
 * [DONE?] property file names are now based upon $property->name instead of
@@ -320,11 +320,11 @@ KNOWN ISSUES
   exposes an issue in how we name the property classes themselves and the name
   stored in the database
 
- 
+
 MIN. REQUIRED VERSIONS DETERMINED SO FAR
 ----------------------------------------
 
-* PHP      5.1.4 
+* PHP      5.1.4
 * Mysql    5.0.18
 * Postgres 8.1 (this introduced secquences (bug 1883) as tracked objects, meaning
             they can be reliably referenced in table definitions )
@@ -344,11 +344,11 @@ Requirements for a front end (js) library
   the second need (master detail relations, repopulation combo's etc.)
 - specifying the controls should be a 3 step process maximal:
   1. include on js entry point for the request
-  2. write the controls inside a xar-template 
+  2. write the controls inside a xar-template
   3. (optional) customize the default behaviour to the applications need.
 Whether the tags used are compiled/transformed on the server or
 through a js callback is irrelevant for us.
- 
+
 
 Encoding of pseudo values:
 --------------------------
@@ -392,7 +392,10 @@ Possible new QA checks for 2.x code branch
 - no php4 style constructors, always __construct() if any (hard, since have 2
   is valid too, sigh.)
 - classes start with Capitals (?) (sys class doesnt now, is that bad?)
-- add new deprecation info on wrapped API methods (a lot!)
+- add new deprecation info (on wrapped API methods) (a lot!)
+    - [DONE] PO_insert_ID
+    - [DONE] xarPreCoreGetVarDirPath
+    -
 - no use of GenID method (no need, leave id columns alone as much as possible)
 
 
@@ -407,7 +410,7 @@ Hammered: (as in, at least 2 people agreed to this)
 * class constants go first in the class
 * constructors are always the first method, regardless of scope.
 * ClassNames are UpperCamelCase ¹
-* InterfaceNames are UpperCamelCase ² 
+* InterfaceNames are UpperCamelCase ²
 * methodNames are lowerCamelCase
 * $variableNames are $lowerCamelCase
 * CONSTANTS and DEFINES are UPPERCASE (prefer Class::CONSTANT over CONSTANT)
@@ -421,8 +424,8 @@ Hammered: (as in, at least 2 people agreed to this)
 * phpdoc @access only needed for things which dont have access specifiers
   in php:
     - functions
-    - classes 
- 
+    - classes
+
 Remarks:
 
 ¹ we wil NOT use a xar specific prefix for our classes, but instead gamble
@@ -438,9 +441,9 @@ suited for us mere mortals.
 ² for interfaces it's even more important to think thrice about their
 names. Serializable, Countable are *good* examples, InterfaceForMyClass is
 *bad*. But what is _enough_ we dont know yet.
-    
-List of things to hammer (or not): 
 
-* interface inheritance is unclear to me, so its hard to come up with some 
-  rules for that 
+List of things to hammer (or not):
+
+* interface inheritance is unclear to me, so its hard to come up with some
+  rules for that
 * [WONT] group interface satisfaction methods together

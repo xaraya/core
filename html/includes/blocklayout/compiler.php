@@ -13,10 +13,11 @@
  * @author Marcel van der Boom <marcel@xaraya.com>
  * @author Marty Vance <dracos@xaraya.com>
  * @author Garrett Hunter <garrett@blacktower.com>
+ * @todo   Most of this is now deprecated, with the birth of the XSL based compiler
  */
 
 /**
- * DONT EVEN THINK ABOUT UNCOMMENTING THIS
+ * This define allows switching back to BL1 if needed (comment the line)
  *
  */
  //define('XAR_BL_USE_XSLT',true);
@@ -219,21 +220,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         }
 
         fclose($fp);
-
-        // XSLT-SECTION
-        if(defined('XAR_BL_USE_XSLT')) {
-            // If the filename contains 'modules' add a root tag
-            xarLogMessage("Compiling : $fileName");
-            $location = dirname($fileName);
-            $pathelements = explode('/',$location);
-            $lastdir = array_pop($pathelements);
-            if($lastdir != 'pages') {
-                //if(!(basename($fileName) == 'default.xt' || basename($fileName) =='admin.xt')) {
-                xarLogMessage('NOT a page template, adding dummy root tag');
-                $templateSource ="
-<xar:template xmlns:xar=\"http://xaraya.com/2004/blocklayout\">\n".$templateSource .'</xar:template>';
-            }
-        }
+        xarLogMessage("BL: compiling $fileName");
 
         $this->parser->setFileName($fileName);
         $res = $this->compile($templateSource);
@@ -249,10 +236,11 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         if(defined('XAR_BL_USE_XSLT')) {
             sys::import('blocklayout.xsltransformer');
             $xslFile = 'includes/blocklayout/xslt/xar2php.xsl';
-            $xslProc = new BlockLayoutXSLTProcessor($templateSource,$xslFile);
+            $xslProc = new BlockLayoutXSLTProcessor($xslFile);
+            // This is confusing, dont do this here.
             $xslProc->xmlFile = $this->parser->getFileName();
             // This generates php code, the documentree is not visible here anymore
-            $outDoc = $xslProc->transform();
+            $outDoc = $xslProc->transform($templateSource);
             return $outDoc;
         }
 

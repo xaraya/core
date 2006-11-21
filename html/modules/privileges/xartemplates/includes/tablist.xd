@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:style scope="module" module="base" file="navtabs" />
 <xar:set name="request">xarRequestGetInfo()</xar:set>
 <xar:set name="activetab">#$request.2#</xar:set>
@@ -23,3 +24,4 @@
 
   </dl>
 </div>
+</xar:template>

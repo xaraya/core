@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="$showhelp eq '1'">
     <ul class="xar-menu-section">
@@ -174,3 +175,4 @@
         - this built-in implementation of vertical menus uses empty links as means of providing visual feedback in all browsers, including those that dont support :hover state on anything except links (surprise: IE/Win) 
 
 -->
+</xar:template>

@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <fieldset>
     <legend>
         <xar:mlstring>Define object and property to reference</xar:mlstring>
@@ -15,4 +16,4 @@
     <xar:set name="field">$name.'[store_propid]'</xar:set>
     <xar:data-input type="dropdown" options="$properties" value="$store_propid" name="$field"/>
     
-</fieldset>
+</fieldset></xar:template>

@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <form action="#$form_action#" method="post">
    <div>
@@ -14,3 +15,4 @@
     <input type="submit" name="change_language" value="#xarML('Set Language')#" />
    </div>
 </form>
+</xar:template>

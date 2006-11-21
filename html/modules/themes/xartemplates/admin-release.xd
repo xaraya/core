@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Themes Administration</xar:mlstring></span>
@@ -27,3 +28,4 @@
         #$warning#
     </xar:if>
 </div>
+</xar:template>
