@@ -214,7 +214,8 @@ class DataObjectMaster extends Object
         {
             $this->fieldlist = array(); // why?
             foreach($this->properties as $name => $property)
-                if($property->status & $this->status)
+                if($property->status && $this->status)
+//                if($property->status & $this->status)
                     $this->fieldlist[] = $name;
         }
         // build the list of relevant data stores where we'll get/set our data
