@@ -94,7 +94,7 @@ class DataObjectMaster extends Object
     public $datastores  = array();      // similarly the list of datastores (arguably in the wrong place here)
     public $fieldlist   = array();
     public $fieldprefix = '';           // prefix to use in field names etc.
-    public $status      = 0;
+    public $status      = 1;
 
     public $layout = 'default';         // optional layout inside the templates
     public $template = '';              // optional sub-template, e.g. user-objectview-[template].xd (defaults to the object name)
@@ -210,7 +210,7 @@ class DataObjectMaster extends Object
         }
 
         // filter on property status if necessary
-        if(isset($this->status) && count($this->fieldlist) == 0)
+        if(!empty($this->status) && count($this->fieldlist) == 0)
         {
             $this->fieldlist = array(); // why?
             foreach($this->properties as $name => $property)

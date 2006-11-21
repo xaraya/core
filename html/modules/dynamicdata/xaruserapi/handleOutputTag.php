@@ -21,13 +21,14 @@
  */
 function dynamicdata_userapi_handleOutputTag($args)
 {
-    
+
     if (isset($args['property'])) {
         $property  = $args['property'];
         unset($args['property']);
     }
     $out = '';
-    
+
+            var_dump($args);
     if (!empty($args)) {
         if (!isset($args['field'])) {
             $parts = array();

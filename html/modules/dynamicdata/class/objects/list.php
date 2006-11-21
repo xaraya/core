@@ -107,7 +107,6 @@ class DataObjectList extends DataObjectMaster
                 $args['where'] = $this->secondary . ' eq ' . $this->itemtype;
             else
                 $args['where'] .= ' and ' . $this->secondary . ' eq ' . $this->itemtype;
-        var_dump($args['where']);
         }
 
         // Note: they can be empty here, which means overriding any previous criteria

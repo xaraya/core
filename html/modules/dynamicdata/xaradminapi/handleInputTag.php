@@ -55,6 +55,7 @@ function dynamicdata_adminapi_handleInputTag($args)
          $args['id'] = strtr($args['name'], array('[' => '_', ']' => ''));
     }
 */
+            var_dump($args);
     if (!empty($args)) {
         if (!isset($args['field'])) {
             $parts = array();
