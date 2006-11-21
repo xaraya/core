@@ -784,7 +784,7 @@ function xarModGetDisplayableDescription($modName = NULL, $type = 'module')
 function xarModGetIDFromName($modName, $type = 'module')
 {   return xarMod::getRegID($modName, $type); }
 
-function xarModGetInfo($modRegId, $type = 'module')
+function xarModgetInfo($modRegId, $type = 'module')
 {   return xarMod::getInfo($modRegId, $type); }
 
 function xarMod_getBaseInfo($modName, $type = 'module')
@@ -831,7 +831,7 @@ interface IxarMod
  * Preliminary class to model xarMod interface
  *
  */
-class xarMod  extends Object implements IxarMod
+class xarMod extends Object implements IxarMod
 {
     static $genShortUrls = false;
     static $genXmlUrls   = true;
@@ -932,7 +932,7 @@ class xarMod  extends Object implements IxarMod
         if (!isset($modBaseInfo)) return; // throw back
         return array('systemid' => $modBaseInfo['systemid'], 'regid' => $modBaseInfo['regid']);
     }
-    
+
     /**
      * Get module registry ID by name
      *
@@ -946,7 +946,7 @@ class xarMod  extends Object implements IxarMod
         $ids = self::getIds($modName);
         return $ids['regid'];
     }
-    
+
     /**
      * Get module system ID by name
      *

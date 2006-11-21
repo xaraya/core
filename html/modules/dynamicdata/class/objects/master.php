@@ -502,15 +502,18 @@ class DataObjectMaster extends Object
 */
     function &getProperties($args = array())
     {
-        if(empty($args['fieldlist']) && empty($this->status))
+
+        if(empty($args['fieldlist']))
         {
             if(count($this->fieldlist) > 0)
                 $fieldlist = $this->fieldlist;
             else
-                $fieldlist = array_keys($this->properties);
-        }
-        else
+                return $this->properties;
+//                $fieldlist = array_keys($this->properties);
+        } else {
             $fieldlist = $args['fieldlist'];
+        }
+
 
         $properties = array();
         foreach($fieldlist as $name) {
