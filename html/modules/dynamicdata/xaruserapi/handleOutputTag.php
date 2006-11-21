@@ -28,6 +28,7 @@ function dynamicdata_userapi_handleOutputTag($args)
     }
     $out = '';
 
+            var_dump($property)."XX";
     if (!empty($args)) {
         if (!isset($args['field'])) {
             $parts = array();
