@@ -224,6 +224,7 @@ class DataObjectMaster extends Object
         // add ancestors' properties to this object if required
         // the default is to add the fields
         $this->baseancestor = $this->objectid;
+//        echo $this->objectid;exit;
         if($this->extend)
             $this->addAncestors();
     }
@@ -283,8 +284,7 @@ class DataObjectMaster extends Object
             throw new EmptyParameterException(array(),'Not a valid object');
 
         $properties = $object->getProperties();
-        // mrb: why the ref?
-        foreach($properties as &$newproperty)
+        foreach($properties as $newproperty)
         {
             // ignore if this property already belongs to the object
             if(isset($this->properties[$newproperty->name]))
@@ -303,9 +303,9 @@ class DataObjectMaster extends Object
                 $this->addDatastore($newstore[0],$newstore[1]);
             }
             $this->datastores[$newproperty->datastore]->addField($this->properties[$args['name']]);
+            $this->fieldlist[] = $newproperty->name;
             // Is this stuff needed?
             // $newproperty->_items =& $this->items;
-            // $this->fieldlist[] = $newproperty->name;
         }
     }
 
@@ -502,7 +502,6 @@ class DataObjectMaster extends Object
 */
     function &getProperties($args = array())
     {
-
         if(empty($args['fieldlist']))
         {
             if(count($this->fieldlist) > 0)

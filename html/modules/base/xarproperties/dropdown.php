@@ -174,7 +174,7 @@ class SelectProperty extends DataProperty
                 }
             } elseif (isset($items) && is_array($items) && count($items) > 0) {
                 foreach ($items as $id => $name) {
-                    array_push($this->options, array('id' => $id, 'name' => $name));
+                    $this->options[] = array('id' => $id, 'name' => $name);
                 }
                 unset($items);
             }
