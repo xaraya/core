@@ -87,7 +87,6 @@ class DataObjectMaster extends Object
     public $isalias     = 0;
     public $join;
     public $table;
-    public $where       = '';
     public $extend      = true;
 
     public $properties  = array();      // list of properties for the DD object

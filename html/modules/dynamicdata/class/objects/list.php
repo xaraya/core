@@ -14,7 +14,7 @@ sys::import('modules.dynamicdata.class.objects.master');
 class DataObjectList extends DataObjectMaster
 {
     public $itemids  = array();           // the list of item ids used in data stores
-//    public $where;
+    public $where    = '';
     public $sort;
     public $groupby;
     public $numitems = null;
