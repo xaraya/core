@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <xar:comment>
 Generic page for display of URL in an IFrame.
@@ -31,4 +32,4 @@ function IntegrateIt() {
   </xar:if>
 <xar:else />
    <xar:mlstring>You do not have permission to access this page.</xar:mlstring>
-</xar:if>
+</xar:if></xar:template>

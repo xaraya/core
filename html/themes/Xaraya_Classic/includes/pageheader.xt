@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:set name="siteslogan"><xar:var scope="module" module="themes" name="SiteSlogan" /></xar:set>
 <div id="xc-header">
     <div id="xc-header-rightbevel">
@@ -17,3 +18,4 @@
         <xar:var name="siteslogan" />
     </p>
 </div>
+</xar:template>

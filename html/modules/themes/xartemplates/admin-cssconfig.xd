@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <!--
     Temporarily using blocks css because it's already implemented in stable scenario.. TODO: convert to native core.css as soon as practicable 
@@ -100,3 +101,4 @@
         <xar:template file="modulescss" type="module" />
     </xar:if>
 </div>
+</xar:template>

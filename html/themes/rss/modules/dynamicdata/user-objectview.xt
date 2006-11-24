@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:set name="itemname">xarVarGetCached('XML','itemname')</xar:set>
 <xar:foreach in="$items" key="$itemid" value="$fields">
     &lt;#$itemname#&gt;
@@ -7,3 +8,4 @@
     &lt;/#$itemname#&gt;
 </xar:foreach>
 
+</xar:template>

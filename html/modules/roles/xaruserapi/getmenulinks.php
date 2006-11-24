@@ -10,13 +10,14 @@
  * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
-/* 
+/*
  * Standard function to get main menu links
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 function roles_userapi_getmenulinks()
 {
     //If we have turned on role list (memberlist) display and users have requisite level to see them
+    $menulinks = array();
     if (xarModGetVar('roles', 'displayrolelist')){
         if (true) {
             $menulinks[] = Array('url'   => xarModURL('roles',
@@ -53,10 +54,6 @@ function roles_userapi_getmenulinks()
                              'label' => xarML('Terms of Use'));
     }
     */
-    if (empty($menulinks)){
-        $menulinks = '';
-    }
-
     return $menulinks;
 }
 
