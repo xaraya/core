@@ -87,6 +87,7 @@ class DataObjectMaster extends Object
     public $isalias     = 0;
     public $join;
     public $table;
+    public $where       = '';
     public $extend      = true;
 
     public $properties  = array();      // list of properties for the DD object
@@ -166,6 +167,7 @@ class DataObjectMaster extends Object
             if (!empty($info)) {
                 $this->descriptor->setArgs($info);
                 $this->load();
+                $this->descriptor->store($this);
             }
         }
         // use the object name as default template override (*-*-[template].x*)
@@ -224,9 +226,9 @@ class DataObjectMaster extends Object
         // add ancestors' properties to this object if required
         // the default is to add the fields
         $this->baseancestor = $this->objectid;
-//        echo $this->objectid;exit;
-        if($this->extend)
+        if($this->extend) {
             $this->addAncestors();
+            }
     }
 
     /**
@@ -276,7 +278,7 @@ class DataObjectMaster extends Object
     private function addObject($object=null)
     {
         if(is_numeric($object))
-            $object =& self::getObject(
+            $object = self::getObject(
                 array('objectid' => $object)
             );
 
@@ -469,7 +471,7 @@ class DataObjectMaster extends Object
     function addDataStore($name = '_dynamic_data_', $type='data')
     {
         // get a new data store
-        $datastore =& DataStoreFactory::getDataStore($name, $type);
+        $datastore = DataStoreFactory::getDataStore($name, $type);
 
         // add it to the list of data stores
         $this->datastores[$datastore->name] =& $datastore;

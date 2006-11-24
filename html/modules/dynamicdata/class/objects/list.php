@@ -14,7 +14,7 @@ sys::import('modules.dynamicdata.class.objects.master');
 class DataObjectList extends DataObjectMaster
 {
     public $itemids  = array();           // the list of item ids used in data stores
-    public $where;
+//    public $where;
     public $sort;
     public $groupby;
     public $numitems = null;
@@ -384,7 +384,7 @@ class DataObjectList extends DataObjectMaster
         if(empty($this->startstore) && !empty($this->primary))
             $this->startstore = $this->properties[$this->primary]->datastore;
 
-        // first get the items from the start store (if any)
+       // first get the items from the start store (if any)
         if(!empty($this->startstore))
         {
             $this->datastores[$this->startstore]->getItems($args);

@@ -83,7 +83,7 @@
     }
 
 /**
- * Factory Class to creazte Dynamic Data Stores
+ * Factory Class to create Dynamic Data Stores
  *
  * @package Xaraya eXtensible Management System
  * @subpackage dynamicdata module

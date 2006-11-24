@@ -397,7 +397,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         // We got the query, prepare it
         $stmt = $this->db->prepareStatement($query);
-        
+
         if ($numitems > 0) {
             $stmt->setLimit($numitems);
             $stmt->setOffset($startnum - 1);
@@ -484,7 +484,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
 
         // TODO: GROUP BY, LEFT JOIN, ... ? -> cfr. relationships
         if($this->db->databaseType == 'sqlite') $query.=")";
-        
+
         $stmt = $this->db->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
         if (!$result->first()) return;
@@ -587,7 +587,7 @@ class Dynamic_FlatTable_DataStore extends Dynamic_SQL_DataStore
             }
             // We got the query, prepare it
             $stmt = $this->db->prepareStatement($query);
-            
+
             // Now set additional parameters if we need to
             if ($numitems > 0) {
                 $stmt->setLimit($numitems);

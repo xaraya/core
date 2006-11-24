@@ -34,6 +34,12 @@
             else echo $key ."<br />";  // temporary for debugging
         }
 
+        public function store(Object $object)
+        {
+            $publicproperties = $this->getPublicProperties($object);
+            foreach ($publicproperties as $key => $value) $this->args[$key] = $value;
+        }
+
         public function setArgs(array $args)
         {
             $this->args = $args;
