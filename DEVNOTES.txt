@@ -319,6 +319,7 @@ KNOWN ISSUES
   sys::import('modules.base.xarproperties.Dynamic_Select_Property') this
   exposes an issue in how we name the property classes themselves and the name
   stored in the database
+* an empty template with just <xar:template xmlns...> </xar:template> gets an Error: 0: FileNotFoundException The file "modules/base/xartemplates/includes/.xd could not be found. Workaround, add a comment inside the tags. 
 
 
 MIN. REQUIRED VERSIONS DETERMINED SO FAR
