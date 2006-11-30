@@ -509,6 +509,3 @@ at least following problems (top 10):
     either in the transform stage or in pre or post handling) but have to do
     it on both sides. Above all, this creates complexity and maintenance
     problems.
-
-
-l1LIO0_/-=+][()qgjiz2Z5S
