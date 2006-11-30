@@ -148,13 +148,7 @@
         <xsl:text>')</xsl:text>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:text>'</xsl:text>
-        <xsl:call-template name="oops">
-          <xsl:with-param name="label">
-            <xsl:text>Invalid scope</xsl:text>
-          </xsl:with-param>
-        </xsl:call-template>
-        <xsl:text>'</xsl:text>
+        <xsl:text>''</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
