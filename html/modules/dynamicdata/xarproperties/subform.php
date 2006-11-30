@@ -419,6 +419,7 @@ class SubFormProperty extends DataProperty
         extract($data);
 
         if (!empty($validation)) $this->parseValidation($validation);
+
         if (!isset($value)) $value = $this->value;
         if (!isset($name)) $name = 'dd_'.$this->id;
 
@@ -438,6 +439,7 @@ class SubFormProperty extends DataProperty
         // only show explicit warnings for the fields that aren't in the fieldlist here
         $data['invalid']   = !empty($this->warnings) ? xarML('Invalid #(1)', $this->warnings) :'';
 
+        // Prepare the properties for the form
         foreach ($this->arguments as $item) {
             $data[$item]   = $this->$item;
         }
@@ -483,6 +485,7 @@ class SubFormProperty extends DataProperty
             }
         }
 
+//            debug($data);;
 //        var_dump($data['object']);exit;
         return parent::showInput($data);
     }
