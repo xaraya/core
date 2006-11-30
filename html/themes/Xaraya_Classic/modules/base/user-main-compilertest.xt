@@ -129,8 +129,8 @@
       <h4>Results</h4>
       <xar:set name="next">4</xar:set>
       <pre>
-E: Next page; #(1) items, yes really #(2)
-E: Next page; Test #(1) items, yes really #(2)
+E: Next page; 4 items, yes really 4.
+E: Next page; <a href="blah"> Test 4 items</a>, yes really 4.
         <xar:set name="nextpagelabel">
           <xar:ml>
             R: Next page; <xar:var name="next"/> items, yes really <xar:var name="next"/>.
@@ -231,5 +231,8 @@ E: Next page; Test #(1) items, yes really #(2)
 
   </div>
   <xar:comment>End of the tests</xar:comment>
+
+  <!-- Some tests which dont need to do anything, but also should not error out -->
+  <xar:template> </xar:template>
 
 </div></xar:template>
