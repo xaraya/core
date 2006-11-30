@@ -21,16 +21,11 @@ process too.
 Issues
 ------
 
-- [DONE] how to cross the border? i.e. how do parameters from the module
-  get passed into the xslt processor (see parameter section below and
-  xsltransformer.php )
 - [STARTED] how do we create a suiteable test suite (make a compilation of the
   core templates?) Testsuite in theme XClassic
   modules/base/user-main-compilertest.xt]
 - can we make a stub inserting some random values for the template vars,
   so we can compare somehow
-- [DONE] is merging with other output namespaces just a question of copying
-  output (xhtml in our case) (A: yes)
 - how do we handle #$var# constructs?
   * ideally i want to handle it through separation of the template in two
     sections, data and presentation, both in the xml domain:
@@ -72,10 +67,10 @@ Issues
 
   Example 1:
 
-   `#$modinfo['adminurltitle']#&#160;#$modinfo['displayname']#
-     |_______first expr______| ^ |__| |_________text________|\- lonely #
-                               |   \- second expr
-                               |- single & 'text'`
+  #$modinfo['adminurltitle']#&#160;#$modinfo['displayname']#
+   \________first expr_____/ | \__/  \_________text_______/\_ lonely #
+                             |   \_ second expr '160;'
+                             |_ single & 'text'`
 
   Example 2:
 
@@ -98,15 +93,6 @@ Issues
         </style>
 
     As seen through compiler eyes: [expression: 'someID { color: ref; }\n'][text: 'someID2 { color: blue;}']
-- [DONE]the construct <div style="clear: left|right|both"><div> appears to render improperly.
-    See:
-        - http://www.stylusstudio.com/xsllist/200209/post10350.html
-        - mtn rev: 6143d31238f3aaa6309a390f16fca034b9d1cda2
-- [DONE]javascript construct:
-    <script type="text/javascript">Calendar.setup({#$js_options#});</script>
-  (from the dhtml calendar at dynarch.com) appears to render improperly.
-    This turned out to be a `<script />` empty tag issue, as above with the div.
-
 - we are now in a postion to create a DTD, let's do so.
 - instead of organising by tag, it seems to make more sense to organize by
   'group' (flow, comment, blocks etc.) as those tags often interrelate and use
@@ -118,13 +104,6 @@ Issues
       the rendering bombs out in ugliness, where it possibly doesnt need to
       do that.
 - put the new tags locations into the dirlayout proposal
-- [DONE] we now add a root tag to module templates artificially. This leads to a
-  number of things we can not do now:
-    * as we 'pre-read' the templatefile to add this tag, the filename of the
-    template gets lost when an exception is raised. We really should add the
-    root tag to the templates themselves. (this can be automated)
-    * individual templates are not well-formed (interoperability)
-  (all core templates have had their root tags added in)
 - we omit the xml declaration now, because it doesnt work, but i dont remember
   why anymore. Either make it work (preferably) or document why it can't.
   This has to do with <?xml conflicting with <?php when producing code.
@@ -133,6 +112,33 @@ Issues
         for elements which may choose
     - <!ATTLIST element xml:space (preserve) #FIXED 'preserve'>
         for elements which should have space preserving.
+- [DONE] is merging with other output namespaces just a question of copying
+  output (xhtml in our case) (A: yes)
+- [DONE] how to cross the border? i.e. how do parameters from the module
+  get passed into the xslt processor (see parameter section below and
+  xsltransformer.php )
+- [DONE]the construct <div style="clear: left|right|both"><div> appears to render improperly.
+    See:
+        - http://www.stylusstudio.com/xsllist/200209/post10350.html
+        - mtn rev: 6143d31238f3aaa6309a390f16fca034b9d1cda2
+- [DONE]javascript construct:
+    <script type="text/javascript">Calendar.setup({#$js_options#});</script>
+  (from the dhtml calendar at dynarch.com) appears to render improperly.
+    This turned out to be a `<script />` empty tag issue, as above with the div.
+
+- [DONE] we now add a root tag to module templates artificially. This leads to a
+  number of things we can not do now:
+    * as we 'pre-read' the templatefile to add this tag, the filename of the
+    template gets lost when an exception is raised. We really should add the
+    root tag to the templates themselves. (this can be automated)
+    * individual templates are not well-formed (interoperability)
+  (all core templates have had their root tags added in)
+- [DONE] an empty template with just <xar:template xmlns...> </xar:template> gets an
+  Error: 0: FileNotFoundException The file "modules/base/xartemplates/includes/.xd
+  could not be found. Workaround, add a comment inside the tags.
+  (Cause: we strip redundant spacing, so from the pov of the compiler its a closed tag,
+  thus processing it as the 'include' variety. Fixed by explicitly testing on the
+  file attribute. This keeps the error when file="", which is what we want.)
 
 Refactoring needs
 =================
@@ -503,3 +509,6 @@ at least following problems (top 10):
     either in the transform stage or in pre or post handling) but have to do
     it on both sides. Above all, this creates complexity and maintenance
     problems.
+
+
+l1LIO0_/-=+][()qgjiz2Z5S
