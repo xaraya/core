@@ -764,7 +764,7 @@ class xarRole extends Object
     {
         $role = xarRoles::getRole($this->uid);
         $users = $role->getUsers($state);
-        $groups = $roles->getSubGroups($this->uid);
+        $groups = xarRoles::getSubGroups($this->uid);
         $ua = array();
         foreach($users as $user){
             //using the ID as the key so that if a person is in more than one sub group they only get one email (mrb: email?)

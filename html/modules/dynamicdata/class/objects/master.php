@@ -295,7 +295,8 @@ class DataObjectMaster extends Object
                 'type'      => $newproperty->type,
                 'label'     => $newproperty->label,
                 'source'    => $newproperty->source,
-                'datastore' => $newproperty->datastore
+                'status'    => $newproperty->status,
+                'datastore' => $newproperty->datastore,
             );
             $this->addProperty($args);
             if(!isset($this->datastores[$newproperty->datastore]))

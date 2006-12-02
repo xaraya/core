@@ -55,9 +55,11 @@ function modules_adminapi_enablehooks($args)
                                 xar_action, xar_tarea, xar_tmodid, xar_ttype,
                                 xar_tfunc
                 FROM $xartable[hooks]
-                WHERE xar_smodid = ? AND xar_tmodid = ?";
+                WHERE xar_tmodid = ?";
+//                WHERE xar_smodid = ? AND xar_tmodid = ?";
         $stmt1 = $dbconn->prepareStatement($sql);
-        $result = $stmt1->executeQuery(array(0,$tmodId));
+//        $result = $stmt1->executeQuery(array(null,$tmodId));
+        $result = $stmt1->executeQuery(array($tmodId));
 
         // Prepare the statement outside the loop
         $sql = "INSERT INTO $xartable[hooks]
