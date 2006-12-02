@@ -22,7 +22,12 @@
 
   <xsl:choose>
     <!-- If the template tag does not contain anything, treat it as in 1.x -->
-    <xsl:when test="not(node())">
+    <!--
+      Redundant space will be compressed, so watch out here for nodes which
+      just contain space-type content. There's no way to test that anymore once
+      we get here.
+    -->
+    <xsl:when test="not(node()) and @file">
       <xsl:processing-instruction name="php">
         <xsl:text>echo </xsl:text>
         <xsl:choose>
@@ -78,7 +83,10 @@
       </xsl:processing-instruction>
     </xsl:when>
     <xsl:otherwise>
-      <!-- It's the root tag of a template file, no need to do anything yet -->
+      <!--
+        It's the root tag of a template file, or placed in block form inline
+        no need to do anything yet, but process the children in it
+      -->
       <xsl:apply-templates/>
     </xsl:otherwise>
   </xsl:choose>

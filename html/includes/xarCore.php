@@ -19,7 +19,7 @@
  *
  * @todo seems that defines are hoggers, move them to class constants!
 **/
-// For migration purposes, cos we're lazy 
+// For migration purposes, cos we're lazy
 define('XARCORE_GENERATION',2);
 
 // The actual version information
@@ -28,9 +28,10 @@ define('XARCORE_VERSION_ID',  'Xaraya 2 series');
 define('XARCORE_VERSION_SUB', 'etiam infractus');
 
 // Handy if we're running from a mt working copy, prolly comment out on distributing
-if(file_exists('../_MTN/revision')) 
+if(file_exists('../_MTN/revision'))
 {
-    $rev = str_replace(array('old_revision [',']'),'',array_pop(file('../_MTN/revision')));
+    $t= file('../_MTN/revision');
+    $rev = str_replace(array('old_revision [',']'),'',$t[4]);
     define('XARCORE_VERSION_REV', $rev);
 }
 
@@ -129,7 +130,7 @@ define('XARCORE_TPL_CACHEDIR' , '/cache/templates');
  * Load the Xaraya pre core early in case the entry point didn't do it (it should)
  *
  */
-if(!class_exists('sys')) 
+if(!class_exists('sys'))
 {
     include (dirname(__FILE__).'/bootstrap.php');
 }
@@ -333,7 +334,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     $anonuid = !empty($anonuid) ? $anonuid : 2;
     define('_XAR_ID_UNREGISTERED', $anonuid);
 
-    if ($whatToLoad & XARCORE_SYSTEM_SESSION) 
+    if ($whatToLoad & XARCORE_SYSTEM_SESSION)
     {
         sys::import('xarSession');
 
@@ -357,7 +358,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     // FIXME: This is wrong, should be part of templating
     //        it's a legacy thought, we don't need it anymore
 
-    if ($whatToLoad & XARCORE_SYSTEM_BLOCKS) 
+    if ($whatToLoad & XARCORE_SYSTEM_BLOCKS)
     {
         sys::import('xarBlocks');
 
@@ -389,7 +390,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     sys::import('xarTemplate');
-    
+
     $systemArgs = array(
         'enableTemplatesCaching' => xarConfigGetVar('Site.BL.CacheTemplates'),
         'themesBaseDirectory'    => xarConfigGetVar('Site.BL.ThemesDirectory'),
@@ -406,7 +407,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      * @todo <marcinmilan> review what pasts of the old user system need to be retained
     **/
-    if ($whatToLoad & XARCORE_SYSTEM_USER) 
+    if ($whatToLoad & XARCORE_SYSTEM_USER)
     {
         sys::import('xarUser');
         sys::import('xarSecurity');
@@ -511,7 +512,7 @@ function xarCore_getSystemVar($name)
 /**
  * Checks if a certain function was disabled in php.ini
  *
- * 
+ *
  * @access public
  * @param string $funcName The function name; case-sensitive
  * @todo this seems out of place here.
@@ -520,13 +521,13 @@ function xarFuncIsDisabled($funcName)
 {
     static $disabled;
 
-    if (!isset($disabled)) 
+    if (!isset($disabled))
     {
         // Fetch the disabled functions as an array.
         // White space is trimmed here too.
         $functions = preg_split('/[\s,]+/', trim(ini_get('disable_functions')));
 
-        if ($functions[0] != '') 
+        if ($functions[0] != '')
         {
             // Make the function names the keys.
             // Values will be 0, 1, 2 etc.
@@ -628,7 +629,7 @@ class xarCore extends Object
             unset(self::$cacheCollection[$cacheKey][$name]);
         }
         //This unsets the key that said that collection had already been retrieved
-        
+
         //Seems to have caused a problem because of the expected behaviour of the old code
         //FIXME: Change how this works for a mainstream function, stop the hacks
         if (isset(self::$cacheCollection[$cacheKey][0])) {

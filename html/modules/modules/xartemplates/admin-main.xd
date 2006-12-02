@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>
@@ -145,3 +146,4 @@
     <strong>&#160;<xar:mlstring>Modules Module Overview</xar:mlstring></strong><br />&#160;<xar:mlstring>Version</xar:mlstring> 2.3.1&#160; 2006-02-08
   </p>
 </div>
+</xar:template>

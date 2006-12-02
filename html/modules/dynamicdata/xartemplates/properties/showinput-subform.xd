@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:base-include-javascript position="head" module="dynamicdata" filename="subform.js" />
 <input type="hidden" id="fieldprefix" value="#$fieldprefix#" />
@@ -171,3 +172,4 @@
 <xar:if condition="!empty($invalid)">
     <span class="xar-error">#$invalid#</span>
 </xar:if>
+</xar:template>

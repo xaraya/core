@@ -1,2 +1,3 @@
 <!-- The table view is the default by default, but a list view is also available -->
-<xar:template file="proplist-list"/>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout" file="proplist-list"/>
+

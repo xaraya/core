@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <div id="xc-inner-wrapper">
     <div id="xc-innerbg">
         <div id="xc-center">
@@ -10,3 +11,4 @@
         </div>
     </div>
 </div>
+</xar:template>

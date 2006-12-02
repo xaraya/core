@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:template file="mod-head"/>
 
 <xar:comment>Sanity checks</xar:comment>
@@ -57,3 +58,4 @@
     <a href="&xar-modurl-mail-admin-view;"><xar:mlstring>Create new queue definition</xar:mlstring></a>
   </xar:if>
 </div>
+</xar:template>

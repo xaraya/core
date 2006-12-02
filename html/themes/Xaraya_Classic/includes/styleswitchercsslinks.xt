@@ -1,7 +1,8 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:style scope="theme" file="style_textsmall" title="Small classictext" />
 <xar:style scope="theme" file="style_textmedium" alternate="true" title="Medium classictext" />
 <xar:style scope="theme" file="style_textlarge" alternate="true" title="Large classictext" />
 <xar:style scope="theme" file="colstyle_blue" title="Blue classiccolors" />
 <xar:style scope="theme" file="colstyle_highcontrast" alternate="true" title="Contrast classiccolors" />
 <xar:style scope="theme" file="colstyle_green" alternate="true" title="Green classiccolors" />
-<xar:style scope="theme" file="colstyle_orange" alternate="true" title="Orange classiccolors" />
+<xar:style scope="theme" file="colstyle_orange" alternate="true" title="Orange classiccolors" /></xar:template>

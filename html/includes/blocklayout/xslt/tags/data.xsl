@@ -38,7 +38,7 @@
       <xsl:choose>
         <xsl:when test="not(@object)">
           <!-- No object passed in -->
-          <xsl:text>echo xarModAPIFunc('dynamicdata','admin','showform'</xsl:text>
+          <xsl:text>echo xarModAPIFunc('dynamicdata','admin','showform',</xsl:text>
           <xsl:choose>
             <xsl:when test="not(@definition)">
               <!-- No direct definition, use the attributes -->
@@ -56,6 +56,38 @@
           <!-- Use the object attribute -->
           <xsl:text>echo </xsl:text><xsl:value-of select="@object"/>
           <xsl:text>-&gt;showForm(</xsl:text>
+          <xsl:call-template name="atts2args">
+            <xsl:with-param name="nodeset" select="@*[name() != object]"/>
+          </xsl:call-template>
+          <xsl:text>);</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+  </xsl:processing-instruction>
+</xsl:template>
+
+<xsl:template match="xar:data-display">
+  <xsl:processing-instruction name="php">
+      <xsl:choose>
+        <xsl:when test="not(@object)">
+          <!-- No object passed in -->
+          <xsl:text>echo xarModAPIFunc('dynamicdata','user','showdisplay',</xsl:text>
+          <xsl:choose>
+            <xsl:when test="not(@definition)">
+              <!-- No direct definition, use the attributes -->
+              <xsl:call-template name="atts2args">
+                <xsl:with-param name="nodeset" select="@*"/>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="@definition"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:text>);</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- Use the object attribute -->
+          <xsl:text>echo </xsl:text><xsl:value-of select="@object"/>
+          <xsl:text>-&gt;showDisplay(</xsl:text>
           <xsl:call-template name="atts2args">
             <xsl:with-param name="nodeset" select="@*[name() != object]"/>
           </xsl:call-template>
@@ -167,6 +199,19 @@
             <xsl:with-param name="nodeset" select="@*"/>
           </xsl:call-template>
           <xsl:text>);</xsl:text>
+          <xsl:text>echo $property-&gt;showOutput(</xsl:text>
+          <!-- if we have a field attribute, use just that, otherwise use all attributes -->
+          <xsl:choose>
+            <xsl:when test="not(@field)">
+              <xsl:call-template name="atts2args">
+                <xsl:with-param name="nodeset" select="@*[name() != 'property']"/>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="@field"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:text>);</xsl:text>
         </xsl:when>
         <xsl:otherwise>
           <!-- We already had a property object, run its output method -->
@@ -253,24 +298,5 @@
   </xsl:processing-instruction>
 </xsl:template>
 
-<!--
-  Utility template which takes a set of attribute nodes and creates a dd
-  common array $key / $value style out of it.
--->
-<xsl:template name="atts2args">
-  <xsl:param name="nodeset"/>
-  <xsl:text>array(</xsl:text>
-  <xsl:for-each select="$nodeset">
-    <xsl:text>'</xsl:text><xsl:value-of select="name()"/><xsl:text>' =&gt;</xsl:text>
-    <xsl:choose>
-      <xsl:when test="starts-with(normalize-space(.),'$') or not(string(number(.))='NaN')">
-        <xsl:value-of select="."/><xsl:text>,</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>'</xsl:text><xsl:value-of select="."/><xsl:text>',</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:for-each>
-  <xsl:text>)</xsl:text>
-</xsl:template>
 </xsl:stylesheet>
+

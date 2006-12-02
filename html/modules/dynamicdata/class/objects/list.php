@@ -435,10 +435,11 @@ class DataObjectList extends DataObjectMaster
 
     function showView($args = array())
     {
+        //if(!empty($args['tplmodule'])) $tplmodule  = $args['tplmodule'];
         $args = $this->toArray($args);
 /*        if(empty($args['layout']))      $args['layout']         = $this->layout;
         if(empty($args['template']))   $args['template']   = $this->template;
-        if(empty($args['tplmodule'])) $args['tplmodule']  = $this->tplmodule;
+        
         if(empty($args['viewfunc']))   $args['viewfunc']    = $this->viewfunc;
         if(empty($args['fieldprefix'])) $args['fieldprefix'] = $this->fieldprefix;
         if(empty($args['fieldlist']))     $args['fieldlist']      = $this->fieldlist;
@@ -504,6 +505,10 @@ class DataObjectList extends DataObjectMaster
         $args['itemtype'] = $itemtype;
         $args['objectid'] = $this->objectid;
         $args['links'] = array();
+        
+        if (empty($args['template']) && !empty($args['objectname'])) {
+            $args['template'] = $args['objectname'];
+        }
         if(empty($args['urlmodule'])) {
             if(!empty($this->urlmodule)) {
                 $args['urlmodule'] = $this->urlmodule;
@@ -569,7 +574,7 @@ class DataObjectList extends DataObjectMaster
             $args['sorturl']) = $this->getPager($args['pagerurl']);
 
         // $current = xarModAPIFunc('dynamicdata','user','setcontext',$args);
-
+        //die(var_dump($args));
         return xarTplObject($args['tplmodule'],$args['template'],'showview',$args);
     }
 

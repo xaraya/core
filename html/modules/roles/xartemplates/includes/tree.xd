@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:if condition="!empty($treenode)">
     <ul>
         <xar:set name="lastnode">max(0,count($treenode)-1)</xar:set>
@@ -92,3 +93,4 @@
         </xar:for>
     </ul>
 </xar:if>
+</xar:template>

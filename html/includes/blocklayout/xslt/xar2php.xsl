@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE xsl:stylesheet [
-<!ENTITY nl "&#xd;&#xa;">
-]>
+<!DOCTYPE xsl:stylesheet [<!ENTITY nl "&#xd;&#xa;">]>
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xar="http://xaraya.com/2004/blocklayout"
@@ -29,19 +27,35 @@
     The default identity transform which will just copy over anything we dont match
   -->
   <xsl:import href="defaults/identity.xsl"/>
+  <!--
+    The defaults for html type stuff
+  -->
+  <xsl:import href="defaults/html.xsl" />
+
+  <!--
+    Debugging templates, this (tries to) be more verbose.
+
+    This allow to set the modus operandi to copy-through unknown tags, which
+    is more common in these types of solutions. We import it as the last one
+    so we can override just by inserting, instead of messing around with
+    priorities.
+
+    This include should by default be commented out.
+  -->
+  <!-- <xsl:import href="default/debug" /> -->
+
+  <!--
+    We produce an UTF-8 encoded XML document as output. As we compile the
+    each document to a (hopefully valid) php script ultimately. We leave out
+    the xml declaration, as PHP interprets that as the start of a PHP block.
+  -->
+  <xsl:output  method="xml" omit-xml-declaration="yes" indent="yes" encoding="UTF-8"/>
 
   <!--
     Parameters, we'd like as few as possible
   -->
   <xsl:param name="bl_dirname"/>
   <xsl:param name="bl_filename"/>
-
-
-  <!--
-    We view php as one large processing instruction of xml without the xml
-    declaration
-  -->
-  <xsl:output method="xml" omit-xml-declaration="yes" indent="yes" />
 
   <!--
     Spacing
@@ -52,19 +66,11 @@
     there shouldnt be any, but alas.
   -->
   <xsl:strip-space elements="*" />
-  <!--
-    Problematic elements
-
-    - empty div/ elements bork everything
-  -->
-  <xsl:preserve-space elements="div script"/>
 
   <!--
     Start of the transform usually starts with matching the root, so do we
   -->
-  <xsl:template match="/">
-    <xsl:apply-templates />
-  </xsl:template>
+  <xsl:template match="/"><xsl:apply-templates /></xsl:template>
 
   <!--
     First we do some simple stuff to get rid of things we dont really care
@@ -86,6 +92,8 @@
   <xsl:include href="tags/base-include-javascript.xsl"/>
   <!-- xar:base-render-javascript -->
   <xsl:include href="tags/base-render-javascript.xsl"/>
+  <!-- xar:block -->
+  <xsl:include href="tags/block.xsl"/>
   <!-- xar:blockgroup -->
   <xsl:include href="tags/blockgroup.xsl"/>
   <!-- xar:blocklayout -->
@@ -98,7 +106,7 @@
   <xsl:include href="tags/continue.xsl"/>
 
   <!-- TODO: organize this -->
-  <!-- xar:data-view/output/label -->
+  <!-- xar:data-view/output/label etc. -->
   <xsl:include href="tags/data.xsl"/>
 
   <!-- xar:else -->
@@ -115,12 +123,10 @@
   <xsl:include href="tags/if.xsl"/>
   <!-- xar:loop -->
   <xsl:include href="tags/loop.xsl"/>
-  <!-- xar:ml -->
-  <xsl:include href="tags/ml.xsl"/>
-  <!-- xar:mlstring -->
-  <xsl:include href="tags/mlstring.xsl"/>
-  <!-- xar:mlvar -->
-  <xsl:include href="tags/mlvar.xsl"/>
+
+  <!-- MLS functionality -->
+  <xsl:include href="tags/mls.xsl"/>
+
   <!-- xar:module -->
   <xsl:include href="tags/module.xsl"/>
   <!-- xar:sec -->
@@ -136,33 +142,21 @@
   <!-- xar:while -->
   <xsl:include href="tags/while.xsl"/>
 
-<!-- text nodes in php mode -->
-<xsl:template match="xar:set/text()">
-    <xsl:choose>
-      <xsl:when test="substring(normalize-space(.),1,1) = '#'">
-        <!-- The string starts with # so, let's resolve it -->
-        <xsl:call-template name="resolvePHP">
-          <xsl:with-param name="expr" select="normalize-space(.)"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <!-- This is the point where we can do automatic translation
-             of textnodes without requiring xar:mlstring
-             Erm, no its not, the xsl changed, need to re-arrange this.
-        -->
-        <xsl:copy/>
-      </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
 <!--
-    Utility template, taks a parameter 'expr' which contains the
-    value of a text node. It recursively resvolves #-pairs from left
-    to right. Pre- and Post- hash content are treated as text.
+    Utility template for resolving text nodes. It recursively resolves
+    #-pairs from left to right. Pre- and Post- hash content are treated
+    as text.
+
+    The param $expr contains the  value of a text node holding the expression
+    to resolve.
+    @todo leave #(1) constructs alone?
 -->
 <xsl:template name="resolveText" >
   <xsl:param name="expr"/>
 
+  <!--
+    <xsl:text>[EXPR]</xsl:text><xsl:value-of select="$expr"/><xsl:text>[END EXPR]</xsl:text>
+  -->
   <xsl:variable name="nrOfHashes"
       select="string-length($expr) - string-length(translate($expr, '#', ''))"/>
 
@@ -201,11 +195,14 @@
 <!--
   For all text nodes, resolve expressions within
 -->
-<xsl:template match="text()">
+<!--
+  <xsl:template match="text()">
   <xsl:call-template name="resolveText">
     <xsl:with-param name="expr" select="."/>
   </xsl:call-template>
 </xsl:template>
+-->
+
 
 <!-- Expression resolving in nodes-->
 <xsl:template name="resolvePHP">
@@ -216,24 +213,66 @@
 </xsl:template>
 
 <!--
-  Any xar tag we dont match, we highlight in the output, i.e. turn it into a text node
--->
-<xsl:template match="xar:*">
-  <pre class="xsltdebug">
-    <xsl:text>MISSING TAG IMPLEMENTATION:
-&lt;</xsl:text>
-    <xsl:value-of select="name()"/>
-    <xsl:text> </xsl:text>
-    <xsl:for-each select="@*">
-      <xsl:value-of select="name()"/>
-      <xsl:text>="</xsl:text>
-      <xsl:value-of select="."/>
-      <xsl:text>" </xsl:text>
-    </xsl:for-each>
-    <xsl:text>/&gt;</xsl:text>
-    <xsl:apply-imports />
-  </pre>
+  Utility template to replace a string with another.
 
+  The default is to replace ' with \', but
+  by specifying the parameters, other replacements can be performed
+  as well
+
+  @param  string source contains the source string in which replacements are needed
+  @param  string from   contains what needs to be replaced
+  @param  string to     contains what will be the replacement.
+  @return string with the replacements done.
+-->
+<xsl:template name="replace" >
+  <!-- Specifiy the parameters -->
+  <xsl:param name="source"/>
+  <xsl:param name="from" select="&quot;'&quot;"/>
+  <xsl:param name="to"   select="&quot;\'&quot;"/>
+
+  <!-- Make it safe when there is no such character -->
+  <xsl:choose>
+    <xsl:when test="contains($source,$from)">
+      <xsl:value-of select="substring-before($source,$from)"/>
+      <xsl:value-of select="$to"/>
+      <!-- Recurse -->
+      <xsl:call-template name="replace">
+        <xsl:with-param name="source" select="substring-after($source,$from)"/>
+        <xsl:with-param name="from"   select="$from"/>
+        <xsl:with-param name="to"     select="$to"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$source"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!--
+  Utility template which takes a set of attribute nodes and creates a dd
+  common array $key / $value style out of it.
+
+  @param  nodeset a nodeset of attributes (usually from the current node, filtered)
+  @return string array with key/value pairs representing each attribute=value pair
+  @todo   hackery, prevents proper expression support.
+-->
+<xsl:template name="atts2args">
+  <xsl:param name="nodeset"/>
+  <xsl:text>array(</xsl:text>
+  <xsl:if test="$nodeset">
+    <xsl:for-each select="$nodeset">
+      <xsl:text>'</xsl:text><xsl:value-of select="name()"/><xsl:text>' =&gt;</xsl:text>
+      <xsl:choose>
+        <xsl:when test="starts-with(normalize-space(.),'$') or not(string(number(.))='NaN')">
+          <xsl:value-of select="."/><xsl:text>,</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>'</xsl:text><xsl:value-of select="."/><xsl:text>',</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+  </xsl:if>
+  <xsl:text>)</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>

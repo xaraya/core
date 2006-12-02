@@ -1,1 +1,2 @@
-<img class="xar-roletree-box" src="#xarTplGetImage('k2.gif')#" alt="" style="vertical-align: middle" onclick="#$onclick#" />
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<img class="xar-roletree-box" src="#xarTplGetImage('k2.gif')#" alt="" style="vertical-align: middle" onclick="#$onclick#" /></xar:template>

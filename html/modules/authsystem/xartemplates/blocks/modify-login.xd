@@ -1,3 +1,4 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-form-input-wrapper-after">
     <xar:if condition="$showlogout eq 1">
@@ -17,3 +18,4 @@
         <input type="text" name="logouttitle" id="logouttitle#$blockid#" value="#$logouttitle#" maxlength="25" class="xar-form-textlong" />
     </div>
 </xar:if>
+</xar:template>
