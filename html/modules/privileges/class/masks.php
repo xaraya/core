@@ -42,7 +42,6 @@ class xarMasks extends Object
      * xarMasks: constructor for the class
      *
      * Just sets up the db connection and initializes some variables
-     * This should really be a static class
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
@@ -51,7 +50,7 @@ class xarMasks extends Object
      * @throws  none
      * @todo    none
     */
-    static function initialize()
+    public static function initialize()
     {
         self::$dbconn =& xarDBGetConn();
         xarModAPILoad('privileges');
@@ -86,7 +85,7 @@ class xarMasks extends Object
      * @throws  list of exception identifiers which can be thrown
      * @todo    list of things which must be done to comply to relevant RFC
     */
-    static function getmasks($module = 'All',$component='All')
+    public static function getmasks($module = 'All',$component='All')
     {
         self::initialize();
         // TODO: try to do all this a bit more compact and without xarMod_GetBaseInfo
@@ -155,7 +154,7 @@ class xarMasks extends Object
      * @return  boolean
      * @todo    almost the same as privileges register method
     */
-    static function register($name,$realm,$module,$component,$instance,$level,$description='')
+    public static function register($name,$realm,$module,$component,$instance,$level,$description='')
     {
         self::initialize();
         // Check if the mask has already been registered, and update it if necessary.
@@ -221,7 +220,7 @@ class xarMasks extends Object
      * @param   string representing a mask name
      * @return  boolean
      */
-    static function unregister($name)
+    public static function unregister($name)
     {
         self::initialize();
         $query = "DELETE FROM " . self::$maskstable . " WHERE xar_name = ?";
@@ -237,7 +236,7 @@ class xarMasks extends Object
      * @param   module name
      * @return  boolean
     */
-    static function removemasks($module)
+    public static function removemasks($module)
     {
         self::initialize();
         if($module=='All') {
@@ -261,7 +260,7 @@ class xarMasks extends Object
      * @param   string $levelname the
      * @return  int access level
     */
-    static function xarSecLevel($levelname)
+    public static function xarSecLevel($levelname)
     {
         // If we could somehow turn a string into the name of a class constant, that would be great.
         sys::import('modules.privileges.class.securitylevel');
@@ -279,7 +278,7 @@ class xarMasks extends Object
      * @param   component string
      * @return  boolean
     */
-    static function xarSecurityCheck($mask,$catch=1,$component='',$instance='',$module='',$rolename='',$pnrealm=0,$pnlevel=0)
+    public static function xarSecurityCheck($mask,$catch=1,$component='',$instance='',$module='',$rolename='',$pnrealm=0,$pnlevel=0)
     {
         self::initialize();
         $userID = xarSessionGetVar('uid');
@@ -447,7 +446,7 @@ class xarMasks extends Object
      * @param   string
      * @return  boolean
     */
-    static function forgetprivsets()
+    public static function forgetprivsets()
     {
         $query = "DELETE FROM " . self::$privsetstable;
         self::$dbconn->executeUpdate($query);
@@ -462,7 +461,7 @@ class xarMasks extends Object
      * @param   role object
      * @return  array containing the role's ancestors and privileges
     */
-    static function getprivset($role)
+    public static function getprivset($role)
     {
         static $selStmt = null;
         static $insStmt = null;
@@ -498,7 +497,7 @@ class xarMasks extends Object
      * @param   array representing the initial node to start from
      * @return  nested array containing the role's ancestors and privileges
     */
-    static function irreducibleset($coreset,$module='')
+    public static function irreducibleset($coreset,$module='')
     {
         if (!empty($module)) {
             $module = strtolower($module);
@@ -544,7 +543,7 @@ class xarMasks extends Object
      * @param   array representing the privilege set
      * @return  none
     */
-    static function normalizeprivset(&$privset)
+    public static function normalizeprivset(&$privset)
     {
         if (isset($privset['privileges']) && is_array($privset['privileges'])) {
             foreach (array_keys($privset['privileges']) as $id) {
@@ -566,7 +565,7 @@ class xarMasks extends Object
      * @param   boolean false (initial test value)
      * @return  boolean false if check fails, privilege object if check succeeds
     */
-    static function testprivileges($mask,$privilegeset,$pass,$role='')
+    public static function testprivileges($mask,$privilegeset,$pass,$role='')
     {
         $candebug = (xarSessionGetVar('uid') == xarModGetVar('privileges','tester'));
         $test = xarModGetVar('privileges','test') && $candebug;
@@ -698,7 +697,7 @@ class xarMasks extends Object
      * @param   string
      * @return  mask object
     */
-    static function getMask($name,$module="All",$component="All",$suppresscache=FALSE)
+    public static function getMask($name,$module="All",$component="All",$suppresscache=FALSE)
     {
         self::initialize();
         // check if we already have the definition of this mask

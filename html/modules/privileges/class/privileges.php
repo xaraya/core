@@ -27,7 +27,7 @@ class xarPrivileges extends xarMasks
      * @param   array of values to register instance
      * @return  boolean
     */
-    static function defineInstance($module,$type,$instances,$propagate=0,$table2='',$childID='',$parentID='',$description='')
+    public static function defineInstance($module,$type,$instances,$propagate=0,$table2='',$childID='',$parentID='',$description='')
     {
         foreach($instances as $instance) {
             // make privilege wizard URLs relative, for easier migration of sites
@@ -103,7 +103,7 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    none
     */
-    static function removeInstances($module)
+    public static function removeInstances($module)
     {
         parent::initialize();
         try {
@@ -134,7 +134,7 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    duplicates parts of $privilege->add() method
     */
-    static function register($name,$realm,$module,$component,$instance,$level,$description='')
+    public static function register($name,$realm,$module,$component,$instance,$level,$description='')
     {
         parent::initialize();
 
@@ -170,7 +170,7 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    none
     */
-    static function assign($privilegename,$rolename)
+    public static function assign($privilegename,$rolename)
     {
         parent::initialize();
         // get the ID of the privilege to be assigned
@@ -207,7 +207,7 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    use associative fetching and one getrow statement.
     */
-    static function getprivileges()
+    public static function getprivileges()
     {
         parent::initialize();
         static $allprivileges = array();
@@ -259,7 +259,7 @@ class xarPrivileges extends xarMasks
      * @todo    use associative fetching and one getrow
      * @todo    cache with statics?
     */
-    static function gettoplevelprivileges($arg)
+    public static function gettoplevelprivileges($arg)
     {
         parent::initialize();
         // Base query
@@ -320,7 +320,7 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    this isn't really the right place for this function
     */
-    static function getrealms()
+    public static function getrealms()
     {
         parent::initialize();
         static $allreams = array(); // Get them once
@@ -360,7 +360,7 @@ class xarPrivileges extends xarMasks
      * @todo    this isn't really the right place for this function
      * @todo    ucfirst is a presentation issue.
      */
-    static function getmodules()
+    public static function getmodules()
     {
         parent::initialize();
         static $allmodules = array();
@@ -406,7 +406,7 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    this isn't really the right place for this function
     */
-    static function getcomponents($module)
+    public static function getcomponents($module)
     {
         parent::initialize();
         $modInfo = xarMod_GetBaseInfo($module);
@@ -465,7 +465,7 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    this isn't really the right place for this function
     */
-    static function getinstances($module, $component)
+    public static function getinstances($module, $component)
     {
         parent::initialize();
         $modInfo = xarMod_GetBaseInfo($module);
@@ -535,7 +535,7 @@ class xarPrivileges extends xarMasks
         return $instances;
     }
 
-    static function getprivilegefast($pid)
+    public static function getprivilegefast($pid)
     {
         foreach(self::getprivileges() as $privilege){
             if ($privilege['pid'] == $pid) return $privilege;
@@ -543,7 +543,7 @@ class xarPrivileges extends xarMasks
         return false;
     }
 
-    static function getChildren($pid)
+    public static function getChildren($pid)
     {
         $subprivileges = array();
         $ind = 1;
@@ -564,7 +564,7 @@ class xarPrivileges extends xarMasks
      * @param   strings with pid, name, realm, module, component, instances and level
      * @return  mixed pid if OK, void if not
     */
-    static function returnPrivilege($pid,$name,$realm,$module,$component,$instances,$level)
+    public static function returnPrivilege($pid,$name,$realm,$module,$component,$instances,$level)
     {
         $instance = "";
         foreach ($instances as $inst) { // mrb: why not use join()?
@@ -622,7 +622,7 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    none
     */
-    static function getPrivilege($pid)
+    public static function getPrivilege($pid)
     {
         parent::initialize();
         static $stmt = null;  // Statement only needs to be prepared once.
@@ -673,7 +673,7 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    none
     */
-    static function findPrivilege($name)
+    public static function findPrivilege($name)
     {
         static $stmt = null;
 
@@ -714,7 +714,7 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    none
     */
-    static function findPrivilegesForModule($module)
+    public static function findPrivilegesForModule($module)
     {
         static $stmt = null; // only prepare it once
 
@@ -759,7 +759,7 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    create exceptions for bad input
     */
-    static function makeMember($childname,$parentname)
+    public static function makeMember($childname,$parentname)
     {
         parent::initialize();
         // get the data for the parent object
@@ -818,7 +818,7 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    create exceptions for bad input
     */
-    static function makeEntry($rootname)
+    public static function makeEntry($rootname)
     {
         $priv = self::findPrivilege($rootname);
         $priv->makeEntry();
