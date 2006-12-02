@@ -50,8 +50,7 @@ function roles_admin_sendmail()
     // In this case we'll just pick out the descendants in the same state
     // Note the nice use of the array keys to overwrite users we already have
     if ($uid != 0 && ($includesubgroups == 1)) {
-        $roles = new xarRoles();
-        $parentgroup = $roles->getRole($uid);
+        $parentgroup = xarRoles::getRole($uid);
         $descendants = $parentgroup->getDescendants($state);
 
         while (list($key, $user) = each($descendants)) {

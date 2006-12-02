@@ -38,13 +38,10 @@ function roles_admin_newrole()
 
     // Security Check
     if (!xarSecurityCheck('AddRole')) return;
-    // Call the Roles class
-    // should be static, but apparently not doable in php?
-    $roles = new xarRoles();
 
     $groups = array();
     $names = array();
-    foreach($roles->getgroups() as $temp) {
+    foreach(xarRoles::getgroups() as $temp) {
         $nam = $temp['name'];
         if (!in_array($nam, $names)) {
             $names[] = $nam;
@@ -121,5 +118,5 @@ function roles_admin_newrole()
     $data['groups'] = $groups;
     $data['return_url'] = $return_url;
     return $data;
-} 
+}
 ?>

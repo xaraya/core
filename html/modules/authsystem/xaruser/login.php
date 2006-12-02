@@ -191,10 +191,9 @@ function authsystem_user_login()
             $lockvars = unserialize(xarModGetVar('roles','lockdata'));
             if ($lockvars['locked'] ==1) {
                 $rolesarray = array();
-                $rolemaker = new xarRoles();
                 $roles = $lockvars['roles'];
                 for($i=0, $max = count($roles); $i < $max; $i++)
-                        $rolesarray[] = $rolemaker->getRole($roles[$i]['uid']);
+                        $rolesarray[] = xarRoles::getRole($roles[$i]['uid']);
                 $letin = array();
                 foreach($rolesarray as $roletoletin) {
                     if ($roletoletin->isUser()) $letin[] = $roletoletin;

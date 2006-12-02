@@ -55,8 +55,7 @@ function roles_admin_showusers()
 
     if ($uid != 0) {
         // Call the Roles class and get the role
-        $roles     = new xarRoles();
-        $role      = $roles->getRole($uid);
+        $role      = xarRoles::getRole($uid);
         $ancestors = $role->getAncestors();
         $data['groupname'] = $role->getName();
         $data['title'] = "";
@@ -65,7 +64,6 @@ function roles_admin_showusers()
             $data['ancestors'][] = array('name' => $ancestor->getName(),
                                           'uid' => $ancestor->getID());
         }
-        //$subgroups = $roles->getsubgroups($uid);
     }
     else {
         $data['title'] = xarML('All ')." ";

@@ -31,8 +31,7 @@ function roles_adminapi_recall($args)
 
     $deleted = '[' . xarML('deleted') . ']';
 
-    $roles = new xarRoles();
-    $role = $roles->getRole($uid);
+    $role = xarRoles::getRole($uid);
     $uname = explode($deleted,$role->getUser());
     $email = explode($deleted,$role->getEmail());
 //            echo $uname[0];exit;

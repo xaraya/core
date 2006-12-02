@@ -45,8 +45,7 @@ class RolesTree extends Tree
 {
     function createnodes(TreeNode $node)
     {
-        $r = new xarRoles();
-        $data = $r->getgroups();
+        $data = xarRoles::getgroups();
          foreach ($data as $row) {
             $nodedata = array(
                 'id' => $row['uid'],

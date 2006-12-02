@@ -102,10 +102,9 @@ function roles_admin_sitelock($args)
             // Find the users to be notified
             // First get the roles
             $rolesarray = array();
-            $rolemaker = new xarRoles();
             for($i=0; $i < $rolesCount; $i++) {
                 if($roles[$i]['notify'] == 1) {
-                    $rolesarray[] = $rolemaker->getRole($roles[$i]['uid']);
+                    $rolesarray[] = xarRoles::getRole($roles[$i]['uid']);
                 }
             }
             //Check each if it is a user or a group
@@ -114,7 +113,7 @@ function roles_admin_sitelock($args)
                 if ($roletotell->isUser()) $notify[] = $roletotell;
                 else $notify = array_merge($notify,$roletotell->getUsers());
             }
-            $admin = $rolemaker->getRole(xarModGetVar('roles','admin'));
+            $admin = xarRoles::getRole(xarModGetVar('roles','admin'));
             $mailinfo = array('subject' => 'Site Lock',
                               'from' => $admin->getEmail()
             );

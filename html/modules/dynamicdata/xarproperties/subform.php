@@ -485,8 +485,6 @@ class SubFormProperty extends DataProperty
             }
         }
 
-//            debug($data);;
-//        var_dump($data['object']);exit;
         return parent::showInput($data);
     }
 

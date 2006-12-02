@@ -25,8 +25,7 @@ function roles_admin_modifyconfig()
             // get a list of everyone with admin privileges
             // TODO: find a more elegant way to do this
             // first find the id of the admin privilege
-            $roles = new xarRoles();
-            $role  = $roles->getRole(xarModGetVar('roles','admin'));
+            $role  = xarRoles::getRole(xarModGetVar('roles','admin'));
             $privs = array_merge($role->getInheritedPrivileges(),$role->getAssignedPrivileges());
             foreach ($privs as $priv)
             {
@@ -53,7 +52,7 @@ function roles_admin_modifyconfig()
             while ($result->next())
             {
                 list($id) = $result->fields;
-                $role     = $roles->getRole($id);
+                $role     = xarRoles::getRole($id);
                 $admins[] = $role;
                 $admins   = array_merge($admins,$role->getDescendants());
             }
@@ -74,7 +73,7 @@ function roles_admin_modifyconfig()
             // remove duplicate entries from the list of groups
             $groups = array();
             $names  = array();
-            foreach($roles->getgroups() as $temp) {
+            foreach(xarRoles::getgroups() as $temp) {
                 $nam = $temp['name'];
                 if (!in_array($nam, $names)) {
                    array_push($names, $nam);
@@ -141,7 +140,7 @@ function roles_admin_modifyconfig()
 
                     xarModSetVar('roles', 'itemsperpage', $itemsperpage);
                     xarModSetVar('roles', 'defaultauthmodule', $defaultauthmodule);
-                    xarModSetVar('roles', 'defaultregmodule', $defaultregmodule);                    
+                    xarModSetVar('roles', 'defaultregmodule', $defaultregmodule);
                     xarModSetVar('roles', 'defaultgroup', $defaultgroup);
                     xarModSetVar('roles', 'SupportShortURLs', $shorturls);
                     xarModSetVar('roles', 'admin', $siteadmin);
@@ -166,7 +165,7 @@ function roles_admin_modifyconfig()
                     if (!xarVarFetch('allowexternalurl', 'checkbox', $allowexternalurl,  false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('loginredirect',    'checkbox', $loginredirect,     true,  XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('requirevalidation','checkbox', $requirevalidation, true,  XARVAR_NOT_REQUIRED)) return;
-                   
+
                     xarModSetVar('roles', 'searchbyemail', $searchbyemail); //search by email
                     xarModSetVar('roles', 'usersendemails', $usersendemails);
                     xarModSetVar('roles', 'displayrolelist', $displayrolelist); //display member list in Roles menu links

@@ -22,8 +22,7 @@ function roles_admin_removeprivilege()
     if (!xarVarFetch('roleid',       'int:1:', $roleid)) return;
     if (!xarVarFetch('confirmation', 'str:1:', $confirmation, '', XARVAR_NOT_REQUIRED)) return;
     // Call the Roles class and get the role
-    $roles = new xarRoles();
-    $role  = $roles->getRole($roleid);
+    $role  = xarRoles::getRole($roleid);
 
     // get the array of parents of this role
     // need to display this in the template
@@ -40,11 +39,11 @@ function roles_admin_removeprivilege()
     // some assignments can't be removed, for your own good
     if ((($roleid == 1) && ($privid == 1)) ||
         (($roleid == 2) && ($privid == 6)) ||
-        (($roleid == 4) && ($privid == 2))) 
+        (($roleid == 4) && ($privid == 2)))
         {
             throw new ForbiddenOperationException(null,'This privilege cannot be removed');
         }
-    
+
     // Security Check
     if (!xarSecurityCheck('EditRole')) return;
     // some info for the template display

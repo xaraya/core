@@ -28,12 +28,11 @@ function roles_admin_createpassword()
 
     $pass = xarModAPIFunc('roles','user','makepass');
     if (empty($pass)) throw new DataNotFoundException(array(),'Problem generating new password');
-    $roles = new xarRoles();
-    $role = $roles->getRole($uid);
+    $role = xarRoles::getRole($uid);
     $modifiedstatus = $role->setPass($pass);
     $modifiedrole = $role->update();
     if (!$modifiedrole) return;
-     
+
     if (!xarModGetVar('roles', 'askpasswordemail')) {
         xarResponseRedirect(xarModURL('roles', 'admin', 'showusers',
                       array('uid' => $groupuid, 'state' => $state)));

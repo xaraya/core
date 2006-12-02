@@ -23,7 +23,7 @@ function roles_admin_updatestate()
     if (!xarVarFetch('groupuid',    'int:0:', $data['groupuid'], 1,       XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('updatephase', 'str:1:', $updatephase,      'update',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('uids',        'isset',  $uids,             NULL,    XARVAR_NOT_REQUIRED)) return;
-    
+
     $data['authid'] = xarSecGenAuthKey();
     // invalid fields (we'll check this below)
     // check if the username is empty
@@ -34,7 +34,7 @@ function roles_admin_updatestate()
     }
      if (isset($invalid)) {
         // if so, return to the previous template
-        return xarResponseRedirect(xarModURL('roles','admin', 'showusers', 
+        return xarResponseRedirect(xarModURL('roles','admin', 'showusers',
                              array('authid'  => $data['authid'],
                                    'state'   => $data['state'],
                                    'invalid' => $invalid,
@@ -69,11 +69,10 @@ function roles_admin_updatestate()
         $vars = array('parameters', 'admin', 'updatestate', 'Roles');
         throw new BadParameterException($vars,$msg);
     }
-    $roles     = new xarRoles();
     $uidnotify = array();
     foreach ($uids as $uid => $val) {
         //check if the user must be updated :
-        $role = $roles->getRole($uid);
+        $role = xarRoles::getRole($uid);
         if ($role->getState() != $data['status']) {
             if ($data['status'] == ROLES_STATE_NOTVALIDATED) $valcode = xarModAPIFunc('roles','user','makepass');
             else $valcode = null;

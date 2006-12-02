@@ -16,6 +16,9 @@
  * @author Marco Canini
  * initialise block
  */
+sys::import('structures.descriptor');
+sys::import('modules.roles.class.language');
+
 function roles_languageblock_init()
 {
     return array(
@@ -23,6 +26,16 @@ function roles_languageblock_init()
         'pageshared' => 1, // share across pages
         'usershared' => 0, // don't share across users
         'cacheexpire' => null);
+/*        $descriptor = new ObjectDescriptor(array(
+                                        'nocache' => 1,
+                                        'usershared' => 0,
+                                        'text_type' => 'Language',
+                                        'text_type_long' => 'Language selection',
+                                        'module' => 'roles',
+                                        ));
+        $block = new LanguageBlock($descriptor);
+        return $block->getArgs();
+*/
 }
 
 /**

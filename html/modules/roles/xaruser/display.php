@@ -32,8 +32,7 @@ function roles_user_display($args)
 
     if ($uid) {
         // Get role information
-        $roles = new xarRoles();
-        $role = $roles->getRole($uid);
+        $role = xarRoles::getRole($uid);
 
         if (!$role) return;
 

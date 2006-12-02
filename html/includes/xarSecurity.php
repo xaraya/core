@@ -92,8 +92,7 @@ $schemas = array();
  */
 function xarMakeGroup($name,$uname='')
 {
-    $roles = new xarRoles();
-    return $roles->makeGroup($name,$uname);
+    return xarRoles::makeGroup($name,$uname);
 }
 
 /**
@@ -107,8 +106,7 @@ function xarMakeGroup($name,$uname='')
  */
 function xarMakeUser($name,$uname,$email,$pass='',$dateReg='',$valCode='',$state=3,$authModule= 0)
 {
-    $roles = new xarRoles();
-    return $roles->makeUser($name,$uname,$email,$pass,$dateReg,$valCode,$state,$authModule);
+    return xarRoles::makeUser($name,$uname,$email,$pass,$dateReg,$valCode,$state,$authModule);
 }
 
 /**
@@ -122,8 +120,7 @@ function xarMakeUser($name,$uname,$email,$pass='',$dateReg='',$valCode='',$state
  */
 function xarMakeRoleRoot($name)
 {
-    $roles = new xarRoles();
-    return $roles->isRoot($name);
+    return xarRoles::isRoot($name);
 }
 
 /**
@@ -138,8 +135,7 @@ function xarMakeRoleRoot($name)
  */
 function xarMakeRoleMemberByName($childName, $parentName)
 {
-    $roles = new xarRoles();
-    return $roles->makeMemberByName($childName, $parentName);
+    return xarRoles::makeMemberByName($childName, $parentName);
 }
 
 /**
@@ -154,9 +150,8 @@ function xarMakeRoleMemberByName($childName, $parentName)
  */
 function xarMakeRoleMemberByUname($childName, $parentName)
 {
-    $roles = new xarRoles();
-    $parent = $roles->ufindRole($parentName);
-    $child = $roles->ufindRole($childName);
+    $parent = xarRoles::ufindRole($parentName);
+    $child = xarRoles::ufindRole($childName);
 
     return $parent->addMember($child);
 }
@@ -173,9 +168,8 @@ function xarMakeRoleMemberByUname($childName, $parentName)
  */
 function xarMakeRoleMemberByID($childId, $parentId)
 {
-    $roles = new xarRoles();
-    $parent = $roles->getRole($parentId);
-    $child = $roles->getRole($childId);
+    $parent = xarRoles::getRole($parentId);
+    $child = xarRoles::getRole($childId);
 
     return $parent->addMember($child);
 }
@@ -192,9 +186,8 @@ function xarMakeRoleMemberByID($childId, $parentId)
  */
 function xarRemoveRoleMemberByID($childId, $parentId)
 {
-    $roles = new xarRoles();
-    $parent = $roles->getRole($parentId);
-    $child = $roles->getRole($childId);
+    $parent = xarRoles::getRole($parentId);
+    $child = xarRoles::getRole($childId);
 
     return $parent->removeMember($child);
 }
@@ -341,8 +334,7 @@ function xarRemoveInstances($module)
  */
 function xarGetGroups()
 {
-    $roles = new xarRoles();
-    return $roles->getgroups();
+    return xarRoles::getgroups();
 }
 
 /* xarFindRole: returns a role object by its name
@@ -355,27 +347,23 @@ function xarGetGroups()
  */
 function xarFindRole($name)
 {
-    $roles = new xarRoles();
-    return $roles->findRole($name);
+    return xarRoles::findRole($name);
 }
 
 function xarUFindRole($name)
 {
-    $roles = new xarRoles();
-    return $roles->ufindRole($name);
+    return xarRoles::ufindRole($name);
 }
 
 function xarCurrentRole()
 {
-    $roles = new xarRoles();
-    return $roles->getRole(xarSessionGetVar('uid'));
+    return xarRoles::getRole(xarSessionGetVar('uid'));
 }
 
 function xarIsParent($name1, $name2)
 {
-    $roles = new xarRoles();
-    $role1 = $roles->findRole($name1);
-    $role2 = $roles->ufindRole($name2);
+    $role1 = xarRoles::findRole($name1);
+    $role2 = xarRoles::ufindRole($name2);
     if (is_object($role1) && is_object($role2)) {
         return $role2->isParent($role1);
     }
@@ -384,9 +372,8 @@ function xarIsParent($name1, $name2)
 
 function xarIsAncestor($name1, $name2)
 {
-    $roles = new xarRoles();
-    $role1 = $roles->findRole($name1);
-    $role2 = $roles->ufindRole($name2);
+    $role1 = xarRoles::findRole($name1);
+    $role2 = xarRoles::ufindRole($name2);
     if (is_object($role1) && is_object($role2)) {
         return $role2->isAncestor($role1);
     }
@@ -527,7 +514,7 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
  */
 function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$description='')
 {
-        return xarMasks::register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
+    return xarMasks::register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
 }
 
 /**

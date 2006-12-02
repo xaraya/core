@@ -20,8 +20,6 @@ function roles_admin_viewroles()
     xarSessionDelVar('roles_statusmsg');
     // Security Check
     if (!xarSecurityCheck('EditRole')) return;
-    // Call the Roles class
-    $roles = new xarRoles();
 
     sys::import('modules.roles.xartreerenderer');
     $renderer = new xarTreeRenderer();

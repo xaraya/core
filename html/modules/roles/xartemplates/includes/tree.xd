@@ -1,12 +1,11 @@
 <xar:if condition="!empty($treenode)">
-    <xar:set name="roles">new xarRoles()</xar:set>
     <ul>
         <xar:set name="lastnode">max(0,count($treenode)-1)</xar:set>
         <xar:for start="$i = 0" test="$i le $lastnode" iter="$i++">
             <xar:set name="childrennode">$treenode[$i]['children']</xar:set>
             <xar:set name="node">$treenode[$i]['parent']</xar:set>
             <xar:set name="drawchildren">true</xar:set>
-            
+
             <xar:if condition="$i eq $lastnode">
                 <xar:set name="islast">"lastnode"</xar:set>
             <xar:else />
@@ -29,7 +28,7 @@
                                 <b>#$node['name']#</b> <xar:mlstring>see the entry above</xar:mlstring>
                             </span>
                         <xar:else />
-                            <xar:set name="numofsubgroups">count($roles->getsubgroups($node['uid']))</xar:set>
+                            <xar:set name="numofsubgroups">count(xarRoles::getsubgroups($node['uid']))</xar:set>
                             <xar:set name="numofsubgroups">1</xar:set>
                             <xar:set name="subgroups">$numofsubgroups == 1 ? xarML('subgroup') : xarML('subgroups')</xar:set>
                             <xar:set name="users">$node['users'] == 1 ? xarML('user') : xarML('users')</xar:set>
@@ -91,5 +90,5 @@
                 </xar:if>
             </li>
         </xar:for>
-    </ul>    
+    </ul>
 </xar:if>

@@ -25,7 +25,6 @@ function roles_adminapi_clearsessions($spared)
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
     $sessionstable = $xartable['session_info'];
-    $roles = new xarRoles();
 
     $query = "SELECT xar_sessid, xar_uid FROM $sessionstable";
     $result = $dbconn->executeQuery($query);
@@ -38,8 +37,8 @@ function roles_adminapi_clearsessions($spared)
         while ($result->next()) {
             list($thissession, $thisuid) = $result->fields;
             foreach ($spared as $uid) {
-                $thisrole = $roles->getRole($thisuid);
-                $thatrole = $roles->getRole($uid);
+                $thisrole = xarRoles::getRole($thisuid);
+                $thatrole = xarRoles::getRole($uid);
                 if (!$thisuid == $uid && !$thisrole->isParent($thatrole)) {
                     $stmt->executeUpdate(array($thisuid));
                     break;

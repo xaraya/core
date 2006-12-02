@@ -32,8 +32,7 @@ function roles_admin_modifyrole()
 
     // Call the Roles class and get the role to modify
     sys::import('modules.roles.class.roles');
-    $roles = new xarRoles();
-    $role = $roles->getRole($uid);
+    $role = xarRoles::getRole($uid);
 
     // get the array of parents of this role
     // need to display this in the template
@@ -54,7 +53,7 @@ function roles_admin_modifyrole()
     // get the array of all roles, minus the current one
     // need to display this in the template
     $groups = array();
-    foreach($roles->getgroups() as $temp) {
+    foreach(xarRoles::getgroups() as $temp) {
         $nam = $temp['name'];
 // TODO: this is very inefficient. Here we have the perfect use case for embedding security checks directly into the SQL calls
         if(!xarSecurityCheck('AttachRole',0,'Relation',$nam . ":" . $role->getName())) continue;

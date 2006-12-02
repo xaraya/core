@@ -177,11 +177,8 @@ class xarPrivileges extends xarMasks
         $privilege = self::findPrivilege($privilegename);
         $privid = $privilege->getID();
 
-        // get the Roles class
-        $roles = new xarRoles();
-
         // find the role for the assignation and get its ID
-        $role = $roles->findRole($rolename);
+        $role = xarRoles::findRole($rolename);
         $roleid = $role->getID();
 
         // Add the assignation as an entry to the acl table
@@ -679,11 +676,11 @@ class xarPrivileges extends xarMasks
     static function findPrivilege($name)
     {
         static $stmt = null;
-        
+
         parent::initialize();
         $query = "SELECT * FROM " . parent::$privilegestable . " WHERE xar_name = ?";
         if(!isset($stmt)) $stmt = parent::$dbconn->prepareStatement($query);
-        
+
         //Execute the query, bail if an exception was thrown
         $result = $stmt->executeQuery(array($name));
 

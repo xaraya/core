@@ -383,7 +383,6 @@ class xarMasks extends Object
 
         // get the Roles class
         sys::import('modules.roles.class.roles');
-        $roles = new xarRoles();
 
         // get the uid of the role we will check against
         // an empty role means take the current user
@@ -393,10 +392,10 @@ class xarMasks extends Object
             if (empty($userID)) {
                 $userID = _XAR_ID_UNREGISTERED;
             }
-            $role = $roles->getRole($userID);
+            $role = xarRoles::getRole($userID);
         }
         else {
-            $role = $roles->findRole($rolename);
+            $role = xarRoles::findRole($rolename);
         }
 
         // check if we already have the irreducible set of privileges for the current user

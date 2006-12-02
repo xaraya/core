@@ -29,15 +29,14 @@ function roles_admin_createmail()
     if ($uid < 1) {
         $type = 'selection';
     } else {
-        $roles = new xarRoles();
-        $role  = $roles->getRole($uid);
+        $role  = xarRoles::getRole($uid);
         $type  = $role->getType() ? 'selection' : 'single';
     }
 
     $xartable =& xarDBGetTables();
     if ($type == 'single') {
         $uid = $role->getID();
-        $data['users'][$role->getID()] = 
+        $data['users'][$role->getID()] =
             array('uid'      => $uid,
                   'name'     => $role->getName(),
                   'uname'    => $role->getUser(),
@@ -112,7 +111,7 @@ function roles_admin_createmail()
         foreach($q->output() as $role) {
                 // Remove the next line eventually. It comes from a special situation upgrading from 0.9.10 to 0.9.11
                 if (empty($role)) continue;
-                $data['users'][$role['uid']] = 
+                $data['users'][$role['uid']] =
                     array('uid'      => $role['uid'],
                           'name'     => $role['name'],
                           'uname'    => $role['uname'],
@@ -126,12 +125,12 @@ function roles_admin_createmail()
         // Check if we also want to send to subgroups
         // In this case we'll just pick out the descendants in the same state
         if ($uid != 0 && ($data['includesubgroups'] == 1)) {
-            $parentgroup = $roles->getRole($uid);
+            $parentgroup = xarRoles::getRole($uid);
             $descendants = $parentgroup->getDescendants($state);
 
             while (list($key, $user) = each($descendants)) {
                 if (xarSecurityCheck('EditRole',0,'Roles',$user->getName())) {
-                    $data['users'][$user->getID()] = 
+                    $data['users'][$user->getID()] =
                         array('uid'      => $user->getID(),
                               'name'     => $user->getName(),
                               'uname'    => $user->getUser(),

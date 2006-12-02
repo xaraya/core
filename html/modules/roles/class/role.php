@@ -152,8 +152,7 @@ class xarRole extends Object
         foreach ($this->duvs as $key => $value) xarModSetUserVar('roles',$key,$value,$this->uid);
         //set the email useage for this user to false
         xarModSetUserVar('roles','usersendemails', false, $this->uid);
-        $parts = new xarRoles();
-        $parentpart = $parts->getRole($this->parentid);
+        $parentpart = xarRoles::getRole($this->parentid);
         return $parentpart->addMember($this);
     }
 
@@ -286,14 +285,12 @@ class xarRole extends Object
         $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->getID()));
 
-        // get the Roles class so we can use its methods
-        $parts = new xarRoles();
         // go through the list, retrieving the roles and detaching each one
         // we need to do it this way because the method removeMember is more than just
         // a simple SQL DELETE
         while ($result->next()) {
             list($parentid) = $result->fields;
-            $parentpart = $parts->getRole($parentid);
+            $parentpart = xarRoles::getRole($parentid);
             // Check that a parent was returned
             if ($parentpart) {
                 $parentpart->removeMember($this);
@@ -765,8 +762,7 @@ class xarRole extends Object
      */
     function getDescendants($state = ROLES_STATE_CURRENT, $grpflag=0)
     {
-        $roles = new xarRoles();
-        $role = $roles->getRole($this->uid);
+        $role = xarRoles::getRole($this->uid);
         $users = $role->getUsers($state);
         $groups = $roles->getSubGroups($this->uid);
         $ua = array();
@@ -776,7 +772,7 @@ class xarRole extends Object
         }
         //Get the sub groups and go for another round
         foreach($groups as $group){
-            $role = $roles->getRole($group['uid']);
+            $role = xarRoles::getRole($group['uid']);
             if ($grpflag) {
                 $ua[$group['uid']] = $role;
             }

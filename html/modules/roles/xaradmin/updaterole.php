@@ -31,8 +31,7 @@ function roles_admin_updaterole()
     if (!xarVarFetch('allowemail','checkbox',$allowemail,false,XARVAR_NOT_REQUIRED)) return;
     //Grab it here if primary parent modvar is activated
     if (!empty($pprimaryparent) && is_integer($pprimaryparent) && xarModGetVar('roles','setprimaryparent')) {
-        $primaryrole = new xarRoles();
-        $primaryp = $primaryrole->getRole($pprimaryparent);
+        $primaryp = xarRoles::getRole($pprimaryparent);
         $primaryparent = $primaryp->uname;
     } else {
         $primaryparent='';
@@ -48,8 +47,7 @@ function roles_admin_updaterole()
     }
 
     //Save the old state and type
-    $roles = new xarRoles();
-    $oldrole = $roles->getRole($uid);
+    $oldrole = xarRoles::getRole($uid);
     $oldstate = $oldrole->getState();
     $oldtype = $oldrole->getType();
 

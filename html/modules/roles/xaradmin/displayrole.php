@@ -18,8 +18,7 @@ function roles_admin_displayrole()
     if (!xarVarFetch('uid','int:1:',$uid)) return;
 
     sys::import('modules.roles.class.roles');
-    $roles = new xarRoles();
-    $role = $roles->getRole($uid);
+    $role = xarRoles::getRole($uid);
 
     // get the array of parents of this role
     // need to display this in the template
