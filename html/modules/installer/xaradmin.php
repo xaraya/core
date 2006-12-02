@@ -472,6 +472,15 @@ function installer_admin_bootstrap()
         }
     }
 
+# --------------------------------------------------------
+# Create wrapper DD objects for the native itemtypes of the roles module
+    if (!xarModAPIFunc('roles','admin','createobjects'))
+        throw new Exception("Creating objects for roles module failed");
+# --------------------------------------------------------
+# Create wrapper DD objects for the native itemtypes of the privileges module
+    if (!xarModAPIFunc('privileges','admin','createobjects'))
+        throw new Exception("Creating objects for privileges module failed");
+
     // create the default roles and privileges setup
     include 'modules/privileges/xarsetup.php';
     initializeSetup();
@@ -545,15 +554,6 @@ function installer_admin_bootstrap()
     // Set module state to active
     if (!xarModAPIFunc('modules', 'admin', 'setstate', array('regid' => $baseId, 'state' => XARMOD_STATE_ACTIVE)))
         throw new Exception("Activating base $baseId module failed");
-
-    // --------------------------------------------------------
-# Create wrapper DD objects for the native itemtypes of the roles module
-    if (!xarModAPIFunc('roles','admin','createobjects'))
-        throw new Exception("Creating objects for roles module failed");
-# --------------------------------------------------------
-# Create wrapper DD objects for the native itemtypes of the privileges module
-    if (!xarModAPIFunc('privileges','admin','createobjects'))
-        throw new Exception("Creating objects for privileges module failed");
 
     xarResponseRedirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
 }

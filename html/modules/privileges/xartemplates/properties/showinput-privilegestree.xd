@@ -14,7 +14,6 @@
     }
 // -->
 </script>
-<div style="margin-left: 5px">
 <xar:if condition="!empty($trees)">
     <xar:foreach in="$trees" value="$tree">
     <ul class="tree">
@@ -53,4 +52,3 @@
     </ul>
     </xar:foreach>
 </xar:if>
-</div>

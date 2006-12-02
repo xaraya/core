@@ -189,7 +189,9 @@ class xarRole extends Object
 
         // for children that are users
         // add 1 to the users field of the parent group. This is for display purposes.
+        echo "hi";
         if ($member->isUser()) {
+        echo "ho";
             // get the current count
             $query = "SELECT xar_users FROM $this->rolestable WHERE xar_uid = ?";
             $result = $this->dbconn->Execute($query,array($this->getID()));
