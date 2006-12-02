@@ -17,7 +17,7 @@
 <div class="xar-mod-body">
    <xar:template type="module" file="admin-menu" />
     <h2>
-        #xarVarPrepForDisplay($title)#: 
+        #xarVarPrepForDisplay($title)#:
         <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$groupuid#" title="#xarML('Modify role')#">#xarVarPrepForDisplay($groupname)#</a>
         <xar:if condition="$search ne ''">
             <xar:mlstring>matching</xar:mlstring>
@@ -39,20 +39,6 @@
                 <xar:data-input type="rolestree" />
           </div>
         </fieldset>
-        <!--
-        <fieldset>
-          <legend><xar:mlstring>Role hierarchy</xar:mlstring></legend>
-            <div name="tree" id="tree" class="tree">
-                <xar:template file="tree" />
-          </div>
-        </fieldset>
-        <fieldset>
-          <legend><xar:mlstring>Role hierarchy</xar:mlstring></legend>
-          <div>
-            #$roletree#
-          </div>
-        </fieldset>
-        -->
     <xar:elseif condition="$selstyle eq '2'"/>
         <div>
             <dl class="xar-tabs">
@@ -60,7 +46,7 @@
                     <xar:mlstring>
                         Groups
                     </xar:mlstring>
-                    : 
+                    :
                 </dt>
                 <xar:if condition="$groupuid eq 0">
                     <dd class="active">
@@ -347,7 +333,7 @@
             <div class="xar-align-right">
                 <a href="javascript:void(0);" onclick="xar_base_checkall(document.forms['state'],true);return false;">
                     <xar:mlstring>Check All</xar:mlstring>
-                </a> | 
+                </a> |
                 <a href="javascript:void(0);" onclick="xar_base_checkall(document.forms['state'],false);return false;">
                     <xar:mlstring>Uncheck All</xar:mlstring>
                 </a>

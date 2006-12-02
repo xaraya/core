@@ -2,18 +2,19 @@
 <xar:base-include-javascript module="privileges" filename="xarTree.js" />
 <script type="text/javascript">
 <!--
-    var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
+    var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");
     function doOnLoad(){
-        oldOnLoadFunction();      
+        oldOnLoadFunction();
         xarTree_init();
     }
-    var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); 
+    var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;");
     function doOnUnload(){
-        oldOnUnloadFunction();      
+        oldOnUnloadFunction();
         xarTree_init();
     }
 // -->
 </script>
+<div style="margin-left: 5px">
 <xar:if condition="!empty($trees)">
     <xar:foreach in="$trees" value="$tree">
     <ul class="tree">
@@ -39,7 +40,7 @@
                         <img src="#xarTplGetImage('remove.gif')#"/>
                     </a>
                 </xar:if>
-            </div>                
+            </div>
 
             <li class="leaf">
                 <xar:for start="$i = 0" test="$i le $level" iter="$i++">
@@ -52,3 +53,4 @@
     </ul>
     </xar:foreach>
 </xar:if>
+</div>

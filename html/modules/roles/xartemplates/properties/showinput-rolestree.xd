@@ -1,3 +1,4 @@
+<div style="clear:both"></div>
 <xar:if condition="!empty($nodes)">
     <ul>
         <xar:set name="nodecount">count($nodes)</xar:set>
@@ -8,8 +9,8 @@
             <xar:set name="uid">$node->id</xar:set>
             <xar:set name="drawchildren">true</xar:set>
 
-            <li>
-                <xar:for start="$i = 1" test="$i le $level" iter="$i++">
+            <li style="border: none">
+                <xar:for start="$i = 1" test="$i le $level+1" iter="$i++">
                     <img src="#xarTplGetImage('blank.png')#" />
                 </xar:for>
                 <span class="treeattributes">
@@ -55,7 +56,7 @@
                         </a>
                     </xar:if>
                 </span>
-            </li>               
+            </li>
         </xar:foreach>
-    </ul>    
+    </ul>
 </xar:if>
