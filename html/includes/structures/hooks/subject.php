@@ -22,14 +22,14 @@ class HookSubject extends BasicSubject
 {
     private $messenger;
 
-    function attach(SplObserver $observer)
+    function attach(SplObserver $observer, $callerItemType = '')
     {
-        xarModAPIFunc('modules','admin','enablehooks',array('callerModName' => $this->getmodule(), 'hookModName' => $observer->getmodule()));
+        xarModAPIFunc('modules','admin','enablehooks',array('callerModName' => $this->getmodule(), 'hookModName' => $observer->getmodule(), 'callerItemType' => $callerItemType));
     }
 
-    function detach(SplObserver $observer)
+    function detach(SplObserver $observer, $callerItemType = '')
     {
-        xarModAPIFunc('modules','admin','disablehooks',array('callerModName' => $this->getmodule(), 'hookModName' => $observer->getmodule()));
+        xarModAPIFunc('modules','admin','disablehooks',array('callerModName' => $this->getmodule(), 'hookModName' => $observer->getmodule(), 'callerItemType' => $callerItemType));
     }
 
     function getMessenger()

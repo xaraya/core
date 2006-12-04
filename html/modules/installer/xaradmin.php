@@ -1065,6 +1065,7 @@ function installer_admin_cleanup()
         $msg = xarML("Group 'right' not found.");
         throw new Exception($msg);
     }
+    $result->next();
     list ($rightBlockGroup) = $result->fields;
 
     $loginBlockTypeId = xarModAPIFunc('blocks','admin','register_block_type',
@@ -1074,7 +1075,7 @@ function installer_admin_cleanup()
     }
 
     if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'login'))) {
-        if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
+        if (xarModAPIFunc('blocks', 'admin', 'create_instance',
                            array('title'    => 'Login',
                                  'name'     => 'login',
                                  'type'     => $loginBlockTypeId,
@@ -1082,6 +1083,8 @@ function installer_admin_cleanup()
                                                            'template' => '')),
                                  'template' => '',
                                  'state'    => 2))) {
+        } else {
+            throw new Exception('Could not create login block');
         }
     } else {
         throw new Exception('Login block created too early?');
@@ -1097,6 +1100,7 @@ function installer_admin_cleanup()
         throw new Exception($msg);
     }
 
+    $result->next();
     list ($headerBlockGroup) = $result->fields;
 
     $metaBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
@@ -1106,7 +1110,7 @@ function installer_admin_cleanup()
     $metaBlockTypeId = $metaBlockType['tid'];
 
     if (!xarModAPIFunc('blocks', 'user', 'get', array('name'  => 'meta'))) {
-        if (!xarModAPIFunc('blocks', 'admin', 'create_instance',
+        if (xarModAPIFunc('blocks', 'admin', 'create_instance',
                            array('title'    => 'Meta',
                                  'name'     => 'meta',
                                  'type'     => $metaBlockTypeId,
@@ -1114,7 +1118,8 @@ function installer_admin_cleanup()
                                                            'template' => '')),
                                  'template' => '',
                                  'state'    => 2))) {
-            return;
+        } else {
+            throw new Exception('Could not create meta block');
         }
     }
 
