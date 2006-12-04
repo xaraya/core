@@ -20,7 +20,7 @@
                             <tr>
                                 <td>&#160;</td>
                                 <td>
-                                    <xar:foreach in="$item['options']" value="$option">#$option['ojoin']# 
+                                    <xar:foreach in="$item['options']" value="$option">#$option['ojoin']#
                                     <a href="#$option['olink']#">#$option['otitle']#</a></xar:foreach>
                                 </td>
                             </tr>
@@ -37,7 +37,7 @@
         <div class="xar-align-center">
         <xar:if condition="!empty($prevurl)">
         <a href="#$prevurl#">&lt;&lt;</a>
-        <xar:else />---</xar:if>&#160;&#160;&#160; 
+        <xar:else />---</xar:if>&#160;&#160;&#160;
         <xar:if condition="!empty($nexturl)">
         <a href="#$nexturl#">&gt;&gt;</a>
         <xar:else />---</xar:if></div>
@@ -60,7 +60,7 @@
                 </xar:foreach>
                 <td class="xar-align-center xar-valign-top">
                     <xar:if condition="!empty($item['options']) and count($item['options']) gt 0">
-                    <xar:foreach in="$item['options']" value="$option">#$option['ojoin']# 
+                    <xar:foreach in="$item['options']" value="$option">#$option['ojoin']#
                     <a href="#$option['olink']#">#$option['otitle']#</a></xar:foreach>
                     <xar:else />&#160;</xar:if>
                 </td>
@@ -71,7 +71,7 @@
         <div class="xar-align-center">
         <xar:if condition="!empty($prevurl)">
         <a href="#$prevurl#">&lt;&lt;</a>
-        <xar:else />---</xar:if>&#160;&#160;&#160; 
+        <xar:else />---</xar:if>&#160;&#160;&#160;
         <xar:if condition="!empty($nexturl)">
         <a href="#$nexturl#">&gt;&gt;</a>
         <xar:else />---</xar:if></div>
@@ -89,8 +89,8 @@
                         <xar:data-output type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']" />
                     </xar:if>
                 </xar:foreach>
-                <xar:if condition="!empty($item['options']) and count($item['options']) gt 0">[ 
-                <xar:foreach in="$item['options']" value="$option">#$option['ojoin']# 
+                <xar:if condition="!empty($item['options']) and count($item['options']) gt 0">[
+                <xar:foreach in="$item['options']" value="$option">#$option['ojoin']#
                 <a href="#$option['olink']#">#$option['otitle']#</a></xar:foreach>]</xar:if>
             </li>
         </xar:foreach>
@@ -99,7 +99,7 @@
         <div class="xar-align-left">
         <xar:if condition="!empty($prevurl)">
         <a href="#$prevurl#">&lt;&lt;</a>
-        <xar:else />---</xar:if>&#160;&#160;&#160; 
+        <xar:else />---</xar:if>&#160;&#160;&#160;
         <xar:if condition="!empty($nexturl)">
         <a href="#$nexturl#">&gt;&gt;</a>
         <xar:else />---</xar:if></div>

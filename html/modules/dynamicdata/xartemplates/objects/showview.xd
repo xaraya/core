@@ -1,10 +1,10 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<!-- 
-    This is a generic view template for any DD object. You can use a specific template 
-    for one particular object in this directory as showview-[objectname].xd, and/or 
-    use templates in your own [module]/xartemplates/objects directory by specifying 
-    the tplmodule="..." argument in the xar:data-view BL tag or showView() method call. 
+<!--
+    This is a generic view template for any DD object. You can use a specific template
+    for one particular object in this directory as showview-[objectname].xd, and/or
+    use templates in your own [module]/xartemplates/objects directory by specifying
+    the tplmodule="..." argument in the xar:data-view BL tag or showView() method call.
 -->
 <xar:style scope="module" module="dynamicdata" file="dd" />
 <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
@@ -23,7 +23,7 @@
             <a href="#$prevurl#">&lt;&lt;</a>
         <xar:else />
             &lt;&lt;
-        </xar:if>&#160;&#160;&#160; 
+        </xar:if>&#160;&#160;&#160;
         <xar:if condition="!empty($nexturl)">
             <a href="#$nexturl#">&gt;&gt;</a>
         <xar:else />&gt;&gt;</xar:if>

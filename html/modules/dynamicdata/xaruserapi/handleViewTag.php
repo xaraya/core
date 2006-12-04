@@ -40,7 +40,6 @@ function dynamicdata_userapi_handleViewTag($args)
             return 'echo '.$args['object'].'->showView(); ';
         }
     }
-
     // if we don't have an object yet, we'll make one below
     $out = "echo xarModAPIFunc('dynamicdata',
                    'user',

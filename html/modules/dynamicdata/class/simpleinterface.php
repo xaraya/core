@@ -15,7 +15,7 @@ class SimpleObjectInterface extends DataObjectInterface
 {
     function __construct(array $args = array())
     {
-        parent::__construct($descriptor);
+        parent::__construct($args);
         if (!xarVarFetch('tplmodule',   'isset', $args['tplmodule'], 'dynamicdata', XARVAR_NOT_REQUIRED))
             return;
 
@@ -43,7 +43,11 @@ class SimpleObjectInterface extends DataObjectInterface
             $this->args = array_merge($this->args, $args);
         }
         $this->object =& DataObjectMaster::getObjectList($this->args);
-        $this->object->getItems();
+        if (method_exists($this->object,$this->args['method'])) {
+            $this->object->getItems();
+        } else {
+            $this->object =& DataObjectMaster::getObject($this->args);
+        }
 
         if (empty($this->object)) return;
 
