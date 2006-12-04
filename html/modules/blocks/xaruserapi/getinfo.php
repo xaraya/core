@@ -32,7 +32,8 @@ function blocks_userapi_getinfo($args)
 
     // Exit now for templates that have not been recompiled - at least one of these elements
     // will be missing.
-    if (!isset($args['instance']) || !isset($args['module']) || !isset($args['type'])) {
+//    if (!isset($args['instance']) || !isset($args['module']) || !isset($args['type'])) {
+    if (!(isset($args['instance']) || !(isset($args['module']) && isset($args['type'])))) {
         return;
     }
 
@@ -127,7 +128,7 @@ function blocks_userapi_getinfo($args)
             // If the array element exists, then override it.
             // There is no validation here (yet) - so arrays can
             // override strings and strings can override arrays.
-            // TODO: allow a block to provide validation rules to 
+            // TODO: allow a block to provide validation rules to
             // pass $pvalue through for each $pname.
             // Such validation would also be able to convert numbers
             // into booleans, string lists into arrays etc.

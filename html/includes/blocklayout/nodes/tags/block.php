@@ -15,26 +15,26 @@
  */
 class BlockTagNode extends TagNode implements ElementTag
 {
-    public $blockgrouptemplate = NULL; // is written to by blockgroup node 
-    
+    public $blockgrouptemplate = NULL; // is written to by blockgroup node
+
     function __construct(&$parser, $tagName, $parentTagName='', $parameters=array())
     {
         parent::__construct($parser, $tagName, $parentTagName, $parameters);
         $this->hasText = true;
     }
-    
+
     function renderBeginTag()
     {
         extract($this->attributes);
-        
+
         if (empty($instance) && (empty($module) || empty($type))) {
             $this->raiseError(XAR_BL_MISSING_ATTRIBUTE, 'Tag <xar:block> requires either an \'instance\' or both a \'module\' and \'type\' tag.');
             return;
         }
-        
+
         // Collect the remaining attributes together.
         $content = $this->attributes;
-        
+
         // Remove the attributes that are handled outside the content.
         foreach(array('instance', 'module', 'type', 'name', 'title', 'template', 'state') as $std_attribute) {
             if (isset($content[$std_attribute])) {
@@ -44,13 +44,13 @@ class BlockTagNode extends TagNode implements ElementTag
                 $$std_attribute = 'NULL';
             }
         }
-        
+
         // PHP code for the block parameter override array.
         foreach($content as $attr_name => $attr_value) {
             $content[$attr_name] = '\'' . $attr_name . '\'=>"' . xarVar_addSlashes($attr_value) . '"';
         }
         $override = 'array(' . implode(', ', $content) . ')';
-                   
+
         // Code for rendering the block tag.
         // Use double-quotes so variables can be expanded within the attributes
         // for more dynamic blocks.
@@ -72,7 +72,7 @@ class BlockTagNode extends TagNode implements ElementTag
                                         )
 EOT;
         return $code;
-                  
+
         // TODO: what shall we do about the content?
         // Ideally we could have child tags to supply content not appropriate to attributes.
         if (isset($this->children) && count($this->children) > 0) {
