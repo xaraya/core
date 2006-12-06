@@ -829,6 +829,13 @@ class DataObjectMaster extends Object
         if(empty($itemid))
             return;
 
+        // Last stand against wild hooks and other excesses
+        if($this->objectid < 3)
+        {
+            $msg = 'You cannot delete the DataObject or DataProperties class';
+            throw new BadParameterException(null, $msg);
+        }
+
         // Get an object list for the object itself, so we can delete its items
         $mylist =& self::getObjectList(
             array(

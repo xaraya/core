@@ -432,8 +432,12 @@ class DataObject extends DataObjectMaster
             throw new BadParameterException($vars, $msg);
         }
 
-//        $modinfo = xarModGetInfo($this->moduleid);
-//        xarLogMessage("Class: " . get_class() . ". Deleting an item. Itemid: " . $this->itemid . ", module: " . $modinfo['name'] . ", itemtype: " . $this->itemtype);
+        // Last stand against wild hooks and other excesses
+        if(($this->objectid < 3) && ($this->itemid < 3))
+        {
+            $msg = 'You cannot delete the DataObject or DataProperties class';
+            throw new BadParameterException(null, $msg);
+        }
 
         // TODO: this won't work for objects with several static tables !
         // delete the item in all the data stores
