@@ -59,10 +59,17 @@ class DataObjectDescriptor extends ObjectDescriptor
         }
         if (!$q->run()) return;
         $row = $q->row();
-        $args['moduleid'] = isset($row['xar_object_moduleid']) ? $row['xar_object_moduleid'] : 182;  //will need to change this
-        $args['itemtype'] = isset($row['xar_object_itemtype']) ? $row['xar_object_itemtype'] : 0;
-        $args['objectid'] = isset($row['xar_object_id']) ? $row['xar_object_id'] : 1;
-        $args['name'] = isset($row['xar_object_name']) ? $row['xar_object_name'] : 'objects';
+        if ($row == array()) {
+            $args['moduleid'] = isset($args['moduleid']) ? $args['moduleid'] : 182;  //will need to change this
+            $args['itemtype'] = isset($args['itemtype']) ? $args['itemtype'] : 0;
+            $args['objectid'] = isset($args['objectid']) ? $args['objectid'] : 1;
+            $args['name'] = isset($args['name']) ? $args['name'] : 'objects';
+        } else {
+            $args['moduleid'] = $row['xar_object_moduleid'];
+            $args['itemtype'] = $row['xar_object_itemtype'];
+            $args['objectid'] = $row['xar_object_id'];
+            $args['name'] = $row['xar_object_name'];
+        }
         return $args;
 
     }
@@ -796,6 +803,7 @@ class DataObjectMaster extends Object
     {
         $descriptor = new DataObjectDescriptor($args);
         $object = self::getObject($descriptor->getArgs());
+        $args = $descriptor->getArgs();
 
         // Update specific part
         $itemid = $object->getItem(array('itemid' => $args['objectid']));

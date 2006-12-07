@@ -74,7 +74,7 @@ function installer_community_configuration_load($args)
 
     if(in_array('p2',$args)) {
         // Only do readaccess if we havent already done so
-        if(!in_array('p1',$args)) installer_community_readaccess(); 
+        if(!in_array('p1',$args)) installer_community_readaccess();
         installer_community_readnoncore();
         xarAssignPrivilege('ReadNonCore','Everybody');
    }
@@ -93,15 +93,18 @@ function installer_community_casualaccess()
     xarRegisterPrivilege('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW','View the Login block');
     xarRegisterPrivilege('ViewBlocks','All','base','Block','All','ACCESS_OVERVIEW','View blocks of the Base module');
     xarRegisterPrivilege('ViewLoginItems','All','dynamicdata','Item','All','ACCESS_OVERVIEW','View some Dynamic Data items');
+    xarRegisterPrivilege('ViewBlockItems','All','blocks','BlockItem','All','ACCESS_OVERVIEW','View block items in general');
     xarMakePrivilegeRoot('CasualAccess');
     xarMakePrivilegeRoot('ViewLogin');
     xarMakePrivilegeRoot('ViewBlocks');
     xarMakePrivilegeRoot('ViewLoginItems');
+    xarMakePrivilegeRoot('ViewBlockItems');
     xarMakePrivilegeMember('ViewRegistrationLogin','CasualAccess');
     xarMakePrivilegeMember('ViewLogin','CasualAccess');
     xarMakePrivilegeMember('ViewBlocks','CasualAccess');
     xarMakePrivilegeMember('ViewAuthsystem','CasualAccess');
     xarMakePrivilegeMember('ViewLoginItems','CasualAccess');
+    xarMakePrivilegeMember('ViewBlockItems','CasualAccess');
 }
 
 function installer_community_readnoncore()
