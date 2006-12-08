@@ -24,6 +24,7 @@ class HookSubject extends BasicSubject
 
     function attach(SplObserver $observer, $callerItemType = '')
     {
+        if (!xarModIsHooked($observer->getmodule(), $this->getmodule(), $callerItemType))
         xarModAPIFunc('modules','admin','enablehooks',array('callerModName' => $this->getmodule(), 'hookModName' => $observer->getmodule(), 'callerItemType' => $callerItemType));
     }
 

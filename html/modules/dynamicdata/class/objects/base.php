@@ -277,8 +277,6 @@ class DataObject extends DataObjectMaster
                     $this->properties[$name]->setValue($value);
         }
 
-//        $modinfo = xarModGetInfo($this->moduleid);
-
         // special case when we try to create a new object handled by dynamicdata
         if(
             $this->objectid == 1 &&
@@ -307,7 +305,11 @@ class DataObject extends DataObjectMaster
             }
             else
             {
-                $value = $primaryobject->properties[$primaryobject->primary]->getValue();
+                if ($this->objectid == 1) {
+                    $value = 0;
+                } else {
+                    $value = $primaryobject->properties[$primaryobject->primary]->getValue();
+                }
 
                 // we already have an itemid value in the properties
                 if(!empty($value))

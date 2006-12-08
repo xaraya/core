@@ -19,8 +19,10 @@
  */
 function dynamicdata_userapi_showdisplay($args)
 {
+
     extract($args);
 
+/* Happens automatically in the constructor
     // optional layout for the template
     if (empty($tplmodule)) {
         $tplmodule = 'dynamicdata';
@@ -35,6 +37,11 @@ function dynamicdata_userapi_showdisplay($args)
         $template = '';
     }
 
+    if (empty($itemtype) || !is_numeric($itemtype)) {
+        $itemtype = null;
+    }
+
+*/
     // When called via hooks, the module name may be empty, so we get it from
     // the current module
     if (empty($module)) {
@@ -56,10 +63,6 @@ function dynamicdata_userapi_showdisplay($args)
         throw new BadParameterException($vars,$msg);
     }
 
-    if (empty($itemtype) || !is_numeric($itemtype)) {
-        $itemtype = null;
-    }
-
     // try getting the item id via input variables if necessary
     if (!isset($itemid) || !is_numeric($itemid)) {
         if (!xarVarFetch('itemid', 'isset', $itemid,  NULL, XARVAR_DONT_SET)) {return;}
@@ -68,11 +71,14 @@ function dynamicdata_userapi_showdisplay($args)
 // TODO: what kind of security checks do we want/need here ?
     if(!xarSecurityCheck('ReadDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
 
+    $args['moduleid'] = $modid;
+    $descriptor = new DataObjectDescriptor($args);
+    $args = $descriptor->getArgs();
+
     // we got everything via template parameters
     if (isset($fields) && is_array($fields) && count($fields) > 0) {
         return xarTplModule('dynamicdata','user','showdisplay',
-                            array('fields' => $fields,
-                                  'layout' => $layout),
+                            $args,
                             $template);
     }
 
@@ -80,31 +86,25 @@ function dynamicdata_userapi_showdisplay($args)
     if (!empty($fieldlist)) {
         // support comma-separated field list
         if (is_string($fieldlist)) {
-            $myfieldlist = explode(',',$fieldlist);
+            $args['fieldlist'] = explode(',',$fieldlist);
         // and array of fields
         } elseif (is_array($fieldlist)) {
-            $myfieldlist = $fieldlist;
+            $args['fieldlist'] = $fieldlist;
         }
     } else {
-        $myfieldlist = null;
+        $args['fieldlist'] = null;
     }
 
     // join a module table to a dynamic object
     if (empty($join)) {
-        $join = '';
+        $args['join'] = '';
     }
     // make some database table available via DD
     if (empty($table)) {
-        $table = '';
+        $args['table'] = '';
     }
 
-    $object = & DataObjectMaster::getObject(array('moduleid'  => $modid,
-                                       'itemtype'  => $itemtype,
-                                       'itemid'    => $itemid,
-                                       'join'      => $join,
-                                       'table'     => $table,
-                                       'fieldlist' => $myfieldlist,
-                                       'extend'    => !empty($extend)));
+    $object = & DataObjectMaster::getObject($args);
     // we're dealing with a real item, so retrieve the property values
     if (!empty($itemid)) {
         $object->getItem();
@@ -115,9 +115,7 @@ function dynamicdata_userapi_showdisplay($args)
         $object->checkInput();
     }
 
-    return $object->showDisplay(array('layout'   => $layout,
-                                      'template' => $template,
-                                      'tplmodule'=> $tplmodule));
+    return $object->showDisplay($args);
 }
 
 ?>

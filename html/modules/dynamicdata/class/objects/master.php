@@ -59,10 +59,17 @@ class DataObjectDescriptor extends ObjectDescriptor
         }
         if (!$q->run()) return;
         $row = $q->row();
-        $args['moduleid'] = isset($row['xar_object_moduleid']) ? $row['xar_object_moduleid'] : 182;  //will need to change this
-        $args['itemtype'] = isset($row['xar_object_itemtype']) ? $row['xar_object_itemtype'] : 0;
-        $args['objectid'] = isset($row['xar_object_id']) ? $row['xar_object_id'] : 1;
-        $args['name'] = isset($row['xar_object_name']) ? $row['xar_object_name'] : 'objects';
+        if ($row == array()) {
+            $args['moduleid'] = isset($args['moduleid']) ? $args['moduleid'] : 182;  //will need to change this
+            $args['itemtype'] = isset($args['itemtype']) ? $args['itemtype'] : 0;
+            $args['objectid'] = isset($args['objectid']) ? $args['objectid'] : 1;
+            $args['name'] = isset($args['name']) ? $args['name'] : 'objects';
+        } else {
+            $args['moduleid'] = $row['xar_object_moduleid'];
+            $args['itemtype'] = $row['xar_object_itemtype'];
+            $args['objectid'] = $row['xar_object_id'];
+            $args['name'] = $row['xar_object_name'];
+        }
         return $args;
 
     }
@@ -781,25 +788,22 @@ class DataObjectMaster extends Object
     **/
     static function createObject(array $args)
     {
-        // Generic getter
-        $object = self::getObjectTemp($args);
+        $descriptor = new DataObjectDescriptor($args);
+        $object = self::getObject($descriptor->getArgs());
 
         // Create specific part
-        $objectid = $object->createItem($args);
-        xarLogMessage("Class: " . get_class() . ". Creating an object of class " . $args['classname'] . ". Objectid: " . $objectid . ", module: " . $args['moduleid'] . ", itemtype: " . $args['itemtype']);
+        $objectid = $object->createItem($descriptor->getArgs());
+        $classname = get_class($object);
+        xarLogMessage("Creating an object of class " . $classname . ". Objectid: " . $objectid . ", module: " . $args['moduleid'] . ", itemtype: " . $args['itemtype']);
         unset($object);
         return $objectid;
     }
 
     static function updateObject(array $args)
     {
-        // For updating, we need the object id
-        // @todo raise exception here?
-        if(empty($args['objectid']))
-            return;
-
-        // Generic getter
-        $object = self::getObjectTemp($args);
+        $descriptor = new DataObjectDescriptor($args);
+        $object = self::getObject($descriptor->getArgs());
+        $args = $descriptor->getArgs();
 
         // Update specific part
         $itemid = $object->getItem(array('itemid' => $args['objectid']));
@@ -812,25 +816,11 @@ class DataObjectMaster extends Object
 
     static function deleteObject($args)
     {
-        // For delete we need the object id.
-        // @todo raise exception here?
-        if(empty($args['objectid']))
-            return;
-
-        // Generic getter
-        $object = self::getObjectTemp($args);
-        if(empty($object))
-            return;
-
-        // Delete specific part
-        $itemid = $object->getItem(
-            array('itemid' => $args['objectid'])
-        );
-        if(empty($itemid))
-            return;
+        $descriptor = new DataObjectDescriptor($args);
+        $args = $descriptor->getArgs();
 
         // Last stand against wild hooks and other excesses
-        if($this->objectid < 3)
+        if($args['objectid'] < 3)
         {
             $msg = 'You cannot delete the DataObject or DataProperties class';
             throw new BadParameterException(null, $msg);
@@ -840,9 +830,6 @@ class DataObjectMaster extends Object
         $mylist =& self::getObjectList(
             array(
                 'objectid' => $args['objectid'],
-                'moduleid' => $args['moduleid'],
-                'itemtype' => $args['itemtype'],
-                'classname' => $args['classname'],
                 'extend' => false
             )
         );
@@ -862,36 +849,13 @@ class DataObjectMaster extends Object
         unset($mylist);
 
         // delete the Dynamic Objects item corresponding to this object
+        $object = self::getObject(array('objectid' => 1));
+        $itemid = $object->getItem(array('itemid' => $args['objectid']));
+        if(empty($itemid))
+            return;
         $result = $object->deleteItem();
         unset($object);
         return $result;
-    }
-
-    /*
-        Temporary private helper method for getting an object, as the
-        create/update/delete all use this. Until we figure out where the
-        master class will fit in we make it private and with a weird name
-        so we dont use this too much yet.
-    */
-    private static function &getObjectTemp(array &$args)
-    {
-        // Generic check
-        $args['moduleid']  = isset($args['moduleid'])  ? $args['moduleid']  : null;
-        $args['itemtype']  = isset($args['itemtype'])  ? $args['itemtype']  : null;
-        $args['classname'] = isset($args['classname']) ? $args['classname'] : null;
-
-        // get the Dynamic Objects item corresponding to these args
-        $object = self::getObject(
-            array(
-                'objectid'  => 1, // the Dynamic Objects = 1
-                'moduleid'  => $args['moduleid'],
-                'itemtype'  => $args['itemtype'],
-                'classname' => $args['classname']
-            )
-        );
-        if(empty($object))
-            return null;
-        return $object;
     }
 
     /**

@@ -1,0 +1,103 @@
+<object name="modules_hooks">
+  <objectid>19</objectid>
+  <label>Hooks</label>
+  <parent>objects</parent>
+  <moduleid>182</moduleid>
+  <itemtype>12</itemtype>
+  <urlparam>itemid</urlparam>
+  <maxid>0</maxid>
+  <config></config>
+  <isalias>1</isalias>
+  <properties>
+    <property name="id">
+      <id>142</id>
+      <label>ID</label>
+      <type>itemid</type>
+      <default></default>
+      <source>xar_hooks.xar_id</source>
+      <status>67</status>
+      <order>1</order>
+      <validation></validation>
+    </property>
+    <property name="object">
+      <id>143</id>
+      <label>Object</label>
+      <type>textbox</type>
+      <default></default>
+      <source>xar_hooks.xar_object</source>
+      <status>65</status>
+      <order>2</order>
+      <validation></validation>
+    </property>
+    <property name="action">
+      <id>144</id>
+      <label>Action</label>
+      <type>textbox</type>
+      <default></default>
+      <source>xar_hooks.xar_action</source>
+      <status>65</status>
+      <order>3</order>
+      <validation></validation>
+    </property>
+    <property name="subject_module">
+      <id>145</id>
+      <label>Subject Module</label>
+      <type>module</type>
+      <default></default>
+      <source>xar_hooks.xar_smodid</source>
+      <status>65</status>
+      <order>4</order>
+      <validation></validation>
+    </property>
+    <property name="subject_type">
+      <id>146</id>
+      <label>Subject Type</label>
+      <type>integerbox</type>
+      <default></default>
+      <source>xar_hooks.xar_stype</source>
+      <status>65</status>
+      <order>5</order>
+      <validation></validation>
+    </property>
+    <property name="area">
+      <id>147</id>
+      <label>Area</label>
+      <type>textbox</type>
+      <default></default>
+      <source>xar_hooks.xar_tarea</source>
+      <status>65</status>
+      <order>6</order>
+      <validation></validation>
+    </property>
+    <property name="observer_module">
+      <id>148</id>
+      <label>Observer Module</label>
+      <type>module</type>
+      <default></default>
+      <source>xar_hooks.xar_tmodid</source>
+      <status>65</status>
+      <order>7</order>
+      <validation></validation>
+    </property>
+    <property name="observer_type">
+      <id>149</id>
+      <label>Observer Type</label>
+      <type>integerbox</type>
+      <default></default>
+      <source>xar_hooks.xar_ttype</source>
+      <status>65</status>
+      <order>8</order>
+      <validation></validation>
+    </property>
+    <property name="observer_function">
+      <id>150</id>
+      <label>Observer Function</label>
+      <type>textbox</type>
+      <default></default>
+      <source>xar_hooks.xar_tfunc</source>
+      <status>65</status>
+      <order>9</order>
+      <validation></validation>
+    </property>
+  </properties>
+</object>
