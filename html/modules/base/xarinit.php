@@ -128,13 +128,13 @@ function base_init()
         $query = xarDBCreateIndex($configVarsTable, $index);
         $dbconn->Execute($query);
 
-        // Let's commit this, since we're gonna do some other stuff 
+        // Let's commit this, since we're gonna do some other stuff
         $dbconn->commit();
     } catch (Exception $e) {
-        $dbconn->rollback(); 
+        $dbconn->rollback();
         throw $e;
     }
-    
+
     // Start Configuration Unit
     sys::import('xarConfig');
     $systemArgs = array();
@@ -164,6 +164,7 @@ function base_init()
      ******************************************************************/
     xarConfigSetVar('Site.BL.ThemesDirectory','themes');
     xarConfigSetVar('Site.BL.CacheTemplates',true);
+    xarConfigSetVar('Site.BL.CompilerVersion','XAR_BL_USE_XSLT');
     xarConfigSetVar('Site.Core.FixHTMLEntities',true);
     xarConfigSetVar('Site.Core.TimeZone', 'Etc/UTC');
     xarConfigSetVar('Site.Core.EnableShortURLsSupport', false);

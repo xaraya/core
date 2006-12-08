@@ -20,7 +20,7 @@
  * This define allows switching back to BL1 if needed (comment the line)
  *
  */
- //define('XAR_BL_USE_XSLT',true);
+ define(xarConfigGetVar('Site.BL.CompilerVersion'),true);
 
 /**
  * Defines for token handling
