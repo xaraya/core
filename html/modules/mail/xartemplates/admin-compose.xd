@@ -68,7 +68,7 @@
                 </label>
                 <input type="text" id="namebcc" name="namebcc" value="" maxlength="100" class="xar-form-textlong" />
             </div>
-            
+
             <div class="xar-form-input-wrapper">
                 <label for="subject" title="#xarML('Message Subject.')#" class="xar-form-label">
                     <xar:mlstring>
@@ -84,7 +84,7 @@
                     </xar:mlstring>
                 </label>
                 <div class="xar-form-container-after">
-                    <textarea name="message" id="message" class="xar-form-textarealarge"></textarea>
+                    <textarea name="message" id="message" class="xar-form-textarealarge">&#160;</textarea>
                 </div>
            </div>
             <xar:if condition="xarModIsAvailable('scheduler')">
