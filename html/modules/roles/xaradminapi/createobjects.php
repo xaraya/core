@@ -26,7 +26,7 @@ function roles_adminapi_createobjects($args)
     $prefix = xarDBGetSiteTablePrefix();
     $itemtype = 1;
     $objectid = xarModAPIFunc('dynamicdata','admin','createobject',array(
-                                    'name'     => 'role',
+                                    'name'     => 'roles_role',
                                     'label'    => 'Role',
                                     'moduleid' => $moduleid,
                                     'itemtype' => $itemtype,
@@ -66,7 +66,7 @@ function roles_adminapi_createobjects($args)
 
     $itemtype = 2;
     $objectid = xarModAPIFunc('dynamicdata','admin','createobject',array(
-                                    'name'     => 'user',
+                                    'name'     => 'roles_user',
                                     'label'    => 'User',
                                     'moduleid' => $moduleid,
                                     'itemtype' => $itemtype,
@@ -199,7 +199,7 @@ function roles_adminapi_createobjects($args)
 #
     $itemtype = 3;
     $objectid = xarModAPIFunc('dynamicdata','admin','createobject',array(
-                                    'name'     => 'group',
+                                    'name'     => 'roles_group',
                                     'label'    => 'Group',
                                     'moduleid' => $moduleid,
                                     'itemtype' => $itemtype,

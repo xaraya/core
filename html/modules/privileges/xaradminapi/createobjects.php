@@ -24,7 +24,7 @@ function privileges_adminapi_createobjects($args)
     $prefix = xarDBGetSiteTablePrefix();
     $itemtype = 1;
     $objectid = xarModAPIFunc('dynamicdata','admin','createobject',array(
-                                    'name'     => 'baseprivilege',
+                                    'name'     => 'privileges_baseprivilege',
                                     'label'    => 'Base Privilege',
                                     'moduleid' => $moduleid,
                                     'itemtype' => $itemtype,
@@ -51,7 +51,7 @@ function privileges_adminapi_createobjects($args)
 #
     $itemtype = 2;
     $objectid = xarModAPIFunc('dynamicdata','admin','createobject',array(
-                                    'name'     => 'privilege',
+                                    'name'     => 'privileges_privilege',
                                     'label'    => 'Privilege',
                                     'moduleid' => $moduleid,
                                     'itemtype' => $itemtype,
@@ -161,7 +161,7 @@ function privileges_adminapi_createobjects($args)
 #
     $itemtype = 3;
     $objectid = xarModAPIFunc('dynamicdata','admin','createobject',array(
-                                    'name'     => 'mask',
+                                    'name'     => 'privileges_mask',
                                     'label'    => 'Mask',
                                     'moduleid' => $moduleid,
                                     'itemtype' => $itemtype,

@@ -48,7 +48,7 @@ sys::import('xarCore');
 // anything extra for maximum control
 $whatToLoad = XARCORE_SYSTEM_NONE;
 
-// Start Exception Handling System very early 
+// Start Exception Handling System very early
 sys::import('xarException');
 $systemArgs = array();
 xarError_init($systemArgs, $whatToLoad);
