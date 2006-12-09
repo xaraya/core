@@ -16,12 +16,12 @@
  * @param $args array containing the items or fields to show
  * @return string containing the HTML (or other) text to output in the BL template
  */
+
 function dynamicdata_userapi_showview($args)
 {
     extract($args);
 
-    //    $current = xarModAPIFunc('dynamicdata','user','setcontext',$args);
-
+/* Happens automatically in the constructor
     // optional layout for the template
     if (empty($layout)) {
         $layout = 'default';
@@ -34,17 +34,18 @@ function dynamicdata_userapi_showview($args)
     if (empty($tplmodule)) {
         $tplmodule = 'dynamicdata';
     }
+*/
+    $descriptor = new DataObjectDescriptor($args);
+    $args = $descriptor->getArgs();
 
     // do we want to count?
-    if(empty($count)) $count=false;
+    if(empty($count)) $args['count'] = false;
 
     // we got everything via template parameters
     if (isset($items) && is_array($items)) {
+        $args['count'] = count($items);
         return xarTplModule('dynamicdata','user','showview',
-                            array('items' => $items,
-                                  'labels' => $labels,
-                                  'layout' => $layout,
-                                  'count'  => count($items)), // no overhead, count anyway
+                            $args,
                             $template);
     }
 
@@ -143,7 +144,7 @@ function dynamicdata_userapi_showview($args)
     if (!isset($object)) return;
     // Count before numitems!
     $numthings = 0;
-    if($count) {
+    if($args['count']) {
         $numthings = $object->countItems();
     }
     $object->getItems();
@@ -163,6 +164,13 @@ function dynamicdata_userapi_showview($args)
     // current URL for the pager (defaults to current URL)
     if (empty($pagerurl)) $pagerurl = '';
 
+    // TODO: stopgap: remove once we let the descriptor do this
+    if (empty($tplmodule)) {
+        $tplmodule = 'dynamicdata';
+    }
+    if (empty($template)) {
+        $template = '';
+    }
     return $object->showView(array('layout'    => $layout,
                                    'tplmodule' => $tplmodule,
                                    'template'  => $template,
@@ -171,8 +179,7 @@ function dynamicdata_userapi_showview($args)
                                    'param'     => $param,
                                    'pagerurl'  => $pagerurl,
                                    'linkfield' => $linkfield,
-                                   'count'     => $numthings,
-                                   'tplmodule' => $tplmodule));
+                                   'count'     => $numthings));
 }
 
 ?>
