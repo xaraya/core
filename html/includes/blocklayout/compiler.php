@@ -20,7 +20,12 @@
  * This define allows switching back to BL1 if needed (comment the line)
  *
  */
- //define(xarConfigGetVar('Site.BL.CompilerVersion'),true);
+//    if (xarVarSetCached('installer','installing', true)) {
+    if (file_exists('install.php')) {
+        define('XAR_BL_USE_XSLT',true);
+    } else {
+        define(xarConfigGetVar('Site.BL.CompilerVersion'),true);
+    }
 
 /**
  * Defines for token handling

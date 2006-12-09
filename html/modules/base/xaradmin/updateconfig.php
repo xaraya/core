@@ -41,7 +41,7 @@ function base_admin_updateconfig()
             if (!xarVarFetch('themedir','str:1:',$defaultThemeDir,'themes',XARVAR_NOT_REQUIRED)) return;
             xarConfigSetVar('Site.BL.ThemesDirectory', $defaultThemeDir);
             if (!xarVarFetch('compilerversion','str:1:',$compilerversion,xarConfigGetVar('Site.BL.CompilerVersion'),XARVAR_NOT_REQUIRED)) return;
-            xarConfigSetVar('Site.BL.CompilerVersion', $compilerversion);
+            if (!file_exists('install.php')) xarConfigSetVar('Site.BL.CompilerVersion', $compilerversion);
 
             xarConfigSetVar('Site.Core.DefaultModuleName', $defaultModuleName);
             xarModSetVar('base','UseAlternatePageTemplate', ($alternatePageTemplate ? 1 : 0));
