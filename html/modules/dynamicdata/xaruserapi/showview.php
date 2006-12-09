@@ -165,6 +165,9 @@ function dynamicdata_userapi_showview($args)
     if (empty($pagerurl)) $pagerurl = '';
 
     // TODO: stopgap: remove once we let the descriptor do this
+    if (empty($layout)) {
+        $layout = 'default';
+    }
     if (empty($tplmodule)) {
         $tplmodule = 'dynamicdata';
     }

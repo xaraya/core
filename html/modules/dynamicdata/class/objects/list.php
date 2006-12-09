@@ -602,6 +602,12 @@ class DataObjectList extends DataObjectMaster
         $urlargs['table'] = $table;
         $urlargs[$args['param']] = $itemid;
         $urlargs['template'] = $args['template'];
+        // The next 3 lines make the DD modify/display routines work for overlay objects
+        // TODO: do we need the concept of urlmodule at all?
+        $info = DataObjectMaster::getObjectInfo($args);
+        $urlargs['objectid'] = $info['objectid'];
+        $args['urlmodule'] = 'dynamicdata';
+
 
         $options = array();
         if (xarSecurityCheck('DeleteDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid))  {
