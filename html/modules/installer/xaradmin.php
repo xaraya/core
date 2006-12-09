@@ -1139,9 +1139,9 @@ function installer_admin_finish()
     if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'roles', 'objects' => $objects))) return;
 
     $objects = array(
-                   'privileges_baseprivileges',
-                   'privileges_privileges',
-                   'privileges_masks',
+//                   'privileges_baseprivileges',
+//                   'privileges_privileges',
+//                   'privileges_masks',
                      );
 
     if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'privileges', 'objects' => $objects))) return;
