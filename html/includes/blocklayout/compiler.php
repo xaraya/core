@@ -20,7 +20,6 @@
  * This define allows switching back to BL1 if needed (comment the line)
  *
  */
-//    if (xarVarSetCached('installer','installing', true)) {
     if (file_exists('install.php')) {
         define('XAR_BL_USE_XSLT',true);
     } else {
