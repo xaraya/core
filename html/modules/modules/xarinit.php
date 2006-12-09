@@ -191,6 +191,7 @@ function modules_init()
         $dbconn->rollback();
         throw $e;
     }
+
     // Initialisation successful
     return true;
 }

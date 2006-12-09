@@ -617,7 +617,7 @@ class DataObjectMaster extends Object
      * @todo no ref return?
      * @todo when we can turn this into an object method, we dont have to do db inclusion all the time.
     **/
-    static function getObjectInfo(array $args)
+    static function getObjectInfo(array $args=array())
     {
         $args = DataObjectDescriptor::getObjectID($args);
         if(!empty($args['table']))
@@ -686,7 +686,7 @@ class DataObjectMaster extends Object
      * @return object the requested object definition
      * @todo  automatic sub-classing per module (and itemtype) ?
     **/
-    static function &getObject(array $args)
+    static function &getObject(array $args=array())
     {
         if(!isset($args['itemid']))
             $args['itemid'] = null;

@@ -1,0 +1,93 @@
+<object name="privileges_privileges">
+  <objectid>8</objectid>
+  <label>Privileges</label>
+  <parent>0</parent>
+  <moduleid>1098</moduleid>
+  <itemtype>2</itemtype>
+  <urlparam>itemid</urlparam>
+  <maxid>0</maxid>
+  <config></config>
+  <isalias>1</isalias>
+  <properties>
+    <property name="id">
+      <id>49</id>
+      <label>ID</label>
+      <type>itemid</type>
+      <default></default>
+      <source>xar_privileges.xar_pid</source>
+      <status>65</status>
+      <order>1</order>
+      <validation></validation>
+    </property>
+    <property name="name">
+      <id>50</id>
+      <label>Name</label>
+      <type>textbox</type>
+      <default></default>
+      <source>xar_privileges.xar_name</source>
+      <status>33</status>
+      <order>2</order>
+      <validation></validation>
+    </property>
+    <property name="realm">
+      <id>51</id>
+      <label>Realm</label>
+      <type>textbox</type>
+      <default></default>
+      <source>xar_privileges.xar_realmid</source>
+      <status>33</status>
+      <order>3</order>
+      <validation></validation>
+    </property>
+    <property name="module">
+      <id>52</id>
+      <label>Module</label>
+      <type>textbox</type>
+      <default></default>
+      <source>xar_privileges.xar_module</source>
+      <status>33</status>
+      <order>4</order>
+      <validation></validation>
+    </property>
+    <property name="component">
+      <id>53</id>
+      <label>Component</label>
+      <type>textbox</type>
+      <default></default>
+      <source>xar_privileges.xar_component</source>
+      <status>33</status>
+      <order>5</order>
+      <validation></validation>
+    </property>
+    <property name="instance">
+      <id>54</id>
+      <label>Instance</label>
+      <type>textbox</type>
+      <default></default>
+      <source>xar_privileges.xar_instance</source>
+      <status>33</status>
+      <order>6</order>
+      <validation></validation>
+    </property>
+    <property name="level">
+      <id>55</id>
+      <label>Level</label>
+      <type>integerbox</type>
+      <default></default>
+      <source>xar_privileges.xar_level</source>
+      <status>33</status>
+      <order>7</order>
+      <validation></validation>
+    </property>
+    <property name="description">
+      <id>56</id>
+      <label>Description</label>
+      <type>textbox</type>
+      <default></default>
+      <source>xar_privileges.xar_description</source>
+      <status>65</status>
+      <order>8</order>
+      <validation></validation>
+    </property>
+  </properties>
+</object>

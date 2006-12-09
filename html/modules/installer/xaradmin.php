@@ -472,17 +472,8 @@ function installer_admin_bootstrap()
         }
     }
 
-# --------------------------------------------------------
-# Create wrapper DD objects for the native itemtypes of the roles module
-    if (!xarModAPIFunc('roles','admin','createobjects'))
-        throw new Exception("Creating objects for roles module failed");
-# --------------------------------------------------------
-# Create wrapper DD objects for the native itemtypes of the privileges module
-    if (!xarModAPIFunc('privileges','admin','createobjects'))
-        throw new Exception("Creating objects for privileges module failed");
-
     // create the default roles and privileges setup
-    include 'modules/privileges/xarsetup.php';
+    sys::import('modules.privileges.xarsetup');
     initializeSetup();
 
     // Set up default user properties, etc.
@@ -1135,6 +1126,32 @@ function installer_admin_cleanup()
 function installer_admin_finish()
 {
     xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush' => true));
+
+# --------------------------------------------------------
+# Create wrapper DD overlay objects for the modules, roles and privileges modules
+#
+    $objects = array(
+                   'roles_roles',
+                   'roles_users',
+                   'roles_groups',
+                     );
+
+    if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'roles', 'objects' => $objects))) return;
+
+    $objects = array(
+                   'privileges_baseprivileges',
+                   'privileges_privileges',
+                   'privileges_masks',
+                     );
+
+    if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'privileges', 'objects' => $objects))) return;
+
+    $objects = array(
+                   'modules_hooks',
+                     );
+
+    if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'modules', 'objects' => $objects))) return;
+
     // Until here we have been using a hardcoded default timezone as a placeholder. Now load a "real" default zone via the API
     $zones = array_keys(xarModAPIFunc('base','user','timezones'));
     $defaultzone = array_shift($zones);

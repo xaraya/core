@@ -1,0 +1,103 @@
+<object name="roles_groups">
+  <objectid>6</objectid>
+  <label>Groups</label>
+  <parent>0</parent>
+  <moduleid>27</moduleid>
+  <itemtype>3</itemtype>
+  <urlparam>itemid</urlparam>
+  <maxid>0</maxid>
+  <config></config>
+  <isalias>1</isalias>
+  <properties>
+    <property name="id">
+      <id>39</id>
+      <label>ID</label>
+      <type>itemid</type>
+      <default></default>
+      <source>xar_roles.xar_uid</source>
+      <status>65</status>
+      <order>1</order>
+      <validation></validation>
+    </property>
+    <property name="name">
+      <id>40</id>
+      <label>Name</label>
+      <type>textbox</type>
+      <default></default>
+      <source>xar_roles.xar_name</source>
+      <status>33</status>
+      <order>2</order>
+      <validation></validation>
+    </property>
+    <property name="type">
+      <id>41</id>
+      <label>Type</label>
+      <type>itemtype</type>
+      <default>3</default>
+      <source>xar_roles.xar_type</source>
+      <status>65</status>
+      <order>3</order>
+      <validation></validation>
+    </property>
+    <property name="users">
+      <id>42</id>
+      <label>Users</label>
+      <type>integerbox</type>
+      <default>0</default>
+      <source>xar_roles.xar_users</source>
+      <status>33</status>
+      <order>4</order>
+      <validation></validation>
+    </property>
+    <property name="uname">
+      <id>43</id>
+      <label>UserName</label>
+      <type>textbox</type>
+      <default></default>
+      <source>xar_roles.xar_uname</source>
+      <status>65</status>
+      <order>5</order>
+      <validation></validation>
+    </property>
+    <property name="regdate">
+      <id>44</id>
+      <label>Reg. Date</label>
+      <type>textbox</type>
+      <default></default>
+      <source>xar_roles.xar_date_reg</source>
+      <status>33</status>
+      <order>6</order>
+      <validation></validation>
+    </property>
+    <property name="valcode">
+      <id>45</id>
+      <label>Val. Code</label>
+      <type>textbox</type>
+      <default></default>
+      <source>xar_roles.xar_valcode</source>
+      <status>65</status>
+      <order>7</order>
+      <validation></validation>
+    </property>
+    <property name="state">
+      <id>46</id>
+      <label>State</label>
+      <type>integerbox</type>
+      <default></default>
+      <source>xar_roles.xar_state</source>
+      <status>65</status>
+      <order>8</order>
+      <validation></validation>
+    </property>
+    <property name="authmodule">
+      <id>47</id>
+      <label>Auth. Module</label>
+      <type>textbox</type>
+      <default></default>
+      <source>xar_roles.xar_auth_modid</source>
+      <status>65</status>
+      <order>9</order>
+      <validation></validation>
+    </property>
+  </properties>
+</object>

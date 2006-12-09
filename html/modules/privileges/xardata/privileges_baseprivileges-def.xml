@@ -1,0 +1,23 @@
+<object name="privileges_baseprivileges">
+  <objectid>7</objectid>
+  <label>Base Privileges</label>
+  <parent>0</parent>
+  <moduleid>1098</moduleid>
+  <itemtype>1</itemtype>
+  <urlparam>itemid</urlparam>
+  <maxid>0</maxid>
+  <config></config>
+  <isalias>1</isalias>
+  <properties>
+    <property name="id">
+      <id>48</id>
+      <label>ID</label>
+      <type>itemid</type>
+      <default></default>
+      <source>xar_privileges.xar_pid</source>
+      <status>65</status>
+      <order>1</order>
+      <validation></validation>
+    </property>
+  </properties>
+</object>

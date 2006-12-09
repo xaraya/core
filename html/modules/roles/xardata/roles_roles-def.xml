@@ -1,0 +1,33 @@
+<object name="roles_roles">
+  <objectid>4</objectid>
+  <label>Roles</label>
+  <parent>0</parent>
+  <moduleid>27</moduleid>
+  <itemtype>1</itemtype>
+  <urlparam>itemid</urlparam>
+  <maxid>0</maxid>
+  <config></config>
+  <isalias>1</isalias>
+  <properties>
+    <property name="id">
+      <id>27</id>
+      <label>ID</label>
+      <type>itemid</type>
+      <default></default>
+      <source>xar_roles.xar_uid</source>
+      <status>65</status>
+      <order>1</order>
+      <validation></validation>
+    </property>
+    <property name="type">
+      <id>28</id>
+      <label>Type</label>
+      <type>itemtype</type>
+      <default>1</default>
+      <source>xar_roles.xar_type</source>
+      <status>65</status>
+      <order>3</order>
+      <validation></validation>
+    </property>
+  </properties>
+</object>

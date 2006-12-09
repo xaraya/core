@@ -88,17 +88,19 @@ function dynamicdata_utilapi_import($args)
         // Make sure we drop the object id, because it might already exist here
         //TODO: don't define it in the first place?
         unset($args['objectid']);
-        $args['itemtype'] = xarModAPIFunc('dynamicdata','admin','getnextitemtype',
-                                       array('modid' => $args['moduleid']));
-        // Create the DD object
-            $myobject = DataObjectMaster::getObject(array(
-                                                 'itemtype'   => $args['itemtype'],
-                                                 'itemid'   => 0));
-            if (empty($myobject)) return;
-            $objectid = $myobject->createItem($args);
 
-        // Now do the object's properties
-        $property = DataObjectMaster::getObject(array('objectid'   => 2));
+        // Get the DataObject Objects
+        $myobject = DataObjectMaster::getObject();
+
+        // Add an item to the object
+        if ($args['moduleid'] == 182) {
+            $args['itemtype'] = xarModAPIFunc('dynamicdata','admin','getnextitemtype',
+                                           array('modid' => $args['moduleid']));
+        }
+        $objectid = $myobject->createItem($args);
+
+        // Now do the item's properties
+        $property = DataObjectMaster::getObject(array('objectid' => 2));
         $propertyproperties = array_keys($property->properties);
         $propertieshead = $xmlobject->properties;
         foreach($propertieshead->children() as $property) {
