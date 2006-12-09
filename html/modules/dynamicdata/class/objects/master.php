@@ -92,8 +92,8 @@ class DataObjectMaster extends Object
     public $maxid       = 0;
     public $config      = '';
     public $isalias     = 0;
-    public $join;
-    public $table;
+    public $join        = '';
+    public $table       = '';
     public $extend      = true;
 
     public $properties  = array();      // list of properties for the DD object

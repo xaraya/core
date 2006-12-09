@@ -95,15 +95,6 @@ function dynamicdata_userapi_showdisplay($args)
         $args['fieldlist'] = null;
     }
 
-    // join a module table to a dynamic object
-    if (empty($join)) {
-        $args['join'] = '';
-    }
-    // make some database table available via DD
-    if (empty($table)) {
-        $args['table'] = '';
-    }
-
     $object = & DataObjectMaster::getObject($args);
     // we're dealing with a real item, so retrieve the property values
     if (!empty($itemid)) {
