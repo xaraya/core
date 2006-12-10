@@ -1114,6 +1114,8 @@ function installer_admin_cleanup()
         }
     }
 
+    xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush' => true));
+
     $data['language']    = $install_language;
     $data['phase'] = 6;
     $data['phase_label'] = xarML('Step Six');
@@ -1125,8 +1127,6 @@ function installer_admin_cleanup()
 
 function installer_admin_finish()
 {
-    xarModAPIFunc('dynamicdata','admin','importpropertytypes', array('flush' => true));
-
 # --------------------------------------------------------
 # Create wrapper DD overlay objects for the modules, roles and privileges modules
 #

@@ -118,12 +118,13 @@ function dynamicdata_userapi_showview($args)
         $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
     }
 
+    /* Done in the constructor
     // join a module table to a dynamic object
     if (empty($join)) $join = '';
 
     // make some database table available via DD
     if (empty($table)) $table = '';
-
+    */
     // select in some category
     if (empty($catid)) $catid = '';
 
@@ -135,8 +136,6 @@ function dynamicdata_userapi_showview($args)
                                            'startnum' => $startnum,
                                            'where' => $where,
                                            'fieldlist' => $myfieldlist,
-                                           'join' => $join,
-                                           'table' => $table,
                                            'catid' => $catid,
                                            'groupby' => $groupby,
                                            'status' => $status,
