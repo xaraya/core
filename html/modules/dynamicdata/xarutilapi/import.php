@@ -29,6 +29,10 @@ function dynamicdata_utilapi_import($args)
 
     extract($args);
 
+    if (!isset($prefix)) $prefix = xarDBGetSiteTablePrefix() . "_";
+    else $prefix .= "_";
+// TODO: check this
+// if (!isset($prefix)) $prefix = xarDBGetSystemTablePrefix() . "_";
     if (empty($xml) && empty($file)) {
         throw new EmptyParameterException('xml or file');
     } elseif (!empty($file) && (!file_exists($file) || !preg_match('/\.xml$/',$file)) ) {
@@ -54,8 +58,6 @@ function dynamicdata_utilapi_import($args)
     $roottag = $dom->tagName;
 
     if ($roottag == 'object') {
-        $prefix = xarDBGetSystemTablePrefix();
-        $prefix .= '_';
 
         $args = array();
         // Get the object's name

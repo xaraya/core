@@ -22,10 +22,9 @@ function dynamicdata_util_import($args)
     if(!xarVarFetch('xml',        'isset', $xml,         NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('refresh',    'isset', $refresh,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('keepitemid', 'isset', $keepitemid,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('siteprefix', 'isset', $data['siteprefix'],  xarDBGetSiteTablePrefix(), XARVAR_DONT_SET)) {return;}
 
     extract($args);
-
-    $data = array();
 
     $data['warning'] = '';
     $data['options'] = array();
@@ -64,11 +63,15 @@ function dynamicdata_util_import($args)
             }
             $objectid = xarModAPIFunc('dynamicdata','util','import',
                                       array('file' => $basedir . '/' . $file,
-                                            'keepitemid' => $keepitemid));
+                                            'keepitemid' => $keepitemid,
+                                            'prefix' => $data['siteprefix'],
+                                            ));
         } else {
             $objectid = xarModAPIFunc('dynamicdata','util','import',
                                       array('xml' => $xml,
-                                            'keepitemid' => $keepitemid));
+                                            'keepitemid' => $keepitemid,
+                                            'prefix' => $data['siteprefix'],
+                                            ));
         }
         if (empty($objectid)) return;
 

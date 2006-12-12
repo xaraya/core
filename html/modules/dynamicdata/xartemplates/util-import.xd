@@ -23,13 +23,13 @@
         <fieldset>
             <legend>
                 <xar:mlstring>
-                    Import Object Definition 
+                    Import Object Definition
                 </xar:mlstring>
             </legend>
             <div class="xar-form-input-wrapper">
                 <label for="basedir" title="#xarML('Location of object definitions')#" class="xar-form-label">
                     <xar:mlstring>
-                        Base Directory: 
+                        Base Directory:
                     </xar:mlstring>
                 </label>
                 <input type="text" name="basedir" id="basedir" value="#$basedir#" maxlength="250" class="xar-form-textxlong" />
@@ -38,13 +38,13 @@
             <div class="xar-form-input-wrapper">
                 <label for="import" title="#xarML('XML files found in Base Directory')#" class="xar-form-label">
                     <xar:mlstring>
-                        Available .xml Files: 
+                        Available .xml Files:
                     </xar:mlstring>
                 </label>
                 <select name="import" id="import">
                     <xar:foreach in="$options" value="$option">
                         <option value="#$option['id']#">
-                            #$option['name']# 
+                            #$option['name']#
                         </option>
                     </xar:foreach>
                 </select>
@@ -53,18 +53,28 @@
                 <input type="checkbox" name="keepitemid" id="keepitemid" value="1" />
                 <label for="keepitemid" title="#xarML('Check to attempt to maintain item ids found in definition file')#">
                     <xar:mlstring>
-                        Preserve Item ids If Possible 
+                        Preserve Item ids If Possible
                     </xar:mlstring>
                 </label>
             </div>
             <div class="xar-form-input-wrapper">
                 <label for="xml" title="#xarML('Object definition to import.')#" class="xar-form-label">
                     <xar:mlstring>
-                        Select a file in the list above, or paste the object definition in here: 
+                        Select a file in the list above, or paste the object definition in here:
                     </xar:mlstring>
                 </label>
                 <div class="xar-form-container-after">
                     <textarea name="xml" id="xml" class="xar-form-textarealarge"></textarea>
+                </div>
+            </div>
+            <div class="xar-form-input-wrapper">
+                <label for="siteprefix" title="#xarML('The prefix to use for storage definitions')#" class="xar-form-label">
+                    <xar:mlstring>
+                        Prefix:
+                    </xar:mlstring>
+                </label>
+                <div class="xar-form-container-after">
+                    <input name="siteprefix" id="siteprefix" class="xar-form-textshort" value="#$siteprefix#" />
                 </div>
             </div>
         </fieldset>

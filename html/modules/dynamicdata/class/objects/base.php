@@ -383,7 +383,6 @@ class DataObject extends DataObjectMaster
                 if(isset($this->properties[$name]))
                     $this->properties[$name]->setValue($value);
         }
-
         if(empty($this->itemid))
         {
             $msg = 'Invalid item id in method #(1)() for dynamic object [#(2)] #(3)';
