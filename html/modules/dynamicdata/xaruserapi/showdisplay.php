@@ -42,6 +42,7 @@ function dynamicdata_userapi_showdisplay($args)
     }
 
 */
+/* Now done in the descriptor
     // When called via hooks, the module name may be empty, so we get it from
     // the current module
     if (empty($module)) {
@@ -67,13 +68,13 @@ function dynamicdata_userapi_showdisplay($args)
     if (!isset($itemid) || !is_numeric($itemid)) {
         if (!xarVarFetch('itemid', 'isset', $itemid,  NULL, XARVAR_DONT_SET)) {return;}
     }
-
-// TODO: what kind of security checks do we want/need here ?
-    if(!xarSecurityCheck('ReadDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
-
-    $args['moduleid'] = $modid;
+*/
+    $args['fallbackmodule'] = 'current';
     $descriptor = new DataObjectDescriptor($args);
     $args = $descriptor->getArgs();
+// TODO: what kind of security checks do we want/need here ?
+    if(!xarSecurityCheck('ReadDynamicDataItem',1,'Item',$args['moduleid'].":".$args['itemtype'].":".$itemid)) return;
+
 
     // we got everything via template parameters
     if (isset($fields) && is_array($fields) && count($fields) > 0) {
