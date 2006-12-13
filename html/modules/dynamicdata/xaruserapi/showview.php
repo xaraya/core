@@ -35,6 +35,7 @@ function dynamicdata_userapi_showview($args)
         $tplmodule = 'dynamicdata';
     }
 */
+    $args['fallbackmodule'] = 'current';
     $descriptor = new DataObjectDescriptor($args);
     $args = $descriptor->getArgs();
 
@@ -49,6 +50,7 @@ function dynamicdata_userapi_showview($args)
                             $template);
     }
 
+/* Done in the descriptor now
     if (empty($modid)) {
         if (empty($module)) {
             $modname = xarModGetName();
@@ -71,13 +73,14 @@ function dynamicdata_userapi_showview($args)
         $vars = array('module name', 'user', 'showview', 'dynamicdata');
         throw new BadParameterException($vars,$msg);
     }
-
+*/
+/* Default is 0 in the constructor
     if (empty($itemtype) || !is_numeric($itemtype)) {
         $itemtype = null;
     }
-
+*/
     // TODO: what kind of security checks do we want/need here ?
-    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:All")) return;
+    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$args ['moduleid']:$args ['itemtype']:All")) return;
 
     // try getting the item id list via input variables if necessary
     if (!isset($itemids)) {
@@ -128,8 +131,8 @@ function dynamicdata_userapi_showview($args)
     // select in some category
     if (empty($catid)) $catid = '';
 
-    $object = & DataObjectMaster::getObjectList(array('moduleid'  => $modid,
-                                           'itemtype'  => $itemtype,
+    $object = & DataObjectMaster::getObjectList(array('moduleid'  => $args ['moduleid'],
+                                           'itemtype'  => $args ['itemtype'],
                                            'itemids' => $itemids,
                                            'sort' => $sort,
                                            'numitems' => $numitems,

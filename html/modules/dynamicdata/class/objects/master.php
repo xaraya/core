@@ -25,7 +25,7 @@ class DataObjectDescriptor extends ObjectDescriptor
     {
         foreach ($args as $key => &$value) {
             if (in_array($key, array('module','modid','module','moduleid'))) {
-                if (empty($value)) $value = xarModGetIDFromName(xarModGetName());
+                if (empty($value)) $value = xarMod::getRegID(xarMod::getName());
                 if (is_numeric($value) || is_integer($value)) {
                     $args['moduleid'] = $value;
                 } else {
@@ -35,9 +35,15 @@ class DataObjectDescriptor extends ObjectDescriptor
                 break;
             }
         }
+        // Still not found?
         if (!isset($args['moduleid'])) {
-            $info = xarMod::getInfo(182);
-            $args['moduleid'] = 182; // $info['systemid'];  FIXME change id
+            if (isset($args['fallbackmodule']) && ($args['fallbackmodule'] == 'current')) {
+                $args['fallbackmodule'] = xarMod::getName();
+            } else {
+                $args['fallbackmodule'] = 'dynamicdata';
+            }
+            $info = xarMod::getInfo($args['fallbackmodule']);
+            $args['moduleid'] = xarMod::getRegID($args['fallbackmodule']); // $info['systemid'];  FIXME change id
         }
         return $args;
     }
@@ -166,7 +172,7 @@ class DataObjectMaster extends Object
         }
 
         // FIXME: we need to go to the database if the object exists but we don't have all the data
-        //        whyt would be the correct condition for that?
+        //        what would be the correct condition for that?
         if(empty($this->label))
         {
             $info = self::getObjectInfo($this->descriptor->getArgs());
@@ -491,24 +497,6 @@ class DataObjectMaster extends Object
     /**
      * Get the selected dynamic properties for this object
     **/
-/*    function &getProperties($args = array())
-    {
-        if(empty($args['fieldlist']))
-            $args['fieldlist'] = $this->fieldlist;
-
-        // return only the properties we're interested in (might be none)
-        if(count($args['fieldlist']) > 0 || !empty($this->status))
-        {
-            $properties = array();
-            foreach($args['fieldlist'] as $name)
-                if(isset($this->properties[$name]))
-                    $properties[$name] =& $this->properties[$name];
-        }
-        else
-            $properties =& $this->properties;
-        return $properties;
-    }
-*/
     function &getProperties($args = array())
     {
         if(empty($args['fieldlist']))
@@ -529,7 +517,6 @@ class DataObjectMaster extends Object
         }
         return $properties;
     }
-
 
     /**
      * Add a property for this object
@@ -1024,8 +1011,8 @@ class DataObjectMaster extends Object
         if (!$q->run()) return;
 
         // Put in itemtype as key for easier manipulation
-        foreach($q->output() as $row) $objects
-[$row['itemtype']] = array('objectid' => $row['objectid'],'objectname' => $row['objectname'], 'moduleid' => $row['moduleid'], 'itemtype' => $row['itemtype'], 'parent' => $row['parent']);
+        foreach($q->output() as $row)
+            $objects[$row['itemtype']] = array('objectid' => $row['objectid'],'objectname' => $row['objectname'], 'moduleid' => $row['moduleid'], 'itemtype' => $row['itemtype'], 'parent' => $row['parent']);
 
         // Cycle through each ancestor
         $parentitemtype = $topobject['parent'];
