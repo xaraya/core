@@ -19,5 +19,6 @@ then   # Bail out if no such file.
 fi
 
 cat - $1 <<<$OTAG > $1.new
+echo -e "\n" >> $1.new
 echo $ETAG >> $1.new
 mv $1.new $1
