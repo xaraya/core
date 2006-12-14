@@ -97,19 +97,20 @@ ALTER TABLE xar_dynamic_objects ADD COLUMN xar_object_parent INT(11) NOT NULL DE
    - xar_security_acl
    instead of the artificial unique key 
 */
-DROP INDEX i_xar_privmembers_id;
+DROP INDEX i_xar_privmembers_id ON xar_privmembers;
 ALTER TABLE xar_privmembers ADD PRIMARY KEY (xar_pid,xar_parentid);
-DROP INDEX i_xar_rolememb_id;
+DROP INDEX i_xar_rolememb_id ON xar_rolemembers;
 ALTER TABLE xar_rolemembers ADD PRIMARY KEY (xar_uid,xar_parentid);
-DROP INDEX i_xar_security_acl_id;
+DROP INDEX i_xar_security_acl_id ON xar_security_acl;
 ALTER TABLE xar_security_acl ADD PRIMARY KEY(xar_partid,xar_permid);
 
-DROP INDEX i_xar_cache_blocks_1;
+DROP INDEX i_xar_cache_blocks_1 ON xar_cache_blocks;
 ALTER TABLE xar_cache_blocks ADD PRIMARY KEY (xar_bid);
 
 DROP TABLE xar_security_levels;
 
-/* Replace the data-list handler */
+/* Replace the data-list handler 
+  TODO: might need to be changed again depending on how we handle the new compiler tag registration */
 UPDATE xar_template_tags 
 SET xar_handler = 'dynamicdata_userapi_handleViewTag',
     xar_data    = 'O:14:"xarTemplateTag":12:{s:5:"_name";s:9:"data-list";s:11:"_attributes";a:0:{}s:8:"_handler";s:34:"dynamicdata_adminapi_handleListTag";s:7:"_module";s:11:"dynamicdata";s:5:"_type";s:4:"user";s:5:"_func";s:13:"handleViewTag";s:12:"_hasChildren";b:0;s:8:"_hasText";b:0;s:13:"_isAssignable";b:0;s:10:"_isPHPCode";b:1;s:15:"_needAssignment";b:0;s:14:"_needParameter";b:0;}' WHERE `xar_template_tags`.`xar_handler` = 'dynamicdata_adminapi_handleListTag';
