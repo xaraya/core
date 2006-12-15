@@ -84,7 +84,7 @@ function dynamicdata_admin_new($args)
     }
     if (file_exists('modules/' . $tplmodule . '/xartemplates/admin-new.xd') ||
         file_exists('modules/' . $tplmodule . '/xartemplates/admin-new-' . $template . '.xd')) {
-        return xarTplModule($tplmodule,'user','display',$data,$template);
+        return xarTplModule($tplmodule,'admin','new',$data,$template);
     } else {
         return xarTplModule('dynamicdata','admin','new',$data,$template);
     }
