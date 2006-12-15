@@ -339,18 +339,19 @@ class DataObject extends DataObjectMaster
 
         // TODO: this won't work for objects with several static tables !
         // now let's try to create items in the other data stores
+        $args = $this->getFieldValues();
+        $args['itemid'] = $this->itemid;
         foreach(array_keys($this->datastores) as $store)
         {
             // skip the primary store
             if(isset($primarystore) && $store == $primarystore)
                 continue;
 
-            $itemid = $this->datastores[$store]->createItem($this->toArray());
+            $itemid = $this->datastores[$store]->createItem($args);
             if(empty($itemid))
                 return;
         }
 
-//        xarLogMessage("Class: " . get_class() . ". Creating an item. Itemid: " . $this->itemid . ", module: " . $modinfo['name'] . ", itemtype: " . $this->itemtype);
         // call create hooks for this item
         // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
         // TODO:  somehow generalize this to prevent recursive calls in the general sense, rather then specifically for articles / roles
@@ -393,9 +394,11 @@ class DataObject extends DataObjectMaster
 //        $modinfo = xarModGetInfo($this->moduleid);
         // TODO: this won't work for objects with several static tables !
         // update all the data stores
+        $args = $this->getFieldValues();
+        $args['itemid'] = $this->itemid;
         foreach(array_keys($this->datastores) as $store)
         {
-            $itemid = $this->datastores[$store]->updateItem($this->toArray());
+            $itemid = $this->datastores[$store]->updateItem($args);
             if(empty($itemid))
                 return;
         }
@@ -442,9 +445,11 @@ class DataObject extends DataObjectMaster
 
         // TODO: this won't work for objects with several static tables !
         // delete the item in all the data stores
+        $args = $this->getFieldValues();
+        $args['itemid'] = $this->itemid;
         foreach(array_keys($this->datastores) as $store)
         {
-            $itemid = $this->datastores[$store]->deleteItem($this->toArray());
+            $itemid = $this->datastores[$store]->deleteItem($args);
             if(empty($itemid))
                 return;
         }

@@ -99,7 +99,7 @@ function dynamicdata_admin_modify($args)
     }
     if (file_exists('modules/' . $tplmodule . '/xartemplates/admin-modify.xd') ||
         file_exists('modules/' . $tplmodule . '/xartemplates/admin-modify-' . $template . '.xd')) {
-        return xarTplModule($tplmodule,'user','display',$data,$template);
+        return xarTplModule($tplmodule,'admin','modify',$data,$template);
     } else {
         return xarTplModule('dynamicdata','admin','modify',$data,$template);
     }

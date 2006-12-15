@@ -157,7 +157,7 @@ class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
                 $query = "INSERT INTO $dynamicdata
                             (xar_dd_propid, xar_dd_itemid, xar_dd_value)
                           VALUES (?,?,?)";
-                $bindvars = array($nextId,$propid,$itemid, (string) $value);
+                $bindvars = array($propid,$itemid, (string) $value);
             }
             $stmt = $this->db->prepareStatement($query);
             $stmt->executeUpdate($bindvars);
