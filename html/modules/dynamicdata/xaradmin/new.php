@@ -19,6 +19,7 @@ function dynamicdata_admin_new($args)
     extract($args);
 
     if(!xarVarFetch('objectid', 'isset', $objectid,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('modid',    'isset', $modid,     182,  XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype,  0,    XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemid',   'isset', $itemid,    0,    XARVAR_DONT_SET)) {return;}
@@ -36,6 +37,8 @@ function dynamicdata_admin_new($args)
     } else {
         if (isset($objectid)) {
             $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $objectid));
+        } elseif (isset($name)) {
+            $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('name' => $name));
         } else {
             $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('moduleid' => $modid,'itemtype' => $itemtype));
         }
@@ -49,6 +52,7 @@ function dynamicdata_admin_new($args)
     $data = xarModAPIFunc('dynamicdata','admin','menu');
 
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
+                                         'name'     => $name,
                                          'moduleid' => $modid,
                                          'itemtype' => $itemtype,
                                          'join'     => $join,

@@ -983,12 +983,16 @@ class DataObjectMaster extends Object
             $moduleid = $topobject['moduleid'];
             $itemtype = $topobject['itemtype'];
         } else {
+            if (isset($name)) {
+                $topobject = self::getObjectInfo(array('name' => $name));
+            } else {
+                $topobject = self::getObjectInfo(array('moduleid' => $moduleid, 'itemtype' => $itemtype));
+            }
             // We have a moduleid and itemtype - get the objectid
-            $topobject = self::getObjectInfo(array('moduleid' => $moduleid, 'itemtype' => $itemtype));
             if (empty($topobject)) {
                 if ($base) {
-                    $types = self::getModuleItemTypes(array('moduleid' => $moduleid));
-                    $info = array('objectid' => 0, 'itemtype' => $itemtype, 'name' => xarModGetNameFromID($moduleid));
+                    $types = self::getModuleItemTypes(array('moduleid' => $topobject['moduleid']));
+                    $info = array('objectid' => 0, 'itemtype' => $topobject['itemtype'], 'name' => xarModGetNameFromID($moduleid));
                     $ancestors[] = $info;
                     return $ancestors;
                 }
