@@ -105,7 +105,12 @@ function dynamicdata_user_display($args)
         $template = $myobject->name;
     }
     // Return the template variables defined in this function
-    return xarTplModule($tplmodule,'user','display',$data,$template);
+    if (file_exists('modules/' . $tplmodule . '/xartemplates/user-display.xd') ||
+        file_exists('modules/' . $tplmodule . '/xartemplates/user-display-' . $template . '.xd')) {
+        return xarTplModule($tplmodule,'user','display',$data,$template);
+    } else {
+        return xarTplModule('dynamicdata','user','display',$data,$template);
+    }
 }
 
 
