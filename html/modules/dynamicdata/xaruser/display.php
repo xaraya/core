@@ -63,7 +63,8 @@ function dynamicdata_user_display($args)
                                          'itemtype' => $itemtype,
                                          'join'     => $join,
                                          'table'    => $table,
-                                         'itemid'   => $itemid));
+                                         'itemid'   => $itemid,
+                                         'tplmodule' => $tplmodule));
     if (!isset($myobject)) return;
     $args = $myobject->toArray();
     $myobject->getItem();
