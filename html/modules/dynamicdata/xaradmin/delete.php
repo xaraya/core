@@ -69,7 +69,12 @@ function dynamicdata_admin_delete($args)
         if(!isset($template)) {
             $template = $myobject->name;
         }
-        return xarTplModule($tplmodule,'admin','delete',$data,$template);
+        if (file_exists('modules/' . $tplmodule . '/xartemplates/admin-delete.xd') ||
+            file_exists('modules/' . $tplmodule . '/xartemplates/admin-delete-' . $template . '.xd')) {
+            return xarTplModule($tplmodule,'admin','delete',$data,$template);
+        } else {
+            return xarTplModule('dynamicdata','admin','delete',$data,$template);
+        }
     }
 
     // If we get here it means that the user has confirmed the action
