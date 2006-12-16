@@ -602,7 +602,7 @@ class DataObjectList extends DataObjectMaster
         $urlargs['table'] = $table;
         $urlargs[$args['param']] = $itemid;
         $urlargs['template'] = $args['template'];
-        $urlargs['tplmodule'] = $args['tplmodule'];
+//        $urlargs['tplmodule'] = $args['tplmodule'];
         // The next 3 lines make the DD modify/display routines work for overlay objects
         // TODO: do we need the concept of urlmodule at all?
         $info = DataObjectMaster::getObjectInfo($args);

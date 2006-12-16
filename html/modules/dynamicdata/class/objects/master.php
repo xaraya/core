@@ -76,6 +76,7 @@ class DataObjectDescriptor extends ObjectDescriptor
             $args['objectid'] = $row['xar_object_id'];
             $args['name'] = $row['xar_object_name'];
         }
+        if (empty($args['tplmodule'])) $args['tplmodule'] = xarMod::getName($args['moduleid']); //FIXME: go to systemid
         return $args;
 
     }

@@ -32,7 +32,7 @@ function dynamicdata_admin_modify($args)
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('notfresh', 'isset', $notfresh,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('tplmodule','str',   $tplmodule, 'dynamicdata', XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('tplmodule','str',   $tplmodule, NULL, XARVAR_DONT_SET)) {return;}
 
     if(!xarVarFetch('itemid',   'isset', $itemid)) {return;}
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
@@ -63,6 +63,7 @@ function dynamicdata_admin_modify($args)
                                          'table'    => $table,
                                          'itemid'   => $itemid,
                                          'tplmodule' => $tplmodule));
+    $args = $myobject->toArray();
     if ($notfresh) {
         $isvalid = $myobject->checkInput();
     } else {
@@ -80,7 +81,7 @@ function dynamicdata_admin_modify($args)
     $data['itemid'] = $itemid;
     $data['authid'] = xarSecGenAuthKey();
     $data['preview'] = $preview;
-    $data['tplmodule'] = $tplmodule;
+    $data['tplmodule'] = $args['tplmodule'];   //TODO: is this needed
 
     $modinfo = xarModGetInfo($myobject->moduleid);
     $item = array();
@@ -97,9 +98,9 @@ function dynamicdata_admin_modify($args)
     if(!isset($template)) {
         $template = $myobject->name;
     }
-    if (file_exists('modules/' . $tplmodule . '/xartemplates/admin-modify.xd') ||
-        file_exists('modules/' . $tplmodule . '/xartemplates/admin-modify-' . $template . '.xd')) {
-        return xarTplModule($tplmodule,'admin','modify',$data,$template);
+    if (file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-modify.xd') ||
+        file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-modify-' . $template . '.xd')) {
+        return xarTplModule($args['tplmodule'],'admin','modify',$data,$template);
     } else {
         return xarTplModule('dynamicdata','admin','modify',$data,$template);
     }

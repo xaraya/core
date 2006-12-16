@@ -27,7 +27,7 @@ function dynamicdata_admin_delete($args)
     if(!xarVarFetch('noconfirm','isset', $noconfirm, NULL,                              XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('tplmodule','str',   $tplmodule, 'dynamicdata', XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('tplmodule','str',   $tplmodule, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
 
     $myobject = & DataObjectMaster::getObject(array('moduleid' => $modid,
@@ -37,6 +37,7 @@ function dynamicdata_admin_delete($args)
                                          'itemid'   => $itemid,
                                          'extend'   => false));
     if (empty($myobject)) return;
+    $args = $myobject->toArray();
 
     if (!empty($noconfirm)) {
         if (!empty($table)) {
@@ -69,9 +70,9 @@ function dynamicdata_admin_delete($args)
         if(!isset($template)) {
             $template = $myobject->name;
         }
-        if (file_exists('modules/' . $tplmodule . '/xartemplates/admin-delete.xd') ||
-            file_exists('modules/' . $tplmodule . '/xartemplates/admin-delete-' . $template . '.xd')) {
-            return xarTplModule($tplmodule,'admin','delete',$data,$template);
+        if (file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-delete.xd') ||
+            file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-delete-' . $template . '.xd')) {
+            return xarTplModule($args['tplmodule'],'admin','delete',$data,$template);
         } else {
             return xarTplModule('dynamicdata','admin','delete',$data,$template);
         }

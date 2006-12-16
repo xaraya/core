@@ -28,7 +28,7 @@ function dynamicdata_user_display($args)
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('tplmodule','str',   $tplmodule, 'dynamicdata', XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('tplmodule','str',   $tplmodule, NULL, XARVAR_DONT_SET)) {return;}
 
 /*  // we could also pass along the parameters to the template, and let it retrieve the object
     // but in this case, we'd need to retrieve the object label anyway
@@ -61,6 +61,7 @@ function dynamicdata_user_display($args)
                                          'table'    => $table,
                                          'itemid'   => $itemid));
     if (!isset($myobject)) return;
+    $args = $myobject->toArray();
     $myobject->getItem();
 
     $data = array();
@@ -105,9 +106,9 @@ function dynamicdata_user_display($args)
         $template = $myobject->name;
     }
     // Return the template variables defined in this function
-    if (file_exists('modules/' . $tplmodule . '/xartemplates/user-display.xd') ||
-        file_exists('modules/' . $tplmodule . '/xartemplates/user-display-' . $template . '.xd')) {
-        return xarTplModule($tplmodule,'user','display',$data,$template);
+    if (file_exists('modules/' . $args['tplmodule'] . '/xartemplates/user-display.xd') ||
+        file_exists('modules/' . $args['tplmodule'] . '/xartemplates/user-display-' . $template . '.xd')) {
+        return xarTplModule($args['tplmodule'],'user','display',$data,$template);
     } else {
         return xarTplModule('dynamicdata','user','display',$data,$template);
     }
