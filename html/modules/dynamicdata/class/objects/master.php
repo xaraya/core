@@ -25,7 +25,7 @@ class DataObjectDescriptor extends ObjectDescriptor
     {
         foreach ($args as $key => &$value) {
             if (in_array($key, array('module','modid','module','moduleid'))) {
-                if (empty($value)) $value = xarModGetIDFromName(xarModGetName());
+                if (empty($value)) $value = xarMod::getRegID(xarMod::getName());
                 if (is_numeric($value) || is_integer($value)) {
                     $args['moduleid'] = $value;
                 } else {
@@ -35,9 +35,15 @@ class DataObjectDescriptor extends ObjectDescriptor
                 break;
             }
         }
+        // Still not found?
         if (!isset($args['moduleid'])) {
-            $info = xarMod::getInfo(182);
-            $args['moduleid'] = 182; // $info['systemid'];  FIXME change id
+            if (isset($args['fallbackmodule']) && ($args['fallbackmodule'] == 'current')) {
+                $args['fallbackmodule'] = xarMod::getName();
+            } else {
+                $args['fallbackmodule'] = 'dynamicdata';
+            }
+            $info = xarMod::getInfo($args['fallbackmodule']);
+            $args['moduleid'] = xarMod::getRegID($args['fallbackmodule']); // $info['systemid'];  FIXME change id
         }
         return $args;
     }
@@ -70,6 +76,8 @@ class DataObjectDescriptor extends ObjectDescriptor
             $args['objectid'] = $row['xar_object_id'];
             $args['name'] = $row['xar_object_name'];
         }
+        if (empty($args['tplmodule'])) $args['tplmodule'] = xarMod::getName($args['moduleid']); //FIXME: go to systemid
+        if (empty($args['template'])) $args['template'] = $args['name'];
         return $args;
 
     }
@@ -166,7 +174,7 @@ class DataObjectMaster extends Object
         }
 
         // FIXME: we need to go to the database if the object exists but we don't have all the data
-        //        whyt would be the correct condition for that?
+        //        what would be the correct condition for that?
         if(empty($this->label))
         {
             $info = self::getObjectInfo($this->descriptor->getArgs());
@@ -491,24 +499,6 @@ class DataObjectMaster extends Object
     /**
      * Get the selected dynamic properties for this object
     **/
-/*    function &getProperties($args = array())
-    {
-        if(empty($args['fieldlist']))
-            $args['fieldlist'] = $this->fieldlist;
-
-        // return only the properties we're interested in (might be none)
-        if(count($args['fieldlist']) > 0 || !empty($this->status))
-        {
-            $properties = array();
-            foreach($args['fieldlist'] as $name)
-                if(isset($this->properties[$name]))
-                    $properties[$name] =& $this->properties[$name];
-        }
-        else
-            $properties =& $this->properties;
-        return $properties;
-    }
-*/
     function &getProperties($args = array())
     {
         if(empty($args['fieldlist']))
@@ -529,7 +519,6 @@ class DataObjectMaster extends Object
         }
         return $properties;
     }
-
 
     /**
      * Add a property for this object
@@ -979,7 +968,7 @@ class DataObjectMaster extends Object
 
         extract($args);
 
-        if (!(isset($moduleid) && isset($itemtype)) && !isset($objectid)) {
+        if (!(isset($moduleid) && isset($itemtype)) && !isset($objectid) && !isset($name)) {
             $msg = xarML('Wrong arguments to DataObjectMaster::getAncestors.');
             throw new BadParameterException(array(),$msg);
         }
@@ -996,12 +985,18 @@ class DataObjectMaster extends Object
             $moduleid = $topobject['moduleid'];
             $itemtype = $topobject['itemtype'];
         } else {
+            if (isset($name)) {
+                $topobject = self::getObjectInfo(array('name' => $name));
+                $moduleid = $topobject['moduleid'];
+                $itemtype = $topobject['itemtype'];
+            } else {
+                $topobject = self::getObjectInfo(array('moduleid' => $moduleid, 'itemtype' => $itemtype));
+            }
             // We have a moduleid and itemtype - get the objectid
-            $topobject = self::getObjectInfo(array('moduleid' => $moduleid, 'itemtype' => $itemtype));
             if (empty($topobject)) {
                 if ($base) {
-                    $types = self::getModuleItemTypes(array('moduleid' => $moduleid));
-                    $info = array('objectid' => 0, 'itemtype' => $itemtype, 'name' => xarModGetNameFromID($moduleid));
+                    $types = self::getModuleItemTypes(array('moduleid' => $topobject['moduleid']));
+                    $info = array('objectid' => 0, 'itemtype' => $topobject['itemtype'], 'name' => xarModGetNameFromID($moduleid));
                     $ancestors[] = $info;
                     return $ancestors;
                 }
@@ -1024,8 +1019,8 @@ class DataObjectMaster extends Object
         if (!$q->run()) return;
 
         // Put in itemtype as key for easier manipulation
-        foreach($q->output() as $row) $objects
-[$row['itemtype']] = array('objectid' => $row['objectid'],'objectname' => $row['objectname'], 'moduleid' => $row['moduleid'], 'itemtype' => $row['itemtype'], 'parent' => $row['parent']);
+        foreach($q->output() as $row)
+            $objects[$row['itemtype']] = array('objectid' => $row['objectid'],'objectname' => $row['objectname'], 'moduleid' => $row['moduleid'], 'itemtype' => $row['itemtype'], 'parent' => $row['parent']);
 
         // Cycle through each ancestor
         $parentitemtype = $topobject['parent'];

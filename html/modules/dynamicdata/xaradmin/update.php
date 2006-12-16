@@ -130,7 +130,6 @@ function dynamicdata_admin_update($args)
                                       array('itemid' => $myobject->objectid)));
     }
 
-    // Return
     return true;
 }
 

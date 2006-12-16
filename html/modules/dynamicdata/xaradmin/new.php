@@ -19,6 +19,7 @@ function dynamicdata_admin_new($args)
     extract($args);
 
     if(!xarVarFetch('objectid', 'isset', $objectid,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('modid',    'isset', $modid,     182,  XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype,  0,    XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemid',   'isset', $itemid,    0,    XARVAR_DONT_SET)) {return;}
@@ -27,28 +28,30 @@ function dynamicdata_admin_new($args)
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('notfresh', 'isset', $notfresh,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('tplmodule','str',   $tplmodule, 'dynamicdata', XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('tplmodule','str',   $tplmodule, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
 
-    if($modid == 182) {
+/*    if($modid == 182) {
         // Dynamicdata module is special
         $ancestor = array('objectid' => $objectid, 'modid' => $modid, 'itemtype' => $itemtype);
     } else {
         if (isset($objectid)) {
             $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $objectid));
+        } elseif (isset($name)) {
+            $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('name' => $name));
         } else {
             $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('moduleid' => $modid,'itemtype' => $itemtype));
         }
     }
     $itemtype = $ancestor['itemtype'];
-
-    // Security check - important to do this as early as possible to avoid
-    // potential security holes or just too much wasted processing
+*/
+    // Security check
     if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',"$modid:$itemtype:All")) return;
 
     $data = xarModAPIFunc('dynamicdata','admin','menu');
 
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
+                                         'name'     => $name,
                                          'moduleid' => $modid,
                                          'itemtype' => $itemtype,
                                          'join'     => $join,
@@ -56,13 +59,14 @@ function dynamicdata_admin_new($args)
                                          'itemid'   => $itemid,
                                          'tplmodule' => $tplmodule));
 
+    $args = $myobject->toArray();
     if (isset($myobject->properties['moduleid'])) {
         if ($notfresh) $isvalid = $myobject->checkInput();
         $itemtype = xarModAPIFunc('dynamicdata','admin', 'getnextitemtype', array('modid' => $myobject->properties['moduleid']->value));
         $myobject->properties['itemtype']->value = $itemtype;
     }
     $data['object'] =& $myobject;
-    $data['tplmodule'] = $tplmodule;
+    $data['tplmodule'] = $args['tplmodule'];  //TODO: is this needed?
 
     // Generate a one-time authorisation code for this operation
     $data['authid'] = xarSecGenAuthKey();
@@ -79,10 +83,12 @@ function dynamicdata_admin_new($args)
     $hooks = xarModCallHooks('item', 'new', $myobject->itemid, $item, $modinfo['name']);
     $data['hooks'] = $hooks;
 
-    if(!isset($template)) {
-        $template = $myobject->name;
+    if (file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-new.xd') ||
+        file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-new-' . $args['template'] . '.xd')) {
+        return xarTplModule($args['tplmodule'],'admin','new',$data,$args['template']);
+    } else {
+        return xarTplModule('dynamicdata','admin','new',$data,$args['template']);
     }
-    return xarTplModule($tplmodule,'admin','new',$data,$template);
 }
 
 ?>

@@ -26,7 +26,6 @@ class CountryListProperty extends SelectProperty
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'base';
-        $this->template  = 'countrylist';
     }
 
     public function validateValue($value = null)

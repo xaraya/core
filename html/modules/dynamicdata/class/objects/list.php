@@ -598,14 +598,15 @@ class DataObjectList extends DataObjectMaster
         }
 
         $urlargs = array();
-        $urlargs['itemtype'] =$itemtype;
+//        $urlargs['itemtype'] =$itemtype;
         $urlargs['table'] = $table;
         $urlargs[$args['param']] = $itemid;
-        $urlargs['template'] = $args['template'];
+//        $urlargs['template'] = $args['template'];
+        $urlargs['tplmodule'] = $args['tplmodule'];
         // The next 3 lines make the DD modify/display routines work for overlay objects
         // TODO: do we need the concept of urlmodule at all?
         $info = DataObjectMaster::getObjectInfo($args);
-        $urlargs['objectid'] = $info['objectid'];
+        $urlargs['name'] = $info['name'];
         $args['urlmodule'] = 'dynamicdata';
 
 
