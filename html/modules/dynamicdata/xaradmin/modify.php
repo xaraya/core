@@ -95,14 +95,11 @@ function dynamicdata_admin_modify($args)
     $hooks = xarModCallHooks('item', 'modify', $myobject->itemid, $item, $modinfo['name']);
     $data['hooks'] = $hooks;
 
-    if(!isset($template)) {
-        $template = $myobject->name;
-    }
     if (file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-modify.xd') ||
-        file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-modify-' . $template . '.xd')) {
-        return xarTplModule($args['tplmodule'],'admin','modify',$data,$template);
+        file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-modify-' . $args['template'] . '.xd')) {
+        return xarTplModule($args['tplmodule'],'admin','modify',$data,$args['template']);
     } else {
-        return xarTplModule('dynamicdata','admin','modify',$data,$template);
+        return xarTplModule('dynamicdata','admin','modify',$data,$args['template']);
     }
 }
 

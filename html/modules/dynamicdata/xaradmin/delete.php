@@ -67,14 +67,11 @@ function dynamicdata_admin_delete($args)
         }
         $data['authid'] = xarSecGenAuthKey();
 
-        if(!isset($template)) {
-            $template = $myobject->name;
-        }
         if (file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-delete.xd') ||
-            file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-delete-' . $template . '.xd')) {
-            return xarTplModule($args['tplmodule'],'admin','delete',$data,$template);
+            file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-delete-' . $args['template'] . '.xd')) {
+            return xarTplModule($args['tplmodule'],'admin','delete',$data,$args['template']);
         } else {
-            return xarTplModule('dynamicdata','admin','delete',$data,$template);
+            return xarTplModule('dynamicdata','admin','delete',$data,$args['template']);
         }
     }
 

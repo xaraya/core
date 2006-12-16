@@ -102,15 +102,12 @@ function dynamicdata_user_display($args)
     $hooks = xarModCallHooks('item', 'display', $myobject->itemid, $item, $modinfo['name']);
     $data['hooks'] = $hooks;
 
-    if(!isset($template)) {
-        $template = $myobject->name;
-    }
     // Return the template variables defined in this function
     if (file_exists('modules/' . $args['tplmodule'] . '/xartemplates/user-display.xd') ||
-        file_exists('modules/' . $args['tplmodule'] . '/xartemplates/user-display-' . $template . '.xd')) {
-        return xarTplModule($args['tplmodule'],'user','display',$data,$template);
+        file_exists('modules/' . $args['tplmodule'] . '/xartemplates/user-display-' . $args['template'] . '.xd')) {
+        return xarTplModule($args['tplmodule'],'user','display',$data,$args['template']);
     } else {
-        return xarTplModule('dynamicdata','user','display',$data,$template);
+        return xarTplModule('dynamicdata','user','display',$data,$args['template']);
     }
 }
 

@@ -84,14 +84,11 @@ function dynamicdata_admin_new($args)
     $hooks = xarModCallHooks('item', 'new', $myobject->itemid, $item, $modinfo['name']);
     $data['hooks'] = $hooks;
 
-    if(!isset($template)) {
-        $template = $myobject->name;
-    }
     if (file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-new.xd') ||
-        file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-new-' . $template . '.xd')) {
-        return xarTplModule($args['tplmodule'],'admin','new',$data,$template);
+        file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-new-' . $args['template'] . '.xd')) {
+        return xarTplModule($args['tplmodule'],'admin','new',$data,$args['template']);
     } else {
-        return xarTplModule('dynamicdata','admin','new',$data,$template);
+        return xarTplModule('dynamicdata','admin','new',$data,$args['template']);
     }
 }
 
