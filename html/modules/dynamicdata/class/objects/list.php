@@ -598,7 +598,7 @@ class DataObjectList extends DataObjectMaster
         }
 
         $urlargs = array();
-        $urlargs['itemtype'] =$itemtype;
+//        $urlargs['itemtype'] =$itemtype;
         $urlargs['table'] = $table;
         $urlargs[$args['param']] = $itemid;
 //        $urlargs['template'] = $args['template'];

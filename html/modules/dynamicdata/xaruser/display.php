@@ -22,7 +22,8 @@ function dynamicdata_user_display($args)
     extract($args);
 
     if(!xarVarFetch('objectid', 'isset', $objectid,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',    'int',   $modid,     182,  XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('modid',    'int',   $moduleid,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemid',   'isset', $itemid,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
@@ -42,20 +43,23 @@ function dynamicdata_user_display($args)
         if(!xarSecurityCheck('AdminDynamicData')) return;
     }
 
-    if($modid == 182) {
-        // Dynamicdata module is special
-        $ancestor = array('objectid' => $objectid, 'modid' => $modid, 'itemtype' => $itemtype);
+/*    if (isset($objectid)) {
+        $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $objectid));
+    } elseif (isset($name)) {
+        $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('name' => $name));
     } else {
-        if (isset($objectid)) {
-            $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $objectid));
+        if($modid == 182) {
+            // Dynamicdata module is special
+            $ancestor = array('objectid' => $objectid, 'modid' => $modid, 'itemtype' => $itemtype);
         } else {
             $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('moduleid' => $modid,'itemtype' => $itemtype));
         }
     }
     $itemtype = $ancestor['itemtype'];
-
+*/
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
-                                         'moduleid' => $modid,
+                                         'name' => $name,
+                                         'moduleid' => $moduleid,
                                          'itemtype' => $itemtype,
                                          'join'     => $join,
                                          'table'    => $table,
@@ -67,17 +71,17 @@ function dynamicdata_user_display($args)
     $data = array();
     //$data['object'] =& $myobject;
 
-    $modinfo = xarModGetInfo($myobject->moduleid);
+    $modinfo = xarModGetInfo($args['moduleid']);
     $item = array();
     $item['module'] = $modinfo['name'];
     $item['itemtype'] = $itemtype;
     $item['returnurl'] = xarModURL($tplmodule,'user','display',
-                                   array('objectid' => $objectid,
-                                         'moduleid' => $modid,
-                                         'itemtype' => $itemtype,
+                                   array('objectid' => $args['objectid'],
+                                         'moduleid' => $args['moduleid'],
+                                         'itemtype' => $args['itemtype'],
                                          'join'     => $join,
                                          'table'    => $table,
-                                         'itemid'   => $itemid));
+                                         'itemid'   => $args['itemid']));
     // First transform hooks, create an array of things eligible and pass that along
     $totransform = array(); $totransform['transform'] = array(); // we must do this, otherwise we lose track of what got transformed
     foreach($myobject->properties as $pname => $pobj) {
@@ -87,7 +91,7 @@ function dynamicdata_user_display($args)
         $totransform['transform'][] = $pname;
         $totransform[$pname] = $pobj->value;
     }
-    $transformed = xarModCallHooks('item','transform',$myobject->itemid, $totransform, $modinfo['name'],$myobject->itemtype);
+    $transformed = xarModCallHooks('item','transform',$args['itemid'], $totransform, $modinfo['name'],$args['itemtype']);
     // Ok, we got the transformed values, now what?
     foreach($transformed as $pname => $tvalue) {
         if($pname == 'transform') continue;
@@ -99,7 +103,7 @@ function dynamicdata_user_display($args)
 
     // Display hooks
     $hooks = array();
-    $hooks = xarModCallHooks('item', 'display', $myobject->itemid, $item, $modinfo['name']);
+    $hooks = xarModCallHooks('item', 'display', $args['itemid'], $item, $modinfo['name']);
     $data['hooks'] = $hooks;
 
     // Return the template variables defined in this function

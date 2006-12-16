@@ -968,7 +968,7 @@ class DataObjectMaster extends Object
 
         extract($args);
 
-        if (!(isset($moduleid) && isset($itemtype)) && !isset($objectid)) {
+        if (!(isset($moduleid) && isset($itemtype)) && !isset($objectid) && !isset($name)) {
             $msg = xarML('Wrong arguments to DataObjectMaster::getAncestors.');
             throw new BadParameterException(array(),$msg);
         }
@@ -987,6 +987,8 @@ class DataObjectMaster extends Object
         } else {
             if (isset($name)) {
                 $topobject = self::getObjectInfo(array('name' => $name));
+                $moduleid = $topobject['moduleid'];
+                $itemtype = $topobject['itemtype'];
             } else {
                 $topobject = self::getObjectInfo(array('moduleid' => $moduleid, 'itemtype' => $itemtype));
             }
