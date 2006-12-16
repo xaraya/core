@@ -70,7 +70,6 @@ function dynamicdata_user_display($args)
     $myobject->getItem();
 
     $data = array();
-    //$data['object'] =& $myobject;
 
     $modinfo = xarModGetInfo($args['moduleid']);
     $item = array();

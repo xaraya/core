@@ -31,7 +31,7 @@ function dynamicdata_admin_new($args)
     if(!xarVarFetch('tplmodule','str',   $tplmodule, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
 
-    if($modid == 182) {
+/*    if($modid == 182) {
         // Dynamicdata module is special
         $ancestor = array('objectid' => $objectid, 'modid' => $modid, 'itemtype' => $itemtype);
     } else {
@@ -44,9 +44,8 @@ function dynamicdata_admin_new($args)
         }
     }
     $itemtype = $ancestor['itemtype'];
-
-    // Security check - important to do this as early as possible to avoid
-    // potential security holes or just too much wasted processing
+*/
+    // Security check
     if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',"$modid:$itemtype:All")) return;
 
     $data = xarModAPIFunc('dynamicdata','admin','menu');

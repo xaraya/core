@@ -66,8 +66,7 @@ function dynamicdata_admin_modify($args)
                                          'tplmodule' => $tplmodule));
     $args = $myobject->toArray();
 
-    // Security check - important to do this as early as possible to avoid
-    // potential security holes or just too much wasted processing
+    // Security check
     if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',$args['moduleid'].":".$args['itemtype'].":".$args['itemid'])) return;
 
     if ($notfresh) {
