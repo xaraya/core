@@ -74,14 +74,16 @@ function dynamicdata_user_display($args)
     $modinfo = xarModGetInfo($args['moduleid']);
     $item = array();
     $item['module'] = $modinfo['name'];
-    $item['itemtype'] = $itemtype;
-    $item['returnurl'] = xarModURL($tplmodule,'user','display',
+    $item['itemtype'] = $args['itemtype'];
+    $item['returnurl'] = xarModURL($args['tplmodule'],'user','display',
                                    array('objectid' => $args['objectid'],
                                          'moduleid' => $args['moduleid'],
                                          'itemtype' => $args['itemtype'],
                                          'join'     => $join,
                                          'table'    => $table,
-                                         'itemid'   => $args['itemid']));
+                                         'itemid'   => $args['itemid'],
+                                         'tplmodule' => $args['tplmodule']));
+
     // First transform hooks, create an array of things eligible and pass that along
     $totransform = array(); $totransform['transform'] = array(); // we must do this, otherwise we lose track of what got transformed
     foreach($myobject->properties as $pname => $pobj) {
