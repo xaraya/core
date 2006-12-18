@@ -42,7 +42,7 @@ class DataObjectDescriptor extends ObjectDescriptor
             } else {
                 $args['fallbackmodule'] = 'dynamicdata';
             }
-            $info = xarMod::getInfo($args['fallbackmodule']);
+            $info = xarMod::getInfo(xarMod::getRegID($args['fallbackmodule']));
             $args['moduleid'] = xarMod::getRegID($args['fallbackmodule']); // $info['systemid'];  FIXME change id
         }
         return $args;
@@ -189,7 +189,7 @@ class DataObjectMaster extends Object
             $this->template = $this->name;
 
         // get the properties defined for this object
-        if(count($this->properties) == 0 && isset($this->objectid)) {
+       if(count($this->properties) == 0 && isset($this->objectid)) {
             $args = $this->toArray();
             $args['objectref'] = $this;
             if(!isset($args['allprops']))   //FIXME is this needed??
