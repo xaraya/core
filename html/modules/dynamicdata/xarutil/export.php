@@ -27,16 +27,10 @@ function dynamicdata_util_export($args)
     if(!xarVarFetch('tofile',   'isset', $tofile,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('convert',  'isset', $convert,  NULL, XARVAR_DONT_SET)) {return;}
 
-    if (empty($modid)) {
-        $modid = xarModGetIDFromName('dynamicdata');
-    }
-    if (empty($itemtype)) {
-        $itemtype = 0;
-    }
-
     $data = array();
     $data['menutitle'] = xarML('Dynamic Data Utilities');
 
+    var_dump($objectid.$modid.$itemtype.$itemid);
     $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'moduleid' => $modid,
                                          'itemtype' => $itemtype,
