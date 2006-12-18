@@ -25,7 +25,7 @@
                 <dd>
                     <a href="&xar-modurl-dynamicdata-admin-modify;&amp;itemid=#$objectid#">
                         <xar:mlstring>
-                            Modify Object Definition 
+                            Modify Object Definition
                         </xar:mlstring>
                     </a>
                 </dd>
@@ -44,7 +44,7 @@
                         {
                             var my_window = window.open('#$urlform#',
                                                         'FormPreview',
-                                                        'width=780,height=580,status=no,resizable=yes,top=0,left=0,dependent=yes,alwaysRaised=yes');
+                                                        'width=780,height=580,status=no,scrollbars=1,resizable=yes,top=0,left=0,dependent=yes,alwaysRaised=yes');
                             my_window.opener = window;
                             my_window.focus();
                         }
@@ -82,7 +82,7 @@
 
     <!-- <xar:data-view object="$myobject" layout="$layout"  /> -->
     <p>
-        [ 
+        [
         <xar:if condition="empty($details)">
             <a href="#$detailslink#">
                 <xar:mlstring>Show Static Properties and Relations</xar:mlstring>
@@ -92,7 +92,7 @@
                 <xar:mlstring>Hide Static Properties and Relations</xar:mlstring>
             </a>
         </xar:if>
-        ] 
+        ]
     </p>
 
     <xar:if condition="count($static) gt 0">
@@ -128,22 +128,22 @@
             <xar:foreach in="$static" value="$field">
                 <tr>
                     <td>
-                        #$field['name']# 
+                        #$field['name']#
                     </td>
                     <td>
-                        #$field['label']# 
+                        #$field['label']#
                     </td>
                     <td>
                         <xar:data-output property="$fieldtypeprop" name="static_type['.$field['id'].']" value="$field['type']" />
                     </td>
                     <td>
-                        #$field['default']# 
+                        #$field['default']#
                     </td>
                     <td>
-                        #$field['source']# 
+                        #$field['source']#
                     </td>
                     <td>
-                        #$field['validation']# 
+                        #$field['validation']#
                     </td>
                 </tr>
             </xar:foreach>
@@ -169,7 +169,7 @@
     <xar:if condition="count($relations) gt 0">
 
         <h2>
-            #$relationstitle# 
+            #$relationstitle#
         </h2>
 
         <!--
@@ -184,30 +184,30 @@
 
                             <label>
                                 <strong>
-                                    #$labels['module']# 
+                                    #$labels['module']#
                                 </strong>
-                                #$relation['module']# 
+                                #$relation['module']#
                             </label>
 
                             <label>
                                 <strong>
-                                    #$labels['linktype']# 
+                                    #$labels['linktype']#
                                 </strong>
-                                #$link['type']# 
+                                #$link['type']#
                             </label>
 
                             <label>
                                 <strong>
-                                    #$labels['linkfrom']# 
+                                    #$labels['linkfrom']#
                                 </strong>
-                                #$link['from']# 
+                                #$link['from']#
                             </label>
 
                             <label>
                                 <strong>
-                                    #$labels['linkto']# 
+                                    #$labels['linkto']#
                                 </strong>
-                                #$link['to']# 
+                                #$link['to']#
                             </label>
 
                         </p>
@@ -217,34 +217,34 @@
 
                         <label>
                             <strong>
-                                #$labels['module']# 
+                                #$labels['module']#
                             </strong>
-                            #$relation['module']# 
+                            #$relation['module']#
                         </label>
 
                         <label>
                             <strong>
-                                #$labels['linktype']# 
+                                #$labels['linktype']#
                             </strong>
-                            ( 
+                            (
                             <xar:mlstring>not found</xar:mlstring>
-                            ) 
+                            )
                         </label>
 
                         <label>
                             <strong>
-                                #$labels['linkfrom']# 
+                                #$labels['linkfrom']#
                             </strong>
-                            - 
+                            -
                         </label>
 
                         <label>
                             <strong>
-                                #$labels['linkto']# 
+                                #$labels['linkto']#
                             </strong>
-                            ( 
+                            (
                             <xar:mlstring>not found</xar:mlstring>
-                            ) 
+                            )
                         </label>
 
                     </p>
