@@ -21,7 +21,8 @@ function dynamicdata_util_export($args)
     extract($args);
 
     if(!xarVarFetch('objectid', 'isset', $objectid, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',    'isset', $modid,    NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('name',     'isset', $name    , NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('modid',    'isset', $moduleid, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemid',   'isset', $itemid,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('tofile',   'isset', $tofile,   NULL, XARVAR_DONT_SET)) {return;}
@@ -30,9 +31,9 @@ function dynamicdata_util_export($args)
     $data = array();
     $data['menutitle'] = xarML('Dynamic Data Utilities');
 
-    var_dump($objectid.$modid.$itemtype.$itemid);
     $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
-                                         'moduleid' => $modid,
+                                         'name' => $name,
+                                         'moduleid' => $moduleid,
                                          'itemtype' => $itemtype,
                                          'itemid'   => $itemid,
                                          'allprops' => true));
@@ -93,7 +94,7 @@ function dynamicdata_util_export($args)
         $data['label'] = xarML('Export Data for all #(1) Items', $myobject->label);
 
         $mylist = DataObjectMaster::getObjectList(array('objectid' => $objectid,
-                                                'moduleid' => $modid,
+                                                'moduleid' => $moduleid,
                                                 'itemtype' => $itemtype));
         $mylist->getItems();
 
