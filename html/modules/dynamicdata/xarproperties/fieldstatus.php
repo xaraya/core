@@ -32,11 +32,11 @@ class FieldStatusProperty extends SelectProperty
             $this->options['display'] = array(
                                  array('id' => DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE, 'name' => xarML('Active')),
                                  array('id' => DataPropertyMaster::DD_DISPLAYSTATE_DISABLED, 'name' => xarML('Disabled')),
-                                 array('id' => DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY, 'name' => xarML('Display Only')),
+                                 array('id' => DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY, 'name' => xarML('Display only')),
                                  array('id' => DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN, 'name' => xarML('Hidden')),
                              );
             $this->options['input'] = array(
-                                 array('id' => DataPropertyMaster::DD_INPUTSTATE_NOINPUT, 'name' => xarML('No Input Allowed')),
+                                 array('id' => DataPropertyMaster::DD_INPUTSTATE_NOINPUT, 'name' => xarML('No input allowed')),
                                  array('id' => DataPropertyMaster::DD_INPUTSTATE_ADD, 'name' => xarML('Can be added')),
                                  array('id' => DataPropertyMaster::DD_INPUTSTATE_MODIFY, 'name' => xarML('Can be changed')),
                                  array('id' => DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY, 'name' => xarML('Can be added/changed')),

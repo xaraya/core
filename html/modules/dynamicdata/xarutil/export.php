@@ -32,7 +32,7 @@ function dynamicdata_util_export($args)
     $data['menutitle'] = xarML('Dynamic Data Utilities');
 
     $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
-                                         'name' => $name,
+                                         'name'     => $name,
                                          'moduleid' => $moduleid,
                                          'itemtype' => $itemtype,
                                          'itemid'   => $itemid,
