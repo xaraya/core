@@ -42,9 +42,6 @@ function dynamicdata_utilapi_import($args)
 
     $objectcache = array();
     $objectmaxid = array();
-    // Make a default descriptor
-    $descriptor = new DataObjectDescriptor();
-    var_dump($descriptor);exit;
 
     $proptypes = DataPropertyMaster::getPropertyTypes();
     $name2id = array();
@@ -170,9 +167,13 @@ function dynamicdata_utilapi_import($args)
             if (!isset($objectcache[$objectid])) {
                 $objectcache[$objectid] = DataObjectMaster::getObject(array('objectid' => $objectid));
             }
-            // Get the properties for this object
             $object =& $objectcache[$objectid];
-            $primaryobject = DataObjectMaster::getObject(array('objectid' => $object->baseancestor));
+            if (!isset($objectcache[$object->baseancestor])) {
+                $objectcache[$object->baseancestor] = DataObjectMaster::getObject(array('objectid' => $object->baseancestor));
+            }
+            $primaryobject =& $objectcache[$object->baseancestor];
+
+            // Get the properties for this object
             $objectproperties = $object->properties;
             $oldindex = 0;
             foreach($objectproperties as $propertyname => $property) {

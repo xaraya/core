@@ -4,7 +4,7 @@
     {
         protected $args;
 
-        function __construct(array $args)
+        function __construct(array $args=array())
         {
             $this->setArgs($args);
         }
@@ -43,6 +43,10 @@
         public function setArgs(array $args)
         {
             $this->args = $args;
+        }
+        public function load(array $args=array())
+        {
+            $this->__construct($args);
         }
     }
 ?>
