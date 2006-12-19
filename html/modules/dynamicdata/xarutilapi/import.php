@@ -103,8 +103,12 @@ function dynamicdata_utilapi_import($args)
         $objectid = $myobject->createItem($args);
 
         // Now do the item's properties
-        $property = DataObjectMaster::getObject(array('objectid' => 2));
-        $propertyproperties = array_keys($property->properties);
+
+        // Create the DataProperty object we will use to create items of
+        $dataproperty = DataObjectMaster::getObject(array('objectid' => 2));
+        if (empty($dataproperty)) return;
+
+        $propertyproperties = array_keys($dataproperty->properties);
         $propertieshead = $xmlobject->properties;
         foreach($propertieshead->children() as $property) {
             $propertyname = (string)($property->attributes()->name);
@@ -119,6 +123,7 @@ function dynamicdata_utilapi_import($args)
             $propertyargs['objectid'] = $objectid;
             $propertyargs['moduleid'] = $args['moduleid'];
             $propertyargs['itemtype'] = $args['itemtype'];
+            $propertyargs['itemid']   = 0;
 
             // Now do some checking
             if (empty($propertyargs['name']) || empty($propertyargs['type'])) {
@@ -136,12 +141,10 @@ function dynamicdata_utilapi_import($args)
             // replace default xar_* table prefix with local one
             $propertyargs['source'] = preg_replace("/^xar_/",$prefix,$propertyargs['source']);
 
-            // Create this property
-            $myobject = DataObjectMaster::getObject(array(
-                                                 'itemtype'   => 1,
-                                                 'itemid'   => 0));
-            if (empty($myobject)) return;
-            $prop_id = $myobject->createItem($propertyargs);
+            // Force a new itemid to be created for this property
+            $dataproperty->properties[$dataproperty->primary]->setValue(0);
+            // Create the property
+            $prop_id = $dataproperty->createItem($propertyargs);
         }
     } elseif ($roottag == 'items') {
 
