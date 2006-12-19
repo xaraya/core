@@ -9,8 +9,8 @@
  *
 **/
 sys::import('modules.dynamicdata.class.properties');
-
 sys::import('modules.dynamicdata.class.objects.master');
+
 class DataObjectList extends DataObjectMaster
 {
     public $itemids  = array();           // the list of item ids used in data stores
@@ -598,10 +598,8 @@ class DataObjectList extends DataObjectMaster
         }
 
         $urlargs = array();
-//        $urlargs['itemtype'] =$itemtype;
         $urlargs['table'] = $table;
         $urlargs[$args['param']] = $itemid;
-//        $urlargs['template'] = $args['template'];
         $urlargs['tplmodule'] = $args['tplmodule'];
         // The next 3 lines make the DD modify/display routines work for overlay objects
         // TODO: do we need the concept of urlmodule at all?
