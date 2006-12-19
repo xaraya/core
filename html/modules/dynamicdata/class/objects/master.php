@@ -14,7 +14,7 @@ sys::import('modules.dynamicdata.class.properties');
 
 class DataObjectDescriptor extends ObjectDescriptor
 {
-    function __construct(array $args)
+    function __construct(array $args=array())
     {
         if (!isset($args['itemtype'])) $args['itemtype'] = 0;
         $args = $this->getObjectID($args);

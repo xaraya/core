@@ -42,6 +42,10 @@ function dynamicdata_utilapi_import($args)
 
     $objectcache = array();
     $objectmaxid = array();
+    // Make a default descriptor
+    $descriptor = new DataObjectDescriptor();
+    var_dump($descriptor);exit;
+
     $proptypes = DataPropertyMaster::getPropertyTypes();
     $name2id = array();
     foreach ($proptypes as $propid => $proptype) {
