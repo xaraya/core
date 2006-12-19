@@ -162,8 +162,12 @@ function dynamicdata_utilapi_import($args)
             }
             $objectid = $objectname2objectid[$item['name']];
 
+            // Create the item
+            if (!isset($objectcache[$objectid])) {
+                $objectcache[$objectid] = DataObjectMaster::getObject(array('objectid' => $objectid));
+            }
             // Get the properties for this object
-            $object = DataObjectMaster::getObject(array('objectid'   => $objectid));
+            $object =& $objectcache[$objectid];
             $primaryobject = DataObjectMaster::getObject(array('objectid' => $object->baseancestor));
             $objectproperties = $object->properties;
             $oldindex = 0;
@@ -189,14 +193,10 @@ function dynamicdata_utilapi_import($args)
                 }
                 if($propertyname == $primaryobject->primary) $oldindex = $item[$propertyname];
             }
-            // Create the item
-            if (!isset($objectcache[$objectid])) {
-                $objectcache[$objectid] = DataObjectMaster::getObject(array('objectid' => $objectid));
-            }
             if (empty($keepitemid)) {
                 // for dynamic objects, set the primary field to 0 too
-                if (isset($objectcache[$objectid]->primary)) {
-                    $primary = $objectcache[$objectid]->primary;
+                if (isset($object->primary)) {
+                    $primary = $object->primary;
                     if (!empty($item[$primary])) {
                         $item[$primary] = 0;
                     }
@@ -204,17 +204,17 @@ function dynamicdata_utilapi_import($args)
             }
             if (!empty($item['itemid'])) {
                 // check if the item already exists
-                $olditemid = $objectcache[$objectid]->getItem(array('itemid' => $item['itemid']));
+                $olditemid = $object->getItem(array('itemid' => $item['itemid']));
                 if (!empty($olditemid) && $olditemid == $item['itemid']) {
                     // update the item
-                    $itemid = $objectcache[$objectid]->updateItem($item);
+                    $itemid = $object->updateItem($item);
                 } else {
                     // create the item
-                    $itemid = $objectcache[$objectid]->createItem($item);
+                    $itemid = $object->createItem($item);
                 }
             } else {
                 // create the item
-                $itemid = $objectcache[$objectid]->createItem($item);
+                $itemid = $object->createItem($item);
             }
             if (empty($itemid)) return;
 
@@ -231,7 +231,7 @@ function dynamicdata_utilapi_import($args)
     // adjust maxid (for objects stored in the dynamic_data table)
     if (count($objectcache) > 0 && count($objectmaxid) > 0) {
         foreach (array_keys($objectcache) as $objectid) {
-            if (!empty($objectmaxid[$objectid]) && $objectcache[$objectid]->maxid < $objectmaxid[$objectid]) {
+            if (!empty($objectmaxid[$objectid]) && $object->maxid < $objectmaxid[$objectid]) {
                 $itemid = DataObjectMaster::updateObject(array('objectid' => $objectid,
                                                                     'maxid'    => $objectmaxid[$objectid]));
                 if (empty($itemid)) return;
