@@ -40,13 +40,16 @@
             foreach ($publicproperties as $key => $value) $this->args[$key] = $value;
         }
 
-        public function setArgs(array $args)
+        public function setArgs(array $args=array())
         {
-            $this->args = $args;
+            if (empty($this->args)) $this->args = $args;
+            else foreach($args as $key => $value) if (isset($value)) $this->args[$key] = $value;
         }
+        /* deprecated
         public function load(array $args=array())
         {
             $this->__construct($args);
         }
+        */
     }
 ?>

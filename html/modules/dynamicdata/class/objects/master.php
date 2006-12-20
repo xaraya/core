@@ -16,7 +16,6 @@ class DataObjectDescriptor extends ObjectDescriptor
 {
     function __construct(array $args=array())
     {
-        if (!isset($args['itemtype'])) $args['itemtype'] = 0;
         $args = $this->getObjectID($args);
         parent::__construct($args);
     }
@@ -45,6 +44,7 @@ class DataObjectDescriptor extends ObjectDescriptor
             $info = xarMod::getInfo(xarMod::getRegID($args['fallbackmodule']));
             $args['moduleid'] = xarMod::getRegID($args['fallbackmodule']); // $info['systemid'];  FIXME change id
         }
+        if (!isset($args['itemtype'])) $args['itemtype'] = 0;
         return $args;
     }
 
@@ -175,7 +175,7 @@ class DataObjectMaster extends Object
 
         // FIXME: we need to go to the database if the object exists but we don't have all the data
         //        what would be the correct condition for that?
-        if(empty($this->label))
+/*        if(empty($this->label))
         {
             $info = self::getObjectInfo($this->descriptor->getArgs());
             if (!empty($info)) {
@@ -184,7 +184,7 @@ class DataObjectMaster extends Object
                 $this->descriptor->store($this);
             }
         }
-        // use the object name as default template override (*-*-[template].x*)
+*/        // use the object name as default template override (*-*-[template].x*)
         if(empty($this->template) && !empty($this->name))
             $this->template = $this->name;
 
@@ -681,10 +681,13 @@ class DataObjectMaster extends Object
             $args['itemid'] = null;
 
         $classname = 'DataObject';
+
+        $info = self::getObjectInfo($args);
+        $descriptor = new DataObjectDescriptor($info);
+        $descriptor->setArgs($args);
+        $args = $descriptor->getArgs();
         if(!empty($args['classname']) && class_exists($args['classname']))
             $classname = $args['classname'];
-
-        $descriptor = new DataObjectDescriptor($args);
         // here we can use our own classes to retrieve this
         $object = new $classname($descriptor);
         return $object;
