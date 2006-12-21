@@ -151,8 +151,9 @@ class DataPropertyMaster extends Object
      */
     static function &getProperty(array $args)
     {
-        if(!is_numeric($args['type']))
+        if(isset($args['name']) || !is_numeric($args['type']))
         {
+            if(isset($args['name'])) $args['type'] = $args['name'];
             $proptypes = self::getPropertyTypes();
             if(!isset($proptypes))
                 $proptypes = array();
@@ -165,9 +166,9 @@ class DataPropertyMaster extends Object
                     break;
                 }
             }
-        }
-        else
+        } else {
             $proptypes = self::getPropertyTypes();
+        }
 
         $clazz = 'DataProperty';
         if( isset($proptypes[$args['type']]) && is_array($proptypes[$args['type']]) )
