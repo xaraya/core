@@ -26,13 +26,16 @@ define('XARCORE_GENERATION',2);
 define('XARCORE_VERSION_NUM', '[ongoing development version]');
 define('XARCORE_VERSION_ID',  'Xaraya 2 series');
 define('XARCORE_VERSION_SUB', 'etiam infractus');
+define('XARCORE_VERSION_REV', '');
 
 // Handy if we're running from a mt working copy, prolly comment out on distributing
 if(file_exists('../_MTN/revision'))
 {
     $t= file('../_MTN/revision');
-    $rev = str_replace(array('old_revision [',']'),'',$t[4]);
-    define('XARCORE_VERSION_REV', $rev);
+    if (isset($t[4])) {
+        $rev = str_replace(array('old_revision [',']'),'',$t[4]);
+        define('XARCORE_VERSION_REV', $rev);
+    }
 }
 
 /*

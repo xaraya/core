@@ -151,9 +151,14 @@ class DataPropertyMaster extends Object
      */
     static function &getProperty(array $args)
     {
+        if(!isset($args['name']) && !isset($args['type'])) {
+            throw new BadParameterException(null,xarML('The getProperty method needs either a name or type parameter.'));
+        }
+
         if(isset($args['name']) || !is_numeric($args['type']))
         {
-            if(isset($args['name'])) $args['type'] = $args['name'];
+            // TODO: type takes precedence if it exists. should this be changed?
+            if (!isset($args['type'])) if(isset($args['name'])) $args['type'] = $args['name'];
             $proptypes = self::getPropertyTypes();
             if(!isset($proptypes))
                 $proptypes = array();
