@@ -222,4 +222,5 @@ final class sys extends Object
         return self::$var;
     }
 }
+
 ?>
