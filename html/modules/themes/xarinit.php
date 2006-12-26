@@ -97,29 +97,29 @@ function themes_init()
     if (empty($selfilter)) $selfilter = XARMOD_STATE_ANY;
     if (empty($hidecore)) $hidecore = 0;
 
-    xarModSetVar('themes', 'hidecore', $hidecore);
-    xarModSetVar('themes', 'selstyle', $selstyle);
-    xarModSetVar('themes', 'selfilter', $selfilter);
-    // Not sure when these following 2 vars were introduced. Need to keep them here and in upgrade.
-    xarModSetVar('themes', 'selclass', 'all');
-    xarModSetVar('themes', 'useicons', false);
+    xarModVars::set('themes', 'hidecore', $hidecore);
+    xarModVars::set('themes', 'selstyle', $selstyle);
+    xarModVars::set('themes', 'selfilter', $selfilter);
+    xarModVars::set('themes', 'selclass', $selclass);
+    xarModVars::set('themes', 'useicons', $useicons);
 
-    xarModSetVar('themes', 'SiteName', 'Your Site Name');
-    xarModSetVar('themes', 'SiteSlogan', 'Your Site Slogan');
-    xarModSetVar('themes', 'SiteCopyRight', '&copy; Copyright 2006 ');
-    xarModSetVar('themes', 'SiteTitleSeparator', ' :: ');
-    xarModSetVar('themes', 'SiteTitleOrder', 'default');
-    xarModSetVar('themes', 'SiteFooter', '<a href="http://www.xaraya.com"><img src="modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" class="xar-noborder" /></a>');
-    xarModSetVar('themes', 'ShowPHPCommentBlockInTemplates', 0);
-    xarModSetVar('themes', 'ShowTemplates', 0);
+    xarModVars::set('themes', 'SiteName', 'Your Site Name');
+    xarModVars::set('themes', 'SiteSlogan', 'Your Site Slogan');
+    xarModVars::set('themes', 'SiteCopyRight', '&copy; Copyright 2003 ');
+    xarModVars::set('themes', 'SiteTitleSeparator', ' :: ');
+    xarModVars::set('themes', 'SiteTitleOrder', 'default');
+    xarModVars::set('themes', 'SiteFooter', '<a href="http://www.xaraya.com"><img src="modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" class="xar-noborder" /></a>');
+    xarModVars::set('themes', 'ShowPHPCommentBlockInTemplates', 0);
+    xarModVars::set('themes', 'ShowTemplates', 0);
+    xarModVars::set('themes', 'var_dump', 0);
     //Moved here in 1.1.x series
-    xarModSetVar('themes', 'usedashboard', 0);
-    xarModSetVar('themes', 'dashtemplate', 'dashboard');
-    xarModSetVar('themes', 'adminpagemenu', 1);
+    xarModVars::set('themes', 'usedashboard', 0);
+    xarModVars::set('themes', 'dashtemplate', 'dashboard');
+    xarModVars::set('themes', 'adminpagemenu', 0);
 
     xarRegisterMask('ViewThemes','All','themes','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('AdminTheme','All','themes','All','All','ACCESS_ADMIN');
-    
+
     // Initialisation successful
     return themes_upgrade('1.0');
 }
@@ -164,7 +164,7 @@ function themes_upgrade($oldversion)
 
        xarModSetVar('themes', 'selclass', 'all');
        xarModSetVar('themes', 'useicons', false);
-      
+
       case '1.8.0' : //current version
 
       break;

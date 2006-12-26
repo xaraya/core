@@ -3,7 +3,7 @@
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:mlstring>
-            Themes Administration 
+            Themes Administration
         </xar:mlstring>
     </span>
 </div>
@@ -11,14 +11,14 @@
    <xar:template type="module" file="admin-menu" />
     <h2>
         <xar:mlstring>
-            Modify Configuration 
+            Modify Configuration
         </xar:mlstring>
     </h2>
     <form action="&xar-modurl-themes-admin-updateconfig;" method="post" enctype="application/x-www-form-urlencoded">
         <fieldset>
             <legend>
                 <xar:mlstring>
-                    Site Display Options 
+                    Site Display Options
                 </xar:mlstring>
             </legend>
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -62,7 +62,7 @@
             <div class="xar-form-input-wrapper">
                 <label for="separator" class="xar-form-label">
                     <xar:mlstring>
-                        Page Title Separator 
+                        Page Title Separator
                     </xar:mlstring>
                 </label>
                 <input type="text" name="separator" id="separator" value="#xarModGetVar('themes', 'SiteTitleSeparator', 1)#" size="10" maxlength="15" />
@@ -70,189 +70,189 @@
             <div class="xar-form-input-wrapper">
                 <label for="pagetitle" class="xar-form-label">
                     <xar:mlstring>
-                        Page Title Order 
+                        Page Title Order
                     </xar:mlstring>
                 </label>
                 <select name="pagetitle" id="pagetitle" size="1">
                     <xar:if condition="xarModGetVar('themes', 'SiteTitleOrder') eq 'default'">
                         <option value="default" selected="selected">
                             <xar:mlstring>
-                                Site Name - Module Name - Page Name 
+                                Site Name - Module Name - Page Name
                             </xar:mlstring>
                         </option>
                         <option value="sp">
                             <xar:mlstring>
-                                Site Name - Page Name 
+                                Site Name - Page Name
                             </xar:mlstring>
                         </option>
                         <option value="mps">
                             <xar:mlstring>
-                                Module Name - Page Name - Site Name 
+                                Module Name - Page Name - Site Name
                             </xar:mlstring>
                         </option>
                         <option value="pms">
                             <xar:mlstring>
-                                Page Name - Module Name - Site Name 
+                                Page Name - Module Name - Site Name
                             </xar:mlstring>
                         </option>
                         <option value="to">
                             <xar:mlstring>
-                                Page Name 
+                                Page Name
                             </xar:mlstring>
                         </option>
                         <option value="theme">
                             <xar:mlstring>
-                                Theme Driven 
+                                Theme Driven
                             </xar:mlstring>
                         </option>
                         <xar:elseif condition="xarModGetVar('themes', 'SiteTitleOrder') eq 'sp'" />
                         <option value="default">
                             <xar:mlstring>
-                                Site Name - Module Name - Page Name 
+                                Site Name - Module Name - Page Name
                             </xar:mlstring>
                         </option>
                         <option value="sp" selected="selected">
                             <xar:mlstring>
-                                Site Name - Page Name 
+                                Site Name - Page Name
                             </xar:mlstring>
                         </option>
                         <option value="mps">
                             <xar:mlstring>
-                                Module Name - Page Name - Site Name 
+                                Module Name - Page Name - Site Name
                             </xar:mlstring>
                         </option>
                         <option value="pms">
                             <xar:mlstring>
-                                Page Name - Module Name - Site Name 
+                                Page Name - Module Name - Site Name
                             </xar:mlstring>
                         </option>
                         <option value="to">
                             <xar:mlstring>
-                                Page Name 
+                                Page Name
                             </xar:mlstring>
                         </option>
                         <option value="theme">
                             <xar:mlstring>
-                                Theme Driven 
+                                Theme Driven
                             </xar:mlstring>
                         </option>
                         <xar:elseif condition="xarModGetVar('themes', 'SiteTitleOrder') eq 'mps'" />
                         <option value="default">
                             <xar:mlstring>
-                                Site Name - Module Name - Page Name 
+                                Site Name - Module Name - Page Name
                             </xar:mlstring>
                         </option>
                         <option value="sp">
                             <xar:mlstring>
-                                Site Name - Page Name 
+                                Site Name - Page Name
                             </xar:mlstring>
                         </option>
                         <option value="mps" selected="selected">
                             <xar:mlstring>
-                                Module Name - Page Name - Site Name 
+                                Module Name - Page Name - Site Name
                             </xar:mlstring>
                         </option>
                         <option value="pms">
                             <xar:mlstring>
-                                Page Name - Module Name - Site Name 
+                                Page Name - Module Name - Site Name
                             </xar:mlstring>
                         </option>
                         <option value="to">
                             <xar:mlstring>
-                                Page Name 
+                                Page Name
                             </xar:mlstring>
                         </option>
                         <option value="theme">
                             <xar:mlstring>
-                                Theme Driven 
+                                Theme Driven
                             </xar:mlstring>
                         </option>
                         <xar:elseif condition="xarModGetVar('themes', 'SiteTitleOrder') eq 'pms'" />
                         <option value="default">
                             <xar:mlstring>
-                                Site Name - Module Name - Page Name 
+                                Site Name - Module Name - Page Name
                             </xar:mlstring>
                         </option>
                         <option value="sp">
                             <xar:mlstring>
-                                Site Name - Page Name 
+                                Site Name - Page Name
                             </xar:mlstring>
                         </option>
                         <option value="mps">
                             <xar:mlstring>
-                                Module Name - Page Name - Site Name 
+                                Module Name - Page Name - Site Name
                             </xar:mlstring>
                         </option>
                         <option value="pms" selected="selected">
                             <xar:mlstring>
-                                Page Name - Module Name - Site Name 
+                                Page Name - Module Name - Site Name
                             </xar:mlstring>
                         </option>
                         <option value="theme">
                             <xar:mlstring>
-                                Theme Driven 
+                                Theme Driven
                             </xar:mlstring>
                         </option>
                         <xar:elseif condition="xarModGetVar('themes', 'SiteTitleOrder') eq 'to'" />
                         <option value="default">
                             <xar:mlstring>
-                                Site Name - Module Name - Page Name 
+                                Site Name - Module Name - Page Name
                             </xar:mlstring>
                         </option>
                         <option value="sp">
                             <xar:mlstring>
-                                Site Name - Page Name 
+                                Site Name - Page Name
                             </xar:mlstring>
                         </option>
                         <option value="mps">
                             <xar:mlstring>
-                                Module Name - Page Name - Site Name 
+                                Module Name - Page Name - Site Name
                             </xar:mlstring>
                         </option>
                         <option value="pms">
                             <xar:mlstring>
-                                Page Name - Module Name - Site Name 
+                                Page Name - Module Name - Site Name
                             </xar:mlstring>
                         </option>
                         <option value="to" selected="selected">
                             <xar:mlstring>
-                                Page Name 
+                                Page Name
                             </xar:mlstring>
                         </option>
                         <option value="theme">
                             <xar:mlstring>
-                                Theme Driven 
+                                Theme Driven
                             </xar:mlstring>
                         </option>
                         <xar:elseif condition="xarModGetVar('themes', 'SiteTitleOrder') eq 'theme'" />
                         <option value="default">
                             <xar:mlstring>
-                                Site Name - Module Name - Page Name 
+                                Site Name - Module Name - Page Name
                             </xar:mlstring>
                         </option>
                         <option value="sp">
                             <xar:mlstring>
-                                Site Name - Page Name 
+                                Site Name - Page Name
                             </xar:mlstring>
                         </option>
                         <option value="mps">
                             <xar:mlstring>
-                                Module Name - Page Name - Site Name 
+                                Module Name - Page Name - Site Name
                             </xar:mlstring>
                         </option>
                         <option value="pms">
                             <xar:mlstring>
-                                Page Name - Module Name - Site Name 
+                                Page Name - Module Name - Site Name
                             </xar:mlstring>
                         </option>
                         <option value="to">
                             <xar:mlstring>
-                                Page Name 
+                                Page Name
                             </xar:mlstring>
                         </option>
                         <option value="theme" selected="selected">
                             <xar:mlstring>
-                                Theme Driven 
+                                Theme Driven
                             </xar:mlstring>
                         </option>
                     </xar:if>
@@ -327,7 +327,7 @@
         <fieldset>
             <legend>
                 <xar:mlstring>
-                    Template Debugging options 
+                    Template Debugging options
                 </xar:mlstring>
             </legend>
             <xar:if condition="xarConfigGetVar('Site.BL.CacheTemplates')">
@@ -339,7 +339,7 @@
                     </xar:if>
                     <label for="showphpcbit">
                         <xar:mlstring>
-                            Show php comment block header in compiled templates 
+                            Show php comment block header in compiled templates
                         </xar:mlstring>
                     </label>
                 </div>
@@ -352,7 +352,7 @@
                 </xar:if>
                 <label for="showtemplates">
                     <xar:mlstring>
-                        Show template filenames in HTML comments 
+                        Show template filenames in HTML comments
                     </xar:mlstring>
                 </label>
             </div>
@@ -364,19 +364,15 @@
                 </xar:if>
                 <label for="cachetemplates">
                     <xar:mlstring>
-                        Cache templates 
+                        Cache templates
                     </xar:mlstring>
                 </label>
             </div>
             <div class="xar-form-input-wrapper-after">
-                <xar:if condition="xarModGetVar('themes', 'var_dump')">
-                    <input type="checkbox" name="var_dump" id="var_dump" value="1" checked="checked" />
-                    <xar:else />
-                    <input type="checkbox" name="var_dump" id="var_dump" value="1" />
-                </xar:if>
+                <xar:set name="checked">xarModVars::get('themes', 'var_dump')</xar:set>
                 <label for="var_dump">
                     <xar:mlstring>
-                        Debug Templates by Showing Variables Available 
+                        Debug Templates by Showing Variables Available
                     </xar:mlstring>
                 </label>
             </div>
@@ -385,14 +381,14 @@
                 <div class="xar-form-input-wrapper">
                     <label for="AtomTag" class="xar-form-label">
                         <xar:mlstring>
-                            Atom Tag 
+                            Atom Tag
                         </xar:mlstring>
                     </label>
                     <input type="text" name="AtomTag" id="AtomTag" value="#xarModGetVar('themes', 'AtomTag', 1)#" size="30" maxlength="100" />
                 </div>
             </xar:if>
         </fieldset>
-         
+
         <fieldset>
             <div class="xar-form-input-wrapper-after">
                 <input type="submit" value="#$submitbutton#" />
