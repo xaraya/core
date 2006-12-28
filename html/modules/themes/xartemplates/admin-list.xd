@@ -146,11 +146,7 @@
                     </select>
                 </td>
                 <td class="xar-align-center">
-                    <xar:if condition="$useicons eq true">
-                        <input type="checkbox" name="useicons" id="useicons" value="1" checked="checked" onchange="this.form.submit()" />
-                    <xar:else />
-                        <input type="checkbox" name="useicons" id="useicons" value="1" onchange="this.form.submit()" />
-                    </xar:if>
+                    <xar:data-input type="checkbox" name="useicons" checked="$useicons" onchange="this.form.submit()" />
                     <label for="useicons">
                         <xar:mlstring>
                             Use Icons

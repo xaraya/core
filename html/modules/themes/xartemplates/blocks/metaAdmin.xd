@@ -21,11 +21,7 @@
     </div>
 </div>
 <div class="xar-form-input-wrapper-after">
-    <xar:if condition="!empty($usegeo)">
-        <input type="checkbox" name="usegeo" id="usegeo#$blockid#" value="1" checked="checked" tabindex="1" /> 
-        <xar:else />
-        <input type="checkbox" name="usegeo" id="usegeo#$blockid#" value="1" tabindex="1" /> 
-    </xar:if>
+    <xar:data-input type="checkbox" name="usegeo" id="usegeo#$blockid#" checked="$usegeo" tabindex="1" />
     <label for="usegeo#$blockid#" title="#xarML('GeoUrl allows you to locate websites that are geographically close to yours.')#"> 
         <xar:mlstring>
             Use GeoURL 

@@ -267,11 +267,7 @@
                 </xar:mlstring>
             </legend>
             <div class="xar-form-input-wrapper-after">
-                <xar:if condition="$dashboard">
-                    <input type="checkbox" name="dashboard" id="dashboard" value="1" checked="checked" />
-                    <xar:else />
-                    <input type="checkbox" name="dashboard" id="dashboard" value="1" />
-                </xar:if>
+                <xar:data-input type="checkbox" name="dashboard" checked="$dashboard" />
                 <label for="dashboard" title="#xarML('Use the Admin Dashboard to manage all your Admin settings from a single page.')#">
                     <xar:mlstring>
                         Enable the Admin Dashboard.
