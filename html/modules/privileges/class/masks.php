@@ -309,6 +309,7 @@ class xarMasks extends Object
             else {
                 $msg = xarML('Did not find mask #(1) registered for component #(2) in module #(3)', $maskname, $component, $module);
             }
+            echo $msg;exit;
             throw new Exception($msg);
         }
 

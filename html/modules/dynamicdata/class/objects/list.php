@@ -558,6 +558,7 @@ class DataObjectList extends DataObjectMaster
                 $args['urlmodule'],'admin','new',
                 array(
                     'itemtype' => $itemtype,
+                    'tplmodule'    => $args['tplmodule'],
                     'table'    => $args['table']
                 )
             );
