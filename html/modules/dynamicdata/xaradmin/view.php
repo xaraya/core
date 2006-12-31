@@ -26,45 +26,28 @@ function dynamicdata_admin_view($args)
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('catid',    'isset', $catid,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('layout',   'str:1' , $layout,   'default', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('layout',   'str:1' ,$layout,    'default', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('tplmodule','isset', $tplmodule, 'dynamicdata', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
 
-    $object = xarModAPIFunc('dynamicdata','user','getobjectinfo',
-                            array('objectid' => $itemid,
-                                  'moduleid' => $modid,
-                                  'itemtype' => $itemtype,
-                                  'join'     => $join,
-                                  'table'    => $table));
-    if (isset($object)) {
-        $objectid = $object['objectid'];
-        $modid = $object['moduleid'];
-        $itemtype = $object['itemtype'];
-        $label = $object['label'];
-        $param = $object['urlparam'];
-    } else {
+    $object = xarModAPIFunc('dynamicdata','user','getobjectlist',
+                            array('objectid'  => $itemid,
+                                  'moduleid'  => $modid,
+                                  'itemtype'  => $itemtype,
+                                  'join'      => $join,
+                                  'table'     => $table,
+                                  'tplmodule' => $tplmodule,
+                                  ));
+    if (!isset($object)) {
         return;
     }
 
-    $data = xarModAPIFunc('dynamicdata','admin','menu');
-
-/*
-    $mylist = & DataObjectMaster::getObjectList(array('objectid' => $itemid,
-                                            'moduleid' => $modid,
-                                            'itemtype' => $itemtype));
-    $data['mylist'] = & $mylist;
-*/
-
-    $data['objectid'] = $objectid;
-    $data['modid'] = $modid;
-    $data['itemtype'] = $itemtype;
-    $data['param'] = $param;
-    $data['startnum'] = $startnum;
-    $data['numitems'] = $numitems;
-    $data['label'] = $label;
-    $data['sort'] = $sort;
-    $data['join'] = $join;
-    $data['table'] = $table;
+    $data = $object->toArray();
+    // TODO: remove this when we turn all the moduleid into modid
+    $data['modid'] = $data['moduleid'];
+    // TODO: another stray
     $data['catid'] = $catid;
-    $data['layout'] = $layout;
+    $data = array_merge($data,xarModAPIFunc('dynamicdata','admin','menu'));
 
     // Security check - important to do this as early as possible to avoid
     // potential security holes or just too much wasted processing
@@ -73,7 +56,7 @@ function dynamicdata_admin_view($args)
 
     // show other modules
     $data['modlist'] = array();
-    if ($objectid == 1 && empty($table)) {
+    if ($data['objectid'] == 1 && empty($table)) {
         $objects = xarModAPIFunc('dynamicdata','user','getobjects');
         xarLogMessage('AFTER getobjects');
         $seenmod = array();
@@ -105,21 +88,25 @@ function dynamicdata_admin_view($args)
     }
 
     if (xarSecurityCheck('AdminDynamicData',0)) {
-        if (!empty($table)) {
+        if (!empty($data['table'])) {
             $data['querylink'] = xarModURL('dynamicdata','admin','query',
-                                           array('table' => $table));
-        } elseif (!empty($join)) {
+                                           array('table' => $data['table']));
+        } elseif (!empty($data['join'])) {
             $data['querylink'] = xarModURL('dynamicdata','admin','query',
                                            array('itemid' => $objectid,
-                                                 'join' => $join));
+                                                 'join' => $data['join']));
         } else {
             $data['querylink'] = xarModURL('dynamicdata','admin','query',
-                                           array('itemid' => $objectid));
+                                           array('itemid' => $data['objectid']));
         }
     }
 
-    // Return the template variables defined in this function
-    return $data;
+    if (file_exists('modules/' . $data['tplmodule'] . '/xartemplates/admin-new.xd') ||
+        file_exists('modules/' . $data['tplmodule'] . '/xartemplates/admin-new-' . $data['template'] . '.xd')) {
+        return xarTplModule($data['tplmodule'],'admin','view',$data,$data['template']);
+    } else {
+        return xarTplModule('dynamicdata','admin','view',$data);
+    }
 }
 
 ?>

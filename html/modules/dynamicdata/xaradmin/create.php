@@ -33,6 +33,7 @@ function dynamicdata_admin_create($args)
     if (!xarVarFetch('join',        'isset', $join,       NULL, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('table',       'isset', $table,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('template',     'isset', $template,   NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('tplmodule',  'isset', $tplmodule,   'dynamicdata', XARVAR_NOT_REQUIRED)) {return;}
 
     if (!xarSecConfirmAuthKey()) return;
 
@@ -83,7 +84,7 @@ function dynamicdata_admin_create($args)
         xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
                                       array('table' => $table)));
     } else {
-        xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
+        xarResponseRedirect(xarModURL($tplmodule, 'admin', 'view',
                                       array('itemid' => $myobject->objectid)));
     }
 

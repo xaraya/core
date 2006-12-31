@@ -18,7 +18,7 @@
     <xar:if condition="empty($numitems)">
         <xar:set name="numitems">30</xar:set>
     </xar:if>
-    <xar:data-view layout="$layout" module="$modid" itemtype="$itemtype" join="$join" table="$table" param="$param" numitems="$numitems" startnum="$startnum" catid="$catid" sort="$sort" />
+    <xar:data-view layout="$layout" module="$modid" itemtype="$itemtype" join="$join" table="$table" param="$urlparam" numitems="$numitems" startnum="$startnum" catid="$catid" sort="$sort" />
 
     <xar:if condition="!empty($querylink)">
         <p>
@@ -43,10 +43,10 @@
           <xar:foreach in="$modlist" value="$module">
             <xar:if condition="!empty($module['header'])">
               <h3>
-                #$module['header']# 
+                #$module['header']#
               </h3>
             </xar:if>
-            
+
             <div class="xar-form-input-wrapper">
               <span class="xar-form-label">
                 #$module['name']#

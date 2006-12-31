@@ -26,7 +26,9 @@ function dynamicdata_user_view($args)
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('catid',    'isset', $catid,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('layout',   'str:1' , $layout,   'default', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('layout',   'str:1' ,$layout,    'default', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('tplmodule','isset', $tplmodule, 'dynamicdata', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
 
     // Override if needed from argument array
     extract($args);
@@ -43,12 +45,14 @@ function dynamicdata_user_view($args)
         $itemtype = 0;
     }
 
-    $object = DataObjectMaster::getObjectInfo(
+    $object = DataObjectMaster::getobject(
                             array('objectid' => $objectid,
                                   'moduleid' => $modid,
                                   'itemtype' => $itemtype,
                                   'join'     => $join,
-                                  'table'    => $table));
+                                  'table'    => $table,
+                                  'tplmodule' => $tplmodule,
+                                  ));
     if (isset($object)) {
         $objectid = $object['objectid'];
         $modid = $object['moduleid'];
@@ -60,6 +64,7 @@ function dynamicdata_user_view($args)
         $label = xarML('Dynamic Data Objects');
         $param = '';
     }
+    $args = $object->toArray();
     if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:All")) return;
 
     $data = xarModAPIFunc('dynamicdata','user','menu');
@@ -86,7 +91,12 @@ function dynamicdata_user_view($args)
 
     $data['object'] = & $mylist;
 */
-    return $data;
+    if (file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-new.xd') ||
+        file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-new-' . $args['template'] . '.xd')) {
+        return xarTplModule($args['tplmodule'],'user','view',$data,$args['template']);
+    } else {
+        return xarTplModule('dynamicdata','user','view',$data,$args['template']);
+    }
 }
 
 ?>

@@ -29,13 +29,14 @@ function dynamicdata_admin_update($args)
     extract($args);
 
     if(!xarVarFetch('objectid',   'isset', $objectid,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',      'int', $modid,       xarModGetIDFromName('dynamicdata'), XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('modid',      'int',   $modid,       xarModGetIDFromName('dynamicdata'), XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('itemtype',   'int',   $itemtype,    0, XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('itemid',     'isset', $itemid,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('return_url', 'isset', $return_url,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('preview',    'isset', $preview,     0, XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('join',       'isset', $join,        NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',      'isset', $table,       NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('tplmodule',  'isset', $tplmodule,   'dynamicdata', XARVAR_NOT_REQUIRED)) {return;}
 
     if (!xarSecConfirmAuthKey()) return;
 
@@ -127,7 +128,10 @@ function dynamicdata_admin_update($args)
                                       array('table' => $table)));
     } else {
         xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
-                                      array('itemid' => $myobject->objectid)));
+                                      array(
+                                      'itemid' => $myobject->objectid,
+                                      'tplmodule' => $tplmodule
+                                      )));
     }
 
     return true;
