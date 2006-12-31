@@ -37,6 +37,7 @@ function dynamicdata_admin_view($args)
                                   'join'      => $join,
                                   'table'     => $table,
                                   'tplmodule' => $tplmodule,
+                                  'template'  => $template,
                                   ));
     if (!isset($object)) {
         return;
@@ -47,6 +48,7 @@ function dynamicdata_admin_view($args)
     $data['modid'] = $data['moduleid'];
     // TODO: another stray
     $data['catid'] = $catid;
+    // TODO: is this needed?
     $data = array_merge($data,xarModAPIFunc('dynamicdata','admin','menu'));
 
     // Security check - important to do this as early as possible to avoid

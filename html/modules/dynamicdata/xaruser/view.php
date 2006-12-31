@@ -45,55 +45,28 @@ function dynamicdata_user_view($args)
         $itemtype = 0;
     }
 
-    $object = DataObjectMaster::getobject(
-                            array('objectid' => $objectid,
-                                  'moduleid' => $modid,
-                                  'itemtype' => $itemtype,
-                                  'join'     => $join,
-                                  'table'    => $table,
+    $object = DataObjectMaster::getobjectlist(
+                            array('objectid'  => $objectid,
+                                  'moduleid'  => $modid,
+                                  'itemtype'  => $itemtype,
+                                  'join'      => $join,
+                                  'table'     => $table,
                                   'tplmodule' => $tplmodule,
+                                  'template'  => $template,
                                   ));
-    if (isset($object)) {
-        $objectid = $object['objectid'];
-        $modid = $object['moduleid'];
-        $itemtype = $object['itemtype'];
-        $label = $object['label'];
-        $param = $object['urlparam'];
-    } else {
-        $objectid = 0;
-        $label = xarML('Dynamic Data Objects');
-        $param = '';
-    }
-    $args = $object->toArray();
+    $data = $object->toArray();
     if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$modid:$itemtype:All")) return;
 
-    $data = xarModAPIFunc('dynamicdata','user','menu');
-    $data['objectid'] = $objectid;
-    $data['modid'] = $modid;
-    $data['itemtype'] = $itemtype;
-    $data['param'] = $param;
-    $data['startnum'] = $startnum;
-    $data['numitems'] = $numitems;
-    $data['label'] = $label;
-    $data['join'] = $join;
-    $data['table'] = $table;
+    // TODO: is this needed?
+    $data = array_merge($data,xarModAPIFunc('dynamicdata','admin','menu'));
+    // TODO: remove this when we turn all the moduleid into modid
+    $data['modid'] = $data['moduleid'];
+    // TODO: another stray
     $data['catid'] = $catid;
-    $data['layout'] = $layout;
 
-/*  // we could also retrieve the object list here, and pass that along to the template
-    $numitems = 30;
-    $mylist = & DataObjectMaster::getObjectList(array('objectid' => $objectid,
-                                            'moduleid' => $modid,
-                                            'itemtype' => $itemtype,
-                                            'status'   => 1));
-    $mylist->getItems(array('numitems' => $numitems,
-                            'startnum' => $startnum));
-
-    $data['object'] = & $mylist;
-*/
-    if (file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-new.xd') ||
-        file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-new-' . $args['template'] . '.xd')) {
-        return xarTplModule($args['tplmodule'],'user','view',$data,$args['template']);
+    if (file_exists('modules/' . $data['tplmodule'] . '/xartemplates/admin-new.xd') ||
+        file_exists('modules/' . $data['tplmodule'] . '/xartemplates/admin-new-' . $data['template'] . '.xd')) {
+        return xarTplModule($data['tplmodule'],'user','view',$data,$data['template']);
     } else {
         return xarTplModule('dynamicdata','user','view',$data,$args['template']);
     }
