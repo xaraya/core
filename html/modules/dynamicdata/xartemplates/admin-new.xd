@@ -24,7 +24,7 @@
 
     <xar:if condition="!empty($isupload)">
         <xar:set name="enc_type">'multipart/form-data'</xar:set>
-    <xar:else/> 
+    <xar:else/>
         <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
     </xar:if>
 
@@ -41,12 +41,13 @@
       </fieldset>
       <fieldset>
         <div class="xar-align-center">
-          <input type="hidden" name="authid" id="authid" value="#$authid#" />
-          <input type="hidden" name="modid" id="modid" value="#$object:moduleid#" />
-          <input type="hidden" name="itemtype" id="itemtype" value="#$object:itemtype#" />
-          <input type="hidden" name="join" id="join" value="#$object:join#" />
-          <input type="hidden" name="table" id="table" value="#$object:table#" />
-          <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#" />
+            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="modid" id="modid" value="#$object:moduleid#" />
+            <input type="hidden" name="itemtype" id="itemtype" value="#$object:itemtype#" />
+            <input type="hidden" name="join" id="join" value="#$object:join#" />
+            <input type="hidden" name="table" id="table" value="#$object:table#" />
+            <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#" />
+            <input type="hidden" name="tplmodule" id="tplmodule" value="#$tplmodule#" />
             <input type="hidden" name="notfresh" id="notfresh" value="true" />
           <xar:if condition="!empty($return_url)">
             <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />

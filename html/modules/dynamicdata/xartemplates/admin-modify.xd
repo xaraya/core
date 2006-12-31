@@ -82,6 +82,7 @@
             <input type="hidden" name="join" id="join" value="#$object:join#" />
             <input type="hidden" name="table" id="table" value="#$object:table#" />
             <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#" />
+            <input type="hidden" name="tplmodule" id="tplmodule" value="#$tplmodule#" />
             <xar:if condition="!empty($return_url)">
               <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
             </xar:if>

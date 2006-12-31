@@ -16,7 +16,7 @@
             <h3 class="xar-align-center">
                 <xar:mlstring>Warning! This is a system object used internally by the Dynamic Data module.</xar:mlstring>
             </h3>
-                
+
             <p class="xar-align-center">
                 <xar:mlstring>Deleting this object may break the Dynamic Data module. </xar:mlstring>
             </p>
@@ -42,6 +42,7 @@
             <input type="hidden" name="join" id="join" value="#$object:join#" />
             <input type="hidden" name="table" id="table" value="#$object:table#" />
             <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#" />
+            <input type="hidden" name="tplmodule" id="tplmodule" value="#$tplmodule#" />
 
             <input type="submit" name="confirm" id="confirm" value="#xarML('Delete')#" class="xar-margin-thickright" />
             <input type="submit" name="noconfirm" id="noconfirm" value="#xarML('Cancel')#" class="xar-margin-thickleft" />
