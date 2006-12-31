@@ -33,25 +33,33 @@ function dynamicdata_admin_delete($args)
 
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name' => $name,
-                                         'moduleid' => $moduleid,
-                                         'itemtype' => $itemtype,
-                                         'join'     => $join,
-                                         'table'    => $table,
-                                         'itemid'   => $itemid,
-                                         'extend'   => false));  //Note: this means we only delete this extension, not the parent
+                                         'moduleid'   => $moduleid,
+                                         'itemtype'   => $itemtype,
+                                         'join'       => $join,
+                                         'table'      => $table,
+                                         'itemid'     => $itemid,
+                                         'tplmodule'  => $tplmodule,
+                                         'template'   => $template,
+                                         'extend'     => false));  //Note: this means we only delete this extension, not the parent
     if (empty($myobject)) return;
-    $args = $myobject->toArray();
+    $data = $myobject->toArray();
 
     // Security check
-    if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item',$args['moduleid'].":".$args['itemtype'].":".$args['itemid'])) return;
+    if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item',$data['moduleid'].":".$data['itemtype'].":".$data['itemid'])) return;
 
     if (!empty($noconfirm)) {
         if (!empty($table)) {
             xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
-                                          array('table' => $table)));
+                                          array(
+                                            'table'     => $table,
+                                            'tplmodule' => $data['tplmodule'],
+                                          )));
         } else {
             xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
-                                          array('itemid' => $args['objectid'])));
+                                          array(
+                                            'itemid'    => $data['objectid'],
+                                            'tplmodule' => $data['tplmodule'],
+                                          )));
         }
         return true;
     }
@@ -59,21 +67,22 @@ function dynamicdata_admin_delete($args)
     $myobject->getItem();
 
     if (empty($confirm)) {
-        $data = xarModAPIFunc('dynamicdata','admin','menu');
+        // TODO: is this needed?
+        $data = array_merge($data,xarModAPIFunc('dynamicdata','admin','menu'));
         $data['object'] = & $myobject;
-        if ($args['objectid'] == 1) {
-            $mylist = & DataObjectMaster::getObjectList(array('objectid' => $args['itemid'], 'extend' => false));
+        if ($data['objectid'] == 1) {
+            $mylist = & DataObjectMaster::getObjectList(array('objectid' => $data['itemid'], 'extend' => false));
             if (count($mylist->properties) > 0) {
                 $data['related'] = xarML('Warning : there are #(1) properties and #(2) items associated with this object !', count($mylist->properties), $mylist->countItems());
             }
         }
         $data['authid'] = xarSecGenAuthKey();
 
-        if (file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-delete.xd') ||
-            file_exists('modules/' . $args['tplmodule'] . '/xartemplates/admin-delete-' . $args['template'] . '.xd')) {
-            return xarTplModule($args['tplmodule'],'admin','delete',$data,$args['template']);
+        if (file_exists('modules/' . $data['tplmodule'] . '/xartemplates/admin-delete.xd') ||
+            file_exists('modules/' . $data['tplmodule'] . '/xartemplates/admin-delete-' . $data['template'] . '.xd')) {
+            return xarTplModule($data['tplmodule'],'admin','delete',$data,$data['template']);
         } else {
-            return xarTplModule('dynamicdata','admin','delete',$data,$args['template']);
+            return xarTplModule('dynamicdata','admin','delete',$data,$data['template']);
         }
     }
 
@@ -83,8 +92,8 @@ function dynamicdata_admin_delete($args)
 
     // special case for a dynamic object : delete its properties too // TODO: and items
 // TODO: extend to any parent-child relation ?
-    if ($args['objectid'] == 1) {
-        $mylist = & DataObjectMaster::getObjectList(array('objectid' => $args['itemid'], 'extend' => false));
+    if ($data['objectid'] == 1) {
+        $mylist = & DataObjectMaster::getObjectList(array('objectid' => $data['itemid'], 'extend' => false));
         foreach (array_keys($mylist->properties) as $name) {
             $propid = $mylist->properties[$name]->id;
             $propid = DataPropertyMaster::deleteProperty(array('itemid' => $propid));
@@ -95,10 +104,16 @@ function dynamicdata_admin_delete($args)
 
     if (!empty($table)) {
         xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
-                                      array('table' => $table)));
+                                      array(
+                                      'table'     => $table,
+                                      'tplmodule' => $tplmodule,
+                                      )));
     } else {
         xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
-                                      array('itemid' => $args['objectid'])));
+                                      array(
+                                      'itemid'    => $data['objectid'],
+                                      'tplmodule' => $tplmodule,
+                                      )));
     }
 
     return true;

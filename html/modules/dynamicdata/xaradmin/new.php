@@ -51,13 +51,15 @@ function dynamicdata_admin_new($args)
     $data = xarModAPIFunc('dynamicdata','admin','menu');
 
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
-                                         'name'     => $name,
-                                         'moduleid' => $modid,
-                                         'itemtype' => $itemtype,
-                                         'join'     => $join,
-                                         'table'    => $table,
-                                         'itemid'   => $itemid,
-                                         'tplmodule' => $tplmodule));
+                                         'name'      => $name,
+                                         'moduleid'  => $modid,
+                                         'itemtype'  => $itemtype,
+                                         'join'      => $join,
+                                         'table'     => $table,
+                                         'itemid'    => $itemid,
+                                         'tplmodule' => $tplmodule,
+                                         'template'  => $template,
+                                         ));
 
     $args = $myobject->toArray();
     if (isset($myobject->properties['moduleid'])) {
