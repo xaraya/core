@@ -1,6 +1,6 @@
 <?php
 
-class BasicCollection extends Object implements Collection
+class BasicCollection extends DataContainer implements Collection
 {
     protected $elements;
 
@@ -11,10 +11,6 @@ class BasicCollection extends Object implements Collection
     function equals(Object $object)
     {
         return $this === $object;
-    }
-    function hash()
-    {
-        return sha1(serialize($this));
     }
     public function add(Object $element)
     {

@@ -223,4 +223,45 @@ final class sys extends Object
     }
 }
 
+/**
+ * The DataContainer class from which all classes containing data are derived
+ *
+ * This class has the minimum methods for subclasses that
+ * are not "system" classes and need to interact with other Xaraya classes.
+ *
+ * @package core
+**/
+class DataContainer extends Object
+{
+    function hash()
+    {
+        return sha1(serialize($this));
+    }
+
+    function get($name)
+    {
+        $properties = $this->getPublicProperties($this);
+        return $properties[$name];
+    }
+
+    function set($name, $x)
+    {
+        $properties = $this->getPublicProperties($this);
+        if (isset($properties[$name])) $this->$name = $x;
+    }
+
+    public function getPublicProperties(Object $object)
+    {
+        $o = $object->getClass();
+        $objectname = $o->getName();
+        $reflection = new ReflectionClass($objectname);
+        $properties = array();
+        foreach($reflection->getProperties() as $p) {
+            $prop = new ReflectionProperty($objectname,$p->name);
+            if ($prop->isPublic()) $properties[$p->name] = $prop->getValue($object);
+        }
+        return $properties;
+    }
+}
+
 ?>

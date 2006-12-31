@@ -1,6 +1,6 @@
 <?php
 
-    class ObjectDescriptor extends Object
+    class ObjectDescriptor extends DataContainer
     {
         protected $args;
 
@@ -12,19 +12,6 @@
         public function getArgs()
         {
             return $this->args;
-        }
-
-        public function getPublicProperties(Object $object)
-        {
-            $o = $object->getClass();
-            $objectname = $o->getName();
-            $reflection = new ReflectionClass($objectname);
-            $properties = array();
-            foreach($reflection->getProperties() as $p) {
-                $prop = new ReflectionProperty($objectname,$p->name);
-                if ($prop->isPublic()) $properties[$p->name] = $prop->getValue($object);
-            }
-            return $properties;
         }
 
         public function refresh(Object $object)
