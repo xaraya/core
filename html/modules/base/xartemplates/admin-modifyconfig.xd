@@ -176,11 +176,8 @@
 
                 <xar:if condition="xarConfigGetVar('Site.Core.DefaultModuleName') eq 'base'">
                     <div class="xar-form-input-wrapper-after">
-                        <xar:if condition="xarModGetVar('base', 'UseAlternatePageTemplate')">
-                            <input type="checkbox" name="alternatepagetemplate" id="alternatepagetemplate" value="1" checked="checked" />
-                            <xar:else />
-                            <input type="checkbox" name="alternatepagetemplate" id="alternatepagetemplate" value="1" />
-                        </xar:if>
+                        <xar:set name="checked">xarModGetVar('base', 'UseAlternatePageTemplate')</xar:set>
+                        <xar:data-input type="checkbox" name="alternatepagetemplate" id="alternatepagetemplate" checked="$checked" />
                         <label for="alternatepagetemplate" title="#xarML('Use an alternate default page template.')#">
                             <xar:mlstring>
                                 Use Alternate Page Template [TODO: belongs in themes module (the var)]
@@ -252,11 +249,8 @@
                     <input type="text" id="themedir" name="themedir" value="#xarConfigGetVar('Site.BL.ThemesDirectory')#" maxlength="100" class="xar-form-textlong" />
                 </div>
                 <div class="xar-form-input-wrapper-after">
-                    <xar:if condition="xarConfigGetVar('Site.Core.EnableShortURLsSupport')">
-                        <input type="checkbox" name="shorturl" id="shorturl" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="shorturl" id="shorturl" value="1" />
-                    </xar:if>
+                    <xar:set name="checked">xarConfigGetVar('Site.Core.EnableShortURLsSupport')</xar:set>
+                    <xar:data-input type="checkbox" name="shorturl" id="shorturl" checked="$checked" />
                     <label for="shorturl" title="#xarML('Enable short url support throughout Xaraya.')#">
                         <xar:mlstring>
                             Enable Short URL Support
@@ -264,11 +258,8 @@
                     </label>
                 </div>
                 <div class="xar-form-input-wrapper-after">
-                    <xar:if condition="xarModGetVar('base', 'SupportShortURLs')">
-                        <input type="checkbox" name="baseshorturl" id="baseshorturl" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="baseshorturl" id="baseshorturl" value="1" />
-                    </xar:if>
+                    <xar:set name="checked">xarModGetVar('base', 'SupportShortURLs')</xar:set>
+                    <xar:data-input type="checkbox" name="baseshorturl" id="baseshorturl" checked="$checked" />
                     <label for="baseshorturl" title="#xarML('Enable short URL support in the base module.')#">
                         <xar:mlstring>
                             Enable Base Module Short URLs
@@ -276,11 +267,8 @@
                     </label>
                 </div>
                 <div class="xar-form-input-wrapper-after">
-                    <xar:if condition="xarConfigGetVar('Site.Core.FixHTMLEntities')">
-                        <input type="checkbox" name="htmlenitites" id="htmlenitites" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="htmlenitites" id="htmlenitites" value="1" />
-                    </xar:if>
+                    <xar:set name="checked">xarConfigGetVar('Site.Core.FixHTMLEntities')</xar:set>
+                    <xar:data-input type="checkbox" name="htmlenitites" id="htmlenitites" checked="$checked" />
                     <label for="htmlenitites" title="#xarML('Change HTML Entities to readible entities.')#">
                         <xar:mlstring>
                             Fix HTML Entities
@@ -316,11 +304,8 @@
                     </xar:mlstring>
                 </legend>
                 <div class="xar-form-input-wrapper-after">
-                    <xar:if condition="xarConfigGetVar('Site.Core.EnableSecureServer')">
-                        <input type="checkbox" name="secureserver" id="secureserver" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="secureserver" id="secureserver" value="1" />
-                    </xar:if>
+                    <xar:set name="checked">xarConfigGetVar('Site.Core.EnableSecureServer')</xar:set>
+                    <xar:data-input type="checkbox" name="secureserver" id="secureserver" checked="$checked" />
                     <label for="secureserver" title="#xarML('Configure to run on a secure server.')#">
                         <xar:mlstring>
                             Configure to run on Secure Server
@@ -506,11 +491,8 @@
                     </select>
                 </div>
                 <div class="xar-form-input-wrapper-after xar-padding-topthick">
-                    <xar:if condition="xarConfigGetVar('Site.Core.LoadLegacy')">
-                        <input type="checkbox" name="loadlegacy" id="loadlegacy" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="loadlegacy" id="loadlegacy" value="1" />
-                    </xar:if>
+                    <xar:set name="checked">xarConfigGetVar('Site.Core.LoadLegacy')</xar:set>
+                    <xar:data-input type="checkbox" name="loadlegacy" id="loadlegacy" checked="$checked" />
                     <label for="loadlegacy" title="#xarML('Load Legacy Support for Postnuke (7.1x, 7.2x)')#">
                         <xar:mlstring>
                             Load Legacy Support for Postnuke
