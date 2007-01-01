@@ -10,7 +10,7 @@
 <div class="xar-mod-body">
  <xar:template type="module" file="admin-menu" />
     <h2>
-        <xar:mlstring>Modify Properties for Module</xar:mlstring>: #$displayname# 
+        <xar:mlstring>Modify Properties for Module</xar:mlstring>: #$displayname#
     </h2>
     <form action="&xar-modurl-modules-admin-updateproperties;" method="post" enctype="application/x-www-form-urlencoded">
         <fieldset>
@@ -25,16 +25,13 @@
                         Display Name:
                     </xar:mlstring>
                 </label>
-                #$displayname# 
+                #$displayname#
                 <input type="hidden" name="displayname" id="displayname" value="#$displayname#" />
             </div>
             <xar:if condition="$adminallowed">
                 <div class="xar-form-input-wrapper-after">
-                    <xar:if condition="$admincapable eq 1">
-                        <input type="checkbox" name="admincapable" id="admincapable" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="admincapable" id="admincapable" />
-                    </xar:if>
+                    <xar:set name="checked">$admincapable</xar:set>
+                    <xar:data-input type="checkbox" name="admincapable" id="admincapable" checked="$checked" />
                     <label for="admincapable" title="#xarML('Set whether to display admin menu entries provided by this module.')#">
                         <xar:mlstring>
                             Enable Admin Menu
@@ -44,11 +41,8 @@
             </xar:if>
             <xar:if condition="$userallowed">
                 <div class="xar-form-input-wrapper-after">
-                    <xar:if condition="$usercapable eq 1">
-                        <input type="checkbox" name="usercapable" id="usercapable" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="usercapable" id="usercapable" />
-                    </xar:if>
+                    <xar:set name="checked">$usercapable</xar:set>
+                    <xar:data-input type="checkbox" name="usercapable" id="usercapable" checked="$checked" />
                     <label for="usercapable" title="#xarML('Set whether to display user menu entries provided by this module.')#">
                         <xar:mlstring>
                             Enable User Menu

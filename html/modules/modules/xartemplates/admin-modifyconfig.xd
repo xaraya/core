@@ -10,11 +10,8 @@
         <fieldset>
             <legend><xar:mlstring>Configuration settings</xar:mlstring></legend>
             <div class="xar-form-input-wrapper-after">
-                <xar:if condition="$disableoverview eq 1">
-                    <input type="checkbox" name="disableoverview" id="disableoverview" value="1" checked="checked" />
-                    <xar:else />
-                    <input type="checkbox" name="disableoverview" id="disableoverview" value="1" />
-                </xar:if>
+                <xar:set name="checked">$disableoverview</xar:set>
+                <xar:data-input type="checkbox" name="disableoverview" id="disableoverview" checked="$checked" />
                 <label for="disableoverview" title="#xarML('Disable the display by default of all module overview pages.')#">
                     <xar:mlstring>Disable the display by default of all module overview pages.</xar:mlstring>
                 </label>

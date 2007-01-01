@@ -58,7 +58,7 @@
                     <xar:mlstring>No mappings available.</xar:mlstring>
                   </xar:if>
             </div>
-        
+
             <div class="xar-form-input-wrapper">
                 <label for="newmap" title="#xarML('Enter a new mapping')#" class="xar-form-label">
                     <xar:mlstring>Create Mapping:</xar:mlstring>
@@ -176,11 +176,8 @@
                     </div>
 
                     <div class="xar-form-input-wrapper-after">
-                        <xar:if condition="empty($to['itemid'])">
-                            <input type="checkbox" name="to[itemid]" id="to_itemid" value="1" />
-                        <xar:else/>
-                            <input type="checkbox" name="to[itemid]" id="to_itemid" value="1" checked="checked" />
-                        </xar:if>
+                        <xar:set name="checked">empty($to['itemid'])</xar:set>
+                        <xar:data-input type="checkbox" name="to[itemid]" id="to_itemid" checked="$checked" />
                         <label for="to_itemid" title="xarML('Attempt to preserve item id during this migration')#">
                             <xar:mlstring>Preserve id</xar:mlstring>
                         </label>
@@ -189,7 +186,7 @@
                 </xar:if>
             </xar:if>
         </fieldset>
-         
+
         <fieldset>
             <div class="xar-form-input-wrapper-after">
                 <input type="hidden" name="step" value="#$step#" />

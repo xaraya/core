@@ -46,7 +46,7 @@
             <xar:mlvar>#$itemtypename#</xar:mlvar>
         </xar:ml>
       </legend>
-    
+
         <form action="&xar-modurl-roles-admin-updaterole;" method="post" enctype="application/x-www-form-urlencoded">
             <xar:if condition="$frozen">
                 <div class="xar-form-input-wrapper">
@@ -69,7 +69,7 @@
                     </label>
                     <input type="text" name="pname" id="pname" value="#xarVarPrepForDisplay($pname)#" maxlength="255" class="xar-form-textlong" />
                 </div>
-        
+
                 <xar:if condition="$basetype eq ROLES_GROUPTYPE and $haschildren">
                     <div class="xar-form-input-wrapper">
                         <label title="#xarML('Type of Role')#" class="xar-form-label">
@@ -82,13 +82,13 @@
                         </xar:comment>
                         <input type="hidden" name="itemtype" value="#$itemtype#" />
                     </div>
-                <xar:else />                
+                <xar:else />
                     <div class="xar-form-input-wrapper">
                         <label for="itemtype" title="#xarML('Type of Role')#" class="xar-form-label">
                                 <xar:mlstring>Type:</xar:mlstring>
                         </label>
                         <xar:set name="moduleitemtype">xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 600))</xar:set>
-                        <xar:set name="onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();\""</xar:set>                    
+                        <xar:set name="onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();\""</xar:set>
                         <xar:data-input property="$moduleitemtype" name="itemtype" modid="27" value="$itemtype" onchange="$onchange" />
                     </div>
                 </xar:if>
@@ -113,14 +113,14 @@
                     </div>
                 </xar:if>
 
-                <xar:if condition="$basetype eq ROLES_USERTYPE">                    
+                <xar:if condition="$basetype eq ROLES_USERTYPE">
                     <div class="xar-form-input-wrapper">
                         <label for="puname" title="#xarML('Name used for user log on')#" class="xar-form-label">
                             <xar:mlstring>User Name:</xar:mlstring>
                         </label>
                         <input type="text" name="puname" id="puname" value="#xarVarPrepForDisplay($puname)#" maxlength="255" class="xar-form-textlong" />
                     </div>
-                    
+
                     <div class="xar-form-input-wrapper">
                         <label for="pemail" title="#xarML('Email address for this user')#" class="xar-form-label">
                             <xar:mlstring>Email:</xar:mlstring>
@@ -149,7 +149,7 @@
                         </label>
                         <input type="password" name="ppass1" id="ppass1" value="" maxlength="40" class="xar-form-textmedium" />
                     </div>
-                    
+
                     <div class="xar-form-input-wrapper">
                         <label for="ppass2" title="#xarML('Confirm password for this user')#" class="xar-form-label">
                             <xar:mlstring>Confirm Password:</xar:mlstring>
@@ -187,11 +187,8 @@
                     </xar:if>
                     <xar:if condition="xarModGetVar('roles','usersendemails')">
                         <div class="xar-form-input-wrapper-after">
-                            <xar:if condition="xarModGetUserVar('roles', 'usersendemails',$uid)">
-                                <input type="checkbox" name="allowemail" id="allowemail" value="1" checked="checked" tabindex="2"/>
-                            <xar:else />
-                                <input type="checkbox" name="allowemail" id="allowemail" value="1" tabindex="2"/>
-                            </xar:if>
+                            <xar:set name="checked">xarModGetUserVar('roles', 'usersendemails',$uid)</xar:set>
+                            <xar:data-input type="checkbox" name="allowemail" id="allowemail" checked="$checked" />
                             <label for="allowemail" title="#xarML('Allow users to send emails?')#">
                                <xar:mlstring>User has allowed other users to send them an email?</xar:mlstring>
                             </label>
@@ -205,7 +202,7 @@
                         #$hooks[$hookmodule]#
                     </xar:foreach>
                 </xar:if>
-                
+
                 <div class="xar-align-center xar-clearboth">
                     <input type="hidden" name="uid" id="uid" value="#$uid#" />
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -260,7 +257,7 @@
                     </label>
                     <select name="roleid" id="roleid">
                         <xar:loop name="$groups">
-                            <option value="#$loop:item['duid']#">                    
+                            <option value="#$loop:item['duid']#">
                                 <xar:var name="loop:item.dname" prep="true"/>
                             </option>
                         </xar:loop>

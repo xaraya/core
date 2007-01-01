@@ -296,11 +296,8 @@
 
             </div>
             <div class="xar-form-input-wrapper-after">
-                <xar:if condition="$adminpagemenu">
-                    <input type="checkbox" name="adminpagemenu" id="adminpagemenu" value="1" checked="checked" />
-                    <xar:else />
-                    <input type="checkbox" name="adminpagemenu" id="adminpagemenu" value="1" />
-                </xar:if>
+                <xar:set name="checked">$adminpagemenu</xar:set>
+                <xar:data-input type="checkbox" name="adminpagemenu" id="adminpagemenu" checked="$checked" />
                 <label for="adminpagemenu" title="#xarML('Use submenus in the page for admin functions.')#">
                     <xar:mlstring>
                         Enable InPage Admin SubMenus
@@ -308,11 +305,8 @@
                 </label>
             </div>
             <div class="xar-form-input-wrapper-after">
-                <xar:if condition="#xarModIsHooked('themes', 'roles')#">
-                    <input type="checkbox" name="usermenu" id="usermenu" value="1" checked="checked" />
-                    <xar:else />
-                    <input type="checkbox" name="usermenu" id="usermenu" value="1" />
-                </xar:if>
+                <xar:set name="checked">xarModIsHooked('themes', 'roles')</xar:set>
+                <xar:data-input type="checkbox" name="usermenu" id="usermenu" checked="$checked" />
                 <label for="usermenu" title="#xarML('Allow users to select themes from their Account Details page.')#">
                     <xar:mlstring>
                         Allow users to set their theme in User Account page
@@ -328,11 +322,8 @@
             </legend>
             <xar:if condition="xarConfigGetVar('Site.BL.CacheTemplates')">
                 <div class="xar-form-input-wrapper-after">
-                    <xar:if condition="xarModGetVar('themes', 'ShowPHPCommentBlockInTemplates')">
-                        <input type="checkbox" name="showphpcbit" id="showphpcbit" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="showphpcbit" id="showphpcbit" value="1" />
-                    </xar:if>
+                    <xar:set name="checked">xarModGetVar('themes', 'ShowPHPCommentBlockInTemplates')</xar:set>
+                    <xar:data-input type="checkbox" name="showphpcbit" id="showphpcbit" checked="$checked" />
                     <label for="showphpcbit">
                         <xar:mlstring>
                             Show php comment block header in compiled templates
@@ -341,11 +332,8 @@
                 </div>
             </xar:if>
             <div class="xar-form-input-wrapper-after">
-                <xar:if condition="xarModGetVar('themes', 'ShowTemplates')">
-                    <input type="checkbox" name="showtemplates" id="showtemplates" value="1" checked="checked" />
-                    <xar:else />
-                    <input type="checkbox" name="showtemplates" id="showtemplates" value="1" />
-                </xar:if>
+                <xar:set name="checked">xarModGetVar('themes', 'ShowTemplates')</xar:set>
+                <xar:data-input type="checkbox" name="showtemplates" id="showtemplates" checked="$checked" />
                 <label for="showtemplates">
                     <xar:mlstring>
                         Show template filenames in HTML comments
@@ -353,11 +341,8 @@
                 </label>
             </div>
             <div class="xar-form-input-wrapper-after">
-                <xar:if condition="xarConfigGetVar('Site.BL.CacheTemplates')">
-                    <input type="checkbox" name="cachetemplates" id="cachetemplates" value="1" checked="checked" />
-                    <xar:else />
-                    <input type="checkbox" name="cachetemplates" id="cachetemplates" value="1" />
-                </xar:if>
+                <xar:set name="checked">xarConfigGetVar('Site.BL.CacheTemplates')</xar:set>
+                <xar:data-input type="checkbox" name="cachetemplates" id="cachetemplates" checked="$checked" />
                 <label for="cachetemplates">
                     <xar:mlstring>
                         Cache templates

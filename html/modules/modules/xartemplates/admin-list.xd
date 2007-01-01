@@ -75,11 +75,8 @@
                     </select>
                 </td>
                 <td class="xar-nowrap xar-align-center">
-                    <xar:if condition="$hidecore eq 1">
-                        <input type="checkbox" name="hidecore" id="hidecore" value="1" checked="checked" class="xar-valign-middle" />
-                    <xar:else />
-                        <input type="checkbox" name="hidecore" id="hidecore" value="1" class="xar-valign-middle" />
-                    </xar:if>
+                    <xar:set name="checked">$hidecore</xar:set>
+                    <xar:data-input type="checkbox" name="hidecore" id="hidecore" checked="$checked" />
                     <label for="hidecore">
                         <xar:mlstring>Core Modules</xar:mlstring>
                     </label>

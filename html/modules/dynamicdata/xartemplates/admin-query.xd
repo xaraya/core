@@ -67,11 +67,8 @@
                     </label>
                 </td>
                 <td>
-                    <xar:if condition="!empty($groupby)">
-                        <input type="checkbox" name="groupby" id="groupby" value="1" checked="checked" onchange="submit()" />
-                        <xar:else />
-                        <input type="checkbox" name="groupby" id="groupby" value="1" onchange="submit()" />
-                    </xar:if>
+                    <xar:set name="checked">!empty($groupby)</xar:set>
+                    <xar:data-input type="checkbox" name="groupby" id="groupby" onchange="submit()" checked="$checked" />
                 </td>
             </tr>
             <xar:if condition="!empty($jointables)">
@@ -145,7 +142,7 @@
                 </td>
             </tr>
         </table>
-<!-- 
+<!--
         <table border="0" cellpadding="5">
             <xar:if condition="!empty($properties)">
                 <tr>
@@ -309,7 +306,7 @@
                                 <label for="field_#$name#">
                                     <xar:data-label property="$properties[$name]" />
                                 </label>
-                            </xar:if>                            
+                            </xar:if>
                         </td>
                         <td>
                             <xar:if condition="!empty($groupby)">
@@ -323,7 +320,7 @@
                                         </xar:if>
                                     </xar:foreach>
                                 </select>
-                                <label for="operation_#$name#" />                            
+                                <label for="operation_#$name#" />
                             </xar:if>
                             <select name="where[#$name#]" id="where_#$name#">
                                 <option value=""></option>
@@ -335,14 +332,14 @@
                                     </xar:if>
                                 </xar:foreach>
                             </select>
-                            <label for="where_#$name#" />                            
+                            <label for="where_#$name#" />
                         </td>
                         <td>
                             <xar:if condition="isset($value[$name])">
                                 <input name="value[#$name#]" id="value_#$name#" value="#$value[$name]#" type="text" size="13" />
                                 <xar:else />
                                 <input name="value[#$name#]" id="value_#$name#" value="" type="text" size="13" />
-                            </xar:if>                        
+                            </xar:if>
                         </td>
                         <td>
                             <select name="sort[#$name#]" id="sort_#$name#">
@@ -354,7 +351,7 @@
                                         <option value="#$option['id']#">#$option['name']#</option>
                                     </xar:if>
                                 </xar:foreach>
-                            </select>                        
+                            </select>
                         </td>
                     </tr>
                 </xar:foreach>
@@ -364,7 +361,7 @@
                 <td colspan="3"><input type="submit" value="#$submit#" /></td>
             </tr>
         </table>
-        
+
     </form>
     <xar:if condition="!empty($viewlink)">
         <p>

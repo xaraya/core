@@ -41,9 +41,9 @@
         <dl class="xar-tabs">
             <dt class="help">
                 <xar:mlstring>
-                    Option 
+                    Option
                 </xar:mlstring>
-                : 
+                :
             </dt>
             <dd class="active">
                 <a href="&xar-modurl-roles-admin-createmail;">
@@ -70,7 +70,7 @@
     </div>
     <form method="post" action="&xar-modurl-roles-admin-createmail;">
         <xar:comment>
-            Module List Sort and Filter Controls table 
+            Module List Sort and Filter Controls table
         </xar:comment>
         <table class="xar-fullwidth">
             <tr>
@@ -191,11 +191,8 @@
                 </td>
                 <xar:if condition="$uid gt 0">
                     <td  class="xar-align-center xar-valign-middle">
-                        <xar:if condition="$includesubgroups eq 0">
-                            <input type="checkbox" name="includesubgroups" id="includesubgroups" value="1" onchange="this.form.submit()" />
-                            <xar:else />
-                            <input type="checkbox" name="includesubgroups" id="includesubgroups" value="1" checked="checked" onchange="this.form.submit()" />
-                        </xar:if>
+                        <xar:set name="checked">$includesubgroups == 0</xar:set>
+                        <xar:data-input type="checkbox" name="includesubgroups" id="includesubgroups" checked="$checked" onchange="this.form.submit()" />
                     </td>
                 </xar:if>
                 <td class="xar-align-center">
@@ -203,11 +200,11 @@
                         <xar:loop name="$templates">
                             <xar:if condition="$mailtype eq $loop:item['key']">
                                 <option value="#$loop:item['key']#" selected="selected">
-                                    #$loop:item['value']# 
+                                    #$loop:item['value']#
                                 </option>
                                 <xar:else />
                                 <option value="#$loop:item['key']#">
-                                    #$loop:item['value']# 
+                                    #$loop:item['value']#
                                 </option>
                             </xar:if>
                         </xar:loop>
@@ -224,7 +221,7 @@
         <xar:comment>
             lets display latest status ?? this contains very strange values, so let's not :-)
         <p>
-            #$modstatus# 
+            #$modstatus#
         </p>
         </xar:comment>
 
@@ -236,7 +233,7 @@
             <xar:mlstring>
                 No users selected
             </xar:mlstring>
-            . 
+            .
         </p>
       <xar:else />
         <xar:comment>
@@ -302,18 +299,18 @@
             <xar:loop name="$users">
               <tr>
                 <td>
-                  #$loop:item['name']# 
+                  #$loop:item['name']#
                 </td>
                 <td>
-                  #$loop:item['uname']# 
+                  #$loop:item['uname']#
                 </td>
                 <td>
                   <a href="&xar-modurl-roles-admin-createmail;&amp;uid=#$loop:item.uid#" title="#xarML('Email this user')#">
-                    #$loop:item['email']# 
+                    #$loop:item['email']#
                   </a>
                 </td>
                 <td class="xar-align-center">
-                  #xarLocaleFormatDate('%m/%d/%Y',$loop:item['date_reg'])# 
+                  #xarLocaleFormatDate('%m/%d/%Y',$loop:item['date_reg'])#
                 </td>
                 <td>
                   <xar:if condition="$loop:item['status'] eq 1">
@@ -341,7 +338,7 @@
           </table>
           <xar:if condition="!empty($pager)">
             <div class="xar-align-center">
-              #$pager# 
+              #$pager#
             </div>
           </xar:if>
           </xar:if>
@@ -352,12 +349,12 @@
         <fieldset>
             <legend>
                 <xar:mlstring>
-                    Message 
+                    Message
                 </xar:mlstring>
             </legend>
         <p>
             <xar:mlstring>
-                Choose a message template from the Templates dropdown above, or type in your message directly : 
+                Choose a message template from the Templates dropdown above, or type in your message directly :
             </xar:mlstring>
         </p>
             <div class="xar-form-input-wrapper">

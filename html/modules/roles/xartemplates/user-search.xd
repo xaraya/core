@@ -31,11 +31,9 @@
             <xar:foreach in="$columns" value="$fields">
                 <td class="xar-align-top">
                 <xar:foreach in="$fields" value="$field">
-                    <xar:if condition="!empty($checked[$field])">
-                        <input type="checkbox" name="#$field#" id="#$field#" value="1" checked="checked" /> <label for="#$field#"><xar:data-label property="$properties[$field]" /></label><br />
-                    <xar:else />
-                        <input type="checkbox" name="#$field#" id="#$field#" value="1" /> <label for="#$field#"><xar:data-label property="$properties[$field]" /></label><br />
-                    </xar:if>
+                    <xar:set name="checked">!empty($checked[$field])</xar:set>
+                    <xar:data-input type="checkbox" name="$field" id="$field" checked="$checked" />
+                    <label for="#$field#"><xar:data-label property="$properties[$field]" /></label><br />
                 </xar:foreach>
                 </td>
             </xar:foreach>

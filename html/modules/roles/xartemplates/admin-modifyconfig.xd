@@ -114,7 +114,7 @@
         </dl>
     </div>
     <xar:comment>
-        - - - - - - - - - - - - - - - - - - - Begin General Options - - - - - - - - - - - - - - - - - - - - - 
+        - - - - - - - - - - - - - - - - - - - Begin General Options - - - - - - - - - - - - - - - - - - - - -
     </xar:comment>
     <xar:if condition="$tab eq 'general'">
         <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
@@ -133,11 +133,8 @@
                     <input type="text" name="itemsperpage" id="itemsperpage" value="#xarModGetVar('roles', 'itemsperpage')#" maxlength="3" class="xar-form-textshort" />
                 </div>
                 <div class="xar-form-input-wrapper-after">
-                    <xar:if condition="xarModGetVar('roles', 'SupportShortURLs')">
-                        <input type="checkbox" name="shorturls" id="shorturls" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="shorturls" id="shorturls" value="1" />
-                    </xar:if>
+                    <xar:set name="checked">xarModGetVar('roles', 'SupportShortURLs')</xar:set>
+                    <xar:data-input type="checkbox" name="shorturls" id="shorturls" checked="$checked" />
                     <label for="shorturls" title="#xarML('Enable short URLs for Roles module')#">
                         <xar:mlstring>
                             Enable Short URLs
@@ -431,7 +428,7 @@
             </p>
         </xar:if>
         <xar:comment>
-            - - - - - - - - - - - - - - - - - Begin Group Hooks Options - - - - - - - - - - - - - - - - - - - 
+            - - - - - - - - - - - - - - - - - Begin Group Hooks Options - - - - - - - - - - - - - - - - - - -
         </xar:comment>
         <xar:elseif condition="$tab eq 'grouphooks'" />
         <xar:if condition="!empty($hooks)">
@@ -460,7 +457,7 @@
             </p>
         </xar:if>
         <xar:comment>
-            - - - - - - - - - - - - - - - - - Begin Member List Options - - - - - - - - - - - - - - - - - - - 
+            - - - - - - - - - - - - - - - - - Begin Member List Options - - - - - - - - - - - - - - - - - - -
         </xar:comment>
         <xar:elseif condition="$tab eq 'memberlist'" />
         <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
@@ -489,11 +486,8 @@
                     </xar:mlstring>
                 </p>
                 <div class="xar-form-input-wrapper-after">
-                    <xar:if condition="xarModGetVar('roles', 'usersendemails')">
-                        <input type="checkbox" name="usersendemails" id="usersendemails" value="1" checked="checked" tabindex="2"/>
-                    <xar:else />
-                        <input type="checkbox" name="usersendemails" id="usersendemails" value="1" tabindex="2"/>
-                    </xar:if>
+                    <xar:set name="checked">xarModGetVar('roles', 'usersendemails')</xar:set>
+                    <xar:data-input type="checkbox" name="usersendemails" id="usersendemails" checked="$checked" />
                     <label for="usersendemails" title="#xarML('Allow users to send emails?')#">
                         <strong><xar:mlstring>
                             Allow User Email Page?
@@ -505,11 +499,8 @@
                 </p>
 
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">
-                    <xar:if condition="xarModGetVar('roles', 'usereditaccount')">
-                        <input type="checkbox" name="usereditaccount" id="usereditaccount" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="usereditaccount" id="usereditaccount" value="1" />
-                    </xar:if>
+                    <xar:set name="checked">xarModGetVar('roles', 'usereditaccount')</xar:set>
+                    <xar:data-input type="checkbox" name="usereditaccount" id="usereditaccount" checked="$checked" />
                     <label for="usereditaccount" title="#xarML('Allow users to edit their account details')#">
                         <strong><xar:mlstring>
                             Allow users to edit their member account details
@@ -522,11 +513,8 @@
                     </xar:mlstring>
                 </p>
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">
-                    <xar:if condition="xarModGetVar('roles', 'requirevalidation')">
-                        <input type="checkbox" name="requirevalidation" id="requirevalidation" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="requirevalidation" id="requirevalidation" value="1" />
-                    </xar:if>
+                    <xar:set name="checked">xarModGetVar('roles', 'requirevalidation')</xar:set>
+                    <xar:data-input type="checkbox" name="requirevalidation" id="requirevalidation" checked="$checked" />
                     <label for="requirevalidation" title="#xarML('Require users to revalidate when they change email address?')#">
                         <strong><xar:mlstring>
                             Members must validate if they change their email account?
@@ -536,11 +524,8 @@
 
 
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">
-                    <xar:if condition="xarModGetVar('roles', 'displayrolelist')">
-                        <input type="checkbox" name="displayrolelist" id="displayrolelist" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="displayrolelist" id="displayrolelist" value="1" />
-                    </xar:if>
+                    <xar:set name="checked">xarModGetVar('roles', 'displayrolelist')</xar:set>
+                    <xar:data-input type="checkbox" name="displayrolelist" id="displayrolelist" checked="$checked" />
                     <label for="displayrolelist" title="#xarML('Display roles (memberlist) in user menu?')#">
                         <strong><xar:mlstring>
                             Display member list as Roles menu option?
@@ -557,11 +542,8 @@
                 <xar:if condition="xarModGetVar('roles', 'setuserhome')">
 
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">
-                    <xar:if condition="xarModGetVar('roles', 'loginredirect')">
-                        <input type="checkbox" name="loginredirect" id="loginredirect" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="loginredirect" id="loginredirect" value="1" />
-                    </xar:if>
+                    <xar:set name="checked">xarModGetVar('roles', 'loginredirect')</xar:set>
+                    <xar:data-input type="checkbox" name="loginredirect" id="loginredirect" checked="$checked" />
                     <label for="loginredirect" title="#xarML('Redirect users to Home Page on login?')#">
                         <strong><xar:mlstring>
                            Redirect users to Home Page on login?
@@ -570,11 +552,8 @@
                 </div>
 
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">
-                    <xar:if condition="xarModGetVar('roles', 'allowuserhomeedit')">
-                        <input type="checkbox" name="userhomeedit" id="userhomeedit" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="userhomeedit" id="userhomeedit" value="1" />
-                    </xar:if>
+                    <xar:set name="checked">xarModGetVar('roles', 'allowuserhomeedit')</xar:set>
+                    <xar:data-input type="checkbox" name="userhomeedit" id="userhomeedit" checked="$checked" />
                     <label for="userhomeedit" title="#xarML('Allow users to edit their user home page in their account')#">
                         <strong><xar:mlstring>
                             Allow users to set Home Page in their member account
@@ -583,11 +562,8 @@
                 </div>
 
                 <div class="xar-form-input-wrapper-after xar-padding-thicktop">
-                    <xar:if condition="xarModGetVar('roles', 'allowexternalurl')">
-                        <input type="checkbox" name="allowexternalurl" id="allowexternalurl" value="1" checked="checked" />
-                        <xar:else />
-                        <input type="checkbox" name="allowexternalurl" id="allowexternalurl" value="1" />
-                    </xar:if>
+                    <xar:set name="checked">xarModGetVar('roles', 'allowexternalurl')</xar:set>
+                    <xar:data-input type="checkbox" name="allowexternalurl" id="allowexternalurl" checked="$checked" />
                     <label for="allowexternalurl" title="#xarML('Allow users to set external URLS for their user home page')#">
                         <strong><xar:mlstring>
                             Allow users to set external URLS in their Home Page?
