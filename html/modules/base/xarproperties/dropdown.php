@@ -62,9 +62,8 @@ class SelectProperty extends DataProperty
 
     public function showInput(Array $data = array())
     {
-        if (!isset($data['value'])) {
-            $data['value'] = $this->value;
-        }
+        if (!isset($data['value'])) $data['value'] = $this->value;
+        if (isset($data['override'])) $this->override = $data['override'];
 
         if (!isset($data['options']) || count($data['options']) == 0) {
             $data['options'] = $this->getOptions();
@@ -328,6 +327,9 @@ class SelectProperty extends DataProperty
 
                 } elseif (!empty($validation['other'])) {
                     $this->validation = $validation['other'];
+
+                } elseif (!empty($validation['override'])) {
+                    $this->override = $validation['override'];
 
                 } elseif (!empty($validation['options'])) {
                     // remove last option if empty
