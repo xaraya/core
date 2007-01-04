@@ -1,13 +1,11 @@
 <?php
 /**
- * Themes initialization
- *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Themes module
+ * @subpackage themes
  * @link http://xaraya.com/index.php/release/70.html
  */
 
@@ -18,8 +16,7 @@ xarDBLoadTableMaintenanceAPI();
  * Initialise the themes module
  * Themes administration
  * @author Marty Vance
- * @param none $
- * @returns bool
+ * @return bool
  * @throws DATABASE_ERROR
  */
 function themes_init()
@@ -100,8 +97,8 @@ function themes_init()
     xarModVars::set('themes', 'hidecore', $hidecore);
     xarModVars::set('themes', 'selstyle', $selstyle);
     xarModVars::set('themes', 'selfilter', $selfilter);
-    xarModVars::set('themes', 'selclass', $selclass);
-    xarModVars::set('themes', 'useicons', $useicons);
+    xarModVars::set('themes', 'selclass', 'all');
+    xarModVars::set('themes', 'useicons', false);
 
     xarModVars::set('themes', 'SiteName', 'Your Site Name');
     xarModVars::set('themes', 'SiteSlogan', 'Your Site Slogan');
