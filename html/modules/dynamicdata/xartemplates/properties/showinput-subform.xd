@@ -23,6 +23,13 @@
             Use a field prefix for all input fields of the object, so that
             you can have several identical objects in the same input form
           -->
+            <xar:if condition="count($object) gt 2">
+                <xar:set name="items">array(array_shift($object))</xar:set>
+                <xar:set name="insert">array_shift($object)</xar:set>
+                <xar:set name="items">array_merge($items,$object)</xar:set>
+                <xar:set name="foo">array_push($items,$insert)</xar:set>
+                <xar:set name="object">$items</xar:set>
+            </xar:if>
             <xar:set name="i">0</xar:set>
             <div id="item">
             <xar:foreach in="$object" value="$item">
