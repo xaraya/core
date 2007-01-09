@@ -21,7 +21,7 @@
 
 /**
  * Class that represents a shared code for handling emulated pre-compiled statements.
- * 
+ *
  * Many drivers do not take advantage of pre-compiling SQL statements; for these
  * cases the precompilation is emulated.  This emulation comes with slight penalty involved
  * in parsing the queries, but provides other benefits such as a cleaner object model and ability
@@ -36,22 +36,22 @@ abstract class PreparedStatementCommon {
     /**
      * The database connection.
      * @var Connection
-     */ 
+     */
     protected $conn;
-    
+
     /**
      * Max rows to retrieve from DB.
      * @var int
      */
     protected $limit = 0;
-    
+
     /**
      * Offset at which to start processing DB rows.
      * "Skip X rows"
      * @var int
      */
     protected $offset = 0;
-    
+
     /**
      * The SQL this class operates on.
      * @var string
@@ -90,8 +90,8 @@ abstract class PreparedStatementCommon {
      * Map of index => value for bound params.
      * @var array string[]
      */
-    protected $boundInVars = array();    
-    
+    protected $boundInVars = array();
+
     /**
      * Temporarily hold a ResultSet object after an execute() query.
      * @var ResultSet
@@ -103,23 +103,23 @@ abstract class PreparedStatementCommon {
      * @var int
      */
     protected $updateCount;
-    
+
     /**
      * Create new prepared statement instance.
-     * 
+     *
      * @param object $conn Connection object
      * @param string $sql The SQL to work with.
      * @param array $positions The positions in SQL of ?'s.
      * @param restult $stmt If the driver supports prepared queries, then $stmt will contain the statement to use.
-     */ 
+     */
     public function __construct(Connection $conn, $sql)
     {
         $this->conn = $conn;
         $this->sql = $sql;
-    
-	$this->positions = $this->parseQuery ( $sql );
+
+    $this->positions = $this->parseQuery ( $sql );
         // save processing later in cases where we may repeatedly exec statement
-	$this->positionsCount = count ( $this->positions );
+    $this->positionsCount = count ( $this->positions );
     }
 
     /**
@@ -132,24 +132,24 @@ abstract class PreparedStatementCommon {
     {
 
         $positions = array();
-	// match anything ? ' " or \ in $sql with an early out if we find nothing
+    // match anything ? ' " or \ in $sql with an early out if we find nothing
         if ( preg_match_all ( '([\?]|[\']|[\"]|[\\\])', $sql, $matches, PREG_OFFSET_CAPTURE ) !== 0 ) {
                 $matches = $matches['0'];
                 $open = NULL;
-		// go thru all our matches and see what we can find
+        // go thru all our matches and see what we can find
                 for ( $i = 0, $j = count ( $matches ); $i < $j; $i++ ) {
                         switch ( $matches[$i]['0'] ) {
-				// if we already have an open " or ' then check if this is the end
-				// to close it or not
+                // if we already have an open " or ' then check if this is the end
+                // to close it or not
                                 case $open:
                                         $open = NULL;
                                         break;
-				// we have a quote, set ourselves open
+                // we have a quote, set ourselves open
                                 case '"':
                                 case "'":
                                         $open = $matches[$i]['0'];
                                         break;
-				// check if it is an escaped quote and skip if it is
+                // check if it is an escaped quote and skip if it is
                                 case '\\':
                                         $next_match = $matches[$i+1]['0'];
                                         if ( $next_match === '"' || $next_match === "'" ) {
@@ -157,8 +157,8 @@ abstract class PreparedStatementCommon {
                                         }
                                         unset ( $next_match );
                                         break;
-				// we found a ?, check we arent in an open "/' first and
-				// add it to the position list if we arent
+                // we found a ?, check we arent in an open "/' first and
+                // add it to the position list if we arent
                                 default:
                                         if ( $open === NULL ) {
                                                 $positions[] = $matches[$i]['1'];
@@ -169,7 +169,7 @@ abstract class PreparedStatementCommon {
                 unset ( $open, $matches, $i, $j );
         }
 
-	return $positions;
+    return $positions;
 
     }
 
@@ -180,7 +180,7 @@ abstract class PreparedStatementCommon {
     {
         $this->limit = (int) $v;
     }
-    
+
     /**
      * @see PreparedStatement::getLimit()
      */
@@ -188,15 +188,15 @@ abstract class PreparedStatementCommon {
     {
         return $this->limit;
     }
-    
+
     /**
      * @see PreparedStatement::setOffset()
-     */ 
+     */
     public function setOffset($v)
     {
         $this->offset = (int) $v;
     }
-    
+
     /**
      * @see PreparedStatement::getOffset()
      */
@@ -204,7 +204,7 @@ abstract class PreparedStatementCommon {
     {
         return $this->offset;
     }
-    
+
     /**
      * @see PreparedStatement::getResultSet()
      */
@@ -220,7 +220,7 @@ abstract class PreparedStatementCommon {
     {
         return $this->updateCount;
     }
-    
+
     /**
      * @see PreparedStatement::getMoreResults()
      */
@@ -230,7 +230,7 @@ abstract class PreparedStatementCommon {
         $this->resultSet = null;
         return false;
     }
-     
+
     /**
      * @see PreparedStatement::getConnection()
      */
@@ -238,7 +238,7 @@ abstract class PreparedStatementCommon {
     {
         return $this->conn;
     }
-    
+
     /**
      * Statement resources do not exist for emulated prepared statements,
      * so this just returns <code>null</code>.
@@ -248,53 +248,53 @@ abstract class PreparedStatementCommon {
     {
         return null;
     }
-    
+
     /**
      * Nothing to close for emulated prepared statements.
      */
     public function close()
-    {       
+    {
     }
-    
+
     /**
      * Replaces placeholders with the specified parameter values in the SQL.
-     * 
+     *
      * This is for emulated prepared statements.
-     * 
+     *
      * @return string New SQL statement with parameters replaced.
      * @throws SQLException - if param not bound.
      */
     protected function replaceParams()
     {
-    	// early out if we still have the same query ready
-    	if ( $this->sql_cache_valid === true ) {
-		return $this->sql_cache;
-	}
+        // early out if we still have the same query ready
+        if ( $this->sql_cache_valid === true ) {
+        return $this->sql_cache;
+    }
 
-        // Default behavior for this function is to behave in 'emulated' mode.    
-        $sql = '';    
+        // Default behavior for this function is to behave in 'emulated' mode.
+        $sql = '';
         $last_position = 0;
 
         for ($position = 0; $position < $this->positionsCount; $position++) {
             if (!isset($this->boundInVars[$position + 1])) {
                 throw new SQLException('Replace params: undefined query param: ' . ($position + 1));
             }
-            $current_position = $this->positions[$position];            
+            $current_position = $this->positions[$position];
             $sql .= substr($this->sql, $last_position, $current_position - $last_position);
-            $sql .= $this->boundInVars[$position + 1];                    
-            $last_position = $current_position + 1;            
+            $sql .= $this->boundInVars[$position + 1];
+            $last_position = $current_position + 1;
         }
         // append the rest of the query
         $sql .= substr($this->sql, $last_position);
 
-	// just so we dont touch anything with a blob/clob
-	if ( strlen ( $sql ) > 2048 ) { 
-		$this->sql_cache = $sql;
-    		$this->sql_cache_valid = true;
-		return $this->sql_cache;
-	} else {
-		return $sql;
-	}
+    // just so we dont touch anything with a blob/clob
+    if ( strlen ( $sql ) > 2048 ) {
+        $this->sql_cache = $sql;
+            $this->sql_cache_valid = true;
+        return $this->sql_cache;
+    } else {
+        return $sql;
+    }
     }
 
     /**
@@ -307,41 +307,41 @@ abstract class PreparedStatementCommon {
      * @return ResultSet
      * @throws SQLException if a database access error occurs.
      */
-	public function executeQuery($p1 = null, $fetchmode = null)
-	{    
-	    $params = null;
-		if ($fetchmode !== null) {
-			$params = $p1;
-		} elseif ($p1 !== null) {
-			if (is_array($p1)) $params = $p1;
-			else $fetchmode = $p1;
-		}
-	    
-		if ($params) {
-			for($i=0,$cnt=count($params); $i < $cnt; $i++) {
-				$this->set($i+1, $params[$i]);
-			}
-	    }
-        
+    public function executeQuery($p1 = null, $fetchmode = null)
+    {
+        $params = null;
+        if ($fetchmode !== null) {
+            $params = $p1;
+        } elseif ($p1 !== null) {
+            if (is_array($p1)) $params = $p1;
+            else $fetchmode = $p1;
+        }
+
+        if ($params) {
+            for($i=0,$cnt=count($params); $i < $cnt; $i++) {
+                $this->set($i+1, $params[$i]);
+            }
+        }
+
         $this->updateCount = null; // reset
-        $sql = $this->replaceParams();        
-        
+        $sql = $this->replaceParams();
+
         if ($this->limit > 0 || $this->offset > 0) {
             $this->conn->applyLimit($sql, $this->offset, $this->limit);
         }
-        
+
         $this->resultSet = $this->conn->executeQuery($sql, $fetchmode);
         return $this->resultSet;
     }
 
     /**
      * Executes the SQL INSERT, UPDATE, or DELETE statement in this PreparedStatement object.
-     * 
+     *
      * @param array $params Parameters that will be set using PreparedStatement::set() before query is executed.
      * @return int Number of affected rows (or 0 for drivers that return nothing).
      * @throws SQLException if a database access error occurs.
      */
-    public function executeUpdate($params = null) 
+    public function executeUpdate($params = null)
     {
         if ($params) {
             for($i=0,$cnt=count($params); $i < $cnt; $i++) {
@@ -350,11 +350,11 @@ abstract class PreparedStatementCommon {
         }
 
         if($this->resultSet) $this->resultSet->close();
-        $this->resultSet = null; // reset                
-        $sql = $this->replaceParams();        
+        $this->resultSet = null; // reset
+        $sql = $this->replaceParams();
         $this->updateCount = $this->conn->executeUpdate($sql);
         return $this->updateCount;
-    }    
+    }
 
     /**
      * Escapes special characters (usu. quotes) using native driver function.
@@ -362,14 +362,14 @@ abstract class PreparedStatementCommon {
      * @return string The escaped string.
      */
     abstract protected function escape($str);
-    
+
     /**
      * A generic set method.
-     * 
+     *
      * You can use this if you don't want to concern yourself with the details.  It involves
      * slightly more overhead than the specific settesr, since it grabs the PHP type to determine
      * which method makes most sense.
-     * 
+     *
      * @param int $paramIndex
      * @param mixed $value
      * @return void
@@ -392,22 +392,22 @@ abstract class PreparedStatementCommon {
                 throw new SQLException("Unsupported object type passed to set(): " . get_class($value));
             }
         } else {
-	    switch ( $type ) {
-	    	case 'integer':
-			$type = 'int';
-			break;
-		case 'double':
-			$type = 'float';
-			break;
-		// nice at a later date for large int handling?
-		//case 'gmp':
-	    }
+        switch ( $type ) {
+            case 'integer':
+            $type = 'int';
+            break;
+        case 'double':
+            $type = 'float';
+            break;
+        // nice at a later date for large int handling?
+        //case 'gmp':
+        }
             $setter = 'set' . ucfirst($type); // PHP types are case-insensitive, but we'll do this in case that changes
-	    $this->sql_cache_valid = false;
+        $this->sql_cache_valid = false;
             $this->$setter($paramIndex, $value);
-        }        
+        }
     }
-    
+
     /**
      * Sets an array.
      * Unless a driver-specific method is used, this means simply serializing
@@ -416,9 +416,9 @@ abstract class PreparedStatementCommon {
      * @param array $value
      * @return void
      */
-    function setArray($paramIndex, $value) 
-    {        
-	    $this->sql_cache_valid = false;
+    function setArray($paramIndex, $value)
+    {
+        $this->sql_cache_valid = false;
         if ($value === null) {
             $this->setNull($paramIndex);
         } else {
@@ -433,130 +433,130 @@ abstract class PreparedStatementCommon {
      * @param boolean $value
      * @return void
      */
-    function setBoolean($paramIndex, $value) 
-    {                
-	    $this->sql_cache_valid = false;
+    function setBoolean($paramIndex, $value)
+    {
+        $this->sql_cache_valid = false;
         if ($value === null) {
             $this->setNull($paramIndex);
         } else {
             $this->boundInVars[$paramIndex] = (int) $value;
         }
     }
-    
+
 
     /**
      * @see PreparedStatement::setBlob()
      */
-    function setBlob($paramIndex, $blob) 
-    {        
-	    $this->sql_cache_valid = false;
+    function setBlob($paramIndex, $blob)
+    {
+        $this->sql_cache_valid = false;
         if ($blob === null) {
             $this->setNull($paramIndex);
         } else {
             // they took magic __toString() out of PHP5.0.0; this sucks
             if (is_object($blob)) {
-            	$this->boundInVars[$paramIndex] = "'" . $this->escape($blob->__toString()) . "'";
+                $this->boundInVars[$paramIndex] = "'" . $this->escape($blob->__toString()) . "'";
             } else {
-            	$this->boundInVars[$paramIndex] = "'" . $this->escape($blob) . "'";
-	    }
+                $this->boundInVars[$paramIndex] = "'" . $this->escape($blob) . "'";
         }
-    } 
+        }
+    }
 
     /**
      * @see PreparedStatement::setClob()
      */
-    function setClob($paramIndex, $clob) 
+    function setClob($paramIndex, $clob)
     {
-	    $this->sql_cache_valid = false;
+        $this->sql_cache_valid = false;
         if ($clob === null) {
             $this->setNull($paramIndex);
-        } else {      
+        } else {
             // they took magic __toString() out of PHP5.0.0; this sucks
             if (is_object($clob)) {
-            	$this->boundInVars[$paramIndex] = "'" . $this->escape($clob->__toString()) . "'";
+                $this->boundInVars[$paramIndex] = "'" . $this->escape($clob->__toString()) . "'";
             } else {
-            	$this->boundInVars[$paramIndex] = "'" . $this->escape($clob) . "'";
-	    }
+                $this->boundInVars[$paramIndex] = "'" . $this->escape($clob) . "'";
         }
-    }     
+        }
+    }
 
     /**
      * @param int $paramIndex
      * @param string $value
      * @return void
      */
-    function setDate($paramIndex, $value) 
+    function setDate($paramIndex, $value)
     {
-	    $this->sql_cache_valid = false;
+        $this->sql_cache_valid = false;
         if ($value === null) {
             $this->setNull($paramIndex);
         } else {
             if (is_numeric($value)) $value = date("Y-m-d", $value);
-            elseif (is_object($value)) $value = date("Y-m-d", $value->getTime());        
+            elseif (is_object($value)) $value = date("Y-m-d", $value->getTime());
             $this->boundInVars[$paramIndex] = "'" . $this->escape($value) . "'";
         }
-    } 
-    
-    /**
-     * @param int $paramIndex
-     * @param double $value
-     * @return void
-     */
-    function setDecimal($paramIndex, $value) 
-    {
-	    $this->sql_cache_valid = false;
-        if ($value === null) {
-            $this->setNull($paramIndex);
-        } else {
-            $this->boundInVars[$paramIndex] = (float) $value;
-        }
-    }             
+    }
 
     /**
      * @param int $paramIndex
      * @param double $value
      * @return void
      */
-    function setDouble($paramIndex, $value) 
+    function setDecimal($paramIndex, $value)
     {
-	    $this->sql_cache_valid = false;
-        if ($value === null) {
-            $this->setNull($paramIndex);
-        } else {
-            $this->boundInVars[$paramIndex] = (double) $value;
-        }
-    } 
-        
-    /**
-     * @param int $paramIndex
-     * @param float $value
-     * @return void
-     */
-    function setFloat($paramIndex, $value) 
-    {
-	    $this->sql_cache_valid = false;
+        $this->sql_cache_valid = false;
         if ($value === null) {
             $this->setNull($paramIndex);
         } else {
             $this->boundInVars[$paramIndex] = (float) $value;
         }
-    } 
+    }
+
+    /**
+     * @param int $paramIndex
+     * @param double $value
+     * @return void
+     */
+    function setDouble($paramIndex, $value)
+    {
+        $this->sql_cache_valid = false;
+        if ($value === null) {
+            $this->setNull($paramIndex);
+        } else {
+            $this->boundInVars[$paramIndex] = (double) $value;
+        }
+    }
+
+    /**
+     * @param int $paramIndex
+     * @param float $value
+     * @return void
+     */
+    function setFloat($paramIndex, $value)
+    {
+        $this->sql_cache_valid = false;
+        if ($value === null) {
+            $this->setNull($paramIndex);
+        } else {
+            $this->boundInVars[$paramIndex] = (float) $value;
+        }
+    }
 
     /**
      * @param int $paramIndex
      * @param int $value
      * @return void
      */
-    function setInt($paramIndex, $value) 
+    function setInt($paramIndex, $value)
     {
-	    $this->sql_cache_valid = false;
+        $this->sql_cache_valid = false;
         if ($value === null) {
             $this->setNull($paramIndex);
         } else {
             $this->boundInVars[$paramIndex] = (int) $value;
         }
-    } 
-    
+    }
+
     /**
      * Alias for setInt()
      * @param int $paramIndex
@@ -564,7 +564,7 @@ abstract class PreparedStatementCommon {
      */
     function setInteger($paramIndex, $value)
     {
-	    $this->sql_cache_valid = false;
+        $this->sql_cache_valid = false;
         $this->setInt($paramIndex, $value);
     }
 
@@ -572,9 +572,9 @@ abstract class PreparedStatementCommon {
      * @param int $paramIndex
      * @return void
      */
-    function setNull($paramIndex) 
+    function setNull($paramIndex)
     {
-	    $this->sql_cache_valid = false;
+        $this->sql_cache_valid = false;
         $this->boundInVars[$paramIndex] = 'NULL';
     }
 
@@ -583,57 +583,57 @@ abstract class PreparedStatementCommon {
      * @param string $value
      * @return void
      */
-    function setString($paramIndex, $value) 
+    function setString($paramIndex, $value)
     {
-	    $this->sql_cache_valid = false;
+        $this->sql_cache_valid = false;
         if ($value === null) {
             $this->setNull($paramIndex);
         } else {
             // it's ok to have a fatal error here, IMO, if object doesn't have
             // __toString() and is being passed to this method.
-	    if ( is_object ( $value ) ) {
-            	$this->boundInVars[$paramIndex] = "'" . $this->escape($value->__toString()) . "'";
-	    } else {
-            	$this->boundInVars[$paramIndex] = "'" . $this->escape((string)$value) . "'";
-	    }
+        if ( is_object ( $value ) ) {
+                $this->boundInVars[$paramIndex] = "'" . $this->escape($value->__toString()) . "'";
+        } else {
+                $this->boundInVars[$paramIndex] = "'" . $this->escape((string)$value) . "'";
         }
-    } 
-    
+        }
+    }
+
     /**
      * @param int $paramIndex
      * @param string $value
      * @return void
      */
-    function setTime($paramIndex, $value) 
-    {        
-	    $this->sql_cache_valid = false;
+    function setTime($paramIndex, $value)
+    {
+        $this->sql_cache_valid = false;
         if ($value === null) {
             $this->setNull($paramIndex);
         } else {
             if ( is_numeric ( $value ) ) {
-	    		$value = date ('H:i:s', $value );
-		    } elseif ( is_object ( $value ) ) {
-		    	$value = date ('H:i:s', $value->getTime ( ) );
-		    }
+                $value = date ('H:i:s', $value );
+            } elseif ( is_object ( $value ) ) {
+                $value = date ('H:i:s', $value->getTime ( ) );
+            }
             $this->boundInVars [ $paramIndex ] = "'" . $this->escape ( $value ) . "'";
         }
     }
-    
+
     /**
      * @param int $paramIndex
      * @param string $value
      * @return void
      */
-    function setTimestamp($paramIndex, $value) 
-    {        
-	    $this->sql_cache_valid = false;
+    function setTimestamp($paramIndex, $value)
+    {
+        $this->sql_cache_valid = false;
         if ($value === null) {
             $this->setNull($paramIndex);
         } else {
-       	    if (is_numeric($value)) $value = date('Y-m-d H:i:s', $value);
-       	    elseif (is_object($value)) $value = date('Y-m-d H:i:s', $value->getTime());
+            if (is_numeric($value)) $value = date('Y-m-d H:i:s', $value);
+            elseif (is_object($value)) $value = date('Y-m-d H:i:s', $value->getTime());
             $this->boundInVars[$paramIndex] = "'".$this->escape($value)."'";
         }
     }
-            
+
 }

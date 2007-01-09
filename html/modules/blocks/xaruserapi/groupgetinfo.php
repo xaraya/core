@@ -63,6 +63,7 @@ function blocks_userapi_groupgetinfo($args)
     if ($result->getRecordCount() != 1) {
         return;
     }
+    $result->next();
     $group = $result->fields;
     $result->close();
 
@@ -84,7 +85,7 @@ function blocks_userapi_groupgetinfo($args)
               LEFT JOIN $blockInstancesTable as inst ON inst.xar_id = group_inst.xar_instance_id
               LEFT JOIN $blockTypesTable as btypes   ON btypes.xar_id = inst.xar_type_id
               LEFT JOIN $modulesTable as mods        ON btypes.xar_modid = mods.xar_id
-              WHERE     bgroups.xar_id = ? 
+              WHERE     bgroups.xar_id = ?
               ORDER BY  group_inst.xar_position ASC";
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery(array($gid),ResultSet::FETCHMODE_ASSOC);

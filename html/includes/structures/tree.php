@@ -44,8 +44,9 @@ class TreeNode extends Object implements ITreeNode
             }
             $data1[$key] = array('id' => $key, 'children' => $children);
         }
+        $data1 = !empty($data1) ? array_pop($data1) : $data1;
         $nodeset = new BasicSet();
-        $arrayIterator = new RecursiveArrayIterator(array_pop($data1));
+        $arrayIterator = new RecursiveArrayIterator($data1);
         $iterator = new RecursiveIteratorIterator($arrayIterator);
         foreach($iterator as $value) {
             $node = new TreeNode();

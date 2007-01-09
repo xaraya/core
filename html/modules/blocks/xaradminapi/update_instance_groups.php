@@ -56,18 +56,18 @@ function blocks_adminapi_update_instance_groups($args)
 
     $current = array();
     while ($result->next()) {
-        $id = $result->getInt(1);
-        
-        $current[$id] = array (
-            'id'        => $id,
-            'gid'       => $result->getInt(2),
+        $gid = $result->getInt(2);
+
+        $current[$gid] = array (
+            'id'        => $result->getInt(1),
+            'gid'       => $gid,
             'template'  => $result->getString(3)
         );
     }
 
     // Get all groups for the main update loop.
     $allgroups = xarModAPIfunc('blocks', 'user', 'getallgroups');
-    
+
     // Key the new groups on the gid for convenience
     $newgroups = array();
     foreach($groups as $group) {
@@ -88,7 +88,7 @@ function blocks_adminapi_update_instance_groups($args)
     // and then insert new ones. In this case we don't want to do that
     // as an error anywhere in this code or data could result in all existing
     // block group associations being lost.
-    
+
     // Prepare the queries we need in the loop
     $delQuery = "DELETE FROM $block_group_instances_table WHERE xar_id = ?";
     $delStmt  = $dbconn->prepareStatement($delQuery);
@@ -100,29 +100,27 @@ function blocks_adminapi_update_instance_groups($args)
                  SET xar_template = ?
                  WHERE xar_id = ?";
     $updStmt  = $dbconn->prepareStatement($updQuery);
-    
+
     // Loop for each group.
     foreach ($allgroups as $group) {
         $gid = $group['gid'];
-        // If the group is not in the $groups array, and is in the 
+        // If the group is not in the $groups array, and is in the
         // current instance groups, then it should be deleted.
         if (!isset($newgroups[$gid]) && isset($current[$gid])) {
             $delStmt->executeUpdate(array((int) $current[$gid]['id']));
         }
-
         // If the new group does not exist, then create it.
-        if (isset($newgroups[$gid]) && !isset($current[$gid])) {
+        elseif (isset($newgroups[$gid]) && !isset($current[$gid])) {
             $insStmt->executeUpdate(array($gid, $bid, 0,$newgroups[$gid]['template']));
         }
 
         // If the new group already exists, then update it.
-        if (isset($newgroups[$gid]) && isset($current[$gid])
-            && $newgroups[$gid]['template'] != $current[$gid]['template']) 
+        elseif (isset($newgroups[$gid]) && isset($current[$gid])
+            && $newgroups[$gid]['template'] != $current[$gid]['template'])
         {
             $updStmt->executeUpdate(array($newgroups[$gid]['template'],$current[$gid]['id']));
         }
     }
-
     // Resequence the position values, since we may have changed the existing values.
     // Span the resequence across all groups, since any number of groups could have
     // been affected.

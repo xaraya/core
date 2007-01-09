@@ -62,7 +62,7 @@ function blocks_adminapi_update_instance($args)
     // TODO: check for unique name before updating the database (errors raised
     // by unique keys are not user-friendly).
     $name = strtolower($name);
-    
+
     // Security
     // TODO: add security on the name as well as (eventually instead of) the title.
     if(!xarSecurityCheck('EditBlock', 1, 'Block', "$title::$bid")) {return;}
@@ -80,14 +80,14 @@ function blocks_adminapi_update_instance($args)
         $stmt = $dbconn->prepareStatement($query);
         $bind = array($content, $template, $name, $title,$refresh, $state, $bid);
         $stmt->executeUpdate($bind);
-        
+
         // Update the group instances.
         if (isset($groups) && is_array($groups)) {
             // Pass the group updated to the API if required.
             // TODO: error handling.
             $result = xarModAPIfunc('blocks', 'admin', 'update_instance_groups',array('bid' => $bid, 'groups' => $groups));
         }
-    
+
         $args['module'] = 'blocks';
         $args['itemtype'] = 3; // block instance
         $args['itemid'] = $bid;
