@@ -1,6 +1,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<script language="JavaScript">
+<script type="text/javascript">
 <xar:comment>
     // Enter name of mandatory fields
     var mail_fieldRequired = Array("adminname", "adminmail");

@@ -1,7 +1,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
 <script type="text/javascript" src="modules/privileges/xartemplates/xarTree.js"></script>
-<script language="JavaScript">var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); function doOnLoad() { oldOnLoadFunction(); xarTree_init('PrivilegesTree'); } var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); function doOnUnload() { oldOnUnloadFunction(); xarTree_init('PrivilegesTree'); } window.onload = doOnLoad; window.onunload = doOnUnload;</script>
+<script type="text/javascript">var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); function doOnLoad() { oldOnLoadFunction(); xarTree_init('PrivilegesTree'); } var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); function doOnUnload() { oldOnUnloadFunction(); xarTree_init('PrivilegesTree'); } window.onload = doOnLoad; window.onunload = doOnUnload;</script>
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:mlstring>Privileges Administration</xar:mlstring>
@@ -31,7 +31,7 @@
             <xar:loop name="$roles">
                 <tr>
                     <td width="150">
-                        <xar:if condition="$loop:item['type'] eq 0">User 
+                        <xar:if condition="$loop:item['type'] eq 0">User
                         <xar:else />Group</xar:if>
                     </td>
                     <td width="150">#$loop:item['name']#</td>

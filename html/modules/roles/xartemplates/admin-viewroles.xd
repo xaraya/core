@@ -2,18 +2,18 @@
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:style module='roles' type='module' file='roletree.css' />
 <script type="text/javascript" src="modules/roles/xartemplates/xarTree.js"></script>
-<script language="JavaScript">
+<script type="text/javascript">
 <!--
- var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
+ var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");
  function doOnLoad() {
-      oldOnLoadFunction();      
+      oldOnLoadFunction();
       xarTree_init('RolesTree');
       }
- var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); 
+ var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;");
  function doOnUnload() {
-      oldOnUnloadFunction();      
+      oldOnUnloadFunction();
       }
- 
+
  window.onload = doOnLoad;
  window.onunload = doOnUnload;
 //-->

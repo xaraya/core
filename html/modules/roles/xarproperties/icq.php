@@ -72,7 +72,7 @@ class ICQProperty extends URLIconProperty
             // TODO: move this outa here
             //<jojodee> Passing the whole lot to the template !
             //The data is there for anyone that wants to use the vars themselves in the template.
-            $link = '<script language="JavaScript" type="text/javascript"><!--
+            $link = '<script type="text/javascript"><!--
 if ( navigator.userAgent.toLowerCase().indexOf(\'mozilla\') != -1 && navigator.userAgent.indexOf(\'5.\') == -1 )
     document.write(\' <a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($this->icon).'" alt="ICQ Number" title="ICQ Number" alt=""/></a>\');
 else
