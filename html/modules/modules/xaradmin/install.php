@@ -52,11 +52,13 @@ function modules_admin_install()
         //3rd has only 'regid' key with the ID of the module
 
         // get any dependency info on this module for a better message if something is missing
-        try {
             $thisinfo = xarModGetInfo($id);
             $data['displayname'] = $thisinfo['displayname'];
+        if (!empty($thisinfo['dependencyinfo'])) {
             $data['dependencyinfo'] = $thisinfo['dependencyinfo'];
-        } catch (NotFoundExceptions $e) {
+        } elseif (!empty($thisinfo['dependency'])) {
+            $data['dependencyinfo'] = $thisinfo['dependency'];
+        } else {
             $data['dependencyinfo'] = array();
         }
 

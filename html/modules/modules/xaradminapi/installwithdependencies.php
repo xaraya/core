@@ -86,8 +86,8 @@ function modules_adminapi_installwithdependencies ($args)
             }
 
             $modstack = unserialize(xarSessionGetVar('modulestoinstall'));
-            $teststack = $modstack;
-            if ($mainId != array_pop($teststack)) {
+            if (!is_array($modstack)) $modstack = array();
+            if (empty($modstack) || ($mainId != array_pop($modstack))) {
                 array_push($modstack,$mainId);
                 xarSessionSetVar('modulestoinstall',serialize($modstack));
             }

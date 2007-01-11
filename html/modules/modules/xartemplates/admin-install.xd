@@ -61,27 +61,27 @@
                 <ul>
                     <xar:foreach in="$dependencies['unsatisfiable']" value="$modInfo">
                         <li>
-                            <xar:if condition="is_array($modInfo) AND ($modInfo['displayname'] ne xarML('Unknown')) ">
-                                <xar:if condition="$modInfo['regid'] ne $id">
-                                    #$modInfo['displayname']#
-                                <xar:else />
+                            <xar:if condition="is_array($modInfo) AND ($modInfo['displayname'] ne xarML('Unknown') AND !empty($modInfo['displayname'])) ">
+                                <xar:continue />
+                            <xar:elseif condition="is_array($modInfo) AND ($modInfo['displayname'] eq xarML('Unknown') OR empty($modInfo['displayname']))" />
+                                <xar:if condition="isset($dependencyinfo[$modInfo['regid']]) AND !is_numeric($dependencyinfo[$modInfo['regid']])" >
                                     <xar:ml>
-                                        <xar:mlstring>#(1) (id #(2)), the module you are trying to install</xar:mlstring>
-                                        <xar:mlvar>#$modInfo['displayname']#</xar:mlvar>
-                                        <xar:mlvar>#$id#</xar:mlvar>
-                                    </xar:ml>
-                                </xar:if>
-                            <xar:elseif condition="is_array($modInfo) and $modInfo['displayname'] eq xarML('Unknown')" />
-                                <a href="http://www.xaraya.com/index.php/release/#$modInfo['regid']#.html">
-                                    <xar:ml>
-                                        <xar:mlstring>Missing a module with ID #(1). Click this line to get information on this missing module.</xar:mlstring>
+                                        <xar:mlstring>Missing a module #(1) (ID #(2)).</xar:mlstring>
+                                        <xar:mlvar>#$modInfo['name']#</xar:mlvar>
                                         <xar:mlvar>#$modInfo['regid']#</xar:mlvar>
                                     </xar:ml>
-                                </a>
+                                <xar:else />
+                                    <a href="http://www.xaraya.com/index.php/release/#$modInfo#.html">
+                                        <xar:ml>
+                                            <xar:mlstring>Missing a module with ID #(1). Click this line to get information on this missing module.</xar:mlstring>
+                                            <xar:mlvar>#$modInfo['regid']#</xar:mlvar>
+                                        </xar:ml>
+                                    </a>
+                                </xar:if>
                                 <br />
                                 <xar:mlstring>Install this module first, then try this installation again.</xar:mlstring>
-                            <xar:elseif condition="is_numeric($modInfo)" />
-                                <xar:if condition="isset($dependencyinfo[$modInfo])" >
+                            <xar:elseif condition="is_numeric($modInfo['id'])" />
+                                <xar:if condition="isset($dependencyinfo[$modInfo['regid']])" >
                                     <xar:ml>
                                         <xar:mlstring>Missing a module #(1) (ID #(2)).</xar:mlstring>
                                         <xar:mlvar>#$dependencyinfo[$modInfo]#</xar:mlvar>
@@ -91,7 +91,7 @@
                                     <a href="http://www.xaraya.com/index.php/release/#$modInfo#.html">
                                         <xar:ml>
                                             <xar:mlstring>Missing a module with ID #(1). Click this line to get information on this missing module.</xar:mlstring>
-                                            <xar:mlvar>#$modInfo#</xar:mlvar>
+                                            <xar:mlvar>#$modInfo['displayname']#</xar:mlvar>
                                         </xar:ml>
                                     </a>
                                 </xar:if>
