@@ -21,20 +21,20 @@
     <xar:mlstring>Choosing a Configuration</xar:mlstring>
 </xar:set>
 <xar:set name="steptext[8]">
-    <xar:mlstring>Choosing Options</xar:mlstring>
+    <xar:mlstring>Choosing Privileges</xar:mlstring>
 </xar:set>
 <div id="status">
     <xar:for start="$phase = 1" test="$phase lt $active_step" iter="$phase++">
         <p class="complete">
-            #$steptext[$phase]# 
+            #$steptext[$phase]#
         </p>
     </xar:for>
     <p class="active">
-        #$steptext[$active_step]# 
+        #$steptext[$active_step]#
     </p>
     <xar:for start="$phase = $active_step + 1" test="$phase le 8" iter="$phase++">
         <p class="greyed">
-            #$steptext[$phase]# 
+            #$steptext[$phase]#
         </p>
     </xar:for>
 </div>

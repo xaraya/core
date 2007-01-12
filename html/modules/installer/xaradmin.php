@@ -1127,6 +1127,8 @@ function installer_admin_cleanup()
 
 function installer_admin_finish()
 {
+    xarVarFetch('returnurl', 'str', $returnurl, 'site', XARVAR_NOT_REQUIRED);
+
 # --------------------------------------------------------
 # Create wrapper DD overlay objects for the modules, roles and privileges modules
 #
@@ -1157,7 +1159,17 @@ function installer_admin_finish()
     $defaultzone = array_shift($zones);
     xarConfigSetVar('System.Core.TimeZone', $defaultzone);
     xarConfigSetVar('Site.Core.TimeZone', $defaultzone);
-    xarResponseRedirect('index.php');
+
+    switch ($returnurl) {
+        case ('modules'):
+            xarResponseRedirect(xarModURL('modules','admin','list'));
+        case ('blocks'):
+            xarResponseRedirect(xarModURL('blocks','admin','view_instances'));
+        case ('site'):
+        default:
+            xarResponseRedirect('index.php');
+    }
+    return true;
 }
 
 function installer_admin_upgrade1()

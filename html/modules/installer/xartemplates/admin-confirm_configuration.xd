@@ -4,7 +4,7 @@
 <div id="install">
     <xar:template file="status" />
     <h1 class="xar-pagetitle">
-        <xar:mlstring>Choose Configuration Options</xar:mlstring>
+        <xar:mlstring>Choose Privileges Setup</xar:mlstring>
     </h1>
 
     <h3>
@@ -18,7 +18,7 @@
             <xar:loop name="$options1">
                 <p>
                     <xar:if condition="$loop:item['option'] eq ''">
-                        #$loop:item['comment']# 
+                        #$loop:item['comment']#
                         <xar:else />
                         <xar:if condition="$loop:item['option'] == 'true'">
                             <input type="checkbox" name="chosen[]" id="chosen1_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
@@ -26,7 +26,7 @@
                             <input type="checkbox" name="chosen[]" id="chosen1_#$loop:index#" value="#$loop:item['item']#" />
                         </xar:if>
                         <label for="chosen1_#$loop:index#">
-                            #$loop:item['comment']# 
+                            #$loop:item['comment']#
                         </label>
                     </xar:if>
                 </p>
@@ -34,7 +34,7 @@
             <p>
                 <xar:mlstring>Disabling the options above will leave your registered and unregistered users with minimal access. The administrator you created in Step 6 will always have full access to the site.</xar:mlstring>
             </p>
-
+<!--
             <div class="configuration">
 
                 <h4>
@@ -50,7 +50,7 @@
                         <xar:loop name="$options2">
                         <xar:if condition="$loop:item['option'] eq ''">
                             <p class="xar-normal">
-                                #$loop:item['comment']# 
+                                #$loop:item['comment']#
                             </p>
                             <xar:else />
                             <p class="xar-normal">
@@ -60,7 +60,7 @@
                                     <input type="checkbox" name="chosen[]" id="chosen2_#$loop:index#" value="#$loop:item['item']#" />
                                 </xar:if>
                                 <label for="chosen2_#$loop:index#">
-                                    #$loop:item['comment']# 
+                                    #$loop:item['comment']#
                                 </label>
                             </p>
                         </xar:if>
@@ -70,19 +70,20 @@
             <xar:if condition="$installed ne ''">
                 <p class="xar-normal">
                     <xar:mlstring>The following modules for this configuration are already installed:</xar:mlstring>
-                    #$installed# 
+                    #$installed#
                 </p>
             </xar:if>
             <xar:if condition="$missing ne ''">
                 <p>
                     <xar:mlstring>The following modules for this configuration are missing in the modules directory:</xar:mlstring>
-                    #$missing# 
+                    #$missing#
                 </p>
             </xar:if>
             </div>
             <p>
                 <xar:mlstring>All of the above modules can be installed or removed at any later time in the Modules module.</xar:mlstring>
             </p>
+        -->
             <xar:set name="buttonnext">
                 <xar:mlstring>Continue</xar:mlstring>
             </xar:set>

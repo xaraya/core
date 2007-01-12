@@ -7,20 +7,22 @@
 
     <h3>
         <xar:mlstring>Congratulations, you have successfully installed</xar:mlstring>
-        #xarConfigGetVar('System.Core.VersionId')# #xarConfigGetVar('System.Core.VersionNum')# ("#xarConfigGetVar('System.Core.VersionSub')#")! 
+        #xarConfigGetVar('System.Core.VersionId')# #xarConfigGetVar('System.Core.VersionNum')# ("#xarConfigGetVar('System.Core.VersionSub')#")!
     </h3>
 
     <p>
-        <xar:mlstring>Take this time to customize your installation to match your needs. Use the Modules administration to install any additional features, and use the Blocks administration to adjust the look of your sidebars.</xar:mlstring>
+        <h3>
+            <xar:mlstring>Security Hints</xar:mlstring>
+        </h3>
+    </p>
+    <p>
+        <strong><xar:mlstring>Please be sure to remove or rename the file install.php in your web root. Failing to do so constitutes a security risk.</xar:mlstring></strong>
     </p>
 
     <p>
-        <strong>
-            <xar:mlstring>Security Hint:</xar:mlstring>
-        </strong>
         <xar:mlstring>You are strongly advised to remove write access to html/var/config.system.php once the install has completed. This can be done on UNIX using the command</xar:mlstring>
-    
-        "<code>chmod 444 config.system.php</code>" 
+
+        "<code>chmod 444 config.system.php</code>"
         <xar:mlstring>from within the html/var directory.</xar:mlstring>
     </p>
 
@@ -34,11 +36,26 @@
         <code>chmod 440 config.system.php</code>
     </p>
     <p>
-        <a href="#$finalurl#">
-            <xar:mlstring>Launch the site!</xar:mlstring>
-        </a>
+        <h3>
+            <xar:mlstring>Next Steps:</xar:mlstring>
+        </h3>
     </p>
-
+    <p>
+        <xar:mlstring>You can now customize your installation to match your needs. Use the <strong>Modules administration</strong> to install any additional features, or use the <strong>Blocks administration</strong> to adjust the look of your sidebars or add blocks to your site. You can do either of these at any time via the Admin menu.</xar:mlstring>
+    </p>
+        <div style="clear: both; float: left; width: 33%">
+            <a href="#$finalurl#&amp;returnurl=modules" >I want to add modules</a>
+        </div>
+        <div style="float: left; width: 33%">
+            <a href="#$finalurl#&amp;returnurl=blocks" >I want to manage blocks</a>
+        </div>
+        <div style="float: left; width: 33%">
+            <a href="#$finalurl#&amp;returnurl=site">
+                <xar:mlstring>Just launch the site!</xar:mlstring>
+            </a>
+        </div>
+<br />
+<br />
     <h2>
         <xar:mlstring>Thank you for using Xaraya.</xar:mlstring>
     </h2>
