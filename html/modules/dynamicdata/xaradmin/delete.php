@@ -19,18 +19,19 @@ function dynamicdata_admin_delete($args)
 {
    extract($args);
 
-    if(!xarVarFetch('objectid', 'isset', $objectid,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',    'isset', $moduleid,  NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemid',   'id',    $itemid                          )) {return;}
-    if(!xarVarFetch('confirm',  'isset', $confirm,   NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('noconfirm','isset', $noconfirm, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('tplmodule','isset', $tplmodule, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
-
+    if(!xarVarFetch('objectid',   'isset', $objectid,   NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('name',       'isset', $name,       NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('modid',      'isset', $moduleid,   NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('itemtype',   'isset', $itemtype,   NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('itemid',     'id',    $itemid                          )) {return;}
+    if(!xarVarFetch('confirm',    'isset', $confirm,    NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('noconfirm',  'isset', $noconfirm,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('join',       'isset', $join,       NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('table',      'isset', $table,      NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('tplmodule',  'isset', $tplmodule,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('template',   'isset', $template,   NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('return_url', 'isset', $return_url, NULL, XARVAR_DONT_SET)) {return;}
+    
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name' => $name,
                                          'moduleid'   => $moduleid,
@@ -48,7 +49,9 @@ function dynamicdata_admin_delete($args)
     if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item',$data['moduleid'].":".$data['itemtype'].":".$data['itemid'])) return;
 
     if (!empty($noconfirm)) {
-        if (!empty($table)) {
+        if (!empty($return_url)) {
+            xarResponseRedirect($return_url);
+        } elseif (!empty($table)) {    
             xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
                                           array(
                                             'table'     => $table,
@@ -101,8 +104,9 @@ function dynamicdata_admin_delete($args)
     }
 
     $itemid = $myobject->deleteItem();
-
-    if (!empty($table)) {
+    if (!empty($return_url)) {
+        xarResponseRedirect($return_url);
+    } elseif (!empty($table)) {
         xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
                                       array(
                                       'table'     => $table,
