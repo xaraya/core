@@ -182,6 +182,14 @@ class DataProperty extends Object implements iDataProperty
     }
 
     /**
+     * Get the value of this property's display status
+     */
+    function getDisplayStatus()
+    {
+        return ($this->status & DataPropertyMaster::DD_DISPLAYMASK);
+    }
+
+    /**
      * Show an input field for setting/modifying the value of this property
      *
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
@@ -196,7 +204,7 @@ class DataProperty extends Object implements iDataProperty
      */
     public function showInput(Array $data = array())
     {
-        if(($this->status & DataPropertyMaster::DD_DISPLAYMASK) == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
+        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
             return $this->showHidden($data);
 
         // Our common items we need
@@ -226,7 +234,7 @@ class DataProperty extends Object implements iDataProperty
      */
     public function showOutput(Array $data = array())
     {
-        if(($this->status & DataPropertyMaster::DD_DISPLAYMASK) == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
+        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
             return $this->showHidden($data);
 
         $data['id']   = $this->id;
@@ -251,7 +259,7 @@ class DataProperty extends Object implements iDataProperty
      */
     function showLabel($args = array())
     {
-        if(($this->status & DataPropertyMaster::DD_DISPLAYMASK) == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
+        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
             return $this->showHidden($args);
 
         if(empty($args))

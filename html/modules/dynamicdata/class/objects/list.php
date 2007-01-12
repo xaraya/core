@@ -455,7 +455,7 @@ class DataObjectList extends DataObjectMaster
         {
             foreach($args['fieldlist'] as $name) {
                 if(isset($this->properties[$name])) {
-                    if(($this->properties[$name]->status & DataPropertyMaster::DD_DISPLAYMASK) == ($state & DataPropertyMaster::DD_DISPLAYMASK))
+                    if($this->properties[$name]->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK))
                         $args['properties'][$name] =& $this->properties[$name];
                 }
             }
@@ -463,7 +463,7 @@ class DataObjectList extends DataObjectMaster
         else
         {
             foreach($this->properties as $property)
-                if(($property->status & DataPropertyMaster::DD_DISPLAYMASK) == ($state & DataPropertyMaster::DD_DISPLAYMASK))
+                if($property->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK))
                     $args['properties'][$property->name] = $property;
         }
 

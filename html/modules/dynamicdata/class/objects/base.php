@@ -158,7 +158,7 @@ class DataObject extends DataObjectMaster
             $properties = $this->getProperties($args);
             $args['properties'] = array();
             foreach ($properties as $property) {
-                if(($property->status & DataPropertyMaster::DD_DISPLAYMASK) != DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
+                if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
                     $args['properties'][$property->name] = $property;
             }
         }
@@ -187,7 +187,7 @@ class DataObject extends DataObjectMaster
             foreach($this->properties as $property)
             {
                 if(
-                    (($property->status & DataPropertyMaster::DD_DISPLAYMASK) != DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) &&
+                    ($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) &&
                     ($property->type != 21) &&
                     isset($transformed[$property->name])
                 )
