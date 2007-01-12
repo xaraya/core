@@ -73,7 +73,9 @@ function modules_admin_install()
     }
 
     xarSessionSetVar('installing',true);
-    $minfo=xarModGetInfo($id);
+
+    $minfo = xarModGetInfo($id);
+
     //Bail if we've lost our module
     if ($minfo['state'] != XARMOD_STATE_MISSING_FROM_INACTIVE) {
         //Installs with dependencies, first initialise the necessary dependencies
