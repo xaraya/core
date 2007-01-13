@@ -535,8 +535,8 @@
                 </legend>
 
                 <div class="xar-form-input-wrapper">
-                    <label for="defaulttimezone" title="#xarML('This will be the global timezone')#" class="xar-form-label">
-                        <xar:mlstring>Default Timezone:</xar:mlstring>
+                    <label for="defaulttimezone" title="#xarML('This is the timezone the server/site is based in.')#" class="xar-form-label">
+                        <xar:mlstring>Server Timezone:</xar:mlstring>
                     </label>
                     <xar:set name="timezone">#xarConfigGetVar('Site.Core.TimeZone')#</xar:set>
                     <xar:data-input type="timezone" name="defaulttimezone" id="defaulttimezone" value="$timezone" />
