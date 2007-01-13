@@ -1154,9 +1154,6 @@ function installer_admin_finish()
 
     if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'modules', 'objects' => $objects))) return;
 
-    // Until here we have been using a hardcoded default timezone as a placeholder. Now load a "real" default zone via the API
-    $zones = array_keys(xarModAPIFunc('base','user','timezones'));
-    $defaultzone = array_shift($zones);
     $machinetz = date_default_timezone_get();
     xarConfigSetVar('System.Core.TimeZone', $machinetz);
     xarConfigSetVar('Site.Core.TimeZone', $machinetz);

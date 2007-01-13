@@ -351,6 +351,7 @@
             </div>
             <div class="xar-form-input-wrapper-after">
                 <xar:set name="checked">xarModVars::get('themes', 'var_dump')</xar:set>
+                <xar:data-input type="checkbox" name="var_dump" id="var_dump" checked="$checked" />
                 <label for="var_dump">
                     <xar:mlstring>
                         Debug Templates by Showing Variables Available
