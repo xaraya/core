@@ -541,6 +541,13 @@
                     <xar:set name="timezone">#xarConfigGetVar('Site.Core.TimeZone')#</xar:set>
                     <xar:data-input type="timezone" name="defaulttimezone" id="defaulttimezone" value="$timezone" />
                 </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="defaulttimezone" title="#xarML('The current server time based on the timezone selected.')#" class="xar-form-label">
+                        <xar:mlstring>The server time is:</xar:mlstring>
+                    </label>
+                    <xar:set name="now">time()</xar:set>
+                    #xarLocaleGetFormattedUTCDate('long',$servernow)#&#160;#xarLocaleGetFormattedUTCTime('long',$servernow)#
+                </div>
             </fieldset>
             <fieldset>
                 <legend>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Modify site configuration 
+ * Modify site configuration
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -47,10 +47,10 @@ function base_admin_modifyconfig()
     }
     closedir($dd);
 
-    $timezone = xarConfigGetVar('Site.Core.TimeZone');
-    if (!isset($timezone) || substr($timezone,0,2) == 'US') {
-        xarConfigSetVar('Site.Core.TimeZone', '');
-    }
+    sys::import('structures.datetime');
+    $dateobject = new XarDateTime();
+    $dateobject->setnow();
+    $data['servernow'] = $dateobject->getTimestamp();
 
     $data['editor'] = xarModGetVar('base','editor');
     $data['editors'] = array(array('displayname' => xarML('none')));
