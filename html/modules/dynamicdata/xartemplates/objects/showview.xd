@@ -20,12 +20,12 @@
 <xar:if condition="!empty($prevurl) or !empty($nexturl)">
     <div class="xar-align-center">
         <xar:if condition="!empty($prevurl)">
-            <a href="#$prevurl#">&lt;&lt;</a>
+            <a href="#$prevurl#">&lt;&lt;<xar:mlstring> Prev</xar:mlstring></a>
         <xar:else />
             &lt;&lt;
         </xar:if>&#160;&#160;&#160;
         <xar:if condition="!empty($nexturl)">
-            <a href="#$nexturl#">&gt;&gt;</a>
+            <a href="#$nexturl#"><xar:mlstring>Next</xar:mlstring>&gt;&gt; </a>
         <xar:else />&gt;&gt;</xar:if>
     </div>
 </xar:if>
