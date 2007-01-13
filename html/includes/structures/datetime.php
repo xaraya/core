@@ -19,9 +19,11 @@ class XarDateTime extends DateTime
     public $minute;
     public $second;
     public $timestamp;
+    public $servertz;
 
-    function __construct($hour=0,$minute=0,$second=0,$month=0,$day=0,$year=0)
+    function __construct($hour=0,$minute=0,$second=0,$month=0,$day=0,$year=0,$timezone=null)
     {
+        parent::__construct();
         $this->timestamp = mktime($hour,$minute,$second,$month,$day,$year);
         $this->year = $year;
         $this->month = $month;
@@ -29,6 +31,16 @@ class XarDateTime extends DateTime
         $this->hour = $hour;
         $this->minute = $minute;
         $this->second = $second;
+        $this->servertz = empty($timezone) ? xarConfigGetVar('Site.Core.TimeZone') : $timezone;
+        $tzobject = new DateTimezone($this->servertz);
+    }
+
+    function getOffset($timezone=null)
+    {
+        if (empty($timezone)) return 0;
+        $baseoffset = parent::getOffset($this->servertz);
+        $localoffset = parent::getOffset($timezone);
+        return $localoffset - $baseoffset;
     }
 
     function setnow()

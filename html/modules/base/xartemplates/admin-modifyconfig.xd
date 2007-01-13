@@ -546,6 +546,13 @@
                         <xar:mlstring>The server time is:</xar:mlstring>
                     </label>
                     <xar:set name="now">time()</xar:set>
+                    #xarLocaleGetFormattedUTCDate('long',$servernow)#&#160;#xarLocaleGetFormattedUTCTime('long',$servernow)#&#160;in&#160;<xar:data-output type="timezone" name="defaulttimezone" id="defaulttimezone" value="$timezone" />
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="defaulttimezone" title="#xarML('The current time of this user.')#" class="xar-form-label">
+                        <xar:mlstring>Your local time is:</xar:mlstring>
+                    </label>
+                    <xar:set name="now">time()</xar:set>
                     #xarLocaleGetFormattedUTCDate('long',$servernow)#&#160;#xarLocaleGetFormattedUTCTime('long',$servernow)#
                 </div>
             </fieldset>

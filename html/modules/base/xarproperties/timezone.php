@@ -135,62 +135,6 @@ class TimeZoneProperty extends SelectProperty
         return parent::showInput($data);
     }
 
-    public function showOutput(Array $data = array())
-    {
-        extract($data);
-        if (!isset($value))  $value = $this->value;
-
-        $offset = null;
-        $timezone = null;
-        if (empty($value)) {
-            $value = 'GMT';
-        } elseif (is_numeric($value)) {
-            $offset = $value;
-        } elseif (is_array($value)) {
-            if (isset($value['offset'])) {
-                $offset = $value['offset'];
-            }
-            if (isset($value['timezone'])) {
-                $timezone = $value['timezone'];
-            }
-
-        } else {
-            $out = @unserialize($value);
-            if ($out !== false) {
-                $value = $out;
-                if (isset($value['offset'])) {
-                    $offset = $value['offset'];
-                }
-                if (isset($value['timezone'])) {
-                    $timezone = $value['timezone'];
-                }
-            } else {
-                $value = '';
-            }
-        }
-
-        $data['value'] = $value;
-        if (isset($timezone)) {
-            $data['timezone'] = strtr($timezone, array('/' => ' - ', '_' => ' '));
-        }
-        if (isset($offset)) {
-            $hours = intval($offset);
-            if ($hours != $offset) {
-                $minutes = abs($offset - $hours) * 60;
-            } else {
-                $minutes = 0;
-            }
-            if ($hours > 0) {
-                $data['offset'] = sprintf("+%d:%02d",$hours,$minutes);
-            } else {
-                $data['offset'] = sprintf("%d:%02d",$hours,$minutes);
-            }
-        }
-        // old timezone output format
-        $data['option']['name'] = $value;
-        return parent::showOutput($data);
-    }
-
     function getOldOptions()
     {
         if (count($this->options) > 0) {
