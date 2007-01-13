@@ -49,8 +49,13 @@ function base_admin_modifyconfig()
 
     sys::import('structures.datetime');
     $dateobject = new XarDateTime();
-    $dateobject->setnow();
-    $data['servernow'] = $dateobject->getTimestamp();
+    $tzobject = new DateTimeZone(xarConfigGetVar('System.Core.TimeZone'));
+    $dateobject->setTimezone($tzobject);
+    $data['hostnow'] = $dateobject->format("r");
+
+    $tzobject = new DateTimeZone(xarModGetUserVar('roles','usertimezone'));
+    $dateobject->setTimezone($tzobject);
+    $data['localnow'] = $dateobject->format("r");
 
     $data['editor'] = xarModGetVar('base','editor');
     $data['editors'] = array(array('displayname' => xarML('none')));

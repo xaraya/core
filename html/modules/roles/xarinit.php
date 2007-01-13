@@ -164,7 +164,7 @@ function roles_activate()
     xarModSetVar('roles', 'userhome', '');
     xarModSetVar('roles', 'userlastlogin', '');
     xarModSetVar('roles', 'primaryparent', '');
-    xarModSetVar('roles', 'usertimezone', '');
+    xarModSetVar('roles', 'usertimezone', xarConfigGetVar('Site.Core.TimeZone'));
     xarModSetVar('roles', 'setuserhome',false);
     xarModSetVar('roles', 'setprimaryparent', false);
     xarModSetVar('roles', 'setpasswordupdate',false);

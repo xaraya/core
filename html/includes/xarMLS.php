@@ -73,7 +73,7 @@ function xarMLS_init(&$args, $whatElseIsGoingLoaded)
     $GLOBALS['xarMLS_newEncoding'] = new xarCharset;
 
     $GLOBALS['xarMLS_defaultTimeZone'] = !empty($args['defaultTimeZone']) ?
-                                         $args['defaultTimeZone'] : 'UTC';
+                                         $args['defaultTimeZone'] : @date_default_timezone_get();
     $GLOBALS['xarMLS_defaultTimeOffset'] = isset($args['defaultTimeOffset']) ?
                                            $args['defaultTimeOffset'] : 0;
 

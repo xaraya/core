@@ -535,6 +535,13 @@
                 </legend>
 
                 <div class="xar-form-input-wrapper">
+                    <label for="defaulttimezone" title="#xarML('This is the timezone your operating system is set to.')#" class="xar-form-label">
+                        <xar:mlstring>Host Timezone:</xar:mlstring>
+                    </label>
+                    <xar:set name="timezone">#xarConfigGetVar('System.Core.TimeZone')#</xar:set>
+                    <xar:data-input type="timezone" name="defaultsystemtimezone" id="defaultsystemtimezone" value="$timezone" />
+                </div>
+                <div class="xar-form-input-wrapper">
                     <label for="defaulttimezone" title="#xarML('This is the timezone the server/site is based in.')#" class="xar-form-label">
                         <xar:mlstring>Server Timezone:</xar:mlstring>
                     </label>
@@ -545,15 +552,13 @@
                     <label for="defaulttimezone" title="#xarML('The current server time based on the timezone selected.')#" class="xar-form-label">
                         <xar:mlstring>The server time is:</xar:mlstring>
                     </label>
-                    <xar:set name="now">time()</xar:set>
-                    #xarLocaleGetFormattedUTCDate('long',$servernow)#&#160;#xarLocaleGetFormattedUTCTime('long',$servernow)#&#160;in&#160;<xar:data-output type="timezone" name="defaulttimezone" id="defaulttimezone" value="$timezone" />
+                    #$hostnow#&#160;in&#160;<xar:data-output type="timezone" value="$timezone" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="defaulttimezone" title="#xarML('The current time of this user.')#" class="xar-form-label">
                         <xar:mlstring>Your local time is:</xar:mlstring>
                     </label>
-                    <xar:set name="now">time()</xar:set>
-                    #xarLocaleGetFormattedUTCDate('long',$servernow)#&#160;#xarLocaleGetFormattedUTCTime('long',$servernow)#
+                    #$localnow#
                 </div>
             </fieldset>
             <fieldset>

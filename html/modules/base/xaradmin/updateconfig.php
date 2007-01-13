@@ -120,21 +120,22 @@ function base_admin_updateconfig()
             xarModSetVar('base','editor',$editor);
 
             // Timezone, offset and DST
-            if (!xarVarFetch('defaulttimezone','str:1:',$defaulttimezone,'',XARVAR_NOT_REQUIRED)) return;
-            if (!empty($defaulttimezone)) {
-                $timezoneinfo = xarModAPIFunc('base','user','timezones',
-                                              array('timezone' => $defaulttimezone));
-                if (!empty($timezoneinfo)) {
-                    xarConfigSetVar('Site.Core.TimeZone', $defaulttimezone);
-                    list($hours,$minutes) = explode(':',$timezoneinfo[0]);
-                    // tz offset is in hours
-                    $offset = (float) $hours + (float) $minutes / 60;
-                    xarConfigSetVar('Site.MLS.DefaultTimeOffset', $offset);
-                } else {
-                    // unknown/invalid timezone
-                }
+            if (!xarVarFetch('defaultsystemtimezone','str:1:',$defaultsystemtimezone,'UTC',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('defaulttimezone','str:1:',$defaulttimezone,'UTC',XARVAR_NOT_REQUIRED)) return;
+
+            $tzobject = new DateTimezone($defaultsystemtimezone);
+            if (!empty($tzobject)) {
+                xarConfigSetVar('System.Core.TimeZone', $defaultsystemtimezone);
             } else {
-                xarConfigSetVar('Site.Core.TimeZone', '');
+                xarConfigSetVar('System.Core.TimeZone', "UTC");
+            }
+            $tzobject = new DateTimezone($defaulttimezone);
+            if (!empty($tzobject)) {
+                $datetime = new DateTime();
+                xarConfigSetVar('Site.Core.TimeZone', $defaulttimezone);
+                xarConfigSetVar('Site.MLS.DefaultTimeOffset', $tzobject->getOffset($datetime));
+            } else {
+                xarConfigSetVar('Site.Core.TimeZone', "UTC");
                 xarConfigSetVar('Site.MLS.DefaultTimeOffset', 0);
             }
 
