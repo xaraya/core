@@ -238,12 +238,10 @@ class TimeZoneProperty extends SelectProperty
         if (count($this->options) > 0) {
             return $this->options;
         }
-        $timezones = xarModAPIFunc('base','user','timezones');
+        $zones = DateTimeZone::listIdentifiers();
         $options = array();
-//        $options[] = array('id' => '', 'name' => '');
-        foreach ($timezones as $timezone => $info) {
-            $name = strtr($timezone, array('/' => ' - ', '_' => ' '));
-            $options[] = array('id' => $timezone, 'name' => $name, 'offset' => $info[0]);
+        foreach ($zones as $zone) {
+            $options[] = array('id' => $zone, 'name' => $zone);
         }
         return $options;
     }

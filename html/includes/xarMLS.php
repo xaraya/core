@@ -73,19 +73,12 @@ function xarMLS_init(&$args, $whatElseIsGoingLoaded)
     $GLOBALS['xarMLS_newEncoding'] = new xarCharset;
 
     $GLOBALS['xarMLS_defaultTimeZone'] = !empty($args['defaultTimeZone']) ?
-                                         $args['defaultTimeZone'] : 'Etc/UTC';
+                                         $args['defaultTimeZone'] : 'UTC';
     $GLOBALS['xarMLS_defaultTimeOffset'] = isset($args['defaultTimeOffset']) ?
                                            $args['defaultTimeOffset'] : 0;
 
     // Set the timezone
-    if(function_exists('date_default_timezone_set')) {
-        // PHP 5.1 only
-        date_default_timezone_set ($GLOBALS['xarMLS_defaultTimeZone']);
-    } else {
-        // TODO: find alternative for the above, what is it for anyway? shouldn't the server already have one?
-        // TODO: if so, how to get it?
-        // Now what?
-    }
+    date_default_timezone_set ($GLOBALS['xarMLS_defaultTimeZone']);
 
     // Register MLS events
     // These should be done before the xarMLS_setCurrentLocale function
@@ -409,7 +402,7 @@ function xarMLS_setCurrentLocale($locale)
     // FIXME: during initialisation, the current locale was set, and it gets called
     // again during user subsystem initialisation, we have to provide better defaults
     // if we really want this to run only once.
-    
+
     //assert('$called == 0; // Can only be called once during a page request');
     $called++;
 
@@ -536,7 +529,7 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
 /**
  * Load relevant translations for a specified relatvive path (be it file or directory)
  *
- * @return bool true on success, false on failure   
+ * @return bool true on success, false on failure
  * @todo slowly add more intelligence for more scopes. (core, version, init?)
  * @todo static hash on path to prevent double loading?
  * @todo is directory support needed? i.e. modules/base/ load all for base module? or how does this work?
@@ -551,18 +544,18 @@ function xarMLSLoadTranslations($path)
         xarLogMessage("MLS: Trying to load translations for a non-existing path ($path)",XARLOG_LEVEL_WARNING);
         //die($path);
         return true;
-    } 
-    
+    }
+
     // Get a structured representation of the path.
     $pathElements = explode("/",$path);
-    
+
     // Initialise some defaults
     $dnType = XARMLS_DNTYPE_MODULE; $possibleOverride = false; $ctxType = 'modules';
-    
+
     // Determine dnType
     // Lets get core files out of the way
     if($pathElements[0] == 'includes') return xarMLS_loadTranslations(XARMLS_DNTYPE_CORE, 'xaraya', 'core:', 'core');
-    
+
     // modules have a fixed place, so if it's not 'modules/blah/blah' it's themes, period.
     // NOTE: $pathElements changes here!
     if(array_shift($pathElements) != 'modules') {
@@ -571,17 +564,17 @@ function xarMLSLoadTranslations($path)
         $ctxType= 'themes';
     }
     $ctxType .= ":";
-    
+
     // Determine dnName
     // The specifics within that Type are in the next element, overridden or not
     // NOTE: $pathElements changes here!
     $dnName = array_shift($pathElements);
-    
-    // Determine ctxName, which is just the basename of the file without extension it seems 
+
+    // Determine ctxName, which is just the basename of the file without extension it seems
     // CHECKME: there was a hardcoded substr(str,0,-3) here earlier
     // NOTE: $pathElements changes here!
     $ctxName = preg_replace('/^(xar)?(.+)\..*$/', '$2', array_pop($pathElements));
-    
+
     // Determine ctxType further if needed (i.e. more path components are there)
     // Peek into the first element and unwind the rest of the path elements into $ctxType
     // xartemplates -> templates, xarblocks -> blocks, xarproperties -> properties etc.
@@ -590,7 +583,7 @@ function xarMLSLoadTranslations($path)
         $pathElements[0] = preg_replace('/^xar(.+)/','$1',$pathElements[0]);
         $ctxType .= implode("/",$pathElements);
     }
-  
+
     // Ok, based on possible overrides, we load internal only, or interal plus overrides
     $ok = false;
     if($possibleOverride) {
