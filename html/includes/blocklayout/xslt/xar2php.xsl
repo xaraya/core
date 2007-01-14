@@ -212,6 +212,23 @@
         disable-output-escaping="yes"/>
 </xsl:template>
 
+<!-- Conditional expression resolving in nodes-->
+<xsl:template name="resolveIfVar">
+  <xsl:param name="expr"/>
+    <xsl:choose>
+      <xsl:when test="starts-with($expr,'$')">
+        <xsl:call-template name="resolvePHP">
+          <xsl:with-param name="expr" select="$expr"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>'</xsl:text>
+        <xsl:value-of select="$expr"/>
+        <xsl:text>'</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!--
   Utility template to replace a string with another.
 

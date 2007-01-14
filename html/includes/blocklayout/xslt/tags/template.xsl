@@ -52,9 +52,9 @@
             <xsl:text>xarTpl_includeModuleTemplate(</xsl:text>
             <xsl:choose>
               <xsl:when test="@module != ''">
-                <xsl:text>'</xsl:text>
-                <xsl:value-of select="@module"/>
-                <xsl:text>'</xsl:text>
+                <xsl:call-template name="resolveIfVar">
+                  <xsl:with-param name="expr" select="@module"/>
+                </xsl:call-template>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:choose>
