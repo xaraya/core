@@ -64,7 +64,7 @@
                     </xar:mlstring>
                 </label>
                 <div class="xar-form-container-after">
-                    <textarea name="xml" id="xml" class="xar-form-textarealarge"></textarea>
+                    <textarea name="xml" id="xml" class="xar-form-textarealarge">&#160;</textarea>
                 </div>
             </div>
             <div class="xar-form-input-wrapper">
