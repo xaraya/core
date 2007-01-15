@@ -1149,7 +1149,8 @@ function installer_admin_finish()
     if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'privileges', 'objects' => $objects))) return;
 
     $objects = array(
-                   'modules_hooks',
+//                   'modules_hooks',
+//                   'modules_modvars',
                      );
 
     if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'modules', 'objects' => $objects))) return;
