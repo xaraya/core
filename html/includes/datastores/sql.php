@@ -46,14 +46,6 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
     }
 
     /**
-     * Remove all where criteria for this data store (for getItems)
-     */
-    function cleanWhere()
-    {
-        $this->where = array();
-    }
-
-    /**
      * Add a group by field for this data store (for getItems)
      */
     function addGroupBy(DataProperty &$property)
@@ -63,14 +55,6 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
             return;
 
         $this->groupby[] = $name;
-    }
-
-    /**
-     * Remove all group by fields for this data store (for getItems)
-     */
-    function cleanGroupBy()
-    {
-        $this->groupby = array();
     }
 
     /**
