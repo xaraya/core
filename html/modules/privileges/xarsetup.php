@@ -55,9 +55,11 @@ function initializeSetup()
     $themesTable         = $systemPrefix . '_themes';
 
    //--------------------------------- Roles Module
-    $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable WHERE xar_module = 'roles'";
-    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'roles'";
-    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'roles'";
+    $info = xarMod::getBaseInfo('roles');
+    $sysid = $info['systemid'];
+    $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable WHERE xar_modid = $sysid";
+    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_modid = $sysid";
+    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_modid = $sysid";
     $instances = array(array('header' => 'Block Type:',
                              'query' => $query1,
                              'limit' => 20),
@@ -91,9 +93,11 @@ function initializeSetup()
     xarDefineInstance('privileges','Privileges',$instances,0,$privMembersTable,'xar_pid','xar_parentid','Instances of the privileges module, including multilevel nesting');
 
     // ----------------------------- Base Module
-    $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable WHERE xar_module = 'base'";
-    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'base'";
-    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'base'";
+    $info = xarMod::getBaseInfo('base');
+    $sysid = $info['systemid'];
+    $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable WHERE xar_modid = $sysid";
+    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_modid = $sysid";
+    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_modid = $sysid";
     $instances = array(array('header' => 'Block Type:',
                              'query' => $query1,
                              'limit' => 20),
@@ -116,9 +120,11 @@ function initializeSetup()
                              'limit' => 20));
     xarDefineInstance('themes','Themes',$instances);
 
-    $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable WHERE xar_module = 'themes'";
-    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'themes'";
-    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_module = 'themes'";
+    $info = xarMod::getBaseInfo('themes');
+    $sysid = $info['systemid'];
+    $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable WHERE xar_modid = $sysid";
+    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_modid = $sysid";
+    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_modid = $sysid";
     $instances = array(array('header' => 'Block Type:',
                              'query' => $query1,
                              'limit' => 20),

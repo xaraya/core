@@ -286,7 +286,7 @@ function blocks_upgrade($oldVersion)
 
         //The block instances differ and now defined on name (not title)
         //These need to be upgraded
-        $query1 = "SELECT DISTINCT xar_module FROM $blockTypesTable ";
+        $query1 = "SELECT DISTINCT xar_modid FROM $blockTypesTable ";
         $query2 = "SELECT xar_type FROM $blockTypesTable ";
         $query3 = "SELECT DISTINCT instances.xar_name FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id";
         $instances = array(array('header' => 'Module Name:',

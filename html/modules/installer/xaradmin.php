@@ -1496,24 +1496,26 @@ function installer_admin_upgrade2()
     $blocktypeTable = $systemPrefix .'_block_types';
     $blockinstanceTable = $systemPrefix .'_block_instances';
     $blockproblem=array();
+    $info = xarMod::getBaseInfo('roles');
+    $sysid = $info['systemid'];
        //Get the block type id of the existing block type
         $query = "SELECT xar_id,
                          xar_type,
-                         xar_module
+                         xar_modid
                          FROM $blocktypeTable
-                 WHERE xar_type=? and xar_module=?";
-        $result =& $dbconn->Execute($query,array('login','roles'));
+                 WHERE xar_type=? and xar_modid=?";
+        $result =& $dbconn->Execute($query,array('login',$sysid));
         list($blockid,$blocktype,$module)= $result->fields;
         $blocktype = array('id' => $blockid,
                            'blocktype' => $blocktype,
-                           'module'=> $module);
+                           'modid'=> $modid);
 
-        if (is_array($blocktype) && $blocktype['module']=='roles') {
+        if (is_array($blocktype) && $blocktype['modid']==$sysid) {
 
             $blockid=$blocktype['id'];
             //set the module to authsystem and it can be used for the existing block instance
             $query = "UPDATE $blocktypeTable
-                      SET xar_module = ?
+                      SET xar_modid = ?
                       WHERE xar_id=?";
             $bindvars=array('authsystem',$blockid);
             $result =& $dbconn->Execute($query,$bindvars);
@@ -1595,26 +1597,28 @@ function installer_admin_upgrade2()
     foreach ($newblocks as $newblock) {
         // We don't need to register new block = just change the existing block
 
+        $info = xarMod::getBaseInfo('adminpanels');
+        $sysid = $info['systemid'];
         //Get the ID of the old block type
         $query = "SELECT xar_id,
                          xar_type,
                          xar_module
                          FROM $blocktypeTable
-                 WHERE xar_type=? and xar_module=?";
-        $result =& $dbconn->Execute($query,array($newblock,'adminpanels'));
+                 WHERE xar_type=? and xar_modid=?";
+        $result =& $dbconn->Execute($query,array($newblock,$sysid));
 
         if ($result) {
             list($blockid,$blocktype,$module)= $result->fields;
             //update the module name in the block with that id to 'base'
             $blocktype = array('id' => $blockid,
                            'blocktype' => $blocktype,
-                           'module'=> $module);
+                           'modid'=> $modid);
 
-            if (is_array($blocktype) && $blocktype['module']=='adminpanels') {
+            if (is_array($blocktype) && $blocktype['modid']==$sysid) {
                $blockid=$blocktype['id'];
                //set the module to base
                $query = "UPDATE $blocktypeTable
-                         SET xar_module = ?
+                         SET xar_modid = ?
                          WHERE xar_id=?";
                $bindvars=array('base',$blockid);
                $result =& $dbconn->Execute($query,$bindvars);
