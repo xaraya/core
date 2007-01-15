@@ -174,8 +174,8 @@
                     <li class="failure">
                         <xar:ml>
                             <xar:mlstring>
-                                ERROR: The installer cannot write to the configuration file.
-                                Please verify that your webserver has write access to the file #(1)
+                                ERROR: The installer cannot write to the configuration file or the file is missing.
+                                Please verify that your webserver has write access to the file #(1) and that it exists.
                             </xar:mlstring>
                             <xar:mlvar>
                                 #$systemConfigFile#
