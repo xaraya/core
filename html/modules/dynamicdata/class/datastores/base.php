@@ -30,7 +30,23 @@ class BasicDataStore extends DDObject implements IBasicDataStore
 
         $this->fields[$name] = &$property; // use reference to original property
     }
-    
+
+    /**
+     * Remove all group by fields for this data store (for getItems)
+     */
+    function cleanGroupBy()
+    {
+        $this->groupby = array();
+    }
+
+    /**
+     * Remove all where criteria for this data store (for getItems)
+     */
+    function cleanWhere()
+    {
+        $this->where = array();
+    }
+
     /**
      * Get the field name used to identify this property (by default, the property name itself)
      */
