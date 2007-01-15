@@ -39,7 +39,7 @@
 **/
 interface IDDObject
 {
-    function __construct($name = null);
+    function __construct($name=null);
 
     // @note routines for dealing with XML files
     function readSchema(Array $args = array());
@@ -51,12 +51,12 @@ interface IDDObject
 interface IBasicDataStore
 {
     // @note this looks pretty generic, but we dont know what's in $args
-    function    getItem(array $args = array()); // would typ. need some sort of ID value
-    function createItem(array $args = array()); // would typ. need some sort of Item object
-    function updateItem(array $args = array()); // would typ. need some sort of Item object
-    function deleteItem(array $args = array()); // would typ. need some sort of ID value
-    function   getItems(array $args = array()); // would typ. need some sort of Criteria object
-    function countItems(array $args = array()); // would typ. need some sort of Criteria object
+    function    getItem(Array $args = array()); // would typ. need some sort of ID value
+    function createItem(Array $args = array()); // would typ. need some sort of Item object
+    function updateItem(Array $args = array()); // would typ. need some sort of Item object
+    function deleteItem(Array $args = array()); // would typ. need some sort of ID value
+    function   getItems(Array $args = array()); // would typ. need some sort of Criteria object
+    function countItems(Array $args = array()); // would typ. need some sort of Criteria object
 }
 
 interface IOrderedDataStore

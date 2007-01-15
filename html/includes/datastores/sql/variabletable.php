@@ -17,7 +17,7 @@ sys::import('datastores.sql');
  *
  * @package dynamicdata
 **/
-class Dynamic_VariableTable_DataStore extends Dynamic_SQL_DataStore
+class VariableTableDataStore extends SQLDataStore
 {
     /**
      * Get the field name used to identify this property (we use the property id here)

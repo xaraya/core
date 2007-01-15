@@ -17,7 +17,7 @@ sys::import('datastores.file');
  *
  * @package dynamicdata
 **/
-class Dynamic_XMLFile_DataStore extends Dynamic_File_DataStore
+class XMLFileDataStore extends FileDataStore
 {
 }
 

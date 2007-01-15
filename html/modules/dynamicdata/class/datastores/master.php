@@ -101,48 +101,48 @@ class DataStoreFactory extends Object
         {
             case 'table':
                 sys::import('datastores.sql.flattable');
-                $datastore = new Dynamic_FlatTable_DataStore($name);
+                $datastore = new FlatTableDataStore($name);
                 break;
             case 'data':
                 sys::import('datastores.sql.variabletable');
-                $datastore = new Dynamic_VariableTable_DataStore($name);
+                $datastore = new VariableTableDataStore($name);
                 break;
             case 'hook':
                 sys::import('datastores.hook');
-                $datastore = new Dynamic_Hook_DataStore($name);
+                $datastore = new HookDataStore($name);
                 break;
             case 'function':
                 sys::import('datastores.function');
-                $datastore = new Dynamic_Function_DataStore($name);
+                $datastore = new FunctionDataStore($name);
                 break;
             case 'uservars':
                 sys::import('datastores.usersettings');
                 // TODO: integrate user variable handling with DD
-                $datastore = new Dynamic_UserSettings_DataStore($name);
+                $datastore = new UserSettingsDataStore($name);
                 break;
             case 'modulevars':
                 sys::import('datastores.modulevariables');
                 // TODO: integrate module variable handling with DD
-                $datastore = new Dynamic_ModuleVariables_DataStore($name);
+                $datastore = new ModuleVariablesDataStore($name);
                 break;
 
                 // TODO: other data stores
             case 'ldap':
                 sys::import('datastores.ldap');
-                $datastore = new Dynamic_LDAP_DataStore($name);
+                $datastore = new LDAPDataStore($name);
                 break;
             case 'xml':
                 sys::import('datastores.file.xml');
-                $datastore = new Dynamic_XMLFile_DataStore($name);
+                $datastore = new XMLFileDataStore($name);
                 break;
             case 'csv':
                 sys::import('datastores.file.csv');
-                $datastore = new Dynamic_CSVFile_DataStore($name);
+                $datastore = new CSVFileDataStore($name);
                 break;
             case 'dummy':
             default:
                 sys::import('datastores.dummy');
-                $datastore = new Dynamic_Dummy_DataStore($name);
+                $datastore = new DummyDataStore($name);
                 break;
         }
         return $datastore;

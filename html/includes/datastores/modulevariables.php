@@ -11,11 +11,11 @@
  *
  * @package dynamicdata
  */
-class Dynamic_ModuleVariables_DataStore extends BasicDataStore
+class ModuleVariablesDataStore extends BasicDataStore
 {
     public $modname;
 
-    function __construct($name)
+    function __construct($name=null)
     {
         // invoke the default constructor from our parent class
         parent::__construct($name);
@@ -32,7 +32,7 @@ class Dynamic_ModuleVariables_DataStore extends BasicDataStore
         }
     }
 
-    function getItem($args = array())
+    function getItem(Array $args = array())
     {
         if (empty($args['itemid'])) {
             // by default, there's only 1 item here, except if your module has several
@@ -57,13 +57,13 @@ class Dynamic_ModuleVariables_DataStore extends BasicDataStore
         return $itemid;
     }
 
-    function createItem($args = array())
+    function createItem(Array $args = array())
     {
         // There's no difference with updateItem() here, because xarModVars:set() handles that
         return $this->updateItem($args);
     }
 
-    function updateItem($args = array())
+    function updateItem(Array $args = array())
     {
         if (empty($args['itemid'])) {
             // by default, there's only 1 item here, except if your module has several
@@ -90,7 +90,7 @@ class Dynamic_ModuleVariables_DataStore extends BasicDataStore
         return $itemid;
     }
 
-    function deleteItem($args = array())
+    function deleteItem(Array $args = array())
     {
         if (empty($args['itemid'])) {
             // by default, there's only 1 item here, except if your module has several
@@ -112,12 +112,12 @@ class Dynamic_ModuleVariables_DataStore extends BasicDataStore
         return $itemid;
     }
 
-    function getItems($args = array())
+    function getItems(Array $args = array())
     {
         // TODO: not supported by xarMod*Var
     }
 
-    function countItems($args = array())
+    function countItems(Array $args = array())
     {
         // TODO: not supported by xarMod*Var
         return 0;
