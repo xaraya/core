@@ -109,6 +109,10 @@ function base_adminmenublock_display($blockinfo)
                 $labelDisplay = $mod['displayname'];
                 // get URL to module's main function
                 $link = xarModURL($modname, 'admin', 'main', array());
+                if (!xarSecurityCheck('ViewBlock',0,'BlockItem',$blockinfo['name']. ":" . $mod['name'])) {
+                    $adminmods[$modname]['features'] = array();
+                    continue;
+                }
                 // if this module is loaded we probably want to display it with -current css rule in the menu
                 $adminmods[$modname]['features'] = array(
                     'label'     => $labelDisplay,
@@ -116,7 +120,7 @@ function base_adminmenublock_display($blockinfo)
                     'modactive' => 0,
                     'overview'  => 0,
                     'maintitle' => xarML('Show administration options for module #(1)', $labelDisplay));
-                
+
                 if ($modname == $thismodname && in_array($thismodtype, $admintypes)) {
                     // this module is currently loaded (active), we need to display
                     // 1. blank label 2. no URL 3. no title text 4. links to module functions, when users looking at default main function
@@ -142,17 +146,17 @@ function base_adminmenublock_display($blockinfo)
                                 'funcactive'    => ($menulink['url'] == $currenturl) ? 1 : 0
                             );
                         }
-                    } 
+                    }
                 } // if
             } // foreach
-            
+
             $template = 'verticallistbyname';
             $data = array('adminmods'     => $adminmods);
             break;
 
         default:
         case 'bycat': // sort by categories
-            // <mrb> for the release we can do without the adminmenu table, if 
+            // <mrb> for the release we can do without the adminmenu table, if
             // that gains functionality consider putting it back.
             foreach ($mods as $mod) {
                 // get URL to module's main function
@@ -165,6 +169,10 @@ function base_adminmenublock_display($blockinfo)
                 $cat = xarVarPrepForDisplay($mod['category']);
 
                 // if this module is loaded we probably want to display it with -current css rule in the menu
+                if (!xarSecurityCheck('ViewBlock',0,'BlockItem',$blockinfo['name']. ":" . $mod['name'])) {
+                    $catmods[$cat][$modname]['features'] = array();
+                    continue;
+                }
                 $catmods[$cat][$modname]['features'] = array(
                     'label'     => $labelDisplay,
                     'link'      => $link,
@@ -202,7 +210,7 @@ function base_adminmenublock_display($blockinfo)
                    unset($mod['displayname']);
                 }
             } //inner foreach
-                
+
             $template = 'verticallistbycats';
             $data = array(
                 'catmods'       => $catmods

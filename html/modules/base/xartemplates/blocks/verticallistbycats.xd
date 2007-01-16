@@ -22,7 +22,7 @@
     <!--
         we dont really want to display a category if there are no modules that belong to it,
         even though we're passing all category names to this template from API [andyv]
-    -->    
+    -->
     <xar:if condition="count($cats) ne 0">
         <ul class="xar-menu-section">
             <li class="xar-menu-section">
@@ -32,12 +32,14 @@
                           here we are dealing with 3 main conditions:
                                 - if module is active and main/overview function is loaded, we display item as having *-current state
                                 - if module is active and main/overview function is not loaded, we allow user to click the item to load main/overview
-                                - if module is not active, user can activate item by clicking its link, upon which s/he loads main/overview function 
+                                - if module is not active, user can activate item by clicking its link, upon which s/he loads main/overview function
                             (some redundancy in template allows to easily port it for drop-down lists implementations in the future)
                      -->
                     <xar:foreach in="$cats" value="$mod" key="$modname">
-                        
-                        <xar:if condition="$mod['features']['modactive'] and !$mod['features']['overview']">
+
+                        <xar:if condition="empty($mod['features'])">
+                            <xar:continue />
+                        <xar:elseif condition="$mod['features']['modactive'] and !$mod['features']['overview']" />
                             <li class="xar-menu-item-current">
                                 <a name="activeitem" title="#$mod['features']['label']#">#$mod['features']['label']#</a>
                                 <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
@@ -48,7 +50,7 @@
                                                 <li class="xar-menu-subitem-current"><a name="activesubitem" title="#$sublinks['adminlabel']#">#$sublinks['adminlabel']#</a></li>
                                             <xar:else />
                                                 <li class="xar-menu-subitem"><a href="#$sublinks['adminlink']#" title="#$sublinks['admintitle']#">#$sublinks['adminlabel']#</a></li>
-                                            </xar:if>                                        
+                                            </xar:if>
                                         </xar:foreach>
                                     </ul>
                                 </xar:if>
@@ -64,7 +66,7 @@
                                                 <li class="xar-menu-subitem-current"><a name="activesubitem" title="#$sublinks['adminlabel']#">#$sublinks['adminlabel']#</a></li>
                                             <xar:else />
                                                 <li class="xar-menu-subitem"><a href="#$sublinks['adminlink']#" title="#$sublinks['admintitle']#">#$sublinks['adminlabel']#</a></li>
-                                            </xar:if>                                        
+                                            </xar:if>
                                         </xar:foreach>
                                     </ul>
                                 </xar:if>
@@ -80,7 +82,7 @@
                                                 <li class="xar-menu-subitem-current"><a name="activesubitem" title="#$sublinks['adminlabel']#">#$sublinks['adminlabel']#</a></li>
                                             <xar:else />
                                                 <li class="xar-menu-subitem"><a href="#$sublinks['adminlink']#" title="#$sublinks['admintitle']#">#$sublinks['adminlabel']#</a></li>
-                                            </xar:if>                                        
+                                            </xar:if>
                                         </xar:foreach>
                                     </ul>
                                 </xar:if>
@@ -94,7 +96,7 @@
 </xar:foreach>
 <!--
     the modvar to display/hide admin logout link should be available starting from version 1.2.3 of adminpanels : upgrade transparently via modules module
--->  
+-->
 <xar:if condition="$showlogout">
     <ul class="xar-menu-section">
         <li class="xar-menu-section">
@@ -107,7 +109,7 @@
                 <li class="xar-menu-item">
                     <a title="#xarML('Logout as administrator')#" href="&xar-modurl-base-admin-confirmlogout;">
                         <xar:mlstring>Admin logout</xar:mlstring>
-                    </a> 
+                    </a>
                 </li>
             </ul>
         </li>
@@ -115,13 +117,13 @@
 </xar:if>
 
 <!-- DO NOT UNCOMMENT - EXAMPLE!
-    
+
     Below is a typical (simplified) example of nested unordered list that we process in this template:
- 
+
     <ul>
         <li>
             <a href="#" class="current">
-                Item one 
+                Item one
             </a>
             <ul class="sub-item">
                 <li class="sub-current">
@@ -168,11 +170,11 @@
         - when combined with correct css the output can be used for building a wide variety of standards-compliant layouts
         - links in this template can be put on the same line with <li></li> to avoid extra vertical spacing in some browsers with bad css support (surprise:- IE/Win)
         - when overriding this template in your own theme you may wish to delete all examples and comments, that's perfectly alright
-    
-    THINGS TO PAY ATTENTION TO:     
+
+    THINGS TO PAY ATTENTION TO:
         - every listitem contains a link
         - a link can be either real or 'empty' (named anchors) depending on its *-current* status
-        - this built-in implementation of vertical menus uses empty links as means of providing visual feedback in all browsers, including those that dont support :hover state on anything except links (surprise: IE/Win) 
+        - this built-in implementation of vertical menus uses empty links as means of providing visual feedback in all browsers, including those that dont support :hover state on anything except links (surprise: IE/Win)
 
 -->
 </xar:template>

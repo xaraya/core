@@ -15,7 +15,9 @@
             </li>
             </xar:if>
             <xar:foreach in="$adminmods" value="$mod" key="$modname">
-                <xar:if condition="$mod['features']['modactive'] and !$mod['features']['overview']">
+                <xar:if condition="empty($mod['features'])">
+                    <xar:continue />
+                <xar:elseif condition="$mod['features']['modactive'] and !$mod['features']['overview']" />
                     <li class="xar-menu-item-current"><a name="activeitem" title="#$mod['features']['label']#">#$mod['features']['label']#</a>
                         <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
                             <ul class="xar-menu-subitem">
@@ -25,7 +27,7 @@
                                         <li class="xar-menu-subitem-current"><a name="activesubitem" title="#$sublinks['adminlabel']#">#$sublinks['adminlabel']#</a></li>
                                     <xar:else />
                                         <li class="xar-menu-subitem"><a href="#$sublinks['adminlink']#" title="#$sublinks['admintitle']#">#$sublinks['adminlabel']#</a></li>
-                                    </xar:if>                                        
+                                    </xar:if>
                                 </xar:foreach>
                             </ul>
                         </xar:if>
@@ -40,7 +42,7 @@
                                         <li class="xar-menu-subitem-current"><a name="activesubitem" title="#$sublinks['adminlabel']#">#$sublinks['adminlabel']#</a></li>
                                     <xar:else />
                                         <li class="xar-menu-subitem"><a href="#$sublinks['adminlink']#" title="#$sublinks['admintitle']#">#$sublinks['adminlabel']#</a></li>
-                                    </xar:if>                                        
+                                    </xar:if>
                                 </xar:foreach>
                             </ul>
                         </xar:if>
@@ -55,7 +57,7 @@
                                         <li class="xar-menu-subitem-current"><a name="activesubitem" title="#$sublinks['adminlabel']#">#$sublinks['adminlabel']#</a></li>
                                     <xar:else />
                                         <li class="xar-menu-subitem"><a href="#$sublinks['adminlink']#" title="#$sublinks['admintitle']#">#$sublinks['adminlabel']#</a></li>
-                                    </xar:if>                                        
+                                    </xar:if>
                                 </xar:foreach>
                             </ul>
                         </xar:if>
@@ -74,7 +76,7 @@
         <li class="xar-menu-item">
             <a title="#xarML('Logout as administrator')#" href="&xar-modurl-base-admin-confirmlogout;">
                 <xar:mlstring>Admin logout</xar:mlstring>
-            </a> 
+            </a>
         </li>
     </ul>
 </xar:if>
