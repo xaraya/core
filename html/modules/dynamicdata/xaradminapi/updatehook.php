@@ -33,17 +33,11 @@ function dynamicdata_adminapi_updatehook($args)
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4) (not numeric or not set)';
         $vars = array('object id', 'admin', $dd_function, 'dynamicdata');
         throw new BadParameterException($vars,$msg);
-        // we *must* return $extrainfo for now, or the next hook will fail
-        // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
-        //return $extrainfo;
     }
     if (!isset($extrainfo) || !is_array($extrainfo)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
         $vars = array('extrainfo', 'admin', $dd_function, 'dynamicdata');
         throw new BadParameterException($vars,$msg);
-        // we *must* return $extrainfo for now, or the next hook will fail
-        // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
-        //return $extrainfo;
     }
 
     // We can exit immediately if the status flag is set because we are just updating
@@ -66,9 +60,6 @@ function dynamicdata_adminapi_updatehook($args)
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
         $vars = array('module name', 'admin', $dd_function, 'dynamicdata');
         throw new BadParameterException($vars,$msg);
-        // we *must* return $extrainfo for now, or the next hook will fail
-        // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
-        //return $extrainfo;
     }
 
     if (!empty($extrainfo['itemtype'])) {
@@ -86,23 +77,17 @@ function dynamicdata_adminapi_updatehook($args)
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
         $vars = array('item id', 'admin', $dd_function, 'dynamicdata');
         throw new BadParameterException($vars,$msg);
-        // we *must* return $extrainfo for now, or the next hook will fail
-        // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
-        //return $extrainfo;
     }
 
     $myobject = & DataObjectMaster::getObject(array('moduleid' => $modid,
                                          'itemtype' => $itemtype,
                                          'itemid'   => $itemid,
                                          'extend' => false));
-    var_dump($myobject);exit;
+    if($myobject->objectid == 1) return $extrainfo;
     if (!isset($myobject)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
         $vars = array('object', 'admin', $dd_function, 'dynamicdata');
         throw new BadParameterException($vars,$msg);
-        // we *must* return $extrainfo for now, or the next hook will fail
-        // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
-        //return $extrainfo;
     }
 
     $myobject->getItem();
@@ -147,9 +132,6 @@ function dynamicdata_adminapi_updatehook($args)
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
         $vars = array('create/update', 'admin', $dd_function, 'dynamicdata');
         throw new BadParameterException($vars,$msg);
-        // we *must* return $extrainfo for now, or the next hook will fail
-        // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
-        //return $extrainfo;
     }
     // Return the extra info
     return $extrainfo;
