@@ -95,6 +95,7 @@ function dynamicdata_adminapi_updatehook($args)
                                          'itemtype' => $itemtype,
                                          'itemid'   => $itemid,
                                          'extend' => false));
+    var_dump($myobject);exit;
     if (!isset($myobject)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
         $vars = array('object', 'admin', $dd_function, 'dynamicdata');
