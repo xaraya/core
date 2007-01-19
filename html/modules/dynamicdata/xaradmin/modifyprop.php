@@ -60,6 +60,7 @@ function dynamicdata_admin_modifyprop()
                                   'moduleid' => $modid,
                                   'itemtype' => $itemtype));
 
+    if ($itemid == null) unset($object);
     if (isset($object)) {
         $objectid = $object['objectid'];
         $modid = $object['moduleid'];
