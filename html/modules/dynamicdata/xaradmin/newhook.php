@@ -46,12 +46,14 @@ function dynamicdata_admin_newhook($args)
         $itemtype = 0;
     }
 
+    echo isset($objectid);
     if (!empty($extrainfo['itemid']) && is_numeric($extrainfo['itemid'])) {
         $itemid = $extrainfo['itemid'];
     } elseif (isset($objectid)) {
         $itemid = $objectid;
     } else {
-        $itemid = 0;
+//        $itemid = 0;
+        return;
     }
     $object = & DataObjectMaster::getObject(array(
                                        'moduleid' => $modid,
