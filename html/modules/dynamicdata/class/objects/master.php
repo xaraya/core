@@ -306,12 +306,14 @@ class DataObjectMaster extends Object
             if(isset($this->properties[$newproperty->name]))
                 continue;
             $args = array(
-                'name'      => $newproperty->name,
-                'type'      => $newproperty->type,
-                'label'     => $newproperty->label,
-                'source'    => $newproperty->source,
-                'status'    => $newproperty->status,
-                'datastore' => $newproperty->datastore,
+                'name'       => $newproperty->name,
+                'type'       => $newproperty->type,
+                'label'      => $newproperty->label,
+                'source'     => $newproperty->source,
+                'status'     => $newproperty->status,
+                'datastore'  => $newproperty->datastore,
+                'validation' => $newproperty->datastore,
+                'default'    => $newproperty->default,
             );
             $this->addProperty($args);
             if(!isset($this->datastores[$newproperty->datastore]))
