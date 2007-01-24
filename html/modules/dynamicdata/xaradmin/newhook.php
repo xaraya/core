@@ -32,7 +32,6 @@ function dynamicdata_admin_newhook($args)
     } else {
         $modname = $extrainfo['module'];
     }
-
     $modid = xarModGetIDFromName($modname);
     if (empty($modid)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
@@ -46,7 +45,7 @@ function dynamicdata_admin_newhook($args)
         $itemtype = 0;
     }
 
-    if (!empty($extrainfo['itemid']) && is_numeric($extrainfo['itemid'])) {
+    if (isset($extrainfo['itemid']) && is_numeric($extrainfo['itemid'])) {
         $itemid = $extrainfo['itemid'];
     } elseif (isset($objectid) && !empty($objectid)) {
         $itemid = $objectid;

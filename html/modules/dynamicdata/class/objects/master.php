@@ -303,8 +303,7 @@ class DataObjectMaster extends Object
         foreach($properties as $newproperty)
         {
             // ignore if this property already belongs to the object
-            if(isset($this->properties[$newproperty->name]))
-                continue;
+            if(isset($this->properties[$newproperty->name])) continue;
             $args = array(
                 'name'       => $newproperty->name,
                 'type'       => $newproperty->type,
