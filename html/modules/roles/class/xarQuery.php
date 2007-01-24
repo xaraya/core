@@ -329,9 +329,11 @@ class xarQuery extends Object
     }
     function notin($field1,$field2,$active=1)
     {
-        return $this->addcondition(array('field1' => $field1,
+        $key = $this->_addcondition();
+        $this->conditions[$key]=array('field1' => $field1,
                                   'field2' => $field2,
-                                  'op' => 'NOT IN'),$active);
+                                  'op' => 'NOT IN');
+        return $key;
     }
     function regex($field1,$field2)
     {
@@ -915,6 +917,14 @@ class xarQuery extends Object
     {
         if (!isset($this->dbconn)) $this->dbconn =& xarDBGetConn();
         return $this->dbconn->getLastId($table);
+    }
+
+    function lastid($table="", $id="")
+    {
+        if (!isset($this->dbconn)) $this->dbconn =& xarDBGetConn();
+        $result = $this->dbconn->Execute("SELECT MAX($id) FROM $table");
+        list($id) = $result->fields;
+        return $id;
     }
 
     /** These last three can probably be removed **/
