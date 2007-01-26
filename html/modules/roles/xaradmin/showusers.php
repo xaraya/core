@@ -21,9 +21,8 @@ function roles_admin_showusers()
     if (xarVarIsCached('roles', 'defaultgroupuid')) {
         $defaultgroupuid = xarVarGetCached('roles', 'defaultgroupuid');
     } else {
-        $defaultgroup = xarModAPIFunc('roles','user','getdefaultgroup');
         $defaultgroupuid = xarModAPIFunc('roles','user','get',
-                                                 array('uname'  => $defaultgroup,
+                                                 array('uname'  => xarModGetVar('roles','defaultgroup'),
                                                        'type'   => ROLES_GROUPTYPE));
     }
     xarVarSetCached('roles', 'defaultgroupuid', $defaultgroupuid);

@@ -27,7 +27,7 @@ function roles_adminapi_deletegroup($args)
     $role = xarRoles::getRole($uid);
 
    // Prohibit removal of any groups the system needs
-   $defaultgroup=xarModAPIFunc('roles', 'user', 'getdefaulgroup');
+   $defaultgroup = xarModGetVar('roles','defaultgroup');
 
     if($role->getName() == $defaultgroup) {
         throw new ForbiddenOperationException($defaultgroup,'The group #(1) is the default group for new users. If you want to remove it change the appropriate configuration setting first.');

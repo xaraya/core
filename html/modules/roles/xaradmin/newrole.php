@@ -1,24 +1,21 @@
 <?php
 /**
- * Create a new role
- *
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
- * newRole - create a new role
- * Takes no parameters
+ * Show new role form
  *
  * @author Marc Lutolf
  */
 function roles_admin_newrole()
 {
-    $defaultRole = xarModAPIFunc('roles', 'user', 'get', array('name'  => xarModAPIFunc('roles','user','getdefaultgroup'), 'type'   => 1));
+    $defaultRole = xarModAPIFunc('roles', 'user', 'get', array('name'  => xarModGetVar('roles','defaultgroup'), 'type'   => 1));
     if (!xarVarFetch('return_url',  'isset',  $return_url, NULL, XARVAR_DONT_SET)) {return;}
     $defaultuid = $defaultRole['uid'];
     if (!xarVarFetch('return_url',  'isset', $return_url, NULL, XARVAR_DONT_SET)) {return;}

@@ -178,7 +178,7 @@ Public (this MAY affect someone)
 * xarModAPIFunc('dynamicdata','admin','checkinput') : never used
 * xarModAPIFunc('dynamicdata','user','interface') : never used
 * xarModAPIFunc('dynamicdata','user','getsources') : never used
-
+* xarModAPIFunc('roles','user','getdefaultgroup'): use xarModGetVar('roles','defaultgroup');
 
 DIFFERENCES BETWEEN PHP 5.0/5.1/5.2
 ===================================
