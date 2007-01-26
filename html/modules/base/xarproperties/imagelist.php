@@ -51,7 +51,8 @@ class ImageListProperty extends SelectProperty
         $basedir = $this->basedir;
         $filetype = $this->filetype;
         if (!empty($value) &&
-            preg_match('/^[a-zA-Z0-9_\/.-]+$/',$value) &&
+            //slight change to allow spaces
+            preg_match('/^[a-zA-Z0-9_\/.\-\040]+$/',$value) &&
             preg_match("/$filetype$/",$value) &&
             file_exists($basedir.'/'.$value) &&
             is_file($basedir.'/'.$value)) {
@@ -107,7 +108,7 @@ class ImageListProperty extends SelectProperty
         $filetype = $this->filetype;
 
         if (!empty($value) &&
-            preg_match('/^[a-zA-Z0-9_\/.-]+$/',$value) &&
+            preg_match('/^[a-zA-Z0-9_\/.\-\040]+$/',$value) &&
             preg_match("/$filetype$/",$value) &&
             file_exists($basedir.'/'.$value) &&
             is_file($basedir.'/'.$value)) {
