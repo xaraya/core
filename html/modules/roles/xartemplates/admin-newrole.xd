@@ -1,19 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html
-</xar:comment>
-<xar:set name="stateinactive">
-    ROLES_STATE_INACTIVE
-</xar:set>
-<xar:set name="statenotvalidated">
-    ROLES_STATE_NOTVALIDATED
-</xar:set>
-<xar:set name="stateactive">
-    ROLES_STATE_ACTIVE
-</xar:set>
-<xar:set name="statepending">
-    ROLES_STATE_PENDING
-</xar:set>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:mlstring>
@@ -74,6 +60,7 @@
                         Member Of:
                     </xar:mlstring>
                 </label>
+
                 <select name="pparentid" id="pparentid">
                     <xar:loop name="$groups">
                         <xar:if condition="$loop:item['uid'] eq $pparentid">
@@ -120,79 +107,14 @@
                         <input type="text" name="phome" id="phome" value="#$phome#" size="40" maxlength="100" tabindex="7" />
                     </div>
                 </xar:if>
-                <xar:comment> There is no real use displaying this here. The role is not yet created
-                              So the primary parent will be for now the same as the set parent on role creation
-                <xar:if condition="xarModGetVar('roles','setprimaryparent')">
-                    <div class="xar-form-input-wrapper">
-                        <label for="phome" title="#xarML('Home URL')#" class="xar-form-label">
-                            <xar:mlstring>
-                                Primary Group:
-                            </xar:mlstring>
-                        </label>
-                    <xar:data-input type="grouplist" name="pprimaryparent" id="pprimaryparent" value="$pparentid" tabindex="8" />
-                    </div>
-                </xar:if>
-                </xar:comment>
+
                 <div class="xar-form-input-wrapper">
                     <label for="pstate" title="#xarML('Status of this user')#" class="xar-form-label">
                         <xar:mlstring>
                             Status:
                         </xar:mlstring>
                     </label>
-                    <select name="pstate" id="pstate">
-                        <xar:if condition="$pstate eq $stateinactive">
-                            <option value="#$stateinactive#" selected="selected">
-                                <xar:mlstring>
-                                    Inactive
-                                </xar:mlstring>
-                            </option>
-                            <xar:else />
-                            <option value="#$stateinactive#">
-                                <xar:mlstring>
-                                    Inactive
-                                </xar:mlstring>
-                            </option>
-                        </xar:if>
-                        <xar:if condition="$pstate eq $statenotvalidated">
-                            <option value="#$statenotvalidated#" selected="selected">
-                                <xar:mlstring>
-                                    Not Validated
-                                </xar:mlstring>
-                            </option>
-                            <xar:else />
-                            <option value="#$statenotvalidated#">
-                                <xar:mlstring>
-                                    Not Validated
-                                </xar:mlstring>
-                            </option>
-                        </xar:if>
-                        <xar:if condition="$pstate eq $stateactive">
-                            <option value="#$stateactive#" selected="selected">
-                                <xar:mlstring>
-                                    Active
-                                </xar:mlstring>
-                            </option>
-                            <xar:else />
-                            <option value="#$stateactive#">
-                                <xar:mlstring>
-                                    Active
-                                </xar:mlstring>
-                            </option>
-                        </xar:if>
-                        <xar:if condition="$pstate eq $statepending">
-                            <option value="#$statepending#" selected="selected">
-                                <xar:mlstring>
-                                    Pending
-                                </xar:mlstring>
-                            </option>
-                            <xar:else />
-                            <option value="#$statepending#">
-                                <xar:mlstring>
-                                    Pending
-                                </xar:mlstring>
-                            </option>
-                        </xar:if>
-                    </select>
+                    <xar:data-input type="dropdown" name="pstate" id="pstate" value="$pstate" validation="$states" />
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="ppass1" title="#xarML('Password for this user')#" class="xar-form-label">

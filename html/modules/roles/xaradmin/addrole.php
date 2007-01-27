@@ -1,17 +1,17 @@
 <?php
 /**
- * Add a role
- *
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
+
 /**
- * addRole - add a role
+ * Create a role
+ *
  * This function tries to create a user and provides feedback on the
  * result.
  *
@@ -31,8 +31,8 @@ function roles_admin_addrole()
     // TODO: need to see what to do with auth module
     $basetype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
     if ($basetype == ROLES_USERTYPE) {
-        xarVarFetch('puname', 'str:1:35:', $puname, NULL, XARVAR_NOT_REQUIRED);
-        xarVarFetch('pemail', 'str:1:', $pemail, NULL, XARVAR_NOT_REQUIRED);
+        xarVarFetch('puname', 'str:1:35:', $puname);
+        xarVarFetch('pemail', 'email', $pemail);
         xarVarFetch('ppass1', 'str:1:', $ppass1, NULL, XARVAR_NOT_REQUIRED);
         xarVarFetch('ppass2', 'str:1:', $ppass2, NULL, XARVAR_NOT_REQUIRED);
         xarVarFetch('pstate', 'str:1:', $pstate, NULL, XARVAR_NOT_REQUIRED);
@@ -48,28 +48,18 @@ function roles_admin_addrole()
         }
 
         // check for duplicate username
-        $user = xarModAPIFunc('roles',
-            'user',
-            'get',
-            array('uname' => $puname));
+        $user = xarModAPIFunc('roles', 'user','get',
+                        array('uname' => $puname));
 
-        if ($user != false) {
+        if ($user) {
             throw new DuplicateException(array('user',$puname));
         }
 
-        // check for empty email address
-        if ($pemail == '') {
-            throw new BadParameterException(null,'Email address should have a value');
-        }
         // check for duplicate email address
         if(xarModGetVar('roles','uniqueemail')) {
             $user = xarModAPIFunc('roles','user', 'get', array('email' => $pemail));
-            if ($user != false) throw new DuplicateException(array('email',$pemail));
+            if ($user) throw new DuplicateException(array('email',$pemail));
         }
-        // TODO: Replace with DD property type check.
-        // check for valid email address
-        $res = preg_match('/.*@.*/', $pemail);
-        if ($res == false) throw new BadParameterException($pemail,'The email address "#(1)" is invalid');
 
         if (strcmp($ppass1, $ppass2) != 0) {
             throw new BadParameterException(null,'The two entered passwords are not the same');
@@ -111,7 +101,7 @@ function roles_admin_addrole()
     $uid = xarModAPIFunc('roles','admin','create',$args);
 
     // call item create hooks (for DD etc.)
-// TODO: move to add() function
+    // TODO: move to add() function
     $pargs['module'] = 'roles';
     $pargs['itemtype'] = $itemtype;
     $pargs['itemid'] = $uid;
