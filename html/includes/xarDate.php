@@ -2,11 +2,8 @@
 
 sys::import('structures.datetime');
 
-class xarDate extends Object
+class xarDate extends XarDateTime
 {
-    function __construct() {
-        parent::__construct();
-    }
 }
 
 ?>
