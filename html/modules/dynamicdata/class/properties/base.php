@@ -108,9 +108,9 @@ class DataProperty extends Object implements iDataProperty
     {
         $isvalid = true;
         $value = null;
-        xarVarFetch('dd_'.$this->id, 'isset', $ddvalue,  NULL, XARVAR_DONT_SET);
-        if(isset($ddvalue))
-            $value = $ddvalue;
+        xarVarFetch($name, 'isset', $namevalue,  NULL, XARVAR_DONT_SET);
+        if(isset($namevalue))
+            $value = $namevalue;
         else
         {
             xarVarFetch($this->name, 'isset', $fieldvalue,  NULL, XARVAR_DONT_SET);
@@ -118,9 +118,9 @@ class DataProperty extends Object implements iDataProperty
                 $value = $fieldvalue;
             else
             {
-                xarVarFetch($name, 'isset', $namevalue,  NULL, XARVAR_DONT_SET);
-                if(isset($namevalue))
-                    $value = $namevalue;
+                xarVarFetch('dd_'.$this->id, 'isset', $ddvalue,  NULL, XARVAR_DONT_SET);
+                if(isset($ddvalue))
+                    $value = $ddvalue;
                 else
                     $isvalid = false;
             }
