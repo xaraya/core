@@ -191,15 +191,16 @@ class xarRole extends Object
         // add 1 to the users field of the parent group. This is for display purposes.
         if ($member->isUser()) {
             // get the current count
-            $query = "SELECT xar_users FROM $this->rolestable WHERE xar_uid = ?";
-            $result = $this->dbconn->Execute($query,array($this->getID()));
+            $q = new xarQuery('SELECT',$this->rolestable,'xar_users');
+            $q->eq('xar_uid',$this->getID());
+            if (!$q->run()) return;
+            $result = $q->row();
 
             // add 1 and update.
-            list($users) = $result->fields;
-            $users = $users + 1;
-            $query = "UPDATE " . $this->rolestable . " SET xar_users = ? WHERE xar_uid = ?";
-            $bindvars = array($users,$this->getID());
-            $this->dbconn->Execute($query,$bindvars);
+            $q = new xarQuery('UPDATE',$this->rolestable);
+            $q->eq('xar_uid',$this->getID());
+            $q->addfield('xar_users',$result['xar_users']+1);
+            if (!$q->run()) return;
         }
         // empty the privset cache
         // $privileges = new xarPrivileges();
@@ -230,15 +231,16 @@ class xarRole extends Object
         // subtract 1 from the users field of the parent group. This is for display purposes.
         if ($member->isUser()) {
             // get the current count.
-            $query = "SELECT xar_users FROM $this->rolestable WHERE xar_uid = ?";
-            $result = $this->dbconn->Execute($query,array($this->getID()));
+            $q = new xarQuery('SELECT',$this->rolestable,'xar_users');
+            $q->eq('xar_uid',$this->getID());
+            if (!$q->run()) return;
+            $result = $q->row();
 
             // subtract 1 and update.
-            list($users) = $result->fields;
-            $users = $users - 1;
-            $query = "UPDATE " . $this->rolestable . " SET xar_users = ? WHERE xar_uid = ?";
-            $bindvars = array($users, $this->getID());
-            $this->dbconn->Execute($query,$bindvars);
+            $q = new xarQuery('UPDATE',$this->rolestable);
+            $q->eq('xar_uid',$this->getID());
+            $q->addfield('xar_users',$result['xar_users']-1);
+            if (!$q->run()) return;
         }
         // empty the privset cache
         // $privileges = new xarPrivileges();
