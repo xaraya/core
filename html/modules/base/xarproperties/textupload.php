@@ -182,7 +182,7 @@ class TextUploadProperty extends DataProperty
 //    function showInput($name = '', $value = null, $size = 0, $maxsize = 0, $id = '', $tabindex = '')
     public function showInput(Array $data = array())
     {
-        extract($args);
+        extract($data);
 
         $data = array();
 
