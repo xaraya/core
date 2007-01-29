@@ -486,10 +486,7 @@ function xarQueryMask($mask, $showException=1, $component='', $instance='', $mod
  */
 function xarSecurityCheck($mask, $showException=1, $component='', $instance='', $module='', $role='',$pnrealm=0,$pnlevel=0)
 {
-    // Obviously, do NOT uncomment the next line :-)
-    //return true;
     $installing = xarCore::getCached('installer','installing');
-
     if(isset($installing) && ($installing == true)) {
        return true;
     }

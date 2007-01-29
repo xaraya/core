@@ -20,7 +20,7 @@ function initializeSetup()
     *********************************************************************/
     xarRoles::makeGroup('Everybody');
     xarRoles::makeUser('Anonymous','anonymous','anonymous@xaraya.com');
-    xarRoles::makeUser(Admin','Admin','admin@xaraya.com','password');
+    xarRoles::makeUser('Admin','Admin','admin@xaraya.com','password');
     xarRoles::makeGroup('Administrators');
     xarRoles::makeGroup('Users');
     xarRoles::makeUser('Myself','myself','myself@xaraya.com','password');
@@ -142,55 +142,55 @@ function initializeSetup()
     * xarMasks::register(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
-    xarMasks::register('AdminAll','All','All','All','All','ACCESS_ADMIN');
+    xarMasks::register('AdminAll','All','All','All','All',xarSecurityLevel('ACCESS_ADMIN'));
 
-    xarMasks::register('ViewBaseBlocks','All','base','Block','All:All:All','ACCESS_OVERVIEW');
-    xarMasks::register('ReadBaseBlock','All','base','Block','All:All:All','ACCESS_READ');
-    xarMasks::register('EditBaseBlock','All','base','Block','All:All:All','ACCESS_EDIT');
-    xarMasks::register('AddBaseBlock','All','base','Block','All:All:All','ACCESS_ADD');
-    xarMasks::register('DeleteBaseBlock','All','base','Block','All:All:All','ACCESS_DELETE');
-    xarMasks::register('AdminBaseBlock','All','base','Block','All:All:All','ACCESS_ADMIN');
-    xarMasks::register('ViewBase','All','base','All','All','ACCESS_OVERVIEW');
-    xarMasks::register('ReadBase','All','base','All','All','ACCESS_READ');
-    xarMasks::register('AdminBase','All','base','All','All','ACCESS_ADMIN');
+    xarMasks::register('ViewBaseBlocks','All','base','Block','All:All:All',xarSecurityLevel('ACCESS_OVERVIEW'));
+    xarMasks::register('ReadBaseBlock','All','base','Block','All:All:All',xarSecurityLevel('ACCESS_READ'));
+    xarMasks::register('EditBaseBlock','All','base','Block','All:All:All',xarSecurityLevel('ACCESS_EDIT'));
+    xarMasks::register('AddBaseBlock','All','base','Block','All:All:All',xarSecurityLevel('ACCESS_ADD'));
+    xarMasks::register('DeleteBaseBlock','All','base','Block','All:All:All',xarSecurityLevel('ACCESS_DELETE'));
+    xarMasks::register('AdminBaseBlock','All','base','Block','All:All:All',xarSecurityLevel('ACCESS_ADMIN'));
+    xarMasks::register('ViewBase','All','base','All','All',xarSecurityLevel('ACCESS_OVERVIEW'));
+    xarMasks::register('ReadBase','All','base','All','All',xarSecurityLevel('ACCESS_READ'));
+    xarMasks::register('AdminBase','All','base','All','All',xarSecurityLevel('ACCESS_ADMIN'));
     /* This AdminPanel mask is added to replace the adminpanel module equivalent
      *   - since adminpanel module is removed as of 1.1.0
      * At some stage we should remove this but practice has been to use this mask in xarSecurityCheck
      * frequently in module code and templates - left here for now for ease in backward compatibiilty
      * @todo remove this
      */
-    xarMasks::register('AdminPanel','All','base','All','All','ACCESS_ADMIN');
+    xarMasks::register('AdminPanel','All','base','All','All',xarSecurityLevel('ACCESS_ADMIN'));
 
-    xarMasks::register('AdminInstaller','All','installer','All','All','ACCESS_ADMIN');
+    xarMasks::register('AdminInstaller','All','installer','All','All',xarSecurityLevel('ACCESS_ADMIN'));
 
-    xarMasks::register('ViewRolesBlocks','All','roles','Block','All','ACCESS_OVERVIEW');
-    xarMasks::register('ViewRoles','All','roles','All','All','ACCESS_OVERVIEW');
-    xarMasks::register('ReadRole','All','roles','All','All','ACCESS_READ');
-    xarMasks::register('EditRole','All','roles','All','All','ACCESS_EDIT');
-    xarMasks::register('AddRole','All','roles','All','All','ACCESS_ADD');
-    xarMasks::register('DeleteRole','All','roles','All','All','ACCESS_DELETE');
-    xarMasks::register('AdminRole','All','roles','All','All','ACCESS_ADMIN');
-    xarMasks::register('MailRoles','All','roles','Mail','All','ACCESS_ADMIN');
+    xarMasks::register('ViewRolesBlocks','All','roles','Block','All',xarSecurityLevel('ACCESS_OVERVIEW'));
+    xarMasks::register('ViewRoles','All','roles','All','All',xarSecurityLevel('ACCESS_OVERVIEW'));
+    xarMasks::register('ReadRole','All','roles','All','All',xarSecurityLevel('ACCESS_READ'));
+    xarMasks::register('EditRole','All','roles','All','All',xarSecurityLevel('ACCESS_EDIT'));
+    xarMasks::register('AddRole','All','roles','All','All',xarSecurityLevel('ACCESS_ADD'));
+    xarMasks::register('DeleteRole','All','roles','All','All',xarSecurityLevel('ACCESS_DELETE'));
+    xarMasks::register('AdminRole','All','roles','All','All',xarSecurityLevel('ACCESS_ADMIN'));
+    xarMasks::register('MailRoles','All','roles','Mail','All',xarSecurityLevel('ACCESS_ADMIN'));
 
-    xarMasks::register('AttachRole','All','roles','Relation','All','ACCESS_ADD');
-    xarMasks::register('RemoveRole','All','roles','Relation','All','ACCESS_DELETE');
+    xarMasks::register('AttachRole','All','roles','Relation','All',xarSecurityLevel('ACCESS_ADD'));
+    xarMasks::register('RemoveRole','All','roles','Relation','All',xarSecurityLevel('ACCESS_DELETE'));
 
-    xarMasks::register('AssignPrivilege','All','privileges','All','All','ACCESS_ADD');
-    xarMasks::register('DeassignPrivilege','All','privileges','All','All','ACCESS_DELETE');
-    xarMasks::register('ViewPrivileges','All','privileges','All','All','ACCESS_READ');
-    xarMasks::register('EditPrivilege','All','privileges','All','All','ACCESS_EDIT');
-    xarMasks::register('AddPrivilege','All','privileges','All','All','ACCESS_ADD');
-    xarMasks::register('DeletePrivilege','All','privileges','All','All','ACCESS_DELETE');
-    xarMasks::register('AdminPrivilege','All','privileges','All','All','ACCESS_ADMIN');
+    xarMasks::register('AssignPrivilege','All','privileges','All','All',xarSecurityLevel('ACCESS_ADD'));
+    xarMasks::register('DeassignPrivilege','All','privileges','All','All',xarSecurityLevel('ACCESS_DELETE'));
+    xarMasks::register('ViewPrivileges','All','privileges','All','All',xarSecurityLevel('ACCESS_READ'));
+    xarMasks::register('EditPrivilege','All','privileges','All','All',xarSecurityLevel('ACCESS_EDIT'));
+    xarMasks::register('AddPrivilege','All','privileges','All','All',xarSecurityLevel('ACCESS_ADD'));
+    xarMasks::register('DeletePrivilege','All','privileges','All','All',xarSecurityLevel('ACCESS_DELETE'));
+    xarMasks::register('AdminPrivilege','All','privileges','All','All',xarSecurityLevel('ACCESS_ADMIN'));
 
-    xarMasks::register('ViewPrivileges','All','privileges','Realm','All','ACCESS_OVERVIEW');
-    xarMasks::register('ReadPrivilege','All','privileges','Realm','All','ACCESS_READ');
-    xarMasks::register('EditPrivilege','All','privileges','Realm','All','ACCESS_EDIT');
-    xarMasks::register('AddPrivilege','All','privileges','Realm','All','ACCESS_ADD');
-    xarMasks::register('DeletePrivilege','All','privileges','Realm','All','ACCESS_DELETE');
+    xarMasks::register('ViewPrivileges','All','privileges','Realm','All',xarSecurityLevel('ACCESS_OVERVIEW'));
+    xarMasks::register('ReadPrivilege','All','privileges','Realm','All',xarSecurityLevel('ACCESS_READ'));
+    xarMasks::register('EditPrivilege','All','privileges','Realm','All',xarSecurityLevel('ACCESS_EDIT'));
+    xarMasks::register('AddPrivilege','All','privileges','Realm','All',xarSecurityLevel('ACCESS_ADD'));
+    xarMasks::register('DeletePrivilege','All','privileges','Realm','All',xarSecurityLevel('ACCESS_DELETE'));
 
-    xarMasks::register('EditModules','All','modules','All','All','ACCESS_EDIT');
-    xarMasks::register('AdminModules','All','modules','All','All','ACCESS_ADMIN');
+    xarMasks::register('EditModules','All','modules','All','All',xarSecurityLevel('ACCESS_EDIT'));
+    xarMasks::register('AdminModules','All','modules','All','All',xarSecurityLevel('ACCESS_ADMIN'));
 
     return true;
 }
