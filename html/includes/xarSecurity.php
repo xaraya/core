@@ -209,12 +209,10 @@ function xarRemoveRoleMemberByID($childId, $parentId)
  */
 function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$description='')
 {
-    $privileges = new xarPrivileges();
-
     // Check if the privilege already exists
-    $privilege = $privileges->findPrivilege($name);
+    $privilege = xarPrivilegesfindPrivilege($name);
     if (!$privilege) {
-        return $privileges->register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
+        return xarPrivileges::register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
     }
     return;
 }
@@ -230,8 +228,7 @@ function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$
  */
 function xarMakePrivilegeRoot($name)
 {
-    $privileges = new xarPrivileges();
-    return $privileges->makeEntry($name);
+    return xarPrivileges::makeEntry($name);
 }
 
 /**
@@ -246,8 +243,7 @@ function xarMakePrivilegeRoot($name)
  */
 function xarMakePrivilegeMember($childName, $parentName)
 {
-    $privileges = new xarPrivileges();
-    return $privileges->makeMember($childName, $parentName);
+    return xarPrivileges::makeMember($childName, $parentName);
 }
 
 /**
@@ -262,8 +258,7 @@ function xarMakePrivilegeMember($childName, $parentName)
  */
 function xarAssignPrivilege($privilege,$role)
 {
-    $privileges = new xarPrivileges();
-    return $privileges->assign($privilege,$role);
+    return xarPrivileges::assign($privilege,$role);
 }
 
 /**
@@ -277,10 +272,8 @@ function xarAssignPrivilege($privilege,$role)
  */
 function xarRemovePrivileges($module)
 {
-    $privileges = new xarPrivileges();
-
     // Get the pids for the module
-    $modulePrivileges = $privileges->findPrivilegesForModule($module);
+    $modulePrivileges = xarPrivileges::findPrivilegesForModule($module);
     foreach ($modulePrivileges as $modulePrivilege) {
         $modulePrivilege->remove();
     }
@@ -304,9 +297,7 @@ function xarRemovePrivileges($module)
  */
 function xarDefineInstance($module,$type,$query,$propagate=0,$table2='',$childId='',$parentId='',$description='')
 {
-    $privileges = new xarPrivileges();
-
-    return $privileges->defineInstance($module,$type,$query,$propagate,$table2,$childId,$parentId,$description);
+    return xarPrivileges::defineInstance($module,$type,$query,$propagate,$table2,$childId,$parentId,$description);
 }
 
 /**
@@ -320,8 +311,7 @@ function xarDefineInstance($module,$type,$query,$propagate=0,$table2='',$childId
  */
 function xarRemoveInstances($module)
 {
-    $privileges = new xarPrivileges();
-    return $privileges->removeInstances($module);
+    return xarPrivileges::removeInstances($module);
 }
 
 /**
@@ -409,8 +399,7 @@ function xarTree()
  */
 function xarReturnPrivilege($pid,$name,$realm,$module,$component,$instance,$level)
 {
-    $privs = new xarPrivileges();
-    return $privs->returnPrivilege($pid,$name,$realm,$module,$component,$instance,$level);
+    return xarPrivileges::returnPrivilege($pid,$name,$realm,$module,$component,$instance,$level);
 }
 
 /* xarSecurityLevel: gets a security level based on its name.
@@ -435,8 +424,7 @@ function xarSecurityLevel($levelname)
  */
 function xarPrivExists($name)
 {
-    $privileges = new xarPrivileges();
-    $priv = $privileges->findPrivilege($name);
+    $priv = xarPrivileges::findPrivilege($name);
     if ($priv) return true;
     else return false;
 }
@@ -537,8 +525,7 @@ function xarUnregisterMask($name)
  */
 function xarRemoveMasks($module)
 {
-    $privileges = new xarPrivileges();
-    return $privileges->removeMasks($module);
+    return xarMasks::removeMasks($module);
 }
 
 /**
