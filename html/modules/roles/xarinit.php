@@ -156,40 +156,40 @@ function roles_activate()
     // Create some modvars
     //
     //TODO: improve on this hardwiring
-    xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem')); //Setting a default
-    xarModSetVar('roles', 'defaultregmodule', '');
+    xarModVars::set('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem')); //Setting a default
+    xarModVars::set('roles', 'defaultregmodule', '');
     if (xarModGetVar('roles','itemsperpage')) return true;
-    xarModSetVar('roles', 'rolesdisplay', 'tabbed');
-    xarModSetVar('roles', 'locale', '');
-    xarModSetVar('roles', 'userhome', '');
-    xarModSetVar('roles', 'userlastlogin', '');
-    xarModSetVar('roles', 'primaryparent', '');
-    xarModSetVar('roles', 'usertimezone', xarConfigGetVar('Site.Core.TimeZone'));
-    xarModSetVar('roles', 'setuserhome',false);
-    xarModSetVar('roles', 'setprimaryparent', false);
-    xarModSetVar('roles', 'setpasswordupdate',false);
-    xarModSetVar('roles', 'setuserlastlogin',false);
-    xarModSetVar('roles', 'setusertimezone',false);
-    xarModSetVar('roles', 'defaultgroup', 'Users');
-    xarModSetVar('roles', 'displayrolelist', false);
-    xarModSetVar('roles', 'usereditaccount', true);
-    xarModSetVar('roles', 'allowuserhomeedit', false);
-    xarModSetVar('roles', 'loginredirect', true);
-    xarModSetVar('roles', 'allowexternalurl', false);
-    xarModSetVar('roles', 'usersendemails', false);
-    xarModSetVar('roles', 'requirevalidation', true);
+    xarModVars::set('roles', 'rolesdisplay', 'tabbed');
+    xarModVars::set('roles', 'locale', '');
+    xarModVars::set('roles', 'userhome', '');
+    xarModVars::set('roles', 'userlastlogin', '');
+    xarModVars::set('roles', 'primaryparent', '');
+    xarModVars::set('roles', 'usertimezone', xarConfigGetVar('Site.Core.TimeZone'));
+    xarModVars::set('roles', 'setuserhome',false);
+    xarModVars::set('roles', 'setprimaryparent', false);
+    xarModVars::set('roles', 'setpasswordupdate',false);
+    xarModVars::set('roles', 'setuserlastlogin',false);
+    xarModVars::set('roles', 'setusertimezone',false);
+    xarModVars::set('roles', 'defaultgroup', 'Users');
+    xarModVars::set('roles', 'displayrolelist', false);
+    xarModVars::set('roles', 'usereditaccount', true);
+    xarModVars::set('roles', 'allowuserhomeedit', false);
+    xarModVars::set('roles', 'loginredirect', true);
+    xarModVars::set('roles', 'allowexternalurl', false);
+    xarModVars::set('roles', 'usersendemails', false);
+    xarModVars::set('roles', 'requirevalidation', true);
     $lockdata = array('roles' => array( array('uid' => 4,
                                               'name' => 'Administrators',
                                               'notify' => TRUE)),
                                   'message' => '',
                                   'locked' => 0,
                                   'notifymsg' => '');
-    xarModSetVar('roles', 'lockdata', serialize($lockdata));
+    xarModVars::set('roles', 'lockdata', serialize($lockdata));
 
-    xarModSetVar('roles', 'itemsperpage', 20);
+    xarModVars::set('roles', 'itemsperpage', 20);
     // save the uids of the default roles for later
     $role = xarFindRole('Everybody');
-    xarModSetVar('roles', 'everybody', $role->getID());
+    xarModVars::set('roles', 'everybody', $role->getID());
     $role = xarFindRole('Anonymous');
     xarConfigSetVar('Site.User.AnonymousUID', $role->getID());
     // set the current session information to the right anonymous uid
@@ -199,7 +199,7 @@ function roles_activate()
     if (!isset($role)) {
       $role=xarUFindRole('Admin');
     }
-    xarModSetVar('roles', 'admin', $role->getID());
+    xarModVars::set('roles', 'admin', $role->getID());
 
     // --------------------------------------------------------
     //
@@ -249,22 +249,22 @@ function roles_upgrade($oldVersion)
                 // create the new authentication modvars
                 // TODO: dont do this here, but i dont know how to do it otherwise, since apparently the
                 //       roles values are needed
-                xarModSetVar('authentication', 'allowregistration', xarModGetVar('roles', 'allowregistration'));
-                xarModSetVar('authentication', 'requirevalidation', xarModGetVar('roles', 'requirevalidation'));
-                xarModSetVar('authentication', 'itemsperpage', xarModGetVar('roles', 'rolesperpage'));
-                xarModSetVar('authentication', 'uniqueemail', xarModGetVar('roles', 'uniqueemail'));
-                xarModSetVar('authentication', 'askwelcomeemail', xarModGetVar('roles', 'askwelcomeemail'));
-                xarModSetVar('authentication', 'askvalidationemail', xarModGetVar('roles', 'askvalidationemail'));
-                xarModSetVar('authentication', 'askdeactivationemail', xarModGetVar('roles', 'askdeactivationemail'));
-                xarModSetVar('authentication', 'askpendingemail', xarModGetVar('roles', 'askpendingemail'));
-                xarModSetVar('authentication', 'askpasswordemail', xarModGetVar('roles', 'askpasswordemail'));
-                xarModSetVar('authentication', 'defaultgroup', xarModGetVar('roles', 'defaultgroup'));
-                xarModSetVar('authentication', 'lockouttime', 15);
-                xarModSetVar('authentication', 'lockouttries', 3);
-                xarModSetVar('authentication', 'minage', xarModGetVar('roles', 'minage'));
-                xarModSetVar('authentication', 'disallowednames', xarModGetVar('roles', 'disallowednames'));
-                xarModSetVar('authentication', 'disallowedemails', xarModGetVar('roles', 'disallowedemails'));
-                xarModSetVar('authentication', 'disallowedips', xarModGetVar('roles', 'disallowedips'));
+                xarModVars::set('authentication', 'allowregistration', xarModGetVar('roles', 'allowregistration'));
+                xarModVars::set('authentication', 'requirevalidation', xarModGetVar('roles', 'requirevalidation'));
+                xarModVars::set('authentication', 'itemsperpage', xarModGetVar('roles', 'rolesperpage'));
+                xarModVars::set('authentication', 'uniqueemail', xarModGetVar('roles', 'uniqueemail'));
+                xarModVars::set('authentication', 'askwelcomeemail', xarModGetVar('roles', 'askwelcomeemail'));
+                xarModVars::set('authentication', 'askvalidationemail', xarModGetVar('roles', 'askvalidationemail'));
+                xarModVars::set('authentication', 'askdeactivationemail', xarModGetVar('roles', 'askdeactivationemail'));
+                xarModVars::set('authentication', 'askpendingemail', xarModGetVar('roles', 'askpendingemail'));
+                xarModVars::set('authentication', 'askpasswordemail', xarModGetVar('roles', 'askpasswordemail'));
+                xarModVars::set('authentication', 'defaultgroup', xarModGetVar('roles', 'defaultgroup'));
+                xarModVars::set('authentication', 'lockouttime', 15);
+                xarModVars::set('authentication', 'lockouttries', 3);
+                xarModVars::set('authentication', 'minage', xarModGetVar('roles', 'minage'));
+                xarModVars::set('authentication', 'disallowednames', xarModGetVar('roles', 'disallowednames'));
+                xarModVars::set('authentication', 'disallowedemails', xarModGetVar('roles', 'disallowedemails'));
+                xarModVars::set('authentication', 'disallowedips', xarModGetVar('roles', 'disallowedips'));
 
                 // delete the old roles modvars
                 xarModDelVar('roles', 'allowregistration');
@@ -285,7 +285,7 @@ function roles_upgrade($oldVersion)
                 xarModDelVar('roles', 'disallowedips');
 
                 // create one new roles modvar
-                xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authentication'));
+                xarModVars::set('roles', 'defaultauthmodule', xarModGetIDFromName('authentication'));
             } else {
                 throw new Exception('I could not load the authentication module. Please make it available and try again');
             }

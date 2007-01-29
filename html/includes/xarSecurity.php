@@ -210,7 +210,7 @@ function xarRemoveRoleMemberByID($childId, $parentId)
 function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$description='')
 {
     // Check if the privilege already exists
-    $privilege = xarPrivilegesfindPrivilege($name);
+    $privilege = xarPrivileges::findPrivilege($name);
     if (!$privilege) {
         return xarPrivileges::register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
     }
