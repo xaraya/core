@@ -414,7 +414,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     {
         sys::import('xarUser');
         sys::import('xarSecurity');
-        xarSecurity_init();
+//        xarSecurity_init();
         // Start User System
         $systemArgs = array('authenticationModules' => xarConfigGetVar('Site.User.AuthenticationModules'));
         xarUser_init($systemArgs, $whatToLoad);

@@ -54,7 +54,7 @@ sys::import('modules.roles.class.roles');
  * @return bool true
  */
 
-function xarSecurity_init()
+/*function xarSecurity_init()
 {
     // Subsystem initialized, register a handler to run when the request is over
     $prefix = xarDBGetSiteTablePrefix();
@@ -70,7 +70,7 @@ function xarSecurity_init()
     xarDB::importTables($tables);
     return true;
 }
-
+*/
 /*
  * schemas - holds all component/instance schemas
  * Should wrap this in a static one day, but the information

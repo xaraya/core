@@ -413,7 +413,7 @@ function installer_admin_phase5()
     // and xarSecurityCheck functions until we've finished the installation process
 
     sys::import('xarSecurity');
-    xarSecurity_init();
+//    xarSecurity_init();
 
     // Load in modules/installer/xarinit.php and start the install
     // This effectively initializes the base module.

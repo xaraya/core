@@ -819,6 +819,7 @@ class xarRole extends Object
     function isUser()
     {
         $base = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $this->getType(), 'moduleid' => 27));
+ //       if ($base['itemtype'] != 3) {var_dump($base);exit;}
         return $base['itemtype'] == ROLES_USERTYPE;
     }
 
