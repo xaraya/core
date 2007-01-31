@@ -73,7 +73,7 @@ function dynamicdata_admin_modifyhook($args)
     } else {
         $template = $object->name;
     }
-    if ($object->objectid ==1) {
+    if ($object->objectid == 1) {
         $properties = array();
     } else {
         $properties = $object->getProperties();

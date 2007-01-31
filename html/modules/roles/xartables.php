@@ -35,18 +35,6 @@ function roles_xartables()
     $instances = xarDBGetSiteTablePrefix() . '_security_instances';
     $realms = xarDBGetSiteTablePrefix() . '_security_realms';
 
-    $xartable['users_column'] = array('uid' => $roles . '.xar_uid',
-        'name' => $roles . '.xar_name',
-        'uname' => $roles . '.xar_uname',
-        'email' => $roles . '.xar_email',
-        'pass' => $roles . '.xar_pass',
-        'date_reg' => $roles . '.xar_date_reg',
-        'valcode' => $roles . '.xar_valcode',
-        'state' => $roles . '.xar_state',
-        'auth_modid' => $roles . '.xar_auth_modid'
-        );
-    // Get the name for the autolinks item table
-    $user_status = xarDBGetSiteTablePrefix() . '_user_status';
     // Set the table name
     $xartable['roles'] = $roles;
     $xartable['rolemembers'] = $rolemembers;
@@ -56,7 +44,6 @@ function roles_xartables()
     $xartable['security_masks'] = $masks;
     $xartable['security_realms'] = $realms;
     $xartable['security_instances'] = $instances;
-    $xartable['user_status'] = $user_status;
     // Return the table information
     return $xartable;
 }

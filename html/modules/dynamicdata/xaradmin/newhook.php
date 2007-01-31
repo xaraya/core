@@ -71,8 +71,13 @@ function dynamicdata_admin_newhook($args)
     } else {
         $template = $object->name;
     }
+    if ($object->objectid == 1) {
+        $properties = array();
+    } else {
+        $properties = $object->getProperties();
+    }
     return xarTplModule('dynamicdata','admin','newhook',
-                        array('properties' => & $object->properties),
+                        array('properties' => $properties),
                         $template);
 }
 
