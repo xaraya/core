@@ -275,9 +275,21 @@
                             Dynamic Roles Variables
                         </xar:mlstring>
                     </legend>
-                    <p> <xar:mlstring>Optional in a user role. Once activated they can be retrieved as <strong>xarModGetUserVar('roles','varname')</strong></xar:mlstring>
+                    <p> <xar:mlstring>Optional in a user role. Once activated they can be retrieved as <strong>xarModGetUserVar('roles','varname','uid')</strong></xar:mlstring>
                     </p>
-
+                    <br />
+                    <xar:set name="settings">unserialize(xarModVars::get('roles','duvsettings'))</xar:set>
+                    <xar:set name="options">
+                        array(
+                            array('id' => 'userhome', 'name' => xarML('User Home Page')),
+                            array('id' => 'primaryparent', 'name' => xarML('Day Primary Parent')),
+                            array('id' => 'passwordupdate', 'name' => xarML('Last Password Update')),
+                            array('id' => 'userlastlogin', 'name' => xarML('Last Login')),
+                            array('id' => 'usertimezone', 'name' => xarML('Time Zone')),
+                        );
+                    </xar:set>
+                    <xar:data-input type="checkboxlist" name="duvsettings" options="$options" value="$settings" layout="vertical" />
+                    <br />
                     <table style="width: 90%">
                         <tr>
                             <th style="width: 100px">
@@ -285,9 +297,6 @@
                             </th>
                             <th style="width: 400px">
                                 <xar:mlstring>Description</xar:mlstring>
-                            </th>
-                            <th style="width: 50px">
-                                &#160;
                             </th>
                         </tr>
                         <tr>
@@ -297,19 +306,7 @@
                             <td style="width: 400px">
                                       <xar:mlstring>The role's home page, which is initially displayed when the user logs in. The home page can be role/user specific or inherited from the direct parent group. The home page is specified in a similar manner to user menu item shortcuts in the modify or edit role page.</xar:mlstring>
                             </td>
-                            <td style="width: 50px; text-align: center;">
-                                <xar:if condition="xarModGetVar('roles','setuserhome')">
-                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setuserhome' => 0))#">
-                                        <xar:mlstring>Deactivate</xar:mlstring>
-                                    </a>
-                                <xar:else />
-                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setuserhome' => 1))#">
-                                        <xar:mlstring>Activate</xar:mlstring>
-                                    </a>
-                                </xar:if>
-                            </td>
                         </tr>
-
                         <tr>
                             <td style="width: 100px">
                                 primaryparent
@@ -317,17 +314,6 @@
                             <td style="width: 400px">
                                 <xar:mlstring>The role's primary parent group.
                                 A primary parent take precendence over other parent groups for realm and user role home settings.</xar:mlstring>
-                            </td>
-                            <td style="width: 50px; text-align: center;">
-                                <xar:if condition="xarModGetVar('roles','setprimaryparent')">
-                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setprimaryparent' => 0))#">
-                                        <xar:mlstring>Deactivate</xar:mlstring>
-                                    </a>
-                                <xar:else />
-                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setprimaryparent' => 1))#">
-                                        <xar:mlstring>Activate</xar:mlstring>
-                                    </a>
-                                </xar:if>
                             </td>
                         </tr>
                         <tr>
@@ -337,17 +323,6 @@
                             <td style="width: 400px">
                                 <xar:mlstring>The date and time this role's password was last changed.</xar:mlstring>
                             </td>
-                            <td style="width: 50px; text-align: center;">
-                                <xar:if condition="xarModGetVar('roles','setpasswordupdate')">
-                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setpasswordupdate' => 0))#">
-                                        <xar:mlstring>Deactivate</xar:mlstring>
-                                    </a>
-                                <xar:else />
-                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setpasswordupdate' => 1))#">
-                                        <xar:mlstring>Activate</xar:mlstring>
-                                    </a>
-                                </xar:if>
-                            </td>
                         </tr>
                         <tr>
                             <td style="width: 100px">
@@ -356,17 +331,6 @@
                             <td style="width: 400px">
                                 <xar:mlstring>The date and time this role last logged in.</xar:mlstring>
                             </td>
-                            <td style="width: 50px; text-align: center;">
-                                <xar:if condition="xarModGetVar('roles','setuserlastlogin')">
-                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setuserlastlogin' => 0))#">
-                                        <xar:mlstring>Deactivate</xar:mlstring>
-                                    </a>
-                                <xar:else />
-                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setuserlastlogin' => 1))#">
-                                        <xar:mlstring>Activate</xar:mlstring>
-                                    </a>
-                                </xar:if>
-                            </td>
                         </tr>
                         <tr>
                             <td style="width: 100px">
@@ -374,17 +338,6 @@
                             </td>
                             <td style="width: 400px">
                                 <xar:mlstring>This role's timezone.</xar:mlstring>
-                            </td>
-                            <td style="width: 50px; text-align: center;">
-                                <xar:if condition="xarModGetVar('roles','setusertimezone')">
-                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setusertimezone' => 0))#">
-                                        <xar:mlstring>Deactivate</xar:mlstring>
-                                    </a>
-                                <xar:else />
-                                    <a href="#xarModURL('roles','admin','modifyconfig',array('phase' => 'links', 'tab' => 'duvs','setusertimezone' => 1))#">
-                                        <xar:mlstring>Activate</xar:mlstring>
-                                    </a>
-                                </xar:if>
                             </td>
                         </tr>
                     </table>

@@ -163,7 +163,7 @@ function roles_activate()
     xarModVars::set('roles', 'locale', '');
     xarModVars::set('roles', 'userhome', '');
     xarModVars::set('roles', 'userlastlogin', '');
-    xarModVars::set('roles', 'primaryparent', '');
+    xarModVars::set('roles', 'primaryparent', 1);
     xarModVars::set('roles', 'usertimezone', xarConfigGetVar('Site.Core.TimeZone'));
     xarModVars::set('roles', 'setuserhome',false);
     xarModVars::set('roles', 'setprimaryparent', false);
