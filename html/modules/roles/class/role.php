@@ -965,31 +965,6 @@ class xarRole extends Object
     {
         return $this->name;
     }
-    function getHome()
-    {
-        $duv = isset($this->duvs['userhome']) ? $this->duvs['userhome'] : "";
-        return $duv;
-    }
-    function getPrimaryParent()
-    {
-        $duv = isset($this->duvs['primaryparent']) ? $this->duvs['primaryparent'] : "";
-        return $duv;
-    }
-    function getPasswordUpdate()
-    {
-        $duv = isset($this->duvs['passwordupdate']) ? $this->duvs['passwordupdate'] : "";
-         return $duv;
-    }
-    function getUserLastLogin()
-    {
-        $duv = isset($this->duvs['userlastlogin']) ? $this->duvs['userlastlogin'] : "";
-         return $duv;
-    }
-    function getUserTimezone()
-    {
-        $duv = isset($this->duvs['usertimezone']) ? $this->duvs['usertimezone'] : "";
-         return $duv;
-    }
     function getUname()
     {
         return $this->uname;
@@ -1034,26 +1009,6 @@ class xarRole extends Object
     function setName($var)
     {
         $this->name = $var;
-    }
-    function setHome($var)
-    {
-        $this->userhome = $var;
-    }
-    function setPasswordUpdate($var)
-    {
-        $this->passwordupdate= $var;
-    }
-    function setUserLastLogin($var)
-    {
-        $this->userlastlogin= $var;
-    }
-    function setUserTimezone($var)
-    {
-        $this->usertimezone= $var;
-    }
-    function setPrimaryParent($var)
-    {
-        $this->primaryparent = $var;
     }
     function setUname($var)
     {
