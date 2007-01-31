@@ -93,7 +93,8 @@
                     </div>
                 </xar:if>
 
-                <xar:if condition="xarModGetVar('roles','setuserhome')">
+                <xar:set name="settings">unserialize(xarModVars::get('roles','duvsettings'))</xar:set>
+                <xar:if condition="in_array('userhome',$settings)">
                     <div class="xar-form-input-wrapper">
                         <label for="phome" title="#xarML('Home URL')#" class="xar-form-label">
                             <xar:mlstring>Home:</xar:mlstring>
@@ -104,7 +105,7 @@
                         </p>
                     </div>
                 </xar:if>
-                <xar:if condition="xarModGetVar('roles','setprimaryparent')">
+                <xar:if condition="in_array('primaryparent',$settings)">
                     <div class="xar-form-input-wrapper">
                         <label for="pprimaryparent" title="#xarML('Primary parent group')#" class="xar-form-label">
                             <xar:mlstring>Primary Parent Group:</xar:mlstring>
@@ -157,7 +158,7 @@
                         <input type="password" name="ppass2" id="ppass2" value="" maxlength="40" class="xar-form-textmedium" />
                     </div>
 
-                    <xar:if condition="xarModGetVar('roles','setpasswordupdate')">
+                    <xar:if condition="in_array('passwordupdate',$settings)">
                         <div class="xar-form-input-wrapper">
                             <label for="upasswordupdate" class="xar-form-label">
                                 <xar:mlstring>Password last updated:</xar:mlstring>
@@ -165,7 +166,7 @@
                             #xarLocaleGetFormattedDate('medium', $upasswordupdate)# #xarLocaleGetFormattedTime('medium', $upasswordupdate)#
                         </div>
                     </xar:if>
-                    <xar:if condition="xarModGetVar('roles','setuserlastlogin')">
+                    <xar:if condition="in_array('userlastlogin',$settings)">
                         <xar:if condition="!empty($userlastlogin)">
                         <div class="xar-form-input-wrapper">
                             <label for="lastlogin" class="xar-form-label">
@@ -175,7 +176,7 @@
                         </div>
                     </xar:if>
 
-                    <xar:if condition="xarModGetVar('roles','setusertimezone')">
+                    <xar:if condition="in_array('usertimezone',$settings)">
                         <xar:if condition="!empty($utimezone)">
                         <div class="xar-form-input-wrapper">
                             <label for="utimezone" class="xar-form-label">
