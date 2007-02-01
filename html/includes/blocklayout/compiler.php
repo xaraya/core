@@ -17,16 +17,6 @@
  */
 
 /**
- * This define allows switching back to BL1 if needed (comment the line)
- *
- */
-    if (file_exists('install.php')) {
-        define('XAR_BL_USE_XSLT',true);
-    } else {
-        define(xarConfigGetVar('Site.BL.CompilerVersion'),true);
-    }
-
-/**
  * Defines for token handling
  *
  */
@@ -236,8 +226,8 @@ class xarBLCompiler extends Object implements IxarBLCompiler
      */
     private function compile(&$templateSource)
     {
-        // EXPERIMENTAL, USE AT OWN RISK, I DONT EVEN WANNA KNOW
-        if(defined('XAR_BL_USE_XSLT')) {
+        // use the new compiler or not?
+        if(!function_exists('xarConfigGetVar') || xarConfigGetVar('Site.BL.CompilerVersion') == 'XAR_BL_USE_XSLT') {
             sys::import('blocklayout.xsltransformer');
             $xslFile = 'includes/blocklayout/xslt/xar2php.xsl';
             $xslProc = new BlockLayoutXSLTProcessor($xslFile);
