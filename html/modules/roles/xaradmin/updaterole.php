@@ -70,21 +70,6 @@ function roles_admin_updaterole()
     }
 
     $duvs = array();
-    if ((!empty($ppass1))  && xarModGetVar('roles','setpasswordupdate')){
-        //assume if it's not empty then it's already been matched with ppass2
-        $duvs['passwordupdate']=time();
-    } elseif (xarModGetVar('roles','setpasswordupdate')) { //get existing
-        $duvs['passwordupdate'] = xarModGetUserVar('roles','passwordupdate',$uid);
-    }
-    if (xarModGetVar('roles','setuserlastlogin')) {
-        $duvs['userlastlogin']=xarModGetUserVar('roles','userlastlogin', $uid);
-    }
-    if (xarModGetVar('roles','setprimaryparent')) {
-        $duvs['primaryparent']=$primaryparent;
-    }
-    if (xarModGetVar('roles','setusertimezone')) {
-        $duvs['usertimezone']=$usertimezone;
-    }
 
     //the user cannot receive emails from other users until they allow it and admin allows this option
     xarModSetUserVar('roles','usersendemails', $allowemail, $uid);
@@ -93,15 +78,9 @@ function roles_admin_updaterole()
         'name' => $pname,
         'itemtype' => $itemtype,
         'uname' => $puname,
-        'userhome' => $phome,
-        'primaryparent' => $primaryparent,
-        'usertimezone' => $usertimezone,
-        'lastlogin' => time(),  // $duvs['userlastlogin'],
-        'passwordupdate'=> time(),  //$duvs['passwordupdate'],
         'email' => $pemail,
         'pass' => $ppass1,
         'state' => $pstate,
-        'duvs' => $duvs,
         'basetype' => $basetype,
         );
 

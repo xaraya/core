@@ -25,7 +25,6 @@ class xarRole extends Object
     public $val_code;     //the validation code of this user or group
     public $state;        //the state of this user or group
     public $auth_module;  //no idea what this is (not used by groups)
-    public $duvs;         //property for holding dynamic user vars
     public $parentlevel;  //we use this just to store transient information
     public $basetype;     //the base itemtype. we add this so it can be passed rather than calculated here
 
@@ -90,7 +89,6 @@ class xarRole extends Object
         $this->val_code = $val_code;
         $this->auth_module = $auth_module;
         $this->parentlevel = 0;
-        $this->duvs = isset($duvs) ? $duvs : array();
         $this->basetype = $basetype;
     }
 
@@ -149,7 +147,6 @@ class xarRole extends Object
         $this->uid = $q->nextid($this->rolestable, 'xar_uid');
         if (!$this->uid) return;
 
-        foreach ($this->duvs as $key => $value) xarModSetUserVar('roles',$key,$value,$this->uid);
         //set the email useage for this user to false
         xarModSetUserVar('roles','usersendemails', false, $this->uid);
         $parentpart = xarRoles::getRole($this->parentid);
@@ -264,7 +261,6 @@ class xarRole extends Object
         // Execute the query, bail if an exception was thrown
         if (!$q->run()) return;
 
-        foreach ($this->duvs as $key => $value) xarModSetUserVar('roles',$key,$value,$this->getID());
         return true;
     }
 
@@ -575,15 +571,6 @@ class xarRole extends Object
                            'val_code' => $val_code,
                            'state' => $state,
                            'auth_module' => $auth_module);
-            $duvarray = array('userhome','primaryparent','passwordupdate','timezone');
-            $vars = array();
-            foreach ($duvarray as $key) {
-                if (xarModGetVar('roles',$key)) {
-                    $vars[$key] = xarModGetUserVar('roles',$key,$pargs['uid']);
-                    $vars[$key] = ($vars[$key] == 1) ? '' : $vars[$key];
-                }
-            }
-            $pargs = array_merge($pargs,$vars);
             $users[] = new xarRole($pargs);
         }
         // done
@@ -690,15 +677,6 @@ class xarRole extends Object
                            'val_code' => $val_code,
                            'state' => $state,
                            'auth_module' => $auth_module);
-            $duvarray = array('userhome','primaryparent','passwordupdate','userlastlogin','usertimezone');
-            $vars = array();
-            foreach ($duvarray as $key) {
-                if (xarModGetVar('roles',$key)) {
-                    $vars[$key] = xarModGetUserVar('roles',$key,$pargs['uid']);
-                    $vars[$key] = ($vars[$key] == 1) ? '' : $vars[$key];
-                }
-            }
-            $pargs = array_merge($pargs,$vars);
             $parents[] = new xarRole($pargs);
         }
         // done
