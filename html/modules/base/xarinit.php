@@ -164,7 +164,7 @@ function base_init()
      ******************************************************************/
     xarConfigSetVar('Site.BL.ThemesDirectory','themes');
     xarConfigSetVar('Site.BL.CacheTemplates',true);
-    xarConfigSetVar('Site.BL.CompilerVersion',true);
+    xarConfigSetVar('Site.BL.CompilerVersion','XAR_BL_USE_XSLT');
     xarConfigSetVar('Site.Core.FixHTMLEntities',true);
     xarConfigSetVar('Site.Core.TimeZone', 'Etc/UTC');
     xarConfigSetVar('Site.Core.EnableShortURLsSupport', false);
