@@ -69,7 +69,6 @@ class TextAreaProperty extends DataProperty
 
     public function showInput(Array $data = array())
     {
-        // Make the variables easier to access
         extract($data);
 
         // Prepare

@@ -12,8 +12,8 @@
 <span class="xar-error">
     <xar:ml>
         <xar:mlstring>
-            Warning: the template showinput-#(1).xd or showinput-#(2).xd 
-            is missing for this property !
+            Warning: the template showinput-#(1).xd or showinput-#(2).xd
+            is missing for this property!
         </xar:mlstring>
         <xar:mlvar>#$type#</xar:mlvar>
         <xar:mlvar>#$template#</xar:mlvar>
@@ -25,5 +25,5 @@
 <xar:if condition="!empty($invalid)">
     <span class="xar-error">#$invalid#</span>
 </xar:if>
-  
+
 </xar:template>

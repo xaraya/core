@@ -23,28 +23,12 @@ function roles_admin_updaterole()
     if (!xarVarFetch('uid', 'int:1:', $uid)) return;
     if (!xarVarFetch('pname', 'str:1:35:', $pname)) return;
     if (!xarVarFetch('itemtype', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('phome', 'str', $phome, '', XARVAR_NOT_REQUIRED)) return;
     $basetype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
-    if (!xarVarFetch('pprimaryparent', 'int', $pprimaryparent, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('returnurl', 'str', $returnurl, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('utimezone','str:1:',$utimezone,'',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('allowemail','checkbox',$allowemail,false,XARVAR_NOT_REQUIRED)) return;
-    //Grab it here if primary parent modvar is activated
-    if (!empty($pprimaryparent) && is_integer($pprimaryparent) && xarModGetVar('roles','setprimaryparent')) {
-        $primaryp = xarRoles::getRole($pprimaryparent);
-        $primaryparent = $primaryp->uname;
-    } else {
-        $primaryparent='';
-    }
-    if (!empty($utimezone) && is_string($utimezone) && xarModGetVar('roles','setusertimezone')) {
-        $timeinfo = xarModAPIFunc('base','user','timezones', array('timezone' => $utimezone));
-        list($hours,$minutes) = explode(':',$timeinfo[0]);
-        $offset = (float) $hours + (float) $minutes / 60;
-        $timeinfoarray= array('timezone' => $utimezone, 'offset' => $offset);
-        $usertimezone=serialize($timeinfoarray);
-    } else {
-        $usertimezone='';
-    }
+
+    if (!xarVarFetch('duvsettings','array',$duvs,array(),XARVAR_NOT_REQUIRED)) return;
+    foreach($duvs as $key => $value) xarModSetUserVar('roles',$key, $value, $uid);
 
     //Save the old state and type
     $oldrole = xarRoles::getRole($uid);

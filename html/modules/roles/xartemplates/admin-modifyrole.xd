@@ -93,23 +93,27 @@
                     </div>
                 </xar:if>
 
-                <xar:if condition="xarModGetVar('roles','setuserhome')">
+                <xar:set name="settings">unserialize(xarModVars::get('roles','duvsettings'))</xar:set>
+                <xar:if condition="in_array('userhome',$settings)">
                     <div class="xar-form-input-wrapper">
-                        <label for="phome" title="#xarML('Home URL')#" class="xar-form-label">
+                        <label for="duvsettings_userhome" title="#xarML('Home URL')#" class="xar-form-label">
                             <xar:mlstring>Home:</xar:mlstring>
                         </label>
-                        <input type="text" name="phome" id="phome" value="#xarVarPrepForDisplay($phome)#" size="40" maxlength="100" tabindex="7" />
+                        <input type="text" name="duvsettings[userhome]" id="duvsettings_userhome" value="#xarModGetUserVar('roles','userhome',$uid)#" size="40" maxlength="100" tabindex="7" />
                         <p class="xar-form-input-wrapper-after">
                             <xar:mlstring>You can use the module shortcut syntax available in the Base user menu block.</xar:mlstring>
                         </p>
                     </div>
                 </xar:if>
-                <xar:if condition="xarModGetVar('roles','setprimaryparent')">
+                <xar:if condition="in_array('primaryparent',$settings)">
                     <div class="xar-form-input-wrapper">
-                        <label for="pprimaryparent" title="#xarML('Primary parent group')#" class="xar-form-label">
+                        <label for="duvsettings_primaryparent" title="#xarML('Primary parent group')#" class="xar-form-label">
                             <xar:mlstring>Primary Parent Group:</xar:mlstring>
                         </label>
-                        <xar:data-input type="grouplist" name="pprimaryparent" id="pprimaryparent" value="$pprimaryparent" tabindex="8"/>
+                        <xar:set name="value">
+                            xarModGetUserVar('roles','primaryparent',$uid)
+                        </xar:set>
+                        <xar:data-input type="grouplist" name="duvsettings[primaryparent]" id="duvsettings_primaryparent" value="$value" tabindex="8" />
                     </div>
                 </xar:if>
 
@@ -157,33 +161,33 @@
                         <input type="password" name="ppass2" id="ppass2" value="" maxlength="40" class="xar-form-textmedium" />
                     </div>
 
-                    <xar:if condition="xarModGetVar('roles','setpasswordupdate')">
+                    <xar:if condition="in_array('passwordupdate',$settings)">
                         <div class="xar-form-input-wrapper">
-                            <label for="upasswordupdate" class="xar-form-label">
+                            <label class="xar-form-label">
                                 <xar:mlstring>Password last updated:</xar:mlstring>
                             </label>
-                            #xarLocaleGetFormattedDate('medium', $upasswordupdate)# #xarLocaleGetFormattedTime('medium', $upasswordupdate)#
+                            #xarLocaleGetFormattedDate('medium', xarModGetUserVar('roles','passwordupdate',$uid))# #xarLocaleGetFormattedTime('medium', xarModGetUserVar('roles','passwordupdate',$uid))#
                         </div>
                     </xar:if>
-                    <xar:if condition="xarModGetVar('roles','setuserlastlogin')">
-                        <xar:if condition="!empty($userlastlogin)">
+                    <xar:if condition="in_array('userlastlogin',$settings)">
                         <div class="xar-form-input-wrapper">
-                            <label for="lastlogin" class="xar-form-label">
+                            <label class="xar-form-label">
                                 <xar:mlstring>Last login time:</xar:mlstring>
                             </label>
-                                #xarLocaleGetFormattedDate('medium', $userlastlogin)#  #xarLocaleGetFormattedTime('medium', $userlastlogin)#
+                                #xarLocaleGetFormattedDate('medium', xarModGetUserVar('roles','userlastlogin',$uid))#  #xarLocaleGetFormattedTime('medium', xarModGetUserVar('roles','userlastlogin',$uid))#
                         </div>
                     </xar:if>
 
-                    <xar:if condition="xarModGetVar('roles','setusertimezone')">
-                        <xar:if condition="!empty($utimezone)">
+                    <xar:if condition="in_array('usertimezone',$settings)">
                         <div class="xar-form-input-wrapper">
-                            <label for="utimezone" class="xar-form-label">
+                            <label for="duvsettings_usertimezone" class="xar-form-label">
                                 <xar:mlstring>User Timezone:</xar:mlstring>
                             </label>
-                            <xar:data-input type="timezone" name="utimezone" id="utimezone" value="$utimezone" />
+                            <xar:set name="value">
+                                xarModGetUserVar('roles','usertimezone',$uid)
+                            </xar:set>
+                            <xar:data-input type="timezone" name="duvsettings[usertimezone]" id="duvsettings_usertimezone" value="$value" />
                         </div>
-                        </xar:if>
                     </xar:if>
                     <xar:if condition="xarModGetVar('roles','usersendemails')">
                         <div class="xar-form-input-wrapper-after">
@@ -195,7 +199,6 @@
                         </div>
                    </xar:if>
                 </xar:if>
-            </xar:if>
                <p class="xar-clear"></p>
                 <xar:if condition="!empty($hooks) and count($hooks) gt 0">
                     <xar:foreach in="$hooks" key="$hookmodule">

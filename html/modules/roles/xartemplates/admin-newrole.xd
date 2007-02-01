@@ -97,7 +97,8 @@
                     </label>
                     <input type="text" name="pemail" id="pemail" value="#$pemail#" maxlength="255" class="xar-form-textlong" />
                 </div>
-                <xar:if condition="xarModGetVar('roles','setuserhome')">
+                <xar:set name="settings">unserialize(xarModVars::get('roles','duvsettings'))</xar:set>
+                <xar:if condition="in_array('userhome',$settings)">
                     <div class="xar-form-input-wrapper">
                         <label for="phome" title="#xarML('Home URL')#" class="xar-form-label">
                             <xar:mlstring>

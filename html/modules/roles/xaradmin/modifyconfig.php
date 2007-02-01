@@ -195,8 +195,13 @@ function roles_admin_modifyconfig()
                          }
                    }
                     break;
+                case 'duvs':
+                    if (!xarVarFetch('duvsettings', 'array', $duvs, array(), XARVAR_DONT_SET)) return;
+                    $settings = array();
+                    foreach ($duvs as $duv) $settings[] = $duv;
+                    xarModVars::set('roles','duvsettings', serialize($settings));
+                    break;
             }
-
 //            if (!xarVarFetch('allowinvisible', 'checkbox', $allowinvisible, false, XARVAR_NOT_REQUIRED)) return;
             // Update module variables
 //            xarModSetVar('roles', 'allowinvisible', $allowinvisible);
@@ -205,53 +210,6 @@ function roles_admin_modifyconfig()
             // Return
             return true;
             break;
-
-        case 'links':
-            switch ($data['tab']) {
-                case 'duvs':
-                    $duvarray = array('setuserhome'       => 'userhome',
-                                      'setprimaryparent'  => 'primaryparent',
-                                      'setpasswordupdate' => 'passwordupdate',
-                                      'setuserlastlogin'  => 'userlastlogin',
-                                      'setusertimezone'   => 'usertimezone');
-                    foreach ($duvarray as $duv=>$userduv) {
-                        if (!xarVarFetch($duv, 'int', $$duv, null, XARVAR_DONT_SET)) return;
-                        if (isset($$duv)) {
-                            if ($$duv) {
-                                xarModSetVar('roles',$duv, true);
-                                if ($userduv =='primaryparent') { // let us set it to the default Role
-                                    $defaultrole=xarModGetVar('roles','defaultgroup');
-                                    xarModSetVar('roles','primaryparent', $defaultrole);
-                                }elseif ($userduv =='usertimezone') {//set to the default site timezone
-                                    $defaultzone = xarConfigGetVar('Site.Core.TimeZone');
-                                    if (!isset($defaultzone) || empty($defaultzone)) {
-                                        xarConfigSetVar('Site.Core.TimeZone','Europe/London');
-                                        $defaultzone = xarConfigGetVar('Site.Core.TimeZone');
-                                    }
-                                    $timeinfo = xarModAPIFunc('base','user','timezones', array('timezone' => $defaultzone));
-                                    if (!is_array($timeinfo)){ //we still need to set this to something
-                                        xarConfigSetVar('Site.Core.TimeZone','Europe/London');
-                                        $defaultzone = xarConfigGetVar('Site.Core.TimeZone');
-                                    }
-                                    //And try again
-                                    $timeinfo = xarModAPIFunc('base','user','timezones', array('timezone' => $defaultzone));
-
-                                    list($hours,$minutes) = explode(':',$timeinfo[0]);
-                                    $offset               = (float) $hours + (float) $minutes / 60;
-                                    $timeinfoarray        = array('timezone' => $defaultzone, 'offset' => $offset);
-                                    $defaultusertime      = serialize($timeinfoarray);
-                                    xarModSetVar('roles','usertimezone', $defaultusertime);
-                                }else {
-                                   xarModSetVar('roles', $userduv, '');
-                                }
-                            } else {
-                                xarModSetVar('roles',$duv, false);
-                            }
-                        }
-                    }
-                    break;
-                }
-        break;
     }
 
 

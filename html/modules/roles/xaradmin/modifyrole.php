@@ -88,25 +88,6 @@ function roles_admin_modifyrole()
         $data['puname'] = $role->getUser();
     }
 
-    if (!empty($phome)) {
-        $data['phome'] = $phome;
-    } else {
-        $data['phome'] = $role->getHome();
-    }
-    //jojodee - this code is confusing - sometimes primary parent is int and sometimes string, very inconsistent
-    //Let's decide - it is a string and just pass it's uid around for forms
-    if (xarModGetVar('roles','setprimaryparent')) {
-        if (!empty($primaryparent) && is_int($primaryparent)) { //we have a uid
-            $data['pprimaryparent'] = $primaryparent;
-        } else {
-            $primaryparent = $role->getPrimaryParent(); //this is a string name
-            $prole = xarUFindRole($primaryparent);
-            $data['pprimaryparent'] = $prole->getID();//pass in the uid
-        }
-    } else {
-        $data['pprimaryparent'] ='';
-    }
-
     if (!empty($email)) {
         $data['pemail'] = $email;
     } else {
@@ -117,18 +98,6 @@ function roles_admin_modifyrole()
         $data['pstate'] = $pstate;
     } else {
         $data['pstate'] = $role->getState();
-    }
-    if (xarModGetVar('roles','setpasswordupdate')) {
-         $data['upasswordupdate'] = $role->getPasswordUpdate();
-    }else {
-         $data['upasswordupdate'] ='';
-    }
-    if (xarModGetVar('roles','setusertimezone')) {
-        $usertimezone= $role->getUserTimezone();
-        $usertimezonedata =unserialize($usertimezone);
-        $data['utimezone']=$usertimezonedata['timezone'];
-    } else {
-        $data['utimezone']='';
     }
 
     if (xarModGetVar('roles','setuserlastlogin')) {
