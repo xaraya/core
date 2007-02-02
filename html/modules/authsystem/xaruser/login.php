@@ -249,23 +249,22 @@ function authsystem_user_login()
 
             $externalurl=false; //used as a flag for userhome external url
             if (xarModGetVar('roles', 'loginredirect')) { //only redirect to home page if this option is set
-                if (xarModGetVar('roles', 'setuserhome')) {
+                $settings = unserialize(xarModVars::get('roles', 'duvsettings'));
+                if (in_array('userhome', $settings)) {
                     $truecurrenturl = xarServerGetCurrentURL(array(), false);
                     $role = xarUFindRole($uname);
-                    $url = $lastresort ? '[base]' : $role->getHome();
+                    $url = $lastresort ? '[base]' : xarModGetUserVar('roles','userhome',$role->getID());
                     if (!isset($url) || empty($url)) {
-                       //jojodee - we now have primary parent implemented so can use this if activated
-                       if (xarModGetVar('roles','setprimaryparent')) { //primary parent is activated
-                          //TODO: we should really take this out and do this once somewhere for use in other cases
-                           $primaryparent = $role->getPrimaryParent();
-                           $primaryparentrole = xarUFindRole($primaryparent);
-                           $parenturl = $primaryparentrole->getHome();
+                       if (in_array('primaryparent', $settings)) {
+                           $parentid = xarModVars::get('roles','primaryparent',$role->getID());
+                           $primaryparent = xarRoles::getRole($parentid);
+                           $parenturl = xarModGetUserVar('roles','userhome',$primaryparent->getID());
                            if (!empty($parenturl)) $url= $parenturl;
                        } else {
                            // take the first home url encountered.
                            // TODO: what would be a more logical choice?
                             foreach ($role->getParents() as $parent) {
-                                $parenturl = $parent->getHome();
+                                $parenturl = xarModGetUserVar('roles','userhome',$parent->getID());
                                 if (!empty($parenturl))  {
                                     $url = $parenturl;
                                     break;

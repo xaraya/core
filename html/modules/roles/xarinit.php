@@ -161,8 +161,10 @@ function roles_activate()
     if (xarModGetVar('roles','itemsperpage')) return true;
     xarModVars::set('roles', 'rolesdisplay', 'tabbed');
     xarModVars::set('roles', 'locale', '');
+    xarModVars::set('roles', 'duvsettings', serialize(array()));
     xarModVars::set('roles', 'userhome', '[base]');
     xarModVars::set('roles', 'userlastlogin', '');
+    xarModVars::set('roles', 'passwordupdate', '');
     xarModVars::set('roles', 'primaryparent', 1);
     xarModVars::set('roles', 'usertimezone', xarConfigGetVar('Site.Core.TimeZone'));
     xarModVars::set('roles', 'defaultgroup', 'Users');
