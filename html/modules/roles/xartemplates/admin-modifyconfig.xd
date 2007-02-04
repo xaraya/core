@@ -282,7 +282,7 @@
                     <xar:set name="options">
                         array(
                             array('id' => 'userhome', 'name' => xarML('User Home Page')),
-                            array('id' => 'primaryparent', 'name' => xarML('Day Primary Parent')),
+                            array('id' => 'primaryparent', 'name' => xarML('Primary Parent')),
                             array('id' => 'passwordupdate', 'name' => xarML('Last Password Update')),
                             array('id' => 'userlastlogin', 'name' => xarML('Last Login')),
                             array('id' => 'usertimezone', 'name' => xarML('Time Zone')),
