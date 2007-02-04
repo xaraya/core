@@ -66,9 +66,9 @@ PENDING DB-CHANGES
     Answer: yes, but it's confusing:
     1. it doesnt need to be there really, but might be a moditemvar (it applies to the few)
     2. it is referred to as default authmodule in the code sometimes, which it  is not, it is the auth module which successfully logged this user on latest.
-* ticket:6 the xar\_ prefix on columns is redundant, not a lightly task though, kinda  obvious why.
-* ticket:7 privmembers parent column stores 0 now for 'no parent', change to null, so a foreign key constraint can be added on the column
-* ticket:7 rolemembers parent column stores 0 now for 'no parent', change to null, so a  foreign key constraint can be added on the column
+* `ticket:6`:trac: the xar\_ prefix on columns is redundant, not a lightly task though, kinda  obvious why.
+* `ticket:7`:trac: privmembers parent column stores 0 now for 'no parent', change to null, so a foreign key constraint can be added on the column
+* `ticket:7`:trac: rolemembers parent column stores 0 now for 'no parent', change to null, so a  foreign key constraint can be added on the column
 
 NOTE: the above 2 are probably problematic since the parent column is part of
 the primary key and as such can probably not contain the non-value NULL.
@@ -98,11 +98,11 @@ Choices:
         - dynamic_objects.object_moduleid (stores regid)
         - dynamic_properties.prop_moduleid (stores regid)
         - privileges.xar_module (stores 'All', 'empty' besides module name.)
-* [ticket: 8] it might be attractive to consolidate the tables privileges and security
+* `ticket:8`:trac: it might be attractive to consolidate the tables privileges and security
   masks, adding an extra column ('type'?) to distinguish masks from
   privileges. before that can happen syncing the definition of security_masks
   to privileges is needed (modid column, realmid)
-* [ticket:9] we need a consolidated solution for database encoding, mysql takes this swedish latin thing by default, postgres us ascii, dont know about the others.
+* `ticket:9`:trac: we need a consolidated solution for database encoding, mysql takes this swedish latin thing by default, postgres us ascii, dont know about the others.
   How about we make them all UTF-8? (i have no idea about the consequences
   though, nor how to do it, seems, that on 'create database' there should be
   an option or changing an option of some kind when using an existing
@@ -442,4 +442,5 @@ List of things to hammer (or not):
 * interface inheritance is unclear to me, so its hard to come up with some
   rules for that
 * [WONT] group interface satisfaction methods together
+
 }}}
