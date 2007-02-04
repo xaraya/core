@@ -26,10 +26,8 @@ Assumptions
 -----------
 
 1. Each 'install' can have one or more 'instances'.
-2. Each 'instance' has a default 'site', in absence of extra information, data
-belongs to the default 'site'
-3. Each 'instance' can have many 'sites', but always has at least one.
-(master-site?)
+2. Each 'instance' has a default 'site', in absence of extra information, data belongs to the default 'site'
+3. Each 'instance' can have many 'sites', but always has at least one.(master-site?)
 4. Each 'site' belongs to exactly one 'instance'.
 5. One server can support many 'installs', possibly differing in version.
 
@@ -86,7 +84,7 @@ it's an immutable collection of things which are used to generate new instances
 we have time to create. (ideally both).
 Translation from our current situation, it could be viewed upon as a 'consolidated installer'
 or 'server admin part'; one level higher than what our current UI exposes. 
-The 'global environment' needs to be configured in the webserver specifically.
+The 'global environment' needs to be configured in the webserver specifically::
 
      /path/to/install
          /bin                            [cmd line interface for the managing of instances]
@@ -142,7 +140,7 @@ using the instance manager is to 'generate' the necessary structure for starting
 (collection of) websites. The necessary directories are created, the proper config is
 put into place etc.
 
-A minimal instance might look something like this:
+A minimal instance might look something like this::
 
     /path/to/instance
         /conf
@@ -158,8 +156,7 @@ A minimal instance might look something like this:
                 /logs
             
 
-An instance structure showing all possible options might look something like
-this:
+An instance structure showing all possible options might look something like this::
 
     /path/to/instance
         /conf
@@ -364,19 +361,19 @@ to deal with file locations, include paths etc.
 
 Deployment 'before and after' stories
 =====================================
-[
+
     here's where we would list known deployment scenarios in the current
     situation and compare it with how the new situation would look.
     We can then compare it in terms of disk size, backup strategy, site mgmt.
     coding efficiency and other metric we deem important.
-]
+
 
 CURRENT 1.x Xaraya SETUPS
 -------------------------
 
 A. One Install, One (or more) Instances, Multiple Sites
 
-Generalized actual example, draft, needs tidying yet.
+Generalized actual example, draft, needs tidying yet::
 
     /path/to/instance
         /html
