@@ -57,15 +57,15 @@ DB-CHANGES:
 PENDING DB-CHANGES
 ==================
 
-* [ticket:4] does blocks really need 5 tables?
-* [ticket:5] xar_module column in privileges table uses a string for modulename and 'All' and 'empty' which prevents it from being a foreign key to the modules table
+* ticket:4 does blocks really need 5 tables?
+* ticket:5 xar_module column in privileges table uses a string for modulename and 'All' and 'empty' which prevents it from being a foreign key to the modules table
 * is column auth_modid still needed?
     Answer: yes, but it's confusing:
     1. it doesnt need to be there really, but might be a moditemvar (it applies to the few)
     2. it is referred to as default authmodule in the code sometimes, which it  is not, it is the auth module which successfully logged this user on latest.
-* [ticket:6] the xar\_ prefix on columns is redundant, not a lightly task though, kinda  obvious why.
-* [ticket:7] privmembers parent column stores 0 now for 'no parent', change to null, so a foreign key constraint can be added on the column
-* [ticket:7] rolemembers parent column stores 0 now for 'no parent', change to null, so a  foreign key constraint can be added on the column
+* ticket:6 the xar\_ prefix on columns is redundant, not a lightly task though, kinda  obvious why.
+* ticket:7 privmembers parent column stores 0 now for 'no parent', change to null, so a foreign key constraint can be added on the column
+* ticket:7 rolemembers parent column stores 0 now for 'no parent', change to null, so a  foreign key constraint can be added on the column
 
 NOTE: the above 2 are probably problematic since the parent column is part of
 the primary key and as such can probably not contain the non-value NULL.
