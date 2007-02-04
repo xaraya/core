@@ -1,3 +1,6 @@
+{{{
+#!rst
+
 A log of important changes made to the 2.x branch which we need to
 revisit later on before trusting the branch to be released or used.
 
@@ -57,8 +60,8 @@ DB-CHANGES:
 PENDING DB-CHANGES
 ==================
 
-* ticket:4 does blocks really need 5 tables?
-* ticket:5 xar_module column in privileges table uses a string for modulename and 'All' and 'empty' which prevents it from being a foreign key to the modules table
+* `ticket:12`:trac: does blocks really need 5 tables?
+* `ticket:5`:trac: xar_module column in privileges table uses a string for modulename and 'All' and 'empty' which prevents it from being a foreign key to the modules table
 * is column auth_modid still needed?
     Answer: yes, but it's confusing:
     1. it doesnt need to be there really, but might be a moditemvar (it applies to the few)
@@ -439,3 +442,4 @@ List of things to hammer (or not):
 * interface inheritance is unclear to me, so its hard to come up with some
   rules for that
 * [WONT] group interface satisfaction methods together
+}}}
