@@ -55,7 +55,7 @@ define('XAR_TOKEN_CR'                , "\n"   );
 define('XAR_NAMESPACE_PREFIX'        , 'xar'  );          // Our own default namespace prefix
 define('XAR_FUNCTION_PREFIX'         , 'xar'  );          // Function prefix (used in check for allowed functions)
 define('XAR_ROOTTAG_NAME'            , 'blocklayout');    // Default name of the root tag
-define('XAR_NODES_LOCATION'          , 'includes/blocklayout/nodes/'); // Where do we keep our nodes classes
+define('XAR_NODES_LOCATION'          , 'lib/blocklayout/nodes/'); // Where do we keep our nodes classes
 
 
 /**
@@ -229,14 +229,14 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         // use the new compiler or not?
         if(!function_exists('xarConfigGetVar') || xarConfigGetVar('Site.BL.CompilerVersion') == 'XAR_BL_USE_XSLT') {
             sys::import('blocklayout.xsltransformer');
-            $xslFile = 'includes/blocklayout/xslt/xar2php.xsl';
+            $xslFile = 'lib/blocklayout/xslt/xar2php.xsl';
             $xslProc = new BlockLayoutXSLTProcessor($xslFile);
             // This is confusing, dont do this here.
             $xslProc->xmlFile = $this->parser->getFileName();
             // This generates php code, the documentree is not visible here anymore
             $outDoc = $xslProc->transform($templateSource);
             return $outDoc;
-        }
+        //}
 
         $documentTree = $this->parser->parse($templateSource);
         if (!isset($documentTree)) return; // throw back

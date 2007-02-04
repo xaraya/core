@@ -12,7 +12,7 @@
  /**
  * Load the Xaraya bootstrap so we can get started
  */
-include 'includes/bootstrap.php';
+include 'lib/bootstrap.php';
 
 /**
  * Set up output caching if enabled

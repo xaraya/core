@@ -40,7 +40,7 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
         //          in the bone handler
         try {
             // Try to get the full path location out of the trace
-            $root  = str_replace('includes/exceptions','',dirname(__FILE__));
+            $root  = str_replace('lib/exceptions','',dirname(__FILE__));
             $trace = str_replace($root,'/',$e->getTraceAsString());
             $data = array('major'     => 'MAJOR TBD (Code was: '. $e->getCode().')',
                           'type'      => get_class($e), // consider stripping of 'Exception'

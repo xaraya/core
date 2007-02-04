@@ -42,7 +42,7 @@ define ('XARINSTALL_PHASE_SETTINGS_COLLECTION', '5');
 define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
 
 // Include the core
-include 'includes/bootstrap.php';
+include 'lib/bootstrap.php';
 sys::import('xarCore');
 // Besides what we explicitly load, we dont want to load
 // anything extra for maximum control
@@ -63,19 +63,20 @@ xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_I
 include 'modules/installer/xarfunctions.php';
 
 // Basic systems always loaded
-// {ML_dont_parse 'includes/xarLog.php'}
+// {ML_dont_parse 'lib/xarLog.php'}
 sys::import('xarLog');
-// {ML_dont_parse 'includes/xarEvt.php'}
+// {ML_dont_parse 'lib/xarEvt.php'}
 sys::import('xarEvt');
-// {ML_dont_parse 'includes/xarVar.php'}
+// {ML_dont_parse 'lib/xarVar.php'}
 sys::import('xarVar');
-// {ML_dont_parse 'includes/xarServer.php'}
+// {ML_dont_parse 'lib/xarServer.php'}
 sys::import('xarServer');
-// {ML_dont_parse 'includes/xarMLS.php'}
+// {ML_dont_parse 'lib/xarMLS.php'}
 sys::import('xarMLS');
-// {ML_dont_parse 'includes/xarTemplate.php'}
+// {ML_dont_parse 'lib/xarTemplate.php'}
 sys::import('xarTemplate');
 
+sys::import('xarConfig');
 // Start Logging Facilities as soon as possible
 $systemArgs = array();
 xarLog_init($systemArgs, $whatToLoad);

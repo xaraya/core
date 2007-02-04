@@ -180,7 +180,7 @@ final class sys extends Object
      * Public wrapper for the sys::once private method for components
      *
      * Syntax examples:
-     *    sys::import('blocklayout.compiler')              -> includes/blocklayout/compiler.php
+     *    sys::import('blocklayout.compiler')              -> lib/blocklayout/compiler.php
      *    sys::import('modules.mymodule.xarincludes.test') -> modules/mymodule/xarincludes/test.php
      *
      * The beginning of the dot path is scanned for 'modules.' and 'creole.',
@@ -194,7 +194,7 @@ final class sys extends Object
     public static function import($dp)
     {
         if((0===strpos($dp,'modules.'))||(0===strpos($dp,'creole.'))) return self::once($dp);
-        return self::once('includes.'.$dp);
+        return self::once('lib.'.$dp);
     }
 
     /**
