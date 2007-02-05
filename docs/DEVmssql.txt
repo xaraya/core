@@ -49,13 +49,15 @@ Xaraya Implementation Notes
   impose the following restrictions:
 
   1. column must allow an 'explicit value' to be inserted to cater for this
-  common construct in Xaraya:
+  common construct in Xaraya::
+  
      $nextid = $dbconn->getNextId('xar_table');
      $sql = "insert into xar_table (id, name) values($nextid,'name')";
      $dbconn->Execute($sql)
 
   2. if column is not specified in the insert statement an id must be
-  generated automatically
+  generated automatically::
+  
      $sql = "insert into xar_table(name) values ('name')
      $dbconn->Execute($sql);
 

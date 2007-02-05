@@ -27,19 +27,18 @@ Issues
 - can we make a stub inserting some random values for the template vars,
   so we can compare somehow
 - how do we handle #$var# constructs?
-  * ideally i want to handle it through separation of the template in two
-    sections, data and presentation, both in the xml domain:
-  * one way of doing that is to make #$var# ~ &var; but this is a pain to
-    handle for XSLT, since it assumes entities to be known/declared at
-    transform time, which is clearly not the case
-  * another separation mechanism is to create a "data" section (xml
-    fragment) to go with the template: like
-    <tpldata>
-      <vars>
-        <var name="var">value</var>
-          ...
-      </vars>
-    </tpldata>
+  - ideally i want to handle it through separation of the template in two sections, data and presentation, both in the xml domain:
+  - one way of doing that is to make #$var# ~ &var; but this is a pain to    handle for XSLT, since it assumes entities to be known/declared at    transform time, which is clearly not the case
+  - another separation mechanism is to create a "data" section (xml fragment) to go with the template
+  
+  Example::
+  
+        <tpldata>
+          <vars>
+            <var name="var">value</var>
+              ...
+          </vars>
+        </tpldata>
 
     or something like that, generated dynamically, From then on we can
     reach each var by using XPath expressions like
@@ -65,14 +64,14 @@ Issues
 - our # delimiter conflicts with the use of generic entities in not-so-rare
   cases.
 
-  Example 1:
+  Example 1::
 
-  #$modinfo['adminurltitle']#&#160;#$modinfo['displayname']#
-   \________first expr_____/ | \__/  \_________text_______/\_ lonely #
-                             |   \_ second expr '160;'
-                             |_ single & 'text'`
+      #$modinfo['adminurltitle']#&#160;#$modinfo['displayname']#
+       \________first expr_____/ | \__/  \_________text_______/\_ lonely #
+                                 |   \_ second expr '160;'
+                                 |_ single & 'text'`
 
-  Example 2:
+  Example 2::
 
     `##$variable##`
 
@@ -128,11 +127,8 @@ Issues
 
 - [DONE] we now add a root tag to module templates artificially. This leads to a
   number of things we can not do now:
-    * as we 'pre-read' the templatefile to add this tag, the filename of the
-    template gets lost when an exception is raised. We really should add the
-    root tag to the templates themselves. (this can be automated)
-    * individual templates are not well-formed (interoperability)
-  (all core templates have had their root tags added in)
+  - as we 'pre-read' the templatefile to add this tag, the filename of the template gets lost when an exception is raised. We really should add the root tag to the templates themselves. (this can be automated)
+  - individual templates are not well-formed (interoperability) (all core templates have had their root tags added in)
 - [DONE] an empty template with just <xar:template xmlns...> </xar:template> gets an
   Error: 0: FileNotFoundException The file "modules/base/xartemplates/includes/.xd
   could not be found. Workaround, add a comment inside the tags.
@@ -185,16 +181,16 @@ The concept of translating textnodes upto now has been:
 
 The problems this creates are:
     1. verbosity, xar:mlstring around every piece of text.
-    2. when variable parts are needed, the xar:ml/xar:mlvar construct creates
-    more verbosity, while ruining the context.
-    3. nightmare to translate a chunk which contains, say, links without
-    reverting to chopping everything up into little pieces
+    2. when variable parts are needed, the xar:ml/xar:mlvar construct creates more verbosity, while ruining the context.
+    3. nightmare to translate a chunk which contains, say, links without reverting to chopping everything up into little pieces
 
 To address these problems I propose the following:
 
     1. The translation concept becomes:
+    
         "translation is enabled by default on all textnodes unless a (global or
          local) setting is set to not translate a node."
+         
     2. On a per-node (which can be whole tree of nodes) basis, nodes can be
     'pinned' to a certain language through the use of the 'xml:lang' attribute
     value as per:
@@ -239,7 +235,8 @@ NOTE:
 Content with variable substitutions, single level, single namespace
 -------------------------------------------------------------------
 
-Old:
+Old::
+
     <p>
       <xar:ml>
         <xar:mlstring>Some text with #(1) and #(2) and #(3).</xar:mlstring>
@@ -252,7 +249,9 @@ Old:
       ...
       ... est laborum.
     </p>
-New:
+
+New::
+
     <p>
       <xar:ml>
         Some text with <xar:var name="first"/> and <xar:var name="second"/> or <xar:var name="third"/>.
@@ -262,31 +261,40 @@ New:
       ...
       ... est laborum.
     </p>
+    
 NOTE: Interpret xar:ml as "register this specifically for translation". The
 ending </xar:ml> can be placed anywhere in the <p/>, depending on what
 should be registered. If it were to be omitted, the whole <p> textnode would
 be registered as the unit to translate.
 
-Examples:
+Examples::
+
     <p>
       <xar:ml>
         Some <a href="http://example.org">Linked <xar:var name="first"/> text</a> with <xar:var name="second"/>
       </xar:ml>
     </p>
-is the same as:
+
+is the same as::
+
     <p>
         Some Linked <xar:var name="first"/> text with <xar:var name="first"/> <!-- One unit of translation -->
     </p>
-THROUGH THE EYES OF TRANSLATION!, while:
+
+THROUGH THE EYES OF TRANSLATION!, while::
+
     <p>
         Some <a href="http://example.org">Linked <xar:var name="first"/> text</a> with <xar:var name="second"/>
     </p>
-is the same as:
+
+is the same as::
+
     <p>
         <xar:ml>Some </xar:ml>
         <a href="http://example.org">Linked <xar:var name="first"/> text</a>  <!-- 3 units of translation -->
         <xar:ml> with <xar:var name="first"/></xar:ml>
     </p>
+
 THROUGH THE EYES OF TRANSLATION!
 
 Implementation:
@@ -296,7 +304,8 @@ Instead of making things hard with the #(1)# constructs, why not stay closer
 to 'home', i.e. eliminate the extra concept and stay with the expressions we
 already know.
 
-In template:
+In template::
+
     <p>
       Some <a href="http://example.org">Linked <xar:var name="first"/> text</a> with <xar:var name="second"/>
     </p>
@@ -308,7 +317,8 @@ In template:
       2. 'Linked␣#$first#␣text'
       3. '␣with␣#$second#␣'        -- should the end have the spacer?
 
-In template:
+In template::
+
       <p>
         <xar:ml>
           Some <a href="http://example.org">Linked <xar:var name="first"/> text</a> with <xar:var name="second"/>
@@ -326,28 +336,25 @@ This makes us use one expression syntax. The #...# constructs are not to be
 changeable in translation, only 'moveable' within the textnode they are in.
 
 - "passed" should be interpreted as: "this is what the user sees when translating".
-- Q: should we 'xarML it' at all? That is, why not reproduce the whole
-    template in the locale (translated) ?
-  A: ?
-  [The advantage of not xarML-ing it would be runtime performance.]
-- Q: as we're going XSLT during compile time, would it make sense to use
-    runtime XSL for MLS?
-  A: in theory, yes. Problem is when compiling, we're moving out of the
-    XML domain, so the compiled stuff cant be XSL-ed again.
-- Q: most requested feature of MLS: when a string is already translated,
-    dont ask for it again, or at least provide default for other scopes.
-- Q: suppose that
-        'text <a>linked #$first#</a> text #$second#'
-     is translated as
-        'text #$first# <a>Linked text</a> #$second#' , how would we know?
-  A: we dont, we will forbid that, the #$first# has to stay within the <a> textnode.
-     How MLS will know that, i have no idea.
+- Q: should we 'xarML it' at all? That is, why not reproduce the whole template in the locale (translated) ?
+  A: ? [The advantage of not xarML-ing it would be runtime performance.]
+- Q: as we're going XSLT during compile time, would it make sense to use runtime XSL for MLS?
+  A: in theory, yes. Problem  is when compiling, we're moving out of the XML domain, so the compiled stuff cant be XSL-ed again.
+- Q: most requested feature of MLS: when a string is already translated, dont ask for it again, or at least provide default for other scopes.
+- Q: suppose that 'text <a>linked #$first#</a> text #$second#' is translated as
+
+        `text #$first# <a>Linked text</a> #$second#` 
+        
+    how would we know?
+    
+  A: we dont, we will forbid that, the #$first# has to stay within the <a> textnode. How MLS will know that, i have no idea.
      THIS IS A BIG ISSUE
 - Q: Aren't we painting ourselves into a corner here? The 'per textnode'
     translation is a good thing, but the grouping with variables is killing.
     Could we not delegate the specific functionality to the MLS parser?
+
   A:
--
+
 Expression resolving
 ====================
 
@@ -394,7 +401,7 @@ technique. Similarly to the namespaced tags, you can employ namespaced attribute
 to be handled by your engine. BL doesnt  use this technique yet either. The
 key addition this brings to the table is that you can hook your namespace into
 others. Say you combine html and blocklayout in a template a div tag, belonging
-to the html (default) namespace can be (legally) extended by;
+to the html (default) namespace can be (legally) extended by::
 
     <div style="border:thin" xar:extra="somevalue">
         <img src="myPicture.png" />
@@ -415,18 +422,13 @@ Technique 3: define dynamic behaviour through an expression language
 --------------------------------------------------------------------
 
 Here's where the problem starts. XML, as such, unless implemented explicitly
-in one of the two previous techniques doesnt define dynamic behaviour in itself.
-There is however a staggering amount of ways to give it one:
+in one of the two previous techniques doesnt define dynamic behaviour in itself. There is however a staggering amount of ways to give it one:
 
     1. XPath expression language to point to XML things and execute some functions on them
     2. Extensions of XPath like XPointer and XLink for example
     3. XQuery to search into XML
-    4. An event model layered into what is known as a DOM (into 3 levels) which
-    introduces an indirect way to manipulate XML documents by modelling them as
-    an hierarchical object. It's not entirely clear where the OnEvent like
-    attributes come into play. (that is, to which doctype they actually belong)
-    5. Choose a specific doctype like XHTML and you get another set of dynamics, specific to what
-    the dialect was designed for (xul+javascript for example)
+    4. An event model layered into what is known as a DOM (into 3 levels) which introduces an indirect way to manipulate XML documents by modelling them as an hierarchical object. It's not entirely clear where the OnEvent like    attributes come into play. (that is, to which doctype they actually belong)
+    5. Choose a specific doctype like XHTML and you get another set of dynamics, specific to what the dialect was designed for (xul+javascript for example)
     6. Databinding specifications like XForms and RDF
 
 and last but not least the custom expression languages which every template
