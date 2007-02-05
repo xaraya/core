@@ -31,7 +31,7 @@
         </p>
     </xar:if>
 
-    <xar:if condition="!empty($modlist) and count($modlist) gt 0">
+    <xar:if condition="!empty($modlist) and count($modlist) gt 0 and (xarSessionGetVar('uid') eq xarModVars::get('roles','admin'))">
         <!--
         when we're viewing the DataObjects themselves, show other modules
         -->
