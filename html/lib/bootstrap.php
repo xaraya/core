@@ -15,14 +15,17 @@
  * of what you want to do here.
  *
  * @package core
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @author Jonn Beames
- * @author Marco Canini <marco@xaraya.com>
  * @author Marcel van der Boom <mrb@hsdev.com>
-**/
+ **/
 
+/**
+ * Set the include_path to the base of a xaraya install
+ */
+$path = './lib';
+set_include_path(get_include_path() . PATH_SEPARATOR . $path);
 /**
  * The Object class from which all other classes are derived.
  *
@@ -183,17 +186,17 @@ final class sys extends Object
      *    sys::import('blocklayout.compiler')              -> lib/blocklayout/compiler.php
      *    sys::import('modules.mymodule.xarincludes.test') -> modules/mymodule/xarincludes/test.php
      *
-     * The beginning of the dot path is scanned for 'modules.' and 'creole.',
-     * if found it assumes a module/creole import
+     * The beginning of the dot path is scanned for 'modules.'
+     * if found it assumes a module import
      * is meant, otherwise a core component import is assumed.
      *
      * @see    sys::once()
      * @todo   do we want to support sys::import('blocklayout.*') ?
-     * @todo   we should probably change our directory structure so we dont have to do specials for creole and modules.
+     * @todo   we should probably change our directory structure so we dont have to do specials for modules.
     **/
     public static function import($dp)
     {
-        if((0===strpos($dp,'modules.'))||(0===strpos($dp,'creole.'))) return self::once($dp);
+        if((0===strpos($dp,'modules.'))) return self::once($dp);
         return self::once('lib.'.$dp);
     }
 
