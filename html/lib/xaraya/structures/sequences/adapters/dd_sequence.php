@@ -7,7 +7,7 @@
  * @todo we have to clarify the interaction between these datastructures and 
  *       datastores.
  */
-sys::import('structures.sequences.adapters.array_sequence');
+sys::import('xaraya.structures.sequences.adapters.array_sequence');
 
 class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceAdapter
 {

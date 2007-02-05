@@ -10,7 +10,7 @@
  * Parent class is SQL datastore
  *
  */
-sys::import('datastores.sql');
+sys::import('xaraya.datastores.sql');
 
 /**
  * Data store is a variable SQL table

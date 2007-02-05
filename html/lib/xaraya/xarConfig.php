@@ -40,7 +40,7 @@ function xarConfig_init(&$args, $whatElseIsGoingLoaded)
     return true;
 }
 
-sys::import('variables.config');
+sys::import('xaraya.variables.config');
 /**
  * Wrapper functions to support Xaraya 1 API for modvars
  * NOTE: the $prep in the signature has been dropped!!

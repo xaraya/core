@@ -10,7 +10,7 @@
  * Parent class is the File data store
  *
 **/
-sys::import('datastores.file');
+sys::import('xaraya.datastores.file');
 
 /**
  * Handle CSV file

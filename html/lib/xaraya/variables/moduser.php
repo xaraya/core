@@ -3,8 +3,8 @@
  * Interface declaration for module user vars
  *
  */
-sys::import('variables');
-sys::import('variables.moditem');
+sys::import('xaraya.variables');
+sys::import('xaraya.variables.moditem');
 
 /**
  * Class to implement the interface to module user vars

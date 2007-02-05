@@ -4,9 +4,9 @@
  * Interface declaration for theme vars
  *
  */
-sys::import('variables');
-sys::import('variables.module');
-sys::import('variables.moditem');
+sys::import('xaraya.variables');
+sys::import('xaraya.variables.module');
+sys::import('xaraya.variables.moditem');
 
 class xarThemeVars extends xarModItemVars implements IxarModItemVars
 {

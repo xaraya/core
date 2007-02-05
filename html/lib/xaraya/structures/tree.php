@@ -1,5 +1,5 @@
 <?php
-sys::import('structures.sets.collection');
+sys::import('xaraya.structures.sets.collection');
 
 class TreeNode extends Object implements ITreeNode
 {

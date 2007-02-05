@@ -13,7 +13,7 @@
  * Make sure base class is available
  *
  */
-sys::import('log.loggers.xarLogger');
+sys::import('xaraya.log.loggers.xarLogger');
 
 /**
  * Javascript logger

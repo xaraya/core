@@ -1,5 +1,5 @@
 <?php
-sys::import('variables');
+sys::import('xaraya.variables');
 /**
  * Class to handle system variables
  * 
@@ -9,7 +9,7 @@ sys::import('variables');
  *
  * @package variables
  * @author Marcel van der Boom <mrb@hsdev.com>
-**/
+ **/
 class xarSystemVars extends xarVars implements IxarVars
 {
     private static $KEY = 'System.Variables'; // const cannot be private :-(

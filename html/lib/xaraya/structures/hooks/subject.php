@@ -1,6 +1,6 @@
 <?php
 
-sys::import('structures.hooks.request');
+sys::import('xaraya.structures.hooks.request');
 
 class BasicSubject extends RequestObject implements SplSubject
 {
@@ -35,7 +35,7 @@ class HookSubject extends BasicSubject
 
     function getMessenger()
     {
-        sys::import('structures.hooks.messenger');
+        sys::import('xaraya.structures.hooks.messenger');
         $this->messenger = new HookMessenger($this->module, $this->itemtype);
         return $this->messenger;
     }

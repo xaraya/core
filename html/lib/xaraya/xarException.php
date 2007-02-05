@@ -60,14 +60,14 @@ define('XAR_TEMPLATE_EXCEPTION', 13);
 /**#@-*/
 
 /* We still need the old classes */
-sys::import('exceptions.legacy.systemexception');
-sys::import('exceptions.legacy.defaultuserexception');
-sys::import('exceptions.legacy.systemmessage');
+sys::import('xaraya.exceptions.legacy.systemexception');
+sys::import('xaraya.exceptions.legacy.defaultuserexception');
+sys::import('xaraya.exceptions.legacy.systemmessage');
 
 // We also need the new classes
-sys::import('exceptions.types');
+sys::import('xaraya.exceptions.types');
 // And the handlers to deal with them
-sys::import('exceptions.handlers');
+sys::import('xaraya.exceptions.handlers');
 
 /**
  * Special exception signalling the old ErrorSet was used

@@ -24,7 +24,7 @@
  * Make sure the base class is available
  *
  */
-sys::import('log.loggers.xarLogger');
+sys::import('xaraya.log.loggers.xarLogger');
 
 /**
  * Mail logger

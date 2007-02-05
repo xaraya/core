@@ -1,6 +1,6 @@
 <?php
 
-sys::import('structures.hooks.subject');
+sys::import('xaraya.structures.hooks.subject');
 
 class BasicObserver extends RequestObject implements SplObserver
 {

@@ -11,7 +11,7 @@
  * @author Marcel van der Boom <mrb@hsdev.com>
  * @author Andy Varganov <andyv@xaraya.com>
  * @author Jason Judge
-**/
+ **/
 
 /**
  * Exceptions for this subsystem
@@ -60,11 +60,11 @@ function xarTpl_init(&$args, $whatElseIsGoingLoaded)
     }
 
     // @todo is the core define still needed now?
-    sys::import('caching.template');
+    sys::import('xaraya.caching.template');
     xarTemplateCache::init(sys::varpath() . XARCORE_TPL_CACHEDIR, $args['enableTemplatesCaching']);
 
     // This is wrong here as well, but it's better at least than in xarMod
-    sys::import('xarTheme');
+    sys::import('xaraya.xarTheme');
     return true;
 }
 

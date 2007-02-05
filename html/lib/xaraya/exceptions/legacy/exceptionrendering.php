@@ -35,7 +35,7 @@ class ExceptionRendering extends Object
         $this->major = $exception->getMajor();
         switch ($this->major) {
             case XAR_SYSTEM_EXCEPTION:
-                sys::import('exceptions.legacy.systemexception_defaults');
+                sys::import('xaraya.exceptions.legacy.systemexception_defaults');
                 if (!isset($this->defaults[$this->id])) {
                     $this->id = "EXCEPTION_FAILURE";
                 }
@@ -43,7 +43,7 @@ class ExceptionRendering extends Object
                 $this->type = 'System Error';
                 break;
             case XAR_USER_EXCEPTION:
-                sys::import('exceptions.legacy.defaultuserexception_defaults');
+                sys::import('xaraya.exceptions.legacy.defaultuserexception_defaults');
                 if (isset($this->defaults[$this->id])) {
                     $this->load();
                 }
@@ -56,7 +56,7 @@ class ExceptionRendering extends Object
                 $this->type = 'User Error';
                 break;
             case XAR_SYSTEM_MESSAGE:
-                sys::import('exceptions.legacy.systemmessage_defaults');
+                sys::import('xaraya.exceptions.legacy.systemmessage_defaults');
                 if (isset($this->defaults[$this->id])) {
                     $this->load();
                 }
@@ -69,7 +69,7 @@ class ExceptionRendering extends Object
                 $this->type = 'System Message';
                 break;
             default:
-                sys::import('exceptions.legacy.systemexception_defaults');
+                sys::import('xaraya.exceptions.legacy.systemexception_defaults');
                 break;
         }
         $this->defaults = '';

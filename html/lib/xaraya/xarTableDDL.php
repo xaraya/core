@@ -64,7 +64,7 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
             break;
         case 'mssql':
         case 'datadict':
-            sys::import('tableddl.datadict');
+            sys::import('xaraya.tableddl.datadict');
             $sql = xarDB__datadictCreateDatabase($databaseName);
             break;
         // Other DBs go here
@@ -106,25 +106,25 @@ function xarDBCreateTable($tableName, $fields, $databaseType="")
     // Select the correct database type
     switch($databaseType) {
         case 'mysql':
-            sys::import('tableddl.mysql');
+            sys::import('xaraya.tableddl.mysql');
             $sql = xarDB__mysqlCreateTable($tableName, $fields);
             break;
         case 'postgres':
-            sys::import('tableddl.postgres');
+            sys::import('xaraya.tableddl.postgres');
             $sql = xarDB__postgresqlCreateTable($tableName, $fields);
             break;
         case 'oci8':
         case 'oci8po':
-            sys::import('tableddl.oracle');
+            sys::import('xaraya.tableddl.oracle');
             $sql = xarDB__oracleCreateTable($tableName, $fields);
             break;
         case 'sqlite':
-            sys::import('tableddl.sqlite');
+            sys::import('xaraya.tableddl.sqlite');
             $sql = xarDB__sqliteCreateTable($tableName, $fields);
             break;
         case 'mssql':
         case 'datadict':
-            sys::import('tableddl.datadict');
+            sys::import('xaraya.tableddl.datadict');
             $sql = xarDB__datadictCreateTable($tableName, $fields);
             break;
         // Other DBs go here
@@ -168,25 +168,25 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
     // Select the correct database type
     switch($databaseType) {
         case 'mysql':
-            sys::import('tableddl.mysql');
+            sys::import('xaraya.tableddl.mysql');
             $sql = xarDB__mysqlAlterTable($tableName, $args);
             break;
         case 'postgres':
-            sys::import('tableddl.postgres');
+            sys::import('xaraya.tableddl.postgres');
             $sql = xarDB__postgresqlAlterTable($tableName, $args);
             break;
         case 'oci8':
         case 'oci8po':
-            sys::import('tableddl.oracle');
+            sys::import('xaraya.tableddl.oracle');
             $sql = xarDB__oracleAlterTable($tableName, $args);
             break;
         case 'sqlite':
-            sys::import('tableddl.sqlite');
+            sys::import('xaraya.tableddl.sqlite');
             $sql = xarDB__sqliteAlterTable($tableName, $args);
             break;
         case 'mssql':
         case 'datadict':
-            sys::import('tableddl.datadict');
+            sys::import('xaraya.tableddl.datadict');
             $sql = xarDB__datadictAlterTable($tableName, $args);
             break;
         // Other DBs go here
@@ -223,7 +223,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
             break;
         case 'mssql':
         case 'datadict':
-            sys::import('tableddl.datadict');
+            sys::import('xaraya.tableddl.datadict');
             $sql = xarDB__datadictDropTable($tableName);
             break;
         // Other DBs go here
@@ -285,7 +285,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
 
         case 'mssql':
         case 'datadict':
-            sys::import('tableddl.datadict');
+            sys::import('xaraya.tableddl.datadict');
             $sql = xarDB__datadictCreateIndex($tableName, $index);
             break;
 
@@ -330,7 +330,7 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
             break;
         case 'mssql':
         case 'datadict':
-            sys::import('tableddl.datadict');
+            sys::import('xaraya.tableddl.datadict');
             $sql = xarDB__datadictDropIndex($tableName, $index);
             break;
         // Other DBs go here

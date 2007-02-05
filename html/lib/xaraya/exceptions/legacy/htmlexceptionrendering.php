@@ -9,7 +9,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 
-sys::import('exceptions.legacy.exceptionrendering');
+sys::import('xaraya.exceptions.legacy.exceptionrendering');
 class HTMLExceptionRendering extends ExceptionRendering
 {
 

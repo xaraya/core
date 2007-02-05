@@ -11,7 +11,7 @@
  * @todo Most of this doesnt belong here, but in the themes module, move it away
 */
 
-sys::import('variables.theme');
+sys::import('xaraya.variables.theme');
 function xarThemeGetVar($themeName, $name, $prep = NULL)
 {   return xarThemeVars::get($themeName, $name); }
 

@@ -39,7 +39,7 @@ function xarDB_init(array &$args, $whatElseIsGoingLoaded)
     if(!isset($args['doConnect'])) $args['doConnect'] = true;
     $GLOBALS['xarDB_systemArgs'] = $args;
     
-    sys::import('xarCreole');
+    sys::import('xaraya.xarCreole');
     // Register postgres driver, since Creole uses a slightly different alias
     // We do this here so we can remove customisation from creole lib.
     xarDB::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
@@ -140,7 +140,7 @@ function &xarDBGetTables()
  */
 function xarDBLoadTableMaintenanceAPI()
 {
-    return sys::import('xarTableDDL');
+    return sys::import('xaraya.xarTableDDL');
 }
 
 /**
@@ -171,7 +171,7 @@ function &xarDBNewDataDict(Connection &$dbconn, $mode = 'READONLY')
 {
     // Load the data dictionary source.
     // Depending on the mode, there may be one or more files to load.
-    sys::import('xarDataDict');
+    sys::import('xaraya.xarDataDict');
 
     // Decide which class to use.
     if ($mode == 'METADATA') {

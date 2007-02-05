@@ -52,14 +52,14 @@ function xarCache_init($args = false)
 
     if (file_exists($cacheDir . '/cache.pagelevel')) {
         define('XARCACHE_PAGE_IS_ENABLED',1);
-        sys::import('caching.page');
+        sys::import('xaraya.caching.page');
         // Note : we may already exit here if session-less page caching is enabled
         xarPageCache_init($cachingConfiguration);
     }
 
     if (file_exists($cacheDir . '/cache.blocklevel')) {
         define('XARCACHE_BLOCK_IS_ENABLED',1);
-        sys::import('caching.block');
+        sys::import('xaraya.caching.block');
         xarBlockCache_init($cachingConfiguration);
     }
 
@@ -264,47 +264,47 @@ function xarCache_getParents()
  */
 function xarCache_getStorage($args)
 {
-    sys::import('caching.storage');
+    sys::import('xaraya.caching.storage');
     switch ($args['storage'])
     {
         case 'database':
-            sys::import('caching.storage.database');
+            sys::import('xaraya.caching.storage.database');
             $classname = 'xarCache_Database_Storage';
             break;
 
         case 'memcached':
             if (extension_loaded('memcache')) {
-                sys::import('caching.storage.memcached');
+                sys::import('xaraya.caching.storage.memcached');
                 $classname = 'xarCache_MemCached_Storage';
             } else {
-                sys::import('caching.storage.filesystem');
+                sys::import('xaraya.caching.storage.filesystem');
                 $classname = 'xarCache_FileSystem_Storage';
             }
             break;
 
         case 'mmcache':
             if (function_exists('mmcache')) {
-                sys::import('caching.storage.mmcache');
+                sys::import('xaraya.caching.storage.mmcache');
                 $classname = 'xarCache_MMCache_Storage';
             } else {
-                sys::import('caching.storage.filesystem');
+                sys::import('xaraya.caching.storage.filesystem');
                 $classname = 'xarCache_FileSystem_Storage';
             }
             break;
 
         case 'eaccelerator':
             if (function_exists('eaccelerator')) {
-                sys::import('caching.storage.eaccelarator');
+                sys::import('xaraya.caching.storage.eaccelarator');
                 $classname = 'xarCache_eAccelerator_Storage';
             } else {
-                sys::import('caching.storage.filesystem');
+                sys::import('xaraya.caching.storage.filesystem');
                 $classname = 'xarCache_FileSystem_Storage';
             }
             break;
 
         case 'filesystem':
         default:
-            sys::import('caching.storage.filesystem');
+            sys::import('xaraya.caching.storage.filesystem');
             $classname = 'xarCache_FileSystem_Storage';
             break;
     }

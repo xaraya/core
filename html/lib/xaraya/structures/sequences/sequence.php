@@ -8,7 +8,7 @@
  * to implement stacks, queues, deques or other special linear lists. 
  * 
  */
-sys::import('structures.sequences.interfaces');
+sys::import('xaraya.structures.sequences.interfaces');
 class Sequence extends SequenceAdapter implements iSequence
 {
     /* 

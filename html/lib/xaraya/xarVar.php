@@ -433,13 +433,10 @@ function xarVarLoad ($includes_type, $filename)
 
     $filename = xarVarPrepForOS($filename);
 
-    $function_file = './lib/'.$includes_type.'/'.$filename.'.php';
     $function_name = 'variable_'.$includes_type.'_'.$filename;
 
     if (!function_exists($function_name)) {
-        if (file_exists($function_file)) {
-            sys::import("$includes_type.$filename");
-        }
+        sys::import("xaraya.$includes_type.$filename");
     }
 
     if (!function_exists($function_name)) {

@@ -3,7 +3,7 @@
  * Build upon IxarVars to define interface for ModVars
  *
  */
-sys::import('variables');
+sys::import('xaraya.variables');
 interface IxarModVars extends IxarVars
 {
     static function getID     ($scope, $name);

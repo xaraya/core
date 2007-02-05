@@ -32,8 +32,8 @@ define('XARMLS_DNTYPE_CORE', 1);
 define('XARMLS_DNTYPE_THEME', 2);
 define('XARMLS_DNTYPE_MODULE', 3);
 
-sys::import('xarLocale');
-sys::import('transforms.xarCharset');
+sys::import('xaraya.xarLocale');
+sys::import('xaraya.transforms.xarCharset');
 
 /**
  * Initializes the Multi Language System
@@ -449,16 +449,16 @@ function xarMLS_setCurrentLocale($locale)
 /* TODO: delete after new backend testing
     switch ($GLOBALS['xarMLS_backendName']) {
     case 'xml':
-        sys::import('xarMLSXMLBackend');
+        sys::import('xaraya.xarMLSXMLBackend');
         $GLOBALS['xarMLS_backend'] = new xarMLS__XMLTranslationsBackend($alternatives);
         break;
     case 'php':
-        sys::import('xarMLSPHPBackend');
+        sys::import('xaraya.xarMLSPHPBackend');
         $GLOBALS['xarMLS_backend'] = new xarMLS__PHPTranslationsBackend($alternatives);
         break;
     case 'xml2php':
 */
-        sys::import('xarMLSXML2PHPBackend');
+        sys::import('xaraya.xarMLSXML2PHPBackend');
         $GLOBALS['xarMLS_backend'] = new xarMLS__XML2PHPTranslationsBackend($alternatives);
 
 /*

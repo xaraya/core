@@ -1,6 +1,6 @@
 <?php
-sys::import('structures.sequences.interfaces');
-sys::import('structures.sequences.adapters.sequence_adapter');
+sys::import('xaraya.structures.sequences.interfaces');
+sys::import('xaraya.structures.sequences.adapters.sequence_adapter');
 
 /**
  * A stack manipulates only the item at the head of the sequence

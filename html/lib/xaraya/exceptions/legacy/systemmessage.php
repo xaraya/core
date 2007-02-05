@@ -9,7 +9,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 
-sys::import('exceptions.legacy.exception');
+sys::import('xaraya.exceptions.legacy.exception');
 
 class SystemMessage extends xarException
 {

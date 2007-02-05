@@ -10,7 +10,7 @@
 */
 
 include 'lib/bootstrap.php';
-sys::import('xarCore');
+sys::import('xaraya.xarCore');
 xarCoreInit(XARCORE_SYSTEM_ALL);
 xarWebservicesMain();
 

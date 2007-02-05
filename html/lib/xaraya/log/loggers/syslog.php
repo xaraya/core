@@ -16,7 +16,7 @@
  * Make sure the base class is available
  *
  */
-sys::import('log.loggers.xarLogger');
+sys::import('xaraya.log.loggers.xarLogger');
 
 /**
  * The Log_syslog class is a concrete implementation of the Log::

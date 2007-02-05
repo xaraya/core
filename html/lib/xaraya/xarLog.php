@@ -193,7 +193,7 @@ function xarLog__shutdown_handler()
 **/
 function xarLog__add_logger($type, $config_args)
 {
-    sys::import('log.loggers.'.$type);
+    sys::import('xaraya.log.loggers.'.$type);
     $type = 'xarLogger_'.$type;
 
      if (!$observer = new $type()) {
@@ -221,7 +221,7 @@ function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
     $args = array('name'=>$name, 'var'=>$var, 'format'=>'text');
 
     //Encapsulate core libraries in classes and let __call work lazy loading
-    sys::import('log.functions.dumpvariable');
+    sys::import('xaraya.log.functions.dumpvariable');
     xarLogMessage(xarLog__dumpVariable($args),$level);
 }
 

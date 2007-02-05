@@ -6,7 +6,7 @@ $savedir = getcwd();
 chdir('/var/mt/xar/core/core.2.x/html');
 
 include('lib/bootstrap.php');
-sys::import('xarCore');
+sys::import('xaraya.xarCore');
 
 // TODO: don't load the whole core
 xarCoreInit(XARCORE_SYSTEM_ALL);
@@ -24,8 +24,8 @@ if(!xarUserLogin('Admin','12345')) {
 }
 
 
-sys::import('structures.sequences.queue');
-sys::import('structures.sequences.stack');
+sys::import('xaraya.structures.sequences.queue');
+sys::import('xaraya.structures.sequences.stack');
 m('WHY IS THIS NOT USING THE LOVELY UNITTESTS?');
 $l=0;
 m('Testing DD queue',$l++);

@@ -8,7 +8,7 @@
  * @todo make this a real factory
  * @todo scoping of variables
 **/
-sys::import('structures.descriptor');
+sys::import('xaraya.structures.descriptor');
 sys::import('modules.dynamicdata.class.datastores');
 sys::import('modules.dynamicdata.class.properties');
 

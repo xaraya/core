@@ -1,6 +1,6 @@
 <?php
 
-sys::import('structures.datetime');
+sys::import('xaraya.structures.datetime');
 
 class xarDate extends XarDateTime
 {

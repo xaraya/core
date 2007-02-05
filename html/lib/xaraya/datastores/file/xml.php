@@ -10,7 +10,7 @@
  * Parent class is File datastore
  *
 **/
-sys::import('datastores.file');
+sys::import('xaraya.datastores.file');
 
 /**
  * Data store is an XML file

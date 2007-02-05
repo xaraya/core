@@ -9,7 +9,7 @@
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
 
-sys::import('exceptions.types');
+sys::import('xaraya.exceptions.types');
 class DuplicateTagException extends DuplicationExceptions
 {
     protected $message = 'The tag definition for the tag: "#(1)" already exists.';

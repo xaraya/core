@@ -16,7 +16,7 @@
  *
  * @package multilanguage
  */
-sys::import('xarMLS');
+sys::import('xaraya.xarMLS');
 
 class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {

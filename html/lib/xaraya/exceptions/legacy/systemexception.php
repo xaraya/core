@@ -9,7 +9,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 
-sys::import('exceptions.legacy.exception');
+sys::import('xaraya.exceptions.legacy.exception');
 class SystemException extends xarException
 {
     function SystemException($msg = '')
@@ -30,7 +30,7 @@ class SystemException extends xarException
         // FIXME: see http://bugs.php.net/bug.php?id=35634
         /*
         // load relative to the current file (e.g. for shutdown functions)
-        if (!isset($core)) sys::import('exceptions.xarayacomponents');
+        if (!isset($core)) sys::import('xaraya.exceptions.xarayacomponents');
         foreach (xarComponents::$core as $corecomponent) {
             if ($corecomponent['name'] == $this->module) {
                 $this->component = $corecomponent['fullname'];

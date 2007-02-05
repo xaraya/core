@@ -10,7 +10,7 @@
 **/
 
 include 'lib/bootstrap.php';
-sys::import('xarCore');
+sys::import('xaraya.xarCore');
 
 // We need a (fake) ip address to run xar.
 if(!isset($_SERVER['REMOTE_ADDR'])) putenv("REMOTE_ADDR=127.0.0.1");

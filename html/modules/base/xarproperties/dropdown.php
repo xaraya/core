@@ -164,7 +164,7 @@ class SelectProperty extends DataProperty
             // we have some specific function to retrieve the options here
             eval('$items = ' . $this->func .';');
             if (isset($items) && is_object($items)){
-                sys::import('structures.sets.collection');
+                sys::import('xaraya.structures.sets.collection');
                 $iter = $items->getIterator();
                 while($iter->valid()) {
                     $obj = $iter->current();

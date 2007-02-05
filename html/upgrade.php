@@ -34,7 +34,7 @@ error_reporting(E_ALL);
 
 // initialize the Xaraya core
 include 'lib/bootstrap.php';
-sys::import('xarCore');
+sys::import('xaraya.xarCore');
 xarCoreInit(XARCORE_SYSTEM_ALL);
 /**
  * Entry function for the installer

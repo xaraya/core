@@ -116,7 +116,7 @@ function xarMod_init(&$args, $whatElseIsGoingLoaded)
 /*
     Bring in the module variables to maintain interface compatibility for now
 */
-sys::import('variables.module');
+sys::import('xaraya.variables.module');
 
 /**
  * Wrapper functions to support Xaraya 1 API for modvars
@@ -139,7 +139,7 @@ function xarModGetVarId($modName, $name)
 /*
     Bring in the module user variables to maintain interface compatibility for now
 */
-sys::import('variables.moduser');
+sys::import('xaraya.variables.moduser');
 /**
  * Wrapper functions for xarModUserVars to support Xaraya 1 API
  *

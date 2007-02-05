@@ -1,11 +1,12 @@
 <?php
-/*
-    Class to handle variables linked to an item of a module.
-    Bit different than the others, so lets just start and see
-    where we end up
-*/
+/**
+ * Class to handle variables linked to an item of a module.
+ *
+ * Bit different than the others, so lets just start and see
+ * where we end up
+ */
 
-sys::import('variables');
+sys::import('xaraya.variables');
 
 interface IxarModItemVars
 {

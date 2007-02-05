@@ -10,7 +10,7 @@
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
-sys::import('structures.tree');
+sys::import('xaraya.structures.tree');
 sys::import('modules.roles.class.roles');
 
 /**

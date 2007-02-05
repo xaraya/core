@@ -177,7 +177,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Before we do anything make sure we can except out of code in a predictable matter
      *
      */
-    sys::import('xarException');
+    sys::import('xaraya.xarException');
     $systemArgs = array();
     xarError_init($systemArgs, $whatToLoad);
 
@@ -201,7 +201,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     // {ML_dont_parse 'includes/xarLog.php'}
-    sys::import('xarLog');
+    sys::import('xaraya.xarLog');
     xarLog_init($systemArgs, $whatToLoad);
 
     /*
@@ -213,7 +213,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     if ($whatToLoad & XARCORE_SYSTEM_DATABASE) { // yeah right, as if this is optional
-        sys::import('xarDB');
+        sys::import('xaraya.xarDB');
 
         // Decode encoded DB parameters
         // These need to be there
@@ -256,7 +256,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     // {ML_dont_parse 'includes/xarEvt.php'}
-    sys::import('xarEvt');
+    sys::import('xaraya.xarEvt');
     $systemArgs = array('loadLevel' => $whatToLoad);
     xarEvt_init($systemArgs, $whatToLoad);
 
@@ -270,14 +270,14 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     if ($whatToLoad & XARCORE_SYSTEM_CONFIGURATION) {
-        sys::import('xarConfig');
+        sys::import('xaraya.xarConfig');
 
         // Start Configuration Unit
         $systemArgs = array();
         xarConfig_init($systemArgs, $whatToLoad);
 
         // Start Variables utilities
-        sys::import('xarVar');
+        sys::import('xaraya.xarVar');
         xarVar_init($systemArgs, $whatToLoad);
         $whatToLoad ^= XARCORE_BIT_CONFIGURATION;
     }
@@ -289,7 +289,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     if (xarConfigGetVar('Site.Core.LoadLegacy') == true) {
-        sys::import('xarLegacy');
+        sys::import('xaraya.xarLegacy');
     }
 
     /*
@@ -302,7 +302,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Bring HTTP Protocol Server/Request/Response utilities into the story
      *
      */
-    sys::import('xarServer');
+    sys::import('xaraya.xarServer');
     $systemArgs = array('enableShortURLsSupport' => xarConfigGetVar('Site.Core.EnableShortURLsSupport'),
                         'defaultModuleName'      => xarConfigGetVar('Site.Core.DefaultModuleName'),
                         'defaultModuleType'      => xarConfigGetVar('Site.Core.DefaultModuleType'),
@@ -315,7 +315,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Bring Multi Language System online
      *
      */
-    sys::import('xarMLS');
+    sys::import('xaraya.xarMLS');
     $systemArgs = array('MLSMode'             => xarConfigGetVar('Site.MLS.MLSMode'),
 //                        'translationsBackend' => xarConfigGetVar('Site.MLS.TranslationsBackend'),
                         'translationsBackend' => 'xml2php',
@@ -339,7 +339,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
     if ($whatToLoad & XARCORE_SYSTEM_SESSION)
     {
-        sys::import('xarSession');
+        sys::import('xaraya.xarSession');
 
         $systemArgs = array(
             'securityLevel'     => xarConfigGetVar('Site.Session.SecurityLevel'),
@@ -363,7 +363,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
     if ($whatToLoad & XARCORE_SYSTEM_BLOCKS)
     {
-        sys::import('xarBlocks');
+        sys::import('xaraya.xarBlocks');
 
         // Start Blocks Support Sytem
         $systemArgs = array();
@@ -380,7 +380,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * @todo <mrb> i thought it was configurable
     **/
     if ($whatToLoad & XARCORE_SYSTEM_MODULES) {
-        sys::import('xarMod');
+        sys::import('xaraya.xarMod');
         $systemArgs = array('enableShortURLsSupport' => xarConfigGetVar('Site.Core.EnableShortURLsSupport'),
                             'generateXMLURLs' => true);
         xarMod::init($systemArgs);
@@ -392,7 +392,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Start BlockLayout Template Engine
      *
      */
-    sys::import('xarTemplate');
+    sys::import('xaraya.xarTemplate');
 
     $systemArgs = array(
         'enableTemplatesCaching' => xarConfigGetVar('Site.BL.CacheTemplates'),
@@ -412,8 +412,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     **/
     if ($whatToLoad & XARCORE_SYSTEM_USER)
     {
-        sys::import('xarUser');
-        sys::import('xarSecurity');
+        sys::import('xaraya.xarUser');
+        sys::import('xaraya.xarSecurity');
 //        xarSecurity_init();
         // Start User System
         $systemArgs = array('authenticationModules' => xarConfigGetVar('Site.User.AuthenticationModules'));
@@ -458,7 +458,7 @@ function xarCoreActivateDebugger($flags)
     } elseif ($flags & XARDBG_ACTIVE) {
         // See if config.system.php has info for us on the errorlevel, but dont break if it has not
         try {
-            sys::import('variables.system');
+            sys::import('xaraya.variables.system');
             $errLevel = xarSystemVars::get(sys::CONFIG, 'Exception.ErrorLevel');
         } catch(Exception $e) {
             $errLevel = E_ALL;
@@ -508,7 +508,7 @@ function xarCoreIsDebugFlagSet($flag)
 **/
 function xarCore_getSystemVar($name)
 {
-    sys::import('variables.system');
+    sys::import('xaraya.variables.system');
     return xarSystemVars::get(null, $name);
 }
 

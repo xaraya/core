@@ -9,7 +9,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 
-sys::import('exception.legacy.exception');
+sys::import('xaraya.exception.legacy.exception');
 class NoException extends xarException
 {
     function NoException() 

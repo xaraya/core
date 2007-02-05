@@ -43,13 +43,13 @@ define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
 
 // Include the core
 include 'lib/bootstrap.php';
-sys::import('xarCore');
+sys::import('xaraya.xarCore');
 // Besides what we explicitly load, we dont want to load
 // anything extra for maximum control
 $whatToLoad = XARCORE_SYSTEM_NONE;
 
 // Start Exception Handling System very early
-sys::import('xarException');
+sys::import('xaraya.xarException');
 $systemArgs = array();
 xarError_init($systemArgs, $whatToLoad);
 // As long as we are coming in through install.php we need to pick up the bones if something goes wrong
@@ -64,19 +64,19 @@ include 'modules/installer/xarfunctions.php';
 
 // Basic systems always loaded
 // {ML_dont_parse 'lib/xarLog.php'}
-sys::import('xarLog');
+sys::import('xaraya.xarLog');
 // {ML_dont_parse 'lib/xarEvt.php'}
-sys::import('xarEvt');
+sys::import('xaraya.xarEvt');
 // {ML_dont_parse 'lib/xarVar.php'}
-sys::import('xarVar');
+sys::import('xaraya.xarVar');
 // {ML_dont_parse 'lib/xarServer.php'}
-sys::import('xarServer');
+sys::import('xaraya.xarServer');
 // {ML_dont_parse 'lib/xarMLS.php'}
-sys::import('xarMLS');
+sys::import('xaraya.xarMLS');
 // {ML_dont_parse 'lib/xarTemplate.php'}
-sys::import('xarTemplate');
+sys::import('xaraya.xarTemplate');
 
-sys::import('xarConfig');
+sys::import('xaraya.xarConfig');
 // Start Logging Facilities as soon as possible
 $systemArgs = array();
 xarLog_init($systemArgs, $whatToLoad);

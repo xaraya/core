@@ -6,7 +6,7 @@
  * @subpackage dynamicdata module
 **/
 sys::import('modules.dynamicdata.class.datastores.master');
-sys::import('datastores.interface');
+sys::import('xaraya.datastores.interface');
 
 class BasicDataStore extends DDObject implements IBasicDataStore
 {

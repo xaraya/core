@@ -1,7 +1,7 @@
 <?php
 
-sys::import('structures.sequences.interfaces');
-sys::import('structures.sequences.adapters.sequence_adapter');
+sys::import('xaraya.structures.sequences.interfaces');
+sys::import('xaraya.structures.sequences.adapters.sequence_adapter');
 
 // A deque can be manipulated at both ends
 
