@@ -162,7 +162,8 @@ function roles_activate()
     xarModVars::set('roles', 'rolesdisplay', 'tabbed');
     xarModVars::set('roles', 'locale', '');
     xarModVars::set('roles', 'duvsettings', serialize(array()));
-    xarModVars::set('roles', 'userhome', '[base]');
+    xarModVars::set('roles', 'userhome', 'undefined');
+    xarModSetUserVar('roles', 'userhome', '[base]',1);
     xarModVars::set('roles', 'userlastlogin', '');
     xarModVars::set('roles', 'passwordupdate', '');
     xarModVars::set('roles', 'primaryparent', 1);

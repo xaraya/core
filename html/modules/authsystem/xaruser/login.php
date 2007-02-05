@@ -252,36 +252,17 @@ function authsystem_user_login()
                 $settings = unserialize(xarModVars::get('roles', 'duvsettings'));
                 if (in_array('userhome', $settings)) {
                     $truecurrenturl = xarServerGetCurrentURL(array(), false);
-                    $role = xarUFindRole($uname);
-                    $url = $lastresort ? '[base]' : xarModGetUserVar('roles','userhome',$role->getID());
-                    if (!isset($url) || empty($url)) {
-                       if (in_array('primaryparent', $settings)) {
-                           $parentid = xarModVars::get('roles','primaryparent',$role->getID());
-                           $primaryparent = xarRoles::getRole($parentid);
-                           $parenturl = xarModGetUserVar('roles','userhome',$primaryparent->getID());
-                           if (!empty($parenturl)) $url= $parenturl;
-                       } else {
-                           // take the first home url encountered.
-                           // TODO: what would be a more logical choice?
-                            foreach ($role->getParents() as $parent) {
-                                $parenturl = xarModGetUserVar('roles','userhome',$parent->getID());
-                                if (!empty($parenturl))  {
-                                    $url = $parenturl;
-                                    break;
-                                }
-                            }
-                        }
-                    }
+                    $url = xarModAPIFunc('roles','user','getuserhome',array('itemid' => $user['uid']));
 
                     /* move the half page of code out to a Roles function. No need to repeat everytime it's used*/
-                    $urldata=xarModAPIFunc('roles','user','userhome',array('url'=>$url,'truecurrenturl'=>$truecurrenturl));
-                    $data=array();
+                    $urldata = xarModAPIFunc('roles','user','parseuserhome',array('url'=>$url,'truecurrenturl'=>$truecurrenturl));
+                    $data = array();
                     if (!is_array($urldata) || !$urldata) {
-                        $externalurl=false;
-                        $redirecturl=xarServerGetBaseURL();
+                        $externalurl = false;
+                        $redirecturl = xarServerGetBaseURL();
                     } else{
-                        $externalurl=$urldata['externalurl'];
-                        $redirecturl=$urldata['redirecturl'];
+                        $externalurl = $urldata['externalurl'];
+                        $redirecturl = $urldata['redirecturl'];
                     }
                 }
             } //end get homepage redirect data
