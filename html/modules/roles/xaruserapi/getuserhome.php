@@ -28,22 +28,26 @@ function roles_userapi_getuserhome($args)
     $userhome = !empty($lastresort) ? '[base]' : xarModGetUserVar('roles','userhome',$itemid);
 
     // otherwise look for the role's userhome
+    $notdone = true;
     if (!isset($userhome) || empty($userhome) || ($userhome == 'undefined')) {
-       if (in_array('primaryparent', $settings)) {
+        $settings = unserialize(xarModVars::get('roles', 'duvsettings'));
+        if (in_array('primaryparent', $settings)) {
             // go for the primary parent's userhome
-           $parentid = xarModVars::get('roles','primaryparent',$itemid);
-           return xarModAPIFunc('roles','user','getuserhome',array('itemid' => $parentid));
-       } else {
+            $parentid = xarModVars::get('roles','primaryparent',$itemid);
+            if (!empty($parentid)) {
+               return xarModAPIFunc('roles','user','getuserhome',array('itemid' => $parentid));
+            }
+    }
+    if ($notdone) {
            // take the first userhome url encountered.
            // TODO: what would be a more logical choice?
-            $role = Roles::getRole($itemid);
+            $role = xarRoles::getRole($itemid);
             foreach ($role->getParents() as $parent) {
-                return xarModGetUserVar('roles','userhome',$parent->getID());
+                return xarModAPIFunc('roles','user','getuserhome',array('itemid' => $parent->getID()));
                 break;
             }
         }
     }
-
     return $userhome;
 }
 ?>
