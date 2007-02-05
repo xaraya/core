@@ -44,9 +44,9 @@ function modules_adminapi_update($args)
                             xar_action, xar_tarea, xar_tmodid, xar_ttype,
                             xar_tfunc
                 FROM $xartable[hooks]
-                WHERE xar_smodid = ?";
+                WHERE xar_smodid IS NULL";
         $stmt = $dbconn->prepareStatement($sql);
-        $result = $stmt->executeQuery(array(0));
+        $result = $stmt->executeQuery();
 
         $modList = xarModAPIFunc('modules', 'admin', 'getlist');
         $todo = array();
