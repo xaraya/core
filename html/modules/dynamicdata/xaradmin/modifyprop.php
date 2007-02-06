@@ -1,17 +1,17 @@
 <?php
 /**
- * Modify the dynamic properties for a module and itemtype
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
  * Modify the dynamic properties for a module + itemtype
+ *
  * @param int itemid
  * @param int modid
  * @param int itemtype
@@ -23,11 +23,7 @@
  */
 function dynamicdata_admin_modifyprop()
 {
-    // Initialise the $data variable with menu
     $data = xarModAPIFunc('dynamicdata','admin','menu');
-
-    // Security check - important to do this as early as possible to avoid
-    // potential security holes or just too much wasted processing
 
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
@@ -52,8 +48,6 @@ function dynamicdata_admin_modifyprop()
     }
     $data['myobject'] = & $myobject;
 */
-
-    if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
 
     $object = xarModAPIFunc('dynamicdata','user','getobjectinfo',
                             array('objectid' => $itemid,
@@ -148,9 +142,6 @@ function dynamicdata_admin_modifyprop()
                             'validation' => xarML('Validation'),
                             'new' => xarML('New'),
                       );
-
-    // Specify some labels and values for display
-    $data['updatebutton'] = xarVarPrepForDisplay(xarML('Update Properties'));
 
     $data['fieldtypeprop'] =& DataPropertyMaster::getProperty(array('type' => 'fieldtype'));
     $data['fieldstatusprop'] =& DataPropertyMaster::getProperty(array('type' => 'fieldstatus'));

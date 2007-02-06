@@ -53,6 +53,7 @@ DB-CHANGES:
   that other module.
 * hooks table colum xar_smodid now INTEGER DEFAULT NULL
 * hooks table column xar_tmodid now INTEGER NOT NULL
+* drop moduleid and and itemtype fields from dynamic_properties table
 
 
 (see DEVupgrades.sql for details on all of the above)
@@ -78,14 +79,14 @@ Choices:
     1. table without a primary key but consistent with the foreign keys
     2. table with a primary key but no foreign key possible
     3. use a derived constraint like a trigger to enforce consistency (this is the same as 2, but extended)
-    
+
     A question related to this::
-    
+
         Does the combination of say, privparent, privchild need extra attributes
         i.e. if the fact of a privilege 'membership' would lead to a need of
         extra fields in the table, we could introduce an ID in that table and
         treat the 'membership' record as an item in its own right.
-        
+
 * Columns affected by modid/regid/modname decision:
     The decision was:
         "regid is only stored in the modules table for the db model. All other
@@ -303,14 +304,14 @@ KNOWN ISSUES
 * when we're in exception handling for a *php* exception, it seems that no more
   exceptions are thrown in subsequent code
   Example for reproducing::
-  
+
         - dont define date.timezone in php (will raise exception in
         xarLogger.php early on)
         - make sure CACHEKEYS file is NOT present (should raise exception in
         caching/template.php lines 168+)
         The fopen() call in caching/template.php does NOT raise an exception then
 
-* [DONE?] property file names are now based upon $property->name instead of
+* [DONE] property file names are now based upon $property->name instead of
   their class name as before, this means that Dynamic_Select_Property becomes
   included via sys::import('modules.base.xarproperties.dropdown') instead of
   sys::import('modules.base.xarproperties.Dynamic_Select_Property') this
@@ -344,7 +345,7 @@ Requirements for a front end (js) library
   1. include on js entry point for the request
   2. write the controls inside a xar-template
   3. (optional) customize the default behaviour to the applications need.
-  
+
 Whether the tags used are compiled/transformed on the server or
 through a js callback is irrelevant for us.
 

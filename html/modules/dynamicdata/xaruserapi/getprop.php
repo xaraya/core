@@ -1,17 +1,16 @@
 <?php
 /**
- * Get field properties for a specific module + item type
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * get field properties for a specific module + item type
+ * Get field properties for a specific module + item type
  *
  * @author the DynamicData module development team
  * @param $args['objectid'] object id of the properties to get
@@ -22,8 +21,7 @@
  * @param $args['status'] limit to property fields of a certain status (e.g. active)
  * @param $args['allprops'] skip disabled properties by default
  * @param $args['static'] include the static properties (= module tables) too (default no)
- * @returns mixed
- * @return value of the field, or false on failure
+ * @return mixed value of the field, or false on failure
  * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
  */
 function dynamicdata_userapi_getprop($args)
@@ -109,7 +107,6 @@ function dynamicdata_userapi_getprop($args)
                                                            'moduleid' => $modid,
                                                            'itemtype' => $itemtype,
                                                            'allprops' => $allprops));
-
     if (!empty($static)) {
         // get the list of static properties for this module
         $staticlist = xarModAPIFunc('dynamicdata','util','getstatic',
@@ -142,6 +139,7 @@ function dynamicdata_userapi_getprop($args)
     } else {
         return $fields;
     }
+
 }
 
 ?>
