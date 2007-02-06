@@ -154,3 +154,5 @@ ALTER TABLE xar_hooks MODIFY COLUMN xar_tmodid INTEGER NOT NULL;
 /* removing unneeded moduleid and itemtype fields for the properties table */
 ALTER TABLE `xar_dynamic_properties` DROP INDEX `i_xar_dynprops_combo`;
 ALTER TABLE `xar_dynamic_properties` DROP `xar_prop_moduleid` , DROP `xar_prop_itemtype` ;
+DELETE FROM `xar_dynamic_properties` WHERE `xar_dynamic_properties`.`xar_prop_id` =15 LIMIT 1 ;
+DELETE FROM `xar_dynamic_properties` WHERE `xar_dynamic_properties`.`xar_prop_id` =16 LIMIT 1 ;
