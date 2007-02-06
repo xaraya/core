@@ -6,7 +6,7 @@
  * @subpackage dynamicdata module
  *
 **/
-sys::import('structures.descriptor');
+sys::import('xaraya.structures.descriptor');
 sys::import('modules.dynamicdata.class.properties');
 sys::import('modules.dynamicdata.class.objects.master');
 

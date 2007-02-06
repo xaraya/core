@@ -1,5 +1,5 @@
 <?php
-    sys::import('datastores.interface');
+    sys::import('xaraya.datastores.interface');
 
 
 /**
@@ -100,48 +100,48 @@ class DataStoreFactory extends Object
         switch ($type)
         {
             case 'table':
-                sys::import('datastores.sql.flattable');
+                sys::import('xaraya.datastores.sql.flattable');
                 $datastore = new FlatTableDataStore($name);
                 break;
             case 'data':
-                sys::import('datastores.sql.variabletable');
+                sys::import('xaraya.datastores.sql.variabletable');
                 $datastore = new VariableTableDataStore($name);
                 break;
             case 'hook':
-                sys::import('datastores.hook');
+                sys::import('xaraya.datastores.hook');
                 $datastore = new HookDataStore($name);
                 break;
             case 'function':
-                sys::import('datastores.function');
+                sys::import('xaraya.datastores.function');
                 $datastore = new FunctionDataStore($name);
                 break;
             case 'uservars':
-                sys::import('datastores.usersettings');
+                sys::import('xaraya.datastores.usersettings');
                 // TODO: integrate user variable handling with DD
                 $datastore = new UserSettingsDataStore($name);
                 break;
             case 'modulevars':
-                sys::import('datastores.modulevariables');
+                sys::import('xaraya.datastores.modulevariables');
                 // TODO: integrate module variable handling with DD
                 $datastore = new ModuleVariablesDataStore($name);
                 break;
 
                 // TODO: other data stores
             case 'ldap':
-                sys::import('datastores.ldap');
+                sys::import('xaraya.datastores.ldap');
                 $datastore = new LDAPDataStore($name);
                 break;
             case 'xml':
-                sys::import('datastores.file.xml');
+                sys::import('xaraya.datastores.file.xml');
                 $datastore = new XMLFileDataStore($name);
                 break;
             case 'csv':
-                sys::import('datastores.file.csv');
+                sys::import('xaraya.datastores.file.csv');
                 $datastore = new CSVFileDataStore($name);
                 break;
             case 'dummy':
             default:
-                sys::import('datastores.dummy');
+                sys::import('xaraya.datastores.dummy');
                 $datastore = new DummyDataStore($name);
                 break;
         }

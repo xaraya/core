@@ -12,7 +12,7 @@
  /**
  * Load the Xaraya bootstrap so we can get started
  */
-include 'includes/bootstrap.php';
+include 'lib/bootstrap.php';
 
 /**
  * Set up output caching if enabled
@@ -20,7 +20,7 @@ include 'includes/bootstrap.php';
  *       without loading the core
  */
 if (file_exists(sys::varpath() . '/cache/output/cache.touch')) {
-    sys::import('xarCache');
+    sys::import('xaraya.xarCache');
     // Note : we may already exit here if session-less page caching is enabled
     xarCache_init();
 }
@@ -28,7 +28,7 @@ if (file_exists(sys::varpath() . '/cache/output/cache.touch')) {
 /**
  * Load the Xaraya core
  */
-sys::import('xarCore');
+sys::import('xaraya.xarCore');
 
 /**
  * Main Xaraya Entry

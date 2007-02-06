@@ -1,6 +1,6 @@
 <?php
 /**
- * Dynamic data initilazation
+ * Dynamic data initialization
  *
  * @package modules
  * @copyright (C) 2002-2007 The Digital Development Foundation
@@ -287,8 +287,6 @@ function dynamicdata_init()
             array('name'      ,'Name'               ,$objectid[2],2 ,''            ,$dynamic_properties.'.xar_prop_name'      ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,'varchar (30)'),
             array('label'     ,'Label'              ,$objectid[2],2 ,''            ,$dynamic_properties.'.xar_prop_label'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,'varchar (254)'),
             array('objectid'  ,'Object'             ,$objectid[2],24,''            ,$dynamic_properties.'.xar_prop_objectid'  ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,'integer'),
-            array('moduleid'  ,'Module'             ,$objectid[2],19,''            ,$dynamic_properties.'.xar_prop_moduleid'  ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,5 ,'integer'),
-            array('itemtype'  ,'Item Type'          ,$objectid[2],20,''            ,$dynamic_properties.'.xar_prop_itemtype'  ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,6 ,'integer'),
             array('type'      ,'Property Type'      ,$objectid[2],22,''            ,$dynamic_properties.'.xar_prop_type'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,'integer'),
             array('default'   ,'Default'            ,$objectid[2],3 ,''            ,$dynamic_properties.'.xar_prop_default'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8 ,'varchar (254)'),
             array('source'    ,'Source'             ,$objectid[2],23,'dynamic_data',$dynamic_properties.'.xar_prop_source'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,9 ,'varchar (254)'),
@@ -390,20 +388,20 @@ function dynamicdata_init()
         $stmt = $dbconn->prepareStatement($sql);
 
         $dataentries = array(
-            array($propid[23],1,'1'),
-            array($propid[24],1,'Johnny'),
-            array($propid[25],1,'32'),
-            array($propid[26],1,'http://mikespub.net/xaraya/images/cuernos1.jpg'),
+            array($propid[21],1,'1'),
+            array($propid[22],1,'Johnny'),
+            array($propid[23],1,'32'),
+            array($propid[24],1,'http://mikespub.net/xaraya/images/cuernos1.jpg'),
 
-            array($propid[23],2,'2'),
-            array($propid[24],2,'Nancy'),
-            array($propid[25],2,'29'),
-            array($propid[26],2,'http://mikespub.net/xaraya/images/agra1.jpg'),
+            array($propid[21],2,'2'),
+            array($propid[22],2,'Nancy'),
+            array($propid[23],2,'29'),
+            array($propid[24],2,'http://mikespub.net/xaraya/images/agra1.jpg'),
 
-            array($propid[23],3,'3'),
-            array($propid[24],3,'Baby'),
-            array($propid[25],3,'1'),
-            array($propid[26],3,'http://mikespub.net/xaraya/images/sydney1.jpg')
+            array($propid[21],3,'3'),
+            array($propid[22],3,'Baby'),
+            array($propid[23],3,'1'),
+            array($propid[24],3,'http://mikespub.net/xaraya/images/sydney1.jpg')
         );
 
         foreach ($dataentries as &$dataentry) {

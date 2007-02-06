@@ -13,7 +13,7 @@
  */
 
 
-sys::import('datastores.interface');
+sys::import('xaraya.datastores.interface');
 
 /*
     As this file was long in the 1.x series i've split it up into 2 parts

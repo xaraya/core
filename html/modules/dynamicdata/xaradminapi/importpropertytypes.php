@@ -18,7 +18,7 @@
  * @throws BAD_PARAM, NO_PERMISSION
  */
 
-sys::import('structures.relativedirectoryiterator');
+sys::import('xaraya.structures.relativedirectoryiterator');
 
 function dynamicdata_adminapi_importpropertytypes( $args )
 {

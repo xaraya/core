@@ -136,7 +136,7 @@ function base_init()
     }
 
     // Start Configuration Unit
-    sys::import('xarConfig');
+    sys::import('xaraya.xarConfig');
     $systemArgs = array();
     // change this loadlevel to the proper level
     $whatToLoad = XARCORE_SYSTEM_DATABASE;
@@ -234,7 +234,7 @@ function base_init()
     $dbconn->Execute($query);
 
     // {ML_dont_parse 'includes/xarMod.php'}
-    sys::import('xarMod');
+    sys::import('xaraya.xarMod');
 
     // Start Modules Support
     $systemArgs = array('enableShortURLsSupport' => false,

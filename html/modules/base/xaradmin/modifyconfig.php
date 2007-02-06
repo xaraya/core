@@ -47,7 +47,7 @@ function base_admin_modifyconfig()
     }
     closedir($dd);
 
-    sys::import('structures.datetime');
+    sys::import('xaraya.structures.datetime');
     $dateobject = new XarDateTime();
     $tzobject = new DateTimeZone(xarConfigGetVar('System.Core.TimeZone'));
     $dateobject->setTimezone($tzobject);

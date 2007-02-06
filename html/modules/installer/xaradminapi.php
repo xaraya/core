@@ -106,7 +106,7 @@ function installer_adminapi_createdb($args)
 {
     extract($args);
     // Load in Table Maintainance API
-    sys::import('xarTableDDL');
+    sys::import('xaraya.xarTableDDL');
 
     // Start connection, but use the configured connection db
    $createArgs = array(

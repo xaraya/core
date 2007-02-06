@@ -15,7 +15,7 @@
 /**
  *  initialize the Xaraya core
  */
-include 'includes/xarCore.php';
+include 'lib/xarCore.php';
 xarCoreInit(XARCORE_SYSTEM_ALL);
 
 if (!xarVarFetch('v', 'str:1', $v)) return;

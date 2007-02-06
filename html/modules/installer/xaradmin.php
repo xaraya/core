@@ -301,7 +301,7 @@ function installer_admin_phase5()
                         'doConnect' => false);
 
     // {ML_dont_parse 'includes/xarDB.php'}
-    sys::import('xarDB');
+    sys::import('xaraya.xarDB');
     xarDB_Init($init_args, XARCORE_SYSTEM_NONE);
 
     // Not all Database Servers support selecting the specific db *after* connecting
@@ -412,7 +412,7 @@ function installer_admin_phase5()
     // install the security stuff here, but disable the registerMask and
     // and xarSecurityCheck functions until we've finished the installation process
 
-    sys::import('xarSecurity');
+    sys::import('xaraya.xarSecurity');
 //    xarSecurity_init();
 
     // Load in modules/installer/xarinit.php and start the install
@@ -425,7 +425,7 @@ function installer_admin_phase5()
 
     // If we are here, the base system has completed
     // We can now pass control to xaraya.
-    sys::import('xarConfig');
+    sys::import('xaraya.xarConfig');
 
     $a = array();
     xarConfig_init($a,XARCORE_SYSTEM_DATABASE);
