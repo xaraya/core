@@ -49,6 +49,7 @@ function base_admin_updateconfig()
 
             xarConfigSetVar('Site.Core.DefaultModuleType', $defaultModuleType);
             xarConfigSetVar('Site.Core.DefaultModuleFunction', $defaultModuleFunction);
+            xarModSetUserVar('roles','userhome', xarModURL($defaultModuleName, $defaultModuleType, $defaultModuleFunction),1);
             xarConfigSetVar('Site.Core.EnableShortURLsSupport', $enableShortURLs);
             // enable short urls for the base module itself too
             xarModSetVar('base','SupportShortURLs', ($enableBaseShortURLs ? 1 : 0));

@@ -37,8 +37,8 @@ function modules_adminapi_gethookedmodules($args)
     $bindvars = array();
     // TODO: This looks awfally similar to gethooklist in xarMod.php, investigate later
     $query = "SELECT DISTINCT smods.xar_name, hooks.xar_stype
-              FROM $xartable[hooks] hooks, $xartable[modules] smods
-              WHERE hooks.xar_smodid = smods.xar_id AND smods.xar_name = ?";
+              FROM $xartable[hooks] hooks, $xartable[modules] mods, $xartable[modules] smods
+              WHERE hooks.xar_tmodid = mods.xar_id AND hooks.xar_smodid = smods.xar_id AND mods.xar_name = ?";
     $bindvars[] = $hookModName;
     if (!empty($hookObject)) {
         $query .= " AND hooks.xar_object = ?";
@@ -52,7 +52,6 @@ function modules_adminapi_gethookedmodules($args)
         $query .= " AND hooks.xar_tarea = ?";
         $bindvars[] = $hookArea;
     }
-
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery($bindvars);
 
