@@ -5,7 +5,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -14,8 +14,6 @@
  *
  * @author the DynamicData module development team
  * @param $args['prop_id'] property id of the item field to update
- * @param $args['modid'] module id of the item field to update (optional)
- * @param $args['itemtype'] item type of the item field to update (optional)
  * @param $args['name'] name of the field to update (optional)
  * @param $args['label'] label of the field to update
  * @param $args['type'] type of the field to update
@@ -23,8 +21,7 @@
  * @param $args['source'] data source of the field to update (optional)
  * @param $args['status'] status of the field to update (optional)
  * @param $args['validation'] validation of the field to update (optional)
- * @returns bool
- * @return true on success, false on failure
+ * @return bool
  * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_updateprop($args)
@@ -75,7 +72,7 @@ function dynamicdata_adminapi_updateprop($args)
         $sql .= ", xar_prop_default = ?";
         $bindvars[] = $default;
     }
-// TODO: verify that the data source exists
+    // TODO: verify that the data source exists
     if (isset($source) && is_string($source)) {
         $sql .= ", xar_prop_source = ?";
         $bindvars[] = $source;
@@ -83,15 +80,6 @@ function dynamicdata_adminapi_updateprop($args)
     if (isset($validation) && is_string($validation)) {
         $sql .= ", xar_prop_validation = ?";
         $bindvars[] = $validation;
-    }
-// TODO: evaluate if we allow update those too
-    if (isset($modid) && is_numeric($modid)) {
-        $sql .= ", xar_prop_moduleid = ?";
-        $bindvars[] = $modid;
-    }
-    if (isset($itemtype) && is_numeric($itemtype)) {
-        $sql .= ", xar_prop_itemtype = ?";
-        $bindvars[] = $itemtype;
     }
     if (isset($name) && is_string($name)) {
         $sql .= ", xar_prop_name = ?";
@@ -108,5 +96,4 @@ function dynamicdata_adminapi_updateprop($args)
 
     return true;
 }
-
 ?>

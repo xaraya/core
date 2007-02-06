@@ -43,9 +43,6 @@ function mail_admin_createqdef($args)
         $params = array('objectid' => $qdefObjectId, 'itemtype' => $newItemtype);
         $itemid = DataObjectMaster::updateObject($params);
 
-        // Itemtype changed, resync the props
-        $params['moduleid'] = 771; // mail module
-        if (!xarModAPIFunc('dynamicdata','admin','syncprops',$params)) return;
     } else {
         // All went well, we can set the modvar now
         xarModSetVar('mail','queue-definition',$qdefName);

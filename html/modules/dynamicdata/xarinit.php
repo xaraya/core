@@ -1,6 +1,6 @@
 <?php
 /**
- * Dynamic data initilazation
+ * Dynamic data initialization
  *
  * @package modules
  * @copyright (C) 2002-2007 The Digital Development Foundation
@@ -287,8 +287,6 @@ function dynamicdata_init()
             array('name'      ,'Name'               ,$objectid[2],2 ,''            ,$dynamic_properties.'.xar_prop_name'      ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,'varchar (30)'),
             array('label'     ,'Label'              ,$objectid[2],2 ,''            ,$dynamic_properties.'.xar_prop_label'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,'varchar (254)'),
             array('objectid'  ,'Object'             ,$objectid[2],24,''            ,$dynamic_properties.'.xar_prop_objectid'  ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,'integer'),
-//            array('moduleid'  ,'Module'             ,$objectid[2],19,''            ,$dynamic_properties.'.xar_prop_moduleid'  ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,5 ,'integer'),
-//            array('itemtype'  ,'Item Type'          ,$objectid[2],20,''            ,$dynamic_properties.'.xar_prop_itemtype'  ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,6 ,'integer'),
             array('type'      ,'Property Type'      ,$objectid[2],22,''            ,$dynamic_properties.'.xar_prop_type'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,'integer'),
             array('default'   ,'Default'            ,$objectid[2],3 ,''            ,$dynamic_properties.'.xar_prop_default'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8 ,'varchar (254)'),
             array('source'    ,'Source'             ,$objectid[2],23,'dynamic_data',$dynamic_properties.'.xar_prop_source'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,9 ,'varchar (254)'),

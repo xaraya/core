@@ -39,7 +39,7 @@ function dynamicdata_admin_update($args)
     if(!xarVarFetch('tplmodule',  'isset', $tplmodule,   'dynamicdata', XARVAR_NOT_REQUIRED)) {return;}
 
     if (!xarSecConfirmAuthKey()) return;
-
+    debug($itemtype);
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'moduleid' => $modid,
                                          'itemtype' => $itemtype,
@@ -106,16 +106,6 @@ function dynamicdata_admin_update($args)
             }
         }
 
-        // resynchronise properties with object in terms of module id and itemtype (for now)
-        $objectid = $myobject->properties['objectid']->value;
-        $moduleid = $myobject->properties['moduleid']->value;
-        $itemtype = $myobject->properties['itemtype']->value;
-        if (!xarModAPIFunc('dynamicdata','admin','syncprops',
-                           array('objectid' => $objectid,
-                                 'moduleid' => $moduleid,
-                                 'itemtype' => $itemtype))) {
-            return;
-        }
     }
 
     if (!empty($return_url)) {
