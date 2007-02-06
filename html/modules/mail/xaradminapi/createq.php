@@ -23,10 +23,6 @@ function mail_adminapi_createq($args)
     $params = array('objectid' => $qdataObjectId, 'itemtype' => $newItemtype);
     $itemid = DataObjectMaster::updateObject($params);
     
-    // Itemtype changed, resync the props
-    $params['moduleid'] = 771; // mail module
-    if (!xarModAPIFunc('dynamicdata','admin','syncprops',$params)) return;
-
     return true;
 }
 ?>
