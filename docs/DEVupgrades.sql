@@ -1,11 +1,11 @@
-/* 
+/*
   Mysql 5.0 Upgrade script for the table changes made in 2.x branch
   This is temporary for development. The whole upgrade needs to be
   integrated in the (new) DDL system.
   The script here is mysql specific, but can easily be adapted for
   other databases. Again, this is a TEMPORARY HELPER SCRIPT
   TODO list for this script:
-  * adapt all the instance queries wrt the block_types changes!!!! 
+  * adapt all the instance queries wrt the block_types changes!!!!
     (on last count in core, 15, plus 1 for each block in modules)
     i would like to change this method of doing instances though, tying it
     to the physical datamodel like this isnt very nice
@@ -95,7 +95,7 @@ ALTER TABLE xar_dynamic_objects ADD COLUMN xar_object_parent INT(11) NOT NULL DE
    - xar_privmembers
    - xar-rolemembers
    - xar_security_acl
-   instead of the artificial unique key 
+   instead of the artificial unique key
 */
 DROP INDEX i_xar_privmembers_id ON xar_privmembers;
 ALTER TABLE xar_privmembers ADD PRIMARY KEY (xar_pid,xar_parentid);
@@ -109,9 +109,9 @@ ALTER TABLE xar_cache_blocks ADD PRIMARY KEY (xar_bid);
 
 DROP TABLE xar_security_levels;
 
-/* Replace the data-list handler 
+/* Replace the data-list handler
   TODO: might need to be changed again depending on how we handle the new compiler tag registration */
-UPDATE xar_template_tags 
+UPDATE xar_template_tags
 SET xar_handler = 'dynamicdata_userapi_handleViewTag',
     xar_data    = 'O:14:"xarTemplateTag":12:{s:5:"_name";s:9:"data-list";s:11:"_attributes";a:0:{}s:8:"_handler";s:34:"dynamicdata_adminapi_handleListTag";s:7:"_module";s:11:"dynamicdata";s:5:"_type";s:4:"user";s:5:"_func";s:13:"handleViewTag";s:12:"_hasChildren";b:0;s:8:"_hasText";b:0;s:13:"_isAssignable";b:0;s:10:"_isPHPCode";b:1;s:15:"_needAssignment";b:0;s:14:"_needParameter";b:0;}' WHERE `xar_template_tags`.`xar_handler` = 'dynamicdata_adminapi_handleListTag';
 
@@ -119,7 +119,7 @@ SET xar_handler = 'dynamicdata_userapi_handleViewTag',
 ALTER TABLE xar_module_vars MODIFY COLUMN `xar_modid` INTEGER DEFAULT NULL;
 UPDATE xar_module_vars SET xar_modid=NULL WHERE xar_modid=0;
 
-/* Let the xar_realmid column reference the realms table 
+/* Let the xar_realmid column reference the realms table
  - add the new column (default is nul ~~ All
  - update the others with the rids in xar_security_realms
 */
@@ -150,3 +150,7 @@ CREATE INDEX i_xar_dynpropdef_modid ON xar_dynamic_properties_def (xar_prop_modi
 /* Making the hooks table modid columns 'foreign keyable' */
 ALTER TABLE xar_hooks MODIFY COLUMN xar_smodid INTEGER DEFAULT NULL;
 ALTER TABLE xar_hooks MODIFY COLUMN xar_tmodid INTEGER NOT NULL;
+
+/* removing unneeded moduleid and itemtype fields for the properties table */
+ALTER TABLE `xar_dynamic_properties` DROP INDEX `i_xar_dynprops_combo`;
+ALTER TABLE `xar_dynamic_properties` DROP `xar_prop_moduleid` , DROP `xar_prop_itemtype` ;

@@ -15,11 +15,13 @@ in the 2.x source tree:
 
 * xarModApiFunc had a parameter to suppress exceptions. This parameter has
   been removed and an exception is always raised:
-  Example:
+  Example::
+  
       // don't throw an exception if this function doesn't exist (the zero at the end)
       $mytypes = xarModAPIFunc($modname,'user','getitemtypes', array(), 0);
   
-  New code:
+  New code::
+
       try {
         $mytypes = xarModAPIFunc($modname,'user','getitemtypes');
       } catch (Exception $e) {
@@ -31,7 +33,7 @@ in the 2.x source tree:
   2 GUI methods for 'list' and 'view' have been consolidated into one.
 
 * if your module creates or uses properties, their naming scheme has changed
-  considerably. the 'Dynamic_' prefix was removed from most and some names
+  considerably. the `Dynamic_` prefix was removed from most and some names
   have changed to reflect their contents better. There is no direct need to
   change your filenames, but it is recommended to follow this practice. See
   base/xarproperties for examples.
@@ -52,17 +54,14 @@ in the 2.x source tree:
   your code will not work anymore, as all of the above function have been
   removed.
 
-* if your module used the $prep parameter in any of the *get*Var functions
-  in core, you will have to change your code to add prepping explicitly if you
-  need it.
+* if your module used the $prep parameter in any of the \*get\*Var functions in core, you will have to change your code to add prepping explicitly if you  need it.
 
-* the GenID() method for generating IDs when inserting new data is now obsolete
-  it is recommended to not use that method anymore and leave out the ID columns
-  from your SQL statement alltogether
+* the GenID() method for generating IDs when inserting new data is now obsolete it is recommended to not use that method anymore and leave out the ID columns from your SQL statement alltogether
   
-* The proper way to get the last inserted ID for a table is now: 
+* The proper way to get the last inserted ID for a table is now::
+
     $dbconn->getLastId('tablename')
-  The method PO_insert_ID(tablename,fieldname) is still there for compatibility
-  purposes but it is unsafe in high concurrency environments.
+    
+  The method PO_insert_ID(tablename,fieldname) is still there for compatibility  purposes but it is unsafe in high concurrency environments.
   
   

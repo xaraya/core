@@ -30,37 +30,5 @@
             </a>
         </p>
     </xar:if>
-
-    <xar:if condition="!empty($modlist) and count($modlist) gt 0 and (xarSessionGetVar('uid') eq xarModVars::get('roles','admin'))">
-        <!--
-        when we're viewing the DataObjects themselves, show other modules
-        -->
-        <fieldset>
-          <legend>
-            <xar:mlstring>Other Modules</xar:mlstring>
-          </legend>
-
-          <xar:foreach in="$modlist" value="$module">
-            <xar:if condition="!empty($module['header'])">
-              <h3>
-                #$module['header']#
-              </h3>
-            </xar:if>
-
-            <div class="xar-form-input-wrapper">
-              <span class="xar-form-label">
-                #$module['name']#
-              </span>
-              <xar:if condition="empty($module['link'])">
-                <xar:mlstring>Not Applicable</xar:mlstring>
-                <xar:else />
-                <a href="#$module['link']#">
-                  <xar:mlstring>View Properties</xar:mlstring>
-                </a>
-              </xar:if>
-            </div>
-          </xar:foreach>
-        </fieldset>
-    </xar:if>
 </div>
 </xar:template>

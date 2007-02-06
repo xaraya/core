@@ -46,20 +46,18 @@ class DataPropertyMaster extends Object
         $query = "SELECT xar_prop_name, xar_prop_label, xar_prop_type,
                          xar_prop_id, xar_prop_default, xar_prop_source,
                          xar_prop_status, xar_prop_order, xar_prop_validation,
-                         xar_prop_objectid, xar_prop_moduleid, xar_prop_itemtype
-                  FROM $dynamicprop ";
-        if(isset($args['objectid']))
+                         xar_prop_objectid FROM $dynamicprop ";
+        if(!isset($args['objectid']))
         {
-            $query .= " WHERE xar_prop_objectid = ?";
-            $bindvars[] = (int) $args['objectid'];
+            $doargs['moduleid'] = $args['moduleid'];
+            $doargs['itemtype'] = $args['itemtype'];
+            $info = DataObjectDescriptor::getObjectID($doargs);
+            $args['objectid'] = $info['objectid'];
+
         }
-        else
-        {
-            $query .= " WHERE xar_prop_moduleid = ?
-                          AND xar_prop_itemtype = ?";
-            $bindvars[] = (int) $args['moduleid'];
-            $bindvars[] = (int) $args['itemtype'];
-        }
+        $query .= " WHERE xar_prop_objectid = ?";
+        $bindvars[] = (int) $args['objectid'];
+
         if(empty($args['allprops']))
             $query .= " AND xar_prop_status > 0 ";
 
@@ -73,8 +71,8 @@ class DataPropertyMaster extends Object
         {
             list(
                 $name, $label, $type, $id, $default, $source, $fieldstatus,
-                $order, $validation, $_objectid, $_moduleid, $_itemtype
-            ) = $result->fields;
+                $order, $validation, $_objectid
+                ) = $result->fields;
             if(xarSecurityCheck('ReadDynamicDataField',0,'Field',"$name:$type:$id"))
             {
                 $property = array(
@@ -88,9 +86,7 @@ class DataPropertyMaster extends Object
                     'order'         => $order,
                     'validation'    => $validation,
                     // some internal variables
-                    '_objectid'     => $_objectid,
-                    '_moduleid'     => $_moduleid,
-                    '_itemtype'     => $_itemtype
+                    '_objectid'     => $_objectid
                 );
                 if(isset($args['objectref']))
                     self::addProperty($property,$args['objectref']);

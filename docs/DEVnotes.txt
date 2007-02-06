@@ -1,3 +1,6 @@
+{{{
+#!rst
+
 A log of important changes made to the 2.x branch which we need to
 revisit later on before trusting the branch to be released or used.
 
@@ -40,7 +43,7 @@ DB-CHANGES:
 * table dynamic_relations table has been dropped
 * table DDL for postgres now uses the SERIAL type for auto-increment columns
   and autogenerates a sequence 'tablename_seq' for it.This means that it now
-  behaves  _as if_ an autoinc column like in mysql was there.
+  behaves  *as if* an autoinc column like in mysql was there.
   (effectively making genID obsolete for postgres too, as it already was for
   mysql and sqlite) [TODO: this is install-wide, how are we going to do
   upgrades for this? not trivial.]
@@ -50,6 +53,7 @@ DB-CHANGES:
   that other module.
 * hooks table colum xar_smodid now INTEGER DEFAULT NULL
 * hooks table column xar_tmodid now INTEGER NOT NULL
+* drop moduleid and and itemtype fields from dynamic_properties table
 
 
 (see DEVupgrades.sql for details on all of the above)
@@ -57,35 +61,32 @@ DB-CHANGES:
 PENDING DB-CHANGES
 ==================
 
-* does blocks really need 5 tables?
-* xar_module column in privileges table uses a string for modulename and 'All'
-  and 'empty' which prevents it from being a foreign key to the modules table
+* `ticket:12`:trac: does blocks really need 5 tables?
+* `ticket:5`:trac: xar_module column in privileges table uses a string for modulename and 'All' and 'empty' which prevents it from being a foreign key to the modules table
 * is column auth_modid still needed?
     Answer: yes, but it's confusing:
-    1. it doesnt need to be there really, but might be a moditemvar (it
-    applies to the few)
-    2. it is referred to as default authmodule in the code sometimes, which it
-    is not, it is the auth module which successfully logged this user on
-    latest.
-* the xar_ prefix on columns is redundant, not a lightly task though, kinda
-  obvious why.
-* privmembers parent column stores 0 now for 'no parent', change to null, so a
-  foreign key constraint can be added on the column
-* rolemembers parent column stores 0 now for 'no parent', change to null, so a
-  foreign key constraint can be added on the column
+    1. it doesnt need to be there really, but might be a moditemvar (it applies to the few)
+    2. it is referred to as default authmodule in the code sometimes, which it  is not, it is the auth module which successfully logged this user on latest.
+* `ticket:6`:trac: the xar\_ prefix on columns is redundant, not a lightly task though, kinda  obvious why.
+* `ticket:7`:trac: privmembers parent column stores 0 now for 'no parent', change to null, so a foreign key constraint can be added on the column
+* `ticket:7`:trac: rolemembers parent column stores 0 now for 'no parent', change to null, so a  foreign key constraint can be added on the column
+
 NOTE: the above 2 are probably problematic since the parent column is part of
 the primary key and as such can probably not contain the non-value NULL.
 no idea what the solution is there, except revert back to a unique key only.
 Choices:
+
     1. table without a primary key but consistent with the foreign keys
     2. table with a primary key but no foreign key possible
-    3. use a derived constraint like a trigger to enforce consistency
-    (this is the same as 2, but extended)
-    A question related to this:
+    3. use a derived constraint like a trigger to enforce consistency (this is the same as 2, but extended)
+
+    A question related to this::
+
         Does the combination of say, privparent, privchild need extra attributes
         i.e. if the fact of a privilege 'membership' would lead to a need of
         extra fields in the table, we could introduce an ID in that table and
         treat the 'membership' record as an item in its own right.
+
 * Columns affected by modid/regid/modname decision:
     The decision was:
         "regid is only stored in the modules table for the db model. All other
@@ -94,17 +95,15 @@ Choices:
     Consequences:
         - modules.regid
             - is now not null default 0
-            - becomes default null
-        ( this has probably quite a few consequences )
+            - becomes default null ( this has probably quite a few consequences )
         - dynamic_objects.object_moduleid (stores regid)
         - dynamic_properties.prop_moduleid (stores regid)
         - privileges.xar_module (stores 'All', 'empty' besides module name.)
-* it might be attractive to consolidate the tables privileges and security
+* `ticket:8`:trac: it might be attractive to consolidate the tables privileges and security
   masks, adding an extra column ('type'?) to distinguish masks from
   privileges. before that can happen syncing the definition of security_masks
   to privileges is needed (modid column, realmid)
-* we need a consolidated solution for database encoding, mysql takes this
-  swedish latin thing by default, postgres us ascii, dont know about the others.
+* `ticket:9`:trac: we need a consolidated solution for database encoding, mysql takes this swedish latin thing by default, postgres us ascii, dont know about the others.
   How about we make them all UTF-8? (i have no idea about the consequences
   though, nor how to do it, seems, that on 'create database' there should be
   an option or changing an option of some kind when using an existing
@@ -117,11 +116,13 @@ OTHER CHANGES POSSIBLY AFFECTING UPGRADES:
   versions than in 1.0 is removed, assuming we will only support
   upgrading from 1.0 to 2.x and not versions before 1.0
   NOTE:
+
     when changing modules to return upgrade_themodule('1.0') instead of
     return true, the original upgrade from init need to be placed in the
     upgrade routine again. (luckily i replaced this only for one or two)
     modules, which have now been propagate from c.x.c to c.x.c.2.x so DO NOT
     remove old upgrade code anymore now!
+
 * the whole exception subsystem was rewritten from scratch and the
   whole of core was adapted to use it. (see new RFC-0054)
 * adodb has been replaced with the creole database abstraction layer.
@@ -254,25 +255,19 @@ design work can begin.
   place is obviously creole, but for shielding and triggering we dont have an
   abstraction and the more complex modules go through a whole lot of hoops
   sometimes which the backend could do in a jiffy. [See DEVbackends.txt]
-* the installer screens try to throw all databases onto one pile, we need to
-  split the database configuration screens into different ones for each
-  backend
-    * sqlite has no user and password (uses os file based privs)
-    * sqlite uses a directory for a host (in creole and even that is a patch
-      from us)
-    * mysql can support different table drivers (myisam, innodb) transparently
-    * postgres may require schema support
-    * ms sql *requires* a port in the connection
-    * database encoding may be chosen on some backends. (and be dictated on
-      others depending on language choice for example)
-* xml constructs like PI, ELEM and ATTR need their equivalent in BL, but the
-  current implementation lacks context.
-  - [STARTED] element tag; generating an xml element in the output stream
-  - attribute tag; generating an attribute on an existing node in the output
-  - pi tag? or pi support? (answer: both, they are 2 different things)
-    * pi tag -> generating a processing instruction in the _output_
-    * pi support -> being able to parse/handle processing instructions in the
-    _input_
+* the installer screens try to throw all databases onto one pile, we need to split the database configuration screens into different ones for each backend
+  * sqlite has no user and password (uses os file based privs)
+  * sqlite uses a directory for a host (in creole and even that is a patch from us)
+  * mysql can support different table drivers (myisam, innodb) transparently
+  * postgres may require schema support
+  * ms sql *requires* a port in the connection
+  * database encoding may be chosen on some backends. (and be dictated on others depending on language choice for example)
+* xml constructs like PI, ELEM and ATTR need their equivalent in BL, but the current implementation lacks context.
+    - [STARTED] element tag; generating an xml element in the output stream
+    - attribute tag; generating an attribute on an existing node in the output
+    - pi tag? or pi support? (answer: both, they are 2 different things)
+        * pi tag -> generating a processing instruction in the _output_
+        * pi support -> being able to parse/handle processing instructions in the _input_
 * [STARTED] finish design and implementation os schema based data definition
 * design a less bloated concept for config/user/mod/theme/system vars etc
 * reorganize the old error/exception system to use much fewer files, consider
@@ -308,13 +303,15 @@ KNOWN ISSUES
 * there is no upgrade routine for upgrading 1.x to 2.x
 * when we're in exception handling for a *php* exception, it seems that no more
   exceptions are thrown in subsequent code
-  Example for reproducing:
+  Example for reproducing::
+
         - dont define date.timezone in php (will raise exception in
         xarLogger.php early on)
         - make sure CACHEKEYS file is NOT present (should raise exception in
         caching/template.php lines 168+)
         The fopen() call in caching/template.php does NOT raise an exception then
-* [DONE?] property file names are now based upon $property->name instead of
+
+* [DONE] property file names are now based upon $property->name instead of
   their class name as before, this means that Dynamic_Select_Property becomes
   included via sys::import('modules.base.xarproperties.dropdown') instead of
   sys::import('modules.base.xarproperties.Dynamic_Select_Property') this
@@ -348,6 +345,7 @@ Requirements for a front end (js) library
   1. include on js entry point for the request
   2. write the controls inside a xar-template
   3. (optional) customize the default behaviour to the applications need.
+
 Whether the tags used are compiled/transformed on the server or
 through a js callback is irrelevant for us.
 
@@ -369,13 +367,9 @@ frequently used case, but the problem is more generic.
 In theory there are the following strategies:
 
 1. do nothing, forget about the foreign key constraint
-2. use 'null' for all as an assumption and document 'exceptions' to the rule
-and the specifics for the case at hand
-3. use a link table to record the relationship (absence of row==none, for each
-applicable reference a row is present)
-4. change the column type which imposed the foreign key constraint to gain
-freedom in the 'constrained' columns (for example: change auto increment to
-signed integer)
+2. use 'null' for all as an assumption and document 'exceptions' to the rule and the specifics for the case at hand
+3. use a link table to record the relationship (absence of row==none, for each applicable reference a row is present)
+4. change the column type which imposed the foreign key constraint to gain freedom in the 'constrained' columns (for example: change auto increment to signed integer)
 
 Other than remodelling completely for a usecase i think the above 4 are the
 possible generic routes to travel.
@@ -425,8 +419,8 @@ Hammered: (as in, at least 2 people agreed to this)
 * and phpdoc)
 * phpdoc @access only needed for things which dont have access specifiers
   in php:
-    - functions
-    - classes
+  - functions
+  - classes
 
 Remarks:
 
@@ -449,3 +443,5 @@ List of things to hammer (or not):
 * interface inheritance is unclear to me, so its hard to come up with some
   rules for that
 * [WONT] group interface satisfaction methods together
+
+}}}

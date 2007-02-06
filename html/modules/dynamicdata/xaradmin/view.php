@@ -1,17 +1,17 @@
 <?php
 /**
- * Dynamic data view items
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
+
 /**
- * view items
+ * View items
  */
 function dynamicdata_admin_view($args)
 {
@@ -39,6 +39,7 @@ function dynamicdata_admin_view($args)
                                   'tplmodule' => $tplmodule,
                                   'template'  => $template,
                                   ));
+
     if (!isset($object)) {
         return;
     }
@@ -51,42 +52,11 @@ function dynamicdata_admin_view($args)
     // TODO: is this needed?
     $data = array_merge($data,xarModAPIFunc('dynamicdata','admin','menu'));
 
-    // Security check - important to do this as early as possible to avoid
-    // potential security holes or just too much wasted processing
-// Security Check
     if(!xarSecurityCheck('EditDynamicData')) return;
 
-    // show other modules
-    $data['modlist'] = array();
     if ($data['objectid'] == 1 && empty($table)) {
         $objects = xarModAPIFunc('dynamicdata','user','getobjects');
         xarLogMessage('AFTER getobjects');
-        $seenmod = array();
-        foreach ($objects as $object) {
-            $seenmod[$object['moduleid']] = 1;
-        }
-
-        $modList = xarModAPIFunc('modules','admin','getlist',
-                          array('orderBy'     => 'category/name'));
-        $oldcat = '';
-        for ($i = 0, $max = count($modList); $i < $max; $i++) {
-            if (!empty($seenmod[$modList[$i]['regid']])) {
-                continue;
-            }
-            if (isset($modList[$i]['category']) && $oldcat != $modList[$i]['category']) {
-                $modList[$i]['header'] = xarVarPrepForDisplay($modList[$i]['category']);
-                $oldcat = $modList[$i]['category'];
-            } else {
-                $modList[$i]['header'] = '';
-            }
-            if(xarSecurityCheck('AdminDynamicDataItem',0,'Item',$modList[$i]['regid'].':All:All')) {
-                $modList[$i]['link'] = xarModURL('dynamicdata','admin','modifyprop',
-                                                  array('modid' => $modList[$i]['regid']));
-            } else {
-                $modList[$i]['link'] = '';
-            }
-            $data['modlist'][] = $modList[$i];
-        }
     }
 
     if (xarSecurityCheck('AdminDynamicData',0)) {
