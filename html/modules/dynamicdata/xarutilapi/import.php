@@ -121,8 +121,8 @@ function dynamicdata_utilapi_import($args)
             // Add some args needed to define the property
             unset($propertyargs['id']);
             $propertyargs['objectid'] = $objectid;
-            $propertyargs['moduleid'] = $args['moduleid'];
-            $propertyargs['itemtype'] = $args['itemtype'];
+//            $propertyargs['moduleid'] = $args['moduleid'];
+//            $propertyargs['itemtype'] = $args['itemtype'];
             $propertyargs['itemid']   = 0;
 
             // Now do some checking
