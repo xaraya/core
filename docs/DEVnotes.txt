@@ -56,7 +56,7 @@ DB-CHANGES:
 * drop moduleid and and itemtype fields from dynamic_properties table
 
 
-(see DEVupgrades.sql for details on all of the above)
+(see `browser:docs/DEVupgrades.sql`:trac: for details on all of the above)
 
 PENDING DB-CHANGES
 ==================
