@@ -81,7 +81,8 @@
       <xar:mlstring>Override</xar:mlstring>
     </td>
     <td>
-        <xar:data-input type="checkbox" name="override" checked="$override" />
+        <xar:set name="name">$name . "[override]"</xar:set>
+        <xar:data-input type="checkbox" name="$name" checked="$override" />
     </td>
     <td>
     </td>

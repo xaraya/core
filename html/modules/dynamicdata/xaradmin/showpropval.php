@@ -40,12 +40,14 @@ function dynamicdata_admin_showpropval($args)
     }
 
     // check if the module+itemtype this property belongs to is hooked to the uploads module
+    /* FIXME: can we do without this hardwiring? Comment out for now
     $modid = $myobject->properties['moduleid']->value;
     $itemtype = $myobject->properties['itemtype']->value;
     $modinfo = xarModGetInfo($modid);
     if (xarModIsHooked('uploads', $modinfo['name'], $itemtype)) {
         xarVarSetCached('Hooks.uploads','ishooked',1);
     }
+    */
 
     $data = array();
     // get a new property of the right type
