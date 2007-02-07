@@ -22,11 +22,6 @@
  **/
 
 /**
- * Set the include_path to the base of a xaraya install
- */
-$path = './lib';
-set_include_path(get_include_path() . PATH_SEPARATOR . $path);
-/**
  * The Object class from which all other classes are derived.
  *
  * This is basically a placeholder extending from stdClass so we have a
@@ -165,16 +160,11 @@ final class sys extends Object
         // If we already have it get out of here asap
         if(!isset(self::$has[$dp]))
         {
-            // Get the absolute location of our webroot so include_path isnt
-            // searched when importing (note: there will be no slash at the end!)
-            if(!isset(self::$root))
-                self::$root = dirname(dirname(realpath(__FILE__)));
-
             // set this *before* the include below
             self::$has[$dp] = true;
             // tiny bit faster would be to use include, but this is quite a bit safer
             // and it will be executed only once anyway. (i.e. if everything uses this class)
-            return include_once(self::$root . '/' . str_replace('.','/',$dp).'.php');
+            return include_once(self::root() . '/' . str_replace('.','/',$dp).'.php');
         }
         return true;
     }
@@ -198,6 +188,21 @@ final class sys extends Object
     {
         if((0===strpos($dp,'modules.'))) return self::once($dp);
         return self::once('lib.'.$dp);
+    }
+
+    /**
+     * Returns the absolute path of the xaraya system root, NOT the web root
+     * Note that there will be NO slash at the end of the returne path.
+     *
+     * @todo THIS RETURNS THE WEBROOT STILL, UNTIL WE ARE READY TO ACTUALLY RETURN THE SYSTEM ROOT
+     *       I SAY AGAIN, THIS NOW RETURNS THE WEBROOT, WHICH IS TEMPORARILY
+    **/
+    public static function root()
+    {
+        // We are in <root>/html/lib/bootstrap.php and we want <root>
+        if(!isset(self::$root))
+            self::$root = dirname(dirname(realpath(__FILE__)));
+        return self::$root;
     }
 
     /**
