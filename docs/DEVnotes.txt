@@ -180,6 +180,7 @@ Public (this MAY affect someone)
 * xarModAPIFunc('dynamicdata','user','interface') : never used
 * xarModAPIFunc('dynamicdata','user','getsources') : never used
 * xarModAPIFunc('dynamicdata','admin','syncprops') : never used
+* xarModAPIFunc('dynamicdata','user','getmodule') : never used
 * xarModAPIFunc('roles','user','getdefaultgroup'): use xarModGetVar('roles','defaultgroup');
 * xarModAPIFunc('roles','admin','getallgroups'): use xarModAPIFunc('roles','user','getallgroups')
 
