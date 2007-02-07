@@ -76,7 +76,6 @@ sys::import('xaraya.xarMLS');
 // {ML_dont_parse 'lib/xarTemplate.php'}
 sys::import('xaraya.xarTemplate');
 
-sys::import('xaraya.xarConfig');
 // Start Logging Facilities as soon as possible
 $systemArgs = array();
 xarLog_init($systemArgs, $whatToLoad);
