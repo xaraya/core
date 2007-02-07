@@ -255,7 +255,7 @@ design work can begin.
 * i'd really like more native backend support, for query preparation that
   place is obviously creole, but for shielding and triggering we dont have an
   abstraction and the more complex modules go through a whole lot of hoops
-  sometimes which the backend could do in a jiffy. [See DEVbackends.txt]
+  sometimes which the backend could do in a jiffy. See `browser:docs/DEVbackends.txt`:trac:
 * the installer screens try to throw all databases onto one pile, we need to split the database configuration screens into different ones for each backend
   * sqlite has no user and password (uses os file based privs)
   * sqlite uses a directory for a host (in creole and even that is a patch from us)
@@ -318,21 +318,6 @@ KNOWN ISSUES
   sys::import('modules.base.xarproperties.Dynamic_Select_Property') this
   exposes an issue in how we name the property classes themselves and the name
   stored in the database
-
-
-
-MIN. REQUIRED VERSIONS DETERMINED SO FAR
-----------------------------------------
-
-* PHP      5.2.0
-* Mysql    5.0.18
-* Postgres 8.1 (this introduced secquences (bug 1883) as tracked objects, meaning
-            they can be reliably referenced in table definitions )
-* Sqlite   N/A (embedded in PHP, i think it's 2.8.x for non PDO and 3.x for PDO)
-           There seems to be a sqlite3 extension floating around for php5 too
-           [Requiring sqlite3 wouldnt be bad IMO]
-* Oracle   ?
-* MsSql    ? (server 2003?)
 
 
 Requirements for a front end (js) library
