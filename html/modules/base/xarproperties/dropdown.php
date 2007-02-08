@@ -37,6 +37,14 @@ class SelectProperty extends DataProperty
         }
         // options may be set in one of the child classes
         if (count($this->options) == 0 && !empty($this->validation)) {
+            // split up the  override and the validation proper
+            try  {
+                $validationarray = unserialize($this->validation);
+                $this->validation = $validationarray['validation'];
+                $this->override = $validationarray['override'];
+            } catch(Exception $e) {
+
+            }
             $this->parseValidation($this->validation);
         }
     }
@@ -262,6 +270,12 @@ class SelectProperty extends DataProperty
         $data['static'] = count($this->options);
 
         if (isset($validation)) {
+            // split up the  override and the validation proper
+            try  {
+                $validationarray = unserialize($validation);
+                $validation = $validationarray['validation'];
+                $this->override = $validationarray['override'];
+            } catch(Exception $e) {}
             $this->validation = $validation;
             $this->parseValidation($validation);
         }
@@ -308,7 +322,6 @@ class SelectProperty extends DataProperty
      */
     public function updateValidation(Array $args = array())
     {
-        var_dump($args);exit;
         extract($args);
 
         // in case we need to process additional input fields based on the name
@@ -328,9 +341,6 @@ class SelectProperty extends DataProperty
 
                 } elseif (!empty($validation['other'])) {
                     $this->validation = $validation['other'];
-
-                } elseif (!empty($validation['override'])) {
-                    $this->override = $validation['override'];
 
                 } elseif (!empty($validation['options'])) {
                     // remove last option if empty
@@ -357,6 +367,10 @@ class SelectProperty extends DataProperty
                 $this->validation = $validation;
             }
         }
+        $validationarray['validation'] = $this->validation;
+
+        $validationarray['override'] = isset($validation['override']) ? $validation['override'] :0;
+        $this->validation = serialize($validationarray);
 
         // tell the calling function that everything is OK
         return true;
