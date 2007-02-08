@@ -199,10 +199,20 @@ function roles_activate()
     }
     xarModVars::set('roles', 'admin', $role->getID());
 
-    // --------------------------------------------------------
-    //
-    // Register block types
-    //
+# --------------------------------------------------------
+# Create wrapper DD overlay objects for the roles module
+#
+    $objects = array(
+                   'roles_roles',
+                   'roles_users',
+                   'roles_groups',
+                     );
+
+    if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'roles', 'objects' => $objects))) return;
+
+# --------------------------------------------------------
+#  Register block types
+#
     xarModAPIFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'online'));
     xarModAPIFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'user'));
     xarModAPIFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'language'));

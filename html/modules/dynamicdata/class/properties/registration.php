@@ -16,11 +16,12 @@ xarMod::loadDbInfo('dynamicdata','dynamicdata');
  * This corresponds directly to the db info we register for a property.
  *
  */
-class PropertyRegistration extends Object
+class PropertyRegistration extends DataContainer
 {
     public $id         = 0;                      // id of the property, hardcoded to make things easier
     public $name       = 'propertyType';         // what type of property are we dealing with
     public $desc       = 'Property Description'; // description of this type
+    public $label      = 'propertyLabel';        // the label of the property are we dealing with
     public $type       = 1;
     public $parent     = '';                     // this type is derived from?
     public $class      = '';                     // what is the class?
@@ -28,14 +29,21 @@ class PropertyRegistration extends Object
     public $source     = 'dynamic_data';         // what source is default for this type?
     public $reqfiles   = array();                // do we require some files to be present?
     public $reqmodules = array();                // do we require some modules to be present?
-    public $args       = array();                     // special args needed?
+    public $args       = array();                // special args needed?
     public $aliases    = array();                // aliases for this property
+    public $filepath   = "";                     // path to the directory where the property lives
     public $format     = 0;                      // what format type do we have here?
                                                  // 0 = ? what?
                                                  // 1 =
 
-    function __construct(Array $args=array())
+    // TODO: are these necessary?
+    public $default        = '';
+    public $status         = 0;
+    public $order          = 0;
+
+    function __construct(ObjectDescriptor $descriptor)
     {
+        $args = $descriptor->getArgs();
         if(!empty($args))
             foreach($args as $key=>$value)
                 $this->$key = $value;
@@ -131,13 +139,12 @@ class PropertyRegistration extends Object
                   ORDER BY m.xar_name, xar_prop_name";
         $result = $dbconn->executeQuery($query);
         $proptypes = array();
-        if($result->RecordCount() == 0 )
+        if($result->RecordCount() == 0 ) {
             $proptypes = xarModAPIFunc(
                 'dynamicdata','admin','importpropertytypes',
                 array('flush'=>false)
             );
-        else
-        {
+        } else {
             while($result->next())
             {
                 list(
@@ -155,7 +162,7 @@ class PropertyRegistration extends Object
                 $property['dependancies']   = unserialize($reqfiles);
                 $property['requiresmodule'] = $modname;
                 $property['args']           = $args;
-                $property['propertyClass']  = $class;
+                $property['class']          = $class;
                 // TODO: this return a serialized array of objects, does that hurt?
                 $property['aliases']        = unserialize($aliases);
 

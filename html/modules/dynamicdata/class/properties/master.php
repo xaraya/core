@@ -86,7 +86,8 @@ class DataPropertyMaster extends Object
                     'order'         => $order,
                     'validation'    => $validation,
                     // some internal variables
-                    '_objectid'     => $_objectid
+                    '_objectid'     => $_objectid,
+                    'class'         => ''
                 );
                 if(isset($args['objectref']))
                     self::addProperty($property,$args['objectref']);
@@ -170,12 +171,11 @@ class DataPropertyMaster extends Object
         } else {
             $proptypes = self::getPropertyTypes();
         }
-
         $clazz = 'DataProperty';
         if( isset($proptypes[$args['type']]) && is_array($proptypes[$args['type']]) )
         {
             $propertyInfo  = $proptypes[$args['type']];
-            $propertyClass = $propertyInfo['propertyClass'];
+            $propertyClass = $propertyInfo['class'];
             // Filepath is complete real path to the php file, and decoupled from the class name
             // We should load the MLS translations for the right context here, in case the property
             // PHP file contains xarML() statements
@@ -195,11 +195,14 @@ class DataPropertyMaster extends Object
             $dp = str_replace('/','.',substr($propertyInfo['filepath'],0,-4)); // minus .php
             sys::import($dp);
 
-            if( isset($propertyInfo['args']) && ($propertyInfo['args'] != '') )
+            /*  TODO: confirm that not needed and remove
+            if(isset($propertyInfo['args']) && !empty($propertyInfo['args']) )
             {
+                if(!is_array($propertyInfo['args'])) {echo $propertyInfo['args'];exit;}
                 $baseArgs = unserialize($propertyInfo['args']);
                 $args = array_merge($baseArgs, $args);
             }
+            */
             $clazz = $propertyClass;
         }
         // DataProperty or the determined one
@@ -260,13 +263,6 @@ class DataPropertyMaster extends Object
         // Attempt to retrieve properties from DB
         $property_types = PropertyRegistration::Retrieve();
 
-        /*
-         // Security Check
-         if(xarSecurityCheck('ViewDynamicData',0)) {
-             $proptypes[] = array(...);
-         }
-         }
-        */
         xarVarSetCached('DynamicData','PropertyTypes',$property_types);
         return $property_types;
     }

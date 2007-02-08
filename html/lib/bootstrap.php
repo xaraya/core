@@ -258,8 +258,9 @@ class DataContainer extends Object
         if (isset($properties[$name])) $this->$name = $x;
     }
 
-    public function getPublicProperties(Object $object)
+    public function getPublicProperties(Object $object=null)
     {
+        if ($object == null) $object = $this;
         $o = $object->getClass();
         $objectname = $o->getName();
         $reflection = new ReflectionClass($objectname);

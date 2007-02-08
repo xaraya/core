@@ -1130,16 +1130,8 @@ function installer_admin_finish()
     xarVarFetch('returnurl', 'str', $returnurl, 'site', XARVAR_NOT_REQUIRED);
 
 # --------------------------------------------------------
-# Create wrapper DD overlay objects for the modules, roles and privileges modules
+# Create wrapper DD overlay objects for the modules and privileges modules
 #
-    $objects = array(
-                   'roles_roles',
-                   'roles_users',
-                   'roles_groups',
-                     );
-
-    if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'roles', 'objects' => $objects))) return;
-
     $objects = array(
                    'privileges_baseprivileges',
                    'privileges_privileges',

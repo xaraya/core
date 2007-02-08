@@ -27,6 +27,7 @@ class DataProperty extends Object implements iDataProperty
     public $reqmodules     = array();  // these modules must be available before this property is enabled (optional)
     public $aliases        = '';  // If the same property class is reused directly with just different base info, supply the alternate base properties here (optional)
     public $filepath       = 'modules/dynamicdata/xarproperties';         // where is our class for it?
+    public $class          = '';         // what class is this?
 
     // Attributes for runtime
     public $template = '';
@@ -34,7 +35,7 @@ class DataProperty extends Object implements iDataProperty
     public $tplmodule = 'dynamicdata';
     public $validation = '';
     public $dependancies = '';    // semi-colon seperated list of files that must be present for this property to be available (optional)
-    public $args           = array();
+    public $args         = array();
 
     public $datastore = '';   // name of the data store where this property comes from
 

@@ -46,6 +46,7 @@ function dynamicdata_utilapi_import($args)
     $proptypes = DataPropertyMaster::getPropertyTypes();
     $name2id = array();
     foreach ($proptypes as $propid => $proptype) {
+    if (is_object($proptype)) {echo $proptype->name;exit;}
         $name2id[$proptype['name']] = $propid;
     }
 

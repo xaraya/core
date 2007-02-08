@@ -89,8 +89,8 @@ function dynamicdata_adminapi_importpropertytypes( $args )
             // Main part
             // Call the class method on each property to get the registration info
             if (!is_callable(array($propertyClass,'getRegistrationInfo'))) continue;
-            $baseInfo = new PropertyRegistration(array());
             $descriptor = new ObjectDescriptor(array());
+            $baseInfo = new PropertyRegistration($descriptor);
             $property = new $propertyClass($descriptor);
             if (empty($property->id)) continue;   // Don't register the base property
             $baseInfo->getRegistrationInfo($property);
@@ -99,18 +99,19 @@ function dynamicdata_adminapi_importpropertytypes( $args )
             $baseInfo->class = $propertyClass;
             $baseInfo->filepath = $property->filepath . '/' . $baseInfo->name . '.php';
             $currentproptypes[$baseInfo->id] = $baseInfo;
-            $proptypes[$baseInfo->id] = $baseInfo;
+            $proptypes[$baseInfo->id] = $baseInfo->getPublicProperties();
 
              // Check for aliases
              $aliases = $property->aliases();
             if(!empty($aliases)) {
                 // Each alias is also a propertyRegistration object
                 foreach($aliases as $alias) {
-                    $aliasInfo = new PropertyRegistration($alias);
+                    $descriptor = new ObjectDescriptor($alias);
+                    $aliasInfo = new PropertyRegistration($descriptor);
                     $aliasInfo->class = $propertyClass;
                     $aliasInfo->filepath = $property->filepath .'/'. $property->name . '.php';
                     $currentproptypes[$aliasInfo->id] = $aliasInfo;
-                    $proptypes[$aliasInfo->id] = $aliasInfo;
+                    $proptypes[$aliasInfo->id] = $aliasInfo->getPublicProperties();
                 }
             }
 
