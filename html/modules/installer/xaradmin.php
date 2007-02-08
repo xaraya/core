@@ -472,6 +472,17 @@ function installer_admin_bootstrap()
         }
     }
 
+# --------------------------------------------------------
+# Create wrapper DD overlay objects for the roles module
+#
+    $objects = array(
+                   'roles_roles',
+                   'roles_users',
+                   'roles_groups',
+                     );
+
+    if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'roles', 'objects' => $objects))) return;
+
     // create the default roles and privileges setup
     sys::import('modules.privileges.xarsetup');
     initializeSetup();
