@@ -308,6 +308,7 @@ class SelectProperty extends DataProperty
      */
     public function updateValidation(Array $args = array())
     {
+        var_dump($args);exit;
         extract($args);
 
         // in case we need to process additional input fields based on the name
