@@ -20,7 +20,7 @@
  */
 
 /** TEMPORARY XARAYA MODIFICATION **/
-set_include_path(get_include_path() . PATH_SEPARATOR. dirname(dirname(__FILE__)));
+set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 include_once 'creole/SQLException.php';
 include_once 'creole/Connection.php';
 
@@ -55,7 +55,7 @@ class Creole {
     /**
      * Flag to pass to the connection to indicate that no case conversions
      * should be performed by ResultSet on keys of fetched rows.
-	 * @deprecated use COMPAT_ASSOC_LOWER
+     * @deprecated use COMPAT_ASSOC_LOWER
      */
     const NO_ASSOC_LOWER = 16;
 
@@ -63,18 +63,18 @@ class Creole {
      * Flag to pass to the connection to indicate that a to-lower case conversion
      * should be performed by ResultSet on keys of fetched rows.
      */
-	const COMPAT_ASSOC_LOWER = 32;
+    const COMPAT_ASSOC_LOWER = 32;
 
     /**
      * Flag to pass to the connection to indicate that an rtrim() should be performed
-	 * on strings (using ResultSet->getString(), etc.).
+     * on strings (using ResultSet->getString(), etc.).
      */
-	const COMPAT_RTRIM_STRING = 64;
+    const COMPAT_RTRIM_STRING = 64;
 
-	/**
-	 * Flag to indicate that all compatibility flags should be set.
-	 */
-	const COMPAT_ALL = 96;
+    /**
+     * Flag to indicate that all compatibility flags should be set.
+     */
+    const COMPAT_ALL = 96;
 
     /**
      * Map of built-in drivers.
@@ -178,15 +178,15 @@ class Creole {
             $dsninfo = self::parseDSN($dsn);
         }
 
-		// gather any flags from the DSN
-		if (!empty($dsninfo['persistent'])) $flags |= Creole::PERSISTENT;
-		if (!empty($dsninfo['compat_assoc_lower'])) $flags |= Creole::COMPAT_ASSOC_LOWER;
-		if (!empty($dsninfo['compat_rtrim_string'])) $flags |= Creole::COMPAT_RTRIM_STRING;
-		if (!empty($dsninfo['compat_all'])) $flags |= Creole::COMPAT_ALL;
+        // gather any flags from the DSN
+        if (!empty($dsninfo['persistent'])) $flags |= Creole::PERSISTENT;
+        if (!empty($dsninfo['compat_assoc_lower'])) $flags |= Creole::COMPAT_ASSOC_LOWER;
+        if (!empty($dsninfo['compat_rtrim_string'])) $flags |= Creole::COMPAT_RTRIM_STRING;
+        if (!empty($dsninfo['compat_all'])) $flags |= Creole::COMPAT_ALL;
 
-		if ($flags & Creole::NO_ASSOC_LOWER) {
-			trigger_error("The Creole::NO_ASSOC_LOWER flag has been deprecated, and is now the default behavior. Use Creole::COMPAT_ASSOC_LOWER to lowercase resulset keys.", E_USER_WARNING);
-		}
+        if ($flags & Creole::NO_ASSOC_LOWER) {
+            trigger_error("The Creole::NO_ASSOC_LOWER flag has been deprecated, and is now the default behavior. Use Creole::COMPAT_ASSOC_LOWER to lowercase resulset keys.", E_USER_WARNING);
+        }
 
         // sort $dsninfo by keys so the serialized result is always the same
         // for identical connection parameters, no matter what their order is
@@ -199,9 +199,9 @@ class Creole {
             // persistent connections will be used if a non-persistent one was requested and is available
             // but a persistent connection will be created if a non-persistent one is present
 
-	    // TODO: impliment auto close of non persistent and replacing the
-	    // non persistent with the persistent object so as we dont have
-	    // both links open for no reason
+        // TODO: impliment auto close of non persistent and replacing the
+        // non persistent with the persistent object so as we dont have
+        // both links open for no reason
 
             if( isset(self::$connectionMap[$connectionMapKey][1]) ) { // is persistent
                 // a persistent connection with these parameters is already there,
@@ -246,7 +246,7 @@ class Creole {
             $sqle->setUserInfo($dsninfo);
             throw $sqle;
         }
-		$persistent = ($flags & Creole::PERSISTENT) === Creole::PERSISTENT;
+        $persistent = ($flags & Creole::PERSISTENT) === Creole::PERSISTENT;
         return self::$connectionMap[$connectionMapKey][(int)$persistent] = $obj;
     }
 
