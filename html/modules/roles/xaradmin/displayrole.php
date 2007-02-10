@@ -41,22 +41,7 @@ function roles_admin_displayrole()
     $types = xarModAPIFunc('roles','user','getitemtypes');
     $data['itemtypename'] = $types[$data['itemtype']]['label'];
     $data['name'] = $name;
-    $data['phome'] = $role->getHome();
 
-    if (xarModGetVar('roles','setprimaryparent')) { //we have activated primary parent
-        $primaryparent = $role->getPrimaryParent();
-        $prole = xarUFindRole($primaryparent);
-        $data['primaryparent'] = $primaryparent;
-        $data['pprimaryparent'] = $prole->getID();//pass in the uid
-        if (!isset($data['phome']) || empty ($data['phome'])) {
-            $parenthome = $prole->getHome(); //get the primary parent home
-            $data['parenthome']=$parenthome;
-        }
-    } else {
-        $data['parenthome']='';
-        $data['pprimaryparent'] ='';
-        $data['primaryparent'] ='';
-    }
     //get the data for a user
     if ($data['basetype'] == ROLES_USERTYPE) {
         $data['uname'] = $role->getUser();
@@ -66,43 +51,6 @@ function roles_admin_displayrole()
     } else {
         //get the data for a group
 
-    }
-    if (xarModGetVar('roles','setuserlastlogin')) {
-        //only display it for current user or admin
-        if (xarUserIsLoggedIn() && xarUserGetVar('uid')==$uid) {
-            $data['userlastlogin']=xarSessionGetVar('roles_thislastlogin');
-        }elseif (xarSecurityCheck('AdminRole',0,'Roles',$name) && xarModGetUserVar('roles','userlastlogin',$uid)<>''){
-            $data['userlastlogin']=xarModGetUserVar('roles','userlastlogin',$uid);
-        }else{
-            $data['userlastlogin']='';
-        }
-    }else{
-        $data['userlastlogin']='';
-    }
-
-    $data['upasswordupdate'] = xarModGetUserVar('roles','passwordupdate');//now user mod var not 'duv'. $role->getPasswordUpdate();
-    //timezone
-    if (xarModGetVar('roles','setusertimezone')) {
-        $usertimezone= $role->getUserTimezone();
-        $usertimezone = unserialize($usertimezone);
-        $data['utimezone']=$usertimezone['timezone'];
-        $offset=$usertimezone['offset'];
-        if (isset($offset)) {
-            $hours = intval($offset);
-            if ($hours != $offset) {
-                $minutes = abs($offset - $hours) * 60;
-            } else {
-                $minutes = 0;
-            }
-            if ($hours > 0) {
-                $data['offset'] = sprintf("%+d:%02d",$hours,$minutes);
-            } else {
-                $data['offset'] = sprintf("%+d:%02d",$hours,$minutes);
-            }
-        }
-    } else {
-        $data['utimezone']='';
-        $data['offset']='';
     }
 
     $item = $data;

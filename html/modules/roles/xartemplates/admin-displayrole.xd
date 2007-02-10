@@ -56,21 +56,25 @@
         #xarVarPrepForDisplay($name)#
       </div>
 
-    <xar:if condition="xarModGetVar('roles','setuserhome')">
+    <xar:set name="settings">unserialize(xarModVars::get('roles','duvsettings'))</xar:set>
+    <xar:if condition="in_array('userhome',$settings)">
         <div class="xar-form-input-wrapper">
             <label class="xar-form-label">
                 <xar:mlstring>Home:</xar:mlstring>
             </label>
-            #xarVarPrepForDisplay($phome)#&#160;
+            #xarModGetUserVar('roles','userhome',$uid)#&#160;
         </div>
     </xar:if>
-    <xar:if condition="xarModGetVar('roles','setprimaryparent')">
+    <xar:if condition="in_array('primaryparent',$settings)">
         <xar:if condition="empty($phome) and !empty($parenthome)">
           <div class="xar-form-input-wrapper">
             <label class="xar-form-label">
                 <xar:mlstring>Primary Parent Home:</xar:mlstring>
             </label>
-            #xarVarPrepForDisplay($parenthome)#
+            <xar:set name="value">
+                xarModGetUserVar('roles','primaryparent',$uid)
+            </xar:set>
+            <xar:data-output type="grouplist" value="$value" tabindex="8" />
         </div>
         </xar:if>
         <div class="xar-form-input-wrapper">
@@ -88,7 +92,7 @@
           </label>
           #xarVarPrepForDisplay($uname)#
         </div>
-        
+
         <div class="xar-form-input-wrapper">
           <label class="xar-form-label">
             <xar:mlstring>Email:</xar:mlstring>
@@ -96,29 +100,32 @@
           #xarVarPrepForDisplay($email)#
         </div>
       </xar:if>
-      <xar:if condition="$userlastlogin ne ''">
+      <xar:if condition="in_array('userlastlogin',$settings)">
         <div class="xar-form-input-wrapper">
-            <label for="lastlogin" class="xar-form-label">
+            <label class="xar-form-label">
                 <xar:mlstring>Last Login:</xar:mlstring>
             </label>
-            #xarLocaleGetFormattedDate('medium', $userlastlogin)#  #xarLocaleGetFormattedTime('medium', $userlastlogin)#&#160;
+            #xarLocaleGetFormattedDate('medium', xarModGetUserVar('roles','userlastlogin',$uid))#  #xarLocaleGetFormattedTime('medium', xarModGetUserVar('roles','userlastlogin',$uid))#
         </div>
       </xar:if>
-      <xar:if condition="xarModGetVar('roles','setpasswordupdate')">
+      <xar:if condition="in_array('passwordupdate',$settings)">
           <div class="xar-form-input-wrapper">
-              <label for="upasswordupdate" class="xar-form-label">
+              <label class="xar-form-label">
                   <xar:mlstring>Password last updated:</xar:mlstring>
               </label>
-              #xarLocaleGetFormattedDate('medium', $upasswordupdate)# #xarLocaleGetFormattedTime('medium', $upasswordupdate)#
+            #xarLocaleGetFormattedDate('medium', xarModGetUserVar('roles','passwordupdate',$uid))# #xarLocaleGetFormattedTime('medium', xarModGetUserVar('roles','passwordupdate',$uid))#
           </div>
       </xar:if>
       <xar:if condition="xarModGetVar('roles','setusertimezone')">
-          <div class="xar-form-input-wrapper">
-              <label for="utimezone" class="xar-form-label">
-                  <xar:mlstring>User Timezone:</xar:mlstring>
-              </label>
-              #$utimezone# (GMT #$offset#)
-          </div>
+        <div class="xar-form-input-wrapper">
+            <label class="xar-form-label">
+                <xar:mlstring>User Timezone:</xar:mlstring>
+            </label>
+            <xar:set name="value">
+                xarModGetUserVar('roles','usertimezone',$uid)
+            </xar:set>
+            <xar:data-input type="timezone" name="duvs[usertimezone]" id="duvs_usertimezone" value="$value" />
+        </div>
       </xar:if>
       <xar:if condition="xarModIsAvailable('dynamicdata')">
         <xar:data-getitem name="$properties" module="roles" itemtype="$itemtype" itemid="$uid" />

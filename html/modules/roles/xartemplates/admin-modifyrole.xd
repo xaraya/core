@@ -96,10 +96,10 @@
                 <xar:set name="settings">unserialize(xarModVars::get('roles','duvsettings'))</xar:set>
                 <xar:if condition="in_array('userhome',$settings)">
                     <div class="xar-form-input-wrapper">
-                        <label for="duvsettings_userhome" title="#xarML('Home URL')#" class="xar-form-label">
+                        <label for="duvs_userhome" title="#xarML('Home URL')#" class="xar-form-label">
                             <xar:mlstring>Home:</xar:mlstring>
                         </label>
-                        <input type="text" name="duvsettings[userhome]" id="duvsettings_userhome" value="#xarModGetUserVar('roles','userhome',$uid)#" size="40" maxlength="100" tabindex="7" />
+                        <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModGetUserVar('roles','userhome',$uid)#" size="40" maxlength="100" tabindex="7" />
                         <p class="xar-form-input-wrapper-after">
                             <xar:mlstring>You can use the module shortcut syntax available in the Base user menu block.</xar:mlstring>
                         </p>
@@ -107,13 +107,13 @@
                 </xar:if>
                 <xar:if condition="in_array('primaryparent',$settings)">
                     <div class="xar-form-input-wrapper">
-                        <label for="duvsettings_primaryparent" title="#xarML('Primary parent group')#" class="xar-form-label">
+                        <label for="duvs_primaryparent" title="#xarML('Primary parent group')#" class="xar-form-label">
                             <xar:mlstring>Primary Parent Group:</xar:mlstring>
                         </label>
                         <xar:set name="value">
                             xarModGetUserVar('roles','primaryparent',$uid)
                         </xar:set>
-                        <xar:data-input type="grouplist" name="duvsettings[primaryparent]" id="duvsettings_primaryparent" value="$value" tabindex="8" />
+                        <xar:data-input type="grouplist" name="duvs[primaryparent]" id="duvs_primaryparent" value="$value" tabindex="8" />
                     </div>
                 </xar:if>
 
@@ -131,6 +131,25 @@
                         </label>
                         <input type="text" name="pemail" id="pemail" value="#xarVarPrepForDisplay($pemail)#" maxlength="255" class="xar-form-textxlong" />
                     </div>
+                    <xar:if condition="in_array('useremailformat',$settings)">
+                        <div class="xar-form-input-wrapper">
+                            <label for="duvs_useremailformat" title="#xarML('Email Format')#" class="xar-form-label">
+                                <xar:mlstring>
+                                    Email Format:
+                                </xar:mlstring>
+                            </label>
+                            <xar:set name="value">
+                                xarModGetUserVar('roles','useremailformat',$uid)
+                            </xar:set>
+                            <xar:set name="options">
+                                array(
+                                    array('id' => 'text', 'name' => 'text'),
+                                    array('id' => 'html', 'name' => 'html'),
+                                )
+                            </xar:set>
+                            <xar:data-input type="dropdown" name="duvs[useremailformat]" id="duvs_useremailformat" value="$value" options="$options" />
+                        </div>
+                    </xar:if>
 
                     <div class="xar-form-input-wrapper">
                         <label for="pstate" title="#xarML('Status of this user')#" class="xar-form-label">
@@ -180,13 +199,13 @@
 
                     <xar:if condition="in_array('usertimezone',$settings)">
                         <div class="xar-form-input-wrapper">
-                            <label for="duvsettings_usertimezone" class="xar-form-label">
+                            <label for="duvs_usertimezone" class="xar-form-label">
                                 <xar:mlstring>User Timezone:</xar:mlstring>
                             </label>
                             <xar:set name="value">
                                 xarModGetUserVar('roles','usertimezone',$uid)
                             </xar:set>
-                            <xar:data-input type="timezone" name="duvsettings[usertimezone]" id="duvsettings_usertimezone" value="$value" />
+                            <xar:data-input type="timezone" name="duvs[usertimezone]" id="duvs_usertimezone" value="$value" />
                         </div>
                     </xar:if>
                     <xar:if condition="xarModGetVar('roles','usersendemails')">

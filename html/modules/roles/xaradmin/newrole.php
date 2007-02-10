@@ -28,8 +28,7 @@ function roles_admin_newrole()
     if (!xarVarFetch('pemail',      'email', $data['pemail'], '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('ppass1',      'str:1:', $data['ppass1'], '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('state',       'int:1:', $data['pstate'], 1, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('phome', 'str', $data['phome'], '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('pprimaryparent', 'int', $data['pprimaryparent'], '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('duvs', 'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
 
     $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
     $types = xarModAPIFunc('roles','user','getitemtypes');
@@ -49,15 +48,6 @@ function roles_admin_newrole()
         }
     }
 
-    //Primary parent is a name string (apparently looking at other code) but passed in here as an int
-    //we want to pass it to the template as an int as well
-    //Preparing it here but no real use in this function afaik. The Primary parent will be the same as the parent on creation
-    if (!empty($data['pprimaryparent'])) { //we have a uid
-        //this is a new role. Let's set it at the current default roles group
-        $data['primaryparent']  = xarModGetVar('roles','defaultgroup');
-        $data['pprimaryparent'] = $defaultRole['uid'];;//pass in the uid
-    }
-
     if (isset($pparentid)) {
         $data['pparentid'] = $pparentid;
     } else {
@@ -75,6 +65,7 @@ function roles_admin_newrole()
 
     $data['authid'] = xarSecGenAuthKey();
     $data['groups'] = $groups;
+    $data['uid'] = 0;
 
     return $data;
 }

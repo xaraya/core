@@ -286,6 +286,7 @@
                             array('id' => 'passwordupdate', 'name' => xarML('Last Password Update')),
                             array('id' => 'userlastlogin', 'name' => xarML('Last Login')),
                             array('id' => 'usertimezone', 'name' => xarML('Time Zone')),
+                            array('id' => 'useremailformat', 'name' => xarML('Email Format')),
                         );
                     </xar:set>
                     <xar:data-input type="checkboxlist" name="duvsettings" options="$options" value="$settings" layout="vertical" />
@@ -338,6 +339,14 @@
                             </td>
                             <td style="width: 400px">
                                 <xar:mlstring>This role's timezone.</xar:mlstring>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 100px">
+                                emailformat
+                            </td>
+                            <td style="width: 400px">
+                                <xar:mlstring>This role's preferred email format (text or html).</xar:mlstring>
                             </td>
                         </tr>
                     </table>

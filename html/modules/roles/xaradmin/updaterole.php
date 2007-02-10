@@ -27,7 +27,7 @@ function roles_admin_updaterole()
     if (!xarVarFetch('returnurl', 'str', $returnurl, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('allowemail','checkbox',$allowemail,false,XARVAR_NOT_REQUIRED)) return;
 
-    if (!xarVarFetch('duvsettings','array',$duvs,array(),XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('duvs','array',$duvs,array(),XARVAR_NOT_REQUIRED)) return;
     foreach($duvs as $key => $value) xarModSetUserVar('roles',$key, $value, $uid);
 
     //Save the old state and type

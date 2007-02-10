@@ -25,8 +25,7 @@ function roles_admin_modifyrole()
     if (!xarVarFetch('pemail', 'str:1:', $email, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('ppass', 'str:1:', $pass, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('state', 'str:1:', $state, '', XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('phome', 'str', $data['phome'], '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('pprimaryparent', 'int', $data['primaryparent'], '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('duvs', 'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
 
     $uid = isset($itemid) ? $itemid : $uid;
 
@@ -100,18 +99,6 @@ function roles_admin_modifyrole()
         $data['pstate'] = $role->getState();
     }
 
-    if (xarModGetVar('roles','setuserlastlogin')) {
-        //only display it for current user or admin
-        if (xarUserIsLoggedIn() && xarUserGetVar('uid')==$uid) {
-            $data['userlastlogin']=xarSessionGetVar('roles_thislastlogin');
-        }elseif (xarSecurityCheck('AdminRole',0,'Roles',$name)&& xarUserGetVar('uid')!= $uid){
-            $data['userlastlogin']= xarModGetUserVar('roles','userlastlogin',$uid);
-        }else{
-            $data['userlastlogin']='';
-        }
-    }else{
-        $data['userlastlogin']='';
-    }
     // call item modify hooks (for DD etc.)
     $item = $data;
     $item['module']= 'roles';

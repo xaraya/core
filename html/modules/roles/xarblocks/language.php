@@ -16,7 +16,7 @@
  * @author Marco Canini
  * initialise block
  */
-//sys::import('structures.descriptor');
+//sys::import('xaraya.structures.descriptor');
 //sys::import('modules.roles.class.language');
 
 function roles_languageblock_init()

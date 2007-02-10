@@ -168,6 +168,7 @@ function roles_activate()
     xarModVars::set('roles', 'passwordupdate', '');
     xarModVars::set('roles', 'primaryparent', 1);
     xarModVars::set('roles', 'usertimezone', xarConfigGetVar('Site.Core.TimeZone'));
+    xarModVars::set('roles', 'useremailformat', 'text');
     xarModVars::set('roles', 'defaultgroup', 'Users');
     xarModVars::set('roles', 'displayrolelist', false);
     xarModVars::set('roles', 'usereditaccount', true);
