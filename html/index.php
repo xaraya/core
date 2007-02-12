@@ -20,7 +20,7 @@ include 'lib/bootstrap.php';
  *       without loading the core
  */
 if (file_exists(sys::varpath() . '/cache/output/cache.touch')) {
-    sys::import('xaraya.xarCache');
+    sys::import('xaraya.caching');
     // Note : we may already exit here if session-less page caching is enabled
     xarCache_init();
 }

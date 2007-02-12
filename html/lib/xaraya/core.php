@@ -365,7 +365,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
     if ($whatToLoad & XARCORE_SYSTEM_BLOCKS)
     {
-        sys::import('xaraya.xarBlocks');
+        sys::import('xaraya.blocks');
 
         // Start Blocks Support Sytem
         $systemArgs = array();
