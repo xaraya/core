@@ -36,9 +36,8 @@ function roles_admin_addrole()
         xarVarFetch('ppass1', 'str:1:', $ppass1, NULL, XARVAR_NOT_REQUIRED);
         xarVarFetch('ppass2', 'str:1:', $ppass2, NULL, XARVAR_NOT_REQUIRED);
         xarVarFetch('pstate', 'str:1:', $pstate, NULL, XARVAR_NOT_REQUIRED);
-        xarVarFetch('phome', 'str', $phome, NULL, XARVAR_NOT_REQUIRED);
-        xarVarFetch('pprimaryparent', 'int', $pprimaryparent, NULL, XARVAR_NOT_REQUIRED); // this seems redundant here
     }
+
     // checks specific only to users
     if ($basetype == ROLES_USERTYPE) {
         // check for valid username
@@ -67,15 +66,6 @@ function roles_admin_addrole()
     }
     // assemble the args into an array for the role constructor
     if ($basetype == ROLES_USERTYPE) {
-        $duvs = array();
-        if (isset($phome) && xarModGetVar('roles','setuserhome'))
-            $duvs['userhome'] = $phome;
-        if (xarModGetVar('roles','setprimaryparent')) { //For a new role surely this is the same as the parentid
-            //the primary parent is a string name inline with default role etc
-            $parentrole= xarModAPIFunc('roles', 'user', 'get', array('uid'  => $pparentid, 'type'   => 1));
-            $duvs['primaryparent'] = $parentrole['uname'];
-        }
-
         $args = array('realname' => $pname,
             'itemtype' => $itemtype,
             'parentid' => $pparentid,
@@ -85,7 +75,6 @@ function roles_admin_addrole()
             'val_code' => 'createdbyadmin',
             'state' => $pstate,
             'auth_module' => 'authsystem',
-            'duvs' => $duvs,
             'basetype' => $basetype,
             );
     } else {
@@ -99,6 +88,9 @@ function roles_admin_addrole()
             );
     }
     $uid = xarModAPIFunc('roles','admin','create',$args);
+
+    if (!xarVarFetch('duvs','array',$duvs,array(),XARVAR_NOT_REQUIRED)) return;
+    foreach($duvs as $key => $value) xarModSetUserVar('roles',$key, $value, $uid);
 
     // call item create hooks (for DD etc.)
     // TODO: move to add() function

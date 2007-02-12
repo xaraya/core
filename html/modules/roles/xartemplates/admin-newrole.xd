@@ -98,14 +98,33 @@
                     <input type="text" name="pemail" id="pemail" value="#$pemail#" maxlength="255" class="xar-form-textlong" />
                 </div>
                 <xar:set name="settings">unserialize(xarModVars::get('roles','duvsettings'))</xar:set>
+                <xar:if condition="in_array('useremailformat',$settings)">
+                    <div class="xar-form-input-wrapper">
+                        <label for="duvs_useremailformat" title="#xarML('Email Format')#" class="xar-form-label">
+                            <xar:mlstring>
+                                Email Format:
+                            </xar:mlstring>
+                        </label>
+                        <xar:set name="value">
+                            xarModGetUserVar('roles','useremailformat',$uid)
+                        </xar:set>
+                        <xar:set name="options">
+                            array(
+                                array('id' => 'text', 'name' => 'text'),
+                                array('id' => 'html', 'name' => 'html'),
+                            )
+                        </xar:set>
+                        <xar:data-input type="dropdown" name="duvs[useremailformat]" id="duvs_useremailformat" value="$value" options="$options" />
+                    </div>
+                </xar:if>
                 <xar:if condition="in_array('userhome',$settings)">
                     <div class="xar-form-input-wrapper">
-                        <label for="phome" title="#xarML('Home URL')#" class="xar-form-label">
+                        <label for="duvs_userhome" title="#xarML('Home URL')#" class="xar-form-label">
                             <xar:mlstring>
                                 Home:
                             </xar:mlstring>
                         </label>
-                        <input type="text" name="phome" id="phome" value="#$phome#" size="40" maxlength="100" tabindex="7" />
+                        <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModGetUserVar('roles','userhome',$uid)#" size="40" maxlength="100" tabindex="7" />
                     </div>
                 </xar:if>
 
