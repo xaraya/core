@@ -40,8 +40,7 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
         //          in the bone handler
         try {
             // Try to get the full path location out of the trace
-            $root  = str_replace('lib/exceptions','',dirname(__FILE__));
-            $trace = str_replace($root,'/',$e->getTraceAsString());
+            $trace = str_replace(sys::root(),'',$e->getTraceAsString());
             $data = array('major'     => 'MAJOR TBD (Code was: '. $e->getCode().')',
                           'type'      => get_class($e), // consider stripping of 'Exception'
                           'title'     => get_class($e) . ' ['.$e->getCode().'] was raised (native)',
@@ -152,8 +151,8 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
             } elseif (isset($_GET['module'])) {
                 // Then check in $_GET
                 $module = $_GET['module'];
-            } 
-            
+            }
+
             // @todo consider removing this, it doesnt add much and causes quite a maintenance task
             $product = ''; $component = '';
             if ($module != '') {
@@ -175,7 +174,7 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
                     }
                 }
             }
-                
+
         }
         // Throw an exception to let the default handler handle the rest.
         throw new PHPException($msg,$errorRaised);
