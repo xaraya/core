@@ -229,7 +229,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         // use the new compiler or not?
         if(!function_exists('xarConfigGetVar') || (xarConfigGetVar('Site.BL.CompilerVersion') == 'XAR_BL_USE_XSLT')) {
             sys::import('blocklayout.xsltransformer');
-            $xslFile = 'lib/blocklayout/xslt/xar2php.xsl';
+            $xslFile = sys::root() . '/lib/blocklayout/xslt/xar2php.xsl';
             $xslProc = new BlockLayoutXSLTProcessor($xslFile);
             // This is confusing, dont do this here.
             $xslProc->xmlFile = $this->parser->getFileName();

@@ -18,8 +18,6 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
-
-/** TEMPORARY XARAYA MODIFICATION **/
 set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 include_once 'creole/SQLException.php';
 include_once 'creole/Connection.php';
