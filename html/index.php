@@ -2,16 +2,17 @@
 /**
  * Xaraya Web Interface Entry Point
  *
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Web Interface Entry Point
+ * @subpackage entrypoint
  * @author Marco Canini
  */
 
  /**
  * Load the Xaraya bootstrap so we can get started
  */
+set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 include 'lib/bootstrap.php';
 
 /**

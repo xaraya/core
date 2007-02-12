@@ -174,7 +174,7 @@ final class sys extends Object
      *
      * Syntax examples:
      *    sys::import('blocklayout.compiler')              -> lib/blocklayout/compiler.php
-     *    sys::import('modules.mymodule.xarincludes.test') -> modules/mymodule/xarincludes/test.php
+     *    sys::import('modules.mymodule.xarincludes.test') -> html/modules/mymodule/xarincludes/test.php
      *
      * The beginning of the dot path is scanned for 'modules.'
      * if found it assumes a module import
@@ -183,10 +183,10 @@ final class sys extends Object
      * @see    sys::once()
      * @todo   do we want to support sys::import('blocklayout.*') ?
      * @todo   we should probably change our directory structure so we dont have to do specials for modules.
-    **/
+     */
     public static function import($dp)
     {
-        if((0===strpos($dp,'modules.'))) return self::once($dp);
+        if((0===strpos($dp,'modules.'))) return self::once('html.' . $dp);
         return self::once('lib.'.$dp);
     }
 
@@ -194,12 +194,11 @@ final class sys extends Object
      * Returns the absolute path of the xaraya system root, NOT the web root
      * Note that there will be NO slash at the end of the returne path.
      *
-     * @todo THIS RETURNS THE WEBROOT STILL, UNTIL WE ARE READY TO ACTUALLY RETURN THE SYSTEM ROOT
-     *       I SAY AGAIN, THIS NOW RETURNS THE WEBROOT, WHICH IS TEMPORARILY
-    **/
+     * @return string
+     */
     public static function root()
     {
-        // We are in <root>/html/lib/bootstrap.php and we want <root>
+        // We are in <root>/lib/bootstrap.php and we want <root>
         if(!isset(self::$root))
             self::$root = dirname(dirname(realpath(__FILE__)));
         return self::$root;
@@ -217,7 +216,7 @@ final class sys extends Object
      *
      * @return string the var directory path name
      * @todo the .key.php construct seems odd
-    **/
+     */
     public static function varpath()
     {
         if (isset(self::$var)) return self::$var;
@@ -238,7 +237,7 @@ final class sys extends Object
  * are not "system" classes and need to interact with other Xaraya classes.
  *
  * @package core
-**/
+ */
 class DataContainer extends Object
 {
     function hash()
