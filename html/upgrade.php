@@ -2,12 +2,12 @@
 /**
  * Xaraya Upgrade
  *
- * package upgrader
+ * @package upgrader
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Upgrade
+ * @subpackage entrypoint
  * @author mikespub <mikespub@xaraya.com>
  * @author jojodee <jojodee@xaraya.com>
  */
@@ -28,10 +28,10 @@ define ('XARUPGRADE_DATABASE',                  '2');
 define ('XARUPGRADE_MISCELLANEOUS',             '3');
 define ('XARUPGRADE_PHASE_COMPLETE',            '4');
 /* Show all errors by default.
- * This may be modified in xarCore.php, but gives us a good default.
+ * This may be modified in core.php, but gives us a good default.
  */
 error_reporting(E_ALL);
-
+set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 // initialize the Xaraya core
 include 'lib/bootstrap.php';
 sys::import('xaraya.xarCore');

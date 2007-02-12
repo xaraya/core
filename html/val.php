@@ -2,19 +2,20 @@
 /**
  * Redirect for validating users
  *
- * @package server
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @package entrypoint
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * 
  * @author John Cox
  * @TODO jojodee - rethink dependencies between roles, authentication(authsystem) and 
  *                 registration in relation to validation
-*/
+ */
 
 /**
  *  initialize the Xaraya core
  */
+set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 include 'lib/xarCore.php';
 xarCoreInit(XARCORE_SYSTEM_ALL);
 

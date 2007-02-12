@@ -2,12 +2,12 @@
 /**
  * Xaraya Installer
  *
- * package installer
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @package installer
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Installer
+ * @subpackage installer
  * @author Johnny Robeson
  * @author Paul Rosania
  * @author Marc Lutolf
@@ -41,6 +41,7 @@ define ('XARINSTALL_PHASE_SYSTEM_CHECK',        '4');
 define ('XARINSTALL_PHASE_SETTINGS_COLLECTION', '5');
 define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
 
+set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 // Include the core
 include 'lib/bootstrap.php';
 sys::import('xaraya.core');

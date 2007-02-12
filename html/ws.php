@@ -2,13 +2,13 @@
 /**
  * Xaraya WebServices Interface
  *
- * @package services
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @package entrypoint
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Miko
 */
-
+set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 include 'lib/bootstrap.php';
 sys::import('xaraya.core');
 xarCoreInit(XARCORE_SYSTEM_ALL);
