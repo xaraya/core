@@ -49,7 +49,7 @@ sys::import('xaraya.xarCore');
 $whatToLoad = XARCORE_SYSTEM_NONE;
 
 // Start Exception Handling System very early
-sys::import('xaraya.xarException');
+sys::import('xaraya.exceptions');
 $systemArgs = array();
 xarError_init($systemArgs, $whatToLoad);
 // As long as we are coming in through install.php we need to pick up the bones if something goes wrong

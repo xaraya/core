@@ -136,6 +136,7 @@ define('XARCORE_TPL_CACHEDIR' , '/cache/templates');
  */
 if(!class_exists('sys'))
 {
+    // @todo: this aint right, it's not here, but one level up.
     include (dirname(__FILE__).'/bootstrap.php');
 }
 
@@ -178,7 +179,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Before we do anything make sure we can except out of code in a predictable matter
      *
      */
-    sys::import('xaraya.xarException');
+    sys::import('xaraya.exceptions');
     $systemArgs = array();
     xarError_init($systemArgs, $whatToLoad);
 

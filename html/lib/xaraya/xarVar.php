@@ -190,7 +190,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     $oldValue = null;
     if (isset($value) && $flags & XARVAR_DONT_SET) $oldValue = $value;
 
-    // XARVAR_DONT_REUSE fetches the variable, regardless 
+    // XARVAR_DONT_REUSE fetches the variable, regardless
     // FIXME: this flag doesn't seem to work !?
     // mrb: what doesn't work then? seems ok within the given workings
     // --------v  this is kinda confusing though, especially when dont_set is used as flag.
@@ -199,15 +199,14 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     }
 
     // Suppress validation warnings when dont_set, not_required or a default value is specified
-    $supress = (($flags & XARVAR_DONT_SET) || ($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue)); 
+    $supress = (($flags & XARVAR_DONT_SET) || ($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue));
     // Validate the $value given
     $validated = xarVarValidate($validation, $value, $supress, $name);
-    if (xarCurrentErrorType()) {return;} //Throw back
 
     if (!$validated) {
         // The value does not validate
         $value = null; // we first make sure that this is what we expect to return
-        
+
         // Perhaps the default or old can be returned?
         if (($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue)) {
             // CHECKME:  even for the XARVAR_DONT_SET flag !?
@@ -221,7 +220,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
         // Value is ok, handle preparation of that value
         if ($prep & XARVAR_PREP_FOR_DISPLAY) $value = xarVarPrepForDisplay($value);
         if ($prep & XARVAR_PREP_FOR_HTML)    $value = xarVarPrepHTMLDisplay($value);
-        
+
         // TODO: this is used nowhere, plus it introduces a db connection here which is of no use
         if ($prep & XARVAR_PREP_FOR_STORE) {
             $dbconn =& xarDBGetConn();
@@ -335,15 +334,15 @@ function xarVarValidate($validation, &$subject, $supress = false, $name='')
  * @access public
  * @see xarCore
  */
-function xarVarIsCached($cacheKey,  $name)         
+function xarVarIsCached($cacheKey,  $name)
 { return xarCore::isCached($cacheKey, $name);         }
-function xarVarGetCached($cacheKey, $name)         
+function xarVarGetCached($cacheKey, $name)
 { return xarCore::getCached($cacheKey, $name);        }
-function xarVarSetCached($cacheKey, $name, $value) 
+function xarVarSetCached($cacheKey, $name, $value)
 { return xarCore::setCached($cacheKey, $name, $value);}
-function xarVarDelCached($cacheKey, $name)         
+function xarVarDelCached($cacheKey, $name)
 { return xarCore::delCached($cacheKey, $name);        }
-function xarVarFlushCached($cacheKey)              
+function xarVarFlushCached($cacheKey)
 { return xarCore::flushCached($cacheKey);             }
 
 
