@@ -11,7 +11,7 @@
  * @author Vladimirs Metenchuks <voll@xaraya.com>
 */
 
-define ("CONVERT_TABLES_DIR", 'lib/transforms/convtables/');
+define ("CONVERT_TABLES_DIR", sys::root() . '/lib/transforms/convtables/');
 
 class xarCharset extends Object
 {

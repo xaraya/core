@@ -55,8 +55,7 @@ define('XAR_TOKEN_CR'                , "\n"   );
 define('XAR_NAMESPACE_PREFIX'        , 'xar'  );          // Our own default namespace prefix
 define('XAR_FUNCTION_PREFIX'         , 'xar'  );          // Function prefix (used in check for allowed functions)
 define('XAR_ROOTTAG_NAME'            , 'blocklayout');    // Default name of the root tag
-define('XAR_NODES_LOCATION'          , 'lib/blocklayout/nodes/'); // Where do we keep our nodes classes
-
+define('XAR_NODES_LOCATION'          , sys::root() . '/lib/blocklayout/nodes/'); // Where do we keep our nodes classes
 
 /**
  * Defines for errors
