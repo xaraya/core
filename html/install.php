@@ -43,7 +43,7 @@ define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
 
 // Include the core
 include 'lib/bootstrap.php';
-sys::import('xaraya.xarCore');
+sys::import('xaraya.core');
 // Besides what we explicitly load, we dont want to load
 // anything extra for maximum control
 $whatToLoad = XARCORE_SYSTEM_NONE;
@@ -63,10 +63,10 @@ xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_I
 include 'modules/installer/xarfunctions.php';
 
 // Basic systems always loaded
-// {ML_dont_parse 'lib/xarLog.php'}
-sys::import('xaraya.xarLog');
-// {ML_dont_parse 'lib/xarEvt.php'}
-sys::import('xaraya.xarEvt');
+// {ML_dont_parse 'lib/log.php'}
+sys::import('xaraya.log');
+// {ML_dont_parse 'lib/events.php'}
+sys::import('xaraya.events');
 // {ML_dont_parse 'lib/xarVar.php'}
 sys::import('xaraya.xarVar');
 // {ML_dont_parse 'lib/xarServer.php'}

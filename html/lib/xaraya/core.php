@@ -203,7 +203,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     // {ML_dont_parse 'includes/xarLog.php'}
-    sys::import('xaraya.xarLog');
+    sys::import('xaraya.log');
     xarLog_init($systemArgs, $whatToLoad);
 
     /*
@@ -257,8 +257,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * be as early as possible in place. This system is for *core* events
      *
      */
-    // {ML_dont_parse 'includes/xarEvt.php'}
-    sys::import('xaraya.xarEvt');
+    // {ML_dont_parse 'includes/events.php'}
+    sys::import('xaraya.events');
     $systemArgs = array('loadLevel' => $whatToLoad);
     xarEvt_init($systemArgs, $whatToLoad);
 

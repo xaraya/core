@@ -28,7 +28,7 @@ if (file_exists(sys::varpath() . '/cache/output/cache.touch')) {
 /**
  * Load the Xaraya core
  */
-sys::import('xaraya.xarCore');
+sys::import('xaraya.core');
 
 /**
  * Main Xaraya Entry

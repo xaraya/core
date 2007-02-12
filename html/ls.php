@@ -1,7 +1,7 @@
 <?php
 /**
  * Xaraya Local Services Interface
- * 
+ *
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -10,7 +10,7 @@
 **/
 
 include 'lib/bootstrap.php';
-sys::import('xaraya.xarCore');
+sys::import('xaraya.core');
 
 // We need a (fake) ip address to run xar.
 if(!isset($_SERVER['REMOTE_ADDR'])) putenv("REMOTE_ADDR=127.0.0.1");
@@ -24,7 +24,7 @@ exit(xarLocalServicesMain($argc, $argv));
 
 /**
  * Entry point for local services
- * 
+ *
  * Also know as the command line entry point
  *
  * call sign: php ./ws.php <type> [args]
@@ -39,11 +39,11 @@ function xarLocalServicesMain($argc, $argv)
     $handler = $argv[1];
     if(xarModIsAvailable($handler))
         return xarModApiFunc($handler,'cli','process',array('argc'=>$argc, 'argv'=>$argv));
-    else 
+    else
         return usage();
 }
 
-function usage() 
+function usage()
 {
     fwrite(STDERR,"Usage for local services entry point:
     php5 ./".basename(__FILE__)." <type> [-u <user>][-p <pass>] [args]
@@ -56,8 +56,8 @@ function usage()
     [args]   : arguments specific to the supplied <type>
     NOTES:
        - if PHP doesnt have REMOTE_ADDR available, it will assume 127.0.0.1.
-         if that is not correct, make sure that PHP can determine your ip address 
-         (for example by setting REMOTE_ADDR in the environment) 
+         if that is not correct, make sure that PHP can determine your ip address
+         (for example by setting REMOTE_ADDR in the environment)
          \n");
     return 1;
 }

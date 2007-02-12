@@ -36,7 +36,6 @@
 
 //Maybe changing this touch to a centralized API would be a good idea?
 //Even if in the end it would use touched files too...
-sys::import('xaraya.xarCore'); // Why is this?
 if (file_exists(sys::varpath() . '/security/on.touch')) {
     sys::import('xaraya.xarCacheSecurity');
 }

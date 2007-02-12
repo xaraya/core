@@ -1,21 +1,21 @@
 <?php
 /**
  * Xaraya WebServices Interface
- * 
+ *
  * @package services
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @author Miko 
+ * @author Miko
 */
 
 include 'lib/bootstrap.php';
-sys::import('xaraya.xarCore');
+sys::import('xaraya.core');
 xarCoreInit(XARCORE_SYSTEM_ALL);
 xarWebservicesMain();
 
 /**
- * Entry point for webservices 
+ * Entry point for webservices
  *
  * Just here to create a convenient url, the
  * actual work is done in the module, so we
@@ -34,11 +34,11 @@ xarWebservicesMain();
  *
  * @access public
  */
-function xarWebservicesMain() 
+function xarWebservicesMain()
 {
-    /* 
+    /*
      determine the server type, then
-     create an instance of an that server and 
+     create an instance of an that server and
      serve the request according the ther servers protocol
     */
     xarVarFetch('type','enum:xmlrpc:trackback:soap:webdav:flashremoting',$type,'');
@@ -57,7 +57,7 @@ function xarWebservicesMain()
         } else {
             xarLogMessage("Created XMLRPC server");
         }
-        
+
         break;
     // Hmmm, this seems a bit of a strange duck in this place here.
     // Trackback with it's mixed spec. i.e. not an xml formatted request, but a simple POST
@@ -96,15 +96,15 @@ function xarWebservicesMain()
         } else {
             xarLogMessage("Created trackback server");
         }
-        
+
         break;
     case 'soap' :
         if(xarModIsAvailable('soapserver')) {
             $server = xarModAPIFunc('soapserver','user','initsoapserver');
-        
+
             if (!$server) {
                 // erm, where does this one come from? lucky because we did the api func?
-                $fault = new soap_fault('Server','','Unable to start SOAP server', ''); 
+                $fault = new soap_fault('Server','','Unable to start SOAP server', '');
                 // TODO: check this
                 echo $fault->serialize();
             }
@@ -135,13 +135,13 @@ function xarWebservicesMain()
           $server = xarModAPIFunc('flashservices','user','initflashservices');
           if (is_object($server)) {
               $server->service();
-              
+
           } else {
             echo "could not create flashremoting server";
-            
+
           }// if
         }// if
-            break; 
+            break;
 
     default:
         if (xarServerGetVar('QUERY_STRING') == 'wsdl') {
