@@ -7,8 +7,9 @@
  * things which *absolutely* need to be available, which should be very little.
  *
  * So far:
- *  - Declaration of the root Object class of which all other classes are derived
- *  - Declaration of the Class_ class which Metamodels a PHP class.
+ *  - Declaration of the Object   class of which all other classes are derived
+ *  - Declaration of the Class_   class which Metamodels a PHP class.
+ *  - Declaration of the Property class which Metamodels a PHP property
  *  - Definition of the sys class which contains methods to steer php in the right direction
  *    for getting the right files (now: inclusion and the var path)
  *
@@ -66,9 +67,17 @@ class Object extends stdClass
      *
      * @return Class_ the class of the object
     **/
-    public final function getClass()
+    public final function &getClass()
     {
         return new Class_($this);
+    }
+
+    /**
+     * @todo get rid of the underscore once DataPropertyMaster:getProperty is remodelled
+    **/
+    public final function &getProperty_($name)
+    {
+        return new Property($this,$name);
     }
 }
 
@@ -83,14 +92,13 @@ class Object extends stdClass
  * by its ancestors, which only is the Object class and is exactly what we want.
  *
  * @package core
- * @todo is the pass by reference needed?
  * @todo can we come up with a better name without the underscore?
 **/
 final class Class_ extends Object
 {
     private $reflect = null;
 
-    protected function __construct(Object &$object)
+    protected function __construct(Object $object)
     {
         $this->reflect = new ReflectionClass($object);
     }
@@ -98,6 +106,39 @@ final class Class_ extends Object
     public function getName()
     {
         return $this->reflect->getName();
+    }
+}
+
+/**
+ * A class to model a property in PHP
+ *
+ * The purpose of this class i mainly to support the getProperty_() method
+ * in the Object class above, but i can see it grow a bit futher later on.
+ * The class is final, there's only one definition of a property, it can not be
+ * specialized in any way. Futhermore the constructor is made protected.
+ * In combination with the final keyword, this makes this class only instantiable
+ * by its ancestors, which only is the Object class and this is exactly what we want.
+ *
+ * @package core
+**/
+final class Property extends Object
+{
+    private $reflect = null;
+
+    protected function __construct(Object $object, $name)
+    {
+        $clazz = $object->getClass();
+        $this->reflect = new ReflectionProperty($clazz->getName(),$name);
+    }
+
+    public function getName()
+    {
+        return $this->reflect->getName();
+    }
+
+    public function isPublic()
+    {
+        return $this->reflect->isPublic();
     }
 }
 
@@ -260,9 +301,9 @@ class DataContainer extends Object
     **/
     public function get($name)
     {
-        $p = new ReflectionProperty($this,$name);
+        $p = $this->getProperty_($name);
         if($p->isPublic())
-            return $this->$name;
+            return $p->$name;
     }
 
     /**
@@ -271,7 +312,7 @@ class DataContainer extends Object
     **/
     public function set($name, $value)
     {
-        $p = new ReflectionProperty($this,$name);
+        $p = $this->getProperty_($name);
         if($p->isPublic())
             $this->$name = $value;
     }
