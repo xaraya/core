@@ -139,7 +139,7 @@ class DataObjectMaster extends Object
 
     function toArray($args=array())
     {
-        $properties = $this->descriptor->getPublicProperties($this);
+        $properties = $this->getPublicProperties();
         foreach ($properties as $key => $value) if (!isset($args[$key])) $args[$key] = $value;
         //FIXME where do we need to define the modname best?
         $args['modname'] = xarModGetNameFromID($args['moduleid']); //FIXME change to systemid

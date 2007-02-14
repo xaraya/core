@@ -67,7 +67,7 @@ class TreeNode extends Object implements ITreeNode
     }
     function hash()
     {
-        return sha1(serialize($this));
+        return $this->hashCode();
     }
 
     private function comparelevels($a, $b)

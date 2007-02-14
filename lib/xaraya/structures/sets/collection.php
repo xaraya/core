@@ -8,10 +8,6 @@ class BasicCollection extends DataContainer implements Collection
     {
         $this->elements = array();
     }
-    function equals(Object $object)
-    {
-        return $this === $object;
-    }
     public function add(Object $element)
     {
         $this->elements[$element->hash()] = $element;
@@ -48,12 +44,6 @@ class BasicCollection extends DataContainer implements Collection
 }
 class BasicSet extends BasicCollection implements IteratorAggregate
 {
-    public function hash()
-    {
-        $code = 0;
-        foreach(array_keys($this->elements) as $hash) $code += $hash;
-        return $code;
-    }
     public function getIterator()
     {
         $arrayobj = new ArrayObject($this->elements);
@@ -66,9 +56,6 @@ interface Collection
     public function add(Object $element);
     public function addAll(BasicCollection $collection);
     public function clear();
-    public function equals(Object $object);
-    public function getClass();
-    public function hash();
     public function isEmpty();
     public function remove(Object $element);
     public function removeAll(BasicCollection $collection);

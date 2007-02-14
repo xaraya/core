@@ -73,11 +73,36 @@ class Object extends stdClass
     }
 
     /**
+     * Return a property from an instance of an Object
+     *
+     * @param  string   Name of the property
+     * @return Property Property object
      * @todo get rid of the underscore once DataPropertyMaster:getProperty is remodelled
     **/
     public final function &getProperty_($name)
     {
         return new Property($this,$name);
+    }
+
+    public function getPublicProperties()
+    {
+        $reflection = new ReflectionClass($this);
+        $properties = array();
+        foreach($reflection->getProperties() as $p) {
+            if ($p->isPublic()) $properties[$p->getName()] = $p->getValue($this);
+        }
+        // why construct an associative array while we have an array of ReflectionProperty for free above??
+        return $properties;
+    }
+
+    public function equals(Object $object)
+    {
+        return $this === $object;
+    }
+
+    public function hashCode()
+    {
+        return spl_object_hash();
     }
 }
 
@@ -284,17 +309,10 @@ final class sys extends Object
  *     function like we have them in modules now will return an object
  *     and a getrall will return a collection
  *
- * @package core
- * @todo hash method can move to parent?
  *
 **/
 class DataContainer extends Object
 {
-    public function hash()
-    {
-        return sha1(serialize($this));
-    }
-
     /**
      *  @todo protected members cannot be gotten?
      *  @todo <mrb> i dont think this is a feasible direction
@@ -315,19 +333,6 @@ class DataContainer extends Object
         $p = $this->getProperty_($name);
         if($p->isPublic())
             $this->$name = $value;
-    }
-
-    public function getPublicProperties(Object $object = null)
-    {
-        if ($object == null) $object = $this; // why not always use this and dump the param?
-
-        $reflection = new ReflectionClass($object);
-        $properties = array();
-        foreach($reflection->getProperties() as $p) {
-            if ($p->isPublic()) $properties[$p->getName()] = $p->getValue($object);
-        }
-        // why construct an associative array while we have an array of ReflectionProperty for free above??
-        return $properties;
     }
 }
 
