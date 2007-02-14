@@ -1,5 +1,6 @@
 html\/var\/config\.system\.php$
 \._.*
+_local.*
 html\/var\/cache\/templates\/.*\.php$
 html\/var\/cache\/templates\/CACHEKEYS$
 html\/var\/cache\/database\/.*
