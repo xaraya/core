@@ -2,12 +2,13 @@
 /**
  * Bootstrap file
  *
- * This file is the only one (longer term) which get always included when
+ * This file is the only one (longer term) which always gets included when
  * running Xaraya. Everything else is lazy loaded. This file contains the
  * things which *absolutely* need to be available, which should be very little.
  *
  * So far:
  *  - Declaration of the root Object class of which all other classes are derived
+ *  - Declaration of the Class_ class which Metamodels a PHP class.
  *  - Definition of the sys class which contains methods to steer php in the right direction
  *    for getting the right files (now: inclusion and the var path)
  *
@@ -19,7 +20,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marcel van der Boom <mrb@hsdev.com>
- **/
+**/
 
 /**
  * The Object class from which all other classes are derived.
@@ -183,7 +184,7 @@ final class sys extends Object
      * @see    sys::once()
      * @todo   do we want to support sys::import('blocklayout.*') ?
      * @todo   we should probably change our directory structure so we dont have to do specials for modules.
-     */
+    **/
     public static function import($dp)
     {
         if((0===strpos($dp,'modules.'))) return self::once('html.' . $dp);
@@ -195,7 +196,7 @@ final class sys extends Object
      * Note that there will be NO slash at the end of the returne path.
      *
      * @return string
-     */
+    **/
     public static function root()
     {
         // We are in <root>/lib/bootstrap.php and we want <root>
@@ -216,7 +217,7 @@ final class sys extends Object
      *
      * @return string the var directory path name
      * @todo the .key.php construct seems odd
-     */
+    **/
     public static function varpath()
     {
         if (isset(self::$var)) return self::$var;
@@ -236,38 +237,55 @@ final class sys extends Object
  * This class has the minimum methods for subclasses that
  * are not "system" classes and need to interact with other Xaraya classes.
  *
+ * [random]
+ *     The specific use case is:
+ *     collections with the idea that in the future sometime a standard "get"
+ *     function like we have them in modules now will return an object
+ *     and a getrall will return a collection
+ *
  * @package core
- */
+ * @todo hash method can move to parent?
+ *
+**/
 class DataContainer extends Object
 {
-    function hash()
+    public function hash()
     {
         return sha1(serialize($this));
     }
 
-    function get($name)
+    /**
+     *  @todo protected members cannot be gotten?
+     *  @todo <mrb> i dont think this is a feasible direction
+    **/
+    public function get($name)
     {
-        $properties = $this->getPublicProperties($this);
-        return $properties[$name];
+        $p = new ReflectionProperty($this,$name);
+        if($p->isPublic())
+            return $this->$name;
     }
 
-    function set($name, $x)
+    /**
+     *  @todo protected members cannot be set?
+     *  @todo <mrb> i dont think this is a feasible direction
+    **/
+    public function set($name, $value)
     {
-        $properties = $this->getPublicProperties($this);
-        if (isset($properties[$name])) $this->$name = $x;
+        $p = new ReflectionProperty($this,$name);
+        if($p->isPublic())
+            $this->$name = $value;
     }
 
-    public function getPublicProperties(Object $object=null)
+    public function getPublicProperties(Object $object = null)
     {
-        if ($object == null) $object = $this;
-        $o = $object->getClass();
-        $objectname = $o->getName();
-        $reflection = new ReflectionClass($objectname);
+        if ($object == null) $object = $this; // why not always use this and dump the param?
+
+        $reflection = new ReflectionClass($object);
         $properties = array();
         foreach($reflection->getProperties() as $p) {
-            $prop = new ReflectionProperty($objectname,$p->name);
-            if ($prop->isPublic()) $properties[$p->name] = $prop->getValue($object);
+            if ($p->isPublic()) $properties[$p->getName()] = $p->getValue($object);
         }
+        // why construct an associative array while we have an array of ReflectionProperty for free above??
         return $properties;
     }
 }
