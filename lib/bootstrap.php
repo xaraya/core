@@ -24,7 +24,7 @@
 **/
 
 /**
- * The Object class from which all other classes are derived.
+ * The Object class from which all other classes should be derived.
  *
  * This is basically a placeholder extending from stdClass so we have a
  * place to put things in our root class. There are severe limitations to what
@@ -49,7 +49,7 @@ class Object extends stdClass
      * @todo php version 5.2 is ok for sure, 5.1.4/5.1.6 works, but manual says it
      *       shouldnt work with sprintf(), keep an eye on it.
     **/
-    public final function toString()
+    final public function toString()
     {
         // Reuse __toString magic by internal conversion.
         return sprintf('%s',$this);
@@ -67,42 +67,67 @@ class Object extends stdClass
      *
      * @return Class_ the class of the object
     **/
-    public final function &getClass()
+    final public function getClass()
     {
         return new Class_($this);
     }
 
     /**
-     * Return a property from an instance of an Object
+     * Determine equality of two objects
      *
-     * @param  string   Name of the property
-     * @return Property Property object
-     * @todo get rid of the underscore once DataPropertyMaster:getProperty is remodelled
+     * We do this because it allows to make the comparison overridable and
+     * pair it up with the hashCode method
+     * Usually when overriding equals or hashCode, you will want to override
+     * the other method too.
+     * Note: $this === $object is the same here, but this way just overriding
+     * hashCode allows for equality specialisation.
     **/
-    public final function &getProperty_($name)
-    {
-        return new Property($this,$name);
-    }
-
-    public function getPublicProperties()
-    {
-        $reflection = new ReflectionClass($this);
-        $properties = array();
-        foreach($reflection->getProperties() as $p) {
-            if ($p->isPublic()) $properties[$p->getName()] = $p->getValue($this);
-        }
-        // why construct an associative array while we have an array of ReflectionProperty for free above??
-        return $properties;
-    }
-
     public function equals(Object $object)
     {
-        return $this === $object;
+        return $this->hashCode() === $object->hashCode();
     }
 
+    /**
+     * A unique id for an object
+     *
+     *
+    **/
     public function hashCode()
     {
-        return spl_object_hash();
+        return spl_object_hash($this);
+    }
+
+    /**
+     * Get an array of property values
+     *
+     * @todo why not deliver a Property[] instead?
+     * @todo the public part is something that probably belongs in the caller, not here
+     * @todo it doesnt get properties ;-)
+    **/
+    public function getPublicProperties()
+    {
+        $properties = array();
+        $cl = $this->getClass();
+        foreach($cl->getProperties() as $ix => $p) {
+            if ($p->isPublic())
+                $properties[$p->getName()] = $p->getValue($this);
+        }
+        return $properties;
+    }
+}
+
+/**
+ * Base class for the reflectable objects we will expose
+ *
+ * @package core
+**/
+abstract class Reflectable extends Object
+{
+    protected $reflect = null;
+
+    public function getName()
+    {
+        return $this->reflect->getName();
     }
 }
 
@@ -119,18 +144,31 @@ class Object extends stdClass
  * @package core
  * @todo can we come up with a better name without the underscore?
 **/
-final class Class_ extends Object
+final class Class_ extends Reflectable
 {
-    private $reflect = null;
-
     protected function __construct(Object $object)
     {
         $this->reflect = new ReflectionClass($object);
     }
 
-    public function getName()
+    public function getProperties()
     {
-        return $this->reflect->getName();
+        $ret = array();
+        foreach($this->reflect->getProperties() as $p)
+            $ret[] = new Property($this, $p->getName());
+        return $ret;
+    }
+
+    /**
+     * Return a property from an instance of an Object
+     *
+     * @param  string   Name of the property
+     * @return Property Property object
+     * @todo get rid of the underscore once DataPropertyMaster:getProperty is remodelled
+    **/
+    final public function getProperty_($name)
+    {
+        return new Property($this,$name);
     }
 }
 
@@ -140,30 +178,26 @@ final class Class_ extends Object
  * The purpose of this class i mainly to support the getProperty_() method
  * in the Object class above, but i can see it grow a bit futher later on.
  * The class is final, there's only one definition of a property, it can not be
- * specialized in any way. Futhermore the constructor is made protected.
- * In combination with the final keyword, this makes this class only instantiable
- * by its ancestors, which only is the Object class and this is exactly what we want.
+ * specialized in any way. The constructor is public here because of the getProperty
+ * method in the Class_ class.
  *
  * @package core
 **/
-final class Property extends Object
+final class Property extends Reflectable
 {
-    private $reflect = null;
-
-    protected function __construct(Object $object, $name)
+    public function __construct(Class_ $clazz, $name)
     {
-        $clazz = $object->getClass();
         $this->reflect = new ReflectionProperty($clazz->getName(),$name);
-    }
-
-    public function getName()
-    {
-        return $this->reflect->getName();
     }
 
     public function isPublic()
     {
         return $this->reflect->isPublic();
+    }
+
+    public function getValue(Object $object)
+    {
+        return $this->reflect->getValue($object);
     }
 }
 
@@ -309,7 +343,7 @@ final class sys extends Object
  *     function like we have them in modules now will return an object
  *     and a getrall will return a collection
  *
- *
+ * @package core
 **/
 class DataContainer extends Object
 {
