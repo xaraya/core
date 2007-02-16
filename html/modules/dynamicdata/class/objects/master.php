@@ -48,6 +48,11 @@ class DataObjectDescriptor extends ObjectDescriptor
         return $args;
     }
 
+    /**
+     * Get Object ID
+     *
+     * @return array all parts necessary to describe a DataObject
+     */
     static function getObjectID(array $args=array())
     {
         $xartable = xarDBGetTables();
@@ -305,25 +310,23 @@ class DataObjectMaster extends Object
             // ignore if this property already belongs to the object
             if(isset($this->properties[$newproperty->name])) continue;
             $args = array(
+                'id'         => $newproperty->id,
                 'name'       => $newproperty->name,
                 'type'       => $newproperty->type,
                 'label'      => $newproperty->label,
                 'source'     => $newproperty->source,
                 'status'     => $newproperty->status,
                 'datastore'  => $newproperty->datastore,
-                'validation' => $newproperty->datastore,
+                'validation' => $newproperty->validation,
                 'default'    => $newproperty->default,
             );
             $this->addProperty($args);
-            if(!isset($this->datastores[$newproperty->datastore]))
-            {
+            if (!isset($this->datastores[$newproperty->datastore])) {
                 $newstore = $this->property2datastore($newproperty);
                 $this->addDatastore($newstore[0],$newstore[1]);
             }
             $this->datastores[$newproperty->datastore]->addField($this->properties[$args['name']]);
             $this->fieldlist[] = $newproperty->name;
-            // Is this stuff needed?
-            // $newproperty->_items =& $this->items;
         }
     }
 
@@ -333,39 +336,30 @@ class DataObjectMaster extends Object
     function &getDataStores($reset = false)
     {
         // if we already have the datastores
-        if(!$reset && isset($this->datastores) && count($this->datastores) > 0)
-        {
+        if (!$reset && isset($this->datastores) && count($this->datastores) > 0) {
             return $this->datastores;
         }
 
         // if we're filtering on property status and there are no properties matching this status
-        if(!$reset && !empty($this->status) && count($this->fieldlist) == 0)
-        {
+        if (!$reset && !empty($this->status) && count($this->fieldlist) == 0) {
             return $this->datastores;
         }
 
         // reset field list of datastores if necessary
-        if($reset && count($this->datastores) > 0)
-        {
-            foreach(array_keys($this->datastores) as $storename)
-            {
+        if ($reset && count($this->datastores) > 0) {
+            foreach(array_keys($this->datastores) as $storename) {
                 $this->datastores[$storename]->fields = array();
             }
         }
 
         // check the fieldlist for valid property names and for operations like COUNT, SUM etc.
-        if(!empty($this->fieldlist) && count($this->fieldlist) > 0)
-        {
+        if (!empty($this->fieldlist) && count($this->fieldlist) > 0) {
             $cleanlist = array();
-            foreach($this->fieldlist as $name)
-            {
-                if(!strstr($name,'('))
-                {
+            foreach($this->fieldlist as $name) {
+                if (!strstr($name,'(')) {
 //                    if(isset($this->properties[$name]))
                         $cleanlist[] = $name;
-                }
-                elseif(preg_match('/^(.+)\((.+)\)/',$name,$matches))
-                {
+                } elseif (preg_match('/^(.+)\((.+)\)/',$name,$matches)) {
                     $operation = $matches[1];
                     $field = $matches[2];
                     if(isset($this->properties[$field]))
@@ -379,8 +373,7 @@ class DataObjectMaster extends Object
             $this->fieldlist = $cleanlist;
         }
 
-        foreach($this->properties as $name => $property)
-        {
+        foreach($this->properties as $name => $property) {
             if(
                 !empty($this->fieldlist) and          // if there is a fieldlist
                 !in_array($name,$this->fieldlist) and // but the field is not in it,
@@ -393,25 +386,26 @@ class DataObjectMaster extends Object
             }
 
             list($storename, $storetype) = $this->property2datastore($property);
-            if(!isset($this->datastores[$storename]))
+            if (!isset($this->datastores[$storename])) {
                 $this->addDataStore($storename, $storetype);
-
+            }
             $this->properties[$name]->datastore = $storename;
 
-            if(empty($this->fieldlist) || in_array($name,$this->fieldlist))
+            if (empty($this->fieldlist) || in_array($name,$this->fieldlist)) {
                 // we add this to the data store fields
                 $this->datastores[$storename]->addField($this->properties[$name]); // use reference to original property
-            else
+            } else {
                 // we only pass this along as being the primary field
                 $this->datastores[$storename]->setPrimary($this->properties[$name]);
-
+            }
             // keep track of what property holds the primary key (item id)
-            if(!isset($this->primary) && $property->type == 21)
+            if (!isset($this->primary) && $property->type == 21) {
                 $this->primary = $name;
-
+            }
             // keep track of what property holds the secondary key (item type)
-            if(empty($this->secondary) && $property->type == 20 && !empty($this->filter))
+            if (empty($this->secondary) && $property->type == 20 && !empty($this->filter)) {
                 $this->secondary = $name;
+            }
         }
         return $this->datastores;
     }
@@ -423,8 +417,7 @@ class DataObjectMaster extends Object
      */
     function property2datastore(&$property)
     {
-        switch($property->source)
-        {
+        switch($property->source) {
             case 'dynamic_data':
                 // Variable table storage method, aka 'usual dd'
                 $storename = '_dynamic_data_';
@@ -483,7 +476,7 @@ class DataObjectMaster extends Object
      *
      * @param $name the name for the data store
      * @param $type the type of data store
-    **/
+     */
     function addDataStore($name = '_dynamic_data_', $type='data')
     {
         // get a new data store
@@ -533,7 +526,7 @@ class DataObjectMaster extends Object
      *
      * @todo why not keep the scope here and do this:
      *       $this->properties[$args['id']] = new Property($args); (with a reference probably)
-    **/
+     */
     function addProperty($args)
     {
         // TODO: find some way to have unique IDs across all objects if necessary
@@ -546,7 +539,7 @@ class DataObjectMaster extends Object
      * Class method to retrieve information about all DataObjects
      *
      * @return array of object definitions
-    **/
+     */
     static function &getObjects($args=array())
     {
         extract($args);
@@ -606,7 +599,7 @@ class DataObjectMaster extends Object
      * @todo when we had a constructor which was more passive, this could be non-static. (cheap construction is a good rule of thumb)
      * @todo no ref return?
      * @todo when we can turn this into an object method, we dont have to do db inclusion all the time.
-    **/
+     */
     static function getObjectInfo(array $args=array())
     {
         $args = DataObjectDescriptor::getObjectID($args);
