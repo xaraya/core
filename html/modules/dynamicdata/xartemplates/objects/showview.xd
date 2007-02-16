@@ -15,7 +15,7 @@
     <xar:set name="layout">'default'</xar:set>
 </xar:if>
 
-<xar:template file="view-$layout"/>
+<xar:template module="$tplmodule" file="view-$layout" />
 
 <xar:if condition="!empty($prevurl) or !empty($nexturl)">
     <div class="xar-align-center">
