@@ -21,20 +21,6 @@ function dynamicdata_userapi_showview($args)
 {
     extract($args);
 
-/* Happens automatically in the constructor
-    // optional layout for the template
-    if (empty($layout)) {
-        $layout = 'default';
-    }
-    // or optional template, if you want e.g. to handle individual fields
-    // differently for a specific module / item type
-    if (empty($template)) {
-        $template = '';
-    }
-    if (empty($tplmodule)) {
-        $tplmodule = 'dynamicdata';
-    }
-*/
     $args['fallbackmodule'] = 'current';
     $descriptor = new DataObjectDescriptor($args);
     $args = $descriptor->getArgs();
@@ -50,54 +36,21 @@ function dynamicdata_userapi_showview($args)
                             $template);
     }
 
-/* Done in the descriptor now
-    if (empty($modid)) {
-        if (empty($module)) {
-            $modname = xarModGetName();
-        } else {
-            $modname = $module;
-        }
-        if (is_numeric($modname)) {
-            $modid = $modname;
-            $modinfo = xarModGetInfo($modid);
-            $modname = $modinfo['name'];
-        } else {
-            $modid = xarModGetIDFromName($modname);
-        }
-    } else {
-            $modinfo = xarModGetInfo($modid);
-            $modname = $modinfo['name'];
-    }
-    if (empty($modid)) {
-        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('module name', 'user', 'showview', 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
-    }
-*/
-/* Default is 0 in the constructor
-    if (empty($itemtype) || !is_numeric($itemtype)) {
-        $itemtype = null;
-    }
-*/
     // TODO: what kind of security checks do we want/need here ?
     if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$args ['moduleid']:$args ['itemtype']:All")) return;
 
-    // try getting the item id list via input variables if necessary
     if (!isset($itemids)) {
         if (!xarVarFetch('itemids', 'isset', $itemids,  NULL, XARVAR_DONT_SET)) {return;}
     }
 
-    // try getting the sort via input variables if necessary
     if (!isset($sort)) {
         if (!xarVarFetch('sort', 'isset', $sort,  NULL, XARVAR_DONT_SET)) {return;}
     }
 
-    // try getting the numitems via input variables if necessary
     if (!isset($numitems)) {
         if (!xarVarFetch('numitems', 'isset', $numitems,  NULL, XARVAR_DONT_SET)) {return;}
     }
 
-    // try getting the startnum via input variables if necessary
     if (!isset($startnum)) {
         if (!xarVarFetch('startnum', 'isset', $startnum,  NULL, XARVAR_DONT_SET)) {return;}
     }
@@ -121,13 +74,6 @@ function dynamicdata_userapi_showview($args)
         $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
     }
 
-    /* Done in the constructor
-    // join a module table to a dynamic object
-    if (empty($join)) $join = '';
-
-    // make some database table available via DD
-    if (empty($table)) $table = '';
-    */
     // select in some category
     if (empty($catid)) $catid = '';
 

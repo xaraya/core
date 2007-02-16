@@ -4,10 +4,10 @@
  * Note : for performance reasons, we won't use an array of objects here,
  *        but a single object with an array of item values
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package modules
+ * @subpackage dynamicdata
  *
-**/
+ **/
 sys::import('modules.dynamicdata.class.properties');
 sys::import('modules.dynamicdata.class.objects.master');
 
@@ -50,28 +50,34 @@ class DataObjectList extends DataObjectMaster
         $this->setArguments($descriptor->getArgs());
     }
 
-    function setArguments($args)
+    /**
+     * Set arguments for the DataObjectList class
+     *
+     * @param array
+     */
+    function setArguments(array $args = array())
     {
         // set the number of items to retrieve
-        if(!empty($args['numitems']))
+        if(!empty($args['numitems'])) {
             $this->numitems = $args['numitems'];
-
-        // set the start number to retrieve
-        if(!empty($args['startnum']))
-            $this->startnum = $args['startnum'];
-
-        // set the list of requested item ids
-        if(!empty($args['itemids']))
-        {
-            if(is_numeric($args['itemids']))
-                $this->itemids = array($args['itemids']);
-            elseif(is_string($args['itemids']))
-                $this->itemids = explode(',',$args['itemids']);
-            elseif(is_array($args['itemids']))
-                $this->itemids = $args['itemids'];
         }
-        if (!isset($this->itemids))
+        // set the start number to retrieve
+        if(!empty($args['startnum'])) {
+            $this->startnum = $args['startnum'];
+        }
+        // set the list of requested item ids
+        if(!empty($args['itemids'])) {
+            if(is_numeric($args['itemids'])) {
+                $this->itemids = array($args['itemids']);
+            } elseif(is_string($args['itemids'])) {
+                $this->itemids = explode(',',$args['itemids']);
+            } elseif(is_array($args['itemids'])) {
+                $this->itemids = $args['itemids'];
+            }
+        }
+        if (!isset($this->itemids)) {
             $this->itemids = array();
+        }
 
         // reset fieldlist and datastores if necessary
         if(
@@ -82,9 +88,7 @@ class DataObjectList extends DataObjectMaster
 
             $this->fieldlist = $args['fieldlist'];
             $this->getDataStores(true);
-        }
-        else
-        {
+        } else {
             if(
                 isset($args['status']) &&
                 (!isset($this->status) || $args['status'] != $this->status)
@@ -101,19 +105,17 @@ class DataObjectList extends DataObjectMaster
         }
 
         // add where clause if itemtype is one of the properties (e.g. articles)
-        if(isset($this->secondary) && !empty($this->itemtype) && $this->objectid > 2)
-        {
-            if(empty($args['where']))
+        if(isset($this->secondary) && !empty($this->itemtype) && $this->objectid > 2) {
+            if(empty($args['where'])) {
                 $args['where'] = $this->secondary . ' eq ' . $this->itemtype;
-            else
+            } else {
                 $args['where'] .= ' and ' . $this->secondary . ' eq ' . $this->itemtype;
+            }
         }
 
         // Note: they can be empty here, which means overriding any previous criteria
-        if(isset($args['sort']) || isset($args['where']) || isset($args['groupby']) || isset($args['cache']))
-        {
-            foreach(array_keys($this->datastores) as $name)
-            {
+        if(isset($args['sort']) || isset($args['where']) || isset($args['groupby']) || isset($args['cache'])) {
+            foreach(array_keys($this->datastores) as $name) {
                 if(isset($args['sort']))
                     // make sure we don't have some left-over sort criteria
                     $this->datastores[$name]->cleanSort();
@@ -146,31 +148,32 @@ class DataObjectList extends DataObjectMaster
             $this->setCategories($args['catid']);
     }
 
+    /**
+     * Set sort portion of query
+     *
+     * @param string sort
+     */
     function setSort($sort)
     {
-        if(is_array($sort))
+        if(is_array($sort)) {
             $this->sort = $sort;
-        else
+        } else {
             $this->sort = explode(',',$sort);
-
-        foreach($this->sort as $criteria)
-        {
+        }
+        foreach($this->sort as $criteria) {
             // split off trailing ASC or DESC
-            if(preg_match('/^(.+)\s+(ASC|DESC)\s*$/',$criteria,$matches))
-            {
+            if(preg_match('/^(.+)\s+(ASC|DESC)\s*$/',$criteria,$matches)) {
                 $criteria = trim($matches[1]);
                 $sortorder = $matches[2];
-            }
-            else
+            } else {
                 $sortorder = 'ASC';
+            }
 
-            if(isset($this->properties[$criteria]))
-            {
+            if(isset($this->properties[$criteria])) {
                 // pass the sort criteria to the right data store
                 $datastore = $this->properties[$criteria]->datastore;
                 // assign property to datastore if necessary
-                if(empty($datastore))
-                {
+                if(empty($datastore)) {
                     list($storename, $storetype) = $this->property2datastore($this->properties[$criteria]);
                     if(!isset($this->datastores[$storename]))
                         $this->addDataStore($storename, $storetype);
@@ -191,16 +194,19 @@ class DataObjectList extends DataObjectMaster
         }
     }
 
+    /**
+     * Set where clause
+     *
+     * @param string where
+     */
     function setWhere($where)
     {
         // find all single-quoted pieces of text with and/or and replace them first, to
         // allow where clauses like : title eq 'this and that' and body eq 'here or there'
         $idx = 0;
         $found = array();
-        if(preg_match_all("/'(.*?)'/",$where,$matches))
-        {
-            foreach($matches[1] as $match)
-            {
+        if(preg_match_all("/'(.*?)'/",$where,$matches)) {
+            foreach($matches[1] as $match) {
                 // skip if it doesn't contain and/or
                 if(!preg_match('/\s+(and|or)\s+/',$match))
                     continue;
@@ -224,10 +230,8 @@ class DataObjectList extends DataObjectMaster
         // TODO: reject multi-source WHERE clauses :-)
         $parts = preg_split('/\s+(and|or)\s+/',$where,-1,PREG_SPLIT_DELIM_CAPTURE);
         $join = '';
-        foreach($parts as $part)
-        {
-            if($part == 'and' || $part == 'or')
-            {
+        foreach($parts as $part) {
+            if($part == 'and' || $part == 'or') {
                 $join = $part;
                 continue;
             }
@@ -236,34 +240,29 @@ class DataObjectList extends DataObjectMaster
             $pre = '';
             $post = '';
             $name = array_shift($pieces);
-            if($name == '(')
-            {
+            if($name == '(') {
                 $pre = '(';
                 $name = array_shift($pieces);
             }
 
             $last = count($pieces) - 1;
-            if($pieces[$last] == ')')
-            {
+            if($pieces[$last] == ')') {
                 $post = ')';
                 array_pop($pieces);
             }
 
             // sanity check on SQL
-            if(count($pieces) < 2)
-            {
+            if(count($pieces) < 2) {
                 $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
                 $vars = array('query ' . $where, 'DataObjectList', 'getWhere', 'DynamicData');
                 throw new BadParameterException($vars,$msg);
             }
 
-            if(isset($this->properties[$name]))
-            {
+            if(isset($this->properties[$name])) {
                 // pass the where clause to the right data store
                 $datastore = $this->properties[$name]->datastore;
                 // assign property to datastore if necessary
-                if(empty($datastore))
-                {
+                if(empty($datastore)) {
                     list($storename, $storetype) = $this->property2datastore($this->properties[$name]);
                     if(!isset($this->datastores[$storename]))
                         $this->addDataStore($storename, $storetype);
@@ -275,16 +274,13 @@ class DataObjectList extends DataObjectMaster
                 elseif($this->properties[$name]->type == 21)
                     $this->datastores[$datastore]->addField($this->properties[$name]); // use reference to original property
 
-                if(empty($idx))
+                if(empty($idx)) {
                     $mywhere = join(' ',$pieces);
-                else
-                {
+                } else {
                     $mywhere = '';
-                    foreach($pieces as $piece)
-                    {
+                    foreach($pieces as $piece) {
                         // replace the pieces again if necessary
-                        if(preg_match("#'~(\d+)~'#",$piece,$matches) && isset($found[$matches[1]]))
-                        {
+                        if(preg_match("#'~(\d+)~'#",$piece,$matches) && isset($found[$matches[1]])) {
                             $original = $found[$matches[1]];
                             $piece = preg_replace("#'~(\d+)~'#","'$original'",$piece);
                         }
@@ -302,47 +298,55 @@ class DataObjectList extends DataObjectMaster
         }
     }
 
+    /**
+     * Set Group By
+     *
+     * @param mixed groupby
+     * @todo make param not mixed
+     */
     function setGroupBy($groupby)
     {
-        if(is_array($groupby))
+        if(is_array($groupby)) {
             $this->groupby = $groupby;
-        else
+        } else {
             $this->groupby = explode(',',$groupby);
-
+        }
         $this->isgrouped = 1;
 
-        foreach($this->groupby as $name)
-        {
-            if(isset($this->properties[$name]))
-            {
+        foreach($this->groupby as $name) {
+            if(isset($this->properties[$name])) {
                 // pass the sort criteria to the right data store
                 $datastore = $this->properties[$name]->datastore;
                 // assign property to datastore if necessary
-                if(empty($datastore))
-                {
+                if(empty($datastore)) {
                     list($storename, $storetype) = $this->property2datastore($this->properties[$name]);
-                    if(!isset($this->datastores[$storename]))
+                    if(!isset($this->datastores[$storename])) {
                         $this->addDataStore($storename, $storetype);
+                    }
 
                     $this->properties[$name]->datastore = $storename;
                     $this->datastores[$storename]->addField($this->properties[$name]); // use reference to original property
                     $datastore = $storename;
                 }
-                elseif($this->properties[$name]->type == 21)
+                elseif($this->properties[$name]->type == 21) {
                     $this->datastores[$datastore]->addField($this->properties[$name]); // use reference to original property
-
+                }
                 $this->datastores[$datastore]->addGroupBy($this->properties[$name]);
                 // if we're grouping by some field, we should start querying by the data store that holds it
-                if(!isset($this->startstore))
+                if(!isset($this->startstore)) {
                    $this->startstore = $datastore;
+                }
             }
         }
     }
 
+    /**
+     * Set categories for an object
+     *
+     */
     function setCategories($catid)
     {
-        if(!xarModIsAvailable('categories'))
-            return;
+        if(!xarModIsAvailable('categories')) return;
 
         $categoriesdef = xarModAPIFunc(
             'categories','user','leftjoin',
@@ -353,8 +357,7 @@ class DataObjectList extends DataObjectMaster
             )
         );
 
-        foreach(array_keys($this->datastores) as $name)
-        {
+        foreach(array_keys($this->datastores) as $name) {
             $this->datastores[$name]->addJoin(
                 $categoriesdef['table'],
                 $categoriesdef['field'],
@@ -366,7 +369,12 @@ class DataObjectList extends DataObjectMaster
         }
     }
 
-    function &getItems($args = array())
+    /**
+     * Get Items
+     *
+     * @return array
+     */
+    function &getItems(array $args = array())
     {
         // initialize the items array
         $this->items = array();
@@ -374,30 +382,28 @@ class DataObjectList extends DataObjectMaster
         // set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
         $this->setArguments($args);
 
-        if(empty($args['numitems']))
+        if(empty($args['numitems'])) {
             $args['numitems'] = $this->numitems;
-
-        if(empty($args['startnum']))
+        }
+        if(empty($args['startnum'])) {
             $args['startnum'] = $this->startnum;
-
+        }
         // if we don't have a start store yet, but we do have a primary datastore, we'll start there
-        if(empty($this->startstore) && !empty($this->primary))
+        if(empty($this->startstore) && !empty($this->primary)) {
             $this->startstore = $this->properties[$this->primary]->datastore;
-
+        }
        // first get the items from the start store (if any)
-        if(!empty($this->startstore))
-        {
+        if(!empty($this->startstore)) {
             $this->datastores[$this->startstore]->getItems($args);
 
             // check if we found something - if not, no sense looking further
-            if(count($this->itemids) == 0)
-                return $this->items;
+            if(count($this->itemids) == 0) return $this->items;
         }
         // then retrieve the other info about those items
-        foreach(array_keys($this->datastores) as $name)
-        {
-            if(!empty($this->startstore) && $name == $this->startstore)
+        foreach(array_keys($this->datastores) as $name) {
+            if(!empty($this->startstore) && $name == $this->startstore) {
                 continue;
+            }
 
             $this->datastores[$name]->getItems($args);
         }
@@ -406,57 +412,53 @@ class DataObjectList extends DataObjectMaster
 
     /**
      * Count the number of items that match the selection criteria
+     *
      * Note : this must be called *before* getItems() if you're using numitems !
      */
-    function countItems($args = array())
+    function countItems(array $args = array())
     {
         // set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
         $this->setArguments($args);
 
         // if we don't have a start store yet, but we do have a primary datastore, we'll count there
-        if(empty($this->startstore) && !empty($this->primary))
+        if(empty($this->startstore) && !empty($this->primary)) {
             $this->startstore = $this->properties[$this->primary]->datastore;
-
+        }
         // try to count the items in the start store (if any)
-        if(!empty($this->startstore))
+        if(!empty($this->startstore)) {
             return $this->datastores[$this->startstore]->countItems($args);
-        else
-        {
+        } else {
             // If we don't have a start store, we're probably stuck,
             // but we'll try the first one anyway :)
             // TODO: find some better way to determine which data store to count in
-            foreach(array_keys($this->datastores) as $name)
-            {
+            foreach(array_keys($this->datastores) as $name) {
                 // this looks like a loop but it isnt :-) (yet)
                 return $this->datastores[$name]->countItems($args);
             }
         }
     }
 
-    function showView($args = array())
+    /**
+     * Show a view of an object
+     *
+     * @return xarTplObject
+     */
+    function showView(array $args = array())
     {
-        //if(!empty($args['tplmodule'])) $tplmodule  = $args['tplmodule'];
         $args = $this->toArray($args);
-/*        if(empty($args['layout']))      $args['layout']         = $this->layout;
-        if(empty($args['template']))   $args['template']   = $this->template;
 
-        if(empty($args['viewfunc']))   $args['viewfunc']    = $this->viewfunc;
-        if(empty($args['fieldprefix'])) $args['fieldprefix'] = $this->fieldprefix;
-        if(empty($args['fieldlist']))     $args['fieldlist']      = $this->fieldlist;
-        if(!empty($args['extend']))    $this->extend();
-*/
-        if(!empty($this->status))
+        if(!empty($this->status)) {
             $state = $this->status;
-        else
+        } else {
             $state = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
-
+        }
         $args['properties'] = array();
-        if(count($args['fieldlist']) > 0)
-        {
+        if(count($args['fieldlist']) > 0) {
             foreach($args['fieldlist'] as $name) {
                 if(isset($this->properties[$name])) {
-                    if($this->properties[$name]->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK))
+                    if($this->properties[$name]->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK)) {
                         $args['properties'][$name] =& $this->properties[$name];
+                    }
                 }
             }
         }
@@ -484,14 +486,11 @@ class DataObjectList extends DataObjectMaster
 
         // override for viewing dynamic objects
         $args['dummymode'] = 0; // Set to 0 when interested in viewing them anyway...
-        if($modname == 'dynamicdata' && $this->itemtype == 0 && empty($this->table))
-        {
+        if($modname == 'dynamicdata' && $this->itemtype == 0 && empty($this->table)) {
             $linktype = 'user';
             $linkfunc = 'view';
             // Don't show link to view items that don't belong to the DD module
-        }
-        else
-        {
+        } else {
             $linktype = 'user';
             $linkfunc = $args['linkfunc'];
         }
@@ -536,10 +535,8 @@ class DataObjectList extends DataObjectMaster
             // @todo let's be a lil more explicit in handling these options
             $args['links'][$itemid] = $this->getViewOptions($args);
         }
-        if(!empty($this->isgrouped))
-        {
-            foreach(array_keys($args['properties']) as $name)
-            {
+        if(!empty($this->isgrouped)) {
+            foreach(array_keys($args['properties']) as $name) {
                 if(!empty($this->properties[$name]->operation))
                     $this->properties[$name]->label = $this->properties[$name]->operation . '(' . $this->properties[$name]->label . ')';
             }
@@ -548,12 +545,10 @@ class DataObjectList extends DataObjectMaster
 
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
-        if(isset($args['newlink']))
-        {
+        if(isset($args['newlink'])) {
             // TODO: improve this + SECURITY !!!
         }
-        elseif(xarSecurityCheck('AddDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':All'))
-        {
+        elseif(xarSecurityCheck('AddDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':All')) {
             $args['newlink'] = xarModURL(
                 $args['urlmodule'],'admin','new',
                 array(
@@ -563,12 +558,12 @@ class DataObjectList extends DataObjectMaster
                 )
             );
         }
-        else
+        else {
             $args['newlink'] = '';
-
-        if(empty($args['pagerurl']))
+        }
+        if(empty($args['pagerurl'])) {
             $args['pagerurl'] = '';
-
+        }
         list(
             $args['prevurl'],
             $args['nexturl'],
@@ -667,27 +662,28 @@ class DataObjectList extends DataObjectMaster
 
     /**
      * Get the labels and values to include in some output view for these items
+     *
+     * @return array
      */
-    function &getViewValues($args = array())
+    function &getViewValues(array $args = array())
     {
-        if(empty($args['fieldlist']))
+        if(empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;
-        if(count($args['fieldlist']) == 0 && empty($this->status))
+        }
+        if(count($args['fieldlist']) == 0 && empty($this->status)) {
             $args['fieldlist'] = array_keys($this->properties);
-
+        }
         $viewvalues = array();
-        foreach($this->itemids as $itemid)
-        {
+        foreach($this->itemids as $itemid) {
             $viewvalues[$itemid] = array();
-            foreach($args['fieldlist'] as $name)
-            {
-                if(isset($this->properties[$name]))
-                {
+            foreach($args['fieldlist'] as $name) {
+                if(isset($this->properties[$name])) {
                     $label = xarVarPrepForDisplay($this->properties[$name]->label);
-                    if(isset($this->items[$itemid][$name]))
+                    if(isset($this->items[$itemid][$name])) {
                         $value = $this->properties[$name]->showOutput(array('value' => $this->items[$itemid][$name]));
-                    else
+                    } else {
                         $value = '';
+                    }
                     $viewvalues[$itemid][$label] = $value;
                 }
             }
@@ -701,14 +697,12 @@ class DataObjectList extends DataObjectMaster
         $nexturl = '';
         $sorturl = '';
 
-        if(empty($this->startnum))
-            $this->startnum = 1;
+        if(empty($this->startnum)) $this->startnum = 1;
 
         // TODO: count items before calling getItems() if we want some better pager
 
         // Get current URL (this uses &amp; by default now)
-        if(empty($currenturl))
-            $currenturl = xarServerGetCurrentURL();
+        if(empty($currenturl)) $currenturl = xarServerGetCurrentURL();
 
         // TODO: clean up generation of sort URL
 
@@ -721,51 +715,40 @@ class DataObjectList extends DataObjectMaster
         $sorturl = preg_replace('/\?sort=\w+&amp;/','?',$sorturl);
         $sorturl = preg_replace('/\?sort=\w+$/','',$sorturl);
         // add sort param at the end of the URL
-        if(preg_match('/\?/',$sorturl))
+        if(preg_match('/\?/',$sorturl)) {
             $sorturl = $sorturl . '&amp;sort';
-        else
+        } else {
             $sorturl = $sorturl . '?sort';
-
-        if(empty($this->numitems) || ( (count($this->items) < $this->numitems) && $this->startnum == 1 ))
-        {
+        }
+        if(empty($this->numitems) || ( (count($this->items) < $this->numitems) && $this->startnum == 1 )) {
             return array($prevurl,$nexturl,$sorturl);
         }
 
-        if(preg_match('/startnum=\d+/',$currenturl))
-        {
-            if(count($this->items) == $this->numitems)
-            {
+        if(preg_match('/startnum=\d+/',$currenturl)) {
+            if(count($this->items) == $this->numitems) {
                 $next = $this->startnum + $this->numitems;
                 $nexturl = preg_replace('/startnum=\d+/',"startnum=$next",$currenturl);
             }
-            if($this->startnum > 1)
-            {
+            if($this->startnum > 1) {
                 $prev = $this->startnum - $this->numitems;
                 $prevurl = preg_replace('/startnum=\d+/',"startnum=$prev",$currenturl);
             }
         }
-        elseif(preg_match('/\?/',$currenturl))
-        {
-            if(count($this->items) == $this->numitems)
-            {
+        elseif(preg_match('/\?/',$currenturl)) {
+            if(count($this->items) == $this->numitems) {
                 $next = $this->startnum + $this->numitems;
                 $nexturl = $currenturl . '&amp;startnum=' . $next;
             }
-            if($this->startnum > 1)
-            {
+            if($this->startnum > 1) {
                 $prev = $this->startnum - $this->numitems;
                 $prevurl = $currenturl . '&amp;startnum=' . $prev;
             }
-        }
-        else
-        {
-            if(count($this->items) == $this->numitems)
-            {
+        } else {
+            if(count($this->items) == $this->numitems) {
                 $next = $this->startnum + $this->numitems;
                 $nexturl = $currenturl . '?startnum=' . $next;
             }
-            if($this->startnum > 1)
-            {
+            if($this->startnum > 1) {
                 $prev = $this->startnum - $this->numitems;
                 $prevurl = $currenturl . '?startnum=' . $prev;
             }
@@ -775,13 +758,14 @@ class DataObjectList extends DataObjectMaster
 
     /**
      * Get items one at a time, instead of storing everything in $this->items
+     *
+     * @return int
      */
-    function getNext($args = array())
+    function getNext(array $args = array())
     {
         static $start = true;
 
-        if($start)
-        {
+        if($start) {
             // set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
             $this->setArguments($args);
 
@@ -791,21 +775,19 @@ class DataObjectList extends DataObjectMaster
                 $args['startnum'] = $this->startnum;
 
             // if we don't have a start store yet, but we do have a primary datastore, we'll start there
-            if(empty($this->startstore) && !empty($this->primary))
+            if(empty($this->startstore) && !empty($this->primary)) {
                 $this->startstore = $this->properties[$this->primary]->datastore;
-
+            }
             $start = false;
         }
 
         $itemid = null;
         // first get the items from the start store (if any)
-        if(!empty($this->startstore))
-        {
+        if(!empty($this->startstore)) {
             $itemid = $this->datastores[$this->startstore]->getNext($args);
 
             // check if we found something - if not, no sense looking further
-            if(empty($itemid))
-                return;
+            if(empty($itemid)) return;
         }
         return $itemid;
     }

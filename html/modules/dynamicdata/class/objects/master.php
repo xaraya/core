@@ -2,12 +2,12 @@
 /**
  * The DD factory (sort of)
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package modules
+ * @subpackage dynamicdata
  *
  * @todo make this a real factory
  * @todo scoping of variables
-**/
+ **/
 sys::import('xaraya.structures.descriptor');
 sys::import('modules.dynamicdata.class.datastores');
 sys::import('modules.dynamicdata.class.properties');
@@ -724,6 +724,7 @@ class DataObjectMaster extends Object
             }
         }
         $descriptor = new DataObjectDescriptor($args);
+
         // here we can use our own classes to retrieve this
         $object = new $classname($descriptor);
         return $object;
