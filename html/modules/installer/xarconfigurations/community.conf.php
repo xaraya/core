@@ -89,7 +89,8 @@ function installer_community_configuration_load($args)
 function installer_community_casualaccess()
 {
     xarRegisterPrivilege('CasualAccess','All','themes','Block','All','ACCESS_OVERVIEW','Minimal access to a site');
-    xarRegisterPrivilege('ViewRegistrationLogin','All','registration','Block','rlogin:Login:All','ACCESS_OVERVIEW','View the User Access block');
+    // FIXME there is no registration module at this point
+//    xarRegisterPrivilege('ViewRegistrationLogin','All','registration','Block','rlogin:Login:All','ACCESS_OVERVIEW','View the User Access block');
     xarRegisterPrivilege('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW','View the Login block');
     xarRegisterPrivilege('ViewBlocks','All','base','Block','All','ACCESS_OVERVIEW','View blocks of the Base module');
     xarRegisterPrivilege('ViewLoginItems','All','dynamicdata','Item','All','ACCESS_OVERVIEW','View some Dynamic Data items');
@@ -99,7 +100,7 @@ function installer_community_casualaccess()
     xarMakePrivilegeRoot('ViewBlocks');
     xarMakePrivilegeRoot('ViewLoginItems');
     xarMakePrivilegeRoot('ViewBlockItems');
-    xarMakePrivilegeMember('ViewRegistrationLogin','CasualAccess');
+//    xarMakePrivilegeMember('ViewRegistrationLogin','CasualAccess');
     xarMakePrivilegeMember('ViewLogin','CasualAccess');
     xarMakePrivilegeMember('ViewBlocks','CasualAccess');
     xarMakePrivilegeMember('ViewAuthsystem','CasualAccess');
@@ -109,8 +110,8 @@ function installer_community_casualaccess()
 
 function installer_community_readnoncore()
 {
-    xarRegisterPrivilege('ReadNonCore','All','empty','All','All','ACCESS_NONE','Read access only to none-core modules');
-    xarRegisterPrivilege('ViewRegistrationLogin','All','registration','Block','rlogin:Login:All','ACCESS_OVERVIEW','View the User Access block');
+    xarRegisterPrivilege('ReadNonCore','All',null,'All','All','ACCESS_NONE','Read access only to none-core modules');
+//    xarRegisterPrivilege('ViewRegistrationLogin','All','registration','Block','rlogin:Login:All','ACCESS_OVERVIEW','View the User Access block');
     xarRegisterPrivilege('DenyPrivileges','All','privileges','All','All','ACCESS_NONE','Deny access to the Privileges module');
     xarRegisterPrivilege('DenyBlocks','All','blocks','All','All','ACCESS_NONE','Deny access to the Blocks module');
     xarRegisterPrivilege('DenyMail','All','mail','All','All','ACCESS_NONE','Deny access to the Mail module');
@@ -129,7 +130,7 @@ function installer_community_readnoncore()
     xarMakePrivilegeMember('DenyMail','ReadNonCore');
     xarMakePrivilegeMember('DenyModules','ReadNonCore');
     xarMakePrivilegeMember('DenyThemes','ReadNonCore');
-    xarMakePrivilegeMember('ViewRegistrationLogin','ReadNonCore');
+//    xarMakePrivilegeMember('ViewRegistrationLogin','ReadNonCore');
 }
 
 function installer_community_readaccess()

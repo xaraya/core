@@ -53,7 +53,7 @@ function roles_admin_showprivileges()
         $groupname = $ancestor->getName();
         $groupid = $ancestor->getID();
         foreach($allprivileges as $priv) {
-            if ($priv->getModule() == "empty") {
+            if ($priv->getModule() == null) {
                 $inherited[] = array('privid' => $priv->getID(),
                         'name' => $priv->getName(),
                         'realm' => "",
@@ -100,7 +100,7 @@ function roles_admin_showprivileges()
     $currentprivileges = array();
     foreach ($curprivileges as $priv) {
         $frozen = !xarSecurityCheck('DeassignPrivilege',0,'Privileges',$priv->getName());
-        if ($priv->getModule() == "empty") {
+        if ($priv->getModule() == null) {
             $currentprivileges[] = array('privid' => $priv->getID(),
                 'name' => $priv->getName(),
                 'realm' => "",
@@ -166,7 +166,7 @@ function roles_admin_showprivileges()
         foreach ($xs as $x) {
             if ($x['status'] != 1) {
                 foreach ($ys as $y) {
-                    if ($y['module'] == 'empty') continue;
+                    if ($y['module'] == null) continue;
                     if ($y['privid'] == $x['privid']) continue;
                     if ($y['object']->implies($x['object'])) {
                         $x['status'] = 1;

@@ -91,7 +91,7 @@ function installer_intranet_configuration_load($args)
 
 function installer_intranet_oversightprivilege()
 {
-    xarRegisterPrivilege('Oversight','All','empty','All','All','ACCESS_NONE','The privilege container for the Oversight group');
+    xarRegisterPrivilege('Oversight','All',null,'All','All','ACCESS_NONE','The privilege container for the Oversight group');
     xarMakePrivilegeRoot('Oversight');
 }
 
@@ -106,7 +106,7 @@ function installer_intranet_oversightrole()
 function installer_intranet_casualaccess()
 {
     xarRegisterPrivilege('CasualAccess','All','themes','Block','All','ACCESS_OVERVIEW','Minimal access to a site');
-    xarRegisterPrivilege('ViewRegistrationLogin','All','registration','Block','rlogin:Login:All','ACCESS_OVERVIEW','View the User Access block');
+//    xarRegisterPrivilege('ViewRegistrationLogin','All','registration','Block','rlogin:Login:All','ACCESS_OVERVIEW','View the User Access block');
     xarRegisterPrivilege('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW','View the Login block');
     xarRegisterPrivilege('ViewBlocks','All','base','Block','All','ACCESS_OVERVIEW','View blocks of the Base module');
     xarRegisterPrivilege('ViewLoginItems','All','dynamicdata','Item','All','ACCESS_OVERVIEW','View some Dynamic Data items');
@@ -120,14 +120,14 @@ function installer_intranet_casualaccess()
     xarMakePrivilegeMember('ViewLogin','CasualAccess');
     xarMakePrivilegeMember('ViewBlocks','CasualAccess');
     xarMakePrivilegeMember('ViewLoginItems','CasualAccess');
-    xarMakePrivilegeMember('ViewRegistrationLogin','CasualAccess');
+//    xarMakePrivilegeMember('ViewRegistrationLogin','CasualAccess');
     xarMakePrivilegeMember('ViewBlockItems','CasualAccess');
 }
 
 function installer_intranet_readnoncore()
 {
-    xarRegisterPrivilege('ReadNonCore','All','empty','All','All','ACCESS_NONE','Read access only to none-core modules');
-    xarRegisterPrivilege('ViewRegistrationLogin','All','registration','Block','rlogin:Login:All','ACCESS_OVERVIEW','View the User Access block');
+    xarRegisterPrivilege('ReadNonCore','All',null,'All','All','ACCESS_NONE','Read access only to none-core modules');
+//    xarRegisterPrivilege('ViewRegistrationLogin','All','registration','Block','rlogin:Login:All','ACCESS_OVERVIEW','View the User Access block');
     xarRegisterPrivilege('DenyPrivileges','All','privileges','All','All','ACCESS_NONE','Deny access to the Privileges module');
     xarRegisterPrivilege('DenyBlocks','All','blocks','All','All','ACCESS_NONE','Deny access to the Blocks module');
     xarRegisterPrivilege('DenyMail','All','mail','All','All','ACCESS_NONE','Deny access to the Mail module');
@@ -147,7 +147,7 @@ function installer_intranet_readnoncore()
     xarMakePrivilegeMember('DenyModules','ReadNonCore');
     xarMakePrivilegeMember('DenyThemes','ReadNonCore');
     xarMakePrivilegeMember('ViewAuthsystem','ReadNonCore');
-    xarMakePrivilegeMember('ViewRegistrationLogin','ReadNonCore');
+//    xarMakePrivilegeMember('ViewRegistrationLogin','ReadNonCore');
     //xarMakePrivilegeMember('DenyDynamicData','ReadNonCore');
 }
 

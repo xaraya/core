@@ -397,24 +397,26 @@ class xarRole extends Object
         // We'll have to get it.
         xarLogMessage("ROLE: getting privileges for uid: $this->uid");
         // TODO: propagate the use of 'All'=null for realms through the API instead of the flip-flopping
-        $query = "SELECT  xar_pid, p.xar_name, r.xar_name, xar_module,
+        $xartable =& xarDBGetTables();
+        $query = "SELECT  xar_pid, p.xar_name, r.xar_name, p.xar_modid,
                           xar_component, xar_instance, xar_level, xar_description
                   FROM    $this->acltable acl,
                           $this->privilegestable p LEFT JOIN $this->realmstable r ON p.xar_realmid = r.xar_rid
                   WHERE   p.xar_pid = acl.xar_permid AND
                           acl.xar_partid = ?";
+//                          echo $query;exit;
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->uid));
 
         sys::import('modules.privileges.class.privilege');
         $privileges = array();
         while ($result->next()) {
-            list($pid, $name, $realm, $module, $component, $instance, $level,
+            list($pid, $name, $realm, $modid, $component, $instance, $level,
                 $description) = $result->fields;
             $perm = new xarPrivilege(array('pid' => $pid,
                     'name' => $name,
                     'realm' => is_null($realm) ? 'All' : $realm,
-                    'module' => $module,
+                    'module' => $modid,
                     'component' => $component,
                     'instance' => $instance,
                     'level' => $level,
@@ -424,6 +426,37 @@ class xarRole extends Object
         }
         xarVarSetCached($cacheKey,$this->uid,$privileges);
         return $privileges;
+
+        /*
+        $q = new xarQuery();
+        $q->addtable($this->acltable, 'acl');
+        $q->addtable($this->privilegestable, 'p');
+        $q->addtable($this->realmstable, 'r');
+        $q->addtable($xartable['modules'], 'm');
+        $q->addfield('xar_pid AS pid');
+        $q->addfield('p.xar_name AS name');
+        $q->addfield('r.xar_name AS realm');
+        $q->addfield('m.xar_name AS module');
+        $q->addfield('xar_component AS component');
+        $q->addfield('xar_instance AS instance');
+        $q->addfield('xar_level AS level');
+        $q->addfield('xar_description AS description');
+        $q->leftjoin('p.xar_realmid', 'r.xar_rid');
+        $q->leftjoin('p.xar_modid', 'm.xar_id');
+        $q->join('p.xar_pid', 'acl.xar_permid');
+        $q->eq('acl.xar_partid',$this->uid);
+        $q->qecho();exit;
+        if (!$q->run()) return;
+
+        sys::import('modules.privileges.class.privilege');
+        $privileges = array();
+        foreach ($q->output() as $row) {
+            $row['realm'] = is_null($row['realm']) ? 'All' : $row['realm'];
+            $row['parentid'] = 0;
+        }
+        xarVarSetCached($cacheKey,$this->uid,$privileges);
+        return $q->output();
+        */
     }
 
 

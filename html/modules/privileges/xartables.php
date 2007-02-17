@@ -29,10 +29,9 @@ function privileges_xartables()
     $roles       = xarDBGetSiteTablePrefix() . '_roles';
     $roleMembers = xarDBGetSiteTablePrefix() . '_rolemembers';
     $acl         = xarDBGetSiteTablePrefix() . '_security_acl';
-    $masks       = xarDBGetSiteTablePrefix() . '_security_masks';
     $instances   = xarDBGetSiteTablePrefix() . '_instances';
     $modules     = xarDBGetSiteTablePrefix() . '_modules';
-    $privsets    = xarDBGetSiteTablePrefix() . '_security_privsets';
+//    $privsets    = xarDBGetSiteTablePrefix() . '_security_privsets';
     $realms      = xarDBGetSiteTablePrefix() . '_security_realms';
     $instances   = xarDBGetSiteTablePrefix() . '_security_instances';
 
@@ -42,10 +41,9 @@ function privileges_xartables()
     $tables['roles']          = $roles;
     $tables['rolemembers']    = $roleMembers;
     $tables['security_acl']   = $acl;
-    $tables['security_masks'] = $masks;
     $tables['instances']      = $instances;
     $tables['modules']        = $modules;
-    $tables['security_privsets']      = $privsets;
+//    $tables['security_privsets']      = $privsets;
     $tables['security_realms']= $realms;
     $tables['security_instances']= $instances;
 

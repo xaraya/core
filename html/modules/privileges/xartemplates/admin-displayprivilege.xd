@@ -5,17 +5,17 @@
 <xar:base-include-javascript module="privileges" filename="xarTree.js" />
 <script type="javascript">
 <!--
-    var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;"); 
+    var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");
     function doOnLoad() {
-    oldOnLoadFunction();      
+    oldOnLoadFunction();
     xarTree_init('PrivilegesTree');
     }
-    var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;"); 
+    var oldOnUnloadFunction = (window.onunload) ? window.onunload : new Function("","return true;");
     function doOnUnload() {
-    oldOnUnloadFunction();      
+    oldOnUnloadFunction();
     xarTree_init('PrivilegesTree');
     }
-    
+
     window.onload = doOnLoad;
     window.onunload = doOnUnload;
 
@@ -59,16 +59,16 @@
             </dt>
             <dd class="active">
                 <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;pid=#$ppid#" class="active"><xar:mlstring>Display</xar:mlstring></a>
-            </dd>    
+            </dd>
             <dd>
                 <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$ppid#"><xar:mlstring>Modify</xar:mlstring></a>
-            </dd>    
+            </dd>
             <dd>
                 <a href="&xar-modurl-privileges-admin-deleteprivilege;&amp;pid=#$ppid#"><xar:mlstring>Delete</xar:mlstring></a>
-            </dd>    
+            </dd>
             <dd>
                 <a href="&xar-modurl-privileges-admin-viewroles;&amp;pid=#$ppid#"><xar:mlstring>Groups/Users</xar:mlstring></a>
-            </dd>    
+            </dd>
         </dl>
     </div>
 
@@ -79,27 +79,27 @@
         <span>#$pname#</span>
       </div>
 
-      <xar:if condition="$ptype eq 'empty'">
+      <xar:if condition="$ptype eq null">
         <p>
           <xar:mlstring>This is an empty container for other privileges.</xar:mlstring>
         </p>
       </xar:if>
-      
+
       <div class="xar-form-input-wrapper">
         <label class="xar-form-label"><xar:mlstring>Realm:</xar:mlstring></label>
         <span>#$prealm#</span>
       </div>
-      
+
       <div class="xar-form-input-wrapper">
         <label class="xar-form-label"><xar:mlstring>Module:</xar:mlstring></label>
         <span>#$pmodule#</span>
       </div>
-      
+
       <div class="xar-form-input-wrapper">
         <label class="xar-form-label"><xar:mlstring>Component:</xar:mlstring></label>
         <span>#$pcomponent#</span>
       </div>
-      
+
       <div class="xar-form-input-wrapper">
         <label class="xar-form-label"><xar:mlstring>Level:</xar:mlstring></label>
         <span>
@@ -124,14 +124,14 @@
           </xar:if>
         </span>
       </div>
-      
+
       <div class="xar-form-input-wrapper">
         <label class="xar-form-label"><xar:mlstring>Instances:</xar:mlstring></label>
         <span>#$instance#</span>
       </div>
     </fieldset>
     <br class="xar-clearboth" />
-      
+
     <fieldset>
       <legend>
         <xar:ml>

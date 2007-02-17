@@ -251,18 +251,7 @@ class xarQuery extends Object
     function eq($field1,$field2)
     {
         $key = $this->_addcondition();
-/*
-        $limit = count($this->conditions);
-        for ($i=0;$i<$limit;$i++) {
-            if ($this->conditions[$i]['field1'] == $field1) {
-                $this->conditions[$i]=array('field1' => $field1,
-                                            'field2' => $field2,
-                                            'op' => '=');
-                return;
-            }
-        }
-*/
-       $this->conditions[$key]=array('field1' => $field1,
+        $this->conditions[$key]=array('field1' => $field1,
                                   'field2' => $field2,
                                   'op' => '=');
         return $key;

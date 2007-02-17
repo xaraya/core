@@ -19,13 +19,6 @@
  */
 function installer_init()
 {
-    /*********************************************************************
-    * Register the module components that are privileges objects
-    * Format is
-    * register(Name,Realm,Module,Component,Instance,Level,Description)
-    *********************************************************************/
-
-    xarInstallAPIFunc('initialise', array('directory' => 'base','initfunc'  => 'init'));
     // Initialisation successful
     return true;
 }

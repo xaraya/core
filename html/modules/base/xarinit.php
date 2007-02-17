@@ -233,94 +233,10 @@ function base_init()
     $query = xarDBCreateTable($templateTagsTable,$fields);
     $dbconn->Execute($query);
 
-    // {ML_dont_parse 'includes/xarMod.php'}
-    sys::import('xaraya.xarMod');
-
     // Start Modules Support
     $systemArgs = array('enableShortURLsSupport' => false,
                         'generateXMLURLs' => false);
     xarMod::init($systemArgs);
-
-    /**************************************************************
-     * Install modules table and insert the modules module
-     **************************************************************/
-    xarInstallAPIFunc('initialise', array('directory' => 'modules', 'initfunc'  => 'init'));
-
-    /****************************************************************
-     * Install roles module and set up default roles
-     ****************************************************************/
-    xarInstallAPIFunc('initialise', array('directory' => 'roles','initfunc'  => 'init'));
-
-    /**************************************************************
-     * Install privileges module and setup default privileges
-     **************************************************************/
-    xarInstallAPIFunc('initialise', array('directory' => 'privileges','initfunc'  => 'init'));
-
-    $modulesTable = $systemPrefix .'_modules';
-
-    $newModSql   = "INSERT INTO $modulesTable
-                    (xar_name, xar_regid, xar_directory,
-                     xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable, xar_state)
-                    VALUES (?,?,?,?,?,?,?,?,?,?)";
-    $newStmt     = $dbconn->prepareStatement($newModSql);
-
-
-    $modules = array('authsystem','roles','privileges','base','installer','blocks','themes');
-    // Series of updates, begin transaction
-    try {
-        $dbconn->begin();
-        foreach($modules as $index => $modName) {
-            // Insert module
-            $modversion=array();$bindvars = array();
-            // NOTE: We can not use the sys::import here, since the variable scope is important.
-            include_once "modules/$modName/xarversion.php";
-            $bindvars = array($modName,
-                              $modversion['id'],       // regid, from xarversion
-                              $modName,
-                              $modversion['version'],
-                              1,
-                              $modversion['class'],
-                              $modversion['category'],
-                              isset($modversion['admin'])?$modversion['admin']:0,
-                              isset($modversion['user'])?$modversion['user']:0,
-                              3);
-            $result = $newStmt->executeUpdate($bindvars);
-            $newModId = $dbconn->getLastId($tables['modules']);
-        }
-        $dbconn->commit();
-    } catch (Exception $e) {
-        $dbconn->rollback();
-        throw $e;
-    }
-
-    /**************************************************************
-     * Install the blocks module
-     **************************************************************/
-    // FIXME: the installation of the blocks module depends on the modules module
-    // to be present, doh !
-    xarInstallAPIFunc('initialise', array('directory'=>'blocks', 'initfunc'=>'init'));
-
-    /**************************************************************
-    * Install the authsystem module
-    **************************************************************/
-    xarInstallAPIFunc('initialise', array('directory'=>'authsystem', 'initfunc'=>'init'));
-
-    /**************************************************************
-     * Install the themes module
-     **************************************************************/
-    xarInstallAPIFunc('initialise', array('directory'=>'themes', 'initfunc'=>'init'));
-
-    // Fill language list(?)
-
-    // TODO: move this to some common place in Xaraya ?
-    // Register BL user tags
-    // Include a JavaScript file in a page
-    xarTplRegisterTag('base', 'base-include-javascript', array(),'base_javascriptapi_handlemodulejavascript');
-    // Render JavaScript in a page
-    xarTplRegisterTag('base', 'base-render-javascript', array(),'base_javascriptapi_handlerenderjavascript');
-
-    // TODO: is this is correct place for a default value for a modvar?
-    xarModSetVar('base', 'AlternatePageTemplate', 'homepage');
 
     // Initialisation successful
     return true;

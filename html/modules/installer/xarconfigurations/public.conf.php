@@ -17,7 +17,7 @@
 
 $configuration_name = xarML('Public Site - modules and privilege appropriate for open access');
 
-function installer_public_moduleoptions() 
+function installer_public_moduleoptions()
 {
     return array(
         array('name' => "autolinks",            'regid' => 11),
@@ -38,7 +38,7 @@ function installer_public_moduleoptions()
     );
 }
 
-function installer_public_privilegeoptions() 
+function installer_public_privilegeoptions()
 {
     return array(
                   array(
@@ -87,13 +87,13 @@ function installer_public_configuration_load($args)
 
 function installer_public_commentnoncore()
 {
-    xarRegisterPrivilege('CommentNonCore','All','empty','All','All','ACCESS_NONE','Read access only to none-core modules');
+    xarRegisterPrivilege('CommentNonCore','All',null,'All','All','ACCESS_NONE','Read access only to none-core modules');
     xarRegisterPrivilege('CommentAccess','All','All','All','All','ACCESS_COMMENT','Comment access to all modules');
-    xarRegisterPrivilege('ViewRegistrationLogin','All','registration','Block','rlogin:Login:All','ACCESS_OVERVIEW','View the User Access block');
+//    xarRegisterPrivilege('ViewRegistrationLogin','All','registration','Block','rlogin:Login:All','ACCESS_OVERVIEW','View the User Access block');
     xarMakePrivilegeRoot('CommentNonCore');
     xarMakePrivilegeRoot('CommentAccess');
     xarMakePrivilegeMember('CommentAccess','CommentNonCore');
-    xarMakePrivilegeMember('CommentAccess','ViewRegistrationLogin');
+//    xarMakePrivilegeMember('CommentAccess','ViewRegistrationLogin');
     xarMakePrivilegeMember('DenyPrivileges','CommentNonCore');
     //xarMakePrivilegeMember('DenyAdminPanels','CommentNonCore');
     xarMakePrivilegeMember('ViewAuthsystem','CommentNonCore');
@@ -105,7 +105,7 @@ function installer_public_commentnoncore()
 
 function installer_public_moderatenoncore()
 {
-    xarRegisterPrivilege('ModerateNonCore','All','empty','All','All','ACCESS_NONE','Read access only to none-core modules');
+    xarRegisterPrivilege('ModerateNonCore','All',null,'All','All','ACCESS_NONE','Read access only to none-core modules');
     xarRegisterPrivilege('ModerateAccess','All','All','All','All','ACCESS_MODERATE','Moderate access to all modules');
     xarRegisterPrivilege('DenyPrivileges','All','privileges','All','All','ACCESS_NONE','Deny access to the Privileges module');
     //xarRegisterPrivilege('DenyAdminPanels','All','adminpanels','All','All','ACCESS_NONE','Deny access to the AdminPanels module');
@@ -133,7 +133,7 @@ function installer_public_moderatenoncore()
 
 function installer_public_readnoncore()
 {
-    xarRegisterPrivilege('ReadNonCore','All','empty','All','All','ACCESS_NONE','Read access only to none-core modules');
+    xarRegisterPrivilege('ReadNonCore','All',null,'All','All','ACCESS_NONE','Read access only to none-core modules');
     xarRegisterPrivilege('ReadAccess','All','All','All','All','ACCESS_READ','Read access to all modules');
     xarRegisterPrivilege('DenyPrivileges','All','privileges','All','All','ACCESS_NONE','Deny access to the Privileges module');
    // xarRegisterPrivilege('DenyAdminPanels','All','adminpanels','All','All','ACCESS_NONE','Deny access to the AdminPanels module');
@@ -159,7 +159,7 @@ function installer_public_readnoncore()
 }
 function installer_public_readnoncore2()
 {
-    xarRegisterPrivilege('ReadNonCore','All','empty','All','All','ACCESS_NONE','Read access only to none-core modules');
+    xarRegisterPrivilege('ReadNonCore','All',null,'All','All','ACCESS_NONE','Read access only to none-core modules');
     xarRegisterPrivilege('ReadAccess','All','All','All','All','ACCESS_READ','Read access to all modules');
     xarMakePrivilegeMember('ReadAccess','ReadNonCore');
     xarMakePrivilegeMember('DenyPrivileges','ReadNonCore');

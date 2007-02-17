@@ -415,13 +415,66 @@ function installer_admin_phase5()
     sys::import('xaraya.xarSecurity');
 //    xarSecurity_init();
 
-    // Load in modules/installer/xarinit.php and start the install
-    // This effectively initializes the base module.
-    if (!xarInstallAPIFunc('initialise',
-                           array('directory' => 'installer',
-                                 'initfunc'  => 'init'))) {
-        return;
+    sys::import('xaraya.xarMod');
+
+    $modules = array('base','modules','roles','privileges');
+    foreach ($modules as $module)
+        if (!xarInstallAPIFunc('initialise', array('directory' => $module,'initfunc'  => 'init'))) return;;
+
+    $systemPrefix = xarDBGetSystemTablePrefix();
+    $modulesTable = $systemPrefix .'_modules';
+    $tables =& xarDBGetTables();
+
+    $newModSql   = "INSERT INTO $modulesTable
+                    (xar_name, xar_regid, xar_directory,
+                     xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable, xar_state)
+                    VALUES (?,?,?,?,?,?,?,?,?,?)";
+    $newStmt     = $dbconn->prepareStatement($newModSql);
+
+
+    $modules = array('authsystem','roles','privileges','base','installer','blocks','themes');
+    // Series of updates, begin transaction
+    try {
+        $dbconn->begin();
+        foreach($modules as $index => $modName) {
+            // Insert module
+            $modversion=array();$bindvars = array();
+            // NOTE: We can not use the sys::import here, since the variable scope is important.
+            include_once "modules/$modName/xarversion.php";
+            $bindvars = array($modName,
+                              $modversion['id'],       // regid, from xarversion
+                              $modName,
+                              $modversion['version'],
+                              1,
+                              $modversion['class'],
+                              $modversion['category'],
+                              isset($modversion['admin'])?$modversion['admin']:0,
+                              isset($modversion['user'])?$modversion['user']:0,
+                              3);
+            $result = $newStmt->executeUpdate($bindvars);
+            $newModId = $dbconn->getLastId($tables['modules']);
+        }
+        $dbconn->commit();
+    } catch (Exception $e) {
+        $dbconn->rollback();
+        throw $e;
     }
+
+    $modules = array('blocks','authsystem','themes');
+    foreach ($modules as $module)
+        if (!xarInstallAPIFunc('initialise', array('directory' => $module,'initfunc'  => 'init'))) return;;
+
+    if (!xarInstallAPIFunc('initialise', array('directory'=>'authsystem', 'initfunc'=>'activate'))) return;;
+
+    // TODO: move this to some common place in Xaraya ?
+    // Register BL user tags
+    // Include a JavaScript file in a page
+    xarTplRegisterTag('base', 'base-include-javascript', array(),'base_javascriptapi_handlemodulejavascript');
+    // Render JavaScript in a page
+    xarTplRegisterTag('base', 'base-render-javascript', array(),'base_javascriptapi_handlerenderjavascript');
+
+    // TODO: is this is correct place for a default value for a modvar?
+    xarModSetVar('base', 'AlternatePageTemplate', 'homepage');
 
     // If we are here, the base system has completed
     // We can now pass control to xaraya.
@@ -542,12 +595,10 @@ function installer_admin_bootstrap()
     // Initialise and activate mail
     $regid = xarModGetIDFromName('mail');
     if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid)))
-         throw new Exception("Initalising m with regid : $regid failed");
-        if (!xarModAPIFunc('modules', 'admin', 'initialise', array('regid' => $regid)))
-            throw new Exception("Initalising module with regid : $regid failed");
-        // Activate the module
-        if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid)))
-            throw new Exception("Activating module with regid: $regid failed");
+        throw new Exception("Initalising module with regid : $regid failed");
+    // Activate the module
+    if (!xarModAPIFunc('modules', 'admin', 'activate', array('regid' => $regid)))
+        throw new Exception("Activating module with regid: $regid failed");
 
     //initialise and activate base module by setting the states
     $baseId = xarModGetIDFromName('base');
@@ -887,16 +938,15 @@ function installer_admin_confirm_configuration()
         $data['missing'] = implode(', ',$awolmodules);
         $data['configuration'] = $configuration;
         return $data;
-    }
-    else {
+    } else {
         /*********************************************************************
         * Empty the privilege tables
         *********************************************************************/
-        $dbconn =& xarDBGetConn();
+/*         $dbconn =& xarDBGetConn();
         $sitePrefix = xarDBGetSiteTablePrefix();
         try {
             $dbconn->begin();
-            $query = "DELETE FROM " . $sitePrefix . '_privileges';
+           $query = "DELETE FROM " . $sitePrefix . '_privileges WHERE type = ' . xarMasks::RIVILEGES_PRIVILEGETYPE;
             $dbconn->Execute($query);
             $query = "DELETE FROM " . $sitePrefix . '_privmembers';
             $dbconn->Execute($query);
@@ -907,6 +957,7 @@ function installer_admin_confirm_configuration()
             $dbconn->rollback();
             throw $e;
         }
+        */
 
         /*********************************************************************
         * Enter some default privileges
@@ -915,7 +966,7 @@ function installer_admin_confirm_configuration()
         *********************************************************************/
 
         xarRegisterPrivilege('Administration','All','All','All','All','ACCESS_ADMIN',xarML('Admin access to all modules'));
-        xarRegisterPrivilege('GeneralLock','All','empty','All','All','ACCESS_NONE',xarML('A container privilege for denying access to certain roles'));
+        xarRegisterPrivilege('GeneralLock','All',null,'All','All','ACCESS_NONE',xarML('A container privilege for denying access to certain roles'));
         xarRegisterPrivilege('LockMyself','All','roles','Roles','Myself','ACCESS_NONE',xarML('Deny access to Myself role'));
         xarRegisterPrivilege('LockEverybody','All','roles','Roles','Everybody','ACCESS_NONE',xarML('Deny access to Everybody role'));
         xarRegisterPrivilege('LockAnonymous','All','roles','Roles','Anonymous','ACCESS_NONE',xarML('Deny access to Anonymous role'));
@@ -1464,7 +1515,7 @@ function installer_admin_upgrade2()
         }
     }
 
-      // Check the installed privs and masks.
+/*      // Check the installed privs and masks.
     $content .= "<p><strong>Checking Privilege Structure</strong></p>";
 
     $upgrade['priv_masks'] = xarMaskExists('ViewPrivileges','privileges','Realm');
@@ -1480,7 +1531,7 @@ function installer_admin_upgrade2()
     } else {
         $content .= "<p>Privileges realm masks have been created previously, moving to next check. </p>";
     }
-
+*/
     $content .= "<p><strong>Updating Roles and Authsystem for changes in User Login and Authentication</strong></p>";
 
     //Check for allow registration in existing Roles module

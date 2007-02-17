@@ -30,7 +30,7 @@ function mail_init()
     xarModSetVar('mail', 'smtpPort', '25');
     xarModSetVar('mail', 'smtpHost', 'Your SMTP Host');
     xarModSetVar('mail', 'encoding', '8bit');
-    xarModSetVar('mail', 'html', false);  
+    xarModSetVar('mail', 'html', false);
 
     // when a module item is created
     if (!xarModRegisterHook('item', 'create', 'API',
@@ -113,7 +113,7 @@ function mail_upgrade($oldVersion)
         // Try to find a reasonable admin (the designated one, for example ;-) )
         $desigAdmin = xarModGetVar('roles','admin');
         // In current xar this always fails as mail is installed before roles gets initialized
-        // in the off chance someone is actually ugrading, we leave it in. 
+        // in the off chance someone is actually ugrading, we leave it in.
         if(!empty($desigAdmin)) {
             xarModSetVar('mail','admin_outgoing', $desigAdmin);
         }
@@ -144,7 +144,7 @@ function mail_delete()
     xarModDelVar('mail', 'smtpPort');
     xarModDelVar('mail', 'smtpHost');
     xarModDelVar('mail', 'encoding');
-    xarModDelVar('mail', 'ShowTemplates');  
+    xarModDelVar('mail', 'ShowTemplates');
     xarModDelVar('mail', 'ShowTemplates');
     xarModDelVar('mail', 'suppresssending');
     xarModDelVar('mail', 'redirectsending');

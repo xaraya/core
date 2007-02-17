@@ -23,7 +23,7 @@ function privileges_admin_updateprivilege()
     if(!xarVarFetch('pid',        'isset', $pid,        NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('pname',      'isset', $name,       NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('prealm',     'isset', $realm,     'All', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('pmodule',    'isset', $module,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('pmodule',    'isset', $module,     0,    XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('pcomponent', 'isset', $component,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('ptype',      'isset', $type,       NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('plevel',     'isset', $level,      NULL, XARVAR_DONT_SET)) {return;}
@@ -44,21 +44,17 @@ function privileges_admin_updateprivilege()
 // call the Privileges class and update the values
 
     sys::import('modules.privileges.class.privileges');
+    $priv = xarPrivileges::getPrivilege($pid);
     if ($type =="empty") {
 
 // this is just a container for other privileges
-        $privs = new xarPrivileges();
-        $priv = $privs->getPrivilege($pid);
         $priv->setName($name);
         $priv->setRealm('All');
-        $priv->setModule('empty');
+        $priv->setModule(null);
         $priv->setComponent('All');
         $priv->setInstance('All');
         $priv->setLevel(0);
-    }
-    else {
-        $privs = new xarPrivileges();
-        $priv = $privs->getPrivilege($pid);
+    } else {
         $priv->setName($name);
         $priv->setRealm($realm);
         $priv->setModule($module);

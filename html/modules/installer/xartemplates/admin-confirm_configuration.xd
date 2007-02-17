@@ -23,7 +23,7 @@
                         <xar:if condition="$loop:item['option'] == 'true'">
                             <input type="checkbox" name="chosen[]" id="chosen1_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
                             <xar:else />
-                            <input type="checkbox" name="chosen[]" id="chosen1_#$loop:index#" value="#$loop:item['item']#" />
+                            <input type="checkbox" name="chosen[]" id="chosen1_#$loop:index#" value="#$loop:item['item']#" checked="checked" />
                         </xar:if>
                         <label for="chosen1_#$loop:index#">
                             #$loop:item['comment']#

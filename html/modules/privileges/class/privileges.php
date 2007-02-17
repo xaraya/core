@@ -74,9 +74,9 @@ class xarPrivileges extends xarMasks
                             xar_instanceparentid, xar_description)
                           VALUES (?,?,?,?,?,?,?,?,?,?)";
                     $modInfo = xarMod_GetBaseInfo($module);
-                    $modId = $modInfo['systemid'];
+                    $modid = $modInfo['systemid'];
                     $bindvars = array(
-                                      $modId, $type, $instance['header'],
+                                      $modid, $type, $instance['header'],
                                       $instance['query'], $instance['limit'],
                                       $propagate, $table2, $childID, $parentID,
                                       $description
@@ -109,10 +109,10 @@ class xarPrivileges extends xarMasks
         try {
             parent::$dbconn->begin();
             $modInfo = xarMod_GetBaseInfo($module);
-            $modId = $modInfo['systemid'];
+            $modid = $modInfo['systemid'];
             $query = "DELETE FROM " . parent::$instancestable . " WHERE xar_modid = ?";
             //Execute the query, bail if an exception was thrown
-            parent::$dbconn->Execute($query,array($modId));
+            parent::$dbconn->Execute($query,array($modid));
             parent::$dbconn->commit();
         } catch (SQLException $e) {
             parent::$dbconn->rollback(); // redundant? we need to investigate concurency and locking
@@ -134,7 +134,7 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    duplicates parts of $privilege->add() method
     */
-    public static function register($name,$realm,$module,$component,$instance,$level,$description='')
+    public static function register($name,$realm,$modid=null,$component,$instance,$level,$description='')
     {
         parent::initialize();
 
@@ -144,12 +144,20 @@ class xarPrivileges extends xarMasks
             $result = $stmt->executeQuery(array($realm),ResultSet::FETCHMODE_ASSOC);
             if($result->next()) $realmid = $result->getInt('xar_rid');
         }
-        $query = "INSERT INTO " . parent::$privilegestable . " (
-                    xar_name, xar_realmid, xar_module, xar_component,
-                    xar_instance, xar_level, xar_description)
-                  VALUES (?,?,?,?,?,?,?)";
-        $bindvars = array($name, $realmid, $module, $component,
-                          $instance, $level, $description);
+/*        if (is_null($modid)) {
+            $modid = null;
+        } elseif ($modid == "All") {
+            $modid = xarPrivileges::PRIVILEGES_ALL;
+        } else {
+            $modInfo = xarMod_GetBaseInfo($modid);
+            $modid = is_null($modInfo['systemid']) ? 0 : $modInfo['systemid'];
+        }
+*/        $query = "INSERT INTO " . parent::$privilegestable . " (
+                    xar_name, xar_realmid, xar_modid, xar_component,
+                    xar_instance, xar_level, xar_description, type)
+                  VALUES (?,?,?,?,?,?,?,?)";
+        $bindvars = array($name, $realmid, $modid, $component,
+                          $instance, $level, $description, parent::PRIVILEGES_PRIVILEGETYPE);
 
         parent::$dbconn->Execute($query,$bindvars);
         return true;
@@ -214,17 +222,40 @@ class xarPrivileges extends xarMasks
 
         if (empty($allprivileges)) {
             xarLogMessage('PRIV: getting all privs, once!');
+            /*
+            $q = new xarQuery();
+            $q->addtable(parent::$privmemberstable, 'pm');
+            $q->addtable(parent::$realmstable, 'r');
+            $q->addtable(parent::$modulestable, 'm');
+            $q->addfield('p.xar_pid AS pid');
+            $q->addfield('p.xar_name AS name');
+            $q->addfield('r.xar_name AS realm');
+            $q->addfield('m.xar_name AS module');
+            $q->addfield('p.xar_component AS component');
+            $q->addfield('p.xar_instance AS instance');
+            $q->addfield('p.xar_level AS level');
+            $q->addfield('p.xar_description AS description');
+            $q->addfield('pm.xar_parentid AS parentid');
+            $q->leftjoin('p.xar_realmid', 'r.xar_rid');
+            $q->join('p.xar_pid', 'pm.xar_pid');
+            $q->join('p.xar_modid', 'm.xar_id');
+            $q->eq('p.type', self::PRIVILEGES_PRIVILEGETYPE);
+            $q->setorder('p.xar_name');
+            if (!$q->run()) return;
+            $allprivileges = $q->output();
+*/
             $query = "SELECT p.xar_pid, p.xar_name, r.xar_name,
-                             p.xar_module, p.xar_component, p.xar_instance,
+                             m.xar_name, p.xar_component, p.xar_instance,
                              p.xar_level,  p.xar_description, pm.xar_parentid
                       FROM " . parent::$privmemberstable . " pm, ".
                       parent::$privilegestable . " p LEFT JOIN ". parent::$realmstable . " r ON p.xar_realmid = r.xar_rid
+                      LEFT JOIN ". parent::$modulestable . " m ON p.xar_modid = m.xar_id
                       WHERE p.xar_pid = pm.xar_pid
-                      ORDER BY p.xar_name";
+                      AND type = " . self::PRIVILEGES_PRIVILEGETYPE .
+                      " ORDER BY p.xar_name";
             $stmt = parent::$dbconn->prepareStatement($query);
             // The fetchmode *needed* to be here, dunno why. Exception otherwise
             $result = $stmt->executeQuery($query,ResultSet::FETCHMODE_NUM);
-
             while($result->next()) {
                 list($pid, $name, $realm, $module, $component, $instance, $level,
                         $description,$parentid) = $result->fields;
@@ -263,11 +294,11 @@ class xarPrivileges extends xarMasks
     {
         parent::initialize();
         // Base query
-        $query = "SELECT p.xar_pid, p.xar_name,  r.xar_name,
-                         p.xar_module,  p.xar_component, p.xar_instance,
+        $query = "SELECT DISTINCT p.xar_pid, p.xar_name,  r.xar_name,
+                         p.xar_modid,  p.xar_component, p.xar_instance,
                          p.xar_level, p.xar_description, pm.xar_parentid
                   FROM " . parent::$privmemberstable . " pm, " .
-                           parent::$privilegestable  . " p LEFT JOIN " . parent::$realmstable . " r ON p.xar_realmid = r.xar_rid ";
+                           parent::$privilegestable  . " p LEFT JOIN " . parent::$realmstable . " r ON p.xar_realmid = r.xar_rid";
 
         if($arg == "all") {
              $query .= " WHERE p.xar_pid = pm.xar_pid AND
@@ -278,9 +309,11 @@ class xarPrivileges extends xarMasks
                               p.xar_pid = acl.xar_permid AND
                               pm.xar_parentid = ? ";
         }
+        $query .=" AND p.type = ?";
         $query .=" ORDER BY p.xar_name";
+
         $stmt = parent::$dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array(0));
+        $result = $stmt->executeQuery(array(0,self::PRIVILEGES_PRIVILEGETYPE));
 
         $privileges = array();
         $pids = array();
@@ -406,21 +439,25 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    this isn't really the right place for this function
     */
-    public static function getcomponents($module)
+    public static function getcomponents($modid=null)
     {
+        if (is_null($modid)) return array();
+        if (!empty($modid)) {
+            $modInfo = xarMod_GetBaseInfo(xarModGetNameFromID($modid));
+            $modid = $modInfo['systemid'];
+        }
+
         parent::initialize();
-        $modInfo = xarMod_GetBaseInfo($module);
-        $modId = $modInfo['systemid'];
         $query = "SELECT DISTINCT xar_component
                   FROM " . parent::$instancestable . "
-                  WHERE xar_modid= ?
+                  WHERE xar_modid = ?
                   ORDER BY xar_component";
         $stmt = parent::$dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array($modId));
+        $result = $stmt->executeQuery(array($modid));
         $iter = $result->next();
 
         $components = array();
-        if ($module ==''){
+        if (empty($modid)){
             $components[] = array('id' => -2,
                                'name' => 'All');
         }
@@ -465,11 +502,15 @@ class xarPrivileges extends xarMasks
      * @throws  none
      * @todo    this isn't really the right place for this function
     */
-    public static function getinstances($module, $component)
+    public static function getinstances($modid=null, $component)
     {
+        if (is_null($modid)) return array();
+        if (!empty($modid)) {
+            $modInfo = xarMod_GetBaseInfo(xarModGetNameFromID($modid));
+            $modid = $modInfo['systemid'];
+        }
+
         parent::initialize();
-        $modInfo = xarMod_GetBaseInfo($module);
-        $modId = $modInfo['systemid'];
 
         if ($component =="All") {
             $componentstring = "";
@@ -479,9 +520,9 @@ class xarPrivileges extends xarMasks
         }
         $query = "SELECT xar_header, xar_query, xar_limit
                   FROM " . parent::$instancestable ."
-                  WHERE xar_modid= ? AND xar_component= ?
+                  WHERE xar_modid = ? AND xar_component = ?
                   ORDER BY xar_component,xar_iid";
-        $bindvars = array($modId,$component);
+        $bindvars = array($modid,$component);
 
         $instances = array();
         $stmt = parent::$dbconn->prepareStatement($query);
@@ -508,7 +549,7 @@ class xarPrivileges extends xarMasks
             $result1 = $stmt1->executeQuery();
 
             $dropdown = array();
-            if ($module ==''){
+            if (empty($modid)){
                 $dropdown[] = array('id' => -2,'name' => '');
             }  elseif($result->EOF) { // FIXME: this never gets executed it think? it's outside the while condition.
                 $dropdown[] = array('id' => -1,'name' => 'All');
@@ -632,12 +673,15 @@ class xarPrivileges extends xarMasks
             return xarVarGetCached($cacheKey,$pid);
         }
         // Need to get it
-        $query = "SELECT p.xar_pid, p.xar_name, r.xar_name, p.xar_module, p.xar_component, p.xar_instance, p.xar_level, p.xar_description
+        $query = "SELECT p.xar_pid, p.xar_name, r.xar_name, p.xar_modid, p.xar_component, p.xar_instance, p.xar_level, p.xar_description
                   FROM " . parent::$privilegestable . " p LEFT JOIN ". parent::$realmstable ." r ON p.xar_realmid = r.xar_rid
-                  WHERE xar_pid = ?";
+                  WHERE type = ?";
+        if(is_numeric($pid)) $query .= " AND p.xar_pid = ?";
+        else  $query .= " AND p.xar_name = ?";
+
         if(!isset($stmt)) $stmt = parent::$dbconn->prepareStatement($query);
         //Execute the query, bail if an exception was thrown
-        $result = $stmt->executeQuery(array($pid),ResultSet::FETCHMODE_NUM);
+        $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE,$pid),ResultSet::FETCHMODE_NUM);
 
         if ($result->next()) {
             list($pid,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
@@ -678,11 +722,11 @@ class xarPrivileges extends xarMasks
         static $stmt = null;
 
         parent::initialize();
-        $query = "SELECT * FROM " . parent::$privilegestable . " WHERE xar_name = ?";
+        $query = "SELECT * FROM " . parent::$privilegestable . " WHERE type = ? AND xar_name = ?";
         if(!isset($stmt)) $stmt = parent::$dbconn->prepareStatement($query);
 
         //Execute the query, bail if an exception was thrown
-        $result = $stmt->executeQuery(array($name));
+        $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE, $name));
 
         if ($result->first()) {
             list($pid,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
@@ -720,13 +764,13 @@ class xarPrivileges extends xarMasks
 
         parent::initialize();
         $privileges = array();
-        $query = "SELECT * FROM " . parent::$privilegestable . " WHERE xar_module = ?";
+        $query = "SELECT * FROM " . parent::$privilegestable . " WHERE type = ? AND xar_modid = ?";
         //Execute the query, bail if an exception was thrown
         if(!isset($stmt)) $stmt = parent::$dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array($module));
+        $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE, $module));
 
         while ($result->next()) {
-            list($pid,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
+            list($pid,$name,$realm,$modid,$component,$instance,$level,$description) = $result->fields;
             $pargs = array(
                 'pid'         => $pid,
                 'name'        => $name,
@@ -761,12 +805,16 @@ class xarPrivileges extends xarMasks
     */
     public static function makeMember($childname,$parentname)
     {
+        $parent = self::getPrivilege($parentname);
+        $child = self::getPrivilege($childname);
+        return $parent->addMember($child);
+
         parent::initialize();
         // get the data for the parent object
         $query = "SELECT *
-                  FROM " . parent::$privilegestable . " WHERE xar_name = ?";
+                  FROM " . parent::$privilegestable . " WHERE type = ? AND xar_name = ?";
         //Execute the query, bail if an exception was thrown
-        $result = parent::$dbconn->Execute($query,array($parentname));
+        $result = parent::$dbconn->Execute($query,array(self::PRIVILEGES_PRIVILEGETYPE, $parentname));
 
 
 // create the parent object
@@ -783,9 +831,9 @@ class xarPrivileges extends xarMasks
         $parent =  new xarPrivilege($pargs);
 
 // get the data for the child object
-        $query = "SELECT * FROM " . parent::$privilegestable . " WHERE xar_name = ?";
+        $query = "SELECT * FROM " . parent::$privilegestable . " WHERE type = ? AND xar_name = ?";
         //Execute the query, bail if an exception was thrown
-        $result = parent::$dbconn->Execute($query,array($childname));
+        $result = parent::$dbconn->Execute($query,array(self::PRIVILEGES_PRIVILEGETYPE, $childname));
 
 
 // create the child object

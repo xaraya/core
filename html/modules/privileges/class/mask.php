@@ -11,6 +11,9 @@
 */
 class xarMask extends Object
 {
+    const PRIVILEGES_PRIVILEGETYPE = 2;
+    const PRIVILEGES_MASKTYPE = 3;
+
     public $sid;           //the id of this privilege
     public $name;          //the name of this privilege
     public $realm;         //the realm of this privilege
@@ -63,7 +66,7 @@ class xarMask extends Object
         $display = $this->getName();
         $display .= "-" . strtolower($this->getLevel());
         $display .= ":" . strtolower($this->getRealm());
-        $display .= ":" . strtolower($this->getModule());
+        $display .= ":" . $this->getModule();
         $display .= ":" . strtolower($this->getComponent());
         $display .= ":" . strtolower($this->getInstance());
         return $display;
@@ -92,7 +95,7 @@ class xarMask extends Object
             $normalform = array();
             $normalform[] = strtolower($this->getLevel());
             $normalform[] = strtolower($this->getRealm());
-            $normalform[] = strtolower($this->getModule());
+            $normalform[] = $this->getModule();
             $normalform[] = strtolower($this->getComponent());
             $thisinstance = strtolower($this->getInstance());
             $thisinstance = str_replace('myself',xarSessionGetVar('uid'),$thisinstance);
@@ -147,7 +150,6 @@ class xarMask extends Object
         for ($i=1; $i < $p1count; $i++) {
             $match = $match && ($p1[$i]==$p2[$i]);
         }
-//        echo $this->present() . $mask->present() . $match;exit;
         return $match;
     }
 
@@ -206,10 +208,11 @@ class xarMask extends Object
         if (($p1[1] != 'all') && ($fails)) return false;
 
         // match module and component. bail if no match.
-        for ($i=2;$i<4;$i++) {
-            if (($p1[$i] != 'all') && ($p1[$i]!=$p2[$i])) {
-                return false;
-            }
+        if (($p1[2] == null) || (($p1[2] != xarMasks::PRIVILEGES_ALL) && ($p1[2]!=$p2[2]))) {
+            return false;
+        }
+        if (($p1[3] != 'all') && ($p1[3]!=$p2[3])) {
+            return false;
         }
 
         // now match the instances

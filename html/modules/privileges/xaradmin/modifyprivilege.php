@@ -18,7 +18,7 @@ function privileges_admin_modifyprivilege()
     if(!xarVarFetch('pid',           'isset', $pid,          NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('pname',         'isset', $name,         NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('prealm',        'isset', $realm,        NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('pmodule',       'isset', $module,       NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('pmodule',       'isset', $data['pmodule'],    0,          XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('pcomponent',    'isset', $component,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('poldcomponent', 'isset', $oldcomponent, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('ptype',         'isset', $type,         NULL, XARVAR_DONT_SET)) {return;}
@@ -35,9 +35,7 @@ function privileges_admin_modifyprivilege()
 
 //Call the Privileges class and get the privilege to be modified
     sys::import('modules.privileges.class.privileges');
-    $privs = new xarPrivileges();
-    $priv = $privs->getPrivilege($pid);
-
+    $priv = xarPrivileges::getPrivilege($pid);
 //Get the array of parents of this privilege
     $parents = array();
     foreach ($priv->getParents() as $parent) {
@@ -50,7 +48,7 @@ function privileges_admin_modifyprivilege()
 // need this for the dropdown display
     $privileges = array();
     $names = array();
-    foreach($privs->getprivileges() as $temp){
+    foreach(xarPrivileges::getprivileges() as $temp){
         $nam = $temp['name'];
         if (!in_array($nam,$names) && $temp['pid'] != $pid){
             $names[] = $nam;
@@ -71,8 +69,10 @@ function privileges_admin_modifyprivilege()
     if(isset($realm)) {$data['prealm'] = $realm;}
     else {$data['prealm'] = $priv->getRealm();}
 
-    if(isset($module)) {$data['pmodule'] = strtolower($module);}
-    else {$data['pmodule'] = $priv->getModule();}
+    if(!isset($module)) {
+        $info = xarModAPIFunc('privileges','admin','get',array('itemid' => $pid));
+        $data['pmodule'] = $info['moduleid'];
+    }
 
     if(isset($component)) {$data['pcomponent'] = $component;}
     else {$data['pcomponent'] = $priv->getComponent();}
@@ -80,7 +80,7 @@ function privileges_admin_modifyprivilege()
     if(isset($level)) {$data['plevel'] = $level;}
     else {$data['plevel'] = $priv->getLevel();}
 
-    $instances = $privs->getinstances($data['pmodule'],$data['pcomponent']);
+    $instances = xarPrivileges::getinstances($data['pmodule'],$data['pcomponent']);
     $numInstances = count($instances); // count the instances to use in later loops
 
     if(count($instance) > 0) {$default = $instance;}
@@ -93,9 +93,7 @@ function privileges_admin_modifyprivilege()
 
 // send to external wizard if necessary
     if (!empty($instances['external']) && $instances['external'] == "yes") {
-//    xarResponseRedirect($instances['target'] . "&extpid=$pid&extname=$name&extrealm=$realm&extmodule=$module&extcomponent=$component&extlevel=$level");
-//        return;
-        $data['target'] = $instances['target'] . '&amp;extpid='.$data['ppid'].'&amp;extname='.$data['pname'].'&amp;extrealm='.$data['prealm'].'&amp;extmodule='.$data['pmodule'].'&amp;extcomponent='.$data['pcomponent'].'&amp;extlevel='.$data['plevel'];
+        $data['target'] = $instances['target'] . '&amp;extpid='.$data['ppid'].'&amp;extname='.$data['pname'].'&amp;extrealm='.$data['prealm'].'&amp;extmodule='.xarModGetNameFromID($data['pmodule']).'&amp;extcomponent='.$data['pcomponent'].'&amp;extlevel='.$data['plevel'];
         $data['target'] .= '&amp;extinstance=' . urlencode(join(':',$default));
         $data['curinstance'] = join(':',$default);
         $data['instances'] = array();
@@ -119,9 +117,8 @@ function privileges_admin_modifyprivilege()
     $data['authid'] = xarSecGenAuthKey();
     $data['parents'] = $parents;
     $data['privileges'] = $privileges;
-    $data['realms'] = $privs->getrealms();
-    $data['modules'] = $privs->getmodules();
-    $data['components'] = $privs->getcomponents($data['pmodule']);
+    $data['realms'] = xarPrivileges::getrealms();
+    $data['components'] = xarPrivileges::getcomponents($data['pmodule']);
     $data['refreshlabel'] = xarML('Refresh');
     return $data;
 }

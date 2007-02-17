@@ -91,7 +91,7 @@
           </label>
           <input type="text" name="pname" id="pname" value="#$pname#" maxlength="40" class="xar-form-textlong" />
         </div>
-        <xar:if condition="$ptype eq 'empty'">
+        <xar:if condition="$ptype eq null">
           <div class="xar-form-input-wrapper-after">
             <input type="radio" name="ptype" id="ptype1_empty" value="empty" checked="checked" onclick="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();" />
             <label for="ptype1_empty" title="#xarML('This privilege has no children')#">
@@ -137,20 +137,13 @@
           </xar:if>
 
         </xar:if>
-        <xar:if condition="$ptype ne 'empty'">
+        <xar:if condition="$ptype ne null">
         <div class="xar-form-input-wrapper">
           <label for="pmodule" title="#xarML('Module which holds the target component')#" class="xar-form-label">
             <xar:mlstring>Module:</xar:mlstring>
           </label>
-          <select name="pmodule" id="pmodule" onchange="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();">
-            <xar:loop name="$modules">
-              <xar:if condition="strtolower($loop:item['name']) eq strtolower($pmodule)">
-                <option value="#$loop:item['name']#" selected="selected">#$loop:item['display']#</option>
-                <xar:else />
-                <option value="#$loop:item['name']#">#$loop:item['display']#</option>
-              </xar:if>
-            </xar:loop>
-          </select>
+            <xar:set name="onchange">"javascript:this.form.action = '" . xarModURl('privileges','admin','modifyprivilege') . "';this.form.submit();"</xar:set>
+            <xar:data-input type="module" name="pmodule" value="$pmodule" firstline="All" onchange="$onchange" />
         </div>
 
         <div class="xar-form-input-wrapper">

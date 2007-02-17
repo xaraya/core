@@ -37,7 +37,6 @@ function privileges_init()
     $tables['privileges'] = $sitePrefix . '_privileges';
     $tables['privmembers'] = $sitePrefix . '_privmembers';
     $tables['security_acl'] = $sitePrefix . '_security_acl';
-    $tables['security_masks'] = $sitePrefix . '_security_masks';
     $tables['security_instances'] = $sitePrefix . '_security_instances';
     $tables['security_realms']      = $sitePrefix . '_security_realms';
     $tables['security_privsets']      = $sitePrefix . '_security_privsets';
@@ -57,7 +56,7 @@ function privileges_init()
          * prefix_security_instances       - holds module instance definitions
          * prefix_security_realms  - holds realsm info
          ********************************************************************/
-        
+
         /*********************************************************************
          * CREATE TABLE xar_security_realms (
          *  xar_rid int(11) NOT NULL auto_increment,
@@ -72,8 +71,8 @@ function privileges_init()
                                             'null'        => false,    'default'     => ''));
         $query = xarDBCreateTable($tables['security_realms'],$fields);
         $dbconn->Execute($query);
-        
-        
+
+
         /*********************************************************************
          * CREATE TABLE xar_privileges (
          *   xar_pid int(11) NOT NULL auto_increment,
@@ -87,25 +86,25 @@ function privileges_init()
          *   PRIMARY KEY  (xar_pid)
          * )
          *********************************************************************/
-        
+
         $fields = array('xar_pid'   => array('type' => 'integer', 'null' => false, 'default' => '0','increment' => true, 'primary_key' => true),
                         'xar_name'  => array('type' => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
                         'xar_realmid'=>array('type' => 'integer', 'null' => true, 'default' => null),
-                        // TODO: use modid here
-                        'xar_module' => array('type'=> 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
+                        'xar_modid'=>array('type' => 'integer', 'null' => true, 'default' => null),
                         'xar_component' => array('type'  => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
                         'xar_instance' => array('type'   => 'varchar', 'size' => 100, 'null' => false, 'default' => ''),
                         'xar_level' => array('type'      => 'integer', 'null' => false,'default' => '0'),
-                        'xar_description' => array('type'=> 'varchar', 'size' => 255, 'null' => false, 'default'     => ''));
+                        'xar_description' => array('type'=> 'varchar', 'size' => 255, 'null' => false, 'default'     => ''),
+                        'type' => array('type'=> 'integer', 'null' => false, 'default'     => '0'));
         $query = xarDBCreateTable($tables['privileges'],$fields);
         $dbconn->Execute($query);
 
         $index = array('name'      => 'i_'.$sitePrefix.'_privileges_name',
-                       'fields'    => array('xar_name'),
+                       'fields'    => array('xar_name', 'xar_modid', 'type'),
                        'unique'    => true);
         $query = xarDBCreateIndex($tables['privileges'],$index);
         $dbconn->Execute($query);
-        
+
         $index = array('name'      => 'i_'.$sitePrefix.'_privileges_realmid',
                        'fields'    => array('xar_realmid'),
                        'unique'    => false);
@@ -113,7 +112,7 @@ function privileges_init()
         $dbconn->Execute($query);
 
         $index = array('name'      => 'i_'.$sitePrefix.'_privileges_module',
-                       'fields'    => array('xar_module'),
+                       'fields'    => array('xar_modid'),
                        'unique'    => false);
         $query = xarDBCreateIndex($tables['privileges'],$index);
         $dbconn->Execute($query);
@@ -125,7 +124,7 @@ function privileges_init()
         $dbconn->Execute($query);
 
         xarDB::importTables(array('privileges' => xarDBGetSiteTablePrefix() . '_privileges'));
-        
+
         /*********************************************************************
          * CREATE TABLE xar_privmembers (
          *   xar_pid int(11) NOT NULL default '0',
@@ -133,7 +132,7 @@ function privileges_init()
          *   PRIMARY KEY xar_pid (xar_pid,xar_parentid)
          * )
          *********************************************************************/
-        
+
         $query = xarDBCreateTable($tables['privmembers'],
                                   array('xar_pid'       => array('type'        => 'integer',
                                                                  'null'        => false,
@@ -144,15 +143,15 @@ function privileges_init()
                                                                      'default'     => '0',
                                                                      'primary_key' => true)));
         $dbconn->Execute($query);
-        
+
         xarDB::importTables(array('privmembers' => xarDBGetSiteTablePrefix() . '_privmembers'));
-        
+
         $index = array('name'      => 'i_'.$sitePrefix.'_privmembers_pid',
                        'fields'    => array('xar_pid'),
                        'unique'    => false);
         $query = xarDBCreateIndex($tables['privmembers'],$index);
         $dbconn->Execute($query);
-                
+
         $index = array('name'      => 'i_'.$sitePrefix.'_privmembers_parentid',
                        'fields'    => array('xar_parentid'),
                        'unique'    => false);
@@ -166,7 +165,7 @@ function privileges_init()
          *   KEY xar_pid (xar_pid,xar_parentid)
          * )
          *********************************************************************/
-        
+
         $query = xarDBCreateTable($tables['security_acl'],
                                   array('xar_partid'       => array('type'  => 'integer',
                                                                     'null'        => false,
@@ -191,7 +190,7 @@ function privileges_init()
         $dbconn->Execute($query);
 
         xarDB::importTables(array('security_acl' => xarDBGetSiteTablePrefix() . '_security_acl'));
-        
+
         /*********************************************************************
          * CREATE TABLE xar_security_masks (
          *   xar_sid int(11) NOT NULL default '0',
@@ -212,8 +211,8 @@ function privileges_init()
          *   PRIMARY KEY  (xar_sid)
          * )
          *********************************************************************/
-        
-        $fields = array(
+
+/*        $fields = array(
                         'xar_sid'  => array('type'=> 'integer','null'=> false,'default'=>'0','increment'=>true,'primary_key' => true),
                         'xar_name' => array('type'=>'varchar','size'=>100,'null'=>false,'default'=>''),
                         'xar_realmid'=> array('type'=>'integer','null'=>true,'default'=> null),
@@ -236,7 +235,7 @@ function privileges_init()
                        'unique'    => false);
         $query = xarDBCreateIndex($tables['security_masks'],$index);
         $dbconn->Execute($query);
-        
+
         $index = array('name'      => 'i_'.$sitePrefix.'_security_masks_level',
                        'fields'    => array('xar_level'),
                        'unique'    => false);
@@ -244,7 +243,7 @@ function privileges_init()
         $dbconn->Execute($query);
 
         xarDB::importTables(array('security_masks' => xarDBGetSiteTablePrefix() . '_security_masks'));
-        
+*/
         /*********************************************************************
          * CREATE TABLE xar_security_instances (
          *   xar_iid int(11) NOT NULL default '0',
@@ -262,7 +261,7 @@ function privileges_init()
          *   PRIMARY KEY  (xar_sid)
          * )
          *********************************************************************/
-        
+
         $query = xarDBCreateTable($tables['security_instances'],
                                   array('xar_iid'  => array('type'       => 'integer',
                                                             'null'        => false,
@@ -306,11 +305,11 @@ function privileges_init()
                                                                    'size'        => 255,
                                                                    'null'        => false,
                                                                    'default'     => '')));
-        
+
         $dbconn->Execute($query);
-        
+
         xarDB::importTables(array('security_instances' => xarDBGetSiteTablePrefix() . '_security_instances'));
-        
+
         /*********************************************************************
          * CREATE TABLE xar_security_privsets (
          *  xar_uid int(11) NOT NULL auto_increment,
@@ -326,16 +325,16 @@ function privileges_init()
          'increment'   => true,
          'primary_key' => true),
          'xar_set' => array('type'        => 'text')));
-         
+
          TO BE IMPLEMENTED LATER
          $result = $dbconn->Execute($query);
-         
+
          xarDB::importTables(array('security_instances' => xarDBGetSiteTablePrefix() . '_security_instances'));
-         
+
         */
         $dbconn->commit();
         // Set up an initial value for module variables.
-        
+
         // Initialisation successful
     } catch (Exception $e) {
         $dbconn->rollback();

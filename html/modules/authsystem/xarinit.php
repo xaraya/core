@@ -30,8 +30,23 @@ function authsystem_init()
  */
 function authsystem_activate()
 {
+    xarRegisterPrivilege('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
+    xarRegisterPrivilege('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
+    xarMakePrivilegeRoot('AdminAuthsystem');
+    xarMakePrivilegeRoot('ViewAuthsystem');
 
-  return true;
+    xarRegisterMask('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW');
+    xarRegisterMask('ViewAuthsystemBlocks','All','authsystem','Block','All','ACCESS_OVERVIEW');
+    xarRegisterMask('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
+    xarRegisterMask('EditAuthsystem','All','authsystem','All','All','ACCESS_EDIT');
+    xarRegisterMask('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
+
+    /* Define Module vars */
+    xarModSetVar('authsystem', 'lockouttime', 15);
+    xarModSetVar('authsystem', 'lockouttries', 3);
+    xarModSetVar('authsystem', 'uselockout', false);
+
+    return true;
 }
 
 /**
@@ -47,23 +62,6 @@ function authsystem_upgrade($oldVersion)
     switch ($oldVersion) {
         case '0.91':
         case '0.91.0':
-            /* DEFINE PRIVILEGES
-             * Privileges module is loaded prior to Authsystem module
-             */
-            xarRegisterPrivilege('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
-            xarRegisterPrivilege('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
-
-            /* DEFINE MASKS */
-            xarRegisterMask('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW');
-            xarRegisterMask('ViewAuthsystemBlocks','All','authsystem','Block','All','ACCESS_OVERVIEW');
-            xarRegisterMask('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
-            xarRegisterMask('EditAuthsystem','All','authsystem','All','All','ACCESS_EDIT');
-            xarRegisterMask('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
-
-            /* Define Module vars */
-            xarModSetVar('authsystem', 'lockouttime', 15);
-            xarModSetVar('authsystem', 'lockouttries', 3);
-            xarModSetVar('authsystem', 'uselockout', false);
 
            //Set the default authmodule if not already set
            $isdefaultauth = xarModGetVar('roles','defaultauthmodule');

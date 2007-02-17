@@ -211,7 +211,15 @@ function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$
     // Check if the privilege already exists
     $privilege = xarPrivileges::findPrivilege($name);
     if (!$privilege) {
-        return xarPrivileges::register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
+        if ($module == "All") {
+            $modid = xarMasks::PRIVILEGES_ALL;
+        } elseif ($module == null) {
+            $modid = null;
+        } else {
+            $modInfo = xarMod::getBaseInfo($module);
+            $modid = $modInfo['systemid'];
+        }
+        return xarPrivileges::register($name,$realm,$modid,$component,$instance,xarSecurityLevel($level),$description);
     }
     return;
 }
@@ -438,6 +446,7 @@ function xarPrivExists($name)
  */
 function xarMaskExists($name,$module="All",$component="All")
 {
+    if ($mask == "All") $mask = 0;
     $mask = xarMasks::getMask($name,$module,$component,true);
     if ($mask) return true;
     else return false;
@@ -453,7 +462,8 @@ function xarMaskExists($name,$module="All",$component="All")
  */
 function xarQueryMask($mask, $showException=1, $component='', $instance='', $module='', $role='')
 {
-   return xarMasks::querymask($mask, $component, $instance, $module, $role,$pnrealm,$pnlevel);
+    if ($mask == "All") $mask = 0;
+    return xarMasks::querymask($mask, $component, $instance, $module, $role,$pnrealm,$pnlevel);
 }
 
 /**
@@ -498,7 +508,13 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
  */
 function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$description='')
 {
-    return xarMasks::register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
+    if ($module == "All") {
+        $modid = xarMasks::PRIVILEGES_ALL;
+    } else {
+        $modInfo = xarMod::getBaseInfo($module);
+        $modid = $modInfo['systemid'];
+    }
+    return xarMasks::register($name,$realm,$modid,$component,$instance,xarSecurityLevel($level),$description);
 }
 
 /**

@@ -22,7 +22,7 @@ function privileges_admin_newprivilege()
     if (!xarVarFetch('pname',      'isset', $data['pname'],      '',         XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('pparentid',  'isset', $data['pparentid'],  '',         XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('prealm',     'isset', $data['prealm'],     'All',      XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('pmodule',    'isset', $module,             NULL,       XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('pmodule',    'isset', $data['pmodule'],    0,          XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('pcomponent', 'isset', $data['pcomponent'], 'All',      XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('pinstance',  'isset', $data['pinstance'],  '',         XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('plevel',     'isset', $data['plevel'],     '',         XARVAR_NOT_REQUIRED)) {return;}
@@ -30,25 +30,18 @@ function privileges_admin_newprivilege()
     if (!xarVarFetch('show',       'isset', $data['show'],       'assigned', XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('trees',      'isset', $trees,              NULL,       XARVAR_NOT_REQUIRED)) {return;}
 
-    if ($module !== NULL) {$data['pmodule'] = strtolower($module);}
-    else {$data['pmodule'] = 'All';}
-
 // Clear Session Vars
     xarSessionDelVar('privileges_statusmsg');
 
 // Security Check
     if(!xarSecurityCheck('AddPrivilege')) return;
 
-// call the Privileges class
-    sys::import('modules.privileges.class.privileges');
-    $privs = new xarPrivileges();
-
 // remove duplicate entries from the list of privileges
     $privileges = array();
     $names = array();
     $privileges[] = array('pid' => 0,
                             'name' => '');
-    foreach($privs->getprivileges() as $temp){
+    foreach(xarPrivileges::getprivileges() as $temp){
         $nam = $temp['name'];
         if (!in_array($nam,$names)){
             $names[] = $nam;
@@ -57,22 +50,19 @@ function privileges_admin_newprivilege()
     }
 
     //Load Template
-    $instances = $privs->getinstances($data['pmodule'],$data['pcomponent']);
+    $instances = xarPrivileges::getinstances($data['pmodule'],$data['pcomponent']);
 // send to external wizard if necessary
     if (!empty($instances['external']) && $instances['external'] == "yes") {
-//    xarResponseRedirect($instances['target'] . "&extpid=0&extname=$name&extrealm=$realm&extmodule=$module&extcomponent=$component&extlevel=$level");
-//        return;
-        $data['target'] = $instances['target'] . '&amp;extpid=0&amp;extname='.$data['pname'].'&amp;extrealm='.$data['prealm'].'&amp;extmodule='.$data['pmodule'].'&amp;extcomponent='.$data['pcomponent'].'&amp;extlevel='.$data['plevel'];
+        $data['target'] = $instances['target'] . '&amp;extpid=0&amp;extname='.$data['pname'].'&amp;extrealm='.$data['prealm'].'&amp;extmodule='.xarModGetNameFromID($data['pmodule']).'&amp;extcomponent='.$data['pcomponent'].'&amp;extlevel='.$data['plevel'];
         $data['instances'] = array();
     } else {
         $data['instances'] = $instances;
     }
 
     $data['authid'] = xarSecGenAuthKey();
-    $data['realms'] = $privs->getrealms();
-    $data['modules'] = $privs->getmodules();
+    $data['realms'] = xarPrivileges::getrealms();
     $data['privileges'] = $privileges;
-    $data['components'] = $privs->getcomponents($data['pmodule']);
+    $data['components'] = xarPrivileges::getcomponents($data['pmodule']);
     return $data;
 }
 
