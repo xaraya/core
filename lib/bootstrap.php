@@ -90,7 +90,7 @@ class Object extends stdClass
     /**
      * A unique id for an object
      *
-     *
+     * @return string unique id
     **/
     public function hashCode()
     {
@@ -143,14 +143,25 @@ abstract class Reflectable extends Object
  *
  * @package core
  * @todo can we come up with a better name without the underscore?
+ * @todo look at visibility of the methods
 **/
 final class Class_ extends Reflectable
 {
+    /**
+     * Create a Class_ object based on an instance object
+     *
+     * @param Object $object any object
+    **/
     protected function __construct(Object $object)
     {
         $this->reflect = new ReflectionClass($object);
     }
 
+    /**
+     * Get an array of Property objects
+     *
+     * @return Property[] array of Property objects from the class
+    **/
     public function getProperties()
     {
         $ret = array();
@@ -160,9 +171,9 @@ final class Class_ extends Reflectable
     }
 
     /**
-     * Return a property from an instance of an Object
+     * Return a property object by name from a class
      *
-     * @param  string   Name of the property
+     * @param  string   $name Name of the property
      * @return Property Property object
      * @todo get rid of the underscore once DataPropertyMaster:getProperty is remodelled
     **/
@@ -185,6 +196,12 @@ final class Class_ extends Reflectable
 **/
 final class Property extends Reflectable
 {
+    /**
+     * Create a Property object based on the class it is in
+     *
+     * @param Class_ $clazz the class object
+     * @param string $name  the name of the property
+    **/
     public function __construct(Class_ $clazz, $name)
     {
         $this->reflect = new ReflectionProperty($clazz->getName(),$name);
@@ -254,7 +271,6 @@ final class sys extends Object
      *
      * @return mixed if file is actually included the return value determined by the included file, otherwise true
      * @param  string $dp 'dot path' a dot separated string describing which component to include
-     * @todo   the absolute path fixes the location to one dir below the webroot
     **/
     private static function once($dp)
     {
