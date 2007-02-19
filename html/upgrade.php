@@ -34,7 +34,7 @@ error_reporting(E_ALL);
 set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 // initialize the Xaraya core
 include 'lib/bootstrap.php';
-sys::import('xaraya.xarCore');
+sys::import('xaraya.core');
 xarCoreInit(XARCORE_SYSTEM_ALL);
 /**
  * Entry function for the installer
@@ -65,7 +65,7 @@ function xarUpgradeMain()
 
     // start the output buffer
     $mainModuleOutput =xarModFunc('installer','admin',$funcName);
-  
+
     if (xarCoreIsDebuggerActive()) {
         if (ob_get_length() > 0) {
             $rawOutput = ob_get_contents();
