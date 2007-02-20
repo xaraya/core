@@ -1,17 +1,17 @@
 <?php
 /**
- * Get a specific deleted user by any of his attributes
- *
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
+
 /**
  * get a specific deleted user by any of his attributes
+ *
  * uname, uid and email are guaranteed to be unique,
  * otherwise the first hit will be returned
  * @author Richard Cave <rcave@xaraya.com>
@@ -19,7 +19,7 @@
  * @param $args['uname'] user name of user to get
  * @param $args['name'] name of user to get
  * @param $args['email'] email of user to get
- * @returns array
+ * @return array
  */
 function roles_userapi_getdeleteduser($args)
 {
@@ -38,7 +38,6 @@ function roles_userapi_getdeleteduser($args)
         $type = ROLES_USERTYPE;
     }
 
-    // Security Check
     if(!xarSecurityCheck('ReadRole')) return;
 
     // Get database setup
@@ -77,13 +76,11 @@ function roles_userapi_getdeleteduser($args)
         $bindvars[] = $email;
     }
     $stmt = $dbconn->prepareStatement($query);
-    $result = $stmt->executeQuuery($bindvars);
+    $result = $stmt->executeQuery($bindvars);
 
 
-    // Check for no rows found, and if so return
     if (!$result->first()) return false;
 
-    // Obtain the item information from the result set
     list($uid, $uname, $name, $email, $pass, $date, $valcode, $state) = $result->fields;
     $result->close();
 
@@ -97,8 +94,6 @@ function roles_userapi_getdeleteduser($args)
                   'valcode'     => $valcode,
                   'state'       => $state);
 
-    // Return the user array
     return $user;
-
 }
 ?>
