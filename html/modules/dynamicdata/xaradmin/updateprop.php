@@ -48,7 +48,6 @@ function dynamicdata_admin_updateprop()
                             array('objectid' => $objectid,
                                   'moduleid' => $modid,
                                   'itemtype' => $itemtype));
-    var_dump($objectid.$modid.$itemtype);
     if (isset($object)) {
         $objectid = $object['objectid'];
         $modid = $object['moduleid'];
