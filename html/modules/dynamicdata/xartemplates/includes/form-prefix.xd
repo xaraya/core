@@ -1,0 +1,14 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!--
+        This layout uses a field prefix for all input fields of the object, so that
+        you can have several identical objects in the same input form (cfr. subforms)
+ -->
+<xar:foreach in="$properties" key="$name" value="$property">
+    <xar:set name="fieldname">$fieldprefix . '_dd_' . $property->id</xar:set>
+    <div class="xar-form-input-wrapper">
+        <xar:data-label property="$properties[$name]" label="$fieldname" />
+        <xar:data-input property="$properties[$name]" name="$fieldname" />
+    </div>
+</xar:foreach>
+</xar:template>

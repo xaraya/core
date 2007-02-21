@@ -1,12 +1,11 @@
 <?php
 /**
- * Update the dynamic properties for a module + itemtype
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -21,11 +20,9 @@
  */
 function dynamicdata_admin_updateprop()
 {
-    // Get parameters from whatever input we need.  All arguments to this
-    // function should be obtained from xarVarFetch()
     if(!xarVarFetch('objectid',          'isset', $objectid,          NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('modid',             'isset', $modid,             NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype',          'isset', $itemtype,          NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('itemtype',          'int:1:', $itemtype,          0, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',             'isset', $table,             NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_label',          'isset', $dd_label,          NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_type',           'isset', $dd_type,           NULL, XARVAR_DONT_SET)) {return;}
@@ -35,14 +32,7 @@ function dynamicdata_admin_updateprop()
     if(!xarVarFetch('input_dd_status',   'isset', $input_dd_status,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_validation',     'isset', $dd_validation,     NULL, XARVAR_DONT_SET)) {return;}
 
-    // Confirm authorisation code.
     if (!xarSecConfirmAuthKey()) return;
-
-    if (empty($itemtype)) {
-        $itemtype = 0;
-    }
-
-    if (!xarModAPILoad('dynamicdata', 'user')) return; // throw back
 
     $object = xarModAPIFunc('dynamicdata','user','getobjectinfo',
                             array('objectid' => $objectid,
@@ -59,7 +49,6 @@ function dynamicdata_admin_updateprop()
             if (!empty($itemtype)) {
                 $name .= '_' . $itemtype;
             }
-            if (!xarModAPILoad('dynamicdata','admin')) return;
             $objectid = xarModAPIFunc('dynamicdata','admin','createobject',
                                       array('moduleid' => $modid,
                                             'itemtype' => $itemtype,
@@ -78,9 +67,6 @@ function dynamicdata_admin_updateprop()
                            array('modid' => $modid,
                                  'itemtype' => $itemtype,
                                  'allprops' => true));
-
-    if (!xarModAPILoad('dynamicdata', 'admin')) return;
-
     $isprimary = 0;
 
     $i = 0;
@@ -95,7 +81,7 @@ function dynamicdata_admin_updateprop()
                 return;
             }
         } else {
-        // TODO : only if necessary
+             // TODO : only if necessary
             // update property in xaradminapi.php
             if (!isset($dd_default[$id])) {
                 $dd_default[$id] = null;
@@ -176,9 +162,5 @@ function dynamicdata_admin_updateprop()
                         array('modid'    => $modid,
                               'itemtype' => $itemtype,
                               'table'    => $table)));
-
-    // Return
-    return true;
 }
-
 ?>
