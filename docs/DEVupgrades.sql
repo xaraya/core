@@ -170,7 +170,7 @@ DELETE FROM `xar_dynamic_properties` WHERE `xar_dynamic_properties`.`xar_prop_id
 ALTER TABLE `xar_privileges` ADD COLUMN type INTEGER DEFAULT NULL;
 UPDATE `xar_privileges` SET type = 2:
 UPDATE `xar_privileges` a INNER JOIN `xar_modules` b ON a.xar_module = b.xar_name SET a.xar_module = b.xar_id:
-UPDATE `xar_privileges` SET xar_module = 0 WHERE xar_module = 'empty';
+UPDATE `xar_privileges` SET xar_module = NULL WHERE xar_module = 'empty';
 UPDATE `xar_privileges` SET xar_module = 0 WHERE xar_module = 'All':
 ALTER TABLE `xar_privileges` CHANGE `xar_module` `xar_modid` INTEGER DEFAULT NULL;
 INSERT INTO xar_privileges (xar_pid, xar_name, xar_realm, xar_modid, xar_component, xar_instance, xar_level, xar_description)
