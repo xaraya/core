@@ -5,13 +5,13 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
+
 /**
-// TODO: move this to some common place in Xaraya (base module ?)
- * display an item in a template
+ * Display an item in a template
  *
  * @param $args array containing the item or fields to show
  * @returns string
@@ -19,60 +19,13 @@
  */
 function dynamicdata_userapi_showdisplay($args)
 {
-
     extract($args);
 
-/* Happens automatically in the constructor
-    // optional layout for the template
-    if (empty($tplmodule)) {
-        $tplmodule = 'dynamicdata';
-    }
-    // optional layout for the template
-    if (empty($layout)) {
-        $layout = 'default';
-    }
-    // or optional template, if you want e.g. to handle individual fields
-    // differently for a specific module / item type
-    if (empty($template)) {
-        $template = '';
-    }
-
-    if (empty($itemtype) || !is_numeric($itemtype)) {
-        $itemtype = null;
-    }
-
-*/
-/* Now done in the descriptor
-    // When called via hooks, the module name may be empty, so we get it from
-    // the current module
-    if (empty($module)) {
-        $modname = xarModGetName();
-    } else {
-        $modname = $module;
-    }
-
-    if (is_numeric($modname)) {
-        $modid = $modname;
-        $modinfo = xarModGetInfo($modid);
-        $modname = $modinfo['name'];
-    } else {
-        $modid = xarModGetIDFromName($modname);
-    }
-    if (empty($modid)) {
-        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('module name', 'user', 'showdisplay', 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
-    }
-
-    // try getting the item id via input variables if necessary
-    if (!isset($itemid) || !is_numeric($itemid)) {
-        if (!xarVarFetch('itemid', 'isset', $itemid,  NULL, XARVAR_DONT_SET)) {return;}
-    }
-*/
     $args['fallbackmodule'] = 'current';
     $descriptor = new DataObjectDescriptor($args);
     $args = $descriptor->getArgs();
-// TODO: what kind of security checks do we want/need here ?
+
+    // TODO: what kind of security checks do we want/need here ?
     if(!xarSecurityCheck('ReadDynamicDataItem',1,'Item',$args['moduleid'].":".$args['itemtype'].":".$itemid)) return;
 
 
