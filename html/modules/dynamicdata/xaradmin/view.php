@@ -43,8 +43,11 @@ function dynamicdata_admin_view($args)
     if (!isset($object)) {
         return;
     }
-
+    // CHECKME: is this line needed?
     $data = $object->toArray();
+
+    $object->getItems();
+    $data['object'] = $object;
     // TODO: remove this when we turn all the moduleid into modid
     $data['modid'] = $data['moduleid'];
     // TODO: another stray
@@ -72,9 +75,8 @@ function dynamicdata_admin_view($args)
                                            array('itemid' => $data['objectid']));
         }
     }
-
-    if (file_exists('modules/' . $data['tplmodule'] . '/xartemplates/admin-new.xd') ||
-        file_exists('modules/' . $data['tplmodule'] . '/xartemplates/admin-new-' . $data['template'] . '.xd')) {
+    if (file_exists('modules/' . $data['tplmodule'] . '/xartemplates/admin-view.xd') ||
+        file_exists('modules/' . $data['tplmodule'] . '/xartemplates/admin-view-' . $data['template'] . '.xd')) {
         return xarTplModule($data['tplmodule'],'admin','view',$data,$data['template']);
     } else {
         return xarTplModule('dynamicdata','admin','view',$data);
