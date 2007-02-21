@@ -238,10 +238,6 @@ class xarMasks extends Object
     public static function removemasks($modid)
     {
         self::initialize();
-        if($modid != self::PRIVILEGES_ALL) {
-            $modInfo = xarMod_GetBaseInfo(xarModGetNameFromId($modid));
-            $modid = $modInfo['systemid'];
-        }
         $query = "DELETE FROM " . self::$privilegestable . " WHERE type = ? AND xar_modid = ?";
         //Execute the query, bail if an exception was thrown
         self::$dbconn->Execute($query,array(self::PRIVILEGES_MASKTYPE, $modid));
@@ -424,12 +420,11 @@ class xarMasks extends Object
                 $requrl = xarServerGetCurrentUrl(array(),false);
                 xarResponseRedirect(xarModURL('authsystem','user','showloginform',array('redirecturl'=> $requrl),false));
             } else {
-                $msg = xarML('You don\'t have the correct privileges for this operation');
+                $msg = xarML("You don't have the correct privileges for this operation");
                 throw new Exception($msg);
             }
         }
 
-        // done
         return $pass;
     }
 

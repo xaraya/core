@@ -61,7 +61,7 @@ class DataObjectDescriptor extends ObjectDescriptor
         $q->open();
         if (isset($args['name'])) {
             $q->eq('xar_object_name',$args['name']);
-        } elseif (isset($args['objectid'])) {
+        } elseif (!empty($args['objectid'])) {
             $q->eq('xar_object_id',(int)$args['objectid']);
         } else {
             $args = self::getModID($args);

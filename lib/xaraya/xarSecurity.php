@@ -540,7 +540,15 @@ function xarUnregisterMask($name)
  */
 function xarRemoveMasks($module)
 {
-    return xarMasks::removeMasks($module);
+    if ($module == "All") {
+        $modid = xarMasks::PRIVILEGES_ALL;
+    } elseif ($module == null) {
+        $modid = null;
+    } else {
+        $modInfo = xarMod::getBaseInfo($module);
+        $modid = $modInfo['systemid'];
+    }
+    return xarMasks::removeMasks($modid);
 }
 
 /**
