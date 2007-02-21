@@ -45,7 +45,6 @@ class XarDateTime extends DateTime
         $baseoffset = $tzobject->getOffset($this);
         $tzobject = new DateTimezone($timezone);
         $localoffset = $tzobject->getOffset($this);
-        echo date_default_timezone_get() . " " . $machineoffset . " " . $baseoffset . " " . $localoffset;
         return $localoffset - ($baseoffset - $machineoffset);
     }
 

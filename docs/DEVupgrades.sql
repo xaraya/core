@@ -156,3 +156,24 @@ ALTER TABLE `xar_dynamic_properties` DROP INDEX `i_xar_dynprops_combo`;
 ALTER TABLE `xar_dynamic_properties` DROP `xar_prop_moduleid` , DROP `xar_prop_itemtype` ;
 DELETE FROM `xar_dynamic_properties` WHERE `xar_dynamic_properties`.`xar_prop_id` =15 LIMIT 1 ;
 DELETE FROM `xar_dynamic_properties` WHERE `xar_dynamic_properties`.`xar_prop_id` =16 LIMIT 1 ;
+
+/* merging the masks and privileges tables */
+/*
+ - update the module column values containing "All" to contain 0
+ - update the module column values containing "empty" to contain null
+ - change the name and definition of xar_module to xar_modid as INTEGER
+ - add the rows of the masks table to the privileges table
+ - add a new column type to the privileges table
+ - set the type values to 2 (privilges) or 3 (masks)
+ - drop the masks table
+*/
+ALTER TABLE `xar_privileges` ADD COLUMN type INTEGER DEFAULT NULL;
+UPDATE `xar_privileges` SET type = 2:
+UPDATE `xar_privileges` a INNER JOIN `xar_modules` b ON a.xar_module = b.xar_name SET a.xar_module = b.xar_id:
+UPDATE `xar_privileges` SET xar_module = 0 WHERE xar_module = 'empty';
+UPDATE `xar_privileges` SET xar_module = 0 WHERE xar_module = 'All':
+ALTER TABLE `xar_privileges` CHANGE `xar_module` `xar_modid` INTEGER DEFAULT NULL;
+INSERT INTO xar_privileges (xar_pid, xar_name, xar_realm, xar_modid, xar_component, xar_instance, xar_level, xar_description)
+SELECT 0,xar_name, xar_realm, xar_modid, xar_component, xar_instance, xar_level, xar_description FROM xar_security_masks;
+UPDATE `xar_privileges` SET type = 3 WHERE type IS NULL;
+DROP 'xar_security_masks';
