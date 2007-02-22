@@ -268,7 +268,7 @@ class xarRoles extends Object
         $query = "INSERT INTO " . self::$rolememberstable .
                 " VALUES (?,?)";
         // Execute the query, bail if an exception was thrown
-        self::$dbconn->Execute($query, array($uid,0));
+        self::$dbconn->Execute($query, array($uid,null));
         // done
         return true;
     }

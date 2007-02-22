@@ -178,3 +178,7 @@ INSERT INTO xar_privileges (xar_pid, xar_name, xar_realm, xar_modid, xar_compone
 SELECT 0,xar_name, xar_realm, xar_modid, xar_component, xar_instance, xar_level, xar_description FROM xar_security_masks;
 UPDATE `xar_privileges` SET type = 3 WHERE type IS NULL;
 DROP 'xar_security_masks';
+
+/* Making the default value in the rolemembers table form 0 to null' */
+ALTER TABLE `xar_rolemembers` CHANGE `xar_parentid` `xar_parentid` INTEGER DEFAULT NULL;
+UPDATE `xar_rolemembers` SET xar_parentid = NULL WHERE xar_parentid = 0;
