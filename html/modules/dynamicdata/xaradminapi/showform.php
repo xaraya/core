@@ -18,6 +18,11 @@
 function dynamicdata_adminapi_showform($args)
 {
     extract($args);
+    $args['fallbackmodule'] = 'current';
+    $descriptor = new DataObjectDescriptor($args);
+    $args = $descriptor->getArgs();
+
+    $itemtype = $args['itemtype'];
 
     // optional layout for the template
     if (empty($layout)) {
@@ -35,31 +40,6 @@ function dynamicdata_adminapi_showform($args)
                             array('fields' => $fields,
                                   'layout' => $layout),
                             $template);
-    }
-
-    // When called via hooks, the module name may be empty, so we get it from
-    // the current module
-    if (empty($module)) {
-        $modname = xarModGetName();
-    } else {
-        $modname = $module;
-    }
-
-    if (is_numeric($modname)) {
-        $modid = $modname;
-        $modinfo = xarModGetInfo($modid);
-        $modname = $modinfo['name'];
-    } else {
-        $modid = xarModGetIDFromName($modname);
-    }
-    if (empty($modid)) {
-        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('module name', 'admin', 'showform', 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
-    }
-
-    if (empty($itemtype) || !is_numeric($itemtype)) {
-        $itemtype = null;
     }
 
     // try getting the item id via input variables if necessary

@@ -1,12 +1,11 @@
 <?php
 /**
- * Handle dynamic data tags
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -18,9 +17,8 @@
  *       <xar:data-label property="$property" label="name" /> will use <label for="$property->name">...</label>
  *       <xar:data-label property="$property" label="something" /> will use <label for="something">...</label>
  *
- * @param $args array containing the object or property
- * @returns string
- * @return the PHP code needed to show the object or property label in the BL template
+ * @param array $args containing the object or property
+ * @return string the PHP code needed to show the object or property label in the BL template
  */
 function dynamicdata_userapi_handleLabelTag($args)
 {

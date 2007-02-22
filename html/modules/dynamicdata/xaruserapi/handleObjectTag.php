@@ -1,12 +1,11 @@
 <?php
 /**
- * Handle dynamic data tags
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -15,9 +14,8 @@
  * Format : <xar:data-object object="$object" property="$property" /> with $object some object and $property some property of this object
  *       or <xar:data-object object="$object" method="$method" arguments="$args" /> with $object some object and $method some method of this object
  *
- * @param $args array containing the object and property/method
- * @returns string
- * @return the PHP code needed to show the object property or call the object method in the BL template
+ * @param array $args containing the object and property/method
+ * @return string the PHP code needed to show the object property or call the object method in the BL template
  */
 function dynamicdata_userapi_handleObjectTag($args)
 {
