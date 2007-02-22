@@ -22,8 +22,6 @@ function dynamicdata_adminapi_showform($args)
     $descriptor = new DataObjectDescriptor($args);
     $args = $descriptor->getArgs();
 
-    $itemtype = $args['itemtype'];
-
     // optional layout for the template
     if (empty($layout)) {
         $layout = 'default';
@@ -44,44 +42,30 @@ function dynamicdata_adminapi_showform($args)
 
     // try getting the item id via input variables if necessary
     if (!isset($itemid) || !is_numeric($itemid)) {
-        if (!xarVarFetch('itemid', 'isset', $itemid,  NULL, XARVAR_DONT_SET)) {return;}
+        if (!xarVarFetch('itemid', 'isset', $args['itemid'],  NULL, XARVAR_DONT_SET)) {return;}
     }
 
     // check the optional field list
     if (!empty($fieldlist)) {
         // support comma-separated field list
         if (is_string($fieldlist)) {
-            $myfieldlist = explode(',',$fieldlist);
+            $args['fieldlist'] = explode(',',$fieldlist);
         // and array of fields
         } elseif (is_array($fieldlist)) {
-            $myfieldlist = $fieldlist;
+            $args['fieldlist'] = $fieldlist;
         }
     } else {
-        $myfieldlist = null;
-    }
-
-    // join a module table to a dynamic object
-    if (empty($join)) {
-        $join = '';
-    }
-    // make some database table available via DD
-    if (empty($table)) {
-        $table = '';
+        $args['fieldlist'] = null;
     }
 
     // throw an exception if you can't edit this
     if (empty($itemid)) {
-        if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',"$modid:$itemtype:All")) return;
+        if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',"$args[moduleid]:$args[itemtype]:All")) return;
     } else {
-        if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$modid:$itemtype:$itemid")) return;
+        if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$args[moduleid]:$args[itemtype]:$itemid")) return;
     }
 
-    $object = & DataObjectMaster::getObject(array('moduleid'  => $modid,
-                                       'itemtype'  => $itemtype,
-                                       'itemid'    => $itemid,
-                                       'join'      => $join,
-                                       'table'     => $table,
-                                       'fieldlist' => $myfieldlist));
+    $object = & DataObjectMaster::getObject($args);
     if (!empty($itemid)) {
         $object->getItem();
     }
