@@ -7,30 +7,10 @@
 
 <xar:if condition="$layout eq 'default'">
     <xar:foreach in="$properties" key="$name" value="$property">
-      <div class="xar-form-input-wrapper">
-        <xar:data-label property="$properties[$name]" label="id" />
-            <xar:if condition="$name eq 'moduleid'">
-                <xar:set name="onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();"</xar:set>
-                <xar:data-input property="$properties[$name]" onchange="$onchange" />
-            <xar:elseif condition="$name eq 'parent'" />
-                <xar:set name="modid">$properties['moduleid']->value</xar:set>
-                <xar:data-input property="$properties[$name]" modid="$modid" />
-            <xar:else />
-        <xar:data-input property="$properties[$name]" />
-            </xar:if>
-          </div>
-    </xar:foreach>
-<xar:elseif condition="$layout eq 'prefix'" />
-    <!--
-        This layout uses a field prefix for all input fields of the object, so that
-        you can have several identical objects in the same input form (cfr. subforms)
-    -->
-    <xar:foreach in="$properties" key="$name" value="$property">
-      <xar:set name="fieldname">$fieldprefix . '_dd_' . $property->id</xar:set>
-      <div class="xar-form-input-wrapper">
-        <xar:data-label property="$properties[$name]" label="$fieldname" />
-        <xar:data-input property="$properties[$name]" name="$fieldname" />
-      </div>
+        <div class="xar-form-input-wrapper">
+            <xar:data-label property="$properties[$name]" label="id" />
+            <xar:data-input property="$properties[$name]" />
+        </div>
     </xar:foreach>
 <xar:else />
       <!-- You can also specify your own layout here or in a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype -->
