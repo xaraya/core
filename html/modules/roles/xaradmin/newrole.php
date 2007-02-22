@@ -21,7 +21,7 @@ function roles_admin_newrole()
 
     $defaultuid = $defaultRole['uid'];
     if (!xarVarFetch('return_url',  'isset', $data['return_url'], NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('pparentid', 'int:', $pparentid, $defaultuid, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('pparentid', 'int:', $data['pparentid'], $defaultuid, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('pname',       'str:1:', $data['pname'], '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('itemtype',    'int',    $itemtype, ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('puname',      'str:1:35:', $data['puname'], '', XARVAR_NOT_REQUIRED)) return;
@@ -38,22 +38,6 @@ function roles_admin_newrole()
     // Security Check
     if (!xarSecurityCheck('AddRole')) return;
 
-    $groups = array();
-    $names = array();
-    foreach(xarRoles::getgroups() as $temp) {
-        $nam = $temp['name'];
-        if (!in_array($nam, $names)) {
-            $names[] = $nam;
-            $groups[] = $temp;
-        }
-    }
-
-    if (isset($pparentid)) {
-        $data['pparentid'] = $pparentid;
-    } else {
-        $data['pparentid'] = $defaultuid;
-    }
-
     $data['states'] = array(ROLES_STATE_INACTIVE => xarML('Inactive'),
                             ROLES_STATE_NOTVALIDATED => xarML('Not Validated'),
                             ROLES_STATE_ACTIVE => xarML('Active'),
@@ -64,7 +48,6 @@ function roles_admin_newrole()
     $data['hooks'] = xarModCallHooks('item', 'new', '', $item);
 
     $data['authid'] = xarSecGenAuthKey();
-    $data['groups'] = $groups;
     $data['uid'] = 0;
 
     return $data;

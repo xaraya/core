@@ -37,7 +37,7 @@
       <source>xar_roles.xar_type</source>
       <status>65</status>
       <order>3</order>
-      <validation></validation>
+      <validation>roles</validation>
     </property>
     <property name="uname">
       <id>32</id>
@@ -62,7 +62,7 @@
     <property name="password">
       <id>34</id>
       <label>Password</label>
-      <type>email</type>
+      <type>passwordbox</type>
       <default></default>
       <source>xar_roles.xar_pass</source>
       <status>65</status>

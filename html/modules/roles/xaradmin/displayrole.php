@@ -1,17 +1,15 @@
 <?php
 /**
- * Display role
- *
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
- * display user
+ * display role
  */
 function roles_admin_displayrole()
 {
@@ -31,7 +29,7 @@ function roles_admin_displayrole()
     $data['parents'] = $parents;
 
     $name = $role->getName();
-// Security Check
+
     if (!xarSecurityCheck('EditRole',1,'Roles',$name)) return;
     $data['frozen'] = xarSecurityCheck('ViewRoles',0,'Roles',$name);
 

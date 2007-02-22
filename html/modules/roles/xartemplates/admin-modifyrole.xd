@@ -1,5 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Roles Administration</xar:mlstring></span>
@@ -36,7 +36,7 @@
         </div>
     </xar:if>
 
-    <xar:comment>TODO set the active tab here</xar:comment>
+    <!-- TODO: set the active tab here -->
     <!-- Show the general tab list for roles -->
     <xar:template file="tablist" />
     <fieldset>
@@ -87,9 +87,8 @@
                         <label for="itemtype" title="#xarML('Type of Role')#" class="xar-form-label">
                                 <xar:mlstring>Type:</xar:mlstring>
                         </label>
-                        <xar:set name="moduleitemtype">xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 600))</xar:set>
-                        <xar:set name="onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();\""</xar:set>
-                        <xar:data-input property="$moduleitemtype" name="itemtype" modid="27" value="$itemtype" onchange="$onchange" />
+                        <xar:set name="onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();"</xar:set>
+                        <xar:data-input type="itemtype" name="itemtype" value="$itemtype" validation="roles" onchange="$onchange" />
                     </div>
                 </xar:if>
 

@@ -50,9 +50,8 @@
                         Type:
                     </xar:mlstring>
                 </label>
-                <xar:set name="moduleitemtype">xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 600))</xar:set>
                 <xar:set name="onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();"</xar:set>
-                <xar:data-input property="$moduleitemtype" name="itemtype" modid="27" value="$itemtype" onchange="$onchange" />
+                <xar:data-input name="itemtype" value="$itemtype" validation="roles" onchange="$onchange" />
             </div>
             <div class="xar-form-input-wrapper">
                 <label for="pparentid" title="#xarML('Initial Group membership')#" class="xar-form-label">
@@ -60,20 +59,7 @@
                         Member Of:
                     </xar:mlstring>
                 </label>
-
-                <select name="pparentid" id="pparentid">
-                    <xar:loop name="$groups">
-                        <xar:if condition="$loop:item['uid'] eq $pparentid">
-                            <option value="#$loop:item['uid']#" selected="selected">
-                                #$loop:item['name']#
-                            </option>
-                            <xar:else />
-                            <option value="#$loop:item['uid']#">
-                                #$loop:item['name']#
-                            </option>
-                        </xar:if>
-                    </xar:loop>
-                </select>
+                <xar:data-input type="grouplist" name="pparentid" value="$pparentid" />
             </div>
             <xar:if condition="$basetype eq ROLES_USERTYPE">
                 <p>
@@ -96,6 +82,30 @@
                         </xar:mlstring>
                     </label>
                     <input type="text" name="pemail" id="pemail" value="#$pemail#" maxlength="255" class="xar-form-textlong" />
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="pstate" title="#xarML('Status of this user')#" class="xar-form-label">
+                        <xar:mlstring>
+                            Status:
+                        </xar:mlstring>
+                    </label>
+                    <xar:data-input type="dropdown" name="pstate" id="pstate" value="$pstate" validation="$states" />
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="ppass1" title="#xarML('Password for this user')#" class="xar-form-label">
+                        <xar:mlstring>
+                            Password:
+                        </xar:mlstring>
+                    </label>
+                    <input type="password" name="ppass1" id="ppass1" value="#$ppass1#" maxlength="40" class="xar-form-text-medium" />
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="ppass2" title="#xarML('Confirm password for this user')#" class="xar-form-label">
+                        <xar:mlstring>
+                            Confirm Password:
+                        </xar:mlstring>
+                    </label>
+                    <input type="password" name="ppass2" id="ppass2" value="#$ppass1#" maxlength="40" class="xar-form-text-medium" />
                 </div>
                 <xar:set name="settings">unserialize(xarModVars::get('roles','duvsettings'))</xar:set>
                 <xar:if condition="in_array('useremailformat',$settings)">
@@ -127,31 +137,6 @@
                         <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModGetUserVar('roles','userhome',$uid)#" size="40" maxlength="100" tabindex="7" />
                     </div>
                 </xar:if>
-
-                <div class="xar-form-input-wrapper">
-                    <label for="pstate" title="#xarML('Status of this user')#" class="xar-form-label">
-                        <xar:mlstring>
-                            Status:
-                        </xar:mlstring>
-                    </label>
-                    <xar:data-input type="dropdown" name="pstate" id="pstate" value="$pstate" validation="$states" />
-                </div>
-                <div class="xar-form-input-wrapper">
-                    <label for="ppass1" title="#xarML('Password for this user')#" class="xar-form-label">
-                        <xar:mlstring>
-                            Password:
-                        </xar:mlstring>
-                    </label>
-                    <input type="password" name="ppass1" id="ppass1" value="#$ppass1#" maxlength="40" class="xar-form-text-medium" />
-                </div>
-                <div class="xar-form-input-wrapper">
-                    <label for="ppass2" title="#xarML('Confirm password for this user')#" class="xar-form-label">
-                        <xar:mlstring>
-                            Confirm Password:
-                        </xar:mlstring>
-                    </label>
-                    <input type="password" name="ppass2" id="ppass2" value="#$ppass1#" maxlength="40" class="xar-form-text-medium" />
-                </div>
             </xar:if>
             <xar:foreach in="$hooks" key="$hookmodule">
                 #$hooks[$hookmodule]#

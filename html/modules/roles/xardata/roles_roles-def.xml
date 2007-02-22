@@ -27,7 +27,7 @@
       <source>xar_roles.xar_type</source>
       <status>65</status>
       <order>3</order>
-      <validation></validation>
+      <validation>roles</validation>
     </property>
   </properties>
 </object>

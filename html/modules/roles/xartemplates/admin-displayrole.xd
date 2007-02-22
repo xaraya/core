@@ -1,5 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
@@ -44,7 +44,7 @@
         </div>
     </xar:if>
 
-    <xar:comment>TODO set the active tab here</xar:comment>
+    <!-- TODO set the active tab here -->
     <!-- Show the general tab list for roles -->
     <xar:template file="tablist" />
     <fieldset>
@@ -127,18 +127,16 @@
             <xar:data-input type="timezone" name="duvs[usertimezone]" id="duvs_usertimezone" value="$value" />
         </div>
       </xar:if>
-      <xar:if condition="xarModIsAvailable('dynamicdata')">
-        <xar:data-getitem name="$properties" module="roles" itemtype="$itemtype" itemid="$uid" />
-        <xar:if condition="isset($properties) and count($properties) gt 0">
+      <xar:data-getitem name="$properties" module="roles" itemtype="$itemtype" itemid="$uid" />
+      <xar:if condition="isset($properties) and count($properties) gt 0">
           <xar:foreach in="$properties" key="$name">
-            <div class="xar-form-input-wrapper">
-              <label class="xar-form-label">
-                <xar:data-label property="$properties[$name]" />:
-              </label>
-              <xar:data-output property="$properties[$name]" />
-            </div>
+              <div class="xar-form-input-wrapper">
+                  <label class="xar-form-label">
+                      <xar:data-label property="$properties[$name]" />:
+                  </label>
+                  <xar:data-output property="$properties[$name]" />
+              </div>
           </xar:foreach>
-        </xar:if>
       </xar:if>
 
       <xar:foreach in="$hooks" key="$module" value="$output">

@@ -3,11 +3,11 @@
  * Modify role details
  *
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -17,21 +17,26 @@
  */
 function roles_admin_modifyrole()
 {
-    if (!xarVarFetch('uid', 'int:1:', $uid, 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('pname', 'str:1:', $name, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('itemid', 'int', $itemid, NULL, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('itemtype', 'int', $itemtype, NULL, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('puname', 'str:1:35:', $uname, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('pemail', 'str:1:', $email, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('ppass', 'str:1:', $pass, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('state', 'str:1:', $state, '', XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('duvs', 'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
-
-    $uid = isset($itemid) ? $itemid : $uid;
-
     // Call the Roles class and get the role to modify
     sys::import('modules.roles.class.roles');
+    if (!xarVarFetch('uid', 'id', $uid, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemid', 'id', $itemid, NULL, XARVAR_DONT_SET)) return;
+    $uid = isset($itemid) ? $itemid : $uid;
     $role = xarRoles::getRole($uid);
+
+    if (!xarVarFetch('pname', 'str:1:', $name, $role->getName(), XARVAR_NOT_REQUIRED)) return;
+
+    if (!xarVarFetch('itemtype', 'id', $itemtype, $role->getType(), XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('puname', 'str:1:35:', $uname, $role->getUser(), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('pemail', 'str:1:', $email, $role->getEmail(), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('ppass', 'str:1:', $pass, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('state', 'str:1:', $state, $role->getState(), XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('duvs', 'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
+
+
+
+
+
 
     // get the array of parents of this role
     // need to display this in the template
@@ -54,7 +59,7 @@ function roles_admin_modifyrole()
     $groups = array();
     foreach(xarRoles::getgroups() as $temp) {
         $nam = $temp['name'];
-// TODO: this is very inefficient. Here we have the perfect use case for embedding security checks directly into the SQL calls
+        // TODO: this is very inefficient. Here we have the perfect use case for embedding security checks directly into the SQL calls
         if(!xarSecurityCheck('AttachRole',0,'Relation',$nam . ":" . $role->getName())) continue;
         if (!in_array($nam, $names) && $temp['uid'] != $uid) {
             $names[] = $nam;
@@ -63,41 +68,20 @@ function roles_admin_modifyrole()
         }
     }
 
-    // Load Template
-    if (empty($name)) $name = $role->getName();
-    $data['pname'] = $name;
-
-// Security Check
-    if (!xarSecurityCheck('EditRole',0,'Roles',$name))
+    if (!xarSecurityCheck('EditRole',0,'Roles',$name)) {
         if (!xarSecurityCheck('ReadRole',1,'Roles',$name)) return;
+    }
     $data['frozen'] = !xarSecurityCheck('EditRole',0,'Roles',$name);
 
-    if (isset($itemtype)) {
-        $data['itemtype'] = $itemtype;
-    } else {
-        $data['itemtype'] = $role->getType();
-    }
-    $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
+    $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
     $types = xarModAPIFunc('roles','user','getitemtypes');
-    $data['itemtypename'] = $types[$data['itemtype']]['label'];
+    $data['itemtypename'] = $types[$itemtype]['label'];
 
-    if (!empty($uname)) {
-        $data['puname'] = $uname;
-    } else {
-        $data['puname'] = $role->getUser();
-    }
-
-    if (!empty($email)) {
-        $data['pemail'] = $email;
-    } else {
-        $data['pemail'] = $role->getEmail();
-    }
-
-    if (isset($pstate)) {
-        $data['pstate'] = $pstate;
-    } else {
-        $data['pstate'] = $role->getState();
-    }
+    $data['itemtype'] = $itemtype;
+    $data['pname'] = $name;
+    $data['puname'] = $uname;
+    $data['pemail'] = $email;
+    $data['pstate'] = $state;
 
     // call item modify hooks (for DD etc.)
     $item = $data;
@@ -110,8 +94,6 @@ function roles_admin_modifyrole()
     $data['groups'] = $groups;
     $data['parents'] = $parents;
     $data['haschildren'] = $role->countChildren();
-    $data['updatelabel'] = xarML('Update');
-    $data['addlabel'] = xarML('Add');
     $data['authid'] = xarSecGenAuthKey();
     return $data;
 }
