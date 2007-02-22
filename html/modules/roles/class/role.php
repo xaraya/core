@@ -1,5 +1,17 @@
 <?php
+/**
+ * xarRole class
+ *
+ * @package modules
+ * @copyright (C) 2002-2007 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
+ * @subpackage roles
+ * @link http://xaraya.com/index.php/release/27.html
+ */
 
+sys::import('modules.roles.class.xarQuery');
 /**
  * xarRole: class for the role object
  *
@@ -7,11 +19,7 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
- * @throws none
- * @todo none
  */
-sys::import('modules.roles.class.xarQuery');
-
 class xarRole extends Object
 {
     public $uid;          //the id of this user or group
@@ -43,13 +51,10 @@ class xarRole extends Object
      * Retrieves a single role (user or group) from the roles repository
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param array $
-     * @return role object
-     * @throws none
-     * @todo none
+     * @param array $pargs
+     * @return object role
      */
-    function __construct($pargs)
+    public function __construct($pargs)
     {
         extract($pargs);
 
@@ -98,13 +103,9 @@ class xarRole extends Object
      * Creates an entry in the repository for a role object that has been created
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param none $
-     * @return boolean
-     * @throws none
-     * @todo none
+     * @return bool
      */
-    function add()
+    public function add()
     {
         if (empty($this->name))
             throw new EmptyParameterException('name');
@@ -160,13 +161,10 @@ class xarRole extends Object
      * A user of group can have any number of parents or children..
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param role $ object
-     * @return boolean
-     * @throws none
-     * @todo none
+     * @param object $member
+     * @return bool
      */
-    function addMember($member)
+    public function addMember($member)
     {
         // bail if the purported parent is not a group.
         if ($this->isUser()) return false;
@@ -212,13 +210,11 @@ class xarRole extends Object
      * Removes a user or group as an entry of another group.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param role $ object
-     * @return boolean
-     * @throws none
+     * @param object $member
+     * @return bool
      * @todo add transaction around the delete and the update
      */
-    function removeMember($member)
+    public function removeMember($member)
     {
         // delete the relevant entry from the rolemembers table
         $query = "DELETE FROM $this->rolememberstable WHERE xar_uid= ? AND xar_parentid= ?";
@@ -246,7 +242,12 @@ class xarRole extends Object
         return true;
     }
 
-    function update()
+    /**
+     * update: update a role
+     *
+     * @return bool
+     */
+    public function update()
     {
         $q = new xarQuery('UPDATE',$this->rolestable);
         $q->addfield('xar_name',$this->name);
@@ -268,13 +269,10 @@ class xarRole extends Object
      * remove: make a role deleted
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param none $
-     * @return boolean
-     * @throws none
+     * @return bool
      * @todo flag illegal deletes
      */
-    function remove()
+    public function remove()
     {
         // get a list of all relevant entries in the rolemembers table
         // where this role is the child
@@ -327,12 +325,9 @@ class xarRole extends Object
      * purge: make a role purged
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param none $
-     * @return boolean
-     * @throws none
+     * @return bool
      */
-    function purge()
+    public function purge()
     {
         // no checks here. just do it
         $this->remove();
@@ -361,7 +356,7 @@ class xarRole extends Object
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @return array of privilege arrays like ('pid' => x, 'name' => y)
      */
-    function getAllPrivileges()
+    public function getAllPrivileges()
     {
         static $allprivileges = array();
         if (empty($allprivileges)) {
@@ -386,7 +381,7 @@ class xarRole extends Object
      * @return array of privilege objects
      * @todo seems to me this belongs in privileges.
      */
-    function getAssignedPrivileges()
+    public function getAssignedPrivileges()
     {
         static $stmt = null;  // For each uid, the query is the same, prepare it once.
 
@@ -466,7 +461,7 @@ class xarRole extends Object
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @return array of privilege objects
      */
-    function getInheritedPrivileges()
+    public function getInheritedPrivileges()
     {
         // mrb: is this only dependent on $this->uid? if so, we can cache it too.
         $ancestors = $this->getAncestors();
@@ -484,9 +479,9 @@ class xarRole extends Object
      * Checks whether this role has a specific privilege assigned or inherited.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return boolean
+     * @return bool
      */
-    function hasPrivilege($privname)
+    public function hasPrivilege($privname)
     {
         $privs = $this->getAssignedPrivileges();
         foreach ($privs as $privilege)
@@ -501,17 +496,14 @@ class xarRole extends Object
      * assignPrivilege: assigns a privilege to a role
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param privilege $ object
-     * @return boolean
-     * @throws none
-     * @todo none
+     * @param object $privilege
+     * @return bool
      */
-    function assignPrivilege($perm)
+    public function assignPrivilege($privilege)
     {
         // create an entry in the privmembers table
         $query = "INSERT INTO $this->acltable VALUES (?,?)";
-        $bindvars = array($this->getID(),$perm->getID());
+        $bindvars = array($this->getID(),$privilege->getID());
         $this->dbconn->Execute($query,$bindvars);
         // empty the privset cache
         // $privileges = new xarPrivileges();
@@ -523,18 +515,15 @@ class xarRole extends Object
      * removePrivilege: removes a privilege from a role
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param privilege $ object
-     * @return boolean
-     * @throws none
-     * @todo none
+     * @param object $privilege
+     * @return bool
      */
-    function removePrivilege($perm)
+    public function removePrivilege($privilege)
     {
         // remove an entry from the privmembers table
         $query = "DELETE FROM $this->acltable
                   WHERE xar_partid= ? AND xar_permid= ?";
-        $bindvars = array($this->uid, $perm->getID());
+        $bindvars = array($this->uid, $privilege->getID());
         $this->dbconn->Execute($query,$bindvars);
         // empty the privset cache
         // $privileges = new xarPrivileges();
@@ -546,17 +535,14 @@ class xarRole extends Object
      * getUsers: get the members of a group that are users
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
      * @param integer state get users in this state
      * @param integer startnum get users beyond this number
      * @param integer numitems get a defined number of users
      * @param string order order the result (name, uname, type, email, date_reg, state...)
      * @param string selection get users within this selection criteria
-     * @return boolean
-     * @throws none
-     * @todo none
+     * @return array
      */
-    function getUsers($state = ROLES_STATE_CURRENT, $startnum = 0, $numitems = 0, $order = 'name', $selection = NULL)
+    public function getUsers($state = ROLES_STATE_CURRENT, $startnum = 0, $numitems = 0, $order = 'name', $selection = NULL)
     {
         $query = "SELECT r.xar_uid, r.xar_name, r.xar_type, r.xar_uname,
                          r.xar_email, r.xar_pass, r.xar_date_reg,
@@ -614,15 +600,12 @@ class xarRole extends Object
      * countChildren: count the members of a group
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
      * @param integer state count user in this state
      * @param string selection count user within this selection criteria
      * @param integer type group or user
-     * @return boolean
-     * @throws none
-     * @todo none
+     * @return int
      */
-    function countChildren($state = ROLES_STATE_CURRENT, $selection = NULL, $type = NULL)
+    public function countChildren($state = ROLES_STATE_CURRENT, $selection = NULL, $type = NULL)
     {
         $q = new xarQuery('SELECT');
         $q->addfield('COUNT(r.xar_uid) AS children');
@@ -651,14 +634,11 @@ class xarRole extends Object
      * countUsers: count the members of a group that are users
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param integer state count user in this state
-     * @param string selection count user within this selection criteria
-     * @return boolean
-     * @throws none
-     * @todo none
+     * @param int    $state count user in this state
+     * @param string $selection count user within this selection criteria
+     * @return int
      */
-    function countUsers($state = ROLES_STATE_CURRENT, $selection = NULL)
+    public function countUsers($state = ROLES_STATE_CURRENT, $selection = NULL)
     {
         return $this->countChildren(0, $state, $selection);
     }
@@ -667,13 +647,9 @@ class xarRole extends Object
      * getParents: returns the parent objects of a role
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param none $
      * @return array of role objects
-     * @throws none
-     * @todo none
      */
-    function getParents()
+    public function getParents()
     {
         static $stmt = null;  // The query below is the same for each uid, prepare it once.
 
@@ -721,12 +697,9 @@ class xarRole extends Object
      * getAncestors: returns all objects in the roles hierarchy above a role
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param none
      * @return array of role objects. The objects can be queried with the getLevel() method to show their relationship (1=prents, 2=grandparents etc.).
-     * @throws none
      */
-    function getAncestors()
+    public function getAncestors()
     {
         // if this is the root return an empty array
         if ($this->getID() == 1) return array();
@@ -767,13 +740,12 @@ class xarRole extends Object
      * getDescendants: get the descendaants of a group
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param integer state get users in this state
-     * @return list of users
-     * @throws none
+     * @param int state get users in this state
+     * @param int $grpflag
+     * @return array list of users
      * @todo evaluate performance of this (3 loops, of which 2 nested)
      */
-    function getDescendants($state = ROLES_STATE_CURRENT, $grpflag=0)
+    public function getDescendants($state = ROLES_STATE_CURRENT, $grpflag=0)
     {
         $role = xarRoles::getRole($this->uid);
         $users = $role->getUsers($state);
@@ -803,13 +775,11 @@ class xarRole extends Object
      * Two role objects are considered equal if they have the same uid.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param none $
-     * @return boolean
-     * @throws none
-     * @todo none
+     * @param object $role
+     * @return bool
+     * @todo replace this with the hash object equality check?
      */
-    function isEqual($role)
+    public function isEqual($role)
     {
         return $this->getID() == $role->getID();
     }
@@ -821,16 +791,11 @@ class xarRole extends Object
      * Groups have type = 3.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param none $
-     * @return boolean
-     * @throws none
-     * @todo none
+     * @return bool
      */
-    function isUser()
+    public function isUser()
     {
         $base = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('itemtype' => $this->getType(), 'moduleid' => 27));
- //       if ($base['itemtype'] != 3) {var_dump($base);exit;}
         return $base['itemtype'] == ROLES_USERTYPE;
     }
 
@@ -838,13 +803,10 @@ class xarRole extends Object
      * isParent: checks whether a role is a parent of this one
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param none $
-     * @return boolean
-     * @throws none
-     * @todo none
+     * @param object $role
+     * @return bool
      */
-    function isParent($role)
+    public function isParent($role)
     {
         $parents = $this->getParents();
         foreach ($parents as $parent) {
@@ -857,13 +819,10 @@ class xarRole extends Object
      * isAncestor: checks whether a role is an ancestor of this one
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param none $
-     * @return boolean
-     * @throws none
-     * @todo none
+     * @param object $role
+     * @return bool
      */
-    function isAncestor($role)
+    public function isAncestor($role)
     {
         $ancestors = $this->getAncestors();
         foreach ($ancestors as $ancestor) {
@@ -876,13 +835,10 @@ class xarRole extends Object
      * adjustParentUsers: adjust of a user's parent user tallies
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param integer
-     * @return boolean
-     * @throws none
-     * @todo none
+     * @param int $adjust
+     * @return bool
      */
-    function adjustParentUsers($adjust)
+    public function adjustParentUsers($adjust)
     {
         $q = new xarQuery('SELECT', $this->rolestable, 'xar_users AS users');
         $q1 = new xarQuery('UPDATE', $this->rolestable);
@@ -962,10 +918,8 @@ class xarRole extends Object
      * Get and set methods for the class variables
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
      * @param n $ /a
      * @return n /a
-     * @throws none
      * @todo since there are so many a generalized getter (magic __get() ) might be more pleasurable
      */
     function getID()
@@ -1062,5 +1016,4 @@ class xarRole extends Object
         $this->parentlevel = $var;
     }
 }
-
 ?>

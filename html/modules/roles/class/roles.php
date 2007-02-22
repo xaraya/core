@@ -3,14 +3,15 @@
  * xarRoles class
  *
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 
+sys::import('modules.roles.class.xarQuery');
 /**
  * xarRoles: class for the role repository
  *
@@ -18,11 +19,7 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
- * @throws none
- * @todo none
  */
-sys::import('modules.roles.class.xarQuery');
-
 class xarRoles extends Object
 {
     const ROLES_STATE_DELETED = 0;
@@ -62,11 +59,7 @@ class xarRoles extends Object
      * On subsequent calls it just returns the array .
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access private
-     * @param none $
      * @return array of arrays representing all the groups
-     * @throws none
-     * @todo none
      */
     public static function getgroups()
     {
@@ -86,11 +79,8 @@ class xarRoles extends Object
      * The repository contains an entry for each user and group.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access private
-     * @param integer $
+     * @param integer $uid
      * @return array representing the group
-     * @throws none
-     * @todo none
      */
     public static function getgroup($uid)
     {
@@ -108,11 +98,8 @@ class xarRoles extends Object
      * We don't include users in the tree because there are too many to display
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access private
-     * @param none $
+     * @param int $uid
      * @return array representing the subgroups of a group
-     * @throws none
-     * @todo none
      */
     public static function getsubgroups($uid)
     {
@@ -132,11 +119,8 @@ class xarRoles extends Object
      * Retrieves a single role (user or group) from the roles repository
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param integer $
-     * @return role object
-     * @throws none
-     * @todo none
+     * @param integer $uid
+     * @return object role
      */
     public static function getRole($uid)
     {
@@ -158,10 +142,8 @@ class xarRoles extends Object
      * This is a convenience class for module developers
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param string $
-     * @return role object
-     * @throws none
+     * @param string $name
+     * @return object role
      * @todo cache this too?
      */
     public static function findRole($name)
@@ -169,6 +151,13 @@ class xarRoles extends Object
         return self::_lookuprole('xar_name',$name,$state=ROLES_STATE_ACTIVE);
     }
 
+    /**
+     * ufindRole: finds a single role based on its username
+     *
+     * @param string $uname
+     * @return object role
+     * @todo cache this too?
+     */
     public static function ufindRole($uname)
     {
         return self::_lookuprole('xar_uname',$uname,$state=ROLES_STATE_ACTIVE);
@@ -181,11 +170,9 @@ class xarRoles extends Object
      * This is a convenience class for module developers
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param string $
-     * @param string $
-     * @return boolean
-     * @throws none
+     * @param string $childname
+     * @param string $parentname
+     * @return bool
      * @todo create exceptions for bad input
      * @todo seems we could do this in one query instead of two?
      */
@@ -247,10 +234,8 @@ class xarRoles extends Object
      * This is a convenience class for module developers
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param string $
-     * @return boolean
-     * @throws none
+     * @param string $rootname
+     * @return bool
      * @todo create exceptions for bad input
      */
     public static function isRoot($rootname)
@@ -280,12 +265,16 @@ class xarRoles extends Object
      * This is a convenience method for module developers
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param string $
-     * @param string $
-     * @param string $
-     * @return boolean
-     * @throws none
+     * @param string $name
+     * @param string $uname
+     * @param string $email
+     * @param string $pass
+     * @param string $datereg
+     * @param string $valcode
+     * @param int    $state
+     * @param int    $authmodule
+     * @param array  $duvs
+     * @return bool
      * @todo create exception handling for bad input
      */
     public static function makeUser($name, $uname, $email, $pass = 'xaraya', $datereg = '', $valcode = '', $state = ROLES_STATE_ACTIVE, $authmodule = 0, $duvs=array())
@@ -327,10 +316,9 @@ class xarRoles extends Object
      * This is a convenience method for module developers
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param string $
-     * @return boolean
-     * @throws none
+     * @param string $name
+     * @param string $uname
+     * @return bool
      */
     public static function makeGroup($name,$uname='')
     {
@@ -363,8 +351,6 @@ class xarRoles extends Object
      * _getgroupsquery: query for getting groups
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access private
-     * @todo none
      */
     private static function _getgroupsquery()
     {
@@ -394,6 +380,14 @@ class xarRoles extends Object
         return $q;
     }
 
+    /**
+     * _lookuprole : Lookup a row based upon a specified field
+     *
+     * @param string $field
+     * @param mixed  $value
+     * @param int    $state
+     * @return object a role
+     */
     private static function _lookuprole($field,$value,$state=ROLES_STATE_ALL)
     {
         // retrieve the object's data from the repository
@@ -437,7 +431,5 @@ class xarRoles extends Object
         sys::import('modules.roles.class.role');
         return new xarRole($pargs);
     }
-
 }
-
 ?>
