@@ -182,5 +182,11 @@ UPDATE `xar_privileges` SET type = 3 WHERE type IS NULL;
 DROP TABLE 'xar_security_masks';
 
 /* Making the default value in the rolemembers table form 0 to null' */
+DROP INDEX i_xar_rolememb_id ON xar_rolemembers;
 ALTER TABLE `xar_rolemembers` CHANGE `xar_parentid` `xar_parentid` INTEGER DEFAULT NULL;
 UPDATE `xar_rolemembers` SET xar_parentid = NULL WHERE xar_parentid = 0;
+
+/* Making the default value in the privmembers table form 0 to null' */
+DROP INDEX i_xar_privmembers_id ON xar_privmembers;
+ALTER TABLE `xar_privmembers` CHANGE `xar_parentid` `xar_parentid` INTEGER DEFAULT NULL;
+UPDATE `xar_privmembers` SET xar_parentid = NULL WHERE xar_parentid = 0;

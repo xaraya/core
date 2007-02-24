@@ -47,7 +47,7 @@ class DataPropertyMaster extends Object
                          xar_prop_id, xar_prop_default, xar_prop_source,
                          xar_prop_status, xar_prop_order, xar_prop_validation,
                          xar_prop_objectid FROM $dynamicprop ";
-        if(!isset($args['objectid']))
+        if(empty($args['objectid']))
         {
             $doargs['moduleid'] = $args['moduleid'];
             $doargs['itemtype'] = $args['itemtype'];
@@ -62,7 +62,6 @@ class DataPropertyMaster extends Object
             $query .= " AND xar_prop_status > 0 ";
 
         $query .= " ORDER BY xar_prop_order ASC, xar_prop_id ASC";
-
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
 

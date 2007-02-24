@@ -135,13 +135,11 @@ function privileges_init()
 
         $query = xarDBCreateTable($tables['privmembers'],
                                   array('xar_pid'       => array('type'        => 'integer',
-                                                                 'null'        => false,
-                                                                 'default'     => '0',
-                                                                 'primary_key' => true),
+                                                                 'null'        => true,
+                                                                 'default'     => null),
                                         'xar_parentid'      => array('type'        => 'integer',
-                                                                     'null'        => false,
-                                                                     'default'     => '0',
-                                                                     'primary_key' => true)));
+                                                                 'null'        => true,
+                                                                 'default'     => null)));
         $dbconn->Execute($query);
 
         xarDB::importTables(array('privmembers' => xarDBGetSiteTablePrefix() . '_privmembers'));

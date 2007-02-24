@@ -114,21 +114,18 @@ function roles_init()
 
         $query = xarDBCreateTable($tables['rolemembers'],
                                   array('xar_uid' => array('type'        => 'integer',
-                                                           'null'        => false,
-                                                           'default'     => '0',
-                                                           'primary_key' => true),
+                                                           'null'        => true,
+                                                           'default'     => null),
                                         'xar_parentid' => array('type'        => 'integer',
                                                                 'null'        => true,
                                                                 'default'     => null)));
         $dbconn->Execute($query);
 
-        /* CHECKME: if this is already the primary, why does it need to be an index?
         $index = array('name' => 'i_' . $sitePrefix . '_rolememb_uid',
                        'fields' => array('xar_uid'),
                        'unique' => false);
         $query = xarDBCreateIndex($tables['rolemembers'], $index);
         $dbconn->Execute($query);
-        */
 
         $index = array('name' => 'i_' . $sitePrefix . '_rolememb_parentid',
                        'fields' => array('xar_parentid'),
