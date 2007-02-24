@@ -5,7 +5,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-    <!--   IMPORTANT! - we need to get blocks data early in source by assigning 
+    <!--   IMPORTANT! - we need to get blocks data early in source by assigning
                     'to be later used'  blockgroups and/or individual instances to local vars,
                     otherwise block stylesheets/embedded styles cannot be delivered in time to head section
                     TODO: this is a known major shortcoming of blocks subsystem - FIX ASAP
@@ -19,7 +19,7 @@
     <xar:set name="rightblocksgroup"><xar:blockgroup name="right" id="right" /></xar:set>
     <xar:set name="leftblocksgroup"><xar:blockgroup name="left" id="left" /></xar:set>
     <xar:set name="centerblocksgroup"><xar:blockgroup name="center" id="center" /></xar:set>
-    
+
     <!-- prepare some other common local variables which may be used in the theme -->
     <xar:set name="classicthemedir">#xarTplGetThemeDir()#</xar:set>
     <xar:set name="sitename"><xar:var scope="module" module="themes" name="SiteName" /></xar:set>
@@ -35,7 +35,7 @@
             <div id="classictopnavigation">
                 <xar:var name="topnavblocksgroup" />
             </div>
-        </xar:if>        
+        </xar:if>
         <xar:template file="pageblockgroups" type="theme" />
         <xar:template file="pagefooter" type="theme" />
     </div>
