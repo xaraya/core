@@ -11,11 +11,6 @@
                     TODO: this is a known major shortcoming of blocks subsystem - FIX ASAP
     -->
     <xar:set name="topnavblocksgroup"><xar:blockgroup name="topnav" id="topnav" /></xar:set>
-    <xar:if condition="!empty($topnavblocksgroup)">
-        <div id="classictopnavigation">
-            <xar:var name="topnavblocksgroup" />
-        </div>
-    </xar:if>
     <xar:set name="rightblocksgroup"><xar:blockgroup name="right" id="right" /></xar:set>
     <xar:set name="leftblocksgroup"><xar:blockgroup name="left" id="left" /></xar:set>
     <xar:set name="centerblocksgroup"><xar:blockgroup name="center" id="center" /></xar:set>
