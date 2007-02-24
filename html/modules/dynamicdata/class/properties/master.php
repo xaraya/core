@@ -52,7 +52,8 @@ class DataPropertyMaster extends Object
             $doargs['moduleid'] = $args['moduleid'];
             $doargs['itemtype'] = $args['itemtype'];
             $info = DataObjectDescriptor::getObjectID($doargs);
-            $args['objectid'] = $info['objectid'];
+            // FIXME: this needs to be solved a better way
+            $args['objectid'] = $info['objectid'] != 1 ? $info['objectid'] : null;
 
         }
         $query .= " WHERE xar_prop_objectid = ?";
