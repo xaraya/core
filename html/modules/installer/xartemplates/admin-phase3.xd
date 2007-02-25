@@ -52,7 +52,7 @@
                     <li class="success">
                         <xar:ml>
                             <xar:mlstring>
-                                PHP Version is greater than or equal to 5.0. Your PHP Version is #(1)
+                                PHP Version is greater than or equal to 5.2. Your PHP Version is #(1)
                             </xar:mlstring>
                             <xar:mlvar>
                                 #$phpVersion#
