@@ -28,7 +28,7 @@ function roles_admin_testprivileges()
 {
     // Get Parameters
     if (!xarVarFetch('uid', 'int:1:', $uid)) return;
-    if (!xarVarFetch('pmodule', 'str:1:', $module, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('pmodule', 'int', $module, xarMasks::PRIVILEGES_ALL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('name', 'str:1', $name, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('test', 'str:1:35:', $test, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
 
@@ -49,20 +49,13 @@ function roles_admin_testprivileges()
     }
     $data['parents'] = $parents;
 
-    // Call the Privileges class and
-    // get a list of all modules for dropdown display
-    sys::import('modules.privileges.class.privileges');
-    $privileges = new xarPrivileges();
-    $allmodules = $privileges->getmodules();
-    // Call the Masks class
-    $masks = new xarMasks();
     // we want to do test
     if (!empty($test)) {
         // get the mask to test against
-        $mask = $masks->getMask($name);
+        $mask = xarMasks::getMask($name);
         $component = $mask->getComponent();
         // test the mask against the role
-        $testresult = $masks->xarSecurityCheck($name, 0, $component, 'All', $mask->getModule(), $role->getName());
+        $testresult = xarMasks::xarSecurityCheck($name, 0, $component, 'All', $mask->getModule(), $role->getName());
         // test failed
         if (!$testresult) {
             $resultdisplay = xarML('Privilege: none found');
@@ -105,10 +98,8 @@ function roles_admin_testprivileges()
     $data['itemtypename'] = $types[$data['itemtype']]['label'];
     $data['pmodule'] = $module;
     $data['uid'] = $uid;
-    $data['allmodules'] = $allmodules;
     $data['testlabel'] = xarML('Test');
-    if (empty($module)) $data['masks'] = array();
-    else $data['masks'] = $masks->getmasks(strtolower($module));
+    $data['masks'] = xarMasks::getmasks($module);
     $data['authid'] = xarSecGenAuthKey();
     return $data;
     // redirect to the next page

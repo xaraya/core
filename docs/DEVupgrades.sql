@@ -174,12 +174,12 @@ ALTER TABLE `xar_privileges` CHANGE `xar_module` `xar_module` VARCHAR(100) DEFAU
 UPDATE `xar_privileges` SET xar_module = NULL WHERE xar_module = 'empty';
 UPDATE `xar_privileges` SET xar_module = 0 WHERE xar_module = 'All';
 ALTER TABLE `xar_privileges` CHANGE `xar_module` `xar_modid` INTEGER DEFAULT NULL;
-ALTER TABLE xar_privileges DROP INDEX i_xar_privileges_name;
+ALTER TABLE xar_privileges DROP INDEX `i_xar_privileges_name`;
 CREATE UNIQUE INDEX i_xar_privileges_name ON xar_privileges (xar_name,xar_modid,type);
 INSERT INTO xar_privileges (xar_pid, xar_name, xar_realmid, xar_modid, xar_component, xar_instance, xar_level, xar_description)
 SELECT 0,xar_name, xar_realmid, xar_modid, xar_component, xar_instance, xar_level, xar_description FROM xar_security_masks;
 UPDATE `xar_privileges` SET type = 3 WHERE type IS NULL;
-DROP TABLE 'xar_security_masks';
+DROP TABLE `xar_security_masks`;
 
 /* Making the default value in the rolemembers table form 0 to null' */
 DROP INDEX i_xar_rolememb_id ON xar_rolemembers;

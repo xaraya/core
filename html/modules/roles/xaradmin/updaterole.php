@@ -19,7 +19,7 @@
 function roles_admin_updaterole()
 {
     // Check for authorization code
-//    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) return;
     if (!xarVarFetch('uid', 'int:1:', $uid)) return;
     if (!xarVarFetch('pname', 'str:1:35:', $pname)) return;
     if (!xarVarFetch('itemtype', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;
