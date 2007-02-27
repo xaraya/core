@@ -92,12 +92,12 @@
     <property name="state">
       <id>37</id>
       <label>State</label>
-      <type>integerbox</type>
+      <type>dropdown</type>
       <default></default>
       <source>xar_roles.xar_state</source>
       <status>65</status>
       <order>9</order>
-      <validation></validation>
+      <validation>xarModAPIFunc('roles','user','getstates')</validation>
     </property>
     <property name="authmodule">
       <id>38</id>

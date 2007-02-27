@@ -38,10 +38,7 @@ function roles_admin_newrole()
     // Security Check
     if (!xarSecurityCheck('AddRole')) return;
 
-    $data['states'] = array(ROLES_STATE_INACTIVE => xarML('Inactive'),
-                            ROLES_STATE_NOTVALIDATED => xarML('Not Validated'),
-                            ROLES_STATE_ACTIVE => xarML('Active'),
-                            ROLES_STATE_PENDING => xarML('Pending'));
+    $data['states'] = xarModAPIFunc('roles','user','getstates');
     // call item new hooks (for DD etc.)
     $item = $data;
     $item['module'] = 'roles';
