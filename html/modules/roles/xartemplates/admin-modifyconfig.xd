@@ -174,19 +174,7 @@
                             Default Group For New Users:
                         </xar:mlstring>
                     </label>
-                    <select name="defaultgroup" id="defaultgroup">
-                        <xar:loop name="$groups">
-                            <xar:if condition="$loop:item['name'] eq $defaultgroup">
-                                <option name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['name']#" selected="selected">
-                                    #$loop:item['name']#
-                                </option>
-                                <xar:else />
-                                <option name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['name']#">
-                                    #$loop:item['name']#
-                                </option>
-                            </xar:if>
-                        </xar:loop>
-                    </select>
+                    <xar:data-input type="grouplist" name="defaultgroup" id="defaultgroup" value="$defaultgroup" />
                 </div>
             </fieldset>
             <fieldset>
