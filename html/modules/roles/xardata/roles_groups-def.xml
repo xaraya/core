@@ -37,7 +37,7 @@
       <source>xar_roles.xar_type</source>
       <status>65</status>
       <order>3</order>
-      <validation></validation>
+      <validation>roles</validation>
     </property>
     <property name="users">
       <id>42</id>
@@ -62,7 +62,7 @@
     <property name="regdate">
       <id>44</id>
       <label>Reg. Date</label>
-      <type>textbox</type>
+      <type>calendar</type>
       <default></default>
       <source>xar_roles.xar_date_reg</source>
       <status>33</status>
@@ -82,12 +82,12 @@
     <property name="state">
       <id>46</id>
       <label>State</label>
-      <type>integerbox</type>
+      <type>dropdown</type>
       <default></default>
       <source>xar_roles.xar_state</source>
       <status>65</status>
       <order>8</order>
-      <validation></validation>
+      <validation>xarModAPIFunc('roles','user','getstates')</validation>
     </property>
     <property name="authmodule">
       <id>47</id>

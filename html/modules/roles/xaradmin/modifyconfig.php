@@ -1,13 +1,11 @@
 <?php
 /**
- * Modify configuration
- *
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -68,19 +66,6 @@ function roles_admin_modifyconfig()
                 }
             }
 
-            // create the dropdown of groups for the template display
-            // get the array of all groups
-            // remove duplicate entries from the list of groups
-            $groups = array();
-            $names  = array();
-            foreach(xarRoles::getgroups() as $temp) {
-                $nam = $temp['name'];
-                if (!in_array($nam, $names)) {
-                   array_push($names, $nam);
-                   array_push($groups, $temp);
-                }
-            }
-
             $checkip = xarModGetVar('roles', 'disallowedips');
             if (empty($checkip)) {
                 $ip = serialize('10.0.0.1'); // <mrb> why 10.0.0.1 ?
@@ -88,10 +73,8 @@ function roles_admin_modifyconfig()
             }
             $data['siteadmins']   = $siteadmins;
             $data['defaultgroup'] = xarModGetVar('roles', 'defaultgroup');
-            $data['groups']       = $groups;
 
             $data['authid']       = xarSecGenAuthKey();
-            $data['updatelabel']  = xarML('Update Roles Configuration');
             $hooks = array();
 
             switch ($data['tab']) {
