@@ -67,12 +67,12 @@
       <source>xar_roles.xar_pass</source>
       <status>65</status>
       <order>6</order>
-      <validation></validation>
+      <validation>confirm</validation>
     </property>
     <property name="regdate">
       <id>35</id>
       <label>Reg. Date</label>
-      <type>textbox</type>
+      <type>calendar</type>
       <default></default>
       <source>xar_roles.xar_date_reg</source>
       <status>33</status>
@@ -102,8 +102,8 @@
     <property name="authmodule">
       <id>38</id>
       <label>Auth. Module</label>
-      <type>textbox</type>
-      <default></default>
+      <type>module</type>
+      <default>xarModGetVar('roles', 'defaultauthmodule');</default>
       <source>xar_roles.xar_auth_modid</source>
       <status>65</status>
       <order>10</order>

@@ -37,7 +37,7 @@
       <source>xar_roles.xar_type</source>
       <status>65</status>
       <order>3</order>
-      <validation></validation>
+      <validation>roles</validation>
     </property>
     <property name="users">
       <id>42</id>
@@ -62,7 +62,7 @@
     <property name="regdate">
       <id>44</id>
       <label>Reg. Date</label>
-      <type>textbox</type>
+      <type>calendar</type>
       <default></default>
       <source>xar_roles.xar_date_reg</source>
       <status>33</status>
