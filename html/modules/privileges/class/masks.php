@@ -110,7 +110,7 @@ class xarMasks extends Object
                 $bindvars = array($component,'All','None');
             }
         } else {
-            $modInfo = xarMod_GetBaseInfo(xarModGetNameFromId($modid));
+            $modInfo = xarMod_GetBaseInfo(xarMod::GetName($modid));
             $modid = $modInfo['systemid'];
             if ($component == '' || $component == 'All') {
                 $query .= "WHERE xar_modid = ? ";

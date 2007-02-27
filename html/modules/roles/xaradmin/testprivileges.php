@@ -86,7 +86,7 @@ function roles_admin_testprivileges()
             $testmaskarray[] = $thismask;
         }
         $data['testmasks'] = $testmaskarray;
-        $module = $mask->getModule();
+        $modid = $mask->getModuleID();
     }
     // no test yet
     // Load Template
