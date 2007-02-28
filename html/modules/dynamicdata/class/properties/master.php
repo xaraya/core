@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * @package modules
+ * @copyright (C) 2002-2007 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata
+ * @link http://xaraya.com/index.php/release/182.html
+ */
 sys::import('modules.dynamicdata.class.properties.base');
 sys::import('modules.dynamicdata.class.objects.base');
 sys::import('modules.dynamicdata.class.properties.registration');
@@ -7,8 +15,6 @@ sys::import('modules.dynamicdata.class.properties.registration');
 /**
  * Utility Class to manage Dynamic Properties
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
  */
 class DataPropertyMaster extends Object
 {
@@ -67,14 +73,12 @@ class DataPropertyMaster extends Object
         $result = $stmt->executeQuery($bindvars);
 
         $properties = array();
-        while ($result->next())
-        {
+        while ($result->next()) {
             list(
                 $name, $label, $type, $id, $default, $source, $fieldstatus,
                 $order, $validation, $_objectid
                 ) = $result->fields;
-            if(xarSecurityCheck('ReadDynamicDataField',0,'Field',"$name:$type:$id"))
-            {
+            if (xarSecurityCheck('ReadDynamicDataField',0,'Field',"$name:$type:$id")) {
                 $property = array(
                     'name'          => $name,
                     'label'         => $label,
@@ -89,13 +93,14 @@ class DataPropertyMaster extends Object
                     '_objectid'     => $_objectid,
                     'class'         => ''
                 );
-                if(isset($args['objectref']))
+                if(isset($args['objectref'])) {
                     self::addProperty($property,$args['objectref']);
-                else
+                }
+                else {
                     $properties[$name] = $property;
+                }
             }
         }
-//        $result->close();
 
         return $properties;
     }
@@ -195,14 +200,6 @@ class DataPropertyMaster extends Object
             $dp = str_replace('/','.',substr($propertyInfo['filepath'],0,-4)); // minus .php
             sys::import($dp);
 
-            /*  TODO: confirm that not needed and remove
-            if(isset($propertyInfo['args']) && !empty($propertyInfo['args']) )
-            {
-                if(!is_array($propertyInfo['args'])) {echo $propertyInfo['args'];exit;}
-                $baseArgs = unserialize($propertyInfo['args']);
-                $args = array_merge($baseArgs, $args);
-            }
-            */
             $clazz = $propertyClass;
         }
         // DataProperty or the determined one
@@ -239,12 +236,10 @@ class DataPropertyMaster extends Object
             )
         );
         $object = new DataObject($descriptor);
-        if(empty($object))
-            return;
+        if (empty($object)) return;
 
         $objectid = $object->getItem();
-        if(empty($objectid))
-            return;
+        if (empty($objectid)) return;
 
         $objectid = $object->deleteItem();
         unset($object);
@@ -256,16 +251,7 @@ class DataPropertyMaster extends Object
      */
     static function getPropertyTypes()
     {
-        if(xarVarIsCached('DynamicData','PropertyTypes')) {
-            return xarVarGetCached('DynamicData','PropertyTypes');
-        }
-
-        // Attempt to retrieve properties from DB
-        $property_types = PropertyRegistration::Retrieve();
-
-        xarVarSetCached('DynamicData','PropertyTypes',$property_types);
-        return $property_types;
+        return PropertyRegistration::Retrieve();
     }
-
 }
 ?>
