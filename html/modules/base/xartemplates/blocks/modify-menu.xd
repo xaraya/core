@@ -1,7 +1,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <!--
-    We know that blocks.css file is already included by admin-modify_instance.xd, so no need to do it twice 
+    We know that blocks.css file is already included by admin-modify_instance.xd, so no need to do it twice
 -->
 
 <xar:if condition="!empty($content)">
