@@ -1,17 +1,21 @@
 <?php
 /**
- * The DD factory (sort of)
- *
  * @package modules
- * @subpackage dynamicdata
+ * @copyright (C) 2002-2007 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
  *
- * @todo make this a real factory
- * @todo scoping of variables
- **/
+ * @subpackage dynamicdata
+ * @link http://xaraya.com/index.php/release/182.html
+ */
+
 sys::import('xaraya.structures.descriptor');
 sys::import('modules.dynamicdata.class.datastores');
 sys::import('modules.dynamicdata.class.properties');
 
+/**
+ * generate the variables necessary to instantiate a DataObject or DataProperty class
+ */
 class DataObjectDescriptor extends ObjectDescriptor
 {
     function __construct(array $args=array())
