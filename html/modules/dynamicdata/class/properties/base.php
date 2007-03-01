@@ -1,4 +1,13 @@
 <?php
+/**
+ * @package modules
+ * @copyright (C) 2002-2007 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
+ * @subpackage dynamicdata
+ * @link http://xaraya.com/index.php/release/182.html
+ */
 
 sys::import('modules.dynamicdata.class.properties.master');
 sys::import('modules.dynamicdata.class.properties.interfaces');
@@ -6,11 +15,9 @@ sys::import('modules.dynamicdata.class.properties.interfaces');
 /**
  * Base Class for Dynamic Properties
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
  * @todo is this abstract?
  * @todo the visibility of most of the attributes can probably be protected
-**/
+ */
 class DataProperty extends Object implements iDataProperty
 {
     // Attributes for registration
@@ -24,9 +31,7 @@ class DataProperty extends Object implements iDataProperty
     public $status         = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
     public $order          = 0;
     public $format         = '0'; //<-- eh?
-    public $reqmodules     = array();  // these modules must be available before this property is enabled (optional)
-    public $aliases        = '';  // If the same property class is reused directly with just different base info, supply the alternate base properties here (optional)
-    public $filepath       = 'modules/dynamicdata/xarproperties';         // where is our class for it?
+    public $filepath       = 'modules/dynamicdata/xarproperties';
     public $class          = '';         // what class is this?
 
     // Attributes for runtime
@@ -356,32 +361,6 @@ class DataProperty extends Object implements iDataProperty
     }
 
     /**
-     * Get the base information for this property.
-     *
-     * @returns array
-     * @return base information for this property
-     **/
-    function getBasePropertyInfo()
-    {
-        $baseInfo = array(
-            'id'         => $this->id,
-            'name'       => $this->name,
-            'label'      => $this->label,
-            'format'     => $this->format,
-            'template'   => $this->template,
-            'tplmodule'  => $this->tplmodule,
-            'validation' => $this->validation,
-            'source'     => $this->source,
-            'dependancies' => $this->dependancies,
-            'requiresmodule' => $this->requiresmodule,
-            'aliases' => $this->aliases,
-            'args' => $this->args
-                          // ...
-        );
-        return $baseInfo;
-    }
-
-    /**
      * The following methods provide an interface to show and update validation rules
      * when editing dynamic properties. They should be customized for each property
      * type, based on its specific format and interpretation of the validation rules.
@@ -441,7 +420,7 @@ class DataProperty extends Object implements iDataProperty
     }
 
     /**
-     * Update the current validation rule in a specific way for this property type
+     * Update the current validation rule in a specific way for this property
      *
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
      * @param $args['validation'] validation rule (default is the current validation)
@@ -495,6 +474,7 @@ class DataProperty extends Object implements iDataProperty
         $template = empty($this->template) ? $this->name : $this->template;
         return $template;
     }
+
     public static function getRegistrationInfo()
     {
         $info = new PropertyRegistration();
@@ -505,6 +485,7 @@ class DataProperty extends Object implements iDataProperty
 
         return $info;
     }
+
     function aliases()
     {
         return array();
