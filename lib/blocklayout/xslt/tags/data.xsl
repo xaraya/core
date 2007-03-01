@@ -56,6 +56,7 @@
           <!-- Use the object attribute -->
           <xsl:text>echo </xsl:text><xsl:value-of select="@object"/>
           <xsl:text>-&gt;showForm(</xsl:text>
+          <xsl:call-template name="atts2args">
             <xsl:with-param name="nodeset" select="@*[name() != 'object']"/>
           </xsl:call-template>
           <xsl:text>);</xsl:text>
