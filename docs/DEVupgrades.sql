@@ -156,6 +156,9 @@ ALTER TABLE `xar_dynamic_properties` DROP INDEX `i_xar_dynprops_combo`;
 ALTER TABLE `xar_dynamic_properties` DROP `xar_prop_moduleid` , DROP `xar_prop_itemtype` ;
 DELETE FROM `xar_dynamic_properties` WHERE `xar_dynamic_properties`.`xar_prop_id` =15 LIMIT 1 ;
 DELETE FROM `xar_dynamic_properties` WHERE `xar_dynamic_properties`.`xar_prop_id` =16 LIMIT 1 ;
+ALTER TABLE `xar_dynamic_properties` DROP INDEX `i_xar_dynprops_name`;
+ALTER TABLE `xar_dynamic_properties` DROP INDEX `i_xar_dynprops_objectid`;
+ALTER TABLE `xar_dynamic_properties` ADD UNIQUE `i_xar_dynprops_combo` ( `xar_prop_objectid` , `xar_prop_name` );
 
 /* merging the masks and privileges tables */
 /*
