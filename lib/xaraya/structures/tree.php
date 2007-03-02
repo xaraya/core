@@ -35,7 +35,7 @@ class TreeNode extends Object implements ITreeNode
     {
         $data = $this->tree->treedata;
         uasort($data, array($this,"comparelevels"));
-//        krsort($data);
+        krsort($data);
         $data1 = array();
         foreach ($data as $key => $value) {
             $children = array();
@@ -44,7 +44,7 @@ class TreeNode extends Object implements ITreeNode
             }
             $data1[$key] = array('id' => $key, 'children' => $children);
         }
-//        $data1 = !empty($data1) ? array_pop($data1) : $data1;
+        $data1 = !empty($data1) ? array_pop($data1) : $data1;
         $nodeset = new BasicSet();
         $arrayIterator = new RecursiveArrayIterator($data1);
         $iterator = new RecursiveIteratorIterator($arrayIterator);
