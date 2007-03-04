@@ -83,7 +83,7 @@ function dynamicdata_adminapi_updatehook($args)
                                          'itemtype' => $itemtype,
                                          'itemid'   => $itemid,
                                          'extend' => false));
-    if($myobject->objectid == 1) return $extrainfo;
+
     if (!isset($myobject)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
         $vars = array('object', 'admin', $dd_function, 'dynamicdata');
@@ -91,6 +91,7 @@ function dynamicdata_adminapi_updatehook($args)
     }
 
     $myobject->getItem();
+
     // use the values passed via $extrainfo if available
     $isvalid = $myobject->checkInput($extrainfo);
     if (!$isvalid) {

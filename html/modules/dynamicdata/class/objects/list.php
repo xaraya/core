@@ -496,8 +496,7 @@ class DataObjectList extends DataObjectMaster
         }
         $args['linktype'] = $linktype;
 
-        if(empty($itemtype))
-            $itemtype = null; // don't add to URL
+        if(empty($itemtype)) $itemtype = 0; // don't add to URL
         $args['table'] = !empty($this->table) ? $this->table : null;
         $args['objectname'] = !empty($this->name) ? $this->name : null;
         $args['modname'] = $modname;
@@ -569,7 +568,6 @@ class DataObjectList extends DataObjectMaster
             $args['nexturl'],
             $args['sorturl']) = $this->getPager($args['pagerurl']);
 
-        //die(var_dump($args['template']));
         return xarTplObject($args['tplmodule'],$args['template'],'showview',$args);
     }
 

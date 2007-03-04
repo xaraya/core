@@ -57,7 +57,7 @@ class DataObjectDescriptor extends ObjectDescriptor
      *
      * @return array all parts necessary to describe a DataObject
      */
-    static function getObjectID(array $args=array())
+    static function getObjectID(Array $args=array())
     {
         $xartable = xarDBGetTables();
 
@@ -69,16 +69,16 @@ class DataObjectDescriptor extends ObjectDescriptor
             $q->eq('xar_object_id',(int)$args['objectid']);
         } else {
             $args = self::getModID($args);
-            $q->eq('xar_object_moduleid',(int)$args['moduleid']);
-            $q->eq('xar_object_itemtype',(int)$args['itemtype']);
+            $q->eq('xar_object_moduleid', $args['moduleid']);
+            $q->eq('xar_object_itemtype', $args['itemtype']);
         }
         if (!$q->run()) return;
         $row = $q->row();
         if ($row == array()) {
-            $args['moduleid'] = isset($args['moduleid']) ? $args['moduleid'] : 182;  //will need to change this
-            $args['itemtype'] = isset($args['itemtype']) ? $args['itemtype'] : 0;
-            $args['objectid'] = isset($args['objectid']) ? $args['objectid'] : 1;
-            $args['name'] = isset($args['name']) ? $args['name'] : 'objects';
+            $args['moduleid'] = isset($args['moduleid']) ? $args['moduleid'] : null;
+            $args['itemtype'] = isset($args['itemtype']) ? $args['itemtype'] : null;
+            $args['objectid'] = isset($args['objectid']) ? $args['objectid'] : null;
+            $args['name'] = isset($args['name']) ? $args['name'] : null;
         } else {
             $args['moduleid'] = $row['xar_object_moduleid'];
             $args['itemtype'] = $row['xar_object_itemtype'];
@@ -249,9 +249,7 @@ class DataObjectMaster extends Object
         // add ancestors' properties to this object if required
         // the default is to add the fields
         $this->baseancestor = $this->objectid;
-        if($this->extend) {
-            $this->addAncestors();
-            }
+        if($this->extend) $this->addAncestors();
     }
 
     /**
@@ -547,7 +545,6 @@ class DataObjectMaster extends Object
     static function &getObjects($args=array())
     {
         extract($args);
-        $nullreturn = NULL;
         $dbconn = xarDBGetConn();
         $xartable = xarDBGetTables();
 
@@ -646,7 +643,6 @@ class DataObjectMaster extends Object
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
         if(!$result->first()) return;
-
         $info = array();
         list(
             $info['objectid'], $info['name'],     $info['label'],
@@ -680,10 +676,11 @@ class DataObjectMaster extends Object
 
         $classname = 'DataObject';
 
+        // Complete the info if this is a known object
         $info = self::getObjectInfo($args);
-        $descriptor = new DataObjectDescriptor($info);
-        $descriptor->setArgs($args);
-        $args = $descriptor->getArgs();
+        if ($info != null) $args = array_merge($args,$info);
+
+        $descriptor = new DataObjectDescriptor($args);
         if(!empty($args['classname']) && class_exists($args['classname']))
             $classname = $args['classname'];
         // here we can use our own classes to retrieve this
@@ -779,10 +776,11 @@ class DataObjectMaster extends Object
     **/
     static function createObject(array $args)
     {
-        $descriptor = new DataObjectDescriptor($args);
-        $object = self::getObject($descriptor->getArgs());
+        // TODO: if we extend dobject classes then probably we need to put the class name here
+        $object = self::getObject(array('name' => 'objects'));
 
         // Create specific part
+        $descriptor = new DataObjectDescriptor($args);
         $objectid = $object->createItem($descriptor->getArgs());
         $classname = get_class($object);
         xarLogMessage("Creating an object of class " . $classname . ". Objectid: " . $objectid . ", module: " . $args['moduleid'] . ", itemtype: " . $args['itemtype']);
@@ -964,7 +962,7 @@ class DataObjectMaster extends Object
       * @param bool args[top]
       * @param bool  args[base]
       */
-    static function &getAncestors(array $args)
+    static function &getAncestors(Array $args)
     {
         if(!xarSecurityCheck('ViewDynamicDataItems')) return;
 
@@ -997,8 +995,8 @@ class DataObjectMaster extends Object
             // We have a moduleid and itemtype - get the objectid
             if (empty($topobject)) {
                 if ($base) {
-                    $types = self::getModuleItemTypes(array('moduleid' => $topobject['moduleid']));
-                    $info = array('objectid' => 0, 'itemtype' => $topobject['itemtype'], 'name' => xarModGetNameFromID($moduleid));
+                    $types = self::getModuleItemTypes(array('moduleid' => $moduleid));
+                    $info = array('objectid' => 0, 'itemtype' => $itemtype, 'name' => xarModGetNameFromID($moduleid));
                     $ancestors[] = $info;
                     return $ancestors;
                 }

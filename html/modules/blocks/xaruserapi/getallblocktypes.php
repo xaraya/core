@@ -24,13 +24,14 @@ function blocks_userapi_getallblocktypes($args)
 
     // Order by columns.
     // Only id, type and module allowed.
-    // Ignore order-clause silently if incorrect unmerated columns passed in.
-    // TODO: this will now fail
-    //if (!empty($order) && xarVarValidate('strlist:,|:pre:trim:passthru:enum:module:type:id', $order, true)) {
-        //$orderby = ' ORDER BY xar_' . implode(', xar_', explode(',', $order));
-    //} else {
+    // Ignore order-clause silently if incorrect numerated columns passed in.
+
+    if (!empty($order) && xarVarValidate('strlist:,|:pre:trim:passthru:enum:module:type:id', $order, true)) {
+        $orderby = ' ORDER BY xar_' . implode(', xar_', explode(',', $order));
+        $orderby = str_ireplace("module", "name", $orderby);
+    } else {
         $orderby = '';
-    //}
+    }
 
     $dbconn =& xarDBGetConn();
     $xartable =& xarDBGetTables();
