@@ -57,6 +57,7 @@ function dynamicdata_admin_updateprop()
             if (!isset($objectid)) return;
         }
     }
+
     if (empty($modid)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
         $vars = array('module id', 'admin', 'updateprop', 'dynamicdata');

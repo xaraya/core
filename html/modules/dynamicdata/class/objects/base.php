@@ -62,7 +62,6 @@ class DataObject extends DataObjectMaster
         if(!empty($this->primary) && !empty($this->properties[$this->primary]))
             $primarystore = $this->properties[$this->primary]->datastore;
 
-//        $modinfo = xarModGetInfo($this->moduleid);
         foreach($this->datastores as $name => $datastore)
         {
             $itemid = $datastore->getItem($this->toArray());
@@ -280,8 +279,8 @@ class DataObject extends DataObjectMaster
         // special case when we try to create a new object handled by dynamicdata
         if(
             $this->objectid == 1 &&
-            $this->properties['moduleid']->value == xarModGetIDFromName('dynamicdata') &&
-            $this->properties['itemtype']->value < 2
+            $this->properties['moduleid']->value == xarModGetIDFromName('dynamicdata')
+            //&& $this->properties['itemtype']->value < 2
         )
         {
             $this->properties['itemtype']->setValue($this->getNextItemtype($args));
@@ -290,33 +289,26 @@ class DataObject extends DataObjectMaster
         // check that we have a valid item id, or that we can create one if it's set to 0
         if(empty($this->itemid))
         {
-            if ($this->baseancestor == $this->objectid) {
-                $primaryobject = $this;
-            } else {
-                $primaryobject = DataObjectMaster::getObject(array('objectid' => $this->baseancestor));
+            if ($this->baseancestor == 0) {
+                $this->baseancestor = 1;
             }
+            $primaryobject = DataObjectMaster::getObject(array('objectid' => $this->baseancestor));
+
             // no primary key identified for this object, so we're stuck
-            if(!isset($primaryobject->primary))
-            {
+            if(!isset($primaryobject->primary)) {
                 $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
                 $vars = array('primary key', 'DataObject', 'createItem', 'DynamicData');
                 throw new BadParameterException($vars,$msg);
-            }
-            else
-            {
+            } else {
                 if ($this->objectid == 1) {
                     $value = 0;
                 } else {
                     $value = $primaryobject->properties[$primaryobject->primary]->getValue();
                 }
-
                 // we already have an itemid value in the properties
-                if(!empty($value))
-                {
+                if(!empty($value)) {
                     $this->itemid = $value;
-                }
-                elseif(!empty($primaryobject->properties[$primaryobject->primary]->datastore))
-                {
+                } elseif(!empty($primaryobject->properties[$primaryobject->primary]->datastore)) {
                     // we'll let the primary datastore create an itemid for us
                     $primarystore = $primaryobject->properties[$primaryobject->primary]->datastore;
                     // add the primary to the data store fields if necessary
@@ -324,9 +316,7 @@ class DataObject extends DataObjectMaster
                         $this->datastores[$primarystore]->addField($this->properties[$this->primary]); // use reference to original property
 
                     $this->itemid = $this->datastores[$primarystore]->createItem($this->toArray());
-                }
-                else
-                {
+                } else {
                     $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
                     $vars = array('primary key datastore', 'Dynamic Object', 'createItem', 'DynamicData');
                     throw new BadParameterException($vars,$msg);

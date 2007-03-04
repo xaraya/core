@@ -28,18 +28,11 @@ function dynamicdata_userapi_getprop($args)
 {
     static $propertybag = array();
 
-    extract($args);
+    $args = DataObjectMaster::getObjectInfo($args);
+    if (empty($args)) return array();
 
-    if (!empty($objectid)) {
-        $object = xarModAPIFunc('dynamicdata','user','getobjectinfo',
-                                array('objectid' => $objectid));
-        if (!empty($object)) {
-            $modid = $object['moduleid'];
-            $itemtype = $object['itemtype'];
-        }
-    } else {
-        $objectid = null;
-    }
+    extract($args);
+    $modid = $args['moduleid'];
 
     if (empty($modid) && !empty($module)) {
         $modid = xarModGetIDFromName($module);

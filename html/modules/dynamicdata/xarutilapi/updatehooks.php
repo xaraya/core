@@ -204,8 +204,6 @@ function dynamicdata_utilapi_updatehooks($args)
                 $debug .= xarML('Updating hook #(1) from #(2) to #(3) for items #(4)',
                                 $tohook, "$from[module]:$from[itemtype]", "$to[module]:$to[itemtype]", join(',',array_keys($itemids)));
                 $debug .= "\n";
-                //echo var_dump($query);
-                //echo var_dump($bindvars);
             }
             continue;
         }
@@ -242,8 +240,6 @@ function dynamicdata_utilapi_updatehooks($args)
                     $debug .= xarML('Updating hook #(1) from #(2) to #(3)',
                                     $tohook, "$from[module]:$from[itemtype]:$itemid", "$to[module]:$to[itemtype]:$newid");
                     $debug .= "\n";
-                    //echo var_dump($query);
-                    //echo var_dump($bindvars);
                 }
             }
             $dbconn->commit();

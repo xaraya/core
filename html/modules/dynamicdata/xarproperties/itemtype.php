@@ -25,7 +25,7 @@ class ItemTypeProperty extends NumberBoxProperty
     public $desc       = 'Item Type';
     public $reqmodules = array('dynamicdata');
 
-    public $module   = ''; // get itemtypes for this module with getitemtypes()
+    public $module   = null; // get itemtypes for this module with getitemtypes()
     public $itemtype = null; // get items for this module+itemtype with getitemlinks()
     public $func     = null; // specific API call to retrieve a list of items
     public $options  = array();
