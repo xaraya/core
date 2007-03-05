@@ -1,13 +1,14 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
+
 sys::import('modules.base.xarproperties.textbox');
 /**
  * Handle Passwordbox property
@@ -63,21 +64,20 @@ class PassBoxProperty extends TextBoxProperty
         if (is_array($value) && $value[0] == $value[1]) {
             $value = $value[0];
         } else {
-            $this->invalid = xarML('text : Passwords did not match');
+            $this->invalid = xarML('Passwords did not match');
             $this->value = null;
             return false;
         }
 
         if (!empty($value) && strlen($value) > $this->maxlength) {
-            $this->invalid = xarML('text : must be less than #(1) characters long',$this->max + 1);
+            $this->invalid = xarML('password : must be less than #(1) characters long',$this->max + 1);
             $this->value = null;
             return false;
         } elseif (isset($this->min) && strlen($value) < $this->min) {
-            $this->invalid = xarML('text : must be at least #(1) characters long',$this->min);
+            $this->invalid = xarML('password : must be at least #(1) characters long',$this->min);
             $this->value = null;
             return false;
         } else {
-    // TODO: allowable HTML ?
             $this->value = $value;
             return true;
         }
