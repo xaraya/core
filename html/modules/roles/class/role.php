@@ -197,10 +197,6 @@ class xarRole extends Object
             $q->addfield('xar_users',$result['xar_users']+1);
             if (!$q->run()) return;
         }
-        // empty the privset cache
-        // $privileges = new xarPrivileges();
-        // $privileges->forgetprivsets();
-        // done
         return true;
     }
 
@@ -235,10 +231,6 @@ class xarRole extends Object
             $q->addfield('xar_users',$result['xar_users']-1);
             if (!$q->run()) return;
         }
-        // empty the privset cache
-        // $privileges = new xarPrivileges();
-        // $privileges->forgetprivsets();
-        // done
         return true;
     }
 
@@ -421,37 +413,6 @@ class xarRole extends Object
         }
         xarVarSetCached($cacheKey,$this->uid,$privileges);
         return $privileges;
-
-        /*
-        $q = new xarQuery();
-        $q->addtable($this->acltable, 'acl');
-        $q->addtable($this->privilegestable, 'p');
-        $q->addtable($this->realmstable, 'r');
-        $q->addtable($xartable['modules'], 'm');
-        $q->addfield('xar_pid AS pid');
-        $q->addfield('p.xar_name AS name');
-        $q->addfield('r.xar_name AS realm');
-        $q->addfield('m.xar_name AS module');
-        $q->addfield('xar_component AS component');
-        $q->addfield('xar_instance AS instance');
-        $q->addfield('xar_level AS level');
-        $q->addfield('xar_description AS description');
-        $q->leftjoin('p.xar_realmid', 'r.xar_rid');
-        $q->leftjoin('p.xar_modid', 'm.xar_id');
-        $q->join('p.xar_pid', 'acl.xar_permid');
-        $q->eq('acl.xar_partid',$this->uid);
-        $q->qecho();exit;
-        if (!$q->run()) return;
-
-        sys::import('modules.privileges.class.privilege');
-        $privileges = array();
-        foreach ($q->output() as $row) {
-            $row['realm'] = is_null($row['realm']) ? 'All' : $row['realm'];
-            $row['parentid'] = 0;
-        }
-        xarVarSetCached($cacheKey,$this->uid,$privileges);
-        return $q->output();
-        */
     }
 
 
@@ -505,9 +466,6 @@ class xarRole extends Object
         $query = "INSERT INTO $this->acltable VALUES (?,?)";
         $bindvars = array($this->getID(),$privilege->getID());
         $this->dbconn->Execute($query,$bindvars);
-        // empty the privset cache
-        // $privileges = new xarPrivileges();
-        // $privileges->forgetprivsets();
         return true;
     }
 
@@ -525,9 +483,6 @@ class xarRole extends Object
                   WHERE xar_partid= ? AND xar_permid= ?";
         $bindvars = array($this->uid, $privilege->getID());
         $this->dbconn->Execute($query,$bindvars);
-        // empty the privset cache
-        // $privileges = new xarPrivileges();
-        // $privileges->forgetprivsets();
         return true;
     }
 
@@ -861,65 +816,11 @@ class xarRole extends Object
     }
 
     /**
-     * getPrivileges: returns the privileges in the privileges repository
-     *
-     * Returns an array of all the privileges objects
-     *
-     * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param none $
-     * @return array of privilege objects
-     * @throws none
-     * @todo is this still used?
-     */
-    function getPrivileges()
-    {
-        /*
-        // start by getting an array of all the privileges
-        $query = "SELECT * FROM $this->privilegestable";
-        $result = $this->dbconn->executeQuery($query);
-
-        $privileges = array();
-        while($result->next()) {
-            list($pid,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
-            $pargs = array('pid' => $pid,
-                            'name' => $name,
-                            'realm'=>$realm,
-                            'module'=>$module,
-                            'component'=>$component,
-                            'instance'=>$instance,
-                            'level'=>$level,
-                            'description'=>$description);
-            array_push($privileges,new xarPrivilege($pargs))
-        }
-
-        // start by getting an array of the parents
-        $parents = $part->getParents();
-
-        //Get the parent field for each parent
-        while (list($key, $parent) = each($parents)) {
-            $ancestors = $parent->getParents();
-            foreach ($ancestors as $ancestor) {
-                //If this is a new ancestor add to the end of the array
-                $iscontained = false;
-                foreach ($parents as $parent){
-                    if ($parent->isEqual($ancestor)) $iscontained = true;
-                }
-                if (!$iscontained) array_push($parents, $ancestor);
-            }
-        }
-    */
-    }
-
-
-    /**
      * Gets and Sets
      *
      * Get and set methods for the class variables
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @param n $ /a
-     * @return n /a
      * @todo since there are so many a generalized getter (magic __get() ) might be more pleasurable
      */
     function getID()
