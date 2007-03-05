@@ -51,11 +51,11 @@
     </property>
     <property name="uname">
       <id>43</id>
-      <label>UserName</label>
+      <label>User Name</label>
       <type>textbox</type>
       <default></default>
       <source>xar_roles.xar_uname</source>
-      <status>65</status>
+      <status>67</status>
       <order>5</order>
       <validation></validation>
     </property>
@@ -63,7 +63,7 @@
       <id>44</id>
       <label>Reg. Date</label>
       <type>calendar</type>
-      <default></default>
+      <default>xarMLS_userTime()</default>
       <source>xar_roles.xar_date_reg</source>
       <status>67</status>
       <order>6</order>
