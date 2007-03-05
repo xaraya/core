@@ -10,15 +10,15 @@
     <h2>
         <xar:ml>
             <xar:mlstring>Manage #(1) '#(2)':</xar:mlstring>
-            <xar:mlvar>#$itemtypename#</xar:mlvar>
-            <xar:mlvar>#$pname#</xar:mlvar>
+            <xar:mlvar>#$object:label#</xar:mlvar>
+            <xar:mlvar>#$object:properties.name:value#</xar:mlvar>
         </xar:ml>
     </h2>
 
     <xar:if condition="count($parents) ne 0">
         <div>
             <dl class="xar-tabs">
-                <dt class="help" title="These are the parents that #$pname# is a member of">
+                <dt class="help" title="These are the parents that #$object:properties.name:value# is a member of">
                     <xar:mlstring>Parents:</xar:mlstring>
                 </dt>
                 <xar:set name="prevgroup">""</xar:set>
@@ -43,43 +43,30 @@
       <legend>
         <xar:ml>
             <xar:mlstring>#(1) Properties:</xar:mlstring>
-            <xar:mlvar>#$itemtypename#</xar:mlvar>
+            <xar:mlvar>#$object:label#</xar:mlvar>
         </xar:ml>
       </legend>
 
         <form action="&xar-modurl-roles-admin-updaterole;" method="post" enctype="application/x-www-form-urlencoded">
             <xar:if condition="$frozen">
-                <div class="xar-form-input-wrapper">
-                    <label for="pname" title="#xarML('Common name')#" class="xar-form-label">
-                        <xar:mlstring>Display Name:</xar:mlstring>
-                    </label>
-                    <input type="text" name="pname" id="pname" value="#xarVarPrepForDisplay($pname)#" maxlength="255" disabled="disabled" class="xar-form-textlong" />
-                </div>
-
+                <xar:data-display object="$object" />
                 <p>
                 <xar:ml>
                     <xar:mlstring>This #(1) cannot be edited or deleted.</xar:mlstring>
-                    <xar:mlvar>#$itemtypename#</xar:mlvar>
+                    <xar:mlvar>#$object:label#</xar:mlvar>
                 </xar:ml>
                 </p>
             <xar:else />
-                <div class="xar-form-input-wrapper">
-                    <label for="pname" title="#xarML('Common name')#" class="xar-form-label">
-                        <xar:mlstring>Display Name:</xar:mlstring>
-                    </label>
-                    <input type="text" name="pname" id="pname" value="#xarVarPrepForDisplay($pname)#" maxlength="255" class="xar-form-textlong" />
-                </div>
-
                 <xar:if condition="$basetype eq ROLES_GROUPTYPE and $haschildren">
                     <div class="xar-form-input-wrapper">
                         <label title="#xarML('Type of Role')#" class="xar-form-label">
                             <xar:mlstring>Type:</xar:mlstring>
                         </label>
-                        #$itemtypename#
-                        <xar:comment>
+                        #$object:label#
+                        <!--
                             value should still be there in the form, otherwise validation will fail,
                             do it with a hidden input now, but this should really be done with readonly attribute
-                        </xar:comment>
+                        -->
                         <input type="hidden" name="itemtype" value="#$itemtype#" />
                     </div>
                 <xar:else />
@@ -91,19 +78,8 @@
                         <xar:data-input type="itemtype" name="itemtype" value="$itemtype" validation="roles" onchange="$onchange" />
                     </div>
                 </xar:if>
-
+                <xar:data-form object="$object" />
                 <xar:set name="settings">unserialize(xarModVars::get('roles','duvsettings'))</xar:set>
-                <xar:if condition="in_array('userhome',$settings)">
-                    <div class="xar-form-input-wrapper">
-                        <label for="duvs_userhome" title="#xarML('Home URL')#" class="xar-form-label">
-                            <xar:mlstring>Home:</xar:mlstring>
-                        </label>
-                        <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModGetUserVar('roles','userhome',$uid)#" size="40" maxlength="100" tabindex="7" />
-                        <p class="xar-form-input-wrapper-after">
-                            <xar:mlstring>You can use the module shortcut syntax available in the Base user menu block.</xar:mlstring>
-                        </p>
-                    </div>
-                </xar:if>
                 <xar:if condition="in_array('primaryparent',$settings)">
                     <div class="xar-form-input-wrapper">
                         <label for="duvs_primaryparent" title="#xarML('Primary parent group')#" class="xar-form-label">
@@ -117,19 +93,18 @@
                 </xar:if>
 
                 <xar:if condition="$basetype eq ROLES_USERTYPE">
-                    <div class="xar-form-input-wrapper">
-                        <label for="puname" title="#xarML('Name used for user log on')#" class="xar-form-label">
-                            <xar:mlstring>User Name:</xar:mlstring>
-                        </label>
-                        <input type="text" name="puname" id="puname" value="#xarVarPrepForDisplay($puname)#" maxlength="255" class="xar-form-textlong" />
-                    </div>
 
-                    <div class="xar-form-input-wrapper">
-                        <label for="pemail" title="#xarML('Email address for this user')#" class="xar-form-label">
-                            <xar:mlstring>Email:</xar:mlstring>
-                        </label>
-                        <input type="text" name="pemail" id="pemail" value="#xarVarPrepForDisplay($pemail)#" maxlength="255" class="xar-form-textxlong" />
-                    </div>
+                    <xar:if condition="in_array('userhome',$settings)">
+                        <div class="xar-form-input-wrapper">
+                            <label for="duvs_userhome" title="#xarML('Home URL')#" class="xar-form-label">
+                                <xar:mlstring>Home:</xar:mlstring>
+                            </label>
+                            <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModGetUserVar('roles','userhome',$uid)#" size="40" maxlength="100" tabindex="7" />
+                            <p class="xar-form-input-wrapper-after">
+                                <xar:mlstring>You can use the module shortcut syntax available in the Base user menu block.</xar:mlstring>
+                            </p>
+                        </div>
+                    </xar:if>
                     <xar:if condition="in_array('useremailformat',$settings)">
                         <div class="xar-form-input-wrapper">
                             <label for="duvs_useremailformat" title="#xarML('Email Format')#" class="xar-form-label">
@@ -149,36 +124,6 @@
                             <xar:data-input type="dropdown" name="duvs[useremailformat]" id="duvs_useremailformat" value="$value" options="$options" />
                         </div>
                     </xar:if>
-
-                    <div class="xar-form-input-wrapper">
-                        <label for="pstate" title="#xarML('Status of this user')#" class="xar-form-label">
-                            <xar:mlstring>Status:</xar:mlstring>
-                        </label>
-                        <xar:set name="options">
-                            array(
-                                array('id' => ROLES_STATE_INACTIVE, 'name' => 'Inactive'),
-                                array('id' => ROLES_STATE_NOTVALIDATED, 'name' => 'Not Validated'),
-                                array('id' => ROLES_STATE_ACTIVE, 'name' => 'Active'),
-                                array('id' => ROLES_STATE_PENDING, 'name' => 'Pending'),
-                            )
-                        </xar:set>
-                        <xar:data-input type="dropdown" name="pstate" value="$pstate" options="$options" />
-                    </div>
-
-                    <div class="xar-form-input-wrapper">
-                        <label for="ppass1" title="#xarML('Password for this user')#" class="xar-form-label">
-                            <xar:mlstring>Password:</xar:mlstring>
-                        </label>
-                        <input type="password" name="ppass1" id="ppass1" value="" maxlength="40" class="xar-form-textmedium" />
-                    </div>
-
-                    <div class="xar-form-input-wrapper">
-                        <label for="ppass2" title="#xarML('Confirm password for this user')#" class="xar-form-label">
-                            <xar:mlstring>Confirm Password:</xar:mlstring>
-                        </label>
-                        <input type="password" name="ppass2" id="ppass2" value="" maxlength="40" class="xar-form-textmedium" />
-                    </div>
-
                     <xar:if condition="in_array('passwordupdate',$settings)">
                         <div class="xar-form-input-wrapper">
                             <label class="xar-form-label">
@@ -267,7 +212,7 @@
           <p>
         <xar:ml>
             <xar:mlstring>This #(1) cannot be edited or deleted.</xar:mlstring>
-            <xar:mlvar>#$itemtypename#</xar:mlvar>
+            <xar:mlvar>#$object:label#</xar:mlvar>
         </xar:ml>
           </p>
           <xar:else />
