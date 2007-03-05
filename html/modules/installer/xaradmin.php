@@ -946,7 +946,7 @@ function installer_admin_confirm_configuration()
         $sitePrefix = xarDBGetSiteTablePrefix();
         try {
             $dbconn->begin();
-           $query = "DELETE FROM " . $sitePrefix . '_privileges WHERE type = ' . xarMasks::RIVILEGES_PRIVILEGETYPE;
+           $query = "DELETE FROM " . $sitePrefix . '_privileges WHERE type = ' . xarMasks::PRIVILEGES_PRIVILEGETYPE;
             $dbconn->Execute($query);
             $query = "DELETE FROM " . $sitePrefix . '_privmembers';
             $dbconn->Execute($query);

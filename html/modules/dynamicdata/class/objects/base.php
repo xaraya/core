@@ -110,7 +110,6 @@ class DataObject extends DataObjectMaster
                         $field = $args['fieldprefix'] . '_' . $name;
                         $isvalid = $this->properties[$name]->checkInput($field);
                     }
-            }
             // for hooks, use the values passed via $extrainfo if available
             } elseif(isset($args[$name])) {
                 // Name based check
