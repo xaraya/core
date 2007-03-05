@@ -25,7 +25,7 @@
         <xsl:text>echo </xsl:text><xsl:value-of select="@object"/><xsl:text>-&gt;showView(</xsl:text>
         <!-- Dump the attributes in an array for the function call, but skip the object attribute -->
         <xsl:call-template name="atts2args">
-          <xsl:with-param name="nodeset" select="@*[name() != object]"/>
+          <xsl:with-param name="nodeset" select="@*[name() != 'object']"/>
         </xsl:call-template>
         <xsl:text>);</xsl:text>
       </xsl:otherwise>
@@ -57,7 +57,7 @@
           <xsl:text>echo </xsl:text><xsl:value-of select="@object"/>
           <xsl:text>-&gt;showForm(</xsl:text>
           <xsl:call-template name="atts2args">
-            <xsl:with-param name="nodeset" select="@*[name() != object]"/>
+            <xsl:with-param name="nodeset" select="@*[name() != 'object']"/>
           </xsl:call-template>
           <xsl:text>);</xsl:text>
         </xsl:otherwise>
@@ -89,7 +89,7 @@
           <xsl:text>echo </xsl:text><xsl:value-of select="@object"/>
           <xsl:text>-&gt;showDisplay(</xsl:text>
           <xsl:call-template name="atts2args">
-            <xsl:with-param name="nodeset" select="@*[name() != object]"/>
+            <xsl:with-param name="nodeset" select="@*[name() != 'object']"/>
           </xsl:call-template>
           <xsl:text>);</xsl:text>
         </xsl:otherwise>
