@@ -1,15 +1,20 @@
 <?php
 /**
- * DataObject
+ * @package modules
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
- *
-**/
+ * @subpackage dynamicdata
+ * @link http://xaraya.com/index.php/release/27.html
+ */
+
 sys::import('xaraya.structures.descriptor');
 sys::import('modules.dynamicdata.class.properties');
 sys::import('modules.dynamicdata.class.objects.master');
-
+/**
+ * DataObject Base class
+ */
 class DataObject extends DataObjectMaster
 {
     protected $descriptor  = null;      // descriptor object of this class
@@ -59,21 +64,20 @@ class DataObject extends DataObjectMaster
             throw new BadParameterException($vars,$msg);
         }
 
-        if(!empty($this->primary) && !empty($this->properties[$this->primary]))
+        if (!empty($this->primary) && !empty($this->properties[$this->primary])) {
             $primarystore = $this->properties[$this->primary]->datastore;
-
+        }
 //        $modinfo = xarModGetInfo($this->moduleid);
-        foreach($this->datastores as $name => $datastore)
-        {
+        foreach($this->datastores as $name => $datastore) {
             $itemid = $datastore->getItem($this->toArray());
             // only worry about finding something in primary datastore (if any)
-            if(empty($itemid) && !empty($primarystore) && $primarystore == $name)
+            if(empty($itemid) && !empty($primarystore) && $primarystore == $name) {
                 return;
+            }
         }
 
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
-        if(!empty($args['preview']))
-            $this->checkInput();
+        if(!empty($args['preview'])) $this->checkInput();
         return $this->itemid;
     }
 
@@ -82,22 +86,22 @@ class DataObject extends DataObjectMaster
      */
     function checkInput($args = array())
     {
-        if(!empty($args['itemid']) && $args['itemid'] != $this->itemid)
-        {
+        if(!empty($args['itemid']) && $args['itemid'] != $this->itemid) {
             $this->itemid = $args['itemid'];
             $this->getItem($args);
         }
 
-        if(empty($args['fieldprefix']))
+        if(empty($args['fieldprefix'])) {
             $args['fieldprefix'] = $this->fieldprefix;
+        }
 
         $isvalid = true;
         $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
-        foreach($fields as $name)
-        {
+
+        //debug($fields);
+        foreach($fields as $name) {
             $field = 'dd_' . $this->properties[$name]->id;
-            if(!empty($args['fieldprefix']))
-            {
+            if(!empty($args['fieldprefix'])) {
                 // No field, but prefix given, use that
                 // cfr. prefix layout in objects/showform template
                     $field = $args['fieldprefix'] . '_' . $field;
@@ -106,17 +110,18 @@ class DataObject extends DataObjectMaster
                         $field = $args['fieldprefix'] . '_' . $name;
                         $isvalid = $this->properties[$name]->checkInput($field);
                     }
-            }
             // for hooks, use the values passed via $extrainfo if available
-            elseif(isset($args[$name]))
+            } elseif(isset($args[$name])) {
                 // Name based check
                 $isvalid = $this->properties[$name]->checkInput($name,$args[$name]);
-            elseif(isset($args[$field]))
+            } elseif(isset($args[$field])) {
                 // No name, check based on field
                 $isvalid = $this->properties[$name]->checkInput($field,$args[$field]);
-            else
+            } else {
                 // Ok, try without anything
                 $isvalid = $this->properties[$name]->checkInput();
+            }
+            //if(!$isvalid) debug($name);
         }
         return $isvalid;
     }
@@ -129,8 +134,7 @@ class DataObject extends DataObjectMaster
         $args = $this->toArray($args);
 
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
-        if(!empty($args['preview']))
-            $this->checkInput();
+        if(!empty($args['preview'])) $this->checkInput();
 
         // Set all properties based on what is passed in.
         $args['properties'] = $this->getProperties($args);
@@ -146,34 +150,28 @@ class DataObject extends DataObjectMaster
     /**
      * Show an output display for this item
      */
-    function showDisplay($args = array())
+    function showDisplay(array $args = array())
     {
         $args = $this->toArray($args);
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
-        if(!empty($args['preview']))
-            $this->checkInput();
+        if(!empty($args['preview'])) $this->checkInput();
 
-        if(count($args['fieldlist']) > 0 || !empty($this->status))
-        {
+        if(count($args['fieldlist']) > 0 || !empty($this->status)) {
             $properties = $this->getProperties($args);
             $args['properties'] = array();
             foreach ($properties as $property) {
                 if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
                     $args['properties'][$property->name] = $property;
             }
-        }
-        else
-        {
+        } else {
             $args['properties'] =& $this->properties;
             // Do them all, except for status = DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN
             // TODO: this is exactly the same as in the display function, consolidate it.
             $totransform = array(); $totransform['transform'] = array();
-            foreach($this->properties as $pname => $pobj)
-            {
+            foreach($this->properties as $pname => $pobj) {
                 // *never* transform an ID
                 // TODO: there is probably lots more to skip here.
-                if($pobj->type == '21')
-                    continue;
+                if($pobj->type == '21') continue;
                 $totransform['transform'][] = $pname;
                 $totransform[$pname] = $pobj->value;
             }
@@ -184,8 +182,7 @@ class DataObject extends DataObjectMaster
                 $totransform, $this->tplmodule,$this->itemtype
             );
 
-            foreach($this->properties as $property)
-            {
+            foreach($this->properties as $property) {
                 if(
                     ($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) &&
                     ($property->type != 21) &&
@@ -211,7 +208,7 @@ class DataObject extends DataObjectMaster
     /**
      * Get the names and values of
      */
-    function getFieldValues($args = array())
+    function getFieldValues(array $args = array())
     {
         $fields = array();
         $properties = $this->getProperties($args);
@@ -229,8 +226,8 @@ class DataObject extends DataObjectMaster
 
     /**
      * Get the labels and values to include in some output display for this item
-    **/
-    function getDisplayValues($args = array())
+     **/
+    function getDisplayValues(array $args = array())
     {
         if(empty($args['fieldlist']))
             $args['fieldlist'] = $this->fieldlist;
@@ -265,16 +262,17 @@ class DataObject extends DataObjectMaster
         */
     }
 
-    function createItem($args = array())
+    function createItem(array $args = array())
     {
-        if(count($args) > 0)
-        {
-            if(isset($args['itemid']))
+        if(count($args) > 0) {
+            if(isset($args['itemid'])) {
                 $this->itemid = $args['itemid'];
-
-            foreach($args as $name => $value)
-                if(isset($this->properties[$name]))
+            }
+            foreach($args as $name => $value) {
+                if(isset($this->properties[$name])) {
                     $this->properties[$name]->setValue($value);
+                }
+            }
         }
 
         // special case when we try to create a new object handled by dynamicdata
@@ -288,22 +286,18 @@ class DataObject extends DataObjectMaster
         }
 
         // check that we have a valid item id, or that we can create one if it's set to 0
-        if(empty($this->itemid))
-        {
+        if(empty($this->itemid)) {
             if ($this->baseancestor == $this->objectid) {
                 $primaryobject = $this;
             } else {
                 $primaryobject = DataObjectMaster::getObject(array('objectid' => $this->baseancestor));
             }
             // no primary key identified for this object, so we're stuck
-            if(!isset($primaryobject->primary))
-            {
+            if(!isset($primaryobject->primary)) {
                 $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-                $vars = array('primary key', 'DataObject', 'createItem', 'DynamicData');
+                $vars = array('primary key', 'DataObject', 'createItem', 'dynamicdata');
                 throw new BadParameterException($vars,$msg);
-            }
-            else
-            {
+            } else {
                 if ($this->objectid == 1) {
                     $value = 0;
                 } else {
@@ -311,12 +305,9 @@ class DataObject extends DataObjectMaster
                 }
 
                 // we already have an itemid value in the properties
-                if(!empty($value))
-                {
+                if(!empty($value)) {
                     $this->itemid = $value;
-                }
-                elseif(!empty($primaryobject->properties[$primaryobject->primary]->datastore))
-                {
+                } elseif(!empty($primaryobject->properties[$primaryobject->primary]->datastore)) {
                     // we'll let the primary datastore create an itemid for us
                     $primarystore = $primaryobject->properties[$primaryobject->primary]->datastore;
                     // add the primary to the data store fields if necessary
@@ -324,24 +315,20 @@ class DataObject extends DataObjectMaster
                         $this->datastores[$primarystore]->addField($this->properties[$this->primary]); // use reference to original property
 
                     $this->itemid = $this->datastores[$primarystore]->createItem($this->toArray());
-                }
-                else
-                {
+                } else {
                     $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
                     $vars = array('primary key datastore', 'Dynamic Object', 'createItem', 'DynamicData');
                     throw new BadParameterException($vars,$msg);
                 }
             }
         }
-        if(empty($this->itemid))
-            return;
+        if(empty($this->itemid)) return;
 
         // TODO: this won't work for objects with several static tables !
         // now let's try to create items in the other data stores
         $args = $this->getFieldValues();
         $args['itemid'] = $this->itemid;
-        foreach(array_keys($this->datastores) as $store)
-        {
+        foreach(array_keys($this->datastores) as $store) {
             // skip the primary store
             if(isset($primarystore) && $store == $primarystore)
                 continue;
