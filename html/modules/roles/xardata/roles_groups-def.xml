@@ -29,13 +29,13 @@
       <order>2</order>
       <validation></validation>
     </property>
-    <property name="type">
+    <property name="role_type">
       <id>41</id>
       <label>Type</label>
       <type>itemtype</type>
       <default>3</default>
       <source>xar_roles.xar_type</source>
-      <status>65</status>
+      <status>67</status>
       <order>3</order>
       <validation>roles</validation>
     </property>
@@ -45,7 +45,7 @@
       <type>integerbox</type>
       <default>0</default>
       <source>xar_roles.xar_users</source>
-      <status>33</status>
+      <status>67</status>
       <order>4</order>
       <validation></validation>
     </property>
@@ -65,7 +65,7 @@
       <type>calendar</type>
       <default></default>
       <source>xar_roles.xar_date_reg</source>
-      <status>33</status>
+      <status>67</status>
       <order>6</order>
       <validation></validation>
     </property>
@@ -75,7 +75,7 @@
       <type>textbox</type>
       <default></default>
       <source>xar_roles.xar_valcode</source>
-      <status>65</status>
+      <status>67</status>
       <order>7</order>
       <validation></validation>
     </property>
@@ -83,9 +83,9 @@
       <id>46</id>
       <label>State</label>
       <type>dropdown</type>
-      <default></default>
+      <default>3</default>
       <source>xar_roles.xar_state</source>
-      <status>65</status>
+      <status>67</status>
       <order>8</order>
       <validation>xarModAPIFunc('roles','user','getstates')</validation>
     </property>
@@ -95,7 +95,7 @@
       <type>textbox</type>
       <default></default>
       <source>xar_roles.xar_auth_modid</source>
-      <status>65</status>
+      <status>67</status>
       <order>9</order>
       <validation></validation>
     </property>

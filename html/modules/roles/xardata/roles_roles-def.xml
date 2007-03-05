@@ -19,13 +19,13 @@
       <order>1</order>
       <validation></validation>
     </property>
-    <property name="type">
+    <property name="role_type">
       <id>28</id>
       <label>Type</label>
       <type>itemtype</type>
       <default>1</default>
       <source>xar_roles.xar_type</source>
-      <status>65</status>
+      <status>67</status>
       <order>3</order>
       <validation>roles</validation>
     </property>
