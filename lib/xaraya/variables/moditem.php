@@ -44,7 +44,7 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         if(!$modvarid)
             return;
 
-        $query = "SELECT value FROM $module_itemvarstable WHERE modvar_id = ? AND item_id = ?";
+        $query = "SELECT value FROM $module_itemvarstable WHERE module_var_id = ? AND item_id = ?";
         $bindvars = array((int)$modvarid, (int)$itemid);
 
         $stmt = $dbconn->prepareStatement($query);
@@ -88,7 +88,7 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         if ($value != $modsetting)
         {
             $query = "INSERT INTO $module_itemvarstable
-                        (modvar_id, item_id, value)
+                        (module_var_id, item_id, value)
                       VALUES (?,?,?)";
             $bindvars = array($modvarid, $itemid, (string)$value);
             $stmt = $dbconn->prepareStatement($query);
@@ -112,7 +112,7 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         // We need the variable id
         $modvarid = xarModVars::getId($scope, $name);
         if(!$modvarid) return;
-        $query = "DELETE FROM $module_itemvarstable WHERE modvar_id = ? AND item_id = ?";
+        $query = "DELETE FROM $module_itemvarstable WHERE module_var_id = ? AND item_id = ?";
         $bindvars = array((int)$modvarid, (int)$itemid);
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate($bindvars);

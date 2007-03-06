@@ -99,14 +99,14 @@ function modules_init()
 
         /**
          * CREATE TABLE xar_module_itemvars (
-         *   modvar_id    integer NOT NULL auto_increment,
-         *   item_id      integer NOT NULL default 0,
-         *   value        longtext,
-         *   PRIMARY KEY  (modvar_id, item_id)
+         *   module_var_id    integer NOT NULL auto_increment,
+         *   item_id          integer NOT NULL default 0,
+         *   value            longtext,
+         *   PRIMARY KEY      (module_var_id, item_id)
          * )
          */
         $fields = array(
-                        'modvar_id' => array('type' => 'integer', 'null' => false, 'primary_key' => true),
+                        'module_var_id' => array('type' => 'integer', 'null' => false, 'primary_key' => true),
                         'item_id' => array('type' => 'integer', 'null' => false, 'unsigned' => true, 'primary_key' => true),
                         'value' => array('type' => 'text', 'size' => 'long')
                         );

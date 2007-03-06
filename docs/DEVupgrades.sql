@@ -220,7 +220,7 @@ ALTER TABLE `xar_module_vars`
 
 
 ALTER TABLE `xar_module_itemvars`
- CHANGE COLUMN `xar_mvid` `modvar_id` INTEGER NOT NULL,
+ CHANGE COLUMN `xar_mvid` `module_var_id` INTEGER NOT NULL,
  CHANGE COLUMN `xar_itemid` `item_id` INTEGER UNSIGNED NOT NULL,
  CHANGE COLUMN `xar_value` `value` LONGTEXT DEFAULT NULL;
 /* FIXME: incomplete, indexes probably need to be recreated, or at least renamed */
