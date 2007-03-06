@@ -6,6 +6,6 @@ using the following username and password:
 
 username: #$username#
 
-password: #$password#
+password: #$mypassword#
 
 -- #$siteadmin#
