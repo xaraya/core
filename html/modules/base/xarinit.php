@@ -39,7 +39,7 @@ function base_init()
          * Here we create non module associated tables
          *
          * prefix_session_info  - Session table
-         * prefix_config_vars   - system configuration variables
+         * prefix_module_vars   - system configuration variables
          * prefix_template_tags - module template tag registry
          *********************************************************************/
         $sessionInfoTable = $systemPrefix . '_session_info';
@@ -55,8 +55,7 @@ function base_init()
          *  PRIMARY KEY  (id)
          * )
          *********************************************************************/
-        $fields = array(
-                        'id'        => array('type'=>'varchar','size'=>32   ,'null'=>false,'primary_key'=>true),
+        $fields = array('id'        => array('type'=>'varchar','size'=>32   ,'null'=>false,'primary_key'=>true),
                         'ip_addr'   => array('type'=>'varchar','size'=>20   ,'null'=>false),
                         'first_use' => array('type'=>'integer','null'=>false,'default'=>'0'),
                         'last_use'  => array('type'=>'integer','null'=>false,'default'=>'0'),
@@ -89,7 +88,7 @@ function base_init()
         // TODO: revisit this when we know its all working out, for now, minimal change.
         $configVarsTable  = $systemPrefix . '_module_vars';
         /*********************************************************************
-         * CREATE TABLE xar_config_vars (
+         * CREATE TABLE xar_module_vars (
          *  id        integer NOT NULL auto_increment,
          *  module_id integer NOT NULL default '0',
          *  name      varchar(64) NOT NULL default '',
@@ -99,8 +98,7 @@ function base_init()
          * )
          *********************************************************************/
 
-        $fields = array(
-                        'id'        => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
+        $fields = array('id'        => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
                         'module_id' => array('type'=>'integer','null'=>true,'increment'=>false),
                         'name'      => array('type'=>'varchar','size'=>64,'null'=>false),
                         'value'     => array('type'=>'text','size'=>'long')
@@ -215,20 +213,19 @@ function base_init()
     $templateTagsTable = $systemPrefix . '_template_tags';
     /*********************************************************************
      * CREATE TABLE xar_template_tags (
-     *  xar_id int(11) NOT NULL auto_increment,
-     *  xar_name varchar(255) NOT NULL default '',
-     *  xar_modid int(11) default 0,
-     *  xar_handler varchar(255) NOT NULL default '',
-     *  xar_data text,
-     *  PRIMARY KEY  (xar_id)
+     *  id        integer NOT NULL auto_increment,
+     *  name      varchar(255) NOT NULL default '',
+     *  module_id integer default 0,
+     *  handler   varchar(255) NOT NULL default '',
+     *  data      text,
+     *  PRIMARY KEY (id)
      * )
      *********************************************************************/
-    $fields = array(
-                    'xar_id'      => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
-                    'xar_name'    => array('type'=>'varchar','size'=>255,'null'=>false),
-                    'xar_modid'   => array('type'=>'integer','null'=>false,'default'=>'0'),
-                    'xar_handler' => array('type'=>'varchar','size'=>255,'null'=>false),
-                    'xar_data'    => array('type'=>'text')
+    $fields = array('id'      => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
+                    'name'    => array('type'=>'varchar','size'=>255,'null'=>false),
+                    'module_id'   => array('type'=>'integer','null'=>false,'default'=>'0'),
+                    'handler' => array('type'=>'varchar','size'=>255,'null'=>false),
+                    'data'    => array('type'=>'text')
                     );
     $query = xarDBCreateTable($templateTagsTable,$fields);
     $dbconn->Execute($query);

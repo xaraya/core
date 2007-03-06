@@ -196,12 +196,12 @@ class xarTemplateTag extends Object
 
         // Get next ID in table
         try {
-            
+
             $dbconn->begin();
 
             $modInfo = xarMod::GetBaseInfo($this->getModule());
             $query = "INSERT INTO $tag_table
-                      (xar_name, xar_modid, xar_handler, xar_data)
+                      (name, module_id, handler, data)
                       VALUES(?,?,?,?)";
             $bindvars = array(
                 $this->getName(),
@@ -237,7 +237,7 @@ class xarTemplateTag extends Object
         $xartable =& xarDBGetTables();
 
         $tag_table = $xartable['template_tags'];
-        $query = "DELETE FROM $tag_table WHERE xar_name = ?";
+        $query = "DELETE FROM $tag_table WHERE name = ?";
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate(array($tag_name));
         return true;
@@ -260,7 +260,7 @@ class xarTemplateTag extends Object
         $xartable =& xarDBGetTables();
 
         $tag_table = $xartable['template_tags'];
-        $query = "DELETE FROM $tag_table WHERE xar_modid = ?";
+        $query = "DELETE FROM $tag_table WHERE module_id = ?";
         $stmt = $dbconn->prepareStatement($query);
         $info = xarMod::getInfo(xarModGetIDFromName($module));
         $stmt->executeUpdate(array($info['systemid']));
@@ -272,7 +272,7 @@ class xarTemplateTag extends Object
         // cache tags for compile performance
         static $tag_objects = array();
         static $stmt = null;
-        
+
         if (isset($tag_objects[$tag_name])) {
             return $tag_objects[$tag_name];
         }
@@ -283,11 +283,11 @@ class xarTemplateTag extends Object
         $systemPrefix = xarDBGetSystemTablePrefix();
         $tag_table = $systemPrefix . '_template_tags';
         $mod_table = $systemPrefix . '_modules';
-        $query = "SELECT tags.xar_data, mods.xar_name
+        $query = "SELECT tags.data, mods.xar_name
                   FROM $tag_table tags, $mod_table mods
-                  WHERE tags.xar_modid = mods.xar_id AND tags.xar_name=?";
+                  WHERE tags.module_id = mods.xar_id AND tags.name=?";
         if(!isset($stmt)) $stmt = $dbconn->prepareStatement($query);
-        
+
         $stmt->setLimit(1);
         $result = $stmt->executeQuery(array($tag_name),ResultSet::FETCHMODE_NUM);
 

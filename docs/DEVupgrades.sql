@@ -225,3 +225,10 @@ ALTER TABLE `xar_module_itemvars`
  CHANGE COLUMN `xar_value` `value` LONGTEXT DEFAULT NULL;
 /* FIXME: incomplete, indexes probably need to be recreated, or at least renamed */
 
+
+ALTER TABLE `xar_template_tags`
+ CHANGE COLUMN `xar_id` `id` INTEGER NOT NULL DEFAULT NULL AUTO_INCREMENT,
+ CHANGE COLUMN `xar_name` `name` VARCHAR(255) NOT NULL,
+ CHANGE COLUMN `xar_modid` `module_id` INTEGER NOT NULL DEFAULT 0,
+ CHANGE COLUMN `xar_handler` `handler` VARCHAR(255) NOT NULL,
+ CHANGE COLUMN `xar_data` `data` TEXT DEFAULT NULL;
