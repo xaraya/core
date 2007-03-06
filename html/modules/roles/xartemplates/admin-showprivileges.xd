@@ -72,7 +72,7 @@
                 <xar:loop name="$inherited">
                   <tr>
                     <td>
-                      <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$loop:item['privid']#">
+                      <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$loop:item['privid']#">
                         <xar:var name="loop:item.name" prep="true"/>
                       </a>
                     </td>
@@ -139,7 +139,7 @@
           <xar:loop name="$privileges">
             <tr>
               <td>
-                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$loop:item['privid']#">
+                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$loop:item['privid']#">
                   <xar:var name="loop:item.name" prep="true"/>
                 </a>
               </td>
@@ -193,7 +193,7 @@
           </label>
           <select name="privid" id="privid">
           <xar:loop name="$allprivileges">
-            <option value="#$loop:item['pid']#">
+            <option value="#$loop:item['id']#">
               <xar:var name="loop:item.name" prep="true"/>
             </option>
           </xar:loop>

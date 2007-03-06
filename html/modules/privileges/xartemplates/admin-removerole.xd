@@ -34,10 +34,10 @@
         <div class="xar-align-center">
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
             <input type="hidden" name="roleid" id="roleid" value="#$roleid#" />
-            <input type="hidden" name="pid" id="pid" value="#$pid#" />
+            <input type="hidden" name="id" id="id" value="#$id#" />
             <input type="hidden" name="confirmation" id="confirmation" value="1" />
             <input type="submit" value="#xarML('Remove Privilege')#" class="xar-margin-thickright" />
-            <input type="button" value="#xarML('Cancel')#" onclick="document.location='&xar-modurl-privileges-admin-viewroles;&amp;pid=#$pid#';" class="xar-margin-thickleft" />
+            <input type="button" value="#xarML('Cancel')#" onclick="document.location='&xar-modurl-privileges-admin-viewroles;&amp;id=#$id#';" class="xar-margin-thickleft" />
         </div>
 
     </form>

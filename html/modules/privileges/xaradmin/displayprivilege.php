@@ -18,13 +18,13 @@ function privileges_admin_displayprivilege()
 // Security Check
     if(!xarSecurityCheck('EditPrivilege')) return;
 
-    if(!xarVarFetch('pid',           'isset', $pid,        NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('id',           'isset', $id,        NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('pinstance',     'array', $instance,   array(), XARVAR_NOT_REQUIRED)) {return;}
 
 //Call the Privileges class and get the privilege to be modified
     sys::import('modules.privileges.class.privileges');
     $privs = new xarPrivileges();
-    $priv = $privs->getPrivilege($pid);
+    $priv = $privs->getPrivilege($id);
 
 //Get the array of parents of this privilege
     $parents = array();
@@ -34,7 +34,7 @@ function privileges_admin_displayprivilege()
     }
 
 // Load Template
-    if(isset($pid)) {$data['ppid'] = $pid;}
+    if(isset($id)) {$data['ppid'] = $id;}
     else {$data['ppid'] = $priv->getID();}
 
     $data['priv'] = $priv;

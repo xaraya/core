@@ -18,7 +18,7 @@ function privileges_admin_newprivilege()
 {
     $data = array();
 
-    if (!xarVarFetch('pid',        'isset', $data['pid'],        '',         XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('id',        'isset', $data['id'],        '',         XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('pname',      'isset', $data['pname'],      '',         XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('pparentid',  'isset', $data['pparentid'],  '',         XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('prealm',     'isset', $data['prealm'],     'All',      XARVAR_NOT_REQUIRED)) {return;}
@@ -39,7 +39,7 @@ function privileges_admin_newprivilege()
 // remove duplicate entries from the list of privileges
     $privileges = array();
     $names = array();
-    $privileges[] = array('pid' => 0,
+    $privileges[] = array('id' => 0,
                             'name' => '');
     foreach(xarPrivileges::getprivileges() as $temp){
         $nam = $temp['name'];

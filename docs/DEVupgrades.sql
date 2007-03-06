@@ -232,3 +232,43 @@ ALTER TABLE `xar_template_tags`
  CHANGE COLUMN `xar_modid` `module_id` INTEGER NOT NULL DEFAULT 0,
  CHANGE COLUMN `xar_handler` `handler` VARCHAR(255) NOT NULL,
  CHANGE COLUMN `xar_data` `data` TEXT DEFAULT NULL;
+
+
+ALTER TABLE `xar_privileges`
+ CHANGE COLUMN `xar_pid` `id` INTEGER NOT NULL DEFAULT NULL AUTO_INCREMENT,
+ CHANGE COLUMN `xar_name` `name` VARCHAR(100) NOT NULL,
+ CHANGE COLUMN `xar_realmid` `realmid` INTEGER DEFAULT NULL,
+ CHANGE COLUMN `xar_modid` `module_id` INTEGER NOT NULL DEFAULT 0,
+ CHANGE COLUMN `xar_component` `component` VARCHAR(100) NOT NULL,
+ CHANGE COLUMN `xar_instance` `instance` VARCHAR(100) NOT NULL,
+ CHANGE COLUMN `xar_level` `level` INTEGER NOT NULL DEFAULT 0,
+ CHANGE COLUMN `xar_description` `description` VARCHAR(255) NOT NULL;
+
+ALTER TABLE `xar_privmembers`
+ CHANGE COLUMN `xar_pid` `id`  INTEGER DEFAULT NULL AUTO_INCREMENT,
+ CHANGE COLUMN `xar_parentid` `parentid` INTEGER DEFAULT NULL;
+/* FIXME: rename the pid index */
+
+ALTER TABLE `security_realms`
+ CHANGE COLUMN `xar_rid` `id` INTEGER NOT NULL AUTO_INCREMENT,
+ CHANGE COLUMN `xar_name` `name` VARCHAR(255) NOT NULL;
+
+ALTER TABLE `security_acl`
+ CHANGE COLUMN `xar_partid` `partid` INTEGER NOT NULL DEFAULT 0,
+ CHANGE COLUMN `xar_permid` `permid` INTEGER NOT NULL DEFAULT 0;
+/* FIXME: phpmyadmin shows an error on the indexes */
+
+ALTER TABLE `security_instances`
+ CHANGE COLUMN `xar_iid` `id` INTEGER NOT NULL DEFAULT NULL AUTO_INCREMENT,
+ CHANGE COLUMN `xar_modid` `module_id` INTEGER NOT NULL DEFAULT 0,
+ CHANGE COLUMN `xar_component` `component` VARCHAR(100) NOT NULL,
+ CHANGE COLUMN `xar_header` `header` VARCHAR(255) NOT NULL,
+ CHANGE COLUMN `xar_query` `query` VARCHAR(255) NOT NULL,
+ CHANGE COLUMN `xar_limit` `ddlimit` INTEGER DEFAULT NULL,
+ CHANGE COLUMN `xar_propagate` `propagate` INTEGER DEFAULT NULL,
+ CHANGE COLUMN `xar_instancetable2` `instancetable2` VARCHAR(100) NOT NULL,
+ CHANGE COLUMN `xar_instancechildid` `instancechildid` VARCHAR(100) NOT NULL,
+ CHANGE COLUMN `xar_instanceparentid` `instanceparentid` VARCHAR(100) NOT NULL,
+ CHANGE COLUMN `xar_description` `description` VARCHAR(255) NOT NULL;
+/* TODO: this table will surely be lightened up */
+

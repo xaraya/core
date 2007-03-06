@@ -30,21 +30,21 @@ function privileges_admin_addmember()
 // Check for authorization code
     if (!xarSecConfirmAuthKey()) return;
 
-    if(!xarVarFetch('ppid',   'isset', $pid   , NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('ppid',   'isset', $id   , NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('privid', 'isset', $privid, NULL, XARVAR_DONT_SET)) {return;}
 
-    if (empty($pid) || empty($privid)) {
+    if (empty($id) || empty($privid)) {
         xarResponseRedirect(xarModURL('privileges',
                                       'admin',
                                       'modifyprivilege',
-                                      array('pid'=>$pid)));
+                                      array('id'=>$id)));
         return true;
     }
 
 // call the Privileges class and get the parent and child objects
     sys::import('modules.privileges.class.privileges');
     $privs = new xarPrivileges();
-    $priv = $privs->getPrivilege($pid);
+    $priv = $privs->getPrivilege($id);
     $member = $privs->getPrivilege($privid);
 
 // we bail if there is a loop: the child is already an ancestor of the parent
@@ -70,7 +70,7 @@ function privileges_admin_addmember()
     xarResponseRedirect(xarModURL('privileges',
                              'admin',
                              'modifyprivilege',
-                             array('pid'=>$pid)));
+                             array('id'=>$id)));
 }
 
 

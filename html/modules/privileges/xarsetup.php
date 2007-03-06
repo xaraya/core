@@ -86,11 +86,11 @@ function initializeSetup()
     xarDefineInstance('roles','Relation',$instances,0,$roleMembersTable,'xar_uid','xar_parentid','Instances of the roles module, including multilevel nesting');
 
    // ----------------------------- Privileges Module
-    $query = "SELECT DISTINCT xar_name FROM $privilegesTable";
+    $query = "SELECT DISTINCT name FROM $privilegesTable";
     $instances = array(array('header' => 'Privileges',
                              'query' => $query,
                              'limit' => 20));
-    xarDefineInstance('privileges','Privileges',$instances,0,$privMembersTable,'xar_pid','xar_parentid','Instances of the privileges module, including multilevel nesting');
+    xarDefineInstance('privileges','Privileges',$instances,0,$privMembersTable,'id','parentid','Instances of the privileges module, including multilevel nesting');
 
     // ----------------------------- Base Module
     $info = xarMod::getBaseInfo('base');

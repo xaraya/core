@@ -71,7 +71,7 @@ class xarTreeRenderer
     {
         $trees = array();
         foreach ($this->privs->gettoplevelprivileges($arg) as $entry) {
-            array_push($trees,$this->maketree($this->privs->getPrivilege($entry['pid'])));
+            array_push($trees,$this->maketree($this->privs->getPrivilege($entry['id'])));
         }
         return $trees;
     }
@@ -111,7 +111,7 @@ class xarTreeRenderer
         $node['expanded'] = false;
         $node['selected'] = false;
         $node['children'] = array();
-        foreach($this->privs->getChildren($object['pid']) as $subnode){
+        foreach($this->privs->getChildren($object['id']) as $subnode){
             $node['children'][] = $this->addbranches(array('parent'=>$subnode));
         }
         return $node;
@@ -153,7 +153,7 @@ class xarTreeRenderer
     function drawtree($node)
     {
 
-        $this->html = "\n".'<div name="PrivilegesTree_'.$node['parent']['pid'].'" id="PrivilegesTree_'.$node['parent']['pid'].'" style="position: relative;">';
+        $this->html = "\n".'<div name="PrivilegesTree_'.$node['parent']['id'].'" id="PrivilegesTree_'.$node['parent']['id'].'" style="position: relative;">';
         $this->nodeindex = 0;
         $this->indent = array();
         $this->level = 0;
@@ -186,13 +186,13 @@ class xarTreeRenderer
         $object = $node['parent'];
 
         // check if we've aleady processed this entry
-        if (in_array($object['pid'],$this->alreadydone)) {
+        if (in_array($object['id'],$this->alreadydone)) {
             $drawchildren = false;
             $node['children'] = array();
         }
         else {
             $drawchildren = true;
-            array_push($this->alreadydone,$object['pid']);
+            array_push($this->alreadydone,$object['id']);
         }
 
         // is this a branch?
@@ -205,7 +205,7 @@ class xarTreeRenderer
 
         // this next part holds the icon links
         // toggle the tree
-        /*        if(count($this->privs->getChildren($object['pid'])) == 0) {
+        /*        if(count($this->privs->getChildren($object['id'])) == 0) {
          $this->html .= $this->bigblank;
          }
          else {
@@ -219,7 +219,7 @@ class xarTreeRenderer
         else {
             $this->html .= '<a href="' .
                 xarModURL('privileges','admin', 'deleteprivilege',
-                          array('pid'=>$object['pid'])) .
+                          array('id'=>$object['id'])) .
                 '" title="'.xarML('Delete this Privilege').'">
                          <span style="padding-left: 0.25em; padding-right: 0.25em;">
                             <img src="modules/privileges/xarimages/delete.gif" style="vertical-align: middle;" />
@@ -230,7 +230,7 @@ class xarTreeRenderer
         // offer to show the users/groups this privilege is assigned to
         $this->html .= '<a href="' .
             xarModURL('privileges','admin','viewroles',
-                      array('pid'=>$object['pid'])) .
+                      array('id'=>$object['id'])) .
             '" title="'.xarML('Show the Groups/Users this Privilege is assigned to').'">
                         <span style="padding-left: 0.25em; padding-right: 0.25em;">
                             <img src="modules/privileges/xarimages/usersgroups.gif" style="vertical-align: middle;" />
@@ -244,7 +244,7 @@ class xarTreeRenderer
         else {
             $this->html .= '<a href="' .
                 xarModURL('privileges', 'admin', 'removebranch',
-                          array('childid'=> $object['pid'], 'parentid' => $object['parentid'])) .
+                          array('childid'=> $object['id'], 'parentid' => $object['parentid'])) .
                 '" title="'.xarML('Remove this privilege from its parent').'">
                              <span style="padding-left: 0.25em; padding-right: 0.25em;">
                                  <img src="modules/privileges/xarimages/remove.gif" style="vertical-align: middle;" />
@@ -276,8 +276,8 @@ class xarTreeRenderer
         // draw the name of the object and make a link
         $this->html .= '<a style="padding-left: 1em" href="' .
             xarModURL('privileges', 'admin', 'modifyprivilege',
-                      array('pid'=>$object['pid'])) .'" title="'.$object['description'].'">' .$object['name'] . '</a>';
-        $componentcount = count($this->privs->getChildren($object['pid']));
+                      array('id'=>$object['id'])) .'" title="'.$object['description'].'">' .$object['name'] . '</a>';
+        $componentcount = count($this->privs->getChildren($object['id']));
         $this->html .= $componentcount > 0 ? "&#160;:&#160;" .$componentcount . '&#160;'.xarML('components') : "";
         $this->html .= "\n\t\t";
         /*        $this->html .= '<span style="position:absolute;left:35em;border: 1px dashed #f0f;">';

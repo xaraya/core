@@ -13,14 +13,14 @@
  */
 /**
  * modifyRealm - modify an existing realm
- * @param rid the id of the realm to be modified
+ * @param id of the realm to be modified
  */
 function privileges_admin_modifyrealm()
 {
     // Security Check
     if(!xarSecurityCheck('EditPrivilege',0,'Realm')) return;
 
-    if (!xarVarFetch('rid',       'int', $rid,      '',      XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('id',       'int', $id,      '',      XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('confirmed', 'bool', $confirmed, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('name',      'str:1.20', $name,      '',      XARVAR_NOT_REQUIRED)) {return;}
     $xartable =& xarDBGetTables();
@@ -28,8 +28,8 @@ function privileges_admin_modifyrealm()
     sys::import('modules.roles.class.xarQuery');
     if (empty($confirmed)) {
         $q = new xarQuery('SELECT',$xartable['security_realms']);
-        $q->addfields(array('xar_rid AS rid','xar_name AS name'));
-        $q->eq('xar_rid', $rid);
+        $q->addfields(array('id','name'));
+        $q->eq('id', $id);
         if(!$q->run()) return;
         $result = $q->row();
         if ($result)
@@ -38,20 +38,20 @@ function privileges_admin_modifyrealm()
         if (!xarVarFetch('newname',   'str:1.20',$newname, '',XARVAR_NOT_REQUIRED)) {return;}
         if (!xarSecConfirmAuthKey()) return;
 
-        $q = new xarQuery('SELECT',$xartable['security_realms'],'xar_name');
-        $q->eq('xar_name', $newname);
+        $q = new xarQuery('SELECT',$xartable['security_realms'],'name');
+        $q->eq('name', $newname);
         if(!$q->run()) return;
 
         if ($q->getrows() > 0) throw new DuplicateException(array('realm',$newname));
 
         $q = new xarQuery('UPDATE',$xartable['security_realms']);
-        $q->addfield('xar_name', $newname);
-        $q->eq('xar_rid', $rid);
+        $q->addfield('name', $newname);
+        $q->eq('id', $id);
         if(!$q->run()) return;
         xarResponseRedirect(xarModURL('privileges', 'admin', 'viewrealms'));
     }
 
-    $data['rid'] = $rid;
+    $data['id'] = $id;
     $data['name'] = $name;
     $data['newname'] = '';
     $data['authid'] = xarSecGenAuthKey();

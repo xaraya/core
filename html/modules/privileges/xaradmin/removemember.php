@@ -39,6 +39,6 @@ function privileges_admin_removemember()
     xarResponseRedirect(xarModURL('privileges',
                              'admin',
                              'modifyprivilege',
-                             array('pid'=>$childid)));
+                             array('id'=>$childid)));
 }
 ?>

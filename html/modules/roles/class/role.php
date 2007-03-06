@@ -346,20 +346,20 @@ class xarRole extends Object
      * Gets all the privileges in the database.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return array of privilege arrays like ('pid' => x, 'name' => y)
+     * @return array of privilege arrays like ('id' => x, 'name' => y)
      */
     public function getAllPrivileges()
     {
         static $allprivileges = array();
         if (empty($allprivileges)) {
-            $query = "SELECT xar_pid, xar_name FROM $this->privilegestable ORDER BY xar_name";
+            $query = "SELECT id, name FROM $this->privilegestable ORDER BY name";
             $stmt = $this->dbconn->prepareStatement($query);
             $result = $stmt->executeQuery();
 
             $i=0;
             while ($result->next()) {
-                list($pid, $name) = $result->fields;
-                $allprivileges[$i++] = array('pid' => $pid, 'name' => $name);
+                list($id, $name) = $result->fields;
+                $allprivileges[$i++] = array('id' => $id, 'name' => $name);
             }
         }
         return $allprivileges;
@@ -385,12 +385,12 @@ class xarRole extends Object
         xarLogMessage("ROLE: getting privileges for uid: $this->uid");
         // TODO: propagate the use of 'All'=null for realms through the API instead of the flip-flopping
         $xartable =& xarDBGetTables();
-        $query = "SELECT  xar_pid, p.xar_name, r.xar_name, p.xar_modid,
-                          xar_component, xar_instance, xar_level, xar_description
+        $query = "SELECT  p.id, p.name, r.name, p.module_id,
+                          component, instance, level, description
                   FROM    $this->acltable acl,
-                          $this->privilegestable p LEFT JOIN $this->realmstable r ON p.xar_realmid = r.xar_rid
-                  WHERE   p.xar_pid = acl.xar_permid AND
-                          acl.xar_partid = ?";
+                          $this->privilegestable p LEFT JOIN $this->realmstable r ON p.realmid = r.id
+                  WHERE   p.id = acl.permid AND
+                          acl.partid = ?";
 //                          echo $query;exit;
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->uid));
@@ -398,12 +398,12 @@ class xarRole extends Object
         sys::import('modules.privileges.class.privilege');
         $privileges = array();
         while ($result->next()) {
-            list($pid, $name, $realm, $modid, $component, $instance, $level,
+            list($id, $name, $realm, $module_id, $component, $instance, $level,
                 $description) = $result->fields;
-            $perm = new xarPrivilege(array('pid' => $pid,
+            $perm = new xarPrivilege(array('id' => $id,
                     'name' => $name,
                     'realm' => is_null($realm) ? 'All' : $realm,
-                    'module' => $modid,
+                    'module' => $module_id,
                     'component' => $component,
                     'instance' => $instance,
                     'level' => $level,
@@ -480,7 +480,7 @@ class xarRole extends Object
     {
         // remove an entry from the privmembers table
         $query = "DELETE FROM $this->acltable
-                  WHERE xar_partid= ? AND xar_permid= ?";
+                  WHERE partid= ? AND permid= ?";
         $bindvars = array($this->uid, $privilege->getID());
         $this->dbconn->Execute($query,$bindvars);
         return true;
