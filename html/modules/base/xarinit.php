@@ -38,8 +38,8 @@ function base_init()
         /*********************************************************************
          * Here we create non module associated tables
          *
-         * prefix_config_vars   - system configuration variables
          * prefix_session_info  - Session table
+         * prefix_config_vars   - system configuration variables
          * prefix_template_tags - module template tag registry
          *********************************************************************/
         $sessionInfoTable = $systemPrefix . '_session_info';
@@ -90,20 +90,20 @@ function base_init()
         $configVarsTable  = $systemPrefix . '_module_vars';
         /*********************************************************************
          * CREATE TABLE xar_config_vars (
-         *  xar_id int(11) unsigned NOT NULL auto_increment,
-         *  xar_modid int(11) unsigned NOT NULL default '0',
-         *  xar_name varchar(64) NOT NULL default '',
-         *  xar_value longtext,
-         *  PRIMARY KEY  (xar_id),
-         *  KEY xar_name (xar_name)
+         *  id        integer NOT NULL auto_increment,
+         *  module_id integer NOT NULL default '0',
+         *  name      varchar(64) NOT NULL default '',
+         *  value     longtext,
+         *  PRIMARY KEY  (id),
+         *  KEY (name)
          * )
          *********************************************************************/
 
         $fields = array(
-                        'xar_id'    => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
-                        'xar_modid' => array('type'=>'integer','null'=>true,'increment'=>false),
-                        'xar_name'  => array('type'=>'varchar','size'=>64,'null'=>false),
-                        'xar_value' => array('type'=>'text','size'=>'long')
+                        'id'        => array('type'=>'integer','null'=>false,'increment'=>true,'primary_key'=>true),
+                        'module_id' => array('type'=>'integer','null'=>true,'increment'=>false),
+                        'name'      => array('type'=>'varchar','size'=>64,'null'=>false),
+                        'value'     => array('type'=>'text','size'=>'long')
                         );
 
         $query = xarDBCreateTable($configVarsTable,$fields);
@@ -112,19 +112,19 @@ function base_init()
         // config var name should be unique in scope
         // TODO: nameing of index is now confusing, see above.
         $index = array('name'   => 'i_'.$systemPrefix.'_config_name',
-                       'fields' => array('xar_name', 'xar_modid'),
+                       'fields' => array('name', 'module_id'),
                        'unique' => true);
 
         $query = xarDBCreateIndex($configVarsTable,$index);
         $dbconn->Execute($query);
 
-        $index = array('name' => 'i_' . $systemPrefix . '_module_vars_modid',
-                       'fields' => array('xar_modid'));
+        $index = array('name' => 'i_' . $systemPrefix . '_module_vars_module_id',
+                       'fields' => array('module_id'));
         $query = xarDBCreateIndex($configVarsTable, $index);
         $dbconn->Execute($query);
 
         $index = array('name' => 'i_' . $systemPrefix . '_module_vars_name',
-                       'fields' => array('xar_name'));
+                       'fields' => array('name'));
         $query = xarDBCreateIndex($configVarsTable, $index);
         $dbconn->Execute($query);
 

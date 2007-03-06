@@ -208,3 +208,14 @@ CREATE TABLE  xar_session_info (
   KEY `i_xar_session_role_id` (`role_id`),
   KEY `i_xar_session_lastused` (`last_use`)
 );
+
+
+/* Dropping column prefixes from xar_module_vars table, need to preserve data */
+ALTER TABLE `xar_module_vars`
+ CHANGE COLUMN `xar_id` `id` INTEGER NOT NULL DEFAULT NULL AUTO_INCREMENT,
+ CHANGE COLUMN `xar_modid` `module_id` INTEGER DEFAULT NULL,
+ CHANGE COLUMN `xar_name` `name` VARCHAR(64) NOT NULL,
+ CHANGE COLUMN `xar_value` `value` LONGTEXT DEFAULT NULL;
+/* FIXME: incomplete, indexes probably need to be recreated, or at least renamed */
+
+

@@ -154,7 +154,7 @@ function modules_init()
          * prolly need to move this closer to installer, not sure yet
          */
 
-        $sql = "INSERT INTO " . $tables['module_vars'] . " (xar_modid, xar_name, xar_value)
+        $sql = "INSERT INTO " . $tables['module_vars'] . " (module_id, name, value)
                 VALUES (?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 

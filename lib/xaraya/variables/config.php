@@ -49,7 +49,7 @@ class xarConfigVars extends xarVars implements IxarVars
 
         //Insert
         $query = "INSERT INTO $config_varsTable
-                  (xar_modid, xar_name, xar_value)
+                  (module_id, name, value)
                   VALUES (?,?,?)";
         $bindvars = array(null, $name, $serialvalue);
         $stmt = $dbconn->prepareStatement($query);
@@ -111,7 +111,7 @@ class xarConfigVars extends xarVars implements IxarVars
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
         $varstable = $tables['config_vars'];
-        $query = "SELECT xar_name, xar_value FROM $varstable WHERE xar_modid is null AND xar_name = ?";
+        $query = "SELECT name, value FROM $varstable WHERE module_id is null AND name = ?";
 
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($name),ResultSet::FETCHMODE_NUM);
@@ -132,7 +132,7 @@ class xarConfigVars extends xarVars implements IxarVars
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
         $config_varsTable = $tables['config_vars'];
-        $query = "DELETE FROM $config_varsTable WHERE xar_name = ? AND xar_modid is null";
+        $query = "DELETE FROM $config_varsTable WHERE name = ? AND module_id is null";
 
         // We want to make the next two statements atomic
         $stmt = $dbconn->prepareStatement($query);
@@ -155,14 +155,14 @@ class xarConfigVars extends xarVars implements IxarVars
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
 
-        $query = "SELECT xar_name, xar_value FROM $tables[config_vars] WHERE xar_modid is null";
+        $query = "SELECT name, value FROM $tables[config_vars] WHERE module_id is null";
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array(),ResultSet::FETCHMODE_ASSOC);
 
         while ($result->next())
         {
-            $newval = unserialize($result->getString('xar_value'));
-            xarCore::setCached(self::$KEY, $result->getString('xar_name'), $newval);
+            $newval = unserialize($result->getString('value'));
+            xarCore::setCached(self::$KEY, $result->getString('name'), $newval);
         }
         $result->close();
 
