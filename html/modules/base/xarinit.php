@@ -45,37 +45,37 @@ function base_init()
         $sessionInfoTable = $systemPrefix . '_session_info';
         /*********************************************************************
          * CREATE TABLE xar_session_info (
-         *  xar_sessid varchar(32) NOT NULL default '',
-         *  xar_ipaddr varchar(20) NOT NULL default '',
-         *  xar_firstused int(11) NOT NULL default '0',
-         *  xar_lastused int(11) NOT NULL default '0',
-         *  xar_uid int(11) NOT NULL default '0',
-         *  xar_vars blob,
-         *  xar_remembersess int(1) default '0',
-         *  PRIMARY KEY  (xar_sessid)
+         *  id        varchar(32) NOT NULL,
+         *  ipaddr    varchar(20) NOT NULL default '',
+         *  firstused integer NOT NULL default '0',
+         *  lastused  integer NOT NULL default '0',
+         *  role_id   integer NOT NULL default '0',
+         *  vars      blob,
+         *  remember  int(1) default '0',
+         *  PRIMARY KEY  (id)
          * )
          *********************************************************************/
         $fields = array(
-                        'xar_sessid'       => array('type'=>'varchar','size'=>32,'null'=>false,'primary_key'=>true),
-                        'xar_ipaddr'       => array('type'=>'varchar','size'=>20,'null'=>false),
-                        'xar_firstused'    => array('type'=>'integer','null'=>false,'default'=>'0'),
-                        'xar_lastused'     => array('type'=>'integer','null'=>false,'default'=>'0'),
-                        'xar_uid'          => array('type'=>'integer','null'=>false,'default'=>'0'),
-                        'xar_vars'         => array('type'=>'blob', 'null' => true),
-                        'xar_remembersess' => array('type'=>'integer','size'=>'tiny','default'=>'0')
+                        'id'        => array('type'=>'varchar','size'=>32   ,'null'=>false,'primary_key'=>true),
+                        'ip_addr'   => array('type'=>'varchar','size'=>20   ,'null'=>false),
+                        'first_use' => array('type'=>'integer','null'=>false,'default'=>'0'),
+                        'last_use'  => array('type'=>'integer','null'=>false,'default'=>'0'),
+                        'role_id'   => array('type'=>'integer','null'=>false,'default'=>'0'),
+                        'vars'      => array('type'=>'blob'   ,'null'=>true),
+                        'remember'  => array('type'=>'integer','size'=>1    ,'default'=>'0')
                         );
 
         $query = xarDBCreateTable($sessionInfoTable,$fields);
         $dbconn->Execute($query);
 
-        $index = array('name'   => 'i_'.$systemPrefix.'_session_uid',
-                       'fields' => array('xar_uid'),
+        $index = array('name'   => 'i_'.$systemPrefix.'_session_role_id',
+                       'fields' => array('role_id'),
                        'unique' => false);
         $query = xarDBCreateIndex($sessionInfoTable,$index);
         $dbconn->Execute($query);
 
         $index = array('name'   => 'i_'.$systemPrefix.'_session_lastused',
-                       'fields' => array('xar_lastused'),
+                       'fields' => array('last_use'),
                        'unique' => false);
 
         $query = xarDBCreateIndex($sessionInfoTable,$index);

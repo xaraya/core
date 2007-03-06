@@ -177,10 +177,10 @@ ALTER TABLE `xar_privileges` CHANGE `xar_module` `xar_module` VARCHAR(100) DEFAU
 UPDATE `xar_privileges` SET xar_module = NULL WHERE xar_module = 'empty';
 UPDATE `xar_privileges` SET xar_module = 0 WHERE xar_module = 'All';
 ALTER TABLE `xar_privileges` CHANGE `xar_module` `xar_modid` INTEGER DEFAULT NULL;
-ALTER TABLE xar_privileges DROP INDEX `i_xar_privileges_name`;
+ALTER TABLE `xar_privileges` DROP INDEX `i_xar_privileges_name`;
 CREATE UNIQUE INDEX i_xar_privileges_name ON xar_privileges (xar_name,xar_modid,type);
-INSERT INTO xar_privileges (xar_pid, xar_name, xar_realmid, xar_modid, xar_component, xar_instance, xar_level, xar_description)
-SELECT 0,xar_name, xar_realmid, xar_modid, xar_component, xar_instance, xar_level, xar_description FROM xar_security_masks;
+INSERT INTO `xar_privileges` (xar_pid, xar_name, xar_realmid, xar_modid, xar_component, xar_instance, xar_level, xar_description)
+    SELECT 0,xar_name, xar_realmid, xar_modid, xar_component, xar_instance, xar_level, xar_description FROM `xar_security_masks`;
 UPDATE `xar_privileges` SET type = 3 WHERE type IS NULL;
 DROP TABLE `xar_security_masks`;
 
@@ -193,3 +193,18 @@ UPDATE `xar_rolemembers` SET xar_parentid = NULL WHERE xar_parentid = 0;
 DROP INDEX i_xar_privmembers_uid ON xar_privmembers;
 ALTER TABLE `xar_privmembers` CHANGE `xar_parentid` `xar_parentid` INTEGER DEFAULT NULL;
 UPDATE `xar_privmembers` SET xar_parentid = NULL WHERE xar_parentid = 0;
+
+/* Dropping column prefixes from xar_session_info, session_info is moot, so we take the high road :-) */
+DROP table xar_session_info; /* Drops the indexes too */
+CREATE TABLE  xar_session_info (
+  `id` varchar(32) NOT NULL,
+  `ip_addr` varchar(20) NOT NULL,
+  `first_use` int(11) NOT NULL default '0',
+  `last_use` int(11) NOT NULL default '0',
+  `role_id` int(11) NOT NULL default '0',
+  `vars` blob,
+  `remember` int(11) default '0',
+  PRIMARY KEY  (`id`),
+  KEY `i_xar_session_role_id` (`role_id`),
+  KEY `i_xar_session_lastused` (`last_use`)
+);
