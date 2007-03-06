@@ -16,36 +16,29 @@
  */
 function roles_admin_newrole()
 {
+    if (!xarSecurityCheck('AddRole')) return;
+
     $data = array();
     $defaultRole = xarModAPIFunc('roles', 'user', 'get', array('name'  => xarModGetVar('roles','defaultgroup'), 'type'   => 1));
 
     $defaultuid = $defaultRole['uid'];
     if (!xarVarFetch('return_url',  'isset', $data['return_url'], NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('pparentid', 'int:', $data['pparentid'], $defaultuid, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('pname',       'str:1:', $data['pname'], '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('pparentid',   'id', $data['pparentid'], $defaultuid, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('itemtype',    'int',    $itemtype, ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('puname',      'str:1:35:', $data['puname'], '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('pemail',      'email', $data['pemail'], '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('ppass1',      'str:1:', $data['ppass1'], '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('state',       'int:1:', $data['pstate'], 1, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('duvs', 'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('duvs',        'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
 
     $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
     $types = xarModAPIFunc('roles','user','getitemtypes');
     $data['itemtype'] = $itemtype;
-    $data['itemtypename'] = $types[$itemtype]['label'];
 
-    // Security Check
-    if (!xarSecurityCheck('AddRole')) return;
+    $data['object'] = DataObjectMaster::getObject(array('module'   => 'roles',
+                                                        'itemtype' => $data['basetype']));
 
-    $data['states'] = xarModAPIFunc('roles','user','getstates');
-    // call item new hooks (for DD etc.)
+    // call item new hooks
     $item = $data;
     $item['module'] = 'roles';
+    $item['itemtype'] = $itemtype;
     $data['hooks'] = xarModCallHooks('item', 'new', '', $item);
-
-    $data['authid'] = xarSecGenAuthKey();
-    $data['uid'] = 0;
 
     return $data;
 }

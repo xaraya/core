@@ -19,91 +19,82 @@
  */
 function roles_admin_addrole()
 {
-    // Check for authorization code
     if (!xarSecConfirmAuthKey()) return;
 
-    // get some vars for both groups and users
-    if (!xarVarFetch('pname',      'str:1:', $pname,      NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('pparentid',  'str:1:', $pparentid,  NULL, XARVAR_NOT_REQUIRED)) return;
+    // get common vars
+    if (!xarVarFetch('pparentid',  'int', $pparentid,  NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('return_url', 'isset',  $return_url, NULL, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('itemtype', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;
-    // get the rest for users only
+    if (!xarVarFetch('itemtype', 'int', $itemtype, ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
     // TODO: need to see what to do with auth module
     $basetype = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
-    if ($basetype == ROLES_USERTYPE) {
-        xarVarFetch('puname', 'str:1:35:', $puname);
-        xarVarFetch('pemail', 'email', $pemail);
-        xarVarFetch('ppass1', 'str:1:', $ppass1, NULL, XARVAR_NOT_REQUIRED);
-        xarVarFetch('ppass2', 'str:1:', $ppass2, NULL, XARVAR_NOT_REQUIRED);
-        xarVarFetch('pstate', 'str:1:', $pstate, NULL, XARVAR_NOT_REQUIRED);
+
+    $object = DataObjectMaster::getObject(array('module'   => 'roles',
+                                                'itemtype' => $basetype));
+
+    $isvalid = $object->checkInput();
+    // @todo add preview?
+    if (!$isvalid) {
+        $data = xarModAPIFunc('roles','admin','menu');
+        $data['itemtype'] = $itemtype;
+        $data['basetype'] = $basetype;
+        $data['pparentid'] = $pparentid;
+        $data['authid'] = xarSecGenAuthKey();
+        $data['return_url'] = $return_url;
+        $data['object'] = & $object;
+
+        //$data['preview'] = $preview;
+        $item = array();
+        $item['module'] = 'roles';
+        $item['itemtype'] = $itemtype;
+        $data['hooks'] = xarModCallHooks('item','new','',$item);
+        return xarTplModule('roles','admin','newrole', $data);
     }
 
-    // checks specific only to users
     if ($basetype == ROLES_USERTYPE) {
-        // check for valid username
-        // TODO: do this in the xarVarFetch above, no need to do this here.
-        if ((!$puname) || !(!preg_match("/[[:space:]]/", $puname))) {
-            throw new BadParameterException($puname,'The username "#(1)" contains spacing characters, this is not allowed');
-        }
-
         // check for duplicate username
+        $uname = $object->properties['uname']->value;
+        $email = $object->properties['email']->value;
         $user = xarModAPIFunc('roles', 'user','get',
-                        array('uname' => $puname));
+                        array('uname' => $uname));
 
         if ($user) {
-            throw new DuplicateException(array('user',$puname));
+            throw new DuplicateException(array('user',$uname));
         }
 
         // check for duplicate email address
         if(xarModGetVar('roles','uniqueemail')) {
-            $user = xarModAPIFunc('roles','user', 'get', array('email' => $pemail));
-            if ($user) throw new DuplicateException(array('email',$pemail));
+            $user = xarModAPIFunc('roles','user', 'get', array('email' => $email));
+            if ($user) throw new DuplicateException(array('email',$email));
         }
+        $object->properties['password']->value = md5($object->properties['password']->value);
+    }
 
-        if (strcmp($ppass1, $ppass2) != 0) {
-            throw new BadParameterException(null,'The two entered passwords are not the same');
-        }
-    }
-    // assemble the args into an array for the role constructor
-    if ($basetype == ROLES_USERTYPE) {
-        $args = array('realname' => $pname,
-            'itemtype' => $itemtype,
-            'parentid' => $pparentid,
-            'uname' => $puname,
-            'email' => $pemail,
-            'pass' => $ppass1,
-            'val_code' => 'createdbyadmin',
-            'state' => $pstate,
-            'auth_module' => 'authsystem',
-            'basetype' => $basetype,
-            );
-    } else {
-        $args = array('realname' => $pname,
-            'itemtype' => $itemtype,
-            'parentid' => $pparentid,
-            'uname' => xarSessionGetVar('uid') . time(),
-            'val_code' => 'createdbyadmin',
-            'auth_module' => 'authsystem',
-            'basetype' => $basetype,
-            );
-    }
-    $uid = xarModAPIFunc('roles','admin','create',$args);
+
+    $uid = $object->createItem();
+    if (empty($uid)) return;
+
+    $args = array('uid' => $uid, 'gid' => $pparentid);
+    if (!xarModAPIFunc('roles','admin','addmember',$args)) return;
 
     if (!xarVarFetch('duvs','array',$duvs,array(),XARVAR_NOT_REQUIRED)) return;
-    foreach($duvs as $key => $value) xarModSetUserVar('roles',$key, $value, $uid);
+    foreach($duvs as $key => $value) {
+        xarModSetUserVar('roles',$key, $value, $uid);
+    }
+    xarModSetUserVar('roles','usersendemails', false, $uid);
 
-    // call item create hooks (for DD etc.)
+    // call item create hooks
     // TODO: move to add() function
-    $pargs['module'] = 'roles';
-    $pargs['itemtype'] = $itemtype;
-    $pargs['itemid'] = $uid;
-    xarModCallHooks('item', 'create', $uid, $pargs);
+    $item['module'] = 'roles';
+    $item['itemtype'] = $itemtype;
+    $item['itemid'] = $uid;
+    xarModCallHooks('item', 'create', $uid, $item);
 
     // redirect to the next page
     if (!empty($return_url)) {
         xarResponseRedirect($return_url);
     } else {
-        xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole',array('uid' => $uid)));
+        xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole',array('itemtype' => $itemtype,
+                                                                           'uid' => $uid)));
     }
 }
 ?>

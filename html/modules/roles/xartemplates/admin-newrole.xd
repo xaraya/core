@@ -15,7 +15,7 @@
                 Add #(1)
             </xar:mlstring>
             <xar:mlvar>
-                #$itemtypename#
+                #$object:label#
             </xar:mlvar>
         </xar:ml>
     </h2>
@@ -32,18 +32,10 @@
                         #(1) Details
                     </xar:mlstring>
                     <xar:mlvar>
-                        #$itemtypename#
+                        #$object:label#
                     </xar:mlvar>
                 </xar:ml>
             </legend>
-            <div class="xar-form-input-wrapper">
-                <label for="pname" title="#xarML('Common name')#" class="xar-form-label">
-                    <xar:mlstring>
-                        Display Name:
-                    </xar:mlstring>
-                </label>
-                <input type="text" name="pname" id="pname" value="#$pname#" maxlength="255" class="xar-form-textlong" />
-            </div>
             <div class="xar-form-input-wrapper">
                 <label for="ptype" title="#xarML('Type of Role')#" class="xar-form-label">
                     <xar:mlstring>
@@ -51,8 +43,11 @@
                     </xar:mlstring>
                 </label>
                 <xar:set name="onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();"</xar:set>
-                <xar:data-input name="itemtype" value="$itemtype" validation="roles" onchange="$onchange" />
+                <xar:data-input type="itemtype" name="itemtype" value="$itemtype" validation="roles" onchange="$onchange" />
             </div>
+
+            <xar:data-form object="$object" />
+
             <div class="xar-form-input-wrapper">
                 <label for="pparentid" title="#xarML('Initial Group membership')#" class="xar-form-label">
                     <xar:mlstring>
@@ -61,52 +56,7 @@
                 </label>
                 <xar:data-input type="grouplist" name="pparentid" value="$pparentid" />
             </div>
-            <xar:if condition="$basetype eq ROLES_USERTYPE">
-                <p>
-                    <xar:mlstring>
-                        The following fields only apply to Users
-                    </xar:mlstring>
-                </p>
-                <div class="xar-form-input-wrapper">
-                    <label for="puname" title="#xarML('Name used for user log on')#" class="xar-form-label">
-                        <xar:mlstring>
-                            User Name:
-                        </xar:mlstring>
-                    </label>
-                    <input type="text" name="puname" id="puname" value="#$puname#" maxlength="255" class="xar-form-textlong" />
-                </div>
-                <div class="xar-form-input-wrapper">
-                    <label for="pemail" title="#xarML('Email address for this user')#" class="xar-form-label">
-                        <xar:mlstring>
-                            Email:
-                        </xar:mlstring>
-                    </label>
-                    <input type="text" name="pemail" id="pemail" value="#$pemail#" maxlength="255" class="xar-form-textlong" />
-                </div>
-                <div class="xar-form-input-wrapper">
-                    <label for="pstate" title="#xarML('Status of this user')#" class="xar-form-label">
-                        <xar:mlstring>
-                            Status:
-                        </xar:mlstring>
-                    </label>
-                    <xar:data-input type="dropdown" name="pstate" id="pstate" value="$pstate" validation="$states" />
-                </div>
-                <div class="xar-form-input-wrapper">
-                    <label for="ppass1" title="#xarML('Password for this user')#" class="xar-form-label">
-                        <xar:mlstring>
-                            Password:
-                        </xar:mlstring>
-                    </label>
-                    <input type="password" name="ppass1" id="ppass1" value="#$ppass1#" maxlength="40" class="xar-form-text-medium" />
-                </div>
-                <div class="xar-form-input-wrapper">
-                    <label for="ppass2" title="#xarML('Confirm password for this user')#" class="xar-form-label">
-                        <xar:mlstring>
-                            Confirm Password:
-                        </xar:mlstring>
-                    </label>
-                    <input type="password" name="ppass2" id="ppass2" value="#$ppass1#" maxlength="40" class="xar-form-text-medium" />
-                </div>
+            <xar:if condition="ROLES_USERTYPE eq $basetype">
                 <xar:set name="settings">unserialize(xarModVars::get('roles','duvsettings'))</xar:set>
                 <xar:if condition="in_array('useremailformat',$settings)">
                     <div class="xar-form-input-wrapper">
@@ -144,7 +94,7 @@
         </fieldset>
         <fieldset>
         <div class="xar-form-input-wrapper-after">
-            <input type="hidden" name="authid" id="authid" value="#$authid#" />
+            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
             <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
             <input type="submit" value="#xarML('Add')#" />
         </div>
