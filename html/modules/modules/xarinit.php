@@ -99,16 +99,16 @@ function modules_init()
 
         /**
          * CREATE TABLE xar_module_itemvars (
-         *   xar_mvid int(11) NOT NULL auto_increment,
-         *   xar_itemid  int(11) NOT NULL default 0,
-         *   xar_value longtext,
-         *   PRIMARY KEY  (xar_mvid, xar_itemid)
+         *   modvar_id    integer NOT NULL auto_increment,
+         *   item_id      integer NOT NULL default 0,
+         *   value        longtext,
+         *   PRIMARY KEY  (modvar_id, item_id)
          * )
          */
         $fields = array(
-                        'xar_mvid' => array('type' => 'integer', 'null' => false, 'primary_key' => true),
-                        'xar_itemid' => array('type' => 'integer', 'null' => false, 'unsigned' => true, 'primary_key' => true),
-                        'xar_value' => array('type' => 'text', 'size' => 'long')
+                        'modvar_id' => array('type' => 'integer', 'null' => false, 'primary_key' => true),
+                        'item_id' => array('type' => 'integer', 'null' => false, 'unsigned' => true, 'primary_key' => true),
+                        'value' => array('type' => 'text', 'size' => 'long')
                         );
 
         // Create the module itemvars table
