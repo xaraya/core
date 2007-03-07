@@ -47,23 +47,23 @@ function modules_adminapi_enablehooks($args)
         $smodId = $smodInfo['systemid'];
         $tmodInfo = xarMod_GetBaseInfo($hookModName);
         $tmodId = $tmodInfo['systemid'];
-        $sql = "DELETE FROM $xartable[hooks] WHERE xar_smodid = ? AND xar_stype = ? AND xar_tmodid = ?";
+        $sql = "DELETE FROM $xartable[hooks] WHERE s_module_id = ? AND s_type = ? AND t_module_id = ?";
         $bindvars = array($smodId,$callerItemType,$tmodId);
         $dbconn->Execute($sql,$bindvars);
 
-        $sql = "SELECT DISTINCT xar_id, xar_smodid, xar_stype, xar_object,
-                                xar_action, xar_tarea, xar_tmodid, xar_ttype,
-                                xar_tfunc
+        $sql = "SELECT DISTINCT id, s_module_id, s_type, object,
+                                action, t_area, t_module_id, t_type,
+                                t_func
                 FROM $xartable[hooks]
-                WHERE xar_tmodid = ?";
-//                WHERE xar_smodid = ? AND xar_tmodid = ?";
+                WHERE t_module_id = ?";
+//                WHERE s_module_id = ? AND t_module_id = ?";
         $stmt1 = $dbconn->prepareStatement($sql);
 //        $result = $stmt1->executeQuery(array(null,$tmodId));
         $result = $stmt1->executeQuery(array($tmodId));
 
         // Prepare the statement outside the loop
         $sql = "INSERT INTO $xartable[hooks]
-                (xar_object,xar_action,xar_smodid,xar_stype,xar_tarea,xar_tmodid,xar_ttype,xar_tfunc)
+                (object,action,s_module_id,s_type,t_area,t_module_id,t_type,t_func)
                 VALUES (?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 

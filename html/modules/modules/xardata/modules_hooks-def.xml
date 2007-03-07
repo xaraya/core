@@ -14,7 +14,7 @@
       <label>ID</label>
       <type>itemid</type>
       <default></default>
-      <source>xar_hooks.xar_id</source>
+      <source>xar_hooks.id</source>
       <status>67</status>
       <order>1</order>
       <validation></validation>
@@ -24,7 +24,7 @@
       <label>Object</label>
       <type>textbox</type>
       <default></default>
-      <source>xar_hooks.xar_object</source>
+      <source>xar_hooks.object</source>
       <status>65</status>
       <order>2</order>
       <validation></validation>
@@ -34,7 +34,7 @@
       <label>Action</label>
       <type>textbox</type>
       <default></default>
-      <source>xar_hooks.xar_action</source>
+      <source>xar_hooks.action</source>
       <status>65</status>
       <order>3</order>
       <validation></validation>
@@ -44,7 +44,7 @@
       <label>Subject Module</label>
       <type>module</type>
       <default></default>
-      <source>xar_hooks.xar_smodid</source>
+      <source>xar_hooks.s_module_id</source>
       <status>65</status>
       <order>4</order>
       <validation></validation>
@@ -54,7 +54,7 @@
       <label>Subject Type</label>
       <type>integerbox</type>
       <default></default>
-      <source>xar_hooks.xar_stype</source>
+      <source>xar_hooks.s_type</source>
       <status>65</status>
       <order>5</order>
       <validation></validation>
@@ -64,7 +64,7 @@
       <label>Area</label>
       <type>textbox</type>
       <default></default>
-      <source>xar_hooks.xar_tarea</source>
+      <source>xar_hooks.t_area</source>
       <status>65</status>
       <order>6</order>
       <validation></validation>
@@ -74,7 +74,7 @@
       <label>Observer Module</label>
       <type>module</type>
       <default></default>
-      <source>xar_hooks.xar_tmodid</source>
+      <source>xar_hooks.t_module_id</source>
       <status>65</status>
       <order>7</order>
       <validation></validation>
@@ -84,7 +84,7 @@
       <label>Observer Type</label>
       <type>integerbox</type>
       <default></default>
-      <source>xar_hooks.xar_ttype</source>
+      <source>xar_hooks.t_type</source>
       <status>65</status>
       <order>8</order>
       <validation></validation>
@@ -94,7 +94,7 @@
       <label>Observer Function</label>
       <type>textbox</type>
       <default></default>
-      <source>xar_hooks.xar_tfunc</source>
+      <source>xar_hooks.t_func</source>
       <status>65</status>
       <order>9</order>
       <validation></validation>

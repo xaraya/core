@@ -37,14 +37,14 @@ function modules_adminapi_update($args)
     try {
         $dbconn->begin();
         // Delete hook regardless
-        $sql = "DELETE FROM $xartable[hooks] WHERE xar_smodid = ?";
+        $sql = "DELETE FROM $xartable[hooks] WHERE s_module_id = ?";
         $dbconn->Execute($sql,array($modinfo['systemid']));
 
-        $sql = "SELECT DISTINCT xar_id, xar_smodid, xar_stype, xar_object,
-                            xar_action, xar_tarea, xar_tmodid, xar_ttype,
-                            xar_tfunc
+        $sql = "SELECT DISTINCT id, s_module_id, s_type, object,
+                            action, t_area, t_module_id, t_type,
+                            t_func
                 FROM $xartable[hooks]
-                WHERE xar_smodid IS NULL";
+                WHERE s_module_id IS NULL";
         $stmt = $dbconn->prepareStatement($sql);
         $result = $stmt->executeQuery();
 
@@ -66,7 +66,7 @@ function modules_adminapi_update($args)
                 // Insert hook if required
                 // Prepare statement outside the loop
                 $sql = "INSERT INTO $xartable[hooks]
-                    (xar_object,xar_action,xar_smodid,xar_stype,xar_tarea,xar_tmodid,xar_ttype,xar_tfunc)
+                    (object,action,s_module_id,s_type,t_area,t_module_id,t_type,t_func)
                     VALUES (?,?,?,?,?,?,?,?)";
                 $stmt2 = $dbconn->prepareStatement($sql);
 

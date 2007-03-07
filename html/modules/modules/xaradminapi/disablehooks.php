@@ -47,7 +47,7 @@ function modules_adminapi_disablehooks($args)
     $smodId = $smodInfo['systemid'];
     $tmodInfo = xarMod_GetBaseInfo($hookModName);
     $tmodId = $tmodInfo['systemid'];
-    $sql = "DELETE FROM $xartable[hooks] WHERE xar_smodid = ? AND xar_stype = ? AND xar_tmodid = ?";
+    $sql = "DELETE FROM $xartable[hooks] WHERE s_module_id = ? AND s_type = ? AND t_module_id = ?";
     $stmt = $dbconn->prepareStatement($sql);
 
     try {
