@@ -179,7 +179,7 @@ class xarModVars extends xarVars implements IxarModVars
         // TODO: we should delegate this to moditemvars class somehow
         if($modvarid) {
             $module_itemvarstable = $tables['module_itemvars'];
-            $query = "DELETE FROM $module_itemvarstable WHERE xar_mvid = ?";
+            $query = "DELETE FROM $module_itemvarstable WHERE module_var_id = ?";
             $stmt = $dbconn->prepareStatement($query);
             $stmt->executeUpdate(array((int)$modvarid));
         }
@@ -239,7 +239,7 @@ class xarModVars extends xarVars implements IxarModVars
             $dbconn->begin();
             if(count($idlist) != 0 ) {
                 $bindmarkers = '?' . str_repeat(',?', count($idlist) -1);
-                $sql = "DELETE FROM $module_itemvarstable WHERE $module_itemvarstable.xar_mvid IN (".$bindmarkers.")";
+                $sql = "DELETE FROM $module_itemvarstable WHERE $module_itemvarstable.module_var_id IN (".$bindmarkers.")";
                 $stmt = $dbconn->prepareStatement($sql);
                 $result = $stmt->executeUpdate($idlist);
             }
