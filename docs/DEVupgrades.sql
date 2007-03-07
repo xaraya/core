@@ -234,6 +234,20 @@ ALTER TABLE `xar_template_tags`
  CHANGE COLUMN `xar_data` `data` TEXT DEFAULT NULL;
 
 
+ ALTER TABLE `xar_hooks`
+  CHANGE COLUMN `xar_id` `id` INTEGER NOT NULL DEFAULT NULL AUTO_INCREMENT,
+  CHANGE COLUMN `xar_object` `object` VARCHAR(64) NOT NULL,
+  CHANGE COLUMN `xar_action` `action` VARCHAR(64) NOT NULL,
+  CHANGE COLUMN `xar_smodid` `s_module_id` INTEGER DEFAULT NULL,
+  CHANGE COLUMN `xar_stype` `s_type` VARCHAR(64) NOT NULL,
+  CHANGE COLUMN `xar_tarea` `t_area` VARCHAR(64) NOT NULL,
+  CHANGE COLUMN `xar_tmodid` `t_module_id` INTEGER NOT NULL,
+  CHANGE COLUMN `xar_ttype` `t_type` VARCHAR(64) NOT NULL,
+  CHANGE COLUMN `xar_tfunc` `t_func` VARCHAR(64) NOT NULL,
+  CHANGE COLUMN `xar_order` `order` INTEGER NOT NULL DEFAULT 0;
+ CHANGE COLUMN `xar_data` `data` TEXT DEFAULT NULL;
+
+
 ALTER TABLE `xar_privileges`
  CHANGE COLUMN `xar_pid` `id` INTEGER NOT NULL DEFAULT NULL AUTO_INCREMENT,
  CHANGE COLUMN `xar_name` `name` VARCHAR(100) NOT NULL,
