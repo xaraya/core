@@ -445,7 +445,7 @@ class xarPrivileges extends xarMasks
                   WHERE module_id = ?
                   ORDER BY component";
         $stmt = parent::$dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array($module_id));
+        $result = $stmt->executeQuery(array($modid));
         $iter = $result->next();
 
         $components = array();
@@ -499,7 +499,7 @@ class xarPrivileges extends xarMasks
         if (is_null($modid)) return array();
         if (!empty($modid)) {
             $modInfo = xarMod_GetBaseInfo(xarModGetNameFromID($modid));
-            $module_id = $modInfo['systemid'];
+            $modid = $modInfo['systemid'];
         }
 
         parent::initialize();
@@ -514,7 +514,7 @@ class xarPrivileges extends xarMasks
                   FROM " . parent::$instancestable ."
                   WHERE module_id = ? AND component = ?
                   ORDER BY component,id";
-        $bindvars = array($module_id,$component);
+        $bindvars = array($modid,$component);
 
         $instances = array();
         $stmt = parent::$dbconn->prepareStatement($query);
