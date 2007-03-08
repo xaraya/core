@@ -436,7 +436,7 @@ class xarPrivileges extends xarMasks
         if (is_null($modid)) return array();
         if (!empty($modid)) {
             $modInfo = xarMod_GetBaseInfo(xarModGetNameFromID($modid));
-            $module_id = $modInfo['systemid'];
+            $modid = $modInfo['systemid'];
         }
 
         parent::initialize();
