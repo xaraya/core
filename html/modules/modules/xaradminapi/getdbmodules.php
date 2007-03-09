@@ -33,11 +33,11 @@ function modules_adminapi_getdbmodules($args)
     $dbModules = array();
 
     // Get all modules in DB
-    $sql = "SELECT xar_regid, xar_name, xar_directory, xar_class, xar_version, xar_mode, xar_state
+    $sql = "SELECT regid, name, directory, class, version, mode, state
             FROM $xartable[modules] ";
 
     if ($modregid) {
-        $sql .= " WHERE $xartable[modules].xar_regid = ?";
+        $sql .= " WHERE $xartable[modules].regid = ?";
     }
     $stmt = $dbconn->prepareStatement($sql);
     $result = $stmt->executeQuery(array($modregid));

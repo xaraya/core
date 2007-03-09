@@ -47,32 +47,32 @@ function modules_init()
         // prefix_modules
         /**
          * CREATE TABLE xar_modules (
-         *   xar_id int(11) NOT NULL auto_increment,
-         *   xar_name varchar(64) NOT NULL default '',
-         *   xar_regid int(10) unsigned NOT NULL default '0',
-         *   xar_directory varchar(64) NOT NULL default '',
-         *   xar_version varchar(10) NOT NULL default '0',
-         *   xar_mode int(6) NOT NULL default '1',
-         *   xar_class varchar(64) NOT NULL default '',
-         *   xar_category varchar(64) NOT NULL default '',
-         *   xar_admin_capable tinyint(1) NOT NULL default '0',
-         *   xar_user_capable tinyint(1) NOT NULL default '0',
-         *   xar_state tinyint(1) NOT NULL default '0'
-         *   PRIMARY KEY  (xar_id)
+         *   id int(11) NOT NULL auto_increment,
+         *   name varchar(64) NOT NULL default '',
+         *   regid int(10) unsigned NOT NULL default '0',
+         *   directory varchar(64) NOT NULL default '',
+         *   version varchar(10) NOT NULL default '0',
+         *   mode int(6) NOT NULL default '1',
+         *   class varchar(64) NOT NULL default '',
+         *   category varchar(64) NOT NULL default '',
+         *   admin_capable tinyint(1) NOT NULL default '0',
+         *   user_capable tinyint(1) NOT NULL default '0',
+         *   state tinyint(1) NOT NULL default '0'
+         *   PRIMARY KEY  (id)
          * )
          */
         $fields = array(
-                        'xar_id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
-                        'xar_name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        'xar_regid' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
-                        'xar_directory' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        'xar_version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
-                        'xar_mode' => array('type' => 'integer', 'size' => 'small', 'null' => false, 'default' => '1'),
-                        'xar_class' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        'xar_category' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        'xar_admin_capable' => array('type' => 'integer', 'size' => 'tiny', 'null' => false, 'default' => '0'),
-                        'xar_user_capable' => array('type' => 'integer', 'size' => 'tiny', 'null' => false, 'default' => '0'),
-                        'xar_state' => array('type' => 'integer', 'null' => false, 'default' => '1')
+                        'id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
+                        'name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                        'regid' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
+                        'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                        'version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
+                        'mode' => array('type' => 'integer', 'size' => 'small', 'null' => false, 'default' => '1'),
+                        'class' => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                        'category' => array('type' => 'varchar', 'size' => 64, 'null' => false),
+                        'admin_capable' => array('type' => 'integer', 'size' => 'tiny', 'null' => false, 'default' => '0'),
+                        'user_capable' => array('type' => 'integer', 'size' => 'tiny', 'null' => false, 'default' => '0'),
+                        'state' => array('type' => 'integer', 'null' => false, 'default' => '1')
                         );
 
         // Create the modules table
@@ -85,8 +85,8 @@ function modules_init()
         $modVersion = $modInfo['version'];
         // Manually Insert Modules module into modules table
         $query = "INSERT INTO " . $tables['modules'] . "
-              (xar_name, xar_regid, xar_directory, xar_version, xar_mode,
-               xar_class, xar_category, xar_admin_capable, xar_user_capable, xar_state )
+              (name, regid, directory, version, mode,
+               class, category, admin_capable, user_capable, state )
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $bindvars = array('modules',1,'modules',(string) $modVersion,1,'Core Admin','Global',1,0,3);
         $dbconn->Execute($query,$bindvars);
@@ -98,7 +98,7 @@ function modules_init()
         /** Module vars table is created earlier now (base mod, where config_vars table was created */
 
         /**
-         * CREATE TABLE xar_module_itemvars (
+         * CREATE TABLE module_itemvars (
          *   module_var_id    integer NOT NULL auto_increment,
          *   item_id          integer NOT NULL default 0,
          *   value            longtext,

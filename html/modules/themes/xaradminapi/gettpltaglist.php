@@ -28,11 +28,11 @@ function themes_adminapi_gettpltaglist($args)
 
     // Get all registered tags from the DB
     $bindvars = array();
-    $sSql = "SELECT tags.id, tags.name, mods.xar_name
+    $sSql = "SELECT tags.id, tags.name, mods.name
              FROM $xartable[template_tags] tags, $xartable[modules] mods
-             WHERE mods.xar_id = tags.module_id ";
+             WHERE mods.id = tags.module_id ";
     if (isset($module) && trim($module) != '') {
-        $sSql .= " AND mods.xar_name = ?";
+        $sSql .= " AND mods.name = ?";
         $bindvars[] = $module;
     }
     if (isset($id) && trim($id) != '') {

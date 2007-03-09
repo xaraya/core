@@ -157,7 +157,7 @@ function xarBlock_renderGroup($groupname, $template = NULL)
     // CHECKME: Does this really have to be a quadruple left join, i cant imagine
     $query = "SELECT    inst.xar_id as bid,
                         btypes.xar_type as type,
-                        mods.xar_name as module,
+                        mods.name as module,
                         inst.xar_name as name,
                         inst.xar_title as title,
                         inst.xar_content as content,
@@ -173,7 +173,7 @@ function xarBlock_renderGroup($groupname, $template = NULL)
               LEFT JOIN $blockGroupsTable bgroups ON group_inst.xar_group_id = bgroups.xar_id
               LEFT JOIN $blockInstancesTable inst ON inst.xar_id = group_inst.xar_instance_id
               LEFT JOIN $blockTypesTable btypes   ON btypes.xar_id = inst.xar_type_id
-              LEFT JOIN $modulesTable mods        ON btypes.xar_modid = mods.xar_id
+              LEFT JOIN $modulesTable mods        ON btypes.xar_modid = mods.id
               WHERE     bgroups.xar_name = ? AND
                         inst.xar_state > ?
               ORDER BY  group_inst.xar_position ASC";

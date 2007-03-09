@@ -44,9 +44,9 @@ function themes_adminapi_getthemelist($args)
             throw new BadParameterException('orderBy','The parameter #(1) can contain only \'name\' or \'regid\' or \'class\' as items.');
         }
         // Here $validOrderFields[$orderField] is the table alias
-        $orderByClauses[] = $validOrderFields[$orderField] . '.xar_' . $orderField;
+        $orderByClauses[] = $validOrderFields[$orderField] . '.' . $orderField;
         if ($validOrderFields[$orderField] == 'infos') {
-            $extraSelectClause .= ', ' . $validOrderFields[$orderField] . '.xar_' . $orderField;
+            $extraSelectClause .= ', ' . $validOrderFields[$orderField] . '.' . $orderField;
         }
     }
     $orderByClause = join(', ', $orderByClauses);
@@ -59,29 +59,29 @@ function themes_adminapi_getthemelist($args)
     // Construct arrays for the where conditions and their bind variables
     $whereClauses = array(); $bindvars = array();
     if (isset($filter['Mode'])) {
-        $whereClauses[] = 'themes.xar_mode = ?';
+        $whereClauses[] = 'themes.mode = ?';
         $bindvars[] = $filter['Mode'];
     }
 
     if (isset($filter['Class'])) {
-        $whereClauses[] = 'themes.xar_class = ?';
+        $whereClauses[] = 'themes.class = ?';
         $bindvars[] = $filter['Class'];
     }
 
     if (isset($filter['State'])) {
         if ($filter['State'] != XARTHEME_STATE_ANY) {
             if ($filter['State'] != XARTHEME_STATE_INSTALLED) {
-                $whereClauses[] = 'themes.xar_state = ?';
+                $whereClauses[] = 'themes.state = ?';
                 $bindvars[] = $filter['State'];
             } else {
-                $whereClauses[] = 'themes.xar_state != ? AND themes.xar_state < ? AND themes.xar_state != ?';
+                $whereClauses[] = 'themes.state != ? AND themes.state < ? AND themes.state != ?';
                 $bindvars[] = XARTHEME_STATE_UNINITIALISED;
                 $bindvars[] = XARTHEME_STATE_MISSING_FROM_INACTIVE;
                 $bindvars[] = XARTHEME_STATE_MISSING_FROM_UNINITIALISED;
             }
         }
     } else {
-        $whereClauses[] = 'themes.xar_state = ?';
+        $whereClauses[] = 'themes.state = ?';
         $bindvars[] = XARTHEME_STATE_ACTIVE;
     }
 
@@ -89,14 +89,14 @@ function themes_adminapi_getthemelist($args)
     $mode = XARTHEME_MODE_SHARED;
     $themeList = array();
 
-    $query = "SELECT themes.xar_regid,
-                     themes.xar_name,
-                     themes.xar_directory,
-                     themes.xar_class,
-                     themes.xar_state
+    $query = "SELECT themes.regid,
+                     themes.name,
+                     themes.directory,
+                     themes.class,
+                     themes.state
               FROM $themestable AS themes ";
 
-    array_unshift($whereClauses, 'themes.xar_mode = ?');
+    array_unshift($whereClauses, 'themes.mode = ?');
     array_unshift($bindvars,$mode);
 
     $whereClause = join(' AND ', $whereClauses);

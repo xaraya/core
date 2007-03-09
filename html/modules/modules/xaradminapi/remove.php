@@ -48,7 +48,7 @@ function modules_adminapi_remove($args)
             xarModDelAllVars($modinfo['name']);
 
             // Remove the module itself
-            $query = "DELETE FROM $tables[modules] WHERE xar_regid = ?";
+            $query = "DELETE FROM $tables[modules] WHERE regid = ?";
             $dbconn->Execute($query,array($modinfo['regid']));
         } else {
             // Module deletion function

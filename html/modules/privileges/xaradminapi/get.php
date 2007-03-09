@@ -14,10 +14,10 @@ function privileges_adminapi_get($args)
 
     $xartable =& xarDBGetTables();
     $query = "SELECT p.id, p.name, p.realmid,
-                     m.xar_regid, p.component, p.instance,
+                     m.regid, p.component, p.instance,
                      p.level,  p.description
               FROM " . $xartable['privileges'] . " p
-              LEFT JOIN ". $xartable['modules'] . " m ON p.module_id = m.xar_id
+              LEFT JOIN ". $xartable['modules'] . " m ON p.module_id = m.id
               WHERE p.type = " . xarMasks::PRIVILEGES_PRIVILEGETYPE;
     if (isset($itemid)) {
         $query .= " AND p.id = " . $itemid;

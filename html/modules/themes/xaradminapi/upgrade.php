@@ -34,7 +34,7 @@ function themes_adminapi_upgrade($args)
     // Update state of theme
     $res = xarModAPIFunc('themes', 'admin', 'setstate',
                         array('regid' => $regid, 'state' => XARTHEME_STATE_INACTIVE));
-    
+
     if (!isset($res)) return;
 
     // Get the new version information...
@@ -46,12 +46,12 @@ function themes_adminapi_upgrade($args)
     $xartable =& xarDBGetTables();
 
      $sql = "UPDATE $xartable[themes]
-            SET xar_version = ?, xar_class = ?
-            WHERE xar_regid = ?";     
+            SET version = ?, class = ?
+            WHERE regid = ?";
     $bindvars = array($themeFileInfo['version'],
                       $themeFileInfo['class'],
                       $regid);
-            
+
     $dbconn->Execute($sql,$bindvars);
 
     // Message

@@ -71,9 +71,9 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
             throw new BadParameterException('orderBy','Parameter orderBy can contain only \'name\' or \'regid\' or \'class\' as items.');
         }
         // Here $validOrderFields[$orderField] is the table alias
-        $orderByClauses[] = $validOrderFields[$orderField] . '.xar_' . $orderField;
+        $orderByClauses[] = $validOrderFields[$orderField] . '.' . $orderField;
         if ($validOrderFields[$orderField] == 'infos') {
-            $extraSelectClause .= ', ' . $validOrderFields[$orderField] . '.xar_' . $orderField;
+            $extraSelectClause .= ', ' . $validOrderFields[$orderField] . '.' . $orderField;
         }
     }
     $orderByClause = join(', ', $orderByClauses);
@@ -86,20 +86,20 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
     // Construct an array with where conditions and their bind variables
     $whereClauses = array(); $bindvars = array();
     if (isset($filter['Mode'])) {
-        $whereClauses[] = 'themes.xar_mode = ?';
+        $whereClauses[] = 'themes.mode = ?';
         $bindvars[] = $filter['Mode'];
     }
     if (isset($filter['Class'])) {
-        $whereClauses[] = 'themes.xar_class = ?';
+        $whereClauses[] = 'themes.class = ?';
         $bindvars[] = $filter['Class'];
     }
     if (isset($filter['State'])) {
         if ($filter['State'] != XARTHEME_STATE_ANY) {
-            $whereClauses[] = 'themes.xar_state = ?';
+            $whereClauses[] = 'themes.state = ?';
             $bindvars[] = $filter['State'];
         }
     } else {
-        $whereClauses[] = 'themes.xar_state = ?';
+        $whereClauses[] = 'themes.state = ?';
         $bindvars[] = XARTHEME_STATE_ACTIVE;
     }
 
@@ -107,17 +107,17 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
     $mode = XARTHEME_MODE_SHARED;
     $themeList = array();
 
-    $query = "SELECT themes.xar_regid,
-                     themes.xar_name,
-                     themes.xar_directory,
-                     themes.xar_state
+    $query = "SELECT themes.regid,
+                     themes.name,
+                     themes.directory,
+                     themes.state
               FROM $tables[themes] AS themes ";
-    array_unshift($whereClauses, 'themes.xar_mode = ?');
+    array_unshift($whereClauses, 'themes.mode = ?');
     array_unshift($bindvars,$mode);
 
     $whereClause = join(' AND ', $whereClauses);
     $query .= " WHERE $whereClause ORDER BY $orderByClause";
-    
+
     $stmt = $dbconn->prepareStatement($query);
     $stmt->setLimit($numItems);
     $stmt->setOffset($startNum - 1);
@@ -137,11 +137,11 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
             $themeInfo['displayname'] = xarThemeGetDisplayableName($themeInfo['name']);
             // Shortcut for os prepared directory
             $themeInfo['osdirectory'] = xarVarPrepForOS($themeInfo['directory']);
-            
+
             $themeInfo['state'] = (int) $themeState;
-            
+
             xarVarSetCached('Theme.BaseInfos', $themeInfo['name'], $themeInfo);
-            
+
             $themeFileInfo = xarTheme_getFileInfo($themeInfo['osdirectory']);
             if (!isset($themeFileInfo)) {
                 // There was an entry in the database which was not in the file system,

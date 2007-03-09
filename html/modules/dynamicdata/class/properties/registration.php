@@ -135,11 +135,11 @@ class PropertyRegistration extends DataContainer
         $query = "SELECT  p.xar_prop_id, p.xar_prop_name, p.xar_prop_label,
                           p.xar_prop_parent, p.xar_prop_filepath, p.xar_prop_class,
                           p.xar_prop_format, p.xar_prop_validation, p.xar_prop_source,
-                          p.xar_prop_reqfiles, m.xar_name, p.xar_prop_args,
+                          p.xar_prop_reqfiles, m.name, p.xar_prop_args,
                           p.xar_prop_aliases
                   FROM    $tables[dynamic_properties_def] p INNER JOIN $tables[modules] m
-                  ON      p.xar_prop_modid = m.xar_id
-                  ORDER BY m.xar_name, xar_prop_name";
+                  ON      p.xar_prop_modid = m.id
+                  ORDER BY m.name, xar_prop_name";
         $result = $dbconn->executeQuery($query);
         $proptypes = array();
         if($result->RecordCount() == 0 ) {

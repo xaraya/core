@@ -553,12 +553,12 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
 
     // Get applicable hooks
     // New query:
-    $query ="SELECT DISTINCT hooks.t_area, tmods.xar_name,
+    $query ="SELECT DISTINCT hooks.t_area, tmods.name,
                              hooks.t_type, hooks.t_func, hooks.priority
              FROM $hookstable hooks, $modulestable tmods, $modulestable smods
-             WHERE hooks.t_module_id = tmods.xar_id AND
-                   hooks.s_module_id = smods.xar_id AND
-                   smods.xar_name = ?";
+             WHERE hooks.t_module_id = tmods.id AND
+                   hooks.s_module_id = smods.id AND
+                   smods.name = ?";
     $bindvars = array($callerModName);
 
     if (empty($callerItemType)) {
@@ -628,11 +628,11 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
 
         // Get applicable hooks
         // New query:
-        $query = "SELECT DISTINCT tmods.xar_name, hooks.s_type
+        $query = "SELECT DISTINCT tmods.name, hooks.s_type
                   FROM  $hookstable hooks, $modulestable tmods, $modulestable smods
-                  WHERE hooks.s_module_id = smods.xar_id AND
-                        hooks.t_module_id = tmods.xar_id AND
-                        smods.xar_name = ?";
+                  WHERE hooks.s_module_id = smods.id AND
+                        hooks.t_module_id = tmods.id AND
+                        smods.name = ?";
         $bindvars = array($callerModName);
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
@@ -1055,25 +1055,25 @@ class xarMod extends Object implements IxarMod
         case 'module':
         default:
             $the_table = $tables['modules'];
-            $query = "SELECT xar_id,
-                             xar_name,
-                             xar_directory,
-                             xar_mode,
-                             xar_version,
-                             xar_admin_capable,
-                             xar_user_capable,
-                             xar_state
-                       FROM  $the_table WHERE xar_regid = ?";
+            $query = "SELECT id,
+                             name,
+                             directory,
+                             mode,
+                             version,
+                             admin_capable,
+                             user_capable,
+                             state
+                       FROM  $the_table WHERE regid = ?";
             break;
         case 'theme':
             $the_table = $tables['themes'];
-            $query = "SELECT xar_id,
-                             xar_name,
-                             xar_directory,
-                             xar_mode,
-                             xar_version,
-                             xar_state
-                       FROM  $the_table WHERE xar_regid = ?";
+            $query = "SELECT id,
+                             name,
+                             directory,
+                             mode,
+                             version,
+                             state
+                       FROM  $the_table WHERE regid = ?";
             break;
         }
         $stmt = $dbconn->prepareStatement($query);
@@ -1211,10 +1211,10 @@ class xarMod extends Object implements IxarMod
         // theme+s or module+s
         $table = $tables[$type.'s'];
 
-        $query = "SELECT items.xar_regid, items.xar_directory, items.xar_mode,
-                     items.xar_id, items.xar_state, items.xar_name
+        $query = "SELECT items.regid, items.directory, items.mode,
+                     items.id, items.state, items.name
               FROM   $table items
-              WHERE  items.xar_name = ? OR items.xar_directory = ?";
+              WHERE  items.name = ? OR items.directory = ?";
         $bindvars = array($modName, $modName);
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);

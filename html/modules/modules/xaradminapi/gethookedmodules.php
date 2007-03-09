@@ -36,9 +36,9 @@ function modules_adminapi_gethookedmodules($args)
 
     $bindvars = array();
     // TODO: This looks awfally similar to gethooklist in xarMod.php, investigate later
-    $query = "SELECT DISTINCT smods.xar_name, hooks.s_type
+    $query = "SELECT DISTINCT smods.name, hooks.s_type
               FROM $xartable[hooks] hooks, $xartable[modules] mods, $xartable[modules] smods
-              WHERE hooks.t_module_id = mods.xar_id AND hooks.s_module_id = smods.xar_id AND mods.xar_name = ?";
+              WHERE hooks.t_module_id = mods.id AND hooks.s_module_id = smods.id AND mods.name = ?";
     $bindvars[] = $hookModName;
     if (!empty($hookObject)) {
         $query .= " AND hooks.object = ?";

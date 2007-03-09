@@ -23,7 +23,7 @@ function themes_adminapi_getdbthemes()
     $dbThemes = array();
 
     // Get all themes in DB
-    $sql = "SELECT xar_regid  FROM $xartable[themes]";
+    $sql = "SELECT regid  FROM $xartable[themes]";
     $result = $dbconn->executeQuery($sql);
 
     while($result->next()) {

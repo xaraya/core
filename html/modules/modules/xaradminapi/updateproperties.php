@@ -33,15 +33,15 @@ function modules_adminapi_updateproperties($args)
     $xartable =& xarDBGetTables();
     $q = 'UPDATE ' . $xartable['modules'] . ' SET ';
     $uparts=array(); $bindvars=array();
-    //    if (isset($displayname)) {$uparts[] = 'xar_directory=?'; $bindvars[] = $displayname;}
-    if (isset($admincapable)) {$uparts[] = 'xar_admin_capable=?'; $bindvars[] = $admincapable;}
-    if (isset($usercapable))  {$uparts[] = 'xar_user_capable=?';  $bindvars[] = $usercapable; }
-    if (isset($version))      {$uparts[] = 'xar_version=?';       $bindvars[] = $version;}
-    if (isset($class))        {$uparts[] = 'xar_class=?';         $bindvars[] = $class;}
-    if (isset($category))     {$uparts[] = 'xar_category=?';      $bindvars[] = $category;}
+    //    if (isset($displayname)) {$uparts[] = 'directory=?'; $bindvars[] = $displayname;}
+    if (isset($admincapable)) {$uparts[] = 'admin_capable=?'; $bindvars[] = $admincapable;}
+    if (isset($usercapable))  {$uparts[] = 'user_capable=?';  $bindvars[] = $usercapable; }
+    if (isset($version))      {$uparts[] = 'version=?';       $bindvars[] = $version;}
+    if (isset($class))        {$uparts[] = 'class=?';         $bindvars[] = $class;}
+    if (isset($category))     {$uparts[] = 'category=?';      $bindvars[] = $category;}
     if(!empty($uparts)) {
         // We have something to update
-        $q .= join(',',$uparts) . ' WHERE xar_regid=?';
+        $q .= join(',',$uparts) . ' WHERE regid=?';
         $bindvars[] = $regid;
         $dbconn = xarDbGetConn();
         $dbconn->Execute($q, $bindvars);

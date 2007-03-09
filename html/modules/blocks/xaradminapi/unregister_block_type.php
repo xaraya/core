@@ -34,21 +34,21 @@ function blocks_adminapi_unregister_block_type($args)
     $block_types_table     = $xartable['block_types'];
     $block_instances_table = $xartable['block_instances'];
     $modules_table         = $xartable['modules'];
-    // First we need to retrieve the block ids and remove 
+    // First we need to retrieve the block ids and remove
     // the corresponding id's from the xar_block_instances
     // and xar_block_group_instances tables
     $query = "SELECT    inst.xar_id as id
               FROM      $block_instances_table inst, $block_types_table btypes, $modules_table mods
-              WHERE     mods.xar_id = btypes.xar_modid AND
+              WHERE     mods.id = btypes.xar_modid AND
                         btypes.xar_id = inst.xar_type_id AND
-                        mods.xar_name = ? AND
+                        mods.name = ? AND
                         btypes.xar_type = ?";
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery(array($modName,$blockType));
 
     try {
         $dbconn->begin();
-        $modInfo = xarMod_GetBaseInfo($modName); 
+        $modInfo = xarMod_GetBaseInfo($modName);
         $modId = $modInfo['systemid'];
 
         while ($result->next()) {

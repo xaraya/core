@@ -39,13 +39,13 @@ function blocks_userapi_getallblocktypes($args)
     $modules_table     = $xartable['modules'];
 
     // Fetch instance details.
-    $query = "SELECT btypes.xar_id, mods.xar_name, btypes.xar_type, btypes.xar_info
+    $query = "SELECT btypes.xar_id, mods.name, btypes.xar_type, btypes.xar_info
               FROM  $block_types_table btypes, $modules_table mods
               WHERE btypes.xar_modid = mods.xar_id ";
 
     $bind = array();
     if (!empty($module)) {
-        $query .= ' AND mods.xar_name = ?';
+        $query .= ' AND mods.name = ?';
         $bind [] = $module;
     }
 

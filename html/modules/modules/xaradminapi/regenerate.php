@@ -64,15 +64,15 @@ function modules_adminapi_regenerate()
         if (empty($dbModules[$name])) {
             // New module
             $sql = "INSERT INTO $modules_table
-                      (xar_name,
-                       xar_regid,
-                       xar_directory,
-                       xar_version,
-                       xar_mode,
-                       xar_class,
-                       xar_category,
-                       xar_admin_capable,
-                       xar_user_capable)
+                      (name,
+                       regid,
+                       directory,
+                       version,
+                       mode,
+                       class,
+                       category,
+                       admin_capable,
+                       user_capable)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $params = array(
                 $modinfo['name'],
@@ -168,7 +168,7 @@ function modules_adminapi_regenerate()
                         }
 
                         // Update the module version number
-                        $sql = "UPDATE $modules_table SET xar_version = ? WHERE xar_regid = ?";
+                        $sql = "UPDATE $modules_table SET version = ? WHERE regid = ?";
                         $dbconn->Execute($sql, array($modinfo['version'], $modinfo['regid']));
                     } else {
                         // Else set the module state to upgraded

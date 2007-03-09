@@ -45,7 +45,7 @@ class xarPrivileges extends xarMasks
             $query = "SELECT instances.id
                       FROM   $iTable instances, $mTable mods
                       WHERE  instances.module_id = mods.xar_id AND
-                             mods.xar_name = ? AND
+                             mods.name = ? AND
                              instances.component = ? AND
                              instances.header = ?";
             $stmt = parent::$dbconn->prepareStatement($query);
@@ -215,10 +215,10 @@ class xarPrivileges extends xarMasks
         if (empty($allprivileges)) {
             xarLogMessage('PRIV: getting all privs, once!');
             $query = "SELECT p.id, p.name, r.name,
-                             m.xar_name, p.component, p.instance,
+                             m.name, p.component, p.instance,
                              p.level,  p.description
                       FROM " . parent::$privilegestable . " p LEFT JOIN ". parent::$realmstable . " r ON p.realmid = r.id
-                      LEFT JOIN ". parent::$modulestable . " m ON p.module_id = m.xar_id
+                      LEFT JOIN ". parent::$modulestable . " m ON p.module_id = m.id
                       WHERE type = " . self::PRIVILEGES_PRIVILEGETYPE .
                       " ORDER BY p.name";
             $stmt = parent::$dbconn->prepareStatement($query);
@@ -366,10 +366,10 @@ class xarPrivileges extends xarMasks
         static $allmodules = array();
 
         if (empty($allmodules)) {
-            $query = "SELECT modules.xar_id, modules.xar_name
+            $query = "SELECT modules.xar_id, modules.name
                       FROM " . parent::$modulestable . " modules
                       WHERE modules.xar_state = ?
-                      ORDER BY modules.xar_name";
+                      ORDER BY modules.name";
             $stmt = parent::$dbconn->prepareStatement($query);
             $result = $stmt->executeQuery(array(3));
 
@@ -628,9 +628,9 @@ class xarPrivileges extends xarMasks
             return xarVarGetCached($cacheKey,$id);
         }
         // Need to get it
-        $query = "SELECT p.id, p.name, r.name, m.xar_regid, p.component, p.instance, p.level, p.description
+        $query = "SELECT p.id, p.name, r.name, m.regid, p.component, p.instance, p.level, p.description
                   FROM " . parent::$privilegestable . " p LEFT JOIN ". parent::$realmstable ." r ON p.realmid = r.id
-                  LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.xar_id
+                  LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.id
                   WHERE type = ?";
         if(is_numeric($id)) $query .= " AND p.id = ?";
         else  $query .= " AND p.name = ?";

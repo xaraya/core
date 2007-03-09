@@ -76,7 +76,7 @@ function blocks_userapi_groupgetinfo($args)
     // NOTE: same query as in includes/xarBlocks.php
     $query = "SELECT    inst.xar_id as id,
                         btypes.xar_type as type,
-                        mods.xar_name as module,
+                        mods.name as module,
                         inst.xar_title as title,
                         inst.xar_name as name,
                         group_inst.xar_position as position
@@ -84,7 +84,7 @@ function blocks_userapi_groupgetinfo($args)
               LEFT JOIN $blockGroupsTable as bgroups ON group_inst.xar_group_id = bgroups.xar_id
               LEFT JOIN $blockInstancesTable as inst ON inst.xar_id = group_inst.xar_instance_id
               LEFT JOIN $blockTypesTable as btypes   ON btypes.xar_id = inst.xar_type_id
-              LEFT JOIN $modulesTable as mods        ON btypes.xar_modid = mods.xar_id
+              LEFT JOIN $modulesTable as mods        ON btypes.xar_modid = mods.id
               WHERE     bgroups.xar_id = ?
               ORDER BY  group_inst.xar_position ASC";
     $stmt = $dbconn->prepareStatement($query);

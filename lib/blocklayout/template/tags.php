@@ -283,9 +283,9 @@ class xarTemplateTag extends Object
         $systemPrefix = xarDBGetSystemTablePrefix();
         $tag_table = $systemPrefix . '_template_tags';
         $mod_table = $systemPrefix . '_modules';
-        $query = "SELECT tags.data, mods.xar_name
+        $query = "SELECT tags.data, mods.name
                   FROM $tag_table tags, $mod_table mods
-                  WHERE tags.module_id = mods.xar_id AND tags.name=?";
+                  WHERE tags.module_id = mods.id AND tags.name=?";
         if(!isset($stmt)) $stmt = $dbconn->prepareStatement($query);
 
         $stmt->setLimit(1);

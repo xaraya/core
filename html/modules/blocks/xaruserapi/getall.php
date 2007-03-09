@@ -23,7 +23,7 @@ function blocks_userapi_getall($args)
     // Check parameters
     if (!empty($bid) && !xarVarValidate('int:1:', $bid)) {return;}
     if (!empty($name) && !xarVarValidate('str', $name)) {return;}
-    
+
     if (!empty($order) && xarVarValidate('strlist:,|:enum:name:title:id', $order, true)) {
         $orderby = ' ORDER BY binst.xar_' . implode(', inst.xar_', explode(',', $order));
     } else {
@@ -42,10 +42,10 @@ function blocks_userapi_getall($args)
     $query = "SELECT binst.xar_id, binst.xar_name,
                      binst.xar_title, binst.xar_template,
                      binst.xar_content, binst.xar_refresh, binst.xar_state,
-                     btypes.xar_id, mods.xar_name, btypes.xar_type
+                     btypes.xar_id, mods.name, btypes.xar_type
               FROM   $modules_table mods, $block_instances_table binst
-              LEFT JOIN $block_types_table btypes  ON btypes.xar_id = binst.xar_type_id 
-              WHERE  mods.xar_id = btypes.xar_modid ";
+              LEFT JOIN $block_types_table btypes  ON btypes.xar_id = binst.xar_type_id
+              WHERE  mods.id = btypes.xar_modid ";
 
     $bindvars = array();
     if (!empty($bid)) {
@@ -62,14 +62,14 @@ function blocks_userapi_getall($args)
 
     // Prepare it
     $stmt = $dbconn->prepareStatement($query);
-    
+
     // Return if no details retrieved.
     if (isset($startat) && isset($rowstodo)) {
         $stmt->setLimit($rowstodo);
         $stmt->setOffset($startat - 1);
     }
     $result = $stmt->executeQuery($bindvars);
-    
+
     // Group query
     $querygroup = "SELECT bgroup_inst.xar_id,
                           bgroup_inst.xar_group_id,
@@ -81,7 +81,7 @@ function blocks_userapi_getall($args)
                    LEFT JOIN $block_groups_table bgroups ON bgroups.xar_id = bgroup_inst.xar_group_id
                    WHERE  bgroup_inst.xar_instance_id = ?";
     $grpStmt = $dbconn->prepareStatement($querygroup);
-    
+
     // The main result array.
     $instances = array();
 
