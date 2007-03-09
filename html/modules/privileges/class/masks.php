@@ -97,11 +97,11 @@ class xarMasks extends Object
         $bindvars = array();
         // base query, only the where clauses differ
         $query = "SELECT masks.id, masks.name, realms.name,
-                  modules.xar_name, masks.component, masks.instance,
+                  modules.name, masks.component, masks.instance,
                   masks.level, masks.description
                   FROM " . self::$privilegestable . " AS masks
                   LEFT JOIN " . self::$realmstable. " AS realms ON masks.realmid = realms.id
-                  LEFT JOIN " . self::$modulestable. " AS modules ON masks.module_id = modules.xar_id ";
+                  LEFT JOIN " . self::$modulestable. " AS modules ON masks.module_id = modules.id ";
         if ($modid == self::PRIVILEGES_ALL) {
             if ($component == '' || $component == 'All') {
                 // nothing differs

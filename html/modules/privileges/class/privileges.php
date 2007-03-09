@@ -44,7 +44,7 @@ class xarPrivileges extends xarMasks
             $iTable = parent::$instancestable; $mTable = parent::$modulestable;
             $query = "SELECT instances.id
                       FROM   $iTable instances, $mTable mods
-                      WHERE  instances.module_id = mods.xar_id AND
+                      WHERE  instances.module_id = mods.id AND
                              mods.name = ? AND
                              instances.component = ? AND
                              instances.header = ?";
@@ -366,9 +366,9 @@ class xarPrivileges extends xarMasks
         static $allmodules = array();
 
         if (empty($allmodules)) {
-            $query = "SELECT modules.xar_id, modules.name
+            $query = "SELECT modules.id, modules.name
                       FROM " . parent::$modulestable . " modules
-                      WHERE modules.xar_state = ?
+                      WHERE modules.state = ?
                       ORDER BY modules.name";
             $stmt = parent::$dbconn->prepareStatement($query);
             $result = $stmt->executeQuery(array(3));
