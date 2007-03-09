@@ -341,31 +341,6 @@ class xarRole extends Object
         return true;
     }
 
-
-    /**
-     * Gets all the privileges in the database.
-     *
-     * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return array of privilege arrays like ('id' => x, 'name' => y)
-     */
-    public function getAllPrivileges()
-    {
-        static $allprivileges = array();
-        if (empty($allprivileges)) {
-            $query = "SELECT id, name FROM $this->privilegestable ORDER BY name";
-            $stmt = $this->dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery();
-
-            $i=0;
-            while ($result->next()) {
-                list($id, $name) = $result->fields;
-                $allprivileges[$i++] = array('id' => $id, 'name' => $name);
-            }
-        }
-        return $allprivileges;
-    }
-
-
     /**
      * Gets all the privileges assigned directly to this role.
      *
