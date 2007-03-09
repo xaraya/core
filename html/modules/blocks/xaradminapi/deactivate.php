@@ -34,7 +34,7 @@ function blocks_adminapi_deactivate($args)
     $blockstable = $xartable['block_instances'];
 
     // Deactivate
-    $query = "UPDATE $blockstable SET xar_state = ?  WHERE xar_id = ?";
+    $query = "UPDATE $blockstable SET state = ?  WHERE id = ?";
     $dbconn->Execute($query,array(0, $bid));
 
     return true;

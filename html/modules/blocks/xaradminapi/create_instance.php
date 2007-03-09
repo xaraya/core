@@ -71,13 +71,13 @@ function blocks_adminapi_create_instance($args)
 
     // Insert instance details.
     $query = 'INSERT INTO ' . $block_instances_table . ' (
-              xar_type_id, xar_name,
-              xar_title, xar_content, xar_template,
-              xar_state, xar_refresh, xar_last_update
+              type_id, name,
+              title, content, template,
+              state, refresh, last_update
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
 
     $dbconn->Execute($query, array($type, $name, $title, $content, $template, $state,0,0));
-    
+
     // Get ID of row inserted.
     $bid = $dbconn->getLastId($block_instances_table);
 
@@ -117,15 +117,15 @@ function blocks_adminapi_create_instance($args)
         $checkbid = xarModAPIFunc('blocks','user','getcacheblock',array('bid'=>$bid));
         //we assume for now that it's left here due to bug # 5815 so delete it
         if (is_array($checkbid)) {
-           $deletecacheblock = xarModAPIFunc('blocks','admin','delete_cacheinstance', array('bid' => $bid)); 
+           $deletecacheblock = xarModAPIFunc('blocks','admin','delete_cacheinstance', array('bid' => $bid));
         }
         //now create the new block
         $cacheblocks = $xartable['cache_blocks'];
-        $query = "INSERT INTO $cacheblocks (xar_bid,
-                                            xar_nocache,
-                                            xar_page,
-                                            xar_user,
-                                            xar_expire)
+        $query = "INSERT INTO $cacheblocks (id,
+                                            nocache,
+                                            page,
+                                            user,
+                                            expire)
                   VALUES (?,?,?,?,?)";
         $bindvars = array($bid, $nocache, $pageshared, $usershared, $cacheexpire);
         $dbconn->Execute($query,$bindvars);

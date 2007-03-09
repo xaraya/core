@@ -45,9 +45,9 @@ function blocks_adminapi_update_type_info($args)
     $xartable =& xarDBGetTables();
 
     $block_types_table =& $xartable['block_types'];
-    
+
     // Update the info column for the block in the database.
-    $query = "UPDATE $block_types_table SET xar_info = ? WHERE xar_id = ?";
+    $query = "UPDATE $block_types_table SET info = ? WHERE id = ?";
     $bind = array(serialize($block_info), $type['tid']);
     $dbconn->Execute($query, $bind);
     return true;

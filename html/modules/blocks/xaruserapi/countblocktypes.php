@@ -32,15 +32,15 @@ function blocks_userapi_countblocktypes($args)
     $block_types_table = $xartable['block_types'];
     $modules_table     = $xartable['modules'];
 
-    $query = "SELECT count(btypes.xar_id)
+    $query = "SELECT count(btypes.id)
               FROM $block_types_table btypes, $modules_table mods
-              WHERE btypes.xar_modid = mods.id ";
+              WHERE btypes.modid = mods.id ";
     if(!empty($module)) {
         $query .= "AND mods.name = ? ";
         $bind[] = $module;
     }
     if (!empty($type)) {
-        $query .= 'AND btypes.xar_type = ?';
+        $query .= 'AND btypes.type = ?';
         $bind[] = $type;
     }
     $result =& $dbconn->Execute($query, $bind);

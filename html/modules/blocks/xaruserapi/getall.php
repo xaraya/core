@@ -25,7 +25,7 @@ function blocks_userapi_getall($args)
     if (!empty($name) && !xarVarValidate('str', $name)) {return;}
 
     if (!empty($order) && xarVarValidate('strlist:,|:enum:name:title:id', $order, true)) {
-        $orderby = ' ORDER BY binst.xar_' . implode(', inst.xar_', explode(',', $order));
+        $orderby = ' ORDER BY binst.' . $order;
     } else {
         $orderby = '';
     }
@@ -39,23 +39,23 @@ function blocks_userapi_getall($args)
     $block_groups_table = $xartable['block_groups'];
     $modules_table      = $xartable['modules'];
     // Fetch instance details.
-    $query = "SELECT binst.xar_id, binst.xar_name,
-                     binst.xar_title, binst.xar_template,
-                     binst.xar_content, binst.xar_refresh, binst.xar_state,
-                     btypes.xar_id, mods.name, btypes.xar_type
+    $query = "SELECT binst.id, binst.name,
+                     binst.title, binst.template,
+                     binst.content, binst.refresh, binst.state,
+                     btypes.id, mods.name, btypes.type
               FROM   $modules_table mods, $block_instances_table binst
-              LEFT JOIN $block_types_table btypes  ON btypes.xar_id = binst.xar_type_id
-              WHERE  mods.id = btypes.xar_modid ";
+              LEFT JOIN $block_types_table btypes  ON btypes.id = binst.type_id
+              WHERE  mods.id = btypes.modid ";
 
     $bindvars = array();
     if (!empty($bid)) {
-        $query .= "AND binst.xar_id = ? ";
+        $query .= "AND binst.id = ? ";
         $bindvars[] = $bid;
     } elseif (!empty($name)) {
-        $query .= "AND binst.xar_name = ? ";
+        $query .= "AND binst.name = ? ";
         $bindvars[] = $name;
     } elseif (!empty($filter)) {
-        $query .= "AND lower(binst.xar_name) LIKE ?";
+        $query .= "AND lower(binst.name) LIKE ?";
         $bindvars[] = '%'. strtolower($filter) . '%';
     }
     $query .= ' ' . $orderby;
@@ -71,15 +71,15 @@ function blocks_userapi_getall($args)
     $result = $stmt->executeQuery($bindvars);
 
     // Group query
-    $querygroup = "SELECT bgroup_inst.xar_id,
-                          bgroup_inst.xar_group_id,
-                          bgroup_inst.xar_position,
-                          bgroup_inst.xar_template as xar_group_inst_template,
-                          bgroups.xar_name,
-                          bgroups.xar_template as xar_group_template
+    $querygroup = "SELECT bgroup_inst.id,
+                          bgroup_inst.group_id,
+                          bgroup_inst.position,
+                          bgroup_inst.template as group_inst_template,
+                          bgroups.name,
+                          bgroups.template as group_template
                    FROM   $block_group_instances_table bgroup_inst
-                   LEFT JOIN $block_groups_table bgroups ON bgroups.xar_id = bgroup_inst.xar_group_id
-                   WHERE  bgroup_inst.xar_instance_id = ?";
+                   LEFT JOIN $block_groups_table bgroups ON bgroups.id = bgroup_inst.group_id
+                   WHERE  bgroup_inst.instance_id = ?";
     $grpStmt = $dbconn->prepareStatement($querygroup);
 
     // The main result array.

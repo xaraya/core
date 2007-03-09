@@ -42,17 +42,17 @@ function blocks_userapi_groupgetinfo($args)
     $blockGroupInstancesTable = $tables['block_group_instances'];
     $modulesTable             = $tables['modules'];
 
-    $query = 'SELECT    xar_id as id,
-                        xar_name as name,
-                        xar_template as template
+    $query = 'SELECT    id as id,
+                        name as name,
+                        template as template
               FROM      ' . $blockGroupsTable;
 
     $bindvars = array();
     if (!empty($gid)) {
-        $query .= ' WHERE xar_id = ?';
+        $query .= ' WHERE id = ?';
         $bindvars=array($gid);
     } elseif (!empty($name)) {
-        $query .= ' WHERE xar_name = ?';
+        $query .= ' WHERE name = ?';
         $bindvars=array($name);
     }
 
@@ -74,19 +74,19 @@ function blocks_userapi_groupgetinfo($args)
 
     // Query for instances in this group
     // NOTE: same query as in includes/xarBlocks.php
-    $query = "SELECT    inst.xar_id as id,
-                        btypes.xar_type as type,
+    $query = "SELECT    inst.id as id,
+                        btypes.type as type,
                         mods.name as module,
-                        inst.xar_title as title,
-                        inst.xar_name as name,
-                        group_inst.xar_position as position
+                        inst.title as title,
+                        inst.name as name,
+                        group_inst.position as position
               FROM      $blockGroupInstancesTable as group_inst
-              LEFT JOIN $blockGroupsTable as bgroups ON group_inst.xar_group_id = bgroups.xar_id
-              LEFT JOIN $blockInstancesTable as inst ON inst.xar_id = group_inst.xar_instance_id
-              LEFT JOIN $blockTypesTable as btypes   ON btypes.xar_id = inst.xar_type_id
-              LEFT JOIN $modulesTable as mods        ON btypes.xar_modid = mods.id
-              WHERE     bgroups.xar_id = ?
-              ORDER BY  group_inst.xar_position ASC";
+              LEFT JOIN $blockGroupsTable as bgroups ON group_inst.group_id = bgroups.id
+              LEFT JOIN $blockInstancesTable as inst ON inst.id = group_inst.instance_id
+              LEFT JOIN $blockTypesTable as btypes   ON btypes.id = inst.type_id
+              LEFT JOIN $modulesTable as mods        ON btypes.modid = mods.id
+              WHERE     bgroups.id = ?
+              ORDER BY  group_inst.position ASC";
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery(array($gid),ResultSet::FETCHMODE_ASSOC);
 

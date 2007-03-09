@@ -23,9 +23,9 @@ function blocks_userapi_reactivate_menus()
     $xartable =& xarDBGetTables();
     $ublockstable = $xartable['userblocks'];
 
-    $query="UPDATE $ublockstable 
-               SET xar_active=? 
-             WHERE xar_active=?";
+    $query="UPDATE $ublockstable
+               SET active=?
+             WHERE active=?";
 
     $dbconn->Execute($query,array(1,0));
 

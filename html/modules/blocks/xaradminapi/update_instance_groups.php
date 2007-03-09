@@ -48,9 +48,9 @@ function blocks_adminapi_update_instance_groups($args)
     $block_group_instances_table = $xartable['block_group_instances'];
 
     // Get the current group membership for this block instance.
-    $query = 'SELECT xar_id, xar_group_id, xar_template'
+    $query = 'SELECT id, group_id, template'
         . ' FROM ' . $block_group_instances_table
-        . ' WHERE xar_instance_id = ?';
+        . ' WHERE instance_id = ?';
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery(array($bid));
 
@@ -90,15 +90,15 @@ function blocks_adminapi_update_instance_groups($args)
     // block group associations being lost.
 
     // Prepare the queries we need in the loop
-    $delQuery = "DELETE FROM $block_group_instances_table WHERE xar_id = ?";
+    $delQuery = "DELETE FROM $block_group_instances_table WHERE id = ?";
     $delStmt  = $dbconn->prepareStatement($delQuery);
     $insQuery = "INSERT INTO $block_group_instances_table
-                (xar_group_id, xar_instance_id, xar_position, xar_template)
+                (group_id, instance_id, position, template)
                 VALUES (?,?,?,?)";
     $insStmt  = $dbconn->prepareStatement($insQuery);
     $updQuery = "UPDATE $block_group_instances_table
-                 SET xar_template = ?
-                 WHERE xar_id = ?";
+                 SET template = ?
+                 WHERE id = ?";
     $updStmt  = $dbconn->prepareStatement($updQuery);
 
     // Loop for each group.

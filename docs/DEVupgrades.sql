@@ -365,3 +365,55 @@ ALTER TABLE `xar_dynamic_properties_def`
 
 /* Replace property definitions in the properties table */
 UPDATE `xar_dynamic_properties` SET `prop_source` = REPLACE(prop_source, ".xar_", ".")
+
+ALTER TABLE `xar_block_group_instances`
+  CHANGE COLUMN `xar_id` `id` INTEGER NOT NULL auto_increment,
+  CHANGE COLUMN `xar_group_id` `group_id` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `xar_instance_id` `instance_id` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `xar_template` `template` varchar(100) default NULL,
+  CHANGE COLUMN `xar_position` `position` INTEGER NOT NULL default '0';
+
+/* TODO: fix these keys */
+  KEY `i_xar_block_group_instances` (`xar_group_id`),
+  KEY `i_xar_block_group_instances_2` (`xar_instance_id`)
+
+ALTER TABLE `xar_block_groups`
+  CHANGE COLUMN `xar_id` `id` INTEGER NOT NULL auto_increment,
+  CHANGE COLUMN `xar_name` `name` varchar(255) NOT NULL default '',
+  CHANGE COLUMN `xar_template` `template` varchar(255) NOT NULL default '';
+
+/* TODO: fix these keys */
+  UNIQUE KEY `i_xar_block_groups` (`xar_name`)
+
+ALTER TABLE `xar_block_instances`
+  CHANGE COLUMN `xar_id` `id` INTEGER NOT NULL auto_increment,
+  CHANGE COLUMN `xar_type_id` `type_id` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `xar_name` `name` varchar(100) NOT NULL default '',
+  CHANGE COLUMN `xar_title` `title` varchar(255) default NULL,
+  CHANGE COLUMN `xar_content` `content` text NOT NULL,
+  CHANGE COLUMN `xar_template` `template` varchar(255) default NULL,
+  CHANGE COLUMN `xar_state` `state` tinyint(4) NOT NULL default '2',
+  CHANGE COLUMN `xar_refresh` `refresh` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `xar_last_update` `last_update` INTEGER NOT NULL default '0';
+
+/* TODO: fix these keys */
+  UNIQUE KEY `i_xar_block_instances_u2` (`xar_name`),
+  KEY `i_xar_block_instances` (`xar_type_id`)
+
+
+ALTER TABLE `xar_block_types`
+  CHANGE COLUMN `xar_id` `id` INTEGER NOT NULL auto_increment,
+  CHANGE COLUMN `xar_type` `type` varchar(64) NOT NULL default '',
+  CHANGE COLUMN `xar_modid` `modid` int(10) unsigned NOT NULL default '0',
+  CHANGE COLUMN `xar_info` `info` text;
+
+/* TODO: fix these keys */
+  UNIQUE KEY `i_xar_block_types2` (`xar_modid`,`xar_type`)
+
+ALTER TABLE `xar_cache_blocks`
+  CHANGE COLUMN `xar_bid` `id` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `xar_nocache` `nocache` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `xar_page` `page` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `xar_user` `user` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `xar_expire` `expire` INTEGER default NULL;
+

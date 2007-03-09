@@ -24,25 +24,25 @@ function blocks_adminapi_resequence($args)
     $where_clause = '';
 
     if (!empty($gid) && is_numeric($gid)) {
-        $where_clause .= ' WHERE xar_group_id = ?';
+        $where_clause .= ' WHERE group_id = ?';
         $bind[] = $gid;
     }
 
     $block_group_instances_table =& $xartable['block_group_instances'];
 
     // Get the information
-    $query = "SELECT xar_id, xar_group_id, xar_position
+    $query = "SELECT id, group_id, position
               FROM $block_group_instances_table
               $where_clause
-              ORDER BY xar_group_id, xar_position, xar_id";
+              ORDER BY group_id, position, id";
     $stmt = $dbconn->prepareStatement($query);
     $qresult = $stmt->executeQuery($bind);
 
     // Prepare the update query to be used in the loop outside of it.
     $upquery = "UPDATE $block_group_instances_table
-                SET xar_position = ? WHERE xar_id = ? AND xar_position <> ?";
+                SET position = ? WHERE id = ? AND position <> ?";
     $upstmt  = $dbconn->prepareStatement($upquery);
-    
+
     $last_gid = null;
     // Fix sequence numbers
     while ($qresult->next()) {
