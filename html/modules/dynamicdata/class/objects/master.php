@@ -64,13 +64,13 @@ class DataObjectDescriptor extends ObjectDescriptor
         $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
         $q->open();
         if (isset($args['name'])) {
-            $q->eq('xar_object_name',$args['name']);
+            $q->eq('object_name',$args['name']);
         } elseif (!empty($args['objectid'])) {
-            $q->eq('xar_object_id',(int)$args['objectid']);
+            $q->eq('object_id',(int)$args['objectid']);
         } else {
             $args = self::getModID($args);
-            $q->eq('xar_object_moduleid', $args['moduleid']);
-            $q->eq('xar_object_itemtype', $args['itemtype']);
+            $q->eq('object_moduleid', $args['moduleid']);
+            $q->eq('object_itemtype', $args['itemtype']);
         }
         if (!$q->run()) return;
         $row = $q->row();
@@ -80,10 +80,10 @@ class DataObjectDescriptor extends ObjectDescriptor
             $args['objectid'] = isset($args['objectid']) ? $args['objectid'] : null;
             $args['name'] = isset($args['name']) ? $args['name'] : null;
         } else {
-            $args['moduleid'] = $row['xar_object_moduleid'];
-            $args['itemtype'] = $row['xar_object_itemtype'];
-            $args['objectid'] = $row['xar_object_id'];
-            $args['name'] = $row['xar_object_name'];
+            $args['moduleid'] = $row['object_moduleid'];
+            $args['itemtype'] = $row['object_itemtype'];
+            $args['objectid'] = $row['object_id'];
+            $args['name'] = $row['object_name'];
         }
         if (empty($args['tplmodule'])) $args['tplmodule'] = xarMod::getName($args['moduleid']); //FIXME: go to systemid
         if (empty($args['template'])) $args['template'] = $args['name'];
@@ -552,20 +552,20 @@ class DataObjectMaster extends Object
 
         $bindvars = array();
         xarLogMessage("DB: query in getObjects");
-        $query = "SELECT xar_object_id,
-                         xar_object_name,
-                         xar_object_label,
-                         xar_object_moduleid,
-                         xar_object_itemtype,
-                         xar_object_parent,
-                         xar_object_urlparam,
-                         xar_object_maxid,
-                         xar_object_config,
-                         xar_object_isalias
+        $query = "SELECT object_id,
+                         object_name,
+                         object_label,
+                         object_moduleid,
+                         object_itemtype,
+                         object_parent,
+                         object_urlparam,
+                         object_maxid,
+                         object_config,
+                         object_isalias
                   FROM $dynamicobjects ";
         if(isset($moduleid))
         {
-            $query .= "WHERE xar_object_moduleid = ?";
+            $query .= "WHERE object_moduleid = ?";
             $bindvars[] = $moduleid;
         }
         $stmt = $dbconn->prepareStatement($query);
@@ -627,18 +627,18 @@ class DataObjectMaster extends Object
 
         $bindvars = array();
         xarLogMessage('DD: query in getObjectInfo');
-        $query = "SELECT xar_object_id,
-                         xar_object_name,
-                         xar_object_label,
-                         xar_object_moduleid,
-                         xar_object_itemtype,
-                         xar_object_parent,
-                         xar_object_urlparam,
-                         xar_object_maxid,
-                         xar_object_config,
-                         xar_object_isalias
+        $query = "SELECT object_id,
+                         object_name,
+                         object_label,
+                         object_moduleid,
+                         object_itemtype,
+                         object_parent,
+                         object_urlparam,
+                         object_maxid,
+                         object_config,
+                         object_isalias
                   FROM $dynamicobjects ";
-        $query .= " WHERE xar_object_id = ? ";
+        $query .= " WHERE object_id = ? ";
         $bindvars[] = (int) $args['objectid'];
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
@@ -1014,8 +1014,8 @@ class DataObjectMaster extends Object
         sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
         $q->open();
-        $q->addfields(array('xar_object_id AS objectid','xar_object_name AS objectname','xar_object_moduleid AS moduleid','xar_object_itemtype AS itemtype','xar_object_parent AS parent'));
-        $q->eq('xar_object_moduleid',$moduleid);
+        $q->addfields(array('object_id AS objectid','object_name AS objectname','object_moduleid AS moduleid','object_itemtype AS itemtype','object_parent AS parent'));
+        $q->eq('object_moduleid',$moduleid);
         if (!$q->run()) return;
 
         // Put in itemtype as key for easier manipulation
@@ -1119,8 +1119,8 @@ class DataObjectMaster extends Object
             $xartable = xarDBGetTables();
             sys::import('modules.roles.class.xarQuery');
             $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
-            $q->addfields(array('xar_object_id AS objectid','xar_object_label AS objectlabel','xar_object_moduleid AS moduleid','xar_object_itemtype AS itemtype','xar_object_parent AS parent'));
-            $q->eq('xar_object_moduleid',$moduleid);
+            $q->addfields(array('object_id AS objectid','object_label AS objectlabel','object_moduleid AS moduleid','object_itemtype AS itemtype','object_parent AS parent'));
+            $q->eq('object_moduleid',$moduleid);
             if (!$q->run()) return;
 
             // put in itemtype as key for easier manipulation

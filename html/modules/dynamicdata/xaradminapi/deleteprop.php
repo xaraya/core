@@ -56,13 +56,13 @@ function dynamicdata_adminapi_deleteprop($args)
 
     try {
         $dbconn->begin();
-        $sql = "DELETE FROM $dynamicprop WHERE xar_prop_id = ?";
+        $sql = "DELETE FROM $dynamicprop WHERE prop_id = ?";
         $dbconn->Execute($sql,array($prop_id));
 
         // TODO: don't delete if the data source is not in dynamic_data
         // delete all data too !
         $dynamicdata = $xartable['dynamic_data'];
-        $sql = "DELETE FROM $dynamicdata WHERE xar_dd_propid = ?";
+        $sql = "DELETE FROM $dynamicdata WHERE dd_propid = ?";
         $dbconn->Execute($sql,array($prop_id));
         $dbconn->commit();
     } catch (SQLException $e) {

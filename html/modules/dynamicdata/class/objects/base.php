@@ -477,7 +477,7 @@ class DataObject extends DataObjectMaster
 
         $dynamicobjects = $xartable['dynamic_objects'];
 
-        $query = "SELECT MAX(xar_object_itemtype) FROM $dynamicobjects  WHERE xar_object_moduleid = ?";
+        $query = "SELECT MAX(object_itemtype) FROM $dynamicobjects  WHERE object_moduleid = ?";
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array((int)$args['moduleid']));
         if(!$result->first()) return; // shouldnt we raise?

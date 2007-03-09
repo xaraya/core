@@ -14,8 +14,8 @@
  * Create a flat table corresponding to some dynamic object definition, e.g.
  * for performance reasons or when moving from a prototype to the real thing
  *
- * This will create the table [prefix]_dd_[objectname] with fields xar_[propname],
- * possibly with an additional xar_itemid field to store the itemid if it's an
+ * This will create the table [prefix]_dd_[objectname] with fields [propname],
+ * possibly with an additional itemid field to store the itemid if it's an
  * extension object (fully dynamic objects will already have an itemid property)
  *
  * Next steps to finish the move from xar_dynamic_data to a dedicated table :
@@ -104,7 +104,7 @@ function dynamicdata_utilapi_maketable($args)
     $fields = array();
     $isprimary = false;
     foreach (array_keys($properties) as $name) {
-        $field = 'xar_' . $name;
+        $field = $name;
         $type = $proptypes[$properties[$name]['type']]['name'];
         $definition = array();
         switch ($type) {
@@ -152,10 +152,10 @@ function dynamicdata_utilapi_maketable($args)
         $fields[$field] = $definition;
     }
     if (!$isprimary) {
-        if (empty($fields['xar_itemid'])) {
-             $field = 'xar_itemid';
+        if (empty($fields['itemid'])) {
+             $field = 'itemid';
         } else {
-             $field = 'xar_dd_itemid';
+             $field = 'dd_itemid';
         }
         $fields[$field] = array('type'        => 'integer',
                                 'null'        => false,

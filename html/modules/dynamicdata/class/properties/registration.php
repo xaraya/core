@@ -93,10 +93,10 @@ class PropertyRegistration extends DataContainer
         if($this->format == 0) $this->format = $this->id;
 
         $sql = "INSERT INTO $propdefTable
-                (xar_prop_id, xar_prop_name, xar_prop_label,
-                 xar_prop_parent, xar_prop_filepath, xar_prop_class,
-                 xar_prop_format, xar_prop_validation, xar_prop_source,
-                 xar_prop_reqfiles, xar_prop_modid, xar_prop_args, xar_prop_aliases)
+                (prop_id, prop_name, prop_label,
+                 prop_parent, prop_filepath, prop_class,
+                 prop_format, prop_validation, prop_source,
+                 prop_reqfiles, prop_modid, prop_args, prop_aliases)
                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
         if(!isset($stmt))
             $stmt = $dbconn->prepareStatement($sql);
@@ -132,14 +132,14 @@ class PropertyRegistration extends DataContainer
         $dbconn = xarDBGetConn();
         $tables = xarDBGetTables();
         // Sort by required module(s) and then by name
-        $query = "SELECT  p.xar_prop_id, p.xar_prop_name, p.xar_prop_label,
-                          p.xar_prop_parent, p.xar_prop_filepath, p.xar_prop_class,
-                          p.xar_prop_format, p.xar_prop_validation, p.xar_prop_source,
-                          p.xar_prop_reqfiles, m.name, p.xar_prop_args,
-                          p.xar_prop_aliases
+        $query = "SELECT  p.prop_id, p.prop_name, p.prop_label,
+                          p.prop_parent, p.prop_filepath, p.prop_class,
+                          p.prop_format, p.prop_validation, p.prop_source,
+                          p.prop_reqfiles, m.name, p.prop_args,
+                          p.prop_aliases
                   FROM    $tables[dynamic_properties_def] p INNER JOIN $tables[modules] m
-                  ON      p.xar_prop_modid = m.id
-                  ORDER BY m.name, xar_prop_name";
+                  ON      p.prop_modid = m.id
+                  ORDER BY m.name, prop_name";
         $result = $dbconn->executeQuery($query);
         $proptypes = array();
         if($result->RecordCount() == 0 ) {

@@ -317,3 +317,7 @@ ALTER TABLE `modules`
  CHANGE COLUMN `xar_admin_capable` `admin_capable` INTEGER NOT NULL DEFAULT 0,
  CHANGE COLUMN `xar_user_capable` `user_capable` INTEGER NOT NULL DEFAULT 0,
  CHANGE COLUMN `xar_state` `state` INTEGER NOT NULL DEFAULT 0,
+
+
+/* Replace property definitions in the properties table */
+UPDATE `xar_dynamic_properties` SET `prop_source` = REPLACE(prop_source, ".xar_", ".")
