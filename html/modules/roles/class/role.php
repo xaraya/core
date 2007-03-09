@@ -474,7 +474,7 @@ class xarRole extends Object
      */
     public function getUsers($state = ROLES_STATE_CURRENT, $startnum = 0, $numitems = 0, $order = 'name', $selection = NULL)
     {
-        $query = "SELECT r.uid, r.name, r.type, r.uname,
+        $query = "SELECT r.id, r.name, r.type, r.uname,
                          r.email, r.pass, r.date_reg,
                          r.valcode, r.state,r.auth_modid
                   FROM $this->rolestable r, $this->rolememberstable rm

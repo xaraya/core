@@ -163,7 +163,7 @@ function xarUserLogIn($userName, $password, $rememberMe = 0)
     // TODO: this should be inside roles module
     try {
         $dbconn->begin();
-        $query = "UPDATE $rolestable SET xar_auth_modid = ? WHERE xar_uid = ?";
+        $query = "UPDATE $rolestable SET auth_modid = ? WHERE id = ?";
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate(array($modId,$userId));
         $dbconn->commit();
@@ -578,8 +578,8 @@ function xarUser__getAuthModule($userId)
 
     $query = "SELECT mods.name
               FROM $modstable mods, $rolestable roles
-              WHERE mods.id = roles.xar_auth_modid AND
-                    roles.xar_uid = ?";
+              WHERE mods.id = roles.auth_modid AND
+                    roles.id = ?";
     $stmt =& $dbconn->prepareStatement($query);
     $result =& $stmt->executeQuery(array($userId),ResultSet::FETCHMODE_NUM);
 
@@ -649,7 +649,7 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
     // from the users table.
     try {
         $dbconn->begin();
-        $query = "UPDATE $rolestable SET $usercolumns[$name] = ? WHERE xar_uid = ?";
+        $query = "UPDATE $rolestable SET $usercolumns[$name] = ? WHERE id = ?";
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate(array($value,$userId));
     } catch (SQLException $e) {

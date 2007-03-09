@@ -433,7 +433,7 @@ class xarSession  extends Object implements IsessionHandler
             // This is apparently because this is in a session write handler.
             // Additional notes:
             // * apache 2 on debian linux segfaults
-            // UPDATE: Could this be because the xar_vars column is a BLOB (i.e. binary) ?
+            // UPDATE: Could this be because the vars column is a BLOB (i.e. binary) ?
             $query = "UPDATE $this->tbl SET vars = ".
                 $this->db->qstr($vars) . ", last_use = " .
                 $this->db->qstr(time()). "WHERE id = ".
