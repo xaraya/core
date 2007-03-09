@@ -303,7 +303,7 @@ ALTER TABLE `themes`
  CHANGE COLUMN `xar_xaraya_version` `xaraya_version` VARCHAR(10) NOT NULL,
  CHANGE COLUMN `xar_bl_version` `bl_version` VARCHAR(10) NOT NULL,
  CHANGE COLUMN `xar_class` `class` INTEGER NOT NULL DEFAULT 0,
- CHANGE COLUMN `xar_state` `state` INTEGER NOT NULL DEFAULT 1,
+ CHANGE COLUMN `xar_state` `state` INTEGER NOT NULL DEFAULT 1;
 
 ALTER TABLE `modules`
  CHANGE COLUMN `xar_id` `id` INTEGER NOT NULL DEFAULT NULL AUTO_INCREMENT,
@@ -316,8 +316,52 @@ ALTER TABLE `modules`
  CHANGE COLUMN `xar_category` `category` VARCHAR(64) NOT NULL,
  CHANGE COLUMN `xar_admin_capable` `admin_capable` INTEGER NOT NULL DEFAULT 0,
  CHANGE COLUMN `xar_user_capable` `user_capable` INTEGER NOT NULL DEFAULT 0,
- CHANGE COLUMN `xar_state` `state` INTEGER NOT NULL DEFAULT 0,
+ CHANGE COLUMN `xar_state` `state` INTEGER NOT NULL DEFAULT 0;
 
+ALTER TABLE `xar_dynamic_objects_data`
+  CHANGE COLUMN `xar_id` `dd_id` INTEGER NOT NULL AUTO_INCREMENT,
+  CHANGE COLUMN `xar_dd_propid` `dd_propid` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `xar_dd_itemid` `dd_itemid` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `xar_dd_value` `dd_value` mediumtext;
+
+ALTER TABLE `xar_dynamic_objects`
+  CHANGE COLUMN `xar_object_id` `object_id` INTEGER NOT NULL AUTO_INCREMENT,
+  CHANGE COLUMN `xar_object_name` `object_name` varchar(30) NOT NULL default '',
+  CHANGE COLUMN `xar_object_label` `object_label` varchar(254) NOT NULL default '',
+  CHANGE COLUMN `xar_object_moduleid` `object_moduleid` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `xar_object_itemtype` `object_itemtype` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `xar_object_parent` `object_parent` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `xar_object_urlparam` `object_urlparam` varchar(30) NOT NULL default 'itemid',
+  CHANGE COLUMN `xar_object_maxid` `object_maxid` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `xar_object_config` `object_config` text,
+  CHANGE COLUMN `xar_object_isalias` `object_isalias` tinyint(4) NOT NULL default '1';
+
+ALTER TABLE `xar_dynamic_properties`
+  CHANGE COLUMN `xar_prop_id` `prop_id` INTEGER NOT NULL AUTO_INCREMENT,
+  CHANGE COLUMN `xar_prop_name` `prop_name` varchar(30) NOT NULL default '',
+  CHANGE COLUMN `xar_prop_label` `prop_label` varchar(254) NOT NULL default '',
+  CHANGE COLUMN `xar_prop_objectid` `prop_objectid` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `xar_prop_type` `prop_type` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `xar_prop_default` `prop_default` varchar(254) default NULL,
+  CHANGE COLUMN `xar_prop_source` `prop_source` varchar(254) NOT NULL default 'dynamic_data',
+  CHANGE COLUMN `xar_prop_status` `prop_status` INTEGER NOT NULL default '33',
+  CHANGE COLUMN `xar_prop_order` `prop_order` tinyint(4) NOT NULL default '0',
+  CHANGE COLUMN `xar_prop_validation` `prop_validation` text;
+
+ALTER TABLE `xar_dynamic_properties_def`
+  CHANGE COLUMN `xar_prop_id` `prop_id` INTEGER NOT NULL auto_increment,
+  CHANGE COLUMN `xar_prop_name` `prop_name` varchar(254) default NULL,
+  CHANGE COLUMN `xar_prop_label` `prop_label` varchar(254) default NULL,
+  CHANGE COLUMN `xar_prop_parent` `prop_parent` varchar(254) default NULL,
+  CHANGE COLUMN `xar_prop_filepath` `prop_filepath` varchar(254) default NULL,
+  CHANGE COLUMN `xar_prop_class` `prop_class` varchar(254) default NULL,
+  CHANGE COLUMN `xar_prop_validation` `prop_validation` varchar(254) default NULL,
+  CHANGE COLUMN `xar_prop_source` `prop_source` varchar(254) default NULL,
+  CHANGE COLUMN `xar_prop_reqfiles` `prop_reqfiles` varchar(254) default NULL,
+  CHANGE COLUMN `xar_prop_modid` `prop_modid` INTEGER default NULL,
+  CHANGE COLUMN `xar_prop_args` `prop_args` mediumtext NOT NULL,
+  CHANGE COLUMN `xar_prop_aliases` `prop_aliases` varchar(254) default NULL,
+  CHANGE COLUMN `xar_prop_format` `prop_format` INTEGER default '0';
 
 /* Replace property definitions in the properties table */
 UPDATE `xar_dynamic_properties` SET `prop_source` = REPLACE(prop_source, ".xar_", ".")
