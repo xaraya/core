@@ -55,7 +55,7 @@ function themes_adminapi_remove($args)
     xarThemeDBInfoLoad($themeInfo['name'], $themeInfo['directory']);
 
     // Delete the theme from the themes table
-    $sql = "DELETE FROM $tables[themes] WHERE xar_regid = ?";
+    $sql = "DELETE FROM $tables[themes] WHERE regid = ?";
     $dbconn->Execute($sql,array($regid));
     return true;
 }
