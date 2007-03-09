@@ -49,29 +49,29 @@ function modules_init()
          * CREATE TABLE xar_modules (
          *   id int(11) NOT NULL auto_increment,
          *   name varchar(64) NOT NULL default '',
-         *   regid int(10) unsigned NOT NULL default '0',
+         *   regid int(10) INTEGER NOT NULL default '0',
          *   directory varchar(64) NOT NULL default '',
          *   version varchar(10) NOT NULL default '0',
          *   mode int(6) NOT NULL default '1',
          *   class varchar(64) NOT NULL default '',
          *   category varchar(64) NOT NULL default '',
-         *   admin_capable tinyint(1) NOT NULL default '0',
-         *   user_capable tinyint(1) NOT NULL default '0',
-         *   state tinyint(1) NOT NULL default '0'
+         *   admin_capable INTEGER NOT NULL default '0',
+         *   user_capable INTEGER NOT NULL default '0',
+         *   state INTEGER NOT NULL default '0'
          *   PRIMARY KEY  (id)
          * )
          */
         $fields = array(
                         'id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
                         'name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        'regid' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
+                        'regid' => array('type' => 'integer', 'default' => null),
                         'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
-                        'mode' => array('type' => 'integer', 'size' => 'small', 'null' => false, 'default' => '1'),
+                        'mode' => array('type' => 'integer', 'null' => false, 'default' => '1'),
                         'class' => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'category' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-                        'admin_capable' => array('type' => 'integer', 'size' => 'tiny', 'null' => false, 'default' => '0'),
-                        'user_capable' => array('type' => 'integer', 'size' => 'tiny', 'null' => false, 'default' => '0'),
+                        'admin_capable' => array('type' => 'integer', 'null' => false, 'default' => '0'),
+                        'user_capable' => array('type' => 'integer', 'null' => false, 'default' => '0'),
                         'state' => array('type' => 'integer', 'null' => false, 'default' => '1')
                         );
 

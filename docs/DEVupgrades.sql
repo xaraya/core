@@ -252,7 +252,7 @@ ALTER TABLE `xar_privileges`
  CHANGE COLUMN `xar_pid` `id` INTEGER NOT NULL DEFAULT NULL AUTO_INCREMENT,
  CHANGE COLUMN `xar_name` `name` VARCHAR(100) NOT NULL,
  CHANGE COLUMN `xar_realmid` `realmid` INTEGER DEFAULT NULL,
- CHANGE COLUMN `xar_modid` `module_id` INTEGER NOT NULL DEFAULT 0,
+ CHANGE COLUMN `xar_modid` `module_id` INTEGER DEFAULT NULL,
  CHANGE COLUMN `xar_component` `component` VARCHAR(100) NOT NULL,
  CHANGE COLUMN `xar_instance` `instance` VARCHAR(100) NOT NULL,
  CHANGE COLUMN `xar_level` `level` INTEGER NOT NULL DEFAULT 0,
@@ -286,3 +286,34 @@ ALTER TABLE `security_instances`
  CHANGE COLUMN `xar_description` `description` VARCHAR(255) NOT NULL;
 /* TODO: this table will surely be lightened up */
 
+ALTER TABLE `themes`
+ CHANGE COLUMN `xar_id` `id` INTEGER NOT NULL DEFAULT NULL AUTO_INCREMENT,
+ CHANGE COLUMN `xar_name` `name` VARCHAR(64) NOT NULL,
+ CHANGE COLUMN `xar_regid` `regid` INTEGER DEFAULT NULL,
+ CHANGE COLUMN `xar_directory` `directory` VARCHAR(64) NOT NULL,
+ CHANGE COLUMN `xar_mode` `mode` INTEGER NOT NULL DEFAULT 1,
+ CHANGE COLUMN `xar_author` `author` VARCHAR(64) NOT NULL,
+ CHANGE COLUMN `xar_homepage` `homepage` VARCHAR(64) NOT NULL,
+ CHANGE COLUMN `xar_email` `email` VARCHAR(64) NOT NULL,
+ CHANGE COLUMN `xar_description` `description` VARCHAR(255) NOT NULL,
+ CHANGE COLUMN `xar_contactinfo` `contactinfo` VARCHAR(255) NOT NULL,
+ CHANGE COLUMN `xar_publishdate` `publishdate` VARCHAR(32) NOT NULL,
+ CHANGE COLUMN `xar_license` `license` VARCHAR(255) NOT NULL,
+ CHANGE COLUMN `xar_version` `version` VARCHAR(10) NOT NULL,
+ CHANGE COLUMN `xar_xaraya_version` `xaraya_version` VARCHAR(10) NOT NULL,
+ CHANGE COLUMN `xar_bl_version` `bl_version` VARCHAR(10) NOT NULL,
+ CHANGE COLUMN `xar_class` `class` INTEGER NOT NULL DEFAULT 0,
+ CHANGE COLUMN `xar_state` `state` INTEGER NOT NULL DEFAULT 1,
+
+ALTER TABLE `modules`
+ CHANGE COLUMN `xar_id` `id` INTEGER NOT NULL DEFAULT NULL AUTO_INCREMENT,
+ CHANGE COLUMN `xar_name` `name` VARCHAR(64) NOT NULL,
+ CHANGE COLUMN `xar_regid` `regid` INTEGER DEFAULT NULL,
+ CHANGE COLUMN `xar_directory` `directory` VARCHAR(64) NOT NULL,
+ CHANGE COLUMN `xar_version` `version` VARCHAR(10) NOT NULL,
+ CHANGE COLUMN `xar_mode` `mode` INTEGER NOT NULL DEFAULT 1,
+ CHANGE COLUMN `xar_class` `class` VARCHAR(64) NOT NULL,
+ CHANGE COLUMN `xar_category` `category` VARCHAR(64) NOT NULL,
+ CHANGE COLUMN `xar_admin_capable` `admin_capable` INTEGER NOT NULL DEFAULT 0,
+ CHANGE COLUMN `xar_user_capable` `user_capable` INTEGER NOT NULL DEFAULT 0,
+ CHANGE COLUMN `xar_state` `state` INTEGER NOT NULL DEFAULT 0,

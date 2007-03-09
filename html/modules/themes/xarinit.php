@@ -43,7 +43,7 @@ function themes_init()
      * CREATE TABLE xar_themes (
      *   id int(11) NOT NULL auto_increment,
      *   name varchar(64) NOT NULL default '',
-     *   regid int(10) unsigned NOT NULL default '0',
+     *   regid int(10) INTEGER NOT NULL default '0',
      *   directory varchar(64) NOT NULL default '',
      *   mode smallint(6) NOT NULL default '1',
      *   author varchar(64) NOT NULL default '',
@@ -56,15 +56,15 @@ function themes_init()
      *   version varchar(10) NOT NULL default '',
      *   xaraya_version varchar(10) NOT NULL default '',
      *   bl_version varchar(10) NOT NULL default '',
-     *   class int(10) unsigned NOT NULL default '0',
-     *   state int(11) not null defaul '1'
+     *   class int(10) INTEGER NOT NULL default '0',
+     *   state int(11) not null default '1'
      *   PRIMARY KEY  (id)
      * )
      */
     $fields = array(
         'id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
         'name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'regid' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
+        'regid' => array('type' => 'integer', 'default' => null),
         'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false),
         'mode' => array('type' => 'integer', 'null' => false, 'default' => '1'),
         'author' => array('type' => 'varchar', 'size' => 64, 'null' => false),
@@ -77,7 +77,7 @@ function themes_init()
         'version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
         'xaraya_version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
         'bl_version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
-        'class' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
+        'class' => array('type' => 'integer', 'null' => false, 'default' => '0'),
         'state' => array('type' => 'integer', 'null' => false, 'default' => '1')
         );
 
