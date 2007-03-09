@@ -36,8 +36,8 @@ function roles_adminapi_recall($args)
     $email = explode($deleted,$role->getEmail());
 //            echo $uname[0];exit;
     $query = "UPDATE $rolestable
-              SET xar_uname = ?, xar_email = ?, xar_state = ?
-              WHERE xar_uid = ?";
+              SET uname = ?, email = ?, state = ?
+              WHERE id = ?";
     $bindvars = array($uname[0],$email[0],$state,$uid);
     $dbconn->Execute($query,$bindvars);
 

@@ -24,11 +24,11 @@
  * @param $args['uids'] optional array of uids that we are selecting on
  * @returns array
  * @return array('table' => 'xar_roles',
- *               'field' => 'xar_roles.xar_uid',
- *               'where' => 'xar_roles.xar_uid IN (...)',
- *               'name'  => 'xar_roles.xar_name',
+ *               'field' => 'xar_roles.id',
+ *               'where' => 'xar_roles.id IN (...)',
+ *               'name'  => 'xar_roles.name',
  *               ...
- *               'email'  => 'xar_roles.xar_email')
+ *               'email'  => 'xar_roles.email')
  */
 function roles_userapi_leftjoin($args)
 {
@@ -56,7 +56,7 @@ function roles_userapi_leftjoin($args)
 
     // Specify LEFT JOIN ... ON ... [WHERE ...] parts
     $leftjoin['table'] = $rolestable;
-    $leftjoin['field'] = $rolestable . '.xar_uid';
+    $leftjoin['field'] = $rolestable . '.id';
     if (count($uids) > 0) {
         $cleanuids = array();
         foreach ($uids as $uid) {
@@ -65,7 +65,7 @@ function roles_userapi_leftjoin($args)
             $cleanuids[] = $uid;
         }
         $alluids = join(', ', $cleanuids);
-        $leftjoin['where'] = $rolestable . '.xar_uid IN (' .
+        $leftjoin['where'] = $rolestable . '.id IN (' .
                              $alluids . ')';
     } else {
         $leftjoin['where'] = '';
@@ -75,7 +75,7 @@ function roles_userapi_leftjoin($args)
     // note : we forget about pass and auth module for now :-)
     $columns = array('uid','uname','name','email');
     foreach ($columns as $column) {
-        $leftjoin[$column] = $rolestable . '.xar_' . $column;
+        $leftjoin[$column] = $rolestable . '.' . $column;
     }
 
     return $leftjoin;

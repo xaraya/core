@@ -417,3 +417,30 @@ ALTER TABLE `xar_cache_blocks`
   CHANGE COLUMN `xar_user` `user` INTEGER NOT NULL default '0',
   CHANGE COLUMN `xar_expire` `expire` INTEGER default NULL;
 
+ALTER TABLE `xar_roles`
+  CHANGE COLUMN `xar_uid` `id` INTEGER NOT NULL auto_increment,
+  CHANGE COLUMN `xar_name` `name` varchar(255) NOT NULL default '',
+  CHANGE COLUMN `xar_type` `type` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `xar_users` `users` INTEGER NOT NULL default '0',
+  CHANGE COLUMN `xar_uname` `uname` varchar(255) NOT NULL default '',
+  CHANGE COLUMN `xar_email` `email` varchar(255) NOT NULL default '',
+  CHANGE COLUMN `xar_pass` `pass` varchar(100) NOT NULL default '',
+  CHANGE COLUMN `xar_date_reg` `date_reg` varchar(100) NOT NULL default '0000-00-00 00:00:00',
+  CHANGE COLUMN `xar_valcode` `valcode` varchar(35) NOT NULL default '',
+  CHANGE COLUMN `xar_state` `state` INTEGER NOT NULL default '3',
+  CHANGE COLUMN `xar_auth_modid` `auth_modid` INTEGER NOT NULL default '0';
+
+/* TODO: fix these keys */
+  UNIQUE KEY `i_xar_roles_uname` (`xar_uname`),
+  KEY `i_xar_roles_type` (`xar_type`),
+  KEY `i_xar_roles_name` (`xar_name`),
+  KEY `i_xar_roles_email` (`xar_email`),
+  KEY `i_xar_roles_state` (`xar_state`)
+
+ALTER TABLE `xar_rolemembers`
+  CHANGE COLUMN `xar_uid` `id` INTEGER default NULL,
+  CHANGE COLUMN `xar_parentid` `parentid` INTEGER default NULL;
+
+/* TODO: fix these keys */
+  KEY `i_xar_rolememb_uid` (`xar_uid`),
+  KEY `i_xar_rolememb_parentid` (`xar_parentid`)

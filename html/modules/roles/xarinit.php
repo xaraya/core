@@ -35,46 +35,46 @@ function roles_init()
         $dbconn->begin();
         /**
          * CREATE TABLE xar_roles (
-         *    xar_uid int(11) NOT NULL auto_increment,
-         *    xar_name varchar(100) NOT NULL default '',
-         *    xar_type int(11) NOT NULL default '0',
-         *    xar_users int(11) NOT NULL default '0',
-         *    xar_uname varchar(100) NOT NULL default '',
-         *    xar_email varchar(100) NOT NULL default '',
-         *    xar_pass varchar(100) NOT NULL default '',
-         *    xar_date_reg datetime NOT NULL default '0000-00-00 00:00:00',
-         *    xar_valcode varchar(35) NOT NULL default '',
-         *    xar_state int(3) NOT NULL default '0',
-         *    xar_auth_modid int(11) NOT NULL default '0',
-         *    PRIMARY KEY  (xar_uid)
+         *    id int(11) NOT NULL auto_increment,
+         *    name varchar(100) NOT NULL default '',
+         *    type int(11) NOT NULL default '0',
+         *    users int(11) NOT NULL default '0',
+         *    uname varchar(100) NOT NULL default '',
+         *    email varchar(100) NOT NULL default '',
+         *    pass varchar(100) NOT NULL default '',
+         *    date_reg datetime NOT NULL default '0000-00-00 00:00:00',
+         *    valcode varchar(35) NOT NULL default '',
+         *    state int(3) NOT NULL default '0',
+         *    auth_modid int(11) NOT NULL default '0',
+         *    PRIMARY KEY  (id)
          * )
          */
 
         $fields = array(
-                        'xar_uid' => array('type' => 'integer','null' => false,'default' => '0','increment' => true, 'primary_key' => true),
-                        'xar_name' => array('type' => 'varchar','size' => 255,'null' => false,'default' => ''),
-                        'xar_type' => array('type' => 'integer', 'null' => false, 'default' => '0'),
-                        'xar_users' => array('type' => 'integer', 'null' => false, 'default' => '0'),
-                        'xar_uname' => array('type' => 'varchar', 'size' => 255, 'null' => false, 'default' => ''),
-                        'xar_email' => array('type' => 'varchar', 'size' => 255,'null' => false,'default' => ''),
-                        'xar_pass' => array('type' => 'varchar',  'size' => 100, 'null' => false, 'default' => ''),
-                        'xar_date_reg' => array('type' => 'varchar', 'size' => 100, 'null' => false, 'default' => '0000-00-00 00:00:00'),
-                        'xar_valcode' => array('type' => 'varchar', 'size' => 35, 'null' => false, 'default' => ''),
-                        'xar_state' => array('type' => 'integer', 'null' => false,'default' => '3'),
-                        'xar_auth_modid' => array('type' => 'integer', 'unsigneded' => true,'null' => false, 'default' => '0'));
+                        'id' => array('type' => 'integer','null' => false,'default' => '0','increment' => true, 'primary_key' => true),
+                        'name' => array('type' => 'varchar','size' => 255,'null' => false,'default' => ''),
+                        'type' => array('type' => 'integer', 'null' => false, 'default' => '0'),
+                        'users' => array('type' => 'integer', 'null' => false, 'default' => '0'),
+                        'uname' => array('type' => 'varchar', 'size' => 255, 'null' => false, 'default' => ''),
+                        'email' => array('type' => 'varchar', 'size' => 255,'null' => false,'default' => ''),
+                        'pass' => array('type' => 'varchar',  'size' => 100, 'null' => false, 'default' => ''),
+                        'date_reg' => array('type' => 'varchar', 'size' => 100, 'null' => false, 'default' => '0000-00-00 00:00:00'),
+                        'valcode' => array('type' => 'varchar', 'size' => 35, 'null' => false, 'default' => ''),
+                        'state' => array('type' => 'integer', 'null' => false,'default' => '3'),
+                        'auth_modid' => array('type' => 'integer', 'unsigneded' => true,'null' => false, 'default' => '0'));
         $query = xarDBCreateTable($tables['roles'],$fields);
         $dbconn->Execute($query);
 
         // role type is used in all group look-ups (e.g. security checks)
         $index = array('name' => 'i_' . $sitePrefix . '_roles_type',
-                       'fields' => array('xar_type')
+                       'fields' => array('type')
                        );
         $query = xarDBCreateIndex($tables['roles'], $index);
         $dbconn->Execute($query);
 
         // username must be unique (for login) + don't allow groupname to be the same either
         $index = array('name' => 'i_' . $sitePrefix . '_roles_uname',
-                       'fields' => array('xar_uname'),
+                       'fields' => array('uname'),
                        'unique' => true
                        );
         $query = xarDBCreateIndex($tables['roles'], $index);
@@ -82,7 +82,7 @@ function roles_init()
 
         // allow identical "real names" here
         $index = array('name' => 'i_' . $sitePrefix . '_roles_name',
-                       'fields' => array('xar_name'),
+                       'fields' => array('name'),
                        'unique' => false
                        );
         $query = xarDBCreateIndex($tables['roles'], $index);
@@ -90,7 +90,7 @@ function roles_init()
 
         // allow identical e-mail here (???) + is empty for groups !
         $index = array('name' => 'i_' . $sitePrefix . '_roles_email',
-                       'fields' => array('xar_email'),
+                       'fields' => array('email'),
                        'unique' => false
                        );
         $query = xarDBCreateIndex($tables['roles'], $index);
@@ -98,7 +98,7 @@ function roles_init()
 
         // role state is used in many user lookups
         $index = array('name' => 'i_' . $sitePrefix . '_roles_state',
-                       'fields' => array('xar_state'),
+                       'fields' => array('state'),
                        'unique' => false
                        );
         $query = xarDBCreateIndex($tables['roles'], $index);
@@ -107,28 +107,28 @@ function roles_init()
 
         /**
          * CREATE TABLE xar_rolemembers (
-         *    xar_uid int(11) NOT NULL default '0',
-         *    xar_parentid int(11) NOT NULL default '0'
+         *    id int(11) NOT NULL default '0',
+         *    parentid int(11) NOT NULL default '0'
          * )
          */
 
         $query = xarDBCreateTable($tables['rolemembers'],
-                                  array('xar_uid' => array('type'        => 'integer',
+                                  array('id' => array('type'        => 'integer',
                                                            'null'        => true,
                                                            'default'     => null),
-                                        'xar_parentid' => array('type'        => 'integer',
+                                        'parentid' => array('type'        => 'integer',
                                                                 'null'        => true,
                                                                 'default'     => null)));
         $dbconn->Execute($query);
 
         $index = array('name' => 'i_' . $sitePrefix . '_rolememb_uid',
-                       'fields' => array('xar_uid'),
+                       'fields' => array('id'),
                        'unique' => false);
         $query = xarDBCreateIndex($tables['rolemembers'], $index);
         $dbconn->Execute($query);
 
         $index = array('name' => 'i_' . $sitePrefix . '_rolememb_parentid',
-                       'fields' => array('xar_parentid'),
+                       'fields' => array('parentid'),
                        'unique' => false);
         $query = xarDBCreateIndex($tables['rolemembers'], $index);
         $dbconn->Execute($query);

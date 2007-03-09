@@ -31,16 +31,16 @@ function roles_userapi_countall($args)
 
     $bindvars = array();
     if (!empty($state) && is_numeric($state) && $state != ROLES_STATE_CURRENT) {
-        $query = "SELECT COUNT(xar_uid) FROM $rolestable WHERE xar_state = ?";
+        $query = "SELECT COUNT(id) FROM $rolestable WHERE state = ?";
         $bindvars[] = (int) $state;
     } else {
-        $query = "SELECT COUNT(xar_uid) FROM $rolestable WHERE xar_state != ?";
+        $query = "SELECT COUNT(id) FROM $rolestable WHERE state != ?";
         $bindvars[] = ROLES_STATE_DELETED;
     }
 
     //suppress display of pending users to non-admins
     if (!xarSecurityCheck("AdminRole",0)) {
-        $query .= " AND xar_state != ?";
+        $query .= " AND state != ?";
         $bindvars[] = ROLES_STATE_PENDING;
     }
 
@@ -51,17 +51,17 @@ function roles_userapi_countall($args)
     // a where clause to the query
    if (isset($include_anonymous) && !$include_anonymous) {
         $thisrole = xarModAPIFunc('roles','user','get',array('uname'=>'anonymous'));
-        $query .= " AND xar_uid != ?";
+        $query .= " AND id != ?";
         $bindvars[] =  (int) $thisrole['uid'];
     }
     if (isset($include_myself) && !$include_myself) {
 
         $thisrole = xarModAPIFunc('roles','user','get',array('uname'=>'myself'));
-        $query .= " AND xar_uid != ?";
+        $query .= " AND id != ?";
         $bindvars[] = (int) $thisrole['uid'];
     }
 
-    $query .= " AND xar_type = ?";
+    $query .= " AND type = ?";
     $bindvars[] = ROLES_USERTYPE;
     $bindvars[] = 0;
 // cfr. xarcachemanager - this approach might change later

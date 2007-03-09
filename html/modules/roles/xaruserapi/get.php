@@ -42,36 +42,36 @@ function roles_userapi_get($args)
     sys::import('modules.roles.class.xarQuery');
     $q = new xarQuery('SELECT',$rolestable);
     $q->addfields(array(
-                  'xar_uid', // UID is a reserved word in Oracle (cannot be redefined)
-                  'xar_uname AS uname',
-                  'xar_name AS name',
-                  'xar_type', // TYPE is a key word in several databases (avoid for the future)
-                  'xar_email AS email',
-                  'xar_pass AS pass',
-                  'xar_date_reg AS date_reg',
-                  'xar_valcode AS valcode',
-                  'xar_state AS state'
+                  'id', // UID is a reserved word in Oracle (cannot be redefined)
+                  'uname',
+                  'name',
+                  'type', // TYPE is a key word in several databases (avoid for the future)
+                  'email',
+                  'pass',
+                  'date_reg',
+                  'valcode',
+                  'state'
                 ));
     if (!empty($uid) && is_numeric($uid)) {
-        $q->eq('xar_uid',(int)$uid);
+        $q->eq('id',(int)$uid);
     }
     if (!empty($name)) {
-        $q->eq('xar_name',$name);
+        $q->eq('name',$name);
     }
     if (!empty($uname)) {
-        $q->eq('xar_uname',$uname);
+        $q->eq('uname',$uname);
     }
     if (!empty($email)) {
-        $q->eq('xar_email',$email);
+        $q->eq('email',$email);
     }
     if (!empty($state) && $state == ROLES_STATE_CURRENT) {
-        $q->ne('xar_state',ROLES_STATE_DELETED);
+        $q->ne('state',ROLES_STATE_DELETED);
     }
     elseif (!empty($state) && $state != ROLES_STATE_ALL) {
-        $q->eq('xar_state',(int)$state);
+        $q->eq('state',(int)$state);
     }
     if (!empty($type)) {
-        $q->eq('xar_type',$type);
+        $q->eq('type',$type);
     }
     if (!$q->run()) return;
 
@@ -79,8 +79,8 @@ function roles_userapi_get($args)
     $user = $q->row();
     if ($user == array()) return false;
     // uid and type are reserved/key words in Oracle et al.
-    $user['uid'] = $user['xar_uid'];
-    $user['type'] = $user['xar_type'];
+    $user['uid'] = $user['id'];
+    $user['type'] = $user['type'];
     return $user;
 }
 

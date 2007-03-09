@@ -29,15 +29,15 @@ function roles_userapi_getallgroups($args)
     $q = new xarQuery('SELECT');
     $q->addtable($xartable['roles'],'r');
     $q->addtable($xartable['rolemembers'], 'rm');
-    $q->join('rm.xar_uid','r.xar_uid');
-    $q->addfields(array('r.xar_uid AS uid','r.xar_name AS name','r.xar_users AS users','rm.xar_parentid AS parentid'));
+    $q->join('rm.id','r.id');
+    $q->addfields(array('r.id AS uid','r.name AS name','r.users AS users','rm.parentid AS parentid'));
 
     $conditions = array();
     // Restriction by group.
     if (isset($group)) {
         $groups = explode(',', $group);
         foreach ($groups as $group) {
-            $conditions[] = $q->eq('r.xar_name',$group);
+            $conditions[] = $q->eq('r.name',$group);
         }
     }
 // Restriction by parent group.
@@ -52,7 +52,7 @@ function roles_userapi_getallgroups($args)
                 )
             );
             if (isset($group['uid']) && is_numeric($group['uid'])) {
-                $conditions[] = $q->eq('rm.xar_parentid',$group['uid']);
+                $conditions[] = $q->eq('rm.parentid',$group['uid']);
             }
         }
     }
@@ -63,10 +63,10 @@ function roles_userapi_getallgroups($args)
         $q1->addtable($xartable['roles'],'r');
         $q1->addtable($xartable['roles'],'r1');
         $q1->addtable($xartable['rolemembers'], 'rm');
-        $q1->join('rm.xar_uid','r.xar_uid');
-        $q1->join('rm.xar_parentid','r1.xar_uid');
-        $q1->addfields(array('r.xar_name','rm.xar_uid','r1.xar_name','rm.xar_parentid'));
-        $q1->eq('r.xar_type',ROLES_GROUPTYPE);
+        $q1->join('rm.id','r.id');
+        $q1->join('rm.parentid','r1.id');
+        $q1->addfields(array('r.name','rm.id','r1.name','rm.parentid'));
+        $q1->eq('r.type',ROLES_GROUPTYPE);
         $q1->run();
         $allgroups = $q1->output();
         $descendants = array();
@@ -77,14 +77,14 @@ function roles_userapi_getallgroups($args)
         foreach ($descendants as $descendant) {
             if (!in_array($descendant[1],$ids)) {
                 $ids[] = $descendant[1];
-                $conditions[] = $q->eq('rm.xar_uid',$descendant[1]);
+                $conditions[] = $q->eq('rm.id',$descendant[1]);
             }
         }
     }
 
     if (count($conditions) != 0) $q->qor($conditions);
-    $q->eq('r.xar_type',ROLES_GROUPTYPE);
-    $q->ne('r.xar_state',ROLES_STATE_DELETED);
+    $q->eq('r.type',ROLES_GROUPTYPE);
+    $q->ne('r.state',ROLES_STATE_DELETED);
     $q->run();
     return $q->output();
 }
@@ -93,13 +93,13 @@ function _getDescendants($ancestor,$groups)
 {
     $descendants = array();
     foreach($groups as $group){
-        if($group['r1.xar_name'] == $ancestor)
-        $descendants[$group['rm.xar_uid']] = array($group['r.xar_name'],$group['rm.xar_uid']);
+        if($group['r1.name'] == $ancestor)
+        $descendants[$group['rm.id']] = array($group['r.name'],$group['rm.id']);
     }
     foreach($descendants as $descendant){
         $subgroups = _getDescendants($descendant[0],$groups);
         foreach($subgroups as $subgroup){
-            $descendants[$subgroup['rm.xar_uid']] = $subgroup['rm.xar_uid'];
+            $descendants[$subgroup['rm.id']] = $subgroup['rm.id'];
         }
     }
     return $descendants ;

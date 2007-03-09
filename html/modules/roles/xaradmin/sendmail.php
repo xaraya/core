@@ -33,16 +33,16 @@ function roles_admin_sendmail()
 
     // only need the uid, name and email fields
     $q->clearfields();
-    $q->addfields(array('r.xar_uid','r.xar_name','r.xar_uname','r.xar_email'));
+    $q->addfields(array('r.id','r.name','r.uname','r.email'));
 
     // Open a connection and run the query
     $q->run();
 
     foreach ($q->output() as $user) {
-        $users[$user['r.xar_uid']] = array('uid'      => $user['r.xar_uid'],
-                                           'name'     => $user['r.xar_name'],
-                                           'email'    => $user['r.xar_email'],
-                                           'username' => $user['r.xar_uname']
+        $users[$user['r.id']] = array('id'      => $user['r.id'],
+                                           'name'     => $user['r.name'],
+                                           'email'    => $user['r.email'],
+                                           'username' => $user['r.uname']
         );
     }
 
