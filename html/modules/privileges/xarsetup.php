@@ -57,9 +57,9 @@ function initializeSetup()
    //--------------------------------- Roles Module
     $info = xarMod::getBaseInfo('roles');
     $sysid = $info['systemid'];
-    $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable WHERE xar_modid = $sysid";
-    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_modid = $sysid";
-    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_modid = $sysid";
+    $query1 = "SELECT DISTINCT type FROM $blockTypesTable WHERE modid = $sysid";
+    $query2 = "SELECT DISTINCT instances.title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id WHERE modid = $sysid";
+    $query3 = "SELECT DISTINCT instances.id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id WHERE modid = $sysid";
     $instances = array(array('header' => 'Block Type:',
                              'query' => $query1,
                              'limit' => 20),
@@ -86,18 +86,18 @@ function initializeSetup()
     xarDefineInstance('roles','Relation',$instances,0,$roleMembersTable,'xar_uid','xar_parentid','Instances of the roles module, including multilevel nesting');
 
    // ----------------------------- Privileges Module
-    $query = "SELECT DISTINCT xar_name FROM $privilegesTable";
+    $query = "SELECT DISTINCT name FROM $privilegesTable";
     $instances = array(array('header' => 'Privileges',
                              'query' => $query,
                              'limit' => 20));
-    xarDefineInstance('privileges','Privileges',$instances,0,$privMembersTable,'xar_pid','xar_parentid','Instances of the privileges module, including multilevel nesting');
+    xarDefineInstance('privileges','Privileges',$instances,0,$privMembersTable,'id','parentid','Instances of the privileges module, including multilevel nesting');
 
     // ----------------------------- Base Module
     $info = xarMod::getBaseInfo('base');
     $sysid = $info['systemid'];
-    $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable WHERE xar_modid = $sysid";
-    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_modid = $sysid";
-    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_modid = $sysid";
+    $query1 = "SELECT DISTINCT type FROM $blockTypesTable WHERE modid = $sysid";
+    $query2 = "SELECT DISTINCT instances.title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id WHERE modid = $sysid";
+    $query3 = "SELECT DISTINCT instances.id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id WHERE modid = $sysid";
     $instances = array(array('header' => 'Block Type:',
                              'query' => $query1,
                              'limit' => 20),
@@ -110,8 +110,8 @@ function initializeSetup()
     xarDefineInstance('base','Block',$instances);
 
    // ------------------------------- Themes Module
-    $query1 = "SELECT DISTINCT xar_name FROM $themesTable";
-    $query2 = "SELECT DISTINCT xar_regid FROM $themesTable";
+    $query1 = "SELECT DISTINCT name FROM $themesTable";
+    $query2 = "SELECT DISTINCT regid FROM $themesTable";
     $instances = array(array('header' => 'Theme Name:',
                              'query' => $query1,
                              'limit' => 20),
@@ -122,9 +122,9 @@ function initializeSetup()
 
     $info = xarMod::getBaseInfo('themes');
     $sysid = $info['systemid'];
-    $query1 = "SELECT DISTINCT xar_type FROM $blockTypesTable WHERE xar_modid = $sysid";
-    $query2 = "SELECT DISTINCT instances.xar_title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_modid = $sysid";
-    $query3 = "SELECT DISTINCT instances.xar_id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.xar_id = instances.xar_type_id WHERE xar_modid = $sysid";
+    $query1 = "SELECT DISTINCT type FROM $blockTypesTable WHERE modid = $sysid";
+    $query2 = "SELECT DISTINCT instances.title FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id WHERE modid = $sysid";
+    $query3 = "SELECT DISTINCT instances.id FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id WHERE modid = $sysid";
     $instances = array(array('header' => 'Block Type:',
                              'query' => $query1,
                              'limit' => 20),

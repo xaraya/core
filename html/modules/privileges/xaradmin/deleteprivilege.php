@@ -16,7 +16,7 @@
  */
 function privileges_admin_deleteprivilege()
 {
-    if (!xarVarFetch('pid',          'isset', $pid,          NULL, XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('id',          'isset', $id,          NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('confirmation', 'isset', $confirmation, NULL, XARVAR_DONT_SET)) return;
 
 // Clear Session Vars
@@ -25,7 +25,7 @@ function privileges_admin_deleteprivilege()
 //Call the Privileges class and get the privilege to be deleted
     sys::import('modules.privileges.class.privileges');
     $privs = new xarPrivileges();
-    $priv = $privs->getprivilege($pid);
+    $priv = $privs->getprivilege($id);
     $name = $priv->getName();
 
 // Security Check
@@ -41,7 +41,7 @@ function privileges_admin_deleteprivilege()
         }
         //Load Template
         $data['authid'] = xarSecGenAuthKey();
-        $data['pid'] = $pid;
+        $data['id'] = $id;
         $data['pname'] = $name;
         $data['parents'] = $parents;
         return $data;
@@ -54,7 +54,7 @@ function privileges_admin_deleteprivilege()
 //Try to remove the privilege and bail if an error was thrown
     if (!$priv->remove()) return;
 
-    xarModCallHooks('item', 'delete', $pid, '');
+    xarModCallHooks('item', 'delete', $id, '');
 
     xarSessionSetVar('privileges_statusmsg', xarML('Privilege Removed',
                     'privileges'));

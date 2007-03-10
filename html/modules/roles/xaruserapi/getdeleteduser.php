@@ -47,32 +47,32 @@ function roles_userapi_getdeleteduser($args)
     $rolestable = $xartable['roles'];
 
     $bindvars = array();
-    $query = "SELECT xar_uid,
-                   xar_uname,
-                   xar_name,
-                   xar_email,
-                   xar_pass,
-                   xar_date_reg,
-                   xar_valcode,
-                   xar_state
+    $query = "SELECT id,
+                   uname,
+                   name,
+                   email,
+                   pass,
+                   date_reg,
+                   valcode,
+                   state
             FROM $rolestable
-            WHERE xar_state = ? AND xar_type = ?";
+            WHERE state = ? AND type = ?";
     $bindvars[] = 0;
     $bindvars[] = $type;
 
     if (!empty($uid) && is_numeric($uid)) {
-        $query .= " AND xar_uid = ?";
+        $query .= " AND id = ?";
         $bindvars[] = $uid;
     } elseif (!empty($name)) {
-        $query .= " AND xar_name = ?";
+        $query .= " AND name = ?";
         $bindvars[] = $name;
     } elseif (!empty($uname)) {
         // Need to add 'deleted' string to username
         $deleted = '[' . xarML('deleted') . ']';
-        $query .= " AND xar_uname LIKE ?";
+        $query .= " AND uname LIKE ?";
         $bindvars[] = $uname.$deleted."%";
     } elseif (!empty($email)) {
-        $query .= " AND xar_email = ?";
+        $query .= " AND email = ?";
         $bindvars[] = $email;
     }
     $stmt = $dbconn->prepareStatement($query);

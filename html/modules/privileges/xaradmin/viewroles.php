@@ -19,7 +19,7 @@ function privileges_admin_viewroles()
 
     $data = array();
 
-    if (!xarVarFetch('pid',  'isset', $pid,          NULL,       XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('id',  'isset', $id,          NULL,       XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('show', 'isset', $data['show'], 'assigned', XARVAR_NOT_REQUIRED)) {return;}
 
     // Clear Session Vars
@@ -28,7 +28,7 @@ function privileges_admin_viewroles()
     //Call the Privileges class and get the privilege
     sys::import('modules.privileges.class.privileges');
     $privs = new xarPrivileges();
-    $priv = $privs->getPrivilege($pid);
+    $priv = $privs->getPrivilege($id);
 
     //Get the array of current roles this privilege is assigned to
     $curroles = array();
@@ -49,12 +49,12 @@ function privileges_admin_viewroles()
     }
 
     $data['pname'] = $priv->getName();
-    $data['pid'] = $pid;
+    $data['id'] = $id;
     $data['roles'] = $curroles;
     $data['removeurl'] = xarModURL('privileges',
                              'admin',
                              'removerole',
-                             array('pid'=>$pid));
+                             array('id'=>$id));
 
     $data['parents'] = $parents;
     $data['groups'] = xarModAPIFunc('roles','user','getallgroups');

@@ -553,21 +553,21 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
 
     // Get applicable hooks
     // New query:
-    $query ="SELECT DISTINCT hooks.xar_tarea, tmods.xar_name,
-                             hooks.xar_ttype, hooks.xar_tfunc, hooks.xar_order
+    $query ="SELECT DISTINCT hooks.t_area, tmods.name,
+                             hooks.t_type, hooks.t_func, hooks.priority
              FROM $hookstable hooks, $modulestable tmods, $modulestable smods
-             WHERE hooks.xar_tmodid = tmods.xar_id AND
-                   hooks.xar_smodid = smods.xar_id AND
-                   smods.xar_name = ?";
+             WHERE hooks.t_module_id = tmods.id AND
+                   hooks.s_module_id = smods.id AND
+                   smods.name = ?";
     $bindvars = array($callerModName);
 
     if (empty($callerItemType)) {
         // Itemtype is not specified, only get the generic hooks
-        $query .= " AND hooks.xar_stype = ?";
+        $query .= " AND hooks.s_type = ?";
         $bindvars[] = '';
     } else {
         // hooks can be enabled for all or for a particular item type
-        $query .= " AND (hooks.xar_stype = ? OR hooks.xar_stype = ?)";
+        $query .= " AND (hooks.s_type = ? OR hooks.s_type = ?)";
         $bindvars[] = '';
         $bindvars[] = (string)$callerItemType;
         // Q     : if itemtype is specified, why get the generic hooks? To save a function call in the modules?
@@ -575,7 +575,7 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
         //         need to check whether hooks are enabled for this particular itemtype or for all
         //         itemtypes here...
     }
-    $query .= " AND hooks.xar_object = ? AND hooks.xar_action = ? ORDER BY hooks.xar_order ASC";
+    $query .= " AND hooks.object = ? AND hooks.action = ? ORDER BY hooks.priority ASC";
     $bindvars[] = $hookObject;
     $bindvars[] = $hookAction;
     $stmt = $dbconn->prepareStatement($query);
@@ -628,11 +628,11 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
 
         // Get applicable hooks
         // New query:
-        $query = "SELECT DISTINCT tmods.xar_name, hooks.xar_stype
+        $query = "SELECT DISTINCT tmods.name, hooks.s_type
                   FROM  $hookstable hooks, $modulestable tmods, $modulestable smods
-                  WHERE hooks.xar_smodid = smods.xar_id AND
-                        hooks.xar_tmodid = tmods.xar_id AND
-                        smods.xar_name = ?";
+                  WHERE hooks.s_module_id = smods.id AND
+                        hooks.t_module_id = tmods.id AND
+                        smods.name = ?";
         $bindvars = array($callerModName);
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
@@ -712,7 +712,7 @@ function xarModRegisterHook($hookObject, $hookAction, $hookArea, $hookModName, $
         $tmodInfo = xarMod::getBaseInfo($hookModName);
         $tmodId = $tmodInfo['systemid'];
         $query = "INSERT INTO $hookstable
-                  (xar_object, xar_action, xar_tarea, xar_tmodid, xar_ttype, xar_tfunc)
+                  (object, action, t_area, t_module_id, t_type, t_func)
                   VALUES (?,?,?,?,?,?)";
         $bindvars = array($hookObject,$hookAction,$hookArea,$tmodId,$hookModType,$hookFuncName);
         $stmt = $dbconn->prepareStatement($query);
@@ -751,9 +751,9 @@ function xarModUnregisterHook($hookObject, $hookAction, $hookArea,$hookModName, 
         $tmodInfo = xarMod::getBaseInfo($hookModName);
         $tmodId = $tmodInfo['systemid'];
         $query = "DELETE FROM $hookstable
-                  WHERE xar_object = ?
-                  AND xar_action = ? AND xar_tarea = ? AND xar_tmodid = ?
-                  AND xar_ttype = ?  AND xar_tfunc = ?";
+                  WHERE object = ?
+                  AND action = ? AND t_area = ? AND t_module_id = ?
+                  AND t_type = ?  AND t_func = ?";
         $stmt = $dbconn->prepareStatement($query);
         $bindvars = array($hookObject,$hookAction,$hookArea,$tmodId,$hookModType,$hookFuncName);
         $stmt->executeUpdate($bindvars);
@@ -1055,25 +1055,25 @@ class xarMod extends Object implements IxarMod
         case 'module':
         default:
             $the_table = $tables['modules'];
-            $query = "SELECT xar_id,
-                             xar_name,
-                             xar_directory,
-                             xar_mode,
-                             xar_version,
-                             xar_admin_capable,
-                             xar_user_capable,
-                             xar_state
-                       FROM  $the_table WHERE xar_regid = ?";
+            $query = "SELECT id,
+                             name,
+                             directory,
+                             mode,
+                             version,
+                             admin_capable,
+                             user_capable,
+                             state
+                       FROM  $the_table WHERE regid = ?";
             break;
         case 'theme':
             $the_table = $tables['themes'];
-            $query = "SELECT xar_id,
-                             xar_name,
-                             xar_directory,
-                             xar_mode,
-                             xar_version,
-                             xar_state
-                       FROM  $the_table WHERE xar_regid = ?";
+            $query = "SELECT id,
+                             name,
+                             directory,
+                             mode,
+                             version,
+                             state
+                       FROM  $the_table WHERE regid = ?";
             break;
         }
         $stmt = $dbconn->prepareStatement($query);
@@ -1211,10 +1211,10 @@ class xarMod extends Object implements IxarMod
         // theme+s or module+s
         $table = $tables[$type.'s'];
 
-        $query = "SELECT items.xar_regid, items.xar_directory, items.xar_mode,
-                     items.xar_id, items.xar_state, items.xar_name
+        $query = "SELECT items.regid, items.directory, items.mode,
+                     items.id, items.state, items.name
               FROM   $table items
-              WHERE  items.xar_name = ? OR items.xar_directory = ?";
+              WHERE  items.name = ? OR items.directory = ?";
         $bindvars = array($modName, $modName);
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);

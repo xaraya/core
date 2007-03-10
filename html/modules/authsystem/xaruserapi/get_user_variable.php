@@ -13,7 +13,7 @@
  * get a user variable (currently unused)
  * @access public
  * @author Marco Canini
- * @param args['uid'] user id
+ * @param args['id'] user id
  * @param args['name'] variable name
  * @return string
  */
@@ -25,7 +25,7 @@ function authsystem_userapi_get_user_variable($args)
     extract($args);
 
     if (!isset($uid) || !isset($name)) {
-        throw new BadParameterException(array($uid,$name),'Empty uid (#(1)) or name (#(2))');
+        throw new BadParameterException(array($uid,$name),'Empty id (#(1)) or name (#(2))');
     }
 
     if (!isset($vars[$uid])) {
@@ -39,7 +39,7 @@ function authsystem_userapi_get_user_variable($args)
 
         // throw back an exception if the user doesn't exist
         //if (...) {
-        //    throw new IDNotFoundException($uid,'User identified by uid #(1) does not exist.');
+        //    throw new IDNotFoundException($uid,'User identified by id #(1) does not exist.');
         //}
 
         // $vars[$uid][$name] = $value;

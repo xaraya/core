@@ -48,15 +48,15 @@ function roles_user_viewlist($args)
         if ($letter == 'Other') {
             // TODO: check for syntax in other databases or use a different matching method.
             $selection = " AND ("
-                .$dbconn->substr."(".$dbconn->upperCase."(xar_name),1,1) < 'A' OR "
-                .$dbconn->substr."(".$dbconn->upperCase."(xar_name),1,1) > 'Z')";
+                .$dbconn->substr."(".$dbconn->upperCase."(name),1,1) < 'A' OR "
+                .$dbconn->substr."(".$dbconn->upperCase."(name),1,1) > 'Z')";
             // TODO: move these messages to the template (and shorten it a bit;-).
             $data['msg'] = xarML(
                 'Members whose Display Name begins with character not listed in alphabet above (labeled as "Other")'
             );
         } else {
         // TODO: handle case-sensitive databases
-            $selection = ' AND xar_name LIKE ' . $dbconn->qstr($letter.'%');
+            $selection = ' AND name LIKE ' . $dbconn->qstr($letter.'%');
             if(strtolower($phase) == 'active') {
                 $data['msg'] = xarML('Members Online whose Display Name begins with "#(1)"', $letter);
             } else {
@@ -68,10 +68,10 @@ function roles_user_viewlist($args)
         $qsearch = $dbconn->qstr('%'.$search.'%');
 
         $selection = ' AND (';
-        $selection .= '(xar_name LIKE ' . $qsearch . ')';
-        $selection .= ' OR (xar_uname LIKE ' . $qsearch . ')';
+        $selection .= '(name LIKE ' . $qsearch . ')';
+        $selection .= ' OR (uname LIKE ' . $qsearch . ')';
         if (xarModGetVar('roles', 'searchbyemail')) {
-            $selection .= ' OR (xar_email LIKE ' . $qsearch . ')';
+            $selection .= ' OR (email LIKE ' . $qsearch . ')';
             $data['msg'] = xarML('Members whose Display Name or User Name or Email Address contains "#(1)"', $search);
         } else {
             $data['msg'] = xarML('Members whose Display Name or User Name "#(1)"', $search);

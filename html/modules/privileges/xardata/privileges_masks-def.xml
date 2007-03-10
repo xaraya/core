@@ -14,7 +14,7 @@
       <label>ID</label>
       <type>itemid</type>
       <default></default>
-      <source>xar_security_masks.xar_sid</source>
+      <source>xar_security_masks.sid</source>
       <status>65</status>
       <order>1</order>
       <validation></validation>
@@ -24,7 +24,7 @@
       <label>Name</label>
       <type>textbox</type>
       <default></default>
-      <source>xar_security_masks.xar_name</source>
+      <source>xar_security_masks.name</source>
       <status>33</status>
       <order>2</order>
       <validation></validation>
@@ -34,7 +34,7 @@
       <label>Realm</label>
       <type>textbox</type>
       <default></default>
-      <source>xar_security_masks.xar_realmid</source>
+      <source>xar_security_masks.realmid</source>
       <status>33</status>
       <order>3</order>
       <validation></validation>
@@ -44,7 +44,7 @@
       <label>Module</label>
       <type>textbox</type>
       <default></default>
-      <source>xar_security_masks.xar_modid</source>
+      <source>xar_security_masks.module_id</source>
       <status>33</status>
       <order>4</order>
       <validation></validation>
@@ -54,7 +54,7 @@
       <label>Component</label>
       <type>textbox</type>
       <default></default>
-      <source>xar_security_masks.xar_component</source>
+      <source>xar_security_masks.component</source>
       <status>33</status>
       <order>5</order>
       <validation></validation>
@@ -64,7 +64,7 @@
       <label>Instance</label>
       <type>textbox</type>
       <default></default>
-      <source>xar_security_masks.xar_instance</source>
+      <source>xar_security_masks.instance</source>
       <status>33</status>
       <order>6</order>
       <validation></validation>
@@ -74,7 +74,7 @@
       <label>Level</label>
       <type>integerbox</type>
       <default></default>
-      <source>xar_security_masks.xar_level</source>
+      <source>xar_security_masks.level</source>
       <status>33</status>
       <order>7</order>
       <validation></validation>
@@ -84,7 +84,7 @@
       <label>Description</label>
       <type>textbox</type>
       <default></default>
-      <source>xar_security_masks.xar_description</source>
+      <source>xar_security_masks.description</source>
       <status>65</status>
       <order>8</order>
       <validation></validation>

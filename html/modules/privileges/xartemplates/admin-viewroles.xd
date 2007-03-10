@@ -44,7 +44,7 @@
                 <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                     <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                         <dd>
-                            <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$parents.$i.parentid#" title="#xarML('Show this privilege')#">
+                            <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this privilege')#">
                                 #$parents[$i]['parentname']#
                             </a>
                         </dd>
@@ -61,22 +61,22 @@
                 <xar:mlstring>Manage privilege</xar:mlstring> :
             </dt>
             <dd>
-                <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;pid=#$pid#">
+                <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;id=#$id#">
                     <xar:mlstring>Display</xar:mlstring>
                 </a>
             </dd>
             <dd>
-                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$pid#">
+                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$id#">
                     <xar:mlstring>Modify</xar:mlstring>
                 </a>
             </dd>
             <dd>
-                <a href="&xar-modurl-privileges-admin-deleteprivilege;&amp;pid=#$pid#">
+                <a href="&xar-modurl-privileges-admin-deleteprivilege;&amp;id=#$id#">
                     <xar:mlstring>Delete</xar:mlstring>
                 </a>
             </dd>
             <dd class="active">
-                <a href="&xar-modurl-privileges-admin-viewroles;&amp;pid=#$pid#" >
+                <a href="&xar-modurl-privileges-admin-viewroles;&amp;id=#$id#" >
                     <xar:mlstring>Groups/Users</xar:mlstring>
                 </a>
             </dd>
@@ -140,8 +140,8 @@
             </select>
             <input type="submit" value="#xarML('Assign')#" />
             <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('roles')#" />
-            <input type="hidden" name="privid" id="privid" value="#$pid#" />
-            <input type="hidden" name="return_url" id="return_url" value="&xar-modurl-privileges-admin-viewroles;&amp;pid=#$pid#" />
+            <input type="hidden" name="privid" id="privid" value="#$id#" />
+            <input type="hidden" name="return_url" id="return_url" value="&xar-modurl-privileges-admin-viewroles;&amp;id=#$id#" />
         </div>
       </form>
     </fieldset>
@@ -149,7 +149,7 @@
     <fieldset>
       <legend><xar:mlstring>Current Privileges</xar:mlstring></legend>
       <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-viewroles;" method="post" enctype="application/x-www-form-urlencoded">
-        <input type="hidden" name="pid" id="pid" value="#$pid#" />
+        <input type="hidden" name="id" id="id" value="#$id#" />
         <p>
             <a href="&xar-modurl-privileges-admin-newprivilege;">
                 <xar:mlstring>Add Privilege</xar:mlstring>

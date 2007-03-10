@@ -20,7 +20,7 @@ function roles_admin_createmail()
     if (!xarVarFetch('uids',     'isset',  $uids,     NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('state',    'int:0:', $state,      -1, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('startnum', 'int:1:', $startnum,    1, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('order',    'str:0:', $data['order'], 'xar_name', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('order',    'str:0:', $data['order'], 'name', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('includesubgroups', 'int:0:', $data['includesubgroups'],0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('mailtype', 'str:0:', $data['mailtype'], 'blank', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('selstyle', 'isset',  $selstyle,    0, XARVAR_NOT_REQUIRED)) return;
@@ -50,13 +50,13 @@ function roles_admin_createmail()
         sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery('SELECT');
         $q->addtable($xartable['roles'],'r');
-        $q->addfields(array('r.xar_uid AS uid',
-                            'r.xar_name AS name',
-                            'r.xar_uname AS uname',
-                            'r.xar_email AS email',
-                            'r.xar_state AS state',
-                            'r.xar_date_reg AS date_reg'));
-        $q->eq('r.xar_uid',$uid);
+        $q->addfields(array('r.id AS id',
+                            'r.name AS name',
+                            'r.uname AS uname',
+                            'r.email AS email',
+                            'r.state AS state',
+                            'r.date_reg AS date_reg'));
+        $q->eq('r.id',$uid);
         $q->sessionsetvar('rolesquery');
     }
     else {
@@ -70,13 +70,13 @@ function roles_admin_createmail()
         if(empty($q)) {
             $q = new xarQuery('SELECT');
             $q->addtable($xartable['roles'],'r');
-            $q->addfields(array('r.xar_uid AS uid',
-                                'r.xar_name AS name',
-                                'r.xar_uname AS uname',
-                                'r.xar_email AS email',
-                                'r.xar_state AS state',
-                                'r.xar_date_reg AS date_reg'));
-            $q->eq('xar_type',ROLES_USERTYPE);
+            $q->addfields(array('r.id AS id',
+                                'r.name AS name',
+                                'r.uname AS uname',
+                                'r.email AS email',
+                                'r.state AS state',
+                                'r.date_reg AS date_reg'));
+            $q->eq('type',ROLES_USERTYPE);
         }
         // Set the paging and order stuff for this particular page
         $numitems = xarModGetVar('roles', 'itemsperpage');
@@ -86,10 +86,10 @@ function roles_admin_createmail()
 
         // Add state
         if ($uid != -1) {
-            $q->removecondition('xar_state');
-            if ($state == ROLES_STATE_CURRENT) $q->ne('xar_state',ROLES_STATE_DELETED);
+            $q->removecondition('state');
+            if ($state == ROLES_STATE_CURRENT) $q->ne('state',ROLES_STATE_DELETED);
             elseif ($state == ROLES_STATE_ALL) {}
-            else $q->eq('xar_state',$state);
+            else $q->eq('state',$state);
         }
         else $state = -1;
 
@@ -97,8 +97,8 @@ function roles_admin_createmail()
             if ($uid != 0) {
                 // If a group was chosen, get only the users of that group
                 $q->addtable($xartable['rolemembers'],'rm');
-                $q->join('r.xar_uid','rm.xar_uid');
-                $q->eq('rm.xar_parentid',$uid);
+                $q->join('r.id','rm.id');
+                $q->eq('rm.parentid',$uid);
             }
         }
 

@@ -238,7 +238,7 @@ function xarCache_getParents()
     $systemPrefix = xarDBGetSystemTablePrefix();
     $rolemembers = $systemPrefix . '_rolemembers';
     $dbconn =& xarDBGetConn();
-    $query = "SELECT xar_parentid FROM $rolemembers WHERE xar_uid = ?";
+    $query = "SELECT parentid FROM $rolemembers WHERE id = ?";
     $stmt =& $dbconn->prepareStatement($query);
     $result =& $stmt->executeQuery(array($currentuid));
 

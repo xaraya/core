@@ -10,7 +10,7 @@
     <form action="&xar-modurl-privileges-admin-deleterealm;" method="post" enctype="application/x-www-form-urlencoded" >
         <div style="text-align: center">
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="hidden" name="rid" id="rid" value="#$rid#" />
+                <input type="hidden" name="id" id="id" value="#$id#" />
                 <input type="hidden" name="confirmed" id="confirmed" value="1" />
 
                 <p><span class="xar-title"><xar:mlstring>Confirm the deletion of all instances of the realm</xar:mlstring>  '#$name#'</span></p>

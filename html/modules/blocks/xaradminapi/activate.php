@@ -31,7 +31,7 @@ function blocks_adminapi_activate($args)
     $blockstable = $xartable['block_instances'];
 
     // Activate
-    $query = "UPDATE $blockstable SET xar_state=? WHERE xar_id=?";
+    $query = "UPDATE $blockstable SET state=? WHERE id=?";
     $dbconn->Execute($query,array(2,$bid));
     return true;
 }

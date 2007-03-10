@@ -48,11 +48,11 @@ function modules_adminapi_remove($args)
             xarModDelAllVars($modinfo['name']);
 
             // Remove the module itself
-            $query = "DELETE FROM $tables[modules] WHERE xar_regid = ?";
+            $query = "DELETE FROM $tables[modules] WHERE regid = ?";
             $dbconn->Execute($query,array($modinfo['regid']));
         } else {
             // Module deletion function
-            xarModAPIFunc('modules', 'admin', 'executeinitfunction', 
+            xarModAPIFunc('modules', 'admin', 'executeinitfunction',
                           array('regid' => $regid, 'function' => 'delete'));
 
             // Delete any module variables that the module cleanup function might have missed.
@@ -61,7 +61,7 @@ function modules_adminapi_remove($args)
             xarModDelAllVars($modinfo['name']);
 
             // Update state of module
-            xarModAPIFunc('modules', 'admin', 'setstate', 
+            xarModAPIFunc('modules', 'admin', 'setstate',
                           array('regid' => $regid,'state' => XARMOD_STATE_UNINITIALISED));
         }
 
@@ -74,7 +74,7 @@ function modules_adminapi_remove($args)
         xarModCallHooks('module','remove',$modinfo['name'],'',$modinfo['name']);
 
         // Delete any hooks assigned for that module, or by that module
-        $query = "DELETE FROM $tables[hooks] WHERE xar_smodid = ? OR xar_tmodid = ?";
+        $query = "DELETE FROM $tables[hooks] WHERE s_module_id = ? OR t_module_id = ?";
         $bindvars = array($modinfo['systemid'],$modinfo['systemid']);
         $dbconn->Execute($query,$bindvars);
 

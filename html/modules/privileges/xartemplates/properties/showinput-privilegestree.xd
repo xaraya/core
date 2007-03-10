@@ -19,7 +19,7 @@
     <xar:foreach in="$trees" value="$tree">
     <ul class="tree">
         <xar:foreach in="$tree" key="$index" value="$node">
-            <xar:set name="pid">$node->id</xar:set>
+            <xar:set name="id">$node->id</xar:set>
             <xar:set name="name">$node->name</xar:set>
             <xar:set name="description">$node->description</xar:set>
             <xar:set name="parentid">$node->parent</xar:set>
@@ -27,15 +27,15 @@
 
             <div class="preamble">
                 <xar:sec mask="DeletePrivilege" catch="false" component="Privileges" instance="#$name#">
-                    <xar:set name="dellink">xarModUrl('privileges','admin','deleteprivilege',array('pid'=> $pid))</xar:set>
+                    <xar:set name="dellink">xarModUrl('privileges','admin','deleteprivilege',array('id'=> $id))</xar:set>
                     <a href="#$dellink#" title="#xarML('Delete this privilege')#"><img src="#xarTplGetImage('delete.gif')#"/></a>
                 </xar:sec>
-                <xar:set name="userslink">xarModUrl('privileges','admin','viewroles',array('pid'=> $pid))</xar:set>
+                <xar:set name="userslink">xarModUrl('privileges','admin','viewroles',array('id'=> $id))</xar:set>
                 <a href="#$userslink#" title="xarML('Show the Groups/Users this Privilege is assigned to')#">
                     <img src="#xarTplGetImage('usersgroups.gif')#"/>
                 </a>
                 <xar:if condition="$parentid ne 0">
-                    <xar:set name="removelink">xarModUrl('privileges','admin','removebranch',array('pid'=> $pid))</xar:set>
+                    <xar:set name="removelink">xarModUrl('privileges','admin','removebranch',array('id'=> $id))</xar:set>
                     <a href="#$removelink#" title="#xarML('Remove this privilege from its parent')#">
                         <img src="#xarTplGetImage('remove.gif')#"/>
                     </a>
@@ -46,7 +46,7 @@
                 <xar:for start="$i = 0" test="$i le $level" iter="$i++">
                     <img src="#xarTplGetImage('blank.png')#" />
                 </xar:for>
-                <xar:set name="modlink">xarModUrl('privileges','admin','modifyprivilege',array('pid'=> $pid))</xar:set>
+                <xar:set name="modlink">xarModUrl('privileges','admin','modifyprivilege',array('id'=> $id))</xar:set>
                 <a href="#$modlink#" title="#$description#">#$name#</a>
             </li>
         </xar:foreach>

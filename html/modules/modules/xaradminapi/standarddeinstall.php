@@ -88,8 +88,8 @@ function modules_adminapi_standarddeinstall($args)
     $modInfo = xarMod::getBaseInfo($module);
     $modId = $modInfo['systemid'];
     $query = "DELETE FROM " . $xartables['hooks'] .
-             " WHERE xar_smodid = " . $modId .
-             " OR xar_tmodid = " . $modId;
+             " WHERE s_module_id = " . $modId .
+             " OR t_module_id = " . $modId;
     $dbconn->Execute($query);
 
 # --------------------------------------------------------

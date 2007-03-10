@@ -89,7 +89,7 @@ function modules_adminapi_setstate($args)
     //Get current module mode to update the proper table
     $modMode  = $modInfo['mode'];
     $modulesTable = $xartable['modules'];
-    $query = "UPDATE $modulesTable SET xar_state = ? WHERE xar_regid = ?";
+    $query = "UPDATE $modulesTable SET state = ? WHERE regid = ?";
     $bindvars = array($state,$regid);
     $dbconn->Execute($query,$bindvars);
 

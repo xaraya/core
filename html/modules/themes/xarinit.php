@@ -41,44 +41,44 @@ function themes_init()
     // prefix_themes
     /**
      * CREATE TABLE xar_themes (
-     *   xar_id int(11) NOT NULL auto_increment,
-     *   xar_name varchar(64) NOT NULL default '',
-     *   xar_regid int(10) unsigned NOT NULL default '0',
-     *   xar_directory varchar(64) NOT NULL default '',
-     *   xar_mode smallint(6) NOT NULL default '1',
-     *   xar_author varchar(64) NOT NULL default '',
-     *   xar_homepage varchar(64) NOT NULL default '',
-     *   xar_email varchar(64) NOT NULL default '',
-     *   xar_description varchar(255) NOT NULL default '',
-     *   xar_contactinfo varchar(255) NOT NULL default '',
-     *   xar_publishdate varchar(32) NOT NULL default '',
-     *   xar_license varchar(255) NOT NULL default '',
-     *   xar_version varchar(10) NOT NULL default '',
-     *   xar_xaraya_version varchar(10) NOT NULL default '',
-     *   xar_bl_version varchar(10) NOT NULL default '',
-     *   xar_class int(10) unsigned NOT NULL default '0',
-     *   xar_state int(11) not null defaul '1'
-     *   PRIMARY KEY  (xar_id)
+     *   id int(11) NOT NULL auto_increment,
+     *   name varchar(64) NOT NULL default '',
+     *   regid int(10) INTEGER NOT NULL default '0',
+     *   directory varchar(64) NOT NULL default '',
+     *   mode smallint(6) NOT NULL default '1',
+     *   author varchar(64) NOT NULL default '',
+     *   homepage varchar(64) NOT NULL default '',
+     *   email varchar(64) NOT NULL default '',
+     *   description varchar(255) NOT NULL default '',
+     *   contactinfo varchar(255) NOT NULL default '',
+     *   publishdate varchar(32) NOT NULL default '',
+     *   license varchar(255) NOT NULL default '',
+     *   version varchar(10) NOT NULL default '',
+     *   xaraya_version varchar(10) NOT NULL default '',
+     *   bl_version varchar(10) NOT NULL default '',
+     *   class int(10) INTEGER NOT NULL default '0',
+     *   state int(11) not null default '1'
+     *   PRIMARY KEY  (id)
      * )
      */
     $fields = array(
-        'xar_id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
-        'xar_name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_regid' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
-        'xar_directory' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_mode' => array('type' => 'integer', 'null' => false, 'default' => '1'),
-        'xar_author' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_homepage' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_email' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'xar_description' => array('type' => 'varchar', 'size' => 255, 'null' => false),
-        'xar_contactinfo' => array('type' => 'varchar', 'size' => 255, 'null' => false),
-        'xar_publishdate' => array('type' => 'varchar', 'size' => 32, 'null' => false),
-        'xar_license' => array('type' => 'varchar', 'size' => 255, 'null' => false),
-        'xar_version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
-        'xar_xaraya_version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
-        'xar_bl_version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
-        'xar_class' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
-        'xar_state' => array('type' => 'integer', 'null' => false, 'default' => '1')
+        'id' => array('type' => 'integer', 'null' => false, 'increment' => true, 'primary_key' => true),
+        'name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
+        'regid' => array('type' => 'integer', 'default' => null),
+        'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false),
+        'mode' => array('type' => 'integer', 'null' => false, 'default' => '1'),
+        'author' => array('type' => 'varchar', 'size' => 64, 'null' => false),
+        'homepage' => array('type' => 'varchar', 'size' => 64, 'null' => false),
+        'email' => array('type' => 'varchar', 'size' => 64, 'null' => false),
+        'description' => array('type' => 'varchar', 'size' => 255, 'null' => false),
+        'contactinfo' => array('type' => 'varchar', 'size' => 255, 'null' => false),
+        'publishdate' => array('type' => 'varchar', 'size' => 32, 'null' => false),
+        'license' => array('type' => 'varchar', 'size' => 255, 'null' => false),
+        'version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
+        'xaraya_version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
+        'bl_version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
+        'class' => array('type' => 'integer', 'null' => false, 'default' => '0'),
+        'state' => array('type' => 'integer', 'null' => false, 'default' => '1')
         );
 
     $query = xarDBCreateTable($tables['themes'], $fields);

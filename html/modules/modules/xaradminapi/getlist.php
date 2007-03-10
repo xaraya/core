@@ -74,9 +74,9 @@ function modules_adminapi_getlist($args)
         if (!isset($validOrderFields[$orderField])) throw new BadParameterExceptions('orderBy');
 
         // Here $validOrderFields[$orderField] is the table alias
-        $orderByClauses[] = $validOrderFields[$orderField] . '.xar_' . $orderField;
+        $orderByClauses[] = $validOrderFields[$orderField] . '.' . $orderField;
         if ($validOrderFields[$orderField] == 'mods') {
-            $extraSelectClause .= ', ' . $validOrderFields[$orderField] . '.xar_' . $orderField;
+            $extraSelectClause .= ', ' . $validOrderFields[$orderField] . '.' . $orderField;
         }
     }
     $orderByClause = join(', ', $orderByClauses);
@@ -84,64 +84,64 @@ function modules_adminapi_getlist($args)
     // Keep a record of the different conditions and their bindvars
     $whereClauses = array(); $bindvars = array();
     if (isset($filter['Mode'])) {
-        $whereClauses[] = 'mods.xar_mode = ?';
+        $whereClauses[] = 'mods.mode = ?';
         $bindvars[] = $filter['Mode'];
     }
     if (isset($filter['UserCapable'])) {
-        $whereClauses[] = 'mods.xar_user_capable = ?';
+        $whereClauses[] = 'mods.user_capable = ?';
         $bindvars[] = $filter['UserCapable'];
     }
     if (isset($filter['AdminCapable'])) {
-        $whereClauses[] = 'mods.xar_admin_capable = ?';
+        $whereClauses[] = 'mods.admin_capable = ?';
         $bindvars[] = $filter['AdminCapable'];
     }
     if (isset($filter['Class'])) {
-        $whereClauses[] = 'mods.xar_class = ?';
+        $whereClauses[] = 'mods.class = ?';
         $bindvars[] = $filter['Class'];
     }
     if (isset($class)) {
-        $whereClauses[] = 'mods.xar_class = ?';
+        $whereClauses[] = 'mods.class = ?';
         $bindvars[] = $class;
     }
     if (isset($filter['Category'])) {
-        $whereClauses[] = 'mods.xar_category = ?';
+        $whereClauses[] = 'mods.category = ?';
         $bindvars[] = $filter['Category'];
     }
     if (isset($filter['State'])) {
         if ($filter['State'] != XARMOD_STATE_ANY) {
             if ($filter['State'] != XARMOD_STATE_INSTALLED) {
-                $whereClauses[] = 'mods.xar_state = ?';
+                $whereClauses[] = 'mods.state = ?';
                 $bindvars[] = $filter['State'];
             } else {
-                $whereClauses[] = 'mods.xar_state != ? AND mods.xar_state < ? AND mods.xar_state != ?';
+                $whereClauses[] = 'mods.state != ? AND mods.state < ? AND mods.state != ?';
                 $bindvars[] = XARMOD_STATE_UNINITIALISED;
                 $bindvars[] = XARMOD_STATE_MISSING_FROM_INACTIVE;
                 $bindvars[] = XARMOD_STATE_MISSING_FROM_UNINITIALISED;
             }
         }
     } else {
-        $whereClauses[] = 'mods.xar_state = ?';
+        $whereClauses[] = 'mods.state = ?';
         $bindvars[] = XARMOD_STATE_ACTIVE;
     }
 
 
     $modList = array(); $mode = XARMOD_MODE_SHARED;
 
-    $query = "SELECT mods.xar_regid, mods.xar_name, mods.xar_directory,
-                     mods.xar_version, mods.xar_id, mods.xar_category, mods.xar_state
+    $query = "SELECT mods.regid, mods.name, mods.directory,
+                     mods.version, mods.id, mods.category, mods.state
                   FROM $modulestable mods ";
 
     // Add the first mode to the where clauses and join it into one string
-    array_unshift($whereClauses, 'mods.xar_mode = ?');
+    array_unshift($whereClauses, 'mods.mode = ?');
     array_unshift($bindvars,$mode);
     $whereClause = join(' AND ', $whereClauses);
     $query .= " WHERE $whereClause ORDER BY $orderByClause";
-    
+
     // Got it
     $stmt = $dbconn->prepareStatement($query);
     $stmt->setLimit($numItems);
     $stmt->setOffset($startNum - 1);
-    
+
     $result = $stmt->executeQuery($bindvars);
 
     while($result->next()) {

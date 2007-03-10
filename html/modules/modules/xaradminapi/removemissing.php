@@ -25,19 +25,19 @@ function modules_adminapi_removemissing($args)
     // TODO (random) This whole exercise is on hold because w have no way of knowing which
     // tables actually belong to the module being removed, and so the cleanup is incomplete
     // For now just remove the entry in the modules table
-    
+
     //    if (!xarVarFetch('remove', 'str', $remove, NULL, XARVAR_NOT_REQUIRED)) return;
     // Get module information
     //    $modinfo = xarModGetInfo($regid);
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
-    
+
     $modInfo = xarModGetInfo($regid);
     $modId = $modInfo['systemid'];
     // Make what we do at least atomic
     try {
         $dbconn->begin();
-        $query = "DELETE FROM $tables[modules] WHERE xar_id = ?";
+        $query = "DELETE FROM $tables[modules] WHERE id = ?";
         $dbconn->Execute($query,array($modId));
         $dbconn->commit();
     } catch (SQLException $e) {

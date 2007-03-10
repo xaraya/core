@@ -13,7 +13,7 @@
 
 /**
  * delete a cache block
- * 
+ *
  * @param $args['bid'] the ID of the block to delete
  * @return bool true on success, false on failure
  */
@@ -25,7 +25,7 @@ function blocks_adminapi_delete_cacheinstance($args)
     // Argument check
     if(!isset($bid)) throw new EmptyParameterException('bid');
     if(!is_numeric($bid)) throw new BadParameterException($bid);
-    
+
     // Security
     if (!xarSecurityCheck('DeleteBlock', 1, 'Block', "::$bid")) {return;}
 
@@ -34,7 +34,7 @@ function blocks_adminapi_delete_cacheinstance($args)
     $xartable =& xarDBGetTables();
     if (!empty($xartable['cache_blocks'])) {
         $cacheblockstable = $xartable['cache_blocks'];
-        $query = "DELETE FROM $cacheblockstable WHERE xar_bid=?";
+        $query = "DELETE FROM $cacheblockstable WHERE id=?";
         $stmt = $dbconn->prepareStatement($query);
         $stmt->ExecuteUpdate(array($bid));
     }

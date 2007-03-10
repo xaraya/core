@@ -72,7 +72,7 @@
                 <xar:loop name="$inherited">
                   <tr>
                     <td>
-                      <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$loop:item['privid']#">
+                      <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$loop:item['privid']#">
                         <xar:var name="loop:item.name" prep="true"/>
                       </a>
                     </td>
@@ -139,7 +139,7 @@
           <xar:loop name="$privileges">
             <tr>
               <td>
-                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$loop:item['privid']#">
+                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$loop:item['privid']#">
                   <xar:var name="loop:item.name" prep="true"/>
                 </a>
               </td>
@@ -191,13 +191,8 @@
               </xar:mlvar>
             </xar:ml>
           </label>
-          <select name="privid" id="privid">
-          <xar:loop name="$allprivileges">
-            <option value="#$loop:item['pid']#">
-              <xar:var name="loop:item.name" prep="true"/>
-            </option>
-          </xar:loop>
-        </select>
+          <xar:set name="options">xarPrivileges::getprivileges()</xar:set>
+          <xar:data-input type="dropdown" name="privid" options="$options" />
         <input type="hidden" name="authid" id="authid" value="#$authid#" />
         <input type="hidden" name="roleid" id="roleid" value="#$roleid#" />
         <input type="submit" value="#xarML('Add Privilege')#" />

@@ -12,7 +12,7 @@
 /**
  * xarDataDict: class for the data dictionary
  *
- * Represents the repository for the Xaraya data dictionary 
+ * Represents the repository for the Xaraya data dictionary
  * For more information:
  *   http://phplens.com/lens/adodb/docs-datadict.htm
  *
@@ -26,14 +26,14 @@ class xarDataDict extends Object
     /**
      * xarDataDict: constructor for the class
      *
-     * Initializes variables for xarDataDict class 
+     * Initializes variables for xarDataDict class
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
      * @param   object $dbconn Database connection
      * @return  none
     */
-    function xarDataDict(&$dbconn) 
+    function xarDataDict(&$dbconn)
     {
         // Check if we passed in a database connection.
         if (empty($dbconn)) {
@@ -128,9 +128,9 @@ class xarDataDict extends Object
      *
      * Calls ADODB changeTable()
      * Alters a table with appropriate ALTER TABLE MODIFY COLUMN or
-     * ALTER TABLE ADD $column if the column does not exist 
+     * ALTER TABLE ADD $column if the column does not exist
      *
-     * $fields = "xar_name C(100) NOTNULL";
+     * $fields = "name C(100) NOTNULL";
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
@@ -160,7 +160,7 @@ class xarDataDict extends Object
     /**
      * createDatabase
      *
-     * Create a database 
+     * Create a database
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
@@ -254,11 +254,11 @@ class xarDataDict extends Object
     /**
      * createTable
      *
-     * Create a table 
+     * Create a table
      * ADOdb uses a portable declarative data dictionary format similar to SQL.
      * Field types use 1 character codes, and fields are separated by commas.
      * The following example creates three fields: "col1", "col2" and "col3":
-     * $flds = " 
+     * $flds = "
      *     col1 C(32) NOTNULL DEFAULT 'abc',
      *     col2 I  DEFAULT 0,
      *     col3 N(12.2)
@@ -321,7 +321,7 @@ class xarDataDict extends Object
     /**
      * dropTable
      *
-     * Drop a table 
+     * Drop a table
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
@@ -348,11 +348,11 @@ class xarDataDict extends Object
     /**
      * executeSQLArray
      *
-     * Execute an array of SQL strings 
+     * Execute an array of SQL strings
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
-     * @param   array $sql an array of SQL strings 
+     * @param   array $sql an array of SQL strings
      * @param   bool  $contOnError continue on error, default is true
      * @return  integer 0 if failed, 1 if executed with errors, 2 if successful
     */
@@ -442,7 +442,7 @@ class xarDataDict extends Object
             if (!$tables) {
                 return false;
             }
-        } else { 
+        } else {
             $tables = $this->dict->MetaTables();
 
             if (!isset($tables)) {
@@ -517,10 +517,10 @@ class xarDataDict extends Object
         // retrieving with MetaTables, parse out the tables
         // based on the system table prefix
         $tables = array();
-    
+
         // Currently, xarDBGetSiteTablePrefix() returns the same prefix
         // as xarDBGetSystemTablePrefix()
-        $systemPrefix = xarDBGetSiteTablePrefix(); 
+        $systemPrefix = xarDBGetSiteTablePrefix();
         $prefixLength = strlen($systemPrefix);
 
         if ($prefixLength > 0) {
@@ -555,8 +555,8 @@ class xarDataDict extends Object
             if (!$tables) {
                 return false;
             }
-        } else { 
-            // Get all the tables 
+        } else {
+            // Get all the tables
             $tables = $this->getTables();
             if (!$tables) {
                 return false;
@@ -630,7 +630,7 @@ class xarDataDict extends Object
 /**
  * xarMetaData: class for the database metadata
  *
- * Represents the repository containing metadata 
+ * Represents the repository containing metadata
  *
  * @author Richard Cave <rcave@xaraya.com>
  * @access public
@@ -642,14 +642,14 @@ class xarMetaData extends Object
     /**
      * xarMetaData: constructor for the class
      *
-     * Initializes variables for xarMetaData class 
+     * Initializes variables for xarMetaData class
      *
      * @author  Richard Cave <rcave@xaraya.com>
      * @access  public
      * @param   object $dbconn database connection (optional)
      * @return  none
     */
-    function xarMetaData($dbconn = false) 
+    function xarMetaData($dbconn = false)
     {
         // Check if we passed in a database connection.
         // TODO: check heritage of the object to be sure it is a DB connection.
@@ -660,8 +660,8 @@ class xarMetaData extends Object
 
         $this->dbconn =& $dbconn;
     }
-   
-    
+
+
     /**
      * getDatabases
      *

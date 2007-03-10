@@ -55,7 +55,7 @@ function blocks_adminapi_create_type($args)
     try {
         $dbconn->begin();
         $query = "INSERT INTO $block_types_table
-                  (xar_modid, xar_type, xar_info) VALUES (?, ?, ?)";
+                  (modid, type, info) VALUES (?, ?, ?)";
         $bindvars = array($modId, $type, $info);
         $dbconn->Execute($query, $bindvars);
         // We need the id which was generated

@@ -37,7 +37,7 @@ class PrivilegesTreeProperty extends DataProperty
         if (!isset($data['show'])) $data['show'] = 'assigned';
         $trees = array();
         foreach ($this->privs->gettoplevelprivileges($data['show']) as $entry) {
-           $node = new TreeNode($entry['pid']);
+           $node = new TreeNode($entry['id']);
             $tree = new PrivilegesTree($node);
             $trees[] = $node->depthfirstenumeration();
 //            var_dump($tree);echo "<br/><br/>";
@@ -54,10 +54,39 @@ class PrivilegesTree extends Tree
 {
     function createnodes(TreeNode $node)
     {
-        $data = xarPrivileges::getprivileges();
+        //FIXME this is too unwieldy and largely duplicating a similar query inxarPrivileges
+        $dbconn =& xarDBGetConn();
+        $xartable =& xarDBGetTables();
+        $query = "SELECT p.id, p.name, r.name,
+                         m.name, p.component, p.instance,
+                         p.level,  p.description, pm.parentid
+                  FROM " . $xartable['privileges'] . " p LEFT JOIN ". $xartable['realms'] . " r ON p.realmid = r.id
+                  LEFT JOIN ". $xartable['modules'] . " m ON p.module_id = m.id
+                  LEFT JOIN ". $xartable['privmembers'] . " pm ON p.id = pm.id
+                  WHERE type = " . xarPrivileges::PRIVILEGES_PRIVILEGETYPE .
+                  " ORDER BY p.name";
+        $stmt = $dbconn->prepareStatement($query);
+        // The fetchmode *needed* to be here, dunno why. Exception otherwise
+        $result = $stmt->executeQuery($query,ResultSet::FETCHMODE_NUM);
+        while($result->next()) {
+            list($id, $name, $realm, $module, $component, $instance, $level,
+                    $description, $parentid) = $result->fields;
+            $nodedata = array('id' => $id,
+                               'name' => $name,
+                               'realm' => is_null($realm) ? 'All' : $realm,
+                               'module' => $module,
+                               'component' => $component,
+                               'instance' => $instance,
+                               'level' => $level,
+                               'description' => $description,
+                               'parent' => $parentid,);
+            $this->treedata[] = $nodedata;
+        }
+
+/*        $data = xarPrivileges::getprivileges();
          foreach ($data as $row) {
             $nodedata = array(
-                'id' => $row['pid'],
+                'id' => $row['id'],
                 'parent' => $row['parentid'],
                 'name' => $row['name'],
                 'realm' => $row['realm'],
@@ -68,7 +97,7 @@ class PrivilegesTree extends Tree
                 'description' => $row['description'],
             );
             $this->treedata[] = $nodedata;
-        }
+        }*/
         parent::createnodes($node);
     }
 }

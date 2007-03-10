@@ -426,8 +426,8 @@ function installer_admin_phase5()
     $tables =& xarDBGetTables();
 
     $newModSql   = "INSERT INTO $modulesTable
-                    (xar_name, xar_regid, xar_directory,
-                     xar_version, xar_mode, xar_class, xar_category, xar_admin_capable, xar_user_capable, xar_state)
+                    (name, regid, directory,
+                     version, mode, class, category, admin_capable, user_capable, state)
                     VALUES (?,?,?,?,?,?,?,?,?,?)";
     $newStmt     = $dbconn->prepareStatement($newModSql);
 
@@ -726,9 +726,9 @@ function installer_admin_create_administrator()
 
     $blockGroupsTable = $tables['block_groups'];
 
-    $query = "SELECT    xar_id as id
+    $query = "SELECT    id as id
               FROM      $blockGroupsTable
-              WHERE     xar_name = ?";
+              WHERE     name = ?";
     $result = $dbconn->Execute($query,array('left'));
 
     // Freak if we don't get one and only one result
@@ -1037,9 +1037,9 @@ function installer_admin_confirm_configuration()
 
         $blockGroupsTable = $tables['block_groups'];
 
-        $query = "SELECT    xar_id as id
+        $query = "SELECT    id as id
                   FROM      $blockGroupsTable
-                  WHERE     xar_name = ?";
+                  WHERE     name = ?";
 
         $result =& $dbconn->Execute($query,array('left'));
 
@@ -1105,9 +1105,9 @@ function installer_admin_cleanup()
     $blockGroupsTable = $tables['block_groups'];
 
     // Prepare getting one blockgroup
-    $query = "SELECT    xar_id as id
+    $query = "SELECT    id as id
               FROM      $blockGroupsTable
-              WHERE     xar_name = ?";
+              WHERE     name = ?";
     $stmt = $dbconn->prepareStatement($query);
 
     // Execute for the right blockgroup
@@ -1197,7 +1197,6 @@ function installer_admin_finish()
     $objects = array(
                    'privileges_baseprivileges',
                    'privileges_privileges',
-                   'privileges_masks',
                      );
 
     if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => 'privileges', 'objects' => $objects))) return;
@@ -1553,11 +1552,11 @@ function installer_admin_upgrade2()
     $info = xarMod::getBaseInfo('roles');
     $sysid = $info['systemid'];
        //Get the block type id of the existing block type
-        $query = "SELECT xar_id,
-                         xar_type,
-                         xar_modid
+        $query = "SELECT id,
+                         type,
+                         modid
                          FROM $blocktypeTable
-                 WHERE xar_type=? and xar_modid=?";
+                 WHERE type=? and modid=?";
         $result =& $dbconn->Execute($query,array('login',$sysid));
         list($blockid,$blocktype,$module)= $result->fields;
         $blocktype = array('id' => $blockid,
@@ -1569,8 +1568,8 @@ function installer_admin_upgrade2()
             $blockid=$blocktype['id'];
             //set the module to authsystem and it can be used for the existing block instance
             $query = "UPDATE $blocktypeTable
-                      SET xar_modid = ?
-                      WHERE xar_id=?";
+                      SET modid = ?
+                      WHERE id=?";
             $bindvars=array('authsystem',$blockid);
             $result =& $dbconn->Execute($query,$bindvars);
 
@@ -1654,11 +1653,11 @@ function installer_admin_upgrade2()
         $info = xarMod::getBaseInfo('adminpanels');
         $sysid = $info['systemid'];
         //Get the ID of the old block type
-        $query = "SELECT xar_id,
-                         xar_type,
-                         xar_module
+        $query = "SELECT id,
+                         type,
+                         module
                          FROM $blocktypeTable
-                 WHERE xar_type=? and xar_modid=?";
+                 WHERE type=? and modid=?";
         $result =& $dbconn->Execute($query,array($newblock,$sysid));
 
         if ($result) {
@@ -1672,8 +1671,8 @@ function installer_admin_upgrade2()
                $blockid=$blocktype['id'];
                //set the module to base
                $query = "UPDATE $blocktypeTable
-                         SET xar_modid = ?
-                         WHERE xar_id=?";
+                         SET modid = ?
+                         WHERE id=?";
                $bindvars=array('base',$blockid);
                $result =& $dbconn->Execute($query,$bindvars);
 
@@ -1682,8 +1681,8 @@ function installer_admin_upgrade2()
                    //We need to disable existing hooks and enable new ones - but which :)
                    $hookTable = $systemPrefix .'_hooks';
                    $query = "UPDATE $hookTable
-                             SET xar_smodule = 'base'
-                             WHERE xar_action=? AND xar_smodule=?";
+                             SET smodule = 'base'
+                             WHERE action=? AND smodule=?";
                     $bindvars = array('base','waitingcontent','adminpanels');
                     //? no execute here?
                }
@@ -1735,18 +1734,18 @@ function installer_admin_upgrade2()
     $moduleTable = $systemPrefix .'_modules';
     $moduleStatesTable=$systemPrefix .'_module_states';
     $adminpanels='adminpanels';
-    $query = "SELECT xar_name,
-                     xar_regid
+    $query = "SELECT name,
+                     regid
               FROM $moduleTable
-              WHERE xar_name = ?";
+              WHERE name = ?";
     $result = &$dbconn->Execute($query,array($adminpanels));
     list($name, $adminregid) = $result->fields;
     if (!$result) $aperror=1;
     if (isset($adminregid) and $aperror<=0) {
-        $query = "DELETE FROM $moduleTable WHERE xar_regid = ?";
+        $query = "DELETE FROM $moduleTable WHERE regid = ?";
         $result = &$dbconn->Execute($query,array($adminregid));
         if (!$result) $aperror=1;
-        $query = "DELETE FROM $moduleStatesTable WHERE xar_regid = ?";
+        $query = "DELETE FROM $moduleStatesTable WHERE regid = ?";
         $result = &$dbconn->Execute($query,array($adminregid));
         if (!$result) $aperror=1;
     }

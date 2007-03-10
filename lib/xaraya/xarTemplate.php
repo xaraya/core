@@ -381,7 +381,7 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
  *
  * @access public
  * @param  string $modName   the module name
- * @param  string $blockType the block type (xar_block_types.xar_type)
+ * @param  string $blockType the block type (xar_block_types.type)
  * @param  array  $tplData   arguments for the template
  * @param  string $tplName   the specific template to call
  * @param  string $tplBase   the base name of the template (defaults to $blockType)

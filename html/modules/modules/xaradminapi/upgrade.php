@@ -56,7 +56,7 @@ function modules_adminapi_upgrade($args)
     // Bug 1671 - Invalid SQL
     // If the module fields returned from xarMod_getFileInfo()
     // are set to false, then they must be set to a some valid value
-    // or a SQL error will occur due to null and zero length fields. 
+    // or a SQL error will occur due to null and zero length fields.
     if (!$modFileInfo['admin_capable'])
         $modFileInfo['admin_capable'] = 0;
     if (!$modFileInfo['user_capable'])
@@ -71,9 +71,9 @@ function modules_adminapi_upgrade($args)
     $xartable =& xarDBGetTables();
 
     $sql = "UPDATE $xartable[modules]
-            SET xar_version = ?, xar_admin_capable = ?, xar_user_capable = ?,
-                xar_class = ?, xar_category = ?
-            WHERE xar_regid = ?";
+            SET version = ?, admin_capable = ?, user_capable = ?,
+                class = ?, category = ?
+            WHERE regid = ?";
     $bindvars = array($modFileInfo['version'], $modFileInfo['admin_capable'],
                       $modFileInfo['user_capable'],$modFileInfo['class'],
                       $modFileInfo['category'], $regid);

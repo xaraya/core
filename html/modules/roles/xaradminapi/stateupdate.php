@@ -43,13 +43,13 @@ function roles_adminapi_stateupdate($args)
 
     $rolesTable = $xartable['roles'];
 
-    $query = "UPDATE $rolesTable SET xar_state = ?" ;
+    $query = "UPDATE $rolesTable SET state = ?" ;
     $bindvars = array($state);
     if (isset($valcode)) {
-        $query .= ", xar_valcode = ?";
+        $query .= ", valcode = ?";
         $bindvars[] = $valcode;
     }
-    $query .= " WHERE xar_uid = ?";
+    $query .= " WHERE id = ?";
     $bindvars[] = $uid;
 
     $dbconn->Execute($query,$bindvars);

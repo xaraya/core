@@ -39,7 +39,7 @@ function blocks_adminapi_load($args)
     // Legacy - some modules still passing in a 'blockName'.
     if (!empty($blockName)) {$type = $blockName;}
 
-    // These really are block types, as defined in the block_types.xar_type column.
+    // These really are block types, as defined in the block_types.type column.
     if (empty($type)) throw new EmptyParameterException('type');
 
     if (

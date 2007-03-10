@@ -54,9 +54,10 @@ function privileges_admin_addprivilege()
     else {
 
 // this is privilege has its own rights assigned
+        $info = xarMod_GetBaseInfo(xarMod::getName($pmodule));
         $pargs = array('name' => $pname,
                     'realm' => $prealm, // now has realm id in it!!!
-                    'module' => $pmodule,
+                    'module' => $info['systemid'],
                     'component' => $pcomponent,
                     'instance' => $instance,
                     'level' => $plevel,

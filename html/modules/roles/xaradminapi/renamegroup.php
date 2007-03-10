@@ -14,7 +14,7 @@
  * renamegroup - rename a group
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['pid'] group id
+ * @param $args['id'] group id
  * @param $args['gname'] group name
  * @return true on success, false on failure.
  */
@@ -22,7 +22,7 @@ function roles_adminapi_renamegroup($args)
 {
     extract($args);
 
-    if (!isset($pid))  throw new EmptyParameterException('pid');
+    if (!isset($id))  throw new EmptyParameterException('id');
     if (!isset($gname)) throw new EmptyParameterException('gname');
 
 

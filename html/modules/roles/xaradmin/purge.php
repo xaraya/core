@@ -64,21 +64,21 @@ function roles_admin_purge($args)
         //Create the selection
         sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery('SELECT',$rolestable);
-        $q->addfields(array('xar_uid AS uid',
-                    'xar_uname AS uname',
-                    'xar_name AS name',
-                    'xar_email AS email',
-                    'xar_type AS type',
-                    'xar_date_reg AS date_reg'));
-        $q->setorder('xar_name');
+        $q->addfields(array('id',
+                    'uname',
+                    'name',
+                    'email',
+                    'type',
+                    'date_reg'));
+        $q->setorder('name');
         if (!empty($data['recallsearch'])) {
-            $c[1] = $q->like('xar_name','%' . $data['recallsearch'] . '%');
-            $c[2] = $q->like('xar_uname','%' . $data['recallsearch'] . '%');
-            $c[3] = $q->like('xar_email','%' . $data['recallsearch'] . '%');
+            $c[1] = $q->like('name','%' . $data['recallsearch'] . '%');
+            $c[2] = $q->like('uname','%' . $data['recallsearch'] . '%');
+            $c[3] = $q->like('email','%' . $data['recallsearch'] . '%');
             $q->qor($c);
         }
-        $q->eq('xar_state',ROLES_STATE_DELETED);
-        $q->ne('xar_date_reg','');
+        $q->eq('state',ROLES_STATE_DELETED);
+        $q->ne('date_reg','');
         $q->setrowstodo($numitems);
         $q->setstartat($recallstartnum);
 //        $q->qecho();
@@ -178,13 +178,13 @@ function roles_admin_purge($args)
                 $email = '';
                 $date_reg = '';
                 $q = new xarQuery('UPDATE',$rolestable);
-                $q->addfield('xar_name',$name);
-                $q->addfield('xar_uname',$uname);
-                $q->addfield('xar_pass',$pass);
-                $q->addfield('xar_email',$email);
-                $q->addfield('xar_date_reg',$date_reg);
-                $q->addfield('xar_state',$state);
-                $q->eq('xar_uid',$uid);
+                $q->addfield('name',$name);
+                $q->addfield('uname',$uname);
+                $q->addfield('pass',$pass);
+                $q->addfield('email',$email);
+                $q->addfield('date_reg',$date_reg);
+                $q->addfield('state',$state);
+                $q->eq('id',$uid);
                 $q->run();
 // --- Let any hooks know that we have purged this user.
                 $item['module'] = 'roles';
@@ -196,11 +196,11 @@ function roles_admin_purge($args)
 
 // --- display users that can be purged
         $bindvars = array();
-        $selection = " WHERE xar_email != ?";
+        $selection = " WHERE email != ?";
         $bindvars[] = '';
         //Create the selection
         if ($data['purgestate'] != -1) {
-            $selection .= " AND xar_state = ? ";
+            $selection .= " AND state = ? ";
             $bindvars[] = $data['purgestate'];
             switch ($data['purgestate']):
                 case ROLES_STATE_DELETED :
@@ -225,9 +225,9 @@ function roles_admin_purge($args)
         }
         if (!empty($data['purgesearch'])) {
             $selection .= " AND (
-                                  (xar_name LIKE ?) OR
-                                  (xar_uname LIKE ?) OR
-                                  (xar_email LIKE ?)
+                                  (name LIKE ?) OR
+                                  (uname LIKE ?) OR
+                                  (email LIKE ?)
                                 )";
             $bv = '%'.$data['purgesearch'].'%';
             $bindvars[] = $bv;
@@ -236,15 +236,15 @@ function roles_admin_purge($args)
         }
         // Select-clause.
         $query = '
-            SELECT DISTINCT xar_uid,
-                    xar_uname,
-                    xar_name,
-                    xar_email,
-                    xar_state,
-                    xar_date_reg
+            SELECT DISTINCT id,
+                    uname,
+                    name,
+                    email,
+                    state,
+                    date_reg
                     FROM ' . $rolestable .
                     $selection .
-                    ' ORDER BY xar_name';
+                    ' ORDER BY name';
 
         $stmt = $dbconn->prepareStatement($query);
 

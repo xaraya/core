@@ -26,11 +26,11 @@ function roles_adminapi_clearsessions($spared)
     $xartable =& xarDBGetTables();
     $sessionstable = $xartable['session_info'];
 
-    $query = "SELECT xar_sessid, xar_uid FROM $sessionstable";
+    $query = "SELECT sessid, role_id FROM $sessionstable";
     $result = $dbconn->executeQuery($query);
 
     // Prepare query outside the loop
-    $sql = "DELETE FROM $sessionstable WHERE xar_sessid = ?";
+    $sql = "DELETE FROM $sessionstable WHERE sessid = ?";
     $stmt = $dbconn->prepareStatement($sql);
     try {
         $dbconn->begin();

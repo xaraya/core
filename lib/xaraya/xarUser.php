@@ -12,8 +12,8 @@
  * @author Marco Canini <marco@xaraya.com>
  * @todo <marco> user status field
  */
- 
-// IS THIS STILL USED? 
+
+// IS THIS STILL USED?
 global $installing;
 
 /**
@@ -101,19 +101,19 @@ function xarUserLogIn($userName, $password, $rememberMe = 0)
     $userId = XARUSER_AUTH_FAILED;
     $args = array('uname' => $userName, 'pass' => $password);
 
-    foreach($GLOBALS['xarUser_authenticationModules'] as $authModName) 
+    foreach($GLOBALS['xarUser_authenticationModules'] as $authModName)
     {
         // Bug #918 - If the module has been deactivated, then continue
         // checking with the next available authentication module
-        if (!xarMod::isAvailable($authModName)) 
+        if (!xarMod::isAvailable($authModName))
             continue;
-            
+
         // Every authentication module must at least implement the
         // authentication interface so there's at least the authenticate_user
         // user api function
-        if (!xarMod::apiLoad($authModName, 'user')) 
+        if (!xarMod::apiLoad($authModName, 'user'))
             continue;
-            
+
         $modInfo = xarMod::getBaseInfo($authModName);
         $modId = $modInfo['systemid'];
 
@@ -127,12 +127,12 @@ function xarUserLogIn($userName, $password, $rememberMe = 0)
             break;
         }
     }
-    if ($userId == XARUSER_AUTH_FAILED || $userId == XARUSER_AUTH_DENIED) 
+    if ($userId == XARUSER_AUTH_FAILED || $userId == XARUSER_AUTH_DENIED)
     {
-        if (xarModVars::get('privileges','lastresort')) 
+        if (xarModVars::get('privileges','lastresort'))
         {
             $secret = unserialize(xarModVars::get('privileges','lastresort'));
-            if ($secret['name'] == md5($userName) && $secret['password'] == md5($password)) 
+            if ($secret['name'] == md5($userName) && $secret['password'] == md5($password))
             {
                 $userId = XARUSER_LAST_RESORT;
                 $rememberMe = 0;
@@ -144,14 +144,14 @@ function xarUserLogIn($userName, $password, $rememberMe = 0)
     }
 
     // Catch common variations (0, false, '', ...)
-    if (empty($rememberMe)) 
+    if (empty($rememberMe))
         $rememberMe = 0;
-    else 
+    else
         $rememberMe = 1;
 
     // Set user session information
     // TODO: make this a class static in xarSession.php
-    if (!xarSession_setUserInfo($userId, $rememberMe)) 
+    if (!xarSession_setUserInfo($userId, $rememberMe))
         return; // throw back
 
     // Set user auth module information
@@ -163,7 +163,7 @@ function xarUserLogIn($userName, $password, $rememberMe = 0)
     // TODO: this should be inside roles module
     try {
         $dbconn->begin();
-        $query = "UPDATE $rolestable SET xar_auth_modid = ? WHERE xar_uid = ?";
+        $query = "UPDATE $rolestable SET auth_modid = ? WHERE id = ?";
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate(array($modId,$userId));
         $dbconn->commit();
@@ -269,7 +269,7 @@ function xarUserSetNavigationThemeName($themeName)
  */
 function xarUserGetNavigationLocale()
 {
-    if (xarUserIsLoggedIn()) 
+    if (xarUserIsLoggedIn())
     {
         $uid = xarUserGetVar('uid');
           //last resort user is falling over on this uservar by setting multiple times
@@ -362,7 +362,7 @@ $GLOBALS['xarUser_objectRef'] = null;
  * @todo <marco FIXME: ignoring unknown user variables for now...
  * @todo redesign the delegation to auth* modules for handling user variables
  * @todo add some security for getting to user variables (at least from another uid)
- * @todo define clearly what the difference or similarity is with dd here 
+ * @todo define clearly what the difference or similarity is with dd here
  */
 function xarUserGetVar($name, $userId = NULL)
 {
@@ -406,7 +406,7 @@ function xarUserGetVar($name, $userId = NULL)
             xarCore::setCached('User.Variables.'.$userId, 'email', $userRole['email']);
 
         } elseif (!xarUser__isVarDefined($name)) {
-            if (xarModVars::get('roles',$name) || xarModVars::get('roles','set'.$name)) { //acount for optionals that need to be activated) 
+            if (xarModVars::get('roles',$name) || xarModVars::get('roles','set'.$name)) { //acount for optionals that need to be activated)
                 $value = xarModUserVars::get('roles',$name,$userId);
                 if ($value == null) {
                     xarCore::setCached('User.Variables.'.$userId, $name, false);
@@ -576,10 +576,10 @@ function xarUser__getAuthModule($userId)
     $rolestable = $xartable['roles'];
     $modstable = $xartable['modules'];
 
-    $query = "SELECT mods.xar_name
+    $query = "SELECT mods.name
               FROM $modstable mods, $rolestable roles
-              WHERE mods.xar_id = roles.xar_auth_modid AND
-                    roles.xar_uid = ?";
+              WHERE mods.id = roles.auth_modid AND
+                    roles.id = ?";
     $stmt =& $dbconn->prepareStatement($query);
     $result =& $stmt->executeQuery(array($userId),ResultSet::FETCHMODE_NUM);
 
@@ -604,7 +604,7 @@ function xarUser__getAuthModule($userId)
 
 /**
  * See if a Variable has been defined
- * 
+ *
  * @access private
  * @param  string $name name of the variable to check
  * @return bool true if the variable is defined
@@ -649,7 +649,7 @@ function xarUser__setUsersTableUserVar($name, $value, $userId)
     // from the users table.
     try {
         $dbconn->begin();
-        $query = "UPDATE $rolestable SET $usercolumns[$name] = ? WHERE xar_uid = ?";
+        $query = "UPDATE $rolestable SET $usercolumns[$name] = ? WHERE id = ?";
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate(array($value,$userId));
     } catch (SQLException $e) {

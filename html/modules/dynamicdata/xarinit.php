@@ -43,7 +43,7 @@ function dynamicdata_init()
          * DataObjects table
          */
         $objectfields = array(
-            'xar_object_id' => array(
+            'object_id' => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0',
@@ -51,56 +51,56 @@ function dynamicdata_init()
                 'primary_key' => true
             ),
             /* the name used to reference an object */
-            'xar_object_name'     => array(
+            'object_name'     => array(
                 'type'        => 'varchar',
                 'size'        => 30,
                 'null'        => false,
                 'default'     => ''
             ),
             /* the label used for display */
-            'xar_object_label'    => array(
+            'object_label'    => array(
                 'type'        => 'varchar',
                 'size'        => 254,
                 'null'        => false,
                 'default'     => ''
             ),
             /* the module this object relates to */
-            'xar_object_moduleid' => array(
+            'object_moduleid' => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
             ),
             /* the optional item type within this module */
-            'xar_object_itemtype' => array(
+            'object_itemtype' => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
             ),
             /* the item type of the parent of this object */
-            'xar_object_parent' => array(
+            'object_parent' => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
             ),
             /* the URL parameter used to pass on the item id to the original module */
-            'xar_object_urlparam' => array(
+            'object_urlparam' => array(
                 'type'        => 'varchar',
                 'size'        => 30,
                 'null'        => false,
                 'default'     => 'itemid'
             ),
             /* the highest item id for this object (used if the object has a dynamic item id field) */
-            'xar_object_maxid'    => array(
+            'object_maxid'    => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
             ),
             /* any configuration settings for this object (future) */
-            'xar_object_config'   => array(
+            'object_config'   => array(
                 'type'=>'text'
             ),
             /* use the name of this object as alias for short URLs */
-            'xar_object_isalias'  => array(
+            'object_isalias'  => array(
                 'type'        => 'integer',
                 'size'        => 'tiny',
                 'null'        => false,
@@ -117,7 +117,7 @@ function dynamicdata_init()
             $dynamic_objects,
             array(
                 'name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dynobjects_combo',
-                'fields' => array('xar_object_moduleid','xar_object_itemtype'),
+                'fields' => array('object_moduleid','object_itemtype'),
                 'unique' => 'true'
             )
         );
@@ -128,7 +128,7 @@ function dynamicdata_init()
             $dynamic_objects,
             array(
                 'name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dynobjects_name',
-                'fields' => array('xar_object_name'),
+                'fields' => array('object_name'),
                 'unique' => 'true'
             )
         );
@@ -143,9 +143,9 @@ function dynamicdata_init()
 
         // create default objects for dynamic data
         $sql = "INSERT INTO $dynamic_objects (
-                xar_object_name, xar_object_label,
-                xar_object_moduleid, xar_object_itemtype, xar_object_urlparam,
-                xar_object_maxid, xar_object_config, xar_object_isalias)
+                object_name, object_label,
+                object_moduleid, object_itemtype, object_urlparam,
+                object_maxid, object_config, object_isalias)
                 VALUES (?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
@@ -168,7 +168,7 @@ function dynamicdata_init()
          * Dynamic Properties table
          */
         $propfields = array(
-            'xar_prop_id'     => array(
+            'prop_id'     => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0',
@@ -176,59 +176,59 @@ function dynamicdata_init()
                 'primary_key' => true
             ),
             /* the name used to reference a particular property, e.g. in function calls and templates */
-            'xar_prop_name'       => array(
+            'prop_name'       => array(
                 'type'        => 'varchar',
                 'size'        => 30,
                 'null'        => false,
                 'default'     => ''
             ),
             /* the label used for display */
-            'xar_prop_label'      => array(
+            'prop_label'      => array(
                 'type'        => 'varchar',
                 'size'        => 254,
                 'null'        => false,
                 'default'     => ''
             ),
             /* the object this property belong to */
-            'xar_prop_objectid'   => array(
+            'prop_objectid'   => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
             ),
             /* the property type of this property */
-            'xar_prop_type'       => array(
+            'prop_type'       => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => null
             ),
             /* the default value for this property */
-            'xar_prop_default'    => array(
+            'prop_default'    => array(
                 'type'        => 'varchar',
                 'size'        => 254,
                 'default'     => null
             ),
             /* the data source for this property (dynamic data, static table, hook, user function, LDAP (?), file, ... */
-            'xar_prop_source'     => array(
+            'prop_source'     => array(
                 'type'        => 'varchar',
                 'size'        => 254,
                 'null'        => false,
                 'default'     => 'dynamic_data'
             ),
             /* is this property active ? (unused at the moment) */
-            'xar_prop_status'     => array(
+            'prop_status'     => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '33'
             ),
             /* the order of this property */
-            'xar_prop_order'      => array(
+            'prop_order'      => array(
                 'type'        => 'integer',
                 'size'        => 'tiny',
                 'null'        => false,
                 'default'     => '0'
             ),
             /* specific validation rules for this property (e.g. basedir, size, ...) */
-            'xar_prop_validation' => array(
+            'prop_validation' => array(
                 'type'        => 'text'
             )
         );
@@ -240,7 +240,7 @@ function dynamicdata_init()
             $dynamic_properties,
             array(
                 'name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dynprops_combo',
-                'fields' => array('xar_prop_objectid', 'xar_prop_name'),
+                'fields' => array('prop_objectid', 'prop_name'),
                 'unique' => 'true'
             )
         );
@@ -253,9 +253,9 @@ function dynamicdata_init()
 
         // create default properties for dynamic data objects
         $sql = "INSERT INTO $dynamic_properties (
-                xar_prop_name, xar_prop_label, xar_prop_objectid,
-                xar_prop_type, xar_prop_default, xar_prop_source,
-                xar_prop_status, xar_prop_order, xar_prop_validation)
+                prop_name, prop_label, prop_objectid,
+                prop_type, prop_default, prop_source,
+                prop_status, prop_order, prop_validation)
             VALUES (?,?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
@@ -263,28 +263,28 @@ function dynamicdata_init()
         sys::import('modules.dynamicdata.class.properties');
         $properties = array(
             // Properties for the Objects DD object
-            array('objectid'  ,'Id'                 ,$objectid[1],21,''            ,$dynamic_objects.'.xar_object_id'         ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_NOINPUT,1 ,'DataPropertyMaster::integer'),
-            array('name'      ,'Name'               ,$objectid[1],2 ,''            ,$dynamic_objects.'.xar_object_name'       ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,'varchar (30)'),
-            array('label'     ,'Label'              ,$objectid[1],2 ,''            ,$dynamic_objects.'.xar_object_label'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,'varchar (254)'),
-            array('parent'    ,'Parent',             $objectid[1],600,'0'          ,$dynamic_objects.'.xar_object_parent'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,'integer'),
-            array('moduleid'  ,'Module'             ,$objectid[1],19,'182'         ,$dynamic_objects.'.xar_object_moduleid'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,5 ,'integer'),
-            array('itemtype'  ,'Item Type'          ,$objectid[1],20,'0'           ,$dynamic_objects.'.xar_object_itemtype'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,6 ,'integer'),
-            array('urlparam'  ,'URL Param'          ,$objectid[1],2 ,'itemid'      ,$dynamic_objects.'.xar_object_urlparam'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,'varchar (30)'),
-            array('maxid'     ,'Max Id'             ,$objectid[1],15,'0'           ,$dynamic_objects.'.xar_object_maxid'      ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8 ,'integer'),
-            array('config'    ,'Config'             ,$objectid[1],4 ,''            ,$dynamic_objects.'.xar_object_config'     ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,9 ,'text'),
-            array('isalias'   ,'Alias in short URLs',$objectid[1],14,'1'           ,$dynamic_objects.'.xar_object_isalias'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,10 ,'integer (tiny)'),
+            array('objectid'  ,'Id'                 ,$objectid[1],21,''            ,$dynamic_objects.'.object_id'         ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_NOINPUT,1 ,'DataPropertyMaster::integer'),
+            array('name'      ,'Name'               ,$objectid[1],2 ,''            ,$dynamic_objects.'.object_name'       ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,'varchar (30)'),
+            array('label'     ,'Label'              ,$objectid[1],2 ,''            ,$dynamic_objects.'.object_label'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,'varchar (254)'),
+            array('parent'    ,'Parent',             $objectid[1],600,'0'          ,$dynamic_objects.'.object_parent'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,'integer'),
+            array('moduleid'  ,'Module'             ,$objectid[1],19,'182'         ,$dynamic_objects.'.object_moduleid'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,5 ,'integer'),
+            array('itemtype'  ,'Item Type'          ,$objectid[1],20,'0'           ,$dynamic_objects.'.object_itemtype'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,6 ,'integer'),
+            array('urlparam'  ,'URL Param'          ,$objectid[1],2 ,'itemid'      ,$dynamic_objects.'.object_urlparam'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,'varchar (30)'),
+            array('maxid'     ,'Max Id'             ,$objectid[1],15,'0'           ,$dynamic_objects.'.object_maxid'      ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8 ,'integer'),
+            array('config'    ,'Config'             ,$objectid[1],4 ,''            ,$dynamic_objects.'.object_config'     ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,9 ,'text'),
+            array('isalias'   ,'Alias in short URLs',$objectid[1],14,'1'           ,$dynamic_objects.'.object_isalias'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,10 ,'integer (tiny)'),
 
             // Properties for the Properties DD object
-            array('id'        ,'Id'                 ,$objectid[2],21,''            ,$dynamic_properties.'.xar_prop_id'        ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,1 ,'integer'),
-            array('name'      ,'Name'               ,$objectid[2],2 ,''            ,$dynamic_properties.'.xar_prop_name'      ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,'varchar (30)'),
-            array('label'     ,'Label'              ,$objectid[2],2 ,''            ,$dynamic_properties.'.xar_prop_label'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,'varchar (254)'),
-            array('objectid'  ,'Object'             ,$objectid[2],24,''            ,$dynamic_properties.'.xar_prop_objectid'  ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,'integer'),
-            array('type'      ,'Property Type'      ,$objectid[2],22,''            ,$dynamic_properties.'.xar_prop_type'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,'integer'),
-            array('default'   ,'Default'            ,$objectid[2],3 ,''            ,$dynamic_properties.'.xar_prop_default'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8 ,'varchar (254)'),
-            array('source'    ,'Source'             ,$objectid[2],23,'dynamic_data',$dynamic_properties.'.xar_prop_source'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,9 ,'varchar (254)'),
-            array('status'    ,'Status'             ,$objectid[2],25,'1'           ,$dynamic_properties.'.xar_prop_status'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,10,'integer (tiny)'),
-            array('order'     ,'Order'              ,$objectid[2],15,'0'           ,$dynamic_properties.'.xar_prop_order'     ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,11,'integer (tiny)'),
-            array('validation','Validation'         ,$objectid[2],2 ,''            ,$dynamic_properties.'.xar_prop_validation',DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,12,'varchar (254)'),
+            array('id'        ,'Id'                 ,$objectid[2],21,''            ,$dynamic_properties.'.prop_id'        ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,1 ,'integer'),
+            array('name'      ,'Name'               ,$objectid[2],2 ,''            ,$dynamic_properties.'.prop_name'      ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,'varchar (30)'),
+            array('label'     ,'Label'              ,$objectid[2],2 ,''            ,$dynamic_properties.'.prop_label'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,'varchar (254)'),
+            array('objectid'  ,'Object'             ,$objectid[2],24,''            ,$dynamic_properties.'.prop_objectid'  ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,'integer'),
+            array('type'      ,'Property Type'      ,$objectid[2],22,''            ,$dynamic_properties.'.prop_type'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,'integer'),
+            array('default'   ,'Default'            ,$objectid[2],3 ,''            ,$dynamic_properties.'.prop_default'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8 ,'varchar (254)'),
+            array('source'    ,'Source'             ,$objectid[2],23,'dynamic_data',$dynamic_properties.'.prop_source'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,9 ,'varchar (254)'),
+            array('status'    ,'Status'             ,$objectid[2],25,'1'           ,$dynamic_properties.'.prop_status'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,10,'integer (tiny)'),
+            array('order'     ,'Order'              ,$objectid[2],15,'0'           ,$dynamic_properties.'.prop_order'     ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,11,'integer (tiny)'),
+            array('validation','Validation'         ,$objectid[2],2 ,''            ,$dynamic_properties.'.prop_validation',DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,12,'varchar (254)'),
 
             // Properties for the Sample DD object
             // @todo import this
@@ -307,7 +307,7 @@ function dynamicdata_init()
          * Dynamic Data table (= one of the possible data sources for properties)
          */
         $datafields = array(
-            'xar_dd_id'   => array(
+            'dd_id'   => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0',
@@ -315,19 +315,19 @@ function dynamicdata_init()
                 'primary_key' => true
             ),
             /* the property this dynamic data belongs to */
-            'xar_dd_propid'   => array(
+            'dd_propid'   => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
             ),
             /* the item id this dynamic data belongs to */
-            'xar_dd_itemid'   => array(
+            'dd_itemid'   => array(
                 'type'        => 'integer',
                 'null'        => false,
                 'default'     => '0'
             ),
             /* the value of this dynamic data */
-            'xar_dd_value'    => array(
+            'dd_value'    => array(
                 'type'        => 'text', // or blob when storing binary data (but not for PostgreSQL - see bug 1324)
                 'size'        => 'medium',
                 'null'        => 'false'
@@ -343,7 +343,7 @@ function dynamicdata_init()
             $dynamic_data,
             array(
                 'name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dyndata_propid',
-                'fields' => array('xar_dd_propid')
+                'fields' => array('dd_propid')
             )
         );
         $dbconn->Execute($query);
@@ -352,7 +352,7 @@ function dynamicdata_init()
             $dynamic_data,
             array(
                 'name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dyndata_itemid',
-                'fields' => array('xar_dd_itemid')
+                'fields' => array('dd_itemid')
             )
         );
         $dbconn->Execute($query);
@@ -365,7 +365,7 @@ function dynamicdata_init()
         // we don't really need to create an object and properties for the dynamic data table
 
         // create some sample data for the sample object
-        $sql = "INSERT INTO $dynamic_data (xar_dd_propid, xar_dd_itemid, xar_dd_value)
+        $sql = "INSERT INTO $dynamic_data (dd_propid, dd_itemid, dd_value)
             VALUES (?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
@@ -556,7 +556,7 @@ function dynamicdata_upgrade($oldVersion)
                           array(),
                           'dynamicdata_userapi_handleGetItemsTag');
 
-        // for the switch from blob to text of the xar_dd_value field, no upgrade is necessary for MySQL,
+        // for the switch from blob to text of the dd_value field, no upgrade is necessary for MySQL,
         // and no simple upgrade is possible for PostgreSQL
     case '1.1':
         // Fall through to next upgrade
@@ -760,7 +760,7 @@ function dynamicdata_createPropDefTable()
 
 
     $propdefs = array(
-        'xar_prop_id'     => array(
+        'prop_id'     => array(
             'type'        => 'integer',
             'null'        => false,
             'default'     => '0',
@@ -768,73 +768,73 @@ function dynamicdata_createPropDefTable()
             'primary_key' => true
         ),
         /* the name of this property */
-        'xar_prop_name'   => array(
+        'prop_name'   => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /* the label of this property */
-        'xar_prop_label'  => array(
+        'prop_label'  => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /* this property's parent */
-        'xar_prop_parent' => array(
+        'prop_parent' => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /* path to the file defining this property */
-        'xar_prop_filepath' => array(
+        'prop_filepath' => array(
             'type'          => 'varchar',
             'size'          => 254,
             'default'       => null
         ),
         /* name of the Class to be instantiated for this property */
-        'xar_prop_class'  => array(
+        'prop_class'  => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /* the default validation string for this property - no need to use text here... */
-        'xar_prop_validation'   => array(
+        'prop_validation'   => array(
             'type'              => 'varchar',
             'size'              => 254,
             'default'           => null
         ),
         /* the source of this property */
-        'xar_prop_source'   => array(
+        'prop_source'   => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /* the semi-colon seperated list of file required to be present before this property is active */
-        'xar_prop_reqfiles'   => array(
+        'prop_reqfiles'   => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /* the ID of the module owning this property */
-        'xar_prop_modid'  => array(
+        'prop_modid'  => array(
             'type'        => 'integer',
             'null'        => true,
             'default'     => null
         ),
         /* the default args for this property -- serialized array */
-        'xar_prop_args'    => array(
+        'prop_args'    => array(
             'type'        => 'text',
             'size'        => 'medium',
             'null'        => false
         ),
         /* the aliases for this property -- serialized array */
-        'xar_prop_aliases'   => array(
+        'prop_aliases'   => array(
             'type'        => 'varchar',
             'size'        => 254,
             'default'     => null
         ),
         /*  */
-        'xar_prop_format'   => array(
+        'prop_format'   => array(
             'type'        => 'integer',
             'default'     => '0'
         ),
@@ -847,7 +847,7 @@ function dynamicdata_createPropDefTable()
         $dynamic_properties_def,
         array(
             'name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dynpropdef_modid',
-            'fields' => array('xar_prop_modid')
+            'fields' => array('prop_modid')
         )
     );
     $dbconn->Execute($query);

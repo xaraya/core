@@ -11,7 +11,7 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 
-/** 
+/**
  * Online Block
  * @author Jim McDonald, Greg Allan, John Cox, Michael Makushev
  */
@@ -64,13 +64,13 @@ function roles_onlineblock_display($blockinfo)
     $sessioninfotable = $xartable['session_info'];
     $activetime = time() - (xarConfigGetVar('Site.Session.Duration') * 60);
     if($dbconn->databaseType == 'sqlite') {
-        $sql = "SELECT COUNT(*) 
-                FROM (SELECT DISTINCT xar_uid FROM $sessioninfotable
-                      WHERE xar_lastused > ? AND xar_uid > ?)";
+        $sql = "SELECT COUNT(*)
+                FROM (SELECT DISTINCT toles_id FROM $sessioninfotable
+                      WHERE lastused > ? AND role_id > ?)";
     } else {
-        $sql = "SELECT COUNT(DISTINCT xar_uid)
+        $sql = "SELECT COUNT(DISTINCT role_id)
             FROM $sessioninfotable
-            WHERE xar_lastused > ? AND xar_uid > ?";
+            WHERE lastused > ? AND role_id > ?";
     }
     $result = $dbconn->Execute($sql, array($activetime,2));
     // CHECKME: do we catch the exception here?
@@ -127,13 +127,13 @@ function roles_onlineblock_display($blockinfo)
 
 
     if($dbconn->databaseType == 'sqlite') {
-        $query2 = "SELECT COUNT(*) 
-                   FROM (SELECT DISTINCT xar_ipaddr FROM $sessioninfotable
-                         WHERE xar_lastused > ? AND xar_uid = ?)";
+        $query2 = "SELECT COUNT(*)
+                   FROM (SELECT DISTINCT ipaddr FROM $sessioninfotable
+                         WHERE lastused > ? AND role_id = ?)";
     } else {
-        $query2 = "SELECT COUNT(DISTINCT xar_ipaddr)
+        $query2 = "SELECT COUNT(DISTINCT ipaddr)
                FROM $sessioninfotable
-               WHERE xar_lastused > ? AND xar_uid = ?";
+               WHERE lastused > ? AND role_id = ?";
     }
     $result2 = $dbconn->Execute($query2, array($activetime,2));
     // CHECKME: do we catch the exception here?

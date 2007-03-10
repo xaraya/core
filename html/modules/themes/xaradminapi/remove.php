@@ -37,11 +37,11 @@ function themes_adminapi_remove($args)
         $msg = 'The theme you are trying to remove is the current default theme. Select another default theme first, then try again.';
         throw new ForbiddenOperationException(null, $msg);
     }
-    
+
     // Bail out if we're trying to remove while one of our users
     // has it set to their default theme
     $mvid = xarModGetVarId('themes','default');
-    $sql = "SELECT COUNT(*) FROM $tables[module_itemvars] WHERE xar_mvid=? AND xar_value = ?";
+    $sql = "SELECT COUNT(*) FROM $tables[module_itemvars] WHERE module_var_id =? AND value = ?";
     $result =& $dbconn->Execute($sql, array($mvid,$defaultTheme));
 
     // count should be zero
@@ -49,13 +49,13 @@ function themes_adminapi_remove($args)
     if($count != 0 ) {
         $msg = 'The theme you are trying to remove is used by #(1) users on this site as their default theme. Theme cannot be removed.';
         throw new ForbiddenOperationException($count,$msg);
-    }        
-    
+    }
+
     // Get theme database info
     xarThemeDBInfoLoad($themeInfo['name'], $themeInfo['directory']);
 
     // Delete the theme from the themes table
-    $sql = "DELETE FROM $tables[themes] WHERE xar_regid = ?";
+    $sql = "DELETE FROM $tables[themes] WHERE regid = ?";
     $dbconn->Execute($sql,array($regid));
     return true;
 }

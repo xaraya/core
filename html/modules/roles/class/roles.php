@@ -85,7 +85,7 @@ class xarRoles extends Object
     public static function getgroup($uid)
     {
         $q = self::_getgroupsquery();
-        $q->eq('r.xar_uid',$uid);
+        $q->eq('r.id',$uid);
         if (!$q->run()) return;
         if ($q->row() != array()) return $q->row();
         return false;
@@ -130,7 +130,7 @@ class xarRoles extends Object
         }
         // Need to get it from DB.
         // TODO: move caching to _lookuprole?
-        $r = self::_lookuprole('xar_uid',(int) $uid);
+        $r = self::_lookuprole('id',(int) $uid);
         xarVarSetCached($cacheKey,$uid,$r);
         return $r;
     }
@@ -148,7 +148,7 @@ class xarRoles extends Object
      */
     public static function findRole($name)
     {
-        return self::_lookuprole('xar_name',$name,$state=ROLES_STATE_ACTIVE);
+        return self::_lookuprole('name',$name,$state=ROLES_STATE_ACTIVE);
     }
 
     /**
@@ -160,7 +160,7 @@ class xarRoles extends Object
      */
     public static function ufindRole($uname)
     {
-        return self::_lookuprole('xar_uname',$uname,$state=ROLES_STATE_ACTIVE);
+        return self::_lookuprole('uname',$uname,$state=ROLES_STATE_ACTIVE);
     }
 
     /**
@@ -180,7 +180,7 @@ class xarRoles extends Object
     {
         self::initialize();
         // retrieve the parent's data from the repository
-        $query = "SELECT * FROM " . self::$rolestable . " WHERE xar_name = ?";
+        $query = "SELECT * FROM " . self::$rolestable . " WHERE name = ?";
         // Prepare it once
         $stmt = self::$dbconn->prepareStatement($query);
 
@@ -242,9 +242,9 @@ class xarRoles extends Object
     {
         self::initialize();
         // get the data for the root object
-        $query = "SELECT xar_uid
+        $query = "SELECT id
                   FROM " . self::$rolestable .
-                  " WHERE xar_name = ?";
+                  " WHERE name = ?";
         // Execute the query, bail if an exception was thrown
         $result = self::$dbconn->Execute($query,array($rootname));
 
@@ -287,15 +287,15 @@ class xarRoles extends Object
 
         // set up the query and create the entry
         $tablefields = array(
-            array('name' => 'xar_name',        'value' => $name),
-            array('name' => 'xar_type',        'value' => ROLES_USERTYPE),
-            array('name' => 'xar_uname',       'value' => $uname),
-            array('name' => 'xar_email',       'value' => $email),
-            array('name' => 'xar_pass',        'value' => $pass),
-            array('name' => 'xar_date_reg',    'value' => time()),
-            array('name' => 'xar_valcode',     'value' => $valcode),
-            array('name' => 'xar_state',       'value' => $state),
-            array('name' => 'xar_auth_modid',  'value' => $authmodule),
+            array('name' => 'name',        'value' => $name),
+            array('name' => 'type',        'value' => ROLES_USERTYPE),
+            array('name' => 'uname',       'value' => $uname),
+            array('name' => 'email',       'value' => $email),
+            array('name' => 'pass',        'value' => $pass),
+            array('name' => 'date_reg',    'value' => time()),
+            array('name' => 'valcode',     'value' => $valcode),
+            array('name' => 'state',       'value' => $state),
+            array('name' => 'auth_modid',  'value' => $authmodule),
         );
         self::initialize();
         $q = new xarQuery('INSERT',self::$rolestable);
@@ -327,8 +327,8 @@ class xarRoles extends Object
 
         // Confirm that this group or user does not already exist
         $q = new xarQuery('SELECT',self::$rolestable,'COUNT(*) AS groupcount');
-        $q->eq('xar_name',$name);
-        $q->ne('xar_state',ROLES_STATE_DELETED);
+        $q->eq('name',$name);
+        $q->ne('state',ROLES_STATE_DELETED);
         if (!$q->run()) return;
 
         $row = $q->row();
@@ -339,7 +339,7 @@ class xarRoles extends Object
 
         $createdate = time();
         $query = "INSERT INTO " . self::$rolestable .
-                   " (xar_name, xar_type, xar_uname,xar_date_reg)
+                   " (name, type, uname,date_reg)
                   VALUES (?,?,?,?)";
         $bindvars = array($name, ROLES_GROUPTYPE, $uname, $createdate);
         self::$dbconn->Execute($query,$bindvars);
@@ -365,18 +365,18 @@ class xarRoles extends Object
         $q = new xarQuery('SELECT');
         $q->addtable(self::$rolestable,'r');
         $q->addtable(self::$rolememberstable,'rm');
-        $q->join('r.xar_uid','rm.xar_uid');
-        $q->addfield('r.xar_uid AS uid');
-        $q->addfield('r.xar_name AS name');
-        $q->addfield('r.xar_users AS users');
-        $q->addfield('rm.xar_parentid AS parentid');
+        $q->join('r.id','rm.id');
+        $q->addfield('r.id AS uid');
+        $q->addfield('r.name AS name');
+        $q->addfield('r.users AS users');
+        $q->addfield('rm.parentid AS parentid');
         $c = array();
         foreach ($basetypes as $type) {
-            $c[] = $q->eq('r.xar_type',$type);
+            $c[] = $q->eq('r.type',$type);
         }
         $q->qor($c);
-        $q->eq('r.xar_state',ROLES_STATE_ACTIVE);
-        $q->setorder('r.xar_name');
+        $q->eq('r.state',ROLES_STATE_ACTIVE);
+        $q->setorder('r.name');
         return $q;
     }
 
@@ -396,9 +396,9 @@ class xarRoles extends Object
         $q = new xarQuery('SELECT',self::$rolestable);
         $q->eq($field,$value);
         if ($state == ROLES_STATE_CURRENT) {
-            $q->ne('xar_state',ROLES_STATE_DELETED);
+            $q->ne('state',ROLES_STATE_DELETED);
         } elseif ($state != ROLES_STATE_ALL) {
-            $q->eq('xar_state',$state);
+            $q->eq('state',$state);
         }
 
         // Execute the query, bail if an exception was thrown
@@ -411,21 +411,21 @@ class xarRoles extends Object
         $duvarray = array('userhome','primaryparent','passwordupdate','userlastlogin','usertimezone');
         $duvs = array();
         foreach ($duvarray as $key) {
-            $duv = xarModGetUserVar('roles',$key,$row['xar_uid']);
+            $duv = xarModGetUserVar('roles',$key,$row['id']);
             if (!empty($duv)) $duvs[$key] = $duv;
         }
         $pargs = array(
-            'uid' =>         $row['xar_uid'],
-            'name' =>        $row['xar_name'],
-            'type' =>        $row['xar_type'],
-            'users' =>       $row['xar_users'],
-            'uname' =>       $row['xar_uname'],
-            'email' =>       $row['xar_email'],
-            'pass' =>        $row['xar_pass'],
-            'date_reg' =>    $row['xar_date_reg'],
-            'val_code' =>    $row['xar_valcode'],
-            'state' =>       $row['xar_state'],
-            'auth_module' => $row['xar_auth_modid'],
+            'uid' =>         $row['id'],
+            'name' =>        $row['name'],
+            'type' =>        $row['type'],
+            'users' =>       $row['users'],
+            'uname' =>       $row['uname'],
+            'email' =>       $row['email'],
+            'pass' =>        $row['pass'],
+            'date_reg' =>    $row['date_reg'],
+            'val_code' =>    $row['valcode'],
+            'state' =>       $row['state'],
+            'auth_module' => $row['auth_modid'],
             'duvs'          => $duvs    );
         // create and return the role object
         sys::import('modules.roles.class.role');

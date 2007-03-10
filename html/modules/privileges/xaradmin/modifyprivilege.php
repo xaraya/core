@@ -15,10 +15,10 @@
 function privileges_admin_modifyprivilege()
 {
 
-    if(!xarVarFetch('pid',           'isset', $pid,          NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('id',            'isset', $id,           NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('pname',         'isset', $name,         NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('prealm',        'isset', $realm,        NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('pmodule',       'isset', $data['pmodule'],    0,          XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('pmodule',       'isset', $data['pmodule'],    NULL,          XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('pcomponent',    'isset', $component,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('poldcomponent', 'isset', $oldcomponent, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('ptype',         'isset', $type,         NULL, XARVAR_DONT_SET)) {return;}
@@ -35,7 +35,7 @@ function privileges_admin_modifyprivilege()
 
 //Call the Privileges class and get the privilege to be modified
     sys::import('modules.privileges.class.privileges');
-    $priv = xarPrivileges::getPrivilege($pid);
+    $priv = xarPrivileges::getPrivilege($id);
 //Get the array of parents of this privilege
     $parents = array();
     foreach ($priv->getParents() as $parent) {
@@ -50,14 +50,14 @@ function privileges_admin_modifyprivilege()
     $names = array();
     foreach(xarPrivileges::getprivileges() as $temp){
         $nam = $temp['name'];
-        if (!in_array($nam,$names) && $temp['pid'] != $pid){
+        if (!in_array($nam,$names) && $temp['id'] != $id){
             $names[] = $nam;
             $privileges[] = $temp;
         }
     }
 
 // Load Template
-    if(isset($pid)) {$data['ppid'] = $pid;}
+    if(isset($id)) {$data['ppid'] = $id;}
     else {$data['ppid'] = $priv->getID();}
 
     if(empty($name)) $name = $priv->getName();
@@ -69,8 +69,8 @@ function privileges_admin_modifyprivilege()
     if(isset($realm)) {$data['prealm'] = $realm;}
     else {$data['prealm'] = $priv->getRealm();}
 
-    if(!isset($module)) {
-        $info = xarModAPIFunc('privileges','admin','get',array('itemid' => $pid));
+    if(!isset($data['pmodule'])) {
+        $info = xarModAPIFunc('privileges','admin','get',array('itemid' => $id));
         $data['pmodule'] = $info['moduleid'];
     }
 

@@ -280,8 +280,8 @@ class xarMask extends Object
     function getModuleID()
     {
         $xartable =& xarDBGetTables();
-        $q = new xarQuery('SELECT',$xartable['modules'],'xar_regid AS regid');
-        $q->eq('xar_id', $this->getModule());
+        $q = new xarQuery('SELECT',$xartable['modules'],'regid AS regid');
+        $q->eq('id', $this->getModule());
         if (!$q->run()) return;
         $row = $q->row();
         return $row['regid'];

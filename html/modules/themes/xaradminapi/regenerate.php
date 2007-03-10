@@ -24,7 +24,7 @@ function themes_adminapi_regenerate()
 
     //Finds and updates missing modules
     if (!xarModAPIFunc('themes','admin','checkmissing')) {return;}
-    
+
     //Get all themes in the filesystem
     $fileThemes = xarModAPIFunc('themes','admin','getfilethemes');
     if (!isset($fileThemes)) return;
@@ -78,17 +78,17 @@ function themes_adminapi_regenerate()
 
         if (empty($dbThemes[$name])) {
             // New theme
-            
+
             if (empty($themeInfo['xar_version'])){
                 $themeInfo['xar_version'] = '1.0.0';
             }
 
             $sql = "INSERT INTO $xartable[themes]
-                      (xar_name, xar_regid, xar_directory,
-                       xar_author, xar_homepage, xar_email, xar_description,
-                       xar_contactinfo, xar_publishdate, xar_license,
-                       xar_version, xar_xaraya_version, xar_bl_version,
-                       xar_class)
+                      (name, regid, directory,
+                       author, homepage, email, description,
+                       contactinfo, publishdate, license,
+                       version, xaraya_version, bl_version,
+                       class)
                     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             $bindvars = array($themeInfo['name'],$themeInfo['regid'],
                               $themeInfo['directory'],$themeInfo['author'],

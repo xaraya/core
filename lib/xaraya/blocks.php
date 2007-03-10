@@ -155,28 +155,28 @@ function xarBlock_renderGroup($groupname, $template = NULL)
 
     // Fetch details of all blocks in the group.
     // CHECKME: Does this really have to be a quadruple left join, i cant imagine
-    $query = "SELECT    inst.xar_id as bid,
-                        btypes.xar_type as type,
-                        mods.xar_name as module,
-                        inst.xar_name as name,
-                        inst.xar_title as title,
-                        inst.xar_content as content,
-                        inst.xar_last_update as last_update,
-                        inst.xar_state as state,
-                        group_inst.xar_position as position,
-                        bgroups.xar_id              AS bgid,
-                        bgroups.xar_name            AS group_name,
-                        bgroups.xar_template        AS group_bl_template,
-                        inst.xar_template           AS inst_bl_template,
-                        group_inst.xar_template     AS group_inst_bl_template
+    $query = "SELECT    inst.id as bid,
+                        btypes.type as type,
+                        mods.name as module,
+                        inst.name as name,
+                        inst.title as title,
+                        inst.content as content,
+                        inst.last_update as last_update,
+                        inst.state as state,
+                        group_inst.position as position,
+                        bgroups.id              AS bgid,
+                        bgroups.name            AS group_name,
+                        bgroups.template        AS group_bl_template,
+                        inst.template           AS inst_bl_template,
+                        group_inst.template     AS group_inst_bl_template
               FROM      $blockGroupInstancesTable group_inst
-              LEFT JOIN $blockGroupsTable bgroups ON group_inst.xar_group_id = bgroups.xar_id
-              LEFT JOIN $blockInstancesTable inst ON inst.xar_id = group_inst.xar_instance_id
-              LEFT JOIN $blockTypesTable btypes   ON btypes.xar_id = inst.xar_type_id
-              LEFT JOIN $modulesTable mods        ON btypes.xar_modid = mods.xar_id
-              WHERE     bgroups.xar_name = ? AND
-                        inst.xar_state > ?
-              ORDER BY  group_inst.xar_position ASC";
+              LEFT JOIN $blockGroupsTable bgroups ON group_inst.group_id = bgroups.id
+              LEFT JOIN $blockInstancesTable inst ON inst.id = group_inst.instance_id
+              LEFT JOIN $blockTypesTable btypes   ON btypes.id = inst.type_id
+              LEFT JOIN $modulesTable mods        ON btypes.modid = mods.id
+              WHERE     bgroups.name = ? AND
+                        inst.state > ?
+              ORDER BY  group_inst.position ASC";
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery(array($groupname,0), ResultSet::FETCHMODE_ASSOC);
 

@@ -49,10 +49,10 @@ class DataPropertyMaster extends Object
         $dynamicprop = $xartable['dynamic_properties'];
 
         $bindvars = array();
-        $query = "SELECT xar_prop_name, xar_prop_label, xar_prop_type,
-                         xar_prop_id, xar_prop_default, xar_prop_source,
-                         xar_prop_status, xar_prop_order, xar_prop_validation,
-                         xar_prop_objectid FROM $dynamicprop ";
+        $query = "SELECT prop_name, prop_label, prop_type,
+                         prop_id, prop_default, prop_source,
+                         prop_status, prop_order, prop_validation,
+                         prop_objectid FROM $dynamicprop ";
         if(empty($args['objectid']))
         {
             $doargs['moduleid'] = $args['moduleid'];
@@ -60,13 +60,13 @@ class DataPropertyMaster extends Object
             $info = DataObjectDescriptor::getObjectID($doargs);
         }
 
-        $query .= " WHERE xar_prop_objectid = ?";
+        $query .= " WHERE prop_objectid = ?";
         $bindvars[] = (int) $args['objectid'];
 
         if(empty($args['allprops']))
-            $query .= " AND xar_prop_status > 0 ";
+            $query .= " AND prop_status > 0 ";
 
-        $query .= " ORDER BY xar_prop_order ASC, xar_prop_id ASC";
+        $query .= " ORDER BY prop_order ASC, prop_id ASC";
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
 
