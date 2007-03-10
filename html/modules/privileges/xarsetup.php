@@ -71,11 +71,11 @@ function initializeSetup()
                              'limit' => 20));
     xarDefineInstance('roles','Block',$instances);
 
-    $query = "SELECT DISTINCT xar_name FROM $rolesTable";
+    $query = "SELECT DISTINCT name FROM $rolesTable";
     $instances = array(array('header' => 'Users and Groups',
                              'query' => $query,
                              'limit' => 20));
-    xarDefineInstance('roles','Roles',$instances,0,$roleMembersTable,'xar_uid','xar_parentid','Instances of the roles module, including multilevel nesting');
+    xarDefineInstance('roles','Roles',$instances,0,$roleMembersTable,'id','parentid','Instances of the roles module, including multilevel nesting');
 
     $instances = array(array('header' => 'Parent:',
                              'query' => $query,
@@ -83,7 +83,7 @@ function initializeSetup()
                        array('header' => 'Child:',
                              'query' => $query,
                              'limit' => 20));
-    xarDefineInstance('roles','Relation',$instances,0,$roleMembersTable,'xar_uid','xar_parentid','Instances of the roles module, including multilevel nesting');
+    xarDefineInstance('roles','Relation',$instances,0,$roleMembersTable,'id','parentid','Instances of the roles module, including multilevel nesting');
 
    // ----------------------------- Privileges Module
     $query = "SELECT DISTINCT name FROM $privilegesTable";

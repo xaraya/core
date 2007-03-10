@@ -247,27 +247,27 @@
             <table class="xar-fullwidth xar-clearboth">
                 <tr>
                     <th>
-                        <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;uid=#$groupuid#&amp;order=xar_name&amp;search=#$search#">
+                        <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;uid=#$groupuid#&amp;order=name&amp;search=#$search#">
                             <xar:mlstring>Real name</xar:mlstring>
                         </a>
                     </th>
                     <th>
-                        <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;uid=#$groupuid#&amp;order=xar_uname&amp;search=#$search#">
+                        <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;uid=#$groupuid#&amp;order=uname&amp;search=#$search#">
                             <xar:mlstring>Login</xar:mlstring>
                         </a>
                     </th>
                     <th>
-                        <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;uid=#$groupuid#&amp;order=xar_email&amp;search=#$search#">
+                        <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;uid=#$groupuid#&amp;order=email&amp;search=#$search#">
                             <xar:mlstring>Email</xar:mlstring>
                         </a>
                     </th>
                     <th>
-                        <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;uid=#$groupuid#&amp;order=xar_date_reg&amp;search=#$search#">
+                        <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;uid=#$groupuid#&amp;order=date_reg&amp;search=#$search#">
                             <xar:mlstring>Date Registered</xar:mlstring>
                         </a>
                     </th>
                     <th>
-                        <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;uid=#$groupuid#&amp;order=xar_state&amp;search=#$search#">
+                        <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;uid=#$groupuid#&amp;order=state&amp;search=#$search#">
                             <xar:mlstring>State</xar:mlstring>
                         </a>
                     </th>

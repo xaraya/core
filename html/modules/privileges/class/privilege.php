@@ -322,11 +322,11 @@ class xarPrivilege extends xarMask
     {
         // set up a query to select the roles this privilege
         // is linked to in the acl table
-        $query = "SELECT r.xar_uid, r.xar_name, r.xar_type,
-                         r.xar_uname, r.xar_email, r.xar_pass,
-                         r.xar_auth_modid
+        $query = "SELECT r.id, r.name, r.type,
+                         r.uname, r.email, r.pass,
+                         r.auth_modid
                   FROM $this->rolestable r, $this->acltable acl
-                  WHERE r.xar_uid = acl.partid AND
+                  WHERE r.id = acl.partid AND
                         acl.permid = ?";
         $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->id));
