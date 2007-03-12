@@ -3,11 +3,11 @@
  * Initialise the roles module
  *
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  * @author Jan Schrage, John Cox, Gregor Rothfuss
  */
@@ -16,13 +16,11 @@
  * Initialise the roles module
  *
  * @access public
- * @param none $
- * @returns bool
+ * @return bool
  * @throws DATABASE_ERROR
  */
 function roles_init()
 {
-    // Get database setup
     $dbconn =& xarDBGetConn();
     $tables =& xarDBGetTables();
 
@@ -33,22 +31,6 @@ function roles_init()
     // Create tables inside a transaction
     try {
         $dbconn->begin();
-        /**
-         * CREATE TABLE xar_roles (
-         *    id int(11) NOT NULL auto_increment,
-         *    name varchar(100) NOT NULL default '',
-         *    type int(11) NOT NULL default '0',
-         *    users int(11) NOT NULL default '0',
-         *    uname varchar(100) NOT NULL default '',
-         *    email varchar(100) NOT NULL default '',
-         *    pass varchar(100) NOT NULL default '',
-         *    date_reg datetime NOT NULL default '0000-00-00 00:00:00',
-         *    valcode varchar(35) NOT NULL default '',
-         *    state int(3) NOT NULL default '0',
-         *    auth_modid int(11) NOT NULL default '0',
-         *    PRIMARY KEY  (id)
-         * )
-         */
 
         $fields = array(
                         'id' => array('type' => 'integer','null' => false,'default' => '0','increment' => true, 'primary_key' => true),
@@ -58,7 +40,7 @@ function roles_init()
                         'uname' => array('type' => 'varchar', 'size' => 255, 'null' => false, 'default' => ''),
                         'email' => array('type' => 'varchar', 'size' => 255,'null' => false,'default' => ''),
                         'pass' => array('type' => 'varchar',  'size' => 100, 'null' => false, 'default' => ''),
-                        'date_reg' => array('type' => 'varchar', 'size' => 100, 'null' => false, 'default' => '0000-00-00 00:00:00'),
+                        'date_reg' => array('type' => 'int', 'null' => false, 'default' => '0'),
                         'valcode' => array('type' => 'varchar', 'size' => 35, 'null' => false, 'default' => ''),
                         'state' => array('type' => 'integer', 'null' => false,'default' => '3'),
                         'auth_modid' => array('type' => 'integer', 'unsigneded' => true,'null' => false, 'default' => '0'));
@@ -104,17 +86,9 @@ function roles_init()
         $query = xarDBCreateIndex($tables['roles'], $index);
         $dbconn->Execute($query);
 
-
-        /**
-         * CREATE TABLE xar_rolemembers (
-         *    id int(11) NOT NULL default '0',
-         *    parentid int(11) NOT NULL default '0'
-         * )
-         */
-
         $query = xarDBCreateTable($tables['rolemembers'],
-                                  array('id' => array('type'        => 'integer',
-                                                           'null'        => true,
+                            array('id' => array('type'        => 'integer',
+                                 'null'        => true,
                                                            'default'     => null),
                                         'parentid' => array('type'        => 'integer',
                                                                 'null'        => true,
@@ -198,9 +172,8 @@ function roles_activate()
     }
     xarModVars::set('roles', 'admin', $role->getID());
 
-# --------------------------------------------------------
-#  Register block types
-#
+    // --------------------------------------------------------
+    // Register block types
     xarModAPIFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'online'));
     xarModAPIFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'user'));
     xarModAPIFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'language'));
@@ -210,7 +183,7 @@ function roles_activate()
     xarModRegisterHook('item', 'usermenu', 'GUI','roles', 'user', 'usermenu');
 
 //    xarModAPIFunc('modules', 'admin', 'enablehooks', array('callerModName' => 'roles', 'hookModName' => 'roles'));
-//    xarModAPIFunc('modules','admin','enablehooks',array('callerModName' => 'roles', 'hookModName' => 'dynamicdata'));
+
 
     return true;
 }
@@ -349,5 +322,4 @@ function roles_delete()
     // Deletion successful
     return true;
 }
-
 ?>
