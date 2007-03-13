@@ -1,5 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:set name="statecurrent">ROLES_STATE_CURRENT</xar:set>
 <xar:set name="stateinactive">ROLES_STATE_INACTIVE</xar:set>
 <xar:set name="statenotvalidated">ROLES_STATE_NOTVALIDATED</xar:set>
@@ -27,7 +27,7 @@
         (#$totalselect#)
     </h2>
 
-    <xar:comment>TODO set the active tab here</xar:comment>
+    <!-- TODO set the active tab here -->
     <!-- Show the general tab list for roles -->
     <xar:set name="basetype">ROLES_GROUPTYPE</xar:set>
     <xar:template file="tablist" />
