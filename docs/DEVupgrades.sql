@@ -244,8 +244,7 @@ ALTER TABLE `xar_template_tags`
   CHANGE COLUMN `xar_tmodid` `t_module_id` INTEGER NOT NULL,
   CHANGE COLUMN `xar_ttype` `t_type` VARCHAR(64) NOT NULL,
   CHANGE COLUMN `xar_tfunc` `t_func` VARCHAR(64) NOT NULL,
-  CHANGE COLUMN `xar_order` `order` INTEGER NOT NULL DEFAULT 0;
- CHANGE COLUMN `xar_data` `data` TEXT DEFAULT NULL;
+  CHANGE COLUMN `xar_order` `priority` INTEGER NOT NULL DEFAULT 0;
 
 
 ALTER TABLE `xar_privileges`
@@ -263,16 +262,16 @@ ALTER TABLE `xar_privmembers`
  CHANGE COLUMN `xar_parentid` `parentid` INTEGER DEFAULT NULL;
 /* FIXME: rename the pid index */
 
-ALTER TABLE `security_realms`
+ALTER TABLE `xar_security_realms`
  CHANGE COLUMN `xar_rid` `id` INTEGER NOT NULL AUTO_INCREMENT,
  CHANGE COLUMN `xar_name` `name` VARCHAR(255) NOT NULL;
 
-ALTER TABLE `security_acl`
+ALTER TABLE `xar_security_acl`
  CHANGE COLUMN `xar_partid` `partid` INTEGER NOT NULL DEFAULT 0,
  CHANGE COLUMN `xar_permid` `permid` INTEGER NOT NULL DEFAULT 0;
 /* FIXME: phpmyadmin shows an error on the indexes */
 
-ALTER TABLE `security_instances`
+ALTER TABLE `xar_security_instances`
  CHANGE COLUMN `xar_iid` `id` INTEGER NOT NULL DEFAULT NULL AUTO_INCREMENT,
  CHANGE COLUMN `xar_modid` `module_id` INTEGER NOT NULL DEFAULT 0,
  CHANGE COLUMN `xar_component` `component` VARCHAR(100) NOT NULL,
@@ -286,7 +285,7 @@ ALTER TABLE `security_instances`
  CHANGE COLUMN `xar_description` `description` VARCHAR(255) NOT NULL;
 /* TODO: this table will surely be lightened up */
 
-ALTER TABLE `themes`
+ALTER TABLE `xar_themes`
  CHANGE COLUMN `xar_id` `id` INTEGER NOT NULL DEFAULT NULL AUTO_INCREMENT,
  CHANGE COLUMN `xar_name` `name` VARCHAR(64) NOT NULL,
  CHANGE COLUMN `xar_regid` `regid` INTEGER DEFAULT NULL,
@@ -305,7 +304,7 @@ ALTER TABLE `themes`
  CHANGE COLUMN `xar_class` `class` INTEGER NOT NULL DEFAULT 0,
  CHANGE COLUMN `xar_state` `state` INTEGER NOT NULL DEFAULT 1;
 
-ALTER TABLE `modules`
+ALTER TABLE `xar_modules`
  CHANGE COLUMN `xar_id` `id` INTEGER NOT NULL DEFAULT NULL AUTO_INCREMENT,
  CHANGE COLUMN `xar_name` `name` VARCHAR(64) NOT NULL,
  CHANGE COLUMN `xar_regid` `regid` INTEGER DEFAULT NULL,
@@ -318,8 +317,8 @@ ALTER TABLE `modules`
  CHANGE COLUMN `xar_user_capable` `user_capable` INTEGER NOT NULL DEFAULT 0,
  CHANGE COLUMN `xar_state` `state` INTEGER NOT NULL DEFAULT 0;
 
-ALTER TABLE `xar_dynamic_objects_data`
-  CHANGE COLUMN `xar_id` `dd_id` INTEGER NOT NULL AUTO_INCREMENT,
+ALTER TABLE `xar_dynamic_data`
+  CHANGE COLUMN `xar_dd_id` `dd_id` INTEGER NOT NULL AUTO_INCREMENT,
   CHANGE COLUMN `xar_dd_propid` `dd_propid` INTEGER NOT NULL default '0',
   CHANGE COLUMN `xar_dd_itemid` `dd_itemid` INTEGER NOT NULL default '0',
   CHANGE COLUMN `xar_dd_value` `dd_value` mediumtext;
@@ -446,4 +445,4 @@ ALTER TABLE `xar_rolemembers`
   KEY `i_xar_rolememb_parentid` (`xar_parentid`)
 
 /* change date_reg to an int */
-ALTER TABLE `xar_roles` CHANGE `date_reg` `date_reg` INT( 11 ) NOT NULL DEFAULT;
+ALTER TABLE `xar_roles` CHANGE `date_reg` `date_reg` INT( 11 ) NOT NULL DEFAULT '0';
