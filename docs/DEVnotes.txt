@@ -68,8 +68,11 @@ PENDING DB-CHANGES
     1. it doesnt need to be there really, but might be a moditemvar (it applies to the few)
     2. it is referred to as default authmodule in the code sometimes, which it  is not, it is the auth module which successfully logged this user on latest.
 * `ticket:6`:trac: the xar\_ prefix on columns is redundant, not a lightly task though, kinda  obvious why.
+   Note: this ticket was closed
 * `ticket:7`:trac: privmembers parent column stores 0 now for 'no parent', change to null, so a foreign key constraint can be added on the column
+   Note: this ticket was closed
 * `ticket:7`:trac: rolemembers parent column stores 0 now for 'no parent', change to null, so a  foreign key constraint can be added on the column
+   Note: this ticket was closed
 
 NOTE: the above 2 are probably problematic since the parent column is part of
 the primary key and as such can probably not contain the non-value NULL.
@@ -103,6 +106,7 @@ Choices:
   masks, adding an extra column ('type'?) to distinguish masks from
   privileges. before that can happen syncing the definition of security_masks
   to privileges is needed (modid column, realmid)
+   Note: this ticket was closed
 * `ticket:9`:trac: we need a consolidated solution for database encoding, mysql takes this swedish latin thing by default, postgres us ascii, dont know about the others.
   How about we make them all UTF-8? (i have no idea about the consequences
   though, nor how to do it, seems, that on 'create database' there should be
