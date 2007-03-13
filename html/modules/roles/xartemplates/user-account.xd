@@ -1,7 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
-</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:set name="compare">
     xarServerGetCurrentURL()
 </xar:set>
@@ -24,21 +22,21 @@
         #xarVarPrepForDisplay($name)#
     </h2>
     <xar:if condition="!empty($message)">
-        #$message# 
+        #$message#
         <xar:else />
         <div>
             <dl class="xar-tabs">
                 <dt class="help">
                     <xar:mlstring>
-                        Your Profile 
+                        Your Profile
                     </xar:mlstring>
-                    : 
+                    :
                 </dt>
                 <xar:if condition="($compare eq $current) or ($compare eq $account)">
                     <dd class="active">
                         <a href="#xarServerGetCurrentURL()#">
                             <xar:mlstring>
-                                Display your profile 
+                                Display your profile
                             </xar:mlstring>
                         </a>
                     </dd>
@@ -46,7 +44,7 @@
                     <dd>
                         <a href="&xar-modurl-roles-user-account;">
                             <xar:mlstring>
-                                Display your profile 
+                                Display your profile
                             </xar:mlstring>
                         </a>
                     </dd>
@@ -60,7 +58,7 @@
                     <dd>
                         <a href="#xarModURL($logoutmodule,'user','logout')#">
                             <xar:mlstring>
-                                Logout 
+                                Logout
                             </xar:mlstring>
                         </a>
                     </dd>
@@ -69,6 +67,7 @@
         </div>
     </xar:if>
 </div>
+
 <xar:if condition="$compare eq $account">
     <xar:module main="false" module="roles" type="user" func="display" />
 <xar:else />

@@ -27,19 +27,38 @@ function roles_admin_updaterole()
 
     $object = DataObjectMaster::getObject(array('module'   => 'roles',
                                                 'itemtype' => $basetype));
-    $object->getItem(array('itemid' => $uid));
 
+    $object->getItem(array('itemid' => $uid));
     //Save the old state and type
     $oldrole = xarRoles::getRole($uid);
     $oldstate = $oldrole->getState();
     $oldtype = $oldrole->getType();
     $oldpass = $oldrole->getPass();
 
+    // force validation to pass with password empty
+    $object->properties['password']->setValue($oldpass);
+
     $isvalid = $object->checkInput();
 
     $puname = $object->properties['uname']->value;
     $pname  = $object->properties['name']->value;
 
+    // @todo add preview?
+    /*if (!$isvalid) {
+        $data = xarModAPIFunc('roles','admin','menu');
+        $data['itemtype'] = $itemtype;
+        $data['basetype'] = $basetype;
+        $data['authid'] = xarSecGenAuthKey();
+        $data['returnurl'] = $returnurl;
+        $data['object'] = & $object;
+
+        //$data['preview'] = $preview;
+        $item = array();
+        $item['module'] = 'roles';
+        $item['itemtype'] = $itemtype;
+        $data['hooks'] = xarModCallHooks('item','modify','',$item);
+        return xarTplModule('roles','admin','modifyrole', $data);
+    }*/
     // TODO: what about the role itemtype?
     if ($basetype == ROLES_USERTYPE) {
         $pemail = $object->properties['email']->value;
