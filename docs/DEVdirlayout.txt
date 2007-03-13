@@ -424,3 +424,56 @@ this path-to-site needs to be moved into a path in the web root (eg each site ha
 isolated theme dir in their site config). 
 
 
+COPY from older wiki to be consolidated here:
+=============================================
+* Modules: do they need to be completely self-contained in a single directory branch? There are some advantages and disadvantages in doing so. I think it would be easier for the application if the module functions were kept in one place, and the templates (for the various output types) kept on another place. That way, all the default templates for all modules, for any particular output type, are kept in one place, where they can be easily managed (e.g. there could be a "default XHTML theme" - assuming that isn't an over-simplification - that templates would fall back to, rather than falling back to special templates in the module area). The problem arises during development, where having a module split over several branches would be more difficult to manage.
+
+!!!Alternative file structure – Dedicated user space
+
+This is just an alternative to the current xaraya file structure but contributes a lot of change to the xaraya design towards a more “framework” structure. Some of the idea’s here are borrowed from frameworks including, apache struts, eclipse and prado.
+The main directories are mostly the same as the current setup except for framework and applications. The structure is based on the Model View Controller design pattern.
+
+<pre>
+<framework>
+<modules>
+<xaradobdb>
+<applications>
+Index.php
+Upgrade.php
+Etc.php
+</pre>
+
+-Framework:
+Possible alternative to the current “includes” directory and will contain the core files to xaraya. Elements that are considered essential to xaraya will be thrown in here and called here.
+
+-Applications:
+Here is where the big difference is.  The core and modules will team up to construct functionality which is implemented by applications. Similar to how eclipse has the “features” and “plugins” folders. The separation of functionality and implementation creates a space dedicated to the application developer or “the user space”.
+
+The application folder replaces Themes. Templates will be overwriten by applications and there specific views (pages). Modules and applications have a one to many relationships in the sense that several applications can implement the functionality of a single module. This emulates the itemtype concept currently being used in xaraya.
+
+The application tree could look like the following
+<pre>
+<applications>
+  <blog>
+    <models>
+    <views>
+    <controllers>
+    Blog.spec
+  <forum>
+    <models>
+      Thread.xml
+      Poll.xml
+    <views>
+      Showthread.xt
+      Edithread.xt
+      Editthread-overwrite.xt
+    <controllers>
+      Editthread.php
+    Forum.spec
+</pre>
+
+Spec will include application definitions for url encoding/decoding, data sources, security masks, and act similarly to the init.php file inside modules.
+
+This kind of file structure has a lot of advantages. Packages will be easy to download and configure. Instead of just providing the core with modules, applications allow specific solutions to be packaged together. Users can simply download the applications they want with less or potentially no additional configuration. Putting the configuration of applications into files instead of database makes it easier to describe and accomplish common tasks.
+
+The clear disadvantage to this is the elimination of themes all together. The theme behavior is still there its just slightly less accessible. This is a tradeoff. It pushes xaraya in the direction of being a framework more the CMS. This isn’t terribly serious. It is possible still, under this structure, to implement a content management application that has a mechanism (in the controller) to allow themes.
