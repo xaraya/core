@@ -103,7 +103,7 @@ function roles_user_usermenu($args)
             $oldemail = $object->properties['email']->getValue();
 
             $isvalid = $object->checkInput();
-debug($isvalid);
+
             // @todo add preview?
             if (!$isvalid) {
                 $data = array();
