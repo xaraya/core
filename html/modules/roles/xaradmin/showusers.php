@@ -73,6 +73,7 @@ function roles_admin_showusers()
         sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery();
         $q = $q->sessiongetvar('rolesquery');
+        $q = '';
     if (empty($q) || isset($reload)) {
         $types = xarModAPIFunc('roles','user','getitemtypes');
         $basetypes = array();
@@ -84,7 +85,7 @@ function roles_admin_showusers()
         $q = new xarQuery('SELECT');
         $q->addtable($xartable['roles'],'r');
         $q->addfields(array(
-            'r.id AS id',
+            'r.id AS uid',
             'r.name AS name',
             'r.uname AS uname',
             'r.email AS email',
@@ -157,10 +158,11 @@ function roles_admin_showusers()
             break;
     }
     // assemble the info for the display
-        $users = array();
-        foreach($q->output() as $user)
-            $users[] = array_merge($user, array('frozen' => !xarSecurityCheck('EditRole',0,'Roles',$user['name'])));
-
+    $users = array();
+    //debug($q->output);
+    foreach($q->output() as $user) {
+        $users[] = array_merge($user, array('frozen' => !xarSecurityCheck('EditRole',0,'Roles',$user['name'])));
+    }
     if ($uid != 0) $data['title'] .= " ".xarML('of group')." ";
 
     //selstyle
