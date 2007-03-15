@@ -46,14 +46,14 @@ function roles_user_usermenu($args)
             if (xarModGetVar('roles','setuserlastlogin')) {
             //only display it for current user or admin
                 if (xarUserIsLoggedIn() && xarUserGetVar('uid')==$uid) { //they should be but ..
-                    $userlastlogin=xarSessionGetVar('roles_thislastlogin');
-                    $usercurrentlogin=xarModGetUserVar('roles','userlastlogin',$uid);
+                    $userlastlogin = xarSessionGetVar('roles_thislastlogin');
+                    $usercurrentlogin = xarModGetUserVar('roles','userlastlogin',$uid);
                 }elseif (xarSecurityCheck('AdminRole',0,'Roles',$name) && xarModGetUserVar('roles','userlastlogin',$uid)){
-                    $usercurrentlogin='';
-                    $userlastlogin= xarModGetUserVar('roles','userlastlogin',$uid);
+                    $usercurrentlogin = '';
+                    $userlastlogin = xarModGetUserVar('roles','userlastlogin',$uid);
                 }else{
-                    $userlastlogin='';
-                    $usercurrentlogin='';
+                    $userlastlogin = '';
+                    $usercurrentlogin = '';
                 }
             }else{
                 $userlastlogin='';
@@ -61,7 +61,7 @@ function roles_user_usermenu($args)
             }
             $authid = xarSecGenAuthKey();
 
-            $upasswordupdate = xarModGetUserVar('roles','passwordupdate');//now user mod var not 'duv'. $role->getPasswordUpdate();
+            $upasswordupdate = xarModGetUserVar('roles','passwordupdate');
             $usertimezonedata = xarModGetUserVar('roles','usertimezone');
             $utimezone=$usertimezonedata['timezone'];
 
@@ -81,8 +81,8 @@ function roles_user_usermenu($args)
                                   'hooks'        => $hooks,
                                   'uid'          => $uid,
                                   'upasswordupdate' => $upasswordupdate,
-                                  'usercurrentlogin'=> $usercurrentlogin,
-                                  'userlastlogin'   => $userlastlogin,
+                                  'usercurrentlogin' => $usercurrentlogin,
+                                  'userlastlogin'    => $userlastlogin,
                                   'utimezone'    => $utimezone,
                                   'allowemail'   => $allowemail));
             break;
