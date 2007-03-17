@@ -38,7 +38,7 @@ class RequestObject extends Object
         $tmodId = $tmodInfo['systemid'];
         $query = "SELECT COUNT(*) FROM " . $hookstable .
                  " WHERE object = ? AND action = ? AND
-                   tarea = ? AND  t_module_id = ? AND t_type = ? AND t_func = ?";
+                   t_area = ? AND  t_module_id = ? AND t_type = ? AND t_func = ?";
         $bindvars = array($hookObject,$hookAction,$hookArea,$tmodId,$this->gettype(),$this->getfunction());
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
