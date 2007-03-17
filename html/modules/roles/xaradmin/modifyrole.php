@@ -39,8 +39,6 @@ function roles_admin_modifyrole()
     $values = $object->getFieldValues();
     $name = $values['name'];
 
-    if ($data['basetype'] != ROLES_GROUPTYPE) $object->properties['password']->setValue('');
-
     $role = xarRoles::getRole($uid);
     // get the array of parents of this role
     // need to display this in the template
