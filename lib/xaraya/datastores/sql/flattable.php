@@ -39,9 +39,12 @@ class FlatTableDataStore extends SQLDataStore
         $table = $this->name;
         $itemidfield = $this->primary;
 
-        // can't really do much without the item id field at the moment
         if (empty($itemidfield)) {
-            return;
+            $itemidfield = $this->getPrimary();
+            // can't really do much without the item id field at the moment
+            if (empty($itemidfield)) {
+                return;
+            }
         }
 
         $tables = array($table);
@@ -124,9 +127,12 @@ class FlatTableDataStore extends SQLDataStore
         $table = $this->name;
         $itemidfield = $this->primary;
 
-        // can't really do much without the item id field at the moment
         if (empty($itemidfield)) {
-            return;
+            $itemidfield = $this->getPrimary();
+            // can't really do much without the item id field at the moment
+            if (empty($itemidfield)) {
+                return;
+            }
         }
 
         $fieldlist = array_keys($this->fields);
@@ -194,9 +200,12 @@ class FlatTableDataStore extends SQLDataStore
         $table = $this->name;
         $itemidfield = $this->primary;
 
-        // can't really do much without the item id field at the moment
         if (empty($itemidfield)) {
-            return;
+            $itemidfield = $this->getPrimary();
+            // can't really do much without the item id field at the moment
+            if (empty($itemidfield)) {
+                return;
+            }
         }
 
         $fieldlist = array_keys($this->fields);
@@ -234,9 +243,12 @@ class FlatTableDataStore extends SQLDataStore
         $table = $this->name;
         $itemidfield = $this->primary;
 
-        // can't really do much without the item id field at the moment
         if (empty($itemidfield)) {
-            return;
+            $itemidfield = $this->getPrimary();
+            // can't really do much without the item id field at the moment
+            if (empty($itemidfield)) {
+                return;
+            }
         }
 
         $query = "DELETE FROM $table WHERE $itemidfield = ?";
@@ -273,10 +285,12 @@ class FlatTableDataStore extends SQLDataStore
         $table = $this->name;
         $itemidfield = $this->primary;
 
-        // can't really do much without the item id field at the moment
         if (empty($itemidfield)) {
-            // CHECKME: test working without the item id field
-            return;
+            $itemidfield = $this->getPrimary();
+            // can't really do much without the item id field at the moment
+            if (empty($itemidfield)) {
+                return;
+            }
         }
 
         $tables = array($table);
@@ -507,9 +521,12 @@ class FlatTableDataStore extends SQLDataStore
             return $this->primary;
         }
 
-        $dbInfo =& $this->db->getDatabaseInfo();
-        $tblInfo=& $dbInfo->getTable($this->name);
-        $keyInfo=& $tblInfo->getPrimaryKey();
+        $dbInfo = $this->db->getDatabaseInfo();
+        $tblInfo= $dbInfo->getTable($this->name);
+        $keyInfo= $tblInfo->getPrimaryKey();
+        if(empty($keyInfo)) {
+            throw new BadParameterException($this->name,'The table "#(1)" does not appear to have primary key.');
+        }
 
         $columns = $keyInfo->getColumns();
         if(count($columns) > 1) {
