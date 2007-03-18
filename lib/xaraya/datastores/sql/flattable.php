@@ -525,7 +525,7 @@ class FlatTableDataStore extends SQLDataStore
         $tblInfo= $dbInfo->getTable($this->name);
         $keyInfo= $tblInfo->getPrimaryKey();
         if(empty($keyInfo)) {
-            throw new BadParameterException($this->name,'The table "#(1)" does not appear to have primary key.');
+            throw new BadParameterException($this->name,'The table "#(1)" does not appear to have a primary key.');
         }
 
         $columns = $keyInfo->getColumns();

@@ -6,7 +6,7 @@
       <xar:mlstring>Object</xar:mlstring>
     </td>
     <td>
-      <xar:set name="field">$name.'[objectid]'</xar:set>
+      <xar:set name="field">$name.'[objectname]'</xar:set>
       <xar:data-input type="object" name="$field" value="$objectid" tabindex="$tabindex" />
     </td>
     <td>
