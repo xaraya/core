@@ -1,20 +1,19 @@
 <?php
 /**
- * Set the state of a module
- *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Modules module
+ * @subpackage modules
  */
+
 /**
  * Set the state of a module
  *
- * @author Xaraya Development Team
  * @param $args['regid'] the module id
  * @param $args['state'] the state
+ * @return int state
  * @throws BAD_PARAM,NO_PERMISSION
  * @todo Do the db changes in a transaction to completely fail or succeed?
  */
@@ -86,8 +85,7 @@ function modules_adminapi_setstate($args)
             }
             break;
     }
-    //Get current module mode to update the proper table
-    $modMode  = $modInfo['mode'];
+
     $modulesTable = $xartable['modules'];
     $query = "UPDATE $modulesTable SET state = ? WHERE regid = ?";
     $bindvars = array($state,$regid);
@@ -101,5 +99,4 @@ function modules_adminapi_setstate($args)
 
     return $state;
 }
-
 ?>

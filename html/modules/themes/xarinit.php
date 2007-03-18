@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -45,7 +45,6 @@ function themes_init()
      *   name varchar(64) NOT NULL default '',
      *   regid int(10) INTEGER NOT NULL default '0',
      *   directory varchar(64) NOT NULL default '',
-     *   mode smallint(6) NOT NULL default '1',
      *   author varchar(64) NOT NULL default '',
      *   homepage varchar(64) NOT NULL default '',
      *   email varchar(64) NOT NULL default '',
@@ -66,7 +65,6 @@ function themes_init()
         'name' => array('type' => 'varchar', 'size' => 64, 'null' => false),
         'regid' => array('type' => 'integer', 'default' => null),
         'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false),
-        'mode' => array('type' => 'integer', 'null' => false, 'default' => '1'),
         'author' => array('type' => 'varchar', 'size' => 64, 'null' => false),
         'homepage' => array('type' => 'varchar', 'size' => 64, 'null' => false),
         'email' => array('type' => 'varchar', 'size' => 64, 'null' => false),
@@ -124,8 +122,8 @@ function themes_init()
 /**
  * Upgrade the themes theme from an old version
  *
- * @param oldversion $ the old version to upgrade from
- * @returns bool
+ * @param string oldversion the old version to upgrade from
+ * @return bool
  */
 function themes_upgrade($oldversion)
 {
@@ -173,8 +171,7 @@ function themes_upgrade($oldversion)
 /**
  * Delete the themes theme
  *
- * @param none $
- * @returns bool
+ * @return bool
  */
 function themes_delete()
 {

@@ -3,11 +3,11 @@
  * Module initialization functions
  *
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Module System
+ * @subpackage modules
  * @link http://xaraya.com/index.php/release/1.html
  */
 // Load Table Maintainance API
@@ -52,7 +52,6 @@ function modules_init()
          *   regid int(10) INTEGER NOT NULL default '0',
          *   directory varchar(64) NOT NULL default '',
          *   version varchar(10) NOT NULL default '0',
-         *   mode int(6) NOT NULL default '1',
          *   class varchar(64) NOT NULL default '',
          *   category varchar(64) NOT NULL default '',
          *   admin_capable INTEGER NOT NULL default '0',
@@ -67,7 +66,6 @@ function modules_init()
                         'regid' => array('type' => 'integer', 'default' => null),
                         'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'version' => array('type' => 'varchar', 'size' => 10, 'null' => false),
-                        'mode' => array('type' => 'integer', 'null' => false, 'default' => '1'),
                         'class' => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'category' => array('type' => 'varchar', 'size' => 64, 'null' => false),
                         'admin_capable' => array('type' => 'integer', 'null' => false, 'default' => '0'),
@@ -85,10 +83,10 @@ function modules_init()
         $modVersion = $modInfo['version'];
         // Manually Insert Modules module into modules table
         $query = "INSERT INTO " . $tables['modules'] . "
-              (name, regid, directory, version, mode,
+              (name, regid, directory, version,
                class, category, admin_capable, user_capable, state )
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $bindvars = array('modules',1,'modules',(string) $modVersion,1,'Core Admin','Global',1,0,3);
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $bindvars = array('modules',1,'modules',(string) $modVersion,'Core Admin','Global',1,0,3);
         $dbconn->Execute($query,$bindvars);
 
         // Save the actual insert id
@@ -250,7 +248,6 @@ function modules_upgrade($oldVersion)
 /**
  * Delete the modules module
  *
- * @param none $
  * @returns bool
  */
 function modules_delete()

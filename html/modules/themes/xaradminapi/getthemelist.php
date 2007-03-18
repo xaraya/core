@@ -1,16 +1,16 @@
 <?php
 /**
- * Gets a list of themes
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Themes module
+ * @subpackage themes
  */
 /**
- * Gets a list of themes that matches required criteria.
- * Supported criteria are Mode, UserCapable, AdminCapable, Class, Category, State.
+ * Gets a list of themes that matches required criteria
+ *
+ * Supported criteria are: UserCapable, AdminCapable, Class, Category, State.
  * @author original - Marco Canini <marco@xaraya.com>,
  * @author andyv - modified
  * @param filter array of criteria used to filter the entire list of installed themes.
@@ -58,10 +58,6 @@ function themes_adminapi_getthemelist($args)
 
     // Construct arrays for the where conditions and their bind variables
     $whereClauses = array(); $bindvars = array();
-    if (isset($filter['Mode'])) {
-        $whereClauses[] = 'themes.mode = ?';
-        $bindvars[] = $filter['Mode'];
-    }
 
     if (isset($filter['Class'])) {
         $whereClauses[] = 'themes.class = ?';
@@ -85,8 +81,10 @@ function themes_adminapi_getthemelist($args)
         $bindvars[] = XARTHEME_STATE_ACTIVE;
     }
 
-
-    $mode = XARTHEME_MODE_SHARED;
+    $whereClause = '';
+    if (!empty($whereClauses)) {
+        $whereClause = 'WHERE ' . join(' AND ', $whereClauses);
+    }
     $themeList = array();
 
     $query = "SELECT themes.regid,
@@ -94,16 +92,7 @@ function themes_adminapi_getthemelist($args)
                      themes.directory,
                      themes.class,
                      themes.state
-              FROM $themestable AS themes ";
-
-    array_unshift($whereClauses, 'themes.mode = ?');
-    array_unshift($bindvars,$mode);
-
-    $whereClause = join(' AND ', $whereClauses);
-    if($whereClause != ''){
-        $query .= " WHERE $whereClause";
-    }
-    $query .= " ORDER BY $orderByClause";
+              FROM $themestable AS themes $whereClause ORDER BY $orderByClause";
 
     $stmt = $dbconn->prepareStatement($query);
     $stmt->setLimit($numItems);
@@ -121,7 +110,6 @@ function themes_adminapi_getthemelist($args)
             // Get infos from cache
             $themeList[] = xarVarGetCached('Theme.Infos', $themeInfo['regid']);
         } else {
-            $themeInfo['mode'] = (int) $mode;
             $themeInfo['displayname'] = xarThemeGetDisplayableName($themeInfo['name']);
             // Shortcut for os prepared directory
             $themeInfo['osdirectory'] = xarVarPrepForOS($themeInfo['directory']);
