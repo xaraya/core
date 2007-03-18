@@ -1,21 +1,18 @@
 <?php
 /**
- * Activate a module
- *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Modules module
+ * @subpackage modules
  */
 /**
  * Activate a module if it has an active function, otherwise just set the state to active
  *
- * @author Xaraya Development Team
  * @access public
  * @param regid module's registered id
- * @returns bool
+ * @return bool
  * @throws BAD_PARAM
  */
 function modules_adminapi_activate ($args)
@@ -27,7 +24,7 @@ function modules_adminapi_activate ($args)
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
     $modInfo = xarModGetInfo($regid);
-    
+
     if($modInfo['state'] == XARMOD_STATE_UNINITIALISED) {
         throw new Exception("Calling activate function while module is uninitialised");
     }

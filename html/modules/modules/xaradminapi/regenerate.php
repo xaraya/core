@@ -68,18 +68,16 @@ function modules_adminapi_regenerate()
                        regid,
                        directory,
                        version,
-                       mode,
                        class,
                        category,
                        admin_capable,
                        user_capable)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $params = array(
                 $modinfo['name'],
                 $modinfo['regid'],
                 $modinfo['directory'],
                 $modinfo['version'],
-                $modinfo['mode'],
                 $modinfo['class'],
                 $modinfo['category'],
                 $modinfo['admin_capable'],

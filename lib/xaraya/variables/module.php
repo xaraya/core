@@ -93,7 +93,6 @@ class xarModVars extends xarVars implements IxarModVars
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
 
-        // Takes the right table basing on module mode
         $module_varstable = $tables['module_vars'];
 
         $query = "SELECT name, value FROM $module_varstable WHERE module_id = ?";
@@ -215,7 +214,6 @@ class xarModVars extends xarVars implements IxarModVars
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
 
-        // Takes the right table basing on module mode
         $module_varstable     = $tables['module_vars'];
         $module_itemvarstable = $tables['module_itemvars'];
 
@@ -288,7 +286,6 @@ class xarModVars extends xarVars implements IxarModVars
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
 
-        // Takes the right table basing on module mode
         $module_varstable = $tables['module_vars'];
 
         $query = "SELECT id FROM $module_varstable WHERE module_id = ? AND name = ?";

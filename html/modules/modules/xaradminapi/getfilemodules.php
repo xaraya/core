@@ -1,12 +1,13 @@
 <?php
 /**
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Modules module
+ * @subpackage modules
  */
+
 /**
  * Get module information from xarversion.php for each module
  *
@@ -19,10 +20,8 @@
  * SCCS - where Bitkeeper stores source files
  * PENDING - where Bitkeeper stores pending merges
  *
- * @author Xaraya Development Team
  * @param $args['regid'] - optional regid to retrieve
- * @returns array
- * @return an array of modules from the file system
+ * @return array modules from the file system
  */
 function modules_adminapi_getfilemodules($args)
 {
@@ -62,7 +61,6 @@ function modules_adminapi_getfilemodules($args)
                     $nameinfile   = $modFileInfo['name'];
                     $regId        = $modFileInfo['id'];
                     $version      = $modFileInfo['version'];
-                    $mode         = XARMOD_MODE_SHARED;
                     $class        = $modFileInfo['class'];
                     $category     = $modFileInfo['category'];
                     $adminCapable = $modFileInfo['admin_capable'];
@@ -134,7 +132,6 @@ function modules_adminapi_getfilemodules($args)
                                          'nameinfile'    => $nameinfile,
                                          'regid'         => $regId,
                                          'version'       => $version,
-                                         'mode'          => $mode,
                                          'class'         => $class,
                                          'category'      => $category,
                                          'admin_capable' => $adminCapable,
@@ -146,7 +143,6 @@ function modules_adminapi_getfilemodules($args)
                                                         'nameinfile'    => $nameinfile,
                                                         'regid'         => $regId,
                                                         'version'       => $version,
-                                                        'mode'          => $mode,
                                                         'class'         => $class,
                                                         'category'      => $category,
                                                         'admin_capable' => $adminCapable,
@@ -160,5 +156,4 @@ function modules_adminapi_getfilemodules($args)
 
     return $fileModules;
 }
-
 ?>

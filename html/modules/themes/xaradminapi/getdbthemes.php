@@ -1,18 +1,17 @@
 <?php
 /**
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Themes module
+ * @subpackage themes
  */
+
 /**
  * Get all themes in the database
  *
  * @author Marty Vance
- * @param none
- * @returns array
  * @return array of themes in the database
  */
 function themes_adminapi_getdbthemes()
@@ -37,12 +36,10 @@ function themes_adminapi_getdbthemes()
         $dbThemes[$name] = array('name'    => $name,
                                   'regid'   => $themeRegId,
                                   'version' => $themeInfo['version'],
-                                  'mode'    => $themeInfo['mode'],
                                   'state'   => $themeInfo['state']);
     }
     $result->close();
 
     return $dbThemes;
 }
-
 ?>

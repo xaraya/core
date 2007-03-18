@@ -1,13 +1,13 @@
 <?php
 /**
- * Get a list of modules that matches required criteria.
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Modules module
+ * @subpackage modules
  */
+
 /**
  * Get a list of modules that matches required criteria.
  *
@@ -50,7 +50,7 @@
 function modules_adminapi_getlist($args)
 {
     extract($args);
-    static $validOrderFields = array('name' => 'mods', 'regid' => 'mods',
+    static $validOrderFields = array('name' => 'mods', 'regid' => 'mods','id' => 'mods',
                                      'class' => 'mods', 'category' => 'mods');
 
     if (!isset($filter)) $filter = array();
@@ -83,10 +83,6 @@ function modules_adminapi_getlist($args)
 
     // Keep a record of the different conditions and their bindvars
     $whereClauses = array(); $bindvars = array();
-    if (isset($filter['Mode'])) {
-        $whereClauses[] = 'mods.mode = ?';
-        $bindvars[] = $filter['Mode'];
-    }
     if (isset($filter['UserCapable'])) {
         $whereClauses[] = 'mods.user_capable = ?';
         $bindvars[] = $filter['UserCapable'];
@@ -125,17 +121,15 @@ function modules_adminapi_getlist($args)
     }
 
 
-    $modList = array(); $mode = XARMOD_MODE_SHARED;
+    $whereClause = '';
+    if (!empty($whereClauses)) {
+        $whereClause = 'WHERE '. join(' AND ', $whereClauses);
+    }
+    $modList = array();
 
     $query = "SELECT mods.regid, mods.name, mods.directory,
                      mods.version, mods.id, mods.category, mods.state
-                  FROM $modulestable mods ";
-
-    // Add the first mode to the where clauses and join it into one string
-    array_unshift($whereClauses, 'mods.mode = ?');
-    array_unshift($bindvars,$mode);
-    $whereClause = join(' AND ', $whereClauses);
-    $query .= " WHERE $whereClause ORDER BY $orderByClause";
+                  FROM $modulestable mods $whereClause ORDER BY $orderByClause";
 
     // Got it
     $stmt = $dbconn->prepareStatement($query);
@@ -157,7 +151,6 @@ function modules_adminapi_getlist($args)
             // Get infos from cache
             $modList[] = xarVarGetCached('Mod.Infos', $modInfo['regid']);
         } else {
-            $modInfo['mode'] = (int) $mode;
             $modInfo['displayname'] = xarModGetDisplayableName($modInfo['name']);
             $modInfo['displaydescription'] = xarModGetDisplayableDescription($modInfo['name']);
             // Shortcut for os prepared directory
@@ -169,7 +162,6 @@ function modules_adminapi_getlist($args)
 
             $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
             if (isset($modFileInfo)) {
-                //     $modInfo = array_merge($modInfo, $modFileInfo);
                 $modInfo = array_merge($modFileInfo, $modInfo);
                 xarVarSetCached('Mod.Infos', $modInfo['regid'], $modInfo);
                 switch ($modInfo['state']) {

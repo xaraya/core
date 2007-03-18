@@ -411,9 +411,8 @@ function installer_admin_phase5()
 
     // install the security stuff here, but disable the registerMask and
     // and xarSecurityCheck functions until we've finished the installation process
-
     sys::import('xaraya.xarSecurity');
-//    xarSecurity_init();
+
 
     sys::import('xaraya.xarMod');
 
@@ -427,8 +426,8 @@ function installer_admin_phase5()
 
     $newModSql   = "INSERT INTO $modulesTable
                     (name, regid, directory,
-                     version, mode, class, category, admin_capable, user_capable, state)
-                    VALUES (?,?,?,?,?,?,?,?,?,?)";
+                     version, class, category, admin_capable, user_capable, state)
+                    VALUES (?,?,?,?,?,?,?,?,?)";
     $newStmt     = $dbconn->prepareStatement($newModSql);
 
 
@@ -445,7 +444,6 @@ function installer_admin_phase5()
                               $modversion['id'],       // regid, from xarversion
                               $modName,
                               $modversion['version'],
-                              1,
                               $modversion['class'],
                               $modversion['category'],
                               isset($modversion['admin'])?$modversion['admin']:0,

@@ -87,16 +87,6 @@ define('XARTHEME_STATE_MISSING_FROM_UPGRADED', 9);
 define('XARMOD_LOAD_ONLYACTIVE', 1);
 define('XARMOD_LOAD_ANYSTATE', 2);
 
-/*
- * Modules modes
- * @todo get rid of these
- */
-define('XARMOD_MODE_SHARED', 1);
-define('XARMOD_MODE_PER_SITE', 2);
-
-define('XARTHEME_MODE_SHARED', 1);
-define('XARTHEME_MODE_PER_SITE', 2);
-
 /**
  * Start the module subsystem
  *
@@ -966,14 +956,13 @@ class xarMod extends Object implements IxarMod
      *
      * @access public
      * @param  integer the module's registered id
-     * @param modMode integer the module's site mode
      * @param type determines theme or module
      * @return mixed the module's current state
      * @throws DATABASE_ERROR, MODULE_NOT_EXIST
      * @todo implement the xarMod__setState reciproke
      * @todo We dont need this, used nowhere
      */
-    static function getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'module')
+    static function getState($modRegId, $type = 'module')
     {
         $tmp = self::getInfo($modRegid, $type);
         return $tmp['state'];
@@ -1058,7 +1047,6 @@ class xarMod extends Object implements IxarMod
             $query = "SELECT id,
                              name,
                              directory,
-                             mode,
                              version,
                              admin_capable,
                              user_capable,
@@ -1070,7 +1058,6 @@ class xarMod extends Object implements IxarMod
             $query = "SELECT id,
                              name,
                              directory,
-                             mode,
                              version,
                              state
                        FROM  $the_table WHERE regid = ?";
@@ -1090,7 +1077,6 @@ class xarMod extends Object implements IxarMod
             list($modInfo['systemid'],
                  $modInfo['name'],
                  $modInfo['directory'],
-                 $mode,
                  $modInfo['version'],
                  $modInfo['admincapable'],
                  $modInfo['usercapable'],
@@ -1100,7 +1086,6 @@ class xarMod extends Object implements IxarMod
             list($modInfo['systemid'],
                  $modInfo['name'],
                  $modInfo['directory'],
-                 $mode,
                  $modInfo['version'],
                  $modInfo['state']) = $result->getRow();
             break;
@@ -1109,7 +1094,6 @@ class xarMod extends Object implements IxarMod
         unset($result);
 
         $modInfo['regid'] = (int) $modRegId;
-        $modInfo['mode'] = (int) $mode;
         $modInfo['displayname'] = self::getDisplayName($modInfo['name'], $type);
         $modInfo['displaydescription'] = self::getDisplayDescription($modInfo['name'], $type);
 
@@ -1211,7 +1195,7 @@ class xarMod extends Object implements IxarMod
         // theme+s or module+s
         $table = $tables[$type.'s'];
 
-        $query = "SELECT items.regid, items.directory, items.mode,
+        $query = "SELECT items.regid, items.directory,
                      items.id, items.state, items.name
               FROM   $table items
               WHERE  items.name = ? OR items.directory = ?";
@@ -1225,11 +1209,10 @@ class xarMod extends Object implements IxarMod
         }
 
         $modBaseInfo = array();
-        list($regid,  $directory, $mode, $systemid, $state, $name) = $result->getRow();
+        list($regid,  $directory, $systemid, $state, $name) = $result->getRow();
         $result->Close();
 
         $modBaseInfo['regid'] = (int) $regid;
-        $modBaseInfo['mode'] = (int) $mode;
         $modBaseInfo['systemid'] = (int) $systemid;
         $modBaseInfo['state'] = (int) $state;
         $modBaseInfo['name'] = $name;
