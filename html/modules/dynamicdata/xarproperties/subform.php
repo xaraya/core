@@ -21,6 +21,7 @@ class SubFormProperty extends DataProperty
     public $reqmodules = array('dynamicdata');
 
     public $objectid  = 0;
+    public $objectname  = '';
     public $style     = 'serialized';
     public $title     = '';
     public $link      = '';
@@ -31,7 +32,7 @@ class SubFormProperty extends DataProperty
     public $fieldlist = null;
     public $objectref = null;
     public $oldvalue  = null;
-    public $arguments = array('objectid','style','title','link','where','input','display','fieldlist','repeat');
+    public $arguments = array('objectname','style','title','link','where','input','display','fieldlist','repeat');
     public $warnings  = '';
 
     function __construct(ObjectDescriptor $descriptor)
@@ -520,24 +521,6 @@ class SubFormProperty extends DataProperty
         return xarTplProperty($module, $template, 'showoutput', $data);
     }
 
-    public function parseValidation($validation = '')
-    {
-        if (is_array($validation)) {
-            $fields = $validation;
-        } else {
-            $fields = @unserialize($validation);
-        }
-        if (!empty($fields) && is_array($fields)) {
-            foreach ($this->arguments as $item) {
-                if (isset($fields[$item])) {
-                    $this->$item = $fields[$item];
-                } elseif ($item == 'input' && isset($fields[$item])) {
-                    $this->$item = $fields[$item];
-                }
-            }
-        }
-    }
-
     function &getObject($value)
     {
         if (isset($this->objectref)) {
@@ -680,6 +663,24 @@ class SubFormProperty extends DataProperty
         return $myobject;
     }
 
+    public function parseValidation($validation = '')
+    {
+        if (is_array($validation)) {
+            $fields = $validation;
+        } else {
+            $fields = unserialize($validation);
+        }
+        if (!empty($fields) && is_array($fields)) {
+            foreach ($this->arguments as $item) {
+                if (isset($fields[$item])) {
+                    $this->$item = $fields[$item];
+                } elseif ($item == 'input' && isset($fields[$item])) {
+                    $this->$item = $fields[$item];
+                }
+            }
+        }
+    }
+
     /**
      * Show the current validation rule in a specific form for this property type
      *
@@ -694,7 +695,6 @@ class SubFormProperty extends DataProperty
     public function showValidation(Array $args = array())
     {
         extract($args);
-
         $data = array();
         $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
         $data['id']         = !empty($id)   ? $id   : 'dd_'.$this->id;
@@ -706,12 +706,14 @@ class SubFormProperty extends DataProperty
             $this->validation = $validation;
             $this->parseValidation($validation);
         }
-
         foreach ($this->arguments as $item) {
             $data[$item] = $this->$item;
         }
-        if (!empty($this->objectid)) {
-            $data['properties'] = DataPropertyMaster::getProperties(array('objectid' => $this->objectid));
+        if (!empty($this->objectname)) {
+            $info = DataObjectMaster::getObjectInfo(array('name' => $this->objectname));
+            $this->objectid = $info['objectid'];
+            $data['objectid'] = $info['objectid'];
+            $data['properties'] = DataPropertyMaster::getProperties(array('objectid' => $info['objectid']));
         } else {
             $data['properties'] = array();
         }
@@ -751,6 +753,11 @@ class SubFormProperty extends DataProperty
                 $data = array();
                 foreach ($this->arguments as $item) {
                     if (isset($validation[$item])) {
+                        // FIXME: needs to be a better way to convert between objectname and objectid
+                        if ($item == 'objectname') {
+                            $info = DataObjectMaster::getObjectInfo(array('objectid' => $validation[$item]));
+                            $validation[$item] = $info['name'];
+                        }
                         $data[$item] = $validation[$item];
                     } elseif ($item == 'input' && isset($validation[$item])) {
                         $data[$item] = $validation[$item];
