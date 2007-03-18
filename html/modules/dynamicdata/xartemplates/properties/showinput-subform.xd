@@ -123,7 +123,7 @@
   </xar:if>
 
 <xar:elseif condition="$style eq 'childlist' or $style eq 'parentid'"/>
-  <xar:if condition="!empty($object)">
+  <xar:if condition="!empty($object)">xxx
     <table class="xar-norm">
       <xar:if condition="!empty($dropdown) and !empty($count)">
       <tr>

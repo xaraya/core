@@ -673,6 +673,11 @@ class SubFormProperty extends DataProperty
         if (!empty($fields) && is_array($fields)) {
             foreach ($this->arguments as $item) {
                 if (isset($fields[$item])) {
+                    // FIXME: needs to be a better way to convert between objectname and objectid
+                    if ($item == 'objectname') {
+                        $info = DataObjectMaster::getObjectInfo(array('name' => $fields[$item]));
+                        $this->objectid = $info['objectid'];
+                    }
                     $this->$item = $fields[$item];
                 } elseif ($item == 'input' && isset($fields[$item])) {
                     $this->$item = $fields[$item];
@@ -709,6 +714,7 @@ class SubFormProperty extends DataProperty
         foreach ($this->arguments as $item) {
             $data[$item] = $this->$item;
         }
+        // FIXME: needs to be a better way to convert between objectname and objectid
         if (!empty($this->objectname)) {
             $info = DataObjectMaster::getObjectInfo(array('name' => $this->objectname));
             $this->objectid = $info['objectid'];
