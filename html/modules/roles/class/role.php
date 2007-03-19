@@ -117,9 +117,9 @@ class xarRole extends Object
         // Confirm that this group or user does not already exist
         $q = new xarQuery('SELECT',$this->rolestable);
         if ($this->basetype == ROLES_GROUPTYPE) {
-            $q->eq('xar_name',$this->name);
+            $q->eq('name',$this->name);
         } else {
-            $q->eq('xar_uname',$this->uname);
+            $q->eq('uname',$this->uname);
         }
 
         if (!$q->run()) return;
@@ -129,23 +129,23 @@ class xarRole extends Object
         }
 
         $q = new xarQuery('INSERT',$this->rolestable);
-        $q->addfield('xar_uname', $this->uname);
-        $q->addfield('xar_name', $this->name);
-        $q->addfield('xar_date_reg', time());
-        $q->addfield('xar_valcode', $this->val_code);
-        $q->addfield('xar_auth_modid', $this->auth_module);
-        $q->addfield('xar_type', $this->type);
+        $q->addfield('uname', $this->uname);
+        $q->addfield('name', $this->name);
+        $q->addfield('date_reg', time());
+        $q->addfield('valcode', $this->val_code);
+        $q->addfield('auth_modid', $this->auth_module);
+        $q->addfield('type', $this->type);
         if ($this->basetype == ROLES_USERTYPE) {
-            $q->addfield('xar_email', $this->email);
-            $q->addfield('xar_pass', md5($this->pass));
-            $q->addfield('xar_state', $this->state);
-            $q->addfield('xar_auth_modid', $this->auth_module);
+            $q->addfield('email', $this->email);
+            $q->addfield('pass', md5($this->pass));
+            $q->addfield('state', $this->state);
+            $q->addfield('auth_modid', $this->auth_module);
         }
         // Execute the query, bail if an exception was thrown
         if (!$q->run()) return;
 
         // Fetch the last inserted user ID, bail if an exception was thrown
-        $this->uid = $q->nextid($this->rolestable, 'xar_uid');
+        $this->uid = $q->nextid($this->rolestable, 'id');
         if (!$this->uid) return;
 
         //set the email useage for this user to false
@@ -170,37 +170,33 @@ class xarRole extends Object
         if ($this->isUser()) return false;
 
         $q = new xarQuery('SELECT',$this->rolememberstable);
-        $q->eq('xar_uid',$member->getID());
-        $q->eq('xar_parentid',$this->getID());
+        $q->eq('id',$member->getID());
+        $q->eq('parentid',$this->getID());
         if (!$q->run()) return;
         // This relationship already exists. Move on
         if ($q->row() != array()) return true;
 
         // add the necessary entry to the rolemembers table
         $q = new xarQuery('INSERT',$this->rolememberstable);
-        $q->addfield('xar_uid',$member->getID());
-        $q->addfield('xar_parentid',$this->getID());
+        $q->addfield('id',$member->getID());
+        $q->addfield('parentid',$this->getID());
         if (!$q->run()) return;
 
         // for children that are users
         // add 1 to the users field of the parent group. This is for display purposes.
         if ($member->isUser()) {
             // get the current count
-            $q = new xarQuery('SELECT',$this->rolestable,'xar_users');
-            $q->eq('xar_uid',$this->getID());
+            $q = new xarQuery('SELECT',$this->rolestable,'users');
+            $q->eq('id',$this->getID());
             if (!$q->run()) return;
             $result = $q->row();
 
             // add 1 and update.
             $q = new xarQuery('UPDATE',$this->rolestable);
-            $q->eq('xar_uid',$this->getID());
-            $q->addfield('xar_users',$result['xar_users']+1);
+            $q->eq('id',$this->getID());
+            $q->addfield('users',$result['users']+1);
             if (!$q->run()) return;
         }
-        // empty the privset cache
-        // $privileges = new xarPrivileges();
-        // $privileges->forgetprivsets();
-        // done
         return true;
     }
 
@@ -217,28 +213,24 @@ class xarRole extends Object
     public function removeMember($member)
     {
         // delete the relevant entry from the rolemembers table
-        $query = "DELETE FROM $this->rolememberstable WHERE xar_uid= ? AND xar_parentid= ?";
+        $query = "DELETE FROM $this->rolememberstable WHERE id= ? AND parentid= ?";
         $bindvars = array($member->getID(), $this->getID());
         $this->dbconn->Execute($query,$bindvars);
         // for children that are users
         // subtract 1 from the users field of the parent group. This is for display purposes.
         if ($member->isUser()) {
             // get the current count.
-            $q = new xarQuery('SELECT',$this->rolestable,'xar_users');
-            $q->eq('xar_uid',$this->getID());
+            $q = new xarQuery('SELECT',$this->rolestable,'users');
+            $q->eq('id',$this->getID());
             if (!$q->run()) return;
             $result = $q->row();
 
             // subtract 1 and update.
             $q = new xarQuery('UPDATE',$this->rolestable);
-            $q->eq('xar_uid',$this->getID());
-            $q->addfield('xar_users',$result['xar_users']-1);
+            $q->eq('id',$this->getID());
+            $q->addfield('users',$result['users']-1);
             if (!$q->run()) return;
         }
-        // empty the privset cache
-        // $privileges = new xarPrivileges();
-        // $privileges->forgetprivsets();
-        // done
         return true;
     }
 
@@ -250,14 +242,14 @@ class xarRole extends Object
     public function update()
     {
         $q = new xarQuery('UPDATE',$this->rolestable);
-        $q->addfield('xar_name',$this->name);
-        $q->addfield('xar_type',$this->type);
-        $q->addfield('xar_uname',$this->uname);
-        $q->addfield('xar_email',$this->email);
-        $q->addfield('xar_state',$this->state);
-        $q->addfield('xar_auth_modid',$this->auth_module);
-        if ($this->pass != '') $q->addfield('xar_pass',md5($this->pass));
-        $q->eq('xar_uid',$this->getID());
+        $q->addfield('name',$this->name);
+        $q->addfield('type',$this->type);
+        $q->addfield('uname',$this->uname);
+        $q->addfield('email',$this->email);
+        $q->addfield('state',$this->state);
+        $q->addfield('auth_modid',$this->auth_module);
+        if ($this->pass != '') $q->addfield('pass',md5($this->pass));
+        $q->eq('id',$this->getID());
 
         // Execute the query, bail if an exception was thrown
         if (!$q->run()) return;
@@ -276,7 +268,7 @@ class xarRole extends Object
     {
         // get a list of all relevant entries in the rolemembers table
         // where this role is the child
-        $query = "SELECT xar_parentid FROM $this->rolememberstable WHERE xar_uid= ?";
+        $query = "SELECT parentid FROM $this->rolememberstable WHERE id= ?";
         // Execute the query, bail if an exception was thrown
         $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->getID()));
@@ -294,16 +286,16 @@ class xarRole extends Object
         }
         // delete the relevant entry in the roles table
         //$query = "DELETE FROM $this->rolestable
-        //      WHERE xar_uid=" . $this->getID();
+        //      WHERE id=" . $this->getID();
 
         //Let's not remove the role yet.  Instead, we want to deactivate it
         // <mrb> i'm not a fan of the name munging
         $deleted = xarML('deleted');
         $q = new xarQuery('UPDATE',$this->rolestable);
-        $q->addfield('xar_uname',$this->getUser() . "[" . $deleted . "]" . time());
-        $q->addfield('xar_email',$this->getEmail() . "[" . $deleted . "]" . time());
-        $q->addfield('xar_state',ROLES_STATE_DELETED);
-        $q->eq('xar_uid',$this->getID());
+        $q->addfield('uname',$this->getUser() . "[" . $deleted . "]" . time());
+        $q->addfield('email',$this->getEmail() . "[" . $deleted . "]" . time());
+        $q->addfield('state',ROLES_STATE_DELETED);
+        $q->eq('id',$this->getID());
 
         // Execute the query, bail if an exception was thrown
         if (!$q->run()) return;
@@ -338,41 +330,16 @@ class xarRole extends Object
         $email = '';
         $date_reg = '';
         $q = new xarQuery('UPDATE',$this->rolestable);
-        $q->addfield('xar_name',$name);
-        $q->addfield('xar_uname',$uname);
-        $q->addfield('xar_pass',$pass);
-        $q->addfield('xar_email',$email);
-        $q->addfield('xar_date_reg',$date_reg);
-        $q->addfield('xar_state',$state);
-        $q->eq('xar_uid',$this->uid);
+        $q->addfield('name',$name);
+        $q->addfield('uname',$uname);
+        $q->addfield('pass',$pass);
+        $q->addfield('email',$email);
+        $q->addfield('date_reg',$date_reg);
+        $q->addfield('state',$state);
+        $q->eq('id',$this->uid);
         if(!$q->run()) return;
         return true;
     }
-
-
-    /**
-     * Gets all the privileges in the database.
-     *
-     * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return array of privilege arrays like ('pid' => x, 'name' => y)
-     */
-    public function getAllPrivileges()
-    {
-        static $allprivileges = array();
-        if (empty($allprivileges)) {
-            $query = "SELECT xar_pid, xar_name FROM $this->privilegestable ORDER BY xar_name";
-            $stmt = $this->dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery();
-
-            $i=0;
-            while ($result->next()) {
-                list($pid, $name) = $result->fields;
-                $allprivileges[$i++] = array('pid' => $pid, 'name' => $name);
-            }
-        }
-        return $allprivileges;
-    }
-
 
     /**
      * Gets all the privileges assigned directly to this role.
@@ -393,12 +360,12 @@ class xarRole extends Object
         xarLogMessage("ROLE: getting privileges for uid: $this->uid");
         // TODO: propagate the use of 'All'=null for realms through the API instead of the flip-flopping
         $xartable =& xarDBGetTables();
-        $query = "SELECT  xar_pid, p.xar_name, r.xar_name, p.xar_modid,
-                          xar_component, xar_instance, xar_level, xar_description
+        $query = "SELECT  p.id, p.name, r.name, p.module_id,
+                          component, instance, level, description
                   FROM    $this->acltable acl,
-                          $this->privilegestable p LEFT JOIN $this->realmstable r ON p.xar_realmid = r.xar_rid
-                  WHERE   p.xar_pid = acl.xar_permid AND
-                          acl.xar_partid = ?";
+                          $this->privilegestable p LEFT JOIN $this->realmstable r ON p.realmid = r.id
+                  WHERE   p.id = acl.permid AND
+                          acl.partid = ?";
 //                          echo $query;exit;
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->uid));
@@ -406,12 +373,12 @@ class xarRole extends Object
         sys::import('modules.privileges.class.privilege');
         $privileges = array();
         while ($result->next()) {
-            list($pid, $name, $realm, $modid, $component, $instance, $level,
+            list($id, $name, $realm, $module_id, $component, $instance, $level,
                 $description) = $result->fields;
-            $perm = new xarPrivilege(array('pid' => $pid,
+            $perm = new xarPrivilege(array('id' => $id,
                     'name' => $name,
                     'realm' => is_null($realm) ? 'All' : $realm,
-                    'module' => $modid,
+                    'module' => $module_id,
                     'component' => $component,
                     'instance' => $instance,
                     'level' => $level,
@@ -421,37 +388,6 @@ class xarRole extends Object
         }
         xarVarSetCached($cacheKey,$this->uid,$privileges);
         return $privileges;
-
-        /*
-        $q = new xarQuery();
-        $q->addtable($this->acltable, 'acl');
-        $q->addtable($this->privilegestable, 'p');
-        $q->addtable($this->realmstable, 'r');
-        $q->addtable($xartable['modules'], 'm');
-        $q->addfield('xar_pid AS pid');
-        $q->addfield('p.xar_name AS name');
-        $q->addfield('r.xar_name AS realm');
-        $q->addfield('m.xar_name AS module');
-        $q->addfield('xar_component AS component');
-        $q->addfield('xar_instance AS instance');
-        $q->addfield('xar_level AS level');
-        $q->addfield('xar_description AS description');
-        $q->leftjoin('p.xar_realmid', 'r.xar_rid');
-        $q->leftjoin('p.xar_modid', 'm.xar_id');
-        $q->join('p.xar_pid', 'acl.xar_permid');
-        $q->eq('acl.xar_partid',$this->uid);
-        $q->qecho();exit;
-        if (!$q->run()) return;
-
-        sys::import('modules.privileges.class.privilege');
-        $privileges = array();
-        foreach ($q->output() as $row) {
-            $row['realm'] = is_null($row['realm']) ? 'All' : $row['realm'];
-            $row['parentid'] = 0;
-        }
-        xarVarSetCached($cacheKey,$this->uid,$privileges);
-        return $q->output();
-        */
     }
 
 
@@ -505,9 +441,6 @@ class xarRole extends Object
         $query = "INSERT INTO $this->acltable VALUES (?,?)";
         $bindvars = array($this->getID(),$privilege->getID());
         $this->dbconn->Execute($query,$bindvars);
-        // empty the privset cache
-        // $privileges = new xarPrivileges();
-        // $privileges->forgetprivsets();
         return true;
     }
 
@@ -522,12 +455,9 @@ class xarRole extends Object
     {
         // remove an entry from the privmembers table
         $query = "DELETE FROM $this->acltable
-                  WHERE xar_partid= ? AND xar_permid= ?";
+                  WHERE partid= ? AND permid= ?";
         $bindvars = array($this->uid, $privilege->getID());
         $this->dbconn->Execute($query,$bindvars);
-        // empty the privset cache
-        // $privileges = new xarPrivileges();
-        // $privileges->forgetprivsets();
         return true;
     }
 
@@ -544,14 +474,14 @@ class xarRole extends Object
      */
     public function getUsers($state = ROLES_STATE_CURRENT, $startnum = 0, $numitems = 0, $order = 'name', $selection = NULL)
     {
-        $query = "SELECT r.xar_uid, r.xar_name, r.xar_type, r.xar_uname,
-                         r.xar_email, r.xar_pass, r.xar_date_reg,
-                         r.xar_valcode, r.xar_state,r.xar_auth_modid
+        $query = "SELECT r.id, r.name, r.type, r.uname,
+                         r.email, r.pass, r.date_reg,
+                         r.valcode, r.state,r.auth_modid
                   FROM $this->rolestable r, $this->rolememberstable rm
-                  WHERE r.xar_uid = rm.xar_uid AND
-                        r.xar_type = ? AND
-                        r.xar_state != ? AND
-                        rm.xar_parentid = ?";
+                  WHERE r.id = rm.id AND
+                        r.type = ? AND
+                        r.state != ? AND
+                        rm.parentid = ?";
         // set up the query and get the data
         if ($state == ROLES_STATE_CURRENT) {
              $bindvars = array(ROLES_USERTYPE,ROLES_STATE_DELETED,$this->uid);
@@ -560,7 +490,7 @@ class xarRole extends Object
              $bindvars = array(ROLES_USERTYPE, $state, $this->uid);
         }
         if (isset($selection)) $query .= $selection;
-        $query .= " ORDER BY xar_" . $order;
+        $query .= " ORDER BY " . $order;
 
         // Prepare the query
         $stmt = $this->dbconn->prepareStatement($query);
@@ -608,17 +538,17 @@ class xarRole extends Object
     public function countChildren($state = ROLES_STATE_CURRENT, $selection = NULL, $type = NULL)
     {
         $q = new xarQuery('SELECT');
-        $q->addfield('COUNT(r.xar_uid) AS children');
+        $q->addfield('COUNT(r.id) AS children');
         $q->addtable($this->rolestable,'r');
         $q->addtable($this->rolememberstable,'rm');
-        $q->join('r.xar_uid', 'rm.xar_uid');
-        $q->eq('rm.xar_parentid', $this->uid);
+        $q->join('r.id', 'rm.id');
+        $q->eq('rm.parentid', $this->uid);
         if ($state == ROLES_STATE_CURRENT) {
-            $q->ne('r.xar_state', ROLES_STATE_DELETED);
+            $q->ne('r.state', ROLES_STATE_DELETED);
         } else {
-            $q->eq('r.xar_state', $state);
+            $q->eq('r.state', $state);
         }
-        if (isset($type)) $q->eq('r.xar_type', $type);
+        if (isset($type)) $q->eq('r.type', $type);
 
         if (isset($selection)) {
             $query = $q->tostring() . $selection;
@@ -667,7 +597,7 @@ class xarRole extends Object
         // if this is a user just perform a SELECT on the rolemembers table
         $query = "SELECT r.*
                   FROM $this->rolestable r, $this->rolememberstable rm
-                  WHERE r.xar_uid = rm.xar_parentid AND rm.xar_uid = ?";
+                  WHERE r.id = rm.parentid AND rm.id = ?";
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->uid));
 
@@ -840,77 +770,25 @@ class xarRole extends Object
      */
     public function adjustParentUsers($adjust)
     {
-        $q = new xarQuery('SELECT', $this->rolestable, 'xar_users AS users');
+        $q = new xarQuery('SELECT', $this->rolestable, 'users AS users');
         $q1 = new xarQuery('UPDATE', $this->rolestable);
         $parents = $this->getParents();
         foreach ($parents as $parent) {
             $q->clearconditions();
-            $q->eq('xar_uid', $parent->getID());
+            $q->eq('id', $parent->getID());
             $q1->clearconditions();
-            $q1->eq('xar_uid', $parent->getID());
+            $q1->eq('id', $parent->getID());
 
             // get the current count.
             if (!$q->run()) return;
             $row = $q->row();
 
             // adjust and update update.
-            $q1->addfield('xar_users', $row['users'] + $adjust);
+            $q1->addfield('users', $row['users'] + $adjust);
             if (!$q1->run()) return;
         }
         return true;
     }
-
-    /**
-     * getPrivileges: returns the privileges in the privileges repository
-     *
-     * Returns an array of all the privileges objects
-     *
-     * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @access public
-     * @param none $
-     * @return array of privilege objects
-     * @throws none
-     * @todo is this still used?
-     */
-    function getPrivileges()
-    {
-        /*
-        // start by getting an array of all the privileges
-        $query = "SELECT * FROM $this->privilegestable";
-        $result = $this->dbconn->executeQuery($query);
-
-        $privileges = array();
-        while($result->next()) {
-            list($pid,$name,$realm,$module,$component,$instance,$level,$description) = $result->fields;
-            $pargs = array('pid' => $pid,
-                            'name' => $name,
-                            'realm'=>$realm,
-                            'module'=>$module,
-                            'component'=>$component,
-                            'instance'=>$instance,
-                            'level'=>$level,
-                            'description'=>$description);
-            array_push($privileges,new xarPrivilege($pargs))
-        }
-
-        // start by getting an array of the parents
-        $parents = $part->getParents();
-
-        //Get the parent field for each parent
-        while (list($key, $parent) = each($parents)) {
-            $ancestors = $parent->getParents();
-            foreach ($ancestors as $ancestor) {
-                //If this is a new ancestor add to the end of the array
-                $iscontained = false;
-                foreach ($parents as $parent){
-                    if ($parent->isEqual($ancestor)) $iscontained = true;
-                }
-                if (!$iscontained) array_push($parents, $ancestor);
-            }
-        }
-    */
-    }
-
 
     /**
      * Gets and Sets
@@ -918,8 +796,6 @@ class xarRole extends Object
      * Get and set methods for the class variables
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @param n $ /a
-     * @return n /a
      * @todo since there are so many a generalized getter (magic __get() ) might be more pleasurable
      */
     function getID()

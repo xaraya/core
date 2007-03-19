@@ -97,7 +97,7 @@
                 </xsl:choose></label>
             <type><xsl:apply-templates mode="xarobject_proptype" select="." /></type>
             <default><xsl:value-of select="@default" /></default>
-            <source>xar_<xsl:value-of select="$module_prefix" />_<xsl:value-of select="$table_name" />.xar_<xsl:value-of select="@name" /></source>
+            <source><xsl:value-of select="$module_prefix" />_<xsl:value-of select="$table_name" />.<xsl:value-of select="@name" /></source>
             <status></status>
             <order></order>
             <validation><xsl:value-of select="dd_validation" /></validation>

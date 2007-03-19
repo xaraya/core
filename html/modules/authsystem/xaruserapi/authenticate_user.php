@@ -16,7 +16,7 @@
  * @param args['uname'] user name of user
  * @param args['pass'] password of user
  * @todo use roles api, not direct db
- * @return int uid on successful authentication, XARUSER_AUTH_FAILED otherwise
+ * @return int id on successful authentication, XARUSER_AUTH_FAILED otherwise
  */
 function authsystem_userapi_authenticate_user($args)
 {
@@ -29,9 +29,9 @@ function authsystem_userapi_authenticate_user($args)
 
     // Get user information
     $rolestable = $xartable['roles'];
-    $query = "SELECT xar_uid, xar_pass FROM $rolestable WHERE xar_uname = ?";
+    $query = "SELECT id, pass FROM $rolestable WHERE uname = ?";
     $stmt = $dbconn->prepareStatement($query);
-    
+
     $result = $stmt->executeQuery(array($uname));
 
     if (!$result->first()) {

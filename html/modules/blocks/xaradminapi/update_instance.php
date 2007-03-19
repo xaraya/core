@@ -75,8 +75,8 @@ function blocks_adminapi_update_instance($args)
     try {
         $dbconn->begin();
         $query = 'UPDATE ' . $block_instances_table . '
-                  SET xar_content=?, xar_template=?, xar_name=?, xar_title=?, xar_refresh=?, xar_state=?
-                  WHERE xar_id = ?';
+                  SET content=?, template=?, name=?, title=?, refresh=?, state=?
+                  WHERE id = ?';
         $stmt = $dbconn->prepareStatement($query);
         $bind = array($content, $template, $name, $title,$refresh, $state, $bid);
         $stmt->executeUpdate($bind);

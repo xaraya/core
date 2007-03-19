@@ -49,7 +49,7 @@ function roles_user_view($args)
     $data['items'] = $items;
     $data['objectlists'] = array($objectlists);
     $data['itemlabels'] = $itemlabels;
-    if (!isset($order)) $data['order'] = 'xar_name';
+    if (!isset($order)) $data['order'] = 'name';
     if (!isset($search)) $data['search'] = '';
     if (!isset($startnum)) $data['startnum'] = 1;
     if (!isset($numitems)) $numitems = xarModGetVar('roles', 'itemsperpage');

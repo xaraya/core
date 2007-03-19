@@ -19,7 +19,7 @@ class xarModItemVars extends xarVars implements IxarModItemVars
 {
     static function get($scope, $name, $itemid = null)
     {
-        if(empty($name)) 
+        if(empty($name))
             throw new EmptyParameterException('name');
 
         // Initialize
@@ -33,7 +33,7 @@ class xarModItemVars extends xarVars implements IxarModItemVars
             $value = xarCore::getCached($cacheCollection, $cacheName);
             return $value;
         }
-        
+
         // Not in cache, need to retrieve it
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
@@ -41,15 +41,15 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         $module_itemvarstable = $tables['module_itemvars'];
         unset($modvarid);
         $modvarid = xarModVars::getId($scope, $name);
-        if(!$modvarid) 
+        if(!$modvarid)
             return;
 
-        $query = "SELECT xar_value FROM $module_itemvarstable WHERE xar_mvid = ? AND xar_itemid = ?";
+        $query = "SELECT value FROM $module_itemvarstable WHERE module_var_id = ? AND item_id = ?";
         $bindvars = array((int)$modvarid, (int)$itemid);
 
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
-        
+
         if(!$result->next()) {
             // No value, return the modvar default
             $value = xarModVars::get($scope, $name);
@@ -61,7 +61,7 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         $result->close();
         return $value;
     }
-    
+
     static function set($scope, $name, $value, $itemid = null)
     {
         assert('!is_null($value); /* Not allowed to set a variable to NULL value */');
@@ -85,22 +85,22 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         self::delete($scope,$name,$itemid);
 
         // Only store setting if different from global setting
-        if ($value != $modsetting) 
+        if ($value != $modsetting)
         {
             $query = "INSERT INTO $module_itemvarstable
-                        (xar_mvid, xar_itemid, xar_value)
+                        (module_var_id, item_id, value)
                       VALUES (?,?,?)";
             $bindvars = array($modvarid, $itemid, (string)$value);
             $stmt = $dbconn->prepareStatement($query);
             $stmt->executeUpdate($bindvars);
         }
-        
+
         $cachename = $itemid . $name;
         xarCore::setCached('ModItem.Variables.' . $scope, $cachename, $value);
 
         return true;
     }
-    
+
     static function delete($scope, $name, $itemid = null)
     {
         if (empty($name)) throw new EmptyParameterException('name');
@@ -112,7 +112,7 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         // We need the variable id
         $modvarid = xarModVars::getId($scope, $name);
         if(!$modvarid) return;
-        $query = "DELETE FROM $module_itemvarstable WHERE xar_mvid = ? AND xar_itemid = ?";
+        $query = "DELETE FROM $module_itemvarstable WHERE module_var_id = ? AND item_id = ?";
         $bindvars = array((int)$modvarid, (int)$itemid);
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate($bindvars);

@@ -106,7 +106,7 @@ function authsystem_user_login()
                         }
                     }
                 }
-                // check for user and grab uid if exists
+                // check for user and grab id if exists
                 $user = xarModAPIFunc('roles','user','get', array('uname' => $uname));
 
                 // Make sure we haven't already found authldap module

@@ -84,12 +84,12 @@
                     </label>
                     <select name="pparentid" id="pparentid">
                         <xar:loop name="$privileges">
-                            <xar:if condition="$loop:item['pid'] eq $pparentid">
-                                <option value="#$loop:item['pid']#" selected="selected">
+                            <xar:if condition="$loop:item['id'] eq $pparentid">
+                                <option value="#$loop:item['id']#" selected="selected">
                                     #$loop:item['name']#
                                 </option>
                                 <xar:else />
-                                <option value="#$loop:item['pid']#">
+                                <option value="#$loop:item['id']#">
                                     #$loop:item['name']#
                                 </option>
                             </xar:if>
@@ -322,7 +322,7 @@
         <fieldset>
             <div class="xar-form-input-wrapper-after">
                 <input type="hidden" name="authid" id="authid" value="#$authid#" />
-                <input type="hidden" name="pid" id="pid" value="#$pid#" />
+                <input type="hidden" name="id" id="id" value="#$id#" />
                 <xar:set name="tmpaddvalue"><xar:mlstring>Add</xar:mlstring></xar:set>
                 <input type="submit" value="#$tmpaddvalue#" tabindex="8" />
             </div>

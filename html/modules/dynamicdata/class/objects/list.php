@@ -57,6 +57,8 @@ class DataObjectList extends DataObjectMaster
      */
     function setArguments(array $args = array())
     {
+        if (empty($args)) return true;
+
         // set the number of items to retrieve
         if(!empty($args['numitems'])) {
             $this->numitems = $args['numitems'];

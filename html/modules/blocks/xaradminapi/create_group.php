@@ -37,7 +37,7 @@ function blocks_adminapi_create_group($args)
 
     // Insert group into table
     $query = 'INSERT INTO ' . $block_groups_table
-        . ' (xar_name, xar_template) VALUES (?, ?)';
+        . ' (name, template) VALUES (?, ?)';
     $dbconn->Execute($query , array($name, $template));
 
     // Get group ID as index of groups table

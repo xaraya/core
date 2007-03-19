@@ -28,7 +28,7 @@ $modversion['author'] = 'Marc Lutolf';
 $modversion['contact'] = 'http://www.xaraya.com/';
 $modversion['admin'] = 1;
 $modversion['user'] = 0;
-$modversion['securityschema'] = array('Privileges::' => 'name:pid');
+$modversion['securityschema'] = array('Privileges::' => 'name:id');
 $modversion['class'] = 'Core Complete';
 $modversion['category'] = 'Users & Groups';
 ?>

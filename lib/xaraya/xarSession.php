@@ -22,7 +22,7 @@ class SessionException extends Exception
 
 /**
  * Initialise the Session Support
- * 
+ *
  * @return bool true
  */
 function xarSession_init(&$args, $whatElseIsGoingLoaded)
@@ -36,11 +36,11 @@ function xarSession_init(&$args, $whatElseIsGoingLoaded)
     // Register tables this subsystem uses
     $systemPrefix = xarDBGetSystemTablePrefix();
     $tables = array('session_info' => $systemPrefix . '_session_info');
-    xarDB::importTables($tables); 
+    xarDB::importTables($tables);
 
     // Set up the session object
     $session = new xarSession($args);
-  
+
     // Start the session, this will call xarSession:read, and
     // it will tell us if we need to start a new session or just
     // to continue the current session
@@ -88,10 +88,10 @@ function xarSessionGetSecurityLevel()
  * require.  This avoids blatant or accidental over-writing of session
  * variables.
  *
- * The old interface as wrappers for the class methods are here, see xarSession class 
+ * The old interface as wrappers for the class methods are here, see xarSession class
  * for the implementation
  */
-function xarSessionGetVar($name) 
+function xarSessionGetVar($name)
 { return xarSession::getVar($name); }
 function xarSessionSetVar($name, $value)
 { return xarSession::setVar($name, $value); }
@@ -172,7 +172,7 @@ class xarSession  extends Object implements IsessionHandler
             }
         }
     }
-    
+
     /**
      * Destructor for the session handler
      *
@@ -200,20 +200,20 @@ class xarSession  extends Object implements IsessionHandler
             // PHP configuration variables
             // Stop adding SID to URLs
             ini_set('session.use_trans_sid', 0);
-            
+
             // User-defined save handler
             ini_set('session.save_handler', 'user');
-            
+
             // How to store data
             ini_set('session.serialize_handler', 'php');
-            
+
             // Use cookie to store the session ID
             ini_set('session.use_cookies', 1);
-            
+
             // Name of our cookie
             if (empty($args['cookieName'])) $args['cookieName'] = self::COOKIE;
             ini_set('session.name', $args['cookieName']);
-            
+
             if (empty($args['cookiePath'])) {
                 $path = xarServer::getBaseURI();
                 if (empty($path)) {
@@ -222,7 +222,7 @@ class xarSession  extends Object implements IsessionHandler
             } else {
                 $path = $args['cookiePath'];
             }
-            
+
             // Lifetime of our cookie
             switch ($args['securityLevel']) {
             case 'High':
@@ -250,17 +250,17 @@ class xarSession  extends Object implements IsessionHandler
                 break;
             }
             ini_set('session.cookie_lifetime', $lifetime);
-            
+
             // Referer check for the session cookie
             if (!empty($args['refererCheck'])) {
                 ini_set('session.referer_check', $args['refererCheck']);
             }
-            
+
             // Cookie path
             // this should be customized for multi-server setups wanting to share
             // sessions
             ini_set('session.cookie_path', $path);
-            
+
             // Cookie domain
             // this is only necessary for sharing sessions across multiple servers,
             // and should be configurable for multi-site setups
@@ -271,13 +271,13 @@ class xarSession  extends Object implements IsessionHandler
             if (!empty($args['cookieDomain'])) {
                 ini_set('session.cookie_domain', $args['cookieDomain']);
             }
-            
+
             // Garbage collection
             ini_set('session.gc_probability', 1);
-            
+
             // Inactivity timeout for user sessions
             ini_set('session.gc_maxlifetime', $args['inactivityTimeout'] * 60);
-            
+
             // Auto-start session
             ini_set('session.auto_start', 1);
         }
@@ -296,7 +296,7 @@ class xarSession  extends Object implements IsessionHandler
         session_start();
     }
 
-    /** 
+    /**
      * Set or get the session id
      *
      * @todo the static vs runtime method sucks, do we really need that?
@@ -306,24 +306,24 @@ class xarSession  extends Object implements IsessionHandler
         $this->sessionId = $this->getId($id);
         return $this->sessionId;
     }
-    
+
     static function getId($id = null)
     {
-        if(isset($id)) 
+        if(isset($id))
             return session_id($id);
         else
             return session_id();
     }
-        
+
     /**
      * Getter for new isNew
      *
      */
-    function isNew() 
+    function isNew()
     {
         return $this->isNew;
     }
-    
+
     /**
      * Register a new session in our container
      *
@@ -333,9 +333,8 @@ class xarSession  extends Object implements IsessionHandler
     {
         try {
             $this->db->begin();
-            $query = "INSERT INTO $this->tbl
-                  (xar_sessid, xar_ipaddr, xar_uid, xar_firstused, xar_lastused)
-                  VALUES (?,?,?,?,?)";
+            $query = "INSERT INTO $this->tbl (id, ip_addr, role_id, first_use, last_use)
+                      VALUES (?,?,?,?,?)";
             $bindvars = array($this->sessionId, $ipAddress, _XAR_ID_UNREGISTERED, time(), time());
             $stmt = $this->db->prepareStatement($query);
             $stmt->executeUpdate($bindvars);
@@ -351,7 +350,7 @@ class xarSession  extends Object implements IsessionHandler
         // some authentication
         srand((double) microtime() * 1000000);
         $this->setVar('rand', rand());
-        
+
         $this->ipAddress = $ipAddress;
         return true;
     }
@@ -389,11 +388,10 @@ class xarSession  extends Object implements IsessionHandler
      */
     function read($sessionId)
     {
-        $query = "SELECT xar_uid, xar_ipaddr, xar_lastused, xar_vars
-              FROM $this->tbl WHERE xar_sessid = ?";
+        $query = "SELECT role_id, ip_addr, last_use, vars FROM $this->tbl WHERE id = ?";
         $stmt = $this->db->prepareStatement($query);
         $result = $stmt->executeQuery(array($sessionId),ResultSet::FETCHMODE_NUM);
-        
+
         if ($result->first()) {
             // Already have this session
             $this->isNew = false;
@@ -411,13 +409,13 @@ class xarSession  extends Object implements IsessionHandler
             }
         } else {
             $_SESSION[self::PREFIX.'uid'] = _XAR_ID_UNREGISTERED;
-            
+
             $this->ipAddress = '';
             $vars = '';
         }
         $result->close();
 
-        // We *have to* make sure this returns a string!! 
+        // We *have to* make sure this returns a string!!
         return (string) $vars;
     }
 
@@ -435,10 +433,10 @@ class xarSession  extends Object implements IsessionHandler
             // This is apparently because this is in a session write handler.
             // Additional notes:
             // * apache 2 on debian linux segfaults
-            // UPDATE: Could this be because the xar_vars column is a BLOB (i.e. binary) ?
-            $query = "UPDATE $this->tbl SET xar_vars = ". 
-                $this->db->qstr($vars) . ", xar_lastused = " . 
-                $this->db->qstr(time()). "WHERE xar_sessid = ".
+            // UPDATE: Could this be because the vars column is a BLOB (i.e. binary) ?
+            $query = "UPDATE $this->tbl SET vars = ".
+                $this->db->qstr($vars) . ", last_use = " .
+                $this->db->qstr(time()). "WHERE id = ".
                 $this->db->qstr($sessionId);
             $this->db->executeUpdate($query);
             $this->db->commit();
@@ -459,7 +457,7 @@ class xarSession  extends Object implements IsessionHandler
     {
         try {
             $this->db->begin();
-            $query = "DELETE FROM $this->tbl WHERE xar_sessid = ?";
+            $query = "DELETE FROM $this->tbl WHERE id = ?";
             $this->db->execute($query,array($sessionId));
             $this->db->commit();
         } catch (SQLException $e) {
@@ -483,7 +481,7 @@ class xarSession  extends Object implements IsessionHandler
         case 'Low':
             // Low security - delete session info if user decided not to
             //                remember themself
-            $where = "xar_remembersess = ? AND  xar_lastused < ?";
+            $where = "remember = ? AND  last_use < ?";
             $bindvars[] = 0;
             $bindvars[] = $timeoutSetting;
             break;
@@ -491,8 +489,7 @@ class xarSession  extends Object implements IsessionHandler
             // Medium security - delete session info if session cookie has
             //                   expired or user decided not to remember
             //                   themself
-            $where = "(xar_remembersess = ? AND xar_lastused <  ?) OR
-                   xar_firstused < ?";
+            $where = "(remember = ? AND last_use <  ?) OR first_use < ?";
             $bindvars[] = 0;
             $bindvars[] = $timeoutSetting;
             $bindvars[] = (time()- ($GLOBALS['xarSession_systemArgs']['duration'] * 86400));
@@ -500,7 +497,7 @@ class xarSession  extends Object implements IsessionHandler
         case 'High':
         default:
             // High security - delete session info if user is inactive
-            $where = "xar_lastused < ?";
+            $where = "last_use < ?";
             $bindvars[] = $timeoutSetting;
             break;
         }
@@ -554,11 +551,11 @@ class xarSession  extends Object implements IsessionHandler
     /**
      * Delete a session variable
      * @param name name of the session variable to delete
-     */    
+     */
     static function delVar($name)
     {
         if ($name == 'uid') return false;
-        
+
         $var = self::PREFIX . $name;
 
         if (!isset($_SESSION[$var])) {
@@ -588,8 +585,8 @@ class xarSession  extends Object implements IsessionHandler
         try {
             $dbconn->begin();
             $query = "UPDATE $sessioninfoTable
-                      SET xar_uid = ? ,xar_remembersess = ?
-                      WHERE xar_sessid = ?";
+                      SET role_id = ? ,remember = ?
+                      WHERE id = ?";
             $bindvars = array($userId, $rememberSession, self::getId());
             $stmt = $dbconn->prepareStatement($query);
             $stmt->executeUpdate($bindvars);

@@ -35,14 +35,14 @@ function roles_userapi_getallroles($args)
 
     // Order
     if (!isset($order)) {
-        $q->addorder('r.xar_name');
+        $q->addorder('r.name');
     } else {
         foreach (explode(',', $order) as $order_field) {
             if (preg_match('/^[-]?(name|uname|email|uid|state|date_reg)$/', $order_field)) {
                 if (strstr($order_field, '-')) {
-                    $q->addorder('r.xar_' . $order_field,'DESC');
+                    $q->addorder('r.' . $order_field,'DESC');
                 } else {
-                    $q->addorder('r.xar_' . $order_field);
+                    $q->addorder('r.' . $order_field);
                 }
             }
         }
@@ -50,27 +50,27 @@ function roles_userapi_getallroles($args)
 
     // Itemtype
     if (!empty($itemtype)) {
-        $q->eq('r.xar_type',$itemtype);
+        $q->eq('r.type',$itemtype);
     }
 
     // State
     if (!empty($state) && is_numeric($state) && $state != ROLES_STATE_CURRENT) {
-        $q->eq('r.xar_state',$state);
+        $q->eq('r.state',$state);
     } else {
-        $q->ne('r.xar_state',ROLES_STATE_DELETED);
+        $q->ne('r.state',ROLES_STATE_DELETED);
     }
 
-    $q->addfield('r.xar_uid AS uid');
-    $q->addfield('r.xar_name AS name');
-    $q->addfield('r.xar_type AS type');
-    $q->addfield('r.xar_users AS users');
-    $q->addfield('r.xar_uname AS uname');
-    $q->addfield('r.xar_pass AS pass');
-    $q->addfield('r.xar_email AS email');
-    $q->addfield('r.xar_date_reg AS date_reg');
-    $q->addfield('r.xar_state AS state');
-    $q->addfield('r.xar_valcode AS valcode');
-    $q->addfield('r.xar_auth_modid AS auth_modid');
+    $q->addfield('r.id AS uid');
+    $q->addfield('r.name AS name');
+    $q->addfield('r.type AS type');
+    $q->addfield('r.users AS users');
+    $q->addfield('r.uname AS uname');
+    $q->addfield('r.pass AS pass');
+    $q->addfield('r.email AS email');
+    $q->addfield('r.date_reg AS date_reg');
+    $q->addfield('r.state AS state');
+    $q->addfield('r.valcode AS valcode');
+    $q->addfield('r.auth_modid AS auth_modid');
 
     // Inclusions
     $includedgroups = array();
@@ -80,9 +80,9 @@ function roles_userapi_getallroles($args)
     if (isset($include)) {
         foreach (explode(',', $include) as $include_field) {
             if ($baseitemtype == ROLES_USERTYPE) {
-                $q->ne('xar_uname',xarModAPIFunc('roles', 'user', 'get', array('uname' => $include_field)));
+                $q->ne('uname',xarModAPIFunc('roles', 'user', 'get', array('uname' => $include_field)));
             } elseif ($baseitemtype == ROLES_GROUPTYPE) {
-                $q->ne('xar_name',xarModAPIFunc('roles', 'user', 'get', array('name' => $include_field)));
+                $q->ne('name',xarModAPIFunc('roles', 'user', 'get', array('name' => $include_field)));
                 $includedgroups[] = $include_field;
             }
         }
@@ -96,9 +96,9 @@ function roles_userapi_getallroles($args)
     if (isset($exclude)) {
         foreach (explode(',', $exclude) as $exclude_field) {
             if ($baseitemtype == ROLES_USERTYPE) {
-                $q->ne('xar_uname',xarModAPIFunc('roles', 'user', 'get', array('uname' => $exclude_field)));
+                $q->ne('uname',xarModAPIFunc('roles', 'user', 'get', array('uname' => $exclude_field)));
             } elseif ($baseitemtype == ROLES_GROUPTYPE) {
-                $q->ne('xar_name',xarModAPIFunc('roles', 'user', 'get', array('name' => $exclude_field)));
+                $q->ne('name',xarModAPIFunc('roles', 'user', 'get', array('name' => $exclude_field)));
                 $excludedgroups[] = $exclude_field;
             }
         }
@@ -106,12 +106,12 @@ function roles_userapi_getallroles($args)
 
     if ($includedgroups != array() || $excludedgroups != array()) {
         $q->addtable($xartable['rolemembers'],'rm');
-        $q->join('r.xar_uid','rm.xar_uid');
+        $q->join('r.id','rm.id');
         foreach ($includedgroups as $include) {
-            $q->eq('rm.xar_parentid',$include);
+            $q->eq('rm.parentid',$include);
         }
         foreach ($excludedgroups as $exclude) {
-            $q->ne('rm.xar_parentid',$exclude);
+            $q->ne('rm.parentid',$exclude);
         }
     }
 

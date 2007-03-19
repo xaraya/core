@@ -12,7 +12,7 @@
         <fieldset>
             <legend>
             <xar:mlstring>
-                Modify Realm 
+                Modify Realm
             </xar:mlstring>
             </legend>
             <div class="xar-form-input-wrapper">
@@ -27,7 +27,7 @@
         <fieldset>
             <div class="xar-form-input-wrapper-after">
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="hidden" name="rid" id="rid" value="#$rid#" />
+            <input type="hidden" name="id" id="id" value="#$id#" />
             <input type="hidden" name="name" id="name" value="#$name#" />
             <input type="hidden" name="confirmed" id="confirmed" value="true" />
             <xar:set name="tmpchgvalue"><xar:mlstring>Save</xar:mlstring></xar:set>

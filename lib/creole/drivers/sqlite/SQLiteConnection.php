@@ -176,7 +176,8 @@ class SQLiteConnection extends ConnectionCommon implements Connection {
         $this->lastQuery = $sql;
         $result = @sqlite_query($this->dblink, $this->lastQuery);
         if (!$result) {
-            throw new SQLException('Could not execute query', $php_errormsg, $this->lastQuery); //sqlite_error_string(sqlite_last_error($this->dblink))
+            $nativeError = sqlite_error_string(sqlite_last_error($this->dblink));
+            throw new SQLException('Could not execute query', $nativeError, $this->lastQuery);
         }
         require_once 'creole/drivers/sqlite/SQLiteResultSet.php';
         return new SQLiteResultSet($this, $result, $fetchmode);
@@ -190,7 +191,8 @@ class SQLiteConnection extends ConnectionCommon implements Connection {
         $this->lastQuery = $sql;
         $result = @sqlite_query($this->dblink, $this->lastQuery);
         if (!$result) {
-            throw new SQLException('Could not execute update', $php_errormsg, $this->lastQuery); //sqlite_error_string(sqlite_last_error($this->dblink))
+            $nativeError = sqlite_error_string(sqlite_last_error($this->dblink));
+            throw new SQLException('Could not execute update', $nativeError, $this->lastQuery);
         }
         return (int) @sqlite_changes($this->dblink);
     }
@@ -204,7 +206,8 @@ class SQLiteConnection extends ConnectionCommon implements Connection {
     {
         $result = @sqlite_query($this->dblink, 'BEGIN');
         if (!$result) {
-            throw new SQLException('Could not begin transaction', $php_errormsg); //sqlite_error_string(sqlite_last_error($this->dblink))
+            $nativeError = sqlite_error_string(sqlite_last_error($this->dblink));
+            throw new SQLException('Could not begin transaction', $nativeError);
         }
     }
 
@@ -217,7 +220,8 @@ class SQLiteConnection extends ConnectionCommon implements Connection {
     {
         $result = @sqlite_query($this->dblink, 'COMMIT');
         if (!$result) {
-            throw new SQLException('Can not commit transaction', $php_errormsg); // sqlite_error_string(sqlite_last_error($this->dblink))
+            $nativeError = sqlite_error_string(sqlite_last_error($this->dblink));
+            throw new SQLException('Can not commit transaction', $nativeError);
         }
     }
 
@@ -230,7 +234,8 @@ class SQLiteConnection extends ConnectionCommon implements Connection {
     {
         $result = @sqlite_query($this->dblink, 'ROLLBACK');
         if (!$result) {
-            throw new SQLException('Could not rollback transaction', $php_errormsg); // sqlite_error_string(sqlite_last_error($this->dblink))
+            $nativeError = sqlite_error_string(sqlite_last_error($this->dblink));
+            throw new SQLException('Could not rollback transaction', $nativeError);
         }
     }
 

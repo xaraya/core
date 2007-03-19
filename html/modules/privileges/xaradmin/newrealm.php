@@ -30,8 +30,8 @@ function privileges_admin_newrealm()
 
         $xartable =& xarDBGetTables();
         sys::import('modules.roles.class.xarQuery');
-        $q = new xarQuery('SELECT',$xartable['security_realms'],'xar_name');
-        $q->eq('xar_name', $name);
+        $q = new xarQuery('SELECT',$xartable['security_realms'],'name');
+        $q->eq('name', $name);
         if(!$q->run()) return;
 
         if ($q->getrows() > 0) {
@@ -39,7 +39,7 @@ function privileges_admin_newrealm()
         }
 
         $q = new xarQuery('INSERT',$xartable['security_realms']);
-        $q->addfield('xar_name', $name);
+        $q->addfield('name', $name);
         if(!$q->run()) return;
 
         //Redirect to view page

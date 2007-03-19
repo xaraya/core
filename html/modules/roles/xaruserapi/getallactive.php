@@ -41,14 +41,14 @@ function roles_userapi_getallactive($args)
     $rolestable = $xartable['roles'];
 
     $bindvars = array();
-    $query = "SELECT a.xar_uid,
-                     a.xar_uname,
-                     a.xar_name,
-                     a.xar_email,
-                     a.xar_date_reg,
-                     b.xar_ipaddr
+    $query = "SELECT a.id,
+                     a.uname,
+                     a.name,
+                     a.email,
+                     a.date_reg,
+                     b.ipaddr
               FROM $rolestable a, $sessioninfoTable b
-              WHERE a.xar_uid = b.xar_uid AND b.xar_lastused > ? AND a.xar_uid > ?";
+              WHERE a.id = b.role_id AND b.lastused > ? AND a.id > ?";
     $bindvars[] = $filter;
     $bindvars[] = 1;
     if (isset($selection)) $query .= $selection;
@@ -58,16 +58,16 @@ function roles_userapi_getallactive($args)
     // a where clause to the query
     if (!$include_anonymous) {
         $anon = xarModAPIFunc('roles','user','get',array('uname'=>'anonymous'));
-        $query .= " AND a.xar_uid != ?";
+        $query .= " AND a.id != ?";
         $bindvars[] = (int) $anon['uid'];
     }
     if (!$include_myself) {
         $thisrole = xarModAPIFunc('roles','user','get',array('uname'=>'myself'));
-        $query .= " AND a.xar_uid != ?";
+        $query .= " AND a.id != ?";
         $bindvars[] = (int) $thisrole['uid'];
     }
 
-    $query .= " AND xar_type = ? ORDER BY xar_" . $order;
+    $query .= " AND type = ? ORDER BY " . $order;
     $bindvars[] = 0;
     $stmt = $dbconn->prepareStatement($query);
 

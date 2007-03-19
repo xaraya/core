@@ -2,7 +2,7 @@
 /**
  *
  * @package security
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Jim McDonald
@@ -21,20 +21,19 @@
  *  GID 0 corresponds to unregistered users
  *
  */
+define('ROLES_STATE_DELETED',0);
+define('ROLES_STATE_INACTIVE',1);
+define('ROLES_STATE_NOTVALIDATED',2);
+define('ROLES_STATE_ACTIVE',3);
+define('ROLES_STATE_PENDING',4);
+define('ROLES_STATE_CURRENT',98);
+define('ROLES_STATE_ALL',99);
 
-    define('ROLES_STATE_DELETED',0);
-    define('ROLES_STATE_INACTIVE',1);
-    define('ROLES_STATE_NOTVALIDATED',2);
-    define('ROLES_STATE_ACTIVE',3);
-    define('ROLES_STATE_PENDING',4);
-    define('ROLES_STATE_CURRENT',98);
-    define('ROLES_STATE_ALL',99);
+define('ROLES_ROLETYPE',1);
+define('ROLES_USERTYPE',2);
+define('ROLES_GROUPTYPE',3);
 
-    define('ROLES_ROLETYPE',1);
-    define('ROLES_USERTYPE',2);
-    define('ROLES_GROUPTYPE',3);
-
-//Maybe changing this touch to a centralized API would be a good idea?
+// @todo Maybe changing this touch to a centralized API would be a good idea?
 //Even if in the end it would use touched files too...
 if (file_exists(sys::varpath() . '/security/on.touch')) {
     sys::import('xaraya.xarCacheSecurity');
@@ -44,41 +43,6 @@ if (file_exists(sys::varpath() . '/security/on.touch')) {
 //        said another way, can we move the two files to /includes (partially preferably)
 sys::import('modules.privileges.class.privileges');
 sys::import('modules.roles.class.roles');
-
-
-/**
- * Start the security subsystem
- *
- * @access protected
- * @return bool true
- */
-
-/*function xarSecurity_init()
-{
-    // Subsystem initialized, register a handler to run when the request is over
-    $prefix = xarDBGetSiteTablePrefix();
-    $tables = array('security_masks' => $prefix . '_security_masks',
-                    'security_acl' => $prefix . '_security_acl',
-                    'privileges' => $prefix . '_privileges',
-                    'privmembers' => $prefix . '_privmembers',
-                    'security_realms' => $prefix . '_security_realms',
-                    'security_instances' => $prefix . '_security_instances',
-                    'modules' => $prefix . '_modules',
-                    'security_privsets' => $prefix . '_security_privsets'
-                    );
-    xarDB::importTables($tables);
-    return true;
-}
-*/
-/*
- * schemas - holds all component/instance schemas
- * Should wrap this in a static one day, but the information
- * isn't critical so we'll do it later
- */
-// FIXME: lonely vars go out of scope (same note as above, more important now with sys::import())
-$schemas = array();
-
-
 
 /**
  * xarMakeGroup: create an entry in the database for a group
@@ -334,7 +298,8 @@ function xarGetGroups()
     return xarRoles::getgroups();
 }
 
-/* xarFindRole: returns a role object by its name
+/**
+ * xarFindRole: returns a role object by its name
  *
  * This is a wrapper function
  *
@@ -377,7 +342,8 @@ function xarIsAncestor($name1, $name2)
     return false;
 }
 
-/* xarTree: creates a tree object
+/**
+ * xarTree: creates a tree object
  *
  * This is a wrapper function
  *
@@ -394,7 +360,8 @@ function xarTree()
     return $tree;
 }
 
-/* xarReturnPrivilege: stores a privilege from an external wizard in the repository.
+/**
+ * xarReturnPrivilege: stores a privilege from an external wizard in the repository.
  *
  * This is a wrapper function
  *
@@ -409,7 +376,8 @@ function xarReturnPrivilege($pid,$name,$realm,$module,$component,$instance,$leve
     return xarPrivileges::returnPrivilege($pid,$name,$realm,$module,$component,$instance,$level);
 }
 
-/* xarSecurityLevel: gets a security level based on its name.
+/**
+ * xarSecurityLevel: gets a security level based on its name.
  *
  * This is a wrapper function
  *
@@ -422,7 +390,8 @@ function xarSecurityLevel($levelname)
     return xarMasks::xarSecLevel($levelname);
 }
 
-/* xarPrivExists: checks whether a privilege exists.
+/**
+ * xarPrivExists: checks whether a privilege exists.
  *
  *
  * @access  public
@@ -436,13 +405,14 @@ function xarPrivExists($name)
     else return false;
 }
 
-/* xarMaskExists: checks whether a mask exists.
+/**
+ * xarMaskExists: checks whether a mask exists.
  *
  *
  * @access  public
  * @param   string name of mask
  * @param   string module of mask
- * @return  boolean
+ * @return  bool
  */
 function xarMaskExists($name,$module="All",$component="All")
 {
@@ -452,13 +422,14 @@ function xarMaskExists($name,$module="All",$component="All")
     else return false;
 }
 
-/* xarQueryMask: returns a mask suitable for inclusion in a structured query
+/**
+ * xarQueryMask: returns a mask suitable for inclusion in a structured query
  *
  *
  * @access  public
  * @param   string name of mask
  * @param   string module of mask
- * @return  boolean
+ * @return  bool
  */
 function xarQueryMask($mask, $showException=1, $component='', $instance='', $module='', $role='')
 {

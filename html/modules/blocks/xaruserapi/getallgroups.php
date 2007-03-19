@@ -25,12 +25,12 @@ function blocks_userapi_getallgroups($args)
     $bind = array();
 
     if (!empty($gid)) {
-        $where[] = 'xar_id = ?';
+        $where[] = 'id = ?';
         $bind[] = $gid;
     }
 
     if (!empty($name)) {
-        $where[] = 'xar_name = ?';
+        $where[] = 'name = ?';
         $bind[] = $name;
     }
 
@@ -42,7 +42,7 @@ function blocks_userapi_getallgroups($args)
 
     // Can order by name and id
     if (!empty($order) && xarVarValidate('strlist:,|:pre:trim:passthru:enum:name:id', $order, true)) {
-        $orderby = ' ORDER BY xar_' . implode(', xar_', explode(',', $order));
+        $orderby = ' ORDER BY ' . $order;
     } else {
         $orderby = '';
     }
@@ -51,7 +51,7 @@ function blocks_userapi_getallgroups($args)
     $xartable =& xarDBGetTables();
 
     $block_groups_table =& $xartable['block_groups'];
-    $query = 'SELECT xar_id as gid, xar_name as name, xar_template as template'
+    $query = 'SELECT id as gid, name as name, template as template'
         . ' FROM ' . $block_groups_table . $where_clause . $orderby;
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery($bind,ResultSet::FETCHMODE_ASSOC);

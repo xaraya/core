@@ -49,12 +49,12 @@ function blocks_adminapi_delete_type($args)
     // First we need to retrieve the block ids and remove
     // the corresponding id's from the xar_block_instances
     // and xar_block_group_instances tables
-    $query = "SELECT    inst.xar_id as id
+    $query = "SELECT    inst.id as id
               FROM      $block_instances_table as inst,
                         $block_types_table as btypes
-              WHERE     btypes.xar_id = inst.xar_type_id
-              AND       btypes.xar_modid = ?
-              AND       btypes.xar_type = ?";
+              WHERE     btypes.id = inst.type_id
+              AND       btypes.modid = ?
+              AND       btypes.type = ?";
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery(array($module, $type));
 
@@ -65,7 +65,7 @@ function blocks_adminapi_delete_type($args)
     $result->close();
 
     // Delete the block type
-    $query = "DELETE FROM $block_types_table WHERE xar_modid = ? AND xar_type = ?";
+    $query = "DELETE FROM $block_types_table WHERE modid = ? AND type = ?";
     $dbconn->Execute($query, array($module, $type));
     return true;
 }

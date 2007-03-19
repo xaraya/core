@@ -41,7 +41,7 @@ function themes_adminapi_setstate($args)
     $themesTable = $xartable['themes'];
 
     $oldState = $themeInfo['state'];
-  
+
     switch ($state) {
     case XARTHEME_STATE_UNINITIALISED:
         // Are we always good here?
@@ -74,7 +74,7 @@ function themes_adminapi_setstate($args)
         break;
     }
     // If we end up here, things are good
-    $query = "UPDATE $themesTable SET xar_state = ? WHERE xar_regid = ? ";
+    $query = "UPDATE $themesTable SET state = ? WHERE regid = ? ";
     $dbconn->Execute($query,array($state,$regid));
     return true;
 }

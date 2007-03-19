@@ -37,8 +37,8 @@ class RequestObject extends Object
         $tmodInfo = xarMod::getBaseInfo($this->getmodule());
         $tmodId = $tmodInfo['systemid'];
         $query = "SELECT COUNT(*) FROM " . $hookstable .
-                 " WHERE xar_object = ? AND xar_action = ? AND
-                   xar_tarea = ? AND xar_tmodid = ? AND xar_ttype = ? AND xar_tfunc = ?";
+                 " WHERE object = ? AND action = ? AND
+                   t_area = ? AND  t_module_id = ? AND t_type = ? AND t_func = ?";
         $bindvars = array($hookObject,$hookAction,$hookArea,$tmodId,$this->gettype(),$this->getfunction());
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);

@@ -2,12 +2,12 @@
 /**
  * Theme handling functions
  *
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * 
+ *
  * @subpackage themes
- * @author mrb <marcel@xaraya.com> 
+ * @author mrb <marcel@xaraya.com>
  * @todo Most of this doesnt belong here, but in the themes module, move it away
 */
 
@@ -143,7 +143,6 @@ function xarTheme_getVarsByTheme($themeName)
  * Get the theme's current state
  *
  * @param themeRegId the theme's registered id
- * @param themeThemee the theme's site mode
  * @return to xarMod__getState for processing
  * @todo we dont need this
  */

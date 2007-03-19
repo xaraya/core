@@ -14,8 +14,8 @@
  * viewgroup - view users in group
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['pid'] group id
- * @return $users array containing uname, pid
+ * @param $args['id'] group id
+ * @return $users array containing uname, id
  */
 function roles_adminapi_viewgroup($args)
 {

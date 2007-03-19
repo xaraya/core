@@ -44,18 +44,18 @@ function blocks_adminapi_update_group($args)
     $block_group_instances_table =& $xartable['block_group_instances'];
 
     $query = "UPDATE $block_groups_table
-              SET xar_name = ?, xar_template = ?
-              WHERE xar_id = ?";
+              SET name = ?, template = ?
+              WHERE id = ?";
     $dbconn->Execute($query, array($name, $template, $gid));
 
     if (!empty($instance_order)) {
         $position = 1;
         foreach ($instance_order as $instance_id) {
             $query = "UPDATE $block_group_instances_table
-                      SET xar_position = ?
-                      WHERE xar_instance_id = ? AND
-                            xar_group_id = ? AND
-                            xar_position <> ?";
+                      SET position = ?
+                      WHERE instance_id = ? AND
+                            group_id = ? AND
+                            position <> ?";
             if (is_numeric($instance_id)) {
                 $dbconn->Execute($query, array($position, $instance_id, $gid, $position));
             }

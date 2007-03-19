@@ -47,7 +47,7 @@ function roles_userapi_countallactive($args)
     $bindvars = array();
     $query = "SELECT COUNT(*)
               FROM $rolestable a, $sessioninfoTable b
-              WHERE a.xar_uid = b.xar_uid AND b.xar_lastused > ? AND a.xar_uid > ?";
+              WHERE a.id = b.role_id AND b.lastused > ? AND a.id > ?";
     $bindvars[] = $filter;
     $bindvars[] = 1;
 
@@ -60,16 +60,16 @@ function roles_userapi_countallactive($args)
     // a where clause to the query
     if (!$include_anonymous) {
         $anon = xarModAPIFunc('roles','user','get',array('uname'=>'anonymous'));
-        $query .= " AND a.xar_uid != ?";
+        $query .= " AND a.id != ?";
         $bindvars[] = (int) $anon['uid'];
     }
     if (!$include_myself) {
         $thisrole = xarModAPIFunc('roles','user','get',array('uname'=>'myself'));
-        $query .= " AND a.xar_uid != ?";
+        $query .= " AND a.id != ?";
         $bindvars[] = (int) $thisrole['uid'];
     }
 
-    $query .= " AND xar_type = ?";
+    $query .= " AND type = ?";
     $bindvars[] = ROLES_USERTYPE;
 
 // cfr. xarcachemanager - this approach might change later

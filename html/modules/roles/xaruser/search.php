@@ -117,11 +117,11 @@ function roles_user_search()
     $quotedlike = $dbconn->qstr('%'.$q.'%');
 
     $selection = " AND (";
-    $selection .= "(xar_name LIKE " . $quotedlike . ")";
-    $selection .= " OR (xar_uname LIKE " . $quotedlike . ")";
+    $selection .= "(name LIKE " . $quotedlike . ")";
+    $selection .= " OR (uname LIKE " . $quotedlike . ")";
 
     if (xarModGetVar('roles', 'searchbyemail')) {
-        $selection .= " OR (xar_email LIKE " . $quotedlike . ")";
+        $selection .= " OR (email LIKE " . $quotedlike . ")";
     }
 
     $selection .= ")";

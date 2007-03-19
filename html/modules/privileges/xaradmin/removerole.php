@@ -16,7 +16,7 @@
  */
 function privileges_admin_removerole()
 {
-    if (!xarVarFetch('pid',          'isset', $pid,          NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('id',          'isset', $id,          NULL, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('roleid',       'isset', $roleid,       NULL, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('confirmation', 'isset', $confirmation, NULL, XARVAR_DONT_SET)) {return;}
 
@@ -26,13 +26,13 @@ function privileges_admin_removerole()
 //Call the Privileges class and get the privilege to be de-assigned
     sys::import('modules.privileges.class.privileges');
     $privs = new xarPrivileges();
-    $priv = $privs->getPrivilege($pid);
+    $priv = $privs->getPrivilege($id);
 
 
 // some assignments can't be changed, for your own good
-    if ((($roleid == 1) && ($pid == 1)) ||
-        (($roleid == 2) && ($pid == 6)) ||
-        (($roleid == 4) && ($pid == 2)))
+    if ((($roleid == 1) && ($id == 1)) ||
+        (($roleid == 2) && ($id == 6)) ||
+        (($roleid == 4) && ($id == 2)))
         {
             throw new ForbiddenOperationException(null,'This privilege cannot be removed');
         }
@@ -52,7 +52,7 @@ function privileges_admin_removerole()
         //Load Template
         $data['authid'] = xarSecGenAuthKey();
         $data['roleid'] = $roleid;
-        $data['pid'] = $pid;
+        $data['id'] = $id;
         $data['ptype'] = $role->getType();
         $data['privname'] = $privname;
         $data['rolename'] = $rolename;
@@ -74,7 +74,7 @@ function privileges_admin_removerole()
         xarResponseRedirect(xarModURL('privileges',
                                  'admin',
                                  'viewroles',
-                                 array('pid'=>$pid)));
+                                 array('id'=>$id)));
     }
 
 }

@@ -14,7 +14,7 @@
       <label>ID</label>
       <type>itemid</type>
       <default></default>
-      <source>xar_roles.xar_uid</source>
+      <source>xar_roles.id</source>
       <status>65</status>
       <order>1</order>
       <validation></validation>
@@ -24,18 +24,18 @@
       <label>Name</label>
       <type>textbox</type>
       <default></default>
-      <source>xar_roles.xar_name</source>
+      <source>xar_roles.name</source>
       <status>33</status>
       <order>2</order>
       <validation></validation>
     </property>
-    <property name="type">
+    <property name="role_type">
       <id>31</id>
       <label>Type</label>
       <type>itemtype</type>
       <default>2</default>
-      <source>xar_roles.xar_type</source>
-      <status>65</status>
+      <source>xar_roles.type</source>
+      <status>67</status>
       <order>3</order>
       <validation>roles</validation>
     </property>
@@ -44,17 +44,17 @@
       <label>User Name</label>
       <type>textbox</type>
       <default></default>
-      <source>xar_roles.xar_uname</source>
+      <source>xar_roles.uname</source>
       <status>33</status>
       <order>4</order>
-      <validation></validation>
+      <validation>::/[[:^space:]]/</validation>
     </property>
     <property name="email">
       <id>33</id>
       <label>Email</label>
       <type>email</type>
       <default></default>
-      <source>xar_roles.xar_email</source>
+      <source>xar_roles.email</source>
       <status>33</status>
       <order>5</order>
       <validation></validation>
@@ -64,7 +64,7 @@
       <label>Password</label>
       <type>passwordbox</type>
       <default></default>
-      <source>xar_roles.xar_pass</source>
+      <source>xar_roles.pass</source>
       <status>65</status>
       <order>6</order>
       <validation>confirm</validation>
@@ -73,9 +73,9 @@
       <id>35</id>
       <label>Reg. Date</label>
       <type>calendar</type>
-      <default></default>
-      <source>xar_roles.xar_date_reg</source>
-      <status>33</status>
+      <default>xarMLS_userTime()</default>
+      <source>xar_roles.date_reg</source>
+      <status>67</status>
       <order>7</order>
       <validation></validation>
     </property>
@@ -83,9 +83,9 @@
       <id>36</id>
       <label>Val. Code</label>
       <type>textbox</type>
-      <default></default>
-      <source>xar_roles.xar_valcode</source>
-      <status>65</status>
+      <default>createdbyadmin</default>
+      <source>xar_roles.valcode</source>
+      <status>67</status>
       <order>8</order>
       <validation></validation>
     </property>
@@ -93,8 +93,8 @@
       <id>37</id>
       <label>State</label>
       <type>dropdown</type>
-      <default></default>
-      <source>xar_roles.xar_state</source>
+      <default>1</default>
+      <source>xar_roles.state</source>
       <status>65</status>
       <order>9</order>
       <validation>xarModAPIFunc('roles','user','getstates')</validation>
@@ -103,9 +103,9 @@
       <id>38</id>
       <label>Auth. Module</label>
       <type>module</type>
-      <default>xarModGetVar('roles', 'defaultauthmodule');</default>
-      <source>xar_roles.xar_auth_modid</source>
-      <status>65</status>
+      <default>xarModGetVar('roles', 'defaultauthmodule')</default>
+      <source>xar_roles.auth_modid</source>
+      <status>67</status>
       <order>10</order>
       <validation></validation>
     </property>

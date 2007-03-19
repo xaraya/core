@@ -5,9 +5,8 @@
     <span class="xar-mod-title">
         <xar:ml>
             <xar:mlstring>#(1) Information</xar:mlstring>
-            <xar:mlvar>#$itemtypename#</xar:mlvar>
+            <xar:mlvar>#$object:label#</xar:mlvar>
         </xar:ml>
-    <xar:mlstring>User Information</xar:mlstring>
     </span>
 </div>
 <div class="xar-mod-body">
@@ -15,7 +14,7 @@
     <h2>
         <xar:ml>
             <xar:mlstring>Manage #(1) '#(2)':</xar:mlstring>
-            <xar:mlvar>#$itemtypename#</xar:mlvar>
+            <xar:mlvar>#$object:label#</xar:mlvar>
             <xar:mlvar>#$name#</xar:mlvar>
         </xar:ml>
     </h2>
@@ -49,13 +48,9 @@
     <xar:template file="tablist" />
     <fieldset>
       <legend><xar:mlstring>Role properties</xar:mlstring></legend>
-      <div class="xar-form-input-wrapper">
-        <label class="xar-form-label">
-          <xar:mlstring>Real Name:</xar:mlstring>
-        </label>
-        #xarVarPrepForDisplay($name)#
-      </div>
+      <xar:data-display object="$object" />
 
+      <xar:if condition="$basetype eq ROLES_USERTYPE">
     <xar:set name="settings">unserialize(xarModVars::get('roles','duvsettings'))</xar:set>
     <xar:if condition="in_array('userhome',$settings)">
         <div class="xar-form-input-wrapper">
@@ -85,21 +80,8 @@
         </div>
     </xar:if>
 
-      <xar:if condition="$basetype eq ROLES_USERTYPE">
-        <div class="xar-form-input-wrapper">
-          <label class="xar-form-label">
-            <xar:mlstring>Login:</xar:mlstring>
-          </label>
-          #xarVarPrepForDisplay($uname)#
-        </div>
 
-        <div class="xar-form-input-wrapper">
-          <label class="xar-form-label">
-            <xar:mlstring>Email:</xar:mlstring>
-          </label>
-          #xarVarPrepForDisplay($email)#
-        </div>
-      </xar:if>
+
       <xar:if condition="in_array('userlastlogin',$settings)">
         <div class="xar-form-input-wrapper">
             <label class="xar-form-label">
@@ -127,18 +109,7 @@
             <xar:data-input type="timezone" name="duvs[usertimezone]" id="duvs_usertimezone" value="$value" />
         </div>
       </xar:if>
-      <xar:data-getitem name="$properties" module="roles" itemtype="$itemtype" itemid="$uid" />
-      <xar:if condition="isset($properties) and count($properties) gt 0">
-          <xar:foreach in="$properties" key="$name">
-              <div class="xar-form-input-wrapper">
-                  <label class="xar-form-label">
-                      <xar:data-label property="$properties[$name]" />:
-                  </label>
-                  <xar:data-output property="$properties[$name]" />
-              </div>
-          </xar:foreach>
       </xar:if>
-
       <xar:foreach in="$hooks" key="$module" value="$output">
         #$output#
       </xar:foreach>

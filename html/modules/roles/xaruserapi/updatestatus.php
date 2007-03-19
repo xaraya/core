@@ -34,8 +34,8 @@ function roles_userapi_updatestatus($args)
 
     // Update the status
     $query = "UPDATE $rolesTable
-              SET xar_valcode = ?, xar_state = ?
-              WHERE xar_uname = ?";
+              SET valcode = ?, state = ?
+              WHERE uname = ?";
     $bindvars = array('',$state,$uname);
 
     $dbconn->Execute($query,$bindvars);

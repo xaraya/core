@@ -40,9 +40,9 @@ function roles_userapi_getactive($args)
 
     $sessioninfoTable = $xartable['session_info'];
 
-    $query = "SELECT xar_uid
+    $query = "SELECT role_id
               FROM $sessioninfoTable
-              WHERE xar_lastused > ? AND xar_uid = ?";
+              WHERE lastused > ? AND role_id = ?";
     $stmt = $dbconn->prepareStatement($query);
     $bindvars = array((int)$filter,(int)$uid);
     $result = $stmt->executeQuery($bindvars);

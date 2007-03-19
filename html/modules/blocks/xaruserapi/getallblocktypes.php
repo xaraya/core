@@ -27,7 +27,7 @@ function blocks_userapi_getallblocktypes($args)
     // Ignore order-clause silently if incorrect numerated columns passed in.
 
     if (!empty($order) && xarVarValidate('strlist:,|:pre:trim:passthru:enum:module:type:id', $order, true)) {
-        $orderby = ' ORDER BY xar_' . implode(', xar_', explode(',', $order));
+        $orderby = ' ORDER BY ' . $order;
         $orderby = str_ireplace("module", "name", $orderby);
     } else {
         $orderby = '';
@@ -39,23 +39,23 @@ function blocks_userapi_getallblocktypes($args)
     $modules_table     = $xartable['modules'];
 
     // Fetch instance details.
-    $query = "SELECT btypes.xar_id, mods.xar_name, btypes.xar_type, btypes.xar_info
+    $query = "SELECT btypes.id, mods.name, btypes.type, btypes.info
               FROM  $block_types_table btypes, $modules_table mods
-              WHERE btypes.xar_modid = mods.xar_id ";
+              WHERE btypes.modid = mods.id ";
 
     $bind = array();
     if (!empty($module)) {
-        $query .= ' AND mods.xar_name = ?';
+        $query .= ' AND mods.name = ?';
         $bind [] = $module;
     }
 
     if (!empty($type)) {
-        $query .= ' AND btypes.xar_type = ?';
+        $query .= ' AND btypes.type = ?';
         $bind [] = $type;
     }
 
     if (!empty($tid) && is_numeric($tid)) {
-        $query .= ' AND btypes.xar_id = ?';
+        $query .= ' AND btypes.id = ?';
         $bind [] = $tid;
     }
     $query .= $orderby;

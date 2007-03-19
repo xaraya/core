@@ -18,7 +18,7 @@ class ObjectDescriptor extends DataContainer
     {
         $publicproperties = $object->getPublicProperties();
         foreach ($this->args as $key => $value) if (in_array($key,$publicproperties)) $object->$key = $value;
-        else echo $key ."<br />";  // temporary for debugging
+        //else echo $key ."<br />";  // temporary for debugging
     }
 
     public function store(Object $object)

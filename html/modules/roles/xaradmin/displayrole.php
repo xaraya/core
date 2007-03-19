@@ -8,15 +8,27 @@
  * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
+
 /**
  * display role
  */
 function roles_admin_displayrole()
 {
+    if (!xarVarFetch('itemtype','id',$itemtype, 1, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('uid','int:1:',$uid)) return;
 
+
+    $data = array();
     sys::import('modules.roles.class.roles');
     $role = xarRoles::getRole($uid);
+
+    $data['itemtype'] = $role->getType();
+    $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
+
+    $object = xarModAPIFunc('dynamicdata','user','getobject',array('module'   => 'roles',
+                                                'itemtype' => $data['basetype']));
+
+    $itemid = $object->getItem(array('itemid' => $uid));
 
     // get the array of parents of this role
     // need to display this in the template
@@ -33,23 +45,11 @@ function roles_admin_displayrole()
     if (!xarSecurityCheck('EditRole',1,'Roles',$name)) return;
     $data['frozen'] = xarSecurityCheck('ViewRoles',0,'Roles',$name);
 
-    $data['uid'] = $role->getID();
-    $data['itemtype'] = $role->getType();
-    $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $data['itemtype']));
+    $data['uid'] = $uid;
+
     $types = xarModAPIFunc('roles','user','getitemtypes');
-    $data['itemtypename'] = $types[$data['itemtype']]['label'];
+
     $data['name'] = $name;
-
-    //get the data for a user
-    if ($data['basetype'] == ROLES_USERTYPE) {
-        $data['uname'] = $role->getUser();
-        $data['email'] = $role->getEmail();
-        $data['state'] = $role->getState();
-        $data['valcode'] = $role->getValCode();
-    } else {
-        //get the data for a group
-
-    }
 
     $item = $data;
     $item['module'] = 'roles';
@@ -59,6 +59,7 @@ function roles_admin_displayrole()
     $hooks = array();
     $hooks = xarModCallHooks('item', 'display', $uid, $item);
     $data['hooks'] = $hooks;
+    $data['object'] = & $object;
     xarTplSetPageTitle(xarVarPrepForDisplay($data['name']));
     return $data;
 }

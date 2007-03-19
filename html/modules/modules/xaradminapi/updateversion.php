@@ -39,7 +39,7 @@ function modules_adminapi_updateversion($args)
     if (!isset($fileModule)) return;
 
     // Update database version
-    $sql = "UPDATE $modules_table SET xar_version = ? WHERE xar_regid = ?";
+    $sql = "UPDATE $modules_table SET version = ? WHERE regid = ?";
     $bindvars = array($fileModule['version'],$fileModule['regid']);
 
     $result =& $dbconn->Execute($sql,$bindvars);

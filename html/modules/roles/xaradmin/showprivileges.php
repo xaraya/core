@@ -199,7 +199,6 @@ function roles_admin_showprivileges()
     $data['inherited'] = $inherited;
     $data['privileges'] = $currentprivileges;
     $data['directassigned'] = $directassigned;
-    $data['allprivileges'] = $role->getAllPrivileges();
     $data['authid'] = xarSecGenAuthKey();
     $data['groups'] = xarRoles::getgroups();
     $data['removeurl'] = xarModURL('roles',

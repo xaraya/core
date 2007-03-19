@@ -21,11 +21,11 @@
             <xar:loop name="$realms">
                 <tr class="xar-norm-outline xar-padding-endsthick xar-align-left">
                     <td >
-                        <a href="&xar-modurl-privileges-admin-modifyrealm;&amp;rid=#$loop:item['rid']#">#xarVarPrepForDisplay($loop:item['name'])#</a>
+                        <a href="&xar-modurl-privileges-admin-modifyrealm;&amp;id=#$loop:item['id']#">#xarVarPrepForDisplay($loop:item['name'])#</a>
                     </td>
                     <td class="xar-align-center">
-                        <a class="xar-valign-middle" href="&xar-modurl-privileges-admin-modifyrealm;&amp;rid=#$loop:item['rid']#" alt="#xarML('Modify this realm')#" title="#xarML('Modify this realm')#"><img src="#xarTplGetImage('infoicon.gif', 'roles')#" /></a>&#160;
-                        <a class="xar-valign-middle" href="&xar-modurl-privileges-admin-deleterealm;&amp;rid=#$loop:item['rid']#" alt="#xarML('Delete this realm')#" title="#xarML('Delete this realm')#"><img src="#xarTplGetImage('delete.png', 'roles')#" /></a>
+                        <a class="xar-valign-middle" href="&xar-modurl-privileges-admin-modifyrealm;&amp;id=#$loop:item['id']#" alt="#xarML('Modify this realm')#" title="#xarML('Modify this realm')#"><img src="#xarTplGetImage('infoicon.gif', 'roles')#" /></a>&#160;
+                        <a class="xar-valign-middle" href="&xar-modurl-privileges-admin-deleterealm;&amp;id=#$loop:item['id']#" alt="#xarML('Delete this realm')#" title="#xarML('Delete this realm')#"><img src="#xarTplGetImage('delete.png', 'roles')#" /></a>
                     </td>
                 </tr>
             </xar:loop>

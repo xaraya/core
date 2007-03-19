@@ -14,15 +14,15 @@
  * Create a flat table corresponding to some dynamic object definition, e.g.
  * for performance reasons or when moving from a prototype to the real thing
  *
- * This will create the table [prefix]_dd_[objectname] with fields xar_[propname],
- * possibly with an additional xar_itemid field to store the itemid if it's an
+ * This will create the table [prefix]_dd_[objectname] with fields [propname],
+ * possibly with an additional itemid field to store the itemid if it's an
  * extension object (fully dynamic objects will already have an itemid property)
  *
  * Next steps to finish the move from xar_dynamic_data to a dedicated table :
  * 2. export all items to an XML file (Admin - DynamicData - View Objects - Edit - Export to XML - Export all items to file)
  * 3. UPDATE [prefix]_dynamic_properties
- *       SET xar_prop_source=CONCAT('[prefix]_dd_[objectname].xar_',xar_prop_name)
- *     WHERE xar_prop_objectid = [objectid]
+ *       SET prop_source=CONCAT('[prefix]_dd_[objectname].',prop_name)
+ *     WHERE prop_objectid = [objectid]
  * 4. add an itemid property to the object if it's an extension (see above)
  * 5. import all items from the XML file (Admin - DynamicData - Utilities - Import - change dir)
  * 6. (for extension objects) skip the extra itemid property in display / input templates
@@ -104,7 +104,7 @@ function dynamicdata_utilapi_maketable($args)
     $fields = array();
     $isprimary = false;
     foreach (array_keys($properties) as $name) {
-        $field = 'xar_' . $name;
+        $field = $name;
         $type = $proptypes[$properties[$name]['type']]['name'];
         $definition = array();
         switch ($type) {
@@ -152,10 +152,10 @@ function dynamicdata_utilapi_maketable($args)
         $fields[$field] = $definition;
     }
     if (!$isprimary) {
-        if (empty($fields['xar_itemid'])) {
-             $field = 'xar_itemid';
+        if (empty($fields['itemid'])) {
+             $field = 'itemid';
         } else {
-             $field = 'xar_dd_itemid';
+             $field = 'dd_itemid';
         }
         $fields[$field] = array('type'        => 'integer',
                                 'null'        => false,

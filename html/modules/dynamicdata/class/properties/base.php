@@ -65,17 +65,16 @@ class DataProperty extends Object implements iDataProperty
 
         $descriptor->refresh($this);
 
-        if(!isset($args['value']))
-        {
+        if(!isset($args['value'])) {
             // if the default field looks like xar<something>(...), we'll assume that this is
             // a function call that returns some dynamic default value
-            if(!empty($this->default) && preg_match('/^xar\w+\(.*\)$/',$this->default))
-            {
+            if(!empty($this->default) && preg_match('/^xar\w+\(.*\)$/',$this->default)) {
                 eval('$value = ' . $this->default .';');
-                if(isset($value))
+                if(isset($value)) {
                     $this->default = $value;
-                else
+                } else {
                     $this->default = null;
+                }
             }
             $this->value = $this->default;
         }
@@ -113,20 +112,19 @@ class DataProperty extends Object implements iDataProperty
         $isvalid = true;
         $value = null;
         xarVarFetch($name, 'isset', $namevalue,  NULL, XARVAR_DONT_SET);
-        if(isset($namevalue))
+        if(isset($namevalue)) {
             $value = $namevalue;
-        else
-        {
+        } else {
             xarVarFetch($this->name, 'isset', $fieldvalue,  NULL, XARVAR_DONT_SET);
-            if(isset($fieldvalue))
+            if(isset($fieldvalue)) {
                 $value = $fieldvalue;
-            else
-            {
+            } else {
                 xarVarFetch('dd_'.$this->id, 'isset', $ddvalue,  NULL, XARVAR_DONT_SET);
-                if(isset($ddvalue))
+                if(isset($ddvalue)) {
                     $value = $ddvalue;
-                else
+                } else {
                     $isvalid = false;
+                }
             }
         }
         return array($isvalid,$value);
@@ -140,8 +138,7 @@ class DataProperty extends Object implements iDataProperty
      */
     public function checkInput($name = '', $value = null)
     {
-        if(!isset($value))
-        {
+        if(!isset($value)) {
             list($isvalid,$value) = $this->fetchValue($name);
             if (!$isvalid) return $isvalid;
 

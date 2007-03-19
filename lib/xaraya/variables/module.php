@@ -17,7 +17,7 @@ interface IxarModVars extends IxarVars
 class xarModVars extends xarVars implements IxarModVars
 {
     private static $preloaded = array(); // Keep track of what module vars (per module) we already had
-    
+
     /**
      * Get a module variable
      *
@@ -34,11 +34,11 @@ class xarModVars extends xarVars implements IxarModVars
 
         // Initialize
         $value = null;
-        
+
         // Preload per module, once
-        if(!isset(self::$preloaded[$scope])) 
+        if(!isset(self::$preloaded[$scope]))
             self::preload($scope);
-        
+
         // Lets first check to see if any of our type vars are already set in the cache.
         $cacheCollection = 'Mod.Variables.' . $scope;
 
@@ -47,7 +47,7 @@ class xarModVars extends xarVars implements IxarModVars
             $value = xarCore::getCached($cacheCollection, $name);
             return $value;
         }
-        
+
         // Still no luck, let's do the hard work then
         $modBaseInfo = xarMod::getBaseInfo($scope);
         if (!isset($modBaseInfo)) return; // throw back
@@ -57,7 +57,7 @@ class xarModVars extends xarVars implements IxarModVars
 
         // Retrieve all the variables for this module at once
         $module_varstable = $tables['module_vars'];
-        $query = "SELECT xar_name, xar_value FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
+        $query = "SELECT name, value FROM $module_varstable WHERE module_id = ? AND name = ?";
         $bindvars = array((int)$modBaseInfo['systemid'],$name);
 
         $stmt = $dbconn->prepareStatement($query);
@@ -93,15 +93,14 @@ class xarModVars extends xarVars implements IxarModVars
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
 
-        // Takes the right table basing on module mode
         $module_varstable = $tables['module_vars'];
 
-        $query = "SELECT xar_name, xar_value FROM $module_varstable WHERE xar_modid = ?";
+        $query = "SELECT name, value FROM $module_varstable WHERE module_id = ?";
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($modBaseInfo['systemid']),ResultSet::FETCHMODE_ASSOC);
 
         while ($result->next()) {
-            xarCore::setCached('Mod.Variables.' . $scope, $result->getString('xar_name'), $result->get('xar_value'));
+            xarCore::setCached('Mod.Variables.' . $scope, $result->getString('name'), $result->get('value'));
         }
         $result->close();
 
@@ -136,16 +135,16 @@ class xarModVars extends xarVars implements IxarModVars
 
         if($value === false) $value = 0;
         if($value === true)  $value = 1;
-        
+
         if(!$modvarid) {
             // Not there yet
             $query = "INSERT INTO $module_varstable
-                         (xar_modid, xar_name, xar_value)
+                         (module_id, name, value)
                       VALUES (?,?,?)";
             $bindvars = array($modBaseInfo['systemid'],$name,(string)$value);
         } else {
             // Existing one
-            $query = "UPDATE $module_varstable SET xar_value = ? WHERE xar_id = ?";
+            $query = "UPDATE $module_varstable SET value = ? WHERE id = ?";
             $bindvars = array((string)$value,$modvarid);
         }
         $stmt = $dbconn->prepareStatement($query);
@@ -169,29 +168,29 @@ class xarModVars extends xarVars implements IxarModVars
     static function delete($scope, $name)
     {
         if (empty($scope)) throw new EmptyParameterException('modName');
-        
+
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
         $modBaseInfo = xarMod::getBaseInfo($scope);
-        
+
         // Delete all the itemvars derived from this var first
         $modvarid = self::getId($scope, $name);
         // TODO: we should delegate this to moditemvars class somehow
         if($modvarid) {
             $module_itemvarstable = $tables['module_itemvars'];
-            $query = "DELETE FROM $module_itemvarstable WHERE xar_mvid = ?";
+            $query = "DELETE FROM $module_itemvarstable WHERE module_var_id = ?";
             $stmt = $dbconn->prepareStatement($query);
             $stmt->executeUpdate(array((int)$modvarid));
         }
-        
+
         // Now delete the modvar itself
         $module_varstable = $tables['module_vars'];
         // Now delete the module var itself
-        $query = "DELETE FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
+        $query = "DELETE FROM $module_varstable WHERE module_id = ? AND name = ?";
         $bindvars = array($modBaseInfo['systemid'], $name);
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
-        
+
         // Removed it from the cache
         xarCore::delCached('Mod.Variables.' . $scope, $name);
         return true;
@@ -215,14 +214,13 @@ class xarModVars extends xarVars implements IxarModVars
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
 
-        // Takes the right table basing on module mode
         $module_varstable     = $tables['module_vars'];
         $module_itemvarstable = $tables['module_itemvars'];
 
         // PostGres (allows only one table in DELETE)
         // MySql: multiple table delete only from 4.0 up
         // Select the id's which need to be removed
-        $sql="SELECT $module_varstable.xar_id FROM $module_varstable WHERE $module_varstable.xar_modid = ?";
+        $sql="SELECT $module_varstable.id FROM $module_varstable WHERE $module_varstable.module_id = ?";
         $stmt = $dbconn->prepareStatement($sql);
         $result = $stmt->executeQuery(array($modBaseInfo['systemid']), ResultSet::FETCHMODE_NUM);
 
@@ -239,13 +237,13 @@ class xarModVars extends xarVars implements IxarModVars
             $dbconn->begin();
             if(count($idlist) != 0 ) {
                 $bindmarkers = '?' . str_repeat(',?', count($idlist) -1);
-                $sql = "DELETE FROM $module_itemvarstable WHERE $module_itemvarstable.xar_mvid IN (".$bindmarkers.")";
+                $sql = "DELETE FROM $module_itemvarstable WHERE $module_itemvarstable.module_var_id IN (".$bindmarkers.")";
                 $stmt = $dbconn->prepareStatement($sql);
                 $result = $stmt->executeUpdate($idlist);
             }
 
             // Now delete the module vars
-            $query = "DELETE FROM $module_varstable WHERE xar_modid = ?";
+            $query = "DELETE FROM $module_varstable WHERE module_id = ?";
             $stmt  = $dbconn->prepareStatement($query);
             $result = $stmt->executeUpdate(array($modBaseInfo['systemid']));
             $dbconn->commit();
@@ -288,10 +286,9 @@ class xarModVars extends xarVars implements IxarModVars
         $dbconn =& xarDBGetConn();
         $tables =& xarDBGetTables();
 
-        // Takes the right table basing on module mode
         $module_varstable = $tables['module_vars'];
 
-        $query = "SELECT xar_id FROM $module_varstable WHERE xar_modid = ? AND xar_name = ?";
+        $query = "SELECT id FROM $module_varstable WHERE module_id = ? AND name = ?";
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array((int)$modBaseInfo['systemid'],$name),ResultSet::FETCHMODE_NUM);
         // If there is no such thing, the callee is responsible, return null

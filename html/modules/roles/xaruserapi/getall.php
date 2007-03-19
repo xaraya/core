@@ -40,15 +40,15 @@ function roles_userapi_getall($args)
 
     // Create the order array.
     if (!isset($order)) {
-        $order_clause = array('roletab.xar_name');
+        $order_clause = array('roletab.name');
     } else {
         $order_clause = array();
         foreach (explode(',', $order) as $order_field) {
             if (preg_match('/^[-]?(name|uname|email|uid|state|date_reg)$/', $order_field)) {
                 if (strstr($order_field, '-')) {
-                    $order_clause[] = 'roletab.xar_' . str_replace('-', '', $order_field) . ' desc';
+                    $order_clause[] = 'roletab.' . str_replace('-', '', $order_field) . ' desc';
                 } else {
-                    $order_clause[] = 'roletab.xar_' . $order_field;
+                    $order_clause[] = 'roletab.' . $order_field;
                 }
             }
         }
@@ -75,50 +75,50 @@ function roles_userapi_getall($args)
     $where_clause = array();
     $bindvars = array();
     if (!empty($state) && is_numeric($state) && $state != ROLES_STATE_CURRENT) {
-        $where_clause[] = 'roletab.xar_state = ?';
+        $where_clause[] = 'roletab.state = ?';
         $bindvars[] = (int) $state;
     } else {
-        $where_clause[] = 'roletab.xar_state <> ?';
+        $where_clause[] = 'roletab.state <> ?';
         $bindvars[] = (int) ROLES_STATE_DELETED;
     }
 
     if (empty($group_list)) {
         // Simple query.
         $query = '
-            SELECT  roletab.xar_uid,
-                    roletab.xar_uname,
-                    roletab.xar_name,
-                    roletab.xar_email,
-                    roletab.xar_pass,
-                    roletab.xar_state,
-                    roletab.xar_date_reg';
+            SELECT  roletab.id,
+                    roletab.uname,
+                    roletab.name,
+                    roletab.email,
+                    roletab.pass,
+                    roletab.state,
+                    roletab.date_reg';
         $query .= ' FROM ' . $rolestable . ' AS roletab';
     } else {
         // Select-clause.
         $query = '
-            SELECT  DISTINCT roletab.xar_uid,
-                    roletab.xar_uname,
-                    roletab.xar_name,
-                    roletab.xar_email,
-                    roletab.xar_pass,
-                    roletab.xar_state,
-                    roletab.xar_date_reg';
+            SELECT  DISTINCT roletab.id,
+                    roletab.uname,
+                    roletab.name,
+                    roletab.email,
+                    roletab.pass,
+                    roletab.state,
+                    roletab.date_reg';
         // Restrict by group(s) - join to the group_members table.
         $query .= ' FROM ' . $rolestable . ' AS roletab, ' . $rolemembtable . ' AS rolememb';
-        $where_clause[] = 'roletab.xar_uid = rolememb.xar_uid';
+        $where_clause[] = 'roletab.id = rolememb.id';
         if (count($group_list) > 1) {
             $bindmarkers = '?' . str_repeat(',?',count($group_list)-1);
-            $where_clause[] = 'rolememb.xar_parentid in (' . $bindmarkers. ')';
+            $where_clause[] = 'rolememb.parentid in (' . $bindmarkers. ')';
             $bindvars = array_merge($bindvars, $group_list);
         } else {
-            $where_clause[] = 'rolememb.xar_parentid = ?';
+            $where_clause[] = 'rolememb.parentid = ?';
             $bindvars[] = $group_list[0];
         }
     }
 
     // Hide pending users from non-admins
     if (!xarSecurityCheck('AdminRole', 0)) {
-        $where_clause[] = 'roletab.xar_state <> ?';
+        $where_clause[] = 'roletab.state <> ?';
         $bindvars[] = (int) ROLES_STATE_PENDING;
     }
 
@@ -128,18 +128,18 @@ function roles_userapi_getall($args)
     // By default, include both 'myself' and 'anonymous'.
     if (isset($include_anonymous) && !$include_anonymous) {
         $thisrole = xarModAPIFunc('roles', 'user', 'get', array('uname'=>'anonymous'));
-        $where_clause[] = 'roletab.xar_uid <> ?';
+        $where_clause[] = 'roletab.id <> ?';
         $bindvars[] = (int) $thisrole['uid'];
     }
     if (isset($include_myself) && !$include_myself) {
 
         $thisrole = xarModAPIFunc('roles', 'user', 'get', array('uname'=>'myself'));
-        $where_clause[] = 'roletab.xar_uid <> ?';
+        $where_clause[] = 'roletab.id <> ?';
         $bindvars[] = (int) $thisrole['uid'];
     }
 
     // Return only users (not groups).
-    $where_clause[] = 'roletab.xar_type = ' . ROLES_USERTYPE;
+    $where_clause[] = 'roletab.type = ' . ROLES_USERTYPE;
 
     // Add the where-clause to the query.
     $query .= ' WHERE ' . implode(' AND ', $where_clause);
@@ -150,7 +150,7 @@ function roles_userapi_getall($args)
     }
 
     if (isset($uidlist) && is_array($uidlist) && count($uidlist) > 0) {
-        $query .= ' AND roletab.xar_uid IN (' . join(',',$uidlist) . ') ';
+        $query .= ' AND roletab.id IN (' . join(',',$uidlist) . ') ';
     }
 
     // Add the order clause.
@@ -160,10 +160,10 @@ function roles_userapi_getall($args)
 
     // We got the complete query, prepare it
     $stmt = $dbconn->prepareStatement($query);
-    
+
     // cfr. xarcachemanager - this approach might change later
     $expire = xarModGetVar('roles', 'cache.userapi.getall');
-    
+
     if($startnum > 0) {
         $stmt->setLimit($numitems);
         $stmt->setOffset($startnum - 1 );

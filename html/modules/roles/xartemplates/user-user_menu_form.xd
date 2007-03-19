@@ -1,8 +1,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html
-</xar:comment>
-<xar:if condition="isset($withupload) AND $withupload">
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<xar:if condition="$object:label">
     <xar:set name="enc_type">
         'multipart/form-data'
     </xar:set>
@@ -12,58 +10,22 @@
     </xar:set>
 </xar:if>
 <div class="xar-mod-body">
+
     <h2>
         <xar:mlstring>
             Edit User
         </xar:mlstring>
         : #$uname#
     </h2>
+
     <form action="&xar-modurl-roles-user-usermenu;" method="post" id="post" name="post" enctype="#$enc_type#">
+
         <fieldset>
             <legend>
                 <xar:mlstring>
                     User Details
                 </xar:mlstring>
             </legend>
-            <div class="xar-form-input-wrapper">
-                <label for="username" class="xar-form-label">
-                    <xar:mlstring>
-                        User Name
-                    </xar:mlstring>
-                    :
-                </label>
-                <span id="username">
-                    #xarVarPrepForDisplay($uname)#
-                </span>
-            </div>
-            <div class="xar-form-input-wrapper">
-                <label for="emailaddress" class="xar-form-label">
-                    <xar:mlstring>
-                        Email Address
-                    </xar:mlstring>
-                    :
-                </label>
-                <span>
-                    #xarVarPrepForDisplay($emailaddress)#
-                </span>
-            </div>
-            <div class="xar-form-input-wrapper">
-                <label for="name" class="xar-form-label">
-                    <xar:mlstring>
-                        Display Name
-                    </xar:mlstring>
-                    :
-                </label>
-                <input type="text" name="name" id="name" value="#xarVarPrepForDisplay($name)#" size="20" maxlength="60" />
-            </div>
-            <div class="xar-form-input-wrapper">
-                <label for="email" class="xar-form-label">
-                    <xar:mlstring>
-                        Email Address:
-                    </xar:mlstring>
-                </label>
-                <input type="text" name="email" id="email" value="" size="40" maxlength="60" />
-            </div>
             <xar:if condition="xarModGetVar('roles', 'requirevalidation')">
                 <div class="xar-form-input-wrapper">
                     <label for="email">
@@ -73,6 +35,7 @@
                     </label>
                 </div>
             </xar:if>
+            <xar:data-form object="$object" />
             <xar:if condition="xarModGetVar('roles','usersendemails')">
                 <div class="xar-form-input-wrapper-after">
                     <xar:set name="checked">xarModGetUserVar('roles', 'usersendemails',$uid)</xar:set>
@@ -97,27 +60,6 @@
             <xar:elseif condition="xarModGetVar('roles','setuserhome')" />
                  <input type="hidden" name="home" id="home" value="#$home#" />
             </xar:if>
-
-            <div class="xar-form-input-wrapper">
-                <label for="pass1" class="xar-form-label">
-                    <xar:mlstring>
-                        Password
-                    </xar:mlstring>
-                    :
-                </label>
-                <input type="password" name="pass1" id="pass1" value="" size="20" maxlength="40" />
-            </div>
-
-            <div class="xar-form-input-wrapper">
-                <label for="pass2" class="xar-form-label">
-                    <xar:mlstring>
-                        Confirm Password
-                    </xar:mlstring>
-                    :
-                </label>
-                <input type="password" name="pass2" id="pass2" value="" size="20" maxlength="40" />
-            </div>
-
             <xar:if condition="xarModGetVar('roles','setpasswordupdate')">
                     <div class="xar-form-input-wrapper">
                         <label for="upasswordupdate" class="xar-form-label">
@@ -157,16 +99,8 @@
             </xar:if>
 
             <div class="xar-form-input-wrapper">
-                <xar:data-getitem name="$properties" module="roles" itemid="$uid" />
+
             </div>
-            <xar:if condition="isset($properties) and count($properties) gt 0">
-                <xar:foreach in="$properties" key="$name">
-                    <div class="xar-form-input-wrapper">
-                        <xar:data-label property="$properties[$name]" label="id" />
-                        <xar:data-input property="$properties[$name]" />
-                    </div>
-                </xar:foreach>
-            </xar:if>
             <xar:if condition="!empty($hooks)">
                 <div class="xar-form-input-wrapper">
                     <xar:foreach in="$hooks" key="$module" value="$output">
@@ -177,12 +111,13 @@
         </fieldset>
         <fieldset>
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="hidden" name="uid" id="uid" value="#$uid#" />
             <input type="hidden" name="phase" id="phase" value="updatebasic" />
             <div class="xar-form-input-wrapper-after">
-                <input type="submit" value="#xarVarPrepForDisplay($submitlabel)#" />
+                <input type="submit" value="#xarML('Submit')#" />
             </div>
         </fieldset>
+
     </form>
+
 </div>
 </xar:template>

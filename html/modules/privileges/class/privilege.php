@@ -12,7 +12,7 @@ sys::import('modules.privileges.class.mask');
 class xarPrivilege extends xarMask
 {
 
-    public $pid;           //the id of this privilege
+    public $id;           //the id of this privilege
     public $name;          //the name of this privilege
     public $realm;         //the realm of this privilege
     public $module;        //the module of this privilege
@@ -20,7 +20,7 @@ class xarPrivilege extends xarMask
     public $instance;      //the instance of this privilege
     public $level;         //the access level of this privilege
     public $description;   //the long description of this privilege
-    public $parentid;      //the pid of the parent of this privilege
+    public $parentid;      //the id of the parent of this privilege
 
     public $dbconn;
     public $privilegestable;
@@ -49,15 +49,15 @@ class xarPrivilege extends xarMask
         $this->acltable = $xartable['security_acl'];
         $this->realmstable = $xartable['security_realms'];
 
-// CHECKME: pid and description are undefined when adding a new privilege
-        if (empty($pid)) {
-            $pid = 0;
+// CHECKME: id and description are undefined when adding a new privilege
+        if (empty($id)) {
+            $id = 0;
         }
         if (empty($description)) {
             $description = '';
         }
 
-        $this->pid          = (int) $pid;
+        $this->id          = (int) $id;
         $this->name         = $name;
         $this->realm        = $realm;
         $this->module       = $module;
@@ -89,12 +89,12 @@ class xarPrivilege extends xarMask
         // create the insert query
         $realmid = null;
         if($this->realm != 'All') {
-            $stmt = $this->dbconn->prepareStatement('SELECT xar_rid FROM '. $this->realmstable .' WHERE xar_name=?');
+            $stmt = $this->dbconn->prepareStatement('SELECT id FROM '. $this->realmstable .' WHERE name=?');
             $result = $stmt->executeQuery(array($this->realm),ResultSet::FETCHMODE_ASSOC);
-            if($result->next()) $realmid = $result->getInt('xar_rid');
+            if($result->next()) $realmid = $result->getInt('id');
         }
         $query = "INSERT INTO $this->privilegestable
-                    (xar_name, xar_realmid, xar_modid, xar_component, xar_instance, xar_level, type)
+                    (name, realmid, module_id, component, instance, level, type)
                   VALUES (?,?,?,?,?,?,?)";
         $bindvars = array($this->name, $realmid, $this->module,
                           $this->component, $this->instance, $this->level, self::PRIVILEGES_PRIVILEGETYPE);
@@ -102,7 +102,7 @@ class xarPrivilege extends xarMask
         $this->dbconn->Execute($query,$bindvars);
         // the insert created a new index value
         // retrieve the value
-        $this->pid = $this->dbconn->getLastId($this->privilegestable);
+        $this->id = $this->dbconn->getLastId($this->privilegestable);
 
         // make this privilege a child of its parent
         if($this->parentid != 0) {
@@ -171,20 +171,20 @@ class xarPrivilege extends xarMask
     {
         sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery('SELECT', $this->privmemberstable, 'COUNT(*) AS count');
-        $q->eq('xar_pid', $member->getID());
+        $q->eq('id', $member->getID());
         if (!$q->run()) return;
         $total = $q->row();
         if($total['count'] == 0) return true;
 
         if($total['count'] > 1) {
             $q = new xarQuery('DELETE');
-            $q->eq('xar_parentid', $this->getID());
+            $q->eq('parentid', $this->getID());
         } else {
             $q = new xarQuery('UPDATE');
-            $q->addfield('xar_parentid', 0);
+            $q->addfield('parentid', 0);
         }
         $q->addtable($this->privmemberstable);
-        $q->eq('xar_pid', $member->getID());
+        $q->eq('id', $member->getID());
         if (!$q->run()) return;
 
 // empty the privset cache
@@ -207,16 +207,16 @@ class xarPrivilege extends xarMask
     {
         $realmid = null;
         if($this->realm != 'All') {
-            $stmt = $this->dbconn->prepareStatement('SELECT xar_rid FROM '. $this->realmstable .' WHERE xar_name=?');
+            $stmt = $this->dbconn->prepareStatement('SELECT id FROM '. $this->realmstable .' WHERE name=?');
             $result = $stmt->executeQuery(array($this->realm),ResultSet::FETCHMODE_ASSOC);
-            if($result->next()) $realmid = $result->getInt('xar_rid');
+            if($result->next()) $realmid = $result->getInt('id');
         }
 
         $query =    "UPDATE " . $this->privilegestable .
-                    ' SET xar_name = ?,     xar_realmid = ?,
-                          xar_modid = ?,   xar_component = ?,
-                          xar_instance = ?, xar_level = ?, type = ?
-                      WHERE xar_pid = ?';
+                    ' SET name = ?,     realmid = ?,
+                          module_id = ?,   component = ?,
+                          instance = ?, level = ?, type = ?
+                      WHERE id = ?';
         $bindvars = array($this->name, $realmid, $this->module,
                           $this->component, $this->instance, $this->level, self::PRIVILEGES_PRIVILEGETYPE,
                           $this->getID());
@@ -240,13 +240,13 @@ class xarPrivilege extends xarMask
     {
 
         // set up the DELETE query
-        $query = "DELETE FROM $this->privilegestable WHERE xar_pid=?";
+        $query = "DELETE FROM $this->privilegestable WHERE id=?";
         //Execute the query, bail if an exception was thrown
-        $this->dbconn->Execute($query,array($this->pid));
+        $this->dbconn->Execute($query,array($this->id));
 
         // set up a query to get all the parents of this child
-        $query = "SELECT xar_parentid FROM $this->privmemberstable
-              WHERE xar_pid=?";
+        $query = "SELECT parentid FROM $this->privmemberstable
+              WHERE id=?";
         //Execute the query, bail if an exception was thrown
         $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->getID()));
@@ -262,9 +262,9 @@ class xarPrivilege extends xarMask
         }
 
         // remove this child from the root privilege too
-        $query = "DELETE FROM $this->privmemberstable WHERE xar_pid=? AND xar_parentid=?";
+        $query = "DELETE FROM $this->privmemberstable WHERE id=? AND parentid=?";
         $stmt = $this->dbconn->prepareStatement($query);
-        $stmt->executeUpdate(array($this->pid,0));
+        $stmt->executeUpdate(array($this->id,0));
 
         // get all the roles this privilege was assigned to
         $roles = $this->getRoles();
@@ -300,8 +300,8 @@ class xarPrivilege extends xarMask
     {
         static $stmt = null;
 
-        $query = "SELECT xar_partid FROM $this->acltable WHERE
-                xar_partid = ? AND xar_permid = ?";
+        $query = "SELECT partid FROM $this->acltable WHERE
+                partid = ? AND permid = ?";
         $bindvars = array($role->getID(), $this->getID());
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
@@ -322,14 +322,14 @@ class xarPrivilege extends xarMask
     {
         // set up a query to select the roles this privilege
         // is linked to in the acl table
-        $query = "SELECT r.xar_uid, r.xar_name, r.xar_type,
-                         r.xar_uname, r.xar_email, r.xar_pass,
-                         r.xar_auth_modid
+        $query = "SELECT r.id, r.name, r.type,
+                         r.uname, r.email, r.pass,
+                         r.auth_modid
                   FROM $this->rolestable r, $this->acltable acl
-                  WHERE r.xar_uid = acl.xar_partid AND
-                        acl.xar_permid = ?";
+                  WHERE r.id = acl.partid AND
+                        acl.permid = ?";
         $stmt = $this->dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array($this->pid));
+        $result = $stmt->executeQuery(array($this->id));
 
         // make objects from the db entries retrieved
         sys::import('modules.roles.class.roles');
@@ -389,22 +389,22 @@ class xarPrivilege extends xarMask
         // perform a SELECT on the privmembers table
         $query = "SELECT p.*
                   FROM $this->privilegestable p, $this->privmemberstable pm
-                  WHERE p.xar_pid = pm.xar_parentid
-                    AND pm.xar_pid = ?";
+                  WHERE p.id = pm.parentid
+                    AND pm.id = ?";
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->getID()));
         // collect the table values and use them to create new role objects
         while($result->next()) {
-            list($pid,$name,$realm,$modid,$component,$instance,$level,$description) = $result->fields;
-            $pargs = array('pid'=>$pid,
+            list($id,$name,$realm,$module_id,$component,$instance,$level,$description) = $result->fields;
+            $pargs = array('id'=>$id,
                             'name'=>$name,
                             'realm'=>$realm,
-                            'module'=>$modid,
+                            'module'=>$module_id,
                             'component'=>$component,
                             'instance'=>$instance,
                             'level'=>$level,
                             'description'=>$description,
-                            'parentid' => $pid);
+                            'parentid' => $id);
             array_push($parents, new xarPrivilege($pargs));
         }
         // done
@@ -465,21 +465,21 @@ class xarPrivilege extends xarMask
         // create an array to hold the objects to be returned
         $children = array();
 
-        $query = "SELECT p.*, pm.xar_parentid
+        $query = "SELECT p.*, pm.parentid
                     FROM $this->privilegestable p, $this->privmemberstable pm
-                    WHERE p.xar_pid = pm.xar_pid";
+                    WHERE p.id = pm.id";
         // retrieve all children of everyone at once
-        //              AND pm.xar_parentid = " . $cacheId;
+        //              AND pm.parentid = " . $cacheId;
         // Can't use caching here. The privs have changed
         $result = $this->dbconn->executeQuery($query);
 
         while($result->next()) {
-            list($pid,$name,$realm,$modid,$component,$instance,$level,$description,$type,$parentid) = $result->fields;
+            list($id,$name,$realm,$module_id,$component,$instance,$level,$description,$type,$parentid) = $result->fields;
             if (!isset($children[$parentid])) $children[$parentid] = array();
-            $pargs = array('pid'=>$pid,
+            $pargs = array('id'=>$id,
                             'name'=>$name,
                             'realm'=>$realm,
-                            'module'=>$modid,
+                            'module'=>$module_id,
                             'component'=>$component,
                             'instance'=>$instance,
                             'level'=>$level,
@@ -529,7 +529,7 @@ class xarPrivilege extends xarMask
     /**
      * isEqual: checks whether two privileges are equal
      *
-     * Two privilege objects are considered equal if they have the same pid.
+     * Two privilege objects are considered equal if they have the same id.
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
@@ -552,7 +552,7 @@ class xarPrivilege extends xarMask
     */
     function getID()
     {
-        return $this->pid;
+        return $this->id;
     }
 
     /**
@@ -603,9 +603,9 @@ class xarPrivilege extends xarMask
         $q = new xarQuery('SELECT');
         $q->addtable($this->privilegestable,'p');
         $q->addtable($this->privmemberstable,'pm');
-        $q->join('p.xar_pid','pm.xar_pid'); // inner join i presume?
-        $q->eq('pm.xar_pid',$this->getID());
-        $q->eq('pm.xar_parentid',0);
+        $q->join('p.id','pm.id');
+        $q->eq('pm.id',$this->getID());
+        $q->eq('pm.parentid',0);
         if(!$q->run()) return;
         return ($q->output() != array());
     }

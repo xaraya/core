@@ -20,11 +20,11 @@ function privileges_admin_updateprivilege()
 // Check for authorization code
     if (!xarSecConfirmAuthKey()) return;
 
-    if(!xarVarFetch('pid',        'isset', $pid,        NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('id',        'isset', $id,        NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('pname',      'isset', $name,       NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('prealm',     'isset', $realm,     'All', XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('pmodule',    'isset', $module,     0,    XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('pcomponent', 'isset', $component,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('pcomponent', 'isset', $component,  'All', XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('ptype',      'isset', $type,       NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('plevel',     'isset', $level,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('pinstance',  'array', $pinstance, array(), XARVAR_NOT_REQUIRED)) {return;}
@@ -44,7 +44,7 @@ function privileges_admin_updateprivilege()
 // call the Privileges class and update the values
 
     sys::import('modules.privileges.class.privileges');
-    $priv = xarPrivileges::getPrivilege($pid);
+    $priv = xarPrivileges::getPrivilege($id);
     if ($type =="empty") {
 
 // this is just a container for other privileges
@@ -57,7 +57,12 @@ function privileges_admin_updateprivilege()
     } else {
         $priv->setName($name);
         $priv->setRealm($realm);
-        $priv->setModule($module);
+        if (!empty($module)) {
+            $info = xarMod_GetBaseInfo(xarMod::getName($module));
+            $priv->setModule($info['systemid']);
+        } else {
+            $priv->setModule(0);
+        }
         $priv->setComponent($component);
         $priv->setInstance($instance);
         $priv->setLevel($level);
@@ -66,13 +71,13 @@ function privileges_admin_updateprivilege()
 //Try to update the privilege to the repository and bail if an error was thrown
     if (!$priv->update()) {return;}
 
-    xarModCallHooks('item', 'update', $pid, '');
+    xarModCallHooks('item', 'update', $id, '');
 
     xarSessionSetVar('privileges_statusmsg', xarML('Privilege Modified',
                     'privileges'));
 
 // redirect to the next page
-    xarResponseRedirect(xarModURL('privileges', 'admin', 'modifyprivilege', array('pid' => $pid)));
+    xarResponseRedirect(xarModURL('privileges', 'admin', 'modifyprivilege', array('id' => $id)));
 }
 
 ?>

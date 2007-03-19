@@ -32,7 +32,7 @@ function roles_admin_showusers()
     if (!xarVarFetch('state',    'int:0:', $data['state'],    ROLES_STATE_CURRENT, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('selstyle', 'isset',  $data['selstyle'], xarSessionGetVar('rolesdisplay'), XARVAR_DONT_SET)) return;
     if (!xarVarFetch('invalid',  'str:0:', $data['invalid'],  NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('order',    'str:0:', $data['order'],    'xar_name', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('order',    'str:0:', $data['order'],    'name', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('search',   'str:0:', $data['search'],   NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('reload',   'str:0:', $reload,           NULL,    XARVAR_DONT_SET)) return;
 
@@ -73,6 +73,7 @@ function roles_admin_showusers()
         sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery();
         $q = $q->sessiongetvar('rolesquery');
+        $q = '';
     if (empty($q) || isset($reload)) {
         $types = xarModAPIFunc('roles','user','getitemtypes');
         $basetypes = array();
@@ -84,38 +85,38 @@ function roles_admin_showusers()
         $q = new xarQuery('SELECT');
         $q->addtable($xartable['roles'],'r');
         $q->addfields(array(
-            'r.xar_uid AS uid',
-            'r.xar_name AS name',
-            'r.xar_uname AS uname',
-            'r.xar_email AS email',
-            'r.xar_state AS state',
-            'r.xar_date_reg AS date_reg'));
+            'r.id AS uid',
+            'r.name AS name',
+            'r.uname AS uname',
+            'r.email AS email',
+            'r.state AS state',
+            'r.date_reg AS date_reg'));
 
         //Create the selection
         $c = array();
         if (!empty($data['search'])) {
-            $c[] = $q->like('xar_name','%' . $data['search'] . '%');
-            $c[] = $q->like('xar_uname','%' . $data['search'] . '%');
-            $c[] = $q->like('xar_email','%' . $data['search'] . '%');
+            $c[] = $q->like('name','%' . $data['search'] . '%');
+            $c[] = $q->like('uname','%' . $data['search'] . '%');
+            $c[] = $q->like('email','%' . $data['search'] . '%');
             $q->qor($c);
         }
 
         $c = array();
         foreach ($basetypes as $type) {
-            $c[] = $q->eq('r.xar_type',$type);
+            $c[] = $q->eq('r.type',$type);
         }
         $q->qor($c);
 
         // Add state
-        if ($data['state'] == ROLES_STATE_CURRENT) $q->ne('xar_state',ROLES_STATE_DELETED);
+        if ($data['state'] == ROLES_STATE_CURRENT) $q->ne('state',ROLES_STATE_DELETED);
         elseif ($data['state'] == ROLES_STATE_ALL) {}
-        else $q->eq('xar_state',$data['state']);
+        else $q->eq('state',$data['state']);
 
         // If a group was chosen, get only the users of that group
         if ($uid != 0) {
             $q->addtable($xartable['rolemembers'],'rm');
-            $q->join('r.xar_uid','rm.xar_uid');
-            $q->eq('rm.xar_parentid',$uid);
+            $q->join('r.id','rm.id');
+            $q->eq('rm.parentid',$uid);
         }
 
         // Save the query so we can reuse it somewhere
@@ -157,10 +158,11 @@ function roles_admin_showusers()
             break;
     }
     // assemble the info for the display
-        $users = array();
-        foreach($q->output() as $user)
-            $users[] = array_merge($user, array('frozen' => !xarSecurityCheck('EditRole',0,'Roles',$user['name'])));
-
+    $users = array();
+    //debug($q->output);
+    foreach($q->output() as $user) {
+        $users[] = array_merge($user, array('frozen' => !xarSecurityCheck('EditRole',0,'Roles',$user['name'])));
+    }
     if ($uid != 0) $data['title'] .= " ".xarML('of group')." ";
 
     //selstyle

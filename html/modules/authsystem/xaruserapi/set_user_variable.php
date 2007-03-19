@@ -13,7 +13,7 @@
  * set a user variable (currently unused)
  * @access public
  * @author Gregor J. Rothfuss
- * @param args['uid'] user id
+ * @param args['id'] user id
  * @param args['name'] variable name
  * @param args['value'] variable value
  * @return bool
@@ -30,7 +30,7 @@ function authsystem_userapi_set_user_variable($args)
 
     // throw back an exception if the user doesn't exist
     //if (...) {
-    //    throw new IDNotFoundException($uid,'User identified by uid #(1) does not exist.');
+    //    throw new IDNotFoundException($uid,'User identified by id #(1) does not exist.');
     //}
 
     return true;

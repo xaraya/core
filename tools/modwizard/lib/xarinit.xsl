@@ -342,7 +342,7 @@
 
     $fields = array(
     <xsl:for-each select="structure/field">
-        'xar_<xsl:value-of select="@name" />'   =>  array(
+        '<xsl:value-of select="@name" />'   =>  array(
             'type'          =>  '<xsl:value-of select="@type" />',
             <xsl:if test="@size">'size'          =>  '<xsl:value-of select="@size" />',</xsl:if>
             'null'          =>  <xsl:choose>
@@ -375,7 +375,7 @@
     // <xsl:value-of select="comment" />
     $index = array(
         'name'      => 'i_' . $sitePrefix . '<xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />'
-        ,'fields'   => array( <xsl:for-each select="field">'xar_<xsl:value-of select="@name" />'<xsl:if test="last() != position()">,</xsl:if></xsl:for-each> )
+        ,'fields'   => array( <xsl:for-each select="field">'<xsl:value-of select="@name" />'<xsl:if test="last() != position()">,</xsl:if></xsl:for-each> )
         ,'unique'   => <xsl:choose><xsl:when test="@unique = 'true'">true</xsl:when><xsl:otherwise>false</xsl:otherwise></xsl:choose>
         );
     $query = xarDBCreateIndex( $xartables['<xsl:value-of select="../@name" />'], $index );

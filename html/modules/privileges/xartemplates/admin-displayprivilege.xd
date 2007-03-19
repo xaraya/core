@@ -43,7 +43,7 @@
                 <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                     <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                         <dd>
-                            <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;pid=#$parents.$i.parentid#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a>
+                            <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a>
                         </dd>
                     </xar:if>
                     <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
@@ -58,16 +58,16 @@
                 <xar:mlstring>Manage privilege</xar:mlstring> :
             </dt>
             <dd class="active">
-                <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;pid=#$ppid#" class="active"><xar:mlstring>Display</xar:mlstring></a>
+                <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;id=#$ppid#" class="active"><xar:mlstring>Display</xar:mlstring></a>
             </dd>
             <dd>
-                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$ppid#"><xar:mlstring>Modify</xar:mlstring></a>
+                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$ppid#"><xar:mlstring>Modify</xar:mlstring></a>
             </dd>
             <dd>
-                <a href="&xar-modurl-privileges-admin-deleteprivilege;&amp;pid=#$ppid#"><xar:mlstring>Delete</xar:mlstring></a>
+                <a href="&xar-modurl-privileges-admin-deleteprivilege;&amp;id=#$ppid#"><xar:mlstring>Delete</xar:mlstring></a>
             </dd>
             <dd>
-                <a href="&xar-modurl-privileges-admin-viewroles;&amp;pid=#$ppid#"><xar:mlstring>Groups/Users</xar:mlstring></a>
+                <a href="&xar-modurl-privileges-admin-viewroles;&amp;id=#$ppid#"><xar:mlstring>Groups/Users</xar:mlstring></a>
             </dd>
         </dl>
     </div>

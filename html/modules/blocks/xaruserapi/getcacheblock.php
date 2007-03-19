@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
  * Retrieve a cache block instance
  *
  * @package modules
@@ -24,19 +24,19 @@ function blocks_userapi_getcacheblock($args)
     $cacheBlockTable = $xartable['cache_blocks'];
     $instance = array();
 
-    $query = "SELECT xar_bid, xar_nocache, xar_page, xar_user, xar_expire
+    $query = "SELECT id, nocache, page, user, expire
               FROM $cacheBlockTable
-              WHERE xar_bid = ?";
+              WHERE id = ?";
     $result = $dbconn->Execute($query,array($bid));
     if($result->next()) {
         // and if there is one (assuming only one here but there is a constraint on the table) grab it
         list($bid, $nocache, $page, $user, $expire) = $result->fields;
-        $instance = array('bid'    => $bid, 'nocache' => $nocache,
+        $instance = array('id'    => $bid, 'nocache' => $nocache,
                           'page'   => $page,'user'    => $user,
                           'expire' => $expire);
     }
     $result->close();
-    
+
     /* Return the instance array */
     return $instance;
 }

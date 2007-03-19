@@ -1,61 +1,44 @@
 <?php
 /**
- * Main user menu
- *
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
+
 /**
  * Show the user menu
+ *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 function roles_user_usermenu($args)
 {
-    // Security check
     if (!xarSecurityCheck('ViewRoles')) return;
     extract($args);
     if(!xarVarFetch('phase','notempty', $phase, 'menu', XARVAR_NOT_REQUIRED)) {return;}
     xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Your Account Preferences')));
-    $data = array(); $hooks = array();
+    $data = array();
+    $hooks = array();
     switch(strtolower($phase)) {
         case 'menu':
             $iconbasic = xarTplGetImage('home.gif', 'roles');
-            $iconenhanced = xarTplGetImage('home.gif', 'roles');
             $current = xarModURL('roles', 'user', 'account', array('moduleload' => 'roles'));
             $data = xarTplModule('roles','user', 'user_menu_icon', array('iconbasic'    => $iconbasic,
-                                                                         'iconenhanced' => $iconenhanced,
                                                                          'current'      => $current));
             break;
         case 'form':
         case 'formbasic':
-            $properties = null;
-            $withupload = (int) FALSE;
-            if (xarModIsAvailable('dynamicdata')) {
-                // get the DataObject defined for this module (and itemtype, if relevant)
-                $object = xarModAPIFunc('dynamicdata','user','getobject',
-                                         array('module' => 'roles'));
-                if (isset($object) && !empty($object->objectid)) {
-                    // get the Dynamic Properties of this object
-                    $properties =& $object->getProperties();
-                }
+            $uid = xarUserGetVar('uid');
+            $object = xarModAPIFunc('dynamicdata','user','getobject',
+                              array('name' => 'roles_users'));
+            $object->getItem(array('itemid' => $uid));
 
-                if (is_array($properties)) {
-                    foreach ($properties as $key => $prop) {
-                        if (isset($prop->upload) && $prop->upload == TRUE) {
-                            $withupload = (int) TRUE;
-                        }
-                    }
-                }
-            }
-            unset($properties);
             $uname = xarUserGetVar('uname');
             $name = xarUserGetVar('name');
-            $uid = xarUserGetVar('uid');
+
             $email = xarUserGetVar('email');
             $role = xarUFindRole($uname);
             $home = xarModGetUserVar('roles','userhome');// now user mod var not 'duv'. $role->getHome();
@@ -63,25 +46,26 @@ function roles_user_usermenu($args)
             if (xarModGetVar('roles','setuserlastlogin')) {
             //only display it for current user or admin
                 if (xarUserIsLoggedIn() && xarUserGetVar('uid')==$uid) { //they should be but ..
-                    $userlastlogin=xarSessionGetVar('roles_thislastlogin');
-                    $usercurrentlogin=xarModGetUserVar('roles','userlastlogin',$uid);
+                    $userlastlogin = xarSessionGetVar('roles_thislastlogin');
+                    $usercurrentlogin = xarModGetUserVar('roles','userlastlogin',$uid);
                 }elseif (xarSecurityCheck('AdminRole',0,'Roles',$name) && xarModGetUserVar('roles','userlastlogin',$uid)){
-                    $usercurrentlogin='';
-                    $userlastlogin= xarModGetUserVar('roles','userlastlogin',$uid);
+                    $usercurrentlogin = '';
+                    $userlastlogin = xarModGetUserVar('roles','userlastlogin',$uid);
                 }else{
-                    $userlastlogin='';
-                    $usercurrentlogin='';
+                    $userlastlogin = '';
+                    $usercurrentlogin = '';
                 }
             }else{
                 $userlastlogin='';
                 $usercurrentlogin='';
             }
             $authid = xarSecGenAuthKey();
-            $submitlabel = xarML('Submit');
-            $item['module'] = 'roles';
-            $upasswordupdate = xarModGetUserVar('roles','passwordupdate');//now user mod var not 'duv'. $role->getPasswordUpdate();
-            $usertimezonedata =unserialize(xarModGetUserVar('roles','usertimezone'));
+
+            $upasswordupdate = xarModGetUserVar('roles','passwordupdate');
+            $usertimezonedata = xarModGetUserVar('roles','usertimezone');
             $utimezone=$usertimezonedata['timezone'];
+
+            $item['module'] = 'roles';
             $item['itemtype'] = ROLES_USERTYPE;
 
             $hooks = xarModCallHooks('item','modify',$uid,$item);
@@ -91,48 +75,55 @@ function roles_user_usermenu($args)
 
             $data = xarTplModule('roles','user', 'user_menu_form',
                                   array('authid'       => $authid,
-                                  'withupload'   => $withupload,
-                                  'name'         => $name,
+                                  'object'       => $object,
                                   'uname'        => $uname,
                                   'home'         => $home,
                                   'hooks'        => $hooks,
-                                  'emailaddress' => $email,
-                                  'submitlabel'  => $submitlabel,
                                   'uid'          => $uid,
                                   'upasswordupdate' => $upasswordupdate,
-                                  'usercurrentlogin'=> $usercurrentlogin,
-                                  'userlastlogin'   => $userlastlogin,
+                                  'usercurrentlogin' => $usercurrentlogin,
+                                  'userlastlogin'    => $userlastlogin,
                                   'utimezone'    => $utimezone,
                                   'allowemail'   => $allowemail));
-                 break;
-
-        case 'formenhanced':
-            $name = xarUserGetVar('name');
-            $uid = xarUserGetVar('uid');
-            $authid = xarSecGenAuthKey();
-            $item['module'] = 'roles';
-            $hooks = xarModCallHooks('item','modify',$uid,$item);
-
-            $data = xarTplModule('roles','user', 'user_menu_formenhanced', array('authid'   => $authid,
-                                                                                 'name'     => $name,
-                                                                                 'uid'      => $uid,
-                                                                                 'hooks'    => $hooks));
             break;
         case 'updatebasic':
-            if(!xarVarFetch('uid',   'isset', $uid,     NULL, XARVAR_DONT_SET)) return;
-            if(!xarVarFetch('name',  'isset', $name,    NULL, XARVAR_DONT_SET)) return;
-            if(!xarVarFetch('email', 'isset', $email,   NULL, XARVAR_DONT_SET)) return;
-            if(!xarVarFetch('home',  'isset', $home,    NULL, XARVAR_DONT_SET)) return;
-            if(!xarVarFetch('pass1', 'isset', $pass1,   NULL, XARVAR_DONT_SET)) return;
-            if(!xarVarFetch('pass2', 'isset', $pass2,   NULL, XARVAR_DONT_SET)) return;
+            if (!xarSecConfirmAuthKey()) return;
+
             if(!xarVarFetch('allowemail', 'checkbox', $allowemail,   false, XARVAR_DONT_SET)) return;
             if(!xarVarFetch('utimezone','str:1:',$utimezone, NULL,XARVAR_NOT_REQUIRED)) return;
+
+            $uid = xarUserGetVar('uid');
             $uname = xarUserGetVar('uname');
+
+            $object = xarModAPIFunc('dynamicdata','user','getobject',
+                              array('name' => 'roles_users'));
+            $object->getItem(array('itemid' => $uid));
+
+            $oldpass = $object->properties['password']->getValue();
+            $oldemail = $object->properties['email']->getValue();
+
+            $isvalid = $object->checkInput();
+
+            // @todo add preview?
+            if (!$isvalid) {
+                $data = array();
+                $data['uname'] = $uname;
+                $data['authid'] = xarSecGenAuthKey();
+                $data['object'] = & $object;
+
+                //$data['preview'] = $preview;
+                $item = array();
+                $item['module'] = 'roles';
+                $item['itemtype'] = ROLES_USERTYPE;
+                $data['hooks'] = xarModCallHooks('item','modify','',$item);
+
+                $data['moduleload'] = 'roles';
+                return xarTplModule('roles','user','account', $data);
+            }
             //set emailing options for the user
             xarModSetUserVar('roles','usersendemails',$allowemail,$uid);
-            // Confirm authorisation code.
-            if (!xarSecConfirmAuthKey()) return;
-            $dopasswordupdate=false; //switch
+
+
             //adjust the timezone value for saving
             if (xarModGetVar('roles','setusertimezone') && (isset($utimezone))) {
                $timeinfo = xarModAPIFunc('base','user','timezones', array('timezone' => $utimezone));
@@ -156,53 +147,37 @@ function roles_user_usermenu($args)
                   throw new BadParameterException(array($home), $msg);
                 }
             }
-            if (!empty($pass1)){
-                $minpasslength = xarModGetVar('roles', 'minpasslength');
-                if (strlen($pass2) < $minpasslength) {
-                    throw new VariableValidationException(array('password','*password value hidden*','minimum length: '.$minpasslength));
-                }
-                // Check to make sure passwords match
-                if ($pass1 == $pass2){
-                    $pass = $pass1;
-                } else {
-                    throw new VariableValidationException(array('passwords','*password values hidden*','must be equal'));
-                }
-                $oldemail = xarUserGetVar('email');
-                // The API function is called.
-                if(!xarModAPIFunc('roles', 'admin', 'update',
-                                   array('uid'   => $uid,
-                                         'uname' => $uname,
-                                         'name'  => $name,
-                                         'home'  => $home,
-                                         'email' => $oldemail,
-                                         'state' => ROLES_STATE_ACTIVE,
-                                         'pass'  => $pass,
-                                         'usertimezone' => $usertimezone,
-                                         'dopasswordupdate' => $dopasswordupdate))) return;
+            $pass = $object->properties['password']->getValue();
+
+            $newpass = md5($pass);
+            $passchanged = false;
+            if ($oldpass != $newpass) {
+                $passchanged = true;
+                $object->properties['password']->value = $newpass;
             }
-            if (!empty($email)){
+
+
+
+            $object->updateItem();
+
+            if ($passchanged){
+                // @todo CHECKME: Send an email?
+            }
+
+            $email = $object->properties['email']->getValue();
+            if ($oldemail != $email){
                 /* updated steps for changing email address
-                   1) Validate the new email address for errors.
-                   2) Check if validation is required and if so create confirmation code
-                   3) Change user status to 2 (if validation is set as option)
-                   4) If validation is required for a change, send the user an email about validation
-                   5) if user is logged in (ie existing user), log user out
-                   6) Display appropriate message
+                   1) Check if validation is required and if so create confirmation code
+                   2) Change user status to 2 (if validation is set as option)
+                   3) If validation is required for a change, send the user an email about validation
+                   4) if user is logged in (ie existing user), log user out
+                   5) Display appropriate message
                 */
-
-                // Step 1
-                $emailcheck = xarModAPIFunc('roles','user','validatevar',
-                                            array('var' => $email,
-                                                  'type' => 'email'));
-
-                if ($emailcheck == false) {
-                    throw new VariableValidationException(array('email',$email,'valid address'));
-                }
 
                 if(xarModGetVar('roles','uniqueemail')) {
                     // check for duplicate email address
                     $user = xarModAPIFunc('roles', 'user','get',
-                                           array('email' => $email));
+                                       array('email' => $email));
                     if ($user != false) {
                         unset($user);
                         throw new DuplicateException(array('email address',$email));
@@ -219,35 +194,17 @@ function roles_user_usermenu($args)
                         throw new ForbiddenOperationException(null,$msg);
                     }
                 }
+
                 // Step 2 Check for validation required or not
                 $requireValidation = xarModGetVar('roles', 'requirevalidation');
-                if ((!xarModGetVar('roles', 'requirevalidation')) || (xarUserGetVar('uname') == 'admin')){
-                    // The API function is called.
-                    if(!xarModAPIFunc('roles',  'admin', 'update',
-                                       array('uid' => $uid,
-                                             'uname' => $uname,
-                                             'name' => $name,
-                                             'home' => $home,
-                                             'email' => $email,
-                                             'usertimezone' => $usertimezone,
-                                             'state' => ROLES_STATE_ACTIVE))) return;
-                } else { // if we need validation
+                if (xarModGetVar('roles', 'requirevalidation') || (xarUserGetVar('uname') != 'admin')) {
                     // Step 2
                     // Create confirmation code and time registered
                     $confcode = xarModAPIFunc('roles','user','makepass');
 
                     // Step 3
                     // Set the user to not validated
-                    // The API function is called.
-                    if(!xarModAPIFunc('roles', 'admin', 'update',
-                                       array('uid'      => $uid,
-                                             'uname'    => $uname,
-                                             'name'     => $name,
-                                             'home'     => $home,
-                                             'email'    => $email,
-                                             'usertimezone' => $usertimezone,
-                                             'valcode'  => $confcode,
-                                             'state'    => ROLES_STATE_NOTVALIDATED))) return;
+                     $object->properties['valcode']->setValue($confcode);
                     // Step 4
                     //Send validation email
                     if (!xarModAPIFunc( 'roles',  'admin', 'senduseremail',
@@ -256,6 +213,7 @@ function roles_user_usermenu($args)
                         $msg = xarML('Problem sending confirmation email');
                         throw new Exception($msg);
                     }
+                    $object->updateItem();
                     // Step 5
                     // Log the user out. This needs to happen last
                     xarUserLogOut();
@@ -265,27 +223,9 @@ function roles_user_usermenu($args)
                     $data = xarTplModule('roles','user', 'waitingconfirm');
                     return $data;
                 }
-            } else {
-                $email = xarUserGetVar('email');
-
-                // The API function is called.
-                if(!xarModAPIFunc('roles', 'admin', 'update',
-                                   array('uid' => $uid,
-                                         'uname' => $uname,
-                                         'name' => $name,
-                                         'home' => $home,
-                                         'email' => $email,
-                                         'usertimezone'=> $usertimezone,
-                                         'state' => ROLES_STATE_ACTIVE))) return;
             }
 
-            // Redirect
             xarResponseRedirect(xarModURL('roles', 'user', 'account'));
-            return true;
-        case 'updateenhanced':
-            // Redirect
-            xarResponseRedirect(xarModURL('roles', 'user', 'account'));
-            return true;
     }
     return $data;
 }

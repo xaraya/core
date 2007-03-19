@@ -41,7 +41,7 @@
         <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
           <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
             <dd>
-              <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$parents.$i.parentid#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a>
+              <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this privilege')#">#$parents[$i]['parentname']#</a>
             </dd>
           </xar:if>
           <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
@@ -56,16 +56,16 @@
         <xar:mlstring>Manage privilege</xar:mlstring> :
       </dt>
       <dd>
-        <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;pid=#$ppid#"><xar:mlstring>Display</xar:mlstring></a>
+        <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;id=#$ppid#"><xar:mlstring>Display</xar:mlstring></a>
       </dd>
       <dd class="active">
-        <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$ppid#" class="active"><xar:mlstring>Modify</xar:mlstring></a>
+        <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$ppid#" class="active"><xar:mlstring>Modify</xar:mlstring></a>
       </dd>
       <dd>
-        <a href="&xar-modurl-privileges-admin-deleteprivilege;&amp;pid=#$ppid#"><xar:mlstring>Delete</xar:mlstring></a>
+        <a href="&xar-modurl-privileges-admin-deleteprivilege;&amp;id=#$ppid#"><xar:mlstring>Delete</xar:mlstring></a>
       </dd>
       <dd>
-        <a href="&xar-modurl-privileges-admin-viewroles;&amp;pid=#$ppid#"><xar:mlstring>Groups/Users</xar:mlstring></a>
+        <a href="&xar-modurl-privileges-admin-viewroles;&amp;id=#$ppid#"><xar:mlstring>Groups/Users</xar:mlstring></a>
       </dd>
     </dl>
   </div>
@@ -91,9 +91,23 @@
           </label>
           <input type="text" name="pname" id="pname" value="#$pname#" maxlength="40" class="xar-form-textlong" />
         </div>
+        <xar:set name="onclick">
+            "this.form.action='" . xarModURL('privileges','admin','modifyprivilege') . "';this.form.submit()";
+        </xar:set>
+        <!-- FIXME: make this dprop support onclick, cause IE6 doesn't do onchange
+        <div class="xar-form-input-wrapper-after">
+            <xar:set name="options">
+                array(
+                    array('id' => 'empty', 'name' => 'empty'),
+                    array('id' => 'full', 'name' => 'with rights'),
+                )
+            </xar:set>
+            <xar:data-input type="radio" name="ptype" id="ptype" options="$options" value="$ptype" onclick="$onclick" />
+        </div>
+        -->
         <xar:if condition="$ptype eq null">
           <div class="xar-form-input-wrapper-after">
-            <input type="radio" name="ptype" id="ptype1_empty" value="empty" checked="checked" onclick="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();" />
+            <input type="radio" name="ptype" id="ptype1_empty" value="empty" checked="checked" onclick="" />
             <label for="ptype1_empty" title="#xarML('This privilege has no children')#">
               <xar:mlstring>empty</xar:mlstring>
             </label>
@@ -142,8 +156,7 @@
           <label for="pmodule" title="#xarML('Module which holds the target component')#" class="xar-form-label">
             <xar:mlstring>Module:</xar:mlstring>
           </label>
-            <xar:set name="onchange">"javascript:this.form.action = '" . xarModURl('privileges','admin','modifyprivilege') . "';this.form.submit();"</xar:set>
-            <xar:data-input type="module" name="pmodule" value="$pmodule" firstline="All" onchange="$onchange" />
+            <xar:data-input type="module" name="pmodule" value="$pmodule" firstline="All" onchange="$onclick" />
         </div>
 
         <div class="xar-form-input-wrapper">
@@ -283,7 +296,7 @@
         <select name="privid" id="privid">
           <option value=""></option>
           <xar:loop name="$privileges">
-            <option value="#$loop:item['pid']#">#$loop:item['name']#</option>
+            <option value="#$loop:item['id']#">#$loop:item['name']#</option>
           </xar:loop>
         </select>
       </div>
@@ -291,7 +304,7 @@
       <div class="xar-form-input-wrapper-after">
         <input type="hidden" name="authid" id="authid" value="#$authid#" />
         <input type="hidden" name="poldcomponent" id="poldcomponent" value="#$oldcomponent#" />
-        <input type="hidden" name="pid" id="pid" value="#$ppid#" />
+        <input type="hidden" name="id" id="id" value="#$ppid#" />
         <xar:set name="tmpaddvalue"><xar:mlstring>Add</xar:mlstring></xar:set>
         <input type="button" value="#$tmpaddvalue#" onclick="javascript:this.form.action = '&xar-modurl-privileges-admin-addmember;&amp;ppid=#$ppid#&amp;authid=#$authid#';this.form.submit();"/>
       </div>
@@ -317,7 +330,7 @@
       <xar:loop name="$parents">
         <div class="xar-form-input-wrapper">
           <span class="xar-form-label">
-            <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;pid=#$loop:item['parentid']#">#$loop:item['parentname']#</a>
+            <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$loop:item['parentid']#">#$loop:item['parentname']#</a>
           </span>
           <xar:set name="tmptitle">
             <xar:ml>
