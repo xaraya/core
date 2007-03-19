@@ -364,6 +364,7 @@ ALTER TABLE `xar_dynamic_properties_def`
 
 /* Replace property definitions in the properties table */
 UPDATE `xar_dynamic_properties` SET `prop_source` = REPLACE(prop_source, ".xar_", ".");
+UPDATE `xar_dynamic_properties` SET `prop_source` = REPLACE(prop_source, "xar_roles.uid", "xar_roles.id");
 
 ALTER TABLE `xar_block_group_instances`
   CHANGE COLUMN `xar_id` `id` INTEGER NOT NULL auto_increment,
