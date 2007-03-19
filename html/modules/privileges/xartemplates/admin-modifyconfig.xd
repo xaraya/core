@@ -1,7 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html
-</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
@@ -97,9 +95,7 @@
             </xar:if>
         </dl>
     </div>
-    <xar:comment>
-        - - - - - - Begin General Options - - - - - -
-    </xar:comment>
+    <!--  Begin General Options -->
     <xar:if condition="$tab eq 'general'">
         <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded" >
             <fieldset>
@@ -118,7 +114,7 @@
                 </div>
                 <div class="xar-form-input-wrapper-after"><xar:mlstring>A logged in user will see the exception error message that can be changed with a base module override template (message-NO_PRIVILEGES.xt).</xar:mlstring>
                 </div>
-                <xar:comment>
+                <!--
                 <div class="xar-form-input-wrapper">
                     <label for="inheritdeny" title="#xarML('Enable or disable inheritance of deny privileges')#" class="xar-form-label">
                         <xar:mlstring>Inherit Deny Privileges:</xar:mlstring>
@@ -127,7 +123,7 @@
                     <xar:data-input type="checkbox" name="inheritdeny" id="inheritdeny" checked="$checked" />
                     <xar:mlstring>Warning: This setting affects the way privileges work on your site. If changed you should retest all the privileges on your site.</xar:mlstring>
                 </div>
-                </xar:comment>
+                -->
              </fieldset>
             <fieldset>
                <legend>
@@ -154,9 +150,7 @@
             </fieldset>
         </form>
     </xar:if>
-    <xar:comment>
-        - - - - - Begin Realms Options - - - - -
-    </xar:comment>
+    <!-- Begin Realms Options -->
     <xar:if condition="$tab eq 'realms'">
         <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
             <fieldset>
@@ -247,9 +241,7 @@
             </fieldset>
         </form>
     </xar:if>
-    <xar:comment>
-        - - - - - Begin Last Resort - - - - -
-    </xar:comment>
+    <!-- Begin Last Resort -->
     <xar:if condition="$tab eq 'lastresort' AND xarModGetVar('privileges','lastresort')">
         <form method="post" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded" >
             <fieldset>
@@ -299,9 +291,7 @@
             </fieldset>
         </form>
     </xar:if>
-    <xar:comment>
-        - - - - - Begin Masks - - - - -
-    </xar:comment>
+    <!-- Begin Masks -->
     <xar:if condition="$tab eq 'masks'">
         <fieldset>
             <legend>
@@ -316,7 +306,8 @@
                   understanding of how they function can result in access problems to content on your site.
                 </xar:mlstring>
             </p>
-            <xar:data-view module="1098" itemtype="3" tplmodule="privileges" />
+            <xar:set name="where">'priv_type eq 3'</xar:set>
+            <xar:data-view name="privileges_privileges" where="$where" />
         </fieldset>
         <fieldset>
             <div class="xar-form-input-wrapper-after">
@@ -327,9 +318,7 @@
             </div>
         </fieldset>
     </xar:if>
-    <xar:comment>
-        - - - - - - Begin Testing - - - - -
-    </xar:comment>
+    <!-- Begin Testing -->
     <xar:if condition="$tab eq 'testing'">
         <form method="post" id="testerform" name="testerform" action="&xar-modurl-privileges-admin-modifyconfig;" enctype="application/x-www-form-urlencoded" >
             <fieldset>
