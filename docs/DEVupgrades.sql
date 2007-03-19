@@ -363,7 +363,7 @@ ALTER TABLE `xar_dynamic_properties_def`
   CHANGE COLUMN `xar_prop_format` `prop_format` INTEGER default '0';
 
 /* Replace property definitions in the properties table */
-UPDATE `xar_dynamic_properties` SET `prop_source` = REPLACE(prop_source, ".xar_", ".")
+UPDATE `xar_dynamic_properties` SET `prop_source` = REPLACE(prop_source, ".xar_", ".");
 
 ALTER TABLE `xar_block_group_instances`
   CHANGE COLUMN `xar_id` `id` INTEGER NOT NULL auto_increment,
