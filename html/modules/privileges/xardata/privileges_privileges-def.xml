@@ -42,12 +42,12 @@
     <property name="module">
       <id>52</id>
       <label>Module</label>
-      <type>textbox</type>
+      <type>module</type>
       <default></default>
       <source>xar_privileges.module_id</source>
       <status>33</status>
       <order>4</order>
-      <validation></validation>
+      <validation>a:2:{s:10:&quot;validation&quot;;s:8:&quot;systemid&quot;;s:8:&quot;override&quot;;s:1:&quot;1&quot;;}</validation>
     </property>
     <property name="component">
       <id>53</id>
@@ -72,12 +72,12 @@
     <property name="level">
       <id>55</id>
       <label>Level</label>
-      <type>integerbox</type>
+      <type>dropdown</type>
       <default></default>
       <source>xar_privileges.level</source>
       <status>33</status>
       <order>7</order>
-      <validation></validation>
+      <validation>0,No Access;100,Overview;200,Read;300,Comment;400,Moderate;500,Edit;600,Add;700,Delete;800,Adminster;-1,Invalid</validation>
     </property>
     <property name="description">
       <id>56</id>
@@ -88,6 +88,16 @@
       <status>65</status>
       <order>8</order>
       <validation></validation>
+    </property>
+    <property name="priv_type">
+      <id>57</id>
+      <label>Type</label>
+      <type>dropdown</type>
+      <default>2</default>
+      <source>xar_privileges.type</source>
+      <status>65</status>
+      <order>8</order>
+      <validation>0,Base;1,Privilege;3,Mask</validation>
     </property>
   </properties>
 </object>
