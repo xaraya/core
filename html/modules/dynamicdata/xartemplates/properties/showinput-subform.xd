@@ -123,33 +123,33 @@
   </xar:if>
 
 <xar:elseif condition="$style eq 'childlist' or $style eq 'parentid'"/>
-  <xar:if condition="!empty($object)">xxx
+  <xar:if condition="!empty($object)">
     <table class="xar-norm">
       <xar:if condition="!empty($dropdown) and !empty($count)">
-      <tr>
-        <td>
-          <xar:mlstring>Select link</xar:mlstring>
-        </td>
-        <td>
-          <!--  use the link property to show the values in a nicer way -->
-          <xar:set name="linkprop">#$object:properties[$link]#</xar:set>
+          <tr>
+            <td>
+              <xar:mlstring>Select link</xar:mlstring>
+            </td>
+            <td>
+              <!--  use the link property to show the values in a nicer way -->
+              <xar:set name="linkprop">#$object:properties[$link]#</xar:set>
 
-          <input type="hidden" name="#$name#_old" id="#$id#_old" value="#$value#" />
-          <select name="#$name#" id="#$id#" tabindex="#$tabindex#">
-            <option value="0">[ <xar:mlstring>new link</xar:mlstring> ]</option>
-            <xar:foreach in="$dropdown" key="$dropid" value="$dropvalue">
-              <xar:if condition="!empty($value) and $value eq $dropvalue[$link]">
-                <option value="#$dropvalue[$link]#" selected="selected"><xar:data-output property="$linkprop" value="$dropvalue[$link]" /> (#$dropvalue[$count]#)</option>
-              <xar:else/>
-                <option value="#$dropvalue[$link]#"><xar:data-output property="$linkprop" value="$dropvalue[$link]" /> (#$dropvalue[$count]#)</option>
+              <input type="hidden" name="#$name#_old" id="#$id#_old" value="#$value#" />
+              <select name="#$name#" id="#$id#" tabindex="#$tabindex#">
+                <option value="0">[ <xar:mlstring>new link</xar:mlstring> ]</option>
+                <xar:foreach in="$dropdown" key="$dropid" value="$dropvalue">
+                  <xar:if condition="!empty($value) and $value eq $dropvalue[$link]">
+                    <option value="#$dropvalue[$link]#" selected="selected"><xar:data-output property="$linkprop" value="$dropvalue[$link]" /> (#$dropvalue[$count]#)</option>
+                  <xar:else/>
+                    <option value="#$dropvalue[$link]#"><xar:data-output property="$linkprop" value="$dropvalue[$link]" /> (#$dropvalue[$count]#)</option>
+                  </xar:if>
+                </xar:foreach>
+              </select>
+              <xar:if condition="empty($value)">
+                <xar:data-input property="$linkprop" name="$name.'_new'" id="$id.'_new'" value="0" />
               </xar:if>
-            </xar:foreach>
-          </select>
-          <xar:if condition="empty($value)">
-            <xar:data-input property="$linkprop" name="$name.'_new'" id="$id.'_new'" value="0" />
-          </xar:if>
-        </td>
-      </tr>
+            </td>
+          </tr>
       <xar:elseif condition="$style eq 'parentid'" />
         <input type="hidden" name="#$name#_old" id="#$id#_old" value="#$value#" />
         <input type="hidden" name="#$name#" id="#$id#" value="#$value#" />
