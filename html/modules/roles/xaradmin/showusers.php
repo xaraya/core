@@ -21,13 +21,11 @@ function roles_admin_showusers()
     if (xarVarIsCached('roles', 'defaultgroupuid')) {
         $defaultgroupuid = xarVarGetCached('roles', 'defaultgroupuid');
     } else {
-        $defaultgroupuid = xarModAPIFunc('roles','user','get',
-                                                 array('uname'  => xarModGetVar('roles','defaultgroup'),
-                                                       'type'   => ROLES_GROUPTYPE));
+        $defaultgroupuid = xarModGetVar('roles','defaultgroup');
     }
     xarVarSetCached('roles', 'defaultgroupuid', $defaultgroupuid);
 
-    if (!xarVarFetch('uid',      'int:0:', $uid,              $defaultgroupuid['uid'], XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('uid',      'int:0:', $uid,              $defaultgroupuid, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('startnum', 'int:1:', $startnum,         1,   XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('state',    'int:0:', $data['state'],    ROLES_STATE_CURRENT, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('selstyle', 'isset',  $data['selstyle'], xarSessionGetVar('rolesdisplay'), XARVAR_DONT_SET)) return;
