@@ -69,7 +69,7 @@ class DataProperty extends Object implements iDataProperty
             // if the default field looks like <something>(...), we'll assume that this
             // a function call that returns some dynamic default value
             // Expression stolen from http://php.net/functions
-            if(!empty($this->default) && preg_match('/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/',$this->default)) {
+            if(!empty($this->default) && preg_match('/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*\(.*\)/',$this->default)) {
                 eval('$value = ' . $this->default .';');
                 if(isset($value)) {
                     $this->default = $value;
@@ -156,8 +156,7 @@ class DataProperty extends Object implements iDataProperty
      */
     public function validateValue($value = null)
     {
-        if(!isset($value))
-            $value = $this->value;
+        if(!isset($value)) $value = $this->value;
 
         $this->value = null;
         $this->invalid = xarML('unknown property');
@@ -394,6 +393,7 @@ class DataProperty extends Object implements iDataProperty
         $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
         $data['size']       = !empty($size) ? $size : 50;
+        $data['required']   = isset($required) && $required ? true : false;
 
         if(isset($validation))
         {
@@ -410,8 +410,7 @@ class DataProperty extends Object implements iDataProperty
         // }
 
         // allow template override by child classes
-        if(!isset($template))
-            $template = null;
+        if(!isset($template)) $template = null;
 
         return xarTplProperty('dynamicdata', $template, 'validation', $data);
     }
