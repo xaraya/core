@@ -66,9 +66,10 @@ class DataProperty extends Object implements iDataProperty
         $descriptor->refresh($this);
 
         if(!isset($args['value'])) {
-            // if the default field looks like xar<something>(...), we'll assume that this is
+            // if the default field looks like <something>(...), we'll assume that this
             // a function call that returns some dynamic default value
-            if(!empty($this->default) && preg_match('/^xar\w+\(.*\)$/',$this->default)) {
+            // Expression stolen from http://php.net/functions
+            if(!empty($this->default) && preg_match('/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*\(.*\)/',$this->default)) {
                 eval('$value = ' . $this->default .';');
                 if(isset($value)) {
                     $this->default = $value;
@@ -83,8 +84,7 @@ class DataProperty extends Object implements iDataProperty
     /**
      * Get the value of this property (= for a particular object item)
      *
-     * @returns mixed
-     * @return the value for the property
+     * @return mixed the value for the property
      */
     public function getValue()
     {
@@ -94,7 +94,7 @@ class DataProperty extends Object implements iDataProperty
     /**
      * Set the value of this property (= for a particular object item)
      *
-     * @param $value the new value for the property
+     * @param mixed $value the new value for the property
      */
     public function setValue($value)
     {
@@ -104,8 +104,8 @@ class DataProperty extends Object implements iDataProperty
     /**
      * Fetch the input value of this property
      *
-     * @param $name name of the input field
-     * @return an array containing a flag whether the value was found and the found value itself
+     * @param string $name name of the input field
+     * @return array an array containing a flag whether the value was found and the found value itself
      */
     public function fetchValue($name = '')
     {
@@ -133,8 +133,8 @@ class DataProperty extends Object implements iDataProperty
     /**
      * Check the input value of this property
      *
-     * @param $name name of the input field (default is 'dd_NN' with NN the property id)
-     * @param $value value of the input field (default is retrieved via xarVarFetch())
+     * @param string $name name of the input field (default is 'dd_NN' with NN the property id)
+     * @param mixed  $value value of the input field (default is retrieved via xarVarFetch())
      */
     public function checkInput($name = '', $value = null)
     {
@@ -152,12 +152,11 @@ class DataProperty extends Object implements iDataProperty
     /**
      * Validate the value of this property
      *
-     * @param $value value of the property (default is the current value)
+     * @param mixed $value value of the property (default is the current value)
      */
     public function validateValue($value = null)
     {
-        if(!isset($value))
-            $value = $this->value;
+        if(!isset($value)) $value = $this->value;
 
         $this->value = null;
         $this->invalid = xarML('unknown property');
@@ -167,7 +166,8 @@ class DataProperty extends Object implements iDataProperty
     /**
      * Get the value of this property for a particular item (= for object lists)
      *
-     * @param $itemid the item id we want the value for
+     * @param int $itemid the item id we want the value for
+     * @return mixed
      */
     function getItemValue($itemid)
     {
@@ -176,6 +176,9 @@ class DataProperty extends Object implements iDataProperty
 
     /**
      * Set the value of this property for a particular item (= for object lists)
+     *
+     * @param int $itemid
+     * @param mixed value
      */
     function setItemValue($itemid, $value)
     {
@@ -200,7 +203,6 @@ class DataProperty extends Object implements iDataProperty
      * @param $args['module'] which module is responsible for the templating
      * @param $args['template'] what's the partial name of the showinput template.
      * @param $args[*] rest of arguments is passed on to the templating method.
-     * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
     public function showInput(Array $data = array())
@@ -230,7 +232,6 @@ class DataProperty extends Object implements iDataProperty
      * Show some default output for this property
      *
      * @param $args['value'] value of the property (default is the current value)
-     * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
     public function showOutput(Array $data = array())
@@ -255,7 +256,6 @@ class DataProperty extends Object implements iDataProperty
      *
      * @param $args['label'] label of the property (default is the current label)
      * @param $args['for'] label id to use for this property (id, name or nothing)
-     * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
     function showLabel($args = array())
@@ -290,7 +290,6 @@ class DataProperty extends Object implements iDataProperty
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
      * @param $args['value'] value of the field (default is the current value)
      * @param $args['id'] id of the field
-     * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
     function showHidden($args = array())
@@ -320,7 +319,6 @@ class DataProperty extends Object implements iDataProperty
      * @param $args['value'] value of the field (default is the current value)
      * @param $args['id'] id of the field
      * @param $args['tabindex'] tab index of the field
-     * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
     function _showPreset($args = array())
@@ -349,6 +347,8 @@ class DataProperty extends Object implements iDataProperty
 
     /**
      * Parse the validation rule
+     *
+     * @param string $validation
      */
     public function parseValidation($validation = '')
     {
@@ -380,7 +380,6 @@ class DataProperty extends Object implements iDataProperty
      * @param $args['validation'] validation rule (default is the current validation)
      * @param $args['id'] id of the field
      * @param $args['tabindex'] tab index of the field
-     * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
     public function showValidation(Array $args = array())
@@ -394,6 +393,7 @@ class DataProperty extends Object implements iDataProperty
         $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
         $data['size']       = !empty($size) ? $size : 50;
+        $data['required']   = isset($required) && $required ? true : false;
 
         if(isset($validation))
         {
@@ -410,8 +410,7 @@ class DataProperty extends Object implements iDataProperty
         // }
 
         // allow template override by child classes
-        if(!isset($template))
-            $template = null;
+        if(!isset($template)) $template = null;
 
         return xarTplProperty('dynamicdata', $template, 'validation', $data);
     }
@@ -453,7 +452,7 @@ class DataProperty extends Object implements iDataProperty
     /**
      * Return the module this property belongs to
      *
-     * @returns string module name
+     * @return string module name
      */
     public function getModule()
     {
@@ -463,7 +462,7 @@ class DataProperty extends Object implements iDataProperty
     /**
      * Return the name this property uses in its templates
      *
-     * @returns string template name
+     * @return string template name
      */
     public function getTemplate()
     {
