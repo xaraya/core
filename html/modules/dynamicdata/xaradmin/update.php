@@ -45,8 +45,7 @@ function dynamicdata_admin_update($args)
                                          'join'     => $join,
                                          'table'    => $table,
                                          'itemid'   => $itemid));
-    $myobject->getItem();
-
+    $itemid = $myobject->getItem();
     // if we're editing a dynamic property, save its property type to cache
     // for correct processing of the validation rule (ValidationProperty)
     if ($myobject->objectid == 2) {
@@ -63,6 +62,7 @@ function dynamicdata_admin_update($args)
         $data['itemid'] = $itemid;
         $data['authid'] = xarSecGenAuthKey();
         $data['preview'] = $preview;
+        $data['tplmodule'] = $tplmodule;
         if (!empty($return_url)) {
             $data['return_url'] = $return_url;
         }
@@ -108,21 +108,25 @@ function dynamicdata_admin_update($args)
     }
 
     if (!empty($return_url)) {
+        if (strpos($return_url,'?') === false)
+            $return_url .= '?';
+        else
+            $return_url .= '&';
+        $return_url .= 'itemid=' . $itemid;
         xarResponseRedirect($return_url);
     } elseif ($myobject->objectid == 2) { // for dynamic properties, return to modifyprop
         xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
-                                      array('itemid' => $myobject->properties['objectid']->value)));
+                                      array('itemid' => $itemid)));
     } elseif (!empty($table)) {
         xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
                                       array('table' => $table)));
     } else {
         xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
                                       array(
-                                      'itemid' => $myobject->objectid,
+                                      'itemid' => $itemid,
                                       'tplmodule' => $tplmodule
                                       )));
     }
-
     return true;
 }
 

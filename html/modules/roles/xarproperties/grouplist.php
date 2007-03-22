@@ -26,7 +26,7 @@ class GroupListProperty extends SelectProperty
     public $grouplist    = array();
 
     /*
-    * Options available to user selection
+    * Options available to group selection
     * ===================================
     * Options take the form:
     *   option-type:option-value;

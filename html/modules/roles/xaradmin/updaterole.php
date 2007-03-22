@@ -90,9 +90,7 @@ function roles_admin_updaterole()
 
     //Change the defaultgroup var values if the name is changed
     if ($basetype == ROLES_GROUPTYPE) {
-        $defaultgroupuid = xarModAPIFunc('roles','user','get',
-                                                     array('uname'  => xarModGetVar('roles','defaultgroup'),
-                                                           'type'   => ROLES_GROUPTYPE));
+        $defaultgroupuid = xarModGetVar('roles','defaultgroup');
         if ($uid == $defaultgroupuid) xarModSetVar(xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule')), 'defaultgroup', $pname);
 
         // Adjust the user count if necessary
