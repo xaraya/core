@@ -18,13 +18,13 @@ sys::import('modules.dynamicdata.class.properties');
  */
 class DataObjectDescriptor extends ObjectDescriptor
 {
-    function __construct(array $args=array())
+    function __construct(Array $args=array())
     {
         $args = $this->getObjectID($args);
         parent::__construct($args);
     }
 
-    static function getModID(array $args=array())
+    static function getModID(Array $args=array())
     {
         foreach ($args as $key => &$value) {
             if (in_array($key, array('module','modid','module','moduleid'))) {
@@ -146,7 +146,7 @@ class DataObjectMaster extends Object
      * @todo  This does too much, split it up
     **/
 
-    function toArray($args=array())
+    function toArray(Array $args=array())
     {
         $properties = $this->getPublicProperties();
         foreach ($properties as $key => $value) if (!isset($args[$key])) $args[$key] = $value;
@@ -542,7 +542,7 @@ class DataObjectMaster extends Object
      *
      * @return array of object definitions
      */
-    static function &getObjects($args=array())
+    static function &getObjects(Array $args=array())
     {
         extract($args);
         $dbconn = xarDBGetConn();
@@ -601,7 +601,7 @@ class DataObjectMaster extends Object
      * @todo no ref return?
      * @todo when we can turn this into an object method, we dont have to do db inclusion all the time.
      */
-    static function getObjectInfo(array $args=array())
+    static function getObjectInfo(Array $args=array())
     {
         $args = DataObjectDescriptor::getObjectID($args);
         if(!empty($args['table']))
@@ -669,7 +669,7 @@ class DataObjectMaster extends Object
      * @return object the requested object definition
      * @todo  automatic sub-classing per module (and itemtype) ?
     **/
-    static function &getObject(array $args=array())
+    static function &getObject(Array $args=array())
     {
         if(!isset($args['itemid']))
             $args['itemid'] = null;
@@ -700,7 +700,7 @@ class DataObjectMaster extends Object
      * @todo   automatic sub-classing per module (and itemtype) ?
      * @todo   get rid of the classname munging, use typing
     **/
-    static function &getObjectList(array $args)
+    static function &getObjectList(Array $args)
     {
         sys::import('modules.dynamicdata.class.objects.list');
         $classname = 'DataObjectList';
@@ -774,7 +774,7 @@ class DataObjectMaster extends Object
      * @param $args['classname'] optional classname (e.g. <module>_DataObject)
      * @return integer object id of the created item
     **/
-    static function createObject(array $args)
+    static function createObject(Array $args)
     {
         // TODO: if we extend dobject classes then probably we need to put the class name here
         $object = self::getObject(array('name' => 'objects'));
@@ -788,7 +788,7 @@ class DataObjectMaster extends Object
         return $objectid;
     }
 
-    static function updateObject(array $args)
+    static function updateObject(Array $args)
     {
         $descriptor = new DataObjectDescriptor($args);
         $object = self::getObject($descriptor->getArgs());
@@ -1071,7 +1071,7 @@ class DataObjectMaster extends Object
      * see getAncestors for parameters
      * @see self::getAncestors
      */
-    static function &getBaseAncestor(array $args)
+    static function &getBaseAncestor(Array $args)
     {
         $ancestors = self::getAncestors($args);
         $ancestors = array_shift($ancestors);
@@ -1089,7 +1089,7 @@ class DataObjectMaster extends Object
      * @todo pick moduleid or module
      * @todo move this into a utils class?
      */
-    static function getModuleItemTypes(array $args)
+    static function getModuleItemTypes(Array $args)
     {
         extract($args);
         // Argument checks

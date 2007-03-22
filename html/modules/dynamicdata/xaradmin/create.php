@@ -52,6 +52,7 @@ function dynamicdata_admin_create($args)
 
         $data['authid'] = xarSecGenAuthKey();
         $data['preview'] = $preview;
+        $data['tplmodule'] = $tplmodule;
         if (!empty($return_url)) {
             $data['return_url'] = $return_url;
         }
@@ -79,16 +80,22 @@ function dynamicdata_admin_create($args)
     if (empty($itemid)) return; // throw back
 
     if (!empty($return_url)) {
+        if (strpos($return_url,'?') === false)
+            $return_url .= '?';
+        else
+            $return_url .= '&';
+        $return_url .= 'itemid=' . $itemid;
         xarResponseRedirect($return_url);
     } elseif (!empty($table)) {
         xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
                                       array('table' => $table)));
     } else {
-        xarResponseRedirect(xarModURL($tplmodule, 'admin', 'view',
-                                      array('itemid' => $myobject->objectid)));
+        xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
+                                      array(
+                                      'itemid' => $myobject->objectid,
+                                      'tplmodule' => $tplmodule
+                                      )));
     }
-
-    // Return
     return true;
 }
 
