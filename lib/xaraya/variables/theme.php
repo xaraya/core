@@ -28,13 +28,13 @@ class xarThemeVars extends xarModItemVars implements IxarModItemVars
         $varname = $scope . '_' . $name; // bah
         return parent::get($scope, $varname, $itemid);
     }
-    
+
     /**
      * set a theme variable
      *
      * Note that this method is incompatible with 1.x even if wrapped.
      * the prime/description parameters were dropped from the signature.
-     * 
+     *
      * @access public
      * @param themeName The name of the theme
      * @param name The name of the variable
@@ -48,11 +48,11 @@ class xarThemeVars extends xarModItemVars implements IxarModItemVars
         if (empty($scope)) throw new EmptyParameterException('themename');
 
         $itemid = xarThemeGetIDFromName($scope,'systemid');
-        $varName = $scope . '_' . $name; // bah
+        $varname = $scope . '_' . $name; // bah
         // Make sure we set it as modvar first
         // TODO: this sucks
-        if(!xarModVars::get('themes',$modVarName)) {
-            xarModVars::set('themes',$modVarName,$value);
+        if(!xarModVars::get($scope,$varname)) {
+            xarModVars::set($scope,$varname,$value);
         }
         return parent::set($scope, $varname, $value, $itemid);
     }
@@ -72,7 +72,7 @@ class xarThemeVars extends xarModItemVars implements IxarModItemVars
 
         $itemid = xarThemeGetIDFromName($scope,'systemid');
         $varname = $scope . '_' . $name;
-        return parent::delete($scope, $name, $itemid);
+        return parent::delete($scope, $varname, $itemid);
     }
 }
 ?>
