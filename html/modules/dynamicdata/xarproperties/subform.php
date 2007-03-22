@@ -694,7 +694,6 @@ class SubFormProperty extends DataProperty
      * @param $args['id'] id of the field
      * @param $args['tabindex'] tab index of the field
      * @param $args['repetitions'] number of repetitions of this subform to be displayed on forms
-     * @returns string
      * @return string containing the HTML (or other) text to output in the BL template
      */
     public function showValidation(Array $args = array())
@@ -721,6 +720,8 @@ class SubFormProperty extends DataProperty
             $data['objectid'] = $info['objectid'];
             $data['properties'] = DataPropertyMaster::getProperties(array('objectid' => $info['objectid']));
         } else {
+            $this->objectid = 0;
+            $data['objectid'] = 0;
             $data['properties'] = array();
         }
         $data['other']     = '';
@@ -743,7 +744,6 @@ class SubFormProperty extends DataProperty
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
      * @param $args['validation'] validation rule (default is the current validation)
      * @param $args['id'] id of the field
-     * @returns bool
      * @return bool true if the validation rule could be processed, false otherwise
      */
     public function updateValidation(Array $args = array())
@@ -775,9 +775,8 @@ class SubFormProperty extends DataProperty
                 $this->validation = $validation;
             }
         }
-        // tell the calling function that everything is OK
+
         return true;
     }
 }
-
 ?>
