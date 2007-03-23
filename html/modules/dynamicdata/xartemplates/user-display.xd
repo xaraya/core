@@ -13,12 +13,13 @@
         <h2>#$label#</h2>
         <xar:data-display module="$module" itemtype="$itemtype" itemid="$itemid" />
     </xar:if>
-    
+
     <xar:if condition="!empty($hooks)">
         <xar:foreach in="$hooks" key="$module" value="$output">
             #$output#
         </xar:foreach>
     </xar:if>
+    <div style="clear:both">&#160;</div>
 
 </div>
 </xar:template>

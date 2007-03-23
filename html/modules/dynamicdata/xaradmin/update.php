@@ -29,8 +29,6 @@ function dynamicdata_admin_update($args)
     extract($args);
 
     if(!xarVarFetch('objectid',   'isset', $objectid,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',      'int',   $modid,       xarModGetIDFromName('dynamicdata'), XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('itemtype',   'int',   $itemtype,    0, XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('itemid',     'isset', $itemid,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('return_url', 'isset', $return_url,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('preview',    'isset', $preview,     0, XARVAR_NOT_REQUIRED)) {return;}
