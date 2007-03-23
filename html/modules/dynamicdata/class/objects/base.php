@@ -334,8 +334,6 @@ class DataObject extends DataObjectMaster
         }
         if(empty($this->itemid)) return;
 
-        // TODO: this won't work for objects with several static tables !
-        // now let's try to create items in the other data stores
         $args = $this->getFieldValues();
         $args['itemid'] = $this->itemid;
         foreach(array_keys($this->datastores) as $store) {
@@ -387,9 +385,6 @@ class DataObject extends DataObjectMaster
             throw new BadParameterException($vars,$msg);
         }
 
-//        $modinfo = xarModGetInfo($this->moduleid);
-        // TODO: this won't work for objects with several static tables !
-        // update all the data stores
         $args = $this->getFieldValues();
         $args['itemid'] = $this->itemid;
         foreach(array_keys($this->datastores) as $store)
@@ -439,7 +434,6 @@ class DataObject extends DataObjectMaster
             throw new BadParameterException(null, $msg);
         }
 
-        // TODO: this won't work for objects with several static tables !
         // delete the item in all the data stores
         $args = $this->getFieldValues();
         $args['itemid'] = $this->itemid;
