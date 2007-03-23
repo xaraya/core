@@ -100,6 +100,10 @@ class DataObject extends DataObjectMaster
         $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
 
         foreach($fields as $name) {
+            // Ignore disabled properties
+            if($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                continue;
+
             $field = 'dd_' . $this->properties[$name]->id;
             if(!empty($args['fieldprefix'])) {
                 // No field, but prefix given, use that
@@ -136,7 +140,12 @@ class DataObject extends DataObjectMaster
         if(!empty($args['preview'])) $this->checkInput();
 
         // Set all properties based on what is passed in.
-        $args['properties'] = $this->getProperties($args);
+        $properties = $this->getProperties($args);
+        $args['properties'] = array();
+        foreach ($properties as $property) {
+            if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                $args['properties'][$property->name] = $property;
+        }
 
         // pass some extra template variables for use in BL tags, API calls etc.
         //FIXME: check these
@@ -159,7 +168,9 @@ class DataObject extends DataObjectMaster
             $properties = $this->getProperties($args);
             $args['properties'] = array();
             foreach ($properties as $property) {
-                if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
+                if(($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) &&
+                   ($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                )
                     $args['properties'][$property->name] = $property;
             }
         } else {
@@ -184,6 +195,7 @@ class DataObject extends DataObjectMaster
             foreach($this->properties as $property) {
                 if(
                     ($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) &&
+                    ($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) &&
                     ($property->type != 21) &&
                     isset($transformed[$property->name])
                 )
