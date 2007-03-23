@@ -38,10 +38,8 @@ function dynamicdata_admin_update($args)
     if(!xarVarFetch('table',      'isset', $table,       NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('tplmodule',  'isset', $tplmodule,   'dynamicdata', XARVAR_NOT_REQUIRED)) {return;}
 
-    if (!xarSecConfirmAuthKey()) return;
+//    if (!xarSecConfirmAuthKey()) return;
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
-                                         'moduleid' => $modid,
-                                         'itemtype' => $itemtype,
                                          'join'     => $join,
                                          'table'    => $table,
                                          'itemid'   => $itemid));
@@ -124,7 +122,7 @@ function dynamicdata_admin_update($args)
     } else {
         xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
                                       array(
-                                      'itemid' => $itemid,
+                                      'itemid' => $objectid,
                                       'tplmodule' => $tplmodule
                                       )));
     }

@@ -77,8 +77,7 @@
       <fieldset>
         <div class="xar-align-center">
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
-            <input type="hidden" name="modid" id="modid" value="#$object:moduleid#" />
-            <input type="hidden" name="itemtype" id="itemtype" value="#$object:itemtype#" />
+            <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#" />
             <input type="hidden" name="join" id="join" value="#$object:join#" />
             <input type="hidden" name="table" id="table" value="#$object:table#" />
             <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#" />
