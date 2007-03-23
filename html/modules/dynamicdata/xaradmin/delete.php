@@ -21,8 +21,6 @@ function dynamicdata_admin_delete($args)
 
     if(!xarVarFetch('objectid',   'isset', $objectid,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('name',       'isset', $name,       NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',      'isset', $moduleid,   NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('itemtype',   'isset', $itemtype,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemid',     'id',    $itemid                          )) {return;}
     if(!xarVarFetch('confirm',    'isset', $confirm,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('noconfirm',  'isset', $noconfirm,  NULL, XARVAR_DONT_SET)) {return;}
@@ -31,11 +29,9 @@ function dynamicdata_admin_delete($args)
     if(!xarVarFetch('tplmodule',  'isset', $tplmodule,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('template',   'isset', $template,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('return_url', 'isset', $return_url, NULL, XARVAR_DONT_SET)) {return;}
-    
+
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name' => $name,
-                                         'moduleid'   => $moduleid,
-                                         'itemtype'   => $itemtype,
                                          'join'       => $join,
                                          'table'      => $table,
                                          'itemid'     => $itemid,
@@ -51,7 +47,7 @@ function dynamicdata_admin_delete($args)
     if (!empty($noconfirm)) {
         if (!empty($return_url)) {
             xarResponseRedirect($return_url);
-        } elseif (!empty($table)) {    
+        } elseif (!empty($table)) {
             xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
                                           array(
                                             'table'     => $table,
