@@ -50,7 +50,7 @@ function dynamicdata_admin_modifyprop()
     $data['authid'] = xarSecGenAuthKey();
 
     $modinfo = xarModGetInfo($modid);
-    if (!isset($object)) {
+    if (!isset($objectinfo)) {
         $data['objectid'] = 0;
         if (!empty($itemtype)) {
             $data['label'] = xarML('for module #(1) - item type #(2)', $modinfo['displayname'], $itemtype);
@@ -58,11 +58,11 @@ function dynamicdata_admin_modifyprop()
             $data['label'] = xarML('for module #(1)', $modinfo['displayname']);
         }
     } else {
-        $data['objectid'] = $object['objectid'];
+        $data['objectid'] = $objectinfo['objectid'];
         if (!empty($itemtype)) {
-            $data['label'] = xarML('for #(1)', $object['label']);
+            $data['label'] = xarML('for #(1)', $objectinfo['label']);
         } else {
-            $data['label'] = xarML('for #(1)', $object['label']);
+            $data['label'] = xarML('for #(1)', $objectinfo['label']);
         }
     }
 

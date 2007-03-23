@@ -34,14 +34,13 @@ function dynamicdata_admin_updateprop()
 
     if (!xarSecConfirmAuthKey()) return;
 
-    $object = xarModAPIFunc('dynamicdata','user','getobjectinfo',
-                            array('objectid' => $objectid,
-                                  'moduleid' => $modid,
-                                  'itemtype' => $itemtype));
-    if (isset($object)) {
-        $objectid = $object['objectid'];
-        $modid = $object['moduleid'];
-        $itemtype = $object['itemtype'];
+    $objectinfo = DataObjectMaster::getObjectInfo(
+                                    array('objectid' => $objectid));
+
+    if (isset($objectinfo)) {
+        $objectid = $objectinfo['objectid'];
+        $modid = $objectinfo['moduleid'];
+        $itemtype = $objectinfo['itemtype'];
     } elseif (!empty($modid)) {
         $modinfo = xarModGetInfo($modid);
         if (!empty($modinfo['name'])) {
@@ -160,8 +159,7 @@ function dynamicdata_admin_updateprop()
     }
 
     xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
-                        array('modid'    => $modid,
-                              'itemtype' => $itemtype,
+                        array('itemid'    => $objectid,
                               'table'    => $table)));
 }
 ?>
