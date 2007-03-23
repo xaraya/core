@@ -38,7 +38,7 @@ function dynamicdata_admin_update($args)
     if(!xarVarFetch('table',      'isset', $table,       NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('tplmodule',  'isset', $tplmodule,   'dynamicdata', XARVAR_NOT_REQUIRED)) {return;}
 
-//    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) return;
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'join'     => $join,
                                          'table'    => $table,
