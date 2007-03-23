@@ -42,20 +42,6 @@ function dynamicdata_admin_modify($args)
 
     $data = xarModAPIFunc('dynamicdata','admin','menu');
 
-/*    if (isset($objectid)) {
-        $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('objectid' => $objectid));
-    } elseif (isset($name)) {
-        $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('name' => $name));
-    } else {
-        if($modid == 182) {
-            // Dynamicdata module is special
-            $ancestor = array('objectid' => $objectid, 'modid' => $modid, 'itemtype' => $itemtype);
-        } else {
-            $ancestor = xarModAPIFunc('dynamicdata','user','getbaseancestor',array('moduleid' => $modid,'itemtype' => $itemtype));
-        }
-    }
-//    $itemtype = $ancestor['itemtype'];
-*/
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name' => $name,
                                          'moduleid' => $moduleid,

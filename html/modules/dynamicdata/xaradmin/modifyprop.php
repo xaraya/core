@@ -34,36 +34,14 @@ function dynamicdata_admin_modifyprop()
     if(!xarVarFetch('details',  'isset', $details,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('layout',   'str:1', $layout,   'default', XARVAR_NOT_REQUIRED)) {return;}
 
-/*
-    if (!empty($itemid)) {
-        $where = 'objectid eq '.$itemid;
-    } else {
-        $where = 'moduleid eq '.$modid.' and itemtype eq '.$itemtype;
-    }
-    $myobject = & DataObjectMaster::getObjectList(array('objectid' => 2,
-                                              'fieldlist' => array('id','label','type','default','source','validation','status','objectid','moduleid','itemtype'),
-                                              'where' => $where));
-    if ($myobject->items) {
-        $myobject->getItems();
-    }
-    $data['myobject'] = & $myobject;
-*/
+    $objectinfo = DataObjectMaster::getObjectInfo(
+                                    array('objectid' => $itemid));
 
-    $object = xarModAPIFunc('dynamicdata','user','getobjectinfo',
-                            array('objectid' => $itemid,
-                                  'moduleid' => $modid,
-                                  'itemtype' => $itemtype));
-
-    if (isset($object)) {
-        $objectid = $object['objectid'];
-        $modid = $object['moduleid'];
-        $itemtype = $object['itemtype'];
-        $label =  $object['label'];
-    }
-    if (empty($modid)) {
-        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('module id', 'admin', 'modifyprop', 'dynamicdata');
-        throw new BadParameterException($vars, $msg);
+    if (isset($objectinfo)) {
+        $objectid = $objectinfo['objectid'];
+        $modid = $objectinfo['moduleid'];
+        $itemtype = $objectinfo['itemtype'];
+        $label =  $objectinfo['label'];
     }
     $data['modid'] = $modid;
     $data['itemtype'] = $itemtype;
@@ -89,8 +67,7 @@ function dynamicdata_admin_modifyprop()
     }
 
     $data['fields'] = xarModAPIFunc('dynamicdata','user','getprop',
-                                   array('modid' => $modid,
-                                         'itemtype' => $itemtype,
+                                   array('objectid' => $itemid,
                                          'allprops' => true));
     if (!isset($data['fields']) || $data['fields'] == false) {
         $data['fields'] = array();

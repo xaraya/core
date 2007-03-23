@@ -115,8 +115,9 @@ function dynamicdata_admin_update($args)
         $return_url .= 'itemid=' . $itemid;
         xarResponseRedirect($return_url);
     } elseif ($myobject->objectid == 2) { // for dynamic properties, return to modifyprop
+        $objectid = $myobject->properties['objectid']->value;
         xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
-                                      array('itemid' => $itemid)));
+                                      array('itemid' => $objectid)));
     } elseif (!empty($table)) {
         xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
                                       array('table' => $table)));
