@@ -35,20 +35,13 @@ function dynamicdata_admin_modifyprop()
     if(!xarVarFetch('layout',   'str:1', $layout,   'default', XARVAR_NOT_REQUIRED)) {return;}
 
     $objectinfo = DataObjectMaster::getObjectInfo(
-                                    array('objectid' => $itemid,
-                                          'moduleid' => $modid,
-                                          'itemtype' => $itemtype));
+                                    array('objectid' => $itemid));
 
     if (isset($objectinfo)) {
         $objectid = $objectinfo['objectid'];
         $modid = $objectinfo['moduleid'];
         $itemtype = $objectinfo['itemtype'];
         $label =  $objectinfo['label'];
-    }
-    if (empty($modid)) {
-        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('module id', 'admin', 'modifyprop', 'dynamicdata');
-        throw new BadParameterException($vars, $msg);
     }
     $data['modid'] = $modid;
     $data['itemtype'] = $itemtype;
@@ -74,8 +67,7 @@ function dynamicdata_admin_modifyprop()
     }
 
     $data['fields'] = xarModAPIFunc('dynamicdata','user','getprop',
-                                   array('modid' => $modid,
-                                         'itemtype' => $itemtype,
+                                   array('objectid' => $itemid,
                                          'allprops' => true));
     if (!isset($data['fields']) || $data['fields'] == false) {
         $data['fields'] = array();
