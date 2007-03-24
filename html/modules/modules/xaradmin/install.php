@@ -43,7 +43,10 @@ function modules_admin_install()
         $command = false;
     }
 
-    if (!$command) {
+    $data['dependencies'] = xarModAPIFunc('modules','admin','getalldependencies',array('regid'=>$id));
+
+    //Only show the status screen if there are dependencies that cannot be satisfied
+    if (!$command && !empty($data['dependencies']['unsatisfiable'])) {
         //Let's make a nice GUI to show the user the options
         $data = array();
         $data['id'] = $id;
@@ -63,7 +66,6 @@ function modules_admin_install()
         }
 
         $data['authid']       = xarSecGenAuthKey();
-        $data['dependencies'] = xarModAPIFunc('modules','admin','getalldependencies',array('regid'=>$id));
         return $data;
     }
 
