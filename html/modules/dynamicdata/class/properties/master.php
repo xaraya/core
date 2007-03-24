@@ -39,7 +39,7 @@ class DataPropertyMaster extends Object
      * @param $args['objectref'] a reference to the object to add those properties to (optional)
      * @param $args['allprops'] skip disabled properties by default
      */
-    static function getProperties(array $args)
+    static function getProperties(Array $args)
     {
         // we can't use our own classes here, because we'd have an endless loop :-)
 
@@ -116,7 +116,7 @@ class DataPropertyMaster extends Object
      * @todo  this look like it needs to be in object class
      * @todo  if not, we should define an interface for D_Obj and D_Obj_List so we can type hint on it
      */
-    static function addProperty(array $args, &$objectref)
+    static function addProperty(Array $args, &$objectref)
     {
         if(!isset($objectref) || empty($args['name']) || empty($args['type']))
             return;
@@ -149,7 +149,7 @@ class DataPropertyMaster extends Object
     /**
      * Class method to get a new dynamic property of the right type
      */
-    static function &getProperty(array $args)
+    static function &getProperty(Array $args)
     {
         if(!isset($args['name']) && !isset($args['type'])) {
             throw new BadParameterException(null,xarML('The getProperty method needs either a name or type parameter.'));
@@ -207,7 +207,7 @@ class DataPropertyMaster extends Object
         return $property;
     }
 
-    static function createProperty(array $args)
+    static function createProperty(Array $args)
     {
         $descriptor = new DataObjectDescriptor(array('objectid' => 2)); // the Dynamic Properties = 2
         $object = new DataObject($descriptor);
@@ -216,12 +216,12 @@ class DataPropertyMaster extends Object
         return $objectid;
     }
 
-    static function updateProperty(array $args)
+    static function updateProperty(Array $args)
     {
         // TODO: what if the property type changes to something incompatible ?
     }
 
-    static function deleteProperty(array $args)
+    static function deleteProperty(Array $args)
     {
         if(empty($args['itemid']))
             return;
