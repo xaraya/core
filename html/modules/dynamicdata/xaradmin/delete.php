@@ -31,7 +31,7 @@ function dynamicdata_admin_delete($args)
     if(!xarVarFetch('return_url', 'isset', $return_url, NULL, XARVAR_DONT_SET)) {return;}
 
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
-                                         'name' => $name,
+                                         'name'       => $name,
                                          'join'       => $join,
                                          'table'      => $table,
                                          'itemid'     => $itemid,
@@ -101,6 +101,11 @@ function dynamicdata_admin_delete($args)
 
     $itemid = $myobject->deleteItem();
     if (!empty($return_url)) {
+        if (strpos($return_url,'?') === false)
+            $return_url .= '?';
+        else
+            $return_url .= '&';
+        $return_url .= '&itemid=' . $itemid;
         xarResponseRedirect($return_url);
     } elseif (!empty($table)) {
         xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
@@ -111,7 +116,7 @@ function dynamicdata_admin_delete($args)
     } else {
         xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',
                                       array(
-                                      'itemid'    => $data['objectid'],
+                                      'name' => $myobject->name,
                                       'tplmodule' => $tplmodule,
                                       )));
     }

@@ -45,15 +45,15 @@ function xarSerReqRes_init(&$args, $whatElseIsGoingLoaded)
  * Wrapper functions to support Xaraya 1 API Server functions
  *
  */
-function xarServerGetVar($name) 
+function xarServerGetVar($name)
 { return xarServer::getVar($name); }
-function xarServerGetBaseURI()  
+function xarServerGetBaseURI()
 { return xarServer::getBaseURI();  }
-function xarServerGetHost()     
+function xarServerGetHost()
 { return xarServer::getHost();     }
-function xarServerGetProtocol() 
+function xarServerGetProtocol()
 { return xarServer::getProtocol(); }
-function xarServerGetBaseURL()  
+function xarServerGetBaseURL()
 { return xarServer::getBaseURL();  }
 function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target = NULL)
 {
@@ -64,20 +64,20 @@ function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target
  * Wrapper function to support Xaraya 1 API Request functions
  *
  */
-function xarRequestGetVar($name, $allowOnlyMethod = NULL) 
-{ 
+function xarRequestGetVar($name, $allowOnlyMethod = NULL)
+{
     return xarRequest::getVar($name, $allowOnlyMethod);
 }
-function xarRequestGetInfo()        
+function xarRequestGetInfo()
 { return xarRequest::getInfo();        }
-function xarRequestIsLocalReferer() 
+function xarRequestIsLocalReferer()
 { return xarRequest::IsLocalReferer(); }
 
 /**
  * Wrapper functions to support Xaraya 1 API Response functions
  *
  */
-function xarResponseRedirect($redirectURL) 
+function xarResponseRedirect($redirectURL)
 { return xarResponse::Redirect($redirectURL); }
 
 /**
@@ -108,7 +108,7 @@ class xarServer extends Object
      * @param name string the name of the variable
      * @return mixed value of the variable
      */
-    static function getVar($name) 
+    static function getVar($name)
     {
         assert('version_compare("5.0",phpversion()) <= 0; /* The minimum PHP version supported by Xaraya is 5.0 */');
         if (isset($_SERVER[$name])) return $_SERVER[$name];
@@ -137,10 +137,10 @@ class xarServer extends Object
         } catch(Exception $e) {
             // We need to build it
         }
-        
+
         // Get the name of this URI
         $path = self::getVar('REQUEST_URI');
-        
+
         //if ((empty($path)) ||
         //    (substr($path, -1, 1) == '/')) {
         //what's wrong with a path (cfr. Indexes index.php, mod_rewrite etc.) ?
@@ -155,15 +155,15 @@ class xarServer extends Object
                 $path = self::getVar('PATH_INFO');
             }
         }
-        
+
         $path = preg_replace('/[#\?].*/', '', $path);
-      
+
         $path = preg_replace('/\.php\/.*$/', '', $path);
         if (substr($path, -1, 1) == '/') {
             $path .= 'dummy';
         }
         $path = dirname($path);
-        
+
         //FIXME: This is VERY slow!!
         if (preg_match('!^[/\\\]*$!', $path)) {
             $path = '';
@@ -214,7 +214,7 @@ class xarServer extends Object
         }
         return 'http';
     }
-    
+
     /**
      * get base URL for Xaraya
      *
@@ -225,15 +225,15 @@ class xarServer extends Object
     {
         static $baseurl = null;
         if (isset($baseurl))  return $baseurl;
-        
+
         $server   = self::getHost();
         $protocol = self::getProtocol();
         $path     = self::getBaseURI();
-        
+
         $baseurl = "$protocol://$server$path/";
         return $baseurl;
     }
-    
+
     /**
      * Get current URL (and optionally add/replace some parameters)
      *
@@ -249,10 +249,10 @@ class xarServer extends Object
         $server   = self::getHost();
         $protocol = self::getProtocol();
         $baseurl  = "$protocol://$server";
-        
+
         // get current URI
         $request = self::getVar('REQUEST_URI');
-        
+
         if (empty($request)) {
             // adapted patch from Chris van de Steeg for IIS
             // TODO: please test this :)
@@ -269,17 +269,17 @@ class xarServer extends Object
                 $request = '/';
             }
         }
-        
+
         // Note to Dracos: please don't replace & with &amp; here just yet - give me some time to test this first :-)
         // Mike can we change these now, so we can work on validation a bit?
-        
+
         // add optional parameters
         if (count($args) > 0) {
-            if (strpos($request,'?') === false) 
+            if (strpos($request,'?') === false)
                 $request .= '?';
-            else 
+            else
                 $request .= '&';
-            
+
             foreach ($args as $k=>$v) {
                 if (is_array($v)) {
                     foreach($v as $l=>$w) {
@@ -293,7 +293,7 @@ class xarServer extends Object
                         // ... replace it in-line if it's not empty
                         if (!empty($v)) {
                             $request = preg_replace("/(&|\?)".preg_quote($find)."/","$1$k=$v",$request);
-                            
+
                             // ... or remove it otherwise
                         } elseif ($matches[1] == '?') {
                             $request = preg_replace("/\?".preg_quote($find)."(&|)/",'?',$request);
@@ -308,7 +308,7 @@ class xarServer extends Object
             // Strip off last &
             $request = substr($request, 0, -1);
         }
-        
+
         // Finish up
         if (!isset($generateXMLURL)) $generateXMLURL = self::$generateXMLURLs;
         if (isset($target)) $request .= '#' . urlencode($target);
@@ -386,9 +386,9 @@ class xarRequest extends Object
                 return;
             }
         }
-        
+
         $value = xarMLS_convertFromInput($value, $method);
-        
+
         if (get_magic_quotes_gpc()) {
             xarVar_stripSlashes($value);
         }
@@ -451,21 +451,21 @@ class xarRequest extends Object
              as parts of a short-url path -- because it wouldn't not permit many characters that would
              in titles, such as parens, commas, or apostrophes.  Since a similiar "security" check is not
              done to normal URL params, I've changed this to a more flexable regex at the other extreme.
-             
+
              This also happens to address Bug 2927
-             
+
              TODO: The security of doing this should be examined by someone more familiar with why this works
              as a security check in the first place.
             */
             preg_match_all('|/([^/]+)|i', $path, $matches);
-            
+
             $params = $matches[1];
             if (count($params) > 0) {
                 $modName = $params[0];
                 // if the second part is not admin, it's user by default
                 $modType = 'user';
                 if (isset($params[1]) && $params[1] == 'admin') $modType = 'admin';
-                
+
                 // Check if this is an alias for some other module
                 $modName = self::resolveModuleAlias($modName);
                 // Call the appropriate decode_shorturl function
@@ -495,7 +495,7 @@ class xarRequest extends Object
                 }
             }
         }
-        
+
         if (!empty($modName)) {
             // Check if this is an alias for some other module
             $modName = self::resolveModuleAlias($modName);
@@ -507,7 +507,7 @@ class xarRequest extends Object
         }
         return $requestInfo;
     }
-    
+
     /**
      * Check to see if this is a local referral
      *
@@ -518,7 +518,7 @@ class xarRequest extends Object
     {
         $server  = xarServer::getHost();
         $referer = xarServer::getVar('HTTP_REFERER');
-        
+
         if (!empty($referer) && preg_match("!^https?://$server(:\d+|)/!", $referer)) {
             return true;
         } else {
@@ -565,31 +565,31 @@ class xarResponse extends Object
     {
         $redirectURL=urldecode($url); // this is safe if called multiple times.
         if (headers_sent() == true) return false;
-        
+
         // Remove &amp; entities to prevent redirect breakage
         $redirectURL = str_replace('&amp;', '&', $redirectURL);
-        
+
         if (substr($redirectURL, 0, 4) != 'http') {
             // Removing leading slashes from redirect url
             $redirectURL = preg_replace('!^/*!', '', $redirectURL);
-            
+
             // Get base URL
             $baseurl = xarServer::getBaseURL();
-            
+
             $redirectURL = $baseurl.$redirectURL;
         }
-        
+
         if (preg_match('/IIS/', xarServer::getVar('SERVER_SOFTWARE')) && preg_match('/CGI/', xarServer::getVar('GATEWAY_INTERFACE')) ) {
             $header = "Refresh: 0; URL=$redirectURL";
         } else {
             $header = "Location: $redirectURL";
         }// if
-        
+
         // Start all over again
         header($header);
 
         // NOTE: we *could* return for pure '1 exit point' but then we'd have to keep track of more,
-        // so for now, we exit here explicitly. Besides the end of index.php this should be the only 
+        // so for now, we exit here explicitly. Besides the end of index.php this should be the only
         // exit point.
         exit();
     }
