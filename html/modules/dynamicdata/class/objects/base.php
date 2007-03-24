@@ -141,10 +141,20 @@ class DataObject extends DataObjectMaster
 
         // Set all properties based on what is passed in.
         $properties = $this->getProperties($args);
+
         $args['properties'] = array();
         foreach ($properties as $property) {
             if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
                 $args['properties'][$property->name] = $property;
+        }
+
+        // Order the fields if this is an extended object
+        if (!empty($this->fieldorder)) {
+            $tempprops = array();
+            foreach ($this->fieldorder as $field)
+                if (isset($args['properties'][$field]))
+                    $tempprops[$field] = $args['properties'][$field];
+            $args['properties'] = $tempprops;
         }
 
         // pass some extra template variables for use in BL tags, API calls etc.
@@ -207,6 +217,15 @@ class DataObject extends DataObjectMaster
                 }
             }
 
+        }
+
+        // Order the fields if this is an extended object
+        if (!empty($this->fieldorder)) {
+            $tempprops = array();
+            foreach ($this->fieldorder as $field)
+                if (isset($args['properties'][$field]))
+                    $tempprops[$field] = $args['properties'][$field];
+            $args['properties'] = $tempprops;
         }
 
         // pass some extra template variables for use in BL tags, API calls etc.

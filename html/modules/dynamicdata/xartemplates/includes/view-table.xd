@@ -55,12 +55,12 @@
                         <xar:if condition="!empty($links[$itemid]) and count($links[$itemid]) gt 0">
                             <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
                                 <xar:if condition="!empty($option['olink'])">
-                                    #$option['ojoin']# 
+                                    #$option['ojoin']#
                                        <a href="#$option['olink']#">
-                                            #$option['otitle']# 
+                                            #$option['otitle']#
                                        </a>
                                 <xar:else />
-                                    #$option['ojoin']# #$option['otitle']# 
+                                    #$option['ojoin']# #$option['otitle']#
                                 </xar:if>
                             </xar:foreach>
                         <xar:else />

@@ -115,7 +115,8 @@ class DataObjectMaster extends Object
 
     public $properties  = array();      // list of properties for the DD object
     public $datastores  = array();      // similarly the list of datastores (arguably in the wrong place here)
-    public $fieldlist   = array();
+    public $fieldlist   = array();      // array of properties to be displayed
+    public $fieldorder  = array();      // displayorder for the properties
     public $fieldprefix = '';           // prefix to use in field names etc.
     public $status      = 1;
 
@@ -276,6 +277,7 @@ class DataObjectMaster extends Object
         $ancestors = self::getAncestors($params);
 
         // If this is an extended object add the ancestor properties for display purposes
+        $this->fieldorder = array_keys($this->properties);
         if(!empty($ancestors))
         {
             $this->baseancestor = $ancestors[0]['objectid'];
@@ -330,6 +332,7 @@ class DataObjectMaster extends Object
             $this->datastores[$newproperty->datastore]->addField($this->properties[$args['name']]);
             $this->fieldlist[] = $newproperty->name;
         }
+        $this->fieldorder = array_merge(array_keys($properties), $this->fieldorder);
     }
 
     /**

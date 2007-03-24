@@ -55,7 +55,7 @@ class DataObjectList extends DataObjectMaster
      *
      * @param array
      */
-    function setArguments(array $args = array())
+    function setArguments(Array $args = array())
     {
         if (empty($args)) return true;
 
@@ -376,7 +376,7 @@ class DataObjectList extends DataObjectMaster
      *
      * @return array
      */
-    function &getItems(array $args = array())
+    function &getItems(Array $args = array())
     {
         // initialize the items array
         $this->items = array();
@@ -417,7 +417,7 @@ class DataObjectList extends DataObjectMaster
      *
      * Note : this must be called *before* getItems() if you're using numitems !
      */
-    function countItems(array $args = array())
+    function countItems(Array $args = array())
     {
         // set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
         $this->setArguments($args);
@@ -445,7 +445,7 @@ class DataObjectList extends DataObjectMaster
      *
      * @return xarTplObject
      */
-    function showView(array $args = array())
+    function showView(Array $args = array())
     {
         $args = $this->toArray($args);
 
@@ -468,9 +468,18 @@ class DataObjectList extends DataObjectMaster
         {
             foreach($this->properties as $property)
                 if($property->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK))
-                    $args['properties'][$property->name] = $property;
+                    $args['properties'][$property->name] =& $property;
+
         }
 
+        // Order the fields if this is an extended object
+        if (!empty($this->fieldorder)) {
+            $tempprops = array();
+            foreach ($this->fieldorder as $field)
+                if (isset($args['properties'][$field]))
+                    $tempprops[$field] = $args['properties'][$field];
+            $args['properties'] = $tempprops;
+        }
         $args['items'] =& $this->items;
 
         // add link to display the item
@@ -665,7 +674,7 @@ class DataObjectList extends DataObjectMaster
      *
      * @return array
      */
-    function &getViewValues(array $args = array())
+    function &getViewValues(Array $args = array())
     {
         if(empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;
@@ -761,7 +770,7 @@ class DataObjectList extends DataObjectMaster
      *
      * @return int
      */
-    function getNext(array $args = array())
+    function getNext(Array $args = array())
     {
         static $start = true;
 
