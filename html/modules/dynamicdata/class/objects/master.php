@@ -326,7 +326,7 @@ class DataObjectMaster extends Object
             );
             $this->addProperty($args);
             if (!isset($this->datastores[$newproperty->datastore])) {
-                $newstore = $this->property2datastore($newproperty);
+                $newstore = $newproperty->getDataStore();
                 $this->addDatastore($newstore[0],$newstore[1]);
             }
             $this->datastores[$newproperty->datastore]->addField($this->properties[$args['name']]);
@@ -390,7 +390,7 @@ class DataObjectMaster extends Object
                 continue;
             }
 
-            list($storename, $storetype) = $this->property2datastore($property);
+            list($storename, $storetype) = $property->getDataStore();
             if (!isset($this->datastores[$storename])) {
                 $this->addDataStore($storename, $storetype);
             }
@@ -413,67 +413,6 @@ class DataObjectMaster extends Object
             }
         }
         return $this->datastores;
-    }
-
-    /**
-     * Find the datastore name and type corresponding to the data source of a property
-     *
-     * @todo this belongs in the property class, not here
-     */
-    function property2datastore(&$property)
-    {
-        switch($property->source) {
-            case 'dynamic_data':
-                // Variable table storage method, aka 'usual dd'
-                $storename = '_dynamic_data_';
-                $storetype = 'data';
-                break;
-            case 'hook module':
-                // data managed by a hook/utility module
-                $storename = '_hooks_';
-                $storetype = 'hook';
-                break;
-            case 'user function':
-                // data managed by some user function (specified in validation for now)
-                $storename = '_functions_';
-                $storetype = 'function';
-                break;
-            case 'user settings':
-                // data available in user variables
-                // we'll keep a separate data store per module/itemtype here for now
-                // TODO: (don't) integrate user variable handling with DD
-                $storename = 'uservars_'.$this->moduleid.'_'.$this->itemtype; //FIXME change id
-                $storetype = 'uservars';
-                break;
-            case 'module variables':
-                // data available in module variables
-                // we'll keep a separate data store per module/itemtype here for now
-                // TODO: (don't) integrate module variable handling with DD
-                $storename = 'modulevars_'.$this->moduleid.'_'.$this->itemtype; //FIXME change id
-                $storetype = 'modulevars';
-                break;
-            case 'dummy':
-                // no data storage
-                $storename = '_dummy_';
-                $storetype = 'dummy';
-                break;
-            default:
-                // Nothing specific, perhaps a table?
-                if(preg_match('/^(.+)\.(\w+)$/', $property->source, $matches))
-                {
-                    // data field coming from some static table : [database.]table.field
-                    $table = $matches[1];
-                    $field = $matches[2];
-                    $storename = $table;
-                    $storetype = 'table';
-                    break;
-                }
-                // Must be on the todo list then.
-                // TODO: extend with LDAP, file, ...
-                $storename = '_todo_';
-                $storetype = 'todo';
-        }
-        return array($storename, $storetype);
     }
 
     /**

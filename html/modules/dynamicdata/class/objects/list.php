@@ -176,7 +176,7 @@ class DataObjectList extends DataObjectMaster
                 $datastore = $this->properties[$criteria]->datastore;
                 // assign property to datastore if necessary
                 if(empty($datastore)) {
-                    list($storename, $storetype) = $this->property2datastore($this->properties[$criteria]);
+                    list($storename, $storetype) = $this->properties[$criteria]->getDataStore();
                     if(!isset($this->datastores[$storename]))
                         $this->addDataStore($storename, $storetype);
 
@@ -265,7 +265,7 @@ class DataObjectList extends DataObjectMaster
                 $datastore = $this->properties[$name]->datastore;
                 // assign property to datastore if necessary
                 if(empty($datastore)) {
-                    list($storename, $storetype) = $this->property2datastore($this->properties[$name]);
+                    list($storename, $storetype) = $this->properties[$name]->getDataStore();
                     if(!isset($this->datastores[$storename]))
                         $this->addDataStore($storename, $storetype);
 
@@ -321,7 +321,7 @@ class DataObjectList extends DataObjectMaster
                 $datastore = $this->properties[$name]->datastore;
                 // assign property to datastore if necessary
                 if(empty($datastore)) {
-                    list($storename, $storetype) = $this->property2datastore($this->properties[$name]);
+                    list($storename, $storetype) = $this->properties[$name]->getDataStore();
                     if(!isset($this->datastores[$storename])) {
                         $this->addDataStore($storename, $storetype);
                     }
