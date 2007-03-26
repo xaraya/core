@@ -47,8 +47,8 @@ function base_init()
          * CREATE TABLE xar_session_info (
          *  id        varchar(32) NOT NULL,
          *  ipaddr    varchar(20) NOT NULL default '',
-         *  firstused integer NOT NULL default '0',
-         *  lastused  integer NOT NULL default '0',
+         *  first_use integer NOT NULL default '0',
+         *  last_use  integer NOT NULL default '0',
          *  role_id   integer NOT NULL default '0',
          *  vars      blob,
          *  remember  int(1) default '0',
@@ -73,7 +73,7 @@ function base_init()
         $query = xarDBCreateIndex($sessionInfoTable,$index);
         $dbconn->Execute($query);
 
-        $index = array('name'   => 'i_'.$systemPrefix.'_session_lastused',
+        $index = array('name'   => 'i_'.$systemPrefix.'_session_last_use',
                        'fields' => array('last_use'),
                        'unique' => false);
 
