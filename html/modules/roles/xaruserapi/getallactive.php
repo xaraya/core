@@ -48,7 +48,7 @@ function roles_userapi_getallactive($args)
                      a.date_reg,
                      b.ipaddr
               FROM $rolestable a, $sessioninfoTable b
-              WHERE a.id = b.role_id AND b.lastused > ? AND a.id > ?";
+              WHERE a.id = b.role_id AND b.last_use > ? AND a.id > ?";
     $bindvars[] = $filter;
     $bindvars[] = 1;
     if (isset($selection)) $query .= $selection;
