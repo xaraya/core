@@ -47,7 +47,7 @@ function roles_userapi_countallactive($args)
     $bindvars = array();
     $query = "SELECT COUNT(*)
               FROM $rolestable a, $sessioninfoTable b
-              WHERE a.id = b.role_id AND b.lastused > ? AND a.id > ?";
+              WHERE a.id = b.role_id AND b.last_use > ? AND a.id > ?";
     $bindvars[] = $filter;
     $bindvars[] = 1;
 

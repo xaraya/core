@@ -66,11 +66,11 @@ function roles_onlineblock_display($blockinfo)
     if($dbconn->databaseType == 'sqlite') {
         $sql = "SELECT COUNT(*)
                 FROM (SELECT DISTINCT toles_id FROM $sessioninfotable
-                      WHERE lastused > ? AND role_id > ?)";
+                      WHERE last_use > ? AND role_id > ?)";
     } else {
         $sql = "SELECT COUNT(DISTINCT role_id)
             FROM $sessioninfotable
-            WHERE lastused > ? AND role_id > ?";
+            WHERE last_use > ? AND role_id > ?";
     }
     $result = $dbconn->Execute($sql, array($activetime,2));
     // CHECKME: do we catch the exception here?
@@ -129,11 +129,11 @@ function roles_onlineblock_display($blockinfo)
     if($dbconn->databaseType == 'sqlite') {
         $query2 = "SELECT COUNT(*)
                    FROM (SELECT DISTINCT ipaddr FROM $sessioninfotable
-                         WHERE lastused > ? AND role_id = ?)";
+                         WHERE last_use > ? AND role_id = ?)";
     } else {
         $query2 = "SELECT COUNT(DISTINCT ipaddr)
                FROM $sessioninfotable
-               WHERE lastused > ? AND role_id = ?";
+               WHERE last_use > ? AND role_id = ?";
     }
     $result2 = $dbconn->Execute($query2, array($activetime,2));
     // CHECKME: do we catch the exception here?

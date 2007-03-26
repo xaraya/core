@@ -261,7 +261,7 @@ function base_menublock_display($blockinfo)
                 $link = xarModURL($mod['name'] ,'user', 'main', array());
                 // depending on which module is currently loaded we display accordingly
                 if($mod['name'] == $thismodname && $thismodtype == 'user'){
-
+echo "SSS";
                     // Get list of links for modules
                     $labelDisplay = $label;
                     $usermods[] = array(   'label'     => $labelDisplay,
