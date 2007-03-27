@@ -185,7 +185,6 @@ class DataObject extends DataObjectMaster
             }
         } else {
             $args['properties'] =& $this->properties;
-            // Do them all, except for status = DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN
             // TODO: this is exactly the same as in the display function, consolidate it.
             $totransform = array(); $totransform['transform'] = array();
             foreach($this->properties as $pname => $pobj) {

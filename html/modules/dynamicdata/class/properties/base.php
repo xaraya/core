@@ -306,7 +306,7 @@ class DataProperty extends Object implements iDataProperty
         if(!isset($data['module']))   $data['module']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
-        // Render it
+
         return xarTplProperty($data['module'], $data['template'], 'showoutput', $data);
     }
 
@@ -317,7 +317,7 @@ class DataProperty extends Object implements iDataProperty
      * @param $args['for'] label id to use for this property (id, name or nothing)
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showLabel($args = array())
+    function showLabel(Array $args = array())
     {
         if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
             return $this->showHidden($args);
@@ -336,11 +336,11 @@ class DataProperty extends Object implements iDataProperty
         $data['name']  = $this->name;
         $data['label'] = isset($label) ? xarVarPrepForDisplay($label) : xarVarPrepForDisplay($this->label);
         $data['for']   = isset($for) ? $for : null;
+        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['template'])) $data['template'] = $this->template;
+        if(!isset($data['layout']))   $data['layout']   = $this->layout;
 
-        if(!isset($template))
-            $template = null;
-
-        return xarTplProperty('dynamicdata', $template, 'label', $data);
+        return xarTplProperty($data['module'], $data['template'], 'label', $data);
     }
 
     /**
@@ -351,7 +351,7 @@ class DataProperty extends Object implements iDataProperty
      * @param $args['id'] id of the field
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showHidden($args = array())
+    function showHidden(Array $args = array())
     {
         extract($args);
 
@@ -360,10 +360,11 @@ class DataProperty extends Object implements iDataProperty
         $data['id']       = !empty($id)   ? $id   : 'dd_'.$this->id;
         $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['template'])) $data['template'] = $this->template;
+        if(!isset($data['layout']))   $data['layout']   = $this->layout;
 
-        if(!isset($template))
-            $template = null;
-        return xarTplProperty('dynamicdata', $template, 'showhidden', $data);
+        return xarTplProperty($data['module'], $data['template'], 'showhidden', $data);
     }
 
     /**
@@ -380,7 +381,7 @@ class DataProperty extends Object implements iDataProperty
      * @param $args['tabindex'] tab index of the field
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function _showPreset($args = array())
+    private final function _showPreset(Array $args = array())
     {
         // Check for empty here instead of isset, e.g. for <xar:data-input ... value="" />
         if(empty($args['value']))
@@ -468,10 +469,7 @@ class DataProperty extends Object implements iDataProperty
         $data['other'] = xarVarPrepForDisplay($this->validation);
         // }
 
-        // allow template override by child classes
-        if(!isset($template)) $template = null;
-
-        return xarTplProperty('dynamicdata', $template, 'validation', $data);
+        return xarTplProperty($data['module'], $data['template'], 'validation', $data);
     }
 
     /**
@@ -513,7 +511,7 @@ class DataProperty extends Object implements iDataProperty
      *
      * @return string module name
      */
-    public function getModule()
+    protected function getModule()
     {
         $modulename = empty($this->tplmodule) ? $info['tplmodule'] : $this->tplmodule;
         return $modulename;
@@ -523,7 +521,7 @@ class DataProperty extends Object implements iDataProperty
      *
      * @return string template name
      */
-    public function getTemplate()
+    protected function getTemplate()
     {
         // If not specified, default to the registered name of the prop
         $template = empty($this->template) ? $this->name : $this->template;
