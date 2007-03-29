@@ -7,6 +7,7 @@
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
+sys::import('xaraya.exceptions');
 
 /**
   * Declare an interface for the xarTemplateCache class so we dont shoot
@@ -59,7 +60,7 @@ class xarTemplateCache extends Object implements ixarTemplateCache
                       . "Although you can switch the template cache to off (not recommended), i still need that directory to be writable.\n";
             }
             $msg .= "You need to change the permissions on the mentioned file/directory.";
-            throw new ConfigurationException($dir, $msg);
+            throw new GeneralException($dir, $msg);
         }
         self::$dir = $dir;
     }
