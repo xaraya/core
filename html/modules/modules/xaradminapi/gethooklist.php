@@ -1,20 +1,18 @@
 <?php
 /**
  * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @copyright (C) 2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @subpackage Modules module
  */
+
 /**
  * Obtain list of hooks (optionally for a particular module)
  *
- * @author Xaraya Development Team
  * @param $args['modName'] optional module we're looking for
- * @returns array
  * @return array of known hooks
- * @throws NO_PERMISSION
  */
 function modules_adminapi_gethooklist($args)
 {
