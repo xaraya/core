@@ -201,8 +201,9 @@ class xarLogger_simple extends xarLogger
     {
         if (file_exists($this->_filename)) {
             if (!is_writable($this->_filename)) {
+                $err = error_get_last();
                 throw new LoggerException('Unable to write to logger file: ' . $this->_filename
-                    . (!empty($php_errormsg) ? ' (' . $php_errormsg . ')' : ''));
+                    .  ' (' . $err['message'] . ')' );
             }
         } else {
             if (!is_writable(dirname($this->_filename))) {
@@ -251,8 +252,9 @@ class xarLogger_simple extends xarLogger
 
         // Always append - the will be a log file ready.
         if (($this->_fp = @fopen($this->_filename, 'a')) == false) {
+            $err = error_get_last();
             throw new LoggerException('Unable to open log file for writing: ' . $this->_filename
-                . (!empty($php_errormsg) ? ' (' . $php_errormsg . ')' : ''));
+                . ' (' . $err['message']. ')');
         }
 
         return true;
