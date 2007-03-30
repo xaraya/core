@@ -22,8 +22,8 @@ class ImageProperty extends TextBoxProperty
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-        $this->tplmodule = 'base';
         $this->template  = 'image';
+        echo $this->template;
     }
 
     public function validateValue($value = null)
@@ -43,6 +43,11 @@ class ImageProperty extends TextBoxProperty
             $this->value = '';
         }
         return true;
+    }
+    public function showValidation(Array $data = array())
+    {
+        $data['template']   = $this->template;
+        return parent::showValidation($data);
     }
 }
 ?>
