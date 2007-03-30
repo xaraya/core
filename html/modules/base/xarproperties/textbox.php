@@ -117,11 +117,10 @@ class TextBoxProperty extends DataProperty
      * @param $args['tabindex'] tab index of the field
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showValidation(Array $args = array())
+    public function showValidation(Array $data = array())
     {
-        extract($args);
+        extract($data);
 
-        $data = array();
         $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
         $data['id']         = !empty($id)   ? $id   : 'dd_'.$this->id;
         $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;

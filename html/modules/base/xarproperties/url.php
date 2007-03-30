@@ -29,22 +29,42 @@ class URLProperty extends TextBoxProperty
         $this->template = 'url';
     }
 
-    public function validateValue($value = null)
+    function validateValue($value = null)
     {
         if (!isset($value)) {
             $value = $this->value;
         }
-        if (!empty($value) && $value != 'http://') {
-            // TODO: add some URL validation routine !
+        // Make sure $value['link'] is set, has a length > 0 and does not equal simply 'http://'
+        $value = trim($value);
+        if (!empty($value) && $value != 'http://')  {
+           //let's process futher then
+           //check it is not invalid eg html tag
             if (preg_match('/[<>"]/',$value)) {
                 $this->invalid = xarML('URL');
-                $this->value = null;
+                $this->value = '';
                 return false;
             } else {
-                $this->value = $value;
-            }
-        } else {
-            $this->value = '';
+              // If we have a scheme but nothing following it,
+                // then consider the link empty :-)
+                if (eregi('^[a-z]+\:\/\/$', $value)) {
+                    $this->value = '';
+                } else {
+                    // Do some URL validation below. Separate for better understanding
+                    // Still not perfect. Add as seen fit.
+                    $uri = parse_url($value);
+                    if (empty($uri['scheme']) && empty($uri['host']) && empty($uri['path'])) {
+                        $this->invalid = xarML('URL');
+                        $this->value = '';
+                        return false;
+                    } elseif (empty($uri['scheme'])) {
+                        $this->value = 'http://' . $value;
+                    } else {
+                        // it has at least a scheme (http/ftp/etc) and a host (domain.tld)
+                        $this->value = $value;
+                    }
+                }
+
+            } //end checks for other schemes
         }
         return true;
     }
