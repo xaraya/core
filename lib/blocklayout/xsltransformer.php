@@ -56,6 +56,7 @@ class BlocklayoutXSLTProcessor extends Object
         $this->xmlDoc->resolveExternals = false;
         // We're still a long way from validating
         // $this->xmlDoc->validateOnParse = true;
+        $file = isset($this->xmlFile) ? $this->xmlFile : 'unknown';
         $this->xmlDoc->loadXML($xml);
 
         // Set up additional parameters related to the input

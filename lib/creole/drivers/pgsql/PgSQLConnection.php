@@ -18,7 +18,7 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
- 
+
 require_once 'creole/Connection.php';
 require_once 'creole/common/ConnectionCommon.php';
 require_once 'creole/drivers/pgsql/PgSQLPreparedStatement.php';
@@ -27,16 +27,16 @@ include_once 'creole/drivers/pgsql/PgSQLResultSet.php';
 
 /**
  * PgSQL implementation of Connection.
- * 
+ *
  * @author    Hans Lellelid <hans@xmpl.org> (Creole)
  * @author    Stig Bakken <ssb@fast.no> (PEAR::DB)
  * @author    Lukas Smith (PEAR::MDB)
  * @version   $Revision: 1.21 $
  * @package   creole.drivers.pgsql
- */ 
-class PgSQLConnection extends ConnectionCommon implements Connection {        
-                
-    /** 
+ */
+class PgSQLConnection extends ConnectionCommon implements Connection {
+
+    /**
      * Affected Rows of last executed query.
      * Postgres needs this for getUpdateCount()
      * We used to store the entire result set
@@ -44,7 +44,7 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
      * @var int
      */
     private $result_affected_rows;
-    
+
     /**
      * Connect to a database and log in as the specified user.
      *
@@ -55,18 +55,16 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
      * @return void
      */
     function connect($dsninfo, $flags = 0)
-    {    
-        global $php_errormsg;
-                
+    {
         if (!extension_loaded('pgsql')) {
             throw new SQLException('pgsql extension not loaded');
         }
 
         $this->dsn = $dsninfo;
         $this->flags = $flags;
-        
+
         $persistent = ($flags & Creole::PERSISTENT === Creole::PERSISTENT);
-                
+
         $protocol = (isset($dsninfo['protocol'])) ? $dsninfo['protocol'] : 'tcp';
         $connstr = '';
 
@@ -94,22 +92,23 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
         if (!empty($dsninfo['tty'])) {
             $connstr .= ' tty=' . $dsninfo['tty'];
         }
-        
+
         if ($persistent) {
             $conn = @pg_pconnect($connstr);
         } else {
             $conn = @pg_connect($connstr);
         }
-        
+
         if (!$conn) {
 			// hide the password from connstr
 			$cleanconnstr = preg_replace('/password=\'.*?\'($|\s)/', 'password=\'*********\'', $connstr);
-            throw new SQLException('Could not connect', $php_errormsg, $cleanconnstr);
+			$err = error_get_last()
+            throw new SQLException('Could not connect', $err['message'], $cleanconnstr);
         }
-        
-        $this->dblink = $conn;        
+
+        $this->dblink = $conn;
     }
-    
+
     /**
      * @see Connection::applyLimit()
      */
@@ -122,7 +121,7 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
             $sql .= " OFFSET ".$offset;
         }
     }
-    
+
     /**
      * @see Connection::disconnect()
      */
@@ -133,7 +132,7 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
         $this->dblink = null;
         return $ret;
     }
-    
+
     /**
      * @see Connection::simpleQuery()
      */
@@ -146,13 +145,13 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
 	$this->result_affected_rows = @pg_affected_rows($result);
 
         return new PgSQLResultSet($this, $result, $fetchmode);
-    }        
+    }
 
     /**
      * @see Connection::simpleUpdate()
      */
     function executeUpdate($sql)
-    {            
+    {
         $result = @pg_query($this->dblink, $sql);
         if (!$result) {
             throw new SQLException('Could not execute update', pg_last_error($this->dblink), $sql);
@@ -174,7 +173,7 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
             throw new SQLException('Could not begin transaction', pg_last_error($this->dblink));
         }
     }
-        
+
     /**
      * Commit the current transaction.
      * @throws SQLException
@@ -213,9 +212,9 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
 		throw new SQLException('getUpdateCount called before any sql queries were executed');
 	}
 	return $this->result_affected_rows;
-    }    
+    }
 
-    
+
     /**
      * @see Connection::getDatabaseInfo()
      */
@@ -224,7 +223,7 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
         require_once 'creole/drivers/pgsql/metadata/PgSQLDatabaseInfo.php';
         return new PgSQLDatabaseInfo($this);
     }
-    
+
     /**
      * @see Connection::getIdGenerator()
      */
@@ -233,22 +232,22 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
         require_once 'creole/drivers/pgsql/PgSQLIdGenerator.php';
         return new PgSQLIdGenerator($this);
     }
-    
+
     /**
      * @see Connection::prepareStatement()
      */
-    public function prepareStatement($sql) 
+    public function prepareStatement($sql)
     {
         return new PgSQLPreparedStatement($this, $sql);
     }
-    
+
     /**
      * @see Connection::prepareCall()
      */
     public function prepareCall($sql) {
         throw new SQLException('PostgreSQL does not support stored procedures.');
     }
-    
+
     /**
      * @see Connection::createStatement()
      */
@@ -256,5 +255,5 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
     {
         return new PgSQLStatement($this);
     }
-    
+
 }

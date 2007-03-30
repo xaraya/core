@@ -51,20 +51,20 @@
                     <xar:else/>
                         <xar:set name="SOMEischecked">true</xar:set>
                     </xar:if>
-                    
+
                     <!-- Store the disabled attribute for reuse -->
                     <xar:set name="hookedmoddisabled">true</xar:set>
                     <xar:if condition="$hookmod['modstatus'] eq 1">
                         <xar:set name="hookedmoddisabled">false</xar:set>
                     </xar:if>
-            
+
                     <fieldset>
                         <legend>
                             #$hookedmod['name']#
                         </legend>
 
                         <!-- inline style is needed here because IE's DOM support is flaky -->
-                        
+
                         <!-- The NOT radio -->
                         <xar:if condition="$NOTischecked">
                             <xar:if condition="$hookedmoddisabled">
@@ -87,7 +87,7 @@
                             </xar:ml>
                         </label>
                         <br />
-                    
+
                         <!-- The ALL radio -->
                         <xar:if condition="$ALLischecked">
                             <xar:if condition="$hookedmoddisabled">
@@ -110,7 +110,7 @@
                             </xar:ml>
                         </label>
                         <br/>
-                    
+
                         <xar:if condition="count($hookedmod['itemtypes']) gt 0">
                             <!-- The SOME radio -->
                             <xar:if condition="$SOMEischecked">
@@ -134,7 +134,7 @@
                                 </xar:ml>
                             </label>
                             <br />
-                        
+
                             <xar:set name="hasItemTypes">false</xar:set>
                             <div id="itemtypes_#$hookedmod['name']#" class="xar-padding-thickleft">
                                 <xar:foreach in="$hookedmod['itemtypes']" key="$typeid" value="$itemtype">

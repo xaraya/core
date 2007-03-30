@@ -83,10 +83,9 @@ class MySQLiConnection extends ConnectionCommon implements Connection {
         if (empty($conn)) {
             if (($err = @mysqli_error()) != '') {
                 throw new SQLException("connect failed", $err);
-            } elseif (empty($php_errormsg)) {
-                throw new SQLException("connect failed");
             } else {
-                throw new SQLException("connect failed", $php_errormsg);
+                $err = error_get_last(); $err = $err['message'];
+                throw new SQLException("connect failed", $err['message']);
             }
         }
 
@@ -249,7 +248,7 @@ class MySQLiConnection extends ConnectionCommon implements Connection {
         }
 
         if (!mysqli_commit($this->dblink)) {
-            throw new SQLException('Can not commit transaction', mysqli_error($this->dblink));                
+            throw new SQLException('Can not commit transaction', mysqli_error($this->dblink));
         }
 
         mysqli_autocommit($this->dblink, TRUE);
