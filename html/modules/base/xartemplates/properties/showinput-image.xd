@@ -3,7 +3,7 @@
 
 <xar:if condition="$inputtype eq 'upload'">
     <input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#"  />
-    &#160;<xar:data-input type="fileupload" validation="var/uploads|(gif|(jpg|jpeg|png|bmp)" />
+    &#160;<xar:data-input type="fileupload" name="$name" validation="var/uploads|(gif|(jpg|jpeg|png|bmp)" />
 <xar:elseif condition="$inputtype eq 'url'" />
     <xar:data-input type="url" name="$name" value="$value" />
 <xar:else />
@@ -13,7 +13,6 @@
         [ <a href="#$basedir#/#$value#" target="preview">#$showlabel#</a> ]
     </xar:if>
 </xar:if>
-
 
 <xar:if condition="!empty($invalid)">
     <span class="xar-error">#$invalid#</span>
