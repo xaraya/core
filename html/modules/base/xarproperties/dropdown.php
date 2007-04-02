@@ -328,6 +328,7 @@ class SelectProperty extends DataProperty
         $name = empty($name) ? 'dd_'.$this->id : $name;
         // do something with the validation and save it in $this->validation
         if (isset($validation)) {
+        var_dump($args);exit;
             if (is_array($validation)) {
                 if (!empty($validation['func']) && preg_match('/^xarModAPIFunc/i',$validation['func'])) {
                     $this->validation = $validation['func'];

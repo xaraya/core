@@ -226,6 +226,7 @@
                                 </xar:if>
                             </td>
                             <td class="xar-align-center">
+                              <xar:if condition="xarModIsAvailable($modinfo['name'])">
                                 <xar:if condition="$selstyle eq 'pro'">
                                     <input type="submit" name="edit" id="edit" value="Edit" />
                                 <xar:elseif condition="$selstyle eq 'icons'"/>
@@ -233,6 +234,7 @@
                                 <xar:else />
                                     <a href="#$modinfo['editurl']#">#$modinfo['edit']#</a>
                                 </xar:if>
+                              </xar:if>
                             </td>
                         </tr>
                     </xar:foreach>

@@ -42,7 +42,7 @@ function roles_userapi_getactive($args)
 
     $query = "SELECT role_id
               FROM $sessioninfoTable
-              WHERE lastused > ? AND role_id = ?";
+              WHERE last_use > ? AND role_id = ?";
     $stmt = $dbconn->prepareStatement($query);
     $bindvars = array((int)$filter,(int)$uid);
     $result = $stmt->executeQuery($bindvars);

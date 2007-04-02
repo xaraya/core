@@ -9,9 +9,7 @@ interface iDataProperty
     public function __construct(ObjectDescriptor $descriptor);
     public function checkInput($name = '', $value = null);
     public function fetchValue($name = '');
-    public function getModule();
     public static function getRegistrationInfo();
-    public function getTemplate();
     public function getValue();
     public function parseValidation($validation = '');
     public function setValue($value);

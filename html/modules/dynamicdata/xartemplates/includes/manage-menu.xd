@@ -16,7 +16,7 @@
             <xar:set name="tabclass">$activetab=='view'?'active':''</xar:set>
             <dd class="#$tabclass#">
                 <a href="&xar-modurl-dynamicdata-admin-view;">
-                   <xar:mlstring>View DataObject Items</xar:mlstring>
+                   <xar:mlstring>View DataObjects</xar:mlstring>
                 </a>
             </dd>
         </xar:sec>
@@ -24,7 +24,7 @@
             <xar:set name="tabclass">$activetab=='new'?'active':''</xar:set>
             <dd class="#$tabclass#">
                 <a href="&xar-modurl-dynamicdata-admin-new;">
-                   <xar:mlstring>New DataObject Item</xar:mlstring>
+                   <xar:mlstring>Create DataObject</xar:mlstring>
                 </a>
             </dd>
         </xar:sec>

@@ -45,6 +45,7 @@
               </a>
             </dd>
         </xar:sec>
+        <!--
         <xar:sec mask="EditDynamicData" catch="false">
             <xar:set name="tabclass">$activetab=='relations'?'active':''</xar:set>
             <dd class="#$tabclass#">
@@ -53,6 +54,7 @@
               </a>
             </dd>
         </xar:sec>
+        -->
         <xar:sec mask="EditDynamicData" catch="false">
             <xar:set name="tabclass">$activetab=='meta'?'active':''</xar:set>
             <dd class="#$tabclass#">

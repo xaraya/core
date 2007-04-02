@@ -1,11 +1,17 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-<xar:set name="showlabel"><xar:mlstring>Show</xar:mlstring></xar:set>
-
-<input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#"  />
-<xar:if condition="!empty($value) and ($value ne 'http://')">
-    [ <a href="#$value#" target="preview">#$showlabel#</a> ]
+<xar:if condition="$inputtype eq 'upload'">
+    <input type="text" name="#$name#" value="#$value#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#"  />
+    &#160;<xar:data-input type="fileupload" name="$name" validation="var/uploads|(gif|(jpg|jpeg|png|bmp)" />
+<xar:elseif condition="$inputtype eq 'url'" />
+    <xar:data-input type="url" name="$name" value="$value" />
+<xar:else />
+    <xar:data-input type="filepicker" name="$name" value="$value" basedir="$basedir" extensions="gif,jpg,jpeg,png,bmp" />
+    <xar:set name="showlabel"><xar:mlstring>check</xar:mlstring></xar:set>
+    <xar:if condition="!empty($value)">
+        [ <a href="#$basedir#/#$value#" target="preview">#$showlabel#</a> ]
+    </xar:if>
 </xar:if>
 
 <xar:if condition="!empty($invalid)">

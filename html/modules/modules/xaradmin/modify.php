@@ -88,6 +88,7 @@ function modules_admin_modify($args)
   //print_r($data['hooklist']);
     // End form
 
+    $data['available'] = xarModIsAvailable($modName);
     $data['authid'] = xarSecGenAuthKey('modules');
     $data['id'] = $id;
     $data['displayname'] = $modInfo['displayname'];

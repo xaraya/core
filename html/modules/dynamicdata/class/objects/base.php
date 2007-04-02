@@ -47,7 +47,7 @@ class DataObject extends DataObjectMaster
     /**
      * Retrieve the values for this item
     **/
-    function getItem($args = array())
+    function getItem(Array $args = array())
     {
         if(!empty($args['itemid']))
         {
@@ -85,7 +85,7 @@ class DataObject extends DataObjectMaster
     /**
      * Check the different input values for this item
      */
-    function checkInput($args = array())
+    function checkInput(Array $args = array())
     {
         if(!empty($args['itemid']) && $args['itemid'] != $this->itemid) {
             $this->itemid = $args['itemid'];
@@ -132,7 +132,7 @@ class DataObject extends DataObjectMaster
     /**
      * Show an input form for this item
      */
-    function showForm($args = array())
+    function showForm(Array $args = array())
     {
         $args = $this->toArray($args);
 
@@ -168,7 +168,7 @@ class DataObject extends DataObjectMaster
     /**
      * Show an output display for this item
      */
-    function showDisplay(array $args = array())
+    function showDisplay(Array $args = array())
     {
         $args = $this->toArray($args);
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
@@ -185,7 +185,6 @@ class DataObject extends DataObjectMaster
             }
         } else {
             $args['properties'] =& $this->properties;
-            // Do them all, except for status = DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN
             // TODO: this is exactly the same as in the display function, consolidate it.
             $totransform = array(); $totransform['transform'] = array();
             foreach($this->properties as $pname => $pobj) {
@@ -238,7 +237,7 @@ class DataObject extends DataObjectMaster
     /**
      * Get the names and values of
      */
-    function getFieldValues(array $args = array())
+    function getFieldValues(Array $args = array())
     {
         $fields = array();
         $properties = $this->getProperties($args);
@@ -257,11 +256,8 @@ class DataObject extends DataObjectMaster
     /**
      * Get the labels and values to include in some output display for this item
      */
-    function getDisplayValues(array $args = array())
+    function getDisplayValues(Array $args = array())
     {
-        if(empty($args['fieldlist']))
-            $args['fieldlist'] = $this->fieldlist;
-
         $displayvalues = array();
         $properties = $this->getProperties($args);
         foreach($properties as $property) {
@@ -292,7 +288,7 @@ class DataObject extends DataObjectMaster
         */
     }
 
-    function createItem(array $args = array())
+    function createItem(Array $args = array())
     {
         if(count($args) > 0) {
             if(isset($args['itemid'])) {
@@ -386,7 +382,7 @@ class DataObject extends DataObjectMaster
         return $this->itemid;
     }
 
-    function updateItem($args = array())
+    function updateItem(Array $args = array())
     {
         if(count($args) > 0)
         {
@@ -434,7 +430,7 @@ class DataObject extends DataObjectMaster
         return $this->itemid;
     }
 
-    function deleteItem($args = array())
+    function deleteItem(Array $args = array())
     {
         if(!empty($args['itemid']))
             $this->itemid = $args['itemid'];
@@ -492,7 +488,7 @@ class DataObject extends DataObjectMaster
      *
      * @todo this needs to change into something more safe.
      */
-    function getNextItemtype($args = array())
+    function getNextItemtype(Array $args = array())
     {
         if(empty($args['moduleid']))
             $args['moduleid'] = $this->moduleid;

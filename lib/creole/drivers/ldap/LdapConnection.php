@@ -18,28 +18,28 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
- 
+
 require_once 'creole/Connection.php';
 require_once 'creole/common/ConnectionCommon.php';
 include_once 'creole/drivers/ldap/LdapResultSet.php';
 
 /**
  * Ldap implementation of Connection.
- * 
- * 
+ *
+ *
  * @author    Sébastien Cramatte <scramatte@zensoluciones.com>
  * @package   creole.drivers.ldap
- */ 
+ */
 class LdapConnection extends ConnectionCommon implements Connection {
 
     /** Current DN . */
     private $basedn;
     private $bind;
     private $query;
-    
+
     const PORT = 389;
     const TLSPORT = 636;
-    
+
     /**
      * Connect to a database and log in as the specified user.
      *
@@ -57,7 +57,7 @@ class LdapConnection extends ConnectionCommon implements Connection {
 
         $this->dsn = $dsninfo;
         $this->flags = $flags;
-        
+
         $user = $dsninfo['username'];
         $pw = $dsninfo['password'];
         $dbport = $dsninfo['port'];
@@ -65,7 +65,7 @@ class LdapConnection extends ConnectionCommon implements Connection {
    			if ($dsninfo['phptype'] == 'ldaps') {
             $dbhost = 'ldaps://' . $dsninfo['hostspec'];
             if (!isset($dbport)) $dbport = LdapConnection::TLSPORT;
-            
+
         } else {
             $dbhost = $dsninfo['hostspec'];
             $dbport = $dsninfo['port'];
@@ -79,28 +79,27 @@ class LdapConnection extends ConnectionCommon implements Connection {
         } else {
             $conn = false;
         }
-        
+
         @ini_restore('track_errors');
         if (empty($conn)) {
             if (($err = @ldap_error()) != '') {
                 throw new SQLException("connect failed", $err);
-            } elseif (empty($php_errormsg)) {
-                throw new SQLException("connect failed");
             } else {
-                throw new SQLException("connect failed", $php_errormsg);
+                $err = error_get_last(); $err = $err['message'];
+                throw new SQLException("connect failed", $err['message']);
             }
         }
-				
+
 				if (!$dsninfo['database']) {
 						throw new SQLException("You must specify base DN");
 				}
-				
+
 				$this->basedn = $dsninfo['database'];
-								
+
         $this->dblink = $conn;
         $this->bind = $bind;
-    }    
-    
+    }
+
     /**
      * @see Connection::getDatabaseInfo()
      */
@@ -109,7 +108,7 @@ class LdapConnection extends ConnectionCommon implements Connection {
         require_once 'creole/drivers/ldap/metadata/LdapDatabaseInfo.php';
         return new LdapDatabaseInfo($this);
     }
-    
+
     /**
      * @see Connection::getIdGenerator()
      */
@@ -117,23 +116,23 @@ class LdapConnection extends ConnectionCommon implements Connection {
     {
         throw new SQLException('Ldap does not support id generation.');
     }
-    
+
     /**
      * @see Connection::prepareStatement()
      */
-    public function prepareStatement($sql) 
+    public function prepareStatement($sql)
     {
         require_once 'creole/drivers/ldap/LdapPreparedStatement.php';
         return new LdapPreparedStatement($this, $sql);
     }
-    
+
     /**
      * @see Connection::prepareCall()
      */
     public function prepareCall($sql) {
         throw new SQLException('Ldap does not support stored procedures.');
     }
-    
+
     /**
      * @see Connection::createStatement()
      */
@@ -142,7 +141,7 @@ class LdapConnection extends ConnectionCommon implements Connection {
         require_once 'creole/drivers/ldap/LdapStatement.php';
         return new LdapStatement($this);
     }
-        
+
     /**
      * @see Connection::disconnect()
      */
@@ -152,7 +151,7 @@ class LdapConnection extends ConnectionCommon implements Connection {
         $this->dblink = null;
         return $ret;
     }
-    
+
     /**
      * @see Connection::applyLimit()
      */
@@ -168,11 +167,11 @@ class LdapConnection extends ConnectionCommon implements Connection {
     }
 
 		private function createQuery($query) {
-			if (!is_array($query))  $query = explode('?',$query);	
-			
+			if (!is_array($query))  $query = explode('?',$query);
+
 		  /* return an array in the same order as specified in rfc 2255 */
 			return array (	'dn'=> $query[0]?$query[0]:$this->basedn,
-											'attributes' => $query[1]?explode(',',$query[1]):array('*'),  
+											'attributes' => $query[1]?explode(',',$query[1]):array('*'),
 											'scope' => $query[2]?$query[2]:'base',   /* base, one, sub */
 											'filter' => $query[3]?$query[3]:'(objectClass=*)',
 											'extensions' => $query[4]
@@ -184,27 +183,27 @@ class LdapConnection extends ConnectionCommon implements Connection {
      */
     function executeQuery($query, $fetchmode = null)
     {
-    	
+
     	$query = $this->createQuery($query);
     	$this->lastQuery = $query;
-    	    	
+
     	$result = @ldap_search($this->dblink,$query['dn'],$query['filter'],$query['attributes']);
-    	
+
     	if (!$result) {
             throw new SQLException('Could not execute search', ldap_error($this->dblink));
       }
-      
 
-      return new LdapResultSet($this, $result, $fetchmode);  
-    	
+
+      return new LdapResultSet($this, $result, $fetchmode);
+
     }
-    
+
     /**
      * @see Connection::executeUpdate()
      */
     function executeUpdate($sql)
-    {  
-    	/*  
+    {
+    	/*
         $this->lastQuery = $sql;
 
         if ($this->database) {
@@ -212,11 +211,11 @@ class LdapConnection extends ConnectionCommon implements Connection {
                     throw new SQLException('No database selected', mysql_error($this->dblink));
             }
         }
-        
+
         $result = @mysql_query($sql, $this->dblink);
         if (!$result) {
             throw new SQLException('Could not execute update', mysql_error($this->dblink), $sql);
-        }        
+        }
         return (int) mysql_affected_rows($this->dblink);
       */
     }
@@ -230,7 +229,7 @@ class LdapConnection extends ConnectionCommon implements Connection {
     {
 				throw new SQLException('Ldap does not support stored procedures.');
     }
-        
+
     /**
      * Commit the current transaction.
      * @throws SQLException
@@ -261,5 +260,5 @@ class LdapConnection extends ConnectionCommon implements Connection {
     {
 				throw new SQLException('Ldap does not support this feature.');
     }
-    
+
 }
