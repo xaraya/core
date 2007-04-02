@@ -12,12 +12,12 @@
 /**
  * Include the base class
  */
-sys::import('modules.base.xarproperties.textbox');
+sys::import('modules.base.xarproperties.url');
 
 /**
  * Handle the URLIcon property
  */
-class URLIconProperty extends TextBoxProperty
+class URLIconProperty extends URLProperty
 {
     public $id         = 27;
     public $name       = 'urlicon';
@@ -38,19 +38,6 @@ class URLIconProperty extends TextBoxProperty
            $this->icon='';
         }
         $this->template = 'urlicon';
-    }
-
-    public function validateValue($value = null)
-    {
-        if (!isset($value)) {
-            $value = $this->value;
-        }
-        if (!empty($value) && $value != 'http://') {
-            $this->value = $value;
-        } else {
-            $this->value = '';
-        }
-        return true;
     }
 
     public function showOutput(Array $data = array())
