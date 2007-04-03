@@ -627,7 +627,7 @@ class DataObjectList extends DataObjectMaster
                                    'olink'  => xarModURL($args['urlmodule'],'admin','modify',
                                                $urlargs),
                                    'ojoin'  => '|');
-            if($this->itemtype == 0){
+            if($this->objectid == 1){
                 $options['modifyprops'] = array('otitle' => xarML('Properties'),
                                      'olink'  => xarModURL($args['urlmodule'],'admin','modifyprop',
                                                    $urlargs),
@@ -666,7 +666,7 @@ class DataObjectList extends DataObjectMaster
                     ),
                     'ojoin'  => '|'
                 );
-            if($this->itemtype == 0){
+            if($this->objectid == 1){
                 $options['modifyprops'] = array('otitle' => xarML('Properties'),
                                      'olink'  => xarModURL($args['urlmodule'],'admin','modifyprop',
                                                    $urlargs),

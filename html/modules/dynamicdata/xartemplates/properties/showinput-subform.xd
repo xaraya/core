@@ -150,7 +150,7 @@
               </xar:if>
             </td>
           </tr>
-      <xar:elseif condition="$style eq 'parentid'" />
+      <xar:elseif condition="$style eq 'parentid'" />xxx
         <input type="hidden" name="#$name#_old" id="#$id#_old" value="#$value#" />
         <input type="hidden" name="#$name#" id="#$id#" value="#$value#" />
       <xar:else/>

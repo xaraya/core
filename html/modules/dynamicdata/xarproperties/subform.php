@@ -462,19 +462,24 @@ class SubFormProperty extends DataProperty
                 $data['dropdown'] = $mylist->getItems();
 
             } elseif (($this->style == 'childlist' || $this->style == 'parentid') &&
-                       !empty($this->link) && empty($this->title)) {
-                // pick some field to count with
-                if (!empty($data['object']->primary)) {
-                    // preferably the primary key
-                    $data['count'] = $data['object']->primary;
-                } else {
-                    // otherwise any field other than the link field :-)
-                    foreach (array_keys($data['object']->properties) as $key) {
-                        if ($key != $this->link) {
-                            $data['count'] = $key;
-                            break;
+                       !empty($this->link)) {
+                if (empty($this->title)) {
+                    // pick some field to count with
+                    if (!empty($data['object']->primary)) {
+                        // preferably the primary key
+                        $data['count'] = $data['object']->primary;
+                    } else {
+                        // CHECKME: what is this about really? aren't we talking about different tables
+                        // otherwise any field other than the link field :-)
+                        foreach (array_keys($data['object']->properties) as $key) {
+                            if ($key != $this->link) {
+                                $data['count'] = $key;
+                                break;
+                            }
                         }
                     }
+                } else {
+                    $data['count'] = $data['object']->primary;
                 }
                 // get the number of items per link field value
                 $mylist =& DataObjectMaster::getObjectList(array('objectid'  => $this->objectid,
@@ -484,6 +489,7 @@ class SubFormProperty extends DataProperty
             } else {
                 $data['dropdown'] = array();
             }
+                echo $this->title;
         }
 
         return parent::showInput($data);
@@ -565,7 +571,7 @@ class SubFormProperty extends DataProperty
             case 'childlist':
                 if (!isset($myobject)) {
                     if (empty($this->fieldlist)) {
-                        $status = DD_DISPLAYSTATE_ACTIVE; // skip the display-only properties
+                        $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE; // skip the display-only properties
                     } else {
                         $status = null;
                     }
