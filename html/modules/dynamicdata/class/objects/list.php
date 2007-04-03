@@ -627,6 +627,20 @@ class DataObjectList extends DataObjectMaster
                                    'olink'  => xarModURL($args['urlmodule'],'admin','modify',
                                                $urlargs),
                                    'ojoin'  => '|');
+            if($this->itemtype == 0){
+                $options['modifyprops'] = array('otitle' => xarML('Properties'),
+                                     'olink'  => xarModURL($args['urlmodule'],'admin','modifyprop',
+                                                   $urlargs),
+                                       'ojoin'  => '|');
+                $options['viewitems'] = array(
+                        'otitle' => xarML('Items'),
+                        'olink'  => xarModURL(
+                            'dynamicdata','admin','view',
+                            array('itemid' => $itemid)
+                        ),
+                        'ojoin'  => '|'
+                    );
+            }
             $options['delete'] = array('otitle' => xarML('Delete'),
                                    'olink'  => xarModURL($args['urlmodule'],'admin','delete',
                                                $urlargs),
@@ -652,6 +666,12 @@ class DataObjectList extends DataObjectMaster
                     ),
                     'ojoin'  => '|'
                 );
+            if($this->itemtype == 0){
+                $options['modifyprops'] = array('otitle' => xarML('Properties'),
+                                     'olink'  => xarModURL($args['urlmodule'],'admin','modifyprop',
+                                                   $urlargs),
+                                       'ojoin'  => '|');
+            }
         } elseif(xarSecurityCheck('ReadDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
             if (isset($dummyoption)) {
                 $options['dummy'] = $dummyoption;
@@ -664,6 +684,16 @@ class DataObjectList extends DataObjectMaster
                         ),
                         'ojoin'  => ''
                     );
+                if($this->itemtype == 0){
+                    $options['viewitems'] = array(
+                            'otitle' => xarML('Items'),
+                            'olink'  => xarModURL(
+                                'dynamicdata','admin','view',
+                                array('itemid' => $itemid)
+                            ),
+                            'ojoin'  => '|'
+                        );
+                }
             }
         }
         return $options;

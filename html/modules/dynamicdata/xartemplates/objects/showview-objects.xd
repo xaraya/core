@@ -1,0 +1,91 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!-- TODO: multi-column output -->
+<xar:style scope="module" module="dynamicdata" file="dd" />
+<xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
+    <xar:template file="catnavigation" />
+</xar:if>
+
+<xar:if condition="empty($layout)">
+    <xar:set name="layout">'default'</xar:set>
+</xar:if>
+<div class="xar-fullwidth">
+    <!-- Show the create new link only once, if at all -->
+    <xar:if condition="!empty($newlink)">
+        <h3>
+            <a href="#$newlink#">
+                <xar:mlstring>Create New Data Object</xar:mlstring>
+            </a>
+        </h3>
+        </xar:if>
+
+    <table class="xar-fullwidth">
+        <tr>
+            <xar:foreach in="$properties" key="$name">
+                        <th class="xar-form-textlong">
+                            <a href="#$sorturl#=#$name#">
+                                <xar:data-label property="$properties[$name]" />
+                            </a>
+                        </th>
+             </xar:foreach>
+            <xar:if condition="empty($linkfield)">
+                <th class="xar-form-textlong">&#160;</th>
+            </xar:if>
+        </tr>
+        <xar:set name="item_no">0</xar:set>
+        <xar:foreach in="$items" key="$itemid" value="$fields">
+            <xar:set name="item_no">$item_no+1</xar:set>
+            <xar:set name="rowclass">'xar-norm'</xar:set>
+            <xar:if condition="$item_no % 2 eq 0">
+                <xar:set name="rowclass">'xar-alt'</xar:set>
+            </xar:if>
+        <tr class="#$rowclass#">
+        <!-- we could use xar:data-display here too, instead of looping over fields ourselves -->
+                <xar:foreach in="$properties" key="$name">
+                    <td>
+                    <xar:if condition="empty($fields[$name])">
+                       &#160;
+                    <xar:elseif condition="!empty($linkfield) and $linkfield eq $name" />
+                        <a href="#$links[$itemid]['display']['olink']#">
+                            <xar:data-output property="$properties[$name]" value="$fields[$name]" />
+                        </a>
+                    <xar:else />
+                            <xar:data-output property="$properties[$name]" value="$fields[$name]" />
+                    </xar:if>
+                    </td>
+                </xar:foreach>
+                <xar:if condition="empty($linkfield)">
+                    <td class="xar-align-center">
+                        <xar:if condition="!empty($links[$itemid]) and count($links[$itemid]) gt 0">
+                            <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
+                                <xar:if condition="!empty($option['olink'])">
+                                    #$option['ojoin']#
+                                       <a href="#$option['olink']#">
+                                            #$option['otitle']#
+                                       </a>
+                                <xar:else />
+                                    #$option['ojoin']# #$option['otitle']#
+                                </xar:if>
+                            </xar:foreach>
+                        <xar:else />
+                                &#160;
+                         </xar:if>
+                    </td>
+                </xar:if>
+            </tr>
+        </xar:foreach>
+    </table>
+</div>
+<xar:if condition="!empty($prevurl) or !empty($nexturl)">
+    <div class="xar-align-center">
+        <xar:if condition="!empty($prevurl)">
+            <a href="#$prevurl#">&lt;&lt;<xar:mlstring> Prev</xar:mlstring></a>
+        <xar:else />
+            &lt;&lt;
+        </xar:if>&#160;&#160;&#160;
+        <xar:if condition="!empty($nexturl)">
+            <a href="#$nexturl#"><xar:mlstring>Next</xar:mlstring>&gt;&gt; </a>
+        <xar:else />&gt;&gt;</xar:if>
+    </div>
+</xar:if>
+</xar:template>
