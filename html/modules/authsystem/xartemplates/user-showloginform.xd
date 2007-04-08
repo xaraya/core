@@ -1,6 +1,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Authentication</xar:mlstring></span></div>
+<div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Login to an existing account</xar:mlstring></span></div>
 <div class="xar-mod-body">
   <form action="#$loginurl#" method="post" enctype="application/x-www-form-urlencoded">
     <fieldset>
@@ -17,7 +17,7 @@
         <input type="password" name="pass" id="password" maxlength="64" size="20" tabindex="2" />
       </div>
       <p class="xar-form-input-wrapper-after">
-        <a href="&xar-modurl-roles-user-lostpassword;"><xar:mlstring>Forget your password?</xar:mlstring></a>
+        <a href="&xar-modurl-roles-user-lostpassword;"><xar:mlstring>Request a new password</xar:mlstring></a>
       </p>
       <div class="xar-form-input-wrapper-after">
         <input type="checkbox" name="rememberme" id="remembermeform" value="1" tabindex="3" />
