@@ -82,6 +82,13 @@ function dynamicdata_init()
                 'null'        => false,
                 'default'     => '0'
             ),
+            /* the name used to reference an object */
+            'object_filepath'     => array(
+                'type'        => 'varchar',
+                'size'        => 255,
+                'null'        => false,
+                'default'     => ''
+            ),
             /* the URL parameter used to pass on the item id to the original module */
             'object_urlparam' => array(
                 'type'        => 'varchar',
