@@ -616,15 +616,18 @@ class DataObjectMaster extends Object
         if(!isset($args['itemid']))
             $args['itemid'] = null;
 
-        $classname = 'DataObject';
+        if(empty($args['classname'])) $args['classname'] = 'DataObject';
 
         // Complete the info if this is a known object
         $info = self::getObjectInfo($args);
         if ($info != null) $args = array_merge($args,$info);
 
         $descriptor = new DataObjectDescriptor($args);
-        if(!empty($args['classname']) && class_exists($args['classname']))
+        if(class_exists($args['classname']))
             $classname = $args['classname'];
+        else
+            throw new ClassNotFoundException('Unable to load a dataobject of class ' . $args['classname']);
+
         // here we can use our own classes to retrieve this
         $object = new $classname($descriptor);
         return $object;

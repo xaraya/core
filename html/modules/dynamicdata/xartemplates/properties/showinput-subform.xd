@@ -150,7 +150,19 @@
               </xar:if>
             </td>
           </tr>
-      <xar:elseif condition="$style eq 'parentid'" />xxx
+      <xar:elseif condition="$style eq 'parentid'" />
+
+          <xar:if condition="$repeat">
+              <!--
+                  Use a field prefix for all input fields of the object, so that
+                  you can have several identical objects in the same input form
+              -->
+              <xar:for start="$i = 0" test="$i lt $repeat" iter="$i++">
+                  <xar:set name="prefix">"Item_" . $i . "_" . $fieldprefix</xar:set>
+                  <xar:data-form object="$object" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist" />
+              </xar:for>
+          <xar:else />
+          </xar:if>
         <input type="hidden" name="#$name#_old" id="#$id#_old" value="#$value#" />
         <input type="hidden" name="#$name#" id="#$id#" value="#$value#" />
       <xar:else/>
