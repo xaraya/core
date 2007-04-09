@@ -96,6 +96,7 @@ class DataObject extends DataObjectMaster
             $args['fieldprefix'] = $this->fieldprefix;
         }
 
+        $invalid = false;
         $isvalid = true;
         $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
 
@@ -103,7 +104,7 @@ class DataObject extends DataObjectMaster
             // Ignore disabled properties
             if($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
                 continue;
-
+      
             $field = 'dd_' . $this->properties[$name]->id;
             if(!empty($args['fieldprefix'])) {
                 // No field, but prefix given, use that
@@ -125,7 +126,10 @@ class DataObject extends DataObjectMaster
                 // Ok, try without anything
                 $isvalid = $this->properties[$name]->checkInput();
             }
+            
+            if(!$isvalid) $invalid = true;
         }
+        if ($invalid) $isvalid = false;
         return $isvalid;
     }
 
