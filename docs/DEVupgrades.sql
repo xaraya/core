@@ -453,4 +453,5 @@ ALTER TABLE `xar_modules` DROP `mode`;
 ALTER TABLE `xar_themes` DROP `mode`;
 
 /* add a filepath to show where a class lives */
+ALTER TABLE xar_dynamic_objects ADD COLUMN object_class VARCHAR(255) NOT NULL DEFAULT '';
 ALTER TABLE xar_dynamic_objects ADD COLUMN object_filepath VARCHAR(255) NOT NULL DEFAULT '';
