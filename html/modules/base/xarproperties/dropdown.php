@@ -180,8 +180,14 @@ class SelectProperty extends DataProperty
                     $iter->next();
                 }
             } elseif (isset($items) && is_array($items) && count($items) > 0) {
-                foreach ($items as $id => $name) {
-                    $this->options[] = array('id' => $id, 'name' => $name);
+                if (is_array($items[0])) {
+                    foreach($items as $id => $name) {
+                        $this->options[] = array('id' => $name['id'], 'name' => $name['name']);
+                    }
+                } else {
+                    foreach ($items as $id => $name) {
+                        $this->options[] = array('id' => $id, 'name' => $name);
+                    }
                 }
                 unset($items);
             }
@@ -328,7 +334,6 @@ class SelectProperty extends DataProperty
         $name = empty($name) ? 'dd_'.$this->id : $name;
         // do something with the validation and save it in $this->validation
         if (isset($validation)) {
-        var_dump($args);exit;
             if (is_array($validation)) {
                 if (!empty($validation['func']) && preg_match('/^xarModAPIFunc/i',$validation['func'])) {
                     $this->validation = $validation['func'];
