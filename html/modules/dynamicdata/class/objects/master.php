@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2007 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundationetobject
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -619,8 +619,6 @@ class DataObjectMaster extends Object
     {
         if(!isset($args['itemid']))
             $args['itemid'] = null;
-
-///        if(empty($args['classname'])) $args['classname'] = 'DataObject';
 
         // Complete the info if this is a known object
         $info = self::getObjectInfo($args);
