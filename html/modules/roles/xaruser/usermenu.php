@@ -41,7 +41,7 @@ function roles_user_usermenu($args)
 
             $email = xarUserGetVar('email');
             $role = xarUFindRole($uname);
-            $home = xarModGetUserVar('roles','userhome');// now user mod var not 'duv'. $role->getHome();
+            $home = xarModGetUserVar('roles','userhome');
             $allowemail = xarModGetUserVar('roles','usersendemails',$uid); //allow someone to send an email to the user via a form
             if (xarModGetVar('roles','setuserlastlogin')) {
             //only display it for current user or admin
@@ -63,7 +63,7 @@ function roles_user_usermenu($args)
 
             $upasswordupdate = xarModGetUserVar('roles','passwordupdate');
             $usertimezonedata = xarModGetUserVar('roles','usertimezone');
-            $utimezone=$usertimezonedata['timezone'];
+            $utimezone = $usertimezonedata['timezone'];
 
             $item['module'] = 'roles';
             $item['itemtype'] = ROLES_USERTYPE;
@@ -91,6 +91,7 @@ function roles_user_usermenu($args)
 
             if(!xarVarFetch('allowemail', 'checkbox', $allowemail,   false, XARVAR_DONT_SET)) return;
             if(!xarVarFetch('utimezone','str:1:',$utimezone, NULL,XARVAR_NOT_REQUIRED)) return;
+            if(!xarVarFetch('home', 'str:1:', $home, '', XARVAR_NOT_REQUIRED)) return;
 
             $uid = xarUserGetVar('uid');
             $uname = xarUserGetVar('uname');
@@ -129,22 +130,23 @@ function roles_user_usermenu($args)
                $timeinfo = xarModAPIFunc('base','user','timezones', array('timezone' => $utimezone));
                list($hours,$minutes) = explode(':',$timeinfo[0]);
                $offset = (float) $hours + (float) $minutes / 60;
-               $timeinfoarray= array('timezone' => $utimezone, 'offset' => $offset);
-                $usertimezone=serialize($timeinfoarray);
+               $timeinfoarray = array('timezone' => $utimezone, 'offset' => $offset);
+                $usertimezone = serialize($timeinfoarray);
                 xarModSetUserVar('roles','usertimezone',$usertimezone);
             }
-             /* Check if external urls are allowed in home page */
-            $allowexternalurl=xarModGetVar('roles','allowexternalurl');
-            $url_parts = parse_url($home);
-            if (!$allowexternalurl) {
-                if ((preg_match("%^http://%", $home, $matches)) &&
-                ($url_parts['host'] != $_SERVER["SERVER_NAME"]) &&
-                ($url_parts['host'] != $_SERVER["HTTP_HOST"])) {
-
-                  $msg  = xarML('External URLs such as #(1) are not permitted in your User Account.', $home);
-                  $var  = array($home);
-                  $home = '';
-                  throw new BadParameterException(array($home), $msg);
+            if (xarModGetVar('roles','userhome') && (isset($home))) {
+                /* Check if external urls are allowed in home page */
+                $allowexternalurl=xarModGetVar('roles','allowexternalurl');
+                $url_parts = parse_url($home);
+                if (!$allowexternalurl) {
+                    if ((preg_match("%^http://%", $home, $matches)) &&
+                    ($url_parts['host'] != $_SERVER["SERVER_NAME"]) &&
+                    ($url_parts['host'] != $_SERVER["HTTP_HOST"])) {
+                        $msg  = xarML('External URLs such as #(1) are not permitted in your User Account.', $home);
+                        $var  = array($home);
+                        $home = '';
+                        throw new BadParameterException(array($home), $msg);
+                    }
                 }
             }
             $pass = $object->properties['password']->getValue();
