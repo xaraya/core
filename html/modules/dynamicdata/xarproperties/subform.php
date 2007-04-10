@@ -547,13 +547,20 @@ class SubFormProperty extends DataProperty
                     } else {
                         $status = null;
                     }
-                    $myobject =& DataObjectMaster::getObjectList(array('objectid'  => $this->objectid,
+                    $myobject =& DataObjectMaster::getObject(array('objectid'  => $this->objectid,
                                                                             'fieldlist' => $this->fieldlist,
                                                                             'status'    => $status));
                 } else {
                     // reset the list of item ids
                     $myobject->itemids = array();
                 }
+
+                $repeats = $this->repeat ? $this->repeat : 1;
+                for ($i=0;$i<$repeats;$i++) {
+                    $objects[] = $myobject;
+                }
+//                var_dump($this->link);exit;
+//                $data['repeats'] = $this->repeat;
                 if (!empty($this->link) && !empty($value))
                 {
                     if (is_numeric($value)) {
@@ -564,7 +571,7 @@ class SubFormProperty extends DataProperty
                     $myobject->getItems(array('where' => $where));
                 } else {
                     // re-initialize the items array
-                    $myobject->items = array();
+//                    $myobject->items = array();
                 }
                 break;
 

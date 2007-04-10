@@ -555,6 +555,7 @@ class DataObjectMaster extends Object
             $info['moduleid'] = 182;
             $info['itemtype'] = 0;
             $info['parent'] = 1;
+            $info['filepath'] = '';
             $info['urlparam'] = 'itemid';
             $info['maxid'] = 0;
             $info['config'] = '';
@@ -575,6 +576,8 @@ class DataObjectMaster extends Object
                          object_moduleid,
                          object_itemtype,
                          object_parent,
+                         object_class,
+                         object_filepath,
                          object_urlparam,
                          object_maxid,
                          object_config,
@@ -589,6 +592,7 @@ class DataObjectMaster extends Object
         list(
             $info['objectid'], $info['name'],     $info['label'],
             $info['moduleid'], $info['itemtype'], $info['parent'],
+            $info['classname'], $info['filepath'],
             $info['urlparam'], $info['maxid'],    $info['config'],
             $info['isalias']
         ) = $result->fields;
@@ -616,17 +620,19 @@ class DataObjectMaster extends Object
         if(!isset($args['itemid']))
             $args['itemid'] = null;
 
-        $classname = 'DataObject';
+///        if(empty($args['classname'])) $args['classname'] = 'DataObject';
 
         // Complete the info if this is a known object
         $info = self::getObjectInfo($args);
         if ($info != null) $args = array_merge($args,$info);
 
-        $descriptor = new DataObjectDescriptor($args);
-        if(!empty($args['classname']) && class_exists($args['classname']))
-            $classname = $args['classname'];
+        if(!empty($args['filepath'])) include_once($args['filepath']);
+        if(!class_exists($args['classname'])) {
+            throw new ClassNotFoundException($args['classname']);
+        }
         // here we can use our own classes to retrieve this
-        $object = new $classname($descriptor);
+        $descriptor = new DataObjectDescriptor($args);
+        $object = new $args['classname']($descriptor);
         return $object;
     }
 
