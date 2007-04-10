@@ -215,7 +215,7 @@
         <p>
             #$message#
             <xar:if condition="$search ne ''">
-                <xar:mlstring>matching</xar:mlstring> '#$search#'
+                &#160;<xar:mlstring>matching</xar:mlstring> '#$search#'
             </xar:if>
         </p>
     <xar:else />

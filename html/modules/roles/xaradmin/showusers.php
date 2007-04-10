@@ -99,11 +99,12 @@ function roles_admin_showusers()
             $q->qor($c);
         }
 
-        $c = array();
-        foreach ($basetypes as $type) {
-            $c[] = $q->eq('r.type',$type);
-        }
-        $q->qor($c);
+          $q->eq('r.type',ROLES_USERTYPE);
+//        $c = array();
+//        foreach ($basetypes as $type) {
+//            $c[] = $q->eq('r.type',$type);
+//        }
+//        $q->qor($c);
 
         // Add state
         if ($data['state'] == ROLES_STATE_CURRENT) $q->ne('state',ROLES_STATE_DELETED);
