@@ -180,7 +180,7 @@ class SelectProperty extends DataProperty
                     $iter->next();
                 }
             } elseif (isset($items) && is_array($items) && count($items) > 0) {
-                if (is_array($items[0])) {
+                if (isset($items[0]) && is_array($items[0])) {
                     foreach($items as $id => $name) {
                         $this->options[] = array('id' => $name['id'], 'name' => $name['name']);
                     }
