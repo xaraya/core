@@ -99,6 +99,7 @@ function roles_admin_showusers()
             $q->qor($c);
         }
 
+          // only look for "real" users right now
           $q->eq('r.type',ROLES_USERTYPE);
 //        $c = array();
 //        foreach ($basetypes as $type) {
