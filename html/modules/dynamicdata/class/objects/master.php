@@ -648,6 +648,10 @@ class DataObjectMaster extends Object
     **/
     static function &getObjectList(Array $args)
     {
+        // Complete the info if this is a known object
+        $info = self::getObjectInfo($args);
+        if ($info != null) $args = array_merge($args,$info);
+
         sys::import('modules.dynamicdata.class.objects.list');
         $classname = 'DataObjectList';
         if(!empty($args['classname']))
