@@ -1,0 +1,48 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<xar:set name="options">
+    array(
+        array('id' => 'local', 'name' => 'local location'),
+        array('id' => 'url', 'name' => 'url'),
+        array('id' => 'upload', 'name' => 'file upload'),
+    )
+</xar:set>
+<div class="xar-form-input-wrapper">
+    <label for="#$id#_inputtype" title="#xarML('Where the source of the image is.')#" class="xar-form-label">
+        <xar:mlstring>
+            Input type
+        </xar:mlstring>
+    </label>
+    <xar:set name="inputtypename">$name . "[inputtype]"</xar:set>
+    <xar:data-input type="radio" name="$inputtypename" id="#$id#_inputtype" options="$options" value="$inputtype" />
+</div>
+<div class="xar-form-input-wrapper">
+    <label for="#$id#_basedir" title="#xarML('The local directory where images are placed or looked for')#" class="xar-form-label">
+        <xar:mlstring>
+            Base Directory
+        </xar:mlstring>
+    </label>
+      <input type="text" name="#$name#[basedir]" id="#$id#_basedir" value="#$basedir#" size="#$size#" tabindex="#$tabindex#" />
+      &#160;
+      <xar:mlstring>
+        only needed if input type is not 'url'
+      </xar:mlstring>
+      <br/>
+      <xar:mlstring>
+        Note : {theme} will be replaced by the current theme directory
+        - e.g. {theme}/images -&gt; themes/Xaraya_Classic/images
+      </xar:mlstring>
+</div>
+<div class="xar-form-input-wrapper">
+    <label for="#$id#_extensions" title="#xarML('Which file extensions will be allowed.')#" class="xar-form-label">
+        <xar:mlstring>
+            Valid extensions
+        </xar:mlstring>
+    </label>
+      <input type="text" name="#$name#[extensions]" id="#$id#_extensions" value="#$extensions#" size="#$size#" tabindex="#$tabindex#" />
+</div>
+
+<xar:if condition="!empty($invalid)">
+    <span class="xar-error">#$invalid#</span>
+</xar:if>
+</xar:template>
