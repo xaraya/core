@@ -113,6 +113,8 @@ class DataObjectMaster extends Object
     public $table       = '';
     public $extend      = true;
 
+    public $class       = 'DataObject'; // the class name of this DD object
+    public $filepath    = '';           // the path to the class of this DD object (can be empty for DataObject)
     public $properties  = array();      // list of properties for the DD object
     public $datastores  = array();      // similarly the list of datastores (arguably in the wrong place here)
     public $fieldlist   = array();      // array of properties to be displayed
@@ -592,7 +594,7 @@ class DataObjectMaster extends Object
         list(
             $info['objectid'], $info['name'],     $info['label'],
             $info['moduleid'], $info['itemtype'], $info['parent'],
-            $info['classname'], $info['filepath'],
+            $info['class'], $info['filepath'],
             $info['urlparam'], $info['maxid'],    $info['config'],
             $info['isalias']
         ) = $result->fields;
@@ -611,7 +613,7 @@ class DataObjectMaster extends Object
      * @param $args['objectid'] id of the object you're looking for, or
      * @param $args['moduleid'] module id of the object to retrieve +
      * @param $args['itemtype'] item type of the object to retrieve
-     * @param $args['classname'] optional classname (e.g. <module>_DataObject)
+     * @param $args['class'] optional classname (e.g. <module>_DataObject)
      * @return object the requested object definition
      * @todo  automatic sub-classing per module (and itemtype) ?
     **/
@@ -625,12 +627,12 @@ class DataObjectMaster extends Object
         if ($info != null) $args = array_merge($args,$info);
 
         if(!empty($args['filepath'])) include_once($args['filepath']);
-        if(!class_exists($args['classname'])) {
+        if(!class_exists($args['class'])) {
             throw new ClassNotFoundException($args['classname']);
         }
         // here we can use our own classes to retrieve this
         $descriptor = new DataObjectDescriptor($args);
-        $object = new $args['classname']($descriptor);
+        $object = new $args['class']($descriptor);
         return $object;
     }
 
@@ -641,7 +643,7 @@ class DataObjectMaster extends Object
      * @param $args['objectid'] id of the object you're looking for, or
      * @param $args['moduleid'] module id of the object to retrieve +
      * @param $args['itemtype'] item type of the object to retrieve
-     * @param $args['classname'] optional classname (e.g. <module>_DataObject[_List])
+     * @param $args['class'] optional classname (e.g. <module>_DataObject[_List])
      * @return object the requested object definition
      * @todo   automatic sub-classing per module (and itemtype) ?
      * @todo   get rid of the classname munging, use typing
@@ -653,24 +655,24 @@ class DataObjectMaster extends Object
         if ($info != null) $args = array_merge($args,$info);
 
         sys::import('modules.dynamicdata.class.objects.list');
-        $classname = 'DataObjectList';
-        if(!empty($args['classname']))
+        $class = 'DataObjectList';
+        if(!empty($args['class']))
         {
-            if(class_exists($args['classname'] . 'List'))
+            if(class_exists($args['class'] . 'List'))
             {
                 // this is a generic classname for the object, list and interface
-                $classname = $args['classname'] . 'List';
+                $classname = $args['class'] . 'List';
             }
-            elseif(class_exists($args['classname']))
+            elseif(class_exists($args['class']))
             {
                 // this is a specific classname for the list
-                $classname = $args['classname'];
+                $classname = $args['class'];
             }
         }
         $descriptor = new DataObjectDescriptor($args);
 
         // here we can use our own classes to retrieve this
-        $object = new $classname($descriptor);
+        $object = new $class($descriptor);
         return $object;
     }
 
@@ -681,7 +683,7 @@ class DataObjectMaster extends Object
      * @param $args['objectid'] id of the object you're looking for, or
      * @param $args['moduleid'] module id of the object to retrieve +
      * @param $args['itemtype'] item type of the object to retrieve
-     * @param $args['classname'] optional classname (e.g. <module>_DataObject[_Interface])
+     * @param $args['class'] optional classname (e.g. <module>_DataObject[_Interface])
      * @return object the requested object definition
      * @todo  get rid of the classname munging
      * @todo  automatic sub-classing per module (and itemtype) ?
@@ -690,22 +692,22 @@ class DataObjectMaster extends Object
     {
         sys::import('modules.dynamicdata.class.interface');
 
-        $classname = 'DataObjectInterface';
-        if(!empty($args['classname']))
+        $class = 'DataObjectInterface';
+        if(!empty($args['class']))
         {
-            if(class_exists($args['classname'] . 'Interface'))
+            if(class_exists($args['class'] . 'Interface'))
             {
                 // this is a generic classname for the object, list and interface
-                $classname = $args['classname'] . 'Interface';
+                $class = $args['class'] . 'Interface';
             }
-            elseif(class_exists($args['classname']))
+            elseif(class_exists($args['class']))
             {
                 // this is a specific classname for the interface
-                $classname = $args['classname'];
+                $class = $args['class'];
             }
         }
         // here we can use our own classes to retrieve this
-        $object = new $classname($args);
+        $object = new $class($args);
         return $object;
     }
 
@@ -721,7 +723,7 @@ class DataObjectMaster extends Object
      * @param $args['maxid'] for purely dynamic objects, the current max. itemid (for import only)
      * @param $args['config'] some configuration for the object (free to define and use)
      * @param $args['isalias'] flag to indicate whether the object name is used as alias for short URLs
-     * @param $args['classname'] optional classname (e.g. <module>_DataObject)
+     * @param $args['class'] optional classname (e.g. <module>_DataObject)
      * @return integer object id of the created item
     **/
     static function createObject(Array $args)
