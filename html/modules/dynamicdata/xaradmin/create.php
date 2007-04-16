@@ -45,7 +45,6 @@ function dynamicdata_admin_create($args)
         $data = xarModAPIFunc('dynamicdata','admin','menu');
 
         $data['object'] = & $myobject;
-        $data['tplmodule'] = $tplmodule;
 
         $data['authid'] = xarSecGenAuthKey();
         $data['preview'] = $preview;
