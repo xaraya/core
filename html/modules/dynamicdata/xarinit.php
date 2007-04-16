@@ -386,20 +386,20 @@ function dynamicdata_init()
         $stmt = $dbconn->prepareStatement($sql);
 
         $dataentries = array(
-            array($propid[21],1,'1'),
-            array($propid[22],1,'Johnny'),
-            array($propid[23],1,'32'),
-            array($propid[24],1,'http://mikespub.net/xaraya/images/cuernos1.jpg'),
+            array($propid[23],1,'1'),
+            array($propid[24],1,'Johnny'),
+            array($propid[25],1,'32'),
+            array($propid[26],1,'http://mikespub.net/xaraya/images/cuernos1.jpg'),
 
-            array($propid[21],2,'2'),
-            array($propid[22],2,'Nancy'),
-            array($propid[23],2,'29'),
-            array($propid[24],2,'http://mikespub.net/xaraya/images/agra1.jpg'),
+            array($propid[23],2,'2'),
+            array($propid[24],2,'Nancy'),
+            array($propid[25],2,'29'),
+            array($propid[26],2,'http://mikespub.net/xaraya/images/agra1.jpg'),
 
-            array($propid[21],3,'3'),
-            array($propid[22],3,'Baby'),
-            array($propid[23],3,'1'),
-            array($propid[24],3,'http://mikespub.net/xaraya/images/sydney1.jpg')
+            array($propid[23],3,'3'),
+            array($propid[24],3,'Baby'),
+            array($propid[25],3,'1'),
+            array($propid[26],3,'http://mikespub.net/xaraya/images/sydney1.jpg')
         );
 
         foreach ($dataentries as &$dataentry) {
