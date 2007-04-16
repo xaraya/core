@@ -75,7 +75,7 @@ function dynamicdata_admin_update($args)
         $hooks = xarModCallHooks('item', 'modify', $myobject->itemid, $item, $modinfo['name']);
         $data['hooks'] = $hooks;
 
-        return xarTplModule('dynamicdata','admin','modify', $data);
+        return xarTplModule($tplmodule,'admin','modify', $data);
     }
     // Valid and not previewing, update the object
     $itemid = $myobject->updateItem();
