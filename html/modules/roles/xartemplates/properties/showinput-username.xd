@@ -1,20 +1,18 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:set name="profile"><xar:mlstring>Profile</xar:mlstring></xar:set>
-<xar:set name="preview"><xar:mlstring>preview</xar:mlstring></xar:set>
 
-<xar:comment>
-FIXME:  The target="" needs to be replaced by something that works in xhtml.  
+<!--
+FIXME:  The target="" needs to be replaced by something that works in xhtml.
     <xar:if condition="!empty($linkurl)">
         #$user# [ <a href="#$linkurl#" target="#$preview#">#$profile#</a> ]
     <xar:else />
         #$user#
     </xar:if>
-</xar:comment>
-        <span id="#$id#">#$user#</span>
-
+-->
+    <span id="#$user#">#$user#</span>
+    <input type="hidden" name="#$name#" id="#$id#" value="#$value#" />
 
     <xar:if condition="!empty($invalid)">
-        <span class="xar-error">#$invalid#</span>
+        &#160;<span class="xar-error">#$invalid#</span>
     </xar:if>
 </xar:template>
