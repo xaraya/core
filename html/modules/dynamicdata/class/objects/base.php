@@ -96,7 +96,6 @@ class DataObject extends DataObjectMaster
             $args['fieldprefix'] = $this->fieldprefix;
         }
 
-        $invalid = false;
         $isvalid = true;
         $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
 
@@ -104,32 +103,31 @@ class DataObject extends DataObjectMaster
             // Ignore disabled properties
             if($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
                 continue;
-      
+
             $field = 'dd_' . $this->properties[$name]->id;
             if(!empty($args['fieldprefix'])) {
                 // No field, but prefix given, use that
                 // cfr. prefix layout in objects/showform template
                     $field = $args['fieldprefix'] . '_' . $field;
-                    $isvalid = $this->properties[$name]->checkInput($field);
-                    if (!$isvalid) {
+                    $passed = $this->properties[$name]->checkInput($field);
+                    if (!$passed) {
                         $field = $args['fieldprefix'] . '_' . $name;
-                        $isvalid = $this->properties[$name]->checkInput($field);
+                        $passed = $this->properties[$name]->checkInput($field);
                     }
             // for hooks, use the values passed via $extrainfo if available
             } elseif(isset($args[$name])) {
                 // Name based check
-                $isvalid = $this->properties[$name]->checkInput($name,$args[$name]);
+                $passed = $this->properties[$name]->checkInput($name,$args[$name]);
             } elseif(isset($args[$field])) {
                 // No name, check based on field
-                $isvalid = $this->properties[$name]->checkInput($field,$args[$field]);
+                $passed = $this->properties[$name]->checkInput($field,$args[$field]);
             } else {
                 // Ok, try without anything
-                $isvalid = $this->properties[$name]->checkInput();
+                $passed = $this->properties[$name]->checkInput();
             }
-            
-            if(!$isvalid) $invalid = true;
+
+            if(!$passed) $isvalid = false;
         }
-        if ($invalid) $isvalid = false;
         return $isvalid;
     }
 
