@@ -39,10 +39,10 @@ function roles_admin_sendmail()
     $q->run();
 
     foreach ($q->output() as $user) {
-        $users[$user['r.id']] = array('id'      => $user['r.id'],
-                                           'name'     => $user['r.name'],
-                                           'email'    => $user['r.email'],
-                                           'username' => $user['r.uname']
+        $users[$user['id']] = array('uid'      => $user['id'],
+                                    'name'     => $user['name'],
+                                    'email'    => $user['email'],
+                                    'username' => $user['uname']
         );
     }
 
@@ -80,7 +80,7 @@ function roles_admin_sendmail()
     $subject  = xarTplCompileString($string . $subject);
     $message  = xarTplCompileString($string . $message);
 
-// now send the mails
+    // now send the mails
     foreach ($users as $user) {
         //Get the common search and replace values
         $data['recipientuid']      = $user['uid'];
@@ -100,9 +100,8 @@ function roles_admin_sendmail()
     }
     // If it was on, turn it back on
     xarModSetVar('themes','ShowTemplates',$themecomments);
-    // Return
+
     xarResponseRedirect(xarModURL('roles', 'admin', 'createmail'));
     return true;
 }
-
 ?>
