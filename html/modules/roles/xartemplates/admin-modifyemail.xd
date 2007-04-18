@@ -1,5 +1,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<!-- @todo make this editor configurable -->
 <xar:if condition="xarModGetVar('base','editor') eq 'htmlarea'">
     <xar:template file="htmlarea_insert" module="htmlarea" type="module" />
 </xar:if>
@@ -208,7 +209,7 @@
                 ##$siteurl##
             </span>
             <span class="xar-padding-thickleft">
-                <xar:mlstring>URL of the site</xar:mlstring>
+                <xar:mlstring>URL of the site</xar:mlstring>&#160;(#xarServerGetBaseURL()#)
             </span>
         </div>
 
@@ -239,19 +240,16 @@
             </span>
         </div>
 
-        <xar:if condition="isset($properties)">
-            <xar:foreach in="$properties" key="$name">
-                <div class="xar-form-input-wrapper">
-                    <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                        $#$name#
-                    </span>
-                    <span class="xar-padding-thickleft">
-                        <xar:data-label property="$properties[$name]" /> <xar:mlstring>(Dynamic property)</xar:mlstring>
-                    </span>
-                </div>
-                <xar:mlstring>URL of the site</xar:mlstring>&#160;(#xarServerGetBaseURL()#)
-            </xar:foreach>
-        </xar:if>
+        <xar:foreach in="$properties" key="$name">
+            <div class="xar-form-input-wrapper">
+                <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
+                     ##$<xar:var name="name"/>##
+                </span>
+                <span class="xar-padding-thickleft">
+                    <xar:data-label property="$properties[$name]" />
+                </span>
+            </div>   
+        </xar:foreach>
         <br class="xar-clearboth" />
     </form>
 </div>
