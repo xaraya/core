@@ -627,8 +627,13 @@ class DataObjectMaster extends Object
         if ($info != null) $args = array_merge($args,$info);
 
         if(!empty($args['filepath'])) include_once($args['filepath']);
-        if(!class_exists($args['class'])) {
-            throw new ClassNotFoundException($args['classname']);
+        if (!empty($args['class'])) {
+            if(!class_exists($args['class'])) {
+                throw new ClassNotFoundException($args['class']);
+            }
+        } else {
+            //CHECKME: remove this later. only here for backward compatibility
+            $args['class'] = 'DataObject';
         }
         // here we can use our own classes to retrieve this
         $descriptor = new DataObjectDescriptor($args);
