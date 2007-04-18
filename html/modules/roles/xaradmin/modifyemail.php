@@ -1,13 +1,11 @@
 <?php
 /**
- * Modify the  email for users
- *
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -23,12 +21,12 @@ function roles_admin_modifyemail($args)
     if (!isset($mailtype)) xarVarFetch('mailtype', 'str:1:100', $data['mailtype'], 'welcome', XARVAR_NOT_REQUIRED);
     else $data['mailtype'] = $mailtype;
 
-// Get the list of available templates
+    // Get the list of available templates
     $messaginghome = sys::varpath() . "/messaging/roles";
     if (!file_exists($messaginghome)) throw new DirectoryNotFoundException($messaginghome);
 
     $dd = opendir($messaginghome);
-// FIXME: what's the blank template supposed to do ?
+    // FIXME: what's the blank template supposed to do ?
     //$templates = array(array('key' => 'blank', 'value' => xarML('Empty')));
     $templates = array();
     while (($filename = readdir($dd)) !== false) {
@@ -52,19 +50,12 @@ function roles_admin_modifyemail($args)
             $data['message'] = $strings['message'];
             $data['authid'] = xarSecGenAuthKey();
 
-
-            // dynamic properties (if any)
-            $data['properties'] = null;
-            if (xarModIsAvailable('dynamicdata')) {
-                // get the DataObject defined for this module (and itemtype, if relevant)
-                // FIXME: 'Only variables should be assigned by reference' notice in php4.4
-                @$object = xarModAPIFunc('dynamicdata', 'user', 'getobject',
-                    array('module' => 'roles'));
+            $object = xarModAPIFunc('dynamicdata', 'user', 'getobject',
+                              array('name' => 'roles_users'));
                 if (isset($object) && !empty($object->objectid)) {
                     // get the Dynamic Properties of this object
                     $data['properties'] = &$object->getProperties();
                 }
-            }
             break;
 
         case 'update':
@@ -113,5 +104,4 @@ function roles_admin_modifyemail($args)
     }
     return $data;
 }
-
 ?>
