@@ -33,7 +33,7 @@ class FlatTableDataStore extends SQLDataStore
         }
     }
 
-    function getItem(array $args = array())
+    function getItem(Array $args = array())
     {
         $itemid = $args['itemid'];
         $table = $this->name;
@@ -121,7 +121,7 @@ class FlatTableDataStore extends SQLDataStore
      * @return bool true on success, false on failure
      * @throws BadParameterException
      **/
-    function createItem(array $args = array())
+    function createItem(Array $args = array())
     {
         $itemid = $args['itemid'];
         $table = $this->name;
@@ -194,7 +194,7 @@ class FlatTableDataStore extends SQLDataStore
         return $itemid;
     }
 
-    function updateItem(array $args = array())
+    function updateItem(Array $args = array())
     {
         $itemid = $args['itemid'];
         $table = $this->name;
@@ -237,7 +237,7 @@ class FlatTableDataStore extends SQLDataStore
         return $itemid;
     }
 
-    function deleteItem(array $args = array())
+    function deleteItem(Array $args = array())
     {
         $itemid = $args['itemid'];
         $table = $this->name;
@@ -257,7 +257,7 @@ class FlatTableDataStore extends SQLDataStore
         return $itemid;
     }
 
-    function getItems(array $args = array())
+    function getItems(Array $args = array())
     {
         if (!empty($args['numitems'])) {
             $numitems = $args['numitems'];
@@ -449,7 +449,7 @@ class FlatTableDataStore extends SQLDataStore
         $result->close();
     }
 
-    function countItems(array $args = array())
+    function countItems(Array $args = array())
     {
         if (!empty($args['itemids'])) {
             $itemids = $args['itemids'];
