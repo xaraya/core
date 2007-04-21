@@ -54,7 +54,7 @@ dl.xar-tabs dd.active a {
 }
 
 /* ie5-mac seems to need this */
-* html dl.xar-tabs dd a { display: inline-block; }
+* html dl.xar-tabs dd a { display: inline; }
 
 /* a bit fancier look for good browsers */
 dl.xar-tabs dd.active > a {

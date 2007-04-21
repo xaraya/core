@@ -185,17 +185,18 @@ UPDATE `xar_privileges` SET type = 3 WHERE type IS NULL;
 DROP TABLE `xar_security_masks`;
 
 /* Making the default value in the rolemembers table form 0 to null' */
-DROP INDEX i_xar_rolememb_id ON xar_rolemembers;
+DROP INDEX i_xar_rolememb_uid ON xar_rolemembers;
 ALTER TABLE `xar_rolemembers` CHANGE `xar_parentid` `xar_parentid` INTEGER DEFAULT NULL;
 UPDATE `xar_rolemembers` SET xar_parentid = NULL WHERE xar_parentid = 0;
 
 /* Making the default value in the privmembers table form 0 to null' */
-DROP INDEX i_xar_privmembers_uid ON xar_privmembers;
+DROP INDEX i_xar_privmembers_pid ON xar_privmembers;
 ALTER TABLE `xar_privmembers` CHANGE `xar_parentid` `xar_parentid` INTEGER DEFAULT NULL;
 UPDATE `xar_privmembers` SET xar_parentid = NULL WHERE xar_parentid = 0;
 
 /* Dropping column prefixes from xar_session_info, session_info is moot, so we take the high road :-) */
-DROP table xar_session_info; /* Drops the indexes too */
+/* Drops the indexes too */
+DROP table xar_session_info;
 CREATE TABLE  xar_session_info (
   `id` varchar(32) NOT NULL,
   `ip_addr` varchar(20) NOT NULL,
