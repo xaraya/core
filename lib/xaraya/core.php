@@ -318,6 +318,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     sys::import('xaraya.xarMLS');
+    // FIXME: Site.MLS.MLSMode is NULL during install
     $systemArgs = array('MLSMode'             => xarConfigGetVar('Site.MLS.MLSMode'),
 //                        'translationsBackend' => xarConfigGetVar('Site.MLS.TranslationsBackend'),
                         'translationsBackend' => 'xml2php',
