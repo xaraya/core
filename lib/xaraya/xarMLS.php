@@ -57,7 +57,8 @@ function xarMLS_init(&$args, $whatElseIsGoingLoaded)
         }
         break;
     default:
-        throw new Exception('xarMLS_init: Unknown MLS mode: '.$args['MLSMode']);
+        $GLOBALS['xarMLS_mode'] = 'BOXED';
+        //throw new Exception('xarMLS_init: Unknown MLS mode: '.$args['MLSMode']);
     }
     $GLOBALS['xarMLS_backendName'] = $args['translationsBackend'];
 
