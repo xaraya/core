@@ -26,6 +26,7 @@ class UsernameProperty extends DataProperty
         $this->tplmodule = 'roles';
         $this->template = 'username';
         $this->filepath   = 'modules/roles/xarproperties';
+        $this->parseValidation($this->validation);
     }
 
     public function validateValue($value = null)
@@ -67,8 +68,10 @@ class UsernameProperty extends DataProperty
             // Nothing to do?
         }
 
-        if ($value > 1) { // Why the 1 here?
+        if ($this->validation) {
             $data['linkurl'] = xarModURL('roles','user','display', array('uid' => $value));
+        } else {
+            $data['linkurl'] = "";
         }
         $data['user'] = xarVarprepForDisplay($user);
         $data['value']= $value;
@@ -92,8 +95,10 @@ class UsernameProperty extends DataProperty
         $data['value'] = $value;
         $data['user']  = xarVarPrepForDisplay($user);
 
-        if ($value > 1) { // Why the 1 here?
+        if ($this->validation) {
             $data['linkurl'] = xarModURL('roles','user','display',array('uid' => $value));
+        } else {
+            $data['linkurl'] = "";
         }
         return parent::showOutput($data);
     }

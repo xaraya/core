@@ -454,6 +454,8 @@ class DataProperty extends Object implements iDataProperty
         $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
         $data['size']       = !empty($size) ? $size : 50;
         $data['required']   = isset($required) && $required ? true : false;
+        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['template'])) $data['template'] = $this->template;
 
         if(isset($validation))
         {
