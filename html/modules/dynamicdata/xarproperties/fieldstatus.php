@@ -52,7 +52,7 @@ class FieldStatusProperty extends SelectProperty
             $value = $data['value'];
         }
 
-        $valuearray['display'] = $value & 31;
+        $valuearray['display'] = $value & DataPropertyMaster::DD_DISPLAYMASK;
         $valuearray['input'] = $value & 992;
 
         $data['value'] = $valuearray;
