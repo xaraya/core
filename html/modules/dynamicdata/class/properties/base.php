@@ -253,6 +253,14 @@ class DataProperty extends Object implements iDataProperty
     }
 
     /**
+     * Get the value of this property's input status
+     */
+    function getInputStatus()
+    {
+        return $this->status - $this->getDisplayStatus();
+    }
+
+    /**
      * Show an input field for setting/modifying the value of this property
      *
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
@@ -268,6 +276,11 @@ class DataProperty extends Object implements iDataProperty
     {
         if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
             return $this->showHidden($data);
+
+        if($this->getInputStatus() == DataPropertyMaster::DD_INPUTSTATE_NOINPUT) {
+            return $this->showOutput($data) . $this->showHidden($data);
+
+        }
 
         // Our common items we need
         if(!isset($data['name']))        $data['name'] = 'dd_'.$this->id;
@@ -320,7 +333,7 @@ class DataProperty extends Object implements iDataProperty
     function showLabel(Array $args = array())
     {
         if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
-            return $this->showHidden($args);
+            return "";
 
         if(empty($args))
         {
@@ -351,14 +364,11 @@ class DataProperty extends Object implements iDataProperty
      * @param $args['id'] id of the field
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showHidden(Array $args = array())
+    function showHidden(Array $data = array())
     {
-        extract($args);
-
-        $data = array();
-        $data['name']     = !empty($name) ? $name : 'dd_'.$this->id;
-        $data['id']       = !empty($id)   ? $id   : 'dd_'.$this->id;
-        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
+        $data['name']     = !empty($data['name']) ? $data['name'] : 'dd_'.$this->id;
+        $data['id']       = !empty($data['id'])   ? $data['id']   : 'dd_'.$this->id;
+        $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->value);
         $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
         if(!isset($data['module']))   $data['module']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
@@ -454,6 +464,8 @@ class DataProperty extends Object implements iDataProperty
         $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
         $data['size']       = !empty($size) ? $size : 50;
         $data['required']   = isset($required) && $required ? true : false;
+        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
+        if(!isset($data['template'])) $data['template'] = $this->template;
 
         if(isset($validation))
         {

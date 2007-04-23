@@ -42,5 +42,9 @@ class FieldTypeProperty extends SelectProperty
         // sort em by name
         ksort($this->options);
     }
+    public function checkInput($name = '', $value = null)
+    {
+       return parent::checkInput('dd_'.$this->id);
+    }
 }
 ?>
