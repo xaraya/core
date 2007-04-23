@@ -253,6 +253,14 @@ class DataProperty extends Object implements iDataProperty
     }
 
     /**
+     * Get the value of this property's input status
+     */
+    function getInputStatus()
+    {
+        return $this->status - $this->getDisplayStatus();
+    }
+
+    /**
      * Show an input field for setting/modifying the value of this property
      *
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
@@ -268,6 +276,11 @@ class DataProperty extends Object implements iDataProperty
     {
         if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
             return $this->showHidden($data);
+
+        if($this->getInputStatus() == DataPropertyMaster::DD_INPUTSTATE_NOINPUT) {
+            return $this->showOutput($data) . $this->showHidden($data);
+
+        }
 
         // Our common items we need
         if(!isset($data['name']))        $data['name'] = 'dd_'.$this->id;
