@@ -18,8 +18,7 @@ function dynamicdata_admin_view($args)
     extract($args);
 
     if(!xarVarFetch('itemid',   'int',   $itemid,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',    'int',   $modid,     xarModGetIDFromName('dynamicdata'), XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype', 'int',   $itemtype,  0, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('name',       'isset', $name,       NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('startnum', 'int',   $startnum,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('numitems', 'int',   $numitems,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('sort',     'isset', $sort,      NULL, XARVAR_DONT_SET)) {return;}
@@ -32,8 +31,7 @@ function dynamicdata_admin_view($args)
 
     $object = xarModAPIFunc('dynamicdata','user','getobjectlist',
                             array('objectid'  => $itemid,
-                                  'moduleid'  => $modid,
-                                  'itemtype'  => $itemtype,
+                                  'name'       => $name,
                                   'join'      => $join,
                                   'table'     => $table,
                                   'tplmodule' => $tplmodule,
