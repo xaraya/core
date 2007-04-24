@@ -93,15 +93,12 @@ function dynamicdata_utilapi_import($args)
         //TODO: don't define it in the first place?
         unset($args['objectid']);
 
-        // Get the DataObject Objects
-        $myobject = DataObjectMaster::getObject();
-
         // Add an item to the object
         if ($args['moduleid'] == 182) {
             $args['itemtype'] = xarModAPIFunc('dynamicdata','admin','getnextitemtype',
                                            array('modid' => $args['moduleid']));
         }
-        $objectid = $myobject->createItem($args);
+        $objectid = $object->createItem($args);
 
         // Now do the item's properties
 
@@ -148,39 +145,44 @@ function dynamicdata_utilapi_import($args)
     } elseif ($roottag == 'items') {
 
         $indices = array();
+        $currentobject = "";
         foreach($xmlobject->children() as $child) {
             $item = array();
             $item['name'] = $child->getName();
             $item['itemid'] = (!empty($keepitemid)) ? (string)$child->attributes()->itemid : 0;
 
-            if (empty($objectname2objectid[$item['name']])) {
-                $objectinfo = DataObjectMaster::getObjectInfo(array('name' => $item['name']));
-                if (isset($objectinfo) && !empty($objectinfo['objectid'])) {
-                    $objectname2objectid[$item['name']] = $objectinfo['objectid'];
-                } else {
-                    $msg = 'Unknown #(1) "#(2)"';
-                    $vars = array('object',xarVarPrepForDisplay($item['name']));
-                    throw new BadParameterException($vars,$msg);
+            if ($item['name'] != $currentobject) {
+                $currentobject = $item['name'];
+                if (empty($objectname2objectid[$item['name']])) {
+                    $objectinfo = DataObjectMaster::getObjectInfo(array('name' => $item['name']));
+                    if (isset($objectinfo) && !empty($objectinfo['objectid'])) {
+                        $objectname2objectid[$item['name']] = $objectinfo['objectid'];
+                    } else {
+                        $msg = 'Unknown #(1) "#(2)"';
+                        $vars = array('object',xarVarPrepForDisplay($item['name']));
+                        throw new BadParameterException($vars,$msg);
+                    }
                 }
-            }
-            $objectid = $objectname2objectid[$item['name']];
+                $objectid = $objectname2objectid[$item['name']];
 
-            // Create the item
-            if (!isset($objectcache[$objectid])) {
-                $objectcache[$objectid] = DataObjectMaster::getObject(array('objectid' => $objectid));
+                // Create the item
+                if (!isset($objectcache[$objectid])) {
+                    $objectcache[$objectid] = DataObjectMaster::getObject(array('objectid' => $objectid));
+                }
+                $object =& $objectcache[$objectid];
+                if (!isset($objectcache[$object->baseancestor])) {
+                    $objectcache[$object->baseancestor] = DataObjectMaster::getObject(array('objectid' => $object->baseancestor));
+                }
+                $primaryobject =& $objectcache[$object->baseancestor];
+                // Get the properties for this object
+                $objectproperties = $object->properties;
             }
-            $object =& $objectcache[$objectid];
-            if (!isset($objectcache[$object->baseancestor])) {
-                $objectcache[$object->baseancestor] = DataObjectMaster::getObject(array('objectid' => $object->baseancestor));
-            }
-            $primaryobject =& $objectcache[$object->baseancestor];
 
-            // Get the properties for this object
-            $objectproperties = $object->properties;
             $oldindex = 0;
             foreach($objectproperties as $propertyname => $property) {
                 if (isset($child->$propertyname)) {
                     $value = (string)$child->$propertyname;
+                    /*
                     if ($property->type == 30049) {
                         if (in_array($value,array_keys($indices))) {
                             $item[$propertyname] = $indices[$value];
@@ -195,8 +197,10 @@ function dynamicdata_utilapi_import($args)
                             $item[$propertyname] = $indices[$value];
                         }
                     } else {
+                    */
                         $item[$propertyname] = $value;
-                    }
+//                    }
+
                 }
                 if($propertyname == $primaryobject->primary) $oldindex = $item[$propertyname];
             }
@@ -209,6 +213,7 @@ function dynamicdata_utilapi_import($args)
                     }
                 }
             }
+            /*
             if (!empty($item['itemid'])) {
                 // check if the item already exists
                 $olditemid = $object->getItem(array('itemid' => $item['itemid']));
@@ -220,21 +225,23 @@ function dynamicdata_utilapi_import($args)
                     $itemid = $object->createItem($item);
                 }
             } else {
+            */
                 // create the item
                 $itemid = $object->createItem($item);
-            }
+//            }
             if (empty($itemid)) return;
 
             // add the new index to the array of indices for reference
             $indices[$oldindex] = $itemid;
             // keep track of the highest item id
-            if (empty($objectmaxid[$objectid]) || $objectmaxid[$objectid] < $itemid) {
-                $objectmaxid[$objectid] = $itemid;
-            }
+            //if (empty($objectmaxid[$objectid]) || $objectmaxid[$objectid] < $itemid) {
+            //    $objectmaxid[$objectid] = $itemid;
+            //}
 
         }
     }
 
+/* don't think this is needed atm
     // adjust maxid (for objects stored in the dynamic_data table)
     if (count($objectcache) > 0 && count($objectmaxid) > 0) {
         foreach (array_keys($objectcache) as $objectid) {
@@ -246,8 +253,8 @@ function dynamicdata_utilapi_import($args)
         }
         unset($objectcache);
     }
-
-    return isset($objectid) ? $objectid : null;
+    */
+    return $objectid;
 }
 
 ?>
