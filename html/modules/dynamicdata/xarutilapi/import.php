@@ -227,7 +227,8 @@ function dynamicdata_utilapi_import($args)
             } else {
             */
                 // create the item
-                $itemid = $object->createItem($item);
+//                $args['itemid'] = $item['itemid'];
+                $itemid = $object->createItem(args);
 //            }
             if (empty($itemid)) return;
 

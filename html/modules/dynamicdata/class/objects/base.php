@@ -12,11 +12,12 @@
 sys::import('xaraya.structures.descriptor');
 sys::import('modules.dynamicdata.class.properties');
 sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.interfaces');
 
 /**
  * DataObject Base class
  */
-class DataObject extends DataObjectMaster
+class DataObject extends DataObjectMaster implements iDataObject
 {
     protected $descriptor  = null;      // descriptor object of this class
 
@@ -47,7 +48,7 @@ class DataObject extends DataObjectMaster
     /**
      * Retrieve the values for this item
     **/
-    function getItem(Array $args = array())
+    public function getItem(Array $args = array())
     {
         if(!empty($args['itemid']))
         {
