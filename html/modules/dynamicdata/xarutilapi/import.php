@@ -38,7 +38,6 @@ function dynamicdata_utilapi_import($args)
     } elseif (!empty($file) && (!file_exists($file) || !preg_match('/\.xml$/',$file)) ) {
         throw new BadParameterException($file,'Invalid importfile "#(1)"');
     }
-    if (!isset($entry) || empty($entry) || !is_array($entry)) $entry = array();
 
     $objectcache = array();
     $objectmaxid = array();
@@ -144,7 +143,6 @@ function dynamicdata_utilapi_import($args)
         }
     } elseif ($roottag == 'items') {
 
-        $indices = array();
         $currentobject = "";
         foreach($xmlobject->children() as $child) {
             $item = array();
@@ -152,6 +150,8 @@ function dynamicdata_utilapi_import($args)
             $item['itemid'] = (!empty($keepitemid)) ? (string)$child->attributes()->itemid : 0;
 
             if ($item['name'] != $currentobject) {
+                if (!empty($item['name']))
+                    throw new BadParameterException("The items imported must all belong to the same object");
                 $currentobject = $item['name'];
                 if (empty($objectname2objectid[$item['name']])) {
                     $objectinfo = DataObjectMaster::getObjectInfo(array('name' => $item['name']));
@@ -182,25 +182,6 @@ function dynamicdata_utilapi_import($args)
             foreach($objectproperties as $propertyname => $property) {
                 if (isset($child->$propertyname)) {
                     $value = (string)$child->$propertyname;
-                    /*
-                    if ($property->type == 30049) {
-                        if (in_array($value,array_keys($indices))) {
-                            $item[$propertyname] = $indices[$value];
-                        } else {
-                            if (count($entry > 0)) {
-                                $entryvalue = array_shift($entry);
-                                $item[$propertyname] = $entryvalue;
-                                $indices[$value] = $entryvalue;
-                            } else {
-                                $item[$propertyname] = 0;
-                            }
-                            $item[$propertyname] = $indices[$value];
-                        }
-                    } else {
-                    */
-                        $item[$propertyname] = $value;
-//                    }
-
                 }
                 if($propertyname == $primaryobject->primary) $oldindex = $item[$propertyname];
             }
