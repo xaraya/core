@@ -144,7 +144,19 @@ function dynamicdata_utilapi_import($args)
     } elseif ($roottag == 'items') {
 
         $currentobject = "";
+        $index = 1;
+        $count = count($xmlobject->children());
+
+        // pass on a generic value so that the class(es) will know where we are
+        $args['import'] = true;
+
         foreach($xmlobject->children() as $child) {
+
+            // pass on some generic values so that the class(es) will know where we are
+            if ($index == 1) $args['position'] = 'first';
+            elseif ($index == $count) $args['position'] = 'last';
+            else $args['position'] = '';
+
             $item = array();
             $item['name'] = $child->getName();
             $item['itemid'] = (!empty($keepitemid)) ? (string)$child->attributes()->itemid : 0;
@@ -185,7 +197,6 @@ function dynamicdata_utilapi_import($args)
                     $value = (string)$child->$propertyname;
                     $item[$propertyname] = $value;
                 }
-                if($propertyname == $primaryobject->primary) $oldindex = $item[$propertyname];
             }
             if (empty($keepitemid)) {
                 // for dynamic objects, set the primary field to 0 too
@@ -197,7 +208,8 @@ function dynamicdata_utilapi_import($args)
                 }
             }
             $args = array_merge($args,$item);
-            /*
+
+            /* for the moment we only allow creates
             if (!empty($item['itemid'])) {
                 // check if the item already exists
                 $olditemid = $object->getItem(array('itemid' => $item['itemid']));
@@ -215,8 +227,6 @@ function dynamicdata_utilapi_import($args)
 //            }
             if (empty($itemid)) return;
 
-            // add the new index to the array of indices for reference
-            $indices[$oldindex] = $itemid;
             // keep track of the highest item id
             //if (empty($objectmaxid[$objectid]) || $objectmaxid[$objectid] < $itemid) {
             //    $objectmaxid[$objectid] = $itemid;
