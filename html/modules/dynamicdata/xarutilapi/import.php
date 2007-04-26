@@ -149,9 +149,10 @@ function dynamicdata_utilapi_import($args)
             $item['name'] = $child->getName();
             $item['itemid'] = (!empty($keepitemid)) ? (string)$child->attributes()->itemid : 0;
 
+            // set up the object the first time around in this loop
             if ($item['name'] != $currentobject) {
-                if (!empty($item['name']))
-                    throw new BadParameterException("The items imported must all belong to the same object");
+                if (!empty($currentobject))
+                    throw new Exception("The items imported must all belong to the same object");
                 $currentobject = $item['name'];
                 if (empty($objectname2objectid[$item['name']])) {
                     $objectinfo = DataObjectMaster::getObjectInfo(array('name' => $item['name']));
@@ -182,6 +183,7 @@ function dynamicdata_utilapi_import($args)
             foreach($objectproperties as $propertyname => $property) {
                 if (isset($child->$propertyname)) {
                     $value = (string)$child->$propertyname;
+                    $item[$propertyname] = $value;
                 }
                 if($propertyname == $primaryobject->primary) $oldindex = $item[$propertyname];
             }
@@ -194,22 +196,22 @@ function dynamicdata_utilapi_import($args)
                     }
                 }
             }
+            $args = array_merge($args,$item);
             /*
             if (!empty($item['itemid'])) {
                 // check if the item already exists
                 $olditemid = $object->getItem(array('itemid' => $item['itemid']));
                 if (!empty($olditemid) && $olditemid == $item['itemid']) {
                     // update the item
-                    $itemid = $object->updateItem($item);
+                    $itemid = $object->updateItem($args);
                 } else {
                     // create the item
-                    $itemid = $object->createItem($item);
+                    $itemid = $object->createItem($args);
                 }
             } else {
             */
                 // create the item
-//                $args['itemid'] = $item['itemid'];
-                $itemid = $object->createItem(args);
+                $itemid = $object->createItem($args);
 //            }
             if (empty($itemid)) return;
 
