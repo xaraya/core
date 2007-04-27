@@ -54,6 +54,7 @@ class SelectProperty extends DataProperty
         if (isset($value)) {
             $this->value = $value;
         }
+
         // check if this option really exists
         $isvalid = $this->getOption(true);
         if ($isvalid) {
@@ -63,7 +64,7 @@ class SelectProperty extends DataProperty
         if ($this->override) {
             return true;
         }
-        $this->invalid = xarML('selection');
+        $this->invalid = xarML('unallowed selection');
         $this->value = null;
         return false;
     }

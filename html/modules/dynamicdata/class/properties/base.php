@@ -199,7 +199,10 @@ class DataProperty extends Object implements iDataProperty
     {
         if(!isset($value)) {
             list($isvalid,$value) = $this->fetchValue($name);
-            if (!$isvalid) return $isvalid;
+            if (!$isvalid) {
+                $this->invalid = xarML('no value found');
+                return false;
+            }
 
             // store the fieldname for validations who need them (e.g. file uploads)
             $name = empty($name) ? 'dd_'.$this->id : $name;
@@ -294,7 +297,7 @@ class DataProperty extends Object implements iDataProperty
 
         if(!isset($data['tabindex'])) $data['tabindex'] = 0;
         if(!isset($data['value']))    $data['value']    = '';
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid: #(1)', $this->invalid) :'';
         // debug($data);
         // Render it
         return xarTplProperty($data['module'], $data['template'], 'showinput', $data);
