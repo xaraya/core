@@ -12,11 +12,12 @@
 sys::import('xaraya.structures.descriptor');
 sys::import('modules.dynamicdata.class.properties');
 sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.interfaces');
 
 /**
  * DataObject Base class
  */
-class DataObject extends DataObjectMaster
+class DataObject extends DataObjectMaster implements iDataObject
 {
     protected $descriptor  = null;      // descriptor object of this class
 
@@ -27,7 +28,7 @@ class DataObject extends DataObjectMaster
      *
      * @param $args['itemid'] item id of the object to get
     **/
-    function __construct(DataObjectDescriptor $descriptor)
+    public function __construct(DataObjectDescriptor $descriptor)
     {
         // get the object type information from our parent class
         $this->loader($descriptor);
@@ -47,7 +48,7 @@ class DataObject extends DataObjectMaster
     /**
      * Retrieve the values for this item
     **/
-    function getItem(Array $args = array())
+    public function getItem(Array $args = array())
     {
         if(!empty($args['itemid']))
         {
@@ -85,7 +86,7 @@ class DataObject extends DataObjectMaster
     /**
      * Check the different input values for this item
      */
-    function checkInput(Array $args = array())
+    public function checkInput(Array $args = array())
     {
         if(!empty($args['itemid']) && $args['itemid'] != $this->itemid) {
             $this->itemid = $args['itemid'];
@@ -134,7 +135,7 @@ class DataObject extends DataObjectMaster
     /**
      * Show an input form for this item
      */
-    function showForm(Array $args = array())
+    public function showForm(Array $args = array())
     {
         $args = $this->toArray($args);
 
@@ -170,7 +171,7 @@ class DataObject extends DataObjectMaster
     /**
      * Show an output display for this item
      */
-    function showDisplay(Array $args = array())
+    public function showDisplay(Array $args = array())
     {
         $args = $this->toArray($args);
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
@@ -239,7 +240,7 @@ class DataObject extends DataObjectMaster
     /**
      * Get the names and values of
      */
-    function getFieldValues(Array $args = array())
+    public function getFieldValues(Array $args = array())
     {
         $fields = array();
         $properties = $this->getProperties($args);
@@ -258,7 +259,7 @@ class DataObject extends DataObjectMaster
     /**
      * Get the labels and values to include in some output display for this item
      */
-    function getDisplayValues(Array $args = array())
+    public function getDisplayValues(Array $args = array())
     {
         $displayvalues = array();
         $properties = $this->getProperties($args);
@@ -290,7 +291,7 @@ class DataObject extends DataObjectMaster
         */
     }
 
-    function createItem(Array $args = array())
+    public function createItem(Array $args = array())
     {
         if(count($args) > 0) {
             if(isset($args['itemid'])) {
@@ -384,7 +385,7 @@ class DataObject extends DataObjectMaster
         return $this->itemid;
     }
 
-    function updateItem(Array $args = array())
+    public function updateItem(Array $args = array())
     {
         if(count($args) > 0)
         {
@@ -432,7 +433,7 @@ class DataObject extends DataObjectMaster
         return $this->itemid;
     }
 
-    function deleteItem(Array $args = array())
+    public function deleteItem(Array $args = array())
     {
         if(!empty($args['itemid']))
             $this->itemid = $args['itemid'];
@@ -490,7 +491,7 @@ class DataObject extends DataObjectMaster
      *
      * @todo this needs to change into something more safe.
      */
-    function getNextItemtype(Array $args = array())
+    public function getNextItemtype(Array $args = array())
     {
         if(empty($args['moduleid']))
             $args['moduleid'] = $this->moduleid;

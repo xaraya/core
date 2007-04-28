@@ -10,8 +10,9 @@
  **/
 sys::import('modules.dynamicdata.class.properties');
 sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.interfaces');
 
-class DataObjectList extends DataObjectMaster
+class DataObjectList extends DataObjectMaster implements iDataObjectList
 {
     public $itemids  = array();           // the list of item ids used in data stores
     public $where    = '';
@@ -38,7 +39,7 @@ class DataObjectList extends DataObjectMaster
      * @param $args['numitems'] number of items to retrieve
      * @param $args['startnum'] start number
      */
-    function __construct(DataObjectDescriptor $descriptor)
+    public function __construct(DataObjectDescriptor $descriptor)
     {
         // get the object type information from our parent class
         $this->loader($descriptor);
@@ -55,7 +56,7 @@ class DataObjectList extends DataObjectMaster
      *
      * @param array
      */
-    function setArguments(Array $args = array())
+    public function setArguments(Array $args = array())
     {
         if (empty($args)) return true;
 
@@ -155,7 +156,7 @@ class DataObjectList extends DataObjectMaster
      *
      * @param string sort
      */
-    function setSort($sort)
+    public function setSort($sort)
     {
         if(is_array($sort)) {
             $this->sort = $sort;
@@ -201,7 +202,7 @@ class DataObjectList extends DataObjectMaster
      *
      * @param string where
      */
-    function setWhere($where)
+    public function setWhere($where)
     {
         // find all single-quoted pieces of text with and/or and replace them first, to
         // allow where clauses like : title eq 'this and that' and body eq 'here or there'
@@ -306,7 +307,7 @@ class DataObjectList extends DataObjectMaster
      * @param mixed groupby
      * @todo make param not mixed
      */
-    function setGroupBy($groupby)
+    public function setGroupBy($groupby)
     {
         if(is_array($groupby)) {
             $this->groupby = $groupby;
@@ -346,7 +347,7 @@ class DataObjectList extends DataObjectMaster
      * Set categories for an object
      *
      */
-    function setCategories($catid)
+    public function setCategories($catid)
     {
         if(!xarModIsAvailable('categories')) return;
 
@@ -376,7 +377,7 @@ class DataObjectList extends DataObjectMaster
      *
      * @return array
      */
-    function &getItems(Array $args = array())
+    public function &getItems(Array $args = array())
     {
         // initialize the items array
         $this->items = array();
@@ -417,7 +418,7 @@ class DataObjectList extends DataObjectMaster
      *
      * Note : this must be called *before* getItems() if you're using numitems !
      */
-    function countItems(Array $args = array())
+    public function countItems(Array $args = array())
     {
         // set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
         $this->setArguments($args);
@@ -445,7 +446,7 @@ class DataObjectList extends DataObjectMaster
      *
      * @return xarTplObject
      */
-    function showView(Array $args = array())
+    public function showView(Array $args = array())
     {
         $args = $this->toArray($args);
 
@@ -590,7 +591,7 @@ class DataObjectList extends DataObjectMaster
       * @todo make this smarter
       * @todo can we use this for the newlink too?
       */
-    function getViewOptions($args)
+    public function getViewOptions(Array $args = array())
     {
         extract($args);
 
@@ -704,7 +705,7 @@ class DataObjectList extends DataObjectMaster
      *
      * @return array
      */
-    function &getViewValues(Array $args = array())
+    public function &getViewValues(Array $args = array())
     {
         if(empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;
@@ -730,8 +731,9 @@ class DataObjectList extends DataObjectMaster
         return $viewvalues;
     }
 
-    function getPager($currenturl = '')
+    public function getPager($currenturl=null)
     {
+        $currenturl = isset($currenturl) ? $currenturl : "";
         $prevurl = '';
         $nexturl = '';
         $sorturl = '';
@@ -800,7 +802,7 @@ class DataObjectList extends DataObjectMaster
      *
      * @return int
      */
-    function getNext(Array $args = array())
+    public function getNext(Array $args = array())
     {
         static $start = true;
 

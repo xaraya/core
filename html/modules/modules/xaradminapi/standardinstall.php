@@ -15,20 +15,25 @@ function modules_adminapi_standardinstall($args)
     $dd_objects = array();
 
     foreach($objects as $dd_object) {
-        $entry = array();
+        $name = is_array($dd_object) ? $dd_object['name'] : $dd_object;
+        $def_file = 'modules/' . $module . '/xardata/'.$name.'-def.xml';
+        $dat_file = 'modules/' . $module . '/xardata/'.$name.'-dat.xml';
+
+        $data = array('file' => $def_file, 'keepitemid' => false);
         if (is_array($dd_object)) {
-            $entry = $dd_object['entry'];
-            $dd_object = $dd_object['name'];
+            // pass the args we received though to the import routine
+            // (and from there to the class(es) that will use them
+            $data = array_merge($data,$dd_object);
         }
-        $def_file = 'modules/' . $module . '/xardata/'.$dd_object.'-def.xml';
-        $dat_file = 'modules/' . $module . '/xardata/'.$dd_object.'-dat.xml';
-        $objectid = xarModAPIFunc('dynamicdata','util','import', array('file' => $def_file, 'entry' => $entry, 'keepitemid' => false));
+
+        $objectid = xarModAPIFunc('dynamicdata','util','import', $data);
         if (!$objectid) return;
-        else $dd_objects[$dd_object] = $objectid;
+        else $dd_objects[$name] = $objectid;
         // Let data import be allowed to be empty
         if(file_exists($dat_file)) {
+            $data['file'] = $dat_file;
             // And allow it to fail for now
-            xarModAPIFunc('dynamicdata','util','import', array('file' => $dat_file, 'entry' => $entry, 'keepitemid' => false));
+            xarModAPIFunc('dynamicdata','util','import', $data);
         }
     }
 

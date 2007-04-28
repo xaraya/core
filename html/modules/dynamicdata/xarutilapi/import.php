@@ -38,7 +38,6 @@ function dynamicdata_utilapi_import($args)
     } elseif (!empty($file) && (!file_exists($file) || !preg_match('/\.xml$/',$file)) ) {
         throw new BadParameterException($file,'Invalid importfile "#(1)"');
     }
-    if (!isset($entry) || empty($entry) || !is_array($entry)) $entry = array();
 
     $objectcache = array();
     $objectmaxid = array();
@@ -93,15 +92,12 @@ function dynamicdata_utilapi_import($args)
         //TODO: don't define it in the first place?
         unset($args['objectid']);
 
-        // Get the DataObject Objects
-        $myobject = DataObjectMaster::getObject();
-
         // Add an item to the object
         if ($args['moduleid'] == 182) {
             $args['itemtype'] = xarModAPIFunc('dynamicdata','admin','getnextitemtype',
                                            array('modid' => $args['moduleid']));
         }
-        $objectid = $myobject->createItem($args);
+        $objectid = $object->createItem($args);
 
         // Now do the item's properties
 
@@ -147,58 +143,60 @@ function dynamicdata_utilapi_import($args)
         }
     } elseif ($roottag == 'items') {
 
-        $indices = array();
+        $currentobject = "";
+        $index = 1;
+        $count = count($xmlobject->children());
+
+        // pass on a generic value so that the class(es) will know where we are
+        $args['import'] = true;
+
         foreach($xmlobject->children() as $child) {
+
+            // pass on some generic values so that the class(es) will know where we are
+            if ($index == 1) $args['position'] = 'first';
+            elseif ($index == $count) $args['position'] = 'last';
+            else $args['position'] = '';
+
             $item = array();
             $item['name'] = $child->getName();
             $item['itemid'] = (!empty($keepitemid)) ? (string)$child->attributes()->itemid : 0;
 
-            if (empty($objectname2objectid[$item['name']])) {
-                $objectinfo = DataObjectMaster::getObjectInfo(array('name' => $item['name']));
-                if (isset($objectinfo) && !empty($objectinfo['objectid'])) {
-                    $objectname2objectid[$item['name']] = $objectinfo['objectid'];
-                } else {
-                    $msg = 'Unknown #(1) "#(2)"';
-                    $vars = array('object',xarVarPrepForDisplay($item['name']));
-                    throw new BadParameterException($vars,$msg);
+            // set up the object the first time around in this loop
+            if ($item['name'] != $currentobject) {
+                if (!empty($currentobject))
+                    throw new Exception("The items imported must all belong to the same object");
+                $currentobject = $item['name'];
+                if (empty($objectname2objectid[$item['name']])) {
+                    $objectinfo = DataObjectMaster::getObjectInfo(array('name' => $item['name']));
+                    if (isset($objectinfo) && !empty($objectinfo['objectid'])) {
+                        $objectname2objectid[$item['name']] = $objectinfo['objectid'];
+                    } else {
+                        $msg = 'Unknown #(1) "#(2)"';
+                        $vars = array('object',xarVarPrepForDisplay($item['name']));
+                        throw new BadParameterException($vars,$msg);
+                    }
                 }
-            }
-            $objectid = $objectname2objectid[$item['name']];
+                $objectid = $objectname2objectid[$item['name']];
 
-            // Create the item
-            if (!isset($objectcache[$objectid])) {
-                $objectcache[$objectid] = DataObjectMaster::getObject(array('objectid' => $objectid));
+                // Create the item
+                if (!isset($objectcache[$objectid])) {
+                    $objectcache[$objectid] = DataObjectMaster::getObject(array('objectid' => $objectid));
+                }
+                $object =& $objectcache[$objectid];
+                if (!isset($objectcache[$object->baseancestor])) {
+                    $objectcache[$object->baseancestor] = DataObjectMaster::getObject(array('objectid' => $object->baseancestor));
+                }
+                $primaryobject =& $objectcache[$object->baseancestor];
+                // Get the properties for this object
+                $objectproperties = $object->properties;
             }
-            $object =& $objectcache[$objectid];
-            if (!isset($objectcache[$object->baseancestor])) {
-                $objectcache[$object->baseancestor] = DataObjectMaster::getObject(array('objectid' => $object->baseancestor));
-            }
-            $primaryobject =& $objectcache[$object->baseancestor];
 
-            // Get the properties for this object
-            $objectproperties = $object->properties;
             $oldindex = 0;
             foreach($objectproperties as $propertyname => $property) {
                 if (isset($child->$propertyname)) {
                     $value = (string)$child->$propertyname;
-                    if ($property->type == 30049) {
-                        if (in_array($value,array_keys($indices))) {
-                            $item[$propertyname] = $indices[$value];
-                        } else {
-                            if (count($entry > 0)) {
-                                $entryvalue = array_shift($entry);
-                                $item[$propertyname] = $entryvalue;
-                                $indices[$value] = $entryvalue;
-                            } else {
-                                $item[$propertyname] = 0;
-                            }
-                            $item[$propertyname] = $indices[$value];
-                        }
-                    } else {
-                        $item[$propertyname] = $value;
-                    }
+                    $item[$propertyname] = $value;
                 }
-                if($propertyname == $primaryobject->primary) $oldindex = $item[$propertyname];
             }
             if (empty($keepitemid)) {
                 // for dynamic objects, set the primary field to 0 too
@@ -209,32 +207,35 @@ function dynamicdata_utilapi_import($args)
                     }
                 }
             }
+            $args = array_merge($args,$item);
+
+            /* for the moment we only allow creates
             if (!empty($item['itemid'])) {
                 // check if the item already exists
                 $olditemid = $object->getItem(array('itemid' => $item['itemid']));
                 if (!empty($olditemid) && $olditemid == $item['itemid']) {
                     // update the item
-                    $itemid = $object->updateItem($item);
+                    $itemid = $object->updateItem($args);
                 } else {
                     // create the item
-                    $itemid = $object->createItem($item);
+                    $itemid = $object->createItem($args);
                 }
             } else {
+            */
                 // create the item
-                $itemid = $object->createItem($item);
-            }
+                $itemid = $object->createItem($args);
+//            }
             if (empty($itemid)) return;
 
-            // add the new index to the array of indices for reference
-            $indices[$oldindex] = $itemid;
             // keep track of the highest item id
-            if (empty($objectmaxid[$objectid]) || $objectmaxid[$objectid] < $itemid) {
-                $objectmaxid[$objectid] = $itemid;
-            }
+            //if (empty($objectmaxid[$objectid]) || $objectmaxid[$objectid] < $itemid) {
+            //    $objectmaxid[$objectid] = $itemid;
+            //}
 
         }
     }
 
+/* don't think this is needed atm
     // adjust maxid (for objects stored in the dynamic_data table)
     if (count($objectcache) > 0 && count($objectmaxid) > 0) {
         foreach (array_keys($objectcache) as $objectid) {
@@ -246,8 +247,8 @@ function dynamicdata_utilapi_import($args)
         }
         unset($objectcache);
     }
-
-    return isset($objectid) ? $objectid : null;
+    */
+    return $objectid;
 }
 
 ?>
