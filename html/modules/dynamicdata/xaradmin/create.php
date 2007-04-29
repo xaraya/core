@@ -18,7 +18,6 @@
  */
 function dynamicdata_admin_create($args)
 {
-
     extract($args);
 
 // FIXME: whatever, as long as it doesn't generate Variable "0" should not be empty exceptions
@@ -33,15 +32,17 @@ function dynamicdata_admin_create($args)
     if(!xarVarFetch('template',     'isset', $template,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('tplmodule',    'isset', $tplmodule,   'dynamicdata', XARVAR_NOT_REQUIRED)) {return;}
 
-//    if (!xarSecConfirmAuthKey()) return;
+    if (!xarSecConfirmAuthKey()) return;
 
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'join'     => $join,
                                          'table'    => $table,
                                          'itemid'   => $itemid));
     $isvalid = $myobject->checkInput();
+
     $data = xarModAPIFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
     extract($data);
+
     if (!empty($preview) || !$isvalid) {
         $data = array_merge($data, xarModAPIFunc('dynamicdata','admin','menu'));
 
