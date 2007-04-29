@@ -44,7 +44,15 @@ class UsernameProperty extends DataProperty
             } catch (NotFoundExceptions $e) {
                 // Nothing to do?
             }
+        } else {
+            $role = xarRoles::findRole($value);
+            if (!empty($role)) xarRoles::ufindRole($value);
+            try {
+                $user = $value;
+                $value = $role->getID();
+            } catch (NotFoundExceptions $e) {}
         }
+
         if (!is_numeric($value) || empty($user)) {
             $this->invalid = xarML('user');
             $this->value = null;
@@ -66,7 +74,7 @@ class UsernameProperty extends DataProperty
             if (empty($user))
                 $user = xarUserGetVar('uname', $value);
         } catch(NotFoundExceptions $e) {
-            // Nothing to do?
+            $user = $value;
         }
 
         $data['user'] = xarVarprepForDisplay($user);
@@ -85,7 +93,7 @@ class UsernameProperty extends DataProperty
             if (empty($user))
                 $user = xarUserGetVar('uname', $value);
         } catch(NotFoundExceptions $e) {
-            // Nothing to do?
+            $user = $value;
         }
 
         $data['user']  = xarVarPrepForDisplay($user);
