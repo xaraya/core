@@ -30,7 +30,9 @@ class DataObject extends DataObjectMaster implements iDataObject
     **/
     public function __construct(DataObjectDescriptor $descriptor)
     {
-        // get the object type information from our parent class
+      $this->status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE + DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
+
+      // get the object type information from our parent class
         $this->loader($descriptor);
 
         // set the specific item id (or 0)
