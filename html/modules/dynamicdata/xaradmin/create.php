@@ -18,7 +18,6 @@
  */
 function dynamicdata_admin_create($args)
 {
-
     extract($args);
 
 // FIXME: whatever, as long as it doesn't generate Variable "0" should not be empty exceptions
