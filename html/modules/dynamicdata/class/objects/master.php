@@ -315,23 +315,13 @@ class DataObjectMaster extends Object
         {
             // ignore if this property already belongs to the object
             if(isset($this->properties[$newproperty->name])) continue;
-            $args = array(
-                'id'         => $newproperty->id,
-                'name'       => $newproperty->name,
-                'type'       => $newproperty->type,
-                'label'      => $newproperty->label,
-                'source'     => $newproperty->source,
-                'status'     => $newproperty->status,
-                'datastore'  => $newproperty->datastore,
-                'validation' => $newproperty->validation,
-                'default'    => $newproperty->default,
-            );
-            $this->addProperty($args);
+            $props = $newproperty->getPublicProperties();
+            $this->addProperty($props);
             if (!isset($this->datastores[$newproperty->datastore])) {
                 $newstore = $newproperty->getDataStore();
                 $this->addDatastore($newstore[0],$newstore[1]);
             }
-            $this->datastores[$newproperty->datastore]->addField($this->properties[$args['name']]);
+            $this->datastores[$newproperty->datastore]->addField($this->properties[$props['name']]);
             $this->fieldlist[] = $newproperty->name;
         }
         $this->fieldorder = array_merge(array_keys($properties), $this->fieldorder);

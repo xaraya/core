@@ -41,14 +41,17 @@ function dynamicdata_admin_create($args)
                                          'itemid'   => $itemid));
     $isvalid = $myobject->checkInput();
 
+    $data = xarModAPIFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
+    extract($data);
+
     if (!empty($preview) || !$isvalid) {
-        $data = xarModAPIFunc('dynamicdata','admin','menu');
+        $data = array_merge($data, xarModAPIFunc('dynamicdata','admin','menu'));
 
         $data['object'] = & $myobject;
 
         $data['authid'] = xarSecGenAuthKey();
         $data['preview'] = $preview;
-        $data['tplmodule'] = $tplmodule;
+//        $data['tplmodule'] = $tplmodule;
         if (!empty($return_url)) {
             $data['return_url'] = $return_url;
         }

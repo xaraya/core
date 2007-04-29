@@ -44,6 +44,9 @@ function dynamicdata_admin_delete($args)
     // Security check
     if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item',$data['moduleid'].":".$data['itemtype'].":".$data['itemid'])) return;
 
+    $data = array_merge($data,xarModAPIFunc('dynamicdata','user','getcontext',array('module' => $tplmodule)));
+    extract($data);
+
     if (!empty($noconfirm)) {
         if (!empty($return_url)) {
             xarResponseRedirect($return_url);

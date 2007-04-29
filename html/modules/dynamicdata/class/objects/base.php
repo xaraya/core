@@ -127,6 +127,7 @@ class DataObject extends DataObjectMaster implements iDataObject
                 $passed = $this->properties[$name]->checkInput();
             }
 
+            if(!$passed) echo $name."<br />";
             if(!$passed) $isvalid = false;
         }
         return $isvalid;

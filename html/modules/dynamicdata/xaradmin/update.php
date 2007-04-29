@@ -50,8 +50,11 @@ function dynamicdata_admin_update($args)
 
     $isvalid = $myobject->checkInput();
 
+    $data = xarModAPIFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
+    extract($data);
+
     if (!empty($preview) || !$isvalid) {
-        $data = xarModAPIFunc('dynamicdata','admin','menu');
+        $data = array_merge($data, xarModAPIFunc('dynamicdata','admin','menu'));
         $data['object'] = & $myobject;
 
         $data['objectid'] = $myobject->objectid;
