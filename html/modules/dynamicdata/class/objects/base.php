@@ -99,6 +99,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         $isvalid = true;
         $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
+        $missing = array();
 
         foreach($fields as $name) {
             // Ignore disabled properties
@@ -127,8 +128,13 @@ class DataObject extends DataObjectMaster implements iDataObject
                 $passed = $this->properties[$name]->checkInput();
             }
 
-            if(!$passed) echo $name."<br />";
+            // FIXME: find a better way to get this without passing an object ref to the property?
+            if($this->properties[$name]->invalid == xarML('no value found')) $missing[] = $name;
+
             if(!$passed) $isvalid = false;
+        }
+        if (!empty($missing)) {
+            throw new VariableNotFoundException(implode(', ',$missing),'The following properties were not found: #(1)');
         }
         return $isvalid;
     }
