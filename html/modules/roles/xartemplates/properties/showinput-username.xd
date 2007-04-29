@@ -9,8 +9,7 @@ FIXME:  The target="" needs to be replaced by something that works in xhtml.
         #$user#
     </xar:if>
 -->
-    <span id="#$user#">#$user#</span>
-    <input type="hidden" name="#$name#" id="#$id#" value="#$value#" />
+    <input type="text" name="#$name#" id="#$id#" value="#$user#" />
 
     <xar:if condition="!empty($invalid)">
         &#160;<span class="xar-error">#$invalid#</span>

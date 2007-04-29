@@ -280,7 +280,6 @@ class DataProperty extends Object implements iDataProperty
         if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
             return $this->showHidden($data);
 
-        echo $this->name . $this->getDisplayStatus() . $this->getInputStatus();
         if($this->getInputStatus() == DataPropertyMaster::DD_INPUTSTATE_NOINPUT) {
             return $this->showOutput($data) . $this->showHidden($data);
         }

@@ -63,16 +63,12 @@ class UsernameProperty extends DataProperty
 
         try {
             $user = xarUserGetVar('name', $value);
-            if (empty($user)) $user = xarUserGetVar('uname', $value);
-        } catch (NotFoundExceptions $e) {
+            if (empty($user))
+                $user = xarUserGetVar('uname', $value);
+        } catch(NotFoundExceptions $e) {
             // Nothing to do?
         }
 
-        if ($this->validation) {
-            $data['linkurl'] = xarModURL('roles','user','display', array('uid' => $value));
-        } else {
-            $data['linkurl'] = "";
-        }
         $data['user'] = xarVarprepForDisplay($user);
         $data['value']= $value;
         return parent::showInput($data);
@@ -92,8 +88,8 @@ class UsernameProperty extends DataProperty
             // Nothing to do?
         }
 
-        $data['value'] = $value;
         $data['user']  = xarVarPrepForDisplay($user);
+        $data['value'] = $value;
 
         if ($this->validation) {
             $data['linkurl'] = xarModURL('roles','user','display',array('uid' => $value));
