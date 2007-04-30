@@ -32,6 +32,7 @@ function dynamicdata_admin_create($args)
     if(!xarVarFetch('template',     'isset', $template,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('tplmodule',    'isset', $tplmodule,   'dynamicdata', XARVAR_NOT_REQUIRED)) {return;}
 
+    die("SS");
     if (!xarSecConfirmAuthKey()) return;
 
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
