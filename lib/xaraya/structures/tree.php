@@ -18,22 +18,23 @@ class TreeNode extends Object implements ITreeNode
     {
         foreach($arr as $key => $value) $this->{$key} = $value;
     }
-    function breadthfirstenumeration()
+    function breadthfirstenumeration($depth=null)
     {
         $data = $this->tree->treedata;
         if (empty($data)) return new BasicSet();
-
         uasort($data, array($this,"comparelevels"));
+
         $nodeset = new BasicSet();
-        foreach ($data as $datum) {
+        foreach ($data as $value) {
+            if (isset($depth) && ($value['nodelevel'] > $depth)) break;
             $node = new TreeNode();
-            $node->adddata($datum);
+            $node->adddata($value);
             $nodeset->add($node);
         }
         $it = $nodeset->getIterator();
         return $nodeset;
     }
-    function depthfirstenumeration()
+    function depthfirstenumeration($depth=null)
     {
         $data = $this->tree->treedata;
         if (empty($data)) return new BasicSet();
@@ -41,6 +42,7 @@ class TreeNode extends Object implements ITreeNode
 
         $data1 = array();
         foreach ($data as $key => $value) {
+            if (isset($depth) && ($value['nodelevel'] > $depth)) continue;
             $children = array();
             foreach ($value['children'] as $child) {
                 if (isset($data1[$child])) $children[] = array($data1[$child]);
@@ -158,8 +160,8 @@ class Tree extends Object implements ITree
 interface ITreeNode
 {
     public function adddata(array $arr);
-    public function breadthfirstenumeration();
-    public function depthfirstenumeration();
+    public function breadthfirstenumeration($arg=null);
+    public function depthfirstenumeration($arg=null);
     public function getChildCount();
     public function getDepth();
     public function getLevel();
