@@ -21,6 +21,8 @@ class TreeNode extends Object implements ITreeNode
     function breadthfirstenumeration()
     {
         $data = $this->tree->treedata;
+        if (empty($data)) return new BasicSet();
+
         uasort($data, array($this,"comparelevels"));
         $nodeset = new BasicSet();
         foreach ($data as $datum) {
@@ -34,8 +36,9 @@ class TreeNode extends Object implements ITreeNode
     function depthfirstenumeration()
     {
         $data = $this->tree->treedata;
-        uasort($data, array($this,"comparelevels"));
-        krsort($data);
+        if (empty($data)) return new BasicSet();
+        uasort($data, array($this,"rcomparelevels"));
+
         $data1 = array();
         foreach ($data as $key => $value) {
             $children = array();
@@ -43,10 +46,10 @@ class TreeNode extends Object implements ITreeNode
                 if (isset($data1[$child])) $children[] = array($data1[$child]);
             }
             $data1[$key] = array('id' => $key, 'children' => $children);
+            $toplevel = $data1[$key];
         }
-        $data1 = !empty($data1) ? array_pop($data1) : $data1;
         $nodeset = new BasicSet();
-        $arrayIterator = new RecursiveArrayIterator($data1);
+        $arrayIterator = new RecursiveArrayIterator($toplevel);
         $iterator = new RecursiveIteratorIterator($arrayIterator);
         foreach($iterator as $value) {
             $node = new TreeNode();
@@ -73,6 +76,10 @@ class TreeNode extends Object implements ITreeNode
     private function comparelevels($a, $b)
     {
        return ($a['nodelevel'] > $b['nodelevel']);
+    }
+    private function rcomparelevels($a, $b)
+    {
+       return ($a['nodelevel'] < $b['nodelevel']);
     }
 }
 
