@@ -53,14 +53,14 @@ function themes_adminapi_setstate($args)
             ($oldState != XARTHEME_STATE_ACTIVE) &&
             ($oldState != XARTHEME_STATE_MISSING_FROM_INACTIVE) &&
             ($oldState != XARTHEME_STATE_UPGRADED)) {
-            xarSessionSetVar('errormsg', xarML('Invalid theme state transition'));
+            xarSession::setVar('errormsg', xarML('Invalid theme state transition'));
             return false;
         }
         break;
     case XARTHEME_STATE_ACTIVE:
         if (($oldState != XARTHEME_STATE_INACTIVE) &&
             ($oldState != XARTHEME_STATE_MISSING_FROM_ACTIVE)) {
-            xarSessionSetVar('errormsg', xarML('Invalid theme state transition'));
+            xarSession::setVar('errormsg', xarML('Invalid theme state transition'));
             return false;
         }
         break;
@@ -68,7 +68,7 @@ function themes_adminapi_setstate($args)
         if (($oldState != XARTHEME_STATE_INACTIVE) &&
             ($oldState != XARTHEME_STATE_ACTIVE) &&
             $oldState != XARTHEME_STATE_MISSING_FROM_UPGRADED) {
-            xarSessionSetVar('errormsg', xarML('Invalid theme state transition'));
+            xarSession::setVar('errormsg', xarML('Invalid theme state transition'));
             return false;
         }
         break;

@@ -103,7 +103,7 @@ function roles_admin_updaterole()
         $pass = $object->properties['password']->value;
         if ($passchanged) {
             if (xarModGetVar('roles', 'askpasswordemail')) {
-                xarSessionSetVar('tmppass',$pass);
+                xarSession::setVar('tmppass',$pass);
                 xarResponseRedirect(xarModURL('roles', 'admin', 'asknotification',
                 array('uid' => array($uid => '1'), 'mailtype' => 'password')));
             }

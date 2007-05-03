@@ -57,7 +57,7 @@ function themes_adminapi_initialise($args)
     // debug($set);
     if (!isset($set)) {
         throw new Exception('Could not set state of theme');
-        xarSessionSetVar('errormsg', xarML('Theme state change failed'));
+        xarSession::setVar('errormsg', xarML('Theme state change failed'));
         return false;
     }
 

@@ -85,11 +85,11 @@ function modules_adminapi_installwithdependencies ($args)
                 $dependency = array();
             }
 
-            $modstack = unserialize(xarSessionGetVar('modulestoinstall'));
+            $modstack = unserialize(xarSession::getVar('modulestoinstall'));
             $teststack = $modstack;
             if ($mainId != array_pop($teststack)) {
                 array_push($modstack,$mainId);
-                xarSessionSetVar('modulestoinstall',serialize($modstack));
+                xarSession::setVar('modulestoinstall',serialize($modstack));
             }
 
             //The dependencies are ok, assuming they shouldnt change in the middle of the
@@ -119,9 +119,9 @@ function modules_adminapi_installwithdependencies ($args)
             }
 
         case 1:
-            $modstack = unserialize(xarSessionGetVar('modulestoinstall'));
+            $modstack = unserialize(xarSession::getVar('modulestoinstall'));
             $mainId = array_pop($modstack);
-            xarSessionSetVar('modulestoinstall',serialize($modstack));
+            xarSession::setVar('modulestoinstall',serialize($modstack));
 
             //Checks if the module is already initialised
             if (!$initialised) {

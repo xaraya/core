@@ -70,7 +70,7 @@ class xarRole extends Object
         if (isset($itemtype)) $type = $itemtype;
         if (!isset($type)) $type = ROLES_USERTYPE;
         if (!isset($parentid)) $parentid = 1;
-        if (!isset($uname)) $uname = xarSessionGetVar('uid') . microtime();
+        if (!isset($uname)) $uname = xarSession::getVar('uid') . microtime();
         usleep(1);// <-- Huh? why?
         if (!isset($email)) $email = '';
         if (!isset($pass)) $pass = '';

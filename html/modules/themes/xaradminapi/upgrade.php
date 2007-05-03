@@ -27,7 +27,7 @@ function themes_adminapi_upgrade($args)
     // Get theme information
     $themeInfo = xarThemeGetInfo($regid);
     if (empty($themeInfo)) {
-        xarSessionSetVar('errormsg', xarML('No such theme'));
+        xarSession::setVar('errormsg', xarML('No such theme'));
         return false;
     }
 
@@ -55,7 +55,7 @@ function themes_adminapi_upgrade($args)
     $dbconn->Execute($sql,$bindvars);
 
     // Message
-    xarSessionSetVar('statusmsg', xarML('Theme has been upgraded, now inactive'));
+    xarSession::setVar('statusmsg', xarML('Theme has been upgraded, now inactive'));
 
     // Success
     return true;

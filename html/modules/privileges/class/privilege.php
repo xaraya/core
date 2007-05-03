@@ -82,7 +82,7 @@ class xarPrivilege extends xarMask
         if(empty($this->name)) {
             $msg = xarML('You must enter a name.','privileges');
             throw new DuplicateException(null,$msg);
-            xarSessionSetVar('errormsg', _MODARGSERROR);
+            xarSession::setVar('errormsg', _MODARGSERROR);
             return false;
         }
 

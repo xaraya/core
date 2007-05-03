@@ -684,35 +684,35 @@ function dynamicdata_delete()
     // Remove module hooks
     if (!xarModUnregisterHook('item', 'new', 'GUI',
                              'dynamicdata', 'admin', 'newhook')) {
-        xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
+        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
     }
     if (!xarModUnregisterHook('item', 'create', 'API',
                              'dynamicdata', 'admin', 'createhook')) {
-        xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
+        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
     }
     if (!xarModUnregisterHook('item', 'modify', 'GUI',
                              'dynamicdata', 'admin', 'modifyhook')) {
-        xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
+        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
     }
     if (!xarModUnregisterHook('item', 'update', 'API',
                              'dynamicdata', 'admin', 'updatehook')) {
-        xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
+        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
     }
     if (!xarModUnregisterHook('item', 'delete', 'API',
                              'dynamicdata', 'admin', 'deletehook')) {
-        xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
+        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
     }
     if (!xarModUnregisterHook('module', 'modifyconfig', 'GUI',
                              'dynamicdata', 'admin', 'modifyconfighook')) {
-        xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
+        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
     }
     if (!xarModUnregisterHook('module', 'updateconfig', 'API',
                              'dynamicdata', 'admin', 'updateconfighook')) {
-        xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
+        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
     }
     if (!xarModUnregisterHook('module', 'remove', 'API',
                              'dynamicdata', 'admin', 'removehook')) {
-        xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
+        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
     }
 
 //  Ideally, people should be able to use the dynamic fields in their
@@ -723,13 +723,13 @@ function dynamicdata_delete()
 /*  display hook is now disabled by default - use the BL tags or APIs instead
     if (!xarModUnregisterHook('item', 'display', 'GUI',
                              'dynamicdata', 'user', 'displayhook')) {
-        xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
+        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
     }
 */
 
     if (!xarModUnregisterHook('item', 'search', 'GUI',
                              'dynamicdata', 'user', 'search')) {
-        xarSessionSetVar('errormsg', xarML('Could not unregister hook'));
+        xarSession::setVar('errormsg', xarML('Could not unregister hook'));
     }
 
     /**

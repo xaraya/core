@@ -16,7 +16,7 @@ function dynamicdata_userapi_setcontext($args)
 {
     extract($args);
 
-    $context = xarSessionGetVar('context');
+    $context = xarSession::getVar('context');
     $added = false;
 
     if (empty($modid) && !empty($module)) {
@@ -78,7 +78,7 @@ function dynamicdata_userapi_setcontext($args)
     }
 
     // save if anything changed
-    if ((count($args) > 0) || $added) xarSessionSetVar('context',$context);
+    if ((count($args) > 0) || $added) xarSession::setVar('context',$context);
     return $context;
 }
 

@@ -30,7 +30,7 @@ function roles_admin_asknotification($args)
     if (!xarVarFetch('ip',       'str:0:', $data['ip'],       NULL, XARVAR_NOT_REQUIRED)) return;
     switch ($data['phase']) {
         case 'display' :
-                $data['pass'] = xarSessionGetVar('tmppass');
+                $data['pass'] = xarSession::getVar('tmppass');
                 xarSessionDelVar('tmppass');
                 if ($data['mailtype'] == 'blank') {
                     $data['subject'] = '';

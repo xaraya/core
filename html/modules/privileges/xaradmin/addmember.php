@@ -64,7 +64,7 @@ function privileges_admin_addmember()
     if (!$found) if (!$priv->addMember($member)) {return;}
 
 // set the session variable
-    xarSessionSetVar('privileges_statusmsg', xarML('Added to Privilege',
+    xarSession::setVar('privileges_statusmsg', xarML('Added to Privilege',
                     'privileges'));
 // redirect to the next page
     xarResponseRedirect(xarModURL('privileges',

@@ -22,7 +22,7 @@ function blocks_adminapi_deactivate($args)
 
     // Argument check
     if (!isset($bid)) {
-        xarSessionSetVar('errormsg', _MODARGSERROR);
+        xarSession::setVar('errormsg', _MODARGSERROR);
         return false;
     }
 

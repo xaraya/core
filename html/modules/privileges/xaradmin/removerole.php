@@ -67,7 +67,7 @@ function privileges_admin_removerole()
         //Try to remove the privilege and bail if an error was thrown
         if (!$role->removePrivilege($priv)) {return;}
 
-        xarSessionSetVar('privileges_statusmsg', xarML('Role Removed',
+        xarSession::setVar('privileges_statusmsg', xarML('Role Removed',
                         'privileges'));
 
 // redirect to the next page

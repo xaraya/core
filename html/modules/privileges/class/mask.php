@@ -98,7 +98,7 @@ class xarMask extends Object
             $normalform[] = $this->getModule();
             $normalform[] = strtolower($this->getComponent());
             $thisinstance = strtolower($this->getInstance());
-            $thisinstance = str_replace('myself',xarSessionGetVar('uid'),$thisinstance);
+            $thisinstance = str_replace('myself',xarSession::getVar('uid'),$thisinstance);
             $normalform   = array_merge($normalform, explode(':', $thisinstance));
             $this->normalform = $normalform;
         }

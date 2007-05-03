@@ -274,7 +274,7 @@ class xarMasks extends Object
     public static function xarSecurityCheck($mask,$catch=1,$component='',$instance='',$module='',$rolename='',$pnrealm=0,$pnlevel=0)
     {
         self::initialize();
-        $userID = xarSessionGetVar('uid');
+        $userID = xarSession::getVar('uid');
         xarLogMessage("PRIVS: uid in security check: $userID");
         if ($userID == XARUSER_LAST_RESORT) return true;
 
@@ -381,7 +381,7 @@ class xarMasks extends Object
         // an empty role means take the current user
         if ($rolename == '') {
             // mrb: again?
-            $userID = xarSessionGetVar('uid');
+            $userID = xarSession::getVar('uid');
             if (empty($userID)) {
                 $userID = _XAR_ID_UNREGISTERED;
             }
@@ -558,7 +558,7 @@ class xarMasks extends Object
     */
     public static function testprivileges($mask,$privilegeset,$pass,$role='')
     {
-        $candebug = (xarSessionGetVar('uid') == xarModGetVar('privileges','tester'));
+        $candebug = (xarSession::getVar('uid') == xarModGetVar('privileges','tester'));
         $test = xarModGetVar('privileges','test') && $candebug;
         $testdeny = xarModGetVar('privileges','testdeny') && $candebug;
         $testmask = xarModGetVar('privileges','testmask');
