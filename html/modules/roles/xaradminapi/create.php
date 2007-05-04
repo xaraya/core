@@ -50,8 +50,7 @@ function roles_adminapi_create($args)
     $args['name'] = isset($realname) ? $realname : $name;
     $args['type'] = $itemtype;
     if (empty($authmodule)) {
-        $modInfo = xarMod_GetBaseInfo('authsystem');
-        $args['modId'] = $modInfo['systemid'];
+        $args['modId'] = xarMod::getID('authsystem');
     }
 
     $role = new xarRole($args);
