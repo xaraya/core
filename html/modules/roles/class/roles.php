@@ -114,7 +114,7 @@ class xarRoles extends Object
     }
 
     /**
-     * getRole: gets a single role
+     * get: gets a single role
      *
      * Retrieves a single role (user or group) from the roles repository
      *
