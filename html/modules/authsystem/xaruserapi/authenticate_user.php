@@ -39,7 +39,7 @@ function authsystem_userapi_authenticate_user($args)
         return XARUSER_AUTH_FAILED;
     }
 
-    list($uid, $realpass) = $result->fields;
+    list($id, $realpass) = $result->fields;
     $result->close();
 
     // Confirm that passwords match
@@ -47,7 +47,7 @@ function authsystem_userapi_authenticate_user($args)
         return XARUSER_AUTH_FAILED;
     }
 
-    return $uid;
+    return $id;
 }
 
 ?>

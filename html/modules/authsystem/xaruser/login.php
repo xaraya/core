@@ -177,7 +177,7 @@ function authsystem_user_login()
 
                 // TODO: remove this when everybody has moved to 1.0
                 if(!xarModVars::get('roles', 'lockdata')) {
-                    $lockdata = array('roles' => array( array('uid' => 4,
+                    $lockdata = array('roles' => array( array('id' => 4,
                                                               'name' => 'Administrators',
                                                               'notify' => TRUE)
                                                        ),
@@ -193,7 +193,7 @@ function authsystem_user_login()
                 $rolesarray = array();
                 $roles = $lockvars['roles'];
                 for($i=0, $max = count($roles); $i < $max; $i++)
-                        $rolesarray[] = xarRoles::get($roles[$i]['uid']);
+                        $rolesarray[] = xarRoles::get($roles[$i]['id']);
                 $letin = array();
                 foreach($rolesarray as $roletoletin) {
                     if ($roletoletin->isUser()) $letin[] = $roletoletin;
@@ -252,8 +252,8 @@ function authsystem_user_login()
                 $settings = unserialize(xarModVars::get('roles', 'duvsettings'));
                 if (in_array('userhome', $settings)) {
                     $truecurrenturl = xarServerGetCurrentURL(array(), false);
-                    $url = xarModAPIFunc('roles','user','getuserhome',array('itemid' => $user['uid']));
-
+                    $url = xarModAPIFunc('roles','user','getuserhome',array('itemid' => $user['id']));
+                    if (empty($url)) $url = '[base]';
                     /* move the half page of code out to a Roles function. No need to repeat everytime it's used*/
                     $urldata = xarModAPIFunc('roles','user','parseuserhome',array('url'=>$url,'truecurrenturl'=>$truecurrenturl));
                     $data = array();

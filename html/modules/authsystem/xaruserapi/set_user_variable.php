@@ -22,15 +22,15 @@ function authsystem_userapi_set_user_variable($args)
 {
     extract($args);
 
-    if (!isset($uid) || !isset($name) || !isset($value)) {
-        throw new BadParameterException(array($uid,$name,$value),'Empty uid (#(1)) or name (#(2)) or value (#(3)).');
+    if (!isset($id) || !isset($name) || !isset($value)) {
+        throw new BadParameterException(array($id,$name,$value),'Empty id (#(1)) or name (#(2)) or value (#(3)).');
     }
 
     // ...update the user variable in the external auth system if applicable...
 
     // throw back an exception if the user doesn't exist
     //if (...) {
-    //    throw new IDNotFoundException($uid,'User identified by id #(1) does not exist.');
+    //    throw new IDNotFoundException($id,'User identified by id #(1) does not exist.');
     //}
 
     return true;
