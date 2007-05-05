@@ -160,7 +160,7 @@ class xarRoles extends Object
      */
     public static function ufindRole($uname)
     {
-        return self::_lookuprole('uname',$uname,$type,$state=ROLES_STATE_ACTIVE);
+        return self::_lookuprole('uname',$uname,$state=ROLES_STATE_ACTIVE);
     }
 
     /**
@@ -202,9 +202,8 @@ class xarRoles extends Object
                        'val_code' => $val_code,
                        'state' => $state,
                        'auth_module' => $auth_module);
-                       "/
+                       */
         sys::import('modules.dynamicdata.class.objects.master');
-        $descriptor = new DataObjectDescriptor($args);
         $parent = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $type));
         $parent->getItem(array('itemid' => $uid));
 
@@ -229,8 +228,6 @@ class xarRoles extends Object
                        'auth_module' => $auth_module);
                        */
         sys::import('modules.dynamicdata.class.objects.master');
-        if ($type == ROLES_USERTYPE) $name = 'roles_users';
-        else $name = 'roles_groups';
         $child = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $type));
         $child->getItem(array('itemid' => $uid));
 

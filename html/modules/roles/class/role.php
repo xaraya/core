@@ -818,7 +818,7 @@ class Role extends DataObject
     function getState() { return $this->properties['state']->value; }
     function getDateReg() { return $this->properties['datereg']->value; }
     function getValCode() { return $this->properties['valcode']->value; }
-    function getAuthModule() { return $this->properties['authmodid']->value; }
+    function getAuthModule() { return $this->properties['authmodule']->value; }
     function getLevel()
     {
         return $this->parentlevel;
@@ -833,7 +833,7 @@ class Role extends DataObject
     function setState($var) { $this->properties['state']->value = $var; }
     function setDateReg($var) { $this->properties['datereg']->value = $var; }
     function setValCode($var) { $this->properties['valcode']->value = $var; }
-    function setAuthModule($var) { $this->properties['authmodid']->value = $var; }
+    function setAuthModule($var) { $this->properties['authmodule']->value = $var; }
     function setLevel($var)
     {
         $this->parentlevel = $var;
