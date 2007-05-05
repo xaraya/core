@@ -105,8 +105,8 @@ function roles_admin_purge($args)
                 $unique = 1;
                 $thisrole = xarRoles::get($role['id']);
                 $baseancestor = $thisrole->getBaseAncestor();
+                $existinguser = xarModAPIFunc('roles','user','get',array('uname' => $role['uname'], 'state' => ROLES_STATE_CURRENT));
                 if ($baseancestor['itemtype'] != ROLES_USERTYPE) {
-                    $existinguser = xarModAPIFunc('roles','user','get',array('uname' => $role['uname'], 'type' => ROLES_GROUPTYPE, 'state' => ROLES_STATE_CURRENT));
                     if (is_array($existinguser)) $unique = 0;
                     $role['uname'] = "";
                 } else {
@@ -116,7 +116,6 @@ function roles_admin_purge($args)
                         $existinguser = 0;
                         $skip = 1;
                     } else
-                        $existinguser = xarModAPIFunc('roles','user','get',array('uname' => $uname1[0], 'state' => ROLES_STATE_CURRENT));
                     if (is_array($existinguser)) $unique = 0;
                     $role['uname'] = $uname1[0];
 // now check that email is unique if this has to be checked (fix for nonexisting Bug)
