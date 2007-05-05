@@ -88,9 +88,9 @@
                        <td class="xar-align-center">
                             <xar:set name="options">
                                 array(
+                                    array('id' => ROLES_STATE_ACTIVE, 'name' => 'Active'),
                                     array('id' => ROLES_STATE_INACTIVE, 'name' => 'Inactive'),
                                     array('id' => ROLES_STATE_NOTVALIDATED, 'name' => 'Not Validated'),
-                                    array('id' => ROLES_STATE_ACTIVE, 'name' => 'Active'),
                                     array('id' => ROLES_STATE_PENDING, 'name' => 'Pending'),
                                 )
                             </xar:set>
@@ -218,10 +218,10 @@
                         <xar:set name="options">
                             array(
                                 array('id' => -1, 'name' => ''),
+                                array('id' => ROLES_STATE_ACTIVE, 'name' => 'Active'),
                                 array('id' => ROLES_STATE_DELETED, 'name' => 'Deleted'),
                                 array('id' => ROLES_STATE_INACTIVE, 'name' => 'Inactive'),
                                 array('id' => ROLES_STATE_NOTVALIDATED, 'name' => 'Not Validated'),
-                                array('id' => ROLES_STATE_ACTIVE, 'name' => 'Active'),
                                 array('id' => ROLES_STATE_PENDING, 'name' => 'Pending'),
                             )
                         </xar:set>
