@@ -56,7 +56,7 @@ function privileges_admin_deleteprivilege()
 
     xarModCallHooks('item', 'delete', $id, '');
 
-    xarSessionSetVar('privileges_statusmsg', xarML('Privilege Removed',
+    xarSession::setVar('privileges_statusmsg', xarML('Privilege Removed',
                     'privileges'));
 
 // redirect to the next page

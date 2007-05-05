@@ -18,7 +18,7 @@
 function dynamicdata_userapi_getcontext($args=array('module' =>'dynamicdata'))
 {
     extract($args);
-    $context = xarSessionGetVar('ddcontext.' . $module);
+    $context = xarSession::getVar('ddcontext.' . $module);
     $context['tplmodule'] = $module;
     return $context;
 }

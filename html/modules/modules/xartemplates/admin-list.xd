@@ -1,9 +1,9 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-<xar:set name="modstatus">xarSessionGetVar('statusmsg')</xar:set>
+<xar:set name="modstatus">xarSession::getVar('statusmsg')</xar:set>
 <xar:style scope="module" file="modules" />
 <xar:set name="modstatus">
-    xarSessionGetVar('statusmsg')
+    xarSession::getVar('statusmsg')
 </xar:set>
 <div class="xar-mod-head">
     <span class="xar-mod-title"><xar:mlstring>Modules Administration</xar:mlstring></span>

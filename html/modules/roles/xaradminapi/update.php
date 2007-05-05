@@ -52,7 +52,9 @@ function roles_adminapi_update($args)
     //FIXME: we need to standardize to 'itemtype' everywhere
     //$args['type'] = $itemtype;
 
-    $role = new xarRole($args);
+    sys::import('modules.dynamicdata.class.objects.master');
+    $role = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $item['type']));
+    $role->checkInput();
     $role->update();
 
     $item['module'] = 'roles';

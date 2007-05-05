@@ -62,7 +62,7 @@ function modules_adminapi_setstate($args)
                 ($oldState != XARMOD_STATE_MISSING_FROM_INACTIVE) &&
                 ($oldState != XARMOD_STATE_ERROR_INACTIVE) &&
                 ($oldState != XARMOD_STATE_UPGRADED)) {
-                xarSessionSetVar('errormsg', xarML('Invalid module state transition'));
+                xarSession::setVar('errormsg', xarML('Invalid module state transition'));
                 return false;
             }
             break;
@@ -70,7 +70,7 @@ function modules_adminapi_setstate($args)
             if (($oldState != XARMOD_STATE_INACTIVE) &&
                 ($oldState != XARMOD_STATE_ERROR_ACTIVE) &&
                 ($oldState != XARMOD_STATE_MISSING_FROM_ACTIVE)) {
-                xarSessionSetVar('errormsg', xarML('Invalid module state transition'));
+                xarSession::setVar('errormsg', xarML('Invalid module state transition'));
                 throw new Exception("Setting from $oldState to $state for module $regid failed");
                 return false;
             }
@@ -80,7 +80,7 @@ function modules_adminapi_setstate($args)
                 ($oldState != XARMOD_STATE_ACTIVE) &&
                 ($oldState != XARMOD_STATE_ERROR_UPGRADED) &&
                 ($oldState != XARMOD_STATE_MISSING_FROM_UPGRADED)) {
-                xarSessionSetVar('errormsg', xarML('Invalid module state transition'));
+                xarSession::setVar('errormsg', xarML('Invalid module state transition'));
                 return false;
             }
             break;

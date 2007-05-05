@@ -27,7 +27,7 @@ function modules_adminapi_upgrade($args)
     // Get module information
     $modInfo = xarModGetInfo($regid);
     if (empty($modInfo)) {
-        xarSessionSetVar('errormsg', xarML('No such module'));
+        xarSession::setVar('errormsg', xarML('No such module'));
         return false;
     }
 
@@ -80,13 +80,13 @@ function modules_adminapi_upgrade($args)
     $dbconn->Execute($sql,$bindvars);
 
     // Message to display in the module list view (only for core modules atm)
-    if(!xarSessionGetVar('statusmsg')){
+    if(!xarSession::getVar('statusmsg')){
         if(substr($modFileInfo['class'], 0, 4)  == 'Core'){
-            xarSessionSetVar('statusmsg', $modInfo['name']);
+            xarSession::setVar('statusmsg', $modInfo['name']);
         }
     } else {
         if(substr($modFileInfo['class'], 0, 4)  == 'Core'){
-            xarSessionSetVar('statusmsg', xarSessionGetVar('statusmsg') . ', '. $modInfo['name']);
+            xarSession::setVar('statusmsg', xarSession::getVar('statusmsg') . ', '. $modInfo['name']);
         }
     }
     // Success

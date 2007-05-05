@@ -26,7 +26,7 @@ function privileges_admin_modifyconfig()
         case 'modify':
         default:
             if (!isset($phase)) {
-                xarSessionSetVar('statusmsg', '');
+                xarSession::setVar('statusmsg', '');
             }
             $data['inheritdeny'] = xarModGetVar('privileges', 'inheritdeny');
             $data['authid'] = xarSecGenAuthKey();
@@ -124,18 +124,18 @@ function privileges_admin_modifyconfig()
                     if (!xarVarFetch('name', 'str', $name, '', XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('password', 'str', $password, '', XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('password2', 'str', $password2, '', XARVAR_NOT_REQUIRED)) return;
-                    
+
                     // rudimentary check for valid password for now - fix so nicer presentation to user
                     if (strcmp($password, $password2) != 0) {
                         $msg = xarML('Last Resort Admin Creation failed! <br />The two password entries are not the same, please try again.');
-                        xarSessionSetVar('statusmsg', $msg);
+                        xarSession::setVar('statusmsg', $msg);
                        xarResponseRedirect(xarModURL('privileges', 'admin', 'modifyconfig',array('tab' => $data['tab'])));
                     }
                     $secret = array(
                                 'name' => MD5($name),
                                 'password' => MD5($password)
                                 );
-                    xarSessionSetVar('statusmsg', xarML('Last Resort Administrator successfully created!'));
+                    xarSession::setVar('statusmsg', xarML('Last Resort Administrator successfully created!'));
                     xarModSetVar('privileges','lastresort',serialize($secret));
                     break;
                 case 'testing':

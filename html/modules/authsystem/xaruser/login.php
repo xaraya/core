@@ -34,7 +34,7 @@ function authsystem_user_login()
         throw new BadParameterException(null,xarML('You must enable cookies on your browser to run Xaraya. Check the browser configuration options to make sure cookies are enabled, click on  the "Back" button of the browser and try again.'));
     }
 
-    $unlockTime  = (int) xarSessionGetVar('authsystem.login.lockedout');
+    $unlockTime  = (int) xarSession::getVar('authsystem.login.lockedout');
     $lockouttime=xarModGetVar('authsystem','lockouttime')? xarModGetVar('authsystem','lockouttime') : 15;
     $lockouttries =xarModGetVar('authsystem','lockouttries') ? xarModGetVar('authsystem','lockouttries') : 3;
 
@@ -225,16 +225,16 @@ function authsystem_user_login()
                 // TODO - work out flow, put in appropriate HTML
 
                 // Cast the result to an int in case VOID is returned
-                $attempts = (int) xarSessionGetVar('authsystem.login.attempts');
+                $attempts = (int) xarSession::getVar('authsystem.login.attempts');
 
                 if (($attempts >= $lockouttries) && (xarModGetVar('authsystem','uselockout')==true)){
                     // set the time for fifteen minutes from now
-                    xarSessionSetVar('authsystem.login.lockedout', time() + (60 * $lockouttime));
-                    xarSessionSetVar('authsystem.login.attempts', 0);
+                    xarSession::setVar('authsystem.login.lockedout', time() + (60 * $lockouttime));
+                    xarSession::setVar('authsystem.login.attempts', 0);
                     throw new ForbiddenOperationException($lockouttime,xarML('Problem logging in: Invalid username or password.  Your account has been locked for #(1) minutes.'));
                 } else{
                     $newattempts = $attempts + 1;
-                    xarSessionSetVar('authsystem.login.attempts', $newattempts);
+                    xarSession::setVar('authsystem.login.attempts', $newattempts);
                     throw new ForbiddenOperationException($newattempts,xarML('Problem logging in: Invalid username or password.  You have tried to log in #(1) times.'));
                     return;
                 }
@@ -243,7 +243,7 @@ function authsystem_user_login()
             $thislastlogin =xarModGetUserVar('roles','userlastlogin');
             if (!empty($thislastlogin)) {
                 //move this to a session var for this user
-                    xarSessionSetVar('roles_thislastlogin',$thislastlogin);
+                    xarSession::setVar('roles_thislastlogin',$thislastlogin);
             }
             xarModSetUserVar('roles','userlastlogin',time()); //this is what everyone else will see
 

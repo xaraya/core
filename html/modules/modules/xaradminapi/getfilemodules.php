@@ -69,7 +69,7 @@ function modules_adminapi_getfilemodules($args)
 
                     // TODO: beautify :-)
                     if (!isset($regId)) {
-                        xarSessionSetVar('errormsg', "Module '$name' doesn't seem to have a registered module ID defined in xarversion.php - skipping...\nPlease register your module at http://www.xaraya.com");
+                        xarSession::setVar('errormsg', "Module '$name' doesn't seem to have a registered module ID defined in xarversion.php - skipping...\nPlease register your module at http://www.xaraya.com");
                         continue;
                     }
 

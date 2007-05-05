@@ -64,12 +64,12 @@
                            </label>
                        </th>
                        <th class="xar-nowrap">
-                           <label for="groupuid" title="#xarML('Assign recalled users to this group')#">
+                           <label for="groupid" title="#xarML('Assign recalled users to this group')#">
                                 <xar:mlstring>Attach Recalled Groups/Users To</xar:mlstring>
                            </label>
                        </th>
                        <th class="xar-nowrap">
-                           <label for="groupuid" title="#xarML('Assign recalled users to this status')#">
+                           <label for="groupid" title="#xarML('Assign recalled users to this status')#">
                                   <xar:mlstring>Set Recalled Users To</xar:mlstring>
                            </label>
                        </th>
@@ -80,9 +80,9 @@
                            <input type="submit" name="search" id="search" value="#xarML('Search')#" class="xar-margin-thickleft" />
                        </td>
                        <td class="xar-align-center">
-                           <select name="groupuid" id="groupuid">
+                           <select name="groupid" id="groupid">
                                <xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
-                                    <xar:if condition="$groups[$i]['uid'] eq $groupuid">
+                                    <xar:if condition="$groups[$i]['uid'] eq $groupid">
                                         <option value="#$groups[$i]['uid']#" selected="selected">#$groups[$i]['name']#</option>
                                     <xar:else/>
                                         <option value="#$groups[$i]['uid']#">#$groups[$i]['name']#</option>
@@ -170,7 +170,7 @@
                                 </td>
                                 <td class="xar-align-center">
                                     <xar:if condition="$loop:item['unique'] eq 1">
-                                         <input type="checkbox" name="recalluids[#$loop:item['uid']#]" id="recalluids_#$loop:item['uid']#" />
+                                         <input type="checkbox" name="recalluids[#$loop:item['id']#]" id="recalluids_#$loop:item['id']#" />
                                     </xar:if>
                                 </td>
                             </tr>
@@ -194,7 +194,7 @@
         </form>
 
         <p>
-              <xar:mlstring>Note: Groups/users without checkboxes cannot be recalled because another group/user 
+              <xar:mlstring>Note: Groups/users without checkboxes cannot be recalled because another group/user
               of the same name already exists (or same email, if the admin restricted emails to be unique).</xar:mlstring>
         </p>
 
@@ -322,7 +322,7 @@
                                 #$loop:item['state']#
                             </td>
                             <td class="xar-align-center">
-                               <input type="checkbox" name="purgeuids[#$loop:item['uid']#]" id="purgeuids_#$loop:item['uid']#" value="1"/>
+                               <input type="checkbox" name="purgeuids[#$loop:item['id']#]" id="purgeuids_#$loop:item['id']#" value="1"/>
                             </td>
                         </tr>
                     </xar:loop>
