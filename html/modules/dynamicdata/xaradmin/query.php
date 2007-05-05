@@ -86,7 +86,7 @@ function dynamicdata_admin_query($args)
     // used the pager, so we retrieve the current query from session variables
     } elseif (!empty($startnum) && is_numeric($startnum)
               && empty($itemid) && empty($table) && empty($query)) {
-        $query = xarSessionGetVar('DynamicData.LastQuery');
+        $query = xarSession::getVar('DynamicData.LastQuery');
         if (!empty($query)) {
             $newquery = $query;
             $startpager = $startnum;
@@ -95,7 +95,7 @@ function dynamicdata_admin_query($args)
     // used the header sort, so we retrieve the current query from session variables
     } elseif (!empty($sort) && is_string($sort)
               && empty($itemid) && empty($table) && empty($query)) {
-        $query = xarSessionGetVar('DynamicData.LastQuery');
+        $query = xarSession::getVar('DynamicData.LastQuery');
         if (!empty($query)) {
             $newquery = $query;
             $sorthead = $sort;
@@ -395,9 +395,9 @@ function dynamicdata_admin_query($args)
         $data['sample'] .= 'numitems="' . xarVarPrepForDisplay($numitems) . '" ';
         $data['sample'] .= 'startnum="' . xarVarPrepForDisplay($startnum) . '" ';
         $data['sample'] .= '/&gt;';
-        xarSessionSetVar('DynamicData.LastQuery',$newquery);
+        xarSession::setVar('DynamicData.LastQuery',$newquery);
     } else {
-        xarSessionSetVar('DynamicData.LastQuery','');
+        xarSession::setVar('DynamicData.LastQuery','');
     }
 
     if (!empty($newquery)) {

@@ -12,7 +12,7 @@
     )
 </xar:set>
 <xar:set name="modstatus">
-    xarSessionGetVar('statusmsg')
+    xarSession::getVar('statusmsg')
 </xar:set>
 <xar:set name="messagetitle">
     #xarML('Write this string in the message body or subject to display the corresponding information')#

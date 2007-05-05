@@ -76,7 +76,7 @@ class DataPropertyMaster extends Object
                 $name, $label, $type, $id, $default, $source, $fieldstatus,
                 $order, $validation, $_objectid
                 ) = $result->fields;
-            if (xarSecurityCheck('ReadDynamicDataField',0,'Field',"$name:$type:$id")) {
+//            if (xarSecurityCheck('ReadDynamicDataField',0,'Field',"$name:$type:$id")) {
                 $property = array(
                     'name'          => $name,
                     'label'         => $label,
@@ -97,7 +97,7 @@ class DataPropertyMaster extends Object
                 else {
                     $properties[$name] = $property;
                 }
-            }
+//            }
         }
 
         return $properties;

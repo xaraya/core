@@ -878,7 +878,7 @@ class xarQuery extends Object
     }
     function sessiongetvar($x)
     {
-        $q = xarSessionGetVar($x);
+        $q = xarSession::getVar($x);
         if (empty($q) || !isset($q)) return;
         $q = unserialize($q);
         return $q;
@@ -886,7 +886,7 @@ class xarQuery extends Object
     function sessionsetvar($x)
     {
         $q = $this;
-        xarSessionSetVar($x, serialize($q));
+        xarSession::setVar($x, serialize($q));
     }
     function setstatement($statement='')
     {

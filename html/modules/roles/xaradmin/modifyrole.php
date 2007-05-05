@@ -11,7 +11,7 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 
-sys::import('modules.roles.class.roles');
+sys::import('modules.dynamicdata.class.objects.master');
 /**
  * modifyrole - modify role details
  *
@@ -30,10 +30,8 @@ function roles_admin_modifyrole()
     if (!xarVarFetch('duvs', 'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
 
 
-    $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
-
-    $object = DataObjectMaster::getObject(array('module'   => 'roles',
-                                                'itemtype' => $data['basetype']));
+    $object = xarRoles::getRole($uid);
+    $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $object->getType()));
 
     $itemid = $object->getItem(array('itemid' => $uid));
     $values = $object->getFieldValues();
@@ -76,7 +74,7 @@ function roles_admin_modifyrole()
     }
     $data['frozen'] = !xarSecurityCheck('EditRole',0,'Roles',$name);
 
-    $data['itemtype'] = $itemtype;
+    $data['itemtype'] = $object->getType();
 
     $data['object'] = &$object;
 

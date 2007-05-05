@@ -4,6 +4,8 @@
   <parent>0</parent>
   <moduleid>27</moduleid>
   <itemtype>2</itemtype>
+  <class>Role</class>
+  <filepath>modules/roles/class/role.php</filepath>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
   <config></config>

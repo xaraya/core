@@ -58,13 +58,13 @@ function themes_adminapi_getfilethemes()
 
                     // TODO: beautify :-)
                     if (!isset($regId)) {
-                        xarSessionSetVar('errormsg', "Theme '$name' doesn't seem to have a registered theme ID defined in xarversion.php - skipping...\nPlease register your theme at http://www.xaraya.com/index.php?module=release&func=addid if you haven't done so yet, and add \$themeversion['id'] = 'your ID'; in xarversion.php");
+                        xarSession::setVar('errormsg', "Theme '$name' doesn't seem to have a registered theme ID defined in xarversion.php - skipping...\nPlease register your theme at http://www.xaraya.com/index.php?module=release&func=addid if you haven't done so yet, and add \$themeversion['id'] = 'your ID'; in xarversion.php");
                         continue;
                     }
 
                     // TODO: beautify :-)
                     if (!isset($regId) || xarVarPrepForOS($directory) != $themeOsDir) {
-                        xarSessionSetVar('errormsg', "Theme '$name' exists in ".xarConfigGetVar('Site.BL.ThemesDirectory')."/$themeOsDir but should be in "
+                        xarSession::setVar('errormsg', "Theme '$name' exists in ".xarConfigGetVar('Site.BL.ThemesDirectory')."/$themeOsDir but should be in "
                         .xarConfigGetVar('Site.BL.ThemesDirectory').
                         "/$directory according to themes/$themeOsDir/xartheme.php... Skipping this theme until resolved.");
                         continue;

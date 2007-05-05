@@ -5,7 +5,7 @@
 <xar:set name="statenotvalidated">ROLES_STATE_NOTVALIDATED</xar:set>
 <xar:set name="stateactive">ROLES_STATE_ACTIVE</xar:set>
 <xar:set name="statepending">ROLES_STATE_PENDING</xar:set>
-<xar:set name="modstatus">xarSessionGetVar('statusmsg')</xar:set>
+<xar:set name="modstatus">xarSession::getVar('statusmsg')</xar:set>
 <xar:base-include-javascript module="base" filename="checkall.js" position="head" />
 <xar:base-include-javascript module="roles" filename="xarTree.js" position="head" />
 <xar:base-include-javascript module="roles" filename="tree.js" position="head" />

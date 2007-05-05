@@ -631,7 +631,7 @@ function installer_admin_create_administrator()
     $data['phase_label'] = xarML('Create Administrator');
 
     sys::import('modules.roles.class.roles');
-    $role = xarFindRole('Admin');
+    $role = xarRoles::ufindRole('Admin');
 
     if (!xarVarFetch('create', 'isset', $create, FALSE, XARVAR_NOT_REQUIRED)) return;
     if (!$create) {
@@ -675,21 +675,19 @@ function installer_admin_create_administrator()
     }
 
     // assemble the args into an array for the role constructor
-    $pargs = array('uid'   => $role->getID(),
-                   'name'  => $name,
-                   'type'  => ROLES_USERTYPE,
-                   'uname' => $userName,
-                   'email' => $email,
-                   'pass'  => $pass,
-                   'state' => 3);
+    $args =  array('itemid'     => $role->getID(),
+                   'name'       => $name,
+                   'uname'      => $userName,
+                   'email'      => $email,
+                   // CHECKME: can we transform this in the dproperty
+                   'password'   => MD5($pass),
+                   'state'      => ROLES_STATE_ACTIVE);
 
     xarModSetVar('roles', 'lastuser', $userName);
     xarModSetVar('roles', 'adminpass', $pass);// <-- come again? why store the pass?
-    // create a role from the data
-    $role = new xarRole($pargs);
 
     //Try to update the role to the repository and bail if an error was thrown
-    $modifiedrole = $role->update();
+    $modifiedrole = $role->updateItem($args);
     if (!$modifiedrole) {return;}
 
     // Register Block types from modules installed before block apis (base)

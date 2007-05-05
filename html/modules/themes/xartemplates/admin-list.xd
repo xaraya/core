@@ -1,47 +1,47 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
 <xar:set name="modstatus">
-    xarSessionGetVar('statusmsg') 
+    xarSessionGetVar('statusmsg')
 </xar:set>
 <xar:set name="imgdisabled">
     <xar:mlstring>
-        Disabled 
+        Disabled
     </xar:mlstring>
 </xar:set>
 <xar:set name="imgactivate">
     <xar:mlstring>
-        Activate 
+        Activate
     </xar:mlstring>
 </xar:set>
 <xar:set name="imgdeactivate">
     <xar:mlstring>
-        Deactivate 
+        Deactivate
     </xar:mlstring>
 </xar:set>
 <xar:set name="imgsetdefault">
     <xar:mlstring>
-        Set As Default 
+        Set As Default
     </xar:mlstring>
 </xar:set>
 <xar:set name="imgupgrade">
     <xar:mlstring>
-        Upgrade 
+        Upgrade
     </xar:mlstring>
 </xar:set>
 <xar:set name="imginstall">
     <xar:mlstring>
-        Install 
+        Install
     </xar:mlstring>
 </xar:set>
 <xar:set name="imgremove">
     <xar:mlstring>
-        Remove 
+        Remove
     </xar:mlstring>
 </xar:set>
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:mlstring>
-            Themes Administration 
+            Themes Administration
         </xar:mlstring>
     </span>
 </div>
@@ -49,35 +49,35 @@
    <xar:template type="module" file="admin-menu" />
     <h2>
         <xar:mlstring>
-            View Themes 
+            View Themes
         </xar:mlstring>
     </h2>
     <p>
         <xar:mlstring>
-            Total listed: 
+            Total listed:
         </xar:mlstring>
         <xar:set name="modscount">
-            count($listrowsitems) 
+            count($listrowsitems)
         </xar:set>
-        #$modscount# 
+        #$modscount#
     </p>
     <form method="post" action="&xar-modurl-themes-admin-settings;">
         <!--
-            Theme List Sort and Filter Controls table 
+            Theme List Sort and Filter Controls table
         -->
         <table class="xar-fullwidth">
             <tr>
                 <th>
                     <label for="selstyle">
                         <xar:mlstring>
-                            Style 
+                            Style
                         </xar:mlstring>
                     </label>
                 </th>
                 <th>
                     <label for="filter">
                         <xar:mlstring>
-                            View 
+                            View
                         </xar:mlstring>
                     </label>
                 </th>
@@ -94,7 +94,7 @@
                 <th>
                     <label for="reload">
                         <xar:mlstring>
-                            Action 
+                            Action
                         </xar:mlstring>
                     </label>
                 </th>
@@ -105,11 +105,11 @@
                         <xar:foreach in="$style" key="$key" value="$value">
                             <xar:if condition="$key eq $selstyle">
                                 <option value="#$key#" selected="selected">
-                                    #$value# 
+                                    #$value#
                                 </option>
                                 <xar:else />
                                 <option value="#$key#">
-                                    #$value# 
+                                    #$value#
                                 </option>
                             </xar:if>
                         </xar:foreach>
@@ -120,11 +120,11 @@
                         <xar:foreach in="$filter" key="$key" value="$value">
                             <xar:if condition="$key eq $selfilter">
                                 <option value="#$key#" selected="selected">
-                                    #$value# 
+                                    #$value#
                                 </option>
                                 <xar:else />
                                 <option value="#$key#">
-                                    #$value# 
+                                    #$value#
                                 </option>
                             </xar:if>
                         </xar:foreach>
@@ -135,11 +135,11 @@
                         <xar:foreach in="$class" key="$key" value="$value">
                             <xar:if condition="$key eq $selclass">
                                 <option value="#$key#" selected="selected">
-                                    #$value# 
+                                    #$value#
                                 </option>
                                 <xar:else />
                                 <option value="#$key#">
-                                    #$value# 
+                                    #$value#
                                 </option>
                             </xar:if>
                         </xar:foreach>
@@ -160,19 +160,19 @@
         </table>
         <xar:if condition="$modstatus">
             <xar:comment>
-                lets display latest status on themes upgrades if any 
+                lets display latest status on themes upgrades if any
             </xar:comment>
             <p>
                 <xar:mlstring>
-                    Latest status - the following core modules have been successfully upgraded: 
+                    Latest status - the following core modules have been successfully upgraded:
                 </xar:mlstring>
             </p>
             <p>
-                #$modstatus# 
+                #$modstatus#
             </p>
         </xar:if>
         <xar:comment>
-            the Module Lists css-based styles 
+            the Module Lists css-based styles
         </xar:comment>
         <xar:if condition="$selstyle eq 'preview'">
 
@@ -311,7 +311,7 @@
             </xar:foreach>
         <xar:else />
             <xar:comment>
-                the Module Lists table-based styles 
+                the Module Lists table-based styles
             </xar:comment>
             <table class="xar-fullwidth">
                 <tr>
@@ -342,28 +342,28 @@
                     </th>
                     <th>
                         <xar:mlstring>
-                            Status 
+                            Status
                         </xar:mlstring>
                     </th>
                     <th>
                         <xar:mlstring>
-                            Actions 
+                            Actions
                         </xar:mlstring>
                     </th>
                 </tr>
                 <xar:foreach in="$listrowsitems" value="$modinfo">
                     <tr>
                         <xar:comment>
-                            please note any element can be a named anchor as long as it has id (and name for some browsers) so we shouldnt waste space with empty anchors here 
+                            please note any element can be a named anchor as long as it has id (and name for some browsers) so we shouldnt waste space with empty anchors here
                         </xar:comment>
                         <td>
                             <xar:comment>
-                                if module is active and configurable (admin type) make its name a link to module main admin function 
+                                if module is active and configurable (admin type) make its name a link to module main admin function
                             </xar:comment>
-                            #$modinfo['displayname']# 
+                            #$modinfo['displayname']#
                         </td>
                         <td class="xar-align-right">
-                            #$modinfo['version']# 
+                            #$modinfo['version']#
                         </td>
                         <td class="xar-align-center">
                             <xar:if condition="$useicons eq true">
@@ -378,13 +378,13 @@
                                 <xar:else />
                                 <a href="#$modinfo['infourlnew']#&amp;theme=print" onclick="window.open(this.getAttribute('href'));return false;">
                                     <xar:mlstring>
-                                        Info 
+                                        Info
                                     </xar:mlstring>
                                 </a>
                                 <noscript>
                                     <a href="#$modinfo['infourl']#">
                                         <xar:mlstring>
-                                            Info 
+                                            Info
                                         </xar:mlstring>
                                     </a>
                                 </noscript>
@@ -426,19 +426,19 @@
                                 </xar:if>
                                 <xar:else />
                                 <a href="#$modinfo['actionurl']#">
-                                    #$modinfo['actionlabel']# 
+                                    #$modinfo['actionlabel']#
                                 </a>
                                 <xar:if condition="$modinfo['state'] eq 2">
-                                    | 
+                                    |
                                     <a href="#$modinfo['removeurl']#">
-                                        #$modinfo['removelabel']# 
+                                        #$modinfo['removelabel']#
                                     </a>
                                 </xar:if>
                                 <xar:if condition="($modinfo['state'] eq 3) and ($modinfo['class'] eq 2) and $modinfo['directory'] ne $default">
-                                    | 
+                                    |
                                     <a href="#$modinfo['defaulturl']#">
                                         <xar:mlstring>
-                                            Set as Default 
+                                            Set as Default
                                         </xar:mlstring>
                                     </a>
                                 </xar:if>
@@ -453,18 +453,18 @@
 <xar:if condition="$useicons eq true">
     <div class="xar-mod-foot xar-align-center">
         <img src="#xarTplGetImage('set1/activate.png')#" alt="#$imgactivate#" class="xar-margin-thicksides" />
-        #$imgactivate# 
+        #$imgactivate#
         <img src="#xarTplGetImage('set1/deactivate.png')#" alt="#$imgdeactivate#" class="xar-margin-thicksides" />
-        #$imgdeactivate# 
+        #$imgdeactivate#
         <img src="#xarTplGetImage('set1/setdefault.png')#" alt="#$imgsetdefault#" class="xar-margin-thicksides" />
-        #$imgsetdefault# 
+        #$imgsetdefault#
         <img src="#xarTplGetImage('set1/upgrade.png')#" alt="#$imgupgrade#" class="xar-margin-thicksides" />
-        #$imgupgrade# 
+        #$imgupgrade#
         <img src="#xarTplGetImage('set1/initialise.png')#" alt="#$imginstall#" class="xar-margin-thicksides" />
-        #$imginstall# 
+        #$imginstall#
         <img src="#xarTplGetImage('set1/remove.png')#" alt="#$imgremove#" class="xar-margin-thicksides" />
-        #$imgremove# 
+        #$imgremove#
     </div>
 </xar:if>
-<xar:if condition="xarSessionSetVar('statusmsg', '')"></xar:if>
+<xar:if condition="xarSession::setVar('statusmsg', '')"></xar:if>
 </xar:template>

@@ -37,7 +37,7 @@ function privileges_adminapi_removemember($args)
     if (!$priv->removeMember($member)) {return;}
 
 // set the session variable
-    xarSessionSetVar('privileges_statusmsg', xarML('Removed from Privilege',
+    xarSession::setVar('privileges_statusmsg', xarML('Removed from Privilege',
                     'privileges'));
     return true;
 }

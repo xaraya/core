@@ -73,7 +73,7 @@ function privileges_admin_updateprivilege()
 
     xarModCallHooks('item', 'update', $id, '');
 
-    xarSessionSetVar('privileges_statusmsg', xarML('Privilege Modified',
+    xarSession::setVar('privileges_statusmsg', xarML('Privilege Modified',
                     'privileges'));
 
 // redirect to the next page

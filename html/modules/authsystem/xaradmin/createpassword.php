@@ -43,7 +43,7 @@ function authsystem_admin_createpassword()
     }
     else {
 
-        xarSessionSetVar('tmppass',$pass);
+        xarSession::setVar('tmppass',$pass);
         xarResponseRedirect(xarModURL('roles', 'admin', 'asknotification',
         array('uid' => array($uid => '1'), 'mailtype' => 'password', 'groupuid' => $groupuid, 'state' => $state)));
     }

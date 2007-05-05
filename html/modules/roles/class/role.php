@@ -1,6 +1,6 @@
 <?php
 /**
- * xarRole class
+ * Role class
  *
  * @package modules
  * @copyright (C) 2002-2007 The Digital Development Foundation
@@ -11,16 +11,17 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 
+sys::import('modules.dynamicdata.class.objects.base');
 sys::import('modules.roles.class.xarQuery');
 /**
- * xarRole: class for the role object
+ * Role: class for the role object
  *
  * Represents a single role (user or group)
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  */
-class xarRole extends Object
+class Role extends DataObject
 {
     public $uid;          //the id of this user or group
     public $name;         //the name of this user or group
@@ -46,7 +47,7 @@ class xarRole extends Object
     public $allprivileges;
 
     /**
-     * xarRole: constructor for the role object
+     * Role: constructor for the role object
      *
      * Retrieves a single role (user or group) from the roles repository
      *
@@ -54,9 +55,12 @@ class xarRole extends Object
      * @param array $pargs
      * @return object role
      */
-    public function __construct($pargs)
+//    public function __construct($pargs)
+    public function __construct(DataObjectDescriptor $descriptor)
     {
-        extract($pargs);
+        parent::__construct($descriptor);
+        $args = $descriptor->getArgs();
+        extract($args);
 
         $this->dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
@@ -70,7 +74,7 @@ class xarRole extends Object
         if (isset($itemtype)) $type = $itemtype;
         if (!isset($type)) $type = ROLES_USERTYPE;
         if (!isset($parentid)) $parentid = 1;
-        if (!isset($uname)) $uname = xarSessionGetVar('uid') . microtime();
+        if (!isset($uname)) $uname = xarSession::getVar('uid') . microtime();
         usleep(1);// <-- Huh? why?
         if (!isset($email)) $email = '';
         if (!isset($pass)) $pass = '';
@@ -82,7 +86,7 @@ class xarRole extends Object
         if (!isset($auth_module)) $auth_module = 0;
         if (!isset($basetype)) $basetype = 0;
 
-        $this->uid = (int) $uid;
+        $this->properties['id']->value = (int) $uid;
         $this->name = $name;
         $this->type = (int) $type;
         $this->parentid = (int) $parentid;
@@ -145,11 +149,11 @@ class xarRole extends Object
         if (!$q->run()) return;
 
         // Fetch the last inserted user ID, bail if an exception was thrown
-        $this->uid = $q->nextid($this->rolestable, 'id');
-        if (!$this->uid) return;
+        $this->properties['id']->value = $q->nextid($this->rolestable, 'id');
+        if (!$this->properties['id']->value) return;
 
         //set the email useage for this user to false
-        xarModSetUserVar('roles','usersendemails', false, $this->uid);
+        xarModSetUserVar('roles','usersendemails', false, $this->properties['id']->value);
         $parentpart = xarRoles::getRole($this->parentid);
         return $parentpart->addMember($this);
     }
@@ -324,7 +328,7 @@ class xarRole extends Object
         // no checks here. just do it
         $this->remove();
         $state = ROLES_STATE_DELETED;
-        $uname = xarML('deleted') . microtime(TRUE) .'.'. $this->uid;
+        $uname = xarML('deleted') . microtime(TRUE) .'.'. $this->properties['id']->value;
         $name = '';
         $pass = '';
         $email = '';
@@ -336,7 +340,7 @@ class xarRole extends Object
         $q->addfield('email',$email);
         $q->addfield('date_reg',$date_reg);
         $q->addfield('state',$state);
-        $q->eq('id',$this->uid);
+        $q->eq('id',$this->properties['id']->value);
         if(!$q->run()) return;
         return true;
     }
@@ -353,11 +357,11 @@ class xarRole extends Object
         static $stmt = null;  // For each uid, the query is the same, prepare it once.
 
         $cacheKey = "Privileges.ByUid";
-        if(xarVarIsCached($cacheKey,$this->uid)) {
-            return xarVarGetCached($cacheKey,$this->uid);
+        if(xarVarIsCached($cacheKey,$this->properties['id']->value)) {
+            return xarVarGetCached($cacheKey,$this->properties['id']->value);
         }
         // We'll have to get it.
-        xarLogMessage("ROLE: getting privileges for uid: $this->uid");
+        xarLogMessage("ROLE: getting privileges for uid: $this->properties['id']->value");
         // TODO: propagate the use of 'All'=null for realms through the API instead of the flip-flopping
         $xartable =& xarDBGetTables();
         $query = "SELECT  p.id, p.name, r.name, p.module_id,
@@ -368,7 +372,7 @@ class xarRole extends Object
                           acl.partid = ?";
 //                          echo $query;exit;
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array($this->uid));
+        $result = $stmt->executeQuery(array($this->properties['id']->value));
 
         sys::import('modules.privileges.class.privilege');
         $privileges = array();
@@ -386,7 +390,7 @@ class xarRole extends Object
                     'parentid' => 0));
             array_push($privileges, $perm);
         }
-        xarVarSetCached($cacheKey,$this->uid,$privileges);
+        xarVarSetCached($cacheKey,$this->properties['id']->value,$privileges);
         return $privileges;
     }
 
@@ -399,8 +403,8 @@ class xarRole extends Object
      */
     public function getInheritedPrivileges()
     {
-        // mrb: is this only dependent on $this->uid? if so, we can cache it too.
-        $ancestors = $this->getAncestors();
+        // mrb: is this only dependent on $this->properties['id']->value? if so, we can cache it too.
+        $ancestors = $this->getRoleAncestors();
         $inherited = array();
         foreach ($ancestors as $ancestor) {
             $perms = $ancestor->getAssignedPrivileges();
@@ -456,7 +460,7 @@ class xarRole extends Object
         // remove an entry from the privmembers table
         $query = "DELETE FROM $this->acltable
                   WHERE partid= ? AND permid= ?";
-        $bindvars = array($this->uid, $privilege->getID());
+        $bindvars = array($this->properties['id']->value, $privilege->getID());
         $this->dbconn->Execute($query,$bindvars);
         return true;
     }
@@ -484,10 +488,10 @@ class xarRole extends Object
                         rm.parentid = ?";
         // set up the query and get the data
         if ($state == ROLES_STATE_CURRENT) {
-             $bindvars = array(ROLES_USERTYPE,ROLES_STATE_DELETED,$this->uid);
+             $bindvars = array(ROLES_USERTYPE,ROLES_STATE_DELETED,$this->properties['id']->value);
 
         } else {
-             $bindvars = array(ROLES_USERTYPE, $state, $this->uid);
+             $bindvars = array(ROLES_USERTYPE, $state, $this->properties['id']->value);
         }
         if (isset($selection)) $query .= $selection;
         $query .= " ORDER BY " . $order;
@@ -502,14 +506,14 @@ class xarRole extends Object
         $result = $stmt->executeQuery($bindvars);
 
         // CHECKME: I suppose this is what you meant here ?
-        $parentid = $this->uid;
+        $parentid = $this->properties['id']->value;
         // arrange the data in an array of role objects
         $users = array();
         while ($result->next()) {
             list($uid, $name, $type, $uname, $email, $pass,
                 $date_reg, $val_code, $state, $auth_module) = $result->fields;
             // FIXME: if we do assoc fetching we get this for free
-            $pargs = array('uid' => $uid,
+            $args = array('uid' => $uid,
                            'name' => $name,
                            'type' => $type,
                            'parentid' => $parentid,
@@ -520,7 +524,10 @@ class xarRole extends Object
                            'val_code' => $val_code,
                            'state' => $state,
                            'auth_module' => $auth_module);
-            $users[] = new xarRole($pargs);
+            sys::import('modules.dynamicdata.class.objects.master');
+            $role = DataObjectMaster::getObject(array('name' => 'roles_users'));
+            $role->getItem(array('itemid' => $uid));
+            $user[] = $role;
         }
         // done
         return $users;
@@ -542,7 +549,7 @@ class xarRole extends Object
         $q->addtable($this->rolestable,'r');
         $q->addtable($this->rolememberstable,'rm');
         $q->join('r.id', 'rm.id');
-        $q->eq('rm.parentid', $this->uid);
+        $q->eq('rm.parentid', $this->properties['id']->value);
         if ($state == ROLES_STATE_CURRENT) {
             $q->ne('r.state', ROLES_STATE_DELETED);
         } else {
@@ -590,8 +597,8 @@ class xarRole extends Object
         if ($this->getID() == 1) return $parents;
 
         // if it's cached, we can return it
-        if(xarVarIsCached($cacheKey,$this->uid)) {
-            return xarVarGetCached($cacheKey,$this->uid);
+        if(xarVarIsCached($cacheKey,$this->properties['id']->value)) {
+            return xarVarGetCached($cacheKey,$this->properties['id']->value);
         }
 
         // if this is a user just perform a SELECT on the rolemembers table
@@ -599,13 +606,13 @@ class xarRole extends Object
                   FROM $this->rolestable r, $this->rolememberstable rm
                   WHERE r.id = rm.parentid AND rm.id = ?";
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array($this->uid));
+        $result = $stmt->executeQuery(array($this->properties['id']->value));
 
         // collect the table values and use them to create new role objects
         while ($result->next()) {
             list($uid, $name, $type, $parentid, $uname, $email, $pass,
                 $date_reg, $val_code, $state, $auth_module) = $result->fields;
-            $pargs = array('uid' => $uid,
+            $args = array('uid' => $uid,
                            'name' => $name,
                            'type' => $type,
                            'parentid' => $parentid,
@@ -616,10 +623,13 @@ class xarRole extends Object
                            'val_code' => $val_code,
                            'state' => $state,
                            'auth_module' => $auth_module);
-            $parents[] = new xarRole($pargs);
+            sys::import('modules.dynamicdata.class.objects.master');
+            $role = DataObjectMaster::getObject(array('name' => 'roles_groups'));
+            $role->getItem(array('itemid' => $uid));
+            $parents[] = $role;
         }
         // done
-        xarVarSetCached($cacheKey,$this->uid,$parents);
+        xarVarSetCached($cacheKey,$this->properties['id']->value,$parents);
         return $parents;
     }
 
@@ -629,7 +639,7 @@ class xarRole extends Object
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @return array of role objects. The objects can be queried with the getLevel() method to show their relationship (1=prents, 2=grandparents etc.).
      */
-    public function getAncestors()
+    public function getRoleAncestors()
     {
         // if this is the root return an empty array
         if ($this->getID() == 1) return array();
@@ -677,9 +687,9 @@ class xarRole extends Object
      */
     public function getDescendants($state = ROLES_STATE_CURRENT, $grpflag=0)
     {
-        $role = xarRoles::getRole($this->uid);
+        $role = xarRoles::getRole($this->properties['id']->value);
         $users = $role->getUsers($state);
-        $groups = xarRoles::getSubGroups($this->uid);
+        $groups = xarRoles::getSubGroups($this->properties['id']->value);
         $ua = array();
         foreach($users as $user){
             //using the ID as the key so that if a person is in more than one sub group they only get one email (mrb: email?)
@@ -754,7 +764,7 @@ class xarRole extends Object
      */
     public function isAncestor($role)
     {
-        $ancestors = $this->getAncestors();
+        $ancestors = $this->getRoleAncestors();
         foreach ($ancestors as $ancestor) {
             if ($role->isEqual($ancestor)) return true;
         }
@@ -798,95 +808,32 @@ class xarRole extends Object
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @todo since there are so many a generalized getter (magic __get() ) might be more pleasurable
      */
-    function getID()
-    {
-        return $this->uid;
-    }
-    function getName()
-    {
-        return $this->name;
-    }
-    function getUname()
-    {
-        return $this->uname;
-    }
-    function getType()
-    {
-        return $this->type;
-    }
-    function getUser()
-    {
-        return $this->uname;
-    }
-    function getEmail()
-    {
-        return $this->email;
-    }
-    function getPass()
-    {
-        return $this->pass;
-    }
-    function getState()
-    {
-        return $this->state;
-    }
-    function getDateReg()
-    {
-        return $this->date_reg;
-    }
-    function getValCode()
-    {
-        return $this->val_code;
-    }
-    function getAuthModule()
-    {
-        return $this->auth_module;
-    }
+    function getID() { return $this->properties['id']->value; }
+    function getName() { return $this->properties['name']->value; }
+    function getUname() { return $this->properties['name']->value; }
+    function getType() { return $this->properties['role_type']->value; }
+    function getUser() { return $this->properties['uname']->value; }
+    function getEmail() { return $this->properties['email']->value; }
+    function getPass() { return $this->properties['password']->value; }
+    function getState() { return $this->properties['state']->value; }
+    function getDateReg() { return $this->properties['datereg']->value; }
+    function getValCode() { return $this->properties['valcode']->value; }
+    function getAuthModule() { return $this->properties['authmodule']->value; }
     function getLevel()
     {
         return $this->parentlevel;
     }
 
-    function setName($var)
-    {
-        $this->name = $var;
-    }
-    function setUname($var)
-    {
-        $this->uname = $var;
-    }
-    function setParent($var)
-    {
-        $this->parentid = $var;
-    }
-    function setUser($var)
-    {
-        $this->uname = $var;
-    }
-    function setEmail($var)
-    {
-        $this->email = $var;
-    }
-    function setPass($var)
-    {
-        $this->pass = $var;
-    }
-    function setState($var)
-    {
-        $this->state = $var;
-    }
-    function setDateReg($var)
-    {
-        $this->date_reg = $var;
-    }
-    function setValCode($var)
-    {
-        $this->val_code = $var;
-    }
-    function setAuthModule($var)
-    {
-        $this->auth_module = $var;
-    }
+    function setName($var) { $this->properties['name']->value = $var; }
+    function setUname($var) { $this->properties['name']->value = $var; }
+    function setParent($var) { $this->properties['parentid']->value = $var; }
+    function setUser($var) { $this->properties['uname']->value = $var; }
+    function setEmail($var) { $this->properties['email']->value = $var; }
+    function setPass($var) { $this->properties['password']->value = $var; }
+    function setState($var) { $this->properties['state']->value = $var; }
+    function setDateReg($var) { $this->properties['datereg']->value = $var; }
+    function setValCode($var) { $this->properties['valcode']->value = $var; }
+    function setAuthModule($var) { $this->properties['authmodule']->value = $var; }
     function setLevel($var)
     {
         $this->parentlevel = $var;

@@ -39,10 +39,11 @@ class DataObject extends DataObjectMaster implements iDataObject
             $this->itemid = $args['itemid'];
 
         // see if we can access this object, at least in overview
-        if(!xarSecurityCheck(
+/*        if(!xarSecurityCheck(
             'ViewDynamicDataItems',1,'Item',
             $this->moduleid.':'.$this->itemtype.':'.$this->itemid)
         ) return;
+        */
     }
 
     /**

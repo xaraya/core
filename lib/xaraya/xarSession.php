@@ -127,7 +127,7 @@ interface IsessionHandler
     public function gc($maxlifetime);
 }
 
-class xarSession  extends Object implements IsessionHandler
+class xarSession extends Object implements IsessionHandler
 {
     const  PREFIX='XARSV';    // Reserved by us for our session vars
     const  COOKIE='XARAYASID';// Our cookiename

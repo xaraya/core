@@ -46,6 +46,7 @@ class FilePickerProperty extends SelectProperty
 
     function getOptions()
     {
+        if (empty($this->basedir)) return array();
         $dir = new RelativeDirectoryIterator($this->basedir);
 
         for($dir->rewind();$dir->valid();$dir->next()) {

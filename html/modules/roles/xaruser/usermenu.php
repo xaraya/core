@@ -46,7 +46,7 @@ function roles_user_usermenu($args)
             if (xarModGetVar('roles','setuserlastlogin')) {
             //only display it for current user or admin
                 if (xarUserIsLoggedIn() && xarUserGetVar('uid')==$uid) { //they should be but ..
-                    $userlastlogin = xarSessionGetVar('roles_thislastlogin');
+                    $userlastlogin = xarSession::getVar('roles_thislastlogin');
                     $usercurrentlogin = xarModGetUserVar('roles','userlastlogin',$uid);
                 }elseif (xarSecurityCheck('AdminRole',0,'Roles',$name) && xarModGetUserVar('roles','userlastlogin',$uid)){
                     $usercurrentlogin = '';

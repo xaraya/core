@@ -191,7 +191,7 @@ class xarRoles extends Object
         // create the parent object
         list($uid, $name, $type, $parentid, $uname, $email, $pass,
             $date_reg, $val_code, $state, $auth_module) = $result->fields;
-        $pargs = array('uid' => $uid,
+/*        $args = array('uid' => $uid,
                        'name' => $name,
                        'type' => $type,
                        'parentid' => $parentid,
@@ -202,8 +202,11 @@ class xarRoles extends Object
                        'val_code' => $val_code,
                        'state' => $state,
                        'auth_module' => $auth_module);
-        sys::import('modules.roles.class.role');
-        $parent = new xarRole($pargs);
+                       */
+        sys::import('modules.dynamicdata.class.objects.master');
+        $parent = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $type));
+        $parent->getItem(array('itemid' => $uid));
+
         // retrieve the child's data from the repository
         // Execute the query, bail if an exception was thrown
         $result = $stmt->executeQuery(array($childname));
@@ -212,7 +215,7 @@ class xarRoles extends Object
         // create the child object
         list($uid, $name, $type, $parentid, $uname, $email, $pass,
             $date_reg, $val_code, $state, $auth_module) = $result->fields;
-        $pargs = array('uid' => $uid,
+/*        $args = array('uid' => $uid,
                        'name' => $name,
                        'type' => $type,
                        'parentid' => $parentid,
@@ -223,7 +226,11 @@ class xarRoles extends Object
                        'val_code' => $val_code,
                        'state' => $state,
                        'auth_module' => $auth_module);
-        $child = new xarRole($pargs);
+                       */
+        sys::import('modules.dynamicdata.class.objects.master');
+        $child = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $type));
+        $child->getItem(array('itemid' => $uid));
+
        // done
         return $parent->addMember($child);
     }
@@ -388,7 +395,7 @@ class xarRoles extends Object
      * @param int    $state
      * @return object a role
      */
-    private static function _lookuprole($field,$value,$state=ROLES_STATE_ALL)
+    private static function _lookuprole($field,$value,$type=ROLES_USERTYPE,$state=ROLES_STATE_ALL)
     {
         // retrieve the object's data from the repository
         // set up and execute the query
@@ -414,7 +421,7 @@ class xarRoles extends Object
             $duv = xarModGetUserVar('roles',$key,$row['id']);
             if (!empty($duv)) $duvs[$key] = $duv;
         }
-        $pargs = array(
+/*        $args = array(
             'uid' =>         $row['id'],
             'name' =>        $row['name'],
             'type' =>        $row['type'],
@@ -427,9 +434,12 @@ class xarRoles extends Object
             'state' =>       $row['state'],
             'auth_module' => $row['auth_modid'],
             'duvs'          => $duvs    );
+            */
         // create and return the role object
-        sys::import('modules.roles.class.role');
-        return new xarRole($pargs);
+        sys::import('modules.dynamicdata.class.objects.master');
+        $role = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $row['type']));
+        $role->getItem(array('itemid' => $row['id']));
+        return $role;
     }
 }
 ?>

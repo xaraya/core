@@ -77,7 +77,7 @@ function privileges_admin_addprivilege()
 //Try to add the privilege and bail if an error was thrown
     if (!$priv->add()) {return;}
 
-    xarSessionSetVar('privileges_statusmsg', xarML('Privilege Added',
+    xarSession::setVar('privileges_statusmsg', xarML('Privilege Added',
                     'privileges'));
 
 // redirect to the next page

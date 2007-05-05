@@ -25,7 +25,7 @@ class ApiInstructionNode extends InstructionNode
         } else {
             $instruction = $this->instruction;
         }
-        
+
         if(!function_exists($funcName)) {
             $this->raiseError(XAR_BL_INVALID_INSTRUCTION,'Invalid API reference instruction or invalid function syntax.');
             return;

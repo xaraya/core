@@ -25,12 +25,12 @@ function roles_userapi_getmenulinks()
                                  'title' => xarML('View All Users'),
                                  'label' => xarML('Memberslist'));
 
-        }
-        if (xarUserIsLoggedIn()){
-            $menulinks[] = array('url'   => xarModURL('roles','user','account'),
-                                 'title' => xarML('Your Custom Configuration'),
-                                 'label' => xarML('Your Account'));
-        }
+    }
+    if (xarUserIsLoggedIn()){
+        $menulinks[] = array('url'   => xarModURL('roles','user','account'),
+                             'title' => xarML('Your Custom Configuration'),
+                             'label' => xarML('Your Account'));
+    }
     return $menulinks;
 }
 ?>
