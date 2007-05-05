@@ -37,7 +37,7 @@ function roles_admin_showprivileges()
 
 // -------------------------------------------------------------------
     // Get the inherited privileges
-    $ancestors = $role->getAncestors();
+    $ancestors = $role->getRoleAncestors();
     $inherited = array();
     // this assembles the irreducuble set of privileges
     // needs to be moved to a method of the Role class

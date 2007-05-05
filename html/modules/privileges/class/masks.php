@@ -390,7 +390,6 @@ class xarMasks extends Object
         else {
             $role = xarRoles::findRole($rolename);
         }
-
         // check if we already have the irreducible set of privileges for the current user
         if (!xarVarIsCached('Security.Variables','privilegeset.'.$mask->module) || !empty($rolename)) {
             // get the privileges and test against them
@@ -492,7 +491,6 @@ class xarMasks extends Object
     */
     public static function irreducibleset($coreset,$modid=null)
     {
-
         $roles = $coreset['roles'];
         $coreset['privileges'] = array();
         $coreset['children'] = array();

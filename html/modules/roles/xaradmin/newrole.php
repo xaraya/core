@@ -31,7 +31,6 @@ function roles_admin_newrole()
 
     $data['object'] = DataObjectMaster::getObject(array('module'   => 'roles',
                                                         'itemtype' => $data['basetype']));
-
     // call item new hooks
     $item = $data;
     $item['module'] = 'roles';

@@ -335,21 +335,26 @@ class xarPrivilege extends xarMask
         sys::import('modules.roles.class.roles');
         $roles = array();
         //      $ind = 0;
+    sys::import('modules.dynamicdata.class.objects.master');
         while($result->next()) {
             list($uid,$name,$type,$uname,$email,$pass,$auth_modid) = $result->fields;
             //          $ind = $ind + 1;
 
+            $role = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $item['type']));
+            $role->getItem(array('itemid' => $uid));
+            /*
             $role = new xarRole(array('uid' => $uid,
                                       'name' => $name,
                                       'type' => $type,
                                       'uname' => $uname,
                                       'email' => $email,
                                       'pass' => $pass,
-                                      // NOTE: CHANGED since 1.x! to and ID,
+                                      // NOTE: CHANGED since 1.x! to an id,
                                       // but i dont think it matters, auth module should probably
                                       // be phased out of this table completely
                                       'auth_module' => $auth_modid,
                                       'parentid' => 0));
+            */
             $roles[] = $role;
         }
         // done

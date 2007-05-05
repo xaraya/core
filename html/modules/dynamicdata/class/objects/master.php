@@ -911,7 +911,7 @@ class DataObjectMaster extends Object
       */
     static function &getAncestors(Array $args)
     {
-        if(!xarSecurityCheck('ViewDynamicDataItems')) return;
+//        if(!xarSecurityCheck('ViewDynamicDataItems')) return;
 
         extract($args);
 
