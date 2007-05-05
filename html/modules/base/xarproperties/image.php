@@ -48,6 +48,8 @@ class ImageProperty extends TextBoxProperty
             $this->value = $prop->value;
         } elseif ($this->inputtype == 'upload') {
             $prop = DataPropertyMaster::getProperty(array('type' => 'fileupload'));
+            $prop->basedir = $this->basedir;
+            $prop->filetype= str_replace (',','|',$this->extensions);
             $prop->fieldname = $this->fieldname;
             $prop->validateValue($value);
             $this->value = $prop->value;
