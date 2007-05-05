@@ -122,7 +122,7 @@ class xarRoles extends Object
      * @param integer $uid
      * @return object role
      */
-    public static function getRole($uid,$type=ROLES_USERTYPE)
+    public static function getRole($uid)
     {
         $cacheKey = 'Roles.ByUid';
         if(xarVarIsCached($cacheKey,$uid)) {
@@ -130,7 +130,7 @@ class xarRoles extends Object
         }
         // Need to get it from DB.
         // TODO: move caching to _lookuprole?
-        $r = self::_lookuprole('id',(int) $uid,$type);
+        $r = self::_lookuprole('id',(int) $uid);
         xarVarSetCached($cacheKey,$uid,$r);
         return $r;
     }
@@ -146,9 +146,9 @@ class xarRoles extends Object
      * @return object role
      * @todo cache this too?
      */
-    public static function findRole($name, $type=ROLES_USERTYPE)
+    public static function findRole($name)
     {
-        return self::_lookuprole('name',$name,$type,$state=ROLES_STATE_ACTIVE);
+        return self::_lookuprole('name',$name,$state=ROLES_STATE_ACTIVE);
     }
 
     /**
@@ -158,7 +158,7 @@ class xarRoles extends Object
      * @return object role
      * @todo cache this too?
      */
-    public static function ufindRole($uname, $type=ROLES_USERTYPE)
+    public static function ufindRole($uname)
     {
         return self::_lookuprole('uname',$uname,$type,$state=ROLES_STATE_ACTIVE);
     }
@@ -440,9 +440,7 @@ class xarRoles extends Object
             */
         // create and return the role object
         sys::import('modules.dynamicdata.class.objects.master');
-        if ($type == ROLES_USERTYPE) $name = 'roles_users';
-        else $name = 'roles_groups';
-        $role = DataObjectMaster::getObject(array('name' => $name));
+        $role = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $row['type']));
         $role->getItem(array('itemid' => $row['id']));
         return $role;
     }

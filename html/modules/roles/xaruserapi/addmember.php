@@ -24,8 +24,8 @@ function roles_userapi_addmember($args)
     if (!isset($gid)) throw new EmptyParameterException('gid');
     if (!isset($uid)) throw new EmptyParameterException('uid');
 
-    $group = xarRoles::getRole($gid,ROLES_GROUPTYPE);
-//    if($group->isUser()) throw new IDNotFoundException($gid);
+    $group = xarRoles::getRole($gid);
+    if($group->isUser()) throw new IDNotFoundException($gid);
 
     $user = xarRoles::getRole($uid);
 
