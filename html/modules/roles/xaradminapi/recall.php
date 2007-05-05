@@ -12,7 +12,7 @@
  */
 /**
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['uid'] uid of the role that is being called
+ * @param $args['id'] id of the role that is being called
  * @returns bool
  * @return true on success, false on failure
  */
@@ -21,7 +21,7 @@ function roles_adminapi_recall($args)
     // Get arguments
     extract($args);
 
-    if (!isset($uid) || $uid == 0) throw new EmptyParameterException('uid');
+    if (!isset($id) || $id == 0) throw new EmptyParameterException('id');
     if (!isset($state) || $state == 0) throw new EmptyParameterException('state');
 
     // Get database setup
@@ -31,21 +31,21 @@ function roles_adminapi_recall($args)
 
     $deleted = '[' . xarML('deleted') . ']';
 
-    $role = xarRoles::getRole($uid);
+    $role = xarRoles::getRole($id);
     $uname = explode($deleted,$role->getUser());
     $email = explode($deleted,$role->getEmail());
 //            echo $uname[0];exit;
     $query = "UPDATE $rolestable
               SET uname = ?, email = ?, state = ?
               WHERE id = ?";
-    $bindvars = array($uname[0],$email[0],$state,$uid);
+    $bindvars = array($uname[0],$email[0],$state,$id);
     $dbconn->Execute($query,$bindvars);
 
     // Let any hooks know that we have recalled this user.
     $item['module'] = 'roles';
-    $item['itemid'] = $uid;
+    $item['itemid'] = $id;
     $item['method'] = 'recall';
-    xarModCallHooks('item', 'create', $uid, $item);
+    xarModCallHooks('item', 'create', $id, $item);
 
     //finished successfully
     return true;
