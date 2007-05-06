@@ -32,7 +32,7 @@ function roles_adminapi_renamegroup($args)
     $role = xarRoles::getRole($uid);
     $role->setName($gname);
 
-    return $role->update();
+    return $role->updateItem();
 }
 
 ?>
