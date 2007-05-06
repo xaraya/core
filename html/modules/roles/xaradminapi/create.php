@@ -55,8 +55,7 @@ function roles_adminapi_create($args)
 
     sys::import('modules.dynamicdata.class.objects.master');
     $role = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $itemtype));
-    $role->checkInput();
-    $role->update();
+    $uid = $role->createItem($args);
 
     // Let any hooks know that we have created a new user.
     $item['module'] = 'roles';

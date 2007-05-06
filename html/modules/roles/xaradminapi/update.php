@@ -54,8 +54,7 @@ function roles_adminapi_update($args)
 
     sys::import('modules.dynamicdata.class.objects.master');
     $role = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $item['type']));
-    $role->checkInput();
-    $role->update();
+    $role->updateItem($args);
 
     $item['module'] = 'roles';
     $item['itemtype'] = $item['type'];
