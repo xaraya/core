@@ -340,7 +340,7 @@ class xarPrivilege extends xarMask
             list($uid,$name,$type,$uname,$email,$pass,$auth_modid) = $result->fields;
             //          $ind = $ind + 1;
 
-            $role = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $item['type']));
+            $role = DataObjectMaster::getObject(array('module' => 'roles', 'itemtype' => $type));
             $role->getItem(array('itemid' => $uid));
             /*
             $role = new xarRole(array('uid' => $uid,

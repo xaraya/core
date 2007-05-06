@@ -37,7 +37,6 @@ function privileges_admin_viewroles()
                                     'name'=>$role->getName(),
                                     'type'=>$role->getType(),
                                     'uname'=>$role->getUser(),
-                                    'pass'=>$role->getPass(),
                                     'auth_module'=>$role->getAuthModule()));
     }
 
