@@ -3,11 +3,11 @@
  * Send emails to users
  *
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 
@@ -15,7 +15,7 @@
  * Send emails to users by mailtype
  *
  * Ex: Lost Password, Confirmation
- *
+ * @todo FIXME: change name of uid parameter to something that implies plurality, review why we need k => v array
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param $args['uid'] array of uid of the user(s) array($uid => '1')
  * @param $args['mailtype'] type of the message to send (confirmation, deactivation, ...)
