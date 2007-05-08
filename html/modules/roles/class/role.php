@@ -293,6 +293,13 @@ class Role extends DataObject
         //Let's not remove the role yet.  Instead, we want to deactivate it
         // <mrb> i'm not a fan of the name munging
         $deleted = xarML('deleted');
+        $args = array(
+            'user' => "[" . $deleted . "]" . time(),
+            'email' => "[" . $deleted . "]" . time(),
+            'state' => ROLES_STATE_DELETED,
+        );
+        parent::updateItem($args);
+        /*
         $q = new xarQuery('UPDATE',$this->rolestable);
         $q->addfield('uname',$this->getUser() . "[" . $deleted . "]" . time());
         $q->addfield('email',$this->getEmail() . "[" . $deleted . "]" . time());
@@ -302,7 +309,7 @@ class Role extends DataObject
         // Execute the query, bail if an exception was thrown
         if (!$q->run()) return;
         // done
-
+*/
         // get all the privileges that were assigned to this role
         $privileges = $this->getAssignedPrivileges();
         // remove the privilege assignments for this role
