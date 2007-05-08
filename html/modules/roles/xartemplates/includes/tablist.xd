@@ -10,9 +10,9 @@
       <xar:mlstring>Manage role:</xar:mlstring>
     </dt>
 
-    <xar:set name="tabclass">$activetab=='displayrole'?'active':''</xar:set>
+    <xar:set name="tabclass">$activetab=='display'?'active':''</xar:set>
     <dd class="#$tabclass#">
-      <a href="&xar-modurl-roles-admin-displayrole;&amp;uid=#$uid#">
+      <a href="&xar-modurl-roles-admin-display;&amp;uid=#$uid#">
         <xar:mlstring>Display</xar:mlstring>
       </a>
     </dd>

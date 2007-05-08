@@ -12,7 +12,7 @@
 /**
  * display role
  */
-function roles_admin_displayrole()
+function roles_admin_display()
 {
     if (!xarVarFetch('itemtype','id',$itemtype, 1, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('uid','int:1:',$uid)) return;
