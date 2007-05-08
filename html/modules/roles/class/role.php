@@ -238,14 +238,10 @@ class Role extends DataObject
         return true;
     }
 
-    /**
-     * update: update a role
-     *
-     * @return bool
-     */
     public function updateItem(Array $data = array())
     {
-        die("S");
+        return parent::updateItem($data);
+        /*
         $q = new xarQuery('UPDATE',$this->rolestable);
         $q->addfield('name',$this->name);
         $q->addfield('type',$this->type);
@@ -260,6 +256,7 @@ class Role extends DataObject
         if (!$q->run()) return;
 
         return true;
+        */
     }
 
     /**

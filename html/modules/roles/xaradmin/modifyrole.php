@@ -19,33 +19,31 @@ sys::import('modules.dynamicdata.class.objects.master');
  */
 function roles_admin_modifyrole()
 {
-    // Call the Roles class and get the role to modify
-
     if (!xarVarFetch('uid', 'id', $uid, 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('itemid', 'id', $itemid, NULL, XARVAR_DONT_SET)) return;
     $uid = isset($itemid) ? $itemid : $uid;
 
 
-    if (!xarVarFetch('itemtype', 'id', $itemtype, ROLES_USERTYPE, XARVAR_DONT_SET)) return;
+//    if (!xarVarFetch('itemtype', 'id', $itemtype, ROLES_USERTYPE, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('duvs', 'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
 
 
     $object = xarRoles::getRole($uid);
     $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $object->getType()));
 
-    $itemid = $object->getItem(array('itemid' => $uid));
-    $values = $object->getFieldValues();
-    $name = $values['name'];
+//    $itemid = $object->getItem(array('itemid' => $uid));
+//    $values = $object->getFieldValues();
+//    $name = $values['name'];
 
-    $role = xarRoles::getRole($uid);
+//    $role = xarRoles::getRole($uid);
     // get the array of parents of this role
     // need to display this in the template
     // we also use this loop to fill the names array with groups that this group shouldn't be added to
     $parents = array();
     $names = array();
 
-    foreach ($role->getParents() as $parent) {
-        if(xarSecurityCheck('RemoveRole',0,'Relation',$parent->getName() . ":" . $name)) {
+    foreach ($object->getParents() as $parent) {
+        if(xarSecurityCheck('RemoveRole',0,'Relation',$parent->getName() . ":" . $object->getName())) {
             $parents[] = array('parentid' => $parent->getID(),
                                'parentname' => $parent->getName(),
                                'parentuname'=> $parent->getUname());
@@ -61,7 +59,7 @@ function roles_admin_modifyrole()
     foreach(xarRoles::getgroups() as $temp) {
         $nam = $temp['name'];
         // TODO: this is very inefficient. Here we have the perfect use case for embedding security checks directly into the SQL calls
-        if(!xarSecurityCheck('AttachRole',0,'Relation',$nam . ":" . $name)) continue;
+        if(!xarSecurityCheck('AttachRole',0,'Relation',$nam . ":" . $object->getName())) continue;
         if (!in_array($nam, $names) && $temp['uid'] != $uid) {
             $names[] = $nam;
             $groups[] = array('duid' => $temp['uid'],
@@ -69,10 +67,10 @@ function roles_admin_modifyrole()
         }
     }
 
-    if (!xarSecurityCheck('EditRole',0,'Roles',$name)) {
-        if (!xarSecurityCheck('ReadRole',1,'Roles',$name)) return;
+    if (!xarSecurityCheck('EditRole',0,'Roles',$object->getName())) {
+        if (!xarSecurityCheck('ReadRole',1,'Roles',$object->getName())) return;
     }
-    $data['frozen'] = !xarSecurityCheck('EditRole',0,'Roles',$name);
+    $data['frozen'] = !xarSecurityCheck('EditRole',0,'Roles',$object->getName());
 
     $data['itemtype'] = $object->getType();
 
@@ -81,14 +79,14 @@ function roles_admin_modifyrole()
     // call item modify hooks (for DD etc.)
     $item = $data;
     $item['module']= 'roles';
-    $item['itemtype'] = $itemtype;
+    $item['itemtype'] = $object->getType();
     $item['itemid']= $uid;
     $data['hooks'] = xarModCallHooks('item', 'modify', $uid, $item);
 
     $data['uid'] = $uid;
     $data['groups'] = $groups;
     $data['parents'] = $parents;
-    $data['haschildren'] = $role->countChildren();
+    $data['haschildren'] = $object->countChildren();
     $data['authid'] = xarSecGenAuthKey();
     return $data;
 }
