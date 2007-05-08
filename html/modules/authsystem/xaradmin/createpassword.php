@@ -32,7 +32,7 @@ function authsystem_admin_createpassword()
      }
      $role = xarRoles::getRole($uid);
      $modifiedstatus = $role->setPass($pass);
-     $modifiedrole = $role->update();
+     $modifiedrole = $role->updateItem();
      if (!$modifiedrole) {
         return;
      }

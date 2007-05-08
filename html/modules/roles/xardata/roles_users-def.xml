@@ -67,7 +67,7 @@
       <type>passwordbox</type>
       <default></default>
       <source>xar_roles.pass</source>
-      <status>65</status>
+      <status>33</status>
       <order>6</order>
       <validation>confirm</validation>
     </property>

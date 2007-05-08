@@ -34,7 +34,7 @@ function roles_adminapi_deletegroup($args)
     }
 
 // OK, go ahead
-    return $role->remove();
+    return $role->deleteItem();
 }
 
 ?>

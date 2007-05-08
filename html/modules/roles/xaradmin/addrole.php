@@ -83,7 +83,7 @@ function roles_admin_addrole()
     xarModSetUserVar('roles','usersendemails', false, $uid);
 
     // call item create hooks
-    // TODO: move to add() function
+    // TODO: move to createItem() function
     $item['module'] = 'roles';
     $item['itemtype'] = $itemtype;
     $item['itemid'] = $uid;

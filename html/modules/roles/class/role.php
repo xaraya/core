@@ -109,7 +109,7 @@ class Role extends DataObject
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @return bool
      */
-    public function add()
+    public function createItem(Array $data = array())
     {
         if (empty($this->name))
             throw new EmptyParameterException('name');
@@ -243,8 +243,9 @@ class Role extends DataObject
      *
      * @return bool
      */
-    public function update()
+    public function updateItem(Array $data = array())
     {
+        die("S");
         $q = new xarQuery('UPDATE',$this->rolestable);
         $q->addfield('name',$this->name);
         $q->addfield('type',$this->type);
@@ -268,7 +269,7 @@ class Role extends DataObject
      * @return bool
      * @todo flag illegal deletes
      */
-    public function remove()
+    public function deleteItem(Array $data = array())
     {
         // get a list of all relevant entries in the rolemembers table
         // where this role is the child

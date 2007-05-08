@@ -86,7 +86,7 @@ function roles_admin_deleterole()
 
         if (empty($check)) {
             // Try to remove the role and bail if an error was thrown
-            if (!$role->remove()) return;
+            if (!$role->deleteItem()) return;
 
             // call item delete hooks (for DD etc.)
             // TODO: move to remove() function

@@ -169,7 +169,7 @@ function roles_admin_purge($args)
 // --- do this in 2 stages. First, delete the role: this will update the user
 // --- count on all the role's parents
                 $role = xarRoles::getRole($id);
-                $role->remove();
+                $role->deleteItem();
 // --- now actually remove the data from the role's entry
                 $state = ROLES_STATE_DELETED;
                 $uname = $deleted . microtime(TRUE) .'.'. $id;
