@@ -15,8 +15,8 @@
  *
  * @author Marc Lutolf
  */
-function roles_admin_new()
+function roles_admin_newrole()
 {
-    return xarModFunc('roles', 'admin', 'newrole');
+    return xarModFunc('roles', 'admin', 'new');
 }
 ?>

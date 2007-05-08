@@ -130,7 +130,8 @@ function roles_admin_purge($args)
 
                }
                 if (!$skip) {
-                    $role['type'] = $role['type'] ? "Group" : "User";
+                    $types = xarModAPIFunc('roles','user','getitemtypes');
+                    $role['type'] = $types[$role['type']]['label'];
                     $role['unique'] = $unique;
                     $recallroles[] = $role;
                 }
