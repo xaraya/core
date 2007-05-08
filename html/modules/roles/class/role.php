@@ -111,6 +111,10 @@ class Role extends DataObject
      */
     public function createItem(Array $data = array())
     {
+        $this->checkInput();
+        $id = parent::createItem($data);
+
+        /*
         if (empty($this->name))
             throw new EmptyParameterException('name');
 
@@ -151,9 +155,9 @@ class Role extends DataObject
         // Fetch the last inserted user ID, bail if an exception was thrown
         $this->properties['id']->value = $q->nextid($this->rolestable, 'id');
         if (!$this->properties['id']->value) return;
-
+*/
         //set the email useage for this user to false
-        xarModSetUserVar('roles','usersendemails', false, $this->properties['id']->value);
+        xarModSetUserVar('roles','usersendemails', false, $id);
         $parentpart = xarRoles::getRole($this->parentid);
         return $parentpart->addMember($this);
     }

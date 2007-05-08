@@ -25,12 +25,11 @@ function roles_admin_newrole()
     if (!xarVarFetch('itemtype',    'int',    $itemtype, ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('duvs',        'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
 
+    $data['object'] = DataObjectMaster::getObject(array('module'   => 'roles', 'itemtype' => $itemtype));
     $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
     $types = xarModAPIFunc('roles','user','getitemtypes');
     $data['itemtype'] = $itemtype;
 
-    $data['object'] = DataObjectMaster::getObject(array('module'   => 'roles',
-                                                        'itemtype' => $data['basetype']));
     // call item new hooks
     $item = $data;
     $item['module'] = 'roles';

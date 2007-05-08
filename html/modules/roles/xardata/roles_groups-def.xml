@@ -55,7 +55,7 @@
       <id>43</id>
       <label>User Name</label>
       <type>textbox</type>
-      <default></default>
+      <default>time()</default>
       <source>xar_roles.uname</source>
       <status>67</status>
       <order>5</order>
