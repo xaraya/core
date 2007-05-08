@@ -62,7 +62,7 @@ class ImageListProperty extends SelectProperty
             $this->value = $value;
             return true;
         }
-        $this->invalid = xarML('selection');
+        $this->invalid = xarML('selection: #(1)', $this->name);
         $this->value = null;
         return false;
     }

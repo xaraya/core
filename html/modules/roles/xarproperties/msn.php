@@ -41,7 +41,7 @@ class MSNProperty extends URLIconProperty
             if (preg_match($regexp,$value)) {
                 $this->value = $value;
             } else {
-                $this->invalid = xarML('MSN Messenger');
+                $this->invalid = xarML('MSN Messenger: #(1)', $this->name);
                 $this->value = null;
                 return false;
             }

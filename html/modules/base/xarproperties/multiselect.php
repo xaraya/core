@@ -48,7 +48,7 @@ class MultiSelectProperty extends SelectProperty
         }
         foreach ($value as $val) {
             if (!in_array($val,$validlist)) {
-                $this->invalid = xarML('selection');
+                $this->invalid = xarML('selection: #(1)', $this->name);
                 $this->value = null;
                 return false;
             }

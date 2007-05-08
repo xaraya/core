@@ -67,13 +67,13 @@ class ExtendedDateProperty extends CalendarProperty
                             $value['hour'] > -1 && $value['hour'] < 24 && $value['min'] > -1 && $value['min'] < 61 && $value['sec'] > -1 && $value['sec'] < 61) {
                             $this->value .= ' ' . sprintf('%02d:%02d:%02d',$value['hour'],$value['min'],$value['sec']);
                         } else {
-                            $this->invalid = xarML('date');
+                            $this->invalid = xarML('date: #(1)', $this->name);
                             $this->value = null;
                             return false;
                         }
                     }
                 } else {
-                    $this->invalid = xarML('date');
+                    $this->invalid = xarML('date: #(1)', $this->name);
                     $this->value = null;
                     return false;
                 }

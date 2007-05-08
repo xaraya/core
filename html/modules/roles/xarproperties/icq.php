@@ -39,7 +39,7 @@ class ICQProperty extends URLIconProperty
             if (is_numeric($value)) {
                 $this->value = $value;
             } else {
-                $this->invalid = xarML('ICQ Number');
+                $this->invalid = xarML('ICQ Number: #(1)', $this->name);
                 $this->value = null;
                 return false;
             }

@@ -58,7 +58,7 @@ class NumberListProperty extends SelectProperty
         } elseif (is_numeric($value)) {
             $this->value = intval($value);
         } else {
-            $this->invalid = xarML('integer');
+            $this->invalid = xarML('integer: #(1)', $this->name);
             $this->value = null;
             return false;
         }

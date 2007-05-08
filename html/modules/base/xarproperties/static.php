@@ -30,7 +30,7 @@ class StaticTextProperty extends DataProperty
     public function validateValue($value = null)
     {
         if (isset($value) && $value != $this->value) {
-            $this->invalid = xarML('static text');
+            $this->invalid = xarML('static text: #(1)', $this->name);
             $this->value = null;
             return false;
         }

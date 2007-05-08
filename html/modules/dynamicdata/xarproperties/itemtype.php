@@ -52,7 +52,7 @@ class ItemTypeProperty extends NumberBoxProperty
         // check if this option really exists
         $isvalid = $this->getOption(true);
         if (!$isvalid) {
-            $this->invalid = xarML('item type');
+            $this->invalid = xarML('item type: #(1)', $this->name);
             $this->value = null;
             return false;
         } else {

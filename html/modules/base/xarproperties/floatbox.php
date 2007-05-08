@@ -56,7 +56,7 @@ class FloatBoxProperty extends TextBoxProperty
                 return false;
             }
         } else {
-            $this->invalid = xarML('float');
+            $this->invalid = xarML('float: #(1)', $this->name);
             $this->value = null;
             return false;
         }

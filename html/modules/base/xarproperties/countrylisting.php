@@ -37,7 +37,7 @@ class CountryListProperty extends SelectProperty
             if (is_string($value)) {
                 $this->value = $value;
             } else {
-                $this->invalid = xarML('Country Listing');
+                $this->invalid = xarML('Country Listing: #(1)', $this->name);
                 $this->value = null;
                 return false;
             }

@@ -40,7 +40,7 @@ class AfferoProperty extends URLIconProperty
             if (is_string($value)) {
                 $this->value = $value;
             } else {
-                $this->invalid = xarML('Affero Name');
+                $this->invalid = xarML('Affero Name: #(1)', $this->name);
                 $this->value = null;
                 return false;
             }

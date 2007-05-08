@@ -54,7 +54,7 @@ class UsernameProperty extends DataProperty
         }
 
         if (!is_numeric($value) || empty($user)) {
-            $this->invalid = xarML('user');
+            $this->invalid = xarML('user: #(1)', $this->name);
             $this->value = null;
             return false;
         } else {

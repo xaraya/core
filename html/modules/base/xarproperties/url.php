@@ -40,7 +40,7 @@ class URLProperty extends TextBoxProperty
            //let's process futher then
            //check it is not invalid eg html tag
             if (preg_match('/[<>"]/',$value)) {
-                $this->invalid = xarML('URL');
+                $this->invalid = xarML('URL: #(1)', $this->name);
                 $this->value = '';
                 return false;
             } else {

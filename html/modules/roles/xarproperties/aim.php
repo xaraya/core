@@ -40,7 +40,7 @@ class AIMProperty extends URLIconProperty
             if (is_string($value)) {
                 $this->value = $value;
             } else {
-                $this->invalid = xarML('AIM Address');
+                $this->invalid = xarML('AIM Address: #(1)', $this->name);
                 $this->value = null;
                 return false;
             }

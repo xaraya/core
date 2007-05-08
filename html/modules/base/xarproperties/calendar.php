@@ -57,7 +57,7 @@ class CalendarProperty extends DataProperty
                 $this->value -= xarMLS_userOffset($this->value) * 3600;
             }
         } else {
-            $this->invalid = xarML('date');
+            $this->invalid = xarML('date: #(1)', $this->name);
             $this->value = null;
             return false;
         }

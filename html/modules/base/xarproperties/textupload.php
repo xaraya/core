@@ -126,7 +126,7 @@ class TextUploadProperty extends DataProperty
             }
             if (empty($return[0])) {
                 $this->value = null;
-                $this->invalid = xarML('value');
+                $this->invalid = xarML('value: #(1)', $this->name);
                 return false;
             }
             // show magic link #...:NN# to file in text (cfr. transform hook in uploads module)

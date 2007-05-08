@@ -52,7 +52,7 @@ class EmailProperty extends TextBoxProperty
             if (preg_match($regexp,$value)) {
                 $this->value = $value;
             } else {
-                $this->invalid = xarML('E-Mail');
+                $this->invalid = xarML('E-Mail: #(1)', $this->name);
                 $this->value = $value;
                 return false;
             }

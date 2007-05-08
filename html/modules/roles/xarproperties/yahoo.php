@@ -38,7 +38,7 @@ class YahooProperty extends URLIconProperty
             if (preg_match('/^[a-z0-9_-]+$/i',$value)) { // TODO: refine this !?
                 $this->value = $value;
             } else {
-                $this->invalid = xarML('Yahoo Messenger');
+                $this->invalid = xarML('Yahoo Messenger: #(1)', $this->name);
                 $this->value = null;
                 return false;
             }
