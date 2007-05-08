@@ -13,7 +13,7 @@
 
 sys::import('modules.dynamicdata.class.objects.master');
 /**
- * modifyrole - modify role details
+ * modify - modify role details
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */

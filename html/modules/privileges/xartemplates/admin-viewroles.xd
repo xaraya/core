@@ -112,7 +112,7 @@
                         </xar:if>
                     </td>
                     <td>
-                        <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$role['roleid']#" title="#xarML('Go to this role')#">
+                        <a href="&xar-modurl-roles-admin-modify;&amp;uid=#$role['roleid']#" title="#xarML('Go to this role')#">
                             #$role['name']#
                         </a>
                     </td>

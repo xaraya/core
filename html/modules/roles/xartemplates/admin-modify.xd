@@ -176,7 +176,7 @@
                     <input type="hidden" name="object_tplmodule" id="tplmodule" value="roles" />
                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
                     <input type="submit" value="#xarML('Update')#" />
-                    <input type="hidden" name="return_url" value="#xarModURL('roles','admin','modifyrole',array('name' => $object->name))#" />
+                    <input type="hidden" name="return_url" value="#xarModURL('roles','admin','modify',array('name' => $object->name))#" />
                 </div>
             </xar:if>
         </form>
@@ -193,7 +193,7 @@
                 <tr>
                     <td>
                         <xar:if condition="$loop:item['parentid'] gt 4">
-                            <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$loop:item['parentid']#">
+                            <a href="&xar-modurl-roles-admin-modify;&amp;uid=#$loop:item['parentid']#">
                                 <xar:var name="loop:item.parentname" prep="true"/>
                             </a>
                         <xar:else />

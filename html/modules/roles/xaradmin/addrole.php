@@ -93,7 +93,7 @@ function roles_admin_addrole()
     if (!empty($return_url)) {
         xarResponseRedirect($return_url);
     } else {
-        xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole',array('itemtype' => $itemtype,
+        xarResponseRedirect(xarModURL('roles', 'admin', 'modify',array('itemtype' => $itemtype,
                                                                            'uid' => $uid)));
     }
 }

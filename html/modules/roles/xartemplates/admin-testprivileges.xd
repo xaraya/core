@@ -202,7 +202,7 @@
     <fieldset>
       <legend><xar:mlstring>Test Result</xar:mlstring></legend>
       <h4>
-        #$itemtypename# <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">'#$pname#'</a>
+        #$itemtypename# <a href="&xar-modurl-roles-admin-modify;&amp;uid=#$uid#">'#$pname#'</a>
         <xar:if condition="$testresult eq false">
           <xar:mlstring>Is Not Permitted</xar:mlstring>
           <xar:else />

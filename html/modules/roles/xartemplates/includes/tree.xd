@@ -34,7 +34,7 @@
                             <xar:set name="subgroups">$numofsubgroups == 1 ? xarML('subgroup') : xarML('subgroups')</xar:set>
                             <xar:set name="users">$node['users'] == 1 ? xarML('user') : xarML('users')</xar:set>
                             <xar:set name="description">$numofsubgroups . " " . $subgroups . ' | ' . $node['users'] . " " . $users</xar:set>
-                            <a href="#xarModURL('roles', 'admin', 'modifyrole', array('uid' => $node['uid']))#" title="#xarML('Modify this Group')#" style="margin: 0 0.25em 0 0.25em;">
+                            <a href="#xarModURL('roles', 'admin', 'modify', array('uid' => $node['uid']))#" title="#xarML('Modify this Group')#" style="margin: 0 0.25em 0 0.25em;">
                                 #$node['name']#
                             </a> #$description#
                         </xar:if>

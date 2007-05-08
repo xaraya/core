@@ -17,9 +17,9 @@
       </a>
     </dd>
 
-    <xar:set name="tabclass">$activetab=='modifyrole'?'active':''</xar:set>
+    <xar:set name="tabclass">$activetab=='modify'?'active':''</xar:set>
     <dd class="#$tabclass#">
-      <a href="&xar-modurl-roles-admin-modifyrole;&amp;uid=#$uid#">
+      <a href="&xar-modurl-roles-admin-modify;&amp;uid=#$uid#">
         <xar:mlstring>Modify</xar:mlstring>
       </a>
     </dd>

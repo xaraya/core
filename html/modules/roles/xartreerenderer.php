@@ -331,7 +331,7 @@ class xarTreeRenderer extends Object
             $numofsubgroups = count($this->roles->getsubgroups($this->treenode['uid']));
             $subgroups = $numofsubgroups == 1 ? xarML('subgroup') : xarML('subgroups');
             $users = $this->treenode['users'] == 1 ? xarML('user') : xarML('users');
-            $data['leafitemurl'] = xarModURL('roles', 'admin', 'modifyrole',
+            $data['leafitemurl'] = xarModURL('roles', 'admin', 'modify',
                             array('uid' => $this->treenode['uid']));
             $data['leafitemtitle'] = xarML("Modify this Group");
             $data['leafitemtext'] = $this->treenode['name'];

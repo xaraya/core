@@ -57,7 +57,7 @@ function roles_admin_updaterole()
         $item['module'] = 'roles';
         $item['itemtype'] = $itemtype;
         $data['hooks'] = xarModCallHooks('item','modify','',$item);
-        return xarTplModule('roles','admin','modifyrole', $data);
+        return xarTplModule('roles','admin','modify', $data);
     }*/
     // TODO: what about the role itemtype?
     if ($basetype == ROLES_USERTYPE) {
@@ -135,7 +135,7 @@ function roles_admin_updaterole()
     }
 
     if (empty($returnurl)) {
-        xarResponseRedirect(xarModURL('roles', 'admin', 'modifyrole', array('itemtype' => $itemtype,
+        xarResponseRedirect(xarModURL('roles', 'admin', 'modify', array('itemtype' => $itemtype,
                                                                             'uid' => $uid)));
     } else {
         xarResponseRedirect($returnurl);
