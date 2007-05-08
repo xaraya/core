@@ -1,0 +1,42 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<table class="xar-norm">
+  <tr>
+    <td>
+      <xar:mlstring>Minimum length</xar:mlstring>
+    </td>
+    <td>
+      <input type="text" name="#$name#[min]" id="#$id#_min" value="#$min#" size="4" tabindex="#$tabindex#" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <xar:mlstring>Maximum length</xar:mlstring>
+    </td>
+    <td>
+      <input type="text" name="#$name#[max]" id="#$id#_max" value="#$max#" size="4" tabindex="#$tabindex#" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <xar:mlstring>Regular expression</xar:mlstring>
+    </td>
+    <td>
+      <input type="text" name="#$name#[regex]" id="#$id#_regex" value="#$regex#" size="30" tabindex="#$tabindex#" />
+      <xar:mlstring>PCRE syntax, e.g. /^[A-Z]+\d*$/</xar:mlstring>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <xar:mlstring>Other rule</xar:mlstring>
+    </td>
+    <td>
+      <input type="text" name="#$name#[other]" id="#$id#_other" value="#$other#" size="50" tabindex="#$tabindex#" />
+    </td>
+  </tr>
+</table>
+
+<xar:if condition="!empty($invalid)">
+    <span class="xar-error">#$invalid#</span>
+</xar:if>
+</xar:template>

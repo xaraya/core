@@ -66,6 +66,10 @@ class Role extends DataObject
         $xartable =& xarDBGetTables();
         $this->rolestable = $xartable['roles'];
         $this->rolememberstable = $xartable['rolemembers'];
+
+        // dodgy. remove later on
+        sys::import('modules.privileges.xartables');
+        xarDB::importTables(privileges_xartables());
         $this->privilegestable = $xartable['privileges'];
         $this->acltable = $xartable['security_acl'];
         $this->realmstable = $xartable['security_realms'];
