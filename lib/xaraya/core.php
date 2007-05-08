@@ -28,16 +28,14 @@ define('XARCORE_VERSION_ID',  'Xaraya 2 series');
 define('XARCORE_VERSION_SUB', 'etiam infractus');
 
 // Handy if we're running from a mt working copy, prolly comment out on distributing
+$rev = 'unknown';
 if(file_exists('../_MTN/revision'))
 {
     $t= file('../_MTN/revision');
-    if (isset($t[4])) {
+    if (isset($t[4]))
         $rev = str_replace(array('old_revision [',']'),'',$t[4]);
-        define('XARCORE_VERSION_REV', $rev);
-    }
-} else {
-    define('XARCORE_VERSION_REV', 'unknown');
 }
+define('XARCORE_VERSION_REV', $rev);
 
 /*
  * System dependencies for (optional) systems
@@ -549,6 +547,7 @@ function xarFuncIsDisabled($funcName)
 /**
  * Convenience class for keeping track of debugger operation
  *
+ * @package debug
  * @todo this is close to exceptions or logging than core, see also notes earlier
 **/
 class xarDebug extends Object
@@ -561,6 +560,7 @@ class xarDebug extends Object
 /**
  * Convenience class for keeping track of core cached stuff
  *
+ * @package core
  * @todo this is closer to the caching subsystem than here
  * @todo i dont like the array shuffling
  * @todo separate file
