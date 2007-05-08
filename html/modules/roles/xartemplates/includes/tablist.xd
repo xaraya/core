@@ -24,9 +24,9 @@
       </a>
     </dd>
 
-    <xar:set name="tabclass">$activetab=='deleterole'?'active':''</xar:set>
+    <xar:set name="tabclass">$activetab=='delete'?'active':''</xar:set>
     <dd class="#$tabclass#">
-      <a href="&xar-modurl-roles-admin-deleterole;&amp;uid=#$uid#">
+      <a href="&xar-modurl-roles-admin-delete;&amp;uid=#$uid#">
         <xar:mlstring>Delete</xar:mlstring>
       </a>
     </dd>

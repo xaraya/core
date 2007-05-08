@@ -46,7 +46,7 @@
                 </a>
             </dd>
             <dd>
-                <a href="&xar-modurl-roles-admin-deleterole;&amp;uid=#$roleid#">
+                <a href="&xar-modurl-roles-admin-delete;&amp;uid=#$roleid#">
                     <xar:mlstring>Delete</xar:mlstring>
                 </a>
             </dd>

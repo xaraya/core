@@ -51,7 +51,7 @@
                 </a>
             </dd>
             <dd class="active">
-                <a href="&xar-modurl-roles-admin-deleterole;&amp;uid=#$uid#">
+                <a href="&xar-modurl-roles-admin-delete;&amp;uid=#$uid#">
                     <xar:mlstring>Delete</xar:mlstring>
                 </a>
             </dd>
@@ -80,7 +80,7 @@
             </xar:ml>
         </p>
     <xar:else />
-        <form method="post" action="&xar-modurl-roles-admin-deleterole;" enctype="application/x-www-form-urlencoded">
+        <form method="post" action="&xar-modurl-roles-admin-delete;" enctype="application/x-www-form-urlencoded">
 
             <h3 class="xar-align-center">
                 <xar:ml>

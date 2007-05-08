@@ -312,7 +312,7 @@
                             <xar:if condition="!$loop:item['frozen']">
                                 <a href="&xar-modurl-roles-admin-createpassword;&amp;uid=#$loop:item.uid#&amp;state=#$state#&amp;groupuid=#$groupuid#" title="#xarML('Generate a new password for this User')#"><img src="modules/roles/xarimages/passicon.gif" class="xar-valign-middle"/></a>&#160;
                                 <a href="&xar-modurl-roles-admin-modify;&amp;uid=#$loop:item.uid#" title="#xarML('Modify this user')#"><img src="modules/roles/xarimages/infoicon.gif" class="xar-valign-middle"/></a>&#160;
-                                <a href="&xar-modurl-roles-admin-deleterole;&amp;uid=#$loop:item.uid#" title="#xarML('Delete this User')#"><img src="modules/roles/xarimages/delete.png" class="xar-valign-middle"/></a>&#160;
+                                <a href="&xar-modurl-roles-admin-delete;&amp;uid=#$loop:item.uid#" title="#xarML('Delete this User')#"><img src="modules/roles/xarimages/delete.png" class="xar-valign-middle"/></a>&#160;
                             <xar:else />
                                 <img src="modules/roles/xarimages/passicon.gif" class="xar-valign-middle"/>&#160;
                                 <img src="modules/roles/xarimages/passicon.gif" class="xar-valign-middle"/>&#160;

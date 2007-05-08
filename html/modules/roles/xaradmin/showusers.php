@@ -176,7 +176,7 @@ function roles_admin_showusers()
     $data['users']      = $users;
     $data['changestatuslabel'] = xarML('Change Status');
     $data['authid']     = xarSecGenAuthKey();
-    $data['removeurl']  = xarModURL('roles', 'admin','deleterole', array('roleid' => $uid));
+    $data['removeurl']  = xarModURL('roles', 'admin','delete', array('roleid' => $uid));
     $filter['startnum'] = '%%';
     $filter['uid']      = $uid;
     $filter['state']    = $data['state'];

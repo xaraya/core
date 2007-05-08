@@ -30,7 +30,7 @@
                     <xar:set name="seccheck">xarSecurityCheck('DeleteRole',0,'Roles',$node->name)</xar:set>
                     <xar:if condition="($seccheck eq false) or ($users gt 0) or ($drawchildren eq false)">
                     <xar:else />
-                        <a href="#xarModURL('roles', 'admin', 'deleterole', array('uid' => $uid))#" title="#xarML('Delete this Group')#" style="margin: 0 0.25em 0 0.25em;">
+                        <a href="#xarModURL('roles', 'admin', 'delete', array('uid' => $uid))#" title="#xarML('Delete this Group')#" style="margin: 0 0.25em 0 0.25em;">
                             <img src="#xarTplGetImage('delete.png')#" alt="" />
                         </a>
                     </xar:if>

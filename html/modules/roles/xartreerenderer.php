@@ -274,7 +274,7 @@ class xarTreeRenderer extends Object
         if (!xarSecurityCheck('DeleteRole',0,'Roles',$this->treenode['name']) || ($this->treenode['users'] > 0) || (!$this->drawchildren)) {
             return xarTplObject('roles', 'spacer', 'large');
         } else {
-            $data['leafitemurl'] = xarModURL('roles', 'admin', 'deleterole',
+            $data['leafitemurl'] = xarModURL('roles', 'admin', 'delete',
                             array('uid' => $this->treenode['uid']));
             $data['leafitemtitle'] = xarML('Delete this Group');
             $data['leafitemimage'] = xarTplGetImage('delete.png');
