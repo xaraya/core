@@ -103,6 +103,7 @@ class DTDIdentifiers extends Object
          'svg11-tiny'           => '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1 Tiny//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11-tiny.dtd">',
          'xhtml-math-svg'       => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN" "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd">',
          'svg-xhtml-math'       => '<!DOCTYPE svg:svg PUBLIC  "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN" "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd">',
+         'rss'                  => '<!DOCTYPE rss PUBLIC "-//Netscape Communications//DTD RSS 0.91//EN"   "http://my.netscape.com/publish/formats/rss-0.91.dtd">',
          'none'                 => ''
         );
         if(isset($dtds[$key])) {

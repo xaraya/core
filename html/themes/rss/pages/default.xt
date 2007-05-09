@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE blocklayout PUBLIC "-//XAR//DTD BL 1.0 Strict//EN" "http://xaraya.com/bl1/DTD/bl1-strict.dtd">
 <?xar type="page" ?>
-<xar:blocklayout version="1.0" content="text/xml" xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:admin="http://webns.net/mvcb/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-     <channel>
-        <title>#xarVarTransform($tpl:pageTitle, 'HTML', 'XML')#</title>
+<xar:blocklayout version="1.0" content="text/xml" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="rss" >
+  <rss version="2.0"
+       xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+       xmlns:admin="http://webns.net/mvcb/"        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+       xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>#$tpl:pageTitle#</title>
         <link>#xarVarPrepForDisplay(xarServerGetBaseURL())#</link>
-        <description>#xarVarTransform(xarModGetVar('themes','SiteSlogan'), 'HTML', 'XML')#</description>
-        <dc:language>en-us</dc:language> 
-        <dc:creator>#xarVarTransform(xarModGetVar('mail', 'adminname'), 'HTML', 'XML')#</dc:creator> 
-        <admin:generatorAgent rdf:resource="http://www.xaraya.org" /> 
-        <admin:errorReportsTo rdf:resource="mailto:#xarVarTransform(xarModGetVar('mail', 'adminmail'), 'HTML', 'XML')#" /> 
-        <sy:updatePeriod>hourly</sy:updatePeriod> 
-        <sy:updateFrequency>1</sy:updateFrequency> 
+        <description>#xarModGetVar('themes','SiteSlogan')#</description>
+        <dc:language>en-us</dc:language>
+        <dc:creator>#xarModGetVar('mail', 'adminname')#</dc:creator>
+        <admin:generatorAgent rdf:resource="http://www.xaraya.org" />
+        <admin:errorReportsTo rdf:resource="mailto:#xarModGetVar('mail', 'adminmail')#" />
+        <sy:updatePeriod>hourly</sy:updatePeriod>
+        <sy:updateFrequency>1</sy:updateFrequency>
         <docs>http://backend.userland.com/rss</docs>
         <xar:module class="modulespace" main="true" />
     </channel>
