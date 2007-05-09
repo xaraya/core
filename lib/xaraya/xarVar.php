@@ -13,8 +13,7 @@
 /**
  * Exceptions for this subsystem
  *
- */
-
+**/
 class VariableValidationException extends ValidationExceptions
 {
     protected $message = 'The variable "#(1)" [Value: "#(2)"] did not comply with the required validation: "#(3)"';
@@ -53,7 +52,7 @@ define('XARVAR_PREP_TRIM',        8);
  * @return bool
  * @todo <johnny> fix the load level stuff here... it's inconsistant to the rest of the core
  * @todo <mrb> remove the two settings allowablehtml and fixhtmlentities
- */
+**/
 function xarVar_init(&$args, $whatElseIsGoingLoaded)
 {
     /*
@@ -93,7 +92,7 @@ function xarVar_init(&$args, $whatElseIsGoingLoaded)
  * @access public
  * @param arrays The arrays storing information equivalent to the xarVarFetch interface
  * @return array With the respective exceptions in case of failure
- */
+**/
 function xarVarBatchFetch()
 {
 
@@ -324,24 +323,19 @@ function xarVarValidate($validation, &$subject, $supress = false, $name = '')
  *
  */
 
-/**
+/**@+
  * Wrapper functions for var caching as in Xaraya 1 API
  * See the documentation of protected xarCore::*Cached for details
  *
  * @access public
  * @see xarCore
  */
-function xarVarIsCached($cacheKey,  $name)
-{ return xarCore::isCached($cacheKey, $name);         }
-function xarVarGetCached($cacheKey, $name)
-{ return xarCore::getCached($cacheKey, $name);        }
-function xarVarSetCached($cacheKey, $name, $value)
-{ return xarCore::setCached($cacheKey, $name, $value);}
-function xarVarDelCached($cacheKey, $name)
-{ return xarCore::delCached($cacheKey, $name);        }
-function xarVarFlushCached($cacheKey)
-{ return xarCore::flushCached($cacheKey);             }
-
+function xarVarIsCached($cacheKey,  $name)         { return xarCore::isCached($cacheKey, $name);         }
+function xarVarGetCached($cacheKey, $name)         { return xarCore::getCached($cacheKey, $name);        }
+function xarVarSetCached($cacheKey, $name, $value) { return xarCore::setCached($cacheKey, $name, $value);}
+function xarVarDelCached($cacheKey, $name)         { return xarCore::delCached($cacheKey, $name);        }
+function xarVarFlushCached($cacheKey)              { return xarCore::flushCached($cacheKey);             }
+/**@-*/
 
 /**
  * Changes one variable from one context to another
@@ -354,7 +348,7 @@ function xarVarFlushCached($cacheKey)
  * @throws EmptyParameterException
  * @todo  Would it be useful to be able to transform arrays of strings at once?
  * @todo  This is a bit weird, perhaps use a factory class and hide the loading details?
- */
+**/
 function xarVarTransform ($string, $sourceContext, $targetContext)
 {
     if (empty($sourceContext)) throw new EmptyParameterException('sourceContext');
