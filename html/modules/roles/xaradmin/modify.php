@@ -67,12 +67,12 @@ function roles_admin_modify()
         }
     }
 
-        xarSession::setVar('ddcontext.roles', array(
-                                                    'return_url' => xarServerGetCurrentURL(),
-                                                    'parents' => $parents,
-                                                    'groups' => $groups,
-                                                    'basetype' => $data['basetype'],
-                                                    ));
+    xarSession::setVar('ddcontext.roles', array(
+                                            'return_url' => xarServerGetCurrentURL(),
+                                            'parents' => $parents,
+                                            'groups' => $groups,
+                                            'basetype' => $data['basetype'],
+                                                ));
 
     if (!xarSecurityCheck('EditRole',0,'Roles',$object->getName())) {
         if (!xarSecurityCheck('ReadRole',1,'Roles',$object->getName())) return;
