@@ -22,7 +22,7 @@ function roles_admin_showprivileges()
     // Security Check
     if (!xarSecurityCheck('EditRole')) return;
     // Call the Roles class and get the role
-    $role = xarRoles::getRole($uid);
+    $role = xarRoles::get($uid);
 
     // get the array of parents of this role
     // need to display this in the template

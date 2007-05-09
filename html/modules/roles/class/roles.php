@@ -136,6 +136,12 @@ class xarRoles extends Object
     }
 
     /**
+     * Wrapper functions to support Xaraya 1 API for roles
+     */
+    function get($uid) {return getRole::get($uid);}
+
+
+    /**
      * findRole: finds a single role based on its name
      *
      * Retrieves a single role object from the Roles repository

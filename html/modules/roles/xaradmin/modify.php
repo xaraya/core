@@ -28,14 +28,14 @@ function roles_admin_modify()
     if (!xarVarFetch('duvs', 'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
 
 
-    $object = xarRoles::getRole($uid);
+    $object = xarRoles::get($uid);
     $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $object->getType()));
 
 //    $itemid = $object->getItem(array('itemid' => $uid));
 //    $values = $object->getFieldValues();
 //    $name = $values['name'];
 
-//    $role = xarRoles::getRole($uid);
+//    $role = xarRoles::get($uid);
     // get the array of parents of this role
     // need to display this in the template
     // we also use this loop to fill the names array with groups that this group shouldn't be added to

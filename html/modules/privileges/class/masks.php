@@ -385,7 +385,7 @@ class xarMasks extends Object
             if (empty($userID)) {
                 $userID = _XAR_ID_UNREGISTERED;
             }
-            $role = xarRoles::getRole($userID);
+            $role = xarRoles::get($userID);
         }
         else {
             $role = xarRoles::findRole($rolename);

@@ -31,8 +31,8 @@ function roles_admin_addmember()
     if (!xarVarFetch('uid',    'int:1:', $uid)) return;
     if (!xarVarFetch('roleid', 'int:1:', $roleid)) return;
     // call the Roles class and get the parent and child objects
-    $role   = xarRoles::getRole($roleid);
-    $member = xarRoles::getRole($uid);
+    $role   = xarRoles::get($roleid);
+    $member = xarRoles::get($uid);
 
     // Security Check
     if(!xarSecurityCheck('AttachRole',1,'Relation',$role->getName() . ":" . $member->getName())) return;

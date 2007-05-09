@@ -24,7 +24,7 @@ function roles_adminapi_deletegroup($args)
 // Security Check
     if(!xarSecurityCheck('EditRole')) return;
 
-    $role = xarRoles::getRole($uid);
+    $role = xarRoles::get($uid);
 
    // Prohibit removal of any groups the system needs
    $defaultgroup = xarModGetVar('roles','defaultgroup');

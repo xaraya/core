@@ -25,10 +25,10 @@ function roles_adminapi_deleteuser($args)
 
     if(!xarSecurityCheck('DeleteRole')) return;
 
-    $group = xarRoles::getRole($gid);
+    $group = xarRoles::get($gid);
     if($group->isUser()) throw new IDNotFoundException($gid,'The group with id "#(1)" was not found');
 
-    $user = xarRoles::getRole($uid);
+    $user = xarRoles::get($uid);
     // Fix to bug 2889 credit to Ben Page
     if(count($user->getParents()) == 1) {
         throw new ForbiddenOperationException(null,'The user has one parent group, removal is not allowed');

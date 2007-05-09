@@ -30,7 +30,7 @@ function roles_admin_updaterole()
 
     $object->getItem(array('itemid' => $uid));
     //Save the old state and type
-    $oldrole = xarRoles::getRole($uid);
+    $oldrole = xarRoles::get($uid);
     $oldstate = $oldrole->getState();
     $oldtype = $oldrole->getType();
     $oldpass = $oldrole->getPass();

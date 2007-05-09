@@ -24,7 +24,7 @@ function roles_userapi_getancestors($args)
 
     if(!xarSecurityCheck('ReadRole')) return;
 
-    $role = xarRoles::getRole($uid);
+    $role = xarRoles::get($uid);
 
     $ancestors = $role->getRoleAncestors();
 

@@ -41,7 +41,7 @@ function roles_userapi_getuserhome($args)
     if ($notdone) {
            // take the first userhome url encountered.
            // TODO: what would be a more logical choice?
-            $role = xarRoles::getRole($itemid);
+            $role = xarRoles::get($itemid);
             foreach ($role->getParents() as $parent) {
                 return xarModAPIFunc('roles','user','getuserhome',array('itemid' => $parent->getID()));
                 break;

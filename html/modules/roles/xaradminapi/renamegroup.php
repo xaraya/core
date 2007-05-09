@@ -29,7 +29,7 @@ function roles_adminapi_renamegroup($args)
 // Security Check
     if(!xarSecurityCheck('EditRole')) return;
 
-    $role = xarRoles::getRole($uid);
+    $role = xarRoles::get($uid);
     $role->setName($gname);
 
     return $role->updateItem();

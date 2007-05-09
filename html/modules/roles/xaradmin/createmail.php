@@ -29,7 +29,7 @@ function roles_admin_createmail()
     if ($uid < 1) {
         $type = 'selection';
     } else {
-        $role  = xarRoles::getRole($uid);
+        $role  = xarRoles::get($uid);
         $type  = $role->getType() ? 'selection' : 'single';
     }
 
@@ -124,7 +124,7 @@ function roles_admin_createmail()
         // Check if we also want to send to subgroups
         // In this case we'll just pick out the descendants in the same state
         if ($uid != 0 && ($data['includesubgroups'] == 1)) {
-            $parentgroup = xarRoles::getRole($uid);
+            $parentgroup = xarRoles::get($uid);
             $descendants = $parentgroup->getDescendants($state);
 
             while (list($key, $user) = each($descendants)) {

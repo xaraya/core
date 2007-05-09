@@ -50,9 +50,9 @@ function roles_admin_purge($args)
         {
  // --- recall users and groups
             if(!xarSecurityCheck('DeleteRole')) return;
-            if ($data['groupid'] != 0) $parentgroup = xarRoles::getRole($data['groupid']);
+            if ($data['groupid'] != 0) $parentgroup = xarRoles::get($data['groupid']);
             foreach ($recalluids as $id => $val) {
-                $role = xarRoles::getRole($id);
+                $role = xarRoles::get($id);
                 $state = $role->getType() ? ROLES_STATE_ACTIVE : $data['recallstate'];
                 $recalled = xarModAPIFunc('roles','admin','recall',
                     array('id' => $id,
@@ -169,7 +169,7 @@ function roles_admin_purge($args)
                 if($id == xarModGetVar('roles','admin')) continue;
 // --- do this in 2 stages. First, delete the role: this will update the user
 // --- count on all the role's parents
-                $role = xarRoles::getRole($id);
+                $role = xarRoles::get($id);
                 $role->deleteItem();
 // --- now actually remove the data from the role's entry
                 $state = ROLES_STATE_DELETED;

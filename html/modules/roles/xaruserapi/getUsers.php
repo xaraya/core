@@ -26,7 +26,7 @@ function roles_userapi_getUsers($args)
 // Security Check
     if(!xarSecurityCheck('ReadRole')) return;
 
-    $role = xarRoles::getRole($uid);
+    $role = xarRoles::get($uid);
 
     $users = $role->getUsers();
 

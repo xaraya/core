@@ -22,7 +22,7 @@ function roles_admin_removeprivilege()
     if (!xarVarFetch('roleid',       'int:1:', $roleid)) return;
     if (!xarVarFetch('confirmation', 'str:1:', $confirmation, '', XARVAR_NOT_REQUIRED)) return;
     // Call the Roles class and get the role
-    $role  = xarRoles::getRole($roleid);
+    $role  = xarRoles::get($roleid);
 
     // get the array of parents of this role
     // need to display this in the template

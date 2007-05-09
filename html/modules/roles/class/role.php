@@ -162,7 +162,7 @@ class Role extends DataObject
 */
         //set the email useage for this user to false
         xarModSetUserVar('roles','usersendemails', false, $id);
-        $parentpart = xarRoles::getRole($this->parentid);
+        $parentpart = xarRoles::get($this->parentid);
         return $parentpart->addMember($this);
     }
 
@@ -288,7 +288,7 @@ class Role extends DataObject
         // a simple SQL DELETE
         while ($result->next()) {
             list($parentid) = $result->fields;
-            $parentpart = xarRoles::getRole($parentid);
+            $parentpart = xarRoles::get($parentid);
             // Check that a parent was returned
             if ($parentpart) {
                 $parentpart->removeMember($this);
@@ -700,7 +700,7 @@ class Role extends DataObject
      */
     public function getDescendants($state = ROLES_STATE_CURRENT, $grpflag=0)
     {
-        $role = xarRoles::getRole($this->properties['id']->value);
+        $role = xarRoles::get($this->properties['id']->value);
         $users = $role->getUsers($state);
         $groups = xarRoles::getSubGroups($this->properties['id']->value);
         $ua = array();
@@ -710,7 +710,7 @@ class Role extends DataObject
         }
         //Get the sub groups and go for another round
         foreach($groups as $group){
-            $role = xarRoles::getRole($group['uid']);
+            $role = xarRoles::get($group['uid']);
             if ($grpflag) {
                 $ua[$group['uid']] = $role;
             }

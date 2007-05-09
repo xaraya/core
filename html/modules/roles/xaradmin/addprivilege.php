@@ -26,7 +26,7 @@ function roles_admin_addprivilege()
     if (!xarSecConfirmAuthKey()) return;
 
     // Call the Roles class and get the role
-    $role = xarRoles::getRole($roleid);
+    $role = xarRoles::get($roleid);
 
     // Call the Privileges class and get the privilege
     sys::import('modules.privileges.class.privileges');

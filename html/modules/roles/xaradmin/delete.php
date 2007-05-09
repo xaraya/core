@@ -27,7 +27,7 @@ function roles_admin_delete()
     // Call the Roles class
     sys::import('modules.roles.class.roles');
     // get the role to be deleted
-    $role = xarRoles::getRole($uid);
+    $role = xarRoles::get($uid);
     $itemtype = $role->getType();
 
     // get the array of parents of this role

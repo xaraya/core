@@ -72,7 +72,7 @@ function roles_admin_updatestate()
     $uidnotify = array();
     foreach ($uids as $uid => $val) {
         //check if the user must be updated :
-        $role = xarRoles::getRole($uid);
+        $role = xarRoles::get($uid);
         if ($role->getState() != $data['status']) {
             if ($data['status'] == ROLES_STATE_NOTVALIDATED) $valcode = xarModAPIFunc('roles','user','makepass');
             else $valcode = null;

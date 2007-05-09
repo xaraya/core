@@ -104,7 +104,7 @@ function roles_admin_sitelock($args)
             $rolesarray = array();
             for($i=0; $i < $rolesCount; $i++) {
                 if($roles[$i]['notify'] == 1) {
-                    $rolesarray[] = xarRoles::getRole($roles[$i]['uid']);
+                    $rolesarray[] = xarRoles::get($roles[$i]['uid']);
                 }
             }
             //Check each if it is a user or a group
@@ -113,7 +113,7 @@ function roles_admin_sitelock($args)
                 if ($roletotell->isUser()) $notify[] = $roletotell;
                 else $notify = array_merge($notify,$roletotell->getUsers());
             }
-            $admin = xarRoles::getRole(xarModGetVar('roles','admin'));
+            $admin = xarRoles::get(xarModGetVar('roles','admin'));
             $mailinfo = array('subject' => 'Site Lock',
                               'from' => $admin->getEmail()
             );
