@@ -11,14 +11,18 @@
  * notempty Validation Function
  *
  * @throws VariableValidationException
- **/
-function variable_validations_notempty (&$subject, $parameters)
+ * @todo this class is probably too close to issetvalidation
+**/
+sys::import('xaraya.validations');
+class NotEmptyValidation extends ValueValidations
 {
-    if (empty($subject)) {
-        $msg = 'Variable is empty';
-        throw new VariableValidationException(null, $msg);
+    function validate(&$subject, Array $parameters)
+    {
+        if (empty($subject)) {
+            $msg = 'Variable is empty';
+            throw new VariableValidationException(null, $msg);
+        }
+        return true;
     }
-    return true;
 }
-
 ?>

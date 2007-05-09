@@ -279,24 +279,25 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  * @throws EmptyParameterException
  * @return bool true if the $subject validates correctly, false otherwise
  */
-function xarVarValidate($validation, &$subject, $supress = false, $name='')
+function xarVarValidate($validation, &$subject, $supress = false, $name = '')
 {
     $valParams = explode(':', $validation);
-    $valType = strtolower(array_shift($valParams));
+    $type = strtolower(array_shift($valParams));
 
-    if (empty($valType)) throw new EmptyParameterException('valType');
+    if (empty($type)) throw new EmptyParameterException('type');
 
-    $function_name = xarVarLoad ('validations', $valType);
-    if (!$function_name) {return;}
+    sys::import("xaraya.validations");
+    $v = ValueValidations::get($type);
 
     try {
         // Now featuring without passing the name everywhere :-)
-        $result = $function_name($subject, $valParams);
+        $result = $v->validate($subject, $valParams);
         return $result;
     } catch (ValidationExceptions $e) {
         // If a validation exception occurred, we can optionally suppress it
         if(!$supress) {
             // Rethrow with more verbose message
+            if($name == '') $name = '<unknown>'; // @todo MLS!
             throw new VariableValidationException(array($name,$subject,$e->getMessage()));
         }
     } catch(Exception $e) {

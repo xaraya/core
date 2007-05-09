@@ -10,9 +10,12 @@
  * HTML Validation Class
  *
  * @throws VariableValidationException
- */
-function variable_validations_html (&$subject, $parameters)
+**/
+sys::import('xaraya.validations');
+class HtmlValidation extends ValueValidations
 {
+    function validate(&$subject, Array $parameters)
+    {
         assert('($parameters[0] == "restricted" ||
                  $parameters[0] == "basic" ||
                  $parameters[0] == "enhanced" ||
@@ -43,5 +46,6 @@ function variable_validations_html (&$subject, $parameters)
             }
         }
         return true;
+    }
 }
 ?>
