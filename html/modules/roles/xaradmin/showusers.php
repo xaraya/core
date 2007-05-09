@@ -189,6 +189,6 @@ function roles_admin_showusers()
                                          $numitems);
     return $data;
     // redirect to the next page
-    xarResponseRedirect(xarModURL('roles', 'admin', 'newrole'));
+    xarResponseRedirect(xarModURL('roles', 'admin', 'new'));
 }
 ?>

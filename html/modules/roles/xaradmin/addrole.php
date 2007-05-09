@@ -47,7 +47,7 @@ function roles_admin_addrole()
         $item['module'] = 'roles';
         $item['itemtype'] = $itemtype;
         $data['hooks'] = xarModCallHooks('item','new','',$item);
-        return xarTplModule('roles','admin','newrole', $data);
+        return xarTplModule('roles','admin','new', $data);
     }
 
     if ($basetype == ROLES_USERTYPE) {

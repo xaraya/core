@@ -1,22 +1,41 @@
 <?php
 /**
- * Create a new role
- *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
+ * @link http://xaraya.com/index.php/release/27.html
  */
 /**
- * new - generic wrapper to create a new item
- * Takes no parameters
+ * Show new role form
  *
  * @author Marc Lutolf
+ * @author Johnny Robeson
  */
-function roles_admin_newrole()
+function roles_admin_new()
 {
-    return xarModFunc('roles', 'admin', 'new');
+    if (!xarSecurityCheck('AddRole')) return;
+
+    $data = array();
+
+    if (!xarVarFetch('return_url',  'isset', $data['return_url'], NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('pparentid',   'id', $data['pparentid'], xarModGetVar('roles','defaultgroup'), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemtype',    'int',    $itemtype, ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('duvs',        'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
+
+    $data['object'] = DataObjectMaster::getObject(array('module'   => 'roles', 'itemtype' => $itemtype));
+    $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
+    $types = xarModAPIFunc('roles','user','getitemtypes');
+    $data['itemtype'] = $itemtype;
+
+    // call item new hooks
+    $item = $data;
+    $item['module'] = 'roles';
+    $item['itemtype'] = $itemtype;
+    $data['hooks'] = xarModCallHooks('item', 'new', '', $item);
+
+    return $data;
 }
 ?>

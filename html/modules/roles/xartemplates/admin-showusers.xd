@@ -349,7 +349,7 @@
     </xar:if>
     <!-- always show the new user link -->
     <p>
-      <a href="&xar-modurl-roles-admin-newrole;&amp;ptype=0&amp;pparentid=#$groupuid#" title="#xarML('Add a new user')#">
+      <a href="&xar-modurl-roles-admin-new;&amp;ptype=0&amp;pparentid=#$groupuid#" title="#xarML('Add a new user')#">
         <xar:mlstring>Add a New User to this Group</xar:mlstring>
       </a>
       |
