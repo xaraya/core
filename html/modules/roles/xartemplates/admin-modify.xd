@@ -174,7 +174,7 @@
                     <input type="hidden" name="object_objectid" id="objectid" value="#$object:objectid#" />
                     <input type="hidden" name="object_itemid" id="itemid" value="#$object->getID()#" />
                     <input type="hidden" name="object_tplmodule" id="tplmodule" value="roles" />
-                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('dynamicdata')#" />
                     <input type="submit" value="#xarML('Update')#" />
                     <input type="hidden" name="return_url" value="#xarModURL('roles','admin','modify',array('name' => $object->name))#" />
                 </div>
@@ -202,7 +202,7 @@
                     </td>
                     <td class="xar-align-center">
                         <xar:if condition="count($parents) ne 1">
-                            <a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$object->getID()#&amp;parentid=#$loop:item['parentid']#&amp;authid=#$authid#">
+                            <a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$object->getID()#&amp;parentid=#$loop:item['parentid']#&amp;authid=#xarSecGenAuthKey()#">
                                 <xar:mlstring>Remove</xar:mlstring>
                             </a>
                         <xar:else />
@@ -233,7 +233,7 @@
                         </xar:loop>
                     </select>
                     <input type="hidden" name="uid" id="adduid" value="#$object->getID()#" />
-                    <input type="hidden" name="authid" id="addauthid" value="#$authid#" />
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
                     <input type="submit" value="#xarML('Add')#" />
                 </div>
             </form>

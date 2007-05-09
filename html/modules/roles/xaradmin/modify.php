@@ -89,7 +89,6 @@ function roles_admin_modify()
 
     $data['groups'] = $groups;
     $data['parents'] = $parents;
-    $data['authid'] = xarSecGenAuthKey('dynamicdata');
     return $data;
 }
 

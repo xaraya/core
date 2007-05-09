@@ -24,7 +24,7 @@
             All fields are required to create a new role on the system.
         </xar:mlstring>
     </p>
-    <form id="newrole" action="&xar-modurl-roles-admin-addrole;" method="post" enctype="application/x-www-form-urlencoded">
+    <form id="newrole" action="&xar-modurl-dynamicdata-admin-create;" method="post" enctype="application/x-www-form-urlencoded">
         <fieldset>
             <legend>
                 <xar:ml>
@@ -94,7 +94,9 @@
         </fieldset>
         <fieldset>
         <div class="xar-form-input-wrapper-after">
-            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
+            <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#" />
+            <input type="hidden" name="tplmodule" id="tplmodule" value="roles" />
+            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('dynamicdata')#" />
             <input type="hidden" name="return_url" id="return_url" value="#$return_url#" />
             <input type="submit" value="#xarML('Add')#" />
         </div>

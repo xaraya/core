@@ -30,6 +30,10 @@ function roles_admin_new()
     $types = xarModAPIFunc('roles','user','getitemtypes');
     $data['itemtype'] = $itemtype;
 
+    xarSession::setVar('ddcontext.roles', array(
+                                            'return_url' => xarServerGetCurrentURL(),
+                                            'basetype' => $data['basetype'],
+                                                ));
     // call item new hooks
     $item = $data;
     $item['module'] = 'roles';
