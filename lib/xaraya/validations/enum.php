@@ -11,7 +11,7 @@
  *
  * @throws VariableValidationException
  */
-function variable_validations_enum (&$subject, $parameters, &$name)
+function variable_validations_enum (&$subject, $parameters)
 {
     $found = false;
 
@@ -24,7 +24,6 @@ function variable_validations_enum (&$subject, $parameters, &$name)
     if ($found) {
         return true;
     } else {
-        if ($name == '') $name = '<unknown>';
         $msg = 'Input given is not in list of valid options';
         $first = true;
         foreach ($parameters as $param) {
@@ -33,7 +32,7 @@ function variable_validations_enum (&$subject, $parameters, &$name)
 
             $msg .= $param;
         }
-        throw new VariableValidationException(array($name,$subject,$msg));
+        throw new VariableValidationException(null, $msg);
     }
 }
 

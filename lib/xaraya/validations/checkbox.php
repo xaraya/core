@@ -13,7 +13,7 @@
  *
  * @throws VariableValidationException
  */
-function variable_validations_checkbox (&$subject, $parameters, &$name)
+function variable_validations_checkbox (&$subject, $parameters)
 {
 
     if (empty($subject) || is_null($subject)) {
@@ -21,9 +21,8 @@ function variable_validations_checkbox (&$subject, $parameters, &$name)
     } elseif (is_string($subject)) {
         $subject = true;
     } else {
-        if ($name == '') $name = '<unknown>';
         $msg = 'Not a checkbox value';
-        throw new VariableValidationException(array($name,$subject,$msg));
+        throw new VariableValidationException(null,$msg);
     }
     return true;
 }

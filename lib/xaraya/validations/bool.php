@@ -11,7 +11,7 @@
  *
  * @throws VariableValidationException
  */
-function variable_validations_bool (&$subject, $parameters=null, &$name)
+function variable_validations_bool (&$subject, $parameters=null)
 {
     // NOTE: can't we use $subject = (boolean) $subject; ?
 
@@ -22,9 +22,8 @@ function variable_validations_bool (&$subject, $parameters=null, &$name)
     } elseif ($subject === false || $subject === 'false' || $subject === 0 || $subject === '0' || $subject === '') {
         $subject = false;
     } else {
-        if ($name == '') $name = '<unknown>';
         $msg = 'Not a boolean';
-        throw new VariableValidationException(array($name,$subject,$msg));
+        throw new VariableValidationException(null, $msg);
     }
     return true;
 }

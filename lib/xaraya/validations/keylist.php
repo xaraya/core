@@ -34,9 +34,8 @@
  *
  * @throws VariableValidationException
  **/
-function variable_validations_keylist (&$subject, $parameters, &$name)
+function variable_validations_keylist (&$subject, $parameters)
 {
-    if ($name == '') $name = '<unknown>';
     if (!is_array($subject)) {
         $msg = 'Not an array';
 
@@ -45,7 +44,7 @@ function variable_validations_keylist (&$subject, $parameters, &$name)
         if ($subject === NULL) {
             return false;
         }
-        throw new VariableValidationException(array($name,$subject,$msg));
+        throw new VariableValidationException(null, $msg);
     }
 
     if (isset($parameters[0]) && trim($parameters[0]) != '') {

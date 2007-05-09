@@ -11,7 +11,7 @@
  *
  * @throws VariableValidationException
  */
-function variable_validations_html (&$subject, $parameters, &$name)
+function variable_validations_html (&$subject, $parameters)
 {
         assert('($parameters[0] == "restricted" ||
                  $parameters[0] == "basic" ||
@@ -33,14 +33,13 @@ function variable_validations_html (&$subject, $parameters, &$name)
         foreach ($matches as $match) {
             $tag = strtolower($match[1]);
             if (!isset($allowedTags[$tag])) {
-                if ($name == '') $name = '<unknown>';
                 $msg = 'Specified tag is not allowed';
-                throw new VariableValidationException(array($name,$subject,$msg));
+                throw new VariableValidationException(null, $msg);
             } elseif (isset($match[2]) && $allowedTags[$tag] == XARVAR_ALLOW_NO_ATTRIBS && trim($match[2]) != '') {
                 // We should check for on* attributes
                 // Attributes should be restricted too, shouldnt they?
-                $msg = 'Attributes are not allowed for this tag in variable #(1): "#(2)"';
-                throw new VariableValidationException(array($name,$tag),$msg);
+                $msg = 'Attributes are not allowed for tag "#(1)"';
+                throw new VariableValidationException(array($tag),$msg);
             }
         }
         return true;

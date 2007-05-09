@@ -12,12 +12,11 @@
  *
  * @throws VariableValidationException
  **/
-function variable_validations_list (&$subject, $parameters, &$name)
+function variable_validations_list (&$subject, $parameters)
 {
-    if ($name == '') $name = '<unknown>';
     if (!is_array($subject)) {
         $msg = 'Not an array';
-        throw new VariableValidationException(array($name,$subject,$msg));
+        throw new VariableValidationException(null, $msg);
     }
 
     if (isset($parameters[0]) && trim($parameters[0]) != '') {

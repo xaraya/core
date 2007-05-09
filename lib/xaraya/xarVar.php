@@ -286,32 +286,19 @@ function xarVarValidate($validation, &$subject, $supress = false, $name='')
 
     if (empty($valType)) throw new EmptyParameterException('valType');
 
-    // @todo Please get rid of these
-    // {ML_include 'lib/validations/array.php'}
-    // {ML_include 'lib/validations/bool.php'}
-    // {ML_include 'lib/validations/checkbox.php'}
-    // {ML_include 'lib/validations/email.php'}
-    // {ML_include 'lib/validations/enum.php'}
-    // {ML_include 'lib/validations/float.php'}
-    // {ML_include 'lib/validations/fullemail.php'}
-    // {ML_include 'lib/validations/html.php'}
-    // {ML_include 'lib/validations/id.php'}
-    // {ML_include 'lib/validations/int.php'}
-    // {ML_include 'lib/validations/isset.php'}
-    // {ML_include 'lib/validations/list.php'}
-    // {ML_include 'lib/validations/mxcheck.php'}
-    // {ML_include 'lib/validations/notempty.php'}
-    // {ML_include 'lib/validations/regexp.php'}
-    // {ML_include 'lib/validations/str.php'}
-
     $function_name = xarVarLoad ('validations', $valType);
     if (!$function_name) {return;}
 
     try {
-        return $function_name($subject, $valParams, $name);
+        // Now featuring without passing the name everywhere :-)
+        $result = $function_name($subject, $valParams);
+        return $result;
     } catch (ValidationExceptions $e) {
         // If a validation exception occurred, we can optionally suppress it
-        if(!$supress) throw $e;
+        if(!$supress) {
+            // Rethrow with more verbose message
+            throw new VariableValidationException(array($name,$subject,$e->getMessage()));
+        }
     } catch(Exception $e) {
         // But not the others (note that this part is redundant)
         throw $e;

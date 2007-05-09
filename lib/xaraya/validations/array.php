@@ -13,13 +13,12 @@
  *
  * @throws VariableValidationException, BadParameterException
  */
-function variable_validations_array (&$subject, $parameters, &$name)
+function variable_validations_array (&$subject, $parameters)
 {
     // If the subject is not array, we can bail out, cos that's what it is all about
-    if ($name == '') $name = '<unknown>';
     if (!is_array($subject)) {
         $msg = 'Not an array';
-        throw new VariableValidationException(array($name,$subject,$msg));
+        throw new VariableValidationException(null,$msg);
     }
 
     if (isset($parameters[0]) && trim($parameters[0]) != '') {

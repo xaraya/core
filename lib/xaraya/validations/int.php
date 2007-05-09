@@ -13,15 +13,13 @@
  *
  * @throws VariableValidationException, BadParameterException
  */
-function variable_validations_int (&$subject, $parameters, &$name)
+function variable_validations_int (&$subject, $parameters)
 {
-
     $value = intval($subject);
 
-    if ($name == '') $name = '<unknown>';
     $msg = 'Not an integer';
     if ("$subject" != "$value") {
-        throw new VariableValidationException(array($name,$subject,$msg));
+        throw new VariableValidationException(null, $msg);
     }
 
     if (isset($parameters[0]) && trim($parameters[0]) != '') {

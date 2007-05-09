@@ -14,21 +14,20 @@
  *
  * @package validation
  * @copyright (C) 2003 by the Xaraya Development Team.
- **/
+**/
 
 /**
  * String List Validation Class
  *
  * @throws VariableValidationException, BadParameterException
- **/
-function variable_validations_strlist (&$subject, $parameters, &$name)
+**/
+function variable_validations_strlist (&$subject, $parameters)
 {
     $return = true;
 
-    if ($name == '') $name = '<unknown>';
     if (!is_string($subject)) {
         $msg = 'Not a string';
-        throw new VariableValidationException(array($name,$subject,$msg));
+        throw new VariableValidationException(null, $msg);
     }
 
     if (!empty($parameters)) {
@@ -56,7 +55,7 @@ function variable_validations_strlist (&$subject, $parameters, &$name)
         if ($count > 0 && !empty($validation)) {
             for($i = 0; $i < $count; $i++) {
                 // Validate each element in turn.
-                $return = $return & xarVarValidate($validation, $elements[$i], $supress_soft_exc);
+                $return = $return & xarVarValidate($validation, $elements[$i]);
                 if (!$return) {
                     // This one failed validation - don't try and validate any more.
                     break;
@@ -66,7 +65,6 @@ function variable_validations_strlist (&$subject, $parameters, &$name)
 
         // Roll up the validated values. Use the first character
         // from the separator character list.
-        // TODO: only roll up if validation was a success?
         $subject = implode(substr($sep, 0, 1), $elements);
     }
     return $return;

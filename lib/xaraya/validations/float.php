@@ -16,13 +16,12 @@
  * @return true on success (value is validated as a float number
  * @throws VariableValidationException, BadParameterException
  */
-function variable_validations_float (&$subject, $parameters, &$name)
+function variable_validations_float (&$subject, $parameters)
 {
         $value = (float)$subject;
-        if ($name == '') $name = '<unknown>';
         if ("$subject" != "$value") {
             $msg = 'Not a float type';
-            throw new VariableValidationException(array($name,$subject,$msg));
+            throw new VariableValidationException(null, $msg);
         }
 
         if (isset($parameters[0]) && trim($parameters[0]) != '') {

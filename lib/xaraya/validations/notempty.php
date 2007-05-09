@@ -12,12 +12,11 @@
  *
  * @throws VariableValidationException
  **/
-function variable_validations_notempty (&$subject, $parameters, &$name)
+function variable_validations_notempty (&$subject, $parameters)
 {
     if (empty($subject)) {
-        if ($name == '') $name = '<unknown>';
         $msg = 'Variable is empty';
-        throw new VariableValidationException(array($name,$subject,$msg));
+        throw new VariableValidationException(null, $msg);
     }
     return true;
 }

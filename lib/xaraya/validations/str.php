@@ -11,12 +11,11 @@
  *
  * @throws VariableValidationException, BadParameterException
  **/
-function variable_validations_str (&$subject, $parameters, &$name)
+function variable_validations_str (&$subject, $parameters)
 {
-    if ($name == '') $name = '<unknown>';
     if (!is_string($subject)) {
         $msg = 'Not a string';
-        throw new VariableValidationException(array($name,$subject,$msg));
+        throw new VariableValidationException(null, $msg);
     }
 
     $length = strlen($subject);
