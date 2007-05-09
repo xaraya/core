@@ -308,7 +308,7 @@ function xarVarValidate($validation, &$subject, $supress = false, $name='')
     if (!$function_name) {return;}
 
     try {
-        $result = $function_name($subject, $valParams, $name);
+        return $function_name($subject, $valParams, $name);
     } catch (ValidationExceptions $e) {
         // If a validation exception occurred, we can optionally suppress it
         if(!$supress) throw $e;
