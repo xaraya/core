@@ -1,11 +1,11 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:set name="itemname">xarVarGetCached('XML','itemname')</xar:set>
 <xar:foreach in="$items" key="$itemid" value="$fields">
-    &lt;#$itemname#&gt;
+  <xar:element name="#$itemname#">
     <xar:foreach in="$fields" key="$name" value="$value">
-        &lt;#$properties.$name:name#&gt;#xarVarPrepForDisplay($value)#&lt;/#$properties.$name:name#&gt;
+        <xar:element name="#$properties.$name:name#">#xarVarPrepForDisplay($value)#</xar:element>
     </xar:foreach>
-    &lt;/#$itemname#&gt;
+  </xar:element>
 </xar:foreach>
 
 </xar:template>
