@@ -3,16 +3,144 @@
  * Class for conversion between charsets
  *
  * @package multilanguage
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @author Mikolaj Jedrzejak <mikolajj@op.pl>
  * @author Vladimirs Metenchuks <voll@xaraya.com>
-*/
+**/
 
 define ("CONVERT_TABLES_DIR", sys::root() . '/lib/transforms/convtables/');
 
+/**
+ * Main FEATURES of this class:
+ * - conversion between 1 byte charsets
+ * - conversion from 1 byte to multi byte charset (utf-8)
+ * - conversion from multibyte charset (utf-8) to 1 byte charset
+ * - every conversion output can be save with numeric entities
+ *   (browser charset independent - not a full truth)
+ *
+ * Convert Tables Directory
+ *
+ * This is a place where you store all files with charset encodings.
+ * Filenames should have the same names as encodings.
+ * My advise is to keep existing names, because they were taken
+ * from unicode.org (www.unicode.org), and after update to unicode 3.0 or 4.0
+ * the names of files will be the same.
+ *
+ * This is a list of charsets you can operate with, the basic rule is
+ * that a char have to be in both charsets, otherwise you'll get an error.
+ *
+ * - WINDOWS
+ * - windows-1250 - Central Europe
+ * - windows-1251 - Cyrillic
+ * - windows-1252 - Latin I
+ * - windows-1253 - Greek
+ * - windows-1254 - Turkish
+ * - windows-1255 - Hebrew
+ * - windows-1256 - Arabic
+ * - windows-1257 - Baltic
+ * - windows-1258 - Viet Nam
+ * - cp874 - Thai - this file is also for DOS
+ *
+ * - DOS
+ * - cp437 - Latin US
+ * - cp737 - Greek
+ * - cp775 - BaltRim
+ * - cp850 - Latin1
+ * - cp852 - Latin2
+ * - cp855 - Cyrillic
+ * - cp857 - Turkish
+ * - cp860 - Portuguese
+ * - cp861 - Iceland
+ * - cp862 - Hebrew
+ * - cp863 - Canada
+ * - cp864 - Arabic
+ * - cp865 - Nordic
+ * - cp866 - Cyrillic Russian for DOS
+ * - cp869 - Greek2
+ *
+ * - MAC (Apple)
+ * - x-mac-cyrillic
+ * - x-mac-greek
+ * - x-mac-icelandic
+ * - x-mac-ce
+ * - x-mac-roman
+ *
+ * - ISO (Unix/Linux)
+ * - iso-8859-1
+ * - iso-8859-2
+ * - iso-8859-3
+ * - iso-8859-4
+ * - iso-8859-5
+ * - iso-8859-6
+ * - iso-8859-7
+ * - iso-8859-8
+ * - iso-8859-9
+ * - iso-8859-10
+ * - iso-8859-11
+ * - iso-8859-12
+ * - iso-8859-13
+ * - iso-8859-14
+ * - iso-8859-15
+ * - iso-8859-16
+ *
+ * - MISCELLANEOUS
+ * - gsm0338 (ETSI GSM 03.38)
+ * - cp037
+ * - cp424
+ * - cp500
+ * - cp856
+ * - cp875
+ * - cp1006
+ * - cp1026
+ * - koi8-r (Cyrillic)
+ * - koi8-u (Cyrillic Ukrainian)
+ * - nextstep
+ * - us-ascii
+ * - us-ascii-quotes
+ *
+ * - DSP implementation for NeXT
+ * - stdenc
+ * - symbol
+ * - zdingbat
+ *
+ *
+ *
+ * The file with encoding tables have to be save in "Format A"
+ * of unicode.org charset table format!
+ * This is usualy writen in a header of every charset file.
+ *
+ * The files with encoding tables have to be complete
+ * (Non of chars can be missing, unless you are sure
+ * you are not going to use it)
+ *
+ * "Format A" encoding file, if you have to build it by yourself
+ * should aplly these rules:
+ * - you can comment everything with #
+ * - first column contains 1 byte chars in hex starting from 0x..
+ * - second column contains unicode equivalent in hex starting from 0x....
+ * - then every next column is optional, but in "Format A"
+ *   it should contain unicode char name or/and your own comment
+ * - the columns can be splited by "spaces", "tabs", "," or
+ *   any combination of these
+ * - below is an example
+ *
+ * <code>
+ * #
+ * #    The entries are in ANSI X3.4 order.
+ * #
+ * 0x00    0x0000    #    NULL end extra comment, if needed
+ * 0x01    0x0001    #    START OF HEADING
+ * # Oh, one more thing, you can make comments inside of a rows if you like.
+ * 0x02    0x0002    #    START OF TEXT
+ * 0x03    0x0003    #    END OF TEXT
+ * next line, and so on...
+ * </code>
+ *
+ * You can get full tables with encodings from http://www.unicode.org
+**/
 class xarCharset extends Object
 {
     public $lastConversion = ''; // Last used conversion
