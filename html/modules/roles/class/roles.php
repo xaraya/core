@@ -122,7 +122,7 @@ class xarRoles extends Object
      * @param integer $uid
      * @return object role
      */
-    public static function getRole($uid)
+    public static function get($uid)
     {
         $cacheKey = 'Roles.ByUid';
         if(xarVarIsCached($cacheKey,$uid)) {
@@ -138,7 +138,7 @@ class xarRoles extends Object
     /**
      * Wrapper functions to support Xaraya 1 API for roles
      */
-    function get($uid) {return getRole::get($uid);}
+    public static function getRole($uid) {return get::get($uid);}
 
 
     /**
