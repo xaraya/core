@@ -1,7 +1,7 @@
 <?php
 /**
  * Configuration Unit
- * 
+ *
  * @package config
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -12,10 +12,11 @@
 /**
  * Exceptions for this subsystem
  *
+ * @package config
  * @todo this exception is too weak
  */
 class ConfigurationException extends ConfigurationExceptions
-{ 
+{
     protected $message = 'There is an unknown configuration error detected.';
 }
 
@@ -45,9 +46,7 @@ sys::import('xaraya.variables.config');
  * Wrapper functions to support Xaraya 1 API for modvars
  * NOTE: the $prep in the signature has been dropped!!
  */
-function xarConfigSetVar($name, $value)
-{   return xarConfigVars::set(null, $name, $value); }
-function xarConfigGetVar($name)
-{   return xarConfigVars::get(null, $name); }
+function xarConfigSetVar($name, $value) { return xarConfigVars::set(null, $name, $value); }
+function xarConfigGetVar($name)         { return xarConfigVars::get(null, $name); }
 
 ?>

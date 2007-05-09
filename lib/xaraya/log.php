@@ -35,6 +35,7 @@ define('XARLOG_LEVEL_ALL',       255);
 /**
  * Exceptions raised within the loggers
  *
+ * @package logging
  */
 class LoggerException extends Exception
 {
@@ -47,7 +48,7 @@ class LoggerException extends Exception
  * @return void
  * @throws LoggerException
 **/
-function xarLog_init(&$args, &$whatElseIsGoingLoaded) 
+function xarLog_init(&$args, &$whatElseIsGoingLoaded)
 {
 
     $GLOBALS['xarLog_loggers'] = array();
@@ -159,7 +160,7 @@ function xarLogFallbackPossible ()
 function xarLog__shutdown_handler()
 {
      xarLogMessage("xarLog shutdown handler.");
-    
+
      // If the debugger was active, we can dispose it now.
      if(xarDebug::$flags & XARDBG_SQL) {
          xarLogMessage("Total SQL queries: $GLOBALS[xarDebug_sqlCalls].");
