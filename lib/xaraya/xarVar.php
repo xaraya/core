@@ -407,28 +407,9 @@ function xarVarLoad ($includes_type, $filename)
     return $function_name;
 }
 
-/**
- * Escapes on variable for the use in a specific context
- *
- * @access public
- * @param string The string to be Converted
- * @param targetContext The name of the context to escape for
- * @return string the string escape for the context
- * @throws EmptyParameterException
- * @todo Would it be useful to be able to transform arrays of strings at once?
- */
-function xarVarEscape ($string, $targetContext, $extras = array())
-{
-    if (empty($targetContext)) throw new EmptyParameterException('targetContext');
-
-    $function_name = xarVarLoad ('escapes', $targetContext);
-    if (!$function_name) {return;}
-
-    return $function_name ($string, $extras);
-}
-
 /*
     ---------------------------------------------------------------------
+    @todo LOOK AT  THIS, IT SEEMS ABANDONED, except for the transform of entities from named to numeric
     Everything below should be remade, working thru xarVarEscape or xarVarTransform
     * xarVarCleanFromInput
     * xarVarCleanUntrusted
@@ -488,7 +469,6 @@ function xarVarPrepForDisplay()
  * @access public
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
- * @throws DATABASE_ERROR, BAD_PARAM
  */
 function xarVarPrepHTMLDisplay()
 {
