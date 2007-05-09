@@ -346,23 +346,6 @@ function xarVarFlushCached($cacheKey)
 { return xarCore::flushCached($cacheKey);             }
 
 
-/**
- * Stripslashes on multidimensional arrays.
- *
- * Used in conjunction with xarVarCleanFromInput
- *
- * @access protected
- * @param &var any variables or arrays to be stripslashed
- */
-function xarVar_stripSlashes(&$var)
-{
-    if(!is_array($var)) {
-        $var = stripslashes($var);
-    } else {
-        array_walk($var,'xarVar_stripSlashes');
-    }
-}
-
 function xarVar_addSlashes($var)
 {
     return str_replace(array("\\",'"'), array("\\\\",'\"'), $var);
