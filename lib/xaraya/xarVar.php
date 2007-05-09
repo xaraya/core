@@ -352,30 +352,6 @@ function xarVar_addSlashes($var)
 }
 
 /**
- * Get allowed tags based on $level
- *
- * @access private
- * @static restricted array
- * @static basic array
- * @static enhanced array
- * @param level string
- * @return array
- */
-function xarVar__getAllowedTags($level)
-{
-    // Get the allowed HTML from the config var.  At some
-    // point this will be replaced by retrieving the
-    // allowed HTML from the HTML module.
-    $allowedHTML = array();
-    foreach (xarConfigGetVar('Site.Core.AllowableHTML') as $k=>$v) {
-        if ($v) {
-            $allowedHTML[] = $k;
-        }
-    }
-    return $allowedHTML;
-}
-
-/**
  * Changes one variable from one context to another
  *
  * @access public
