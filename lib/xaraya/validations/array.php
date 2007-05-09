@@ -13,14 +13,13 @@
  *
  * @throws VariableValidationException, BadParameterException
  */
-function variable_validations_array (&$subject, $parameters, $supress_soft_exc, &$name)
+function variable_validations_array (&$subject, $parameters, &$name)
 {
     // If the subject is not array, we can bail out, cos that's what it is all about
     if ($name == '') $name = '<unknown>';
     if (!is_array($subject)) {
         $msg = 'Not an array';
-        if (!$supress_soft_exc) throw new VariableValidationException(array($name,$subject,$msg));
-        return false;
+        throw new VariableValidationException(array($name,$subject,$msg));
     }
 
     if (isset($parameters[0]) && trim($parameters[0]) != '') {
@@ -30,9 +29,7 @@ function variable_validations_array (&$subject, $parameters, $supress_soft_exc, 
         } elseif (count($subject) < (int) $parameters[0]) {
             // The subject has too little values
             $msg = 'Array variable has less elements "#(1)" than the specified minimum "#(2)"';
-            if (!$supress_soft_exc) 
-                throw new VariableValidationException(array(count($subject), $parameters[0]), $msg);
-            return false;
+            throw new VariableValidationException(array(count($subject), $parameters[0]), $msg);
         }
     }
 
@@ -43,12 +40,9 @@ function variable_validations_array (&$subject, $parameters, $supress_soft_exc, 
         } elseif (count($subject) > (int) $parameters[1]) {
             // The subject has too many values
             $msg = 'Array variable has more elements "#(1)" than the specified maximum "#(2)"';
-            if (!$supress_soft_exc) 
-                throw new VariableValidationException(array(count($subject), $parameters[1]), $msg);
-            return false;
+            throw new VariableValidationException(array(count($subject), $parameters[1]), $msg);
         }
     }
-
     return true;
 }
 

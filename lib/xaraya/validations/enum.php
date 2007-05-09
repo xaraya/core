@@ -11,9 +11,8 @@
  *
  * @throws VariableValidationException
  */
-function variable_validations_enum (&$subject, $parameters, $supress_soft_exc, &$name)
+function variable_validations_enum (&$subject, $parameters, &$name)
 {
-
     $found = false;
 
     foreach ($parameters as $param) {
@@ -34,9 +33,7 @@ function variable_validations_enum (&$subject, $parameters, $supress_soft_exc, &
 
             $msg .= $param;
         }
-        if (!$supress_soft_exc) 
-            throw new VariableValidationException(array($name,$subject,$msg));
-        return false;
+        throw new VariableValidationException(array($name,$subject,$msg));
     }
 }
 

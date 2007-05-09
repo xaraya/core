@@ -10,9 +10,8 @@
  * HTML Validation Class
  *
  * @throws VariableValidationException
- * @todo remove the supress parameter
  */
-function variable_validations_html (&$subject, $parameters, $supress_soft_exc, &$name)
+function variable_validations_html (&$subject, $parameters, &$name)
 {
         assert('($parameters[0] == "restricted" ||
                  $parameters[0] == "basic" ||
@@ -36,20 +35,14 @@ function variable_validations_html (&$subject, $parameters, $supress_soft_exc, &
             if (!isset($allowedTags[$tag])) {
                 if ($name == '') $name = '<unknown>';
                 $msg = 'Specified tag is not allowed';
-                if (!$supress_soft_exc)
-                    throw new VariableValidationException(array($name,$subject,$msg));
-                return false;
+                throw new VariableValidationException(array($name,$subject,$msg));
             } elseif (isset($match[2]) && $allowedTags[$tag] == XARVAR_ALLOW_NO_ATTRIBS && trim($match[2]) != '') {
                 // We should check for on* attributes
                 // Attributes should be restricted too, shouldnt they?
                 $msg = 'Attributes are not allowed for this tag in variable #(1): "#(2)"';
-                if (!$supress_soft_exc)
-                    throw new VariableValidationException(array($name,$tag),$msg);
-                return false;
+                throw new VariableValidationException(array($name,$tag),$msg);
             }
         }
-
         return true;
 }
-
 ?>

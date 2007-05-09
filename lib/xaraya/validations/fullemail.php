@@ -13,10 +13,10 @@
  *
  * @todo Why doesnt this throw an exception?
  */
-function variable_validations_fullemail (&$subject, $parameters=null, $supress_soft_exc)
+function variable_validations_fullemail (&$subject, $parameters=null)
 {
-    if (xarVarValidate ('email', $subject, $supress_soft_exc) &&
-        xarVarValidate ('mxcheck', $subject, $supress_soft_exc)) {
+    if (xarVarValidate ('email', $subject) &&
+        xarVarValidate ('mxcheck', $subject)) {
         return true;
     }
 

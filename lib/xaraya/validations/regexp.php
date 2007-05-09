@@ -10,9 +10,9 @@
 /**
  * Regular Expression Validation Class
  *
- * @throws VariableValidationException 
+ * @throws VariableValidationException
  **/
-function variable_validations_regexp (&$subject, $parameters, $supress_soft_exc, &$name)
+function variable_validations_regexp (&$subject, $parameters, &$name)
 {
     if ($name == '') $name = '<unknown>';
     if (!isset($parameters[0]) || trim($parameters[0]) == '') {
@@ -24,9 +24,7 @@ function variable_validations_regexp (&$subject, $parameters, $supress_soft_exc,
     }
 
     $msg = 'Variable #(1): "#(2)" did not match pattern "#(3)"';
-    if (!$supress_soft_exc) 
-        throw new VariableValidationException(array( $name, $subject, $parameters[0]),$msg);
-    return false;
+    throw new VariableValidationException(array( $name, $subject, $parameters[0]),$msg);
 }
 
 ?>

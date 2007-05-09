@@ -32,9 +32,9 @@ ifsnow is korean phper. Is sorry to be unskillful to English. *^^*;;
  * valdidate email
  *
  *
- * @throws VariableValidationException 
+ * @throws VariableValidationException
  **/
-function variable_validations_mxcheck (&$subject, $parameters=null, $supress_soft_exc) 
+function variable_validations_mxcheck (&$subject, $parameters=null)
 {
 
     global $HTTP_HOST;
@@ -98,17 +98,14 @@ function variable_validations_mxcheck (&$subject, $parameters=null, $supress_sof
                     // hardware consumption exploit thru sending many of these e-mails to be checked
 
                     $msg = 'Invalid e-mail #(1), the mail server doesnt recognize it.';
-                    if (!$supress_soft_exc) 
-                        throw new VariableValidationException($subject,$msg);
-                    return false;
+                    throw new VariableValidationException($subject,$msg);
                 }
         }
     } else { // Failure in socket connection
         // TODO: use try catch here
         // CHECK: is this considered to be a validation exception?
         $msg = 'Unable to connect to the mail server #(1) for e-mail #(2).';
-        if (!$supress_soft_exc) throw new VariableValidationException(array($ConnectAddress, $subject),$msg);
-        return false;
+        throw new VariableValidationException(array($ConnectAddress, $subject),$msg);
     }
 
     return true;

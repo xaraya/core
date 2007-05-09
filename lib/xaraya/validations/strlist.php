@@ -21,16 +21,14 @@
  *
  * @throws VariableValidationException, BadParameterException
  **/
-function variable_validations_strlist (&$subject, $parameters, $supress_soft_exc, &$name)
+function variable_validations_strlist (&$subject, $parameters, &$name)
 {
     $return = true;
 
     if ($name == '') $name = '<unknown>';
     if (!is_string($subject)) {
         $msg = 'Not a string';
-        if (!$supress_soft_exc) 
-            throw new VariableValidationException(array($name,$subject,$msg));
-        return false;
+        throw new VariableValidationException(array($name,$subject,$msg));
     }
 
     if (!empty($parameters)) {
@@ -40,10 +38,7 @@ function variable_validations_strlist (&$subject, $parameters, $supress_soft_exc
         // TODO: error if no separator?
         if (empty($sep)) {
             $msg = xarML('No separator character(s) provided for validation type "strlist"');
-            if (!$supress_soft_exc) {
-                throw new BadParameterException($msg);
-            }
-            return false;
+            throw new BadParameterException($msg);
         }
 
         // Roll up the remaining validation parameters (noting there
@@ -74,7 +69,6 @@ function variable_validations_strlist (&$subject, $parameters, $supress_soft_exc
         // TODO: only roll up if validation was a success?
         $subject = implode(substr($sep, 0, 1), $elements);
     }
-
     return $return;
 }
 

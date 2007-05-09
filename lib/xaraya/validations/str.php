@@ -11,14 +11,12 @@
  *
  * @throws VariableValidationException, BadParameterException
  **/
-function variable_validations_str (&$subject, $parameters, $supress_soft_exc, &$name)
+function variable_validations_str (&$subject, $parameters, &$name)
 {
     if ($name == '') $name = '<unknown>';
     if (!is_string($subject)) {
         $msg = 'Not a string';
-        if (!$supress_soft_exc) 
-            throw new VariableValidationException(array($name,$subject,$msg));
-        return false;
+        throw new VariableValidationException(array($name,$subject,$msg));
     }
 
     $length = strlen($subject);
@@ -29,9 +27,7 @@ function variable_validations_str (&$subject, $parameters, $supress_soft_exc, &$
             throw new BadParameterException($parameters[0],'The parameter specifying the minimum length of the string should be numeric. It is: "#(1)"');
         } elseif ($length < (int) $parameters[0]) {
             $msg = 'Size of the string "#(1)" is smaller than the specified minimum "#(2)"';
-            if (!$supress_soft_exc)
-                throw new VariableValidationException(array($subject, $parameters[0]),$msg);
-            return false;
+            throw new VariableValidationException(array($subject, $parameters[0]),$msg);
         }
     }
 
@@ -41,9 +37,7 @@ function variable_validations_str (&$subject, $parameters, $supress_soft_exc, &$
             throw new BadParameterException($parameters[1],'The parameter specifying the maximum length of the string should be numeric. It is: "#(1)"');
         } elseif ($length > (int) $parameters[1]) {
             $msg = 'Size of the string "#(1)" is larger than the specified maximum "#(2)"';
-            if (!$supress_soft_exc)
-                throw new VariableValidationException(array($subject, $parameters[1]),$msg);
-            return false;
+            throw new VariableValidationException(array($subject, $parameters[1]),$msg);
         }
     }
 

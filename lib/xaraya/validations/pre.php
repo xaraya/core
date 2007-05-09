@@ -40,13 +40,13 @@
  *
  * @package validation
  * @copyright (C) 2003 by the Xaraya Development Team.
- * @throws VariableValidationException 
+ * @throws VariableValidationException
 **/
 
 /**
  * Strings Validation Class
  */
-function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
+function variable_validations_pre (&$subject, $parameters)
 {
     // Start by forcing the subject into a string.
     if (isset($subject) && !is_string($subject)) {
@@ -102,11 +102,9 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
                     );
                     // The token must start with a letter or underscore.
                     // Raise an error if not.
-                    if (!empty($subject) && !preg_match('/^[a-zA-Z_]/', $subject)) { 
+                    if (!empty($subject) && !preg_match('/^[a-zA-Z_]/', $subject)) {
                         $msg = 'Value "#(1)" is not a valid variable name';
-                        if(!$supress_soft_exc) 
-                            throw new VariableValidationException($subject,$msg);
-                        return false;
+                        throw new VariableValidationException($subject,$msg);
                     }
                     break;
 
@@ -202,7 +200,7 @@ function variable_validations_pre (&$subject, $parameters, $supress_soft_exc)
     }
 
     // CHECKME: since we either handle it directly and/or the stack is never filled. Is this still needed?
-    if (!$return && !empty($fieldname) && !$supress_soft_exc) {
+    if (!$return && !empty($fieldname)) {
         // Add another error message, naming the field.
         // Combine it with the 'short' details of the last message logged,
         // with the assumption that it will contain some useful details.

@@ -12,16 +12,13 @@
  *
  * @throws VariableValidationException
  */
-function variable_validations_email (&$subject, $parameters=null, $supress_soft_exc, &$name)
+function variable_validations_email (&$subject, $parameters=null, &$name)
 {
     if($name == '') $name = '<unknown>';
     if (!eregi('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,6})$', $subject)) {
         $msg = 'Not a valid email format';
-        if (!$supress_soft_exc) 
-            throw new VariableValidationException(array($name,$subject,$msg));
-        return false;
+        throw new VariableValidationException(array($name,$subject,$msg));
     }
-
     return true;
 }
 

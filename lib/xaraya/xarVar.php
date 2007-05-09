@@ -286,6 +286,7 @@ function xarVarValidate($validation, &$subject, $supress = false, $name='')
 
     if (empty($valType)) throw new EmptyParameterException('valType');
 
+    // @todo Please get rid of these
     // {ML_include 'lib/validations/array.php'}
     // {ML_include 'lib/validations/bool.php'}
     // {ML_include 'lib/validations/checkbox.php'}
@@ -306,7 +307,15 @@ function xarVarValidate($validation, &$subject, $supress = false, $name='')
     $function_name = xarVarLoad ('validations', $valType);
     if (!$function_name) {return;}
 
-    return $function_name($subject, $valParams, $supress, $name);
+    try {
+        $result = $function_name($subject, $valParams, $name);
+    } catch (ValidationExceptions $e) {
+        // If a validation exception occurred, we can optionally suppress it
+        if(!$supress) throw $e;
+    } catch(Exception $e) {
+        // But not the others (note that this part is redundant)
+        throw $e;
+    }
 }
 
 /*

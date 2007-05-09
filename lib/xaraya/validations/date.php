@@ -29,13 +29,12 @@
  * @throws VariableValidationException
  */
 
-function variable_validations_date (&$subject, $parameters, $supress_soft_exc, &$name)
+function variable_validations_date (&$subject, $parameters, &$name)
 {
     if ($name == '') $name = '<unknown>';
     if (!is_string($subject)) {
         $msg = 'Not a string';
-        if (!$supress_soft_exc) throw new VariableValidationException(array($name,$subject,$msg));
-        return false;
+        throw new VariableValidationException(array($name,$subject,$msg));
     }
 
     if (isset($parameters[0])) {
@@ -97,10 +96,8 @@ function variable_validations_date (&$subject, $parameters, $supress_soft_exc, &
         $subject = strftime($store_format, $timestamp);
     } else {
         $msg = 'Not a valid date format';
-        if (!$supress_soft_exc) throw new VariableValidationException(array($name,$subject,$msg));
-        return false;
+        throw new VariableValidationException(array($name,$subject,$msg));
     }
-
     return true;
 }
 

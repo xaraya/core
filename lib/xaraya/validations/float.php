@@ -16,15 +16,13 @@
  * @return true on success (value is validated as a float number
  * @throws VariableValidationException, BadParameterException
  */
-function variable_validations_float (&$subject, $parameters, $supress_soft_exc, &$name)
+function variable_validations_float (&$subject, $parameters, &$name)
 {
         $value = (float)$subject;
         if ($name == '') $name = '<unknown>';
         if ("$subject" != "$value") {
             $msg = 'Not a float type';
-            if (!$supress_soft_exc) 
-                throw new VariableValidationException(array($name,$subject,$msg));
-            return false;
+            throw new VariableValidationException(array($name,$subject,$msg));
         }
 
         if (isset($parameters[0]) && trim($parameters[0]) != '') {
@@ -33,9 +31,7 @@ function variable_validations_float (&$subject, $parameters, $supress_soft_exc, 
                 throw new BadParameterException($parameters[0],'The parameter specifying the minimum value should be numeric. It is: "#(1)"');
             } elseif ($value < (float) $parameters[0]) {
                 $msg = 'Float Value "#(1)" is smaller than the specified minimum "#(2)"';
-                if (!$supress_soft_exc) 
-                    throw new VariableValidationException(array($value,$parameters[0]),$msg);
-                return false;
+                throw new VariableValidationException(array($value,$parameters[0]),$msg);
             }
         }
 
@@ -45,9 +41,7 @@ function variable_validations_float (&$subject, $parameters, $supress_soft_exc, 
                 throw new BadParameterException($parameters[1],'The parameter specifying the maximum value should be numeric. It is: "#(1)"');
             } elseif ($value > (float) $parameters[1]) {
                 $msg = 'Float Value "#(1)" is larger than the specified maximum "#(2)"';
-                if (!$supress_soft_exc) 
-                    throw new VariableValidationException(array($value,$parameters[0]),$msg);
-                return false;
+                throw new VariableValidationException(array($value,$parameters[0]),$msg);
             }
         }
 

@@ -10,18 +10,15 @@
 /**
  * notempty Validation Function
  *
- * @throws VariableValidationException 
+ * @throws VariableValidationException
  **/
-function variable_validations_notempty (&$subject, $parameters, $supress_soft_exc, &$name)
+function variable_validations_notempty (&$subject, $parameters, &$name)
 {
     if (empty($subject)) {
         if ($name == '') $name = '<unknown>';
         $msg = 'Variable is empty';
-        if (!$supress_soft_exc) 
-            throw new VariableValidationException(array($name,$subject,$msg));
-        return false;
+        throw new VariableValidationException(array($name,$subject,$msg));
     }
-
     return true;
 }
 

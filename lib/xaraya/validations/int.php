@@ -13,7 +13,7 @@
  *
  * @throws VariableValidationException, BadParameterException
  */
-function variable_validations_int (&$subject, $parameters, $supress_soft_exc, &$name)
+function variable_validations_int (&$subject, $parameters, &$name)
 {
 
     $value = intval($subject);
@@ -21,8 +21,7 @@ function variable_validations_int (&$subject, $parameters, $supress_soft_exc, &$
     if ($name == '') $name = '<unknown>';
     $msg = 'Not an integer';
     if ("$subject" != "$value") {
-        if (!$supress_soft_exc) throw new VariableValidationException(array($name,$subject,$msg));
-        return false;
+        throw new VariableValidationException(array($name,$subject,$msg));
     }
 
     if (isset($parameters[0]) && trim($parameters[0]) != '') {
@@ -31,9 +30,7 @@ function variable_validations_int (&$subject, $parameters, $supress_soft_exc, &$
             throw new BadParameterException($parameters[0],'The parameter specifying the minimum value should be numeric. It is: "#(1)"');
         } elseif ($value < (int) $parameters[0]) {
             $msg = 'Integer Value "#(1)" is smaller than the specified minimum "#(2)"';
-            if (!$supress_soft_exc) 
-                throw new VariableValidationException(array($value,$parameters[0]),$msg);
-            return false;
+            throw new VariableValidationException(array($value,$parameters[0]),$msg);
         }
     }
 
@@ -43,9 +40,7 @@ function variable_validations_int (&$subject, $parameters, $supress_soft_exc, &$
             throw new BadParameterException($parameters[1],'The parameter specifying the maximum value should be numeric. It is: "#(1)"');
         } elseif ($value > (int) $parameters[1]) {
             $msg = 'Integer Value "#(1)" is larger than the specified minimum "#(2)"';
-            if (!$supress_soft_exc) 
-                throw new VariableValidationException(array($value,$parameters[1]),$msg);
-            return false;
+            throw new VariableValidationException(array($value,$parameters[1]),$msg);
         }
     }
 

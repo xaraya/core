@@ -18,15 +18,12 @@
  * @return bool true on isset, false on !isset
  * @throws VariableValidationException
  */
-function variable_validations_isset (&$subject, $parameters, $supress_soft_exc)
+function variable_validations_isset (&$subject, $parameters )
 {
     if (!isset($subject)) {
         $msg = 'The variable was not set while the validation requires it to be.';
-        if (!$supress_soft_exc) 
-            throw new VariableValidationException('subject', $msg);
-        return false;
+        throw new VariableValidationException('subject', $msg);
     }
-
     return true;
 }
 
