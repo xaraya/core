@@ -355,11 +355,6 @@ function xarVarFlushCached($cacheKey)
 { return xarCore::flushCached($cacheKey);             }
 
 
-function xarVar_addSlashes($var)
-{
-    return str_replace(array("\\",'"'), array("\\\\",'\"'), $var);
-}
-
 /**
  * Changes one variable from one context to another
  *
