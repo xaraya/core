@@ -15,28 +15,6 @@
 */
 function initializeSetup()
 {
-    /*********************************************************************
-    * Enter some default groups and users
-    *********************************************************************/
-    xarRoles::makeGroup('Everybody');
-    xarRoles::makeUser('Anonymous','anonymous','anonymous@xaraya.com');
-    xarRoles::makeUser('Admin','Admin','admin@xaraya.com','password');
-    xarRoles::makeGroup('Administrators');
-    xarRoles::makeGroup('Users');
-    xarRoles::makeUser('Myself','myself','myself@xaraya.com','password');
-
-    /*********************************************************************
-    * Arrange the roles in a hierarchy
-    * Format is
-    * makeMember(Child,Parent)
-    *********************************************************************/
-
-    xarRoles::isRoot('Everybody');
-    xarRoles::makeMemberByName('Administrators','Everybody');
-    xarRoles::makeMemberByName('Admin','Administrators');
-    xarRoles::makeMemberByName('Users','Everybody');
-    xarRoles::makeMemberByName('Anonymous','Everybody');
-    xarRoles::makeMemberByName('Myself','Everybody');
 
     /*********************************************************************
     * Define instances for the core modules

@@ -23,7 +23,7 @@ function blocks_admin_modifyconfig()
     if(!xarSecurityCheck('AdminBlock')) return;
     if (!xarVarFetch('update', 'isset', $update, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('itemsperpage', 'int', $data['itemsperpage'], xarModGetVar('blocks', 'itemsperpage'), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemsperpage', 'int', $data['itemsperpage'], xarModVars::get('blocks', 'itemsperpage'), XARVAR_NOT_REQUIRED)) return;
 
     if($update) {
         if (!xarSecConfirmAuthKey()) return;

@@ -36,7 +36,7 @@ function authsystem_admin_createpassword()
      if (!$modifiedrole) {
         return;
      }
-     if (!xarModGetVar('roles', 'askpasswordemail')) {
+     if (!xarModVars::get('roles', 'askpasswordemail')) {
         xarResponseRedirect(xarModURL('roles', 'admin', 'showusers',
                       array('uid' => $data['groupuid'], 'state' => $data['state'])));
         return true;

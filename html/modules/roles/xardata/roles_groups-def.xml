@@ -95,11 +95,11 @@
       <id>47</id>
       <label>Auth. Module</label>
       <type>textbox</type>
-      <default></default>
+      <default>xarModGetVar('roles', 'defaultauthmodule')</default>
       <source>xar_roles.auth_modid</source>
       <status>67</status>
       <order>9</order>
-      <validation>a:2:{s:10:"validation";s:0:"";s:8:"override";s:1:"1";}</validation>
+      <validation></validation>
     </property>
   </properties>
 </object>

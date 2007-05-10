@@ -102,11 +102,13 @@ class Role extends DataObject
         $this->val_code = $val_code;
         $this->auth_module = $auth_module;
         $this->parentlevel = 0;
-        $this->basetype = $basetype;
+//        $this->basetype = $basetype;
+        $ancestor = DataObjectMaster::getBaseAncestor(array('moduleid' => 27, 'itemtype' => $this->getType()));
+        $this->basetype = $ancestor['itemtype'];
     }
 
     /**
-     * add: add a new role object to the repository
+     * createItem: add a new role item to the repository
      *
      * Creates an entry in the repository for a role object that has been created
      *
@@ -115,55 +117,34 @@ class Role extends DataObject
      */
     public function createItem(Array $data = array())
     {
-        $this->checkInput();
-        $id = parent::createItem($data);
-
-        /*
-        if (empty($this->name))
-            throw new EmptyParameterException('name');
-
-        // TODO: validate the email address
-        if (($this->basetype == ROLES_USERTYPE) && (empty($this->uname) || empty($this->email)))
-            throw new EmptyParameterException('user name and valid email address.');
-
         // Confirm that this group or user does not already exist
         $q = new xarQuery('SELECT',$this->rolestable);
         if ($this->basetype == ROLES_GROUPTYPE) {
-            $q->eq('name',$this->name);
+            $q->eq('name',$this->getName());
         } else {
-            $q->eq('uname',$this->uname);
+            $q->eq('uname',$this->getUser());
         }
 
         if (!$q->run()) return;
 
         if ($q->getrows() > 0) {
-            throw new DuplicateException(array('role',($this->type==1)?$this->name:$this->uname));
+            throw new DuplicateException(array('role',($this->basetype == ROLES_GROUPTYPE)?$this->getName():$this->getUser()));
         }
 
-        $q = new xarQuery('INSERT',$this->rolestable);
-        $q->addfield('uname', $this->uname);
-        $q->addfield('name', $this->name);
-        $q->addfield('date_reg', time());
-        $q->addfield('valcode', $this->val_code);
-        $q->addfield('auth_modid', $this->auth_module);
-        $q->addfield('type', $this->type);
-        if ($this->basetype == ROLES_USERTYPE) {
-            $q->addfield('email', $this->email);
-            $q->addfield('pass', md5($this->pass));
-            $q->addfield('state', $this->state);
-            $q->addfield('auth_modid', $this->auth_module);
-        }
-        // Execute the query, bail if an exception was thrown
-        if (!$q->run()) return;
+        $id = parent::createItem($data);
 
-        // Fetch the last inserted user ID, bail if an exception was thrown
-        $this->properties['id']->value = $q->nextid($this->rolestable, 'id');
-        if (!$this->properties['id']->value) return;
-*/
-        //set the email useage for this user to false
+        // Set the email useage for this user to false
         xarModSetUserVar('roles','usersendemails', false, $id);
-        $parentpart = xarRoles::get($this->parentid);
-        return $parentpart->addMember($this);
+
+        // Get a value for the parent id
+        if (empty($data['parentid'])) xarVarFetch('parentid',  'int', $data['parentid'],  NULL, XARVAR_DONT_SET);
+        if (empty($data['parentid'])) $data['parentid'] = xarModVars::get('roles', 'defaultgroup');
+        if (!empty($data['parentid'])) {
+            $parent = xarRoles::get($data['parentid']);
+            if (!$parent->addMember($this))
+                throw new Exception('Unable to create a roles relation');
+        }
+        return $id;
     }
 
     /**

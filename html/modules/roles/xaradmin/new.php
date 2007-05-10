@@ -21,18 +21,18 @@ function roles_admin_new()
     $data = array();
 
     if (!xarVarFetch('return_url',  'isset', $data['return_url'], NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('pparentid',   'id', $data['pparentid'], xarModGetVar('roles','defaultgroup'), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('parentid',   'id', $data['parentid'], xarModGetVar('roles','defaultgroup'), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('itemtype',    'int',    $itemtype, ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('duvs',        'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
 
     $data['object'] = DataObjectMaster::getObject(array('module'   => 'roles', 'itemtype' => $itemtype));
     $data['basetype'] = xarModAPIFunc('dynamicdata','user','getbaseitemtype',array('moduleid' => 27, 'itemtype' => $itemtype));
-    $types = xarModAPIFunc('roles','user','getitemtypes');
-    $data['itemtype'] = $itemtype;
+//    $types = xarModAPIFunc('roles','user','getitemtypes');
 
     xarSession::setVar('ddcontext.roles', array(
                                             'return_url' => xarServerGetCurrentURL(),
                                             'basetype' => $data['basetype'],
+                                            'parentid' => $data['parentid'],
                                                 ));
     // call item new hooks
     $item = $data;

@@ -27,10 +27,10 @@ function authsystem_admin_modifyconfig()
         case 'modify':
         default:
             $data['authid']           = xarSecGenAuthKey();
-            $data['shorturlschecked'] = xarModGetVar('authsystem',  'SupportShortURLs') ? true : false;
-            $data['uselockout']       = xarModGetVar('authsystem,', 'uselockout') ? 'checked' : '';
-            $data['lockouttime']      = xarModGetVar('authsystem,', 'lockouttime')? xarModGetVar('authsystem,', 'lockouttime'): 15; //minutes
-            $data['lockouttries']     = xarModGetVar('authsystem,', 'lockouttries') ? xarModGetVar('authsystem,', 'lockouttries'): 3;
+            $data['shorturlschecked'] = xarModVars::get('authsystem',  'SupportShortURLs') ? true : false;
+            $data['uselockout']       = xarModVars::get('authsystem,', 'uselockout') ? 'checked' : '';
+            $data['lockouttime']      = xarModVars::get('authsystem,', 'lockouttime')? xarModVars::get('authsystem,', 'lockouttime'): 15; //minutes
+            $data['lockouttries']     = xarModVars::get('authsystem,', 'lockouttries') ? xarModVars::get('authsystem,', 'lockouttries'): 3;
 
             break;
 

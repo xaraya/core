@@ -49,8 +49,8 @@ function dynamicdata_util_meta($args)
     $data['export'] = $export;
     $data['prop'] = xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 'fieldtype', 'name' => 'dummy'));
 
-    if (xarModGetVar('themes','usedashboard')) {
-        $admin_tpl = xarModGetVar('themes','dashtemplate');
+    if (xarModVars::get('themes','usedashboard')) {
+        $admin_tpl = xarModVars::get('themes','dashtemplate');
     }else {
        $admin_tpl='default';
     }

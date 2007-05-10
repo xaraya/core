@@ -37,7 +37,7 @@ function dynamicdata_util_migrate($args)
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
     // retrieve past steps and recover if necessary
-    if (!xarModGetVar('dynamicdata','migratesteps')) {
+    if (!xarModVars::get('dynamicdata','migratesteps')) {
         xarModSetVar('dynamicdata','migratesteps',serialize(array()));
     }
     if (empty($from) && empty($to)) {
@@ -61,7 +61,7 @@ function dynamicdata_util_migrate($args)
     }
 
     // retrieve existing mappings and recover if necessary
-    $maps = xarModGetVar('dynamicdata','migratemaps');
+    $maps = xarModVars::get('dynamicdata','migratemaps');
     if (empty($maps)) {
         xarModSetVar('dynamicdata','migratemaps',serialize(array()));
         $maps = array();

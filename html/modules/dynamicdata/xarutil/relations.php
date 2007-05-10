@@ -63,7 +63,7 @@ function dynamicdata_util_relations($args)
         if (empty($table)) {
             $table = $objectid;
         }
-        $relations = xarModGetVar('dynamicdata','relations');
+        $relations = xarModVars::get('dynamicdata','relations');
         if (!empty($relations)) {
             $data['relations'] = unserialize($relations);
         } else {
@@ -141,8 +141,8 @@ function dynamicdata_util_relations($args)
         $data['relations'] = array();
     }
 
-    if (xarModGetVar('themes','usedashboard')) {
-        $admin_tpl = xarModGetVar('themes','dashtemplate');
+    if (xarModVars::get('themes','usedashboard')) {
+        $admin_tpl = xarModVars::get('themes','dashtemplate');
     }else {
        $admin_tpl='default';
     }

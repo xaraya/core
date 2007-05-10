@@ -51,15 +51,15 @@ class TextBoxProperty extends DataProperty
             $value = serialize($value);
         }
         if (!empty($value) && strlen($value) > $this->maxlength) {
-            $this->invalid = xarML('text : must be less than #(1) characters long',$this->max + 1);
+            $this->invalid = xarML('#(1) text: must be less than #(2) characters long', $this->name,$this->max + 1);
             $this->value = null;
             return false;
         } elseif (isset($this->min) && strlen($value) < $this->min) {
-            $this->invalid = xarML('text : must be at least #(1) characters long',$this->min);
+            $this->invalid = xarML('#(1) text: must be at least #(2) characters long', $this->name,$this->min);
             $this->value = null;
             return false;
         } elseif (!empty($this->regex) && !preg_match($this->regex, $value)) {
-            $this->invalid = xarML('text : does not match regular expression');
+            $this->invalid = xarML('#(1) text: does not match regular expression', $this->name);
             $this->value = null;
             return false;
         } else {

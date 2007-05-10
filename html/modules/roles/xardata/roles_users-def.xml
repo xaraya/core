@@ -109,7 +109,7 @@
       <source>xar_roles.auth_modid</source>
       <status>67</status>
       <order>10</order>
-      <validation>a:2:{s:10:"validation";s:0:"";s:8:"override";s:1:"1";}</validation>
+      <validation></validation>
     </property>
   </properties>
 </object>

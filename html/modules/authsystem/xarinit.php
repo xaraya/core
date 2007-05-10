@@ -64,9 +64,9 @@ function authsystem_upgrade($oldVersion)
         case '0.91.0':
 
            //Set the default authmodule if not already set
-           $isdefaultauth = xarModGetVar('roles','defaultauthmodule');
+           $isdefaultauth = xarModVars::get('roles','defaultauthmodule');
            if (!isset($isdefaultauth) || !is_integer($isdefaultauth)) {
-               xarModSetVar('roles', 'defaultauthmodule', xarModGetIDFromName('authsystem'));
+               xarModVars::get('roles', 'defaultauthmodule', xarMod::getID('authsystem'));
            }
 
            // Get database setup

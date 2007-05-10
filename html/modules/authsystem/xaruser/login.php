@@ -35,10 +35,10 @@ function authsystem_user_login()
     }
 
     $unlockTime  = (int) xarSession::getVar('authsystem.login.lockedout');
-    $lockouttime=xarModGetVar('authsystem','lockouttime')? xarModGetVar('authsystem','lockouttime') : 15;
-    $lockouttries =xarModGetVar('authsystem','lockouttries') ? xarModGetVar('authsystem','lockouttries') : 3;
+    $lockouttime=xarModVars::get('authsystem','lockouttime')? xarModVars::get('authsystem','lockouttime') : 15;
+    $lockouttries =xarModVars::get('authsystem','lockouttries') ? xarModVars::get('authsystem','lockouttries') : 3;
 
-    if ((time() < $unlockTime) && (xarModGetVar('authsystem','uselockout')==true)) {
+    if ((time() < $unlockTime) && (xarModVars::get('authsystem','uselockout')==true)) {
         throw new ForbiddenOperationException($lockouttime,xarML('Your account has been locked for #(1) minutes.'));
     }
 
@@ -95,9 +95,9 @@ function authsystem_user_login()
                 // set to inactive in the user table
                 //Get and check last resort first before going to db table
                 $lastresortvalue=array();
-                $lastresortvalue=xarModGetVar('privileges','lastresort');
+                $lastresortvalue=xarModVars::get('privileges','lastresort');
                 if (isset($lastresortvalue)) {
-                    $secret = @unserialize(xarModGetVar('privileges','lastresort'));
+                    $secret = @unserialize(xarModVars::get('privileges','lastresort'));
                     if (is_array($secret)) {
                         if ($secret['name'] == MD5($uname) && $secret['password'] == MD5($pass)) {
                             $lastresort=true;
@@ -176,7 +176,7 @@ function authsystem_user_login()
             // User is active.
 
                 // TODO: remove this when everybody has moved to 1.0
-                if(!xarModGetVar('roles', 'lockdata')) {
+                if(!xarModVars::get('roles', 'lockdata')) {
                     $lockdata = array('roles' => array( array('uid' => 4,
                                                               'name' => 'Administrators',
                                                               'notify' => TRUE)
@@ -188,7 +188,7 @@ function authsystem_user_login()
                 }
 
             // Check if the site is locked and this user is allowed in
-            $lockvars = unserialize(xarModGetVar('roles','lockdata'));
+            $lockvars = unserialize(xarModVars::get('roles','lockdata'));
             if ($lockvars['locked'] ==1) {
                 $rolesarray = array();
                 $roles = $lockvars['roles'];
@@ -227,7 +227,7 @@ function authsystem_user_login()
                 // Cast the result to an int in case VOID is returned
                 $attempts = (int) xarSession::getVar('authsystem.login.attempts');
 
-                if (($attempts >= $lockouttries) && (xarModGetVar('authsystem','uselockout')==true)){
+                if (($attempts >= $lockouttries) && (xarModVars::get('authsystem','uselockout')==true)){
                     // set the time for fifteen minutes from now
                     xarSession::setVar('authsystem.login.lockedout', time() + (60 * $lockouttime));
                     xarSession::setVar('authsystem.login.attempts', 0);
@@ -248,7 +248,7 @@ function authsystem_user_login()
             xarModSetUserVar('roles','userlastlogin',time()); //this is what everyone else will see
 
             $externalurl=false; //used as a flag for userhome external url
-            if (xarModGetVar('roles', 'loginredirect')) { //only redirect to home page if this option is set
+            if (xarModVars::get('roles', 'loginredirect')) { //only redirect to home page if this option is set
                 $settings = unserialize(xarModVars::get('roles', 'duvsettings'));
                 if (in_array('userhome', $settings)) {
                     $truecurrenturl = xarServerGetCurrentURL(array(), false);

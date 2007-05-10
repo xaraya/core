@@ -60,8 +60,8 @@ function dynamicdata_util_static($args)
     $data['itemtype'] = $itemtype;
     $data['authid'] = xarSecGenAuthKey();
 
-    if (xarModGetVar('themes','usedashboard')) {
-        $admin_tpl = xarModGetVar('themes','dashtemplate');
+    if (xarModVars::get('themes','usedashboard')) {
+        $admin_tpl = xarModVars::get('themes','dashtemplate');
     }else {
        $admin_tpl='default';
     }

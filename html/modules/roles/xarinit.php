@@ -122,7 +122,6 @@ function roles_activate()
 {
     //TODO: this stuff is happening here because at install blocks is not yet installed
 
-    // only go through this once
     // --------------------------------------------------------
     //
     // Create some modvars
@@ -135,13 +134,10 @@ function roles_activate()
     xarModVars::set('roles', 'locale', '');
     xarModVars::set('roles', 'duvsettings', serialize(array()));
     xarModVars::set('roles', 'userhome', 'undefined');
-    xarModUserVars::set('roles', 'userhome', '[base]',1);
     xarModVars::set('roles', 'userlastlogin', '');
     xarModVars::set('roles', 'passwordupdate', '');
-    xarModVars::set('roles', 'primaryparent', 1);
     xarModVars::set('roles', 'usertimezone', xarConfigGetVar('Site.Core.TimeZone'));
     xarModVars::set('roles', 'useremailformat', 'text');
-    xarModVars::set('roles', 'defaultgroup', 5);
     xarModVars::set('roles', 'displayrolelist', false);
     xarModVars::set('roles', 'usereditaccount', true);
     xarModVars::set('roles', 'allowuserhomeedit', false);
@@ -149,28 +145,13 @@ function roles_activate()
     xarModVars::set('roles', 'allowexternalurl', false);
     xarModVars::set('roles', 'usersendemails', false);
     xarModVars::set('roles', 'requirevalidation', true);
-    $lockdata = array('roles' => array( array('uid' => 4,
-                                              'name' => 'Administrators',
-                                              'notify' => TRUE)),
-                                  'message' => '',
-                                  'locked' => 0,
-                                  'notifymsg' => '');
-    xarModVars::set('roles', 'lockdata', serialize($lockdata));
-
     xarModVars::set('roles', 'itemsperpage', 20);
-    // save the uids of the default roles for later
-    $role = xarFindRole('Everybody');
-    xarModVars::set('roles', 'everybody', $role->getID());
-    $role = xarFindRole('Anonymous');
-    xarConfigSetVar('Site.User.AnonymousUID', $role->getID());
+
+    /*
     // set the current session information to the right anonymous uid
     // TODO: make the setUserInfo a class static in xarSession.php
     xarSession_setUserInfo($role->getID(), 0);
-    $role = xarFindRole('Admin');
-    if (!isset($role)) {
-      $role=xarUFindRole('Admin');
-    }
-    xarModVars::set('roles', 'admin', $role->getID());
+    */
 
     // --------------------------------------------------------
     // Register block types
@@ -184,6 +165,75 @@ function roles_activate()
 
 //    xarModAPIFunc('modules', 'admin', 'enablehooks', array('callerModName' => 'roles', 'hookModName' => 'roles'));
 
+    // --------------------------------------------------------
+    //
+    // Enter some default groups and users and put them in a hierarchy
+    //
+    $rolefields = array(
+                    'itemid' => 0,  // make this explicit, because we are going to reuse the roles we define
+                    'users' => 0,
+                    'regdate' => time(),
+                    'state' => ROLES_STATE_ACTIVE,
+                    'valcode' => 'createdbysystem',
+                    'authmodule' => xarMod::getID('roles'),
+    );
+    $group = DataObjectMaster::getObject(array('name' => 'roles_groups'));
+    $rolefields['role_type'] = ROLES_GROUPTYPE;
+    xarModVars::set('roles', 'defaultgroup', 0);
+
+    // The top level group Everybody
+    $rolefields['name'] = 'Everybody';
+    $rolefields['uname'] = 'everybody';
+    $rolefields['parentid'] = 0;
+    $topid = $group->createItem($rolefields);
+    xarRoles::isRoot('Everybody');
+    xarModVars::set('roles', 'everybody', $topid);
+    xarModVars::set('roles', 'defaultgroup', $topid);
+    xarModVars::set('roles', 'primaryparent', $topid);
+    xarModUserVars::set('roles', 'userhome', '[base]',$topid);
+
+    // The Administrators group
+    $rolefields['name'] = 'Administrators';
+    $rolefields['uname'] = 'administrators';
+    $rolefields['parentid'] = $topid;
+    $admingroup = $group->createItem($rolefields);
+    $lockdata = array('roles' => array( array('uid' => $admingroup,
+                                              'name' => $rolefields['name'],
+                                              'notify' => TRUE)),
+                                              'message' => '',
+                                              'locked' => 0,
+                                              'notifymsg' => '');
+    xarModVars::set('roles', 'lockdata', serialize($lockdata));
+
+    // The Users group group
+    $rolefields['name'] = 'Users';
+    $rolefields['uname'] = 'users';
+    $rolefields['parentid'] = $topid;
+    $usergroup = $group->createItem($rolefields);
+    xarModVars::set('roles', 'defaultgroup', $topid);
+
+    $user = DataObjectMaster::getObject(array('name' => 'roles_users'));
+    $rolefields['role_type'] = ROLES_USERTYPE;
+
+        // The Anonymous user
+    $rolefields['name'] = 'Anonymous';
+    $rolefields['uname'] = 'anonymous';
+    $rolefields['parentid'] = $topid;
+    $id = $user->createItem($rolefields);
+    xarConfigSetVar('Site.User.AnonymousUID', $topid);
+
+    // The Administrator
+    $rolefields['name'] = 'Administrator';
+    $rolefields['uname'] = 'admin';
+    $rolefields['parentid'] = $admingroup;
+    $user->createItem($rolefields);
+    xarModVars::set('roles', 'admin', $topid);
+
+    // The Myself user
+    $rolefields['name'] = 'Myself';
+    $rolefields['uname'] = 'myself';
+    $rolefields['parentid'] = $topid;
+    $user->createItem($rolefields);
 
     return true;
 }

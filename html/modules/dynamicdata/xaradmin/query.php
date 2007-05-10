@@ -116,7 +116,7 @@ function dynamicdata_admin_query($args)
     }
 
     if (!empty($query) && $query == $newquery) {
-        $queryinfo = xarModGetVar('dynamicdata','query.'.$query);
+        $queryinfo = xarModVars::get('dynamicdata','query.'.$query);
         if (!empty($queryinfo)) {
             $queryvars = unserialize($queryinfo);
             if ($reset) {
@@ -137,7 +137,7 @@ function dynamicdata_admin_query($args)
     $data = array();
     $data['query'] = $query;
     $data['oldquery'] = $query;
-    $querylist = xarModGetVar('dynamicdata','querylist');
+    $querylist = xarModVars::get('dynamicdata','querylist');
     if (!empty($querylist)) {
         $data['queries'] = unserialize($querylist);
     } else {

@@ -20,7 +20,7 @@ function dynamicdata_admin_main()
 // Security Check
     if(!xarSecurityCheck('EditDynamicData')) return;
 
-    if (xarModGetVar('modules', 'disableoverview') == 0){
+    if (xarModVars::get('modules', 'disableoverview') == 0){
         $data = xarModAPIFunc('dynamicdata','admin','menu');
 
         // Return the template variables defined in this function
