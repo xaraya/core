@@ -104,7 +104,7 @@
     <property name="authmodule">
       <id>38</id>
       <label>Auth. Module</label>
-      <type>module</type>
+      <type>integerbox</type>
       <default>xarModGetVar('roles', 'defaultauthmodule')</default>
       <source>xar_roles.auth_modid</source>
       <status>67</status>

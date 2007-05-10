@@ -680,7 +680,7 @@ function installer_admin_create_administrator()
                    'uname'      => $userName,
                    'email'      => $email,
                    // CHECKME: can we transform this in the dproperty
-                   'password'   => MD5($pass),
+                   'password'   => $role->properties['password']->encrypt($pass),
                    'state'      => ROLES_STATE_ACTIVE);
 
     xarModSetVar('roles', 'lastuser', $userName);

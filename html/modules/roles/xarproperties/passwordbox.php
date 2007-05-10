@@ -70,17 +70,23 @@ class PassBoxProperty extends TextBoxProperty
         }
 
         if (!empty($value) && strlen($value) > $this->maxlength) {
-            $this->invalid = xarML('password : must be less than #(1) characters long',$this->max + 1);
+            $this->invalid = xarML('password: must be less than #(1) characters long',$this->max + 1);
             $this->value = null;
             return false;
         } elseif (isset($this->min) && strlen($value) < $this->min) {
-            $this->invalid = xarML('password : must be at least #(1) characters long',$this->min);
+            $this->invalid = xarML('password: must be at least #(1) characters long',$this->min);
             $this->value = null;
             return false;
         } else {
-            $this->value = $value;
+            $this->value = $this->encrypt($value);
             return true;
         }
+    }
+
+    public function encrypt($value = null)
+    {
+        if (empty($value)) return null;
+        return MD5($value);
     }
 
     public function showInput(Array $data = array())

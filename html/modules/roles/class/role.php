@@ -120,9 +120,11 @@ class Role extends DataObject
         // Confirm that this group or user does not already exist
         $q = new xarQuery('SELECT',$this->rolestable);
         if ($this->basetype == ROLES_GROUPTYPE) {
-            $q->eq('name',$this->getName());
+            if (empty($data['name'])) $data['name'] = $this->getName();
+            $q->eq('name',$data['name']);
         } else {
-            $q->eq('uname',$this->getUser());
+            if (empty($data['uname'])) $data['uname'] = $this->getUser();
+            $q->eq('uname',$data['uname']);
         }
 
         if (!$q->run()) return;

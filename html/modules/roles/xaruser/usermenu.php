@@ -151,13 +151,12 @@ function roles_user_usermenu($args)
             }
             $pass = $object->properties['password']->getValue();
 
-            $newpass = md5($pass);
+            $newpass = $object->properties['password']->encrypt($pass);
             $passchanged = false;
             if ($oldpass != $newpass) {
                 $passchanged = true;
                 $object->properties['password']->value = $newpass;
             }
-
 
 
             $object->updateItem();
