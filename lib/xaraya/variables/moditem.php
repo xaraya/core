@@ -35,8 +35,8 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         }
 
         // Not in cache, need to retrieve it
-        $dbconn =& xarDBGetConn();
-        $tables =& xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
 
         $module_itemvarstable = $tables['module_itemvars'];
         unset($modvarid);
@@ -67,8 +67,8 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         assert('!is_null($value); /* Not allowed to set a variable to NULL value */');
         if (empty($name)) throw new EmptyParameterException('name');
 
-        $dbconn =& xarDBGetConn();
-        $tables =& xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
 
         $module_itemvarstable = $tables['module_itemvars'];
 
@@ -105,8 +105,8 @@ class xarModItemVars extends xarVars implements IxarModItemVars
     {
         if (empty($name)) throw new EmptyParameterException('name');
 
-        $dbconn =& xarDBGetConn();
-        $tables =& xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
 
         $module_itemvarstable = $tables['module_itemvars'];
         // We need the variable id

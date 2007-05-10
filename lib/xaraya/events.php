@@ -277,7 +277,7 @@ class xarEvents extends Object implements IxarEvents
         if (function_exists('xarConfigGetVar')) {
             $handlers = xarConfigGetVar('Site.Evt.Handlers');
         } else {
-            $dbconn =& xarDBGetConn();
+            $dbconn = xarDB::getConn();
             $sitetabpre = xarDBGetSiteTablePrefix();
             $configtable = $sitetabpre.'_config_vars';
             $query = "SELECT value FROM $configtable WHERE name = ?";

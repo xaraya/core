@@ -7,14 +7,14 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marco Canini
-*/
+**/
 
 /**
  * Exceptions for this subsystem
  *
  * @package config
  * @todo this exception is too weak
- */
+**/
 class ConfigurationException extends ConfigurationExceptions
 {
     protected $message = 'There is an unknown configuration error detected.';
@@ -28,13 +28,13 @@ class ConfigurationException extends ConfigurationExceptions
  * @param array args
  * @param integer whatElseIsGoingLoaded
  * @return bool
-*/
+**/
 function xarConfig_init(&$args, $whatElseIsGoingLoaded)
 {
     // Configuration Unit Tables
     $sitePrefix = xarDBGetSiteTablePrefix();
 
-    // TODO: revisit nameing, this was minimal change when migrating
+    // @todo revisit nameing, this was minimal change when migrating
     $tables = array('config_vars' => $sitePrefix . '_module_vars');
 
     xarDB::importTables($tables);
@@ -42,7 +42,7 @@ function xarConfig_init(&$args, $whatElseIsGoingLoaded)
 }
 
 sys::import('xaraya.variables.config');
-/**
+/*
  * Wrapper functions to support Xaraya 1 API for modvars
  * NOTE: the $prep in the signature has been dropped!!
  */

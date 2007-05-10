@@ -52,8 +52,8 @@ class xarModVars extends xarVars implements IxarModVars
         $modBaseInfo = xarMod::getBaseInfo($scope);
         if (!isset($modBaseInfo)) return; // throw back
 
-        $dbconn =& xarDBGetConn();
-        $tables =& xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
 
         // Retrieve all the variables for this module at once
         $module_varstable = $tables['module_vars'];
@@ -90,8 +90,8 @@ class xarModVars extends xarVars implements IxarModVars
         $modBaseInfo = xarMod::getBaseInfo($scope);
         if (!isset($modBaseInfo)) return;
 
-        $dbconn =& xarDBGetConn();
-        $tables =& xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
 
         $module_varstable = $tables['module_vars'];
 
@@ -125,8 +125,8 @@ class xarModVars extends xarVars implements IxarModVars
         if (empty($name)) throw new EmptyParameterException('name');
         assert('!is_null($value); /* Not allowed to set a variable to NULL value */');
 
-        $dbconn =& xarDBGetConn();
-        $tables =& xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
         $modBaseInfo = xarMod::getBaseInfo($scope);
         $module_varstable = $tables['module_vars'];
         // We need the variable id
@@ -169,8 +169,8 @@ class xarModVars extends xarVars implements IxarModVars
     {
         if (empty($scope)) throw new EmptyParameterException('modName');
 
-        $dbconn =& xarDBGetConn();
-        $tables =& xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
         $modBaseInfo = xarMod::getBaseInfo($scope);
 
         // Delete all the itemvars derived from this var first
@@ -211,8 +211,8 @@ class xarModVars extends xarVars implements IxarModVars
 
         $modBaseInfo = xarMod::getBaseInfo($scope);
 
-        $dbconn =& xarDBGetConn();
-        $tables =& xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
 
         $module_varstable     = $tables['module_vars'];
         $module_itemvarstable = $tables['module_itemvars'];
@@ -283,8 +283,8 @@ class xarModVars extends xarVars implements IxarModVars
             return xarCore::getCached('Mod.GetVarID', $modBaseInfo['name'] . $name);
         }
 
-        $dbconn =& xarDBGetConn();
-        $tables =& xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
 
         $module_varstable = $tables['module_vars'];
 

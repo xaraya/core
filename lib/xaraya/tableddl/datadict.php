@@ -7,7 +7,7 @@
  * USE THE METHODS IN xarDataDict.php. BOTH SUBSYSTEMS ARE NOT 100% FINISHED
  * BUT THIS ONE WILL BE ABANDONED, YOU MIGHT AS WELL WRITE YOUR CODE TO USE
  * THE MAINTAINED SUBSYSTEM.
- 
+
  * @package database
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -471,8 +471,9 @@ function &xarDB__datadictInit()
 //          The xarTableDDL API doesn't really provide for this
 
     if (!isset($datadict)) {
-        $dbconn =& xarDBGetConn();
-        $datadict =& xarDBNewDataDict($dbconn, 'ALTERTABLE');
+        $dbconn   = xarDB::getConn();
+        // @todo This doesnt work yet in 2.x
+        $datadict = xarDBNewDataDict($dbconn, 'ALTERTABLE');
     }
 
     return $datadict;

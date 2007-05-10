@@ -31,8 +31,8 @@ class RequestObject extends Object
         if (empty($hookAction)) return true;
 
         // Check if there's already a hook registered
-        $dbconn =& xarDBGetConn();
-        $xartable =& xarDBGetTables();
+        $dbconn   = xarDB::getConn();
+        $xartable = xarDB::getTables();
         $hookstable = $xartable['hooks'];
         $tmodInfo = xarMod::getBaseInfo($this->getmodule());
         $tmodId = $tmodInfo['systemid'];

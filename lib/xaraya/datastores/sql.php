@@ -25,8 +25,8 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
     function __construct($name=null)
     {
         parent::__construct($name);
-        $this->db     = xarDBGetConn();
-        $this->tables = xarDBGetTables(); // Is this scopy enough? i.e. would all tables be there already?
+        $this->db     = xarDB::getConn();
+        $this->tables = xarDB::getTables(); // Is this scopy enough? i.e. would all tables be there already?
     }
 
     /**

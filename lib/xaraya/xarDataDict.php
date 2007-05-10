@@ -38,7 +38,7 @@ class xarDataDict extends Object
         // Check if we passed in a database connection.
         if (empty($dbconn)) {
             // Get current database connection
-            $dbconn =& xarDBGetConn();
+            $dbconn = xarDB::getConn();
         }
 
         // Create new data dictionary
@@ -655,7 +655,7 @@ class xarMetaData extends Object
         // TODO: check heritage of the object to be sure it is a DB connection.
         if (empty($dbconn) || !is_object($dbconn)) {
             // Get current default database connection
-            $dbconn =& xarDBGetConn();
+            $dbconn = xarDB::getConn();
         }
 
         $this->dbconn =& $dbconn;

@@ -86,8 +86,9 @@ class PreValidation extends ValueValidations
                     case 'display': $subject = xarVarPrepForDisplay($subject); break;
                     case 'store'  :
                     case 'sql'    :
+                        // @todo this doesnt belong here, creates database dependency too
                         // Preparing for use as a quoted SQL string.
-                        $dbconn =& xarDBGetConn();
+                        $dbconn = xarDB::getConn();
                         // @todo when using bindvars this can be just (string) $subject
                         $subject = $dbconn->qstr($subject);
                         break;

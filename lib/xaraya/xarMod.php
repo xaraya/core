@@ -542,8 +542,8 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
     }
 
     // Get database info
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn   = xarDB::getConn();
+    $xartable = xarDB::getTables();
     $hookstable    = $xartable['hooks'];
     $modulestable  = $xartable['modules'];
 
@@ -617,8 +617,8 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
     // Get all hook modules for the caller module once
     if (!isset($modHookedCache[$callerModName])) {
         // Get database info
-        $dbconn =& xarDBGetConn();
-        $xartable =& xarDBGetTables();
+        $dbconn   = xarDB::getConn();
+        $xartable = xarDB::getTables();
         $hookstable   = $xartable['hooks'];
         $modulestable = $xartable['modules'];
 
@@ -697,8 +697,8 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
 function xarModRegisterHook($hookObject, $hookAction, $hookArea, $hookModName, $hookModType, $hookFuncName)
 {
     // Get database info
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn   = xarDB::getConn();
+    $xartable = xarDB::getTables();
     $hookstable = $xartable['hooks'];
 
     // Insert hook
@@ -736,8 +736,8 @@ function xarModRegisterHook($hookObject, $hookAction, $hookArea, $hookModName, $
 function xarModUnregisterHook($hookObject, $hookAction, $hookArea,$hookModName, $hookModType, $hookFuncName)
 {
     // Get database info
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn   = xarDB::getConn();
+    $xartable = xarDB::getTables();
     $hookstable = $xartable['hooks'];
 
     // Remove hook
@@ -1043,8 +1043,8 @@ class xarMod extends Object implements IxarMod
         // Log it when it doesnt come from the cache
         xarLogMessage("xarMod::getInfo ". $modRegId ." / " . $type);
 
-        $dbconn =& xarDBGetConn();
-        $tables =& xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
 
         switch($type) {
         case 'module':
@@ -1195,8 +1195,8 @@ class xarMod extends Object implements IxarMod
         // Log it when it doesnt come from the cache
         xarLogMessage("xarMod::getBaseInfo ". $modName ." / ". $type);
 
-        $dbconn =& xarDBGetConn();
-        $tables =& xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
 
         // theme+s or module+s
         $table = $tables[$type.'s'];

@@ -7,7 +7,7 @@
  * USE THE METHODS IN xarDataDict.php. BOTH SUBSYSTEMS ARE NOT 100% FINISHED
  * BUT THIS ONE WILL BE ABANDONED, YOU MIGHT AS WELL WRITE YOUR CODE TO USE
  * THE MAINTAINED SUBSYSTEM.
- 
+
  * @package database
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -61,8 +61,8 @@ function xarDB__mysqlCreateTable($tableName, $fields)
     // creating DDL to return, not executing it.
     // There are instances when we don't want to drop the table, but
     // look for the exception to know the table has been created.
-    $dbconn =& xarDBGetConn();
-    $query = 'DROP TABLE IF EXISTS ' . $tableName;
+    $dbconn = xarDB::getConn();
+    $query  = 'DROP TABLE IF EXISTS ' . $tableName;
     // CHECKME: Do we want to use bind vars here?
     $result =& $dbconn->Execute($query);
 
@@ -172,7 +172,7 @@ function xarDB__mysqlAlterTable($tableName, $args)
             // the existing schema. Also b/c the fetch mode may or may not be set to NUM, set it to
             // ASSOC so we don't have to loop through the entire returned array looking for are our one
             // field and field type
-            $dbconn =& xarDBGetConn();
+            $dbconn = xarDB::getConn();
             $dbInfo = $dbconn->getDatabaseInfo();
             $tblInfo = $dbInfo->getTable($tableName);
             $tableInfoArray = $tblInfo->getColumns();

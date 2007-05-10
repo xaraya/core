@@ -222,7 +222,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
 
         // TODO: this is used nowhere, plus it introduces a db connection here which is of no use
         if ($prep & XARVAR_PREP_FOR_STORE) {
-            $dbconn =& xarDBGetConn();
+            $dbconn = xarDB::getConn();
             $value = $dbconn->qstr($value);
         }
 

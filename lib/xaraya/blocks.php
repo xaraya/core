@@ -144,8 +144,8 @@ function xarBlock_renderGroup($groupname, $template = NULL)
 
     $blockCaching = xarCore::getCached('xarcache', 'blockCaching');
 
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $tables = xarDB::getTables();
 
     $blockGroupInstancesTable = $tables['block_group_instances'];
     $blockInstancesTable      = $tables['block_instances'];

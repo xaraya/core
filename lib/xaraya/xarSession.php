@@ -147,8 +147,8 @@ class xarSession extends Object implements IsessionHandler
     function __construct(&$args)
     {
         // Set up our container.
-        $this->db =& xarDBGetConn();
-        $tbls =& xarDBGetTables();
+        $this->db = xarDB::getConn();
+        $tbls     = xarDB::getTables();
         $this->tbl = $tbls['session_info'];
 
         // Set up the environment
@@ -578,8 +578,8 @@ class xarSession extends Object implements IsessionHandler
      */
     static function setUserInfo($userId, $rememberSession)
     {
-        $dbconn =& xarDBGetConn();
-        $xartable =& xarDBGetTables();
+        $dbconn   = xarDB::getConn();
+        $xartable = xarDB::getTables();
 
         $sessioninfoTable = $xartable['session_info'];
         try {
