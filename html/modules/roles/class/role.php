@@ -259,6 +259,12 @@ class Role extends DataObject
      */
     public function deleteItem(Array $data = array())
     {
+        if (!empty($data['itemid'])) $this->setID($data['itemid']);
+
+        // FIXME: park this here for the moment
+        if($this->getID() == xarModVars::get('roles','defaultgroup'))
+            throw new ForbiddenOperationException($defaultgroup,'The group #(1) is the default group for new users. If you want to remove it change the appropriate configuration setting first.');
+
         // get a list of all relevant entries in the rolemembers table
         // where this role is the child
         $query = "SELECT parentid FROM $this->rolememberstable WHERE id= ?";
@@ -266,15 +272,19 @@ class Role extends DataObject
         $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->getID()));
 
+        // FIXME: park this here for the moment
+        if(count($result->fields) == 1)
+            throw new ForbiddenOperationException(null,'The user has one parent group, removal is not allowed');
+
         // go through the list, retrieving the roles and detaching each one
         // we need to do it this way because the method removeMember is more than just
         // a simple SQL DELETE
         while ($result->next()) {
             list($parentid) = $result->fields;
-            $parentpart = xarRoles::get($parentid);
+            $parent = xarRoles::get($parentid);
             // Check that a parent was returned
-            if ($parentpart) {
-                $parentpart->removeMember($this);
+            if ($parent) {
+                $parent->removeMember($this);
             }
         }
         // delete the relevant entry in the roles table

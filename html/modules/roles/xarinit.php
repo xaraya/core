@@ -188,7 +188,6 @@ function roles_activate()
     $topid = $group->createItem($rolefields);
     xarRoles::isRoot('Everybody');
     xarModVars::set('roles', 'everybody', $topid);
-    xarModVars::set('roles', 'defaultgroup', $topid);
     xarModVars::set('roles', 'primaryparent', $topid);
     xarModUserVars::set('roles', 'userhome', '[base]',$topid);
 
@@ -210,7 +209,7 @@ function roles_activate()
     $rolefields['uname'] = 'users';
     $rolefields['parentid'] = $topid;
     $usergroup = $group->createItem($rolefields);
-    xarModVars::set('roles', 'defaultgroup', $topid);
+    xarModVars::set('roles', 'defaultgroup', $usergroup);
 
     $user = DataObjectMaster::getObject(array('name' => 'roles_users'));
     $rolefields['role_type'] = ROLES_USERTYPE;
