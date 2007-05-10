@@ -59,7 +59,7 @@ function roles_admin_modifyconfig()
 
             $siteadmins = array();
             $adminids = array();
-            foreach ($admins as $admin)
+           foreach ($admins as $admin)
             {
                 if($admin->isUser() && !in_array($admin->getID(),$adminids)){
                     $siteadmins[] = array('name' => $admin->getName(),

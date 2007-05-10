@@ -467,14 +467,13 @@ class Role extends DataObject
                         rm.parentid = ?";
         // set up the query and get the data
         if ($state == ROLES_STATE_CURRENT) {
-             $bindvars = array(ROLES_USERTYPE,ROLES_STATE_DELETED,$this->properties['id']->value);
+             $bindvars = array(ROLES_USERTYPE,ROLES_STATE_DELETED,$this->getID());
 
         } else {
              $bindvars = array(ROLES_USERTYPE, $state, $this->properties['id']->value);
         }
         if (isset($selection)) $query .= $selection;
         $query .= " ORDER BY " . $order;
-
         // Prepare the query
         $stmt = $this->dbconn->prepareStatement($query);
 
@@ -506,7 +505,7 @@ class Role extends DataObject
             sys::import('modules.dynamicdata.class.objects.master');
             $role = DataObjectMaster::getObject(array('name' => 'roles_users'));
             $role->getItem(array('itemid' => $uid));
-            $user[] = $role;
+            $users[] = $role;
         }
         // done
         return $users;
@@ -666,9 +665,9 @@ class Role extends DataObject
      */
     public function getDescendants($state = ROLES_STATE_CURRENT, $grpflag=0)
     {
-        $role = xarRoles::get($this->properties['id']->value);
-        $users = $role->getUsers($state);
-        $groups = xarRoles::getSubGroups($this->properties['id']->value);
+        $users = $this->getUsers($state);
+
+        $groups = xarRoles::getSubGroups($this->getID());
         $ua = array();
         foreach($users as $user){
             //using the ID as the key so that if a person is in more than one sub group they only get one email (mrb: email?)

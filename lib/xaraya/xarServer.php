@@ -386,7 +386,7 @@ class xarRequest extends Object
             if(!is_array($value)) {
                 $value = stripslashes($value);
             } else {
-                array_walk(&$value,array('self','__stripslashes'));
+                array_walk($value,array('self','__stripslashes'));
             }
         }
         return $value;
