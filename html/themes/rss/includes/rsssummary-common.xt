@@ -8,7 +8,7 @@
     </link>
     <pubDate><xar:set name="gmpubdate">gmdate("D, d M Y H:i:s",$pubdate)</xar:set>#$gmpubdate# GMT</pubDate>
     <format resource="http://www.w3.org/1999/xhtml"/>
-    <encoded><![CDATA[ #xarVarTransform($summary, 'HTML', 'XML')# ]]></encoded>
+    <encoded><![CDATA[ #$summary# ]]></encoded>
     <description>
       <xar:var name="rsssummary"/>
     </description>
