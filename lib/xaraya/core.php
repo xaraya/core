@@ -289,7 +289,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     if (xarConfigGetVar('Site.Core.LoadLegacy') == true) {
-        sys::import('xaraya.xarLegacy');
+        sys::import('xaraya.legacy');
     }
 
     /*
