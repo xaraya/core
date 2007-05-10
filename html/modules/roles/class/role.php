@@ -23,6 +23,7 @@ sys::import('modules.roles.class.xarQuery');
  */
 class Role extends DataObject
 {
+    /*
     public $uid;          //the id of this user or group
     public $name;         //the name of this user or group
     public $type;         //the type of this role (0=user, 1=group)
@@ -34,6 +35,7 @@ class Role extends DataObject
     public $val_code;     //the validation code of this user or group
     public $state;        //the state of this user or group
     public $auth_module;  //no idea what this is (not used by groups)
+    */
     public $parentlevel;  //we use this just to store transient information
     public $basetype;     //the base itemtype. we add this so it can be passed rather than calculated here
 
@@ -55,7 +57,6 @@ class Role extends DataObject
      * @param array $pargs
      * @return object role
      */
-//    public function __construct($pargs)
     public function __construct(DataObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
@@ -63,13 +64,14 @@ class Role extends DataObject
         extract($args);
 
         $this->dbconn =& xarDBGetConn();
-        $xartable =& xarDBGetTables();
-        $this->rolestable = $xartable['roles'];
-        $this->rolememberstable = $xartable['rolemembers'];
 
         // dodgy. remove later on
         sys::import('modules.privileges.xartables');
         xarDB::importTables(privileges_xartables());
+
+        $xartable =& xarDBGetTables();
+        $this->rolestable = $xartable['roles'];
+        $this->rolememberstable = $xartable['rolemembers'];
         $this->privilegestable = $xartable['privileges'];
         $this->acltable = $xartable['security_acl'];
         $this->realmstable = $xartable['security_realms'];
