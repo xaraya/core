@@ -13,7 +13,7 @@
  *
 **/
 sys::import('xaraya.validations.email');
-class FullEmailValidation extends EmailValidations
+class FullEmailValidation extends EmailValidation
 {
     function validate(&$subject, $parameters=null)
     {
