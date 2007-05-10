@@ -225,8 +225,8 @@ function roles_activate()
     $rolefields['name'] = 'Administrator';
     $rolefields['uname'] = 'admin';
     $rolefields['parentid'] = $admingroup;
-    $user->createItem($rolefields);
-    xarModVars::set('roles', 'admin', $topid);
+    $adminid = user->createItem($rolefields);
+    xarModVars::set('roles', 'admin', $adminid);
 
     // The Myself user
     $rolefields['name'] = 'Myself';

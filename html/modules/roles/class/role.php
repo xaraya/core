@@ -234,7 +234,7 @@ class Role extends DataObject
     }
 
     /**
-     * remove: make a role deleted
+     * deleteItem: make a role deleted
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @return bool

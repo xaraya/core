@@ -33,6 +33,8 @@ function roles_admin_modifyconfig()
                     break;
                 }
             }
+            if (!isset($adminpriv))
+                throw new Exception('The designated site admin does not have administration privileges');
 
             $dbconn   =& xarDBGetConn();
             $xartable =& xarDBGetTables();
