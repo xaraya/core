@@ -204,19 +204,19 @@ function modules_init()
 function modules_activate()
 {
     // make sure we dont miss empty variables (which were not passed thru)
-    $selstyle = xarModGetVar('modules', 'hidecore');
-    $selstyle = xarModGetVar('modules', 'selstyle');
-    $selstyle = xarModGetVar('modules', 'selfilter');
-    $selstyle = xarModGetVar('modules', 'selsort');
-    if (empty($hidecore)) xarModSetVar('modules', 'hidecore', 0);
-    if (empty($selstyle)) xarModSetVar('modules', 'selstyle', 'plain');
-    if (empty($selfilter)) xarModSetVar('modules', 'selfilter', XARMOD_STATE_ANY);
-    if (empty($selsort)) xarModSetVar('modules', 'selsort', 'nameasc');
+    $selstyle = xarModVars::get('modules', 'hidecore');
+    $selstyle = xarModVars::get('modules', 'selstyle');
+    $selstyle = xarModVars::get('modules', 'selfilter');
+    $selstyle = xarModVars::get('modules', 'selsort');
+    if (empty($hidecore)) xarModVars::set('modules', 'hidecore', 0);
+    if (empty($selstyle)) xarModVars::set('modules', 'selstyle', 'plain');
+    if (empty($selfilter)) xarModVars::set('modules', 'selfilter', XARMOD_STATE_ANY);
+    if (empty($selsort)) xarModVars::set('modules', 'selsort', 'nameasc');
 
 
 
     // New in 1.1.x series but not used
-    xarModSetVar('modules', 'disableoverview',0);
+    xarModVars::set('modules', 'disableoverview',0);
 
     return true;
 }

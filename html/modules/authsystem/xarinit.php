@@ -42,9 +42,9 @@ function authsystem_activate()
     xarRegisterMask('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
 
     /* Define Module vars */
-    xarModSetVar('authsystem', 'lockouttime', 15);
-    xarModSetVar('authsystem', 'lockouttries', 3);
-    xarModSetVar('authsystem', 'uselockout', false);
+    xarModVars::set('authsystem', 'lockouttime', 15);
+    xarModVars::set('authsystem', 'lockouttries', 3);
+    xarModVars::set('authsystem', 'uselockout', false);
 
     return true;
 }

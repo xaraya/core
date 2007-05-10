@@ -61,7 +61,7 @@ function mail_adminapi_hookmaildelete($args)
     $encoding = xarModGetVar('mail', 'encoding');
     if (empty($encoding)) {
         $encoding = '8bit';
-        xarModSetVar('mail', 'encoding', $encoding);
+        xarModVars::set('mail', 'encoding', $encoding);
     }
     $from = xarModGetVar('mail', 'adminmail');
     $fromname = xarModGetVar('mail', 'adminname');

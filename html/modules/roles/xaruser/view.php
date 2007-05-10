@@ -52,9 +52,9 @@ function roles_user_view($args)
     if (!isset($order)) $data['order'] = 'name';
     if (!isset($search)) $data['search'] = '';
     if (!isset($startnum)) $data['startnum'] = 1;
-    if (!isset($numitems)) $numitems = xarModGetVar('roles', 'itemsperpage');
+    if (!isset($numitems)) $numitems = xarModVars::get('roles', 'itemsperpage');
 
-    $numitems = xarModGetVar('roles', 'itemsperpage');
+    $numitems = xarModVars::get('roles', 'itemsperpage');
     $pagerfilter['order'] = $data['order'];
     $pagerfilter['search'] = $data['search'];
     $pagerfilter['startnum'] = '%%';

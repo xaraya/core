@@ -13,7 +13,7 @@
 
 /**
  * viewTree - display part of the roles hierarchy as a tree
- * 
+ *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param   none
@@ -28,7 +28,7 @@ function roles_user_viewtree()
     if (!xarSecurityCheck('ViewRoles')) return;
     // Define at which uid the tree starts
     // If not set the uid becomes that of Everybody
-    if(!xarVarFetch('uid',     'int', $uid,    xarModGetVar('roles','everybody'), XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('uid',     'int', $uid,    xarModVars::get('roles','everybody'), XARVAR_NOT_REQUIRED)) {return;}
     // Define the number of levels to be displayed
     // If not set then defaults to 0 (all the levels below the first node are displayed)
     if(!xarVarFetch('levels',  'int', $levels, 0, XARVAR_NOT_REQUIRED)) {return;}

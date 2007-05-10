@@ -33,7 +33,7 @@ function roles_admin_purge($args)
     $rolestable = $xartable['roles'];
 
     $deleted = '[' . xarML('deleted') . ']';
-    $numitems = xarModGetVar('roles', 'itemsperpage');
+    $numitems = xarModVars::get('roles', 'itemsperpage');
     // Make sure a value was retrieved for itemsperpage
     if (empty($numitems)) $numitems = -1;
 
@@ -123,7 +123,7 @@ function roles_admin_purge($args)
                     $email = explode($deleted,$role['email']);
                     $role['email']=$email[0];
 // now check that email is unique if this has to be checked (fix for nonexisting Bug)
-                    if (xarModGetVar('roles', 'uniqueemail')) {
+                    if (xarModVars::get('roles', 'uniqueemail')) {
                         $existinguser = xarModAPIFunc('roles','user','get',array('email' => $email[0], 'state' => ROLES_STATE_CURRENT));
                         if (is_array($existinguser)) $unique = 0;
                     }
@@ -166,7 +166,7 @@ function roles_admin_purge($args)
             foreach ($purgeids as $id => $val) {
 // --- skip if we are trying to remove the designated site admin.
 // TODO: insert error feedabck here somehow
-                if($id == xarModGetVar('roles','admin')) continue;
+                if($id == xarModVars::get('roles','admin')) continue;
 // --- do this in 2 stages. First, delete the role: this will update the user
 // --- count on all the role's parents
                 $role = xarRoles::get($id);

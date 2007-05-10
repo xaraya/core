@@ -37,10 +37,10 @@ function authsystem_admin_modifyconfig()
         case 'update':
             // Confirm authorisation code
             if (!xarSecConfirmAuthKey()) return;
-            xarModSetVar('authsystem', 'SupportShortURLs', $shorturls);
-            xarModSetVar('authsystem', 'uselockout', $uselockout);
-            xarModSetVar('authsystem', 'lockouttime', $lockouttime);
-            xarModSetVar('authsystem', 'lockouttries', $lockouttries);
+            xarModVars::set('authsystem', 'SupportShortURLs', $shorturls);
+            xarModVars::set('authsystem', 'uselockout', $uselockout);
+            xarModVars::set('authsystem', 'lockouttime', $lockouttime);
+            xarModVars::set('authsystem', 'lockouttries', $lockouttries);
             xarResponseRedirect(xarModURL('authsystem', 'admin', 'modifyconfig'));
             // Return
             return true;

@@ -90,8 +90,8 @@ function roles_admin_updaterole()
 
     //Change the defaultgroup var values if the name is changed
     if ($basetype == ROLES_GROUPTYPE) {
-        $defaultgroupuid = xarModGetVar('roles','defaultgroup');
-        if ($uid == $defaultgroupuid) xarModSetVar(xarModGetNameFromID(xarModGetVar('roles','defaultauthmodule')), 'defaultgroup', $pname);
+        $defaultgroupuid = xarModVars::get('roles','defaultgroup');
+        if ($uid == $defaultgroupuid) xarModVars::set(xarModGetNameFromID(xarModVars::get('roles','defaultauthmodule')), 'defaultgroup', $pname);
 
         // Adjust the user count if necessary
         if ($oldtype == ROLES_USERTYPE) $oldrole->adjustParentUsers(-1);
@@ -102,7 +102,7 @@ function roles_admin_updaterole()
         //Ask to send email if the password has changed
         $pass = $object->properties['password']->value;
         if ($passchanged) {
-            if (xarModGetVar('roles', 'askpasswordemail')) {
+            if (xarModVars::get('roles', 'askpasswordemail')) {
                 xarSession::setVar('tmppass',$pass);
                 xarResponseRedirect(xarModURL('roles', 'admin', 'asknotification',
                 array('uid' => array($uid => '1'), 'mailtype' => 'password')));
@@ -126,7 +126,7 @@ function roles_admin_updaterole()
                     $mailtype = 'pending';
                 break;
             }
-            if (xarModGetVar('roles', 'ask'.$mailtype.'email')) {
+            if (xarModVars::get('roles', 'ask'.$mailtype.'email')) {
                 xarResponseRedirect(xarModURL('roles', 'admin', 'asknotification',
                               array('uid' => array($uid => '1'), 'mailtype' => $mailtype)));
             }

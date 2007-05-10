@@ -419,7 +419,7 @@ function dynamicdata_init()
     /**
      * Set module variables
      */
-    xarModSetVar('dynamicdata', 'SupportShortURLs', 1);
+    xarModVars::set('dynamicdata', 'SupportShortURLs', 1);
 
     /**
      * Register blocks

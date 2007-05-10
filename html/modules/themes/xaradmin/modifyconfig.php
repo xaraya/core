@@ -17,26 +17,26 @@
  * @author Marty Vance
  */
 function themes_admin_modifyconfig()
-{ 
+{
     // Security Check
-    if (!xarSecurityCheck('AdminTheme')) return; 
+    if (!xarSecurityCheck('AdminTheme')) return;
     // Generate a one-time authorisation code for this operation
-    $data['authid'] = xarSecGenAuthKey(); 
+    $data['authid'] = xarSecGenAuthKey();
     // everything else happens in Template for now
     // prepare labels and values for display by the template
     $data['title'] = xarVarPrepForDisplay(xarML('Configure Themes'));
     $data['configoverview'] = xarVarPrepForDisplay(xarML('Configure Overview'));
     $data['showhelplabel'] = xarVarPrepForDisplay(xarML('Show module "Help" in the menu:'));
-    $data['showhelp'] = xarModGetVar('modules', 'showhelp') ? 'checked' : '' ;
+    $data['showhelp'] = xarModVars::get('modules', 'showhelp') ? 'checked' : '' ;
     $data['submitbutton'] = xarVarPrepForDisplay(xarML('Submit'));
     // Dashboard
-    $data['dashboard']= xarModGetVar('themes', 'usedashboard');
-    $data['adminpagemenu']= xarModGetVar('themes', 'adminpagemenu');    
-    $data['dashtemplate']= trim(xarModGetVar('themes', 'dashtemplate'));
+    $data['dashboard']= xarModVars::get('themes', 'usedashboard');
+    $data['adminpagemenu']= xarModVars::get('themes', 'adminpagemenu');
+    $data['dashtemplate']= trim(xarModVars::get('themes', 'dashtemplate'));
     if (!isset($data['dashtemplate']) || trim ($data['dashtemplate']=='')) {
         $data['dashtemplate']='dashboard';
     }
     // everything else happens in Template for now
     return $data;
-} 
+}
 ?>

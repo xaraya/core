@@ -97,7 +97,7 @@ function roles_userapi_decode_shorturl($params)
         // the first part might be something variable like a category name
         // In order to match that, you'll have to retrieve all relevant
         // categories for this module, and compare against them...
-        // $cid = xarModGetVar('example','mastercids');
+        // $cid = xarModVars::get('example','mastercids');
         // if (xarModAPILoad('categories','user')) {
         //     $cats = xarModAPIFunc('categories',
         //                          'user',

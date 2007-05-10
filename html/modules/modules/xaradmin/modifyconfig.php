@@ -31,7 +31,7 @@ function modules_admin_modifyconfig()
     $data['authid'] = xarSecGenAuthKey();
 
     // Disable the overview pages?
-    $data['disableoverview'] = xarModGetVar('modules', 'disableoverview');
+    $data['disableoverview'] = xarModVars::get('modules', 'disableoverview');
 
     // everything else happens in Template for now
     return $data;

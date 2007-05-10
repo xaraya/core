@@ -40,12 +40,12 @@ function themes_admin_cssconfig()
     switch($component) {
         case "common":
             // get and verify modvars and files - all reporting inline in the form
-            $data['csslinkoption'] = xarModGetVar('themes', 'csslinkoption');
+            $data['csslinkoption'] = xarModVars::get('themes', 'csslinkoption');
             $cssfilepath = 'modules/themes/xarstyles/';
             $filemissing = xarML('none (missing)');
             $notlinked = xarML('none - use for template debugging only!!');
             if($data['csslinkoption'] == '') {
-                xarModSetVar('themes', 'csslinkoption', 'static');
+                xarModVars::set('themes', 'csslinkoption', 'static');
                 if(file_exists($cssfilepath.'core.css')) {
                     $data['currentcssfile'] = xarVarPrepForDisplay($cssfilepath.'core.css');
                 } else {
@@ -63,7 +63,7 @@ function themes_admin_cssconfig()
             } else if($data['csslinkoption'] == 'dynamic') {
                 if(file_exists($cssfilepath.'corecss.php')) {
                     $data['currentcssfile'] = xarVarPrepForDisplay($cssfilepath.'corecss.php');
-                    $data['csssource'] = xarModGetVar('themes', 'corecss');
+                    $data['csssource'] = xarModVars::get('themes', 'corecss');
                 } else {
                     $data['currentcssfile'] = xarVarPrepForDisplay($filemissing);
                 }

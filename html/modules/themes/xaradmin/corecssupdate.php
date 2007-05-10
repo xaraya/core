@@ -20,18 +20,18 @@
 function themes_admin_corecssupdate()
 {
     // Confirm authorisation code
-    if (!xarSecConfirmAuthKey()) return; 
+    if (!xarSecConfirmAuthKey()) return;
     // Security Check
     if (!xarSecurityCheck('AdminTheme')) return;
-    
+
     // params
     if (!xarVarFetch('linkoptions', 'str::', $linkoptions, '', XARVAR_NOT_REQUIRED)) return;
-    
-    
-    // set modvars
-    xarModSetVar('themes', 'csslinkoption', $linkoptions);
 
-    xarResponseRedirect(xarModURL('themes','admin','cssconfig',array('component'=>'core'))); 
+
+    // set modvars
+    xarModVars::set('themes', 'csslinkoption', $linkoptions);
+
+    xarResponseRedirect(xarModURL('themes','admin','cssconfig',array('component'=>'core')));
     // Return
     return true;
 }

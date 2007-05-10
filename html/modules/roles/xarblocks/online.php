@@ -156,7 +156,7 @@ function roles_onlineblock_display($blockinfo)
          $args['users'] = xarML('users');
     }
 
-    $uid = xarModGetVar('roles', 'lastuser');
+    $uid = xarModVars::get('roles', 'lastuser');
 
     // Make sure we have a lastuser
     if (!empty($uid)) {

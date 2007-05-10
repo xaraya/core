@@ -12,9 +12,9 @@
  */
 /**
  * send queued/scheduled mails (executed by the scheduler module)
- * 
+ *
  * @author mikespub
- * @access public 
+ * @access public
  */
 function mail_schedulerapi_sendmail($args)
 {
@@ -83,7 +83,7 @@ function mail_schedulerapi_sendmail($args)
     }
     // update the waiting queue
     $serialqueue = serialize($queue);
-    xarModSetVar('mail','queue',$serialqueue);
+    xarModVars::set('mail','queue',$serialqueue);
 
     return $log;
 }

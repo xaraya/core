@@ -268,14 +268,14 @@ function privileges_init()
 function privileges_activate()
 {
     // On activation, set our variables
-    xarModSetVar('privileges', 'showrealms', false);
-    xarModSetVar('privileges', 'inheritdeny', true);
-    xarModSetVar('privileges', 'tester', 0);
-    xarModSetVar('privileges', 'test', false);
-    xarModSetVar('privileges', 'testdeny', false);
-    xarModSetVar('privileges', 'testmask', 'All');
-    xarModSetVar('privileges', 'realmvalue', 'none');
-    xarModSetVar('privileges', 'realmcomparison','exact');
+    xarModVars::set('privileges', 'showrealms', false);
+    xarModVars::set('privileges', 'inheritdeny', true);
+    xarModVars::set('privileges', 'tester', 0);
+    xarModVars::set('privileges', 'test', false);
+    xarModVars::set('privileges', 'testdeny', false);
+    xarModVars::set('privileges', 'testmask', 'All');
+    xarModVars::set('privileges', 'realmvalue', 'none');
+    xarModVars::set('privileges', 'realmcomparison','exact');
     return true;
 }
 

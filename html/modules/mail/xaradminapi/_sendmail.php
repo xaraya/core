@@ -237,14 +237,14 @@ function mail_adminapi__sendmail($args)
     // If mailShowTemplates is undefined, then the modvar is missing for some reason
     // If so, we assume off, since the GUI will also show off in this case
     if (!isset($mailShowTemplates)) {
-        xarModSetVar('mail','ShowTemplates',false);
+        xarModVars::set('mail','ShowTemplates',false);
         $mailShowTemplates = false;
     }
 
     // go ahead and override the show *theme* templates value,
     // using the mail modules settings instead :-)
     $oldShowTemplates = xarModGetVar('themes', 'ShowTemplates');
-    xarModSetVar('themes', 'ShowTemplates', $mailShowTemplates);
+    xarModVars::set('themes', 'ShowTemplates', $mailShowTemplates);
 
     // Check if this is HTML mail and set Body appropriately
     if ($htmlmail) {
@@ -286,7 +286,7 @@ function mail_adminapi__sendmail($args)
     }
 
     // Set the showTemplates back to what it was previously
-    xarModSetVar('themes', 'ShowTemplates', $oldShowTemplates);
+    xarModVars::set('themes', 'ShowTemplates', $oldShowTemplates);
 
     // We are now setting up the advance options that can be used by the modules
     // Add Attachment will look to see if there is a var passed called
@@ -307,7 +307,7 @@ function mail_adminapi__sendmail($args)
         $msg = xarML('The message was not sent. Mailer Error: #(1)',$mail->ErrorInfo);
         throw new Exception($msg);
     }
-    
+
     // Clear all recipients for next email
     $mail->ClearAddresses();
 

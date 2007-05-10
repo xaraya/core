@@ -51,11 +51,11 @@ function roles_admin_delete()
         throw new ForBiddenOperationException($role->getName(),$msg);
     }
 // Prohibit removal of any groups or users the system needs
-    if($uid == xarModGetVar('roles','admin')) {
+    if($uid == xarModVars::get('roles','admin')) {
         $msg = 'The user #(1) is the designated site administrator. If you want to remove this user change the site admin in the roles configuration setting first.';
         throw new ForbiddenOperationException($role->getName(),$msg);
     }
-    if($uid == xarModGetVar('roles','defaultgroup')) {
+    if($uid == xarModVars::get('roles','defaultgroup')) {
         $msg = 'The group #(1) is the default group for new users. If you want to remove this group change the roles configuration setting first.';
         throw new ForbiddenOperationException($role->getName(),$msg);
     }

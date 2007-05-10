@@ -18,7 +18,7 @@ function roles_userapi_getmenulinks()
 {
     //If we have turned on role list (memberlist) display and users have requisite level to see them
     $menulinks = array();
-    if (xarModGetVar('roles', 'displayrolelist')){
+    if (xarModVars::get('roles', 'displayrolelist')){
             $menulinks[] = array('url'   => xarModURL('roles',
                                                       'user',
                                                       'view'),

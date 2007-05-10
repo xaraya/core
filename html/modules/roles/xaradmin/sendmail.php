@@ -75,8 +75,8 @@ function roles_admin_sendmail()
 
     // To prevent the template comments from being sent with the mail
     // messages, we turn it off temporarily
-    $themecomments = xarModGetVar('themes','ShowTemplates');
-    xarModSetVar('themes','ShowTemplates',0);
+    $themecomments = xarModVars::get('themes','ShowTemplates');
+    xarModVars::set('themes','ShowTemplates',0);
     $subject  = xarTplCompileString($string . $subject);
     $message  = xarTplCompileString($string . $message);
 
@@ -99,7 +99,7 @@ function roles_admin_sendmail()
                   'message' => $mailmessage))) return;
     }
     // If it was on, turn it back on
-    xarModSetVar('themes','ShowTemplates',$themecomments);
+    xarModVars::set('themes','ShowTemplates',$themecomments);
 
     xarResponseRedirect(xarModURL('roles', 'admin', 'createmail'));
     return true;

@@ -21,7 +21,7 @@ function roles_userapi_getdefaultauthdata()
 {
     $defaultauthdata=array();
 
-    $defaultauthmoduleid =xarModGetVar('roles','defaultauthmodule');
+    $defaultauthmoduleid =xarModVars::get('roles','defaultauthmodule');
 
     if (isset($defaultauthmoduleid) && !empty($defaultauthmoduleid)) {
         $defaultauthmodulename =xarModGetNameFromId($defaultauthmoduleid);

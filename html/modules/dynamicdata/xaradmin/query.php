@@ -428,12 +428,12 @@ function dynamicdata_admin_query($args)
             if (!empty($dropquery)) {
                 xarModDelVar('dynamicdata','query.'.$dropquery);
             }
-            xarModSetVar('dynamicdata','querylist',serialize($data['queries']));
+            xarModVars::set('dynamicdata','querylist',serialize($data['queries']));
         }
-        xarModSetVar('dynamicdata','query.'.$newquery, serialize($queryvars));
+        xarModVars::set('dynamicdata','query.'.$newquery, serialize($queryvars));
         if (count($data['queries']) == 0 || !in_array($newquery,$data['queries'])) {
             array_unshift($data['queries'],$newquery);
-            xarModSetVar('dynamicdata','querylist',serialize($data['queries']));
+            xarModVars::set('dynamicdata','querylist',serialize($data['queries']));
         }
         $data['query'] = $newquery;
         $data['oldquery'] = $newquery;

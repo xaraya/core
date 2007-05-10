@@ -83,7 +83,7 @@ class xarTreeRenderer extends Object
     function maketree($topuid='',$levels=0)
     {
         $this->levels = $levels;
-        if ($topuid == '') $topuid = xarModGetVar('roles', 'everybody');
+        if ($topuid == '') $topuid = xarModVars::get('roles', 'everybody');
         $initialnode = array(
                     'parent' => $this->roles->getgroup($topuid),
                     'level' => 1

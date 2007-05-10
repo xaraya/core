@@ -25,7 +25,7 @@ function roles_admin_sitelock($args)
 
     if(!isset($cmd)) {
     // Get parameters from the db
-        $lockvars = unserialize(xarModGetVar('roles','lockdata'));
+        $lockvars = unserialize(xarModVars::get('roles','lockdata'));
         $toggle = $lockvars['locked'];
         $roles = $lockvars['roles'];
         $lockedoutmsg = (!isset($lockvars['message']) || $lockvars['message'] == '') ? xarML('The site is currently locked. Thank you for your patience.') : $lockvars['message'];
@@ -57,7 +57,7 @@ function roles_admin_sitelock($args)
                               'message'   => $lockedoutmsg,
                               'locked'    => $toggle,
                               'notifymsg' => $notifymsg);
-            xarModSetVar('roles', 'lockdata', serialize($lockdata));
+            xarModVars::set('roles', 'lockdata', serialize($lockdata));
             }
         }
 
@@ -81,7 +81,7 @@ function roles_admin_sitelock($args)
                               'message'   => $lockedoutmsg,
                               'locked'    => $toggle,
                               'notifymsg' => $notifymsg);
-            xarModSetVar('roles', 'lockdata', serialize($lockdata));
+            xarModVars::set('roles', 'lockdata', serialize($lockdata));
             }
         }
 
@@ -90,7 +90,7 @@ function roles_admin_sitelock($args)
                               'message'   => $lockedoutmsg,
                               'locked'    => $toggle,
                               'notifymsg' => $notifymsg);
-            xarModSetVar('roles', 'lockdata', serialize($lockdata));
+            xarModVars::set('roles', 'lockdata', serialize($lockdata));
             xarResponseRedirect(xarModURL('roles', 'admin', 'sitelock'));
         }
 
@@ -113,7 +113,7 @@ function roles_admin_sitelock($args)
                 if ($roletotell->isUser()) $notify[] = $roletotell;
                 else $notify = array_merge($notify,$roletotell->getUsers());
             }
-            $admin = xarRoles::get(xarModGetVar('roles','admin'));
+            $admin = xarRoles::get(xarModVars::get('roles','admin'));
             $mailinfo = array('subject' => 'Site Lock',
                               'from' => $admin->getEmail()
             );
@@ -128,11 +128,11 @@ function roles_admin_sitelock($args)
                     $msg = xarML('Could not clear sessions table');
                     throw new Exception($msg);
                 }
-                $mailinfo['message'] = 'The site ' . xarModGetVar('themes','SiteName') . ' has been locked.';
+                $mailinfo['message'] = 'The site ' . xarModVars::get('themes','SiteName') . ' has been locked.';
             }
 // We unlocked the site
             else {
-               $mailinfo['message'] = 'The site ' . xarModGetVar('themes','SiteName') . ' has been unlocked.';
+               $mailinfo['message'] = 'The site ' . xarModVars::get('themes','SiteName') . ' has been unlocked.';
             }
 
             $mailinfo['message'] .= "\n\n" . $notifymsg;
@@ -148,7 +148,7 @@ function roles_admin_sitelock($args)
                               'message'   => $lockedoutmsg,
                               'locked'    => $toggle,
                               'notifymsg' => $notifymsg);
-            xarModSetVar('roles', 'lockdata', serialize($lockdata));
+            xarModVars::set('roles', 'lockdata', serialize($lockdata));
         }
     }
 

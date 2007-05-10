@@ -112,7 +112,7 @@ function dynamicdata_util_relations($args)
                 break;
             }
             $relations = serialize($data['relations']);
-            xarModSetVar('dynamicdata','relations',$relations);
+            xarModVars::set('dynamicdata','relations',$relations);
             xarResponseRedirect(xarModURL('dynamicdata', 'util', 'relations',
                                           array('table' => $table)));
             return true;
@@ -126,7 +126,7 @@ function dynamicdata_util_relations($args)
                 }
             }
             $relations = serialize($data['relations']);
-            xarModSetVar('dynamicdata','relations',$relations);
+            xarModVars::set('dynamicdata','relations',$relations);
             xarResponseRedirect(xarModURL('dynamicdata', 'util', 'relations',
                                           array('table' => $table)));
             return true;

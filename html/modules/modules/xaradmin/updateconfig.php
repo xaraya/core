@@ -25,11 +25,11 @@ function modules_admin_updateconfig()
 {
     // Confirm authorisation code
     if (!xarSecConfirmAuthKey()) return;
-    
+
     // enable or disable overviews
     if(!xarVarFetch('disableoverview','isset', $disableoverview, 0, XARVAR_DONT_SET)) return;
 
-    xarModSetVar('modules', 'disableoverview', ($disableoverview) ? 1 : 0);
+    xarModVars::set('modules', 'disableoverview', ($disableoverview) ? 1 : 0);
      // lets update status and display updated configuration
     xarResponseRedirect(xarModURL('modules', 'admin', 'modifyconfig'));
 

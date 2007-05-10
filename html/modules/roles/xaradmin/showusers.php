@@ -21,7 +21,7 @@ function roles_admin_showusers()
     if (xarVarIsCached('roles', 'defaultgroupuid')) {
         $defaultgroupuid = xarVarGetCached('roles', 'defaultgroupuid');
     } else {
-        $defaultgroupuid = xarModGetVar('roles','defaultgroup');
+        $defaultgroupuid = xarModVars::get('roles','defaultgroup');
     }
     xarVarSetCached('roles', 'defaultgroupuid', $defaultgroupuid);
 
@@ -127,7 +127,7 @@ function roles_admin_showusers()
     $q->setorder($data['order']);
 
     // Add limits
-    $numitems = xarModGetVar('roles', 'itemsperpage');
+    $numitems = xarModVars::get('roles', 'itemsperpage');
     $q->setrowstodo($numitems);
     $q->setstartat($startnum);
     if(!$q->run()) return;

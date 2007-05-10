@@ -23,14 +23,14 @@
  */
 function mail_init()
 {
-    xarModSetVar('mail', 'server', 'mail');
-    xarModSetVar('mail', 'replyto', '0');
-    xarModSetVar('mail', 'wordwrap', '78');
-    xarModSetVar('mail', 'priority', '3');
-    xarModSetVar('mail', 'smtpPort', '25');
-    xarModSetVar('mail', 'smtpHost', 'Your SMTP Host');
-    xarModSetVar('mail', 'encoding', '8bit');
-    xarModSetVar('mail', 'html', false);
+    xarModVars::set('mail', 'server', 'mail');
+    xarModVars::set('mail', 'replyto', '0');
+    xarModVars::set('mail', 'wordwrap', '78');
+    xarModVars::set('mail', 'priority', '3');
+    xarModVars::set('mail', 'smtpPort', '25');
+    xarModVars::set('mail', 'smtpHost', 'Your SMTP Host');
+    xarModVars::set('mail', 'encoding', '8bit');
+    xarModVars::set('mail', 'html', false);
 
     // when a module item is created
     if (!xarModRegisterHook('item', 'create', 'API',
@@ -103,10 +103,10 @@ function mail_upgrade($oldVersion)
         }
 
     case '0.1.1':
-        xarModSetVar('mail', 'ShowTemplates', false);
-        xarModSetVar('mail', 'suppresssending', false);
-        xarModSetVar('mail', 'redirectsending', false);
-        xarModSetVar('mail', 'redirectaddress', '');
+        xarModVars::set('mail', 'ShowTemplates', false);
+        xarModVars::set('mail', 'suppresssending', false);
+        xarModVars::set('mail', 'redirectsending', false);
+        xarModVars::set('mail', 'redirectaddress', '');
 
 
         // From 0.1.1 -> 2.0.0 we added a mod var which holds the admin id for mail, the adminname is obsolete (no free email choice anymore)
@@ -115,7 +115,7 @@ function mail_upgrade($oldVersion)
         // In current xar this always fails as mail is installed before roles gets initialized
         // in the off chance someone is actually ugrading, we leave it in.
         if(!empty($desigAdmin)) {
-            xarModSetVar('mail','admin_outgoing', $desigAdmin);
+            xarModVars::set('mail','admin_outgoing', $desigAdmin);
         }
         xarModDelVar('mail','adminname');
         xarModDelVar('mail','adminmail');

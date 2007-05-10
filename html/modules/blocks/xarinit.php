@@ -232,9 +232,9 @@ function blocks_init()
          before the modules module is so, the module_vars table
          isn't even created at this point.
 
-         xarModSetVar('blocks','collapseable',1);
-         xarModSetVar('blocks','blocksuparrow','upb.gif');
-         xarModSetVar('blocks','blocksdownarrow','downb.gif');
+         xarModVars::set('blocks','collapseable',1);
+         xarModVars::set('blocks','blocksuparrow','upb.gif');
+         xarModVars::set('blocks','blocksdownarrow','downb.gif');
         */
         $dbconn->commit();
     } catch (Exception $e) {
@@ -243,8 +243,8 @@ function blocks_init()
     }
 
     // Initialisation successful
-    xarModSetVar('blocks', 'selstyle', 'plain');
-    xarModSetVar('blocks', 'itemsperpage', 20);
+    xarModVars::set('blocks', 'selstyle', 'plain');
+    xarModVars::set('blocks', 'itemsperpage', 20);
 
     return blocks_upgrade('1.0');
 }

@@ -31,18 +31,18 @@ function mail_admin_updateconfig()
     case 'general':
         // new modvar in 2.0.0, only store the id of the designated admin
         if (!xarVarFetch('admin_outgoing','id',$admin_outgoing)) return;
-        if(isset($admin_outgoing)) xarModSetVar('mail','admin_outgoing',$admin_outgoing);
+        if(isset($admin_outgoing)) xarModVars::set('mail','admin_outgoing',$admin_outgoing);
 
         if (!xarVarFetch('showtemplates', 'checkbox', $showtemplates, false, XARVAR_NOT_REQUIRED)) return;
-        xarModSetVar('mail', 'ShowTemplates', $showtemplates);
+        xarModVars::set('mail', 'ShowTemplates', $showtemplates);
 
         if (!xarVarFetch('replyto', 'checkbox', $replyto, false, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('replytoname', 'str:1:', $replytoname, '', XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('replytoemail', 'str:1:', $replytoemail, '', XARVAR_NOT_REQUIRED)) return;
-        if(isset($adminname)) xarModSetVar('mail', 'adminname', $adminname);
-        xarModSetVar('mail', 'replyto', $replyto);
-        xarModSetVar('mail', 'replytoname', $replytoname);
-        xarModSetVar('mail', 'replytoemail', $replytoemail);
+        if(isset($adminname)) xarModVars::set('mail', 'adminname', $adminname);
+        xarModVars::set('mail', 'replyto', $replyto);
+        xarModVars::set('mail', 'replytoname', $replytoname);
+        xarModVars::set('mail', 'replytoemail', $replytoemail);
         break;
     case 'incoming':
         break;
@@ -72,31 +72,31 @@ function mail_admin_updateconfig()
         if (!xarVarFetch('redirectaddress', 'str:1', $redirectaddress, '', XARVAR_NOT_REQUIRED)) return;
 
         // update the data
-        xarModSetVar('mail', 'html', $html);
-        xarModSetVar('mail', 'htmluseheadfoot', $htmluseheadfoot);
-        xarModSetVar('mail', 'htmlheader', $htmlheader);
-        xarModSetVar('mail', 'htmlfooter', $htmlfooter);
-        xarModSetVar('mail', 'textuseheadfoot', $textuseheadfoot);
-        xarModSetVar('mail', 'textheader', $textheader);
-        xarModSetVar('mail', 'textfooter', $textfooter);
-        xarModSetVar('mail', 'priority', $priority);
-        xarModSetVar('mail', 'encoding', $encoding);
-        xarModSetVar('mail', 'wordwrap', $wordwrap);
-        xarModSetVar('mail', 'server', $server);
-        xarModSetVar('mail', 'smtpHost', $smtpHost);
-        xarModSetVar('mail', 'smtpPort', $smtpPort);
-        xarModSetVar('mail', 'smtpAuth', $smtpAuth);
-        xarModSetVar('mail', 'smtpUserName', $smtpUserName);
-        if (!empty($smtpPassword)) xarModSetVar('mail', 'smtpPassword', $smtpPassword);
+        xarModVars::set('mail', 'html', $html);
+        xarModVars::set('mail', 'htmluseheadfoot', $htmluseheadfoot);
+        xarModVars::set('mail', 'htmlheader', $htmlheader);
+        xarModVars::set('mail', 'htmlfooter', $htmlfooter);
+        xarModVars::set('mail', 'textuseheadfoot', $textuseheadfoot);
+        xarModVars::set('mail', 'textheader', $textheader);
+        xarModVars::set('mail', 'textfooter', $textfooter);
+        xarModVars::set('mail', 'priority', $priority);
+        xarModVars::set('mail', 'encoding', $encoding);
+        xarModVars::set('mail', 'wordwrap', $wordwrap);
+        xarModVars::set('mail', 'server', $server);
+        xarModVars::set('mail', 'smtpHost', $smtpHost);
+        xarModVars::set('mail', 'smtpPort', $smtpPort);
+        xarModVars::set('mail', 'smtpAuth', $smtpAuth);
+        xarModVars::set('mail', 'smtpUserName', $smtpUserName);
+        if (!empty($smtpPassword)) xarModVars::set('mail', 'smtpPassword', $smtpPassword);
 
-        xarModSetVar('mail', 'sendmailpath', $sendmailpath);
+        xarModVars::set('mail', 'sendmailpath', $sendmailpath);
         $searchstrings = serialize($searchstrings);
-        xarModSetVar('mail', 'searchstrings', $searchstrings);
+        xarModVars::set('mail', 'searchstrings', $searchstrings);
         $replacestrings = serialize($replacestrings);
-        xarModSetVar('mail', 'replacestrings', $replacestrings);
-        xarModSetVar('mail', 'suppresssending', $suppresssending);
-        xarModSetVar('mail', 'redirectsending', $redirectsending);
-        xarModSetVar('mail', 'redirectaddress', $redirectaddress);
+        xarModVars::set('mail', 'replacestrings', $replacestrings);
+        xarModVars::set('mail', 'suppresssending', $suppresssending);
+        xarModVars::set('mail', 'redirectsending', $redirectsending);
+        xarModVars::set('mail', 'redirectaddress', $redirectaddress);
 
         if (xarModIsAvailable('scheduler')) {
             if (!xarVarFetch('interval', 'str:1', $interval, '', XARVAR_NOT_REQUIRED)) return;

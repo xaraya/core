@@ -27,7 +27,7 @@ function blocks_admin_modifyconfig()
 
     if($update) {
         if (!xarSecConfirmAuthKey()) return;
-        xarModSetVar('blocks', 'itemsperpage',$data['itemsperpage']);
+        xarModVars::set('blocks', 'itemsperpage',$data['itemsperpage']);
     }
     $data['authid'] = xarSecGenAuthKey();
     return $data;

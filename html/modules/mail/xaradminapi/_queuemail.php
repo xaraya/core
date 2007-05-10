@@ -37,7 +37,7 @@ function mail_adminapi__queuemail($args)
     // create a unique id for this mail
     $id = md5($data);
     // store the mail for later
-    xarModSetVar('mail',$id,$data);
+    xarModVars::set('mail',$id,$data);
 
     // put it in the waiting queue, together with when it should be sent
     $serialqueue = xarModGetVar('mail','queue');
@@ -48,7 +48,7 @@ function mail_adminapi__queuemail($args)
     }
     $queue[$id] = $args['when'];
     $serialqueue = serialize($queue);
-    xarModSetVar('mail','queue',$serialqueue);
+    xarModVars::set('mail','queue',$serialqueue);
 
     return true;
 }

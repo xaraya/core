@@ -23,7 +23,7 @@ function mail_admin_createqdef($args)
     default:
         // Wrong value, raise exception
     }
- 
+
     if($qdefNew) {
         $xmlDef = @file_get_contents('modules/mail/xardata/qdef.xml'); // if it fails, sane check will catch it.
         // Take the xml and the objectname and try to create the object
@@ -32,7 +32,7 @@ function mail_admin_createqdef($args)
 
         // The file contained itemtype -1 which needs to be corrected now.
         // We created the object successfully, register it as soon as possible (getitemtypes depends on it, for one)
-        xarModSetVar('mail','queue-definition',$qdefName);
+        xarModVars::set('mail','queue-definition',$qdefName);
         // Get the itemtypes of the mail module
         $itemtypes = xarModApiFunc('mail','user','getitemtypes');
         // Get the max value from the keys and add one
@@ -45,7 +45,7 @@ function mail_admin_createqdef($args)
 
     } else {
         // All went well, we can set the modvar now
-        xarModSetVar('mail','queue-definition',$qdefName);
+        xarModVars::set('mail','queue-definition',$qdefName);
     }
     xarResponseRedirect(xarModUrl('mail','admin','view'));
 }

@@ -45,7 +45,7 @@ function themes_skinblock_display($blockinfo)
     // Security check
 //    if (!xarSecurityCheck('ReadTheme', 0, 'Block', "All:" . $blockinfo['title'] . ":" . $blockinfo['bid'])) {return;}
 
-    $current_theme_name = xarModGetVar('themes', 'default');
+    $current_theme_name = xarModVars::get('themes', 'default');
     $site_themes = xarModAPIFunc('themes', 'admin','getthemelist');
     asort($site_themes);
 

@@ -66,11 +66,11 @@ function modules_adminmenublock_display($blockinfo)
     } else {
         $vars = $blockinfo['content'];
     }
-    
+
     // are there any admin modules, then get the whole list sorted by names
     // checking this as early as possible
     $mods = xarModAPIFunc('modules', 'admin', 'getlist', array('filter' => array('AdminCapable' => 1)));
-  
+
     // which module is loaded atm?
     // we need it's name, type and function - dealing only with admin type mods, aren't we?
     list($thismodname, $thismodtype, $thisfuncname) = xarRequestGetInfo();
@@ -78,19 +78,19 @@ function modules_adminmenublock_display($blockinfo)
     // SETTING 1: Show a logout link in the block?
     $showlogout = false;
     if(isset($vars['showlogout']) && $vars['showlogout']) $showlogout = true;
-    
-    // SETTING 2: Menustyle 
+
+    // SETTING 2: Menustyle
     if(!isset($vars['menustyle'])) {
         // If it is not set, revert to the default setting
-        $vars['menustyle'] = xarModGetVar('modules', 'menustyle');
+        $vars['menustyle'] = xarModVars::get('modules', 'menustyle');
     }
 
     // SETTING 3: Show overviews or not
     if(!isset($vars['overview'])) {
         // If it i not set, rever to the default setting
-        $vars['overview'] = xarModGetVar('modules','disableoverview');
+        $vars['overview'] = xarModVars::get('modules','disableoverview');
     }
-    
+
     // Get current URL for later comparisons because we need to compare
     // xhtml compliant url, we fetch the default 'XML'-formatted URL.
     $currenturl = xarServerGetCurrentURL();
@@ -113,7 +113,7 @@ function modules_adminmenublock_display($blockinfo)
                     'modactive' => 0,
                     'overview'  => 0,
                     'maintitle' => xarML('Show administration options for module #(1)', $labelDisplay));
-                
+
                 if ($modname == $thismodname && in_array($thismodtype, $admintypes)) {
                     // this module is currently loaded (active), we need to display
                     // 1. blank label 2. no URL 3. no title text 4. links to module functions, when users looking at default main function
@@ -139,17 +139,17 @@ function modules_adminmenublock_display($blockinfo)
                                 'funcactive'    => ($menulink['url'] == $currenturl) ? 1 : 0
                             );
                         }
-                    } 
+                    }
                 } // if
             } // foreach
-            
+
             $template = 'verticallistbyname';
             $data = array('adminmods'     => $adminmods);
             break;
 
         default:
         case 'bycat': // sort by categories
-            // <mrb> for the release we can do without the adminmenu table, if 
+            // <mrb> for the release we can do without the adminmenu table, if
             // that gains functionality consider putting it back.
             foreach ($mods as $mod) {
                 // get URL to module's main function
@@ -203,7 +203,7 @@ function modules_adminmenublock_display($blockinfo)
                    unset($mod['displayname']);
                 }
             } //inner foreach
-                
+
             $template = 'verticallistbycats';
             $data = array(
                 'catmods'       => $catmods

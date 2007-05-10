@@ -43,7 +43,7 @@ function roles_user_usermenu($args)
             $role = xarUFindRole($uname);
             $home = xarModGetUserVar('roles','userhome');
             $allowemail = xarModGetUserVar('roles','usersendemails',$uid); //allow someone to send an email to the user via a form
-            if (xarModGetVar('roles','setuserlastlogin')) {
+            if (xarModVars::get('roles','setuserlastlogin')) {
             //only display it for current user or admin
                 if (xarUserIsLoggedIn() && xarUserGetVar('uid')==$uid) { //they should be but ..
                     $userlastlogin = xarSession::getVar('roles_thislastlogin');
@@ -126,7 +126,7 @@ function roles_user_usermenu($args)
 
 
             //adjust the timezone value for saving
-            if (xarModGetVar('roles','setusertimezone') && (isset($utimezone))) {
+            if (xarModVars::get('roles','setusertimezone') && (isset($utimezone))) {
                $timeinfo = xarModAPIFunc('base','user','timezones', array('timezone' => $utimezone));
                list($hours,$minutes) = explode(':',$timeinfo[0]);
                $offset = (float) $hours + (float) $minutes / 60;
@@ -134,9 +134,9 @@ function roles_user_usermenu($args)
                 $usertimezone = serialize($timeinfoarray);
                 xarModSetUserVar('roles','usertimezone',$usertimezone);
             }
-            if (xarModGetVar('roles','userhome') && (isset($home))) {
+            if (xarModVars::get('roles','userhome') && (isset($home))) {
                 /* Check if external urls are allowed in home page */
-                $allowexternalurl=xarModGetVar('roles','allowexternalurl');
+                $allowexternalurl=xarModVars::get('roles','allowexternalurl');
                 $url_parts = parse_url($home);
                 if (!$allowexternalurl) {
                     if ((preg_match("%^http://%", $home, $matches)) &&
@@ -176,7 +176,7 @@ function roles_user_usermenu($args)
                    5) Display appropriate message
                 */
 
-                if(xarModGetVar('roles','uniqueemail')) {
+                if(xarModVars::get('roles','uniqueemail')) {
                     // check for duplicate email address
                     $user = xarModAPIFunc('roles', 'user','get',
                                        array('email' => $email));
@@ -187,7 +187,7 @@ function roles_user_usermenu($args)
                 }
 
                 // check for disallowed email addresses
-                $disallowedemails = xarModGetVar('roles','disallowedemails');
+                $disallowedemails = xarModVars::get('roles','disallowedemails');
                 if (!empty($disallowedemails)) {
                     $disallowedemails = unserialize($disallowedemails);
                     $disallowedemails = explode("\r\n", $disallowedemails);
@@ -198,8 +198,8 @@ function roles_user_usermenu($args)
                 }
 
                 // Step 2 Check for validation required or not
-                $requireValidation = xarModGetVar('roles', 'requirevalidation');
-                if (xarModGetVar('roles', 'requirevalidation') || (xarUserGetVar('uname') != 'admin')) {
+                $requireValidation = xarModVars::get('roles', 'requirevalidation');
+                if (xarModVars::get('roles', 'requirevalidation') || (xarUserGetVar('uname') != 'admin')) {
                     // Step 2
                     // Create confirmation code and time registered
                     $confcode = xarModAPIFunc('roles','user','makepass');

@@ -24,21 +24,21 @@
 function mail_admin_modifyconfig()
 {
     // Security Check
-    if (!xarSecurityCheck('AdminMail')) return; 
+    if (!xarSecurityCheck('AdminMail')) return;
     $data = array();
     if (!xarVarFetch('tab', 'str:1:100', $data['tab'], '', XARVAR_NOT_REQUIRED)) return;
     // Generate a one-time authorisation code for this operation
-    $data['authid'] = xarSecGenAuthKey(); 
+    $data['authid'] = xarSecGenAuthKey();
     // Quick Check for E_ALL
     $searchstrings = xarModGetVar('mail', 'searchstrings');
     $replacestrings = xarModGetVar('mail', 'replacestrings');
     if (empty($searchstrings)){
         $searchstrings = serialize('%%Search%%');
-        xarModSetVar('mail', 'searchstrings', $searchstrings);
+        xarModVars::set('mail', 'searchstrings', $searchstrings);
     }
     if (empty($replacestrings)){
         $replacestrings = serialize('Replace %%Search%% with this text');
-        xarModSetVar('mail', 'replacestrings', $replacestrings);
+        xarModVars::set('mail', 'replacestrings', $replacestrings);
     }
     $data['createlabel'] = xarML('Submit');
     $data['searchstrings'] = unserialize(xarModGetVar('mail', 'searchstrings'));
@@ -46,7 +46,7 @@ function mail_admin_modifyconfig()
 
     // Get encoding
     $data['encoding'] = xarModGetVar('mail', 'encoding');
-    
+
     //redirect address - ensure it's set
     $redirectaddress = trim(xarModGetVar('mail', 'redirectaddress'));
     if (isset($redirectaddress) && !empty($redirectaddress)){
@@ -89,5 +89,5 @@ function mail_admin_modifyconfig()
 
     // everything else happens in Template for now
     return $data;
-} 
+}
 ?>

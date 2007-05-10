@@ -27,7 +27,7 @@ function roles_user_main()
     /*
     if(xarSecurityCheck('EditRole',0)) {
 
-        if (xarModGetVar('modules', 'disableoverview') == 0){
+        if (xarModVars::get('modules', 'disableoverview') == 0){
             return xarTplModule('roles','admin', 'main',array());
         } else {
             xarResponseRedirect(xarModURL('roles', 'admin', 'viewroles'));
@@ -35,7 +35,7 @@ function roles_user_main()
     }
     elseif(xarSecurityCheck('ViewRoles',0)) {
     */
-    
+
     // Get the default authentication data - this supplies default auth module and corrected login and logout module
     $defaultauthdata=xarModAPIFunc('roles','user','getdefaultauthdata');
 
@@ -47,7 +47,7 @@ function roles_user_main()
     } else {
         xarResponseRedirect(xarModURL($loginmodule, 'user', 'showloginform'));
     }
-   
+
    /*
     }
     else { return; }

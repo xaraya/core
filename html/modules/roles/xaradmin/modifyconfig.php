@@ -23,7 +23,7 @@ function roles_admin_modifyconfig()
             // get a list of everyone with admin privileges
             // TODO: find a more elegant way to do this
             // first find the id of the admin privilege
-            $role  = xarRoles::get(xarModGetVar('roles','admin'));
+            $role  = xarRoles::get(xarModVars::get('roles','admin'));
             $privs = array_merge($role->getInheritedPrivileges(),$role->getAssignedPrivileges());
             foreach ($privs as $priv)
             {
@@ -66,13 +66,13 @@ function roles_admin_modifyconfig()
                 }
             }
 
-            $checkip = xarModGetVar('roles', 'disallowedips');
+            $checkip = xarModVars::get('roles', 'disallowedips');
             if (empty($checkip)) {
                 $ip = serialize('10.0.0.1'); // <mrb> why 10.0.0.1 ?
-                xarModSetVar('roles', 'disallowedips', $ip);
+                xarModVars::set('roles', 'disallowedips', $ip);
             }
             $data['siteadmins']   = $siteadmins;
-            $data['defaultgroup'] = xarModGetVar('roles', 'defaultgroup');
+            $data['defaultgroup'] = xarModVars::get('roles', 'defaultgroup');
 
             $data['authid']       = xarSecGenAuthKey();
             $hooks = array();
@@ -96,15 +96,15 @@ function roles_admin_modifyconfig()
             }
 
             $data['hooks'] = $hooks;
-            $data['defaultauthmod']    = xarModGetVar('roles', 'defaultauthmodule');
-            $data['defaultregmod']     = xarModGetVar('roles', 'defaultregmodule');
-            $data['allowuserhomeedit'] = xarModGetVar('roles', 'allowuserhomeedit');
-            $data['requirevalidation'] = xarModGetVar('roles', 'requirevalidation');
+            $data['defaultauthmod']    = xarModVars::get('roles', 'defaultauthmodule');
+            $data['defaultregmod']     = xarModVars::get('roles', 'defaultregmodule');
+            $data['allowuserhomeedit'] = xarModVars::get('roles', 'allowuserhomeedit');
+            $data['requirevalidation'] = xarModVars::get('roles', 'requirevalidation');
             //check for roles hook in case it's set independently elsewhere
             if (xarModIsHooked('roles', 'roles')) {
-                xarModSetVar('roles','usereditaccount',true);
+                xarModVars::set('roles','usereditaccount',true);
             } else {
-                xarModSetVar('roles','usereditaccount',false);
+                xarModVars::set('roles','usereditaccount',false);
             }
 
             break;
@@ -118,15 +118,15 @@ function roles_admin_modifyconfig()
                     if (!xarVarFetch('defaultauthmodule', 'str:1:',   $defaultauthmodule, xarModGetIDFromName('authsystem'), XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
                     if (!xarVarFetch('defaultregmodule',  'str:1:',   $defaultregmodule, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
                     if (!xarVarFetch('shorturls',         'checkbox', $shorturls,        false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('siteadmin',         'int:1',    $siteadmin,        xarModGetVar('roles','admin'), XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('siteadmin',         'int:1',    $siteadmin,        xarModVars::get('roles','admin'), XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('defaultgroup',      'str:1',    $defaultgroup,     'Users', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
 
-                    xarModSetVar('roles', 'itemsperpage', $itemsperpage);
-                    xarModSetVar('roles', 'defaultauthmodule', $defaultauthmodule);
-                    xarModSetVar('roles', 'defaultregmodule', $defaultregmodule);
-                    xarModSetVar('roles', 'defaultgroup', $defaultgroup);
-                    xarModSetVar('roles', 'SupportShortURLs', $shorturls);
-                    xarModSetVar('roles', 'admin', $siteadmin);
+                    xarModVars::set('roles', 'itemsperpage', $itemsperpage);
+                    xarModVars::set('roles', 'defaultauthmodule', $defaultauthmodule);
+                    xarModVars::set('roles', 'defaultregmodule', $defaultregmodule);
+                    xarModVars::set('roles', 'defaultgroup', $defaultgroup);
+                    xarModVars::set('roles', 'SupportShortURLs', $shorturls);
+                    xarModVars::set('roles', 'admin', $siteadmin);
                 case 'hooks':
                     // Role type 'user' (itemtype 1).
                     xarModCallHooks('module', 'updateconfig', 'roles',
@@ -149,19 +149,19 @@ function roles_admin_modifyconfig()
                     if (!xarVarFetch('loginredirect',    'checkbox', $loginredirect,     true,  XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('requirevalidation','checkbox', $requirevalidation, true,  XARVAR_NOT_REQUIRED)) return;
 
-                    xarModSetVar('roles', 'searchbyemail', $searchbyemail); //search by email
-                    xarModSetVar('roles', 'usersendemails', $usersendemails);
-                    xarModSetVar('roles', 'displayrolelist', $displayrolelist); //display member list in Roles menu links
-                    xarModSetVar('roles', 'usereditaccount', $usereditaccount); //allow users to edit account
-                    xarModSetVar('roles', 'allowexternalurl', $allowexternalurl); //allow users to set external urls for home page
-                    xarModSetVar('roles', 'loginredirect', $loginredirect); //search by email
-                    xarModSetVar('roles', 'requirevalidation', $requirevalidation); //require revalidation if email changed
-                    if (xarModGetVar('roles', 'setuserhome')==true) { //we only want to allow option of users editing home page if we are using homepages
+                    xarModVars::set('roles', 'searchbyemail', $searchbyemail); //search by email
+                    xarModVars::set('roles', 'usersendemails', $usersendemails);
+                    xarModVars::set('roles', 'displayrolelist', $displayrolelist); //display member list in Roles menu links
+                    xarModVars::set('roles', 'usereditaccount', $usereditaccount); //allow users to edit account
+                    xarModVars::set('roles', 'allowexternalurl', $allowexternalurl); //allow users to set external urls for home page
+                    xarModVars::set('roles', 'loginredirect', $loginredirect); //search by email
+                    xarModVars::set('roles', 'requirevalidation', $requirevalidation); //require revalidation if email changed
+                    if (xarModVars::get('roles', 'setuserhome')==true) { //we only want to allow option of users editing home page if we are using homepages
                        $allowuserhomeedit = $userhomeedit ==true ? true:false;
                     }else {
                         $allowuserhomeedit=false;
                     }
-                    xarModSetVar('roles', 'allowuserhomeedit', $allowuserhomeedit); //allow users to set their own homepage
+                    xarModVars::set('roles', 'allowuserhomeedit', $allowuserhomeedit); //allow users to set their own homepage
                     if ($usereditaccount) {
                         //check and hook Roles to roles if not already hooked
                          if (!xarModIsHooked('roles', 'roles')) {
@@ -187,7 +187,7 @@ function roles_admin_modifyconfig()
             }
 //            if (!xarVarFetch('allowinvisible', 'checkbox', $allowinvisible, false, XARVAR_NOT_REQUIRED)) return;
             // Update module variables
-//            xarModSetVar('roles', 'allowinvisible', $allowinvisible);
+//            xarModVars::set('roles', 'allowinvisible', $allowinvisible);
 
             xarResponseRedirect(xarModURL('roles', 'admin', 'modifyconfig',array('tab' => $data['tab'])));
             // Return

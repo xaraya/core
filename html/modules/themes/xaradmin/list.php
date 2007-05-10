@@ -61,7 +61,7 @@ function themes_admin_list()
     $data['filter'][XARTHEME_STATE_MISSING_FROM_ACTIVE]         = xarML('Missing (Active)');
     $data['filter'][XARTHEME_STATE_MISSING_FROM_UPGRADED]       = xarML('Missing (Upgraded)');
 
-    $data['default']                           = xarModGetVar('themes', 'default', 1);
+    $data['default']                           = xarModVars::get('themes', 'default', 1);
 
     // obtain list of modules based on filtering criteria
 /*     if($regen){ */

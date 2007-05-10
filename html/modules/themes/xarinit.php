@@ -82,8 +82,8 @@ function themes_init()
     $query = xarDBCreateTable($tables['themes'], $fields);
     $result =& $dbconn->Execute($query);
 
-    xarModSetVar('themes', 'default', 'Xaraya_Classic');
-    xarModSetVar('themes', 'selsort', 'nameasc');
+    xarModVars::set('themes', 'default', 'Xaraya_Classic');
+    xarModVars::set('themes', 'selsort', 'nameasc');
 
     // Make sure we dont miss empty variables (which were not passed thru)
     // FIXME: how would these values ever be passed in?
@@ -157,8 +157,8 @@ function themes_upgrade($oldversion)
             }
       case '1.7.0':
 
-       xarModSetVar('themes', 'selclass', 'all');
-       xarModSetVar('themes', 'useicons', false);
+       xarModVars::set('themes', 'selclass', 'all');
+       xarModVars::set('themes', 'useicons', false);
 
       case '1.8.0' : //current version
 

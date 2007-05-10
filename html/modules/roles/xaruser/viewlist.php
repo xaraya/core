@@ -70,7 +70,7 @@ function roles_user_viewlist($args)
         $selection = ' AND (';
         $selection .= '(name LIKE ' . $qsearch . ')';
         $selection .= ' OR (uname LIKE ' . $qsearch . ')';
-        if (xarModGetVar('roles', 'searchbyemail')) {
+        if (xarModVars::get('roles', 'searchbyemail')) {
             $selection .= ' OR (email LIKE ' . $qsearch . ')';
             $data['msg'] = xarML('Members whose Display Name or User Name or Email Address contains "#(1)"', $search);
         } else {
@@ -131,7 +131,7 @@ function roles_user_viewlist($args)
                     'selection'   => $selection,
                     'include_anonymous' => false,
                     'include_myself' => false,
-                    'numitems' => xarModGetVar('roles', 'itemsperpage')
+                    'numitems' => xarModVars::get('roles', 'itemsperpage')
                 )
             );
             break;
@@ -166,7 +166,7 @@ function roles_user_viewlist($args)
                     'selection' => $selection,
                     'include_anonymous' => false,
                     'include_myself' => false,
-                    'numitems' => xarModGetVar('roles', 'itemsperpage')
+                    'numitems' => xarModVars::get('roles', 'itemsperpage')
                 )
             );
             break;
@@ -206,7 +206,7 @@ function roles_user_viewlist($args)
     // Add the array of items to the template variables
     $data['items'] = $items;
 
-    $numitems = xarModGetVar('roles', 'itemsperpage');
+    $numitems = xarModVars::get('roles', 'itemsperpage');
     $pagerfilter['phase'] = $phase;
     $pagerfilter['order'] = $order;
     $pagerfilter['letter'] = $letter;

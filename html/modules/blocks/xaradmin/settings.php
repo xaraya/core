@@ -22,7 +22,7 @@ function blocks_admin_settings()
     if (!xarVarFetch('selstyle', 'str:1:', $selstyle, 'plain', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('filter', 'str', $filter, "", XARVAR_NOT_REQUIRED)) {return;}
 
-    xarModSetVar('blocks', 'selstyle', $selstyle);
+    xarModVars::set('blocks', 'selstyle', $selstyle);
 
     xarResponseRedirect(xarModURL('blocks', 'admin', 'view_instances',array('filter' => $filter)));
 

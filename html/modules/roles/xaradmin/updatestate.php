@@ -86,7 +86,7 @@ function roles_admin_updatestate()
     }
     $uids = $uidnotify;
     // Success
-     if ((!xarModGetVar('roles', 'ask'.$mailtype.'email')) || (count($uidnotify) == 0)) {
+     if ((!xarModVars::get('roles', 'ask'.$mailtype.'email')) || (count($uidnotify) == 0)) {
             xarResponseRedirect(xarModURL('roles', 'admin', 'showusers',
                           array('uid' => $data['groupuid'], 'state' => $data['state'])));
             return true;

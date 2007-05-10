@@ -290,8 +290,8 @@ class xarMasks extends Object
             if ($module == '') list($module) = xarRequestGetInfo();
 
             // I'm a bit lost on this line. Does this var ever get set?
-            // <mikespub> this gets set in xarBlock_render, to replace the xarModSetVar /
-            // xarModGetVar combination you used before (although $module will generally
+            // <mikespub> this gets set in xarBlock_render, to replace the xarModVars::set /
+            // xarModVars::get combination you used before (although $module will generally
             // not be 'blocks', so I have no idea why this is needed anyway)
             if ($module == 'blocks' && xarVarIsCached('Security.Variables','currentmodule'))
             $module = xarVarGetCached('Security.Variables','currentmodule');
@@ -315,7 +315,7 @@ class xarMasks extends Object
         // this is for PostNuke backward compatibility
         if ($pnrealm != '') $mask->setRealm($pnrealm);
         if ($pnlevel != '') $mask->setLevel($pnlevel);
-        $realmvalue = xarModGetVar('privileges', 'realmvalue');
+        $realmvalue = xarModVars::get('privileges', 'realmvalue');
         if (strpos($realmvalue,'string:') === 0) {
             $textvalue = substr($realmvalue,7);
             $realmvalue = 'string';
@@ -327,7 +327,7 @@ class xarMasks extends Object
             //perhaps something for later.
             // <mrb> i dont grok this, theme can be realm?
             case "theme":
-                $mask->setRealm(xarModGetVar('themes', 'default'));
+                $mask->setRealm(xarModVars::get('themes', 'default'));
                 break;
             case "domain":
                 $host = xarServerGetHost();
@@ -353,7 +353,7 @@ class xarMasks extends Object
                 //We now have primary parent implemented
                 //Use primary parent if implemented else get first parent??
                 //TODO: this needs to be reviewed
-                $useprimary = xarModGetVar('roles','setprimaryparent');
+                $useprimary = xarModVars::get('roles','setprimaryparent');
                 if ($useprimary) { //grab the primary parent
                     $parent=$role->getPrimaryParent(); //string value
                 }else { //we don't have a primary parent so use the first parent?? ... hmm review
@@ -413,7 +413,7 @@ class xarMasks extends Object
         // check if the exception needs to be caught here or not
 
         if ($catch && !$pass) {
-            if (xarModGetVar('privileges','exceptionredirect') && !xarUserIsLoggedIn()) {
+            if (xarModVars::get('privileges','exceptionredirect') && !xarUserIsLoggedIn()) {
                 //authsystem will handle the authentication
                 //Redirect to login for anon users, and take their current url as well for redirect after login
                 $requrl = xarServerGetCurrentUrl(array(),false);
@@ -556,10 +556,10 @@ class xarMasks extends Object
     */
     public static function testprivileges($mask,$privilegeset,$pass,$role='')
     {
-        $candebug = (xarSession::getVar('uid') == xarModGetVar('privileges','tester'));
-        $test = xarModGetVar('privileges','test') && $candebug;
-        $testdeny = xarModGetVar('privileges','testdeny') && $candebug;
-        $testmask = xarModGetVar('privileges','testmask');
+        $candebug = (xarSession::getVar('uid') == xarModVars::get('privileges','tester'));
+        $test = xarModVars::get('privileges','test') && $candebug;
+        $testdeny = xarModVars::get('privileges','testdeny') && $candebug;
+        $testmask = xarModVars::get('privileges','testmask');
         $matched = false;
         $pass = false;
         // Note : DENY rules override all others here...
@@ -581,7 +581,7 @@ class xarMasks extends Object
                 xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
             }
             if ($privilege->level == 0 && $privilege->includes($mask)) {
-                if (!xarModGetVar('privileges','inheritdeny') && is_object($role)) {
+                if (!xarModVars::get('privileges','inheritdeny') && is_object($role)) {
                     if($thistest) {
                         echo "We don't inherit <strong>denys</strong>, ";
                     }

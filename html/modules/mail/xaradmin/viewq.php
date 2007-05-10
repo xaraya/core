@@ -1,6 +1,6 @@
 <?php
 /**
- * View the current mail queue 
+ * View the current mail queue
  *
  * @package modules
  * @copyright (C) 2002-2006 The Digital Development Foundation
@@ -25,7 +25,7 @@ function mail_admin_viewq($args)
     extract($args);
     if (!xarVarFetch('action','str', $action, '')) return;
 
-    if (!xarSecurityCheck('AdminMail')) return; 
+    if (!xarSecurityCheck('AdminMail')) return;
 
     $data = array();
     if (!empty($action)) {
@@ -69,7 +69,7 @@ function mail_admin_viewq($args)
                     }
                     // update the waiting queue
                     $serialqueue = serialize($queue);
-                    xarModSetVar('mail','queue',$serialqueue);
+                    xarModVars::set('mail','queue',$serialqueue);
 
                     xarResponseRedirect(xarModURL('mail', 'admin', 'viewq'));
                     return true;

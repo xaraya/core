@@ -38,7 +38,7 @@ function dynamicdata_util_migrate($args)
 
     // retrieve past steps and recover if necessary
     if (!xarModVars::get('dynamicdata','migratesteps')) {
-        xarModSetVar('dynamicdata','migratesteps',serialize(array()));
+        xarModVars::set('dynamicdata','migratesteps',serialize(array()));
     }
     if (empty($from) && empty($to)) {
         $steps = array();
@@ -63,7 +63,7 @@ function dynamicdata_util_migrate($args)
     // retrieve existing mappings and recover if necessary
     $maps = xarModVars::get('dynamicdata','migratemaps');
     if (empty($maps)) {
-        xarModSetVar('dynamicdata','migratemaps',serialize(array()));
+        xarModVars::set('dynamicdata','migratemaps',serialize(array()));
         $maps = array();
     } else {
         $maps = unserialize($maps);
@@ -368,7 +368,7 @@ function dynamicdata_util_migrate($args)
         if (!empty($map)) {
             $maps[$map] = array('from' => $data['from'], 'to' => $data['to'],
                                 'fieldmap' => $data['fieldmap'], 'hookmap' => $data['hookmap']);
-            xarModSetVar('dynamicdata','migratemaps',serialize($maps));
+            xarModVars::set('dynamicdata','migratemaps',serialize($maps));
         }
     }
 

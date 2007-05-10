@@ -44,15 +44,15 @@ function base_admin_updateconfig()
             xarConfigSetVar('Site.BL.CompilerVersion', $compilerversion);
 
             xarConfigSetVar('Site.Core.DefaultModuleName', $defaultModuleName);
-            xarModSetVar('base','UseAlternatePageTemplate', ($alternatePageTemplate ? 1 : 0));
-            xarModSetVar('base','AlternatePageTemplateName', $alternatePageTemplateName);
+            xarModVars::set('base','UseAlternatePageTemplate', ($alternatePageTemplate ? 1 : 0));
+            xarModVars::set('base','AlternatePageTemplateName', $alternatePageTemplateName);
 
             xarConfigSetVar('Site.Core.DefaultModuleType', $defaultModuleType);
             xarConfigSetVar('Site.Core.DefaultModuleFunction', $defaultModuleFunction);
             xarModSetUserVar('roles','userhome', xarModURL($defaultModuleName, $defaultModuleType, $defaultModuleFunction),1);
             xarConfigSetVar('Site.Core.EnableShortURLsSupport', $enableShortURLs);
             // enable short urls for the base module itself too
-            xarModSetVar('base','SupportShortURLs', ($enableBaseShortURLs ? 1 : 0));
+            xarModVars::set('base','SupportShortURLs', ($enableBaseShortURLs ? 1 : 0));
             xarConfigSetVar('Site.Core.FixHTMLEntities', $FixHTMLEntities);
             break;
         case 'security':
@@ -114,11 +114,11 @@ function base_admin_updateconfig()
             if (!xarVarFetch('releasenumber','int:1:',$releasenumber,10,XARVAR_NOT_REQUIRED)) return;
 
             // Save these in normal module variables for now
-            xarModSetVar('base','proxyhost',$proxyhost);
-            xarModSetVar('base','proxyport',$proxyport);
-            xarModSetVar('base','releasenumber', $releasenumber);
+            xarModVars::set('base','proxyhost',$proxyhost);
+            xarModVars::set('base','proxyport',$proxyport);
+            xarModVars::set('base','releasenumber', $releasenumber);
             xarConfigSetVar('Site.Core.LoadLegacy', $loadLegacy);
-            xarModSetVar('base','editor',$editor);
+            xarModVars::set('base','editor',$editor);
 
             // Timezone, offset and DST
             if (!xarVarFetch('defaultsystemtimezone','str:1:',$defaultsystemtimezone,'UTC',XARVAR_NOT_REQUIRED)) return;

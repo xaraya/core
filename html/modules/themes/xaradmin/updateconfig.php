@@ -38,19 +38,19 @@ function themes_admin_updateconfig()
     if(!xarVarFetch('adminpagemenu', 'checkbox', $adminpagemenu, false, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dashtemplate', 'str:1:', $dashtemplate, 'dashboard', XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('usermenu', 'checkbox', $usermenu, false, XARVAR_DONT_SET)) {return;}
-    xarModSetVar('themes', 'SiteName', $sitename);
-    xarModSetVar('themes', 'SiteTitleSeparator', $separator);
-    xarModSetVar('themes', 'SiteTitleOrder', $pagetitle);
-    xarModSetVar('themes', 'SiteSlogan', $slogan);
-    xarModSetVar('themes', 'SiteCopyRight', $copyright);
-    xarModSetVar('themes', 'SiteFooter', $footer);
-    xarModSetVar('themes', 'ShowPHPCommentBlockInTemplates', $showphpcbit);
-    xarModSetVar('themes', 'ShowTemplates', $showtemplates);
-    xarModSetVar('themes', 'AtomTag', $atomtag);
-    xarModSetVar('themes', 'var_dump', $var_dump);
-    xarModSetVar('themes', 'usedashboard', ($dashboard) ? 1 : 0);
-    xarModSetVar('themes', 'adminpagemenu', ($adminpagemenu) ? 1 : 0);    
-    xarModSetVar('themes', 'dashtemplate', $dashtemplate);
+    xarModVars::set('themes', 'SiteName', $sitename);
+    xarModVars::set('themes', 'SiteTitleSeparator', $separator);
+    xarModVars::set('themes', 'SiteTitleOrder', $pagetitle);
+    xarModVars::set('themes', 'SiteSlogan', $slogan);
+    xarModVars::set('themes', 'SiteCopyRight', $copyright);
+    xarModVars::set('themes', 'SiteFooter', $footer);
+    xarModVars::set('themes', 'ShowPHPCommentBlockInTemplates', $showphpcbit);
+    xarModVars::set('themes', 'ShowTemplates', $showtemplates);
+    xarModVars::set('themes', 'AtomTag', $atomtag);
+    xarModVars::set('themes', 'var_dump', $var_dump);
+    xarModVars::set('themes', 'usedashboard', ($dashboard) ? 1 : 0);
+    xarModVars::set('themes', 'adminpagemenu', ($adminpagemenu) ? 1 : 0);
+    xarModVars::set('themes', 'dashtemplate', $dashtemplate);
     xarConfigSetVar('Site.BL.CacheTemplates',$cachetemplates);
 
     // make sure we dont miss empty variables (which were not passed thru)
@@ -59,10 +59,10 @@ function themes_admin_updateconfig()
     if (empty($hidecore)) $hidecore = 0;
     if (empty($selsort)) $selsort = 'namedesc';
 
-    xarModSetVar('themes', 'hidecore', $hidecore);
-    xarModSetVar('themes', 'selstyle', $selstyle);
-    xarModSetVar('themes', 'selfilter', $selfilter);
-    xarModSetVar('themes', 'selsort', $selsort);
+    xarModVars::set('themes', 'hidecore', $hidecore);
+    xarModVars::set('themes', 'selstyle', $selstyle);
+    xarModVars::set('themes', 'selfilter', $selfilter);
+    xarModVars::set('themes', 'selsort', $selsort);
 
     // Only go through updatehooks() if there was a change.
     if (xarModIsHooked('themes', 'roles') != $usermenu) {
@@ -73,14 +73,14 @@ function themes_admin_updateconfig()
             $hooked_roles[0] = 1;
             // turning on, so remember previous hook config
             if (xarModIsHooked('themes', 'roles', 1)) {
-                xarModSetVar('themes', 'group_hooked', true);
+                xarModVars::set('themes', 'group_hooked', true);
             }
         } else {
             // turning off, so restore previous hook config
-            if (xarModGetVar('themes', 'group_hooked')) {
+            if (xarModVars::get('themes', 'group_hooked')) {
                 $hooked_roles[0] = 2;
                 $hooked_roles[1] = 1; // groups only
-                xarModSetVar('themes', 'group_hooked', false);
+                xarModVars::set('themes', 'group_hooked', false);
             } else {
                 $hooked_roles[0] = 0; // nothing hooked at all
             }

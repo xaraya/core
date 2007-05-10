@@ -33,7 +33,7 @@ function roles_admin_createpassword()
     $modifiedrole = $role->updateItem();
     if (!$modifiedrole) return;
 
-    if (!xarModGetVar('roles', 'askpasswordemail')) {
+    if (!xarModVars::get('roles', 'askpasswordemail')) {
         xarResponseRedirect(xarModURL('roles', 'admin', 'showusers',
                       array('uid' => $groupuid, 'state' => $state)));
         return true;

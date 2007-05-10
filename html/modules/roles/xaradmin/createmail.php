@@ -79,7 +79,7 @@ function roles_admin_createmail()
             $q->eq('type',ROLES_USERTYPE);
         }
         // Set the paging and order stuff for this particular page
-        $numitems = xarModGetVar('roles', 'itemsperpage');
+        $numitems = xarModVars::get('roles', 'itemsperpage');
         $q->setrowstodo($numitems);
         $q->setstartat($startnum);
         $q->setorder($data['order']);

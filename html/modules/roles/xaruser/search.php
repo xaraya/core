@@ -120,7 +120,7 @@ function roles_user_search()
     $selection .= "(name LIKE " . $quotedlike . ")";
     $selection .= " OR (uname LIKE " . $quotedlike . ")";
 
-    if (xarModGetVar('roles', 'searchbyemail')) {
+    if (xarModVars::get('roles', 'searchbyemail')) {
         $selection .= " OR (email LIKE " . $quotedlike . ")";
     }
 
@@ -146,7 +146,7 @@ function roles_user_search()
                                   'selection'         => $selection,
                                   'include_anonymous' => false,
                                   'include_myself'    => false,
-                                  'numitems'          => xarModGetVar('roles', 'itemsperpage')));
+                                  'numitems'          => xarModVars::get('roles', 'itemsperpage')));
 
     // combine search results with DD
     if (!empty($users) && count($data['users']) > 0) {

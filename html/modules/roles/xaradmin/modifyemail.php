@@ -64,8 +64,8 @@ function roles_admin_modifyemail($args)
             if (!xarVarFetch('subject', 'str:1:', $subject)) return;
             // Confirm authorisation code
 //            if (!xarSecConfirmAuthKey()) return;
-//            xarModSetVar('roles', $data['mailtype'].'email', $message);
-//            xarModSetVar('roles', $data['mailtype'].'title', $subject);
+//            xarModVars::set('roles', $data['mailtype'].'email', $message);
+//            xarModVars::set('roles', $data['mailtype'].'title', $subject);
 
             $messaginghome = sys::varpath() . "/messaging/roles";
             $filebase = $messaginghome . "/" . $data['mailtype'] . "-";

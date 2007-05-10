@@ -73,7 +73,7 @@ function roles_userapi_countallactive($args)
     $bindvars[] = ROLES_USERTYPE;
 
 // cfr. xarcachemanager - this approach might change later
-    $expire = xarModGetVar('roles','cache.userapi.countallactive');
+    $expire = xarModVars::get('roles','cache.userapi.countallactive');
     if (!empty($expire)){
         $result = $dbconn->CacheExecute($expire,$query,$bindvars);
     } else {

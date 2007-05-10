@@ -26,7 +26,7 @@ function roles_userapi_getallroles($args)
 
     // Optional arguments.
     if (!isset($startnum)) $startnum = 1;
-    if (!isset($numitems)) $numitems = xarModGetVar('roles', 'itemsperpage');
+    if (!isset($numitems)) $numitems = xarModVars::get('roles', 'itemsperpage');
 
     sys::import('modules.roles.class.xarQuery');
     $q = new xarQuery();
@@ -116,7 +116,7 @@ function roles_userapi_getallroles($args)
     }
 
 // cfr. xarcachemanager - this approach might change later
-    $expire = xarModGetVar('roles','cache.userapi.getallroles');
+    $expire = xarModVars::get('roles','cache.userapi.getallroles');
     if (!empty($expire)){
         $expire = unserialize($expire);
         $q = $expire;

@@ -184,7 +184,7 @@ function authsystem_user_login()
                                       'message' => '',
                                       'locked' => 0,
                                       'notifymsg' => '');
-                    xarModSetVar('roles', 'lockdata', serialize($lockdata));
+                    xarModVars::set('roles', 'lockdata', serialize($lockdata));
                 }
 
             // Check if the site is locked and this user is allowed in

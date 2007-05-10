@@ -162,7 +162,7 @@ function roles_userapi_getall($args)
     $stmt = $dbconn->prepareStatement($query);
 
     // cfr. xarcachemanager - this approach might change later
-    $expire = xarModGetVar('roles', 'cache.userapi.getall');
+    $expire = xarModVars::get('roles', 'cache.userapi.getall');
 
     if($startnum > 0) {
         $stmt->setLimit($numitems);

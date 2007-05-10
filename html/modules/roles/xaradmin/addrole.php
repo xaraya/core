@@ -62,7 +62,7 @@ function roles_admin_addrole()
         }
 
         // check for duplicate email address
-        if(xarModGetVar('roles','uniqueemail')) {
+        if(xarModVars::get('roles','uniqueemail')) {
             $user = xarModAPIFunc('roles','user', 'get', array('email' => $email));
             if ($user) throw new DuplicateException(array('email',$email));
         }

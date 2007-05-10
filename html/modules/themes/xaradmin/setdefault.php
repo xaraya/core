@@ -26,7 +26,7 @@ function themes_admin_setdefault()
     if (!xarSecurityCheck('AdminTheme')) return;
     if (!xarVarFetch('id', 'int:1:', $defaulttheme)) return;
 
-    $whatwasbefore = xarModGetVar('themes', 'default');
+    $whatwasbefore = xarModVars::get('themes', 'default');
 
     if (!isset($defaulttheme)) {
         $defaulttheme = $whatwasbefore;
@@ -49,7 +49,7 @@ function themes_admin_setdefault()
 
     // update the data
     xarTplSetThemeDir($themeInfo['directory']);
-    xarModSetVar('themes', 'default', $themeInfo['directory']);
+    xarModVars::set('themes', 'default', $themeInfo['directory']);
 
     // set the target location (anchor) to go to within the page
     $target = $themeInfo['name'];
