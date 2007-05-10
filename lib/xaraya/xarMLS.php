@@ -34,6 +34,7 @@ define('XARMLS_DNTYPE_MODULE', 3);
 
 sys::import('xaraya.xarLocale');
 sys::import('xaraya.transforms.xarCharset');
+sys::import('xaraya.mlsbackends.reference');
 
 /**
  * Initializes the Multi Language System
@@ -459,7 +460,7 @@ function xarMLS_setCurrentLocale($locale)
         break;
     case 'xml2php':
 */
-        sys::import('xaraya.xarMLSXML2PHPBackend');
+        sys::import('xaraya.mlsbackends.xml2php');
         $GLOBALS['xarMLS_backend'] = new xarMLS__XML2PHPTranslationsBackend($alternatives);
 
 /*
@@ -468,7 +469,6 @@ function xarMLS_setCurrentLocale($locale)
 */
     // Load core translations
     xarMLS_loadTranslations(XARMLS_DNTYPE_CORE, 'xaraya', 'core:', 'core');
-
     //xarMLSLoadLocaleData($locale);
 }
 
@@ -709,8 +709,7 @@ function xarMLS__getSingleByteCharset($langISO2Code)
     return @$charsets[$langISO2Code];
 }
 
-// MLS CLASSES
-sys::import('xaraya.mlsbackends.reference');
+
 
 
 /**
