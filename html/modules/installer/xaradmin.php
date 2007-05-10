@@ -476,10 +476,10 @@ function installer_admin_phase5()
 
     // If we are here, the base system has completed
     // We can now pass control to xaraya.
-    sys::import('xaraya.xarConfig');
+    sys::import('xaraya.variables');
 
     $a = array();
-    xarConfig_init($a,XARCORE_SYSTEM_DATABASE);
+    xarVar_init($a,XARCORE_SYSTEM_DATABASE);
     xarConfigSetVar('Site.MLS.DefaultLocale', $install_language);
 
     // Set the allowed locales to our "C" locale and the one used during installation

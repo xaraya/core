@@ -8,6 +8,7 @@
  * @author Marcel van der Boom <mrb@hsdev.com>
  **/
 sys::import('xaraya.variables');
+sys::import('xaraya.creole');
 /**
  * ConfigVars class
  *

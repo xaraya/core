@@ -64,17 +64,11 @@ xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_I
 include 'modules/installer/xarfunctions.php';
 
 // Basic systems always loaded
-// {ML_dont_parse 'lib/log.php'}
 sys::import('xaraya.log');
-// {ML_dont_parse 'lib/events.php'}
 sys::import('xaraya.events');
-// {ML_dont_parse 'lib/xarVar.php'}
-sys::import('xaraya.xarVar');
-// {ML_dont_parse 'lib/xarServer.php'}
+sys::import('xaraya.variables');
 sys::import('xaraya.xarServer');
-// {ML_dont_parse 'lib/xarMLS.php'}
 sys::import('xaraya.xarMLS');
-// {ML_dont_parse 'lib/xarTemplate.php'}
 sys::import('xaraya.xarTemplate');
 
 // Start Logging Facilities as soon as possible

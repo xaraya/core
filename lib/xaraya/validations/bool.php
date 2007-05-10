@@ -14,7 +14,7 @@
 sys::import('xaraya.validations');
 class BoolValidation extends ValueValidations
 {
-    function variable_validations_bool (&$subject, $parameters=null)
+    function validate(&$subject, Array $parameters)
     {
         // @todo can't we use $subject = (boolean) $subject; ?
 

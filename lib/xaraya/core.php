@@ -270,14 +270,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     if ($whatToLoad & XARCORE_SYSTEM_CONFIGURATION) {
-        sys::import('xaraya.xarConfig');
-
-        // Start Configuration Unit
-        $systemArgs = array();
-        xarConfig_init($systemArgs, $whatToLoad);
-
         // Start Variables utilities
-        sys::import('xaraya.xarVar');
+        sys::import('xaraya.variables');
         xarVar_init($systemArgs, $whatToLoad);
         $whatToLoad ^= XARCORE_BIT_CONFIGURATION;
     }

@@ -18,7 +18,7 @@
  * @package multilanguage
  */
 
-sys::import('xaraya.xarMLS');
+sys::import('xaraya.mlsbackends.reference');
 class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
     function __construct($locales)
