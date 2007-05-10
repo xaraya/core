@@ -13,8 +13,7 @@
 /**
  * Exceptions for this subsystem
  *
- */
-
+**/
 class VariableValidationException extends ValidationExceptions
 {
     protected $message = 'The variable "#(1)" [Value: "#(2)"] did not comply with the required validation: "#(3)"';
@@ -53,7 +52,7 @@ define('XARVAR_PREP_TRIM',        8);
  * @return bool
  * @todo <johnny> fix the load level stuff here... it's inconsistant to the rest of the core
  * @todo <mrb> remove the two settings allowablehtml and fixhtmlentities
- */
+**/
 function xarVar_init(&$args, $whatElseIsGoingLoaded)
 {
     /*
@@ -93,7 +92,7 @@ function xarVar_init(&$args, $whatElseIsGoingLoaded)
  * @access public
  * @param arrays The arrays storing information equivalent to the xarVarFetch interface
  * @return array With the respective exceptions in case of failure
- */
+**/
 function xarVarBatchFetch()
 {
 
@@ -223,7 +222,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
 
         // TODO: this is used nowhere, plus it introduces a db connection here which is of no use
         if ($prep & XARVAR_PREP_FOR_STORE) {
-            $dbconn =& xarDBGetConn();
+            $dbconn = xarDB::getConn();
             $value = $dbconn->qstr($value);
         }
 
@@ -279,34 +278,31 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  * @throws EmptyParameterException
  * @return bool true if the $subject validates correctly, false otherwise
  */
-function xarVarValidate($validation, &$subject, $supress = false, $name='')
+function xarVarValidate($validation, &$subject, $supress = false, $name = '')
 {
     $valParams = explode(':', $validation);
-    $valType = strtolower(array_shift($valParams));
+    $type = strtolower(array_shift($valParams));
 
-    if (empty($valType)) throw new EmptyParameterException('valType');
+    if (empty($type)) throw new EmptyParameterException('type');
 
-    // {ML_include 'lib/validations/array.php'}
-    // {ML_include 'lib/validations/bool.php'}
-    // {ML_include 'lib/validations/checkbox.php'}
-    // {ML_include 'lib/validations/email.php'}
-    // {ML_include 'lib/validations/enum.php'}
-    // {ML_include 'lib/validations/float.php'}
-    // {ML_include 'lib/validations/fullemail.php'}
-    // {ML_include 'lib/validations/html.php'}
-    // {ML_include 'lib/validations/id.php'}
-    // {ML_include 'lib/validations/int.php'}
-    // {ML_include 'lib/validations/isset.php'}
-    // {ML_include 'lib/validations/list.php'}
-    // {ML_include 'lib/validations/mxcheck.php'}
-    // {ML_include 'lib/validations/notempty.php'}
-    // {ML_include 'lib/validations/regexp.php'}
-    // {ML_include 'lib/validations/str.php'}
+    sys::import("xaraya.validations");
+    $v = ValueValidations::get($type);
 
-    $function_name = xarVarLoad ('validations', $valType);
-    if (!$function_name) {return;}
-
-    return $function_name($subject, $valParams, $supress, $name);
+    try {
+        // Now featuring without passing the name everywhere :-)
+        $result = $v->validate($subject, $valParams);
+        return $result;
+    } catch (ValidationExceptions $e) {
+        // If a validation exception occurred, we can optionally suppress it
+        if(!$supress) {
+            // Rethrow with more verbose message
+            if($name == '') $name = '<unknown>'; // @todo MLS!
+            throw new VariableValidationException(array($name,$subject,$e->getMessage()));
+        }
+    } catch(Exception $e) {
+        // But not the others (note that this part is redundant)
+        throw $e;
+    }
 }
 
 /*
@@ -327,149 +323,23 @@ function xarVarValidate($validation, &$subject, $supress = false, $name='')
  *
  */
 
-/**
+/**@+
  * Wrapper functions for var caching as in Xaraya 1 API
  * See the documentation of protected xarCore::*Cached for details
  *
  * @access public
  * @see xarCore
  */
-function xarVarIsCached($cacheKey,  $name)
-{ return xarCore::isCached($cacheKey, $name);         }
-function xarVarGetCached($cacheKey, $name)
-{ return xarCore::getCached($cacheKey, $name);        }
-function xarVarSetCached($cacheKey, $name, $value)
-{ return xarCore::setCached($cacheKey, $name, $value);}
-function xarVarDelCached($cacheKey, $name)
-{ return xarCore::delCached($cacheKey, $name);        }
-function xarVarFlushCached($cacheKey)
-{ return xarCore::flushCached($cacheKey);             }
-
-
-/**
- * Stripslashes on multidimensional arrays.
- *
- * Used in conjunction with xarVarCleanFromInput
- *
- * @access protected
- * @param &var any variables or arrays to be stripslashed
- */
-function xarVar_stripSlashes(&$var)
-{
-    if(!is_array($var)) {
-        $var = stripslashes($var);
-    } else {
-        array_walk($var,'xarVar_stripSlashes');
-    }
-}
-
-function xarVar_addSlashes($var)
-{
-    return str_replace(array("\\",'"'), array("\\\\",'\"'), $var);
-}
-
-/**
- * Get allowed tags based on $level
- *
- * @access private
- * @static restricted array
- * @static basic array
- * @static enhanced array
- * @param level string
- * @return array
- */
-function xarVar__getAllowedTags($level)
-{
-    // Get the allowed HTML from the config var.  At some
-    // point this will be replaced by retrieving the
-    // allowed HTML from the HTML module.
-    $allowedHTML = array();
-    foreach (xarConfigGetVar('Site.Core.AllowableHTML') as $k=>$v) {
-        if ($v) {
-            $allowedHTML[] = $k;
-        }
-    }
-    return $allowedHTML;
-}
-
-/**
- * Changes one variable from one context to another
- *
- * @access public
- * @param string The string to be Converted
- * @param sourceContext The name of the module
- * @param targetContext The name of the module
- * @return string the string in the new context
- * @throws EmptyParameterException
- * @todo  Would it be useful to be able to transform arrays of strings at once?
- * @todo  This is a bit weird, perhaps use a factory class and hide the loading details?
- */
-function xarVarTransform ($string, $sourceContext, $targetContext)
-{
-    if (empty($sourceContext)) throw new EmptyParameterException('sourceContext');
-    if (empty($targetContext)) throw new EmptyParameterException('targetContext');
-    $transform_type = $sourceContext.'_to_'.$targetContext;
-    $function_name = xarVarLoad ('transforms', $transform_type);
-
-    if (!$function_name) {return;}
-
-    return $function_name ($string);
-}
-
-/**
- * Loads variable's drivers. Should be changed to module space latter on.
- *
- * @access private
- * @param string The drivers directory
- * @param filename The name file to be used
- * @return string the function anme
- * @throws BadParameterException
- * @todo also a bit weird
- * @see xarVarTransform
- */
-function xarVarLoad ($includes_type, $filename)
-{
-
-    $filename = xarVarPrepForOS($filename);
-
-    $function_name = 'variable_'.$includes_type.'_'.$filename;
-
-    if (!function_exists($function_name)) {
-        sys::import("xaraya.$includes_type.$filename");
-    }
-
-    if (!function_exists($function_name)) {
-        // Raise an exception
-        $msg = 'The #(1) type \'#(2)\' could not be found.';
-        $params = array($includes_type, $filename);
-        throw new BadParameterException($params,$msg);
-    }
-
-    return $function_name;
-}
-
-/**
- * Escapes on variable for the use in a specific context
- *
- * @access public
- * @param string The string to be Converted
- * @param targetContext The name of the context to escape for
- * @return string the string escape for the context
- * @throws EmptyParameterException
- * @todo Would it be useful to be able to transform arrays of strings at once?
- */
-function xarVarEscape ($string, $targetContext, $extras = array())
-{
-    if (empty($targetContext)) throw new EmptyParameterException('targetContext');
-
-    $function_name = xarVarLoad ('escapes', $targetContext);
-    if (!$function_name) {return;}
-
-    return $function_name ($string, $extras);
-}
+function xarVarIsCached($cacheKey,  $name)         { return xarCore::isCached($cacheKey, $name);         }
+function xarVarGetCached($cacheKey, $name)         { return xarCore::getCached($cacheKey, $name);        }
+function xarVarSetCached($cacheKey, $name, $value) { return xarCore::setCached($cacheKey, $name, $value);}
+function xarVarDelCached($cacheKey, $name)         { return xarCore::delCached($cacheKey, $name);        }
+function xarVarFlushCached($cacheKey)              { return xarCore::flushCached($cacheKey);             }
+/**@-*/
 
 /*
     ---------------------------------------------------------------------
+    @todo LOOK AT  THIS, IT SEEMS ABANDONED, except for the transform of entities from named to numeric
     Everything below should be remade, working thru xarVarEscape or xarVarTransform
     * xarVarCleanFromInput
     * xarVarCleanUntrusted
@@ -529,7 +399,6 @@ function xarVarPrepForDisplay()
  * @access public
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
- * @throws DATABASE_ERROR, BAD_PARAM
  */
 function xarVarPrepHTMLDisplay()
 {

@@ -390,7 +390,11 @@ class xarRequest extends Object
         $value = xarMLS_convertFromInput($value, $method);
 
         if (get_magic_quotes_gpc()) {
-            xarVar_stripSlashes($value);
+            if(!is_array($value)) {
+                $value = stripslashes($value);
+            } else {
+                array_walk($value,'stripslashes');
+            }
         }
         return $value;
     }

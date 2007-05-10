@@ -7,7 +7,7 @@
  * USE THE METHODS IN xarDataDict.php. BOTH SUBSYSTEMS ARE NOT 100% FINISHED
  * BUT THIS ONE WILL BE ABANDONED, YOU MIGHT AS WELL WRITE YOUR CODE TO USE
  * THE MAINTAINED SUBSYSTEM.
- 
+
  * @package database
  * @copyright (C) 2002 by the Xaraya Development Team.
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
@@ -102,9 +102,9 @@ function xarDB__oracleAlterTable($tableName, $args)
             // Add column values if they exist
             // Note:  Oracle does not support null values in ALTER TABLE
             $sqlDDL = "";
-            if (isset($this_field['type'])) 
+            if (isset($this_field['type']))
                 $sqlDDL = $sqlDDL . ' ' . $this_field['type'];
-            if (isset($this_field['default'])) 
+            if (isset($this_field['default']))
                 $sqlDDL = $sqlDDL . ' ' . $this_field['default'];
             $sql .= $sqlDDL;
             break;
@@ -152,7 +152,7 @@ function xarDB__oracleAlterTable($tableName, $args)
             // the existing schema. Also b/c the fetch mode may or may not be set to NUM, set it to
             // ASSOC so we don't have to loop through the entire returned array looking for are our one
             // field and field type
-            $dbconn =& xarDBGetConn();
+            $dbconn = xarDB::getConn();
             $dbInfo = $dbconn->getDatabaseInfo();
             $tblInfo = $dbInfo->getTable($tableName);
             $tableInfoArray = $tblInfo->getColumns();

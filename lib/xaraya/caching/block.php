@@ -76,7 +76,7 @@ function xarBlockIsCached(array $args)
         // We need to get it.
         $systemPrefix = xarDBGetSystemTablePrefix();
         $blocksettings = $systemPrefix . '_cache_blocks';
-        $dbconn =& xarDBGetConn();
+        $dbconn = xarDB::getConn();
         $tables = $dbconn->MetaTables();
         if (in_array($blocksettings, $tables)) {
             $query = "SELECT id, nocache,

@@ -155,8 +155,8 @@ function xarUserLogIn($userName, $password, $rememberMe = 0)
         return; // throw back
 
     // Set user auth module information
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn   = xarDB::getConn();
+    $xartable = xarDB::getTables();
 
     $rolestable = $xartable['roles'];
 
@@ -569,8 +569,8 @@ function xarUser__getAuthModule($userId)
         }
     }
 
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn   = xarDB::getConn();
+    $xartable = xarDB::getTables();
 
     // Get user auth_module name
     $rolestable = $xartable['roles'];
@@ -633,14 +633,13 @@ function xarUser__isVarDefined($name)
  * @access private
  * @return bool
  * @throws SQLException
- */
+ * @todo replace with some roles API ?
+**/
 function xarUser__setUsersTableUserVar($name, $value, $userId)
 {
 
-// TODO: replace with some roles API ?
-
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn   = xarDB::getConn();
+    $xartable = xarDB::getTables();
 
     $rolestable = $xartable['roles'];
     $usercolumns = $xartable['users_column'];

@@ -13,20 +13,20 @@
  *
  * @throws VariableValidationException
  */
-function variable_validations_checkbox (&$subject, $parameters, $supress_soft_exc, &$name)
+sys::import('xaraya.validations');
+class CheckBoxValidation extends ValueValidations
 {
-
-    if (empty($subject) || is_null($subject)) {
-        $subject = false;
-    } elseif (is_string($subject)) {
-        $subject = true;
-    } else {
-        if ($name == '') $name = '<unknown>';
-        $msg = 'Not a checkbox value';
-        if (!$supress_soft_exc) throw new VariableValidationException(array($name,$subject,$msg));
-        return false;
+    function validate(&$subject, Array $parameters)
+    {
+        if (empty($subject) || is_null($subject)) {
+            $subject = false;
+        } elseif (is_string($subject)) {
+            $subject = true;
+        } else {
+            $msg = 'Not a checkbox value';
+            throw new VariableValidationException(null,$msg);
+        }
+        return true;
     }
-    return true;
 }
-
 ?>

@@ -12,7 +12,7 @@ sys::import('xaraya.variables');
  * ConfigVars class
  *
  * @package variables
- * @todo if core was module 0 this could be a whole lot simpler by derivation
+ * @todo if core was module 0 this could be a whole lot simpler by derivation (or if all config variables were moved to a module)
  **/
 class xarConfigVars extends xarVars implements IxarVars
 {
@@ -39,8 +39,8 @@ class xarConfigVars extends xarVars implements IxarVars
         // Question is wether we want to invent new configvars on the fly or not
         self::delete(null,$name);
 
-        $dbconn =& xarDBGetConn();
-        $tables =& xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
         $config_varsTable = $tables['config_vars'];
 
         //Here we serialize the configuration variables
@@ -108,8 +108,8 @@ class xarConfigVars extends xarVars implements IxarVars
 
         // Need to retrieve it
         // @todo checkme What should we do here? preload again, or just fetch the one?
-        $dbconn =& xarDBGetConn();
-        $tables =& xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
         $varstable = $tables['config_vars'];
         $query = "SELECT name, value FROM $varstable WHERE module_id is null AND name = ?";
 
@@ -129,8 +129,8 @@ class xarConfigVars extends xarVars implements IxarVars
 
     public static function delete($scope, $name)
     {
-        $dbconn =& xarDBGetConn();
-        $tables =& xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
         $config_varsTable = $tables['config_vars'];
         $query = "DELETE FROM $config_varsTable WHERE name = ? AND module_id is null";
 
@@ -152,8 +152,8 @@ class xarConfigVars extends xarVars implements IxarVars
      */
     private static function preload()
     {
-        $dbconn =& xarDBGetConn();
-        $tables =& xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
 
         $query = "SELECT name, value FROM $tables[config_vars] WHERE module_id is null";
         $stmt = $dbconn->prepareStatement($query);

@@ -4,7 +4,7 @@
  *
  * @package logging
  * @copyright (C) 2003 by the Xaraya Development Team.
- * 
+ *
 */
 
 /**
@@ -60,11 +60,8 @@ class xarLogger_sql extends xarLogger
     function setConfig(array $conf)
     {
         parent::setConfig($conf);
-
-        $this->_dbconn =& xarDBGetConn();
-
+        $this->_dbconn = xarDB::getConn();
         $this->_table = $conf['table'];
-//        $xartable =& xarDBGetTables();
     }
 
 
@@ -80,7 +77,7 @@ class xarLogger_sql extends xarLogger
      *                  PEAR_LOG_NOTICE, PEAR_LOG_INFO, and PEAR_LOG_DEBUG.
      *                  The default is PEAR_LOG_INFO.
      * @return boolean  True on success or false on failure.
-     * @access public     
+     * @access public
      */
     function notify($message, $priority)
     {

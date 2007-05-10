@@ -17,17 +17,17 @@
  * @param subject The parameter to check for
  * @return bool true on isset, false on !isset
  * @throws VariableValidationException
- */
-function variable_validations_isset (&$subject, $parameters, $supress_soft_exc)
+**/
+sys::import('xaraya.validations');
+class IssetValidation extends ValueValidations
 {
-    if (!isset($subject)) {
-        $msg = 'The variable was not set while the validation requires it to be.';
-        if (!$supress_soft_exc) 
+    function validate(&$subject, Array $parameters )
+    {
+        if (!isset($subject)) {
+            $msg = 'The variable was not set while the validation requires it to be.';
             throw new VariableValidationException('subject', $msg);
-        return false;
+        }
+        return true;
     }
-
-    return true;
 }
-
 ?>

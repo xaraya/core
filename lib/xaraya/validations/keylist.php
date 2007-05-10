@@ -33,47 +33,49 @@
  *    e.g. $x[123][456] = 'anything'
  *
  * @throws VariableValidationException
- **/
-function variable_validations_keylist (&$subject, $parameters, $supress_soft_exc, &$name)
+**/
+sys::import('xaraya.validations');
+class KeyListValidation extends ValueValidations
 {
-    if ($name == '') $name = '<unknown>';
-    if (!is_array($subject)) {
-        $msg = 'Not an array';
-        
-        // NULL is a special case. Perform a 'soft' fail should we encounter a NULL
-        if (!($subject === NULL && $supress_soft_exc)) {
-            throw new VariableValidationException(array($name,$subject,$msg));
-        } else {
-            return false;
-        }
-    }
+    function validate(&$subject, Array $parameters)
+    {
+        if (!is_array($subject)) {
+            $msg = 'Not an array';
 
-    if (isset($parameters[0]) && trim($parameters[0]) != '') {
-        // Get the remainder of the validation as a string.
-        $validation = implode(':', $parameters);
-
-        // The key validation is everything up to the first ';'.
-        list($validation_key, $validation_value) = explode(';', $validation, 2);
-
-        foreach  ($subject as $key => $value) {
-            // Note: key is a copy, so it will not get updated by the validation routine.
-            // That is the behaviour we want: not to start updating key values.
-            $return = xarVarValidate($validation_key, $key, $supress_soft_exc);
-
-            // The value validation is optional. We may want to just validate the keys
-            // and disregard the values.
-            if (!empty($validation_value)) {
-                // subject[key] is a reference to the original value, so it can get updated.
-                $return = $return & xarVarValidate($validation_value, $subject[$key], $supress_soft_exc);
+            // NULL is a special case. Perform a 'soft' fail should we encounter a NULL
+            // @todo What does that mean? Soft fail?
+            if ($subject === NULL) {
+                return false;
             }
+            throw new VariableValidationException(null, $msg);
+        }
 
-            if (!$return) {
-                return $return;
+        if (isset($parameters[0]) && trim($parameters[0]) != '') {
+            // Get the remainder of the validation as a string.
+            $validation = implode(':', $parameters);
+
+            // The key validation is everything up to the first ';'.
+            list($validation_key, $validation_value) = explode(';', $validation, 2);
+
+            foreach  ($subject as $key => $value) {
+                // Note: key is a copy, so it will not get updated by the validation routine.
+                // That is the behaviour we want: not to start updating key values.
+                $return = xarVarValidate($validation_key, $key);
+
+                // The value validation is optional. We may want to just validate the keys
+                // and disregard the values.
+                if (!empty($validation_value)) {
+                    // subject[key] is a reference to the original value, so it can get updated.
+                    $return = $return & xarVarValidate($validation_value, $subject[$key]);
+                }
+
+                if (!$return) {
+                    return $return;
+                }
             }
         }
-    }
 
-    return true;
+        return true;
+    }
 }
-
 ?>

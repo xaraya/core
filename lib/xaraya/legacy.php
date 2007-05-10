@@ -12,9 +12,10 @@
 /**
  * Exceptions defined by this subsystem
  *
- */
+ * @package legacy
+**/
 class ApiDeprecationException extends DeprecationExceptions
-{ 
+{
     protected $message = "You are trying to use a deprecated API function [#(1)], Replace this call with #(2)";
 }
 
@@ -43,6 +44,6 @@ class ApiDeprecationException extends DeprecationExceptions
 * xarVarCleanFromInput          -> use xarVarFetch validations
 * xarTplAddStyleLink            -> use xar:style tag
 * xarTplAddJavaScriptCode       -> use xar:base-include-javascript
-* xarInclude                    -> use sys:import('dot.separated.path.below.includes') 
+* xarInclude                    -> use sys:import('dot.separated.path')
 */
 ?>

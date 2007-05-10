@@ -10,23 +10,23 @@
 /**
  * Regular Expression Validation Class
  *
- * @throws VariableValidationException 
- **/
-function variable_validations_regexp (&$subject, $parameters, $supress_soft_exc, &$name)
+ * @throws VariableValidationException
+**/
+sys::import("xaraya.validations");
+class RegExpValidation extends ValueValidations
 {
-    if ($name == '') $name = '<unknown>';
-    if (!isset($parameters[0]) || trim($parameters[0]) == '') {
-        $msg = 'There is not parameter to check agains the regular expression validation.';
-        // CHECK: this is probably better a BadParameterException ?
-        throw new VariableValidationException(array($name,$subject,$msg));
-    } elseif (preg_match($parameters[0], $subject)) {
-        return true;
+    function validate (&$subject, Array $parameters)
+    {
+        if (!isset($parameters[0]) || trim($parameters[0]) == '') {
+            $msg = 'There is no parameter to check agains the regular expression validation.';
+            // CHECK: this is probably better a BadParameterException ?
+            throw new VariableValidationException(null, $msg);
+        } elseif (preg_match($parameters[0], $subject)) {
+            return true;
+        }
+
+        $msg = '"#(1)" Does not match pattern "#(2)"';
+        throw new VariableValidationException(array($subject, $parameters[0]),$msg);
     }
-
-    $msg = 'Variable #(1): "#(2)" did not match pattern "#(3)"';
-    if (!$supress_soft_exc) 
-        throw new VariableValidationException(array( $name, $subject, $parameters[0]),$msg);
-    return false;
 }
-
 ?>

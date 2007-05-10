@@ -8,10 +8,16 @@
 
 /**
  * Id Validation Class
- */
-function variable_validations_id (&$subject, $parameters, $supress_soft_exc)
+ *
+ * Validates as integer larger than or equal than 1 'int:1'
+**/
+sys::import("xaraya.validations.int");
+class IdValidation extends IntValidation
 {
-    return xarVarValidate ('int:1', $subject, $supress_soft_exc);
+    function validate(&$subject, Array $parameters)
+    {
+        return parent::validate($subject,array(1));
+    }
 }
 
 ?>

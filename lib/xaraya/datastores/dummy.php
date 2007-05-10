@@ -4,7 +4,8 @@
  *
  * @package dynamicdata
  * @subpackage datastores
- */
+ * @todo louzy name
+**/
 
 /**
  * Dummy data store class

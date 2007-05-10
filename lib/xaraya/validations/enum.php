@@ -10,34 +10,33 @@
  * Enum Validation Function
  *
  * @throws VariableValidationException
- */
-function variable_validations_enum (&$subject, $parameters, $supress_soft_exc, &$name)
+**/
+sys::import('xaraya.validations');
+class EnumValidation extends ValueValidations
 {
+    function validate(&$subject, Array $parameters)
+    {
+        $found = false;
 
-    $found = false;
-
-    foreach ($parameters as $param) {
-        if ($subject == $param) {
-            $found = true;
-        }
-    }
-
-    if ($found) {
-        return true;
-    } else {
-        if ($name == '') $name = '<unknown>';
-        $msg = 'Input given is not in list of valid options';
-        $first = true;
         foreach ($parameters as $param) {
-            if ($first) $first = false;
-            else $msg .= ' or '; // TODO: evaluate MLS consequences later on
-
-            $msg .= $param;
+            if ($subject == $param) {
+                $found = true;
+            }
         }
-        if (!$supress_soft_exc) 
-            throw new VariableValidationException(array($name,$subject,$msg));
-        return false;
+
+        if ($found) {
+            return true;
+        } else {
+            $msg = 'Input given is not in list of valid options';
+            $first = true;
+            foreach ($parameters as $param) {
+                if ($first) $first = false;
+                else $msg .= ' or '; // TODO: evaluate MLS consequences later on
+
+                $msg .= $param;
+            }
+            throw new VariableValidationException(null, $msg);
+        }
     }
 }
-
 ?>

@@ -1,12 +1,12 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:set name="dummy">xarTplSetPageTemplateName('header')</xar:set>
 <xar:if condition="!empty($object)">
-    &lt;#$object:name#&gt;
-    <xar:data-display object="$object" />
-    &lt;/#$object:name#&gt;
+    <xar:element name="#$object:name#">
+      <xar:data-display object="$object" />
+    </xar:element>
 <xar:else />
-    &lt;#$module.'_'.$itemtype#&gt;
-    <xar:data-display module="$module" itemtype="$itemtype" itemid="$itemid" />
-    &lt;/#$module.'_'.$itemtype#&gt;
+    <xar:element name="#$module#_#$itemtype#">
+      <xar:data-display module="$module" itemtype="$itemtype" itemid="$itemid" />
+    </xar:element>
 </xar:if>
 </xar:template>

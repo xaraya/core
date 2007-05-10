@@ -22,21 +22,27 @@
 /**
  * Exceptions defined by this subsystem
  *
+ * @package modules
  */
 class ModuleBaseInfoNotFoundException extends NotFoundExceptions
 {
     protected $message = 'The base info for module "#(1)" could not be found';
 }
-
+/**
+ * @package modules
+**/
 class ModuleNotFoundException extends NotFoundExceptions
 {
     protected $message = 'A module is missing, the module name could not be determined in the current context';
 }
-
+/**
+ * @package modules
+**/
 class ModuleNotActiveException extends xarExceptions
 {
     protected $message = 'The module "#(1)" was called, but it is not active.';
 }
+
 
 /**
  * State of modules
@@ -536,8 +542,8 @@ function xarModGetHookList($callerModName, $hookObject, $hookAction, $callerItem
     }
 
     // Get database info
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn   = xarDB::getConn();
+    $xartable = xarDB::getTables();
     $hookstable    = $xartable['hooks'];
     $modulestable  = $xartable['modules'];
 
@@ -611,8 +617,8 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
     // Get all hook modules for the caller module once
     if (!isset($modHookedCache[$callerModName])) {
         // Get database info
-        $dbconn =& xarDBGetConn();
-        $xartable =& xarDBGetTables();
+        $dbconn   = xarDB::getConn();
+        $xartable = xarDB::getTables();
         $hookstable   = $xartable['hooks'];
         $modulestable = $xartable['modules'];
 
@@ -691,8 +697,8 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
 function xarModRegisterHook($hookObject, $hookAction, $hookArea, $hookModName, $hookModType, $hookFuncName)
 {
     // Get database info
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn   = xarDB::getConn();
+    $xartable = xarDB::getTables();
     $hookstable = $xartable['hooks'];
 
     // Insert hook
@@ -730,8 +736,8 @@ function xarModRegisterHook($hookObject, $hookAction, $hookArea, $hookModName, $
 function xarModUnregisterHook($hookObject, $hookAction, $hookArea,$hookModName, $hookModType, $hookFuncName)
 {
     // Get database info
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn   = xarDB::getConn();
+    $xartable = xarDB::getTables();
     $hookstable = $xartable['hooks'];
 
     // Remove hook
@@ -1037,8 +1043,8 @@ class xarMod extends Object implements IxarMod
         // Log it when it doesnt come from the cache
         xarLogMessage("xarMod::getInfo ". $modRegId ." / " . $type);
 
-        $dbconn =& xarDBGetConn();
-        $tables =& xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
 
         switch($type) {
         case 'module':
@@ -1189,8 +1195,8 @@ class xarMod extends Object implements IxarMod
         // Log it when it doesnt come from the cache
         xarLogMessage("xarMod::getBaseInfo ". $modName ." / ". $type);
 
-        $dbconn =& xarDBGetConn();
-        $tables =& xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
 
         // theme+s or module+s
         $table = $tables[$type.'s'];

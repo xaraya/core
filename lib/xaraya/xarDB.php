@@ -1,7 +1,7 @@
 <?php
 /**
  * Database Abstraction Layer API Helpers
- * 
+ *
  * @package database
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -16,7 +16,7 @@
  * This function loads up the db abstraction layer  and starts the database
  * connection using the required parameters then it sets
  * the table prefixes and xartables up and returns true
- * 
+ *
  * @access protected
  * @global array xarDB_systemArgs
  * @global object dbconn database connection object
@@ -38,13 +38,13 @@ function xarDB_init(array &$args, $whatElseIsGoingLoaded)
 {
     if(!isset($args['doConnect'])) $args['doConnect'] = true;
     $GLOBALS['xarDB_systemArgs'] = $args;
-    
-    sys::import('xaraya.xarCreole');
+
+    sys::import('xaraya.creole');
     // Register postgres driver, since Creole uses a slightly different alias
     // We do this here so we can remove customisation from creole lib.
     xarDB::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
-    
-    if($args['doConnect']) 
+
+    if($args['doConnect'])
         $dbconn =& xarDBNewConn();
     $systemPrefix = $args['systemTablePrefix'];
     $sitePrefix   = $args['siteTablePrefix'];
@@ -63,11 +63,11 @@ function xarDB_init(array &$args, $whatElseIsGoingLoaded)
  * @access public
  * @return object database connection object
  */
-function &xarDBGetConn($index=0)
+function &xarDBGetConn($index = 0)
 {
     // we only want to return the first connection here
     // perhaps we'll add linked list capabilities to this soon
-    $tmp =& xarDB::getConn($index);
+    $tmp = xarDB::getConn($index);
     return $tmp;
 }
 
@@ -75,7 +75,7 @@ function &xarDBGetConn($index=0)
  * Initialise a new db connection
  *
  * Create a new connection based on the supplied parameters
- * 
+ *
  * @access public
  * @todo   do we need the global?
  */
@@ -102,14 +102,14 @@ function &xarDBNewConn(array $args = null)
     if($persistent) $flags |= xarDB::PERSISTENT;
     $conn = null;
     $conn = xarDB::getConnection($dsn,$flags);
-    
+
     // if code uses assoc fetching and makes a mess of column names, correct
     // this by forcing returns to be lowercase
     // <mrb> : this is not for nothing a COMPAT flag. the problem still lies
-    //         in creating the database schema case sensitive in the first 
+    //         in creating the database schema case sensitive in the first
     //         place. Unfortunately, that is just not portable.
     $flags |= xarDB::COMPAT_ASSOC_LOWER;
-    
+
     $conn = null;
     $conn = xarDB::getConnection($dsn,$flags); // cached on dsn hash, so no worries
     xarLogMessage("New connection created, now serving " . count(xarDB::$count) . " connections");
@@ -125,7 +125,7 @@ function &xarDBNewConn(array $args = null)
  */
 function &xarDBGetTables()
 {
-    $tmp =& xarDB::getTables();
+    $tmp = xarDB::getTables();
     return $tmp;
 }
 

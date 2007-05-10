@@ -237,10 +237,10 @@ function xarCache_getParents()
     }
     $systemPrefix = xarDBGetSystemTablePrefix();
     $rolemembers = $systemPrefix . '_rolemembers';
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $query = "SELECT parentid FROM $rolemembers WHERE id = ?";
-    $stmt =& $dbconn->prepareStatement($query);
-    $result =& $stmt->executeQuery(array($currentuid));
+    $stmt   = $dbconn->prepareStatement($query);
+    $result = $stmt->executeQuery(array($currentuid));
 
     $gidlist = array();
     while($result->next()) {

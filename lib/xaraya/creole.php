@@ -5,7 +5,7 @@
  * @author Marcel van der Boom <marcel@hsdev.com>
 **/
 sys::import('creole.Creole');
-class xarDB extends Creole 
+class xarDB extends Creole
 {
     public static $count = 0;
 
@@ -14,7 +14,7 @@ class xarDB extends Creole
     private static $connections = array();
     private static $tables = array();
 
-    public static function &getTables() 
+    public static function &getTables()
     {
         return self::$tables;
     }
@@ -48,7 +48,7 @@ class xarDB extends Creole
         self::$firstDSN = $conn->getDSN();
     }
 
-    public static function &getConn($index)
+    public static function &getConn($index = 0)
     {
         return self::$connections[$index];
     }

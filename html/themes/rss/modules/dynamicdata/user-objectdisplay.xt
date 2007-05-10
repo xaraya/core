@@ -1,5 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:foreach in="$properties" key="$name">
-    &lt;#$properties.$name:name#&gt;#xarVarPrepForDisplay($properties.$name:value)#&lt;/#$properties.$name:name#&gt;
+  <xar:element name="#$protperties.$name:name#">#xarVarPrepForDisplay($properties.$name:value)#</xar:element>
 </xar:foreach>
 </xar:template>

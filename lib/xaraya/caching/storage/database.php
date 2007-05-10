@@ -14,7 +14,7 @@ class xarCache_Database_Storage extends xarCache_Storage
     {
         parent::__construct($args);
         $this->storage = 'database';
-        $this->dbconn = xarDBGetConn();
+        $this->dbconn = xarDB::getConn();
     }
 
     public function getTable()

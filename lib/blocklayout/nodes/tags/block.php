@@ -10,7 +10,6 @@
  *   Tag content: not supported for the present time
  * @package blocklayout
  * @access private
- * @todo try to get rid of the dependency with xarVar.php (xarVar_addslashes)
  * @todo there is a return in the middle of this handler (effectively ignoring children) CORRECT THIS!
  */
 class BlockTagNode extends TagNode implements ElementTag
@@ -38,7 +37,7 @@ class BlockTagNode extends TagNode implements ElementTag
         // Remove the attributes that are handled outside the content.
         foreach(array('instance', 'module', 'type', 'name', 'title', 'template', 'state') as $std_attribute) {
             if (isset($content[$std_attribute])) {
-                $$std_attribute = '"' . xarVar_addSlashes($content[$std_attribute]) . '"';
+                $$std_attribute = '"' . str_replace(array("\\",'"'), array("\\\\",'\"'), $content[$std_attribute]) . '"';
                 unset ($content[$std_attribute]);
             } else {
                 $$std_attribute = 'NULL';
@@ -47,7 +46,7 @@ class BlockTagNode extends TagNode implements ElementTag
 
         // PHP code for the block parameter override array.
         foreach($content as $attr_name => $attr_value) {
-            $content[$attr_name] = '\'' . $attr_name . '\'=>"' . xarVar_addSlashes($attr_value) . '"';
+            $content[$attr_name] = '\'' . $attr_name . '\'=>"' . str_replace(array("\\",'"'), array("\\\\",'\"'), $attr_value) . '"';
         }
         $override = 'array(' . implode(', ', $content) . ')';
 

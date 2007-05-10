@@ -56,6 +56,7 @@
 /**
  * Exceptions raised by this subsystem
  *
+ * @package events
  */
 class EventRegistrationException extends RegistrationExceptions
 {
@@ -75,6 +76,11 @@ function xarEvt_init(&$args, $whatElseIsGoingLoaded)
     return true;
 }
 
+/**
+ * Interface declaration for core events
+ *
+ * @package events
+**/
 interface IxarEvents
 {
     static function register($eventName);
@@ -83,7 +89,8 @@ interface IxarEvents
 /**
  * Class to model the interface to core events management
  *
- */
+ * @package events
+**/
 class xarEvents extends Object implements IxarEvents
 {
     private static $knownEvents = array();
@@ -270,7 +277,7 @@ class xarEvents extends Object implements IxarEvents
         if (function_exists('xarConfigGetVar')) {
             $handlers = xarConfigGetVar('Site.Evt.Handlers');
         } else {
-            $dbconn =& xarDBGetConn();
+            $dbconn = xarDB::getConn();
             $sitetabpre = xarDBGetSiteTablePrefix();
             $configtable = $sitetabpre.'_config_vars';
             $query = "SELECT value FROM $configtable WHERE name = ?";

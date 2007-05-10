@@ -11,16 +11,16 @@
 /**
  * Full Email Check -- Checks first thru the regexp and then by mx records
  *
- * @todo Why doesnt this throw an exception?
- */
-function variable_validations_fullemail (&$subject, $parameters=null, $supress_soft_exc)
+**/
+sys::import('xaraya.validations.email');
+class FullEmailValidation extends EmailValidation
 {
-    if (xarVarValidate ('email', $subject, $supress_soft_exc) &&
-        xarVarValidate ('mxcheck', $subject, $supress_soft_exc)) {
-        return true;
+    function validate(&$subject, $parameters=null)
+    {
+        if (parent::validate($subject,array()) && xarVarValidate ('mxcheck', $subject)) {
+            return true;
+        }
+        return false;
     }
-
-    return false;
 }
-
 ?>

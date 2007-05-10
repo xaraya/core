@@ -10,30 +10,30 @@
 /**
  * Lists Validation Function
  *
- * @throws VariableValidationException 
- **/
-function variable_validations_list (&$subject, $parameters, $supress_soft_exc, &$name)
+ * @throws VariableValidationException
+**/
+sys::import('xaraya.validations');
+class ListValidation extends ValueValidations
 {
-    if ($name == '') $name = '<unknown>';
-    if (!is_array($subject)) {
-        $msg = 'Not an array';
-        if (!$supress_soft_exc) 
-            throw new VariableValidationException(array($name,$subject,$msg));
-        return false;
-    }
+    function validate(&$subject, Array $parameters)
+    {
+        if (!is_array($subject)) {
+            $msg = 'Not an array';
+            throw new VariableValidationException(null, $msg);
+        }
 
-    if (isset($parameters[0]) && trim($parameters[0]) != '') {
-        $validation = implode(':', $parameters);
-        foreach  ($subject as $key => $value) {
-            $return = xarVarValidate($validation, $subject[$key], $supress_soft_exc);
-            //$return === null or $return === false => return
-            if (!$return) {
-                return $return;
+        if (isset($parameters[0]) && trim($parameters[0]) != '') {
+            $validation = implode(':', $parameters);
+            foreach  ($subject as $key => $value) {
+                $return = xarVarValidate($validation, $subject[$key]);
+                //$return === null or $return === false => return
+                if (!$return) {
+                    return $return;
+                }
             }
         }
+
+        return true;
     }
-
-    return true;
 }
-
 ?>

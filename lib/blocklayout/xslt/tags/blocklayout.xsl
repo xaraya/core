@@ -20,7 +20,7 @@
     <!-- Generate the doctype
       @todo: xsl:output has mechanisms to do this, but dont know how
              to do that (as the result true generation has already started)
-      @todo: how should the dtd attribute really behave if unset or should 
+      @todo: how should the dtd attribute really behave if unset or should
                   that even be possible
     -->
     <xsl:if test="@dtd != 'none'">
@@ -88,6 +88,10 @@
       <xsl:when test="$dtd = 'svg-xhtml-math'">
         <xsl:text disable-output-escaping="yes">svg:svg PUBLIC  "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN" "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd"&gt;</xsl:text>
       </xsl:when>
+      <xsl:when test="$dtd = 'rss'">
+        <xsl:text disable-output-escaping="yes">rss PUBLIC "-//Netscape Communications//DTD RSS 0.91//EN"   "http://my.netscape.com/publish/formats/rss-0.91.dtd"&gt;</xsl:text>
+      </xsl:when>
+
     </xsl:choose>
   </xsl:template>
 
