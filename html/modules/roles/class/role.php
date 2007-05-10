@@ -74,7 +74,7 @@ class Role extends DataObject
         $this->acltable = $xartable['security_acl'];
         $this->realmstable = $xartable['security_realms'];
 
-        if (!isset($uid)) $uid = 0;
+        /*if (!isset($uid)) $uid = 0;
         if (isset($itemtype)) $type = $itemtype;
         if (!isset($type)) $type = ROLES_USERTYPE;
         if (!isset($parentid)) $parentid = 1;
@@ -91,6 +91,7 @@ class Role extends DataObject
         if (!isset($basetype)) $basetype = 0;
 
         $this->properties['id']->value = (int) $uid;
+
         $this->name = $name;
         $this->type = (int) $type;
         $this->parentid = (int) $parentid;
@@ -101,6 +102,7 @@ class Role extends DataObject
         $this->date_reg = $date_reg;
         $this->val_code = $val_code;
         $this->auth_module = $auth_module;
+        */
         $this->parentlevel = 0;
 //        $this->basetype = $basetype;
         $ancestor = DataObjectMaster::getBaseAncestor(array('moduleid' => 27, 'itemtype' => $this->getType()));
@@ -229,27 +231,6 @@ class Role extends DataObject
         return true;
     }
 
-    public function updateItem(Array $data = array())
-    {
-        return parent::updateItem($data);
-        /*
-        $q = new xarQuery('UPDATE',$this->rolestable);
-        $q->addfield('name',$this->name);
-        $q->addfield('type',$this->type);
-        $q->addfield('uname',$this->uname);
-        $q->addfield('email',$this->email);
-        $q->addfield('state',$this->state);
-        $q->addfield('auth_modid',$this->auth_module);
-        if ($this->pass != '') $q->addfield('pass',md5($this->pass));
-        $q->eq('id',$this->getID());
-
-        // Execute the query, bail if an exception was thrown
-        if (!$q->run()) return;
-
-        return true;
-        */
-    }
-
     /**
      * remove: make a role deleted
      *
@@ -299,18 +280,8 @@ class Role extends DataObject
             'email' => "[" . $deleted . "]" . time(),
             'state' => ROLES_STATE_DELETED,
         );
-        parent::updateItem($args);
-        /*
-        $q = new xarQuery('UPDATE',$this->rolestable);
-        $q->addfield('uname',$this->getUser() . "[" . $deleted . "]" . time());
-        $q->addfield('email',$this->getEmail() . "[" . $deleted . "]" . time());
-        $q->addfield('state',ROLES_STATE_DELETED);
-        $q->eq('id',$this->getID());
+        $this->updateItem($args);
 
-        // Execute the query, bail if an exception was thrown
-        if (!$q->run()) return;
-        // done
-*/
         // get all the privileges that were assigned to this role
         $privileges = $this->getAssignedPrivileges();
         // remove the privilege assignments for this role
