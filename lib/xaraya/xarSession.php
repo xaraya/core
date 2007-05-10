@@ -91,14 +91,10 @@ function xarSessionGetSecurityLevel()
  * The old interface as wrappers for the class methods are here, see xarSession class
  * for the implementation
  */
-function xarSessionGetVar($name)
-{ return xarSession::getVar($name); }
-function xarSessionSetVar($name, $value)
-{ return xarSession::setVar($name, $value); }
-function xarSessionDelVar($name)
-{ return xarSession::delVar($name); }
-function xarSessionGetId()
-{ return xarSession::getId(); }
+function xarSessionGetVar($name)         { return xarSession::getVar($name); }
+function xarSessionSetVar($name, $value) { return xarSession::setVar($name, $value); }
+function xarSessionDelVar($name)         { return xarSession::delVar($name); }
+function xarSessionGetId()               { return xarSession::getId(); }
 
 // PROTECTED FUNCTIONS
 /** mrb: if it's protected, how come roles uses it? */
