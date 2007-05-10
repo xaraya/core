@@ -476,7 +476,7 @@ function installer_admin_phase5()
 
     // If we are here, the base system has completed
     // We can now pass control to xaraya.
-    sys::import('xaraya.xarVar');
+    sys::import('xaraya.variables');
 
     $a = array();
     xarVar_init($a,XARCORE_SYSTEM_DATABASE);

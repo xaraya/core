@@ -134,7 +134,7 @@ function base_init()
     }
 
     // Start Configuration Unit
-    sys::import('xaraya.xarVar');
+    sys::import('xaraya.variables');
     $systemArgs = array();
     // change this loadlevel to the proper level
     $whatToLoad = XARCORE_SYSTEM_DATABASE;
