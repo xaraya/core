@@ -18,6 +18,23 @@ class VariableValidationException extends ValidationExceptions
 {
     protected $message = 'The variable "#(1)" [Value: "#(2)"] did not comply with the required validation: "#(3)"';
 }
+/**
+ *
+ * @package config
+ * @todo this exception is too weak
+**/
+class ConfigurationException extends ConfigurationExceptions
+{
+    protected $message = 'There is an unknown configuration error detected.';
+}
+
+/*
+ * Wrapper functions to support Xaraya 1 API for modvars
+ * NOTE: the $prep in the signature has been dropped!!
+ */
+sys::import('xaraya.variables.config');
+function xarConfigSetVar($name, $value) { return xarConfigVars::set(null, $name, $value); }
+function xarConfigGetVar($name)         { return xarConfigVars::get(null, $name); }
 
 /**
  * Variables package defines
@@ -52,14 +69,20 @@ define('XARVAR_PREP_TRIM',        8);
  * @return bool
  * @todo <johnny> fix the load level stuff here... it's inconsistant to the rest of the core
  * @todo <mrb> remove the two settings allowablehtml and fixhtmlentities
+ * @todo revisit naming of config_vars table
 **/
 function xarVar_init(&$args, $whatElseIsGoingLoaded)
 {
-    /*
-     * Initialise the variable cache
-    */
+    // Configuration init needs to be done first
+    $sitePrefix = xarDBGetSiteTablePrefix();
+    $tables = array('config_vars' => $sitePrefix . '_module_vars');
+
+    xarDB::importTables($tables);
+
+    // Initialise the variable cache
     $GLOBALS['xarVar_allowableHTML'] = xarConfigGetVar('Site.Core.AllowableHTML');
     $GLOBALS['xarVar_fixHTMLEntities'] = xarConfigGetVar('Site.Core.FixHTMLEntities');
+
     return true;
 }
 
