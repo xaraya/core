@@ -150,6 +150,24 @@ class Role extends DataObject
             if (!$parent->addMember($this))
                 throw new Exception('Unable to create a roles relation');
         }
+
+        // add the duvs
+        $id = parent::updateItem($data);
+        if (!xarVarFetch('duvs','array',$duvs,array(),XARVAR_NOT_REQUIRED)) return;
+        foreach($duvs as $key => $value) {
+            xarModSetUserVar('roles',$key, $value, $id);
+        }
+
+        return $id;
+    }
+
+    public function updateItem(Array $data = array())
+    {
+        $id = parent::updateItem($data);
+        if (!xarVarFetch('duvs','array',$duvs,array(),XARVAR_NOT_REQUIRED)) return;
+        foreach($duvs as $key => $value) {
+            xarModSetUserVar('roles',$key, $value, $id);
+        }
         return $id;
     }
 
