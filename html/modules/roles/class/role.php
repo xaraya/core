@@ -64,8 +64,6 @@ class Role extends DataObject
         $this->realmstable = $xartable['security_realms'];
 
         $this->parentlevel = 0;
-//        $p = $this->getProperties();
-//        var_dump(array_keys($p));exit;
         $ancestor = DataObjectMaster::getBaseAncestor(array('moduleid' => 27, 'itemtype' => $this->getType()));
         $this->basetype = $ancestor['itemtype'];
     }
@@ -282,7 +280,7 @@ class Role extends DataObject
     public function purge()
     {
         // no checks here. just do it
-        $this->remove();
+        $this->deleteItem();
         $state = ROLES_STATE_DELETED;
         $uname = xarML('deleted') . microtime(TRUE) .'.'. $this->properties['id']->value;
         $name = '';
