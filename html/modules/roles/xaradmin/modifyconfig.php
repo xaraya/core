@@ -144,7 +144,7 @@ function roles_admin_modifyconfig()
                 case 'memberlist':
                     if (!xarVarFetch('searchbyemail',    'checkbox', $searchbyemail,     false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('displayrolelist',  'checkbox', $displayrolelist,   false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('usersendemails',   'checkbox', $usersendemails,    false, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('allowemail',       'checkbox', $allowemail,        false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('usereditaccount',  'checkbox', $usereditaccount,   true,  XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('userhomeedit',     'checkbox', $userhomeedit,      false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('allowexternalurl', 'checkbox', $allowexternalurl,  false, XARVAR_NOT_REQUIRED)) return;

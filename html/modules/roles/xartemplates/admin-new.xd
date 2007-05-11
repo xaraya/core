@@ -79,16 +79,28 @@
                         <xar:data-input type="dropdown" name="duvs[useremailformat]" id="duvs_useremailformat" value="$value" options="$options" />
                     </div>
                 </xar:if>
-                <xar:if condition="in_array('userhome',$settings)">
+
+                <xar:if condition="in_array('usertimezone',$settings)">
                     <div class="xar-form-input-wrapper">
-                        <label for="duvs_userhome" title="#xarML('Home URL')#" class="xar-form-label">
-                            <xar:mlstring>
-                                Home:
-                            </xar:mlstring>
+                        <label for="duvs_usertimezone" class="xar-form-label">
+                            <xar:mlstring>User Timezone:</xar:mlstring>
                         </label>
-                        <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModGetUserVar('roles','userhome',$uid)#" size="40" maxlength="100" tabindex="7" />
+                        <xar:set name="value">
+                            xarModGetUserVar('roles','usertimezone',$uid)
+                        </xar:set>
+                        <xar:data-input type="timezone" name="duvs[usertimezone]" id="duvs_usertimezone" value="$value" />
                     </div>
                 </xar:if>
+            </xar:if>
+            <xar:if condition="in_array('userhome',$settings)">
+                <div class="xar-form-input-wrapper">
+                    <label for="duvs_userhome" title="#xarML('Home URL')#" class="xar-form-label">
+                        <xar:mlstring>
+                            Home:
+                        </xar:mlstring>
+                    </label>
+                    <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModGetUserVar('roles','userhome',$uid)#" size="40" maxlength="100" tabindex="7" />
+                </div>
             </xar:if>
             <xar:foreach in="$hooks" key="$hookmodule">
                 #$hooks[$hookmodule]#

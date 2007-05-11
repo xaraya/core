@@ -97,7 +97,7 @@ class Role extends DataObject
         $id = parent::createItem($data);
 
         // Set the email useage for this user to false
-        xarModSetUserVar('roles','usersendemails', false, $id);
+        xarModSetUserVar('roles','allowemail', false, $id);
 
         // Get a value for the parent id
         if (empty($data['parentid'])) xarVarFetch('parentid',  'int', $data['parentid'],  NULL, XARVAR_DONT_SET);
