@@ -64,6 +64,8 @@ class Role extends DataObject
         $this->realmstable = $xartable['security_realms'];
 
         $this->parentlevel = 0;
+//        $p = $this->getProperties();
+//        var_dump(array_keys($p));exit;
         $ancestor = DataObjectMaster::getBaseAncestor(array('moduleid' => 27, 'itemtype' => $this->getType()));
         $this->basetype = $ancestor['itemtype'];
     }
