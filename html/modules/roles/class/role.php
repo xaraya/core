@@ -23,19 +23,6 @@ sys::import('modules.roles.class.xarQuery');
  */
 class Role extends DataObject
 {
-    /*
-    public $uid;          //the id of this user or group
-    public $name;         //the name of this user or group
-    public $type;         //the type of this role (0=user, 1=group)
-    public $parentid;     //the id of the parent of this role
-    public $uname;        //the user name (not used by groups)
-    public $email;        //the email address (not used by groups)
-    public $pass;         //the password (not used by groups)
-    public $date_reg;     //the date of registration
-    public $val_code;     //the validation code of this user or group
-    public $state;        //the state of this user or group
-    public $auth_module;  //no idea what this is (not used by groups)
-    */
     public $parentlevel;  //we use this just to store transient information
     public $basetype;     //the base itemtype. we add this so it can be passed rather than calculated here
 
@@ -76,37 +63,7 @@ class Role extends DataObject
         $this->acltable = $xartable['security_acl'];
         $this->realmstable = $xartable['security_realms'];
 
-        /*if (!isset($uid)) $uid = 0;
-        if (isset($itemtype)) $type = $itemtype;
-        if (!isset($type)) $type = ROLES_USERTYPE;
-        if (!isset($parentid)) $parentid = 1;
-        if (!isset($uname)) $uname = xarSession::getVar('uid') . microtime();
-        usleep(1);// <-- Huh? why?
-        if (!isset($email)) $email = '';
-        if (!isset($pass)) $pass = '';
-        if (!isset($state)) $state = ROLES_STATE_INACTIVE;
-        // FIXME: why is date_reg a varchar in the database and not a date field?
-        if (!isset($date_reg)) $date_reg = time();
-        if (!isset($val_code)) $val_code = 'createdbyadmin';
-        // FIXME: what is a sensible default for auth_module?
-        if (!isset($auth_module)) $auth_module = 0;
-        if (!isset($basetype)) $basetype = 0;
-
-        $this->properties['id']->value = (int) $uid;
-
-        $this->name = $name;
-        $this->type = (int) $type;
-        $this->parentid = (int) $parentid;
-        $this->uname = $uname;
-        $this->email = $email;
-        $this->pass = $pass;
-        $this->state = (int) $state;
-        $this->date_reg = $date_reg;
-        $this->val_code = $val_code;
-        $this->auth_module = $auth_module;
-        */
         $this->parentlevel = 0;
-//        $this->basetype = $basetype;
         $ancestor = DataObjectMaster::getBaseAncestor(array('moduleid' => 27, 'itemtype' => $this->getType()));
         $this->basetype = $ancestor['itemtype'];
     }
