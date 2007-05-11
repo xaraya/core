@@ -1,4 +1,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<xar:set name="uid">$object->getID()</xar:set>
+<xar:set name="itemtype">$object->getType()</xar:set>
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <xar:style scope="module" module="base" file="navtabs" />
 <div class="xar-mod-head">
@@ -67,14 +69,13 @@
                             value should still be there in the form, otherwise validation will fail,
                             do it with a hidden input now, but this should really be done with readonly attribute
                         -->
-                        <input type="hidden" name="itemtype" value="#$object->getType()#" />
+                        <input type="hidden" name="itemtype" value="#$itemtype#" />
                     </div>
                 <xar:else />
                     <div class="xar-form-input-wrapper">
                         <label for="itemtype" title="#xarML('Type of Role')#" class="xar-form-label">
                                 <xar:mlstring>Type:</xar:mlstring>
                         </label>
-                        <xar:set name="itemtype">$object->getType()</xar:set>
                         <xar:set name="onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();"</xar:set>
                         <xar:data-input type="itemtype" name="itemtype" value="$itemtype" validation="roles" onchange="$onchange" />
                     </div>
@@ -87,7 +88,7 @@
                             <xar:mlstring>Primary Parent Group:</xar:mlstring>
                         </label>
                         <xar:set name="value">
-                            xarModGetUserVar('roles','primaryparent',$object->getID())
+                            xarModGetUserVar('roles','primaryparent',$uid)
                         </xar:set>
                         <xar:data-input type="grouplist" name="duvs[primaryparent]" id="duvs_primaryparent" value="$value" tabindex="8" />
                     </div>
@@ -98,7 +99,7 @@
                         <label for="duvs_userhome" title="#xarML('Home URL')#" class="xar-form-label">
                             <xar:mlstring>Home:</xar:mlstring>
                         </label>
-                        <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModGetUserVar('roles','userhome',$object->getID())#" size="40" maxlength="100" tabindex="7" />
+                        <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModGetUserVar('roles','userhome',$uid)#" size="40" maxlength="100" tabindex="7" />
                         <p class="xar-form-input-wrapper-after">
                             <xar:mlstring>You can use the module shortcut syntax available in the Base user menu block.</xar:mlstring>
                         </p>
@@ -114,7 +115,7 @@
                                 </xar:mlstring>
                             </label>
                             <xar:set name="value">
-                                xarModGetUserVar('roles','useremailformat',$object->getID())
+                                xarModGetUserVar('roles','useremailformat',$uid)
                             </xar:set>
                             <xar:set name="options">
                                 array(
@@ -132,7 +133,7 @@
                                 <xar:mlstring>User Timezone:</xar:mlstring>
                             </label>
                             <xar:set name="value">
-                                xarModGetUserVar('roles','usertimezone',$object->getID())
+                                xarModGetUserVar('roles','usertimezone',$uid)
                             </xar:set>
                             <xar:data-input type="timezone" name="duvs[usertimezone]" id="duvs_usertimezone" value="$value" />
                         </div>
@@ -140,7 +141,7 @@
 
                     <xar:if condition="in_array('allowemail',$settings)">
                         <div class="xar-form-input-wrapper-after">
-                            <xar:set name="checked">xarModGetUserVar('roles', 'allowemail',$object->getID())</xar:set>
+                            <xar:set name="checked">xarModGetUserVar('roles', 'allowemail',$uid)</xar:set>
                             <xar:data-input type="checkbox" name="duvs[allowemail]" id="duvs_allowemail" checked="$checked" />
                             <label for="allowemail" title="#xarML('Allow users to send emails?')#">
                                <xar:mlstring>User has allowed other users to send them an email?</xar:mlstring>
@@ -153,7 +154,7 @@
                             <label class="xar-form-label">
                                 <xar:mlstring>Password last updated:</xar:mlstring>
                             </label>
-                            #xarLocaleGetFormattedDate('medium', xarModGetUserVar('roles','passwordupdate',$object->getID()))# #xarLocaleGetFormattedTime('medium', xarModGetUserVar('roles','passwordupdate',$object->getID()))#
+                            #xarLocaleGetFormattedDate('medium', xarModGetUserVar('roles','passwordupdate',$uid))# #xarLocaleGetFormattedTime('medium', xarModGetUserVar('roles','passwordupdate',$uid))#
                         </div>
                     </xar:if>
 
@@ -162,7 +163,7 @@
                             <label class="xar-form-label">
                                 <xar:mlstring>Last login time:</xar:mlstring>
                             </label>
-                                #xarLocaleGetFormattedDate('medium', xarModGetUserVar('roles','userlastlogin',$object->getID()))#  #xarLocaleGetFormattedTime('medium', xarModGetUserVar('roles','userlastlogin',$object->getID()))#
+                                #xarLocaleGetFormattedDate('medium', xarModGetUserVar('roles','userlastlogin',$uid))#  #xarLocaleGetFormattedTime('medium', xarModGetUserVar('roles','userlastlogin',$uid))#
                         </div>
                     </xar:if>
 
@@ -177,7 +178,7 @@
 
                 <div class="xar-align-center xar-clearboth">
                     <input type="hidden" name="object_objectid" id="objectid" value="#$object:objectid#" />
-                    <input type="hidden" name="object_itemid" id="itemid" value="#$object->getID()#" />
+                    <input type="hidden" name="object_itemid" id="itemid" value="#$uid#" />
                     <input type="hidden" name="object_tplmodule" id="tplmodule" value="roles" />
                     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('dynamicdata')#" />
                     <input type="submit" value="#xarML('Update')#" />
@@ -207,7 +208,7 @@
                     </td>
                     <td class="xar-align-center">
                         <xar:if condition="count($parents) ne 1">
-                            <a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$object->getID()#&amp;parentid=#$loop:item['parentid']#&amp;authid=#xarSecGenAuthKey()#">
+                            <a href="&xar-modurl-roles-admin-removemember;&amp;childid=#$uid#&amp;parentid=#$loop:item['parentid']#&amp;authid=#xarSecGenAuthKey()#">
                                 <xar:mlstring>Remove</xar:mlstring>
                             </a>
                         <xar:else />
@@ -237,7 +238,7 @@
                             </option>
                         </xar:loop>
                     </select>
-                    <input type="hidden" name="uid" id="adduid" value="#$object->getID()#" />
+                    <input type="hidden" name="uid" id="adduid" value="#$uid#" />
                     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
                     <input type="submit" value="#xarML('Add')#" />
                 </div>
