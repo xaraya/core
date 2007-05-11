@@ -459,24 +459,11 @@ class Role extends DataObject
         $result = $stmt->executeQuery($bindvars);
 
         // CHECKME: I suppose this is what you meant here ?
-        $parentid = $this->properties['id']->value;
+        $parentid = $this->getID();
         // arrange the data in an array of role objects
         $users = array();
         while ($result->next()) {
-            list($uid, $name, $type, $uname, $email, $pass,
-                $date_reg, $val_code, $state, $auth_module) = $result->fields;
-            // FIXME: if we do assoc fetching we get this for free
-            $args = array('uid' => $uid,
-                           'name' => $name,
-                           'type' => $type,
-                           'parentid' => $parentid,
-                           'uname' => $uname,
-                           'email' => $email,
-                           'pass' => $pass,
-                           'date_reg' => $date_reg,
-                           'val_code' => $val_code,
-                           'state' => $state,
-                           'auth_module' => $auth_module);
+            list($uid) = $result->fields;
             sys::import('modules.dynamicdata.class.objects.master');
             $role = DataObjectMaster::getObject(array('name' => 'roles_users'));
             $role->getItem(array('itemid' => $uid));
@@ -563,19 +550,7 @@ class Role extends DataObject
 
         // collect the table values and use them to create new role objects
         while ($result->next()) {
-            list($uid, $name, $type, $parentid, $uname, $email, $pass,
-                $date_reg, $val_code, $state, $auth_module) = $result->fields;
-            $args = array('uid' => $uid,
-                           'name' => $name,
-                           'type' => $type,
-                           'parentid' => $parentid,
-                           'uname' => $uname,
-                           'email' => $email,
-                           'pass' => $pass,
-                           'date_reg' => $date_reg,
-                           'val_code' => $val_code,
-                           'state' => $state,
-                           'auth_module' => $auth_module);
+            list($uid) = $result->fields;
             sys::import('modules.dynamicdata.class.objects.master');
             $role = DataObjectMaster::getObject(array('name' => 'roles_groups'));
             $role->getItem(array('itemid' => $uid));
