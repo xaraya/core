@@ -1,5 +1,5 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title">
         <xar:mlstring>Roles Administration</xar:mlstring>
@@ -16,30 +16,31 @@
     </h3>
     <p>
         <xar:mlstring>The Roles module lets you manage users and groups on your site. Roles are representations of users and the different groups they can belong to.</xar:mlstring>
-    </p><br />
+    </p>
+    <br />
     <ul>
         <li>
             <xar:mlstring>Roles can be members of other roles, to any degree. You can, for instance, use roles to
-            represent a company's organization chart, or the set of classes at a university. A role can be a member 
+            represent a company's organization chart, or the set of classes at a university. A role can be a member
             of as many other roles as you like (as long as the parents are groups).</xar:mlstring>
         </li>
         <li>
-            <xar:mlstring>Roles can be assigned privileges. By doing so, you define what a given role may or may not 
-            do on the site. You can use the test functionality of the Roles module to see what parts of the site a 
+            <xar:mlstring>Roles can be assigned privileges. By doing so, you define what a given role may or may not
+            do on the site. You can use the test functionality of the Roles module to see what parts of the site a
             role with a given set of privileges has access to.</xar:mlstring>
         </li>
         <li>
             <xar:mlstring>Roles have inheritance. A role inherits all the privileges of all of its parents, but can
-            override them. If you give a group editing privileges, for instance, any other role that is a member of 
+            override them. If you give a group editing privileges, for instance, any other role that is a member of
             that group inherits the editing privileges. If you want to restrict the privileges of some of the members,
-            simply assign them a different set of privileges (say reading), and the privileges of the parent will be 
+            simply assign them a different set of privileges (say reading), and the privileges of the parent will be
             overridden.</xar:mlstring>
         </li>
     </ul>
     <h2>
         <xar:mlstring>How to use it?</xar:mlstring>
     </h2>
-    
+
     <h3>
         <xar:mlstring>Menu Options</xar:mlstring>
     </h3>
@@ -74,20 +75,20 @@
         <xar:mlstring>Xaraya also comes preconfigured with a minimal set of roles that are loaded when you run the installer. This configuration is shown below:</xar:mlstring>
     </p>
     <pre>
-        Everybody 
+        Everybody
         |
-        |---Anonymous 
+        |---Anonymous
         |
-        |---Administrators 
+        |---Administrators
         |   |
-        |   |---Admin 
+        |   |---Admin
         |
-        |---Users 
-    
+        |---Users
+
 </pre>
      <p>
           <xar:mlstring>At installation time you are asked to choose a configuration that affects preinstalled
-          privileges assigned to the above roles. The privileges can be changed after installation. The default 
+          privileges assigned to the above roles. The privileges can be changed after installation. The default
           roles and minimum privileges at installation time are.</xar:mlstring>
      </p>
     <ul>
@@ -109,13 +110,13 @@
         </li>
         <li>
             <xar:mlstring>
-            <strong>Users</strong>: a group that normally holds registered users of the site. N.B.: this role does not come preconfigured with any privileges. 
+            <strong>Users</strong>: a group that normally holds registered users of the site. N.B.: this role does not come preconfigured with any privileges.
             <em>Its members will not have access to the site until you assign some privileges.</em></xar:mlstring>
         </li>
         <li>
             <xar:mlstring>
-            <strong>Myself</strong>: this is a special role that enables you to assign privileges that will be applied 
-            to the current user's content. For example if you assign edit privileges for articles to the Myself role, 
+            <strong>Myself</strong>: this is a special role that enables you to assign privileges that will be applied
+            to the current user's content. For example if you assign edit privileges for articles to the Myself role,
             then users will be able to edit only their own articles.</xar:mlstring>
         </li>
 
@@ -126,16 +127,11 @@
     <p>
         <xar:mlstring>Always keep in mind: When you create a role, until you've assigned it some privileges, it will only have those privileges it inherits from its parents.</xar:mlstring>
     </p>
-    
+
    <h3><xar:mlstring>Extending Roles</xar:mlstring></h3>
    <p>
-      <xar:mlstring>You can extend roles by hooking in the functionality of other modules to roles.
-      Dynamic Data module for example, enables you to add further custom fields to your user roles. </xar:mlstring></p>
-   <p><xar:mlstring>There is a set of sample 'user' dynamic data (file called users.xml) you can </xar:mlstring><a href="&xar-modurl-dynamicdata-util-import;"><xar:mlstring>import into Roles</xar:mlstring></a>
-      <xar:mlstring> including timezone, aim, irc, msn, yahoom, avatar, user signature and so on that can also be utilized by other modules.
-       Some such as the Forum module(xarbb) automatically integrate this data.</xar:mlstring>
+      <xar:mlstring>You can extend roles by hooking in the functionality of other modules to roles or adding fields directly to the user object via the admin interface in dynamicdata</xar:mlstring>
    </p>
-
     <h3>
         <xar:mlstring>Included Blocks</xar:mlstring>
     </h3>
@@ -146,19 +142,14 @@
         <li>
             <xar:mlstring><strong>Language Block</strong> - allow users to select their default language</xar:mlstring>
         </li>
-
-       <li>
-            <xar:mlstring>Login Block - deprecated here and moved to Authsystem (authentication) module at Xaraya version 1.1.0</xar:mlstring>
-        </li>
-
     </ul>
     <h3>
         <xar:mlstring>Included Hooks</xar:mlstring>
     </h3>
     <p>
-        <xar:mlstring>The roles module does not provide any hooks. It does allows other modules to provide a 
-        User Menu hook that when activated can enhance a user's visit. If a module providing a User Menu hook  
-        is hooked to Roles, content from the module will be displayed in the User's account page. 
+        <xar:mlstring>The roles module does not provide any hooks. It does allows other modules to provide a
+        User Menu hook that when activated can enhance a user's visit. If a module providing a User Menu hook
+        is hooked to Roles, content from the module will be displayed in the User's account page.
         Examples of modules that provide User Menu hooks are Themes, and Comments.</xar:mlstring>
     </p>
     <h3>
@@ -187,5 +178,4 @@
     <strong>&#160;<xar:mlstring>Roles Module Overview</xar:mlstring></strong><br />&#160;<xar:mlstring>Version</xar:mlstring> 1.1.2&#160; 2006-04-30
   </p>
 </div>
-
 </xar:template>

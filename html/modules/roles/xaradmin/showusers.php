@@ -1,9 +1,7 @@
 <?php
 /**
- * Display the users of this role
- *
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -11,13 +9,13 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
- * showusers - display the users of this role
+ * Show users of this role
  */
 function roles_admin_showusers()
 {
-    // Security Check
+
     if (!xarSecurityCheck('EditRole')) return;
-    // Get parameters
+
     if (xarVarIsCached('roles', 'defaultgroupuid')) {
         $defaultgroupuid = xarVarGetCached('roles', 'defaultgroupuid');
     } else {
@@ -37,14 +35,6 @@ function roles_admin_showusers()
     if (empty($data['selstyle'])) $data['selstyle'] = 0;
     xarSession::setVar('rolesdisplay', $data['selstyle']);
 
-    //Create the role tree
-    if ($data['selstyle'] == '1') {
-//        sys::import('modules.roles.xartreerenderer');
-//        $renderer = new xarTreeRenderer();
-//        $data['roletree'] = $renderer->drawtree($renderer->maketree());
-//        $data['treenode'] = array($renderer->maketree());
-    }
-
     // Get information on the group we're at
     $data['groups']     = xarModAPIFunc('roles', 'user', 'getallgroups');
     $data['groupuid']   = $uid;
@@ -55,7 +45,7 @@ function roles_admin_showusers()
         $role      = xarRoles::get($uid);
         $ancestors = $role->getRoleAncestors();
         $data['groupname'] = $role->getName();
-        $data['title'] = "";
+        $data['title'] = '';
         $data['ancestors'] = array();
         foreach ($ancestors as $ancestor) {
             $data['ancestors'][] = array('name' => $ancestor->getName(),
@@ -188,7 +178,5 @@ function roles_admin_showusers()
                                          xarModURL('roles', 'admin', 'showusers',$filter),
                                          $numitems);
     return $data;
-    // redirect to the next page
-    xarResponseRedirect(xarModURL('roles', 'admin', 'new'));
 }
 ?>

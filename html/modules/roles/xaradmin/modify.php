@@ -1,7 +1,5 @@
 <?php
 /**
- * Modify role details
- *
  * @package modules
  * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -11,9 +9,8 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 
-sys::import('modules.dynamicdata.class.objects.master');
 /**
- * modify - modify role details
+ * Modify role details
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
@@ -91,5 +88,4 @@ function roles_admin_modify()
     $data['parents'] = $parents;
     return $data;
 }
-
 ?>
