@@ -1,4 +1,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<xar:set name="uid">$object->getID()</xar:set>
+<xar:set name="itemtype">$object->getType()</xar:set>
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title">
@@ -43,7 +45,7 @@
                     </xar:mlstring>
                 </label>
                 <xar:set name="onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();"</xar:set>
-                <xar:data-input type="itemtype" name="itemtype" value="$object->getType()" validation="roles" onchange="$onchange" />
+                <xar:data-input type="itemtype" name="itemtype" value="$itemtype" validation="roles" onchange="$onchange" />
             </div>
 
             <xar:data-form object="$object" />
