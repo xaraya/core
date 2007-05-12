@@ -11,7 +11,7 @@
                 <xar:mlstring>
                     Sort
                 </xar:mlstring>
-                : 
+                :
             </dt>
                 <xar:if condition="$letter eq ''">
                     <dd class="active">
@@ -61,7 +61,7 @@
                     <xar:mlstring>
                         Show
                     </xar:mlstring>
-                    : 
+                    :
                 </dt>
                 <xar:if condition="$phase ne 'active'">
                     <dd class="active">
@@ -118,7 +118,7 @@
                         </a>
                     </th>
                 </xar:if>
-                <xar:if condition="xarModGetVar('roles', 'usersendemails')">
+                <xar:if condition="xarModGetVar('roles', 'allowemail')">
                     <th>
                         <xar:mlstring>Email</xar:mlstring>
                     </th>
@@ -138,7 +138,7 @@
                 <xar:else/>
                     <xar:set name="item_class">'xar-accent'</xar:set>
                 </xar:if>
-                
+
                 <tr class="#$item_class#">
                 <xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
                     <td>
@@ -157,7 +157,7 @@
                         </xar:if>
                     </td>
                 </xar:if>
-                <xar:if condition="xarModGetVar('roles', 'usersendemails')">
+                <xar:if condition="xarModGetVar('roles', 'allowemail')">
                     <td class="xar-align-center">
                         <xar:if condition="empty($loop:item['emailurl']) || !xarUserIsLoggedIn()">
                             <img src="#$loop:item['emailicon']#" alt="#xarML('Email')#" title="#xarML('Email')#"/>

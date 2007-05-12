@@ -1,4 +1,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<xar:set name="uid">$object->getID()</xar:set>
+<xar:set name="itemtype">$object->getType()</xar:set>
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 <div class="xar-mod-head">
     <span class="xar-mod-title">
@@ -43,7 +45,7 @@
                     </xar:mlstring>
                 </label>
                 <xar:set name="onchange">"this.form.action='" . xarServerGetCurrentURL() . "';this.form.submit();"</xar:set>
-                <xar:data-input type="itemtype" name="itemtype" value="$object->getType()" validation="roles" onchange="$onchange" />
+                <xar:data-input type="itemtype" name="itemtype" value="$itemtype" validation="roles" onchange="$onchange" />
             </div>
 
             <xar:data-form object="$object" />
@@ -77,16 +79,28 @@
                         <xar:data-input type="dropdown" name="duvs[useremailformat]" id="duvs_useremailformat" value="$value" options="$options" />
                     </div>
                 </xar:if>
-                <xar:if condition="in_array('userhome',$settings)">
+
+                <xar:if condition="in_array('usertimezone',$settings)">
                     <div class="xar-form-input-wrapper">
-                        <label for="duvs_userhome" title="#xarML('Home URL')#" class="xar-form-label">
-                            <xar:mlstring>
-                                Home:
-                            </xar:mlstring>
+                        <label for="duvs_usertimezone" class="xar-form-label">
+                            <xar:mlstring>User Timezone:</xar:mlstring>
                         </label>
-                        <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModGetUserVar('roles','userhome',$uid)#" size="40" maxlength="100" tabindex="7" />
+                        <xar:set name="value">
+                            xarModGetUserVar('roles','usertimezone',$uid)
+                        </xar:set>
+                        <xar:data-input type="timezone" name="duvs[usertimezone]" id="duvs_usertimezone" value="$value" />
                     </div>
                 </xar:if>
+            </xar:if>
+            <xar:if condition="in_array('userhome',$settings)">
+                <div class="xar-form-input-wrapper">
+                    <label for="duvs_userhome" title="#xarML('Home URL')#" class="xar-form-label">
+                        <xar:mlstring>
+                            Home:
+                        </xar:mlstring>
+                    </label>
+                    <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModGetUserVar('roles','userhome',$uid)#" size="40" maxlength="100" tabindex="7" />
+                </div>
             </xar:if>
             <xar:foreach in="$hooks" key="$hookmodule">
                 #$hooks[$hookmodule]#

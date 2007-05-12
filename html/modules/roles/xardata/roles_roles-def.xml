@@ -1,6 +1,6 @@
 <object name="roles_roles">
   <objectid>4</objectid>
-  <label>Roles</label>
+  <label>Role</label>
   <parent>0</parent>
   <moduleid>27</moduleid>
   <itemtype>1</itemtype>

@@ -36,9 +36,9 @@
                 </div>
             </xar:if>
             <xar:data-form object="$object" />
-            <xar:if condition="xarModGetVar('roles','usersendemails')">
+            <xar:if condition="xarModGetVar('roles','allowemail')">
                 <div class="xar-form-input-wrapper-after">
-                    <xar:set name="checked">xarModGetUserVar('roles', 'usersendemails',$uid)</xar:set>
+                    <xar:set name="checked">xarModGetUserVar('roles', 'allowemail',$uid)</xar:set>
                     <xar:data-input type="checkbox" name="allowemail" id="allowemail" checked="$checked" tabindex="2" />
                     <label for="allowemail" title="#xarML('Allow users to send emails?')#">
                        <xar:mlstring>Allow other users to send you an email via a form?</xar:mlstring>

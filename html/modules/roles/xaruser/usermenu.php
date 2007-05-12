@@ -42,7 +42,7 @@ function roles_user_usermenu($args)
             $email = xarUserGetVar('email');
             $role = xarUFindRole($uname);
             $home = xarModGetUserVar('roles','userhome');
-            $allowemail = xarModGetUserVar('roles','usersendemails',$uid); //allow someone to send an email to the user via a form
+            $allowemail = xarModGetUserVar('roles','allowemail',$uid); //allow someone to send an email to the user via a form
             if (xarModVars::get('roles','setuserlastlogin')) {
             //only display it for current user or admin
                 if (xarUserIsLoggedIn() && xarUserGetVar('uid')==$uid) { //they should be but ..
@@ -122,7 +122,7 @@ function roles_user_usermenu($args)
                 return xarTplModule('roles','user','account', $data);
             }
             //set emailing options for the user
-            xarModSetUserVar('roles','usersendemails',$allowemail,$uid);
+            xarModSetUserVar('roles','allowemail',$allowemail,$uid);
 
 
             //adjust the timezone value for saving

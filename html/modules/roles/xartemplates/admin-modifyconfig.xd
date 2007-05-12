@@ -274,6 +274,7 @@
                             array('id' => 'passwordupdate', 'name' => xarML('Last Password Update')),
                             array('id' => 'userlastlogin', 'name' => xarML('Last Login')),
                             array('id' => 'usertimezone', 'name' => xarML('Time Zone')),
+                            array('id' => 'allowemail', 'name' => xarML('Allow Emails')),
                             array('id' => 'useremailformat', 'name' => xarML('Email Format')),
                         );
                     </xar:set>
@@ -293,7 +294,7 @@
                                 userhome
                             </td>
                             <td style="width: 400px">
-                                      <xar:mlstring>The role's home page, which is initially displayed when the user logs in. The home page can be role/user specific or inherited from the direct parent group. The home page is specified in a similar manner to user menu item shortcuts in the modify or edit role page.</xar:mlstring>
+                              <xar:mlstring>The role's home page, which is initially displayed when the user logs in. The home page can be role/user specific or inherited from the direct parent group. The home page is specified in a similar manner to user menu item shortcuts in the modify or edit role page.</xar:mlstring>
                             </td>
                         </tr>
                         <tr>
@@ -327,6 +328,14 @@
                             </td>
                             <td style="width: 400px">
                                 <xar:mlstring>This role's timezone.</xar:mlstring>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 100px">
+                                allowemails
+                            </td>
+                            <td style="width: 400px">
+                                <xar:mlstring>This role's preference to receive emails from others or not.</xar:mlstring>
                             </td>
                         </tr>
                         <tr>
@@ -436,9 +445,9 @@
                     </xar:mlstring>
                 </p>
                 <div class="xar-form-input-wrapper-after">
-                    <xar:set name="checked">xarModGetVar('roles', 'usersendemails')</xar:set>
-                    <xar:data-input type="checkbox" name="usersendemails" id="usersendemails" checked="$checked" />
-                    <label for="usersendemails" title="#xarML('Allow users to send emails?')#">
+                    <xar:set name="checked">xarModGetVar('roles', 'allowemail')</xar:set>
+                    <xar:data-input type="checkbox" name="allowemail" id="usersendemails" checked="$checked" />
+                    <label for="allowemail" title="#xarML('Allow users to send emails?')#">
                         <strong><xar:mlstring>
                             Allow User Email Page?
                         </xar:mlstring></strong>

@@ -1,6 +1,6 @@
 <object name="roles_users">
   <objectid>5</objectid>
-  <label>Users</label>
+  <label>User</label>
   <parent>0</parent>
   <moduleid>27</moduleid>
   <itemtype>2</itemtype>
