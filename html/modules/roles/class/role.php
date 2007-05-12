@@ -107,11 +107,16 @@ class Role extends DataObject
         }
 
         // add the duvs
-        $id = parent::updateItem($data);
         if (!xarVarFetch('duvs','array',$duvs,array(),XARVAR_NOT_REQUIRED)) return;
         foreach($duvs as $key => $value) {
             xarModSetUserVar('roles',$key, $value, $id);
         }
+
+        // Let any hooks know that we have created a new user.
+        $item['module'] = 'roles';
+        $item['itemtype'] = $this->getType();
+        $item['itemid'] = $id;
+        xarModCallHooks('item', 'create', $id, $item);
 
         return $id;
     }
@@ -123,6 +128,10 @@ class Role extends DataObject
         foreach($duvs as $key => $value) {
             xarModSetUserVar('roles',$key, $value, $id);
         }
+        $item['module'] = 'roles';
+        $item['itemtype'] = $this->getType();
+        $item['itemid'] = $id;
+        xarModCallHooks('item', 'update', $id, $item);
         return $id;
     }
 
@@ -169,6 +178,10 @@ class Role extends DataObject
             $q->addfield('users',$result['users']+1);
             if (!$q->run()) return;
         }
+        $item['module']   = 'roles';
+        $item['itemtype'] = $this->getType();
+        $item['itemid']   = $this->getID();
+        xarModCallHooks('item', 'link', $this->getID(), $item);
         return true;
     }
 
@@ -203,6 +216,10 @@ class Role extends DataObject
             $q->addfield('users',$result['users']-1);
             if (!$q->run()) return;
         }
+        $item['module']   = 'roles';
+        $item['itemtype'] = $this->getType();
+        $item['itemid']   = $this->getID();
+        xarModCallHooks('item', 'unlink', $this->getID(), $item);
         return true;
     }
 
@@ -261,6 +278,12 @@ class Role extends DataObject
             $this->removePrivilege($priv);
         }
 
+        // Let any hooks know that we have deleted this user.
+        $item['module'] = 'roles';
+        $item['itemid'] = $this->getID();
+        $item['method'] = 'delete';
+        xarModCallHooks('item', 'delete', $this->getID(), $item);
+
         // CHECKME: re-assign all privileges to the child roles ? (probably not)
         return true;
     }
@@ -289,8 +312,13 @@ class Role extends DataObject
         $q->addfield('email',$email);
         $q->addfield('date_reg',$date_reg);
         $q->addfield('state',$state);
-        $q->eq('id',$this->properties['id']->value);
+        $q->eq('id',$this->getID());
         if(!$q->run()) return;
+        $item['module'] = 'roles';
+        $item['itemid'] = $this->getID();
+        $item['itemtype'] = $this->getType();
+        $item['method'] = 'purge';
+        xarModCallHooks('item', 'delete', $this->getID(), $item);
         return true;
     }
 
