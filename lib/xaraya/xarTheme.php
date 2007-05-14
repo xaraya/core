@@ -2,6 +2,7 @@
 /**
  * Theme handling functions
  *
+ * @package lib
  * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -50,37 +51,6 @@ function xarThemeGetIDFromName($themeName,$id='regid')
 function xarThemeGetInfo($regId)
 {
     return xarMod::getInfo($regId, $type = 'theme');
-}
-
-
-/**
- * load database definition for a theme
- *
- * @param themeName name of theme to load database definition for
- * @param themeDir directory that theme is in (if known)
- * @return xarModDBInfoLoad for processing.
- */
-function xarThemeDBInfoLoad($themeName, $themeDir = NULL)
-{
-    // Just for consistency we do this now, but this just returns true, nothing more
-    return xarMod::loadDbInfo($themeName, $themeDir, $type = 'theme');
-}
-
-
-/**
- * Gets the displayable name for the passed themeName.
- * The displayble name is sensible to user language.
- *
- * @access public
- * @param themeName registered name of theme
- * @return string the displayable name
- */
-function xarThemeGetDisplayableName($themeName)
-{
-    // The theme display name is language sensitive,
-    // so it's fetched through xarML.
-    // TODO: need to think of something that actually works.
-    return $themeName;
 }
 
 /**
@@ -139,15 +109,4 @@ function xarTheme_getVarsByTheme($themeName)
     return xarModVars::load('themes');
 }
 
-/**
- * Get the theme's current state
- *
- * @param themeRegId the theme's registered id
- * @return to xarMod__getState for processing
- * @todo we dont need this
- */
-function xarTheme_getState($themeRegId, $themeMode)
-{
-    return xarMod::getState($themeRegId, $themeMode, $type = 'theme');
-}
 ?>
