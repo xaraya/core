@@ -422,19 +422,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 }
 
 /**
- * Returns the relative path name for the var directory
- *
- * @access public
- * @return string the var directory path name
- * @deprec replaced by sys::varpath()
- * @see    sys
-**/
-function xarCoreGetVarDirPath()
-{
-    return sys::varpath();
-}
-
-/**
  * Activates the debugger.
  *
  * @access public
@@ -492,19 +479,6 @@ function xarCoreIsDebuggerActive()
 function xarCoreIsDebugFlagSet($flag)
 {
     return (xarDebug::$flags & XARDBG_ACTIVE) && (xarDebug::$flags & $flag);
-}
-
-/**
- * Wrapper functions to support Xaraya 1 API for systemvars
- *
- * @todo this was a protected function by mistake i think
- * @deprec replaced by xarSystemVars
- * @see    xarSystemVars
-**/
-function xarCore_getSystemVar($name)
-{
-    sys::import('xaraya.variables.system');
-    return xarSystemVars::get(null, $name);
 }
 
 /**

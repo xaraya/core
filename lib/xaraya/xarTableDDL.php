@@ -46,7 +46,7 @@ function xarDBCreateDatabase($databaseName, $databaseType = NULL)
     // perform validations on input arguments
     if (empty($databaseName)) throw new EmptyParameterException('databaseName');
     if (empty($databaseType)) {
-        $databaseType = xarDBGetType();
+        $databaseType = xarDB::getType();
     }
 
     switch($databaseType) {
@@ -100,7 +100,7 @@ function xarDBCreateTable($tableName, $fields, $databaseType="")
     if (empty($tableName)) throw new EmptyParameterException('tableName');
     if (!is_array($fields)) throw new BadParameterException('fields','The #(1) parameter is not an array');
     if (empty($databaseType)) {
-        $databaseType = xarDBGetType();
+        $databaseType = xarDB::getType();
     }
 
     // Select the correct database type
@@ -162,7 +162,7 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
     }
 
     if (empty($databaseType)) {
-        $databaseType = xarDBGetType();
+        $databaseType = xarDB::getType();
     }
 
     // Select the correct database type
@@ -210,7 +210,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
     // perform validations on input arguments
     if (empty($tableName)) throw new EmptyParameterException('tableName');
     if (empty($databaseType)) {
-        $databaseType = xarDBGetType();
+        $databaseType = xarDB::getType();
     }
 
     switch($databaseType) {
@@ -258,7 +258,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
     }
 
     if (empty($databaseType)) {
-        $databaseType = xarDBGetType();
+        $databaseType = xarDB::getType();
     }
 
     // Select the correct database type
@@ -314,7 +314,7 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
         throw new BadParameterException('index','The parameter "#(1)" must be an array, the "fields" key inside it must be an array and the "name" key must be set).');
     }
     if (empty($databaseType)) {
-        $databaseType = xarDBGetType();
+        $databaseType = xarDB::getType();
     }
 
     // Select the correct database type

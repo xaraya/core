@@ -34,7 +34,7 @@ function dynamicdata_util_meta($args)
         // Note: this only works if we use the same database connection
         $data['databases'] = $dbconn->MetaDatabases();
         if (empty($db)) {
-            $db = xarDBGetName();
+            $db = xxarDB::getName();
         }
         $data['db'] = $db;
         if (empty($data['databases'])) {
