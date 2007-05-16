@@ -117,5 +117,5 @@ function xarDBGetSystemTablePrefix() { return xarDB::getPrefix(); }
  * @see xarDB::getPrefix()
  * @todo replace all instances of this one with xarDB::getPrefix()
  */
-function xarDB::getPrefix() { return xarDBGetSystemTablePrefix(); }
+function xarDBGetSiteTablePrefix() { return xarDBGetSystemTablePrefix(); }
 ?>
