@@ -48,7 +48,7 @@ class LoggerException extends Exception
  * @return void
  * @throws LoggerException
 **/
-function xarLog_init(&$args, &$whatElseIsGoingLoaded)
+function xarLog_init(&$args)
 {
 
     $GLOBALS['xarLog_loggers'] = array();
@@ -77,8 +77,7 @@ function xarLog_init(&$args, &$whatElseIsGoingLoaded)
 
     // If none of these => do nothing.
      foreach ($xarLogConfig as $logger) {
-        $config = array_merge(array('loadLevel' => &$whatElseIsGoingLoaded), $logger['config']);
-        xarLog__add_logger($logger['type'], $config);
+        xarLog__add_logger($logger['type'], $logger['config']);
      }
 
     // Subsystem initialized, register a shutdown function

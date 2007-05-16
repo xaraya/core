@@ -29,20 +29,13 @@ class xarLogger_mozilla extends xarLogger
     var $_buffer;
 
     /**
-    * The level of load of the core systems.
-    */
-    var $_loadLevel;
-
-    /**
     * Write out the buffer if it is possible (the template system is already loaded)
     * @access public
     */
     function writeOut()
     {
-        if ($this->_loadLevel & XARCORE_BIT_TEMPLATE) return false;
         xarTplAddJavaScript('body', 'code', $this->_buffer);
         $this->_buffer = '';
-        
         return true;
     }
 
@@ -52,18 +45,17 @@ class xarLogger_mozilla extends xarLogger
      * @access public
      * @return boolean
      */
-    function setConfig(&$conf) 
+    function setConfig(&$conf)
     {
         parent::setConfig($conf);
-        $this->_loadLevel = & $conf['loadLevel'];
         $this->_buffer = $this->getCommonCode();
     }
-    
+
     function getCommonCode()
     {
         // Common javascript to get a variable which has the logmessage method
         $code="
-function mozConsole(msg, level) 
+function mozConsole(msg, level)
 {
     // Only relevant for moz engine
     if(navigator.appName.indexOf('Netscape') != -1) {
@@ -77,7 +69,7 @@ function mozConsole(msg, level)
          var scriptError = Components.classes['@mozilla.org/scripterror;1']
                                    .createInstance(Components.interfaces.nsIScriptError);
         scriptError.init(msg, null, null, null, null, flag, '');\n
-         consoleService.logMessage(scriptError);\n    
+         consoleService.logMessage(scriptError);\n
       } else {
         consoleService.logStringMessage(msg);\n
      }
@@ -99,13 +91,13 @@ function mozConsole(msg, level)
         if (!$this->doLogLevel($level)) return false;
 
         // FIXME: this code depends on a user setting to use principal codebase support (same origin policy)
-        // In mozilla//ff: 
+        // In mozilla//ff:
         // 1. about:config in address bar
         // 2. look up signed.applets.codebase_principal_support
         // 3. make sure it is set to true
         // alternatively user_pref("signed.applets.codebase_principal_support", true);
         // in the profile prefs.js file
-        // 
+        //
         // it should be done with a signed script eventually, but this is rather complex
         // TODO: check on windows and browsers other than mozilla, to fall back gracefully
 

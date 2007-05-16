@@ -28,21 +28,14 @@ class xarLogger_javascript extends xarLogger
     var $_buffer;
 
     /**
-    * The level of load of the core systems.
-    */
-    var $_loadLevel;
-
-    /**
     * Write out the buffer if it is possible (the template system is already loaded)
     *
     * @access public
     */
     function writeOut()
     {
-        if ($this->_loadLevel & XARCORE_BIT_TEMPLATE) return false;
         xarTplAddJavaScript('head', 'code', $this->_buffer);
         $this->_buffer = '';
-        
         return true;
     }
 
@@ -54,13 +47,12 @@ class xarLogger_javascript extends xarLogger
      * @access public
      * @return boolean
      */
-    function setConfig(array &$conf) 
+    function setConfig(array &$conf)
     {
         parent::setConfig($conf);
-        $this->_loadLevel = & $conf['loadLevel'];
         $this->_buffer = $this->getCommonCode();
     }
-    
+
     /**
     * Common Code. This will create the javascript debug window.
     *
@@ -92,7 +84,7 @@ class xarLogger_javascript extends xarLogger
     {
         $strings = array ("\r\n", "\r", "\n");
         $replace = array ("<br />", "<br />", "<br />");
-        
+
         // Abort early if the level of priority is above the maximum logging level.
         if (!$this->doLogLevel($level)) return false;
 

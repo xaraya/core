@@ -51,10 +51,10 @@ $whatToLoad = XARCORE_SYSTEM_NONE;
 
 // Start Exception Handling System very early
 sys::import('xaraya.exceptions');
-$systemArgs = array();
-xarError_init($systemArgs);
-
-// As long as we are coming in through install.php we need to pick up the bones if something goes wrong
+/*
+    As long as we are coming in through install.php we need to pick up the
+    bones if something goes wrong, so set the handler to bone for now
+*/
 set_exception_handler(array('ExceptionHandlers','bone'));
 
 // Enable debugging always for the installer
@@ -74,7 +74,7 @@ sys::import('xaraya.templates');
 
 // Start Logging Facilities as soon as possible
 $systemArgs = array();
-xarLog_init($systemArgs, $whatToLoad);
+xarLog_init($systemArgs);
 
 // Start HTTP Protocol Server/Request/Response utilities
 $systemArgs = array('enableShortURLsSupport' =>false,

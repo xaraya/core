@@ -170,8 +170,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     sys::import('xaraya.exceptions');
-    $systemArgs = array();
-    xarError_init($systemArgs);
+
 
     /*
      * At this point we should be able to catch all low level errors, so we can start the debugger
@@ -192,9 +191,9 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * If there happens something we want to be able to log it
      *
      */
-    // {ML_dont_parse 'includes/xarLog.php'}
+    $systemArgs = array();
     sys::import('xaraya.log');
-    xarLog_init($systemArgs, $whatToLoad);
+    xarLog_init($systemArgs);
 
     /*
      * Start Database Connection Handling System
