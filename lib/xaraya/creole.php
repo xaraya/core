@@ -1,9 +1,13 @@
 <?php
 /**
- * xaraya wrapper class for Creole
+ * Creole wrapper class
  *
+ * @package lib
+ * @subpackage database
+ * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @link http://www.xaraya.com
  * @author Marcel van der Boom <marcel@hsdev.com>
-**/
+ */
 sys::import('creole.Creole');
 class xarDB extends Creole
 {
@@ -13,7 +17,24 @@ class xarDB extends Creole
     private static $firstDSN = null;
     private static $connections = array();
     private static $tables = array();
+    private static $prefix = '';
 
+    public static function getPrefix()
+    {
+        return self::$prefix;
+    }
+
+    public static function setPrefix($prefix)
+    {
+        self::$prefix =  $prefix;
+    }
+
+    /**
+     * Get an array of database tables
+     *
+     * @return array array of database tables
+     * @todo we should figure something out so we dont have to do the getTables stuff, it should be transparent
+     */
     public static function &getTables()
     {
         return self::$tables;
@@ -48,6 +69,11 @@ class xarDB extends Creole
         self::$firstDSN = $conn->getDSN();
     }
 
+    /**
+     * Get a database connection
+     *
+     * @return object database connection object
+     */
     public static function &getConn($index = 0)
     {
         return self::$connections[$index];
@@ -61,7 +87,5 @@ class xarDB extends Creole
         self::$count++;
         return $conn;
     }
-
 }
-
 ?>

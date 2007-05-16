@@ -3,11 +3,11 @@
  * Initialise the blocks module
  *
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Blocks module
+ * @subpackage blocks
  * @link http://xaraya.com/index.php/release/13.html
  */
 
@@ -19,8 +19,8 @@ function blocks_init()
 {
     // Get database information
     $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
-    $prefix = xarDBGetSystemTablePrefix();
+    $xartable =& xarDB::getTables();
+    $prefix = xarDB::getPrefix();
 
     // Create tables inside a transaction
     try {
@@ -174,7 +174,7 @@ function blocks_init()
         $dbconn->Execute($query);
 
         // Cache blocks table is not in xartables
-        $cacheblockstable =  xarDBGetSystemTablePrefix() . '_cache_blocks';
+        $cacheblockstable =  $prefix . '_cache_blocks';
 
         $query = xarDBCreateTable($prefix . '_cache_blocks',
                                   array('id'          => array('type'        => 'integer',
@@ -266,11 +266,11 @@ function blocks_upgrade($oldVersion)
         //setup the new ones
         $dbconn =& xarDBGetConn();
         $xartable =& xarDBGetTables();
-        $systemPrefix = xarDBGetSystemTablePrefix();
+        $prefix = xarDB::getPrefix();
 
-        $blockGroupsTable    = $systemPrefix . '_block_groups';
-        $blockTypesTable     = $systemPrefix . '_block_types';
-        $blockInstancesTable = $systemPrefix . '_block_instances';
+        $blockGroupsTable    = $prefix . '_block_groups';
+        $blockTypesTable     = $prefix . '_block_types';
+        $blockInstancesTable = $prefix . '_block_instances';
 
         //Set up the block group instances for this module - these are the same as previously defined and retained
         $query1 = "SELECT DISTINCT name FROM $blockGroupsTable";
@@ -302,7 +302,7 @@ function blocks_upgrade($oldVersion)
 
         //Define an instance that refers to items that a block contains
         $query1 = "SELECT DISTINCT instances.name FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id";
-        $modulesTable = $systemPrefix . '_modules';
+        $modulesTable = $prefix . '_modules';
         $query2 = "SELECT DISTINCT name FROM $modulesTable ";
         $instances = array(array('header' => 'Block Name:',
                                  'query' => $query1,

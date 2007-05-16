@@ -846,14 +846,14 @@ class xarMod extends Object implements IxarMod
         xarEvents::register('ModAPILoad');
 
         // Modules Support Tables
-        $systemPrefix = xarDBGetSystemTablePrefix();
+        $prefix = xarDB::getPrefix();
 
         // How we want it
-        $tables['modules']         = $systemPrefix . '_modules';
-        $tables['module_vars']     = $systemPrefix . '_module_vars';
-        $tables['module_itemvars'] = $systemPrefix . '_module_itemvars';
-        $tables['hooks']           = $systemPrefix . '_hooks';
-        $tables['themes']          = $systemPrefix . '_themes';
+        $tables['modules']         = $prefix . '_modules';
+        $tables['module_vars']     = $prefix . '_module_vars';
+        $tables['module_itemvars'] = $prefix . '_module_itemvars';
+        $tables['hooks']           = $prefix . '_hooks';
+        $tables['themes']          = $prefix . '_themes';
 
         xarDB::importTables($tables);
         return true;

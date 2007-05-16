@@ -6,7 +6,7 @@
  * @copyright The Digital Development Foundation, 2006
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @author Marcel van der Boom <mrb@hsdev.com>
- **/
+ */
 sys::import('xaraya.variables');
 sys::import('xaraya.creole');
 /**
@@ -14,7 +14,7 @@ sys::import('xaraya.creole');
  *
  * @package variables
  * @todo if core was module 0 this could be a whole lot simpler by derivation (or if all config variables were moved to a module)
- **/
+ */
 class xarConfigVars extends xarVars implements IxarVars
 {
     private static $KEY = 'Config.Variables'; // const cannot be private :-(
@@ -67,7 +67,6 @@ class xarConfigVars extends xarVars implements IxarVars
      * @param string $name  the name of the variable
      * @return mixed value of the variable(string), or void if variable doesn't exist
      * @todo do we need these aliases anymore ?
-     * @todo return proper site prefix when we can store site vars
      * @todo the vars which are not in the database should probably be systemvars, not configvars
      * @todo bench the preloading
      */
@@ -96,7 +95,7 @@ class xarConfigVars extends xarVars implements IxarVars
                 break;
             case 'prefix':
                 // FIXME: Can we do this another way (dependency)
-                return xarDBGetSiteTablePrefix();
+                return xarDB::getPrefix();
                 break;
         }
 

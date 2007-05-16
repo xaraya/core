@@ -11,28 +11,25 @@
  * @link http://xaraya.com/index.php/release/1.html
  */
 // Load Table Maintainance API
-xarDBLoadTableMaintenanceAPI();
-
+sys::import('lib.TableDDL');
 /**
  * Initialise the modules module
  *
- * @param none $
- * @returns bool
+ * @return bool
  * @throws DATABASE_ERROR
  */
 function modules_init()
 {
     // Get database information
     $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
+    $tables =& xarDB::getTables();
 
-    $sitePrefix = xarDBGetSiteTablePrefix();
-    $systemPrefix = xarDBGetSystemTablePrefix();
+    $prefix = xarDB::getPrefix();
 
-    $tables['modules'] = $systemPrefix . '_modules';
-    $tables['module_vars'] = $sitePrefix . '_module_vars';
-    $tables['module_itemvars'] = $sitePrefix . '_module_itemvars';
-    $tables['hooks'] = $sitePrefix . '_hooks';
+    $tables['modules'] = $prefix . '_modules';
+    $tables['module_vars'] = $prefix . '_module_vars';
+    $tables['module_itemvars'] = $prefix . '_module_itemvars';
+    $tables['hooks'] = $prefix . '_hooks';
     // Create tables
     // This should either go, or fail competely
     try {

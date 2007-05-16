@@ -300,7 +300,6 @@ function installer_admin_phase5()
                         'siteTablePrefix' => $dbPrefix,
                         'doConnect' => false);
 
-    // {ML_dont_parse 'includes/xarDB.php'}
     sys::import('xaraya.xarDB');
     xarDB_Init($init_args, XARCORE_SYSTEM_NONE);
 
@@ -343,7 +342,7 @@ function installer_admin_phase5()
         return $data;
     }
 
-    xarDBLoadTableMaintenanceAPI();
+    sys::import('lib.xarTableDDL');
     // Create the database if necessary
     if ($createDB) {
         $data['confirmDB']  = true;
@@ -371,8 +370,7 @@ function installer_admin_phase5()
                         'databaseHost' => $dbHost,
                         'databaseType' => $dbType,
                         'databaseName' => $dbName,
-                        'systemTablePrefix' => $dbPrefix,
-                        'siteTablePrefix' => $dbPrefix);
+                        'prefix' => $dbPrefix);
     // Connect to database
     $whatToLoad = XARCORE_SYSTEM_NONE;
     xarDB_init($systemArgs, $whatToLoad);
@@ -420,9 +418,9 @@ function installer_admin_phase5()
     foreach ($modules as $module)
         if (!xarInstallAPIFunc('initialise', array('directory' => $module,'initfunc'  => 'init'))) return;;
 
-    $systemPrefix = xarDBGetSystemTablePrefix();
-    $modulesTable = $systemPrefix .'_modules';
-    $tables =& xarDBGetTables();
+    $prefix = xarDB::getPrefix();
+    $modulesTable = $prefix .'_modules';
+    $tables =& xarDB::getTables();
 
     $newModSql   = "INSERT INTO $modulesTable
                     (name, regid, directory,
@@ -939,14 +937,14 @@ function installer_admin_confirm_configuration()
         * Empty the privilege tables
         *********************************************************************/
 /*         $dbconn =& xarDBGetConn();
-        $sitePrefix = xarDBGetSiteTablePrefix();
+        $prefix = xarDB::getPrefix();
         try {
             $dbconn->begin();
-           $query = "DELETE FROM " . $sitePrefix . '_privileges WHERE type = ' . xarMasks::PRIVILEGES_PRIVILEGETYPE;
+           $query = "DELETE FROM " . $prefix . '_privileges WHERE type = ' . xarMasks::PRIVILEGES_PRIVILEGETYPE;
             $dbconn->Execute($query);
-            $query = "DELETE FROM " . $sitePrefix . '_privmembers';
+            $query = "DELETE FROM " . $prefix . '_privmembers';
             $dbconn->Execute($query);
-            $query = "DELETE FROM " . $sitePrefix . '_security_acl';
+            $query = "DELETE FROM " . $prefix . '_security_acl';
             $dbconn->Execute($query);
             $dbconn->commit();
         } catch(SQLException $e) {
@@ -1264,11 +1262,10 @@ function installer_admin_upgrade2()
      $thisdata['xarRelease'] = xarConfigGetVar('System.Core.VersionSub');
 
      //Load this early
-     xarDBLoadTableMaintenanceAPI();
+     sys::import('lib.xarTableDDL');
 
-     $sitePrefix=xarDBGetSiteTablePrefix();
-     $systemPrefix=xarDBGetSystemTablePrefix();
-     $dbconn =& xarDBGetConn();
+     $prefix = xarDB::getPrefix();
+     $dbconn =& xarDB::getConn();
 /**
  * Version 1.0 Release Upgrades
  * Version 1.0 Release candidate upgrades are also included here
@@ -1542,8 +1539,8 @@ function installer_admin_upgrade2()
 
     //we need to check the login block is the Authsystem login block, not the Roles
     //As the block is the same we could just change the type id of any login block type.
-    $blocktypeTable = $systemPrefix .'_block_types';
-    $blockinstanceTable = $systemPrefix .'_block_instances';
+    $blocktypeTable = $prefix . '_block_types';
+    $blockinstanceTable = $prefix .'_block_instances';
     $blockproblem=array();
     $info = xarMod::getBaseInfo('roles');
     $sysid = $info['systemid'];
@@ -1626,21 +1623,21 @@ function installer_admin_upgrade2()
     xarModSetVar('themes','usedashboard',false);
     xarModSetVar('themes','dashtemplate','admin');
 
-    $table_name['admin_menu']=$sitePrefix . '_admin_menu';
+    $table_name['admin_menu']=$prefix . '_admin_menu';
     $upgrade['admin_menu'] = xarModAPIFunc('installer',
                                                 'admin',
                                                 'CheckTableExists',
                                                 array('table_name' => $table_name['admin_menu']));
     //Let's remove the now unused admin menu table
     if ($upgrade['admin_menu']) {
-        $adminmenuTable = $systemPrefix .'_admin_menu';
+        $adminmenuTable = $prefix .'_admin_menu';
         $query = xarDBDropTable($adminmenuTable);
         $result = &$dbconn->Execute($query);
      }
 
     //We need to upgrade the blocks, and as the block is the same we could just change the type id of any login.
-    $blocktypeTable = $systemPrefix .'_block_types';
-    $blockinstanceTable = $systemPrefix .'_block_instances';
+    $blocktypeTable = $prefix .'_block_types';
+    $blockinstanceTable = $prefix .'_block_instances';
     $newblocks=array('waitingcontent','adminmenu');
     $blockproblem=array();
     foreach ($newblocks as $newblock) {
@@ -1675,7 +1672,7 @@ function installer_admin_upgrade2()
 
                if (($newblock='waitingcontent') && isset($blockid)) {
                    //We need to disable existing hooks and enable new ones - but which :)
-                   $hookTable = $systemPrefix .'_hooks';
+                   $hookTable = $prefix .'_hooks';
                    $query = "UPDATE $hookTable
                              SET smodule = 'base'
                              WHERE action=? AND smodule=?";
@@ -1727,8 +1724,8 @@ function installer_admin_upgrade2()
 
     //Remove the Adminpanel module entry
     $aperror=0;
-    $moduleTable = $systemPrefix .'_modules';
-    $moduleStatesTable=$systemPrefix .'_module_states';
+    $moduleTable = $prefix .'_modules';
+    $moduleStatesTable=$prefix .'_module_states';
     $adminpanels='adminpanels';
     $query = "SELECT name,
                      regid

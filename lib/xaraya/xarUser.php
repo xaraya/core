@@ -3,7 +3,7 @@
  * User System
  *
  * @package core
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -54,13 +54,13 @@ define('XARUSER_LAST_RESORT', -3);
 function xarUser_init(Array &$args, $whatElseIsGoingLoaded)
 {
     // User System and Security Service Tables
-    $systemPrefix = xarDBGetSystemTablePrefix();
+    $prefix = xarDB::getPrefix();
 
-    // CHECK: is this needed?
+    // CHECKME: is this needed?
     $tables = array(
-        'roles'       => $systemPrefix . '_roles',
-        'realms'      => $systemPrefix . '_security_realms',
-        'rolemembers' => $systemPrefix . '_rolemembers'
+        'roles'       => $prefix . '_roles',
+        'realms'      => $prefix . '_security_realms',
+        'rolemembers' => $prefix . '_rolemembers'
     );
 
     xarDB::importTables($tables);

@@ -241,8 +241,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                             'databaseType' => xarSystemVars::get(sys::CONFIG, 'DB.Type'),
                             'databaseName' => xarSystemVars::get(sys::CONFIG, 'DB.Name'),
                             'persistent' => $persistent,
-                            'systemTablePrefix' => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'),
-                            'siteTablePrefix' => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'));
+                            'prefix' => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'));
         // Connect to database
         xarDB_init($systemArgs, $whatToLoad);
         $whatToLoad ^= XARCORE_BIT_DATABASE;

@@ -1,33 +1,27 @@
 <?php
 /**
- * Blocks table management and initialization
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Blocks module
+ * @subpackage blocks
  * @link http://xaraya.com/index.php/release/13.html
  */
 
+/**
+ * Return table names back to Xaraya
+ */
 function blocks_xartables()
 {
-    // Initialise table array
-    $xartable = array();
+    $tables = array();
 
-    // Get the name for the example item table.  This is not necessary
-    // but helps in the following statements and keeps them readable
-    $userblocks = xarDBGetSiteTablePrefix() . '_userblocks';
-    $blocktypes = xarDBGetSiteTablePrefix() . '_block_types';
-    $cacheblocks = xarDBGetSiteTablePrefix() . '_cache_blocks';
+    $prefix = xarDB::getPrefix();
 
-    // Set the table name
-    $xartable['userblocks'] = $userblocks;
-    $xartable['block_types'] = $blocktypes;
-    $xartable['cache_blocks'] = $cacheblocks;
+    $tables['userblocks']   = $prefix . '_userblocks';
+    $tables['block_types']  = $prefix . '_block_types';
+    $tables['cache_blocks'] = $prefix . '_cache_blocks';
 
-    // Return the table information
-    return $xartable;
+    return $tables;
 }
-
 ?>

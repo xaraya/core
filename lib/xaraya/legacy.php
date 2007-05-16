@@ -88,6 +88,7 @@ function xarDBLoadTableMaintenanceAPI()
  * Get the database host
  *
  * @deprec
+ * @see xarDB::getHost()
  */
 function xarDBGetHost()
 {
@@ -98,6 +99,7 @@ function xarDBGetHost()
  * Get the database type
  *
  * @deprec
+ * @see xarDB::getType();
  */
 function xarDBGetType()
 {
@@ -108,9 +110,33 @@ function xarDBGetType()
  * Get the database name
  *
  * @deprec
+ * @see xarDB::getName();
  */
 function xarDBGetName()
 {
     return xarDB::getName();
+}
+
+/**
+ * Get the system table prefix
+ *
+ * @deprec
+ * @see xarDB::getPrefix()
+ */
+function xarDBGetSystemTablePrefix()
+{
+    return xarDB::getPrefix();
+}
+
+/**
+ * Get the site table prefix
+ *
+ * @deprec
+ * @see xarDB::getPrefix()
+ * @todo replace all instances of this one with xarDB::getPrefix()
+ */
+function xarDBGetSiteTablePrefix()
+{
+    return xarDBGetSystemTablePrefix();
 }
 ?>

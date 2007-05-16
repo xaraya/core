@@ -1,38 +1,30 @@
 <?php
 /**
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- *
- * @subpackage Modules module
+ * @link http://www.xaraya.com *
+ * @subpackage modules
  */
+sys::import('modules.roles.class.xarQuery');
 /**
  * Perform standard module removal actions
  *
  * @author Marc Lutolf (mfl@netspan.ch)
- * @param none
  * @returns boolean result of action
  */
-
-sys::import('modules.roles.class.xarQuery');
-
 function modules_adminapi_standarddeinstall($args)
 {
     extract($args);
     if (!isset($module)) return false;
 
     $dbconn =& xarDBGetConn();
-    $xartables =& xarDBGetTables();
+    $xartables =& xarDB::getTables();
 
-# --------------------------------------------------------
-#
-# Remove database tables
-#
-   // Load table maintenance API
+    //Remove database tables
     xarMod::apiLoad($module);
     try {
-        $tablenameprefix = xarDBGetSiteTablePrefix() . '_' . $module;
+        $tablenameprefix = xarDB::getPrefix() . '_' . $module;
         foreach ($xartables as $table) {
             if (is_array($table)) continue;
             if (strpos($table,$tablenameprefix) === 0) {
@@ -42,13 +34,12 @@ function modules_adminapi_standarddeinstall($args)
         }
     } catch (Exception $e) {}
 
-# --------------------------------------------------------
-#
-# Delete the base group created by this module
-# Move the descendants to the Users group
-#
+    /*
+     * Delete the base group created by this module
+     *Move the descendants to the Users group
+     */
     try {
-        $role = xarFindRole(UCFirst($module) . 'Group');
+        $role = xarFindRole(ucfirst($module) . 'Group');
         if (!empty($role)) {
             $usersgroup = xarFindRole('Users');
             $descendants = $role->getDescendants();
@@ -60,31 +51,22 @@ function modules_adminapi_standarddeinstall($args)
             if (!$role->purge()) return;
         }
     } catch (Exception $e) {}
-
-# --------------------------------------------------------
-#
-# Delete all DD objects created by this module
-#
+    
+    //Delete all DD objects created by this module
     try {
         $dd_objects = unserialize(xarModVars::get($module,'dd_objects'));
         foreach ($dd_objects as $key => $value)
             $result = xarModAPIFunc('dynamicdata','admin','deleteobject',array('objectid' => $value));
     } catch (Exception $e) {}
-
-# --------------------------------------------------------
-#
-# Remove the categories created by this module
-#
+    
+// Remove the categories created by this module
     try {
         xarModAPIFunc('categories', 'admin', 'deletecat',
                              array('cid' => xarModVars::get($module, 'basecategory'))
                             );
     } catch (Exception $e) {}
 
-# --------------------------------------------------------
-#
-# Remove hooks
-#
+    //Remove hooks
     $modInfo = xarMod::getBaseInfo($module);
     $modId = $modInfo['systemid'];
     $query = "DELETE FROM " . $xartables['hooks'] .
@@ -92,10 +74,7 @@ function modules_adminapi_standarddeinstall($args)
              " OR t_module_id = " . $modId;
     $dbconn->Execute($query);
 
-# --------------------------------------------------------
-#
-# Remove custom tags, modvars, masks and privilege instances
-#
+    //Remove custom tags, modvars, masks and privilege instances
     xarTemplateTag::unregisterall($module);
     xarRemoveMasks($module);
     xarRemoveInstances($module);
@@ -104,5 +83,4 @@ function modules_adminapi_standarddeinstall($args)
     // Deinstall successful
     return true;
 }
-
 ?>

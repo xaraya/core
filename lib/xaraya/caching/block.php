@@ -2,8 +2,7 @@
 /**
  * Xaraya Web Interface Entry Point
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -74,8 +73,7 @@ function xarBlockIsCached(array $args)
         $blocks = xarCore::getCached('Blocks.Caching', 'settings');
     } else {
         // We need to get it.
-        $systemPrefix = xarDBGetSystemTablePrefix();
-        $blocksettings = $systemPrefix . '_cache_blocks';
+        $blocksettings = xarDB::getPrefix() . '_cache_blocks';
         $dbconn = xarDB::getConn();
         $tables = $dbconn->MetaTables();
         if (in_array($blocksettings, $tables)) {

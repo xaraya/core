@@ -20,11 +20,12 @@ function dynamicdata_xartables()
 {
     $tables = array();
 
-    $tables['dynamic_objects'] = xarDBGetSiteTablePrefix() . '_dynamic_objects';
-    $tables['dynamic_properties'] = xarDBGetSiteTablePrefix() . '_dynamic_properties';
-    $tables['dynamic_data'] = xarDBGetSiteTablePrefix() . '_dynamic_data';
-    $tables['dynamic_relations'] = xarDBGetSiteTablePrefix() . '_dynamic_relations';
-    $tables['dynamic_properties_def'] = xarDBGetSiteTablePrefix() . '_dynamic_properties_def';
+    $prefix = xarDB::getPrefix();
+    $tables['dynamic_objects'] = $prefix . '_dynamic_objects';
+    $tables['dynamic_properties'] = $prefix . '_dynamic_properties';
+    $tables['dynamic_data'] = $prefix . '_dynamic_data';
+    $tables['dynamic_relations'] = $prefix . '_dynamic_relations';
+    $tables['dynamic_properties_def'] = $prefix . '_dynamic_properties_def';
 
     return $tables;
 }
