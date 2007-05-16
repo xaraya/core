@@ -368,13 +368,12 @@
     $result =&amp; $dbconn->Execute($query);
     if (!$result) return;
 
-    // INIDZES FOR THE TABLE
-    $sitePrefix = xarDBGetSiteTablePrefix();
+    // INIDCES FOR THE TABLE
 
     <xsl:for-each select="index">
     // <xsl:value-of select="comment" />
     $index = array(
-        'name'      => 'i_' . $sitePrefix . '<xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />'
+        'name'      => 'i_' . $xarDB::getPrefix() . '<xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />'
         ,'fields'   => array( <xsl:for-each select="field">'<xsl:value-of select="@name" />'<xsl:if test="last() != position()">,</xsl:if></xsl:for-each> )
         ,'unique'   => <xsl:choose><xsl:when test="@unique = 'true'">true</xsl:when><xsl:otherwise>false</xsl:otherwise></xsl:choose>
         );

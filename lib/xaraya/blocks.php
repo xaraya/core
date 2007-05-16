@@ -1,12 +1,9 @@
 <?php
 /**
  * Display Blocks
- *
- * xarBlockType functions are now in xarLegacy,
- * they can be called through blocks module api
- *
+ * *
  * @package blocks
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Paul Rosania
@@ -25,13 +22,13 @@
 function xarBlock_init(&$args, $whatElseIsGoingLoaded)
 {
     // Blocks Support Tables
-    $systemPrefix = xarDBGetSystemTablePrefix();
+    $prefix = xarDB::getPrefix();
 
     $tables = array(
-        'block_instances'       => $systemPrefix . '_block_instances',
-        'block_groups'          => $systemPrefix . '_block_groups',
-        'block_group_instances' => $systemPrefix . '_block_group_instances',
-        'block_types'           => $systemPrefix . '_block_types'
+        'block_instances'       => $prefix . '_block_instances',
+        'block_groups'          => $prefix . '_block_groups',
+        'block_group_instances' => $prefix . '_block_group_instances',
+        'block_types'           => $prefix . '_block_types'
     );
 
     xarDB::importTables($tables);

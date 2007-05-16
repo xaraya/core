@@ -10,11 +10,10 @@
  */
 
 // Load Table Maintainance API
-xarDBLoadTableMaintenanceAPI();
+sys::import('lib.xarTableDDL');
 
 /**
  * Initialise the themes module
- * Themes administration
  * @author Marty Vance
  * @return bool
  * @throws DATABASE_ERROR
@@ -23,13 +22,11 @@ function themes_init()
 {
     // Get database information
     $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
+    $tables =& xarDB::getTables();
 
-    $sitePrefix = xarDBGetSiteTablePrefix();
-    $systemPrefix = xarDBGetSystemTablePrefix();
-
-    $tables['themes'] = $systemPrefix . '_themes';
-    $tables['theme_vars'] = $sitePrefix . '_theme_vars';
+    $prefix = xarDB::getPrefix();
+    $tables['themes']     = $prefix . '_themes';
+    $tables['theme_vars'] = $prefix . '_theme_vars';
 
     // Create tables
     /**

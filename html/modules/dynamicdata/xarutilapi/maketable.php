@@ -2,11 +2,11 @@
 /**
  * Create a flat table corresponding to some dynamic object definition
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -70,13 +70,13 @@ function dynamicdata_utilapi_maketable($args)
 
     $proptypes = DataPropertyMaster::getPropertyTypes();
 
-    $prefix = xarDBGetSystemTablePrefix();
+    $prefix = xarDB::getPrefix();
     $prefix .= '_';
 
     $dbconn = xarDBGetConn();
 
     //Load Table Maintenance API
-    xarDBLoadTableMaintenanceAPI();
+    sys::import('lib.xarTableDDL');
 
     $table = $prefix . 'dd_' . $myobject->name;
 

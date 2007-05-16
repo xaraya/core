@@ -7,7 +7,7 @@
  * @copyright The Digital Development Foundataion, 2006
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @author Marcel van der Boom <mrb@hsdev.com>
-**/
+ */
 
 sys::import('xaraya.exceptions.types');
 class DuplicateTagException extends DuplicationExceptions
@@ -188,11 +188,10 @@ class xarTemplateTag extends Object
             // Good, not registered yet
         }
 
-        $dbconn =& xarDBGetConn();
-        $xartable =& xarDBGetTables();
+        $dbconn =& xarDB::getConn();
+        $xartable =& xarDB::getTables();
 
-        $systemPrefix = xarDBGetSystemTablePrefix();
-        $tag_table = $systemPrefix . '_template_tags';
+        $tag_table = xarDB::getPrefix() . '_template_tags';
 
         // Get next ID in table
         try {
@@ -233,8 +232,8 @@ class xarTemplateTag extends Object
             return false;
         }
 
-        $dbconn =& xarDBGetConn();
-        $xartable =& xarDBGetTables();
+        $dbconn =& xarDB::getConn();
+        $xartable =& xarDB::getTables();
 
         $tag_table = $xartable['template_tags'];
         $query = "DELETE FROM $tag_table WHERE name = ?";
@@ -256,8 +255,8 @@ class xarTemplateTag extends Object
             return false;
         }
 
-        $dbconn =& xarDBGetConn();
-        $xartable =& xarDBGetTables();
+        $dbconn =& xarDB::getConn();
+        $xartable =& xarDB::getTables();
 
         $tag_table = $xartable['template_tags'];
         $query = "DELETE FROM $tag_table WHERE module_id = ?";
@@ -277,12 +276,12 @@ class xarTemplateTag extends Object
             return $tag_objects[$tag_name];
         }
 
-        $dbconn =& xarDBGetConn();
-        $xartable =& xarDBGetTables();
+        $dbconn =& xarDB::getConn();
+        $xartable =& xarDB::getTables();
 
-        $systemPrefix = xarDBGetSystemTablePrefix();
-        $tag_table = $systemPrefix . '_template_tags';
-        $mod_table = $systemPrefix . '_modules';
+        $prefix = xarDB::getPrefix();
+        $tag_table = $prefix . '_template_tags';
+        $mod_table = $prefix . '_modules';
         $query = "SELECT tags.data, mods.name
                   FROM $tag_table tags, $mod_table mods
                   WHERE tags.module_id = mods.id AND tags.name=?";

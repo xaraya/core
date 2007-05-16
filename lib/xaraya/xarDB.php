@@ -37,38 +37,21 @@
 function xarDB_init(array &$args, $whatElseIsGoingLoaded)
 {
     if(!isset($args['doConnect'])) $args['doConnect'] = true;
-    $GLOBALS['xarDB_systemArgs'] = $args;
+    xarDB::setPrefix($args['prefix']);
 
     sys::import('xaraya.creole');
     // Register postgres driver, since Creole uses a slightly different alias
     // We do this here so we can remove customisation from creole lib.
     xarDB::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
 
-    if($args['doConnect'])
-        $dbconn =& xarDBNewConn();
-    $systemPrefix = $args['systemTablePrefix'];
-    $sitePrefix   = $args['siteTablePrefix'];
+    if($args['doConnect']) $dbconn =& xarDBNewConn($args);
 
     // BlockLayout Template Engine Tables
     // FIXME: this doesnt belong here
     // Not trivial to move out though
-    $table['template_tags'] = $systemPrefix . '_template_tags';
+    $table['template_tags'] = $args['prefix'] . '_template_tags';
     xarDB::importTables($table);
     return true;
-}
-
-/**
- * Get a database connection
- *
- * @access public
- * @return object database connection object
- */
-function &xarDBGetConn($index = 0)
-{
-    // we only want to return the first connection here
-    // perhaps we'll add linked list capabilities to this soon
-    $tmp = xarDB::getConn($index);
-    return $tmp;
 }
 
 /**
@@ -77,13 +60,9 @@ function &xarDBGetConn($index = 0)
  * Create a new connection based on the supplied parameters
  *
  * @access public
- * @todo   do we need the global?
  */
 function &xarDBNewConn(array $args = null)
 {
-    if (!isset($args)) {
-        $args =  $GLOBALS['xarDB_systemArgs'];
-    }
     // Get database parameters
     $dbType  = $args['databaseType'];
     $dbHost  = $args['databaseHost'];
@@ -119,9 +98,8 @@ function &xarDBNewConn(array $args = null)
 /**
  * Get an array of database tables
  *
- * @access public
- * @return array array of database tables
- * @todo we should figure something out so we dont have to do the getTables stuff, it should be transparent
+ * @deprec
+ * @see xarDB::getTables()
  */
 function &xarDBGetTables()
 {
@@ -130,28 +108,14 @@ function &xarDBGetTables()
 }
 
 /**
- * Get the system table prefix
+ * Get a database connection
  *
- * @access public
- * @return string
- * @todo no added value
+ * @deprec
+ * @see xarDB::getConn()
  */
-function xarDBGetSystemTablePrefix()
+function &xarDBGetConn($index = 0)
 {
-    return $GLOBALS['xarDB_systemArgs']['systemTablePrefix'];
-}
-
-/**
- * Get the site table prefix
- *
- * @access public
- * @return string
- * @todo change it back to return site table prefix
- *       when we decide how to store site information
- */
-function xarDBGetSiteTablePrefix()
-{
-    //return $GLOBALS['xarDB_systemArgs']['siteTablePrefix'];
-    return xarDBGetSystemTablePrefix();
+    $tmp = xarDB::getConn($index);
+    return $tmp;
 }
 ?>

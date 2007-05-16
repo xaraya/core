@@ -76,13 +76,13 @@
                 </div>
             </div>
             <div class="xar-form-input-wrapper">
-                <label for="siteprefix" title="#xarML('The prefix to use for storage definitions')#" class="xar-form-label">
+                <label for="prefix" title="#xarML('The prefix to use for storage definitions')#" class="xar-form-label">
                     <xar:mlstring>
                         Prefix:
                     </xar:mlstring>
                 </label>
                 <div class="xar-form-container-after">
-                    <input name="siteprefix" id="siteprefix" class="xar-form-textshort" value="#$siteprefix#" />
+                    <input name="prefix" id="prefix" class="xar-form-textshort" value="#$prefix#" />
                 </div>
             </div>
         </fieldset>

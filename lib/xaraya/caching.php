@@ -235,8 +235,7 @@ function xarCache_getParents()
     if (xarCore::isCached('User.Variables.'.$currentuid, 'parentlist')) {
         return xarCore::getCached('User.Variables.'.$currentuid, 'parentlist');
     }
-    $systemPrefix = xarDBGetSystemTablePrefix();
-    $rolemembers = $systemPrefix . '_rolemembers';
+    $rolemembers = xarDB::getPrefix() . '_rolemembers';
     $dbconn = xarDB::getConn();
     $query = "SELECT parentid FROM $rolemembers WHERE id = ?";
     $stmt   = $dbconn->prepareStatement($query);

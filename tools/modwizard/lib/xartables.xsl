@@ -69,7 +69,7 @@ function <xsl:value-of select="$module_prefix" />_xartables()
     // Get the name for the <xsl:value-of select="@name" /> table.
     // This is not necessary but helps in the following statements and
     // keeps them readable
-    $<xsl:value-of select="@name" />table = xarDBGetSiteTablePrefix() . '_<xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />';
+    $<xsl:value-of select="@name" />table = xarDB::getPrefix() . '_<xsl:value-of select="$module_prefix" />_<xsl:value-of select="@name" />';
 
     // Set the table name
     $xartables['<xsl:value-of select="@name" />'] = $<xsl:value-of select="@name" />table;

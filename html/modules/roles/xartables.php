@@ -1,51 +1,37 @@
 <?php
 /**
- * Table information for roles module
- *
- * @package core modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
-
-/* Purpose of file:  Table information for roles module
+/**
+ * Return table name definitions to Xaraya
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @access public
- * @param none $
- * @return $xartable array
- * @throws no exceptions
- * @todo nothing
+ * This function is called internally by the core whenever the module is
+ * loaded. It is called by xarMod__dbInfoLoad()
+ *
+ * @return array
  */
 function roles_xartables()
 {
-    // Initialise table array
-    $xartable = array();
+    $tables = array();
 
-    $roles = xarDBGetSiteTablePrefix() . '_roles';
-    $rolemembers = xarDBGetSiteTablePrefix() . '_rolemembers';
-    // FIXME: do you still need those defined here too ?
-    $privileges = xarDBGetSiteTablePrefix() . '_privileges';
-    $privmembers = xarDBGetSiteTablePrefix() . '_privmembers';
-    $acl = xarDBGetSiteTablePrefix() . '_security_acl';
-    $masks = xarDBGetSiteTablePrefix() . '_security_masks';
-    $instances = xarDBGetSiteTablePrefix() . '_security_instances';
-    $realms = xarDBGetSiteTablePrefix() . '_security_realms';
+    $prefix = xarDB::getPrefix();
+    $tables['privileges']     = $prefix . '_privileges';
+    $tables['privmembers']    = $prefix . '_privmembers';
+    $tables['roles']          = $prefix . '_roles';
+    $tables['rolemembers']    = $prefix . '_rolemembers';
+    $tables['security_acl']   = $prefix . '_security_acl';
+    $tables['instances']      = $prefix . '_instances';
+    //$tables['security_privsets']  = $prefix . '_security_privsets';
+    $tables['security_realms']    = $prefix . '_security_realms';
+    $tables['security_instances'] = $prefix . '_security_instances';
 
-    // Set the table name
-    $xartable['roles'] = $roles;
-    $xartable['rolemembers'] = $rolemembers;
-    $xartable['privileges'] = $privileges;
-    $xartable['privmembers'] = $privmembers;
-    $xartable['security_acl'] = $acl;
-    $xartable['security_masks'] = $masks;
-    $xartable['security_realms'] = $realms;
-    $xartable['security_instances'] = $instances;
-    // Return the table information
-    return $xartable;
+    return $tables;
 }
-
 ?>

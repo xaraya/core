@@ -3,11 +3,11 @@
  * Initialise the Authsystem module
  *
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Authsystem module
+ * @subpackage authsystem
  * @link http://xaraya.com/index.php/release/42.html
  * @author Jan Schrage, John Cox, Gregor Rothfuss
  */
@@ -17,7 +17,6 @@
  *
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
  * @access public
- * @param none $
  * @return bool
  */
 function authsystem_init()
@@ -69,12 +68,10 @@ function authsystem_upgrade($oldVersion)
                xarModVars::get('roles', 'defaultauthmodule', xarMod::getID('authsystem'));
            }
 
-           // Get database setup
-           $dbconn =& xarDBGetConn();
-           $xartable =& xarDBGetTables();
-           $systemPrefix = xarDBGetSystemTablePrefix();
-           $modulesTable = $systemPrefix .'_modules';
-           $modid=xarModGetIDFromName('authsystem');
+           $dbconn =& xarDB::getConn();
+           $xartable =& xarDB::getTables();
+           $modulesTable = xarDB::getPrefix() .'_modules';
+           $modid = xarModGetIDFromName('authsystem');
            // update the modversion class and admin capable
            $query = "UPDATE $modulesTable
                      SET class         = 'Authentication',

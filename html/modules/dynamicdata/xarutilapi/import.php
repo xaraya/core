@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -24,16 +24,17 @@
  */
 function dynamicdata_utilapi_import($args)
 {
-// Security Check
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
     extract($args);
 
+    if (!isset($prefix)) {
+        $prefix = xarDB::getPrefix() . '_';
+    } else { 
+        $prefix .= '_';
+    }
+
     if (!isset($overwrite)) $overwrite = false;
-    if (!isset($prefix)) $prefix = xarDBGetSiteTablePrefix() . "_";
-    else $prefix .= "_";
-// TODO: check this
-// if (!isset($prefix)) $prefix = xarDBGetSystemTablePrefix() . "_";
     if (empty($xml) && empty($file)) {
         throw new EmptyParameterException('xml or file');
     } elseif (!empty($file) && (!file_exists($file) || !preg_match('/\.xml$/',$file)) ) {

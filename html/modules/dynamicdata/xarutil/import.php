@@ -1,11 +1,11 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -14,7 +14,6 @@
  */
 function dynamicdata_util_import($args)
 {
-// Security Check
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
     if(!xarVarFetch('basedir',    'isset', $basedir,     NULL,  XARVAR_DONT_SET)) {return;}
@@ -23,7 +22,7 @@ function dynamicdata_util_import($args)
     if(!xarVarFetch('refresh',    'isset', $refresh,     NULL,  XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('keepitemid', 'isset', $keepitemid,  NULL,  XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('overwrite',  'bool',  $overwrite,   false, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('siteprefix', 'isset', $data['siteprefix'],  xarDBGetSiteTablePrefix(), XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('prefix', 'isset', $data['prefix'],  xarDBGet::getPrefix(), XARVAR_DONT_SET)) {return;}
 
     extract($args);
 
@@ -66,14 +65,14 @@ function dynamicdata_util_import($args)
                                       array('file' => $basedir . '/' . $file,
                                             'keepitemid' => $keepitemid,
                                             'overwrite' =>  $overwrite,
-                                            'prefix' => $data['siteprefix'],
+                                            'prefix' => $data['prefix'],
                                             ));
         } else {
             $objectid = xarModAPIFunc('dynamicdata','util','import',
                                       array('xml' => $xml,
                                             'keepitemid' => $keepitemid,
                                             'overwrite' =>  $overwrite,
-                                            'prefix' => $data['siteprefix'],
+                                            'prefix' => $data['prefix'],
                                             ));
         }
         if (empty($objectid)) return;

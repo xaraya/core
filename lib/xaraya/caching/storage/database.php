@@ -22,8 +22,8 @@ class xarCache_Database_Storage extends xarCache_Storage
         if (!empty($this->table)) {
             return $this->table;
 
-        } elseif (function_exists('xarDBGetSiteTablePrefix')) {
-            $this->table = xarDBGetSiteTablePrefix() . '_cache_data';
+        } elseif (class_exists('xarDB')) {
+            $this->table = xarDB::GetPrefix() . '_cache_data';
             return $this->table;
 
         } else {

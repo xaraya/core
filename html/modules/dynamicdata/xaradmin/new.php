@@ -1,16 +1,17 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * add new item
+ * Show add new item form
+ *
  * This is a standard function that is called whenever an administrator
  * wishes to create a new module item
  */
@@ -18,10 +19,10 @@ function dynamicdata_admin_new($args)
 {
     extract($args);
 
-    if(!xarVarFetch('objectid', 'isset', $objectid,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('objectid', 'id', $objectid,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('modid',    'isset', $modid,     182,  XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype', 'isset', $itemtype,  0,    XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('modid',    'id', $modid,        182,  XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('itemtype', 'id', $itemtype,     0,    XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemid',   'isset', $itemid,    0,    XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('preview',  'isset', $preview,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
@@ -92,5 +93,4 @@ function dynamicdata_admin_new($args)
         return xarTplModule('dynamicdata','admin','new',$data,$args['template']);
     }
 }
-
 ?>

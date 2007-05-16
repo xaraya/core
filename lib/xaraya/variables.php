@@ -97,8 +97,7 @@ define('XARVAR_PREP_TRIM',        8);
 function xarVar_init(&$args, $whatElseIsGoingLoaded)
 {
     // Configuration init needs to be done first
-    $sitePrefix = xarDBGetSiteTablePrefix();
-    $tables = array('config_vars' => $sitePrefix . '_module_vars');
+    $tables = array('config_vars' => xarDB::getPrefix() . '_module_vars');
 
     xarDB::importTables($tables);
 
