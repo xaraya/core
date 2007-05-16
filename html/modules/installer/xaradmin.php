@@ -1223,10 +1223,10 @@ function installer_admin_upgrade1()
     $data['descr'] = xarML('Now preparing to run an upgrade from prior #(1) Version <strong>#(2)</strong> (release #(3))
                     to #(4) version <strong>#(5)</strong> (release #(6))',
                     $data['xarProduct'],$data['xarVersion'],$data['xarRelease'],
-                    XARCORE_VERSION_ID, XARCORE_VERSION_NUM, XARCORE_VERSION_SUB);
+                    xarCore::VERSION_ID, xarCore::VERSION_NUM, xarCore::VERSION_SUB);
         $data['$title'] = xarML('Xaraya Upgrade');
 
-    if (XARCORE_VERSION_NUM == $data['xarVersion']) {
+    if (xarCore::VERSION_NUM == $data['xarVersion']) {
         $data['alreadydone']=xarML('You have already upgraded to #(1). The upgrade script only needs to run once.', $data['xarVersion']);
     }else{
         $data['alreadydone']='';
@@ -1799,7 +1799,7 @@ function installer_admin_upgrade3()
     $roleanon = xarFindRole('Anonymous');
     $configvars[] = array(
                            array('name'    =>  'System.Core.VersionNum',
-                                 'set'     =>  XARCORE_VERSION_NUM));
+                                 'set'     =>  xarCore::VERSION_NUM));
     $content .=  "<h3><strong>Updating Required Configuration Variables</strong></h3>";
     foreach($configvars as $configvar){
         foreach($configvar as $var){

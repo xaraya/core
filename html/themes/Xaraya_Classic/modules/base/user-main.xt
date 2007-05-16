@@ -11,7 +11,7 @@
     </xar:mlstring>
 </h1>
 <div class="xar-mod-body xar-overflow-auto">
-    <xar:set name="versionnum">XARCORE_VERSION_NUM</xar:set>
+    <xar:set name="versionnum">xarCore::VERSION_NUM</xar:set>
     <xar:if condition="defined('XARCORE_VERSION_REV')">
         <xar:set name="mtrev">XARCORE_VERSION_REV</xar:set>
     </xar:if>

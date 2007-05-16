@@ -17,15 +17,7 @@
  * should be upgraded on each release for
  * better control on config settings
  *
- * @todo seems that defines are hoggers, move them to class constants!
 **/
-// For migration purposes, cos we're lazy
-define('XARCORE_GENERATION',2);
-
-// The actual version information
-define('XARCORE_VERSION_NUM', '[ongoing development version]');
-define('XARCORE_VERSION_ID',  'Xaraya 2 series');
-define('XARCORE_VERSION_SUB', 'etiam infractus');
 
 // Handy if we're running from a mt working copy, prolly comment out on distributing
 $rev = 'unknown';
@@ -535,6 +527,12 @@ class xarDebug extends Object
 **/
 class xarCore extends Object
 {
+    const GENERATION = 2;
+    // The actual version information
+    const VERSION_NUM = '[ongoing development version]';
+    const VERSION_ID  = 'Xaraya 2 series';
+    const VERSION_SUB = 'etiam infractus';
+
     private static $cacheCollection = array();
 
     /**

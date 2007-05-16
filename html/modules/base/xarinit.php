@@ -149,9 +149,9 @@ function base_init()
      * Set System Configuration Variables
      *****************************************************************/
     xarConfigSetVar('System.Core.TimeZone', 'Etc/UTC');
-    xarConfigSetVar('System.Core.VersionNum', XARCORE_VERSION_NUM);
-    xarConfigSetVar('System.Core.VersionId', XARCORE_VERSION_ID);
-    xarConfigSetVar('System.Core.VersionSub', XARCORE_VERSION_SUB);
+    xarConfigSetVar('System.Core.VersionNum', xarCore::VERSION_NUM);
+    xarConfigSetVar('System.Core.VersionId', xarCore::VERSION_ID);
+    xarConfigSetVar('System.Core.VersionSub', xarCore::VERSION_SUB);
     $allowedAPITypes = array();
     /*****************************************************************
      * Set site configuration variables
