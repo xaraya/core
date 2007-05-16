@@ -18,8 +18,6 @@
  * the table prefixes and xartables up and returns true
  *
  * @access protected
- * @global array xarDB_systemArgs
- * @global object dbconn database connection object
  * @param string args[databaseType] database type to use
  * @param string args[databaseHost] database hostname
  * @param string args[databaseName] database name
@@ -30,10 +28,9 @@
  * @param string args[siteTablePrefix] site table prefix
  * @param bool   args[doConnect] on inialisation, also connect, defaults to true if not specified
  * @param integer whatElseIsGoingLoaded
- * @return bool true on success, false on failure
+ * @return bool true
  * @todo <marco> move template tag table definition somewhere else?
- * @todo get rid of GLOBALS
- */
+**/
 function xarDB_init(array &$args, $whatElseIsGoingLoaded)
 {
     if(!isset($args['doConnect'])) $args['doConnect'] = true;
@@ -44,7 +41,7 @@ function xarDB_init(array &$args, $whatElseIsGoingLoaded)
     // We do this here so we can remove customisation from creole lib.
     xarDB::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
 
-    if($args['doConnect']) $dbconn =& xarDBNewConn($args);
+    if($args['doConnect']) xarDBNewConn($args);
 
     // BlockLayout Template Engine Tables
     // FIXME: this doesnt belong here
@@ -64,20 +61,14 @@ function xarDB_init(array &$args, $whatElseIsGoingLoaded)
 function &xarDBNewConn(array $args = null)
 {
     // Get database parameters
-    $dbType  = $args['databaseType'];
-    $dbHost  = $args['databaseHost'];
-    $dbName  = $args['databaseName'];
-    $dbUname = $args['userName'];
-    $dbPass  = $args['password'];
-    $persistent = !empty($args['persistent']) ? true : false;
-
-    $dsn = array('phptype'   => $dbType,
-                 'hostspec'  => $dbHost,
-                 'username'  => $dbUname,
-                 'password'  => $dbPass,
-                 'database'  => $dbName);
+    $dsn = array('phptype'   => $args['databaseType'],
+                 'hostspec'  => $args['databaseHost'],
+                 'username'  => $args['userName'],
+                 'password'  => $args['password'],
+                 'database'  => $args['databaseName']);
     // Set flags
     $flags = 0;
+    $persistent = !empty($args['persistent']) ? true : false;
     if($persistent) $flags |= xarDB::PERSISTENT;
     $conn = null;
     $conn = xarDB::getConnection($dsn,$flags);
@@ -89,7 +80,6 @@ function &xarDBNewConn(array $args = null)
     //         place. Unfortunately, that is just not portable.
     $flags |= xarDB::COMPAT_ASSOC_LOWER;
 
-    $conn = null;
     $conn = xarDB::getConnection($dsn,$flags); // cached on dsn hash, so no worries
     xarLogMessage("New connection created, now serving " . count(xarDB::$count) . " connections");
     return $conn;
@@ -101,11 +91,8 @@ function &xarDBNewConn(array $args = null)
  * @deprec
  * @see xarDB::getTables()
  */
-function &xarDBGetTables()
-{
-    $tmp = xarDB::getTables();
-    return $tmp;
-}
+function &xarDBGetTables() { $t = xarDB::getTables(); return $t;}
+
 
 /**
  * Get a database connection
@@ -113,9 +100,5 @@ function &xarDBGetTables()
  * @deprec
  * @see xarDB::getConn()
  */
-function &xarDBGetConn($index = 0)
-{
-    $tmp = xarDB::getConn($index);
-    return $tmp;
-}
+function &xarDBGetConn($index = 0) {$t = xarDB::getConn($index); return $t;}
 ?>

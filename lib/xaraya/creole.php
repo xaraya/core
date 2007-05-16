@@ -35,10 +35,7 @@ class xarDB extends Creole
      * @return array array of database tables
      * @todo we should figure something out so we dont have to do the getTables stuff, it should be transparent
      */
-    public static function &getTables()
-    {
-        return self::$tables;
-    }
+    public static function &getTables() {  return self::$tables; }
 
     public static function importTables(Array $tables = array())
     {
@@ -74,14 +71,12 @@ class xarDB extends Creole
      *
      * @return object database connection object
      */
-    public static function &getConn($index = 0)
-    {
-        return self::$connections[$index];
-    }
+    public static function &getConn($index = 0) { return self::$connections[$index]; }
 
     // Overridden
     public static function getConnection($dsn, $flags = 0)
     {
+        $conn = null;
         $conn = parent::getConnection($dsn, $flags);
         self::$connections[] =& $conn;
         self::$count++;

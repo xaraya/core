@@ -213,7 +213,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     if ($whatToLoad & XARCORE_SYSTEM_DATABASE) { // yeah right, as if this is optional
-        sys::import('xaraya.xarDB');
+        sys::import('xaraya.database');
 
         // Decode encoded DB parameters
         // These need to be there
@@ -374,7 +374,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * @todo <mrb> i thought it was configurable
     **/
     if ($whatToLoad & XARCORE_SYSTEM_MODULES) {
-        sys::import('xaraya.xarMod');
+        sys::import('xaraya.modules');
         $systemArgs = array('enableShortURLsSupport' => xarConfigGetVar('Site.Core.EnableShortURLsSupport'),
                             'generateXMLURLs' => true);
         xarMod::init($systemArgs);
