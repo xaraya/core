@@ -51,7 +51,7 @@ define('XARUSER_LAST_RESORT', -3);
  * @param args[authenticationModules] array
  * @return bool true on success
  */
-function xarUser_init(Array &$args, $whatElseIsGoingLoaded)
+function xarUser_init(Array &$args)
 {
     // User System and Security Service Tables
     $prefix = xarDB::getPrefix();

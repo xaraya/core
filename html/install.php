@@ -52,7 +52,8 @@ $whatToLoad = XARCORE_SYSTEM_NONE;
 // Start Exception Handling System very early
 sys::import('xaraya.exceptions');
 $systemArgs = array();
-xarError_init($systemArgs, $whatToLoad);
+xarError_init($systemArgs);
+
 // As long as we are coming in through install.php we need to pick up the bones if something goes wrong
 set_exception_handler(array('ExceptionHandlers','bone'));
 
@@ -61,7 +62,7 @@ xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_I
 
 // Include some extra functions, as the installer is somewhat special
 // for loading gui and api functions
-include 'modules/installer/xarfunctions.php';
+sys::import('modules.installer.functions');
 
 // Basic systems always loaded
 sys::import('xaraya.log');
@@ -75,19 +76,15 @@ sys::import('xaraya.templates');
 $systemArgs = array();
 xarLog_init($systemArgs, $whatToLoad);
 
-
-// Start Event Messaging System
-// <mrb> Is this needed? the events are dispatched to modules, which arent here yet.
-$systemArgs = array('loadLevel' => $whatToLoad);
-xarEvt_init($systemArgs, $whatToLoad);
-
 // Start HTTP Protocol Server/Request/Response utilities
 $systemArgs = array('enableShortURLsSupport' =>false,
                     'defaultModuleName'      => 'installer',
                     'defaultModuleType'      => 'admin',
                     'defaultModuleFunction'  => 'main',
                     'generateXMLURLs'        => false);
-xarSerReqRes_init($systemArgs, $whatToLoad);
+xarServer::init($systemArgs);
+xarRequest::init($systemArgs);
+xarResponse::init($systemArgs);
 
 // Start BlockLayout Template Engine
 // This is probably the trickiest part, but we want the installer
@@ -96,7 +93,7 @@ $systemArgs = array('enableTemplatesCaching' => false,
                     'themesBaseDirectory'    => 'themes',
                     'defaultThemeDir'        => 'Xaraya_Classic',
                     'generateXMLURLs'        => false);
-xarTpl_init($systemArgs, $whatToLoad);
+xarTpl_init($systemArgs);
 
 
 // Get the install language everytime we request install.php
@@ -136,7 +133,7 @@ $systemArgs = array('translationsBackend' => 'xml2php',
                     'MLSMode'             => 'BOXED',
                     'defaultLocale'       => $install_language,
                     'allowedLocales'      => $allowedLocales);
-xarMLS_init($systemArgs, $whatToLoad);
+xarMLS_init($systemArgs);
 
 /**
  * Entry function for the installer

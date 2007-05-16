@@ -77,9 +77,8 @@ function xarLog_init(&$args, &$whatElseIsGoingLoaded)
 
     // If none of these => do nothing.
      foreach ($xarLogConfig as $logger) {
-        $config = array_merge(array(
-            'loadLevel' => &$whatElseIsGoingLoaded), $logger['config']);
-         xarLog__add_logger($logger['type'], $config);
+        $config = array_merge(array('loadLevel' => &$whatElseIsGoingLoaded), $logger['config']);
+        xarLog__add_logger($logger['type'], $config);
      }
 
     // Subsystem initialized, register a shutdown function

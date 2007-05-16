@@ -171,7 +171,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      */
     sys::import('xaraya.exceptions');
     $systemArgs = array();
-    xarError_init($systemArgs, $whatToLoad);
+    xarError_init($systemArgs);
 
     /*
      * At this point we should be able to catch all low level errors, so we can start the debugger
@@ -235,7 +235,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                             'persistent' => $persistent,
                             'prefix' => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'));
         // Connect to database
-        xarDB_init($systemArgs, $whatToLoad);
+        xarDB_init($systemArgs);
         $whatToLoad ^= XARCORE_BIT_DATABASE;
     }
 
@@ -246,10 +246,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * be as early as possible in place. This system is for *core* events
      *
      */
-    // {ML_dont_parse 'includes/events.php'}
     sys::import('xaraya.events');
-    $systemArgs = array('loadLevel' => $whatToLoad);
-    xarEvt_init($systemArgs, $whatToLoad);
 
 
     /*
@@ -263,7 +260,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     if ($whatToLoad & XARCORE_SYSTEM_CONFIGURATION) {
         // Start Variables utilities
         sys::import('xaraya.variables');
-        xarVar_init($systemArgs, $whatToLoad);
+        xarVar_init($systemArgs);
         $whatToLoad ^= XARCORE_BIT_CONFIGURATION;
     }
 
@@ -293,8 +290,9 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                         'defaultModuleType'      => xarConfigGetVar('Site.Core.DefaultModuleType'),
                         'defaultModuleFunction'  => xarConfigGetVar('Site.Core.DefaultModuleFunction'),
                         'generateXMLURLs' => true);
-    xarSerReqRes_init($systemArgs, $whatToLoad);
-
+    xarServer::init($systemArgs);
+    xarRequest::init($systemArgs);
+    xarResponse::init($systemArgs);
 
     /*
      * Bring Multi Language System online
@@ -310,7 +308,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
                         'defaultTimeZone'     => xarConfigGetVar('Site.Core.TimeZone'),
                         'defaultTimeOffset'   => xarConfigGetVar('Site.MLS.DefaultTimeOffset'),
                         );
-    xarMLS_init($systemArgs, $whatToLoad);
+    xarMLS_init($systemArgs);
 
 
 
@@ -320,6 +318,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      */
     $anonuid = xarConfigGetVar('Site.User.AnonymousUID');
     // fall back to default uid 2 during installation (cfr. bootstrap function)
+    // @todo this kind of thing should a.) not be happening and b.) not be done here
     $anonuid = !empty($anonuid) ? $anonuid : 2;
     define('_XAR_ID_UNREGISTERED', $anonuid);
 
@@ -335,7 +334,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
             'cookiePath'        => xarConfigGetVar('Site.Session.CookiePath'),
             'cookieDomain'      => xarConfigGetVar('Site.Session.CookieDomain'),
             'refererCheck'      => xarConfigGetVar('Site.Session.RefererCheck'));
-        xarSession_init($systemArgs, $whatToLoad);
+        xarSession_init($systemArgs);
 
         $whatToLoad ^= XARCORE_BIT_SESSION;
     }
@@ -353,7 +352,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
         // Start Blocks Support Sytem
         $systemArgs = array();
-        xarBlock_init($systemArgs, $whatToLoad);
+        xarBlock_init($systemArgs);
         $whatToLoad ^= XARCORE_BIT_BLOCKS;
     }
 
@@ -387,7 +386,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
         'generateXMLURLs'        => true
     );
 
-    xarTpl_init($systemArgs, $whatToLoad);
+    xarTpl_init($systemArgs);
     $whatToLoad ^= XARCORE_BIT_TEMPLATE;
 
 
@@ -403,7 +402,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
         // Start User System
         $systemArgs = array('authenticationModules' => xarConfigGetVar('Site.User.AuthenticationModules'));
-        xarUser_init($systemArgs, $whatToLoad);
+        xarUser_init($systemArgs);
         $whatToLoad ^= XARCORE_BIT_USER;
     }
 

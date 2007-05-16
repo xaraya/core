@@ -37,11 +37,10 @@ class BLException extends xarExceptions
  * @global string xarTpl_doctype
  * @global string xarTpl_JavaScript
  * @param  array  $args                  Elements: themesBaseDir, defaultThemeName, enableTemplateCaching
- * @param  int    $whatElseIsGoingLoaded Bitfield to specify which subsystem will be loaded.
  * @throws DirectoryNotFoundException, FileNotFoundException, ConfigurationException
  * @return bool true
 **/
-function xarTpl_init(&$args, $whatElseIsGoingLoaded)
+function xarTpl_init(&$args)
 {
     $table['template_tags'] = xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix') . '_template_tags';
     xarDB::importTables($table);

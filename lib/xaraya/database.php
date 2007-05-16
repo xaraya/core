@@ -31,11 +31,10 @@ sys::import('xaraya.creole');
  * @param string args[systemTablePrefix] system table prefix
  * @param string args[siteTablePrefix] site table prefix
  * @param bool   args[doConnect] on inialisation, also connect, defaults to true if not specified
- * @param integer whatElseIsGoingLoaded
  * @return bool true
  * @todo <marco> move template tag table definition somewhere else?
 **/
-function xarDB_init(array &$args, $whatElseIsGoingLoaded)
+function xarDB_init(array &$args)
 {
     xarDB::setPrefix($args['prefix']);
 

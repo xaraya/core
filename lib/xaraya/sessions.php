@@ -25,7 +25,7 @@ class SessionException extends Exception
  *
  * @return bool true
  */
-function xarSession_init(&$args, $whatElseIsGoingLoaded)
+function xarSession_init(&$args)
 {
     /* @todo: get rid of the global */
     $GLOBALS['xarSession_systemArgs'] = $args;

@@ -46,10 +46,7 @@ class ApiDeprecationException extends DeprecationExceptions
  * @deprec replaced by sys::varpath()
  * @see    sys
  **/
-function xarCoreGetVarDirPath()
-{
-    return sys::varpath();
-}
+function xarCoreGetVarDirPath() { return sys::varpath(); }
 
 /**
  * Wrapper functions to support Xaraya 1 API for systemvars
@@ -79,10 +76,7 @@ function &xarDBNewDataDict(Connection &$dbconn, $mode = 'READONLY')
  *
  * @deprec no need for this anymore
  */
-function xarDBLoadTableMaintenanceAPI()
-{
-    return sys::import('xaraya.xarTableDDL');
-}
+function xarDBLoadTableMaintenanceAPI() { return sys::import('xaraya.tableddl'); }
 
 /**
  * Get the database host
@@ -90,10 +84,7 @@ function xarDBLoadTableMaintenanceAPI()
  * @deprec
  * @see xarDB::getHost()
  */
-function xarDBGetHost()
-{
-    return xarDB::getHost();
-}
+function xarDBGetHost() { return xarDB::getHost(); }
 
 /**
  * Get the database type
@@ -101,10 +92,7 @@ function xarDBGetHost()
  * @deprec
  * @see xarDB::getType();
  */
-function xarDBGetType()
-{
-    return xarDB::getType();
-}
+function xarDBGetType() { return xarDB::getType(); }
 
 /**
  * Get the database name
@@ -112,10 +100,7 @@ function xarDBGetType()
  * @deprec
  * @see xarDB::getName();
  */
-function xarDBGetName()
-{
-    return xarDB::getName();
-}
+function xarDBGetName() { return xarDB::getName(); }
 
 /**
  * Get the system table prefix
@@ -123,10 +108,7 @@ function xarDBGetName()
  * @deprec
  * @see xarDB::getPrefix()
  */
-function xarDBGetSystemTablePrefix()
-{
-    return xarDB::getPrefix();
-}
+function xarDBGetSystemTablePrefix() { return xarDB::getPrefix(); }
 
 /**
  * Get the site table prefix
@@ -135,8 +117,5 @@ function xarDBGetSystemTablePrefix()
  * @see xarDB::getPrefix()
  * @todo replace all instances of this one with xarDB::getPrefix()
  */
-function xarDBGetSiteTablePrefix()
-{
-    return xarDBGetSystemTablePrefix();
-}
+function xarDBGetSiteTablePrefix() { return xarDBGetSystemTablePrefix(); }
 ?>

@@ -64,19 +64,6 @@ class EventRegistrationException extends RegistrationExceptions
 }
 
 /**
- * Intializes Event Messaging System
- *
- * @access protected
- * @param $args['loadLevel']
- * @return bool true
- * @todo no added value
- */
-function xarEvt_init(&$args, $whatElseIsGoingLoaded)
-{
-    return true;
-}
-
-/**
  * Interface declaration for core events
  *
  * @package events

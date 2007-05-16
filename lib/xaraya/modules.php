@@ -93,61 +93,23 @@ define('XARTHEME_STATE_MISSING_FROM_UPGRADED', 9);
 define('XARMOD_LOAD_ONLYACTIVE', 1);
 define('XARMOD_LOAD_ANYSTATE', 2);
 
-/**
- * Start the module subsystem
- *
- * @access protected
- * @param args['generateShortURLs'] bool
- * @param args['generateXMLURLs'] bool
- * @return bool true
- * @todo this is just a wrapper, it can be removed eventually
- */
-function xarMod_init(&$args, $whatElseIsGoingLoaded)
-{
-    // Initialize the interfaces and stuff.
-    return xarMod::init($args);
-}
-
-
 /*
     Bring in the module variables to maintain interface compatibility for now
 */
 sys::import('xaraya.variables.module');
-
-/**
- * Wrapper functions to support Xaraya 1 API for modvars
- */
-function xarModGetVar($modName, $name, $prep = NULL)
-{   return xarModVars::get($modName, $name, $prep); }
-
-function xarModSetVar($modName, $name, $value)
-{   return xarModVars::set($modName, $name, $value); }
-
-function xarModDelVar($modName, $name)
-{   return xarModVars::delete($modName, $name); }
-
-function xarModDelAllVars($modName)
-{   return xarModVars::delete_all($modName); }
-
-function xarModGetVarId($modName, $name)
-{   return xarModVars::getID($modName, $name); }
-
-/*
-    Bring in the module user variables to maintain interface compatibility for now
-*/
 sys::import('xaraya.variables.moduser');
 /**
- * Wrapper functions for xarModUserVars to support Xaraya 1 API
- *
- */
-function xarModGetUserVar($modName, $name, $uid = NULL, $prep = NULL)
-{   return xarModUserVars::get($modName, $name, $uid, $prep); }
+ * Wrapper functions to support Xaraya 1 API for modvars and moduservars
+**/
+function xarModGetVar($modName, $name, $prep = NULL) {   return xarModVars::get($modName, $name, $prep);  }
+function xarModSetVar($modName, $name, $value)       {   return xarModVars::set($modName, $name, $value); }
+function xarModDelVar($modName, $name)               {   return xarModVars::delete($modName, $name);      }
+function xarModDelAllVars($modName)                  {   return xarModVars::delete_all($modName);         }
+function xarModGetVarId($modName, $name)             {   return xarModVars::getID($modName, $name);       }
 
-function xarModSetUserVar($modName, $name, $value, $uid=NULL)
-{   return xarModUserVars::set($modName, $name, $value, $uid); }
-
-function xarModDelUserVar($modName, $name, $uid=NULL)
-{   return xarModUserVars::delete($modName, $name, $uid); }
+function xarModGetUserVar($modName, $name, $uid = NULL, $prep = NULL){   return xarModUserVars::get($modName, $name, $uid, $prep);  }
+function xarModSetUserVar($modName, $name, $value, $uid=NULL)        {   return xarModUserVars::set($modName, $name, $value, $uid); }
+function xarModDelUserVar($modName, $name, $uid=NULL)                {   return xarModUserVars::delete($modName, $name, $uid);      }
 
 
 /**
@@ -161,7 +123,7 @@ function xarModDelUserVar($modName, $name, $uid=NULL)
  * @return string the encoded URL parts
  * @todo this could be made public
  * @todo support arrays and encode the complete array (keys and values)
- **/
+**/
 function xarMod__URLencode($data, $type = 'getname')
 {
     // Different parts of a URL are encoded in different ways.

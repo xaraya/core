@@ -60,7 +60,7 @@ class GeneralException extends xarExceptions
  * @access protected
  * @return bool true
  */
-function xarError_init(&$systemArgs, $whatToLoad)
+function xarError_init(&$systemArgs)
 {
     // Send all exceptions to the default exception handler, no excuses
     set_exception_handler(array('ExceptionHandlers','defaulthandler'));

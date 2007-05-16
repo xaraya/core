@@ -16,10 +16,9 @@
  * @author Paul Rosania
  * @access protected
  * @param  array args
- * @param  whatElseIsGoingLoaded integer
  * @return bool
  */
-function xarBlock_init(&$args, $whatElseIsGoingLoaded)
+function xarBlock_init(&$args)
 {
     // Blocks Support Tables
     $prefix = xarDB::getPrefix();
@@ -35,11 +34,7 @@ function xarBlock_init(&$args, $whatElseIsGoingLoaded)
 
     // Decide if we will be using the output caching system
     $outputCachePath = sys::varpath() . '/cache/output/';
-    if (defined('XARCACHE_BLOCK_IS_ENABLED')) {
-        xarCore::setCached('xarcache', 'blockCaching', true);
-    } else {
-        xarCore::setCached('xarcache', 'blockCaching', false);
-    }
+    xarCore::setCached('xarcache', 'blockCaching', defined('XARCACHE_BLOCK_IS_ENABLED'));
     return true;
 }
 
