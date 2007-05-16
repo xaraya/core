@@ -1,6 +1,6 @@
 <object name="roles_groups">
   <objectid>6</objectid>
-  <label>Groups</label>
+  <label>Group</label>
   <parent>0</parent>
   <moduleid>27</moduleid>
   <itemtype>3</itemtype>

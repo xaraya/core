@@ -95,7 +95,7 @@ class Role extends DataObject
         $id = parent::createItem($data);
 
         // Set the email useage for this user to false
-        xarModSetUserVar('roles','usersendemails', false, $id);
+        xarModSetUserVar('roles','allowemail', false, $id);
 
         // Get a value for the parent id
         if (empty($data['parentid'])) xarVarFetch('parentid',  'int', $data['parentid'],  NULL, XARVAR_DONT_SET);
@@ -105,6 +105,33 @@ class Role extends DataObject
             if (!$parent->addMember($this))
                 throw new Exception('Unable to create a roles relation');
         }
+
+        // add the duvs
+        if (!xarVarFetch('duvs','array',$duvs,array(),XARVAR_NOT_REQUIRED)) return;
+        foreach($duvs as $key => $value) {
+            xarModSetUserVar('roles',$key, $value, $id);
+        }
+
+        // Let any hooks know that we have created a new user.
+        $item['module'] = 'roles';
+        $item['itemtype'] = $this->getType();
+        $item['itemid'] = $id;
+        xarModCallHooks('item', 'create', $id, $item);
+
+        return $id;
+    }
+
+    public function updateItem(Array $data = array())
+    {
+        $id = parent::updateItem($data);
+        if (!xarVarFetch('duvs','array',$duvs,array(),XARVAR_NOT_REQUIRED)) return;
+        foreach($duvs as $key => $value) {
+            xarModSetUserVar('roles',$key, $value, $id);
+        }
+        $item['module'] = 'roles';
+        $item['itemtype'] = $this->getType();
+        $item['itemid'] = $id;
+        xarModCallHooks('item', 'update', $id, $item);
         return $id;
     }
 
@@ -151,6 +178,10 @@ class Role extends DataObject
             $q->addfield('users',$result['users']+1);
             if (!$q->run()) return;
         }
+        $item['module']   = 'roles';
+        $item['itemtype'] = $this->getType();
+        $item['itemid']   = $this->getID();
+        xarModCallHooks('item', 'link', $this->getID(), $item);
         return true;
     }
 
@@ -185,6 +216,10 @@ class Role extends DataObject
             $q->addfield('users',$result['users']-1);
             if (!$q->run()) return;
         }
+        $item['module']   = 'roles';
+        $item['itemtype'] = $this->getType();
+        $item['itemid']   = $this->getID();
+        xarModCallHooks('item', 'unlink', $this->getID(), $item);
         return true;
     }
 
@@ -243,6 +278,12 @@ class Role extends DataObject
             $this->removePrivilege($priv);
         }
 
+        // Let any hooks know that we have deleted this user.
+        $item['module'] = 'roles';
+        $item['itemid'] = $this->getID();
+        $item['method'] = 'delete';
+        xarModCallHooks('item', 'delete', $this->getID(), $item);
+
         // CHECKME: re-assign all privileges to the child roles ? (probably not)
         return true;
     }
@@ -257,7 +298,7 @@ class Role extends DataObject
     public function purge()
     {
         // no checks here. just do it
-        $this->remove();
+        $this->deleteItem();
         $state = ROLES_STATE_DELETED;
         $uname = xarML('deleted') . microtime(TRUE) .'.'. $this->properties['id']->value;
         $name = '';
@@ -271,8 +312,13 @@ class Role extends DataObject
         $q->addfield('email',$email);
         $q->addfield('date_reg',$date_reg);
         $q->addfield('state',$state);
-        $q->eq('id',$this->properties['id']->value);
+        $q->eq('id',$this->getID());
         if(!$q->run()) return;
+        $item['module'] = 'roles';
+        $item['itemid'] = $this->getID();
+        $item['itemtype'] = $this->getType();
+        $item['method'] = 'purge';
+        xarModCallHooks('item', 'delete', $this->getID(), $item);
         return true;
     }
 
@@ -436,24 +482,11 @@ class Role extends DataObject
         $result = $stmt->executeQuery($bindvars);
 
         // CHECKME: I suppose this is what you meant here ?
-        $parentid = $this->properties['id']->value;
+        $parentid = $this->getID();
         // arrange the data in an array of role objects
         $users = array();
         while ($result->next()) {
-            list($uid, $name, $type, $uname, $email, $pass,
-                $date_reg, $val_code, $state, $auth_module) = $result->fields;
-            // FIXME: if we do assoc fetching we get this for free
-            $args = array('uid' => $uid,
-                           'name' => $name,
-                           'type' => $type,
-                           'parentid' => $parentid,
-                           'uname' => $uname,
-                           'email' => $email,
-                           'pass' => $pass,
-                           'date_reg' => $date_reg,
-                           'val_code' => $val_code,
-                           'state' => $state,
-                           'auth_module' => $auth_module);
+            list($uid) = $result->fields;
 
             $role = DataObjectMaster::getObject(array('name' => 'roles_users'));
             $role->getItem(array('itemid' => $uid));
@@ -540,19 +573,7 @@ class Role extends DataObject
 
         // collect the table values and use them to create new role objects
         while ($result->next()) {
-            list($uid, $name, $type, $parentid, $uname, $email, $pass,
-                $date_reg, $val_code, $state, $auth_module) = $result->fields;
-            $args = array('uid' => $uid,
-                           'name' => $name,
-                           'type' => $type,
-                           'parentid' => $parentid,
-                           'uname' => $uname,
-                           'email' => $email,
-                           'pass' => $pass,
-                           'date_reg' => $date_reg,
-                           'val_code' => $val_code,
-                           'state' => $state,
-                           'auth_module' => $auth_module);
+            list($uid) = $result->fields;
 
             $role = DataObjectMaster::getObject(array('name' => 'roles_groups'));
             $role->getItem(array('itemid' => $uid));

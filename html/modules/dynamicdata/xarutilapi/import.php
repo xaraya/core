@@ -29,6 +29,7 @@ function dynamicdata_utilapi_import($args)
 
     extract($args);
 
+    if (!isset($overwrite)) $overwrite = false;
     if (!isset($prefix)) $prefix = xarDBGetSiteTablePrefix() . "_";
     else $prefix .= "_";
 // TODO: check this
@@ -45,7 +46,7 @@ function dynamicdata_utilapi_import($args)
     $proptypes = DataPropertyMaster::getPropertyTypes();
     $name2id = array();
     foreach ($proptypes as $propid => $proptype) {
-    if (is_object($proptype)) {echo $proptype->name;exit;}
+        //if (is_object($proptype)) {echo $proptype->name;exit;}
         $name2id[$proptype['name']] = $propid;
     }
 
@@ -64,6 +65,15 @@ function dynamicdata_utilapi_import($args)
         // Get the object's name
         $args['name'] = (string)($xmlobject->attributes()->name);
 
+        // check if the object exists
+        $info = DataObjectMaster::getObjectInfo(array('name' => $args['name']));
+        $dupexists = !empty($info);
+        if ($dupexists && !$overwrite) {
+            $msg = 'Duplicate definition for #(1) object #(2)';
+            $vars = array('object',xarVarPrepForDisplay($args['name']));
+            throw new DuplicateException($vars,$msg);
+        }
+
         $object = DataObjectMaster::getObject(array('objectid' => 1));
         $objectproperties = array_keys($object->properties);
         foreach($objectproperties as $property) {
@@ -71,15 +81,6 @@ function dynamicdata_utilapi_import($args)
                 $args[$property] = (string)$xmlobject->{$property}[0];
         }
 
-        // Now do some checking
-        /*
-        if (isset($object[$key])) {
-            fclose($fp);
-            $msg = 'Duplicate definition for #(1) key #(2) on line #(3)';
-            $vars = array('object',xarVarPrepForDisplay($key),$count);
-            throw new DuplicateException($vars,$msg);
-        }
-        */
         // Treat parents where the module is DD differently. Put in numeric itemtype
         if ($args['moduleid'] == 182) {
             $info = DataObjectMaster::getObjectInfo(array('name' => $args['parent']));
@@ -97,13 +98,24 @@ function dynamicdata_utilapi_import($args)
             $args['itemtype'] = xarModAPIFunc('dynamicdata','admin','getnextitemtype',
                                            array('modid' => $args['moduleid']));
         }
-        $objectid = $object->createItem($args);
-
-        // Now do the item's properties
 
         // Create the DataProperty object we will use to create items of
         $dataproperty = DataObjectMaster::getObject(array('objectid' => 2));
         if (empty($dataproperty)) return;
+
+        if ($dupexists && $overwrite) {
+            $args['itemid'] = $info['objectid'];
+            $objectid = $object->updateItem($args);
+            // remove the properties, as they will be replaced
+            $dupobject = DataObjectMaster::getObject(array('name' => $info['name']));
+            $existingproperties = $dupobject->getProperties();
+            foreach ($existingproperties as $propertyitem)
+                $dataproperty->deleteItem(array('itemid' => $propertyitem->id));
+        } else {
+            $objectid = $object->createItem($args);
+        }
+
+        // Now do the item's properties
 
         $propertyproperties = array_keys($dataproperty->properties);
         $propertieshead = $xmlobject->properties;

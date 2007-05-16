@@ -17,11 +17,12 @@ function dynamicdata_util_import($args)
 // Security Check
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
-    if(!xarVarFetch('basedir',    'isset', $basedir,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('import',     'isset', $import,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('xml',        'isset', $xml,         NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('refresh',    'isset', $refresh,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('keepitemid', 'isset', $keepitemid,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('basedir',    'isset', $basedir,     NULL,  XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('import',     'isset', $import,      NULL,  XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('xml',        'isset', $xml,         NULL,  XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('refresh',    'isset', $refresh,     NULL,  XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('keepitemid', 'isset', $keepitemid,  NULL,  XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('overwrite',  'bool',  $overwrite,   false, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('siteprefix', 'isset', $data['siteprefix'],  xarDBGetSiteTablePrefix(), XARVAR_DONT_SET)) {return;}
 
     extract($args);
@@ -64,12 +65,14 @@ function dynamicdata_util_import($args)
             $objectid = xarModAPIFunc('dynamicdata','util','import',
                                       array('file' => $basedir . '/' . $file,
                                             'keepitemid' => $keepitemid,
+                                            'overwrite' =>  $overwrite,
                                             'prefix' => $data['siteprefix'],
                                             ));
         } else {
             $objectid = xarModAPIFunc('dynamicdata','util','import',
                                       array('xml' => $xml,
                                             'keepitemid' => $keepitemid,
+                                            'overwrite' =>  $overwrite,
                                             'prefix' => $data['siteprefix'],
                                             ));
         }
