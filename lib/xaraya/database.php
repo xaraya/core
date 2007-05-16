@@ -44,12 +44,6 @@ function xarDB_init(array &$args, $whatElseIsGoingLoaded)
     xarDB::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
 
     if(!isset($args['doConnect']) or $args['doConnect']) xarDBNewConn($args);
-
-    // BlockLayout Template Engine Tables
-    // FIXME: this doesnt belong here
-    // Not trivial to move out though
-    $table['template_tags'] = $args['prefix'] . '_template_tags';
-    xarDB::importTables($table);
     return true;
 }
 

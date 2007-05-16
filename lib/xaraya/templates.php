@@ -43,6 +43,8 @@ class BLException extends xarExceptions
 **/
 function xarTpl_init(&$args, $whatElseIsGoingLoaded)
 {
+    $table['template_tags'] = xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix') . '_template_tags';
+    xarDB::importTables($table);
 
     $GLOBALS['xarTpl_themesBaseDir']   = $args['themesBaseDirectory'];
     $GLOBALS['xarTpl_defaultThemeDir'] = $args['defaultThemeDir'];
