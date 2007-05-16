@@ -2,6 +2,8 @@
 /**
  * Creole wrapper class
  *
+ * The idea here is to put all deviations/additions/correction from creole
+ * into this class. All generic improvement should be  pushed upstream obviously
  * @package lib
  * @subpackage database
  * @copyright (C) 2002-2006 The Digital Development Foundation
@@ -19,15 +21,9 @@ class xarDB extends Creole
     private static $tables = array();
     private static $prefix = '';
 
-    public static function getPrefix()
-    {
-        return self::$prefix;
-    }
 
-    public static function setPrefix($prefix)
-    {
-        self::$prefix =  $prefix;
-    }
+    public static function getPrefix() { return self::$prefix;}
+    public static function setPrefix($prefix) { self::$prefix =  $prefix; }
 
     /**
      * Get an array of database tables
@@ -42,28 +38,16 @@ class xarDB extends Creole
         self::$tables = array_merge(self::$tables,$tables);
     }
 
-    public static function getHost()
-    {
-        if(!isset(self::$firstDSN)) self::setFirstDSN();
-        return self::$firstDSN['hostspec'];
-    }
-
-    public static function getType()
-    {
-        if(!isset(self::$firstDSN)) self::setFirstDSN();
-        return self::$firstDSN['phptype'];
-    }
-
-    public static function getName()
-    {
-        if(!isset(self::$firstDSN)) self::setFirstDSN();
-        return self::$firstDSN['database'];
-    }
+    public static function getHost() { self::setFirstDSN(); return self::$firstDSN['hostspec']; }
+    public static function getType() { self::setFirstDSN(); return self::$firstDSN['phptype'];  }
+    public static function getName() { self::setFirstDSN(); return self::$firstDSN['database']; }
 
     private static function setFirstDSN()
     {
-        $conn = self::$connections[0];
-        self::$firstDSN = $conn->getDSN();
+        if(!isset(self::$firstDSN)) {
+            $conn = self::$connections[0];
+            self::$firstDSN = $conn->getDSN();
+        }
     }
 
     /**

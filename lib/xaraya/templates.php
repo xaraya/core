@@ -63,8 +63,8 @@ function xarTpl_init(&$args, $whatElseIsGoingLoaded)
     sys::import('xaraya.caching.template');
     xarTemplateCache::init(sys::varpath() . XARCORE_TPL_CACHEDIR, $args['enableTemplatesCaching']);
 
-    // This is wrong here as well, but it's better at least than in xarMod
-    sys::import('xaraya.xarTheme');
+    // This is wrong here as well, but it's better at least than in modules.php
+    sys::import('xaraya.themes');
     return true;
 }
 

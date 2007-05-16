@@ -13,9 +13,7 @@
  * Install Xaraya
  *
  * @author Johnny Robeson
- * @param none
- * @returns bool
- * @throws DATABASE_ERROR
+ * @return bool
  */
 function installer_init()
 {
@@ -26,8 +24,8 @@ function installer_init()
 /**
  * Upgrade Xaraya
  *
- * @param oldVersion
- * @returns bool
+ * @param string $oldVersion the version we're upgrading from.
+ * @return bool
  */
 function installer_upgrade($oldVersion)
 {
@@ -42,7 +40,7 @@ function installer_upgrade($oldVersion)
 /**
  * Delete Installer module
  *
- * @returns bool
+ * @return bool
  */
 function installer_delete()
 {

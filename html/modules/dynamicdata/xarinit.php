@@ -10,7 +10,7 @@
  * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  */
-sys::import('xaraya.xarTableDDL');
+sys::import('xaraya.tableddl');
 /**
  * Initialise the dynamicdata module
  *

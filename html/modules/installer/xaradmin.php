@@ -341,7 +341,7 @@ function installer_admin_phase5()
         return $data;
     }
 
-    sys::import('xaraya.xarTableDDL');
+    sys::import('xaraya.tableddl');
     // Create the database if necessary
     if ($createDB) {
         $data['confirmDB']  = true;
@@ -408,9 +408,7 @@ function installer_admin_phase5()
 
     // install the security stuff here, but disable the registerMask and
     // and xarSecurityCheck functions until we've finished the installation process
-    sys::import('xaraya.xarSecurity');
-
-
+    sys::import('xaraya.security');
     sys::import('xaraya.modules');
 
     $modules = array('base','modules','roles','privileges');
@@ -1261,7 +1259,7 @@ function installer_admin_upgrade2()
      $thisdata['xarRelease'] = xarConfigGetVar('System.Core.VersionSub');
 
      //Load this early
-     sys::import('lib.xarTableDDL');
+     sys::import('xaraya.tableddl');
 
      $prefix = xarDB::getPrefix();
      $dbconn =& xarDB::getConn();

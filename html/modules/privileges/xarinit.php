@@ -11,7 +11,7 @@
  * @link http://xaraya.com/index.php/release/1098.html
  */
 
-sys::import('xaraya.xarTableDDL');
+sys::import('xaraya.tableddl');
 
  /**
  * Initialise the privileges module

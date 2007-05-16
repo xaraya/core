@@ -295,7 +295,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Bring HTTP Protocol Server/Request/Response utilities into the story
      *
      */
-    sys::import('xaraya.xarServer');
+    sys::import('xaraya.server');
     $systemArgs = array('enableShortURLsSupport' => xarConfigGetVar('Site.Core.EnableShortURLsSupport'),
                         'defaultModuleName'      => xarConfigGetVar('Site.Core.DefaultModuleName'),
                         'defaultModuleType'      => xarConfigGetVar('Site.Core.DefaultModuleType'),
@@ -308,7 +308,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Bring Multi Language System online
      *
      */
-    sys::import('xaraya.xarMLS');
+    sys::import('xaraya.mls');
     // FIXME: Site.MLS.MLSMode is NULL during install
     $systemArgs = array('MLSMode'             => xarConfigGetVar('Site.MLS.MLSMode'),
 //                        'translationsBackend' => xarConfigGetVar('Site.MLS.TranslationsBackend'),
@@ -333,7 +333,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
     if ($whatToLoad & XARCORE_SYSTEM_SESSION)
     {
-        sys::import('xaraya.xarSession');
+        sys::import('xaraya.sessions');
 
         $systemArgs = array(
             'securityLevel'     => xarConfigGetVar('Site.Session.SecurityLevel'),
@@ -386,7 +386,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Start BlockLayout Template Engine
      *
      */
-    sys::import('xaraya.xarTemplate');
+    sys::import('xaraya.templates');
 
     $systemArgs = array(
         'enableTemplatesCaching' => xarConfigGetVar('Site.BL.CacheTemplates'),
@@ -406,9 +406,9 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     **/
     if ($whatToLoad & XARCORE_SYSTEM_USER)
     {
-        sys::import('xaraya.xarUser');
-        sys::import('xaraya.xarSecurity');
-//        xarSecurity_init();
+        sys::import('xaraya.users');
+        sys::import('xaraya.security');
+
         // Start User System
         $systemArgs = array('authenticationModules' => xarConfigGetVar('Site.User.AuthenticationModules'));
         xarUser_init($systemArgs, $whatToLoad);

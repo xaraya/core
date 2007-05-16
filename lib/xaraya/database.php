@@ -8,7 +8,11 @@
  * @link http://www.xaraya.com
  * @subpackage database
  * @author Marco Canini
-*/
+**/
+
+// Import our db abstraction layer
+// Theoretically any adodb like layer could come in here.
+sys::import('xaraya.creole');
 
 /**
  * Initializes the database connection.
@@ -33,15 +37,13 @@
 **/
 function xarDB_init(array &$args, $whatElseIsGoingLoaded)
 {
-    if(!isset($args['doConnect'])) $args['doConnect'] = true;
     xarDB::setPrefix($args['prefix']);
 
-    sys::import('xaraya.creole');
     // Register postgres driver, since Creole uses a slightly different alias
     // We do this here so we can remove customisation from creole lib.
     xarDB::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
 
-    if($args['doConnect']) xarDBNewConn($args);
+    if(!isset($args['doConnect']) or $args['doConnect']) xarDBNewConn($args);
 
     // BlockLayout Template Engine Tables
     // FIXME: this doesnt belong here

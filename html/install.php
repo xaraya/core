@@ -67,9 +67,9 @@ include 'modules/installer/xarfunctions.php';
 sys::import('xaraya.log');
 sys::import('xaraya.events');
 sys::import('xaraya.variables');
-sys::import('xaraya.xarServer');
-sys::import('xaraya.xarMLS');
-sys::import('xaraya.xarTemplate');
+sys::import('xaraya.server');
+sys::import('xaraya.mls');
+sys::import('xaraya.templates');
 
 // Start Logging Facilities as soon as possible
 $systemArgs = array();

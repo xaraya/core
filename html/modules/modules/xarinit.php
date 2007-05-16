@@ -11,7 +11,7 @@
  * @link http://xaraya.com/index.php/release/1.html
  */
 // Load Table Maintainance API
-sys::import('xaraya.xarTableDDL');
+sys::import('xaraya.tableddl');
 /**
  * Initialise the modules module
  *

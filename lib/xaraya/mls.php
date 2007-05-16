@@ -32,7 +32,7 @@ define('XARMLS_DNTYPE_CORE', 1);
 define('XARMLS_DNTYPE_THEME', 2);
 define('XARMLS_DNTYPE_MODULE', 3);
 
-sys::import('xaraya.xarLocale');
+sys::import('xaraya.locales');
 sys::import('xaraya.transforms.xarCharset');
 sys::import('xaraya.mlsbackends.reference');
 

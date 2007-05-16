@@ -16,11 +16,8 @@
  *
  * @author John Cox <niceguyeddie@xaraya.com>
  * @access public
- * @param none $
  * @return true on success or void or false on failure
- * @throws 'DATABASE_ERROR'
- * @todo nothing
- */
+**/
 function mail_init()
 {
     xarModVars::set('mail', 'server', 'mail');
@@ -61,9 +58,7 @@ function mail_init()
  * Activate the mail module
  *
  * @access public
- * @param none $
- * @returns bool
- * @throws DATABASE_ERROR
+ * @return bool
  */
 function mail_activate()
 {
@@ -77,7 +72,6 @@ function mail_activate()
  * @access public
  * @param  $oldVersion
  * @return true on success or false on failure
- * @throws no exceptions
  * @todo create separate xar_mail_queue someday
  * @todo allow mail gateway functionality
  */
@@ -130,7 +124,6 @@ function mail_upgrade($oldVersion)
  *
  * @author John Cox <niceguyeddie@xaraya.com>
  * @access public
- * @param no $ parameters
  * @return true on success or false on failure
  * @todo restore the default behaviour prior to 1.0 release
  */

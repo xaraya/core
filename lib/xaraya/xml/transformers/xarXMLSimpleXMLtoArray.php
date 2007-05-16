@@ -1,6 +1,6 @@
 <?php
 
-sys::import('xaraya.xarXML');
+sys::import('xaraya.xml.parser');
 
 /**
  * This handler was made to handle ONLY Simple XML (+attributes), creating
