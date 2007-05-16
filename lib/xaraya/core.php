@@ -129,6 +129,8 @@ if(!class_exists('sys'))
     // @todo: this aint right, it's not here, but one level up.
     include (dirname(__FILE__).'/bootstrap.php');
 }
+// Before we do anything make sure we can except out of code in a predictable matter
+sys::import('xaraya.exceptions');
 
 /**
  * Initializes the core engine
@@ -142,35 +144,19 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 {
     static $current_load_level = XARCORE_SYSTEM_NONE;
     static $first_load = true;
+
     $new_load_level = $whatToLoad;
 
-    // Make sure it only loads the current load level (or less than the current
-    // load level) once.
+    // Make sure it only loads the current load level (or less than the current load level) once.
     if ($whatToLoad <= $current_load_level) {
-        if (!$first_load) {
-            return true; // Does this ever happen? If so, we might consider an assert
-        } else {
-            $first_load = false;
-        }
+        if (!$first_load) return true; // Does this ever happen? If so, we might consider an assert
+        $first_load = false;
     } else {
         // if we are loading a load level higher than the
         // current one, make sure to XOR out everything
         // that we've already loaded
         $whatToLoad ^= $current_load_level;
     }
-
-    /*
-     * Start the different subsystems
-     */
-
-    /*
-     * Start Exception Handling System
-     *
-     * Before we do anything make sure we can except out of code in a predictable matter
-     *
-     */
-    sys::import('xaraya.exceptions');
-
 
     /*
      * At this point we should be able to catch all low level errors, so we can start the debugger
