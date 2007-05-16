@@ -296,11 +296,10 @@ function installer_admin_phase5()
                         'databaseHost' => $dbHost,
                         'databaseType' => $dbType,
                         'databaseName' => $dbName,
-                        'systemTablePrefix' => $dbPrefix,
-                        'siteTablePrefix' => $dbPrefix,
+                        'prefix' => $dbPrefix,
                         'doConnect' => false);
 
-    sys::import('xaraya.xarDB');
+    sys::import('xaraya.database');
     xarDB_Init($init_args, XARCORE_SYSTEM_NONE);
 
     // Not all Database Servers support selecting the specific db *after* connecting
@@ -342,7 +341,7 @@ function installer_admin_phase5()
         return $data;
     }
 
-    sys::import('lib.xarTableDDL');
+    sys::import('xaraya.xarTableDDL');
     // Create the database if necessary
     if ($createDB) {
         $data['confirmDB']  = true;
@@ -412,7 +411,7 @@ function installer_admin_phase5()
     sys::import('xaraya.xarSecurity');
 
 
-    sys::import('xaraya.xarMod');
+    sys::import('xaraya.modules');
 
     $modules = array('base','modules','roles','privileges');
     foreach ($modules as $module)

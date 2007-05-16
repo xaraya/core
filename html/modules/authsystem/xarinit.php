@@ -73,12 +73,10 @@ function authsystem_upgrade($oldVersion)
            $modulesTable = xarDB::getPrefix() .'_modules';
            $modid = xarModGetIDFromName('authsystem');
            // update the modversion class and admin capable
-           $query = "UPDATE $modulesTable
-                     SET class         = 'Authentication',
-                         admin_capable = 1
+           $query = "UPDATE $modulesTable SET class=?, admin_capable=?
                      WHERE regid = ?";
-           $bindvars = array($modid);
-           $result =& $dbconn->Execute($query,$bindvars);
+           $bindvars = array('Authentication',1,$modid);
+           $result = $dbconn->Execute($query,$bindvars);
 
            // Create the login block
            if (!$result) return;

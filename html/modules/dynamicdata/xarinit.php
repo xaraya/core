@@ -10,7 +10,7 @@
  * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  */
-sys::import('lib.xarTableDDL');
+sys::import('xaraya.xarTableDDL');
 /**
  * Initialise the dynamicdata module
  *
@@ -33,9 +33,6 @@ function dynamicdata_init()
     $dynamic_relations = $xartable['dynamic_relations'];
     $dynamic_properties_def = $xartable['dynamic_properties_def'];
     $modulestable = $xartable['modules'];
-
-    //Load Table Maintenance API
-    sys::import('lib.xarTableDDL');
 
     // Create tables inside a transaction
     try {
@@ -768,6 +765,7 @@ function dynamicdata_createPropDefTable()
     // Get existing DB info
     $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();
+    $prefix = xarDB::getPrefix();
     $dynamic_properties_def = $xartable['dynamic_properties_def'];
 
     $propdefs = array(

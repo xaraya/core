@@ -10,7 +10,7 @@
  */
 
 // Load Table Maintainance API
-sys::import('lib.xarTableDDL');
+sys::import('xaraya.xarTableDDL');
 
 /**
  * Initialise the themes module

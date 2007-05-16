@@ -304,15 +304,6 @@ function base_menublock_display($blockinfo)
                     }
 
                 }else{
-/*
-                    $modid = xarModGetIDFromName($mod['name']);
-                    $modinfo = xarModGetInfo($modid);
-                    if($modinfo){
-                        $desc = $modinfo['displaydescription'];
-                    } else {
-                           $desc = xarML('No description');
-                    }
-*/
                     $labelDisplay = $label;
                     $usermods[] = array('label' => $labelDisplay,
                                         'link' => $link,
