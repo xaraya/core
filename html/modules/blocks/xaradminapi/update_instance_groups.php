@@ -41,7 +41,7 @@ function blocks_adminapi_update_instance_groups($args)
         return;
     }
 
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $xartable =& xarDBGetTables();
     $block_groups_table = $xartable['block_groups'];
     $block_instances_table = $xartable['block_instances'];

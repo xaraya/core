@@ -48,7 +48,7 @@ class Role extends DataObject
         $args = $descriptor->getArgs();
         extract($args);
 
-        $this->dbconn =& xarDBGetConn();
+        $this->dbconn = xarDB::getConn();
 
         // dodgy. remove later on
         sys::import('modules.privileges.xartables');

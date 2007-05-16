@@ -42,7 +42,7 @@ function themes_adminapi_upgrade($args)
     if (!isset($themeFileInfo)) return;
 
     // Note the changes in the database...
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $xartable =& xarDBGetTables();
 
      $sql = "UPDATE $xartable[themes]

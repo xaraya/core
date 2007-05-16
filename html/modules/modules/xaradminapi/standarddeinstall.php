@@ -18,7 +18,7 @@ function modules_adminapi_standarddeinstall($args)
     extract($args);
     if (!isset($module)) return false;
 
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $xartables =& xarDB::getTables();
 
     //Remove database tables
@@ -51,14 +51,14 @@ function modules_adminapi_standarddeinstall($args)
             if (!$role->purge()) return;
         }
     } catch (Exception $e) {}
-    
+
     //Delete all DD objects created by this module
     try {
         $dd_objects = unserialize(xarModVars::get($module,'dd_objects'));
         foreach ($dd_objects as $key => $value)
             $result = xarModAPIFunc('dynamicdata','admin','deleteobject',array('objectid' => $value));
     } catch (Exception $e) {}
-    
+
 // Remove the categories created by this module
     try {
         xarModAPIFunc('categories', 'admin', 'deletecat',

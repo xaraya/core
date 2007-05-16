@@ -30,7 +30,7 @@ function dynamicdata_util_meta($args)
     if (!empty($showdb)) {
         $data['tables'] = array();
 
-        $dbconn = xarDBGetConn();
+        $dbconn = xarDB::getConn();
         // Note: this only works if we use the same database connection
         $data['databases'] = $dbconn->MetaDatabases();
         if (empty($db)) {

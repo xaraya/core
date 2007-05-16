@@ -59,7 +59,7 @@ function roles_onlineblock_display($blockinfo)
     // Database setup
     // TODO: do we need this query? I'd have thought userapi/getallactive gives
     // us everything we need.
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $xartable =& xarDBGetTables();
     $sessioninfotable = $xartable['session_info'];
     $activetime = time() - (xarConfigGetVar('Site.Session.Duration') * 60);

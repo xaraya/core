@@ -31,7 +31,7 @@ function modules_adminapi_gethooklist($args)
         $smodId = $smodInfo['systemid'];
     }
 
-    $dbconn  =& xarDBGetConn();
+    $dbconn  = xarDB::getConn();
     $xartable =& xarDBGetTables();
 
     // TODO: allow finer selection of hooks based on type etc., and

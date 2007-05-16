@@ -35,7 +35,7 @@ function roles_userapi_getactive($args)
     if(!xarSecurityCheck('ReadRole')) return;
 
     // Get database setup
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $xartable =& xarDBGetTables();
 
     $sessioninfoTable = $xartable['session_info'];

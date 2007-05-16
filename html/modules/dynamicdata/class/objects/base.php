@@ -504,7 +504,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         if(empty($args['moduleid']))
             $args['moduleid'] = $this->moduleid;
 
-        $dbconn = xarDBGetConn();
+        $dbconn = xarDB::getConn();
         $xartable = xarDBGetTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];

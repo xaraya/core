@@ -25,7 +25,7 @@ function roles_adminapi_recall($args)
     if (!isset($state) || $state == 0) throw new EmptyParameterException('state');
 
     // Get database setup
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $xartable =& xarDBGetTables();
     $rolestable = $xartable['roles'];
 

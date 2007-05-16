@@ -19,7 +19,7 @@ function blocks_userapi_getcacheblock($args)
     if(!isset($bid)) throw new EmptyParameterException('bid');
     if(!is_numeric($bid)) throw new BadParameterException($bid);
 
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $xartable =& xarDBGetTables();
     $cacheBlockTable = $xartable['cache_blocks'];
     $instance = array();

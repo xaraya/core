@@ -28,7 +28,7 @@ function roles_admin_purge($args)
     extract($args);
 
     // Get database setup
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $xartable =& xarDBGetTables();
     $rolestable = $xartable['roles'];
 

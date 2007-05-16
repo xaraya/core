@@ -27,7 +27,7 @@ function blocks_adminapi_delete_instance($args)
     // Security
     if (!xarSecurityCheck('DeleteBlock', 1, 'Block', "::$bid")) {return;}
 
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $xartable =& xarDBGetTables();
     $block_instances_table = $xartable['block_instances'];
     $block_group_instances_table = $xartable['block_group_instances'];

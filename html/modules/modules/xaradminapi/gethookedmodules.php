@@ -31,7 +31,7 @@ function modules_adminapi_gethookedmodules($args)
     // Argument check
     if (empty($hookModName)) throw new EmptyParameterException('hookModName');
 
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $xartable      =& xarDBGetTables();
 
     $bindvars = array();

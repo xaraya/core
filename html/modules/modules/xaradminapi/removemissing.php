@@ -29,7 +29,7 @@ function modules_adminapi_removemissing($args)
     //    if (!xarVarFetch('remove', 'str', $remove, NULL, XARVAR_NOT_REQUIRED)) return;
     // Get module information
     //    $modinfo = xarModGetInfo($regid);
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $tables =& xarDBGetTables();
 
     $modInfo = xarModGetInfo($regid);

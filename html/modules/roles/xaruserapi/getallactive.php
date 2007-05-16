@@ -34,7 +34,7 @@ function roles_userapi_getallactive($args)
     $include_anonymous = (bool) $include_anonymous;
 
     // Get database setup
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $xartable =& xarDBGetTables();
 
     $sessioninfoTable = $xartable['session_info'];

@@ -43,7 +43,7 @@ function modules_adminapi_updateproperties($args)
         // We have something to update
         $q .= join(',',$uparts) . ' WHERE regid=?';
         $bindvars[] = $regid;
-        $dbconn = xarDbGetConn();
+        $dbconn = xarDB::getConn();
         $dbconn->Execute($q, $bindvars);
     }
     return true;

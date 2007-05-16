@@ -48,7 +48,7 @@ function dynamicdata_util_relations($args)
 
     $data['prop'] = xarModAPIFunc('dynamicdata','user','getproperty',array('type' => 'fieldtype', 'name' => 'dummy'));
 
-    $dbconn = xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $dbInfo = $dbconn->getDatabaseInfo();
     // Pass the full info object to the template, let them figure out how and what
     $data['tables'] = $dbInfo->getTables();

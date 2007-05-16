@@ -51,7 +51,7 @@ function roles_user_search()
     }
 
     // Need the database connection for quoting strings.
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
 
     // TODO: support wild cards / boolean / quotes / ... (cfr. articles) ?
 
