@@ -39,10 +39,10 @@ class PassBoxProperty extends TextBoxProperty
         if (!empty($this->validation) && strchr($this->validation,':')) {
             list($min,$max) = explode(':',$this->validation);
             if ($min !== '' && is_numeric($min)) {
-                $this->min = $min; // could be int or float - cfr. FloatBox below
+                $this->min = $min;
             }
             if ($max !== '' && is_numeric($max)) {
-                $this->max = $max; // could be int or float - cfr. FloatBox below
+                $this->max = $max;
             }
         }
     }
@@ -54,6 +54,11 @@ class PassBoxProperty extends TextBoxProperty
         $a1['desc'] = 'Password Text Box';
         $a1['reqmodules'] = array('roles');
         return array($a1);
+    }
+
+    function setValue($value)
+    {
+         $this->value = $this->encrypt($value);
     }
 
     public function validateValue($value = null)
@@ -78,7 +83,7 @@ class PassBoxProperty extends TextBoxProperty
             $this->value = null;
             return false;
         } else {
-            $this->value = $this->encrypt($value);
+            $this->value = $value;
             return true;
         }
     }
@@ -86,8 +91,9 @@ class PassBoxProperty extends TextBoxProperty
     public function encrypt($value = null)
     {
         if (empty($value)) return null;
-        return MD5($value);
+        return md5($value);
     }
+
 
     public function showInput(Array $data = array())
     {
@@ -109,7 +115,7 @@ class PassBoxProperty extends TextBoxProperty
     public function showOutput(Array $data = array())
     {
         //we don't really want to show the password, do we?
-        $data['value'] = '';
+        $data['value'] = ' ';
 
         return parent::showOutput($data);
     }
