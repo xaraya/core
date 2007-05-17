@@ -32,7 +32,7 @@ function modules_adminapi_gethookedmodules($args)
     if (empty($hookModName)) throw new EmptyParameterException('hookModName');
 
     $dbconn = xarDB::getConn();
-    $xartable      =& xarDBGetTables();
+    $xartable      = xarDB::getTables();
 
     $bindvars = array();
     // TODO: This looks awfally similar to gethooklist in xarMod.php, investigate later

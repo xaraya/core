@@ -229,7 +229,7 @@ function modules_upgrade($oldVersion)
 {
     // Get database information
     $dbconn = xarDB::getConn();
-    $tables =& xarDBGetTables();
+    $tables = xarDB::getTables();
 
     switch($oldVersion) {
     case '2.3.0':

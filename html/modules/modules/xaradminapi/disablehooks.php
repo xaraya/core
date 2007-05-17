@@ -37,7 +37,7 @@ function modules_adminapi_disablehooks($args)
 
     // Rename operation
     $dbconn = xarDB::getConn();
-    $xartable =& xarDBGetTables();
+    $xartable = xarDB::getTables();
 
     // Delete hooks regardless
     // New query: select on the mod id's instead of their names

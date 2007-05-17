@@ -29,7 +29,7 @@ function blocks_adminapi_unregister_block_type($args)
     extract($args);
 
     $dbconn = xarDB::getConn();
-    $xartable =& xarDBGetTables();
+    $xartable = xarDB::getTables();
 
     $block_types_table     = $xartable['block_types'];
     $block_instances_table = $xartable['block_instances'];

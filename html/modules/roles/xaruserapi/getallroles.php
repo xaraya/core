@@ -30,7 +30,7 @@ function roles_userapi_getallroles($args)
 
     sys::import('modules.roles.class.xarQuery');
     $q = new xarQuery();
-    $xartable =& xarDBGetTables();
+    $xartable = xarDB::getTables();
     $q->addtable($xartable['roles'],'r');
 
     // Order

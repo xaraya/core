@@ -33,7 +33,7 @@ function roles_admin_createmail()
         $type  = $role->getType() ? 'selection' : 'single';
     }
 
-    $xartable =& xarDBGetTables();
+    $xartable = xarDB::getTables();
     if ($type == 'single') {
         $uid = $role->getID();
         $data['users'][$role->getID()] =

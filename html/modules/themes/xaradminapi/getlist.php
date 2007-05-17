@@ -78,7 +78,7 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
 
     // Determine the right tables to use
     $dbconn = xarDB::getConn();
-    $tables =& xarDBGetTables();
+    $tables = xarDB::getConn();
     $themestable = $tables['themes'];
 
     // Construct an array with where conditions and their bind variables

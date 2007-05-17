@@ -52,7 +52,7 @@ function dynamicdata_admin_updateconfig($args)
     $proptypes = DataPropertyMaster::getPropertyTypes();
 
     $dbconn = xarDB::getConn();
-    $xartable = xarDBGetTables();
+    $xartable = xarDB::getTables();
 
     $dynamicproptypes = $xartable['dynamic_properties_def'];
 

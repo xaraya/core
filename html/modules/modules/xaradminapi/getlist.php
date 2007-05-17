@@ -64,7 +64,7 @@ function modules_adminapi_getlist($args)
 
     // Determine the tables we need to consider
     $dbconn = xarDB::getConn();
-    $tables =& xarDBGetTables();
+    $tables = xarDB::getTables();
     $modulestable = $tables['modules'];
 
     // Construct the order by clause and join it up into one string

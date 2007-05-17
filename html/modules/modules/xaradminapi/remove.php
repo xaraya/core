@@ -26,7 +26,7 @@ function modules_adminapi_remove($args)
 
     // Remove variables and module
     $dbconn = xarDB::getConn();
-    $tables =& xarDBGetTables();
+    $tables = xarDB::getTables();
 
     // Get module information
     $modinfo = xarModGetInfo($regid);
