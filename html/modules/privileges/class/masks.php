@@ -57,7 +57,7 @@ class xarMasks extends Object
     {
         self::$dbconn = xarDB::getConn();
         xarModAPILoad('privileges');
-        $xartable =& xarDBGetTables();
+        $xartable = xarDB::getTables();
         self::$privilegestable = $xartable['privileges'];
         self::$privmemberstable = $xartable['privmembers'];
         self::$modulestable = $xartable['modules'];

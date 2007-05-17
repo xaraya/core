@@ -39,7 +39,7 @@ function roles_userapi_countallactive($args)
 
     // Get database setup
     $dbconn = xarDB::getConn();
-    $xartable =& xarDBGetTables();
+    $xartable = xarDB::getTables();
 
     $sessioninfoTable = $xartable['session_info'];
     $rolestable = $xartable['roles'];

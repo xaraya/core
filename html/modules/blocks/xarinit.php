@@ -265,7 +265,7 @@ function blocks_upgrade($oldVersion)
         xarRemoveInstances('blocks');
         //setup the new ones
         $dbconn = xarDB::getConn();
-        $xartable =& xarDBGetTables();
+        $xartable = xarDB::getTables();
         $prefix = xarDB::getPrefix();
 
         $blockGroupsTable    = $prefix . '_block_groups';

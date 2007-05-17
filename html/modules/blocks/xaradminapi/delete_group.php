@@ -28,7 +28,7 @@ function blocks_adminapi_delete_group($args)
     if (!xarSecurityCheck('DeleteBlock', 1, 'Block', "::$gid")) {return;}
 
     $dbconn = xarDB::getConn();
-    $xartable =& xarDBGetTables();
+    $xartable = xarDB::getTables();
     $block_groups_table = $xartable['block_groups'];
     $block_group_instances_table = $xartable['block_group_instances'];
 

@@ -23,7 +23,7 @@ function privileges_admin_modifyrealm()
     if (!xarVarFetch('id',       'int', $id,      '',      XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('confirmed', 'bool', $confirmed, false, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('name',      'str:1.20', $name,      '',      XARVAR_NOT_REQUIRED)) {return;}
-    $xartable =& xarDBGetTables();
+    $xartable = xarDB::getTables();
 
     sys::import('modules.roles.class.xarQuery');
     if (empty($confirmed)) {

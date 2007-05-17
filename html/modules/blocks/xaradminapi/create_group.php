@@ -32,7 +32,7 @@ function blocks_adminapi_create_group($args)
 
     // Load up database
     $dbconn = xarDB::getConn();
-    $xartable =& xarDBGetTables();
+    $xartable = xarDB::getTables();
     $block_groups_table =& $xartable['block_groups'];
 
     // Insert group into table

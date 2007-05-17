@@ -54,7 +54,7 @@ class Role extends DataObject
         sys::import('modules.privileges.xartables');
         xarDB::importTables(privileges_xartables());
 
-        $xartable =& xarDBGetTables();
+        $xartable = xarDB::getTables();
         $this->rolestable = $xartable['roles'];
         $this->rolememberstable = $xartable['rolemembers'];
         $this->privilegestable = $xartable['privileges'];
@@ -340,7 +340,7 @@ class Role extends DataObject
         // We'll have to get it.
         xarLogMessage("ROLE: getting privileges for uid: $this->properties['id']->value");
         // TODO: propagate the use of 'All'=null for realms through the API instead of the flip-flopping
-        $xartable =& xarDBGetTables();
+        $xartable = xarDB::getTables();
         $query = "SELECT  p.id, p.name, r.name, p.module_id,
                           component, instance, level, description
                   FROM    $this->acltable acl,

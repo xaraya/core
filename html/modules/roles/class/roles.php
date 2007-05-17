@@ -45,7 +45,7 @@ class xarRoles extends Object
     {
         self::$dbconn = xarDB::getConn();
         xarModAPILoad('roles');
-        $xartable =& xarDBGetTables();
+        $xartable = xarDB::getTables();
         self::$rolestable = $xartable['roles'];
         self::$rolememberstable = $xartable['rolemembers'];
     }

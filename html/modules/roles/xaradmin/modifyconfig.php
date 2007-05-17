@@ -37,7 +37,7 @@ function roles_admin_modifyconfig()
                 throw new Exception('The designated site admin does not have administration privileges');
 
             $dbconn   = xarDB::getConn();
-            $xartable =& xarDBGetTables();
+            $xartable = xarDB::getTables();
             $acltable = xarDB::getPrefix() . '_security_acl';
             $query    = "SELECT partid FROM $acltable
                          WHERE permid   = ?";

@@ -28,7 +28,7 @@ function privileges_admin_newrealm()
     if ($confirmed) {
         if (!xarSecConfirmAuthKey()) return;
 
-        $xartable =& xarDBGetTables();
+        $xartable = xarDB::getTables();
         sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery('SELECT',$xartable['security_realms'],'name');
         $q->eq('name', $name);

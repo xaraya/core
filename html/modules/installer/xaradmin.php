@@ -713,7 +713,7 @@ function installer_admin_create_administrator()
 
     // Load up database
     $dbconn = xarDB::getConn();
-    $tables =& xarDBGetTables();
+    $tables = xarDB::getTables();
 
     $blockGroupsTable = $tables['block_groups'];
 
@@ -1024,7 +1024,7 @@ function installer_admin_confirm_configuration()
 
         // Load up database
         $dbconn = xarDB::getConn();
-        $tables =& xarDBGetTables();
+        $tables = xarDB::getTables();
 
         $blockGroupsTable = $tables['block_groups'];
 
@@ -1091,7 +1091,7 @@ function installer_admin_cleanup()
 
     // Load up database
     $dbconn = xarDB::getConn();
-    $tables =& xarDBGetTables();
+    $tables = xarDB::getTables();
 
     $blockGroupsTable = $tables['block_groups'];
 

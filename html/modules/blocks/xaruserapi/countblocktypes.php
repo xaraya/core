@@ -28,7 +28,7 @@ function blocks_userapi_countblocktypes($args)
     $bind = array();
 
     $dbconn = xarDB::getConn();
-    $xartable =& xarDBGetTables();
+    $xartable = xarDB::getTables();
     $block_types_table = $xartable['block_types'];
     $modules_table     = $xartable['modules'];
 

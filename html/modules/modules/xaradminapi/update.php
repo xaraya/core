@@ -28,7 +28,7 @@ function modules_adminapi_update($args)
 
     // Rename operation
     $dbconn = xarDB::getConn();
-    $xartable =& xarDBGetTables();
+    $xartable = xarDB::getTables();
 
     // Get module name
     $modinfo = xarModGetInfo($regid);

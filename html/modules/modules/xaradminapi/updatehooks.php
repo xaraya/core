@@ -29,7 +29,7 @@ function modules_adminapi_updatehooks($args)
 
     // Get database connection and table names
     $dbconn = xarDB::getConn();
-    $xartable =& xarDBGetTables();
+    $xartable = xarDB::getTables();
 
     // Get module name
     $modinfo = xarModGetInfo($regid);

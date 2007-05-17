@@ -34,7 +34,7 @@ function blocks_userapi_groupgetinfo($args)
     }
 
     $dbconn = xarDB::getConn();
-    $tables =& xarDBGetTables();
+    $tables = xarDB::getTables();
 
     $blockInstancesTable      = $tables['block_instances'];
     $blockTypesTable          = $tables['block_types'];

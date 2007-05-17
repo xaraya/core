@@ -31,7 +31,7 @@ function blocks_adminapi_delete_cacheinstance($args)
 
     // Delete the cached block instance, if any
     $dbconn = xarDB::getConn();
-    $xartable =& xarDBGetTables();
+    $xartable = xarDB::getTables();
     if (!empty($xartable['cache_blocks'])) {
         $cacheblockstable = $xartable['cache_blocks'];
         $query = "DELETE FROM $cacheblockstable WHERE id=?";

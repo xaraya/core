@@ -56,7 +56,7 @@ class PrivilegesTree extends Tree
     {
         //FIXME this is too unwieldy and largely duplicating a similar query inxarPrivileges
         $dbconn = xarDB::getConn();
-        $xartable =& xarDBGetTables();
+        $xartable = xarDB::getTables();
         $query = "SELECT p.id, p.name, r.name,
                          m.name, p.component, p.instance,
                          p.level,  p.description, pm.parentid

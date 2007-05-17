@@ -27,7 +27,7 @@ function blocks_adminapi_activate($args)
     if(!xarSecurityCheck('CommentBlock',1,'Block',"::$bid")) {return;}
 
     $dbconn = xarDB::getConn();
-    $xartable =& xarDBGetTables();
+    $xartable = xarDB::getTables();
     $blockstable = $xartable['block_instances'];
 
     // Activate

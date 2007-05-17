@@ -46,7 +46,7 @@ class ApiDeprecationException extends DeprecationExceptions
  * @deprec replaced by sys::varpath()
  * @see    sys
  **/
-function xarCoreGetVarDirPath() { return sys::varpath(); }
+function sys::varpath() { return sys::varpath(); }
 
 /**
  * Wrapper functions to support Xaraya 1 API for systemvars

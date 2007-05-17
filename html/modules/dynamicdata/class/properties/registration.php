@@ -49,7 +49,7 @@ class PropertyRegistration extends DataContainer
     static function clearCache()
     {
         $dbconn = xarDB::getConn();
-        $tables = xarDBGetTables();
+        $tables = xarDB::getTables();
         $sql = "DELETE FROM $tables[dynamic_properties_def]";
         $res = $dbconn->ExecuteUpdate($sql);
         return $res;
@@ -82,7 +82,7 @@ class PropertyRegistration extends DataContainer
                 return false;
 
         $dbconn = xarDB::getConn();
-        $tables = xarDBGetTables();
+        $tables = xarDB::getTables();
         $propdefTable = $tables['dynamic_properties_def'];
 
         // Make sure the db is the same as in the old days
@@ -130,7 +130,7 @@ class PropertyRegistration extends DataContainer
             return xarVarGetCached('DynamicData','PropertyTypes');
         }
         $dbconn = xarDB::getConn();
-        $tables = xarDBGetTables();
+        $tables = xarDB::getTables();
         // Sort by required module(s) and then by name
         $query = "SELECT  p.prop_id, p.prop_name, p.prop_label,
                           p.prop_parent, p.prop_filepath, p.prop_class,

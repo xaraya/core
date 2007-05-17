@@ -343,7 +343,7 @@ function roles_delete()
      */
     // Get database information
     $dbconn = xarDB::getConn();
-    $tables =& xarDBGetTables();
+    $tables = xarDB::getTables();
 
     try {
         $dbconn->begin();

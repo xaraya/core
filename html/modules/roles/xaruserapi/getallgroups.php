@@ -20,7 +20,7 @@
 function roles_userapi_getallgroups($args)
 {
     extract($args);
-    $xartable =& xarDBGetTables();
+    $xartable = xarDB::getTables();
 
 // Security Check
     if(!xarSecurityCheck('ViewRoles')) return;
