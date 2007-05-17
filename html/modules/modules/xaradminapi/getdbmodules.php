@@ -26,7 +26,7 @@ function modules_adminapi_getdbmodules($args)
         $modregid = $regId;
     }
 
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $xartable =& xarDBGetTables();
 
     $dbModules = array();

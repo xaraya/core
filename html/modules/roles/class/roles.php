@@ -43,7 +43,7 @@ class xarRoles extends Object
 
     public static function initialize()
     {
-        self::$dbconn =& xarDBGetConn();
+        self::$dbconn = xarDB::getConn();
         xarModAPILoad('roles');
         $xartable =& xarDBGetTables();
         self::$rolestable = $xartable['roles'];

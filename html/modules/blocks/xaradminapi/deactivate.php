@@ -29,7 +29,7 @@ function blocks_adminapi_deactivate($args)
     // Security
     if(!xarSecurityCheck('CommentBlock',1,'Block',"::$bid")) return;
 
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $xartable =& xarDBGetTables();
     $blockstable = $xartable['block_instances'];
 

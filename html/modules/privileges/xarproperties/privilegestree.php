@@ -55,7 +55,7 @@ class PrivilegesTree extends Tree
     function createnodes(TreeNode $node)
     {
         //FIXME this is too unwieldy and largely duplicating a similar query inxarPrivileges
-        $dbconn =& xarDBGetConn();
+        $dbconn = xarDB::getConn();
         $xartable =& xarDBGetTables();
         $query = "SELECT p.id, p.name, r.name,
                          m.name, p.component, p.instance,

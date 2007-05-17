@@ -24,7 +24,7 @@ sys::import('xaraya.tableddl');
  */
 function base_init()
 {
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $tables =& xarDB::getTables();
 
     $prefix = xarDB::getPrefix();

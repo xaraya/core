@@ -379,7 +379,7 @@ function installer_admin_phase5()
     // for which modules are already installed
 
     if (isset($removetables) && $removetables) {
-        $dbconn =& xarDBGetConn();
+        $dbconn = xarDB::getConn();
         $dbinfo = $dbconn->getDatabaseInfo();
         try {
             $dbconn->begin();
@@ -712,7 +712,7 @@ function installer_admin_create_administrator()
     }
 
     // Load up database
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $tables =& xarDBGetTables();
 
     $blockGroupsTable = $tables['block_groups'];
@@ -933,7 +933,7 @@ function installer_admin_confirm_configuration()
         /*********************************************************************
         * Empty the privilege tables
         *********************************************************************/
-/*         $dbconn =& xarDBGetConn();
+/*         $dbconn = xarDB::getConn();
         $prefix = xarDB::getPrefix();
         try {
             $dbconn->begin();
@@ -1023,7 +1023,7 @@ function installer_admin_confirm_configuration()
         $content['content'] = '';
 
         // Load up database
-        $dbconn =& xarDBGetConn();
+        $dbconn = xarDB::getConn();
         $tables =& xarDBGetTables();
 
         $blockGroupsTable = $tables['block_groups'];
@@ -1090,7 +1090,7 @@ function installer_admin_cleanup()
     $remove = xarModDelVar('installer','modules');
 
     // Load up database
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $tables =& xarDBGetTables();
 
     $blockGroupsTable = $tables['block_groups'];

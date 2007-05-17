@@ -77,7 +77,7 @@ function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems 
     $orderByClause = join(', ', $orderByClauses);
 
     // Determine the right tables to use
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $tables =& xarDBGetTables();
     $themestable = $tables['themes'];
 

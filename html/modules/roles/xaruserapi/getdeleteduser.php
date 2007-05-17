@@ -41,7 +41,7 @@ function roles_userapi_getdeleteduser($args)
     if(!xarSecurityCheck('ReadRole')) return;
 
     // Get database setup
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $xartable =& xarDBGetTables();
 
     $rolestable = $xartable['roles'];

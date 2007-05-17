@@ -47,7 +47,7 @@ function dynamicdata_adminapi_deleteprop($args)
     // TODO: check based on other arguments too
     if(!xarSecurityCheck('DeleteDynamicDataField',1,'Field',"All:All:$prop_id")) return;
 
-    $dbconn = xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $xartable = xarDBGetTables();
     // It's good practice to name the table and column definitions you
     // are getting - $table and $column don't cut it in more complex

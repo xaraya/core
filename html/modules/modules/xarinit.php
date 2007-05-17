@@ -21,7 +21,7 @@ sys::import('xaraya.tableddl');
 function modules_init()
 {
     // Get database information
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $tables =& xarDB::getTables();
 
     $prefix = xarDB::getPrefix();
@@ -228,7 +228,7 @@ function modules_activate()
 function modules_upgrade($oldVersion)
 {
     // Get database information
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $tables =& xarDBGetTables();
 
     switch($oldVersion) {

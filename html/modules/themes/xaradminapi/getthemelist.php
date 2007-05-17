@@ -52,7 +52,7 @@ function themes_adminapi_getthemelist($args)
     $orderByClause = join(', ', $orderByClauses);
 
     // Determine the tables we are going to use
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $tables =& xarDBGetTables();
     $themestable = $tables['themes'];
 

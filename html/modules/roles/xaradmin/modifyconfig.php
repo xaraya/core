@@ -36,7 +36,7 @@ function roles_admin_modifyconfig()
             if (!isset($adminpriv))
                 throw new Exception('The designated site admin does not have administration privileges');
 
-            $dbconn   =& xarDBGetConn();
+            $dbconn   = xarDB::getConn();
             $xartable =& xarDBGetTables();
             $acltable = xarDB::getPrefix() . '_security_acl';
             $query    = "SELECT partid FROM $acltable

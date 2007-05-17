@@ -61,7 +61,7 @@ class xarQuery extends Object
         $this->key = time();             // ?
         $this->_addtables($tables);
         $this->_addfields($fields);
-        $this->dbconn =& xarDBGetConn();
+        $this->dbconn = xarDB::getConn();
     }
 
     //---------------------------------------------------------
@@ -116,7 +116,7 @@ class xarQuery extends Object
     function open()
     {
         // CHECKME: no reference here? why not?
-        $this->openconnection(xarDBGetConn());
+        $this->openconnection(xarDB::getConn());
     }
 
     function uselimits()
@@ -517,7 +517,7 @@ class xarQuery extends Object
     }
     private function _getcondition($key)
     {
-        if (!isset($this->dbconn)) $this->dbconn =& xarDBGetConn();
+        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
         $condition = $this->conditions[$key];
 
         if (!isset($condition['field2']) || $condition['field2'] === 'NULL') {
@@ -865,7 +865,7 @@ class xarQuery extends Object
     }
     function openconnection($x = '')
     {
-        if (empty($x)) $this->dbconn =& xarDBGetConn();
+        if (empty($x)) $this->dbconn = xarDB::getConn();
         else $this->dbconn = $x;
     }
     function getconnection()
@@ -904,13 +904,13 @@ class xarQuery extends Object
     // Next id????
     function nextid($table="", $id="")
     {
-        if (!isset($this->dbconn)) $this->dbconn =& xarDBGetConn();
+        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
         return $this->dbconn->getLastId($table);
     }
 
     function lastid($table="", $id="")
     {
-        if (!isset($this->dbconn)) $this->dbconn =& xarDBGetConn();
+        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
         $result = $this->dbconn->Execute("SELECT MAX($id) FROM $table");
         list($id) = $result->fields;
         return $id;

@@ -41,7 +41,7 @@ class xarPrivilege extends xarMask
     {
         extract($pargs);
 
-        $this->dbconn =& xarDBGetConn();
+        $this->dbconn = xarDB::getConn();
         $xartable =& xarDBGetTables();
         $this->privilegestable = $xartable['privileges'];
         $this->privmemberstable = $xartable['privmembers'];

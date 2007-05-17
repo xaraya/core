@@ -38,7 +38,7 @@ function roles_adminapi_stateupdate($args)
 
     if ($item == false) throw new IDNotFoundException($uid);
 
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $xartable =& xarDBGetTables();
 
     $rolesTable = $xartable['roles'];

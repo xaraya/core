@@ -25,7 +25,7 @@ function modules_adminapi_remove($args)
     if(!xarSecurityCheck('AdminModules')) return;
 
     // Remove variables and module
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $tables =& xarDBGetTables();
 
     // Get module information

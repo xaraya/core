@@ -66,7 +66,7 @@ function dynamicdata_utilapi_updatehooks($args)
         }
     }
 
-    $dbconn = xarDBGetConn();
+    $dbconn = xarDB::getConn();
     foreach ($hookmap as $fromhook => $tohook) {
         if (empty($fromhook) || empty($tohook)) continue;
         if ($fromhook != $tohook) continue; // no moving of hooked content atm

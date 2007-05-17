@@ -45,7 +45,7 @@ function blocks_adminapi_create_type($args)
         return $origtype['tid'];
     }
 
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $xartable =& xarDBGetTables();
     $block_types_table = $xartable['block_types'];
 

@@ -21,7 +21,7 @@ sys::import('xaraya.tableddl');
 function themes_init()
 {
     // Get database information
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $tables =& xarDB::getTables();
 
     $prefix = xarDB::getPrefix();

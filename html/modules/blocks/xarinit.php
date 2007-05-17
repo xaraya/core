@@ -18,7 +18,7 @@
 function blocks_init()
 {
     // Get database information
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $xartable =& xarDB::getTables();
     $prefix = xarDB::getPrefix();
 
@@ -264,7 +264,7 @@ function blocks_upgrade($oldVersion)
         */
         xarRemoveInstances('blocks');
         //setup the new ones
-        $dbconn =& xarDBGetConn();
+        $dbconn = xarDB::getConn();
         $xartable =& xarDBGetTables();
         $prefix = xarDB::getPrefix();
 

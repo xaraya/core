@@ -36,7 +36,7 @@ function modules_adminapi_enablehooks($args)
     }
 
     // Rename operation
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $xartable =& xarDBGetTables();
 
     // Delete hooks regardless

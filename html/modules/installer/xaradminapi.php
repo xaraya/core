@@ -114,11 +114,11 @@ function installer_adminapi_createdb($args)
                        'password' => $dbPass,
                        'databaseHost' => $dbHost,
                        'databaseType' => $dbType,
-                       'databaseName' => $dbName, 
+                       'databaseName' => $dbName,
                        'systemTablePrefix' => $dbPrefix,
                        'siteTablePrefix' => $dbPrefix);
    $dbconn =& xarDBNewConn($createArgs);
-   
+
    $query = xarDBCreateDatabase($dbName,$dbType);
    $result =& $dbconn->Execute($query);
    return true;
@@ -144,14 +144,14 @@ function installer_adminapi_CheckForField($args)
         throw new EmptyParameterException('field_name or table_name');
     }
 
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $xartable =& xarDBGetTables();
 
     // CHECKME: Is this portable? In any case, use the meta classes
     $query = "desc $table_name";
     $result =& $dbconn->executeQuery($query);
 
-    
+
     while($result->next()) {
         if ($result[Field] == $field_name) {
             return true;
@@ -180,7 +180,7 @@ function installer_adminapi_GetFieldType($args)
         throw new EmptyParameterException('field_name or table_name');
     }
 
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
 
     // CHECKME: Is this portable? In any case, use the meta classes
     $query = "desc $table_name";
@@ -210,7 +210,7 @@ function installer_adminapi_CheckTableExists($args)
     // if not then set an appropriate error message and return
     if (!isset($table_name)) throw new EmptyParameterException('table_name');
 
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $dbInfo = $dbconn->getDatabaseInfo();
     return $dbInfo->hasTable($table_name);
 }

@@ -479,7 +479,7 @@ class DataObjectMaster extends Object
     static function &getObjects(Array $args=array())
     {
         extract($args);
-        $dbconn = xarDBGetConn();
+        $dbconn = xarDB::getConn();
         $xartable = xarDBGetTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];
@@ -555,7 +555,7 @@ class DataObjectMaster extends Object
             return $info;
         }
 
-        $dbconn = xarDBGetConn();
+        $dbconn = xarDB::getConn();
         $xartable = xarDBGetTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];

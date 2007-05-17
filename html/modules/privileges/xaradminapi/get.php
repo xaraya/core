@@ -25,7 +25,7 @@ function privileges_adminapi_get($args)
     if (isset($name)) {
         $query .= " AND p.name = " . $name;
     }
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery();
     $privilege = array();
