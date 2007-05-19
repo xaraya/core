@@ -62,9 +62,14 @@ function modules_admin_modifyproperties($args)
                               array('modName' => $modName));
 
     // Get the list of all item types for this module (if any)
-    $itemtypes = xarModAPIFunc($modName,'user','getitemtypes',
+    try {
+        $itemtypes = xarModAPIFunc($modName,'user','getitemtypes',
                                // don't throw an exception if this function doesn't exist
-                               array(), 0);
+                               array());
+    } catch (Exception $e) {
+        $itemtypes = array();
+    }
+
     if (isset($itemtypes)) {
         $data['itemtypes'] = $itemtypes;
     } else {
