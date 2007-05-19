@@ -338,16 +338,16 @@ class xarRequest extends Object
         $value = xarMLS_convertFromInput($value, $method);
 
         if (get_magic_quotes_gpc()) {
-            if(!is_array($value)) {
-                $value = stripslashes($value);
-            } else {
-                array_walk($value,array('self','__stripslashes'));
-            }
+            $value = self::__stripslashes($value);
         }
         return $value;
     }
-    // TEMP to make PHP happy passing 2 params with array_walk, obviously seek another solution for this.
-    static function __stripslashes($a,$b) { return stripslashes($a);}
+
+    static function __stripslashes($value)
+    {
+        $value = is_array($value) ? array_map(array('self','__stripslashes'), $value) : stripslashes($value);
+        return $value;
+    }
 
 
     /**
