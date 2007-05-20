@@ -150,7 +150,7 @@
                 <p class="xar-form-input-wrapper-after">
                     <xar:mlstring>The Default Module supplies the main entry (front) page to your site. The
                         Default Module Function below provides the template for this frontpage. You can customize and
-                        override this template in your theme. [TODO: belongs in modules (the var)]
+                        override this template in your theme.
                     </xar:mlstring>
                 </p>
                 <div class="xar-form-input-wrapper">
@@ -159,6 +159,14 @@
                             Default Module:
                         </xar:mlstring>
                     </label>
+
+                    <xar:if condition="xarConfigGetVar('Site.Core.DefaultModuleType') == 'admin'">
+                        <xar:set name="filter">array('AdminCapable' => 1)</xar:set>
+                    <xar:else />
+                        <xar:set name="filter">array('UserCapable' => 1)</xar:set>
+                    </xar:if>
+                    <xar:set name="value">xarConfigGetVar('Site.Core.DefaultModuleName')</xar:set>
+                    <xar:data-input type="module" name="defaultmodule" id="defaultmodule" filter="$filter" value="$value" />
                     <select name="defaultmodule" id="defaultmodule">
                         <xar:loop name="$mods">
                             <xar:if condition="xarConfigGetVar('Site.Core.DefaultModuleName') eq $loop:item['name']">
