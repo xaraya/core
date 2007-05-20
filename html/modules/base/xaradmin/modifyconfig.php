@@ -21,19 +21,6 @@ function base_admin_modifyconfig()
     if(!xarSecurityCheck('AdminBase')) return;
     if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'display', XARVAR_NOT_REQUIRED)) return;
 
-    if (xarConfigGetVar('Site.Core.DefaultModuleType') == 'admin'){
-    // Get list of user capable mods
-        $data['mods'] = xarModAPIFunc('modules',
-                          'admin',
-                          'getlist',
-                          array('filter'     => array('AdminCapable' => 1)));
-    } else {
-        $data['mods'] = xarModAPIFunc('modules',
-                          'admin',
-                          'getlist',
-                          array('filter'     => array('UserCapable' => 1)));
-    }
-
     $localehome = sys::varpath() . "/locales";
     if (!file_exists($localehome)) {
         throw new DirectoryNotFoundException($localehome);
