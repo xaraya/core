@@ -8,19 +8,19 @@
 <div class="xar-mod-body">
     <xar:template type="module" file="admin-menu" />
     <h2>
-        <xar:mlstring>View Block Instances</xar:mlstring>
+        <xar:mlstring>View Blocks</xar:mlstring>
     </h2>
     <form method="post" action="#xarModUrl('blocks', 'admin', 'settings')#">
 
     <fieldset>
         <legend><xar:mlstring>View Options</xar:mlstring></legend>
-        
+
         <div class="xar-form-input-wrapper">
             <label for="selstyle" title="#xarML('Choose how Block instances are displayed.')#" class="xar-form-label">
                 <xar:mlstring>Preferred Layout:</xar:mlstring>
             </label>
             <xar:comment>
-                Module List Sort and Filter Controls 
+                Module List Sort and Filter Controls
             </xar:comment>
             <select name="selstyle" id="selstyle">
                 <xar:foreach in="$style" key="$key" value="$value">

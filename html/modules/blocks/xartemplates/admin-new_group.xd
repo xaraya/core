@@ -11,7 +11,7 @@
     var blocks_fieldDescription = Array("Name");
 //-->
 
-</script> 
+</script>
 <xar:style scope="common" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
@@ -22,19 +22,15 @@
 </div>
 <div class="xar-mod-body">
  <xar:template type="module" file="admin-menu" />
-  <h2><xar:mlstring>Add new blockgroup</xar:mlstring></h2>
+  <h2><xar:mlstring>New Block Group</xar:mlstring></h2>
     <form action="#xarModURL('blocks', 'admin', 'create_group')#" method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded">
         <fieldset>
-            <legend>
-                <xar:mlstring>
-                    Add Group 
-                </xar:mlstring>
-            </legend>
+            <legend>Block Group Properties</legend>
             <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
             <div class="xar-form-input-wrapper">
                 <label for="group_name" title="#xarML('Enter the name of the group.  This value is used in your theme template to call the block group.')#" class="xar-form-label">
                     <xar:mlstring>
-                        Group Name: 
+                        Group Name:
                     </xar:mlstring>
                 </label>
                 <input type="text" name="group_name" id="group_name" value="" maxlength="255" class="xar-form-textlong" />
@@ -42,7 +38,7 @@
             <div class="xar-form-input-wrapper">
                 <label for="group_template" title="#xarML('If you wish to override the default template you may do so by entering a template name.  Otherwise the default.xt template will be used.')#" class="xar-form-label">
                     <xar:mlstring>
-                        Default Template (optional): 
+                        Default Template (optional):
                     </xar:mlstring>
                 </label>
                 <input type="text" name="group_template" id="group_template" value="" maxlength="255" class="xar-form-textlong" />

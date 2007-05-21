@@ -8,7 +8,7 @@
     // Enter field description to appear in the dialog box
     var blocks_fieldDescription = Array("Name");
 //-->
-</script> 
+</script>
 <xar:style scope="common" />
 <div class="xar-mod-head">
     <span class="xar-mod-title">
@@ -18,12 +18,12 @@
 <div class="xar-mod-body">
  <xar:template type="module" file="admin-menu" />
     <h2>
-        <xar:mlstring>Add Instance</xar:mlstring>
+        <xar:mlstring>New Block</xar:mlstring>
     </h2>
 
     <form action="#xarModURL('blocks', 'admin', 'create_instance')#" method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded">
         <fieldset>
-            <legend>Instance Properties</legend>
+            <legend>Block Properties</legend>
 
             <div class="xar-form-input-wrapper">
                 <label for="block_type" title="#xarML('The type of block that you wish to add.')#" class="xar-form-label">
@@ -32,7 +32,7 @@
                 <select name="block_type" id="block_type">
                     <xar:loop name="$block_types">
                         <option value="#$loop:item['tid']#">
-                            #xarVarPrepForDisplay($loop:item['module'])# / #xarVarPrepForDisplay($loop:item['type'])# 
+                            #xarVarPrepForDisplay($loop:item['module'])# / #xarVarPrepForDisplay($loop:item['type'])#
                         </option>
                     </xar:loop>
                 </select>
@@ -66,13 +66,13 @@
                 </label>
                 <select name="block_groups[][gid]" id="block_groups">
                     <option value="">
-                        -- 
+                        --
                         <xar:mlstring>no group</xar:mlstring>
-                        -- 
+                        --
                     </option>
                     <xar:loop name="$block_groups">
                         <option value="#$loop:item['gid']#">
-                            #xarVarPrepForDisplay($loop:item['name'])# 
+                            #xarVarPrepForDisplay($loop:item['name'])#
                         </option>
                     </xar:loop>
                 </select>
