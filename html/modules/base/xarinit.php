@@ -154,7 +154,6 @@ function base_init()
     /*****************************************************************
      * Set site configuration variables
      ******************************************************************/
-    xarConfigSetVar('Site.BL.ThemesDirectory','themes');
     xarConfigSetVar('Site.BL.CacheTemplates',true);
     xarConfigSetVar('Site.BL.CompilerVersion','XAR_BL_USE_XSLT');
     xarConfigSetVar('Site.Core.FixHTMLEntities',true);
@@ -175,9 +174,6 @@ function base_init()
         xarConfigSetVar('Site.Core.EnableSecureServer', false);
     }
 
-    xarConfigSetVar('Site.Core.DefaultModuleName', 'base');
-    xarConfigSetVar('Site.Core.DefaultModuleType', 'user');
-    xarConfigSetVar('Site.Core.DefaultModuleFunction', 'main');
     xarConfigSetVar('Site.Core.LoadLegacy', false);
     xarConfigSetVar('Site.Session.SecurityLevel', 'Medium');
     xarConfigSetVar('Site.Session.Duration', 7);

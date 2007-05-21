@@ -271,9 +271,9 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      */
     sys::import('xaraya.server');
     $systemArgs = array('enableShortURLsSupport' => xarConfigGetVar('Site.Core.EnableShortURLsSupport'),
-                        'defaultModuleName'      => xarConfigGetVar('Site.Core.DefaultModuleName'),
-                        'defaultModuleType'      => xarConfigGetVar('Site.Core.DefaultModuleType'),
-                        'defaultModuleFunction'  => xarConfigGetVar('Site.Core.DefaultModuleFunction'),
+                        'defaultModuleName'      => 'base', //xarModVars::get('modules', 'defaultmodule'),
+                        'defaultModuleType'      => 'user', //xarModVars::get('modules', 'defaultmoduletype'),
+                        'defaultModuleFunction'  => 'main', //xarModVars::get('modules', 'defaultmodulefunction'),
                         'generateXMLURLs' => true);
     xarServer::init($systemArgs);
     xarRequest::init($systemArgs);
@@ -366,7 +366,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
     $systemArgs = array(
         'enableTemplatesCaching' => xarConfigGetVar('Site.BL.CacheTemplates'),
-        'themesBaseDirectory'    => xarConfigGetVar('Site.BL.ThemesDirectory'),
+        'themesBaseDirectory'    => xarModVars::get('themes', 'themesdirectory'),
         'defaultThemeDir'        => xarModVars::get('themes','default'),
         'generateXMLURLs'        => true
     );

@@ -89,6 +89,7 @@ function themes_init()
     if (empty($selfilter)) $selfilter = XARMOD_STATE_ANY;
     if (empty($hidecore)) $hidecore = 0;
 
+    xarModVars::set('themes', 'themesdirectory', 'themes');
     xarModVars::set('themes', 'hidecore', $hidecore);
     xarModVars::set('themes', 'selstyle', $selstyle);
     xarModVars::set('themes', 'selfilter', $selfilter);
