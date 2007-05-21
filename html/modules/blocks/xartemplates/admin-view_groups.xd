@@ -11,7 +11,7 @@
         <xar:mlstring>View Block Groups</xar:mlstring>
     </h2>
     <h4>
-        <a href="&xar-modurl-blocks-admin-new_group;"><xar:mlstring>Add New Block Group</xar:mlstring></a>
+        <a href="&xar-modurl-blocks-admin-new_group;"><xar:mlstring>New Block Group</xar:mlstring></a>
     </h4>
 
     <table class="xar-fullwidth">
