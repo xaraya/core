@@ -1233,7 +1233,7 @@ class xarMod extends Object implements IxarMod
                 xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
             break;
         case 'theme':
-            $fileName = xarModVars::set('themes', 'themesdirectory', 'themes'). '/' . $modOsDir . '/xartheme.php';
+            $fileName = xarModVars::get('themes', 'themesdirectory'). '/' . $modOsDir . '/xartheme.php';
             $part = 'xartheme';
             break;
         }

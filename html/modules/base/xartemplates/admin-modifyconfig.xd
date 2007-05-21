@@ -218,14 +218,6 @@
                         General Display Options
                     </xar:mlstring>
                 </legend>
-                <div class="xar-form-input-wrapper">
-                    <label for="themedir" title="#xarML('The default directory for site themes - no trailing slash.')#" class="xar-form-label">
-                        <xar:mlstring>
-                            Default Theme Directory:
-                        </xar:mlstring>
-                    </label>
-                    <input type="text" id="themedir" name="themedir" value="#xarModVars::get('themes', 'themesdirectory')#" maxlength="100" class="xar-form-textlong" />
-                </div>
                 <div class="xar-form-input-wrapper-after">
                     <xar:set name="checked">xarConfigGetVar('Site.Core.EnableShortURLsSupport')</xar:set>
                     <xar:data-input type="checkbox" name="shorturl" id="shorturl" checked="$checked" />
