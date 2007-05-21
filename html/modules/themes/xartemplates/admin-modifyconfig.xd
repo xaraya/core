@@ -95,6 +95,14 @@
                     Theme Options
                 </xar:mlstring>
             </legend>
+            <div class="xar-form-input-wrapper">
+                <label for="themedir" title="#xarML('The default directory for site themes - no trailing slash.')#" class="xar-form-label">
+                    <xar:mlstring>
+                        Default Theme Directory:
+                    </xar:mlstring>
+                </label>
+                <input type="text" id="themedir" name="themedir" value="#xarModVars::get('themes', 'themesdirectory')#" maxlength="100" class="xar-form-textlong" />
+            </div>
             <div class="xar-form-input-wrapper-after">
                 <xar:data-input type="checkbox" name="dashboard" checked="$dashboard" />
                 <label for="dashboard" title="#xarML('Use the Admin Dashboard to manage all your Admin settings from a single page.')#">

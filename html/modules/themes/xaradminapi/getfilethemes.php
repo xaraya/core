@@ -18,10 +18,10 @@
 function themes_adminapi_getfilethemes()
 {
     $fileThemes = array();
-    //jojodee, removed hard coded theme path
+    $basedir = xarModVars::get('themes', 'themesdirectory');
 
     //$dh = opendir('themes');
-    $dh = opendir(xarModVars::get('themes', 'themesdirectory'));
+    $dh = opendir($basedir);
     while ($themeOsDir = readdir($dh)) {
         switch ($themeOsDir) {
             case '.':
@@ -31,8 +31,7 @@ function themes_adminapi_getfilethemes()
             case 'PENDING':
                 break;
             default:
-                //jojodee, remove hard coded theme path
-                if (is_dir(xarModVars::get('themes', 'themesdirectory')."/$themeOsDir")) {
+                if (is_dir($basedir ."/" . $themeOsDir)) {
 
                     // no xartheme.php, no theme
                     $themeFileInfo = xarTheme_getFileInfo($themeOsDir);
@@ -65,7 +64,7 @@ function themes_adminapi_getfilethemes()
                     // TODO: beautify :-)
                     if (!isset($regId) || xarVarPrepForOS($directory) != $themeOsDir) {
                         xarSession::setVar('errormsg', "Theme '$name' exists in ".xarModVars::get('themes', 'themesdirectory')."/$themeOsDir but should be in "
-                        .xarModVars::get('themes', 'themesdirectory').
+                        .$basedir.
                         "/$directory according to themes/$themeOsDir/xartheme.php... Skipping this theme until resolved.");
                         continue;
                     }
