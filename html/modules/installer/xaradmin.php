@@ -426,7 +426,7 @@ function installer_admin_phase5()
     $newStmt     = $dbconn->prepareStatement($newModSql);
 
 
-    $modules = array('authsystem','roles','privileges','base','installer','blocks','themes');
+    $modules = array('authsystem','roles','privileges','installer','blocks','themes');
     // Series of updates, begin transaction
     try {
         $dbconn->begin();
@@ -539,7 +539,7 @@ function installer_admin_bootstrap()
     if (!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
 
 
-    $regid=xarModGetIDFromName('authsystem');
+    $regid = xarModGetIDFromName('authsystem');
     if (empty($regid)) {
         die(xarML('I cannot load the Authsystem module. Please make it available and reinstall'));
     }
@@ -547,7 +547,7 @@ function installer_admin_bootstrap()
     // Set the state and activate the following modules
     // jojodee - Modules, authsystem, base, installer, blocks and themes are already activated in base init
     // We run them through roles and privileges as special cases that need an 'activate' phase. Others don't.
-   $modlist=array('roles','privileges');
+   $modlist = array('roles','privileges');
     foreach ($modlist as $mod) {
         // Set state to inactive first
         $regid=xarModGetIDFromName($mod);
@@ -569,10 +569,10 @@ function installer_admin_bootstrap()
     }
 
     // Set the state and activate the following themes
-    $themelist=array('print','rss','Xaraya_Classic');
+    $themelist = array('print','rss','Xaraya_Classic');
     foreach ($themelist as $theme) {
         // Set state to inactive
-        $regid=xarThemeGetIDFromName($theme);
+        $regid = xarThemeGetIDFromName($theme);
         if (isset($regid)) {
             if (!xarModAPIFunc('themes','admin','setstate', array('regid'=> $regid,'state'=> XARTHEME_STATE_INACTIVE))){
                 throw new Exception("Setting state of theme with regid: $regid failed");

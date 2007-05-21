@@ -462,3 +462,19 @@ UPDATE xar_dynamic_objects SET object_class= 'DataObject' WHERE object_class= ''
 UPDATE `xar_dynamic_objects` SET  `object_class` = 'Role' , `object_filepath` = 'modules/roles/class/role.php' WHERE `object_name` = 'roles_roles';
 UPDATE `xar_dynamic_objects` SET  `object_class` = 'Role' , `object_filepath` = 'modules/roles/class/role.php' WHERE `object_name` = 'roles_users';
 UPDATE `xar_dynamic_objects` SET  `object_class` = 'Role' , `object_filepath` = 'modules/roles/class/role.php' WHERE `object_name` = 'roles_groups';
+
+/* Change some configvars to modvars */
+/* FIXME the id of the Modules module in your installation needs to be put instead of '1' */
+/* FIXME the values put into the modvars need to be unserialized */
+INSERT INTO `xar_module_vars` (module_id, name, value)
+    SELECT 1, 'defaultmoduletype', value FROM `xar_module_vars` WHERE name = 'Site.Core.DefaultModuleType';
+/* FIXME the id of the Modules module in your installation needs to be put instead of '1' */
+/* FIXME the value put into this modvar need to be unserialized, and the id of the module rather than its name */
+INSERT INTO `xar_module_vars` (module_id, name, value)
+    SELECT 1, 'defaultmodule', value FROM `xar_module_vars` WHERE name = 'Site.Core.DefaultModuleName';
+/* FIXME the id of the Modules module in your installation needs to be put instead of '1' */
+INSERT INTO `xar_module_vars` (module_id, name, value)
+    SELECT 1, 'defaultmodulefunction', value FROM `xar_module_vars` WHERE name = 'Site.Core.DefaultModuleFunction';
+/* FIXME the id of the Themes module in your installation needs to be put instead of '8' */
+INSERT INTO `xar_module_vars` (module_id, name, value)
+    SELECT 8, 'themesdirectory', value FROM `xar_module_vars` WHERE name = 'Site.BL.ThemesDirectory';

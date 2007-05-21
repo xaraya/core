@@ -43,7 +43,7 @@ function themes_adminapi_upgrade($args)
 
     // Note the changes in the database...
     $dbconn = xarDB::getConn();
-    $xartable = xarDB::getConn();
+    $xartable = xarDB::getTables();
 
      $sql = "UPDATE $xartable[themes]
             SET version = ?, class = ?

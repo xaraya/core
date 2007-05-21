@@ -53,7 +53,7 @@ function themes_adminapi_getthemelist($args)
 
     // Determine the tables we are going to use
     $dbconn = xarDB::getConn();
-    $tables = xarDB::getConn();
+    $tables = xarDB::getTables();
     $themestable = $tables['themes'];
 
     // Construct arrays for the where conditions and their bind variables
