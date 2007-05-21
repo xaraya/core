@@ -1761,7 +1761,7 @@ function installer_admin_upgrade2()
     xarModSetVar('roles', 'setusertimezone',false); //new modvar - let's make sure it's set
     xarModDelVar('roles', 'settimezone');//this is no longer used, be more explicit and user setusertimezone
     xarModSetVar('roles', 'usertimezone',''); //new modvar - initialize it
-    xarModSetVar('roles','usersendemails', false); //old modvar returns. Let's make sure it's set false as it allows users to send emails
+    xarModSetVar('roles','allowemail', false); //old modvar returns. Let's make sure it's set false as it allows users to send emails
 
     //Ensure that registration module is set as default if it is installed,
     // if it is active and the default is currently not set

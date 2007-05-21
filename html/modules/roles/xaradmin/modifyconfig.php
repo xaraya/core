@@ -152,7 +152,7 @@ function roles_admin_modifyconfig()
                     if (!xarVarFetch('requirevalidation','checkbox', $requirevalidation, true,  XARVAR_NOT_REQUIRED)) return;
 
                     xarModVars::set('roles', 'searchbyemail', $searchbyemail); //search by email
-                    xarModVars::set('roles', 'usersendemails', $usersendemails);
+                    xarModVars::set('roles', 'allowemail', $allowemail);
                     xarModVars::set('roles', 'displayrolelist', $displayrolelist); //display member list in Roles menu links
                     xarModVars::set('roles', 'usereditaccount', $usereditaccount); //allow users to edit account
                     xarModVars::set('roles', 'allowexternalurl', $allowexternalurl); //allow users to set external urls for home page
