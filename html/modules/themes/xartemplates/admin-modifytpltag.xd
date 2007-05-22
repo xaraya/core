@@ -11,8 +11,8 @@
 
     <form class="xar-fullwidth" method="post" action="#$updateurl#" enctype="application/x-www-form-urlencoded">
       <fieldset>
-        <legend><xar:mlstring>Tag details</xar:mlstring></legend>
-    
+        <legend><xar:mlstring>Tag Properties</xar:mlstring></legend>
+
         <div class="xar-form-input-wrapper">
             <label for="tag_module" title="#xarML('The module which provides this tag')#" class="xar-form-label">
                 <xar:mlstring>Module:</xar:mlstring>
