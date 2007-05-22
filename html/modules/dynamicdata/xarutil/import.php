@@ -22,7 +22,7 @@ function dynamicdata_util_import($args)
     if(!xarVarFetch('refresh',    'isset', $refresh,     NULL,  XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('keepitemid', 'isset', $keepitemid,  NULL,  XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('overwrite',  'bool',  $overwrite,   false, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('prefix', 'isset', $data['prefix'],  xarDBGet::getPrefix(), XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('prefix', 'isset', $data['prefix'],  xarDB::getPrefix(), XARVAR_DONT_SET)) {return;}
 
     extract($args);
 
