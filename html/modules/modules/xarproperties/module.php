@@ -41,8 +41,10 @@ class ModuleProperty extends SelectProperty
         if (count($this->options) == 0) {
             if ($this->validation == 'systemid') {
                 $key = 'systemid';
-            } else {
+            } elseif ($this->validation == 'regid') {
                 $key = 'regid';
+            } else {
+                $key = 'displayname';
             }
             // TODO: wasnt here an $args earlier? where did this go?
             $modlist = xarModAPIFunc('modules', 'admin', 'getlist',array('filter' => $this->filter));

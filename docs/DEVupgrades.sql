@@ -463,6 +463,9 @@ UPDATE `xar_dynamic_objects` SET  `object_class` = 'Role' , `object_filepath` = 
 UPDATE `xar_dynamic_objects` SET  `object_class` = 'Role' , `object_filepath` = 'modules/roles/class/role.php' WHERE `object_name` = 'roles_users';
 UPDATE `xar_dynamic_objects` SET  `object_class` = 'Role' , `object_filepath` = 'modules/roles/class/role.php' WHERE `object_name` = 'roles_groups';
 
+/* Change the type property in roles obejcts from type to role_type */
+UPDATE `xar_dynamic_properties` SET `prop_name` = 'role_type' WHERE `prop_source` = 'xar_roles.type'
+
 /* Change some configvars to modvars */
 /* FIXME the values put into the modvars need to be unserialized */
 INSERT INTO `xar_module_vars` (module_id, name, value)
