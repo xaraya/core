@@ -3,43 +3,35 @@
  * Initialisation functions for the security module
  *
  * @package core modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Privileges module
+ * @subpackage privileges
  * @link http://xaraya.com/index.php/release/1098.html
  */
 
+sys::import('xaraya.tableddl');
+
  /**
- * Purpose of file:  Initialisation functions for the security module
  * Initialise the privileges module
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  *
- * @param none
  * @returns bool
  * @throws DATABASE_ERROR
  */
 function privileges_init()
 {
-    /*    if(!xarModIsAvailable('roles')) {
-     $msg=xarML('The roles module should be activated first');
-     throw new Exception($msg);
-     }
-    */
+    $dbconn = xarDB::getConn();
+    $tables =& xarDB::getTables();
 
-    // Get database information
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
-    xarDBLoadTableMaintenanceAPI();
-
-    $sitePrefix = xarDBGetSiteTablePrefix();
-    $tables['privileges'] = $sitePrefix . '_privileges';
-    $tables['privmembers'] = $sitePrefix . '_privmembers';
-    $tables['security_acl'] = $sitePrefix . '_security_acl';
-    $tables['security_instances'] = $sitePrefix . '_security_instances';
-    $tables['security_realms']      = $sitePrefix . '_security_realms';
-    $tables['security_privsets']      = $sitePrefix . '_security_privsets';
+    $prefix = xarDB::getPrefix();
+    $tables['privileges'] = $prefix . '_privileges';
+    $tables['privmembers'] = $prefix . '_privmembers';
+    $tables['security_acl'] = $prefix . '_security_acl';
+    $tables['security_instances'] = $prefix . '_security_instances';
+    $tables['security_realms']      = $prefix . '_security_realms';
+    $tables['security_privsets']      = $prefix . '_security_privsets';
 
     // All or nothing
     try {
@@ -99,31 +91,31 @@ function privileges_init()
         $query = xarDBCreateTable($tables['privileges'],$fields);
         $dbconn->Execute($query);
 
-        $index = array('name'      => 'i_'.$sitePrefix.'_privileges_name',
+        $index = array('name'      => 'i_'.$prefix.'_privileges_name',
                        'fields'    => array('name', 'module_id', 'type'),
                        'unique'    => true);
         $query = xarDBCreateIndex($tables['privileges'],$index);
         $dbconn->Execute($query);
 
-        $index = array('name'      => 'i_'.$sitePrefix.'_privileges_realmid',
+        $index = array('name'      => 'i_'.$prefix.'_privileges_realmid',
                        'fields'    => array('realmid'),
                        'unique'    => false);
         $query = xarDBCreateIndex($tables['privileges'],$index);
         $dbconn->Execute($query);
 
-        $index = array('name'      => 'i_'.$sitePrefix.'_privileges_module',
+        $index = array('name'      => 'i_'.$prefix.'_privileges_module',
                        'fields'    => array('module_id'),
                        'unique'    => false);
         $query = xarDBCreateIndex($tables['privileges'],$index);
         $dbconn->Execute($query);
 
-        $index = array('name'      => 'i_'.$sitePrefix.'_privileges_level',
+        $index = array('name'      => 'i_'.$prefix.'_privileges_level',
                        'fields'    => array('level'),
                        'unique'    => false);
         $query = xarDBCreateIndex($tables['privileges'],$index);
         $dbconn->Execute($query);
 
-        xarDB::importTables(array('privileges' => xarDBGetSiteTablePrefix() . '_privileges'));
+        xarDB::importTables(array('privileges' => $prefix . '_privileges'));
 
         /*********************************************************************
          * CREATE TABLE xar_privmembers (
@@ -142,14 +134,14 @@ function privileges_init()
                                                                  'default'     => null)));
         $dbconn->Execute($query);
 
-        xarDB::importTables(array('privmembers' => xarDBGetSiteTablePrefix() . '_privmembers'));
+        xarDB::importTables(array('privmembers' => $prefix . '_privmembers'));
 
-        $index = array('name'      => 'i_'.$sitePrefix.'_privmembers_pid',
+        $index = array('name'      => 'i_'.$prefix.'_privmembers_pid',
                        'fields'    => array('id'),
                        'unique'    => false);
         $query = xarDBCreateIndex($tables['privmembers'],$index);
         $dbconn->Execute($query);
-        $index = array('name'      => 'i_'.$sitePrefix.'_privmembers_parentid',
+        $index = array('name'      => 'i_'.$prefix.'_privmembers_parentid',
                        'fields'    => array('parentid'),
                        'unique'    => false);
         $query = xarDBCreateIndex($tables['privmembers'],$index);
@@ -174,19 +166,19 @@ function privileges_init()
                                                                    'primary_key'         => true)));
         $dbconn->Execute($query);
 
-        $index = array('name'      => 'i_'.$sitePrefix.'_security_acl_partid',
+        $index = array('name'      => 'i_'.$prefix.'_security_acl_partid',
                        'fields'    => array('partid'),
                        'unique'    => false);
         $query = xarDBCreateIndex($tables['security_acl'],$index);
         $dbconn->Execute($query);
 
-        $index = array('name'      => 'i_'.$sitePrefix.'_security_acl_permid',
+        $index = array('name'      => 'i_'.$prefix.'_security_acl_permid',
                        'fields'    => array('permid'),
                        'unique'    => false);
         $query = xarDBCreateIndex($tables['security_acl'],$index);
         $dbconn->Execute($query);
 
-        xarDB::importTables(array('security_acl' => xarDBGetSiteTablePrefix() . '_security_acl'));
+        xarDB::importTables(array('security_acl' => $prefix . '_security_acl'));
 
         /*********************************************************************
          * CREATE TABLE xar_security_instances (
@@ -252,7 +244,7 @@ function privileges_init()
 
         $dbconn->Execute($query);
 
-        xarDB::importTables(array('security_instances' => xarDBGetSiteTablePrefix() . '_security_instances'));
+        xarDB::importTables(array('security_instances' => $prefix . '_security_instances'));
 
         $dbconn->commit();
         // Set up an initial value for module variables.
@@ -311,9 +303,8 @@ function privileges_delete()
     *********************************************************************/
 
     // Get database information
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
-    xarDBLoadTableMaintenanceAPI();
+    $dbconn =& xarDB::getConn();
+    $tables =& xarDB::getTables();
 
     // TODO: wrap in transaction? (this section is only for testing anyways)
     $query = xarDBDropTable($tables['privileges']);

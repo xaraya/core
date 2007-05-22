@@ -21,19 +21,6 @@ function base_admin_modifyconfig()
     if(!xarSecurityCheck('AdminBase')) return;
     if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'display', XARVAR_NOT_REQUIRED)) return;
 
-    if (xarConfigGetVar('Site.Core.DefaultModuleType') == 'admin'){
-    // Get list of user capable mods
-        $data['mods'] = xarModAPIFunc('modules',
-                          'admin',
-                          'getlist',
-                          array('filter'     => array('AdminCapable' => 1)));
-    } else {
-        $data['mods'] = xarModAPIFunc('modules',
-                          'admin',
-                          'getlist',
-                          array('filter'     => array('UserCapable' => 1)));
-    }
-
     $localehome = sys::varpath() . "/locales";
     if (!file_exists($localehome)) {
         throw new DirectoryNotFoundException($localehome);
@@ -75,9 +62,9 @@ function base_admin_modifyconfig()
     // $data['translationsBackend'] = xarConfigGetVar('Site.MLS.TranslationsBackend');
     $data['authid'] = xarSecGenAuthKey();
     $data['updatelabel'] = xarML('Update Base Configuration');
-    $data['XARCORE_VERSION_NUM'] = XARCORE_VERSION_NUM;
-    $data['XARCORE_VERSION_ID'] =  XARCORE_VERSION_ID;
-    $data['XARCORE_VERSION_SUB'] = XARCORE_VERSION_SUB;
+    $data['XARCORE_VERSION_NUM'] = xarCore::VERSION_NUM;
+    $data['XARCORE_VERSION_ID'] =  xarCore::VERSION_ID;
+    $data['XARCORE_VERSION_SUB'] = xarCore::VERSION_SUB;
     return $data;
 }
 

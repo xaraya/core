@@ -33,8 +33,8 @@ function blocks_userapi_getallblocktypes($args)
         $orderby = '';
     }
 
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $xartable = xarDB::getTables();
     $block_types_table = $xartable['block_types'];
     $modules_table     = $xartable['modules'];
 

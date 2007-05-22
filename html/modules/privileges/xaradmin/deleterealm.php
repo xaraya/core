@@ -20,7 +20,7 @@ function privileges_admin_deleterealm()
     if (!xarVarFetch('id',          'isset', $id,          NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('confirmed', 'isset', $confirmed, NULL, XARVAR_DONT_SET)) return;
 
-    $xartable =& xarDBGetTables();
+    $xartable = xarDB::getTables();
     sys::import('modules.roles.class.xarQuery');
     $q = new xarQuery('SELECT',$xartable['security_realms']);
     $q->addfields(array('id','name'));

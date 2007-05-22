@@ -22,10 +22,18 @@ class ModuleProperty extends SelectProperty
     public $desc       = 'Module';
     public $reqmodules = array('modules');
 
+    public $filter = array();
+
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/modules/xarproperties';
+    }
+
+    function showInput(Array $data=array())
+    {
+        if (!empty($data['filter'])) $this->filter = $data['filter'];
+        return parent::showInput($data);
     }
 
     function getOptions()
@@ -37,7 +45,7 @@ class ModuleProperty extends SelectProperty
                 $key = 'regid';
             }
             // TODO: wasnt here an $args earlier? where did this go?
-            $modlist = xarModAPIFunc('modules', 'admin', 'getlist');
+            $modlist = xarModAPIFunc('modules', 'admin', 'getlist',array('filter' => $this->filter));
             foreach ($modlist as $modinfo) {
                 $this->options[] = array('id' => $modinfo[$key], 'name' => $modinfo['displayname']);
             }

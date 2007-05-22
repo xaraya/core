@@ -21,12 +21,12 @@
  */
 function roles_init()
 {
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
+    $dbconn =& xarDB::getConn();
+    $tables =& xarDB::getTables();
 
-    $sitePrefix = xarDBGetSiteTablePrefix();
-    $tables['roles'] = $sitePrefix . '_roles';
-    $tables['rolemembers'] = $sitePrefix . '_rolemembers';
+    $prefix = xarDB::getPrefix();
+    $tables['roles'] = $prefix . '_roles';
+    $tables['rolemembers'] = $prefix . '_rolemembers';
 
     // Create tables inside a transaction
     try {
@@ -48,14 +48,14 @@ function roles_init()
         $dbconn->Execute($query);
 
         // role type is used in all group look-ups (e.g. security checks)
-        $index = array('name' => 'i_' . $sitePrefix . '_roles_type',
+        $index = array('name' => 'i_' . $prefix . '_roles_type',
                        'fields' => array('type')
                        );
         $query = xarDBCreateIndex($tables['roles'], $index);
         $dbconn->Execute($query);
 
         // username must be unique (for login) + don't allow groupname to be the same either
-        $index = array('name' => 'i_' . $sitePrefix . '_roles_uname',
+        $index = array('name' => 'i_' . $prefix . '_roles_uname',
                        'fields' => array('uname'),
                        'unique' => true
                        );
@@ -63,7 +63,7 @@ function roles_init()
         $dbconn->Execute($query);
 
         // allow identical "real names" here
-        $index = array('name' => 'i_' . $sitePrefix . '_roles_name',
+        $index = array('name' => 'i_' . $prefix . '_roles_name',
                        'fields' => array('name'),
                        'unique' => false
                        );
@@ -71,7 +71,7 @@ function roles_init()
         $dbconn->Execute($query);
 
         // allow identical e-mail here (???) + is empty for groups !
-        $index = array('name' => 'i_' . $sitePrefix . '_roles_email',
+        $index = array('name' => 'i_' . $prefix . '_roles_email',
                        'fields' => array('email'),
                        'unique' => false
                        );
@@ -79,7 +79,7 @@ function roles_init()
         $dbconn->Execute($query);
 
         // role state is used in many user lookups
-        $index = array('name' => 'i_' . $sitePrefix . '_roles_state',
+        $index = array('name' => 'i_' . $prefix . '_roles_state',
                        'fields' => array('state'),
                        'unique' => false
                        );
@@ -95,13 +95,13 @@ function roles_init()
                                                                 'default'     => null)));
         $dbconn->Execute($query);
 
-        $index = array('name' => 'i_' . $sitePrefix . '_rolememb_uid',
+        $index = array('name' => 'i_' . $prefix . '_rolememb_uid',
                        'fields' => array('id'),
                        'unique' => false);
         $query = xarDBCreateIndex($tables['rolemembers'], $index);
         $dbconn->Execute($query);
 
-        $index = array('name' => 'i_' . $sitePrefix . '_rolememb_parentid',
+        $index = array('name' => 'i_' . $prefix . '_rolememb_parentid',
                        'fields' => array('parentid'),
                        'unique' => false);
         $query = xarDBCreateIndex($tables['rolemembers'], $index);
@@ -342,8 +342,8 @@ function roles_delete()
      * Drop the tables
      */
     // Get database information
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $tables = xarDB::getTables();
 
     try {
         $dbconn->begin();

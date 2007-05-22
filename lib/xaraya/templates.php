@@ -37,12 +37,13 @@ class BLException extends xarExceptions
  * @global string xarTpl_doctype
  * @global string xarTpl_JavaScript
  * @param  array  $args                  Elements: themesBaseDir, defaultThemeName, enableTemplateCaching
- * @param  int    $whatElseIsGoingLoaded Bitfield to specify which subsystem will be loaded.
  * @throws DirectoryNotFoundException, FileNotFoundException, ConfigurationException
  * @return bool true
 **/
-function xarTpl_init(&$args, $whatElseIsGoingLoaded)
+function xarTpl_init(&$args)
 {
+    $table['template_tags'] = xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix') . '_template_tags';
+    xarDB::importTables($table);
 
     $GLOBALS['xarTpl_themesBaseDir']   = $args['themesBaseDirectory'];
     $GLOBALS['xarTpl_defaultThemeDir'] = $args['defaultThemeDir'];
@@ -63,8 +64,8 @@ function xarTpl_init(&$args, $whatElseIsGoingLoaded)
     sys::import('xaraya.caching.template');
     xarTemplateCache::init(sys::varpath() . XARCORE_TPL_CACHEDIR, $args['enableTemplatesCaching']);
 
-    // This is wrong here as well, but it's better at least than in xarMod
-    sys::import('xaraya.xarTheme');
+    // This is wrong here as well, but it's better at least than in modules.php
+    sys::import('xaraya.themes');
     return true;
 }
 

@@ -34,8 +34,8 @@ function modules_adminapi_regenerate()
     if (!isset($dbModules)) {return;}
 
     //Setup database object for module insertion
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $xartable = xarDB::getTables();
     $modules_table =& $xartable['modules'];
 
     // See if we have gained any modules since last generation,

@@ -24,8 +24,8 @@ function roles_userapi_countall($args)
     if(!xarSecurityCheck('ReadRole')) return;
 
     // Get database setup
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $xartable = xarDB::getTables();
 
     $rolestable = $xartable['roles'];
 

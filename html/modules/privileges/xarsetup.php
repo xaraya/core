@@ -1,11 +1,11 @@
 <?php
 /**
  * @package core modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage privileges module
+ * @subpackage privileges
  * @link http://xaraya.com/index.php/release/1098.html
  */
 /**
@@ -21,16 +21,16 @@ function initializeSetup()
     * Format is
     * xarDefineInstance(Module,Component,Querystring,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
     *********************************************************************/
-    $systemPrefix = xarDBGetSystemTablePrefix();
+    $prefix = xarDB::getPrefix();
 
-    $blockTypesTable     = $systemPrefix . '_block_types';
-    $blockInstancesTable = $systemPrefix . '_block_instances';
-    $modulesTable        = $systemPrefix . '_modules';
-    $rolesTable          = $systemPrefix . '_roles';
-    $roleMembersTable    = $systemPrefix . '_rolemembers';
-    $privilegesTable     = $systemPrefix . '_privileges';
-    $privMembersTable    = $systemPrefix . '_privmembers';
-    $themesTable         = $systemPrefix . '_themes';
+    $blockTypesTable     = $prefix . '_block_types';
+    $blockInstancesTable = $prefix . '_block_instances';
+    $modulesTable        = $prefix . '_modules';
+    $rolesTable          = $prefix . '_roles';
+    $roleMembersTable    = $prefix . '_rolemembers';
+    $privilegesTable     = $prefix . '_privileges';
+    $privMembersTable    = $prefix . '_privmembers';
+    $themesTable         = $prefix . '_themes';
 
    //--------------------------------- Roles Module
     $info = xarMod::getBaseInfo('roles');

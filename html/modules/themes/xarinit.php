@@ -10,11 +10,10 @@
  */
 
 // Load Table Maintainance API
-xarDBLoadTableMaintenanceAPI();
+sys::import('xaraya.tableddl');
 
 /**
  * Initialise the themes module
- * Themes administration
  * @author Marty Vance
  * @return bool
  * @throws DATABASE_ERROR
@@ -22,14 +21,12 @@ xarDBLoadTableMaintenanceAPI();
 function themes_init()
 {
     // Get database information
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $tables =& xarDB::getTables();
 
-    $sitePrefix = xarDBGetSiteTablePrefix();
-    $systemPrefix = xarDBGetSystemTablePrefix();
-
-    $tables['themes'] = $systemPrefix . '_themes';
-    $tables['theme_vars'] = $sitePrefix . '_theme_vars';
+    $prefix = xarDB::getPrefix();
+    $tables['themes']     = $prefix . '_themes';
+    $tables['theme_vars'] = $prefix . '_theme_vars';
 
     // Create tables
     /**
@@ -92,6 +89,7 @@ function themes_init()
     if (empty($selfilter)) $selfilter = XARMOD_STATE_ANY;
     if (empty($hidecore)) $hidecore = 0;
 
+    xarModVars::set('themes', 'themesdirectory', 'themes');
     xarModVars::set('themes', 'hidecore', $hidecore);
     xarModVars::set('themes', 'selstyle', $selstyle);
     xarModVars::set('themes', 'selfilter', $selfilter);

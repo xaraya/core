@@ -44,8 +44,8 @@ class xarMask extends Object
     {
         extract($pargs);
 
-        $this->dbconn =& xarDBGetConn();
-        $xartable =& xarDBGetTables();
+        $this->dbconn = xarDB::getConn();
+        $xartable = xarDB::getTables();
         $this->privilegestable = $xartable['privileges'];
         $this->privmemberstable = $xartable['privmembers'];
         $this->rolestable = $xartable['roles'];
@@ -279,7 +279,7 @@ class xarMask extends Object
 
     function getModuleID()
     {
-        $xartable =& xarDBGetTables();
+        $xartable = xarDB::getTables();
         $q = new xarQuery('SELECT',$xartable['modules'],'regid AS regid');
         $q->eq('id', $this->getModule());
         if (!$q->run()) return;

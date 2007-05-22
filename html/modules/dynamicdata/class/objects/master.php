@@ -59,7 +59,7 @@ class DataObjectDescriptor extends ObjectDescriptor
      */
     static function getObjectID(Array $args=array())
     {
-        $xartable = xarDBGetTables();
+        $xartable = xarDB::getTables();
 
         $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
         $q->open();
@@ -479,8 +479,8 @@ class DataObjectMaster extends Object
     static function &getObjects(Array $args=array())
     {
         extract($args);
-        $dbconn = xarDBGetConn();
-        $xartable = xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $xartable = xarDB::getTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];
 
@@ -555,8 +555,8 @@ class DataObjectMaster extends Object
             return $info;
         }
 
-        $dbconn = xarDBGetConn();
-        $xartable = xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $xartable = xarDB::getTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];
 
@@ -925,7 +925,7 @@ class DataObjectMaster extends Object
         $ancestors = array();
 
         // Get the info of this object
-        $xartable = xarDBGetTables();
+        $xartable = xarDB::getTables();
         if (isset($objectid)) {
             // We have an objectid - get the moduleid and itemtype
             $topobject = self::getObjectInfo(array('objectid' => $objectid));
@@ -1063,7 +1063,7 @@ class DataObjectMaster extends Object
         }
         if ($extensions) {
             // Get all the objects at once
-            $xartable = xarDBGetTables();
+            $xartable = xarDB::getTables();
             sys::import('modules.roles.class.xarQuery');
             $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
             $q->addfields(array('object_id AS objectid','object_label AS objectlabel','object_moduleid AS moduleid','object_itemtype AS itemtype','object_parent AS parent'));

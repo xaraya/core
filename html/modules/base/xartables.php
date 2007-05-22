@@ -1,8 +1,7 @@
 <?php
 /**
- * Base Table Definitions
  * @package modules
- * @copyright (C) 2005-2006 The Digital Development Foundation
+ * @copyright (C) 2005-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -13,22 +12,13 @@
 /**
  * Passes table definitons back to Xaraya core
  * @author Paul Rosania
- * @return string
+ * @return array
  */
 function base_xartables()
 {
-    // Initialise table array
     $tables = array();
-
-    $systemPrefix = xarDBGetSystemTablePrefix();
-
-    // Get the name for the template Tags table table
-    $templateTagsTable = $systemPrefix . '_template_tags';
-
-    // Q: does this need to be here?
-    $tables['template_tags']= $templateTagsTable;
-    // Return the table information
+    //@todo move this somewhere else
+    $tables['template_tags'] = xarDB::getPrefix() . '_template_tags';
     return $tables;
 }
-
 ?>

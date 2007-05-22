@@ -62,22 +62,22 @@ function privileges_admin_modifyconfig()
                      if (!isset($testmask) || empty($testmask)) {
                          $testmask='All';
                      }
-                     $data['testmask']=$testmask;
+                     $data['testmask'] = $testmask;
                      $settestergroup=xarModVars::get('privileges','testergroup');
                      if (!isset($settestergroupp) || empty($settestergroup)) {
-                         $settestergrouprole=xarFindRole('Administrators');
-                         $settestergroup=$settestergrouprole->uid;
+                         $settestergrouprole = xarFindRole('Administrators');
+                         $settestergroup = $settestergrouprole->getID();
                      }
                      if (!isset($testergroup) || empty($testergroup)) {
-                         $testergroup=$settestergroup;
+                         $testergroup = $settestergroup;
                      }
-                     $data['testergroup']=$testergroup;
+                     $data['testergroup'] = $testergroup;
 
                      $grouplist=xarGetGroups();
                      $data['grouplist']=$grouplist;
 
                      $testusers=xarModAPIFunc('roles','user','getUsers',array('uid'=>$testergroup));
-                     $defaultadminuid=xarModVars::get('roles','admin');
+                     $defaultadminuid = xarModVars::get('roles','admin');
 
                      $data['testusers']=$testusers; //array
 

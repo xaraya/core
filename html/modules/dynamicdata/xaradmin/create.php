@@ -1,11 +1,11 @@
 <?php
 /**
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -13,8 +13,15 @@
 /**
  * This is a standard function that is called with the results of the
  * form supplied by xarModFunc('dynamicdata','admin','new') to create a new item
- * @param 'name' the name of the item to be created
- * @param 'number' the number of the item to be created
+ * @param int    objectid
+ * @param int    itemid
+ * @param string preview
+ * @param string return_url
+ * @param string join
+ * @param string table
+ * @param string template
+ * @param string tplmodule
+ * @return bool
  */
 function dynamicdata_admin_create($args)
 {
@@ -23,9 +30,9 @@ function dynamicdata_admin_create($args)
 // FIXME: whatever, as long as it doesn't generate Variable "0" should not be empty exceptions
 //        or relies on $myobject or other stuff like that...
 
-    if (!xarVarFetch('objectid',    'id',    $objectid,   NULL,                               XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('itemid',      'isset', $itemid,     0,                                  XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('preview',     'isset', $preview,    0,                                  XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('objectid',    'isset',    $objectid,   NULL, XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('itemid',      'isset', $itemid,     0,    XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('preview',     'isset', $preview,    0,    XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('return_url',  'isset', $return_url, NULL, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('join',        'isset', $join,       NULL, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('table',       'isset', $table,      NULL, XARVAR_DONT_SET)) {return;}

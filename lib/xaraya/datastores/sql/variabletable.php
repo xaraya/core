@@ -390,7 +390,7 @@ class VariableTableDataStore extends SQLDataStore
         // more difficult case where we need to create a pivot table, basically
         } elseif ($numitems > 0 || count($this->sort) > 0 || count($this->where) > 0 || count($this->groupby) > 0) {
 
-            $dbtype = xarDBGetType();
+            $dbtype = xarDB::getType();
             if (substr($dbtype,0,4) == 'oci8') {
                 $propval = 'TO_CHAR(dd_value)';
             } elseif (substr($dbtype,0,5) == 'mssql') {

@@ -34,10 +34,13 @@ function themes_admin_updateconfig()
     if (!xarVarFetch('copyright', 'str:1:', $copyright, '', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('AtomTag', 'str:1:', $atomtag, '', XARVAR_NOT_REQUIRED)) return;
     // enable or disable dashboard
-    if(!xarVarFetch('dashboard', 'checkbox', $dashboard, false, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('adminpagemenu', 'checkbox', $adminpagemenu, false, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dashtemplate', 'str:1:', $dashtemplate, 'dashboard', XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('usermenu', 'checkbox', $usermenu, false, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('dashboard', 'checkbox', $dashboard, false, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('adminpagemenu', 'checkbox', $adminpagemenu, false, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('dashtemplate', 'str:1:', $dashtemplate, 'dashboard', XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('usermenu', 'checkbox', $usermenu, false, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('themedir','str:1:',$defaultThemeDir,'themes',XARVAR_NOT_REQUIRED)) return;
+
+    xarModVars::set('themes', 'themesdirectory', $defaultThemeDir);
     xarModVars::set('themes', 'SiteName', $sitename);
     xarModVars::set('themes', 'SiteTitleSeparator', $separator);
     xarModVars::set('themes', 'SiteTitleOrder', $pagetitle);

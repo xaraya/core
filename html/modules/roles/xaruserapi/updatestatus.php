@@ -27,8 +27,8 @@ function roles_userapi_updatestatus($args)
     if (!xarSecurityCheck('ViewRoles')) return;
 
     // Get DB Set-up
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $xartable = xarDB::getTables();
 
     $rolesTable = $xartable['roles'];
 

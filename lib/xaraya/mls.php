@@ -32,7 +32,7 @@ define('XARMLS_DNTYPE_CORE', 1);
 define('XARMLS_DNTYPE_THEME', 2);
 define('XARMLS_DNTYPE_MODULE', 3);
 
-sys::import('xaraya.xarLocale');
+sys::import('xaraya.locales');
 sys::import('xaraya.transforms.xarCharset');
 sys::import('xaraya.mlsbackends.reference');
 
@@ -43,7 +43,7 @@ sys::import('xaraya.mlsbackends.reference');
  * @throws Exception
  * @return bool true
  */
-function xarMLS_init(&$args, $whatElseIsGoingLoaded)
+function xarMLS_init(&$args)
 {
     switch ($args['MLSMode']) {
     case XARMLS_SINGLE_LANGUAGE_MODE:
@@ -104,11 +104,7 @@ function xarMLS_init(&$args, $whatElseIsGoingLoaded)
  */
 function xarMLSGetMode()
 {
-    if (isset($GLOBALS['xarMLS_mode'])){
-        return $GLOBALS['xarMLS_mode'];
-    } else {
-        return 'BOXED';
-    }
+    return isset($GLOBALS['xarMLS_mode']) ? $GLOBALS['xarMLS_mode'] : 'BOXED';
 }
 
 /**
@@ -119,10 +115,7 @@ function xarMLSGetMode()
  * @return string the site locale
  * @todo   check
  */
-function xarMLSGetSiteLocale()
-{
-    return $GLOBALS['xarMLS_defaultLocale'];
-}
+function xarMLSGetSiteLocale() { return $GLOBALS['xarMLS_defaultLocale']; }
 
 /**
  * Returns an array of locales available in the site
@@ -147,10 +140,7 @@ function xarMLSListSiteLocales()
  * @access public
  * @return string current locale
  */
-function xarMLSGetCurrentLocale()
-{
-    return $GLOBALS['xarMLS_currentLocale'];
-}
+function xarMLSGetCurrentLocale() { return $GLOBALS['xarMLS_currentLocale']; }
 
 /**
  * Gets the charset component from a locale
@@ -250,10 +240,7 @@ function xarMLByKey($key/*, ...*/)
  * @access public
  * @return array locale info
  */
-function xarLocaleGetInfo($locale)
-{
-    return xarMLS__parseLocaleString($locale);
-}
+function xarLocaleGetInfo($locale) { return xarMLS__parseLocaleString($locale); }
 
 /**
  * Gets the locale string for the specified locale info.

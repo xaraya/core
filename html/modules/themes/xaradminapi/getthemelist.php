@@ -52,8 +52,8 @@ function themes_adminapi_getthemelist($args)
     $orderByClause = join(', ', $orderByClauses);
 
     // Determine the tables we are going to use
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $tables = xarDB::getTables();
     $themestable = $tables['themes'];
 
     // Construct arrays for the where conditions and their bind variables
@@ -110,7 +110,7 @@ function themes_adminapi_getthemelist($args)
             // Get infos from cache
             $themeList[] = xarVarGetCached('Theme.Infos', $themeInfo['regid']);
         } else {
-            $themeInfo['displayname'] = xarThemeGetDisplayableName($themeInfo['name']);
+            $themeInfo['displayname'] = $themeInfo['name'];
             // Shortcut for os prepared directory
             $themeInfo['osdirectory'] = xarVarPrepForOS($themeInfo['directory']);
 

@@ -16,7 +16,7 @@
  *
  * @package multilanguage
  */
-sys::import('xaraya.xarMLS');
+sys::import('xaraya.mls');
 
 class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
@@ -117,7 +117,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
 
         if (!$this->gen->bindDomain($dnType, $dnName)) return false;
         if (parent::bindDomain($dnType, $dnName)) return true;
-                
+
         return false;
     }
 /*
@@ -177,7 +177,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
             if (!$this->gen->create($ctxType, $ctxName)) return false;
             $fileName = parent::findContext($ctxType, $ctxName);
             if ($fileName === false) return false;
-        }    
+        }
         return $fileName;
     }
 

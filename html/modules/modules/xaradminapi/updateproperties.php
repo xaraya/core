@@ -30,7 +30,7 @@ function modules_adminapi_updateproperties($args)
     if(!xarSecurityCheck('AdminModules',0,'All',"All:All:$regid")) return;
 
     // Update
-    $xartable =& xarDBGetTables();
+    $xartable = xarDB::getTables();
     $q = 'UPDATE ' . $xartable['modules'] . ' SET ';
     $uparts=array(); $bindvars=array();
     //    if (isset($displayname)) {$uparts[] = 'directory=?'; $bindvars[] = $displayname;}
@@ -43,7 +43,7 @@ function modules_adminapi_updateproperties($args)
         // We have something to update
         $q .= join(',',$uparts) . ' WHERE regid=?';
         $bindvars[] = $regid;
-        $dbconn = xarDbGetConn();
+        $dbconn = xarDB::getConn();
         $dbconn->Execute($q, $bindvars);
     }
     return true;

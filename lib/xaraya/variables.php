@@ -88,17 +88,14 @@ define('XARVAR_PREP_TRIM',        8);
  * @global xarVar_allowableHTML array
  * @global xarVar_fixHTMLEntities bool
  * @param args array
- * @param whatElseIsGoingLoaded integer
  * @return bool
- * @todo <johnny> fix the load level stuff here... it's inconsistant to the rest of the core
  * @todo <mrb> remove the two settings allowablehtml and fixhtmlentities
  * @todo revisit naming of config_vars table
 **/
-function xarVar_init(&$args, $whatElseIsGoingLoaded)
+function xarVar_init(&$args)
 {
     // Configuration init needs to be done first
-    $sitePrefix = xarDBGetSiteTablePrefix();
-    $tables = array('config_vars' => $sitePrefix . '_module_vars');
+    $tables = array('config_vars' => xarDB::getPrefix() . '_module_vars');
 
     xarDB::importTables($tables);
 
@@ -203,7 +200,6 @@ function xarVarBatchFetch()
  *   XARVAR_PREP_FOR_NOTHING:    no prep (default)
  *   XARVAR_PREP_FOR_DISPLAY:    xarVarPrepForDisplay($value)
  *   XARVAR_PREP_FOR_HTML:       xarVarPrepHTMLDisplay($value)
- *  // FIXME: DELETE THIS once deprecation is complete
  *   XARVAR_PREP_FOR_STORE:      dbconn->qstr($value)
  *   XARVAR_PREP_TRIM:           trim($value)
  *
@@ -218,8 +214,7 @@ function xarVarBatchFetch()
  * @todo  get rid of the explicit value of XARVAR_GET_OR_POST, use the bitmas (i.e. GET_OR_POST = GET + POST)
  * @todo  make dont_set and dont_reuse are too similar (conceptually) which make the code below confusing [phpdoc above implies REUSE is the default]
  * @todo  re-evaluate the prepping, prepforstore is deprecated for example, prep for display and prep for html are partially exclusive
- * @throws BAD_PARAM
- */
+**/
 function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags = XARVAR_GET_OR_POST, $prep = XARVAR_PREP_FOR_NOTHING)
 {
     assert('is_int($flags); /* Flags passed to xarVarFetch need to be numeric */');

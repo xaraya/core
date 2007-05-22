@@ -10,7 +10,7 @@
  * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  */
-
+sys::import('xaraya.tableddl');
 /**
  * Initialise the dynamicdata module
  *
@@ -23,8 +23,9 @@ function dynamicdata_init()
     /**
      * Create tables
      */
-    $dbconn = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $xartable = xarDB::getTables();
+    $prefix = xarDB::getPrefix();
 
     $dynamic_objects = $xartable['dynamic_objects'];
     $dynamic_properties = $xartable['dynamic_properties'];
@@ -32,9 +33,6 @@ function dynamicdata_init()
     $dynamic_relations = $xartable['dynamic_relations'];
     $dynamic_properties_def = $xartable['dynamic_properties_def'];
     $modulestable = $xartable['modules'];
-
-    //Load Table Maintenance API
-    xarDBLoadTableMaintenanceAPI();
 
     // Create tables inside a transaction
     try {
@@ -130,7 +128,7 @@ function dynamicdata_init()
         $query = xarDBCreateIndex(
             $dynamic_objects,
             array(
-                'name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dynobjects_combo',
+                'name'   => 'i_' . $prefix . '_dynobjects_combo',
                 'fields' => array('object_moduleid','object_itemtype'),
                 'unique' => 'true'
             )
@@ -141,7 +139,7 @@ function dynamicdata_init()
         $query = xarDBCreateIndex(
             $dynamic_objects,
             array(
-                'name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dynobjects_name',
+                'name'   => 'i_' . $prefix . '_dynobjects_name',
                 'fields' => array('object_name'),
                 'unique' => 'true'
             )
@@ -253,7 +251,7 @@ function dynamicdata_init()
         $query = xarDBCreateIndex(
             $dynamic_properties,
             array(
-                'name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dynprops_combo',
+                'name'   => 'i_' . $prefix . '_dynprops_combo',
                 'fields' => array('prop_objectid', 'prop_name'),
                 'unique' => 'true'
             )
@@ -358,7 +356,7 @@ function dynamicdata_init()
         $query = xarDBCreateIndex(
             $dynamic_data,
             array(
-                'name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dyndata_propid',
+                'name'   => 'i_' . $prefix . '_dyndata_propid',
                 'fields' => array('dd_propid')
             )
         );
@@ -367,7 +365,7 @@ function dynamicdata_init()
         $query = xarDBCreateIndex(
             $dynamic_data,
             array(
-                'name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dyndata_itemid',
+                'name'   => 'i_' . $prefix . '_dyndata_itemid',
                 'fields' => array('dd_itemid')
             )
         );
@@ -624,11 +622,9 @@ function dynamicdata_delete()
     /**
      * Drop tables
      */
-    $dbconn = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $xartable = xarDB::getTables();
 
-    //Load Table Maintenance API
-    xarDBLoadTableMaintenanceAPI();
 
     // Generate the SQL to drop the table using the API
     $query = xarDBDropTable($xartable['dynamic_objects']);
@@ -767,13 +763,10 @@ function dynamicdata_createPropDefTable()
       */
 
     // Get existing DB info
-    $dbconn = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $xartable = xarDB::getTables();
+    $prefix = xarDB::getPrefix();
     $dynamic_properties_def = $xartable['dynamic_properties_def'];
-
-    //Load Table Maintenance API
-    xarDBLoadTableMaintenanceAPI();
-
 
     $propdefs = array(
         'prop_id'     => array(
@@ -862,7 +855,7 @@ function dynamicdata_createPropDefTable()
     $query = xarDBCreateIndex(
         $dynamic_properties_def,
         array(
-            'name'   => 'i_' . xarDBGetSiteTablePrefix() . '_dynpropdef_modid',
+            'name'   => 'i_' . $prefix . '_dynpropdef_modid',
             'fields' => array('prop_modid')
         )
     );

@@ -27,8 +27,8 @@ function modules_adminapi_update($args)
     if(!xarSecurityCheck('AdminModules',0,'All',"All:All:$regid")) return;
 
     // Rename operation
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $xartable = xarDB::getTables();
 
     // Get module name
     $modinfo = xarModGetInfo($regid);

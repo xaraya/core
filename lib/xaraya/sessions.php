@@ -11,7 +11,7 @@
  * @author Michel Dalle
  * @author Marcel van der Boom <marcel@xaraya.com>
  * @todo We have to define a public interface so NOWHERE ever anyone else touches anything related to the session implementation
-**/
+ */
 
 /**
  * Session exception class
@@ -25,7 +25,7 @@ class SessionException extends Exception
  *
  * @return bool true
  */
-function xarSession_init(&$args, $whatElseIsGoingLoaded)
+function xarSession_init(&$args)
 {
     /* @todo: get rid of the global */
     $GLOBALS['xarSession_systemArgs'] = $args;
@@ -34,8 +34,7 @@ function xarSession_init(&$args, $whatElseIsGoingLoaded)
     xarEvents::register('SessionCreate');
 
     // Register tables this subsystem uses
-    $systemPrefix = xarDBGetSystemTablePrefix();
-    $tables = array('session_info' => $systemPrefix . '_session_info');
+    $tables = array('session_info' => xarDB::getPrefix() . '_session_info');
     xarDB::importTables($tables);
 
     // Set up the session object

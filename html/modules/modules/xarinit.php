@@ -11,28 +11,25 @@
  * @link http://xaraya.com/index.php/release/1.html
  */
 // Load Table Maintainance API
-xarDBLoadTableMaintenanceAPI();
-
+sys::import('xaraya.tableddl');
 /**
  * Initialise the modules module
  *
- * @param none $
- * @returns bool
+ * @return bool
  * @throws DATABASE_ERROR
  */
 function modules_init()
 {
     // Get database information
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $tables =& xarDB::getTables();
 
-    $sitePrefix = xarDBGetSiteTablePrefix();
-    $systemPrefix = xarDBGetSystemTablePrefix();
+    $prefix = xarDB::getPrefix();
 
-    $tables['modules'] = $systemPrefix . '_modules';
-    $tables['module_vars'] = $sitePrefix . '_module_vars';
-    $tables['module_itemvars'] = $sitePrefix . '_module_itemvars';
-    $tables['hooks'] = $sitePrefix . '_hooks';
+    $tables['modules'] = $prefix . '_modules';
+    $tables['module_vars'] = $prefix . '_module_vars';
+    $tables['module_itemvars'] = $prefix . '_module_itemvars';
+    $tables['hooks'] = $prefix . '_hooks';
     // Create tables
     // This should either go, or fail competely
     try {
@@ -77,21 +74,26 @@ function modules_init()
         $query = xarDBCreateTable($tables['modules'], $fields);
         $dbconn->Execute($query);
 
-        $modInfo = xarMod_getFileInfo('modules');
-        if (!isset($modInfo)) return; // throw back
-        // Use version, since that's the only info likely to change
-        $modVersion = $modInfo['version'];
-        // Manually Insert Modules module into modules table
+        // Manually Insert the Base and Modules module into modules table
         $query = "INSERT INTO " . $tables['modules'] . "
               (name, regid, directory, version,
                class, category, admin_capable, user_capable, state )
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $modInfo = xarMod_getFileInfo('modules');
+        if (!isset($modInfo)) return; // throw back
+        // Use version, since that's the only info likely to change
+        $modVersion = $modInfo['version'];
         $bindvars = array('modules',1,'modules',(string) $modVersion,'Core Admin','Global',1,0,3);
         $dbconn->Execute($query,$bindvars);
 
-        // Save the actual insert id
-        $savedmodid = $dbconn->getLastId($tables['modules']);
+        $modInfo = xarMod_getFileInfo('base');
+        if (!isset($modInfo)) return; // throw back
+        // Use version, since that's the only info likely to change
+        $modVersion = $modInfo['version'];
 
+        $bindvars = array('base',68,'base',(string) $modVersion,'Core Admin','Global',1,1,3);
+        $dbconn->Execute($query,$bindvars);
 
         /** Module vars table is created earlier now (base mod, where config_vars table was created */
 
@@ -157,32 +159,36 @@ function modules_init()
                 VALUES (?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
+        $modulesmodid = xarMod::getID('modules');
         $modvars = array(
                          // default show-hide core modules
-                         array($savedmodid,'hidecore','0'),
+                         array($modulesmodid,'hidecore','0'),
                          // default regenerate command
-                         array($savedmodid,'regen','0'),
+                         array($modulesmodid,'regen','0'),
                          // default style of module list
-                         array($savedmodid,'selstyle','plain'),
+                         array($modulesmodid,'selstyle','plain'),
                          // default filtering based on module states
-                         array($savedmodid,'selfilter', '0'),
+                         array($modulesmodid,'selfilter', '0'),
                          // default modules list sorting order
-                         array($savedmodid,'selsort','nameasc'),
+                         array($modulesmodid,'selsort','nameasc'),
                          // default show-hide modules statistics
-                         array($savedmodid,'hidestats','0'),
+                         array($modulesmodid,'hidestats','0'),
                          // default maximum number of modules listed per page
-                         array($savedmodid,'selmax','all'),
+                         array($modulesmodid,'selmax','all'),
                          // default start page
-                         array($savedmodid,'startpage','overview'),
+                         array($modulesmodid,'startpage','overview'),
                          // disable overviews
-                         array($savedmodid,'disableoverview',0),
+                         array($modulesmodid,'disableoverview',0),
                          // expertlist
-                         array($savedmodid,'expertlist','0'));
+                         array($modulesmodid,'expertlist','0'),
+                         // the configuration settings pertaining to modules for the base module
+                         array($modulesmodid,'defaultmoduletype','user'),
+                         array($modulesmodid,'defaultmodule',xarMod::getID('base')),
+                         array($modulesmodid,'defaultmodulefunction','main'));
 
         foreach($modvars as &$modvar) {
             $stmt->executeUpdate($modvar);
         }
-
         // We're done, thanks, commit the thingie
         $dbconn->commit();
     } catch (Exception $e) {
@@ -231,8 +237,8 @@ function modules_activate()
 function modules_upgrade($oldVersion)
 {
     // Get database information
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $tables = xarDB::getTables();
 
     switch($oldVersion) {
     case '2.3.0':

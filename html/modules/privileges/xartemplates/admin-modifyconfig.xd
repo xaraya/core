@@ -276,8 +276,9 @@
                     </label>
                     <input type="password" name="password2" id="password2" value="" maxlength="40" class="xar-form-textmedium" />
                 </div>
-                <xar:if condition="xarSession::getVar('statusmsg') ne ''">
-                    <p class="xar-form-input-wrapper-after xar-error">#xarSession::getVar('statusmsg')#</p>
+                <xar:set name="message">xarSession::getVar('statusmsg')</xar:set>
+                <xar:if condition="$message ne ''">
+                    <p class="xar-form-input-wrapper-after xar-error">#$message#</p>
                 </xar:if>
                <xar:set name="dummy">xarSession::setVar('statusmsg','')</xar:set>
             </fieldset>

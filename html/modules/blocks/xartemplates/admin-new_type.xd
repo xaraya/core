@@ -17,13 +17,13 @@
 </div>
 <div class="xar-mod-body">
    <xar:template type="module" file="admin-menu" />
-  <h2><xar:mlstring>Add new block type</xar:mlstring></h2>
+  <h2><xar:mlstring>New Block Type</xar:mlstring></h2>
 
     <form action="#xarModURL('blocks', 'admin', 'new_type')#" method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded">
         <fieldset>
             <legend>
                 <xar:mlstring>
-                    Add Block Type
+                    Block Type Properties
                 </xar:mlstring>
             </legend>
             <input type="hidden" name="authid" id="authid" value="#$authid#" />
@@ -47,11 +47,11 @@
                         <xar:loop name="$type_list">
                             <xar:if condition="$loop:item.name eq $blockname">
                                 <option value="#xarVarPrepForDisplay($loop:item.name)#" selected="selected">
-                                    #xarVarPrepForDisplay($loop:item.name)# 
+                                    #xarVarPrepForDisplay($loop:item.name)#
                                 </option>
                                 <xar:else />
                                 <option value="#xarVarPrepForDisplay($loop:item.name)#">
-                                    #xarVarPrepForDisplay($loop:item.name)# 
+                                    #xarVarPrepForDisplay($loop:item.name)#
                                 </option>
                             </xar:if>
                         </xar:loop>

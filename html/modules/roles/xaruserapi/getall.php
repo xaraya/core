@@ -32,8 +32,8 @@ function roles_userapi_getall($args)
     if (!xarSecurityCheck('ViewRoles')) return;
 
     // Get database setup
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $xartable = xarDB::getTables();
 
     $rolestable = $xartable['roles'];
     $rolemembtable = $xartable['rolemembers'];

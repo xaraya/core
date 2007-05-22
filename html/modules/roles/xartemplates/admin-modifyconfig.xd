@@ -446,7 +446,7 @@
                 </p>
                 <div class="xar-form-input-wrapper-after">
                     <xar:set name="checked">xarModGetVar('roles', 'allowemail')</xar:set>
-                    <xar:data-input type="checkbox" name="allowemail" id="usersendemails" checked="$checked" />
+                    <xar:data-input type="checkbox" name="allowemail" id="allowemail" checked="$checked" />
                     <label for="allowemail" title="#xarML('Allow users to send emails?')#">
                         <strong><xar:mlstring>
                             Allow User Email Page?

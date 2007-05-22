@@ -43,8 +43,8 @@ class DataPropertyMaster extends Object
     {
         // we can't use our own classes here, because we'd have an endless loop :-)
 
-        $dbconn = xarDBGetConn();
-        $xartable = xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $xartable = xarDB::getTables();
 
         $dynamicprop = $xartable['dynamic_properties'];
 

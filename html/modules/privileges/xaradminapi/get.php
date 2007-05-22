@@ -12,7 +12,7 @@ function privileges_adminapi_get($args)
         throw new VariableValidationException(array('itemid',$itemid,'numeric'));
     }
 
-    $xartable =& xarDBGetTables();
+    $xartable = xarDB::getTables();
     $query = "SELECT p.id, p.name, p.realmid,
                      m.regid, p.component, p.instance,
                      p.level,  p.description
@@ -25,7 +25,7 @@ function privileges_adminapi_get($args)
     if (isset($name)) {
         $query .= " AND p.name = " . $name;
     }
-    $dbconn =& xarDBGetConn();
+    $dbconn = xarDB::getConn();
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery();
     $privilege = array();

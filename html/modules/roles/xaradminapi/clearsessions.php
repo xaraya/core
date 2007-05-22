@@ -22,8 +22,8 @@ function roles_adminapi_clearsessions($spared)
 {
     if(!isset($spared)) throw new EmptyParameterException('spared');
 
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $xartable = xarDB::getTables();
     $sessionstable = $xartable['session_info'];
 
     $query = "SELECT sessid, role_id FROM $sessionstable";

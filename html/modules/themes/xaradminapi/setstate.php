@@ -36,8 +36,8 @@ function themes_adminapi_setstate($args)
     $themeInfo = xarThemeGetInfo($regid);
 
     //Set up database object
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $xartable = xarDB::getTables();
     $themesTable = $xartable['themes'];
 
     $oldState = $themeInfo['state'];

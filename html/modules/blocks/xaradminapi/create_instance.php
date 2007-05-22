@@ -65,8 +65,8 @@ function blocks_adminapi_create_instance($args)
     if (!isset($title)) $title = '';
 
     // Load up database details.
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $xartable = xarDB::getTables();
     $block_instances_table = $xartable['block_instances'];
 
     // Insert instance details.

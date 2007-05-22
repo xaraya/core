@@ -13,70 +13,24 @@
 **/
 
 /**
- * Initializes the HTTP Protocol Server/Request/Response utilities
- *
- * @access protected
- * @global bool xarRequest_allowShortURLs
- * @global array xarRequest_defaultModule
- * @global array xarRequest_shortURLVariables
- * @param bool args['generateShortURLs']
- * @param string args['defaultModuleName']
- * @param string args['defaultModuleName']
- * @param string args['defaultModuleName']
- * @param integer whatElseIsGoingLoaded
- * @return bool true
- */
-function xarSerReqRes_init(&$args, $whatElseIsGoingLoaded)
-{
-    // Use $args to configure the classes
-    xarServer::init($args);
-    xarRequest::init($args);
-    // TODO: we will migrate the whatelseblah out later on, to keep the init interface clean, we trick it a bit for now.
-    $args['whatelseisgoingloaded'] = $whatElseIsGoingLoaded;
-    xarResponse::init($args);
-
-    // Register the ServerRequest event
-    xarEvents::register('ServerRequest');
-
-    return true;
-}
-
-/**
  * Wrapper functions to support Xaraya 1 API Server functions
  *
- */
+**/
 function xarServerGetVar($name) { return xarServer::getVar($name); }
 function xarServerGetBaseURI()  { return xarServer::getBaseURI();  }
 function xarServerGetHost()     { return xarServer::getHost();     }
 function xarServerGetProtocol() { return xarServer::getProtocol(); }
 function xarServerGetBaseURL()  { return xarServer::getBaseURL();  }
-function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target = NULL)
-{
-    return xarServer::getCurrentUrl($args, $generateXMLURL, $target);
-}
-
-/**
- * Wrapper function to support Xaraya 1 API Request functions
- *
- */
-function xarRequestGetVar($name, $allowOnlyMethod = NULL)
-{
-    return xarRequest::getVar($name, $allowOnlyMethod);
-}
-
-function xarRequestGetInfo()        { return xarRequest::getInfo();        }
-function xarRequestIsLocalReferer() { return xarRequest::IsLocalReferer(); }
-
-/**
- * Wrapper functions to support Xaraya 1 API Response functions
- *
- */
-function xarResponseRedirect($redirectURL) { return xarResponse::Redirect($redirectURL); }
+function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target = NULL) { return xarServer::getCurrentUrl($args, $generateXMLURL, $target); }
+function xarRequestGetVar($name, $allowOnlyMethod = NULL) { return xarRequest::getVar($name, $allowOnlyMethod);}
+function xarRequestGetInfo()                              { return xarRequest::getInfo();        }
+function xarRequestIsLocalReferer()                       { return xarRequest::IsLocalReferer(); }
+function xarResponseRedirect($redirectURL)                { return xarResponse::Redirect($redirectURL); }
 
 /**
  * Convenience classes
  *
- */
+**/
 class xarServer extends Object
 {
     public static $generateXMLURLs = true;
@@ -88,6 +42,7 @@ class xarServer extends Object
     static function init($args)
     {
         self::$generateXMLURLs = $args['generateXMLURLs'];
+        xarEvents::register('ServerRequest');
     }
     /**
      * Gets a server variable
@@ -383,16 +338,16 @@ class xarRequest extends Object
         $value = xarMLS_convertFromInput($value, $method);
 
         if (get_magic_quotes_gpc()) {
-            if(!is_array($value)) {
-                $value = stripslashes($value);
-            } else {
-                array_walk($value,array('self','__stripslashes'));
-            }
+            $value = self::__stripslashes($value);
         }
         return $value;
     }
-    // TEMP to make PHP happy passing 2 params with array_walk, obviously seek another solution for this.
-    static function __stripslashes($a,$b) { return stripslashes($a);}
+
+    static function __stripslashes($value)
+    {
+        $value = is_array($value) ? array_map(array('self','__stripslashes'), $value) : stripslashes($value);
+        return $value;
+    }
 
 
     /**
@@ -543,17 +498,11 @@ class xarRequest extends Object
 
 class xarResponse extends Object
 {
-    public static $closeSession = true;    // we usually will have sessions
-
     /**
      * initialize
      *
      */
-    static function init($args)
-    {
-        // What does this do in the category useful?
-        self::$closeSession = $args['whatelseisgoingloaded'] & XARCORE_SYSTEM_SESSION;
-    }
+    static function init($args) { }
 
     /**
      * Carry out a redirect

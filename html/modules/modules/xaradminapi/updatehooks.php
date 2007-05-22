@@ -28,8 +28,8 @@ function modules_adminapi_updatehooks($args)
     if(!xarSecurityCheck('AdminModules',0,'All',"All:All:$regid")) return;
 
     // Get database connection and table names
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $xartable = xarDB::getTables();
 
     // Get module name
     $modinfo = xarModGetInfo($regid);

@@ -30,8 +30,8 @@ function blocks_userapi_getall($args)
         $orderby = '';
     }
 
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $xartable = xarDB::getTables();
 
     $block_instances_table = $xartable['block_instances'];
     $block_group_instances_table = $xartable['block_group_instances'];

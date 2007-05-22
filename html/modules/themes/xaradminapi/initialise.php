@@ -1,11 +1,11 @@
 <?php
 /**
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Themes module
+ * @subpackage themes
  */
 /**
  * Initialise a theme
@@ -18,10 +18,9 @@
  */
 function themes_adminapi_initialise($args)
 {
-    // Get arguments from argument array
+
     extract($args);
 
-    // Argument check
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
     // Get theme information
@@ -30,16 +29,13 @@ function themes_adminapi_initialise($args)
         throw new ThemeNotFoundException($regid,'Theme (regid: #(1) does not exist.');
     }
 
-    // Get theme database info
-    xarThemeDBInfoLoad($themeInfo['name'], $themeInfo['directory']);
-
-    // jojodee, fix hard coded themes dir
-    $xarinitfilename = xarConfigGetVar('Site.BL.ThemesDirectory').'/'. $themeInfo['directory'] .'/xartheme.php';
+    $xarinitfilename = xarModVars::get('themes', 'themesdirectory') . '/'. $themeInfo['directory']  . '/xartheme.php';
     if (!file_exists($xarinitfilename)) {
         throw new FileNotFounException($xarinitfilename);
     }
     include $xarinitfilename;
 
+//var_dump($themevars);exit;
     if (!empty($themevars)) {
         foreach($themevars as $var => $value){
             $value['prime'] = 1;
@@ -54,14 +50,13 @@ function themes_adminapi_initialise($args)
     $set = xarModAPIFunc('themes', 'admin', 'setstate',
                         array('regid' => $regid,
                               'state' => XARTHEME_STATE_INACTIVE));
-    // debug($set);
+
     if (!isset($set)) {
         throw new Exception('Could not set state of theme');
         xarSession::setVar('errormsg', xarML('Theme state change failed'));
         return false;
     }
 
-    // Success
     return true;
 }
 ?>

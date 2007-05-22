@@ -1,22 +1,18 @@
 <?php
 /**
- * (try to) get the "meta" properties of tables
- *
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
  * (try to) get the "meta" properties of tables via db abstraction layer
  *
- * @author the DynamicData module development team
  * @param $args['table']  optional table you're looking for
- * @returns mixed
  * @return array of field definitions, or null on failure
  * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
  * @todo split off the common parts which are also in getstatic.php
@@ -33,12 +29,12 @@ function dynamicdata_utilapi_getmeta($args)
         return array($table => $propertybag[$table]);
     }
 
-    $dbconn = xarDBGetConn();
+    $dbconn = xarDB::getConn();
     // dbInfo holds the meta information about the database
     $dbInfo = $dbconn->getDatabaseInfo();
 
     // Note: this only works if we use the same database connection
-    if (!empty($db) && $db != $dbInfo->getName()) {
+    if (!empty($db) && $db != xarDB::getName()) {
         $dbconn->SelectDB($db);
         $prefix = $db . '.';
     } else {
@@ -191,11 +187,10 @@ function dynamicdata_utilapi_getmeta($args)
     }
 
     // Note: this only works if we use the same database connection
-    if (!empty($db) && $db != xarDBGetName()) {
-        $dbconn->SelectDB(xarDBGetName());
+    if (!empty($db) && $db != xarDB::getName()) {
+        $dbconn->SelectDB(xarDB::getName());
     }
 
     return $metadata;
 }
-
 ?>

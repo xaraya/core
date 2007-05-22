@@ -175,10 +175,6 @@ function installer_admin_phase3()
     $data['mysqlextension']           = extension_loaded('mysql');
     $data['pgsqlextension']           = extension_loaded('pgsql');
     $data['sqliteextension']          = extension_loaded('sqlite');
-    // This is called xsl in PHP5.x Should check for that when php version is 5 or higher
-   //$data['xsltextension']            = extension_loaded ('xslt');
-   // $data['ldapextension']            = extension_loaded ('ldap');
-   // $data['gdextension']              = extension_loaded ('gd');
 
     $data['metRequiredPHPVersion']    = $metRequiredPHPVersion;
     $data['phpVersion']               = PHP_VERSION;
@@ -296,13 +292,11 @@ function installer_admin_phase5()
                         'databaseHost' => $dbHost,
                         'databaseType' => $dbType,
                         'databaseName' => $dbName,
-                        'systemTablePrefix' => $dbPrefix,
-                        'siteTablePrefix' => $dbPrefix,
+                        'prefix' => $dbPrefix,
                         'doConnect' => false);
 
-    // {ML_dont_parse 'includes/xarDB.php'}
-    sys::import('xaraya.xarDB');
-    xarDB_Init($init_args, XARCORE_SYSTEM_NONE);
+    sys::import('xaraya.database');
+    xarDB_Init($init_args);
 
     // Not all Database Servers support selecting the specific db *after* connecting
     // so let's try connecting with the dbname first, and then without if that fails
@@ -343,7 +337,7 @@ function installer_admin_phase5()
         return $data;
     }
 
-    xarDBLoadTableMaintenanceAPI();
+    sys::import('xaraya.tableddl');
     // Create the database if necessary
     if ($createDB) {
         $data['confirmDB']  = true;
@@ -371,18 +365,16 @@ function installer_admin_phase5()
                         'databaseHost' => $dbHost,
                         'databaseType' => $dbType,
                         'databaseName' => $dbName,
-                        'systemTablePrefix' => $dbPrefix,
-                        'siteTablePrefix' => $dbPrefix);
+                        'prefix' => $dbPrefix);
     // Connect to database
-    $whatToLoad = XARCORE_SYSTEM_NONE;
-    xarDB_init($systemArgs, $whatToLoad);
+    xarDB_init($systemArgs);
 
     // drop all the tables that have this prefix
     //TODO: in the future need to replace this with a check further down the road
     // for which modules are already installed
 
     if (isset($removetables) && $removetables) {
-        $dbconn =& xarDBGetConn();
+        $dbconn = xarDB::getConn();
         $dbinfo = $dbconn->getDatabaseInfo();
         try {
             $dbconn->begin();
@@ -411,18 +403,16 @@ function installer_admin_phase5()
 
     // install the security stuff here, but disable the registerMask and
     // and xarSecurityCheck functions until we've finished the installation process
-    sys::import('xaraya.xarSecurity');
-
-
-    sys::import('xaraya.xarMod');
+    sys::import('xaraya.security');
+    sys::import('xaraya.modules');
 
     $modules = array('base','modules','roles','privileges');
     foreach ($modules as $module)
         if (!xarInstallAPIFunc('initialise', array('directory' => $module,'initfunc'  => 'init'))) return;;
 
-    $systemPrefix = xarDBGetSystemTablePrefix();
-    $modulesTable = $systemPrefix .'_modules';
-    $tables =& xarDBGetTables();
+    $prefix = xarDB::getPrefix();
+    $modulesTable = $prefix .'_modules';
+    $tables =& xarDB::getTables();
 
     $newModSql   = "INSERT INTO $modulesTable
                     (name, regid, directory,
@@ -431,7 +421,7 @@ function installer_admin_phase5()
     $newStmt     = $dbconn->prepareStatement($newModSql);
 
 
-    $modules = array('authsystem','roles','privileges','base','installer','blocks','themes');
+    $modules = array('authsystem','roles','privileges','installer','blocks','themes');
     // Series of updates, begin transaction
     try {
         $dbconn->begin();
@@ -479,7 +469,7 @@ function installer_admin_phase5()
     sys::import('xaraya.variables');
 
     $a = array();
-    xarVar_init($a,XARCORE_SYSTEM_DATABASE);
+    xarVar_init($a);
     xarConfigSetVar('Site.MLS.DefaultLocale', $install_language);
 
     // Set the allowed locales to our "C" locale and the one used during installation
@@ -544,7 +534,7 @@ function installer_admin_bootstrap()
     if (!xarModAPIFunc('modules', 'admin', 'regenerate')) return;
 
 
-    $regid=xarModGetIDFromName('authsystem');
+    $regid = xarModGetIDFromName('authsystem');
     if (empty($regid)) {
         die(xarML('I cannot load the Authsystem module. Please make it available and reinstall'));
     }
@@ -552,7 +542,7 @@ function installer_admin_bootstrap()
     // Set the state and activate the following modules
     // jojodee - Modules, authsystem, base, installer, blocks and themes are already activated in base init
     // We run them through roles and privileges as special cases that need an 'activate' phase. Others don't.
-   $modlist=array('roles','privileges');
+   $modlist = array('roles','privileges');
     foreach ($modlist as $mod) {
         // Set state to inactive first
         $regid=xarModGetIDFromName($mod);
@@ -574,10 +564,10 @@ function installer_admin_bootstrap()
     }
 
     // Set the state and activate the following themes
-    $themelist=array('print','rss','Xaraya_Classic');
+    $themelist = array('print','rss','Xaraya_Classic');
     foreach ($themelist as $theme) {
         // Set state to inactive
-        $regid=xarThemeGetIDFromName($theme);
+        $regid = xarThemeGetIDFromName($theme);
         if (isset($regid)) {
             if (!xarModAPIFunc('themes','admin','setstate', array('regid'=> $regid,'state'=> XARTHEME_STATE_INACTIVE))){
                 throw new Exception("Setting state of theme with regid: $regid failed");
@@ -680,7 +670,7 @@ function installer_admin_create_administrator()
                    'uname'      => $userName,
                    'email'      => $email,
                    // CHECKME: can we transform this in the dproperty
-                   'password'   => $role->properties['password']->encrypt($pass),
+                   'password'   => $pass,
                    'state'      => ROLES_STATE_ACTIVE);
 
     xarModSetVar('roles', 'lastuser', $userName);
@@ -717,8 +707,8 @@ function installer_admin_create_administrator()
     }
 
     // Load up database
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $tables = xarDB::getTables();
 
     $blockGroupsTable = $tables['block_groups'];
 
@@ -914,15 +904,11 @@ function installer_admin_confirm_configuration()
 
     $options2 = $options3 = array();
     foreach ($availablemodules as $availablemodule) {
-        // $modInfo = xarModGetInfo($availableModule['regid']);
-        // if($modInfo['state'] != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-        //            echo var_dump($availablemodule);exit;
         $options2[] = array(
                             'item' => $availablemodule['regid'],
                             'option' => 'true',
                             'comment' => xarML('Install the #(1) module.',ucfirst($availablemodule['name']))
                             );
-        //        }
     }
     if (!$confirmed) {
 
@@ -935,25 +921,6 @@ function installer_admin_confirm_configuration()
         $data['configuration'] = $configuration;
         return $data;
     } else {
-        /*********************************************************************
-        * Empty the privilege tables
-        *********************************************************************/
-/*         $dbconn =& xarDBGetConn();
-        $sitePrefix = xarDBGetSiteTablePrefix();
-        try {
-            $dbconn->begin();
-           $query = "DELETE FROM " . $sitePrefix . '_privileges WHERE type = ' . xarMasks::PRIVILEGES_PRIVILEGETYPE;
-            $dbconn->Execute($query);
-            $query = "DELETE FROM " . $sitePrefix . '_privmembers';
-            $dbconn->Execute($query);
-            $query = "DELETE FROM " . $sitePrefix . '_security_acl';
-            $dbconn->Execute($query);
-            $dbconn->commit();
-        } catch(SQLException $e) {
-            $dbconn->rollback();
-            throw $e;
-        }
-        */
 
         /*********************************************************************
         * Enter some default privileges
@@ -1017,7 +984,6 @@ function installer_admin_confirm_configuration()
                     throw new Exception($msg);
                 }
                 xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$module['item']));
-                // xarModAPIFunc('modules','admin','activate',array('regid'=>$module['item']));
             }
         }
         $func = "installer_" . basename(strval($configuration),'.conf.php') . "_configuration_load";
@@ -1028,8 +994,8 @@ function installer_admin_confirm_configuration()
         $content['content'] = '';
 
         // Load up database
-        $dbconn =& xarDBGetConn();
-        $tables =& xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
 
         $blockGroupsTable = $tables['block_groups'];
 
@@ -1082,7 +1048,7 @@ function installer_admin_cleanup()
     xarTplSetPageTemplateName('installer');
 
     xarUserLogOut();
-// log in admin user
+    // log in admin user
     $uname = xarModGetVar('roles','lastuser');
     $pass = xarModGetVar('roles','adminpass');
 
@@ -1091,12 +1057,13 @@ function installer_admin_cleanup()
         throw new Exception($msg);
     }
 
-//    $remove = xarModDelVar('roles','adminpass');
-    $remove = xarModDelVar('installer','modules');
+
+    xarModDelVar('roles','adminpass');
+    xarModDelVar('installer','modules');
 
     // Load up database
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $tables = xarDB::getTables();
 
     $blockGroupsTable = $tables['block_groups'];
 
@@ -1228,10 +1195,10 @@ function installer_admin_upgrade1()
     $data['descr'] = xarML('Now preparing to run an upgrade from prior #(1) Version <strong>#(2)</strong> (release #(3))
                     to #(4) version <strong>#(5)</strong> (release #(6))',
                     $data['xarProduct'],$data['xarVersion'],$data['xarRelease'],
-                    XARCORE_VERSION_ID, XARCORE_VERSION_NUM, XARCORE_VERSION_SUB);
+                    xarCore::VERSION_ID, xarCore::VERSION_NUM, xarCore::VERSION_SUB);
         $data['$title'] = xarML('Xaraya Upgrade');
 
-    if (XARCORE_VERSION_NUM == $data['xarVersion']) {
+    if (xarCore::VERSION_NUM == $data['xarVersion']) {
         $data['alreadydone']=xarML('You have already upgraded to #(1). The upgrade script only needs to run once.', $data['xarVersion']);
     }else{
         $data['alreadydone']='';
@@ -1264,11 +1231,10 @@ function installer_admin_upgrade2()
      $thisdata['xarRelease'] = xarConfigGetVar('System.Core.VersionSub');
 
      //Load this early
-     xarDBLoadTableMaintenanceAPI();
+     sys::import('xaraya.tableddl');
 
-     $sitePrefix=xarDBGetSiteTablePrefix();
-     $systemPrefix=xarDBGetSystemTablePrefix();
-     $dbconn =& xarDBGetConn();
+     $prefix = xarDB::getPrefix();
+     $dbconn =& xarDB::getConn();
 /**
  * Version 1.0 Release Upgrades
  * Version 1.0 Release candidate upgrades are also included here
@@ -1542,8 +1508,8 @@ function installer_admin_upgrade2()
 
     //we need to check the login block is the Authsystem login block, not the Roles
     //As the block is the same we could just change the type id of any login block type.
-    $blocktypeTable = $systemPrefix .'_block_types';
-    $blockinstanceTable = $systemPrefix .'_block_instances';
+    $blocktypeTable = $prefix . '_block_types';
+    $blockinstanceTable = $prefix .'_block_instances';
     $blockproblem=array();
     $info = xarMod::getBaseInfo('roles');
     $sysid = $info['systemid'];
@@ -1626,21 +1592,21 @@ function installer_admin_upgrade2()
     xarModSetVar('themes','usedashboard',false);
     xarModSetVar('themes','dashtemplate','admin');
 
-    $table_name['admin_menu']=$sitePrefix . '_admin_menu';
+    $table_name['admin_menu']=$prefix . '_admin_menu';
     $upgrade['admin_menu'] = xarModAPIFunc('installer',
                                                 'admin',
                                                 'CheckTableExists',
                                                 array('table_name' => $table_name['admin_menu']));
     //Let's remove the now unused admin menu table
     if ($upgrade['admin_menu']) {
-        $adminmenuTable = $systemPrefix .'_admin_menu';
+        $adminmenuTable = $prefix .'_admin_menu';
         $query = xarDBDropTable($adminmenuTable);
         $result = &$dbconn->Execute($query);
      }
 
     //We need to upgrade the blocks, and as the block is the same we could just change the type id of any login.
-    $blocktypeTable = $systemPrefix .'_block_types';
-    $blockinstanceTable = $systemPrefix .'_block_instances';
+    $blocktypeTable = $prefix .'_block_types';
+    $blockinstanceTable = $prefix .'_block_instances';
     $newblocks=array('waitingcontent','adminmenu');
     $blockproblem=array();
     foreach ($newblocks as $newblock) {
@@ -1675,7 +1641,7 @@ function installer_admin_upgrade2()
 
                if (($newblock='waitingcontent') && isset($blockid)) {
                    //We need to disable existing hooks and enable new ones - but which :)
-                   $hookTable = $systemPrefix .'_hooks';
+                   $hookTable = $prefix .'_hooks';
                    $query = "UPDATE $hookTable
                              SET smodule = 'base'
                              WHERE action=? AND smodule=?";
@@ -1727,8 +1693,8 @@ function installer_admin_upgrade2()
 
     //Remove the Adminpanel module entry
     $aperror=0;
-    $moduleTable = $systemPrefix .'_modules';
-    $moduleStatesTable=$systemPrefix .'_module_states';
+    $moduleTable = $prefix .'_modules';
+    $moduleStatesTable=$prefix .'_module_states';
     $adminpanels='adminpanels';
     $query = "SELECT name,
                      regid
@@ -1767,7 +1733,7 @@ function installer_admin_upgrade2()
     xarModSetVar('roles', 'setusertimezone',false); //new modvar - let's make sure it's set
     xarModDelVar('roles', 'settimezone');//this is no longer used, be more explicit and user setusertimezone
     xarModSetVar('roles', 'usertimezone',''); //new modvar - initialize it
-    xarModSetVar('roles','usersendemails', false); //old modvar returns. Let's make sure it's set false as it allows users to send emails
+    xarModSetVar('roles','allowemail', false); //old modvar returns. Let's make sure it's set false as it allows users to send emails
 
     //Ensure that registration module is set as default if it is installed,
     // if it is active and the default is currently not set
@@ -1805,7 +1771,7 @@ function installer_admin_upgrade3()
     $roleanon = xarFindRole('Anonymous');
     $configvars[] = array(
                            array('name'    =>  'System.Core.VersionNum',
-                                 'set'     =>  XARCORE_VERSION_NUM));
+                                 'set'     =>  xarCore::VERSION_NUM));
     $content .=  "<h3><strong>Updating Required Configuration Variables</strong></h3>";
     foreach($configvars as $configvar){
         foreach($configvar as $var){

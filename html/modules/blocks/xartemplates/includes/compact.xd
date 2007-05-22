@@ -1,136 +1,136 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:comment>
-    License: GPL http://www.gnu.org/copyleft/gpl.html 
+    License: GPL http://www.gnu.org/copyleft/gpl.html
 </xar:comment>
 <div class="xar-form-input-wrapper">
     <label class="xar-form-label">
         <xar:mlstring>
-            Legend of Actions 
+            Legend of Actions
         </xar:mlstring>
     </label>
     <strong>
         <xar:mlstring>
-            [D]efault [H]idden [M]aximized [E]dit [R]emove 
+            [D]efault [H]idden [M]aximized [E]dit [R]emove
         </xar:mlstring>
     </strong>
 </div>
-<div class="xar-overflow-auto">
+<div class="xar-overflow-auto" style="clear:both">
     <xar:loop name="$blocks">
         <xar:if condition="(($loop:index + 1) % 2)">
             <div class="xar-floatleft xar-halfwidth xar-border-thinbottom">
                 <div class="xar-sub xar-floatright xar-align-right">
-                    [ 
+                    [
                     <xar:if condition="!empty($loop:item.groups)">
                         <xar:loop name="$loop:item.groups" id="groupsl">
                             <a href="&xar-modurl-blocks-admin-modify_group;&amp;gid=#$loop:groupsl:item.gid#" title="#xarML('Edit group')#">
-                                #$loop:groupsl:item.name# 
+                                #$loop:groupsl:item.name#
                             </a>
                         </xar:loop>
                         <xar:else />
                         <xar:mlstring>
-                            none 
+                            none
                         </xar:mlstring>
                     </xar:if>
-                    | 
+                    |
                     <xar:if condition="$loop:item['template'] ne NULL">
-                        #$loop:item['template']# &#160; 
+                        #$loop:item['template']# &#160;
                         <xar:else />
                         <xar:if condition="empty($loop:item['group_template'])">
                             <xar:mlstring>
-                                D 
+                                D
                             </xar:mlstring>
                             <xar:else />
-                            #$loop:item['group_template']# &#160; 
+                            #$loop:item['group_template']# &#160;
                         </xar:if>
                     </xar:if>
-                    | 
+                    |
                     <xar:if condition="$loop:item['state'] eq '0'">
                         <xar:mlstring>
-                            H 
+                            H
                         </xar:mlstring>
                         <xar:else />
                         <xar:mlstring>
-                            M 
+                            M
                         </xar:mlstring>
                     </xar:if>
-                    | 
+                    |
                     <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$loop:item.bid#">
                         <xar:mlstring>
-                            E 
+                            E
                         </xar:mlstring>
                     </a>
-                    | 
+                    |
                     <a href="#$loop:item['deleteurl']#" onclick="return xar_base_confirmLink(this, '#xarVarPrepForDisplay($loop:item['deleteconfirm'])#')">
                         <xar:mlstring>
-                            R 
+                            R
                         </xar:mlstring>
                     </a>
-                    ] 
+                    ]
                 </div>
                 <xar:if condition="empty($loop:item['title'])">
-                    #$loop:item['name']# 
+                    #$loop:item['name']#
                     <xar:else />
                     <span title="#xarVarPrepfordisplay($loop:item['title'])#">
-                        #$loop:item['name']# 
+                        #$loop:item['name']#
                     </span>
                 </xar:if>
             </div>
             <xar:else />
             <div class="xar-floatright xar-halfwidth xar-border-thinbottom">
                 <div class="xar-sub xar-floatright xar-align-right">
-                    [ 
+                    [
                     <xar:if condition="!empty($loop:item.groups)">
                         <xar:loop name="$loop:item.groups" id="groupsr">
                             <a href="&xar-modurl-blocks-admin-modify_group;&amp;gid=#$loop:groupsr:item.gid#" title="#xarML('Edit group')#">
-                                #$loop:groupsr:item.name# 
+                                #$loop:groupsr:item.name#
                             </a>
                         </xar:loop>
                         <xar:else />
                         <xar:mlstring>
-                            none 
+                            none
                         </xar:mlstring>
                     </xar:if>
-                    | 
+                    |
                     <xar:if condition="$loop:item['template'] ne NULL">
-                        #$loop:item['template']# &#160; 
+                        #$loop:item['template']# &#160;
                         <xar:else />
                         <xar:if condition="empty($loop:item['group_template'])">
                             <xar:mlstring>
-                                D 
+                                D
                             </xar:mlstring>
                             <xar:else />
-                            #$loop:item['group_template']# &#160; 
+                            #$loop:item['group_template']# &#160;
                         </xar:if>
                     </xar:if>
-                    | 
+                    |
                     <xar:if condition="$loop:item['state'] eq '0'">
                         <xar:mlstring>
-                            H 
+                            H
                         </xar:mlstring>
                         <xar:else />
                         <xar:mlstring>
-                            M 
+                            M
                         </xar:mlstring>
                     </xar:if>
-                    | 
+                    |
                     <a href="&xar-modurl-blocks-admin-modify_instance;&amp;bid=#$loop:item.bid#">
                         <xar:mlstring>
-                            E 
+                            E
                         </xar:mlstring>
                     </a>
-                    | 
+                    |
                     <a href="#$loop:item['deleteurl']#" onclick="return xar_base_confirmLink(this, '#xarVarPrepForDisplay($loop:item['deleteconfirm'])#')">
                         <xar:mlstring>
-                            R 
+                            R
                         </xar:mlstring>
                     </a>
-                    ] 
+                    ]
                 </div>
                 <xar:if condition="empty($loop:item['title'])">
-                    #$loop:item['name']# 
+                    #$loop:item['name']#
                     <xar:else />
                     <span title="#xarVarPrepfordisplay($loop:item['title'])#">
-                        #$loop:item['name']# 
+                        #$loop:item['name']#
                     </span>
                 </xar:if>
             </div>

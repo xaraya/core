@@ -37,8 +37,8 @@ function blocks_adminapi_update_group($args)
 
     if (!is_numeric($id)) {return;}
 
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $xartable = xarDB::getTables();
 
     $block_groups_table =& $xartable['block_groups'];
     $block_group_instances_table =& $xartable['block_group_instances'];

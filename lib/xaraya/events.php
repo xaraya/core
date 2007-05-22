@@ -14,7 +14,7 @@
  * that need to check whether the proper things are loaded themselves.
  *
  * @package events
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @author Marco Canini <marco@xaraya.com>
@@ -64,23 +64,10 @@ class EventRegistrationException extends RegistrationExceptions
 }
 
 /**
- * Intializes Event Messaging System
- *
- * @access protected
- * @param $args['loadLevel']
- * @return bool true
- * @todo no added value
- */
-function xarEvt_init(&$args, $whatElseIsGoingLoaded)
-{
-    return true;
-}
-
-/**
  * Interface declaration for core events
  *
  * @package events
-**/
+ */
 interface IxarEvents
 {
     static function register($eventName);
@@ -90,7 +77,7 @@ interface IxarEvents
  * Class to model the interface to core events management
  *
  * @package events
-**/
+ */
 class xarEvents extends Object implements IxarEvents
 {
     private static $knownEvents = array();
@@ -100,7 +87,6 @@ class xarEvents extends Object implements IxarEvents
      *
      * The event 'eventName' is registered as a supported event
      *
-     * @access  public
      * @param   $eventName string Which event are we registering?
      * @return  bool  true on success
      * @throws  EmptyParameterException
@@ -188,7 +174,6 @@ class xarEvents extends Object implements IxarEvents
      * Notifies a module that a certain event has occurred
      * the event handler in the module is called
      *
-     * @access  private
      * @param   $modName   string The name of the module
      * @param   $eventName string The name of the event to send
      * @param   $value     mixed  Optional value to pass to the event handler
@@ -265,7 +250,6 @@ class xarEvents extends Object implements IxarEvents
     /**
      * Get the list of known event handlers
      *
-     * @access  private
      * @return array of event handlers
      * @todo make return a reference
      */
@@ -278,8 +262,7 @@ class xarEvents extends Object implements IxarEvents
             $handlers = xarConfigGetVar('Site.Evt.Handlers');
         } else {
             $dbconn = xarDB::getConn();
-            $sitetabpre = xarDBGetSiteTablePrefix();
-            $configtable = $sitetabpre.'_config_vars';
+            $configtable = xarDB::getPrefix() . '_config_vars';
             $query = "SELECT value FROM $configtable WHERE name = ?";
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery(array('Site.Evt.Handlers'), ResultSet::FETCHMODE_ASSOC);

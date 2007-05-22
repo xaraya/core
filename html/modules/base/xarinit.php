@@ -3,11 +3,11 @@
  * Base Module Initialisation
  *
  * @package modules
- * @copyright (C) 2005-2006 The Digital Development Foundation
+ * @copyright (C) 2005-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Base module
+ * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
  * @author Marcel van der Boom
  */
@@ -15,8 +15,7 @@
 /**
  * Load Table Maintainance API
  */
-xarDBLoadTableMaintenanceAPI();
-
+sys::import('xaraya.tableddl');
 /**
  * Initialise the base module
  *
@@ -25,11 +24,10 @@ xarDBLoadTableMaintenanceAPI();
  */
 function base_init()
 {
-    // Get database information
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $tables =& xarDB::getTables();
 
-    $systemPrefix = xarDBGetSystemTablePrefix();
+    $prefix = xarDB::getPrefix();
 
     // Creating the first part inside a transaction
     try {
@@ -42,7 +40,7 @@ function base_init()
          * prefix_module_vars   - system configuration variables
          * prefix_template_tags - module template tag registry
          *********************************************************************/
-        $sessionInfoTable = $systemPrefix . '_session_info';
+        $sessionInfoTable = $prefix . '_session_info';
         /*********************************************************************
          * CREATE TABLE xar_session_info (
          *  id        varchar(32) NOT NULL,
@@ -67,13 +65,13 @@ function base_init()
         $query = xarDBCreateTable($sessionInfoTable,$fields);
         $dbconn->Execute($query);
 
-        $index = array('name'   => 'i_'.$systemPrefix.'_session_role_id',
+        $index = array('name'   => 'i_'.$prefix.'_session_role_id',
                        'fields' => array('role_id'),
                        'unique' => false);
         $query = xarDBCreateIndex($sessionInfoTable,$index);
         $dbconn->Execute($query);
 
-        $index = array('name'   => 'i_'.$systemPrefix.'_session_last_use',
+        $index = array('name'   => 'i_'.$prefix.'_session_last_use',
                        'fields' => array('last_use'),
                        'unique' => false);
 
@@ -81,12 +79,11 @@ function base_init()
         $dbconn->Execute($query);
 
         /*********************************************************************
-         * Here we install the configuration table and set some default
-         * configuration variables
+         * Here we install the module variables table and set some default
+         * variables
          *********************************************************************/
-        // TODO: we now use module_vars, but namewise it would be better to use config_vars here
-        // TODO: revisit this when we know its all working out, for now, minimal change.
-        $configVarsTable  = $systemPrefix . '_module_vars';
+
+        $modVarsTable  = $prefix . '_module_vars';
         /*********************************************************************
          * CREATE TABLE xar_module_vars (
          *  id        integer NOT NULL auto_increment,
@@ -104,26 +101,26 @@ function base_init()
                         'value'     => array('type'=>'text','size'=>'long')
                         );
 
-        $query = xarDBCreateTable($configVarsTable,$fields);
+        $query = xarDBCreateTable($modVarsTable,$fields);
         $dbconn->Execute($query);
 
         // config var name should be unique in scope
         // TODO: nameing of index is now confusing, see above.
-        $index = array('name'   => 'i_'.$systemPrefix.'_config_name',
+        $index = array('name'   => 'i_'.$prefix.'_config_name',
                        'fields' => array('name', 'module_id'),
                        'unique' => true);
 
-        $query = xarDBCreateIndex($configVarsTable,$index);
+        $query = xarDBCreateIndex($modVarsTable,$index);
         $dbconn->Execute($query);
 
-        $index = array('name' => 'i_' . $systemPrefix . '_module_vars_module_id',
+        $index = array('name' => 'i_' . $prefix . '_module_vars_module_id',
                        'fields' => array('module_id'));
-        $query = xarDBCreateIndex($configVarsTable, $index);
+        $query = xarDBCreateIndex($modVarsTable, $index);
         $dbconn->Execute($query);
 
-        $index = array('name' => 'i_' . $systemPrefix . '_module_vars_name',
+        $index = array('name' => 'i_' . $prefix . '_module_vars_name',
                        'fields' => array('name'));
-        $query = xarDBCreateIndex($configVarsTable, $index);
+        $query = xarDBCreateIndex($modVarsTable, $index);
         $dbconn->Execute($query);
 
         // Let's commit this, since we're gonna do some other stuff
@@ -136,9 +133,7 @@ function base_init()
     // Start Configuration Unit
     sys::import('xaraya.variables');
     $systemArgs = array();
-    // change this loadlevel to the proper level
-    $whatToLoad = XARCORE_SYSTEM_DATABASE;
-    xarVar_init($systemArgs, $whatToLoad);
+    xarVar_init($systemArgs);
 
     $allowableHTML = array (
                             '!--'=>2, 'a'=>2, 'b'=>2, 'blockquote'=>2,'br'=>2, 'center'=>2,
@@ -151,14 +146,13 @@ function base_init()
      * Set System Configuration Variables
      *****************************************************************/
     xarConfigSetVar('System.Core.TimeZone', 'Etc/UTC');
-    xarConfigSetVar('System.Core.VersionNum', XARCORE_VERSION_NUM);
-    xarConfigSetVar('System.Core.VersionId', XARCORE_VERSION_ID);
-    xarConfigSetVar('System.Core.VersionSub', XARCORE_VERSION_SUB);
+    xarConfigSetVar('System.Core.VersionNum', xarCore::VERSION_NUM);
+    xarConfigSetVar('System.Core.VersionId', xarCore::VERSION_ID);
+    xarConfigSetVar('System.Core.VersionSub', xarCore::VERSION_SUB);
     $allowedAPITypes = array();
     /*****************************************************************
      * Set site configuration variables
      ******************************************************************/
-    xarConfigSetVar('Site.BL.ThemesDirectory','themes');
     xarConfigSetVar('Site.BL.CacheTemplates',true);
     xarConfigSetVar('Site.BL.CompilerVersion','XAR_BL_USE_XSLT');
     xarConfigSetVar('Site.Core.FixHTMLEntities',true);
@@ -179,9 +173,6 @@ function base_init()
         xarConfigSetVar('Site.Core.EnableSecureServer', false);
     }
 
-    xarConfigSetVar('Site.Core.DefaultModuleName', 'base');
-    xarConfigSetVar('Site.Core.DefaultModuleType', 'user');
-    xarConfigSetVar('Site.Core.DefaultModuleFunction', 'main');
     xarConfigSetVar('Site.Core.LoadLegacy', false);
     xarConfigSetVar('Site.Session.SecurityLevel', 'Medium');
     xarConfigSetVar('Site.Session.Duration', 7);
@@ -208,7 +199,7 @@ function base_init()
     $authModules = array('authsystem');
     xarConfigSetVar('Site.User.AuthenticationModules',$authModules);
 
-    $templateTagsTable = $systemPrefix . '_template_tags';
+    $templateTagsTable = $prefix . '_template_tags';
     /*********************************************************************
      * CREATE TABLE xar_template_tags (
      *  id        integer NOT NULL auto_increment,

@@ -39,8 +39,8 @@ function modules_adminapi_setstate($args)
     $modInfo = xarModGetInfo($regid);
 
     //Set up database object
-    $dbconn =& xarDBGetConn();
-    $xartable =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $xartable = xarDB::getTables();
 
     $oldState = $modInfo['state'];
 

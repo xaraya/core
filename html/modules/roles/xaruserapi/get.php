@@ -35,7 +35,7 @@ function roles_userapi_get($args)
         $itemid = $uid;
     }
 
-    $xartable =& xarDBGetTables();
+    $xartable = xarDB::getTables();
     $rolestable = $xartable['roles'];
 
     // Get user

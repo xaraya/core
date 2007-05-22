@@ -28,7 +28,6 @@ function themes_adminapi_install($args)
 
     // Argument check
     if (!isset($mainId)) throw new EmptyParameterException('regid');
-
     // See if we have lost any modules since last generation
     if (!xarModAPIFunc('themes', 'admin', 'checkmissing')) return;
 

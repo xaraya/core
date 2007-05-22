@@ -15,7 +15,8 @@
  * Initialise the caching options
  *
  * @return bool
- * @todo    consider the use of a shutdownhandler for cache maintenance
+ * @todo consider the use of a shutdownhandler for cache maintenance
+ * @todo get rid of globals
  */
 function xarCache_init($args = false)
 {
@@ -25,7 +26,6 @@ function xarCache_init($args = false)
         extract($args);
     }
 
-    // TODO: clean up all these globals and put them e.g. into a single array
     global $xarOutput_cacheCollection;
     global $xarOutput_cacheTheme;
     global $xarOutput_cacheSizeLimit;
@@ -235,8 +235,7 @@ function xarCache_getParents()
     if (xarCore::isCached('User.Variables.'.$currentuid, 'parentlist')) {
         return xarCore::getCached('User.Variables.'.$currentuid, 'parentlist');
     }
-    $systemPrefix = xarDBGetSystemTablePrefix();
-    $rolemembers = $systemPrefix . '_rolemembers';
+    $rolemembers = xarDB::getPrefix() . '_rolemembers';
     $dbconn = xarDB::getConn();
     $query = "SELECT parentid FROM $rolemembers WHERE id = ?";
     $stmt   = $dbconn->prepareStatement($query);

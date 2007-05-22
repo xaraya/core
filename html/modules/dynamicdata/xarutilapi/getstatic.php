@@ -1,27 +1,23 @@
 <?php
 /**
- * Get the "static" properties
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Dynamic Data module
+ * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
  * (try to) get the "static" properties, corresponding to fields in dedicated
  * tables for this module + item type
-// TODO: allow modules to specify their own properties
  *
- * @author the DynamicData module development team
  * @param $args['module'] module name of table you're looking for, or
  * @param $args['modid'] module id of table you're looking for
  * @param $args['itemtype'] item type of table you're looking for
  * @param $args['table']  table name of table you're looking for (better)
- * @returns mixed
- * @return value of the field, or false on failure
+ * @return mixed value of the field, or false on failure
  * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
  * @todo split off the common parts which are also in getmeta
  */
@@ -61,12 +57,10 @@ function dynamicdata_utilapi_getstatic($args)
         return $propertybag["$modid:$itemtype:$table"];
     }
 
-    $dbconn = xarDBGetConn();
-    $xartable = xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $xartable = xarDB::getTables();
 
-// TODO: support site tables as well
-    $systemPrefix = xarDBGetSystemTablePrefix();
-    $metaTable = $systemPrefix . '_tables';
+    $metaTable = xarDB::getPrefix() . '_tables';
 
     if ($modinfo['name'] == 'dynamicdata') {
         // let's cheat a little for DD, because otherwise it won't find any tables :)

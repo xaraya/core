@@ -31,8 +31,8 @@ function modules_adminapi_gethookedmodules($args)
     // Argument check
     if (empty($hookModName)) throw new EmptyParameterException('hookModName');
 
-    $dbconn =& xarDBGetConn();
-    $xartable      =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $xartable      = xarDB::getTables();
 
     $bindvars = array();
     // TODO: This looks awfally similar to gethooklist in xarMod.php, investigate later

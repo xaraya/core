@@ -1,12 +1,13 @@
 <?php
 /**
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Themes module
+ * @subpackage themes
  */
+
 /**
  * Remove a theme
  *
@@ -18,15 +19,13 @@
  */
 function themes_adminapi_remove($args)
 {
-    // Get arguments from argument array
     extract($args);
 
-    // Security Check
     if(!xarSecurityCheck('AdminTheme')) return;
 
     // Remove variables and theme
-    $dbconn =& xarDBGetConn();
-    $tables =& xarDBGetTables();
+    $dbconn = xarDB::getConn();
+    $tables = xarDB::getTables();
 
     // Get theme information
     $themeInfo = xarThemeGetInfo($regid);
@@ -51,13 +50,10 @@ function themes_adminapi_remove($args)
         throw new ForbiddenOperationException($count,$msg);
     }
 
-    // Get theme database info
-    xarThemeDBInfoLoad($themeInfo['name'], $themeInfo['directory']);
-
     // Delete the theme from the themes table
     $sql = "DELETE FROM $tables[themes] WHERE regid = ?";
     $dbconn->Execute($sql,array($regid));
+
     return true;
 }
-
 ?>

@@ -48,8 +48,8 @@ class PropertyRegistration extends DataContainer
 
     static function clearCache()
     {
-        $dbconn = xarDBGetConn();
-        $tables = xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
         $sql = "DELETE FROM $tables[dynamic_properties_def]";
         $res = $dbconn->ExecuteUpdate($sql);
         return $res;
@@ -81,8 +81,8 @@ class PropertyRegistration extends DataContainer
             if(!xarModIsAvailable($required))
                 return false;
 
-        $dbconn = xarDBGetConn();
-        $tables = xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
         $propdefTable = $tables['dynamic_properties_def'];
 
         // Make sure the db is the same as in the old days
@@ -129,8 +129,8 @@ class PropertyRegistration extends DataContainer
         if(xarVarIsCached('DynamicData','PropertyTypes')) {
             return xarVarGetCached('DynamicData','PropertyTypes');
         }
-        $dbconn = xarDBGetConn();
-        $tables = xarDBGetTables();
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
         // Sort by required module(s) and then by name
         $query = "SELECT  p.prop_id, p.prop_name, p.prop_label,
                           p.prop_parent, p.prop_filepath, p.prop_class,
@@ -187,7 +187,7 @@ class PropertyRegistration extends DataContainer
     {
         sys::import('xaraya.structures.relativedirectoryiterator');
 
-        $dbconn = xarDBGetConn(); // Need this for the transaction
+        $dbconn = xarDB::getConn(); // Need this for the transaction
         $propDirs = array();
 
         // We do the whole thing, or not at all (given proper db support)

@@ -66,7 +66,7 @@ function dynamicdata_utilapi_updatehooks($args)
         }
     }
 
-    $dbconn = xarDBGetConn();
+    $dbconn = xarDB::getConn();
     foreach ($hookmap as $fromhook => $tohook) {
         if (empty($fromhook) || empty($tohook)) continue;
         if ($fromhook != $tohook) continue; // no moving of hooked content atm
@@ -75,7 +75,7 @@ function dynamicdata_utilapi_updatehooks($args)
             case 'categories':
                 // load table definitions et al.
                 xarModAPILoad('categories','user');
-                $xartable = xarDBGetTables();
+                $xartable = xarDB::getTables();
                 if (empty($xartable['categories_linkage'])) {
                     continue;
                 }
@@ -92,7 +92,7 @@ function dynamicdata_utilapi_updatehooks($args)
             case 'xlink':
                 // load table definitions et al.
                 xarModAPILoad($tohook,'user');
-                $xartable = xarDBGetTables();
+                $xartable = xarDB::getTables();
                 if (empty($xartable[$tohook])) {
                     continue;
                 }
@@ -105,7 +105,7 @@ function dynamicdata_utilapi_updatehooks($args)
             case 'comments':
                 // load table definitions et al.
                 xarModAPILoad('comments','user');
-                $xartable = xarDBGetTables();
+                $xartable = xarDB::getTables();
                 if (empty($xartable['comments'])) {
                     continue;
                 }
@@ -124,7 +124,7 @@ function dynamicdata_utilapi_updatehooks($args)
             case 'polls':
                 // load table definitions et al.
                 xarModAPILoad('polls','user');
-                $xartable = xarDBGetTables();
+                $xartable = xarDB::getTables();
                 if (empty($xartable['polls'])) {
                     continue;
                 }
@@ -145,7 +145,7 @@ function dynamicdata_utilapi_updatehooks($args)
             case 'uploads':
                 // load table definitions et al.
                 xarModAPILoad('uploads','user');
-                $xartable = xarDBGetTables();
+                $xartable = xarDB::getTables();
                 if (empty($xartable['file_associations'])) {
                     continue;
                 }

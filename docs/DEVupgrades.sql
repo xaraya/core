@@ -462,3 +462,26 @@ UPDATE xar_dynamic_objects SET object_class= 'DataObject' WHERE object_class= ''
 UPDATE `xar_dynamic_objects` SET  `object_class` = 'Role' , `object_filepath` = 'modules/roles/class/role.php' WHERE `object_name` = 'roles_roles';
 UPDATE `xar_dynamic_objects` SET  `object_class` = 'Role' , `object_filepath` = 'modules/roles/class/role.php' WHERE `object_name` = 'roles_users';
 UPDATE `xar_dynamic_objects` SET  `object_class` = 'Role' , `object_filepath` = 'modules/roles/class/role.php' WHERE `object_name` = 'roles_groups';
+
+/* Change some configvars to modvars */
+/* FIXME the values put into the modvars need to be unserialized */
+INSERT INTO `xar_module_vars` (module_id, name, value)
+    SELECT mods.id, 'defaultmoduletype', modvars.value FROM xar_module_vars modvars, xar_modules mods
+    WHERE mods.name = 'modules' AND  modvars.name = 'Site.Core.DefaultModuleType';
+
+/* FIXME the value put into this modvar need to be unserialized,
+   and the id of the module rather than its name
+   In this case, i'd keep it module name. The value is anonymous, i.e. it aint a foreign key to the
+   modules table, so module id brings no benefit other than saving a couple of bytes in the database
+*/
+INSERT INTO `xar_module_vars` (module_id, name, value)
+    SELECT mods.id, 'defaultmodule', modvars.value FROM xar_module_vars modvars, xar_modules mods
+    WHERE mods.name = 'modules' AND modvars.name= 'Site.Core.DefaultModuleName';
+
+INSERT INTO `xar_module_vars` (module_id, name, value)
+    SELECT mods.id, 'defaultmodulefunction', modvars.value FROM xar_module_vars modvars, xar_modules mods
+    WHERE mods.name = 'modules' AND modvars.name = 'Site.Core.DefaultModuleFunction';
+
+INSERT INTO `xar_module_vars` (module_id, name, value)
+    SELECT mods.id, 'themesdirectory', modvars.value FROM xar_module_vars modvars, xar_modules mods
+    WHERE  mods.name = 'themes' AND modvars.name = 'Site.BL.ThemesDirectory';

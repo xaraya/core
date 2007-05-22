@@ -2,6 +2,8 @@
 /**
  * Exception Handling System
  *
+ * For all documentation about exceptions see RFC-0054
+ *
  * @package exceptions
  * @copyright (C) 2002-2006 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
@@ -9,35 +11,28 @@
  * @author Marco Canini <marco@xaraya.com>
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @author Marcel van der Boom <marcel@xaraya.com>
- */
+ * @todo the exception handler receives the instantiated Exception class.
+ *       How do we know there what is available in the derived object so we can
+ *       specialize handling? To only allow deriving from XARExceptions and
+ *       standardize there is probably not enough, but lets do that for now.
+**/
 
-/*
-   For all documentation about exceptions see RFC-0054
-*/
-/*
-   NOTE: I'm putting stuff on this all in this file now, we can split things up
-         later on
-
-   Q: the exception handler receives the instantiated Exception class.
-      How do we know there what is available in the derived object so we can
-      specialize handling? To only allow deriving from XARExceptions and
-      standardize there is probably not enough, but lets do that for now.
-
-*/
-
-/**#@+
- * Error constants for exception throwing
- *
- * @todo probably move this to core loader or get rid of it completely, doesnt do something sane.
- */
-define('E_XAR_ASSERT', 1);
-define('E_XAR_PHPERR', 2);
-/**#@-*/
-
-// We need the new classes
+// Import all our exception types and the core exception handlers
 sys::import('xaraya.exceptions.types');
-// And the handlers to deal with them
 sys::import('xaraya.exceptions.handlers');
+
+/**
+ * Default settings for:
+ * exceptions: send to 'default' handler
+ * errors    : send to 'phperrors' handler
+ *
+ * Of course, any piece of code can set their own handler after this
+ * is loaded, which is almost what we want.
+ *
+ * @todo do we want this abstracted?
+**/
+set_exception_handler(array('ExceptionHandlers','defaulthandler'));
+set_error_handler(array('ExceptionHandlers','phperrors'));
 
 /**
  * General exception to cater for situation where the called function should
@@ -54,24 +49,6 @@ class GeneralException extends xarExceptions
 }
 
 /**
- * Initializes the Error Handling System, basically all it does it register
- * the handler for exceptions and the handler for errors.
- *
- * @access protected
- * @return bool true
- */
-function xarError_init(&$systemArgs, $whatToLoad)
-{
-    // Send all exceptions to the default exception handler, no excuses
-    set_exception_handler(array('ExceptionHandlers','defaulthandler'));
-
-    // Send all error the the default error handler (which basically just throws a specific exception)
-    set_error_handler(array('ExceptionHandlers','phperrors'));
-
-    return true;
-}
-
-/**
  * Debug function, artificially throws an exception
  *
  * @access public
@@ -82,5 +59,4 @@ function debug($anything)
 {
     throw new DebugException('DEBUGGING',var_export($anything,true));
 }
-
 ?>

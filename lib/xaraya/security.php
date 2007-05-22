@@ -53,10 +53,7 @@ sys::import('modules.roles.class.roles');
  * @param   string name
  * @return  bool
  */
-function xarMakeGroup($name,$uname='')
-{
-    return xarRoles::makeGroup($name,$uname);
-}
+function xarMakeGroup($name,$uname='') { return xarRoles::makeGroup($name,$uname); }
 
 /**
  * xarMakeUser: create an entry in the database for a user
@@ -81,10 +78,7 @@ function xarMakeUser($name,$uname,$email,$pass='',$dateReg='',$valCode='',$state
  * @param  string name
  * @return bool
  */
-function xarMakeRoleRoot($name)
-{
-    return xarRoles::isRoot($name);
-}
+function xarMakeRoleRoot($name) { return xarRoles::isRoot($name); }
 
 /**
  * xarMakeRoleMemberByName: create a parent-child relationship in the database between two roles
@@ -197,10 +191,7 @@ function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$
  * @param   string name
  * @return  bool
  */
-function xarMakePrivilegeRoot($name)
-{
-    return xarPrivileges::makeEntry($name);
-}
+function xarMakePrivilegeRoot($name) { return xarPrivileges::makeEntry($name); }
 
 /**
  * xarMakePrivilegeMember: create a parent-child relationship in the database between two privileges
@@ -293,10 +284,7 @@ function xarRemoveInstances($module)
  * @access public
  * @return array of strings
  */
-function xarGetGroups()
-{
-    return xarRoles::getgroups();
-}
+function xarGetGroups() { return xarRoles::getgroups(); }
 
 /**
  * xarFindRole: returns a role object by its name
@@ -307,15 +295,8 @@ function xarGetGroups()
  * @param   string name
  * @return  object role
  */
-function xarFindRole($name)
-{
-    return xarRoles::findRole($name);
-}
-
-function xarUFindRole($name)
-{
-    return xarRoles::ufindRole($name);
-}
+function xarFindRole($name) { return xarRoles::findRole($name);  }
+function xarUFindRole($name){ return xarRoles::ufindRole($name); }
 
 function xarCurrentRole()
 {
