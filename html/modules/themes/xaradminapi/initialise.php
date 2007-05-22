@@ -35,6 +35,7 @@ function themes_adminapi_initialise($args)
     }
     include $xarinitfilename;
 
+//var_dump($themevars);exit;
     if (!empty($themevars)) {
         foreach($themevars as $var => $value){
             $value['prime'] = 1;
