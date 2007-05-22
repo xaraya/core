@@ -18,6 +18,68 @@
         <fieldset>
             <legend>
                 <xar:mlstring>
+                    Configuration Options
+                </xar:mlstring>
+            </legend>
+            <div class="xar-form-input-wrapper">
+                <label for="themedir" title="#xarML('The default directory for site themes - no trailing slash.')#" class="xar-form-label">
+                    <xar:mlstring>
+                        Default Theme Directory:
+                    </xar:mlstring>
+                </label>
+                <input type="text" id="themedir" name="themedir" value="#xarModVars::get('themes', 'themesdirectory')#" maxlength="100" class="xar-form-textlong" />
+            </div>
+            <div class="xar-form-input-wrapper-after">
+                <xar:data-input type="checkbox" name="dashboard" checked="$dashboard" />
+                <label for="dashboard" title="#xarML('Use the Admin Dashboard to manage all your Admin settings from a single page.')#">
+                    <xar:mlstring>
+                        Enable the Admin Dashboard.
+                    </xar:mlstring>
+                </label>
+            </div>
+
+            <div class="xar-form-input-wrapper">
+                <label for="dashtemplate" title="#xarML('Template name for the dashboard - no trailing suffix, defaults to \'dashboard\'')#" class="xar-form-label">
+                    <xar:mlstring>
+                        Dashboard Template name
+                    </xar:mlstring>
+                </label>
+                <input type="text" name="dashtemplate" id="dashtemplate" value="#$dashtemplate#" size="30" maxlength="100" />
+                <xar:mlstring>(without the .xt extension)</xar:mlstring>
+                <div  class="xar-form-input-wrapper-after">
+                    <xar:mlstring>
+                        The Admin Dashboard is automatically used with all admin functions. The default page template name is <strong>dashboard.xt</strong>.
+                    </xar:mlstring>
+                </div >
+                <div class="xar-form-input-wrapper-after">
+                    <xar:mlstring>
+                        A page template called <strong>admin.xt</strong> will be used automatically without this switch and can be customised on a module by module basis (eg admin-articles.xt).
+                    </xar:mlstring>
+                </div >
+
+            </div>
+            <div class="xar-form-input-wrapper-after">
+                <xar:set name="checked">$adminpagemenu</xar:set>
+                <xar:data-input type="checkbox" name="adminpagemenu" id="adminpagemenu" checked="$checked" />
+                <label for="adminpagemenu" title="#xarML('Use submenus in the page for admin functions.')#">
+                    <xar:mlstring>
+                        Enable InPage Admin SubMenus
+                    </xar:mlstring>
+                </label>
+            </div>
+            <div class="xar-form-input-wrapper-after">
+                <xar:set name="checked">xarModIsHooked('themes', 'roles')</xar:set>
+                <xar:data-input type="checkbox" name="usermenu" id="usermenu" checked="$checked" />
+                <label for="usermenu" title="#xarML('Allow users to select themes from their Account Details page.')#">
+                    <xar:mlstring>
+                        Allow users to set their theme in User Account page
+                    </xar:mlstring>
+                </label>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>
+                <xar:mlstring>
                     Site Display Options
                 </xar:mlstring>
             </legend>
@@ -87,68 +149,6 @@
                     </xar:mlstring>
                 </label>
                 <xar:data-input type="dropdown" name="pagetitle" options="$options" value="$value" />
-            </div>
-        </fieldset>
-      <fieldset>
-            <legend>
-                <xar:mlstring>
-                    Theme Options
-                </xar:mlstring>
-            </legend>
-            <div class="xar-form-input-wrapper">
-                <label for="themedir" title="#xarML('The default directory for site themes - no trailing slash.')#" class="xar-form-label">
-                    <xar:mlstring>
-                        Default Theme Directory:
-                    </xar:mlstring>
-                </label>
-                <input type="text" id="themedir" name="themedir" value="#xarModVars::get('themes', 'themesdirectory')#" maxlength="100" class="xar-form-textlong" />
-            </div>
-            <div class="xar-form-input-wrapper-after">
-                <xar:data-input type="checkbox" name="dashboard" checked="$dashboard" />
-                <label for="dashboard" title="#xarML('Use the Admin Dashboard to manage all your Admin settings from a single page.')#">
-                    <xar:mlstring>
-                        Enable the Admin Dashboard.
-                    </xar:mlstring>
-                </label>
-            </div>
-
-            <div class="xar-form-input-wrapper">
-                <label for="dashtemplate" title="#xarML('Template name for the dashboard - no trailing suffix, defaults to \'dashboard\'')#" class="xar-form-label">
-                    <xar:mlstring>
-                        Dashboard Template name
-                    </xar:mlstring>
-                </label>
-                <input type="text" name="dashtemplate" id="dashtemplate" value="#$dashtemplate#" size="30" maxlength="100" />
-                <xar:mlstring>(without the .xt extension)</xar:mlstring>
-                <div  class="xar-form-input-wrapper-after">
-                    <xar:mlstring>
-                        The Admin Dashboard is automatically used with all admin functions. The default page template name is <strong>dashboard.xt</strong>.
-                    </xar:mlstring>
-                </div >
-                <div class="xar-form-input-wrapper-after">
-                    <xar:mlstring>
-                        A page template called <strong>admin.xt</strong> will be used automatically without this switch and can be customised on a module by module basis (eg admin-articles.xt).
-                    </xar:mlstring>
-                </div >
-
-            </div>
-            <div class="xar-form-input-wrapper-after">
-                <xar:set name="checked">$adminpagemenu</xar:set>
-                <xar:data-input type="checkbox" name="adminpagemenu" id="adminpagemenu" checked="$checked" />
-                <label for="adminpagemenu" title="#xarML('Use submenus in the page for admin functions.')#">
-                    <xar:mlstring>
-                        Enable InPage Admin SubMenus
-                    </xar:mlstring>
-                </label>
-            </div>
-            <div class="xar-form-input-wrapper-after">
-                <xar:set name="checked">xarModIsHooked('themes', 'roles')</xar:set>
-                <xar:data-input type="checkbox" name="usermenu" id="usermenu" checked="$checked" />
-                <label for="usermenu" title="#xarML('Allow users to select themes from their Account Details page.')#">
-                    <xar:mlstring>
-                        Allow users to set their theme in User Account page
-                    </xar:mlstring>
-                </label>
             </div>
         </fieldset>
         <fieldset>

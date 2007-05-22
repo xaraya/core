@@ -25,8 +25,7 @@ class xarThemeVars extends xarModItemVars implements IxarModItemVars
         if (empty($scope)) throw new EmptyParameterException('themename');
 
         $itemid = xarThemeGetIDFromName($scope,'systemid');
-        $varname = $scope . '_' . $name; // bah
-        return parent::get($scope, $varname, $itemid);
+        return parent::get('themes', $name, $itemid);
     }
 
     /**
@@ -51,10 +50,10 @@ class xarThemeVars extends xarModItemVars implements IxarModItemVars
         $varname = $scope . '_' . $name; // bah
         // Make sure we set it as modvar first
         // TODO: this sucks
-        if(!xarModVars::get($scope,$varname)) {
-            xarModVars::set($scope,$varname,$value);
+        if(!xarModVars::get('themes',$varname)) {
+            xarModVars::set('themes',$varname,$value);
         }
-        return parent::set($scope, $varname, $value, $itemid);
+        return parent::set('themes', $varname, $value, $itemid);
     }
 
     /**

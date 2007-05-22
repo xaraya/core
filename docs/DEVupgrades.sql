@@ -479,7 +479,7 @@ INSERT INTO `xar_module_vars` (module_id, name, value)
     WHERE mods.name = 'modules' AND modvars.name= 'Site.Core.DefaultModuleName';
 
 INSERT INTO `xar_module_vars` (module_id, name, value)
-    SELECT mods.id, 'defaultmodulefunction', modvars.value FROM xar_module_vars modvars
+    SELECT mods.id, 'defaultmodulefunction', modvars.value FROM xar_module_vars modvars, xar_modules mods
     WHERE mods.name = 'modules' AND modvars.name = 'Site.Core.DefaultModuleFunction';
 
 INSERT INTO `xar_module_vars` (module_id, name, value)
