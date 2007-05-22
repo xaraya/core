@@ -79,12 +79,11 @@ function base_init()
         $dbconn->Execute($query);
 
         /*********************************************************************
-         * Here we install the configuration table and set some default
-         * configuration variables
+         * Here we install the module variables table and set some default
+         * variables
          *********************************************************************/
-        // TODO: we now use module_vars, but namewise it would be better to use config_vars here
-        // TODO: revisit this when we know its all working out, for now, minimal change.
-        $configVarsTable  = $prefix . '_module_vars';
+
+        $modVarsTable  = $prefix . '_module_vars';
         /*********************************************************************
          * CREATE TABLE xar_module_vars (
          *  id        integer NOT NULL auto_increment,
@@ -102,7 +101,7 @@ function base_init()
                         'value'     => array('type'=>'text','size'=>'long')
                         );
 
-        $query = xarDBCreateTable($configVarsTable,$fields);
+        $query = xarDBCreateTable($modVarsTable,$fields);
         $dbconn->Execute($query);
 
         // config var name should be unique in scope
@@ -111,17 +110,17 @@ function base_init()
                        'fields' => array('name', 'module_id'),
                        'unique' => true);
 
-        $query = xarDBCreateIndex($configVarsTable,$index);
+        $query = xarDBCreateIndex($modVarsTable,$index);
         $dbconn->Execute($query);
 
         $index = array('name' => 'i_' . $prefix . '_module_vars_module_id',
                        'fields' => array('module_id'));
-        $query = xarDBCreateIndex($configVarsTable, $index);
+        $query = xarDBCreateIndex($modVarsTable, $index);
         $dbconn->Execute($query);
 
         $index = array('name' => 'i_' . $prefix . '_module_vars_name',
                        'fields' => array('name'));
-        $query = xarDBCreateIndex($configVarsTable, $index);
+        $query = xarDBCreateIndex($modVarsTable, $index);
         $dbconn->Execute($query);
 
         // Let's commit this, since we're gonna do some other stuff
