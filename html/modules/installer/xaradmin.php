@@ -175,10 +175,6 @@ function installer_admin_phase3()
     $data['mysqlextension']           = extension_loaded('mysql');
     $data['pgsqlextension']           = extension_loaded('pgsql');
     $data['sqliteextension']          = extension_loaded('sqlite');
-    // This is called xsl in PHP5.x Should check for that when php version is 5 or higher
-   //$data['xsltextension']            = extension_loaded ('xslt');
-   // $data['ldapextension']            = extension_loaded ('ldap');
-   // $data['gdextension']              = extension_loaded ('gd');
 
     $data['metRequiredPHPVersion']    = $metRequiredPHPVersion;
     $data['phpVersion']               = PHP_VERSION;
@@ -300,7 +296,7 @@ function installer_admin_phase5()
                         'doConnect' => false);
 
     sys::import('xaraya.database');
-    xarDB_Init($init_args, XARCORE_SYSTEM_NONE);
+    xarDB_Init($init_args);
 
     // Not all Database Servers support selecting the specific db *after* connecting
     // so let's try connecting with the dbname first, and then without if that fails
@@ -371,8 +367,7 @@ function installer_admin_phase5()
                         'databaseName' => $dbName,
                         'prefix' => $dbPrefix);
     // Connect to database
-    $whatToLoad = XARCORE_SYSTEM_NONE;
-    xarDB_init($systemArgs, $whatToLoad);
+    xarDB_init($systemArgs);
 
     // drop all the tables that have this prefix
     //TODO: in the future need to replace this with a check further down the road
@@ -474,7 +469,7 @@ function installer_admin_phase5()
     sys::import('xaraya.variables');
 
     $a = array();
-    xarVar_init($a,XARCORE_SYSTEM_DATABASE);
+    xarVar_init($a);
     xarConfigSetVar('Site.MLS.DefaultLocale', $install_language);
 
     // Set the allowed locales to our "C" locale and the one used during installation
@@ -675,7 +670,7 @@ function installer_admin_create_administrator()
                    'uname'      => $userName,
                    'email'      => $email,
                    // CHECKME: can we transform this in the dproperty
-                   'password'   => $role->properties['password']->encrypt($pass),
+                   'password'   => $pass,
                    'state'      => ROLES_STATE_ACTIVE);
 
     xarModSetVar('roles', 'lastuser', $userName);
@@ -909,15 +904,11 @@ function installer_admin_confirm_configuration()
 
     $options2 = $options3 = array();
     foreach ($availablemodules as $availablemodule) {
-        // $modInfo = xarModGetInfo($availableModule['regid']);
-        // if($modInfo['state'] != XARMOD_STATE_MISSING_FROM_UNINITIALISED) {
-        //            echo var_dump($availablemodule);exit;
         $options2[] = array(
                             'item' => $availablemodule['regid'],
                             'option' => 'true',
                             'comment' => xarML('Install the #(1) module.',ucfirst($availablemodule['name']))
                             );
-        //        }
     }
     if (!$confirmed) {
 
@@ -930,25 +921,6 @@ function installer_admin_confirm_configuration()
         $data['configuration'] = $configuration;
         return $data;
     } else {
-        /*********************************************************************
-        * Empty the privilege tables
-        *********************************************************************/
-/*         $dbconn = xarDB::getConn();
-        $prefix = xarDB::getPrefix();
-        try {
-            $dbconn->begin();
-           $query = "DELETE FROM " . $prefix . '_privileges WHERE type = ' . xarMasks::PRIVILEGES_PRIVILEGETYPE;
-            $dbconn->Execute($query);
-            $query = "DELETE FROM " . $prefix . '_privmembers';
-            $dbconn->Execute($query);
-            $query = "DELETE FROM " . $prefix . '_security_acl';
-            $dbconn->Execute($query);
-            $dbconn->commit();
-        } catch(SQLException $e) {
-            $dbconn->rollback();
-            throw $e;
-        }
-        */
 
         /*********************************************************************
         * Enter some default privileges
@@ -1012,7 +984,6 @@ function installer_admin_confirm_configuration()
                     throw new Exception($msg);
                 }
                 xarModAPIFunc('modules','admin','installwithdependencies',array('regid'=>$module['item']));
-                // xarModAPIFunc('modules','admin','activate',array('regid'=>$module['item']));
             }
         }
         $func = "installer_" . basename(strval($configuration),'.conf.php') . "_configuration_load";
@@ -1077,7 +1048,7 @@ function installer_admin_cleanup()
     xarTplSetPageTemplateName('installer');
 
     xarUserLogOut();
-// log in admin user
+    // log in admin user
     $uname = xarModGetVar('roles','lastuser');
     $pass = xarModGetVar('roles','adminpass');
 
@@ -1086,8 +1057,9 @@ function installer_admin_cleanup()
         throw new Exception($msg);
     }
 
-//    $remove = xarModDelVar('roles','adminpass');
-    $remove = xarModDelVar('installer','modules');
+
+    xarModDelVar('roles','adminpass');
+    xarModDelVar('installer','modules');
 
     // Load up database
     $dbconn = xarDB::getConn();
