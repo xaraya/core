@@ -278,9 +278,6 @@ class xarRequest extends Object
     static function init($args)
     {
         self::$allowShortURLs = $args['enableShortURLsSupport'];
-        self::$defaultRequestInfo = array($args['defaultModuleName'],
-                                          $args['defaultModuleType'],
-                                          $args['defaultModuleFunction']);
     }
 
     /**
@@ -369,15 +366,13 @@ class xarRequest extends Object
      * TODO: evaluate and improve this, obviously :-)
      * + check security impact of people combining PATH_INFO with func/type param
      *
-     * @access public
-     * @global xarRequest_defaultModule array
      * @return array requested module, type and func
      * @todo <mikespub> Allow user select start page
      * @todo <marco> Do we need to do a preg_match on $params[1] here?
      * @todo <mikespub> you mean for upper-case Admin, or to support other funcs than user and admin someday ?
      * @todo <marco> Investigate this aliases thing before to integrate and promote it!
      */
-    static function getInfo()
+    public static function getInfo()
     {
         static $requestInfo = NULL;
         static $loopHole = NULL;
@@ -458,8 +453,15 @@ class xarRequest extends Object
             $requestInfo = array($modName, $modType, $funcName);
         } else {
             // If $modName is still empty we use the default module/type/func to be loaded in that such case
+            if (empty(self::$defaultRequestInfo)) {
+
+                self::$defaultRequestInfo = array(xarModVars::get('modules', 'defaultmodule'),
+                                                  xarModVars::get('modules', 'defaultmoduletype'),
+                                                  xarModVars::get('modules', 'defaultmodulefunction'));
+            }
             $requestInfo = self::$defaultRequestInfo;
         }
+
         return $requestInfo;
     }
 
