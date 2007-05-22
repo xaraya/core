@@ -271,10 +271,8 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      */
     sys::import('xaraya.server');
     $systemArgs = array('enableShortURLsSupport' => xarConfigGetVar('Site.Core.EnableShortURLsSupport'),
-                        'defaultModuleName'      => 'base', //xarModVars::get('modules', 'defaultmodule'),
-                        'defaultModuleType'      => 'user', //xarModVars::get('modules', 'defaultmoduletype'),
-                        'defaultModuleFunction'  => 'main', //xarModVars::get('modules', 'defaultmodulefunction'),
                         'generateXMLURLs' => true);
+
     xarServer::init($systemArgs);
     xarRequest::init($systemArgs);
     xarResponse::init($systemArgs);

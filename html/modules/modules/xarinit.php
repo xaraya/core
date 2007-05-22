@@ -183,7 +183,7 @@ function modules_init()
                          array($modulesmodid,'expertlist','0'),
                          // the configuration settings pertaining to modules for the base module
                          array($modulesmodid,'defaultmoduletype','user'),
-                         array($modulesmodid,'defaultmodule',xarMod::getID('base')),
+                         array($modulesmodid,'defaultmodule','base'),
                          array($modulesmodid,'defaultmodulefunction','main'));
 
         foreach($modvars as &$modvar) {

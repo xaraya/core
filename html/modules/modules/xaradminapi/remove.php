@@ -1,11 +1,11 @@
 <?php
 /**
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2005 The Digital Development Foundation
+ * @package modules
+ * @copyright (C) 2002-2007 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Modules module
+ * @subpackage modules
  */
 /**
  * Remove a module
@@ -94,8 +94,8 @@ function modules_adminapi_remove($args)
 
         // Check whether the module was the default module
         $defaultmod = xarModVars::get('modules', 'defaultmodule');
-        if ($modinfo['name'] == $defaultmod){
-            xarModVars::set('modules', 'defaultmodule',xarMod::getID('base'));
+        if ($modinfo['name'] == $defaultmod) {
+            xarModVars::set('modules', 'defaultmodule','base');
         }
         $dbconn->commit();
     } catch (Exception $e) {
