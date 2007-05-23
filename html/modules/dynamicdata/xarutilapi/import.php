@@ -30,7 +30,7 @@ function dynamicdata_utilapi_import($args)
 
     if (!isset($prefix)) {
         $prefix = xarDB::getPrefix() . '_';
-    } else { 
+    } else {
         $prefix .= '_';
     }
 
@@ -84,8 +84,8 @@ function dynamicdata_utilapi_import($args)
 
         // Treat parents where the module is DD differently. Put in numeric itemtype
         if ($args['moduleid'] == 182) {
-            $info = DataObjectMaster::getObjectInfo(array('name' => $args['parent']));
-            $args['parent'] = $info['itemtype'];
+            $infobaseobject = DataObjectMaster::getObjectInfo(array('name' => $args['parent']));
+            $args['parent'] = $infobaseobject['itemtype'];
         }
         if (empty($args['name']) || empty($args['moduleid'])) {
             throw new BadParameterException(null,'Missing keys in object definition');
