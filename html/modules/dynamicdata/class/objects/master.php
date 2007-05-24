@@ -251,7 +251,7 @@ class DataObjectMaster extends Object
 
         // add ancestors' properties to this object if required
         // the default is to add the fields
-        $this->baseancestor = $this->objectid;
+//        $this->baseancestor = $this->objectid;
         if($this->extend) $this->addAncestors();
     }
 
@@ -261,6 +261,7 @@ class DataObjectMaster extends Object
      */
     private function addAncestors($object=null)
     {
+        /*
         // Determine how we are going to get the ancestors
         $params = array();
         if(!empty($this->objectid))
@@ -277,6 +278,8 @@ class DataObjectMaster extends Object
         }
         // Retrieve the ancestors
         $ancestors = self::getAncestors($params);
+        */
+        $ancestors = $this->getAncestors();
 
         // If this is an extended object add the ancestor properties for display purposes
         $this->fieldorder = array_keys($this->properties);
@@ -304,7 +307,7 @@ class DataObjectMaster extends Object
     {
         if(is_numeric($object))
             $object = self::getObject(
-                array('objectid' => $object)
+                array('objectid' => $object, 'extend' => false)
             );
 
         if(!is_object($object))
@@ -909,23 +912,25 @@ class DataObjectMaster extends Object
       * @param bool args[top]
       * @param bool  args[base]
       */
-    static function &getAncestors(Array $args)
+    function &getAncestors()
     {
 //        if(!xarSecurityCheck('ViewDynamicDataItems')) return;
 
-        extract($args);
+//        extract($args);
 
-        if (!(isset($moduleid) && isset($itemtype)) && !isset($objectid) && !isset($name)) {
+/*        if (!(isset($moduleid) && isset($itemtype)) && !isset($objectid) && !isset($name)) {
             $msg = xarML('Wrong arguments to DataObjectMaster::getAncestors.');
             throw new BadParameterException(array(),$msg);
         }
-
+*/
         $top = isset($top) ? $top : true;
         $base = isset($base) ? $base : true;
         $ancestors = array();
 
-        // Get the info of this object
+
         $xartable = xarDB::getTables();
+        $topobject = self::getObjectInfo(array('objectid' => $this->objectid));
+/*        // Get the info of this object
         if (isset($objectid)) {
             // We have an objectid - get the moduleid and itemtype
             $topobject = self::getObjectInfo(array('objectid' => $objectid));
@@ -951,18 +956,18 @@ class DataObjectMaster extends Object
             }
             $objectid = $topobject['objectid'];
        }
-
+*/
         // Include the last descendant (this object) or not
         if ($top) {
-            $ancestors[] = self::getObjectInfo(array('objectid' => $objectid));
+            $ancestors[] = self::getObjectInfo(array('objectid' => $this->objectid));
         }
 
         // Get all the dynamic objects at once
         sys::import('modules.roles.class.xarQuery');
         $q = new xarQuery('SELECT',$xartable['dynamic_objects']);
-        $q->open();
+//        $q->open();
         $q->addfields(array('object_id AS objectid','object_name AS objectname','object_moduleid AS moduleid','object_itemtype AS itemtype','object_parent AS parent'));
-        $q->eq('object_moduleid',$moduleid);
+        $q->eq('object_moduleid',$this->moduleid);
         if (!$q->run()) return;
 
         // Put in itemtype as key for easier manipulation
@@ -972,24 +977,24 @@ class DataObjectMaster extends Object
         // Cycle through each ancestor
         $parentitemtype = $topobject['parent'];
         for(;;) {
-            $done = false;
+            if (!$parentitemtype) break;
+            $thisobject     = $objects[$parentitemtype];
 
-            if ($parentitemtype >= 1000) {
+//            if ($parentitemtype >= 1000 || $this->moduleid == 182) {
                 // This is a DD descendent object. add it to the ancestor array
-                $thisobject     = $objects[$parentitemtype];
                 $moduleid       = $thisobject['moduleid'];
                 $objectid       = $thisobject['objectid'];
                 $itemtype       = $thisobject['itemtype'];
                 $name           = $thisobject['objectname'];
-                $parentitemtype = $thisobject['parent'];
-                $ancestors[] = array('objectid' => $objectid, 'itemtype' => $itemtype, 'name' => $name, 'moduleid' => $moduleid);
-            } else {
+//                $parentitemtype = $thisobject['parent'];
+                $ancestors[] = $thisobject;
+/*            } else {
 
                 // This is a native itemtype. get ready to quit
                 $done = true;
                 $itemtype = $parentitemtype;
                 if ($itemtype) {
-                    if ($info=self::getObjectInfo(array('moduleid' => $moduleid, 'itemtype' => $itemtype))) {
+                    if ($info = self::getObjectInfo(array('objectid' => $thisobject['objectid']))) {
 
                         // A DD wrapper object exists, add it to the ancestor array
                         if ($base) $ancestors[] = array('objectid' => $info['objectid'], 'itemtype' => $itemtype, 'name' => $info['name'], 'moduleid' => $moduleid);
@@ -1005,7 +1010,8 @@ class DataObjectMaster extends Object
                     // Itemtype = 0. We're already at the bottom - do nothing
                 }
             }
-            if ($done) break;
+            */
+            $parentitemtype = $thisobject['parent'];
         }
         $ancestors = array_reverse($ancestors, true);
         return $ancestors;
@@ -1018,9 +1024,9 @@ class DataObjectMaster extends Object
      * see getAncestors for parameters
      * @see self::getAncestors
      */
-    static function &getBaseAncestor(Array $args)
+    function &getBaseAncestor()
     {
-        $ancestors = self::getAncestors($args);
+        $ancestors = $this->getAncestors();
         $ancestors = array_shift($ancestors);
         return $ancestors;
     }

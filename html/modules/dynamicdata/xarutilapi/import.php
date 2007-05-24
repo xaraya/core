@@ -106,6 +106,8 @@ function dynamicdata_utilapi_import($args)
 
         if ($dupexists && $overwrite) {
             $args['itemid'] = $info['objectid'];
+            // don't change the itemtype so existing parent relationships will be conserved
+            $args['itemtype'] = $info['itemtype'];
             $objectid = $object->updateItem($args);
             // remove the properties, as they will be replaced
             $dupobject = DataObjectMaster::getObject(array('name' => $info['name']));

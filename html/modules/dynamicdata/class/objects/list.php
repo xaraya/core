@@ -523,15 +523,18 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             if(!empty($this->urlmodule)) {
                 $args['urlmodule'] = $this->urlmodule;
             } else {
-                $info = DataObjectMaster::getObjectInfo(
+                // CHECKME: do we need this?
+/*                $info = DataObjectMaster::getObjectInfo(
                     array(
                         'moduleid' => $args['moduleid'],
                         'itemtype' => $args['itemtype']
                     )
                 );
+
                 $base = DataObjectMaster::getBaseAncestor(
                     array('objectid' => $info['objectid'])
                 );
+                */
                 $args['urlmodule'] = $modname;
             }
         }

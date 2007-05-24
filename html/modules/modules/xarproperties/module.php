@@ -33,18 +33,19 @@ class ModuleProperty extends SelectProperty
     function showInput(Array $data=array())
     {
         if (!empty($data['filter'])) $this->filter = $data['filter'];
+        if (!empty($data['validation'])) $this->parseValidation($data['validation']);
         return parent::showInput($data);
     }
 
     function getOptions()
     {
         if (count($this->options) == 0) {
-            if ($this->validation == 'systemid') {
-                $key = 'systemid';
+            if ($this->validation == 'name') {
+                $key = 'displayname';
             } elseif ($this->validation == 'regid') {
                 $key = 'regid';
             } else {
-                $key = 'displayname';
+                $key = 'systemid';
             }
             // TODO: wasnt here an $args earlier? where did this go?
             $modlist = xarModAPIFunc('modules', 'admin', 'getlist',array('filter' => $this->filter));
