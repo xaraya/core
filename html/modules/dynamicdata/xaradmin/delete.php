@@ -104,11 +104,6 @@ function dynamicdata_admin_delete($args)
 
     $itemid = $myobject->deleteItem();
     if (!empty($return_url)) {
-        if (strpos($return_url,'?') === false)
-            $return_url .= '?';
-        else
-            $return_url .= '&';
-        $return_url .= '&itemid=' . $itemid;
         xarResponseRedirect($return_url);
     } elseif (!empty($table)) {
         xarResponseRedirect(xarModURL('dynamicdata', 'admin', 'view',

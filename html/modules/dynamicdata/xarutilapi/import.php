@@ -69,7 +69,7 @@ function dynamicdata_utilapi_import($args)
         $info = DataObjectMaster::getObjectInfo(array('name' => $args['name']));
         $dupexists = !empty($info);
         if ($dupexists && !$overwrite) {
-            $msg = 'Duplicate definition for #(1) object #(2)';
+            $msg = 'Duplicate definition for #(1) #(2)';
             $vars = array('object',xarVarPrepForDisplay($args['name']));
             throw new DuplicateException($vars,$msg);
         }

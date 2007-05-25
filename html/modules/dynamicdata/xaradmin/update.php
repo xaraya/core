@@ -107,11 +107,6 @@ function dynamicdata_admin_update($args)
     }
 
     if (!empty($return_url)) {
-        if (strpos($return_url,'?') === false)
-            $return_url .= '?';
-        else
-            $return_url .= '&';
-        $return_url .= 'itemid=' . $itemid;
         xarResponseRedirect($return_url);
     } elseif ($myobject->objectid == 2) { // for dynamic properties, return to modifyprop
         $objectid = $myobject->properties['objectid']->value;
