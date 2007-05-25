@@ -251,7 +251,7 @@ class DataObjectMaster extends Object
 
         // add ancestors' properties to this object if required
         // the default is to add the fields
-//        $this->baseancestor = $this->objectid;
+        $this->baseancestor = $this->objectid;
         if($this->extend) $this->addAncestors();
     }
 
@@ -912,7 +912,7 @@ class DataObjectMaster extends Object
       * @param bool args[top]
       * @param bool  args[base]
       */
-    function &getAncestors()
+    function getAncestors()
     {
 //        if(!xarSecurityCheck('ViewDynamicDataItems')) return;
 
@@ -923,7 +923,7 @@ class DataObjectMaster extends Object
             throw new BadParameterException(array(),$msg);
         }
 */
-        $top = isset($top) ? $top : true;
+        $top = isset($top) ? $top : false;
         $base = isset($base) ? $base : true;
         $ancestors = array();
 
@@ -976,8 +976,9 @@ class DataObjectMaster extends Object
 
         // Cycle through each ancestor
         $parentitemtype = $topobject['parent'];
+        if (!$parentitemtype) return array();
+
         for(;;) {
-            if (!$parentitemtype) break;
             $thisobject     = $objects[$parentitemtype];
 
 //            if ($parentitemtype >= 1000 || $this->moduleid == 182) {
@@ -987,6 +988,7 @@ class DataObjectMaster extends Object
                 $itemtype       = $thisobject['itemtype'];
                 $name           = $thisobject['objectname'];
 //                $parentitemtype = $thisobject['parent'];
+                $this->baseancestor = $objectid;
                 $ancestors[] = $thisobject;
 /*            } else {
 
@@ -1011,7 +1013,7 @@ class DataObjectMaster extends Object
                 }
             }
             */
-            $parentitemtype = $thisobject['parent'];
+            if (!$thisobject['parent']) break;
         }
         $ancestors = array_reverse($ancestors, true);
         return $ancestors;

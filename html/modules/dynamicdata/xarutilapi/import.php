@@ -47,7 +47,6 @@ function dynamicdata_utilapi_import($args)
     $proptypes = DataPropertyMaster::getPropertyTypes();
     $name2id = array();
     foreach ($proptypes as $propid => $proptype) {
-        //if (is_object($proptype)) {echo $proptype->name;exit;}
         $name2id[$proptype['name']] = $propid;
     }
 
@@ -110,7 +109,7 @@ function dynamicdata_utilapi_import($args)
             $args['itemtype'] = $info['itemtype'];
             $objectid = $object->updateItem($args);
             // remove the properties, as they will be replaced
-            $dupobject = DataObjectMaster::getObject(array('name' => $info['name']));
+            $dupobject = DataObjectMaster::getObject(array('name' => $info['name'], 'extend' => false));
             $existingproperties = $dupobject->getProperties();
             foreach ($existingproperties as $propertyitem)
                 $dataproperty->deleteItem(array('itemid' => $propertyitem->id));
@@ -198,10 +197,12 @@ function dynamicdata_utilapi_import($args)
                     $objectcache[$objectid] = DataObjectMaster::getObject(array('objectid' => $objectid));
                 }
                 $object =& $objectcache[$objectid];
+                /*
                 if (!isset($objectcache[$object->baseancestor])) {
                     $objectcache[$object->baseancestor] = DataObjectMaster::getObject(array('objectid' => $object->baseancestor));
                 }
                 $primaryobject =& $objectcache[$object->baseancestor];
+                */
                 // Get the properties for this object
                 $objectproperties = $object->properties;
             }
