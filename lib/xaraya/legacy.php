@@ -62,23 +62,6 @@ function xarCore_getSystemVar($name)
 }
 
 /**
- * Create a data dictionary object
- *
- * @deprec does not work with creole, will be replaced by schema.xml
- */
-function &xarDBNewDataDict(Connection &$dbconn, $mode = 'READONLY')
-{
-    throw new ApiDeprecationException(array('xarDBNewDataDict',''));
-}
-
-/**
- * Load the Table Maintenance API
- *
- * @deprec no need for this anymore
- */
-function xarDBLoadTableMaintenanceAPI() { return sys::import('xaraya.tableddl'); }
-
-/**
  * Get the database host
  *
  * @deprec
@@ -87,35 +70,10 @@ function xarDBLoadTableMaintenanceAPI() { return sys::import('xaraya.tableddl');
 function xarDBGetHost() { return xarDB::getHost(); }
 
 /**
- * Get the database type
- *
- * @deprec
- * @see xarDB::getType();
- */
-function xarDBGetType() { return xarDB::getType(); }
-
-/**
  * Get the database name
  *
  * @deprec
  * @see xarDB::getName();
  */
 function xarDBGetName() { return xarDB::getName(); }
-
-/**
- * Get the system table prefix
- *
- * @deprec
- * @see xarDB::getPrefix()
- */
-function xarDBGetSystemTablePrefix() { return xarDB::getPrefix(); }
-
-/**
- * Get the site table prefix
- *
- * @deprec
- * @see xarDB::getPrefix()
- * @todo replace all instances of this one with xarDB::getPrefix()
- */
-function xarDBGetSiteTablePrefix() { return xarDBGetSystemTablePrefix(); }
 ?>
