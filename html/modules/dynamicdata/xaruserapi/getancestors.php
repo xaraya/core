@@ -19,6 +19,6 @@
 function &dynamicdata_userapi_getancestors($args)
 {
     $object = DataObjectMaster::getObject($args);
-    return object->getAncestors();
+    return $object->getAncestors();
 }
 ?>
