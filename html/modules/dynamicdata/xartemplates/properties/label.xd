@@ -7,7 +7,7 @@
     <xar:set name="style">""</xar:set>
 </xar:if>
 <xar:if condition="empty($class)">
-    <xar:set name="class">""</xar:set>
+    <xar:set name="class">"xar-form-label"</xar:set>
 </xar:if>
 
 <xar:if condition="empty($for)">
