@@ -1,21 +1,31 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<xar:if condition="empty($title)">
+    <xar:set name="title">""</xar:set>
+</xar:if>
+<xar:if condition="empty($style)">
+    <xar:set name="style">""</xar:set>
+</xar:if>
+<xar:if condition="empty($class)">
+    <xar:set name="class">""</xar:set>
+</xar:if>
+
 <xar:if condition="empty($for)">
     #$label#
 <xar:elseif condition="$for ne 'id' and $for ne 'name'"/>
-    <label for="#$for#" class="xar-form-label">
+    <label class="#$class#" for="#$for#" title="#$title#" style="#$style#">
         #$label#
     </label>
 <xar:elseif condition="$for eq 'id' and !empty($id)"/>
-    <label for="dd_#$id#" class="xar-form-label">
+    <label class="#$class#" for="dd_#$id#" title="#$title#" style="#$style#">
         #$label#
     </label>
 <xar:elseif condition="$for eq 'name' and !empty($name)"/>
-    <label for="#$name#" class="xar-form-label">
+    <label class="#$class#" for="#$name#" title="#$title#" style="#$style#">
         #$label#
     </label>
 <xar:else/>
-     <label class="xar-form-label">
+     <label class="#$class#" title="#$title#" style="#$style#">
         #$label#
     </label>
 </xar:if>
